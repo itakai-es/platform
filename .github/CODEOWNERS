@@ -1,0 +1,10 @@
+# Cada PR se asigna automáticamente a los owners del path modificado.
+# Sintaxis: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Por defecto: dueño del proyecto revisa todo
+* @BeplyDeveloper
+
+# Áreas específicas: si crecemos como proyecto se pueden delegar aquí
+# /app/       @BeplyDeveloper @otro-mantenedor
+# /api/       @BeplyDeveloper @otro-mantenedor
+# /docs/      @BeplyDeveloper
