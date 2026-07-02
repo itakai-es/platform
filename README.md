@@ -14,14 +14,14 @@
   </p>
 
   <p>
-    <a href="https://github.com/itakai-es/platform-new/stargazers">
-      <img src="https://img.shields.io/github/stars/itakai-es/platform-new?style=for-the-badge&logo=starship&color=FFD166&logoColor=white" alt="GitHub stars">
+    <a href="https://github.com/itakai-es/platform/stargazers">
+      <img src="https://img.shields.io/github/stars/itakai-es/platform?style=for-the-badge&logo=starship&color=FFD166&logoColor=white" alt="GitHub stars">
     </a>
-    <a href="https://github.com/itakai-es/platform-new/network/members">
-      <img src="https://img.shields.io/github/forks/itakai-es/platform-new?style=for-the-badge&logo=git&color=6FEDB7&logoColor=white" alt="GitHub forks">
+    <a href="https://github.com/itakai-es/platform/network/members">
+      <img src="https://img.shields.io/github/forks/itakai-es/platform?style=for-the-badge&logo=git&color=6FEDB7&logoColor=white" alt="GitHub forks">
     </a>
-    <a href="https://github.com/itakai-es/platform-new/blob/main/LICENSE">
-      <img src="https://img.shields.io/github/license/itakai-es/platform-new?style=for-the-badge&logo=opensourceinitiative&color=1A1F3A&logoColor=white" alt="License">
+    <a href="https://github.com/itakai-es/platform/blob/main/LICENSE">
+      <img src="https://img.shields.io/github/license/itakai-es/platform?style=for-the-badge&logo=opensourceinitiative&color=1A1F3A&logoColor=white" alt="License">
     </a>
   </p>
 </div>
@@ -118,8 +118,8 @@
 
 ```bash
 # Clonar el repositorio
-git clone https://github.com/itakai-es/platform-new.git
-cd platform-new
+git clone https://github.com/itakai-es/platform.git
+cd platform
 
 # Configurar variables de entorno (3 archivos: raíz, api y app)
 cp .env.example .env
@@ -153,8 +153,8 @@ pnpm preview
 
 ### Opción 3: Deploy en la Nube
 
-[![Deploy on Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/itakai-es/platform-new)
-[![Deploy on Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/itakai-es/platform-new)
+[![Deploy on Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/itakai-es/platform)
+[![Deploy on Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/itakai-es/platform)
 
 ---
 
@@ -301,11 +301,11 @@ pnpm preview
 
 ### Formas de Contribuir
 
-- 🐛 **Reportar bugs** - En [feedback.itakai.es](https://feedback.itakai.es) o abriendo un [issue en GitHub](https://github.com/itakai-es/platform-new/issues/new?template=bug_report.md)
-- 💡 **Sugerir features** - En [feedback.itakai.es](https://feedback.itakai.es) o abriendo un [issue en GitHub](https://github.com/itakai-es/platform-new/issues/new?template=feature_request.md)
+- 🐛 **Reportar bugs** - En [feedback.itakai.es](https://feedback.itakai.es) o abriendo un [issue en GitHub](https://github.com/itakai-es/platform/issues/new?template=bug_report.md)
+- 💡 **Sugerir features** - En [feedback.itakai.es](https://feedback.itakai.es) o abriendo un [issue en GitHub](https://github.com/itakai-es/platform/issues/new?template=feature_request.md)
 - 📝 **Mejorar documentación** - Hacer un PR con mejoras
 - 🌍 **Traducir** - Ayudar con i18n a otros idiomas
-- 💻 **Código** - Revisar [issues abiertos](https://github.com/itakai-es/platform-new/issues)
+- 💻 **Código** - Revisar [issues abiertos](https://github.com/itakai-es/platform/issues)
 
 ### Guía Rápida
 
@@ -362,10 +362,10 @@ Novedades, avances y comunidad en [x.com/proyectoitakai](https://x.com/proyectoi
 
 <div align="center">
 
-![GitHub commit activity](https://img.shields.io/github/commit-activity/m/itakai-es/platform-new?style=for-the-badge&logo=git&logoColor=white)
-![GitHub contributors](https://img.shields.io/github/contributors/itakai-es/platform-new?style=for-the-badge&logo=github&logoColor=white)
-![GitHub issues](https://img.shields.io/github/issues/itakai-es/platform-new?style=for-the-badge&logo=github&logoColor=white)
-![GitHub pull requests](https://img.shields.io/github/issues-pr/itakai-es/platform-new?style=for-the-badge&logo=github&logoColor=white)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/itakai-es/platform?style=for-the-badge&logo=git&logoColor=white)
+![GitHub contributors](https://img.shields.io/github/contributors/itakai-es/platform?style=for-the-badge&logo=github&logoColor=white)
+![GitHub issues](https://img.shields.io/github/issues/itakai-es/platform?style=for-the-badge&logo=github&logoColor=white)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/itakai-es/platform?style=for-the-badge&logo=github&logoColor=white)
 
 </div>
 
@@ -390,8 +390,8 @@ Con la condición de:
 
 Agradecemos a todos los contribuidores que han hecho posible este proyecto:
 
-<a href="https://github.com/itakai-es/platform-new/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=itakai-es/platform-new" />
+<a href="https://github.com/itakai-es/platform/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=itakai-es/platform" />
 </a>
 
 ### Tecnologías que usamos
@@ -407,9 +407,9 @@ Agradecemos a todos los contribuidores que han hecho posible este proyecto:
 ## 🔗 Enlaces Útiles
 
 - 🌐 [Website Oficial](https://itakai.es)
-- 🐛 [Reportar bugs y sugerencias](https://feedback.itakai.es) · [GitHub Issues](https://github.com/itakai-es/platform-new/issues)
+- 🐛 [Reportar bugs y sugerencias](https://feedback.itakai.es) · [GitHub Issues](https://github.com/itakai-es/platform/issues)
 - 🐦 [X / Twitter](https://x.com/proyectoitakai)
-- 📦 [Releases](https://github.com/itakai-es/platform-new/releases)
+- 📦 [Releases](https://github.com/itakai-es/platform/releases)
 
 ---
 
@@ -417,7 +417,7 @@ Agradecemos a todos los contribuidores que han hecho posible este proyecto:
 
 ### ⭐ Si te gusta ITAKAI, dale una estrella en GitHub
 
-[![Star History Chart](https://api.star-history.com/svg?repos=itakai-es/platform-new&type=Date)](https://star-history.com/#itakai-es/platform-new&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=itakai-es/platform&type=Date)](https://star-history.com/#itakai-es/platform&Date)
 
 ---
 
