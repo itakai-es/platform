@@ -299,8 +299,8 @@ pnpm preview
 
 ### Formas de Contribuir
 
-- 🐛 **Reportar bugs** - En [feedback.itakai.es](https://feedback.itakai.es)
-- 💡 **Sugerir features** - En [feedback.itakai.es](https://feedback.itakai.es)
+- 🐛 **Reportar bugs** - En [feedback.itakai.es](https://feedback.itakai.es) o abriendo un [issue en GitHub](https://github.com/itakai-es/platform-new/issues/new?template=bug_report.md)
+- 💡 **Sugerir features** - En [feedback.itakai.es](https://feedback.itakai.es) o abriendo un [issue en GitHub](https://github.com/itakai-es/platform-new/issues/new?template=feature_request.md)
 - 📝 **Mejorar documentación** - Hacer un PR con mejoras
 - 🌍 **Traducir** - Ayudar con i18n a otros idiomas
 - 💻 **Código** - Revisar [issues abiertos](https://github.com/itakai-es/platform-new/issues)
@@ -405,7 +405,7 @@ Agradecemos a todos los contribuidores que han hecho posible este proyecto:
 ## 🔗 Enlaces Útiles
 
 - 🌐 [Website Oficial](https://itakai.es)
-- 🐛 [Reportar bugs y sugerencias](https://feedback.itakai.es)
+- 🐛 [Reportar bugs y sugerencias](https://feedback.itakai.es) · [GitHub Issues](https://github.com/itakai-es/platform-new/issues)
 - 🐦 [X / Twitter](https://x.com/proyectoitakai)
 - 📦 [Releases](https://github.com/itakai-es/platform-new/releases)
 
