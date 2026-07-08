@@ -8,6 +8,7 @@ import { checkRateLimit } from './middleware/rate-limiter.js'
 import * as Prompts from './prompts/index.js'
 import { ServiceUnavailableError } from '../../utils/errors.js'
 import { getAiSettings } from '../settings/settings.service.js'
+import { extractContext } from './context-extract.service.js'
 
 const narrativeSchema = z.object({
   prompt: z.string().min(1),
@@ -177,6 +178,33 @@ export async function aiRoutes(fastify: FastifyInstance) {
   fastify.addHook('preHandler', async (request, reply) => {
     if (request.url === '/timings' || request.url === '/ai/timings') return
     await fastify.authenticate(request, reply)
+  })
+
+  // --- Extraer contexto de los materiales del profesor (PDF, Word, texto, imágenes) ---
+
+  fastify.post('/extract-context', async (request: FastifyRequest, reply: FastifyReply) => {
+    const { id } = request.user as { id: string }
+    const rateCheck = checkRateLimit(id)
+    if (!rateCheck.allowed) {
+      return reply.status(429).send({ message: 'Limite de peticiones alcanzado', resetInSeconds: rateCheck.resetInSeconds })
+    }
+
+    try {
+      const files: Array<{ buffer: Buffer; filename: string; mimetype: string }> = []
+      for await (const part of request.parts()) {
+        if (part.type === 'file') {
+          files.push({ buffer: await part.toBuffer(), filename: part.filename, mimetype: part.mimetype })
+        }
+      }
+      if (files.length === 0) {
+        return reply.status(400).send({ message: 'No se recibió ningún archivo' })
+      }
+      const { context, sources } = await extractContext(files)
+      return { context, sources }
+    } catch (error) {
+      request.log.error(error, 'extract-context failed')
+      return reply.status(500).send({ message: 'No se pudieron procesar los archivos' })
+    }
   })
 
   // --- Suggest class names (for wizard step 1) ---

@@ -76,7 +76,11 @@
           "btn_back": "Enrere",
           "btn_next": "Següent",
           "btn_skip": "Saltar",
-          "btn_accept_plan": "Sí, endavant"
+          "btn_accept_plan": "Sí, endavant",
+          "attach_materials": "Adjunta materials (PDF, Word, imatges)",
+          "attach_processing": "Processant materials…",
+          "attach_hint": "La IA els farà servir com a base per crear la teva classe.",
+          "attach_error": "No s'han pogut processar els materials."
         }
       },
       "detail": {

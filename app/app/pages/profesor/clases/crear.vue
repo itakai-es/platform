@@ -83,12 +83,47 @@
                   :placeholder="t('teacher.classes.create.onboarding.placeholder_idea')"
                   class="onb-input flex-1 resize-none"
                 />
+
+                <!-- Materiales de contexto (opcional): la IA los usa para crear la clase -->
+                <div class="mt-3 flex flex-wrap items-center gap-2">
+                  <input
+                    ref="materialsFileRef"
+                    type="file"
+                    multiple
+                    accept=".pdf,.doc,.docx,.txt,.md,image/*"
+                    class="hidden"
+                    @change="handleMaterialsUpload"
+                  />
+                  <button
+                    type="button"
+                    class="inline-flex items-center gap-1.5 text-sm text-navy-700/70 hover:text-navy-700 disabled:opacity-50"
+                    :disabled="extractingDocs"
+                    @click="materialsFileRef?.click()"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                    </svg>
+                    {{ extractingDocs ? t('teacher.classes.create.onboarding.attach_processing') : t('teacher.classes.create.onboarding.attach_materials') }}
+                  </button>
+                  <span
+                    v-for="s in docSources"
+                    :key="s.name"
+                    class="inline-flex items-center gap-1 text-xs bg-navy-700/5 text-navy-700 px-2 py-1 rounded-full"
+                    :title="s.note || ''"
+                  >
+                    📎 {{ s.name }}<span v-if="s.note"> ⚠️</span>
+                  </span>
+                </div>
+                <p v-if="docSources.length" class="mt-1 text-xs text-navy-700/50">
+                  {{ t('teacher.classes.create.onboarding.attach_hint') }}
+                </p>
+
                 <div class="onb-actions">
                   <span />
                   <Button
                     variant="primary"
                     size="sm"
-                    :disabled="!idea.trim() || loading"
+                    :disabled="!idea.trim() || loading || extractingDocs"
                     @click="submitIdea"
                     >{{ t('teacher.classes.create.onboarding.btn_next') }}</Button
                   >
@@ -705,6 +740,50 @@ const imageGenerationFailed = ref(false)
 const imageFeedbackRef = ref<HTMLInputElement>()
 const coverFileRef = ref<HTMLInputElement>()
 
+// ---- Materiales de contexto del profesor (opcional) ----
+// El profe adjunta PDFs/Word/texto/imágenes; el backend extrae el texto (y
+// describe las imágenes con visión) y lo devolvemos aquí para usarlo como
+// contexto al generar narrativa, títulos, portada y guía.
+interface DocSource {
+  name: string
+  kind: string
+  chars: number
+  note?: string
+}
+const docsContext = ref('')
+const docSources = ref<DocSource[]>([])
+const extractingDocs = ref(false)
+const materialsFileRef = ref<HTMLInputElement>()
+
+async function handleMaterialsUpload(event: Event) {
+  const input = event.target as HTMLInputElement
+  const files = Array.from(input.files || [])
+  input.value = ''
+  if (!files.length) return
+  extractingDocs.value = true
+  try {
+    const fd = new FormData()
+    for (const f of files) fd.append('file', f)
+    const config = useRuntimeConfig()
+    const res = await $fetch<{ context: string; sources: DocSource[] }>(
+      `${config.public.apiBase}/ai/extract-context`,
+      { method: 'POST', body: fd }
+    )
+    docsContext.value = [docsContext.value, res.context].filter(Boolean).join('\n\n')
+    docSources.value = [...docSources.value, ...res.sources]
+  } catch {
+    toast.error(t('teacher.classes.create.onboarding.attach_error'))
+  } finally {
+    extractingDocs.value = false
+  }
+}
+
+// La idea que se manda a la IA incluye los materiales del profe como contexto.
+function ideaWithMaterials() {
+  if (!docsContext.value) return idea.value
+  return `${idea.value}\n\nMateriales de referencia del profesor:\n${docsContext.value.slice(0, 4000)}`
+}
+
 // Let the teacher use their own cover instead of (or after) the AI one. The
 // image is read as a base64 data URL; the backend persists it to /uploads on
 // class creation (see teachers.service saveBase64Image).
@@ -740,6 +819,7 @@ function buildContext() {
   const parts = [`Idea: ${idea.value}`]
   if (plan.value) parts.push(`Plan: ${plan.value.slice(0, 500)}`)
   if (chosenTitle.value) parts.push(`Titulo: ${chosenTitle.value}`)
+  if (docsContext.value) parts.push(`Materiales del profesor:\n${docsContext.value.slice(0, 4000)}`)
   return parts.join('\n')
 }
 
@@ -799,7 +879,7 @@ async function submitIdea() {
   try {
     loading.value = false
     isStreaming.value = true
-    await streamPrompt('class.narrative.generate', { idea: idea.value }, plan)
+    await streamPrompt('class.narrative.generate', { idea: ideaWithMaterials() }, plan)
     plan.value = cleanAIText(plan.value).slice(0, 8000)
     planProvider.value = lastProvider.value
   } catch {

@@ -73,7 +73,11 @@
           "btn_back": "Back",
           "btn_next": "Next",
           "btn_skip": "Skip",
-          "btn_accept_plan": "Yes, go ahead"
+          "btn_accept_plan": "Yes, go ahead",
+          "attach_materials": "Attach materials (PDF, Word, images)",
+          "attach_processing": "Processing materials…",
+          "attach_hint": "The AI will use them as a base to create your class.",
+          "attach_error": "Couldn't process the materials."
         },
         "meta": {
           "title": "Create New Class | ITAKAI Teacher"

@@ -76,7 +76,11 @@
           "btn_back": "Atrás",
           "btn_next": "Seguinte",
           "btn_skip": "Saltar",
-          "btn_accept_plan": "Si, adiante"
+          "btn_accept_plan": "Si, adiante",
+          "attach_materials": "Anexar materiais (PDF, Word, imaxes)",
+          "attach_processing": "Procesando materiais…",
+          "attach_hint": "A IA usaraos como base para crear a túa clase.",
+          "attach_error": "Non se puideron procesar os materiais."
         }
       },
       "detail": {

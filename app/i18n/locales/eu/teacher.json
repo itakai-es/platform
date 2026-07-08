@@ -76,7 +76,11 @@
           "btn_back": "Atzera",
           "btn_next": "Hurrengoa",
           "btn_skip": "Saltatu",
-          "btn_accept_plan": "Bai, aurrera"
+          "btn_accept_plan": "Bai, aurrera",
+          "attach_materials": "Erantsi materialak (PDF, Word, irudiak)",
+          "attach_processing": "Materialak prozesatzen…",
+          "attach_hint": "IAk zure klasea sortzeko oinarri gisa erabiliko ditu.",
+          "attach_error": "Ezin izan dira materialak prozesatu."
         }
       },
       "detail": {

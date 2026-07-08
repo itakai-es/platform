@@ -73,7 +73,11 @@
           "btn_back": "Atrás",
           "btn_next": "Siguiente",
           "btn_skip": "Saltar",
-          "btn_accept_plan": "Sí, adelante"
+          "btn_accept_plan": "Sí, adelante",
+          "attach_materials": "Adjuntar materiales (PDF, Word, imágenes)",
+          "attach_processing": "Procesando materiales…",
+          "attach_hint": "La IA los usará como base para crear tu clase.",
+          "attach_error": "No se pudieron procesar los materiales."
         },
         "meta": {
           "title": "Crear Nueva Clase | ITAKAI Profesor"
