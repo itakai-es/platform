@@ -112,7 +112,9 @@ const SAFETY_SETTINGS = [
   { category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT, threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE },
 ]
 
-// Singleton GenAI instance — created once on first use
+// Singleton GenAI instance — created once on first use.
+// Proveedor de RESPALDO (env-driven): si el endpoint principal falla, se usa
+// Gemini/OpenRouter configurados por variables de entorno.
 let _genAI: GoogleGenerativeAI | null | undefined
 
 function getGenAI() {

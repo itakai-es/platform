@@ -37,6 +37,9 @@
         :tabs="tabs"
         :active-tab="activeTab"
         :tab-href="tabHref"
+        :subject="state.classData.subject"
+        :education-level="state.classData.educationLevel"
+        :language="state.classData.language"
       >
         <template #actions>
           <Button

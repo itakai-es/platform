@@ -5,6 +5,8 @@ import { calculateMissionTotalXP } from '../../utils/xp-calculator.js'
 import os from 'os'
 import { execSync } from 'child_process'
 import { fetchSystemLogs, logServiceHealthResults } from './system-log.service.js'
+import { getAiSettings, getAdminSettings, updateSection } from '../settings/settings.service.js'
+import { SETTINGS_SECTIONS, type SettingsSection } from '../settings/settings.types.js'
 
 const userFiltersSchema = z.object({
   role: z.string().optional(),
@@ -16,11 +18,7 @@ const userFiltersSchema = z.object({
 
 type ServiceStatus = 'operational' | 'degraded' | 'down'
 
-const DEFAULT_SPARK_ROUTER_BASE_URL = 'http://192.168.14.2:8000'
-
-function getSparkBaseUrl() {
-  return (process.env.SPARK_ROUTER_BASE_URL || DEFAULT_SPARK_ROUTER_BASE_URL).replace(/\/+$/, '')
-}
+const DEFAULT_SPARK_ROUTER_BASE_URL = 'http://localhost:8000'
 
 // Spark /health response shape
 interface SparkHealthService {
@@ -45,51 +43,55 @@ interface SparkHealthResponse {
 }
 
 /**
- * Single call to Spark Router /health that returns the status
- * of both text (chat) and image services.
+ * Comprueba la salud de un endpoint de IA de forma GENÉRICA: primero intenta el
+ * `/health` de Spark (proveedor propio, con detalle); si no existe, hace un probe
+ * genérico a `/v1/models` y considera "operational" cualquier respuesta HTTP.
+ * Así funciona con OpenAI, Groq, vLLM, etc., no solo con Spark — el panel no
+ * debe decir "down" cuando la generación sí funciona.
  */
+async function probeAiEndpoint(baseUrl: string): Promise<{ status: ServiceStatus; detail: string }> {
+  const url = (baseUrl || DEFAULT_SPARK_ROUTER_BASE_URL).replace(/\/+$/, '')
+  const start = performance.now()
+
+  // 1) Spark /health (detalle rico si es un Spark propio)
+  try {
+    const res = await fetch(`${url}/health`, { signal: AbortSignal.timeout(4000) })
+    if (res.ok) {
+      const body = (await res.json().catch(() => null)) as SparkHealthResponse | null
+      const ms = Math.round(performance.now() - start)
+      if (body?.services) {
+        const anyOk = body.services.some(s => s.status === 'ok')
+        return anyOk
+          ? { status: 'operational', detail: `Spark · ${ms}ms` }
+          : { status: 'degraded', detail: 'Spark: sin servicios activos' }
+      }
+      return { status: 'operational', detail: `Alcanzable · ${ms}ms` }
+    }
+  } catch { /* sin /health → probe genérico */ }
+
+  // 2) Probe genérico OpenAI-compatible: cualquier respuesta HTTP = servidor vivo
+  try {
+    const res = await fetch(`${url}/v1/models`, { signal: AbortSignal.timeout(4000) })
+    const ms = Math.round(performance.now() - start)
+    return { status: 'operational', detail: `Alcanzable (HTTP ${res.status}) · ${ms}ms` }
+  } catch {
+    return { status: 'down', detail: 'No se pudo conectar con el endpoint' }
+  }
+}
+
+/** Salud de los endpoints de IA (texto e imágenes) configurados en el panel. */
 async function checkSparkServices(): Promise<{
   text: { status: ServiceStatus; detail: string }
   image: { status: ServiceStatus; detail: string }
   latencyMs: number
 }> {
-  const baseUrl = getSparkBaseUrl()
+  const ai = await getAiSettings()
+  const textBase = ai.text.baseUrl || DEFAULT_SPARK_ROUTER_BASE_URL
+  const imageBase = ai.image.baseUrl || DEFAULT_SPARK_ROUTER_BASE_URL
   const start = performance.now()
-
-  const res = await fetch(`${baseUrl}/health`, {
-    signal: AbortSignal.timeout(5000),
-  })
-  const latencyMs = Math.round(performance.now() - start)
-
-  if (!res.ok) {
-    const detail = `Spark no disponible (HTTP ${res.status})`
-    return {
-      text: { status: 'down', detail },
-      image: { status: 'down', detail },
-      latencyMs,
-    }
-  }
-
-  const health = await res.json() as SparkHealthResponse
-
-  const chatSvc = health.services.find(s => s.name === 'chat')
-  const imageSvc = health.services.find(s => s.name === 'image')
-
-  const mapService = (svc: SparkHealthService | undefined, label: string): { status: ServiceStatus; detail: string } => {
-    if (!svc) return { status: 'down', detail: `Servicio ${label} no encontrado en Spark` }
-    if (svc.status !== 'ok') return { status: 'down', detail: `${label}: ${svc.status}` }
-    if (!svc.node) return { status: 'degraded', detail: `${label}: sin nodo asignado` }
-
-    const models = svc.models.length > 0 ? svc.models.join(', ') : 'sin modelos cargados'
-    const latency = svc.last_latency_ms ? ` · ${Math.round(svc.last_latency_ms)}ms` : ''
-    return { status: 'operational', detail: `${svc.node} (${models}${latency})` }
-  }
-
-  return {
-    text: mapService(chatSvc, 'Chat'),
-    image: mapService(imageSvc, 'Image'),
-    latencyMs,
-  }
+  const text = await probeAiEndpoint(textBase)
+  const image = imageBase === textBase ? text : await probeAiEndpoint(imageBase)
+  return { text, image, latencyMs: Math.round(performance.now() - start) }
 }
 
 export async function adminRoutes(fastify: FastifyInstance) {
@@ -365,8 +367,8 @@ export async function adminRoutes(fastify: FastifyInstance) {
 
     const serviceResults = [
       { name: 'Base de Datos', ...safeSimple(dbCheck) },
-      { name: 'IA Texto (Spark)', ...spark.text },
-      { name: 'IA Imagen (Spark)', ...spark.image },
+      { name: 'IA (texto)', ...spark.text },
+      { name: 'IA (imágenes)', ...spark.image },
       { name: 'Almacenamiento', ...safeSimple(diskCheck) },
     ]
 
@@ -747,7 +749,7 @@ export async function adminRoutes(fastify: FastifyInstance) {
             requests24h: currentPeriodActivities * 3, // ~3 queries per activity
           },
           {
-            name: 'Spark IA (Texto)',
+            name: 'IA (texto)',
             status: sparkText.status,
             uptime: sparkText.status === 'operational' ? 99.9 : sparkText.status === 'degraded' ? 90.0 : 0,
             avgLatency: sparkLatencyMs || 0,
@@ -755,7 +757,7 @@ export async function adminRoutes(fastify: FastifyInstance) {
             requests24h: messagesInPeriod.length,
           },
           {
-            name: 'Spark IA (Imagen)',
+            name: 'IA (imágenes)',
             status: sparkImage.status,
             uptime: sparkImage.status === 'operational' ? 99.9 : sparkImage.status === 'degraded' ? 90.0 : 0,
             avgLatency: sparkLatencyMs || 0,
@@ -849,6 +851,35 @@ export async function adminRoutes(fastify: FastifyInstance) {
       }
     } catch (error) {
       return reply.status(500).send({ message: 'Error interno' })
+    }
+  })
+
+  // ── Instance settings (auto-hospedaje) ──
+
+  // Get instance settings (admin-only; secretos descifrados para el panel, cifrados en BD)
+  fastify.get('/settings', async (_request: FastifyRequest, reply: FastifyReply) => {
+    try {
+      const settings = await getAdminSettings()
+      return { settings }
+    } catch (error) {
+      return reply.status(500).send({ message: 'Error al cargar la configuración' })
+    }
+  })
+
+  // Update one settings section
+  fastify.put('/settings/:section', async (request: FastifyRequest<{ Params: { section: string } }>, reply: FastifyReply) => {
+    try {
+      const section = request.params.section as SettingsSection
+      if (!SETTINGS_SECTIONS.includes(section)) {
+        return reply.status(400).send({ message: 'Sección de configuración no válida' })
+      }
+      const settings = await updateSection(section, request.body ?? {})
+      return { success: true, settings }
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return reply.status(400).send({ message: 'Datos de configuración inválidos', errors: error.errors })
+      }
+      return reply.status(500).send({ message: 'Error al guardar la configuración' })
     }
   })
 }

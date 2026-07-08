@@ -3,7 +3,8 @@ import { getMissionCompletionRewards, calculateMissionTotalXP, ENIGMA_XP_PRESETS
 import { applyXpDelta } from '../../utils/enrollment-xp.js'
 import { formatMission, getMissionStatus } from '../../utils/mission-formatter.js'
 import { resolveClassSettings } from '../../utils/class-settings.js'
-import { existsSync, mkdirSync, writeFileSync, unlinkSync } from 'fs'
+import { existsSync, mkdirSync } from 'fs'
+import { saveUpload, deleteUpload } from '../storage/storage.service.js'
 import { join } from 'path'
 import { randomUUID } from 'crypto'
 
@@ -503,9 +504,7 @@ export class MissionsService {
       // File upload
       const ext = file.filename.split('.').pop() || 'bin'
       const uniqueName = `${randomUUID()}.${ext}`
-      const filePath = join(DOCUMENTS_DIR, uniqueName)
-      writeFileSync(filePath, file.buffer)
-      fileUrl = `/uploads/documents/${uniqueName}`
+      fileUrl = await saveUpload(`documents/${uniqueName}`, file.buffer, file.mimetype)
       fileName = file.filename
       fileSize = file.buffer.length
       mimeType = file.mimetype
@@ -585,19 +584,9 @@ export class MissionsService {
       throw new Error('No tienes permiso para eliminar este documento')
     }
 
-    // Delete file from disk
+    // Delete file from storage (local o R2, best-effort)
     if (document.fileUrl) {
-      const fileName = document.fileUrl.split('/').pop()
-      if (fileName) {
-        const filePath = join(DOCUMENTS_DIR, fileName)
-        try {
-          if (existsSync(filePath)) {
-            unlinkSync(filePath)
-          }
-        } catch {
-          // Ignore file deletion errors
-        }
-      }
+      await deleteUpload(document.fileUrl)
     }
 
     await prisma.missionDocument.delete({

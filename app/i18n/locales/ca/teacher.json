@@ -30,7 +30,8 @@
         "meta": {
           "title": "Les Meves Classes | ITAKAI Professor",
           "description": "Gestiona totes les teves classes, estudiants inscrits i missions assignades."
-        }
+        },
+        "templates": "Plantilles"
       },
       "create": {
         "breadcrumb_classes": "Les Meves Classes",
@@ -54,20 +55,22 @@
         },
         "preview_label": "Així es veurà la teva classe",
         "onboarding": {
-          "ask_idea": "Hola {name}! Soc {god}. Explica'm, de què vols que tracti la teva classe?",
+          "ask_idea": "Hola {name}! Sóc {god}. Explica'm, quin món o temàtica vols per a la teva classe?",
           "review_approach": "Això és el que he preparat per a tu, t'agrada?",
           "pick_title": "Quin títol li posem a la teva classe?",
           "ask_schedule": "Quin horari tindrà la teva classe?",
           "ask_image": "He creat aquesta portada per a la teva classe",
-          "placeholder_idea": "Ex: Vull crear una classe de física per a 3r ESO amb temàtica de mitologia grega...",
+          "placeholder_idea": "Ex: Una escola de màgia amb 4 cases que competeixen per punts, alumnes-mags i reptes com masmorres…",
           "generating_approach": "Estic creant la narrativa de la teva classe...",
           "narrative_feedback_placeholder": "Ex: Vull més referències a les cases de Hogwarts...",
           "btn_change_something": "Vull canviar alguna cosa",
           "custom_title_placeholder": "O escriu el teu propi títol...",
           "title_feedback_placeholder": "Ex: Vull títols més curts, amb més referència a Harry Potter...",
-          "placeholder_schedule": "Ex: Dilluns i Dimecres 10:00-12:00",
           "generating_cover": "Generant portada...",
           "cover_error": "No s'ha pogut generar la portada. Pots saltar aquest pas.",
+          "btn_upload_cover": "Pujar la meva",
+          "cover_upload_type_error": "Format no vàlid. Puja una imatge PNG, JPG o WEBP.",
+          "cover_upload_size_error": "La imatge és massa gran (màxim 5 MB).",
           "image_feedback_placeholder": "Vull que sigui més colorida, amb fons blau...",
           "thinking": "Pensant...",
           "btn_back": "Enrere",
@@ -250,9 +253,20 @@
           "general": {
             "title": "Dades generals",
             "name_label": "Nom",
+            "subject_label": "Assignatura",
+            "level_label": "Nivell educatiu",
+            "language_label": "Idioma",
+            "province_label": "Província",
+            "metadata_none": "Sense especificar",
+            "metadata_search": "Cercar...",
+            "publish_title": "Publica com a plantilla",
+            "publish_hint": "Comparteix-la al marketplace perquè altres professors la importin.",
+            "publish_missing_metadata": "Desa assignatura, nivell i idioma abans de publicar.",
+            "publish_on": "Classe publicada com a plantilla",
+            "publish_off": "Plantilla retirada del marketplace",
+            "publish_error": "No s'ha pogut publicar la plantilla",
             "schedule_label": "Horari",
             "background_label": "Imatge de fons",
-            "background_hint": "URL pública d'una imatge per a la capçalera de la classe.",
             "save": "Desar canvis",
             "discard": "Descartar",
             "toast_saved": "Dades desades",
@@ -264,6 +278,9 @@
             "background_generate": "Generar amb IA",
             "background_regenerate": "Regenerar amb IA",
             "background_clear": "Treure imatge",
+            "background_upload": "Pujar la meva",
+            "background_upload_type_error": "Format no vàlid. Puja una imatge PNG, JPG o WEBP.",
+            "background_upload_size_error": "La imatge és massa gran (màxim 5 MB).",
             "background_error": "No s'ha pogut generar la imatge"
           },
           "features": {
@@ -634,6 +651,56 @@
           "legendary": "Llegendària"
         },
         "btn_close": "Tancar"
+      }
+    },
+    "templates": {
+      "page_title": "Plantilles de classes",
+      "page_subtitle": "Explora classes que altres professors han publicat i importa-les a les teves.",
+      "search": "Cerca plantilles…",
+      "own": "Teva",
+      "import": "Importa",
+      "import_success": "«{name}» importada. Personalitza-la al teu gust!",
+      "import_error": "No s'ha pogut importar la plantilla",
+      "load_error": "No s'han pogut carregar les plantilles",
+      "empty_title": "Encara no hi ha plantilles",
+      "empty_description": "Quan algun professor publiqui una classe com a plantilla, apareixerà aquí.",
+      "no_results_title": "Sense resultats",
+      "no_results_description": "No hi ha plantilles que coincideixin amb els filtres.",
+      "preview_action": "Previsualitzar",
+      "preview": {
+        "loading": "Carregant plantilla…",
+        "by": "Per {name}",
+        "active": "Activada",
+        "inactive": "Desactivada",
+        "load_error": "No s'ha pogut carregar la plantilla",
+        "error": "No s'ha trobat la plantilla.",
+        "tab_narrative": "Història",
+        "tab_features": "Funcionalitats",
+        "tab_shop": "Botiga ({n})",
+        "tab_behaviors": "Comportaments ({n})",
+        "no_narrative_title": "Sense història",
+        "no_narrative_description": "Aquesta plantilla no té història definida.",
+        "no_shop_title": "Sense botiga",
+        "no_shop_description": "Aquesta plantilla no porta articles de botiga. Els podràs afegir tu.",
+        "no_behaviors_title": "Sense comportaments",
+        "no_behaviors_description": "Aquesta plantilla no porta comportaments. Els podràs definir tu."
+      },
+      "filter_all": {
+        "subject": "Totes les assignatures",
+        "level": "Tots els nivells",
+        "language": "Tots els idiomes",
+        "province": "Totes les províncies"
+      },
+      "sort": {
+        "recent": "Més recents",
+        "name_asc": "Nom A-Z",
+        "name_desc": "Nom Z-A"
+      },
+      "plural": {
+        "subjects": "assignatures",
+        "levels": "nivells",
+        "languages": "idiomes",
+        "provinces": "províncies"
       }
     }
   }

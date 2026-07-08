@@ -59,10 +59,22 @@ function getRefreshTokenCookieOptions() {
   const isProduction = env.NODE_ENV === 'production'
   const isCrossDomain = isProduction && isCrossDomainSetup()
 
+  // Overrides opcionales para auto-hospedaje (SPA + API en el mismo origen tras
+  // nginx, que la autodetección no reconoce). Sin definirlos → comportamiento
+  // actual. Sobre HTTP sin TLS hay que poner COOKIE_SECURE=false (y normalmente
+  // COOKIE_SAMESITE=lax) para que la cookie de sesión se guarde.
+  const sameSite =
+    (process.env.COOKIE_SAMESITE as 'none' | 'lax' | 'strict' | undefined) ||
+    (isCrossDomain ? 'none' : 'lax')
+  const secure =
+    process.env.COOKIE_SECURE !== undefined
+      ? process.env.COOKIE_SECURE === 'true'
+      : isProduction || isCrossDomain
+
   return {
     httpOnly: true,
-    secure: isProduction || isCrossDomain, // HTTPS required for cross-domain
-    sameSite: (isCrossDomain ? 'none' : 'lax') as 'none' | 'lax' | 'strict',
+    secure,
+    sameSite,
     path: '/', // Root path - works with any proxy configuration
     maxAge: 7 * 24 * 60 * 60, // 7 days
   }

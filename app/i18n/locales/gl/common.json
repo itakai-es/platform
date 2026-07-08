@@ -23,7 +23,8 @@
       "toggle_menu": "Alternar menú",
       "back_to_dashboard": "Volver ao Dashboard",
       "create_new_account": "Crear Conta Nova",
-      "enter": "Entrar"
+      "enter": "Entrar",
+      "close": "Pechar"
     },
     "status": {
       "under_development": "En Desenvolvemento"
@@ -191,6 +192,11 @@
       "coins": "Moedas",
       "mana": "Maná",
       "lives": "Puntos de vida"
+    },
+    "maintenance": {
+      "title": "En mantemento",
+      "message": "Estamos facendo melloras. Volve en uns minutos.",
+      "admin_notice": "Modo mantemento activo — só os administradores poden acceder."
     }
   }
 }

@@ -11,6 +11,7 @@
 export type * from './models/User'
 export type * from './models/UserSettings'
 export type * from './models/RefreshToken'
+export type * from './models/InstanceSetting'
 export type * from './models/Class'
 export type * from './models/ClassEnrollment'
 export type * from './models/ClassGuide'

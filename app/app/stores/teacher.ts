@@ -313,6 +313,20 @@ export const useTeacherStore = defineStore('teacher', () => {
     }
   }
 
+  /** Publica/retira la clase como plantilla pública del marketplace. */
+  async function publishTemplate(classId: string, publish: boolean) {
+    const config = useRuntimeConfig()
+    const response = await $fetch<{ isTemplate: boolean }>(
+      `${config.public.apiBase}/teacher/classes/${classId}/publish-template`,
+      { method: 'POST', body: { publish } }
+    )
+    const index = classes.value.findIndex(c => c.id === classId)
+    if (index !== -1) {
+      classes.value[index] = { ...classes.value[index], isTemplate: response.isTemplate }
+    }
+    return response
+  }
+
   async function setClassArchived(classId: string, archived: boolean) {
     try {
       const config = useRuntimeConfig()
@@ -1151,6 +1165,7 @@ export const useTeacherStore = defineStore('teacher', () => {
     fetchClassAnalytics,
     createClass,
     updateClass,
+    publishTemplate,
     setClassArchived,
     getInvitationCode,
     fetchClassMissions,

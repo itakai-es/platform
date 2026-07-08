@@ -37,6 +37,9 @@
         :tabs="tabs"
         :active-tab="activeTab"
         :tab-href="tabHref"
+        :subject="classData.subject"
+        :education-level="classData.educationLevel"
+        :language="classData.language"
       >
         <template #subtitle>
           {{ classData.teacherName || t('student.classes.detail.teacher_fallback')

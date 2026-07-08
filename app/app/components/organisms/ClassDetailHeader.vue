@@ -55,6 +55,30 @@
             <p v-if="$slots.subtitle" class="text-white/70 text-sm sm:text-base">
               <slot name="subtitle" />
             </p>
+            <!-- Chips de clasificación (asignatura · nivel · idioma) -->
+            <div
+              v-if="subject || educationLevel || language"
+              class="mt-2 flex flex-wrap items-center gap-2"
+            >
+              <span
+                v-if="subject"
+                class="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-2.5 py-1 text-xs font-medium text-white/90"
+              >
+                <BookOpenIcon class="h-3.5 w-3.5 flex-shrink-0" />{{ subject }}
+              </span>
+              <span
+                v-if="educationLevel"
+                class="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-2.5 py-1 text-xs font-medium text-white/90"
+              >
+                <AcademicCapIcon class="h-3.5 w-3.5 flex-shrink-0" />{{ educationLevel }}
+              </span>
+              <span
+                v-if="language"
+                class="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-2.5 py-1 text-xs font-medium text-white/90"
+              >
+                <LanguageIcon class="h-3.5 w-3.5 flex-shrink-0" />{{ language }}
+              </span>
+            </div>
           </div>
         </div>
         <slot name="meta" />
@@ -83,7 +107,13 @@
 
 <script setup lang="ts">
 import type { Component } from 'vue'
-import { HomeIcon, ChevronRightIcon } from '@heroicons/vue/24/outline'
+import {
+  HomeIcon,
+  ChevronRightIcon,
+  BookOpenIcon,
+  AcademicCapIcon,
+  LanguageIcon,
+} from '@heroicons/vue/24/outline'
 
 defineProps<{
   /** Nombre de la clase (título y último segmento del breadcrumb). */
@@ -102,6 +132,10 @@ defineProps<{
   activeTab: string
   /** Constructor del href de una tab por su id (p. ej. tabId => `/.../id/tabId`). */
   tabHref: (tabId: string) => string
+  /** Chips de clasificación bajo el subtítulo (opcionales): asignatura · nivel · idioma. */
+  subject?: string | null
+  educationLevel?: string | null
+  language?: string | null
 }>()
 
 defineSlots<{

@@ -50,6 +50,7 @@ import {
   RocketLaunchIcon,
   ChartBarIcon,
   ServerIcon,
+  Cog6ToothIcon,
 } from '@heroicons/vue/24/outline'
 
 const { t } = useI18n()
@@ -124,6 +125,11 @@ const navItems = computed<AdminNavItem[]>(() => [
     to: '/admin/registros',
     label: t('common.nav.logs'),
     icon: ServerIcon,
+  },
+  {
+    to: '/admin/configuracion',
+    label: t('admin.settings.title'),
+    icon: Cog6ToothIcon,
   },
 ])
 </script>

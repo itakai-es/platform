@@ -23,7 +23,8 @@
       "toggle_menu": "Toggle menu",
       "back_to_dashboard": "Back to Dashboard",
       "create_new_account": "Create New Account",
-      "enter": "Enter"
+      "enter": "Enter",
+      "close": "Close"
     },
     "status": {
       "under_development": "Under Development"
@@ -191,6 +192,11 @@
       "coins": "Coins",
       "mana": "Mana",
       "lives": "Life points"
+    },
+    "maintenance": {
+      "title": "Under maintenance",
+      "message": "We're making improvements. Please come back in a few minutes.",
+      "admin_notice": "Maintenance mode active — only admins can access."
     }
   }
 }

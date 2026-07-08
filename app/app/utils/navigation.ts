@@ -42,6 +42,7 @@ export const ROUTE_NAMES = {
   ADMIN_ANALYTICS: '/admin/estadisticas',
   ADMIN_SCHOOLS: '/admin/centros',
   ADMIN_LOGS: '/admin/registros',
+  ADMIN_SETTINGS: '/admin/configuracion',
 } as const
 
 export const getDashboardByRole = (role: string): string => {

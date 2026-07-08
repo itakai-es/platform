@@ -113,6 +113,14 @@
             </p>
           </div>
 
+          <!-- Registro cerrado por el administrador de la instancia -->
+          <div v-if="registrationClosed" class="text-center py-6">
+            <p class="text-base sm:text-lg font-semibold text-navy-700">
+              {{ $t('auth.signup.registration_closed') }}
+            </p>
+          </div>
+
+          <template v-else>
           <!-- Formulario -->
           <form class="space-y-3 sm:space-y-4 signup-form" @submit.prevent="handleSubmit">
             <!-- PASO 1: Información personal -->
@@ -243,6 +251,8 @@
             </Button>
           </div>
 
+          </template>
+
           <!-- Login Link -->
           <div class="mt-4 sm:mt-6 text-center">
             <p class="text-xs sm:text-sm text-navy-700/80 mb-2 sm:mb-3">
@@ -276,6 +286,10 @@ definePageMeta({
 const router = useRouter()
 const authStore = useAuthStore()
 const toast = useToast()
+
+// Registro abierto/cerrado según la config de la instancia (panel de admin).
+const instanceConfig = useInstanceConfig()
+const registrationClosed = computed(() => instanceConfig.value?.registrationOpen === false)
 
 const step = ref(1)
 const name = ref('')

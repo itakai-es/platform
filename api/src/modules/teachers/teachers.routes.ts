@@ -12,6 +12,11 @@ const createClassSchema = z.object({
   narrative: z.string().optional(),
   schedule: z.string().optional(),
   backgroundImage: z.string().optional(),
+  // Metadatos de clasificación (opcionales; alimentan los filtros de plantillas).
+  subject: z.string().optional(),
+  language: z.string().optional(),
+  educationLevel: z.string().optional(),
+  province: z.string().optional(),
 })
 
 const classSettingsSchema = z
@@ -33,6 +38,11 @@ const updateClassSchema = z.object({
   narrative: z.string().optional(),
   schedule: z.string().optional(),
   backgroundImage: z.string().optional(),
+  // Metadatos de clasificación (cadena vacía = sin especificar).
+  subject: z.string().optional(),
+  language: z.string().optional(),
+  educationLevel: z.string().optional(),
+  province: z.string().optional(),
   settings: classSettingsSchema.optional(),
 })
 
@@ -325,6 +335,63 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
+      if (error instanceof Error) {
+        return reply.status(404).send({ message: error.message })
+      }
+      return reply.status(500).send({ message: 'Error interno' })
+    }
+  })
+
+  // ── Marketplace de plantillas ──
+  fastify.post('/classes/:classId/publish-template', async (request: FastifyRequest<{ Params: { classId: string } }>, reply: FastifyReply) => {
+    try {
+      const { id } = request.user as { id: string }
+      const { publish } = z.object({ publish: z.boolean() }).parse(request.body)
+      const result = await teachersService.publishTemplate(id, request.params.classId, publish)
+      return result
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
+      }
+      if (error instanceof Error) {
+        return reply.status(400).send({ message: error.message })
+      }
+      return reply.status(500).send({ message: 'Error interno' })
+    }
+  })
+
+  fastify.get('/templates', async (request: FastifyRequest<{ Querystring: { subject?: string; educationLevel?: string; language?: string; province?: string; q?: string } }>, reply: FastifyReply) => {
+    try {
+      const { id } = request.user as { id: string }
+      const result = await teachersService.listTemplates(id, request.query)
+      return result
+    } catch (error) {
+      if (error instanceof Error) {
+        return reply.status(500).send({ message: error.message })
+      }
+      return reply.status(500).send({ message: 'Error interno' })
+    }
+  })
+
+  fastify.get('/templates/:classId', async (request: FastifyRequest<{ Params: { classId: string } }>, reply: FastifyReply) => {
+    try {
+      const { id } = request.user as { id: string }
+      const result = await teachersService.getTemplateDetail(id, request.params.classId)
+      return result
+    } catch (error) {
+      if (error instanceof Error) {
+        return reply.status(404).send({ message: error.message })
+      }
+      return reply.status(500).send({ message: 'Error interno' })
+    }
+  })
+
+  fastify.post('/templates/:classId/import', async (request: FastifyRequest<{ Params: { classId: string } }>, reply: FastifyReply) => {
+    try {
+      const { id } = request.user as { id: string }
+      const result = await teachersService.importTemplate(id, request.params.classId)
+      return result
+    } catch (error) {
       if (error instanceof Error) {
         return reply.status(404).send({ message: error.message })
       }

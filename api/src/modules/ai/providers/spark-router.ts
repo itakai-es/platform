@@ -4,8 +4,9 @@ import type {
   GenerateImageOptions,
   GenerateTextOptions,
 } from './provider.interface.js'
+import { getAiSettings } from '../../settings/settings.service.js'
 
-const DEFAULT_SPARK_ROUTER_BASE_URL = 'http://192.168.14.2:8000'
+const DEFAULT_SPARK_ROUTER_BASE_URL = 'http://localhost:8000'
 const DEFAULT_SPARK_ROUTER_API_KEY = 'local-testing-key'
 const DEFAULT_SPARK_ROUTER_MODEL = 'google/gemma-4-26b-a4b-it'
 const DEFAULT_SPARK_ROUTER_IMAGE_MODEL = 'black-forest-labs/flux.2-klein-4b'
@@ -34,15 +35,28 @@ interface SparkImageGenerationResponse {
 }
 
 function normalizeBaseUrl(baseUrl?: string) {
-  return (baseUrl || DEFAULT_SPARK_ROUTER_BASE_URL).replace(/\/+$/, '')
+  // Se quita la barra final y un `/v1` final si lo hubiera: el proveedor añade
+  // `/v1/chat/completions` y `/v1/images/generations`, así que la base debe ser
+  // el host (poner `https://api.openai.com` o `https://api.openai.com/v1`, ambas valen).
+  return (baseUrl || DEFAULT_SPARK_ROUTER_BASE_URL).replace(/\/+$/, '').replace(/\/v1$/, '')
 }
 
-function getSparkConfig() {
+// La config se resuelve desde el panel de admin (con .env como default). Son dos
+// endpoints compatibles con OpenAI independientes (texto e imágenes): cada uno
+// puede apuntar a un proveedor distinto. Ver modules/settings/settings.service.ts.
+async function getAiConfig() {
+  const ai = await getAiSettings()
   return {
-    baseUrl: normalizeBaseUrl(process.env.SPARK_ROUTER_BASE_URL),
-    apiKey: process.env.SPARK_ROUTER_API_KEY || DEFAULT_SPARK_ROUTER_API_KEY,
-    model: process.env.SPARK_ROUTER_MODEL || DEFAULT_SPARK_ROUTER_MODEL,
-    imageModel: process.env.SPARK_ROUTER_IMAGE_MODEL || DEFAULT_SPARK_ROUTER_IMAGE_MODEL,
+    text: {
+      baseUrl: normalizeBaseUrl(ai.text.baseUrl),
+      apiKey: ai.text.apiKey || DEFAULT_SPARK_ROUTER_API_KEY,
+      model: ai.text.model || DEFAULT_SPARK_ROUTER_MODEL,
+    },
+    image: {
+      baseUrl: normalizeBaseUrl(ai.image.baseUrl),
+      apiKey: ai.image.apiKey || DEFAULT_SPARK_ROUTER_API_KEY,
+      model: ai.image.model || DEFAULT_SPARK_ROUTER_IMAGE_MODEL,
+    },
   }
 }
 
@@ -133,7 +147,7 @@ export class SparkRouterProvider implements AIProvider {
   constructor(private readonly fallbackProvider?: AIProvider) {}
 
   async generateText(prompt: string, options?: GenerateTextOptions): Promise<string> {
-    const { baseUrl, apiKey, model } = getSparkConfig()
+    const { baseUrl, apiKey, model } = (await getAiConfig()).text
 
     try {
       const payload = await fetchJson<SparkChatCompletionResponse>(
@@ -173,7 +187,7 @@ export class SparkRouterProvider implements AIProvider {
   }
 
   async *generateTextStream(prompt: string, options?: GenerateTextOptions): AsyncIterable<string> {
-    const { baseUrl, apiKey, model } = getSparkConfig()
+    const { baseUrl, apiKey, model } = (await getAiConfig()).text
 
     try {
       const response = await fetch(`${baseUrl}/v1/chat/completions`, {
@@ -245,7 +259,7 @@ export class SparkRouterProvider implements AIProvider {
   }
 
   async generateImage(prompt: string, options?: GenerateImageOptions): Promise<GeneratedImageResult> {
-    const { baseUrl, apiKey, imageModel } = getSparkConfig()
+    const { baseUrl, apiKey, model: imageModel } = (await getAiConfig()).image
 
     try {
       console.log(`[AI] 🎨 Image request → SparkRouter (${options?.type || 'image'}, model: ${imageModel})`)

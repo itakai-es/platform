@@ -12,6 +12,7 @@ import type { LoginInput, LoginAliasInput, SignupInput, OnboardingInput } from '
 import type { UserRole } from '../../generated/prisma/client.js'
 import { sendPasswordResetEmail, sendPasswordChangedEmail } from '../../utils/email.js'
 import { OAuth2Client } from 'google-auth-library'
+import { getDomainSettings, getGeneralSettings } from '../settings/settings.service.js'
 
 // ==================== TYPES ====================
 
@@ -82,21 +83,22 @@ export class AuthService {
     // Find enrollment with matching nickname
     const enrollment = await prisma.classEnrollment.findFirst({
       where: { nickname: input.alias },
-      include: { student: true },
+      include: { student: true, class: { select: { invitationCode: true } } },
     })
 
-    const user = enrollment?.student
-
-    if (!user) {
+    if (!enrollment?.student) {
       throw new Error('Credenciales inválidas')
     }
+
+    const user = enrollment.student
 
     if (user.status !== 'active') {
       throw new Error('Cuenta suspendida o inactiva')
     }
 
-    // For demo purposes, accept any 6-digit code or "123456"
-    if (input.code !== '123456' && !/^\d{6}$/.test(input.code)) {
+    // El código de acceso del alumno es el código de invitación de su clase
+    // (el que le da el profesor), no un número cualquiera.
+    if (input.code.trim() !== enrollment.class.invitationCode) {
       throw new Error('Código inválido')
     }
 
@@ -169,6 +171,10 @@ export class AuthService {
         throw new Error('Cuenta suspendida o inactiva')
       }
     } else {
+      const { registrationOpen } = await getGeneralSettings()
+      if (!registrationOpen) {
+        throw new Error('El registro de nuevos usuarios está deshabilitado en esta instancia')
+      }
       user = await prisma.user.create({
         data: {
           email: payload.email,
@@ -242,6 +248,10 @@ export class AuthService {
         throw new Error('Cuenta suspendida o inactiva')
       }
     } else {
+      const { registrationOpen } = await getGeneralSettings()
+      if (!registrationOpen) {
+        throw new Error('El registro de nuevos usuarios está deshabilitado en esta instancia')
+      }
       // Create new user from Google account
       user = await prisma.user.create({
         data: {
@@ -282,6 +292,11 @@ export class AuthService {
    * Register a new user
    */
   async signup(input: SignupInput, context?: RequestContext): Promise<LoginResult> {
+    const { registrationOpen } = await getGeneralSettings()
+    if (!registrationOpen) {
+      throw new Error('El registro de nuevos usuarios está deshabilitado en esta instancia')
+    }
+
     const existingUser = await prisma.user.findUnique({
       where: { email: input.email },
     })
@@ -531,7 +546,8 @@ export class AuthService {
       email: user.email,
     })
 
-    const appOrigin = process.env.CORS_ORIGIN?.split(',')[0]?.trim() || 'http://localhost:4000'
+    const { appUrl } = await getDomainSettings()
+    const appOrigin = appUrl || process.env.CORS_ORIGIN?.split(',')[0]?.trim() || 'http://localhost:4000'
     const resetUrl = `${appOrigin}/auth/reset-password?token=${encodeURIComponent(resetToken)}`
 
     // Send the reset email (non-blocking — don't let email failure block the response)

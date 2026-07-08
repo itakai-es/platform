@@ -246,6 +246,60 @@
         "title": "No system logs found",
         "description": "No system logs match the selected filters."
       }
+    },
+    "settings": {
+      "title": "Settings",
+      "subtitle": "Configure this instance's services: AI, images, storage and domain.",
+      "meta": {
+        "title": "Settings · ITAKAI Admin",
+        "description": "Instance settings"
+      },
+      "save": "Save changes",
+      "saved": "Settings saved",
+      "save_error": "Couldn't save settings",
+      "ai": {
+        "title": "Artificial intelligence",
+        "desc": "OpenAI-compatible endpoints. Use whatever provider you want (OpenAI, your own Spark, Groq, Together, OpenRouter, Gemini via its OpenAI endpoint…).",
+        "text_title": "Text",
+        "image_title": "Images",
+        "endpoint_url": "Endpoint URL",
+        "api_key": "API key",
+        "model": "Model"
+      },
+      "storage": {
+        "title": "Storage",
+        "desc": "Where uploaded images and files are stored.",
+        "driver": "Storage type",
+        "driver_local": "Local disk (default)",
+        "driver_s3": "External S3 / Cloudflare R2",
+        "endpoint": "Endpoint",
+        "region": "Region",
+        "bucket": "Bucket",
+        "access_key": "Access Key ID",
+        "secret_key": "Secret Access Key",
+        "public_url": "Public base URL",
+        "public_url_hint": "URL the files are served from (public bucket or your own R2 domain).",
+        "path_style": "Use path-style (recommended for R2)"
+      },
+      "domain": {
+        "title": "Domain",
+        "desc": "Public URL of the instance and allowed origins.",
+        "app_url": "Instance URL",
+        "app_url_hint": "Used in email links.",
+        "cors": "Allowed CORS origins",
+        "cors_hint": "Separate multiple with commas."
+      },
+      "general": {
+        "title": "General",
+        "desc": "General instance parameters.",
+        "platform_name": "Platform name",
+        "contact_email": "Contact email",
+        "default_language": "Default language",
+        "registration_open": "Registration open",
+        "registration_hint": "Allow new users to sign up.",
+        "maintenance_mode": "Maintenance mode",
+        "maintenance_hint": "Show a maintenance notice to users."
+      }
     }
   }
 }

@@ -92,6 +92,20 @@ model RefreshToken {
   @@map("refresh_tokens")
 }
 
+// ==================== INSTANCE SETTINGS ====================
+
+// Configuración global de la instancia editable desde el panel de administración.
+// Una fila por sección (ai | storage | domain | general). Los secretos (API keys,
+// claves de R2) viajan cifrados dentro del JSON (ver config/crypto.ts). Permite el
+// auto-hospedaje: la config deja de depender de editar .env a mano.
+model InstanceSetting {
+  section   String   @id
+  data      Json     @default("{}")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("instance_settings")
+}
+
 // ==================== CLASSES ====================
 
 model Class {
@@ -102,6 +116,14 @@ model Class {
   archived        Boolean   @default(false)
   invitationCode  String    @unique @map("invitation_code")
   backgroundImage String?   @map("background_image")
+  // Metadatos de clasificación (editables por el profe; alimentan los filtros del
+  // marketplace de plantillas). Opcionales; se exigirán al publicar como plantilla.
+  subject         String?
+  language        String?
+  educationLevel  String?   @map("education_level")
+  province        String?
+  // Publicada como plantilla pública en el marketplace (otros profes pueden importarla).
+  isTemplate      Boolean   @default(false) @map("is_template")
   settings        Json      @default("{}")
   teacherId       String    @map("teacher_id")
   createdAt       DateTime  @default(now()) @map("created_at")

@@ -246,6 +246,60 @@
         "title": "No s'han trobat logs del sistema",
         "description": "No hi ha registres del sistema que coincideixin amb els filtres seleccionats."
       }
+    },
+    "settings": {
+      "title": "Configuració",
+      "subtitle": "Configura els serveis d'aquesta instància: IA, imatges, emmagatzematge i domini.",
+      "meta": {
+        "title": "Configuració · ITAKAI Admin",
+        "description": "Configuració de la instància"
+      },
+      "save": "Desa els canvis",
+      "saved": "Configuració desada",
+      "save_error": "No s'ha pogut desar la configuració",
+      "ai": {
+        "title": "Intel·ligència artificial",
+        "desc": "Endpoints compatibles amb l'API d'OpenAI. Fes servir el proveïdor que vulguis (OpenAI, el teu propi Spark, Groq, Together, OpenRouter, Gemini via el seu endpoint OpenAI…).",
+        "text_title": "Text",
+        "image_title": "Imatges",
+        "endpoint_url": "URL de l'endpoint",
+        "api_key": "Clau API",
+        "model": "Model"
+      },
+      "storage": {
+        "title": "Emmagatzematge",
+        "desc": "On es desen les imatges i els fitxers pujats.",
+        "driver": "Tipus d'emmagatzematge",
+        "driver_local": "Disc local (per defecte)",
+        "driver_s3": "Extern S3 / Cloudflare R2",
+        "endpoint": "Endpoint",
+        "region": "Regió",
+        "bucket": "Bucket",
+        "access_key": "Access Key ID",
+        "secret_key": "Secret Access Key",
+        "public_url": "URL pública base",
+        "public_url_hint": "URL des d'on se serveixen els fitxers (bucket públic o domini propi de R2).",
+        "path_style": "Usa path-style (recomanat per a R2)"
+      },
+      "domain": {
+        "title": "Domini",
+        "desc": "URL pública de la instància i orígens permesos.",
+        "app_url": "URL de la instància",
+        "app_url_hint": "S'usa als enllaços dels correus.",
+        "cors": "Orígens CORS permesos",
+        "cors_hint": "Separa'n diversos amb comes."
+      },
+      "general": {
+        "title": "General",
+        "desc": "Paràmetres generals de la instància.",
+        "platform_name": "Nom de la plataforma",
+        "contact_email": "Correu de contacte",
+        "default_language": "Idioma per defecte",
+        "registration_open": "Registre obert",
+        "registration_hint": "Permet que es registrin nous usuaris.",
+        "maintenance_mode": "Mode manteniment",
+        "maintenance_hint": "Mostra un avís de manteniment als usuaris."
+      }
     }
   }
 }

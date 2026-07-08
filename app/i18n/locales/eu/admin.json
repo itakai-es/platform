@@ -246,6 +246,60 @@
         "title": "Ez da sistemaren logik aurkitu",
         "description": "Ez dago hautatutako iragazkiekin bat datorren sistema-erregistrorik."
       }
+    },
+    "settings": {
+      "title": "Konfigurazioa",
+      "subtitle": "Konfiguratu instantzia honen zerbitzuak: IA, irudiak, biltegiratzea eta domeinua.",
+      "meta": {
+        "title": "Konfigurazioa · ITAKAI Admin",
+        "description": "Instantziaren konfigurazioa"
+      },
+      "save": "Gorde aldaketak",
+      "saved": "Konfigurazioa gordeta",
+      "save_error": "Ezin izan da konfigurazioa gorde",
+      "ai": {
+        "title": "Adimen artifiziala",
+        "desc": "OpenAI APIarekin bateragarriak diren endpointak. Erabili nahi duzun hornitzailea (OpenAI, zure Spark, Groq, Together, OpenRouter, Gemini bere OpenAI endpointaren bidez…).",
+        "text_title": "Testua",
+        "image_title": "Irudiak",
+        "endpoint_url": "Endpointaren URLa",
+        "api_key": "API gakoa",
+        "model": "Eredua"
+      },
+      "storage": {
+        "title": "Biltegiratzea",
+        "desc": "Non gordetzen diren igotako irudiak eta fitxategiak.",
+        "driver": "Biltegiratze mota",
+        "driver_local": "Disko lokala (lehenetsia)",
+        "driver_s3": "Kanpokoa S3 / Cloudflare R2",
+        "endpoint": "Endpointa",
+        "region": "Eskualdea",
+        "bucket": "Bucket-a",
+        "access_key": "Access Key ID",
+        "secret_key": "Secret Access Key",
+        "public_url": "URL publiko nagusia",
+        "public_url_hint": "Fitxategiak zerbitzatzen diren URLa (bucket publikoa edo R2 domeinu propioa).",
+        "path_style": "Erabili path-style (R2rako gomendatua)"
+      },
+      "domain": {
+        "title": "Domeinua",
+        "desc": "Instantziaren URL publikoa eta baimendutako jatorriak.",
+        "app_url": "Instantziaren URLa",
+        "app_url_hint": "Mezu elektronikoen esteketan erabiltzen da.",
+        "cors": "Baimendutako CORS jatorriak",
+        "cors_hint": "Bereizi hainbat komekin."
+      },
+      "general": {
+        "title": "Orokorra",
+        "desc": "Instantziaren parametro orokorrak.",
+        "platform_name": "Plataformaren izena",
+        "contact_email": "Harremanetarako helbidea",
+        "default_language": "Lehenetsitako hizkuntza",
+        "registration_open": "Izena ematea irekita",
+        "registration_hint": "Baimendu erabiltzaile berriak izena ematea.",
+        "maintenance_mode": "Mantentze modua",
+        "maintenance_hint": "Erakutsi mantentze-abisua erabiltzaileei."
+      }
     }
   }
 }

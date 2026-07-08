@@ -7,6 +7,7 @@ import { getAIProvider, getLastUsedProvider } from './providers/index.js'
 import { checkRateLimit } from './middleware/rate-limiter.js'
 import * as Prompts from './prompts/index.js'
 import { ServiceUnavailableError } from '../../utils/errors.js'
+import { getAiSettings } from '../settings/settings.service.js'
 
 const narrativeSchema = z.object({
   prompt: z.string().min(1),
@@ -458,16 +459,13 @@ Return ONLY the raw SVG code. No markdown, no backticks, no explanation.`
       svg = svgMatch[0]
 
       // Save SVG file
-      const { mkdir, writeFile } = await import('fs/promises')
-      const { join } = await import('path')
       const { randomUUID } = await import('crypto')
-      const directory = join(process.cwd(), 'uploads', 'badges')
-      await mkdir(directory, { recursive: true })
+      const { saveUpload } = await import('../storage/storage.service.js')
       const fileName = `badge-${randomUUID()}.svg`
-      await writeFile(join(directory, fileName), svg, 'utf-8')
+      const imageUrl = await saveUpload(`badges/${fileName}`, svg, 'image/svg+xml')
 
       return {
-        imageUrl: `/uploads/badges/${fileName}`,
+        imageUrl,
         prompt: badgeName,
         provider: getLastUsedProvider(),
       }
@@ -728,10 +726,11 @@ Return ONLY the raw SVG code. No markdown, no backticks, no explanation.`
 
   fastify.get('/timings', async (_request: FastifyRequest, reply: FastifyReply) => {
     try {
-      const baseUrl = (process.env.SPARK_ROUTER_BASE_URL || 'http://192.168.14.2:8000').replace(/\/+$/, '')
-      const apiKey = process.env.SPARK_ROUTER_API_KEY || 'local-testing-key'
-      const imageModel = process.env.SPARK_ROUTER_IMAGE_MODEL || 'black-forest-labs/flux.2-klein-4b'
-      const chatModel = process.env.SPARK_ROUTER_MODEL || 'google/gemma-4-26b-a4b-it'
+      const ai = await getAiSettings()
+      const baseUrl = (ai.text.baseUrl || 'http://localhost:8000').replace(/\/+$/, '')
+      const apiKey = ai.text.apiKey || 'local-testing-key'
+      const imageModel = ai.image.model || 'black-forest-labs/flux.2-klein-4b'
+      const chatModel = ai.text.model || 'google/gemma-4-26b-a4b-it'
 
       const response = await fetch(`${baseUrl}/v1/timings`, {
         headers: { Authorization: `Bearer ${apiKey}` },

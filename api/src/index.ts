@@ -6,6 +6,8 @@ import multipart from '@fastify/multipart'
 import fastifyStatic from '@fastify/static'
 import { join } from 'path'
 import { env } from './config/env.js'
+import { getDomainSettings, getGeneralSettings } from './modules/settings/settings.service.js'
+import { publicConfigRoutes } from './modules/settings/public.routes.js'
 import { authRoutes, onboardingRoutes } from './modules/auth/auth.routes.js'
 import { studentsRoutes } from './modules/students/students.routes.js'
 import { teacherRoutes } from './modules/teachers/teachers.routes.js'
@@ -117,9 +119,23 @@ async function buildServer() {
     })
   })
 
-  // Register CORS
+  // Register CORS. Los orígenes permitidos se resuelven desde la configuración
+  // de instancia (panel de admin), con `.env` (CORS_ORIGIN) como default de
+  // arranque — así el dominio se puede cambiar sin tocar código.
   await fastify.register(cors, {
-    origin: env.CORS_ORIGIN.split(',').map((o) => o.trim()),
+    origin: (origin, cb) => {
+      // Sin cabecera Origin (same-origin, curl, apps nativas) → permitir.
+      if (!origin) {
+        cb(null, true)
+        return
+      }
+      getDomainSettings()
+        .then(({ corsOrigins }) => {
+          const allowed = corsOrigins.split(',').map((o) => o.trim()).filter(Boolean)
+          cb(null, allowed.includes(origin))
+        })
+        .catch(() => cb(null, false))
+    },
     credentials: true,
   })
 
@@ -158,6 +174,45 @@ async function buildServer() {
     }
   })
 
+  // Modo mantenimiento (configurable desde el panel). Si está activo se bloquea
+  // a todos con 503, salvo administradores — que pueden seguir entrando para
+  // desactivarlo. Siempre se permiten login, health, config pública, ficheros y
+  // el preflight CORS, para no dejar a nadie encerrado fuera.
+  fastify.addHook('onRequest', async (request, reply) => {
+    if (request.method === 'OPTIONS') return
+
+    let maintenanceMode = false
+    try {
+      maintenanceMode = (await getGeneralSettings()).maintenanceMode
+    } catch {
+      return // no se pudo leer la config → no bloqueamos (fail-open)
+    }
+    if (!maintenanceMode) return
+
+    const url = request.url
+    if (
+      url === '/' ||
+      url.startsWith('/auth') ||
+      url.startsWith('/health') ||
+      url.startsWith('/public') ||
+      url.startsWith('/uploads')
+    ) {
+      return
+    }
+
+    try {
+      await request.jwtVerify()
+      if ((request.user as { role?: string | null })?.role === 'admin') return
+    } catch {
+      /* sin sesión válida → tratado como no-admin */
+    }
+
+    return reply.status(503).send({
+      message: 'La plataforma está en mantenimiento. Vuelve a intentarlo en unos minutos.',
+      code: 'MAINTENANCE',
+    })
+  })
+
   // Role middleware helper
   const requireRole = (...roles: string[]) => {
     return async (request: any, reply: any) => {
@@ -186,6 +241,7 @@ async function buildServer() {
 
   // Register routes
   await fastify.register(healthRoutes, { prefix: '/health' })
+  await fastify.register(publicConfigRoutes, { prefix: '/public' })
   await fastify.register(authRoutes, { prefix: '/auth' })
   await fastify.register(onboardingRoutes, { prefix: '/onboarding' })
   await fastify.register(studentsRoutes, { prefix: '/students' })

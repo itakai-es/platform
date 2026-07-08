@@ -57,6 +57,11 @@ export type UserSettings = Prisma.UserSettingsModel
  */
 export type RefreshToken = Prisma.RefreshTokenModel
 /**
+ * Model InstanceSetting
+ * 
+ */
+export type InstanceSetting = Prisma.InstanceSettingModel
+/**
  * Model Class
  * 
  */

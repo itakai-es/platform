@@ -1,5 +1,6 @@
 import { prisma } from '../../config/database.js'
-import { existsSync, mkdirSync, writeFileSync, unlinkSync } from 'fs'
+import { existsSync, mkdirSync } from 'fs'
+import { saveUpload } from '../storage/storage.service.js'
 import { join } from 'path'
 import { randomUUID } from 'crypto'
 import { getMissionCompletionRewards, validateCustomEnigmaXp } from '../../utils/xp-calculator.js'
@@ -55,11 +56,8 @@ export class SubmissionsService {
     if (file) {
       const ext = file.filename.split('.').pop() || 'bin'
       const uniqueName = `${randomUUID()}.${ext}`
-      const filePath = join(UPLOADS_DIR, uniqueName)
 
-      writeFileSync(filePath, file.buffer)
-
-      fileUrl = `/uploads/submissions/${uniqueName}`
+      fileUrl = await saveUpload(`submissions/${uniqueName}`, file.buffer, file.mimetype)
       fileName = file.filename
       fileSize = file.buffer.length
     }

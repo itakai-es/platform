@@ -30,7 +30,8 @@
         "meta": {
           "title": "As Miñas Clases | ITAKAI Profesor",
           "description": "Xestiona todas as túas clases, estudantes inscritos e misións asignadas."
-        }
+        },
+        "templates": "Modelos"
       },
       "create": {
         "breadcrumb_classes": "As Miñas Clases",
@@ -54,20 +55,22 @@
         },
         "preview_label": "Así se verá a túa clase",
         "onboarding": {
-          "ask_idea": "Ola {name}! Son {god}. Cóntame, de que queres que sexa a túa clase?",
+          "ask_idea": "Ola {name}! Son {god}. Cóntame, que mundo ou temática queres para a túa clase?",
           "review_approach": "Isto é o que preparei para ti, gústache?",
           "pick_title": "Que título lle poñemos á túa clase?",
           "ask_schedule": "Que horario terá a túa clase?",
           "ask_image": "Creei esta portada para a túa clase",
-          "placeholder_idea": "Ex: Quero crear unha clase de física para 3º ESO con temática de mitoloxía grega...",
+          "placeholder_idea": "Ex: Unha escola de maxia con 4 casas que compiten por puntos, alumnos-magos e retos como mazmorras…",
           "generating_approach": "Estou a crear a narrativa da túa clase...",
           "narrative_feedback_placeholder": "Ex: Quero máis referencias ás casas de Hogwarts...",
           "btn_change_something": "Quero cambiar algo",
           "custom_title_placeholder": "Ou escribe o teu propio título...",
           "title_feedback_placeholder": "Ex: Quero títulos máis curtos...",
-          "placeholder_schedule": "Ex: Luns e Mércores 10:00-12:00",
           "generating_cover": "Xerando portada...",
           "cover_error": "Non se puido xerar a portada. Podes saltar este paso.",
+          "btn_upload_cover": "Subir a miña",
+          "cover_upload_type_error": "Formato non válido. Sobe unha imaxe PNG, JPG ou WEBP.",
+          "cover_upload_size_error": "A imaxe é demasiado grande (máximo 5 MB).",
           "image_feedback_placeholder": "Quero que sexa máis colorida, con fondo azul...",
           "thinking": "Pensando...",
           "btn_back": "Atrás",
@@ -250,9 +253,20 @@
           "general": {
             "title": "Datos xerais",
             "name_label": "Nome",
+            "subject_label": "Materia",
+            "level_label": "Nivel educativo",
+            "language_label": "Idioma",
+            "province_label": "Provincia",
+            "metadata_none": "Sen especificar",
+            "metadata_search": "Buscar...",
+            "publish_title": "Publicar como modelo",
+            "publish_hint": "Compárteo no marketplace para que outros profesores o importen.",
+            "publish_missing_metadata": "Garda materia, nivel e idioma antes de publicar.",
+            "publish_on": "Clase publicada como modelo",
+            "publish_off": "Modelo retirado do marketplace",
+            "publish_error": "Non se puido publicar o modelo",
             "schedule_label": "Horario",
             "background_label": "Imaxe de fondo",
-            "background_hint": "URL pública dunha imaxe para a cabeceira da clase.",
             "save": "Gardar cambios",
             "discard": "Descartar",
             "toast_saved": "Datos gardados",
@@ -264,6 +278,9 @@
             "background_generate": "Xerar con IA",
             "background_regenerate": "Rexerar con IA",
             "background_clear": "Quitar imaxe",
+            "background_upload": "Subir a miña",
+            "background_upload_type_error": "Formato non válido. Sobe unha imaxe PNG, JPG ou WEBP.",
+            "background_upload_size_error": "A imaxe é demasiado grande (máximo 5 MB).",
             "background_error": "Non se puido xerar a imaxe"
           },
           "features": {
@@ -634,6 +651,56 @@
           "legendary": "Legendaria"
         },
         "btn_close": "Pechar"
+      }
+    },
+    "templates": {
+      "page_title": "Modelos de clases",
+      "page_subtitle": "Explora clases que outros profesores publicaron e impórtaas ás túas.",
+      "search": "Buscar modelos…",
+      "own": "Túa",
+      "import": "Importar",
+      "import_success": "«{name}» importada. Personalízaa ao teu gusto!",
+      "import_error": "Non se puido importar o modelo",
+      "load_error": "Non se puideron cargar os modelos",
+      "empty_title": "Aínda non hai modelos",
+      "empty_description": "Cando algún profesor publique unha clase como modelo, aparecerá aquí.",
+      "no_results_title": "Sen resultados",
+      "no_results_description": "Non hai modelos que coincidan cos filtros.",
+      "preview_action": "Previsualizar",
+      "preview": {
+        "loading": "Cargando plantilla…",
+        "by": "Por {name}",
+        "active": "Activada",
+        "inactive": "Desactivada",
+        "load_error": "Non se puido cargar a plantilla",
+        "error": "Non se atopou a plantilla.",
+        "tab_narrative": "Historia",
+        "tab_features": "Funcionalidades",
+        "tab_shop": "Tenda ({n})",
+        "tab_behaviors": "Comportamentos ({n})",
+        "no_narrative_title": "Sen historia",
+        "no_narrative_description": "Esta plantilla non ten historia definida.",
+        "no_shop_title": "Sen tenda",
+        "no_shop_description": "Esta plantilla non trae artigos de tenda. Poderás engadilos ti.",
+        "no_behaviors_title": "Sen comportamentos",
+        "no_behaviors_description": "Esta plantilla non trae comportamentos. Poderás definilos ti."
+      },
+      "filter_all": {
+        "subject": "Todas as materias",
+        "level": "Todos os niveis",
+        "language": "Todos os idiomas",
+        "province": "Todas as provincias"
+      },
+      "sort": {
+        "recent": "Máis recentes",
+        "name_asc": "Nome A-Z",
+        "name_desc": "Nome Z-A"
+      },
+      "plural": {
+        "subjects": "materias",
+        "levels": "niveis",
+        "languages": "idiomas",
+        "provinces": "provincias"
       }
     }
   }

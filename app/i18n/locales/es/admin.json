@@ -246,6 +246,60 @@
         "title": "No se encontraron logs del sistema",
         "description": "No hay registros del sistema que coincidan con los filtros."
       }
+    },
+    "settings": {
+      "title": "Configuración",
+      "subtitle": "Configura los servicios de esta instancia: IA, imágenes, almacenamiento y dominio.",
+      "meta": {
+        "title": "Configuración · ITAKAI Admin",
+        "description": "Configuración de la instancia"
+      },
+      "save": "Guardar cambios",
+      "saved": "Configuración guardada",
+      "save_error": "No se pudo guardar la configuración",
+      "ai": {
+        "title": "Inteligencia artificial",
+        "desc": "Endpoints compatibles con la API de OpenAI. Pon el proveedor que quieras (OpenAI, tu propio Spark, Groq, Together, OpenRouter, Gemini vía su endpoint OpenAI…).",
+        "text_title": "Texto",
+        "image_title": "Imágenes",
+        "endpoint_url": "URL del endpoint",
+        "api_key": "Clave API",
+        "model": "Modelo"
+      },
+      "storage": {
+        "title": "Almacenamiento",
+        "desc": "Dónde se guardan las imágenes y los archivos subidos.",
+        "driver": "Tipo de almacenamiento",
+        "driver_local": "Disco local (por defecto)",
+        "driver_s3": "Externo S3 / Cloudflare R2",
+        "endpoint": "Endpoint",
+        "region": "Región",
+        "bucket": "Bucket",
+        "access_key": "Access Key ID",
+        "secret_key": "Secret Access Key",
+        "public_url": "URL pública base",
+        "public_url_hint": "URL desde donde se sirven los ficheros (bucket público o dominio propio de R2).",
+        "path_style": "Usar path-style (recomendado para R2)"
+      },
+      "domain": {
+        "title": "Dominio",
+        "desc": "URL pública de la instancia y orígenes permitidos.",
+        "app_url": "URL de la instancia",
+        "app_url_hint": "Se usa en los enlaces de los correos.",
+        "cors": "Orígenes CORS permitidos",
+        "cors_hint": "Separa varios con comas."
+      },
+      "general": {
+        "title": "General",
+        "desc": "Parámetros generales de la instancia.",
+        "platform_name": "Nombre de la plataforma",
+        "contact_email": "Email de contacto",
+        "default_language": "Idioma por defecto",
+        "registration_open": "Registro abierto",
+        "registration_hint": "Permite que se registren nuevos usuarios.",
+        "maintenance_mode": "Modo mantenimiento",
+        "maintenance_hint": "Muestra un aviso de mantenimiento a los usuarios."
+      }
     }
   }
 }

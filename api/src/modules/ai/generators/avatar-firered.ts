@@ -1,8 +1,8 @@
-import { mkdir, writeFile } from 'fs/promises'
-import { join } from 'path'
 import { randomUUID } from 'crypto'
+import { getAiSettings } from '../../settings/settings.service.js'
+import { saveUpload } from '../../storage/storage.service.js'
 
-const DEFAULT_BASE_URL = 'http://192.168.14.2:8000'
+const DEFAULT_BASE_URL = 'http://localhost:8000'
 const DEFAULT_API_KEY = 'local-testing-key'
 const AVATAR_TIMEOUT_MS = 120_000
 
@@ -35,9 +35,11 @@ function normalizeAvatarId(avatarId: string) {
   return AVATAR_ID_ALIASES[avatarId] ?? avatarId
 }
 
-function getSparkConfig() {
-  const baseUrl = (process.env.SPARK_ROUTER_BASE_URL || DEFAULT_BASE_URL).replace(/\/+$/, '')
-  const apiKey = process.env.SPARK_ROUTER_API_KEY || DEFAULT_API_KEY
+async function getSparkConfig() {
+  // Los avatares son imágenes → usan el endpoint de imágenes configurado.
+  const { image } = await getAiSettings()
+  const baseUrl = (image.baseUrl || DEFAULT_BASE_URL).replace(/\/+$/, '')
+  const apiKey = image.apiKey || DEFAULT_API_KEY
   return { baseUrl, apiKey }
 }
 
@@ -52,7 +54,7 @@ function inferExtension(contentType: string | null, url: string): string {
 }
 
 export async function generateFireRedAvatar(req: FireRedAvatarRequest): Promise<{ fileUrl: string }> {
-  const { baseUrl, apiKey } = getSparkConfig()
+  const { baseUrl, apiKey } = await getSparkConfig()
   const avatarId = normalizeAvatarId(req.avatar_id)
 
   // Only send defined fields to the API
@@ -115,11 +117,9 @@ export async function generateFireRedAvatar(req: FireRedAvatarRequest): Promise<
   const extension = inferExtension(mimeType, imageUrl)
   const buffer = Buffer.from(await imageResponse.arrayBuffer())
 
-  const directory = join(process.cwd(), 'uploads', 'ai-generated', 'avatars')
-  await mkdir(directory, { recursive: true })
   const fileName = `avatar-${randomUUID()}.${extension}`
-  await writeFile(join(directory, fileName), buffer)
+  const fileUrl = await saveUpload(`ai-generated/avatars/${fileName}`, buffer, mimeType)
 
   console.log(`[AI] ✅ Avatar generated via SparkRouter (avatar_id: ${avatarId}, ${(buffer.byteLength / 1024).toFixed(0)}KB)`)
-  return { fileUrl: `/uploads/ai-generated/avatars/${fileName}` }
+  return { fileUrl }
 }

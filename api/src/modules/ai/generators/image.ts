@@ -1,8 +1,7 @@
-import { mkdir, writeFile } from 'fs/promises'
-import { join } from 'path'
 import { randomUUID } from 'crypto'
 import type { AIProvider } from '../providers/provider.interface.js'
 import { buildCinematicCoverPrompt, generateSceneDescription } from './cover-prompt.js'
+import { saveUpload } from '../../storage/storage.service.js'
 
 export interface ImageGenerationRequest {
   prompt: string
@@ -24,16 +23,16 @@ export async function generateImage(provider: AIProvider, request: ImageGenerati
     type: request.type,
   })
 
-  const directory = join(process.cwd(), 'uploads', 'ai-generated', request.type)
-  await mkdir(directory, { recursive: true })
-
   const fileName = `${request.type}-${randomUUID()}.${result.extension}`
-  const absolutePath = join(directory, fileName)
-  await writeFile(absolutePath, result.buffer)
+  const fileUrl = await saveUpload(
+    `ai-generated/${request.type}/${fileName}`,
+    result.buffer,
+    result.mimeType
+  )
 
   return {
     fileName,
-    fileUrl: `/uploads/ai-generated/${request.type}/${fileName}`,
+    fileUrl,
     mimeType: result.mimeType,
   }
 }

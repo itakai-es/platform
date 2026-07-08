@@ -183,11 +183,50 @@ export interface NotificationSettings {
   diskThreshold: number
 }
 
+// ── Configuración de instancia / auto-hospedaje ──
+
+/** Endpoint compatible con OpenAI (texto o imágenes). Sin capar a un proveedor. */
+export interface AiEndpoint {
+  baseUrl: string
+  apiKey: string
+  model: string
+}
+
+export interface AiSettings {
+  text: AiEndpoint
+  image: AiEndpoint
+}
+
+export type StorageDriver = 'local' | 's3'
+
+export interface StorageSettings {
+  driver: StorageDriver
+  s3: {
+    endpoint: string
+    region: string
+    bucket: string
+    accessKeyId: string
+    secretAccessKey: string
+    publicBaseUrl: string
+    forcePathStyle: boolean
+  }
+}
+
+export interface DomainSettings {
+  appUrl: string
+  corsOrigins: string
+}
+
+/**
+ * Configuración global de la instancia editable desde el panel de admin.
+ * Los campos secreto (API keys, claves R2) llegan enmascarados (`••••••••`)
+ * cuando ya tienen valor; enviarlos sin cambiar los conserva.
+ */
 export interface SystemSettings {
+  ai: AiSettings
+  storage: StorageSettings
+  domain: DomainSettings
   general: GeneralSettings
-  gamification: GamificationSettings
-  security: SecuritySettings
-  notifications: NotificationSettings
 }
 
 // =============================================================================

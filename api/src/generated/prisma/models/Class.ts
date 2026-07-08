@@ -32,6 +32,11 @@ export type ClassMinAggregateOutputType = {
   archived: boolean | null
   invitationCode: string | null
   backgroundImage: string | null
+  subject: string | null
+  language: string | null
+  educationLevel: string | null
+  province: string | null
+  isTemplate: boolean | null
   teacherId: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -45,6 +50,11 @@ export type ClassMaxAggregateOutputType = {
   archived: boolean | null
   invitationCode: string | null
   backgroundImage: string | null
+  subject: string | null
+  language: string | null
+  educationLevel: string | null
+  province: string | null
+  isTemplate: boolean | null
   teacherId: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -58,6 +68,11 @@ export type ClassCountAggregateOutputType = {
   archived: number
   invitationCode: number
   backgroundImage: number
+  subject: number
+  language: number
+  educationLevel: number
+  province: number
+  isTemplate: number
   settings: number
   teacherId: number
   createdAt: number
@@ -74,6 +89,11 @@ export type ClassMinAggregateInputType = {
   archived?: true
   invitationCode?: true
   backgroundImage?: true
+  subject?: true
+  language?: true
+  educationLevel?: true
+  province?: true
+  isTemplate?: true
   teacherId?: true
   createdAt?: true
   updatedAt?: true
@@ -87,6 +107,11 @@ export type ClassMaxAggregateInputType = {
   archived?: true
   invitationCode?: true
   backgroundImage?: true
+  subject?: true
+  language?: true
+  educationLevel?: true
+  province?: true
+  isTemplate?: true
   teacherId?: true
   createdAt?: true
   updatedAt?: true
@@ -100,6 +125,11 @@ export type ClassCountAggregateInputType = {
   archived?: true
   invitationCode?: true
   backgroundImage?: true
+  subject?: true
+  language?: true
+  educationLevel?: true
+  province?: true
+  isTemplate?: true
   settings?: true
   teacherId?: true
   createdAt?: true
@@ -187,6 +217,11 @@ export type ClassGroupByOutputType = {
   archived: boolean
   invitationCode: string
   backgroundImage: string | null
+  subject: string | null
+  language: string | null
+  educationLevel: string | null
+  province: string | null
+  isTemplate: boolean
   settings: runtime.JsonValue
   teacherId: string
   createdAt: Date
@@ -222,6 +257,11 @@ export type ClassWhereInput = {
   archived?: Prisma.BoolFilter<"Class"> | boolean
   invitationCode?: Prisma.StringFilter<"Class"> | string
   backgroundImage?: Prisma.StringNullableFilter<"Class"> | string | null
+  subject?: Prisma.StringNullableFilter<"Class"> | string | null
+  language?: Prisma.StringNullableFilter<"Class"> | string | null
+  educationLevel?: Prisma.StringNullableFilter<"Class"> | string | null
+  province?: Prisma.StringNullableFilter<"Class"> | string | null
+  isTemplate?: Prisma.BoolFilter<"Class"> | boolean
   settings?: Prisma.JsonFilter<"Class">
   teacherId?: Prisma.StringFilter<"Class"> | string
   createdAt?: Prisma.DateTimeFilter<"Class"> | Date | string
@@ -247,6 +287,11 @@ export type ClassOrderByWithRelationInput = {
   archived?: Prisma.SortOrder
   invitationCode?: Prisma.SortOrder
   backgroundImage?: Prisma.SortOrderInput | Prisma.SortOrder
+  subject?: Prisma.SortOrderInput | Prisma.SortOrder
+  language?: Prisma.SortOrderInput | Prisma.SortOrder
+  educationLevel?: Prisma.SortOrderInput | Prisma.SortOrder
+  province?: Prisma.SortOrderInput | Prisma.SortOrder
+  isTemplate?: Prisma.SortOrder
   settings?: Prisma.SortOrder
   teacherId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -275,6 +320,11 @@ export type ClassWhereUniqueInput = Prisma.AtLeast<{
   schedule?: Prisma.StringNullableFilter<"Class"> | string | null
   archived?: Prisma.BoolFilter<"Class"> | boolean
   backgroundImage?: Prisma.StringNullableFilter<"Class"> | string | null
+  subject?: Prisma.StringNullableFilter<"Class"> | string | null
+  language?: Prisma.StringNullableFilter<"Class"> | string | null
+  educationLevel?: Prisma.StringNullableFilter<"Class"> | string | null
+  province?: Prisma.StringNullableFilter<"Class"> | string | null
+  isTemplate?: Prisma.BoolFilter<"Class"> | boolean
   settings?: Prisma.JsonFilter<"Class">
   teacherId?: Prisma.StringFilter<"Class"> | string
   createdAt?: Prisma.DateTimeFilter<"Class"> | Date | string
@@ -300,6 +350,11 @@ export type ClassOrderByWithAggregationInput = {
   archived?: Prisma.SortOrder
   invitationCode?: Prisma.SortOrder
   backgroundImage?: Prisma.SortOrderInput | Prisma.SortOrder
+  subject?: Prisma.SortOrderInput | Prisma.SortOrder
+  language?: Prisma.SortOrderInput | Prisma.SortOrder
+  educationLevel?: Prisma.SortOrderInput | Prisma.SortOrder
+  province?: Prisma.SortOrderInput | Prisma.SortOrder
+  isTemplate?: Prisma.SortOrder
   settings?: Prisma.SortOrder
   teacherId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -320,6 +375,11 @@ export type ClassScalarWhereWithAggregatesInput = {
   archived?: Prisma.BoolWithAggregatesFilter<"Class"> | boolean
   invitationCode?: Prisma.StringWithAggregatesFilter<"Class"> | string
   backgroundImage?: Prisma.StringNullableWithAggregatesFilter<"Class"> | string | null
+  subject?: Prisma.StringNullableWithAggregatesFilter<"Class"> | string | null
+  language?: Prisma.StringNullableWithAggregatesFilter<"Class"> | string | null
+  educationLevel?: Prisma.StringNullableWithAggregatesFilter<"Class"> | string | null
+  province?: Prisma.StringNullableWithAggregatesFilter<"Class"> | string | null
+  isTemplate?: Prisma.BoolWithAggregatesFilter<"Class"> | boolean
   settings?: Prisma.JsonWithAggregatesFilter<"Class">
   teacherId?: Prisma.StringWithAggregatesFilter<"Class"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Class"> | Date | string
@@ -334,6 +394,11 @@ export type ClassCreateInput = {
   archived?: boolean
   invitationCode: string
   backgroundImage?: string | null
+  subject?: string | null
+  language?: string | null
+  educationLevel?: string | null
+  province?: string | null
+  isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -358,6 +423,11 @@ export type ClassUncheckedCreateInput = {
   archived?: boolean
   invitationCode: string
   backgroundImage?: string | null
+  subject?: string | null
+  language?: string | null
+  educationLevel?: string | null
+  province?: string | null
+  isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   teacherId: string
   createdAt?: Date | string
@@ -382,6 +452,11 @@ export type ClassUpdateInput = {
   archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   invitationCode?: Prisma.StringFieldUpdateOperationsInput | string
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -406,6 +481,11 @@ export type ClassUncheckedUpdateInput = {
   archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   invitationCode?: Prisma.StringFieldUpdateOperationsInput | string
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -430,6 +510,11 @@ export type ClassCreateManyInput = {
   archived?: boolean
   invitationCode: string
   backgroundImage?: string | null
+  subject?: string | null
+  language?: string | null
+  educationLevel?: string | null
+  province?: string | null
+  isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   teacherId: string
   createdAt?: Date | string
@@ -444,6 +529,11 @@ export type ClassUpdateManyMutationInput = {
   archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   invitationCode?: Prisma.StringFieldUpdateOperationsInput | string
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -457,6 +547,11 @@ export type ClassUncheckedUpdateManyInput = {
   archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   invitationCode?: Prisma.StringFieldUpdateOperationsInput | string
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -481,6 +576,11 @@ export type ClassCountOrderByAggregateInput = {
   archived?: Prisma.SortOrder
   invitationCode?: Prisma.SortOrder
   backgroundImage?: Prisma.SortOrder
+  subject?: Prisma.SortOrder
+  language?: Prisma.SortOrder
+  educationLevel?: Prisma.SortOrder
+  province?: Prisma.SortOrder
+  isTemplate?: Prisma.SortOrder
   settings?: Prisma.SortOrder
   teacherId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -495,6 +595,11 @@ export type ClassMaxOrderByAggregateInput = {
   archived?: Prisma.SortOrder
   invitationCode?: Prisma.SortOrder
   backgroundImage?: Prisma.SortOrder
+  subject?: Prisma.SortOrder
+  language?: Prisma.SortOrder
+  educationLevel?: Prisma.SortOrder
+  province?: Prisma.SortOrder
+  isTemplate?: Prisma.SortOrder
   teacherId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -508,6 +613,11 @@ export type ClassMinOrderByAggregateInput = {
   archived?: Prisma.SortOrder
   invitationCode?: Prisma.SortOrder
   backgroundImage?: Prisma.SortOrder
+  subject?: Prisma.SortOrder
+  language?: Prisma.SortOrder
+  educationLevel?: Prisma.SortOrder
+  province?: Prisma.SortOrder
+  isTemplate?: Prisma.SortOrder
   teacherId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -708,6 +818,11 @@ export type ClassCreateWithoutTeacherInput = {
   archived?: boolean
   invitationCode: string
   backgroundImage?: string | null
+  subject?: string | null
+  language?: string | null
+  educationLevel?: string | null
+  province?: string | null
+  isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -731,6 +846,11 @@ export type ClassUncheckedCreateWithoutTeacherInput = {
   archived?: boolean
   invitationCode: string
   backgroundImage?: string | null
+  subject?: string | null
+  language?: string | null
+  educationLevel?: string | null
+  province?: string | null
+  isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -783,6 +903,11 @@ export type ClassScalarWhereInput = {
   archived?: Prisma.BoolFilter<"Class"> | boolean
   invitationCode?: Prisma.StringFilter<"Class"> | string
   backgroundImage?: Prisma.StringNullableFilter<"Class"> | string | null
+  subject?: Prisma.StringNullableFilter<"Class"> | string | null
+  language?: Prisma.StringNullableFilter<"Class"> | string | null
+  educationLevel?: Prisma.StringNullableFilter<"Class"> | string | null
+  province?: Prisma.StringNullableFilter<"Class"> | string | null
+  isTemplate?: Prisma.BoolFilter<"Class"> | boolean
   settings?: Prisma.JsonFilter<"Class">
   teacherId?: Prisma.StringFilter<"Class"> | string
   createdAt?: Prisma.DateTimeFilter<"Class"> | Date | string
@@ -797,6 +922,11 @@ export type ClassCreateWithoutEnrollmentsInput = {
   archived?: boolean
   invitationCode: string
   backgroundImage?: string | null
+  subject?: string | null
+  language?: string | null
+  educationLevel?: string | null
+  province?: string | null
+  isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -820,6 +950,11 @@ export type ClassUncheckedCreateWithoutEnrollmentsInput = {
   archived?: boolean
   invitationCode: string
   backgroundImage?: string | null
+  subject?: string | null
+  language?: string | null
+  educationLevel?: string | null
+  province?: string | null
+  isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   teacherId: string
   createdAt?: Date | string
@@ -859,6 +994,11 @@ export type ClassUpdateWithoutEnrollmentsInput = {
   archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   invitationCode?: Prisma.StringFieldUpdateOperationsInput | string
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -882,6 +1022,11 @@ export type ClassUncheckedUpdateWithoutEnrollmentsInput = {
   archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   invitationCode?: Prisma.StringFieldUpdateOperationsInput | string
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -905,6 +1050,11 @@ export type ClassCreateWithoutGuideInput = {
   archived?: boolean
   invitationCode: string
   backgroundImage?: string | null
+  subject?: string | null
+  language?: string | null
+  educationLevel?: string | null
+  province?: string | null
+  isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -928,6 +1078,11 @@ export type ClassUncheckedCreateWithoutGuideInput = {
   archived?: boolean
   invitationCode: string
   backgroundImage?: string | null
+  subject?: string | null
+  language?: string | null
+  educationLevel?: string | null
+  province?: string | null
+  isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   teacherId: string
   createdAt?: Date | string
@@ -967,6 +1122,11 @@ export type ClassUpdateWithoutGuideInput = {
   archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   invitationCode?: Prisma.StringFieldUpdateOperationsInput | string
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -990,6 +1150,11 @@ export type ClassUncheckedUpdateWithoutGuideInput = {
   archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   invitationCode?: Prisma.StringFieldUpdateOperationsInput | string
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1013,6 +1178,11 @@ export type ClassCreateWithoutShopItemsInput = {
   archived?: boolean
   invitationCode: string
   backgroundImage?: string | null
+  subject?: string | null
+  language?: string | null
+  educationLevel?: string | null
+  province?: string | null
+  isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1036,6 +1206,11 @@ export type ClassUncheckedCreateWithoutShopItemsInput = {
   archived?: boolean
   invitationCode: string
   backgroundImage?: string | null
+  subject?: string | null
+  language?: string | null
+  educationLevel?: string | null
+  province?: string | null
+  isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   teacherId: string
   createdAt?: Date | string
@@ -1075,6 +1250,11 @@ export type ClassUpdateWithoutShopItemsInput = {
   archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   invitationCode?: Prisma.StringFieldUpdateOperationsInput | string
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1098,6 +1278,11 @@ export type ClassUncheckedUpdateWithoutShopItemsInput = {
   archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   invitationCode?: Prisma.StringFieldUpdateOperationsInput | string
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1121,6 +1306,11 @@ export type ClassCreateWithoutShopPurchasesInput = {
   archived?: boolean
   invitationCode: string
   backgroundImage?: string | null
+  subject?: string | null
+  language?: string | null
+  educationLevel?: string | null
+  province?: string | null
+  isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1144,6 +1334,11 @@ export type ClassUncheckedCreateWithoutShopPurchasesInput = {
   archived?: boolean
   invitationCode: string
   backgroundImage?: string | null
+  subject?: string | null
+  language?: string | null
+  educationLevel?: string | null
+  province?: string | null
+  isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   teacherId: string
   createdAt?: Date | string
@@ -1183,6 +1378,11 @@ export type ClassUpdateWithoutShopPurchasesInput = {
   archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   invitationCode?: Prisma.StringFieldUpdateOperationsInput | string
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1206,6 +1406,11 @@ export type ClassUncheckedUpdateWithoutShopPurchasesInput = {
   archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   invitationCode?: Prisma.StringFieldUpdateOperationsInput | string
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1229,6 +1434,11 @@ export type ClassCreateWithoutShopItemUsesInput = {
   archived?: boolean
   invitationCode: string
   backgroundImage?: string | null
+  subject?: string | null
+  language?: string | null
+  educationLevel?: string | null
+  province?: string | null
+  isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1252,6 +1462,11 @@ export type ClassUncheckedCreateWithoutShopItemUsesInput = {
   archived?: boolean
   invitationCode: string
   backgroundImage?: string | null
+  subject?: string | null
+  language?: string | null
+  educationLevel?: string | null
+  province?: string | null
+  isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   teacherId: string
   createdAt?: Date | string
@@ -1291,6 +1506,11 @@ export type ClassUpdateWithoutShopItemUsesInput = {
   archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   invitationCode?: Prisma.StringFieldUpdateOperationsInput | string
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1314,6 +1534,11 @@ export type ClassUncheckedUpdateWithoutShopItemUsesInput = {
   archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   invitationCode?: Prisma.StringFieldUpdateOperationsInput | string
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1337,6 +1562,11 @@ export type ClassCreateWithoutMissionsInput = {
   archived?: boolean
   invitationCode: string
   backgroundImage?: string | null
+  subject?: string | null
+  language?: string | null
+  educationLevel?: string | null
+  province?: string | null
+  isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1360,6 +1590,11 @@ export type ClassUncheckedCreateWithoutMissionsInput = {
   archived?: boolean
   invitationCode: string
   backgroundImage?: string | null
+  subject?: string | null
+  language?: string | null
+  educationLevel?: string | null
+  province?: string | null
+  isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   teacherId: string
   createdAt?: Date | string
@@ -1399,6 +1634,11 @@ export type ClassUpdateWithoutMissionsInput = {
   archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   invitationCode?: Prisma.StringFieldUpdateOperationsInput | string
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1422,6 +1662,11 @@ export type ClassUncheckedUpdateWithoutMissionsInput = {
   archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   invitationCode?: Prisma.StringFieldUpdateOperationsInput | string
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1445,6 +1690,11 @@ export type ClassCreateWithoutJoinRequestsInput = {
   archived?: boolean
   invitationCode: string
   backgroundImage?: string | null
+  subject?: string | null
+  language?: string | null
+  educationLevel?: string | null
+  province?: string | null
+  isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1468,6 +1718,11 @@ export type ClassUncheckedCreateWithoutJoinRequestsInput = {
   archived?: boolean
   invitationCode: string
   backgroundImage?: string | null
+  subject?: string | null
+  language?: string | null
+  educationLevel?: string | null
+  province?: string | null
+  isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   teacherId: string
   createdAt?: Date | string
@@ -1507,6 +1762,11 @@ export type ClassUpdateWithoutJoinRequestsInput = {
   archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   invitationCode?: Prisma.StringFieldUpdateOperationsInput | string
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1530,6 +1790,11 @@ export type ClassUncheckedUpdateWithoutJoinRequestsInput = {
   archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   invitationCode?: Prisma.StringFieldUpdateOperationsInput | string
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1553,6 +1818,11 @@ export type ClassCreateWithoutInvitationsInput = {
   archived?: boolean
   invitationCode: string
   backgroundImage?: string | null
+  subject?: string | null
+  language?: string | null
+  educationLevel?: string | null
+  province?: string | null
+  isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1576,6 +1846,11 @@ export type ClassUncheckedCreateWithoutInvitationsInput = {
   archived?: boolean
   invitationCode: string
   backgroundImage?: string | null
+  subject?: string | null
+  language?: string | null
+  educationLevel?: string | null
+  province?: string | null
+  isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   teacherId: string
   createdAt?: Date | string
@@ -1615,6 +1890,11 @@ export type ClassUpdateWithoutInvitationsInput = {
   archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   invitationCode?: Prisma.StringFieldUpdateOperationsInput | string
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1638,6 +1918,11 @@ export type ClassUncheckedUpdateWithoutInvitationsInput = {
   archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   invitationCode?: Prisma.StringFieldUpdateOperationsInput | string
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1661,6 +1946,11 @@ export type ClassCreateWithoutBehaviorTemplatesInput = {
   archived?: boolean
   invitationCode: string
   backgroundImage?: string | null
+  subject?: string | null
+  language?: string | null
+  educationLevel?: string | null
+  province?: string | null
+  isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1684,6 +1974,11 @@ export type ClassUncheckedCreateWithoutBehaviorTemplatesInput = {
   archived?: boolean
   invitationCode: string
   backgroundImage?: string | null
+  subject?: string | null
+  language?: string | null
+  educationLevel?: string | null
+  province?: string | null
+  isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   teacherId: string
   createdAt?: Date | string
@@ -1723,6 +2018,11 @@ export type ClassUpdateWithoutBehaviorTemplatesInput = {
   archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   invitationCode?: Prisma.StringFieldUpdateOperationsInput | string
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1746,6 +2046,11 @@ export type ClassUncheckedUpdateWithoutBehaviorTemplatesInput = {
   archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   invitationCode?: Prisma.StringFieldUpdateOperationsInput | string
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1769,6 +2074,11 @@ export type ClassCreateWithoutBehaviorApplicationsInput = {
   archived?: boolean
   invitationCode: string
   backgroundImage?: string | null
+  subject?: string | null
+  language?: string | null
+  educationLevel?: string | null
+  province?: string | null
+  isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1792,6 +2102,11 @@ export type ClassUncheckedCreateWithoutBehaviorApplicationsInput = {
   archived?: boolean
   invitationCode: string
   backgroundImage?: string | null
+  subject?: string | null
+  language?: string | null
+  educationLevel?: string | null
+  province?: string | null
+  isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   teacherId: string
   createdAt?: Date | string
@@ -1831,6 +2146,11 @@ export type ClassUpdateWithoutBehaviorApplicationsInput = {
   archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   invitationCode?: Prisma.StringFieldUpdateOperationsInput | string
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1854,6 +2174,11 @@ export type ClassUncheckedUpdateWithoutBehaviorApplicationsInput = {
   archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   invitationCode?: Prisma.StringFieldUpdateOperationsInput | string
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1877,6 +2202,11 @@ export type ClassCreateManyTeacherInput = {
   archived?: boolean
   invitationCode: string
   backgroundImage?: string | null
+  subject?: string | null
+  language?: string | null
+  educationLevel?: string | null
+  province?: string | null
+  isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1890,6 +2220,11 @@ export type ClassUpdateWithoutTeacherInput = {
   archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   invitationCode?: Prisma.StringFieldUpdateOperationsInput | string
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1913,6 +2248,11 @@ export type ClassUncheckedUpdateWithoutTeacherInput = {
   archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   invitationCode?: Prisma.StringFieldUpdateOperationsInput | string
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1936,6 +2276,11 @@ export type ClassUncheckedUpdateManyWithoutTeacherInput = {
   archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   invitationCode?: Prisma.StringFieldUpdateOperationsInput | string
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2052,6 +2397,11 @@ export type ClassSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   archived?: boolean
   invitationCode?: boolean
   backgroundImage?: boolean
+  subject?: boolean
+  language?: boolean
+  educationLevel?: boolean
+  province?: boolean
+  isTemplate?: boolean
   settings?: boolean
   teacherId?: boolean
   createdAt?: boolean
@@ -2078,6 +2428,11 @@ export type ClassSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   archived?: boolean
   invitationCode?: boolean
   backgroundImage?: boolean
+  subject?: boolean
+  language?: boolean
+  educationLevel?: boolean
+  province?: boolean
+  isTemplate?: boolean
   settings?: boolean
   teacherId?: boolean
   createdAt?: boolean
@@ -2093,6 +2448,11 @@ export type ClassSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   archived?: boolean
   invitationCode?: boolean
   backgroundImage?: boolean
+  subject?: boolean
+  language?: boolean
+  educationLevel?: boolean
+  province?: boolean
+  isTemplate?: boolean
   settings?: boolean
   teacherId?: boolean
   createdAt?: boolean
@@ -2108,13 +2468,18 @@ export type ClassSelectScalar = {
   archived?: boolean
   invitationCode?: boolean
   backgroundImage?: boolean
+  subject?: boolean
+  language?: boolean
+  educationLevel?: boolean
+  province?: boolean
+  isTemplate?: boolean
   settings?: boolean
   teacherId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ClassOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "narrative" | "schedule" | "archived" | "invitationCode" | "backgroundImage" | "settings" | "teacherId" | "createdAt" | "updatedAt", ExtArgs["result"]["class"]>
+export type ClassOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "narrative" | "schedule" | "archived" | "invitationCode" | "backgroundImage" | "subject" | "language" | "educationLevel" | "province" | "isTemplate" | "settings" | "teacherId" | "createdAt" | "updatedAt", ExtArgs["result"]["class"]>
 export type ClassInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   teacher?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   enrollments?: boolean | Prisma.Class$enrollmentsArgs<ExtArgs>
@@ -2159,6 +2524,11 @@ export type $ClassPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     archived: boolean
     invitationCode: string
     backgroundImage: string | null
+    subject: string | null
+    language: string | null
+    educationLevel: string | null
+    province: string | null
+    isTemplate: boolean
     settings: runtime.JsonValue
     teacherId: string
     createdAt: Date
@@ -2604,6 +2974,11 @@ export interface ClassFieldRefs {
   readonly archived: Prisma.FieldRef<"Class", 'Boolean'>
   readonly invitationCode: Prisma.FieldRef<"Class", 'String'>
   readonly backgroundImage: Prisma.FieldRef<"Class", 'String'>
+  readonly subject: Prisma.FieldRef<"Class", 'String'>
+  readonly language: Prisma.FieldRef<"Class", 'String'>
+  readonly educationLevel: Prisma.FieldRef<"Class", 'String'>
+  readonly province: Prisma.FieldRef<"Class", 'String'>
+  readonly isTemplate: Prisma.FieldRef<"Class", 'Boolean'>
   readonly settings: Prisma.FieldRef<"Class", 'Json'>
   readonly teacherId: Prisma.FieldRef<"Class", 'String'>
   readonly createdAt: Prisma.FieldRef<"Class", 'DateTime'>

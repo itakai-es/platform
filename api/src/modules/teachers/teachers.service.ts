@@ -1,7 +1,8 @@
 import { prisma } from '../../config/database.js'
+import type { Prisma } from '../../generated/prisma/client.js'
 import { nanoid } from 'nanoid'
 import { getLevelInfo, calculateMissionTotalXP } from '../../utils/xp-calculator.js'
-import { existsSync, mkdirSync, writeFileSync } from 'fs'
+import { existsSync, mkdirSync } from 'fs'
 import { join } from 'path'
 import { randomUUID } from 'crypto'
 import { generateFireRedAvatar } from '../ai/generators/avatar-firered.js'
@@ -12,12 +13,16 @@ import {
   normalizeClassSettings,
   type ClassSettings,
 } from '../../utils/class-settings.js'
+import { saveUpload } from '../storage/storage.service.js'
 
 const BADGES_DIR = join(process.cwd(), 'uploads', 'badges')
+const COVERS_DIR = join(process.cwd(), 'uploads', 'covers')
 
-// Ensure badges directory exists
-if (!existsSync(BADGES_DIR)) {
-  mkdirSync(BADGES_DIR, { recursive: true })
+// Ensure upload directories exist
+for (const dir of [BADGES_DIR, COVERS_DIR]) {
+  if (!existsSync(dir)) {
+    mkdirSync(dir, { recursive: true })
+  }
 }
 
 // Default avatar options (Greek gods)
@@ -77,8 +82,9 @@ function getRandomNickname(): string {
   return MYTHOLOGICAL_NICKNAMES[Math.floor(Math.random() * MYTHOLOGICAL_NICKNAMES.length)]
 }
 
-// Helper: Save base64 image to file and return URL
-function saveBase64Image(base64Data: string): string | null {
+// Helper: Save base64 image to file and return URL. `subdir` selects the
+// uploads folder (e.g. 'badges', 'covers') and the returned URL prefix.
+async function saveBase64Image(base64Data: string, subdir: 'badges' | 'covers' = 'badges'): Promise<string | null> {
   if (!base64Data || !base64Data.startsWith('data:image/')) {
     return null
   }
@@ -88,16 +94,10 @@ function saveBase64Image(base64Data: string): string | null {
   if (!matches) return null
 
   const ext = matches[1] === 'jpeg' ? 'jpg' : matches[1]
-  const data = matches[2]
-  const buffer = Buffer.from(data, 'base64')
+  const buffer = Buffer.from(matches[2], 'base64')
 
-  // Generate unique filename
   const filename = `${randomUUID()}.${ext}`
-  const filepath = join(BADGES_DIR, filename)
-
-  writeFileSync(filepath, buffer)
-
-  return `/uploads/badges/${filename}`
+  return saveUpload(`${subdir}/${filename}`, buffer, `image/${matches[1]}`)
 }
 
 export class TeachersService {
@@ -162,6 +162,10 @@ export class TeachersService {
           archived: c.archived,
           invitationCode: c.invitationCode,
           backgroundImage: c.backgroundImage,
+          subject: c.subject,
+          language: c.language,
+          educationLevel: c.educationLevel,
+          province: c.province,
           settings: resolveClassSettings(c.settings),
           studentCount: c.enrollments.length,
           missionCount: totalMissions,
@@ -207,6 +211,11 @@ export class TeachersService {
       archived: cls.archived,
       invitationCode: cls.invitationCode,
       backgroundImage: cls.backgroundImage,
+      subject: cls.subject,
+      language: cls.language,
+      educationLevel: cls.educationLevel,
+      province: cls.province,
+      isTemplate: cls.isTemplate,
       settings: resolveClassSettings(cls.settings),
       updatedAt: cls.updatedAt,
       studentCount: cls.enrollments.length,
@@ -219,8 +228,14 @@ export class TeachersService {
     }
   }
 
-  async createClass(userId: string, data: { name: string; narrative?: string; schedule?: string; backgroundImage?: string }) {
+  async createClass(userId: string, data: { name: string; narrative?: string; schedule?: string; backgroundImage?: string; subject?: string; language?: string; educationLevel?: string; province?: string }) {
     const invitationCode = nanoid(6).toUpperCase()
+
+    // If the teacher uploaded their own cover it arrives as a base64 data URL;
+    // persist it to disk and store the path instead of the raw base64 blob.
+    if (data.backgroundImage && data.backgroundImage.startsWith('data:image/')) {
+      data = { ...data, backgroundImage: (await saveBase64Image(data.backgroundImage, 'covers')) || undefined }
+    }
 
     const cls = await prisma.class.create({
       data: {
@@ -243,6 +258,10 @@ export class TeachersService {
         archived: cls.archived,
         invitationCode: cls.invitationCode,
         backgroundImage: cls.backgroundImage,
+        subject: cls.subject,
+        language: cls.language,
+        educationLevel: cls.educationLevel,
+        province: cls.province,
       },
       message: 'Clase creada correctamente',
     }
@@ -251,13 +270,18 @@ export class TeachersService {
   async updateClass(
     userId: string,
     classId: string,
-    data: { name?: string; narrative?: string; schedule?: string; backgroundImage?: string; settings?: Partial<ClassSettings> }
+    data: { name?: string; narrative?: string; schedule?: string; backgroundImage?: string; subject?: string; language?: string; educationLevel?: string; province?: string; settings?: Partial<ClassSettings> }
   ) {
     const cls = await prisma.class.findFirst({
       where: { id: classId, teacherId: userId },
     })
 
     if (!cls) throw new Error('Clase no encontrada')
+
+    // Persist an uploaded cover (base64 data URL) to disk before storing.
+    if (data.backgroundImage && data.backgroundImage.startsWith('data:image/')) {
+      data = { ...data, backgroundImage: (await saveBase64Image(data.backgroundImage, 'covers')) || undefined }
+    }
 
     const { settings: settingsPatch, ...rest } = data
 
@@ -281,10 +305,191 @@ export class TeachersService {
         archived: updated.archived,
         invitationCode: updated.invitationCode,
         backgroundImage: updated.backgroundImage,
+        subject: updated.subject,
+        language: updated.language,
+        educationLevel: updated.educationLevel,
+        province: updated.province,
         settings: resolveClassSettings(updated.settings),
       },
       message: 'Clase actualizada correctamente',
     }
+  }
+
+  // ==================== MARKETPLACE DE PLANTILLAS ====================
+
+  /** Publica/retira una clase como plantilla pública. Al publicar exige metadatos
+   *  mínimos (asignatura, nivel, idioma) para que el marketplace pueda filtrarla. */
+  async publishTemplate(userId: string, classId: string, publish: boolean) {
+    const cls = await prisma.class.findFirst({ where: { id: classId, teacherId: userId } })
+    if (!cls) throw new Error('Clase no encontrada')
+
+    if (publish) {
+      const missing: string[] = []
+      if (!cls.subject) missing.push('subject')
+      if (!cls.educationLevel) missing.push('educationLevel')
+      if (!cls.language) missing.push('language')
+      if (missing.length > 0) {
+        throw new Error('Completa los metadatos de la clase (asignatura, nivel e idioma) antes de publicarla como plantilla.')
+      }
+    }
+
+    await prisma.class.update({ where: { id: classId }, data: { isTemplate: publish } })
+    return { isTemplate: publish }
+  }
+
+  /** Lista las plantillas públicas del marketplace, con filtros opcionales. */
+  async listTemplates(
+    userId: string,
+    filters: { subject?: string; educationLevel?: string; language?: string; province?: string; q?: string } = {}
+  ) {
+    const where: Prisma.ClassWhereInput = {
+      isTemplate: true,
+      archived: false,
+      ...(filters.subject ? { subject: filters.subject } : {}),
+      ...(filters.educationLevel ? { educationLevel: filters.educationLevel } : {}),
+      ...(filters.language ? { language: filters.language } : {}),
+      ...(filters.province ? { province: filters.province } : {}),
+      ...(filters.q
+        ? {
+            OR: [
+              { name: { contains: filters.q, mode: 'insensitive' } },
+              { narrative: { contains: filters.q, mode: 'insensitive' } },
+            ],
+          }
+        : {}),
+    }
+
+    const classes = await prisma.class.findMany({
+      where,
+      include: { teacher: { select: { name: true } }, _count: { select: { missions: true } } },
+      orderBy: { updatedAt: 'desc' },
+      take: 100,
+    })
+
+    return {
+      templates: classes.map((c) => ({
+        id: c.id,
+        name: c.name,
+        narrative: c.narrative,
+        subject: c.subject,
+        language: c.language,
+        educationLevel: c.educationLevel,
+        province: c.province,
+        backgroundImage: c.backgroundImage,
+        teacherName: c.teacher.name,
+        missionCount: c._count.missions,
+        isOwn: c.teacherId === userId,
+      })),
+      total: classes.length,
+    }
+  }
+
+  /** Detalle de una plantilla del marketplace. Devuelve exactamente lo que el
+   *  importe copia (portada, historia, funcionalidades, tienda, comportamientos)
+   *  para que el modal de previsualización enseñe qué te llevas al importar. */
+  async getTemplateDetail(userId: string, templateClassId: string) {
+    const tpl = await prisma.class.findFirst({
+      where: { id: templateClassId, isTemplate: true },
+      select: {
+        id: true,
+        name: true,
+        narrative: true,
+        backgroundImage: true,
+        settings: true,
+        teacherId: true,
+        teacher: { select: { name: true } },
+        shopItems: {
+          select: { id: true, name: true, description: true, price: true, kind: true, manaCost: true, usage: true, lifeRestore: true },
+          orderBy: { price: 'asc' },
+        },
+        behaviorTemplates: {
+          select: { id: true, kind: true, name: true, description: true, xpDelta: true, coinDelta: true, lifeDelta: true },
+          orderBy: [{ kind: 'asc' }, { name: 'asc' }],
+        },
+      },
+    })
+    if (!tpl) throw new Error('Plantilla no encontrada')
+
+    return {
+      id: tpl.id,
+      name: tpl.name,
+      narrative: tpl.narrative,
+      backgroundImage: tpl.backgroundImage,
+      teacherName: tpl.teacher.name,
+      isOwn: tpl.teacherId === userId,
+      settings: tpl.settings,
+      shopItems: tpl.shopItems,
+      behaviorTemplates: tpl.behaviorTemplates,
+    }
+  }
+
+  /** Importa una plantilla: crea una clase NUEVA del profesor copiando el "chasis"
+   *  reutilizable: settings (funcionalidades), narrativa, imagen de fondo, tienda
+   *  y comportamientos. Deja fuera lo que es específico del profesor original:
+   *  misiones + enigmas (cada profe monta los suyos), guía, metadatos de filtro,
+   *  alumnos y progreso. */
+  async importTemplate(userId: string, templateClassId: string) {
+    const tpl = await prisma.class.findFirst({
+      where: { id: templateClassId, isTemplate: true },
+      include: {
+        shopItems: true,
+        behaviorTemplates: true,
+      },
+    })
+    if (!tpl) throw new Error('Plantilla no encontrada')
+
+    const invitationCode = nanoid(6).toUpperCase()
+
+    const created = await prisma.$transaction(
+      async (tx) => {
+        const newClass = await tx.class.create({
+          data: {
+            name: `${tpl.name} (copia)`,
+            narrative: tpl.narrative,
+            backgroundImage: tpl.backgroundImage,
+            settings: tpl.settings as Prisma.InputJsonValue,
+            teacherId: userId,
+            invitationCode,
+            isTemplate: false,
+          },
+        })
+
+        if (tpl.shopItems.length > 0) {
+          await tx.shopItem.createMany({
+            data: tpl.shopItems.map((s) => ({
+              classId: newClass.id,
+              name: s.name,
+              description: s.description,
+              price: s.price,
+              active: s.active,
+              kind: s.kind,
+              manaCost: s.manaCost,
+              usage: s.usage,
+              lifeRestore: s.lifeRestore,
+            })),
+          })
+        }
+
+        if (tpl.behaviorTemplates.length > 0) {
+          await tx.behaviorTemplate.createMany({
+            data: tpl.behaviorTemplates.map((b) => ({
+              classId: newClass.id,
+              kind: b.kind,
+              name: b.name,
+              description: b.description,
+              xpDelta: b.xpDelta,
+              coinDelta: b.coinDelta,
+              lifeDelta: b.lifeDelta,
+            })),
+          })
+        }
+
+        return newClass
+      },
+      { timeout: 20000 }
+    )
+
+    return { class: { id: created.id, name: created.name }, message: 'Plantilla importada como nueva clase' }
   }
 
   async setClassArchived(userId: string, classId: string, archived: boolean) {
@@ -1292,7 +1497,7 @@ export class TeachersService {
     // If imageUrl is base64, save it as a file
     let imageUrl = data.imageUrl
     if (imageUrl && imageUrl.startsWith('data:image/')) {
-      imageUrl = saveBase64Image(imageUrl) || undefined
+      imageUrl = (await saveBase64Image(imageUrl)) || undefined
     }
 
     const badge = await prisma.badge.create({
@@ -1328,7 +1533,7 @@ export class TeachersService {
     // If imageUrl is base64, save it as a file
     let imageUrl = data.imageUrl
     if (imageUrl && imageUrl.startsWith('data:image/')) {
-      imageUrl = saveBase64Image(imageUrl) || undefined
+      imageUrl = (await saveBase64Image(imageUrl)) || undefined
     }
 
     const updated = await prisma.badge.update({

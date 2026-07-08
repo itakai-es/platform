@@ -53,6 +53,12 @@ export interface Class {
   invitationCode: string // Código de 6 dígitos para que estudiantes se unan
   teacherId: string
   backgroundImage?: string
+  // Metadatos de clasificación (alimentan los filtros del marketplace de plantillas)
+  subject?: string
+  language?: string
+  educationLevel?: string
+  province?: string
+  isTemplate?: boolean
   settings?: ClassSettings
   createdAt: Date
   updatedAt: Date
@@ -69,6 +75,10 @@ export interface CreateClassData {
   narrative?: string
   schedule?: string
   backgroundImage?: string
+  subject?: string
+  language?: string
+  educationLevel?: string
+  province?: string
 }
 
 /**
@@ -79,6 +89,10 @@ export interface UpdateClassData {
   narrative?: string
   schedule?: string
   backgroundImage?: string
+  subject?: string
+  language?: string
+  educationLevel?: string
+  province?: string
   settings?: Partial<ClassSettings>
 }
 

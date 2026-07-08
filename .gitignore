@@ -15,6 +15,8 @@ build/
 .env.*.local
 .env.prod
 **/.env.prod
+.env.selfhost
+**/.env.selfhost
 
 # Logs
 logs/

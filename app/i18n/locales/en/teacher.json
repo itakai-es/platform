@@ -30,7 +30,8 @@
         "meta": {
           "title": "My Classes | ITAKAI Teacher",
           "description": "Manage all your classes, enrolled students, and assigned missions."
-        }
+        },
+        "templates": "Templates"
       },
       "create": {
         "breadcrumb_classes": "My Classes",
@@ -51,20 +52,22 @@
         },
         "preview_label": "This is how your class will look",
         "onboarding": {
-          "ask_idea": "Hi {name}! I'm {god}. Tell me, what do you want your class to be about?",
+          "ask_idea": "Hi {name}! I'm {god}. Tell me — what world or theme do you want for your class?",
           "review_approach": "Here's what I've prepared for you, do you like it?",
           "pick_title": "What title should we give your class?",
           "ask_schedule": "What schedule will your class have?",
           "ask_image": "I've created this cover for your class",
-          "placeholder_idea": "E.g.: I want to create a physics class for 10th grade with Greek mythology theme, focused on mechanics and thermodynamics...",
+          "placeholder_idea": "E.g.: A school of magic with 4 houses competing for points, wizard-students and challenges shaped as dungeons…",
           "generating_approach": "I'm creating the narrative for your class...",
           "narrative_feedback_placeholder": "E.g.: I want more Hogwarts house references...",
           "btn_change_something": "I want to change something",
           "custom_title_placeholder": "Or write your own title...",
           "title_feedback_placeholder": "E.g.: I want shorter titles, with more Harry Potter references...",
-          "placeholder_schedule": "E.g.: Monday and Wednesday 10:00-12:00",
           "generating_cover": "Generating cover...",
           "cover_error": "Could not generate the cover. You can skip this step.",
+          "btn_upload_cover": "Upload my own",
+          "cover_upload_type_error": "Invalid format. Upload a PNG, JPG or WEBP image.",
+          "cover_upload_size_error": "The image is too large (max 5 MB).",
           "image_feedback_placeholder": "I want it more colorful, with blue background...",
           "thinking": "Thinking...",
           "btn_back": "Back",
@@ -250,9 +253,20 @@
           "general": {
             "title": "General details",
             "name_label": "Name",
+            "subject_label": "Subject",
+            "level_label": "Education level",
+            "language_label": "Language",
+            "province_label": "Province",
+            "metadata_none": "Not specified",
+            "metadata_search": "Search...",
+            "publish_title": "Publish as template",
+            "publish_hint": "Share it in the marketplace so other teachers can import it.",
+            "publish_missing_metadata": "Save subject, level and language before publishing.",
+            "publish_on": "Class published as a template",
+            "publish_off": "Template removed from the marketplace",
+            "publish_error": "Couldn't publish the template",
             "schedule_label": "Schedule",
             "background_label": "Background image",
-            "background_hint": "Public URL of an image used as the class header background.",
             "save": "Save changes",
             "discard": "Discard",
             "toast_saved": "Details saved",
@@ -264,6 +278,9 @@
             "background_generate": "Generate with AI",
             "background_regenerate": "Regenerate with AI",
             "background_clear": "Remove image",
+            "background_upload": "Upload my own",
+            "background_upload_type_error": "Invalid format. Upload a PNG, JPG or WEBP image.",
+            "background_upload_size_error": "The image is too large (max 5 MB).",
             "background_error": "Could not generate the image"
           },
           "features": {
@@ -634,6 +651,56 @@
           "legendary": "Legendary"
         },
         "btn_close": "Close"
+      }
+    },
+    "templates": {
+      "page_title": "Class templates",
+      "page_subtitle": "Browse classes other teachers have published and import them into yours.",
+      "search": "Search templates…",
+      "own": "Yours",
+      "import": "Import",
+      "import_success": "“{name}” imported. Make it your own!",
+      "import_error": "Couldn't import the template",
+      "load_error": "Couldn't load templates",
+      "empty_title": "No templates yet",
+      "empty_description": "When a teacher publishes a class as a template, it'll show up here.",
+      "no_results_title": "No results",
+      "no_results_description": "No templates match your filters.",
+      "preview_action": "Preview",
+      "preview": {
+        "loading": "Loading template…",
+        "by": "By {name}",
+        "active": "On",
+        "inactive": "Off",
+        "load_error": "Could not load the template",
+        "error": "Template not found.",
+        "tab_narrative": "Story",
+        "tab_features": "Features",
+        "tab_shop": "Shop ({n})",
+        "tab_behaviors": "Behaviors ({n})",
+        "no_narrative_title": "No story",
+        "no_narrative_description": "This template does not have a story defined.",
+        "no_shop_title": "No shop",
+        "no_shop_description": "This template has no shop items. You can add your own.",
+        "no_behaviors_title": "No behaviors",
+        "no_behaviors_description": "This template has no behaviors. You can define your own."
+      },
+      "filter_all": {
+        "subject": "All subjects",
+        "level": "All levels",
+        "language": "All languages",
+        "province": "All provinces"
+      },
+      "sort": {
+        "recent": "Most recent",
+        "name_asc": "Name A-Z",
+        "name_desc": "Name Z-A"
+      },
+      "plural": {
+        "subjects": "subjects",
+        "levels": "levels",
+        "languages": "languages",
+        "provinces": "provinces"
       }
     }
   }

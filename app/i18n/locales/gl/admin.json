@@ -246,6 +246,60 @@
         "title": "Non se atoparon logs do sistema",
         "description": "Non hai rexistros do sistema que coincidan cos filtros seleccionados."
       }
+    },
+    "settings": {
+      "title": "Configuración",
+      "subtitle": "Configura os servizos desta instancia: IA, imaxes, almacenamento e dominio.",
+      "meta": {
+        "title": "Configuración · ITAKAI Admin",
+        "description": "Configuración da instancia"
+      },
+      "save": "Gardar cambios",
+      "saved": "Configuración gardada",
+      "save_error": "Non se puido gardar a configuración",
+      "ai": {
+        "title": "Intelixencia artificial",
+        "desc": "Endpoints compatibles coa API de OpenAI. Usa o provedor que queiras (OpenAI, o teu propio Spark, Groq, Together, OpenRouter, Gemini a través do seu endpoint OpenAI…).",
+        "text_title": "Texto",
+        "image_title": "Imaxes",
+        "endpoint_url": "URL do endpoint",
+        "api_key": "Clave API",
+        "model": "Modelo"
+      },
+      "storage": {
+        "title": "Almacenamento",
+        "desc": "Onde se gardan as imaxes e os arquivos subidos.",
+        "driver": "Tipo de almacenamento",
+        "driver_local": "Disco local (por defecto)",
+        "driver_s3": "Externo S3 / Cloudflare R2",
+        "endpoint": "Endpoint",
+        "region": "Rexión",
+        "bucket": "Bucket",
+        "access_key": "Access Key ID",
+        "secret_key": "Secret Access Key",
+        "public_url": "URL pública base",
+        "public_url_hint": "URL desde onde se serven os ficheiros (bucket público ou dominio propio de R2).",
+        "path_style": "Usar path-style (recomendado para R2)"
+      },
+      "domain": {
+        "title": "Dominio",
+        "desc": "URL pública da instancia e orixes permitidas.",
+        "app_url": "URL da instancia",
+        "app_url_hint": "Úsase nas ligazóns dos correos.",
+        "cors": "Orixes CORS permitidas",
+        "cors_hint": "Separa varias con comas."
+      },
+      "general": {
+        "title": "Xeral",
+        "desc": "Parámetros xerais da instancia.",
+        "platform_name": "Nome da plataforma",
+        "contact_email": "Correo de contacto",
+        "default_language": "Idioma por defecto",
+        "registration_open": "Rexistro aberto",
+        "registration_hint": "Permite que se rexistren novos usuarios.",
+        "maintenance_mode": "Modo mantemento",
+        "maintenance_hint": "Mostra un aviso de mantemento aos usuarios."
+      }
     }
   }
 }

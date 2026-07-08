@@ -14,12 +14,20 @@
     @unarchive-class="unarchiveClass"
   >
     <template #header-action>
-      <NuxtLink to="/profesor/clases/crear">
-        <Button variant="primary">
-          <PlusIcon class="w-4 h-4 mr-2" />
-          {{ t('teacher.classes.index.new_class') }}
-        </Button>
-      </NuxtLink>
+      <div class="flex items-center gap-2">
+        <NuxtLink to="/profesor/plantillas">
+          <Button variant="outline">
+            <RectangleStackIcon class="w-4 h-4 mr-2" />
+            {{ t('teacher.classes.index.templates') }}
+          </Button>
+        </NuxtLink>
+        <NuxtLink to="/profesor/clases/crear">
+          <Button variant="primary">
+            <PlusIcon class="w-4 h-4 mr-2" />
+            {{ t('teacher.classes.index.new_class') }}
+          </Button>
+        </NuxtLink>
+      </div>
     </template>
 
     <template #empty-action>
@@ -34,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import { PlusIcon } from '@heroicons/vue/24/outline'
+import { PlusIcon, RectangleStackIcon } from '@heroicons/vue/24/outline'
 
 const { t } = useI18n()
 

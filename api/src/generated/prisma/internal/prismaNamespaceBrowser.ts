@@ -54,6 +54,7 @@ export const ModelName = {
   User: 'User',
   UserSettings: 'UserSettings',
   RefreshToken: 'RefreshToken',
+  InstanceSetting: 'InstanceSetting',
   Class: 'Class',
   ClassEnrollment: 'ClassEnrollment',
   ClassGuide: 'ClassGuide',
@@ -141,6 +142,15 @@ export const RefreshTokenScalarFieldEnum = {
 export type RefreshTokenScalarFieldEnum = (typeof RefreshTokenScalarFieldEnum)[keyof typeof RefreshTokenScalarFieldEnum]
 
 
+export const InstanceSettingScalarFieldEnum = {
+  section: 'section',
+  data: 'data',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InstanceSettingScalarFieldEnum = (typeof InstanceSettingScalarFieldEnum)[keyof typeof InstanceSettingScalarFieldEnum]
+
+
 export const ClassScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -149,6 +159,11 @@ export const ClassScalarFieldEnum = {
   archived: 'archived',
   invitationCode: 'invitationCode',
   backgroundImage: 'backgroundImage',
+  subject: 'subject',
+  language: 'language',
+  educationLevel: 'educationLevel',
+  province: 'province',
+  isTemplate: 'isTemplate',
   settings: 'settings',
   teacherId: 'teacherId',
   createdAt: 'createdAt',

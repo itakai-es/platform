@@ -12,22 +12,26 @@ export const CLASS_NARRATIVE = {
   generate: (idea: string, locale: string) => locale === 'en'
     ? `A teacher says: "${idea}".
 
-Create the narrative for their gamified class. Use the EXACT theme they asked for. Be creative and inspiring — make the teacher excited to build this class.
+Create the gamified worldbuilding for their class. This is a *game world*, not a syllabus adaptation: setting, students' role, factions or houses, atmosphere, rituals, and how challenges are framed as narrative. Use the EXACT theme they asked for. Be creative and inspiring — make the teacher excited to build this class.
 
-Write freely, with your own structure. Use markdown: **bold** for key concepts, ## for sections if needed. Paint a vivid world, give students a role, show how the subject comes alive in the story, and build towards an epic climax. The teacher should read this and think "I NEED to create this class".
+CRITICAL RULE: NEVER mention the school subject or any specific curriculum content (mathematics, equations, grammar, verbs, history events, cells, periodic table, etc.). The narrative must work independently of which subject the teacher teaches, so any teacher — regardless of subject — can adopt this world and layer their own content on top. Talk about the game world, roles, factions, atmosphere, progression and stakes. Do NOT talk about the school subject.
+
+Write freely, with your own structure. Use markdown: **bold** for key concepts, ## for sections if needed. Paint a vivid world, give students a role, describe factions or houses if the theme fits, the atmosphere, the mechanics as story (missions, trials, ascension), and where students progress towards. The teacher should read this and think "I NEED to build this world for my classroom".
 
 Do NOT introduce yourself. Start directly with the narrative.`
     : `Un profesor dice: "${idea}".
 
-Crea la narrativa para su clase gamificada. Usa la tematica EXACTA que ha pedido. Se creativo e inspirador — que al profesor le entren ganas de crear esta clase.
+Crea el worldbuilding gamificado de su clase. Esto es un *mundo de juego*, no una adaptacion del temario: ambientacion, rol del alumno, facciones o casas, atmosfera, rituales, y como los retos se enmarcan como narrativa. Usa la tematica EXACTA que ha pedido. Se creativo e inspirador — que al profesor le entren ganas de crear esta clase.
 
-Escribe libremente, con la estructura que tu quieras. Usa markdown: **negrita** para conceptos clave, ## para secciones si lo necesitas. Pinta un mundo vivido, dale a los alumnos un rol, muestra como la asignatura cobra vida dentro de la historia, y construye hacia un climax epico. El profesor tiene que leer esto y pensar "NECESITO crear esta clase".
+REGLA CRITICA: NO menciones NUNCA la asignatura ni ningun contenido curricular concreto (matematicas, ecuaciones, gramatica, verbos, hechos historicos, celulas, tabla periodica, etc.). La narrativa tiene que funcionar independientemente de la asignatura que ensene el profesor, de forma que cualquier profesor — sea de la asignatura que sea — pueda adoptar este mundo y poner encima su propio contenido. Habla del mundo del juego, roles, facciones, atmosfera, progresion y stakes. NO hables del contenido de la asignatura.
+
+Escribe libremente, con la estructura que tu quieras. Usa markdown: **negrita** para conceptos clave, ## para secciones si lo necesitas. Pinta un mundo vivido, dale a los alumnos un rol, describe las facciones o casas si tiene sentido, la atmosfera, las mecanicas como historia (misiones, pruebas, ascenso), y hacia donde progresan los alumnos. El profesor tiene que leer esto y pensar "NECESITO construir este mundo en mi aula".
 
 NO te presentes. Empieza directamente con la narrativa.`,
 
   modify: (idea: string, current: string, feedback: string, locale: string) => locale === 'en'
-    ? `A teacher is creating a gamified class. Original idea: "${idea}". Current narrative: "${current}". Teacher says: "${feedback}". Modify the narrative based on their feedback. Keep what works, change what they asked. Be creative and inspiring. Markdown OK. Start directly.`
-    : `Un profesor esta creando una clase gamificada. Idea original: "${idea}". Narrativa actual: "${current}". El profesor dice: "${feedback}". Modifica la narrativa segun su feedback. Mantén lo que funciona, cambia lo que ha pedido. Se creativo e inspirador. Markdown OK. Empieza directamente.`,
+    ? `A teacher is creating a gamified class world. Original idea: "${idea}". Current narrative: "${current}". Teacher says: "${feedback}". Modify the narrative based on their feedback. Keep what works, change what they asked. Preserve the worldbuilding (setting, roles, factions, atmosphere, mechanics as story). CRITICAL: never mention the school subject or specific curriculum content — the world must remain subject-agnostic so any teacher can reuse it. Markdown OK. Start directly.`
+    : `Un profesor esta creando el mundo de su clase gamificada. Idea original: "${idea}". Narrativa actual: "${current}". El profesor dice: "${feedback}". Modifica la narrativa segun su feedback. Mantén lo que funciona, cambia lo que ha pedido. Preserva el worldbuilding (ambientacion, roles, facciones, atmosfera, mecanicas como historia). CRITICO: nunca menciones la asignatura ni contenido curricular concreto — el mundo tiene que seguir siendo agnostico a la asignatura para que cualquier profesor pueda reutilizarlo. Markdown OK. Empieza directamente.`,
 }
 
 export const CLASS_TITLES = {

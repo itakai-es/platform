@@ -3,6 +3,7 @@
     <NuxtPage />
   </NuxtLayout>
   <ToastContainer />
+  <MaintenanceBanner />
 </template>
 
 <script setup lang="ts">

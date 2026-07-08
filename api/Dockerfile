@@ -5,11 +5,11 @@ WORKDIR /app
 # Install pnpm
 RUN corepack enable && corepack prepare pnpm@10 --activate
 
-# Copy package files
-COPY package.json ./
+# Copy package files (incluye el lockfile para builds reproducibles)
+COPY package.json pnpm-lock.yaml ./
 
 # Install dependencies
-RUN pnpm install
+RUN pnpm install --frozen-lockfile
 
 # Copy source
 COPY . .

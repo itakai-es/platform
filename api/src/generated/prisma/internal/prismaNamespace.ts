@@ -80,12 +80,12 @@ export type PrismaVersion = {
 }
 
 /**
- * Prisma Client JS version: 7.7.0
- * Query Engine version: 75cbdc1eb7150937890ad5465d861175c6624711
+ * Prisma Client JS version: 7.8.0
+ * Query Engine version: 3c6e192761c0362d496ed980de936e2f3cebcd3a
  */
 export const prismaVersion: PrismaVersion = {
-  client: "7.7.0",
-  engine: "75cbdc1eb7150937890ad5465d861175c6624711"
+  client: "7.8.0",
+  engine: "3c6e192761c0362d496ed980de936e2f3cebcd3a"
 }
 
 /**
@@ -387,6 +387,7 @@ export const ModelName = {
   User: 'User',
   UserSettings: 'UserSettings',
   RefreshToken: 'RefreshToken',
+  InstanceSetting: 'InstanceSetting',
   Class: 'Class',
   ClassEnrollment: 'ClassEnrollment',
   ClassGuide: 'ClassGuide',
@@ -425,7 +426,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "userSettings" | "refreshToken" | "class" | "classEnrollment" | "classGuide" | "shopItem" | "shopPurchase" | "shopItemUse" | "mission" | "missionDocument" | "missionEnigma" | "studentEnigmaProgress" | "enigmaSubmission" | "studentMissionProgress" | "badge" | "studentBadge" | "joinRequest" | "invitation" | "notification" | "activity" | "systemLog" | "chatConversation" | "chatMessage" | "behaviorTemplate" | "behaviorApplication"
+    modelProps: "user" | "userSettings" | "refreshToken" | "instanceSetting" | "class" | "classEnrollment" | "classGuide" | "shopItem" | "shopPurchase" | "shopItemUse" | "mission" | "missionDocument" | "missionEnigma" | "studentEnigmaProgress" | "enigmaSubmission" | "studentMissionProgress" | "badge" | "studentBadge" | "joinRequest" | "invitation" | "notification" | "activity" | "systemLog" | "chatConversation" | "chatMessage" | "behaviorTemplate" | "behaviorApplication"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -648,6 +649,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.RefreshTokenCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.RefreshTokenCountAggregateOutputType> | number
+        }
+      }
+    }
+    InstanceSetting: {
+      payload: Prisma.$InstanceSettingPayload<ExtArgs>
+      fields: Prisma.InstanceSettingFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.InstanceSettingFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InstanceSettingPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.InstanceSettingFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InstanceSettingPayload>
+        }
+        findFirst: {
+          args: Prisma.InstanceSettingFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InstanceSettingPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.InstanceSettingFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InstanceSettingPayload>
+        }
+        findMany: {
+          args: Prisma.InstanceSettingFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InstanceSettingPayload>[]
+        }
+        create: {
+          args: Prisma.InstanceSettingCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InstanceSettingPayload>
+        }
+        createMany: {
+          args: Prisma.InstanceSettingCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.InstanceSettingCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InstanceSettingPayload>[]
+        }
+        delete: {
+          args: Prisma.InstanceSettingDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InstanceSettingPayload>
+        }
+        update: {
+          args: Prisma.InstanceSettingUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InstanceSettingPayload>
+        }
+        deleteMany: {
+          args: Prisma.InstanceSettingDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.InstanceSettingUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.InstanceSettingUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InstanceSettingPayload>[]
+        }
+        upsert: {
+          args: Prisma.InstanceSettingUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InstanceSettingPayload>
+        }
+        aggregate: {
+          args: Prisma.InstanceSettingAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateInstanceSetting>
+        }
+        groupBy: {
+          args: Prisma.InstanceSettingGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InstanceSettingGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.InstanceSettingCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InstanceSettingCountAggregateOutputType> | number
         }
       }
     }
@@ -2438,6 +2513,15 @@ export const RefreshTokenScalarFieldEnum = {
 export type RefreshTokenScalarFieldEnum = (typeof RefreshTokenScalarFieldEnum)[keyof typeof RefreshTokenScalarFieldEnum]
 
 
+export const InstanceSettingScalarFieldEnum = {
+  section: 'section',
+  data: 'data',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InstanceSettingScalarFieldEnum = (typeof InstanceSettingScalarFieldEnum)[keyof typeof InstanceSettingScalarFieldEnum]
+
+
 export const ClassScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -2446,6 +2530,11 @@ export const ClassScalarFieldEnum = {
   archived: 'archived',
   invitationCode: 'invitationCode',
   backgroundImage: 'backgroundImage',
+  subject: 'subject',
+  language: 'language',
+  educationLevel: 'educationLevel',
+  province: 'province',
+  isTemplate: 'isTemplate',
   settings: 'settings',
   teacherId: 'teacherId',
   createdAt: 'createdAt',
@@ -3213,11 +3302,27 @@ export type PrismaClientOptions = ({
    * ```
    */
   comments?: runtime.SqlCommenterPlugin[]
+  /**
+   * Optional maximum size for the query plan cache. If not provided, a default size will be used.
+   * A value of `0` can be used to disable the cache entirely. A higher cache size can improve
+   * performance for applications that execute a large number of unique queries, while a smaller
+   * cache size can reduce memory usage.
+   * 
+   * @example
+   * ```
+   * const prisma = new PrismaClient({
+   *   adapter,
+   *   queryPlanCacheMaxSize: 100,
+   * })
+   * ```
+   */
+  queryPlanCacheMaxSize?: number
 }
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   userSettings?: Prisma.UserSettingsOmit
   refreshToken?: Prisma.RefreshTokenOmit
+  instanceSetting?: Prisma.InstanceSettingOmit
   class?: Prisma.ClassOmit
   classEnrollment?: Prisma.ClassEnrollmentOmit
   classGuide?: Prisma.ClassGuideOmit

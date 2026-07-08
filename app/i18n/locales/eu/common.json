@@ -23,7 +23,8 @@
       "toggle_menu": "Menua aldatu",
       "back_to_dashboard": "Dashboard-era itzuli",
       "create_new_account": "Kontu Berria Sortu",
-      "enter": "Sartu"
+      "enter": "Sartu",
+      "close": "Itxi"
     },
     "status": {
       "under_development": "Garapenean"
@@ -191,6 +192,11 @@
       "coins": "Txanponak",
       "mana": "Mana",
       "lives": "Bizi puntuak"
+    },
+    "maintenance": {
+      "title": "Mantentze lanetan",
+      "message": "Hobekuntzak egiten ari gara. Itzuli minutu batzuk barru.",
+      "admin_notice": "Mantentze modua aktibo — administratzaileek soilik sar daitezke."
     }
   }
 }

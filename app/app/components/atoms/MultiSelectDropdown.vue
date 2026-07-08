@@ -22,7 +22,7 @@
     >
       <div
         v-if="isOpen"
-        class="absolute z-50 mt-2 min-w-full max-w-[calc(100vw-2rem)] bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden"
+        class="absolute z-50 mt-2 min-w-full sm:w-[320px] max-w-[calc(100vw-2rem)] bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden"
       >
         <div class="py-1 max-h-60 overflow-y-auto">
           <!-- "All" option -->
@@ -132,8 +132,11 @@ const displayLabel = computed(() => {
 })
 
 const triggerClasses = computed(() => {
+  // sm:w-[220px] fuerza ancho fijo en desktop para que el trigger no cambie de
+  // tamaño según el label seleccionado ("English" vs "Todos los idiomas") dentro
+  // de contenedores flex-wrap. En móvil se queda w-full por el layout de columna.
   const base =
-    'w-full px-3 sm:px-4 py-2.5 sm:py-3 border rounded-2xl text-sm sm:text-base flex items-center justify-between gap-2 transition-colors duration-200 outline-none'
+    'w-full sm:w-[220px] px-3 sm:px-4 py-2.5 sm:py-3 border rounded-2xl text-sm sm:text-base flex items-center justify-between gap-2 transition-colors duration-200 outline-none'
   const normal = 'border-border-primary bg-surface text-text-primary'
   const active = 'border-primary bg-surface text-text-primary ring-2 ring-primary/20'
   const disabledStyle = 'bg-gray-100 border-gray-200 cursor-not-allowed opacity-60'

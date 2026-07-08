@@ -30,7 +30,8 @@
         "meta": {
           "title": "Nire Klaseak | ITAKAI Irakaslea",
           "description": "Kudeatu zure klase guztiak, matrikulatutako ikasleak eta esleitutako misioak."
-        }
+        },
+        "templates": "Txantiloiak"
       },
       "create": {
         "breadcrumb_classes": "Nire Klaseak",
@@ -54,20 +55,22 @@
         },
         "preview_label": "Horrela ikusiko da zure klasea",
         "onboarding": {
-          "ask_idea": "Kaixo {name}! {god} naiz. Kontaidazu, zeri buruz nahi duzu zure klasea?",
+          "ask_idea": "Kaixo {name}! {god} naiz. Kontatu iezadazu, zein mundu edo tematika nahi duzu zure klaserako?",
           "review_approach": "Hau prestatu dut zuretzat, gustatu zaizu?",
           "pick_title": "Zer izenburu jarriko diogu zure klaseari?",
           "ask_schedule": "Zer ordu-tarte izango du zure klaseak?",
           "ask_image": "Azal hau sortu dut zure klasearentzat",
-          "placeholder_idea": "Adib: Fisikako klase bat sortu nahi dut DBH 3. mailarako mitologia greziarreko gaiari buruz...",
+          "placeholder_idea": "Adib.: Magia-eskola bat, 4 etxeekin puntuengatik lehian, ikasle-magoekin eta erronkak ziegak balira bezala…",
           "generating_approach": "Zure klasearen narratiba sortzen ari naiz...",
           "narrative_feedback_placeholder": "Adib: Hogwarts-eko etxeei buruzko erreferentzia gehiago nahi ditut...",
           "btn_change_something": "Zerbait aldatu nahi dut",
           "custom_title_placeholder": "Edo idatzi zure izenburua...",
           "title_feedback_placeholder": "Adib: Izenburu laburragoak nahi ditut...",
-          "placeholder_schedule": "Adib: Astelehena eta Asteazkena 10:00-12:00",
           "generating_cover": "Azala sortzen...",
           "cover_error": "Ezin izan da azala sortu. Urrats hau saltatu dezakezu.",
+          "btn_upload_cover": "Igo nirea",
+          "cover_upload_type_error": "Formatu baliogabea. Igo PNG, JPG edo WEBP irudi bat.",
+          "cover_upload_size_error": "Irudia handiegia da (gehienez 5 MB).",
           "image_feedback_placeholder": "Koloretsuagoa izan dadila nahi dut, atzeko plano urdinarekin...",
           "thinking": "Pentsatzen...",
           "btn_back": "Atzera",
@@ -250,9 +253,20 @@
           "general": {
             "title": "Datu orokorrak",
             "name_label": "Izena",
+            "subject_label": "Irakasgaia",
+            "level_label": "Hezkuntza-maila",
+            "language_label": "Hizkuntza",
+            "province_label": "Probintzia",
+            "metadata_none": "Zehaztu gabe",
+            "metadata_search": "Bilatu...",
+            "publish_title": "Argitaratu txantiloi gisa",
+            "publish_hint": "Partekatu marketplacean beste irakasle batzuek inporta dezaten.",
+            "publish_missing_metadata": "Gorde gaia, maila eta hizkuntza argitaratu aurretik.",
+            "publish_on": "Klasea txantiloi gisa argitaratu da",
+            "publish_off": "Txantiloia marketplacetik kendu da",
+            "publish_error": "Ezin izan da txantiloia argitaratu",
             "schedule_label": "Ordutegia",
             "background_label": "Atzeko planoko irudia",
-            "background_hint": "Klasearen goiburuko atzeko irudiaren URL publikoa.",
             "save": "Gorde aldaketak",
             "discard": "Baztertu",
             "toast_saved": "Datuak gorde dira",
@@ -264,6 +278,9 @@
             "background_generate": "Sortu AArekin",
             "background_regenerate": "Berriz sortu AArekin",
             "background_clear": "Kendu irudia",
+            "background_upload": "Igo nirea",
+            "background_upload_type_error": "Formatu baliogabea. Igo PNG, JPG edo WEBP irudi bat.",
+            "background_upload_size_error": "Irudia handiegia da (gehienez 5 MB).",
             "background_error": "Ezin izan da irudia sortu"
           },
           "features": {
@@ -634,6 +651,56 @@
           "legendary": "Legendarioa"
         },
         "btn_close": "Itxi"
+      }
+    },
+    "templates": {
+      "page_title": "Klase-txantiloiak",
+      "page_subtitle": "Beste irakasle batzuek argitaratutako klaseak arakatu eta zureetara inportatu.",
+      "search": "Bilatu txantiloiak…",
+      "own": "Zurea",
+      "import": "Inportatu",
+      "import_success": "«{name}» inportatu da. Egokitu zure gustura!",
+      "import_error": "Ezin izan da txantiloia inportatu",
+      "load_error": "Ezin izan dira txantiloiak kargatu",
+      "empty_title": "Oraindik ez dago txantiloirik",
+      "empty_description": "Irakasleren batek klase bat txantiloi gisa argitaratzen duenean, hemen agertuko da.",
+      "no_results_title": "Emaitzarik ez",
+      "no_results_description": "Ez dago iragazkiekin bat datorren txantiloirik.",
+      "preview_action": "Aurreikusi",
+      "preview": {
+        "loading": "Txantiloia kargatzen…",
+        "by": "{name}(r)ena",
+        "active": "Aktibo",
+        "inactive": "Ez aktibo",
+        "load_error": "Ezin izan da txantiloia kargatu",
+        "error": "Ez da txantiloia aurkitu.",
+        "tab_narrative": "Ipuina",
+        "tab_features": "Funtzionalitateak",
+        "tab_shop": "Denda ({n})",
+        "tab_behaviors": "Portaerak ({n})",
+        "no_narrative_title": "Ipuinik gabe",
+        "no_narrative_description": "Txantiloi honek ez du ipuinik definitua.",
+        "no_shop_title": "Dendarik gabe",
+        "no_shop_description": "Txantiloi honek ez du denda-artikulurik. Zuk gehitu ahal izango dituzu.",
+        "no_behaviors_title": "Portaerarik gabe",
+        "no_behaviors_description": "Txantiloi honek ez du portaerarik. Zuk defini ditzakezu."
+      },
+      "filter_all": {
+        "subject": "Ikasgai guztiak",
+        "level": "Maila guztiak",
+        "language": "Hizkuntza guztiak",
+        "province": "Probintzia guztiak"
+      },
+      "sort": {
+        "recent": "Berrienak",
+        "name_asc": "Izena A-Z",
+        "name_desc": "Izena Z-A"
+      },
+      "plural": {
+        "subjects": "ikasgai",
+        "levels": "maila",
+        "languages": "hizkuntza",
+        "provinces": "probintzia"
       }
     }
   }

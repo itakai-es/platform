@@ -1,0 +1,119 @@
+# =============================================================================
+# ITAKAI — despliegue AUTO-HOSTEABLE (turnkey, cero configuración).
+#
+# Arranca con UN comando y sin tocar ficheros — trae defaults sensatos y
+# autogenera los secretos:
+#
+#   docker compose -f docker-compose.selfhost.yml up -d --build
+#
+# Luego abre http://localhost y mira las credenciales de admin en los logs:
+#   docker compose -f docker-compose.selfhost.yml logs api | grep -A4 "Administrador creado"
+#
+# ¿Quieres cambiar algo (dominio, puerto, contraseña de admin, BD…)? Copia
+# `.env.selfhost.example` a `.env.selfhost`, edita solo lo que quieras, y añade
+# `--env-file .env.selfhost` al comando. La IA, el almacenamiento (R2) y el resto
+# se configuran desde el panel de administración una vez dentro.
+# =============================================================================
+name: itakai
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: itakai-db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-itakai}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-itakai}
+      POSTGRES_DB: ${POSTGRES_DB:-itakai}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-itakai} -d ${POSTGRES_DB:-itakai}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks: [itakai]
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: itakai-api
+    # .env.selfhost es OPCIONAL: solo para sobreescribir defaults.
+    env_file:
+      - path: .env.selfhost
+        required: false
+    environment:
+      NODE_ENV: production
+      PORT: 3001
+      DATABASE_URL: postgresql://${POSTGRES_USER:-itakai}:${POSTGRES_PASSWORD:-itakai}@postgres:5432/${POSTGRES_DB:-itakai}
+      # Dominio: por defecto localhost; cámbialo por tu dominio si lo expones.
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost}
+      APP_URL: ${APP_URL:-http://localhost}
+      # Cookies de sesión: por HTTP (local) van sin Secure; con HTTPS pon COOKIE_SECURE=true.
+      COOKIE_SAMESITE: ${COOKIE_SAMESITE:-lax}
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
+      # Admin inicial (opcional): si no defines contraseña, se genera y se imprime en los logs.
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@itakai.local}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+      # Los secretos JWT y de cifrado se autogeneran en el primer arranque (ver entrypoint).
+    command: ["sh", "docker-entrypoint.selfhost.sh"]
+    volumes:
+      - api_uploads:/app/uploads
+      - api_data:/app/data
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    networks: [itakai]
+
+  # Genera la SPA estática (API base relativa `/api` → independiente del dominio)
+  # y la deja en el volumen que sirve nginx. Job de un solo uso.
+  app-builder:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+      target: builder
+      args:
+        NUXT_PUBLIC_API_BASE: /api
+        NUXT_PUBLIC_GOOGLE_CLIENT_ID: ${NUXT_PUBLIC_GOOGLE_CLIENT_ID:-}
+    container_name: itakai-app-builder
+    environment:
+      NUXT_PUBLIC_API_BASE: /api
+      NUXT_PUBLIC_GOOGLE_CLIENT_ID: ${NUXT_PUBLIC_GOOGLE_CLIENT_ID:-}
+    command: sh -c "pnpm generate && rm -rf /static/* && cp -a .output/public/. /static/"
+    volumes:
+      - static_html:/static
+    networks: [itakai]
+
+  nginx:
+    image: nginx:alpine
+    container_name: itakai-nginx
+    depends_on:
+      api:
+        condition: service_started
+      app-builder:
+        condition: service_completed_successfully
+    ports:
+      - "${HTTP_PORT:-80}:80"
+    environment:
+      # Tu dominio (como el "site URL" de WordPress). Por defecto `_` = cualquiera.
+      SERVER_NAME: ${SERVER_NAME:-_}
+      # Que envsubst SOLO sustituya SERVER_NAME (no las variables propias de nginx).
+      NGINX_ENVSUBST_FILTER: SERVER_NAME
+    volumes:
+      - static_html:/usr/share/nginx/html:ro
+      # La imagen procesa las plantillas de /etc/nginx/templates y las vuelca en conf.d.
+      - ./app/nginx/selfhost.conf.template:/etc/nginx/templates/default.conf.template:ro
+    restart: unless-stopped
+    networks: [itakai]
+
+volumes:
+  postgres_data:
+  api_uploads:
+  api_data:
+  static_html:
+
+networks:
+  itakai:
+    name: itakai

@@ -59,7 +59,7 @@ services:
       - ./app/.env
     environment:
       NODE_ENV: development
-      NUXT_PUBLIC_API_BASE: http://localhost:3003
+      NUXT_PUBLIC_API_BASE: ${NUXT_PUBLIC_API_BASE:-http://localhost:3003}
     entrypoint: ["sh", "-c"]
     command: ["pnpm dev"]    # arrancamos en modo dev (HMR), no el bundle de prod
     ports:

@@ -269,13 +269,7 @@
 
               <!-- ===== STEP 3: Schedule ===== -->
               <div v-else-if="step === 3" key="s3" class="flex-1 flex flex-col">
-                <input
-                  ref="inputRef"
-                  v-model="schedule"
-                  type="text"
-                  :placeholder="t('teacher.classes.create.onboarding.placeholder_schedule')"
-                  class="onb-input"
-                />
+                <ClassScheduleEditor v-model="schedule" />
                 <div class="flex-1" />
                 <div class="onb-actions">
                   <Button variant="outline" size="sm" @click="step = 2">{{
@@ -317,9 +311,9 @@
                   </div>
                   <div v-else-if="generatedImageUrl" class="w-full max-w-md">
                     <div class="relative aspect-video rounded-2xl overflow-hidden shadow-lg">
-                      <img :src="generatedImageUrl" alt="" class="w-full h-full object-cover" />
+                      <img :src="resolvedImageUrl" alt="" class="w-full h-full object-cover" />
                     </div>
-                    <div class="mt-2 flex justify-end">
+                    <div v-if="coverProvider" class="mt-2 flex justify-end">
                       <AIProviderBadge :provider="coverProvider" />
                     </div>
                   </div>
@@ -329,8 +323,19 @@
                   >
                     <PhotoIcon class="w-12 h-12 opacity-40" />
                     <p class="text-sm">{{ t('teacher.classes.create.onboarding.cover_error') }}</p>
+                    <Button variant="outline" size="sm" @click="coverFileRef?.click()">
+                      <ArrowUpTrayIcon class="w-4 h-4 mr-2" />
+                      {{ t('teacher.classes.create.onboarding.btn_upload_cover') }}
+                    </Button>
                   </div>
                 </div>
+                <input
+                  ref="coverFileRef"
+                  type="file"
+                  accept="image/png,image/jpeg,image/webp"
+                  class="hidden"
+                  @change="handleCoverUpload"
+                />
                 <div v-if="!isGeneratingImage && showImageFeedback" class="onb-feedback">
                   <input
                     ref="imageFeedbackRef"
@@ -369,6 +374,10 @@
                       @click="showImageFeedback = true; nextTick(() => imageFeedbackRef?.focus())"
                       >{{ t('teacher.classes.create.onboarding.btn_change_something') }}</Button
                     >
+                    <Button variant="outline" size="sm" @click="coverFileRef?.click()">
+                      <ArrowUpTrayIcon class="w-4 h-4 mr-1.5" />
+                      {{ t('teacher.classes.create.onboarding.btn_upload_cover') }}
+                    </Button>
                     <Button variant="outline" size="sm" @click="step = 5">{{
                       t('teacher.classes.create.onboarding.btn_skip')
                     }}</Button>
@@ -501,7 +510,7 @@
             :icon="BookOpenIcon"
             :name="form.name"
             :schedule="form.schedule"
-            :background-image="generatedImageUrl || form.backgroundImage"
+            :background-image="resolvedImageUrl || form.backgroundImage"
             :missions-count="0"
           />
         </div>
@@ -608,6 +617,7 @@ import {
   PaperAirplaneIcon,
   BookOpenIcon,
   ArrowPathIcon,
+  ArrowUpTrayIcon,
 } from '@heroicons/vue/24/outline'
 import { renderPageMarkdown } from '~/utils/markdown'
 
@@ -617,6 +627,7 @@ const effects = useEffects()
 
 const { t, locale } = useI18n()
 const config = useRuntimeConfig()
+const toast = useToast()
 
 useHead({ title: () => t('teacher.classes.create.meta.title') })
 definePageMeta({ layout: 'teacher', middleware: ['auth', 'role'] })
@@ -671,6 +682,11 @@ const customTitle = ref('')
 const chosenTitle = computed(() => customTitle.value.trim() || selectedTitle.value)
 const schedule = ref('')
 const generatedImageUrl = ref('')
+// The AI cover arrives as a relative /uploads/... path served by the API host,
+// while a teacher-uploaded cover is a base64 data URL. getImageUrl resolves
+// both correctly for display (prefixes apiBase, leaves data: URLs as-is).
+const { getImageUrl } = useImageUrl()
+const resolvedImageUrl = computed(() => getImageUrl(generatedImageUrl.value) || '')
 const feedback = ref('')
 const showNarrativeFeedback = ref(false)
 const feedbackRef = ref<HTMLInputElement>()
@@ -687,6 +703,38 @@ const showGuideFeedback = ref(false)
 const guideFeedbackRef = ref<HTMLInputElement>()
 const imageGenerationFailed = ref(false)
 const imageFeedbackRef = ref<HTMLInputElement>()
+const coverFileRef = ref<HTMLInputElement>()
+
+// Let the teacher use their own cover instead of (or after) the AI one. The
+// image is read as a base64 data URL; the backend persists it to /uploads on
+// class creation (see teachers.service saveBase64Image).
+function handleCoverUpload(event: Event) {
+  const input = event.target as HTMLInputElement
+  const file = input.files?.[0]
+  if (!file) return
+  const validTypes = ['image/png', 'image/jpeg', 'image/webp']
+  if (!validTypes.includes(file.type)) {
+    toast.error(t('teacher.classes.create.onboarding.cover_upload_type_error'))
+    input.value = ''
+    return
+  }
+  if (file.size > 5 * 1024 * 1024) {
+    toast.error(t('teacher.classes.create.onboarding.cover_upload_size_error'))
+    input.value = ''
+    return
+  }
+  const reader = new FileReader()
+  reader.onload = e => {
+    const dataUrl = e.target?.result as string
+    generatedImageUrl.value = dataUrl
+    rawImagePath.value = dataUrl
+    coverProvider.value = null
+    imageGenerationFailed.value = false
+    showImageFeedback.value = false
+  }
+  reader.readAsDataURL(file)
+  input.value = ''
+}
 
 function buildContext() {
   const parts = [`Idea: ${idea.value}`]
