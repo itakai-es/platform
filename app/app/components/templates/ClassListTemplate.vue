@@ -51,11 +51,14 @@
         :key="classItem.id"
         :class-item="classItem"
         :show-archive-action="showArchiveAction"
+        :show-duplicate-action="showDuplicateAction"
         :show-coins="showCoins"
         :loading="archiveLoadingId === classItem.id"
+        :duplicating="duplicatingId === classItem.id"
         @click="$emit('class-click', classItem.id)"
         @archive="$emit('archive-class', classItem.id)"
         @unarchive="$emit('unarchive-class', classItem.id)"
+        @duplicate="$emit('duplicate-class', classItem.id)"
       />
     </CardGrid>
 
@@ -93,7 +96,9 @@ interface Props {
   loading?: boolean
   showArchiveToggle?: boolean
   showArchiveAction?: boolean
+  showDuplicateAction?: boolean
   archiveLoadingId?: string
+  duplicatingId?: string
   emptyTitle?: string
   emptyDescription?: string
   showCoins?: boolean
@@ -104,7 +109,9 @@ const props = withDefaults(defineProps<Props>(), {
   loading: false,
   showArchiveToggle: false,
   showArchiveAction: false,
+  showDuplicateAction: false,
   archiveLoadingId: '',
+  duplicatingId: '',
   emptyTitle: '',
   emptyDescription: '',
 })
@@ -113,6 +120,7 @@ defineEmits<{
   'class-click': [classId: string]
   'archive-class': [classId: string]
   'unarchive-class': [classId: string]
+  'duplicate-class': [classId: string]
 }>()
 
 const searchQuery = ref('')

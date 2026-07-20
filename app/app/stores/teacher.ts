@@ -357,6 +357,28 @@ export const useTeacherStore = defineStore('teacher', () => {
   }
 
   /**
+   * Duplica una clase propia (crea una copia independiente). `options` elige qué
+   * partes copiar (narrativa, funcionalidades, tienda, comportamientos, misiones).
+   * Devuelve la clase nueva; el refresco de la lista lo hace la página.
+   */
+  async function duplicateClass(
+    classId: string,
+    options?: {
+      narrative: boolean
+      features: boolean
+      shop: boolean
+      behaviors: boolean
+      missions: boolean
+    }
+  ) {
+    const config = useRuntimeConfig()
+    return $fetch<{ class: { id: string; name: string }; message: string }>(
+      `${config.public.apiBase}/teacher/classes/${classId}/duplicate`,
+      { method: 'POST', body: options ?? {} }
+    )
+  }
+
+  /**
    * Obtiene el código de invitación de una clase
    */
   async function getInvitationCode(classId: string) {
@@ -1167,6 +1189,7 @@ export const useTeacherStore = defineStore('teacher', () => {
     updateClass,
     publishTemplate,
     setClassArchived,
+    duplicateClass,
     getInvitationCode,
     fetchClassMissions,
     fetchClassGuide,

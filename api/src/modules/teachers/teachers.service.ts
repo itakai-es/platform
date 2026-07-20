@@ -11,12 +11,22 @@ import { seedDefaultShopItems } from '../shop/shop.service.js'
 import {
   resolveClassSettings,
   normalizeClassSettings,
+  DEFAULT_CLASS_SETTINGS,
   type ClassSettings,
 } from '../../utils/class-settings.js'
 import { saveUpload } from '../storage/storage.service.js'
 
 const BADGES_DIR = join(process.cwd(), 'uploads', 'badges')
 const COVERS_DIR = join(process.cwd(), 'uploads', 'covers')
+
+/** Partes que el profesor puede elegir copiar al duplicar una clase. */
+export interface ClassCopyOptions {
+  narrative: boolean
+  features: boolean
+  shop: boolean
+  behaviors: boolean
+  missions: boolean
+}
 
 // Ensure upload directories exist
 for (const dir of [BADGES_DIR, COVERS_DIR]) {
@@ -423,40 +433,43 @@ export class TeachersService {
     }
   }
 
-  /** Importa una plantilla: crea una clase NUEVA del profesor copiando el "chasis"
-   *  reutilizable: settings (funcionalidades), narrativa, imagen de fondo, tienda
-   *  y comportamientos. Deja fuera lo que es específico del profesor original:
-   *  misiones + enigmas (cada profe monta los suyos), guía, metadatos de filtro,
-   *  alumnos y progreso. */
-  async importTemplate(userId: string, templateClassId: string) {
-    const tpl = await prisma.class.findFirst({
-      where: { id: templateClassId, isTemplate: true },
-      include: {
-        shopItems: true,
-        behaviorTemplates: true,
-      },
-    })
-    if (!tpl) throw new Error('Plantilla no encontrada')
-
+  /** Copia una clase origen a una clase NUEVA del profesor, dentro de una
+   *  transacción, eligiendo qué partes copiar con `options`:
+   *   · narrative → narrativa + imagen de fondo (portada/historia)
+   *   · features  → settings (funcionalidades); si no, defaults
+   *   · shop      → items de la tienda
+   *   · behaviors → plantillas de comportamiento
+   *   · missions  → misiones + sus enigmas
+   *  Siempre deja fuera lo específico del origen: guía, metadatos de filtro,
+   *  alumnos y progreso. Lo comparten importar-plantilla y duplicar-clase. */
+  private async copyClass(
+    source: Prisma.ClassGetPayload<{ include: { shopItems: true; behaviorTemplates: true } }> & {
+      missions?: Prisma.MissionGetPayload<{ include: { enigmas: true } }>[]
+    },
+    userId: string,
+    options: ClassCopyOptions
+  ) {
     const invitationCode = nanoid(6).toUpperCase()
 
-    const created = await prisma.$transaction(
+    return prisma.$transaction(
       async (tx) => {
         const newClass = await tx.class.create({
           data: {
-            name: `${tpl.name} (copia)`,
-            narrative: tpl.narrative,
-            backgroundImage: tpl.backgroundImage,
-            settings: tpl.settings as Prisma.InputJsonValue,
+            name: `${source.name} (copia)`,
+            narrative: options.narrative ? source.narrative : null,
+            backgroundImage: options.narrative ? source.backgroundImage : null,
+            settings: (options.features
+              ? source.settings
+              : DEFAULT_CLASS_SETTINGS) as Prisma.InputJsonValue,
             teacherId: userId,
             invitationCode,
             isTemplate: false,
           },
         })
 
-        if (tpl.shopItems.length > 0) {
+        if (options.shop && source.shopItems.length > 0) {
           await tx.shopItem.createMany({
-            data: tpl.shopItems.map((s) => ({
+            data: source.shopItems.map((s) => ({
               classId: newClass.id,
               name: s.name,
               description: s.description,
@@ -470,9 +483,9 @@ export class TeachersService {
           })
         }
 
-        if (tpl.behaviorTemplates.length > 0) {
+        if (options.behaviors && source.behaviorTemplates.length > 0) {
           await tx.behaviorTemplate.createMany({
-            data: tpl.behaviorTemplates.map((b) => ({
+            data: source.behaviorTemplates.map((b) => ({
               classId: newClass.id,
               kind: b.kind,
               name: b.name,
@@ -484,12 +497,89 @@ export class TeachersService {
           })
         }
 
+        // Misiones + enigmas: mission-por-mission (createMany no anida relaciones),
+        // preservando el orden de los enigmas (orderIndex). Nunca se copia el
+        // progreso de alumnos ni las entregas.
+        if (options.missions && source.missions && source.missions.length > 0) {
+          for (const m of source.missions) {
+            const newMission = await tx.mission.create({
+              data: {
+                classId: newClass.id,
+                title: m.title,
+                description: m.description,
+                status: m.status,
+                rarity: m.rarity,
+                deadline: m.deadline,
+                backgroundImage: m.backgroundImage,
+              },
+            })
+
+            if (m.enigmas.length > 0) {
+              await tx.missionEnigma.createMany({
+                data: m.enigmas.map((e) => ({
+                  missionId: newMission.id,
+                  title: e.title,
+                  description: e.description,
+                  objectives: e.objectives,
+                  isOptional: e.isOptional,
+                  xpReward: e.xpReward,
+                  coinReward: e.coinReward,
+                  manaReward: e.manaReward,
+                  orderIndex: e.orderIndex,
+                })),
+              })
+            }
+          }
+        }
+
         return newClass
       },
-      { timeout: 20000 }
+      { timeout: 30000 }
     )
+  }
+
+  /** Importa una plantilla: crea una clase NUEVA del profesor copiando el chasis
+   *  reutilizable (narrativa, funcionalidades, tienda, comportamientos). Las
+   *  misiones se dejan fuera a propósito (cada profe monta las suyas). */
+  async importTemplate(userId: string, templateClassId: string) {
+    const tpl = await prisma.class.findFirst({
+      where: { id: templateClassId, isTemplate: true },
+      include: {
+        shopItems: true,
+        behaviorTemplates: true,
+      },
+    })
+    if (!tpl) throw new Error('Plantilla no encontrada')
+
+    const created = await this.copyClass(tpl, userId, {
+      narrative: true,
+      features: true,
+      shop: true,
+      behaviors: true,
+      missions: false,
+    })
 
     return { class: { id: created.id, name: created.name }, message: 'Plantilla importada como nueva clase' }
+  }
+
+  /** Duplica una clase propia del profesor en una clase independiente
+   *  "<nombre> (copia)". El profesor elige en `options` qué partes copiar
+   *  (narrativa, funcionalidades, tienda, comportamientos, misiones). Nunca
+   *  arrastra alumnos ni progreso. */
+  async duplicateClass(userId: string, classId: string, options: ClassCopyOptions) {
+    const source = await prisma.class.findFirst({
+      where: { id: classId, teacherId: userId },
+      include: {
+        shopItems: true,
+        behaviorTemplates: true,
+        missions: { include: { enigmas: true } },
+      },
+    })
+    if (!source) throw new Error('Clase no encontrada')
+
+    const created = await this.copyClass(source, userId, options)
+
+    return { class: { id: created.id, name: created.name }, message: 'Clase duplicada' }
   }
 
   async setClassArchived(userId: string, classId: string, archived: boolean) {

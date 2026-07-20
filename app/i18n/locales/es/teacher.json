@@ -31,7 +31,22 @@
           "title": "Mis Clases | ITAKAI Profesor",
           "description": "Gestiona todas tus clases, alumnos inscritos y misiones asignadas."
         },
-        "templates": "Plantillas"
+        "templates": "Plantillas",
+        "duplicate_success": "Clase duplicada como \"{name}\"",
+        "duplicate_error": "No se pudo duplicar la clase",
+        "duplicate": {
+          "title": "Duplicar clase",
+          "subtitle": "Elige qué copiar a la nueva clase «{name}».",
+          "confirm": "Duplicar",
+          "cancel": "Cancelar",
+          "items": {
+            "missions": { "label": "Misiones", "desc": "Las misiones y sus enigmas" },
+            "narrative": { "label": "Historia", "desc": "La narrativa y la imagen de portada" },
+            "features": { "label": "Funcionalidades", "desc": "Los módulos activados de la clase" },
+            "shop": { "label": "Tienda", "desc": "Los artículos de la tienda" },
+            "behaviors": { "label": "Comportamientos", "desc": "Las plantillas de comportamiento" }
+          }
+        }
       },
       "create": {
         "breadcrumb_classes": "Mis Clases",

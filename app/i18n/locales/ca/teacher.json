@@ -31,7 +31,22 @@
           "title": "Les Meves Classes | ITAKAI Professor",
           "description": "Gestiona totes les teves classes, estudiants inscrits i missions assignades."
         },
-        "templates": "Plantilles"
+        "templates": "Plantilles",
+        "duplicate_success": "Classe duplicada com a \"{name}\"",
+        "duplicate_error": "No s'ha pogut duplicar la classe",
+        "duplicate": {
+          "title": "Duplica la classe",
+          "subtitle": "Tria què copiar a la nova classe «{name}».",
+          "confirm": "Duplica",
+          "cancel": "Cancel·la",
+          "items": {
+            "missions": { "label": "Missions", "desc": "Les missions i els seus enigmes" },
+            "narrative": { "label": "Història", "desc": "La narrativa i la imatge de portada" },
+            "features": { "label": "Funcionalitats", "desc": "Els mòduls activats de la classe" },
+            "shop": { "label": "Botiga", "desc": "Els articles de la botiga" },
+            "behaviors": { "label": "Comportaments", "desc": "Les plantilles de comportament" }
+          }
+        }
       },
       "create": {
         "breadcrumb_classes": "Les Meves Classes",
