@@ -6,9 +6,10 @@
       role="article"
       @click="handleCardClick"
     >
-      <!-- Full card link for student mode (disabled for blocked and expired) -->
+      <!-- Full card link for student mode. Las expiradas sí se pueden abrir (solo
+           lectura); solo las bloqueadas quedan sin enlace. -->
       <NuxtLink
-        v-if="!isTeacherMode && status !== 'bloqueada' && status !== 'expirada'"
+        v-if="!isTeacherMode && status !== 'bloqueada'"
         :to="missionLink"
         class="absolute inset-0 z-20"
       />
@@ -333,10 +334,8 @@ const handleCardClick = () => {
       'Esta misión estará disponible pronto. ¡Completa las misiones anteriores para desbloquearla!'
     )
   }
-  // Students get toast on expired missions
-  if (props.status === 'expirada') {
-    toast.error('Esta misión ha expirado. Ya no puedes entregar los enigmas pendientes.')
-  }
+  // Las misiones expiradas se pueden abrir en modo solo lectura (el enlace navega),
+  // así que aquí no mostramos toast ni bloqueamos la navegación.
 }
 </script>
 

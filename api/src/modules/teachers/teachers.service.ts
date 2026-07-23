@@ -1289,8 +1289,10 @@ export class TeachersService {
       if (!cls) throw new Error('Clase no encontrada')
       whereClause.classId = classIdFilter
     } else {
+      // Vista agregada: excluye las misiones de clases archivadas. Si se filtra por
+      // una clase concreta (arriba) sí se muestran, porque se ha abierto a propósito.
       const classes = await prisma.class.findMany({
-        where: { teacherId: userId },
+        where: { teacherId: userId, archived: false },
       })
       whereClause.classId = { in: classes.map((c) => c.id) }
     }

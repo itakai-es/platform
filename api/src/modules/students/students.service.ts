@@ -241,6 +241,8 @@ export class StudentsService {
     })
 
     if (!enrollment) throw new Error('No estás inscrito en esta clase')
+    // Clase archivada: el alumno pierde el acceso aunque conserve el link.
+    if (enrollment.class.archived) throw new Error('Esta clase está archivada y ya no está disponible')
 
     const cls = enrollment.class
 
@@ -323,7 +325,8 @@ export class StudentsService {
     if (!enrollment) throw new Error('No estás inscrito en esta clase')
 
     const missions = await prisma.mission.findMany({
-      where: { classId },
+      // Si la clase está archivada, sus misiones no se listan para el alumno.
+      where: { classId, class: { archived: false } },
       include: {
         enigmas: {
           include: { progress: { where: { studentId: userId } } },
@@ -930,7 +933,8 @@ export class StudentsService {
     const classIds = enrollments.map((e) => e.classId)
 
     const missions = await prisma.mission.findMany({
-      where: { classId: { in: classIds } },
+      // Las misiones de clases archivadas no aparecen en el listado del alumno.
+      where: { classId: { in: classIds }, class: { archived: false } },
       include: {
         enigmas: {
           include: { progress: { where: { studentId: userId } } },

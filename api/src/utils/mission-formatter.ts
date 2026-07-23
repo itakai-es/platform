@@ -131,6 +131,10 @@ export function getMissionStatus(
   progress?: { completedAt: Date | null } | null
 ): string {
   if (progress?.completedAt) return 'completada'
+  // Una misión bloqueada por el profesor debe mostrarse como tal por encima de los
+  // estados derivados de la fecha (urgente/expirada); si no, una fecha cercana la
+  // "desbloquearía" visualmente y el alumno podría interactuar con ella.
+  if (mission.status === 'bloqueada') return 'bloqueada'
   if (mission.deadline && new Date(mission.deadline) < new Date()) return 'expirada'
 
   if (mission.deadline) {
@@ -138,6 +142,5 @@ export function getMissionStatus(
     if (daysLeft <= 2) return 'urgente'
   }
 
-  if (mission.status === 'bloqueada') return 'bloqueada'
   return 'activa'
 }

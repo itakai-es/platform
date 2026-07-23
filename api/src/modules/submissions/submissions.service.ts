@@ -31,6 +31,10 @@ export class SubmissionsService {
 
     if (!enigma) throw new Error('Enigma no encontrado')
     if (enigma.mission.class.archived) throw new Error('La clase está archivada y no admite nuevas entregas')
+    if (enigma.mission.status === 'bloqueada') throw new Error('La misión está bloqueada y no admite entregas')
+    if (enigma.mission.deadline && new Date(enigma.mission.deadline) < new Date()) {
+      throw new Error('La misión ha expirado y ya no admite entregas')
+    }
 
     // Verify student is enrolled in the class
     const enrollment = await prisma.classEnrollment.findUnique({
