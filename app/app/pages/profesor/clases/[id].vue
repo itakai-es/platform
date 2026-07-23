@@ -127,6 +127,7 @@ import {
   ShoppingBagIcon as ShoppingBagIconSolid,
   HandRaisedIcon as HandRaisedIconSolid,
   Cog6ToothIcon as Cog6ToothIconSolid,
+  UsersIcon as UsersIconSolid,
 } from '@heroicons/vue/24/solid'
 
 definePageMeta({
@@ -161,6 +162,7 @@ const tabs = computed(() => {
     { id: 'historia', label: t('teacher.classes.detail.tabs.narrative'), icon: BookOpenIconSolid },
     { id: 'guia', label: t('teacher.classes.detail.tabs.guide'), icon: SparklesIconSolid },
     { id: 'misiones', label: t('teacher.classes.detail.tabs.missions'), icon: RocketLaunchIconSolid },
+    { id: 'alumnos', label: t('teacher.classes.detail.tabs.students'), icon: UsersIconSolid },
   ]
   if (s.rankings)
     list.push({ id: 'ranking', label: t('teacher.classes.detail.tabs.ranking'), icon: ChartBarIconSolid })

@@ -733,6 +733,57 @@ export class TeachersService {
     }
   }
 
+  /**
+   * Listado de alumnos de una clase con TODAS sus stats por clase (XP, nivel,
+   * monedas, maná, vidas) y el recuento de comportamientos positivos/negativos.
+   * Alimenta la pestaña "Alumnos" del detalle de la clase.
+   */
+  async getClassStudents(userId: string, classId: string) {
+    const cls = await prisma.class.findFirst({
+      where: { id: classId, teacherId: userId },
+      include: { enrollments: { include: { student: true } } },
+    })
+
+    if (!cls) throw new Error('Clase no encontrada')
+
+    // Recuento de comportamientos por alumno (positivos / negativos) en esta clase.
+    const behaviorCounts = await prisma.behaviorApplication.groupBy({
+      by: ['studentId', 'kind'],
+      where: { classId },
+      _count: { _all: true },
+    })
+    const positive = new Map<string, number>()
+    const negative = new Map<string, number>()
+    for (const b of behaviorCounts) {
+      const target = b.kind === 'negative' ? negative : positive
+      target.set(b.studentId, b._count._all)
+    }
+
+    const students = cls.enrollments
+      .map((e) => ({
+        id: e.student.id,
+        // Nombre real del alumno + su alias de clase (el "@").
+        name: e.student.name || 'Estudiante',
+        handle: e.nickname || e.student.email.split('@')[0],
+        avatar: e.avatarUrl || '/app/avatars/atenea.svg',
+        level: e.level,
+        xp: e.xp,
+        coins: e.coins,
+        mana: e.mana,
+        lives: e.lives,
+        positiveBehaviors: positive.get(e.student.id) || 0,
+        negativeBehaviors: negative.get(e.student.id) || 0,
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name))
+
+    return {
+      students,
+      total: students.length,
+      // Para que el front muestre solo las columnas de recursos activos.
+      settings: resolveClassSettings(cls.settings),
+    }
+  }
+
   async generateStudentAvatar(
     teacherId: string,
     classId: string,
