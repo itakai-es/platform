@@ -251,21 +251,14 @@
                   <Button
                     variant="outline"
                     size="sm"
-                    @click="
-                      step = 0
-                      plan = ''
-                      showNarrativeFeedback = false
-                    "
+                    @click="step = 0; plan = ''; showNarrativeFeedback = false"
                     >{{ t('teacher.classes.create.onboarding.btn_back') }}</Button
                   >
                   <div v-if="!showNarrativeFeedback" class="flex gap-2">
                     <Button
                       variant="outline"
                       size="sm"
-                      @click="
-                        showNarrativeFeedback = true
-                        nextTick(() => feedbackRef?.focus())
-                      "
+                      @click="showNarrativeFeedback = true; nextTick(() => feedbackRef?.focus())"
                       >{{ t('teacher.classes.create.onboarding.btn_change_something') }}</Button
                     >
                     <Button variant="primary" size="sm" @click="acceptPlan">{{
@@ -305,10 +298,7 @@
                             : 'bg-gray-50 text-navy-700 border border-gray-200 hover:border-navy-700'
                         "
                         :style="{ animationDelay: `${i * 100}ms` }"
-                        @click="
-                          selectedTitle = title
-                          customTitle = ''
-                        "
+                        @click="selectedTitle = title; customTitle = ''"
                       >
                         {{ title }}
                       </button>
@@ -359,10 +349,7 @@
                       <Button
                         variant="outline"
                         size="sm"
-                        @click="
-                          showTitleFeedback = true
-                          nextTick(() => titleFeedbackRef?.focus())
-                        "
+                        @click="showTitleFeedback = true; nextTick(() => titleFeedbackRef?.focus())"
                         >{{ t('teacher.classes.create.onboarding.btn_change_something') }}</Button
                       >
                       <Button
@@ -486,10 +473,7 @@
                       v-if="generatedImageUrl"
                       variant="outline"
                       size="sm"
-                      @click="
-                        showImageFeedback = true
-                        nextTick(() => imageFeedbackRef?.focus())
-                      "
+                      @click="showImageFeedback = true; nextTick(() => imageFeedbackRef?.focus())"
                       >{{ t('teacher.classes.create.onboarding.btn_change_something') }}</Button
                     >
                     <Button variant="outline" size="sm" @click="coverFileRef?.click()">
@@ -588,19 +572,13 @@
                     <Button
                       variant="outline"
                       size="sm"
-                      @click="
-                        showGuideFeedback = true
-                        nextTick(() => guideFeedbackRef?.focus())
-                      "
+                      @click="showGuideFeedback = true; nextTick(() => guideFeedbackRef?.focus())"
                       >{{ t('teacher.classes.create.onboarding.btn_change_something') }}</Button
                     >
                     <Button
                       variant="outline"
                       size="sm"
-                      @click="
-                        guideContent = ''
-                        finishWizard()
-                      "
+                      @click="guideContent = ''; finishWizard()"
                       >{{ t('teacher.classes.create.onboarding.btn_skip') }}</Button
                     >
                     <Button variant="primary" size="sm" @click="finishWizard()">{{
