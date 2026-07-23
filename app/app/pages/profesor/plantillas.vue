@@ -63,7 +63,11 @@
     <EmptyState
       v-else-if="filtered.length === 0"
       :icon="RectangleStackIcon"
-      :title="templates.length === 0 ? t('teacher.templates.empty_title') : t('teacher.templates.no_results_title')"
+      :title="
+        templates.length === 0
+          ? t('teacher.templates.empty_title')
+          : t('teacher.templates.no_results_title')
+      "
       :description="
         templates.length === 0
           ? t('teacher.templates.empty_description')
@@ -86,11 +90,7 @@
             :style="{ backgroundImage: `url(${getImageUrl(tpl.backgroundImage) || ''})` }"
           />
           <div v-else class="absolute inset-0 bg-gray-100" />
-          <StatusBadge
-            v-if="tpl.isOwn"
-            variant="activa"
-            class="absolute right-3 top-3"
-          >
+          <StatusBadge v-if="tpl.isOwn" variant="activa" class="absolute right-3 top-3">
             {{ t('teacher.templates.own') }}
           </StatusBadge>
         </div>
@@ -126,6 +126,7 @@
               {{ t('teacher.templates.preview_action') }}
             </Button>
             <Button
+              v-if="!tpl.isOwn"
               variant="primary"
               size="sm"
               class="flex-1"
@@ -141,11 +142,7 @@
     </div>
 
     <!-- Modal de previsualización -->
-    <TemplatePreviewModal
-      v-model="previewOpen"
-      :template-id="previewId"
-      @imported="onImported"
-    />
+    <TemplatePreviewModal v-model="previewOpen" :template-id="previewId" @imported="onImported" />
   </div>
 </template>
 
@@ -218,15 +215,26 @@ const sortOptions = computed(() => [
   { value: 'name-desc', label: t('teacher.templates.sort.name_desc') },
 ])
 
-const normalize = (s: string) => s.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '')
+const normalize = (s: string) =>
+  s
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
 
 const filtered = computed(() => {
   const q = normalize(search.value.trim())
-  const list = templates.value.filter((tpl) => {
-    if (fSubjects.value.length > 0 && (!tpl.subject || !fSubjects.value.includes(tpl.subject))) return false
-    if (fLevels.value.length > 0 && (!tpl.educationLevel || !fLevels.value.includes(tpl.educationLevel))) return false
-    if (fLanguages.value.length > 0 && (!tpl.language || !fLanguages.value.includes(tpl.language))) return false
-    if (fProvinces.value.length > 0 && (!tpl.province || !fProvinces.value.includes(tpl.province))) return false
+  const list = templates.value.filter(tpl => {
+    if (fSubjects.value.length > 0 && (!tpl.subject || !fSubjects.value.includes(tpl.subject)))
+      return false
+    if (
+      fLevels.value.length > 0 &&
+      (!tpl.educationLevel || !fLevels.value.includes(tpl.educationLevel))
+    )
+      return false
+    if (fLanguages.value.length > 0 && (!tpl.language || !fLanguages.value.includes(tpl.language)))
+      return false
+    if (fProvinces.value.length > 0 && (!tpl.province || !fProvinces.value.includes(tpl.province)))
+      return false
     if (q) {
       const hay = normalize(tpl.name)
       if (!hay.includes(q)) return false
@@ -236,16 +244,24 @@ const filtered = computed(() => {
 
   // Sort in-memory. 'recent' preserva el orden del backend (updatedAt desc).
   if (sort.value === 'name-asc') {
-    return [...list].sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }))
+    return [...list].sort((a, b) =>
+      a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })
+    )
   }
   if (sort.value === 'name-desc') {
-    return [...list].sort((a, b) => b.name.localeCompare(a.name, undefined, { sensitivity: 'base' }))
+    return [...list].sort((a, b) =>
+      b.name.localeCompare(a.name, undefined, { sensitivity: 'base' })
+    )
   }
   return list
 })
 
 const activeFilterCount = computed(
-  () => fSubjects.value.length + fLevels.value.length + fLanguages.value.length + fProvinces.value.length
+  () =>
+    fSubjects.value.length +
+    fLevels.value.length +
+    fLanguages.value.length +
+    fProvinces.value.length
 )
 const hasActiveFilters = computed(() => activeFilterCount.value > 0)
 
@@ -261,7 +277,9 @@ function resetFilters() {
 async function loadTemplates() {
   loading.value = true
   try {
-    const data = await $fetch<{ templates: Template[] }>(`${config.public.apiBase}/teacher/templates`)
+    const data = await $fetch<{ templates: Template[] }>(
+      `${config.public.apiBase}/teacher/templates`
+    )
     templates.value = data.templates
   } catch {
     toast.error(t('teacher.templates.load_error'))
