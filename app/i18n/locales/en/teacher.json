@@ -314,6 +314,40 @@
           "title": "Mission Detail | ITAKAI Teacher",
           "title_loading": "Loading mission... | ITAKAI Teacher",
           "description_fallback": "Mission detail on ITAKAI"
+        },
+        "tabs": {
+          "summary": "Summary",
+          "settings": "Settings"
+        },
+        "settings": {
+          "title_label": "Title",
+          "title_required": "The title cannot be empty",
+          "deadline_label": "Deadline",
+          "deadline_hint": "Leave it empty so the mission never expires.",
+          "rarity_label": "Rarity",
+          "rarity_locked_hint": "You can't change the rarity: a student has already completed the mission.",
+          "rarity": {
+            "comun": "Common",
+            "rara": "Rare",
+            "epica": "Epic",
+            "legendaria": "Legendary"
+          },
+          "status_label": "Status",
+          "status_active": "Active",
+          "status_blocked": "Blocked",
+          "status_hint": "Blocked: students see it locked and can't enter.",
+          "background_label": "Mission image",
+          "background_generate": "Generate with AI",
+          "background_regenerate": "Regenerate with AI",
+          "background_upload": "Upload my own",
+          "background_clear": "Remove image",
+          "background_error": "Could not generate the image",
+          "background_upload_type_error": "Invalid format. Upload a PNG, JPG or WEBP image.",
+          "background_upload_size_error": "The image is too large (max 5 MB).",
+          "save": "Save changes",
+          "discard": "Discard",
+          "toast_saved": "Details saved",
+          "toast_error": "Could not save details"
         }
       }
     },
@@ -621,10 +655,7 @@
         "btn_back": "Back to missions",
         "breadcrumb_classes": "My classes",
         "deadline_none": "No deadline",
-        "deadline_edit": "Edit deadline",
-        "deadline_save": "Save",
-        "deadline_clear": "Remove deadline",
-        "deadline_cancel": "Cancel",
+        "expired_readonly": "This mission has expired: you can review it, but submissions are closed.",
         "narrative_title": "Mission Story",
         "btn_see_more": "See more",
         "btn_see_less": "See less",

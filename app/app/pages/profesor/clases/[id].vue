@@ -54,7 +54,10 @@
           </Button>
         </template>
         <template v-if="state.classData.schedule" #subtitle>
-          {{ state.classData.schedule }}
+          <span class="inline-flex items-center gap-1.5">
+            <CalendarDaysIcon class="w-4 h-4 text-white/60" />
+            {{ state.classData.schedule }}
+          </span>
         </template>
         <template v-if="state.classData.archived" #meta>
           <div
@@ -113,6 +116,7 @@ import {
   UserPlusIcon,
   ExclamationTriangleIcon,
   XMarkIcon,
+  CalendarDaysIcon,
 } from '@heroicons/vue/24/outline'
 import {
   BookOpenIcon as BookOpenIconSolid,

@@ -314,6 +314,40 @@
           "title": "Detalle de Misión | ITAKAI Profesor",
           "title_loading": "Cargando misión... | ITAKAI Profesor",
           "description_fallback": "Detalle de misión en ITAKAI"
+        },
+        "tabs": {
+          "summary": "Resumen",
+          "settings": "Ajustes"
+        },
+        "settings": {
+          "title_label": "Título",
+          "title_required": "El título no puede estar vacío",
+          "deadline_label": "Fecha límite",
+          "deadline_hint": "Déjala vacía para que la misión no caduque.",
+          "rarity_label": "Rareza",
+          "rarity_locked_hint": "No puedes cambiar la rareza: algún alumno ya completó la misión.",
+          "rarity": {
+            "comun": "Común",
+            "rara": "Rara",
+            "epica": "Épica",
+            "legendaria": "Legendaria"
+          },
+          "status_label": "Estado",
+          "status_active": "Activa",
+          "status_blocked": "Bloqueada",
+          "status_hint": "Bloqueada: los alumnos la ven con candado y no pueden entrar.",
+          "background_label": "Imagen de la misión",
+          "background_generate": "Generar con IA",
+          "background_regenerate": "Regenerar con IA",
+          "background_upload": "Subir la mía",
+          "background_clear": "Quitar imagen",
+          "background_error": "No se pudo generar la imagen",
+          "background_upload_type_error": "Formato no válido. Sube una imagen PNG, JPG o WEBP.",
+          "background_upload_size_error": "La imagen es demasiado grande (máximo 5 MB).",
+          "save": "Guardar cambios",
+          "discard": "Descartar",
+          "toast_saved": "Datos guardados",
+          "toast_error": "No se pudieron guardar los datos"
         }
       }
     },
@@ -621,10 +655,7 @@
         "btn_back": "Volver a misiones",
         "breadcrumb_classes": "Mis clases",
         "deadline_none": "Sin fecha límite",
-        "deadline_edit": "Editar fecha límite",
-        "deadline_save": "Guardar",
-        "deadline_clear": "Quitar fecha límite",
-        "deadline_cancel": "Cancelar",
+        "expired_readonly": "Esta misión ha expirado: puedes consultarla, pero ya no admite entregas.",
         "narrative_title": "Historia de la Misión",
         "btn_see_more": "Ver más",
         "btn_see_less": "Ver menos",

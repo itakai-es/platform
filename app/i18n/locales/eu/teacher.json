@@ -314,6 +314,40 @@
           "title": "Misioaren Xehetasuna | ITAKAI Irakaslea",
           "title_loading": "Misioa kargatzen... | ITAKAI Irakaslea",
           "description_fallback": "ITAKAI-ko misioaren xehetasuna"
+        },
+        "tabs": {
+          "summary": "Laburpena",
+          "settings": "Ezarpenak"
+        },
+        "settings": {
+          "title_label": "Izenburua",
+          "title_required": "Izenburua ezin da hutsik egon",
+          "deadline_label": "Epemuga",
+          "deadline_hint": "Utzi hutsik misioak iraungi ez dezan.",
+          "rarity_label": "Arrarotasuna",
+          "rarity_locked_hint": "Ezin duzu arrarotasuna aldatu: ikasleren batek misioa jada osatu du.",
+          "rarity": {
+            "comun": "Arrunta",
+            "rara": "Arraroa",
+            "epica": "Epikoa",
+            "legendaria": "Legendazkoa"
+          },
+          "status_label": "Egoera",
+          "status_active": "Aktiboa",
+          "status_blocked": "Blokeatuta",
+          "status_hint": "Blokeatuta: ikasleek giltzarrapoarekin ikusten dute eta ezin dute sartu.",
+          "background_label": "Misioaren irudia",
+          "background_generate": "Sortu AArekin",
+          "background_regenerate": "Berriz sortu AArekin",
+          "background_upload": "Igo nirea",
+          "background_clear": "Kendu irudia",
+          "background_error": "Ezin izan da irudia sortu",
+          "background_upload_type_error": "Formatu baliogabea. Igo PNG, JPG edo WEBP irudi bat.",
+          "background_upload_size_error": "Irudia handiegia da (gehienez 5 MB).",
+          "save": "Gorde aldaketak",
+          "discard": "Baztertu",
+          "toast_saved": "Datuak gorde dira",
+          "toast_error": "Ezin izan dira datuak gorde"
         }
       }
     },
@@ -621,10 +655,7 @@
         "btn_back": "Misioetara itzuli",
         "breadcrumb_classes": "Nire klaseak",
         "deadline_none": "Epemugarik gabe",
-        "deadline_edit": "Epemuga editatu",
-        "deadline_save": "Gorde",
-        "deadline_clear": "Epemuga kendu",
-        "deadline_cancel": "Utzi",
+        "expired_readonly": "Misio hau iraungi da: kontsultatu dezakezu, baina ez du entregarik onartzen.",
         "narrative_title": "Misioaren Historia",
         "btn_see_more": "Ikusi gehiago",
         "btn_see_less": "Ikusi gutxiago",

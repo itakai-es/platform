@@ -23,6 +23,9 @@
       :mission="mission"
       :loading="loading"
       :error="error"
+      :tabs="tabs"
+      :active-tab="activeTab"
+      :tab-href="tabHref"
       @update-title="updateMissionTitle"
       @update-deadline="updateMissionDeadline"
       @edit-narrative="editNarrative"
@@ -36,7 +39,17 @@
       @reorder-documents="reorderDocuments"
       @edit-rewards="editRewards"
       @view-submissions="openSubmissionsModal"
-    />
+    >
+      <!-- Pestaña Ajustes: título, fecha límite e imagen de la misión -->
+      <template #tab="{ activeTab: current }">
+        <MissionConfigPanel
+          v-if="current === 'ajustes'"
+          :mission-id="missionId"
+          :mission="mission"
+          @update="onSettingsUpdate"
+        />
+      </template>
+    </MissionDetailTemplate>
 
     <!-- Submissions Modal -->
     <EnigmaSubmissionsModal
@@ -91,6 +104,10 @@
 </template>
 
 <script setup lang="ts">
+import {
+  Squares2X2Icon as Squares2X2IconSolid,
+  Cog6ToothIcon as Cog6ToothIconSolid,
+} from '@heroicons/vue/24/solid'
 import type {
   MissionDetail,
   MissionEnigmaDetail as MissionEnigma,
@@ -107,6 +124,27 @@ definePageMeta({
 const route = useRoute()
 const classId = route.params.classId as string
 const missionId = computed(() => route.params.missionId as string)
+
+// --------- Pestañas del detalle (como en una clase) ---------
+const tabs = computed(() => [
+  { id: 'resumen', label: t('teacher.missions.detail.tabs.summary'), icon: Squares2X2IconSolid },
+  { id: 'ajustes', label: t('teacher.missions.detail.tabs.settings'), icon: Cog6ToothIconSolid },
+])
+
+// Pestaña activa desde ?tab=; el resumen es la vista por defecto (sin query).
+const activeTab = computed(() => (route.query.tab as string) || 'resumen')
+
+function tabHref(tabId: string) {
+  return tabId === 'resumen' ? { query: {} } : { query: { tab: tabId } }
+}
+
+// El panel ya persiste los cambios; recargamos la misión desde el backend (con
+// force) para que TODO lo derivado —bonus de XP de misión, etiqueta de estado
+// calculada, portada— refleje exactamente lo guardado, sin duplicar lógica.
+async function onSettingsUpdate() {
+  const fresh = await missionStore.ensureTeacherMissionById(missionId.value, true)
+  if (fresh) mission.value = fresh as unknown as MissionDetail
+}
 
 // Store
 const missionStore = useMissionStore()

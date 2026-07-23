@@ -15,6 +15,15 @@ if (!existsSync(DOCUMENTS_DIR)) {
   mkdirSync(DOCUMENTS_DIR, { recursive: true })
 }
 
+// Helper: persist a base64 data URL cover to disk, returning its stored URL.
+async function saveBase64Image(base64Data: string, subdir: 'covers' = 'covers'): Promise<string | null> {
+  const matches = base64Data.match(/^data:image\/(\w+);base64,(.+)$/)
+  if (!matches) return null
+  const ext = matches[1] === 'jpeg' ? 'jpg' : matches[1]
+  const buffer = Buffer.from(matches[2], 'base64')
+  return saveUpload(`${subdir}/${randomUUID()}.${ext}`, buffer, `image/${matches[1]}`)
+}
+
 // Helper: Convert mimeType to document type
 function getDocumentType(mimeType: string): 'pdf' | 'video' | 'docx' | 'image' | 'link' {
   if (mimeType === 'application/pdf') return 'pdf'
@@ -85,7 +94,8 @@ export class MissionsService {
 
     const classIds = enrollments.map((e) => e.classId)
 
-    const whereClause: any = { classId: { in: classIds } }
+    // Las misiones de clases archivadas no aparecen en el listado del alumno.
+    const whereClause: any = { classId: { in: classIds }, class: { archived: false } }
 
     if (filters?.search) {
       whereClause.OR = [{ title: { contains: filters.search, mode: 'insensitive' } }, { description: { contains: filters.search, mode: 'insensitive' } }]
@@ -141,6 +151,18 @@ export class MissionsService {
     })
 
     if (!isTeacher && !enrollment) throw new Error('No tienes acceso a esta misión')
+
+    // Si la clase está archivada, el alumno pierde el acceso a sus misiones aunque
+    // conserve el link. El profesor sí puede seguir viéndolas para gestionarlas.
+    if (!isTeacher && mission.class.archived) {
+      throw new Error('Esta clase está archivada y sus misiones ya no están disponibles')
+    }
+
+    // Una misión bloqueada está cerrada para el alumno (aunque tenga la URL): el
+    // profesor la ha bloqueado a propósito. El profesor sí puede seguir viéndola.
+    if (!isTeacher && mission.status === 'bloqueada') {
+      throw new Error('Esta misión está bloqueada por el profesor')
+    }
 
     const progress = mission.progress[0]
 
@@ -205,6 +227,9 @@ export class MissionsService {
         classId: mission.classId,
         classSettings: resolveClassSettings(mission.class.settings),
         status: getMissionStatus(mission, progress),
+        // Estado real de la misión (activa/bloqueada), independiente del status
+        // calculado de arriba, para poder editarlo en Ajustes.
+        blocked: mission.status === 'bloqueada',
         rarity: mission.rarity,
         deadline: mission.deadline,
         backgroundImage: mission.backgroundImage,
@@ -270,6 +295,9 @@ export class MissionsService {
           : null,
         // Teacher-only stats (null for students)
         teacherStats,
+        // La rareza no se puede cambiar una vez que algún alumno completó la
+        // misión (alteraría su XP). Misma condición que el bloqueo de updateMission.
+        rarityLocked: (teacherStats?.completed ?? 0) > 0,
       },
     }
   }
@@ -282,6 +310,7 @@ export class MissionsService {
 
     if (!mission) throw new Error('Misión no encontrada')
     if (mission.class.archived) throw new Error('La clase está archivada y no admite nuevas acciones')
+    if (mission.status === 'bloqueada') throw new Error('Esta misión está bloqueada por el profesor')
 
     // Get enrollment for class-specific profile
     const enrollment = await prisma.classEnrollment.findUnique({
@@ -336,7 +365,8 @@ export class MissionsService {
     const classIds = enrollments.map((e) => e.classId)
 
     const missions = await prisma.mission.findMany({
-      where: { classId: { in: classIds } },
+      // Coherente con el listado: las clases archivadas no cuentan en las stats.
+      where: { classId: { in: classIds }, class: { archived: false } },
       include: { progress: { where: { studentId: userId } } },
     })
 
@@ -677,6 +707,16 @@ export class MissionsService {
       }
     }
 
+    // Persist an uploaded cover (base64 data URL) to disk before storing.
+    let backgroundImage = mission.backgroundImage
+    if (data.backgroundImage !== undefined) {
+      backgroundImage = data.backgroundImage
+        ? data.backgroundImage.startsWith('data:image/')
+          ? await saveBase64Image(data.backgroundImage, 'covers')
+          : data.backgroundImage
+        : null
+    }
+
     const updated = await prisma.mission.update({
       where: { id: missionId },
       data: {
@@ -686,6 +726,7 @@ export class MissionsService {
         status: data.status ?? mission.status,
         rarity: data.rarity ?? mission.rarity,
         deadline: data.deadline !== undefined ? (data.deadline ? new Date(data.deadline) : null) : mission.deadline,
+        backgroundImage,
       },
       include: {
         enigmas: true,

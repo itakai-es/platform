@@ -65,6 +65,8 @@ export interface MissionDetail {
   title: string
   description?: string
   status: MissionStatus
+  /** Estado real activa/bloqueada (para Ajustes), aparte del `status` calculado. */
+  blocked?: boolean
   rarity: string
   deadline?: string | Date | null
   backgroundImage?: string | null
@@ -94,4 +96,6 @@ export interface MissionDetail {
   documents?: MissionDocumentDetail[]
   badgeReward?: BadgeRewardDetail | null
   teacherStats?: TeacherMissionStats | null
+  /** True si algún alumno ya completó la misión: la rareza queda bloqueada. */
+  rarityLocked?: boolean
 }

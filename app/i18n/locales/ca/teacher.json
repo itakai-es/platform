@@ -314,6 +314,40 @@
           "title": "Detall de Missió | ITAKAI Professor",
           "title_loading": "Carregant missió... | ITAKAI Professor",
           "description_fallback": "Detall de missió a ITAKAI"
+        },
+        "tabs": {
+          "summary": "Resum",
+          "settings": "Ajustos"
+        },
+        "settings": {
+          "title_label": "Títol",
+          "title_required": "El títol no pot estar buit",
+          "deadline_label": "Data límit",
+          "deadline_hint": "Deixa-la buida perquè la missió no caduqui.",
+          "rarity_label": "Raresa",
+          "rarity_locked_hint": "No pots canviar la raresa: algun alumne ja ha completat la missió.",
+          "rarity": {
+            "comun": "Comú",
+            "rara": "Rara",
+            "epica": "Èpica",
+            "legendaria": "Llegendària"
+          },
+          "status_label": "Estat",
+          "status_active": "Activa",
+          "status_blocked": "Bloquejada",
+          "status_hint": "Bloquejada: els alumnes la veuen amb cadenat i no hi poden entrar.",
+          "background_label": "Imatge de la missió",
+          "background_generate": "Generar amb IA",
+          "background_regenerate": "Regenerar amb IA",
+          "background_upload": "Pujar la meva",
+          "background_clear": "Treure imatge",
+          "background_error": "No s'ha pogut generar la imatge",
+          "background_upload_type_error": "Format no vàlid. Puja una imatge PNG, JPG o WEBP.",
+          "background_upload_size_error": "La imatge és massa gran (màxim 5 MB).",
+          "save": "Desar canvis",
+          "discard": "Descartar",
+          "toast_saved": "Dades desades",
+          "toast_error": "No s'han pogut desar les dades"
         }
       }
     },
@@ -621,10 +655,7 @@
         "btn_back": "Tornar a missions",
         "breadcrumb_classes": "Les meves classes",
         "deadline_none": "Sense data límit",
-        "deadline_edit": "Editar data límit",
-        "deadline_save": "Desar",
-        "deadline_clear": "Treure data límit",
-        "deadline_cancel": "Cancel·lar",
+        "expired_readonly": "Aquesta missió ha caducat: pots consultar-la, però ja no admet lliuraments.",
         "narrative_title": "Història de la Missió",
         "btn_see_more": "Veure més",
         "btn_see_less": "Veure menys",
