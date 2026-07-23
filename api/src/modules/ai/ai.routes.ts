@@ -236,9 +236,10 @@ export async function aiRoutes(fastify: FastifyInstance) {
           : `El profesor dice sobre los titulos: "${data.feedback}". Ten en cuenta su feedback.`)
         : ''
 
-      const prompt = locale === 'en'
+      const prompt = (locale === 'en'
         ? `${contextPart} ${feedbackPart} Generate exactly 6 class title options. They should be real class names suitable for a school, with the topic and level when relevant. Return ONLY a JSON array of strings. No extra text.`
-        : `${contextPart} ${feedbackPart} Genera exactamente 6 opciones de titulo para la clase. Deben ser nombres reales adecuados para un centro educativo, con la asignatura y nivel cuando sea relevante. Devuelve SOLO un array JSON de strings. Sin texto extra.`
+        : `${contextPart} ${feedbackPart} Genera exactamente 6 opciones de titulo para la clase. Deben ser nombres reales adecuados para un centro educativo, con la asignatura y nivel cuando sea relevante. Devuelve SOLO un array JSON de strings. Sin texto extra.`)
+        + Prompts.outputLanguageDirective(data.locale)
 
       const text = await provider.generateText(prompt, { locale, temperature: 0.9 })
       const parsed = extractJson<string[]>(text)
@@ -573,6 +574,9 @@ Return ONLY the raw SVG code. No markdown, no backticks, no explanation.`
       default:
         return reply.status(400).send({ message: `Unknown prompt type: ${data.type}` })
     }
+
+    // Force the OUTPUT language to the class language (ca/eu/gl); no-op for es/en.
+    prompt += Prompts.outputLanguageDirective(data.locale)
 
     // Stream response
     reply.raw.writeHead(200, sseHeaders(request))

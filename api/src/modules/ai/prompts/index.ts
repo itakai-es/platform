@@ -5,6 +5,30 @@
  */
 
 // ============================================================
+// OUTPUT LANGUAGE
+// ============================================================
+
+const LANGUAGE_NAMES: Record<string, string> = {
+  ca: 'Catalan (català)',
+  eu: 'Basque (euskara)',
+  gl: 'Galician (galego)',
+}
+
+/**
+ * Directive appended to text prompts so the model writes its output in the
+ * class's language. The base prompt templates only exist in Spanish/English
+ * (see the `locale === 'en'` branches), so for Catalan/Basque/Galician we keep
+ * the Spanish instructions but force the OUTPUT language via this directive.
+ * Returns '' for es/en (already native) and for unknown locales.
+ */
+export function outputLanguageDirective(rawLocale?: string): string {
+  const code = (rawLocale || '').toLowerCase().slice(0, 2)
+  const name = LANGUAGE_NAMES[code]
+  if (!name) return ''
+  return `\n\nIMPORTANT: Write your ENTIRE response in ${name}, regardless of the language of these instructions. Translate all natural-language text (titles, descriptions, narrative, headings) into ${name}, while keeping any JSON structure/keys and markdown formatting exactly as specified.`
+}
+
+// ============================================================
 // CLASS ONBOARDING
 // ============================================================
 
