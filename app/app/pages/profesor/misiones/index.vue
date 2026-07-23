@@ -19,6 +19,7 @@
       v-model:sort="sortBy"
       v-model:class-filters="activeFilters"
       v-model:status-filters="activeStatusFilters"
+      v-model:view="view"
       :results-count="displayedMissions.length"
       show-class-filter
       show-status-filter
@@ -27,9 +28,14 @@
     />
 
     <!-- Loading State -->
-    <CardGrid v-if="loading">
-      <MissionCardSkeleton v-for="i in 6" :key="i" />
-    </CardGrid>
+    <CardCollection v-if="loading" :view="view">
+      <template v-if="view === 'grid'">
+        <MissionCardSkeleton v-for="i in 6" :key="i" />
+      </template>
+      <template v-else>
+        <CardRowSkeleton v-for="i in 6" :key="i" />
+      </template>
+    </CardCollection>
 
     <!-- Empty State -->
     <EmptyState
@@ -52,7 +58,7 @@
     </EmptyState>
 
     <!-- Missions Grid -->
-    <CardGrid v-else>
+    <CardCollection v-else :view="view">
       <MissionCardEnhanced
         v-for="mission in displayedMissions"
         :id="mission.id"
@@ -69,10 +75,11 @@
         :total-students="mission.totalStudents"
         :deadline="mission.deadline"
         :class-name="mission.className"
+        :layout="view"
         compact
         @click="navigateToMission(mission)"
       />
-    </CardGrid>
+    </CardCollection>
   </div>
 </template>
 
@@ -106,6 +113,7 @@ interface ClassOption {
 }
 
 const { t } = useI18n()
+const view = useViewMode('teacher-missions')
 
 useHead({
   title: () => t('teacher.missions.index.meta.title'),

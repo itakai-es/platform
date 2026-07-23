@@ -13,6 +13,7 @@
       v-model:status-filters="activeStatusFilters"
       v-model:sort="sortBy"
       v-model:class-filters="activeClassFilters"
+      v-model:view="view"
       :results-count="displayedMissions.length"
       show-class-filter
       show-status-filter
@@ -21,9 +22,14 @@
     />
 
     <!-- Loading State -->
-    <CardGrid v-if="loading">
-      <MissionCardSkeleton v-for="i in 6" :key="i" />
-    </CardGrid>
+    <CardCollection v-if="loading" :view="view">
+      <template v-if="view === 'grid'">
+        <MissionCardSkeleton v-for="i in 6" :key="i" />
+      </template>
+      <template v-else>
+        <CardRowSkeleton v-for="i in 6" :key="i" />
+      </template>
+    </CardCollection>
 
     <!-- Empty State -->
     <EmptyState
@@ -34,7 +40,7 @@
     />
 
     <!-- Missions Grid -->
-    <CardGrid v-else>
+    <CardCollection v-else :view="view">
       <MissionCardEnhanced
         v-for="mission in displayedMissions"
         :id="mission.id"
@@ -55,9 +61,10 @@
         :earned-mana="mission.earnedMana"
         :background-image="mission.backgroundImage"
         :class-name="mission.className"
+        :layout="view"
         compact
       />
-    </CardGrid>
+    </CardCollection>
   </div>
 </template>
 
@@ -66,6 +73,7 @@ import { RocketLaunchIcon } from '@heroicons/vue/24/outline'
 import type { MissionStatus, MissionRarity } from '~/types/mission.types'
 
 const { t } = useI18n()
+const view = useViewMode('student-missions')
 
 interface StudentMission {
   id: string

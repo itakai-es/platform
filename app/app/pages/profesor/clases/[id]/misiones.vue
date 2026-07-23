@@ -33,6 +33,7 @@
         v-model:rarity-filters="rarityFilters"
         v-model:sort="sortBy"
         v-model:status-filters="statusFilters"
+        v-model:view="view"
         :results-count="displayed.length"
         show-status-filter
         @reset="resetFilters"
@@ -46,8 +47,8 @@
         :description="emptyMessage"
       />
 
-      <!-- Grid -->
-      <CardGrid v-else>
+      <!-- Grid / Lista -->
+      <CardCollection v-else :view="view">
         <MissionCardEnhanced
           v-for="mission in displayed"
           :id="mission.id"
@@ -63,10 +64,11 @@
           :coin-reward="mission.coinReward"
           :mana-reward="mission.manaReward"
           :background-image="mission.backgroundImage"
+          :layout="view"
           compact
           @click="navigateToMission(mission.id)"
         />
-      </CardGrid>
+      </CardCollection>
     </template>
   </div>
 </template>
@@ -80,6 +82,7 @@ const { t } = useI18n()
 const route = useRoute()
 const classId = computed(() => route.params.id as string)
 const { state } = useTeacherClassDetail(classId)
+const view = useViewMode('teacher-class-missions')
 
 // Filtros (estado local de la tab).
 const searchQuery = ref('')

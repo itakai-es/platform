@@ -1,6 +1,23 @@
 <template>
   <div class="relative">
+    <!-- Vista lista: fila compacta. Vista cuadrícula: tarjeta completa. -->
+    <ClassCardRow
+      v-if="layout === 'list'"
+      :name="classItem.name"
+      :background-image="resolvedImage"
+      :student-count="classItem.studentCount"
+      :missions-count="
+        classItem.stats?.totalMissions ?? classItem.missionCount ?? classItem.totalMissions
+      "
+      :schedule="classItem.schedule"
+      :coins="coins"
+      :mana="mana"
+      :lives="lives"
+      :has-actions="showArchiveAction || showDuplicateAction"
+      @click="$emit('click')"
+    />
     <ClassCard
+      v-else
       :icon="AcademicCapIcon"
       :name="classItem.name"
       :background-image="resolvedImage"
@@ -85,6 +102,7 @@ import {
   XMarkIcon,
 } from '@heroicons/vue/24/outline'
 import type { ClassSettings } from '~/types/class.types'
+import type { ViewMode } from '~/composables/useViewMode'
 import { resolveClassSettings } from '~/utils/class-settings'
 
 interface ClassItemData {
@@ -112,6 +130,7 @@ const props = defineProps<{
   loading?: boolean
   duplicating?: boolean
   showCoins?: boolean
+  layout?: ViewMode
 }>()
 
 // Saldo de monedas, maná y puntos de vida de la clase. Solo en la vista del alumno,
