@@ -31,7 +31,22 @@
           "title": "My Classes | ITAKAI Teacher",
           "description": "Manage all your classes, enrolled students, and assigned missions."
         },
-        "templates": "Templates"
+        "templates": "Templates",
+        "duplicate_success": "Class duplicated as \"{name}\"",
+        "duplicate_error": "Couldn't duplicate the class",
+        "duplicate": {
+          "title": "Duplicate class",
+          "subtitle": "Choose what to copy to the new class “{name}”.",
+          "confirm": "Duplicate",
+          "cancel": "Cancel",
+          "items": {
+            "missions": { "label": "Missions", "desc": "The missions and their enigmas" },
+            "narrative": { "label": "Story", "desc": "The narrative and the cover image" },
+            "features": { "label": "Features", "desc": "The class's enabled modules" },
+            "shop": { "label": "Shop", "desc": "The shop items" },
+            "behaviors": { "label": "Behaviors", "desc": "The behavior templates" }
+          }
+        }
       },
       "create": {
         "breadcrumb_classes": "My Classes",

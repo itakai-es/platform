@@ -144,9 +144,18 @@ async function fetchJson<T>(
 export class SparkRouterProvider implements AIProvider {
   lastUsedProvider: 'spark' | 'gemini' | 'flux' = 'spark'
 
+  // Escotilla temporal: con AI_DISABLE_SPARK=true se salta Spark y va directo
+  // al fallback (Gemini/Flux). Útil cuando Spark va lento en pruebas. Quitar la
+  // variable y reiniciar para volver a usar Spark.
+  private readonly bypass = process.env.AI_DISABLE_SPARK === 'true'
+
   constructor(private readonly fallbackProvider?: AIProvider) {}
 
   async generateText(prompt: string, options?: GenerateTextOptions): Promise<string> {
+    if (this.bypass && this.fallbackProvider) {
+      this.lastUsedProvider = 'gemini'
+      return this.fallbackProvider.generateText(prompt, options)
+    }
     const { baseUrl, apiKey, model } = (await getAiConfig()).text
 
     try {
@@ -187,6 +196,11 @@ export class SparkRouterProvider implements AIProvider {
   }
 
   async *generateTextStream(prompt: string, options?: GenerateTextOptions): AsyncIterable<string> {
+    if (this.bypass && this.fallbackProvider) {
+      this.lastUsedProvider = 'gemini'
+      yield* this.fallbackProvider.generateTextStream(prompt, options)
+      return
+    }
     const { baseUrl, apiKey, model } = (await getAiConfig()).text
 
     try {
@@ -259,6 +273,10 @@ export class SparkRouterProvider implements AIProvider {
   }
 
   async generateImage(prompt: string, options?: GenerateImageOptions): Promise<GeneratedImageResult> {
+    if (this.bypass && this.fallbackProvider) {
+      this.lastUsedProvider = 'flux'
+      return this.fallbackProvider.generateImage(prompt, options)
+    }
     const { baseUrl, apiKey, model: imageModel } = (await getAiConfig()).image
 
     try {

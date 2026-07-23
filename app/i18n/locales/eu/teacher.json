@@ -31,7 +31,22 @@
           "title": "Nire Klaseak | ITAKAI Irakaslea",
           "description": "Kudeatu zure klase guztiak, matrikulatutako ikasleak eta esleitutako misioak."
         },
-        "templates": "Txantiloiak"
+        "templates": "Txantiloiak",
+        "duplicate_success": "Klasea \"{name}\" gisa bikoiztu da",
+        "duplicate_error": "Ezin izan da klasea bikoiztu",
+        "duplicate": {
+          "title": "Bikoiztu klasea",
+          "subtitle": "Aukeratu zer kopiatu «{name}» klase berrira.",
+          "confirm": "Bikoiztu",
+          "cancel": "Utzi",
+          "items": {
+            "missions": { "label": "Misioak", "desc": "Misioak eta beren enigmak" },
+            "narrative": { "label": "Istorioa", "desc": "Narrazioa eta azaleko irudia" },
+            "features": { "label": "Funtzionalitateak", "desc": "Klasearen modulu aktibatuak" },
+            "shop": { "label": "Denda", "desc": "Dendako artikuluak" },
+            "behaviors": { "label": "Portaerak", "desc": "Portaera-txantiloiak" }
+          }
+        }
       },
       "create": {
         "breadcrumb_classes": "Nire Klaseak",

@@ -76,6 +76,62 @@
             <Transition name="fade" mode="out-in">
               <!-- ===== STEP 0: Idea ===== -->
               <div v-if="step === 0" key="s0" class="flex-1 flex flex-col">
+                <!-- Datos básicos: se configuran antes de nada. El idioma manda
+                     el idioma en el que la IA genera todo en esta clase. -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+                  <div>
+                    <label class="text-sm font-medium text-text-primary mb-1.5 block">
+                      {{ t('teacher.classes.detail.settings.general.language_label') }}
+                    </label>
+                    <SelectDropdown
+                      :model-value="meta.language"
+                      :options="languageOptions"
+                      @update:model-value="meta.language = String($event)"
+                    />
+                  </div>
+                  <div>
+                    <label class="text-sm font-medium text-text-primary mb-1.5 block">
+                      {{ t('teacher.classes.detail.settings.general.subject_label') }}
+                    </label>
+                    <SelectDropdown
+                      :model-value="meta.subject"
+                      :options="subjectOptions"
+                      searchable
+                      :placeholder="t('teacher.classes.detail.settings.general.metadata_none')"
+                      :search-placeholder="
+                        t('teacher.classes.detail.settings.general.metadata_search')
+                      "
+                      @update:model-value="meta.subject = String($event)"
+                    />
+                  </div>
+                  <div>
+                    <label class="text-sm font-medium text-text-primary mb-1.5 block">
+                      {{ t('teacher.classes.detail.settings.general.level_label') }}
+                    </label>
+                    <SelectDropdown
+                      :model-value="meta.educationLevel"
+                      :options="educationLevelOptions"
+                      :placeholder="t('teacher.classes.detail.settings.general.metadata_none')"
+                      @update:model-value="meta.educationLevel = String($event)"
+                    />
+                  </div>
+                  <div>
+                    <label class="text-sm font-medium text-text-primary mb-1.5 block">
+                      {{ t('teacher.classes.detail.settings.general.province_label') }}
+                    </label>
+                    <SelectDropdown
+                      :model-value="meta.province"
+                      :options="provinceOptions"
+                      searchable
+                      :placeholder="t('teacher.classes.detail.settings.general.metadata_none')"
+                      :search-placeholder="
+                        t('teacher.classes.detail.settings.general.metadata_search')
+                      "
+                      @update:model-value="meta.province = String($event)"
+                    />
+                  </div>
+                </div>
+
                 <textarea
                   ref="inputRef"
                   v-model="idea"
@@ -101,9 +157,18 @@
                     @click="materialsFileRef?.click()"
                   >
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"
+                      />
                     </svg>
-                    {{ extractingDocs ? t('teacher.classes.create.onboarding.attach_processing') : t('teacher.classes.create.onboarding.attach_materials') }}
+                    {{
+                      extractingDocs
+                        ? t('teacher.classes.create.onboarding.attach_processing')
+                        : t('teacher.classes.create.onboarding.attach_materials')
+                    }}
                   </button>
                   <span
                     v-for="s in docSources"
@@ -186,14 +251,21 @@
                   <Button
                     variant="outline"
                     size="sm"
-                    @click="step = 0; plan = ''; showNarrativeFeedback = false"
+                    @click="
+                      step = 0
+                      plan = ''
+                      showNarrativeFeedback = false
+                    "
                     >{{ t('teacher.classes.create.onboarding.btn_back') }}</Button
                   >
                   <div v-if="!showNarrativeFeedback" class="flex gap-2">
                     <Button
                       variant="outline"
                       size="sm"
-                      @click="showNarrativeFeedback = true; nextTick(() => feedbackRef?.focus())"
+                      @click="
+                        showNarrativeFeedback = true
+                        nextTick(() => feedbackRef?.focus())
+                      "
                       >{{ t('teacher.classes.create.onboarding.btn_change_something') }}</Button
                     >
                     <Button variant="primary" size="sm" @click="acceptPlan">{{
@@ -233,7 +305,10 @@
                             : 'bg-gray-50 text-navy-700 border border-gray-200 hover:border-navy-700'
                         "
                         :style="{ animationDelay: `${i * 100}ms` }"
-                        @click="selectedTitle = title; customTitle = ''"
+                        @click="
+                          selectedTitle = title
+                          customTitle = ''
+                        "
                       >
                         {{ title }}
                       </button>
@@ -255,7 +330,9 @@
                         t('teacher.classes.create.onboarding.title_feedback_placeholder')
                       "
                       class="onb-feedback-input"
-                      @keydown.enter.prevent="titleFeedback.trim() && regenerateTitlesWithFeedback()"
+                      @keydown.enter.prevent="
+                        titleFeedback.trim() && regenerateTitlesWithFeedback()
+                      "
                     />
                     <button
                       type="button"
@@ -282,7 +359,10 @@
                       <Button
                         variant="outline"
                         size="sm"
-                        @click="showTitleFeedback = true; nextTick(() => titleFeedbackRef?.focus())"
+                        @click="
+                          showTitleFeedback = true
+                          nextTick(() => titleFeedbackRef?.focus())
+                        "
                         >{{ t('teacher.classes.create.onboarding.btn_change_something') }}</Button
                       >
                       <Button
@@ -406,7 +486,10 @@
                       v-if="generatedImageUrl"
                       variant="outline"
                       size="sm"
-                      @click="showImageFeedback = true; nextTick(() => imageFeedbackRef?.focus())"
+                      @click="
+                        showImageFeedback = true
+                        nextTick(() => imageFeedbackRef?.focus())
+                      "
                       >{{ t('teacher.classes.create.onboarding.btn_change_something') }}</Button
                     >
                     <Button variant="outline" size="sm" @click="coverFileRef?.click()">
@@ -505,13 +588,19 @@
                     <Button
                       variant="outline"
                       size="sm"
-                      @click="showGuideFeedback = true; nextTick(() => guideFeedbackRef?.focus())"
+                      @click="
+                        showGuideFeedback = true
+                        nextTick(() => guideFeedbackRef?.focus())
+                      "
                       >{{ t('teacher.classes.create.onboarding.btn_change_something') }}</Button
                     >
                     <Button
                       variant="outline"
                       size="sm"
-                      @click="guideContent = ''; finishWizard()"
+                      @click="
+                        guideContent = ''
+                        finishWizard()
+                      "
                       >{{ t('teacher.classes.create.onboarding.btn_skip') }}</Button
                     >
                     <Button variant="primary" size="sm" @click="finishWizard()">{{
@@ -655,6 +744,13 @@ import {
   ArrowUpTrayIcon,
 } from '@heroicons/vue/24/outline'
 import { renderPageMarkdown } from '~/utils/markdown'
+import {
+  CLASS_SUBJECTS,
+  CLASS_EDUCATION_LEVELS,
+  CLASS_LANGUAGES,
+  SPANISH_PROVINCES,
+  CLASS_LANGUAGE_TO_LOCALE,
+} from '~/utils/class-metadata'
 
 // El confeti se dispara via useEffects() para pasar por los mismos gates
 // (`visualEffects`/`sounds`) que el resto del UI.
@@ -708,6 +804,28 @@ const step = ref(0)
 const loading = ref(false)
 const isStreaming = ref(false)
 const inputRef = ref<HTMLInputElement | HTMLTextAreaElement>()
+
+// Datos básicos de la clase que el profe configura antes de nada. El idioma
+// vehicular manda el locale con el que la IA genera todo (narrativa, títulos,
+// guía): si elige Català, la IA le habla en catalán en esta clase.
+const meta = reactive({
+  subject: '',
+  educationLevel: '',
+  language: 'Castellano',
+  province: '',
+})
+const classLocale = computed(() => CLASS_LANGUAGE_TO_LOCALE[meta.language] || locale.value)
+
+// Opciones de los selects. El idioma es obligatorio (manda la IA), el resto
+// lleva un "sin especificar" delante para poder dejarlo vacío.
+const noneOption = computed(() => ({
+  value: '',
+  label: t('teacher.classes.detail.settings.general.metadata_none'),
+}))
+const languageOptions = CLASS_LANGUAGES
+const subjectOptions = computed(() => [noneOption.value, ...CLASS_SUBJECTS])
+const educationLevelOptions = computed(() => [noneOption.value, ...CLASS_EDUCATION_LEVELS])
+const provinceOptions = computed(() => [noneOption.value, ...SPANISH_PROVINCES])
 
 const idea = ref('')
 const plan = ref('')
@@ -879,7 +997,12 @@ async function submitIdea() {
   try {
     loading.value = false
     isStreaming.value = true
-    await streamPrompt('class.narrative.generate', { idea: ideaWithMaterials() }, plan)
+    await streamPrompt(
+      'class.narrative.generate',
+      { idea: ideaWithMaterials() },
+      plan,
+      classLocale.value
+    )
     plan.value = cleanAIText(plan.value).slice(0, 8000)
     planProvider.value = lastProvider.value
   } catch {
@@ -905,7 +1028,8 @@ async function regeneratePlan() {
     await streamPrompt(
       'class.narrative.modify',
       { idea: idea.value, current: previousPlan.slice(0, 800), feedback: fb },
-      plan
+      plan,
+      classLocale.value
     )
     plan.value = cleanAIText(plan.value).slice(0, 8000)
     planProvider.value = lastProvider.value
@@ -930,7 +1054,7 @@ async function acceptPlan() {
       {
         method: 'POST',
         body: {
-          locale: locale.value,
+          locale: classLocale.value,
           context: `${ctx}\nNarrativa: ${plan.value.slice(0, 500)}`.slice(0, 1500),
         },
       }
@@ -959,7 +1083,7 @@ async function regenerateTitlesWithFeedback() {
       {
         method: 'POST',
         body: {
-          locale: locale.value,
+          locale: classLocale.value,
           context: `${ctx}\nNarrativa: ${plan.value.slice(0, 500)}`.slice(0, 1500),
           feedback: fb,
         },
@@ -995,7 +1119,7 @@ async function generateCover(extraPrompt?: string) {
           {
             method: 'POST',
             headers: { Authorization: `Bearer ${authStore.tokens?.accessToken}` },
-            body: { name: chosenTitle.value, description, locale: locale.value },
+            body: { name: chosenTitle.value, description, locale: classLocale.value },
           }
         )
         rawImagePath.value = res.imageUrl
@@ -1043,7 +1167,8 @@ async function generateGuide(extraPrompt?: string) {
     await streamPrompt(
       'class.guide.generate',
       { title: chosenTitle.value, context: ctx },
-      guideContent
+      guideContent,
+      classLocale.value
     )
     guideProvider.value = lastProvider.value
     guideContent.value = guideContent.value
@@ -1095,6 +1220,10 @@ async function handleSubmit() {
       narrative: plan.value.trim() || undefined,
       schedule: form.schedule.trim() || undefined,
       backgroundImage: rawImagePath.value || undefined,
+      subject: meta.subject || undefined,
+      language: meta.language || undefined,
+      educationLevel: meta.educationLevel || undefined,
+      province: meta.province || undefined,
     })
     // Invalidar caché del store del profesor para que dashboard/lista
     // recarguen al volver a entrar.

@@ -31,7 +31,22 @@
           "title": "As Miñas Clases | ITAKAI Profesor",
           "description": "Xestiona todas as túas clases, estudantes inscritos e misións asignadas."
         },
-        "templates": "Modelos"
+        "templates": "Modelos",
+        "duplicate_success": "Clase duplicada como \"{name}\"",
+        "duplicate_error": "Non se puido duplicar a clase",
+        "duplicate": {
+          "title": "Duplicar clase",
+          "subtitle": "Escolle que copiar á nova clase «{name}».",
+          "confirm": "Duplicar",
+          "cancel": "Cancelar",
+          "items": {
+            "missions": { "label": "Misións", "desc": "As misións e os seus enigmas" },
+            "narrative": { "label": "Historia", "desc": "A narrativa e a imaxe de portada" },
+            "features": { "label": "Funcionalidades", "desc": "Os módulos activados da clase" },
+            "shop": { "label": "Tenda", "desc": "Os artigos da tenda" },
+            "behaviors": { "label": "Comportamentos", "desc": "As plantillas de comportamento" }
+          }
+        }
       },
       "create": {
         "breadcrumb_classes": "As Miñas Clases",

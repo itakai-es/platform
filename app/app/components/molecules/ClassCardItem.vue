@@ -15,10 +15,27 @@
       @click="$emit('click')"
     />
 
-    <!-- Archive/unarchive action button -->
-    <div v-if="showArchiveAction" class="absolute top-3 right-3 z-20" @click.stop>
-      <!-- Confirm state -->
-      <Transition name="fade-scale">
+    <!-- Overlay actions (duplicate + archive) -->
+    <div
+      v-if="showArchiveAction || showDuplicateAction"
+      class="absolute top-3 right-3 z-20 flex items-center gap-1.5"
+      @click.stop
+    >
+      <!-- Duplicate action (oculto mientras se confirma archivar, para no saturar) -->
+      <button
+        v-if="showDuplicateAction && !classItem.archived && !confirming"
+        class="w-8 h-8 rounded-xl bg-white/90 backdrop-blur-sm shadow-md border border-white/60 flex items-center justify-center text-text-secondary hover:text-navy-700 hover:bg-white transition-all duration-150 disabled:opacity-60"
+        title="Duplicar clase"
+        :disabled="duplicating"
+        @click="$emit('duplicate')"
+      >
+        <Spinner v-if="duplicating" size="sm" class="!w-3.5 !h-3.5" />
+        <DocumentDuplicateIcon v-else class="w-4 h-4" />
+      </button>
+
+      <!-- Archive/unarchive action -->
+      <Transition v-if="showArchiveAction" name="fade-scale">
+        <!-- Confirm state -->
         <div
           v-if="confirming"
           class="flex items-center gap-1 bg-white rounded-xl shadow-lg border border-gray-200 px-2 py-1.5"
@@ -64,6 +81,7 @@ import {
   ArchiveBoxIcon,
   ArchiveBoxArrowDownIcon,
   CheckIcon,
+  DocumentDuplicateIcon,
   XMarkIcon,
 } from '@heroicons/vue/24/outline'
 import type { ClassSettings } from '~/types/class.types'
@@ -90,7 +108,9 @@ interface ClassItemData {
 const props = defineProps<{
   classItem: ClassItemData
   showArchiveAction?: boolean
+  showDuplicateAction?: boolean
   loading?: boolean
+  duplicating?: boolean
   showCoins?: boolean
 }>()
 
@@ -109,6 +129,7 @@ const emit = defineEmits<{
   click: []
   archive: []
   unarchive: []
+  duplicate: []
 }>()
 
 const config = useRuntimeConfig()
