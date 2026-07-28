@@ -143,6 +143,7 @@
           {{ t('teacher.classes.detail.settings.levels.custom_hint') }}
         </p>
         <div
+          v-if="form.levelXp"
           class="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-72 overflow-y-auto scrollbar-subtle pr-1"
         >
           <div

@@ -129,8 +129,14 @@ export function levelFromXp(totalXP: number, cfg: LevelConfig): number {
 
 /** Tramo (título + color) al que pertenece un nivel. */
 export function tierForLevel(level: number, cfg: LevelConfig): LevelTier {
-  const t = cfg.tiers.find(x => level >= x.fromLevel && level <= x.toLevel)
-  return t ?? cfg.tiers[cfg.tiers.length - 1] ?? DEFAULT_LEVEL_CONFIG.tiers[0]
+  const tiers = cfg.tiers.length > 0 ? cfg.tiers : DEFAULT_LEVEL_CONFIG.tiers
+  const t = tiers.find(x => level >= x.fromLevel && level <= x.toLevel)
+  if (t) return t
+  // Fuera de rango: por debajo del primer tramo → el más bajo; por encima del
+  // último → el más alto. (Los niveles siempre van acotados a [1, cap], así que
+  // esto solo es una red de seguridad para valores inesperados.)
+  const first = tiers[0]
+  return level < first.fromLevel ? first : tiers[tiers.length - 1]
 }
 
 export function titleForLevel(level: number, cfg: LevelConfig): string {

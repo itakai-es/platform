@@ -157,9 +157,9 @@ describe('getTitleForLevel', () => {
     expect(getTitleForLevel(50)).toBe('Dios del Olimpo')
   })
 
-  it('should fallback to Mortal for unknown levels', () => {
-    expect(getTitleForLevel(0)).toBe('Mortal')
-    expect(getTitleForLevel(100)).toBe('Mortal')
+  it('clamps to the nearest tier for out-of-range levels', () => {
+    expect(getTitleForLevel(0)).toBe('Mortal') // below the first tier → lowest
+    expect(getTitleForLevel(100)).toBe('Dios del Olimpo') // above the last tier → highest
   })
 })
 

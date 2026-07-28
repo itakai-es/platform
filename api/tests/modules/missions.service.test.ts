@@ -126,8 +126,10 @@ describe('createMission', () => {
     ).rejects.toThrow(/al menos un enigma/)
   })
 
-  it('rejects enigmas with XP outside the preset ladder', async () => {
+  it('accepts enigmas with any positive XP value (presets are only suggestions)', async () => {
     mocks.classFindFirst.mockResolvedValueOnce({ id: CLASS, teacherId: TEACHER })
+    mocks.missionCreate.mockResolvedValueOnce({ id: MISSION })
+    mocks.missionEnigmaCreateMany.mockResolvedValueOnce({ count: 1 })
 
     await expect(
       missionsService.createMission(TEACHER, {
@@ -135,7 +137,7 @@ describe('createMission', () => {
         title: 'Test',
         enigmas: [{ title: 'E1', xp: 33 }],
       }),
-    ).rejects.toThrow(/debe ser uno de/)
+    ).resolves.toBeDefined()
   })
 
   it('accepts each preset XP value', async () => {
@@ -248,17 +250,8 @@ describe('updateEnigma', () => {
     expect(mocks.missionEnigmaUpdate).not.toHaveBeenCalled()
   })
 
-  it('rejects XP change to a non-preset value', async () => {
-    mocks.missionEnigmaFindFirst.mockResolvedValueOnce({
-      id: ENIGMA,
-      xpReward: 40,
-      mission: { class: { teacherId: TEACHER } },
-    })
-
-    await expect(
-      missionsService.updateEnigma(TEACHER, ENIGMA, { xp: 33 }),
-    ).rejects.toThrow(/debe ser uno de/)
-  })
+  // Nota: la validación "el XP debe ser uno de los presets" se retiró a propósito
+  // (los presets son solo sugerencias; el backend acepta cualquier entero ≥ 0).
 
   // TODO: mock desactualizado (missionEnigmaUpdate) tras renombrar en Prisma schema.
 
