@@ -133,8 +133,12 @@
                   : 'text-white/70 hover:text-white hover:bg-white/10',
               ]"
             >
-              <component :is="tab.icon" class="w-5 h-5" />
-              <span class="hidden sm:inline">{{ tab.label }}</span>
+              <component v-if="menuDisplay !== 'text'" :is="tab.icon" class="w-5 h-5" />
+              <span
+                v-if="menuDisplay !== 'icon'"
+                :class="menuDisplay === 'both' ? 'hidden sm:inline' : ''"
+                >{{ tab.label }}</span
+              >
             </NuxtLink>
           </div>
         </div>
@@ -339,7 +343,10 @@
                             <button
                               type="button"
                               class="flex items-center gap-3 w-full px-4 py-3 text-sm text-navy-700 hover:bg-gray-50 transition-colors"
-                              @click="emit('editEnigma', enigma); openEnigmaDropdown = null"
+                              @click="
+                                emit('editEnigma', enigma)
+                                openEnigmaDropdown = null
+                              "
                             >
                               <PencilIcon class="w-5 h-5" />
                               {{ t('teacher.components.mission_detail_template.btn_edit') }}
@@ -347,7 +354,10 @@
                             <button
                               type="button"
                               class="flex items-center gap-3 w-full px-4 py-3 text-sm text-navy-700 hover:bg-gray-50 transition-colors"
-                              @click="emit('viewSubmissions', enigma); openEnigmaDropdown = null"
+                              @click="
+                                emit('viewSubmissions', enigma)
+                                openEnigmaDropdown = null
+                              "
                             >
                               <UserGroupIcon class="w-5 h-5" />
                               {{
@@ -360,7 +370,10 @@
                             <button
                               type="button"
                               class="flex items-center gap-3 w-full px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors"
-                              @click="emit('deleteEnigma', enigma.id); openEnigmaDropdown = null"
+                              @click="
+                                emit('deleteEnigma', enigma.id)
+                                openEnigmaDropdown = null
+                              "
                             >
                               <TrashIcon class="w-5 h-5" />
                               {{ t('teacher.missions.detail.delete_confirm_btn') }}
@@ -385,7 +398,10 @@
                               <CoinIcon class="w-5 h-5" />{{ enigmaCoins(enigma) }}
                             </span>
                           </Tooltip>
-                          <Tooltip v-if="enigmaMana(enigma) && classCfg.mana" :text="t('common.resources.mana')">
+                          <Tooltip
+                            v-if="enigmaMana(enigma) && classCfg.mana"
+                            :text="t('common.resources.mana')"
+                          >
                             <span class="inline-flex items-center gap-1">
                               <ManaIcon class="w-5 h-5" />{{ enigmaMana(enigma) }}
                             </span>
@@ -461,7 +477,10 @@
                                   <CoinIcon class="w-5 h-5" />{{ enigmaCoins(enigma) }}
                                 </span>
                               </Tooltip>
-                              <Tooltip v-if="enigmaMana(enigma) && classCfg.mana" :text="t('common.resources.mana')">
+                              <Tooltip
+                                v-if="enigmaMana(enigma) && classCfg.mana"
+                                :text="t('common.resources.mana')"
+                              >
                                 <span class="inline-flex items-center gap-1">
                                   <ManaIcon class="w-5 h-5" />{{ enigmaMana(enigma) }}
                                 </span>
@@ -552,10 +571,7 @@
                     <div
                       class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 bg-navy-700"
                     >
-                      <CheckIcon
-                        v-if="enigma.status === 'completado'"
-                        class="w-5 h-5 text-white"
-                      />
+                      <CheckIcon v-if="enigma.status === 'completado'" class="w-5 h-5 text-white" />
                       <span v-else class="text-white font-bold text-sm">{{ index + 1 }}</span>
                     </div>
 
@@ -609,7 +625,10 @@
                                 <template v-else>{{ enigmaCoins(enigma) }}</template>
                               </span>
                             </Tooltip>
-                            <Tooltip v-if="enigmaMana(enigma) && classCfg.mana" :text="t('common.resources.mana')">
+                            <Tooltip
+                              v-if="enigmaMana(enigma) && classCfg.mana"
+                              :text="t('common.resources.mana')"
+                            >
                               <span class="inline-flex items-center gap-1">
                                 <ManaIcon class="w-5 h-5" />
                                 <template
@@ -661,10 +680,7 @@
                       <p class="text-sm mt-2 text-navy-700/80">
                         {{ enigma.description }}
                       </p>
-                      <div
-                        v-if="enigma.objectives && enigma.objectives.length > 0"
-                        class="mt-3"
-                      >
+                      <div v-if="enigma.objectives && enigma.objectives.length > 0" class="mt-3">
                         <p class="text-sm font-semibold text-navy-700 mb-2">
                           {{ t('teacher.components.mission_detail_template.objectives_label') }}
                         </p>
@@ -846,7 +862,10 @@
                                 <button
                                   type="button"
                                   class="flex items-center gap-3 w-full px-4 py-3 text-sm text-navy-700 hover:bg-gray-50 transition-colors"
-                                  @click="emit('editDocument', doc); openDocumentDropdown = null"
+                                  @click="
+                                    emit('editDocument', doc)
+                                    openDocumentDropdown = null
+                                  "
                                 >
                                   <PencilIcon class="w-5 h-5" />
                                   {{ t('teacher.components.mission_detail_template.btn_edit') }}
@@ -854,7 +873,10 @@
                                 <button
                                   type="button"
                                   class="flex items-center gap-3 w-full px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors"
-                                  @click="emit('deleteDocument', doc.id); openDocumentDropdown = null"
+                                  @click="
+                                    emit('deleteDocument', doc.id)
+                                    openDocumentDropdown = null
+                                  "
                                 >
                                   <TrashIcon class="w-5 h-5" />
                                   {{ t('teacher.missions.detail.delete_confirm_btn') }}
@@ -946,7 +968,10 @@
                                 <button
                                   type="button"
                                   class="flex items-center gap-3 w-full px-4 py-3 text-sm text-navy-700 hover:bg-gray-50 transition-colors"
-                                  @click="emit('editDocument', doc); openDocumentDropdown = null"
+                                  @click="
+                                    emit('editDocument', doc)
+                                    openDocumentDropdown = null
+                                  "
                                 >
                                   <PencilIcon class="w-5 h-5" />
                                   {{ t('teacher.components.mission_detail_template.btn_edit') }}
@@ -954,7 +979,10 @@
                                 <button
                                   type="button"
                                   class="flex items-center gap-3 w-full px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors"
-                                  @click="emit('deleteDocument', doc.id); openDocumentDropdown = null"
+                                  @click="
+                                    emit('deleteDocument', doc.id)
+                                    openDocumentDropdown = null
+                                  "
                                 >
                                   <TrashIcon class="w-5 h-5" />
                                   {{ t('teacher.missions.detail.delete_confirm_btn') }}
@@ -1057,7 +1085,9 @@
               >
                 <div
                   class="w-24 h-24 rounded-full flex items-center justify-center mb-3"
-                  :class="[!isTeacher && xpProgressPercent < 100 ? 'bg-gray-200' : 'bg-purple-light']"
+                  :class="[
+                    !isTeacher && xpProgressPercent < 100 ? 'bg-gray-200' : 'bg-purple-light',
+                  ]"
                 >
                   <XpIcon v-if="isTeacher || xpProgressPercent >= 100" class="w-12 h-12" />
                   <XpIcon v-else mono class="w-12 h-12 text-gray-400" />
@@ -1124,7 +1154,9 @@
               >
                 <div
                   class="w-24 h-24 rounded-full flex items-center justify-center mb-3"
-                  :class="[!isTeacher && coinsProgressPercent < 100 ? 'bg-gray-200' : 'bg-yellow-light']"
+                  :class="[
+                    !isTeacher && coinsProgressPercent < 100 ? 'bg-gray-200' : 'bg-yellow-light',
+                  ]"
                 >
                   <CoinIcon
                     class="w-12 h-12"
@@ -1159,7 +1191,9 @@
               >
                 <div
                   class="w-24 h-24 rounded-full flex items-center justify-center mb-3"
-                  :class="[!isTeacher && manaProgressPercent < 100 ? 'bg-gray-200' : 'bg-sky-light']"
+                  :class="[
+                    !isTeacher && manaProgressPercent < 100 ? 'bg-gray-200' : 'bg-sky-light',
+                  ]"
                 >
                   <ManaIcon v-if="isTeacher || manaProgressPercent >= 100" class="w-12 h-12" />
                   <ManaIcon v-else mono class="w-12 h-12 text-gray-400" />
@@ -1468,6 +1502,9 @@ interface Props {
   tabHref?: (tabId: string) => TabLink
 }
 
+// Preferencia de usuario: icono / texto / ambos en las pestañas.
+const menuDisplay = useMenuDisplay()
+
 const props = withDefaults(defineProps<Props>(), {
   tabs: () => [],
   activeTab: 'resumen',
@@ -1496,15 +1533,14 @@ const narrativeOverflows = ref(false)
 const narrativeFullHeight = ref(0)
 
 // True while the box is clamped to the collapsed height
-const narrativeClamped = computed(
-  () => narrativeOverflows.value && !narrativeExpanded.value
-)
+const narrativeClamped = computed(() => narrativeOverflows.value && !narrativeExpanded.value)
 
 // Animate max-height between collapsed and full height (smooth open/close)
 const narrativeContentStyle = computed(() => {
   if (!narrativeOverflows.value) return {}
   return {
-    maxHeight: (narrativeClamped.value ? NARRATIVE_COLLAPSED_HEIGHT : narrativeFullHeight.value) + 'px',
+    maxHeight:
+      (narrativeClamped.value ? NARRATIVE_COLLAPSED_HEIGHT : narrativeFullHeight.value) + 'px',
   }
 })
 

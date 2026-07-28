@@ -214,6 +214,37 @@
                 </div>
               </div>
             </Card>
+
+            <!-- Menú superior: icono / texto / ambos -->
+            <Card type="settings">
+              <div class="p-6">
+                <div class="flex items-center gap-3 mb-4">
+                  <ViewColumnsIcon class="w-6 h-6 text-navy-700" />
+                  <h3 class="text-lg font-bold text-navy-700">
+                    {{ t('common.menu_display.title') }}
+                  </h3>
+                </div>
+                <p class="text-sm text-navy-700/70 mb-4">
+                  {{ t('common.menu_display.description') }}
+                </p>
+                <div class="grid grid-cols-3 gap-2">
+                  <button
+                    v-for="opt in menuOptions"
+                    :key="opt.value"
+                    type="button"
+                    class="rounded-xl border px-3 py-2 text-sm font-medium transition-colors"
+                    :class="
+                      menuDisplay === opt.value
+                        ? 'border-navy-700 bg-navy-700 text-white'
+                        : 'border-border-primary bg-surface text-navy-700 hover:bg-gray-50'
+                    "
+                    @click="menuDisplay = opt.value"
+                  >
+                    {{ opt.label }}
+                  </button>
+                </div>
+              </div>
+            </Card>
           </div>
 
           <!-- Right Column -->
@@ -308,9 +339,18 @@ import {
   SwatchIcon,
   AcademicCapIcon,
   BuildingLibraryIcon,
+  ViewColumnsIcon,
 } from '@heroicons/vue/24/outline'
 
 const { t } = useI18n()
+
+// Preferencia de visualización de las pestañas superiores (icono/texto/ambos).
+const menuDisplay = useMenuDisplay()
+const menuOptions = computed(() => [
+  { value: 'both' as const, label: t('common.menu_display.both') },
+  { value: 'icon' as const, label: t('common.menu_display.icon') },
+  { value: 'text' as const, label: t('common.menu_display.text') },
+])
 const { changeLanguage } = useLocale()
 
 useHead({

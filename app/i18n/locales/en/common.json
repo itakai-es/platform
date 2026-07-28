@@ -6,6 +6,7 @@
       "missions": "Missions",
       "badges": "Badges",
       "students": "Students",
+      "about": "About",
       "users": "Users",
       "classes": "Classes",
       "analytics": "Analytics",
@@ -197,6 +198,13 @@
       "title": "Under maintenance",
       "message": "We're making improvements. Please come back in a few minutes.",
       "admin_notice": "Maintenance mode active — only admins can access."
+    },
+    "menu_display": {
+      "title": "Top menu",
+      "description": "How the class and mission tabs look.",
+      "both": "Icon and text",
+      "icon": "Icon only",
+      "text": "Text only"
     }
   }
 }

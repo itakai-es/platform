@@ -6,6 +6,7 @@
       "missions": "Misións",
       "badges": "Insignias",
       "students": "Estudantes",
+      "about": "Acerca de",
       "users": "Usuarios",
       "classes": "Clases",
       "analytics": "Analíticas",
@@ -197,6 +198,13 @@
       "title": "En mantemento",
       "message": "Estamos facendo melloras. Volve en uns minutos.",
       "admin_notice": "Modo mantemento activo — só os administradores poden acceder."
+    },
+    "menu_display": {
+      "title": "Menú superior",
+      "description": "Como se ven as lapelas de clases e misións.",
+      "both": "Icona e texto",
+      "icon": "Só icona",
+      "text": "Só texto"
     }
   }
 }

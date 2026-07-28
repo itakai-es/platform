@@ -81,8 +81,12 @@
               ]"
               @click="emit('update:modelValue', tab.id)"
             >
-              <component :is="tab.icon" class="w-5 h-5" />
-              <span class="hidden sm:inline">{{ tab.label }}</span>
+              <component v-if="menuDisplay !== 'text'" :is="tab.icon" class="w-5 h-5" />
+              <span
+                v-if="menuDisplay !== 'icon'"
+                :class="menuDisplay === 'both' ? 'hidden sm:inline' : ''"
+                >{{ tab.label }}</span
+              >
             </button>
           </div>
         </div>
@@ -122,6 +126,9 @@ interface Props {
   backLink: string
   backText?: string
 }
+
+// Preferencia de usuario: icono / texto / ambos en las pestañas.
+const menuDisplay = useMenuDisplay()
 
 const props = withDefaults(defineProps<Props>(), {
   loading: false,

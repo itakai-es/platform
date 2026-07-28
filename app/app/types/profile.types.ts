@@ -33,6 +33,7 @@ export interface UserPreferences {
   missionReminders: boolean
   language: 'es' | 'en' | 'ca' | 'eu' | 'gl'
   theme: 'college' | 'university'
+  menuDisplay: 'both' | 'icon' | 'text'
 }
 
 /**
