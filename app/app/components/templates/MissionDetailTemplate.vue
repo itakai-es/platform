@@ -343,10 +343,7 @@
                             <button
                               type="button"
                               class="flex items-center gap-3 w-full px-4 py-3 text-sm text-navy-700 hover:bg-gray-50 transition-colors"
-                              @click="
-                                emit('editEnigma', enigma)
-                                openEnigmaDropdown = null
-                              "
+                              @click="editEnigmaAction(enigma)"
                             >
                               <PencilIcon class="w-5 h-5" />
                               {{ t('teacher.components.mission_detail_template.btn_edit') }}
@@ -354,10 +351,7 @@
                             <button
                               type="button"
                               class="flex items-center gap-3 w-full px-4 py-3 text-sm text-navy-700 hover:bg-gray-50 transition-colors"
-                              @click="
-                                emit('viewSubmissions', enigma)
-                                openEnigmaDropdown = null
-                              "
+                              @click="viewSubmissionsAction(enigma)"
                             >
                               <UserGroupIcon class="w-5 h-5" />
                               {{
@@ -370,10 +364,7 @@
                             <button
                               type="button"
                               class="flex items-center gap-3 w-full px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors"
-                              @click="
-                                emit('deleteEnigma', enigma.id)
-                                openEnigmaDropdown = null
-                              "
+                              @click="deleteEnigmaAction(enigma.id)"
                             >
                               <TrashIcon class="w-5 h-5" />
                               {{ t('teacher.missions.detail.delete_confirm_btn') }}
@@ -862,10 +853,7 @@
                                 <button
                                   type="button"
                                   class="flex items-center gap-3 w-full px-4 py-3 text-sm text-navy-700 hover:bg-gray-50 transition-colors"
-                                  @click="
-                                    emit('editDocument', doc)
-                                    openDocumentDropdown = null
-                                  "
+                                  @click="editDocumentAction(doc)"
                                 >
                                   <PencilIcon class="w-5 h-5" />
                                   {{ t('teacher.components.mission_detail_template.btn_edit') }}
@@ -873,10 +861,7 @@
                                 <button
                                   type="button"
                                   class="flex items-center gap-3 w-full px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors"
-                                  @click="
-                                    emit('deleteDocument', doc.id)
-                                    openDocumentDropdown = null
-                                  "
+                                  @click="deleteDocumentAction(doc.id)"
                                 >
                                   <TrashIcon class="w-5 h-5" />
                                   {{ t('teacher.missions.detail.delete_confirm_btn') }}
@@ -968,10 +953,7 @@
                                 <button
                                   type="button"
                                   class="flex items-center gap-3 w-full px-4 py-3 text-sm text-navy-700 hover:bg-gray-50 transition-colors"
-                                  @click="
-                                    emit('editDocument', doc)
-                                    openDocumentDropdown = null
-                                  "
+                                  @click="editDocumentAction(doc)"
                                 >
                                   <PencilIcon class="w-5 h-5" />
                                   {{ t('teacher.components.mission_detail_template.btn_edit') }}
@@ -979,10 +961,7 @@
                                 <button
                                   type="button"
                                   class="flex items-center gap-3 w-full px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors"
-                                  @click="
-                                    emit('deleteDocument', doc.id)
-                                    openDocumentDropdown = null
-                                  "
+                                  @click="deleteDocumentAction(doc.id)"
                                 >
                                   <TrashIcon class="w-5 h-5" />
                                   {{ t('teacher.missions.detail.delete_confirm_btn') }}
@@ -1647,6 +1626,29 @@ const emit = defineEmits<{
   resourceClick: [resource: string]
   ateneaAction: [action: 'chat' | 'help' | 'start']
 }>()
+
+// Acciones de los dropdowns: emiten el evento y cierran el menú. Se extraen a
+// métodos porque Vue 3.5 no admite @click con varias sentencias inline.
+const editEnigmaAction = (enigma: MissionEnigma) => {
+  emit('editEnigma', enigma)
+  openEnigmaDropdown.value = null
+}
+const viewSubmissionsAction = (enigma: MissionEnigma) => {
+  emit('viewSubmissions', enigma)
+  openEnigmaDropdown.value = null
+}
+const deleteEnigmaAction = (enigmaId: string) => {
+  emit('deleteEnigma', enigmaId)
+  openEnigmaDropdown.value = null
+}
+const editDocumentAction = (doc: MissionDocument) => {
+  emit('editDocument', doc)
+  openDocumentDropdown.value = null
+}
+const deleteDocumentAction = (docId: string) => {
+  emit('deleteDocument', docId)
+  openDocumentDropdown.value = null
+}
 
 // Local state for draggable items
 const localEnigmas = ref<MissionEnigma[]>([])
