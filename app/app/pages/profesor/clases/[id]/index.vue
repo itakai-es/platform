@@ -21,9 +21,6 @@
           <NuxtLink :to="`/profesor/clases/${classId}/entregas`" class="mt-4">
             <Button variant="primary" size="sm"> Ver entregas </Button>
           </NuxtLink>
-          <NuxtLink :to="`/profesor/clases/${classId}/estadisticas`" class="mt-2">
-            <Button variant="outline" size="sm"> Ver analítica </Button>
-          </NuxtLink>
         </div>
       </Card>
     </div>
