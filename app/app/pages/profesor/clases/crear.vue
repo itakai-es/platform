@@ -1,7 +1,9 @@
 <template>
-  <div class="flex flex-col h-[calc(100vh-64px)]">
-    <!-- Header -->
-    <div class="bg-navy-700 -mx-4 md:-mx-6 -mt-4 md:-mt-6 px-4 md:px-6 pt-6 pb-4">
+  <!-- Rompe el padding del <main> del layout (-m) y ocupa todo el alto disponible;
+       así la card llena el hueco sin márgenes muertos ni desbordar la pantalla. -->
+  <div class="flex flex-col h-[calc(100vh-56px)] lg:h-screen -m-4 md:-m-6">
+    <!-- Header (el root ya rompe el padding del layout) -->
+    <div class="bg-navy-700 px-4 md:px-6 pt-6 pb-4">
       <div class="space-y-4">
         <nav class="flex items-center gap-1.5 sm:gap-2 text-sm">
           <NuxtLink to="/profesor/inicio" class="text-white/70 hover:text-white flex-shrink-0"
@@ -21,64 +23,25 @@
       </div>
     </div>
 
-    <!-- WIZARD -->
-    <div v-if="!showForm" class="flex-1 overflow-y-auto px-4 sm:px-8 py-6">
-      <div class="w-full max-w-4xl mx-auto">
-        <!-- Progress: mobile = compact bar, desktop = circles -->
-        <div class="sm:hidden flex items-center gap-3 mb-5">
-          <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
-            <div
-              class="h-full bg-navy-700 rounded-full transition-all duration-300"
-              :style="{ width: `${((step + 1) / 6) * 100}%` }"
-            />
-          </div>
-          <span class="text-sm font-semibold text-navy-700 whitespace-nowrap"
-            >{{ step + 1 }}/6</span
-          >
-        </div>
-        <div class="hidden sm:flex items-center justify-center gap-3 mb-5">
-          <template v-for="i in 6" :key="i">
-            <div
-              class="w-7 h-7 rounded-full flex items-center justify-center transition-all duration-300 text-xs font-bold"
-              :class="
-                i - 1 < step
-                  ? 'bg-navy-700 text-white'
-                  : i - 1 === step
-                    ? 'bg-navy-700 text-white'
-                    : 'bg-gray-200 text-gray-400'
-              "
-            >
-              <CheckIcon v-if="i - 1 < step" class="w-3.5 h-3.5" />
-              <span v-else>{{ i }}</span>
-            </div>
-            <div
-              v-if="i < 6"
-              class="w-8 h-0.5 rounded-full"
-              :class="i - 1 < step ? 'bg-navy-700' : 'bg-gray-200'"
-            />
-          </template>
-        </div>
-
-        <!-- Card -->
-        <div class="flex flex-col min-h-0 bg-white rounded-2xl shadow-lg border border-gray-100">
-          <!-- God + question -->
-          <div class="flex items-start gap-4 px-6 pt-6">
-            <div class="w-12 h-12 rounded-full flex-shrink-0 overflow-hidden bg-white/30">
-              <img :src="god.avatar" :alt="god.name" class="w-full h-full object-contain" />
-            </div>
-            <div class="flex-1 pt-1">
-              <p class="text-lg font-semibold text-navy-700 leading-snug">{{ currentQuestion }}</p>
-            </div>
-          </div>
-
-          <!-- Content -->
-          <div class="flex-1 flex flex-col px-6 pb-6 pt-5 min-h-0">
-            <Transition name="fade" mode="out-in">
+    <!-- WIZARD: alto fijo (no desborda pantalla); solo scrollea el contenido. -->
+    <div v-if="!showForm" class="flex-1 min-h-0 px-4 md:px-6 py-4 flex">
+      <div class="w-full flex flex-1 min-h-0 flex-col">
+        <!-- Card compartida (cabecera de paso + pasos). Ver OnboardingCard.vue -->
+        <OnboardingCard
+          :step="step"
+          :total-steps="5"
+          :god="god"
+          :question="currentQuestion"
+        >
+          <Transition name="onb-fade" mode="out-in">
               <!-- ===== STEP 0: Idea ===== -->
               <div v-if="step === 0" key="s0" class="flex-1 flex flex-col">
                 <!-- Datos básicos: se configuran antes de nada. El idioma manda
                      el idioma en el que la IA genera todo en esta clase. -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+                <div
+                  class="onb-reveal grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4"
+                  style="animation-delay: 0.18s"
+                >
                   <div>
                     <label class="text-sm font-medium text-text-primary mb-1.5 block">
                       {{ t('teacher.classes.detail.settings.general.language_label') }}
@@ -95,6 +58,7 @@
                     </label>
                     <SelectDropdown
                       :model-value="meta.subject"
+                      :error="showMetaErrors && !meta.subject"
                       :options="subjectOptions"
                       searchable
                       :placeholder="t('teacher.classes.detail.settings.general.metadata_none')"
@@ -110,6 +74,7 @@
                     </label>
                     <SelectDropdown
                       :model-value="meta.educationLevel"
+                      :error="showMetaErrors && !meta.educationLevel"
                       :options="educationLevelOptions"
                       :placeholder="t('teacher.classes.detail.settings.general.metadata_none')"
                       @update:model-value="meta.educationLevel = String($event)"
@@ -121,6 +86,7 @@
                     </label>
                     <SelectDropdown
                       :model-value="meta.province"
+                      :error="showMetaErrors && !meta.province"
                       :options="provinceOptions"
                       searchable
                       :placeholder="t('teacher.classes.detail.settings.general.metadata_none')"
@@ -135,13 +101,14 @@
                 <textarea
                   ref="inputRef"
                   v-model="idea"
-                  rows="5"
+                  rows="6"
                   :placeholder="t('teacher.classes.create.onboarding.placeholder_idea')"
-                  class="onb-input flex-1 resize-none"
+                  class="onb-input onb-reveal resize-none"
+                  style="animation-delay: 0.26s"
                 />
 
                 <!-- Materiales de contexto (opcional): la IA los usa para crear la clase -->
-                <div class="mt-3 flex flex-wrap items-center gap-2">
+                <div class="onb-reveal mt-3" style="animation-delay: 0.32s">
                   <input
                     ref="materialsFileRef"
                     type="file"
@@ -170,20 +137,45 @@
                         : t('teacher.classes.create.onboarding.attach_materials')
                     }}
                   </button>
-                  <span
-                    v-for="s in docSources"
-                    :key="s.name"
-                    class="inline-flex items-center gap-1 text-xs bg-navy-700/5 text-navy-700 px-2 py-1 rounded-full"
-                    :title="s.note || ''"
-                  >
-                    📎 {{ s.name }}<span v-if="s.note"> ⚠️</span>
-                  </span>
-                </div>
-                <p v-if="docSources.length" class="mt-1 text-xs text-navy-700/50">
-                  {{ t('teacher.classes.create.onboarding.attach_hint') }}
-                </p>
 
-                <div class="onb-actions">
+                  <!-- Archivos subidos: tarjeta con icono coloreado según el formato,
+                       al estilo de los documentos de apoyo de las misiones. -->
+                  <div v-if="docSources.length" class="mt-2 flex flex-wrap gap-2">
+                    <div
+                      v-for="(s, i) in docSources"
+                      :key="`${s.name}-${i}`"
+                      class="group inline-flex items-center gap-2.5 rounded-xl border border-border-primary bg-white py-1.5 pl-1.5 pr-2"
+                      :title="s.note || ''"
+                    >
+                      <span
+                        class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg"
+                        :class="docBg(s.kind)"
+                      >
+                        <component :is="docIcon(s.kind)" class="h-5 w-5 text-white" />
+                      </span>
+                      <span class="min-w-0">
+                        <span
+                          class="block max-w-[200px] truncate text-sm font-medium text-navy-700"
+                        >
+                          {{ s.name }}
+                        </span>
+                        <span v-if="s.note" class="block text-xs text-yellow-700"
+                          >⚠️ {{ s.note }}</span
+                        >
+                      </span>
+                      <button
+                        type="button"
+                        class="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full text-navy-700/40 hover:bg-navy-700/5 hover:text-navy-700 transition-colors"
+                        :title="t('teacher.classes.create.onboarding.attach_remove')"
+                        @click="removeMaterial(i)"
+                      >
+                        <XMarkIcon class="h-4 w-4" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="onb-actions !mt-auto">
                   <span />
                   <Button
                     variant="primary"
@@ -197,113 +189,151 @@
 
               <!-- ===== STEP 1: Narrative ===== -->
               <div v-else-if="step === 1" key="s1" class="flex-1 flex flex-col min-h-0">
-                <div class="flex-1 onb-result-box overflow-y-auto min-h-0">
-                  <div
-                    v-if="waitingForFirstChunk && !plan"
-                    class="flex flex-col items-center justify-center gap-3 py-8"
-                  >
-                    <SparklesIcon class="w-5 h-5 animate-pulse text-navy-700" />
-                    <span class="text-sm text-text-secondary">{{
-                      t('teacher.classes.create.onboarding.generating_approach')
-                    }}</span>
-                    <AILoadingBar
-                      :progress="generationProgress"
-                      :is-overtime="isOvertime"
-                      :remaining-label="remainingTimeLabel"
-                    />
-                  </div>
-                  <template v-else>
-                    <div class="md-rendered" v-html="renderPageMarkdown(plan)" />
-                    <div v-if="!isStreaming && plan" class="mt-2 flex justify-end">
-                      <AIProviderBadge :provider="planProvider" />
+                <EditableMarkdown
+                  v-model="plan"
+                  :god-name="god.name"
+                  :god-avatar="god.avatar"
+                  ai-placeholder="Ej: Añade un giro en la trama, una casa nueva..."
+                  context-label="Editando la historia de la clase"
+                  ai-modal-hint="Dile a la IA qué quieres añadir o cambiar de la historia."
+                  ai-system-context="El profesor está editando la NARRATIVA/HISTORIA de su clase gamificada. Es la historia que envuelve toda la clase y motiva a los alumnos. Genera contenido narrativo, inmersivo y creativo que encaje con la temática de la clase."
+                >
+                  <template #default="{ edit }">
+                    <div class="flex-1 onb-result-box overflow-y-auto min-h-0">
+                      <OnboardingLoading
+                        v-if="waitingForFirstChunk && !plan"
+                        :text="t('teacher.classes.create.onboarding.generating_approach')"
+                        :progress="generationProgress"
+                        :is-overtime="isOvertime"
+                        :remaining-label="remainingTimeLabel"
+                      />
+                      <div
+                        v-else-if="planGenerationFailed && !plan"
+                        class="h-full flex flex-col items-center justify-center gap-4 text-center px-4"
+                      >
+                        <ExclamationTriangleIcon class="w-8 h-8 text-navy-700/30" />
+                        <p class="text-base font-semibold text-navy-700">
+                          No he podido crear la narrativa
+                        </p>
+                        <p class="text-sm text-text-secondary max-w-sm">
+                          Puede que el asistente esté saturado ahora mismo. Espera un momento y
+                          reinténtalo.
+                        </p>
+                        <div class="flex gap-2">
+                          <Button variant="outline" size="sm" @click="backToStep0">{{
+                            t('teacher.classes.create.onboarding.btn_back')
+                          }}</Button>
+                          <Button variant="primary" size="sm" @click="submitIdea">
+                            <ArrowPathIcon class="w-4 h-4 mr-1.5" />Reintentar
+                          </Button>
+                        </div>
+                      </div>
+                      <template v-else>
+                        <div class="md-rendered" v-html="renderPageMarkdown(plan)" />
+                        <div v-if="!isStreaming && plan" class="mt-2 flex justify-end">
+                          <AIProviderBadge :provider="planProvider" />
+                        </div>
+                      </template>
+                    </div>
+                    <div v-if="!loading && plan && showNarrativeFeedback" class="onb-feedback">
+                      <input
+                        ref="feedbackRef"
+                        v-model="feedback"
+                        type="text"
+                        :placeholder="
+                          t('teacher.classes.create.onboarding.narrative_feedback_placeholder')
+                        "
+                        class="onb-feedback-input"
+                        @keydown.enter.prevent="feedback.trim() && regeneratePlan()"
+                      />
+                      <button
+                        type="button"
+                        class="onb-cancel-btn"
+                        title="Cancelar"
+                        @click="showNarrativeFeedback = false"
+                      >
+                        <XMarkIcon class="w-4 h-4" />
+                      </button>
+                      <button
+                        type="button"
+                        class="onb-send-btn"
+                        :disabled="!feedback.trim() || loading"
+                        @click="regeneratePlan"
+                      >
+                        <PaperAirplaneIcon class="w-4 h-4" />
+                      </button>
+                    </div>
+                    <div v-if="!loading && plan && !isStreaming" class="onb-actions">
+                      <Button variant="outline" size="sm" @click="backToStep0">{{
+                        t('teacher.classes.create.onboarding.btn_back')
+                      }}</Button>
+                      <div v-if="!showNarrativeFeedback" class="flex gap-2">
+                        <Button variant="outline" size="sm" @click="edit"
+                          ><PencilSquareIcon class="w-4 h-4 mr-1.5" />Editar a mano</Button
+                        >
+                        <Button variant="outline" size="sm" @click="openNarrativeFeedback">
+                          <SparklesIcon class="w-4 h-4 mr-1.5" />{{
+                            t('teacher.classes.create.onboarding.btn_change_something')
+                          }}
+                        </Button>
+                        <Button variant="primary" size="sm" @click="acceptPlan">{{
+                          t('teacher.classes.create.onboarding.btn_accept_plan')
+                        }}</Button>
+                      </div>
                     </div>
                   </template>
-                </div>
-                <div v-if="!loading && plan && showNarrativeFeedback" class="onb-feedback">
-                  <input
-                    ref="feedbackRef"
-                    v-model="feedback"
-                    type="text"
-                    :placeholder="
-                      t('teacher.classes.create.onboarding.narrative_feedback_placeholder')
-                    "
-                    class="onb-feedback-input"
-                    @keydown.enter.prevent="feedback.trim() && regeneratePlan()"
-                  />
-                  <button
-                    type="button"
-                    class="onb-cancel-btn"
-                    title="Cancelar"
-                    @click="showNarrativeFeedback = false"
-                  >
-                    <XMarkIcon class="w-4 h-4" />
-                  </button>
-                  <button
-                    type="button"
-                    class="onb-send-btn"
-                    :disabled="!feedback.trim() || loading"
-                    @click="regeneratePlan"
-                  >
-                    <PaperAirplaneIcon class="w-4 h-4" />
-                  </button>
-                </div>
-                <div v-if="!loading && plan && !isStreaming" class="onb-actions">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    @click="step = 0; plan = ''; showNarrativeFeedback = false"
-                    >{{ t('teacher.classes.create.onboarding.btn_back') }}</Button
-                  >
-                  <div v-if="!showNarrativeFeedback" class="flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      @click="showNarrativeFeedback = true; nextTick(() => feedbackRef?.focus())"
-                      >{{ t('teacher.classes.create.onboarding.btn_change_something') }}</Button
-                    >
-                    <Button variant="primary" size="sm" @click="acceptPlan">{{
-                      t('teacher.classes.create.onboarding.btn_accept_plan')
-                    }}</Button>
-                  </div>
-                </div>
+                </EditableMarkdown>
               </div>
 
               <!-- ===== STEP 2: Titles ===== -->
-              <div v-else-if="step === 2" key="s2" class="flex-1 flex flex-col">
-                <template v-if="loading">
-                  <div class="flex-1 flex flex-col items-center justify-center gap-3">
-                    <SparklesIcon class="w-5 h-5 animate-pulse text-navy-700" />
-                    <span class="text-sm text-text-secondary">{{
-                      t('teacher.classes.create.onboarding.thinking')
-                    }}</span>
-                    <AILoadingBar
-                      v-if="generationProgress > 0 || isOvertime"
-                      :progress="generationProgress"
-                      :is-overtime="isOvertime"
-                      :remaining-label="remainingTimeLabel"
-                    />
-                  </div>
-                </template>
+              <div v-else-if="step === 2" key="s2" class="flex-1 flex flex-col min-h-0">
+                <OnboardingLoading
+                  v-if="loading"
+                  :text="t('teacher.classes.create.onboarding.thinking')"
+                  :show-bar="generationProgress > 0 || isOvertime"
+                  :progress="generationProgress"
+                  :is-overtime="isOvertime"
+                  :remaining-label="remainingTimeLabel"
+                />
                 <template v-else>
-                  <div class="space-y-2.5">
-                    <TransitionGroup name="title-item" appear>
-                      <button
-                        v-for="(title, i) in titles"
-                        :key="title"
-                        type="button"
-                        class="w-full text-left px-5 py-3.5 rounded-2xl transition-all text-sm font-medium shadow-sm"
+                  <TransitionGroup
+                    name="title-item"
+                    appear
+                    tag="div"
+                    class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 flex-1 min-h-0 overflow-y-auto content-start pr-1"
+                  >
+                    <button
+                      v-for="(title, i) in titles"
+                      :key="title"
+                      type="button"
+                      class="group flex items-center gap-3 w-full text-left px-4 py-3 rounded-xl border transition-all"
+                      :class="
+                        selectedTitle === title
+                          ? 'bg-navy-700 border-navy-700 shadow-md'
+                          : 'bg-white border-gray-200 hover:border-navy-700/40 hover:shadow-md'
+                      "
+                      :style="{ animationDelay: `${Math.min(i, 10) * 40}ms` }"
+                      @click="selectTitle(title)"
+                    >
+                      <span
+                        class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors"
                         :class="
                           selectedTitle === title
-                            ? 'bg-navy-700 text-white shadow-md'
-                            : 'bg-gray-50 text-navy-700 border border-gray-200 hover:border-navy-700'
+                            ? 'bg-white/15'
+                            : 'bg-navy-700/5 group-hover:bg-navy-700/10'
                         "
-                        :style="{ animationDelay: `${i * 100}ms` }"
-                        @click="selectedTitle = title; customTitle = ''"
+                      >
+                        <CheckIcon v-if="selectedTitle === title" class="w-4 h-4 text-white" />
+                        <SparklesIcon v-else class="w-4 h-4 text-navy-700/50" />
+                      </span>
+                      <span
+                        class="text-sm font-medium truncate"
+                        :class="selectedTitle === title ? 'text-white' : 'text-navy-700'"
                       >
                         {{ title }}
-                      </button>
-                    </TransitionGroup>
-                  </div>
+                      </span>
+                    </button>
+                  </TransitionGroup>
                   <input
                     v-model="customTitle"
                     type="text"
@@ -346,12 +376,9 @@
                       t('teacher.classes.create.onboarding.btn_back')
                     }}</Button>
                     <div class="flex gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        @click="showTitleFeedback = true; nextTick(() => titleFeedbackRef?.focus())"
-                        >{{ t('teacher.classes.create.onboarding.btn_change_something') }}</Button
-                      >
+                      <Button variant="outline" size="sm" @click="openTitleFeedback">{{
+                        t('teacher.classes.create.onboarding.btn_change_something')
+                      }}</Button>
                       <Button
                         variant="primary"
                         size="sm"
@@ -370,65 +397,84 @@
               </div>
 
               <!-- ===== STEP 3: Schedule ===== -->
-              <div v-else-if="step === 3" key="s3" class="flex-1 flex flex-col">
-                <ClassScheduleEditor v-model="schedule" />
-                <div class="flex-1" />
-                <div class="onb-actions">
-                  <Button variant="outline" size="sm" @click="step = 2">{{
-                    t('teacher.classes.create.onboarding.btn_back')
-                  }}</Button>
-                  <div class="flex gap-2">
-                    <Button variant="outline" size="sm" @click="step = 4">{{
-                      t('teacher.classes.create.onboarding.btn_skip')
-                    }}</Button>
-                    <Button variant="primary" size="sm" @click="step = 4">{{
-                      t('teacher.classes.create.onboarding.btn_next')
-                    }}</Button>
-                  </div>
-                </div>
-              </div>
-
-              <!-- ===== STEP 4: Cover ===== -->
-              <div v-else-if="step === 4" key="s4" class="flex-1 flex flex-col min-h-0">
-                <div class="flex-1 flex items-center justify-center min-h-0">
-                  <div
-                    v-if="isGeneratingImage && !generatedImageUrl"
-                    class="w-full max-w-md flex flex-col items-center gap-3"
-                  >
-                    <div
-                      class="w-full aspect-video rounded-2xl bg-gray-100 animate-pulse flex items-center justify-center"
+              <!-- ===== STEP 3: Horario + Portada ===== -->
+              <div v-else-if="step === 3" key="s3" class="flex-1 flex flex-col min-h-0">
+                <div
+                  class="grid flex-1 min-h-0 grid-cols-1 gap-6 overflow-y-auto pr-1 lg:grid-cols-2 lg:items-start"
+                >
+                  <!-- Horario -->
+                  <div>
+                    <h3
+                      class="mb-3 text-xs font-semibold uppercase tracking-wide text-text-secondary"
                     >
-                      <PhotoIcon class="w-12 h-12 text-gray-300" />
-                    </div>
-                    <SparklesIcon class="w-5 h-5 animate-pulse text-navy-700" />
-                    <span class="text-sm text-text-secondary">{{
-                      t('teacher.classes.create.onboarding.generating_cover')
-                    }}</span>
-                    <AILoadingBar
-                      v-if="generationProgress > 0 || isOvertime"
-                      :progress="generationProgress"
-                      :is-overtime="isOvertime"
-                      :remaining-label="remainingTimeLabel"
-                    />
+                      {{ t('teacher.schedule.section_schedule') }}
+                    </h3>
+                    <ClassScheduleCalendar v-model="scheduleConfig" />
                   </div>
-                  <div v-else-if="generatedImageUrl" class="w-full max-w-md">
-                    <div class="relative aspect-video rounded-2xl overflow-hidden shadow-lg">
-                      <img :src="resolvedImageUrl" alt="" class="w-full h-full object-cover" />
+
+                  <!-- Portada -->
+                  <div>
+                    <h3
+                      class="mb-3 text-xs font-semibold uppercase tracking-wide text-text-secondary"
+                    >
+                      {{ t('teacher.schedule.section_cover') }}
+                    </h3>
+                    <div class="flex flex-col items-center justify-center gap-3">
+                      <div
+                        v-if="isGeneratingImage && !generatedImageUrl"
+                        class="w-full max-w-md flex flex-col items-center gap-3"
+                      >
+                        <div
+                          class="w-full aspect-video rounded-2xl bg-gray-100 animate-pulse flex items-center justify-center"
+                        >
+                          <PhotoIcon class="w-12 h-12 text-gray-300" />
+                        </div>
+                        <SparklesIcon class="w-8 h-8 animate-pulse text-navy-700" />
+                        <span class="text-lg font-semibold text-navy-700">{{
+                          t('teacher.classes.create.onboarding.generating_cover')
+                        }}</span>
+                        <AILoadingBar
+                          v-if="generationProgress > 0 || isOvertime"
+                          :progress="generationProgress"
+                          :is-overtime="isOvertime"
+                          :remaining-label="remainingTimeLabel"
+                        />
+                      </div>
+                      <div v-else-if="generatedImageUrl" class="w-full max-w-md">
+                        <div class="relative aspect-video rounded-2xl overflow-hidden shadow-lg">
+                          <img :src="resolvedImageUrl" alt="" class="w-full h-full object-cover" />
+                        </div>
+                        <div v-if="coverProvider" class="mt-2 flex justify-end">
+                          <AIProviderBadge :provider="coverProvider" />
+                        </div>
+                        <!-- Acciones de la portada, justo bajo la imagen generada -->
+                        <div
+                          v-if="!showImageFeedback"
+                          class="mt-3 flex flex-wrap justify-center gap-2"
+                        >
+                          <Button variant="outline" size="sm" @click="openImageFeedback">{{
+                            t('teacher.classes.create.onboarding.btn_change_something')
+                          }}</Button>
+                          <Button variant="outline" size="sm" @click="coverFileRef?.click()">
+                            <ArrowUpTrayIcon class="w-4 h-4 mr-1.5" />
+                            {{ t('teacher.classes.create.onboarding.btn_upload_cover') }}
+                          </Button>
+                        </div>
+                      </div>
+                      <div
+                        v-else-if="imageGenerationFailed"
+                        class="flex flex-col items-center gap-4 text-text-secondary"
+                      >
+                        <PhotoIcon class="w-12 h-12 opacity-40" />
+                        <p class="text-sm">
+                          {{ t('teacher.classes.create.onboarding.cover_error') }}
+                        </p>
+                        <Button variant="outline" size="sm" @click="coverFileRef?.click()">
+                          <ArrowUpTrayIcon class="w-4 h-4 mr-2" />
+                          {{ t('teacher.classes.create.onboarding.btn_upload_cover') }}
+                        </Button>
+                      </div>
                     </div>
-                    <div v-if="coverProvider" class="mt-2 flex justify-end">
-                      <AIProviderBadge :provider="coverProvider" />
-                    </div>
-                  </div>
-                  <div
-                    v-else-if="imageGenerationFailed"
-                    class="flex flex-col items-center gap-4 text-text-secondary"
-                  >
-                    <PhotoIcon class="w-12 h-12 opacity-40" />
-                    <p class="text-sm">{{ t('teacher.classes.create.onboarding.cover_error') }}</p>
-                    <Button variant="outline" size="sm" @click="coverFileRef?.click()">
-                      <ArrowUpTrayIcon class="w-4 h-4 mr-2" />
-                      {{ t('teacher.classes.create.onboarding.btn_upload_cover') }}
-                    </Button>
                   </div>
                 </div>
                 <input
@@ -465,136 +511,123 @@
                   </button>
                 </div>
                 <div v-if="!isGeneratingImage && !showImageFeedback" class="onb-actions">
-                  <Button variant="outline" size="sm" @click="step = 3">{{
+                  <Button variant="outline" size="sm" @click="step = 2">{{
                     t('teacher.classes.create.onboarding.btn_back')
                   }}</Button>
-                  <div class="flex gap-2">
-                    <Button
-                      v-if="generatedImageUrl"
-                      variant="outline"
-                      size="sm"
-                      @click="showImageFeedback = true; nextTick(() => imageFeedbackRef?.focus())"
-                      >{{ t('teacher.classes.create.onboarding.btn_change_something') }}</Button
-                    >
-                    <Button variant="outline" size="sm" @click="coverFileRef?.click()">
-                      <ArrowUpTrayIcon class="w-4 h-4 mr-1.5" />
-                      {{ t('teacher.classes.create.onboarding.btn_upload_cover') }}
-                    </Button>
-                    <Button variant="outline" size="sm" @click="step = 5">{{
-                      t('teacher.classes.create.onboarding.btn_skip')
-                    }}</Button>
-                    <Button
-                      v-if="generatedImageUrl"
-                      variant="primary"
-                      size="sm"
-                      @click="step = 5"
-                      >{{ t('teacher.classes.create.onboarding.btn_accept_plan') }}</Button
-                    >
-                  </div>
+                  <Button variant="primary" size="sm" @click="step = 4">{{
+                    t('teacher.classes.create.onboarding.btn_accept_plan')
+                  }}</Button>
                 </div>
                 <div v-else-if="!isGeneratingImage && showImageFeedback" class="onb-actions">
-                  <Button variant="outline" size="sm" @click="step = 3">{{
+                  <Button variant="outline" size="sm" @click="step = 2">{{
                     t('teacher.classes.create.onboarding.btn_back')
                   }}</Button>
                 </div>
               </div>
 
               <!-- ===== STEP 5: Guide ===== -->
-              <div v-else-if="step === 5" key="s5" class="flex-1 flex flex-col min-h-0">
-                <div class="flex-1 onb-result-box overflow-y-auto min-h-0">
-                  <div
-                    v-if="(waitingForFirstChunk || isGeneratingGuide) && !guideContent"
-                    class="flex flex-col items-center justify-center gap-3 py-8"
-                  >
-                    <SparklesIcon class="w-5 h-5 animate-pulse text-navy-700" />
-                    <span class="text-sm text-text-secondary">Generando guía del alumno...</span>
-                    <AILoadingBar
-                      v-if="generationProgress > 0 || isOvertime"
-                      :progress="generationProgress"
-                      :is-overtime="isOvertime"
-                      :remaining-label="remainingTimeLabel"
-                    />
-                  </div>
-                  <div
-                    v-else-if="guideGenerationFailed && !guideContent"
-                    class="flex flex-col items-center gap-4 text-text-secondary py-8"
-                  >
-                    <p class="text-sm">No se pudo generar la guía.</p>
-                    <Button variant="primary" size="sm" @click="generateGuide()">
-                      <ArrowPathIcon class="w-4 h-4 mr-2" />
-                      Reintentar
-                    </Button>
-                  </div>
-                  <template v-else>
-                    <div class="md-rendered" v-html="renderPageMarkdown(guideContent)" />
-                    <div v-if="!isStreaming && guideContent" class="mt-2 flex justify-end">
-                      <AIProviderBadge :provider="guideProvider" />
+              <div v-else-if="step === 4" key="s4" class="flex-1 flex flex-col min-h-0">
+                <EditableMarkdown
+                  v-model="guideContent"
+                  :god-name="god.name"
+                  :god-avatar="god.avatar"
+                  ai-placeholder="Ej: Añade criterios de evaluación, cambia el tono..."
+                  context-label="Editando la guía del alumno"
+                  ai-modal-hint="Dile a la IA qué quieres añadir o cambiar de la guía."
+                  ai-system-context="El profesor está editando la GUÍA del alumno de su clase gamificada. Es el documento que explica a los alumnos cómo funciona la clase, sus normas y cómo progresar. Genera contenido claro, útil y bien estructurado."
+                >
+                  <template #default="{ edit }">
+                    <div class="flex-1 onb-result-box overflow-y-auto min-h-0">
+                      <OnboardingLoading
+                        v-if="(waitingForFirstChunk || isGeneratingGuide) && !guideContent"
+                        text="Generando guía del alumno..."
+                        :show-bar="generationProgress > 0 || isOvertime"
+                        :progress="generationProgress"
+                        :is-overtime="isOvertime"
+                        :remaining-label="remainingTimeLabel"
+                      />
+                      <div
+                        v-else-if="guideGenerationFailed && !guideContent"
+                        class="flex flex-col items-center gap-4 text-text-secondary py-8"
+                      >
+                        <p class="text-sm">No se pudo generar la guía.</p>
+                        <Button variant="primary" size="sm" @click="generateGuide()">
+                          <ArrowPathIcon class="w-4 h-4 mr-2" />
+                          Reintentar
+                        </Button>
+                      </div>
+                      <template v-else>
+                        <div class="md-rendered" v-html="renderPageMarkdown(guideContent)" />
+                        <div v-if="!isStreaming && guideContent" class="mt-2 flex justify-end">
+                          <AIProviderBadge :provider="guideProvider" />
+                        </div>
+                      </template>
+                    </div>
+                    <div
+                      v-if="!isGeneratingGuide && guideContent && showGuideFeedback"
+                      class="onb-feedback"
+                    >
+                      <input
+                        ref="guideFeedbackRef"
+                        v-model="guideFeedback"
+                        type="text"
+                        placeholder="Ej: Añade criterios de evaluación, cambia el tono..."
+                        class="onb-feedback-input"
+                        @keydown.enter.prevent="guideFeedback.trim() && regenerateGuide()"
+                      />
+                      <button
+                        type="button"
+                        class="onb-cancel-btn"
+                        title="Cancelar"
+                        @click="showGuideFeedback = false"
+                      >
+                        <XMarkIcon class="w-4 h-4" />
+                      </button>
+                      <button
+                        type="button"
+                        class="onb-send-btn"
+                        :disabled="!guideFeedback.trim() || isGeneratingGuide"
+                        @click="regenerateGuide"
+                      >
+                        <PaperAirplaneIcon class="w-4 h-4" />
+                      </button>
+                    </div>
+                    <div
+                      v-if="
+                        !isGeneratingGuide && !isStreaming && guideContent && !showGuideFeedback
+                      "
+                      class="onb-actions"
+                    >
+                      <Button variant="outline" size="sm" @click="step = 3">{{
+                        t('teacher.classes.create.onboarding.btn_back')
+                      }}</Button>
+                      <div class="flex gap-2">
+                        <Button variant="outline" size="sm" @click="edit"
+                          ><PencilSquareIcon class="w-4 h-4 mr-1.5" />Editar a mano</Button
+                        >
+                        <Button variant="outline" size="sm" @click="openGuideFeedback">
+                          <SparklesIcon class="w-4 h-4 mr-1.5" />{{
+                            t('teacher.classes.create.onboarding.btn_change_something')
+                          }}
+                        </Button>
+                        <Button variant="outline" size="sm" @click="skipGuide">{{
+                          t('teacher.classes.create.onboarding.btn_skip')
+                        }}</Button>
+                        <Button variant="primary" size="sm" @click="finishWizard()">{{
+                          t('teacher.classes.create.onboarding.btn_accept_plan')
+                        }}</Button>
+                      </div>
+                    </div>
+                    <div v-else-if="!isGeneratingGuide && showGuideFeedback" class="onb-actions">
+                      <Button variant="outline" size="sm" @click="step = 3">{{
+                        t('teacher.classes.create.onboarding.btn_back')
+                      }}</Button>
                     </div>
                   </template>
-                </div>
-                <div
-                  v-if="!isGeneratingGuide && guideContent && showGuideFeedback"
-                  class="onb-feedback"
-                >
-                  <input
-                    ref="guideFeedbackRef"
-                    v-model="guideFeedback"
-                    type="text"
-                    placeholder="Ej: Añade criterios de evaluación, cambia el tono..."
-                    class="onb-feedback-input"
-                    @keydown.enter.prevent="guideFeedback.trim() && regenerateGuide()"
-                  />
-                  <button
-                    type="button"
-                    class="onb-cancel-btn"
-                    title="Cancelar"
-                    @click="showGuideFeedback = false"
-                  >
-                    <XMarkIcon class="w-4 h-4" />
-                  </button>
-                  <button
-                    type="button"
-                    class="onb-send-btn"
-                    :disabled="!guideFeedback.trim() || isGeneratingGuide"
-                    @click="regenerateGuide"
-                  >
-                    <PaperAirplaneIcon class="w-4 h-4" />
-                  </button>
-                </div>
-                <div
-                  v-if="!isGeneratingGuide && !isStreaming && guideContent && !showGuideFeedback"
-                  class="onb-actions"
-                >
-                  <Button variant="outline" size="sm" @click="step = 4">{{
-                    t('teacher.classes.create.onboarding.btn_back')
-                  }}</Button>
-                  <div class="flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      @click="showGuideFeedback = true; nextTick(() => guideFeedbackRef?.focus())"
-                      >{{ t('teacher.classes.create.onboarding.btn_change_something') }}</Button
-                    >
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      @click="guideContent = ''; finishWizard()"
-                      >{{ t('teacher.classes.create.onboarding.btn_skip') }}</Button
-                    >
-                    <Button variant="primary" size="sm" @click="finishWizard()">{{
-                      t('teacher.classes.create.onboarding.btn_accept_plan')
-                    }}</Button>
-                  </div>
-                </div>
-                <div v-else-if="!isGeneratingGuide && showGuideFeedback" class="onb-actions">
-                  <Button variant="outline" size="sm" @click="step = 4">{{
-                    t('teacher.classes.create.onboarding.btn_back')
-                  }}</Button>
-                </div>
+                </EditableMarkdown>
               </div>
             </Transition>
-          </div>
-        </div>
+        </OnboardingCard>
       </div>
     </div>
 
@@ -711,7 +744,9 @@ import {
   HomeIcon,
   ChevronRightIcon,
   AcademicCapIcon,
+  ExclamationTriangleIcon,
   SparklesIcon,
+  PencilSquareIcon,
   PhotoIcon,
   XMarkIcon,
   CheckIcon,
@@ -720,8 +755,11 @@ import {
   BookOpenIcon,
   ArrowPathIcon,
   ArrowUpTrayIcon,
+  DocumentTextIcon,
+  DocumentIcon,
 } from '@heroicons/vue/24/outline'
 import { renderPageMarkdown } from '~/utils/markdown'
+import { emptyScheduleConfig, type ScheduleConfig } from '~/types/schedule.types'
 import {
   CLASS_SUBJECTS,
   CLASS_EDUCATION_LEVELS,
@@ -765,10 +803,8 @@ const currentQuestion = computed(() => {
     }),
     t('teacher.classes.create.onboarding.review_approach'),
     t('teacher.classes.create.onboarding.pick_title'),
-    t('teacher.classes.create.onboarding.ask_schedule'),
-    t('teacher.classes.create.onboarding.ask_image'),
+    t('teacher.schedule.wizard_question'),
     'He preparado una guía para tus alumnos',
-    '¿Quieres crear una insignia para esta clase?',
   ]
   return questions[step.value] || ''
 })
@@ -805,13 +841,25 @@ const subjectOptions = computed(() => [noneOption.value, ...CLASS_SUBJECTS])
 const educationLevelOptions = computed(() => [noneOption.value, ...CLASS_EDUCATION_LEVELS])
 const provinceOptions = computed(() => [noneOption.value, ...SPANISH_PROVINCES])
 
+// Los metadatos son obligatorios para poder empezar a crear la clase.
+const metaComplete = computed(
+  () => !!meta.language && !!meta.subject && !!meta.educationLevel && !!meta.province
+)
+// Se activa al intentar avanzar sin completar los metadatos; pinta los selects vacíos en rojo.
+const showMetaErrors = ref(false)
+
 const idea = ref('')
 const plan = ref('')
+// Cuando la IA no consigue generar la narrativa (p. ej. rate limit), mostramos un
+// estado de error con reintento en vez de volcar la idea como si fuera narrativa.
+const planGenerationFailed = ref(false)
 const titles = ref<string[]>([])
 const selectedTitle = ref('')
 const customTitle = ref('')
 const chosenTitle = computed(() => customTitle.value.trim() || selectedTitle.value)
-const schedule = ref('')
+const scheduleConfig = ref<ScheduleConfig>(emptyScheduleConfig())
+// Texto legible derivado del patrón semanal (para el campo `schedule` y las tarjetas).
+const { scheduleText: schedule } = useClassCalendar(scheduleConfig)
 const generatedImageUrl = ref('')
 // The AI cover arrives as a relative /uploads/... path served by the API host,
 // while a teacher-uploaded cover is a base64 data URL. getImageUrl resolves
@@ -845,11 +893,42 @@ interface DocSource {
   kind: string
   chars: number
   note?: string
+  // Texto extraído del fichero (lo devuelve el backend por fichero). Permite
+  // reconstruir el contexto cuando el profe quita uno de la lista.
+  text?: string
 }
-const docsContext = ref('')
 const docSources = ref<DocSource[]>([])
+// El contexto que se envía a la IA se deriva de los archivos actuales, así al
+// quitar uno desaparece también su texto sin tener que trocear un blob.
+const docsContext = computed(() =>
+  docSources.value
+    .filter(s => s.text)
+    .map(s => `### ${s.name}\n${s.text}`)
+    .join('\n\n')
+)
 const extractingDocs = ref(false)
 const materialsFileRef = ref<HTMLInputElement>()
+
+function removeMaterial(index: number) {
+  docSources.value = docSources.value.filter((_, i) => i !== index)
+}
+
+// Icono + color del cuadradito según el tipo de archivo (mismo criterio visual
+// que los "documentos de apoyo" de las misiones).
+function docIcon(kind: string) {
+  if (kind === 'image') return PhotoIcon
+  if (kind === 'word') return DocumentIcon
+  return DocumentTextIcon // pdf, text y fallback
+}
+function docBg(kind: string) {
+  const map: Record<string, string> = {
+    pdf: 'bg-red-500',
+    word: 'bg-blue-500',
+    image: 'bg-green-500',
+    text: 'bg-navy-700',
+  }
+  return map[kind] || 'bg-gray-400' // unsupported / desconocido
+}
 
 async function handleMaterialsUpload(event: Event) {
   const input = event.target as HTMLInputElement
@@ -865,7 +944,6 @@ async function handleMaterialsUpload(event: Event) {
       `${config.public.apiBase}/ai/extract-context`,
       { method: 'POST', body: fd }
     )
-    docsContext.value = [docsContext.value, res.context].filter(Boolean).join('\n\n')
     docSources.value = [...docSources.value, ...res.sources]
   } catch {
     toast.error(t('teacher.classes.create.onboarding.attach_error'))
@@ -919,6 +997,17 @@ function buildContext() {
   return parts.join('\n')
 }
 
+// Metadatos legibles (asignatura y nivel) para que la IA sepa realmente de qué va
+// la clase al sugerir títulos. El nivel es contexto, NO para meterlo en el nombre.
+const metaContextLine = computed(() => {
+  const subj = subjectOptions.value.find(o => o.value === meta.subject)?.label
+  const lvl = educationLevelOptions.value.find(o => o.value === meta.educationLevel)?.label
+  const parts: string[] = []
+  if (meta.subject && subj) parts.push(`Asignatura: ${subj}`)
+  if (meta.educationLevel && lvl) parts.push(`Nivel educativo: ${lvl}`)
+  return parts.join(' | ')
+})
+
 const form = reactive({ name: '', schedule: '', backgroundImage: '' })
 const errors = reactive({ name: '' })
 const isSubmitting = ref(false)
@@ -968,8 +1057,14 @@ const guideProvider = ref<AIProviderName>(null)
 
 async function submitIdea() {
   if (!idea.value.trim() || loading.value) return
+  // Metadatos obligatorios: si faltan, resaltamos en rojo los selects vacíos y no avanzamos.
+  if (!metaComplete.value) {
+    showMetaErrors.value = true
+    return
+  }
   step.value = 1
   plan.value = ''
+  planGenerationFailed.value = false
   loading.value = true
 
   try {
@@ -984,7 +1079,7 @@ async function submitIdea() {
     plan.value = cleanAIText(plan.value).slice(0, 8000)
     planProvider.value = lastProvider.value
   } catch {
-    plan.value = idea.value
+    planGenerationFailed.value = true
   } finally {
     loading.value = false
     isStreaming.value = false
@@ -1012,7 +1107,8 @@ async function regeneratePlan() {
     plan.value = cleanAIText(plan.value).slice(0, 8000)
     planProvider.value = lastProvider.value
   } catch {
-    /* keep current */
+    // Si la regeneración falla, no perdemos la narrativa que ya había.
+    plan.value = previousPlan
   } finally {
     loading.value = false
     isStreaming.value = false
@@ -1033,7 +1129,9 @@ async function acceptPlan() {
         method: 'POST',
         body: {
           locale: classLocale.value,
-          context: `${ctx}\nNarrativa: ${plan.value.slice(0, 500)}`.slice(0, 1500),
+          context: `${ctx}\nNarrativa: ${plan.value.slice(0, 500)}${
+            metaContextLine.value ? `\n${metaContextLine.value}` : ''
+          }`.slice(0, 1500),
         },
       }
     ).catch(() => null)
@@ -1062,7 +1160,9 @@ async function regenerateTitlesWithFeedback() {
         method: 'POST',
         body: {
           locale: classLocale.value,
-          context: `${ctx}\nNarrativa: ${plan.value.slice(0, 500)}`.slice(0, 1500),
+          context: `${ctx}\nNarrativa: ${plan.value.slice(0, 500)}${
+            metaContextLine.value ? `\n${metaContextLine.value}` : ''
+          }`.slice(0, 1500),
           feedback: fb,
         },
       }
@@ -1078,7 +1178,7 @@ async function regenerateTitlesWithFeedback() {
 
 // Cover
 watch(step, s => {
-  if (s === 4 && !generatedImageUrl.value) generateCover()
+  if (s === 3 && !generatedImageUrl.value) generateCover()
 })
 
 async function generateCover(extraPrompt?: string) {
@@ -1130,7 +1230,7 @@ async function regenerateCover() {
 
 // Step 5: Guide generation
 watch(step, s => {
-  if (s === 5 && !guideContent.value && !isGeneratingGuide.value) generateGuide()
+  if (s === 4 && !guideContent.value && !isGeneratingGuide.value) generateGuide()
 })
 
 async function generateGuide(extraPrompt?: string) {
@@ -1166,6 +1266,46 @@ async function regenerateGuide() {
   guideFeedback.value = ''
   showGuideFeedback.value = false
   await generateGuide(fb)
+}
+
+// Manejadores de los botones del asistente. Se extraen a métodos (en vez de
+// expresiones inline con varias sentencias) porque Prettier reformatea los
+// @click multi-sentencia a varias líneas y el compilador de Vue 3.5 no los
+// acepta. Con una sola llamada, ni Prettier los toca ni Vue los rechaza.
+function backToStep0() {
+  step.value = 0
+  plan.value = ''
+  showNarrativeFeedback.value = false
+}
+
+function selectTitle(title: string) {
+  selectedTitle.value = title
+  customTitle.value = ''
+}
+
+function openNarrativeFeedback() {
+  showNarrativeFeedback.value = true
+  nextTick(() => feedbackRef.value?.focus())
+}
+
+function openTitleFeedback() {
+  showTitleFeedback.value = true
+  nextTick(() => titleFeedbackRef.value?.focus())
+}
+
+function openImageFeedback() {
+  showImageFeedback.value = true
+  nextTick(() => imageFeedbackRef.value?.focus())
+}
+
+function openGuideFeedback() {
+  showGuideFeedback.value = true
+  nextTick(() => guideFeedbackRef.value?.focus())
+}
+
+function skipGuide() {
+  guideContent.value = ''
+  finishWizard()
 }
 
 function finishWizard() {
@@ -1218,6 +1358,14 @@ async function handleSubmit() {
         /* guide save failed silently - teacher can edit later */
       }
     }
+    // Guardar la configuración de horario si el profe la rellenó (no bloquea el alta).
+    if (res.class.id && (scheduleConfig.value.weekdays.length || scheduleConfig.value.startDate)) {
+      try {
+        await classesStore.updateClass(res.class.id, { scheduleConfig: scheduleConfig.value })
+      } catch {
+        /* schedule save failed silently - teacher can edit later */
+      }
+    }
     createdClassName.value = res.class.name
     createdInviteCode.value = res.class.invitationCode
     showSuccessModal.value = true
@@ -1263,85 +1411,9 @@ async function copyInviteCode() {
 </script>
 
 <style scoped>
-/* Onboarding reusable styles */
-.onb-input {
-  @apply w-full px-5 py-4 rounded-2xl bg-gray-50 text-sm text-navy-700 leading-relaxed border border-gray-200 outline-none;
-}
-.onb-input:focus {
-  @apply ring-2 ring-gray-300;
-}
-.onb-input::placeholder {
-  @apply text-text-secondary;
-}
-.onb-result-box {
-  @apply bg-gray-50 rounded-2xl p-5 border border-gray-100;
-}
-.onb-actions {
-  @apply flex items-center justify-between mt-5 pt-4 border-t border-gray-100;
-}
-.onb-loading {
-  @apply flex items-center gap-2 text-text-secondary text-sm;
-}
-.onb-feedback {
-  @apply flex gap-2 mt-4;
-}
-.onb-feedback-input {
-  @apply flex-1 px-4 py-2.5 rounded-2xl bg-gray-50 border border-gray-200 text-sm text-navy-700 outline-none;
-}
-.onb-feedback-input:focus {
-  @apply ring-2 ring-gray-300;
-}
-.onb-feedback-input::placeholder {
-  @apply text-text-secondary;
-}
-.onb-send-btn {
-  @apply px-3.5 py-2.5 rounded-2xl bg-navy-700 text-white transition-colors;
-}
-.onb-send-btn:hover {
-  @apply opacity-90;
-}
-.onb-send-btn:disabled {
-  @apply opacity-40 cursor-not-allowed;
-}
-.onb-cancel-btn {
-  @apply px-3.5 py-2.5 rounded-2xl bg-gray-100 text-navy-700 border border-gray-200 transition-colors;
-}
-.onb-cancel-btn:hover {
-  @apply bg-gray-200;
-}
-.btn-back {
-  @apply text-sm font-medium text-text-secondary transition-colors;
-}
-.btn-back:hover {
-  @apply text-navy-700;
-}
-.title-item-enter-active {
-  animation: slideUp 0.3s ease both;
-}
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-.fade-enter-active,
-.fade-leave-active {
-  transition:
-    opacity 0.2s ease,
-    transform 0.2s ease;
-}
-.fade-enter-from {
-  opacity: 0;
-  transform: translateX(20px);
-}
-.fade-leave-to {
-  opacity: 0;
-  transform: translateX(-20px);
-}
+/* Transición del modal de éxito (específica de esta página). El resto de estilos
+   del onboarding (onb-*, animaciones de entrada, transición onb-fade entre pasos)
+   viven en assets/css/tailwind.css y en OnboardingCard/OnboardingLoading. */
 .modal-enter-active,
 .modal-leave-active {
   transition: opacity 0.2s ease;

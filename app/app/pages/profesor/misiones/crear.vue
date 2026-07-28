@@ -1,7 +1,9 @@
 <template>
-  <div class="flex flex-col h-[calc(100vh-64px)]">
-    <!-- Header -->
-    <div class="bg-navy-700 -mx-4 md:-mx-6 -mt-4 md:-mt-6 px-4 md:px-6 pt-6 pb-4">
+  <!-- Rompe el padding del <main> del layout (-m) y ocupa todo el alto; la card
+       llena el hueco sin desbordar. Mismo patrón que el wizard de clases. -->
+  <div class="flex flex-col h-[calc(100vh-56px)] lg:h-screen -m-4 md:-m-6">
+    <!-- Header (el root ya rompe el padding del layout) -->
+    <div class="bg-navy-700 px-4 md:px-6 pt-6 pb-4">
       <nav class="flex items-center gap-1.5 sm:gap-2 text-sm">
         <NuxtLink to="/profesor/inicio" class="text-white/70 hover:text-white flex-shrink-0"
           ><HomeIcon class="w-4 h-4"
@@ -15,63 +17,21 @@
       </nav>
     </div>
 
-    <!-- WIZARD -->
-    <div v-if="!showPreview" class="flex-1 overflow-y-auto px-4 sm:px-8 py-6">
-      <div class="w-full max-w-4xl mx-auto">
-        <!-- Progress: mobile = compact bar, desktop = circles -->
-        <div class="sm:hidden flex items-center gap-3 mb-5">
-          <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
-            <div
-              class="h-full bg-navy-700 rounded-full transition-all duration-300"
-              :style="{ width: `${((step + 1) / totalSteps) * 100}%` }"
-            />
-          </div>
-          <span class="text-sm font-semibold text-navy-700 whitespace-nowrap"
-            >{{ step + 1 }}/{{ totalSteps }}</span
-          >
-        </div>
-        <div class="hidden sm:flex items-center justify-center gap-3 mb-5">
-          <template v-for="i in totalSteps" :key="i">
-            <div
-              class="w-7 h-7 rounded-full flex items-center justify-center transition-all duration-300 text-xs font-bold"
-              :class="
-                i - 1 < step
-                  ? 'bg-navy-700 text-white'
-                  : i - 1 === step
-                    ? 'bg-navy-700 text-white'
-                    : 'bg-gray-200 text-gray-400'
-              "
-            >
-              <CheckIcon v-if="i - 1 < step" class="w-3.5 h-3.5" />
-              <span v-else>{{ i }}</span>
-            </div>
-            <div
-              v-if="i < totalSteps"
-              class="w-8 h-0.5 rounded-full"
-              :class="i - 1 < step ? 'bg-navy-700' : 'bg-gray-200'"
-            />
-          </template>
-        </div>
-
-        <!-- Card -->
-        <div class="flex flex-col min-h-0 bg-white rounded-2xl shadow-lg border border-gray-100">
-          <!-- God + question -->
-          <div class="flex items-start gap-4 px-6 pt-6">
-            <div class="w-12 h-12 rounded-full flex-shrink-0 overflow-hidden bg-[#FFC338]/30">
-              <img :src="god.avatar" :alt="god.name" class="w-full h-full object-contain" />
-            </div>
-            <p class="flex-1 text-lg font-semibold text-navy-700 leading-snug pt-1">
-              {{ currentQuestion }}
-            </p>
-          </div>
-
-          <!-- Content -->
-          <div class="flex-1 flex flex-col px-6 pb-6 pt-5 min-h-0">
-            <Transition name="fade" mode="out-in">
+    <!-- WIZARD: alto fijo (no desborda pantalla); solo scrollea el contenido. -->
+    <div v-if="!showPreview" class="flex-1 min-h-0 px-4 md:px-6 py-4 flex">
+      <div class="w-full flex flex-1 min-h-0 flex-col">
+        <!-- Card compartida (cabecera de paso + pasos). Ver OnboardingCard.vue -->
+        <OnboardingCard
+          :step="step"
+          :total-steps="totalSteps"
+          :god="god"
+          :question="currentQuestion"
+        >
+          <Transition name="onb-fade" mode="out-in">
               <!-- STEP 0: Idea -->
               <div v-if="step === 0" key="s0" class="flex-1 flex flex-col">
                 <!-- Class selector -->
-                <div class="mb-4">
+                <div class="onb-reveal mb-4" style="animation-delay: 0.12s">
                   <label class="block text-sm font-medium text-navy-700 mb-1.5">Clase</label>
                   <SelectDropdown
                     :model-value="selectedClassId"
@@ -83,11 +43,12 @@
                 <textarea
                   ref="inputRef"
                   v-model="idea"
-                  rows="5"
+                  rows="6"
                   placeholder="Ej: Quiero una misión sobre cinemática donde los alumnos calculen trayectorias de escobas voladoras..."
-                  class="onb-input flex-1 resize-none"
+                  class="onb-input onb-reveal resize-none"
+                  style="animation-delay: 0.2s"
                 />
-                <div class="onb-actions">
+                <div class="onb-actions !mt-auto">
                   <span />
                   <Button
                     variant="primary"
@@ -101,112 +62,146 @@
 
               <!-- STEP 1: Narrative -->
               <div v-else-if="step === 1" key="s1" class="flex-1 flex flex-col min-h-0">
-                <div class="flex-1 onb-result-box overflow-y-auto min-h-0">
-                  <div
-                    v-if="waitingForFirstChunk && !narrative"
-                    class="flex flex-col items-center justify-center gap-3 py-8"
-                  >
-                    <SparklesIcon class="w-5 h-5 animate-pulse text-navy-700" />
-                    <span class="text-sm text-text-secondary"
-                      >Creando la narrativa de tu misión...</span
+                <EditableMarkdown
+                  v-model="narrative"
+                  :god-name="god.name"
+                  :god-avatar="god.avatar"
+                  ai-placeholder="Ej: Hazlo más épico, añade referencias al tema..."
+                  context-label="Editando la narrativa de la misión"
+                  ai-modal-hint="Dile a la IA qué quieres añadir o cambiar de la narrativa."
+                  ai-system-context="El profesor está editando la NARRATIVA de una misión gamificada. Es la historia que ambienta la misión y engancha a los alumnos. Genera contenido narrativo, inmersivo y épico acorde a la temática."
+                >
+                  <template #default="{ edit }">
+                    <div class="flex-1 onb-result-box overflow-y-auto min-h-0">
+                      <OnboardingLoading
+                        v-if="waitingForFirstChunk && !narrative"
+                        text="Creando la narrativa de tu misión..."
+                        :progress="generationProgress"
+                        :is-overtime="isOvertime"
+                        :remaining-label="remainingTimeLabel"
+                      />
+                      <div
+                        v-else-if="narrativeGenerationFailed && !narrative"
+                        class="h-full flex flex-col items-center justify-center gap-4 text-center px-4"
+                      >
+                        <ExclamationTriangleIcon class="w-8 h-8 text-navy-700/30" />
+                        <p class="text-base font-semibold text-navy-700">
+                          No he podido crear la narrativa
+                        </p>
+                        <p class="text-sm text-text-secondary max-w-sm">
+                          Puede que el asistente esté saturado ahora mismo. Espera un momento y
+                          reinténtalo.
+                        </p>
+                        <div class="flex gap-2">
+                          <Button variant="outline" size="sm" @click="step = 0">Atrás</Button>
+                          <Button variant="primary" size="sm" @click="submitIdea">
+                            <ArrowPathIcon class="w-4 h-4 mr-1.5" />Reintentar
+                          </Button>
+                        </div>
+                      </div>
+                      <template v-else>
+                        <div class="md-rendered" v-html="renderPageMarkdown(narrative)" />
+                        <div v-if="!isStreaming && narrative" class="mt-2 flex justify-end">
+                          <AIProviderBadge :provider="narrativeProvider" />
+                        </div>
+                      </template>
+                    </div>
+                    <div
+                      v-if="!loading && !isStreaming && narrative && showNarrativeFeedback"
+                      class="onb-feedback"
                     >
-                    <AILoadingBar
-                      :progress="generationProgress"
-                      :is-overtime="isOvertime"
-                      :remaining-label="remainingTimeLabel"
-                    />
-                  </div>
-                  <template v-else>
-                    <div class="md-rendered" v-html="renderPageMarkdown(narrative)" />
-                    <div v-if="!isStreaming && narrative" class="mt-2 flex justify-end">
-                      <AIProviderBadge :provider="narrativeProvider" />
+                      <input
+                        ref="feedbackRef"
+                        v-model="feedback"
+                        type="text"
+                        placeholder="Ej: Quiero que sea más épica, con más referencias al tema..."
+                        class="onb-feedback-input"
+                        @keydown.enter.prevent="feedback.trim() && regenerateNarrative()"
+                      />
+                      <button
+                        type="button"
+                        class="onb-cancel-btn"
+                        title="Cancelar"
+                        @click="showNarrativeFeedback = false"
+                      >
+                        <XMarkIcon class="w-4 h-4" />
+                      </button>
+                      <button
+                        type="button"
+                        class="onb-send-btn"
+                        :disabled="!feedback.trim() || loading"
+                        @click="regenerateNarrative"
+                      >
+                        <PaperAirplaneIcon class="w-4 h-4" />
+                      </button>
+                    </div>
+                    <div v-if="!loading && !isStreaming && narrative" class="onb-actions">
+                      <Button variant="outline" size="sm" @click="backToStep0">Atrás</Button>
+                      <div v-if="!showNarrativeFeedback" class="flex gap-2">
+                        <Button variant="outline" size="sm" @click="edit"
+                          ><PencilSquareIcon class="w-4 h-4 mr-1.5" />Editar a mano</Button
+                        >
+                        <Button variant="outline" size="sm" @click="openNarrativeFeedback">
+                          <SparklesIcon class="w-4 h-4 mr-1.5" />Quiero cambiar algo
+                        </Button>
+                        <Button variant="primary" size="sm" @click="acceptNarrative"
+                          >Sí, adelante</Button
+                        >
+                      </div>
                     </div>
                   </template>
-                </div>
-                <div
-                  v-if="!loading && !isStreaming && narrative && showNarrativeFeedback"
-                  class="onb-feedback"
-                >
-                  <input
-                    ref="feedbackRef"
-                    v-model="feedback"
-                    type="text"
-                    placeholder="Ej: Quiero que sea más épica, con más referencias al tema..."
-                    class="onb-feedback-input"
-                    @keydown.enter.prevent="feedback.trim() && regenerateNarrative()"
-                  />
-                  <button
-                    type="button"
-                    class="onb-cancel-btn"
-                    title="Cancelar"
-                    @click="showNarrativeFeedback = false"
-                  >
-                    <XMarkIcon class="w-4 h-4" />
-                  </button>
-                  <button
-                    type="button"
-                    class="onb-send-btn"
-                    :disabled="!feedback.trim() || loading"
-                    @click="regenerateNarrative"
-                  >
-                    <PaperAirplaneIcon class="w-4 h-4" />
-                  </button>
-                </div>
-                <div v-if="!loading && !isStreaming && narrative" class="onb-actions">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    @click="step = 0; narrative = ''"
-                    >Atrás</Button
-                  >
-                  <div v-if="!showNarrativeFeedback" class="flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      @click="showNarrativeFeedback = true; nextTick(() => feedbackRef?.focus())"
-                      >Quiero cambiar algo</Button
-                    >
-                    <Button variant="primary" size="sm" @click="acceptNarrative"
-                      >Sí, adelante</Button
-                    >
-                  </div>
-                </div>
+                </EditableMarkdown>
               </div>
 
               <!-- STEP 2: Titles -->
-              <div v-else-if="step === 2" key="s2" class="flex-1 flex flex-col">
-                <template v-if="loading">
-                  <div class="flex-1 flex flex-col items-center justify-center gap-3">
-                    <SparklesIcon class="w-5 h-5 animate-pulse text-navy-700" />
-                    <span class="text-sm text-text-secondary">Generando títulos...</span>
-                    <AILoadingBar
-                      v-if="generationProgress > 0 || isOvertime"
-                      :progress="generationProgress"
-                      :is-overtime="isOvertime"
-                      :remaining-label="remainingTimeLabel"
-                    />
-                  </div>
-                </template>
+              <div v-else-if="step === 2" key="s2" class="flex-1 flex flex-col min-h-0">
+                <OnboardingLoading
+                  v-if="loading"
+                  text="Generando títulos..."
+                  :show-bar="generationProgress > 0 || isOvertime"
+                  :progress="generationProgress"
+                  :is-overtime="isOvertime"
+                  :remaining-label="remainingTimeLabel"
+                />
                 <template v-else>
-                  <div class="space-y-2.5">
-                    <TransitionGroup name="title-item" appear>
-                      <button
-                        v-for="(title, i) in titles"
-                        :key="title"
-                        type="button"
-                        class="w-full text-left px-5 py-3.5 rounded-2xl transition-all text-sm font-medium shadow-sm"
+                  <TransitionGroup
+                    name="title-item"
+                    appear
+                    tag="div"
+                    class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 flex-1 min-h-0 overflow-y-auto content-start pr-1"
+                  >
+                    <button
+                      v-for="(title, i) in titles"
+                      :key="title"
+                      type="button"
+                      class="group flex items-center gap-3 w-full text-left px-4 py-3 rounded-xl border transition-all"
+                      :class="
+                        selectedTitle === title
+                          ? 'bg-navy-700 border-navy-700 shadow-md'
+                          : 'bg-white border-gray-200 hover:border-navy-700/40 hover:shadow-md'
+                      "
+                      :style="{ animationDelay: `${Math.min(i, 10) * 40}ms` }"
+                      @click="selectTitle(title)"
+                    >
+                      <span
+                        class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors"
                         :class="
                           selectedTitle === title
-                            ? 'bg-navy-700 text-white shadow-md'
-                            : 'bg-gray-50 text-navy-700 border border-gray-200 hover:border-navy-700'
+                            ? 'bg-white/15'
+                            : 'bg-navy-700/5 group-hover:bg-navy-700/10'
                         "
-                        :style="{ animationDelay: `${i * 100}ms` }"
-                        @click="selectedTitle = title; customTitle = ''"
+                      >
+                        <CheckIcon v-if="selectedTitle === title" class="w-4 h-4 text-white" />
+                        <SparklesIcon v-else class="w-4 h-4 text-navy-700/50" />
+                      </span>
+                      <span
+                        class="text-sm font-medium truncate"
+                        :class="selectedTitle === title ? 'text-white' : 'text-navy-700'"
                       >
                         {{ title }}
-                      </button>
-                    </TransitionGroup>
-                  </div>
+                      </span>
+                    </button>
+                  </TransitionGroup>
                   <input
                     v-model="customTitle"
                     type="text"
@@ -243,10 +238,7 @@
                   <div v-if="!showTitleFeedback" class="onb-actions">
                     <Button variant="outline" size="sm" @click="step = 1">Atrás</Button>
                     <div class="flex gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        @click="showTitleFeedback = true; nextTick(() => titleFeedbackRef?.focus())"
+                      <Button variant="outline" size="sm" @click="openTitleFeedback"
                         >Quiero cambiar algo</Button
                       >
                       <Button
@@ -320,16 +312,32 @@
                         class="bg-gray-50 rounded-xl p-4 border border-gray-100"
                         :style="{ animationDelay: `${i * 120}ms` }"
                       >
-                        <div class="flex items-center justify-between mb-1">
+                        <div class="flex items-center justify-between gap-2 mb-1">
                           <h4 class="font-semibold text-navy-700 text-sm">{{ enigma.title }}</h4>
-                          <span
-                            class="px-2 py-0.5 text-xs font-medium rounded-full"
-                            style="
-                              background-color: var(--color-badge-xp-bg);
-                              color: var(--color-badge-xp-text);
-                            "
-                            >{{ enigma.xp }} XP</span
+                          <div
+                            class="flex items-center gap-2 shrink-0 text-xs font-semibold text-navy-700"
                           >
+                            <span
+                              class="px-2 py-0.5 rounded-full"
+                              style="
+                                background-color: var(--color-badge-xp-bg);
+                                color: var(--color-badge-xp-text);
+                              "
+                              >{{ enigma.xp }} XP</span
+                            >
+                            <span
+                              v-if="enigmaResources.coins && enigma.coins"
+                              class="inline-flex items-center gap-1"
+                            >
+                              <CoinIcon class="w-4 h-4" />{{ enigma.coins }}
+                            </span>
+                            <span
+                              v-if="enigmaResources.mana && enigma.mana"
+                              class="inline-flex items-center gap-1"
+                            >
+                              <ManaIcon class="w-4 h-4" />{{ enigma.mana }}
+                            </span>
+                          </div>
                         </div>
                         <p class="text-xs text-text-secondary leading-relaxed mb-2">
                           {{ enigma.description }}
@@ -401,7 +409,7 @@
                         variant="outline"
                         size="sm"
                         :disabled="isStreaming || loading"
-                        @click="showEnigmaFeedback = true; nextTick(() => enigmaFeedbackRef?.focus())"
+                        @click="openEnigmaFeedback"
                         >Quiero cambiar algo</Button
                       >
                       <Button
@@ -491,6 +499,12 @@
                     <div class="mt-2 flex justify-end">
                       <AIProviderBadge :provider="coverProvider" />
                     </div>
+                    <!-- Acción de la portada, justo bajo la imagen generada -->
+                    <div v-if="!showImageFeedback" class="mt-3 flex flex-wrap justify-center gap-2">
+                      <Button variant="outline" size="sm" @click="openImageFeedback"
+                        >Quiero cambiar algo</Button
+                      >
+                    </div>
                   </div>
                   <!-- Error with retry -->
                   <div
@@ -535,19 +549,7 @@
                 </div>
                 <div v-if="!isGeneratingImage && !showImageFeedback" class="onb-actions">
                   <Button variant="outline" size="sm" @click="step = 4">Atrás</Button>
-                  <div class="flex gap-2">
-                    <Button
-                      v-if="generatedImageUrl"
-                      variant="outline"
-                      size="sm"
-                      @click="showImageFeedback = true; nextTick(() => imageFeedbackRef?.focus())"
-                      >Quiero cambiar algo</Button
-                    >
-                    <Button variant="outline" size="sm" @click="step = 6">Saltar</Button>
-                    <Button v-if="generatedImageUrl" variant="primary" size="sm" @click="step = 6"
-                      >Sí, adelante</Button
-                    >
-                  </div>
+                  <Button variant="primary" size="sm" @click="step = 6">Sí, adelante</Button>
                 </div>
                 <div v-else-if="!isGeneratingImage && showImageFeedback" class="onb-actions">
                   <Button variant="outline" size="sm" @click="step = 4">Atrás</Button>
@@ -556,100 +558,104 @@
 
               <!-- STEP 6: Mission Guide / Briefing -->
               <div v-else-if="step === 6" key="s6" class="flex-1 flex flex-col min-h-0">
-                <div class="flex-1 onb-result-box overflow-y-auto min-h-0">
-                  <div
-                    v-if="(waitingForFirstChunk || isGeneratingMissionGuide) && !missionGuide"
-                    class="flex flex-col items-center justify-center gap-3 py-8"
-                  >
-                    <SparklesIcon class="w-5 h-5 animate-pulse text-navy-700" />
-                    <span class="text-sm text-text-secondary"
-                      >Generando guía para los alumnos...</span
+                <EditableMarkdown
+                  v-model="missionGuide"
+                  :god-name="god.name"
+                  :god-avatar="god.avatar"
+                  ai-placeholder="Ej: Añade consejos para los enigmas, hazlo más épico..."
+                  context-label="Editando la guía de la misión"
+                  ai-modal-hint="Dile a la IA qué quieres añadir o cambiar de la guía."
+                  ai-system-context="El profesor está editando la GUÍA para los alumnos de una misión gamificada. Orienta a los alumnos sobre cómo abordar la misión y sus enigmas. Genera contenido claro, útil y motivador."
+                >
+                  <template #default="{ edit }">
+                    <div class="flex-1 onb-result-box overflow-y-auto min-h-0">
+                      <OnboardingLoading
+                        v-if="(waitingForFirstChunk || isGeneratingMissionGuide) && !missionGuide"
+                        text="Generando guía para los alumnos..."
+                        :show-bar="generationProgress > 0 || isOvertime"
+                        :progress="generationProgress"
+                        :is-overtime="isOvertime"
+                        :remaining-label="remainingTimeLabel"
+                      />
+                      <div
+                        v-else-if="missionGuideGenerationFailed && !missionGuide"
+                        class="flex flex-col items-center gap-4 text-text-secondary py-8"
+                      >
+                        <p class="text-sm">No se pudo generar la guía.</p>
+                        <Button variant="primary" size="sm" @click="generateMissionGuide()">
+                          <ArrowPathIcon class="w-4 h-4 mr-2" />
+                          Reintentar
+                        </Button>
+                      </div>
+                      <template v-else>
+                        <div class="md-rendered" v-html="renderPageMarkdown(missionGuide)" />
+                        <div v-if="!isStreaming && missionGuide" class="mt-2 flex justify-end">
+                          <AIProviderBadge :provider="guideProvider" />
+                        </div>
+                      </template>
+                    </div>
+                    <div
+                      v-if="!isGeneratingMissionGuide && missionGuide && showMissionGuideFeedback"
+                      class="onb-feedback"
                     >
-                    <AILoadingBar
-                      v-if="generationProgress > 0 || isOvertime"
-                      :progress="generationProgress"
-                      :is-overtime="isOvertime"
-                      :remaining-label="remainingTimeLabel"
-                    />
-                  </div>
-                  <div
-                    v-else-if="missionGuideGenerationFailed && !missionGuide"
-                    class="flex flex-col items-center gap-4 text-text-secondary py-8"
-                  >
-                    <p class="text-sm">No se pudo generar la guía.</p>
-                    <Button variant="primary" size="sm" @click="generateMissionGuide()">
-                      <ArrowPathIcon class="w-4 h-4 mr-2" />
-                      Reintentar
-                    </Button>
-                  </div>
-                  <template v-else>
-                    <div class="md-rendered" v-html="renderPageMarkdown(missionGuide)" />
-                    <div v-if="!isStreaming && missionGuide" class="mt-2 flex justify-end">
-                      <AIProviderBadge :provider="guideProvider" />
+                      <input
+                        ref="missionGuideFeedbackRef"
+                        v-model="missionGuideFeedback"
+                        type="text"
+                        placeholder="Ej: Hazlo más épico, añade consejos para los enigmas..."
+                        class="onb-feedback-input"
+                        @keydown.enter.prevent="
+                          missionGuideFeedback.trim() && regenerateMissionGuide()
+                        "
+                      />
+                      <button
+                        type="button"
+                        class="onb-cancel-btn"
+                        title="Cancelar"
+                        @click="showMissionGuideFeedback = false"
+                      >
+                        <XMarkIcon class="w-4 h-4" />
+                      </button>
+                      <button
+                        type="button"
+                        class="onb-send-btn"
+                        :disabled="!missionGuideFeedback.trim() || isGeneratingMissionGuide"
+                        @click="regenerateMissionGuide"
+                      >
+                        <PaperAirplaneIcon class="w-4 h-4" />
+                      </button>
+                    </div>
+                    <div
+                      v-if="
+                        !isGeneratingMissionGuide &&
+                        !isStreaming &&
+                        missionGuide &&
+                        !showMissionGuideFeedback
+                      "
+                      class="onb-actions"
+                    >
+                      <Button variant="outline" size="sm" @click="step = 5">Atrás</Button>
+                      <div class="flex gap-2">
+                        <Button variant="outline" size="sm" @click="edit"
+                          ><PencilSquareIcon class="w-4 h-4 mr-1.5" />Editar a mano</Button
+                        >
+                        <Button variant="outline" size="sm" @click="openMissionGuideFeedback">
+                          <SparklesIcon class="w-4 h-4 mr-1.5" />Quiero cambiar algo
+                        </Button>
+                        <Button variant="outline" size="sm" @click="skipMissionGuide"
+                          >Saltar</Button
+                        >
+                        <Button variant="primary" size="sm" @click="step = 7">Sí, adelante</Button>
+                      </div>
+                    </div>
+                    <div
+                      v-else-if="!isGeneratingMissionGuide && showMissionGuideFeedback"
+                      class="onb-actions"
+                    >
+                      <Button variant="outline" size="sm" @click="step = 5">Atrás</Button>
                     </div>
                   </template>
-                </div>
-                <div
-                  v-if="!isGeneratingMissionGuide && missionGuide && showMissionGuideFeedback"
-                  class="onb-feedback"
-                >
-                  <input
-                    ref="missionGuideFeedbackRef"
-                    v-model="missionGuideFeedback"
-                    type="text"
-                    placeholder="Ej: Hazlo más épico, añade consejos para los enigmas..."
-                    class="onb-feedback-input"
-                    @keydown.enter.prevent="missionGuideFeedback.trim() && regenerateMissionGuide()"
-                  />
-                  <button
-                    type="button"
-                    class="onb-cancel-btn"
-                    title="Cancelar"
-                    @click="showMissionGuideFeedback = false"
-                  >
-                    <XMarkIcon class="w-4 h-4" />
-                  </button>
-                  <button
-                    type="button"
-                    class="onb-send-btn"
-                    :disabled="!missionGuideFeedback.trim() || isGeneratingMissionGuide"
-                    @click="regenerateMissionGuide"
-                  >
-                    <PaperAirplaneIcon class="w-4 h-4" />
-                  </button>
-                </div>
-                <div
-                  v-if="
-                    !isGeneratingMissionGuide &&
-                    !isStreaming &&
-                    missionGuide &&
-                    !showMissionGuideFeedback
-                  "
-                  class="onb-actions"
-                >
-                  <Button variant="outline" size="sm" @click="step = 5">Atrás</Button>
-                  <div class="flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      @click="showMissionGuideFeedback = true; nextTick(() => missionGuideFeedbackRef?.focus())"
-                      >Quiero cambiar algo</Button
-                    >
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      @click="missionGuide = ''; step = 7"
-                      >Saltar</Button
-                    >
-                    <Button variant="primary" size="sm" @click="step = 7">Sí, adelante</Button>
-                  </div>
-                </div>
-                <div
-                  v-else-if="!isGeneratingMissionGuide && showMissionGuideFeedback"
-                  class="onb-actions"
-                >
-                  <Button variant="outline" size="sm" @click="step = 5">Atrás</Button>
-                </div>
+                </EditableMarkdown>
               </div>
 
               <!-- STEP 7: Badge -->
@@ -735,15 +741,10 @@
                       v-if="badgeImageUrl"
                       variant="outline"
                       size="sm"
-                      @click="showBadgeFeedback = true; nextTick(() => badgeFeedbackRef?.focus())"
+                      @click="openBadgeFeedback"
                       >Quiero cambiar algo</Button
                     >
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      @click="badgeName = ''; finishWizard()"
-                      >Saltar</Button
-                    >
+                    <Button variant="outline" size="sm" @click="skipBadge">Saltar</Button>
                     <Button v-if="badgeImageUrl" variant="primary" size="sm" @click="finishWizard"
                       >Sí, adelante</Button
                     >
@@ -754,8 +755,7 @@
                 </div>
               </div>
             </Transition>
-          </div>
-        </div>
+        </OnboardingCard>
       </div>
     </div>
 
@@ -844,15 +844,21 @@ import {
   HomeIcon,
   ChevronRightIcon,
   SparklesIcon,
+  PencilSquareIcon,
   PaperAirplaneIcon,
   CheckIcon,
   PhotoIcon,
   ArrowPathIcon,
   TrophyIcon,
   XMarkIcon,
+  ExclamationTriangleIcon,
 } from '@heroicons/vue/24/outline'
 import { renderPageMarkdown } from '~/utils/markdown'
 import { MISSION_COMPLETION_BONUS, type MissionRarity } from '~/utils/gamification-config'
+import { resolveClassSettings } from '~/utils/class-settings'
+import type { ClassSettings } from '~/types/class.types'
+import CoinIcon from '~/components/atoms/CoinIcon.vue'
+import ManaIcon from '~/components/atoms/ManaIcon.vue'
 
 definePageMeta({ layout: 'teacher', middleware: ['auth', 'role'] })
 const { t, locale } = useI18n()
@@ -890,12 +896,22 @@ const enigmaFeedbackRef = ref<HTMLInputElement>()
 const selectedClassId = ref('')
 const idea = ref('')
 const narrative = ref('')
+// Estado de error de generación de narrativa (p. ej. rate limit): mostramos aviso
+// + reintento en vez de volcar la idea como si fuera la narrativa.
+const narrativeGenerationFailed = ref(false)
 const titles = ref<string[]>([])
 const selectedTitle = ref('')
 const customTitle = ref('')
 const chosenTitle = computed(() => customTitle.value.trim() || selectedTitle.value)
 const enigmas = ref<
-  Array<{ title: string; description: string; xp: number; objectives: string[] }>
+  Array<{
+    title: string
+    description: string
+    xp: number
+    coins: number
+    mana: number
+    objectives: string[]
+  }>
 >([])
 const rarity = ref('comun')
 const deadline = ref('')
@@ -938,23 +954,35 @@ const classSelectOptions = computed(() =>
 )
 const classMissions = ref<Array<{ title: string; description?: string }>>([])
 
-// Load existing missions when class changes
+// Recursos activos de la clase seleccionada. Determinan si la IA propone (y si
+// se muestran/envían) monedas y maná en los enigmas.
+const selectedClassSettings = ref<ClassSettings>(resolveClassSettings(null))
+const enigmaResources = computed(() => ({
+  coins: selectedClassSettings.value.coins,
+  mana: selectedClassSettings.value.mana,
+}))
+
+// Load existing missions + settings when class changes
 watch(selectedClassId, async classId => {
   if (!classId) {
     classMissions.value = []
+    selectedClassSettings.value = resolveClassSettings(null)
     return
   }
   try {
-    const res = await $fetch<{ missions: Array<{ title: string; description?: string }> }>(
-      `${config.public.apiBase}/teacher/classes/${classId}`
-    )
+    const res = await $fetch<{
+      missions: Array<{ title: string; description?: string }>
+      settings?: Partial<ClassSettings>
+    }>(`${config.public.apiBase}/teacher/classes/${classId}`)
     classMissions.value =
       (res as any)?.missions?.map((m: any) => ({
         title: m.title,
         description: (m.description || '').slice(0, 200),
       })) || []
+    selectedClassSettings.value = resolveClassSettings((res as any)?.settings ?? null)
   } catch {
     classMissions.value = []
+    selectedClassSettings.value = resolveClassSettings(null)
   }
 })
 
@@ -994,6 +1022,8 @@ const form = computed(() => ({
     title: e.title,
     description: e.description,
     xp: e.xp,
+    coins: e.coins,
+    mana: e.mana,
     objectives: e.objectives,
   })),
 }))
@@ -1072,7 +1102,7 @@ const guideProvider = ref<AIProviderName>(null)
 
 async function streamAI(
   type: string,
-  params: Record<string, string>,
+  params: Record<string, string | number | boolean>,
   target: Ref<string>,
   providerRef?: Ref<AIProviderName>
 ) {
@@ -1096,6 +1126,7 @@ async function submitIdea() {
   if (!idea.value.trim() || !selectedClassId.value || loading.value) return
   step.value = 1
   narrative.value = ''
+  narrativeGenerationFailed.value = false
   loading.value = true
   try {
     await streamAI(
@@ -1109,7 +1140,7 @@ async function submitIdea() {
       .trim()
       .slice(0, 8000)
   } catch {
-    narrative.value = idea.value
+    narrativeGenerationFailed.value = true
   } finally {
     loading.value = false
     isStreaming.value = false
@@ -1198,6 +1229,42 @@ async function regenerateTitles() {
   }
 }
 
+// Entero ≥ suelo, o el suelo si no es un número válido.
+function clampInt(v: unknown, floor = 0): number {
+  const n = Math.floor(Number(v))
+  return Number.isFinite(n) ? Math.max(floor, n) : floor
+}
+
+// Parsea el JSON de enigmas que devuelve la IA. XP/monedas/maná se normalizan a
+// enteros ≥ 0; coins/mana se ponen a 0 si la clase no usa ese recurso.
+function parseEnigmasJson(rawText: string): typeof enigmas.value {
+  const cleaned = rawText
+    .replace(/```(?:json)?\s*/gi, '')
+    .replace(/```/g, '')
+    .trim()
+  const match = cleaned.match(/\[[\s\S]*\]/)
+  if (!match) return []
+  try {
+    const parsed = JSON.parse(match[0])
+    if (!Array.isArray(parsed)) return []
+    const useCoins = enigmaResources.value.coins
+    const useMana = enigmaResources.value.mana
+    return parsed.map((e: any) => ({
+      title: String(e.title || '').slice(0, 100),
+      description: String(e.description || '').slice(0, 300),
+      xp: clampInt(e.xp ?? 20, 0),
+      coins: useCoins ? clampInt(e.coins ?? 0, 0) : 0,
+      mana: useMana ? clampInt(e.mana ?? 0, 0) : 0,
+      objectives: Array.isArray(e.objectives)
+        ? e.objectives.map((o: any) => String(o).slice(0, 200))
+        : [],
+    }))
+  } catch {
+    console.error('Failed to parse enigmas JSON from AI')
+    return []
+  }
+}
+
 // Step 2 → 3: Generate enigmas
 async function acceptTitle() {
   step.value = 3
@@ -1205,29 +1272,6 @@ async function acceptTitle() {
   loading.value = true
   try {
     enigmaRaw.value = ''
-    const _unused = `Legacy prompt for class "${className.value}":
-
-Idea: ${idea.value}
-Narrativa: ${narrative.value.slice(0, 600)}
-Título: ${chosenTitle.value}
-
-Genera exactamente 4 ENIGMAS (actividades/tareas reales que los alumnos deben completar). Cada enigma es una actividad concreta y práctica.
-
-IMPORTANTE: El XP de cada enigma SOLO puede ser uno de estos 5 valores exactos:
-- 20 XP = tarea sencilla, repaso o introducción
-- 40 XP = ejercicio estándar de dificultad media
-- 60 XP = actividad que requiere investigación o análisis
-- 80 XP = reto complejo que combina varios conceptos
-- 100 XP = proyecto o desafío final de alta dificultad
-
-NO uses ningún otro valor de XP. Solo 20, 40, 60, 80 o 100.
-
-Cada enigma tiene objectives (lista de objetivos de aprendizaje, 2-3 por enigma).
-
-Responde SOLO con un JSON array:
-[{"title":"Nombre del enigma","description":"Qué tiene que hacer el alumno (2-3 frases)","xp":20,"objectives":["Objetivo 1","Objetivo 2"]}]
-
-SOLO el JSON, nada más.`
     await streamAI(
       'mission.enigmas.generate',
       {
@@ -1235,42 +1279,13 @@ SOLO el JSON, nada más.`
         narrative: narrative.value,
         title: chosenTitle.value,
         className: className.value,
+        coins: enigmaResources.value.coins,
+        mana: enigmaResources.value.mana,
       },
       enigmaRaw,
       enigmasProvider
     )
-    let raw: string = enigmaRaw.value
-    // Strip markdown code blocks if present (```json ... ```)
-    raw = raw
-      .replace(/```(?:json)?\s*/gi, '')
-      .replace(/```/g, '')
-      .trim()
-    // Extract JSON array from response
-    const match = raw.match(/\[[\s\S]*\]/)
-    if (match) {
-      try {
-        const parsed = JSON.parse(match[0])
-        if (Array.isArray(parsed)) {
-          const validXp = [20, 40, 60, 80, 100]
-          enigmas.value = parsed.map((e: any) => {
-            const rawXp = Number(e.xp) || 20
-            const xp = validXp.reduce((prev, curr) =>
-              Math.abs(curr - rawXp) < Math.abs(prev - rawXp) ? curr : prev
-            )
-            return {
-              title: String(e.title || '').slice(0, 100),
-              description: String(e.description || '').slice(0, 300),
-              xp,
-              objectives: Array.isArray(e.objectives)
-                ? e.objectives.map((o: any) => String(o).slice(0, 200))
-                : [],
-            }
-          })
-        }
-      } catch {
-        console.error('Failed to parse enigmas JSON from AI')
-      }
-    }
+    enigmas.value = parseEnigmasJson(enigmaRaw.value)
     if (enigmas.value.length === 0) {
       enigmaError.value = 'No hemos podido generar los enigmas. Inténtalo de nuevo.'
     }
@@ -1301,50 +1316,20 @@ async function regenerateEnigmas() {
   try {
     const ctx = buildContext()
     enigmaRaw.value = ''
-    const prompt = `Misión para la clase "${className.value}": ${ctx}.
-
-Enigmas actuales: ${prevEnigmas}
-
-El profesor dice: "${fb}".
-
-MODIFICA los enigmas según su feedback. XP SOLO puede ser: 20, 40, 60, 80 o 100. Responde SOLO con un JSON array:
-[{"title":"...","description":"...","xp":20,"objectives":["..."]}]
-SOLO el JSON.`
     await streamAI(
       'mission.enigmas.regenerate',
-      { context: ctx, currentEnigmas: prevEnigmas, feedback: fb, className: className.value },
+      {
+        context: ctx,
+        currentEnigmas: prevEnigmas,
+        feedback: fb,
+        className: className.value,
+        coins: enigmaResources.value.coins,
+        mana: enigmaResources.value.mana,
+      },
       enigmaRaw,
       enigmasProvider
     )
-    const rawRegen = enigmaRaw.value
-      .replace(/```(?:json)?\s*/gi, '')
-      .replace(/```/g, '')
-      .trim()
-    const match = rawRegen.match(/\[[\s\S]*\]/)
-    if (match) {
-      try {
-        const parsed = JSON.parse(match[0])
-        if (Array.isArray(parsed)) {
-          const validXp = [20, 40, 60, 80, 100]
-          enigmas.value = parsed.map((e: any) => {
-            const rawXp = Number(e.xp) || 20
-            const xp = validXp.reduce((prev, curr) =>
-              Math.abs(curr - rawXp) < Math.abs(prev - rawXp) ? curr : prev
-            )
-            return {
-              title: String(e.title || '').slice(0, 100),
-              description: String(e.description || '').slice(0, 300),
-              xp,
-              objectives: Array.isArray(e.objectives)
-                ? e.objectives.map((o: any) => String(o).slice(0, 200))
-                : [],
-            }
-          })
-        }
-      } catch {
-        console.error('Failed to parse enigmas JSON')
-      }
-    }
+    enigmas.value = parseEnigmasJson(enigmaRaw.value)
     if (enigmas.value.length === 0) {
       enigmaError.value = 'No hemos podido regenerar los enigmas. Inténtalo de nuevo.'
       try {
@@ -1529,6 +1514,60 @@ async function regenerateBadge() {
   await generateBadge(fb)
 }
 
+// Manejadores de los botones del asistente. Se extraen a métodos (en vez de
+// expresiones inline con varias sentencias) porque Prettier reformatea los
+// @click multi-sentencia a varias líneas y el compilador de Vue 3.5 no los
+// acepta. Con una sola llamada, ni Prettier los toca ni Vue los rechaza.
+function backToStep0() {
+  step.value = 0
+  narrative.value = ''
+}
+
+function selectTitle(title: string) {
+  selectedTitle.value = title
+  customTitle.value = ''
+}
+
+function openNarrativeFeedback() {
+  showNarrativeFeedback.value = true
+  nextTick(() => feedbackRef.value?.focus())
+}
+
+function openTitleFeedback() {
+  showTitleFeedback.value = true
+  nextTick(() => titleFeedbackRef.value?.focus())
+}
+
+function openEnigmaFeedback() {
+  showEnigmaFeedback.value = true
+  nextTick(() => enigmaFeedbackRef.value?.focus())
+}
+
+function openImageFeedback() {
+  showImageFeedback.value = true
+  nextTick(() => imageFeedbackRef.value?.focus())
+}
+
+function openMissionGuideFeedback() {
+  showMissionGuideFeedback.value = true
+  nextTick(() => missionGuideFeedbackRef.value?.focus())
+}
+
+function skipMissionGuide() {
+  missionGuide.value = ''
+  step.value = 7
+}
+
+function openBadgeFeedback() {
+  showBadgeFeedback.value = true
+  nextTick(() => badgeFeedbackRef.value?.focus())
+}
+
+function skipBadge() {
+  badgeName.value = ''
+  finishWizard()
+}
+
 function finishWizard() {
   showPreview.value = true
 }
@@ -1610,79 +1649,9 @@ function resetWizard() {
 </script>
 
 <style scoped>
-.onb-input {
-  @apply w-full px-5 py-4 rounded-2xl bg-gray-50 text-sm text-navy-700 leading-relaxed border border-gray-200 outline-none;
-}
-.onb-input:focus {
-  @apply ring-2 ring-gray-300;
-}
-.onb-input::placeholder {
-  @apply text-text-secondary;
-}
-.onb-result-box {
-  @apply bg-gray-50 rounded-2xl p-5 border border-gray-100;
-}
-.onb-actions {
-  @apply flex items-center justify-between mt-5 pt-4 border-t border-gray-100;
-}
-.onb-loading {
-  @apply flex items-center gap-2 text-text-secondary text-sm;
-}
-.onb-feedback {
-  @apply flex gap-2 mt-4;
-}
-.onb-feedback-input {
-  @apply flex-1 px-4 py-2.5 rounded-2xl bg-gray-50 border border-gray-200 text-sm text-navy-700 outline-none;
-}
-.onb-feedback-input:focus {
-  @apply ring-2 ring-gray-300;
-}
-.onb-feedback-input::placeholder {
-  @apply text-text-secondary;
-}
-.onb-send-btn {
-  @apply px-3.5 py-2.5 rounded-2xl bg-navy-700 text-white transition-colors;
-}
-.onb-send-btn:hover {
-  @apply opacity-90;
-}
-.onb-send-btn:disabled {
-  @apply opacity-40 cursor-not-allowed;
-}
-.onb-cancel-btn {
-  @apply px-3.5 py-2.5 rounded-2xl bg-gray-100 text-navy-700 border border-gray-200 transition-colors;
-}
-.onb-cancel-btn:hover {
-  @apply bg-gray-200;
-}
-
-.title-item-enter-active {
-  animation: slideUp 0.3s ease both;
-}
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-.fade-enter-active,
-.fade-leave-active {
-  transition:
-    opacity 0.2s ease,
-    transform 0.2s ease;
-}
-.fade-enter-from {
-  opacity: 0;
-  transform: translateX(20px);
-}
-.fade-leave-to {
-  opacity: 0;
-  transform: translateX(-20px);
-}
+/* Transición del modal (específica de esta página). El resto de estilos del
+   onboarding (onb-*, animaciones de entrada, transición onb-fade entre pasos)
+   viven en assets/css/tailwind.css y en OnboardingCard/OnboardingLoading. */
 .modal-enter-active,
 .modal-leave-active {
   transition: opacity 0.2s ease;

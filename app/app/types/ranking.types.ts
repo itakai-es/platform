@@ -12,6 +12,8 @@ export interface RankingStudent {
   username: string
   avatar?: string
   level: number
+  levelTitle?: string // Título del tramo de nivel (config de la clase)
+  levelColor?: string // Color del tramo de nivel (para el marco/acento)
   xp: number
   missionsCompleted: number
   missionsTotal: number

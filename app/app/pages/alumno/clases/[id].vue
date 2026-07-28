@@ -96,6 +96,7 @@
       :old-level="levelUpData.oldLevel"
       :new-level="levelUpData.newLevel"
       :class-name="levelUpData.className"
+      :color="levelUpData.newColor"
       :effects="classSettings.visualEffects"
       @close="classGamificationStore.closeLevelUpModal()"
     />

@@ -198,6 +198,7 @@ export function useTeacherClassDetail(classIdRef: Ref<string> | ComputedRef<stri
       backgroundImage: string
       narrative: string
       settings: any
+      levelConfig: any
     }>
   ) {
     if (!state.value.classData) return

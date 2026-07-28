@@ -7,6 +7,7 @@
         v-if="classSettings.xp && classGamification"
         :level="classGamification.level"
         :title="classGamification.title"
+        :color="classGamification.color"
         :next-title="classGamification.nextTitle"
         :name="classGamification.name"
         :username="classGamification.username"

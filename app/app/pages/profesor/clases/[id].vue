@@ -122,7 +122,6 @@ import {
   BookOpenIcon as BookOpenIconSolid,
   Squares2X2Icon as Squares2X2IconSolid,
   SparklesIcon as SparklesIconSolid,
-  ChartBarIcon as ChartBarIconSolid,
   RocketLaunchIcon as RocketLaunchIconSolid,
   ShoppingBagIcon as ShoppingBagIconSolid,
   HandRaisedIcon as HandRaisedIconSolid,
@@ -164,8 +163,7 @@ const tabs = computed(() => {
     { id: 'misiones', label: t('teacher.classes.detail.tabs.missions'), icon: RocketLaunchIconSolid },
     { id: 'alumnos', label: t('teacher.classes.detail.tabs.students'), icon: UsersIconSolid },
   ]
-  if (s.rankings)
-    list.push({ id: 'ranking', label: t('teacher.classes.detail.tabs.ranking'), icon: ChartBarIconSolid })
+  // El ranking (podio) vive ahora como sub-vista dentro de "Alumnos".
   if (s.shop)
     list.push({ id: 'tienda', label: t('teacher.classes.detail.tabs.tienda'), icon: ShoppingBagIconSolid })
   if (s.behaviors)

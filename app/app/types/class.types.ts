@@ -2,6 +2,7 @@
  * Class Module Type Definitions
  * Tipos para clases y sus estadísticas
  */
+import type { ScheduleConfig } from '~/types/schedule.types'
 
 /**
  * Estadísticas calculadas dinámicamente por clase
@@ -60,6 +61,7 @@ export interface Class {
   province?: string
   isTemplate?: boolean
   settings?: ClassSettings
+  scheduleConfig?: ScheduleConfig
   createdAt: Date
   updatedAt: Date
   // Estadísticas calculadas (opcionales, se añaden en el handler)
@@ -84,6 +86,26 @@ export interface CreateClassData {
 /**
  * Datos para actualizar una clase existente
  */
+/** Un tramo visual del sistema de niveles: rango de niveles + título + color. */
+export interface LevelTier {
+  fromLevel: number
+  toLevel: number
+  title: string
+  color: string
+}
+
+/** Configuración del sistema de niveles de una clase (curva de XP + tramos). */
+export interface LevelConfig {
+  /** 'curve' = XP por fórmula; 'custom' = XP manual por nivel. */
+  mode: 'curve' | 'custom'
+  baseXp: number
+  exponent: number
+  cap: number
+  /** Modo manual: XP para superar cada nivel (levelXp[L-1] = nivel L → L+1). */
+  levelXp?: number[]
+  tiers: LevelTier[]
+}
+
 export interface UpdateClassData {
   name?: string
   narrative?: string
@@ -94,6 +116,8 @@ export interface UpdateClassData {
   educationLevel?: string
   province?: string
   settings?: Partial<ClassSettings>
+  levelConfig?: LevelConfig
+  scheduleConfig?: ScheduleConfig
 }
 
 /**

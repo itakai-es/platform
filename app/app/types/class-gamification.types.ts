@@ -5,6 +5,7 @@
  * Each student has independent XP and level per class,
  * enabling competition within each class context.
  */
+import type { LevelConfig } from './class.types'
 
 /**
  * Gamification data for a specific class
@@ -15,6 +16,8 @@ export interface ClassGamificationData {
   xp: number
   level: number
   title: string
+  color?: string // Color del tramo de nivel (configurable por clase)
+  levelConfig?: LevelConfig // Curva + tramos de la clase (para cálculos optimistas)
   nextTitle?: string // Title for next level (only if different from current)
   name?: string // Student's real name
   username?: string // Student's class-specific nickname
@@ -37,6 +40,7 @@ export interface ClassLevelUpData {
   newLevel: number
   xpGained: number
   newTitle: string
+  newColor?: string // Color del tramo del nuevo nivel (config de la clase)
 }
 
 /**

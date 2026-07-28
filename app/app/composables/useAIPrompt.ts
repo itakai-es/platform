@@ -109,7 +109,7 @@ export function useAIPrompt() {
    */
   async function streamPrompt(
     type: string,
-    params: Record<string, string>,
+    params: Record<string, string | number | boolean>,
     target: Ref<string>,
     localeOverride?: string
   ): Promise<'spark' | 'gemini' | 'flux' | null> {

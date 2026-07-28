@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { checkLevelUp, getLevelInfo } from '~/utils/xp-calculator'
-import { getTitleForLevel } from '~/utils/gamification-config'
+import { resolveLevelConfig } from '~/utils/level-config'
 import type {
   ClassGamificationData,
   ClassLevelUpData,
@@ -123,9 +123,11 @@ export const useClassGamificationStore = defineStore('classGamification', () => 
     const oldLevel = currentData.level
     const newXP = oldXP + xpAmount
 
-    // Check for level up
-    const levelsGained = checkLevelUp(oldXP, newXP)
-    const levelInfoData = getLevelInfo(newXP)
+    // Nivel/título/color se calculan con la curva de ESTA clase (si la trae del
+    // backend); si no, con la config por defecto. Así el modal optimista coincide.
+    const cfg = resolveLevelConfig(currentData.levelConfig)
+    const levelsGained = checkLevelUp(oldXP, newXP, cfg)
+    const levelInfoData = getLevelInfo(newXP, cfg)
 
     // Update stored data
     classXpData.value.set(classId, {
@@ -133,6 +135,7 @@ export const useClassGamificationStore = defineStore('classGamification', () => 
       xp: newXP,
       level: levelInfoData.level,
       title: levelInfoData.title,
+      color: levelInfoData.color,
       progress: levelInfoData.progress,
       currentXP: levelInfoData.currentXP,
       requiredXP: levelInfoData.requiredXP,
@@ -147,6 +150,7 @@ export const useClassGamificationStore = defineStore('classGamification', () => 
         newLevel: levelInfoData.level,
         xpGained: xpAmount,
         newTitle: levelInfoData.title,
+        newColor: levelInfoData.color,
       }
       showLevelUpModal.value = true
     }

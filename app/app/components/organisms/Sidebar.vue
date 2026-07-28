@@ -14,6 +14,16 @@
       </div>
       <h3 class="user-name">{{ userName }}</h3>
       <p class="user-subtitle">{{ userSubtitle }}</p>
+      <!-- Ver como alumno (modo demo): solo para profesores -->
+      <button
+        v-if="userRole === 'teacher'"
+        type="button"
+        class="mt-2 inline-flex items-center gap-1.5 rounded-full border border-navy-700/20 px-3 py-1 text-xs font-medium text-navy-700 transition-colors hover:bg-navy-700/5"
+        @click="auth.enterStudentPreview()"
+      >
+        <EyeIcon class="h-3.5 w-3.5" />
+        Ver como alumno
+      </button>
       <div v-if="showProgress && progressPercentage !== undefined" class="progress-wrapper">
         <div class="progress-bar-new">
           <div class="progress-fill-new" :style="{ width: `${progressPercentage}%` }" />
@@ -190,12 +200,13 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { QuestionMarkCircleIcon } from '@heroicons/vue/24/outline'
+import { EyeIcon } from '@heroicons/vue/24/outline'
 import { getAvatarUrl } from '~/utils/avatar'
 import type { ChatConversation } from '~/stores/aiAssistant'
 
 const { t, tm, rt } = useI18n()
 const { theme } = useTheme()
+const auth = useAuthStore()
 
 interface NavItem {
   type?: 'header' | 'link'

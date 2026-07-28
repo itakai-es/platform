@@ -1,5 +1,24 @@
 {
   "teacher": {
+    "about": {
+      "title": "About ITAKAI",
+      "subtitle": "What's new and version history",
+      "breadcrumb": "About",
+      "breadcrumb_home": "Home",
+      "current_version": "Current version",
+      "latest": "Latest version",
+      "versions_index": "Versions",
+      "footer_note": "Missing something or found a bug? Let us know and we'll consider it for upcoming versions.",
+      "groups": {
+        "new": "New",
+        "improved": "Improvements",
+        "fixed": "Fixes"
+      },
+      "meta": {
+        "title": "About | ITAKAI",
+        "description": "What's new, improvements and fixes in each version of ITAKAI."
+      }
+    },
     "dashboard": {
       "title": "Teacher Dashboard",
       "subtitle": "Welcome, {name}!",
@@ -70,8 +89,6 @@
           "ask_idea": "Hi {name}! I'm {god}. Tell me — what world or theme do you want for your class?",
           "review_approach": "Here's what I've prepared for you, do you like it?",
           "pick_title": "What title should we give your class?",
-          "ask_schedule": "What schedule will your class have?",
-          "ask_image": "I've created this cover for your class",
           "placeholder_idea": "E.g.: A school of magic with 4 houses competing for points, wizard-students and challenges shaped as dungeons…",
           "generating_approach": "I'm creating the narrative for your class...",
           "narrative_feedback_placeholder": "E.g.: I want more Hogwarts house references...",
@@ -91,7 +108,7 @@
           "btn_accept_plan": "Yes, go ahead",
           "attach_materials": "Attach materials (PDF, Word, images)",
           "attach_processing": "Processing materials…",
-          "attach_hint": "The AI will use them as a base to create your class.",
+          "attach_remove": "Remove",
           "attach_error": "Couldn't process the materials."
         },
         "meta": {
@@ -110,7 +127,6 @@
           "guide": "Guide",
           "missions": "Missions",
           "students": "Students",
-          "ranking": "Ranking",
           "tienda": "Shop",
           "behaviors": "Behaviors",
           "settings": "Settings"
@@ -121,12 +137,23 @@
           "col_student": "Student",
           "col_level": "Level",
           "search_placeholder": "Search student...",
-          "sort_name": "Name (A–Z)",
-          "sort_xp": "Most XP",
-          "sort_level": "Highest level",
+          "sort_name_asc": "Name A-Z",
+          "sort_name_desc": "Name Z-A",
+          "sort_xp_asc": "XP ↑",
+          "sort_xp_desc": "XP ↓",
+          "sort_level_asc": "Level ↑",
+          "sort_level_desc": "Level ↓",
+          "sort_coins_asc": "Coins ↑",
+          "sort_coins_desc": "Coins ↓",
+          "sort_mana_asc": "Mana ↑",
+          "sort_mana_desc": "Mana ↓",
+          "sort_lives_asc": "Lives ↑",
+          "sort_lives_desc": "Lives ↓",
           "no_results_title": "No results",
           "no_results_description": "No students match your search.",
-          "col_behaviors": "Behaviors"
+          "col_behaviors": "Behaviors",
+          "view_list": "List",
+          "view_ranking": "Ranking"
         },
         "stats_title": "Class Statistics",
         "pending_reviews": "Submissions to Review",
@@ -242,6 +269,40 @@
           "mana_disabled_chip": "Mana disabled"
         },
         "settings": {
+          "levels": {
+            "title": "Levels",
+            "curve_title": "Experience curve",
+            "curve_hint": "Set how much XP each level costs and the maximum level.",
+            "pace_desc_fast": "Levels come quickly: each one costs only a little more than the last.",
+            "pace_desc_normal": "Balanced progression: each level costs somewhat more than the last.",
+            "pace_desc_slow": "Each level costs considerably more than the last. A long progression, ideal for a full course.",
+            "mode_label": "How XP is earned",
+            "mode_curve": "By formula",
+            "mode_custom": "Manual (per level)",
+            "pace_label": "Leveling pace",
+            "pace_fast": "Fast",
+            "pace_normal": "Normal",
+            "pace_slow": "Slow",
+            "custom_hint": "Set the XP needed to go from each level to the next.",
+            "compare_title": "Total XP to reach each level",
+            "compare_level": "Level {level}",
+            "cap_label": "Number of levels",
+            "base_label": "XP for the first level",
+            "tiers_title": "Ranks",
+            "tiers_hint": "Give each level range a title and a color.",
+            "tier_title_placeholder": "Rank title",
+            "tier_from": "From",
+            "tier_to": "to",
+            "tier_add": "Add rank",
+            "tier_remove": "Remove rank",
+            "tiers_warning": "There are gaps or overlaps between ranks: some levels wouldn't show the right title.",
+            "tiers_autofix": "Auto-fix",
+            "restore_defaults": "Restore defaults",
+            "save": "Save levels",
+            "discard": "Discard",
+            "toast_saved": "Levels saved",
+            "toast_error": "Levels could not be saved"
+          },
           "toast_error": "Couldn't save the settings",
           "items": {
             "shop": {
@@ -298,6 +359,10 @@
             "publish_on": "Class published as a template",
             "publish_off": "Template removed from the marketplace",
             "publish_error": "Couldn't publish the template",
+            "template_metadata_locked": "This class is published as a template: you can't leave subject, level or language unspecified. Unpublish it first.",
+            "duplicate_title": "Duplicate class",
+            "duplicate_hint": "Create a copy of this class. You can choose what content to copy.",
+            "duplicate_cta": "Duplicate",
             "schedule_label": "Schedule",
             "background_label": "Background image",
             "save": "Save changes",
@@ -318,6 +383,9 @@
           },
           "features": {
             "title": "Features"
+          },
+          "management": {
+            "title": "Management"
           }
         }
       }
@@ -561,7 +629,8 @@
         },
         "label_mana": "Mana",
         "label_coins": "Coins",
-        "no_mana": "No mana"
+        "no_mana": "No mana",
+        "custom_value": "Custom value"
       },
       "document_form_modal": {
         "edit_title": "Edit Document",
@@ -766,6 +835,44 @@
         "languages": "languages",
         "provinces": "provinces"
       }
+    },
+    "schedule": {
+      "starts_on": "Starts on",
+      "time": "Time",
+      "recurrence": "Repeat",
+      "preview": "Preview",
+      "previous": "Previous schedule",
+      "choose_days": "Choose class days",
+      "freq_none": "Does not repeat",
+      "freq_daily": "Daily",
+      "freq_weekly_on": "Weekly on {day}",
+      "weekly": "Weekly",
+      "freq_monthly": "Monthly",
+      "freq_yearly": "Annually",
+      "weekdays": "Every weekday (Monday to Friday)",
+      "weekly_days": "Weekly: {days}",
+      "every_weeks_days": "Every {n} weeks: {days}",
+      "all_weekdays": "Every weekday",
+      "ends_on_suffix": "until {date}",
+      "ends_after_suffix": "{n} times",
+      "customize": "Custom…",
+      "custom_title": "Custom recurrence",
+      "repeat_every": "Repeat every",
+      "unit_day": "day | days",
+      "unit_week": "week | weeks",
+      "unit_month": "month | months",
+      "unit_year": "year | years",
+      "repeats_on": "Repeat on",
+      "ends": "Ends",
+      "ends_never": "Never",
+      "ends_on": "On",
+      "ends_after": "After",
+      "repetitions": "occurrences",
+      "section_schedule": "Schedule",
+      "section_cover": "Cover",
+      "wizard_question": "Give your class a schedule and a cover",
+      "cancel": "Cancel",
+      "done": "Done"
     }
   }
 }

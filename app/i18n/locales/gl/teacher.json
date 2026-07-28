@@ -1,5 +1,24 @@
 {
   "teacher": {
+    "about": {
+      "title": "Acerca de ITAKAI",
+      "subtitle": "Novidades e rexistro de versións",
+      "breadcrumb": "Acerca de",
+      "breadcrumb_home": "Inicio",
+      "current_version": "Versión actual",
+      "latest": "Última versión",
+      "versions_index": "Versións",
+      "footer_note": "Bótas en falta algo ou atopaches un fallo? Cóntanolo e terémolo en conta para próximas versións.",
+      "groups": {
+        "new": "Novidades",
+        "improved": "Melloras",
+        "fixed": "Arranxos"
+      },
+      "meta": {
+        "title": "Acerca de | ITAKAI",
+        "description": "Novidades, melloras e correccións de cada versión de ITAKAI."
+      }
+    },
     "dashboard": {
       "title": "Dashboard do Profesor",
       "subtitle": "Benvido, {name}!",
@@ -73,8 +92,6 @@
           "ask_idea": "Ola {name}! Son {god}. Cóntame, que mundo ou temática queres para a túa clase?",
           "review_approach": "Isto é o que preparei para ti, gústache?",
           "pick_title": "Que título lle poñemos á túa clase?",
-          "ask_schedule": "Que horario terá a túa clase?",
-          "ask_image": "Creei esta portada para a túa clase",
           "placeholder_idea": "Ex: Unha escola de maxia con 4 casas que compiten por puntos, alumnos-magos e retos como mazmorras…",
           "generating_approach": "Estou a crear a narrativa da túa clase...",
           "narrative_feedback_placeholder": "Ex: Quero máis referencias ás casas de Hogwarts...",
@@ -94,7 +111,7 @@
           "btn_accept_plan": "Si, adiante",
           "attach_materials": "Anexar materiais (PDF, Word, imaxes)",
           "attach_processing": "Procesando materiais…",
-          "attach_hint": "A IA usaraos como base para crear a túa clase.",
+          "attach_remove": "Quitar",
           "attach_error": "Non se puideron procesar os materiais."
         }
       },
@@ -109,7 +126,6 @@
           "guide": "Guía",
           "missions": "Misións",
           "students": "Alumnado",
-          "ranking": "Ranking",
           "narrative": "Historia",
           "tienda": "Tenda",
           "behaviors": "Comportamentos",
@@ -121,12 +137,23 @@
           "col_student": "Alumno",
           "col_level": "Nivel",
           "search_placeholder": "Buscar alumno...",
-          "sort_name": "Nome (A–Z)",
-          "sort_xp": "Máis XP",
-          "sort_level": "Máis nivel",
+          "sort_name_asc": "Nome A-Z",
+          "sort_name_desc": "Nome Z-A",
+          "sort_xp_asc": "XP ↑",
+          "sort_xp_desc": "XP ↓",
+          "sort_level_asc": "Nivel ↑",
+          "sort_level_desc": "Nivel ↓",
+          "sort_coins_asc": "Moedas ↑",
+          "sort_coins_desc": "Moedas ↓",
+          "sort_mana_asc": "Maná ↑",
+          "sort_mana_desc": "Maná ↓",
+          "sort_lives_asc": "Vida ↑",
+          "sort_lives_desc": "Vida ↓",
           "no_results_title": "Sen resultados",
           "no_results_description": "Non hai alumnos que coincidan coa busca.",
-          "col_behaviors": "Comportamentos"
+          "col_behaviors": "Comportamentos",
+          "view_list": "Listaxe",
+          "view_ranking": "Ranking"
         },
         "stats_title": "Estatísticas da Clase",
         "pending_reviews": "Entregas por Revisar",
@@ -242,6 +269,40 @@
           "mana_disabled_chip": "Mana desactivado"
         },
         "settings": {
+          "levels": {
+            "title": "Niveis",
+            "curve_title": "Curva de experiencia",
+            "curve_hint": "Define canta XP custa subir de nivel e ata que nivel se pode chegar.",
+            "pace_desc_fast": "Súbese de nivel rápido: cada nivel custa só un pouco máis que o anterior.",
+            "pace_desc_normal": "Progresión equilibrada: cada nivel custa algo máis que o anterior.",
+            "pace_desc_slow": "Cada nivel custa bastante máis que o anterior. Progresión longa, ideal para todo o curso.",
+            "mode_label": "Como se gaña a XP",
+            "mode_curve": "Por fórmula",
+            "mode_custom": "Manual (por nivel)",
+            "pace_label": "Ritmo de subida",
+            "pace_fast": "Rápido",
+            "pace_normal": "Normal",
+            "pace_slow": "Lento",
+            "custom_hint": "Escribe a XP necesaria para subir de cada nivel ao seguinte.",
+            "compare_title": "XP total para acadar cada nivel",
+            "compare_level": "Nivel {level}",
+            "cap_label": "Número de niveis",
+            "base_label": "XP do primeiro nivel",
+            "tiers_title": "Rangos",
+            "tiers_hint": "Asigna un título e unha cor a cada tramo de niveis.",
+            "tier_title_placeholder": "Título do rango",
+            "tier_from": "Do",
+            "tier_to": "ao",
+            "tier_add": "Engadir rango",
+            "tier_remove": "Quitar rango",
+            "tiers_warning": "Hai ocos ou solapamentos entre rangos: algúns niveis non amosarían o título correcto.",
+            "tiers_autofix": "Auto-axustar",
+            "restore_defaults": "Restaurar por defecto",
+            "save": "Gardar niveis",
+            "discard": "Descartar",
+            "toast_saved": "Niveis gardados",
+            "toast_error": "Non se puideron gardar os niveis"
+          },
           "toast_error": "Non se puido gardar a configuración",
           "items": {
             "shop": {
@@ -298,6 +359,10 @@
             "publish_on": "Clase publicada como modelo",
             "publish_off": "Modelo retirado do marketplace",
             "publish_error": "Non se puido publicar o modelo",
+            "template_metadata_locked": "A clase está publicada como modelo: non podes deixar materia, nivel ou idioma sen especificar. Despublícaa primeiro.",
+            "duplicate_title": "Duplicar clase",
+            "duplicate_hint": "Crea unha copia desta clase. Poderás elixir que contido se copia.",
+            "duplicate_cta": "Duplicar",
             "schedule_label": "Horario",
             "background_label": "Imaxe de fondo",
             "save": "Gardar cambios",
@@ -318,6 +383,9 @@
           },
           "features": {
             "title": "Funcionalidades"
+          },
+          "management": {
+            "title": "Xestión"
           }
         }
       }
@@ -561,7 +629,8 @@
         },
         "label_mana": "Maná",
         "label_coins": "Moedas",
-        "no_mana": "Sen maná"
+        "no_mana": "Sen maná",
+        "custom_value": "Valor personalizado"
       },
       "document_form_modal": {
         "edit_title": "Editar Documento",
@@ -766,6 +835,44 @@
         "languages": "idiomas",
         "provinces": "provincias"
       }
+    },
+    "schedule": {
+      "starts_on": "Comeza o",
+      "time": "Hora",
+      "recurrence": "Periodicidade",
+      "preview": "Vista previa",
+      "previous": "Horario anterior",
+      "choose_days": "Escolle os días de clase",
+      "freq_none": "Non se repite",
+      "freq_daily": "Cada día",
+      "freq_weekly_on": "Cada semana o {day}",
+      "weekly": "Cada semana",
+      "freq_monthly": "Cada mes",
+      "freq_yearly": "Anualmente",
+      "weekdays": "Todos os días laborables (de luns a venres)",
+      "weekly_days": "Cada semana: {days}",
+      "every_weeks_days": "Cada {n} semanas: {days}",
+      "all_weekdays": "Todos os días laborables",
+      "ends_on_suffix": "ata o {date}",
+      "ends_after_suffix": "{n} veces",
+      "customize": "Personalizar…",
+      "custom_title": "Periodicidade personalizada",
+      "repeat_every": "Repetir cada",
+      "unit_day": "día | días",
+      "unit_week": "semana | semanas",
+      "unit_month": "mes | meses",
+      "unit_year": "ano | anos",
+      "repeats_on": "Repítese o",
+      "ends": "Remata",
+      "ends_never": "Nunca",
+      "ends_on": "O",
+      "ends_after": "Despois de",
+      "repetitions": "repeticións",
+      "section_schedule": "Horario",
+      "section_cover": "Portada",
+      "wizard_question": "Ponlle un horario e unha portada á túa clase",
+      "cancel": "Cancelar",
+      "done": "Feito"
     }
   }
 }

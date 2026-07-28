@@ -17,6 +17,8 @@ interface Props {
   oldLevel: number
   newLevel: number
   className?: string
+  /** Color del tramo del nuevo nivel (config de niveles de la clase). */
+  color?: string
   rewards?: Reward[]
   /** When false, the celebratory confetti is skipped (class has visual effects disabled). */
   effects?: boolean
@@ -193,7 +195,11 @@ function getRewardIcon(type: string): string {
             {{ oldLevel }}
           </span>
           <span class="text-3xl text-student">→</span>
-          <span class="text-5xl font-bold text-student" data-testid="new-level">
+          <span
+            class="text-5xl font-bold text-student"
+            :style="color ? { color } : undefined"
+            data-testid="new-level"
+          >
             {{ newLevel }}
           </span>
         </div>

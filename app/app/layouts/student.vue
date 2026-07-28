@@ -31,6 +31,8 @@
 
     <!-- Main Content with left margin for sidebar and top padding for mobile header -->
     <div class="flex-1 flex flex-col lg:ml-80 pt-14 lg:pt-0">
+      <!-- Aviso "Ver como alumno" (solo en preview del profesor) -->
+      <StudentPreviewBanner />
       <!-- Page Content -->
       <main class="flex-1 overflow-y-auto overflow-x-hidden p-4 md:p-6">
         <slot />

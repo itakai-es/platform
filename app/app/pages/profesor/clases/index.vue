@@ -7,14 +7,11 @@
     :loading="isLoading"
     :show-archive-toggle="true"
     :show-archive-action="true"
-    :show-duplicate-action="true"
     :archive-loading-id="archiveLoadingId"
-    :duplicating-id="duplicatingId"
     :empty-description="t('teacher.classes.index.no_classes_description')"
     @class-click="navigateToClass"
     @archive-class="archiveClass"
     @unarchive-class="unarchiveClass"
-    @duplicate-class="openDuplicateModal"
   >
     <template #header-action>
       <div class="flex items-center gap-2">
@@ -42,18 +39,11 @@
       </NuxtLink>
     </template>
 
-    <DuplicateClassModal
-      v-model="duplicateModalOpen"
-      :class-name="duplicateTarget?.name"
-      :loading="!!duplicatingId"
-      @confirm="confirmDuplicate"
-    />
   </ClassListTemplate>
 </template>
 
 <script setup lang="ts">
 import { PlusIcon, RectangleStackIcon } from '@heroicons/vue/24/outline'
-import type { DuplicateOptions } from '~/components/organisms/DuplicateClassModal.vue'
 
 const { t } = useI18n()
 
@@ -68,7 +58,6 @@ definePageMeta({
 })
 
 const router = useRouter()
-const toast = useToast()
 const teacherStore = useTeacherStore()
 const classesStore = useClassesStore()
 
@@ -78,9 +67,6 @@ const isLoading = computed(
   () => classesStore.isLoadingClasses || teacherStore.isLoadingArchivedClasses
 )
 const archiveLoadingId = ref('')
-const duplicatingId = ref('')
-const duplicateModalOpen = ref(false)
-const duplicateTarget = ref<{ id: string; name: string } | null>(null)
 
 const navigateToClass = (classId: string) => {
   router.push(`/profesor/clases/${classId}`)
@@ -105,29 +91,6 @@ const setArchived = async (classId: string, archived: boolean) => {
 
 const archiveClass = (classId: string) => setArchived(classId, true)
 const unarchiveClass = (classId: string) => setArchived(classId, false)
-
-const openDuplicateModal = (classId: string) => {
-  const cls = classes.value.find(c => c.id === classId)
-  duplicateTarget.value = { id: classId, name: cls?.name ?? '' }
-  duplicateModalOpen.value = true
-}
-
-const confirmDuplicate = async (options: DuplicateOptions) => {
-  if (!duplicateTarget.value || duplicatingId.value) return
-  const classId = duplicateTarget.value.id
-  duplicatingId.value = classId
-  try {
-    const res = await teacherStore.duplicateClass(classId, options)
-    // Refresca la lista activa para que la copia aparezca al momento.
-    await classesStore.ensureTeacherClasses(100, true)
-    toast.success(t('teacher.classes.index.duplicate_success', { name: res.class.name }))
-    duplicateModalOpen.value = false
-  } catch {
-    toast.error(t('teacher.classes.index.duplicate_error'))
-  } finally {
-    duplicatingId.value = ''
-  }
-}
 
 onMounted(async () => {
   await Promise.all([classesStore.ensureTeacherClasses(), teacherStore.ensureArchivedClasses()])

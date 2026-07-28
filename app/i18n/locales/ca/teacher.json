@@ -1,5 +1,24 @@
 {
   "teacher": {
+    "about": {
+      "title": "Sobre ITAKAI",
+      "subtitle": "Novetats i registre de versions",
+      "breadcrumb": "Sobre",
+      "breadcrumb_home": "Inici",
+      "current_version": "Versió actual",
+      "latest": "Última versió",
+      "versions_index": "Versions",
+      "footer_note": "Trobes a faltar alguna cosa o has trobat un error? Digues-nos-ho i ho tindrem en compte per a properes versions.",
+      "groups": {
+        "new": "Novetats",
+        "improved": "Millores",
+        "fixed": "Correccions"
+      },
+      "meta": {
+        "title": "Sobre | ITAKAI",
+        "description": "Novetats, millores i correccions de cada versió d'ITAKAI."
+      }
+    },
     "dashboard": {
       "title": "Dashboard del Professor",
       "subtitle": "Benvingut, {name}!",
@@ -73,8 +92,6 @@
           "ask_idea": "Hola {name}! Sóc {god}. Explica'm, quin món o temàtica vols per a la teva classe?",
           "review_approach": "Això és el que he preparat per a tu, t'agrada?",
           "pick_title": "Quin títol li posem a la teva classe?",
-          "ask_schedule": "Quin horari tindrà la teva classe?",
-          "ask_image": "He creat aquesta portada per a la teva classe",
           "placeholder_idea": "Ex: Una escola de màgia amb 4 cases que competeixen per punts, alumnes-mags i reptes com masmorres…",
           "generating_approach": "Estic creant la narrativa de la teva classe...",
           "narrative_feedback_placeholder": "Ex: Vull més referències a les cases de Hogwarts...",
@@ -94,7 +111,7 @@
           "btn_accept_plan": "Sí, endavant",
           "attach_materials": "Adjunta materials (PDF, Word, imatges)",
           "attach_processing": "Processant materials…",
-          "attach_hint": "La IA els farà servir com a base per crear la teva classe.",
+          "attach_remove": "Treure",
           "attach_error": "No s'han pogut processar els materials."
         }
       },
@@ -109,7 +126,6 @@
           "guide": "Guia",
           "missions": "Missions",
           "students": "Alumnes",
-          "ranking": "Ranquing",
           "narrative": "Història",
           "tienda": "Botiga",
           "behaviors": "Comportaments",
@@ -121,12 +137,23 @@
           "col_student": "Alumne",
           "col_level": "Nivell",
           "search_placeholder": "Cerca alumne...",
-          "sort_name": "Nom (A–Z)",
-          "sort_xp": "Més XP",
-          "sort_level": "Més nivell",
+          "sort_name_asc": "Nom A-Z",
+          "sort_name_desc": "Nom Z-A",
+          "sort_xp_asc": "XP ↑",
+          "sort_xp_desc": "XP ↓",
+          "sort_level_asc": "Nivell ↑",
+          "sort_level_desc": "Nivell ↓",
+          "sort_coins_asc": "Monedes ↑",
+          "sort_coins_desc": "Monedes ↓",
+          "sort_mana_asc": "Mana ↑",
+          "sort_mana_desc": "Mana ↓",
+          "sort_lives_asc": "Vida ↑",
+          "sort_lives_desc": "Vida ↓",
           "no_results_title": "Sense resultats",
           "no_results_description": "No hi ha alumnes que coincideixin amb la cerca.",
-          "col_behaviors": "Comportaments"
+          "col_behaviors": "Comportaments",
+          "view_list": "Llistat",
+          "view_ranking": "Ranquing"
         },
         "stats_title": "Estadístiques de la Classe",
         "pending_reviews": "Lliuraments per Revisar",
@@ -242,6 +269,40 @@
           "mana_disabled_chip": "Mana desactivat"
         },
         "settings": {
+          "levels": {
+            "title": "Nivells",
+            "curve_title": "Corba d'experiència",
+            "curve_hint": "Defineix quanta XP costa pujar de nivell i fins a quin nivell es pot arribar.",
+            "pace_desc_fast": "Es puja de nivell ràpid: cada nivell costa només una mica més que l'anterior.",
+            "pace_desc_normal": "Progressió equilibrada: cada nivell costa una mica més que l'anterior.",
+            "pace_desc_slow": "Cada nivell costa força més que l'anterior. Progressió llarga, ideal per a tot el curs.",
+            "mode_label": "Com es guanya la XP",
+            "mode_curve": "Per fórmula",
+            "mode_custom": "Manual (per nivell)",
+            "pace_label": "Ritme de pujada",
+            "pace_fast": "Ràpid",
+            "pace_normal": "Normal",
+            "pace_slow": "Lent",
+            "custom_hint": "Escriu la XP necessària per pujar de cada nivell al següent.",
+            "compare_title": "XP total per assolir cada nivell",
+            "compare_level": "Nivell {level}",
+            "cap_label": "Nombre de nivells",
+            "base_label": "XP del primer nivell",
+            "tiers_title": "Rangs",
+            "tiers_hint": "Assigna un títol i un color a cada tram de nivells.",
+            "tier_title_placeholder": "Títol del rang",
+            "tier_from": "Del",
+            "tier_to": "al",
+            "tier_add": "Afegir rang",
+            "tier_remove": "Treure rang",
+            "tiers_warning": "Hi ha buits o solapaments entre rangs: alguns nivells no mostrarien el títol correcte.",
+            "tiers_autofix": "Auto-ajustar",
+            "restore_defaults": "Restaurar per defecte",
+            "save": "Desar nivells",
+            "discard": "Descartar",
+            "toast_saved": "Nivells desats",
+            "toast_error": "No s'han pogut desar els nivells"
+          },
           "toast_error": "No s'ha pogut desar la configuració",
           "items": {
             "shop": {
@@ -298,6 +359,10 @@
             "publish_on": "Classe publicada com a plantilla",
             "publish_off": "Plantilla retirada del marketplace",
             "publish_error": "No s'ha pogut publicar la plantilla",
+            "template_metadata_locked": "La classe està publicada com a plantilla: no pots deixar assignatura, nivell o idioma sense especificar. Despublica-la primer.",
+            "duplicate_title": "Duplica la classe",
+            "duplicate_hint": "Crea una còpia d'aquesta classe. Podràs triar quin contingut es copia.",
+            "duplicate_cta": "Duplica",
             "schedule_label": "Horari",
             "background_label": "Imatge de fons",
             "save": "Desar canvis",
@@ -318,6 +383,9 @@
           },
           "features": {
             "title": "Funcionalitats"
+          },
+          "management": {
+            "title": "Gestió"
           }
         }
       }
@@ -561,7 +629,8 @@
         },
         "label_mana": "Mana",
         "label_coins": "Monedes",
-        "no_mana": "Sense mana"
+        "no_mana": "Sense mana",
+        "custom_value": "Valor personalitzat"
       },
       "document_form_modal": {
         "edit_title": "Editar Document",
@@ -766,6 +835,44 @@
         "languages": "idiomes",
         "provinces": "províncies"
       }
+    },
+    "schedule": {
+      "starts_on": "Comença el",
+      "time": "Hora",
+      "recurrence": "Periodicitat",
+      "preview": "Vista prèvia",
+      "previous": "Horari anterior",
+      "choose_days": "Tria els dies de classe",
+      "freq_none": "No es repeteix",
+      "freq_daily": "Cada dia",
+      "freq_weekly_on": "Cada setmana el {day}",
+      "weekly": "Cada setmana",
+      "freq_monthly": "Cada mes",
+      "freq_yearly": "Anualment",
+      "weekdays": "Cada dia laborable (de dilluns a divendres)",
+      "weekly_days": "Cada setmana: {days}",
+      "every_weeks_days": "Cada {n} setmanes: {days}",
+      "all_weekdays": "Cada dia laborable",
+      "ends_on_suffix": "fins al {date}",
+      "ends_after_suffix": "{n} vegades",
+      "customize": "Personalitza…",
+      "custom_title": "Periodicitat personalitzada",
+      "repeat_every": "Repeteix cada",
+      "unit_day": "dia | dies",
+      "unit_week": "setmana | setmanes",
+      "unit_month": "mes | mesos",
+      "unit_year": "any | anys",
+      "repeats_on": "Es repeteix el",
+      "ends": "Acaba",
+      "ends_never": "Mai",
+      "ends_on": "El",
+      "ends_after": "Després de",
+      "repetitions": "repeticions",
+      "section_schedule": "Horari",
+      "section_cover": "Portada",
+      "wizard_question": "Posa un horari i una portada a la teva classe",
+      "cancel": "Cancel·la",
+      "done": "Fet"
     }
   }
 }

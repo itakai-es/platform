@@ -10,6 +10,8 @@ import { UserIcon } from '@heroicons/vue/24/solid'
 interface Props {
   level: number
   title: string
+  /** Color del tramo de nivel (configurable por clase). */
+  color?: string
   nextTitle?: string
   name?: string
   username?: string
@@ -21,7 +23,12 @@ interface Props {
   totalStudents: number
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
+
+// Marco del color del tramo de nivel alrededor del avatar (doble anillo).
+const ringStyle = computed(() =>
+  props.color ? { boxShadow: `0 0 0 2px #fff, 0 0 0 4px ${props.color}` } : undefined
+)
 </script>
 
 <template>
@@ -41,6 +48,7 @@ defineProps<Props>()
           <div class="flex items-center gap-2.5 sm:gap-3 flex-shrink-0 min-w-0">
             <div
               class="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden flex-shrink-0"
+              :style="ringStyle"
             >
               <img
                 v-if="avatar"
@@ -77,8 +85,12 @@ defineProps<Props>()
         <!-- Bottom Row: Progress Bar (full width) -->
         <div>
           <div class="flex items-baseline justify-between mb-1 sm:mb-1.5">
-            <p class="text-navy-700 font-medium text-xs sm:text-sm truncate mr-2">
-              Nivel {{ level }} · {{ title }}
+            <p class="text-navy-700 font-medium text-xs sm:text-sm mr-2 flex items-center gap-1.5 min-w-0">
+              <span
+                class="w-2 h-2 rounded-full flex-shrink-0"
+                :style="{ backgroundColor: color || '#38BDF8' }"
+              />
+              <span class="truncate">Nivel {{ level }} · {{ title }}</span>
             </p>
             <span
               class="text-xs sm:text-sm font-medium text-text-secondary tabular-nums flex-shrink-0"
@@ -102,6 +114,7 @@ defineProps<Props>()
         <div class="flex items-center gap-3 flex-shrink-0">
           <div
             class="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden flex-shrink-0"
+            :style="ringStyle"
           >
             <img
               v-if="avatar"
@@ -122,8 +135,12 @@ defineProps<Props>()
         <!-- XP Progress - Center (grows to fill space) -->
         <div class="flex-1 min-w-0">
           <div class="flex items-baseline justify-between mb-1.5">
-            <p class="text-navy-700 font-medium text-sm truncate mr-2">
-              Nivel {{ level }} · {{ title }}
+            <p class="text-navy-700 font-medium text-sm mr-2 flex items-center gap-1.5 min-w-0">
+              <span
+                class="w-2 h-2 rounded-full flex-shrink-0"
+                :style="{ backgroundColor: color || '#38BDF8' }"
+              />
+              <span class="truncate">Nivel {{ level }} · {{ title }}</span>
             </p>
             <span class="text-sm font-medium text-text-secondary tabular-nums flex-shrink-0">
               {{ currentXp }}/{{ requiredXp }} XP
