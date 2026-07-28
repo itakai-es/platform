@@ -25,6 +25,7 @@ const updatePreferencesSchema = z.object({
   missionReminders: z.boolean().optional(),
   language: z.enum(['es', 'en', 'ca', 'eu', 'gl']).optional(),
   theme: z.enum(['college', 'university']).optional(),
+  menuDisplay: z.enum(['both', 'icon', 'text']).optional(),
 })
 
 const deleteAccountSchema = z.object({

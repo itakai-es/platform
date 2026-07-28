@@ -140,7 +140,7 @@ export function registerTeacherTools() {
 
       const classes = await prisma.class.findMany({
         where: { teacherId: userId },
-        include: { _count: { select: { enrollments: true, missions: true } } },
+        include: { _count: { select: { enrollments: { where: { isPreview: false } }, missions: true } } },
         orderBy: { createdAt: 'desc' },
         take: 10,
       })

@@ -15,7 +15,9 @@ const createMissionSchema = z.object({
       z.object({
         title: z.string(),
         description: z.string().optional(),
-        xp: z.number().optional(),
+        xp: z.number().int().min(0).optional(),
+        coins: z.number().int().min(0).optional(),
+        mana: z.number().int().min(0).optional(),
         objectives: z.array(z.string()).optional(),
       })
     )

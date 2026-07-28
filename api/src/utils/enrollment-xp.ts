@@ -7,6 +7,7 @@
 
 import { prisma as defaultPrisma } from '../config/database.js'
 import { getLevelFromXP } from './xp-calculator.js'
+import { resolveLevelConfig } from './level-config.js'
 import { awardSystemBadges } from './system-badges.js'
 
 // The helper must work both with the global prisma client and with the
@@ -94,9 +95,13 @@ export async function applyXpDelta(options: ApplyXpDeltaOptions): Promise<ApplyX
     newXP = corrected.xp
   }
 
+  // El nivel se recalcula según la configuración de niveles de ESTA clase.
+  const cls = await client.class.findUnique({ where: { id: classId }, select: { levelConfig: true } })
+  const levelCfg = resolveLevelConfig(cls?.levelConfig)
+
   const previousXP = Math.max(0, newXP - delta)
   const previousLevel = updated.level
-  const newLevel = getLevelFromXP(newXP)
+  const newLevel = getLevelFromXP(newXP, levelCfg)
 
   if (newLevel !== previousLevel) {
     await client.classEnrollment.update({
@@ -128,7 +133,8 @@ export async function syncEnrollmentLevel(studentId: string, classId: string, tx
     where: { studentId_classId: { studentId, classId } },
   })
   if (!enrollment) return
-  const level = getLevelFromXP(enrollment.xp)
+  const cls = await client.class.findUnique({ where: { id: classId }, select: { levelConfig: true } })
+  const level = getLevelFromXP(enrollment.xp, resolveLevelConfig(cls?.levelConfig))
   if (level !== enrollment.level) {
     await client.classEnrollment.update({
       where: { studentId_classId: { studentId, classId } },

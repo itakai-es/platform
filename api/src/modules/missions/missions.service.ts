@@ -3,6 +3,7 @@ import { getMissionCompletionRewards, calculateMissionTotalXP, ENIGMA_XP_PRESETS
 import { applyXpDelta } from '../../utils/enrollment-xp.js'
 import { formatMission, getMissionStatus } from '../../utils/mission-formatter.js'
 import { resolveClassSettings } from '../../utils/class-settings.js'
+import { resolveLevelConfig } from '../../utils/level-config.js'
 import { existsSync, mkdirSync } from 'fs'
 import { saveUpload, deleteUpload } from '../storage/storage.service.js'
 import { join } from 'path'
@@ -171,7 +172,7 @@ export class MissionsService {
     if (isTeacher) {
       // Get all enrollments for this class
       const enrollments = await prisma.classEnrollment.findMany({
-        where: { classId: mission.classId },
+        where: { classId: mission.classId, isPreview: false },
       })
       const totalStudents = enrollments.length
 
@@ -641,13 +642,8 @@ export class MissionsService {
       throw new Error('La misión debe tener al menos un enigma')
     }
 
-    // Validate enigma XP values against the preset ladder.
-    for (const e of data.enigmas) {
-      const xp = Number(e.xp ?? ENIGMA_XP_PRESETS[0])
-      if (!(ENIGMA_XP_PRESETS as readonly number[]).includes(xp)) {
-        throw new Error(`El XP de cada enigma debe ser uno de: ${ENIGMA_XP_PRESETS.join(', ')}`)
-      }
-    }
+    // Las recompensas admiten cualquier valor entero ≥ 0 (los presets son solo
+    // sugerencias de UI/IA). El schema de la ruta ya garantiza `int().min(0)`.
 
     return await prisma.$transaction(async (tx) => {
       const mission = await tx.mission.create({
@@ -856,12 +852,8 @@ export class MissionsService {
     if (!enigma) throw new Error('Enigma no encontrado')
     if (enigma.mission.class.teacherId !== teacherId) throw new Error('No tienes permiso para modificar este enigma')
 
-    // XP must stay one of the presets (the UI offers fixed steps).
-    if (data.xp !== undefined && data.xp !== enigma.xpReward) {
-      if (!(ENIGMA_XP_PRESETS as readonly number[]).includes(data.xp)) {
-        throw new Error(`El XP del enigma debe ser uno de: ${ENIGMA_XP_PRESETS.join(', ')}`)
-      }
-    }
+    // El XP admite cualquier valor entero ≥ 0 (input libre + atajos rápidos en la
+    // UI). El schema de la ruta ya garantiza `int().min(0)`.
 
     const classId = enigma.mission.classId
     const classSettings = resolveClassSettings(enigma.mission.class.settings)
@@ -911,6 +903,8 @@ export class MissionsService {
       // adjusting their per-class wallet by the difference. Keeps XP, coins and
       // mana in sync — editing rewards after completion never leaves things dangling.
       if (rewardsChanged) {
+        const clsRow = await tx.class.findUnique({ where: { id: classId }, select: { levelConfig: true } })
+        const levelCfg = resolveLevelConfig(clsRow?.levelConfig)
         const progresses = await tx.studentEnigmaProgress.findMany({ where: { enigmaId } })
         for (const p of progresses) {
           const f = Math.min(100, Math.max(0, p.percentage)) / 100
@@ -931,7 +925,7 @@ export class MissionsService {
               mana: { increment: addMana },
             },
           })
-          const newLevel = getLevelFromXP(enr.xp)
+          const newLevel = getLevelFromXP(enr.xp, levelCfg)
           if (newLevel !== enr.level) {
             await tx.classEnrollment.update({
               where: { studentId_classId: { studentId: p.studentId, classId } },

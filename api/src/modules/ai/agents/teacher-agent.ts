@@ -26,7 +26,7 @@ export class TeacherAgent extends BaseAgent {
         include: {
           _count: {
             select: {
-              enrollments: true,
+              enrollments: { where: { isPreview: false } },
               missions: true,
             },
           },
@@ -143,6 +143,7 @@ export class TeacherAgent extends BaseAgent {
       // Count students enrolled in the mission's class
       prisma.classEnrollment.count({
         where: {
+          isPreview: false,
           class: {
             missions: { some: { id: missionId } },
           },

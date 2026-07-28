@@ -177,7 +177,7 @@ export async function adminRoutes(fastify: FastifyInstance) {
               select: { createdAt: true },
             },
             teacherClasses: { select: { id: true } },
-            enrollments: { select: { id: true } },
+            enrollments: { where: { isPreview: false }, select: { id: true } },
           },
         }),
         prisma.user.count({ where: whereClause }),
@@ -420,7 +420,7 @@ export async function adminRoutes(fastify: FastifyInstance) {
           orderBy: { createdAt: 'desc' },
           include: {
             teacher: { select: { name: true } },
-            _count: { select: { enrollments: true, missions: true } },
+            _count: { select: { enrollments: { where: { isPreview: false } }, missions: true } },
           },
         }),
         prisma.class.count({ where }),

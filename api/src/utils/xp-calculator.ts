@@ -1,4 +1,18 @@
 // XP and Level calculation utilities for ITAKAI gamification
+//
+// El cálculo de niveles vive en `level-config.ts` y es configurable por clase.
+// Estas funciones son envoltorios: sin `cfg` usan DEFAULT_LEVEL_CONFIG (el sistema
+// global de siempre); pasando la config de una clase, calculan según esa clase.
+
+import {
+  DEFAULT_LEVEL_CONFIG,
+  xpForLevel,
+  totalXpForLevel,
+  levelFromXp,
+  levelInfo,
+  titleForLevel,
+  type LevelConfig,
+} from './level-config.js'
 
 export const BASE_XP = 50
 export const EXPONENT = 1.3
@@ -30,94 +44,49 @@ export const LEVEL_TITLES = [
 /**
  * Calculate XP required for a specific level
  */
-export function getXPForLevel(level: number): number {
-  return Math.floor(BASE_XP * Math.pow(level, EXPONENT))
+export function getXPForLevel(level: number, cfg: LevelConfig = DEFAULT_LEVEL_CONFIG): number {
+  return xpForLevel(level, cfg)
 }
 
 /**
- * Calculate total XP required to REACH a level (cumulative threshold)
- * Level 1 starts at 0 XP, level 2 requires completing level 1's XP, etc.
+ * Calculate total XP required to REACH a level (cumulative threshold).
  */
-export function getTotalXPForLevel(level: number): number {
-  if (level <= 1) return 0 // Level 1 starts at 0 XP
-  let total = 0
-  for (let i = 1; i < level; i++) {
-    total += getXPForLevel(i)
-  }
-  return total
+export function getTotalXPForLevel(level: number, cfg: LevelConfig = DEFAULT_LEVEL_CONFIG): number {
+  return totalXpForLevel(level, cfg)
 }
 
 /**
- * Calculate level from total XP.
- * Level 1: 0-49 XP, Level 2: 50-172 XP, etc. Capped at LEVEL_CAP.
+ * Calculate level from total XP (capped at the class's cap).
  */
-export function getLevelFromXP(totalXP: number): number {
-  if (totalXP <= 0) return 1
-  let level = 1
-  let xpThreshold = 0
-
-  while (level < LEVEL_CAP) {
-    const xpForNextLevel = getXPForLevel(level)
-    if (xpThreshold + xpForNextLevel > totalXP) {
-      break
-    }
-    xpThreshold += xpForNextLevel
-    level++
-  }
-
-  return level
+export function getLevelFromXP(totalXP: number, cfg: LevelConfig = DEFAULT_LEVEL_CONFIG): number {
+  return levelFromXp(totalXP, cfg)
 }
 
 /**
- * Get complete level information from total XP.
- * At LEVEL_CAP, progress stays at 100%.
+ * Get complete level information from total XP, según la config de la clase.
+ * Incluye `color` del tramo además de nivel/título/progreso.
  */
-export function getLevelInfo(totalXP: number) {
-  const safeXP = Math.max(0, totalXP)
-  const level = getLevelFromXP(safeXP)
-  const currentLevelXP = getTotalXPForLevel(level)
-
-  if (level >= LEVEL_CAP) {
-    return {
-      level: LEVEL_CAP,
-      title: getTitleForLevel(LEVEL_CAP),
-      progress: 100,
-      currentXP: 0,
-      requiredXP: 0,
-      totalXP: safeXP,
-    }
-  }
-
-  const requiredXP = getXPForLevel(level)
-  const xpInCurrentLevel = safeXP - currentLevelXP
-  const progress = requiredXP > 0
-    ? Math.min(100, Math.max(0, Math.round((xpInCurrentLevel / requiredXP) * 100)))
-    : 0
-
-  return {
-    level,
-    title: getTitleForLevel(level),
-    progress,
-    currentXP: xpInCurrentLevel,
-    requiredXP,
-    totalXP: safeXP,
-  }
+export function getLevelInfo(totalXP: number, cfg: LevelConfig = DEFAULT_LEVEL_CONFIG) {
+  return levelInfo(totalXP, cfg)
 }
 
 /**
- * Get title for a specific level
+ * Get title for a specific level.
  */
-export function getTitleForLevel(level: number): string {
-  const entry = LEVEL_TITLES.find((t) => level >= t.minLevel && level <= t.maxLevel)
-  return entry?.title ?? 'Mortal'
+export function getTitleForLevel(level: number, cfg: LevelConfig = DEFAULT_LEVEL_CONFIG): string {
+  return titleForLevel(level, cfg)
 }
 
 /**
  * Check if completing an enigma/mission would cause a level up
  */
-export function wouldLevelUp(currentXP: number, xpToAdd: number): boolean {
-  const currentLevel = getLevelFromXP(currentXP)
-  const newLevel = getLevelFromXP(currentXP + xpToAdd)
+export function wouldLevelUp(
+  currentXP: number,
+  xpToAdd: number,
+  cfg: LevelConfig = DEFAULT_LEVEL_CONFIG
+): boolean {
+  const currentLevel = getLevelFromXP(currentXP, cfg)
+  const newLevel = getLevelFromXP(currentXP + xpToAdd, cfg)
   return newLevel > currentLevel
 }
 

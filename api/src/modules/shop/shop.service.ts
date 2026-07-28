@@ -482,7 +482,7 @@ export class ShopService {
         },
       }),
       prisma.classEnrollment.findMany({
-        where: { classId },
+        where: { classId, isPreview: false },
         select: { studentId: true, nickname: true, avatarUrl: true },
       }),
     ])

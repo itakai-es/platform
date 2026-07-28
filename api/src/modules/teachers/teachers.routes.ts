@@ -33,6 +33,24 @@ const classSettingsSchema = z
   })
   .partial()
 
+const levelConfigSchema = z
+  .object({
+    mode: z.enum(['curve', 'custom']),
+    baseXp: z.number(),
+    exponent: z.number(),
+    cap: z.number(),
+    levelXp: z.array(z.number()),
+    tiers: z.array(
+      z.object({
+        fromLevel: z.number(),
+        toLevel: z.number(),
+        title: z.string(),
+        color: z.string(),
+      })
+    ),
+  })
+  .partial()
+
 const updateClassSchema = z.object({
   name: z.string().optional(),
   narrative: z.string().optional(),
@@ -44,6 +62,7 @@ const updateClassSchema = z.object({
   educationLevel: z.string().optional(),
   province: z.string().optional(),
   settings: classSettingsSchema.optional(),
+  levelConfig: levelConfigSchema.optional(),
 })
 
 const sendInvitationSchema = z.object({
@@ -345,7 +364,10 @@ export async function teacherRoutes(fastify: FastifyInstance) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
       if (error instanceof Error) {
-        return reply.status(404).send({ message: error.message })
+        // Validaciones (p. ej. plantilla publicada sin metadatos) marcan statusCode 400;
+        // el resto (clase no encontrada) sigue devolviendo 404 como hasta ahora.
+        const status = (error as Error & { statusCode?: number }).statusCode ?? 404
+        return reply.status(status).send({ message: error.message })
       }
       return reply.status(500).send({ message: 'Error interno' })
     }

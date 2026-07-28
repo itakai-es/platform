@@ -1,7 +1,7 @@
 import { prisma } from '../../config/database.js'
-import type { Prisma } from '../../generated/prisma/client.js'
+import { Prisma } from '../../generated/prisma/client.js'
 import { nanoid } from 'nanoid'
-import { getLevelInfo, calculateMissionTotalXP } from '../../utils/xp-calculator.js'
+import { getLevelInfo, getLevelFromXP, calculateMissionTotalXP } from '../../utils/xp-calculator.js'
 import { existsSync, mkdirSync } from 'fs'
 import { join } from 'path'
 import { randomUUID } from 'crypto'
@@ -14,6 +14,7 @@ import {
   DEFAULT_CLASS_SETTINGS,
   type ClassSettings,
 } from '../../utils/class-settings.js'
+import { resolveLevelConfig, tierForLevel, type LevelConfig } from '../../utils/level-config.js'
 import { saveUpload } from '../storage/storage.service.js'
 
 const BADGES_DIR = join(process.cwd(), 'uploads', 'badges')
@@ -130,7 +131,7 @@ export class TeachersService {
   async getStats(userId: string) {
     const classes = await prisma.class.findMany({
       where: { teacherId: userId, archived: false },
-      include: { enrollments: true, missions: true },
+      include: { enrollments: { where: { isPreview: false } }, missions: true },
     })
 
     // Count UNIQUE students across all classes (a student in 3 classes = 1 student)
@@ -152,7 +153,7 @@ export class TeachersService {
     const classes = await prisma.class.findMany({
       where: this.buildArchivedWhere(userId, archived),
       include: {
-        enrollments: { include: { student: true } },
+        enrollments: { where: { isPreview: false }, include: { student: true } },
         missions: { include: { progress: true } },
       },
       orderBy: { createdAt: 'desc' },
@@ -177,6 +178,7 @@ export class TeachersService {
           educationLevel: c.educationLevel,
           province: c.province,
           settings: resolveClassSettings(c.settings),
+          scheduleConfig: c.scheduleConfig,
           studentCount: c.enrollments.length,
           missionCount: totalMissions,
           stats: {
@@ -194,7 +196,7 @@ export class TeachersService {
     const cls = await prisma.class.findFirst({
       where: { id: classId, teacherId: userId },
       include: {
-        enrollments: { include: { student: true } },
+        enrollments: { where: { isPreview: false }, include: { student: true } },
         missions: { include: { enigmas: true, progress: true } },
         guide: true,
       },
@@ -227,6 +229,8 @@ export class TeachersService {
       province: cls.province,
       isTemplate: cls.isTemplate,
       settings: resolveClassSettings(cls.settings),
+      levelConfig: resolveLevelConfig(cls.levelConfig),
+      scheduleConfig: cls.scheduleConfig,
       updatedAt: cls.updatedAt,
       studentCount: cls.enrollments.length,
       missionCount: cls.missions.length,
@@ -280,7 +284,7 @@ export class TeachersService {
   async updateClass(
     userId: string,
     classId: string,
-    data: { name?: string; narrative?: string; schedule?: string; backgroundImage?: string; subject?: string; language?: string; educationLevel?: string; province?: string; settings?: Partial<ClassSettings> }
+    data: { name?: string; narrative?: string; schedule?: string; backgroundImage?: string; subject?: string; language?: string; educationLevel?: string; province?: string; settings?: Partial<ClassSettings>; levelConfig?: Partial<LevelConfig>; scheduleConfig?: unknown }
   ) {
     const cls = await prisma.class.findFirst({
       where: { id: classId, teacherId: userId },
@@ -288,12 +292,29 @@ export class TeachersService {
 
     if (!cls) throw new Error('Clase no encontrada')
 
+    // Invariante del marketplace: una plantilla publicada no puede quedarse sin
+    // los metadatos que exige el filtro (asignatura, nivel, idioma). Se comprueba
+    // el valor efectivo (el entrante si viene en el patch, si no el actual).
+    if (cls.isTemplate) {
+      const required = ['subject', 'educationLevel', 'language'] as const
+      const stillComplete = required.every(field =>
+        field in data ? Boolean(data[field]) : Boolean(cls[field])
+      )
+      if (!stillComplete) {
+        const err = new Error(
+          'La clase está publicada como plantilla: no puedes dejar sin especificar la asignatura, el nivel o el idioma. Despublícala primero.'
+        ) as Error & { statusCode?: number }
+        err.statusCode = 400
+        throw err
+      }
+    }
+
     // Persist an uploaded cover (base64 data URL) to disk before storing.
     if (data.backgroundImage && data.backgroundImage.startsWith('data:image/')) {
       data = { ...data, backgroundImage: (await saveBase64Image(data.backgroundImage, 'covers')) || undefined }
     }
 
-    const { settings: settingsPatch, ...rest } = data
+    const { settings: settingsPatch, levelConfig: levelConfigPatch, scheduleConfig: scheduleConfigPatch, ...rest } = data
 
     const updated = await prisma.class.update({
       where: { id: classId },
@@ -304,8 +325,42 @@ export class TeachersService {
         ...(settingsPatch
           ? { settings: { ...normalizeClassSettings({ ...resolveClassSettings(cls.settings), ...settingsPatch }) } }
           : {}),
+        // La config de niveles se normaliza (curva + tramos válidos) antes de guardar.
+        ...(levelConfigPatch
+          ? { levelConfig: resolveLevelConfig({ ...resolveLevelConfig(cls.levelConfig), ...levelConfigPatch }) as unknown as Prisma.InputJsonValue }
+          : {}),
+        // El horario se guarda tal cual (objeto JSON estructurado); null lo limpia.
+        ...(scheduleConfigPatch !== undefined
+          ? { scheduleConfig: (scheduleConfigPatch ?? Prisma.JsonNull) as Prisma.InputJsonValue }
+          : {}),
       },
     })
+
+    // Al cambiar la curva de niveles, recalculamos el nivel guardado de TODOS los
+    // alumnos de la clase (si no, el ranking y el listado seguirían con el nivel
+    // viejo hasta el próximo cambio de XP). El título/color se calculan al vuelo.
+    if (levelConfigPatch) {
+      const finalCfg = resolveLevelConfig(updated.levelConfig)
+      const enrollments = await prisma.classEnrollment.findMany({
+        where: { classId },
+        select: { studentId: true, xp: true, level: true },
+      })
+      // Agrupamos por nuevo nivel para hacer un updateMany por nivel en vez de N updates.
+      const byLevel = new Map<number, string[]>()
+      for (const e of enrollments) {
+        const lvl = getLevelFromXP(e.xp, finalCfg)
+        if (lvl !== e.level) {
+          if (!byLevel.has(lvl)) byLevel.set(lvl, [])
+          byLevel.get(lvl)!.push(e.studentId)
+        }
+      }
+      for (const [lvl, ids] of byLevel) {
+        await prisma.classEnrollment.updateMany({
+          where: { classId, studentId: { in: ids } },
+          data: { level: lvl },
+        })
+      }
+    }
 
     return {
       class: {
@@ -320,6 +375,7 @@ export class TeachersService {
         educationLevel: updated.educationLevel,
         province: updated.province,
         settings: resolveClassSettings(updated.settings),
+        scheduleConfig: updated.scheduleConfig,
       },
       message: 'Clase actualizada correctamente',
     }
@@ -461,6 +517,11 @@ export class TeachersService {
             settings: (options.features
               ? source.settings
               : DEFAULT_CLASS_SETTINGS) as Prisma.InputJsonValue,
+            // El sistema de niveles personalizado va con las funcionalidades; si no
+            // se copian, la nueva clase arranca con la curva por defecto.
+            levelConfig: (options.features && source.levelConfig
+              ? source.levelConfig
+              : undefined) as Prisma.InputJsonValue | undefined,
             teacherId: userId,
             invitationCode,
             isTemplate: false,
@@ -640,7 +701,7 @@ export class TeachersService {
   async getClassMissions(userId: string, classId: string) {
     const cls = await prisma.class.findFirst({
       where: { id: classId, teacherId: userId },
-      include: { enrollments: true },
+      include: { enrollments: { where: { isPreview: false } } },
     })
 
     if (!cls) throw new Error('Clase no encontrada')
@@ -677,7 +738,7 @@ export class TeachersService {
     const cls = await prisma.class.findFirst({
       where: { id: classId, teacherId: userId },
       include: {
-        enrollments: { include: { student: true } },
+        enrollments: { where: { isPreview: false }, include: { student: true } },
       },
     })
 
@@ -694,10 +755,12 @@ export class TeachersService {
       _count: true,
     })
     const completedByStudent = new Map(studentProgress.map(sp => [sp.studentId, sp._count]))
+    const levelCfg = resolveLevelConfig(cls.levelConfig)
 
     const sorted = cls.enrollments
       .map((e) => {
         const missionsCompleted = completedByStudent.get(e.student.id) || 0
+        const tier = tierForLevel(e.level, levelCfg)
         return {
           id: e.student.id,
           name: e.student.name,
@@ -706,6 +769,8 @@ export class TeachersService {
           avatar: e.avatarUrl || '/app/avatars/atenea.svg',
           xp: e.xp,
           level: e.level,
+          levelTitle: tier.title,
+          levelColor: tier.color,
           missionsCompleted,
           missionsTotal: totalMissionsInClass,
           completionPercent: totalMissionsInClass > 0 ? Math.round((missionsCompleted / totalMissionsInClass) * 100) : 0,
@@ -741,7 +806,7 @@ export class TeachersService {
   async getClassStudents(userId: string, classId: string) {
     const cls = await prisma.class.findFirst({
       where: { id: classId, teacherId: userId },
-      include: { enrollments: { include: { student: true } } },
+      include: { enrollments: { where: { isPreview: false }, include: { student: true } } },
     })
 
     if (!cls) throw new Error('Clase no encontrada')
@@ -759,21 +824,29 @@ export class TeachersService {
       target.set(b.studentId, b._count._all)
     }
 
+    // Config de niveles de la clase → título y color del tramo de cada alumno.
+    const levelCfg = resolveLevelConfig(cls.levelConfig)
+
     const students = cls.enrollments
-      .map((e) => ({
-        id: e.student.id,
-        // Nombre real del alumno + su alias de clase (el "@").
-        name: e.student.name || 'Estudiante',
-        handle: e.nickname || e.student.email.split('@')[0],
-        avatar: e.avatarUrl || '/app/avatars/atenea.svg',
-        level: e.level,
-        xp: e.xp,
-        coins: e.coins,
-        mana: e.mana,
-        lives: e.lives,
-        positiveBehaviors: positive.get(e.student.id) || 0,
-        negativeBehaviors: negative.get(e.student.id) || 0,
-      }))
+      .map((e) => {
+        const tier = tierForLevel(e.level, levelCfg)
+        return {
+          id: e.student.id,
+          // Nombre real del alumno + su alias de clase (el "@").
+          name: e.student.name || 'Estudiante',
+          handle: e.nickname || e.student.email.split('@')[0],
+          avatar: e.avatarUrl || '/app/avatars/atenea.svg',
+          level: e.level,
+          levelTitle: tier.title,
+          levelColor: tier.color,
+          xp: e.xp,
+          coins: e.coins,
+          mana: e.mana,
+          lives: e.lives,
+          positiveBehaviors: positive.get(e.student.id) || 0,
+          negativeBehaviors: negative.get(e.student.id) || 0,
+        }
+      })
       .sort((a, b) => a.name.localeCompare(b.name))
 
     return {
@@ -831,6 +904,7 @@ export class TeachersService {
           },
         },
         enrollments: {
+          where: { isPreview: false },
           include: {
             student: {
               include: {
@@ -1442,7 +1516,7 @@ export class TeachersService {
       where: whereClause,
       include: {
         class: {
-          include: { enrollments: true },
+          include: { enrollments: { where: { isPreview: false } } },
         },
         enigmas: true,
         progress: true,
@@ -1490,7 +1564,7 @@ export class TeachersService {
 
     // Get student IDs from enrollments
     const enrollments = await prisma.classEnrollment.findMany({
-      where: { classId: { in: classIds } },
+      where: { classId: { in: classIds }, isPreview: false },
     })
 
     const studentIds = enrollments.map((e) => e.studentId)
@@ -1548,7 +1622,7 @@ export class TeachersService {
 
     // Get student IDs enrolled in this class
     const enrollments = await prisma.classEnrollment.findMany({
-      where: { classId },
+      where: { classId, isPreview: false },
     })
 
     const studentIds = enrollments.map((e) => e.studentId)
