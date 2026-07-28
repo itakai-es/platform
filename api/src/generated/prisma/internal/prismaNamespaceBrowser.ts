@@ -119,6 +119,7 @@ export const UserSettingsScalarFieldEnum = {
   missionReminders: 'missionReminders',
   language: 'language',
   theme: 'theme',
+  menuDisplay: 'menuDisplay',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -165,6 +166,8 @@ export const ClassScalarFieldEnum = {
   province: 'province',
   isTemplate: 'isTemplate',
   settings: 'settings',
+  levelConfig: 'levelConfig',
+  scheduleConfig: 'scheduleConfig',
   teacherId: 'teacherId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -184,6 +187,7 @@ export const ClassEnrollmentScalarFieldEnum = {
   level: 'level',
   nickname: 'nickname',
   avatarUrl: 'avatarUrl',
+  isPreview: 'isPreview',
   enrolledAt: 'enrolledAt'
 } as const
 
