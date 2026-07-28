@@ -1,7 +1,13 @@
 <template>
   <div ref="dropdownRef" class="relative">
     <!-- Trigger Button -->
-    <button type="button" :disabled="disabled" :class="triggerClasses" @click="toggleDropdown">
+    <button
+      ref="triggerRef"
+      type="button"
+      :disabled="disabled"
+      :class="triggerClasses"
+      @click="toggleDropdown"
+    >
       <span class="truncate">{{ selectedLabel }}</span>
       <ChevronDownIcon
         :class="[
@@ -11,31 +17,36 @@
       />
     </button>
 
-    <!-- Dropdown Menu -->
-    <Transition
-      enter-active-class="transition duration-150 ease-out"
-      enter-from-class="opacity-0 translate-y-1"
-      enter-to-class="opacity-100 translate-y-0"
-      leave-active-class="transition duration-100 ease-in"
-      leave-from-class="opacity-100 translate-y-0"
-      leave-to-class="opacity-0 translate-y-1"
-    >
-      <div
-        v-if="isOpen"
-        class="absolute z-50 mt-2 w-full min-w-[200px] bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden"
+    <!-- Dropdown Menu. Se teletransporta a <body> y se posiciona `fixed` respecto
+         al botón para que ningún ancestro con overflow (p. ej. el <main> con scroll
+         o las barras con overflow-x) lo recorte. -->
+    <Teleport to="body">
+      <Transition
+        enter-active-class="transition duration-150 ease-out"
+        enter-from-class="opacity-0 translate-y-1"
+        enter-to-class="opacity-100 translate-y-0"
+        leave-active-class="transition duration-100 ease-in"
+        leave-from-class="opacity-100 translate-y-0"
+        leave-to-class="opacity-0 translate-y-1"
       >
-        <!-- Buscador (opcional): útil en listas largas (provincias, asignaturas…) -->
-        <div v-if="searchable" class="border-b border-gray-100 p-2">
-          <input
-            ref="searchRef"
-            v-model="query"
-            type="text"
-            :placeholder="searchPlaceholder"
-            class="w-full rounded-lg border border-border-primary bg-surface px-3 py-2 text-sm text-text-primary outline-none focus:ring-2 focus:ring-primary/20"
-            @click.stop
-          />
-        </div>
-        <div class="py-1 max-h-60 overflow-y-auto">
+        <div
+          v-if="isOpen"
+          ref="menuRef"
+          :style="menuStyle"
+          class="fixed z-50 min-w-[200px] bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden"
+        >
+          <!-- Buscador (opcional): útil en listas largas (provincias, asignaturas…) -->
+          <div v-if="searchable" class="border-b border-gray-100 p-2">
+            <input
+              ref="searchRef"
+              v-model="query"
+              type="text"
+              :placeholder="searchPlaceholder"
+              class="w-full rounded-lg border border-border-primary bg-surface px-3 py-2 text-sm text-text-primary outline-none focus:ring-2 focus:ring-primary/20"
+              @click.stop
+            />
+          </div>
+          <div class="py-1 overflow-y-auto" :style="{ maxHeight: `${listMaxHeight}px` }">
           <button
             v-for="option in filteredOptions"
             :key="option.value"
@@ -62,9 +73,10 @@
           >
             {{ noResultsText }}
           </p>
+          </div>
         </div>
-      </div>
-    </Transition>
+      </Transition>
+    </Teleport>
   </div>
 </template>
 
@@ -104,9 +116,37 @@ const emit = defineEmits<{
 }>()
 
 const dropdownRef = ref<HTMLElement | null>(null)
+const triggerRef = ref<HTMLElement | null>(null)
+const menuRef = ref<HTMLElement | null>(null)
 const searchRef = ref<HTMLInputElement | null>(null)
 const isOpen = ref(false)
 const query = ref('')
+
+// El menú va teletransportado a <body> con posición `fixed`, así que calculamos
+// su posición a partir del rect del botón. Se recalcula al abrir y en scroll/resize.
+const menuStyle = ref<Record<string, string>>({})
+const listMaxHeight = ref(320)
+
+function updatePosition() {
+  const el = triggerRef.value
+  if (!el) return
+  const rect = el.getBoundingClientRect()
+  const gap = 8
+  const margin = 16 // aire respecto al borde de la ventana
+  const spaceBelow = window.innerHeight - rect.bottom - gap - margin
+  const spaceAbove = rect.top - gap - margin
+  // Abre hacia arriba solo si abajo no cabe un menú razonable y arriba hay más sitio.
+  const openUp = spaceBelow < 200 && spaceAbove > spaceBelow
+  const avail = Math.max(120, openUp ? spaceAbove : spaceBelow)
+  listMaxHeight.value = Math.min(320, avail - (props.searchable ? 56 : 0))
+  const style: Record<string, string> = {
+    left: `${rect.left}px`,
+    width: `${rect.width}px`,
+  }
+  if (openUp) style.bottom = `${window.innerHeight - rect.top + gap}px`
+  else style.top = `${rect.bottom + gap}px`
+  menuStyle.value = style
+}
 
 const selectedLabel = computed(() => {
   const selected = props.options.find(opt => opt.value === props.modelValue)
@@ -152,16 +192,40 @@ const selectOption = (option: Option) => {
   isOpen.value = false
 }
 
-// Limpia el buscador al cerrar y enfoca el input al abrir (si es searchable).
+// Reposiciona mientras esté abierto: el scroll ocurre en contenedores internos
+// (el <main> del layout), por eso el listener va en captura para enterarnos.
+function onReposition() {
+  if (isOpen.value) updatePosition()
+}
+
 watch(isOpen, open => {
-  if (!open) {
+  if (open) {
+    // Posiciona antes de pintar y engancha listeners de scroll/resize.
+    nextTick(() => {
+      updatePosition()
+      if (props.searchable) searchRef.value?.focus()
+    })
+    window.addEventListener('scroll', onReposition, true)
+    window.addEventListener('resize', onReposition)
+  } else {
     query.value = ''
-  } else if (props.searchable) {
-    nextTick(() => searchRef.value?.focus())
+    window.removeEventListener('scroll', onReposition, true)
+    window.removeEventListener('resize', onReposition)
   }
 })
 
-onClickOutside(dropdownRef, () => {
-  isOpen.value = false
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', onReposition, true)
+  window.removeEventListener('resize', onReposition)
 })
+
+// El menú vive fuera de `dropdownRef` (teleport), así que se ignora explícitamente
+// para que hacer clic dentro del desplegable no lo cierre.
+onClickOutside(
+  dropdownRef,
+  () => {
+    isOpen.value = false
+  },
+  { ignore: [menuRef] }
+)
 </script>
