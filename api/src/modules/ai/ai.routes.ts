@@ -236,19 +236,20 @@ export async function aiRoutes(fastify: FastifyInstance) {
           : `El profesor dice sobre los titulos: "${data.feedback}". Ten en cuenta su feedback.`)
         : ''
 
-      const prompt = locale === 'en'
-        ? `${contextPart} ${feedbackPart} Generate exactly 6 class title options. They should be real class names suitable for a school, with the topic and level when relevant. Return ONLY a JSON array of strings. No extra text.`
-        : `${contextPart} ${feedbackPart} Genera exactamente 6 opciones de titulo para la clase. Deben ser nombres reales adecuados para un centro educativo, con la asignatura y nivel cuando sea relevante. Devuelve SOLO un array JSON de strings. Sin texto extra.`
+      const prompt = (locale === 'en'
+        ? `${contextPart} ${feedbackPart} Generate exactly 20 names for this class. They must fit the class theme and narrative and weave in the subject naturally and evocatively. Vary the style a lot so they don't all sound alike (some epic, some elegant, some playful, some sober). They can be creative but still recognizable as a class name. Do NOT put the course or academic level (e.g. "Grade 7", "1st ESO") in the name unless the teacher explicitly asks. Return ONLY a JSON array of strings. No extra text.`
+        : `${contextPart} ${feedbackPart} Genera exactamente 20 nombres para esta clase. Deben encajar con la temática y la narrativa de la clase e integrar la asignatura de forma natural y evocadora. Varía mucho el estilo para que no suenen todos igual (algunos épicos, otros elegantes, otros desenfadados, otros sobrios). Pueden ser creativos, pero reconocibles como el nombre de una clase. NO incluyas el curso ni el nivel académico (ej. "1º ESO") en el nombre, salvo que el profesor lo pida explícitamente. Devuelve SOLO un array JSON de strings. Sin texto extra.`)
+        + Prompts.outputLanguageDirective(data.locale)
 
-      const text = await provider.generateText(prompt, { locale, temperature: 0.9 })
+      const text = await provider.generateText(prompt, { locale, temperature: 0.95 })
       const parsed = extractJson<string[]>(text)
 
       if (Array.isArray(parsed) && parsed.length > 0) {
-        return { names: parsed.slice(0, 6).map(n => String(n).slice(0, 80)) }
+        return { names: parsed.slice(0, 20).map(n => String(n).slice(0, 80)) }
       }
 
       const lines = text.split(/[\n,]/).map(l => l.replace(/^[-•*\d.)""\[\]\s]+/, '').replace(/[""\[\]]/g, '').trim()).filter(l => l.length > 2 && l.length < 80)
-      return { names: lines.slice(0, 6) }
+      return { names: lines.slice(0, 20) }
     } catch (error) {
       return handleAiRouteError(error, reply, locale)
     }
@@ -550,10 +551,10 @@ Return ONLY the raw SVG code. No markdown, no backticks, no explanation.`
         prompt = Prompts.MISSION_TITLES.regenerate(p.context || '', p.feedback || '', locale)
         break
       case 'mission.enigmas.generate':
-        prompt = Prompts.MISSION_ENIGMAS.generate(p.idea || '', p.narrative || '', p.title || '', p.className || '', locale)
+        prompt = Prompts.MISSION_ENIGMAS.generate(p.idea || '', p.narrative || '', p.title || '', p.className || '', locale, { coins: !!p.coins, mana: !!p.mana })
         break
       case 'mission.enigmas.regenerate':
-        prompt = Prompts.MISSION_ENIGMAS.regenerate(p.context || '', p.currentEnigmas || '', p.feedback || '', p.className || '', locale)
+        prompt = Prompts.MISSION_ENIGMAS.regenerate(p.context || '', p.currentEnigmas || '', p.feedback || '', p.className || '', locale, { coins: !!p.coins, mana: !!p.mana })
         break
       case 'class.guide.generate':
         prompt = Prompts.CLASS_GUIDE.generate(p.title || '', p.context || '', locale)
@@ -573,6 +574,9 @@ Return ONLY the raw SVG code. No markdown, no backticks, no explanation.`
       default:
         return reply.status(400).send({ message: `Unknown prompt type: ${data.type}` })
     }
+
+    // Force the OUTPUT language to the class language (ca/eu/gl); no-op for es/en.
+    prompt += Prompts.outputLanguageDirective(data.locale)
 
     // Stream response
     reply.raw.writeHead(200, sseHeaders(request))

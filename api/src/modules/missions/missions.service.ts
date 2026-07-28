@@ -3,6 +3,7 @@ import { getMissionCompletionRewards, calculateMissionTotalXP, ENIGMA_XP_PRESETS
 import { applyXpDelta } from '../../utils/enrollment-xp.js'
 import { formatMission, getMissionStatus } from '../../utils/mission-formatter.js'
 import { resolveClassSettings } from '../../utils/class-settings.js'
+import { resolveLevelConfig } from '../../utils/level-config.js'
 import { existsSync, mkdirSync } from 'fs'
 import { saveUpload, deleteUpload } from '../storage/storage.service.js'
 import { join } from 'path'
@@ -13,6 +14,15 @@ const DOCUMENTS_DIR = join(process.cwd(), 'uploads', 'documents')
 // Ensure uploads directory exists
 if (!existsSync(DOCUMENTS_DIR)) {
   mkdirSync(DOCUMENTS_DIR, { recursive: true })
+}
+
+// Helper: persist a base64 data URL cover to disk, returning its stored URL.
+async function saveBase64Image(base64Data: string, subdir: 'covers' = 'covers'): Promise<string | null> {
+  const matches = base64Data.match(/^data:image\/(\w+);base64,(.+)$/)
+  if (!matches) return null
+  const ext = matches[1] === 'jpeg' ? 'jpg' : matches[1]
+  const buffer = Buffer.from(matches[2], 'base64')
+  return saveUpload(`${subdir}/${randomUUID()}.${ext}`, buffer, `image/${matches[1]}`)
 }
 
 // Helper: Convert mimeType to document type
@@ -85,7 +95,8 @@ export class MissionsService {
 
     const classIds = enrollments.map((e) => e.classId)
 
-    const whereClause: any = { classId: { in: classIds } }
+    // Las misiones de clases archivadas no aparecen en el listado del alumno.
+    const whereClause: any = { classId: { in: classIds }, class: { archived: false } }
 
     if (filters?.search) {
       whereClause.OR = [{ title: { contains: filters.search, mode: 'insensitive' } }, { description: { contains: filters.search, mode: 'insensitive' } }]
@@ -142,6 +153,18 @@ export class MissionsService {
 
     if (!isTeacher && !enrollment) throw new Error('No tienes acceso a esta misión')
 
+    // Si la clase está archivada, el alumno pierde el acceso a sus misiones aunque
+    // conserve el link. El profesor sí puede seguir viéndolas para gestionarlas.
+    if (!isTeacher && mission.class.archived) {
+      throw new Error('Esta clase está archivada y sus misiones ya no están disponibles')
+    }
+
+    // Una misión bloqueada está cerrada para el alumno (aunque tenga la URL): el
+    // profesor la ha bloqueado a propósito. El profesor sí puede seguir viéndola.
+    if (!isTeacher && mission.status === 'bloqueada') {
+      throw new Error('Esta misión está bloqueada por el profesor')
+    }
+
     const progress = mission.progress[0]
 
     // For teachers, calculate class-wide stats
@@ -149,7 +172,7 @@ export class MissionsService {
     if (isTeacher) {
       // Get all enrollments for this class
       const enrollments = await prisma.classEnrollment.findMany({
-        where: { classId: mission.classId },
+        where: { classId: mission.classId, isPreview: false },
       })
       const totalStudents = enrollments.length
 
@@ -205,6 +228,9 @@ export class MissionsService {
         classId: mission.classId,
         classSettings: resolveClassSettings(mission.class.settings),
         status: getMissionStatus(mission, progress),
+        // Estado real de la misión (activa/bloqueada), independiente del status
+        // calculado de arriba, para poder editarlo en Ajustes.
+        blocked: mission.status === 'bloqueada',
         rarity: mission.rarity,
         deadline: mission.deadline,
         backgroundImage: mission.backgroundImage,
@@ -270,6 +296,9 @@ export class MissionsService {
           : null,
         // Teacher-only stats (null for students)
         teacherStats,
+        // La rareza no se puede cambiar una vez que algún alumno completó la
+        // misión (alteraría su XP). Misma condición que el bloqueo de updateMission.
+        rarityLocked: (teacherStats?.completed ?? 0) > 0,
       },
     }
   }
@@ -282,6 +311,7 @@ export class MissionsService {
 
     if (!mission) throw new Error('Misión no encontrada')
     if (mission.class.archived) throw new Error('La clase está archivada y no admite nuevas acciones')
+    if (mission.status === 'bloqueada') throw new Error('Esta misión está bloqueada por el profesor')
 
     // Get enrollment for class-specific profile
     const enrollment = await prisma.classEnrollment.findUnique({
@@ -336,7 +366,8 @@ export class MissionsService {
     const classIds = enrollments.map((e) => e.classId)
 
     const missions = await prisma.mission.findMany({
-      where: { classId: { in: classIds } },
+      // Coherente con el listado: las clases archivadas no cuentan en las stats.
+      where: { classId: { in: classIds }, class: { archived: false } },
       include: { progress: { where: { studentId: userId } } },
     })
 
@@ -611,13 +642,8 @@ export class MissionsService {
       throw new Error('La misión debe tener al menos un enigma')
     }
 
-    // Validate enigma XP values against the preset ladder.
-    for (const e of data.enigmas) {
-      const xp = Number(e.xp ?? ENIGMA_XP_PRESETS[0])
-      if (!(ENIGMA_XP_PRESETS as readonly number[]).includes(xp)) {
-        throw new Error(`El XP de cada enigma debe ser uno de: ${ENIGMA_XP_PRESETS.join(', ')}`)
-      }
-    }
+    // Las recompensas admiten cualquier valor entero ≥ 0 (los presets son solo
+    // sugerencias de UI/IA). El schema de la ruta ya garantiza `int().min(0)`.
 
     return await prisma.$transaction(async (tx) => {
       const mission = await tx.mission.create({
@@ -677,6 +703,16 @@ export class MissionsService {
       }
     }
 
+    // Persist an uploaded cover (base64 data URL) to disk before storing.
+    let backgroundImage = mission.backgroundImage
+    if (data.backgroundImage !== undefined) {
+      backgroundImage = data.backgroundImage
+        ? data.backgroundImage.startsWith('data:image/')
+          ? await saveBase64Image(data.backgroundImage, 'covers')
+          : data.backgroundImage
+        : null
+    }
+
     const updated = await prisma.mission.update({
       where: { id: missionId },
       data: {
@@ -686,6 +722,7 @@ export class MissionsService {
         status: data.status ?? mission.status,
         rarity: data.rarity ?? mission.rarity,
         deadline: data.deadline !== undefined ? (data.deadline ? new Date(data.deadline) : null) : mission.deadline,
+        backgroundImage,
       },
       include: {
         enigmas: true,
@@ -815,12 +852,8 @@ export class MissionsService {
     if (!enigma) throw new Error('Enigma no encontrado')
     if (enigma.mission.class.teacherId !== teacherId) throw new Error('No tienes permiso para modificar este enigma')
 
-    // XP must stay one of the presets (the UI offers fixed steps).
-    if (data.xp !== undefined && data.xp !== enigma.xpReward) {
-      if (!(ENIGMA_XP_PRESETS as readonly number[]).includes(data.xp)) {
-        throw new Error(`El XP del enigma debe ser uno de: ${ENIGMA_XP_PRESETS.join(', ')}`)
-      }
-    }
+    // El XP admite cualquier valor entero ≥ 0 (input libre + atajos rápidos en la
+    // UI). El schema de la ruta ya garantiza `int().min(0)`.
 
     const classId = enigma.mission.classId
     const classSettings = resolveClassSettings(enigma.mission.class.settings)
@@ -870,6 +903,8 @@ export class MissionsService {
       // adjusting their per-class wallet by the difference. Keeps XP, coins and
       // mana in sync — editing rewards after completion never leaves things dangling.
       if (rewardsChanged) {
+        const clsRow = await tx.class.findUnique({ where: { id: classId }, select: { levelConfig: true } })
+        const levelCfg = resolveLevelConfig(clsRow?.levelConfig)
         const progresses = await tx.studentEnigmaProgress.findMany({ where: { enigmaId } })
         for (const p of progresses) {
           const f = Math.min(100, Math.max(0, p.percentage)) / 100
@@ -890,7 +925,7 @@ export class MissionsService {
               mana: { increment: addMana },
             },
           })
-          const newLevel = getLevelFromXP(enr.xp)
+          const newLevel = getLevelFromXP(enr.xp, levelCfg)
           if (newLevel !== enr.level) {
             await tx.classEnrollment.update({
               where: { studentId_classId: { studentId: p.studentId, classId } },

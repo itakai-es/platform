@@ -20,6 +20,9 @@ export interface ExtractedSource {
   kind: 'pdf' | 'word' | 'text' | 'image' | 'unsupported'
   chars: number
   note?: string
+  // Texto extraído de este fichero. Se devuelve por fichero para que el cliente
+  // pueda reconstruir el contexto cuando el profe quita uno de la lista.
+  text?: string
 }
 
 export interface UploadedFile {
@@ -145,7 +148,7 @@ export async function extractContext(
   const parts: string[] = []
   const sources: ExtractedSource[] = []
   for (const r of results) {
-    sources.push(r.source)
+    sources.push({ ...r.source, text: r.text || undefined })
     if (r.text) parts.push(`### ${r.source.name}\n${r.text}`)
   }
 

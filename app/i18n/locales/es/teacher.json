@@ -1,5 +1,24 @@
 {
   "teacher": {
+    "about": {
+      "title": "Acerca de ITAKAI",
+      "subtitle": "Novedades y registro de versiones",
+      "breadcrumb": "Acerca de",
+      "breadcrumb_home": "Inicio",
+      "current_version": "Versión actual",
+      "latest": "Última versión",
+      "versions_index": "Versiones",
+      "footer_note": "¿Echas en falta algo o has encontrado un fallo? Cuéntanoslo y lo tendremos en cuenta para próximas versiones.",
+      "groups": {
+        "new": "Novedades",
+        "improved": "Mejoras",
+        "fixed": "Arreglos"
+      },
+      "meta": {
+        "title": "Acerca de | ITAKAI",
+        "description": "Novedades, mejoras y correcciones de cada versión de ITAKAI."
+      }
+    },
     "dashboard": {
       "title": "Inicio del Profesor",
       "subtitle": "¡Bienvenido, {name}!",
@@ -31,7 +50,37 @@
           "title": "Mis Clases | ITAKAI Profesor",
           "description": "Gestiona todas tus clases, alumnos inscritos y misiones asignadas."
         },
-        "templates": "Plantillas"
+        "templates": "Plantillas",
+        "duplicate_success": "Clase duplicada como \"{name}\"",
+        "duplicate_error": "No se pudo duplicar la clase",
+        "duplicate": {
+          "title": "Duplicar clase",
+          "subtitle": "Elige qué copiar a la nueva clase «{name}».",
+          "confirm": "Duplicar",
+          "cancel": "Cancelar",
+          "items": {
+            "missions": {
+              "label": "Misiones",
+              "desc": "Las misiones y sus enigmas"
+            },
+            "narrative": {
+              "label": "Historia",
+              "desc": "La narrativa y la imagen de portada"
+            },
+            "features": {
+              "label": "Funcionalidades",
+              "desc": "Los módulos activados de la clase"
+            },
+            "shop": {
+              "label": "Tienda",
+              "desc": "Los artículos de la tienda"
+            },
+            "behaviors": {
+              "label": "Comportamientos",
+              "desc": "Las plantillas de comportamiento"
+            }
+          }
+        }
       },
       "create": {
         "breadcrumb_classes": "Mis Clases",
@@ -55,8 +104,6 @@
           "ask_idea": "¡Hola {name}! Soy {god}. Cuéntame, ¿qué mundo o temática quieres para tu clase?",
           "review_approach": "Esto es lo que he preparado para ti, ¿te gusta?",
           "pick_title": "¿Qué título le ponemos a tu clase?",
-          "ask_schedule": "¿Qué horario tendrá tu clase?",
-          "ask_image": "He creado esta portada para tu clase",
           "placeholder_idea": "Ej: Una escuela de magia con 4 casas que compiten por puntos, alumnos-magos y desafíos como mazmorras…",
           "generating_approach": "Estoy creando la narrativa de tu clase...",
           "narrative_feedback_placeholder": "Ej: Quiero más referencias a las casas de Hogwarts...",
@@ -76,7 +123,7 @@
           "btn_accept_plan": "Sí, adelante",
           "attach_materials": "Adjuntar materiales (PDF, Word, imágenes)",
           "attach_processing": "Procesando materiales…",
-          "attach_hint": "La IA los usará como base para crear tu clase.",
+          "attach_remove": "Quitar",
           "attach_error": "No se pudieron procesar los materiales."
         },
         "meta": {
@@ -94,10 +141,34 @@
           "narrative": "Historia",
           "guide": "Guía",
           "missions": "Misiones",
-          "ranking": "Ranking",
+          "students": "Alumnos",
           "tienda": "Tienda",
           "behaviors": "Comportamientos",
           "settings": "Ajustes"
+        },
+        "students": {
+          "empty_title": "Aún no hay alumnos",
+          "empty_description": "Cuando se unan alumnos a la clase, aparecerán aquí con sus estadísticas.",
+          "col_student": "Alumno",
+          "col_level": "Nivel",
+          "search_placeholder": "Buscar alumno...",
+          "sort_name_asc": "Nombre A-Z",
+          "sort_name_desc": "Nombre Z-A",
+          "sort_xp_asc": "XP ↑",
+          "sort_xp_desc": "XP ↓",
+          "sort_level_asc": "Nivel ↑",
+          "sort_level_desc": "Nivel ↓",
+          "sort_coins_asc": "Monedas ↑",
+          "sort_coins_desc": "Monedas ↓",
+          "sort_mana_asc": "Maná ↑",
+          "sort_mana_desc": "Maná ↓",
+          "sort_lives_asc": "Vida ↑",
+          "sort_lives_desc": "Vida ↓",
+          "no_results_title": "Sin resultados",
+          "no_results_description": "No hay alumnos que coincidan con la búsqueda.",
+          "col_behaviors": "Comportamientos",
+          "view_list": "Listado",
+          "view_ranking": "Ranking"
         },
         "stats_title": "Estadísticas de la Clase",
         "pending_reviews": "Entregas por Revisar",
@@ -213,6 +284,40 @@
           "mana_disabled_chip": "Maná desactivado"
         },
         "settings": {
+          "levels": {
+            "title": "Niveles",
+            "curve_title": "Curva de experiencia",
+            "curve_hint": "Define cuánta XP cuesta subir de nivel y hasta qué nivel se puede llegar.",
+            "pace_desc_fast": "Se sube de nivel rápido: cada nivel cuesta solo un poco más que el anterior.",
+            "pace_desc_normal": "Progresión equilibrada: cada nivel cuesta algo más que el anterior.",
+            "pace_desc_slow": "Cuesta cada vez bastante más subir de nivel. Progresión larga, ideal para todo el curso.",
+            "mode_label": "Cómo se gana la XP",
+            "mode_curve": "Por fórmula",
+            "mode_custom": "Manual (por nivel)",
+            "pace_label": "Ritmo de subida",
+            "pace_fast": "Rápido",
+            "pace_normal": "Normal",
+            "pace_slow": "Lento",
+            "custom_hint": "Escribe la XP necesaria para subir de cada nivel al siguiente.",
+            "compare_title": "XP total para alcanzar cada nivel",
+            "compare_level": "Nivel {level}",
+            "cap_label": "Número de niveles",
+            "base_label": "XP del primer nivel",
+            "tiers_title": "Rangos",
+            "tiers_hint": "Asigna un título y un color a cada tramo de niveles.",
+            "tier_title_placeholder": "Título del rango",
+            "tier_from": "Del",
+            "tier_to": "al",
+            "tier_add": "Añadir rango",
+            "tier_remove": "Quitar rango",
+            "tiers_warning": "Hay huecos o solapes entre rangos: algunos niveles no mostrarían el título correcto.",
+            "tiers_autofix": "Auto-ajustar",
+            "restore_defaults": "Restaurar por defecto",
+            "save": "Guardar niveles",
+            "discard": "Descartar",
+            "toast_saved": "Niveles guardados",
+            "toast_error": "No se pudieron guardar los niveles"
+          },
           "toast_error": "No se pudo guardar la configuración",
           "items": {
             "shop": {
@@ -269,6 +374,10 @@
             "publish_on": "Clase publicada como plantilla",
             "publish_off": "Plantilla retirada del marketplace",
             "publish_error": "No se pudo publicar la plantilla",
+            "template_metadata_locked": "La clase está publicada como plantilla: no puedes dejar asignatura, nivel o idioma sin especificar. Despublícala primero.",
+            "duplicate_title": "Duplicar clase",
+            "duplicate_hint": "Crea una copia de esta clase. Podrás elegir qué contenido se copia.",
+            "duplicate_cta": "Duplicar",
             "schedule_label": "Horario",
             "background_label": "Imagen de fondo",
             "save": "Guardar cambios",
@@ -289,6 +398,9 @@
           },
           "features": {
             "title": "Funcionalidades"
+          },
+          "management": {
+            "title": "Gestión"
           }
         }
       }
@@ -314,6 +426,40 @@
           "title": "Detalle de Misión | ITAKAI Profesor",
           "title_loading": "Cargando misión... | ITAKAI Profesor",
           "description_fallback": "Detalle de misión en ITAKAI"
+        },
+        "tabs": {
+          "summary": "Resumen",
+          "settings": "Ajustes"
+        },
+        "settings": {
+          "title_label": "Título",
+          "title_required": "El título no puede estar vacío",
+          "deadline_label": "Fecha límite",
+          "deadline_hint": "Déjala vacía para que la misión no caduque.",
+          "rarity_label": "Rareza",
+          "rarity_locked_hint": "No puedes cambiar la rareza: algún alumno ya completó la misión.",
+          "rarity": {
+            "comun": "Común",
+            "rara": "Rara",
+            "epica": "Épica",
+            "legendaria": "Legendaria"
+          },
+          "status_label": "Estado",
+          "status_active": "Activa",
+          "status_blocked": "Bloqueada",
+          "status_hint": "Bloqueada: los alumnos la ven con candado y no pueden entrar.",
+          "background_label": "Imagen de la misión",
+          "background_generate": "Generar con IA",
+          "background_regenerate": "Regenerar con IA",
+          "background_upload": "Subir la mía",
+          "background_clear": "Quitar imagen",
+          "background_error": "No se pudo generar la imagen",
+          "background_upload_type_error": "Formato no válido. Sube una imagen PNG, JPG o WEBP.",
+          "background_upload_size_error": "La imagen es demasiado grande (máximo 5 MB).",
+          "save": "Guardar cambios",
+          "discard": "Descartar",
+          "toast_saved": "Datos guardados",
+          "toast_error": "No se pudieron guardar los datos"
         }
       }
     },
@@ -498,7 +644,8 @@
         },
         "label_mana": "Maná",
         "label_coins": "Monedas",
-        "no_mana": "Sin maná"
+        "no_mana": "Sin maná",
+        "custom_value": "Valor personalizado"
       },
       "document_form_modal": {
         "edit_title": "Editar Documento",
@@ -621,10 +768,7 @@
         "btn_back": "Volver a misiones",
         "breadcrumb_classes": "Mis clases",
         "deadline_none": "Sin fecha límite",
-        "deadline_edit": "Editar fecha límite",
-        "deadline_save": "Guardar",
-        "deadline_clear": "Quitar fecha límite",
-        "deadline_cancel": "Cancelar",
+        "expired_readonly": "Esta misión ha expirado: puedes consultarla, pero ya no admite entregas.",
         "narrative_title": "Historia de la Misión",
         "btn_see_more": "Ver más",
         "btn_see_less": "Ver menos",
@@ -706,6 +850,44 @@
         "languages": "idiomas",
         "provinces": "provincias"
       }
+    },
+    "schedule": {
+      "starts_on": "Empieza el",
+      "time": "Hora",
+      "recurrence": "Periodicidad",
+      "preview": "Vista previa",
+      "previous": "Horario anterior",
+      "choose_days": "Elegir días de clase",
+      "freq_none": "No se repite",
+      "freq_daily": "Cada día",
+      "freq_weekly_on": "Cada semana el {day}",
+      "weekly": "Cada semana",
+      "freq_monthly": "Cada mes",
+      "freq_yearly": "Anualmente",
+      "weekdays": "Todos los días laborables (de lunes a viernes)",
+      "weekly_days": "Cada semana: {days}",
+      "every_weeks_days": "Cada {n} semanas: {days}",
+      "all_weekdays": "Todos los días laborables",
+      "ends_on_suffix": "hasta el {date}",
+      "ends_after_suffix": "{n} veces",
+      "customize": "Personalizar…",
+      "custom_title": "Periodicidad personalizada",
+      "repeat_every": "Repetir cada",
+      "unit_day": "día | días",
+      "unit_week": "semana | semanas",
+      "unit_month": "mes | meses",
+      "unit_year": "año | años",
+      "repeats_on": "Se repite el",
+      "ends": "Termina",
+      "ends_never": "Nunca",
+      "ends_on": "El",
+      "ends_after": "Después de",
+      "repetitions": "repeticiones",
+      "section_schedule": "Horario",
+      "section_cover": "Portada",
+      "wizard_question": "Ponle un horario y una portada a tu clase",
+      "cancel": "Cancelar",
+      "done": "Hecho"
     }
   }
 }

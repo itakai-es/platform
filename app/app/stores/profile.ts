@@ -38,6 +38,7 @@ export const useProfileStore = defineStore('profile', () => {
         missionReminders: true,
         language: 'es' as const,
         theme: 'college' as const,
+        menuDisplay: 'both' as const,
       }
   )
 

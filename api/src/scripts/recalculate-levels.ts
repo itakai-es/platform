@@ -4,7 +4,8 @@
  */
 
 import { prisma } from '../config/database.js'
-import { getLevelInfo } from '../utils/xp-calculator.js'
+import { getLevelFromXP } from '../utils/xp-calculator.js'
+import { resolveLevelConfig } from '../utils/level-config.js'
 
 async function recalculateLevels() {
   console.log('🔄 Recalculating levels for all students...\n')
@@ -13,15 +14,15 @@ async function recalculateLevels() {
   const enrollments = await prisma.classEnrollment.findMany({
     include: {
       student: { select: { name: true } },
-      class: { select: { name: true } },
+      class: { select: { name: true, levelConfig: true } },
     },
   })
 
   let updated = 0
 
   for (const enrollment of enrollments) {
-    const levelInfo = getLevelInfo(enrollment.xp)
-    const correctLevel = levelInfo.level
+    // Cada clase puede tener su propia curva de niveles.
+    const correctLevel = getLevelFromXP(enrollment.xp, resolveLevelConfig(enrollment.class.levelConfig))
 
     if (correctLevel !== enrollment.level) {
       await prisma.classEnrollment.update({

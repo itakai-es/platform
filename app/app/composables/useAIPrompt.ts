@@ -109,8 +109,9 @@ export function useAIPrompt() {
    */
   async function streamPrompt(
     type: string,
-    params: Record<string, string>,
-    target: Ref<string>
+    params: Record<string, string | number | boolean>,
+    target: Ref<string>,
+    localeOverride?: string
   ): Promise<'spark' | 'gemini' | 'flux' | null> {
     const maxAttempts = 3
     let lastErr: unknown = null
@@ -129,7 +130,7 @@ export function useAIPrompt() {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${authStore.tokens?.accessToken}`,
           },
-          body: JSON.stringify({ type, locale: locale.value, params }),
+          body: JSON.stringify({ type, locale: localeOverride || locale.value, params }),
         })
 
         if (!response.ok) throw new Error(`AI error: ${response.status}`)
@@ -212,9 +213,13 @@ export function useAIPrompt() {
   /**
    * Call prompt and get full response as string (non-streaming).
    */
-  async function callPrompt(type: string, params: Record<string, string>): Promise<string> {
+  async function callPrompt(
+    type: string,
+    params: Record<string, string>,
+    localeOverride?: string
+  ): Promise<string> {
     const target = ref('')
-    await streamPrompt(type, params, target)
+    await streamPrompt(type, params, target, localeOverride)
     return target.value
   }
 

@@ -1,5 +1,6 @@
 import { prisma } from '../../config/database.js'
 import { getLevelInfo, wouldLevelUp, calculateMissionTotalXP } from '../../utils/xp-calculator.js'
+import { resolveLevelConfig, tierForLevel } from '../../utils/level-config.js'
 import { hashPassword, verifyPassword } from '../../utils/password.js'
 import { formatMission, getMissionStatus } from '../../utils/mission-formatter.js'
 import { ensureSafeEducationalPrompt } from '../ai/ai-safety.js'
@@ -197,7 +198,7 @@ export class StudentsService {
           include: {
             teacher: true,
             missions: true,
-            enrollments: true,
+            enrollments: { where: { isPreview: false } },
           },
         },
       },
@@ -233,7 +234,7 @@ export class StudentsService {
           include: {
             teacher: true,
             missions: { include: { enigmas: true } },
-            enrollments: true,
+            enrollments: { where: { isPreview: false } },
             guide: true,
           },
         },
@@ -241,6 +242,8 @@ export class StudentsService {
     })
 
     if (!enrollment) throw new Error('No estás inscrito en esta clase')
+    // Clase archivada: el alumno pierde el acceso aunque conserve el link.
+    if (enrollment.class.archived) throw new Error('Esta clase está archivada y ya no está disponible')
 
     const cls = enrollment.class
 
@@ -323,7 +326,8 @@ export class StudentsService {
     if (!enrollment) throw new Error('No estás inscrito en esta clase')
 
     const missions = await prisma.mission.findMany({
-      where: { classId },
+      // Si la clase está archivada, sus misiones no se listan para el alumno.
+      where: { classId, class: { archived: false } },
       include: {
         enigmas: {
           include: { progress: { where: { studentId: userId } } },
@@ -412,15 +416,17 @@ export class StudentsService {
 
     // Get ranking in class (order by enrollment XP)
     const classStudents = await prisma.classEnrollment.findMany({
-      where: { classId },
+      where: { classId, isPreview: false },
       orderBy: { xp: 'desc' },
     })
 
     const rank = classStudents.findIndex((e) => e.studentId === userId) + 1
-    const levelInfo = getLevelInfo(xpEarned)
+    // El nivel/título/color del alumno se calcula con la config de SU clase.
+    const levelCfg = resolveLevelConfig(enrollment.class.levelConfig)
+    const levelInfo = getLevelInfo(xpEarned, levelCfg)
     // Get next level title by calculating XP for next level
     const nextLevelXp = levelInfo.totalXP + levelInfo.requiredXP
-    const nextLevelInfo = getLevelInfo(nextLevelXp)
+    const nextLevelInfo = getLevelInfo(nextLevelXp, levelCfg)
 
     return {
       classId,
@@ -430,6 +436,9 @@ export class StudentsService {
       lives: enrollment.lives,
       level: levelInfo.level,
       title: levelInfo.title,
+      color: levelInfo.color,
+      // Curva + tramos de la clase, para que el front calcule niveles/colores igual.
+      levelConfig: levelCfg,
       nextTitle: nextLevelInfo.title,
       progress: levelInfo.progress,
       currentXP: levelInfo.currentXP,
@@ -450,10 +459,14 @@ export class StudentsService {
 
     // Order by enrollment XP (per-class XP)
     const enrollments = await prisma.classEnrollment.findMany({
-      where: { classId },
+      where: { classId, isPreview: false },
       include: { student: true },
       orderBy: { xp: 'desc' },
     })
+
+    // Config de niveles de la clase → título/color del tramo por alumno.
+    const clsRow = await prisma.class.findUnique({ where: { id: classId }, select: { levelConfig: true } })
+    const levelCfg = resolveLevelConfig(clsRow?.levelConfig)
 
     // Get total missions in this class
     const missionsCount = await prisma.mission.count({
@@ -477,6 +490,7 @@ export class StudentsService {
       const missionsCompleted = completedMissionsMap.get(e.student.id) || 0
       const completionPercent = missionsCount > 0 ? Math.round((missionsCompleted / missionsCount) * 100) : 0
 
+      const tier = tierForLevel(e.level, levelCfg)
       return {
         id: e.student.id,
         username: e.nickname || e.student.name,
@@ -484,6 +498,8 @@ export class StudentsService {
         rank: index + 1,
         xp: e.xp,
         level: e.level,
+        levelTitle: tier.title,
+        levelColor: tier.color,
         missionsCompleted,
         missionsTotal: missionsCount,
         completionPercent,
@@ -709,6 +725,41 @@ export class StudentsService {
     }
   }
 
+  /**
+   * Matrícula "fantasma" para el modo "Ver como alumno": auto-matricula al
+   * profesor (isPreview=true) en todas las clases que imparte, de forma
+   * idempotente. Estas matrículas se excluyen de listados/recuentos/rankings,
+   * así que solo las ve el propio profesor al previsualizar.
+   */
+  async ensurePreviewEnrollments(teacherId: string) {
+    const classes = await prisma.class.findMany({
+      where: { teacherId },
+      select: { id: true },
+    })
+    if (!classes.length) return { enrolled: 0 }
+
+    const existing = await prisma.classEnrollment.findMany({
+      where: { studentId: teacherId, classId: { in: classes.map(c => c.id) } },
+      select: { classId: true },
+    })
+    const existingIds = new Set(existing.map(e => e.classId))
+    const toCreate = classes.filter(c => !existingIds.has(c.id))
+
+    if (toCreate.length) {
+      await prisma.classEnrollment.createMany({
+        data: toCreate.map(c => ({
+          studentId: teacherId,
+          classId: c.id,
+          isPreview: true,
+          avatarUrl: getRandomAvatar(),
+          nickname: getRandomNickname(),
+        })),
+        skipDuplicates: true,
+      })
+    }
+    return { enrolled: toCreate.length }
+  }
+
   async joinClass(userId: string, code: string) {
     const cls = await prisma.class.findUnique({
       where: { invitationCode: code },
@@ -930,7 +981,8 @@ export class StudentsService {
     const classIds = enrollments.map((e) => e.classId)
 
     const missions = await prisma.mission.findMany({
-      where: { classId: { in: classIds } },
+      // Las misiones de clases archivadas no aparecen en el listado del alumno.
+      where: { classId: { in: classIds }, class: { archived: false } },
       include: {
         enigmas: {
           include: { progress: { where: { studentId: userId } } },

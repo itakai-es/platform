@@ -5,6 +5,7 @@
       v-model:search="searchQuery"
       v-model:rarity-filters="rarityFilters"
       v-model:sort="sortBy"
+      v-model:view="view"
       :results-count="displayed.length"
       @reset="resetFilters"
     />
@@ -18,7 +19,7 @@
     />
 
     <!-- Grid -->
-    <CardGrid v-else>
+    <CardCollection v-else :view="view">
       <MissionCardEnhanced
         v-for="mission in displayed"
         :id="mission.id"
@@ -37,9 +38,10 @@
         :earned-mana="mission.earnedMana"
         :background-image="mission.backgroundImage"
         :class-id="classId"
+        :layout="view"
         compact
       />
-    </CardGrid>
+    </CardCollection>
   </div>
 </template>
 
@@ -53,6 +55,7 @@ const { t } = useI18n()
 const route = useRoute()
 const classId = computed(() => route.params.id as string)
 const { classMissions } = useStudentClassDetail(classId)
+const view = useViewMode('student-class-missions')
 
 // Estado de filtros local (cada tab arranca limpio cada vez).
 const searchQuery = ref('')

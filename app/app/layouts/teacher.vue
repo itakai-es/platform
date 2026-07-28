@@ -45,6 +45,7 @@ import {
   RocketLaunchIcon,
   UsersIcon,
   TrophyIcon,
+  InformationCircleIcon,
 } from '@heroicons/vue/24/outline'
 
 const { t } = useI18n()
@@ -121,6 +122,11 @@ const navItems = computed(() => [
     to: '/profesor/alumnos',
     label: t('common.nav.students'),
     icon: UsersIcon,
+  },
+  {
+    to: '/profesor/acerca-de',
+    label: t('common.nav.about'),
+    icon: InformationCircleIcon,
   },
 ])
 </script>

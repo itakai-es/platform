@@ -53,6 +53,7 @@ export class StudentAgent extends BaseAgent {
         where: {
           class: {
             enrollments: { some: { studentId: context.userId } },
+            archived: false,
           },
           status: 'activa',
         },

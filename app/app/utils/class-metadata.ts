@@ -18,6 +18,18 @@ const toOptions = (values: string[]): MetaOption[] => values.map(v => ({ value: 
 /** Idioma vehicular de la clase: los 5 idiomas que soporta la app (locales). */
 export const CLASS_LANGUAGES = toOptions(['Castellano', 'English', 'Català', 'Euskara', 'Galego'])
 
+/**
+ * Mapa idioma de la clase → código de locale, para que la IA genere el texto
+ * (narrativa, títulos, guía) en el idioma vehicular elegido por el profe.
+ */
+export const CLASS_LANGUAGE_TO_LOCALE: Record<string, string> = {
+  Castellano: 'es',
+  English: 'en',
+  Català: 'ca',
+  Euskara: 'eu',
+  Galego: 'gl',
+}
+
 /** Nivel educativo (sistema español, todos los niveles). */
 export const CLASS_EDUCATION_LEVELS = toOptions([
   'Educación Infantil',

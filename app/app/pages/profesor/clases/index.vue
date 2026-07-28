@@ -38,6 +38,7 @@
         </Button>
       </NuxtLink>
     </template>
+
   </ClassListTemplate>
 </template>
 
@@ -92,9 +93,6 @@ const archiveClass = (classId: string) => setArchived(classId, true)
 const unarchiveClass = (classId: string) => setArchived(classId, false)
 
 onMounted(async () => {
-  await Promise.all([
-    classesStore.ensureTeacherClasses(),
-    teacherStore.ensureArchivedClasses(),
-  ])
+  await Promise.all([classesStore.ensureTeacherClasses(), teacherStore.ensureArchivedClasses()])
 })
 </script>

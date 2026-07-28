@@ -34,69 +34,32 @@
           <span class="text-red-500">*</span>
         </label>
         <div class="rounded-xl bg-gray-50 p-3 space-y-2.5">
-          <!-- XP -->
-          <div v-if="showXp" class="flex items-center gap-3">
+          <!-- Una fila por recurso: input libre (protagonista) + atajos rápidos. -->
+          <div v-for="row in rewardRows" :key="row.key" class="flex items-center gap-3">
             <div class="flex items-center gap-1.5 w-[84px] shrink-0">
-              <XpIcon class="w-4 h-4" />
-              <span class="text-sm font-medium text-navy-700">
-                {{ t('teacher.components.enigma_form_modal.label_xp') }}
-              </span>
+              <component :is="row.icon" class="w-4 h-4" />
+              <span class="text-sm font-medium text-navy-700">{{ row.label }}</span>
             </div>
-            <div class="grid grid-cols-5 gap-1.5 flex-1">
+            <input
+              v-model.number="form[row.key]"
+              type="number"
+              inputmode="numeric"
+              :min="rewardFloor(row.key)"
+              :title="t('teacher.components.enigma_form_modal.custom_value')"
+              :class="rewardInputClass"
+              @blur="clampReward(row.key)"
+            />
+            <div class="flex flex-wrap items-center gap-1">
               <button
-                v-for="xp in xpPresets"
-                :key="xp"
+                v-for="p in row.presets"
+                :key="p"
                 type="button"
-                :disabled="isPresetDisabled('xp', xp)"
-                :class="chipClass(form.xp === xp, isPresetDisabled('xp', xp))"
-                @click="form.xp = xp"
+                :disabled="isPresetDisabled(row.key, p)"
+                :class="quickPickClass(form[row.key] === p, isPresetDisabled(row.key, p))"
+                :title="p === 0 ? t('teacher.components.enigma_form_modal.no_mana') : undefined"
+                @click="form[row.key] = p"
               >
-                {{ xp }}
-              </button>
-            </div>
-          </div>
-
-          <!-- Monedas -->
-          <div v-if="showCoins" class="flex items-center gap-3">
-            <div class="flex items-center gap-1.5 w-[84px] shrink-0">
-              <CoinIcon class="w-4 h-4" />
-              <span class="text-sm font-medium text-navy-700">
-                {{ t('teacher.components.enigma_form_modal.label_coins') }}
-              </span>
-            </div>
-            <div class="grid grid-cols-5 gap-1.5 flex-1">
-              <button
-                v-for="c in coinPresets"
-                :key="c"
-                type="button"
-                :disabled="isPresetDisabled('coins', c)"
-                :class="chipClass(form.coins === c, isPresetDisabled('coins', c))"
-                @click="form.coins = c"
-              >
-                {{ c }}
-              </button>
-            </div>
-          </div>
-
-          <!-- Maná -->
-          <div v-if="showMana" class="flex items-center gap-3">
-            <div class="flex items-center gap-1.5 w-[84px] shrink-0">
-              <ManaIcon class="w-4 h-4" />
-              <span class="text-sm font-medium text-navy-700">
-                {{ t('teacher.components.enigma_form_modal.label_mana') }}
-              </span>
-            </div>
-            <div class="grid grid-cols-5 gap-1.5 flex-1">
-              <button
-                v-for="m in manaPresets"
-                :key="m"
-                type="button"
-                :disabled="isPresetDisabled('mana', m)"
-                :class="chipClass(form.mana === m, isPresetDisabled('mana', m))"
-                :title="m === 0 ? t('teacher.components.enigma_form_modal.no_mana') : undefined"
-                @click="form.mana = m"
-              >
-                {{ m === 0 ? '—' : m }}
+                {{ p === 0 ? '—' : p }}
               </button>
             </div>
           </div>
@@ -186,6 +149,9 @@
 
 <script setup lang="ts">
 import { PlusIcon, XMarkIcon } from '@heroicons/vue/24/outline'
+import XpIcon from '~/components/atoms/XpIcon.vue'
+import CoinIcon from '~/components/atoms/CoinIcon.vue'
+import ManaIcon from '~/components/atoms/ManaIcon.vue'
 import {
   ENIGMA_XP_PRESETS,
   ENIGMA_MANA_PRESETS,
@@ -237,15 +203,43 @@ const manaPresets = ENIGMA_MANA_PRESETS
 const isEditing = computed(() => !!props.enigma?.id)
 const isSubmitting = ref(false)
 
-const chipClass = (active: boolean, disabled = false) =>
+// El input libre es el protagonista: campo claro y editable con cualquier valor.
+const rewardInputClass =
+  'w-20 h-9 shrink-0 rounded-lg border border-gray-200 px-2 text-center text-sm font-semibold ' +
+  'text-navy-700 outline-none focus:border-navy-700/40 focus:ring-2 focus:ring-navy-700/10 ' +
+  '[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none'
+
+// Atajos rápidos: sutiles, sin peso visual. Rellenan el input al pulsarlos.
+const quickPickClass = (active: boolean, disabled = false) =>
   [
-    'h-9 rounded-lg text-sm font-medium transition-colors flex items-center justify-center border',
+    'h-7 min-w-[1.75rem] px-2 rounded-md text-xs font-medium transition-colors',
     disabled
-      ? 'bg-gray-50 border-gray-200 text-gray-300 cursor-not-allowed'
+      ? 'text-gray-300 cursor-not-allowed'
       : active
-        ? 'bg-navy-700 border-navy-700 text-white'
-        : 'bg-white border-gray-200 text-navy-700 hover:border-navy-700/40',
+        ? 'bg-navy-700/10 text-navy-700'
+        : 'text-navy-700/50 hover:text-navy-700 hover:bg-navy-700/5',
   ].join(' ')
+
+// Filas de recompensa visibles (según los recursos activos de la clase).
+const rewardRows = computed(() =>
+  [
+    { key: 'xp' as const, show: props.showXp, icon: XpIcon, label: t('teacher.components.enigma_form_modal.label_xp'), presets: xpPresets },
+    { key: 'coins' as const, show: props.showCoins, icon: CoinIcon, label: t('teacher.components.enigma_form_modal.label_coins'), presets: coinPresets },
+    { key: 'mana' as const, show: props.showMana, icon: ManaIcon, label: t('teacher.components.enigma_form_modal.label_mana'), presets: manaPresets },
+  ].filter(r => r.show)
+)
+
+// Suelo de cada recompensa: 0 normalmente; el valor actual cuando está bloqueada
+// (un alumno ya completó el enigma → solo se puede subir).
+const rewardFloor = (kind: 'xp' | 'coins' | 'mana') =>
+  props.rewardsLocked ? (props.enigma?.[kind] ?? 0) : 0
+
+// Normaliza el input libre a un entero ≥ suelo (al perder el foco / al enviar).
+const clampReward = (kind: 'xp' | 'coins' | 'mana') => {
+  const floor = rewardFloor(kind)
+  const v = Number(form[kind])
+  form[kind] = Number.isFinite(v) ? Math.max(floor, Math.floor(v)) : floor
+}
 
 // Once a student has completed the enigma, rewards can only go up. The floor for
 // each reward is its current value; presets below it are disabled.
@@ -342,6 +336,14 @@ const handleSubmit = async () => {
   isSubmitting.value = true
 
   try {
+    // Asegura enteros ≥ suelo aunque el input libre quedara vacío o con decimales.
+    clampReward('xp')
+    clampReward('coins')
+    clampReward('mana')
+    // Los recursos que la clase no usa no deben viajar con valores fantasma.
+    if (!props.showCoins) form.coins = 0
+    if (!props.showMana) form.mana = 0
+
     // Filter out empty objectives
     const cleanedObjectives = form.objectives.filter(obj => obj.trim())
 

@@ -117,6 +117,20 @@ export async function studentsRoutes(fastify: FastifyInstance) {
     }
   })
 
+  // ==================== PREVIEW (ver como alumno) ====================
+
+  // El profesor se auto-matricula (oculto) en sus clases para previsualizarlas
+  // como alumno. Seguro para cualquier usuario: solo matricula en clases propias.
+  fastify.post('/preview/enroll', async (request: FastifyRequest, reply: FastifyReply) => {
+    try {
+      const { id } = request.user as { id: string }
+      const result = await studentsService.ensurePreviewEnrollments(id)
+      return result
+    } catch (error) {
+      return reply.status(500).send({ message: 'Error interno' })
+    }
+  })
+
   // ==================== CLASSES ====================
 
   fastify.get('/classes', async (request: FastifyRequest, reply: FastifyReply) => {

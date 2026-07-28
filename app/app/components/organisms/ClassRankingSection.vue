@@ -413,9 +413,11 @@
             <span class="text-sm font-bold text-navy-700">{{ student.rank }}</span>
           </div>
 
-          <!-- Avatar -->
+          <!-- Avatar (borde = color del tramo de nivel de la clase) -->
           <div
             class="w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-white flex items-center justify-center flex-shrink-0 overflow-hidden border-2 border-gray-200"
+            :style="student.levelColor ? { borderColor: student.levelColor } : undefined"
+            :title="student.levelTitle"
           >
             <img
               v-if="student.avatar"

@@ -32,6 +32,7 @@ export type UserSettingsMinAggregateOutputType = {
   missionReminders: boolean | null
   language: string | null
   theme: string | null
+  menuDisplay: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -44,6 +45,7 @@ export type UserSettingsMaxAggregateOutputType = {
   missionReminders: boolean | null
   language: string | null
   theme: string | null
+  menuDisplay: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -56,6 +58,7 @@ export type UserSettingsCountAggregateOutputType = {
   missionReminders: number
   language: number
   theme: number
+  menuDisplay: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -70,6 +73,7 @@ export type UserSettingsMinAggregateInputType = {
   missionReminders?: true
   language?: true
   theme?: true
+  menuDisplay?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -82,6 +86,7 @@ export type UserSettingsMaxAggregateInputType = {
   missionReminders?: true
   language?: true
   theme?: true
+  menuDisplay?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -94,6 +99,7 @@ export type UserSettingsCountAggregateInputType = {
   missionReminders?: true
   language?: true
   theme?: true
+  menuDisplay?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -179,6 +185,7 @@ export type UserSettingsGroupByOutputType = {
   missionReminders: boolean
   language: string
   theme: string
+  menuDisplay: string
   createdAt: Date
   updatedAt: Date
   _count: UserSettingsCountAggregateOutputType | null
@@ -212,6 +219,7 @@ export type UserSettingsWhereInput = {
   missionReminders?: Prisma.BoolFilter<"UserSettings"> | boolean
   language?: Prisma.StringFilter<"UserSettings"> | string
   theme?: Prisma.StringFilter<"UserSettings"> | string
+  menuDisplay?: Prisma.StringFilter<"UserSettings"> | string
   createdAt?: Prisma.DateTimeFilter<"UserSettings"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"UserSettings"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -225,6 +233,7 @@ export type UserSettingsOrderByWithRelationInput = {
   missionReminders?: Prisma.SortOrder
   language?: Prisma.SortOrder
   theme?: Prisma.SortOrder
+  menuDisplay?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
@@ -241,6 +250,7 @@ export type UserSettingsWhereUniqueInput = Prisma.AtLeast<{
   missionReminders?: Prisma.BoolFilter<"UserSettings"> | boolean
   language?: Prisma.StringFilter<"UserSettings"> | string
   theme?: Prisma.StringFilter<"UserSettings"> | string
+  menuDisplay?: Prisma.StringFilter<"UserSettings"> | string
   createdAt?: Prisma.DateTimeFilter<"UserSettings"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"UserSettings"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -254,6 +264,7 @@ export type UserSettingsOrderByWithAggregationInput = {
   missionReminders?: Prisma.SortOrder
   language?: Prisma.SortOrder
   theme?: Prisma.SortOrder
+  menuDisplay?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.UserSettingsCountOrderByAggregateInput
@@ -272,6 +283,7 @@ export type UserSettingsScalarWhereWithAggregatesInput = {
   missionReminders?: Prisma.BoolWithAggregatesFilter<"UserSettings"> | boolean
   language?: Prisma.StringWithAggregatesFilter<"UserSettings"> | string
   theme?: Prisma.StringWithAggregatesFilter<"UserSettings"> | string
+  menuDisplay?: Prisma.StringWithAggregatesFilter<"UserSettings"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"UserSettings"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"UserSettings"> | Date | string
 }
@@ -283,6 +295,7 @@ export type UserSettingsCreateInput = {
   missionReminders?: boolean
   language?: string
   theme?: string
+  menuDisplay?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutSettingsInput
@@ -296,6 +309,7 @@ export type UserSettingsUncheckedCreateInput = {
   missionReminders?: boolean
   language?: string
   theme?: string
+  menuDisplay?: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -307,6 +321,7 @@ export type UserSettingsUpdateInput = {
   missionReminders?: Prisma.BoolFieldUpdateOperationsInput | boolean
   language?: Prisma.StringFieldUpdateOperationsInput | string
   theme?: Prisma.StringFieldUpdateOperationsInput | string
+  menuDisplay?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutSettingsNestedInput
@@ -320,6 +335,7 @@ export type UserSettingsUncheckedUpdateInput = {
   missionReminders?: Prisma.BoolFieldUpdateOperationsInput | boolean
   language?: Prisma.StringFieldUpdateOperationsInput | string
   theme?: Prisma.StringFieldUpdateOperationsInput | string
+  menuDisplay?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -332,6 +348,7 @@ export type UserSettingsCreateManyInput = {
   missionReminders?: boolean
   language?: string
   theme?: string
+  menuDisplay?: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -343,6 +360,7 @@ export type UserSettingsUpdateManyMutationInput = {
   missionReminders?: Prisma.BoolFieldUpdateOperationsInput | boolean
   language?: Prisma.StringFieldUpdateOperationsInput | string
   theme?: Prisma.StringFieldUpdateOperationsInput | string
+  menuDisplay?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -355,6 +373,7 @@ export type UserSettingsUncheckedUpdateManyInput = {
   missionReminders?: Prisma.BoolFieldUpdateOperationsInput | boolean
   language?: Prisma.StringFieldUpdateOperationsInput | string
   theme?: Prisma.StringFieldUpdateOperationsInput | string
+  menuDisplay?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -372,6 +391,7 @@ export type UserSettingsCountOrderByAggregateInput = {
   missionReminders?: Prisma.SortOrder
   language?: Prisma.SortOrder
   theme?: Prisma.SortOrder
+  menuDisplay?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -384,6 +404,7 @@ export type UserSettingsMaxOrderByAggregateInput = {
   missionReminders?: Prisma.SortOrder
   language?: Prisma.SortOrder
   theme?: Prisma.SortOrder
+  menuDisplay?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -396,6 +417,7 @@ export type UserSettingsMinOrderByAggregateInput = {
   missionReminders?: Prisma.SortOrder
   language?: Prisma.SortOrder
   theme?: Prisma.SortOrder
+  menuDisplay?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -439,6 +461,7 @@ export type UserSettingsCreateWithoutUserInput = {
   missionReminders?: boolean
   language?: string
   theme?: string
+  menuDisplay?: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -450,6 +473,7 @@ export type UserSettingsUncheckedCreateWithoutUserInput = {
   missionReminders?: boolean
   language?: string
   theme?: string
+  menuDisplay?: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -477,6 +501,7 @@ export type UserSettingsUpdateWithoutUserInput = {
   missionReminders?: Prisma.BoolFieldUpdateOperationsInput | boolean
   language?: Prisma.StringFieldUpdateOperationsInput | string
   theme?: Prisma.StringFieldUpdateOperationsInput | string
+  menuDisplay?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -488,6 +513,7 @@ export type UserSettingsUncheckedUpdateWithoutUserInput = {
   missionReminders?: Prisma.BoolFieldUpdateOperationsInput | boolean
   language?: Prisma.StringFieldUpdateOperationsInput | string
   theme?: Prisma.StringFieldUpdateOperationsInput | string
+  menuDisplay?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -502,6 +528,7 @@ export type UserSettingsSelect<ExtArgs extends runtime.Types.Extensions.Internal
   missionReminders?: boolean
   language?: boolean
   theme?: boolean
+  menuDisplay?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -515,6 +542,7 @@ export type UserSettingsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   missionReminders?: boolean
   language?: boolean
   theme?: boolean
+  menuDisplay?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -528,6 +556,7 @@ export type UserSettingsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   missionReminders?: boolean
   language?: boolean
   theme?: boolean
+  menuDisplay?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -541,11 +570,12 @@ export type UserSettingsSelectScalar = {
   missionReminders?: boolean
   language?: boolean
   theme?: boolean
+  menuDisplay?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserSettingsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "twoFactorEnabled" | "emailNotifications" | "missionReminders" | "language" | "theme" | "createdAt" | "updatedAt", ExtArgs["result"]["userSettings"]>
+export type UserSettingsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "twoFactorEnabled" | "emailNotifications" | "missionReminders" | "language" | "theme" | "menuDisplay" | "createdAt" | "updatedAt", ExtArgs["result"]["userSettings"]>
 export type UserSettingsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -569,6 +599,7 @@ export type $UserSettingsPayload<ExtArgs extends runtime.Types.Extensions.Intern
     missionReminders: boolean
     language: string
     theme: string
+    menuDisplay: string
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["userSettings"]>
@@ -1002,6 +1033,7 @@ export interface UserSettingsFieldRefs {
   readonly missionReminders: Prisma.FieldRef<"UserSettings", 'Boolean'>
   readonly language: Prisma.FieldRef<"UserSettings", 'String'>
   readonly theme: Prisma.FieldRef<"UserSettings", 'String'>
+  readonly menuDisplay: Prisma.FieldRef<"UserSettings", 'String'>
   readonly createdAt: Prisma.FieldRef<"UserSettings", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"UserSettings", 'DateTime'>
 }

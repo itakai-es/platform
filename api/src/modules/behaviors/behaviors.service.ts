@@ -1,6 +1,7 @@
 import { prisma } from '../../config/database.js'
 import { getLevelFromXP } from '../../utils/xp-calculator.js'
 import { resolveClassSettings } from '../../utils/class-settings.js'
+import { resolveLevelConfig } from '../../utils/level-config.js'
 
 /**
  * Per-class behaviors. Teachers maintain a catalog of positive/negative actions
@@ -143,8 +144,9 @@ class BehaviorsService {
       // Respeta los ajustes de la clase: si los comportamientos están desactivados no se
       // pueden aplicar, y los deltas de recursos desactivados (XP/monedas/vidas) se ignoran
       // para no crear inconsistencias.
-      const clsRow = await tx.class.findUnique({ where: { id: classId }, select: { settings: true } })
+      const clsRow = await tx.class.findUnique({ where: { id: classId }, select: { settings: true, levelConfig: true } })
       const settings = resolveClassSettings(clsRow?.settings)
+      const levelCfg = resolveLevelConfig(clsRow?.levelConfig)
       if (!settings.behaviors) throw new Error('Los comportamientos están desactivados en esta clase')
 
       const sign = behavior.kind === 'positive' ? 1 : -1
@@ -155,7 +157,7 @@ class BehaviorsService {
       const newXp = Math.max(0, enrollment.xp + xpDelta)
       const newCoins = Math.max(0, enrollment.coins + coinDelta)
       const newLives = Math.max(0, enrollment.lives + lifeDelta)
-      const newLevel = getLevelFromXP(newXp)
+      const newLevel = getLevelFromXP(newXp, levelCfg)
 
       const updated = await tx.classEnrollment.update({
         where: { studentId_classId: { studentId, classId } },

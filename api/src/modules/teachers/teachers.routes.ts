@@ -33,6 +33,24 @@ const classSettingsSchema = z
   })
   .partial()
 
+const levelConfigSchema = z
+  .object({
+    mode: z.enum(['curve', 'custom']),
+    baseXp: z.number(),
+    exponent: z.number(),
+    cap: z.number(),
+    levelXp: z.array(z.number()),
+    tiers: z.array(
+      z.object({
+        fromLevel: z.number(),
+        toLevel: z.number(),
+        title: z.string(),
+        color: z.string(),
+      })
+    ),
+  })
+  .partial()
+
 const updateClassSchema = z.object({
   name: z.string().optional(),
   narrative: z.string().optional(),
@@ -44,6 +62,7 @@ const updateClassSchema = z.object({
   educationLevel: z.string().optional(),
   province: z.string().optional(),
   settings: classSettingsSchema.optional(),
+  levelConfig: levelConfigSchema.optional(),
 })
 
 const sendInvitationSchema = z.object({
@@ -69,6 +88,15 @@ const updateGuideSchema = z.object({
 
 const archiveClassSchema = z.object({
   archived: z.boolean(),
+})
+
+// Qué copiar al duplicar una clase. Todo a true por defecto (copia completa).
+const duplicateClassSchema = z.object({
+  narrative: z.boolean().default(true),
+  features: z.boolean().default(true),
+  shop: z.boolean().default(true),
+  behaviors: z.boolean().default(true),
+  missions: z.boolean().default(true),
 })
 
 const shopItemSchema = z.object({
@@ -336,7 +364,10 @@ export async function teacherRoutes(fastify: FastifyInstance) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
       if (error instanceof Error) {
-        return reply.status(404).send({ message: error.message })
+        // Validaciones (p. ej. plantilla publicada sin metadatos) marcan statusCode 400;
+        // el resto (clase no encontrada) sigue devolviendo 404 como hasta ahora.
+        const status = (error as Error & { statusCode?: number }).statusCode ?? 404
+        return reply.status(status).send({ message: error.message })
       }
       return reply.status(500).send({ message: 'Error interno' })
     }
@@ -417,6 +448,23 @@ export async function teacherRoutes(fastify: FastifyInstance) {
     }
   })
 
+  fastify.post('/classes/:classId/duplicate', async (request: FastifyRequest<{ Params: { classId: string } }>, reply: FastifyReply) => {
+    try {
+      const { id } = request.user as { id: string }
+      const options = duplicateClassSchema.parse(request.body ?? {})
+      const result = await teachersService.duplicateClass(id, request.params.classId, options)
+      return result
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
+      }
+      if (error instanceof Error) {
+        return reply.status(404).send({ message: error.message })
+      }
+      return reply.status(500).send({ message: 'Error interno' })
+    }
+  })
+
   fastify.get('/classes/:classId/invitation-code', async (request: FastifyRequest<{ Params: { classId: string } }>, reply: FastifyReply) => {
     try {
       const { id } = request.user as { id: string }
@@ -450,6 +498,20 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       const { id } = request.user as { id: string }
       const { classId } = request.params
       const result = await teachersService.getClassRanking(id, classId)
+      return result
+    } catch (error) {
+      if (error instanceof Error) {
+        return reply.status(404).send({ message: error.message })
+      }
+      return reply.status(500).send({ message: 'Error interno' })
+    }
+  })
+
+  fastify.get('/classes/:classId/students', async (request: FastifyRequest<{ Params: { classId: string } }>, reply: FastifyReply) => {
+    try {
+      const { id } = request.user as { id: string }
+      const { classId } = request.params
+      const result = await teachersService.getClassStudents(id, classId)
       return result
     } catch (error) {
       if (error instanceof Error) {

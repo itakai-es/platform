@@ -58,7 +58,9 @@
        ============================================ */
 
     /* Backgrounds - Fondos principales ITAKAI */
-    --color-bg-primary: #FFFFFF;
+    /* Gris muy claro: el fondo de la app va ligeramente gris para que las cards,
+       inputs y superficies (todas en blanco) resalten en lugar de quedar planas. */
+    --color-bg-primary: #FAFBFC;
     --color-bg-secondary: #f2f2f4;      /* Gris fondo UI claro */
     --color-bg-tertiary: #f3f6f7;       /* Gris contenedores suaves */
 
@@ -757,5 +759,116 @@
   .text-gradient {
     @apply bg-clip-text text-transparent;
     background-image: linear-gradient(to right, var(--color-primary), var(--color-secondary));
+  }
+}
+
+/* ============================================================
+   Onboarding wizards (clase + misión) — estilos compartidos.
+   Antes estaban duplicados en cada página; ahora viven aquí y
+   los consumen ambos wizards y el componente OnboardingCard.
+   ============================================================ */
+@layer components {
+  .onb-input {
+    @apply w-full px-5 py-4 rounded-2xl bg-gray-50 text-sm text-navy-700 leading-relaxed border border-gray-200 outline-none;
+  }
+  .onb-input:focus {
+    @apply ring-2 ring-gray-300;
+  }
+  .onb-input::placeholder {
+    @apply text-text-secondary;
+  }
+  .onb-result-box {
+    @apply bg-gray-50 rounded-2xl p-5 border border-gray-100;
+  }
+  .onb-actions {
+    @apply flex items-center justify-between mt-5 pt-4 border-t border-gray-100;
+  }
+  .onb-loading {
+    @apply flex items-center gap-2 text-text-secondary text-sm;
+  }
+  .onb-feedback {
+    @apply flex gap-2 mt-4;
+  }
+  .onb-feedback-input {
+    @apply flex-1 px-4 py-2.5 rounded-2xl bg-gray-50 border border-gray-200 text-sm text-navy-700 outline-none;
+  }
+  .onb-feedback-input:focus {
+    @apply ring-2 ring-gray-300;
+  }
+  .onb-feedback-input::placeholder {
+    @apply text-text-secondary;
+  }
+  .onb-send-btn {
+    @apply px-3.5 py-2.5 rounded-2xl bg-navy-700 text-white transition-colors;
+  }
+  .onb-send-btn:hover {
+    @apply opacity-90;
+  }
+  .onb-send-btn:disabled {
+    @apply opacity-40 cursor-not-allowed;
+  }
+  .onb-cancel-btn {
+    @apply px-3.5 py-2.5 rounded-2xl bg-gray-100 text-navy-700 border border-gray-200 transition-colors;
+  }
+  .onb-cancel-btn:hover {
+    @apply bg-gray-200;
+  }
+  .onb-btn-back {
+    @apply text-sm font-medium text-text-secondary transition-colors;
+  }
+  .onb-btn-back:hover {
+    @apply text-navy-700;
+  }
+}
+
+/* Animaciones de entrada + transición entre pasos (sin @apply → fuera de @layer) */
+.onb-fade-in {
+  animation: onbFade 0.4s ease both;
+}
+.onb-reveal {
+  animation: onbSlideUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.title-item-enter-active {
+  animation: onbSlideUp 0.3s ease both;
+}
+@keyframes onbSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes onbFade {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.onb-fade-enter-active,
+.onb-fade-leave-active {
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+.onb-fade-enter-from {
+  opacity: 0;
+  transform: translateX(20px);
+}
+.onb-fade-leave-to {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .onb-fade-in,
+  .onb-reveal,
+  .title-item-enter-active {
+    animation: none;
   }
 }

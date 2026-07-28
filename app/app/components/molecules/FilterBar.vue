@@ -23,6 +23,14 @@
         >
       </button>
 
+      <!-- View toggle (grid/list) - only rendered when a view is provided -->
+      <ViewToggle
+        v-if="view !== undefined"
+        :model-value="view"
+        class="flex-shrink-0"
+        @update:model-value="$emit('update:view', $event)"
+      />
+
       <!-- Results count -->
       <div
         class="flex-shrink-0 bg-sky text-white w-10 h-10 sm:w-12 sm:h-12 rounded-full text-sm sm:text-base font-semibold flex items-center justify-center"
@@ -69,6 +77,7 @@
 
 <script setup lang="ts">
 import { XMarkIcon, FunnelIcon } from '@heroicons/vue/24/outline'
+import type { ViewMode } from '~/composables/useViewMode'
 
 interface SelectOption {
   value: string
@@ -84,6 +93,8 @@ interface Props {
   variant?: 'mint' | 'purple' | 'yellow' | 'red'
   hasActiveFilters?: boolean
   activeFilterCount?: number
+  // Modo de vista (cuadrícula/lista). Si se omite, el toggle no se muestra.
+  view?: ViewMode
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -96,6 +107,7 @@ const props = withDefaults(defineProps<Props>(), {
 defineEmits<{
   'update:search': [value: string]
   'update:sort': [value: string]
+  'update:view': [value: ViewMode]
   reset: []
 }>()
 

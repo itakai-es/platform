@@ -6,6 +6,7 @@
       "missions": "Misioak",
       "badges": "Dominak",
       "students": "Ikasleak",
+      "about": "Honi buruz",
       "users": "Erabiltzaileak",
       "classes": "Klaseak",
       "analytics": "Analitikak",
@@ -197,6 +198,13 @@
       "title": "Mantentze lanetan",
       "message": "Hobekuntzak egiten ari gara. Itzuli minutu batzuk barru.",
       "admin_notice": "Mantentze modua aktibo — administratzaileek soilik sar daitezke."
+    },
+    "menu_display": {
+      "title": "Goiko menua",
+      "description": "Klaseen eta misioen fitxak nola ikusten diren.",
+      "both": "Ikonoa eta testua",
+      "icon": "Ikonoa soilik",
+      "text": "Testua soilik"
     }
   }
 }

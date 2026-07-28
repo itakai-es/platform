@@ -1,5 +1,11 @@
 <template>
-  <Modal :model-value="modelValue" size="2xl" :title="undefined" sticky-chrome @update:model-value="close">
+  <Modal
+    :model-value="modelValue"
+    size="2xl"
+    :title="undefined"
+    sticky-chrome
+    @update:model-value="close"
+  >
     <template #header>
       <div class="min-w-0 flex-1">
         <h3 class="text-xl font-bold text-navy-700 break-words">
@@ -83,8 +89,16 @@
                 {{ t(`teacher.classes.detail.settings.items.${flag}.desc`) }}
               </p>
             </div>
-            <Badge :variant="isActive(flag) ? 'success' : 'default'" size="sm" class="flex-shrink-0">
-              {{ isActive(flag) ? t('teacher.templates.preview.active') : t('teacher.templates.preview.inactive') }}
+            <Badge
+              :variant="isActive(flag) ? 'success' : 'default'"
+              size="sm"
+              class="flex-shrink-0"
+            >
+              {{
+                isActive(flag)
+                  ? t('teacher.templates.preview.active')
+                  : t('teacher.templates.preview.inactive')
+              }}
             </Badge>
           </div>
         </div>
@@ -99,36 +113,38 @@
           :description="t('teacher.templates.preview.no_shop_description')"
         />
         <div v-else class="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <div
-          v-for="s in tpl.shopItems"
-          :key="s.id"
-          class="flex items-start gap-3 rounded-2xl bg-white p-4 shadow-sm"
-        >
-          <span
-            class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full"
-            :class="s.kind === 'power' ? 'bg-purple/10 text-purple' : 'bg-yellow/10 text-yellow-active'"
+          <div
+            v-for="s in tpl.shopItems"
+            :key="s.id"
+            class="flex items-start gap-3 rounded-2xl bg-white p-4 shadow-sm"
           >
-            <BoltIcon v-if="s.kind === 'power'" class="h-5 w-5" />
-            <GiftIcon v-else class="h-5 w-5" />
-          </span>
-          <div class="min-w-0 flex-1">
-            <p class="font-semibold leading-tight text-navy-700">{{ s.name }}</p>
-            <p v-if="s.description" class="mt-0.5 line-clamp-2 text-xs text-text-secondary">
-              {{ s.description }}
-            </p>
-            <div class="mt-2 flex items-center gap-3 text-sm font-medium text-navy-700">
-              <span class="flex items-center gap-1">
-                <CoinIcon class="h-4 w-4" />{{ s.price }}
-              </span>
-              <span v-if="s.manaCost > 0" class="flex items-center gap-1">
-                <ManaIcon class="h-4 w-4" />{{ s.manaCost }}
-              </span>
-              <span v-if="s.lifeRestore" class="flex items-center gap-1">
-                <LifeIcon class="h-4 w-4" />+{{ s.lifeRestore }}
-              </span>
+            <span
+              class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full"
+              :class="
+                s.kind === 'power' ? 'bg-purple/10 text-purple' : 'bg-yellow/10 text-yellow-active'
+              "
+            >
+              <BoltIcon v-if="s.kind === 'power'" class="h-5 w-5" />
+              <GiftIcon v-else class="h-5 w-5" />
+            </span>
+            <div class="min-w-0 flex-1">
+              <p class="font-semibold leading-tight text-navy-700">{{ s.name }}</p>
+              <p v-if="s.description" class="mt-0.5 line-clamp-2 text-xs text-text-secondary">
+                {{ s.description }}
+              </p>
+              <div class="mt-2 flex items-center gap-3 text-sm font-medium text-navy-700">
+                <span class="flex items-center gap-1">
+                  <CoinIcon class="h-4 w-4" />{{ s.price }}
+                </span>
+                <span v-if="s.manaCost > 0" class="flex items-center gap-1">
+                  <ManaIcon class="h-4 w-4" />{{ s.manaCost }}
+                </span>
+                <span v-if="s.lifeRestore" class="flex items-center gap-1">
+                  <LifeIcon class="h-4 w-4" />+{{ s.lifeRestore }}
+                </span>
+              </div>
             </div>
           </div>
-        </div>
         </div>
       </div>
 
@@ -187,7 +203,7 @@
         {{ t('common.actions.close') }}
       </Button>
       <Button
-        v-if="tpl"
+        v-if="tpl && !tpl.isOwn"
         variant="primary"
         size="md"
         :loading="importing"
@@ -312,8 +328,16 @@ function isActive(flag: keyof ClassSettings): boolean {
 const availableTabs = computed(() => [
   { id: 'narrative' as TabId, label: t('teacher.templates.preview.tab_narrative') },
   { id: 'features' as TabId, label: t('teacher.templates.preview.tab_features') },
-  { id: 'shop' as TabId, label: t('teacher.templates.preview.tab_shop', { n: tpl.value?.shopItems.length ?? 0 }) },
-  { id: 'behaviors' as TabId, label: t('teacher.templates.preview.tab_behaviors', { n: tpl.value?.behaviorTemplates.length ?? 0 }) },
+  {
+    id: 'shop' as TabId,
+    label: t('teacher.templates.preview.tab_shop', { n: tpl.value?.shopItems.length ?? 0 }),
+  },
+  {
+    id: 'behaviors' as TabId,
+    label: t('teacher.templates.preview.tab_behaviors', {
+      n: tpl.value?.behaviorTemplates.length ?? 0,
+    }),
+  },
 ])
 
 const renderedNarrative = computed(() =>
@@ -329,9 +353,7 @@ async function load(id: string) {
   tpl.value = null
   activeTab.value = 'narrative'
   try {
-    tpl.value = await $fetch<TemplateDetail>(
-      `${config.public.apiBase}/teacher/templates/${id}`
-    )
+    tpl.value = await $fetch<TemplateDetail>(`${config.public.apiBase}/teacher/templates/${id}`)
   } catch {
     toast.error(t('teacher.templates.preview.load_error'))
   } finally {
@@ -363,14 +385,14 @@ function close() {
 
 watch(
   () => props.templateId,
-  (id) => {
+  id => {
     if (id && props.modelValue) load(id)
   },
   { immediate: true }
 )
 watch(
   () => props.modelValue,
-  (open) => {
+  open => {
     if (open && props.templateId) load(props.templateId)
     if (!open) tpl.value = null
   }
@@ -385,14 +407,38 @@ watch(
   color: rgb(35 36 93);
   margin: 0.75rem 0 0.5rem;
 }
-.chat-markdown :deep(h1) { font-size: 1.15rem; }
-.chat-markdown :deep(h2) { font-size: 1.05rem; }
-.chat-markdown :deep(h3) { font-size: 1rem; }
-.chat-markdown :deep(p) { margin: 0.5rem 0; line-height: 1.6; color: rgb(35 36 93); }
-.chat-markdown :deep(strong) { color: rgb(35 36 93); font-weight: 700; }
-.chat-markdown :deep(em) { font-style: italic; }
+.chat-markdown :deep(h1) {
+  font-size: 1.15rem;
+}
+.chat-markdown :deep(h2) {
+  font-size: 1.05rem;
+}
+.chat-markdown :deep(h3) {
+  font-size: 1rem;
+}
+.chat-markdown :deep(p) {
+  margin: 0.5rem 0;
+  line-height: 1.6;
+  color: rgb(35 36 93);
+}
+.chat-markdown :deep(strong) {
+  color: rgb(35 36 93);
+  font-weight: 700;
+}
+.chat-markdown :deep(em) {
+  font-style: italic;
+}
 .chat-markdown :deep(ul),
-.chat-markdown :deep(ol) { padding-left: 1.25rem; margin: 0.5rem 0; }
-.chat-markdown :deep(li) { margin: 0.25rem 0; }
-.chat-markdown :deep(hr) { border: none; border-top: 1px solid rgb(229 231 235); margin: 1rem 0; }
+.chat-markdown :deep(ol) {
+  padding-left: 1.25rem;
+  margin: 0.5rem 0;
+}
+.chat-markdown :deep(li) {
+  margin: 0.25rem 0;
+}
+.chat-markdown :deep(hr) {
+  border: none;
+  border-top: 1px solid rgb(229 231 235);
+  margin: 1rem 0;
+}
 </style>

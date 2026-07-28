@@ -11,9 +11,7 @@
         class="absolute inset-0 bg-cover bg-center"
         :style="{ backgroundImage: `url(${backgroundImage})` }"
       />
-      <div
-        class="absolute inset-0 bg-gradient-to-r from-navy-700 via-navy-700/60 to-transparent"
-      />
+      <div class="absolute inset-0 bg-gradient-to-r from-navy-700 via-navy-700/60 to-transparent" />
     </div>
 
     <div class="relative z-10 space-y-4">
@@ -97,8 +95,12 @@
               : 'text-white/70 hover:text-white hover:bg-white/10',
           ]"
         >
-          <component :is="tab.icon" class="w-5 h-5" />
-          <span class="hidden sm:inline">{{ tab.label }}</span>
+          <component v-if="menuDisplay !== 'text'" :is="tab.icon" class="w-5 h-5" />
+          <span
+            v-if="menuDisplay !== 'icon'"
+            :class="menuDisplay === 'both' ? 'hidden sm:inline' : ''"
+            >{{ tab.label }}</span
+          >
         </NuxtLink>
       </div>
     </div>
@@ -114,6 +116,9 @@ import {
   AcademicCapIcon,
   LanguageIcon,
 } from '@heroicons/vue/24/outline'
+
+// Preferencia de usuario: icono / texto / ambos en las pestañas.
+const menuDisplay = useMenuDisplay()
 
 defineProps<{
   /** Nombre de la clase (título y último segmento del breadcrumb). */

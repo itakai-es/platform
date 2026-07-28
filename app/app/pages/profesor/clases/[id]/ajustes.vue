@@ -4,11 +4,12 @@
     :class-data="state.classData"
     @update="onSettingsUpdate"
     @general-update="onGeneralUpdate"
+    @levels-update="onLevelsUpdate"
   />
 </template>
 
 <script setup lang="ts">
-import type { ClassSettings } from '~/types/class.types'
+import type { ClassSettings, LevelConfig } from '~/types/class.types'
 
 definePageMeta({ layout: 'teacher', middleware: ['auth', 'role'] })
 
@@ -23,5 +24,8 @@ function onSettingsUpdate(settings: ClassSettings) {
 }
 function onGeneralUpdate(data: { name: string; schedule: string; backgroundImage: string }) {
   setClassData(data)
+}
+function onLevelsUpdate(levelConfig: LevelConfig) {
+  setClassData({ levelConfig })
 }
 </script>

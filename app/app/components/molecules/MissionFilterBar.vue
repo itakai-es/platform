@@ -7,9 +7,11 @@
     :sort-options="sortOptions"
     :has-active-filters="hasActiveFilters"
     :active-filter-count="activeFilterCount"
+    :view="view"
     variant="red"
     @update:search="$emit('update:search', $event)"
     @update:sort="$emit('update:sort', $event)"
+    @update:view="$emit('update:view', $event)"
     @reset="$emit('reset')"
   >
     <template #filters>
@@ -55,6 +57,8 @@
  *
  * Extiende FilterBar con filtros específicos de misiones: rareza, clase, estado.
  */
+import type { ViewMode } from '~/composables/useViewMode'
+
 const { t } = useI18n()
 
 interface SelectOption {
@@ -73,6 +77,7 @@ interface Props {
   showStatusFilter?: boolean
   statusFilters?: string[]
   hasExtraActiveFilters?: boolean
+  view?: ViewMode
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -90,6 +95,7 @@ defineEmits<{
   'update:sort': [value: string]
   'update:classFilters': [value: string[]]
   'update:statusFilters': [value: string[]]
+  'update:view': [value: ViewMode]
   reset: []
 }>()
 

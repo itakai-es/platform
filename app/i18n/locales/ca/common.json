@@ -6,6 +6,7 @@
       "missions": "Missions",
       "badges": "Insígnies",
       "students": "Estudiants",
+      "about": "Sobre",
       "users": "Usuaris",
       "classes": "Classes",
       "analytics": "Analítiques",
@@ -197,6 +198,13 @@
       "title": "En manteniment",
       "message": "Estem fent millores. Torna d'aquí a uns minuts.",
       "admin_notice": "Mode manteniment actiu — només els administradors poden accedir."
+    },
+    "menu_display": {
+      "title": "Menú superior",
+      "description": "Com es veuen les pestanyes de classes i missions.",
+      "both": "Icona i text",
+      "icon": "Només icona",
+      "text": "Només text"
     }
   }
 }

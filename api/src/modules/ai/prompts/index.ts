@@ -5,6 +5,30 @@
  */
 
 // ============================================================
+// OUTPUT LANGUAGE
+// ============================================================
+
+const LANGUAGE_NAMES: Record<string, string> = {
+  ca: 'Catalan (català)',
+  eu: 'Basque (euskara)',
+  gl: 'Galician (galego)',
+}
+
+/**
+ * Directive appended to text prompts so the model writes its output in the
+ * class's language. The base prompt templates only exist in Spanish/English
+ * (see the `locale === 'en'` branches), so for Catalan/Basque/Galician we keep
+ * the Spanish instructions but force the OUTPUT language via this directive.
+ * Returns '' for es/en (already native) and for unknown locales.
+ */
+export function outputLanguageDirective(rawLocale?: string): string {
+  const code = (rawLocale || '').toLowerCase().slice(0, 2)
+  const name = LANGUAGE_NAMES[code]
+  if (!name) return ''
+  return `\n\nIMPORTANT: Write your ENTIRE response in ${name}, regardless of the language of these instructions. Translate all natural-language text (titles, descriptions, narrative, headings) into ${name}, while keeping any JSON structure/keys and markdown formatting exactly as specified.`
+}
+
+// ============================================================
 // CLASS ONBOARDING
 // ============================================================
 
@@ -72,8 +96,49 @@ export const MISSION_TITLES = {
     : `Genera 6 títulos DIFERENTES para una misión educativa. Sin nombre de clase. Cortos y creativos.\n\nContexto: ${context}\nFeedback del profesor: "${feedback}"\n\nDevuelve SOLO un JSON array de strings.`,
 }
 
+/** Qué recursos otorga un enigma (según los que la clase tenga activados). */
+export interface EnigmaResources {
+  coins?: boolean
+  mana?: boolean
+}
+
+/** Bloque de guía de recompensas para el prompt, según los recursos activos. Los
+ *  valores son SUGERENCIAS: la IA propone, el profesor sobrescribe. */
+function enigmaRewardSpec(res: EnigmaResources, en: boolean): string {
+  const lines = [
+    en
+      ? '- xp: one of 20, 40, 60, 80, 100 (20=simple review … 100=final project).'
+      : '- xp: uno de 20, 40, 60, 80, 100 (20=repaso sencillo … 100=proyecto final).',
+  ]
+  if (res.coins)
+    lines.push(
+      en
+        ? '- coins: 0 to 100 in steps of 10, matching the difficulty (0 = no coins).'
+        : '- coins: de 0 a 100 en múltiplos de 10, acorde a la dificultad (0 = sin monedas).'
+    )
+  if (res.mana)
+    lines.push(
+      en
+        ? '- mana: one of 0, 10, 20, 30, 50 by difficulty (0 = no mana).'
+        : '- mana: uno de 0, 10, 20, 30, 50 según la dificultad (0 = sin maná).'
+    )
+  return lines.join('\n')
+}
+
+/** Ejemplo de objeto JSON de un enigma, con solo los campos de recurso activos. */
+function enigmaJsonShape(res: EnigmaResources, en: boolean): string {
+  const desc = en
+    ? '"title":"Enigma name","description":"What the student has to do (2-3 sentences)","xp":20'
+    : '"title":"Nombre del enigma","description":"Qué tiene que hacer el alumno (2-3 frases)","xp":20'
+  const fields = [desc]
+  if (res.coins) fields.push('"coins":20')
+  if (res.mana) fields.push('"mana":10')
+  fields.push(en ? '"objectives":["Objective 1","Objective 2"]' : '"objectives":["Objetivo 1","Objetivo 2"]')
+  return `[{${fields.join(',')}}]`
+}
+
 export const MISSION_ENIGMAS = {
-  generate: (idea: string, narrative: string, title: string, className: string, locale: string) => locale === 'en'
+  generate: (idea: string, narrative: string, title: string, className: string, locale: string, res: EnigmaResources = {}) => locale === 'en'
     ? `You are an educational activity designer. The teacher has this mission for the class "${className}":
 
 Idea: ${idea}
@@ -82,19 +147,13 @@ Title: ${title}
 
 Generate exactly 4 ENIGMAS (real activities/tasks students must complete). Each enigma is a concrete, practical activity.
 
-IMPORTANT: XP for each enigma can ONLY be one of these 5 exact values:
-- 20 XP = simple task, review or introduction
-- 40 XP = standard medium difficulty exercise
-- 60 XP = activity requiring research or analysis
-- 80 XP = complex challenge combining several concepts
-- 100 XP = final project or high-difficulty challenge
-
-DO NOT use any other XP value. Only 20, 40, 60, 80 or 100.
+Each enigma grants these rewards (scale them to the enigma's difficulty):
+${enigmaRewardSpec(res, true)}
 
 Each enigma has objectives (list of learning objectives, 2-3 per enigma).
 
 Return ONLY a JSON array:
-[{"title":"Enigma name","description":"What the student has to do (2-3 sentences)","xp":20,"objectives":["Objective 1","Objective 2"]}]
+${enigmaJsonShape(res, true)}
 
 ONLY the JSON, nothing else.`
     : `Eres un diseñador de actividades educativas. El profesor tiene esta misión para la clase "${className}":
@@ -105,25 +164,19 @@ Título: ${title}
 
 Genera exactamente 4 ENIGMAS (actividades/tareas reales que los alumnos deben completar). Cada enigma es una actividad concreta y práctica.
 
-IMPORTANTE: El XP de cada enigma SOLO puede ser uno de estos 5 valores exactos:
-- 20 XP = tarea sencilla, repaso o introducción
-- 40 XP = ejercicio estándar de dificultad media
-- 60 XP = actividad que requiere investigación o análisis
-- 80 XP = reto complejo que combina varios conceptos
-- 100 XP = proyecto o desafío final de alta dificultad
-
-NO uses ningún otro valor de XP. Solo 20, 40, 60, 80 o 100.
+Cada enigma otorga estas recompensas (escálalas según la dificultad del enigma):
+${enigmaRewardSpec(res, false)}
 
 Cada enigma tiene objectives (lista de objetivos de aprendizaje, 2-3 por enigma).
 
 Responde SOLO con un JSON array:
-[{"title":"Nombre del enigma","description":"Qué tiene que hacer el alumno (2-3 frases)","xp":20,"objectives":["Objetivo 1","Objetivo 2"]}]
+${enigmaJsonShape(res, false)}
 
 SOLO el JSON, nada más.`,
 
-  regenerate: (context: string, currentEnigmas: string, feedback: string, className: string, locale: string) => locale === 'en'
-    ? `Mission for class "${className}": ${context}.\n\nCurrent enigmas: ${currentEnigmas}\n\nTeacher says: "${feedback}".\n\nModify the enigmas based on feedback. XP can ONLY be: 20, 40, 60, 80 or 100. Return ONLY a JSON array:\n[{"title":"...","description":"...","xp":20,"objectives":["..."]}]\nONLY the JSON.`
-    : `Misión para la clase "${className}": ${context}.\n\nEnigmas actuales: ${currentEnigmas}\n\nEl profesor dice: "${feedback}".\n\nMODIFICA los enigmas según su feedback. XP SOLO puede ser: 20, 40, 60, 80 o 100. Responde SOLO con un JSON array:\n[{"title":"...","description":"...","xp":20,"objectives":["..."]}]\nSOLO el JSON.`,
+  regenerate: (context: string, currentEnigmas: string, feedback: string, className: string, locale: string, res: EnigmaResources = {}) => locale === 'en'
+    ? `Mission for class "${className}": ${context}.\n\nCurrent enigmas: ${currentEnigmas}\n\nTeacher says: "${feedback}".\n\nModify the enigmas based on feedback. Rewards per enigma:\n${enigmaRewardSpec(res, true)}\n\nReturn ONLY a JSON array:\n${enigmaJsonShape(res, true)}\nONLY the JSON.`
+    : `Misión para la clase "${className}": ${context}.\n\nEnigmas actuales: ${currentEnigmas}\n\nEl profesor dice: "${feedback}".\n\nMODIFICA los enigmas según su feedback. Recompensas por enigma:\n${enigmaRewardSpec(res, false)}\n\nResponde SOLO con un JSON array:\n${enigmaJsonShape(res, false)}\nSOLO el JSON.`,
 }
 
 // ============================================================

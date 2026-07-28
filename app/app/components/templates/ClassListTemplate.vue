@@ -9,6 +9,7 @@
     <ClassFilterBar
       v-model:search="searchQuery"
       v-model:sort="sortBy"
+      v-model:view="cardView"
       :results-count="displayedClasses.length"
       @reset="resetFilters"
     />
@@ -30,9 +31,14 @@
       </Button>
     </div>
 
-    <CardGrid v-if="loading" cols="2-wide">
-      <ClassCardSkeleton v-for="i in 4" :key="i" />
-    </CardGrid>
+    <CardCollection v-if="loading" :view="cardView" cols="2-wide">
+      <template v-if="cardView === 'grid'">
+        <ClassCardSkeleton v-for="i in 4" :key="i" />
+      </template>
+      <template v-else>
+        <CardRowSkeleton v-for="i in 4" :key="i" />
+      </template>
+    </CardCollection>
 
     <EmptyState
       v-else-if="!displayedClasses.length"
@@ -45,19 +51,23 @@
       </template>
     </EmptyState>
 
-    <CardGrid v-else cols="2-wide">
+    <CardCollection v-else :view="cardView" cols="2-wide">
       <ClassCardItem
         v-for="classItem in displayedClasses"
         :key="classItem.id"
         :class-item="classItem"
+        :layout="cardView"
         :show-archive-action="showArchiveAction"
+        :show-duplicate-action="showDuplicateAction"
         :show-coins="showCoins"
         :loading="archiveLoadingId === classItem.id"
+        :duplicating="duplicatingId === classItem.id"
         @click="$emit('class-click', classItem.id)"
         @archive="$emit('archive-class', classItem.id)"
         @unarchive="$emit('unarchive-class', classItem.id)"
+        @duplicate="$emit('duplicate-class', classItem.id)"
       />
-    </CardGrid>
+    </CardCollection>
 
     <slot />
   </div>
@@ -93,7 +103,9 @@ interface Props {
   loading?: boolean
   showArchiveToggle?: boolean
   showArchiveAction?: boolean
+  showDuplicateAction?: boolean
   archiveLoadingId?: string
+  duplicatingId?: string
   emptyTitle?: string
   emptyDescription?: string
   showCoins?: boolean
@@ -104,7 +116,9 @@ const props = withDefaults(defineProps<Props>(), {
   loading: false,
   showArchiveToggle: false,
   showArchiveAction: false,
+  showDuplicateAction: false,
   archiveLoadingId: '',
+  duplicatingId: '',
   emptyTitle: '',
   emptyDescription: '',
 })
@@ -113,11 +127,14 @@ defineEmits<{
   'class-click': [classId: string]
   'archive-class': [classId: string]
   'unarchive-class': [classId: string]
+  'duplicate-class': [classId: string]
 }>()
 
 const searchQuery = ref('')
 const sortBy = ref('name-asc')
 const viewMode = ref<'active' | 'archived'>('active')
+// Preferencia de layout (cuadrícula / lista) persistida por listado.
+const cardView = useViewMode('classes')
 
 const activeClasses = computed(() => props.classes.filter(c => !c.archived))
 

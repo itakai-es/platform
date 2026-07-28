@@ -350,9 +350,46 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  // --- Modo demo "Ver como alumno": el profesor ve la plataforma como un alumno.
+  // El rol se cambia SOLO en memoria (localStorage conserva el rol real); una
+  // marca en sessionStorage lo mantiene tras recargar la pestaña. Volver restaura.
+  const isStudentPreview = ref(false)
+  const PREVIEW_KEY = 'itakai_student_preview'
+
+  const enterStudentPreview = async () => {
+    if (user.value?.role !== 'teacher') return
+    // Asegura las matrículas "fantasma" del profe en sus clases (idempotente),
+    // para que la vista de alumno muestre sus clases reales.
+    try {
+      const config = useRuntimeConfig()
+      await $fetch(`${config.public.apiBase}/students/preview/enroll`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${tokens.value?.accessToken}` },
+      })
+    } catch {
+      /* si falla, entramos igual: se verá vacío pero no bloquea */
+    }
+    user.value = { ...user.value, role: 'student' }
+    isStudentPreview.value = true
+    if (import.meta.client) sessionStorage.setItem(PREVIEW_KEY, '1')
+    navigateTo('/alumno/inicio')
+  }
+
+  const exitStudentPreview = () => {
+    if (user.value) user.value = { ...user.value, role: 'teacher' }
+    isStudentPreview.value = false
+    if (import.meta.client) sessionStorage.removeItem(PREVIEW_KEY)
+    navigateTo('/profesor/inicio')
+  }
+
   // Initialize on store creation
   if (import.meta.client) {
     loadUserFromStorage()
+    // Reaplica el modo "ver como alumno" tras recargar (marca en sessionStorage).
+    if (sessionStorage.getItem(PREVIEW_KEY) === '1' && user.value?.role === 'teacher') {
+      user.value = { ...user.value, role: 'student' }
+      isStudentPreview.value = true
+    }
   }
 
   return {
@@ -366,6 +403,9 @@ export const useAuthStore = defineStore('auth', () => {
     loginWithGoogleCode,
     signup,
     loginAsRole,
+    isStudentPreview,
+    enterStudentPreview,
+    exitStudentPreview,
     logout,
     clearAuthState,
     refreshToken,

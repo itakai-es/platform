@@ -53,6 +53,7 @@ export type ClassEnrollmentMinAggregateOutputType = {
   level: number | null
   nickname: string | null
   avatarUrl: string | null
+  isPreview: boolean | null
   enrolledAt: Date | null
 }
 
@@ -67,6 +68,7 @@ export type ClassEnrollmentMaxAggregateOutputType = {
   level: number | null
   nickname: string | null
   avatarUrl: string | null
+  isPreview: boolean | null
   enrolledAt: Date | null
 }
 
@@ -81,6 +83,7 @@ export type ClassEnrollmentCountAggregateOutputType = {
   level: number
   nickname: number
   avatarUrl: number
+  isPreview: number
   enrolledAt: number
   _all: number
 }
@@ -113,6 +116,7 @@ export type ClassEnrollmentMinAggregateInputType = {
   level?: true
   nickname?: true
   avatarUrl?: true
+  isPreview?: true
   enrolledAt?: true
 }
 
@@ -127,6 +131,7 @@ export type ClassEnrollmentMaxAggregateInputType = {
   level?: true
   nickname?: true
   avatarUrl?: true
+  isPreview?: true
   enrolledAt?: true
 }
 
@@ -141,6 +146,7 @@ export type ClassEnrollmentCountAggregateInputType = {
   level?: true
   nickname?: true
   avatarUrl?: true
+  isPreview?: true
   enrolledAt?: true
   _all?: true
 }
@@ -242,6 +248,7 @@ export type ClassEnrollmentGroupByOutputType = {
   level: number
   nickname: string | null
   avatarUrl: string | null
+  isPreview: boolean
   enrolledAt: Date
   _count: ClassEnrollmentCountAggregateOutputType | null
   _avg: ClassEnrollmentAvgAggregateOutputType | null
@@ -279,6 +286,7 @@ export type ClassEnrollmentWhereInput = {
   level?: Prisma.IntFilter<"ClassEnrollment"> | number
   nickname?: Prisma.StringNullableFilter<"ClassEnrollment"> | string | null
   avatarUrl?: Prisma.StringNullableFilter<"ClassEnrollment"> | string | null
+  isPreview?: Prisma.BoolFilter<"ClassEnrollment"> | boolean
   enrolledAt?: Prisma.DateTimeFilter<"ClassEnrollment"> | Date | string
   student?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   class?: Prisma.XOR<Prisma.ClassScalarRelationFilter, Prisma.ClassWhereInput>
@@ -295,6 +303,7 @@ export type ClassEnrollmentOrderByWithRelationInput = {
   level?: Prisma.SortOrder
   nickname?: Prisma.SortOrderInput | Prisma.SortOrder
   avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  isPreview?: Prisma.SortOrder
   enrolledAt?: Prisma.SortOrder
   student?: Prisma.UserOrderByWithRelationInput
   class?: Prisma.ClassOrderByWithRelationInput
@@ -315,6 +324,7 @@ export type ClassEnrollmentWhereUniqueInput = Prisma.AtLeast<{
   level?: Prisma.IntFilter<"ClassEnrollment"> | number
   nickname?: Prisma.StringNullableFilter<"ClassEnrollment"> | string | null
   avatarUrl?: Prisma.StringNullableFilter<"ClassEnrollment"> | string | null
+  isPreview?: Prisma.BoolFilter<"ClassEnrollment"> | boolean
   enrolledAt?: Prisma.DateTimeFilter<"ClassEnrollment"> | Date | string
   student?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   class?: Prisma.XOR<Prisma.ClassScalarRelationFilter, Prisma.ClassWhereInput>
@@ -331,6 +341,7 @@ export type ClassEnrollmentOrderByWithAggregationInput = {
   level?: Prisma.SortOrder
   nickname?: Prisma.SortOrderInput | Prisma.SortOrder
   avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  isPreview?: Prisma.SortOrder
   enrolledAt?: Prisma.SortOrder
   _count?: Prisma.ClassEnrollmentCountOrderByAggregateInput
   _avg?: Prisma.ClassEnrollmentAvgOrderByAggregateInput
@@ -353,6 +364,7 @@ export type ClassEnrollmentScalarWhereWithAggregatesInput = {
   level?: Prisma.IntWithAggregatesFilter<"ClassEnrollment"> | number
   nickname?: Prisma.StringNullableWithAggregatesFilter<"ClassEnrollment"> | string | null
   avatarUrl?: Prisma.StringNullableWithAggregatesFilter<"ClassEnrollment"> | string | null
+  isPreview?: Prisma.BoolWithAggregatesFilter<"ClassEnrollment"> | boolean
   enrolledAt?: Prisma.DateTimeWithAggregatesFilter<"ClassEnrollment"> | Date | string
 }
 
@@ -365,6 +377,7 @@ export type ClassEnrollmentCreateInput = {
   level?: number
   nickname?: string | null
   avatarUrl?: string | null
+  isPreview?: boolean
   enrolledAt?: Date | string
   student: Prisma.UserCreateNestedOneWithoutEnrollmentsInput
   class: Prisma.ClassCreateNestedOneWithoutEnrollmentsInput
@@ -381,6 +394,7 @@ export type ClassEnrollmentUncheckedCreateInput = {
   level?: number
   nickname?: string | null
   avatarUrl?: string | null
+  isPreview?: boolean
   enrolledAt?: Date | string
 }
 
@@ -393,6 +407,7 @@ export type ClassEnrollmentUpdateInput = {
   level?: Prisma.IntFieldUpdateOperationsInput | number
   nickname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPreview?: Prisma.BoolFieldUpdateOperationsInput | boolean
   enrolledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   student?: Prisma.UserUpdateOneRequiredWithoutEnrollmentsNestedInput
   class?: Prisma.ClassUpdateOneRequiredWithoutEnrollmentsNestedInput
@@ -409,6 +424,7 @@ export type ClassEnrollmentUncheckedUpdateInput = {
   level?: Prisma.IntFieldUpdateOperationsInput | number
   nickname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPreview?: Prisma.BoolFieldUpdateOperationsInput | boolean
   enrolledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -423,6 +439,7 @@ export type ClassEnrollmentCreateManyInput = {
   level?: number
   nickname?: string | null
   avatarUrl?: string | null
+  isPreview?: boolean
   enrolledAt?: Date | string
 }
 
@@ -435,6 +452,7 @@ export type ClassEnrollmentUpdateManyMutationInput = {
   level?: Prisma.IntFieldUpdateOperationsInput | number
   nickname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPreview?: Prisma.BoolFieldUpdateOperationsInput | boolean
   enrolledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -449,6 +467,7 @@ export type ClassEnrollmentUncheckedUpdateManyInput = {
   level?: Prisma.IntFieldUpdateOperationsInput | number
   nickname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPreview?: Prisma.BoolFieldUpdateOperationsInput | boolean
   enrolledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -478,6 +497,7 @@ export type ClassEnrollmentCountOrderByAggregateInput = {
   level?: Prisma.SortOrder
   nickname?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrder
+  isPreview?: Prisma.SortOrder
   enrolledAt?: Prisma.SortOrder
 }
 
@@ -500,6 +520,7 @@ export type ClassEnrollmentMaxOrderByAggregateInput = {
   level?: Prisma.SortOrder
   nickname?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrder
+  isPreview?: Prisma.SortOrder
   enrolledAt?: Prisma.SortOrder
 }
 
@@ -514,6 +535,7 @@ export type ClassEnrollmentMinOrderByAggregateInput = {
   level?: Prisma.SortOrder
   nickname?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrder
+  isPreview?: Prisma.SortOrder
   enrolledAt?: Prisma.SortOrder
 }
 
@@ -626,6 +648,7 @@ export type ClassEnrollmentCreateWithoutStudentInput = {
   level?: number
   nickname?: string | null
   avatarUrl?: string | null
+  isPreview?: boolean
   enrolledAt?: Date | string
   class: Prisma.ClassCreateNestedOneWithoutEnrollmentsInput
 }
@@ -640,6 +663,7 @@ export type ClassEnrollmentUncheckedCreateWithoutStudentInput = {
   level?: number
   nickname?: string | null
   avatarUrl?: string | null
+  isPreview?: boolean
   enrolledAt?: Date | string
 }
 
@@ -683,6 +707,7 @@ export type ClassEnrollmentScalarWhereInput = {
   level?: Prisma.IntFilter<"ClassEnrollment"> | number
   nickname?: Prisma.StringNullableFilter<"ClassEnrollment"> | string | null
   avatarUrl?: Prisma.StringNullableFilter<"ClassEnrollment"> | string | null
+  isPreview?: Prisma.BoolFilter<"ClassEnrollment"> | boolean
   enrolledAt?: Prisma.DateTimeFilter<"ClassEnrollment"> | Date | string
 }
 
@@ -695,6 +720,7 @@ export type ClassEnrollmentCreateWithoutClassInput = {
   level?: number
   nickname?: string | null
   avatarUrl?: string | null
+  isPreview?: boolean
   enrolledAt?: Date | string
   student: Prisma.UserCreateNestedOneWithoutEnrollmentsInput
 }
@@ -709,6 +735,7 @@ export type ClassEnrollmentUncheckedCreateWithoutClassInput = {
   level?: number
   nickname?: string | null
   avatarUrl?: string | null
+  isPreview?: boolean
   enrolledAt?: Date | string
 }
 
@@ -748,6 +775,7 @@ export type ClassEnrollmentCreateManyStudentInput = {
   level?: number
   nickname?: string | null
   avatarUrl?: string | null
+  isPreview?: boolean
   enrolledAt?: Date | string
 }
 
@@ -760,6 +788,7 @@ export type ClassEnrollmentUpdateWithoutStudentInput = {
   level?: Prisma.IntFieldUpdateOperationsInput | number
   nickname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPreview?: Prisma.BoolFieldUpdateOperationsInput | boolean
   enrolledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   class?: Prisma.ClassUpdateOneRequiredWithoutEnrollmentsNestedInput
 }
@@ -774,6 +803,7 @@ export type ClassEnrollmentUncheckedUpdateWithoutStudentInput = {
   level?: Prisma.IntFieldUpdateOperationsInput | number
   nickname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPreview?: Prisma.BoolFieldUpdateOperationsInput | boolean
   enrolledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -787,6 +817,7 @@ export type ClassEnrollmentUncheckedUpdateManyWithoutStudentInput = {
   level?: Prisma.IntFieldUpdateOperationsInput | number
   nickname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPreview?: Prisma.BoolFieldUpdateOperationsInput | boolean
   enrolledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -800,6 +831,7 @@ export type ClassEnrollmentCreateManyClassInput = {
   level?: number
   nickname?: string | null
   avatarUrl?: string | null
+  isPreview?: boolean
   enrolledAt?: Date | string
 }
 
@@ -812,6 +844,7 @@ export type ClassEnrollmentUpdateWithoutClassInput = {
   level?: Prisma.IntFieldUpdateOperationsInput | number
   nickname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPreview?: Prisma.BoolFieldUpdateOperationsInput | boolean
   enrolledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   student?: Prisma.UserUpdateOneRequiredWithoutEnrollmentsNestedInput
 }
@@ -826,6 +859,7 @@ export type ClassEnrollmentUncheckedUpdateWithoutClassInput = {
   level?: Prisma.IntFieldUpdateOperationsInput | number
   nickname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPreview?: Prisma.BoolFieldUpdateOperationsInput | boolean
   enrolledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -839,6 +873,7 @@ export type ClassEnrollmentUncheckedUpdateManyWithoutClassInput = {
   level?: Prisma.IntFieldUpdateOperationsInput | number
   nickname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPreview?: Prisma.BoolFieldUpdateOperationsInput | boolean
   enrolledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -855,6 +890,7 @@ export type ClassEnrollmentSelect<ExtArgs extends runtime.Types.Extensions.Inter
   level?: boolean
   nickname?: boolean
   avatarUrl?: boolean
+  isPreview?: boolean
   enrolledAt?: boolean
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   class?: boolean | Prisma.ClassDefaultArgs<ExtArgs>
@@ -871,6 +907,7 @@ export type ClassEnrollmentSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   level?: boolean
   nickname?: boolean
   avatarUrl?: boolean
+  isPreview?: boolean
   enrolledAt?: boolean
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   class?: boolean | Prisma.ClassDefaultArgs<ExtArgs>
@@ -887,6 +924,7 @@ export type ClassEnrollmentSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   level?: boolean
   nickname?: boolean
   avatarUrl?: boolean
+  isPreview?: boolean
   enrolledAt?: boolean
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   class?: boolean | Prisma.ClassDefaultArgs<ExtArgs>
@@ -903,10 +941,11 @@ export type ClassEnrollmentSelectScalar = {
   level?: boolean
   nickname?: boolean
   avatarUrl?: boolean
+  isPreview?: boolean
   enrolledAt?: boolean
 }
 
-export type ClassEnrollmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "studentId" | "classId" | "xp" | "coins" | "mana" | "lives" | "level" | "nickname" | "avatarUrl" | "enrolledAt", ExtArgs["result"]["classEnrollment"]>
+export type ClassEnrollmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "studentId" | "classId" | "xp" | "coins" | "mana" | "lives" | "level" | "nickname" | "avatarUrl" | "isPreview" | "enrolledAt", ExtArgs["result"]["classEnrollment"]>
 export type ClassEnrollmentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   class?: boolean | Prisma.ClassDefaultArgs<ExtArgs>
@@ -937,6 +976,7 @@ export type $ClassEnrollmentPayload<ExtArgs extends runtime.Types.Extensions.Int
     level: number
     nickname: string | null
     avatarUrl: string | null
+    isPreview: boolean
     enrolledAt: Date
   }, ExtArgs["result"]["classEnrollment"]>
   composites: {}
@@ -1373,6 +1413,7 @@ export interface ClassEnrollmentFieldRefs {
   readonly level: Prisma.FieldRef<"ClassEnrollment", 'Int'>
   readonly nickname: Prisma.FieldRef<"ClassEnrollment", 'String'>
   readonly avatarUrl: Prisma.FieldRef<"ClassEnrollment", 'String'>
+  readonly isPreview: Prisma.FieldRef<"ClassEnrollment", 'Boolean'>
   readonly enrolledAt: Prisma.FieldRef<"ClassEnrollment", 'DateTime'>
 }
     

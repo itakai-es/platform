@@ -68,6 +68,7 @@ export class ProfileService {
       missionReminders: true,
       language: 'es',
       theme: 'college',
+      menuDisplay: 'both',
     }
 
     return {
@@ -85,6 +86,7 @@ export class ProfileService {
           missionReminders: settings.missionReminders,
           language: settings.language,
           theme: settings.theme,
+          menuDisplay: settings.menuDisplay,
         },
         createdAt: user.createdAt,
       },
@@ -186,6 +188,7 @@ export class ProfileService {
     missionReminders?: boolean
     language?: string
     theme?: string
+    menuDisplay?: string
   }) {
     await prisma.userSettings.upsert({
       where: { userId },
@@ -220,6 +223,7 @@ export class ProfileService {
         teacherClasses: {
           include: {
             enrollments: {
+              where: { isPreview: false },
               select: {
                 id: true,
                 studentId: true,

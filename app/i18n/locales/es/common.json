@@ -6,6 +6,7 @@
       "missions": "Misiones",
       "badges": "Insignias",
       "students": "Alumnos",
+      "about": "Acerca de",
       "users": "Usuarios",
       "classes": "Clases",
       "analytics": "Analíticas",
@@ -197,6 +198,13 @@
       "title": "En mantenimiento",
       "message": "Estamos haciendo mejoras. Vuelve en unos minutos.",
       "admin_notice": "Modo mantenimiento activo — solo los administradores pueden acceder."
+    },
+    "menu_display": {
+      "title": "Menú superior",
+      "description": "Cómo se ven las pestañas de clases y misiones.",
+      "both": "Icono y texto",
+      "icon": "Solo icono",
+      "text": "Solo texto"
     }
   }
 }

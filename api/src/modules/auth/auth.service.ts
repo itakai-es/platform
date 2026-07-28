@@ -82,7 +82,7 @@ export class AuthService {
   async loginWithAlias(input: LoginAliasInput, context?: RequestContext): Promise<LoginResult> {
     // Find enrollment with matching nickname
     const enrollment = await prisma.classEnrollment.findFirst({
-      where: { nickname: input.alias },
+      where: { nickname: input.alias, isPreview: false },
       include: { student: true, class: { select: { invitationCode: true } } },
     })
 

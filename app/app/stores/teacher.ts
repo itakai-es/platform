@@ -38,7 +38,6 @@ export const useTeacherStore = defineStore('teacher', () => {
   // Per-id / per-classId data added for ensureX wrappers
   const studentDetails = ref<Map<string, any>>(new Map())
   const classSubmissions = ref<Map<string, any>>(new Map())
-  const classAnalytics = ref<Map<string, any>>(new Map())
 
   // Cache flags (persist during session)
   const hasLoadedStats = ref(false)
@@ -57,7 +56,6 @@ export const useTeacherStore = defineStore('teacher', () => {
   // Per-id / per-classId fetched flags for new ensureX wrappers
   const loadedStudentDetails = ref<Set<string>>(new Set())
   const loadedClassSubmissions = ref<Set<string>>(new Set())
-  const loadedClassAnalytics = ref<Set<string>>(new Set())
   const hasLoadedPendingRequests = ref<Set<string>>(new Set())
   const hasLoadedSentInvitations = ref<Set<string>>(new Set())
   // Per-classId fetched flag for the per-class ensureTeacherClassById wrapper
@@ -66,7 +64,6 @@ export const useTeacherStore = defineStore('teacher', () => {
   // In-flight guards so concurrent ensureX calls don't fire duplicate fetches
   const isLoadingClassDetails = ref<Set<string>>(new Set())
   const isLoadingClassSubmissions = ref<Set<string>>(new Set())
-  const isLoadingClassAnalytics = ref<Set<string>>(new Set())
   const isLoadingStudentDetails = ref<Set<string>>(new Set())
   const isLoadingTotalPending = ref(false)
 
@@ -354,6 +351,28 @@ export const useTeacherStore = defineStore('teacher', () => {
       console.error('Error archiving class:', error)
       throw error
     }
+  }
+
+  /**
+   * Duplica una clase propia (crea una copia independiente). `options` elige qué
+   * partes copiar (narrativa, funcionalidades, tienda, comportamientos, misiones).
+   * Devuelve la clase nueva; el refresco de la lista lo hace la página.
+   */
+  async function duplicateClass(
+    classId: string,
+    options?: {
+      narrative: boolean
+      features: boolean
+      shop: boolean
+      behaviors: boolean
+      missions: boolean
+    }
+  ) {
+    const config = useRuntimeConfig()
+    return $fetch<{ class: { id: string; name: string }; message: string }>(
+      `${config.public.apiBase}/teacher/classes/${classId}/duplicate`,
+      { method: 'POST', body: options ?? {} }
+    )
   }
 
   /**
@@ -782,82 +801,6 @@ export const useTeacherStore = defineStore('teacher', () => {
     classSubmissions.value.set(classId, next)
   }
 
-  /**
-   * Obtiene la analítica de una clase. Cacheada por classId.
-   *
-   * Como no existe un endpoint dedicado de analítica, agregamos los datos a
-   * partir de la clase + sus misiones + el detalle por misión (enigmas con
-   * pendientes/total de submissions). El resultado tiene la forma:
-   *   { className: string, enigmaRows: EnigmaRow[] }
-   */
-  async function fetchClassAnalytics(classId: string, force = false) {
-    if (!force && loadedClassAnalytics.value.has(classId)) {
-      const cached = classAnalytics.value.get(classId)
-      if (cached) return cached
-    }
-    try {
-      const config = useRuntimeConfig()
-
-      const [classData, missionsResponse] = await Promise.all([
-        fetchClassById(classId, force),
-        fetchClassMissions(classId, force),
-      ])
-
-      const className = classData?.name || ''
-      const missions = (missionsResponse?.missions || []) as Array<{
-        id: string
-        title: string
-      }>
-
-      const details = await Promise.all(
-        missions.map(mission =>
-          $fetch<{
-            mission: {
-              id: string
-              title: string
-              enigmas: Array<{
-                id: string
-                title: string
-                pendingSubmissions?: number
-                totalSubmissions?: number
-              }>
-            }
-          }>(`${config.public.apiBase}/missions/${mission.id}`)
-        )
-      )
-
-      const enigmaRows = details.flatMap(detail =>
-        (detail.mission.enigmas || []).map(enigma => {
-          const totalSubmissions = enigma.totalSubmissions || 0
-          const pendingSubmissions = enigma.pendingSubmissions || 0
-          const riskScore =
-            totalSubmissions > 0
-              ? Math.round((pendingSubmissions / totalSubmissions) * 100)
-              : pendingSubmissions > 0
-                ? 100
-                : 0
-
-          return {
-            id: enigma.id,
-            title: enigma.title,
-            missionTitle: detail.mission.title,
-            pendingSubmissions,
-            totalSubmissions,
-            riskScore,
-          }
-        })
-      )
-
-      const response = { className, enigmaRows }
-      classAnalytics.value.set(classId, response)
-      loadedClassAnalytics.value.add(classId)
-      return response
-    } catch (error) {
-      console.error('Error fetching class analytics:', error)
-      throw error
-    }
-  }
-
   // ==========================================
   // ENSURE WRAPPERS — patrón canónico
   // (ver useTeacherClassDetail.ts / useStudentClassDetail.ts).
@@ -968,19 +911,6 @@ export const useTeacherStore = defineStore('teacher', () => {
     }
   }
 
-  async function ensureClassAnalytics(classId: string, force = false) {
-    if (loadedClassAnalytics.value.has(classId) && !force) {
-      return classAnalytics.value.get(classId)
-    }
-    if (isLoadingClassAnalytics.value.has(classId)) return
-    isLoadingClassAnalytics.value.add(classId)
-    try {
-      return await fetchClassAnalytics(classId, force)
-    } finally {
-      isLoadingClassAnalytics.value.delete(classId)
-    }
-  }
-
   async function ensureArchivedClasses(force = false) {
     if (hasLoadedArchivedClasses.value && !force) {
       return { classes: archivedClasses.value, total: archivedClasses.value.length }
@@ -1065,7 +995,6 @@ export const useTeacherStore = defineStore('teacher', () => {
     classRankings.value.clear()
     studentDetails.value.clear()
     classSubmissions.value.clear()
-    classAnalytics.value.clear()
     // Cache flags
     hasLoadedStats.value = false
     hasLoadedClasses.value = false
@@ -1082,13 +1011,11 @@ export const useTeacherStore = defineStore('teacher', () => {
     loadedClassDetails.value.clear()
     loadedStudentDetails.value.clear()
     loadedClassSubmissions.value.clear()
-    loadedClassAnalytics.value.clear()
     hasLoadedPendingRequests.value.clear()
     hasLoadedSentInvitations.value.clear()
     // In-flight guards
     isLoadingClassDetails.value.clear()
     isLoadingClassSubmissions.value.clear()
-    isLoadingClassAnalytics.value.clear()
     isLoadingStudentDetails.value.clear()
     isLoadingTotalPending.value = false
     // Enrollment state
@@ -1122,7 +1049,6 @@ export const useTeacherStore = defineStore('teacher', () => {
     classRankings,
     studentDetails,
     classSubmissions,
-    classAnalytics,
     // Fetched flags (cache de sesión)
     hasLoadedStats,
     hasLoadedClasses,
@@ -1140,7 +1066,6 @@ export const useTeacherStore = defineStore('teacher', () => {
     loadedClassDetails,
     loadedStudentDetails,
     loadedClassSubmissions,
-    loadedClassAnalytics,
     // Enrollment state
     pendingRequests,
     sentInvitations,
@@ -1162,11 +1087,11 @@ export const useTeacherStore = defineStore('teacher', () => {
     fetchStudentById,
     fetchClassSubmissions,
     removeSubmissionFromCache,
-    fetchClassAnalytics,
     createClass,
     updateClass,
     publishTemplate,
     setClassArchived,
+    duplicateClass,
     getInvitationCode,
     fetchClassMissions,
     fetchClassGuide,
@@ -1185,7 +1110,6 @@ export const useTeacherStore = defineStore('teacher', () => {
     ensureClassGuide,
     ensureStudentById,
     ensureClassSubmissions,
-    ensureClassAnalytics,
     ensureArchivedClasses,
     ensurePendingRequests,
     ensureSentInvitations,

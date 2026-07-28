@@ -44,8 +44,25 @@
     <!-- Main Content -->
     <template v-else-if="mission">
       <!-- Mission Header -->
-      <div class="bg-navy-700 -mx-4 md:-mx-6 -mt-4 md:-mt-6 px-4 md:px-6 pt-6 pb-6 mb-6">
-        <div class="space-y-4">
+      <div
+        class="relative overflow-hidden bg-navy-700 -mx-4 md:-mx-6 -mt-4 md:-mt-6 px-4 md:px-6 pt-6 mb-6"
+        :class="showTabs ? 'pb-0' : 'pb-6'"
+      >
+        <!-- Imagen de portada a la derecha con degradado navy → transparente -->
+        <div
+          v-if="mission.backgroundImage"
+          class="pointer-events-none absolute inset-y-0 right-0 hidden md:block md:w-1/2 lg:w-[45%]"
+        >
+          <div
+            class="absolute inset-0 bg-cover bg-center"
+            :style="{ backgroundImage: `url(${getImageUrl(mission.backgroundImage)})` }"
+          />
+          <div
+            class="absolute inset-0 bg-gradient-to-r from-navy-700 via-navy-700/60 to-transparent"
+          />
+        </div>
+
+        <div class="relative z-10 space-y-4">
           <!-- Breadcrumb + Status -->
           <nav class="flex items-center flex-wrap gap-x-1.5 gap-y-1 sm:gap-x-2 text-sm">
             <NuxtLink :to="dashboardLink" class="text-white/70 hover:text-white flex-shrink-0">
@@ -72,111 +89,28 @@
             }}</StatusBadge>
           </nav>
 
-          <!-- Icon + Title -->
-          <div class="flex items-start gap-3 sm:gap-4">
-            <div
-              class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-white/20 flex items-center justify-center flex-shrink-0"
+          <!-- Título + fecha límite (edición en la pestaña Ajustes) -->
+          <div class="min-w-0">
+            <h1 class="text-xl sm:text-3xl lg:text-4xl font-bold text-white break-words">
+              {{ mission.title }}
+            </h1>
+            <p
+              class="text-white/70 mt-1 text-sm sm:text-base flex flex-wrap items-center gap-x-2 gap-y-1"
             >
-              <AcademicCapIcon class="w-6 h-6 sm:w-7 sm:h-7 text-white" />
-            </div>
-            <div class="min-w-0 flex-1">
-              <div class="flex items-start gap-1.5">
-                <template v-if="editingTitle">
-                  <textarea
-                    ref="titleInputRef"
-                    v-model="editTitleValue"
-                    rows="1"
-                    placeholder="Nombre de la misión"
-                    class="text-xl sm:text-3xl lg:text-4xl font-bold text-white bg-white/10 border border-white/30 focus:border-white/60 rounded-xl px-3 py-2 outline-none w-full resize-none overflow-hidden break-words"
-                    @input="autoResizeTitleInput"
-                    @keydown.enter.prevent="saveTitle"
-                    @keydown.escape="editingTitle = false"
-                    @blur="saveTitle"
-                  />
-                </template>
-                <template v-else>
-                  <h1 class="text-xl sm:text-3xl lg:text-4xl font-bold text-white break-words">
-                    {{ mission.title }}
-                  </h1>
-                  <button
-                    v-if="isTeacher"
-                    type="button"
-                    class="flex-shrink-0 mt-1 sm:mt-2 p-1.5 rounded-lg text-white/40 hover:text-white/80 hover:bg-white/15 transition-colors"
-                    @click="startEditTitle"
-                  >
-                    <PencilSquareIcon class="w-4 h-4" />
-                  </button>
-                </template>
-              </div>
-              <p
-                class="text-white/70 mt-1 text-sm sm:text-base flex flex-wrap items-center gap-x-2 gap-y-1"
-              >
-                <span>{{ mission.className }}</span>
-                <span aria-hidden="true">&bull;</span>
-
-                <!-- Deadline display + edit -->
-                <span v-if="!editingDeadline" class="inline-flex items-center gap-1.5">
-                  <CalendarDaysIcon class="w-4 h-4 text-white/60" />
-                  <span v-if="mission.deadline">{{ formatDeadline(mission.deadline) }}</span>
-                  <span v-else class="italic text-white/50">{{
-                    t('teacher.components.mission_detail_template.deadline_none')
-                  }}</span>
-                  <button
-                    v-if="isTeacher"
-                    type="button"
-                    class="ml-0.5 p-1 rounded text-white/40 hover:text-white/80 hover:bg-white/15 transition-colors"
-                    :title="t('teacher.components.mission_detail_template.deadline_edit')"
-                    @click="startEditDeadline"
-                  >
-                    <PencilSquareIcon class="w-3.5 h-3.5" />
-                  </button>
-                </span>
-
-                <span v-else class="inline-flex items-center gap-1.5">
-                  <CalendarDaysIcon class="w-4 h-4 text-white/60" />
-                  <input
-                    ref="deadlineInputRef"
-                    v-model="editDeadlineValue"
-                    type="date"
-                    class="bg-white/10 border border-white/30 focus:border-white/60 rounded-md px-2 py-0.5 text-sm text-white outline-none [color-scheme:dark]"
-                    @keydown.enter.prevent="saveDeadline"
-                    @keydown.escape="editingDeadline = false"
-                  />
-                  <button
-                    type="button"
-                    class="p-1 rounded text-white/70 hover:text-white hover:bg-white/15 transition-colors"
-                    :title="t('teacher.components.mission_detail_template.deadline_save')"
-                    @click="saveDeadline"
-                  >
-                    <CheckIcon class="w-4 h-4" />
-                  </button>
-                  <button
-                    v-if="mission.deadline"
-                    type="button"
-                    class="p-1 rounded text-white/70 hover:text-white hover:bg-white/15 transition-colors"
-                    :title="t('teacher.components.mission_detail_template.deadline_clear')"
-                    @click="clearDeadline"
-                  >
-                    <XMarkIcon class="w-4 h-4" />
-                  </button>
-                  <button
-                    type="button"
-                    class="p-1 rounded text-white/70 hover:text-white hover:bg-white/15 transition-colors"
-                    :title="t('teacher.components.mission_detail_template.deadline_cancel')"
-                    @click="editingDeadline = false"
-                  >
-                    <ArrowUturnLeftIcon class="w-4 h-4" />
-                  </button>
-                </span>
-
-                <span v-if="mission.unit" aria-hidden="true">&bull;</span>
-                <span v-if="mission.unit">{{ mission.unit }}</span>
-              </p>
-            </div>
+              <span class="inline-flex items-center gap-1.5">
+                <CalendarDaysIcon class="w-4 h-4 text-white/60" />
+                <span v-if="mission.deadline">{{ formatDeadline(mission.deadline) }}</span>
+                <span v-else class="italic text-white/50">{{
+                  t('teacher.components.mission_detail_template.deadline_none')
+                }}</span>
+              </span>
+              <span v-if="mission.unit" aria-hidden="true">&bull;</span>
+              <span v-if="mission.unit">{{ mission.unit }}</span>
+            </p>
           </div>
 
           <!-- Tags -->
-          <div class="flex flex-wrap gap-2">
+          <div v-if="mission.tags?.length" class="flex flex-wrap gap-2">
             <span
               v-for="tag in mission.tags"
               :key="tag"
@@ -185,11 +119,47 @@
               {{ tag }}
             </span>
           </div>
+
+          <!-- Pestañas (solo profesor): cada una es un NuxtLink con su propia URL -->
+          <div v-if="showTabs" class="flex gap-0 overflow-x-auto scrollbar-subtle">
+            <NuxtLink
+              v-for="tab in tabs"
+              :key="tab.id"
+              :to="tabHref ? tabHref(tab.id) : '#'"
+              :class="[
+                'px-3 sm:px-4 md:px-6 lg:px-8 py-3 text-sm sm:text-base font-medium transition-colors flex items-center gap-2 rounded-t-2xl whitespace-nowrap flex-shrink-0 hover:opacity-100',
+                activeTab === tab.id
+                  ? 'bg-surface text-navy-700'
+                  : 'text-white/70 hover:text-white hover:bg-white/10',
+              ]"
+            >
+              <component v-if="menuDisplay !== 'text'" :is="tab.icon" class="w-5 h-5" />
+              <span
+                v-if="menuDisplay !== 'icon'"
+                :class="menuDisplay === 'both' ? 'hidden sm:inline' : ''"
+                >{{ tab.label }}</span
+              >
+            </NuxtLink>
+          </div>
         </div>
       </div>
 
-      <!-- Two Column Layout -->
-      <div class="grid grid-cols-1 xl:grid-cols-3 gap-4 xl:gap-6">
+      <!-- Aviso de solo lectura para el alumno cuando la misión ha expirado -->
+      <div
+        v-if="!isTeacher && missionExpired"
+        class="mb-6 flex items-center gap-2 rounded-2xl border border-yellow/30 bg-yellow/10 px-4 py-3 text-sm text-navy-700"
+      >
+        <ClockIcon class="w-5 h-5 flex-shrink-0 text-yellow-700" />
+        <span>{{ t('teacher.components.mission_detail_template.expired_readonly') }}</span>
+      </div>
+
+      <!-- Contenido de otras pestañas (p. ej. Ajustes) -->
+      <div v-if="showTabs && activeTab !== 'resumen'">
+        <slot name="tab" :active-tab="activeTab" />
+      </div>
+
+      <!-- Two Column Layout (pestaña Resumen) -->
+      <div v-else class="grid grid-cols-1 xl:grid-cols-3 gap-4 xl:gap-6">
         <!-- Left Column (2/3): Main content -->
         <div class="xl:col-span-2 space-y-4 xl:space-y-6">
           <!-- Historia de la Mision - Purple theme -->
@@ -373,7 +343,7 @@
                             <button
                               type="button"
                               class="flex items-center gap-3 w-full px-4 py-3 text-sm text-navy-700 hover:bg-gray-50 transition-colors"
-                              @click="emit('editEnigma', enigma); openEnigmaDropdown = null"
+                              @click="editEnigmaAction(enigma)"
                             >
                               <PencilIcon class="w-5 h-5" />
                               {{ t('teacher.components.mission_detail_template.btn_edit') }}
@@ -381,7 +351,7 @@
                             <button
                               type="button"
                               class="flex items-center gap-3 w-full px-4 py-3 text-sm text-navy-700 hover:bg-gray-50 transition-colors"
-                              @click="emit('viewSubmissions', enigma); openEnigmaDropdown = null"
+                              @click="viewSubmissionsAction(enigma)"
                             >
                               <UserGroupIcon class="w-5 h-5" />
                               {{
@@ -394,7 +364,7 @@
                             <button
                               type="button"
                               class="flex items-center gap-3 w-full px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors"
-                              @click="emit('deleteEnigma', enigma.id); openEnigmaDropdown = null"
+                              @click="deleteEnigmaAction(enigma.id)"
                             >
                               <TrashIcon class="w-5 h-5" />
                               {{ t('teacher.missions.detail.delete_confirm_btn') }}
@@ -419,7 +389,10 @@
                               <CoinIcon class="w-5 h-5" />{{ enigmaCoins(enigma) }}
                             </span>
                           </Tooltip>
-                          <Tooltip v-if="enigmaMana(enigma) && classCfg.mana" :text="t('common.resources.mana')">
+                          <Tooltip
+                            v-if="enigmaMana(enigma) && classCfg.mana"
+                            :text="t('common.resources.mana')"
+                          >
                             <span class="inline-flex items-center gap-1">
                               <ManaIcon class="w-5 h-5" />{{ enigmaMana(enigma) }}
                             </span>
@@ -495,7 +468,10 @@
                                   <CoinIcon class="w-5 h-5" />{{ enigmaCoins(enigma) }}
                                 </span>
                               </Tooltip>
-                              <Tooltip v-if="enigmaMana(enigma) && classCfg.mana" :text="t('common.resources.mana')">
+                              <Tooltip
+                                v-if="enigmaMana(enigma) && classCfg.mana"
+                                :text="t('common.resources.mana')"
+                              >
                                 <span class="inline-flex items-center gap-1">
                                   <ManaIcon class="w-5 h-5" />{{ enigmaMana(enigma) }}
                                 </span>
@@ -586,10 +562,7 @@
                     <div
                       class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 bg-navy-700"
                     >
-                      <CheckIcon
-                        v-if="enigma.status === 'completado'"
-                        class="w-5 h-5 text-white"
-                      />
+                      <CheckIcon v-if="enigma.status === 'completado'" class="w-5 h-5 text-white" />
                       <span v-else class="text-white font-bold text-sm">{{ index + 1 }}</span>
                     </div>
 
@@ -643,7 +616,10 @@
                                 <template v-else>{{ enigmaCoins(enigma) }}</template>
                               </span>
                             </Tooltip>
-                            <Tooltip v-if="enigmaMana(enigma) && classCfg.mana" :text="t('common.resources.mana')">
+                            <Tooltip
+                              v-if="enigmaMana(enigma) && classCfg.mana"
+                              :text="t('common.resources.mana')"
+                            >
                               <span class="inline-flex items-center gap-1">
                                 <ManaIcon class="w-5 h-5" />
                                 <template
@@ -669,9 +645,10 @@
                         </div>
                         <!-- Actions area -->
                         <div class="flex items-center gap-2 flex-shrink-0">
-                          <!-- Submit button when the enigma is still available -->
+                          <!-- Submit button when the enigma is still available (una
+                               misión expirada es solo lectura: sin botón de entrega). -->
                           <Button
-                            v-if="enigma.status === 'disponible'"
+                            v-if="enigma.status === 'disponible' && !missionExpired"
                             variant="primary"
                             size="sm"
                             :icon-left="ArrowUpTrayIcon"
@@ -694,10 +671,7 @@
                       <p class="text-sm mt-2 text-navy-700/80">
                         {{ enigma.description }}
                       </p>
-                      <div
-                        v-if="enigma.objectives && enigma.objectives.length > 0"
-                        class="mt-3"
-                      >
+                      <div v-if="enigma.objectives && enigma.objectives.length > 0" class="mt-3">
                         <p class="text-sm font-semibold text-navy-700 mb-2">
                           {{ t('teacher.components.mission_detail_template.objectives_label') }}
                         </p>
@@ -879,7 +853,7 @@
                                 <button
                                   type="button"
                                   class="flex items-center gap-3 w-full px-4 py-3 text-sm text-navy-700 hover:bg-gray-50 transition-colors"
-                                  @click="emit('editDocument', doc); openDocumentDropdown = null"
+                                  @click="editDocumentAction(doc)"
                                 >
                                   <PencilIcon class="w-5 h-5" />
                                   {{ t('teacher.components.mission_detail_template.btn_edit') }}
@@ -887,7 +861,7 @@
                                 <button
                                   type="button"
                                   class="flex items-center gap-3 w-full px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors"
-                                  @click="emit('deleteDocument', doc.id); openDocumentDropdown = null"
+                                  @click="deleteDocumentAction(doc.id)"
                                 >
                                   <TrashIcon class="w-5 h-5" />
                                   {{ t('teacher.missions.detail.delete_confirm_btn') }}
@@ -979,7 +953,7 @@
                                 <button
                                   type="button"
                                   class="flex items-center gap-3 w-full px-4 py-3 text-sm text-navy-700 hover:bg-gray-50 transition-colors"
-                                  @click="emit('editDocument', doc); openDocumentDropdown = null"
+                                  @click="editDocumentAction(doc)"
                                 >
                                   <PencilIcon class="w-5 h-5" />
                                   {{ t('teacher.components.mission_detail_template.btn_edit') }}
@@ -987,7 +961,7 @@
                                 <button
                                   type="button"
                                   class="flex items-center gap-3 w-full px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors"
-                                  @click="emit('deleteDocument', doc.id); openDocumentDropdown = null"
+                                  @click="deleteDocumentAction(doc.id)"
                                 >
                                   <TrashIcon class="w-5 h-5" />
                                   {{ t('teacher.missions.detail.delete_confirm_btn') }}
@@ -1090,7 +1064,9 @@
               >
                 <div
                   class="w-24 h-24 rounded-full flex items-center justify-center mb-3"
-                  :class="[!isTeacher && xpProgressPercent < 100 ? 'bg-gray-200' : 'bg-purple-light']"
+                  :class="[
+                    !isTeacher && xpProgressPercent < 100 ? 'bg-gray-200' : 'bg-purple-light',
+                  ]"
                 >
                   <XpIcon v-if="isTeacher || xpProgressPercent >= 100" class="w-12 h-12" />
                   <XpIcon v-else mono class="w-12 h-12 text-gray-400" />
@@ -1157,7 +1133,9 @@
               >
                 <div
                   class="w-24 h-24 rounded-full flex items-center justify-center mb-3"
-                  :class="[!isTeacher && coinsProgressPercent < 100 ? 'bg-gray-200' : 'bg-yellow-light']"
+                  :class="[
+                    !isTeacher && coinsProgressPercent < 100 ? 'bg-gray-200' : 'bg-yellow-light',
+                  ]"
                 >
                   <CoinIcon
                     class="w-12 h-12"
@@ -1192,7 +1170,9 @@
               >
                 <div
                   class="w-24 h-24 rounded-full flex items-center justify-center mb-3"
-                  :class="[!isTeacher && manaProgressPercent < 100 ? 'bg-gray-200' : 'bg-sky-light']"
+                  :class="[
+                    !isTeacher && manaProgressPercent < 100 ? 'bg-gray-200' : 'bg-sky-light',
+                  ]"
                 >
                   <ManaIcon v-if="isTeacher || manaProgressPercent >= 100" class="w-12 h-12" />
                   <ManaIcon v-else mono class="w-12 h-12 text-gray-400" />
@@ -1218,10 +1198,10 @@
                 </template>
               </div>
 
-              <!-- Badge Reward -->
+              <!-- Badge Reward (la rareza mostrada es la de la misión) -->
               <BadgeRewardCard
-                v-if="mission.badgeReward"
-                :badge="mission.badgeReward"
+                v-if="rewardBadge"
+                :badge="rewardBadge"
                 :unlocked="isTeacher || mission.status === 'completada'"
                 @click="openBadgeDetail"
               />
@@ -1358,7 +1338,6 @@ import {
   LinkIcon,
   PhotoIcon,
   PencilIcon,
-  PencilSquareIcon,
   XMarkIcon,
   PlusIcon,
   TrashIcon,
@@ -1367,7 +1346,6 @@ import {
   TrophyIcon,
   EllipsisVerticalIcon,
   CheckCircleIcon,
-  ArrowUturnLeftIcon,
 } from '@heroicons/vue/24/outline'
 import draggable from 'vuedraggable'
 import type { Component } from 'vue'
@@ -1486,6 +1464,8 @@ const handleMissionAIAction = (action: { chatMessage: string }) => {
   })
 }
 
+type TabLink = string | { query: Record<string, string | undefined> }
+
 interface Props {
   mode: 'teacher' | 'student'
   classId: string
@@ -1493,9 +1473,28 @@ interface Props {
   mission: MissionDetail | null
   loading: boolean
   error: string | null
+  /** Pestañas del detalle (solo profesor). Sin ellas, se muestra solo el resumen. */
+  tabs?: Array<{ id: string; label: string; icon: Component }>
+  /** ID de la pestaña activa (por defecto 'resumen'). */
+  activeTab?: string
+  /** Constructor del destino (:to) de una pestaña por su id. */
+  tabHref?: (tabId: string) => TabLink
 }
 
-const props = defineProps<Props>()
+// Preferencia de usuario: icono / texto / ambos en las pestañas.
+const menuDisplay = useMenuDisplay()
+
+const props = withDefaults(defineProps<Props>(), {
+  tabs: () => [],
+  activeTab: 'resumen',
+  tabHref: undefined,
+})
+
+// Las pestañas solo se muestran para el profesor y cuando se le pasan.
+const showTabs = computed(() => props.mode === 'teacher' && props.tabs.length > 0)
+
+// Misión expirada (solo lectura para el alumno: puede consultarla, no entregar).
+const missionExpired = computed(() => props.mission?.status === 'expirada')
 
 // Per-class feature flags (from the mission's class). Hide XP/coins/mana where disabled.
 const classCfg = computed(() => resolveClassSettings(props.mission?.classSettings))
@@ -1513,15 +1512,14 @@ const narrativeOverflows = ref(false)
 const narrativeFullHeight = ref(0)
 
 // True while the box is clamped to the collapsed height
-const narrativeClamped = computed(
-  () => narrativeOverflows.value && !narrativeExpanded.value
-)
+const narrativeClamped = computed(() => narrativeOverflows.value && !narrativeExpanded.value)
 
 // Animate max-height between collapsed and full height (smooth open/close)
 const narrativeContentStyle = computed(() => {
   if (!narrativeOverflows.value) return {}
   return {
-    maxHeight: (narrativeClamped.value ? NARRATIVE_COLLAPSED_HEIGHT : narrativeFullHeight.value) + 'px',
+    maxHeight:
+      (narrativeClamped.value ? NARRATIVE_COLLAPSED_HEIGHT : narrativeFullHeight.value) + 'px',
   }
 })
 
@@ -1544,88 +1542,12 @@ onBeforeUnmount(() => {
   window.removeEventListener('resize', measureNarrativeOverflow)
 })
 
-// Inline edit mission title
-const editingTitle = ref(false)
-const editTitleValue = ref('')
-const titleInputRef = ref<HTMLTextAreaElement>()
-
-function autoResizeTitleInput() {
-  const el = titleInputRef.value
-  if (!el) return
-  el.style.height = 'auto'
-  el.style.height = el.scrollHeight + 'px'
-}
-
-function startEditTitle() {
-  if (!props.mission) return
-  editTitleValue.value = props.mission.title
-  editingTitle.value = true
-  nextTick(() => {
-    autoResizeTitleInput()
-    titleInputRef.value?.focus()
-  })
-}
-
-function saveTitle() {
-  if (
-    !props.mission ||
-    !editTitleValue.value.trim() ||
-    editTitleValue.value.trim() === props.mission.title
-  ) {
-    editingTitle.value = false
-    return
-  }
-  emit('updateTitle', editTitleValue.value.trim())
-  editingTitle.value = false
-}
-
-// Inline edit mission deadline
-const editingDeadline = ref(false)
-const editDeadlineValue = ref('')
-const deadlineInputRef = ref<HTMLInputElement>()
-
-function toInputDate(input: string | Date | null | undefined): string {
-  if (!input) return ''
-  const d = input instanceof Date ? input : new Date(input)
-  if (isNaN(d.getTime())) return ''
-  // Use local YYYY-MM-DD so the picker shows the user's intended date.
-  const y = d.getFullYear()
-  const m = String(d.getMonth() + 1).padStart(2, '0')
-  const day = String(d.getDate()).padStart(2, '0')
-  return `${y}-${m}-${day}`
-}
-
+// La fecha límite se muestra en modo lectura; su edición vive en la pestaña Ajustes.
 function formatDeadline(input: string | Date | null | undefined): string {
   if (!input) return ''
   const d = input instanceof Date ? input : new Date(input)
   if (isNaN(d.getTime())) return ''
   return d.toLocaleDateString(locale.value, { day: 'numeric', month: 'short', year: 'numeric' })
-}
-
-function startEditDeadline() {
-  if (!props.mission) return
-  editDeadlineValue.value = toInputDate(props.mission.deadline)
-  editingDeadline.value = true
-  nextTick(() => deadlineInputRef.value?.focus())
-}
-
-function saveDeadline() {
-  if (!props.mission) return
-  const value = editDeadlineValue.value
-  const current = toInputDate(props.mission.deadline)
-  if (value === current) {
-    editingDeadline.value = false
-    return
-  }
-  // Empty string means clear; otherwise convert YYYY-MM-DD to ISO at midnight UTC.
-  const next = value ? new Date(value + 'T00:00:00').toISOString() : null
-  emit('updateDeadline', next)
-  editingDeadline.value = false
-}
-
-function clearDeadline() {
-  emit('updateDeadline', null)
-  editingDeadline.value = false
 }
 
 // Local editing state (only for narrative which still needs manual save)
@@ -1643,12 +1565,27 @@ const toggleDocumentDropdown = (docId: string) => {
   openDocumentDropdown.value = openDocumentDropdown.value === docId ? null : docId
 }
 
+// La insignia-recompensa hereda la rareza de la MISIÓN (no la suya propia): así
+// una misión Legendaria muestra su insignia como Legendaria. Las escalas difieren
+// (misión: comun/rara/epica/legendaria; insignia: common/rare/epic/legendary).
+const MISSION_TO_BADGE_RARITY: Record<string, 'common' | 'rare' | 'epic' | 'legendary'> = {
+  comun: 'common',
+  rara: 'rare',
+  epica: 'epic',
+  legendaria: 'legendary',
+}
+const rewardBadge = computed<BadgeReward | null>(() => {
+  const badge = props.mission?.badgeReward
+  if (!badge) return null
+  return { ...badge, rarity: MISSION_TO_BADGE_RARITY[props.mission?.rarity ?? ''] ?? badge.rarity }
+})
+
 // Badge detail modal state
 const selectedBadge = ref<BadgeReward | null>(null)
 
 const openBadgeDetail = () => {
-  if (props.mission?.badgeReward) {
-    selectedBadge.value = props.mission.badgeReward
+  if (rewardBadge.value) {
+    selectedBadge.value = rewardBadge.value
   }
 }
 
@@ -1689,6 +1626,29 @@ const emit = defineEmits<{
   resourceClick: [resource: string]
   ateneaAction: [action: 'chat' | 'help' | 'start']
 }>()
+
+// Acciones de los dropdowns: emiten el evento y cierran el menú. Se extraen a
+// métodos porque Vue 3.5 no admite @click con varias sentencias inline.
+const editEnigmaAction = (enigma: MissionEnigma) => {
+  emit('editEnigma', enigma)
+  openEnigmaDropdown.value = null
+}
+const viewSubmissionsAction = (enigma: MissionEnigma) => {
+  emit('viewSubmissions', enigma)
+  openEnigmaDropdown.value = null
+}
+const deleteEnigmaAction = (enigmaId: string) => {
+  emit('deleteEnigma', enigmaId)
+  openEnigmaDropdown.value = null
+}
+const editDocumentAction = (doc: MissionDocument) => {
+  emit('editDocument', doc)
+  openDocumentDropdown.value = null
+}
+const deleteDocumentAction = (docId: string) => {
+  emit('deleteDocument', docId)
+  openDocumentDropdown.value = null
+}
 
 // Local state for draggable items
 const localEnigmas = ref<MissionEnigma[]>([])

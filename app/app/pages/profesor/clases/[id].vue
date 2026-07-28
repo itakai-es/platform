@@ -54,7 +54,10 @@
           </Button>
         </template>
         <template v-if="state.classData.schedule" #subtitle>
-          {{ state.classData.schedule }}
+          <span class="inline-flex items-center gap-1.5">
+            <CalendarDaysIcon class="w-4 h-4 text-white/60" />
+            {{ state.classData.schedule }}
+          </span>
         </template>
         <template v-if="state.classData.archived" #meta>
           <div
@@ -113,16 +116,17 @@ import {
   UserPlusIcon,
   ExclamationTriangleIcon,
   XMarkIcon,
+  CalendarDaysIcon,
 } from '@heroicons/vue/24/outline'
 import {
   BookOpenIcon as BookOpenIconSolid,
   Squares2X2Icon as Squares2X2IconSolid,
   SparklesIcon as SparklesIconSolid,
-  ChartBarIcon as ChartBarIconSolid,
   RocketLaunchIcon as RocketLaunchIconSolid,
   ShoppingBagIcon as ShoppingBagIconSolid,
   HandRaisedIcon as HandRaisedIconSolid,
   Cog6ToothIcon as Cog6ToothIconSolid,
+  UsersIcon as UsersIconSolid,
 } from '@heroicons/vue/24/solid'
 
 definePageMeta({
@@ -157,9 +161,9 @@ const tabs = computed(() => {
     { id: 'historia', label: t('teacher.classes.detail.tabs.narrative'), icon: BookOpenIconSolid },
     { id: 'guia', label: t('teacher.classes.detail.tabs.guide'), icon: SparklesIconSolid },
     { id: 'misiones', label: t('teacher.classes.detail.tabs.missions'), icon: RocketLaunchIconSolid },
+    { id: 'alumnos', label: t('teacher.classes.detail.tabs.students'), icon: UsersIconSolid },
   ]
-  if (s.rankings)
-    list.push({ id: 'ranking', label: t('teacher.classes.detail.tabs.ranking'), icon: ChartBarIconSolid })
+  // El ranking (podio) vive ahora como sub-vista dentro de "Alumnos".
   if (s.shop)
     list.push({ id: 'tienda', label: t('teacher.classes.detail.tabs.tienda'), icon: ShoppingBagIconSolid })
   if (s.behaviors)

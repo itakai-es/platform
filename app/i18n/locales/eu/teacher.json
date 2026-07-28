@@ -1,5 +1,24 @@
 {
   "teacher": {
+    "about": {
+      "title": "ITAKAIri buruz",
+      "subtitle": "Berritasunak eta bertsioen erregistroa",
+      "breadcrumb": "Honi buruz",
+      "breadcrumb_home": "Hasiera",
+      "current_version": "Uneko bertsioa",
+      "latest": "Azken bertsioa",
+      "versions_index": "Bertsioak",
+      "footer_note": "Zerbait falta duzu edo akatsen bat aurkitu duzu? Esaguzu eta hurrengo bertsioetarako kontuan hartuko dugu.",
+      "groups": {
+        "new": "Berritasunak",
+        "improved": "Hobekuntzak",
+        "fixed": "Konponketak"
+      },
+      "meta": {
+        "title": "Honi buruz | ITAKAI",
+        "description": "ITAKAIren bertsio bakoitzeko berritasunak, hobekuntzak eta konponketak."
+      }
+    },
     "dashboard": {
       "title": "Irakaslearen Dashboarda",
       "subtitle": "Ongi etorri, {name}!",
@@ -31,7 +50,22 @@
           "title": "Nire Klaseak | ITAKAI Irakaslea",
           "description": "Kudeatu zure klase guztiak, matrikulatutako ikasleak eta esleitutako misioak."
         },
-        "templates": "Txantiloiak"
+        "templates": "Txantiloiak",
+        "duplicate_success": "Klasea \"{name}\" gisa bikoiztu da",
+        "duplicate_error": "Ezin izan da klasea bikoiztu",
+        "duplicate": {
+          "title": "Bikoiztu klasea",
+          "subtitle": "Aukeratu zer kopiatu «{name}» klase berrira.",
+          "confirm": "Bikoiztu",
+          "cancel": "Utzi",
+          "items": {
+            "missions": { "label": "Misioak", "desc": "Misioak eta beren enigmak" },
+            "narrative": { "label": "Istorioa", "desc": "Narrazioa eta azaleko irudia" },
+            "features": { "label": "Funtzionalitateak", "desc": "Klasearen modulu aktibatuak" },
+            "shop": { "label": "Denda", "desc": "Dendako artikuluak" },
+            "behaviors": { "label": "Portaerak", "desc": "Portaera-txantiloiak" }
+          }
+        }
       },
       "create": {
         "breadcrumb_classes": "Nire Klaseak",
@@ -58,8 +92,6 @@
           "ask_idea": "Kaixo {name}! {god} naiz. Kontatu iezadazu, zein mundu edo tematika nahi duzu zure klaserako?",
           "review_approach": "Hau prestatu dut zuretzat, gustatu zaizu?",
           "pick_title": "Zer izenburu jarriko diogu zure klaseari?",
-          "ask_schedule": "Zer ordu-tarte izango du zure klaseak?",
-          "ask_image": "Azal hau sortu dut zure klasearentzat",
           "placeholder_idea": "Adib.: Magia-eskola bat, 4 etxeekin puntuengatik lehian, ikasle-magoekin eta erronkak ziegak balira bezala…",
           "generating_approach": "Zure klasearen narratiba sortzen ari naiz...",
           "narrative_feedback_placeholder": "Adib: Hogwarts-eko etxeei buruzko erreferentzia gehiago nahi ditut...",
@@ -79,7 +111,7 @@
           "btn_accept_plan": "Bai, aurrera",
           "attach_materials": "Erantsi materialak (PDF, Word, irudiak)",
           "attach_processing": "Materialak prozesatzen…",
-          "attach_hint": "IAk zure klasea sortzeko oinarri gisa erabiliko ditu.",
+          "attach_remove": "Kendu",
           "attach_error": "Ezin izan dira materialak prozesatu."
         }
       },
@@ -93,11 +125,35 @@
           "summary": "Laburpena",
           "guide": "Gida",
           "missions": "Misioak",
-          "ranking": "Rankinga",
+          "students": "Ikasleak",
           "narrative": "Istorioa",
           "tienda": "Denda",
           "behaviors": "Jokabideak",
           "settings": "Ezarpenak"
+        },
+        "students": {
+          "empty_title": "Oraindik ez dago ikaslerik",
+          "empty_description": "Ikasleak klasera batzen direnean, hemen agertuko dira beren estatistikekin.",
+          "col_student": "Ikaslea",
+          "col_level": "Maila",
+          "search_placeholder": "Bilatu ikaslea...",
+          "sort_name_asc": "Izena A-Z",
+          "sort_name_desc": "Izena Z-A",
+          "sort_xp_asc": "XP ↑",
+          "sort_xp_desc": "XP ↓",
+          "sort_level_asc": "Maila ↑",
+          "sort_level_desc": "Maila ↓",
+          "sort_coins_asc": "Txanponak ↑",
+          "sort_coins_desc": "Txanponak ↓",
+          "sort_mana_asc": "Mana ↑",
+          "sort_mana_desc": "Mana ↓",
+          "sort_lives_asc": "Bizitza ↑",
+          "sort_lives_desc": "Bizitza ↓",
+          "no_results_title": "Emaitzarik ez",
+          "no_results_description": "Ez dago bilaketarekin bat datorren ikaslerik.",
+          "col_behaviors": "Portaerak",
+          "view_list": "Zerrenda",
+          "view_ranking": "Rankinga"
         },
         "stats_title": "Klasearen Estatistikak",
         "pending_reviews": "Berrikusteko Entregak",
@@ -213,6 +269,40 @@
           "mana_disabled_chip": "Mana desaktibatuta"
         },
         "settings": {
+          "levels": {
+            "title": "Mailak",
+            "curve_title": "Esperientzia-kurba",
+            "curve_hint": "Zehaztu maila bakoitzak zenbat XP behar duen eta zein den gehienezko maila.",
+            "pace_desc_fast": "Maila azkar igotzen da: maila bakoitzak aurrekoak baino apur bat gehiago balio du.",
+            "pace_desc_normal": "Progresio orekatua: maila bakoitzak aurrekoak baino zertxobait gehiago balio du.",
+            "pace_desc_slow": "Maila bakoitzak aurrekoak baino dezente gehiago balio du. Progresio luzea, ikasturte osorako aproposa.",
+            "mode_label": "Nola irabazten den XPa",
+            "mode_curve": "Formularen bidez",
+            "mode_custom": "Eskuz (mailaka)",
+            "pace_label": "Igotze-erritmoa",
+            "pace_fast": "Azkarra",
+            "pace_normal": "Normala",
+            "pace_slow": "Motela",
+            "custom_hint": "Idatzi maila batetik hurrengora igotzeko behar den XPa.",
+            "compare_title": "Maila bakoitzera iristeko XP guztira",
+            "compare_level": "{level}. maila",
+            "cap_label": "Maila kopurua",
+            "base_label": "Lehen mailaren XP",
+            "tiers_title": "Tarteak",
+            "tiers_hint": "Eman izenburu bat eta kolore bat maila-tarte bakoitzari.",
+            "tier_title_placeholder": "Tartearen izenburua",
+            "tier_from": "Hasiera",
+            "tier_to": "Amaiera",
+            "tier_add": "Gehitu tartea",
+            "tier_remove": "Kendu tartea",
+            "tiers_warning": "Tarteen artean hutsuneak edo gainjartzeak daude: maila batzuek ez lukete izenburu zuzena erakutsiko.",
+            "tiers_autofix": "Auto-doitu",
+            "restore_defaults": "Berrezarri lehenetsiak",
+            "save": "Gorde mailak",
+            "discard": "Baztertu",
+            "toast_saved": "Mailak gorde dira",
+            "toast_error": "Ezin izan dira mailak gorde"
+          },
           "toast_error": "Ezin izan dira ezarpenak gorde",
           "items": {
             "shop": {
@@ -269,6 +359,10 @@
             "publish_on": "Klasea txantiloi gisa argitaratu da",
             "publish_off": "Txantiloia marketplacetik kendu da",
             "publish_error": "Ezin izan da txantiloia argitaratu",
+            "template_metadata_locked": "Klase hau txantiloi gisa argitaratuta dago: ezin dituzu gaia, maila edo hizkuntza zehaztu gabe utzi. Kendu argitalpena lehenik.",
+            "duplicate_title": "Klasea bikoiztu",
+            "duplicate_hint": "Sortu klase honen kopia bat. Zein eduki kopiatzen den aukeratu ahal izango duzu.",
+            "duplicate_cta": "Bikoiztu",
             "schedule_label": "Ordutegia",
             "background_label": "Atzeko planoko irudia",
             "save": "Gorde aldaketak",
@@ -289,6 +383,9 @@
           },
           "features": {
             "title": "Funtzionalitateak"
+          },
+          "management": {
+            "title": "Kudeaketa"
           }
         }
       }
@@ -314,6 +411,40 @@
           "title": "Misioaren Xehetasuna | ITAKAI Irakaslea",
           "title_loading": "Misioa kargatzen... | ITAKAI Irakaslea",
           "description_fallback": "ITAKAI-ko misioaren xehetasuna"
+        },
+        "tabs": {
+          "summary": "Laburpena",
+          "settings": "Ezarpenak"
+        },
+        "settings": {
+          "title_label": "Izenburua",
+          "title_required": "Izenburua ezin da hutsik egon",
+          "deadline_label": "Epemuga",
+          "deadline_hint": "Utzi hutsik misioak iraungi ez dezan.",
+          "rarity_label": "Arrarotasuna",
+          "rarity_locked_hint": "Ezin duzu arrarotasuna aldatu: ikasleren batek misioa jada osatu du.",
+          "rarity": {
+            "comun": "Arrunta",
+            "rara": "Arraroa",
+            "epica": "Epikoa",
+            "legendaria": "Legendazkoa"
+          },
+          "status_label": "Egoera",
+          "status_active": "Aktiboa",
+          "status_blocked": "Blokeatuta",
+          "status_hint": "Blokeatuta: ikasleek giltzarrapoarekin ikusten dute eta ezin dute sartu.",
+          "background_label": "Misioaren irudia",
+          "background_generate": "Sortu AArekin",
+          "background_regenerate": "Berriz sortu AArekin",
+          "background_upload": "Igo nirea",
+          "background_clear": "Kendu irudia",
+          "background_error": "Ezin izan da irudia sortu",
+          "background_upload_type_error": "Formatu baliogabea. Igo PNG, JPG edo WEBP irudi bat.",
+          "background_upload_size_error": "Irudia handiegia da (gehienez 5 MB).",
+          "save": "Gorde aldaketak",
+          "discard": "Baztertu",
+          "toast_saved": "Datuak gorde dira",
+          "toast_error": "Ezin izan dira datuak gorde"
         }
       }
     },
@@ -498,7 +629,8 @@
         },
         "label_mana": "Mana",
         "label_coins": "Txanponak",
-        "no_mana": "Manarik gabe"
+        "no_mana": "Manarik gabe",
+        "custom_value": "Balio pertsonalizatua"
       },
       "document_form_modal": {
         "edit_title": "Dokumentua Editatu",
@@ -621,10 +753,7 @@
         "btn_back": "Misioetara itzuli",
         "breadcrumb_classes": "Nire klaseak",
         "deadline_none": "Epemugarik gabe",
-        "deadline_edit": "Epemuga editatu",
-        "deadline_save": "Gorde",
-        "deadline_clear": "Epemuga kendu",
-        "deadline_cancel": "Utzi",
+        "expired_readonly": "Misio hau iraungi da: kontsultatu dezakezu, baina ez du entregarik onartzen.",
         "narrative_title": "Misioaren Historia",
         "btn_see_more": "Ikusi gehiago",
         "btn_see_less": "Ikusi gutxiago",
@@ -706,6 +835,44 @@
         "languages": "hizkuntza",
         "provinces": "probintzia"
       }
+    },
+    "schedule": {
+      "starts_on": "Noiz hasten den",
+      "time": "Ordua",
+      "recurrence": "Maiztasuna",
+      "preview": "Aurrebista",
+      "previous": "Aurreko ordutegia",
+      "choose_days": "Aukeratu klase-egunak",
+      "freq_none": "Ez da errepikatzen",
+      "freq_daily": "Egunero",
+      "freq_weekly_on": "Astero, {day}",
+      "weekly": "Astero",
+      "freq_monthly": "Hilero",
+      "freq_yearly": "Urtero",
+      "weekdays": "Astegun guztiak (astelehenetik ostiralera)",
+      "weekly_days": "Astero: {days}",
+      "every_weeks_days": "{n} astez behin: {days}",
+      "all_weekdays": "Astegun guztiak",
+      "ends_on_suffix": "{date} arte",
+      "ends_after_suffix": "{n} aldiz",
+      "customize": "Pertsonalizatu…",
+      "custom_title": "Maiztasun pertsonalizatua",
+      "repeat_every": "Errepikatu",
+      "unit_day": "egun | egun",
+      "unit_week": "aste | aste",
+      "unit_month": "hilabete | hilabete",
+      "unit_year": "urte | urte",
+      "repeats_on": "Errepikatzen da",
+      "ends": "Amaiera",
+      "ends_never": "Inoiz ez",
+      "ends_on": "Data",
+      "ends_after": "Ondoren",
+      "repetitions": "errepikapen",
+      "section_schedule": "Ordutegia",
+      "section_cover": "Azala",
+      "wizard_question": "Jarri ordutegia eta azala zure klaseari",
+      "cancel": "Utzi",
+      "done": "Eginda"
     }
   }
 }

@@ -5,6 +5,8 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 const mocks = vi.hoisted(() => ({
   updateMock: vi.fn(),
   findUniqueMock: vi.fn(),
+  // El cálculo de nivel lee la levelConfig de la clase; sin config → DEFAULT.
+  classFindUniqueMock: vi.fn(),
   // system-badges dependencies — default to "no eligible badges" so that
   // applyXpDelta tests don't exercise the badge-awarding path.
   studentMissionProgressCountMock: vi.fn(),
@@ -22,6 +24,7 @@ vi.mock('../../src/config/database.js', () => ({
       findUnique: mocks.findUniqueMock,
       aggregate: mocks.classEnrollmentAggregateMock,
     },
+    class: { findUnique: mocks.classFindUniqueMock },
     studentMissionProgress: { count: mocks.studentMissionProgressCountMock },
     badge: { findMany: mocks.badgeFindManyMock },
     studentBadge: { create: mocks.studentBadgeCreateMock },
@@ -44,6 +47,8 @@ beforeEach(() => {
   // Default: the student has no completed missions, no enrollments beyond
   // the one under test, and no system badges ever match. These defaults
   // make applyXpDelta a no-op for system badges in every existing test.
+  // Sin levelConfig personalizada → resolveLevelConfig usa el sistema por defecto.
+  mocks.classFindUniqueMock.mockReset().mockResolvedValue({ levelConfig: null })
   mocks.studentMissionProgressCountMock.mockReset().mockResolvedValue(0)
   mocks.classEnrollmentAggregateMock.mockReset().mockResolvedValue({ _max: { xp: 0, level: 1 } })
   mocks.badgeFindManyMock.mockReset().mockResolvedValue([])

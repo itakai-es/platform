@@ -64,6 +64,7 @@ model UserSettings {
   missionReminders   Boolean  @default(true) @map("mission_reminders")
   language           String   @default("es")
   theme              String   @default("college")
+  menuDisplay        String   @default("both") @map("menu_display")
   createdAt          DateTime @default(now()) @map("created_at")
   updatedAt          DateTime @updatedAt @map("updated_at")
 
@@ -125,6 +126,12 @@ model Class {
   // Publicada como plantilla pública en el marketplace (otros profes pueden importarla).
   isTemplate      Boolean   @default(false) @map("is_template")
   settings        Json      @default("{}")
+  // Configuración del sistema de niveles por clase (curva de XP + tramos visuales).
+  // Nulo = usa los valores por defecto (DEFAULT_LEVEL_CONFIG), retrocompatible.
+  levelConfig     Json?     @map("level_config")
+  // Configuración de horario/calendario (recurrencia estilo Google + fechas +
+  // overrides por día). Nulo = sin horario configurado.
+  scheduleConfig  Json?     @map("schedule_config")
   teacherId       String    @map("teacher_id")
   createdAt       DateTime  @default(now()) @map("created_at")
   updatedAt       DateTime  @updatedAt @map("updated_at")
@@ -156,12 +163,16 @@ model ClassEnrollment {
   level      Int      @default(1)
   nickname   String?  // Class-specific nickname (e.g., "MateMaster99")
   avatarUrl  String?  @map("avatar_url") // Class-specific avatar (default, preset, or AI-generated)
+  // Matrícula "fantasma": el profesor se auto-matricula en su propia clase para
+  // probarla como un alumno. Se excluye de listados/recuentos/rankings.
+  isPreview  Boolean  @default(false) @map("is_preview")
   enrolledAt DateTime @default(now()) @map("enrolled_at")
 
   student User  @relation(fields: [studentId], references: [id], onDelete: Cascade)
   class   Class @relation(fields: [classId], references: [id], onDelete: Cascade)
 
   @@unique([studentId, classId])
+  @@index([classId, isPreview])
   @@map("class_enrollments")
 }
 
