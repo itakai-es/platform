@@ -709,6 +709,16 @@
     background-color: rgb(127 127 127 / 0.7);
   }
 
+  /* Scroll horizontal sin barra visible: para tiras que ya tienen su propio
+     control de navegación (p. ej. las pestañas con flechas de la cabecera). */
+  .scrollbar-none {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE / Edge legacy */
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
   /* Scrollbar personalizado */
   .scrollbar-custom {
     scrollbar-width: thin;
