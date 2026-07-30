@@ -82,27 +82,8 @@
         <slot name="meta" />
       </div>
 
-      <!-- Tabs como NuxtLink: cada una tiene su URL real -->
-      <div class="flex gap-0 overflow-x-auto scrollbar-subtle">
-        <NuxtLink
-          v-for="tab in tabs"
-          :key="tab.id"
-          :to="tabHref(tab.id)"
-          :class="[
-            'px-3 sm:px-4 md:px-6 lg:px-8 py-3 text-sm sm:text-base font-medium transition-colors flex items-center gap-2 rounded-t-2xl whitespace-nowrap flex-shrink-0 hover:opacity-100',
-            activeTab === tab.id
-              ? 'bg-surface text-navy-700'
-              : 'text-white/70 hover:text-white hover:bg-white/10',
-          ]"
-        >
-          <component v-if="menuDisplay !== 'text'" :is="tab.icon" class="w-5 h-5" />
-          <span
-            v-if="menuDisplay !== 'icon'"
-            :class="menuDisplay === 'both' ? 'hidden sm:inline' : ''"
-            >{{ tab.label }}</span
-          >
-        </NuxtLink>
-      </div>
+      <!-- Tabs (scroll horizontal con flechas a los lados) -->
+      <HeaderTabsNav :tabs="tabs" :active-tab="activeTab" :tab-href="tabHref" />
     </div>
   </div>
 </template>
@@ -116,9 +97,6 @@ import {
   AcademicCapIcon,
   LanguageIcon,
 } from '@heroicons/vue/24/outline'
-
-// Preferencia de usuario: icono / texto / ambos en las pestañas.
-const menuDisplay = useMenuDisplay()
 
 defineProps<{
   /** Nombre de la clase (título y último segmento del breadcrumb). */

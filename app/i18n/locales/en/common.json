@@ -22,6 +22,8 @@
       "open_menu": "Open menu",
       "close_menu": "Close menu",
       "toggle_menu": "Toggle menu",
+      "scroll_left": "Scroll left",
+      "scroll_right": "Scroll right",
       "back_to_dashboard": "Back to Dashboard",
       "create_new_account": "Create New Account",
       "enter": "Enter",

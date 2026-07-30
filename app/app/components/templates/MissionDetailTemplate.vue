@@ -120,27 +120,13 @@
             </span>
           </div>
 
-          <!-- Pestañas (solo profesor): cada una es un NuxtLink con su propia URL -->
-          <div v-if="showTabs" class="flex gap-0 overflow-x-auto scrollbar-subtle">
-            <NuxtLink
-              v-for="tab in tabs"
-              :key="tab.id"
-              :to="tabHref ? tabHref(tab.id) : '#'"
-              :class="[
-                'px-3 sm:px-4 md:px-6 lg:px-8 py-3 text-sm sm:text-base font-medium transition-colors flex items-center gap-2 rounded-t-2xl whitespace-nowrap flex-shrink-0 hover:opacity-100',
-                activeTab === tab.id
-                  ? 'bg-surface text-navy-700'
-                  : 'text-white/70 hover:text-white hover:bg-white/10',
-              ]"
-            >
-              <component v-if="menuDisplay !== 'text'" :is="tab.icon" class="w-5 h-5" />
-              <span
-                v-if="menuDisplay !== 'icon'"
-                :class="menuDisplay === 'both' ? 'hidden sm:inline' : ''"
-                >{{ tab.label }}</span
-              >
-            </NuxtLink>
-          </div>
+          <!-- Pestañas (solo profesor): scroll horizontal con flechas a los lados -->
+          <HeaderTabsNav
+            v-if="showTabs"
+            :tabs="tabs"
+            :active-tab="activeTab"
+            :tab-href="resolveTabHref"
+          />
         </div>
       </div>
 
@@ -1481,14 +1467,14 @@ interface Props {
   tabHref?: (tabId: string) => TabLink
 }
 
-// Preferencia de usuario: icono / texto / ambos en las pestañas.
-const menuDisplay = useMenuDisplay()
-
 const props = withDefaults(defineProps<Props>(), {
   tabs: () => [],
   activeTab: 'resumen',
   tabHref: undefined,
 })
+
+// Sin tabHref las pestañas no navegan a ningún sitio (caso por defecto: sin pestañas).
+const resolveTabHref = (tabId: string): TabLink => (props.tabHref ? props.tabHref(tabId) : '#')
 
 // Las pestañas solo se muestran para el profesor y cuando se le pasan.
 const showTabs = computed(() => props.mode === 'teacher' && props.tabs.length > 0)
