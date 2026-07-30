@@ -65,6 +65,14 @@ export const changelog: ChangelogEntry[] = [
       },
       {
         type: 'new',
+        text: '"Ver como alumno": explora la plataforma tal y como la vería un estudiante y vuelve a tu vista de profesor cuando quieras.',
+      },
+      {
+        type: 'new',
+        text: 'Nueva página "Acerca de" con las novedades de cada versión.',
+      },
+      {
+        type: 'new',
         text: 'Alterna entre vista de lista y de cuadrícula en los listados de clases y misiones.',
       },
       {
@@ -78,6 +86,10 @@ export const changelog: ChangelogEntry[] = [
       {
         type: 'improved',
         text: 'Elige cómo ver el menú de pestañas: solo iconos, solo texto o ambos.',
+      },
+      {
+        type: 'improved',
+        text: 'Las clases archivadas dejan de mostrar sus misiones en los listados, y las misiones expiradas se pueden consultar en solo lectura.',
       },
       {
         type: 'fixed',
