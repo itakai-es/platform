@@ -36,7 +36,7 @@
                   <SelectDropdown
                     :model-value="selectedClassId"
                     :options="classSelectOptions"
-                    placeholder="Selecciona una clase"
+                    :placeholder="t('teacher.missions.create.pick_class')"
                     @update:model-value="selectedClassId = String($event)"
                   />
                 </div>
@@ -44,7 +44,7 @@
                   ref="inputRef"
                   v-model="idea"
                   rows="6"
-                  placeholder="Ej: Quiero una misión sobre cinemática donde los alumnos calculen trayectorias de escobas voladoras..."
+                  :placeholder="t('teacher.missions.create.idea_placeholder')"
                   class="onb-input onb-reveal resize-none"
                   style="animation-delay: 0.2s"
                 />
@@ -86,7 +86,7 @@
                       >
                         <ExclamationTriangleIcon class="w-8 h-8 text-navy-700/30" />
                         <p class="text-base font-semibold text-navy-700">
-                          No he podido crear la narrativa
+                          {{ t('teacher.missions.create.narrative_error') }}
                         </p>
                         <p class="text-sm text-text-secondary max-w-sm">
                           Puede que el asistente esté saturado ahora mismo. Espera un momento y
@@ -101,9 +101,6 @@
                       </div>
                       <template v-else>
                         <div class="md-rendered" v-html="renderPageMarkdown(narrative)" />
-                        <div v-if="!isStreaming && narrative" class="mt-2 flex justify-end">
-                          <AIProviderBadge :provider="narrativeProvider" />
-                        </div>
                       </template>
                     </div>
                     <div
@@ -393,9 +390,6 @@
                       Cerrar
                     </button>
                   </div>
-                  <div v-if="enigmas.length" class="mt-2 flex justify-end">
-                    <AIProviderBadge :provider="enigmasProvider" />
-                  </div>
                   <div v-if="!showEnigmaFeedback" class="onb-actions">
                     <Button
                       variant="outline"
@@ -496,9 +490,6 @@
                     <div class="relative aspect-video rounded-2xl overflow-hidden shadow-lg">
                       <img :src="generatedImageUrl" alt="" class="w-full h-full object-cover" />
                     </div>
-                    <div class="mt-2 flex justify-end">
-                      <AIProviderBadge :provider="coverProvider" />
-                    </div>
                     <!-- Acción de la portada, justo bajo la imagen generada -->
                     <div v-if="!showImageFeedback" class="mt-3 flex flex-wrap justify-center gap-2">
                       <Button variant="outline" size="sm" @click="openImageFeedback"
@@ -589,9 +580,6 @@
                       </div>
                       <template v-else>
                         <div class="md-rendered" v-html="renderPageMarkdown(missionGuide)" />
-                        <div v-if="!isStreaming && missionGuide" class="mt-2 flex justify-end">
-                          <AIProviderBadge :provider="guideProvider" />
-                        </div>
                       </template>
                     </div>
                     <div
@@ -698,7 +686,7 @@
                     class="flex flex-col items-center gap-4 text-text-secondary"
                   >
                     <TrophyIcon class="w-12 h-12 opacity-40" />
-                    <p class="text-sm">No se pudo generar la insignia.</p>
+                    <p class="text-sm">{{ t('teacher.badges.generate_error') }}</p>
                     <Button variant="primary" size="sm" @click="generateBadge()">
                       <ArrowPathIcon class="w-4 h-4 mr-2" />
                       Reintentar
@@ -1085,7 +1073,6 @@ function buildContext() {
 const {
   streamPrompt,
   callPrompt,
-  lastProvider,
   generationProgress,
   waitingForFirstChunk,
   isOvertime,
@@ -1094,22 +1081,15 @@ const {
   startProgress,
   stopProgress,
 } = useAIPrompt()
-type AIProviderName = 'spark' | 'gemini' | 'flux' | null
-const narrativeProvider = ref<AIProviderName>(null)
-const enigmasProvider = ref<AIProviderName>(null)
-const coverProvider = ref<AIProviderName>(null)
-const guideProvider = ref<AIProviderName>(null)
 
 async function streamAI(
   type: string,
   params: Record<string, string | number | boolean>,
-  target: Ref<string>,
-  providerRef?: Ref<AIProviderName>
+  target: Ref<string>
 ) {
   loading.value = false
   isStreaming.value = true
   await streamPrompt(type, params, target)
-  if (providerRef) providerRef.value = lastProvider.value
 }
 
 async function callAI(type: string, params: Record<string, string>) {
@@ -1132,8 +1112,7 @@ async function submitIdea() {
     await streamAI(
       'mission.narrative.generate',
       { idea: idea.value, className: className.value },
-      narrative,
-      narrativeProvider
+      narrative
     )
     narrative.value = narrative.value
       .replace(/^(Aqui tienes|Claro|Por supuesto)[^.]*[.:]\s*/i, '')
@@ -1159,8 +1138,7 @@ async function regenerateNarrative() {
     await streamAI(
       'mission.narrative.modify',
       { idea: idea.value, current: prev.slice(0, 800), feedback: fb },
-      narrative,
-      narrativeProvider
+      narrative
     )
     narrative.value = narrative.value
       .replace(/^(Aqui tienes|Claro|Por supuesto)[^.]*[.:]\s*/i, '')
@@ -1282,8 +1260,7 @@ async function acceptTitle() {
         coins: enigmaResources.value.coins,
         mana: enigmaResources.value.mana,
       },
-      enigmaRaw,
-      enigmasProvider
+      enigmaRaw
     )
     enigmas.value = parseEnigmasJson(enigmaRaw.value)
     if (enigmas.value.length === 0) {
@@ -1293,7 +1270,7 @@ async function acceptTitle() {
     enigmaError.value =
       err instanceof Error && err.message
         ? err.message
-        : 'El servicio de IA no está disponible ahora mismo. Inténtalo de nuevo en unos minutos.'
+        : t('teacher.missions.create.ai_unavailable')
   } finally {
     loading.value = false
     isStreaming.value = false
@@ -1326,8 +1303,7 @@ async function regenerateEnigmas() {
         coins: enigmaResources.value.coins,
         mana: enigmaResources.value.mana,
       },
-      enigmaRaw,
-      enigmasProvider
+      enigmaRaw
     )
     enigmas.value = parseEnigmasJson(enigmaRaw.value)
     if (enigmas.value.length === 0) {
@@ -1342,7 +1318,7 @@ async function regenerateEnigmas() {
     enigmaError.value =
       err instanceof Error && err.message
         ? err.message
-        : 'El servicio de IA no está disponible ahora mismo. Inténtalo de nuevo en unos minutos.'
+        : t('teacher.missions.create.ai_unavailable')
     try {
       enigmas.value = JSON.parse(prevEnigmas)
     } catch {
@@ -1377,7 +1353,6 @@ async function generateMissionCover(extraPrompt?: string) {
     )
     rawImagePath.value = res.imageUrl
     generatedImageUrl.value = res.imageUrl
-    if (res.provider) coverProvider.value = res.provider as AIProviderName
   } catch {
     imageGenerationFailed.value = true
   } finally {
@@ -1422,7 +1397,6 @@ async function generateMissionGuide(extraPrompt?: string) {
       },
       missionGuide
     )
-    guideProvider.value = lastProvider.value
     missionGuide.value = missionGuide.value
       .replace(/^(Aqui tienes|Claro|Por supuesto)[^.]*[.:]\s*/i, '')
       .trim()

@@ -225,7 +225,7 @@
                       >
                         <ExclamationTriangleIcon class="w-8 h-8 text-navy-700/30" />
                         <p class="text-base font-semibold text-navy-700">
-                          No he podido crear la narrativa
+                          {{ t('teacher.classes.create.narrative_error') }}
                         </p>
                         <p class="text-sm text-text-secondary max-w-sm">
                           Puede que el asistente esté saturado ahora mismo. Espera un momento y
@@ -242,9 +242,6 @@
                       </div>
                       <template v-else>
                         <div class="md-rendered" v-html="renderPageMarkdown(plan)" />
-                        <div v-if="!isStreaming && plan" class="mt-2 flex justify-end">
-                          <AIProviderBadge :provider="planProvider" />
-                        </div>
                       </template>
                     </div>
                     <div v-if="!loading && plan && showNarrativeFeedback" class="onb-feedback">
@@ -456,9 +453,6 @@
                         <div class="relative aspect-video rounded-2xl overflow-hidden shadow-lg">
                           <img :src="resolvedImageUrl" alt="" class="w-full h-full object-cover" />
                         </div>
-                        <div v-if="coverProvider" class="mt-2 flex justify-end">
-                          <AIProviderBadge :provider="coverProvider" />
-                        </div>
                         <!-- Acciones de la portada, justo bajo la imagen generada -->
                         <div
                           v-if="!showImageFeedback"
@@ -570,9 +564,6 @@
                       </div>
                       <template v-else>
                         <div class="md-rendered" v-html="renderPageMarkdown(guideContent)" />
-                        <div v-if="!isStreaming && guideContent" class="mt-2 flex justify-end">
-                          <AIProviderBadge :provider="guideProvider" />
-                        </div>
                       </template>
                     </div>
                     <div
@@ -1029,7 +1020,6 @@ function handleCoverUpload(event: Event) {
     const dataUrl = e.target?.result as string
     generatedImageUrl.value = dataUrl
     rawImagePath.value = dataUrl
-    coverProvider.value = null
     imageGenerationFailed.value = false
     showImageFeedback.value = false
   }
@@ -1089,7 +1079,6 @@ function cleanAIText(text: string) {
 const {
   streamPrompt,
   callPrompt,
-  lastProvider,
   generationProgress,
   waitingForFirstChunk,
   isOvertime,
@@ -1098,10 +1087,6 @@ const {
   startProgress,
   stopProgress,
 } = useAIPrompt()
-type AIProviderName = 'spark' | 'gemini' | 'flux' | null
-const planProvider = ref<AIProviderName>(null)
-const coverProvider = ref<AIProviderName>(null)
-const guideProvider = ref<AIProviderName>(null)
 
 async function submitIdea() {
   if (!idea.value.trim() || loading.value) return
@@ -1125,7 +1110,6 @@ async function submitIdea() {
       classLocale.value
     )
     plan.value = cleanAIText(plan.value).slice(0, 8000)
-    planProvider.value = lastProvider.value
   } catch {
     planGenerationFailed.value = true
   } finally {
@@ -1153,7 +1137,6 @@ async function regeneratePlan() {
       classLocale.value
     )
     plan.value = cleanAIText(plan.value).slice(0, 8000)
-    planProvider.value = lastProvider.value
   } catch {
     // Si la regeneración falla, no perdemos la narrativa que ya había.
     plan.value = previousPlan
@@ -1250,7 +1233,6 @@ async function generateCover(extraPrompt?: string) {
         )
         rawImagePath.value = res.imageUrl
         generatedImageUrl.value = res.imageUrl
-        if (res.provider) coverProvider.value = res.provider as AIProviderName
         return
       } catch (err) {
         stopProgress()
@@ -1296,7 +1278,6 @@ async function generateGuide(extraPrompt?: string) {
       guideContent,
       classLocale.value
     )
-    guideProvider.value = lastProvider.value
     guideContent.value = guideContent.value
       .replace(/^(Aqui tienes|Claro|Por supuesto)[^.]*[.:]\s*/i, '')
       .trim()
