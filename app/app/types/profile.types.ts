@@ -2,6 +2,7 @@
  * Profile Module Type Definitions
  * Tipos para configuración de perfil de usuario
  */
+import type { AppLanguage } from '~/utils/app-languages'
 
 /**
  * Sesión activa del usuario
@@ -31,7 +32,7 @@ export interface SecuritySettings {
 export interface UserPreferences {
   emailNotifications: boolean
   missionReminders: boolean
-  language: 'es' | 'en' | 'ca' | 'eu' | 'gl'
+  language: AppLanguage
   theme: 'college' | 'university'
   menuDisplay: 'both' | 'icon' | 'text'
 }

@@ -210,7 +210,7 @@ const statusOptions = computed(() => [
 const sortOptions = computed(() => [
   { value: 'name-asc', label: 'Nombre A-Z' },
   { value: 'name-desc', label: 'Nombre Z-A' },
-  { value: 'recent', label: 'Más recientes' },
+  { value: 'recent', label: t('admin.users.sort.recent') },
 ])
 
 const activeFilterCount = computed(

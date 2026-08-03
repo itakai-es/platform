@@ -1,0 +1,318 @@
+{
+  "admin": {
+    "dashboard": {
+      "title": "Início de administrador",
+      "subtitle": "Painel de controlo do sistema ITAKAI",
+      "activity": {
+        "title": "Atividade do sistema",
+        "period_24h": "Últimas 24 horas",
+        "period_week": "Última semana",
+        "period_month": "Último mês"
+      },
+      "quick_actions": {
+        "manage_users": "Gerir utilizadores"
+      },
+      "system_status": {
+        "title": "Estado do sistema",
+        "operational": "Operacional",
+        "degraded": "Degradado",
+        "down": "Fora de serviço",
+        "unknown": "Desconhecido",
+        "empty": "Não há serviços disponíveis"
+      },
+      "meta": {
+        "title": "Início admin | ITAKAI",
+        "description": "Painel de controlo do sistema ITAKAI. Faz a gestão de utilizadores e instituições e acompanha o estado da plataforma."
+      }
+    },
+    "users": {
+      "title": "Gestão de utilizadores",
+      "subtitle": "Administra todos os utilizadores da plataforma",
+      "filters": {
+        "search_placeholder": "Procurar por nome ou e-mail...",
+        "all_roles": "Todos os perfis",
+        "students": "Alunos",
+        "teachers": "Professores",
+        "admins": "Administradores",
+        "all_statuses": "Todos os estados",
+        "active": "Ativo",
+        "suspended": "Suspenso",
+        "inactive": "Inativo",
+        "clear": "Limpar filtros"
+      },
+      "roles": {
+        "student": "Aluno",
+        "teacher": "Professor",
+        "admin": "Admin"
+      },
+      "card": {
+        "status": "Estado",
+        "classes": "Turmas",
+        "last_login": "Últ. acesso"
+      },
+      "empty": {
+        "title": "Não foram encontrados utilizadores",
+        "description": "Não há utilizadores que correspondam aos filtros selecionados."
+      },
+      "actions": {
+        "suspend_title": "Suspender utilizador",
+        "suspend_message": "Tens a certeza de que queres suspender {name}? Deixará de poder aceder à plataforma.",
+        "suspend_confirm": "Suspender",
+        "delete_title": "Eliminar utilizador",
+        "delete_message": "Tens a certeza de que queres eliminar {name}? Esta ação não pode ser anulada.",
+        "delete_confirm": "Eliminar"
+      },
+      "meta": {
+        "title": "Gestão de utilizadores | ITAKAI Admin",
+        "description": "Administra todos os utilizadores do sistema, cria novos perfis, edita permissões e acompanha a atividade."
+      },
+      "sort": {
+        "recent": "Mais recentes"
+      }
+    },
+    "schools": {
+      "title": "Gestão de instituições",
+      "subtitle": "Administra as instituições de ensino da plataforma",
+      "filters": {
+        "search_placeholder": "Procurar instituição...",
+        "all_statuses": "Todos os estados",
+        "active": "Ativa",
+        "inactive": "Inativa"
+      },
+      "form": {
+        "create_title": "Nova instituição",
+        "edit_title": "Editar instituição",
+        "name": "Nome",
+        "name_placeholder": "Nome da instituição",
+        "city": "Cidade",
+        "city_placeholder": "Cidade",
+        "country": "País",
+        "country_placeholder": "País",
+        "save": "Guardar",
+        "cancel": "Cancelar"
+      },
+      "actions": {
+        "create": "Nova instituição",
+        "delete_title": "Eliminar instituição",
+        "delete_message": "Tens a certeza de que queres eliminar {name}? Será desassociada de todos os utilizadores.",
+        "delete_confirm": "Eliminar"
+      },
+      "empty": {
+        "title": "Não foram encontradas instituições",
+        "description": "Não há instituições que correspondam aos filtros."
+      },
+      "meta": {
+        "title": "Gestão de instituições | ITAKAI Admin",
+        "description": "Administra todas as instituições de ensino do sistema, cria novas escolas e acompanha a sua atividade."
+      }
+    },
+    "classes": {
+      "title": "Gestão de turmas",
+      "subtitle": "Supervisiona todas as turmas do sistema",
+      "filters": {
+        "search_placeholder": "Procurar turma..."
+      },
+      "empty": {
+        "title": "Não foram encontradas turmas",
+        "description": "Não há turmas que correspondam aos filtros."
+      },
+      "meta": {
+        "title": "Gestão de turmas | ITAKAI Admin"
+      },
+      "sort": {
+        "students_desc": "Mais alunos",
+        "missions_desc": "Mais missões"
+      }
+    },
+    "missions": {
+      "title": "Gestão de missões",
+      "subtitle": "Supervisiona todas as missões do sistema",
+      "filters": {
+        "search_placeholder": "Procurar missão...",
+        "all_statuses": "Todos os estados",
+        "all_rarities": "Todas as raridades"
+      },
+      "empty": {
+        "title": "Não foram encontradas missões",
+        "description": "Não há missões que correspondam aos filtros."
+      },
+      "meta": {
+        "title": "Gestão de missões | ITAKAI Admin"
+      },
+      "sort": {
+        "xp_desc": "Mais XP",
+        "enigmas_desc": "Mais enigmas"
+      }
+    },
+    "analytics": {
+      "title": "Análises do sistema",
+      "subtitle": "Métricas e estatísticas da plataforma",
+      "period": {
+        "week": "Semana",
+        "month": "Mês",
+        "quarter": "Trimestre"
+      },
+      "kpis": {
+        "avg_response": "Tempo de resposta",
+        "requests_per_min": "Pedidos/min",
+        "error_rate": "Taxa de erro",
+        "uptime": "Disponibilidade"
+      },
+      "overview": {
+        "total_users": "Utilizadores totais",
+        "active_today": "Ativos hoje",
+        "missions_completed": "Missões concluídas",
+        "completion_rate": "Taxa de conclusão"
+      },
+      "sections": {
+        "system_resources": "Recursos do sistema",
+        "service_health": "Estado dos serviços",
+        "response_time": "Tempo de resposta",
+        "active_users": "Utilizadores ativos",
+        "requests": "Pedidos",
+        "tokens_over_time": "Tokens consumidos",
+        "users_by_role": "Utilizadores por perfil",
+        "missions_by_status": "Missões por estado",
+        "missions_by_rarity": "Missões por raridade",
+        "ai_usage": "Utilização de IA (assistentes)"
+      },
+      "ai": {
+        "total_tokens": "Tokens totais",
+        "avg_tokens_user": "Média por utilizador",
+        "total_conversations": "Conversas",
+        "avg_conversations_user": "Conv. por utilizador"
+      },
+      "system": {
+        "memory": "Memória",
+        "disk": "Disco",
+        "db_latency": "Latência BD"
+      },
+      "table": {
+        "service": "Serviço",
+        "status": "Estado",
+        "uptime": "Disponibilidade",
+        "latency": "Latência"
+      },
+      "status": {
+        "operational": "OK",
+        "degraded": "Degradado",
+        "down": "Em baixo"
+      },
+      "meta": {
+        "title": "Análises do sistema | ITAKAI Admin",
+        "description": "Consulta métricas avançadas, gráficos de desempenho e análises detalhadas da plataforma."
+      }
+    },
+    "logs": {
+      "title": "Registos do sistema",
+      "subtitle": "Registos de atividade e eventos da plataforma",
+      "tab": "Atividade",
+      "filters": {
+        "search_placeholder": "Procurar nos registos...",
+        "period_24h": "Últimas 24 horas",
+        "period_week": "Última semana",
+        "period_month": "Último mês",
+        "all_severities": "Todas",
+        "info": "Informação",
+        "warning": "Aviso",
+        "error": "Erro",
+        "success": "Sucesso",
+        "all_types": "Todos os tipos",
+        "new_school": "Nova instituição",
+        "new_users": "Novos utilizadores",
+        "alert": "Alerta",
+        "system_update": "Atualização",
+        "missions_completed": "Missões concluídas",
+        "user_action": "Ação de utilizador"
+      },
+      "empty": {
+        "title": "Não foram encontrados registos",
+        "description": "Não há registos que correspondam aos filtros."
+      },
+      "meta": {
+        "title": "Registos do sistema | ITAKAI Admin",
+        "description": "Consulta os registos de atividade do sistema, audita ações dos utilizadores e diagnostica problemas técnicos."
+      }
+    },
+    "system_logs": {
+      "tab": "Sistema",
+      "filters": {
+        "search_placeholder": "Procurar nos registos do sistema...",
+        "all_levels": "Todos os níveis",
+        "all_categories": "Todas as categorias"
+      },
+      "levels": {
+        "info": "Informação",
+        "warning": "Aviso",
+        "error": "Erro",
+        "success": "Sucesso"
+      },
+      "categories": {
+        "health_check": "Estado do sistema",
+        "service_status": "Estado do serviço",
+        "security": "Segurança",
+        "performance": "Desempenho",
+        "maintenance": "Manutenção",
+        "backup": "Cópia de segurança"
+      },
+      "empty": {
+        "title": "Não foram encontrados registos do sistema",
+        "description": "Não há registos do sistema que correspondam aos filtros."
+      }
+    },
+    "settings": {
+      "title": "Configuração",
+      "subtitle": "Configura os serviços desta instância: IA, imagens, armazenamento e domínio.",
+      "meta": {
+        "title": "Configuração · ITAKAI Admin",
+        "description": "Configuração da instância"
+      },
+      "save": "Guardar alterações",
+      "saved": "Configuração guardada",
+      "save_error": "Não foi possível guardar a configuração",
+      "ai": {
+        "title": "Inteligência artificial",
+        "desc": "Endpoints compatíveis com a API da OpenAI. Usa o fornecedor que quiseres (OpenAI, o teu próprio Spark, Groq, Together, OpenRouter, Gemini através do endpoint OpenAI…).",
+        "text_title": "Texto",
+        "image_title": "Imagens",
+        "endpoint_url": "URL do endpoint",
+        "api_key": "Chave API",
+        "model": "Modelo"
+      },
+      "storage": {
+        "title": "Armazenamento",
+        "desc": "Onde ficam guardadas as imagens e os ficheiros carregados.",
+        "driver": "Tipo de armazenamento",
+        "driver_local": "Disco local (predefinido)",
+        "driver_s3": "Externo S3 / Cloudflare R2",
+        "endpoint": "Endpoint",
+        "region": "Região",
+        "bucket": "Bucket",
+        "access_key": "Access Key ID",
+        "secret_key": "Secret Access Key",
+        "public_url": "URL pública base",
+        "public_url_hint": "URL a partir da qual os ficheiros são servidos (bucket público ou domínio próprio do R2).",
+        "path_style": "Usar path-style (recomendado para R2)"
+      },
+      "domain": {
+        "title": "Domínio",
+        "desc": "URL pública da instância e origens permitidas.",
+        "app_url": "URL da instância",
+        "app_url_hint": "É usada nas ligações dos e-mails.",
+        "cors": "Origens CORS permitidas",
+        "cors_hint": "Separa várias com vírgulas."
+      },
+      "general": {
+        "title": "Geral",
+        "desc": "Parâmetros gerais da instância.",
+        "platform_name": "Nome da plataforma",
+        "contact_email": "E-mail de contacto",
+        "default_language": "Idioma predefinido",
+        "registration_open": "Registo aberto",
+        "registration_hint": "Permite que se registem novos utilizadores.",
+        "maintenance_mode": "Modo de manutenção",
+        "maintenance_hint": "Mostra um aviso de manutenção aos utilizadores."
+      }
+    }
+  }
+}

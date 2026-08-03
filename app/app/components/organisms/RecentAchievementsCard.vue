@@ -20,13 +20,15 @@
 
       <!-- Empty State -->
       <CardItem v-if="!achievements.length" padding="lg" layout="column" centered>
-        <p class="text-sm text-navy-700/80">No hay insignias recientes</p>
+        <p class="text-sm text-navy-700/80">{{ t('student.dashboard.recent_badges_empty') }}</p>
       </CardItem>
     </div>
   </Card>
 </template>
 
 <script setup lang="ts">
+const { t } = useI18n()
+
 /**
  * RecentAchievementsCard - Card de insignias recientes
  *

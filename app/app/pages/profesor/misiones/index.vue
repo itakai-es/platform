@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-4 xs:space-y-5 sm:space-y-6">
     <!-- Page Header -->
-    <PageHeader title="Mis Misiones" subtitle="Gestiona las misiones de tus clases">
+    <PageHeader title="Mis Misiones" :subtitle="t('teacher.missions.index.subtitle')">
       <template #actions>
         <NuxtLink to="/profesor/misiones/crear">
           <Button variant="primary">

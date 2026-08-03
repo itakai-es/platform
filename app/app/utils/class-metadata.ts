@@ -8,6 +8,8 @@
  * Para editar el catálogo, basta con tocar estas listas.
  */
 
+import { APP_LANGUAGES } from './app-languages'
+
 export interface MetaOption {
   value: string
   label: string
@@ -15,20 +17,21 @@ export interface MetaOption {
 
 const toOptions = (values: string[]): MetaOption[] => values.map(v => ({ value: v, label: v }))
 
-/** Idioma vehicular de la clase: los 5 idiomas que soporta la app (locales). */
-export const CLASS_LANGUAGES = toOptions(['Castellano', 'English', 'Català', 'Euskara', 'Galego'])
+/**
+ * Idioma vehicular de la clase: los idiomas que soporta la app (locales).
+ * Se deriva de APP_LANGUAGES para que añadir un locale nuevo no requiera tocar
+ * esta lista. El valor almacenado sigue siendo el endónimo ("Castellano",
+ * "Català"…), que es lo que ya hay guardado en la columna `language`.
+ */
+export const CLASS_LANGUAGES = toOptions(APP_LANGUAGES.map(lang => lang.endonym))
 
 /**
  * Mapa idioma de la clase → código de locale, para que la IA genere el texto
  * (narrativa, títulos, guía) en el idioma vehicular elegido por el profe.
  */
-export const CLASS_LANGUAGE_TO_LOCALE: Record<string, string> = {
-  Castellano: 'es',
-  English: 'en',
-  Català: 'ca',
-  Euskara: 'eu',
-  Galego: 'gl',
-}
+export const CLASS_LANGUAGE_TO_LOCALE: Record<string, string> = Object.fromEntries(
+  APP_LANGUAGES.map(lang => [lang.endonym, lang.code])
+)
 
 /** Nivel educativo (sistema español, todos los niveles). */
 export const CLASS_EDUCATION_LEVELS = toOptions([

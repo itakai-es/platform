@@ -1,0 +1,392 @@
+{
+  "student": {
+    "dashboard": {
+      "meta": {
+        "title": "El mio aniciu | ITAKAI",
+        "description": "Aniciu principal del alumnu. Revisa'l to progresu, les últimes misiones y les estadístiques de XP."
+      },
+      "welcome": "¡Bienveníu, {name}!",
+      "welcome_fallback_name": "Alumnu",
+      "subtitle": "Sigui col to viaxe d'aprendizaxe y completa misiones nueves",
+      "stats": {
+        "classes_enrolled": "Clases inscrites",
+        "missions_completed": "Misiones completaes",
+        "badges_earned": "Insinies llograes"
+      },
+      "my_classes": {
+        "title": "Les mios clases",
+        "view_all": "Veles toes",
+        "empty": "Entá nun tas inscritu en nenguna clase"
+      },
+      "latest_missions": {
+        "title": "Últimes misiones",
+        "view_all": "Veles toes",
+        "empty": "Nun hai misiones recientes. ¡Esplora misiones nueves!"
+      },
+      "ai_assistant": {
+        "name": "Atenea",
+        "message_new_user": "¡Hola {name}! Bienveníu a ITAKAI. ¡Completa la to primer misión pa entamar a ganar XP!",
+        "message_returning_user": "¡Hola {name}! Completasti {missions_completed} misiones en {classes_enrolled} clases. ¡Sigui asina!"
+      },
+      "class_fallback_name": "Clase",
+      "recent_badges_empty": "Nun hai insinies recientes",
+      "recent_topics_empty": "Nun hai temes recientes",
+      "upcoming_dates_empty": "Nun hai dates próximes"
+    },
+    "missions": {
+      "meta": {
+        "title": "Les mios misiones | ITAKAI",
+        "description": "Esplora y completa misiones educatives. Gana XP y desbloquia retos nuevos."
+      },
+      "page_title": "Les mios misiones",
+      "page_subtitle": "Esplora y completa misiones pa ganar esperiencia",
+      "empty": {
+        "title": "Ensin misiones",
+        "search_no_results": "Nun s'atoparon misiones pa \"{query}\"",
+        "class_no_missions_single": "Nun hai misiones nesta clase",
+        "class_no_missions_multiple": "Nun hai misiones nes clases escoyíes",
+        "rarity_no_missions": "Nun hai misiones coles rareces escoyíes",
+        "status_no_missions": "Nun hai misiones colos estaos escoyíos",
+        "coming_soon": "Ceo va haber misiones nueves disponibles"
+      },
+      "redirect": {
+        "redirecting": "Redirixendo..."
+      },
+      "status": {
+        "urgente": "Urxente",
+        "activa": "Activa",
+        "completada": "Completada",
+        "bloqueada": "Bloquiada",
+        "pendiente": "Pendiente",
+        "expirada": "Caducada",
+        "en_progreso": "En progresu"
+      }
+    },
+    "mission_detail": {
+      "meta": {
+        "title": "{title} | ITAKAI",
+        "title_loading": "Detalle de misión | ITAKAI",
+        "description_fallback": "Detalle de misión n'ITAKAI"
+      },
+      "error": {
+        "loading_error": "Fallu al cargar la misión"
+      },
+      "documents": {
+        "action_download": "Baxar ficheru",
+        "action_open_link": "Abrir enllaz",
+        "action_play_video": "Reproducir videu"
+      },
+      "atenea": {
+        "message": "¡Hola! Toi equí p'ayudate con \"{mission_title}\". ¿Preparáu pa entamar esta aventura?"
+      },
+      "rewards": {
+        "unlock_badge_hint": "Completa tolos enigmes d'esta misión pa desbloquiar esta insinia."
+      },
+      "submission": {
+        "success": "Entrega unviada correutamente. El profesor va revisala ceo.",
+        "error": "Fallu al unviar la entrega. Inténtalo otra vuelta.",
+        "expired_error": "Esta misión caducó. Yá nun pues entregar enigmes.",
+        "downloading": "Baxando"
+      }
+    },
+    "classes": {
+      "meta": {
+        "title": "Les mios clases | ITAKAI",
+        "description": "Accedi a les tos clases inscrites, revisa'l progresu y descubri misiones nueves asignaes."
+      },
+      "page_title": "Les mios clases",
+      "page_subtitle": "Clases nes que tas inscritu",
+      "join_class_button": "Xunise a una clase",
+      "empty": {
+        "title": "Nun tienes clases",
+        "description": "Entá nun tas inscritu en nenguna clase. Pidi'l códigu al to profesor pa xunite."
+      },
+      "detail": {
+        "error_title": "Fallu al cargar la clase",
+        "back_to_classes": "Volver a les mios clases",
+        "breadcrumb_classes": "Les mios clases",
+        "teacher_fallback": "Profesor",
+        "tabs": {
+          "resumen": "Resume",
+          "historia": "Hestoria",
+          "guia": "Guía",
+          "misiones": "Misiones",
+          "ranking": "Clasificación",
+          "avatar": "Avatar",
+          "tienda": "Tienda"
+        },
+        "progress": {
+          "title": "El mio progresu",
+          "completion_rate": "Completáu",
+          "missions_completed": "Misiones completaes",
+          "xp_total": "XP total",
+          "badges_earned": "Insinies llograes"
+        },
+        "ai_assistant": {
+          "subtitle": "La to guía nesta clase",
+          "message": "¡Hola! Toi equí p'ayudate con cualquier duda que tengas sobre esta clase. ¿En qué t'ayudo güei?"
+        },
+        "missions_tab": {
+          "empty_title": "Ensin misiones",
+          "empty_search": "Nun s'atoparon misiones pa \"{query}\"",
+          "empty_rarity": "Nun hai misiones coles rareces escoyíes",
+          "empty_default": "Entá nun hai misiones asignaes nesta clase."
+        },
+        "avatar_tab": {
+          "choose_guide": "Escueyi la to guía pa esta clase",
+          "describe_avatar": "Describi cómo quies que seya'l to avatar:",
+          "example_label": "Exemplu:",
+          "example_text": "Un guerreru mozu con armadura dorada, pelo escuru y güeyos rellumantes, sosteniendo un escudu col símbolu d'Atenea. Estilu épicu y heroicu, inspiráu na mitoloxía griega ...",
+          "placeholder": "Describi equí'l to avatar...",
+          "tip": "Conseyu: sé específicu colos colores, la ropa, los accesorios y l'estilu. La IA va crear el to avatar en base al personaxe qu'escoyeres.",
+          "generate_button": "Xenera l'avatar",
+          "generating": "Xenerando'l to avatar...",
+          "generated_trait": "Xeneráu con IA",
+          "nickname_placeholder": "El to nomatu...",
+          "save_changes": "Guardar los cambeos",
+          "no_guide_hint": "Escueyi la to guía pa ver el to avatar",
+          "save_success": "Perfil guardáu correutamente",
+          "save_error": "Fallu al guardar el perfil",
+          "generate_error": "Nun se pudo xenerar l'avatar. Inténtalo otra vuelta en dellos segundos.",
+          "generate_error_with_detail": "Nun se pudo xenerar l'avatar: {detail}"
+        },
+        "mission_no_description": "Ensin descripción",
+        "shop": {
+          "help_coins": "Monedes: gánales coles misiones y cámbieles por recompenses.",
+          "help_mana": "Maná: úsalu p'activar poderes.",
+          "tab_rewards": "Recompenses",
+          "tab_purchases": "Los mios cambeos",
+          "empty_title": "La tienda ta balera",
+          "empty_description": "El to profesor entá nun amestó recompenses. Vuelvi más sero.",
+          "purchases_empty_title": "Entá nun cambiesti nada",
+          "purchases_empty_description": "Gasta les tos monedes nes recompenses y equí vas ver el to historial.",
+          "view_rewards": "Ver les recompenses",
+          "coins": "monedes",
+          "confirm_title": "¿Cambiar \"{name}\"?",
+          "cost": "Costu",
+          "balance_after": "Saldu depués del cambéu",
+          "missing": "Fáltente",
+          "cancel": "Encaboxar",
+          "redeem": "Cambiar",
+          "redeemed_toast": "¡Cambiesti \"{name}\"!",
+          "redeem_error": "Nun se pudo completar el cambéu.",
+          "mana": "maná",
+          "buy": "Mercar",
+          "use": "Usar",
+          "owned": "Nel to poder",
+          "power": "Poder",
+          "reward": "Recompensa",
+          "tab_powers": "Poderes",
+          "tab_shop": "Tienda",
+          "tab_items": "Los mios artículos",
+          "owned_empty_title": "Entá nun tienes nada",
+          "owned_empty_description": "Merca poderes o privilexos na tienda y van apaecer equí.",
+          "tab_history": "Historial",
+          "history_bought": "Mercáu",
+          "history_used": "Usáu",
+          "history_redeemed": "Cambiáu",
+          "history_purchases_title": "Compres",
+          "history_uses_title": "Usos",
+          "history_purchases_empty": "Entá nun mercasti nada.",
+          "history_uses_empty": "Entá nun usasti nengún artículu.",
+          "history_empty_title": "Entá ensin actividá",
+          "history_empty_description": "Equí vas ver les tos compres y los poderes qu'uses.",
+          "usage_single": "Un usu",
+          "usage_unlimited": "Illimitada",
+          "powers_empty_title": "Nun hai poderes",
+          "powers_empty_description": "El to profesor entá nun amestó poderes. Vuelvi más sero.",
+          "confirm_buy_title": "¿Mercar \"{name}\"?",
+          "confirm_use_title": "¿Usar \"{name}\"?",
+          "bought_toast": "¡Mercasti \"{name}\"!",
+          "used_toast": "¡Usasti \"{name}\"!",
+          "mana_after": "Maná depués del usu"
+        }
+      }
+    },
+    "achievements": {
+      "meta": {
+        "title": "Les mios insinies | ITAKAI",
+        "description": "Descubri toles insinies llograes al completar misiones y llogros especiales."
+      },
+      "page_title": "Les mios insinies",
+      "page_subtitle": "Recompenses llograes al completar misiones y llogros",
+      "filter": {
+        "search_placeholder": "Guetar insinies...",
+        "all_categories": "Toles categoríes",
+        "all_rarities": "Toles rareces",
+        "plural_categories": "categoríes",
+        "plural_rarities": "rareces",
+        "status_all": "Toes",
+        "status_unlocked": "Desbloquiaes",
+        "status_locked": "Bloquiaes"
+      },
+      "rarity": {
+        "common": "Común",
+        "rare": "Rara",
+        "epic": "Épica",
+        "legendary": "Llexendaria"
+      },
+      "empty": {
+        "title": "Ensin insinies",
+        "no_badges_yet": "Completa misiones pa desbloquiar insinies",
+        "search_no_results": "Nun s'atoparon insinies pa \"{query}\"",
+        "filter_no_results": "Nun hai insinies colos filtros escoyíos",
+        "default": "Nun hai insinies disponibles"
+      },
+      "badge_detail": {
+        "unlocked_on": "Desbloquiada el {date}",
+        "mission_label": "Misión: {name}",
+        "class_label": "Clase: {name}",
+        "progress_label": "Progresu actual",
+        "close": "Zarrar"
+      }
+    },
+    "leaderboard": {
+      "meta": {
+        "title": "Clasificación | ITAKAI",
+        "description": "La clasificación d'alumnos ta disponible dientro de cada clase."
+      },
+      "page_title": "Clasificación",
+      "page_subtitle": "Consulta la clasificación global y compara'l to progresu col restu del alumnáu.",
+      "pick_class": "Escueyi una clase",
+      "friends_soon_title": "Clasificación d'amigos ceo",
+      "friends_soon_description": "La parte social entá nun ta coneutada. Mentanto, pues usar la clasificación global o la de les tos clases.",
+      "choose_class_title": "Escueyi una clase",
+      "choose_class_description": "Escueyi una clase pa ver la to posición y la clasificación interna.",
+      "empty_class_title": "Nun hai clasificación disponible",
+      "empty_class_description": "Entá nun hai datos abondo pa construyir la clasificación d'esta clase.",
+      "empty_global_title": "Nun hai datos de clasificación",
+      "empty_global_description": "Entá nun hai actividá abondo p'amosar una clasificación global.",
+      "global_podium": "Podiu global",
+      "your_position": "La to posición",
+      "rest": "Restu de la clasificación",
+      "by_class": "Por clase"
+    },
+    "ai_assistant": {
+      "meta": {
+        "title": "Asistente IA | ITAKAI",
+        "description": "Charra col to asistente d'IA pa resolver dudes sobre misiones, progresu y la plataforma."
+      },
+      "suggestions": {
+        "how_to_complete_mission": "¿Cómo completo una misión?",
+        "where_to_see_progress": "¿Ónde puedo ver el mio progresu?",
+        "how_xp_works": "¿Cómo funciona'l sistema de XP?",
+        "how_to_join_class": "¿Cómo m'axunto a una clase?"
+      }
+    },
+    "profile": {
+      "meta": {
+        "title": "El mio perfil | ITAKAI",
+        "description": "Xestiona'l to perfil d'alumnu, configura la seguridá y personaliza la to esperiencia."
+      },
+      "breadcrumb_home": "Aniciu",
+      "breadcrumb_profile": "El mio perfil",
+      "page_title": "El mio perfil",
+      "tabs": {
+        "security": "Seguridá",
+        "settings": "Configuración"
+      },
+      "security": {
+        "password_title": "Contraseña",
+        "current_password": "Contraseña actual",
+        "new_password": "Contraseña nueva",
+        "confirm_password": "Confirmar contraseña",
+        "update_button": "Anovar",
+        "passwords_mismatch": "Les contraseñes nun concasen",
+        "password_too_short": "La contraseña tien de tener polo menos 6 caráuteres",
+        "email_title": "Corréu electrónicu",
+        "new_email_placeholder": "Corréu nuevu",
+        "email_invalid": "Introduz un corréu válidu",
+        "sessions_title": "Sesiones",
+        "close_all_sessions": "Zarrales toes",
+        "current_session": "Actual",
+        "close_session": "Zarrar"
+      },
+      "settings": {
+        "theme_title": "Tema",
+        "theme_description": "Escueyi l'estilu visual de la plataforma",
+        "theme_college": "Mou colexu",
+        "theme_college_desc": "Aspeutu gamificáu",
+        "theme_university": "Mou universidá",
+        "theme_university_desc": "Aspeutu profesional",
+        "language_title": "Llingua",
+        "language_updated": "Llingua anovada",
+        "theme_updated": "Tema anováu",
+        "danger_zone_title": "Zona peligrosa",
+        "danger_zone_description": "Una vegada desaniciada la to cuenta, nun hai vuelta atrás. Asegúrate de tar seguru.",
+        "delete_account_button": "Desaniciar la cuenta"
+      },
+      "delete_modal": {
+        "title": "Desaniciar la cuenta",
+        "confirm_prompt": "Pa confirmar, introduz la to contraseña:",
+        "password_placeholder": "La to contraseña",
+        "cancel_button": "Encaboxar",
+        "delete_button": "Desaniciar la mio cuenta",
+        "password_required": "Introduz la to contraseña"
+      },
+      "languages": {
+        "es": "Castellanu",
+        "en": "Inglés",
+        "ca": "Catalán",
+        "val": "Valencianu",
+        "eu": "Éuscaru",
+        "gl": "Gallegu",
+        "ast": "Asturianu",
+        "pt": "Portugués",
+        "el": "Griegu",
+        "ro": "Rumanu"
+      }
+    },
+    "components": {
+      "mission_card": {
+        "progress": "Progresu",
+        "view_mission": "Ver la misión"
+      },
+      "recent_activity_card": {
+        "title": "Actividá reciente",
+        "empty": "Nun hai actividá reciente",
+        "user_fallback": "Usuariu"
+      },
+      "submission_modal": {
+        "title": "Entregar enigma",
+        "file_label": "Ficheru d'entrega",
+        "file_required": "*",
+        "drag_hint": "Arrastra equí'l to ficheru o fai clic pa escoyelu",
+        "file_types": "ZIP, RAR, 7Z (máx. 50 MB)",
+        "cancel_button": "Encaboxar",
+        "submit_button": "Entregar",
+        "submitting_button": "Unviando...",
+        "validation": {
+          "invalid_type": "Namás s'almiten ficheros ZIP, RAR o 7Z",
+          "file_too_large": "El ficheru nun pue pasar de 50 MB",
+          "file_required": "Tienes qu'escoyer un ficheru"
+        }
+      },
+      "class_guide_markdown": {
+        "empty_title": "Ensin conteníu",
+        "empty_student": "El profesor entá nun amestó la guía d'esta clase.",
+        "empty_teacher": "Entá nun amestasti la guía d'esta clase.",
+        "add_guide_button": "Amestar guía",
+        "last_updated": "Últimu anovamientu: {date}"
+      },
+      "rarity_badge": {
+        "comun": "Común",
+        "rara": "Rara",
+        "epica": "Épica",
+        "legendaria": "Llexendaria"
+      },
+      "class_ranking_section": {
+        "podium_title": "Podiu de campeones",
+        "stats_title": "Estadístiques",
+        "rest_title": "Restu de la clasificación",
+        "level_abbr": "Nv.",
+        "missions_suffix": "misiones",
+        "you_badge": "Tu",
+        "avg_xp": "XP media",
+        "avg_progress": "Progresu mediu",
+        "avg_missions": "Misiones medies",
+        "total_xp": "XP total de la clase"
+      }
+    }
+  }
+}

@@ -1,0 +1,392 @@
+{
+  "student": {
+    "dashboard": {
+      "meta": {
+        "title": "O meu início | ITAKAI",
+        "description": "Página inicial do aluno. Consulta o teu progresso, as últimas missões e as estatísticas de XP."
+      },
+      "welcome": "Bem-vindo, {name}!",
+      "welcome_fallback_name": "Aluno",
+      "subtitle": "Continua a tua viagem de aprendizagem e conclui novas missões",
+      "stats": {
+        "classes_enrolled": "Turmas inscritas",
+        "missions_completed": "Missões concluídas",
+        "badges_earned": "Emblemas conquistados"
+      },
+      "my_classes": {
+        "title": "As minhas turmas",
+        "view_all": "Ver todas",
+        "empty": "Ainda não estás inscrito em nenhuma turma"
+      },
+      "latest_missions": {
+        "title": "Últimas missões",
+        "view_all": "Ver todas",
+        "empty": "Não há missões recentes. Explora novas missões!"
+      },
+      "ai_assistant": {
+        "name": "Atena",
+        "message_new_user": "Olá {name}! Bem-vindo ao ITAKAI. Conclui a tua primeira missão para começares a ganhar XP!",
+        "message_returning_user": "Olá {name}! Concluíste {missions_completed} missões em {classes_enrolled} turmas. Continua assim!"
+      },
+      "class_fallback_name": "Turma",
+      "recent_badges_empty": "Não há emblemas recentes",
+      "recent_topics_empty": "Não há temas recentes",
+      "upcoming_dates_empty": "Não há datas próximas"
+    },
+    "missions": {
+      "meta": {
+        "title": "As minhas missões | ITAKAI",
+        "description": "Explora e conclui missões educativas. Ganha XP e desbloqueia novos desafios."
+      },
+      "page_title": "As minhas missões",
+      "page_subtitle": "Explora e conclui missões para ganhar experiência",
+      "empty": {
+        "title": "Sem missões",
+        "search_no_results": "Não foram encontradas missões para \"{query}\"",
+        "class_no_missions_single": "Não há missões nesta turma",
+        "class_no_missions_multiple": "Não há missões nas turmas selecionadas",
+        "rarity_no_missions": "Não há missões com as raridades selecionadas",
+        "status_no_missions": "Não há missões com os estados selecionados",
+        "coming_soon": "Em breve haverá novas missões disponíveis"
+      },
+      "redirect": {
+        "redirecting": "A redirecionar..."
+      },
+      "status": {
+        "urgente": "Urgente",
+        "activa": "Ativa",
+        "completada": "Concluída",
+        "bloqueada": "Bloqueada",
+        "pendiente": "Pendente",
+        "expirada": "Expirada",
+        "en_progreso": "Em curso"
+      }
+    },
+    "mission_detail": {
+      "meta": {
+        "title": "{title} | ITAKAI",
+        "title_loading": "Detalhe da missão | ITAKAI",
+        "description_fallback": "Detalhe de missão no ITAKAI"
+      },
+      "error": {
+        "loading_error": "Erro ao carregar a missão"
+      },
+      "documents": {
+        "action_download": "Descarregar ficheiro",
+        "action_open_link": "Abrir ligação",
+        "action_play_video": "Reproduzir vídeo"
+      },
+      "atenea": {
+        "message": "Olá! Estou aqui para te ajudar com \"{mission_title}\". Pronto para começar esta aventura?"
+      },
+      "rewards": {
+        "unlock_badge_hint": "Conclui todos os enigmas desta missão para desbloqueares este emblema."
+      },
+      "submission": {
+        "success": "Entrega enviada com sucesso. O professor vai revê-la em breve.",
+        "error": "Erro ao enviar a entrega. Tenta novamente.",
+        "expired_error": "Esta missão expirou. Já não podes entregar enigmas.",
+        "downloading": "A descarregar"
+      }
+    },
+    "classes": {
+      "meta": {
+        "title": "As minhas turmas | ITAKAI",
+        "description": "Acede às turmas em que estás inscrito, consulta o progresso e descobre novas missões atribuídas."
+      },
+      "page_title": "As minhas turmas",
+      "page_subtitle": "Turmas em que estás inscrito",
+      "join_class_button": "Juntar-se a uma turma",
+      "empty": {
+        "title": "Não tens turmas",
+        "description": "Ainda não estás inscrito em nenhuma turma. Pede o código ao teu professor para te juntares."
+      },
+      "detail": {
+        "error_title": "Erro ao carregar a turma",
+        "back_to_classes": "Voltar às minhas turmas",
+        "breadcrumb_classes": "As minhas turmas",
+        "teacher_fallback": "Professor",
+        "tabs": {
+          "resumen": "Resumo",
+          "historia": "História",
+          "guia": "Guia",
+          "misiones": "Missões",
+          "ranking": "Ranking",
+          "avatar": "Avatar",
+          "tienda": "Loja"
+        },
+        "progress": {
+          "title": "O meu progresso",
+          "completion_rate": "Concluído",
+          "missions_completed": "Missões concluídas",
+          "xp_total": "XP total",
+          "badges_earned": "Emblemas obtidos"
+        },
+        "ai_assistant": {
+          "subtitle": "O teu guia nesta turma",
+          "message": "Olá! Estou aqui para te ajudar com qualquer dúvida sobre esta turma. Em que posso ajudar hoje?"
+        },
+        "missions_tab": {
+          "empty_title": "Sem missões",
+          "empty_search": "Não foram encontradas missões para \"{query}\"",
+          "empty_rarity": "Não há missões com as raridades selecionadas",
+          "empty_default": "Ainda não há missões atribuídas nesta turma."
+        },
+        "avatar_tab": {
+          "choose_guide": "Escolhe o teu guia para esta turma",
+          "describe_avatar": "Descreve como queres que seja o teu avatar:",
+          "example_label": "Exemplo:",
+          "example_text": "Um guerreiro jovem com armadura dourada, cabelo escuro e olhos brilhantes, segurando um escudo com o símbolo de Atena. Estilo épico e heroico, inspirado na mitologia grega ...",
+          "placeholder": "Descreve aqui o teu avatar...",
+          "tip": "Dica: sê específico com as cores, o vestuário, os acessórios e o estilo. A IA vai criar o teu avatar com base na personagem que escolheste.",
+          "generate_button": "Gerar avatar",
+          "generating": "A gerar o teu avatar...",
+          "generated_trait": "Gerado com IA",
+          "nickname_placeholder": "A tua alcunha...",
+          "save_changes": "Guardar alterações",
+          "no_guide_hint": "Escolhe o teu guia para veres o teu avatar",
+          "save_success": "Perfil guardado com sucesso",
+          "save_error": "Erro ao guardar o perfil",
+          "generate_error": "Não foi possível gerar o avatar. Tenta novamente daqui a uns segundos.",
+          "generate_error_with_detail": "Não foi possível gerar o avatar: {detail}"
+        },
+        "mission_no_description": "Sem descrição",
+        "shop": {
+          "help_coins": "Moedas: ganha-as com missões e troca-as por recompensas.",
+          "help_mana": "Mana: usa-o para ativares poderes.",
+          "tab_rewards": "Recompensas",
+          "tab_purchases": "As minhas trocas",
+          "empty_title": "A loja está vazia",
+          "empty_description": "O teu professor ainda não adicionou recompensas. Volta mais tarde.",
+          "purchases_empty_title": "Ainda não trocaste nada",
+          "purchases_empty_description": "Gasta as tuas moedas nas recompensas e aqui verás o teu histórico.",
+          "view_rewards": "Ver recompensas",
+          "coins": "moedas",
+          "confirm_title": "Trocar \"{name}\"?",
+          "cost": "Custo",
+          "balance_after": "Saldo depois da troca",
+          "missing": "Faltam-te",
+          "cancel": "Cancelar",
+          "redeem": "Trocar",
+          "redeemed_toast": "Trocaste \"{name}\"!",
+          "redeem_error": "Não foi possível concluir a troca.",
+          "mana": "mana",
+          "buy": "Comprar",
+          "use": "Usar",
+          "owned": "Na tua posse",
+          "power": "Poder",
+          "reward": "Recompensa",
+          "tab_powers": "Poderes",
+          "tab_shop": "Loja",
+          "tab_items": "Os meus artigos",
+          "owned_empty_title": "Ainda não tens nada",
+          "owned_empty_description": "Compra poderes ou privilégios na loja e aparecerão aqui.",
+          "tab_history": "Histórico",
+          "history_bought": "Comprado",
+          "history_used": "Usado",
+          "history_redeemed": "Trocado",
+          "history_purchases_title": "Compras",
+          "history_uses_title": "Utilizações",
+          "history_purchases_empty": "Ainda não compraste nada.",
+          "history_uses_empty": "Ainda não usaste nenhum artigo.",
+          "history_empty_title": "Ainda sem atividade",
+          "history_empty_description": "Aqui verás as tuas compras e os poderes que usares.",
+          "usage_single": "Uma utilização",
+          "usage_unlimited": "Ilimitada",
+          "powers_empty_title": "Não há poderes",
+          "powers_empty_description": "O teu professor ainda não adicionou poderes. Volta mais tarde.",
+          "confirm_buy_title": "Comprar \"{name}\"?",
+          "confirm_use_title": "Usar \"{name}\"?",
+          "bought_toast": "Compraste \"{name}\"!",
+          "used_toast": "Usaste \"{name}\"!",
+          "mana_after": "Mana depois da utilização"
+        }
+      }
+    },
+    "achievements": {
+      "meta": {
+        "title": "Os meus emblemas | ITAKAI",
+        "description": "Descobre todos os emblemas obtidos ao concluíres missões e conquistas especiais."
+      },
+      "page_title": "Os meus emblemas",
+      "page_subtitle": "Recompensas obtidas ao concluir missões e conquistas",
+      "filter": {
+        "search_placeholder": "Procurar emblemas...",
+        "all_categories": "Todas as categorias",
+        "all_rarities": "Todas as raridades",
+        "plural_categories": "categorias",
+        "plural_rarities": "raridades",
+        "status_all": "Todos",
+        "status_unlocked": "Desbloqueados",
+        "status_locked": "Bloqueados"
+      },
+      "rarity": {
+        "common": "Comum",
+        "rare": "Raro",
+        "epic": "Épico",
+        "legendary": "Lendário"
+      },
+      "empty": {
+        "title": "Sem emblemas",
+        "no_badges_yet": "Conclui missões para desbloqueares emblemas",
+        "search_no_results": "Não foram encontrados emblemas para \"{query}\"",
+        "filter_no_results": "Não há emblemas com os filtros selecionados",
+        "default": "Não há emblemas disponíveis"
+      },
+      "badge_detail": {
+        "unlocked_on": "Desbloqueado a {date}",
+        "mission_label": "Missão: {name}",
+        "class_label": "Turma: {name}",
+        "progress_label": "Progresso atual",
+        "close": "Fechar"
+      }
+    },
+    "leaderboard": {
+      "meta": {
+        "title": "Ranking | ITAKAI",
+        "description": "O ranking de alunos está disponível dentro de cada turma."
+      },
+      "page_title": "Classificação",
+      "page_subtitle": "Consulta o ranking global e compara o teu progresso com os restantes alunos.",
+      "pick_class": "Seleciona uma turma",
+      "friends_soon_title": "Ranking de amigos em breve",
+      "friends_soon_description": "A parte social ainda não está ligada. Entretanto, podes usar o ranking global ou o das tuas turmas.",
+      "choose_class_title": "Escolhe uma turma",
+      "choose_class_description": "Seleciona uma turma para veres a tua posição e o ranking interno.",
+      "empty_class_title": "Não há ranking disponível",
+      "empty_class_description": "Ainda não há dados suficientes para construir o ranking desta turma.",
+      "empty_global_title": "Não há dados de ranking",
+      "empty_global_description": "Ainda não há atividade suficiente para mostrar uma classificação global.",
+      "global_podium": "Pódio global",
+      "your_position": "A tua posição",
+      "rest": "Resto da classificação",
+      "by_class": "Por turma"
+    },
+    "ai_assistant": {
+      "meta": {
+        "title": "Assistente IA | ITAKAI",
+        "description": "Conversa com o teu assistente de IA para esclareceres dúvidas sobre missões, progresso e a plataforma."
+      },
+      "suggestions": {
+        "how_to_complete_mission": "Como concluo uma missão?",
+        "where_to_see_progress": "Onde posso ver o meu progresso?",
+        "how_xp_works": "Como funciona o sistema de XP?",
+        "how_to_join_class": "Como me junto a uma turma?"
+      }
+    },
+    "profile": {
+      "meta": {
+        "title": "O meu perfil | ITAKAI",
+        "description": "Faz a gestão do teu perfil de aluno, configura a segurança e personaliza a tua experiência."
+      },
+      "breadcrumb_home": "Início",
+      "breadcrumb_profile": "O meu perfil",
+      "page_title": "O meu perfil",
+      "tabs": {
+        "security": "Segurança",
+        "settings": "Definições"
+      },
+      "security": {
+        "password_title": "Palavra-passe",
+        "current_password": "Palavra-passe atual",
+        "new_password": "Nova palavra-passe",
+        "confirm_password": "Confirmar palavra-passe",
+        "update_button": "Atualizar",
+        "passwords_mismatch": "As palavras-passe não coincidem",
+        "password_too_short": "A palavra-passe tem de ter pelo menos 6 caracteres",
+        "email_title": "E-mail",
+        "new_email_placeholder": "Novo e-mail",
+        "email_invalid": "Introduz um e-mail válido",
+        "sessions_title": "Sessões",
+        "close_all_sessions": "Terminar todas",
+        "current_session": "Atual",
+        "close_session": "Terminar"
+      },
+      "settings": {
+        "theme_title": "Tema",
+        "theme_description": "Escolhe o estilo visual da plataforma",
+        "theme_college": "Modo escola",
+        "theme_college_desc": "Aspeto gamificado",
+        "theme_university": "Modo universidade",
+        "theme_university_desc": "Aspeto profissional",
+        "language_title": "Idioma",
+        "language_updated": "Idioma atualizado",
+        "theme_updated": "Tema atualizado",
+        "danger_zone_title": "Zona perigosa",
+        "danger_zone_description": "Depois de eliminares a tua conta, não há volta atrás. Certifica-te de que é mesmo isso que queres.",
+        "delete_account_button": "Eliminar conta"
+      },
+      "delete_modal": {
+        "title": "Eliminar conta",
+        "confirm_prompt": "Para confirmar, introduz a tua palavra-passe:",
+        "password_placeholder": "A tua palavra-passe",
+        "cancel_button": "Cancelar",
+        "delete_button": "Eliminar a minha conta",
+        "password_required": "Introduz a tua palavra-passe"
+      },
+      "languages": {
+        "es": "Espanhol",
+        "en": "Inglês",
+        "ca": "Catalão",
+        "val": "Valenciano",
+        "eu": "Basco",
+        "gl": "Galego",
+        "ast": "Asturiano",
+        "pt": "Português",
+        "el": "Grego",
+        "ro": "Romeno"
+      }
+    },
+    "components": {
+      "mission_card": {
+        "progress": "Progresso",
+        "view_mission": "Ver missão"
+      },
+      "recent_activity_card": {
+        "title": "Atividade recente",
+        "empty": "Não há atividade recente",
+        "user_fallback": "Utilizador"
+      },
+      "submission_modal": {
+        "title": "Entregar enigma",
+        "file_label": "Ficheiro de entrega",
+        "file_required": "*",
+        "drag_hint": "Arrasta o teu ficheiro para aqui ou clica para selecionar",
+        "file_types": "ZIP, RAR, 7Z (máx. 50 MB)",
+        "cancel_button": "Cancelar",
+        "submit_button": "Entregar",
+        "submitting_button": "A enviar...",
+        "validation": {
+          "invalid_type": "Só são aceites ficheiros ZIP, RAR ou 7Z",
+          "file_too_large": "O ficheiro não pode ultrapassar os 50 MB",
+          "file_required": "Tens de selecionar um ficheiro"
+        }
+      },
+      "class_guide_markdown": {
+        "empty_title": "Sem conteúdo",
+        "empty_student": "O professor ainda não adicionou o guia desta turma.",
+        "empty_teacher": "Ainda não adicionaste o guia desta turma.",
+        "add_guide_button": "Adicionar guia",
+        "last_updated": "Última atualização: {date}"
+      },
+      "rarity_badge": {
+        "comun": "Comum",
+        "rara": "Raro",
+        "epica": "Épico",
+        "legendaria": "Lendário"
+      },
+      "class_ranking_section": {
+        "podium_title": "Pódio de campeões",
+        "stats_title": "Estatísticas",
+        "rest_title": "Resto do ranking",
+        "level_abbr": "Nv.",
+        "missions_suffix": "missões",
+        "you_badge": "Tu",
+        "avg_xp": "XP média",
+        "avg_progress": "Progresso médio",
+        "avg_missions": "Missões em média",
+        "total_xp": "XP total da turma"
+      }
+    }
+  }
+}

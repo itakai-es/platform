@@ -65,6 +65,9 @@
         "delete_title": "Eliminar usuari",
         "delete_message": "Estàs segur que vols eliminar {name}? Aquesta acció no es pot desfer.",
         "delete_confirm": "Eliminar"
+      },
+      "sort": {
+        "recent": "Més recents"
       }
     },
     "classes": {
@@ -79,6 +82,10 @@
       "empty": {
         "title": "No s'han trobat classes",
         "description": "No hi ha classes que coincideixin amb els filtres seleccionats."
+      },
+      "sort": {
+        "students_desc": "Més alumnes",
+        "missions_desc": "Més missions"
       }
     },
     "missions": {
@@ -88,11 +95,17 @@
       },
       "subtitle": "Visualitza totes les missions de la plataforma",
       "filters": {
-        "search_placeholder": "Cercar missions..."
+        "search_placeholder": "Cercar missions...",
+        "all_statuses": "Tots els estats",
+        "all_rarities": "Totes les rareses"
       },
       "empty": {
         "title": "No s'han trobat missions",
         "description": "No hi ha missions que coincideixin amb els filtres seleccionats."
+      },
+      "sort": {
+        "xp_desc": "Més XP",
+        "enigmas_desc": "Més enigmes"
       }
     },
     "schools": {

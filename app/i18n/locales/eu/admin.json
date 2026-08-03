@@ -65,6 +65,9 @@
         "delete_title": "Erabiltzailea ezabatu",
         "delete_message": "Ziur zaude {name} ezabatu nahi duzula? Ekintza hau ezin da desegin.",
         "delete_confirm": "Ezabatu"
+      },
+      "sort": {
+        "recent": "Berrienak"
       }
     },
     "classes": {
@@ -79,6 +82,10 @@
       "empty": {
         "title": "Ez da klaserik aurkitu",
         "description": "Ez dago hautatutako iragazkiekin bat datorren klaserik."
+      },
+      "sort": {
+        "students_desc": "Ikasle gehiago",
+        "missions_desc": "Misio gehiago"
       }
     },
     "missions": {
@@ -88,11 +95,17 @@
       },
       "subtitle": "Plataformako misio guztiak ikusi",
       "filters": {
-        "search_placeholder": "Misioak bilatu..."
+        "search_placeholder": "Misioak bilatu...",
+        "all_statuses": "Egoera guztiak",
+        "all_rarities": "ArraroTasun guztiak"
       },
       "empty": {
         "title": "Ez da misiorik aurkitu",
         "description": "Ez dago hautatutako iragazkiekin bat datorren misiorik."
+      },
+      "sort": {
+        "xp_desc": "XP gehiago",
+        "enigmas_desc": "Enigma gehiago"
       }
     },
     "schools": {

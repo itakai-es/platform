@@ -194,11 +194,9 @@ const storageDriverOptions = computed(() => [
   { value: 'local', label: t('admin.settings.storage.driver_local') },
   { value: 's3', label: t('admin.settings.storage.driver_s3') },
 ])
-const languageOptions = computed(() => [
-  { value: 'es', label: 'Castellano' },
-  { value: 'en', label: 'English' },
-  { value: 'ca', label: 'Català' },
-  { value: 'eu', label: 'Euskara' },
-  { value: 'gl', label: 'Galego' },
-])
+// Aquí se muestran los endónimos: el admin elige el idioma por defecto de la
+// instancia y debe reconocerlo aunque no hable el idioma activo del panel.
+const languageOptions = computed(() =>
+  APP_LANGUAGES.map(lang => ({ value: lang.code, label: lang.endonym }))
+)
 </script>

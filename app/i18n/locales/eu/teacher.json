@@ -59,11 +59,26 @@
           "confirm": "Bikoiztu",
           "cancel": "Utzi",
           "items": {
-            "missions": { "label": "Misioak", "desc": "Misioak eta beren enigmak" },
-            "narrative": { "label": "Istorioa", "desc": "Narrazioa eta azaleko irudia" },
-            "features": { "label": "Funtzionalitateak", "desc": "Klasearen modulu aktibatuak" },
-            "shop": { "label": "Denda", "desc": "Dendako artikuluak" },
-            "behaviors": { "label": "Portaerak", "desc": "Portaera-txantiloiak" }
+            "missions": {
+              "label": "Misioak",
+              "desc": "Misioak eta beren enigmak"
+            },
+            "narrative": {
+              "label": "Istorioa",
+              "desc": "Narrazioa eta azaleko irudia"
+            },
+            "features": {
+              "label": "Funtzionalitateak",
+              "desc": "Klasearen modulu aktibatuak"
+            },
+            "shop": {
+              "label": "Denda",
+              "desc": "Dendako artikuluak"
+            },
+            "behaviors": {
+              "label": "Portaerak",
+              "desc": "Portaera-txantiloiak"
+            }
           }
         }
       },
@@ -116,7 +131,8 @@
           "attach_hint": "Gehienez {max} MB fitxategiko",
           "attach_error_size": "«{name}» fitxategiak {size} MB ditu. Gehienez {max} MB fitxategi bakoitzeko.",
           "attach_error_too_large": "Materialek gehiegi pisatzen dute guztira. Banaka igo itzazu (gehienez {max} MB fitxategiko)."
-        }
+        },
+        "narrative_error": "Ezin izan dut narratiba sortu"
       },
       "detail": {
         "breadcrumb_classes": "Nire klaseak",
@@ -391,6 +407,11 @@
           "management": {
             "title": "Kudeaketa"
           }
+        },
+        "badges_empty": "Ez dago domarik klase honetan",
+        "join_requests": {
+          "empty_title": "Eskaerarik ez",
+          "empty_description": "Ez dago eskaera zainik klase honetarako"
         }
       }
     },
@@ -399,12 +420,17 @@
         "meta": {
           "title": "Nire Misioak | ITAKAI Irakaslea",
           "description": "Kudeatu sortutako misio guztiak, editatu edo sortu berriak zure ikasleentzat."
-        }
+        },
+        "subtitle": "Kudeatu zure klaseetako misioak"
       },
       "create": {
         "meta": {
           "title": "Misioa Sortu | ITAKAI Irakaslea"
-        }
+        },
+        "pick_class": "Hautatu klase bat",
+        "idea_placeholder": "Adib.: Zinematikari buruzko misio bat nahi dut, non ikasleek eskuila hegalarien ibilbideak kalkulatzen dituzten...",
+        "narrative_error": "Ezin izan dut narratiba sortu",
+        "ai_unavailable": "AA zerbitzua ez dago erabilgarri une honetan. Saiatu berriro minutu batzuk barru."
       },
       "detail": {
         "delete_confirm_btn": "Ezabatu",
@@ -474,7 +500,8 @@
         "btn_cancel": "Utzi",
         "btn_saving": "Gordetzen...",
         "btn_save_changes": "Aldaketak gorde",
-        "btn_create": "Dominaria sortu"
+        "btn_create": "Dominaria sortu",
+        "no_mission": "Misiorik gabe"
       },
       "detail": {
         "btn_edit": "Editatu",
@@ -491,7 +518,9 @@
       "meta": {
         "title": "Nire Dominariak | ITAKAI Irakaslea",
         "description": "Sortu, editatu eta kudeatu dominari pertsonalizatuak zure ikasleen lorpenak saritzeko."
-      }
+      },
+      "filter_system": "Sistemakoak",
+      "generate_error": "Ezin izan da doma sortu."
     },
     "students": {
       "index": {
@@ -594,11 +623,16 @@
         "btn_cancel": "Utzi",
         "btn_delete_confirm": "Nire kontua ezabatu",
         "languages": {
-          "es": "Espainiera",
+          "es": "Gaztelania",
           "en": "English",
           "ca": "Katalana",
           "eu": "Euskara",
-          "gl": "Galego"
+          "gl": "Galego",
+          "val": "Valentziera",
+          "ast": "Asturiera",
+          "pt": "Portugesa",
+          "el": "Greziera",
+          "ro": "Errumaniera"
         }
       },
       "meta": {
@@ -877,6 +911,10 @@
       "wizard_question": "Jarri ordutegia eta azala zure klaseari",
       "cancel": "Utzi",
       "done": "Eginda"
+    },
+    "submissions": {
+      "subtitle": "Berrikusi eta onartu klase honetako entregak pantaila bakar batetik.",
+      "back_to_class": "Itzuli klasera"
     }
   }
 }

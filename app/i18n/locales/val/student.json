@@ -1,0 +1,392 @@
+{
+  "student": {
+    "dashboard": {
+      "meta": {
+        "title": "El meu inici | ITAKAI",
+        "description": "Inici principal de l'alumne. Revisa el teu progrés, les últimes missions i les estadístiques de XP."
+      },
+      "welcome": "Benvingut, {name}!",
+      "welcome_fallback_name": "Alumne",
+      "subtitle": "Continua el teu viatge d'aprenentatge i completa noves missions",
+      "stats": {
+        "classes_enrolled": "Classes inscrites",
+        "missions_completed": "Missions completades",
+        "badges_earned": "Insígnies aconseguides"
+      },
+      "my_classes": {
+        "title": "Les meues classes",
+        "view_all": "Veure-les totes",
+        "empty": "Encara no estàs inscrit en cap classe"
+      },
+      "latest_missions": {
+        "title": "Últimes missions",
+        "view_all": "Veure-les totes",
+        "empty": "No hi ha missions recents. Explora noves missions!"
+      },
+      "ai_assistant": {
+        "name": "Atenea",
+        "message_new_user": "Hola {name}! Benvingut a ITAKAI. Completa la teua primera missió per a començar a guanyar XP!",
+        "message_returning_user": "Hola {name}! Has completat {missions_completed} missions en {classes_enrolled} classes. Continua així!"
+      },
+      "class_fallback_name": "Classe",
+      "recent_badges_empty": "No hi ha insígnies recents",
+      "recent_topics_empty": "No hi ha temes recents",
+      "upcoming_dates_empty": "No hi ha dates properes"
+    },
+    "missions": {
+      "meta": {
+        "title": "Les meues missions | ITAKAI",
+        "description": "Explora i completa missions educatives. Guanya XP i desbloqueja nous reptes."
+      },
+      "page_title": "Les meues missions",
+      "page_subtitle": "Explora i completa missions per a guanyar experiència",
+      "empty": {
+        "title": "Sense missions",
+        "search_no_results": "No s'han trobat missions per a \"{query}\"",
+        "class_no_missions_single": "No hi ha missions en esta classe",
+        "class_no_missions_multiple": "No hi ha missions en les classes seleccionades",
+        "rarity_no_missions": "No hi ha missions amb les rareses seleccionades",
+        "status_no_missions": "No hi ha missions amb els estats seleccionats",
+        "coming_soon": "Prompte hi haurà noves missions disponibles"
+      },
+      "redirect": {
+        "redirecting": "Redirigint..."
+      },
+      "status": {
+        "urgente": "Urgent",
+        "activa": "Activa",
+        "completada": "Completada",
+        "bloqueada": "Bloquejada",
+        "pendiente": "Pendent",
+        "expirada": "Caducada",
+        "en_progreso": "En progrés"
+      }
+    },
+    "mission_detail": {
+      "meta": {
+        "title": "{title} | ITAKAI",
+        "title_loading": "Detall de missió | ITAKAI",
+        "description_fallback": "Detall de missió en ITAKAI"
+      },
+      "error": {
+        "loading_error": "Error en carregar la missió"
+      },
+      "documents": {
+        "action_download": "Descarregar fitxer",
+        "action_open_link": "Obrir enllaç",
+        "action_play_video": "Reproduir vídeo"
+      },
+      "atenea": {
+        "message": "Hola! Estic ací per a ajudar-te amb \"{mission_title}\". Preparat per a començar esta aventura?"
+      },
+      "rewards": {
+        "unlock_badge_hint": "Completa tots els enigmes d'esta missió per a desbloquejar esta insígnia."
+      },
+      "submission": {
+        "success": "Entrega enviada correctament. El professor la revisarà prompte.",
+        "error": "Error en enviar l'entrega. Torna-ho a intentar.",
+        "expired_error": "Esta missió ha caducat. Ja no pots entregar enigmes.",
+        "downloading": "Descarregant"
+      }
+    },
+    "classes": {
+      "meta": {
+        "title": "Les meues classes | ITAKAI",
+        "description": "Accedix a les teues classes inscrites, revisa el progrés i descobrix noves missions assignades."
+      },
+      "page_title": "Les meues classes",
+      "page_subtitle": "Classes en què estàs inscrit",
+      "join_class_button": "Unir-se a una classe",
+      "empty": {
+        "title": "No tens classes",
+        "description": "Encara no estàs inscrit en cap classe. Demana el codi al teu professor per a unir-te."
+      },
+      "detail": {
+        "error_title": "Error en carregar la classe",
+        "back_to_classes": "Tornar a les meues classes",
+        "breadcrumb_classes": "Les meues classes",
+        "teacher_fallback": "Professor",
+        "tabs": {
+          "resumen": "Resum",
+          "historia": "Història",
+          "guia": "Guia",
+          "misiones": "Missions",
+          "ranking": "Classificació",
+          "avatar": "Avatar",
+          "tienda": "Botiga"
+        },
+        "progress": {
+          "title": "El meu progrés",
+          "completion_rate": "Completat",
+          "missions_completed": "Missions completades",
+          "xp_total": "XP total",
+          "badges_earned": "Insígnies obtingudes"
+        },
+        "ai_assistant": {
+          "subtitle": "La teua guia en esta classe",
+          "message": "Hola! Estic ací per a ajudar-te amb qualsevol dubte que tingues sobre esta classe. En què et puc ajudar hui?"
+        },
+        "missions_tab": {
+          "empty_title": "Sense missions",
+          "empty_search": "No s'han trobat missions per a \"{query}\"",
+          "empty_rarity": "No hi ha missions amb les rareses seleccionades",
+          "empty_default": "Encara no hi ha missions assignades en esta classe."
+        },
+        "avatar_tab": {
+          "choose_guide": "Tria la teua guia per a esta classe",
+          "describe_avatar": "Descriu com vols que siga el teu avatar:",
+          "example_label": "Exemple:",
+          "example_text": "Un guerrer jove amb armadura daurada, cabell fosc i ulls brillants, sostenint un escut amb el símbol d'Atenea. Estil èpic i heroic, inspirat en la mitologia grega ...",
+          "placeholder": "Descriu ací el teu avatar...",
+          "tip": "Consell: sigues específic amb colors, vestimenta, accessoris i estil. La IA crearà el teu avatar basant-se en el personatge que hages seleccionat.",
+          "generate_button": "Genera l'avatar",
+          "generating": "Generant el teu avatar...",
+          "generated_trait": "Generat amb IA",
+          "nickname_placeholder": "El teu sobrenom...",
+          "save_changes": "Guardar els canvis",
+          "no_guide_hint": "Tria la teua guia per a veure el teu avatar",
+          "save_success": "Perfil guardat correctament",
+          "save_error": "Error en guardar el perfil",
+          "generate_error": "No s'ha pogut generar l'avatar. Torna-ho a intentar d'ací a uns segons.",
+          "generate_error_with_detail": "No s'ha pogut generar l'avatar: {detail}"
+        },
+        "mission_no_description": "Sense descripció",
+        "shop": {
+          "help_coins": "Monedes: guanya-les amb missions i canvia-les per recompenses.",
+          "help_mana": "Mana: fes-lo servir per a activar poders.",
+          "tab_rewards": "Recompenses",
+          "tab_purchases": "Els meus canvis",
+          "empty_title": "La botiga està buida",
+          "empty_description": "El teu professor encara no ha afegit recompenses. Torna més tard.",
+          "purchases_empty_title": "Encara no has canviat res",
+          "purchases_empty_description": "Gasta les teues monedes en les recompenses i ací veuràs el teu historial.",
+          "view_rewards": "Veure les recompenses",
+          "coins": "monedes",
+          "confirm_title": "Canviar \"{name}\"?",
+          "cost": "Cost",
+          "balance_after": "Saldo després del canvi",
+          "missing": "Et falten",
+          "cancel": "Cancel·lar",
+          "redeem": "Canviar",
+          "redeemed_toast": "Has canviat \"{name}\"!",
+          "redeem_error": "No s'ha pogut completar el canvi.",
+          "mana": "mana",
+          "buy": "Comprar",
+          "use": "Usar",
+          "owned": "En el teu poder",
+          "power": "Poder",
+          "reward": "Recompensa",
+          "tab_powers": "Poders",
+          "tab_shop": "Botiga",
+          "tab_items": "Els meus articles",
+          "owned_empty_title": "Encara no tens res",
+          "owned_empty_description": "Compra poders o privilegis a la botiga i apareixeran ací.",
+          "tab_history": "Historial",
+          "history_bought": "Comprat",
+          "history_used": "Usat",
+          "history_redeemed": "Canviat",
+          "history_purchases_title": "Compres",
+          "history_uses_title": "Usos",
+          "history_purchases_empty": "Encara no has comprat res.",
+          "history_uses_empty": "Encara no has usat cap article.",
+          "history_empty_title": "Encara sense activitat",
+          "history_empty_description": "Ací veuràs les teues compres i els poders que uses.",
+          "usage_single": "Un ús",
+          "usage_unlimited": "Il·limitada",
+          "powers_empty_title": "No hi ha poders",
+          "powers_empty_description": "El teu professor encara no ha afegit poders. Torna més tard.",
+          "confirm_buy_title": "Comprar \"{name}\"?",
+          "confirm_use_title": "Usar \"{name}\"?",
+          "bought_toast": "Has comprat \"{name}\"!",
+          "used_toast": "Has usat \"{name}\"!",
+          "mana_after": "Mana després de l'ús"
+        }
+      }
+    },
+    "achievements": {
+      "meta": {
+        "title": "Les meues insígnies | ITAKAI",
+        "description": "Descobrix totes les insígnies obtingudes en completar missions i assoliments especials."
+      },
+      "page_title": "Les meues insígnies",
+      "page_subtitle": "Recompenses obtingudes en completar missions i assoliments",
+      "filter": {
+        "search_placeholder": "Buscar insígnies...",
+        "all_categories": "Totes les categories",
+        "all_rarities": "Totes les rareses",
+        "plural_categories": "categories",
+        "plural_rarities": "rareses",
+        "status_all": "Totes",
+        "status_unlocked": "Desbloquejades",
+        "status_locked": "Bloquejades"
+      },
+      "rarity": {
+        "common": "Comuna",
+        "rare": "Rara",
+        "epic": "Èpica",
+        "legendary": "Llegendària"
+      },
+      "empty": {
+        "title": "Sense insígnies",
+        "no_badges_yet": "Completa missions per a desbloquejar insígnies",
+        "search_no_results": "No s'han trobat insígnies per a \"{query}\"",
+        "filter_no_results": "No hi ha insígnies amb els filtres seleccionats",
+        "default": "No hi ha insígnies disponibles"
+      },
+      "badge_detail": {
+        "unlocked_on": "Desbloquejada el {date}",
+        "mission_label": "Missió: {name}",
+        "class_label": "Classe: {name}",
+        "progress_label": "Progrés actual",
+        "close": "Tancar"
+      }
+    },
+    "leaderboard": {
+      "meta": {
+        "title": "Classificació | ITAKAI",
+        "description": "La classificació d'alumnes està disponible dins de cada classe."
+      },
+      "page_title": "Classificació",
+      "page_subtitle": "Consulta el rànquing global i compara el teu progrés amb la resta d'alumnes.",
+      "pick_class": "Selecciona una classe",
+      "friends_soon_title": "Rànquing d'amics pròximament",
+      "friends_soon_description": "La part social encara no està connectada. Mentrestant, pots usar el rànquing global o el de les teues classes.",
+      "choose_class_title": "Tria una classe",
+      "choose_class_description": "Selecciona una classe per veure la teua posició i el rànquing intern.",
+      "empty_class_title": "No hi ha rànquing disponible",
+      "empty_class_description": "Encara no hi ha prou dades per construir el rànquing d'esta classe.",
+      "empty_global_title": "No hi ha dades de rànquing",
+      "empty_global_description": "Encara no hi ha prou activitat per mostrar una classificació global.",
+      "global_podium": "Podi global",
+      "your_position": "La teua posició",
+      "rest": "Resta de la classificació",
+      "by_class": "Per classe"
+    },
+    "ai_assistant": {
+      "meta": {
+        "title": "Assistent IA | ITAKAI",
+        "description": "Xateja amb el teu assistent d'IA per a resoldre dubtes sobre missions, progrés i la plataforma."
+      },
+      "suggestions": {
+        "how_to_complete_mission": "Com complete una missió?",
+        "where_to_see_progress": "On puc veure el meu progrés?",
+        "how_xp_works": "Com funciona el sistema de XP?",
+        "how_to_join_class": "Com puc unir-me a una classe?"
+      }
+    },
+    "profile": {
+      "meta": {
+        "title": "El meu perfil | ITAKAI",
+        "description": "Gestiona el teu perfil d'alumne, configura la seguretat i personalitza la teua experiència."
+      },
+      "breadcrumb_home": "Inici",
+      "breadcrumb_profile": "El meu perfil",
+      "page_title": "El meu perfil",
+      "tabs": {
+        "security": "Seguretat",
+        "settings": "Configuració"
+      },
+      "security": {
+        "password_title": "Contrasenya",
+        "current_password": "Contrasenya actual",
+        "new_password": "Contrasenya nova",
+        "confirm_password": "Confirmar contrasenya",
+        "update_button": "Actualitzar",
+        "passwords_mismatch": "Les contrasenyes no coincidixen",
+        "password_too_short": "La contrasenya ha de tindre com a mínim 6 caràcters",
+        "email_title": "Correu electrònic",
+        "new_email_placeholder": "Correu nou",
+        "email_invalid": "Introduïx un correu vàlid",
+        "sessions_title": "Sessions",
+        "close_all_sessions": "Tancar-les totes",
+        "current_session": "Actual",
+        "close_session": "Tancar"
+      },
+      "settings": {
+        "theme_title": "Tema",
+        "theme_description": "Tria l'estil visual de la plataforma",
+        "theme_college": "Mode col·legi",
+        "theme_college_desc": "Aspecte gamificat",
+        "theme_university": "Mode universitat",
+        "theme_university_desc": "Aspecte professional",
+        "language_title": "Idioma",
+        "language_updated": "Idioma actualitzat",
+        "theme_updated": "Tema actualitzat",
+        "danger_zone_title": "Zona perillosa",
+        "danger_zone_description": "Una vegada eliminat el teu compte, no hi ha marxa arrere. Assegura't que n'estàs segur.",
+        "delete_account_button": "Eliminar el compte"
+      },
+      "delete_modal": {
+        "title": "Eliminar el compte",
+        "confirm_prompt": "Per a confirmar, introduïx la teua contrasenya:",
+        "password_placeholder": "La teua contrasenya",
+        "cancel_button": "Cancel·lar",
+        "delete_button": "Eliminar el meu compte",
+        "password_required": "Introduïx la teua contrasenya"
+      },
+      "languages": {
+        "es": "Castellà",
+        "en": "Anglés",
+        "ca": "Català",
+        "val": "Valencià",
+        "eu": "Basc",
+        "gl": "Gallec",
+        "ast": "Asturià",
+        "pt": "Portugués",
+        "el": "Grec",
+        "ro": "Romanés"
+      }
+    },
+    "components": {
+      "mission_card": {
+        "progress": "Progrés",
+        "view_mission": "Veure la missió"
+      },
+      "recent_activity_card": {
+        "title": "Activitat recent",
+        "empty": "No hi ha activitat recent",
+        "user_fallback": "Usuari"
+      },
+      "submission_modal": {
+        "title": "Entregar enigma",
+        "file_label": "Fitxer d'entrega",
+        "file_required": "*",
+        "drag_hint": "Arrossega ací el teu fitxer o fes clic per a seleccionar-lo",
+        "file_types": "ZIP, RAR, 7Z (màx. 50 MB)",
+        "cancel_button": "Cancel·lar",
+        "submit_button": "Entregar",
+        "submitting_button": "Enviant...",
+        "validation": {
+          "invalid_type": "Només s'admeten fitxers ZIP, RAR o 7Z",
+          "file_too_large": "El fitxer no pot superar els 50 MB",
+          "file_required": "Has de seleccionar un fitxer"
+        }
+      },
+      "class_guide_markdown": {
+        "empty_title": "Sense contingut",
+        "empty_student": "El professor encara no ha afegit la guia d'esta classe.",
+        "empty_teacher": "Encara no has afegit la guia d'esta classe.",
+        "add_guide_button": "Afegir guia",
+        "last_updated": "Última actualització: {date}"
+      },
+      "rarity_badge": {
+        "comun": "Comuna",
+        "rara": "Rara",
+        "epica": "Èpica",
+        "legendaria": "Llegendària"
+      },
+      "class_ranking_section": {
+        "podium_title": "Podi de campions",
+        "stats_title": "Estadístiques",
+        "rest_title": "Resta de la classificació",
+        "level_abbr": "Nv.",
+        "missions_suffix": "missions",
+        "you_badge": "Tu",
+        "avg_xp": "XP mitjana",
+        "avg_progress": "Progrés mitjà",
+        "avg_missions": "Missions mitjanes",
+        "total_xp": "XP total de la classe"
+      }
+    }
+  }
+}

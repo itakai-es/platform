@@ -44,13 +44,15 @@
 
       <!-- Empty State -->
       <div v-if="!topics.length" class="text-center py-8 text-text-secondary">
-        <p>No hay temas recientes</p>
+        <p>{{ t('student.dashboard.recent_topics_empty') }}</p>
       </div>
     </div>
   </article>
 </template>
 
 <script setup lang="ts">
+const { t } = useI18n()
+
 /**
  * RecentTopicsSection - Sección de temas recientes
  *

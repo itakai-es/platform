@@ -1367,56 +1367,56 @@ const assistantGod = computed(
 
 // Mission-specific AI action pool — all reference the current mission
 const missionActionPool = computed(() => {
-  const title = props.mission?.title || 'esta misión'
+  const title = props.mission?.title || t('chat.mission_actions.fallback_title')
   const god = assistantGod.value.name
   return [
     {
       id: 'm1',
-      label: 'Charlar sobre la misión',
+      label: t('chat.mission_actions.m1.label'),
       icon: ChatBubbleLeftRightIcon,
-      chatMessage: `Hola ${god}, quiero charlar sobre la misión "${title}"`,
+      chatMessage: t('chat.mission_actions.m1.message', { god, title }),
     },
     {
       id: 'm2',
-      label: 'Pedir ayuda',
+      label: t('chat.mission_actions.m2.label'),
       icon: QuestionMarkCircleIcon,
-      chatMessage: `Hola ${god}, necesito ayuda con la misión "${title}"`,
+      chatMessage: t('chat.mission_actions.m2.message', { god, title }),
     },
     {
       id: 'm3',
-      label: '¡Vamos a empezar!',
+      label: t('chat.mission_actions.m3.label'),
       icon: PlayIcon,
-      chatMessage: `Hola ${god}, estoy listo para empezar la misión "${title}". ¿Por dónde empiezo?`,
+      chatMessage: t('chat.mission_actions.m3.message', { god, title }),
     },
     {
       id: 'm4',
-      label: 'Explícame los enigmas',
+      label: t('chat.mission_actions.m4.label'),
       icon: AcademicCapIcon,
-      chatMessage: `Hola ${god}, ¿puedes explicarme los enigmas de la misión "${title}"?`,
+      chatMessage: t('chat.mission_actions.m4.message', { god, title }),
     },
     {
       id: 'm5',
-      label: 'Dame pistas sin spoilers',
+      label: t('chat.mission_actions.m5.label'),
       icon: LightBulbIcon,
-      chatMessage: `Hola ${god}, estoy atascado en la misión "${title}". ¿Puedes darme alguna pista sin spoilers?`,
+      chatMessage: t('chat.mission_actions.m5.message', { god, title }),
     },
     {
       id: 'm6',
-      label: '¿Cómo mejorar mi entrega?',
+      label: t('chat.mission_actions.m6.label'),
       icon: ChartBarIcon,
-      chatMessage: `Hola ${god}, ¿qué puedo hacer para mejorar mi entrega en la misión "${title}"?`,
+      chatMessage: t('chat.mission_actions.m6.message', { god, title }),
     },
     {
       id: 'm7',
-      label: 'Resumen de lo aprendido',
+      label: t('chat.mission_actions.m7.label'),
       icon: BookOpenIcon,
-      chatMessage: `Hola ${god}, hazme un resumen de lo que debería haber aprendido con la misión "${title}"`,
+      chatMessage: t('chat.mission_actions.m7.message', { god, title }),
     },
     {
       id: 'm8',
-      label: 'Prepárame para el reto',
+      label: t('chat.mission_actions.m8.label'),
       icon: BoltIcon,
-      chatMessage: `Hola ${god}, quiero prepararme bien para el reto de la misión "${title}". ¿Qué debería repasar?`,
+      chatMessage: t('chat.mission_actions.m8.message', { god, title }),
     },
   ]
 })

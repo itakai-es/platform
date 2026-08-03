@@ -1,0 +1,318 @@
+{
+  "admin": {
+    "dashboard": {
+      "title": "Pagina de administrare",
+      "subtitle": "Panoul de control al sistemului ITAKAI",
+      "activity": {
+        "title": "Activitatea sistemului",
+        "period_24h": "Ultimele 24 de ore",
+        "period_week": "Ultima săptămână",
+        "period_month": "Ultima lună"
+      },
+      "quick_actions": {
+        "manage_users": "Gestionează utilizatorii"
+      },
+      "system_status": {
+        "title": "Starea sistemului",
+        "operational": "Funcțional",
+        "degraded": "Degradat",
+        "down": "Indisponibil",
+        "unknown": "Necunoscută",
+        "empty": "Nu există servicii disponibile"
+      },
+      "meta": {
+        "title": "Administrare | ITAKAI",
+        "description": "Panoul de control al sistemului ITAKAI. Gestionează utilizatori și instituții și urmărește starea platformei."
+      }
+    },
+    "users": {
+      "title": "Gestionarea utilizatorilor",
+      "subtitle": "Administrează toți utilizatorii platformei",
+      "filters": {
+        "search_placeholder": "Caută după nume sau e-mail...",
+        "all_roles": "Toate rolurile",
+        "students": "Elevi",
+        "teachers": "Profesori",
+        "admins": "Administratori",
+        "all_statuses": "Toate stările",
+        "active": "Activ",
+        "suspended": "Suspendat",
+        "inactive": "Inactiv",
+        "clear": "Șterge filtrele"
+      },
+      "roles": {
+        "student": "Elev",
+        "teacher": "Profesor",
+        "admin": "Admin"
+      },
+      "card": {
+        "status": "Stare",
+        "classes": "Clase",
+        "last_login": "Ultimul acces"
+      },
+      "empty": {
+        "title": "Nu s-au găsit utilizatori",
+        "description": "Nu există utilizatori care să corespundă filtrelor selectate."
+      },
+      "actions": {
+        "suspend_title": "Suspendă utilizatorul",
+        "suspend_message": "Sigur vrei să îl suspenzi pe {name}? Nu va mai putea intra în platformă.",
+        "suspend_confirm": "Suspendă",
+        "delete_title": "Șterge utilizatorul",
+        "delete_message": "Sigur vrei să îl ștergi pe {name}? Această acțiune nu poate fi anulată.",
+        "delete_confirm": "Șterge"
+      },
+      "meta": {
+        "title": "Gestionarea utilizatorilor | ITAKAI Admin",
+        "description": "Administrează toți utilizatorii sistemului, creează profiluri noi, modifică roluri și urmărește activitatea."
+      },
+      "sort": {
+        "recent": "Cele mai recente"
+      }
+    },
+    "schools": {
+      "title": "Gestionarea instituțiilor",
+      "subtitle": "Administrează instituțiile de învățământ ale platformei",
+      "filters": {
+        "search_placeholder": "Caută instituția...",
+        "all_statuses": "Toate stările",
+        "active": "Activă",
+        "inactive": "Inactivă"
+      },
+      "form": {
+        "create_title": "Instituție nouă",
+        "edit_title": "Editează instituția",
+        "name": "Nume",
+        "name_placeholder": "Numele instituției",
+        "city": "Oraș",
+        "city_placeholder": "Oraș",
+        "country": "Țară",
+        "country_placeholder": "Țară",
+        "save": "Salvează",
+        "cancel": "Anulează"
+      },
+      "actions": {
+        "create": "Instituție nouă",
+        "delete_title": "Șterge instituția",
+        "delete_message": "Sigur vrei să ștergi {name}? Va fi deconectată de la toți utilizatorii.",
+        "delete_confirm": "Șterge"
+      },
+      "empty": {
+        "title": "Nu s-au găsit instituții",
+        "description": "Nu există instituții care să corespundă filtrelor."
+      },
+      "meta": {
+        "title": "Gestionarea instituțiilor | ITAKAI Admin",
+        "description": "Administrează toate instituțiile de învățământ din sistem, creează școli noi și urmărește activitatea lor."
+      }
+    },
+    "classes": {
+      "title": "Gestionarea claselor",
+      "subtitle": "Supraveghează toate clasele din sistem",
+      "filters": {
+        "search_placeholder": "Caută clasa..."
+      },
+      "empty": {
+        "title": "Nu s-au găsit clase",
+        "description": "Nu există clase care să corespundă filtrelor."
+      },
+      "meta": {
+        "title": "Gestionarea claselor | ITAKAI Admin"
+      },
+      "sort": {
+        "students_desc": "Mai mulți elevi",
+        "missions_desc": "Mai multe misiuni"
+      }
+    },
+    "missions": {
+      "title": "Gestionarea misiunilor",
+      "subtitle": "Supraveghează toate misiunile din sistem",
+      "filters": {
+        "search_placeholder": "Caută misiunea...",
+        "all_statuses": "Toate stările",
+        "all_rarities": "Toate raritățile"
+      },
+      "empty": {
+        "title": "Nu s-au găsit misiuni",
+        "description": "Nu există misiuni care să corespundă filtrelor."
+      },
+      "meta": {
+        "title": "Gestionarea misiunilor | ITAKAI Admin"
+      },
+      "sort": {
+        "xp_desc": "Mai mult XP",
+        "enigmas_desc": "Mai multe enigme"
+      }
+    },
+    "analytics": {
+      "title": "Analizele sistemului",
+      "subtitle": "Indicatori și statistici ale platformei",
+      "period": {
+        "week": "Săptămână",
+        "month": "Lună",
+        "quarter": "Trimestru"
+      },
+      "kpis": {
+        "avg_response": "Timp de răspuns",
+        "requests_per_min": "Cereri/min",
+        "error_rate": "Rată de eroare",
+        "uptime": "Disponibilitate"
+      },
+      "overview": {
+        "total_users": "Utilizatori în total",
+        "active_today": "Activi azi",
+        "missions_completed": "Misiuni finalizate",
+        "completion_rate": "Rată de finalizare"
+      },
+      "sections": {
+        "system_resources": "Resursele sistemului",
+        "service_health": "Starea serviciilor",
+        "response_time": "Timp de răspuns",
+        "active_users": "Utilizatori activi",
+        "requests": "Cereri",
+        "tokens_over_time": "Tokenuri consumate",
+        "users_by_role": "Utilizatori după rol",
+        "missions_by_status": "Misiuni după stare",
+        "missions_by_rarity": "Misiuni după raritate",
+        "ai_usage": "Utilizarea IA (asistenți)"
+      },
+      "ai": {
+        "total_tokens": "Total tokenuri",
+        "avg_tokens_user": "Medie pe utilizator",
+        "total_conversations": "Conversații",
+        "avg_conversations_user": "Conv. pe utilizator"
+      },
+      "system": {
+        "memory": "Memorie",
+        "disk": "Disc",
+        "db_latency": "Latență BD"
+      },
+      "table": {
+        "service": "Serviciu",
+        "status": "Stare",
+        "uptime": "Disponibilitate",
+        "latency": "Latență"
+      },
+      "status": {
+        "operational": "OK",
+        "degraded": "Degradat",
+        "down": "Căzut"
+      },
+      "meta": {
+        "title": "Analizele sistemului | ITAKAI Admin",
+        "description": "Vezi indicatori avansați, grafice de performanță și analize detaliate ale platformei."
+      }
+    },
+    "logs": {
+      "title": "Jurnalele sistemului",
+      "subtitle": "Jurnale de activitate și evenimente ale platformei",
+      "tab": "Activitate",
+      "filters": {
+        "search_placeholder": "Caută în jurnale...",
+        "period_24h": "Ultimele 24 de ore",
+        "period_week": "Ultima săptămână",
+        "period_month": "Ultima lună",
+        "all_severities": "Toate",
+        "info": "Informație",
+        "warning": "Avertisment",
+        "error": "Eroare",
+        "success": "Succes",
+        "all_types": "Toate tipurile",
+        "new_school": "Instituție nouă",
+        "new_users": "Utilizatori noi",
+        "alert": "Alertă",
+        "system_update": "Actualizare",
+        "missions_completed": "Misiuni finalizate",
+        "user_action": "Acțiune de utilizator"
+      },
+      "empty": {
+        "title": "Nu s-au găsit jurnale",
+        "description": "Nu există înregistrări care să corespundă filtrelor."
+      },
+      "meta": {
+        "title": "Jurnalele sistemului | ITAKAI Admin",
+        "description": "Consultă jurnalele de activitate ale sistemului, auditează acțiunile utilizatorilor și diagnostichează probleme tehnice."
+      }
+    },
+    "system_logs": {
+      "tab": "Sistem",
+      "filters": {
+        "search_placeholder": "Caută în jurnalele sistemului...",
+        "all_levels": "Toate nivelurile",
+        "all_categories": "Toate categoriile"
+      },
+      "levels": {
+        "info": "Informație",
+        "warning": "Avertisment",
+        "error": "Eroare",
+        "success": "Succes"
+      },
+      "categories": {
+        "health_check": "Starea sistemului",
+        "service_status": "Starea serviciului",
+        "security": "Securitate",
+        "performance": "Performanță",
+        "maintenance": "Mentenanță",
+        "backup": "Copie de siguranță"
+      },
+      "empty": {
+        "title": "Nu s-au găsit jurnale de sistem",
+        "description": "Nu există înregistrări de sistem care să corespundă filtrelor."
+      }
+    },
+    "settings": {
+      "title": "Configurare",
+      "subtitle": "Configurează serviciile acestei instanțe: IA, imagini, stocare și domeniu.",
+      "meta": {
+        "title": "Configurare · ITAKAI Admin",
+        "description": "Configurarea instanței"
+      },
+      "save": "Salvează modificările",
+      "saved": "Configurarea a fost salvată",
+      "save_error": "Configurarea nu a putut fi salvată",
+      "ai": {
+        "title": "Inteligență artificială",
+        "desc": "Endpointuri compatibile cu API-ul OpenAI. Pune ce furnizor vrei (OpenAI, propriul tău Spark, Groq, Together, OpenRouter, Gemini prin endpointul lui OpenAI…).",
+        "text_title": "Text",
+        "image_title": "Imagini",
+        "endpoint_url": "URL-ul endpointului",
+        "api_key": "Cheie API",
+        "model": "Model"
+      },
+      "storage": {
+        "title": "Stocare",
+        "desc": "Unde se salvează imaginile și fișierele încărcate.",
+        "driver": "Tip de stocare",
+        "driver_local": "Disc local (implicit)",
+        "driver_s3": "Extern S3 / Cloudflare R2",
+        "endpoint": "Endpoint",
+        "region": "Regiune",
+        "bucket": "Bucket",
+        "access_key": "Access Key ID",
+        "secret_key": "Secret Access Key",
+        "public_url": "URL public de bază",
+        "public_url_hint": "URL-ul de la care se servesc fișierele (bucket public sau domeniu propriu R2).",
+        "path_style": "Folosește path-style (recomandat pentru R2)"
+      },
+      "domain": {
+        "title": "Domeniu",
+        "desc": "URL-ul public al instanței și originile permise.",
+        "app_url": "URL-ul instanței",
+        "app_url_hint": "Se folosește în linkurile din e-mailuri.",
+        "cors": "Origini CORS permise",
+        "cors_hint": "Separă mai multe prin virgule."
+      },
+      "general": {
+        "title": "General",
+        "desc": "Parametrii generali ai instanței.",
+        "platform_name": "Numele platformei",
+        "contact_email": "E-mail de contact",
+        "default_language": "Limba implicită",
+        "registration_open": "Înregistrare deschisă",
+        "registration_hint": "Permite înregistrarea de utilizatori noi.",
+        "maintenance_mode": "Mod mentenanță",
+        "maintenance_hint": "Afișează utilizatorilor un mesaj de mentenanță."
+      }
+    }
+  }
+}

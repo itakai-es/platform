@@ -24,18 +24,19 @@
     >
       <template #filters>
         <MultiSelectDropdown
-          :model-value="fSubjects"
-          :options="subjectFilterOptions"
-          :all-label="t('teacher.templates.filter_all.subject')"
-          :plural-label="t('teacher.templates.plural.subjects')"
-          @update:model-value="fSubjects = $event"
-        />
-        <MultiSelectDropdown
           :model-value="fLevels"
           :options="CLASS_EDUCATION_LEVELS"
           :all-label="t('teacher.templates.filter_all.level')"
           :plural-label="t('teacher.templates.plural.levels')"
           @update:model-value="fLevels = $event"
+        />
+        <MultiSelectDropdown
+          :model-value="fSubjects"
+          :disabled="!fLevels.length"
+          :options="subjectFilterOptions"
+          :all-label="t('teacher.templates.filter_all.subject')"
+          :plural-label="t('teacher.templates.plural.subjects')"
+          @update:model-value="fSubjects = $event"
         />
         <MultiSelectDropdown
           :model-value="fLanguages"

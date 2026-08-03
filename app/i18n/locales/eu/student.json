@@ -28,7 +28,10 @@
         "message_new_user": "Kaixo {name}! Ongi etorri ITAKAI-ra. Osatu zure lehen misioa XP irabazten hasteko!",
         "message_returning_user": "Kaixo {name}! {missions_completed} misio osatu dituzu {classes_enrolled} klasetan. Jarraitu horrela!"
       },
-      "class_fallback_name": "Klasea"
+      "class_fallback_name": "Klasea",
+      "recent_badges_empty": "Ez dago azken domarik",
+      "recent_topics_empty": "Ez dago azken gairik",
+      "upcoming_dates_empty": "Ez dago hurrengo datarik"
     },
     "missions": {
       "meta": {
@@ -242,7 +245,22 @@
       "meta": {
         "title": "Rankinga | ITAKAI",
         "description": "Ikasleen rankinga klase bakoitzean eskuragarri dago."
-      }
+      },
+      "page_title": "Sailkapena",
+      "page_subtitle": "Ikusi sailkapen orokorra eta konparatu zure aurrerapena beste ikasleekin.",
+      "pick_class": "Hautatu klase bat",
+      "friends_soon_title": "Lagunen sailkapena laster",
+      "friends_soon_description": "Atal soziala ez dago oraindik konektatuta. Bitartean, sailkapen orokorra edo zure klaseetakoa erabil dezakezu.",
+      "choose_class_title": "Aukeratu klase bat",
+      "choose_class_description": "Hautatu klase bat zure postua eta barne-sailkapena ikusteko.",
+      "empty_class_title": "Ez dago sailkapenik",
+      "empty_class_description": "Oraindik ez dago datu nahikorik klase honen sailkapena osatzeko.",
+      "empty_global_title": "Ez dago sailkapen-daturik",
+      "empty_global_description": "Oraindik ez dago jarduera nahikorik sailkapen orokorra erakusteko.",
+      "global_podium": "Podium orokorra",
+      "your_position": "Zure postua",
+      "rest": "Sailkapenaren gainerakoa",
+      "by_class": "Klaseka"
     },
     "ai_assistant": {
       "meta": {
@@ -307,11 +325,16 @@
         "password_required": "Sartu zure pasahitza"
       },
       "languages": {
-        "es": "Espainiera",
+        "es": "Gaztelania",
         "en": "English",
         "ca": "Katalana",
         "eu": "Euskara",
-        "gl": "Galego"
+        "gl": "Galego",
+        "val": "Valentziera",
+        "ast": "Asturiera",
+        "pt": "Portugesa",
+        "el": "Greziera",
+        "ro": "Errumaniera"
       }
     },
     "components": {

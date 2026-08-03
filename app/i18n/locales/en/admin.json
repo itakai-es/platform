@@ -65,6 +65,9 @@
         "delete_title": "Delete user",
         "delete_message": "Are you sure you want to delete {name}? This action cannot be undone.",
         "delete_confirm": "Delete"
+      },
+      "sort": {
+        "recent": "Most recent"
       }
     },
     "classes": {
@@ -79,6 +82,10 @@
       "empty": {
         "title": "No classes found",
         "description": "No classes match the selected filters."
+      },
+      "sort": {
+        "students_desc": "Most students",
+        "missions_desc": "Most missions"
       }
     },
     "missions": {
@@ -88,11 +95,17 @@
       },
       "subtitle": "View all platform missions",
       "filters": {
-        "search_placeholder": "Search missions..."
+        "search_placeholder": "Search missions...",
+        "all_statuses": "All statuses",
+        "all_rarities": "All rarities"
       },
       "empty": {
         "title": "No missions found",
         "description": "No missions match the selected filters."
+      },
+      "sort": {
+        "xp_desc": "Most XP",
+        "enigmas_desc": "Most enigmas"
       }
     },
     "schools": {

@@ -59,11 +59,26 @@
           "confirm": "Duplica",
           "cancel": "Cancel·la",
           "items": {
-            "missions": { "label": "Missions", "desc": "Les missions i els seus enigmes" },
-            "narrative": { "label": "Història", "desc": "La narrativa i la imatge de portada" },
-            "features": { "label": "Funcionalitats", "desc": "Els mòduls activats de la classe" },
-            "shop": { "label": "Botiga", "desc": "Els articles de la botiga" },
-            "behaviors": { "label": "Comportaments", "desc": "Les plantilles de comportament" }
+            "missions": {
+              "label": "Missions",
+              "desc": "Les missions i els seus enigmes"
+            },
+            "narrative": {
+              "label": "Història",
+              "desc": "La narrativa i la imatge de portada"
+            },
+            "features": {
+              "label": "Funcionalitats",
+              "desc": "Els mòduls activats de la classe"
+            },
+            "shop": {
+              "label": "Botiga",
+              "desc": "Els articles de la botiga"
+            },
+            "behaviors": {
+              "label": "Comportaments",
+              "desc": "Les plantilles de comportament"
+            }
           }
         }
       },
@@ -116,7 +131,8 @@
           "attach_hint": "Màx. {max} MB per fitxer",
           "attach_error_size": "«{name}» pesa {size} MB. El màxim és {max} MB per fitxer.",
           "attach_error_too_large": "Els materials pesen massa en conjunt. Puja'ls d'un en un (màx. {max} MB per fitxer)."
-        }
+        },
+        "narrative_error": "No he pogut crear la narrativa"
       },
       "detail": {
         "breadcrumb_classes": "Les meves classes",
@@ -391,6 +407,11 @@
           "management": {
             "title": "Gestió"
           }
+        },
+        "badges_empty": "No hi ha insígnies en aquesta classe",
+        "join_requests": {
+          "empty_title": "Sense sol·licituds",
+          "empty_description": "No hi ha sol·licituds pendents per a aquesta classe"
         }
       }
     },
@@ -399,12 +420,17 @@
         "meta": {
           "title": "Les Meves Missions | ITAKAI Professor",
           "description": "Gestiona totes les teves missions creades, edita-les o crea'n de noves per als teus estudiants."
-        }
+        },
+        "subtitle": "Gestiona les missions de les teves classes"
       },
       "create": {
         "meta": {
           "title": "Crear Missió | ITAKAI Professor"
-        }
+        },
+        "pick_class": "Selecciona una classe",
+        "idea_placeholder": "Ex.: Vull una missió sobre cinemàtica on els alumnes calculin trajectòries d'escombres voladores...",
+        "narrative_error": "No he pogut crear la narrativa",
+        "ai_unavailable": "El servei d'IA no està disponible ara mateix. Torna-ho a provar d'aquí a uns minuts."
       },
       "detail": {
         "delete_confirm_btn": "Eliminar",
@@ -474,7 +500,8 @@
         "btn_cancel": "Cancel·lar",
         "btn_saving": "Desant...",
         "btn_save_changes": "Desar canvis",
-        "btn_create": "Crear insígnia"
+        "btn_create": "Crear insígnia",
+        "no_mission": "Sense missió"
       },
       "detail": {
         "btn_edit": "Editar",
@@ -491,7 +518,9 @@
       "meta": {
         "title": "Les Meves Insígnies | ITAKAI Professor",
         "description": "Crea, edita i gestiona insígnies personalitzades per premiar les fites dels teus estudiants."
-      }
+      },
+      "filter_system": "Del sistema",
+      "generate_error": "No s'ha pogut generar la insígnia."
     },
     "students": {
       "index": {
@@ -594,11 +623,16 @@
         "btn_cancel": "Cancel·lar",
         "btn_delete_confirm": "Eliminar el meu compte",
         "languages": {
-          "es": "Espanyol",
+          "es": "Castellà",
           "en": "English",
           "ca": "Català",
           "eu": "Euskara",
-          "gl": "Galego"
+          "gl": "Galego",
+          "val": "Valencià",
+          "ast": "Asturià",
+          "pt": "Portuguès",
+          "el": "Grec",
+          "ro": "Romanès"
         }
       },
       "meta": {
@@ -877,6 +911,10 @@
       "wizard_question": "Posa un horari i una portada a la teva classe",
       "cancel": "Cancel·la",
       "done": "Fet"
+    },
+    "submissions": {
+      "subtitle": "Revisa i aprova les entregues d'aquesta classe des d'una sola pantalla.",
+      "back_to_class": "Tornar a la classe"
     }
   }
 }

@@ -59,11 +59,26 @@
           "confirm": "Duplicate",
           "cancel": "Cancel",
           "items": {
-            "missions": { "label": "Missions", "desc": "The missions and their enigmas" },
-            "narrative": { "label": "Story", "desc": "The narrative and the cover image" },
-            "features": { "label": "Features", "desc": "The class's enabled modules" },
-            "shop": { "label": "Shop", "desc": "The shop items" },
-            "behaviors": { "label": "Behaviors", "desc": "The behavior templates" }
+            "missions": {
+              "label": "Missions",
+              "desc": "The missions and their enigmas"
+            },
+            "narrative": {
+              "label": "Story",
+              "desc": "The narrative and the cover image"
+            },
+            "features": {
+              "label": "Features",
+              "desc": "The class's enabled modules"
+            },
+            "shop": {
+              "label": "Shop",
+              "desc": "The shop items"
+            },
+            "behaviors": {
+              "label": "Behaviors",
+              "desc": "The behavior templates"
+            }
           }
         }
       },
@@ -116,7 +131,8 @@
         },
         "meta": {
           "title": "Create New Class | ITAKAI Teacher"
-        }
+        },
+        "narrative_error": "I couldn't create the narrative"
       },
       "detail": {
         "breadcrumb_classes": "My classes",
@@ -391,6 +407,11 @@
           "management": {
             "title": "Management"
           }
+        },
+        "badges_empty": "No badges in this class",
+        "join_requests": {
+          "empty_title": "No requests",
+          "empty_description": "There are no pending requests for this class"
         }
       }
     },
@@ -399,12 +420,17 @@
         "meta": {
           "title": "My Missions | ITAKAI Teacher",
           "description": "Manage all your created missions, edit them, or create new ones for your students."
-        }
+        },
+        "subtitle": "Manage your classes' missions"
       },
       "create": {
         "meta": {
           "title": "Create Mission | ITAKAI Teacher"
-        }
+        },
+        "pick_class": "Select a class",
+        "idea_placeholder": "E.g. I want a mission about kinematics where students calculate the trajectories of flying broomsticks...",
+        "narrative_error": "I couldn't create the narrative",
+        "ai_unavailable": "The AI service isn't available right now. Try again in a few minutes."
       },
       "detail": {
         "delete_confirm_btn": "Delete",
@@ -474,7 +500,8 @@
         "btn_cancel": "Cancel",
         "btn_saving": "Saving...",
         "btn_save_changes": "Save changes",
-        "btn_create": "Create badge"
+        "btn_create": "Create badge",
+        "no_mission": "No mission"
       },
       "detail": {
         "btn_edit": "Edit",
@@ -491,7 +518,9 @@
       "meta": {
         "title": "My Badges | ITAKAI Teacher",
         "description": "Create, edit, and manage custom badges to reward your students' achievements."
-      }
+      },
+      "filter_system": "System",
+      "generate_error": "The badge couldn't be generated."
     },
     "students": {
       "index": {
@@ -594,11 +623,16 @@
         "btn_cancel": "Cancel",
         "btn_delete_confirm": "Delete my account",
         "languages": {
-          "es": "Español",
+          "es": "Castellano",
           "en": "English",
           "ca": "Català",
           "eu": "Euskara",
-          "gl": "Galego"
+          "gl": "Galego",
+          "val": "Valencià",
+          "ast": "Asturianu",
+          "pt": "Português",
+          "el": "Ελληνικά",
+          "ro": "Română"
         }
       },
       "meta": {
@@ -877,6 +911,10 @@
       "wizard_question": "Give your class a schedule and a cover",
       "cancel": "Cancel",
       "done": "Done"
+    },
+    "submissions": {
+      "subtitle": "Review and approve this class's submissions from a single screen.",
+      "back_to_class": "Back to the class"
     }
   }
 }

@@ -1,0 +1,241 @@
+{
+  "common": {
+    "nav": {
+      "dashboard": "Acasă",
+      "my_classes": "Clasele mele",
+      "missions": "Misiuni",
+      "badges": "Insigne",
+      "students": "Elevi",
+      "about": "Despre",
+      "users": "Utilizatori",
+      "classes": "Clase",
+      "analytics": "Analize",
+      "logs": "Jurnale",
+      "features": "Funcționalități",
+      "blog": "Blog",
+      "section_management": "Administrare",
+      "section_system": "Sistem"
+    },
+    "actions": {
+      "rename": "Redenumește",
+      "delete": "Șterge",
+      "open_menu": "Deschide meniul",
+      "close_menu": "Închide meniul",
+      "toggle_menu": "Comută meniul",
+      "scroll_left": "Derulează la stânga",
+      "scroll_right": "Derulează la dreapta",
+      "back_to_dashboard": "Înapoi acasă",
+      "create_new_account": "Creează un cont nou",
+      "enter": "Intră",
+      "close": "Închide",
+      "view_mode": "Mod de vizualizare"
+    },
+    "status": {
+      "under_development": "În dezvoltare"
+    },
+    "time": {
+      "now": "Acum",
+      "ago_min_short": "Acum {count} min",
+      "ago_hours_short": "Acum {count} h",
+      "ago_days": "Acum {count} zile",
+      "ago_weeks": "Acum {count} săptămâni",
+      "yesterday": "Ieri"
+    },
+    "toast": {
+      "enigma_updated": "Enigma a fost actualizată",
+      "enigma_added": "Enigma a fost adăugată",
+      "enigma_save_error": "Eroare la salvarea enigmei",
+      "enigma_deleted": "Enigma a fost ștearsă",
+      "enigma_delete_error": "Eroare la ștergerea enigmei",
+      "document_updated": "Documentul a fost actualizat",
+      "document_added": "Documentul a fost adăugat",
+      "document_save_error": "Eroare la salvarea documentului",
+      "document_deleted": "Documentul a fost șters",
+      "document_delete_error": "Eroare la ștergerea documentului",
+      "badge_assigned": "Insigna a fost atribuită",
+      "badge_removed": "Insigna a fost eliminată din misiune",
+      "submission_student_approved": "Lucrarea trimisă de {name} a fost aprobată (+{xp} XP)",
+      "download_not_found": "Fișierul de descărcat nu a fost găsit",
+      "download_error": "Fișierul nu a putut fi descărcat",
+      "join_request_accepted": "{name} a fost acceptat în clasă",
+      "join_request_rejected": "Cerere respinsă",
+      "join_request_accept_error": "Eroare la acceptarea cererii",
+      "join_request_reject_error": "Eroare la respingerea cererii"
+    },
+    "notifications": {
+      "title": "Notificări",
+      "panel_label": "Panou de notificări",
+      "view_all": "Vezi toate",
+      "empty": "Nu ai notificări",
+      "unread_label": "Necitită",
+      "aria_label": "Notificări",
+      "aria_label_unread": "Notificări ({count} necitite)"
+    },
+    "errors": {
+      "generic": "A apărut o eroare. Încearcă din nou."
+    },
+    "roles": {
+      "student": "Elev",
+      "teacher": "Profesor",
+      "admin": "Administrator",
+      "admin_system": "Administrator de sistem"
+    },
+    "user_dropdown": {
+      "my_profile": "Profilul meu",
+      "logout": "Deconectare",
+      "user_menu_label": "Meniu utilizator"
+    },
+    "sidebar": {
+      "new_conversation": "Conversație nouă",
+      "no_conversations": "Încă nu există conversații.",
+      "start_new": "Începe una nouă!",
+      "chat_with": "Discută cu {name}",
+      "chat_with_god": "Discută cu un zeu",
+      "chat_with_label": "Discuție cu"
+    },
+    "mobile_sidebar": {
+      "join_class": "Alătură-te unei clase"
+    },
+    "landing": {
+      "hero_title": "Aventura de a învăța",
+      "hero_subtitle": "Sistem de gestiune educațională cu elemente de gamificare pentru elevi și profesori",
+      "cta_start": "Începe",
+      "features_title": "Ce poți face cu ITAKAI?",
+      "features_subtitle": "Descoperă toate instrumentele și funcționalitățile care transformă educația într-o experiență unică",
+      "feature_gamification_title": "Gamificare completă",
+      "feature_gamification_desc": "Sistem de puncte, niveluri, insigne și recompense care motivează învățarea continuă",
+      "feature_narrative_title": "Narațiune imersivă",
+      "feature_narrative_desc": "Fiecare clasă este o aventură unică, cu personaje și povești care captează atenția",
+      "feature_teamwork_title": "Lucru în echipă",
+      "feature_teamwork_desc": "Provocări colaborative și clasamente care încurajează lucrul în echipă și progresul constant",
+      "feature_analytics_title": "Analiză inteligentă",
+      "feature_analytics_desc": "Instrumente avansate de urmărire și analiză a progresului elevilor",
+      "feature_access_title": "Acces universal",
+      "feature_access_desc": "Funcționează pe orice dispozitiv, din orice colț al lumii",
+      "feature_ai_title": "IA educațională",
+      "feature_ai_desc": "Asistenți care personalizează învățarea pentru fiecare elev",
+      "profiles_title": "Alege-ți profilul ca să începi",
+      "about_title": "Ce este ITAKAI?",
+      "about_description_1": "ITAKAI este evoluția <strong>MyClassGame</strong>, potențată cu <strong>Inteligență Artificială</strong>. O platformă educațională gamificată care transformă învățământul profesional într-o experiență imersivă.",
+      "about_description_2": "Generare automată de conținut, asistenți IA personalizați pentru fiecare elev și analiză predictivă a performanței. Totul integrat într-un ecosistem în care a învăța este o aventură.",
+      "stat_students": "Elevi",
+      "stat_teachers": "Profesori",
+      "stat_centers": "Școli",
+      "partners_title": "Cine suntem?",
+      "gods_title": "Mentorii tăi olimpieni",
+      "gods_subtitle": "5 asistenți IA inspirați de zeii greci, fiecare expert în domeniul său",
+      "cta_final_title": "Ești gata pentru aventura ta epică?",
+      "cta_final_subtitle": "Alătură-te miilor de elevi care își transformă deja învățarea cu ITAKAI",
+      "cta_final_button": "Începe gratuit acum",
+      "footer_copyright_alt": "© {year} ITAKAI. Sistem educațional gamificat",
+      "gods": {
+        "atenea": {
+          "domain": "Înțelepciune",
+          "description": "Tehnici de studiu și strategii de învățare"
+        },
+        "odiseo": {
+          "domain": "Strategie",
+          "description": "Rezolvarea problemelor și gândire critică"
+        },
+        "penelope": {
+          "domain": "Comunicare",
+          "description": "Limbi, scriere și exprimare"
+        },
+        "polifemo": {
+          "domain": "Științe",
+          "description": "Științe avansate și tehnologie"
+        },
+        "poseidon": {
+          "domain": "Creativitate",
+          "description": "Arte, design și inovație"
+        }
+      }
+    },
+    "footer": {
+      "legal": "Juridic",
+      "platform": "Platformă",
+      "support": "Asistență",
+      "contact": "Contact",
+      "terms_of_service": "Termenii serviciului",
+      "privacy_policy": "Politica de confidențialitate",
+      "cookies": "Cookie-uri",
+      "licenses": "Licențe",
+      "system_access": "Acces la sistem",
+      "teacher_panel": "Panoul profesorului",
+      "student_panel": "Panoul elevului",
+      "help_center": "Centru de ajutor",
+      "documentation": "Documentație"
+    },
+    "level_up": {
+      "title": "Ai urcat de nivel!",
+      "congratulations": "Felicitări! Ai ajuns la nivelul {level}",
+      "congratulations_class": "Felicitări! Ai ajuns la nivelul {level} în {className}",
+      "rewards_title": "Recompense obținute",
+      "continue": "Continuă!"
+    },
+    "join_class_modal": {
+      "title": "Alătură-te unei clase",
+      "description": "Introdu codul clasei primit de la profesorul tău",
+      "placeholder": "ABC123",
+      "joining": "Se face înscrierea...",
+      "join_button": "Alătură-te clasei",
+      "error_required": "Codul clasei este obligatoriu",
+      "error_min_length": "Codul trebuie să aibă cel puțin 4 caractere",
+      "error_not_found": "Nu s-a găsit nicio clasă cu acest cod",
+      "error_invalid_code": "Cod de clasă invalid",
+      "error_already_enrolled": "Ești deja înscris în această clasă",
+      "error_generic": "Eroare la înscrierea în clasă. Încearcă din nou.",
+      "error_generic_short": "Eroare la înscrierea în clasă",
+      "success": "Te-ai alăturat clasei {className}"
+    },
+    "invite_students_modal": {
+      "title": "Invită elevi",
+      "description": "Distribuie acest cod elevilor tăi ca să se alăture clasei:",
+      "copy_code": "Copiază codul",
+      "code_copied": "Codul a fost copiat în clipboard",
+      "copy_error": "Eroare la copierea codului"
+    },
+    "under_development": {
+      "back_to_dashboard": "Înapoi acasă"
+    },
+    "docs": {
+      "title": "Centru de ajutor și documentație",
+      "description": "Aici găsești ghiduri complete, tutoriale pas cu pas, întrebări frecvente și resurse de ajutor ca să profiți la maximum de platforma ITAKAI.",
+      "btn_back": "Înapoi la pagina principală",
+      "meta": {
+        "title": "Documentație - ITAKAI",
+        "description": "Centrul de ajutor și documentație ITAKAI"
+      }
+    },
+    "meta": {
+      "site_title": "ITAKAI - Aventura de a învăța | Platformă educațională gamificată",
+      "site_description": "Transformă educația cu ITAKAI, platforma gamificată care inspiră, motivează și conectează elevi, profesori și familii. Alătură-te celor peste 50.000 de elevi.",
+      "og_title": "ITAKAI - Aventura de a învăța",
+      "og_description": "Platformă educațională gamificată cu IA, narațiuni imersive și analiză inteligentă."
+    },
+    "resources": {
+      "xp": "Experiență (XP)",
+      "coins": "Monede",
+      "mana": "Mana",
+      "lives": "Puncte de viață"
+    },
+    "maintenance": {
+      "title": "În mentenanță",
+      "message": "Facem îmbunătățiri. Revino peste câteva minute.",
+      "admin_notice": "Modul mentenanță este activ — doar administratorii pot intra."
+    },
+    "menu_display": {
+      "title": "Meniul de sus",
+      "description": "Cum apar filele de clase și misiuni.",
+      "both": "Pictogramă și text",
+      "icon": "Doar pictogramă",
+      "text": "Doar text"
+    },
+    "markdown": {
+      "insert_at_end": "Inserează la final"
+    },
+    "student_preview": {
+      "banner": "Vezi platforma ca elev (demo)"
+    }
+  }
+}

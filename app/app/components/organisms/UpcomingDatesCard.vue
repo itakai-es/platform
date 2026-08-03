@@ -19,13 +19,15 @@
 
       <!-- Empty State -->
       <CardItem v-if="!dates.length" padding="lg" layout="column" centered>
-        <p class="text-sm text-navy-700/80">No hay fechas próximas</p>
+        <p class="text-sm text-navy-700/80">{{ t('student.dashboard.upcoming_dates_empty') }}</p>
       </CardItem>
     </div>
   </Card>
 </template>
 
 <script setup lang="ts">
+const { t } = useI18n()
+
 /**
  * UpcomingDatesCard - Card de próximas fechas
  *

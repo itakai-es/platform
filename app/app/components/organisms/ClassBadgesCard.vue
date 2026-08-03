@@ -62,12 +62,14 @@
 
     <!-- Empty State -->
     <CardItem v-if="!badges.length" padding="md" layout="column" centered>
-      <p class="text-sm text-navy-700/70">No hay insignias en esta clase</p>
+      <p class="text-sm text-navy-700/70">{{ t('teacher.classes.detail.badges_empty') }}</p>
     </CardItem>
   </Card>
 </template>
 
 <script setup lang="ts">
+const { t } = useI18n()
+
 import { computed } from 'vue'
 import { TrophyIcon } from '@heroicons/vue/24/outline'
 import { LockClosedIcon } from '@heroicons/vue/24/solid'

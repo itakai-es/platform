@@ -3,9 +3,11 @@
  * una vez al arrancar por el plugin `instance-config.client.ts`. Los componentes
  * la leen con `useInstanceConfig()`.
  */
+import type { AppLanguage } from '~/utils/app-languages'
+
 export interface InstanceConfig {
   platformName: string
-  defaultLanguage: 'es' | 'en' | 'ca' | 'eu' | 'gl'
+  defaultLanguage: AppLanguage
   registrationOpen: boolean
   maintenanceMode: boolean
 }

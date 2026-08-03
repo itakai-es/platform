@@ -59,11 +59,26 @@
           "confirm": "Duplicar",
           "cancel": "Cancelar",
           "items": {
-            "missions": { "label": "Misións", "desc": "As misións e os seus enigmas" },
-            "narrative": { "label": "Historia", "desc": "A narrativa e a imaxe de portada" },
-            "features": { "label": "Funcionalidades", "desc": "Os módulos activados da clase" },
-            "shop": { "label": "Tenda", "desc": "Os artigos da tenda" },
-            "behaviors": { "label": "Comportamentos", "desc": "As plantillas de comportamento" }
+            "missions": {
+              "label": "Misións",
+              "desc": "As misións e os seus enigmas"
+            },
+            "narrative": {
+              "label": "Historia",
+              "desc": "A narrativa e a imaxe de portada"
+            },
+            "features": {
+              "label": "Funcionalidades",
+              "desc": "Os módulos activados da clase"
+            },
+            "shop": {
+              "label": "Tenda",
+              "desc": "Os artigos da tenda"
+            },
+            "behaviors": {
+              "label": "Comportamentos",
+              "desc": "As plantillas de comportamento"
+            }
           }
         }
       },
@@ -116,7 +131,8 @@
           "attach_hint": "Máx. {max} MB por ficheiro",
           "attach_error_size": "«{name}» pesa {size} MB. O máximo é {max} MB por ficheiro.",
           "attach_error_too_large": "Os materiais pesan demasiado en conxunto. Súbeos un a un (máx. {max} MB por ficheiro)."
-        }
+        },
+        "narrative_error": "Non puiden crear a narrativa"
       },
       "detail": {
         "breadcrumb_classes": "As miñas clases",
@@ -391,6 +407,11 @@
           "management": {
             "title": "Xestión"
           }
+        },
+        "badges_empty": "Non hai insignias nesta clase",
+        "join_requests": {
+          "empty_title": "Sen solicitudes",
+          "empty_description": "Non hai solicitudes pendentes para esta clase"
         }
       }
     },
@@ -399,12 +420,17 @@
         "meta": {
           "title": "As Miñas Misións | ITAKAI Profesor",
           "description": "Xestiona todas as túas misións creadas, edítaas ou crea novas para os teus estudantes."
-        }
+        },
+        "subtitle": "Xestiona as misións das túas clases"
       },
       "create": {
         "meta": {
           "title": "Crear Misión | ITAKAI Profesor"
-        }
+        },
+        "pick_class": "Selecciona unha clase",
+        "idea_placeholder": "Ex.: Quero unha misión sobre cinemática onde os alumnos calculen traxectorias de vasoiras voadoras...",
+        "narrative_error": "Non puiden crear a narrativa",
+        "ai_unavailable": "O servizo de IA non está dispoñible agora mesmo. Téntao de novo nuns minutos."
       },
       "detail": {
         "delete_confirm_btn": "Eliminar",
@@ -474,7 +500,8 @@
         "btn_cancel": "Cancelar",
         "btn_saving": "Gardando...",
         "btn_save_changes": "Gardar cambios",
-        "btn_create": "Crear insignia"
+        "btn_create": "Crear insignia",
+        "no_mission": "Sen misión"
       },
       "detail": {
         "btn_edit": "Editar",
@@ -491,7 +518,9 @@
       "meta": {
         "title": "As Miñas Insignias | ITAKAI Profesor",
         "description": "Crea, edita e xestiona insignias personalizadas para premiar os logros dos teus estudantes."
-      }
+      },
+      "filter_system": "Do sistema",
+      "generate_error": "Non se puido xerar a insignia."
     },
     "students": {
       "index": {
@@ -594,11 +623,16 @@
         "btn_cancel": "Cancelar",
         "btn_delete_confirm": "Eliminar a miña conta",
         "languages": {
-          "es": "Español",
+          "es": "Castelán",
           "en": "English",
           "ca": "Catalán",
           "eu": "Éuscaro",
-          "gl": "Galego"
+          "gl": "Galego",
+          "val": "Valenciano",
+          "ast": "Asturiano",
+          "pt": "Portugués",
+          "el": "Grego",
+          "ro": "Romanés"
         }
       },
       "meta": {
@@ -877,6 +911,10 @@
       "wizard_question": "Ponlle un horario e unha portada á túa clase",
       "cancel": "Cancelar",
       "done": "Feito"
+    },
+    "submissions": {
+      "subtitle": "Revisa e aproba as entregas desta clase desde unha soa pantalla.",
+      "back_to_class": "Volver á clase"
     }
   }
 }

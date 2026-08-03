@@ -2,11 +2,11 @@
   <div class="space-y-6">
     <PageHeader
       :title="classData ? `Entregas de ${classData.name}` : 'Entregas pendientes'"
-      subtitle="Revisa, aprueba o rechaza las entregas de esta clase desde una sola pantalla."
+      :subtitle="t('teacher.submissions.subtitle')"
     >
       <template #actions>
         <NuxtLink :to="`/profesor/clases/${classId}`">
-          <Button variant="outline"> Volver a la clase </Button>
+          <Button variant="outline"> {{ t('teacher.submissions.back_to_class') }} </Button>
         </NuxtLink>
       </template>
     </PageHeader>
@@ -89,6 +89,8 @@
 </template>
 
 <script setup lang="ts">
+const { t } = useI18n()
+
 import { CheckCircleIcon } from '@heroicons/vue/24/outline'
 
 interface SubmissionItem {

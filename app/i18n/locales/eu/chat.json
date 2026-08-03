@@ -53,16 +53,148 @@
         "Planifika dezagun ikasgaia!",
         "Nola lagundu dezaket gaur?"
       ],
-      "admin": [
-        "Laguntza behar duzu?",
-        "Zure zerbitzura",
-        "Zertan lagundu?",
-        "Hemen nago!"
-      ]
+      "admin": ["Laguntza behar duzu?", "Zure zerbitzura", "Zertan lagundu?", "Hemen nago!"]
     },
     "user_subtitles": {
       "teacher": "Irakaslea",
       "default": "Erabiltzailea"
+    },
+    "mission_actions": {
+      "fallback_title": "misio hau",
+      "m1": {
+        "label": "Misioaz hitz egin",
+        "message": "Kaixo {god}, \"{title}\" misioaz hitz egin nahi dut"
+      },
+      "m2": {
+        "label": "Laguntza eskatu",
+        "message": "Kaixo {god}, \"{title}\" misioarekin laguntza behar dut"
+      },
+      "m3": {
+        "label": "Goazen hastera!",
+        "message": "Kaixo {god}, prest nago \"{title}\" misioa hasteko. Nondik hasi behar dut?"
+      },
+      "m4": {
+        "label": "Azaldu enigmak",
+        "message": "Kaixo {god}, azal ditzakezu \"{title}\" misioko enigmak?"
+      },
+      "m5": {
+        "label": "Emadazu arrastoak, spoilerrik gabe",
+        "message": "Kaixo {god}, \"{title}\" misioan trabatuta nago. Emango zenidake arrastoren bat spoilerrik gabe?"
+      },
+      "m6": {
+        "label": "Nola hobetu nire entrega?",
+        "message": "Kaixo {god}, zer egin dezaket \"{title}\" misioko nire entrega hobetzeko?"
+      },
+      "m7": {
+        "label": "Ikasitakoaren laburpena",
+        "message": "Kaixo {god}, egidazu \"{title}\" misioarekin ikasi behar nuenaren laburpena"
+      },
+      "m8": {
+        "label": "Prestatu nazazu erronkarako",
+        "message": "Kaixo {god}, ondo prestatu nahi dut \"{title}\" misioko erronkarako. Zer errepasatu beharko nuke?"
+      }
+    },
+    "ai_actions": {
+      "teacher": {
+        "t1": {
+          "label": "Sortu misio epiko bat",
+          "message": "Misio epiko bat sortu nahi dut. Zein klaserako eta zein gairi buruz izan beharko luke?"
+        },
+        "t2": {
+          "label": "Enigma sortzaileen ideiak",
+          "message": "Misio baterako enigma sortzaileen ideiak behar ditut. Zer proposatzen didazu?"
+        },
+        "t3": {
+          "label": "Sortu narratiba hunkigarri bat",
+          "message": "Nire klase baterako narratiba hunkigarri bat sortu nahi dut. Lagunduko didazu?"
+        },
+        "t4": {
+          "label": "Diseinatu ebaluazio-irizpideak",
+          "message": "Lagundu iezadazu nire ikasleentzat ebaluazio-irizpide zuzenak eta motibagarriak diseinatzen."
+        },
+        "t5": {
+          "label": "Proposatu doma tematiko bat",
+          "message": "Nire ikasleak motibatuko dituen doma bat sortzeko ideiak behar ditut. Zer proposatzen duzu?"
+        },
+        "t6": {
+          "label": "Hobetu nire ikaslearen gida",
+          "message": "Nire ikasleei ematen diedan gida hobetu nahi dut. Nola egin dezaket erabilgarriagoa?"
+        },
+        "t7": {
+          "label": "Gai bat jokoztatzeko ideiak",
+          "message": "Nire irakasgaiko gai bat jokoztatu nahi dut. Nola egingo zenuke?"
+        },
+        "t8": {
+          "label": "Sortu asteko erronka bat",
+          "message": "Asteko erronka bat abiarazi nahi dut nire ikasleak motibatzeko. Zer ideia dituzu?"
+        },
+        "t9": {
+          "label": "Motibatzeko estrategiak",
+          "message": "Ikasle batzuk desmotibatuta daude. Zein jokoztatze-estrategia gomendatzen dizkidazu?"
+        },
+        "t10": {
+          "label": "Egokitu jarduera bat mailetara",
+          "message": "Maila desberdinetako ikasleak ditut. Nola egokitu dezaket jarduera bat guztientzat?"
+        },
+        "t11": {
+          "label": "Idatzi misio-gida bat",
+          "message": "Misio bat nire ikasleei aurkezteko gida bat idatzi behar dut. Emango didazu eskua?"
+        },
+        "t12": {
+          "label": "Planifikatu sekuentzia didaktiko bat",
+          "message": "Lagundu iezadazu jokoztatutako sekuentzia didaktiko bat urratsez urrats planifikatzen."
+        }
+      },
+      "student": {
+        "s1": {
+          "label": "Azaldu gai zail bat",
+          "message": "Ulertzea kostatzen zaidan gai bat dago. Modu erraz batean azal diezadakezu?"
+        },
+        "s2": {
+          "label": "Emadazu arrastoak enigma baterako",
+          "message": "Enigma batean trabatuta nago. Emango zenidake arrastoren bat spoilerrik gabe?"
+        },
+        "s3": {
+          "label": "Maila igotzeko aholkuak",
+          "message": "Zer egin dezaket XP gehiago irabazteko eta azkarrago maila igotzeko?"
+        },
+        "s4": {
+          "label": "Ikasitakoaren laburpena",
+          "message": "Egidazu orain arte ikasi dudan garrantzitsuenaren laburpena."
+        },
+        "s5": {
+          "label": "Lagundu nire entregarekin",
+          "message": "Nire hurrengo entrega prestatzeko laguntza behar dut. Orientatuko nauzu?"
+        },
+        "s6": {
+          "label": "Hobeto ikasteko trikimailuak",
+          "message": "Zein ikasteko teknika gomendatzen dizkidazu azkarrago ikasteko?"
+        },
+        "s7": {
+          "label": "Zein misio ditut zain?",
+          "message": "Gogorarazi diezadakezu zein misio ditudan zain eta zein diren premiazkoenak?"
+        },
+        "s8": {
+          "label": "Motibatu nazazu jarraitzeko",
+          "message": "Pixka bat desanimatuta nago. Motibatuko nauzu aurrera jarraitzeko?"
+        },
+        "s9": {
+          "label": "Azaldu adibide batekin",
+          "message": "Zerbait adibide praktiko eta erraz batekin azaltzea behar dut."
+        },
+        "s10": {
+          "label": "Prestatu nazazu erronka baterako",
+          "message": "Ondo prestatu nahi dut hurrengo erronkarako. Zer errepasatu beharko nuke?"
+        },
+        "s11": {
+          "label": "Nola hobetu nire puntuazioa?",
+          "message": "Zer egin dezaket misioetako nire puntuazioa hobetzeko?"
+        },
+        "s12": {
+          "label": "Egidazu galdetegi azkar bat",
+          "message": "Egidazu 5 galderako galdetegi azkar bat klasean ikusten ari garenari buruz."
+        }
+      }
     }
   }
 }

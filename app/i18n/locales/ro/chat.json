@@ -1,0 +1,200 @@
+{
+  "chat": {
+    "assistant": {
+      "default_name": "Asistent IA",
+      "default_title": "Disponibil să te ajute",
+      "default_description": "Sunt aici ca să te ajut cu studiile tale.",
+      "itakai_assistant": "ITAKAI Assistant"
+    },
+    "interface": {
+      "welcome_greeting": "Salut! Sunt {name}",
+      "welcome_greeting_default": "Salut! Sunt asistentul tău",
+      "ask_about": "Mă poți întreba despre:",
+      "input_placeholder": "Scrie aici întrebarea ta...",
+      "input_typing": "Asistentul scrie...",
+      "input_sending": "Se trimite mesajul...",
+      "attach_file": "Atașează fișier",
+      "attach_image": "Atașează imagine",
+      "mention": "Menționează",
+      "ask_anything_placeholder": "Întreabă orice...",
+      "suggested_questions_label": "Întrebări sugerate:",
+      "message_input_placeholder": "Scrie aici mesajul tău...",
+      "default_suggestions": [
+        "Cum finalizez o misiune?",
+        "Unde îmi pot vedea progresul?",
+        "Cum funcționează sistemul de XP?",
+        "Cum mă alătur unei clase?"
+      ],
+      "teacher_suggestions": [
+        "Cum creez o misiune nouă?",
+        "Cum îmi administrez clasa?",
+        "Cum verific progresul elevilor?",
+        "Cum acord puncte suplimentare?"
+      ]
+    },
+    "god_messages": {
+      "student": [
+        "Ai nevoie de ajutor cu misiunea ta?",
+        "Hai să învățăm împreună!",
+        "Ai nelămuriri legate de temă?",
+        "Întreabă-mă orice vrei!",
+        "Sunt aici ca să te ajut",
+        "Te-ai blocat? Hai să vorbim!",
+        "Cucerește provocarea asta!",
+        "Cum merge progresul tău?"
+      ],
+      "teacher": [
+        "Cum merg clasele tale?",
+        "Vrei să creezi o misiune?",
+        "Ai nelămuriri despre elevii tăi?",
+        "Sunt aici ca să te sprijin",
+        "Verificăm ceva împreună?",
+        "Idei pentru clasa ta?",
+        "Hai să planificăm lecția!",
+        "Cu ce te ajut azi?"
+      ],
+      "admin": ["Ai nevoie de ajutor?", "La dispoziția ta", "Cu ce te ajut?", "Sunt aici!"]
+    },
+    "user_subtitles": {
+      "teacher": "Profesor",
+      "default": "Utilizator"
+    },
+    "mission_actions": {
+      "fallback_title": "această misiune",
+      "m1": {
+        "label": "Discută despre misiune",
+        "message": "Salut, {god}, vreau să discutăm despre misiunea „{title}”"
+      },
+      "m2": {
+        "label": "Cere ajutor",
+        "message": "Salut, {god}, am nevoie de ajutor cu misiunea „{title}”"
+      },
+      "m3": {
+        "label": "Hai să începem!",
+        "message": "Salut, {god}, sunt gata să încep misiunea „{title}”. De unde încep?"
+      },
+      "m4": {
+        "label": "Explică-mi enigmele",
+        "message": "Salut, {god}, îmi poți explica enigmele misiunii „{title}”?"
+      },
+      "m5": {
+        "label": "Dă-mi indicii fără spoilere",
+        "message": "Salut, {god}, m-am blocat la misiunea „{title}”. Îmi poți da vreun indiciu fără spoilere?"
+      },
+      "m6": {
+        "label": "Cum îmi îmbunătățesc lucrarea?",
+        "message": "Salut, {god}, ce pot face ca să îmi îmbunătățesc lucrarea la misiunea „{title}”?"
+      },
+      "m7": {
+        "label": "Rezumatul a ce am învățat",
+        "message": "Salut, {god}, fă-mi un rezumat a ceea ce ar fi trebuit să învăț din misiunea „{title}”"
+      },
+      "m8": {
+        "label": "Pregătește-mă pentru provocare",
+        "message": "Salut, {god}, vreau să mă pregătesc bine pentru provocarea misiunii „{title}”. Ce ar trebui să recapitulez?"
+      }
+    },
+    "ai_actions": {
+      "teacher": {
+        "t1": {
+          "label": "Creează o misiune epică",
+          "message": "Vreau să creez o misiune epică. Pentru ce clasă și pe ce temă ar trebui să fie?"
+        },
+        "t2": {
+          "label": "Idei de enigme creative",
+          "message": "Am nevoie de idei de enigme creative pentru o misiune. Ce îmi propui?"
+        },
+        "t3": {
+          "label": "Generează o narațiune imersivă",
+          "message": "Vreau să creez o narațiune imersivă pentru una dintre clasele mele. Mă ajuți?"
+        },
+        "t4": {
+          "label": "Proiectează criterii de evaluare",
+          "message": "Ajută-mă să proiectez criterii de evaluare corecte și motivante pentru elevii mei."
+        },
+        "t5": {
+          "label": "Sugerează o insignă tematică",
+          "message": "Am nevoie de idei ca să creez o insignă care să îmi motiveze elevii. Ce sugerezi?"
+        },
+        "t6": {
+          "label": "Îmbunătățește-mi ghidul elevului",
+          "message": "Vreau să îmbunătățesc ghidul pe care îl dau elevilor mei. Cum îl pot face mai util?"
+        },
+        "t7": {
+          "label": "Idei ca să gamific o temă",
+          "message": "Vreau să gamific o temă de la disciplina mea. Cum ai face-o?"
+        },
+        "t8": {
+          "label": "Creează o provocare săptămânală",
+          "message": "Vreau să lansez o provocare săptămânală ca să îmi motivez elevii. Ce idei ai?"
+        },
+        "t9": {
+          "label": "Strategii de motivare",
+          "message": "Unii elevi sunt demotivați. Ce strategii de gamificare îmi recomanzi?"
+        },
+        "t10": {
+          "label": "Adaptează o activitate pe niveluri",
+          "message": "Am elevi de niveluri diferite. Cum pot adapta o activitate pentru toți?"
+        },
+        "t11": {
+          "label": "Redactează un ghid de misiune",
+          "message": "Trebuie să redactez un ghid ca să prezint o misiune elevilor mei. Îmi dai o mână de ajutor?"
+        },
+        "t12": {
+          "label": "Planifică o secvență didactică",
+          "message": "Ajută-mă să planific pas cu pas o secvență didactică gamificată."
+        }
+      },
+      "student": {
+        "s1": {
+          "label": "Explică-mi o temă grea",
+          "message": "Există o temă care îmi dă bătăi de cap. Mi-o poți explica simplu?"
+        },
+        "s2": {
+          "label": "Dă-mi indicii pentru o enigmă",
+          "message": "M-am blocat la o enigmă. Îmi poți da vreun indiciu fără spoilere?"
+        },
+        "s3": {
+          "label": "Sfaturi ca să urc de nivel",
+          "message": "Ce pot face ca să câștig mai mult XP și să urc de nivel mai repede?"
+        },
+        "s4": {
+          "label": "Rezumatul a ce am învățat",
+          "message": "Fă-mi un rezumat al celor mai importante lucruri pe care le-am învățat până acum."
+        },
+        "s5": {
+          "label": "Ajută-mă cu lucrarea mea",
+          "message": "Am nevoie de ajutor ca să îmi pregătesc următoarea lucrare. Mă îndrumi?"
+        },
+        "s6": {
+          "label": "Trucuri ca să învăț mai bine",
+          "message": "Ce tehnici de studiu îmi recomanzi ca să învăț mai repede?"
+        },
+        "s7": {
+          "label": "Ce misiuni am în așteptare?",
+          "message": "Îmi poți aminti ce misiuni am în așteptare și care sunt cele mai urgente?"
+        },
+        "s8": {
+          "label": "Motivează-mă să continui",
+          "message": "Sunt puțin descurajat. Mă poți motiva să merg mai departe?"
+        },
+        "s9": {
+          "label": "Explică-mi cu un exemplu",
+          "message": "Am nevoie să îmi explici ceva cu un exemplu practic și simplu."
+        },
+        "s10": {
+          "label": "Pregătește-mă pentru o provocare",
+          "message": "Vreau să mă pregătesc bine pentru următoarea provocare. Ce ar trebui să recapitulez?"
+        },
+        "s11": {
+          "label": "Cum îmi îmbunătățesc punctajul?",
+          "message": "Ce pot face ca să îmi îmbunătățesc punctajul la misiuni?"
+        },
+        "s12": {
+          "label": "Fă-mi un test rapid",
+          "message": "Fă-mi un test rapid de 5 întrebări despre ce facem la clasă."
+        }
+      }
+    }
+  }
+}

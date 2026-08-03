@@ -1,0 +1,200 @@
+{
+  "chat": {
+    "assistant": {
+      "default_name": "Assistent IA",
+      "default_title": "Disponible per a ajudar-te",
+      "default_description": "Estic ací per a ajudar-te amb els teus estudis.",
+      "itakai_assistant": "ITAKAI Assistant"
+    },
+    "interface": {
+      "welcome_greeting": "Hola! Soc {name}",
+      "welcome_greeting_default": "Hola! Soc el teu assistent",
+      "ask_about": "Pots preguntar-me sobre:",
+      "input_placeholder": "Escriu la teua pregunta ací...",
+      "input_typing": "L'assistent està escrivint...",
+      "input_sending": "Enviant missatge...",
+      "attach_file": "Adjuntar fitxer",
+      "attach_image": "Adjuntar imatge",
+      "mention": "Mencionar",
+      "ask_anything_placeholder": "Pregunta qualsevol cosa...",
+      "suggested_questions_label": "Preguntes suggerides:",
+      "message_input_placeholder": "Escriu el teu missatge ací...",
+      "default_suggestions": [
+        "Com complete una missió?",
+        "On puc veure el meu progrés?",
+        "Com funciona el sistema de XP?",
+        "Com puc unir-me a una classe?"
+      ],
+      "teacher_suggestions": [
+        "Com cree una nova missió?",
+        "Com gestione la meua classe?",
+        "Com revise el progrés dels alumnes?",
+        "Com assigne punts extra?"
+      ]
+    },
+    "god_messages": {
+      "student": [
+        "Necessites ajuda amb la teua missió?",
+        "Anem a aprendre junts!",
+        "Dubtes amb la tasca?",
+        "Pregunta'm el que vulgues!",
+        "Estic ací per a ajudar-te",
+        "T'has encallat? Parlem-ne!",
+        "Conquista eixe repte!",
+        "Com va el teu progrés?"
+      ],
+      "teacher": [
+        "Com van les teues classes?",
+        "Necessites crear una missió?",
+        "Dubtes sobre els teus alumnes?",
+        "Estic ací per a assistir-te",
+        "Revisem alguna cosa junts?",
+        "Idees per a la teua classe?",
+        "Planifiquem la lliçó!",
+        "Com et puc ajudar hui?"
+      ],
+      "admin": ["Necessites ajuda?", "Al teu servici", "En què t'ajude?", "Estic ací!"]
+    },
+    "user_subtitles": {
+      "teacher": "Professor",
+      "default": "Usuari"
+    },
+    "mission_actions": {
+      "fallback_title": "esta missió",
+      "m1": {
+        "label": "Xerrar sobre la missió",
+        "message": "Hola {god}, vull xerrar sobre la missió \"{title}\""
+      },
+      "m2": {
+        "label": "Demanar ajuda",
+        "message": "Hola {god}, necessite ajuda amb la missió \"{title}\""
+      },
+      "m3": {
+        "label": "Anem-hi!",
+        "message": "Hola {god}, estic a punt per començar la missió \"{title}\". Per on comence?"
+      },
+      "m4": {
+        "label": "Explica'm els enigmes",
+        "message": "Hola {god}, em pots explicar els enigmes de la missió \"{title}\"?"
+      },
+      "m5": {
+        "label": "Dona'm pistes sense spoilers",
+        "message": "Hola {god}, estic encallat a la missió \"{title}\". Em pots donar alguna pista sense spoilers?"
+      },
+      "m6": {
+        "label": "Com millorar la meua entrega?",
+        "message": "Hola {god}, què puc fer per millorar la meua entrega a la missió \"{title}\"?"
+      },
+      "m7": {
+        "label": "Resum del que he après",
+        "message": "Hola {god}, fes-me un resum del que hauria d'haver après amb la missió \"{title}\""
+      },
+      "m8": {
+        "label": "Prepara'm per al repte",
+        "message": "Hola {god}, vull preparar-me bé per al repte de la missió \"{title}\". Què hauria de repassar?"
+      }
+    },
+    "ai_actions": {
+      "teacher": {
+        "t1": {
+          "label": "Crea una missió èpica",
+          "message": "Vull crear una missió èpica. Per a quina classe i sobre quin tema hauria de ser?"
+        },
+        "t2": {
+          "label": "Idees d'enigmes creatius",
+          "message": "Necessite idees d'enigmes creatius per a una missió. Què em proposes?"
+        },
+        "t3": {
+          "label": "Genera una narrativa immersiva",
+          "message": "Vull crear una narrativa immersiva per a una de les meues classes. M'ajudes?"
+        },
+        "t4": {
+          "label": "Dissenya criteris d'avaluació",
+          "message": "Ajuda'm a dissenyar criteris d'avaluació justos i motivadors per als meus alumnes."
+        },
+        "t5": {
+          "label": "Suggerix una insígnia temàtica",
+          "message": "Necessite idees per crear una insígnia que motive els meus alumnes. Què suggerixes?"
+        },
+        "t6": {
+          "label": "Millora la meua guia de l'alumne",
+          "message": "Vull millorar la guia que done als meus alumnes. Com puc fer-la més útil?"
+        },
+        "t7": {
+          "label": "Idees per gamificar un tema",
+          "message": "Vull gamificar un tema de la meua assignatura. Com ho faries?"
+        },
+        "t8": {
+          "label": "Crea un repte setmanal",
+          "message": "Vull llançar un repte setmanal per motivar els meus alumnes. Quines idees tens?"
+        },
+        "t9": {
+          "label": "Estratègies per motivar",
+          "message": "Alguns alumnes estan desmotivats. Quines estratègies de gamificació em recomanes?"
+        },
+        "t10": {
+          "label": "Adapta una activitat a nivells",
+          "message": "Tinc alumnes de nivells diferents. Com puc adaptar una activitat per a tothom?"
+        },
+        "t11": {
+          "label": "Redacta una guia de missió",
+          "message": "Necessite redactar una guia per presentar una missió als meus alumnes. Em fas un cop de mà?"
+        },
+        "t12": {
+          "label": "Planifica una seqüència didàctica",
+          "message": "Ajuda'm a planificar una seqüència didàctica gamificada pas a pas."
+        }
+      },
+      "student": {
+        "s1": {
+          "label": "Explica'm un tema difícil",
+          "message": "Hi ha un tema que em costa entendre. Me'l pots explicar de manera senzilla?"
+        },
+        "s2": {
+          "label": "Dona'm pistes per a un enigma",
+          "message": "Estic encallat en un enigma. Em pots donar alguna pista sense spoilers?"
+        },
+        "s3": {
+          "label": "Consells per pujar de nivell",
+          "message": "Què puc fer per guanyar més XP i pujar de nivell més ràpid?"
+        },
+        "s4": {
+          "label": "Resum del que he après",
+          "message": "Fes-me un resum del més important que he après fins ara."
+        },
+        "s5": {
+          "label": "Ajuda'm amb la meua entrega",
+          "message": "Necessite ajuda per preparar la meua pròxima entrega. M'orientes?"
+        },
+        "s6": {
+          "label": "Trucs per estudiar millor",
+          "message": "Quines tècniques d'estudi em recomanes per aprendre més ràpid?"
+        },
+        "s7": {
+          "label": "Quines missions tinc pendents?",
+          "message": "Em pots recordar quines missions tinc pendents i quines són més urgents?"
+        },
+        "s8": {
+          "label": "Motiva'm per continuar",
+          "message": "Estic una mica desanimat. Em pots motivar per seguir avançant?"
+        },
+        "s9": {
+          "label": "Explica'm amb un exemple",
+          "message": "Necessite que m'expliques una cosa amb un exemple pràctic i senzill."
+        },
+        "s10": {
+          "label": "Prepara'm per a un repte",
+          "message": "Vull preparar-me bé per al pròxim repte. Què hauria de repassar?"
+        },
+        "s11": {
+          "label": "Com millore la meua puntuació?",
+          "message": "Què puc fer per millorar la meua puntuació a les missions?"
+        },
+        "s12": {
+          "label": "Fes-me un test ràpid",
+          "message": "Fes-me un test ràpid de 5 preguntes sobre el que estem veient a classe."
+        }
+      }
+    }
+  }
+}

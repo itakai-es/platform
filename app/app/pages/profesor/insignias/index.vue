@@ -195,7 +195,7 @@
               Misión asociada
               <span class="text-navy-700/50 font-normal">(opcional)</span>
             </label>
-            <Select
+            <SelectDropdown
               v-model="form.missionId"
               :options="
                 teacherMissions.map(m => ({
@@ -203,7 +203,7 @@
                   label: `${m.title} (${rarityLabels[m.rarity] || 'Común'})`,
                 }))
               "
-              placeholder="Sin misión"
+              :placeholder="t('teacher.badges.form.no_mission')"
             />
           </div>
 
@@ -440,7 +440,7 @@ const rarityOptions = [
 const originOptions = [
   { value: 'all', label: 'Todas' },
   { value: 'mine', label: 'Mis insignias' },
-  { value: 'system', label: 'Del sistema' },
+  { value: 'system', label: t('teacher.badges.filter_system') },
 ]
 
 const hasActiveFilters = computed(() => {

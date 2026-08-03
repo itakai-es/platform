@@ -41,17 +41,19 @@
     <Transition name="dropdown">
       <div
         v-if="isOpen"
-        class="absolute right-0 mt-1 w-36 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden z-50"
+        class="absolute right-0 mt-1 w-44 max-h-80 overflow-y-auto scrollbar-subtle bg-white rounded-xl shadow-lg border border-gray-100 z-50"
       >
         <button
-          v-for="lang in SUPPORTED_LOCALES"
-          :key="lang"
+          v-for="lang in APP_LANGUAGES"
+          :key="lang.code"
           class="w-full flex items-center gap-2 px-3 py-2.5 text-sm text-navy-700 hover:bg-gray-50 transition-colors"
-          :class="locale === lang ? 'font-semibold bg-blue-50' : 'font-normal'"
-          @click="select(lang)"
+          :class="locale === lang.code ? 'font-semibold bg-blue-50' : 'font-normal'"
+          @click="select(lang.code)"
         >
-          <span class="w-7 text-xs font-bold uppercase text-center text-blue-600">{{ lang }}</span>
-          <span>{{ LOCALE_NAMES[lang] }}</span>
+          <span class="w-7 text-xs font-bold uppercase text-center text-blue-600">{{
+            lang.code
+          }}</span>
+          <span class="truncate">{{ lang.endonym }}</span>
         </button>
       </div>
     </Transition>
@@ -60,6 +62,8 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
+import { APP_LANGUAGES } from '~/utils/app-languages'
+import type { AppLanguage } from '~/utils/app-languages'
 
 const props = withDefaults(
   defineProps<{
@@ -70,20 +74,14 @@ const props = withDefaults(
   }
 )
 
-const { locale, changeLanguage, SUPPORTED_LOCALES } = useLocale()
+// La lista y los nombres salen de APP_LANGUAGES: aquí se muestra el endónimo
+// (cada idioma en sí mismo) porque quien busca su idioma no lee el activo.
+const { locale, changeLanguage } = useLocale()
 const isOpen = ref(false)
 const container = ref<HTMLElement | null>(null)
 
-const LOCALE_NAMES: Record<string, string> = {
-  es: 'Castellano',
-  en: 'English',
-  ca: 'Català',
-  eu: 'Euskara',
-  gl: 'Galego',
-}
-
-const select = async (lang: string) => {
-  await changeLanguage(lang as any)
+const select = async (lang: AppLanguage) => {
+  await changeLanguage(lang)
   isOpen.value = false
 }
 

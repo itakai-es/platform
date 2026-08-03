@@ -28,7 +28,10 @@
         "message_new_user": "Hello {name}! Welcome to ITAKAI. Complete your first mission to start earning XP!",
         "message_returning_user": "Hello {name}! You have completed {missions_completed} missions in {classes_enrolled} classes. Keep it up!"
       },
-      "class_fallback_name": "Class"
+      "class_fallback_name": "Class",
+      "recent_badges_empty": "No recent badges",
+      "recent_topics_empty": "No recent topics",
+      "upcoming_dates_empty": "No upcoming dates"
     },
     "missions": {
       "meta": {
@@ -242,7 +245,22 @@
       "meta": {
         "title": "Ranking | ITAKAI",
         "description": "The student ranking is available within each class."
-      }
+      },
+      "page_title": "Leaderboard",
+      "page_subtitle": "Check the global ranking and compare your progress with the other students.",
+      "pick_class": "Select a class",
+      "friends_soon_title": "Friends ranking coming soon",
+      "friends_soon_description": "The social side isn't connected yet. In the meantime, you can use the global ranking or your class rankings.",
+      "choose_class_title": "Choose a class",
+      "choose_class_description": "Select a class to see your position and its internal ranking.",
+      "empty_class_title": "No ranking available",
+      "empty_class_description": "There isn't enough data yet to build this class's ranking.",
+      "empty_global_title": "No ranking data",
+      "empty_global_description": "There isn't enough activity yet to show a global leaderboard.",
+      "global_podium": "Global podium",
+      "your_position": "Your position",
+      "rest": "Rest of the leaderboard",
+      "by_class": "By class"
     },
     "ai_assistant": {
       "meta": {
@@ -307,11 +325,16 @@
         "password_required": "Enter your password"
       },
       "languages": {
-        "es": "Español",
+        "es": "Castellano",
         "en": "English",
         "ca": "Català",
         "eu": "Euskara",
-        "gl": "Galego"
+        "gl": "Galego",
+        "val": "Valencià",
+        "ast": "Asturianu",
+        "pt": "Português",
+        "el": "Ελληνικά",
+        "ro": "Română"
       }
     },
     "components": {

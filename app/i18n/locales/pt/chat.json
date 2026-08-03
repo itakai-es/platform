@@ -1,0 +1,200 @@
+{
+  "chat": {
+    "assistant": {
+      "default_name": "Assistente IA",
+      "default_title": "Disponível para te ajudar",
+      "default_description": "Estou aqui para te ajudar com os teus estudos.",
+      "itakai_assistant": "ITAKAI Assistant"
+    },
+    "interface": {
+      "welcome_greeting": "Olá! Sou o {name}",
+      "welcome_greeting_default": "Olá! Sou o teu assistente",
+      "ask_about": "Podes perguntar-me sobre:",
+      "input_placeholder": "Escreve aqui a tua pergunta...",
+      "input_typing": "O assistente está a escrever...",
+      "input_sending": "A enviar mensagem...",
+      "attach_file": "Anexar ficheiro",
+      "attach_image": "Anexar imagem",
+      "mention": "Mencionar",
+      "ask_anything_placeholder": "Pergunta o que quiseres...",
+      "suggested_questions_label": "Perguntas sugeridas:",
+      "message_input_placeholder": "Escreve aqui a tua mensagem...",
+      "default_suggestions": [
+        "Como concluo uma missão?",
+        "Onde posso ver o meu progresso?",
+        "Como funciona o sistema de XP?",
+        "Como me junto a uma turma?"
+      ],
+      "teacher_suggestions": [
+        "Como crio uma nova missão?",
+        "Como faço a gestão da minha turma?",
+        "Como reviso o progresso dos alunos?",
+        "Como atribuo pontos extra?"
+      ]
+    },
+    "god_messages": {
+      "student": [
+        "Precisas de ajuda com a tua missão?",
+        "Vamos aprender juntos!",
+        "Dúvidas com a tarefa?",
+        "Pergunta-me o que quiseres!",
+        "Estou aqui para te ajudar",
+        "Ficaste preso? Vamos falar!",
+        "Conquista esse desafio!",
+        "Como vai o teu progresso?"
+      ],
+      "teacher": [
+        "Como vão as tuas turmas?",
+        "Precisas de criar uma missão?",
+        "Dúvidas sobre os teus alunos?",
+        "Estou aqui para te apoiar",
+        "Revemos alguma coisa juntos?",
+        "Ideias para a tua turma?",
+        "Vamos planear a aula!",
+        "Como te ajudo hoje?"
+      ],
+      "admin": ["Precisas de ajuda?", "Ao teu dispor", "Em que te ajudo?", "Estou aqui!"]
+    },
+    "user_subtitles": {
+      "teacher": "Professor",
+      "default": "Utilizador"
+    },
+    "mission_actions": {
+      "fallback_title": "esta missão",
+      "m1": {
+        "label": "Conversar sobre a missão",
+        "message": "Olá {god}, quero conversar sobre a missão \"{title}\""
+      },
+      "m2": {
+        "label": "Pedir ajuda",
+        "message": "Olá {god}, preciso de ajuda com a missão \"{title}\""
+      },
+      "m3": {
+        "label": "Vamos começar!",
+        "message": "Olá {god}, estou pronto para começar a missão \"{title}\". Por onde começo?"
+      },
+      "m4": {
+        "label": "Explica-me os enigmas",
+        "message": "Olá {god}, podes explicar-me os enigmas da missão \"{title}\"?"
+      },
+      "m5": {
+        "label": "Dá-me pistas sem spoilers",
+        "message": "Olá {god}, estou preso na missão \"{title}\". Podes dar-me alguma pista sem spoilers?"
+      },
+      "m6": {
+        "label": "Como melhoro a minha entrega?",
+        "message": "Olá {god}, o que posso fazer para melhorar a minha entrega na missão \"{title}\"?"
+      },
+      "m7": {
+        "label": "Resumo do que aprendi",
+        "message": "Olá {god}, faz-me um resumo do que deveria ter aprendido com a missão \"{title}\""
+      },
+      "m8": {
+        "label": "Prepara-me para o desafio",
+        "message": "Olá {god}, quero preparar-me bem para o desafio da missão \"{title}\". O que devo rever?"
+      }
+    },
+    "ai_actions": {
+      "teacher": {
+        "t1": {
+          "label": "Cria uma missão épica",
+          "message": "Quero criar uma missão épica. Para que turma e sobre que tema deve ser?"
+        },
+        "t2": {
+          "label": "Ideias de enigmas criativos",
+          "message": "Preciso de ideias de enigmas criativos para uma missão. O que sugeres?"
+        },
+        "t3": {
+          "label": "Gera uma narrativa imersiva",
+          "message": "Quero criar uma narrativa imersiva para uma das minhas turmas. Ajudas-me?"
+        },
+        "t4": {
+          "label": "Desenha critérios de avaliação",
+          "message": "Ajuda-me a desenhar critérios de avaliação justos e motivadores para os meus alunos."
+        },
+        "t5": {
+          "label": "Sugere um emblema temático",
+          "message": "Preciso de ideias para criar um emblema que motive os meus alunos. O que sugeres?"
+        },
+        "t6": {
+          "label": "Melhora o meu guia do aluno",
+          "message": "Quero melhorar o guia que dou aos meus alunos. Como posso torná-lo mais útil?"
+        },
+        "t7": {
+          "label": "Ideias para gamificar um tema",
+          "message": "Quero gamificar um tema da minha disciplina. Como o farias?"
+        },
+        "t8": {
+          "label": "Cria um desafio semanal",
+          "message": "Quero lançar um desafio semanal para motivar os meus alunos. Que ideias tens?"
+        },
+        "t9": {
+          "label": "Estratégias para motivar",
+          "message": "Alguns alunos estão desmotivados. Que estratégias de gamificação me recomendas?"
+        },
+        "t10": {
+          "label": "Adapta uma atividade a vários níveis",
+          "message": "Tenho alunos de níveis diferentes. Como posso adaptar uma atividade para todos?"
+        },
+        "t11": {
+          "label": "Escreve um guia de missão",
+          "message": "Preciso de escrever um guia para apresentar uma missão aos meus alunos. Dás-me uma ajuda?"
+        },
+        "t12": {
+          "label": "Planeia uma sequência didática",
+          "message": "Ajuda-me a planear uma sequência didática gamificada passo a passo."
+        }
+      },
+      "student": {
+        "s1": {
+          "label": "Explica-me um tema difícil",
+          "message": "Há um tema que me custa perceber. Podes explicar-mo de forma simples?"
+        },
+        "s2": {
+          "label": "Dá-me pistas para um enigma",
+          "message": "Estou preso num enigma. Podes dar-me alguma pista sem spoilers?"
+        },
+        "s3": {
+          "label": "Dicas para subir de nível",
+          "message": "O que posso fazer para ganhar mais XP e subir de nível mais depressa?"
+        },
+        "s4": {
+          "label": "Resumo do que aprendi",
+          "message": "Faz-me um resumo do mais importante que aprendi até agora."
+        },
+        "s5": {
+          "label": "Ajuda-me com a minha entrega",
+          "message": "Preciso de ajuda para preparar a minha próxima entrega. Orientas-me?"
+        },
+        "s6": {
+          "label": "Truques para estudar melhor",
+          "message": "Que técnicas de estudo me recomendas para aprender mais depressa?"
+        },
+        "s7": {
+          "label": "Que missões tenho pendentes?",
+          "message": "Podes lembrar-me que missões tenho pendentes e quais são mais urgentes?"
+        },
+        "s8": {
+          "label": "Motiva-me para continuar",
+          "message": "Estou um pouco desanimado. Podes motivar-me para continuar a avançar?"
+        },
+        "s9": {
+          "label": "Explica-me com um exemplo",
+          "message": "Preciso que me expliques algo com um exemplo prático e simples."
+        },
+        "s10": {
+          "label": "Prepara-me para um desafio",
+          "message": "Quero preparar-me bem para o próximo desafio. O que devo rever?"
+        },
+        "s11": {
+          "label": "Como melhoro a minha pontuação?",
+          "message": "O que posso fazer para melhorar a minha pontuação nas missões?"
+        },
+        "s12": {
+          "label": "Faz-me um quiz rápido",
+          "message": "Faz-me um quiz rápido de 5 perguntas sobre o que estamos a ver nas aulas."
+        }
+      }
+    }
+  }
+}

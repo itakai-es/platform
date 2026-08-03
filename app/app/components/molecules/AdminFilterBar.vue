@@ -11,7 +11,7 @@
 
     <!-- Dynamic Filters -->
     <div class="flex flex-wrap gap-2 flex-1">
-      <Select
+      <SelectDropdown
         v-for="filter in filters"
         :key="filter.key"
         :model-value="filter.value"

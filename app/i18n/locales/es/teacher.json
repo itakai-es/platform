@@ -131,7 +131,8 @@
         },
         "meta": {
           "title": "Crear Nueva Clase | ITAKAI Profesor"
-        }
+        },
+        "narrative_error": "No he podido crear la narrativa"
       },
       "detail": {
         "breadcrumb_classes": "Mis clases",
@@ -406,6 +407,11 @@
           "management": {
             "title": "Gestión"
           }
+        },
+        "badges_empty": "No hay insignias en esta clase",
+        "join_requests": {
+          "empty_description": "No hay solicitudes pendientes para esta clase",
+          "empty_title": "Sin solicitudes"
         }
       }
     },
@@ -414,12 +420,17 @@
         "meta": {
           "title": "Mis Misiones | ITAKAI Profesor",
           "description": "Gestiona todas tus misiones creadas, edítalas o crea nuevas para tus alumnos."
-        }
+        },
+        "subtitle": "Gestiona las misiones de tus clases"
       },
       "create": {
         "meta": {
           "title": "Crear Misión | ITAKAI Profesor"
-        }
+        },
+        "ai_unavailable": "El servicio de IA no está disponible ahora mismo. Inténtalo de nuevo en unos minutos.",
+        "idea_placeholder": "Ej: Quiero una misión sobre cinemática donde los alumnos calculen trayectorias de escobas voladoras...",
+        "narrative_error": "No he podido crear la narrativa",
+        "pick_class": "Selecciona una clase"
       },
       "detail": {
         "delete_confirm_btn": "Eliminar",
@@ -489,7 +500,8 @@
         "btn_cancel": "Cancelar",
         "btn_saving": "Guardando...",
         "btn_save_changes": "Guardar cambios",
-        "btn_create": "Crear insignia"
+        "btn_create": "Crear insignia",
+        "no_mission": "Sin misión"
       },
       "detail": {
         "btn_edit": "Editar",
@@ -506,7 +518,9 @@
       "meta": {
         "title": "Mis Insignias | ITAKAI Profesor",
         "description": "Crea, edita y gestiona insignias personalizadas para premiar los logros de tus alumnos."
-      }
+      },
+      "filter_system": "Del sistema",
+      "generate_error": "No se pudo generar la insignia."
     },
     "students": {
       "index": {
@@ -609,11 +623,16 @@
         "btn_cancel": "Cancelar",
         "btn_delete_confirm": "Eliminar mi cuenta",
         "languages": {
-          "es": "Español",
+          "es": "Castellano",
           "en": "English",
           "ca": "Català",
           "eu": "Euskara",
-          "gl": "Galego"
+          "gl": "Galego",
+          "val": "Valencià",
+          "ast": "Asturianu",
+          "pt": "Português",
+          "el": "Ελληνικά",
+          "ro": "Română"
         }
       },
       "meta": {
@@ -892,6 +911,10 @@
       "wizard_question": "Ponle un horario y una portada a tu clase",
       "cancel": "Cancelar",
       "done": "Hecho"
+    },
+    "submissions": {
+      "back_to_class": "Volver a la clase",
+      "subtitle": "Revisa y aprueba las entregas de esta clase desde una sola pantalla."
     }
   }
 }

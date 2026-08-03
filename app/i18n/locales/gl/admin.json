@@ -65,6 +65,9 @@
         "delete_title": "Eliminar usuario",
         "delete_message": "Seguro que queres eliminar a {name}? Esta acción non se pode desfacer.",
         "delete_confirm": "Eliminar"
+      },
+      "sort": {
+        "recent": "Máis recentes"
       }
     },
     "classes": {
@@ -79,6 +82,10 @@
       "empty": {
         "title": "Non se atoparon clases",
         "description": "Non hai clases que coincidan cos filtros seleccionados."
+      },
+      "sort": {
+        "students_desc": "Máis alumnos",
+        "missions_desc": "Máis misións"
       }
     },
     "missions": {
@@ -88,11 +95,17 @@
       },
       "subtitle": "Visualiza todas as misións da plataforma",
       "filters": {
-        "search_placeholder": "Buscar misións..."
+        "search_placeholder": "Buscar misións...",
+        "all_statuses": "Todos os estados",
+        "all_rarities": "Todas as rarezas"
       },
       "empty": {
         "title": "Non se atoparon misións",
         "description": "Non hai misións que coincidan cos filtros seleccionados."
+      },
+      "sort": {
+        "xp_desc": "Máis XP",
+        "enigmas_desc": "Máis enigmas"
       }
     },
     "schools": {

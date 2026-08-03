@@ -53,16 +53,148 @@
         "Let's plan the lesson!",
         "How can I help you today?"
       ],
-      "admin": [
-        "Need help?",
-        "At your service",
-        "How can I help you?",
-        "I'm here!"
-      ]
+      "admin": ["Need help?", "At your service", "How can I help you?", "I'm here!"]
     },
     "user_subtitles": {
       "teacher": "Teacher",
       "default": "User"
+    },
+    "mission_actions": {
+      "fallback_title": "this mission",
+      "m1": {
+        "label": "Chat about the mission",
+        "message": "Hi {god}, I'd like to chat about the mission \"{title}\""
+      },
+      "m2": {
+        "label": "Ask for help",
+        "message": "Hi {god}, I need help with the mission \"{title}\""
+      },
+      "m3": {
+        "label": "Let's get started!",
+        "message": "Hi {god}, I'm ready to start the mission \"{title}\". Where do I begin?"
+      },
+      "m4": {
+        "label": "Explain the enigmas",
+        "message": "Hi {god}, can you explain the enigmas in the mission \"{title}\"?"
+      },
+      "m5": {
+        "label": "Give me hints, no spoilers",
+        "message": "Hi {god}, I'm stuck on the mission \"{title}\". Can you give me a hint without spoilers?"
+      },
+      "m6": {
+        "label": "How do I improve my submission?",
+        "message": "Hi {god}, what can I do to improve my submission for the mission \"{title}\"?"
+      },
+      "m7": {
+        "label": "Summary of what I learned",
+        "message": "Hi {god}, give me a summary of what I should have learned from the mission \"{title}\""
+      },
+      "m8": {
+        "label": "Get me ready for the challenge",
+        "message": "Hi {god}, I want to be well prepared for the challenge in the mission \"{title}\". What should I review?"
+      }
+    },
+    "ai_actions": {
+      "teacher": {
+        "t1": {
+          "label": "Create an epic mission",
+          "message": "I want to create an epic mission. Which class and topic should it be about?"
+        },
+        "t2": {
+          "label": "Creative enigma ideas",
+          "message": "I need creative enigma ideas for a mission. What do you suggest?"
+        },
+        "t3": {
+          "label": "Generate an immersive narrative",
+          "message": "I want to create an immersive narrative for one of my classes. Can you help?"
+        },
+        "t4": {
+          "label": "Design assessment criteria",
+          "message": "Help me design fair, motivating assessment criteria for my students."
+        },
+        "t5": {
+          "label": "Suggest a themed badge",
+          "message": "I need ideas for a badge that motivates my students. What do you suggest?"
+        },
+        "t6": {
+          "label": "Improve my student guide",
+          "message": "I want to improve the guide I give my students. How can I make it more useful?"
+        },
+        "t7": {
+          "label": "Ideas to gamify a topic",
+          "message": "I want to gamify a topic from my subject. How would you do it?"
+        },
+        "t8": {
+          "label": "Create a weekly challenge",
+          "message": "I want to launch a weekly challenge to motivate my students. What ideas do you have?"
+        },
+        "t9": {
+          "label": "Strategies to motivate",
+          "message": "Some students are unmotivated. What gamification strategies do you recommend?"
+        },
+        "t10": {
+          "label": "Adapt an activity to different levels",
+          "message": "I have students at different levels. How can I adapt an activity for everyone?"
+        },
+        "t11": {
+          "label": "Write a mission guide",
+          "message": "I need to write a guide to introduce a mission to my students. Can you give me a hand?"
+        },
+        "t12": {
+          "label": "Plan a teaching sequence",
+          "message": "Help me plan a gamified teaching sequence step by step."
+        }
+      },
+      "student": {
+        "s1": {
+          "label": "Explain a hard topic",
+          "message": "There's a topic I'm struggling with. Can you explain it in a simple way?"
+        },
+        "s2": {
+          "label": "Give me hints for an enigma",
+          "message": "I'm stuck on an enigma. Can you give me a hint without spoilers?"
+        },
+        "s3": {
+          "label": "Tips to level up",
+          "message": "What can I do to earn more XP and level up faster?"
+        },
+        "s4": {
+          "label": "Summary of what I learned",
+          "message": "Give me a summary of the most important things I've learned so far."
+        },
+        "s5": {
+          "label": "Help me with my submission",
+          "message": "I need help preparing my next submission. Can you guide me?"
+        },
+        "s6": {
+          "label": "Tricks to study better",
+          "message": "What study techniques do you recommend so I learn faster?"
+        },
+        "s7": {
+          "label": "Which missions do I have pending?",
+          "message": "Can you remind me which missions I have pending and which are most urgent?"
+        },
+        "s8": {
+          "label": "Motivate me to keep going",
+          "message": "I'm feeling a bit down. Can you motivate me to keep going?"
+        },
+        "s9": {
+          "label": "Explain it with an example",
+          "message": "I need you to explain something with a simple, practical example."
+        },
+        "s10": {
+          "label": "Get me ready for a challenge",
+          "message": "I want to prepare properly for the next challenge. What should I review?"
+        },
+        "s11": {
+          "label": "How do I improve my score?",
+          "message": "What can I do to improve my score in the missions?"
+        },
+        "s12": {
+          "label": "Give me a quick quiz",
+          "message": "Give me a quick 5-question quiz about what we're covering in class."
+        }
+      }
     }
   }
 }

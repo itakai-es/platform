@@ -20,8 +20,8 @@
       <div class="w-14 h-14 bg-mint/10 rounded-full flex items-center justify-center mx-auto mb-3">
         <CheckCircleIcon class="w-7 h-7 text-mint" />
       </div>
-      <h3 class="text-base font-semibold text-navy-700 mb-1">Sin solicitudes</h3>
-      <p class="text-text-secondary text-sm">No hay solicitudes pendientes para esta clase</p>
+      <h3 class="text-base font-semibold text-navy-700 mb-1">{{ t('teacher.classes.detail.join_requests.empty_title') }}</h3>
+      <p class="text-text-secondary text-sm">{{ t('teacher.classes.detail.join_requests.empty_description') }}</p>
     </div>
 
     <!-- Requests List -->

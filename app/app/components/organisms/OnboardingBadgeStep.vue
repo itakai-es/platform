@@ -23,7 +23,7 @@
       <!-- Error -->
       <div v-else-if="failed" class="flex flex-col items-center gap-4 text-text-secondary">
         <TrophyIcon class="w-12 h-12 opacity-40" />
-        <p class="text-sm">No se pudo generar la insignia.</p>
+        <p class="text-sm">{{ t('teacher.badges.generate_error') }}</p>
         <Button variant="primary" size="sm" @click="$emit('retry')">
           <ArrowPathIcon class="w-4 h-4 mr-2" />
           Reintentar
@@ -72,6 +72,8 @@
 </template>
 
 <script setup lang="ts">
+const { t } = useI18n()
+
 import {
   TrophyIcon,
   SparklesIcon,
