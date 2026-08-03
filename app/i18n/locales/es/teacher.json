@@ -368,6 +368,7 @@
             "province_label": "Provincia",
             "metadata_none": "Sin especificar",
             "metadata_search": "Buscar...",
+            "subject_needs_level": "Elige primero el nivel",
             "publish_title": "Publicar como plantilla",
             "publish_hint": "Compártela en el marketplace para que otros profesores la importen.",
             "publish_missing_metadata": "Guarda asignatura, nivel e idioma antes de publicar.",

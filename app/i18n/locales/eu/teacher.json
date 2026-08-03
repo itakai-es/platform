@@ -353,6 +353,7 @@
             "province_label": "Probintzia",
             "metadata_none": "Zehaztu gabe",
             "metadata_search": "Bilatu...",
+            "subject_needs_level": "Aukeratu maila lehenik",
             "publish_title": "Argitaratu txantiloi gisa",
             "publish_hint": "Partekatu marketplacean beste irakasle batzuek inporta dezaten.",
             "publish_missing_metadata": "Gorde gaia, maila eta hizkuntza argitaratu aurretik.",

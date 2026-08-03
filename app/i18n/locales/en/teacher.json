@@ -353,6 +353,7 @@
             "province_label": "Province",
             "metadata_none": "Not specified",
             "metadata_search": "Search...",
+            "subject_needs_level": "Choose a level first",
             "publish_title": "Publish as template",
             "publish_hint": "Share it in the marketplace so other teachers can import it.",
             "publish_missing_metadata": "Save subject, level and language before publishing.",

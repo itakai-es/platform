@@ -54,18 +54,18 @@
                   </div>
                   <div>
                     <label class="text-sm font-medium text-text-primary mb-1.5 block">
-                      {{ t('teacher.classes.detail.settings.general.subject_label') }}
+                      {{ t('teacher.classes.detail.settings.general.province_label') }}
                     </label>
                     <SelectDropdown
-                      :model-value="meta.subject"
-                      :error="showMetaErrors && !meta.subject"
-                      :options="subjectOptions"
+                      :model-value="meta.province"
+                      :error="showMetaErrors && !meta.province"
+                      :options="provinceOptions"
                       searchable
                       :placeholder="t('teacher.classes.detail.settings.general.metadata_none')"
                       :search-placeholder="
                         t('teacher.classes.detail.settings.general.metadata_search')
                       "
-                      @update:model-value="meta.subject = String($event)"
+                      @update:model-value="meta.province = String($event)"
                     />
                   </div>
                   <div>
@@ -82,18 +82,23 @@
                   </div>
                   <div>
                     <label class="text-sm font-medium text-text-primary mb-1.5 block">
-                      {{ t('teacher.classes.detail.settings.general.province_label') }}
+                      {{ t('teacher.classes.detail.settings.general.subject_label') }}
                     </label>
                     <SelectDropdown
-                      :model-value="meta.province"
-                      :error="showMetaErrors && !meta.province"
-                      :options="provinceOptions"
+                      :model-value="meta.subject"
+                      :disabled="!meta.educationLevel"
+                      :error="showMetaErrors && !meta.subject"
+                      :options="subjectOptions"
                       searchable
-                      :placeholder="t('teacher.classes.detail.settings.general.metadata_none')"
+                      :placeholder="
+                        meta.educationLevel
+                          ? t('teacher.classes.detail.settings.general.metadata_none')
+                          : t('teacher.classes.detail.settings.general.subject_needs_level')
+                      "
                       :search-placeholder="
                         t('teacher.classes.detail.settings.general.metadata_search')
                       "
-                      @update:model-value="meta.province = String($event)"
+                      @update:model-value="meta.subject = String($event)"
                     />
                   </div>
                 </div>
@@ -761,7 +766,7 @@ import {
 import { renderPageMarkdown } from '~/utils/markdown'
 import { emptyScheduleConfig, type ScheduleConfig } from '~/types/schedule.types'
 import {
-  CLASS_SUBJECTS,
+  subjectsForLevel,
   CLASS_EDUCATION_LEVELS,
   CLASS_LANGUAGES,
   SPANISH_PROVINCES,
@@ -837,8 +842,19 @@ const noneOption = computed(() => ({
   label: t('teacher.classes.detail.settings.general.metadata_none'),
 }))
 const languageOptions = CLASS_LANGUAGES
-const subjectOptions = computed(() => [noneOption.value, ...CLASS_SUBJECTS])
+// La asignatura depende del nivel: cada nivel tiene su propio catálogo.
+const subjectOptions = computed(() => [noneOption.value, ...subjectsForLevel(meta.educationLevel)])
 const educationLevelOptions = computed(() => [noneOption.value, ...CLASS_EDUCATION_LEVELS])
+
+// Al cambiar el nivel, una asignatura del catálogo anterior deja de ser válida.
+watch(
+  () => meta.educationLevel,
+  () => {
+    if (meta.subject && !subjectsForLevel(meta.educationLevel).some(o => o.value === meta.subject)) {
+      meta.subject = ''
+    }
+  }
+)
 const provinceOptions = computed(() => [noneOption.value, ...SPANISH_PROVINCES])
 
 // Los metadatos son obligatorios para poder empezar a crear la clase.

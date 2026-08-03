@@ -353,6 +353,7 @@
             "province_label": "Provincia",
             "metadata_none": "Sen especificar",
             "metadata_search": "Buscar...",
+            "subject_needs_level": "Escolle primeiro o nivel",
             "publish_title": "Publicar como modelo",
             "publish_hint": "Compárteo no marketplace para que outros profesores o importen.",
             "publish_missing_metadata": "Garda materia, nivel e idioma antes de publicar.",

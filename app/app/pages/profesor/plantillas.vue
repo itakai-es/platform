@@ -25,7 +25,7 @@
       <template #filters>
         <MultiSelectDropdown
           :model-value="fSubjects"
-          :options="CLASS_SUBJECTS"
+          :options="CLASS_SUBJECTS_ALL"
           :all-label="t('teacher.templates.filter_all.subject')"
           :plural-label="t('teacher.templates.plural.subjects')"
           @update:model-value="fSubjects = $event"
@@ -154,7 +154,7 @@ import {
   LanguageIcon,
 } from '@heroicons/vue/24/outline'
 import {
-  CLASS_SUBJECTS,
+  CLASS_SUBJECTS_ALL,
   CLASS_EDUCATION_LEVELS,
   CLASS_LANGUAGES,
   SPANISH_PROVINCES,

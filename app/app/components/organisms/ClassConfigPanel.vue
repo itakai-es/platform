@@ -33,32 +33,6 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
               <label class="text-sm font-medium text-text-primary mb-2 block">
-                {{ t('teacher.classes.detail.settings.general.subject_label') }}
-              </label>
-              <SelectDropdown
-                :model-value="general.subject"
-                :options="subjectOptions"
-                searchable
-                :error="publishErrors.subject"
-                :placeholder="t('teacher.classes.detail.settings.general.metadata_none')"
-                :search-placeholder="t('teacher.classes.detail.settings.general.metadata_search')"
-                @update:model-value="setSubject"
-              />
-            </div>
-            <div>
-              <label class="text-sm font-medium text-text-primary mb-2 block">
-                {{ t('teacher.classes.detail.settings.general.level_label') }}
-              </label>
-              <SelectDropdown
-                :model-value="general.educationLevel"
-                :options="educationLevelOptions"
-                :error="publishErrors.educationLevel"
-                :placeholder="t('teacher.classes.detail.settings.general.metadata_none')"
-                @update:model-value="setEducationLevel"
-              />
-            </div>
-            <div>
-              <label class="text-sm font-medium text-text-primary mb-2 block">
                 {{ t('teacher.classes.detail.settings.general.language_label') }}
               </label>
               <SelectDropdown
@@ -80,6 +54,37 @@
                 :placeholder="t('teacher.classes.detail.settings.general.metadata_none')"
                 :search-placeholder="t('teacher.classes.detail.settings.general.metadata_search')"
                 @update:model-value="general.province = String($event)"
+              />
+            </div>
+            <div>
+              <label class="text-sm font-medium text-text-primary mb-2 block">
+                {{ t('teacher.classes.detail.settings.general.level_label') }}
+              </label>
+              <SelectDropdown
+                :model-value="general.educationLevel"
+                :options="educationLevelOptions"
+                :error="publishErrors.educationLevel"
+                :placeholder="t('teacher.classes.detail.settings.general.metadata_none')"
+                @update:model-value="setEducationLevel"
+              />
+            </div>
+            <div>
+              <label class="text-sm font-medium text-text-primary mb-2 block">
+                {{ t('teacher.classes.detail.settings.general.subject_label') }}
+              </label>
+              <SelectDropdown
+                :model-value="general.subject"
+                :disabled="!general.educationLevel"
+                :options="subjectOptions"
+                searchable
+                :error="publishErrors.subject"
+                :placeholder="
+                  general.educationLevel
+                    ? t('teacher.classes.detail.settings.general.metadata_none')
+                    : t('teacher.classes.detail.settings.general.subject_needs_level')
+                "
+                :search-placeholder="t('teacher.classes.detail.settings.general.metadata_search')"
+                @update:model-value="setSubject"
               />
             </div>
           </div>
@@ -359,7 +364,7 @@ import {
 } from '~/utils/class-settings'
 import {
   CLASS_LANGUAGES,
-  CLASS_SUBJECTS,
+  subjectsForLevel,
   CLASS_EDUCATION_LEVELS,
   SPANISH_PROVINCES,
 } from '~/utils/class-metadata'
@@ -459,6 +464,11 @@ function setSubject(v: string | number) {
 function setEducationLevel(v: string | number) {
   general.value.educationLevel = String(v)
   publishErrors.value.educationLevel = false
+  // La asignatura del nivel anterior deja de ser válida en el nuevo catálogo.
+  const subj = general.value.subject
+  if (subj && !subjectsForLevel(general.value.educationLevel).some(o => o.value === subj)) {
+    general.value.subject = ''
+  }
 }
 function setLanguage(v: string | number) {
   general.value.language = String(v)
@@ -517,7 +527,18 @@ const noneOption = computed(() => ({
   value: '',
   label: t('teacher.classes.detail.settings.general.metadata_none'),
 }))
-const subjectOptions = computed(() => [noneOption.value, ...CLASS_SUBJECTS])
+// La asignatura depende del nivel. Si la clase guarda una asignatura de un
+// catálogo anterior (o de otro nivel), se añade al final para no dejar el
+// select "vacío" hasta que el profesor elija una del catálogo vigente.
+const subjectOptions = computed(() => {
+  const options = subjectsForLevel(general.value.educationLevel)
+  const current = general.value.subject
+  const legacy =
+    current && !options.some(o => o.value === current)
+      ? [{ value: current, label: current }]
+      : []
+  return [noneOption.value, ...options, ...legacy]
+})
 const languageOptions = computed(() => [noneOption.value, ...CLASS_LANGUAGES])
 const educationLevelOptions = computed(() => [noneOption.value, ...CLASS_EDUCATION_LEVELS])
 const provinceOptions = computed(() => [noneOption.value, ...SPANISH_PROVINCES])
