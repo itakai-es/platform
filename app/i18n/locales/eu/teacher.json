@@ -112,7 +112,10 @@
           "attach_materials": "Erantsi materialak (PDF, Word, irudiak)",
           "attach_processing": "Materialak prozesatzen…",
           "attach_remove": "Kendu",
-          "attach_error": "Ezin izan dira materialak prozesatu."
+          "attach_error": "Ezin izan dira materialak prozesatu.",
+          "attach_hint": "Gehienez {max} MB fitxategiko",
+          "attach_error_size": "«{name}» fitxategiak {size} MB ditu. Gehienez {max} MB fitxategi bakoitzeko.",
+          "attach_error_too_large": "Materialek gehiegi pisatzen dute guztira. Banaka igo itzazu (gehienez {max} MB fitxategiko)."
         }
       },
       "detail": {

@@ -142,6 +142,13 @@
                         : t('teacher.classes.create.onboarding.attach_materials')
                     }}
                   </button>
+                  <!-- El tope se avisa antes de elegir archivo: si no, el profe
+                       se entera al fallar la subida. -->
+                  <span v-if="!extractingDocs" class="ml-2 text-xs text-navy-700/50">
+                    {{
+                      t('teacher.classes.create.onboarding.attach_hint', { max: MAX_MATERIAL_MB })
+                    }}
+                  </span>
 
                   <!-- Archivos subidos: tarjeta con icono coloreado según el formato,
                        al estilo de los documentos de apoyo de las misiones. -->
@@ -946,11 +953,29 @@ function docBg(kind: string) {
   return map[kind] || 'bg-gray-400' // unsupported / desconocido
 }
 
+// Tope por archivo. Va por debajo del límite del proxy y del API (50MB) para
+// que el profe vea un aviso claro en vez de un 413 opaco a mitad de subida.
+// Estos materiales no se guardan en disco: se leen en memoria y solo se queda
+// el texto extraído (8.000 caracteres por archivo), así que no compensa
+// aceptar ficheros enormes.
+const MAX_MATERIAL_MB = 15
+
 async function handleMaterialsUpload(event: Event) {
   const input = event.target as HTMLInputElement
   const files = Array.from(input.files || [])
   input.value = ''
   if (!files.length) return
+  const tooBig = files.find(f => f.size > MAX_MATERIAL_MB * 1024 * 1024)
+  if (tooBig) {
+    toast.error(
+      t('teacher.classes.create.onboarding.attach_error_size', {
+        name: tooBig.name,
+        size: (tooBig.size / (1024 * 1024)).toFixed(1),
+        max: MAX_MATERIAL_MB,
+      })
+    )
+    return
+  }
   extractingDocs.value = true
   try {
     const fd = new FormData()
@@ -961,8 +986,15 @@ async function handleMaterialsUpload(event: Event) {
       { method: 'POST', body: fd }
     )
     docSources.value = [...docSources.value, ...res.sources]
-  } catch {
-    toast.error(t('teacher.classes.create.onboarding.attach_error'))
+  } catch (err: unknown) {
+    // 413: el conjunto pasa del límite del proxy aunque cada archivo entre.
+    const status = (err as { response?: { status?: number }; statusCode?: number })?.response
+      ?.status ?? (err as { statusCode?: number })?.statusCode
+    toast.error(
+      status === 413
+        ? t('teacher.classes.create.onboarding.attach_error_too_large', { max: MAX_MATERIAL_MB })
+        : t('teacher.classes.create.onboarding.attach_error')
+    )
   } finally {
     extractingDocs.value = false
   }

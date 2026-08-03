@@ -112,7 +112,10 @@
           "attach_materials": "Anexar materiais (PDF, Word, imaxes)",
           "attach_processing": "Procesando materiais…",
           "attach_remove": "Quitar",
-          "attach_error": "Non se puideron procesar os materiais."
+          "attach_error": "Non se puideron procesar os materiais.",
+          "attach_hint": "Máx. {max} MB por ficheiro",
+          "attach_error_size": "«{name}» pesa {size} MB. O máximo é {max} MB por ficheiro.",
+          "attach_error_too_large": "Os materiais pesan demasiado en conxunto. Súbeos un a un (máx. {max} MB por ficheiro)."
         }
       },
       "detail": {

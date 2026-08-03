@@ -124,7 +124,10 @@
           "attach_materials": "Adjuntar materiales (PDF, Word, imágenes)",
           "attach_processing": "Procesando materiales…",
           "attach_remove": "Quitar",
-          "attach_error": "No se pudieron procesar los materiales."
+          "attach_error": "No se pudieron procesar los materiales.",
+          "attach_hint": "Máx. {max} MB por archivo",
+          "attach_error_size": "«{name}» pesa {size} MB. El máximo es {max} MB por archivo.",
+          "attach_error_too_large": "Los materiales pesan demasiado en conjunto. Súbelos de uno en uno (máx. {max} MB por archivo)."
         },
         "meta": {
           "title": "Crear Nueva Clase | ITAKAI Profesor"
