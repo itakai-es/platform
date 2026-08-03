@@ -47,7 +47,9 @@
         <div class="flex items-center gap-3">
           <slot name="titleIcon" />
           <div class="min-w-0 flex-1">
-            <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-white break-all">
+            <!-- break-words (no break-all): parte por espacios y solo trocea una
+                 palabra si por sí sola no cabe, así "Gringotts" no queda cortado. -->
+            <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-white break-words">
               {{ name }}
             </h1>
             <p v-if="$slots.subtitle" class="text-white/70 text-sm sm:text-base">
