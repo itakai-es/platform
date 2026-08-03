@@ -103,11 +103,11 @@
           </h3>
 
           <div class="mt-3 flex flex-wrap gap-1.5">
-            <Badge v-if="tpl.subject" variant="info" size="sm" class="gap-1">
-              <BookOpenIcon class="h-3.5 w-3.5" />{{ tpl.subject }}
-            </Badge>
             <Badge v-if="tpl.educationLevel" variant="info" size="sm" class="gap-1">
               <AcademicCapIcon class="h-3.5 w-3.5" />{{ tpl.educationLevel }}
+            </Badge>
+            <Badge v-if="tpl.subject" variant="info" size="sm" class="gap-1">
+              <BookOpenIcon class="h-3.5 w-3.5" />{{ tpl.subject }}
             </Badge>
             <Badge v-if="tpl.language" variant="info" size="sm" class="gap-1">
               <LanguageIcon class="h-3.5 w-3.5" />{{ tpl.language }}
@@ -210,9 +210,9 @@ const fLanguages = ref<string[]>([])
 const fProvinces = ref<string[]>([])
 const sort = ref('recent')
 
-// El filtro de asignaturas se estrecha a los niveles marcados (como en el
-// wizard); sin niveles muestra la unión de todos los catálogos. Las asignaturas
-// marcadas que queden fuera al cambiar de nivel se sueltan solas.
+// El filtro de asignaturas funciona como en el wizard: bloqueado hasta marcar
+// algún nivel, y estrechado al catálogo de los niveles marcados. Las
+// asignaturas marcadas que queden fuera al cambiar de nivel se sueltan solas.
 const subjectFilterOptions = computed(() => subjectsForLevels(fLevels.value))
 watch(fLevels, () => {
   const valid = new Set(subjectFilterOptions.value.map(o => o.value))
