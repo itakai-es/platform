@@ -128,12 +128,20 @@
           "attach_error": "Nun se pudieron procesar los materiales.",
           "attach_error_size": "«{name}» pesa {size} MB. El máximu son {max} MB por ficheru.",
           "attach_error_too_large": "Los materiales pesen enforma en conxuntu. Xúbilos d'ún n'ún (máx. {max} MB por ficheru).",
-          "attach_hint": "Máx. {max} MB por ficheru"
+          "attach_hint": "Máx. {max} MB por ficheru",
+          "guide_question": "Preparé una guía pa los tos alumnos"
         },
         "meta": {
           "title": "Crear una clase nueva | ITAKAI Profesor"
         },
-        "narrative_error": "Nun pudi crear la narrativa"
+        "narrative_error": "Nun pudi crear la narrativa",
+        "summary": {
+          "edit": "Editar",
+          "edit_title": "Títulu",
+          "edit_cover": "Portada",
+          "editing_hint": "Tas editando una clase que yá tienes llista.",
+          "back_to_summary": "Volver al resume"
+        }
       },
       "detail": {
         "breadcrumb_classes": "Les mios clases",
@@ -912,7 +920,9 @@
       "section_cover": "Portada",
       "wizard_question": "Ponle un horariu y una portada a la to clase",
       "cancel": "Encaboxar",
-      "done": "Fecho"
+      "done": "Fecho",
+      "wizard_question_schedule": "Ponle un horariu a la to clase",
+      "wizard_question_cover": "Agora, una portada pa la to clase"
     },
     "submissions": {
       "subtitle": "Revisa y aprueba les entregues d'esta clase dende una sola pantalla.",

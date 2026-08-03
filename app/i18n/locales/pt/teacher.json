@@ -128,12 +128,20 @@
           "attach_error": "Não foi possível processar os materiais.",
           "attach_error_size": "«{name}» tem {size} MB. O máximo são {max} MB por ficheiro.",
           "attach_error_too_large": "Os materiais são demasiado pesados no conjunto. Carrega-os um a um (máx. {max} MB por ficheiro).",
-          "attach_hint": "Máx. {max} MB por ficheiro"
+          "attach_hint": "Máx. {max} MB por ficheiro",
+          "guide_question": "Preparei um guia para os teus alunos"
         },
         "meta": {
           "title": "Criar nova turma | ITAKAI Professor"
         },
-        "narrative_error": "Não consegui criar a narrativa"
+        "narrative_error": "Não consegui criar a narrativa",
+        "summary": {
+          "edit": "Editar",
+          "edit_title": "Título",
+          "edit_cover": "Capa",
+          "editing_hint": "Estás a editar uma turma que já está pronta.",
+          "back_to_summary": "Voltar ao resumo"
+        }
       },
       "detail": {
         "breadcrumb_classes": "As minhas turmas",
@@ -912,7 +920,9 @@
       "section_cover": "Capa",
       "wizard_question": "Dá um horário e uma capa à tua turma",
       "cancel": "Cancelar",
-      "done": "Concluído"
+      "done": "Concluído",
+      "wizard_question_schedule": "Define um horário para a tua turma",
+      "wizard_question_cover": "Agora, uma capa para a tua turma"
     },
     "submissions": {
       "subtitle": "Revê e aprova as entregas desta turma a partir de um único ecrã.",

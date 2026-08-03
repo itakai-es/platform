@@ -128,12 +128,20 @@
           "attach_error": "Materialele nu au putut fi procesate.",
           "attach_error_size": "„{name}” are {size} MB. Maximul este {max} MB per fișier.",
           "attach_error_too_large": "Materialele sunt prea mari în total. Încarcă-le pe rând (max. {max} MB per fișier).",
-          "attach_hint": "Max. {max} MB per fișier"
+          "attach_hint": "Max. {max} MB per fișier",
+          "guide_question": "Am pregătit un ghid pentru elevii tăi"
         },
         "meta": {
           "title": "Creează o clasă nouă | ITAKAI Profesor"
         },
-        "narrative_error": "Nu am reușit să creez narațiunea"
+        "narrative_error": "Nu am reușit să creez narațiunea",
+        "summary": {
+          "edit": "Editează",
+          "edit_title": "Titlu",
+          "edit_cover": "Copertă",
+          "editing_hint": "Editezi o clasă care este deja gata.",
+          "back_to_summary": "Înapoi la rezumat"
+        }
       },
       "detail": {
         "breadcrumb_classes": "Clasele mele",
@@ -912,7 +920,9 @@
       "section_cover": "Copertă",
       "wizard_question": "Dă-i clasei tale un orar și o copertă",
       "cancel": "Anulează",
-      "done": "Gata"
+      "done": "Gata",
+      "wizard_question_schedule": "Stabilește un orar pentru clasa ta",
+      "wizard_question_cover": "Acum, o copertă pentru clasa ta"
     },
     "submissions": {
       "subtitle": "Verifică și aprobă lucrările acestei clase dintr-un singur ecran.",
