@@ -25,7 +25,7 @@
       <template #filters>
         <MultiSelectDropdown
           :model-value="fSubjects"
-          :options="CLASS_SUBJECTS_ALL"
+          :options="subjectFilterOptions"
           :all-label="t('teacher.templates.filter_all.subject')"
           :plural-label="t('teacher.templates.plural.subjects')"
           @update:model-value="fSubjects = $event"
@@ -154,7 +154,7 @@ import {
   LanguageIcon,
 } from '@heroicons/vue/24/outline'
 import {
-  CLASS_SUBJECTS_ALL,
+  subjectsForLevels,
   CLASS_EDUCATION_LEVELS,
   CLASS_LANGUAGES,
   SPANISH_PROVINCES,
@@ -208,6 +208,15 @@ const fLevels = ref<string[]>([])
 const fLanguages = ref<string[]>([])
 const fProvinces = ref<string[]>([])
 const sort = ref('recent')
+
+// El filtro de asignaturas se estrecha a los niveles marcados (como en el
+// wizard); sin niveles muestra la unión de todos los catálogos. Las asignaturas
+// marcadas que queden fuera al cambiar de nivel se sueltan solas.
+const subjectFilterOptions = computed(() => subjectsForLevels(fLevels.value))
+watch(fLevels, () => {
+  const valid = new Set(subjectFilterOptions.value.map(o => o.value))
+  fSubjects.value = fSubjects.value.filter(s => valid.has(s))
+})
 
 const sortOptions = computed(() => [
   { value: 'recent', label: t('teacher.templates.sort.recent') },

@@ -200,16 +200,32 @@ export function subjectsForLevel(level?: string | null): MetaOption[] {
   return (level && CLASS_SUBJECTS_BY_LEVEL[level]) || CLASS_SUBJECTS
 }
 
+/** Une catálogos sin duplicados, con "Otra" siempre al final. */
+const mergeSubjects = (catalogs: MetaOption[][]): MetaOption[] => {
+  const seen = new Set<string>()
+  const unique = catalogs
+    .flat()
+    .filter(o => o.value !== 'Otra' && !seen.has(o.value) && seen.add(o.value))
+  return [...unique, { value: 'Otra', label: 'Otra' }]
+}
+
 /**
- * Unión (sin duplicados) del catálogo genérico y los de todos los niveles.
+ * Unión del catálogo genérico y los de todos los niveles.
  * Para filtros que cruzan niveles, como el marketplace de plantillas.
  */
-export const CLASS_SUBJECTS_ALL: MetaOption[] = (() => {
-  const seen = new Set<string>()
-  const all = [...CLASS_SUBJECTS, ...Object.values(CLASS_SUBJECTS_BY_LEVEL).flat()]
-  const unique = all.filter(o => o.value !== 'Otra' && !seen.has(o.value) && seen.add(o.value))
-  return [...unique, { value: 'Otra', label: 'Otra' }]
-})()
+export const CLASS_SUBJECTS_ALL: MetaOption[] = mergeSubjects([
+  CLASS_SUBJECTS,
+  ...Object.values(CLASS_SUBJECTS_BY_LEVEL),
+])
+
+/**
+ * Asignaturas aplicables a un conjunto de niveles (filtros multi-selección).
+ * Sin niveles elegidos devuelve la unión completa.
+ */
+export function subjectsForLevels(levels: string[]): MetaOption[] {
+  if (!levels.length) return CLASS_SUBJECTS_ALL
+  return mergeSubjects(levels.map(l => subjectsForLevel(l)))
+}
 
 /** Las 50 provincias españolas. */
 export const SPANISH_PROVINCES = toOptions([
