@@ -48,3 +48,20 @@ export function emptyScheduleConfig(): ScheduleConfig {
     overrides: {},
   }
 }
+
+/** Un tramo tiene contenido si el profesor ha rellenado algo en él. */
+export function scheduleSlotHasContent(s: ScheduleConfig): boolean {
+  return s.weekdays.length > 0 || !!s.startDate || !!s.start
+}
+
+/**
+ * Normaliza el valor guardado en la columna `scheduleConfig` a lista de tramos:
+ * acepta el objeto único de las clases antiguas, el array nuevo o null, y
+ * garantiza al menos un tramo vacío para el editor.
+ */
+export function normalizeScheduleSlots(
+  v?: ScheduleConfig | ScheduleConfig[] | null
+): ScheduleConfig[] {
+  const list = (Array.isArray(v) ? v : v ? [v] : []).filter(Boolean)
+  return list.length ? list : [emptyScheduleConfig()]
+}

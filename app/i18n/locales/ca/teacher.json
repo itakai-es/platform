@@ -878,6 +878,8 @@
       "starts_on": "Comença el",
       "time": "Hora",
       "recurrence": "Periodicitat",
+      "add_slot": "Afegir horari",
+      "remove_slot": "Treure horari",
       "preview": "Vista prèvia",
       "previous": "Horari anterior",
       "choose_days": "Tria els dies de classe",

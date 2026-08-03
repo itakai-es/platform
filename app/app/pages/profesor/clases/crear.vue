@@ -762,7 +762,11 @@ import {
   DocumentIcon,
 } from '@heroicons/vue/24/outline'
 import { renderPageMarkdown } from '~/utils/markdown'
-import { emptyScheduleConfig, type ScheduleConfig } from '~/types/schedule.types'
+import {
+  emptyScheduleConfig,
+  scheduleSlotHasContent,
+  type ScheduleConfig,
+} from '~/types/schedule.types'
 import {
   subjectsForLevel,
   CLASS_EDUCATION_LEVELS,
@@ -871,7 +875,7 @@ const titles = ref<string[]>([])
 const selectedTitle = ref('')
 const customTitle = ref('')
 const chosenTitle = computed(() => customTitle.value.trim() || selectedTitle.value)
-const scheduleConfig = ref<ScheduleConfig>(emptyScheduleConfig())
+const scheduleConfig = ref<ScheduleConfig[]>([emptyScheduleConfig()])
 // Texto legible derivado del patrón semanal (para el campo `schedule` y las tarjetas).
 const { scheduleText: schedule } = useClassCalendar(scheduleConfig)
 const generatedImageUrl = ref('')
@@ -1388,9 +1392,10 @@ async function handleSubmit() {
       }
     }
     // Guardar la configuración de horario si el profe la rellenó (no bloquea el alta).
-    if (res.class.id && (scheduleConfig.value.weekdays.length || scheduleConfig.value.startDate)) {
+    const filledSlots = scheduleConfig.value.filter(scheduleSlotHasContent)
+    if (res.class.id && filledSlots.length) {
       try {
-        await classesStore.updateClass(res.class.id, { scheduleConfig: scheduleConfig.value })
+        await classesStore.updateClass(res.class.id, { scheduleConfig: filledSlots })
       } catch {
         /* schedule save failed silently - teacher can edit later */
       }

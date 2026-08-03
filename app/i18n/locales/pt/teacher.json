@@ -878,6 +878,8 @@
       "starts_on": "Começa a",
       "time": "Hora",
       "recurrence": "Periodicidade",
+      "add_slot": "Adicionar horário",
+      "remove_slot": "Remover horário",
       "preview": "Pré-visualização",
       "previous": "Horário anterior",
       "choose_days": "Escolher os dias de aula",

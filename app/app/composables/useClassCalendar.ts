@@ -100,16 +100,20 @@ export function useRecurrenceText() {
 
 /**
  * useClassCalendar - Deriva el texto legible del horario (en el idioma activo)
- * para el campo `schedule` que muestran las tarjetas.
+ * para el campo `schedule` que muestran las tarjetas. Acepta un tramo único
+ * (clases antiguas) o la lista de tramos; los tramos se unen con "; ".
  */
-export function useClassCalendar(config: Ref<ScheduleConfig>) {
+export function useClassCalendar(config: Ref<ScheduleConfig | ScheduleConfig[]>) {
   const { describe } = useRecurrenceText()
-  const scheduleText = computed(() => {
-    const c = config.value
+  const slotText = (c: ScheduleConfig): string => {
     // Sin días elegidos en modo semanal = incompleto → sin texto.
     if (c.freq === 'weekly' && c.weekdays.length === 0) return ''
     const time = c.start && c.end ? ` ${c.start}-${c.end}` : ''
     return `${describe(c, c.startDate)}${time}`.trim()
+  }
+  const scheduleText = computed(() => {
+    const v = config.value
+    return (Array.isArray(v) ? v : [v]).map(slotText).filter(Boolean).join('; ')
   })
   return { scheduleText }
 }

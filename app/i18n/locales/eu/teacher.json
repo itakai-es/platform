@@ -878,6 +878,8 @@
       "starts_on": "Noiz hasten den",
       "time": "Ordua",
       "recurrence": "Maiztasuna",
+      "add_slot": "Gehitu ordutegia",
+      "remove_slot": "Kendu ordutegia",
       "preview": "Aurrebista",
       "previous": "Aurreko ordutegia",
       "choose_days": "Aukeratu klase-egunak",

@@ -878,6 +878,8 @@
       "starts_on": "Începe pe",
       "time": "Ora",
       "recurrence": "Recurență",
+      "add_slot": "Adaugă orar",
+      "remove_slot": "Elimină orarul",
       "preview": "Previzualizare",
       "previous": "Orarul anterior",
       "choose_days": "Alege zilele de curs",

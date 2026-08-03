@@ -356,7 +356,11 @@ import XpIcon from '~/components/atoms/XpIcon.vue'
 import LifeIcon from '~/components/atoms/LifeIcon.vue'
 import type { Component } from 'vue'
 import type { ClassSettings, LevelConfig } from '~/types/class.types'
-import { emptyScheduleConfig, type ScheduleConfig } from '~/types/schedule.types'
+import {
+  normalizeScheduleSlots,
+  scheduleSlotHasContent,
+  type ScheduleConfig,
+} from '~/types/schedule.types'
 import {
   resolveClassSettings,
   coerceClassSettings,
@@ -394,7 +398,7 @@ const props = defineProps<{
     invitationCode?: string
     settings?: Partial<ClassSettings> | null
     levelConfig?: LevelConfig | null
-    scheduleConfig?: ScheduleConfig | null
+    scheduleConfig?: ScheduleConfig | ScheduleConfig[] | null
   } | null
 }>()
 
@@ -437,22 +441,22 @@ const general = ref<GeneralData>(buildGeneral())
 const generalSnapshot = ref<GeneralData>(buildGeneral())
 const savingGeneral = ref(false)
 
-// Horario: el calendario edita una config estructurada que se persiste en la
-// columna `scheduleConfig`. `scheduleText` deriva el resumen para el campo
+// Horario: el calendario edita una lista de tramos que se persiste en la
+// columna `scheduleConfig` (las clases antiguas guardan un objeto único; se
+// normaliza a lista al leer). `scheduleText` deriva el resumen para el campo
 // `schedule` (string) que muestran las tarjetas.
-const buildScheduleConfig = (): ScheduleConfig =>
-  props.classData?.scheduleConfig
-    ? (JSON.parse(JSON.stringify(props.classData.scheduleConfig)) as ScheduleConfig)
-    : emptyScheduleConfig()
-const scheduleConfig = ref<ScheduleConfig>(buildScheduleConfig())
-const scheduleConfigSnapshot = ref<ScheduleConfig>(buildScheduleConfig())
+const buildScheduleConfig = (): ScheduleConfig[] =>
+  normalizeScheduleSlots(
+    props.classData?.scheduleConfig
+      ? (JSON.parse(JSON.stringify(props.classData.scheduleConfig)) as
+          | ScheduleConfig
+          | ScheduleConfig[])
+      : null
+  )
+const scheduleConfig = ref<ScheduleConfig[]>(buildScheduleConfig())
+const scheduleConfigSnapshot = ref<ScheduleConfig[]>(buildScheduleConfig())
 const { scheduleText } = useClassCalendar(scheduleConfig)
-const hasScheduleConfig = computed(
-  () =>
-    scheduleConfig.value.weekdays.length > 0 ||
-    !!scheduleConfig.value.startDate ||
-    !!scheduleConfig.value.start
-)
+const hasScheduleConfig = computed(() => scheduleConfig.value.some(scheduleSlotHasContent))
 
 // Setters de los selects de metadatos. Se extraen a métodos porque Prettier
 // expande los handlers inline multi-sentencia a varias líneas y el compilador
@@ -518,7 +522,9 @@ const generalDirty = computed(() => {
 
 function resetGeneral() {
   general.value = { ...generalSnapshot.value }
-  scheduleConfig.value = JSON.parse(JSON.stringify(scheduleConfigSnapshot.value)) as ScheduleConfig
+  scheduleConfig.value = JSON.parse(
+    JSON.stringify(scheduleConfigSnapshot.value)
+  ) as ScheduleConfig[]
 }
 
 // --------- Clasificación (asignatura / nivel / idioma / provincia) ---------
@@ -647,13 +653,16 @@ async function saveGeneral() {
       educationLevel: payload.educationLevel,
       province: payload.province,
       // Solo enviamos la config si corresponde persistir (ver `persistSchedule`).
-      ...(persistSchedule ? { scheduleConfig: scheduleConfig.value } : {}),
+      // Los tramos vacíos (añadidos y sin rellenar) no se guardan.
+      ...(persistSchedule
+        ? { scheduleConfig: scheduleConfig.value.filter(scheduleSlotHasContent) }
+        : {}),
     })
     generalSnapshot.value = { ...payload }
     general.value = { ...payload }
     scheduleConfigSnapshot.value = JSON.parse(
       JSON.stringify(scheduleConfig.value)
-    ) as ScheduleConfig
+    ) as ScheduleConfig[]
     emit('general-update', payload)
     toast.success(t('teacher.classes.detail.settings.general.toast_saved'))
   } catch (err: unknown) {

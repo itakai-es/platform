@@ -61,7 +61,8 @@ export interface Class {
   province?: string
   isTemplate?: boolean
   settings?: ClassSettings
-  scheduleConfig?: ScheduleConfig
+  /** Tramos de horario; las clases antiguas guardan un objeto único. */
+  scheduleConfig?: ScheduleConfig | ScheduleConfig[]
   createdAt: Date
   updatedAt: Date
   // Estadísticas calculadas (opcionales, se añaden en el handler)
@@ -117,7 +118,7 @@ export interface UpdateClassData {
   province?: string
   settings?: Partial<ClassSettings>
   levelConfig?: LevelConfig
-  scheduleConfig?: ScheduleConfig
+  scheduleConfig?: ScheduleConfig | ScheduleConfig[]
 }
 
 /**

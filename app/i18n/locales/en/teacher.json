@@ -878,6 +878,8 @@
       "starts_on": "Starts on",
       "time": "Time",
       "recurrence": "Repeat",
+      "add_slot": "Add schedule",
+      "remove_slot": "Remove schedule",
       "preview": "Preview",
       "previous": "Previous schedule",
       "choose_days": "Choose class days",
