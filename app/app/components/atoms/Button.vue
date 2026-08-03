@@ -46,7 +46,10 @@ const emit = defineEmits<{
 
 const buttonClasses = computed(() => {
   // Base: siempre píldora (rounded-full), DM Sans font-medium
-  const alignment = props.align === 'left' ? 'justify-start' : 'justify-center'
+  // text-left/text-center: si la etiqueta salta a dos líneas, que siga la
+  // alineación del botón (el user-agent centra el texto de los <button>).
+  const alignment =
+    props.align === 'left' ? 'justify-start text-left' : 'justify-center text-center'
   const base = `inline-flex items-center ${alignment} font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-full`
 
   // Variantes según ITAKAI Official Brand Specs

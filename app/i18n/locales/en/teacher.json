@@ -108,6 +108,7 @@
           "generating_approach": "I'm creating the narrative for your class...",
           "narrative_feedback_placeholder": "E.g.: I want more Hogwarts house references...",
           "btn_change_something": "I want to change something",
+          "btn_edit_by_hand": "Edit by hand",
           "custom_title_placeholder": "Or write your own title...",
           "title_feedback_placeholder": "E.g.: I want shorter titles, with more Harry Potter references...",
           "generating_cover": "Generating cover...",

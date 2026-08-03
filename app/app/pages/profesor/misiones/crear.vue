@@ -55,7 +55,7 @@
                     size="sm"
                     :disabled="!idea.trim() || !selectedClassId || loading"
                     @click="submitIdea"
-                    >Siguiente</Button
+                    >{{ t('teacher.classes.create.onboarding.btn_next') }}</Button
                   >
                 </div>
               </div>
@@ -93,7 +93,7 @@
                           reinténtalo.
                         </p>
                         <div class="flex gap-2">
-                          <Button variant="outline" size="sm" @click="step = 0">Atrás</Button>
+                          <Button variant="outline" size="sm" @click="step = 0">{{ t('teacher.classes.create.onboarding.btn_back') }}</Button>
                           <Button variant="primary" size="sm" @click="submitIdea">
                             <ArrowPathIcon class="w-4 h-4 mr-1.5" />Reintentar
                           </Button>
@@ -133,16 +133,16 @@
                       </button>
                     </div>
                     <div v-if="!loading && !isStreaming && narrative" class="onb-actions">
-                      <Button variant="outline" size="sm" @click="backToStep0">Atrás</Button>
+                      <Button variant="outline" size="sm" @click="backToStep0">{{ t('teacher.classes.create.onboarding.btn_back') }}</Button>
                       <div v-if="!showNarrativeFeedback" class="flex gap-2">
                         <Button variant="outline" size="sm" @click="edit"
-                          ><PencilSquareIcon class="w-4 h-4 mr-1.5" />Editar a mano</Button
+                          ><PencilSquareIcon class="w-4 h-4 mr-1.5" />{{ t('teacher.classes.create.onboarding.btn_edit_by_hand') }}</Button
                         >
                         <Button variant="outline" size="sm" @click="openNarrativeFeedback">
-                          <SparklesIcon class="w-4 h-4 mr-1.5" />Quiero cambiar algo
+                          <SparklesIcon class="w-4 h-4 mr-1.5" />{{ t('teacher.classes.create.onboarding.btn_change_something') }}
                         </Button>
                         <Button variant="primary" size="sm" @click="acceptNarrative"
-                          >Sí, adelante</Button
+                          >{{ t('teacher.classes.create.onboarding.btn_accept_plan') }}</Button
                         >
                       </div>
                     </div>
@@ -233,22 +233,22 @@
                     </button>
                   </div>
                   <div v-if="!showTitleFeedback" class="onb-actions">
-                    <Button variant="outline" size="sm" @click="step = 1">Atrás</Button>
+                    <Button variant="outline" size="sm" @click="step = 1">{{ t('teacher.classes.create.onboarding.btn_back') }}</Button>
                     <div class="flex gap-2">
                       <Button variant="outline" size="sm" @click="openTitleFeedback"
-                        >Quiero cambiar algo</Button
+                        >{{ t('teacher.classes.create.onboarding.btn_change_something') }}</Button
                       >
                       <Button
                         variant="primary"
                         size="sm"
                         :disabled="!chosenTitle"
                         @click="acceptTitle"
-                        >Sí, adelante</Button
+                        >{{ t('teacher.classes.create.onboarding.btn_accept_plan') }}</Button
                       >
                     </div>
                   </div>
                   <div v-else class="onb-actions">
-                    <Button variant="outline" size="sm" @click="step = 1">Atrás</Button>
+                    <Button variant="outline" size="sm" @click="step = 1">{{ t('teacher.classes.create.onboarding.btn_back') }}</Button>
                   </div>
                 </template>
               </div>
@@ -262,7 +262,7 @@
                   </div>
                   <div class="flex-1" />
                   <div class="onb-actions">
-                    <Button variant="outline" size="sm" @click="step = 2">Atrás</Button>
+                    <Button variant="outline" size="sm" @click="step = 2">{{ t('teacher.classes.create.onboarding.btn_back') }}</Button>
                     <Button variant="primary" size="sm" @click="retryEnigmas">Reintentar</Button>
                   </div>
                 </template>
@@ -396,7 +396,7 @@
                       size="sm"
                       :disabled="isStreaming || loading"
                       @click="step = 2"
-                      >Atrás</Button
+                      >{{ t('teacher.classes.create.onboarding.btn_back') }}</Button
                     >
                     <div class="flex gap-2">
                       <Button
@@ -404,14 +404,14 @@
                         size="sm"
                         :disabled="isStreaming || loading"
                         @click="openEnigmaFeedback"
-                        >Quiero cambiar algo</Button
+                        >{{ t('teacher.classes.create.onboarding.btn_change_something') }}</Button
                       >
                       <Button
                         variant="primary"
                         size="sm"
                         :disabled="isStreaming || loading"
                         @click="step = 4"
-                        >Sí, adelante</Button
+                        >{{ t('teacher.classes.create.onboarding.btn_accept_plan') }}</Button
                       >
                     </div>
                   </div>
@@ -421,7 +421,7 @@
                       size="sm"
                       :disabled="isStreaming || loading"
                       @click="step = 2"
-                      >Atrás</Button
+                      >{{ t('teacher.classes.create.onboarding.btn_back') }}</Button
                     >
                   </div>
                 </template>
@@ -458,8 +458,8 @@
                 </div>
                 <div class="flex-1" />
                 <div class="onb-actions">
-                  <Button variant="outline" size="sm" @click="step = 3">Atrás</Button>
-                  <Button variant="primary" size="sm" @click="step = 5">Siguiente</Button>
+                  <Button variant="outline" size="sm" @click="step = 3">{{ t('teacher.classes.create.onboarding.btn_back') }}</Button>
+                  <Button variant="primary" size="sm" @click="step = 5">{{ t('teacher.classes.create.onboarding.btn_next') }}</Button>
                 </div>
               </div>
 
@@ -493,7 +493,7 @@
                     <!-- Acción de la portada, justo bajo la imagen generada -->
                     <div v-if="!showImageFeedback" class="mt-3 flex flex-wrap justify-center gap-2">
                       <Button variant="outline" size="sm" @click="openImageFeedback"
-                        >Quiero cambiar algo</Button
+                        >{{ t('teacher.classes.create.onboarding.btn_change_something') }}</Button
                       >
                     </div>
                   </div>
@@ -539,11 +539,11 @@
                   </button>
                 </div>
                 <div v-if="!isGeneratingImage && !showImageFeedback" class="onb-actions">
-                  <Button variant="outline" size="sm" @click="step = 4">Atrás</Button>
-                  <Button variant="primary" size="sm" @click="step = 6">Sí, adelante</Button>
+                  <Button variant="outline" size="sm" @click="step = 4">{{ t('teacher.classes.create.onboarding.btn_back') }}</Button>
+                  <Button variant="primary" size="sm" @click="step = 6">{{ t('teacher.classes.create.onboarding.btn_accept_plan') }}</Button>
                 </div>
                 <div v-else-if="!isGeneratingImage && showImageFeedback" class="onb-actions">
-                  <Button variant="outline" size="sm" @click="step = 4">Atrás</Button>
+                  <Button variant="outline" size="sm" @click="step = 4">{{ t('teacher.classes.create.onboarding.btn_back') }}</Button>
                 </div>
               </div>
 
@@ -622,25 +622,25 @@
                       "
                       class="onb-actions"
                     >
-                      <Button variant="outline" size="sm" @click="step = 5">Atrás</Button>
+                      <Button variant="outline" size="sm" @click="step = 5">{{ t('teacher.classes.create.onboarding.btn_back') }}</Button>
                       <div class="flex gap-2">
                         <Button variant="outline" size="sm" @click="edit"
-                          ><PencilSquareIcon class="w-4 h-4 mr-1.5" />Editar a mano</Button
+                          ><PencilSquareIcon class="w-4 h-4 mr-1.5" />{{ t('teacher.classes.create.onboarding.btn_edit_by_hand') }}</Button
                         >
                         <Button variant="outline" size="sm" @click="openMissionGuideFeedback">
-                          <SparklesIcon class="w-4 h-4 mr-1.5" />Quiero cambiar algo
+                          <SparklesIcon class="w-4 h-4 mr-1.5" />{{ t('teacher.classes.create.onboarding.btn_change_something') }}
                         </Button>
                         <Button variant="outline" size="sm" @click="skipMissionGuide"
-                          >Saltar</Button
+                          >{{ t('teacher.classes.create.onboarding.btn_skip') }}</Button
                         >
-                        <Button variant="primary" size="sm" @click="step = 7">Sí, adelante</Button>
+                        <Button variant="primary" size="sm" @click="step = 7">{{ t('teacher.classes.create.onboarding.btn_accept_plan') }}</Button>
                       </div>
                     </div>
                     <div
                       v-else-if="!isGeneratingMissionGuide && showMissionGuideFeedback"
                       class="onb-actions"
                     >
-                      <Button variant="outline" size="sm" @click="step = 5">Atrás</Button>
+                      <Button variant="outline" size="sm" @click="step = 5">{{ t('teacher.classes.create.onboarding.btn_back') }}</Button>
                     </div>
                   </template>
                 </EditableMarkdown>
@@ -723,23 +723,23 @@
                   </button>
                 </div>
                 <div v-if="!isGeneratingBadge && !showBadgeFeedback" class="onb-actions">
-                  <Button variant="outline" size="sm" @click="step = 6">Atrás</Button>
+                  <Button variant="outline" size="sm" @click="step = 6">{{ t('teacher.classes.create.onboarding.btn_back') }}</Button>
                   <div class="flex gap-2">
                     <Button
                       v-if="badgeImageUrl"
                       variant="outline"
                       size="sm"
                       @click="openBadgeFeedback"
-                      >Quiero cambiar algo</Button
+                      >{{ t('teacher.classes.create.onboarding.btn_change_something') }}</Button
                     >
-                    <Button variant="outline" size="sm" @click="skipBadge">Saltar</Button>
+                    <Button variant="outline" size="sm" @click="skipBadge">{{ t('teacher.classes.create.onboarding.btn_skip') }}</Button>
                     <Button v-if="badgeImageUrl" variant="primary" size="sm" @click="finishWizard"
-                      >Sí, adelante</Button
+                      >{{ t('teacher.classes.create.onboarding.btn_accept_plan') }}</Button
                     >
                   </div>
                 </div>
                 <div v-else-if="!isGeneratingBadge && showBadgeFeedback" class="onb-actions">
-                  <Button variant="outline" size="sm" @click="step = 6">Atrás</Button>
+                  <Button variant="outline" size="sm" @click="step = 6">{{ t('teacher.classes.create.onboarding.btn_back') }}</Button>
                 </div>
               </div>
             </Transition>
@@ -775,7 +775,7 @@
         </p>
 
         <div class="flex justify-center gap-3 mt-6">
-          <Button variant="outline" @click="showPreview = false">Atrás</Button>
+          <Button variant="outline" @click="showPreview = false">{{ t('teacher.classes.create.onboarding.btn_back') }}</Button>
           <Button variant="primary" :disabled="isSubmitting" @click="handleSubmit">
             <template v-if="isSubmitting">
               <svg class="animate-spin w-4 h-4 mr-2" viewBox="0 0 24 24" fill="none">
