@@ -102,7 +102,14 @@
         "meta": {
           "title": "Crear Nova Classe | ITAKAI Professor"
         },
-        "preview_label": "Així es veurà la teva classe",
+        "summary": {
+          "edit": "Edita",
+          "edit_title": "Títol",
+          "edit_cover": "Portada",
+          "editing_hint": "Estàs editant una classe que ja tens llesta.",
+          "back_to_summary": "Torna al resum"
+        },
+        "preview_label": "Això és el que has creat",
         "onboarding": {
           "ask_idea": "Hola {name}! Sóc {god}. Explica'm, quin món o temàtica vols per a la teva classe?",
           "review_approach": "Això és el que he preparat per a tu, t'agrada?",
@@ -131,7 +138,8 @@
           "attach_error": "No s'han pogut processar els materials.",
           "attach_hint": "Màx. {max} MB per fitxer",
           "attach_error_size": "«{name}» pesa {size} MB. El màxim és {max} MB per fitxer.",
-          "attach_error_too_large": "Els materials pesen massa en conjunt. Puja'ls d'un en un (màx. {max} MB per fitxer)."
+          "attach_error_too_large": "Els materials pesen massa en conjunt. Puja'ls d'un en un (màx. {max} MB per fitxer).",
+          "guide_question": "He preparat una guia per als teus alumnes"
         },
         "narrative_error": "No he pogut crear la narrativa"
       },
@@ -912,7 +920,9 @@
       "section_cover": "Portada",
       "wizard_question": "Posa un horari i una portada a la teva classe",
       "cancel": "Cancel·la",
-      "done": "Fet"
+      "done": "Fet",
+      "wizard_question_schedule": "Posa-li un horari a la teva classe",
+      "wizard_question_cover": "Ara, una portada per a la teva classe"
     },
     "submissions": {
       "subtitle": "Revisa i aprova les entregues d'aquesta classe des d'una sola pantalla.",

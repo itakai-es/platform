@@ -99,7 +99,14 @@
           "name_min_length": "Name must be at least 3 characters",
           "create_error": "Error creating the class. Please try again."
         },
-        "preview_label": "This is how your class will look",
+        "summary": {
+          "edit": "Edit",
+          "edit_title": "Title",
+          "edit_cover": "Cover",
+          "editing_hint": "You are editing a class that is already finished.",
+          "back_to_summary": "Back to summary"
+        },
+        "preview_label": "This is what you have created",
         "onboarding": {
           "ask_idea": "Hi {name}! I'm {god}. Tell me — what world or theme do you want for your class?",
           "review_approach": "Here's what I've prepared for you, do you like it?",
@@ -128,7 +135,8 @@
           "attach_error": "Couldn't process the materials.",
           "attach_hint": "Max. {max} MB per file",
           "attach_error_size": "«{name}» is {size} MB. The maximum is {max} MB per file.",
-          "attach_error_too_large": "The materials are too large altogether. Upload them one by one (max. {max} MB per file)."
+          "attach_error_too_large": "The materials are too large altogether. Upload them one by one (max. {max} MB per file).",
+          "guide_question": "I've prepared a guide for your students"
         },
         "meta": {
           "title": "Create New Class | ITAKAI Teacher"
@@ -912,7 +920,9 @@
       "section_cover": "Cover",
       "wizard_question": "Give your class a schedule and a cover",
       "cancel": "Cancel",
-      "done": "Done"
+      "done": "Done",
+      "wizard_question_schedule": "Set a schedule for your class",
+      "wizard_question_cover": "Now, a cover for your class"
     },
     "submissions": {
       "subtitle": "Review and approve this class's submissions from a single screen.",

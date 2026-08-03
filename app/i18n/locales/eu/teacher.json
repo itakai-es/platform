@@ -102,7 +102,14 @@
         "meta": {
           "title": "Klase Berria Sortu | ITAKAI Irakaslea"
         },
-        "preview_label": "Horrela ikusiko da zure klasea",
+        "summary": {
+          "edit": "Editatu",
+          "edit_title": "Izenburua",
+          "edit_cover": "Azala",
+          "editing_hint": "Dagoeneko prest duzun klase bat editatzen ari zara.",
+          "back_to_summary": "Itzuli laburpenera"
+        },
+        "preview_label": "Hau da sortu duzuna",
         "onboarding": {
           "ask_idea": "Kaixo {name}! {god} naiz. Kontatu iezadazu, zein mundu edo tematika nahi duzu zure klaserako?",
           "review_approach": "Hau prestatu dut zuretzat, gustatu zaizu?",
@@ -131,7 +138,8 @@
           "attach_error": "Ezin izan dira materialak prozesatu.",
           "attach_hint": "Gehienez {max} MB fitxategiko",
           "attach_error_size": "«{name}» fitxategiak {size} MB ditu. Gehienez {max} MB fitxategi bakoitzeko.",
-          "attach_error_too_large": "Materialek gehiegi pisatzen dute guztira. Banaka igo itzazu (gehienez {max} MB fitxategiko)."
+          "attach_error_too_large": "Materialek gehiegi pisatzen dute guztira. Banaka igo itzazu (gehienez {max} MB fitxategiko).",
+          "guide_question": "Gida bat prestatu dut zure ikasleentzat"
         },
         "narrative_error": "Ezin izan dut narratiba sortu"
       },
@@ -912,7 +920,9 @@
       "section_cover": "Azala",
       "wizard_question": "Jarri ordutegia eta azala zure klaseari",
       "cancel": "Utzi",
-      "done": "Eginda"
+      "done": "Eginda",
+      "wizard_question_schedule": "Jarri ordutegi bat zure klaseari",
+      "wizard_question_cover": "Orain, azal bat zure klaserako"
     },
     "submissions": {
       "subtitle": "Berrikusi eta onartu klase honetako entregak pantaila bakar batetik.",
