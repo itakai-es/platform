@@ -98,14 +98,6 @@
             {{ t('teacher.classes.detail.settings.general.schedule_label') }}
           </label>
           <ClassScheduleCalendar v-model="scheduleConfig" />
-          <!-- Clases antiguas (texto libre): se muestra como referencia para
-               reescribirlo en el calendario si se quiere. No se migra. -->
-          <p
-            v-if="classData?.schedule && !classData?.scheduleConfig"
-            class="mt-2 text-xs text-text-secondary"
-          >
-            {{ t('teacher.schedule.previous') }}: {{ classData.schedule }}
-          </p>
         </div>
 
         <hr class="border-border-primary" />
