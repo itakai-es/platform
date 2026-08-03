@@ -45,6 +45,14 @@ export function useRecurrenceText() {
   const dayName = (wd: number, style: 'long' | 'short' = 'long') =>
     new Date(2024, 0, 1 + wd).toLocaleDateString(locale.value, { weekday: style })
 
+  // "YYYY-MM-DD" → fecha legible en el idioma activo ("31 de agosto de 2026").
+  // Si la clave no es una fecha válida, se muestra tal cual.
+  const formatDateKey = (key: string): string => {
+    const d = parseDateKey(key)
+    if (isNaN(d.getTime())) return key
+    return d.toLocaleDateString(locale.value, { day: 'numeric', month: 'long', year: 'numeric' })
+  }
+
   const listDays = (weekdays: number[]) => {
     const names = [...weekdays].sort((a, b) => a - b).map(wd => dayName(wd))
     return new Intl.ListFormat(locale.value, { type: 'conjunction' }).format(names)
@@ -89,13 +97,13 @@ export function useRecurrenceText() {
         else base = t('teacher.schedule.weekly_days', { days: listDays(rec.weekdays) })
     }
     if (rec.ends?.type === 'on' && rec.ends.onDate)
-      base += `, ${t('teacher.schedule.ends_on_suffix', { date: rec.ends.onDate })}`
+      base += `, ${t('teacher.schedule.ends_on_suffix', { date: formatDateKey(rec.ends.onDate) })}`
     else if (rec.ends?.type === 'after' && rec.ends.afterCount)
       base += `, ${t('teacher.schedule.ends_after_suffix', { n: rec.ends.afterCount })}`
     return base
   }
 
-  return { t, describe, presetLabels, dayName, listDays }
+  return { t, describe, presetLabels, dayName, listDays, formatDateKey }
 }
 
 /**
