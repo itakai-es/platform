@@ -68,12 +68,11 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
-
 import { computed } from 'vue'
 import { TrophyIcon } from '@heroicons/vue/24/outline'
 import { LockClosedIcon } from '@heroicons/vue/24/solid'
 
+const { t } = useI18n()
 const { getImageUrl } = useImageUrl()
 
 interface ClassBadge {

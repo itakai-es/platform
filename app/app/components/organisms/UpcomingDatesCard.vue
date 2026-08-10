@@ -26,8 +26,6 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
-
 /**
  * UpcomingDatesCard - Card de próximas fechas
  *
@@ -43,6 +41,8 @@ import {
   ClockIcon,
 } from '@heroicons/vue/24/outline'
 import type { UpcomingDate } from '~/types/mission.types'
+
+const { t } = useI18n()
 
 interface Props {
   dates: UpcomingDate[]

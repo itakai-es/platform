@@ -51,8 +51,6 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
-
 /**
  * RecentTopicsSection - Sección de temas recientes
  *
@@ -63,6 +61,8 @@ const { t } = useI18n()
 
 import { BookOpenIcon } from '@heroicons/vue/24/outline'
 import type { RecentTopic } from '~/types/mission.types'
+
+const { t } = useI18n()
 
 interface Props {
   topics: RecentTopic[]

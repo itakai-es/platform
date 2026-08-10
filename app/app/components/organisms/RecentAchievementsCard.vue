@@ -27,8 +27,6 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
-
 /**
  * RecentAchievementsCard - Card de insignias recientes
  *
@@ -38,6 +36,8 @@ const { t } = useI18n()
 
 import { TrophyIcon } from '@heroicons/vue/24/solid'
 import type { RecentAchievement } from '~/types/mission.types'
+
+const { t } = useI18n()
 
 interface Props {
   achievements: RecentAchievement[]

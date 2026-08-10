@@ -4,7 +4,7 @@ Validación de internacionalización (i18n).
 
 Modos:
   --parse   Verifica que todos los JSON de i18n parsean correctamente.
-  --sync    Verifica que las claves están sincronizadas entre los 5 idiomas
+  --sync    Verifica que las claves están sincronizadas entre los idiomas
             (usando 'es' como referencia).
   --usage   Verifica que todas las claves usadas literalmente en código (.vue/.ts)
             existen en los archivos de traducciones, y reporta las que están
@@ -70,7 +70,7 @@ def cmd_parse():
 
 
 def cmd_sync():
-    """Valida que las claves coinciden entre los 5 idiomas."""
+    """Valida que las claves coinciden entre los idiomas."""
     print('▶ Validando sincronización de claves entre idiomas...')
     fail = False
     base_files = {}
@@ -110,7 +110,7 @@ def cmd_sync():
                 fail = True
 
     if not fail:
-        print('✅ Todas las claves están sincronizadas entre los 5 idiomas')
+        print('✅ Todas las claves están sincronizadas entre los idiomas')
     return 0 if not fail else 1
 
 

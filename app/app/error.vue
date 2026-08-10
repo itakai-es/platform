@@ -9,10 +9,9 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
-
 import { getDashboardByRole } from '~/utils/navigation'
 
+const { t } = useI18n()
 const error = useError()
 const authStore = useAuthStore()
 

@@ -89,9 +89,9 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
-
 import { CheckCircleIcon } from '@heroicons/vue/24/outline'
+
+const { t } = useI18n()
 
 interface SubmissionItem {
   id: string

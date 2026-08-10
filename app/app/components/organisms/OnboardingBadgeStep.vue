@@ -72,14 +72,14 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
-
 import {
   TrophyIcon,
   SparklesIcon,
   ArrowPathIcon,
   PaperAirplaneIcon,
 } from '@heroicons/vue/24/outline'
+
+const { t } = useI18n()
 
 interface Props {
   generating: boolean
