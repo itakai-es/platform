@@ -28,7 +28,10 @@
         "message_new_user": "Ola {name}! Benvido a ITAKAI. Completa a túa primeira misión para comezar a gañar XP!",
         "message_returning_user": "Ola {name}! Completaches {missions_completed} misións en {classes_enrolled} clases. Segue así!"
       },
-      "class_fallback_name": "Clase"
+      "class_fallback_name": "Clase",
+      "recent_badges_empty": "Non hai insignias recentes",
+      "recent_topics_empty": "Non hai temas recentes",
+      "upcoming_dates_empty": "Non hai datas próximas"
     },
     "missions": {
       "meta": {
@@ -242,7 +245,22 @@
       "meta": {
         "title": "Ranking | ITAKAI",
         "description": "O ranking de estudantes está dispoñible dentro de cada clase."
-      }
+      },
+      "page_title": "Clasificación",
+      "page_subtitle": "Consulta o ranking global e compara o teu progreso co resto de estudantes.",
+      "pick_class": "Selecciona unha clase",
+      "friends_soon_title": "Ranking de amigos proximamente",
+      "friends_soon_description": "A parte social aínda non está conectada. Mentres tanto, podes usar o ranking global ou o das túas clases.",
+      "choose_class_title": "Escolle unha clase",
+      "choose_class_description": "Selecciona unha clase para ver a túa posición e o ranking interno.",
+      "empty_class_title": "Non hai ranking dispoñible",
+      "empty_class_description": "Aínda non hai datos abondo para construír o ranking desta clase.",
+      "empty_global_title": "Non hai datos de ranking",
+      "empty_global_description": "Aínda non hai actividade abondo para amosar unha clasificación global.",
+      "global_podium": "Podio global",
+      "your_position": "A túa posición",
+      "rest": "Resto da clasificación",
+      "by_class": "Por clase"
     },
     "ai_assistant": {
       "meta": {
@@ -307,11 +325,16 @@
         "password_required": "Introduce o teu contrasinal"
       },
       "languages": {
-        "es": "Español",
+        "es": "Castelán",
         "en": "English",
         "ca": "Catalán",
         "eu": "Éuscaro",
-        "gl": "Galego"
+        "gl": "Galego",
+        "val": "Valenciano",
+        "ast": "Asturiano",
+        "pt": "Portugués",
+        "el": "Grego",
+        "ro": "Romanés"
       }
     },
     "components": {

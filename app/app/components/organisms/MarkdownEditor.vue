@@ -214,7 +214,7 @@
                   >Reemplazar todo</Button
                 >
                 <Button variant="primary" size="sm" @click="acceptAiSuggestion"
-                  >Insertar al final</Button
+                  >{{ t('common.markdown.insert_at_end') }}</Button
                 >
               </div>
             </div>
@@ -286,7 +286,7 @@ const emit = defineEmits<{
 
 const config = useRuntimeConfig()
 const authStore = useAuthStore()
-const { locale } = useI18n()
+const { t, locale } = useI18n()
 
 const content = ref(props.modelValue)
 const editorRef = ref<HTMLTextAreaElement>()

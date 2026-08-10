@@ -46,7 +46,10 @@ const emit = defineEmits<{
 
 const buttonClasses = computed(() => {
   // Base: siempre píldora (rounded-full), DM Sans font-medium
-  const alignment = props.align === 'left' ? 'justify-start' : 'justify-center'
+  // text-left/text-center: si la etiqueta salta a dos líneas, que siga la
+  // alineación del botón (el user-agent centra el texto de los <button>).
+  const alignment =
+    props.align === 'left' ? 'justify-start text-left' : 'justify-center text-center'
   const base = `inline-flex items-center ${alignment} font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-full`
 
   // Variantes según ITAKAI Official Brand Specs
@@ -85,16 +88,18 @@ const buttonClasses = computed(() => {
       'bg-purple-dark text-white hover:bg-purple-dark-hover active:bg-purple-dark-active focus:ring-purple-dark/30 shadow-sm hover:shadow-md active:translate-y-px',
   }
 
-  // Tamaños según ITAKAI Official Specs (heights exactos) - Responsive
+  // Tamaños según ITAKAI Official Specs - Responsive. Altura MÍNIMA en vez de
+  // fija: con una línea el botón mide lo de siempre (32/42/48px), y si la
+  // etiqueta salta a dos líneas crece con su padding en lugar de desbordarse.
   const sizes = {
     // Small: 32-34px height responsive (chips de acción, ej. botones amarillos Atenea)
-    sm: 'text-xs sm:text-sm px-3 sm:px-4 h-[32px] sm:h-[34px]',
+    sm: 'text-xs sm:text-sm px-3 sm:px-4 py-1 min-h-[32px] sm:min-h-[34px] leading-snug',
 
     // Medium: 42-46px height responsive (estándar CTAs)
-    md: 'text-sm sm:text-base px-4 sm:px-6 h-[42px] sm:h-[46px]',
+    md: 'text-sm sm:text-base px-4 sm:px-6 py-1.5 min-h-[42px] sm:min-h-[46px] leading-snug',
 
     // Large: 48-54px height responsive (ancho + icono, botones sociales)
-    lg: 'text-base sm:text-lg px-6 sm:px-8 h-[48px] sm:h-[54px]',
+    lg: 'text-base sm:text-lg px-6 sm:px-8 py-2 min-h-[48px] sm:min-h-[54px] leading-snug',
   }
 
   const width = props.fullWidth ? 'w-full' : ''
@@ -113,7 +118,8 @@ const iconClasses = computed(() => {
   const spacing = props.iconLeft ? 'mr-2' : 'ml-2'
 
   // stroke-2 ensures consistent visual weight across different outline icons
-  return [sizes[props.size], spacing, 'stroke-2'].join(' ')
+  // flex-shrink-0: que el texto a dos líneas no encoja el icono
+  return [sizes[props.size], spacing, 'stroke-2 flex-shrink-0'].join(' ')
 })
 
 const handleClick = (event: MouseEvent) => {

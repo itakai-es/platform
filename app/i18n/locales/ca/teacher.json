@@ -59,11 +59,26 @@
           "confirm": "Duplica",
           "cancel": "Cancel·la",
           "items": {
-            "missions": { "label": "Missions", "desc": "Les missions i els seus enigmes" },
-            "narrative": { "label": "Història", "desc": "La narrativa i la imatge de portada" },
-            "features": { "label": "Funcionalitats", "desc": "Els mòduls activats de la classe" },
-            "shop": { "label": "Botiga", "desc": "Els articles de la botiga" },
-            "behaviors": { "label": "Comportaments", "desc": "Les plantilles de comportament" }
+            "missions": {
+              "label": "Missions",
+              "desc": "Les missions i els seus enigmes"
+            },
+            "narrative": {
+              "label": "Història",
+              "desc": "La narrativa i la imatge de portada"
+            },
+            "features": {
+              "label": "Funcionalitats",
+              "desc": "Els mòduls activats de la classe"
+            },
+            "shop": {
+              "label": "Botiga",
+              "desc": "Els articles de la botiga"
+            },
+            "behaviors": {
+              "label": "Comportaments",
+              "desc": "Les plantilles de comportament"
+            }
           }
         }
       },
@@ -87,7 +102,14 @@
         "meta": {
           "title": "Crear Nova Classe | ITAKAI Professor"
         },
-        "preview_label": "Així es veurà la teva classe",
+        "summary": {
+          "edit": "Edita",
+          "edit_title": "Títol",
+          "edit_cover": "Portada",
+          "editing_hint": "Estàs editant una classe que ja tens llesta.",
+          "back_to_summary": "Torna al resum"
+        },
+        "preview_label": "Això és el que has creat",
         "onboarding": {
           "ask_idea": "Hola {name}! Sóc {god}. Explica'm, quin món o temàtica vols per a la teva classe?",
           "review_approach": "Això és el que he preparat per a tu, t'agrada?",
@@ -96,6 +118,7 @@
           "generating_approach": "Estic creant la narrativa de la teva classe...",
           "narrative_feedback_placeholder": "Ex: Vull més referències a les cases de Hogwarts...",
           "btn_change_something": "Vull canviar alguna cosa",
+          "btn_edit_by_hand": "Editar a mà",
           "custom_title_placeholder": "O escriu el teu propi títol...",
           "title_feedback_placeholder": "Ex: Vull títols més curts, amb més referència a Harry Potter...",
           "generating_cover": "Generant portada...",
@@ -112,8 +135,13 @@
           "attach_materials": "Adjunta materials (PDF, Word, imatges)",
           "attach_processing": "Processant materials…",
           "attach_remove": "Treure",
-          "attach_error": "No s'han pogut processar els materials."
-        }
+          "attach_error": "No s'han pogut processar els materials.",
+          "attach_hint": "Màx. {max} MB per fitxer",
+          "attach_error_size": "«{name}» pesa {size} MB. El màxim és {max} MB per fitxer.",
+          "attach_error_too_large": "Els materials pesen massa en conjunt. Puja'ls d'un en un (màx. {max} MB per fitxer).",
+          "guide_question": "He preparat una guia per als teus alumnes"
+        },
+        "narrative_error": "No he pogut crear la narrativa"
       },
       "detail": {
         "breadcrumb_classes": "Les meves classes",
@@ -353,6 +381,7 @@
             "province_label": "Província",
             "metadata_none": "Sense especificar",
             "metadata_search": "Cercar...",
+            "subject_needs_level": "Tria primer el nivell",
             "publish_title": "Publica com a plantilla",
             "publish_hint": "Comparteix-la al marketplace perquè altres professors la importin.",
             "publish_missing_metadata": "Desa assignatura, nivell i idioma abans de publicar.",
@@ -387,6 +416,11 @@
           "management": {
             "title": "Gestió"
           }
+        },
+        "badges_empty": "No hi ha insígnies en aquesta classe",
+        "join_requests": {
+          "empty_title": "Sense sol·licituds",
+          "empty_description": "No hi ha sol·licituds pendents per a aquesta classe"
         }
       }
     },
@@ -395,12 +429,17 @@
         "meta": {
           "title": "Les Meves Missions | ITAKAI Professor",
           "description": "Gestiona totes les teves missions creades, edita-les o crea'n de noves per als teus estudiants."
-        }
+        },
+        "subtitle": "Gestiona les missions de les teves classes"
       },
       "create": {
         "meta": {
           "title": "Crear Missió | ITAKAI Professor"
-        }
+        },
+        "pick_class": "Selecciona una classe",
+        "idea_placeholder": "Ex.: Vull una missió sobre cinemàtica on els alumnes calculin trajectòries d'escombres voladores...",
+        "narrative_error": "No he pogut crear la narrativa",
+        "ai_unavailable": "El servei d'IA no està disponible ara mateix. Torna-ho a provar d'aquí a uns minuts."
       },
       "detail": {
         "delete_confirm_btn": "Eliminar",
@@ -470,7 +509,8 @@
         "btn_cancel": "Cancel·lar",
         "btn_saving": "Desant...",
         "btn_save_changes": "Desar canvis",
-        "btn_create": "Crear insígnia"
+        "btn_create": "Crear insígnia",
+        "no_mission": "Sense missió"
       },
       "detail": {
         "btn_edit": "Editar",
@@ -487,7 +527,9 @@
       "meta": {
         "title": "Les Meves Insígnies | ITAKAI Professor",
         "description": "Crea, edita i gestiona insígnies personalitzades per premiar les fites dels teus estudiants."
-      }
+      },
+      "filter_system": "Del sistema",
+      "generate_error": "No s'ha pogut generar la insígnia."
     },
     "students": {
       "index": {
@@ -505,9 +547,13 @@
         "sort_progress_desc": "Major progrés",
         "sort_progress_asc": "Menor progrés",
         "sort_missions_desc": "Més missions",
+        "tab_active": "Actius",
+        "tab_archived": "Arxivats",
         "no_students_title": "Sense estudiants",
         "no_students_filtered": "No s'han trobat estudiants amb aquests filtres",
         "no_students_default": "No hi ha estudiants a les teves classes",
+        "no_archived_students_title": "Sense estudiants arxivats",
+        "no_archived_students_default": "No hi ha estudiants a les teves classes arxivades",
         "btn_view": "Veure",
         "stat_missions": "Missions",
         "meta": {
@@ -590,11 +636,16 @@
         "btn_cancel": "Cancel·lar",
         "btn_delete_confirm": "Eliminar el meu compte",
         "languages": {
-          "es": "Espanyol",
+          "es": "Castellà",
           "en": "English",
           "ca": "Català",
           "eu": "Euskara",
-          "gl": "Galego"
+          "gl": "Galego",
+          "val": "Valencià",
+          "ast": "Asturià",
+          "pt": "Portuguès",
+          "el": "Grec",
+          "ro": "Romanès"
         }
       },
       "meta": {
@@ -840,8 +891,9 @@
       "starts_on": "Comença el",
       "time": "Hora",
       "recurrence": "Periodicitat",
+      "add_slot": "Afegir horari",
+      "remove_slot": "Treure horari",
       "preview": "Vista prèvia",
-      "previous": "Horari anterior",
       "choose_days": "Tria els dies de classe",
       "freq_none": "No es repeteix",
       "freq_daily": "Cada dia",
@@ -868,11 +920,14 @@
       "ends_on": "El",
       "ends_after": "Després de",
       "repetitions": "repeticions",
-      "section_schedule": "Horari",
-      "section_cover": "Portada",
-      "wizard_question": "Posa un horari i una portada a la teva classe",
       "cancel": "Cancel·la",
-      "done": "Fet"
+      "done": "Fet",
+      "wizard_question_schedule": "Posa-li un horari a la teva classe",
+      "wizard_question_cover": "Ara, una portada per a la teva classe"
+    },
+    "submissions": {
+      "subtitle": "Revisa i aprova les entregues d'aquesta classe des d'una sola pantalla.",
+      "back_to_class": "Tornar a la classe"
     }
   }
 }

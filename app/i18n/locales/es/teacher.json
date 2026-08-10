@@ -99,7 +99,14 @@
           "name_min_length": "El nombre debe tener al menos 3 caracteres",
           "create_error": "Error al crear la clase. Por favor, inténtalo de nuevo."
         },
-        "preview_label": "Así se verá tu clase",
+        "summary": {
+          "edit": "Editar",
+          "edit_title": "Título",
+          "edit_cover": "Portada",
+          "editing_hint": "Estás editando una clase que ya tienes lista.",
+          "back_to_summary": "Volver al resumen"
+        },
+        "preview_label": "Esto es lo que has creado",
         "onboarding": {
           "ask_idea": "¡Hola {name}! Soy {god}. Cuéntame, ¿qué mundo o temática quieres para tu clase?",
           "review_approach": "Esto es lo que he preparado para ti, ¿te gusta?",
@@ -108,6 +115,7 @@
           "generating_approach": "Estoy creando la narrativa de tu clase...",
           "narrative_feedback_placeholder": "Ej: Quiero más referencias a las casas de Hogwarts...",
           "btn_change_something": "Quiero cambiar algo",
+          "btn_edit_by_hand": "Editar a mano",
           "custom_title_placeholder": "O escribe tu propio título...",
           "title_feedback_placeholder": "Ej: Quiero títulos más cortos, con más referencia a Harry Potter...",
           "generating_cover": "Generando portada...",
@@ -124,11 +132,16 @@
           "attach_materials": "Adjuntar materiales (PDF, Word, imágenes)",
           "attach_processing": "Procesando materiales…",
           "attach_remove": "Quitar",
-          "attach_error": "No se pudieron procesar los materiales."
+          "attach_error": "No se pudieron procesar los materiales.",
+          "attach_hint": "Máx. {max} MB por archivo",
+          "attach_error_size": "«{name}» pesa {size} MB. El máximo es {max} MB por archivo.",
+          "attach_error_too_large": "Los materiales pesan demasiado en conjunto. Súbelos de uno en uno (máx. {max} MB por archivo).",
+          "guide_question": "He preparado una guía para tus alumnos"
         },
         "meta": {
           "title": "Crear Nueva Clase | ITAKAI Profesor"
-        }
+        },
+        "narrative_error": "No he podido crear la narrativa"
       },
       "detail": {
         "breadcrumb_classes": "Mis clases",
@@ -368,6 +381,7 @@
             "province_label": "Provincia",
             "metadata_none": "Sin especificar",
             "metadata_search": "Buscar...",
+            "subject_needs_level": "Elige primero el nivel",
             "publish_title": "Publicar como plantilla",
             "publish_hint": "Compártela en el marketplace para que otros profesores la importen.",
             "publish_missing_metadata": "Guarda asignatura, nivel e idioma antes de publicar.",
@@ -402,6 +416,11 @@
           "management": {
             "title": "Gestión"
           }
+        },
+        "badges_empty": "No hay insignias en esta clase",
+        "join_requests": {
+          "empty_description": "No hay solicitudes pendientes para esta clase",
+          "empty_title": "Sin solicitudes"
         }
       }
     },
@@ -410,12 +429,17 @@
         "meta": {
           "title": "Mis Misiones | ITAKAI Profesor",
           "description": "Gestiona todas tus misiones creadas, edítalas o crea nuevas para tus alumnos."
-        }
+        },
+        "subtitle": "Gestiona las misiones de tus clases"
       },
       "create": {
         "meta": {
           "title": "Crear Misión | ITAKAI Profesor"
-        }
+        },
+        "ai_unavailable": "El servicio de IA no está disponible ahora mismo. Inténtalo de nuevo en unos minutos.",
+        "idea_placeholder": "Ej: Quiero una misión sobre cinemática donde los alumnos calculen trayectorias de escobas voladoras...",
+        "narrative_error": "No he podido crear la narrativa",
+        "pick_class": "Selecciona una clase"
       },
       "detail": {
         "delete_confirm_btn": "Eliminar",
@@ -485,7 +509,8 @@
         "btn_cancel": "Cancelar",
         "btn_saving": "Guardando...",
         "btn_save_changes": "Guardar cambios",
-        "btn_create": "Crear insignia"
+        "btn_create": "Crear insignia",
+        "no_mission": "Sin misión"
       },
       "detail": {
         "btn_edit": "Editar",
@@ -502,7 +527,9 @@
       "meta": {
         "title": "Mis Insignias | ITAKAI Profesor",
         "description": "Crea, edita y gestiona insignias personalizadas para premiar los logros de tus alumnos."
-      }
+      },
+      "filter_system": "Del sistema",
+      "generate_error": "No se pudo generar la insignia."
     },
     "students": {
       "index": {
@@ -520,9 +547,13 @@
         "sort_progress_desc": "Mayor progreso",
         "sort_progress_asc": "Menor progreso",
         "sort_missions_desc": "Más misiones",
+        "tab_active": "Activos",
+        "tab_archived": "Archivados",
         "no_students_title": "Sin alumnos",
         "no_students_filtered": "No se encontraron alumnos con estos filtros",
         "no_students_default": "No hay alumnos en tus clases",
+        "no_archived_students_title": "Sin alumnos archivados",
+        "no_archived_students_default": "No hay alumnos en tus clases archivadas",
         "btn_view": "Ver",
         "stat_missions": "Misiones",
         "meta": {
@@ -605,11 +636,16 @@
         "btn_cancel": "Cancelar",
         "btn_delete_confirm": "Eliminar mi cuenta",
         "languages": {
-          "es": "Español",
+          "es": "Castellano",
           "en": "English",
           "ca": "Català",
           "eu": "Euskara",
-          "gl": "Galego"
+          "gl": "Galego",
+          "val": "Valencià",
+          "ast": "Asturianu",
+          "pt": "Português",
+          "el": "Ελληνικά",
+          "ro": "Română"
         }
       },
       "meta": {
@@ -855,8 +891,9 @@
       "starts_on": "Empieza el",
       "time": "Hora",
       "recurrence": "Periodicidad",
+      "add_slot": "Añadir horario",
+      "remove_slot": "Quitar horario",
       "preview": "Vista previa",
-      "previous": "Horario anterior",
       "choose_days": "Elegir días de clase",
       "freq_none": "No se repite",
       "freq_daily": "Cada día",
@@ -883,11 +920,14 @@
       "ends_on": "El",
       "ends_after": "Después de",
       "repetitions": "repeticiones",
-      "section_schedule": "Horario",
-      "section_cover": "Portada",
-      "wizard_question": "Ponle un horario y una portada a tu clase",
       "cancel": "Cancelar",
-      "done": "Hecho"
+      "done": "Hecho",
+      "wizard_question_schedule": "Ponle un horario a tu clase",
+      "wizard_question_cover": "Ahora, una portada para tu clase"
+    },
+    "submissions": {
+      "back_to_class": "Volver a la clase",
+      "subtitle": "Revisa y aprueba las entregas de esta clase desde una sola pantalla."
     }
   }
 }

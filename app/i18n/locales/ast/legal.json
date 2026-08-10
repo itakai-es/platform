@@ -1,0 +1,456 @@
+{
+  "legal": {
+    "terms": {
+      "title": "Condiciones del serviciu",
+      "last_updated": "Últimu anovamientu: xineru de 2026",
+      "sections": {
+        "acceptance": {
+          "title": "1. Aceutación de les condiciones",
+          "p1": "Bienveníu a ITAKAI. Al acceder y usar la nuestra plataforma educativa gamificada, aceutes quedar vinculáu a estes condiciones (les \"Condiciones\"). Si nun tas d'alcuerdu con dalguna parte d'estes condiciones, nun tienes qu'usar los nuestros servicios.",
+          "p2": "Estes Condiciones son un alcuerdu llegal ente tu (l'\"Usuariu\") ya ITAKAI (la \"Plataforma\", \"nosotros\", \"nuestru\"). Recomendámoste lleer estes condiciones con procuru enantes de rexistrate."
+        },
+        "service_description": {
+          "title": "2. Descripción del serviciu",
+          "intro": "ITAKAI ye una plataforma educativa gamificada inspirada na mitoloxía griega qu'ufierta:",
+          "features": {
+            "missions": "Misiones educatives interactives (xeres gamificaes)",
+            "ai_assistants": "Cinco asistentes d'intelixencia artificial basaos en personaxes mitolóxicos (Atenea, Odiseu, Penélope, Polifemu, Poseidón)",
+            "progress": "Sistema de progresu con esperiencia (XP), niveles y llogros",
+            "management": "Ferramientes de xestión pa profesores y alministradores",
+            "chat": "Charra en tiempu real con asistentes IA pa sofitu educativu"
+          },
+          "disclaimer": "Reservámonos el drechu de modificar, suspender o descontinuar cualquier aspeutu del serviciu en cualquier momentu, con avisu previu o ensin elli."
+        },
+        "accounts": {
+          "title": "3. Rexistru y cuentes d'usuariu",
+          "eligibility_title": "3.1 Elexibilidá",
+          "eligibility_text": "Pa usar ITAKAI tienes de tener polo menos 13 años. Los menores de 18 años tienen de contar col consentimientu d'un pá, ma o tutor llegal pa rexistrase. L'usu por parte de menores tien de tar supervisáu por una institución educativa o un tutor.",
+          "account_types_title": "3.2 Tribes de cuenta",
+          "account_student": "Alumnu: pa usuarios que faen misiones y deprenden na plataforma",
+          "account_teacher": "Profesor: pa educadores que crean misiones, xestionen clases y siguen el progresu del alumnáu",
+          "account_admin": "Alministrador: pa personal internu d'ITAKAI con accesu a funciones alministratives del sistema",
+          "security_title": "3.3 Seguridá de la cuenta",
+          "security_intro": "Yes responsable de:",
+          "security_password": "Caltener la confidencialidá de la to contraseña",
+          "security_activity": "Toles actividaes que se faigan cola to cuenta",
+          "security_notify": "Avisanos darréu de cualquier usu non autorizáu de la to cuenta",
+          "security_info": "Dar información de rexistru precisa, completa y anovada"
+        },
+        "acceptable_use": {
+          "title": "4. Usu aceutable",
+          "permitted_title": "4.1 Conducta permitida",
+          "permitted_intro": "Al usar ITAKAI, comprométeste a:",
+          "permitted_educational": "Usar la plataforma namás con fines educativos y llexítimos",
+          "permitted_respect": "Respetar a otros usuarios, profesores y alministradores",
+          "permitted_content": "Dar conteníu afayadizu y respetuosu",
+          "permitted_laws": "Cumplir toles lleis y normatives aplicables",
+          "prohibited_title": "4.2 Conducta prohibida",
+          "prohibited_intro": "Ta estrictamente prohibío:",
+          "prohibited_hacking": "Facer pirateríes informátiques, inxeniería inversa o intentar acceder a sistemes non autorizaos",
+          "prohibited_offensive": "Xubir conteníu ofensivu, difamatoriu, illegal o inafayadizu",
+          "prohibited_harassment": "Acosar, intimidar o amenaciar a otros usuarios",
+          "prohibited_cheating": "Facer trampes o manipolear el sistema de puntos, XP o llogros",
+          "prohibited_sharing": "Compartir la to cuenta con terceros",
+          "prohibited_bots": "Usar bots, scripts o ferramientes automatizaes ensin autorización",
+          "prohibited_ip": "Vulnerar drechos de propiedá intelectual de terceros",
+          "prohibited_data": "Recoyer datos d'otros usuarios ensin consentimientu"
+        },
+        "intellectual_property": {
+          "title": "5. Propiedá intelectual",
+          "content_title": "5.1 Conteníu d'ITAKAI",
+          "content_text": "Tol conteníu de la plataforma, incluyíos ensin llende'l diseñu, los gráficos, los logotipos, el testu, el códigu fonte, les funcionalidaes, los personaxes mitolóxicos adautaos, los asistentes IA y la estructura de les misiones, ye propiedá esclusiva d'ITAKAI y ta protexíu por lleis de drechos d'autor, marques rexistraes y otres lleis de propiedá intelectual.",
+          "license_title": "5.2 Llicencia d'usu",
+          "license_text": "Otorgámoste una llicencia llendada, non esclusiva, intresferible y revocable p'acceder y usar ITAKAI namás pa los tos fines educativos personales. Nun pues copiar, modificar, distribuir, vender nin esplotar comercialmente nenguna parte de la plataforma ensin el nuestru consentimientu previu por escrito."
+        },
+        "user_content": {
+          "title": "6. Conteníu del usuariu",
+          "p1": "Al unviar conteníu a ITAKAI (como rempuestes a misiones, mensaxes de charra o comentarios), otórgesnos una llicencia mundial, llibre de royalties, sullicenciable y tresferible pa usar, reproducir, distribuir, amosar y modificar esi conteníu col fin de dar y ameyorar los nuestros servicios.",
+          "p2": "Yes l'únicu responsable del conteníu que publiques y garantices que tienes tolos drechos necesarios pa otorgar esta llicencia. Nun publicamos conteníu que vulnere drechos de terceros o lleis aplicables."
+        },
+        "liability": {
+          "title": "7. Llende de responsabilidá",
+          "availability_title": "7.1 Disponibilidá del serviciu",
+          "availability_text": "ITAKAI dase \"tal cual\" y \"según disponibilidá\". Nun garantizamos que'l serviciu tea disponible de manera ininterrumpida, segura o llibre de fallos. Podemos tener interrupciones por mantenimientu, anovamientos o problemes téunicos.",
+          "educational_title": "7.2 Conteníu educativu",
+          "educational_text": "Anque nos esforzamos por dar conteníu educativu de calidá, nun garantizamos la esautitú, la integridá nin l'actualidá de tol conteníu. Los asistentes IA son ferramientes de sofitu educativu y nun sustituyen la supervisión d'un profesor cualificáu.",
+          "warranty_title": "7.3 Esclusión de garantíes",
+          "warranty_text": "Na máxima midida permitida pola llei, ITAKAI escluye toles garantíes, espreses o implícites, incluyíes les garantíes de comerciabilidá, idoneidá pa un fin particular y non infracción."
+        },
+        "modifications": {
+          "title": "8. Modificaciones del serviciu y de les condiciones",
+          "p1": "Reservámonos el drechu de modificar o descontinuar, temporal o permanentemente, el serviciu (o cualquier parte d'elli) con avisu previu o ensin elli. Nun vamos ser responsables énte ti nin énte terceros por nenguna modificación, suspensión o descontinuación del serviciu.",
+          "p2": "Podemos anovar estes Condiciones de xemes en cuando. Vamos avisate de los cambeos importantes con un avisu na plataforma o per corréu electrónicu. L'usu siguíu del serviciu depués del avisu ye la to aceutación de les condiciones nueves."
+        },
+        "termination": {
+          "title": "9. Zarru de la cuenta",
+          "by_user_title": "9.1 Zarru por parte del usuariu",
+          "by_user_text": "Pues desaniciar la to cuenta en cualquier momentu dende la configuración del to perfil o escribiéndonos a sofitu{'@'}itakai.com. El desaniciu de la to cuenta supón la perda permanente de tolos tos datos, progresu, llogros y conteníu asociáu.",
+          "by_itakai_title": "9.2 Zarru por parte d'ITAKAI",
+          "by_itakai_intro": "Reservámonos el drechu de suspender o zarrar la to cuenta si:",
+          "by_itakai_violation": "Vulneres estes Condiciones",
+          "by_itakai_fraud": "Participes en conductes fraudulentes o illegales",
+          "by_itakai_inactivity": "La to cuenta queda inactiva demasiáu tiempu",
+          "by_itakai_legal": "Requiérennoslo por motivos llegales o normativos"
+        },
+        "jurisdiction": {
+          "title": "10. Llei aplicable y xurisdicción",
+          "text": "Estes Condiciones ríxense ya interprétense d'acuerdu coles lleis d'España, ensin dar efeutu a nengún principiu de conflictu de lleis. Cualquier disputa que surda d'estes Condiciones o rellacionada con elles queda suxeta a la xurisdicción esclusiva de los tribunales d'España."
+        },
+        "general": {
+          "title": "11. Disposiciones xenerales",
+          "complete_title": "11.1 Alcuerdu completu",
+          "complete_text": "Estes Condiciones, xunto cola nuestra Política de privacidá y la Política de cookies, son l'alcuerdu completu ente tu ya ITAKAI.",
+          "severability_title": "11.2 Divisibilidá",
+          "severability_text": "Si dalguna disposición d'estes Condiciones se considera inválida o inaplicable, les disposiciones restantes van siguir en vigor.",
+          "waiver_title": "11.3 Renuncia",
+          "waiver_text": "El fechu de nun exercer cualquier drechu o disposición d'estes Condiciones nun ye una renuncia a esi drechu o disposición."
+        },
+        "contact": {
+          "title": "12. Contautu",
+          "intro": "Si tienes entrugues o dudes sobre estes Condiciones, pues escribinos a:",
+          "company": "ITAKAI",
+          "email_label": "Corréu:",
+          "support_label": "Sofitu:"
+        }
+      },
+      "meta": {
+        "title": "Condiciones del serviciu | ITAKAI",
+        "description": "Condiciones d'usu de la plataforma educativa ITAKAI."
+      }
+    },
+    "privacy_policy": {
+      "title": "Política de privacidá",
+      "last_updated": "Últimu anovamientu: xineru de 2026",
+      "sections": {
+        "introduction": {
+          "title": "1. Introducción",
+          "p1": "N'ITAKAI (\"nosotros\", \"nuestru\" o \"la plataforma\") comprometémonos a protexer la to privacidá y los tos datos personales. Esta Política de privacidá describi cómo recoyemos, usamos, compartimos y protexemos la información personal de los nuestros usuarios (alumnáu, profesoráu y alministradores).",
+          "p2": "Al usar ITAKAI, aceutes les práutiques descrites nesta política. Si nun tas d'alcuerdu con dalguna parte d'esta política, nun uses los nuestros servicios."
+        },
+        "information_collected": {
+          "title": "2. Información que recoyemos",
+          "account_title": "2.1 Información de la cuenta",
+          "account_intro": "Cuando te rexistres n'ITAKAI, recoyemos:",
+          "account_name": "Nome completu",
+          "account_email": "Corréu electrónicu",
+          "account_password": "Contraseña (cifrada)",
+          "account_role": "Rol (alumnu, profesor, alministrador)",
+          "account_avatar": "Avatar o semeya de perfil (opcional)",
+          "usage_title": "2.2 Información d'usu",
+          "usage_intro": "Mientres uses la plataforma, recoyemos:",
+          "usage_missions": "Misiones completaes y progresu educativu",
+          "usage_xp": "Puntos d'esperiencia (XP) y niveles algamaos",
+          "usage_ai": "Interaiciones colos asistentes d'IA",
+          "usage_chat": "Mensaxes na charra con profesores y asistentes",
+          "usage_badges": "Llogros ya insinies desbloquiaes",
+          "usage_stats": "Estadístiques de rendimientu académicu",
+          "technical_title": "2.3 Información téunica",
+          "technical_intro": "Recoyemos automáticamente:",
+          "technical_ip": "Direición IP",
+          "technical_browser": "Triba de navegador y versión",
+          "technical_os": "Sistema operativu",
+          "technical_pages": "Páxines visitaes y tiempu de navegación",
+          "technical_cookies": "Cookies y teunoloxíes asemeyaes"
+        },
+        "how_we_use": {
+          "title": "3. Cómo usamos la to información",
+          "intro": "Usamos la to información personal pa:",
+          "educational": "Dar el serviciu educativu: xestionar la to cuenta, entregar conteníu personalizáu y siguir el to progresu académicu",
+          "personalization": "Personalización con IA: adautar les recomendaciones de los nuestros asistentes IA al to nivel y a les tos necesidaes",
+          "communication": "Comunicación: unviate avisos importantes, anovamientos de misiones y mensaxes de profesores",
+          "improvement": "Ameyoramientu del serviciu: analizar l'usu de la plataforma p'ameyorar funcionalidaes y esperiencia d'usuariu",
+          "security": "Seguridá: detectar y prevenir fraude, abusu o actividaes non autorizaes",
+          "legal": "Cumplimientu llegal: cumplir les obligaciones llegales y normatives aplicables"
+        },
+        "sharing": {
+          "title": "4. Compartir información",
+          "intro": "Nun vendemos nin alquilamos la to información personal a terceros. Podemos compartir los tos datos nes circunstancies siguientes:",
+          "teachers": "Con profesores: si yes alumnu, los tos profesores puen ver el to progresu académicu y les estadístiques de rendimientu",
+          "providers": "Fornidores de servicios: compartimos información con fornidores que nos ayuden a operar la plataforma (agospiamientu, analís, IA)",
+          "legal_requirements": "Requisitos llegales: cuando lo esixa la llei, una orde xudicial o les autoridaes gubernamentales",
+          "rights": "Protección de drechos: pa protexer los drechos, la propiedá o la seguridá d'ITAKAI, de los usuarios o d'otros"
+        },
+        "data_security": {
+          "title": "5. Seguridá de los datos",
+          "intro": "Implementamos midíes de seguridá téuniques y organizatives afayadices pa protexer la to información personal escontra accesu non autorizáu, perda, destrucción o alteración. Esto inclúi:",
+          "encryption": "Cifráu de contraseñes con algoritmos seguros",
+          "https": "Conexones HTTPS/SSL pa toles tresmisiones de datos",
+          "access": "Accesu llendáu a los datos personales namás pa personal autorizáu",
+          "audits": "Auditoríes de seguridá regulares",
+          "backup": "Copia de seguridá y recuperación de datos"
+        },
+        "gdpr_rights": {
+          "title": "6. Los tos drechos (RXPD)",
+          "intro": "D'acuerdu col Reglamentu xeneral de protección de datos (RXPD), tienes los drechos siguientes:",
+          "access": "Accesu: solicitar una copia de los tos datos personales",
+          "rectification": "Rectificación: correxir datos inesautos o incompletos",
+          "erasure": "Desaniciu: solicitar el desaniciu de los tos datos (\"drechu al olvidu\")",
+          "portability": "Portabilidá: recibir los tos datos en formatu estructuráu y tresferilos a otru serviciu",
+          "objection": "Oposición: oponete al tratamientu de los tos datos pa ciertos fines",
+          "restriction": "Llimitación: solicitar la restricción del tratamientu de los tos datos",
+          "contact": "Pa exercer estos drechos, escribinos a privacidá{'@'}itakai.com"
+        },
+        "cookies_section": {
+          "title": "7. Cookies y teunoloxíes asemeyaes",
+          "text": "Usamos cookies y teunoloxíes asemeyaes p'ameyorar la to esperiencia n'ITAKAI. Pa más información sobre l'usu de cookies, consulta la nuestra Política de cookies."
+        },
+        "data_retention": {
+          "title": "8. Retención de datos",
+          "text": "Caltenemos la to información personal mientres la to cuenta tea activa o mientres seya necesario pa dar los nuestros servicios. Si desanicies la to cuenta, vamos caltener ciertos datos el tiempu esixíu pola llei o pa fines llexítimos de negociu (por exemplu, prevención del fraude o resolución de disputes)."
+        },
+        "minors": {
+          "title": "9. Menores d'edá",
+          "text": "ITAKAI ta diseñáu pal usu educativu y pue incluyir usuarios menores de 18 años sol la supervisión de profesores o instituciones educatives. Si yes pá, ma o tutor y tienes entrugues sobre cómo tratamos los datos de menores, escribinos a sofitu{'@'}itakai.com"
+        },
+        "policy_changes": {
+          "title": "10. Cambeos nesta política",
+          "text": "Podemos anovar esta Política de privacidá de xemes en cuando. Vamos avisate de los cambeos importantes con un avisu na plataforma o per corréu electrónicu. La data d'\"Últimu anovamientu\" al principiu d'esta política indica cuándo se fixeron los cambeos más recientes."
+        },
+        "contact": {
+          "title": "11. Contautu",
+          "intro": "Si tienes entrugues, dudes o solicitúes rellacionaes con esta Política de privacidá, pues escribinos a:",
+          "company": "ITAKAI",
+          "email_label": "Corréu:",
+          "support_label": "Sofitu:"
+        }
+      },
+      "meta": {
+        "title": "Política de privacidá | ITAKAI",
+        "description": "Conoz cómo protexemos y xestionamos la to información personal n'ITAKAI."
+      }
+    },
+    "cookies": {
+      "title": "Política de cookies",
+      "last_updated": "Últimu anovamientu: xineru de 2026",
+      "sections": {
+        "what_are": {
+          "title": "1. ¿Qué son les cookies?",
+          "p1": "Les cookies son ficheros de testu pequeños que se guarden nel to preséu (ordenador, tableta o móvil) cuando visites un sitiu web. Les cookies permiten que'l sitiu web recuerde les tos aiciones y preferencies un tiempu, pa que nun tengas que configurales otra vuelta cada vegada que vuelvas al sitiu o navegues d'una páxina a otra.",
+          "p2": "N'ITAKAI usamos cookies y teunoloxíes asemeyaes p'ameyorar la to esperiencia na nuestra plataforma educativa, dar funcionalidaes esenciales y analizar cómo s'usa'l nuestru serviciu."
+        },
+        "types": {
+          "title": "2. Tribes de cookies qu'usamos",
+          "essential_title": "2.1 Cookies esenciales (estrictamente necesaries)",
+          "essential_text": "Estes cookies son imprescindibles pa que puedas navegar per ITAKAI y usar les sos funcionalidaes. Ensin estes cookies, servicios como l'aniciu de sesión, la navegación ente páxines o l'accesu a estayes segures nun funcionaríen bien.",
+          "essential_examples_title": "Exemplos d'usu:",
+          "essential_session": "Caltener la to sesión activa mientres navegues pela plataforma",
+          "essential_auth": "Recordar la to autenticación (tokens d'accesu)",
+          "essential_security": "Seguridá y prevención de fraudes",
+          "essential_load": "Equilibriu de carga del sirvidor",
+          "essential_note": "Estes cookies nun se puen desactivar porque son necesaries pal funcionamientu básicu d'ITAKAI.",
+          "functionality_title": "2.2 Cookies de funcionalidá",
+          "functionality_text": "Estes cookies permiten qu'ITAKAI recuerde les eleiciones que faes (como'l to nome d'usuariu, la llingua o la rexón) y dan funcionalidaes ameyoraes y más personalizaes.",
+          "functionality_examples_title": "Exemplos d'usu:",
+          "functionality_preferences": "Recordar les tos preferencies de visualización (tema, tamañu de lletra)",
+          "functionality_progress": "Guardar el to progresu nes misiones",
+          "functionality_assistant": "Caltener la to eleición d'asistente IA favoritu",
+          "functionality_chat": "Recordar la to última conversación activa na charra",
+          "functionality_note": "Pues remanar estes cookies dende la configuración del to navegador, pero desactivales pue afeutar a la funcionalidá de la plataforma.",
+          "analytics_title": "2.3 Cookies de rendimientu y analítiques",
+          "analytics_text": "Estes cookies recueyen información sobre cómo los usuarios usen ITAKAI, como qué páxines visiten más o si reciben mensaxes de fallu. Tola información que recueyen estes cookies ye agregada y anónima.",
+          "analytics_examples_title": "Exemplos d'usu:",
+          "analytics_patterns": "Analizar patrones de navegación y usu de la plataforma",
+          "analytics_visitors": "Contar visitantes y entender cómo naveguen pel sitiu",
+          "analytics_effectiveness": "Midir la efeutividá de les misiones y del conteníu educativu",
+          "analytics_errors": "Detectar y iguar fallos téunicos",
+          "analytics_performance": "Ameyorar el rendimientu del sitiu",
+          "analytics_note": "Usamos ferramientes d'analís pa entender meyor cómo ameyorar la esperiencia del usuariu. Pues optar por nun participar nel siguimientu analíticu dende la configuración del to navegador.",
+          "third_party_title": "2.4 Cookies de terceros",
+          "third_party_text": "Dalgunos de los nuestros servicios usen cookies puestes por terceros de confianza pa dar funcionalidaes adicionales:",
+          "third_party_google": "Google OAuth: pa permitir l'aniciu de sesión cola to cuenta de Google",
+          "third_party_ai": "Servicios d'IA: pa dar rempuestes de los nuestros asistentes mitolóxicos",
+          "third_party_cdn": "CDN y agospiamientu: p'ameyorar la velocidá de carga del sitiu",
+          "third_party_note": "Estes cookies de terceros tán suxetes a les polítiques de privacidá de los sos fornidores respeutivos."
+        },
+        "duration": {
+          "title": "3. Duración de les cookies",
+          "session_title": "3.1 Cookies de sesión",
+          "session_text": "Son cookies temporales que se desanicien automáticamente cuando zarres el navegador. Úsense sobre too pa caltener la to sesión activa mientres navegues per ITAKAI.",
+          "persistent_title": "3.2 Cookies persistentes",
+          "persistent_text": "Queden nel to preséu un tiempu concretu o fasta que les desanicies a mano. N'ITAKAI, les cookies persistentes suelen caducar depués de:",
+          "persistent_auth": "Autenticación: 30 díes (si escueyes \"Recordáme\")",
+          "persistent_preferences": "Preferencies: 1 añu",
+          "persistent_analytics": "Analítiques: 2 años"
+        },
+        "manage": {
+          "title": "4. Cómo xestionar y desaniciar cookies",
+          "intro": "Tienes drechu a decidir si aceutes o refugues les cookies. Pues exercer les tos preferencies de cookies d'estes maneres:",
+          "browser_title": "4.1 Configuración del navegador",
+          "browser_text": "La mayoría de los navegadores web aceuten cookies automáticamente, pero pues camudar la configuración del to navegador pa refugales si lo prefieres:",
+          "browser_chrome": "Google Chrome: Configuración → Privacidá y seguridá → Cookies y otros datos de sitios",
+          "browser_firefox": "Firefox: Opciones → Privacidá y seguridá → Cookies y datos del sitiu",
+          "browser_safari": "Safari: Preferencies → Privacidá → Cookies y datos de sitios web",
+          "browser_edge": "Microsoft Edge: Configuración → Cookies y permisos del sitiu → Cookies",
+          "tools_title": "4.2 Ferramientes de terceros",
+          "tools_text": "Hai ferramientes de terceros que te dexen xestionar cookies, como:",
+          "blocking_title": "4.3 Efeutu de bloquiar les cookies",
+          "blocking_warning_title": "Alvertencia",
+          "blocking_warning_text": "Si decides bloquiar o desaniciar les cookies, dalgunes funcionalidaes d'ITAKAI puen nun funcionar bien. Por exemplu, nun vas poder caltener la to sesión activa, guardar el to progresu nes misiones nin acceder a conteníu personalizáu."
+        },
+        "changes": {
+          "title": "5. Cambeos nesta Política de cookies",
+          "p1": "Podemos anovar esta Política de cookies de xemes en cuando pa reflexar cambeos nes cookies qu'usamos o por razones operatives, llegales o normatives. Recomendámoste revisar esta páxina de xemes en cuando pa tar informáu sobre l'usu que facemos de les cookies.",
+          "p2": "La data d'\"Últimu anovamientu\" al principiu d'esta política indica cuándo se fixeron los cambeos más recientes."
+        },
+        "more_info": {
+          "title": "6. Más información",
+          "p1": "Pa saber más sobre cómo protexemos la to privacidá y tratamos los tos datos personales, consulta la nuestra Política de privacidá.",
+          "p2": "Si tienes dalguna entruga o duda sobre la nuestra Política de cookies, escribinos a:",
+          "company": "ITAKAI",
+          "email_label": "Corréu:",
+          "support_label": "Sofitu:"
+        },
+        "summary_table": {
+          "title": "7. Tabla resume de cookies",
+          "col_type": "Triba",
+          "col_purpose": "Finalidá",
+          "col_duration": "Duración",
+          "col_required": "Necesaria",
+          "essential_type": "Esenciales",
+          "essential_purpose": "Autenticación, seguridá, navegación",
+          "essential_duration": "Sesión / 30 díes",
+          "essential_required": "Sí",
+          "functionality_type": "Funcionalidá",
+          "functionality_purpose": "Preferencies, configuración, personalización",
+          "functionality_duration": "1 añu",
+          "functionality_required": "Non",
+          "analytics_type": "Analítiques",
+          "analytics_purpose": "Analís d'usu, rendimientu, ameyores",
+          "analytics_duration": "2 años",
+          "analytics_required": "Non",
+          "third_party_type": "Terceros",
+          "third_party_purpose": "OAuth, IA, CDN",
+          "third_party_duration": "Variable",
+          "third_party_required": "Parcial"
+        }
+      },
+      "meta": {
+        "title": "Política de cookies | ITAKAI",
+        "description": "Información sobre l'usu de cookies na plataforma ITAKAI."
+      }
+    },
+    "legal_notice": {
+      "title": "Avisu llegal",
+      "last_updated": "Últimu anovamientu: xineru de 2026",
+      "sections": {
+        "identification": {
+          "title": "1. Datos identificativos del titular",
+          "intro": "En cumplimientu del deber d'información recoyíu nel artículu 10 de la Llei 34/2002, d'11 de xunetu, de servicios de la sociedá de la información y de comerciu electrónicu (LSSICE), el titular d'esti sitiu web infórmalu de lo siguiente:",
+          "company_name": "Denominación social: ITAKAI",
+          "domain": "Dominiu: itakai.com",
+          "email_legal": "Corréu de contautu:",
+          "email_support": "Corréu de sofitu:"
+        },
+        "purpose": {
+          "title": "2. Oxetu",
+          "p1": "ITAKAI ye una plataforma educativa gamificada basada na mitoloxía griega que da servicios d'aprendizaxe interactivu per aciu de misiones educatives, asistentes d'intelixencia artificial y un sistema de progresu gamificáu. Esti Avisu llegal regula l'usu del sitiu web itakai.com (d'equí p'alantre, \"el Sitiu Web\").",
+          "p2": "L'accesu y l'usu del Sitiu Web supón l'aceutación espresa y ensin reserves de toles condiciones afitaes nesti Avisu llegal, nes Condiciones del serviciu, na Política de privacidá y na Política de cookies."
+        },
+        "conditions": {
+          "title": "3. Condiciones d'usu",
+          "access_title": "3.1 Accesu y navegación",
+          "access_text": "L'accesu al Sitiu Web por parte del Usuariu ye llibre y de baldre. El rexistru como usuariu y l'usu de determinaos servicios puen tar suxetos a condiciones específiques y puen requerir el rexistru previu del Usuariu.",
+          "correct_use_title": "3.2 Usu correutu",
+          "correct_use_text": "L'Usuariu comprométese a usar el Sitiu Web y los servicios acordies cola llei, esti Avisu llegal, les Condiciones del serviciu y los bonos costumes. L'Usuariu oblígase a facer un usu dilixente de los servicios y a nun destinalos a actividaes ilícites o contraries a la bona fe.",
+          "prohibitions_title": "3.3 Prohibiciones",
+          "prohibitions_intro": "Ta espresamente prohibío:",
+          "prohibitions_damage": "Facer aiciones que puedan dañar, inutilizar, sobrecargar o deteriorar el Sitiu Web",
+          "prohibitions_impede": "Torgar l'usu normal del Sitiu Web por parte d'otros usuarios",
+          "prohibitions_impersonate": "Suplantar la identidá d'otros usuarios",
+          "prohibitions_illegal_content": "Espardir conteníos illegales, racistes, xenófobos, pornográficos, d'apoloxía del terrorismu o qu'atenten escontra los drechos humanos",
+          "prohibitions_malware": "Introducir virus informáticos, troyanos, gusanos, bombes lóxiques o cualquier otru programa o material dañible",
+          "prohibitions_unauthorized_access": "Intentar acceder a estayes restrinxíes de los sistemes informáticos d'ITAKAI o de terceros"
+        },
+        "intellectual_property": {
+          "title": "4. Propiedá intelectual ya industrial",
+          "p1": "Tolos conteníos del Sitiu Web, incluyíos ensin llende testos, semeyes, gráficos, imáxenes, iconos, teunoloxía, software, enllaces, diseños gráficos, códigu fonte, personaxes mitolóxicos adautaos y demás conteníos audiovisuales o sonoros, según el so diseñu gráficu y los códigos fonte (d'equí p'alantre, \"los Conteníos\"), son propiedá intelectual d'ITAKAI o de terceros, ensin que puedan entendese cedíos al Usuariu nengún de los drechos d'esplotación reconocíos pola normativa vixente en materia de propiedá intelectual sobre ellos.",
+          "p2": "Les marques, los nomes comerciales o los signos distintivos son titularidá d'ITAKAI o de terceros, ensin que pueda entendese que l'accesu al Sitiu Web atribuya nengún drechu sobre eses marques, nomes comerciales o signos distintivos.",
+          "p3": "Quedan reservaos tolos drechos de propiedá intelectual ya industrial sobre los Conteníos. Ta espresamente prohibida la reproducción, distribución, comunicación pública, tresformación o cualquier otra forma d'esplotación, por cualquier procedimientu, de too o parte de los Conteníos ensin l'autorización previa, espresa y por escrito d'ITAKAI."
+        },
+        "third_party_links": {
+          "title": "5. Enllaces (links) a sitios de terceros",
+          "p1": "El Sitiu Web pue tener enllaces a sitios web de terceros. ITAKAI nun exerz nengún tipu de control sobre esos sitios web y, poro, nun asume responsabilidá nenguna polos conteníos, servicios o cualquier otru material qu'haiga nellos.",
+          "p2": "La inclusión d'estos enllaces tien una finalidá namás informativa y en nengún casu supón suxerencia, invitación o recomendación sobre ellos. L'Usuariu accede a esos sitios baxo la so esclusiva responsabilidá."
+        },
+        "liability_exclusion": {
+          "title": "6. Esclusión de responsabilidá",
+          "availability_title": "6.1 Disponibilidá del Sitiu Web",
+          "availability_text": "ITAKAI nun garantiza la disponibilidá y la continuidá del funcionamientu del Sitiu Web. Poro, ITAKAI nun va ser en nengún casu responsable de los daños y perxuicios que puedan derivase de la falta de disponibilidá o de continuidá del funcionamientu del Sitiu Web.",
+          "content_title": "6.2 Conteníos",
+          "content_text": "ITAKAI nun garantiza la esautitú, la veracidá, la eshaustividá nin l'anovamientu de los Conteníos. L'Usuariu ye responsable de contrastar la información qu'apaez nel Sitiu Web. ITAKAI escluye cualquier responsabilidá polos daños y perxuicios de toa mena que puedan debese a la falta de veracidá, esautitú, eshaustividá o actualidá de los Conteníos.",
+          "security_title": "6.3 Virus y seguridá",
+          "security_text": "ITAKAI nun garantiza l'ausencia de virus nin d'otros elementos nel Sitiu Web que puedan producir alteraciones nel sistema informáticu del Usuariu. ITAKAI escluye cualquier responsabilidá polos daños y perxuicios de toa mena que puedan debese a la presencia de virus o d'otros elementos dañibles.",
+          "user_content_title": "6.4 Conteníu xeneráu polos usuarios",
+          "user_content_text": "ITAKAI nun se fai responsable de les opiniones espresaes polos Usuarios per aciu de comentarios, foros, charra u otres ferramientes de participación. ITAKAI resérvase'l drechu a desaniciar cualquier conteníu que considere inafayadizu."
+        },
+        "modifications": {
+          "title": "7. Modificaciones",
+          "p1": "ITAKAI resérvase'l drechu de facer ensin avisu previu les modificaciones que considere oportunes nel Sitiu Web, y pue camudar, quitar o amestar tanto los conteníos y servicios que s'ufierten nelli como la forma na qu'estos apaecen presentaos o allugaos.",
+          "p2": "Del mesmu mou, ITAKAI podrá camudar en cualquier momentu les condiciones d'esti Avisu llegal. Recomiéndase al Usuariu consultar de xemes en cuando esti Avisu llegal pa tar al tantu de posibles cambeos."
+        },
+        "data_protection": {
+          "title": "8. Protección de datos personales",
+          "p1": "ITAKAI cumple col Reglamentu xeneral de protección de datos (RXPD) UE 2016/679 y cola Llei orgánica 3/2018, de 5 d'avientu, de protección de datos personales y garantía de los drechos dixitales (LOPDGDD).",
+          "p2": "Pa información detallada sobre'l tratamientu de datos personales, consulta la nuestra Política de privacidá."
+        },
+        "cookies_section": {
+          "title": "9. Cookies",
+          "p1": "El Sitiu Web usa cookies propies y de terceros p'ameyorar la esperiencia del Usuariu y ufiertar conteníos y servicios del so interés.",
+          "p2": "Pa más información sobre l'usu de cookies, consulta la nuestra Política de cookies."
+        },
+        "jurisdiction": {
+          "title": "10. Llexislación aplicable y xurisdicción",
+          "p1": "La rellación ente ITAKAI y l'Usuariu ríxese pola normativa española vixente. En casu de controversia, les partes podrán someter los sos conflictos a arbitraxe o dir a la xurisdicción ordinaria, y son competentes pa resolver cualquier controversia los xulgaos y tribunales d'España.",
+          "p2": "Si dalguna cláusula d'esti Avisu llegal se declarara nula, les demás cláusules van siguir vixentes ya van interpretase teniendo en cuenta la voluntá de les partes y la finalidá mesma d'esti Avisu llegal."
+        },
+        "dispute_resolution": {
+          "title": "11. Resolución de llitixos en llinia",
+          "p1": "Acordies col Reglamentu (UE) 524/2013, la Comisión Europea facilita una plataforma d'accesu de baldre pa la resolución alternativa de conflictos ente l'empresariu y el consumidor, ensin necesidá de dir a los tribunales de xusticia, per aciu de la intervención d'un terceru, llamáu organismu de resolución alternativa de llitixos.",
+          "p2": "Pa más información, pues acceder a la plataforma europea de resolución de llitixos en llinia col enllaz siguiente:"
+        },
+        "contact": {
+          "title": "12. Contautu",
+          "intro": "Pa cualquier consulta, reclamación o aclaración sobre esti Avisu llegal, pues ponete en contautu con nós per estos medios:",
+          "company": "ITAKAI",
+          "email_legal": "Corréu llegal:",
+          "email_support": "Corréu de sofitu:",
+          "email_privacy": "Corréu de privacidá:"
+        },
+        "acceptance": {
+          "title": "Aceutación del Avisu llegal",
+          "text": "L'accesu y l'usu del Sitiu Web supón l'aceutación espresa y plena d'esti Avisu llegal, según de les Condiciones del serviciu, la Política de privacidá y la Política de cookies. Si nun tas d'alcuerdu con dalgún d'estos documentos, tienes d'abstenete d'usar el Sitiu Web."
+        }
+      },
+      "meta": {
+        "title": "Avisu llegal | ITAKAI",
+        "description": "Información llegal sobre l'usu de la plataforma educativa ITAKAI."
+      }
+    },
+    "licenses": {
+      "title": "Llicencies",
+      "description": "Equí vas poder consultar tola información sobre les llicencies de software, biblioteques de terceros y atribuciones usaes na plataforma ITAKAI.",
+      "btn_back": "Volver a la páxina principal",
+      "meta": {
+        "title": "Llicencies - ITAKAI",
+        "description": "Información sobre llicencies d'ITAKAI"
+      }
+    },
+    "notifications": {
+      "title": "Avisos",
+      "btn_mark_all_read": "Marcar toos como lleíos",
+      "tabs": {
+        "all": "Toos",
+        "unread": "Ensin lleer"
+      },
+      "unread_label": "Ensin lleer",
+      "btn_view": "Ver",
+      "btn_delete": "Desaniciar l'avisu",
+      "empty_unread": "Nun tienes avisos ensin lleer",
+      "empty_all": "Nun tienes avisos",
+      "meta": {
+        "title": "Avisos | ITAKAI",
+        "description": "Revisa los tos avisos y mantente al día colos últimos anovamientos de les tos misiones y clases."
+      }
+    }
+  }
+}

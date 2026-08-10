@@ -790,8 +790,26 @@
   .onb-result-box {
     @apply bg-gray-50 rounded-2xl p-5 border border-gray-100;
   }
+  /* Botones sobre la portada del resumen final: legibles encima de cualquier
+     imagen sin robarle protagonismo. */
+  .summary-hero-btn {
+    @apply inline-flex items-center gap-1.5 rounded-full bg-black/35 px-3 py-1.5 text-xs
+      font-medium text-white backdrop-blur-sm transition-colors hover:bg-black/55;
+  }
   .onb-actions {
-    @apply flex items-center justify-between mt-5 pt-4 border-t border-gray-100;
+    @apply flex flex-wrap items-center justify-between gap-2 mt-5 pt-4 border-t border-gray-100;
+  }
+  /* En pantallas estrechas, que salten botones enteros a la línea siguiente
+     en vez de partirse la etiqueta por dentro. */
+  .onb-actions button {
+    @apply whitespace-nowrap;
+  }
+  /* Los hijos directos son los grupos de botones. No se puede usar `.flex` en el
+     selector: Tailwind lo lee como una redefinición de la utilidad `flex` y falla
+     con "circular dependency". Aplicarlo a todos los div es inocuo, porque
+     flex-wrap/justify-end no hacen nada fuera de un contenedor flex. */
+  .onb-actions > div {
+    @apply flex-wrap justify-end gap-y-2;
   }
   .onb-loading {
     @apply flex items-center gap-2 text-text-secondary text-sm;

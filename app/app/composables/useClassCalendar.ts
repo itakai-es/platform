@@ -45,6 +45,14 @@ export function useRecurrenceText() {
   const dayName = (wd: number, style: 'long' | 'short' = 'long') =>
     new Date(2024, 0, 1 + wd).toLocaleDateString(locale.value, { weekday: style })
 
+  // "YYYY-MM-DD" → fecha legible en el idioma activo ("31 de agosto de 2026").
+  // Si la clave no es una fecha válida, se muestra tal cual.
+  const formatDateKey = (key: string): string => {
+    const d = parseDateKey(key)
+    if (isNaN(d.getTime())) return key
+    return d.toLocaleDateString(locale.value, { day: 'numeric', month: 'long', year: 'numeric' })
+  }
+
   const listDays = (weekdays: number[]) => {
     const names = [...weekdays].sort((a, b) => a - b).map(wd => dayName(wd))
     return new Intl.ListFormat(locale.value, { type: 'conjunction' }).format(names)
@@ -89,27 +97,31 @@ export function useRecurrenceText() {
         else base = t('teacher.schedule.weekly_days', { days: listDays(rec.weekdays) })
     }
     if (rec.ends?.type === 'on' && rec.ends.onDate)
-      base += `, ${t('teacher.schedule.ends_on_suffix', { date: rec.ends.onDate })}`
+      base += `, ${t('teacher.schedule.ends_on_suffix', { date: formatDateKey(rec.ends.onDate) })}`
     else if (rec.ends?.type === 'after' && rec.ends.afterCount)
       base += `, ${t('teacher.schedule.ends_after_suffix', { n: rec.ends.afterCount })}`
     return base
   }
 
-  return { t, describe, presetLabels, dayName, listDays }
+  return { t, describe, presetLabels, dayName, listDays, formatDateKey }
 }
 
 /**
  * useClassCalendar - Deriva el texto legible del horario (en el idioma activo)
- * para el campo `schedule` que muestran las tarjetas.
+ * para el campo `schedule` que muestran las tarjetas. Acepta un tramo único
+ * (clases antiguas) o la lista de tramos; los tramos se unen con "; ".
  */
-export function useClassCalendar(config: Ref<ScheduleConfig>) {
+export function useClassCalendar(config: Ref<ScheduleConfig | ScheduleConfig[]>) {
   const { describe } = useRecurrenceText()
-  const scheduleText = computed(() => {
-    const c = config.value
+  const slotText = (c: ScheduleConfig): string => {
     // Sin días elegidos en modo semanal = incompleto → sin texto.
     if (c.freq === 'weekly' && c.weekdays.length === 0) return ''
     const time = c.start && c.end ? ` ${c.start}-${c.end}` : ''
     return `${describe(c, c.startDate)}${time}`.trim()
+  }
+  const scheduleText = computed(() => {
+    const v = config.value
+    return (Array.isArray(v) ? v : [v]).map(slotText).filter(Boolean).join('; ')
   })
   return { scheduleText }
 }

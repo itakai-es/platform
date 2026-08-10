@@ -1,0 +1,933 @@
+{
+  "teacher": {
+    "about": {
+      "title": "Despre ITAKAI",
+      "subtitle": "Noutăți și istoricul versiunilor",
+      "breadcrumb": "Despre",
+      "breadcrumb_home": "Acasă",
+      "current_version": "Versiunea actuală",
+      "latest": "Ultima versiune",
+      "versions_index": "Versiuni",
+      "footer_note": "Îți lipsește ceva sau ai găsit o eroare? Spune-ne și vom ține cont în versiunile următoare.",
+      "groups": {
+        "new": "Noutăți",
+        "improved": "Îmbunătățiri",
+        "fixed": "Remedieri"
+      },
+      "meta": {
+        "title": "Despre | ITAKAI",
+        "description": "Noutăți, îmbunătățiri și remedieri pentru fiecare versiune ITAKAI."
+      }
+    },
+    "dashboard": {
+      "title": "Pagina profesorului",
+      "subtitle": "Bine ai venit, {name}!",
+      "new_class": "Clasă nouă",
+      "new_mission": "Misiune nouă",
+      "stats": {
+        "total_students": "Total elevi",
+        "active_classes": "Clase active",
+        "active_missions": "Misiuni active"
+      },
+      "my_classes": "Clasele mele",
+      "view_all": "Vezi toate",
+      "no_classes_yet": "Încă nu ai clase",
+      "recent_missions": "Ultimele misiuni",
+      "no_missions_description": "Creează prima misiune pentru elevii tăi",
+      "meta": {
+        "title": "Pagina profesorului | ITAKAI",
+        "description": "Pagina principală a profesorului. Administrează-ți clasele și misiunile și urmărește progresul elevilor tăi."
+      }
+    },
+    "classes": {
+      "index": {
+        "title": "Clasele mele",
+        "subtitle": "Administrează-ți clasele și urmărește progresul elevilor tăi",
+        "new_class": "Clasă nouă",
+        "create_first": "Creează prima clasă",
+        "no_classes_description": "Încă nu ai creat nicio clasă",
+        "meta": {
+          "title": "Clasele mele | ITAKAI Profesor",
+          "description": "Administrează toate clasele tale, elevii înscriși și misiunile atribuite."
+        },
+        "templates": "Șabloane",
+        "duplicate_success": "Clasă duplicată ca „{name}”",
+        "duplicate_error": "Clasa nu a putut fi duplicată",
+        "duplicate": {
+          "title": "Duplică clasa",
+          "subtitle": "Alege ce să copiezi în noua clasă «{name}».",
+          "confirm": "Duplică",
+          "cancel": "Anulează",
+          "items": {
+            "missions": {
+              "label": "Misiuni",
+              "desc": "Misiunile și enigmele lor"
+            },
+            "narrative": {
+              "label": "Poveste",
+              "desc": "Narațiunea și imaginea de copertă"
+            },
+            "features": {
+              "label": "Funcționalități",
+              "desc": "Modulele activate ale clasei"
+            },
+            "shop": {
+              "label": "Magazin",
+              "desc": "Articolele din magazin"
+            },
+            "behaviors": {
+              "label": "Comportamente",
+              "desc": "Șabloanele de comportament"
+            }
+          }
+        }
+      },
+      "create": {
+        "breadcrumb_classes": "Clasele mele",
+        "breadcrumb_new": "Nouă",
+        "btn_creating": "Se creează...",
+        "btn_create": "Creează clasa",
+        "success_title": "Clasa a fost creată!",
+        "success_message": "Clasa ta „{name}” este gata.",
+        "invite_code_label": "Cod de invitație",
+        "invite_code_hint": "Distribuie acest cod elevilor tăi",
+        "btn_view_classes": "Vezi clasele",
+        "btn_copied": "Copiat!",
+        "btn_copy_code": "Copiază codul",
+        "validation": {
+          "name_required": "Numele clasei este obligatoriu",
+          "name_min_length": "Numele trebuie să aibă cel puțin 3 caractere",
+          "create_error": "Eroare la crearea clasei. Încearcă din nou."
+        },
+        "preview_label": "Așa va arăta clasa ta",
+        "onboarding": {
+          "ask_idea": "Salut, {name}! Sunt {god}. Spune-mi, ce lume sau ce temă vrei pentru clasa ta?",
+          "review_approach": "Iată ce am pregătit pentru tine, îți place?",
+          "pick_title": "Ce titlu îi punem clasei tale?",
+          "placeholder_idea": "Ex.: O școală de magie cu 4 case care concurează pe puncte, elevi-magicieni și provocări gen temniță…",
+          "generating_approach": "Creez narațiunea clasei tale...",
+          "narrative_feedback_placeholder": "Ex.: Vreau mai multe referințe la casele din Hogwarts...",
+          "btn_change_something": "Vreau să schimb ceva",
+          "btn_edit_by_hand": "Editează manual",
+          "custom_title_placeholder": "Sau scrie propriul tău titlu...",
+          "title_feedback_placeholder": "Ex.: Vreau titluri mai scurte, cu mai multe referințe la Harry Potter...",
+          "generating_cover": "Se generează coperta...",
+          "cover_error": "Coperta nu a putut fi generată. Poți sări peste acest pas.",
+          "btn_upload_cover": "Încarc-o pe a mea",
+          "cover_upload_type_error": "Format invalid. Încarcă o imagine PNG, JPG sau WEBP.",
+          "cover_upload_size_error": "Imaginea este prea mare (maximum 5 MB).",
+          "image_feedback_placeholder": "Vreau să fie mai colorată, cu fundal albastru...",
+          "thinking": "Mă gândesc...",
+          "btn_back": "Înapoi",
+          "btn_next": "Înainte",
+          "btn_skip": "Sari peste",
+          "btn_accept_plan": "Da, mergem mai departe",
+          "attach_materials": "Atașează materiale (PDF, Word, imagini)",
+          "attach_processing": "Se procesează materialele…",
+          "attach_remove": "Elimină",
+          "attach_error": "Materialele nu au putut fi procesate.",
+          "attach_error_size": "„{name}” are {size} MB. Maximul este {max} MB per fișier.",
+          "attach_error_too_large": "Materialele sunt prea mari în total. Încarcă-le pe rând (max. {max} MB per fișier).",
+          "attach_hint": "Max. {max} MB per fișier",
+          "guide_question": "Am pregătit un ghid pentru elevii tăi"
+        },
+        "meta": {
+          "title": "Creează o clasă nouă | ITAKAI Profesor"
+        },
+        "narrative_error": "Nu am reușit să creez narațiunea",
+        "summary": {
+          "edit": "Editează",
+          "edit_title": "Titlu",
+          "edit_cover": "Copertă",
+          "editing_hint": "Editezi o clasă care este deja gata.",
+          "back_to_summary": "Înapoi la rezumat"
+        }
+      },
+      "detail": {
+        "breadcrumb_classes": "Clasele mele",
+        "not_found_title": "Clasa nu a fost găsită",
+        "not_found_description": "Clasa pe care o cauți nu există sau nu ai acces",
+        "btn_back": "Înapoi la clasele mele",
+        "btn_invite": "Invită",
+        "tabs": {
+          "summary": "Rezumat",
+          "narrative": "Poveste",
+          "guide": "Ghid",
+          "missions": "Misiuni",
+          "students": "Elevi",
+          "tienda": "Magazin",
+          "behaviors": "Comportamente",
+          "settings": "Setări"
+        },
+        "students": {
+          "empty_title": "Încă nu sunt elevi",
+          "empty_description": "Când elevii se alătură clasei, vor apărea aici împreună cu statisticile lor.",
+          "col_student": "Elev",
+          "col_level": "Nivel",
+          "search_placeholder": "Caută elev...",
+          "sort_name_asc": "Nume A-Z",
+          "sort_name_desc": "Nume Z-A",
+          "sort_xp_asc": "XP ↑",
+          "sort_xp_desc": "XP ↓",
+          "sort_level_asc": "Nivel ↑",
+          "sort_level_desc": "Nivel ↓",
+          "sort_coins_asc": "Monede ↑",
+          "sort_coins_desc": "Monede ↓",
+          "sort_mana_asc": "Mana ↑",
+          "sort_mana_desc": "Mana ↓",
+          "sort_lives_asc": "Viață ↑",
+          "sort_lives_desc": "Viață ↓",
+          "no_results_title": "Fără rezultate",
+          "no_results_description": "Nu există elevi care să corespundă căutării.",
+          "col_behaviors": "Comportamente",
+          "view_list": "Listă",
+          "view_ranking": "Clasament"
+        },
+        "stats_title": "Statisticile clasei",
+        "pending_reviews": "Lucrări de verificat",
+        "guide_editor": {
+          "toast_saved": "Ghidul a fost salvat",
+          "toast_error": "Eroare la salvarea ghidului"
+        },
+        "ranking": {
+          "no_students_title": "Nu există elevi",
+          "no_students_description": "Încă nu sunt elevi în această clasă"
+        },
+        "missions_tab": {
+          "no_missions_title": "Nu există misiuni",
+          "no_missions_description": "Încă nu au fost atribuite misiuni acestei clase",
+          "create_first": "Creează prima misiune",
+          "new_mission": "Misiune nouă",
+          "no_results": "Fără rezultate",
+          "empty_search": "Nu s-au găsit misiuni pentru „{query}”",
+          "empty_status": "Nu există misiuni cu stările selectate",
+          "empty_rarity": "Nu există misiuni cu raritățile selectate",
+          "empty_default": "Nu există misiuni în această clasă"
+        },
+        "meta": {
+          "title": "Detaliile clasei | ITAKAI Profesor",
+          "description": "Administrează clasa. Vezi elevii, misiunile atribuite și progresul general."
+        },
+        "behaviors": {
+          "new_button": "Comportament nou",
+          "new_button_short": "Nou",
+          "library_button": "Bibliotecă",
+          "library_title": "Biblioteca de comportamente",
+          "library_subtitle": "Adaugă comportamente sugerate dintr-o atingere. Apoi le poți edita sau șterge.",
+          "library_add": "Adaugă",
+          "empty_title": "Încă nu există comportamente",
+          "empty_description": "Creează unul de la zero sau adaugă din bibliotecă.",
+          "edit_aria": "Editează comportamentul",
+          "section_positives": "Pozitive",
+          "section_negatives": "Negative",
+          "filter_all": "Toate",
+          "apply_title": "Aplică „{name}”",
+          "pick_student": "Alege elevul căruia i-l vei aplica.",
+          "applied_toast": "{behavior} aplicat lui {student}",
+          "empty_students": "Încă nu sunt elevi în această clasă.",
+          "form_new_title": "Comportament nou",
+          "form_edit_title": "Editează comportamentul",
+          "form_type": "Tip",
+          "type_positive": "Pozitiv",
+          "type_negative": "Negativ",
+          "form_name": "Nume",
+          "form_name_placeholder": "Ex.: Participare bună",
+          "form_description": "Descriere",
+          "form_description_placeholder": "Ce recunoaște sau ce corectează acest comportament?",
+          "form_impacts": "Efecte",
+          "form_impacts_hint": "Valoare absolută; semnul îl dă tipul (pozitiv = +, negativ = −).",
+          "form_cancel": "Anulează",
+          "form_save": "Salvează",
+          "form_create": "Creează",
+          "form_delete": "Șterge",
+          "delete_title": "Ștergi „{name}”?",
+          "delete_description": "Nu va mai fi în catalog. Această acțiune nu poate fi anulată.",
+          "toast_created": "Comportament creat",
+          "toast_updated": "Comportament actualizat",
+          "toast_deleted": "Comportament șters",
+          "toast_save_error": "Comportamentul nu a putut fi salvat.",
+          "toast_delete_error": "Comportamentul nu a putut fi șters.",
+          "fetch_error": "Comportamentele nu au putut fi încărcate.",
+          "apply_error": "Comportamentul nu a putut fi aplicat."
+        },
+        "shop": {
+          "tab_items": "Articole",
+          "tab_uses": "Utilizări",
+          "uses_empty_title": "Încă fără utilizări",
+          "new_item": "Articol nou",
+          "library_button": "Bibliotecă",
+          "library_title": "Biblioteca de articole",
+          "library_subtitle": "Adaugă articole sugerate dintr-o atingere. Apoi le poți edita sau șterge.",
+          "library_add": "Adaugă",
+          "empty_title": "Încă nu există articole",
+          "empty_description": "Creează prima recompensă pe care elevii tăi o vor putea schimba.",
+          "hidden": "Ascuns",
+          "purchases_empty_title": "Încă fără schimburi",
+          "form_edit_title": "Editează articolul",
+          "form_new_title": "Articol nou",
+          "form_name": "Nume",
+          "form_name_placeholder": "Ex.: Sări peste o temă",
+          "form_description": "Descriere",
+          "form_description_placeholder": "Ce primește elevul când îl schimbă?",
+          "form_price": "Preț",
+          "form_visible": "Vizibil pentru elevi",
+          "form_cancel": "Anulează",
+          "form_delete": "Șterge",
+          "form_save": "Salvează",
+          "form_create": "Creează",
+          "delete_title": "Ștergi „{name}”?",
+          "delete_description": "Elevii nu îl vor mai vedea în magazin. Această acțiune nu poate fi anulată.",
+          "toast_created": "Articol creat",
+          "toast_updated": "Articol actualizat",
+          "toast_deleted": "Articol șters",
+          "toast_save_error": "Articolul nu a putut fi salvat.",
+          "toast_delete_error": "Articolul nu a putut fi șters.",
+          "form_type": "Tip",
+          "type_reward": "Recompensă",
+          "type_power": "Putere",
+          "form_mana_cost": "Cost în mana (la utilizare)",
+          "form_usage": "Utilizare",
+          "usage_single": "O singură utilizare",
+          "usage_unlimited": "Nelimitat",
+          "form_life_restore": "Viața recuperată",
+          "form_life_restore_hint": "Puncte de viață adăugate la schimb (recompense) sau la utilizare (puteri). 0 = nu recuperează viață.",
+          "tab_history": "Istoric",
+          "history_purchases": "Cumpărături",
+          "view_student_profile": "Vezi elevul",
+          "mana_disabled_chip": "Mana dezactivată"
+        },
+        "settings": {
+          "levels": {
+            "title": "Niveluri",
+            "curve_title": "Curba de experiență",
+            "curve_hint": "Stabilește cât XP costă urcarea unui nivel și până la ce nivel se poate ajunge.",
+            "pace_desc_fast": "Se urcă repede de nivel: fiecare nivel costă doar puțin mai mult decât cel anterior.",
+            "pace_desc_normal": "Progresie echilibrată: fiecare nivel costă ceva mai mult decât cel anterior.",
+            "pace_desc_slow": "De fiecare dată costă considerabil mai mult să urci de nivel. Progresie lungă, ideală pentru tot anul.",
+            "mode_label": "Cum se câștigă XP-ul",
+            "mode_curve": "După formulă",
+            "mode_custom": "Manual (pe nivel)",
+            "pace_label": "Ritmul de urcare",
+            "pace_fast": "Rapid",
+            "pace_normal": "Normal",
+            "pace_slow": "Lent",
+            "custom_hint": "Scrie XP-ul necesar pentru a urca de la fiecare nivel la următorul.",
+            "compare_title": "XP total pentru a atinge fiecare nivel",
+            "compare_level": "Nivelul {level}",
+            "cap_label": "Numărul de niveluri",
+            "base_label": "XP-ul primului nivel",
+            "tiers_title": "Trepte",
+            "tiers_hint": "Atribuie un titlu și o culoare fiecărui interval de niveluri.",
+            "tier_title_placeholder": "Titlul treptei",
+            "tier_from": "De la",
+            "tier_to": "la",
+            "tier_add": "Adaugă treaptă",
+            "tier_remove": "Elimină treapta",
+            "tiers_warning": "Există goluri sau suprapuneri între trepte: unele niveluri nu ar afișa titlul corect.",
+            "tiers_autofix": "Ajustează automat",
+            "restore_defaults": "Restabilește valorile implicite",
+            "save": "Salvează nivelurile",
+            "discard": "Renunță",
+            "toast_saved": "Nivelurile au fost salvate",
+            "toast_error": "Nivelurile nu au putut fi salvate"
+          },
+          "toast_error": "Configurarea nu a putut fi salvată",
+          "items": {
+            "shop": {
+              "label": "Magazin",
+              "desc": "Recompense și puteri pe care elevii le schimbă."
+            },
+            "coins": {
+              "label": "Monede",
+              "desc": "Afișează soldul și prețurile în monede."
+            },
+            "mana": {
+              "label": "Mana",
+              "desc": "Energie pentru folosirea puterilor din magazin."
+            },
+            "rankings": {
+              "label": "Clasament",
+              "desc": "Clasamentul elevilor din clasă."
+            },
+            "xp": {
+              "label": "Experiență (XP)",
+              "desc": "Niveluri și bară de progres pe bază de XP."
+            },
+            "behaviors": {
+              "label": "Comportamente",
+              "desc": "Aplică acțiuni pozitive sau negative care dau ori iau resurse."
+            },
+            "lives": {
+              "label": "Vieți",
+              "desc": "Puncte de viață ale clasei (le modifică comportamentele)."
+            },
+            "visualEffects": {
+              "label": "Efecte vizuale",
+              "desc": "Animații precum confetti la urcarea de nivel."
+            },
+            "sounds": {
+              "label": "Sunete",
+              "desc": "Efecte sonore la urcarea de nivel, la finalizarea misiunilor etc."
+            }
+          },
+          "requires": "Necesită {feature}",
+          "requires_resource": "Necesită cel puțin o resursă activă (XP, monede, mana sau vieți)",
+          "general": {
+            "title": "Date generale",
+            "name_label": "Nume",
+            "subject_label": "Materie",
+            "level_label": "Nivel de învățământ",
+            "language_label": "Limbă",
+            "province_label": "Provincie",
+            "metadata_none": "Nespecificat",
+            "metadata_search": "Caută...",
+            "subject_needs_level": "Alege mai întâi nivelul",
+            "publish_title": "Publică drept șablon",
+            "publish_hint": "Distribuie-l în marketplace ca alți profesori să îl importe.",
+            "publish_missing_metadata": "Salvează materia, nivelul și limba înainte de publicare.",
+            "publish_on": "Clasa a fost publicată drept șablon",
+            "publish_off": "Șablonul a fost retras din marketplace",
+            "publish_error": "Șablonul nu a putut fi publicat",
+            "template_metadata_locked": "Clasa este publicată drept șablon: nu poți lăsa materia, nivelul sau limba nespecificate. Retrage-o mai întâi din publicare.",
+            "duplicate_title": "Duplică clasa",
+            "duplicate_hint": "Creează o copie a acestei clase. Vei putea alege ce conținut se copiază.",
+            "duplicate_cta": "Duplică",
+            "schedule_label": "Orar",
+            "background_label": "Imagine de fundal",
+            "save": "Salvează modificările",
+            "discard": "Renunță",
+            "toast_saved": "Datele au fost salvate",
+            "toast_error": "Datele nu au putut fi salvate",
+            "name_required": "Numele nu poate fi gol",
+            "schedule_add": "Adaugă oră",
+            "schedule_remove": "Elimină ora",
+            "schedule_preview": "Previzualizare",
+            "background_generate": "Generează cu IA",
+            "background_regenerate": "Regenerează cu IA",
+            "background_clear": "Elimină imaginea",
+            "background_upload": "Încarc-o pe a mea",
+            "background_upload_type_error": "Format invalid. Încarcă o imagine PNG, JPG sau WEBP.",
+            "background_upload_size_error": "Imaginea este prea mare (maximum 5 MB).",
+            "background_error": "Imaginea nu a putut fi generată"
+          },
+          "features": {
+            "title": "Funcționalități"
+          },
+          "management": {
+            "title": "Administrare"
+          }
+        },
+        "badges_empty": "Nu există insigne în această clasă",
+        "join_requests": {
+          "empty_title": "Fără cereri",
+          "empty_description": "Nu există cereri în așteptare pentru această clasă"
+        }
+      }
+    },
+    "missions": {
+      "index": {
+        "meta": {
+          "title": "Misiunile mele | ITAKAI Profesor",
+          "description": "Administrează toate misiunile pe care le-ai creat, editează-le sau creează altele noi pentru elevii tăi."
+        },
+        "subtitle": "Administrează misiunile claselor tale"
+      },
+      "create": {
+        "meta": {
+          "title": "Creează misiune | ITAKAI Profesor"
+        },
+        "pick_class": "Selectează o clasă",
+        "idea_placeholder": "Ex.: Vreau o misiune despre cinematică, în care elevii să calculeze traiectorii de mături zburătoare...",
+        "narrative_error": "Nu am reușit să creez narațiunea",
+        "ai_unavailable": "Serviciul de IA nu este disponibil acum. Încearcă din nou peste câteva minute."
+      },
+      "detail": {
+        "delete_confirm_btn": "Șterge",
+        "toast": {
+          "enigma_has_submissions": "Nu se poate șterge o enigmă care are deja lucrări trimise de elevi"
+        },
+        "meta": {
+          "title": "Detaliile misiunii | ITAKAI Profesor",
+          "title_loading": "Se încarcă misiunea... | ITAKAI Profesor",
+          "description_fallback": "Detaliile unei misiuni în ITAKAI"
+        },
+        "tabs": {
+          "summary": "Rezumat",
+          "settings": "Setări"
+        },
+        "settings": {
+          "title_label": "Titlu",
+          "title_required": "Titlul nu poate fi gol",
+          "deadline_label": "Termen-limită",
+          "deadline_hint": "Lasă-l gol ca misiunea să nu expire.",
+          "rarity_label": "Raritate",
+          "rarity_locked_hint": "Nu poți schimba raritatea: un elev a finalizat deja misiunea.",
+          "rarity": {
+            "comun": "Comună",
+            "rara": "Rară",
+            "epica": "Epică",
+            "legendaria": "Legendară"
+          },
+          "status_label": "Stare",
+          "status_active": "Activă",
+          "status_blocked": "Blocată",
+          "status_hint": "Blocată: elevii o văd cu lacăt și nu pot intra.",
+          "background_label": "Imaginea misiunii",
+          "background_generate": "Generează cu IA",
+          "background_regenerate": "Regenerează cu IA",
+          "background_upload": "Încarc-o pe a mea",
+          "background_clear": "Elimină imaginea",
+          "background_error": "Imaginea nu a putut fi generată",
+          "background_upload_type_error": "Format invalid. Încarcă o imagine PNG, JPG sau WEBP.",
+          "background_upload_size_error": "Imaginea este prea mare (maximum 5 MB).",
+          "save": "Salvează modificările",
+          "discard": "Renunță",
+          "toast_saved": "Datele au fost salvate",
+          "toast_error": "Datele nu au putut fi salvate"
+        }
+      }
+    },
+    "badges": {
+      "title": "Insignele mele",
+      "subtitle": "Creează și administrează insigne personalizate ca să răsplătești realizările elevilor tăi",
+      "new_badge": "Insignă nouă",
+      "btn_delete": "Șterge",
+      "no_badges_title": "Fără insigne",
+      "no_badges_description": "Creează prima insignă ca să îți răsplătești elevii",
+      "create_first": "Creează prima insignă",
+      "form": {
+        "edit_title": "Editează insigna",
+        "create_title": "Insignă nouă",
+        "label_name": "Nume",
+        "label_description": "Descriere",
+        "label_image": "Imagine",
+        "image_optional": "(opțional)",
+        "placeholder_name": "Ex.: Maestru al ecuațiilor",
+        "placeholder_description": "Descrie ce realizare reprezintă această insignă...",
+        "btn_remove_image": "Elimină imaginea",
+        "preview_label": "Previzualizare:",
+        "btn_cancel": "Anulează",
+        "btn_saving": "Se salvează...",
+        "btn_save_changes": "Salvează modificările",
+        "btn_create": "Creează insigna",
+        "no_mission": "Fără misiune"
+      },
+      "detail": {
+        "btn_edit": "Editează",
+        "btn_close": "Închide"
+      },
+      "delete_title": "Șterge insigna",
+      "delete_confirm": "Sigur vrei să ștergi insigna „{name}”? Această acțiune nu poate fi anulată.",
+      "validation": {
+        "name_required": "Numele este obligatoriu",
+        "name_min_length": "Numele trebuie să aibă cel puțin 3 caractere",
+        "image_size": "Imaginea nu poate depăși 2 MB",
+        "image_type": "Sunt acceptate doar fișiere PNG, JPG, SVG sau WebP"
+      },
+      "meta": {
+        "title": "Insignele mele | ITAKAI Profesor",
+        "description": "Creează, editează și administrează insigne personalizate ca să premiezi realizările elevilor tăi."
+      },
+      "filter_system": "Ale sistemului",
+      "generate_error": "Insigna nu a putut fi generată."
+    },
+    "students": {
+      "index": {
+        "title": "Elevii mei",
+        "subtitle": "Administrează și urmărește progresul elevilor tăi",
+        "search_placeholder": "Caută după nume sau e-mail...",
+        "filter_all_classes": "Toate clasele",
+        "filter_all_progress": "Tot progresul",
+        "progress_excellent": "Excelent (≥80 %)",
+        "progress_good": "Bun (50-79 %)",
+        "progress_in_progress": "În desfășurare (20-49 %)",
+        "progress_initial": "Inițial (<20 %)",
+        "sort_name_asc": "Nume A-Z",
+        "sort_name_desc": "Nume Z-A",
+        "sort_progress_desc": "Progres mai mare",
+        "sort_progress_asc": "Progres mai mic",
+        "sort_missions_desc": "Mai multe misiuni",
+        "tab_active": "Activi",
+        "tab_archived": "Arhivați",
+        "no_students_title": "Fără elevi",
+        "no_students_filtered": "Nu s-au găsit elevi cu aceste filtre",
+        "no_students_default": "Nu există elevi în clasele tale",
+        "no_archived_students_title": "Fără elevi arhivați",
+        "no_archived_students_default": "Nu există elevi în clasele tale arhivate",
+        "btn_view": "Vezi",
+        "stat_missions": "Misiuni",
+        "meta": {
+          "title": "Elevii mei | ITAKAI Profesor",
+          "description": "Administrează toți elevii tăi și consultă progresul și statisticile lor de performanță academică."
+        }
+      },
+      "detail": {
+        "breadcrumb_students": "Elevi",
+        "loading": "Se încarcă...",
+        "error_title": "Eroare la încărcarea elevului",
+        "error_default": "Eroare la încărcarea datelor elevului",
+        "btn_retry": "Reîncearcă",
+        "stat_classes": "Clase",
+        "stat_missions": "Misiuni",
+        "stat_completed": "Finalizat",
+        "enrolled_classes_title": "Clase la care este înscris",
+        "enrolled_classes_count": "{count} clase",
+        "not_enrolled": "Nu este înscris la niciuna dintre clasele tale",
+        "label_progress": "Finalizat",
+        "stat_coins": "Monede",
+        "stat_mana": "Mana",
+        "stat_lives": "Puncte de viață",
+        "no_activity": "Fără activitate recentă",
+        "meta": {
+          "title": "Profilul elevului | ITAKAI Profesor",
+          "description": "Profil detaliat al elevului, cu statistici de performanță, progres în misiuni și activitate recentă."
+        }
+      }
+    },
+    "ai_assistant": {
+      "meta": {
+        "title": "Asistent IA profesor | ITAKAI",
+        "description": "Asistent IA specializat pentru profesori. Primește ajutor pentru administrarea claselor și a misiunilor."
+      }
+    },
+    "profile": {
+      "breadcrumb_home": "Acasă",
+      "breadcrumb_profile": "Profilul meu",
+      "title": "Profilul meu",
+      "tabs": {
+        "security": "Securitate",
+        "settings": "Setări"
+      },
+      "security": {
+        "password_title": "Parolă",
+        "placeholder_current": "Parola actuală",
+        "placeholder_new": "Parolă nouă",
+        "placeholder_confirm": "Confirmă parola",
+        "btn_update": "Actualizează",
+        "email_title": "E-mail",
+        "placeholder_new_email": "E-mail nou",
+        "sessions_title": "Sesiuni",
+        "sessions_close_all": "Închide toate",
+        "session_current": "Curentă",
+        "session_close": "Închide",
+        "validation": {
+          "passwords_mismatch": "Parolele nu coincid",
+          "password_min_length": "Parola trebuie să aibă cel puțin 6 caractere",
+          "email_invalid": "Introdu un e-mail valid",
+          "password_required": "Introdu-ți parola"
+        }
+      },
+      "settings": {
+        "theme_title": "Temă",
+        "theme_description": "Alege stilul vizual al platformei",
+        "theme_college": "Mod școală",
+        "theme_college_desc": "Aspect gamificat",
+        "theme_university": "Mod universitate",
+        "theme_university_desc": "Aspect profesional",
+        "language_title": "Limbă",
+        "language_updated": "Limba a fost actualizată",
+        "theme_updated": "Tema a fost actualizată",
+        "danger_zone_title": "Zonă periculoasă",
+        "danger_zone_description": "Odată ștearsă, contul tău nu mai poate fi recuperat. Asigură-te că asta vrei.",
+        "btn_delete_account": "Șterge contul",
+        "delete_modal_title": "Șterge contul",
+        "delete_modal_confirm_prompt": "Pentru confirmare, introdu-ți parola:",
+        "placeholder_password": "Parola ta",
+        "btn_cancel": "Anulează",
+        "btn_delete_confirm": "Șterge-mi contul",
+        "languages": {
+          "es": "Spaniolă",
+          "en": "Engleză",
+          "ca": "Catalană",
+          "val": "Valenciană",
+          "eu": "Bască",
+          "gl": "Galiciană",
+          "ast": "Asturiană",
+          "pt": "Portugheză",
+          "el": "Greacă",
+          "ro": "Română"
+        }
+      },
+      "meta": {
+        "title": "Profilul meu | ITAKAI",
+        "description": "Administrează-ți profilul de profesor, configurează securitatea și personalizează-ți experiența."
+      }
+    },
+    "components": {
+      "enigma_form_modal": {
+        "edit_title": "Editează enigma",
+        "add_title": "Adaugă enigmă",
+        "label_title": "Titlul enigmei",
+        "placeholder_title": "Ex.: Trezirea mașinilor",
+        "label_xp": "XP",
+        "label_rewards": "Recompense la finalizare",
+        "rewards_locked_hint": "Poți doar să mărești recompensele: un elev le-a câștigat deja.",
+        "label_description": "Descriere",
+        "placeholder_description": "Descrie ce trebuie să facă elevul...",
+        "label_objectives": "Obiective",
+        "label_objectives_optional": "(opțional)",
+        "placeholder_objective": "Scrie un obiectiv...",
+        "btn_remove_objective": "Șterge obiectivul",
+        "btn_add_objective": "Adaugă obiectiv",
+        "is_optional": "Această enigmă este opțională",
+        "btn_cancel": "Anulează",
+        "btn_saving": "Se salvează...",
+        "btn_save": "Salvează",
+        "btn_add": "Adaugă",
+        "validation": {
+          "title_required": "Titlul este obligatoriu",
+          "description_required": "Descrierea este obligatorie"
+        },
+        "label_mana": "Mana",
+        "label_coins": "Monede",
+        "no_mana": "Fără mana",
+        "custom_value": "Valoare personalizată"
+      },
+      "document_form_modal": {
+        "edit_title": "Editează documentul",
+        "add_title": "Adaugă document",
+        "label_title": "Titlu",
+        "placeholder_title": "Ex.: Ghid de sisteme de ecuații",
+        "btn_upload_file": "Încarcă fișier",
+        "btn_add_link": "Adaugă link",
+        "label_file": "Fișier",
+        "drop_hint": "Trage un fișier sau dă clic ca să îl selectezi",
+        "file_types_hint": "PDF, Word, video, imagini (max. 50 MB)",
+        "label_url": "URL",
+        "label_description": "Descriere",
+        "label_description_optional": "(opțional)",
+        "placeholder_description": "Scurtă descriere a documentului...",
+        "label_tags": "Etichete",
+        "placeholder_tags": "Scrie o etichetă și apasă Enter...",
+        "btn_cancel": "Anulează",
+        "btn_saving": "Se salvează...",
+        "btn_save": "Salvează",
+        "btn_add": "Adaugă",
+        "validation": {
+          "title_required": "Titlul este obligatoriu",
+          "url_required": "URL-ul este obligatoriu pentru linkuri",
+          "file_required": "Trebuie să selectezi un fișier",
+          "file_too_large": "Fișierul nu poate depăși 50 MB"
+        }
+      },
+      "class_filter_bar": {
+        "search_placeholder": "Caută clase...",
+        "sort": {
+          "name_asc": "Nume A-Z",
+          "name_desc": "Nume Z-A",
+          "most_students": "Mai mulți elevi",
+          "least_students": "Mai puțini elevi",
+          "most_missions": "Mai multe misiuni",
+          "least_missions": "Mai puține misiuni"
+        }
+      },
+      "mission_filter_bar": {
+        "search_placeholder": "Caută misiuni...",
+        "all_classes": "Toate clasele",
+        "plural_classes": "clase",
+        "all_statuses": "Toate stările",
+        "plural_statuses": "stări",
+        "all_rarities": "Toate raritățile",
+        "plural_rarities": "rarități",
+        "rarity": {
+          "common": "Comună",
+          "rare": "Rară",
+          "epic": "Epică",
+          "legendary": "Legendară"
+        },
+        "status": {
+          "active": "Activă",
+          "urgent": "Urgentă",
+          "completed": "Finalizată",
+          "expired": "Expirată",
+          "locked": "Blocată"
+        },
+        "sort": {
+          "deadline_asc": "Dată ↑",
+          "deadline_desc": "Dată ↓",
+          "name_asc": "Nume A-Z",
+          "name_desc": "Nume Z-A",
+          "xp_desc": "XP ↓",
+          "xp_asc": "XP ↑",
+          "rarity_desc": "Raritate ↓",
+          "rarity_asc": "Raritate ↑",
+          "completion_desc": "Finalizare ↓",
+          "completion_asc": "Finalizare ↑"
+        }
+      },
+      "rewards_form_modal": {
+        "title": "Editează recompensele",
+        "badge_label": "Insignă de recompensă",
+        "remove_badge": "Elimină insigna",
+        "no_badge_title": "Nicio insignă atribuită",
+        "no_badge_description": "Selectează sau creează o insignă pentru această misiune",
+        "btn_select_existing": "Selectează una existentă",
+        "btn_create_new": "Creează una nouă",
+        "select_hint": "Selectează o insignă din colecția ta:",
+        "no_badges_created": "Nu ai insigne create",
+        "btn_create_first": "Creează prima ta insignă",
+        "label_name": "Nume",
+        "label_description": "Descriere",
+        "label_image": "Imagine",
+        "image_optional": "(opțional)",
+        "placeholder_name": "Ex.: Maestru al ecuațiilor",
+        "placeholder_description": "Descrie ce realizare reprezintă această insignă...",
+        "image_selected": "Imagine selectată",
+        "btn_remove_image": "Elimină imaginea",
+        "upload_prompt": "Dă clic ca să încarci o imagine",
+        "upload_hint": "PNG, JPG, SVG sau WebP (max. 2 MB)",
+        "label_rarity": "Raritate",
+        "btn_cancel": "Anulează",
+        "btn_saving": "Se salvează...",
+        "btn_save": "Salvează",
+        "validation": {
+          "name_required": "Numele este obligatoriu",
+          "description_required": "Descrierea este obligatorie",
+          "image_size": "Imaginea nu poate depăși 2 MB",
+          "image_type": "Sunt acceptate doar fișiere PNG, JPG, SVG sau WebP"
+        },
+        "rarity": {
+          "common": "Comună",
+          "rare": "Rară",
+          "epic": "Epică",
+          "legendary": "Legendară"
+        }
+      },
+      "class_detail_layout": {
+        "error_title": "Eroare la încărcarea clasei",
+        "not_found": "Clasa pe care o cauți nu există sau nu ai acces",
+        "btn_back": "Înapoi la clasele mele",
+        "breadcrumb_classes": "Clasele mele"
+      },
+      "mission_detail_template": {
+        "error_title": "Eroare la încărcarea misiunii",
+        "btn_back": "Înapoi la misiuni",
+        "breadcrumb_classes": "Clasele mele",
+        "deadline_none": "Fără termen-limită",
+        "expired_readonly": "Această misiune a expirat: o poți consulta, dar nu mai acceptă lucrări.",
+        "narrative_title": "Povestea misiunii",
+        "btn_see_more": "Vezi mai mult",
+        "btn_see_less": "Vezi mai puțin",
+        "btn_edit": "Editează",
+        "enigmas_title": "Enigme",
+        "btn_add": "Adaugă",
+        "optional_label": "Opțional",
+        "objectives_label": "Obiective:",
+        "no_enigmas": "Nu există enigme în această misiune",
+        "btn_add_first_enigma": "Adaugă prima enigmă",
+        "documents_title": "Documente de sprijin",
+        "no_documents": "Nu există documente de sprijin",
+        "btn_view_submissions": "Vezi lucrările ({count})",
+        "btn_submit": "Trimite",
+        "status_available": "Disponibil",
+        "status_in_review": "În verificare",
+        "status_completed": "Finalizat",
+        "global_progress": "Progres global",
+        "class_average": "Media clasei",
+        "rewards_title": "Recompense",
+        "xp_enigmas": "XP din enigme",
+        "xp_mission": "XP din misiune",
+        "complete_all_enigmas": "Rezolvă toate enigmele",
+        "badge_rarity": {
+          "common": "Comună",
+          "rare": "Rară",
+          "epic": "Epică",
+          "legendary": "Legendară"
+        },
+        "btn_close": "Închide"
+      }
+    },
+    "templates": {
+      "page_title": "Șabloane de clase",
+      "page_subtitle": "Explorează clase publicate de alți profesori și importă-le în ale tale.",
+      "search": "Caută șabloane…",
+      "own": "A ta",
+      "import": "Importă",
+      "import_success": "«{name}» a fost importată. Editeaz-o cum vrei!",
+      "import_error": "Șablonul nu a putut fi importat",
+      "load_error": "Șabloanele nu au putut fi încărcate",
+      "empty_title": "Încă nu există șabloane",
+      "empty_description": "Când un profesor publică o clasă drept șablon, va apărea aici.",
+      "no_results_title": "Fără rezultate",
+      "no_results_description": "Nu există șabloane care să corespundă filtrelor.",
+      "preview_action": "Previzualizează",
+      "preview": {
+        "loading": "Se încarcă șablonul…",
+        "by": "De {name}",
+        "active": "Activată",
+        "inactive": "Dezactivată",
+        "load_error": "Șablonul nu a putut fi încărcat",
+        "error": "Șablonul nu a fost găsit.",
+        "tab_narrative": "Poveste",
+        "tab_features": "Funcționalități",
+        "tab_shop": "Magazin ({n})",
+        "tab_behaviors": "Comportamente ({n})",
+        "no_narrative_title": "Fără poveste",
+        "no_narrative_description": "Acest șablon nu are o poveste definită.",
+        "no_shop_title": "Fără magazin",
+        "no_shop_description": "Acest șablon nu vine cu articole de magazin. Le poți adăuga tu.",
+        "no_behaviors_title": "Fără comportamente",
+        "no_behaviors_description": "Acest șablon nu vine cu comportamente. Le poți defini tu."
+      },
+      "filter_all": {
+        "subject": "Toate materiile",
+        "level": "Toate nivelurile",
+        "language": "Toate limbile",
+        "province": "Toate provinciile"
+      },
+      "sort": {
+        "recent": "Cele mai recente",
+        "name_asc": "Nume A-Z",
+        "name_desc": "Nume Z-A"
+      },
+      "plural": {
+        "subjects": "materii",
+        "levels": "niveluri",
+        "languages": "limbi",
+        "provinces": "provincii"
+      }
+    },
+    "schedule": {
+      "starts_on": "Începe pe",
+      "time": "Ora",
+      "recurrence": "Recurență",
+      "add_slot": "Adaugă orar",
+      "remove_slot": "Elimină orarul",
+      "preview": "Previzualizare",
+      "choose_days": "Alege zilele de curs",
+      "freq_none": "Nu se repetă",
+      "freq_daily": "În fiecare zi",
+      "freq_weekly_on": "În fiecare săptămână {day}",
+      "weekly": "În fiecare săptămână",
+      "freq_monthly": "În fiecare lună",
+      "freq_yearly": "Anual",
+      "weekdays": "În toate zilele lucrătoare (de luni până vineri)",
+      "weekly_days": "În fiecare săptămână: {days}",
+      "every_weeks_days": "La fiecare {n} săptămâni: {days}",
+      "all_weekdays": "Toate zilele lucrătoare",
+      "ends_on_suffix": "până pe {date}",
+      "ends_after_suffix": "de {n} ori",
+      "customize": "Personalizează…",
+      "custom_title": "Recurență personalizată",
+      "repeat_every": "Repetă la fiecare",
+      "unit_day": "zi | zile",
+      "unit_week": "săptămână | săptămâni",
+      "unit_month": "lună | luni",
+      "unit_year": "an | ani",
+      "repeats_on": "Se repetă",
+      "ends": "Se termină",
+      "ends_never": "Niciodată",
+      "ends_on": "Pe",
+      "ends_after": "După",
+      "repetitions": "repetări",
+      "cancel": "Anulează",
+      "done": "Gata",
+      "wizard_question_schedule": "Stabilește un orar pentru clasa ta",
+      "wizard_question_cover": "Acum, o copertă pentru clasa ta"
+    },
+    "submissions": {
+      "subtitle": "Verifică și aprobă lucrările acestei clase dintr-un singur ecran.",
+      "back_to_class": "Înapoi la clasă"
+    }
+  }
+}

@@ -39,6 +39,10 @@ const classCoverSchema = z.object({
   name: z.string().optional(),
   description: z.string().optional(),
   locale: z.string().optional(),
+  // Nivel educativo, para que la ilustración tenga la edad y el tono correctos.
+  // A propósito NO se manda la asignatura: la narrativa es agnóstica a ella (ver
+  // CLASS_NARRATIVE) y meterla aquí llenaría la portada de símbolos del temario.
+  audience: z.string().max(80).optional(),
 })
 
 const missionAssistantSchema = z.object({
@@ -219,6 +223,8 @@ export async function aiRoutes(fastify: FastifyInstance) {
       locale: z.string().optional(),
       context: z.string().max(2000).optional(),
       feedback: z.string().max(500).optional(),
+      brief: z.string().max(2000).optional(),
+      meta: z.string().max(200).optional(),
     }).parse(request.body)
     const locale = resolveLocale(data.locale)
 
@@ -239,6 +245,7 @@ export async function aiRoutes(fastify: FastifyInstance) {
       const prompt = (locale === 'en'
         ? `${contextPart} ${feedbackPart} Generate exactly 20 names for this class. They must fit the class theme and narrative and weave in the subject naturally and evocatively. Vary the style a lot so they don't all sound alike (some epic, some elegant, some playful, some sober). They can be creative but still recognizable as a class name. Do NOT put the course or academic level (e.g. "Grade 7", "1st ESO") in the name unless the teacher explicitly asks. Return ONLY a JSON array of strings. No extra text.`
         : `${contextPart} ${feedbackPart} Genera exactamente 20 nombres para esta clase. Deben encajar con la temática y la narrativa de la clase e integrar la asignatura de forma natural y evocadora. Varía mucho el estilo para que no suenen todos igual (algunos épicos, otros elegantes, otros desenfadados, otros sobrios). Pueden ser creativos, pero reconocibles como el nombre de una clase. NO incluyas el curso ni el nivel académico (ej. "1º ESO") en el nombre, salvo que el profesor lo pida explícitamente. Devuelve SOLO un array JSON de strings. Sin texto extra.`)
+        + Prompts.teacherBriefBlock(data.brief || '', data.meta || '', locale)
         + Prompts.outputLanguageDirective(data.locale)
 
       const text = await provider.generateText(prompt, { locale, temperature: 0.95 })
@@ -380,7 +387,12 @@ export async function aiRoutes(fastify: FastifyInstance) {
       const data = classCoverSchema.parse(request.body)
       const title = data.name?.trim()
       const description = truncateClean(data.description)
-      const compact = [title && `Title: ${title}`, description && `Description: ${description}`]
+      const audience = data.audience?.trim()
+      const compact = [
+        title && `Title: ${title}`,
+        audience && `Audience: ${audience}`,
+        description && `Description: ${description}`,
+      ]
         .filter(Boolean)
         .join('\n')
       const fallback = data.prompt?.trim() || (locale === 'en' ? 'educational class cover' : 'portada educativa de clase')
@@ -407,6 +419,8 @@ export async function aiRoutes(fastify: FastifyInstance) {
     title: z.string().optional(),
     narrative: z.string().optional(),
     locale: z.string().optional(),
+    // Ver classCoverSchema: solo el nivel educativo, nunca la asignatura.
+    audience: z.string().max(80).optional(),
   })
 
   fastify.post('/mission-cover', async (request: FastifyRequest, reply: FastifyReply) => {
@@ -416,7 +430,12 @@ export async function aiRoutes(fastify: FastifyInstance) {
       const data = missionCoverSchema.parse(request.body)
       const title = data.title?.trim()
       const narrative = truncateClean(data.narrative)
-      const compact = [title && `Title: ${title}`, narrative && `Narrative: ${narrative}`]
+      const audience = data.audience?.trim()
+      const compact = [
+        title && `Title: ${title}`,
+        audience && `Audience: ${audience}`,
+        narrative && `Narrative: ${narrative}`,
+      ]
         .filter(Boolean)
         .join('\n')
       const fallback = data.prompt?.trim() || (locale === 'en' ? 'educational mission cover' : 'portada de misión educativa')
@@ -509,8 +528,16 @@ Return ONLY the raw SVG code. No markdown, no backticks, no explanation.`
   const promptSchema = z.object({
     type: z.string(),
     locale: z.string().optional(),
-    params: z.record(z.string()).optional(),
+    // El front declara los params como Record<string, string | number | boolean>
+    // (ver useAIPrompt.streamPrompt). Exigir solo strings hacía que cualquier flag
+    // booleano tumbara la petición con un 400 antes de llegar a la IA: aceptamos
+    // los tres tipos y normalizamos a texto al construir el prompt.
+    params: z.record(z.union([z.string(), z.number(), z.boolean()])).optional(),
   })
+
+  // Los flags viajan ya como texto ("true"/"false"), así que !!valor no sirve:
+  // la cadena "false" es truthy.
+  const asBool = (value?: string) => value === 'true' || value === '1'
 
   fastify.post('/prompt/stream', async (request: FastifyRequest, reply: FastifyReply) => {
     const { id } = request.user as { id: string }
@@ -521,7 +548,9 @@ Return ONLY the raw SVG code. No markdown, no backticks, no explanation.`
 
     const data = promptSchema.parse(request.body)
     const locale = resolveLocale(data.locale)
-    const p = data.params || {}
+    const p: Record<string, string> = Object.fromEntries(
+      Object.entries(data.params || {}).map(([key, value]) => [key, String(value)])
+    )
 
     // Build prompt from centralized templates
     let prompt: string
@@ -551,10 +580,10 @@ Return ONLY the raw SVG code. No markdown, no backticks, no explanation.`
         prompt = Prompts.MISSION_TITLES.regenerate(p.context || '', p.feedback || '', locale)
         break
       case 'mission.enigmas.generate':
-        prompt = Prompts.MISSION_ENIGMAS.generate(p.idea || '', p.narrative || '', p.title || '', p.className || '', locale, { coins: !!p.coins, mana: !!p.mana })
+        prompt = Prompts.MISSION_ENIGMAS.generate(p.idea || '', p.narrative || '', p.title || '', p.className || '', locale, { coins: asBool(p.coins), mana: asBool(p.mana) })
         break
       case 'mission.enigmas.regenerate':
-        prompt = Prompts.MISSION_ENIGMAS.regenerate(p.context || '', p.currentEnigmas || '', p.feedback || '', p.className || '', locale, { coins: !!p.coins, mana: !!p.mana })
+        prompt = Prompts.MISSION_ENIGMAS.regenerate(p.context || '', p.currentEnigmas || '', p.feedback || '', p.className || '', locale, { coins: asBool(p.coins), mana: asBool(p.mana) })
         break
       case 'class.guide.generate':
         prompt = Prompts.CLASS_GUIDE.generate(p.title || '', p.context || '', locale)
@@ -574,6 +603,11 @@ Return ONLY the raw SVG code. No markdown, no backticks, no explanation.`
       default:
         return reply.status(400).send({ message: `Unknown prompt type: ${data.type}` })
     }
+
+    // El brief del profesor va en TODOS los pasos, no solo en el primero: aquí y no
+    // en cada rama del switch, para que un paso nuevo no pueda nacer sin él.
+    // No-op si quien llama no lo manda (asistentes de editor, insignias...).
+    prompt += Prompts.teacherBriefBlock(p.brief || '', p.meta || '', locale)
 
     // Force the OUTPUT language to the class language (ca/eu/gl); no-op for es/en.
     prompt += Prompts.outputLanguageDirective(data.locale)

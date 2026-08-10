@@ -1,0 +1,241 @@
+{
+  "common": {
+    "nav": {
+      "dashboard": "Aniciu",
+      "my_classes": "Les mios clases",
+      "missions": "Misiones",
+      "badges": "Insinies",
+      "students": "Alumnáu",
+      "about": "Tocante a",
+      "users": "Usuarios",
+      "classes": "Clases",
+      "analytics": "Analítiques",
+      "logs": "Rexistros",
+      "features": "Carauterístiques",
+      "blog": "Blog",
+      "section_management": "Xestión",
+      "section_system": "Sistema"
+    },
+    "actions": {
+      "rename": "Renomar",
+      "delete": "Desaniciar",
+      "open_menu": "Abrir menú",
+      "close_menu": "Zarrar menú",
+      "toggle_menu": "Camudar menú",
+      "scroll_left": "Desplazar a la izquierda",
+      "scroll_right": "Desplazar a la drecha",
+      "back_to_dashboard": "Volver al aniciu",
+      "create_new_account": "Crear una cuenta nueva",
+      "enter": "Entrar",
+      "close": "Zarrar",
+      "view_mode": "Mou de vista"
+    },
+    "status": {
+      "under_development": "En desendolque"
+    },
+    "time": {
+      "now": "Agora",
+      "ago_min_short": "Hai {count} min",
+      "ago_hours_short": "Hai {count} h",
+      "ago_days": "Hai {count} díes",
+      "ago_weeks": "Hai {count} selmanes",
+      "yesterday": "Ayeri"
+    },
+    "toast": {
+      "enigma_updated": "Enigma anováu correutamente",
+      "enigma_added": "Enigma amestáu correutamente",
+      "enigma_save_error": "Fallu al guardar l'enigma",
+      "enigma_deleted": "Enigma desaniciáu correutamente",
+      "enigma_delete_error": "Fallu al desaniciar l'enigma",
+      "document_updated": "Documentu anováu correutamente",
+      "document_added": "Documentu amestáu correutamente",
+      "document_save_error": "Fallu al guardar el documentu",
+      "document_deleted": "Documentu desaniciáu correutamente",
+      "document_delete_error": "Fallu al desaniciar el documentu",
+      "badge_assigned": "Insinia asignada correutamente",
+      "badge_removed": "Insinia quitada de la misión",
+      "submission_student_approved": "Entrega de {name} aprobada (+{xp} XP)",
+      "download_not_found": "Nun s'atopó'l ficheru pa baxalu",
+      "download_error": "Nun se pudo baxar el ficheru",
+      "join_request_accepted": "{name} foi aceutáu na clase",
+      "join_request_rejected": "Solicitú refugada",
+      "join_request_accept_error": "Fallu al aceutar la solicitú",
+      "join_request_reject_error": "Fallu al refugar la solicitú"
+    },
+    "notifications": {
+      "title": "Avisos",
+      "panel_label": "Panel d'avisos",
+      "view_all": "Ver toos",
+      "empty": "Nun tienes avisos",
+      "unread_label": "Ensin lleer",
+      "aria_label": "Avisos",
+      "aria_label_unread": "Avisos ({count} ensin lleer)"
+    },
+    "errors": {
+      "generic": "Hebo un fallu. Inténtalo otra vuelta."
+    },
+    "roles": {
+      "student": "Alumnu",
+      "teacher": "Profesor",
+      "admin": "Alministrador",
+      "admin_system": "Alministrador del sistema"
+    },
+    "user_dropdown": {
+      "my_profile": "El mio perfil",
+      "logout": "Zarrar sesión",
+      "user_menu_label": "Menú d'usuariu"
+    },
+    "sidebar": {
+      "new_conversation": "Conversación nueva",
+      "no_conversations": "Entá nun hai conversaciones.",
+      "start_new": "¡Entama una nueva!",
+      "chat_with": "Charra con {name}",
+      "chat_with_god": "Charra con un dios",
+      "chat_with_label": "Charra con"
+    },
+    "mobile_sidebar": {
+      "join_class": "Xunise a una clase"
+    },
+    "landing": {
+      "hero_title": "L'aventura de deprender",
+      "hero_subtitle": "Sistema de xestión educativa con elementos de gamificación pal alumnáu y el profesoráu",
+      "cta_start": "Entamar",
+      "features_title": "¿Qué pues facer con ITAKAI?",
+      "features_subtitle": "Descubri toles ferramientes y funcionalidaes que tresformen la educación nuna esperiencia única",
+      "feature_gamification_title": "Gamificación completa",
+      "feature_gamification_desc": "Sistema de puntos, niveles, insinies y recompenses que motiva l'aprendizaxe continuu",
+      "feature_narrative_title": "Narrativa inmersiva",
+      "feature_narrative_desc": "Cada clase ye una aventura única con personaxes y hestories que prienden l'atención",
+      "feature_teamwork_title": "Trabayu n'equipu",
+      "feature_teamwork_desc": "Retos collaborativos y clasificaciones que fomenten el trabayu n'equipu y la superación constante",
+      "feature_analytics_title": "Analís intelixente",
+      "feature_analytics_desc": "Ferramientes avanzaes de siguimientu y analís del progresu del alumnáu",
+      "feature_access_title": "Accesu universal",
+      "feature_access_desc": "Funciona en cualquier preséu, dende cualquier llugar del mundu",
+      "feature_ai_title": "IA educativa",
+      "feature_ai_desc": "Asistentes que personalicen l'aprendizaxe pa cada alumnu",
+      "profiles_title": "Escueyi'l to perfil pa entamar",
+      "about_title": "¿Qué ye ITAKAI?",
+      "about_description_1": "ITAKAI ye la evolución de <strong>MyClassGame</strong>, sofitada con <strong>Intelixencia Artificial</strong>. Una plataforma educativa gamificada que tresforma la formación profesional nuna esperiencia inmersiva.",
+      "about_description_2": "Xeneración automática de conteníos, asistentes IA personalizaos pa cada alumnu y analís predictivu del rendimientu. Too integráu nun ecosistema onde deprender ye una aventura.",
+      "stat_students": "Alumnáu",
+      "stat_teachers": "Profesoráu",
+      "stat_centers": "Centros",
+      "partners_title": "¿Quién somos?",
+      "gods_title": "Los tos mentores olímpicos",
+      "gods_subtitle": "5 asistentes IA inspiraos en dioses griegos, cada ún espertu nel so dominiu",
+      "cta_final_title": "¿Preparáu pa la to aventura épica?",
+      "cta_final_subtitle": "Xúnite a miles d'alumnos que yá tán tresformando'l so aprendizaxe con ITAKAI",
+      "cta_final_button": "Entamar de baldre agora",
+      "footer_copyright_alt": "© {year} ITAKAI. Sistema educativu gamificáu",
+      "gods": {
+        "atenea": {
+          "domain": "Sabiduría",
+          "description": "Téuniques d'estudiu y estratexes d'aprendizaxe"
+        },
+        "odiseo": {
+          "domain": "Estratexa",
+          "description": "Resolución de problemes y pensamientu críticu"
+        },
+        "penelope": {
+          "domain": "Comunicación",
+          "description": "Llingües, escritura y espresión"
+        },
+        "polifemo": {
+          "domain": "Ciencies",
+          "description": "Ciencies avanzaes y teunoloxía"
+        },
+        "poseidon": {
+          "domain": "Creatividá",
+          "description": "Artes, diseñu ya innovación"
+        }
+      }
+    },
+    "footer": {
+      "legal": "Llegal",
+      "platform": "Plataforma",
+      "support": "Sofitu",
+      "contact": "Contautu",
+      "terms_of_service": "Condiciones del serviciu",
+      "privacy_policy": "Política de privacidá",
+      "cookies": "Cookies",
+      "licenses": "Llicencies",
+      "system_access": "Accesu al sistema",
+      "teacher_panel": "Panel del profesor",
+      "student_panel": "Panel del alumnu",
+      "help_center": "Centru d'ayuda",
+      "documentation": "Documentación"
+    },
+    "level_up": {
+      "title": "¡Xubiesti de nivel!",
+      "congratulations": "¡Norabona! Llegasti al nivel {level}",
+      "congratulations_class": "¡Norabona! Llegasti al nivel {level} en {className}",
+      "rewards_title": "Recompenses llograes",
+      "continue": "¡Siguir!"
+    },
+    "join_class_modal": {
+      "title": "Xunise a una clase",
+      "description": "Introduz el códigu de clase que te dio'l to profesor",
+      "placeholder": "ABC123",
+      "joining": "Xuniéndose...",
+      "join_button": "Xunise a la clase",
+      "error_required": "El códigu de clase ye obligatoriu",
+      "error_min_length": "El códigu tien de tener polo menos 4 caráuteres",
+      "error_not_found": "Nun s'atopó nenguna clase con esi códigu",
+      "error_invalid_code": "Códigu de clase inválidu",
+      "error_already_enrolled": "Yá tas inscritu nesta clase",
+      "error_generic": "Fallu al xunise a la clase. Inténtalo otra vuelta.",
+      "error_generic_short": "Fallu al xunise a la clase",
+      "success": "Xuniéstite a {className}"
+    },
+    "invite_students_modal": {
+      "title": "Convidar alumnos",
+      "description": "Comparti esti códigu colos tos alumnos pa que se xunan a la clase:",
+      "copy_code": "Copiar códigu",
+      "code_copied": "Códigu copiáu al cartafueyu",
+      "copy_error": "Fallu al copiar el códigu"
+    },
+    "under_development": {
+      "back_to_dashboard": "Volver al aniciu"
+    },
+    "docs": {
+      "title": "Centru d'ayuda y documentación",
+      "description": "Equí vas poder acceder a guíes completes, tutoriales pasu ente pasu, entrugues frecuentes y recursos d'ayuda p'aprovechar al máximu la plataforma ITAKAI.",
+      "btn_back": "Volver a la páxina principal",
+      "meta": {
+        "title": "Documentación - ITAKAI",
+        "description": "Centru d'ayuda y documentación d'ITAKAI"
+      }
+    },
+    "meta": {
+      "site_title": "ITAKAI - L'aventura de deprender | Plataforma educativa gamificada",
+      "site_description": "Tresforma la educación con ITAKAI, la plataforma gamificada qu'inspira, motiva y coneuta al alumnáu, al profesoráu y a les families. Xúnite a más de 50.000 alumnos.",
+      "og_title": "ITAKAI - L'aventura de deprender",
+      "og_description": "Plataforma educativa gamificada con IA, narratives inmersives y analís intelixente."
+    },
+    "resources": {
+      "xp": "Esperiencia (XP)",
+      "coins": "Monedes",
+      "mana": "Maná",
+      "lives": "Puntos de vida"
+    },
+    "maintenance": {
+      "title": "En mantenimientu",
+      "message": "Tamos faciendo ameyores. Vuelvi en dellos minutos.",
+      "admin_notice": "Mou mantenimientu activu — namás los alministradores puen acceder."
+    },
+    "menu_display": {
+      "title": "Menú superior",
+      "description": "Cómo se ven les llingüetes de clases y misiones.",
+      "both": "Iconu y testu",
+      "icon": "Namás iconu",
+      "text": "Namás testu"
+    },
+    "markdown": {
+      "insert_at_end": "Inxertar al final"
+    },
+    "student_preview": {
+      "banner": "Tas viendo la plataforma como un alumnu (demo)"
+    }
+  }
+}

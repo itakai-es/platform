@@ -1,0 +1,241 @@
+{
+  "common": {
+    "nav": {
+      "dashboard": "Início",
+      "my_classes": "As minhas turmas",
+      "missions": "Missões",
+      "badges": "Emblemas",
+      "students": "Alunos",
+      "about": "Sobre",
+      "users": "Utilizadores",
+      "classes": "Turmas",
+      "analytics": "Análises",
+      "logs": "Registos",
+      "features": "Funcionalidades",
+      "blog": "Blogue",
+      "section_management": "Gestão",
+      "section_system": "Sistema"
+    },
+    "actions": {
+      "rename": "Mudar o nome",
+      "delete": "Eliminar",
+      "open_menu": "Abrir menu",
+      "close_menu": "Fechar menu",
+      "toggle_menu": "Alternar menu",
+      "scroll_left": "Deslocar para a esquerda",
+      "scroll_right": "Deslocar para a direita",
+      "back_to_dashboard": "Voltar ao início",
+      "create_new_account": "Criar conta nova",
+      "enter": "Entrar",
+      "close": "Fechar",
+      "view_mode": "Modo de visualização"
+    },
+    "status": {
+      "under_development": "Em desenvolvimento"
+    },
+    "time": {
+      "now": "Agora",
+      "ago_min_short": "Há {count} min",
+      "ago_hours_short": "Há {count} h",
+      "ago_days": "Há {count} dias",
+      "ago_weeks": "Há {count} semanas",
+      "yesterday": "Ontem"
+    },
+    "toast": {
+      "enigma_updated": "Enigma atualizado com sucesso",
+      "enigma_added": "Enigma adicionado com sucesso",
+      "enigma_save_error": "Erro ao guardar o enigma",
+      "enigma_deleted": "Enigma eliminado com sucesso",
+      "enigma_delete_error": "Erro ao eliminar o enigma",
+      "document_updated": "Documento atualizado com sucesso",
+      "document_added": "Documento adicionado com sucesso",
+      "document_save_error": "Erro ao guardar o documento",
+      "document_deleted": "Documento eliminado com sucesso",
+      "document_delete_error": "Erro ao eliminar o documento",
+      "badge_assigned": "Emblema atribuído com sucesso",
+      "badge_removed": "Emblema removido da missão",
+      "submission_student_approved": "Entrega de {name} aprovada (+{xp} XP)",
+      "download_not_found": "O ficheiro para descarregar não foi encontrado",
+      "download_error": "Não foi possível descarregar o ficheiro",
+      "join_request_accepted": "{name} foi aceite na turma",
+      "join_request_rejected": "Pedido recusado",
+      "join_request_accept_error": "Erro ao aceitar o pedido",
+      "join_request_reject_error": "Erro ao recusar o pedido"
+    },
+    "notifications": {
+      "title": "Notificações",
+      "panel_label": "Painel de notificações",
+      "view_all": "Ver todas",
+      "empty": "Não tens notificações",
+      "unread_label": "Não lida",
+      "aria_label": "Notificações",
+      "aria_label_unread": "Notificações ({count} por ler)"
+    },
+    "errors": {
+      "generic": "Ocorreu um erro. Tenta novamente."
+    },
+    "roles": {
+      "student": "Aluno",
+      "teacher": "Professor",
+      "admin": "Administrador",
+      "admin_system": "Administrador do sistema"
+    },
+    "user_dropdown": {
+      "my_profile": "O meu perfil",
+      "logout": "Terminar sessão",
+      "user_menu_label": "Menu de utilizador"
+    },
+    "sidebar": {
+      "new_conversation": "Nova conversa",
+      "no_conversations": "Ainda não há conversas.",
+      "start_new": "Começa uma nova!",
+      "chat_with": "Conversa com {name}",
+      "chat_with_god": "Conversa com um deus",
+      "chat_with_label": "Conversa com"
+    },
+    "mobile_sidebar": {
+      "join_class": "Juntar-se a uma turma"
+    },
+    "landing": {
+      "hero_title": "A aventura de aprender",
+      "hero_subtitle": "Sistema de gestão educativa com elementos de gamificação para alunos e professores",
+      "cta_start": "Começar",
+      "features_title": "O que podes fazer com o ITAKAI?",
+      "features_subtitle": "Descobre todas as ferramentas e funcionalidades que transformam a educação numa experiência única",
+      "feature_gamification_title": "Gamificação completa",
+      "feature_gamification_desc": "Sistema de pontos, níveis, emblemas e recompensas que motiva a aprendizagem contínua",
+      "feature_narrative_title": "Narrativa imersiva",
+      "feature_narrative_desc": "Cada turma é uma aventura única com personagens e histórias que captam a atenção",
+      "feature_teamwork_title": "Trabalho em equipa",
+      "feature_teamwork_desc": "Desafios colaborativos e rankings que promovem o trabalho em equipa e a superação constante",
+      "feature_analytics_title": "Análise inteligente",
+      "feature_analytics_desc": "Ferramentas avançadas de acompanhamento e análise do progresso dos alunos",
+      "feature_access_title": "Acesso universal",
+      "feature_access_desc": "Funciona em qualquer dispositivo, a partir de qualquer lugar do mundo",
+      "feature_ai_title": "IA educativa",
+      "feature_ai_desc": "Assistentes que personalizam a aprendizagem para cada aluno",
+      "profiles_title": "Escolhe o teu perfil para começar",
+      "about_title": "O que é o ITAKAI?",
+      "about_description_1": "O ITAKAI é a evolução do <strong>MyClassGame</strong>, potenciada com <strong>Inteligência Artificial</strong>. Uma plataforma educativa gamificada que transforma o ensino profissional numa experiência imersiva.",
+      "about_description_2": "Geração automática de conteúdos, assistentes de IA personalizados para cada aluno e análise preditiva do desempenho. Tudo integrado num ecossistema onde aprender é uma aventura.",
+      "stat_students": "Alunos",
+      "stat_teachers": "Professores",
+      "stat_centers": "Escolas",
+      "partners_title": "Quem somos?",
+      "gods_title": "Os teus mentores olímpicos",
+      "gods_subtitle": "5 assistentes de IA inspirados em deuses gregos, cada um especialista no seu domínio",
+      "cta_final_title": "Pronto para a tua aventura épica?",
+      "cta_final_subtitle": "Junta-te a milhares de alunos que já estão a transformar a sua aprendizagem com o ITAKAI",
+      "cta_final_button": "Começar grátis agora",
+      "footer_copyright_alt": "© {year} ITAKAI. Sistema educativo gamificado",
+      "gods": {
+        "atenea": {
+          "domain": "Sabedoria",
+          "description": "Técnicas de estudo e estratégias de aprendizagem"
+        },
+        "odiseo": {
+          "domain": "Estratégia",
+          "description": "Resolução de problemas e pensamento crítico"
+        },
+        "penelope": {
+          "domain": "Comunicação",
+          "description": "Línguas, escrita e expressão"
+        },
+        "polifemo": {
+          "domain": "Ciências",
+          "description": "Ciências avançadas e tecnologia"
+        },
+        "poseidon": {
+          "domain": "Criatividade",
+          "description": "Artes, design e inovação"
+        }
+      }
+    },
+    "footer": {
+      "legal": "Legal",
+      "platform": "Plataforma",
+      "support": "Apoio",
+      "contact": "Contacto",
+      "terms_of_service": "Termos do serviço",
+      "privacy_policy": "Política de privacidade",
+      "cookies": "Cookies",
+      "licenses": "Licenças",
+      "system_access": "Acesso ao sistema",
+      "teacher_panel": "Painel do professor",
+      "student_panel": "Painel do aluno",
+      "help_center": "Centro de ajuda",
+      "documentation": "Documentação"
+    },
+    "level_up": {
+      "title": "Subiste de nível!",
+      "congratulations": "Parabéns! Chegaste ao nível {level}",
+      "congratulations_class": "Parabéns! Chegaste ao nível {level} em {className}",
+      "rewards_title": "Recompensas obtidas",
+      "continue": "Continuar!"
+    },
+    "join_class_modal": {
+      "title": "Juntar-se a uma turma",
+      "description": "Introduz o código de turma que o teu professor te deu",
+      "placeholder": "ABC123",
+      "joining": "A juntar-se...",
+      "join_button": "Juntar-se à turma",
+      "error_required": "O código de turma é obrigatório",
+      "error_min_length": "O código tem de ter pelo menos 4 caracteres",
+      "error_not_found": "Não foi encontrada nenhuma turma com esse código",
+      "error_invalid_code": "Código de turma inválido",
+      "error_already_enrolled": "Já estás inscrito nesta turma",
+      "error_generic": "Erro ao juntar-se à turma. Tenta novamente.",
+      "error_generic_short": "Erro ao juntar-se à turma",
+      "success": "Juntaste-te a {className}"
+    },
+    "invite_students_modal": {
+      "title": "Convidar alunos",
+      "description": "Partilha este código com os teus alunos para que se juntem à turma:",
+      "copy_code": "Copiar código",
+      "code_copied": "Código copiado para a área de transferência",
+      "copy_error": "Erro ao copiar o código"
+    },
+    "under_development": {
+      "back_to_dashboard": "Voltar ao início"
+    },
+    "docs": {
+      "title": "Centro de ajuda e documentação",
+      "description": "Aqui podes aceder a guias completos, tutoriais passo a passo, perguntas frequentes e recursos de ajuda para tirares o máximo partido da plataforma ITAKAI.",
+      "btn_back": "Voltar à página principal",
+      "meta": {
+        "title": "Documentação - ITAKAI",
+        "description": "Centro de ajuda e documentação do ITAKAI"
+      }
+    },
+    "meta": {
+      "site_title": "ITAKAI - A aventura de aprender | Plataforma educativa gamificada",
+      "site_description": "Transforma a educação com o ITAKAI, a plataforma gamificada que inspira, motiva e liga alunos, professores e famílias. Junta-te a mais de 50 000 alunos.",
+      "og_title": "ITAKAI - A aventura de aprender",
+      "og_description": "Plataforma educativa gamificada com IA, narrativas imersivas e análise inteligente."
+    },
+    "resources": {
+      "xp": "Experiência (XP)",
+      "coins": "Moedas",
+      "mana": "Mana",
+      "lives": "Pontos de vida"
+    },
+    "maintenance": {
+      "title": "Em manutenção",
+      "message": "Estamos a fazer melhorias. Volta daqui a uns minutos.",
+      "admin_notice": "Modo de manutenção ativo — só os administradores podem aceder."
+    },
+    "menu_display": {
+      "title": "Menu superior",
+      "description": "Como aparecem os separadores de turmas e missões.",
+      "both": "Ícone e texto",
+      "icon": "Só ícone",
+      "text": "Só texto"
+    },
+    "markdown": {
+      "insert_at_end": "Inserir no fim"
+    },
+    "student_preview": {
+      "banner": "Estás a ver a plataforma como aluno (demo)"
+    }
+  }
+}

@@ -1,0 +1,933 @@
+{
+  "teacher": {
+    "about": {
+      "title": "Σχετικά με το ITAKAI",
+      "subtitle": "Νέα και ιστορικό εκδόσεων",
+      "breadcrumb": "Σχετικά",
+      "breadcrumb_home": "Αρχική",
+      "current_version": "Τρέχουσα έκδοση",
+      "latest": "Τελευταία έκδοση",
+      "versions_index": "Εκδόσεις",
+      "footer_note": "Σου λείπει κάτι ή βρήκες κάποιο σφάλμα; Πες μας το και θα το λάβουμε υπόψη στις επόμενες εκδόσεις.",
+      "groups": {
+        "new": "Νέα",
+        "improved": "Βελτιώσεις",
+        "fixed": "Διορθώσεις"
+      },
+      "meta": {
+        "title": "Σχετικά | ITAKAI",
+        "description": "Νέα, βελτιώσεις και διορθώσεις κάθε έκδοσης του ITAKAI."
+      }
+    },
+    "dashboard": {
+      "title": "Αρχική καθηγητή",
+      "subtitle": "Καλώς ήρθες, {name}!",
+      "new_class": "Νέα τάξη",
+      "new_mission": "Νέα αποστολή",
+      "stats": {
+        "total_students": "Σύνολο μαθητών",
+        "active_classes": "Ενεργές τάξεις",
+        "active_missions": "Ενεργές αποστολές"
+      },
+      "my_classes": "Οι τάξεις μου",
+      "view_all": "Προβολή όλων",
+      "no_classes_yet": "Δεν έχεις ακόμη τάξεις",
+      "recent_missions": "Τελευταίες αποστολές",
+      "no_missions_description": "Δημιούργησε την πρώτη σου αποστολή για τους μαθητές σου",
+      "meta": {
+        "title": "Αρχική καθηγητή | ITAKAI",
+        "description": "Κεντρική σελίδα του καθηγητή. Διαχειρίσου τις τάξεις και τις αποστολές σου και παρακολούθησε την πρόοδο των μαθητών σου."
+      }
+    },
+    "classes": {
+      "index": {
+        "title": "Οι τάξεις μου",
+        "subtitle": "Διαχειρίσου τις τάξεις σου και παρακολούθησε την πρόοδο των μαθητών σου",
+        "new_class": "Νέα τάξη",
+        "create_first": "Δημιούργησε την πρώτη τάξη",
+        "no_classes_description": "Δεν έχεις δημιουργήσει ακόμη καμία τάξη",
+        "meta": {
+          "title": "Οι τάξεις μου | ITAKAI Καθηγητής",
+          "description": "Διαχειρίσου όλες τις τάξεις σου, τους εγγεγραμμένους μαθητές και τις αποστολές που έχεις αναθέσει."
+        },
+        "templates": "Πρότυπα",
+        "duplicate_success": "Η τάξη αντιγράφηκε ως \"{name}\"",
+        "duplicate_error": "Δεν ήταν δυνατή η αντιγραφή της τάξης",
+        "duplicate": {
+          "title": "Αντιγραφή τάξης",
+          "subtitle": "Διάλεξε τι θα αντιγραφεί στη νέα τάξη «{name}».",
+          "confirm": "Αντιγραφή",
+          "cancel": "Ακύρωση",
+          "items": {
+            "missions": {
+              "label": "Αποστολές",
+              "desc": "Οι αποστολές και οι γρίφοι τους"
+            },
+            "narrative": {
+              "label": "Ιστορία",
+              "desc": "Η αφήγηση και η εικόνα εξωφύλλου"
+            },
+            "features": {
+              "label": "Δυνατότητες",
+              "desc": "Τα ενεργοποιημένα στοιχεία της τάξης"
+            },
+            "shop": {
+              "label": "Κατάστημα",
+              "desc": "Τα αντικείμενα του καταστήματος"
+            },
+            "behaviors": {
+              "label": "Συμπεριφορές",
+              "desc": "Τα πρότυπα συμπεριφοράς"
+            }
+          }
+        }
+      },
+      "create": {
+        "breadcrumb_classes": "Οι τάξεις μου",
+        "breadcrumb_new": "Νέα",
+        "btn_creating": "Δημιουργία...",
+        "btn_create": "Δημιουργία τάξης",
+        "success_title": "Η τάξη δημιουργήθηκε!",
+        "success_message": "Η τάξη σου \"{name}\" είναι έτοιμη.",
+        "invite_code_label": "Κωδικός πρόσκλησης",
+        "invite_code_hint": "Μοιράσου αυτόν τον κωδικό με τους μαθητές σου",
+        "btn_view_classes": "Δες τις τάξεις",
+        "btn_copied": "Αντιγράφηκε!",
+        "btn_copy_code": "Αντιγραφή κωδικού",
+        "validation": {
+          "name_required": "Το όνομα της τάξης είναι υποχρεωτικό",
+          "name_min_length": "Το όνομα πρέπει να έχει τουλάχιστον 3 χαρακτήρες",
+          "create_error": "Σφάλμα κατά τη δημιουργία της τάξης. Δοκίμασε ξανά."
+        },
+        "preview_label": "Έτσι θα φαίνεται η τάξη σου",
+        "onboarding": {
+          "ask_idea": "Γεια σου {name}! Είμαι ο {god}. Πες μου, τι κόσμο ή θεματική θέλεις για την τάξη σου;",
+          "review_approach": "Αυτό ετοίμασα για σένα, σου αρέσει;",
+          "pick_title": "Τι τίτλο βάζουμε στην τάξη σου;",
+          "placeholder_idea": "Π.χ.: Μια σχολή μαγείας με 4 οίκους που ανταγωνίζονται για πόντους, μαθητές-μάγους και προκλήσεις σαν μπουντρούμια…",
+          "generating_approach": "Φτιάχνω την αφήγηση της τάξης σου...",
+          "narrative_feedback_placeholder": "Π.χ.: Θέλω περισσότερες αναφορές στους οίκους του Χόγκουαρτς...",
+          "btn_change_something": "Θέλω να αλλάξω κάτι",
+          "btn_edit_by_hand": "Χειροκίνητη επεξεργασία",
+          "custom_title_placeholder": "Ή γράψε τον δικό σου τίτλο...",
+          "title_feedback_placeholder": "Π.χ.: Θέλω πιο σύντομους τίτλους, με περισσότερη αναφορά στον Χάρι Πότερ...",
+          "generating_cover": "Δημιουργία εξωφύλλου...",
+          "cover_error": "Δεν ήταν δυνατή η δημιουργία του εξωφύλλου. Μπορείς να παραλείψεις αυτό το βήμα.",
+          "btn_upload_cover": "Ανέβασε τη δική μου",
+          "cover_upload_type_error": "Μη έγκυρη μορφή. Ανέβασε εικόνα PNG, JPG ή WEBP.",
+          "cover_upload_size_error": "Η εικόνα είναι πολύ μεγάλη (μέγιστο 5 MB).",
+          "image_feedback_placeholder": "Θέλω να είναι πιο χρωματιστή, με μπλε φόντο...",
+          "thinking": "Σκέφτομαι...",
+          "btn_back": "Πίσω",
+          "btn_next": "Επόμενο",
+          "btn_skip": "Παράλειψη",
+          "btn_accept_plan": "Ναι, προχώρα",
+          "attach_materials": "Επισύναψη υλικού (PDF, Word, εικόνες)",
+          "attach_processing": "Επεξεργασία του υλικού…",
+          "attach_remove": "Αφαίρεση",
+          "attach_error": "Δεν ήταν δυνατή η επεξεργασία του υλικού.",
+          "attach_error_size": "Το «{name}» έχει {size} MB. Το μέγιστο είναι {max} MB ανά αρχείο.",
+          "attach_error_too_large": "Το υλικό είναι συνολικά πολύ μεγάλο. Ανέβασέ το ένα-ένα (μέγ. {max} MB ανά αρχείο).",
+          "attach_hint": "Έως {max} MB ανά αρχείο",
+          "guide_question": "Ετοίμασα έναν οδηγό για τους μαθητές σου"
+        },
+        "meta": {
+          "title": "Δημιουργία νέας τάξης | ITAKAI Καθηγητής"
+        },
+        "narrative_error": "Δεν κατάφερα να δημιουργήσω την αφήγηση",
+        "summary": {
+          "edit": "Επεξεργασία",
+          "edit_title": "Τίτλος",
+          "edit_cover": "Εξώφυλλο",
+          "editing_hint": "Επεξεργάζεσαι μια τάξη που είναι ήδη έτοιμη.",
+          "back_to_summary": "Πίσω στη σύνοψη"
+        }
+      },
+      "detail": {
+        "breadcrumb_classes": "Οι τάξεις μου",
+        "not_found_title": "Η τάξη δεν βρέθηκε",
+        "not_found_description": "Η τάξη που ψάχνεις δεν υπάρχει ή δεν έχεις πρόσβαση",
+        "btn_back": "Επιστροφή στις τάξεις μου",
+        "btn_invite": "Πρόσκληση",
+        "tabs": {
+          "summary": "Σύνοψη",
+          "narrative": "Ιστορία",
+          "guide": "Οδηγός",
+          "missions": "Αποστολές",
+          "students": "Μαθητές",
+          "tienda": "Κατάστημα",
+          "behaviors": "Συμπεριφορές",
+          "settings": "Ρυθμίσεις"
+        },
+        "students": {
+          "empty_title": "Δεν υπάρχουν ακόμη μαθητές",
+          "empty_description": "Όταν μπουν μαθητές στην τάξη, θα εμφανιστούν εδώ με τα στατιστικά τους.",
+          "col_student": "Μαθητής",
+          "col_level": "Επίπεδο",
+          "search_placeholder": "Αναζήτηση μαθητή...",
+          "sort_name_asc": "Όνομα Α-Ω",
+          "sort_name_desc": "Όνομα Ω-Α",
+          "sort_xp_asc": "XP ↑",
+          "sort_xp_desc": "XP ↓",
+          "sort_level_asc": "Επίπεδο ↑",
+          "sort_level_desc": "Επίπεδο ↓",
+          "sort_coins_asc": "Νομίσματα ↑",
+          "sort_coins_desc": "Νομίσματα ↓",
+          "sort_mana_asc": "Μάνα ↑",
+          "sort_mana_desc": "Μάνα ↓",
+          "sort_lives_asc": "Ζωή ↑",
+          "sort_lives_desc": "Ζωή ↓",
+          "no_results_title": "Χωρίς αποτελέσματα",
+          "no_results_description": "Δεν υπάρχουν μαθητές που να ταιριάζουν με την αναζήτηση.",
+          "col_behaviors": "Συμπεριφορές",
+          "view_list": "Λίστα",
+          "view_ranking": "Κατάταξη"
+        },
+        "stats_title": "Στατιστικά της τάξης",
+        "pending_reviews": "Υποβολές προς έλεγχο",
+        "guide_editor": {
+          "toast_saved": "Ο οδηγός αποθηκεύτηκε με επιτυχία",
+          "toast_error": "Σφάλμα κατά την αποθήκευση του οδηγού"
+        },
+        "ranking": {
+          "no_students_title": "Δεν υπάρχουν μαθητές",
+          "no_students_description": "Δεν υπάρχουν ακόμη μαθητές σε αυτή την τάξη"
+        },
+        "missions_tab": {
+          "no_missions_title": "Δεν υπάρχουν αποστολές",
+          "no_missions_description": "Δεν έχουν ανατεθεί ακόμη αποστολές σε αυτή την τάξη",
+          "create_first": "Δημιούργησε την πρώτη αποστολή",
+          "new_mission": "Νέα αποστολή",
+          "no_results": "Χωρίς αποτελέσματα",
+          "empty_search": "Δεν βρέθηκαν αποστολές για «{query}»",
+          "empty_status": "Δεν υπάρχουν αποστολές με τις επιλεγμένες καταστάσεις",
+          "empty_rarity": "Δεν υπάρχουν αποστολές με τις επιλεγμένες σπανιότητες",
+          "empty_default": "Δεν υπάρχουν αποστολές σε αυτή την τάξη"
+        },
+        "meta": {
+          "title": "Λεπτομέρειες τάξης | ITAKAI Καθηγητής",
+          "description": "Διαχειρίσου την τάξη. Δες μαθητές, ανατεθειμένες αποστολές και γενική πρόοδο."
+        },
+        "behaviors": {
+          "new_button": "Νέα συμπεριφορά",
+          "new_button_short": "Νέα",
+          "library_button": "Βιβλιοθήκη",
+          "library_title": "Βιβλιοθήκη συμπεριφορών",
+          "library_subtitle": "Πρόσθεσε προτεινόμενες συμπεριφορές με ένα άγγιγμα. Μετά μπορείς να τις τροποποιήσεις ή να τις διαγράψεις.",
+          "library_add": "Προσθήκη",
+          "empty_title": "Δεν υπάρχουν ακόμη συμπεριφορές",
+          "empty_description": "Δημιούργησε μία από την αρχή ή πρόσθεσε από τη βιβλιοθήκη.",
+          "edit_aria": "Επεξεργασία συμπεριφοράς",
+          "section_positives": "Θετικές",
+          "section_negatives": "Αρνητικές",
+          "filter_all": "Όλες",
+          "apply_title": "Εφαρμογή «{name}»",
+          "pick_student": "Διάλεξε τον μαθητή στον οποίο θα την εφαρμόσεις.",
+          "applied_toast": "Η συμπεριφορά {behavior} εφαρμόστηκε στον/στην {student}",
+          "empty_students": "Δεν υπάρχουν ακόμη μαθητές σε αυτή την τάξη.",
+          "form_new_title": "Νέα συμπεριφορά",
+          "form_edit_title": "Επεξεργασία συμπεριφοράς",
+          "form_type": "Τύπος",
+          "type_positive": "Θετική",
+          "type_negative": "Αρνητική",
+          "form_name": "Όνομα",
+          "form_name_placeholder": "Π.χ.: Καλή συμμετοχή",
+          "form_description": "Περιγραφή",
+          "form_description_placeholder": "Τι επιβραβεύει ή τι διορθώνει αυτή η συμπεριφορά;",
+          "form_impacts": "Επιπτώσεις",
+          "form_impacts_hint": "Απόλυτο μέγεθος· το πρόσημο το δίνει ο τύπος (θετική = +, αρνητική = −).",
+          "form_cancel": "Ακύρωση",
+          "form_save": "Αποθήκευση",
+          "form_create": "Δημιουργία",
+          "form_delete": "Διαγραφή",
+          "delete_title": "Διαγραφή «{name}»;",
+          "delete_description": "Θα αφαιρεθεί από τον κατάλογο. Η ενέργεια αυτή δεν αναιρείται.",
+          "toast_created": "Η συμπεριφορά δημιουργήθηκε",
+          "toast_updated": "Η συμπεριφορά ενημερώθηκε",
+          "toast_deleted": "Η συμπεριφορά διαγράφηκε",
+          "toast_save_error": "Δεν ήταν δυνατή η αποθήκευση της συμπεριφοράς.",
+          "toast_delete_error": "Δεν ήταν δυνατή η διαγραφή της συμπεριφοράς.",
+          "fetch_error": "Δεν ήταν δυνατή η φόρτωση των συμπεριφορών.",
+          "apply_error": "Δεν ήταν δυνατή η εφαρμογή της συμπεριφοράς."
+        },
+        "shop": {
+          "tab_items": "Αντικείμενα",
+          "tab_uses": "Χρήσεις",
+          "uses_empty_title": "Καμία χρήση ακόμη",
+          "new_item": "Νέο αντικείμενο",
+          "library_button": "Βιβλιοθήκη",
+          "library_title": "Βιβλιοθήκη αντικειμένων",
+          "library_subtitle": "Πρόσθεσε προτεινόμενα αντικείμενα με ένα άγγιγμα. Μετά μπορείς να τα τροποποιήσεις ή να τα διαγράψεις.",
+          "library_add": "Προσθήκη",
+          "empty_title": "Δεν υπάρχουν ακόμη αντικείμενα",
+          "empty_description": "Δημιούργησε την πρώτη ανταμοιβή που θα μπορούν να εξαργυρώσουν οι μαθητές σου.",
+          "hidden": "Κρυφό",
+          "purchases_empty_title": "Καμία ανταλλαγή ακόμη",
+          "form_edit_title": "Επεξεργασία αντικειμένου",
+          "form_new_title": "Νέο αντικείμενο",
+          "form_name": "Όνομα",
+          "form_name_placeholder": "Π.χ.: Παράλειψη μιας εργασίας",
+          "form_description": "Περιγραφή",
+          "form_description_placeholder": "Τι κερδίζει ο μαθητής όταν το εξαργυρώνει;",
+          "form_price": "Τιμή",
+          "form_visible": "Ορατό στους μαθητές",
+          "form_cancel": "Ακύρωση",
+          "form_delete": "Διαγραφή",
+          "form_save": "Αποθήκευση",
+          "form_create": "Δημιουργία",
+          "delete_title": "Διαγραφή «{name}»;",
+          "delete_description": "Οι μαθητές δεν θα το βλέπουν πια στο κατάστημα. Η ενέργεια αυτή δεν αναιρείται.",
+          "toast_created": "Το αντικείμενο δημιουργήθηκε",
+          "toast_updated": "Το αντικείμενο ενημερώθηκε",
+          "toast_deleted": "Το αντικείμενο διαγράφηκε",
+          "toast_save_error": "Δεν ήταν δυνατή η αποθήκευση του αντικειμένου.",
+          "toast_delete_error": "Δεν ήταν δυνατή η διαγραφή του αντικειμένου.",
+          "form_type": "Τύπος",
+          "type_reward": "Ανταμοιβή",
+          "type_power": "Δύναμη",
+          "form_mana_cost": "Κόστος σε μάνα (κατά τη χρήση)",
+          "form_usage": "Χρήση",
+          "usage_single": "Μία μόνο χρήση",
+          "usage_unlimited": "Απεριόριστη",
+          "form_life_restore": "Ζωή που επαναφέρει",
+          "form_life_restore_hint": "Πόντοι ζωής που προστίθενται κατά την εξαργύρωση (ανταμοιβές) ή τη χρήση (δυνάμεις). 0 = δεν επαναφέρει ζωή.",
+          "tab_history": "Ιστορικό",
+          "history_purchases": "Αγορές",
+          "view_student_profile": "Δες τον μαθητή",
+          "mana_disabled_chip": "Το μάνα είναι απενεργοποιημένο"
+        },
+        "settings": {
+          "levels": {
+            "title": "Επίπεδα",
+            "curve_title": "Καμπύλη εμπειρίας",
+            "curve_hint": "Καθόρισε πόση XP κοστίζει η άνοδος επιπέδου και μέχρι ποιο επίπεδο μπορεί να φτάσει κάποιος.",
+            "pace_desc_fast": "Η άνοδος επιπέδου είναι γρήγορη: κάθε επίπεδο κοστίζει λίγο μόνο περισσότερο από το προηγούμενο.",
+            "pace_desc_normal": "Ισορροπημένη πρόοδος: κάθε επίπεδο κοστίζει λίγο περισσότερο από το προηγούμενο.",
+            "pace_desc_slow": "Κάθε φορά η άνοδος επιπέδου κοστίζει αρκετά περισσότερο. Μακρά πρόοδος, ιδανική για όλη τη χρονιά.",
+            "mode_label": "Πώς κερδίζεται η XP",
+            "mode_curve": "Με τύπο",
+            "mode_custom": "Χειροκίνητα (ανά επίπεδο)",
+            "pace_label": "Ρυθμός ανόδου",
+            "pace_fast": "Γρήγορος",
+            "pace_normal": "Κανονικός",
+            "pace_slow": "Αργός",
+            "custom_hint": "Γράψε την XP που χρειάζεται για να ανέβει κάποιος από κάθε επίπεδο στο επόμενο.",
+            "compare_title": "Συνολική XP για κάθε επίπεδο",
+            "compare_level": "Επίπεδο {level}",
+            "cap_label": "Αριθμός επιπέδων",
+            "base_label": "XP του πρώτου επιπέδου",
+            "tiers_title": "Βαθμίδες",
+            "tiers_hint": "Δώσε τίτλο και χρώμα σε κάθε εύρος επιπέδων.",
+            "tier_title_placeholder": "Τίτλος βαθμίδας",
+            "tier_from": "Από",
+            "tier_to": "έως",
+            "tier_add": "Προσθήκη βαθμίδας",
+            "tier_remove": "Αφαίρεση βαθμίδας",
+            "tiers_warning": "Υπάρχουν κενά ή επικαλύψεις ανάμεσα στις βαθμίδες: κάποια επίπεδα δεν θα εμφάνιζαν τον σωστό τίτλο.",
+            "tiers_autofix": "Αυτόματη προσαρμογή",
+            "restore_defaults": "Επαναφορά προεπιλογών",
+            "save": "Αποθήκευση επιπέδων",
+            "discard": "Απόρριψη",
+            "toast_saved": "Τα επίπεδα αποθηκεύτηκαν",
+            "toast_error": "Δεν ήταν δυνατή η αποθήκευση των επιπέδων"
+          },
+          "toast_error": "Δεν ήταν δυνατή η αποθήκευση των ρυθμίσεων",
+          "items": {
+            "shop": {
+              "label": "Κατάστημα",
+              "desc": "Ανταμοιβές και δυνάμεις που εξαργυρώνουν οι μαθητές."
+            },
+            "coins": {
+              "label": "Νομίσματα",
+              "desc": "Εμφανίζει το υπόλοιπο και τις τιμές σε νομίσματα."
+            },
+            "mana": {
+              "label": "Μάνα",
+              "desc": "Ενέργεια για τη χρήση δυνάμεων του καταστήματος."
+            },
+            "rankings": {
+              "label": "Κατάταξη",
+              "desc": "Κατάταξη των μαθητών της τάξης."
+            },
+            "xp": {
+              "label": "Εμπειρία (XP)",
+              "desc": "Επίπεδα και μπάρα προόδου με βάση την XP."
+            },
+            "behaviors": {
+              "label": "Συμπεριφορές",
+              "desc": "Εφάρμοσε θετικές ή αρνητικές ενέργειες που δίνουν ή αφαιρούν πόρους."
+            },
+            "lives": {
+              "label": "Ζωές",
+              "desc": "Πόντοι ζωής της τάξης (τους μεταβάλλουν οι συμπεριφορές)."
+            },
+            "visualEffects": {
+              "label": "Οπτικά εφέ",
+              "desc": "Κινούμενα εφέ, όπως τα κομφετί στην άνοδο επιπέδου."
+            },
+            "sounds": {
+              "label": "Ήχοι",
+              "desc": "Ηχητικά εφέ στην άνοδο επιπέδου, στην ολοκλήρωση αποστολών κ.λπ."
+            }
+          },
+          "requires": "Χρειάζεται {feature}",
+          "requires_resource": "Χρειάζεται τουλάχιστον έναν ενεργό πόρο (XP, νομίσματα, μάνα ή ζωές)",
+          "general": {
+            "title": "Γενικά στοιχεία",
+            "name_label": "Όνομα",
+            "subject_label": "Μάθημα",
+            "level_label": "Εκπαιδευτική βαθμίδα",
+            "language_label": "Γλώσσα",
+            "province_label": "Επαρχία",
+            "metadata_none": "Απροσδιόριστο",
+            "metadata_search": "Αναζήτηση...",
+            "subject_needs_level": "Διάλεξε πρώτα το επίπεδο",
+            "publish_title": "Δημοσίευση ως πρότυπο",
+            "publish_hint": "Μοιράσου το στο marketplace για να το εισαγάγουν άλλοι καθηγητές.",
+            "publish_missing_metadata": "Αποθήκευσε μάθημα, βαθμίδα και γλώσσα πριν τη δημοσίευση.",
+            "publish_on": "Η τάξη δημοσιεύτηκε ως πρότυπο",
+            "publish_off": "Το πρότυπο αποσύρθηκε από το marketplace",
+            "publish_error": "Δεν ήταν δυνατή η δημοσίευση του προτύπου",
+            "template_metadata_locked": "Η τάξη είναι δημοσιευμένη ως πρότυπο: δεν μπορείς να αφήσεις μάθημα, βαθμίδα ή γλώσσα απροσδιόριστα. Απόσυρέ τη πρώτα.",
+            "duplicate_title": "Αντιγραφή τάξης",
+            "duplicate_hint": "Δημιούργησε αντίγραφο αυτής της τάξης. Θα μπορείς να διαλέξεις τι περιεχόμενο θα αντιγραφεί.",
+            "duplicate_cta": "Αντιγραφή",
+            "schedule_label": "Ωρολόγιο πρόγραμμα",
+            "background_label": "Εικόνα φόντου",
+            "save": "Αποθήκευση αλλαγών",
+            "discard": "Απόρριψη",
+            "toast_saved": "Τα δεδομένα αποθηκεύτηκαν",
+            "toast_error": "Δεν ήταν δυνατή η αποθήκευση των δεδομένων",
+            "name_required": "Το όνομα δεν μπορεί να είναι κενό",
+            "schedule_add": "Προσθήκη μαθήματος",
+            "schedule_remove": "Αφαίρεση μαθήματος",
+            "schedule_preview": "Προεπισκόπηση",
+            "background_generate": "Δημιουργία με ΤΝ",
+            "background_regenerate": "Νέα δημιουργία με ΤΝ",
+            "background_clear": "Αφαίρεση εικόνας",
+            "background_upload": "Ανέβασε τη δική μου",
+            "background_upload_type_error": "Μη έγκυρη μορφή. Ανέβασε εικόνα PNG, JPG ή WEBP.",
+            "background_upload_size_error": "Η εικόνα είναι πολύ μεγάλη (μέγιστο 5 MB).",
+            "background_error": "Δεν ήταν δυνατή η δημιουργία της εικόνας"
+          },
+          "features": {
+            "title": "Δυνατότητες"
+          },
+          "management": {
+            "title": "Διαχείριση"
+          }
+        },
+        "badges_empty": "Δεν υπάρχουν διακριτικά σε αυτή την τάξη",
+        "join_requests": {
+          "empty_title": "Χωρίς αιτήματα",
+          "empty_description": "Δεν υπάρχουν εκκρεμή αιτήματα για αυτή την τάξη"
+        }
+      }
+    },
+    "missions": {
+      "index": {
+        "meta": {
+          "title": "Οι αποστολές μου | ITAKAI Καθηγητής",
+          "description": "Διαχειρίσου όλες τις αποστολές που έχεις δημιουργήσει, τροποποίησέ τες ή φτιάξε νέες για τους μαθητές σου."
+        },
+        "subtitle": "Διαχειρίσου τις αποστολές των τάξεών σου"
+      },
+      "create": {
+        "meta": {
+          "title": "Δημιουργία αποστολής | ITAKAI Καθηγητής"
+        },
+        "pick_class": "Επίλεξε μια τάξη",
+        "idea_placeholder": "Π.χ.: Θέλω μια αποστολή για την κινηματική, όπου οι μαθητές υπολογίζουν τροχιές ιπτάμενων σκουπών...",
+        "narrative_error": "Δεν κατάφερα να δημιουργήσω την αφήγηση",
+        "ai_unavailable": "Η υπηρεσία ΤΝ δεν είναι διαθέσιμη αυτή τη στιγμή. Δοκίμασε ξανά σε λίγα λεπτά."
+      },
+      "detail": {
+        "delete_confirm_btn": "Διαγραφή",
+        "toast": {
+          "enigma_has_submissions": "Δεν μπορεί να διαγραφεί γρίφος που έχει ήδη υποβολές μαθητών"
+        },
+        "meta": {
+          "title": "Λεπτομέρειες αποστολής | ITAKAI Καθηγητής",
+          "title_loading": "Φόρτωση αποστολής... | ITAKAI Καθηγητής",
+          "description_fallback": "Λεπτομέρειες αποστολής στο ITAKAI"
+        },
+        "tabs": {
+          "summary": "Σύνοψη",
+          "settings": "Ρυθμίσεις"
+        },
+        "settings": {
+          "title_label": "Τίτλος",
+          "title_required": "Ο τίτλος δεν μπορεί να είναι κενός",
+          "deadline_label": "Προθεσμία",
+          "deadline_hint": "Άφησέ την κενή για να μη λήγει η αποστολή.",
+          "rarity_label": "Σπανιότητα",
+          "rarity_locked_hint": "Δεν μπορείς να αλλάξεις τη σπανιότητα: κάποιος μαθητής έχει ήδη ολοκληρώσει την αποστολή.",
+          "rarity": {
+            "comun": "Κοινή",
+            "rara": "Σπάνια",
+            "epica": "Επική",
+            "legendaria": "Θρυλική"
+          },
+          "status_label": "Κατάσταση",
+          "status_active": "Ενεργή",
+          "status_blocked": "Κλειδωμένη",
+          "status_hint": "Κλειδωμένη: οι μαθητές τη βλέπουν με λουκέτο και δεν μπορούν να μπουν.",
+          "background_label": "Εικόνα της αποστολής",
+          "background_generate": "Δημιουργία με ΤΝ",
+          "background_regenerate": "Νέα δημιουργία με ΤΝ",
+          "background_upload": "Ανέβασε τη δική μου",
+          "background_clear": "Αφαίρεση εικόνας",
+          "background_error": "Δεν ήταν δυνατή η δημιουργία της εικόνας",
+          "background_upload_type_error": "Μη έγκυρη μορφή. Ανέβασε εικόνα PNG, JPG ή WEBP.",
+          "background_upload_size_error": "Η εικόνα είναι πολύ μεγάλη (μέγιστο 5 MB).",
+          "save": "Αποθήκευση αλλαγών",
+          "discard": "Απόρριψη",
+          "toast_saved": "Τα δεδομένα αποθηκεύτηκαν",
+          "toast_error": "Δεν ήταν δυνατή η αποθήκευση των δεδομένων"
+        }
+      }
+    },
+    "badges": {
+      "title": "Τα διακριτικά μου",
+      "subtitle": "Δημιούργησε και διαχειρίσου προσαρμοσμένα διακριτικά για να επιβραβεύεις τα επιτεύγματα των μαθητών σου",
+      "new_badge": "Νέο διακριτικό",
+      "btn_delete": "Διαγραφή",
+      "no_badges_title": "Χωρίς διακριτικά",
+      "no_badges_description": "Δημιούργησε το πρώτο σου διακριτικό για να επιβραβεύσεις τους μαθητές σου",
+      "create_first": "Δημιούργησε το πρώτο διακριτικό",
+      "form": {
+        "edit_title": "Επεξεργασία διακριτικού",
+        "create_title": "Νέο διακριτικό",
+        "label_name": "Όνομα",
+        "label_description": "Περιγραφή",
+        "label_image": "Εικόνα",
+        "image_optional": "(προαιρετικό)",
+        "placeholder_name": "Π.χ.: Δεξιοτέχνης των εξισώσεων",
+        "placeholder_description": "Περίγραψε ποιο επίτευγμα αντιπροσωπεύει αυτό το διακριτικό...",
+        "btn_remove_image": "Αφαίρεση εικόνας",
+        "preview_label": "Προεπισκόπηση:",
+        "btn_cancel": "Ακύρωση",
+        "btn_saving": "Αποθήκευση...",
+        "btn_save_changes": "Αποθήκευση αλλαγών",
+        "btn_create": "Δημιουργία διακριτικού",
+        "no_mission": "Χωρίς αποστολή"
+      },
+      "detail": {
+        "btn_edit": "Επεξεργασία",
+        "btn_close": "Κλείσιμο"
+      },
+      "delete_title": "Διαγραφή διακριτικού",
+      "delete_confirm": "Σίγουρα θέλεις να διαγράψεις το διακριτικό «{name}»; Η ενέργεια αυτή δεν αναιρείται.",
+      "validation": {
+        "name_required": "Το όνομα είναι υποχρεωτικό",
+        "name_min_length": "Το όνομα πρέπει να έχει τουλάχιστον 3 χαρακτήρες",
+        "image_size": "Η εικόνα δεν μπορεί να ξεπερνά τα 2 MB",
+        "image_type": "Επιτρέπονται μόνο αρχεία PNG, JPG, SVG ή WebP"
+      },
+      "meta": {
+        "title": "Τα διακριτικά μου | ITAKAI Καθηγητής",
+        "description": "Δημιούργησε, τροποποίησε και διαχειρίσου προσαρμοσμένα διακριτικά για να επιβραβεύεις τα επιτεύγματα των μαθητών σου."
+      },
+      "filter_system": "Του συστήματος",
+      "generate_error": "Δεν ήταν δυνατή η δημιουργία του διακριτικού."
+    },
+    "students": {
+      "index": {
+        "title": "Οι μαθητές μου",
+        "subtitle": "Διαχειρίσου και παρακολούθησε την πρόοδο των μαθητών σου",
+        "search_placeholder": "Αναζήτηση με όνομα ή email...",
+        "filter_all_classes": "Όλες οι τάξεις",
+        "filter_all_progress": "Κάθε πρόοδος",
+        "progress_excellent": "Άριστη (≥80 %)",
+        "progress_good": "Καλή (50-79 %)",
+        "progress_in_progress": "Σε εξέλιξη (20-49 %)",
+        "progress_initial": "Αρχική (<20 %)",
+        "sort_name_asc": "Όνομα Α-Ω",
+        "sort_name_desc": "Όνομα Ω-Α",
+        "sort_progress_desc": "Μεγαλύτερη πρόοδος",
+        "sort_progress_asc": "Μικρότερη πρόοδος",
+        "sort_missions_desc": "Περισσότερες αποστολές",
+        "tab_active": "Ενεργοί",
+        "tab_archived": "Αρχειοθετημένοι",
+        "no_students_title": "Χωρίς μαθητές",
+        "no_students_filtered": "Δεν βρέθηκαν μαθητές με αυτά τα φίλτρα",
+        "no_students_default": "Δεν υπάρχουν μαθητές στις τάξεις σου",
+        "no_archived_students_title": "Χωρίς αρχειοθετημένους μαθητές",
+        "no_archived_students_default": "Δεν υπάρχουν μαθητές στις αρχειοθετημένες τάξεις σου",
+        "btn_view": "Προβολή",
+        "stat_missions": "Αποστολές",
+        "meta": {
+          "title": "Οι μαθητές μου | ITAKAI Καθηγητής",
+          "description": "Διαχειρίσου όλους τους μαθητές σου και δες την πρόοδο και τα στατιστικά ακαδημαϊκής επίδοσής τους."
+        }
+      },
+      "detail": {
+        "breadcrumb_students": "Μαθητές",
+        "loading": "Φόρτωση...",
+        "error_title": "Σφάλμα κατά τη φόρτωση του μαθητή",
+        "error_default": "Σφάλμα κατά τη φόρτωση των δεδομένων του μαθητή",
+        "btn_retry": "Δοκίμασε ξανά",
+        "stat_classes": "Τάξεις",
+        "stat_missions": "Αποστολές",
+        "stat_completed": "Ολοκληρωμένο",
+        "enrolled_classes_title": "Εγγεγραμμένες τάξεις",
+        "enrolled_classes_count": "{count} τάξεις",
+        "not_enrolled": "Δεν είναι εγγεγραμμένος σε καμία από τις τάξεις σου",
+        "label_progress": "Ολοκληρωμένο",
+        "stat_coins": "Νομίσματα",
+        "stat_mana": "Μάνα",
+        "stat_lives": "Πόντοι ζωής",
+        "no_activity": "Χωρίς πρόσφατη δραστηριότητα",
+        "meta": {
+          "title": "Προφίλ μαθητή | ITAKAI Καθηγητής",
+          "description": "Αναλυτικό προφίλ του μαθητή με στατιστικά επίδοσης, πρόοδο στις αποστολές και πρόσφατη δραστηριότητα."
+        }
+      }
+    },
+    "ai_assistant": {
+      "meta": {
+        "title": "Βοηθός AI καθηγητή | ITAKAI",
+        "description": "Εξειδικευμένος βοηθός ΤΝ για καθηγητές. Βρες βοήθεια για τη διαχείριση τάξεων και αποστολών."
+      }
+    },
+    "profile": {
+      "breadcrumb_home": "Αρχική",
+      "breadcrumb_profile": "Το προφίλ μου",
+      "title": "Το προφίλ μου",
+      "tabs": {
+        "security": "Ασφάλεια",
+        "settings": "Ρυθμίσεις"
+      },
+      "security": {
+        "password_title": "Κωδικός πρόσβασης",
+        "placeholder_current": "Τρέχων κωδικός",
+        "placeholder_new": "Νέος κωδικός",
+        "placeholder_confirm": "Επιβεβαίωση κωδικού",
+        "btn_update": "Ενημέρωση",
+        "email_title": "Email",
+        "placeholder_new_email": "Νέο email",
+        "sessions_title": "Συνεδρίες",
+        "sessions_close_all": "Τερματισμός όλων",
+        "session_current": "Τρέχουσα",
+        "session_close": "Τερματισμός",
+        "validation": {
+          "passwords_mismatch": "Οι κωδικοί δεν ταιριάζουν",
+          "password_min_length": "Ο κωδικός πρέπει να έχει τουλάχιστον 6 χαρακτήρες",
+          "email_invalid": "Συμπλήρωσε ένα έγκυρο email",
+          "password_required": "Συμπλήρωσε τον κωδικό σου"
+        }
+      },
+      "settings": {
+        "theme_title": "Θέμα",
+        "theme_description": "Διάλεξε το οπτικό ύφος της πλατφόρμας",
+        "theme_college": "Λειτουργία σχολείου",
+        "theme_college_desc": "Παιχνιδοποιημένη εμφάνιση",
+        "theme_university": "Λειτουργία πανεπιστημίου",
+        "theme_university_desc": "Επαγγελματική εμφάνιση",
+        "language_title": "Γλώσσα",
+        "language_updated": "Η γλώσσα ενημερώθηκε",
+        "theme_updated": "Το θέμα ενημερώθηκε",
+        "danger_zone_title": "Επικίνδυνη ζώνη",
+        "danger_zone_description": "Μόλις διαγραφεί ο λογαριασμός σου, δεν υπάρχει επιστροφή. Βεβαιώσου ότι το θέλεις.",
+        "btn_delete_account": "Διαγραφή λογαριασμού",
+        "delete_modal_title": "Διαγραφή λογαριασμού",
+        "delete_modal_confirm_prompt": "Για επιβεβαίωση, βάλε τον κωδικό σου:",
+        "placeholder_password": "Ο κωδικός σου",
+        "btn_cancel": "Ακύρωση",
+        "btn_delete_confirm": "Διαγραφή του λογαριασμού μου",
+        "languages": {
+          "es": "Ισπανικά",
+          "en": "Αγγλικά",
+          "ca": "Καταλανικά",
+          "val": "Βαλενθιανά",
+          "eu": "Βασκικά",
+          "gl": "Γαλικιανά",
+          "ast": "Αστουριανά",
+          "pt": "Πορτογαλικά",
+          "el": "Ελληνικά",
+          "ro": "Ρουμανικά"
+        }
+      },
+      "meta": {
+        "title": "Το προφίλ μου | ITAKAI",
+        "description": "Διαχειρίσου το προφίλ σου ως καθηγητής, ρύθμισε την ασφάλεια και προσάρμοσε την εμπειρία σου."
+      }
+    },
+    "components": {
+      "enigma_form_modal": {
+        "edit_title": "Επεξεργασία γρίφου",
+        "add_title": "Προσθήκη γρίφου",
+        "label_title": "Τίτλος του γρίφου",
+        "placeholder_title": "Π.χ.: Το ξύπνημα των μηχανών",
+        "label_xp": "XP",
+        "label_rewards": "Ανταμοιβές με την ολοκλήρωση",
+        "rewards_locked_hint": "Μπορείς μόνο να αυξήσεις τις ανταμοιβές: κάποιος μαθητής τις έχει ήδη κερδίσει.",
+        "label_description": "Περιγραφή",
+        "placeholder_description": "Περίγραψε τι πρέπει να κάνει ο μαθητής...",
+        "label_objectives": "Στόχοι",
+        "label_objectives_optional": "(προαιρετικό)",
+        "placeholder_objective": "Γράψε έναν στόχο...",
+        "btn_remove_objective": "Διαγραφή στόχου",
+        "btn_add_objective": "Προσθήκη στόχου",
+        "is_optional": "Αυτός ο γρίφος είναι προαιρετικός",
+        "btn_cancel": "Ακύρωση",
+        "btn_saving": "Αποθήκευση...",
+        "btn_save": "Αποθήκευση",
+        "btn_add": "Προσθήκη",
+        "validation": {
+          "title_required": "Ο τίτλος είναι υποχρεωτικός",
+          "description_required": "Η περιγραφή είναι υποχρεωτική"
+        },
+        "label_mana": "Μάνα",
+        "label_coins": "Νομίσματα",
+        "no_mana": "Χωρίς μάνα",
+        "custom_value": "Προσαρμοσμένη τιμή"
+      },
+      "document_form_modal": {
+        "edit_title": "Επεξεργασία εγγράφου",
+        "add_title": "Προσθήκη εγγράφου",
+        "label_title": "Τίτλος",
+        "placeholder_title": "Π.χ.: Οδηγός συστημάτων εξισώσεων",
+        "btn_upload_file": "Ανέβασμα αρχείου",
+        "btn_add_link": "Προσθήκη συνδέσμου",
+        "label_file": "Αρχείο",
+        "drop_hint": "Σύρε ένα αρχείο ή κάνε κλικ για να το επιλέξεις",
+        "file_types_hint": "PDF, Word, βίντεο, εικόνες (μέγ. 50 MB)",
+        "label_url": "URL",
+        "label_description": "Περιγραφή",
+        "label_description_optional": "(προαιρετικό)",
+        "placeholder_description": "Σύντομη περιγραφή του εγγράφου...",
+        "label_tags": "Ετικέτες",
+        "placeholder_tags": "Γράψε μια ετικέτα και πάτησε Enter...",
+        "btn_cancel": "Ακύρωση",
+        "btn_saving": "Αποθήκευση...",
+        "btn_save": "Αποθήκευση",
+        "btn_add": "Προσθήκη",
+        "validation": {
+          "title_required": "Ο τίτλος είναι υποχρεωτικός",
+          "url_required": "Το URL είναι υποχρεωτικό για τους συνδέσμους",
+          "file_required": "Πρέπει να επιλέξεις ένα αρχείο",
+          "file_too_large": "Το αρχείο δεν μπορεί να ξεπερνά τα 50 MB"
+        }
+      },
+      "class_filter_bar": {
+        "search_placeholder": "Αναζήτηση τάξεων...",
+        "sort": {
+          "name_asc": "Όνομα Α-Ω",
+          "name_desc": "Όνομα Ω-Α",
+          "most_students": "Περισσότεροι μαθητές",
+          "least_students": "Λιγότεροι μαθητές",
+          "most_missions": "Περισσότερες αποστολές",
+          "least_missions": "Λιγότερες αποστολές"
+        }
+      },
+      "mission_filter_bar": {
+        "search_placeholder": "Αναζήτηση αποστολών...",
+        "all_classes": "Όλες οι τάξεις",
+        "plural_classes": "τάξεις",
+        "all_statuses": "Όλες οι καταστάσεις",
+        "plural_statuses": "καταστάσεις",
+        "all_rarities": "Όλες οι σπανιότητες",
+        "plural_rarities": "σπανιότητες",
+        "rarity": {
+          "common": "Κοινή",
+          "rare": "Σπάνια",
+          "epic": "Επική",
+          "legendary": "Θρυλική"
+        },
+        "status": {
+          "active": "Ενεργή",
+          "urgent": "Επείγουσα",
+          "completed": "Ολοκληρωμένη",
+          "expired": "Έληξε",
+          "locked": "Κλειδωμένη"
+        },
+        "sort": {
+          "deadline_asc": "Ημερομηνία ↑",
+          "deadline_desc": "Ημερομηνία ↓",
+          "name_asc": "Όνομα Α-Ω",
+          "name_desc": "Όνομα Ω-Α",
+          "xp_desc": "XP ↓",
+          "xp_asc": "XP ↑",
+          "rarity_desc": "Σπανιότητα ↓",
+          "rarity_asc": "Σπανιότητα ↑",
+          "completion_desc": "Ολοκλήρωση ↓",
+          "completion_asc": "Ολοκλήρωση ↑"
+        }
+      },
+      "rewards_form_modal": {
+        "title": "Επεξεργασία ανταμοιβών",
+        "badge_label": "Διακριτικό ανταμοιβής",
+        "remove_badge": "Αφαίρεση διακριτικού",
+        "no_badge_title": "Δεν έχει οριστεί διακριτικό",
+        "no_badge_description": "Διάλεξε ή δημιούργησε ένα διακριτικό για αυτή την αποστολή",
+        "btn_select_existing": "Επιλογή υπάρχοντος",
+        "btn_create_new": "Δημιουργία νέου",
+        "select_hint": "Διάλεξε ένα διακριτικό από τη συλλογή σου:",
+        "no_badges_created": "Δεν έχεις δημιουργήσει διακριτικά",
+        "btn_create_first": "Δημιούργησε το πρώτο σου διακριτικό",
+        "label_name": "Όνομα",
+        "label_description": "Περιγραφή",
+        "label_image": "Εικόνα",
+        "image_optional": "(προαιρετικό)",
+        "placeholder_name": "Π.χ.: Δεξιοτέχνης των εξισώσεων",
+        "placeholder_description": "Περίγραψε ποιο επίτευγμα αντιπροσωπεύει αυτό το διακριτικό...",
+        "image_selected": "Επιλεγμένη εικόνα",
+        "btn_remove_image": "Αφαίρεση εικόνας",
+        "upload_prompt": "Κάνε κλικ για να ανεβάσεις μια εικόνα",
+        "upload_hint": "PNG, JPG, SVG ή WebP (μέγ. 2 MB)",
+        "label_rarity": "Σπανιότητα",
+        "btn_cancel": "Ακύρωση",
+        "btn_saving": "Αποθήκευση...",
+        "btn_save": "Αποθήκευση",
+        "validation": {
+          "name_required": "Το όνομα είναι υποχρεωτικό",
+          "description_required": "Η περιγραφή είναι υποχρεωτική",
+          "image_size": "Η εικόνα δεν μπορεί να ξεπερνά τα 2 MB",
+          "image_type": "Επιτρέπονται μόνο αρχεία PNG, JPG, SVG ή WebP"
+        },
+        "rarity": {
+          "common": "Κοινή",
+          "rare": "Σπάνια",
+          "epic": "Επική",
+          "legendary": "Θρυλική"
+        }
+      },
+      "class_detail_layout": {
+        "error_title": "Σφάλμα κατά τη φόρτωση της τάξης",
+        "not_found": "Η τάξη που ψάχνεις δεν υπάρχει ή δεν έχεις πρόσβαση",
+        "btn_back": "Επιστροφή στις τάξεις μου",
+        "breadcrumb_classes": "Οι τάξεις μου"
+      },
+      "mission_detail_template": {
+        "error_title": "Σφάλμα κατά τη φόρτωση της αποστολής",
+        "btn_back": "Επιστροφή στις αποστολές",
+        "breadcrumb_classes": "Οι τάξεις μου",
+        "deadline_none": "Χωρίς προθεσμία",
+        "expired_readonly": "Αυτή η αποστολή έχει λήξει: μπορείς να τη δεις, αλλά δεν δέχεται πλέον υποβολές.",
+        "narrative_title": "Ιστορία της αποστολής",
+        "btn_see_more": "Δες περισσότερα",
+        "btn_see_less": "Δες λιγότερα",
+        "btn_edit": "Επεξεργασία",
+        "enigmas_title": "Γρίφοι",
+        "btn_add": "Προσθήκη",
+        "optional_label": "Προαιρετικό",
+        "objectives_label": "Στόχοι:",
+        "no_enigmas": "Δεν υπάρχουν γρίφοι σε αυτή την αποστολή",
+        "btn_add_first_enigma": "Πρόσθεσε τον πρώτο γρίφο",
+        "documents_title": "Υποστηρικτικά έγγραφα",
+        "no_documents": "Δεν υπάρχουν υποστηρικτικά έγγραφα",
+        "btn_view_submissions": "Δες τις υποβολές ({count})",
+        "btn_submit": "Υποβολή",
+        "status_available": "Διαθέσιμο",
+        "status_in_review": "Υπό έλεγχο",
+        "status_completed": "Ολοκληρωμένο",
+        "global_progress": "Συνολική πρόοδος",
+        "class_average": "Μέσος όρος τάξης",
+        "rewards_title": "Ανταμοιβές",
+        "xp_enigmas": "XP γρίφων",
+        "xp_mission": "XP αποστολής",
+        "complete_all_enigmas": "Ολοκλήρωσε όλους τους γρίφους",
+        "badge_rarity": {
+          "common": "Κοινό",
+          "rare": "Σπάνιο",
+          "epic": "Επικό",
+          "legendary": "Θρυλικό"
+        },
+        "btn_close": "Κλείσιμο"
+      }
+    },
+    "templates": {
+      "page_title": "Πρότυπα τάξεων",
+      "page_subtitle": "Εξερεύνησε τάξεις που έχουν δημοσιεύσει άλλοι καθηγητές και εισήγαγέ τες στις δικές σου.",
+      "search": "Αναζήτηση προτύπων…",
+      "own": "Δική σου",
+      "import": "Εισαγωγή",
+      "import_success": "Το «{name}» εισήχθη. Τροποποίησέ το όπως θέλεις!",
+      "import_error": "Δεν ήταν δυνατή η εισαγωγή του προτύπου",
+      "load_error": "Δεν ήταν δυνατή η φόρτωση των προτύπων",
+      "empty_title": "Δεν υπάρχουν ακόμη πρότυπα",
+      "empty_description": "Όταν κάποιος καθηγητής δημοσιεύσει μια τάξη ως πρότυπο, θα εμφανιστεί εδώ.",
+      "no_results_title": "Χωρίς αποτελέσματα",
+      "no_results_description": "Δεν υπάρχουν πρότυπα που να ταιριάζουν με τα φίλτρα.",
+      "preview_action": "Προεπισκόπηση",
+      "preview": {
+        "loading": "Φόρτωση προτύπου…",
+        "by": "Από {name}",
+        "active": "Ενεργοποιημένο",
+        "inactive": "Απενεργοποιημένο",
+        "load_error": "Δεν ήταν δυνατή η φόρτωση του προτύπου",
+        "error": "Το πρότυπο δεν βρέθηκε.",
+        "tab_narrative": "Ιστορία",
+        "tab_features": "Δυνατότητες",
+        "tab_shop": "Κατάστημα ({n})",
+        "tab_behaviors": "Συμπεριφορές ({n})",
+        "no_narrative_title": "Χωρίς ιστορία",
+        "no_narrative_description": "Αυτό το πρότυπο δεν έχει ορισμένη ιστορία.",
+        "no_shop_title": "Χωρίς κατάστημα",
+        "no_shop_description": "Αυτό το πρότυπο δεν περιλαμβάνει αντικείμενα καταστήματος. Μπορείς να τα προσθέσεις εσύ.",
+        "no_behaviors_title": "Χωρίς συμπεριφορές",
+        "no_behaviors_description": "Αυτό το πρότυπο δεν περιλαμβάνει συμπεριφορές. Μπορείς να τις ορίσεις εσύ."
+      },
+      "filter_all": {
+        "subject": "Όλα τα μαθήματα",
+        "level": "Όλες οι βαθμίδες",
+        "language": "Όλες οι γλώσσες",
+        "province": "Όλες οι επαρχίες"
+      },
+      "sort": {
+        "recent": "Πιο πρόσφατα",
+        "name_asc": "Όνομα Α-Ω",
+        "name_desc": "Όνομα Ω-Α"
+      },
+      "plural": {
+        "subjects": "μαθήματα",
+        "levels": "βαθμίδες",
+        "languages": "γλώσσες",
+        "provinces": "επαρχίες"
+      }
+    },
+    "schedule": {
+      "starts_on": "Ξεκινά στις",
+      "time": "Ώρα",
+      "recurrence": "Επανάληψη",
+      "add_slot": "Προσθήκη προγράμματος",
+      "remove_slot": "Αφαίρεση προγράμματος",
+      "preview": "Προεπισκόπηση",
+      "choose_days": "Επίλεξε τις ημέρες μαθήματος",
+      "freq_none": "Δεν επαναλαμβάνεται",
+      "freq_daily": "Κάθε μέρα",
+      "freq_weekly_on": "Κάθε εβδομάδα, {day}",
+      "weekly": "Κάθε εβδομάδα",
+      "freq_monthly": "Κάθε μήνα",
+      "freq_yearly": "Κάθε χρόνο",
+      "weekdays": "Όλες τις εργάσιμες ημέρες (Δευτέρα έως Παρασκευή)",
+      "weekly_days": "Κάθε εβδομάδα: {days}",
+      "every_weeks_days": "Κάθε {n} εβδομάδες: {days}",
+      "all_weekdays": "Όλες τις εργάσιμες ημέρες",
+      "ends_on_suffix": "έως τις {date}",
+      "ends_after_suffix": "{n} φορές",
+      "customize": "Προσαρμογή…",
+      "custom_title": "Προσαρμοσμένη επανάληψη",
+      "repeat_every": "Επανάληψη κάθε",
+      "unit_day": "ημέρα | ημέρες",
+      "unit_week": "εβδομάδα | εβδομάδες",
+      "unit_month": "μήνα | μήνες",
+      "unit_year": "χρόνο | χρόνια",
+      "repeats_on": "Επαναλαμβάνεται",
+      "ends": "Λήγει",
+      "ends_never": "Ποτέ",
+      "ends_on": "Στις",
+      "ends_after": "Μετά από",
+      "repetitions": "επαναλήψεις",
+      "cancel": "Ακύρωση",
+      "done": "Έτοιμο",
+      "wizard_question_schedule": "Όρισε ένα ωρολόγιο πρόγραμμα για την τάξη σου",
+      "wizard_question_cover": "Τώρα, ένα εξώφυλλο για την τάξη σου"
+    },
+    "submissions": {
+      "subtitle": "Έλεγξε και ενέκρινε τις υποβολές αυτής της τάξης από μία μόνο οθόνη.",
+      "back_to_class": "Επιστροφή στην τάξη"
+    }
+  }
+}

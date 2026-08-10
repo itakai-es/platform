@@ -710,9 +710,9 @@
               />
             </div>
             <h3 class="text-base md:text-lg font-semibold text-navy-700 mb-2">Atenea</h3>
-            <Badge variant="epica" class="mb-2 md:mb-3 text-xs">Sabiduría</Badge>
+            <Badge variant="epica" class="mb-2 md:mb-3 text-xs">{{ $t('common.landing.gods.atenea.domain') }}</Badge>
             <p class="text-xs md:text-sm text-gray-600">
-              Técnicas de estudio y estrategias de aprendizaje
+              {{ $t('common.landing.gods.atenea.description') }}
             </p>
           </div>
 
@@ -728,9 +728,9 @@
               />
             </div>
             <h3 class="text-base md:text-lg font-semibold text-navy-700 mb-2">Odiseo</h3>
-            <Badge variant="rara" class="mb-2 md:mb-3 text-xs">Estrategia</Badge>
+            <Badge variant="rara" class="mb-2 md:mb-3 text-xs">{{ $t('common.landing.gods.odiseo.domain') }}</Badge>
             <p class="text-xs md:text-sm text-gray-600">
-              Resolución de problemas y pensamiento crítico
+              {{ $t('common.landing.gods.odiseo.description') }}
             </p>
           </div>
 
@@ -746,8 +746,8 @@
               />
             </div>
             <h3 class="text-base md:text-lg font-semibold text-navy-700 mb-2">Penélope</h3>
-            <Badge variant="success" class="mb-2 md:mb-3 text-xs">Comunicación</Badge>
-            <p class="text-xs md:text-sm text-gray-600">Idiomas, escritura y expresión</p>
+            <Badge variant="success" class="mb-2 md:mb-3 text-xs">{{ $t('common.landing.gods.penelope.domain') }}</Badge>
+            <p class="text-xs md:text-sm text-gray-600">{{ $t('common.landing.gods.penelope.description') }}</p>
           </div>
 
           <!-- Polifemo -->
@@ -762,8 +762,8 @@
               />
             </div>
             <h3 class="text-base md:text-lg font-semibold text-navy-700 mb-2">Polifemo</h3>
-            <Badge variant="info" class="mb-2 md:mb-3 text-xs">Ciencias</Badge>
-            <p class="text-xs md:text-sm text-gray-600">Ciencias avanzadas y tecnología</p>
+            <Badge variant="info" class="mb-2 md:mb-3 text-xs">{{ $t('common.landing.gods.polifemo.domain') }}</Badge>
+            <p class="text-xs md:text-sm text-gray-600">{{ $t('common.landing.gods.polifemo.description') }}</p>
           </div>
 
           <!-- Poseidón -->
@@ -778,8 +778,8 @@
               />
             </div>
             <h3 class="text-base md:text-lg font-semibold text-navy-700 mb-2">Poseidón</h3>
-            <Badge variant="warning" class="mb-2 md:mb-3 text-xs">Creatividad</Badge>
-            <p class="text-xs md:text-sm text-gray-600">Artes, diseño e innovación</p>
+            <Badge variant="warning" class="mb-2 md:mb-3 text-xs">{{ $t('common.landing.gods.poseidon.domain') }}</Badge>
+            <p class="text-xs md:text-sm text-gray-600">{{ $t('common.landing.gods.poseidon.description') }}</p>
           </div>
         </div>
       </div>

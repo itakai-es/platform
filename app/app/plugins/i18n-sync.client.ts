@@ -1,4 +1,5 @@
-const SUPPORTED_LOCALES = ['es', 'en', 'ca', 'eu', 'gl']
+import { isAppLanguage } from '~/utils/app-languages'
+
 const STORAGE_KEY = 'itakai_language'
 const COOKIE_KEY = 'itakai_lang'
 
@@ -16,7 +17,7 @@ export default defineNuxtPlugin(nuxtApp => {
   // 1. On startup: sync cookie from localStorage so detectBrowserLanguage
   //    picks up the right locale on NEXT reload (if cookie was lost/cleared)
   const savedLocale = localStorage.getItem(STORAGE_KEY)
-  if (savedLocale && SUPPORTED_LOCALES.includes(savedLocale)) {
+  if (isAppLanguage(savedLocale)) {
     setCookie(savedLocale)
   }
 
@@ -26,7 +27,7 @@ export default defineNuxtPlugin(nuxtApp => {
   watch(
     () => profileStore.profile?.preferences?.language,
     async dbLang => {
-      if (!dbLang || !SUPPORTED_LOCALES.includes(dbLang)) return
+      if (!isAppLanguage(dbLang)) return
       if (i18n.locale.value === dbLang) return
 
       // DB preference differs from current locale → switch

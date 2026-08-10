@@ -20,7 +20,7 @@
 
       <!-- Empty State -->
       <CardItem v-if="!achievements.length" padding="lg" layout="column" centered>
-        <p class="text-sm text-navy-700/80">No hay insignias recientes</p>
+        <p class="text-sm text-navy-700/80">{{ t('student.dashboard.recent_badges_empty') }}</p>
       </CardItem>
     </div>
   </Card>
@@ -36,6 +36,8 @@
 
 import { TrophyIcon } from '@heroicons/vue/24/solid'
 import type { RecentAchievement } from '~/types/mission.types'
+
+const { t } = useI18n()
 
 interface Props {
   achievements: RecentAchievement[]

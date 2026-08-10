@@ -1,0 +1,318 @@
+{
+  "admin": {
+    "dashboard": {
+      "title": "Inici d'administrador",
+      "subtitle": "Panell de control del sistema ITAKAI",
+      "activity": {
+        "title": "Activitat del sistema",
+        "period_24h": "Últimes 24 hores",
+        "period_week": "Última setmana",
+        "period_month": "Últim mes"
+      },
+      "quick_actions": {
+        "manage_users": "Gestionar usuaris"
+      },
+      "system_status": {
+        "title": "Estat del sistema",
+        "operational": "Operatiu",
+        "degraded": "Degradat",
+        "down": "Fora de servici",
+        "unknown": "Desconegut",
+        "empty": "No hi ha servicis disponibles"
+      },
+      "meta": {
+        "title": "Inici admin | ITAKAI",
+        "description": "Panell de control del sistema ITAKAI. Gestiona usuaris, institucions i supervisa l'estat de la plataforma."
+      }
+    },
+    "users": {
+      "title": "Gestió d'usuaris",
+      "subtitle": "Administra tots els usuaris de la plataforma",
+      "filters": {
+        "search_placeholder": "Buscar per nom o correu...",
+        "all_roles": "Tots els rols",
+        "students": "Alumnes",
+        "teachers": "Professors",
+        "admins": "Administradors",
+        "all_statuses": "Tots els estats",
+        "active": "Actiu",
+        "suspended": "Suspés",
+        "inactive": "Inactiu",
+        "clear": "Netejar filtres"
+      },
+      "roles": {
+        "student": "Alumne",
+        "teacher": "Professor",
+        "admin": "Admin"
+      },
+      "card": {
+        "status": "Estat",
+        "classes": "Classes",
+        "last_login": "Últim accés"
+      },
+      "empty": {
+        "title": "No s'han trobat usuaris",
+        "description": "No hi ha usuaris que coincidisquen amb els filtres seleccionats."
+      },
+      "actions": {
+        "suspend_title": "Suspendre usuari",
+        "suspend_message": "Segur que vols suspendre {name}? No podrà accedir a la plataforma.",
+        "suspend_confirm": "Suspendre",
+        "delete_title": "Eliminar usuari",
+        "delete_message": "Segur que vols eliminar {name}? Esta acció no es pot desfer.",
+        "delete_confirm": "Eliminar"
+      },
+      "meta": {
+        "title": "Gestió d'usuaris | ITAKAI Admin",
+        "description": "Administra tots els usuaris del sistema, crea nous perfils, edita rols i supervisa l'activitat."
+      },
+      "sort": {
+        "recent": "Més recents"
+      }
+    },
+    "schools": {
+      "title": "Gestió d'institucions",
+      "subtitle": "Administra les institucions educatives de la plataforma",
+      "filters": {
+        "search_placeholder": "Buscar institució...",
+        "all_statuses": "Tots els estats",
+        "active": "Activa",
+        "inactive": "Inactiva"
+      },
+      "form": {
+        "create_title": "Nova institució",
+        "edit_title": "Editar institució",
+        "name": "Nom",
+        "name_placeholder": "Nom de la institució",
+        "city": "Ciutat",
+        "city_placeholder": "Ciutat",
+        "country": "País",
+        "country_placeholder": "País",
+        "save": "Guardar",
+        "cancel": "Cancel·lar"
+      },
+      "actions": {
+        "create": "Nova institució",
+        "delete_title": "Eliminar institució",
+        "delete_message": "Segur que vols eliminar {name}? Es desvincularà de tots els usuaris.",
+        "delete_confirm": "Eliminar"
+      },
+      "empty": {
+        "title": "No s'han trobat institucions",
+        "description": "No hi ha institucions que coincidisquen amb els filtres."
+      },
+      "meta": {
+        "title": "Gestió d'institucions | ITAKAI Admin",
+        "description": "Administra totes les institucions educatives del sistema, crea nous centres i supervisa la seua activitat."
+      }
+    },
+    "classes": {
+      "title": "Gestió de classes",
+      "subtitle": "Supervisa totes les classes del sistema",
+      "filters": {
+        "search_placeholder": "Buscar classe..."
+      },
+      "empty": {
+        "title": "No s'han trobat classes",
+        "description": "No hi ha classes que coincidisquen amb els filtres."
+      },
+      "meta": {
+        "title": "Gestió de classes | ITAKAI Admin"
+      },
+      "sort": {
+        "students_desc": "Més alumnes",
+        "missions_desc": "Més missions"
+      }
+    },
+    "missions": {
+      "title": "Gestió de missions",
+      "subtitle": "Supervisa totes les missions del sistema",
+      "filters": {
+        "search_placeholder": "Buscar missió...",
+        "all_statuses": "Tots els estats",
+        "all_rarities": "Totes les rareses"
+      },
+      "empty": {
+        "title": "No s'han trobat missions",
+        "description": "No hi ha missions que coincidisquen amb els filtres."
+      },
+      "meta": {
+        "title": "Gestió de missions | ITAKAI Admin"
+      },
+      "sort": {
+        "xp_desc": "Més XP",
+        "enigmas_desc": "Més enigmes"
+      }
+    },
+    "analytics": {
+      "title": "Analítiques del sistema",
+      "subtitle": "Mètriques i estadístiques de la plataforma",
+      "period": {
+        "week": "Setmana",
+        "month": "Mes",
+        "quarter": "Trimestre"
+      },
+      "kpis": {
+        "avg_response": "Temps de resposta",
+        "requests_per_min": "Peticions/min",
+        "error_rate": "Taxa d'error",
+        "uptime": "Disponibilitat"
+      },
+      "overview": {
+        "total_users": "Usuaris totals",
+        "active_today": "Actius hui",
+        "missions_completed": "Missions completades",
+        "completion_rate": "Taxa de compleció"
+      },
+      "sections": {
+        "system_resources": "Recursos del sistema",
+        "service_health": "Estat dels servicis",
+        "response_time": "Temps de resposta",
+        "active_users": "Usuaris actius",
+        "requests": "Peticions",
+        "tokens_over_time": "Tokens consumits",
+        "users_by_role": "Usuaris per rol",
+        "missions_by_status": "Missions per estat",
+        "missions_by_rarity": "Missions per raresa",
+        "ai_usage": "Ús d'IA (assistents)"
+      },
+      "ai": {
+        "total_tokens": "Tokens totals",
+        "avg_tokens_user": "Mitjana per usuari",
+        "total_conversations": "Converses",
+        "avg_conversations_user": "Conv. per usuari"
+      },
+      "system": {
+        "memory": "Memòria",
+        "disk": "Disc",
+        "db_latency": "Latència BD"
+      },
+      "table": {
+        "service": "Servici",
+        "status": "Estat",
+        "uptime": "Disponibilitat",
+        "latency": "Latència"
+      },
+      "status": {
+        "operational": "OK",
+        "degraded": "Degradat",
+        "down": "Caigut"
+      },
+      "meta": {
+        "title": "Analítiques del sistema | ITAKAI Admin",
+        "description": "Visualitza mètriques avançades, gràfics de rendiment i anàlisis detallades de la plataforma."
+      }
+    },
+    "logs": {
+      "title": "Registres del sistema",
+      "subtitle": "Registres d'activitat i esdeveniments de la plataforma",
+      "tab": "Activitat",
+      "filters": {
+        "search_placeholder": "Buscar en els registres...",
+        "period_24h": "Últimes 24 hores",
+        "period_week": "Última setmana",
+        "period_month": "Últim mes",
+        "all_severities": "Totes",
+        "info": "Informació",
+        "warning": "Avís",
+        "error": "Error",
+        "success": "Correcte",
+        "all_types": "Tots els tipus",
+        "new_school": "Nova institució",
+        "new_users": "Nous usuaris",
+        "alert": "Alerta",
+        "system_update": "Actualització",
+        "missions_completed": "Missions completades",
+        "user_action": "Acció d'usuari"
+      },
+      "empty": {
+        "title": "No s'han trobat registres",
+        "description": "No hi ha registres que coincidisquen amb els filtres."
+      },
+      "meta": {
+        "title": "Registres del sistema | ITAKAI Admin",
+        "description": "Revisa els registres d'activitat del sistema, audita accions d'usuaris i diagnostica problemes tècnics."
+      }
+    },
+    "system_logs": {
+      "tab": "Sistema",
+      "filters": {
+        "search_placeholder": "Buscar en els registres del sistema...",
+        "all_levels": "Tots els nivells",
+        "all_categories": "Totes les categories"
+      },
+      "levels": {
+        "info": "Informació",
+        "warning": "Avís",
+        "error": "Error",
+        "success": "Correcte"
+      },
+      "categories": {
+        "health_check": "Estat del sistema",
+        "service_status": "Estat del servici",
+        "security": "Seguretat",
+        "performance": "Rendiment",
+        "maintenance": "Manteniment",
+        "backup": "Còpia de seguretat"
+      },
+      "empty": {
+        "title": "No s'han trobat registres del sistema",
+        "description": "No hi ha registres del sistema que coincidisquen amb els filtres."
+      }
+    },
+    "settings": {
+      "title": "Configuració",
+      "subtitle": "Configura els servicis d'esta instància: IA, imatges, emmagatzematge i domini.",
+      "meta": {
+        "title": "Configuració · ITAKAI Admin",
+        "description": "Configuració de la instància"
+      },
+      "save": "Guardar els canvis",
+      "saved": "Configuració guardada",
+      "save_error": "No s'ha pogut guardar la configuració",
+      "ai": {
+        "title": "Intel·ligència artificial",
+        "desc": "Endpoints compatibles amb l'API d'OpenAI. Posa el proveïdor que vulgues (OpenAI, el teu propi Spark, Groq, Together, OpenRouter, Gemini via el seu endpoint OpenAI…).",
+        "text_title": "Text",
+        "image_title": "Imatges",
+        "endpoint_url": "URL de l'endpoint",
+        "api_key": "Clau API",
+        "model": "Model"
+      },
+      "storage": {
+        "title": "Emmagatzematge",
+        "desc": "On es guarden les imatges i els fitxers pujats.",
+        "driver": "Tipus d'emmagatzematge",
+        "driver_local": "Disc local (per defecte)",
+        "driver_s3": "Extern S3 / Cloudflare R2",
+        "endpoint": "Endpoint",
+        "region": "Regió",
+        "bucket": "Bucket",
+        "access_key": "Access Key ID",
+        "secret_key": "Secret Access Key",
+        "public_url": "URL pública base",
+        "public_url_hint": "URL des d'on es servixen els fitxers (bucket públic o domini propi de R2).",
+        "path_style": "Usar path-style (recomanat per a R2)"
+      },
+      "domain": {
+        "title": "Domini",
+        "desc": "URL pública de la instància i orígens permesos.",
+        "app_url": "URL de la instància",
+        "app_url_hint": "S'usa en els enllaços dels correus.",
+        "cors": "Orígens CORS permesos",
+        "cors_hint": "Separa'n diversos amb comes."
+      },
+      "general": {
+        "title": "General",
+        "desc": "Paràmetres generals de la instància.",
+        "platform_name": "Nom de la plataforma",
+        "contact_email": "Correu de contacte",
+        "default_language": "Idioma per defecte",
+        "registration_open": "Registre obert",
+        "registration_hint": "Permet que es registren nous usuaris.",
+        "maintenance_mode": "Mode manteniment",
+        "maintenance_hint": "Mostra un avís de manteniment als usuaris."
+      }
+    }
+  }
+}

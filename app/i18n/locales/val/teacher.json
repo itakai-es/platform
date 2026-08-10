@@ -1,0 +1,933 @@
+{
+  "teacher": {
+    "about": {
+      "title": "Sobre ITAKAI",
+      "subtitle": "Novetats i registre de versions",
+      "breadcrumb": "Sobre",
+      "breadcrumb_home": "Inici",
+      "current_version": "Versió actual",
+      "latest": "Última versió",
+      "versions_index": "Versions",
+      "footer_note": "Trobes a faltar alguna cosa o has trobat un error? Conta-nos-ho i ho tindrem en compte per a pròximes versions.",
+      "groups": {
+        "new": "Novetats",
+        "improved": "Millores",
+        "fixed": "Correccions"
+      },
+      "meta": {
+        "title": "Sobre | ITAKAI",
+        "description": "Novetats, millores i correccions de cada versió d'ITAKAI."
+      }
+    },
+    "dashboard": {
+      "title": "Inici del professor",
+      "subtitle": "Benvingut, {name}!",
+      "new_class": "Nova classe",
+      "new_mission": "Nova missió",
+      "stats": {
+        "total_students": "Alumnes totals",
+        "active_classes": "Classes actives",
+        "active_missions": "Missions actives"
+      },
+      "my_classes": "Les meues classes",
+      "view_all": "Veure-les totes",
+      "no_classes_yet": "Encara no tens classes",
+      "recent_missions": "Últimes missions",
+      "no_missions_description": "Crea la teua primera missió per als teus alumnes",
+      "meta": {
+        "title": "Inici professor | ITAKAI",
+        "description": "Inici principal del professor. Gestiona les teues classes i missions i revisa el progrés dels teus alumnes."
+      }
+    },
+    "classes": {
+      "index": {
+        "title": "Les meues classes",
+        "subtitle": "Gestiona les teues classes i revisa el progrés dels teus alumnes",
+        "new_class": "Nova classe",
+        "create_first": "Crear la primera classe",
+        "no_classes_description": "Encara no has creat cap classe",
+        "meta": {
+          "title": "Les meues classes | ITAKAI Professor",
+          "description": "Gestiona totes les teues classes, els alumnes inscrits i les missions assignades."
+        },
+        "templates": "Plantilles",
+        "duplicate_success": "Classe duplicada com a \"{name}\"",
+        "duplicate_error": "No s'ha pogut duplicar la classe",
+        "duplicate": {
+          "title": "Duplicar classe",
+          "subtitle": "Tria què vols copiar a la nova classe «{name}».",
+          "confirm": "Duplicar",
+          "cancel": "Cancel·lar",
+          "items": {
+            "missions": {
+              "label": "Missions",
+              "desc": "Les missions i els seus enigmes"
+            },
+            "narrative": {
+              "label": "Història",
+              "desc": "La narrativa i la imatge de portada"
+            },
+            "features": {
+              "label": "Funcionalitats",
+              "desc": "Els mòduls activats de la classe"
+            },
+            "shop": {
+              "label": "Botiga",
+              "desc": "Els articles de la botiga"
+            },
+            "behaviors": {
+              "label": "Comportaments",
+              "desc": "Les plantilles de comportament"
+            }
+          }
+        }
+      },
+      "create": {
+        "breadcrumb_classes": "Les meues classes",
+        "breadcrumb_new": "Nova",
+        "btn_creating": "Creant...",
+        "btn_create": "Crear classe",
+        "success_title": "Classe creada!",
+        "success_message": "La teua classe \"{name}\" ja està llesta.",
+        "invite_code_label": "Codi d'invitació",
+        "invite_code_hint": "Compartix este codi amb els teus alumnes",
+        "btn_view_classes": "Veure les classes",
+        "btn_copied": "Copiat!",
+        "btn_copy_code": "Copiar codi",
+        "validation": {
+          "name_required": "El nom de la classe és obligatori",
+          "name_min_length": "El nom ha de tindre com a mínim 3 caràcters",
+          "create_error": "Error en crear la classe. Torna-ho a intentar."
+        },
+        "preview_label": "Així es veurà la teua classe",
+        "onboarding": {
+          "ask_idea": "Hola {name}! Soc {god}. Conta'm, quin món o quina temàtica vols per a la teua classe?",
+          "review_approach": "Açò és el que t'he preparat, t'agrada?",
+          "pick_title": "Quin títol li posem a la teua classe?",
+          "placeholder_idea": "Ex.: Una escola de màgia amb 4 cases que competixen per punts, alumnes-mags i reptes com masmorres…",
+          "generating_approach": "Estic creant la narrativa de la teua classe...",
+          "narrative_feedback_placeholder": "Ex.: Vull més referències a les cases de Hogwarts...",
+          "btn_change_something": "Vull canviar alguna cosa",
+          "btn_edit_by_hand": "Editar a mà",
+          "custom_title_placeholder": "O escriu el teu propi títol...",
+          "title_feedback_placeholder": "Ex.: Vull títols més curts, amb més referència a Harry Potter...",
+          "generating_cover": "Generant la portada...",
+          "cover_error": "No s'ha pogut generar la portada. Pots saltar-te este pas.",
+          "btn_upload_cover": "Pujar la meua",
+          "cover_upload_type_error": "Format no vàlid. Puja una imatge PNG, JPG o WEBP.",
+          "cover_upload_size_error": "La imatge és massa gran (màxim 5 MB).",
+          "image_feedback_placeholder": "Vull que siga més acolorida, amb fons blau...",
+          "thinking": "Pensant...",
+          "btn_back": "Arrere",
+          "btn_next": "Següent",
+          "btn_skip": "Saltar",
+          "btn_accept_plan": "Sí, avant",
+          "attach_materials": "Adjuntar materials (PDF, Word, imatges)",
+          "attach_processing": "Processant els materials…",
+          "attach_remove": "Llevar",
+          "attach_error": "No s'han pogut processar els materials.",
+          "attach_error_size": "«{name}» pesa {size} MB. El màxim és {max} MB per fitxer.",
+          "attach_error_too_large": "Els materials pesen massa en conjunt. Puja'ls d'un en un (màx. {max} MB per fitxer).",
+          "attach_hint": "Màx. {max} MB per fitxer",
+          "guide_question": "He preparat una guia per als teus alumnes"
+        },
+        "meta": {
+          "title": "Crear una classe nova | ITAKAI Professor"
+        },
+        "narrative_error": "No he pogut crear la narrativa",
+        "summary": {
+          "edit": "Edita",
+          "edit_title": "Títol",
+          "edit_cover": "Portada",
+          "editing_hint": "Estàs editant una classe que ja tens llesta.",
+          "back_to_summary": "Torna al resum"
+        }
+      },
+      "detail": {
+        "breadcrumb_classes": "Les meues classes",
+        "not_found_title": "Classe no trobada",
+        "not_found_description": "La classe que busques no existix o no hi tens accés",
+        "btn_back": "Tornar a les meues classes",
+        "btn_invite": "Convidar",
+        "tabs": {
+          "summary": "Resum",
+          "narrative": "Història",
+          "guide": "Guia",
+          "missions": "Missions",
+          "students": "Alumnes",
+          "tienda": "Botiga",
+          "behaviors": "Comportaments",
+          "settings": "Ajustos"
+        },
+        "students": {
+          "empty_title": "Encara no hi ha alumnes",
+          "empty_description": "Quan els alumnes s'unisquen a la classe, apareixeran ací amb les seues estadístiques.",
+          "col_student": "Alumne",
+          "col_level": "Nivell",
+          "search_placeholder": "Buscar alumne...",
+          "sort_name_asc": "Nom A-Z",
+          "sort_name_desc": "Nom Z-A",
+          "sort_xp_asc": "XP ↑",
+          "sort_xp_desc": "XP ↓",
+          "sort_level_asc": "Nivell ↑",
+          "sort_level_desc": "Nivell ↓",
+          "sort_coins_asc": "Monedes ↑",
+          "sort_coins_desc": "Monedes ↓",
+          "sort_mana_asc": "Mana ↑",
+          "sort_mana_desc": "Mana ↓",
+          "sort_lives_asc": "Vida ↑",
+          "sort_lives_desc": "Vida ↓",
+          "no_results_title": "Sense resultats",
+          "no_results_description": "No hi ha alumnes que coincidisquen amb la busca.",
+          "col_behaviors": "Comportaments",
+          "view_list": "Llistat",
+          "view_ranking": "Classificació"
+        },
+        "stats_title": "Estadístiques de la classe",
+        "pending_reviews": "Entregues per revisar",
+        "guide_editor": {
+          "toast_saved": "Guia guardada correctament",
+          "toast_error": "Error en guardar la guia"
+        },
+        "ranking": {
+          "no_students_title": "No hi ha alumnes",
+          "no_students_description": "Encara no hi ha alumnes en esta classe"
+        },
+        "missions_tab": {
+          "no_missions_title": "No hi ha missions",
+          "no_missions_description": "Encara no hi ha missions assignades a esta classe",
+          "create_first": "Crear la primera missió",
+          "new_mission": "Nova missió",
+          "no_results": "Sense resultats",
+          "empty_search": "No s'han trobat missions per a \"{query}\"",
+          "empty_status": "No hi ha missions amb els estats seleccionats",
+          "empty_rarity": "No hi ha missions amb les rareses seleccionades",
+          "empty_default": "No hi ha missions en esta classe"
+        },
+        "meta": {
+          "title": "Detall de classe | ITAKAI Professor",
+          "description": "Gestiona la classe. Revisa els alumnes, les missions assignades i el progrés general."
+        },
+        "behaviors": {
+          "new_button": "Nou comportament",
+          "new_button_short": "Nou",
+          "library_button": "Biblioteca",
+          "library_title": "Biblioteca de comportaments",
+          "library_subtitle": "Afig comportaments suggerits amb un toc. Després els pots editar o esborrar.",
+          "library_add": "Afegir",
+          "empty_title": "Encara no hi ha comportaments",
+          "empty_description": "Crea'n un des de zero o afig-ne des de la biblioteca.",
+          "edit_aria": "Editar comportament",
+          "section_positives": "Positius",
+          "section_negatives": "Negatius",
+          "filter_all": "Tots",
+          "apply_title": "Aplicar \"{name}\"",
+          "pick_student": "Selecciona l'alumne a qui li ho aplicaràs.",
+          "applied_toast": "{behavior} aplicat a {student}",
+          "empty_students": "Encara no hi ha alumnes en esta classe.",
+          "form_new_title": "Nou comportament",
+          "form_edit_title": "Editar comportament",
+          "form_type": "Tipus",
+          "type_positive": "Positiu",
+          "type_negative": "Negatiu",
+          "form_name": "Nom",
+          "form_name_placeholder": "Ex.: Bona participació",
+          "form_description": "Descripció",
+          "form_description_placeholder": "Què reconeix o corregix este comportament?",
+          "form_impacts": "Impactes",
+          "form_impacts_hint": "Quantia absoluta; el signe el dona el tipus (positiu = +, negatiu = −).",
+          "form_cancel": "Cancel·lar",
+          "form_save": "Guardar",
+          "form_create": "Crear",
+          "form_delete": "Eliminar",
+          "delete_title": "Eliminar \"{name}\"?",
+          "delete_description": "Deixarà d'estar al catàleg. Esta acció no es pot desfer.",
+          "toast_created": "Comportament creat",
+          "toast_updated": "Comportament actualitzat",
+          "toast_deleted": "Comportament eliminat",
+          "toast_save_error": "No s'ha pogut guardar el comportament.",
+          "toast_delete_error": "No s'ha pogut eliminar el comportament.",
+          "fetch_error": "No s'han pogut carregar els comportaments.",
+          "apply_error": "No s'ha pogut aplicar el comportament."
+        },
+        "shop": {
+          "tab_items": "Articles",
+          "tab_uses": "Usos",
+          "uses_empty_title": "Encara sense usos",
+          "new_item": "Nou article",
+          "library_button": "Biblioteca",
+          "library_title": "Biblioteca d'articles",
+          "library_subtitle": "Afig articles suggerits amb un toc. Després els pots editar o esborrar.",
+          "library_add": "Afegir",
+          "empty_title": "Encara no hi ha articles",
+          "empty_description": "Crea la primera recompensa que els teus alumnes podran canviar.",
+          "hidden": "Ocult",
+          "purchases_empty_title": "Encara sense canvis",
+          "form_edit_title": "Editar article",
+          "form_new_title": "Nou article",
+          "form_name": "Nom",
+          "form_name_placeholder": "Ex.: Saltar-se una tasca",
+          "form_description": "Descripció",
+          "form_description_placeholder": "Què obté l'alumne en canviar-lo?",
+          "form_price": "Preu",
+          "form_visible": "Visible per als alumnes",
+          "form_cancel": "Cancel·lar",
+          "form_delete": "Eliminar",
+          "form_save": "Guardar",
+          "form_create": "Crear",
+          "delete_title": "Eliminar \"{name}\"?",
+          "delete_description": "Els alumnes deixaran de veure'l a la botiga. Esta acció no es pot desfer.",
+          "toast_created": "Article creat",
+          "toast_updated": "Article actualitzat",
+          "toast_deleted": "Article eliminat",
+          "toast_save_error": "No s'ha pogut guardar l'article.",
+          "toast_delete_error": "No s'ha pogut eliminar l'article.",
+          "form_type": "Tipus",
+          "type_reward": "Recompensa",
+          "type_power": "Poder",
+          "form_mana_cost": "Cost en mana (en usar-lo)",
+          "form_usage": "Ús",
+          "usage_single": "Un sol ús",
+          "usage_unlimited": "Il·limitat",
+          "form_life_restore": "Vida que recupera",
+          "form_life_restore_hint": "Punts de vida que se sumen en canviar-lo (recompenses) o en usar-lo (poders). 0 = no recupera vida.",
+          "tab_history": "Historial",
+          "history_purchases": "Compres",
+          "view_student_profile": "Veure l'alumne",
+          "mana_disabled_chip": "Mana desactivat"
+        },
+        "settings": {
+          "levels": {
+            "title": "Nivells",
+            "curve_title": "Corba d'experiència",
+            "curve_hint": "Definix quanta XP costa pujar de nivell i fins a quin nivell es pot arribar.",
+            "pace_desc_fast": "Es puja de nivell ràpid: cada nivell costa només un poc més que l'anterior.",
+            "pace_desc_normal": "Progressió equilibrada: cada nivell costa una mica més que l'anterior.",
+            "pace_desc_slow": "Cada vegada costa prou més pujar de nivell. Progressió llarga, ideal per a tot el curs.",
+            "mode_label": "Com es guanya la XP",
+            "mode_curve": "Per fórmula",
+            "mode_custom": "Manual (per nivell)",
+            "pace_label": "Ritme de pujada",
+            "pace_fast": "Ràpid",
+            "pace_normal": "Normal",
+            "pace_slow": "Lent",
+            "custom_hint": "Escriu la XP necessària per a pujar de cada nivell al següent.",
+            "compare_title": "XP total per a arribar a cada nivell",
+            "compare_level": "Nivell {level}",
+            "cap_label": "Nombre de nivells",
+            "base_label": "XP del primer nivell",
+            "tiers_title": "Rangs",
+            "tiers_hint": "Assigna un títol i un color a cada tram de nivells.",
+            "tier_title_placeholder": "Títol del rang",
+            "tier_from": "Del",
+            "tier_to": "al",
+            "tier_add": "Afegir rang",
+            "tier_remove": "Llevar rang",
+            "tiers_warning": "Hi ha buits o solapaments entre rangs: alguns nivells no mostrarien el títol correcte.",
+            "tiers_autofix": "Ajustar automàticament",
+            "restore_defaults": "Restaurar els valors per defecte",
+            "save": "Guardar els nivells",
+            "discard": "Descartar",
+            "toast_saved": "Nivells guardats",
+            "toast_error": "No s'han pogut guardar els nivells"
+          },
+          "toast_error": "No s'ha pogut guardar la configuració",
+          "items": {
+            "shop": {
+              "label": "Botiga",
+              "desc": "Recompenses i poders que els alumnes canvien."
+            },
+            "coins": {
+              "label": "Monedes",
+              "desc": "Mostra el saldo i els preus en monedes."
+            },
+            "mana": {
+              "label": "Mana",
+              "desc": "Energia per a usar poders de la botiga."
+            },
+            "rankings": {
+              "label": "Classificació",
+              "desc": "Classificació dels alumnes de la classe."
+            },
+            "xp": {
+              "label": "Experiència (XP)",
+              "desc": "Nivells i barra de progrés per XP."
+            },
+            "behaviors": {
+              "label": "Comportaments",
+              "desc": "Aplica accions positives o negatives que donen o lleven recursos."
+            },
+            "lives": {
+              "label": "Vides",
+              "desc": "Punts de vida de la classe (els modifiquen els comportaments)."
+            },
+            "visualEffects": {
+              "label": "Efectes visuals",
+              "desc": "Animacions com el confeti en pujar de nivell."
+            },
+            "sounds": {
+              "label": "Sons",
+              "desc": "Efectes de so en pujar de nivell, completar missions, etc."
+            }
+          },
+          "requires": "Necessita {feature}",
+          "requires_resource": "Necessita almenys un recurs actiu (XP, monedes, mana o vides)",
+          "general": {
+            "title": "Dades generals",
+            "name_label": "Nom",
+            "subject_label": "Assignatura",
+            "level_label": "Nivell educatiu",
+            "language_label": "Idioma",
+            "province_label": "Província",
+            "metadata_none": "Sense especificar",
+            "metadata_search": "Buscar...",
+            "subject_needs_level": "Tria primer el nivell",
+            "publish_title": "Publicar com a plantilla",
+            "publish_hint": "Compartix-la al marketplace perquè altres professors la importen.",
+            "publish_missing_metadata": "Guarda l'assignatura, el nivell i l'idioma abans de publicar.",
+            "publish_on": "Classe publicada com a plantilla",
+            "publish_off": "Plantilla retirada del marketplace",
+            "publish_error": "No s'ha pogut publicar la plantilla",
+            "template_metadata_locked": "La classe està publicada com a plantilla: no pots deixar l'assignatura, el nivell o l'idioma sense especificar. Despublica-la primer.",
+            "duplicate_title": "Duplicar classe",
+            "duplicate_hint": "Crea una còpia d'esta classe. Podràs triar quin contingut es copia.",
+            "duplicate_cta": "Duplicar",
+            "schedule_label": "Horari",
+            "background_label": "Imatge de fons",
+            "save": "Guardar els canvis",
+            "discard": "Descartar",
+            "toast_saved": "Dades guardades",
+            "toast_error": "No s'han pogut guardar les dades",
+            "name_required": "El nom no pot estar buit",
+            "schedule_add": "Afegir sessió",
+            "schedule_remove": "Llevar sessió",
+            "schedule_preview": "Vista prèvia",
+            "background_generate": "Generar amb IA",
+            "background_regenerate": "Regenerar amb IA",
+            "background_clear": "Llevar la imatge",
+            "background_upload": "Pujar la meua",
+            "background_upload_type_error": "Format no vàlid. Puja una imatge PNG, JPG o WEBP.",
+            "background_upload_size_error": "La imatge és massa gran (màxim 5 MB).",
+            "background_error": "No s'ha pogut generar la imatge"
+          },
+          "features": {
+            "title": "Funcionalitats"
+          },
+          "management": {
+            "title": "Gestió"
+          }
+        },
+        "badges_empty": "No hi ha insígnies en esta classe",
+        "join_requests": {
+          "empty_title": "Sense sol·licituds",
+          "empty_description": "No hi ha sol·licituds pendents per a esta classe"
+        }
+      }
+    },
+    "missions": {
+      "index": {
+        "meta": {
+          "title": "Les meues missions | ITAKAI Professor",
+          "description": "Gestiona totes les missions que has creat, edita-les o crea'n de noves per als teus alumnes."
+        },
+        "subtitle": "Gestiona les missions de les teues classes"
+      },
+      "create": {
+        "meta": {
+          "title": "Crear missió | ITAKAI Professor"
+        },
+        "pick_class": "Selecciona una classe",
+        "idea_placeholder": "Ex.: Vull una missió sobre cinemàtica on els alumnes calculen trajectòries d'graneres voladores...",
+        "narrative_error": "No he pogut crear la narrativa",
+        "ai_unavailable": "El servei d'IA no està disponible ara mateix. Torna-ho a provar d'ací a uns minuts."
+      },
+      "detail": {
+        "delete_confirm_btn": "Eliminar",
+        "toast": {
+          "enigma_has_submissions": "No es pot eliminar un enigma que ja té entregues d'alumnes"
+        },
+        "meta": {
+          "title": "Detall de missió | ITAKAI Professor",
+          "title_loading": "Carregant la missió... | ITAKAI Professor",
+          "description_fallback": "Detall de missió en ITAKAI"
+        },
+        "tabs": {
+          "summary": "Resum",
+          "settings": "Ajustos"
+        },
+        "settings": {
+          "title_label": "Títol",
+          "title_required": "El títol no pot estar buit",
+          "deadline_label": "Data límit",
+          "deadline_hint": "Deixa-la buida perquè la missió no caduque.",
+          "rarity_label": "Raresa",
+          "rarity_locked_hint": "No pots canviar la raresa: algun alumne ja ha completat la missió.",
+          "rarity": {
+            "comun": "Comuna",
+            "rara": "Rara",
+            "epica": "Èpica",
+            "legendaria": "Llegendària"
+          },
+          "status_label": "Estat",
+          "status_active": "Activa",
+          "status_blocked": "Bloquejada",
+          "status_hint": "Bloquejada: els alumnes la veuen amb cadenat i no hi poden entrar.",
+          "background_label": "Imatge de la missió",
+          "background_generate": "Generar amb IA",
+          "background_regenerate": "Regenerar amb IA",
+          "background_upload": "Pujar la meua",
+          "background_clear": "Llevar la imatge",
+          "background_error": "No s'ha pogut generar la imatge",
+          "background_upload_type_error": "Format no vàlid. Puja una imatge PNG, JPG o WEBP.",
+          "background_upload_size_error": "La imatge és massa gran (màxim 5 MB).",
+          "save": "Guardar els canvis",
+          "discard": "Descartar",
+          "toast_saved": "Dades guardades",
+          "toast_error": "No s'han pogut guardar les dades"
+        }
+      }
+    },
+    "badges": {
+      "title": "Les meues insígnies",
+      "subtitle": "Crea i gestiona insígnies personalitzades per a recompensar els assoliments dels teus alumnes",
+      "new_badge": "Nova insígnia",
+      "btn_delete": "Eliminar",
+      "no_badges_title": "Sense insígnies",
+      "no_badges_description": "Crea la teua primera insígnia per a recompensar els teus alumnes",
+      "create_first": "Crear la primera insígnia",
+      "form": {
+        "edit_title": "Editar insígnia",
+        "create_title": "Nova insígnia",
+        "label_name": "Nom",
+        "label_description": "Descripció",
+        "label_image": "Imatge",
+        "image_optional": "(opcional)",
+        "placeholder_name": "Ex.: Mestre d'equacions",
+        "placeholder_description": "Descriu quin assoliment representa esta insígnia...",
+        "btn_remove_image": "Llevar la imatge",
+        "preview_label": "Vista prèvia:",
+        "btn_cancel": "Cancel·lar",
+        "btn_saving": "Guardant...",
+        "btn_save_changes": "Guardar els canvis",
+        "btn_create": "Crear insígnia",
+        "no_mission": "Sense missió"
+      },
+      "detail": {
+        "btn_edit": "Editar",
+        "btn_close": "Tancar"
+      },
+      "delete_title": "Eliminar insígnia",
+      "delete_confirm": "Segur que vols eliminar la insígnia '{name}'? Esta acció no es pot desfer.",
+      "validation": {
+        "name_required": "El nom és obligatori",
+        "name_min_length": "El nom ha de tindre com a mínim 3 caràcters",
+        "image_size": "La imatge no pot superar els 2 MB",
+        "image_type": "Només s'admeten fitxers PNG, JPG, SVG o WebP"
+      },
+      "meta": {
+        "title": "Les meues insígnies | ITAKAI Professor",
+        "description": "Crea, edita i gestiona insígnies personalitzades per a premiar els assoliments dels teus alumnes."
+      },
+      "filter_system": "Del sistema",
+      "generate_error": "No s'ha pogut generar la insígnia."
+    },
+    "students": {
+      "index": {
+        "title": "Els meus alumnes",
+        "subtitle": "Gestiona i visualitza el progrés dels teus alumnes",
+        "search_placeholder": "Buscar per nom o correu...",
+        "filter_all_classes": "Totes les classes",
+        "filter_all_progress": "Tot el progrés",
+        "progress_excellent": "Excel·lent (≥80 %)",
+        "progress_good": "Bo (50-79 %)",
+        "progress_in_progress": "En progrés (20-49 %)",
+        "progress_initial": "Inicial (<20 %)",
+        "sort_name_asc": "Nom A-Z",
+        "sort_name_desc": "Nom Z-A",
+        "sort_progress_desc": "Més progrés",
+        "sort_progress_asc": "Menys progrés",
+        "sort_missions_desc": "Més missions",
+        "tab_active": "Actius",
+        "tab_archived": "Arxivats",
+        "no_students_title": "Sense alumnes",
+        "no_students_filtered": "No s'han trobat alumnes amb estos filtres",
+        "no_students_default": "No hi ha alumnes a les teues classes",
+        "no_archived_students_title": "Sense alumnes arxivats",
+        "no_archived_students_default": "No hi ha alumnes a les teues classes arxivades",
+        "btn_view": "Veure",
+        "stat_missions": "Missions",
+        "meta": {
+          "title": "Els meus alumnes | ITAKAI Professor",
+          "description": "Gestiona tots els teus alumnes i revisa el seu progrés i les estadístiques de rendiment acadèmic."
+        }
+      },
+      "detail": {
+        "breadcrumb_students": "Alumnes",
+        "loading": "Carregant...",
+        "error_title": "Error en carregar l'alumne",
+        "error_default": "Error en carregar les dades de l'alumne",
+        "btn_retry": "Reintentar",
+        "stat_classes": "Classes",
+        "stat_missions": "Missions",
+        "stat_completed": "Completat",
+        "enrolled_classes_title": "Classes inscrites",
+        "enrolled_classes_count": "{count} classes",
+        "not_enrolled": "No està inscrit en cap de les teues classes",
+        "label_progress": "Completat",
+        "stat_coins": "Monedes",
+        "stat_mana": "Mana",
+        "stat_lives": "Punts de vida",
+        "no_activity": "Sense activitat recent",
+        "meta": {
+          "title": "Perfil d'alumne | ITAKAI Professor",
+          "description": "Perfil detallat de l'alumne amb estadístiques de rendiment, progrés en missions i activitat recent."
+        }
+      }
+    },
+    "ai_assistant": {
+      "meta": {
+        "title": "Assistent IA professor | ITAKAI",
+        "description": "Assistent d'IA especialitzat per a professors. Obtín ajuda sobre gestió de classes i missions."
+      }
+    },
+    "profile": {
+      "breadcrumb_home": "Inici",
+      "breadcrumb_profile": "El meu perfil",
+      "title": "El meu perfil",
+      "tabs": {
+        "security": "Seguretat",
+        "settings": "Configuració"
+      },
+      "security": {
+        "password_title": "Contrasenya",
+        "placeholder_current": "Contrasenya actual",
+        "placeholder_new": "Contrasenya nova",
+        "placeholder_confirm": "Confirmar contrasenya",
+        "btn_update": "Actualitzar",
+        "email_title": "Correu electrònic",
+        "placeholder_new_email": "Correu nou",
+        "sessions_title": "Sessions",
+        "sessions_close_all": "Tancar-les totes",
+        "session_current": "Actual",
+        "session_close": "Tancar",
+        "validation": {
+          "passwords_mismatch": "Les contrasenyes no coincidixen",
+          "password_min_length": "La contrasenya ha de tindre com a mínim 6 caràcters",
+          "email_invalid": "Introduïx un correu vàlid",
+          "password_required": "Introduïx la teua contrasenya"
+        }
+      },
+      "settings": {
+        "theme_title": "Tema",
+        "theme_description": "Tria l'estil visual de la plataforma",
+        "theme_college": "Mode col·legi",
+        "theme_college_desc": "Aspecte gamificat",
+        "theme_university": "Mode universitat",
+        "theme_university_desc": "Aspecte professional",
+        "language_title": "Idioma",
+        "language_updated": "Idioma actualitzat",
+        "theme_updated": "Tema actualitzat",
+        "danger_zone_title": "Zona perillosa",
+        "danger_zone_description": "Una vegada eliminat el teu compte, no hi ha marxa arrere. Assegura't que n'estàs segur.",
+        "btn_delete_account": "Eliminar el compte",
+        "delete_modal_title": "Eliminar el compte",
+        "delete_modal_confirm_prompt": "Per a confirmar, introduïx la teua contrasenya:",
+        "placeholder_password": "La teua contrasenya",
+        "btn_cancel": "Cancel·lar",
+        "btn_delete_confirm": "Eliminar el meu compte",
+        "languages": {
+          "es": "Castellà",
+          "en": "Anglés",
+          "ca": "Català",
+          "val": "Valencià",
+          "eu": "Basc",
+          "gl": "Gallec",
+          "ast": "Asturià",
+          "pt": "Portugués",
+          "el": "Grec",
+          "ro": "Romanés"
+        }
+      },
+      "meta": {
+        "title": "El meu perfil | ITAKAI",
+        "description": "Gestiona el teu perfil de professor, configura la seguretat i personalitza la teua experiència."
+      }
+    },
+    "components": {
+      "enigma_form_modal": {
+        "edit_title": "Editar enigma",
+        "add_title": "Afegir enigma",
+        "label_title": "Títol de l'enigma",
+        "placeholder_title": "Ex.: El despertar de les màquines",
+        "label_xp": "XP",
+        "label_rewards": "Recompenses en completar-lo",
+        "rewards_locked_hint": "Només pots augmentar les recompenses: algun alumne ja les ha guanyades.",
+        "label_description": "Descripció",
+        "placeholder_description": "Descriu què ha de fer l'alumne...",
+        "label_objectives": "Objectius",
+        "label_objectives_optional": "(opcional)",
+        "placeholder_objective": "Escriu un objectiu...",
+        "btn_remove_objective": "Eliminar objectiu",
+        "btn_add_objective": "Afegir objectiu",
+        "is_optional": "Este enigma és opcional",
+        "btn_cancel": "Cancel·lar",
+        "btn_saving": "Guardant...",
+        "btn_save": "Guardar",
+        "btn_add": "Afegir",
+        "validation": {
+          "title_required": "El títol és obligatori",
+          "description_required": "La descripció és obligatòria"
+        },
+        "label_mana": "Mana",
+        "label_coins": "Monedes",
+        "no_mana": "Sense mana",
+        "custom_value": "Valor personalitzat"
+      },
+      "document_form_modal": {
+        "edit_title": "Editar document",
+        "add_title": "Afegir document",
+        "label_title": "Títol",
+        "placeholder_title": "Ex.: Guia de sistemes d'equacions",
+        "btn_upload_file": "Pujar fitxer",
+        "btn_add_link": "Afegir enllaç",
+        "label_file": "Fitxer",
+        "drop_hint": "Arrossega un fitxer o fes clic per a seleccionar-lo",
+        "file_types_hint": "PDF, Word, vídeo, imatges (màx. 50 MB)",
+        "label_url": "URL",
+        "label_description": "Descripció",
+        "label_description_optional": "(opcional)",
+        "placeholder_description": "Breu descripció del document...",
+        "label_tags": "Etiquetes",
+        "placeholder_tags": "Escriu una etiqueta i prem Enter...",
+        "btn_cancel": "Cancel·lar",
+        "btn_saving": "Guardant...",
+        "btn_save": "Guardar",
+        "btn_add": "Afegir",
+        "validation": {
+          "title_required": "El títol és obligatori",
+          "url_required": "La URL és obligatòria per als enllaços",
+          "file_required": "Has de seleccionar un fitxer",
+          "file_too_large": "El fitxer no pot superar els 50 MB"
+        }
+      },
+      "class_filter_bar": {
+        "search_placeholder": "Buscar classes...",
+        "sort": {
+          "name_asc": "Nom A-Z",
+          "name_desc": "Nom Z-A",
+          "most_students": "Més alumnes",
+          "least_students": "Menys alumnes",
+          "most_missions": "Més missions",
+          "least_missions": "Menys missions"
+        }
+      },
+      "mission_filter_bar": {
+        "search_placeholder": "Buscar missions...",
+        "all_classes": "Totes les classes",
+        "plural_classes": "classes",
+        "all_statuses": "Tots els estats",
+        "plural_statuses": "estats",
+        "all_rarities": "Totes les rareses",
+        "plural_rarities": "rareses",
+        "rarity": {
+          "common": "Comuna",
+          "rare": "Rara",
+          "epic": "Èpica",
+          "legendary": "Llegendària"
+        },
+        "status": {
+          "active": "Activa",
+          "urgent": "Urgent",
+          "completed": "Completada",
+          "expired": "Caducada",
+          "locked": "Bloquejada"
+        },
+        "sort": {
+          "deadline_asc": "Data ↑",
+          "deadline_desc": "Data ↓",
+          "name_asc": "Nom A-Z",
+          "name_desc": "Nom Z-A",
+          "xp_desc": "XP ↓",
+          "xp_asc": "XP ↑",
+          "rarity_desc": "Raresa ↓",
+          "rarity_asc": "Raresa ↑",
+          "completion_desc": "Compleció ↓",
+          "completion_asc": "Compleció ↑"
+        }
+      },
+      "rewards_form_modal": {
+        "title": "Editar recompenses",
+        "badge_label": "Insígnia de recompensa",
+        "remove_badge": "Llevar la insígnia",
+        "no_badge_title": "Sense insígnia assignada",
+        "no_badge_description": "Selecciona o crea una insígnia per a esta missió",
+        "btn_select_existing": "Seleccionar-ne una d'existent",
+        "btn_create_new": "Crear-ne una de nova",
+        "select_hint": "Selecciona una insígnia de la teua col·lecció:",
+        "no_badges_created": "No tens insígnies creades",
+        "btn_create_first": "Crear la teua primera insígnia",
+        "label_name": "Nom",
+        "label_description": "Descripció",
+        "label_image": "Imatge",
+        "image_optional": "(opcional)",
+        "placeholder_name": "Ex.: Mestre d'equacions",
+        "placeholder_description": "Descriu quin assoliment representa esta insígnia...",
+        "image_selected": "Imatge seleccionada",
+        "btn_remove_image": "Llevar la imatge",
+        "upload_prompt": "Fes clic per a pujar una imatge",
+        "upload_hint": "PNG, JPG, SVG o WebP (màx. 2 MB)",
+        "label_rarity": "Raresa",
+        "btn_cancel": "Cancel·lar",
+        "btn_saving": "Guardant...",
+        "btn_save": "Guardar",
+        "validation": {
+          "name_required": "El nom és obligatori",
+          "description_required": "La descripció és obligatòria",
+          "image_size": "La imatge no pot superar els 2 MB",
+          "image_type": "Només s'admeten fitxers PNG, JPG, SVG o WebP"
+        },
+        "rarity": {
+          "common": "Comuna",
+          "rare": "Rara",
+          "epic": "Èpica",
+          "legendary": "Llegendària"
+        }
+      },
+      "class_detail_layout": {
+        "error_title": "Error en carregar la classe",
+        "not_found": "La classe que busques no existix o no hi tens accés",
+        "btn_back": "Tornar a les meues classes",
+        "breadcrumb_classes": "Les meues classes"
+      },
+      "mission_detail_template": {
+        "error_title": "Error en carregar la missió",
+        "btn_back": "Tornar a les missions",
+        "breadcrumb_classes": "Les meues classes",
+        "deadline_none": "Sense data límit",
+        "expired_readonly": "Esta missió ha caducat: pots consultar-la, però ja no admet entregues.",
+        "narrative_title": "Història de la missió",
+        "btn_see_more": "Veure'n més",
+        "btn_see_less": "Veure'n menys",
+        "btn_edit": "Editar",
+        "enigmas_title": "Enigmes",
+        "btn_add": "Afegir",
+        "optional_label": "Opcional",
+        "objectives_label": "Objectius:",
+        "no_enigmas": "No hi ha enigmes en esta missió",
+        "btn_add_first_enigma": "Afegir el primer enigma",
+        "documents_title": "Documents de suport",
+        "no_documents": "No hi ha documents de suport",
+        "btn_view_submissions": "Veure les entregues ({count})",
+        "btn_submit": "Entregar",
+        "status_available": "Disponible",
+        "status_in_review": "En revisió",
+        "status_completed": "Completat",
+        "global_progress": "Progrés global",
+        "class_average": "Mitjana de la classe",
+        "rewards_title": "Recompenses",
+        "xp_enigmas": "XP d'enigmes",
+        "xp_mission": "XP de missió",
+        "complete_all_enigmas": "Completa tots els enigmes",
+        "badge_rarity": {
+          "common": "Comuna",
+          "rare": "Rara",
+          "epic": "Èpica",
+          "legendary": "Llegendària"
+        },
+        "btn_close": "Tancar"
+      }
+    },
+    "templates": {
+      "page_title": "Plantilles de classes",
+      "page_subtitle": "Explora classes que altres professors han publicat i importa-les a les teues.",
+      "search": "Buscar plantilles…",
+      "own": "Teua",
+      "import": "Importar",
+      "import_success": "«{name}» importada. Edita-la al teu gust!",
+      "import_error": "No s'ha pogut importar la plantilla",
+      "load_error": "No s'han pogut carregar les plantilles",
+      "empty_title": "Encara no hi ha plantilles",
+      "empty_description": "Quan algun professor publique una classe com a plantilla, apareixerà ací.",
+      "no_results_title": "Sense resultats",
+      "no_results_description": "No hi ha plantilles que coincidisquen amb els filtres.",
+      "preview_action": "Previsualitzar",
+      "preview": {
+        "loading": "Carregant la plantilla…",
+        "by": "Per {name}",
+        "active": "Activada",
+        "inactive": "Desactivada",
+        "load_error": "No s'ha pogut carregar la plantilla",
+        "error": "No s'ha trobat la plantilla.",
+        "tab_narrative": "Història",
+        "tab_features": "Funcionalitats",
+        "tab_shop": "Botiga ({n})",
+        "tab_behaviors": "Comportaments ({n})",
+        "no_narrative_title": "Sense història",
+        "no_narrative_description": "Esta plantilla no té història definida.",
+        "no_shop_title": "Sense botiga",
+        "no_shop_description": "Esta plantilla no porta articles de botiga. Ja n'hi podràs afegir tu.",
+        "no_behaviors_title": "Sense comportaments",
+        "no_behaviors_description": "Esta plantilla no porta comportaments. Ja els podràs definir tu."
+      },
+      "filter_all": {
+        "subject": "Totes les assignatures",
+        "level": "Tots els nivells",
+        "language": "Tots els idiomes",
+        "province": "Totes les províncies"
+      },
+      "sort": {
+        "recent": "Més recents",
+        "name_asc": "Nom A-Z",
+        "name_desc": "Nom Z-A"
+      },
+      "plural": {
+        "subjects": "assignatures",
+        "levels": "nivells",
+        "languages": "idiomes",
+        "provinces": "províncies"
+      }
+    },
+    "schedule": {
+      "starts_on": "Comença el",
+      "time": "Hora",
+      "recurrence": "Periodicitat",
+      "add_slot": "Afegir horari",
+      "remove_slot": "Llevar horari",
+      "preview": "Vista prèvia",
+      "choose_days": "Triar els dies de classe",
+      "freq_none": "No es repetix",
+      "freq_daily": "Cada dia",
+      "freq_weekly_on": "Cada setmana el {day}",
+      "weekly": "Cada setmana",
+      "freq_monthly": "Cada mes",
+      "freq_yearly": "Anualment",
+      "weekdays": "Tots els dies laborables (de dilluns a divendres)",
+      "weekly_days": "Cada setmana: {days}",
+      "every_weeks_days": "Cada {n} setmanes: {days}",
+      "all_weekdays": "Tots els dies laborables",
+      "ends_on_suffix": "fins al {date}",
+      "ends_after_suffix": "{n} vegades",
+      "customize": "Personalitzar…",
+      "custom_title": "Periodicitat personalitzada",
+      "repeat_every": "Repetir cada",
+      "unit_day": "dia | dies",
+      "unit_week": "setmana | setmanes",
+      "unit_month": "mes | mesos",
+      "unit_year": "any | anys",
+      "repeats_on": "Es repetix el",
+      "ends": "Acaba",
+      "ends_never": "Mai",
+      "ends_on": "El",
+      "ends_after": "Després de",
+      "repetitions": "repeticions",
+      "cancel": "Cancel·lar",
+      "done": "Fet",
+      "wizard_question_schedule": "Posa-li un horari a la teua classe",
+      "wizard_question_cover": "Ara, una portada per a la teua classe"
+    },
+    "submissions": {
+      "subtitle": "Revisa i aprova les entregues d'esta classe des d'una sola pantalla.",
+      "back_to_class": "Tornar a la classe"
+    }
+  }
+}

@@ -27,7 +27,8 @@
       "back_to_dashboard": "Dashboard-era itzuli",
       "create_new_account": "Kontu Berria Sortu",
       "enter": "Sartu",
-      "close": "Itxi"
+      "close": "Itxi",
+      "view_mode": "Ikuspegi modua"
     },
     "status": {
       "under_development": "Garapenean"
@@ -126,7 +127,29 @@
       "cta_final_title": "Prest zure Abentura Epikora?",
       "cta_final_subtitle": "Batu dagoeneko ITAKAI-rekin ikaskuntza eraldatzen ari diren milaka ikasletara",
       "cta_final_button": "Hasi Orain Doan",
-      "footer_copyright_alt": "(c) {year} ITAKAI. Hezkuntza sistema gamifikatua"
+      "footer_copyright_alt": "(c) {year} ITAKAI. Hezkuntza sistema gamifikatua",
+      "gods": {
+        "atenea": {
+          "domain": "Jakinduria",
+          "description": "Ikasteko teknikak eta ikaskuntza-estrategiak"
+        },
+        "odiseo": {
+          "domain": "Estrategia",
+          "description": "Arazoak ebaztea eta pentsamendu kritikoa"
+        },
+        "penelope": {
+          "domain": "Komunikazioa",
+          "description": "Hizkuntzak, idazketa eta adierazpena"
+        },
+        "polifemo": {
+          "domain": "Zientziak",
+          "description": "Zientzia aurreratuak eta teknologia"
+        },
+        "poseidon": {
+          "domain": "Sormena",
+          "description": "Arteak, diseinua eta berrikuntza"
+        }
+      }
     },
     "footer": {
       "legal": "Legala",
@@ -207,6 +230,12 @@
       "both": "Ikonoa eta testua",
       "icon": "Ikonoa soilik",
       "text": "Testua soilik"
+    },
+    "markdown": {
+      "insert_at_end": "Txertatu amaieran"
+    },
+    "student_preview": {
+      "banner": "Plataforma ikasle gisa ikusten ari zara (demoa)"
     }
   }
 }

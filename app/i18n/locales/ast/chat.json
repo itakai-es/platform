@@ -1,0 +1,200 @@
+{
+  "chat": {
+    "assistant": {
+      "default_name": "Asistente IA",
+      "default_title": "Disponible p'ayudate",
+      "default_description": "Toi equí p'ayudate colos tos estudios.",
+      "itakai_assistant": "ITAKAI Assistant"
+    },
+    "interface": {
+      "welcome_greeting": "¡Hola! Soi {name}",
+      "welcome_greeting_default": "¡Hola! Soi'l to asistente",
+      "ask_about": "Pues entrugame tocante a:",
+      "input_placeholder": "Escribi equí la to entruga...",
+      "input_typing": "L'asistente ta escribiendo...",
+      "input_sending": "Unviando mensaxe...",
+      "attach_file": "Axuntar ficheru",
+      "attach_image": "Axuntar imaxe",
+      "mention": "Mentar",
+      "ask_anything_placeholder": "Entruga lo que quieras...",
+      "suggested_questions_label": "Entrugues suxeríes:",
+      "message_input_placeholder": "Escribi equí'l to mensaxe...",
+      "default_suggestions": [
+        "¿Cómo completo una misión?",
+        "¿Ónde puedo ver el mio progresu?",
+        "¿Cómo funciona'l sistema de XP?",
+        "¿Cómo m'axunto a una clase?"
+      ],
+      "teacher_suggestions": [
+        "¿Cómo creo una misión nueva?",
+        "¿Cómo xestiono la mio clase?",
+        "¿Cómo reviso'l progresu del alumnáu?",
+        "¿Cómo asigno puntos extra?"
+      ]
+    },
+    "god_messages": {
+      "student": [
+        "¿Necesites ayuda cola to misión?",
+        "¡Vamos deprender xuntos!",
+        "¿Dudes cola xera?",
+        "¡Entrúgame lo que quieras!",
+        "Toi equí p'ayudate",
+        "¿Atascástite? ¡Falemos!",
+        "¡Gana esi retu!",
+        "¿Qué tal va'l to progresu?"
+      ],
+      "teacher": [
+        "¿Cómo van les tos clases?",
+        "¿Necesites crear una misión?",
+        "¿Dudes tocante al to alumnáu?",
+        "Toi equí p'ayudate",
+        "¿Revisamos daqué xuntos?",
+        "¿Idees pa la to clase?",
+        "¡Planifiquemos la lleición!",
+        "¿En qué t'ayudo güei?"
+      ],
+      "admin": ["¿Necesites ayuda?", "Al to serviciu", "¿En qué t'ayudo?", "¡Toi equí!"]
+    },
+    "user_subtitles": {
+      "teacher": "Profesor",
+      "default": "Usuariu"
+    },
+    "mission_actions": {
+      "fallback_title": "esta misión",
+      "m1": {
+        "label": "Charrar sobre la misión",
+        "message": "¡Hola {god}! Quiero charrar sobre la misión \"{title}\""
+      },
+      "m2": {
+        "label": "Pidir ayuda",
+        "message": "¡Hola {god}! Necesito ayuda cola misión \"{title}\""
+      },
+      "m3": {
+        "label": "¡Vamos entamar!",
+        "message": "¡Hola {god}! Toi llistu pa entamar la misión \"{title}\". ¿Per ónde entamo?"
+      },
+      "m4": {
+        "label": "Explícame los enigmes",
+        "message": "¡Hola {god}! ¿Pues explicame los enigmes de la misión \"{title}\"?"
+      },
+      "m5": {
+        "label": "Dame pistes ensin spoilers",
+        "message": "¡Hola {god}! Toi atascáu na misión \"{title}\". ¿Pues dame dalguna pista ensin spoilers?"
+      },
+      "m6": {
+        "label": "¿Cómo ameyoro la mio entrega?",
+        "message": "¡Hola {god}! ¿Qué puedo facer p'ameyorar la mio entrega na misión \"{title}\"?"
+      },
+      "m7": {
+        "label": "Resume de lo deprendío",
+        "message": "¡Hola {god}! Faime un resume de lo que tendría de deprender cola misión \"{title}\""
+      },
+      "m8": {
+        "label": "Prepárame pal retu",
+        "message": "¡Hola {god}! Quiero preparame bien pal retu de la misión \"{title}\". ¿Qué tendría de repasar?"
+      }
+    },
+    "ai_actions": {
+      "teacher": {
+        "t1": {
+          "label": "Crea una misión épica",
+          "message": "Quiero crear una misión épica. ¿Pa qué clase y sobre qué tema tendría de ser?"
+        },
+        "t2": {
+          "label": "Idees d'enigmes creativos",
+          "message": "Necesito idees d'enigmes creativos pa una misión. ¿Qué me propones?"
+        },
+        "t3": {
+          "label": "Xenera una narrativa inmersiva",
+          "message": "Quiero crear una narrativa inmersiva pa una de les mios clases. ¿Ayúdesme?"
+        },
+        "t4": {
+          "label": "Diseña criterios d'evaluación",
+          "message": "Ayúdame a diseñar criterios d'evaluación xustos y motivadores pa los mios alumnos."
+        },
+        "t5": {
+          "label": "Suxier una insinia temática",
+          "message": "Necesito idees pa crear una insinia que motive a los mios alumnos. ¿Qué suxieres?"
+        },
+        "t6": {
+          "label": "Ameyora la mio guía del alumnu",
+          "message": "Quiero ameyorar la guía que-yos doi a los mios alumnos. ¿Cómo puedo facela más útil?"
+        },
+        "t7": {
+          "label": "Idees pa gamificar un tema",
+          "message": "Quiero gamificar un tema de la mio asignatura. ¿Cómo lo faríes?"
+        },
+        "t8": {
+          "label": "Crea un retu selmanal",
+          "message": "Quiero llanzar un retu selmanal pa motivar a los mios alumnos. ¿Qué idees tienes?"
+        },
+        "t9": {
+          "label": "Estratexes pa motivar",
+          "message": "Dellos alumnos tán desmotivaos. ¿Qué estratexes de gamificación me recomiendes?"
+        },
+        "t10": {
+          "label": "Adapta una actividá a niveles",
+          "message": "Tengo alumnos de niveles distintos. ¿Cómo puedo adaptar una actividá pa toos?"
+        },
+        "t11": {
+          "label": "Redauta una guía de misión",
+          "message": "Necesito redautar una guía pa presentar una misión a los mios alumnos. ¿Écheme una mano?"
+        },
+        "t12": {
+          "label": "Planifica una secuencia didáutica",
+          "message": "Ayúdame a planificar una secuencia didáutica gamificada pasu ente pasu."
+        }
+      },
+      "student": {
+        "s1": {
+          "label": "Explícame un tema difícil",
+          "message": "Hai un tema que me cuesta entender. ¿Pues explicámelu de manera cenciella?"
+        },
+        "s2": {
+          "label": "Dame pistes pa un enigma",
+          "message": "Toi atascáu nun enigma. ¿Pues dame dalguna pista ensin spoilers?"
+        },
+        "s3": {
+          "label": "Conseyos pa xubir de nivel",
+          "message": "¿Qué puedo facer pa ganar más XP y xubir de nivel más rápido?"
+        },
+        "s4": {
+          "label": "Resume de lo deprendío",
+          "message": "Faime un resume de lo más importante que deprendí fasta agora."
+        },
+        "s5": {
+          "label": "Ayúdame cola mio entrega",
+          "message": "Necesito ayuda pa preparar la mio próxima entrega. ¿Oriéntesme?"
+        },
+        "s6": {
+          "label": "Trucos pa estudiar meyor",
+          "message": "¿Qué téuniques d'estudiu me recomiendes pa deprender más rápido?"
+        },
+        "s7": {
+          "label": "¿Qué misiones tengo pendientes?",
+          "message": "¿Pues recordame qué misiones tengo pendientes y cuálas son más urxentes?"
+        },
+        "s8": {
+          "label": "Motívame pa siguir",
+          "message": "Toi un poco desanimáu. ¿Pues motivame pa siguir avanzando?"
+        },
+        "s9": {
+          "label": "Explícame con un exemplu",
+          "message": "Necesito que m'espliques daqué con un exemplu práuticu y cenciellu."
+        },
+        "s10": {
+          "label": "Prepárame pa un retu",
+          "message": "Quiero preparame bien pal próximu retu. ¿Qué tendría de repasar?"
+        },
+        "s11": {
+          "label": "¿Cómo ameyoro la mio puntuación?",
+          "message": "¿Qué puedo facer p'ameyorar la mio puntuación nes misiones?"
+        },
+        "s12": {
+          "label": "Faime un test rápidu",
+          "message": "Faime un test rápidu de 5 entrugues sobre lo que tamos viendo en clase."
+        }
+      }
+    }
+  }
+}

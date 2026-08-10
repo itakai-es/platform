@@ -86,8 +86,8 @@ const sortBy = ref('name-asc')
 const sortOptions = computed(() => [
   { value: 'name-asc', label: 'Nombre A-Z' },
   { value: 'name-desc', label: 'Nombre Z-A' },
-  { value: 'students-desc', label: 'Más alumnos' },
-  { value: 'missions-desc', label: 'Más misiones' },
+  { value: 'students-desc', label: t('admin.classes.sort.students_desc') },
+  { value: 'missions-desc', label: t('admin.classes.sort.missions_desc') },
 ])
 
 const filteredClasses = computed(() => {

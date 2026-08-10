@@ -20,12 +20,12 @@
         <SelectDropdown
           v-model="selectedStatus"
           :options="statusOptions"
-          placeholder="Todos los estados"
+          :placeholder="t('admin.missions.filters.all_statuses')"
         />
         <SelectDropdown
           v-model="selectedRarity"
           :options="rarityOptions"
-          placeholder="Todas las rarezas"
+          :placeholder="t('admin.missions.filters.all_rarities')"
         />
       </template>
     </FilterBar>
@@ -120,18 +120,18 @@ const selectedRarity = ref('')
 const sortOptions = computed(() => [
   { value: 'name-asc', label: 'Nombre A-Z' },
   { value: 'name-desc', label: 'Nombre Z-A' },
-  { value: 'xp-desc', label: 'Más XP' },
-  { value: 'enigmas-desc', label: 'Más enigmas' },
+  { value: 'xp-desc', label: t('admin.missions.sort.xp_desc') },
+  { value: 'enigmas-desc', label: t('admin.missions.sort.enigmas_desc') },
 ])
 
 const statusOptions = computed(() => [
-  { value: '', label: 'Todos los estados' },
+  { value: '', label: t('admin.missions.filters.all_statuses') },
   { value: 'activa', label: 'Activa' },
   { value: 'bloqueada', label: 'Bloqueada' },
 ])
 
 const rarityOptions = computed(() => [
-  { value: '', label: 'Todas las rarezas' },
+  { value: '', label: t('admin.missions.filters.all_rarities') },
   { value: 'comun', label: 'Común' },
   { value: 'rara', label: 'Rara' },
   { value: 'epica', label: 'Épica' },

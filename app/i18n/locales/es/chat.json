@@ -53,16 +53,148 @@
         "¡Planifiquemos la lección!",
         "¿Cómo te ayudo hoy?"
       ],
-      "admin": [
-        "¿Necesitas ayuda?",
-        "A tu servicio",
-        "¿En qué te ayudo?",
-        "¡Estoy aquí!"
-      ]
+      "admin": ["¿Necesitas ayuda?", "A tu servicio", "¿En qué te ayudo?", "¡Estoy aquí!"]
     },
     "user_subtitles": {
       "teacher": "Profesor",
       "default": "Usuario"
+    },
+    "ai_actions": {
+      "student": {
+        "s1": {
+          "label": "Explícame un tema difícil",
+          "message": "Hay un tema que me cuesta entender. ¿Puedes explicármelo de forma sencilla?"
+        },
+        "s10": {
+          "label": "Prepárame para un reto",
+          "message": "Quiero prepararme bien para el próximo reto. ¿Qué debería repasar?"
+        },
+        "s11": {
+          "label": "¿Cómo mejoro mi puntuación?",
+          "message": "¿Qué puedo hacer para mejorar mi puntuación en las misiones?"
+        },
+        "s12": {
+          "label": "Hazme un quiz rápido",
+          "message": "Hazme un quiz rápido de 5 preguntas sobre lo que estamos viendo en clase."
+        },
+        "s2": {
+          "label": "Dame pistas para un enigma",
+          "message": "Estoy atascado en un enigma. ¿Puedes darme alguna pista sin spoilers?"
+        },
+        "s3": {
+          "label": "Consejos para subir de nivel",
+          "message": "¿Qué puedo hacer para ganar más XP y subir de nivel más rápido?"
+        },
+        "s4": {
+          "label": "Resumen de lo aprendido",
+          "message": "Hazme un resumen de lo más importante que he aprendido hasta ahora."
+        },
+        "s5": {
+          "label": "Ayúdame con mi entrega",
+          "message": "Necesito ayuda para preparar mi próxima entrega. ¿Me orientas?"
+        },
+        "s6": {
+          "label": "Trucos para estudiar mejor",
+          "message": "¿Qué técnicas de estudio me recomiendas para aprender más rápido?"
+        },
+        "s7": {
+          "label": "¿Qué misiones tengo pendientes?",
+          "message": "¿Puedes recordarme qué misiones tengo pendientes y cuáles son más urgentes?"
+        },
+        "s8": {
+          "label": "Motívame para seguir",
+          "message": "Estoy un poco desanimado. ¿Puedes motivarme para seguir avanzando?"
+        },
+        "s9": {
+          "label": "Explícame con un ejemplo",
+          "message": "Necesito que me expliques algo con un ejemplo práctico y sencillo."
+        }
+      },
+      "teacher": {
+        "t1": {
+          "label": "Crea una misión épica",
+          "message": "Quiero crear una misión épica. ¿Para qué clase y sobre qué tema debería ser?"
+        },
+        "t10": {
+          "label": "Adapta una actividad a niveles",
+          "message": "Tengo alumnos de distintos niveles. ¿Cómo puedo adaptar una actividad para todos?"
+        },
+        "t11": {
+          "label": "Redacta una guía de misión",
+          "message": "Necesito redactar una guía para presentar una misión a mis alumnos. ¿Me echas una mano?"
+        },
+        "t12": {
+          "label": "Planifica una secuencia didáctica",
+          "message": "Ayúdame a planificar una secuencia didáctica gamificada paso a paso."
+        },
+        "t2": {
+          "label": "Ideas de enigmas creativos",
+          "message": "Necesito ideas de enigmas creativos para una misión. ¿Qué me propones?"
+        },
+        "t3": {
+          "label": "Genera una narrativa inmersiva",
+          "message": "Quiero crear una narrativa inmersiva para una de mis clases. ¿Me ayudas?"
+        },
+        "t4": {
+          "label": "Diseña criterios de evaluación",
+          "message": "Ayúdame a diseñar criterios de evaluación justos y motivadores para mis alumnos."
+        },
+        "t5": {
+          "label": "Sugiere una insignia temática",
+          "message": "Necesito ideas para crear una insignia que motive a mis alumnos. ¿Qué sugieres?"
+        },
+        "t6": {
+          "label": "Mejora mi guía del alumno",
+          "message": "Quiero mejorar la guía que les doy a mis alumnos. ¿Cómo puedo hacerla más útil?"
+        },
+        "t7": {
+          "label": "Ideas para gamificar un tema",
+          "message": "Quiero gamificar un tema de mi asignatura. ¿Cómo lo harías?"
+        },
+        "t8": {
+          "label": "Crea un reto semanal",
+          "message": "Quiero lanzar un reto semanal para motivar a mis alumnos. ¿Qué ideas tienes?"
+        },
+        "t9": {
+          "label": "Estrategias para motivar",
+          "message": "Algunos alumnos están desmotivados. ¿Qué estrategias de gamificación me recomiendas?"
+        }
+      }
+    },
+    "mission_actions": {
+      "fallback_title": "esta misión",
+      "m1": {
+        "label": "Charlar sobre la misión",
+        "message": "Hola {god}, quiero charlar sobre la misión \"{title}\""
+      },
+      "m2": {
+        "label": "Pedir ayuda",
+        "message": "Hola {god}, necesito ayuda con la misión \"{title}\""
+      },
+      "m3": {
+        "label": "¡Vamos a empezar!",
+        "message": "Hola {god}, estoy listo para empezar la misión \"{title}\". ¿Por dónde empiezo?"
+      },
+      "m4": {
+        "label": "Explícame los enigmas",
+        "message": "Hola {god}, ¿puedes explicarme los enigmas de la misión \"{title}\"?"
+      },
+      "m5": {
+        "label": "Dame pistas sin spoilers",
+        "message": "Hola {god}, estoy atascado en la misión \"{title}\". ¿Puedes darme alguna pista sin spoilers?"
+      },
+      "m6": {
+        "label": "¿Cómo mejorar mi entrega?",
+        "message": "Hola {god}, ¿qué puedo hacer para mejorar mi entrega en la misión \"{title}\"?"
+      },
+      "m7": {
+        "label": "Resumen de lo aprendido",
+        "message": "Hola {god}, hazme un resumen de lo que debería haber aprendido con la misión \"{title}\""
+      },
+      "m8": {
+        "label": "Prepárame para el reto",
+        "message": "Hola {god}, quiero prepararme bien para el reto de la misión \"{title}\". ¿Qué debería repasar?"
+      }
     }
   }
 }

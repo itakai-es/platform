@@ -1,8 +1,8 @@
 <template>
   <div class="space-y-6">
     <PageHeader
-      title="Leaderboard"
-      subtitle="Consulta el ranking global y compara tu progreso con el resto de estudiantes."
+      :title="t('student.leaderboard.page_title')"
+      :subtitle="t('student.leaderboard.page_subtitle')"
     />
 
     <div class="flex flex-wrap gap-2">
@@ -10,7 +10,7 @@
         Global
       </Button>
       <Button :variant="tab === 'class' ? 'primary' : 'outline'" @click="tab = 'class'">
-        Por clase
+        {{ t('student.leaderboard.by_class') }}
       </Button>
       <Button :variant="tab === 'friends' ? 'primary' : 'outline'" @click="tab = 'friends'">
         Amigos
@@ -43,7 +43,7 @@
         v-model="selectedClassId"
         class="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-navy-700 outline-none transition-colors focus:border-transparent focus:ring-2 focus:ring-navy-700/20"
       >
-        <option value="">Selecciona una clase</option>
+        <option value="">{{ t('student.leaderboard.pick_class') }}</option>
         <option v-for="classItem in classes" :key="classItem.id" :value="classItem.id">
           {{ classItem.name }}
         </option>
@@ -57,22 +57,22 @@
     <EmptyState
       v-else-if="tab === 'friends'"
       :icon="UsersIcon"
-      title="Ranking de amigos próximamente"
-      description="La parte social todavía no está conectada. Mientras tanto, puedes usar el ranking global o el de tus clases."
+      :title="t('student.leaderboard.friends_soon_title')"
+      :description="t('student.leaderboard.friends_soon_description')"
     />
 
     <EmptyState
       v-else-if="tab === 'class' && !selectedClassId"
       :icon="AcademicCapIcon"
-      title="Elige una clase"
-      description="Selecciona una clase para ver tu posición y el ranking interno."
+      :title="t('student.leaderboard.choose_class_title')"
+      :description="t('student.leaderboard.choose_class_description')"
     />
 
     <EmptyState
       v-else-if="tab === 'class' && !classRanking"
       :icon="AcademicCapIcon"
-      title="No hay ranking disponible"
-      description="Todavía no hay suficientes datos para construir el ranking de esta clase."
+      :title="t('student.leaderboard.empty_class_title')"
+      :description="t('student.leaderboard.empty_class_description')"
     />
 
     <ClassRankingSection v-else-if="tab === 'class' && classRanking" :ranking-data="classRanking" />
@@ -80,14 +80,14 @@
     <EmptyState
       v-else-if="!globalLeaderboard.length"
       :icon="TrophyIcon"
-      title="No hay datos de ranking"
-      description="Todavía no hay suficiente actividad para mostrar un leaderboard global."
+      :title="t('student.leaderboard.empty_global_title')"
+      :description="t('student.leaderboard.empty_global_description')"
     />
 
     <template v-else>
       <div class="grid gap-6 xl:grid-cols-[minmax(0,1.3fr)_minmax(280px,0.7fr)]">
         <Card type="ia">
-          <CardHeader title="Podio Global" :icon="TrophyIcon" title-tag="h2" />
+          <CardHeader :title="t('student.leaderboard.global_podium')" :icon="TrophyIcon" title-tag="h2" />
 
           <div class="space-y-3">
             <div
@@ -113,7 +113,7 @@
         </Card>
 
         <Card type="stats">
-          <CardHeader title="Tu posición" :icon="ChartBarIcon" title-tag="h2" />
+          <CardHeader :title="t('student.leaderboard.your_position')" :icon="ChartBarIcon" title-tag="h2" />
 
           <div class="grid grid-cols-2 gap-4">
             <div class="rounded-2xl bg-white px-4 py-6 text-center">
@@ -143,7 +143,7 @@
       </div>
 
       <Card type="clases">
-        <CardHeader title="Resto del ranking" :icon="ListBulletIcon" title-tag="h2" />
+        <CardHeader :title="t('student.leaderboard.rest')" :icon="ListBulletIcon" title-tag="h2" />
 
         <div class="grid gap-3 p-4 xl:grid-cols-2">
           <div

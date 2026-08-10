@@ -258,7 +258,7 @@
                     {{ t('student.profile.settings.language_title') }}
                   </h3>
                 </div>
-                <Select v-model="preferencesForm.language" :options="languageOptions" />
+                <SelectDropdown v-model="preferencesForm.language" :options="languageOptions" />
               </div>
             </Card>
 
@@ -390,7 +390,7 @@ const securityForm = ref({
 const preferencesForm = ref({
   emailNotifications: true,
   missionReminders: true,
-  language: 'es' as 'es' | 'en' | 'ca' | 'eu' | 'gl',
+  language: 'es' as AppLanguage,
   theme: 'college' as 'college' | 'university',
 })
 
@@ -569,11 +569,7 @@ const deleteAccount = async () => {
 }
 
 // Language options for select
-const languageOptions = computed(() => [
-  { value: 'es', label: t('student.profile.languages.es') },
-  { value: 'en', label: t('student.profile.languages.en') },
-  { value: 'ca', label: t('student.profile.languages.ca') },
-  { value: 'eu', label: t('student.profile.languages.eu') },
-  { value: 'gl', label: t('student.profile.languages.gl') },
-])
+const languageOptions = computed(() =>
+  APP_LANGUAGE_CODES.map(code => ({ value: code, label: t(`student.profile.languages.${code}`) }))
+)
 </script>

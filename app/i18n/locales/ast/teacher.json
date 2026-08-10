@@ -1,0 +1,933 @@
+{
+  "teacher": {
+    "about": {
+      "title": "Tocante a ITAKAI",
+      "subtitle": "Novedaes y rexistru de versiones",
+      "breadcrumb": "Tocante a",
+      "breadcrumb_home": "Aniciu",
+      "current_version": "Versión actual",
+      "latest": "Última versión",
+      "versions_index": "Versiones",
+      "footer_note": "¿Eches en falta daqué o atopasti un fallu? Cuéntanoslo y vamos tenelo en cuenta pa les próximes versiones.",
+      "groups": {
+        "new": "Novedaes",
+        "improved": "Ameyores",
+        "fixed": "Igües"
+      },
+      "meta": {
+        "title": "Tocante a | ITAKAI",
+        "description": "Novedaes, ameyores y correiciones de cada versión d'ITAKAI."
+      }
+    },
+    "dashboard": {
+      "title": "Aniciu del profesor",
+      "subtitle": "¡Bienveníu, {name}!",
+      "new_class": "Clase nueva",
+      "new_mission": "Misión nueva",
+      "stats": {
+        "total_students": "Alumnos totales",
+        "active_classes": "Clases actives",
+        "active_missions": "Misiones actives"
+      },
+      "my_classes": "Les mios clases",
+      "view_all": "Veles toes",
+      "no_classes_yet": "Entá nun tienes clases",
+      "recent_missions": "Últimes misiones",
+      "no_missions_description": "Crea la to primer misión pa los tos alumnos",
+      "meta": {
+        "title": "Aniciu profesor | ITAKAI",
+        "description": "Aniciu principal del profesor. Xestiona les tos clases y misiones y revisa'l progresu de los tos alumnos."
+      }
+    },
+    "classes": {
+      "index": {
+        "title": "Les mios clases",
+        "subtitle": "Xestiona les tos clases y revisa'l progresu de los tos alumnos",
+        "new_class": "Clase nueva",
+        "create_first": "Crear la primer clase",
+        "no_classes_description": "Entá nun creasti nenguna clase",
+        "meta": {
+          "title": "Les mios clases | ITAKAI Profesor",
+          "description": "Xestiona toles tos clases, los alumnos inscritos y les misiones asignaes."
+        },
+        "templates": "Plantíes",
+        "duplicate_success": "Clase duplicada como \"{name}\"",
+        "duplicate_error": "Nun se pudo duplicar la clase",
+        "duplicate": {
+          "title": "Duplicar clase",
+          "subtitle": "Escueyi qué copiar a la clase nueva «{name}».",
+          "confirm": "Duplicar",
+          "cancel": "Encaboxar",
+          "items": {
+            "missions": {
+              "label": "Misiones",
+              "desc": "Les misiones y los sos enigmes"
+            },
+            "narrative": {
+              "label": "Hestoria",
+              "desc": "La narrativa y la imaxe de portada"
+            },
+            "features": {
+              "label": "Funcionalidaes",
+              "desc": "Los módulos activaos de la clase"
+            },
+            "shop": {
+              "label": "Tienda",
+              "desc": "Los artículos de la tienda"
+            },
+            "behaviors": {
+              "label": "Comportamientos",
+              "desc": "Les plantíes de comportamientu"
+            }
+          }
+        }
+      },
+      "create": {
+        "breadcrumb_classes": "Les mios clases",
+        "breadcrumb_new": "Nueva",
+        "btn_creating": "Creando...",
+        "btn_create": "Crear clase",
+        "success_title": "¡Clase creada!",
+        "success_message": "La to clase \"{name}\" yá ta llista.",
+        "invite_code_label": "Códigu d'invitación",
+        "invite_code_hint": "Comparti esti códigu colos tos alumnos",
+        "btn_view_classes": "Ver les clases",
+        "btn_copied": "¡Copiáu!",
+        "btn_copy_code": "Copiar códigu",
+        "validation": {
+          "name_required": "El nome de la clase ye obligatoriu",
+          "name_min_length": "El nome tien de tener polo menos 3 caráuteres",
+          "create_error": "Fallu al crear la clase. Inténtalo otra vuelta."
+        },
+        "preview_label": "Asina va vese la to clase",
+        "onboarding": {
+          "ask_idea": "¡Hola {name}! Soi {god}. Cuéntame, ¿qué mundu o temática quies pa la to clase?",
+          "review_approach": "Esto ye lo que te preparé, ¿préstate?",
+          "pick_title": "¿Qué títulu-y ponemos a la to clase?",
+          "placeholder_idea": "Ex.: Una escuela de maxa con 4 cases que compiten por puntos, alumnos-magos y retos como mazmorres…",
+          "generating_approach": "Toi creando la narrativa de la to clase...",
+          "narrative_feedback_placeholder": "Ex.: Quiero más referencies a les cases de Hogwarts...",
+          "btn_change_something": "Quiero camudar daqué",
+          "btn_edit_by_hand": "Editar a mano",
+          "custom_title_placeholder": "O escribi'l to propiu títulu...",
+          "title_feedback_placeholder": "Ex.: Quiero títulos más curtios, con más referencia a Harry Potter...",
+          "generating_cover": "Xenerando la portada...",
+          "cover_error": "Nun se pudo xenerar la portada. Pues saltate esti pasu.",
+          "btn_upload_cover": "Xubir la mio",
+          "cover_upload_type_error": "Formatu inválidu. Xubi una imaxe PNG, JPG o WEBP.",
+          "cover_upload_size_error": "La imaxe ye enforma grande (máximu 5 MB).",
+          "image_feedback_placeholder": "Quiero que seya más colorida, con fondu azul...",
+          "thinking": "Pensando...",
+          "btn_back": "Atrás",
+          "btn_next": "Siguiente",
+          "btn_skip": "Saltar",
+          "btn_accept_plan": "Sí, alantre",
+          "attach_materials": "Axuntar materiales (PDF, Word, imáxenes)",
+          "attach_processing": "Procesando los materiales…",
+          "attach_remove": "Quitar",
+          "attach_error": "Nun se pudieron procesar los materiales.",
+          "attach_error_size": "«{name}» pesa {size} MB. El máximu son {max} MB por ficheru.",
+          "attach_error_too_large": "Los materiales pesen enforma en conxuntu. Xúbilos d'ún n'ún (máx. {max} MB por ficheru).",
+          "attach_hint": "Máx. {max} MB por ficheru",
+          "guide_question": "Preparé una guía pa los tos alumnos"
+        },
+        "meta": {
+          "title": "Crear una clase nueva | ITAKAI Profesor"
+        },
+        "narrative_error": "Nun pudi crear la narrativa",
+        "summary": {
+          "edit": "Editar",
+          "edit_title": "Títulu",
+          "edit_cover": "Portada",
+          "editing_hint": "Tas editando una clase que yá tienes llista.",
+          "back_to_summary": "Volver al resume"
+        }
+      },
+      "detail": {
+        "breadcrumb_classes": "Les mios clases",
+        "not_found_title": "Clase non atopada",
+        "not_found_description": "La clase que gueta nun esiste o nun tienes accesu",
+        "btn_back": "Volver a les mios clases",
+        "btn_invite": "Convidar",
+        "tabs": {
+          "summary": "Resume",
+          "narrative": "Hestoria",
+          "guide": "Guía",
+          "missions": "Misiones",
+          "students": "Alumnos",
+          "tienda": "Tienda",
+          "behaviors": "Comportamientos",
+          "settings": "Axustes"
+        },
+        "students": {
+          "empty_title": "Entá nun hai alumnos",
+          "empty_description": "Cuando los alumnos se xunan a la clase, van apaecer equí coles sos estadístiques.",
+          "col_student": "Alumnu",
+          "col_level": "Nivel",
+          "search_placeholder": "Guetar alumnu...",
+          "sort_name_asc": "Nome A-Z",
+          "sort_name_desc": "Nome Z-A",
+          "sort_xp_asc": "XP ↑",
+          "sort_xp_desc": "XP ↓",
+          "sort_level_asc": "Nivel ↑",
+          "sort_level_desc": "Nivel ↓",
+          "sort_coins_asc": "Monedes ↑",
+          "sort_coins_desc": "Monedes ↓",
+          "sort_mana_asc": "Maná ↑",
+          "sort_mana_desc": "Maná ↓",
+          "sort_lives_asc": "Vida ↑",
+          "sort_lives_desc": "Vida ↓",
+          "no_results_title": "Ensin resultaos",
+          "no_results_description": "Nun hai alumnos que concasen cola gueta.",
+          "col_behaviors": "Comportamientos",
+          "view_list": "Llistáu",
+          "view_ranking": "Clasificación"
+        },
+        "stats_title": "Estadístiques de la clase",
+        "pending_reviews": "Entregues por revisar",
+        "guide_editor": {
+          "toast_saved": "Guía guardada correutamente",
+          "toast_error": "Fallu al guardar la guía"
+        },
+        "ranking": {
+          "no_students_title": "Nun hai alumnos",
+          "no_students_description": "Entá nun hai alumnos nesta clase"
+        },
+        "missions_tab": {
+          "no_missions_title": "Nun hai misiones",
+          "no_missions_description": "Entá nun hai misiones asignaes a esta clase",
+          "create_first": "Crear la primer misión",
+          "new_mission": "Misión nueva",
+          "no_results": "Ensin resultaos",
+          "empty_search": "Nun s'atoparon misiones pa \"{query}\"",
+          "empty_status": "Nun hai misiones colos estaos escoyíos",
+          "empty_rarity": "Nun hai misiones coles rareces escoyíes",
+          "empty_default": "Nun hai misiones nesta clase"
+        },
+        "meta": {
+          "title": "Detalle de clase | ITAKAI Profesor",
+          "description": "Xestiona la clase. Revisa los alumnos, les misiones asignaes y el progresu xeneral."
+        },
+        "behaviors": {
+          "new_button": "Comportamientu nuevu",
+          "new_button_short": "Nuevu",
+          "library_button": "Biblioteca",
+          "library_title": "Biblioteca de comportamientos",
+          "library_subtitle": "Amiesta comportamientos suxeríos con un toque. Depués pues editalos o desanicialos.",
+          "library_add": "Amestar",
+          "empty_title": "Entá nun hai comportamientos",
+          "empty_description": "Crea ún dende cero o amiesta dende la biblioteca.",
+          "edit_aria": "Editar comportamientu",
+          "section_positives": "Positivos",
+          "section_negatives": "Negativos",
+          "filter_all": "Toos",
+          "apply_title": "Aplicar \"{name}\"",
+          "pick_student": "Escueyi l'alumnu al que-y lo vas aplicar.",
+          "applied_toast": "{behavior} aplicáu a {student}",
+          "empty_students": "Entá nun hai alumnos nesta clase.",
+          "form_new_title": "Comportamientu nuevu",
+          "form_edit_title": "Editar comportamientu",
+          "form_type": "Triba",
+          "type_positive": "Positivu",
+          "type_negative": "Negativu",
+          "form_name": "Nome",
+          "form_name_placeholder": "Ex.: Bona participación",
+          "form_description": "Descripción",
+          "form_description_placeholder": "¿Qué reconoz o corrixe esti comportamientu?",
+          "form_impacts": "Impautos",
+          "form_impacts_hint": "Cuantía absoluta; el signu dalu la triba (positivu = +, negativu = −).",
+          "form_cancel": "Encaboxar",
+          "form_save": "Guardar",
+          "form_create": "Crear",
+          "form_delete": "Desaniciar",
+          "delete_title": "¿Desaniciar \"{name}\"?",
+          "delete_description": "Va dexar de tar nel catálogu. Esta aición nun se pue desfacer.",
+          "toast_created": "Comportamientu creáu",
+          "toast_updated": "Comportamientu anováu",
+          "toast_deleted": "Comportamientu desaniciáu",
+          "toast_save_error": "Nun se pudo guardar el comportamientu.",
+          "toast_delete_error": "Nun se pudo desaniciar el comportamientu.",
+          "fetch_error": "Nun se pudieron cargar los comportamientos.",
+          "apply_error": "Nun se pudo aplicar el comportamientu."
+        },
+        "shop": {
+          "tab_items": "Artículos",
+          "tab_uses": "Usos",
+          "uses_empty_title": "Entá ensin usos",
+          "new_item": "Artículu nuevu",
+          "library_button": "Biblioteca",
+          "library_title": "Biblioteca d'artículos",
+          "library_subtitle": "Amiesta artículos suxeríos con un toque. Depués pues editalos o desanicialos.",
+          "library_add": "Amestar",
+          "empty_title": "Entá nun hai artículos",
+          "empty_description": "Crea la primer recompensa que los tos alumnos van poder cambiar.",
+          "hidden": "Anubríu",
+          "purchases_empty_title": "Entá ensin cambeos",
+          "form_edit_title": "Editar artículu",
+          "form_new_title": "Artículu nuevu",
+          "form_name": "Nome",
+          "form_name_placeholder": "Ex.: Saltase una xera",
+          "form_description": "Descripción",
+          "form_description_placeholder": "¿Qué llogra l'alumnu al cambialu?",
+          "form_price": "Preciu",
+          "form_visible": "Visible pa los alumnos",
+          "form_cancel": "Encaboxar",
+          "form_delete": "Desaniciar",
+          "form_save": "Guardar",
+          "form_create": "Crear",
+          "delete_title": "¿Desaniciar \"{name}\"?",
+          "delete_description": "Los alumnos van dexar de velu na tienda. Esta aición nun se pue desfacer.",
+          "toast_created": "Artículu creáu",
+          "toast_updated": "Artículu anováu",
+          "toast_deleted": "Artículu desaniciáu",
+          "toast_save_error": "Nun se pudo guardar l'artículu.",
+          "toast_delete_error": "Nun se pudo desaniciar l'artículu.",
+          "form_type": "Triba",
+          "type_reward": "Recompensa",
+          "type_power": "Poder",
+          "form_mana_cost": "Costu en maná (al usalu)",
+          "form_usage": "Usu",
+          "usage_single": "Un solu usu",
+          "usage_unlimited": "Illimitáu",
+          "form_life_restore": "Vida que recupera",
+          "form_life_restore_hint": "Puntos de vida que se sumen al cambialu (recompenses) o al usalu (poderes). 0 = nun recupera vida.",
+          "tab_history": "Historial",
+          "history_purchases": "Compres",
+          "view_student_profile": "Ver l'alumnu",
+          "mana_disabled_chip": "Maná desactiváu"
+        },
+        "settings": {
+          "levels": {
+            "title": "Niveles",
+            "curve_title": "Curva d'esperiencia",
+            "curve_hint": "Define cuánta XP cuesta xubir de nivel y fasta qué nivel se pue llegar.",
+            "pace_desc_fast": "Xúbese de nivel rápido: cada nivel cuesta namás un poco más que l'anterior.",
+            "pace_desc_normal": "Progresión equilibrada: cada nivel cuesta daqué más que l'anterior.",
+            "pace_desc_slow": "Cada vegada cuesta bastante más xubir de nivel. Progresión llarga, ideal pa tol cursu.",
+            "mode_label": "Cómo se gana la XP",
+            "mode_curve": "Por fórmula",
+            "mode_custom": "Manual (por nivel)",
+            "pace_label": "Ritmu de xubida",
+            "pace_fast": "Rápidu",
+            "pace_normal": "Normal",
+            "pace_slow": "Lentu",
+            "custom_hint": "Escribi la XP necesaria pa xubir de cada nivel al siguiente.",
+            "compare_title": "XP total pa llegar a cada nivel",
+            "compare_level": "Nivel {level}",
+            "cap_label": "Númberu de niveles",
+            "base_label": "XP del primer nivel",
+            "tiers_title": "Rangos",
+            "tiers_hint": "Asigna un títulu y un color a cada tramu de niveles.",
+            "tier_title_placeholder": "Títulu del rangu",
+            "tier_from": "Del",
+            "tier_to": "al",
+            "tier_add": "Amestar rangu",
+            "tier_remove": "Quitar rangu",
+            "tiers_warning": "Hai furacos o solapes ente rangos: dellos niveles nun amosaríen el títulu correutu.",
+            "tiers_autofix": "Axustar automáticamente",
+            "restore_defaults": "Restaurar los valores por defeutu",
+            "save": "Guardar los niveles",
+            "discard": "Descartar",
+            "toast_saved": "Niveles guardaos",
+            "toast_error": "Nun se pudieron guardar los niveles"
+          },
+          "toast_error": "Nun se pudo guardar la configuración",
+          "items": {
+            "shop": {
+              "label": "Tienda",
+              "desc": "Recompenses y poderes que los alumnos camuden."
+            },
+            "coins": {
+              "label": "Monedes",
+              "desc": "Amuesa'l saldu y los precios en monedes."
+            },
+            "mana": {
+              "label": "Maná",
+              "desc": "Enerxía pa usar poderes de la tienda."
+            },
+            "rankings": {
+              "label": "Clasificación",
+              "desc": "Clasificación de los alumnos de la clase."
+            },
+            "xp": {
+              "label": "Esperiencia (XP)",
+              "desc": "Niveles y barra de progresu por XP."
+            },
+            "behaviors": {
+              "label": "Comportamientos",
+              "desc": "Aplica aiciones positives o negatives que dan o quiten recursos."
+            },
+            "lives": {
+              "label": "Vides",
+              "desc": "Puntos de vida de la clase (modifíquenlos los comportamientos)."
+            },
+            "visualEffects": {
+              "label": "Efeutos visuales",
+              "desc": "Animaciones como'l confeti al xubir de nivel."
+            },
+            "sounds": {
+              "label": "Sonidos",
+              "desc": "Efeutos de soníu al xubir de nivel, completar misiones, etc."
+            }
+          },
+          "requires": "Necesita {feature}",
+          "requires_resource": "Necesita polo menos un recursu activu (XP, monedes, maná o vides)",
+          "general": {
+            "title": "Datos xenerales",
+            "name_label": "Nome",
+            "subject_label": "Asignatura",
+            "level_label": "Nivel educativu",
+            "language_label": "Llingua",
+            "province_label": "Provincia",
+            "metadata_none": "Ensin especificar",
+            "metadata_search": "Guetar...",
+            "subject_needs_level": "Escueyi primero'l nivel",
+            "publish_title": "Publicar como plantía",
+            "publish_hint": "Compártila nel marketplace pa qu'otros profesores la importen.",
+            "publish_missing_metadata": "Guarda la asignatura, el nivel y la llingua enantes de publicar.",
+            "publish_on": "Clase publicada como plantía",
+            "publish_off": "Plantía retirada del marketplace",
+            "publish_error": "Nun se pudo publicar la plantía",
+            "template_metadata_locked": "La clase ta publicada como plantía: nun pues dexar la asignatura, el nivel o la llingua ensin especificar. Despublícala primero.",
+            "duplicate_title": "Duplicar clase",
+            "duplicate_hint": "Crea una copia d'esta clase. Vas poder escoyer qué conteníu se copia.",
+            "duplicate_cta": "Duplicar",
+            "schedule_label": "Horariu",
+            "background_label": "Imaxe de fondu",
+            "save": "Guardar los cambeos",
+            "discard": "Descartar",
+            "toast_saved": "Datos guardaos",
+            "toast_error": "Nun se pudieron guardar los datos",
+            "name_required": "El nome nun pue tar baleru",
+            "schedule_add": "Amestar sesión",
+            "schedule_remove": "Quitar sesión",
+            "schedule_preview": "Vista previa",
+            "background_generate": "Xenerar con IA",
+            "background_regenerate": "Rexenerar con IA",
+            "background_clear": "Quitar la imaxe",
+            "background_upload": "Xubir la mio",
+            "background_upload_type_error": "Formatu inválidu. Xubi una imaxe PNG, JPG o WEBP.",
+            "background_upload_size_error": "La imaxe ye enforma grande (máximu 5 MB).",
+            "background_error": "Nun se pudo xenerar la imaxe"
+          },
+          "features": {
+            "title": "Funcionalidaes"
+          },
+          "management": {
+            "title": "Xestión"
+          }
+        },
+        "badges_empty": "Nun hai insinies nesta clase",
+        "join_requests": {
+          "empty_title": "Ensin solicitúes",
+          "empty_description": "Nun hai solicitúes pendientes pa esta clase"
+        }
+      }
+    },
+    "missions": {
+      "index": {
+        "meta": {
+          "title": "Les mios misiones | ITAKAI Profesor",
+          "description": "Xestiona toles misiones que creasti, edítales o crea unes nueves pa los tos alumnos."
+        },
+        "subtitle": "Xestiona les misiones de les tos clases"
+      },
+      "create": {
+        "meta": {
+          "title": "Crear misión | ITAKAI Profesor"
+        },
+        "pick_class": "Escueyi una clase",
+        "idea_placeholder": "Ex.: Quiero una misión sobre cinemática onde los alumnos calculen traxeutories d'escobes voladores...",
+        "narrative_error": "Nun pudi crear la narrativa",
+        "ai_unavailable": "El serviciu d'IA nun ta disponible agora mesmo. Inténtalo otra vuelta en dellos minutos."
+      },
+      "detail": {
+        "delete_confirm_btn": "Desaniciar",
+        "toast": {
+          "enigma_has_submissions": "Nun se pue desaniciar un enigma que yá tien entregues d'alumnos"
+        },
+        "meta": {
+          "title": "Detalle de misión | ITAKAI Profesor",
+          "title_loading": "Cargando la misión... | ITAKAI Profesor",
+          "description_fallback": "Detalle de misión n'ITAKAI"
+        },
+        "tabs": {
+          "summary": "Resume",
+          "settings": "Axustes"
+        },
+        "settings": {
+          "title_label": "Títulu",
+          "title_required": "El títulu nun pue tar baleru",
+          "deadline_label": "Data llende",
+          "deadline_hint": "Déxala balera pa que la misión nun caduque.",
+          "rarity_label": "Rareza",
+          "rarity_locked_hint": "Nun pues camudar la rareza: dalgún alumnu yá completó la misión.",
+          "rarity": {
+            "comun": "Común",
+            "rara": "Rara",
+            "epica": "Épica",
+            "legendaria": "Llexendaria"
+          },
+          "status_label": "Estáu",
+          "status_active": "Activa",
+          "status_blocked": "Bloquiada",
+          "status_hint": "Bloquiada: los alumnos vénla con candáu y nun puen entrar.",
+          "background_label": "Imaxe de la misión",
+          "background_generate": "Xenerar con IA",
+          "background_regenerate": "Rexenerar con IA",
+          "background_upload": "Xubir la mio",
+          "background_clear": "Quitar la imaxe",
+          "background_error": "Nun se pudo xenerar la imaxe",
+          "background_upload_type_error": "Formatu inválidu. Xubi una imaxe PNG, JPG o WEBP.",
+          "background_upload_size_error": "La imaxe ye enforma grande (máximu 5 MB).",
+          "save": "Guardar los cambeos",
+          "discard": "Descartar",
+          "toast_saved": "Datos guardaos",
+          "toast_error": "Nun se pudieron guardar los datos"
+        }
+      }
+    },
+    "badges": {
+      "title": "Les mios insinies",
+      "subtitle": "Crea y xestiona insinies personalizaes pa recompensar los llogros de los tos alumnos",
+      "new_badge": "Insinia nueva",
+      "btn_delete": "Desaniciar",
+      "no_badges_title": "Ensin insinies",
+      "no_badges_description": "Crea la to primer insinia pa recompensar a los tos alumnos",
+      "create_first": "Crear la primer insinia",
+      "form": {
+        "edit_title": "Editar insinia",
+        "create_title": "Insinia nueva",
+        "label_name": "Nome",
+        "label_description": "Descripción",
+        "label_image": "Imaxe",
+        "image_optional": "(opcional)",
+        "placeholder_name": "Ex.: Maestru d'ecuaciones",
+        "placeholder_description": "Describi qué llogru representa esta insinia...",
+        "btn_remove_image": "Quitar la imaxe",
+        "preview_label": "Vista previa:",
+        "btn_cancel": "Encaboxar",
+        "btn_saving": "Guardando...",
+        "btn_save_changes": "Guardar los cambeos",
+        "btn_create": "Crear insinia",
+        "no_mission": "Ensin misión"
+      },
+      "detail": {
+        "btn_edit": "Editar",
+        "btn_close": "Zarrar"
+      },
+      "delete_title": "Desaniciar insinia",
+      "delete_confirm": "¿De xuru que quies desaniciar la insinia '{name}'? Esta aición nun se pue desfacer.",
+      "validation": {
+        "name_required": "El nome ye obligatoriu",
+        "name_min_length": "El nome tien de tener polo menos 3 caráuteres",
+        "image_size": "La imaxe nun pue pasar de 2 MB",
+        "image_type": "Namás s'almiten ficheros PNG, JPG, SVG o WebP"
+      },
+      "meta": {
+        "title": "Les mios insinies | ITAKAI Profesor",
+        "description": "Crea, edita y xestiona insinies personalizaes pa premiar los llogros de los tos alumnos."
+      },
+      "filter_system": "Del sistema",
+      "generate_error": "Nun se pudo xenerar la insinia."
+    },
+    "students": {
+      "index": {
+        "title": "Los mios alumnos",
+        "subtitle": "Xestiona y visualiza'l progresu de los tos alumnos",
+        "search_placeholder": "Guetar por nome o corréu...",
+        "filter_all_classes": "Toles clases",
+        "filter_all_progress": "Tol progresu",
+        "progress_excellent": "Escelente (≥80 %)",
+        "progress_good": "Bonu (50-79 %)",
+        "progress_in_progress": "En progresu (20-49 %)",
+        "progress_initial": "Inicial (<20 %)",
+        "sort_name_asc": "Nome A-Z",
+        "sort_name_desc": "Nome Z-A",
+        "sort_progress_desc": "Más progresu",
+        "sort_progress_asc": "Menos progresu",
+        "sort_missions_desc": "Más misiones",
+        "tab_active": "Activos",
+        "tab_archived": "Archivaos",
+        "no_students_title": "Ensin alumnos",
+        "no_students_filtered": "Nun s'atoparon alumnos con estos filtros",
+        "no_students_default": "Nun hai alumnos nes tos clases",
+        "no_archived_students_title": "Ensin alumnos archivaos",
+        "no_archived_students_default": "Nun hai alumnos nes tos clases archivaes",
+        "btn_view": "Ver",
+        "stat_missions": "Misiones",
+        "meta": {
+          "title": "Los mios alumnos | ITAKAI Profesor",
+          "description": "Xestiona tolos tos alumnos y revisa'l so progresu y les estadístiques de rendimientu académicu."
+        }
+      },
+      "detail": {
+        "breadcrumb_students": "Alumnos",
+        "loading": "Cargando...",
+        "error_title": "Fallu al cargar l'alumnu",
+        "error_default": "Fallu al cargar los datos del alumnu",
+        "btn_retry": "Reintentar",
+        "stat_classes": "Clases",
+        "stat_missions": "Misiones",
+        "stat_completed": "Completáu",
+        "enrolled_classes_title": "Clases inscrites",
+        "enrolled_classes_count": "{count} clases",
+        "not_enrolled": "Nun ta inscritu en nenguna de les tos clases",
+        "label_progress": "Completáu",
+        "stat_coins": "Monedes",
+        "stat_mana": "Maná",
+        "stat_lives": "Puntos de vida",
+        "no_activity": "Ensin actividá reciente",
+        "meta": {
+          "title": "Perfil d'alumnu | ITAKAI Profesor",
+          "description": "Perfil detalláu del alumnu con estadístiques de rendimientu, progresu nes misiones y actividá reciente."
+        }
+      }
+    },
+    "ai_assistant": {
+      "meta": {
+        "title": "Asistente IA profesor | ITAKAI",
+        "description": "Asistente d'IA especializáu pa profesores. Consigui ayuda sobre xestión de clases y misiones."
+      }
+    },
+    "profile": {
+      "breadcrumb_home": "Aniciu",
+      "breadcrumb_profile": "El mio perfil",
+      "title": "El mio perfil",
+      "tabs": {
+        "security": "Seguridá",
+        "settings": "Configuración"
+      },
+      "security": {
+        "password_title": "Contraseña",
+        "placeholder_current": "Contraseña actual",
+        "placeholder_new": "Contraseña nueva",
+        "placeholder_confirm": "Confirmar contraseña",
+        "btn_update": "Anovar",
+        "email_title": "Corréu electrónicu",
+        "placeholder_new_email": "Corréu nuevu",
+        "sessions_title": "Sesiones",
+        "sessions_close_all": "Zarrales toes",
+        "session_current": "Actual",
+        "session_close": "Zarrar",
+        "validation": {
+          "passwords_mismatch": "Les contraseñes nun concasen",
+          "password_min_length": "La contraseña tien de tener polo menos 6 caráuteres",
+          "email_invalid": "Introduz un corréu válidu",
+          "password_required": "Introduz la to contraseña"
+        }
+      },
+      "settings": {
+        "theme_title": "Tema",
+        "theme_description": "Escueyi l'estilu visual de la plataforma",
+        "theme_college": "Mou colexu",
+        "theme_college_desc": "Aspeutu gamificáu",
+        "theme_university": "Mou universidá",
+        "theme_university_desc": "Aspeutu profesional",
+        "language_title": "Llingua",
+        "language_updated": "Llingua anovada",
+        "theme_updated": "Tema anováu",
+        "danger_zone_title": "Zona peligrosa",
+        "danger_zone_description": "Una vegada desaniciada la to cuenta, nun hai vuelta atrás. Asegúrate de tar seguru.",
+        "btn_delete_account": "Desaniciar la cuenta",
+        "delete_modal_title": "Desaniciar la cuenta",
+        "delete_modal_confirm_prompt": "Pa confirmar, introduz la to contraseña:",
+        "placeholder_password": "La to contraseña",
+        "btn_cancel": "Encaboxar",
+        "btn_delete_confirm": "Desaniciar la mio cuenta",
+        "languages": {
+          "es": "Castellanu",
+          "en": "Inglés",
+          "ca": "Catalán",
+          "val": "Valencianu",
+          "eu": "Éuscaru",
+          "gl": "Gallegu",
+          "ast": "Asturianu",
+          "pt": "Portugués",
+          "el": "Griegu",
+          "ro": "Rumanu"
+        }
+      },
+      "meta": {
+        "title": "El mio perfil | ITAKAI",
+        "description": "Xestiona'l to perfil de profesor, configura la seguridá y personaliza la to esperiencia."
+      }
+    },
+    "components": {
+      "enigma_form_modal": {
+        "edit_title": "Editar enigma",
+        "add_title": "Amestar enigma",
+        "label_title": "Títulu del enigma",
+        "placeholder_title": "Ex.: L'espertar de les máquines",
+        "label_xp": "XP",
+        "label_rewards": "Recompenses al completalu",
+        "rewards_locked_hint": "Namás pues aumentar les recompenses: dalgún alumnu yá les ganó.",
+        "label_description": "Descripción",
+        "placeholder_description": "Describi qué tien de facer l'alumnu...",
+        "label_objectives": "Oxetivos",
+        "label_objectives_optional": "(opcional)",
+        "placeholder_objective": "Escribi un oxetivu...",
+        "btn_remove_objective": "Desaniciar oxetivu",
+        "btn_add_objective": "Amestar oxetivu",
+        "is_optional": "Esti enigma ye opcional",
+        "btn_cancel": "Encaboxar",
+        "btn_saving": "Guardando...",
+        "btn_save": "Guardar",
+        "btn_add": "Amestar",
+        "validation": {
+          "title_required": "El títulu ye obligatoriu",
+          "description_required": "La descripción ye obligatoria"
+        },
+        "label_mana": "Maná",
+        "label_coins": "Monedes",
+        "no_mana": "Ensin maná",
+        "custom_value": "Valor personalizáu"
+      },
+      "document_form_modal": {
+        "edit_title": "Editar documentu",
+        "add_title": "Amestar documentu",
+        "label_title": "Títulu",
+        "placeholder_title": "Ex.: Guía de sistemes d'ecuaciones",
+        "btn_upload_file": "Xubir ficheru",
+        "btn_add_link": "Amestar enllaz",
+        "label_file": "Ficheru",
+        "drop_hint": "Arrastra un ficheru o fai clic pa escoyelu",
+        "file_types_hint": "PDF, Word, videu, imáxenes (máx. 50 MB)",
+        "label_url": "URL",
+        "label_description": "Descripción",
+        "label_description_optional": "(opcional)",
+        "placeholder_description": "Descripción curtia del documentu...",
+        "label_tags": "Etiquetes",
+        "placeholder_tags": "Escribi una etiqueta y calca Enter...",
+        "btn_cancel": "Encaboxar",
+        "btn_saving": "Guardando...",
+        "btn_save": "Guardar",
+        "btn_add": "Amestar",
+        "validation": {
+          "title_required": "El títulu ye obligatoriu",
+          "url_required": "La URL ye obligatoria pa los enllaces",
+          "file_required": "Tienes qu'escoyer un ficheru",
+          "file_too_large": "El ficheru nun pue pasar de 50 MB"
+        }
+      },
+      "class_filter_bar": {
+        "search_placeholder": "Guetar clases...",
+        "sort": {
+          "name_asc": "Nome A-Z",
+          "name_desc": "Nome Z-A",
+          "most_students": "Más alumnos",
+          "least_students": "Menos alumnos",
+          "most_missions": "Más misiones",
+          "least_missions": "Menos misiones"
+        }
+      },
+      "mission_filter_bar": {
+        "search_placeholder": "Guetar misiones...",
+        "all_classes": "Toles clases",
+        "plural_classes": "clases",
+        "all_statuses": "Tolos estaos",
+        "plural_statuses": "estaos",
+        "all_rarities": "Toles rareces",
+        "plural_rarities": "rareces",
+        "rarity": {
+          "common": "Común",
+          "rare": "Rara",
+          "epic": "Épica",
+          "legendary": "Llexendaria"
+        },
+        "status": {
+          "active": "Activa",
+          "urgent": "Urxente",
+          "completed": "Completada",
+          "expired": "Caducada",
+          "locked": "Bloquiada"
+        },
+        "sort": {
+          "deadline_asc": "Data ↑",
+          "deadline_desc": "Data ↓",
+          "name_asc": "Nome A-Z",
+          "name_desc": "Nome Z-A",
+          "xp_desc": "XP ↓",
+          "xp_asc": "XP ↑",
+          "rarity_desc": "Rareza ↓",
+          "rarity_asc": "Rareza ↑",
+          "completion_desc": "Completáu ↓",
+          "completion_asc": "Completáu ↑"
+        }
+      },
+      "rewards_form_modal": {
+        "title": "Editar recompenses",
+        "badge_label": "Insinia de recompensa",
+        "remove_badge": "Quitar la insinia",
+        "no_badge_title": "Ensin insinia asignada",
+        "no_badge_description": "Escueyi o crea una insinia pa esta misión",
+        "btn_select_existing": "Escoyer una esistente",
+        "btn_create_new": "Crear una nueva",
+        "select_hint": "Escueyi una insinia de la to coleición:",
+        "no_badges_created": "Nun tienes insinies creaes",
+        "btn_create_first": "Crear la to primer insinia",
+        "label_name": "Nome",
+        "label_description": "Descripción",
+        "label_image": "Imaxe",
+        "image_optional": "(opcional)",
+        "placeholder_name": "Ex.: Maestru d'ecuaciones",
+        "placeholder_description": "Describi qué llogru representa esta insinia...",
+        "image_selected": "Imaxe escoyida",
+        "btn_remove_image": "Quitar la imaxe",
+        "upload_prompt": "Fai clic pa xubir una imaxe",
+        "upload_hint": "PNG, JPG, SVG o WebP (máx. 2 MB)",
+        "label_rarity": "Rareza",
+        "btn_cancel": "Encaboxar",
+        "btn_saving": "Guardando...",
+        "btn_save": "Guardar",
+        "validation": {
+          "name_required": "El nome ye obligatoriu",
+          "description_required": "La descripción ye obligatoria",
+          "image_size": "La imaxe nun pue pasar de 2 MB",
+          "image_type": "Namás s'almiten ficheros PNG, JPG, SVG o WebP"
+        },
+        "rarity": {
+          "common": "Común",
+          "rare": "Rara",
+          "epic": "Épica",
+          "legendary": "Llexendaria"
+        }
+      },
+      "class_detail_layout": {
+        "error_title": "Fallu al cargar la clase",
+        "not_found": "La clase que gueta nun esiste o nun tienes accesu",
+        "btn_back": "Volver a les mios clases",
+        "breadcrumb_classes": "Les mios clases"
+      },
+      "mission_detail_template": {
+        "error_title": "Fallu al cargar la misión",
+        "btn_back": "Volver a les misiones",
+        "breadcrumb_classes": "Les mios clases",
+        "deadline_none": "Ensin data llende",
+        "expired_readonly": "Esta misión caducó: pues consultala, pero yá nun almite entregues.",
+        "narrative_title": "Hestoria de la misión",
+        "btn_see_more": "Ver más",
+        "btn_see_less": "Ver menos",
+        "btn_edit": "Editar",
+        "enigmas_title": "Enigmes",
+        "btn_add": "Amestar",
+        "optional_label": "Opcional",
+        "objectives_label": "Oxetivos:",
+        "no_enigmas": "Nun hai enigmes nesta misión",
+        "btn_add_first_enigma": "Amestar el primer enigma",
+        "documents_title": "Documentos de sofitu",
+        "no_documents": "Nun hai documentos de sofitu",
+        "btn_view_submissions": "Ver les entregues ({count})",
+        "btn_submit": "Entregar",
+        "status_available": "Disponible",
+        "status_in_review": "En revisión",
+        "status_completed": "Completáu",
+        "global_progress": "Progresu global",
+        "class_average": "Media de la clase",
+        "rewards_title": "Recompenses",
+        "xp_enigmas": "XP d'enigmes",
+        "xp_mission": "XP de misión",
+        "complete_all_enigmas": "Completa tolos enigmes",
+        "badge_rarity": {
+          "common": "Común",
+          "rare": "Rara",
+          "epic": "Épica",
+          "legendary": "Llexendaria"
+        },
+        "btn_close": "Zarrar"
+      }
+    },
+    "templates": {
+      "page_title": "Plantíes de clases",
+      "page_subtitle": "Esplora clases qu'otros profesores publicaron ya impórtales a les tos.",
+      "search": "Guetar plantíes…",
+      "own": "Tuya",
+      "import": "Importar",
+      "import_success": "«{name}» importada. ¡Edítala al to gustu!",
+      "import_error": "Nun se pudo importar la plantía",
+      "load_error": "Nun se pudieron cargar les plantíes",
+      "empty_title": "Entá nun hai plantíes",
+      "empty_description": "Cuando dalgún profesor publique una clase como plantía, va apaecer equí.",
+      "no_results_title": "Ensin resultaos",
+      "no_results_description": "Nun hai plantíes que concasen colos filtros.",
+      "preview_action": "Previsualizar",
+      "preview": {
+        "loading": "Cargando la plantía…",
+        "by": "Por {name}",
+        "active": "Activada",
+        "inactive": "Desactivada",
+        "load_error": "Nun se pudo cargar la plantía",
+        "error": "Nun s'atopó la plantía.",
+        "tab_narrative": "Hestoria",
+        "tab_features": "Funcionalidaes",
+        "tab_shop": "Tienda ({n})",
+        "tab_behaviors": "Comportamientos ({n})",
+        "no_narrative_title": "Ensin hestoria",
+        "no_narrative_description": "Esta plantía nun tien hestoria definida.",
+        "no_shop_title": "Ensin tienda",
+        "no_shop_description": "Esta plantía nun trai artículos de tienda. Vas poder amestalos tu.",
+        "no_behaviors_title": "Ensin comportamientos",
+        "no_behaviors_description": "Esta plantía nun trai comportamientos. Vas poder definilos tu."
+      },
+      "filter_all": {
+        "subject": "Toles asignatures",
+        "level": "Tolos niveles",
+        "language": "Toles llingües",
+        "province": "Toles provincies"
+      },
+      "sort": {
+        "recent": "Más recientes",
+        "name_asc": "Nome A-Z",
+        "name_desc": "Nome Z-A"
+      },
+      "plural": {
+        "subjects": "asignatures",
+        "levels": "niveles",
+        "languages": "llingües",
+        "provinces": "provincies"
+      }
+    },
+    "schedule": {
+      "starts_on": "Entama'l",
+      "time": "Hora",
+      "recurrence": "Periodicidá",
+      "add_slot": "Amestar horariu",
+      "remove_slot": "Quitar horariu",
+      "preview": "Vista previa",
+      "choose_days": "Escoyer los díes de clase",
+      "freq_none": "Nun se repite",
+      "freq_daily": "Cada día",
+      "freq_weekly_on": "Cada selmana el {day}",
+      "weekly": "Cada selmana",
+      "freq_monthly": "Cada mes",
+      "freq_yearly": "Añalmente",
+      "weekdays": "Tolos díes llaborables (de llunes a vienres)",
+      "weekly_days": "Cada selmana: {days}",
+      "every_weeks_days": "Cada {n} selmanes: {days}",
+      "all_weekdays": "Tolos díes llaborables",
+      "ends_on_suffix": "fasta'l {date}",
+      "ends_after_suffix": "{n} vegaes",
+      "customize": "Personalizar…",
+      "custom_title": "Periodicidá personalizada",
+      "repeat_every": "Repetir cada",
+      "unit_day": "día | díes",
+      "unit_week": "selmana | selmanes",
+      "unit_month": "mes | meses",
+      "unit_year": "añu | años",
+      "repeats_on": "Repítese'l",
+      "ends": "Acaba",
+      "ends_never": "Enxamás",
+      "ends_on": "El",
+      "ends_after": "Depués de",
+      "repetitions": "repeticiones",
+      "cancel": "Encaboxar",
+      "done": "Fecho",
+      "wizard_question_schedule": "Ponle un horariu a la to clase",
+      "wizard_question_cover": "Agora, una portada pa la to clase"
+    },
+    "submissions": {
+      "subtitle": "Revisa y aprueba les entregues d'esta clase dende una sola pantalla.",
+      "back_to_class": "Volver a la clase"
+    }
+  }
+}

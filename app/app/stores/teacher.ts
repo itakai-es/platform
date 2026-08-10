@@ -21,12 +21,14 @@ export const useTeacherStore = defineStore('teacher', () => {
   const classes = ref<Class[]>([])
   const archivedClasses = ref<Class[]>([])
   const students = ref<Student[]>([])
+  const archivedStudents = ref<Student[]>([])
   const activities = ref<Activity[]>([])
   const recentMissions = ref<any[]>([])
   const isLoadingStats = ref(true)
   const isLoadingClasses = ref(true)
   const isLoadingArchivedClasses = ref(false)
   const isLoadingStudents = ref(true)
+  const isLoadingArchivedStudents = ref(false)
   const isLoadingActivities = ref(true)
   const isLoadingMissions = ref(true)
 
@@ -44,6 +46,7 @@ export const useTeacherStore = defineStore('teacher', () => {
   const hasLoadedClasses = ref(false)
   const hasLoadedArchivedClasses = ref(false)
   const hasLoadedStudents = ref(false)
+  const hasLoadedArchivedStudents = ref(false)
   const hasLoadedActivities = ref(false)
   const hasLoadedMissions = ref(false)
   const hasLoadedTotalPending = ref(false)
@@ -200,7 +203,8 @@ export const useTeacherStore = defineStore('teacher', () => {
       const response = await $fetch<{ students: Student[]; total: number }>(
         `${config.public.apiBase}/teacher/students`,
         {
-          params: classId ? { classId } : undefined,
+          // Sin classId la vista es agregada: solo alumnos con alguna clase activa.
+          params: classId ? { classId } : { archived: 'active' },
         }
       )
 
@@ -345,6 +349,12 @@ export const useTeacherStore = defineStore('teacher', () => {
       } else if (!response.class.archived) {
         classes.value.unshift(response.class)
       }
+
+      // Archivar/desarchivar mueve alumnos entre las listas activa y archivada:
+      // invalida ambas cachés para que la próxima visita las recargue.
+      hasLoadedStudents.value = false
+      hasLoadedArchivedStudents.value = false
+      hasLoadedStats.value = false
 
       return response
     } catch (error) {
@@ -743,6 +753,35 @@ export const useTeacherStore = defineStore('teacher', () => {
   }
 
   /**
+   * Obtiene los alumnos archivados: los que ya no tienen ninguna clase activa
+   * con este profesor (todas sus clases están archivadas).
+   */
+  async function fetchArchivedStudents(force = false) {
+    if (!force && hasLoadedArchivedStudents.value) {
+      return { students: archivedStudents.value, total: archivedStudents.value.length }
+    }
+    try {
+      isLoadingArchivedStudents.value = true
+      const config = useRuntimeConfig()
+      const response = await $fetch<{ students: Student[]; total: number }>(
+        `${config.public.apiBase}/teacher/students`,
+        {
+          params: { archived: 'archived' },
+        }
+      )
+      archivedStudents.value = response.students || []
+      hasLoadedArchivedStudents.value = true
+      return { students: archivedStudents.value, total: archivedStudents.value.length }
+    } catch (error) {
+      console.error('Error fetching archived students:', error)
+      archivedStudents.value = []
+      throw error
+    } finally {
+      isLoadingArchivedStudents.value = false
+    }
+  }
+
+  /**
    * Obtiene el detalle de un estudiante por id. Cacheado en Map.
    */
   async function fetchStudentById(studentId: string, force = false) {
@@ -829,6 +868,16 @@ export const useTeacherStore = defineStore('teacher', () => {
       return { students: students.value, total: students.value.length }
     }
     return await fetchStudents(undefined, force)
+  }
+
+  async function ensureArchivedStudents(force = false) {
+    if (hasLoadedArchivedStudents.value && !force) {
+      return { students: archivedStudents.value, total: archivedStudents.value.length }
+    }
+    if (isLoadingArchivedStudents.value) {
+      return { students: archivedStudents.value, total: archivedStudents.value.length }
+    }
+    return await fetchArchivedStudents(force)
   }
 
   async function ensureActivities(force = false) {
@@ -980,12 +1029,14 @@ export const useTeacherStore = defineStore('teacher', () => {
     classes.value = []
     archivedClasses.value = []
     students.value = []
+    archivedStudents.value = []
     activities.value = []
     recentMissions.value = []
     isLoadingStats.value = false
     isLoadingClasses.value = false
     isLoadingArchivedClasses.value = false
     isLoadingStudents.value = false
+    isLoadingArchivedStudents.value = false
     isLoadingActivities.value = false
     isLoadingMissions.value = false
     // Per-class data
@@ -1000,6 +1051,7 @@ export const useTeacherStore = defineStore('teacher', () => {
     hasLoadedClasses.value = false
     hasLoadedArchivedClasses.value = false
     hasLoadedStudents.value = false
+    hasLoadedArchivedStudents.value = false
     hasLoadedActivities.value = false
     hasLoadedMissions.value = false
     hasLoadedTotalPending.value = false
@@ -1034,12 +1086,14 @@ export const useTeacherStore = defineStore('teacher', () => {
     classes,
     archivedClasses,
     students,
+    archivedStudents,
     activities,
     recentMissions,
     isLoadingStats,
     isLoadingClasses,
     isLoadingArchivedClasses,
     isLoadingStudents,
+    isLoadingArchivedStudents,
     isLoadingActivities,
     isLoadingMissions,
     // Per-class data
@@ -1054,6 +1108,7 @@ export const useTeacherStore = defineStore('teacher', () => {
     hasLoadedClasses,
     hasLoadedArchivedClasses,
     hasLoadedStudents,
+    hasLoadedArchivedStudents,
     hasLoadedActivities,
     hasLoadedMissions,
     hasLoadedTotalPending,
@@ -1084,6 +1139,7 @@ export const useTeacherStore = defineStore('teacher', () => {
     fetchActivities,
     fetchRecentMissions,
     fetchArchivedClasses,
+    fetchArchivedStudents,
     fetchStudentById,
     fetchClassSubmissions,
     removeSubmissionFromCache,
@@ -1102,6 +1158,7 @@ export const useTeacherStore = defineStore('teacher', () => {
     ensureStats,
     ensureClasses,
     ensureStudents,
+    ensureArchivedStudents,
     ensureActivities,
     ensureRecentMissions,
     ensureTeacherClassById,

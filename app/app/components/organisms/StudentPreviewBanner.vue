@@ -7,7 +7,7 @@
   >
     <span class="inline-flex items-center gap-1.5">
       <EyeIcon class="h-4 w-4" />
-      Estás viendo la plataforma como un alumno (demo)
+      {{ t('common.student_preview.banner') }}
     </span>
     <button
       type="button"
@@ -22,6 +22,8 @@
 
 <script setup lang="ts">
 import { EyeIcon, ArrowUturnLeftIcon } from '@heroicons/vue/24/outline'
+
+const { t } = useI18n()
 
 const auth = useAuthStore()
 </script>

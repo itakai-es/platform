@@ -1,0 +1,392 @@
+{
+  "student": {
+    "dashboard": {
+      "meta": {
+        "title": "Pagina mea | ITAKAI",
+        "description": "Pagina principală a elevului. Vezi-ți progresul, ultimele misiuni și statisticile de XP."
+      },
+      "welcome": "Bine ai venit, {name}!",
+      "welcome_fallback_name": "Elev",
+      "subtitle": "Continuă-ți călătoria de învățare și finalizează misiuni noi",
+      "stats": {
+        "classes_enrolled": "Clase la care ești înscris",
+        "missions_completed": "Misiuni finalizate",
+        "badges_earned": "Insigne obținute"
+      },
+      "my_classes": {
+        "title": "Clasele mele",
+        "view_all": "Vezi toate",
+        "empty": "Încă nu ești înscris la nicio clasă"
+      },
+      "latest_missions": {
+        "title": "Ultimele misiuni",
+        "view_all": "Vezi toate",
+        "empty": "Nu există misiuni recente. Explorează misiuni noi!"
+      },
+      "ai_assistant": {
+        "name": "Atena",
+        "message_new_user": "Salut, {name}! Bine ai venit în ITAKAI. Finalizează prima misiune ca să începi să câștigi XP!",
+        "message_returning_user": "Salut, {name}! Ai finalizat {missions_completed} misiuni în {classes_enrolled} clase. Ține-o tot așa!"
+      },
+      "class_fallback_name": "Clasă",
+      "recent_badges_empty": "Nu există insigne recente",
+      "recent_topics_empty": "Nu există subiecte recente",
+      "upcoming_dates_empty": "Nu există date apropiate"
+    },
+    "missions": {
+      "meta": {
+        "title": "Misiunile mele | ITAKAI",
+        "description": "Explorează și finalizează misiuni educative. Câștigă XP și deblochează provocări noi."
+      },
+      "page_title": "Misiunile mele",
+      "page_subtitle": "Explorează și finalizează misiuni ca să câștigi experiență",
+      "empty": {
+        "title": "Fără misiuni",
+        "search_no_results": "Nu s-au găsit misiuni pentru „{query}”",
+        "class_no_missions_single": "Nu există misiuni în această clasă",
+        "class_no_missions_multiple": "Nu există misiuni în clasele selectate",
+        "rarity_no_missions": "Nu există misiuni cu raritățile selectate",
+        "status_no_missions": "Nu există misiuni cu stările selectate",
+        "coming_soon": "În curând vor apărea misiuni noi"
+      },
+      "redirect": {
+        "redirecting": "Se redirecționează..."
+      },
+      "status": {
+        "urgente": "Urgentă",
+        "activa": "Activă",
+        "completada": "Finalizată",
+        "bloqueada": "Blocată",
+        "pendiente": "În așteptare",
+        "expirada": "Expirată",
+        "en_progreso": "În desfășurare"
+      }
+    },
+    "mission_detail": {
+      "meta": {
+        "title": "{title} | ITAKAI",
+        "title_loading": "Detaliile misiunii | ITAKAI",
+        "description_fallback": "Detaliile unei misiuni în ITAKAI"
+      },
+      "error": {
+        "loading_error": "Eroare la încărcarea misiunii"
+      },
+      "documents": {
+        "action_download": "Descarcă fișierul",
+        "action_open_link": "Deschide linkul",
+        "action_play_video": "Redă videoclipul"
+      },
+      "atenea": {
+        "message": "Salut! Sunt aici ca să te ajut cu „{mission_title}”. Gata să începi această aventură?"
+      },
+      "rewards": {
+        "unlock_badge_hint": "Rezolvă toate enigmele acestei misiuni ca să deblochezi insigna."
+      },
+      "submission": {
+        "success": "Lucrarea a fost trimisă. Profesorul o va verifica în curând.",
+        "error": "Eroare la trimiterea lucrării. Încearcă din nou.",
+        "expired_error": "Această misiune a expirat. Nu mai poți trimite enigme.",
+        "downloading": "Se descarcă"
+      }
+    },
+    "classes": {
+      "meta": {
+        "title": "Clasele mele | ITAKAI",
+        "description": "Intră în clasele la care ești înscris, vezi progresul și descoperă misiunile noi atribuite."
+      },
+      "page_title": "Clasele mele",
+      "page_subtitle": "Clase la care ești înscris",
+      "join_class_button": "Alătură-te unei clase",
+      "empty": {
+        "title": "Nu ai clase",
+        "description": "Încă nu ești înscris la nicio clasă. Cere-i codul profesorului tău ca să te alături."
+      },
+      "detail": {
+        "error_title": "Eroare la încărcarea clasei",
+        "back_to_classes": "Înapoi la clasele mele",
+        "breadcrumb_classes": "Clasele mele",
+        "teacher_fallback": "Profesor",
+        "tabs": {
+          "resumen": "Rezumat",
+          "historia": "Poveste",
+          "guia": "Ghid",
+          "misiones": "Misiuni",
+          "ranking": "Clasament",
+          "avatar": "Avatar",
+          "tienda": "Magazin"
+        },
+        "progress": {
+          "title": "Progresul meu",
+          "completion_rate": "Finalizat",
+          "missions_completed": "Misiuni finalizate",
+          "xp_total": "XP total",
+          "badges_earned": "Insigne obținute"
+        },
+        "ai_assistant": {
+          "subtitle": "Ghidul tău la această clasă",
+          "message": "Salut! Sunt aici pentru orice nelămurire legată de această clasă. Cu ce te pot ajuta azi?"
+        },
+        "missions_tab": {
+          "empty_title": "Fără misiuni",
+          "empty_search": "Nu s-au găsit misiuni pentru „{query}”",
+          "empty_rarity": "Nu există misiuni cu raritățile selectate",
+          "empty_default": "Încă nu au fost atribuite misiuni la această clasă."
+        },
+        "avatar_tab": {
+          "choose_guide": "Alege-ți ghidul pentru această clasă",
+          "describe_avatar": "Descrie cum vrei să arate avatarul tău:",
+          "example_label": "Exemplu:",
+          "example_text": "Un războinic tânăr cu armură aurie, păr închis la culoare și ochi strălucitori, ținând un scut cu simbolul Atenei. Stil epic și eroic, inspirat din mitologia greacă ...",
+          "placeholder": "Descrie aici avatarul tău...",
+          "tip": "Sfat: fii precis cu culorile, ținuta, accesoriile și stilul. IA îți va crea avatarul pornind de la personajul pe care l-ai ales.",
+          "generate_button": "Generează avatarul",
+          "generating": "Se generează avatarul tău...",
+          "generated_trait": "Generat cu IA",
+          "nickname_placeholder": "Porecla ta...",
+          "save_changes": "Salvează modificările",
+          "no_guide_hint": "Alege-ți ghidul ca să îți vezi avatarul",
+          "save_success": "Profilul a fost salvat",
+          "save_error": "Eroare la salvarea profilului",
+          "generate_error": "Avatarul nu a putut fi generat. Încearcă din nou peste câteva secunde.",
+          "generate_error_with_detail": "Avatarul nu a putut fi generat: {detail}"
+        },
+        "mission_no_description": "Fără descriere",
+        "shop": {
+          "help_coins": "Monede: câștigă-le din misiuni și schimbă-le pe recompense.",
+          "help_mana": "Mana: folosește-o ca să activezi puteri.",
+          "tab_rewards": "Recompense",
+          "tab_purchases": "Schimburile mele",
+          "empty_title": "Magazinul este gol",
+          "empty_description": "Profesorul tău nu a adăugat încă recompense. Revino mai târziu.",
+          "purchases_empty_title": "Încă nu ai schimbat nimic",
+          "purchases_empty_description": "Cheltuiește-ți monedele pe recompense și aici îți vei vedea istoricul.",
+          "view_rewards": "Vezi recompensele",
+          "coins": "monede",
+          "confirm_title": "Schimbi „{name}”?",
+          "cost": "Cost",
+          "balance_after": "Sold după schimb",
+          "missing": "Îți lipsesc",
+          "cancel": "Anulează",
+          "redeem": "Schimbă",
+          "redeemed_toast": "Ai schimbat „{name}”!",
+          "redeem_error": "Schimbul nu a putut fi finalizat.",
+          "mana": "mana",
+          "buy": "Cumpără",
+          "use": "Folosește",
+          "owned": "În posesia ta",
+          "power": "Putere",
+          "reward": "Recompensă",
+          "tab_powers": "Puteri",
+          "tab_shop": "Magazin",
+          "tab_items": "Obiectele mele",
+          "owned_empty_title": "Încă nu ai nimic",
+          "owned_empty_description": "Cumpără puteri sau privilegii din magazin și vor apărea aici.",
+          "tab_history": "Istoric",
+          "history_bought": "Cumpărat",
+          "history_used": "Folosit",
+          "history_redeemed": "Schimbat",
+          "history_purchases_title": "Cumpărături",
+          "history_uses_title": "Utilizări",
+          "history_purchases_empty": "Încă nu ai cumpărat nimic.",
+          "history_uses_empty": "Încă nu ai folosit niciun obiect.",
+          "history_empty_title": "Încă fără activitate",
+          "history_empty_description": "Aici îți vei vedea cumpărăturile și puterile pe care le folosești.",
+          "usage_single": "O utilizare",
+          "usage_unlimited": "Nelimitată",
+          "powers_empty_title": "Nu există puteri",
+          "powers_empty_description": "Profesorul tău nu a adăugat încă puteri. Revino mai târziu.",
+          "confirm_buy_title": "Cumperi „{name}”?",
+          "confirm_use_title": "Folosești „{name}”?",
+          "bought_toast": "Ai cumpărat „{name}”!",
+          "used_toast": "Ai folosit „{name}”!",
+          "mana_after": "Mana după utilizare"
+        }
+      }
+    },
+    "achievements": {
+      "meta": {
+        "title": "Insignele mele | ITAKAI",
+        "description": "Descoperă toate insignele obținute prin finalizarea misiunilor și a realizărilor speciale."
+      },
+      "page_title": "Insignele mele",
+      "page_subtitle": "Recompense obținute prin finalizarea misiunilor și a realizărilor",
+      "filter": {
+        "search_placeholder": "Caută insigne...",
+        "all_categories": "Toate categoriile",
+        "all_rarities": "Toate raritățile",
+        "plural_categories": "categorii",
+        "plural_rarities": "rarități",
+        "status_all": "Toate",
+        "status_unlocked": "Deblocate",
+        "status_locked": "Blocate"
+      },
+      "rarity": {
+        "common": "Comună",
+        "rare": "Rară",
+        "epic": "Epică",
+        "legendary": "Legendară"
+      },
+      "empty": {
+        "title": "Fără insigne",
+        "no_badges_yet": "Finalizează misiuni ca să deblochezi insigne",
+        "search_no_results": "Nu s-au găsit insigne pentru „{query}”",
+        "filter_no_results": "Nu există insigne cu filtrele selectate",
+        "default": "Nu există insigne disponibile"
+      },
+      "badge_detail": {
+        "unlocked_on": "Deblocată pe {date}",
+        "mission_label": "Misiune: {name}",
+        "class_label": "Clasă: {name}",
+        "progress_label": "Progres actual",
+        "close": "Închide"
+      }
+    },
+    "leaderboard": {
+      "meta": {
+        "title": "Clasament | ITAKAI",
+        "description": "Clasamentul elevilor este disponibil în interiorul fiecărei clase."
+      },
+      "page_title": "Clasament",
+      "page_subtitle": "Vezi clasamentul general și compară-ți progresul cu ceilalți elevi.",
+      "pick_class": "Selectează o clasă",
+      "friends_soon_title": "Clasamentul prietenilor, în curând",
+      "friends_soon_description": "Partea socială nu este încă conectată. Între timp, poți folosi clasamentul general sau pe cel al claselor tale.",
+      "choose_class_title": "Alege o clasă",
+      "choose_class_description": "Selectează o clasă ca să îți vezi poziția și clasamentul intern.",
+      "empty_class_title": "Nu există clasament disponibil",
+      "empty_class_description": "Încă nu sunt destule date ca să construim clasamentul acestei clase.",
+      "empty_global_title": "Nu există date de clasament",
+      "empty_global_description": "Încă nu este destulă activitate ca să afișăm un clasament general.",
+      "global_podium": "Podium general",
+      "your_position": "Poziția ta",
+      "rest": "Restul clasamentului",
+      "by_class": "Pe clase"
+    },
+    "ai_assistant": {
+      "meta": {
+        "title": "Asistent IA | ITAKAI",
+        "description": "Discută cu asistentul tău IA pentru nelămuriri despre misiuni, progres și platformă."
+      },
+      "suggestions": {
+        "how_to_complete_mission": "Cum finalizez o misiune?",
+        "where_to_see_progress": "Unde îmi pot vedea progresul?",
+        "how_xp_works": "Cum funcționează sistemul de XP?",
+        "how_to_join_class": "Cum mă alătur unei clase?"
+      }
+    },
+    "profile": {
+      "meta": {
+        "title": "Profilul meu | ITAKAI",
+        "description": "Administrează-ți profilul de elev, configurează securitatea și personalizează-ți experiența."
+      },
+      "breadcrumb_home": "Acasă",
+      "breadcrumb_profile": "Profilul meu",
+      "page_title": "Profilul meu",
+      "tabs": {
+        "security": "Securitate",
+        "settings": "Setări"
+      },
+      "security": {
+        "password_title": "Parolă",
+        "current_password": "Parola actuală",
+        "new_password": "Parolă nouă",
+        "confirm_password": "Confirmă parola",
+        "update_button": "Actualizează",
+        "passwords_mismatch": "Parolele nu coincid",
+        "password_too_short": "Parola trebuie să aibă cel puțin 6 caractere",
+        "email_title": "E-mail",
+        "new_email_placeholder": "E-mail nou",
+        "email_invalid": "Introdu un e-mail valid",
+        "sessions_title": "Sesiuni",
+        "close_all_sessions": "Închide toate",
+        "current_session": "Curentă",
+        "close_session": "Închide"
+      },
+      "settings": {
+        "theme_title": "Temă",
+        "theme_description": "Alege stilul vizual al platformei",
+        "theme_college": "Mod școală",
+        "theme_college_desc": "Aspect gamificat",
+        "theme_university": "Mod universitate",
+        "theme_university_desc": "Aspect profesional",
+        "language_title": "Limbă",
+        "language_updated": "Limba a fost actualizată",
+        "theme_updated": "Tema a fost actualizată",
+        "danger_zone_title": "Zonă periculoasă",
+        "danger_zone_description": "Odată ștearsă, contul tău nu mai poate fi recuperat. Asigură-te că asta vrei.",
+        "delete_account_button": "Șterge contul"
+      },
+      "delete_modal": {
+        "title": "Șterge contul",
+        "confirm_prompt": "Pentru confirmare, introdu-ți parola:",
+        "password_placeholder": "Parola ta",
+        "cancel_button": "Anulează",
+        "delete_button": "Șterge-mi contul",
+        "password_required": "Introdu-ți parola"
+      },
+      "languages": {
+        "es": "Spaniolă",
+        "en": "Engleză",
+        "ca": "Catalană",
+        "val": "Valenciană",
+        "eu": "Bască",
+        "gl": "Galiciană",
+        "ast": "Asturiană",
+        "pt": "Portugheză",
+        "el": "Greacă",
+        "ro": "Română"
+      }
+    },
+    "components": {
+      "mission_card": {
+        "progress": "Progres",
+        "view_mission": "Vezi misiunea"
+      },
+      "recent_activity_card": {
+        "title": "Activitate recentă",
+        "empty": "Nu există activitate recentă",
+        "user_fallback": "Utilizator"
+      },
+      "submission_modal": {
+        "title": "Trimite enigma",
+        "file_label": "Fișierul lucrării",
+        "file_required": "*",
+        "drag_hint": "Trage fișierul aici sau dă clic ca să îl selectezi",
+        "file_types": "ZIP, RAR, 7Z (max. 50 MB)",
+        "cancel_button": "Anulează",
+        "submit_button": "Trimite",
+        "submitting_button": "Se trimite...",
+        "validation": {
+          "invalid_type": "Sunt acceptate doar fișiere ZIP, RAR sau 7Z",
+          "file_too_large": "Fișierul nu poate depăși 50 MB",
+          "file_required": "Trebuie să selectezi un fișier"
+        }
+      },
+      "class_guide_markdown": {
+        "empty_title": "Fără conținut",
+        "empty_student": "Profesorul nu a adăugat încă ghidul acestei clase.",
+        "empty_teacher": "Încă nu ai adăugat ghidul acestei clase.",
+        "add_guide_button": "Adaugă ghid",
+        "last_updated": "Ultima actualizare: {date}"
+      },
+      "rarity_badge": {
+        "comun": "Comună",
+        "rara": "Rară",
+        "epica": "Epică",
+        "legendaria": "Legendară"
+      },
+      "class_ranking_section": {
+        "podium_title": "Podiumul campionilor",
+        "stats_title": "Statistici",
+        "rest_title": "Restul clasamentului",
+        "level_abbr": "Niv.",
+        "missions_suffix": "misiuni",
+        "you_badge": "Tu",
+        "avg_xp": "XP mediu",
+        "avg_progress": "Progres mediu",
+        "avg_missions": "Misiuni în medie",
+        "total_xp": "XP total al clasei"
+      }
+    }
+  }
+}

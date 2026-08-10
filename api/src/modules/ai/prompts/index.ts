@@ -29,6 +29,44 @@ export function outputLanguageDirective(rawLocale?: string): string {
 }
 
 // ============================================================
+// BRIEF DEL PROFESOR (compartido por todos los pasos del asistente)
+// ============================================================
+
+/**
+ * Bloque que se engancha a TODOS los prompts de los asistentes de clase y misión.
+ * Lleva las palabras literales del profesor y sus metadatos (asignatura, nivel).
+ *
+ * Existe porque cada paso construía su contexto por su cuenta y solo los primeros
+ * veían lo que el profesor había escrito: a partir de ahí la IA solo conocía la
+ * narrativa ya generada. Si el profesor decía "es un proyecto individual" y la
+ * narrativa no lo repetía, la guía y los enigmas salían de trabajo en equipo.
+ * Con el brief delante, cada paso puede contradecir a la narrativa si hace falta.
+ */
+export function teacherBriefBlock(brief: string, meta: string, locale: string): string {
+  const words = (brief || '').trim().slice(0, 1200)
+  const metaLine = (meta || '').trim().slice(0, 200)
+  if (!words && !metaLine) return ''
+
+  if (locale === 'en') {
+    return `\n\n--- WHAT THE TEACHER ASKED FOR (takes precedence over everything else) ---
+${metaLine ? `${metaLine}\n` : ''}${words ? `The teacher's exact words:\n"""\n${words}\n"""\n` : ''}
+Respect this above any other part of these instructions and above any narrative or
+context you are given: if anything contradicts it, the teacher wins. Pay particular
+attention to decisions they have already made — individual vs. pair vs. team work,
+number of sessions or duration, age or school year, deliverable format, materials and
+assessment — and neither change them nor add the opposite on your own initiative.`
+  }
+
+  return `\n\n--- LO QUE HA PEDIDO EL PROFESOR (manda sobre todo lo demás) ---
+${metaLine ? `${metaLine}\n` : ''}${words ? `Palabras textuales del profesor:\n"""\n${words}\n"""\n` : ''}
+Respeta esto por encima de cualquier otra parte de estas instrucciones y por encima de
+la narrativa o el contexto que te pasen: si algo lo contradice, gana el profesor. Fíjate
+especialmente en las decisiones que ya ha tomado — trabajo individual, por parejas o en
+equipo, número de sesiones o duración, edad o curso, formato de entrega, materiales y
+evaluación — y ni las cambies ni añadas lo contrario por tu cuenta.`
+}
+
+// ============================================================
 // CLASS ONBOARDING
 // ============================================================
 
@@ -40,7 +78,7 @@ Create the gamified worldbuilding for their class. This is a *game world*, not a
 
 CRITICAL RULE: NEVER mention the school subject or any specific curriculum content (mathematics, equations, grammar, verbs, history events, cells, periodic table, etc.). The narrative must work independently of which subject the teacher teaches, so any teacher — regardless of subject — can adopt this world and layer their own content on top. Talk about the game world, roles, factions, atmosphere, progression and stakes. Do NOT talk about the school subject.
 
-Write freely, with your own structure. Use markdown: **bold** for key concepts, ## for sections if needed. Paint a vivid world, give students a role, describe factions or houses if the theme fits, the atmosphere, the mechanics as story (missions, trials, ascension), and where students progress towards. The teacher should read this and think "I NEED to build this world for my classroom".
+Write freely, with your own structure. Use markdown: **bold** for key concepts, ## for sections if needed. Paint a vivid world, give students a role, the atmosphere, the mechanics as story (missions, trials, ascension), and where students progress towards. Only describe factions, houses or teams if the teacher's brief is compatible with group work — if they asked for individual work, frame the world around a solo journey instead. The teacher should read this and think "I NEED to build this world for my classroom".
 
 Do NOT introduce yourself. Start directly with the narrative.`
     : `Un profesor dice: "${idea}".
@@ -49,7 +87,7 @@ Crea el worldbuilding gamificado de su clase. Esto es un *mundo de juego*, no un
 
 REGLA CRITICA: NO menciones NUNCA la asignatura ni ningun contenido curricular concreto (matematicas, ecuaciones, gramatica, verbos, hechos historicos, celulas, tabla periodica, etc.). La narrativa tiene que funcionar independientemente de la asignatura que ensene el profesor, de forma que cualquier profesor — sea de la asignatura que sea — pueda adoptar este mundo y poner encima su propio contenido. Habla del mundo del juego, roles, facciones, atmosfera, progresion y stakes. NO hables del contenido de la asignatura.
 
-Escribe libremente, con la estructura que tu quieras. Usa markdown: **negrita** para conceptos clave, ## para secciones si lo necesitas. Pinta un mundo vivido, dale a los alumnos un rol, describe las facciones o casas si tiene sentido, la atmosfera, las mecanicas como historia (misiones, pruebas, ascenso), y hacia donde progresan los alumnos. El profesor tiene que leer esto y pensar "NECESITO construir este mundo en mi aula".
+Escribe libremente, con la estructura que tu quieras. Usa markdown: **negrita** para conceptos clave, ## para secciones si lo necesitas. Pinta un mundo vivido, dale a los alumnos un rol, la atmosfera, las mecanicas como historia (misiones, pruebas, ascenso), y hacia donde progresan los alumnos. Describe facciones, casas o equipos SOLO si encaja con lo que ha pedido el profesor — si ha pedido trabajo individual, monta el mundo como un viaje en solitario. El profesor tiene que leer esto y pensar "NECESITO construir este mundo en mi aula".
 
 NO te presentes. Empieza directamente con la narrativa.`,
 

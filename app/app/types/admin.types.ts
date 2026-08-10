@@ -2,6 +2,7 @@
  * Admin Module Type Definitions
  * Tipos para el módulo de administración
  */
+import type { AppLanguage } from '~/utils/app-languages'
 
 /**
  * User con información completa para admin
@@ -157,7 +158,7 @@ export interface GeneralSettings {
   contactEmail: string
   maintenanceMode: boolean
   registrationOpen: boolean
-  defaultLanguage: 'es' | 'en' | 'ca' | 'eu' | 'gl'
+  defaultLanguage: AppLanguage
 }
 
 export interface GamificationSettings {

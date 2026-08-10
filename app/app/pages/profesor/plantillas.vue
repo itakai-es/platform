@@ -24,18 +24,19 @@
     >
       <template #filters>
         <MultiSelectDropdown
-          :model-value="fSubjects"
-          :options="CLASS_SUBJECTS"
-          :all-label="t('teacher.templates.filter_all.subject')"
-          :plural-label="t('teacher.templates.plural.subjects')"
-          @update:model-value="fSubjects = $event"
-        />
-        <MultiSelectDropdown
           :model-value="fLevels"
           :options="CLASS_EDUCATION_LEVELS"
           :all-label="t('teacher.templates.filter_all.level')"
           :plural-label="t('teacher.templates.plural.levels')"
           @update:model-value="fLevels = $event"
+        />
+        <MultiSelectDropdown
+          :model-value="fSubjects"
+          :disabled="!fLevels.length"
+          :options="subjectFilterOptions"
+          :all-label="t('teacher.templates.filter_all.subject')"
+          :plural-label="t('teacher.templates.plural.subjects')"
+          @update:model-value="fSubjects = $event"
         />
         <MultiSelectDropdown
           :model-value="fLanguages"
@@ -102,11 +103,11 @@
           </h3>
 
           <div class="mt-3 flex flex-wrap gap-1.5">
-            <Badge v-if="tpl.subject" variant="info" size="sm" class="gap-1">
-              <BookOpenIcon class="h-3.5 w-3.5" />{{ tpl.subject }}
-            </Badge>
             <Badge v-if="tpl.educationLevel" variant="info" size="sm" class="gap-1">
               <AcademicCapIcon class="h-3.5 w-3.5" />{{ tpl.educationLevel }}
+            </Badge>
+            <Badge v-if="tpl.subject" variant="info" size="sm" class="gap-1">
+              <BookOpenIcon class="h-3.5 w-3.5" />{{ tpl.subject }}
             </Badge>
             <Badge v-if="tpl.language" variant="info" size="sm" class="gap-1">
               <LanguageIcon class="h-3.5 w-3.5" />{{ tpl.language }}
@@ -154,7 +155,7 @@ import {
   LanguageIcon,
 } from '@heroicons/vue/24/outline'
 import {
-  CLASS_SUBJECTS,
+  subjectsForLevels,
   CLASS_EDUCATION_LEVELS,
   CLASS_LANGUAGES,
   SPANISH_PROVINCES,
@@ -208,6 +209,15 @@ const fLevels = ref<string[]>([])
 const fLanguages = ref<string[]>([])
 const fProvinces = ref<string[]>([])
 const sort = ref('recent')
+
+// El filtro de asignaturas funciona como en el wizard: bloqueado hasta marcar
+// algún nivel, y estrechado al catálogo de los niveles marcados. Las
+// asignaturas marcadas que queden fuera al cambiar de nivel se sueltan solas.
+const subjectFilterOptions = computed(() => subjectsForLevels(fLevels.value))
+watch(fLevels, () => {
+  const valid = new Set(subjectFilterOptions.value.map(o => o.value))
+  fSubjects.value = fSubjects.value.filter(s => valid.has(s))
+})
 
 const sortOptions = computed(() => [
   { value: 'recent', label: t('teacher.templates.sort.recent') },

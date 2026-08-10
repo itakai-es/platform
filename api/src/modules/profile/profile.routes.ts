@@ -2,6 +2,7 @@ import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
 import { profileService } from './profile.service.js'
 import { z, ZodError } from 'zod'
 import { prisma } from '../../config/database.js'
+import { APP_LANGUAGES } from '../settings/settings.types.js'
 
 const REFRESH_TOKEN_COOKIE_NAME = 'refresh_token'
 
@@ -23,7 +24,7 @@ const toggleTwoFactorSchema = z.object({
 const updatePreferencesSchema = z.object({
   emailNotifications: z.boolean().optional(),
   missionReminders: z.boolean().optional(),
-  language: z.enum(['es', 'en', 'ca', 'eu', 'gl']).optional(),
+  language: z.enum(APP_LANGUAGES).optional(),
   theme: z.enum(['college', 'university']).optional(),
   menuDisplay: z.enum(['both', 'icon', 'text']).optional(),
 })

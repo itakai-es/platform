@@ -1,4 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import { APP_LANGUAGES, LOCALE_FILES } from './app/utils/app-languages'
+
 const apiProxyTarget = process.env.ITAKAI_API_PROXY_TARGET || 'http://localhost:3001'
 
 export default defineNuxtConfig({
@@ -63,83 +65,12 @@ export default defineNuxtConfig({
   modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt', '@vueuse/nuxt', '@nuxtjs/i18n'],
 
   i18n: {
-    locales: [
-      {
-        code: 'es',
-        name: 'Castellano',
-        files: [
-          'es/common.json',
-          'es/auth.json',
-          'es/student.json',
-          'es/teacher.json',
-          'es/admin.json',
-          'es/profile.json',
-          'es/gamification.json',
-          'es/chat.json',
-          'es/legal.json',
-        ],
-      },
-      {
-        code: 'en',
-        name: 'English',
-        files: [
-          'en/common.json',
-          'en/auth.json',
-          'en/student.json',
-          'en/teacher.json',
-          'en/admin.json',
-          'en/profile.json',
-          'en/gamification.json',
-          'en/chat.json',
-          'en/legal.json',
-        ],
-      },
-      {
-        code: 'ca',
-        name: 'Català',
-        files: [
-          'ca/common.json',
-          'ca/auth.json',
-          'ca/student.json',
-          'ca/teacher.json',
-          'ca/admin.json',
-          'ca/profile.json',
-          'ca/gamification.json',
-          'ca/chat.json',
-          'ca/legal.json',
-        ],
-      },
-      {
-        code: 'eu',
-        name: 'Euskara',
-        files: [
-          'eu/common.json',
-          'eu/auth.json',
-          'eu/student.json',
-          'eu/teacher.json',
-          'eu/admin.json',
-          'eu/profile.json',
-          'eu/gamification.json',
-          'eu/chat.json',
-          'eu/legal.json',
-        ],
-      },
-      {
-        code: 'gl',
-        name: 'Galego',
-        files: [
-          'gl/common.json',
-          'gl/auth.json',
-          'gl/student.json',
-          'gl/teacher.json',
-          'gl/admin.json',
-          'gl/profile.json',
-          'gl/gamification.json',
-          'gl/chat.json',
-          'gl/legal.json',
-        ],
-      },
-    ],
+    // Los idiomas salen de app/utils/app-languages.ts para no repetir la lista.
+    locales: APP_LANGUAGES.map(lang => ({
+      code: lang.code,
+      name: lang.endonym,
+      files: LOCALE_FILES.map(file => `${lang.code}/${file}`),
+    })),
     defaultLocale: 'es',
     strategy: 'no_prefix',
     detectBrowserLanguage: {

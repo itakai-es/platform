@@ -33,32 +33,6 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
               <label class="text-sm font-medium text-text-primary mb-2 block">
-                {{ t('teacher.classes.detail.settings.general.subject_label') }}
-              </label>
-              <SelectDropdown
-                :model-value="general.subject"
-                :options="subjectOptions"
-                searchable
-                :error="publishErrors.subject"
-                :placeholder="t('teacher.classes.detail.settings.general.metadata_none')"
-                :search-placeholder="t('teacher.classes.detail.settings.general.metadata_search')"
-                @update:model-value="setSubject"
-              />
-            </div>
-            <div>
-              <label class="text-sm font-medium text-text-primary mb-2 block">
-                {{ t('teacher.classes.detail.settings.general.level_label') }}
-              </label>
-              <SelectDropdown
-                :model-value="general.educationLevel"
-                :options="educationLevelOptions"
-                :error="publishErrors.educationLevel"
-                :placeholder="t('teacher.classes.detail.settings.general.metadata_none')"
-                @update:model-value="setEducationLevel"
-              />
-            </div>
-            <div>
-              <label class="text-sm font-medium text-text-primary mb-2 block">
                 {{ t('teacher.classes.detail.settings.general.language_label') }}
               </label>
               <SelectDropdown
@@ -82,6 +56,37 @@
                 @update:model-value="general.province = String($event)"
               />
             </div>
+            <div>
+              <label class="text-sm font-medium text-text-primary mb-2 block">
+                {{ t('teacher.classes.detail.settings.general.level_label') }}
+              </label>
+              <SelectDropdown
+                :model-value="general.educationLevel"
+                :options="educationLevelOptions"
+                :error="publishErrors.educationLevel"
+                :placeholder="t('teacher.classes.detail.settings.general.metadata_none')"
+                @update:model-value="setEducationLevel"
+              />
+            </div>
+            <div>
+              <label class="text-sm font-medium text-text-primary mb-2 block">
+                {{ t('teacher.classes.detail.settings.general.subject_label') }}
+              </label>
+              <SelectDropdown
+                :model-value="general.subject"
+                :disabled="!general.educationLevel"
+                :options="subjectOptions"
+                searchable
+                :error="publishErrors.subject"
+                :placeholder="
+                  general.educationLevel
+                    ? t('teacher.classes.detail.settings.general.metadata_none')
+                    : t('teacher.classes.detail.settings.general.subject_needs_level')
+                "
+                :search-placeholder="t('teacher.classes.detail.settings.general.metadata_search')"
+                @update:model-value="setSubject"
+              />
+            </div>
           </div>
         </div>
 
@@ -93,14 +98,6 @@
             {{ t('teacher.classes.detail.settings.general.schedule_label') }}
           </label>
           <ClassScheduleCalendar v-model="scheduleConfig" />
-          <!-- Clases antiguas (texto libre): se muestra como referencia para
-               reescribirlo en el calendario si se quiere. No se migra. -->
-          <p
-            v-if="classData?.schedule && !classData?.scheduleConfig"
-            class="mt-2 text-xs text-text-secondary"
-          >
-            {{ t('teacher.schedule.previous') }}: {{ classData.schedule }}
-          </p>
         </div>
 
         <hr class="border-border-primary" />
@@ -351,7 +348,11 @@ import XpIcon from '~/components/atoms/XpIcon.vue'
 import LifeIcon from '~/components/atoms/LifeIcon.vue'
 import type { Component } from 'vue'
 import type { ClassSettings, LevelConfig } from '~/types/class.types'
-import { emptyScheduleConfig, type ScheduleConfig } from '~/types/schedule.types'
+import {
+  normalizeScheduleSlots,
+  scheduleSlotHasContent,
+  type ScheduleConfig,
+} from '~/types/schedule.types'
 import {
   resolveClassSettings,
   coerceClassSettings,
@@ -359,7 +360,7 @@ import {
 } from '~/utils/class-settings'
 import {
   CLASS_LANGUAGES,
-  CLASS_SUBJECTS,
+  subjectsForLevel,
   CLASS_EDUCATION_LEVELS,
   SPANISH_PROVINCES,
 } from '~/utils/class-metadata'
@@ -389,7 +390,7 @@ const props = defineProps<{
     invitationCode?: string
     settings?: Partial<ClassSettings> | null
     levelConfig?: LevelConfig | null
-    scheduleConfig?: ScheduleConfig | null
+    scheduleConfig?: ScheduleConfig | ScheduleConfig[] | null
   } | null
 }>()
 
@@ -432,22 +433,22 @@ const general = ref<GeneralData>(buildGeneral())
 const generalSnapshot = ref<GeneralData>(buildGeneral())
 const savingGeneral = ref(false)
 
-// Horario: el calendario edita una config estructurada que se persiste en la
-// columna `scheduleConfig`. `scheduleText` deriva el resumen para el campo
+// Horario: el calendario edita una lista de tramos que se persiste en la
+// columna `scheduleConfig` (las clases antiguas guardan un objeto único; se
+// normaliza a lista al leer). `scheduleText` deriva el resumen para el campo
 // `schedule` (string) que muestran las tarjetas.
-const buildScheduleConfig = (): ScheduleConfig =>
-  props.classData?.scheduleConfig
-    ? (JSON.parse(JSON.stringify(props.classData.scheduleConfig)) as ScheduleConfig)
-    : emptyScheduleConfig()
-const scheduleConfig = ref<ScheduleConfig>(buildScheduleConfig())
-const scheduleConfigSnapshot = ref<ScheduleConfig>(buildScheduleConfig())
+const buildScheduleConfig = (): ScheduleConfig[] =>
+  normalizeScheduleSlots(
+    props.classData?.scheduleConfig
+      ? (JSON.parse(JSON.stringify(props.classData.scheduleConfig)) as
+          | ScheduleConfig
+          | ScheduleConfig[])
+      : null
+  )
+const scheduleConfig = ref<ScheduleConfig[]>(buildScheduleConfig())
+const scheduleConfigSnapshot = ref<ScheduleConfig[]>(buildScheduleConfig())
 const { scheduleText } = useClassCalendar(scheduleConfig)
-const hasScheduleConfig = computed(
-  () =>
-    scheduleConfig.value.weekdays.length > 0 ||
-    !!scheduleConfig.value.startDate ||
-    !!scheduleConfig.value.start
-)
+const hasScheduleConfig = computed(() => scheduleConfig.value.some(scheduleSlotHasContent))
 
 // Setters de los selects de metadatos. Se extraen a métodos porque Prettier
 // expande los handlers inline multi-sentencia a varias líneas y el compilador
@@ -459,6 +460,11 @@ function setSubject(v: string | number) {
 function setEducationLevel(v: string | number) {
   general.value.educationLevel = String(v)
   publishErrors.value.educationLevel = false
+  // La asignatura del nivel anterior deja de ser válida en el nuevo catálogo.
+  const subj = general.value.subject
+  if (subj && !subjectsForLevel(general.value.educationLevel).some(o => o.value === subj)) {
+    general.value.subject = ''
+  }
 }
 function setLanguage(v: string | number) {
   general.value.language = String(v)
@@ -508,7 +514,9 @@ const generalDirty = computed(() => {
 
 function resetGeneral() {
   general.value = { ...generalSnapshot.value }
-  scheduleConfig.value = JSON.parse(JSON.stringify(scheduleConfigSnapshot.value)) as ScheduleConfig
+  scheduleConfig.value = JSON.parse(
+    JSON.stringify(scheduleConfigSnapshot.value)
+  ) as ScheduleConfig[]
 }
 
 // --------- Clasificación (asignatura / nivel / idioma / provincia) ---------
@@ -517,7 +525,18 @@ const noneOption = computed(() => ({
   value: '',
   label: t('teacher.classes.detail.settings.general.metadata_none'),
 }))
-const subjectOptions = computed(() => [noneOption.value, ...CLASS_SUBJECTS])
+// La asignatura depende del nivel. Si la clase guarda una asignatura de un
+// catálogo anterior (o de otro nivel), se añade al final para no dejar el
+// select "vacío" hasta que el profesor elija una del catálogo vigente.
+const subjectOptions = computed(() => {
+  const options = subjectsForLevel(general.value.educationLevel)
+  const current = general.value.subject
+  const legacy =
+    current && !options.some(o => o.value === current)
+      ? [{ value: current, label: current }]
+      : []
+  return [noneOption.value, ...options, ...legacy]
+})
 const languageOptions = computed(() => [noneOption.value, ...CLASS_LANGUAGES])
 const educationLevelOptions = computed(() => [noneOption.value, ...CLASS_EDUCATION_LEVELS])
 const provinceOptions = computed(() => [noneOption.value, ...SPANISH_PROVINCES])
@@ -561,6 +580,9 @@ async function regenerateImage() {
         name: general.value.name || props.classData?.name,
         description: props.classData?.narrative || undefined,
         locale: locale.value,
+        // Mismo contexto que el asistente de creación, para que regenerar aquí no
+        // dé una portada de otro estilo. Solo el nivel, nunca la asignatura.
+        audience: general.value.educationLevel || '',
       },
     })
     general.value.backgroundImage = res.imageUrl
@@ -626,13 +648,16 @@ async function saveGeneral() {
       educationLevel: payload.educationLevel,
       province: payload.province,
       // Solo enviamos la config si corresponde persistir (ver `persistSchedule`).
-      ...(persistSchedule ? { scheduleConfig: scheduleConfig.value } : {}),
+      // Los tramos vacíos (añadidos y sin rellenar) no se guardan.
+      ...(persistSchedule
+        ? { scheduleConfig: scheduleConfig.value.filter(scheduleSlotHasContent) }
+        : {}),
     })
     generalSnapshot.value = { ...payload }
     general.value = { ...payload }
     scheduleConfigSnapshot.value = JSON.parse(
       JSON.stringify(scheduleConfig.value)
-    ) as ScheduleConfig
+    ) as ScheduleConfig[]
     emit('general-update', payload)
     toast.success(t('teacher.classes.detail.settings.general.toast_saved'))
   } catch (err: unknown) {

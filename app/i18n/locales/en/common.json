@@ -27,7 +27,8 @@
       "back_to_dashboard": "Back to Dashboard",
       "create_new_account": "Create New Account",
       "enter": "Enter",
-      "close": "Close"
+      "close": "Close",
+      "view_mode": "View mode"
     },
     "status": {
       "under_development": "Under Development"
@@ -126,7 +127,29 @@
       "cta_final_title": "Ready for Your Epic Adventure?",
       "cta_final_subtitle": "Join thousands of students who are already transforming their learning with ITAKAI",
       "cta_final_button": "Start Free Now",
-      "footer_copyright_alt": "© {year} ITAKAI. Gamified educational system"
+      "footer_copyright_alt": "© {year} ITAKAI. Gamified educational system",
+      "gods": {
+        "atenea": {
+          "domain": "Wisdom",
+          "description": "Study techniques and learning strategies"
+        },
+        "odiseo": {
+          "domain": "Strategy",
+          "description": "Problem solving and critical thinking"
+        },
+        "penelope": {
+          "domain": "Communication",
+          "description": "Languages, writing and expression"
+        },
+        "polifemo": {
+          "domain": "Science",
+          "description": "Advanced science and technology"
+        },
+        "poseidon": {
+          "domain": "Creativity",
+          "description": "Arts, design and innovation"
+        }
+      }
     },
     "footer": {
       "legal": "Legal",
@@ -207,6 +230,12 @@
       "both": "Icon and text",
       "icon": "Icon only",
       "text": "Text only"
+    },
+    "markdown": {
+      "insert_at_end": "Insert at the end"
+    },
+    "student_preview": {
+      "banner": "You're viewing the platform as a student (demo)"
     }
   }
 }

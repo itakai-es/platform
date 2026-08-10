@@ -44,7 +44,7 @@
 
       <!-- Empty State -->
       <div v-if="!topics.length" class="text-center py-8 text-text-secondary">
-        <p>No hay temas recientes</p>
+        <p>{{ t('student.dashboard.recent_topics_empty') }}</p>
       </div>
     </div>
   </article>
@@ -61,6 +61,8 @@
 
 import { BookOpenIcon } from '@heroicons/vue/24/outline'
 import type { RecentTopic } from '~/types/mission.types'
+
+const { t } = useI18n()
 
 interface Props {
   topics: RecentTopic[]

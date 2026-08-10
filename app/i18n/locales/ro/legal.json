@@ -1,0 +1,456 @@
+{
+  "legal": {
+    "terms": {
+      "title": "Termeni și condiții",
+      "last_updated": "Ultima actualizare: ianuarie 2026",
+      "sections": {
+        "acceptance": {
+          "title": "1. Acceptarea termenilor",
+          "p1": "Bine ai venit în ITAKAI. Prin accesarea și utilizarea platformei noastre educaționale gamificate, accepți să fii obligat de acești Termeni și condiții („Termenii”). Dacă nu ești de acord cu vreo parte a acestor termeni, nu trebuie să folosești serviciile noastre.",
+          "p2": "Acești Termeni constituie un acord legal între tine („Utilizatorul”) și ITAKAI („Platforma”, „noi”, „al nostru”). Îți recomandăm să citești cu atenție acești termeni înainte de a te înregistra."
+        },
+        "service_description": {
+          "title": "2. Descrierea serviciului",
+          "intro": "ITAKAI este o platformă educațională gamificată inspirată din mitologia greacă, care oferă:",
+          "features": {
+            "missions": "Misiuni educative interactive (sarcini gamificate)",
+            "ai_assistants": "Cinci asistenți de inteligență artificială bazați pe personaje mitologice (Atena, Ulise, Penelopa, Polifem, Poseidon)",
+            "progress": "Sistem de progres cu experiență (XP), niveluri și realizări",
+            "management": "Instrumente de administrare pentru profesori și administratori",
+            "chat": "Discuții în timp real cu asistenți IA pentru sprijin educațional"
+          },
+          "disclaimer": "Ne rezervăm dreptul de a modifica, suspenda sau întrerupe orice aspect al serviciului în orice moment, cu sau fără notificare prealabilă."
+        },
+        "accounts": {
+          "title": "3. Înregistrarea și conturile de utilizator",
+          "eligibility_title": "3.1 Eligibilitate",
+          "eligibility_text": "Ca să folosești ITAKAI trebuie să ai cel puțin 13 ani. Minorii sub 18 ani au nevoie de consimțământul unui părinte sau tutore legal ca să se înregistreze. Utilizarea de către minori trebuie supravegheată de o instituție de învățământ sau de un tutore.",
+          "account_types_title": "3.2 Tipuri de cont",
+          "account_student": "Elev: pentru utilizatorii care realizează misiuni și învață prin intermediul platformei",
+          "account_teacher": "Profesor: pentru cadrele didactice care creează misiuni, administrează clase și urmăresc progresul elevilor",
+          "account_admin": "Administrator: pentru personalul intern ITAKAI cu acces la funcțiile administrative ale sistemului",
+          "security_title": "3.3 Securitatea contului",
+          "security_intro": "Ești responsabil pentru:",
+          "security_password": "Păstrarea confidențialității parolei tale",
+          "security_activity": "Toate activitățile desfășurate din contul tău",
+          "security_notify": "Notificarea noastră imediată privind orice utilizare neautorizată a contului tău",
+          "security_info": "Furnizarea unor date de înregistrare exacte, complete și actualizate"
+        },
+        "acceptable_use": {
+          "title": "4. Utilizare acceptabilă",
+          "permitted_title": "4.1 Conduită permisă",
+          "permitted_intro": "Folosind ITAKAI, te angajezi să:",
+          "permitted_educational": "Folosești platforma exclusiv în scopuri educative și legitime",
+          "permitted_respect": "Respecți ceilalți utilizatori, profesorii și administratorii",
+          "permitted_content": "Furnizezi conținut adecvat și respectuos",
+          "permitted_laws": "Respecți toate legile și reglementările aplicabile",
+          "prohibited_title": "4.2 Conduită interzisă",
+          "prohibited_intro": "Este strict interzis:",
+          "prohibited_hacking": "Să spargi sisteme, să faci inginerie inversă sau să încerci accesul la sisteme neautorizate",
+          "prohibited_offensive": "Să încarci conținut ofensator, defăimător, ilegal sau inadecvat",
+          "prohibited_harassment": "Să hărțuiești, să intimidezi sau să ameninți alți utilizatori",
+          "prohibited_cheating": "Să trișezi sau să manipulezi sistemul de puncte, XP sau realizări",
+          "prohibited_sharing": "Să îți partajezi contul cu terți",
+          "prohibited_bots": "Să folosești boți, scripturi sau instrumente automatizate fără autorizare",
+          "prohibited_ip": "Să încalci drepturile de proprietate intelectuală ale terților",
+          "prohibited_data": "Să colectezi date ale altor utilizatori fără consimțământ"
+        },
+        "intellectual_property": {
+          "title": "5. Proprietate intelectuală",
+          "content_title": "5.1 Conținutul ITAKAI",
+          "content_text": "Tot conținutul platformei, inclusiv, dar fără a se limita la design, grafică, logouri, text, cod sursă, funcționalități, personaje mitologice adaptate, asistenți IA și structura misiunilor, este proprietatea exclusivă a ITAKAI și este protejat de legile privind drepturile de autor, mărcile înregistrate și alte legi de proprietate intelectuală.",
+          "license_title": "5.2 Licență de utilizare",
+          "license_text": "Îți acordăm o licență limitată, neexclusivă, netransferabilă și revocabilă pentru a accesa și folosi ITAKAI exclusiv în scopuri educative personale. Nu poți copia, modifica, distribui, vinde sau exploata comercial nicio parte a platformei fără consimțământul nostru prealabil scris."
+        },
+        "user_content": {
+          "title": "6. Conținutul utilizatorului",
+          "p1": "Prin trimiterea de conținut către ITAKAI (răspunsuri la misiuni, mesaje de chat, comentarii), ne acorzi o licență mondială, fără redevențe, sublicențiabilă și transferabilă pentru a folosi, reproduce, distribui, afișa și modifica acel conținut în scopul furnizării și îmbunătățirii serviciilor noastre.",
+          "p2": "Ești singurul responsabil pentru conținutul pe care îl publici și garantezi că deții toate drepturile necesare pentru acordarea acestei licențe. Nu publicăm conținut care încalcă drepturile terților sau legile aplicabile."
+        },
+        "liability": {
+          "title": "7. Limitarea răspunderii",
+          "availability_title": "7.1 Disponibilitatea serviciului",
+          "availability_text": "ITAKAI este furnizat „ca atare” și „în funcție de disponibilitate”. Nu garantăm că serviciul va fi disponibil neîntrerupt, în siguranță sau fără erori. Pot apărea întreruperi din cauza mentenanței, actualizărilor sau problemelor tehnice.",
+          "educational_title": "7.2 Conținut educațional",
+          "educational_text": "Deși ne străduim să oferim conținut educațional de calitate, nu garantăm exactitatea, integralitatea sau actualitatea întregului conținut. Asistenții IA sunt instrumente de sprijin educațional și nu înlocuiesc supravegherea unui profesor calificat.",
+          "warranty_title": "7.3 Excluderea garanțiilor",
+          "warranty_text": "În limita maximă permisă de lege, ITAKAI exclude toate garanțiile, exprese sau implicite, inclusiv garanțiile de vandabilitate, de adecvare pentru un anumit scop și de neîncălcare a drepturilor."
+        },
+        "modifications": {
+          "title": "8. Modificări ale serviciului și ale termenilor",
+          "p1": "Ne rezervăm dreptul de a modifica sau întrerupe, temporar sau permanent, serviciul (sau orice parte a acestuia) cu sau fără notificare prealabilă. Nu vom răspunde față de tine sau față de terți pentru nicio modificare, suspendare sau întrerupere a serviciului.",
+          "p2": "Putem actualiza acești Termeni din când în când. Te vom notifica despre modificările semnificative printr-un anunț în platformă sau prin e-mail. Continuarea utilizării serviciului după notificare constituie acceptarea noilor termeni."
+        },
+        "termination": {
+          "title": "9. Închiderea contului",
+          "by_user_title": "9.1 Închidere de către utilizator",
+          "by_user_text": "Îți poți șterge contul oricând din setările profilului tău sau contactându-ne la suport{'@'}itakai.com. Ștergerea contului duce la pierderea definitivă a tuturor datelor, a progresului, a realizărilor și a conținutului asociat.",
+          "by_itakai_title": "9.2 Închidere de către ITAKAI",
+          "by_itakai_intro": "Ne rezervăm dreptul de a suspenda sau închide contul tău dacă:",
+          "by_itakai_violation": "Încalci acești Termeni și condiții",
+          "by_itakai_fraud": "Ai o conduită frauduloasă sau ilegală",
+          "by_itakai_inactivity": "Contul tău rămâne inactiv o perioadă îndelungată",
+          "by_itakai_legal": "Ne este impus din motive legale sau de reglementare"
+        },
+        "jurisdiction": {
+          "title": "10. Legea aplicabilă și jurisdicția",
+          "text": "Acești Termeni sunt guvernați și interpretați în conformitate cu legislația Spaniei, fără aplicarea normelor privind conflictul de legi. Orice litigiu care decurge din acești Termeni sau are legătură cu ei este supus jurisdicției exclusive a instanțelor din Spania."
+        },
+        "general": {
+          "title": "11. Dispoziții generale",
+          "complete_title": "11.1 Acord integral",
+          "complete_text": "Acești Termeni, împreună cu Politica noastră de confidențialitate și Politica de cookie-uri, constituie acordul integral dintre tine și ITAKAI.",
+          "severability_title": "11.2 Nulitate parțială",
+          "severability_text": "Dacă o prevedere din acești Termeni este considerată nulă sau inaplicabilă, celelalte prevederi rămân pe deplin în vigoare.",
+          "waiver_title": "11.3 Renunțare",
+          "waiver_text": "Neexercitarea unui drept sau a unei prevederi din acești Termeni nu constituie o renunțare la acel drept sau la acea prevedere."
+        },
+        "contact": {
+          "title": "12. Contact",
+          "intro": "Dacă ai întrebări sau nelămuriri despre acești Termeni și condiții, ne poți contacta la:",
+          "company": "ITAKAI",
+          "email_label": "E-mail:",
+          "support_label": "Asistență:"
+        }
+      },
+      "meta": {
+        "title": "Termenii serviciului | ITAKAI",
+        "description": "Termenii și condițiile de utilizare a platformei educaționale ITAKAI."
+      }
+    },
+    "privacy_policy": {
+      "title": "Politica de confidențialitate",
+      "last_updated": "Ultima actualizare: ianuarie 2026",
+      "sections": {
+        "introduction": {
+          "title": "1. Introducere",
+          "p1": "La ITAKAI („noi”, „al nostru” sau „platforma”) ne angajăm să îți protejăm confidențialitatea și datele personale. Această Politică de confidențialitate descrie cum colectăm, folosim, partajăm și protejăm informațiile personale ale utilizatorilor noștri (elevi, profesori și administratori).",
+          "p2": "Prin utilizarea ITAKAI, accepți practicile descrise în această politică. Dacă nu ești de acord cu vreo parte a acestei politici, te rugăm să nu folosești serviciile noastre."
+        },
+        "information_collected": {
+          "title": "2. Informațiile pe care le colectăm",
+          "account_title": "2.1 Informații despre cont",
+          "account_intro": "Când te înregistrezi în ITAKAI, colectăm:",
+          "account_name": "Nume complet",
+          "account_email": "Adresă de e-mail",
+          "account_password": "Parolă (criptată)",
+          "account_role": "Rol (elev, profesor, administrator)",
+          "account_avatar": "Avatar sau fotografie de profil (opțional)",
+          "usage_title": "2.2 Informații de utilizare",
+          "usage_intro": "În timpul utilizării platformei, colectăm:",
+          "usage_missions": "Misiuni finalizate și progres educațional",
+          "usage_xp": "Puncte de experiență (XP) și niveluri atinse",
+          "usage_ai": "Interacțiuni cu asistenții IA",
+          "usage_chat": "Mesaje în discuțiile cu profesori și asistenți",
+          "usage_badges": "Realizări și insigne deblocate",
+          "usage_stats": "Statistici de performanță academică",
+          "technical_title": "2.3 Informații tehnice",
+          "technical_intro": "Colectăm automat:",
+          "technical_ip": "Adresa IP",
+          "technical_browser": "Tipul și versiunea browserului",
+          "technical_os": "Sistemul de operare",
+          "technical_pages": "Paginile vizitate și timpul de navigare",
+          "technical_cookies": "Cookie-uri și tehnologii similare"
+        },
+        "how_we_use": {
+          "title": "3. Cum folosim informațiile tale",
+          "intro": "Folosim informațiile tale personale pentru a:",
+          "educational": "Furniza serviciul educațional: administrarea contului tău, livrarea de conținut personalizat și urmărirea progresului tău academic",
+          "personalization": "Personalizare cu IA: adaptarea recomandărilor asistenților noștri IA la nivelul și nevoile tale",
+          "communication": "Comunicare: trimiterea de notificări importante, actualizări ale misiunilor și mesaje de la profesori",
+          "improvement": "Îmbunătățirea serviciului: analiza utilizării platformei pentru a îmbunătăți funcționalitățile și experiența utilizatorului",
+          "security": "Securitate: detectarea și prevenirea fraudei, abuzului sau activităților neautorizate",
+          "legal": "Conformitate legală: respectarea obligațiilor legale și de reglementare aplicabile"
+        },
+        "sharing": {
+          "title": "4. Partajarea informațiilor",
+          "intro": "Nu vindem și nu închiriem informațiile tale personale către terți. Putem partaja datele tale în următoarele situații:",
+          "teachers": "Cu profesorii: dacă ești elev, profesorii tăi pot vedea progresul tău academic și statisticile de performanță",
+          "providers": "Furnizori de servicii: partajăm informații cu furnizorii care ne ajută să operăm platforma (găzduire, analiză, IA)",
+          "legal_requirements": "Cerințe legale: atunci când este impus de lege, de o hotărâre judecătorească sau de autorități guvernamentale",
+          "rights": "Protejarea drepturilor: pentru a proteja drepturile, proprietatea sau siguranța ITAKAI, a utilizatorilor sau a altora"
+        },
+        "data_security": {
+          "title": "5. Securitatea datelor",
+          "intro": "Implementăm măsuri de securitate tehnice și organizatorice adecvate pentru a-ți proteja informațiile personale împotriva accesului neautorizat, pierderii, distrugerii sau alterării. Acestea includ:",
+          "encryption": "Criptarea parolelor cu algoritmi siguri",
+          "https": "Conexiuni HTTPS/SSL pentru toate transmisiile de date",
+          "access": "Acces restricționat la datele personale, doar pentru personalul autorizat",
+          "audits": "Audituri de securitate periodice",
+          "backup": "Copii de siguranță și recuperarea datelor"
+        },
+        "gdpr_rights": {
+          "title": "6. Drepturile tale (GDPR)",
+          "intro": "În conformitate cu Regulamentul general privind protecția datelor (GDPR), ai următoarele drepturi:",
+          "access": "Acces: să soliciți o copie a datelor tale personale",
+          "rectification": "Rectificare: să corectezi date inexacte sau incomplete",
+          "erasure": "Ștergere: să soliciți ștergerea datelor tale („dreptul de a fi uitat”)",
+          "portability": "Portabilitate: să primești datele tale într-un format structurat și să le transferi altui serviciu",
+          "objection": "Opoziție: să te opui prelucrării datelor tale în anumite scopuri",
+          "restriction": "Restricționare: să soliciți restricționarea prelucrării datelor tale",
+          "contact": "Pentru a-ți exercita aceste drepturi, contactează-ne la confidentialitate{'@'}itakai.com"
+        },
+        "cookies_section": {
+          "title": "7. Cookie-uri și tehnologii similare",
+          "text": "Folosim cookie-uri și tehnologii similare pentru a-ți îmbunătăți experiența în ITAKAI. Pentru mai multe informații despre utilizarea cookie-urilor, consultă Politica noastră de cookie-uri."
+        },
+        "data_retention": {
+          "title": "8. Păstrarea datelor",
+          "text": "Păstrăm informațiile tale personale cât timp contul tău este activ sau cât este necesar pentru a furniza serviciile noastre. Dacă îți ștergi contul, vom păstra anumite date pe perioada impusă de lege sau în scopuri legitime de afaceri (de exemplu, prevenirea fraudei, soluționarea litigiilor)."
+        },
+        "minors": {
+          "title": "9. Minori",
+          "text": "ITAKAI este conceput pentru utilizare educațională și poate include utilizatori sub 18 ani, sub supravegherea profesorilor sau a instituțiilor de învățământ. Dacă ești părinte sau tutore și ai întrebări despre cum tratăm datele minorilor, contactează-ne la suport{'@'}itakai.com"
+        },
+        "policy_changes": {
+          "title": "10. Modificări ale acestei politici",
+          "text": "Putem actualiza această Politică de confidențialitate din când în când. Te vom notifica despre modificările semnificative printr-un anunț în platformă sau prin e-mail. Data „Ultima actualizare” de la începutul politicii arată când au fost făcute cele mai recente modificări."
+        },
+        "contact": {
+          "title": "11. Contact",
+          "intro": "Dacă ai întrebări, nelămuriri sau solicitări legate de această Politică de confidențialitate, ne poți contacta la:",
+          "company": "ITAKAI",
+          "email_label": "E-mail:",
+          "support_label": "Asistență:"
+        }
+      },
+      "meta": {
+        "title": "Politica de confidențialitate | ITAKAI",
+        "description": "Află cum îți protejăm și gestionăm informațiile personale în ITAKAI."
+      }
+    },
+    "cookies": {
+      "title": "Politica de cookie-uri",
+      "last_updated": "Ultima actualizare: ianuarie 2026",
+      "sections": {
+        "what_are": {
+          "title": "1. Ce sunt cookie-urile?",
+          "p1": "Cookie-urile sunt fișiere text mici care se stochează pe dispozitivul tău (calculator, tabletă sau telefon) atunci când vizitezi un site. Cookie-urile permit site-ului să îți rețină acțiunile și preferințele o perioadă de timp, ca să nu fie nevoie să le configurezi din nou de fiecare dată când revii sau treci de la o pagină la alta.",
+          "p2": "În ITAKAI folosim cookie-uri și tehnologii similare pentru a-ți îmbunătăți experiența pe platforma noastră educațională, pentru a oferi funcționalități esențiale și pentru a analiza modul în care este utilizat serviciul nostru."
+        },
+        "types": {
+          "title": "2. Tipurile de cookie-uri pe care le folosim",
+          "essential_title": "2.1 Cookie-uri esențiale (strict necesare)",
+          "essential_text": "Aceste cookie-uri sunt indispensabile ca să poți naviga în ITAKAI și să îi folosești funcționalitățile. Fără ele, servicii precum autentificarea, navigarea între pagini sau accesul la zonele securizate nu ar funcționa corect.",
+          "essential_examples_title": "Exemple de utilizare:",
+          "essential_session": "Menținerea sesiunii tale active cât timp navighezi în platformă",
+          "essential_auth": "Reținerea autentificării tale (tokenuri de acces)",
+          "essential_security": "Securitate și prevenirea fraudelor",
+          "essential_load": "Echilibrarea încărcării serverului",
+          "essential_note": "Aceste cookie-uri nu pot fi dezactivate, fiind necesare funcționării de bază a ITAKAI.",
+          "functionality_title": "2.2 Cookie-uri de funcționalitate",
+          "functionality_text": "Aceste cookie-uri permit ITAKAI să rețină alegerile pe care le faci (numele de utilizator, limba sau regiunea) și oferă funcționalități îmbunătățite și mai personalizate.",
+          "functionality_examples_title": "Exemple de utilizare:",
+          "functionality_preferences": "Reținerea preferințelor de afișare (temă, dimensiunea textului)",
+          "functionality_progress": "Salvarea progresului tău în misiuni",
+          "functionality_assistant": "Păstrarea asistentului IA preferat",
+          "functionality_chat": "Reținerea ultimei conversații active",
+          "functionality_note": "Poți controla aceste cookie-uri din setările browserului, dar dezactivarea lor poate afecta funcționarea platformei.",
+          "analytics_title": "2.3 Cookie-uri de performanță și analiză",
+          "analytics_text": "Aceste cookie-uri colectează informații despre modul în care utilizatorii folosesc ITAKAI, de exemplu ce pagini vizitează cel mai des sau dacă primesc mesaje de eroare. Toate informațiile colectate sunt agregate și anonime.",
+          "analytics_examples_title": "Exemple de utilizare:",
+          "analytics_patterns": "Analiza tiparelor de navigare și de utilizare a platformei",
+          "analytics_visitors": "Numărarea vizitatorilor și înțelegerea modului în care navighează pe site",
+          "analytics_effectiveness": "Măsurarea eficacității misiunilor și a conținutului educațional",
+          "analytics_errors": "Detectarea și rezolvarea erorilor tehnice",
+          "analytics_performance": "Îmbunătățirea performanței site-ului",
+          "analytics_note": "Folosim instrumente de analiză ca să înțelegem mai bine cum putem îmbunătăți experiența utilizatorului. Poți refuza urmărirea analitică din setările browserului tău.",
+          "third_party_title": "2.4 Cookie-uri de la terți",
+          "third_party_text": "Unele dintre serviciile noastre folosesc cookie-uri setate de terți de încredere, pentru a oferi funcționalități suplimentare:",
+          "third_party_google": "Google OAuth: pentru a permite autentificarea cu contul tău Google",
+          "third_party_ai": "Servicii de IA: pentru a furniza răspunsurile asistenților noștri mitologici",
+          "third_party_cdn": "CDN și găzduire: pentru a îmbunătăți viteza de încărcare a site-ului",
+          "third_party_note": "Aceste cookie-uri de la terți sunt supuse politicilor de confidențialitate ale furnizorilor respectivi."
+        },
+        "duration": {
+          "title": "3. Durata cookie-urilor",
+          "session_title": "3.1 Cookie-uri de sesiune",
+          "session_text": "Sunt cookie-uri temporare care se șterg automat când închizi browserul. Se folosesc mai ales pentru a-ți menține sesiunea activă cât timp navighezi în ITAKAI.",
+          "persistent_title": "3.2 Cookie-uri persistente",
+          "persistent_text": "Rămân pe dispozitivul tău o perioadă determinată sau până când le ștergi manual. În ITAKAI, cookie-urile persistente expiră de obicei după:",
+          "persistent_auth": "Autentificare: 30 de zile (dacă alegi „Ține-mă minte”)",
+          "persistent_preferences": "Preferințe: 1 an",
+          "persistent_analytics": "Analiză: 2 ani"
+        },
+        "manage": {
+          "title": "4. Cum să gestionezi și să ștergi cookie-uri",
+          "intro": "Ai dreptul să decizi dacă accepți sau refuzi cookie-urile. Îți poți exercita preferințele în următoarele moduri:",
+          "browser_title": "4.1 Setările browserului",
+          "browser_text": "Majoritatea browserelor acceptă cookie-uri automat, dar poți modifica setările browserului ca să le refuzi, dacă preferi:",
+          "browser_chrome": "Google Chrome: Setări → Confidențialitate și securitate → Cookie-uri și alte date ale site-urilor",
+          "browser_firefox": "Firefox: Opțiuni → Confidențialitate și securitate → Cookie-uri și date ale site-urilor",
+          "browser_safari": "Safari: Preferințe → Confidențialitate → Cookie-uri și date ale site-urilor",
+          "browser_edge": "Microsoft Edge: Setări → Cookie-uri și permisiuni de site → Cookie-uri",
+          "tools_title": "4.2 Instrumente de la terți",
+          "tools_text": "Există instrumente de la terți care îți permit să gestionezi cookie-urile, precum:",
+          "blocking_title": "4.3 Efectele blocării cookie-urilor",
+          "blocking_warning_title": "Avertisment",
+          "blocking_warning_text": "Dacă alegi să blochezi sau să ștergi cookie-urile, unele funcționalități ale ITAKAI ar putea să nu funcționeze corect. De exemplu, nu vei putea să îți menții sesiunea activă, să îți salvezi progresul în misiuni sau să accesezi conținut personalizat."
+        },
+        "changes": {
+          "title": "5. Modificări ale acestei Politici de cookie-uri",
+          "p1": "Putem actualiza această Politică de cookie-uri din când în când pentru a reflecta schimbări ale cookie-urilor pe care le folosim sau din motive operaționale, legale ori de reglementare. Îți recomandăm să consulți periodic această pagină pentru a fi la curent cu utilizarea cookie-urilor.",
+          "p2": "Data „Ultima actualizare” de la începutul politicii arată când au fost făcute cele mai recente modificări."
+        },
+        "more_info": {
+          "title": "6. Mai multe informații",
+          "p1": "Pentru mai multe informații despre cum îți protejăm confidențialitatea și cum îți gestionăm datele personale, consultă Politica noastră de confidențialitate.",
+          "p2": "Dacă ai vreo întrebare sau nelămurire despre Politica noastră de cookie-uri, contactează-ne la:",
+          "company": "ITAKAI",
+          "email_label": "E-mail:",
+          "support_label": "Asistență:"
+        },
+        "summary_table": {
+          "title": "7. Tabel rezumat al cookie-urilor",
+          "col_type": "Tip",
+          "col_purpose": "Scop",
+          "col_duration": "Durată",
+          "col_required": "Necesar",
+          "essential_type": "Esențiale",
+          "essential_purpose": "Autentificare, securitate, navigare",
+          "essential_duration": "Sesiune / 30 de zile",
+          "essential_required": "Da",
+          "functionality_type": "Funcționalitate",
+          "functionality_purpose": "Preferințe, configurare, personalizare",
+          "functionality_duration": "1 an",
+          "functionality_required": "Nu",
+          "analytics_type": "Analiză",
+          "analytics_purpose": "Analiza utilizării, performanță, îmbunătățiri",
+          "analytics_duration": "2 ani",
+          "analytics_required": "Nu",
+          "third_party_type": "Terți",
+          "third_party_purpose": "OAuth, IA, CDN",
+          "third_party_duration": "Variabilă",
+          "third_party_required": "Parțial"
+        }
+      },
+      "meta": {
+        "title": "Politica de cookie-uri | ITAKAI",
+        "description": "Informații despre utilizarea cookie-urilor pe platforma ITAKAI."
+      }
+    },
+    "legal_notice": {
+      "title": "Notă legală",
+      "last_updated": "Ultima actualizare: ianuarie 2026",
+      "sections": {
+        "identification": {
+          "title": "1. Date de identificare ale titularului",
+          "intro": "În conformitate cu obligația de informare prevăzută la articolul 10 din Legea spaniolă 34/2002 din 11 iulie privind serviciile societății informaționale și comerțul electronic (LSSICE), titularul acestui site vă informează următoarele:",
+          "company_name": "Denumire socială: ITAKAI",
+          "domain": "Domeniu: itakai.com",
+          "email_legal": "E-mail de contact:",
+          "email_support": "E-mail de asistență:"
+        },
+        "purpose": {
+          "title": "2. Obiect",
+          "p1": "ITAKAI este o platformă educațională gamificată bazată pe mitologia greacă, care furnizează servicii de învățare interactivă prin misiuni educative, asistenți de inteligență artificială și un sistem de progres gamificat. Prezenta Notă legală reglementează utilizarea site-ului itakai.com (denumit în continuare „Site-ul”).",
+          "p2": "Accesarea și utilizarea Site-ului presupun acceptarea expresă și fără rezerve a tuturor condițiilor stabilite în prezenta Notă legală, în Termeni și condiții, în Politica de confidențialitate și în Politica de cookie-uri."
+        },
+        "conditions": {
+          "title": "3. Condiții de utilizare",
+          "access_title": "3.1 Acces și navigare",
+          "access_text": "Accesul Utilizatorului la Site este liber și gratuit. Înregistrarea ca utilizator și utilizarea anumitor servicii pot fi supuse unor condiții specifice și pot necesita înregistrarea prealabilă a Utilizatorului.",
+          "correct_use_title": "3.2 Utilizare corectă",
+          "correct_use_text": "Utilizatorul se angajează să folosească Site-ul și serviciile în conformitate cu legea, cu prezenta Notă legală, cu Termenii și condițiile și cu bunele moravuri. Utilizatorul se obligă să folosească serviciile cu diligență și să nu le destineze unor activități ilicite sau contrare bunei-credințe.",
+          "prohibitions_title": "3.3 Interdicții",
+          "prohibitions_intro": "Este interzis în mod expres:",
+          "prohibitions_damage": "Să întreprinzi acțiuni care pot deteriora, face inutilizabil, supraîncărca sau degrada Site-ul",
+          "prohibitions_impede": "Să împiedici utilizarea normală a Site-ului de către alți utilizatori",
+          "prohibitions_impersonate": "Să te dai drept alt utilizator",
+          "prohibitions_illegal_content": "Să difuzezi conținut ilegal, rasist, xenofob, pornografic, de apologie a terorismului sau care încalcă drepturile omului",
+          "prohibitions_malware": "Să introduci viruși informatici, troieni, viermi, bombe logice sau orice alt program ori material dăunător",
+          "prohibitions_unauthorized_access": "Să încerci să accesezi zone restricționate ale sistemelor informatice ale ITAKAI sau ale terților"
+        },
+        "intellectual_property": {
+          "title": "4. Proprietate intelectuală și industrială",
+          "p1": "Tot conținutul Site-ului, incluzând fără limitare texte, fotografii, grafică, imagini, pictograme, tehnologie, software, linkuri, design grafic, cod sursă, personaje mitologice adaptate și restul conținutului audiovizual sau sonor, precum și designul grafic și codurile sursă (denumite în continuare „Conținutul”), constituie proprietatea intelectuală a ITAKAI sau a terților, fără a se putea considera că îi sunt cedate Utilizatorului vreunul dintre drepturile de exploatare recunoscute de legislația în vigoare în materie de proprietate intelectuală asupra acestora.",
+          "p2": "Mărcile, denumirile comerciale sau semnele distinctive aparțin ITAKAI sau unor terți, fără a se putea considera că accesul la Site conferă vreun drept asupra respectivelor mărci, denumiri comerciale și/sau semne distinctive.",
+          "p3": "Sunt rezervate toate drepturile de proprietate intelectuală și industrială asupra Conținutului. Sunt interzise în mod expres reproducerea, distribuirea, comunicarea publică, transformarea sau orice altă formă de exploatare, prin orice procedeu, a întregului Conținut sau a unei părți din acesta, fără autorizarea prealabilă, expresă și scrisă a ITAKAI."
+        },
+        "third_party_links": {
+          "title": "5. Linkuri către site-uri ale terților",
+          "p1": "Site-ul poate conține linkuri către site-uri ale terților. ITAKAI nu exercită niciun fel de control asupra acestor site-uri și, în consecință, nu își asumă nicio răspundere pentru conținutul, serviciile sau orice alt material existent pe acestea.",
+          "p2": "Includerea acestor linkuri are un scop pur informativ și nu constituie în niciun caz o sugestie, invitație sau recomandare. Utilizatorul accesează aceste site-uri pe răspunderea sa exclusivă."
+        },
+        "liability_exclusion": {
+          "title": "6. Excluderea răspunderii",
+          "availability_title": "6.1 Disponibilitatea Site-ului",
+          "availability_text": "ITAKAI nu garantează disponibilitatea și continuitatea funcționării Site-ului. În consecință, ITAKAI nu va răspunde în niciun caz pentru daunele care ar putea decurge din lipsa de disponibilitate sau de continuitate a funcționării Site-ului.",
+          "content_title": "6.2 Conținut",
+          "content_text": "ITAKAI nu garantează exactitatea, veridicitatea, exhaustivitatea sau actualizarea Conținutului. Utilizatorul este responsabil să verifice informațiile care apar pe Site. ITAKAI exclude orice răspundere pentru daunele de orice natură care s-ar putea datora lipsei de veridicitate, exactitate, exhaustivitate și/sau actualitate a Conținutului.",
+          "security_title": "6.3 Viruși și securitate",
+          "security_text": "ITAKAI nu garantează absența virușilor sau a altor elemente pe Site care ar putea produce alterări în sistemul informatic al Utilizatorului. ITAKAI exclude orice răspundere pentru daunele de orice natură care s-ar putea datora prezenței virușilor sau a altor elemente dăunătoare.",
+          "user_content_title": "6.4 Conținut generat de utilizatori",
+          "user_content_text": "ITAKAI nu răspunde pentru opiniile exprimate de Utilizatori prin comentarii, forumuri, chat sau alte instrumente de participare. ITAKAI își rezervă dreptul de a șterge orice conținut pe care îl consideră inadecvat."
+        },
+        "modifications": {
+          "title": "7. Modificări",
+          "p1": "ITAKAI își rezervă dreptul de a efectua fără notificare prealabilă modificările pe care le consideră oportune pe Site, putând schimba, elimina sau adăuga atât conținutul și serviciile furnizate prin intermediul acestuia, cât și modul în care acestea sunt prezentate sau amplasate.",
+          "p2": "De asemenea, ITAKAI poate modifica oricând condițiile prezentei Note legale. Se recomandă Utilizatorului să consulte periodic prezenta Notă legală pentru a fi la curent cu eventualele modificări."
+        },
+        "data_protection": {
+          "title": "8. Protecția datelor cu caracter personal",
+          "p1": "ITAKAI respectă Regulamentul general privind protecția datelor (RGPD) UE 2016/679 și Legea organică spaniolă 3/2018 din 5 decembrie privind protecția datelor cu caracter personal și garantarea drepturilor digitale (LOPDGDD).",
+          "p2": "Pentru informații detaliate despre prelucrarea datelor cu caracter personal, consultă Politica noastră de confidențialitate."
+        },
+        "cookies_section": {
+          "title": "9. Cookie-uri",
+          "p1": "Site-ul folosește cookie-uri proprii și ale terților pentru a îmbunătăți experiența Utilizatorului și pentru a oferi conținut și servicii de interes pentru acesta.",
+          "p2": "Pentru mai multe informații despre utilizarea cookie-urilor, consultă Politica noastră de cookie-uri."
+        },
+        "jurisdiction": {
+          "title": "10. Legislație aplicabilă și jurisdicție",
+          "p1": "Relația dintre ITAKAI și Utilizator este guvernată de legislația spaniolă în vigoare. În caz de litigiu, părțile pot supune conflictele arbitrajului sau se pot adresa jurisdicției de drept comun, competente pentru soluționarea oricărui litigiu fiind instanțele din Spania.",
+          "p2": "Dacă vreo clauză a prezentei Note legale ar fi declarată nulă, celelalte clauze rămân în vigoare și se interpretează ținând cont de voința părților și de finalitatea prezentei Note legale."
+        },
+        "dispute_resolution": {
+          "title": "11. Soluționarea online a litigiilor",
+          "p1": "În conformitate cu Regulamentul (UE) 524/2013, Comisia Europeană pune la dispoziție o platformă cu acces gratuit pentru soluționarea alternativă a litigiilor dintre comerciant și consumator, fără a fi nevoie de recurgerea la instanțe, prin intervenția unui terț numit organism de soluționare alternativă a litigiilor.",
+          "p2": "Pentru mai multe informații, poți accesa platforma europeană de soluționare online a litigiilor prin următorul link:"
+        },
+        "contact": {
+          "title": "12. Contact",
+          "intro": "Pentru orice întrebare, reclamație sau clarificare privind această Notă legală, ne poți contacta prin următoarele mijloace:",
+          "company": "ITAKAI",
+          "email_legal": "E-mail juridic:",
+          "email_support": "E-mail asistență:",
+          "email_privacy": "E-mail confidențialitate:"
+        },
+        "acceptance": {
+          "title": "Acceptarea Notei legale",
+          "text": "Accesarea și utilizarea Site-ului presupun acceptarea expresă și deplină a prezentei Note legale, precum și a Termenilor și condițiilor, a Politicii de confidențialitate și a Politicii de cookie-uri. Dacă nu ești de acord cu vreunul dintre aceste documente, trebuie să te abții de la utilizarea Site-ului."
+        }
+      },
+      "meta": {
+        "title": "Notă legală | ITAKAI",
+        "description": "Informații juridice despre utilizarea platformei educaționale ITAKAI."
+      }
+    },
+    "licenses": {
+      "title": "Licențe",
+      "description": "Aici poți consulta toate informațiile despre licențele software, bibliotecile terțe și atribuirile folosite în platforma ITAKAI.",
+      "btn_back": "Înapoi la pagina principală",
+      "meta": {
+        "title": "Licențe - ITAKAI",
+        "description": "Informații despre licențele ITAKAI"
+      }
+    },
+    "notifications": {
+      "title": "Notificări",
+      "btn_mark_all_read": "Marchează toate ca citite",
+      "tabs": {
+        "all": "Toate",
+        "unread": "Necitite"
+      },
+      "unread_label": "Necitită",
+      "btn_view": "Vezi",
+      "btn_delete": "Șterge notificarea",
+      "empty_unread": "Nu ai notificări necitite",
+      "empty_all": "Nu ai notificări",
+      "meta": {
+        "title": "Notificări | ITAKAI",
+        "description": "Consultă-ți notificările și fii la curent cu ultimele noutăți despre misiunile și clasele tale."
+      }
+    }
+  }
+}

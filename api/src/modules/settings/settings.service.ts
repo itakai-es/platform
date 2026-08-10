@@ -2,6 +2,7 @@ import { z } from 'zod'
 import { prisma } from '../../config/database.js'
 import { decryptSecret, encryptSecret } from '../../config/crypto.js'
 import {
+  APP_LANGUAGES,
   SECRET_PATHS,
   type AiSettings,
   type AppLanguage,
@@ -226,7 +227,7 @@ const generalSchema = z
   .object({
     platformName: z.string(),
     contactEmail: z.string(),
-    defaultLanguage: z.enum(['es', 'en', 'ca', 'eu', 'gl']),
+    defaultLanguage: z.enum(APP_LANGUAGES),
     registrationOpen: z.boolean(),
     maintenanceMode: z.boolean(),
   })

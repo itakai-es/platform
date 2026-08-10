@@ -4,7 +4,7 @@
   <div
     class="inline-flex items-center gap-1 rounded-full border border-border-primary bg-surface p-1"
     role="group"
-    aria-label="Modo de vista"
+    :aria-label="t('common.actions.view_mode')"
   >
     <button
       v-for="option in options"
@@ -29,6 +29,8 @@
 <script setup lang="ts">
 import { Squares2X2Icon, ListBulletIcon } from '@heroicons/vue/24/outline'
 import type { ViewMode } from '~/composables/useViewMode'
+
+const { t } = useI18n()
 
 defineProps<{ modelValue: ViewMode }>()
 defineEmits<{ 'update:modelValue': [ViewMode] }>()

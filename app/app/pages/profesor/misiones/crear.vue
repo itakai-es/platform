@@ -36,7 +36,7 @@
                   <SelectDropdown
                     :model-value="selectedClassId"
                     :options="classSelectOptions"
-                    placeholder="Selecciona una clase"
+                    :placeholder="t('teacher.missions.create.pick_class')"
                     @update:model-value="selectedClassId = String($event)"
                   />
                 </div>
@@ -44,7 +44,7 @@
                   ref="inputRef"
                   v-model="idea"
                   rows="6"
-                  placeholder="Ej: Quiero una misión sobre cinemática donde los alumnos calculen trayectorias de escobas voladoras..."
+                  :placeholder="t('teacher.missions.create.idea_placeholder')"
                   class="onb-input onb-reveal resize-none"
                   style="animation-delay: 0.2s"
                 />
@@ -55,7 +55,7 @@
                     size="sm"
                     :disabled="!idea.trim() || !selectedClassId || loading"
                     @click="submitIdea"
-                    >Siguiente</Button
+                    >{{ t('teacher.classes.create.onboarding.btn_next') }}</Button
                   >
                 </div>
               </div>
@@ -86,14 +86,14 @@
                       >
                         <ExclamationTriangleIcon class="w-8 h-8 text-navy-700/30" />
                         <p class="text-base font-semibold text-navy-700">
-                          No he podido crear la narrativa
+                          {{ t('teacher.missions.create.narrative_error') }}
                         </p>
                         <p class="text-sm text-text-secondary max-w-sm">
                           Puede que el asistente esté saturado ahora mismo. Espera un momento y
                           reinténtalo.
                         </p>
                         <div class="flex gap-2">
-                          <Button variant="outline" size="sm" @click="step = 0">Atrás</Button>
+                          <Button variant="outline" size="sm" @click="step = 0">{{ t('teacher.classes.create.onboarding.btn_back') }}</Button>
                           <Button variant="primary" size="sm" @click="submitIdea">
                             <ArrowPathIcon class="w-4 h-4 mr-1.5" />Reintentar
                           </Button>
@@ -101,9 +101,6 @@
                       </div>
                       <template v-else>
                         <div class="md-rendered" v-html="renderPageMarkdown(narrative)" />
-                        <div v-if="!isStreaming && narrative" class="mt-2 flex justify-end">
-                          <AIProviderBadge :provider="narrativeProvider" />
-                        </div>
                       </template>
                     </div>
                     <div
@@ -136,16 +133,16 @@
                       </button>
                     </div>
                     <div v-if="!loading && !isStreaming && narrative" class="onb-actions">
-                      <Button variant="outline" size="sm" @click="backToStep0">Atrás</Button>
+                      <Button variant="outline" size="sm" @click="backToStep0">{{ t('teacher.classes.create.onboarding.btn_back') }}</Button>
                       <div v-if="!showNarrativeFeedback" class="flex gap-2">
                         <Button variant="outline" size="sm" @click="edit"
-                          ><PencilSquareIcon class="w-4 h-4 mr-1.5" />Editar a mano</Button
+                          ><PencilSquareIcon class="w-4 h-4 mr-1.5" />{{ t('teacher.classes.create.onboarding.btn_edit_by_hand') }}</Button
                         >
                         <Button variant="outline" size="sm" @click="openNarrativeFeedback">
-                          <SparklesIcon class="w-4 h-4 mr-1.5" />Quiero cambiar algo
+                          <SparklesIcon class="w-4 h-4 mr-1.5" />{{ t('teacher.classes.create.onboarding.btn_change_something') }}
                         </Button>
                         <Button variant="primary" size="sm" @click="acceptNarrative"
-                          >Sí, adelante</Button
+                          >{{ t('teacher.classes.create.onboarding.btn_accept_plan') }}</Button
                         >
                       </div>
                     </div>
@@ -236,22 +233,22 @@
                     </button>
                   </div>
                   <div v-if="!showTitleFeedback" class="onb-actions">
-                    <Button variant="outline" size="sm" @click="step = 1">Atrás</Button>
+                    <Button variant="outline" size="sm" @click="step = 1">{{ t('teacher.classes.create.onboarding.btn_back') }}</Button>
                     <div class="flex gap-2">
                       <Button variant="outline" size="sm" @click="openTitleFeedback"
-                        >Quiero cambiar algo</Button
+                        >{{ t('teacher.classes.create.onboarding.btn_change_something') }}</Button
                       >
                       <Button
                         variant="primary"
                         size="sm"
                         :disabled="!chosenTitle"
                         @click="acceptTitle"
-                        >Sí, adelante</Button
+                        >{{ t('teacher.classes.create.onboarding.btn_accept_plan') }}</Button
                       >
                     </div>
                   </div>
                   <div v-else class="onb-actions">
-                    <Button variant="outline" size="sm" @click="step = 1">Atrás</Button>
+                    <Button variant="outline" size="sm" @click="step = 1">{{ t('teacher.classes.create.onboarding.btn_back') }}</Button>
                   </div>
                 </template>
               </div>
@@ -265,7 +262,7 @@
                   </div>
                   <div class="flex-1" />
                   <div class="onb-actions">
-                    <Button variant="outline" size="sm" @click="step = 2">Atrás</Button>
+                    <Button variant="outline" size="sm" @click="step = 2">{{ t('teacher.classes.create.onboarding.btn_back') }}</Button>
                     <Button variant="primary" size="sm" @click="retryEnigmas">Reintentar</Button>
                   </div>
                 </template>
@@ -393,16 +390,13 @@
                       Cerrar
                     </button>
                   </div>
-                  <div v-if="enigmas.length" class="mt-2 flex justify-end">
-                    <AIProviderBadge :provider="enigmasProvider" />
-                  </div>
                   <div v-if="!showEnigmaFeedback" class="onb-actions">
                     <Button
                       variant="outline"
                       size="sm"
                       :disabled="isStreaming || loading"
                       @click="step = 2"
-                      >Atrás</Button
+                      >{{ t('teacher.classes.create.onboarding.btn_back') }}</Button
                     >
                     <div class="flex gap-2">
                       <Button
@@ -410,14 +404,14 @@
                         size="sm"
                         :disabled="isStreaming || loading"
                         @click="openEnigmaFeedback"
-                        >Quiero cambiar algo</Button
+                        >{{ t('teacher.classes.create.onboarding.btn_change_something') }}</Button
                       >
                       <Button
                         variant="primary"
                         size="sm"
                         :disabled="isStreaming || loading"
                         @click="step = 4"
-                        >Sí, adelante</Button
+                        >{{ t('teacher.classes.create.onboarding.btn_accept_plan') }}</Button
                       >
                     </div>
                   </div>
@@ -427,7 +421,7 @@
                       size="sm"
                       :disabled="isStreaming || loading"
                       @click="step = 2"
-                      >Atrás</Button
+                      >{{ t('teacher.classes.create.onboarding.btn_back') }}</Button
                     >
                   </div>
                 </template>
@@ -464,8 +458,8 @@
                 </div>
                 <div class="flex-1" />
                 <div class="onb-actions">
-                  <Button variant="outline" size="sm" @click="step = 3">Atrás</Button>
-                  <Button variant="primary" size="sm" @click="step = 5">Siguiente</Button>
+                  <Button variant="outline" size="sm" @click="step = 3">{{ t('teacher.classes.create.onboarding.btn_back') }}</Button>
+                  <Button variant="primary" size="sm" @click="step = 5">{{ t('teacher.classes.create.onboarding.btn_next') }}</Button>
                 </div>
               </div>
 
@@ -496,13 +490,10 @@
                     <div class="relative aspect-video rounded-2xl overflow-hidden shadow-lg">
                       <img :src="generatedImageUrl" alt="" class="w-full h-full object-cover" />
                     </div>
-                    <div class="mt-2 flex justify-end">
-                      <AIProviderBadge :provider="coverProvider" />
-                    </div>
                     <!-- Acción de la portada, justo bajo la imagen generada -->
                     <div v-if="!showImageFeedback" class="mt-3 flex flex-wrap justify-center gap-2">
                       <Button variant="outline" size="sm" @click="openImageFeedback"
-                        >Quiero cambiar algo</Button
+                        >{{ t('teacher.classes.create.onboarding.btn_change_something') }}</Button
                       >
                     </div>
                   </div>
@@ -548,11 +539,11 @@
                   </button>
                 </div>
                 <div v-if="!isGeneratingImage && !showImageFeedback" class="onb-actions">
-                  <Button variant="outline" size="sm" @click="step = 4">Atrás</Button>
-                  <Button variant="primary" size="sm" @click="step = 6">Sí, adelante</Button>
+                  <Button variant="outline" size="sm" @click="step = 4">{{ t('teacher.classes.create.onboarding.btn_back') }}</Button>
+                  <Button variant="primary" size="sm" @click="step = 6">{{ t('teacher.classes.create.onboarding.btn_accept_plan') }}</Button>
                 </div>
                 <div v-else-if="!isGeneratingImage && showImageFeedback" class="onb-actions">
-                  <Button variant="outline" size="sm" @click="step = 4">Atrás</Button>
+                  <Button variant="outline" size="sm" @click="step = 4">{{ t('teacher.classes.create.onboarding.btn_back') }}</Button>
                 </div>
               </div>
 
@@ -589,9 +580,6 @@
                       </div>
                       <template v-else>
                         <div class="md-rendered" v-html="renderPageMarkdown(missionGuide)" />
-                        <div v-if="!isStreaming && missionGuide" class="mt-2 flex justify-end">
-                          <AIProviderBadge :provider="guideProvider" />
-                        </div>
                       </template>
                     </div>
                     <div
@@ -634,25 +622,25 @@
                       "
                       class="onb-actions"
                     >
-                      <Button variant="outline" size="sm" @click="step = 5">Atrás</Button>
+                      <Button variant="outline" size="sm" @click="step = 5">{{ t('teacher.classes.create.onboarding.btn_back') }}</Button>
                       <div class="flex gap-2">
                         <Button variant="outline" size="sm" @click="edit"
-                          ><PencilSquareIcon class="w-4 h-4 mr-1.5" />Editar a mano</Button
+                          ><PencilSquareIcon class="w-4 h-4 mr-1.5" />{{ t('teacher.classes.create.onboarding.btn_edit_by_hand') }}</Button
                         >
                         <Button variant="outline" size="sm" @click="openMissionGuideFeedback">
-                          <SparklesIcon class="w-4 h-4 mr-1.5" />Quiero cambiar algo
+                          <SparklesIcon class="w-4 h-4 mr-1.5" />{{ t('teacher.classes.create.onboarding.btn_change_something') }}
                         </Button>
                         <Button variant="outline" size="sm" @click="skipMissionGuide"
-                          >Saltar</Button
+                          >{{ t('teacher.classes.create.onboarding.btn_skip') }}</Button
                         >
-                        <Button variant="primary" size="sm" @click="step = 7">Sí, adelante</Button>
+                        <Button variant="primary" size="sm" @click="step = 7">{{ t('teacher.classes.create.onboarding.btn_accept_plan') }}</Button>
                       </div>
                     </div>
                     <div
                       v-else-if="!isGeneratingMissionGuide && showMissionGuideFeedback"
                       class="onb-actions"
                     >
-                      <Button variant="outline" size="sm" @click="step = 5">Atrás</Button>
+                      <Button variant="outline" size="sm" @click="step = 5">{{ t('teacher.classes.create.onboarding.btn_back') }}</Button>
                     </div>
                   </template>
                 </EditableMarkdown>
@@ -698,7 +686,7 @@
                     class="flex flex-col items-center gap-4 text-text-secondary"
                   >
                     <TrophyIcon class="w-12 h-12 opacity-40" />
-                    <p class="text-sm">No se pudo generar la insignia.</p>
+                    <p class="text-sm">{{ t('teacher.badges.generate_error') }}</p>
                     <Button variant="primary" size="sm" @click="generateBadge()">
                       <ArrowPathIcon class="w-4 h-4 mr-2" />
                       Reintentar
@@ -735,23 +723,23 @@
                   </button>
                 </div>
                 <div v-if="!isGeneratingBadge && !showBadgeFeedback" class="onb-actions">
-                  <Button variant="outline" size="sm" @click="step = 6">Atrás</Button>
+                  <Button variant="outline" size="sm" @click="step = 6">{{ t('teacher.classes.create.onboarding.btn_back') }}</Button>
                   <div class="flex gap-2">
                     <Button
                       v-if="badgeImageUrl"
                       variant="outline"
                       size="sm"
                       @click="openBadgeFeedback"
-                      >Quiero cambiar algo</Button
+                      >{{ t('teacher.classes.create.onboarding.btn_change_something') }}</Button
                     >
-                    <Button variant="outline" size="sm" @click="skipBadge">Saltar</Button>
+                    <Button variant="outline" size="sm" @click="skipBadge">{{ t('teacher.classes.create.onboarding.btn_skip') }}</Button>
                     <Button v-if="badgeImageUrl" variant="primary" size="sm" @click="finishWizard"
-                      >Sí, adelante</Button
+                      >{{ t('teacher.classes.create.onboarding.btn_accept_plan') }}</Button
                     >
                   </div>
                 </div>
                 <div v-else-if="!isGeneratingBadge && showBadgeFeedback" class="onb-actions">
-                  <Button variant="outline" size="sm" @click="step = 6">Atrás</Button>
+                  <Button variant="outline" size="sm" @click="step = 6">{{ t('teacher.classes.create.onboarding.btn_back') }}</Button>
                 </div>
               </div>
             </Transition>
@@ -787,7 +775,7 @@
         </p>
 
         <div class="flex justify-center gap-3 mt-6">
-          <Button variant="outline" @click="showPreview = false">Atrás</Button>
+          <Button variant="outline" @click="showPreview = false">{{ t('teacher.classes.create.onboarding.btn_back') }}</Button>
           <Button variant="primary" :disabled="isSubmitting" @click="handleSubmit">
             <template v-if="isSubmitting">
               <svg class="animate-spin w-4 h-4 mr-2" viewBox="0 0 24 24" fill="none">
@@ -856,6 +844,7 @@ import {
 import { renderPageMarkdown } from '~/utils/markdown'
 import { MISSION_COMPLETION_BONUS, type MissionRarity } from '~/utils/gamification-config'
 import { resolveClassSettings } from '~/utils/class-settings'
+import { classMetaLine } from '~/utils/class-metadata'
 import type { ClassSettings } from '~/types/class.types'
 import CoinIcon from '~/components/atoms/CoinIcon.vue'
 import ManaIcon from '~/components/atoms/ManaIcon.vue'
@@ -953,6 +942,13 @@ const classSelectOptions = computed(() =>
   teacherClasses.value.map(c => ({ value: c.id, label: c.name }))
 )
 const classMissions = ref<Array<{ title: string; description?: string }>>([])
+// Narrativa y metadatos de la clase donde vive la misión. La misión se ambienta en
+// ese mundo y va dirigida a ese curso, así que la IA necesita ambos: antes solo
+// recibía el NOMBRE de la clase.
+const classNarrative = ref('')
+const classMeta = ref('')
+// El nivel por separado: es lo único de los metadatos que va a la portada.
+const classLevel = ref('')
 
 // Recursos activos de la clase seleccionada. Determinan si la IA propone (y si
 // se muestran/envían) monedas y maná en los enigmas.
@@ -966,22 +962,41 @@ const enigmaResources = computed(() => ({
 watch(selectedClassId, async classId => {
   if (!classId) {
     classMissions.value = []
+    classNarrative.value = ''
+    classMeta.value = ''
+    classLevel.value = ''
     selectedClassSettings.value = resolveClassSettings(null)
     return
   }
   try {
-    const res = await $fetch<{
-      missions: Array<{ title: string; description?: string }>
-      settings?: Partial<ClassSettings>
-    }>(`${config.public.apiBase}/teacher/classes/${classId}`)
-    classMissions.value =
-      (res as any)?.missions?.map((m: any) => ({
-        title: m.title,
-        description: (m.description || '').slice(0, 200),
-      })) || []
-    selectedClassSettings.value = resolveClassSettings((res as any)?.settings ?? null)
+    // El detalle de la clase viene envuelto en { class } y no trae las misiones:
+    // leerlo como { missions, settings } dejaba la lista vacía y los ajustes en sus
+    // valores por defecto, así que la IA ni sabía qué misiones existían ya ni si la
+    // clase tenía monedas o maná activos. Las misiones van por su propio endpoint.
+    const [detail, missions] = await Promise.all([
+      $fetch<{
+        class: {
+          narrative?: string
+          subject?: string
+          educationLevel?: string
+          settings?: Partial<ClassSettings>
+        }
+      }>(`${config.public.apiBase}/teacher/classes/${classId}`),
+      teacherStore.ensureClassMissions(classId),
+    ])
+    classNarrative.value = detail?.class?.narrative || ''
+    classMeta.value = classMetaLine(detail?.class ?? {})
+    classLevel.value = detail?.class?.educationLevel || ''
+    selectedClassSettings.value = resolveClassSettings(detail?.class?.settings ?? null)
+    classMissions.value = (missions?.missions || []).map((m: any) => ({
+      title: m.title,
+      description: (m.description || '').slice(0, 200),
+    }))
   } catch {
     classMissions.value = []
+    classNarrative.value = ''
+    classMeta.value = ''
+    classLevel.value = ''
     selectedClassSettings.value = resolveClassSettings(null)
   }
 })
@@ -1066,26 +1081,61 @@ watch(step, () => {
 })
 
 // Context builder
+// Cada bloque tiene su propio presupuesto en vez de recortar el contexto entero al
+// final. Antes los que llamaban hacían buildContext().slice(0, 800) y, en cuanto la
+// clase acumulaba varias misiones, ese recorte se comía justo la narrativa y el
+// título — que van los últimos — y los títulos se sugerían a ciegas.
 function buildContext() {
-  const parts = [`Idea: ${idea.value}`, `Clase: ${className.value}`]
-  if (classMissions.value.length > 0) {
-    const missionSummaries = classMissions.value
-      .map(m => `- "${m.title}": ${m.description?.slice(0, 150) || 'sin descripción'}`)
-      .join('\n')
-    parts.push(
-      `Misiones ya creadas en esta clase:\n${missionSummaries}\n\nLa nueva misión debe ser DIFERENTE, complementar las existentes y avanzar en dificultad o temática respecto a lo que ya hay.`
-    )
+  const parts = [`Idea: ${idea.value.slice(0, 600)}`, `Clase: ${className.value.slice(0, 120)}`]
+
+  if (classNarrative.value) {
+    parts.push(`Mundo de la clase (la misión ocurre aquí): ${classNarrative.value.slice(0, 500)}`)
   }
+
+  if (classMissions.value.length > 0) {
+    // Se meten misiones hasta agotar el presupuesto, no todas: con veinte misiones
+    // el bloque se comería el resto del contexto.
+    const budget = 500
+    const summaries: string[] = []
+    let used = 0
+    for (const m of classMissions.value) {
+      const line = `- "${m.title}": ${m.description?.slice(0, 150) || 'sin descripción'}`
+      if (used + line.length > budget) break
+      summaries.push(line)
+      used += line.length + 1
+    }
+    const omitted = classMissions.value.length - summaries.length
+    if (summaries.length) {
+      parts.push(
+        `Misiones ya creadas en esta clase:\n${summaries.join('\n')}${
+          omitted > 0 ? `\n(y ${omitted} más)` : ''
+        }\n\nLa nueva misión debe ser DIFERENTE, complementar las existentes y avanzar en dificultad o temática respecto a lo que ya hay.`
+      )
+    }
+  }
+
   if (narrative.value) parts.push(`Narrativa: ${narrative.value.slice(0, 500)}`)
-  if (chosenTitle.value) parts.push(`Título: ${chosenTitle.value}`)
-  return parts.join('\n')
+  if (chosenTitle.value) parts.push(`Título: ${chosenTitle.value.slice(0, 100)}`)
+  // Tope de seguridad, por si algún bloque crece más de lo previsto.
+  return parts.join('\n').slice(0, 2500)
+}
+
+// Brief del profesor: sus palabras literales del paso 0. Viaja en TODAS las llamadas
+// a la IA para que ningún paso dependa de que la narrativa haya recogido lo que pidió
+// (ver teacherBriefBlock en el backend).
+function aiBrief() {
+  const meta = [className.value ? `Clase: ${className.value}` : '', classMeta.value]
+    .filter(Boolean)
+    .join(' | ')
+  // 1200 es lo que aprovecha teacherBriefBlock; recortar aquí evita además pasarse
+  // de los máximos que validan las rutas.
+  return { brief: idea.value.slice(0, 1200), meta: meta.slice(0, 200) }
 }
 
 // AI helpers (centralized prompts)
 const {
   streamPrompt,
   callPrompt,
-  lastProvider,
   generationProgress,
   waitingForFirstChunk,
   isOvertime,
@@ -1094,22 +1144,15 @@ const {
   startProgress,
   stopProgress,
 } = useAIPrompt()
-type AIProviderName = 'spark' | 'gemini' | 'flux' | null
-const narrativeProvider = ref<AIProviderName>(null)
-const enigmasProvider = ref<AIProviderName>(null)
-const coverProvider = ref<AIProviderName>(null)
-const guideProvider = ref<AIProviderName>(null)
 
 async function streamAI(
   type: string,
   params: Record<string, string | number | boolean>,
-  target: Ref<string>,
-  providerRef?: Ref<AIProviderName>
+  target: Ref<string>
 ) {
   loading.value = false
   isStreaming.value = true
   await streamPrompt(type, params, target)
-  if (providerRef) providerRef.value = lastProvider.value
 }
 
 async function callAI(type: string, params: Record<string, string>) {
@@ -1131,9 +1174,8 @@ async function submitIdea() {
   try {
     await streamAI(
       'mission.narrative.generate',
-      { idea: idea.value, className: className.value },
-      narrative,
-      narrativeProvider
+      { idea: idea.value, className: className.value, ...aiBrief() },
+      narrative
     )
     narrative.value = narrative.value
       .replace(/^(Aqui tienes|Claro|Por supuesto)[^.]*[.:]\s*/i, '')
@@ -1158,9 +1200,10 @@ async function regenerateNarrative() {
   try {
     await streamAI(
       'mission.narrative.modify',
-      { idea: idea.value, current: prev.slice(0, 800), feedback: fb },
-      narrative,
-      narrativeProvider
+      // className también al regenerar: la generación inicial sí lo mandaba y al
+      // pulsar "quiero cambiar algo" la IA se olvidaba de en qué clase estaba.
+      { idea: idea.value, current: prev.slice(0, 800), feedback: fb, className: className.value, ...aiBrief() },
+      narrative
     )
     narrative.value = narrative.value
       .replace(/^(Aqui tienes|Claro|Por supuesto)[^.]*[.:]\s*/i, '')
@@ -1182,7 +1225,7 @@ async function acceptNarrative() {
   startProgress(est)
   try {
     const ctx = buildContext()
-    const res = await callAI('mission.titles.generate', { context: ctx.slice(0, 800) })
+    const res = await callAI('mission.titles.generate', { context: ctx, ...aiBrief() })
     if (res?.message) {
       const match = res.message.match(/\[[\s\S]*\]/)
       if (match) {
@@ -1211,8 +1254,9 @@ async function regenerateTitles() {
   try {
     const ctx = buildContext()
     const res = await callAI('mission.titles.regenerate', {
-      context: ctx.slice(0, 800),
+      context: ctx,
       feedback: fb,
+      ...aiBrief(),
     })
     if (res?.message) {
       const match = res.message.match(/\[[\s\S]*\]/)
@@ -1281,9 +1325,9 @@ async function acceptTitle() {
         className: className.value,
         coins: enigmaResources.value.coins,
         mana: enigmaResources.value.mana,
+        ...aiBrief(),
       },
-      enigmaRaw,
-      enigmasProvider
+      enigmaRaw
     )
     enigmas.value = parseEnigmasJson(enigmaRaw.value)
     if (enigmas.value.length === 0) {
@@ -1293,7 +1337,7 @@ async function acceptTitle() {
     enigmaError.value =
       err instanceof Error && err.message
         ? err.message
-        : 'El servicio de IA no está disponible ahora mismo. Inténtalo de nuevo en unos minutos.'
+        : t('teacher.missions.create.ai_unavailable')
   } finally {
     loading.value = false
     isStreaming.value = false
@@ -1325,9 +1369,9 @@ async function regenerateEnigmas() {
         className: className.value,
         coins: enigmaResources.value.coins,
         mana: enigmaResources.value.mana,
+        ...aiBrief(),
       },
-      enigmaRaw,
-      enigmasProvider
+      enigmaRaw
     )
     enigmas.value = parseEnigmasJson(enigmaRaw.value)
     if (enigmas.value.length === 0) {
@@ -1342,7 +1386,7 @@ async function regenerateEnigmas() {
     enigmaError.value =
       err instanceof Error && err.message
         ? err.message
-        : 'El servicio de IA no está disponible ahora mismo. Inténtalo de nuevo en unos minutos.'
+        : t('teacher.missions.create.ai_unavailable')
     try {
       enigmas.value = JSON.parse(prevEnigmas)
     } catch {
@@ -1372,12 +1416,16 @@ async function generateMissionCover(extraPrompt?: string) {
       {
         method: 'POST',
         headers: { Authorization: `Bearer ${authStore.tokens?.accessToken}` },
-        body: { title: chosenTitle.value, narrative: narrativeText, locale: locale.value },
+        body: {
+          title: chosenTitle.value,
+          narrative: narrativeText,
+          locale: locale.value,
+          audience: classLevel.value,
+        },
       }
     )
     rawImagePath.value = res.imageUrl
     generatedImageUrl.value = res.imageUrl
-    if (res.provider) coverProvider.value = res.provider as AIProviderName
   } catch {
     imageGenerationFailed.value = true
   } finally {
@@ -1417,12 +1465,16 @@ async function generateMissionGuide(extraPrompt?: string) {
       {
         title: chosenTitle.value,
         narrative: narrative.value,
-        enigmasSummary: enigmaSummary,
+        // extraPrompt es el "quiero cambiar algo" del profesor: llegaba a esta
+        // función y no se usaba, así que regenerar devolvía otra vez lo mismo.
+        enigmasSummary: extraPrompt
+          ? `${enigmaSummary}\n\nEl profesor pide sobre el briefing: ${extraPrompt}`
+          : enigmaSummary,
         totalXp: String(totalXp.value),
+        ...aiBrief(),
       },
       missionGuide
     )
-    guideProvider.value = lastProvider.value
     missionGuide.value = missionGuide.value
       .replace(/^(Aqui tienes|Claro|Por supuesto)[^.]*[.:]\s*/i, '')
       .trim()
@@ -1461,7 +1513,7 @@ Narrativa: ${narrative.value.slice(0, 400)}
 Enigmas: ${enigmas.value.map(e => e.title).join(', ')}
 Dificultad: ${rarityLabel.value}
 IMPORTANTE: el nombre NO puede ser igual al título de la misión ("${chosenTitle.value}"). Debe ser épico y único, representar el LOGRO de completar la misión.`
-      const res = await callAI('badge.generate', { context: badgeContext })
+      const res = await callAI('badge.generate', { context: badgeContext, ...aiBrief() })
       if (res?.message) {
         const rawMsg = res.message
           .replace(/```(?:json)?\s*/gi, '')

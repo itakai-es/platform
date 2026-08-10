@@ -1,0 +1,318 @@
+{
+  "admin": {
+    "dashboard": {
+      "title": "Aniciu d'alministrador",
+      "subtitle": "Panel de control del sistema ITAKAI",
+      "activity": {
+        "title": "Actividá del sistema",
+        "period_24h": "Últimes 24 hores",
+        "period_week": "Última selmana",
+        "period_month": "Últimu mes"
+      },
+      "quick_actions": {
+        "manage_users": "Xestionar usuarios"
+      },
+      "system_status": {
+        "title": "Estáu del sistema",
+        "operational": "Operativu",
+        "degraded": "Degradáu",
+        "down": "Fuera de serviciu",
+        "unknown": "Desconocíu",
+        "empty": "Nun hai servicios disponibles"
+      },
+      "meta": {
+        "title": "Aniciu admin | ITAKAI",
+        "description": "Panel de control del sistema ITAKAI. Xestiona usuarios, instituciones y supervisa l'estáu de la plataforma."
+      }
+    },
+    "users": {
+      "title": "Xestión d'usuarios",
+      "subtitle": "Alministra tolos usuarios de la plataforma",
+      "filters": {
+        "search_placeholder": "Guetar por nome o corréu...",
+        "all_roles": "Tolos roles",
+        "students": "Alumnos",
+        "teachers": "Profesores",
+        "admins": "Alministradores",
+        "all_statuses": "Tolos estaos",
+        "active": "Activu",
+        "suspended": "Suspendíu",
+        "inactive": "Inactivu",
+        "clear": "Llimpiar filtros"
+      },
+      "roles": {
+        "student": "Alumnu",
+        "teacher": "Profesor",
+        "admin": "Admin"
+      },
+      "card": {
+        "status": "Estáu",
+        "classes": "Clases",
+        "last_login": "Últ. accesu"
+      },
+      "empty": {
+        "title": "Nun s'atoparon usuarios",
+        "description": "Nun hai usuarios que concasen colos filtros escoyíos."
+      },
+      "actions": {
+        "suspend_title": "Suspender usuariu",
+        "suspend_message": "¿De xuru que quies suspender a {name}? Nun va poder acceder a la plataforma.",
+        "suspend_confirm": "Suspender",
+        "delete_title": "Desaniciar usuariu",
+        "delete_message": "¿De xuru que quies desaniciar a {name}? Esta aición nun se pue desfacer.",
+        "delete_confirm": "Desaniciar"
+      },
+      "meta": {
+        "title": "Xestión d'usuarios | ITAKAI Admin",
+        "description": "Alministra tolos usuarios del sistema, crea perfiles nuevos, edita roles y supervisa l'actividá."
+      },
+      "sort": {
+        "recent": "Más recientes"
+      }
+    },
+    "schools": {
+      "title": "Xestión d'instituciones",
+      "subtitle": "Alministra les instituciones educatives de la plataforma",
+      "filters": {
+        "search_placeholder": "Guetar institución...",
+        "all_statuses": "Tolos estaos",
+        "active": "Activa",
+        "inactive": "Inactiva"
+      },
+      "form": {
+        "create_title": "Institución nueva",
+        "edit_title": "Editar institución",
+        "name": "Nome",
+        "name_placeholder": "Nome de la institución",
+        "city": "Ciudá",
+        "city_placeholder": "Ciudá",
+        "country": "País",
+        "country_placeholder": "País",
+        "save": "Guardar",
+        "cancel": "Encaboxar"
+      },
+      "actions": {
+        "create": "Institución nueva",
+        "delete_title": "Desaniciar institución",
+        "delete_message": "¿De xuru que quies desaniciar {name}? Va desvinculase de tolos usuarios.",
+        "delete_confirm": "Desaniciar"
+      },
+      "empty": {
+        "title": "Nun s'atoparon instituciones",
+        "description": "Nun hai instituciones que concasen colos filtros."
+      },
+      "meta": {
+        "title": "Xestión d'instituciones | ITAKAI Admin",
+        "description": "Alministra toles instituciones educatives del sistema, crea centros nuevos y supervisa la so actividá."
+      }
+    },
+    "classes": {
+      "title": "Xestión de clases",
+      "subtitle": "Supervisa toles clases del sistema",
+      "filters": {
+        "search_placeholder": "Guetar clase..."
+      },
+      "empty": {
+        "title": "Nun s'atoparon clases",
+        "description": "Nun hai clases que concasen colos filtros."
+      },
+      "meta": {
+        "title": "Xestión de clases | ITAKAI Admin"
+      },
+      "sort": {
+        "students_desc": "Más alumnos",
+        "missions_desc": "Más misiones"
+      }
+    },
+    "missions": {
+      "title": "Xestión de misiones",
+      "subtitle": "Supervisa toles misiones del sistema",
+      "filters": {
+        "search_placeholder": "Guetar misión...",
+        "all_statuses": "Tolos estaos",
+        "all_rarities": "Toles rareces"
+      },
+      "empty": {
+        "title": "Nun s'atoparon misiones",
+        "description": "Nun hai misiones que concasen colos filtros."
+      },
+      "meta": {
+        "title": "Xestión de misiones | ITAKAI Admin"
+      },
+      "sort": {
+        "xp_desc": "Más XP",
+        "enigmas_desc": "Más enigmes"
+      }
+    },
+    "analytics": {
+      "title": "Analítiques del sistema",
+      "subtitle": "Métriques y estadístiques de la plataforma",
+      "period": {
+        "week": "Selmana",
+        "month": "Mes",
+        "quarter": "Trimestre"
+      },
+      "kpis": {
+        "avg_response": "Tiempu de rempuesta",
+        "requests_per_min": "Peticiones/min",
+        "error_rate": "Tasa de fallu",
+        "uptime": "Disponibilidá"
+      },
+      "overview": {
+        "total_users": "Usuarios totales",
+        "active_today": "Activos güei",
+        "missions_completed": "Misiones completaes",
+        "completion_rate": "Tasa de completáu"
+      },
+      "sections": {
+        "system_resources": "Recursos del sistema",
+        "service_health": "Estáu de los servicios",
+        "response_time": "Tiempu de rempuesta",
+        "active_users": "Usuarios activos",
+        "requests": "Peticiones",
+        "tokens_over_time": "Tokens consumíos",
+        "users_by_role": "Usuarios por rol",
+        "missions_by_status": "Misiones por estáu",
+        "missions_by_rarity": "Misiones por rareza",
+        "ai_usage": "Usu d'IA (asistentes)"
+      },
+      "ai": {
+        "total_tokens": "Tokens totales",
+        "avg_tokens_user": "Media por usuariu",
+        "total_conversations": "Conversaciones",
+        "avg_conversations_user": "Conv. por usuariu"
+      },
+      "system": {
+        "memory": "Memoria",
+        "disk": "Discu",
+        "db_latency": "Llatencia BD"
+      },
+      "table": {
+        "service": "Serviciu",
+        "status": "Estáu",
+        "uptime": "Disponibilidá",
+        "latency": "Llatencia"
+      },
+      "status": {
+        "operational": "OK",
+        "degraded": "Degradáu",
+        "down": "Cayíu"
+      },
+      "meta": {
+        "title": "Analítiques del sistema | ITAKAI Admin",
+        "description": "Visualiza métriques avanzaes, gráficos de rendimientu y analises detallaes de la plataforma."
+      }
+    },
+    "logs": {
+      "title": "Rexistros del sistema",
+      "subtitle": "Rexistros d'actividá y eventos de la plataforma",
+      "tab": "Actividá",
+      "filters": {
+        "search_placeholder": "Guetar nos rexistros...",
+        "period_24h": "Últimes 24 hores",
+        "period_week": "Última selmana",
+        "period_month": "Últimu mes",
+        "all_severities": "Toes",
+        "info": "Información",
+        "warning": "Avisu",
+        "error": "Fallu",
+        "success": "Correutu",
+        "all_types": "Tolos tipos",
+        "new_school": "Institución nueva",
+        "new_users": "Usuarios nuevos",
+        "alert": "Alerta",
+        "system_update": "Anovamientu",
+        "missions_completed": "Misiones completaes",
+        "user_action": "Aición d'usuariu"
+      },
+      "empty": {
+        "title": "Nun s'atoparon rexistros",
+        "description": "Nun hai rexistros que concasen colos filtros."
+      },
+      "meta": {
+        "title": "Rexistros del sistema | ITAKAI Admin",
+        "description": "Revisa los rexistros d'actividá del sistema, audita aiciones d'usuarios y diagnostica problemes téunicos."
+      }
+    },
+    "system_logs": {
+      "tab": "Sistema",
+      "filters": {
+        "search_placeholder": "Guetar nos rexistros del sistema...",
+        "all_levels": "Tolos niveles",
+        "all_categories": "Toles categoríes"
+      },
+      "levels": {
+        "info": "Información",
+        "warning": "Avisu",
+        "error": "Fallu",
+        "success": "Correutu"
+      },
+      "categories": {
+        "health_check": "Estáu del sistema",
+        "service_status": "Estáu del serviciu",
+        "security": "Seguridá",
+        "performance": "Rendimientu",
+        "maintenance": "Mantenimientu",
+        "backup": "Copia de seguridá"
+      },
+      "empty": {
+        "title": "Nun s'atoparon rexistros del sistema",
+        "description": "Nun hai rexistros del sistema que concasen colos filtros."
+      }
+    },
+    "settings": {
+      "title": "Configuración",
+      "subtitle": "Configura los servicios d'esta instancia: IA, imáxenes, almacenamientu y dominiu.",
+      "meta": {
+        "title": "Configuración · ITAKAI Admin",
+        "description": "Configuración de la instancia"
+      },
+      "save": "Guardar los cambeos",
+      "saved": "Configuración guardada",
+      "save_error": "Nun se pudo guardar la configuración",
+      "ai": {
+        "title": "Intelixencia artificial",
+        "desc": "Endpoints compatibles cola API d'OpenAI. Pon el fornidor que quieras (OpenAI, el to propiu Spark, Groq, Together, OpenRouter, Gemini pel so endpoint OpenAI…).",
+        "text_title": "Testu",
+        "image_title": "Imáxenes",
+        "endpoint_url": "URL del endpoint",
+        "api_key": "Clave API",
+        "model": "Modelu"
+      },
+      "storage": {
+        "title": "Almacenamientu",
+        "desc": "Ónde se guarden les imáxenes y los ficheros xubíos.",
+        "driver": "Triba d'almacenamientu",
+        "driver_local": "Discu llocal (por defeutu)",
+        "driver_s3": "Esternu S3 / Cloudflare R2",
+        "endpoint": "Endpoint",
+        "region": "Rexón",
+        "bucket": "Bucket",
+        "access_key": "Access Key ID",
+        "secret_key": "Secret Access Key",
+        "public_url": "URL pública base",
+        "public_url_hint": "URL dende onde se sirven los ficheros (bucket públicu o dominiu propiu de R2).",
+        "path_style": "Usar path-style (recomendáu pa R2)"
+      },
+      "domain": {
+        "title": "Dominiu",
+        "desc": "URL pública de la instancia y oríxenes permitíos.",
+        "app_url": "URL de la instancia",
+        "app_url_hint": "Úsase nos enllaces de los correos.",
+        "cors": "Oríxenes CORS permitíos",
+        "cors_hint": "Separta dellos con comes."
+      },
+      "general": {
+        "title": "Xeneral",
+        "desc": "Parámetros xenerales de la instancia.",
+        "platform_name": "Nome de la plataforma",
+        "contact_email": "Corréu de contautu",
+        "default_language": "Llingua por defeutu",
+        "registration_open": "Rexistru abiertu",
+        "registration_hint": "Permite que se rexistren usuarios nuevos.",
+        "maintenance_mode": "Mou mantenimientu",
+        "maintenance_hint": "Amuesa un avisu de mantenimientu a los usuarios."
+      }
+    }
+  }
+}

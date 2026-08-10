@@ -26,10 +26,26 @@
     <!-- WIZARD: alto fijo (no desborda pantalla); solo scrollea el contenido. -->
     <div v-if="!showForm" class="flex-1 min-h-0 px-4 md:px-6 py-4 flex">
       <div class="w-full flex flex-1 min-h-0 flex-col">
+        <!-- Al volver desde el resumen a retocar un paso, esta barra recuerda
+             que ya está todo hecho y deja regresar sin repetir el recorrido. -->
+        <div
+          v-if="hasReachedSummary"
+          class="mb-3 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-border-primary bg-white px-3 py-2"
+        >
+          <span class="text-sm text-text-secondary">
+            {{ t('teacher.classes.create.summary.editing_hint') }}
+          </span>
+          <!-- finishWizard (no showForm) para que el resumen recoja el título,
+               el horario y la portada que se acaben de cambiar. -->
+          <Button variant="outline" size="sm" @click="finishWizard">
+            {{ t('teacher.classes.create.summary.back_to_summary') }}
+          </Button>
+        </div>
+
         <!-- Card compartida (cabecera de paso + pasos). Ver OnboardingCard.vue -->
         <OnboardingCard
           :step="step"
-          :total-steps="5"
+          :total-steps="6"
           :god="god"
           :question="currentQuestion"
         >
@@ -54,18 +70,18 @@
                   </div>
                   <div>
                     <label class="text-sm font-medium text-text-primary mb-1.5 block">
-                      {{ t('teacher.classes.detail.settings.general.subject_label') }}
+                      {{ t('teacher.classes.detail.settings.general.province_label') }}
                     </label>
                     <SelectDropdown
-                      :model-value="meta.subject"
-                      :error="showMetaErrors && !meta.subject"
-                      :options="subjectOptions"
+                      :model-value="meta.province"
+                      :error="showMetaErrors && !meta.province"
+                      :options="provinceOptions"
                       searchable
                       :placeholder="t('teacher.classes.detail.settings.general.metadata_none')"
                       :search-placeholder="
                         t('teacher.classes.detail.settings.general.metadata_search')
                       "
-                      @update:model-value="meta.subject = String($event)"
+                      @update:model-value="meta.province = String($event)"
                     />
                   </div>
                   <div>
@@ -82,18 +98,23 @@
                   </div>
                   <div>
                     <label class="text-sm font-medium text-text-primary mb-1.5 block">
-                      {{ t('teacher.classes.detail.settings.general.province_label') }}
+                      {{ t('teacher.classes.detail.settings.general.subject_label') }}
                     </label>
                     <SelectDropdown
-                      :model-value="meta.province"
-                      :error="showMetaErrors && !meta.province"
-                      :options="provinceOptions"
+                      :model-value="meta.subject"
+                      :disabled="!meta.educationLevel"
+                      :error="showMetaErrors && !meta.subject"
+                      :options="subjectOptions"
                       searchable
-                      :placeholder="t('teacher.classes.detail.settings.general.metadata_none')"
+                      :placeholder="
+                        meta.educationLevel
+                          ? t('teacher.classes.detail.settings.general.metadata_none')
+                          : t('teacher.classes.detail.settings.general.subject_needs_level')
+                      "
                       :search-placeholder="
                         t('teacher.classes.detail.settings.general.metadata_search')
                       "
-                      @update:model-value="meta.province = String($event)"
+                      @update:model-value="meta.subject = String($event)"
                     />
                   </div>
                 </div>
@@ -137,41 +158,26 @@
                         : t('teacher.classes.create.onboarding.attach_materials')
                     }}
                   </button>
+                  <!-- El tope se avisa antes de elegir archivo: si no, el profe
+                       se entera al fallar la subida. -->
+                  <span v-if="!extractingDocs" class="ml-2 text-xs text-navy-700/50">
+                    {{
+                      t('teacher.classes.create.onboarding.attach_hint', { max: MAX_MATERIAL_MB })
+                    }}
+                  </span>
 
-                  <!-- Archivos subidos: tarjeta con icono coloreado según el formato,
-                       al estilo de los documentos de apoyo de las misiones. -->
+                  <!-- Archivos subidos (ver MaterialChip.vue) -->
                   <div v-if="docSources.length" class="mt-2 flex flex-wrap gap-2">
-                    <div
+                    <MaterialChip
                       v-for="(s, i) in docSources"
                       :key="`${s.name}-${i}`"
-                      class="group inline-flex items-center gap-2.5 rounded-xl border border-border-primary bg-white py-1.5 pl-1.5 pr-2"
-                      :title="s.note || ''"
-                    >
-                      <span
-                        class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg"
-                        :class="docBg(s.kind)"
-                      >
-                        <component :is="docIcon(s.kind)" class="h-5 w-5 text-white" />
-                      </span>
-                      <span class="min-w-0">
-                        <span
-                          class="block max-w-[200px] truncate text-sm font-medium text-navy-700"
-                        >
-                          {{ s.name }}
-                        </span>
-                        <span v-if="s.note" class="block text-xs text-yellow-700"
-                          >⚠️ {{ s.note }}</span
-                        >
-                      </span>
-                      <button
-                        type="button"
-                        class="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full text-navy-700/40 hover:bg-navy-700/5 hover:text-navy-700 transition-colors"
-                        :title="t('teacher.classes.create.onboarding.attach_remove')"
-                        @click="removeMaterial(i)"
-                      >
-                        <XMarkIcon class="h-4 w-4" />
-                      </button>
-                    </div>
+                      :name="s.name"
+                      :kind="s.kind"
+                      :note="s.note"
+                      removable
+                      :remove-label="t('teacher.classes.create.onboarding.attach_remove')"
+                      @remove="removeMaterial(i)"
+                    />
                   </div>
                 </div>
 
@@ -213,7 +219,7 @@
                       >
                         <ExclamationTriangleIcon class="w-8 h-8 text-navy-700/30" />
                         <p class="text-base font-semibold text-navy-700">
-                          No he podido crear la narrativa
+                          {{ t('teacher.classes.create.narrative_error') }}
                         </p>
                         <p class="text-sm text-text-secondary max-w-sm">
                           Puede que el asistente esté saturado ahora mismo. Espera un momento y
@@ -230,9 +236,6 @@
                       </div>
                       <template v-else>
                         <div class="md-rendered" v-html="renderPageMarkdown(plan)" />
-                        <div v-if="!isStreaming && plan" class="mt-2 flex justify-end">
-                          <AIProviderBadge :provider="planProvider" />
-                        </div>
                       </template>
                     </div>
                     <div v-if="!loading && plan && showNarrativeFeedback" class="onb-feedback">
@@ -269,7 +272,7 @@
                       }}</Button>
                       <div v-if="!showNarrativeFeedback" class="flex gap-2">
                         <Button variant="outline" size="sm" @click="edit"
-                          ><PencilSquareIcon class="w-4 h-4 mr-1.5" />Editar a mano</Button
+                          ><PencilSquareIcon class="w-4 h-4 mr-1.5" />{{ t('teacher.classes.create.onboarding.btn_edit_by_hand') }}</Button
                         >
                         <Button variant="outline" size="sm" @click="openNarrativeFeedback">
                           <SparklesIcon class="w-4 h-4 mr-1.5" />{{
@@ -396,33 +399,31 @@
                 </template>
               </div>
 
-              <!-- ===== STEP 3: Schedule ===== -->
-              <!-- ===== STEP 3: Horario + Portada ===== -->
+              <!-- ===== STEP 4: Horario ===== -->
               <div v-else-if="step === 3" key="s3" class="flex-1 flex flex-col min-h-0">
-                <div
-                  class="grid flex-1 min-h-0 grid-cols-1 gap-6 overflow-y-auto pr-1 lg:grid-cols-2 lg:items-start"
-                >
-                  <!-- Horario -->
-                  <div>
-                    <h3
-                      class="mb-3 text-xs font-semibold uppercase tracking-wide text-text-secondary"
-                    >
-                      {{ t('teacher.schedule.section_schedule') }}
-                    </h3>
-                    <ClassScheduleCalendar v-model="scheduleConfig" />
-                  </div>
+                <div class="flex-1 min-h-0 overflow-y-auto pr-1">
+                  <ClassScheduleCalendar v-model="scheduleConfig" />
+                </div>
+                <div class="onb-actions">
+                  <Button variant="outline" size="sm" @click="step = 2">{{
+                    t('teacher.classes.create.onboarding.btn_back')
+                  }}</Button>
+                  <Button variant="primary" size="sm" @click="step = 4">{{
+                    t('teacher.classes.create.onboarding.btn_next')
+                  }}</Button>
+                </div>
+              </div>
 
-                  <!-- Portada -->
-                  <div>
-                    <h3
-                      class="mb-3 text-xs font-semibold uppercase tracking-wide text-text-secondary"
-                    >
-                      {{ t('teacher.schedule.section_cover') }}
-                    </h3>
-                    <div class="flex flex-col items-center justify-center gap-3">
+              <!-- ===== STEP 5: Portada ===== -->
+              <div v-else-if="step === 4" key="s4" class="flex-1 flex flex-col min-h-0">
+                <!-- `m-auto` en vez de justify-center: centra en los dos ejes y, si el
+                     contenido crece más que el hueco, no recorta la parte de arriba. -->
+                <div class="flex flex-1 min-h-0 overflow-y-auto pr-1">
+                  <div class="m-auto w-full max-w-2xl py-4">
+                    <div class="flex flex-col items-center gap-3">
                       <div
                         v-if="isGeneratingImage && !generatedImageUrl"
-                        class="w-full max-w-md flex flex-col items-center gap-3"
+                        class="w-full flex flex-col items-center gap-3"
                       >
                         <div
                           class="w-full aspect-video rounded-2xl bg-gray-100 animate-pulse flex items-center justify-center"
@@ -440,12 +441,9 @@
                           :remaining-label="remainingTimeLabel"
                         />
                       </div>
-                      <div v-else-if="generatedImageUrl" class="w-full max-w-md">
+                      <div v-else-if="generatedImageUrl" class="w-full">
                         <div class="relative aspect-video rounded-2xl overflow-hidden shadow-lg">
                           <img :src="resolvedImageUrl" alt="" class="w-full h-full object-cover" />
-                        </div>
-                        <div v-if="coverProvider" class="mt-2 flex justify-end">
-                          <AIProviderBadge :provider="coverProvider" />
                         </div>
                         <!-- Acciones de la portada, justo bajo la imagen generada -->
                         <div
@@ -463,7 +461,7 @@
                       </div>
                       <div
                         v-else-if="imageGenerationFailed"
-                        class="flex flex-col items-center gap-4 text-text-secondary"
+                        class="flex w-full flex-col items-center gap-4 text-text-secondary"
                       >
                         <PhotoIcon class="w-12 h-12 opacity-40" />
                         <p class="text-sm">
@@ -511,22 +509,22 @@
                   </button>
                 </div>
                 <div v-if="!isGeneratingImage && !showImageFeedback" class="onb-actions">
-                  <Button variant="outline" size="sm" @click="step = 2">{{
+                  <Button variant="outline" size="sm" @click="step = 3">{{
                     t('teacher.classes.create.onboarding.btn_back')
                   }}</Button>
-                  <Button variant="primary" size="sm" @click="step = 4">{{
+                  <Button variant="primary" size="sm" @click="step = 5">{{
                     t('teacher.classes.create.onboarding.btn_accept_plan')
                   }}</Button>
                 </div>
                 <div v-else-if="!isGeneratingImage && showImageFeedback" class="onb-actions">
-                  <Button variant="outline" size="sm" @click="step = 2">{{
+                  <Button variant="outline" size="sm" @click="step = 3">{{
                     t('teacher.classes.create.onboarding.btn_back')
                   }}</Button>
                 </div>
               </div>
 
               <!-- ===== STEP 5: Guide ===== -->
-              <div v-else-if="step === 4" key="s4" class="flex-1 flex flex-col min-h-0">
+              <div v-else-if="step === 5" key="s5" class="flex-1 flex flex-col min-h-0">
                 <EditableMarkdown
                   v-model="guideContent"
                   :god-name="god.name"
@@ -558,9 +556,6 @@
                       </div>
                       <template v-else>
                         <div class="md-rendered" v-html="renderPageMarkdown(guideContent)" />
-                        <div v-if="!isStreaming && guideContent" class="mt-2 flex justify-end">
-                          <AIProviderBadge :provider="guideProvider" />
-                        </div>
                       </template>
                     </div>
                     <div
@@ -598,12 +593,12 @@
                       "
                       class="onb-actions"
                     >
-                      <Button variant="outline" size="sm" @click="step = 3">{{
+                      <Button variant="outline" size="sm" @click="step = 4">{{
                         t('teacher.classes.create.onboarding.btn_back')
                       }}</Button>
                       <div class="flex gap-2">
                         <Button variant="outline" size="sm" @click="edit"
-                          ><PencilSquareIcon class="w-4 h-4 mr-1.5" />Editar a mano</Button
+                          ><PencilSquareIcon class="w-4 h-4 mr-1.5" />{{ t('teacher.classes.create.onboarding.btn_edit_by_hand') }}</Button
                         >
                         <Button variant="outline" size="sm" @click="openGuideFeedback">
                           <SparklesIcon class="w-4 h-4 mr-1.5" />{{
@@ -619,7 +614,7 @@
                       </div>
                     </div>
                     <div v-else-if="!isGeneratingGuide && showGuideFeedback" class="onb-actions">
-                      <Button variant="outline" size="sm" @click="step = 3">{{
+                      <Button variant="outline" size="sm" @click="step = 4">{{
                         t('teacher.classes.create.onboarding.btn_back')
                       }}</Button>
                     </div>
@@ -631,30 +626,61 @@
       </div>
     </div>
 
-    <!-- PREVIEW -->
-    <div v-else class="flex-1 overflow-y-auto px-4 sm:px-8 py-6">
-      <div class="max-w-4xl mx-auto">
+    <!-- PREVIEW: mismo ancho que los pasos del wizard (sin caja centrada). -->
+    <div v-else class="flex-1 overflow-y-auto px-4 md:px-6 py-4">
+      <div class="w-full">
         <!-- Preview label -->
         <p class="text-sm font-medium text-text-secondary mb-4 text-center">
           {{ t('teacher.classes.create.preview_label') }}
         </p>
 
-        <!-- Class card preview -->
-        <div class="pointer-events-none">
-          <ClassCard
-            :icon="BookOpenIcon"
-            :name="form.name"
-            :schedule="form.schedule"
-            :background-image="resolvedImageUrl || form.backgroundImage"
-            :missions-count="0"
+        <!-- Maqueta de la clase ya creada: la misma cabecera y las pestañas
+             de Historia y Guía, con lo que se ha ido rellenando en el wizard.
+             Ver CreationSummary.vue. -->
+        <CreationSummary
+          v-model="previewTab"
+          :title="form.name"
+          :cover-image="resolvedImageUrl || form.backgroundImage"
+          :schedule="form.schedule"
+          :chips="summaryChips"
+          :tabs="previewTabs"
+        >
+          <!-- Título y portada se cambian volviendo a su paso del wizard. -->
+          <template #actions>
+            <button type="button" class="summary-hero-btn" @click="backToStep(2)">
+              <PencilSquareIcon class="h-4 w-4" />{{
+                t('teacher.classes.create.summary.edit_title')
+              }}
+            </button>
+            <button type="button" class="summary-hero-btn" @click="backToStep(4)">
+              <PhotoIcon class="h-4 w-4" />{{ t('teacher.classes.create.summary.edit_cover') }}
+            </button>
+          </template>
+
+          <!-- Contenido de la pestaña activa, tal cual se verá en la clase. -->
+          <div class="flex justify-end">
+            <button
+              type="button"
+              class="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-sm font-medium text-navy-700/70 transition-colors hover:bg-navy-700/5 hover:text-navy-700"
+              @click="backToStep(previewTab === 'guia' ? 5 : 1)"
+            >
+              <PencilSquareIcon class="h-4 w-4" />{{ t('teacher.classes.create.summary.edit') }}
+            </button>
+          </div>
+          <div
+            class="md-rendered"
+            v-html="renderPageMarkdown(previewTab === 'guia' ? guideContent : plan)"
           />
-        </div>
+        </CreationSummary>
 
         <!-- Error -->
         <p v-if="errors.name" class="text-sm text-red-600 mt-3 text-center">{{ errors.name }}</p>
 
-        <!-- Actions -->
-        <div class="flex justify-center gap-3 mt-6">
+        <!-- Actions: pegadas abajo para que "Crear Clase" quede siempre a mano
+             por largo que sea el resumen. -->
+        <div
+          class="sticky bottom-0 mt-4 flex justify-center gap-3 border-t border-gray-100 bg-bg-primary py-3"
+        >
           <Button variant="outline" @click="showForm = false">{{
             t('teacher.classes.create.onboarding.btn_back')
           }}</Button>
@@ -755,17 +781,27 @@ import {
   BookOpenIcon,
   ArrowPathIcon,
   ArrowUpTrayIcon,
-  DocumentTextIcon,
-  DocumentIcon,
+  LanguageIcon,
+  MapPinIcon,
 } from '@heroicons/vue/24/outline'
-import { renderPageMarkdown } from '~/utils/markdown'
-import { emptyScheduleConfig, type ScheduleConfig } from '~/types/schedule.types'
 import {
-  CLASS_SUBJECTS,
+  BookOpenIcon as BookOpenIconSolid,
+  SparklesIcon as SparklesIconSolid,
+} from '@heroicons/vue/24/solid'
+import type { Component } from 'vue'
+import { renderPageMarkdown } from '~/utils/markdown'
+import {
+  emptyScheduleConfig,
+  scheduleSlotHasContent,
+  type ScheduleConfig,
+} from '~/types/schedule.types'
+import {
+  subjectsForLevel,
   CLASS_EDUCATION_LEVELS,
   CLASS_LANGUAGES,
   SPANISH_PROVINCES,
   CLASS_LANGUAGE_TO_LOCALE,
+  classMetaLine,
 } from '~/utils/class-metadata'
 
 // El confeti se dispara via useEffects() para pasar por los mismos gates
@@ -803,8 +839,9 @@ const currentQuestion = computed(() => {
     }),
     t('teacher.classes.create.onboarding.review_approach'),
     t('teacher.classes.create.onboarding.pick_title'),
-    t('teacher.schedule.wizard_question'),
-    'He preparado una guía para tus alumnos',
+    t('teacher.schedule.wizard_question_schedule'),
+    t('teacher.schedule.wizard_question_cover'),
+    t('teacher.classes.create.onboarding.guide_question'),
   ]
   return questions[step.value] || ''
 })
@@ -837,8 +874,19 @@ const noneOption = computed(() => ({
   label: t('teacher.classes.detail.settings.general.metadata_none'),
 }))
 const languageOptions = CLASS_LANGUAGES
-const subjectOptions = computed(() => [noneOption.value, ...CLASS_SUBJECTS])
+// La asignatura depende del nivel: cada nivel tiene su propio catálogo.
+const subjectOptions = computed(() => [noneOption.value, ...subjectsForLevel(meta.educationLevel)])
 const educationLevelOptions = computed(() => [noneOption.value, ...CLASS_EDUCATION_LEVELS])
+
+// Al cambiar el nivel, una asignatura del catálogo anterior deja de ser válida.
+watch(
+  () => meta.educationLevel,
+  () => {
+    if (meta.subject && !subjectsForLevel(meta.educationLevel).some(o => o.value === meta.subject)) {
+      meta.subject = ''
+    }
+  }
+)
 const provinceOptions = computed(() => [noneOption.value, ...SPANISH_PROVINCES])
 
 // Los metadatos son obligatorios para poder empezar a crear la clase.
@@ -853,11 +901,14 @@ const plan = ref('')
 // Cuando la IA no consigue generar la narrativa (p. ej. rate limit), mostramos un
 // estado de error con reintento en vez de volcar la idea como si fuera narrativa.
 const planGenerationFailed = ref(false)
+// Idea + materiales con los que se generó la narrativa actual, para saber si hay
+// que rehacerla al volver a pasar por el primer paso.
+const generatedFromContext = ref('')
 const titles = ref<string[]>([])
 const selectedTitle = ref('')
 const customTitle = ref('')
 const chosenTitle = computed(() => customTitle.value.trim() || selectedTitle.value)
-const scheduleConfig = ref<ScheduleConfig>(emptyScheduleConfig())
+const scheduleConfig = ref<ScheduleConfig[]>([emptyScheduleConfig()])
 // Texto legible derivado del patrón semanal (para el campo `schedule` y las tarjetas).
 const { scheduleText: schedule } = useClassCalendar(scheduleConfig)
 const generatedImageUrl = ref('')
@@ -913,28 +964,29 @@ function removeMaterial(index: number) {
   docSources.value = docSources.value.filter((_, i) => i !== index)
 }
 
-// Icono + color del cuadradito según el tipo de archivo (mismo criterio visual
-// que los "documentos de apoyo" de las misiones).
-function docIcon(kind: string) {
-  if (kind === 'image') return PhotoIcon
-  if (kind === 'word') return DocumentIcon
-  return DocumentTextIcon // pdf, text y fallback
-}
-function docBg(kind: string) {
-  const map: Record<string, string> = {
-    pdf: 'bg-red-500',
-    word: 'bg-blue-500',
-    image: 'bg-green-500',
-    text: 'bg-navy-700',
-  }
-  return map[kind] || 'bg-gray-400' // unsupported / desconocido
-}
+// Tope por archivo. Va por debajo del límite del proxy y del API (50MB) para
+// que el profe vea un aviso claro en vez de un 413 opaco a mitad de subida.
+// Estos materiales no se guardan en disco: se leen en memoria y solo se queda
+// el texto extraído (8.000 caracteres por archivo), así que no compensa
+// aceptar ficheros enormes.
+const MAX_MATERIAL_MB = 15
 
 async function handleMaterialsUpload(event: Event) {
   const input = event.target as HTMLInputElement
   const files = Array.from(input.files || [])
   input.value = ''
   if (!files.length) return
+  const tooBig = files.find(f => f.size > MAX_MATERIAL_MB * 1024 * 1024)
+  if (tooBig) {
+    toast.error(
+      t('teacher.classes.create.onboarding.attach_error_size', {
+        name: tooBig.name,
+        size: (tooBig.size / (1024 * 1024)).toFixed(1),
+        max: MAX_MATERIAL_MB,
+      })
+    )
+    return
+  }
   extractingDocs.value = true
   try {
     const fd = new FormData()
@@ -945,8 +997,15 @@ async function handleMaterialsUpload(event: Event) {
       { method: 'POST', body: fd }
     )
     docSources.value = [...docSources.value, ...res.sources]
-  } catch {
-    toast.error(t('teacher.classes.create.onboarding.attach_error'))
+  } catch (err: unknown) {
+    // 413: el conjunto pasa del límite del proxy aunque cada archivo entre.
+    const status = (err as { response?: { status?: number }; statusCode?: number })?.response
+      ?.status ?? (err as { statusCode?: number })?.statusCode
+    toast.error(
+      status === 413
+        ? t('teacher.classes.create.onboarding.attach_error_too_large', { max: MAX_MATERIAL_MB })
+        : t('teacher.classes.create.onboarding.attach_error')
+    )
   } finally {
     extractingDocs.value = false
   }
@@ -956,6 +1015,13 @@ async function handleMaterialsUpload(event: Event) {
 function ideaWithMaterials() {
   if (!docsContext.value) return idea.value
   return `${idea.value}\n\nMateriales de referencia del profesor:\n${docsContext.value.slice(0, 4000)}`
+}
+
+// Huella de todo lo que alimenta la narrativa, para saber si hay que regenerarla al
+// volver al paso 0. Incluye los metadatos porque ahora también entran en el prompt:
+// si el profe cambia de asignatura o de nivel, la narrativa anterior ya no vale.
+function narrativeContextKey() {
+  return `${ideaWithMaterials()}\n${metaContextLine.value}`
 }
 
 // Let the teacher use their own cover instead of (or after) the AI one. The
@@ -981,7 +1047,6 @@ function handleCoverUpload(event: Event) {
     const dataUrl = e.target?.result as string
     generatedImageUrl.value = dataUrl
     rawImagePath.value = dataUrl
-    coverProvider.value = null
     imageGenerationFailed.value = false
     showImageFeedback.value = false
   }
@@ -989,29 +1054,91 @@ function handleCoverUpload(event: Event) {
   input.value = ''
 }
 
+// Metadatos legibles (asignatura y nivel) para que la IA sepa realmente de qué va
+// la clase. El nivel es contexto, NO para meterlo en el nombre.
+const metaContextLine = computed(() => classMetaLine(meta))
+
+// Contexto completo de la clase, con presupuesto POR BLOQUE. Antes los materiales
+// (hasta 4000 caracteres) iban los últimos y quien llamaba recortaba el resultado a
+// 1500: en cuanto el profesor subía materiales, el recorte se comía la narrativa y
+// los metadatos que se concatenaban después, y los títulos se sugerían sin ellos.
+// Ahora lo corto va primero y los materiales se quedan con lo que sobra.
 function buildContext() {
-  const parts = [`Idea: ${idea.value}`]
-  if (plan.value) parts.push(`Plan: ${plan.value.slice(0, 500)}`)
-  if (chosenTitle.value) parts.push(`Titulo: ${chosenTitle.value}`)
-  if (docsContext.value) parts.push(`Materiales del profesor:\n${docsContext.value.slice(0, 4000)}`)
-  return parts.join('\n')
+  const parts = [`Idea: ${idea.value.slice(0, 600)}`]
+  if (metaContextLine.value) parts.push(metaContextLine.value)
+  if (plan.value) parts.push(`Narrativa: ${plan.value.slice(0, 500)}`)
+  if (chosenTitle.value) parts.push(`Titulo: ${chosenTitle.value.slice(0, 100)}`)
+  if (docsContext.value) parts.push(`Materiales del profesor:\n${docsContext.value.slice(0, 600)}`)
+  // Tope de seguridad: la ruta de títulos acepta como mucho 2000 caracteres.
+  return parts.join('\n').slice(0, 2000)
 }
 
-// Metadatos legibles (asignatura y nivel) para que la IA sepa realmente de qué va
-// la clase al sugerir títulos. El nivel es contexto, NO para meterlo en el nombre.
-const metaContextLine = computed(() => {
-  const subj = subjectOptions.value.find(o => o.value === meta.subject)?.label
-  const lvl = educationLevelOptions.value.find(o => o.value === meta.educationLevel)?.label
-  const parts: string[] = []
-  if (meta.subject && subj) parts.push(`Asignatura: ${subj}`)
-  if (meta.educationLevel && lvl) parts.push(`Nivel educativo: ${lvl}`)
-  return parts.join(' | ')
+// Brief del profesor: sus palabras literales del paso 0 más los metadatos. Va en
+// TODAS las llamadas a la IA del asistente, no solo en las primeras. Antes cada
+// paso se fiaba de que la narrativa hubiera recogido lo que pidió, y detalles como
+// "es un proyecto individual" se perdían por el camino: la guía acababa proponiendo
+// trabajo en equipo. El backend lo antepone a la narrativa (ver teacherBriefBlock).
+function aiBrief() {
+  // 1200 es lo que aprovecha teacherBriefBlock, y el textarea de la idea no tiene
+  // tope: sin este recorte una idea muy larga se pasaría del máximo que acepta la
+  // ruta de títulos y la tumbaría con un 400.
+  return { brief: idea.value.slice(0, 1200), meta: metaContextLine.value }
+}
+
+// Etiquetas legibles de los metadatos para el resumen final. Se resuelven desde
+// las mismas listas que alimentan los selects, así el chip dice "1º ESO" y no el
+// código que se guarda.
+const summaryChips = computed(() => {
+  const labelOf = (options: Array<{ value: string; label: string }>, value: string) =>
+    options.find(o => o.value === value)?.label
+  const chips: Array<{ label: string; icon: Component }> = []
+  const subject = meta.subject && labelOf(subjectOptions.value, meta.subject)
+  const level = meta.educationLevel && labelOf(educationLevelOptions.value, meta.educationLevel)
+  const language = meta.language && labelOf(languageOptions, meta.language)
+  const province = meta.province && labelOf(provinceOptions.value, meta.province)
+  // El nivel va delante de la asignatura, igual que en los filtros y en las
+  // plantillas: primero para quién es la clase y luego de qué va.
+  if (level) chips.push({ label: level, icon: AcademicCapIcon })
+  if (subject) chips.push({ label: subject, icon: BookOpenIcon })
+  if (language) chips.push({ label: language, icon: LanguageIcon })
+  if (province) chips.push({ label: province, icon: MapPinIcon })
+  return chips
+})
+
+// Pestañas de la maqueta final: solo las que el wizard ha rellenado, con las
+// mismas etiquetas e iconos que la vista real de la clase.
+const previewTab = ref('historia')
+const previewTabs = computed(() =>
+  [
+    {
+      id: 'historia',
+      label: t('teacher.classes.detail.tabs.narrative'),
+      icon: BookOpenIconSolid,
+      has: !!plan.value.trim(),
+    },
+    {
+      id: 'guia',
+      label: t('teacher.classes.detail.tabs.guide'),
+      icon: SparklesIconSolid,
+      has: !!guideContent.value.trim(),
+    },
+  ].filter(tab => tab.has)
+)
+// Si la pestaña activa se queda sin contenido (p. ej. al saltarse la guía),
+// caemos en la primera que sí lo tenga.
+watch(previewTabs, tabs => {
+  if (tabs.length && !tabs.some(tab => tab.id === previewTab.value)) {
+    previewTab.value = tabs[0]!.id
+  }
 })
 
 const form = reactive({ name: '', schedule: '', backgroundImage: '' })
 const errors = reactive({ name: '' })
 const isSubmitting = ref(false)
 const showForm = ref(false)
+// Marca que el wizard ya llegó al final una vez: a partir de ahí, volver a un
+// paso es "editar", no rehacer el recorrido.
+const hasReachedSummary = ref(false)
 const showSuccessModal = ref(false)
 const createdClassName = ref('')
 const createdInviteCode = ref('')
@@ -1041,7 +1168,6 @@ function cleanAIText(text: string) {
 const {
   streamPrompt,
   callPrompt,
-  lastProvider,
   generationProgress,
   waitingForFirstChunk,
   isOvertime,
@@ -1050,16 +1176,19 @@ const {
   startProgress,
   stopProgress,
 } = useAIPrompt()
-type AIProviderName = 'spark' | 'gemini' | 'flux' | null
-const planProvider = ref<AIProviderName>(null)
-const coverProvider = ref<AIProviderName>(null)
-const guideProvider = ref<AIProviderName>(null)
 
 async function submitIdea() {
   if (!idea.value.trim() || loading.value) return
   // Metadatos obligatorios: si faltan, resaltamos en rojo los selects vacíos y no avanzamos.
   if (!metaComplete.value) {
     showMetaErrors.value = true
+    return
+  }
+  // Volver atrás a retocar algo no puede costar la narrativa: si ya hay una y ni
+  // la idea ni los materiales han cambiado, se avanza sin regenerar nada. Para
+  // rehacerla está el "quiero cambiar algo" del propio paso.
+  if (plan.value.trim() && narrativeContextKey() === generatedFromContext.value) {
+    step.value = 1
     return
   }
   step.value = 1
@@ -1070,14 +1199,15 @@ async function submitIdea() {
   try {
     loading.value = false
     isStreaming.value = true
+    const context = ideaWithMaterials()
     await streamPrompt(
       'class.narrative.generate',
-      { idea: ideaWithMaterials() },
+      { idea: context, ...aiBrief() },
       plan,
       classLocale.value
     )
     plan.value = cleanAIText(plan.value).slice(0, 8000)
-    planProvider.value = lastProvider.value
+    generatedFromContext.value = narrativeContextKey()
   } catch {
     planGenerationFailed.value = true
   } finally {
@@ -1100,12 +1230,14 @@ async function regeneratePlan() {
     isStreaming.value = true
     await streamPrompt(
       'class.narrative.modify',
-      { idea: idea.value, current: previousPlan.slice(0, 800), feedback: fb },
+      // ideaWithMaterials y no idea a secas: al regenerar también hacen falta los
+      // materiales que subió el profesor, si no la IA los pierde en cuanto pulsa
+      // "quiero cambiar algo".
+      { idea: ideaWithMaterials(), current: previousPlan.slice(0, 800), feedback: fb, ...aiBrief() },
       plan,
       classLocale.value
     )
     plan.value = cleanAIText(plan.value).slice(0, 8000)
-    planProvider.value = lastProvider.value
   } catch {
     // Si la regeneración falla, no perdemos la narrativa que ya había.
     plan.value = previousPlan
@@ -1118,6 +1250,9 @@ async function regeneratePlan() {
 // Step 1 → 2: Accept plan, generate titles + description
 async function acceptPlan() {
   step.value = 2
+  // Si ya se sugirieron títulos, no se vuelven a pedir: cambiarían bajo los pies
+  // del profe y perdería el que tenía elegido.
+  if (titles.value.length) return
   loading.value = true
   const est = await fetchEstimate('chat')
   startProgress(est)
@@ -1129,9 +1264,9 @@ async function acceptPlan() {
         method: 'POST',
         body: {
           locale: classLocale.value,
-          context: `${ctx}\nNarrativa: ${plan.value.slice(0, 500)}${
-            metaContextLine.value ? `\n${metaContextLine.value}` : ''
-          }`.slice(0, 1500),
+          ...aiBrief(),
+          // buildContext ya trae narrativa y metadatos con su propio presupuesto.
+          context: ctx,
         },
       }
     ).catch(() => null)
@@ -1160,9 +1295,9 @@ async function regenerateTitlesWithFeedback() {
         method: 'POST',
         body: {
           locale: classLocale.value,
-          context: `${ctx}\nNarrativa: ${plan.value.slice(0, 500)}${
-            metaContextLine.value ? `\n${metaContextLine.value}` : ''
-          }`.slice(0, 1500),
+          ...aiBrief(),
+          // buildContext ya trae narrativa y metadatos con su propio presupuesto.
+          context: ctx,
           feedback: fb,
         },
       }
@@ -1197,12 +1332,16 @@ async function generateCover(extraPrompt?: string) {
           {
             method: 'POST',
             headers: { Authorization: `Bearer ${authStore.tokens?.accessToken}` },
-            body: { name: chosenTitle.value, description, locale: classLocale.value },
+            body: {
+              name: chosenTitle.value,
+              description,
+              locale: classLocale.value,
+              audience: meta.educationLevel || '',
+            },
           }
         )
         rawImagePath.value = res.imageUrl
         generatedImageUrl.value = res.imageUrl
-        if (res.provider) coverProvider.value = res.provider as AIProviderName
         return
       } catch (err) {
         stopProgress()
@@ -1230,7 +1369,7 @@ async function regenerateCover() {
 
 // Step 5: Guide generation
 watch(step, s => {
-  if (s === 4 && !guideContent.value && !isGeneratingGuide.value) generateGuide()
+  if (s === 5 && !guideContent.value && !isGeneratingGuide.value) generateGuide()
 })
 
 async function generateGuide(extraPrompt?: string) {
@@ -1239,16 +1378,19 @@ async function generateGuide(extraPrompt?: string) {
   guideGenerationFailed.value = false
   guideContent.value = ''
   try {
-    const ctx = `Clase: ${chosenTitle.value}\nNarrativa: ${plan.value.slice(0, 600)}\nHorario: ${schedule.value || 'No especificado'}`
+    // extraPrompt es el "quiero cambiar algo" del profesor: llegaba hasta aquí y se
+    // quedaba sin usar, así que regenerar la guía devolvía otra vez lo mismo.
+    const ctx = `Clase: ${chosenTitle.value}\nNarrativa: ${plan.value.slice(0, 600)}\nHorario: ${schedule.value || 'No especificado'}${
+      extraPrompt ? `\nEl profesor pide sobre la guía: ${extraPrompt}` : ''
+    }`
     isGeneratingGuide.value = false
     isStreaming.value = true
     await streamPrompt(
       'class.guide.generate',
-      { title: chosenTitle.value, context: ctx },
+      { title: chosenTitle.value, context: ctx, ...aiBrief() },
       guideContent,
       classLocale.value
     )
-    guideProvider.value = lastProvider.value
     guideContent.value = guideContent.value
       .replace(/^(Aqui tienes|Claro|Por supuesto)[^.]*[.:]\s*/i, '')
       .trim()
@@ -1308,10 +1450,18 @@ function skipGuide() {
   finishWizard()
 }
 
+// Desde el resumen se puede volver a cualquier paso a retocar algo; al pulsar
+// "Sí, adelante" de nuevo el wizard vuelve a dejarte aquí con lo actualizado.
+function backToStep(target: number) {
+  showForm.value = false
+  step.value = target
+}
+
 function finishWizard() {
   form.name = chosenTitle.value
   form.schedule = schedule.value
   form.backgroundImage = generatedImageUrl.value
+  hasReachedSummary.value = true
   showForm.value = true
 }
 
@@ -1359,9 +1509,10 @@ async function handleSubmit() {
       }
     }
     // Guardar la configuración de horario si el profe la rellenó (no bloquea el alta).
-    if (res.class.id && (scheduleConfig.value.weekdays.length || scheduleConfig.value.startDate)) {
+    const filledSlots = scheduleConfig.value.filter(scheduleSlotHasContent)
+    if (res.class.id && filledSlots.length) {
       try {
-        await classesStore.updateClass(res.class.id, { scheduleConfig: scheduleConfig.value })
+        await classesStore.updateClass(res.class.id, { scheduleConfig: filledSlots })
       } catch {
         /* schedule save failed silently - teacher can edit later */
       }

@@ -69,7 +69,25 @@ export interface DomainSettings {
 
 // ──────────────────────────── Generales ────────────────────────────
 
-export type AppLanguage = 'es' | 'en' | 'ca' | 'eu' | 'gl'
+/**
+ * Idiomas de interfaz soportados. Debe ir en paralelo con
+ * `app/app/utils/app-languages.ts` del frontend: si el front ofrece un idioma
+ * que no está aquí, guardar la preferencia devuelve 400.
+ */
+export const APP_LANGUAGES = [
+  'es',
+  'en',
+  'ca',
+  'val',
+  'eu',
+  'gl',
+  'ast',
+  'pt',
+  'el',
+  'ro',
+] as const
+
+export type AppLanguage = (typeof APP_LANGUAGES)[number]
 
 export interface GeneralSettings {
   platformName: string

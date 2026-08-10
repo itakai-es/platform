@@ -1,8 +1,9 @@
-import type { UserPreferences } from '~/types/profile.types'
+import { APP_LANGUAGE_CODES } from '~/utils/app-languages'
+import type { AppLanguage } from '~/utils/app-languages'
 
-type SupportedLocale = UserPreferences['language']
+type SupportedLocale = AppLanguage
 
-const SUPPORTED_LOCALES: SupportedLocale[] = ['es', 'en', 'ca', 'eu', 'gl']
+const SUPPORTED_LOCALES: SupportedLocale[] = APP_LANGUAGE_CODES
 const STORAGE_KEY = 'itakai_language'
 const COOKIE_KEY = 'itakai_lang'
 

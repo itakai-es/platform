@@ -59,11 +59,26 @@
           "confirm": "Duplicate",
           "cancel": "Cancel",
           "items": {
-            "missions": { "label": "Missions", "desc": "The missions and their enigmas" },
-            "narrative": { "label": "Story", "desc": "The narrative and the cover image" },
-            "features": { "label": "Features", "desc": "The class's enabled modules" },
-            "shop": { "label": "Shop", "desc": "The shop items" },
-            "behaviors": { "label": "Behaviors", "desc": "The behavior templates" }
+            "missions": {
+              "label": "Missions",
+              "desc": "The missions and their enigmas"
+            },
+            "narrative": {
+              "label": "Story",
+              "desc": "The narrative and the cover image"
+            },
+            "features": {
+              "label": "Features",
+              "desc": "The class's enabled modules"
+            },
+            "shop": {
+              "label": "Shop",
+              "desc": "The shop items"
+            },
+            "behaviors": {
+              "label": "Behaviors",
+              "desc": "The behavior templates"
+            }
           }
         }
       },
@@ -84,7 +99,14 @@
           "name_min_length": "Name must be at least 3 characters",
           "create_error": "Error creating the class. Please try again."
         },
-        "preview_label": "This is how your class will look",
+        "summary": {
+          "edit": "Edit",
+          "edit_title": "Title",
+          "edit_cover": "Cover",
+          "editing_hint": "You are editing a class that is already finished.",
+          "back_to_summary": "Back to summary"
+        },
+        "preview_label": "This is what you have created",
         "onboarding": {
           "ask_idea": "Hi {name}! I'm {god}. Tell me — what world or theme do you want for your class?",
           "review_approach": "Here's what I've prepared for you, do you like it?",
@@ -93,6 +115,7 @@
           "generating_approach": "I'm creating the narrative for your class...",
           "narrative_feedback_placeholder": "E.g.: I want more Hogwarts house references...",
           "btn_change_something": "I want to change something",
+          "btn_edit_by_hand": "Edit by hand",
           "custom_title_placeholder": "Or write your own title...",
           "title_feedback_placeholder": "E.g.: I want shorter titles, with more Harry Potter references...",
           "generating_cover": "Generating cover...",
@@ -109,11 +132,16 @@
           "attach_materials": "Attach materials (PDF, Word, images)",
           "attach_processing": "Processing materials…",
           "attach_remove": "Remove",
-          "attach_error": "Couldn't process the materials."
+          "attach_error": "Couldn't process the materials.",
+          "attach_hint": "Max. {max} MB per file",
+          "attach_error_size": "«{name}» is {size} MB. The maximum is {max} MB per file.",
+          "attach_error_too_large": "The materials are too large altogether. Upload them one by one (max. {max} MB per file).",
+          "guide_question": "I've prepared a guide for your students"
         },
         "meta": {
           "title": "Create New Class | ITAKAI Teacher"
-        }
+        },
+        "narrative_error": "I couldn't create the narrative"
       },
       "detail": {
         "breadcrumb_classes": "My classes",
@@ -353,6 +381,7 @@
             "province_label": "Province",
             "metadata_none": "Not specified",
             "metadata_search": "Search...",
+            "subject_needs_level": "Choose a level first",
             "publish_title": "Publish as template",
             "publish_hint": "Share it in the marketplace so other teachers can import it.",
             "publish_missing_metadata": "Save subject, level and language before publishing.",
@@ -387,6 +416,11 @@
           "management": {
             "title": "Management"
           }
+        },
+        "badges_empty": "No badges in this class",
+        "join_requests": {
+          "empty_title": "No requests",
+          "empty_description": "There are no pending requests for this class"
         }
       }
     },
@@ -395,12 +429,17 @@
         "meta": {
           "title": "My Missions | ITAKAI Teacher",
           "description": "Manage all your created missions, edit them, or create new ones for your students."
-        }
+        },
+        "subtitle": "Manage your classes' missions"
       },
       "create": {
         "meta": {
           "title": "Create Mission | ITAKAI Teacher"
-        }
+        },
+        "pick_class": "Select a class",
+        "idea_placeholder": "E.g. I want a mission about kinematics where students calculate the trajectories of flying broomsticks...",
+        "narrative_error": "I couldn't create the narrative",
+        "ai_unavailable": "The AI service isn't available right now. Try again in a few minutes."
       },
       "detail": {
         "delete_confirm_btn": "Delete",
@@ -470,7 +509,8 @@
         "btn_cancel": "Cancel",
         "btn_saving": "Saving...",
         "btn_save_changes": "Save changes",
-        "btn_create": "Create badge"
+        "btn_create": "Create badge",
+        "no_mission": "No mission"
       },
       "detail": {
         "btn_edit": "Edit",
@@ -487,7 +527,9 @@
       "meta": {
         "title": "My Badges | ITAKAI Teacher",
         "description": "Create, edit, and manage custom badges to reward your students' achievements."
-      }
+      },
+      "filter_system": "System",
+      "generate_error": "The badge couldn't be generated."
     },
     "students": {
       "index": {
@@ -505,9 +547,13 @@
         "sort_progress_desc": "Highest progress",
         "sort_progress_asc": "Lowest progress",
         "sort_missions_desc": "Most missions",
+        "tab_active": "Active",
+        "tab_archived": "Archived",
         "no_students_title": "No students",
         "no_students_filtered": "No students found with these filters",
         "no_students_default": "There are no students in your classes",
+        "no_archived_students_title": "No archived students",
+        "no_archived_students_default": "There are no students in your archived classes",
         "btn_view": "View",
         "stat_missions": "Missions",
         "meta": {
@@ -590,11 +636,16 @@
         "btn_cancel": "Cancel",
         "btn_delete_confirm": "Delete my account",
         "languages": {
-          "es": "Español",
+          "es": "Castellano",
           "en": "English",
           "ca": "Català",
           "eu": "Euskara",
-          "gl": "Galego"
+          "gl": "Galego",
+          "val": "Valencià",
+          "ast": "Asturianu",
+          "pt": "Português",
+          "el": "Ελληνικά",
+          "ro": "Română"
         }
       },
       "meta": {
@@ -840,8 +891,9 @@
       "starts_on": "Starts on",
       "time": "Time",
       "recurrence": "Repeat",
+      "add_slot": "Add schedule",
+      "remove_slot": "Remove schedule",
       "preview": "Preview",
-      "previous": "Previous schedule",
       "choose_days": "Choose class days",
       "freq_none": "Does not repeat",
       "freq_daily": "Daily",
@@ -868,11 +920,14 @@
       "ends_on": "On",
       "ends_after": "After",
       "repetitions": "occurrences",
-      "section_schedule": "Schedule",
-      "section_cover": "Cover",
-      "wizard_question": "Give your class a schedule and a cover",
       "cancel": "Cancel",
-      "done": "Done"
+      "done": "Done",
+      "wizard_question_schedule": "Set a schedule for your class",
+      "wizard_question_cover": "Now, a cover for your class"
+    },
+    "submissions": {
+      "subtitle": "Review and approve this class's submissions from a single screen.",
+      "back_to_class": "Back to the class"
     }
   }
 }

@@ -65,6 +65,9 @@
       "meta": {
         "title": "Gestión de Usuarios | ITAKAI Admin",
         "description": "Administra todos los usuarios del sistema, crea nuevos perfiles, edita roles y monitorea la actividad."
+      },
+      "sort": {
+        "recent": "Más recientes"
       }
     },
     "schools": {
@@ -115,13 +118,19 @@
       },
       "meta": {
         "title": "Gestión de Clases | ITAKAI Admin"
+      },
+      "sort": {
+        "missions_desc": "Más misiones",
+        "students_desc": "Más alumnos"
       }
     },
     "missions": {
       "title": "Gestión de Misiones",
       "subtitle": "Supervisa todas las misiones del sistema",
       "filters": {
-        "search_placeholder": "Buscar misión..."
+        "search_placeholder": "Buscar misión...",
+        "all_rarities": "Todas las rarezas",
+        "all_statuses": "Todos los estados"
       },
       "empty": {
         "title": "No se encontraron misiones",
@@ -129,6 +138,10 @@
       },
       "meta": {
         "title": "Gestión de Misiones | ITAKAI Admin"
+      },
+      "sort": {
+        "enigmas_desc": "Más enigmas",
+        "xp_desc": "Más XP"
       }
     },
     "analytics": {

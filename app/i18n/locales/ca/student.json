@@ -28,7 +28,10 @@
         "message_new_user": "Hola {name}! Benvingut a ITAKAI. Completa la teva primera missió per començar a guanyar XP!",
         "message_returning_user": "Hola {name}! Has completat {missions_completed} missions a {classes_enrolled} classes. Continua així!"
       },
-      "class_fallback_name": "Classe"
+      "class_fallback_name": "Classe",
+      "recent_badges_empty": "No hi ha insígnies recents",
+      "recent_topics_empty": "No hi ha temes recents",
+      "upcoming_dates_empty": "No hi ha dates properes"
     },
     "missions": {
       "meta": {
@@ -242,7 +245,22 @@
       "meta": {
         "title": "Ranquing | ITAKAI",
         "description": "El ranquing d'estudiants està disponible dins de cada classe."
-      }
+      },
+      "page_title": "Classificació",
+      "page_subtitle": "Consulta el rànquing global i compara el teu progrés amb la resta d'estudiants.",
+      "pick_class": "Selecciona una classe",
+      "friends_soon_title": "Rànquing d'amics pròximament",
+      "friends_soon_description": "La part social encara no està connectada. Mentrestant, pots fer servir el rànquing global o el de les teves classes.",
+      "choose_class_title": "Tria una classe",
+      "choose_class_description": "Selecciona una classe per veure la teva posició i el rànquing intern.",
+      "empty_class_title": "No hi ha rànquing disponible",
+      "empty_class_description": "Encara no hi ha prou dades per construir el rànquing d'aquesta classe.",
+      "empty_global_title": "No hi ha dades de rànquing",
+      "empty_global_description": "Encara no hi ha prou activitat per mostrar una classificació global.",
+      "global_podium": "Podi global",
+      "your_position": "La teva posició",
+      "rest": "Resta de la classificació",
+      "by_class": "Per classe"
     },
     "ai_assistant": {
       "meta": {
@@ -307,11 +325,16 @@
         "password_required": "Introdueix la teva contrasenya"
       },
       "languages": {
-        "es": "Espanyol",
+        "es": "Castellà",
         "en": "English",
         "ca": "Català",
         "eu": "Euskara",
-        "gl": "Galego"
+        "gl": "Galego",
+        "val": "Valencià",
+        "ast": "Asturià",
+        "pt": "Portuguès",
+        "el": "Grec",
+        "ro": "Romanès"
       }
     },
     "components": {
