@@ -13,6 +13,32 @@ const DEFAULT_SPARK_ROUTER_IMAGE_MODEL = 'black-forest-labs/flux.2-klein-4b'
 const DEFAULT_TEXT_TIMEOUT_MS = 60_000
 const DEFAULT_IMAGE_TIMEOUT_MS = 90_000
 
+// ── Sonda de alcanzabilidad con memoria ──────────────────────────────────────
+// El endpoint principal va por VPN: si el otro extremo está caído, las
+// conexiones no se rechazan, se quedan en el aire hasta agotar el timeout
+// (60s texto / 90s imagen) ANTES de caer al respaldo — cada paso del asistente
+// tardaba un minuto extra. La sonda detecta una base inaccesible en ~2s y lo
+// recuerda un minuto, así que las generaciones van directas al respaldo; cuando
+// el endpoint vuelve, se retoma solo en la siguiente ventana.
+const REACH_PROBE_TIMEOUT_MS = 2_500
+const REACH_RETRY_AFTER_MS = 60_000
+const unreachableUntil = new Map<string, number>()
+
+async function isReachable(baseUrl: string): Promise<boolean> {
+  const memo = unreachableUntil.get(baseUrl)
+  if (memo && Date.now() < memo) return false
+  try {
+    // Cualquier respuesta HTTP (aunque sea un 404) demuestra que el host
+    // atiende conexiones; solo el fallo de red o el timeout marcan inaccesible.
+    await fetch(`${baseUrl}/health`, { signal: AbortSignal.timeout(REACH_PROBE_TIMEOUT_MS) })
+    unreachableUntil.delete(baseUrl)
+    return true
+  } catch {
+    unreachableUntil.set(baseUrl, Date.now() + REACH_RETRY_AFTER_MS)
+    return false
+  }
+}
+
 type SparkMessageRole = 'system' | 'user' | 'assistant'
 
 interface SparkChatMessage {
@@ -158,6 +184,12 @@ export class SparkRouterProvider implements AIProvider {
     }
     const { baseUrl, apiKey, model } = (await getAiConfig()).text
 
+    if (this.fallbackProvider && !(await isReachable(baseUrl))) {
+      this.lastUsedProvider = 'gemini'
+      console.warn('[AI] ⚠️ SparkRouter inaccesible (sonda) → texto con el respaldo Google')
+      return this.fallbackProvider.generateText(prompt, options)
+    }
+
     try {
       const payload = await fetchJson<SparkChatCompletionResponse>(
         `${baseUrl}/v1/chat/completions`,
@@ -202,6 +234,13 @@ export class SparkRouterProvider implements AIProvider {
       return
     }
     const { baseUrl, apiKey, model } = (await getAiConfig()).text
+
+    if (this.fallbackProvider && !(await isReachable(baseUrl))) {
+      this.lastUsedProvider = 'gemini'
+      console.warn('[AI] ⚠️ SparkRouter inaccesible (sonda) → stream con el respaldo Google')
+      yield* this.fallbackProvider.generateTextStream(prompt, options)
+      return
+    }
 
     try {
       const response = await fetch(`${baseUrl}/v1/chat/completions`, {
@@ -278,6 +317,12 @@ export class SparkRouterProvider implements AIProvider {
       return this.fallbackProvider.generateImage(prompt, options)
     }
     const { baseUrl, apiKey, model: imageModel } = (await getAiConfig()).image
+
+    if (this.fallbackProvider && !(await isReachable(baseUrl))) {
+      this.lastUsedProvider = 'flux'
+      console.warn('[AI] ⚠️ SparkRouter inaccesible (sonda) → imagen con el respaldo Flux/OpenRouter')
+      return this.fallbackProvider.generateImage(prompt, options)
+    }
 
     try {
       console.log(`[AI] 🎨 Image request → SparkRouter (${options?.type || 'image'}, model: ${imageModel})`)
