@@ -39,6 +39,73 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.2.1',
+    date: '2026-08-10',
+    title: 'Más idiomas, horarios flexibles y un asistente que te escucha',
+    changes: [
+      {
+        type: 'new',
+        text: 'Cinco idiomas nuevos: valencià, asturianu, português, ελληνικά y română. Ya son diez en total.',
+      },
+      {
+        type: 'new',
+        text: 'Configura varios tramos de horario por clase, por ejemplo lunes a primera hora y jueves a última.',
+      },
+      {
+        type: 'new',
+        text: 'Al crear una clase, indica su nivel educativo y su asignatura: las asignaturas se ajustan al nivel que elijas.',
+      },
+      {
+        type: 'new',
+        text: 'El último paso del asistente de creación te enseña una maqueta de cómo va a quedar la clase antes de crearla.',
+      },
+      {
+        type: 'improved',
+        text: 'Los filtros de plantillas se afinan solos: al marcar un nivel educativo solo te ofrecen las asignaturas de ese nivel.',
+      },
+      {
+        type: 'improved',
+        text: 'El asistente de IA tiene en cuenta lo que le pides en TODOS los pasos, no solo en el primero. Si dices que el proyecto es individual, la guía y los enigmas lo respetan.',
+      },
+      {
+        type: 'improved',
+        text: 'El asistente conoce la asignatura y el nivel de la clase al generar, y una misión conoce la historia de la clase en la que vive.',
+      },
+      {
+        type: 'improved',
+        text: 'Ya puedes adjuntar materiales de hasta 50 MB, y se te avisa del límite antes de subirlos.',
+      },
+      {
+        type: 'fixed',
+        text: 'Los enigmas de una misión dejaron de generarse desde la versión anterior. Ya vuelven a funcionar.',
+      },
+      {
+        type: 'fixed',
+        text: 'Al archivar una clase, sus alumnos se archivan con ella. La página de Alumnos tiene ahora dos pestañas, activos y archivados.',
+      },
+      {
+        type: 'fixed',
+        text: 'El botón de "quiero cambiar algo" de las guías no hacía caso a lo que le pedías: volvía a darte lo mismo.',
+      },
+      {
+        type: 'fixed',
+        text: 'Al pedir cambios sobre lo generado se perdían los materiales que habías adjuntado.',
+      },
+      {
+        type: 'fixed',
+        text: 'El nombre de la clase se partía letra a letra en la cabecera.',
+      },
+      {
+        type: 'fixed',
+        text: 'Los botones con textos largos se desbordaban en vez de crecer, y el pie del asistente se aplastaba.',
+      },
+      {
+        type: 'fixed',
+        text: 'Las fechas de la vista previa del horario ahora se leen con claridad.',
+      },
+    ],
+  },
+  {
     version: '0.2.0',
     date: '2026-07-28',
     title: 'Clases más personalizables y a tu medida',
