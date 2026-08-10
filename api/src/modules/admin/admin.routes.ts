@@ -49,13 +49,19 @@ interface SparkHealthResponse {
  * Así funciona con OpenAI, Groq, vLLM, etc., no solo con Spark — el panel no
  * debe decir "down" cuando la generación sí funciona.
  */
-async function probeAiEndpoint(baseUrl: string): Promise<{ status: ServiceStatus; detail: string }> {
-  const url = (baseUrl || DEFAULT_SPARK_ROUTER_BASE_URL).replace(/\/+$/, '')
+async function probeAiEndpoint(
+  baseUrl: string,
+  credentials?: { apiKey: string; model: string }
+): Promise<{ status: ServiceStatus; detail: string }> {
+  // Misma normalización que el proveedor (ver normalizeBaseUrl en spark-router):
+  // la base es el host, así que se quita un `/v1` final si lo hubiera. Sin esto,
+  // una base configurada como `https://host/v1` se probaba en `/v1/v1/models`.
+  const url = (baseUrl || DEFAULT_SPARK_ROUTER_BASE_URL).replace(/\/+$/, '').replace(/\/v1$/, '')
   const start = performance.now()
 
   // 1) Spark /health (detalle rico si es un Spark propio)
   try {
-    const res = await fetch(`${url}/health`, { signal: AbortSignal.timeout(4000) })
+    const res = await fetch(`${url}/health`, { signal: AbortSignal.timeout(2500) })
     if (res.ok) {
       const body = (await res.json().catch(() => null)) as SparkHealthResponse | null
       const ms = Math.round(performance.now() - start)
@@ -71,11 +77,71 @@ async function probeAiEndpoint(baseUrl: string): Promise<{ status: ServiceStatus
 
   // 2) Probe genérico OpenAI-compatible: cualquier respuesta HTTP = servidor vivo
   try {
-    const res = await fetch(`${url}/v1/models`, { signal: AbortSignal.timeout(4000) })
+    const res = await fetch(`${url}/v1/models`, { signal: AbortSignal.timeout(2500) })
     const ms = Math.round(performance.now() - start)
     return { status: 'operational', detail: `Alcanzable (HTTP ${res.status}) · ${ms}ms` }
+  } catch { /* tampoco expone /v1/models → se prueba la llamada real */ }
+
+  // 3) Último recurso: la MISMA llamada que hace el producto, con un token de
+  //    salida. Hay endpoints (el Spark propio, sin ir más lejos) que no publican
+  //    ni /health ni /v1/models y se quedan colgados en esas rutas, así que los
+  //    dos probes anteriores expiran aunque la generación funcione perfectamente.
+  //    Preguntar por lo que de verdad se usa es lo único concluyente.
+  if (credentials) {
+    try {
+      const res = await fetch(`${url}/v1/chat/completions`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${credentials.apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: credentials.model,
+          messages: [{ role: 'user', content: 'ping' }],
+          max_tokens: 1,
+        }),
+        signal: AbortSignal.timeout(8000),
+      })
+      const ms = Math.round(performance.now() - start)
+      // Cualquier respuesta HTTP significa que el endpoint atiende: un 401 o un
+      // 400 son problema de credenciales o de modelo, no de conectividad.
+      return res.ok
+        ? { status: 'operational', detail: `Generación OK · ${ms}ms` }
+        : { status: 'degraded', detail: `Responde con HTTP ${res.status}` }
+    } catch { /* nada responde */ }
+  }
+
+  return { status: 'down', detail: 'No se pudo conectar con el endpoint' }
+}
+
+// Sondas baratas de los RESPALDOS (los mismos que usa el proveedor cuando el
+// endpoint principal falla: Gemini para texto, Flux/OpenRouter para imágenes).
+// Listar modelos no consume tokens; solo demuestra que el respaldo atiende.
+async function probeTextFallback(): Promise<boolean> {
+  const key = process.env.GOOGLE_API_KEY
+  if (!key) return false
+  try {
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models?pageSize=1&key=${key}`,
+      { signal: AbortSignal.timeout(4000) }
+    )
+    return res.ok
   } catch {
-    return { status: 'down', detail: 'No se pudo conectar con el endpoint' }
+    return false
+  }
+}
+
+async function probeImageFallback(): Promise<boolean> {
+  const key = process.env.OPENROUTER_API_KEY
+  if (!key) return false
+  try {
+    const res = await fetch('https://openrouter.ai/api/v1/models', {
+      headers: { Authorization: `Bearer ${key}` },
+      signal: AbortSignal.timeout(4000),
+    })
+    return res.ok
+  } catch {
+    return false
   }
 }
 
@@ -89,8 +155,27 @@ async function checkSparkServices(): Promise<{
   const textBase = ai.text.baseUrl || DEFAULT_SPARK_ROUTER_BASE_URL
   const imageBase = ai.image.baseUrl || DEFAULT_SPARK_ROUTER_BASE_URL
   const start = performance.now()
-  const text = await probeAiEndpoint(textBase)
-  const image = imageBase === textBase ? text : await probeAiEndpoint(imageBase)
+  // Al de texto se le pasan las credenciales para poder probar la generación real
+  // si no expone rutas de descubrimiento. Al de imágenes NO: generar una imagen
+  // como sonda sería lento y costoso. Cuando comparten endpoint —el caso normal—
+  // hereda la conectividad del de texto, que ya es concluyente.
+  let text = await probeAiEndpoint(textBase, {
+    apiKey: ai.text.apiKey,
+    model: ai.text.model,
+  })
+  let image = imageBase === textBase ? text : await probeAiEndpoint(imageBase)
+
+  // Endpoint principal caído ≠ IA caída: el proveedor genera con el respaldo.
+  // El panel debe contar la verdad completa — "degradado, generando con el
+  // respaldo" — porque "down" a secas sugiere que los profesores no pueden
+  // usar la IA cuando sí pueden.
+  if (text.status === 'down' && (await probeTextFallback())) {
+    text = { status: 'degraded', detail: 'Principal caído — generando con el respaldo (Gemini)' }
+  }
+  if (image.status === 'down' && (await probeImageFallback())) {
+    image = { status: 'degraded', detail: 'Principal caído — generando con el respaldo (Flux)' }
+  }
+
   return { text, image, latencyMs: Math.round(performance.now() - start) }
 }
 
