@@ -801,6 +801,7 @@ import {
   CLASS_LANGUAGES,
   SPANISH_PROVINCES,
   CLASS_LANGUAGE_TO_LOCALE,
+  classMetaLine,
 } from '~/utils/class-metadata'
 
 // El confeti se dispara via useEffects() para pasar por los mismos gates
@@ -1016,6 +1017,13 @@ function ideaWithMaterials() {
   return `${idea.value}\n\nMateriales de referencia del profesor:\n${docsContext.value.slice(0, 4000)}`
 }
 
+// Huella de todo lo que alimenta la narrativa, para saber si hay que regenerarla al
+// volver al paso 0. Incluye los metadatos porque ahora también entran en el prompt:
+// si el profe cambia de asignatura o de nivel, la narrativa anterior ya no vale.
+function narrativeContextKey() {
+  return `${ideaWithMaterials()}\n${metaContextLine.value}`
+}
+
 // Let the teacher use their own cover instead of (or after) the AI one. The
 // image is read as a base64 data URL; the backend persists it to /uploads on
 // class creation (see teachers.service saveBase64Image).
@@ -1046,24 +1054,36 @@ function handleCoverUpload(event: Event) {
   input.value = ''
 }
 
+// Metadatos legibles (asignatura y nivel) para que la IA sepa realmente de qué va
+// la clase. El nivel es contexto, NO para meterlo en el nombre.
+const metaContextLine = computed(() => classMetaLine(meta))
+
+// Contexto completo de la clase, con presupuesto POR BLOQUE. Antes los materiales
+// (hasta 4000 caracteres) iban los últimos y quien llamaba recortaba el resultado a
+// 1500: en cuanto el profesor subía materiales, el recorte se comía la narrativa y
+// los metadatos que se concatenaban después, y los títulos se sugerían sin ellos.
+// Ahora lo corto va primero y los materiales se quedan con lo que sobra.
 function buildContext() {
-  const parts = [`Idea: ${idea.value}`]
-  if (plan.value) parts.push(`Plan: ${plan.value.slice(0, 500)}`)
-  if (chosenTitle.value) parts.push(`Titulo: ${chosenTitle.value}`)
-  if (docsContext.value) parts.push(`Materiales del profesor:\n${docsContext.value.slice(0, 4000)}`)
-  return parts.join('\n')
+  const parts = [`Idea: ${idea.value.slice(0, 600)}`]
+  if (metaContextLine.value) parts.push(metaContextLine.value)
+  if (plan.value) parts.push(`Narrativa: ${plan.value.slice(0, 500)}`)
+  if (chosenTitle.value) parts.push(`Titulo: ${chosenTitle.value.slice(0, 100)}`)
+  if (docsContext.value) parts.push(`Materiales del profesor:\n${docsContext.value.slice(0, 600)}`)
+  // Tope de seguridad: la ruta de títulos acepta como mucho 2000 caracteres.
+  return parts.join('\n').slice(0, 2000)
 }
 
-// Metadatos legibles (asignatura y nivel) para que la IA sepa realmente de qué va
-// la clase al sugerir títulos. El nivel es contexto, NO para meterlo en el nombre.
-const metaContextLine = computed(() => {
-  const subj = subjectOptions.value.find(o => o.value === meta.subject)?.label
-  const lvl = educationLevelOptions.value.find(o => o.value === meta.educationLevel)?.label
-  const parts: string[] = []
-  if (meta.subject && subj) parts.push(`Asignatura: ${subj}`)
-  if (meta.educationLevel && lvl) parts.push(`Nivel educativo: ${lvl}`)
-  return parts.join(' | ')
-})
+// Brief del profesor: sus palabras literales del paso 0 más los metadatos. Va en
+// TODAS las llamadas a la IA del asistente, no solo en las primeras. Antes cada
+// paso se fiaba de que la narrativa hubiera recogido lo que pidió, y detalles como
+// "es un proyecto individual" se perdían por el camino: la guía acababa proponiendo
+// trabajo en equipo. El backend lo antepone a la narrativa (ver teacherBriefBlock).
+function aiBrief() {
+  // 1200 es lo que aprovecha teacherBriefBlock, y el textarea de la idea no tiene
+  // tope: sin este recorte una idea muy larga se pasaría del máximo que acepta la
+  // ruta de títulos y la tumbaría con un 400.
+  return { brief: idea.value.slice(0, 1200), meta: metaContextLine.value }
+}
 
 // Etiquetas legibles de los metadatos para el resumen final. Se resuelven desde
 // las mismas listas que alimentan los selects, así el chip dice "1º ESO" y no el
@@ -1167,7 +1187,7 @@ async function submitIdea() {
   // Volver atrás a retocar algo no puede costar la narrativa: si ya hay una y ni
   // la idea ni los materiales han cambiado, se avanza sin regenerar nada. Para
   // rehacerla está el "quiero cambiar algo" del propio paso.
-  if (plan.value.trim() && ideaWithMaterials() === generatedFromContext.value) {
+  if (plan.value.trim() && narrativeContextKey() === generatedFromContext.value) {
     step.value = 1
     return
   }
@@ -1180,9 +1200,14 @@ async function submitIdea() {
     loading.value = false
     isStreaming.value = true
     const context = ideaWithMaterials()
-    await streamPrompt('class.narrative.generate', { idea: context }, plan, classLocale.value)
+    await streamPrompt(
+      'class.narrative.generate',
+      { idea: context, ...aiBrief() },
+      plan,
+      classLocale.value
+    )
     plan.value = cleanAIText(plan.value).slice(0, 8000)
-    generatedFromContext.value = context
+    generatedFromContext.value = narrativeContextKey()
   } catch {
     planGenerationFailed.value = true
   } finally {
@@ -1205,7 +1230,10 @@ async function regeneratePlan() {
     isStreaming.value = true
     await streamPrompt(
       'class.narrative.modify',
-      { idea: idea.value, current: previousPlan.slice(0, 800), feedback: fb },
+      // ideaWithMaterials y no idea a secas: al regenerar también hacen falta los
+      // materiales que subió el profesor, si no la IA los pierde en cuanto pulsa
+      // "quiero cambiar algo".
+      { idea: ideaWithMaterials(), current: previousPlan.slice(0, 800), feedback: fb, ...aiBrief() },
       plan,
       classLocale.value
     )
@@ -1236,9 +1264,9 @@ async function acceptPlan() {
         method: 'POST',
         body: {
           locale: classLocale.value,
-          context: `${ctx}\nNarrativa: ${plan.value.slice(0, 500)}${
-            metaContextLine.value ? `\n${metaContextLine.value}` : ''
-          }`.slice(0, 1500),
+          ...aiBrief(),
+          // buildContext ya trae narrativa y metadatos con su propio presupuesto.
+          context: ctx,
         },
       }
     ).catch(() => null)
@@ -1267,9 +1295,9 @@ async function regenerateTitlesWithFeedback() {
         method: 'POST',
         body: {
           locale: classLocale.value,
-          context: `${ctx}\nNarrativa: ${plan.value.slice(0, 500)}${
-            metaContextLine.value ? `\n${metaContextLine.value}` : ''
-          }`.slice(0, 1500),
+          ...aiBrief(),
+          // buildContext ya trae narrativa y metadatos con su propio presupuesto.
+          context: ctx,
           feedback: fb,
         },
       }
@@ -1304,7 +1332,12 @@ async function generateCover(extraPrompt?: string) {
           {
             method: 'POST',
             headers: { Authorization: `Bearer ${authStore.tokens?.accessToken}` },
-            body: { name: chosenTitle.value, description, locale: classLocale.value },
+            body: {
+              name: chosenTitle.value,
+              description,
+              locale: classLocale.value,
+              audience: meta.educationLevel || '',
+            },
           }
         )
         rawImagePath.value = res.imageUrl
@@ -1345,12 +1378,16 @@ async function generateGuide(extraPrompt?: string) {
   guideGenerationFailed.value = false
   guideContent.value = ''
   try {
-    const ctx = `Clase: ${chosenTitle.value}\nNarrativa: ${plan.value.slice(0, 600)}\nHorario: ${schedule.value || 'No especificado'}`
+    // extraPrompt es el "quiero cambiar algo" del profesor: llegaba hasta aquí y se
+    // quedaba sin usar, así que regenerar la guía devolvía otra vez lo mismo.
+    const ctx = `Clase: ${chosenTitle.value}\nNarrativa: ${plan.value.slice(0, 600)}\nHorario: ${schedule.value || 'No especificado'}${
+      extraPrompt ? `\nEl profesor pide sobre la guía: ${extraPrompt}` : ''
+    }`
     isGeneratingGuide.value = false
     isStreaming.value = true
     await streamPrompt(
       'class.guide.generate',
-      { title: chosenTitle.value, context: ctx },
+      { title: chosenTitle.value, context: ctx, ...aiBrief() },
       guideContent,
       classLocale.value
     )

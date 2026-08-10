@@ -230,6 +230,24 @@ export function subjectsForLevels(levels: string[]): MetaOption[] {
   return mergeSubjects(levels.map(l => subjectsForLevel(l)))
 }
 
+/**
+ * Línea legible de metadatos para el contexto que se le pasa a la IA ("Asignatura:
+ * Matemáticas | Nivel educativo: Bachillerato"). Los valores almacenados ya SON la
+ * etiqueta, así que no hay que resolverlos contra los catálogos.
+ *
+ * Vive aquí y no en cada asistente para que la clase y la misión describan su
+ * contexto igual: si difieren, la IA recibe cosas distintas según el paso.
+ */
+export function classMetaLine(meta: {
+  subject?: string | null
+  educationLevel?: string | null
+}): string {
+  const parts: string[] = []
+  if (meta.subject) parts.push(`Asignatura: ${meta.subject}`)
+  if (meta.educationLevel) parts.push(`Nivel educativo: ${meta.educationLevel}`)
+  return parts.join(' | ')
+}
+
 /** Las 50 provincias españolas. */
 export const SPANISH_PROVINCES = toOptions([
   'A Coruña',

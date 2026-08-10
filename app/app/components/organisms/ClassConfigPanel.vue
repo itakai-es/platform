@@ -580,6 +580,9 @@ async function regenerateImage() {
         name: general.value.name || props.classData?.name,
         description: props.classData?.narrative || undefined,
         locale: locale.value,
+        // Mismo contexto que el asistente de creación, para que regenerar aquí no
+        // dé una portada de otro estilo. Solo el nivel, nunca la asignatura.
+        audience: general.value.educationLevel || '',
       },
     })
     general.value.backgroundImage = res.imageUrl
