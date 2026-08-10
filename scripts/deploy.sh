@@ -52,8 +52,25 @@ for arg in "$@"; do
   esac
 done
 
-log() { printf '\033[1;36m▶ %s\033[0m\n' "$*"; }
-ok()  { printf '\033[1;32m✔ %s\033[0m\n' "$*"; }
+log()  { printf '\033[1;36m▶ %s\033[0m\n' "$*"; }
+ok()   { printf '\033[1;32m✔ %s\033[0m\n' "$*"; }
+fail() { printf '\033[1;31m✘ %s\033[0m\n' "$*" >&2; exit 1; }
+
+# La conexión a producción vive en api/.env.prod y en ningún otro sitio. Antes se
+# construía en docker-compose.prod.yml interpolando POSTGRES_*, que el .env de la
+# raíz define con los valores de DESARROLLO: un deploy podía recrear la API contra
+# la base de dev (existe en este mismo servidor, así que ni fallaba) o sin poder
+# autenticarse. Se comprueba antes de construir o migrar nada.
+if $do_api || $do_migrate || $do_env; then
+  log "Comprobando la conexión de producción en api/.env.prod…"
+  [[ -f api/.env.prod ]] \
+    || fail "Falta api/.env.prod."
+  grep -qE '^DATABASE_URL=' api/.env.prod \
+    || fail "api/.env.prod no define DATABASE_URL. Añádela (es la conexión de PRODUCCIÓN):\n  DATABASE_URL=postgresql://USUARIO:CONTRASEÑA@127.0.0.1:5432/itakai_prod"
+  grep -qE '^DATABASE_URL=.*/itakai_prod(\?|$)' api/.env.prod \
+    || fail "El DATABASE_URL de api/.env.prod no apunta a itakai_prod. Revísalo antes de desplegar."
+  ok "api/.env.prod define la conexión a itakai_prod."
+fi
 
 # Build first so the migrate step uses the new image (with new migration files).
 if $do_api; then

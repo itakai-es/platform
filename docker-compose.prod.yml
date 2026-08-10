@@ -1,3 +1,8 @@
+# El nombre de la base de producción NO se lee de POSTGRES_DB. El .env de la raíz
+# es el de desarrollo y define POSTGRES_DB=itakai_dev, así que cualquier comando
+# lanzado desde el repo interpolaba ese valor aquí y apuntaba producción a la base
+# de dev — sin fallar, porque itakai_dev también existe en este servidor. Se usa
+# PROD_POSTGRES_DB, que el .env de dev no define, para que no puedan colisionar.
 services:
   # PostgreSQL Database (Production)
   postgres:
@@ -6,14 +11,14 @@ services:
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-itakai}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB:-itakai_prod}
+      POSTGRES_DB: ${PROD_POSTGRES_DB:-itakai_prod}
     ports:
       - "127.0.0.1:5432:5432"
     volumes:
       - postgres_data_prod:/var/lib/postgresql/data
       - ./api/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-itakai} -d ${POSTGRES_DB:-itakai_prod}"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-itakai} -d ${PROD_POSTGRES_DB:-itakai_prod}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -34,7 +39,11 @@ services:
       NODE_ENV: production
       PORT: 3001
       NODE_OPTIONS: "--dns-result-order=ipv4first"
-      DATABASE_URL: postgresql://${POSTGRES_USER:-itakai}:${POSTGRES_PASSWORD}@127.0.0.1:5432/${POSTGRES_DB:-itakai_prod}
+      # DATABASE_URL ya NO se construye aquí: sale de api/.env.prod, junto al resto
+      # de secretos de producción. Al estar en `environment:` pisaba al env_file y
+      # heredaba del .env de dev (usuario, contraseña y base equivocados), así que
+      # un deploy podía dejar la API apuntando a otra base o sin poder autenticarse.
+      # deploy.sh comprueba que api/.env.prod la define antes de tocar nada.
     volumes:
       - api_uploads_prod:/app/uploads
     depends_on:
