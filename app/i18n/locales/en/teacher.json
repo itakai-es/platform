@@ -547,9 +547,13 @@
         "sort_progress_desc": "Highest progress",
         "sort_progress_asc": "Lowest progress",
         "sort_missions_desc": "Most missions",
+        "tab_active": "Active",
+        "tab_archived": "Archived",
         "no_students_title": "No students",
         "no_students_filtered": "No students found with these filters",
         "no_students_default": "There are no students in your classes",
+        "no_archived_students_title": "No archived students",
+        "no_archived_students_default": "There are no students in your archived classes",
         "btn_view": "View",
         "stat_missions": "Missions",
         "meta": {

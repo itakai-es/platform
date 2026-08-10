@@ -547,9 +547,13 @@
         "sort_progress_desc": "Més progrés",
         "sort_progress_asc": "Menys progrés",
         "sort_missions_desc": "Més missions",
+        "tab_active": "Actius",
+        "tab_archived": "Arxivats",
         "no_students_title": "Sense alumnes",
         "no_students_filtered": "No s'han trobat alumnes amb estos filtres",
         "no_students_default": "No hi ha alumnes a les teues classes",
+        "no_archived_students_title": "Sense alumnes arxivats",
+        "no_archived_students_default": "No hi ha alumnes a les teues classes arxivades",
         "btn_view": "Veure",
         "stat_missions": "Missions",
         "meta": {

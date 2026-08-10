@@ -14,22 +14,14 @@
       @reset="resetFilters"
     />
 
-    <div v-if="showArchiveToggle" class="flex flex-wrap gap-2">
-      <Button
-        :variant="viewMode === 'active' ? 'primary' : 'outline'"
-        size="sm"
-        @click="viewMode = 'active'"
-      >
-        Activas ({{ activeClasses.length }})
-      </Button>
-      <Button
-        :variant="viewMode === 'archived' ? 'primary' : 'outline'"
-        size="sm"
-        @click="viewMode = 'archived'"
-      >
-        Archivadas ({{ archivedClasses.length }})
-      </Button>
-    </div>
+    <ArchiveTabs
+      v-if="showArchiveToggle"
+      v-model="viewMode"
+      :active-count="activeClasses.length"
+      :archived-count="archivedClasses.length"
+      active-label="Activas"
+      archived-label="Archivadas"
+    />
 
     <CardCollection v-if="loading" :view="cardView" cols="2-wide">
       <template v-if="cardView === 'grid'">

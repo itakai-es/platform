@@ -60,6 +60,7 @@ export interface Student {
   // Detalle por clase
   classProgress: StudentClassProgress[]
   classIds: string[] // Para filtros y retrocompatibilidad
+  archived?: boolean // Todas sus clases con este profesor están archivadas
   createdAt: Date
 }
 

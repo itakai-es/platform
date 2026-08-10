@@ -547,9 +547,13 @@
         "sort_progress_desc": "Más progresu",
         "sort_progress_asc": "Menos progresu",
         "sort_missions_desc": "Más misiones",
+        "tab_active": "Activos",
+        "tab_archived": "Archivaos",
         "no_students_title": "Ensin alumnos",
         "no_students_filtered": "Nun s'atoparon alumnos con estos filtros",
         "no_students_default": "Nun hai alumnos nes tos clases",
+        "no_archived_students_title": "Ensin alumnos archivaos",
+        "no_archived_students_default": "Nun hai alumnos nes tos clases archivaes",
         "btn_view": "Ver",
         "stat_missions": "Misiones",
         "meta": {

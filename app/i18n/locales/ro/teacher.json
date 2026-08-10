@@ -547,9 +547,13 @@
         "sort_progress_desc": "Progres mai mare",
         "sort_progress_asc": "Progres mai mic",
         "sort_missions_desc": "Mai multe misiuni",
+        "tab_active": "Activi",
+        "tab_archived": "Arhivați",
         "no_students_title": "Fără elevi",
         "no_students_filtered": "Nu s-au găsit elevi cu aceste filtre",
         "no_students_default": "Nu există elevi în clasele tale",
+        "no_archived_students_title": "Fără elevi arhivați",
+        "no_archived_students_default": "Nu există elevi în clasele tale arhivate",
         "btn_view": "Vezi",
         "stat_missions": "Misiuni",
         "meta": {

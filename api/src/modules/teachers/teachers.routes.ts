@@ -578,11 +578,12 @@ export async function teacherRoutes(fastify: FastifyInstance) {
 
   // ==================== STUDENTS ====================
 
-  fastify.get('/students', async (request: FastifyRequest<{ Querystring: { classId?: string } }>, reply: FastifyReply) => {
+  fastify.get('/students', async (request: FastifyRequest<{ Querystring: { classId?: string; archived?: 'active' | 'archived' | 'all' } }>, reply: FastifyReply) => {
     try {
       const { id } = request.user as { id: string }
       const { classId } = request.query
-      const result = await teachersService.getStudents(id, classId)
+      const archived = request.query.archived || 'active'
+      const result = await teachersService.getStudents(id, classId, archived)
       return result
     } catch (error) {
       return reply.status(500).send({ message: 'Error interno' })

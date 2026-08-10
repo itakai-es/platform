@@ -36,8 +36,16 @@
         </template>
       </FilterBar>
 
+      <ArchiveTabs
+        v-model="viewMode"
+        :active-count="teacherStore.students.length"
+        :archived-count="teacherStore.archivedStudents.length"
+        :active-label="t('teacher.students.index.tab_active')"
+        :archived-label="t('teacher.students.index.tab_archived')"
+      />
+
       <!-- Loading State -->
-      <CardGrid v-if="teacherStore.isLoadingStudents">
+      <CardGrid v-if="isLoading">
         <div
           v-for="i in 6"
           :key="i"
@@ -65,12 +73,8 @@
       <EmptyState
         v-else-if="filteredStudents.length === 0"
         :icon="UsersIcon"
-        :title="t('teacher.students.index.no_students_title')"
-        :description="
-          hasActiveFilters
-            ? t('teacher.students.index.no_students_filtered')
-            : t('teacher.students.index.no_students_default')
-        "
+        :title="emptyTitle"
+        :description="emptyDescription"
       />
 
       <!-- Students Grid -->
@@ -184,16 +188,32 @@ const searchQuery = ref('')
 const selectedClassId = ref('')
 const selectedProgressRange = ref('')
 const sortBy = ref('name-asc')
+// Un alumno está archivado cuando todas sus clases con este profesor lo están.
+const viewMode = ref<'active' | 'archived'>('active')
 
-// Computed: total students
-const totalStudents = computed(() => teacherStore.students.length)
+const isLoading = computed(() =>
+  viewMode.value === 'archived'
+    ? teacherStore.isLoadingArchivedStudents
+    : teacherStore.isLoadingStudents
+)
+
+// Lista base según la pestaña activa
+const sourceStudents = computed(() =>
+  viewMode.value === 'archived' ? teacherStore.archivedStudents : teacherStore.students
+)
 
 // Options for SelectDropdown components
 const classOptions = computed(() => {
+  const source = viewMode.value === 'archived' ? teacherStore.archivedClasses : teacherStore.classes
   return [
     { value: '', label: t('teacher.students.index.filter_all_classes') },
-    ...teacherStore.classes.map(c => ({ value: c.id, label: c.name })),
+    ...source.map(c => ({ value: c.id, label: c.name })),
   ]
+})
+
+// La clase elegida no existe en la otra pestaña: al cambiar se descarta el filtro.
+watch(viewMode, () => {
+  selectedClassId.value = ''
 })
 
 // Progress range options
@@ -231,7 +251,7 @@ const clearAllFilters = () => {
 
 // Filtered and sorted students
 const filteredStudents = computed(() => {
-  let students = [...teacherStore.students]
+  let students = [...sourceStudents.value]
 
   // Filter by search query
   if (searchQuery.value) {
@@ -286,6 +306,21 @@ const filteredStudents = computed(() => {
   return students
 })
 
+const emptyTitle = computed(() =>
+  viewMode.value === 'archived'
+    ? t('teacher.students.index.no_archived_students_title')
+    : t('teacher.students.index.no_students_title')
+)
+
+const emptyDescription = computed(() => {
+  if (hasActiveFilters.value || searchQuery.value) {
+    return t('teacher.students.index.no_students_filtered')
+  }
+  return viewMode.value === 'archived'
+    ? t('teacher.students.index.no_archived_students_default')
+    : t('teacher.students.index.no_students_default')
+})
+
 // Navigate to student profile
 const viewStudentProfile = (studentId: string) => {
   router.push(`/profesor/alumnos/${studentId}`)
@@ -293,6 +328,11 @@ const viewStudentProfile = (studentId: string) => {
 
 // Load data on mount
 onMounted(async () => {
-  await Promise.all([teacherStore.ensureClasses(), teacherStore.ensureStudents()])
+  await Promise.all([
+    teacherStore.ensureClasses(),
+    teacherStore.ensureArchivedClasses(),
+    teacherStore.ensureStudents(),
+    teacherStore.ensureArchivedStudents(),
+  ])
 })
 </script>

@@ -547,9 +547,13 @@
         "sort_progress_desc": "Aurrerapen handiena",
         "sort_progress_asc": "Aurrerapen txikiena",
         "sort_missions_desc": "Misio gehien",
+        "tab_active": "Aktiboak",
+        "tab_archived": "Artxibatuak",
         "no_students_title": "Ikaslerik gabe",
         "no_students_filtered": "Ez da ikaslerik aurkitu iragazki hauekin",
         "no_students_default": "Ez dago ikaslerik zure klaseetan",
+        "no_archived_students_title": "Artxibatutako ikaslerik gabe",
+        "no_archived_students_default": "Ez dago ikaslerik zure artxibatutako klaseetan",
         "btn_view": "Ikusi",
         "stat_missions": "Misioak",
         "meta": {

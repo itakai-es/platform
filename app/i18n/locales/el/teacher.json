@@ -547,9 +547,13 @@
         "sort_progress_desc": "Μεγαλύτερη πρόοδος",
         "sort_progress_asc": "Μικρότερη πρόοδος",
         "sort_missions_desc": "Περισσότερες αποστολές",
+        "tab_active": "Ενεργοί",
+        "tab_archived": "Αρχειοθετημένοι",
         "no_students_title": "Χωρίς μαθητές",
         "no_students_filtered": "Δεν βρέθηκαν μαθητές με αυτά τα φίλτρα",
         "no_students_default": "Δεν υπάρχουν μαθητές στις τάξεις σου",
+        "no_archived_students_title": "Χωρίς αρχειοθετημένους μαθητές",
+        "no_archived_students_default": "Δεν υπάρχουν μαθητές στις αρχειοθετημένες τάξεις σου",
         "btn_view": "Προβολή",
         "stat_missions": "Αποστολές",
         "meta": {

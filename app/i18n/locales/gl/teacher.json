@@ -547,9 +547,13 @@
         "sort_progress_desc": "Maior progreso",
         "sort_progress_asc": "Menor progreso",
         "sort_missions_desc": "Máis misións",
+        "tab_active": "Activos",
+        "tab_archived": "Arquivados",
         "no_students_title": "Sen estudantes",
         "no_students_filtered": "Non se atoparon estudantes con estes filtros",
         "no_students_default": "Non hai estudantes nas túas clases",
+        "no_archived_students_title": "Sen estudantes arquivados",
+        "no_archived_students_default": "Non hai estudantes nas túas clases arquivadas",
         "btn_view": "Ver",
         "stat_missions": "Misións",
         "meta": {

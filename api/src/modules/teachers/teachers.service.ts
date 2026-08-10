@@ -891,7 +891,18 @@ export class TeachersService {
 
   // ==================== STUDENTS ====================
 
-  async getStudents(userId: string, classId?: string) {
+  /**
+   * Lista los alumnos del profesor. Un alumno se considera archivado cuando TODAS
+   * sus clases con este profesor están archivadas: no hay estado de archivado propio
+   * del alumno, se deriva de las clases (así desarchivar una clase lo devuelve solo).
+   * Al filtrar por `classId` se devuelven los alumnos de esa clase sin importar el
+   * estado, porque la clase se ha abierto a propósito.
+   */
+  async getStudents(
+    userId: string,
+    classId?: string,
+    archived: 'active' | 'archived' | 'all' = 'active'
+  ) {
     const whereClause: any = { teacherId: userId }
 
     const classes = await prisma.class.findMany({
@@ -956,6 +967,7 @@ export class TeachersService {
           classTotalXp,
           classId: c.id,
           className: c.name,
+          classArchived: c.archived,
           totalMissionsCompleted: completed,
           totalMissionsAvailable: totalMissions,
           totalEnigmasCompleted: completedEnigmas,
@@ -969,9 +981,15 @@ export class TeachersService {
       })
     })
 
+    // Un alumno sigue activo mientras le quede al menos una clase sin archivar.
+    const activeStudentIds = new Set(
+      students.filter((s) => !s.classArchived).map((s) => s.id)
+    )
+
     if (classId) {
       students = students.filter((s) => s.classId === classId).map((s) => ({
         ...s,
+        archived: !activeStudentIds.has(s.id),
         totalXpEarned: s.totalXp,
         totalXpAvailable: s.classTotalXp,
         totalBadgesEarned: s.badgesEarned,
@@ -989,6 +1007,13 @@ export class TeachersService {
         }],
       }))
       return { students, total: students.length }
+    }
+
+    if (archived === 'active') {
+      // Vista activa: solo clases vivas, así las archivadas no suman a sus totales.
+      students = students.filter((s) => !s.classArchived)
+    } else if (archived === 'archived') {
+      students = students.filter((s) => s.classArchived && !activeStudentIds.has(s.id))
     }
 
     // For "all classes" view, aggregate data per student
@@ -1030,6 +1055,7 @@ export class TeachersService {
       } else {
         studentMap.set(s.id, {
           ...s,
+          archived: !activeStudentIds.has(s.id),
           totalXpEarned: s.totalXp,
           totalXpAvailable: s.classTotalXp,
           totalBadgesEarned: s.badgesEarned,
