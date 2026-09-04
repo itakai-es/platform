@@ -2491,6 +2491,10 @@ export const UserSettingsScalarFieldEnum = {
   language: 'language',
   theme: 'theme',
   menuDisplay: 'menuDisplay',
+  fontScale: 'fontScale',
+  contrastMode: 'contrastMode',
+  colorVision: 'colorVision',
+  reduceMotion: 'reduceMotion',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

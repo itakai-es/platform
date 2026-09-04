@@ -135,7 +135,7 @@
                 </div>
                 <button
                   v-if="profileStore.security.sessions.length > 1"
-                  class="text-xs text-navy-700/60 hover:text-navy-700"
+                  class="text-xs text-navy-700/70 hover:text-navy-700"
                   @click="closeAllSessions"
                 >
                   {{ t('student.profile.security.close_all_sessions') }}
@@ -155,7 +155,7 @@
                     <DevicePhoneMobileIcon v-else class="w-4 h-4 text-navy-700/70" />
                     <div>
                       <p class="text-sm font-medium text-navy-700">{{ session.browser }}</p>
-                      <p class="text-xs text-navy-700/60">{{ session.lastActive }}</p>
+                      <p class="text-xs text-navy-700/70">{{ session.lastActive }}</p>
                     </div>
                   </div>
                   <span
@@ -165,7 +165,7 @@
                   >
                   <button
                     v-else
-                    class="text-xs text-navy-700/60 hover:text-navy-700"
+                    class="text-xs text-navy-700/70 hover:text-navy-700"
                     @click="closeSession(session.id)"
                   >
                     {{ t('student.profile.security.close_session') }}
@@ -227,22 +227,11 @@
                 <p class="text-sm text-navy-700/70 mb-4">
                   {{ t('common.menu_display.description') }}
                 </p>
-                <div class="grid grid-cols-3 gap-2">
-                  <button
-                    v-for="opt in menuOptions"
-                    :key="opt.value"
-                    type="button"
-                    class="rounded-xl border px-3 py-2 text-sm font-medium transition-colors"
-                    :class="
-                      menuDisplay === opt.value
-                        ? 'border-navy-700 bg-navy-700 text-white'
-                        : 'border-border-primary bg-surface text-navy-700 hover:bg-gray-50'
-                    "
-                    @click="menuDisplay = opt.value"
-                  >
-                    {{ opt.label }}
-                  </button>
-                </div>
+                <OptionPillGroup
+                  v-model="menuDisplay"
+                  :options="menuOptions"
+                  :aria-label="t('common.menu_display.title')"
+                />
               </div>
             </Card>
           </div>
@@ -261,6 +250,12 @@
                 <SelectDropdown v-model="preferencesForm.language" :options="languageOptions" />
               </div>
             </Card>
+
+            <!-- Avisos -->
+            <NotificationSettingsCard />
+
+            <!-- Accesibilidad -->
+            <AccessibilitySettingsCard />
 
             <!-- Zona peligrosa -->
             <Card type="settings" class="border-2 border-navy-700/20">
@@ -331,7 +326,6 @@ import {
   KeyIcon,
   DevicePhoneMobileIcon,
   ComputerDesktopIcon,
-  BellIcon,
   LanguageIcon,
   ExclamationTriangleIcon,
   TrashIcon,
@@ -388,8 +382,6 @@ const securityForm = ref({
 
 // Form state for preferences (local copy for immediate UI updates)
 const preferencesForm = ref({
-  emailNotifications: true,
-  missionReminders: true,
   language: 'es' as AppLanguage,
   theme: 'college' as 'college' | 'university',
 })
@@ -415,32 +407,6 @@ onMounted(async () => {
 })
 
 // Watch for preference changes and sync with API
-watch(
-  () => preferencesForm.value.emailNotifications,
-  async newVal => {
-    if (profileStore.preferences && newVal !== profileStore.preferences.emailNotifications) {
-      const result = await profileStore.updatePreferences({ emailNotifications: newVal })
-      if (!result.success) {
-        toast.error(result.message)
-        preferencesForm.value.emailNotifications = profileStore.preferences.emailNotifications
-      }
-    }
-  }
-)
-
-watch(
-  () => preferencesForm.value.missionReminders,
-  async newVal => {
-    if (profileStore.preferences && newVal !== profileStore.preferences.missionReminders) {
-      const result = await profileStore.updatePreferences({ missionReminders: newVal })
-      if (!result.success) {
-        toast.error(result.message)
-        preferencesForm.value.missionReminders = profileStore.preferences.missionReminders
-      }
-    }
-  }
-)
-
 watch(
   () => preferencesForm.value.language,
   async newVal => {

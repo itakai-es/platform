@@ -3,6 +3,7 @@
  * Tipos para configuración de perfil de usuario
  */
 import type { AppLanguage } from '~/utils/app-languages'
+import type { AccessibilityPreferences } from '~/utils/accessibility'
 
 /**
  * Sesión activa del usuario
@@ -29,7 +30,7 @@ export interface SecuritySettings {
 /**
  * Configuración de preferencias del usuario
  */
-export interface UserPreferences {
+export interface UserPreferences extends AccessibilityPreferences {
   emailNotifications: boolean
   missionReminders: boolean
   language: AppLanguage

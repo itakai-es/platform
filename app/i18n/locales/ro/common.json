@@ -231,6 +231,58 @@
       "icon": "Doar pictogramă",
       "text": "Doar text"
     },
+    "accessibility": {
+      "title": "Accesibilitate",
+      "description": "Ajustează mărimea textului, contrastul și culorile. Se salvează în contul tău și se aplică pe toate dispozitivele.",
+      "updated": "Preferințele de accesibilitate au fost actualizate",
+      "update_error": "Preferințele de accesibilitate nu au putut fi salvate",
+      "font_scale": {
+        "title": "Mărimea textului",
+        "description": "Mărește textul și pictogramele din toată platforma.",
+        "normal": "Normal",
+        "large": "Mare",
+        "xlarge": "Foarte mare"
+      },
+      "contrast": {
+        "title": "Contrast",
+        "description": "Întărește textele, marginile și focalizarea de la tastatură.",
+        "normal": "Normal",
+        "high": "Ridicat"
+      },
+      "color_vision": {
+        "title": "Percepția culorilor",
+        "description": "Schimbă paleta astfel încât stările să rămână distincte în caz de daltonism.",
+        "default": "Fără ajustare",
+        "protanopia": "Protanopie",
+        "deuteranopia": "Deuteranopie",
+        "tritanopia": "Tritanopie"
+      },
+      "samples": {
+        "success": "Corect",
+        "error": "Eroare",
+        "warning": "Avertisment",
+        "info": "Informație",
+        "accent": "Evidențiat"
+      },
+      "reduce_motion": {
+        "title": "Mai puțină animație",
+        "description": "Reduce tranzițiile și efectele de mișcare."
+      }
+    },
+    "notification_settings": {
+      "title": "Anunțuri",
+      "description": "Despre ce te anunțăm și pe unde. Anunțurile apar mereu în platformă; emailul este opțional.",
+      "updated": "Preferințele de anunțuri au fost actualizate",
+      "update_error": "Preferințele de anunțuri nu au putut fi salvate",
+      "email": {
+        "title": "Anunțuri pe email",
+        "description": "Lucrări corectate, invitații și confirmări și pe emailul tău."
+      },
+      "reminders": {
+        "title": "Memento pentru termene",
+        "description": "Un anunț când mai sunt mai puțin de 24 de ore până la finalul unei misiuni."
+      }
+    },
     "markdown": {
       "insert_at_end": "Inserează la final"
     },

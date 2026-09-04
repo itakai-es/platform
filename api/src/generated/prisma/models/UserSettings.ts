@@ -33,6 +33,10 @@ export type UserSettingsMinAggregateOutputType = {
   language: string | null
   theme: string | null
   menuDisplay: string | null
+  fontScale: string | null
+  contrastMode: string | null
+  colorVision: string | null
+  reduceMotion: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -46,6 +50,10 @@ export type UserSettingsMaxAggregateOutputType = {
   language: string | null
   theme: string | null
   menuDisplay: string | null
+  fontScale: string | null
+  contrastMode: string | null
+  colorVision: string | null
+  reduceMotion: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -59,6 +67,10 @@ export type UserSettingsCountAggregateOutputType = {
   language: number
   theme: number
   menuDisplay: number
+  fontScale: number
+  contrastMode: number
+  colorVision: number
+  reduceMotion: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -74,6 +86,10 @@ export type UserSettingsMinAggregateInputType = {
   language?: true
   theme?: true
   menuDisplay?: true
+  fontScale?: true
+  contrastMode?: true
+  colorVision?: true
+  reduceMotion?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -87,6 +103,10 @@ export type UserSettingsMaxAggregateInputType = {
   language?: true
   theme?: true
   menuDisplay?: true
+  fontScale?: true
+  contrastMode?: true
+  colorVision?: true
+  reduceMotion?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -100,6 +120,10 @@ export type UserSettingsCountAggregateInputType = {
   language?: true
   theme?: true
   menuDisplay?: true
+  fontScale?: true
+  contrastMode?: true
+  colorVision?: true
+  reduceMotion?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -186,6 +210,10 @@ export type UserSettingsGroupByOutputType = {
   language: string
   theme: string
   menuDisplay: string
+  fontScale: string
+  contrastMode: string
+  colorVision: string
+  reduceMotion: boolean
   createdAt: Date
   updatedAt: Date
   _count: UserSettingsCountAggregateOutputType | null
@@ -220,6 +248,10 @@ export type UserSettingsWhereInput = {
   language?: Prisma.StringFilter<"UserSettings"> | string
   theme?: Prisma.StringFilter<"UserSettings"> | string
   menuDisplay?: Prisma.StringFilter<"UserSettings"> | string
+  fontScale?: Prisma.StringFilter<"UserSettings"> | string
+  contrastMode?: Prisma.StringFilter<"UserSettings"> | string
+  colorVision?: Prisma.StringFilter<"UserSettings"> | string
+  reduceMotion?: Prisma.BoolFilter<"UserSettings"> | boolean
   createdAt?: Prisma.DateTimeFilter<"UserSettings"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"UserSettings"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -234,6 +266,10 @@ export type UserSettingsOrderByWithRelationInput = {
   language?: Prisma.SortOrder
   theme?: Prisma.SortOrder
   menuDisplay?: Prisma.SortOrder
+  fontScale?: Prisma.SortOrder
+  contrastMode?: Prisma.SortOrder
+  colorVision?: Prisma.SortOrder
+  reduceMotion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
@@ -251,6 +287,10 @@ export type UserSettingsWhereUniqueInput = Prisma.AtLeast<{
   language?: Prisma.StringFilter<"UserSettings"> | string
   theme?: Prisma.StringFilter<"UserSettings"> | string
   menuDisplay?: Prisma.StringFilter<"UserSettings"> | string
+  fontScale?: Prisma.StringFilter<"UserSettings"> | string
+  contrastMode?: Prisma.StringFilter<"UserSettings"> | string
+  colorVision?: Prisma.StringFilter<"UserSettings"> | string
+  reduceMotion?: Prisma.BoolFilter<"UserSettings"> | boolean
   createdAt?: Prisma.DateTimeFilter<"UserSettings"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"UserSettings"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -265,6 +305,10 @@ export type UserSettingsOrderByWithAggregationInput = {
   language?: Prisma.SortOrder
   theme?: Prisma.SortOrder
   menuDisplay?: Prisma.SortOrder
+  fontScale?: Prisma.SortOrder
+  contrastMode?: Prisma.SortOrder
+  colorVision?: Prisma.SortOrder
+  reduceMotion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.UserSettingsCountOrderByAggregateInput
@@ -284,6 +328,10 @@ export type UserSettingsScalarWhereWithAggregatesInput = {
   language?: Prisma.StringWithAggregatesFilter<"UserSettings"> | string
   theme?: Prisma.StringWithAggregatesFilter<"UserSettings"> | string
   menuDisplay?: Prisma.StringWithAggregatesFilter<"UserSettings"> | string
+  fontScale?: Prisma.StringWithAggregatesFilter<"UserSettings"> | string
+  contrastMode?: Prisma.StringWithAggregatesFilter<"UserSettings"> | string
+  colorVision?: Prisma.StringWithAggregatesFilter<"UserSettings"> | string
+  reduceMotion?: Prisma.BoolWithAggregatesFilter<"UserSettings"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"UserSettings"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"UserSettings"> | Date | string
 }
@@ -296,6 +344,10 @@ export type UserSettingsCreateInput = {
   language?: string
   theme?: string
   menuDisplay?: string
+  fontScale?: string
+  contrastMode?: string
+  colorVision?: string
+  reduceMotion?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutSettingsInput
@@ -310,6 +362,10 @@ export type UserSettingsUncheckedCreateInput = {
   language?: string
   theme?: string
   menuDisplay?: string
+  fontScale?: string
+  contrastMode?: string
+  colorVision?: string
+  reduceMotion?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -322,6 +378,10 @@ export type UserSettingsUpdateInput = {
   language?: Prisma.StringFieldUpdateOperationsInput | string
   theme?: Prisma.StringFieldUpdateOperationsInput | string
   menuDisplay?: Prisma.StringFieldUpdateOperationsInput | string
+  fontScale?: Prisma.StringFieldUpdateOperationsInput | string
+  contrastMode?: Prisma.StringFieldUpdateOperationsInput | string
+  colorVision?: Prisma.StringFieldUpdateOperationsInput | string
+  reduceMotion?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutSettingsNestedInput
@@ -336,6 +396,10 @@ export type UserSettingsUncheckedUpdateInput = {
   language?: Prisma.StringFieldUpdateOperationsInput | string
   theme?: Prisma.StringFieldUpdateOperationsInput | string
   menuDisplay?: Prisma.StringFieldUpdateOperationsInput | string
+  fontScale?: Prisma.StringFieldUpdateOperationsInput | string
+  contrastMode?: Prisma.StringFieldUpdateOperationsInput | string
+  colorVision?: Prisma.StringFieldUpdateOperationsInput | string
+  reduceMotion?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -349,6 +413,10 @@ export type UserSettingsCreateManyInput = {
   language?: string
   theme?: string
   menuDisplay?: string
+  fontScale?: string
+  contrastMode?: string
+  colorVision?: string
+  reduceMotion?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -361,6 +429,10 @@ export type UserSettingsUpdateManyMutationInput = {
   language?: Prisma.StringFieldUpdateOperationsInput | string
   theme?: Prisma.StringFieldUpdateOperationsInput | string
   menuDisplay?: Prisma.StringFieldUpdateOperationsInput | string
+  fontScale?: Prisma.StringFieldUpdateOperationsInput | string
+  contrastMode?: Prisma.StringFieldUpdateOperationsInput | string
+  colorVision?: Prisma.StringFieldUpdateOperationsInput | string
+  reduceMotion?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -374,6 +446,10 @@ export type UserSettingsUncheckedUpdateManyInput = {
   language?: Prisma.StringFieldUpdateOperationsInput | string
   theme?: Prisma.StringFieldUpdateOperationsInput | string
   menuDisplay?: Prisma.StringFieldUpdateOperationsInput | string
+  fontScale?: Prisma.StringFieldUpdateOperationsInput | string
+  contrastMode?: Prisma.StringFieldUpdateOperationsInput | string
+  colorVision?: Prisma.StringFieldUpdateOperationsInput | string
+  reduceMotion?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -392,6 +468,10 @@ export type UserSettingsCountOrderByAggregateInput = {
   language?: Prisma.SortOrder
   theme?: Prisma.SortOrder
   menuDisplay?: Prisma.SortOrder
+  fontScale?: Prisma.SortOrder
+  contrastMode?: Prisma.SortOrder
+  colorVision?: Prisma.SortOrder
+  reduceMotion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -405,6 +485,10 @@ export type UserSettingsMaxOrderByAggregateInput = {
   language?: Prisma.SortOrder
   theme?: Prisma.SortOrder
   menuDisplay?: Prisma.SortOrder
+  fontScale?: Prisma.SortOrder
+  contrastMode?: Prisma.SortOrder
+  colorVision?: Prisma.SortOrder
+  reduceMotion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -418,6 +502,10 @@ export type UserSettingsMinOrderByAggregateInput = {
   language?: Prisma.SortOrder
   theme?: Prisma.SortOrder
   menuDisplay?: Prisma.SortOrder
+  fontScale?: Prisma.SortOrder
+  contrastMode?: Prisma.SortOrder
+  colorVision?: Prisma.SortOrder
+  reduceMotion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -462,6 +550,10 @@ export type UserSettingsCreateWithoutUserInput = {
   language?: string
   theme?: string
   menuDisplay?: string
+  fontScale?: string
+  contrastMode?: string
+  colorVision?: string
+  reduceMotion?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -474,6 +566,10 @@ export type UserSettingsUncheckedCreateWithoutUserInput = {
   language?: string
   theme?: string
   menuDisplay?: string
+  fontScale?: string
+  contrastMode?: string
+  colorVision?: string
+  reduceMotion?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -502,6 +598,10 @@ export type UserSettingsUpdateWithoutUserInput = {
   language?: Prisma.StringFieldUpdateOperationsInput | string
   theme?: Prisma.StringFieldUpdateOperationsInput | string
   menuDisplay?: Prisma.StringFieldUpdateOperationsInput | string
+  fontScale?: Prisma.StringFieldUpdateOperationsInput | string
+  contrastMode?: Prisma.StringFieldUpdateOperationsInput | string
+  colorVision?: Prisma.StringFieldUpdateOperationsInput | string
+  reduceMotion?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -514,6 +614,10 @@ export type UserSettingsUncheckedUpdateWithoutUserInput = {
   language?: Prisma.StringFieldUpdateOperationsInput | string
   theme?: Prisma.StringFieldUpdateOperationsInput | string
   menuDisplay?: Prisma.StringFieldUpdateOperationsInput | string
+  fontScale?: Prisma.StringFieldUpdateOperationsInput | string
+  contrastMode?: Prisma.StringFieldUpdateOperationsInput | string
+  colorVision?: Prisma.StringFieldUpdateOperationsInput | string
+  reduceMotion?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -529,6 +633,10 @@ export type UserSettingsSelect<ExtArgs extends runtime.Types.Extensions.Internal
   language?: boolean
   theme?: boolean
   menuDisplay?: boolean
+  fontScale?: boolean
+  contrastMode?: boolean
+  colorVision?: boolean
+  reduceMotion?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -543,6 +651,10 @@ export type UserSettingsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   language?: boolean
   theme?: boolean
   menuDisplay?: boolean
+  fontScale?: boolean
+  contrastMode?: boolean
+  colorVision?: boolean
+  reduceMotion?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -557,6 +669,10 @@ export type UserSettingsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   language?: boolean
   theme?: boolean
   menuDisplay?: boolean
+  fontScale?: boolean
+  contrastMode?: boolean
+  colorVision?: boolean
+  reduceMotion?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -571,11 +687,15 @@ export type UserSettingsSelectScalar = {
   language?: boolean
   theme?: boolean
   menuDisplay?: boolean
+  fontScale?: boolean
+  contrastMode?: boolean
+  colorVision?: boolean
+  reduceMotion?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserSettingsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "twoFactorEnabled" | "emailNotifications" | "missionReminders" | "language" | "theme" | "menuDisplay" | "createdAt" | "updatedAt", ExtArgs["result"]["userSettings"]>
+export type UserSettingsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "twoFactorEnabled" | "emailNotifications" | "missionReminders" | "language" | "theme" | "menuDisplay" | "fontScale" | "contrastMode" | "colorVision" | "reduceMotion" | "createdAt" | "updatedAt", ExtArgs["result"]["userSettings"]>
 export type UserSettingsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -600,6 +720,10 @@ export type $UserSettingsPayload<ExtArgs extends runtime.Types.Extensions.Intern
     language: string
     theme: string
     menuDisplay: string
+    fontScale: string
+    contrastMode: string
+    colorVision: string
+    reduceMotion: boolean
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["userSettings"]>
@@ -1034,6 +1158,10 @@ export interface UserSettingsFieldRefs {
   readonly language: Prisma.FieldRef<"UserSettings", 'String'>
   readonly theme: Prisma.FieldRef<"UserSettings", 'String'>
   readonly menuDisplay: Prisma.FieldRef<"UserSettings", 'String'>
+  readonly fontScale: Prisma.FieldRef<"UserSettings", 'String'>
+  readonly contrastMode: Prisma.FieldRef<"UserSettings", 'String'>
+  readonly colorVision: Prisma.FieldRef<"UserSettings", 'String'>
+  readonly reduceMotion: Prisma.FieldRef<"UserSettings", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"UserSettings", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"UserSettings", 'DateTime'>
 }

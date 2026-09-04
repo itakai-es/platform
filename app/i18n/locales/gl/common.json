@@ -231,6 +231,58 @@
       "icon": "Só icona",
       "text": "Só texto"
     },
+    "accessibility": {
+      "title": "Accesibilidade",
+      "description": "Axusta o tamaño do texto, o contraste e as cores. Gárdase na túa conta e aplícase en todos os dispositivos.",
+      "updated": "Preferencias de accesibilidade actualizadas",
+      "update_error": "Non se puideron gardar as preferencias de accesibilidade",
+      "font_scale": {
+        "title": "Tamaño da letra",
+        "description": "Agranda o texto e as iconas de toda a plataforma.",
+        "normal": "Normal",
+        "large": "Grande",
+        "xlarge": "Moi grande"
+      },
+      "contrast": {
+        "title": "Contraste",
+        "description": "Reforza textos, bordos e foco do teclado.",
+        "normal": "Normal",
+        "high": "Alto"
+      },
+      "color_vision": {
+        "title": "Visión da cor",
+        "description": "Cambia a paleta para que os estados se sigan distinguindo con daltonismo.",
+        "default": "Sen axuste",
+        "protanopia": "Protanopía",
+        "deuteranopia": "Deuteranopía",
+        "tritanopia": "Tritanopía"
+      },
+      "samples": {
+        "success": "Correcto",
+        "error": "Erro",
+        "warning": "Aviso",
+        "info": "Información",
+        "accent": "Destacado"
+      },
+      "reduce_motion": {
+        "title": "Menos animación",
+        "description": "Reduce transicións e efectos de movemento."
+      }
+    },
+    "notification_settings": {
+      "title": "Avisos",
+      "description": "De que te avisamos e por onde. Os avisos sempre aparecen na plataforma; o correo é opcional.",
+      "updated": "Preferencias de avisos actualizadas",
+      "update_error": "Non se puideron gardar as preferencias de avisos",
+      "email": {
+        "title": "Avisos por correo",
+        "description": "Entregas revisadas, invitacións e confirmacións tamén no teu correo."
+      },
+      "reminders": {
+        "title": "Recordatorios de entrega",
+        "description": "Un aviso cando queden menos de 24 horas para o final dunha misión."
+      }
+    },
     "markdown": {
       "insert_at_end": "Inserir ao final"
     },

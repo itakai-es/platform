@@ -1,0 +1,408 @@
+/**
+ * ITAKAI — Capa de accesibilidad (Fase 3, punto 14)
+ *
+ * Ajustes de plataforma que el usuario elige en su perfil y que se aplican como
+ * atributos en <html> (ver `app/utils/accessibility.ts`):
+ *
+ *   data-font-scale="large|xlarge"      tamaño de letra
+ *   data-contrast="high"                alto contraste
+ *   data-color-vision="protanopia|deuteranopia|tritanopia"
+ *   data-reduce-motion="true"           menos animación
+ *
+ * Todo se resuelve redefiniendo las variables de `tailwind.css`, nunca tocando
+ * componentes: cualquier vista que use los tokens del sistema de diseño hereda
+ * los ajustes sin cambios. Los selectores usan `:root[data-…]` para ganar en
+ * especificidad al tema de marca (`[data-theme="university"]`).
+ *
+ * Este fichero se carga después de `tailwind.css` (ver `nuxt.config.ts`).
+ */
+
+/* ============================================================
+   TAMAÑO DE LETRA
+   Escala el tamaño base del documento: como el sistema de diseño
+   está en `rem`, crece el texto y con él iconos y espaciados, que
+   es lo que mantiene las proporciones legibles (equivale al zoom
+   del navegador, pero por usuario y persistente).
+   ============================================================ */
+
+:root[data-font-scale='large'] {
+  font-size: 112.5%; /* 18px */
+}
+
+:root[data-font-scale='xlarge'] {
+  font-size: 125%; /* 20px */
+}
+
+/* ============================================================
+   ALTO CONTRASTE
+   Sube el contraste de textos secundarios, bordes y foco. Los
+   grises suaves del tema base bajan de 4.5:1 sobre blanco, que es
+   justo lo que hace ilegible la interfaz con baja visión.
+   ============================================================ */
+
+:root[data-contrast='high'] {
+  --color-text-primary-rgb: 16 17 46;
+  --color-text-secondary-rgb: 58 61 92;
+  --color-text-tertiary-rgb: 51 54 79;
+  --color-text-muted-rgb: 74 77 104;
+
+  --color-bg-primary-rgb: 255 255 255;
+  --color-bg-secondary-rgb: 237 237 242;
+  --color-bg-tertiary-rgb: 231 234 236;
+  --color-surface-rgb: 255 255 255;
+  --color-surface-hover-rgb: 238 240 244;
+  --color-surface-active-rgb: 223 226 234;
+
+  --color-border-primary-rgb: 107 110 133;
+  --color-border-secondary-rgb: 76 79 102;
+  --color-border-tertiary-rgb: 46 49 71;
+
+  --color-progress-track-rgb: 185 188 201;
+  --color-skeleton: #c4c7d0;
+
+  /* Los bordes de tarjeta dejan de ser decorativos y delimitan de verdad. */
+  --card-border-width: 1px;
+}
+
+/* Foco visible más grueso y sin depender del color de marca. */
+:root[data-contrast='high'] *:focus-visible {
+  outline: 3px solid var(--color-text-primary);
+  outline-offset: 2px;
+}
+
+:root[data-contrast='high'] a:focus-visible {
+  outline: 3px solid var(--color-text-primary);
+  outline-offset: 2px;
+}
+
+/* Texto de párrafo dentro de contenido largo: subrayar los enlaces reales,
+   que en alto contraste no pueden distinguirse solo por color. */
+:root[data-contrast='high'] .md-rendered a,
+:root[data-contrast='high'] .prose a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ============================================================
+   VISIÓN DEL COLOR
+   Dos paletas, no tres: protanopía y deuteranopía son la misma
+   confusión rojo-verde y comparten mapeo (paleta Okabe-Ito);
+   la tritanopía es azul-amarillo y necesita otro (ColorBrewer
+   Dark2). Se ofrecen los tres nombres porque el usuario elige por
+   diagnóstico, no por familia.
+
+   Se remapean los tokens de marca, no los semánticos: `--color-success`
+   y compañía ya apuntan a estos, así que la sustitución llega sola a
+   badges, barras de progreso, tarjetas y estados.
+   ============================================================ */
+
+/* --- Rojo-verde: protanopía y deuteranopía (Okabe-Ito) --- */
+:root[data-color-vision='protanopia'],
+:root[data-color-vision='deuteranopia'] {
+  /* Verde → verde azulado */
+  --color-green-rgb: 0 158 115;
+  --color-green-light-rgb: 183 228 211;
+  --color-mint-rgb: 102 194 165;
+  --color-mint-hover-rgb: 85 179 148;
+  --color-mint-active-rgb: 69 164 132;
+  --color-mint-light-rgb: 220 240 233;
+
+  /* Rojo → bermellón (se separa del verde por tono y por luminancia) */
+  --color-red-rgb: 213 94 0;
+  --color-red-hover-rgb: 191 84 0;
+  --color-red-active-rgb: 169 74 0;
+  --color-red-light-rgb: 246 211 184;
+  --color-red-light-alt-rgb: 232 147 90;
+
+  /* Amarillo → ámbar, para no solaparse con el bermellón */
+  --color-yellow-rgb: 230 159 0;
+  --color-yellow-hover-rgb: 207 143 0;
+  --color-yellow-active-rgb: 184 127 0;
+  --color-yellow-light-rgb: 251 235 204;
+
+  /* Azul → azul saturado */
+  --color-sky-rgb: 0 114 178;
+  --color-sky-hover-rgb: 0 96 153;
+  --color-sky-active-rgb: 0 79 128;
+  --color-sky-light-rgb: 204 227 240;
+  --color-sky-light-alt-rgb: 127 180 216;
+
+  /* Púrpura → púrpura rojizo: el lila de marca se confunde con el azul */
+  --color-purple-rgb: 204 121 167;
+  --color-purple-hover-rgb: 190 106 153;
+  --color-purple-active-rgb: 172 90 136;
+  --color-purple-light-rgb: 245 227 237;
+  --color-lilac-rgb: 232 203 220;
+  --color-lilac-hover-rgb: 221 185 206;
+  --color-lilac-active-rgb: 210 167 192;
+  --color-purple-dark-rgb: 140 67 112;
+  --color-purple-dark-hover-rgb: 122 58 98;
+  --color-purple-dark-active-rgb: 104 49 84;
+
+  /* Melocotón: comparte zona con el bermellón, se vira a arena */
+  --color-peach-rgb: 242 227 205;
+  --color-peach-hover-rgb: 234 216 189;
+  --color-peach-active-rgb: 226 205 173;
+  --color-peach-light-rgb: 249 241 229;
+
+  /* Tarjetas y barras con hex literal en el tema base */
+  --color-card-ia: #e69f00;
+  --color-card-stats: #cc79a7;
+  --color-card-pending: #f6d3b8;
+  --color-card-clases: #66c2a5;
+  --color-card-info: #66c2a5;
+  --color-section-enigmas: #66c2a5;
+  --color-progress-comun: #66c2a5;
+  --color-progress-rara: #e8cbdc;
+  --color-progress-epica: #cc79a7;
+  --color-progress-legendaria-rgb: 184 127 0;
+}
+
+/* --- Azul-amarillo: tritanopía (ColorBrewer Dark2) --- */
+:root[data-color-vision='tritanopia'] {
+  /* Verde → verde teal oscuro */
+  --color-green-rgb: 27 158 119;
+  --color-green-light-rgb: 194 229 218;
+  --color-mint-rgb: 79 183 154;
+  --color-mint-hover-rgb: 67 166 139;
+  --color-mint-active-rgb: 56 149 124;
+  --color-mint-light-rgb: 214 239 231;
+
+  /* Rojo → naranja rojizo */
+  --color-red-rgb: 217 95 2;
+  --color-red-hover-rgb: 194 85 2;
+  --color-red-active-rgb: 171 75 2;
+  --color-red-light-rgb: 247 213 187;
+  --color-red-light-alt-rgb: 234 142 74;
+
+  /* Amarillo → mostaza: el amarillo puro se lee casi blanco */
+  --color-yellow-rgb: 230 171 2;
+  --color-yellow-hover-rgb: 206 153 2;
+  --color-yellow-active-rgb: 182 135 2;
+  --color-yellow-light-rgb: 251 239 203;
+
+  /* Azul → azul violáceo, para separarlo del verde */
+  --color-sky-rgb: 117 112 179;
+  --color-sky-hover-rgb: 104 98 165;
+  --color-sky-active-rgb: 91 86 151;
+  --color-sky-light-rgb: 224 222 240;
+  --color-sky-light-alt-rgb: 169 165 207;
+
+  /* Púrpura → magenta */
+  --color-purple-rgb: 231 41 138;
+  --color-purple-hover-rgb: 208 34 124;
+  --color-purple-active-rgb: 185 30 110;
+  --color-purple-light-rgb: 250 210 229;
+  --color-lilac-rgb: 242 198 223;
+  --color-lilac-hover-rgb: 233 180 210;
+  --color-lilac-active-rgb: 224 162 197;
+  --color-purple-dark-rgb: 160 31 99;
+  --color-purple-dark-hover-rgb: 140 27 87;
+  --color-purple-dark-active-rgb: 120 23 74;
+
+  --color-peach-rgb: 246 223 208;
+  --color-peach-hover-rgb: 239 211 192;
+  --color-peach-active-rgb: 232 199 176;
+  --color-peach-light-rgb: 251 240 232;
+
+  --color-card-ia: #e6ab02;
+  --color-card-stats: #e7298a;
+  --color-card-pending: #f7d5bb;
+  --color-card-clases: #4fb79a;
+  --color-card-info: #4fb79a;
+  --color-section-enigmas: #4fb79a;
+  --color-progress-comun: #4fb79a;
+  --color-progress-rara: #f2c6df;
+  --color-progress-epica: #e7298a;
+  --color-progress-legendaria-rgb: 182 135 2;
+}
+
+/* El amarillo de marca es claro y lleva texto navy encima; los ámbares de las
+   dos paletas también, así que la regla de texto blanco del tema university
+   dejaría de ser legible. Se devuelve el texto oscuro. */
+:root[data-color-vision='protanopia'] .bg-yellow,
+:root[data-color-vision='deuteranopia'] .bg-yellow,
+:root[data-color-vision='tritanopia'] .bg-yellow {
+  color: var(--color-navy-700);
+}
+
+/* ============================================================
+   PALETA CRUDA DE TAILWIND, REMAPEADA
+   Los tokens del sistema de diseño no llegan a todas partes: hay
+   ~200 usos de la escala cruda (`text-red-500`, `bg-green-100`…)
+   repartidos por unos 42 componentes. Como esos tonos pasan ahora
+   por variable (ver `tailwind.css`), el modo de daltonismo también
+   los alcanza y deja de ser un ajuste a medias.
+
+   Las rampas conservan el mismo perfil de luminosidad que Tailwind
+   y solo cambian el tono, así que los fondos claros siguen siendo
+   claros y los textos oscuros siguen siendo oscuros.
+   ============================================================ */
+
+:root[data-color-vision='protanopia'],
+:root[data-color-vision='deuteranopia'] {
+  --palette-red-50: 253 249 245;
+  --palette-red-100: 251 239 230;
+  --palette-red-200: 244 215 191;
+  --palette-red-300: 236 183 140;
+  --palette-red-400: 226 142 76;
+  --palette-red-500: 213 94 0;
+  --palette-red-600: 187 83 0;
+  --palette-red-700: 160 70 0;
+  --palette-green-50: 245 251 249;
+  --palette-green-100: 230 245 241;
+  --palette-green-400: 76 187 157;
+  --palette-green-500: 0 158 115;
+  --palette-green-600: 0 139 101;
+  --palette-green-700: 0 118 86;
+  --palette-yellow-100: 252 245 230;
+  --palette-yellow-200: 249 231 191;
+  --palette-yellow-500: 230 159 0;
+  --palette-yellow-600: 202 140 0;
+  --palette-yellow-700: 172 119 0;
+  --palette-amber-50: 254 251 245;
+  --palette-amber-100: 252 245 230;
+  --palette-amber-200: 249 231 191;
+  --palette-amber-500: 230 159 0;
+  --palette-amber-600: 202 140 0;
+  --palette-amber-700: 172 119 0;
+  --palette-amber-800: 138 95 0;
+  --palette-orange-500: 226 130 0;
+  --palette-blue-50: 245 249 252;
+  --palette-blue-100: 230 241 247;
+  --palette-blue-200: 191 220 236;
+  --palette-blue-500: 0 114 178;
+  --palette-blue-600: 0 100 157;
+  --palette-blue-700: 0 86 134;
+  --palette-sky-100: 230 241 247;
+  --palette-sky-200: 191 220 236;
+  --palette-sky-300: 140 192 220;
+  --palette-sky-700: 0 86 134;
+  --palette-indigo-900: 0 51 80;
+  --palette-violet-100: 250 242 246;
+  --palette-violet-200: 242 222 233;
+  --palette-violet-700: 153 91 125;
+  --palette-purple-200: 242 222 233;
+  --palette-purple-500: 204 121 167;
+  --palette-emerald-500: 0 158 115;
+}
+
+:root[data-color-vision='tritanopia'] {
+  --palette-red-50: 253 249 245;
+  --palette-red-100: 251 239 230;
+  --palette-red-200: 246 215 192;
+  --palette-red-300: 238 183 141;
+  --palette-red-400: 228 143 78;
+  --palette-red-500: 217 95 2;
+  --palette-red-600: 191 84 2;
+  --palette-red-700: 163 71 2;
+  --palette-green-50: 246 251 250;
+  --palette-green-100: 232 245 241;
+  --palette-green-400: 95 187 160;
+  --palette-green-500: 27 158 119;
+  --palette-green-600: 24 139 105;
+  --palette-green-700: 20 118 89;
+  --palette-yellow-100: 252 247 230;
+  --palette-yellow-200: 249 234 192;
+  --palette-yellow-500: 230 171 2;
+  --palette-yellow-600: 202 150 2;
+  --palette-yellow-700: 172 128 2;
+  --palette-amber-50: 254 252 245;
+  --palette-amber-100: 252 247 230;
+  --palette-amber-200: 249 234 192;
+  --palette-amber-500: 230 171 2;
+  --palette-amber-600: 202 150 2;
+  --palette-amber-700: 172 128 2;
+  --palette-amber-800: 138 103 1;
+  --palette-orange-500: 217 122 2;
+  --palette-blue-50: 249 249 252;
+  --palette-blue-100: 241 241 247;
+  --palette-blue-200: 220 219 236;
+  --palette-blue-500: 117 112 179;
+  --palette-blue-600: 103 99 158;
+  --palette-blue-700: 88 84 134;
+  --palette-sky-100: 241 241 247;
+  --palette-sky-200: 220 219 236;
+  --palette-sky-300: 193 191 221;
+  --palette-sky-700: 88 84 134;
+  --palette-indigo-900: 53 50 81;
+  --palette-violet-100: 253 234 243;
+  --palette-violet-200: 249 202 226;
+  --palette-violet-700: 173 31 104;
+  --palette-purple-200: 249 202 226;
+  --palette-purple-500: 231 41 138;
+  --palette-emerald-500: 27 158 119;
+}
+
+/* ------------------------------------------------------------
+   Alto contraste sobre la paleta cruda: grises más marcados (son
+   los que hacen ilegible el texto secundario) y tonos 400/500 más
+   oscuros, que son los que llevan texto o van sobre blanco.
+   Hay una variante por modo de visión para que activar los dos
+   ajustes a la vez no deshaga el remapeo del daltonismo.
+   ------------------------------------------------------------ */
+
+:root[data-contrast='high'] {
+  --palette-gray-300: 168 173 184;
+  --palette-gray-400: 107 114 128;
+  --palette-gray-500: 75 85 99;
+  --palette-gray-600: 55 65 81;
+  --palette-gray-700: 31 41 55;
+  --palette-red-400: 154 70 70;
+  --palette-red-500: 148 42 42;
+  --palette-green-400: 46 138 79;
+  --palette-green-500: 21 122 58;
+  --palette-yellow-500: 145 111 5;
+  --palette-amber-500: 152 98 7;
+  --palette-orange-500: 154 71 14;
+  --palette-blue-500: 37 81 153;
+  --palette-purple-500: 104 53 153;
+  --palette-emerald-500: 10 115 80;
+}
+
+:root[data-contrast='high'][data-color-vision='protanopia'],
+:root[data-contrast='high'][data-color-vision='deuteranopia'] {
+  --palette-red-400: 140 88 47;
+  --palette-red-500: 132 58 0;
+  --palette-green-400: 47 116 97;
+  --palette-green-500: 0 98 71;
+  --palette-yellow-500: 143 99 0;
+  --palette-amber-500: 143 99 0;
+  --palette-orange-500: 140 81 0;
+  --palette-blue-500: 0 71 110;
+  --palette-purple-500: 126 75 104;
+  --palette-emerald-500: 0 98 71;
+}
+
+:root[data-contrast='high'][data-color-vision='tritanopia'] {
+  --palette-red-400: 142 89 48;
+  --palette-red-500: 135 59 1;
+  --palette-green-400: 59 116 99;
+  --palette-green-500: 17 98 74;
+  --palette-yellow-500: 143 106 1;
+  --palette-amber-500: 143 106 1;
+  --palette-orange-500: 135 76 1;
+  --palette-blue-500: 73 69 111;
+  --palette-purple-500: 143 25 86;
+  --palette-emerald-500: 17 98 74;
+}
+
+/* ============================================================
+   MENOS ANIMACIÓN
+   Complementa a `prefers-reduced-motion`: el ajuste del sistema no
+   siempre está a mano (aulas con equipos compartidos), así que se
+   puede activar por usuario.
+   ============================================================ */
+
+:root[data-reduce-motion='true'] {
+  scroll-behavior: auto;
+}
+
+:root[data-reduce-motion='true'] *,
+:root[data-reduce-motion='true'] *::before,
+:root[data-reduce-motion='true'] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}

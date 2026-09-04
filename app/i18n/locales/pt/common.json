@@ -231,6 +231,58 @@
       "icon": "Só ícone",
       "text": "Só texto"
     },
+    "accessibility": {
+      "title": "Acessibilidade",
+      "description": "Ajusta o tamanho do texto, o contraste e as cores. Fica guardado na tua conta e aplica-se em todos os dispositivos.",
+      "updated": "Preferências de acessibilidade atualizadas",
+      "update_error": "Não foi possível guardar as preferências de acessibilidade",
+      "font_scale": {
+        "title": "Tamanho da letra",
+        "description": "Aumenta o texto e os ícones de toda a plataforma.",
+        "normal": "Normal",
+        "large": "Grande",
+        "xlarge": "Muito grande"
+      },
+      "contrast": {
+        "title": "Contraste",
+        "description": "Reforça textos, contornos e foco do teclado.",
+        "normal": "Normal",
+        "high": "Alto"
+      },
+      "color_vision": {
+        "title": "Visão das cores",
+        "description": "Muda a paleta para que os estados continuem a distinguir-se com daltonismo.",
+        "default": "Sem ajuste",
+        "protanopia": "Protanopia",
+        "deuteranopia": "Deuteranopia",
+        "tritanopia": "Tritanopia"
+      },
+      "samples": {
+        "success": "Correto",
+        "error": "Erro",
+        "warning": "Aviso",
+        "info": "Informação",
+        "accent": "Destaque"
+      },
+      "reduce_motion": {
+        "title": "Menos animação",
+        "description": "Reduz transições e efeitos de movimento."
+      }
+    },
+    "notification_settings": {
+      "title": "Avisos",
+      "description": "Do que te avisamos e por onde. Os avisos aparecem sempre na plataforma; o email é opcional.",
+      "updated": "Preferências de avisos atualizadas",
+      "update_error": "Não foi possível guardar as preferências de avisos",
+      "email": {
+        "title": "Avisos por email",
+        "description": "Entregas revistas, convites e confirmações também no teu email."
+      },
+      "reminders": {
+        "title": "Lembretes de entrega",
+        "description": "Um aviso quando faltarem menos de 24 horas para o fim de uma missão."
+      }
+    },
     "markdown": {
       "insert_at_end": "Inserir no fim"
     },

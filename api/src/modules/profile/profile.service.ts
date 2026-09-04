@@ -69,6 +69,10 @@ export class ProfileService {
       language: 'es',
       theme: 'college',
       menuDisplay: 'both',
+      fontScale: 'normal',
+      contrastMode: 'normal',
+      colorVision: 'default',
+      reduceMotion: false,
     }
 
     return {
@@ -87,6 +91,10 @@ export class ProfileService {
           language: settings.language,
           theme: settings.theme,
           menuDisplay: settings.menuDisplay,
+          fontScale: settings.fontScale,
+          contrastMode: settings.contrastMode,
+          colorVision: settings.colorVision,
+          reduceMotion: settings.reduceMotion,
         },
         createdAt: user.createdAt,
       },
@@ -189,6 +197,10 @@ export class ProfileService {
     language?: string
     theme?: string
     menuDisplay?: string
+    fontScale?: string
+    contrastMode?: string
+    colorVision?: string
+    reduceMotion?: boolean
   }) {
     await prisma.userSettings.upsert({
       where: { userId },

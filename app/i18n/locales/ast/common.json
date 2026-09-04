@@ -231,6 +231,58 @@
       "icon": "Namás iconu",
       "text": "Namás testu"
     },
+    "accessibility": {
+      "title": "Accesibilidá",
+      "description": "Axusta'l tamañu del testu, el contraste y les colores. Guárdase na to cuenta y aplícase en tolos preseos.",
+      "updated": "Preferencies d'accesibilidá anovaes",
+      "update_error": "Nun se pudieron guardar les preferencies d'accesibilidá",
+      "font_scale": {
+        "title": "Tamañu de la lletra",
+        "description": "Allarga'l testu y los iconos de tola plataforma.",
+        "normal": "Normal",
+        "large": "Grande",
+        "xlarge": "Bien grande"
+      },
+      "contrast": {
+        "title": "Contraste",
+        "description": "Refuerza testos, berbesos y focu del tecláu.",
+        "normal": "Normal",
+        "high": "Altu"
+      },
+      "color_vision": {
+        "title": "Visión del color",
+        "description": "Camuda la paleta pa que los estaos sigan estremándose col daltonismu.",
+        "default": "Ensin axuste",
+        "protanopia": "Protanopía",
+        "deuteranopia": "Deuteranopía",
+        "tritanopia": "Tritanopía"
+      },
+      "samples": {
+        "success": "Correuto",
+        "error": "Fallu",
+        "warning": "Avisu",
+        "info": "Información",
+        "accent": "Destacáu"
+      },
+      "reduce_motion": {
+        "title": "Menos animación",
+        "description": "Amenorga transiciones y efeutos de movimientu."
+      }
+    },
+    "notification_settings": {
+      "title": "Avisos",
+      "description": "De qué t'avisamos y per ónde. Los avisos siempre apaecen na plataforma; el corréu ye opcional.",
+      "updated": "Preferencies d'avisos anovaes",
+      "update_error": "Nun se pudieron guardar les preferencies d'avisos",
+      "email": {
+        "title": "Avisos per corréu",
+        "description": "Entregues revisaes, invitaciones y confirmaciones tamién nel to corréu."
+      },
+      "reminders": {
+        "title": "Recordatorios d'entrega",
+        "description": "Un avisu cuando queden menos de 24 hores pal final d'una misión."
+      }
+    },
     "markdown": {
       "insert_at_end": "Inxertar al final"
     },

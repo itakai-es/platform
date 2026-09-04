@@ -231,6 +231,58 @@
       "icon": "Només icona",
       "text": "Només text"
     },
+    "accessibility": {
+      "title": "Accessibilitat",
+      "description": "Ajusta la mida del text, el contrast i els colors. Es desa al teu compte i s'aplica a tots els dispositius.",
+      "updated": "Preferències d'accessibilitat actualitzades",
+      "update_error": "No s'han pogut desar les preferències d'accessibilitat",
+      "font_scale": {
+        "title": "Mida de la lletra",
+        "description": "Amplia el text i les icones de tota la plataforma.",
+        "normal": "Normal",
+        "large": "Gran",
+        "xlarge": "Molt gran"
+      },
+      "contrast": {
+        "title": "Contrast",
+        "description": "Reforça textos, vores i focus del teclat.",
+        "normal": "Normal",
+        "high": "Alt"
+      },
+      "color_vision": {
+        "title": "Visió del color",
+        "description": "Canvia la paleta perquè els estats se segueixin distingint amb daltonisme.",
+        "default": "Sense ajust",
+        "protanopia": "Protanopia",
+        "deuteranopia": "Deuteranopia",
+        "tritanopia": "Tritanopia"
+      },
+      "samples": {
+        "success": "Correcte",
+        "error": "Error",
+        "warning": "Avís",
+        "info": "Informació",
+        "accent": "Destacat"
+      },
+      "reduce_motion": {
+        "title": "Menys animació",
+        "description": "Redueix transicions i efectes de moviment."
+      }
+    },
+    "notification_settings": {
+      "title": "Avisos",
+      "description": "Què t'avisem i per on. Els avisos sempre apareixen a la plataforma; el correu és opcional.",
+      "updated": "Preferències d'avisos actualitzades",
+      "update_error": "No s'han pogut desar les preferències d'avisos",
+      "email": {
+        "title": "Avisos per correu",
+        "description": "Lliuraments revisats, invitacions i confirmacions també al teu correu."
+      },
+      "reminders": {
+        "title": "Recordatoris de lliurament",
+        "description": "Un avís quan quedin menys de 24 hores per al final d'una missió."
+      }
+    },
     "markdown": {
       "insert_at_end": "Inserir al final"
     },

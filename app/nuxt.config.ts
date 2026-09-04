@@ -94,7 +94,9 @@ export default defineNuxtConfig({
     cssPath: '@/assets/css/tailwind.css',
   },
 
-  css: [],
+  // La capa de accesibilidad va después de tailwind.css para poder redefinir
+  // sus variables (ver assets/css/accessibility.css).
+  css: ['~/assets/css/accessibility.css'],
 
   app: {
     head: {

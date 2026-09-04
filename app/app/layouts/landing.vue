@@ -7,7 +7,7 @@
         <!-- Background Layer con Opacidad (solo para el navbar, no el SVG) -->
         <div
           class="absolute inset-0 backdrop-blur-md"
-          style="background: #00aafc; opacity: 0.5"
+          style="background: var(--color-sky); opacity: 0.5"
         ></div>
 
         <!-- Contenido del Navbar -->
@@ -44,6 +44,7 @@
 
               <!-- CTA Buttons + Language -->
               <div class="flex items-center gap-3">
+                <AccessibilityMenu variant="light" />
                 <LanguageSwitcher variant="light" />
                 <Button
                   variant="outline"
@@ -100,7 +101,7 @@
       <header
         v-if="showFixedNavbar"
         class="fixed top-0 left-0 right-0 z-50 shadow-lg py-5"
-        style="background: #00aafc"
+        style="background: var(--color-sky)"
       >
         <div class="mx-auto px-4 md:px-6 lg:px-8" style="max-width: 1050px">
           <div class="flex items-center justify-between">
@@ -135,6 +136,7 @@
 
               <!-- CTA Buttons + Language -->
               <div class="flex items-center gap-3">
+                <AccessibilityMenu variant="light" />
                 <LanguageSwitcher variant="light" />
                 <Button
                   variant="outline"

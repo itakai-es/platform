@@ -65,6 +65,12 @@ model UserSettings {
   language           String   @default("es")
   theme              String   @default("college")
   menuDisplay        String   @default("both") @map("menu_display")
+  // Accesibilidad (Fase 3, punto 14). Se guardan como texto libre y se validan
+  // en la ruta: añadir un modo nuevo no obliga a migrar la base de datos.
+  fontScale          String   @default("normal") @map("font_scale")
+  contrastMode       String   @default("normal") @map("contrast_mode")
+  colorVision        String   @default("default") @map("color_vision")
+  reduceMotion       Boolean  @default(false) @map("reduce_motion")
   createdAt          DateTime @default(now()) @map("created_at")
   updatedAt          DateTime @updatedAt @map("updated_at")
 
@@ -485,6 +491,10 @@ enum NotificationType {
   achievement_unlocked
   system_announcement
   chat_message
+  // Entregas (Fase 3, punto 3): el profesor recibe el aviso de que hay algo que
+  // revisar y el alumno la confirmación de que ya se ha revisado.
+  submission_received
+  submission_reviewed
 }
 
 enum NotificationPriority {

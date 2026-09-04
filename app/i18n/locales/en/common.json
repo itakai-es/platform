@@ -231,6 +231,58 @@
       "icon": "Icon only",
       "text": "Text only"
     },
+    "accessibility": {
+      "title": "Accessibility",
+      "description": "Adjust text size, contrast and colours. It is saved to your account and applies on every device.",
+      "updated": "Accessibility preferences updated",
+      "update_error": "Accessibility preferences could not be saved",
+      "font_scale": {
+        "title": "Text size",
+        "description": "Enlarges text and icons across the whole platform.",
+        "normal": "Normal",
+        "large": "Large",
+        "xlarge": "Extra large"
+      },
+      "contrast": {
+        "title": "Contrast",
+        "description": "Strengthens text, borders and keyboard focus.",
+        "normal": "Normal",
+        "high": "High"
+      },
+      "color_vision": {
+        "title": "Colour vision",
+        "description": "Switches the palette so states stay distinguishable with colour blindness.",
+        "default": "No adjustment",
+        "protanopia": "Protanopia",
+        "deuteranopia": "Deuteranopia",
+        "tritanopia": "Tritanopia"
+      },
+      "samples": {
+        "success": "Success",
+        "error": "Error",
+        "warning": "Warning",
+        "info": "Info",
+        "accent": "Highlight"
+      },
+      "reduce_motion": {
+        "title": "Less motion",
+        "description": "Reduces transitions and movement effects."
+      }
+    },
+    "notification_settings": {
+      "title": "Alerts",
+      "description": "What we tell you about, and where. Alerts always appear in the platform; email is optional.",
+      "updated": "Alert preferences updated",
+      "update_error": "Alert preferences could not be saved",
+      "email": {
+        "title": "Email alerts",
+        "description": "Reviewed work, invitations and confirmations also sent to your inbox."
+      },
+      "reminders": {
+        "title": "Deadline reminders",
+        "description": "An alert when a mission has less than 24 hours left."
+      }
+    },
     "markdown": {
       "insert_at_end": "Insert at the end"
     },
