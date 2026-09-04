@@ -155,17 +155,18 @@ const getNotificationIcon = (type: NotificationType): string => {
   const icons: Record<NotificationType, string> = {
     mission_assigned: '📝',
     mission_completed: '✅',
-    mission_graded: '📊',
     badge_earned: '🏆',
     level_up: '⬆️',
     class_invitation: '📧',
-    class_joined: '👥',
-    announcement: '📢',
-    message: '💬',
-    reminder: '⏰',
-    achievement: '🎯',
-    deadline_reminder: '⚠️',
-    system: 'ℹ️',
+    deadline_reminder: '⏰',
+    join_request: '🙋',
+    join_accepted: '👥',
+    join_rejected: '🚫',
+    achievement_unlocked: '🎯',
+    system_announcement: '📢',
+    chat_message: '💬',
+    submission_received: '📥',
+    submission_reviewed: '📊',
   }
   return icons[type] || 'ℹ️'
 }
@@ -218,7 +219,7 @@ onMounted(() => {
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  color: #9ca3af;
+  color: rgb(var(--palette-gray-400));
   transition: all 0.2s;
 }
 
@@ -361,7 +362,7 @@ onMounted(() => {
 .notification-message {
   margin: 0 0 0.25rem 0;
   font-size: 0.75rem;
-  color: #9ca3af;
+  color: rgb(var(--palette-gray-400));
   line-height: 1rem;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -394,7 +395,7 @@ onMounted(() => {
 .empty-text {
   margin: 0;
   font-size: 0.875rem;
-  color: #9ca3af;
+  color: rgb(var(--palette-gray-400));
 }
 
 /* Transitions */

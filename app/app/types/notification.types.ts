@@ -1,20 +1,28 @@
 /**
  * Tipos de notificaciones disponibles en el sistema
  */
+/**
+ * Tipos de notificación. Es exactamente el enum `NotificationType` del backend
+ * (`api/prisma/schema.prisma`): antes esta lista iba por su cuenta e incluía
+ * tipos que el servidor no emite nunca, con lo que los que sí llegaban
+ * (`join_accepted`, `join_rejected`…) se quedaban sin icono. Al añadir un tipo
+ * hay que tocar los dos sitios.
+ */
 export type NotificationType =
   | 'mission_assigned' // Nueva misión asignada
   | 'mission_completed' // Misión completada
-  | 'mission_graded' // Misión calificada por el profesor
   | 'badge_earned' // Logro/insignia ganada
   | 'level_up' // Subida de nivel
   | 'class_invitation' // Invitación a una clase
-  | 'class_joined' // Estudiante se unió a clase (para profesores)
-  | 'announcement' // Anuncio general
-  | 'message' // Mensaje directo
-  | 'reminder' // Recordatorio
-  | 'achievement' // Logro desbloqueado
   | 'deadline_reminder' // Recordatorio de fecha límite
-  | 'system' // Notificación del sistema
+  | 'join_request' // Solicitud de acceso a una clase
+  | 'join_accepted' // Solicitud aceptada
+  | 'join_rejected' // Solicitud rechazada
+  | 'achievement_unlocked' // Logro desbloqueado
+  | 'system_announcement' // Anuncio del sistema
+  | 'chat_message' // Mensaje del asistente
+  | 'submission_received' // Entrega pendiente de revisar (profesor)
+  | 'submission_reviewed' // Entrega ya revisada (alumno)
 
 export type NotificationPriority = 'low' | 'medium' | 'high' | 'urgent'
 

@@ -6,6 +6,7 @@ import { randomUUID } from 'crypto'
 import { getMissionCompletionRewards, validateCustomEnigmaXp } from '../../utils/xp-calculator.js'
 import { applyXpDelta } from '../../utils/enrollment-xp.js'
 import { resolveClassSettings } from '../../utils/class-settings.js'
+import { notify } from '../notifications/notifications.service.js'
 
 const UPLOADS_DIR = join(process.cwd(), 'uploads', 'submissions')
 
@@ -39,6 +40,9 @@ export class SubmissionsService {
     // Verify student is enrolled in the class
     const enrollment = await prisma.classEnrollment.findUnique({
       where: { studentId_classId: { studentId, classId: enigma.mission.classId } },
+      // El nombre real es el recurso si el alumno no se ha puesto alias en la clase:
+      // el aviso al profesor tiene que decir quién ha entregado.
+      include: { student: { select: { name: true } } },
     })
 
     if (!enrollment) throw new Error('No estás inscrito en esta clase')
@@ -106,6 +110,30 @@ export class SubmissionsService {
           submissionId: submission.id,
         },
       },
+    })
+
+    // Aviso al profesor de que tiene algo que revisar (Fase 3, punto 3). Va sin
+    // correo a propósito: una clase de treinta alumnos entregando la misma
+    // misión llenaría el buzón, y el profesor las ve agrupadas en la aplicación.
+    // No bloquea la respuesta: la entrega ya está guardada.
+    notify({
+      userId: enigma.mission.class.teacherId,
+      type: 'submission_received',
+      copy: 'submission_received',
+      params: {
+        student: enrollment.nickname || enrollment.student.name,
+        enigma: enigma.title,
+        class: enigma.mission.class.name,
+      },
+      actionUrl: `/profesor/clases/${enigma.mission.classId}/entregas`,
+      metadata: {
+        submissionId: submission.id,
+        enigmaId,
+        missionId: enigma.missionId,
+        classId: enigma.mission.classId,
+      },
+    }).catch(error => {
+      console.error('[submissions] no se pudo avisar al profesor de la entrega:', error)
     })
 
     return {
@@ -523,6 +551,28 @@ export class SubmissionsService {
     })
 
     const updated = result.updated
+
+    // Confirmación al alumno (Fase 3, punto 3). Esta sí sale también por correo:
+    // es un aviso por entrega revisada, no una avalancha, y es justo lo que el
+    // alumno está esperando.
+    notify({
+      userId: studentId,
+      type: 'submission_reviewed',
+      copy: 'submission_reviewed',
+      params: { enigma: submission.enigma.title, percentage: Math.round(pct) },
+      actionUrl: `/alumno/misiones/${missionId}`,
+      metadata: {
+        submissionId,
+        enigmaId: submission.enigmaId,
+        missionId,
+        classId,
+        percentage: Math.round(pct),
+      },
+      alsoByEmail: true,
+      emailAction: 'view_mission',
+    }).catch(error => {
+      console.error('[submissions] no se pudo avisar al alumno de la revisión:', error)
+    })
 
     return {
       submission: updated,

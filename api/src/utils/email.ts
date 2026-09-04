@@ -1,4 +1,6 @@
 import { env } from '../config/env.js'
+import { emailActionLabel, emailFooter } from '../modules/notifications/notifications.messages.js'
+import type { AppLanguage } from '../modules/settings/settings.types.js'
 
 /**
  * Send an email via Resend API. Silently skips if API key is not configured.
@@ -116,4 +118,57 @@ export async function sendPasswordChangedEmail(to: string) {
 </html>`
 
   return sendEmail(to, 'Tu contraseña ha sido cambiada — ITAKAI', html)
+}
+
+/**
+ * Aviso de la plataforma por correo (Fase 3, punto 3).
+ *
+ * Misma plantilla que los correos de cuenta, para que un aviso de entrega no
+ * parezca de otro producto. El botón solo sale si el aviso lleva enlace, y todo
+ * el texto —incluido el pie— va en el idioma del destinatario.
+ */
+export async function sendNotificationEmail(
+  to: string,
+  language: AppLanguage,
+  notification: { title: string; message: string; actionUrl?: string; actionLabel?: string }
+) {
+  const { title, message, actionUrl, actionLabel } = notification
+
+  const actionBlock = actionUrl
+    ? `
+        <tr><td align="center" style="padding-bottom:24px;">
+          <a href="${actionUrl}" style="display:inline-block; background-color:#7c3aed; color:#ffffff; text-decoration:none; padding:14px 32px; border-radius:8px; font-size:16px; font-weight:600;">
+            ${actionLabel || emailActionLabel('open', language)}
+          </a>
+        </td></tr>`
+    : ''
+
+  const html = `
+<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"></head>
+<body style="margin:0; padding:0; background-color:#0f0b2e; font-family:'Segoe UI',Roboto,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#0f0b2e; padding:40px 0;">
+    <tr><td align="center">
+      <table width="480" cellpadding="0" cellspacing="0" style="background-color:#1a1545; border-radius:16px; padding:40px; color:#ffffff;">
+        <tr><td align="center" style="padding-bottom:24px;">
+          <h1 style="margin:0; font-size:28px; color:#ffffff;">ITAKAI</h1>
+        </td></tr>
+        <tr><td align="center" style="padding-bottom:16px;">
+          <h2 style="margin:0; font-size:20px; color:#e0d4ff;">${title}</h2>
+        </td></tr>
+        <tr><td style="padding-bottom:24px; color:#b8add4; font-size:15px; line-height:1.6; text-align:center;">
+          ${message}
+        </td></tr>${actionBlock}
+        <tr><td style="border-top:1px solid #2d2660; padding-top:16px; color:#6b5f8a; font-size:12px; text-align:center;">
+          ${emailFooter(language)}<br>
+          © ITAKAI — Plataforma educativa gamificada
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`
+
+  return sendEmail(to, `${title} — ITAKAI`, html)
 }

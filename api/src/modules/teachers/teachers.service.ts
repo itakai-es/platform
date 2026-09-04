@@ -16,6 +16,7 @@ import {
 } from '../../utils/class-settings.js'
 import { resolveLevelConfig, tierForLevel, type LevelConfig } from '../../utils/level-config.js'
 import { saveUpload } from '../storage/storage.service.js'
+import { notify } from '../notifications/notifications.service.js'
 
 const BADGES_DIR = join(process.cwd(), 'uploads', 'badges')
 const COVERS_DIR = join(process.cwd(), 'uploads', 'covers')
@@ -1380,15 +1381,16 @@ export class TeachersService {
       },
     })
 
-    // Create notification for student
-    await prisma.notification.create({
-      data: {
-        userId: request.studentId,
-        type: 'join_accepted',
-        title: 'Solicitud aceptada',
-        message: `Tu solicitud para unirte a ${cls.name} ha sido aceptada`,
-        actionUrl: `/student/classes/${classId}`,
-      },
+    // Aviso al alumno (interno siempre, y por correo si tiene y lo permite).
+    await notify({
+      userId: request.studentId,
+      type: 'join_accepted',
+      copy: 'join_accepted',
+      params: { class: cls.name },
+      actionUrl: `/alumno/clases/${classId}`,
+      metadata: { classId },
+      alsoByEmail: true,
+      emailAction: 'go_to_class',
     })
 
     return { success: true, message: 'Solicitud aceptada' }
@@ -1412,14 +1414,15 @@ export class TeachersService {
       data: { status: 'rejected', rejectionReason: reason },
     })
 
-    // Create notification for student
-    await prisma.notification.create({
-      data: {
-        userId: request.studentId,
-        type: 'join_rejected',
-        title: 'Solicitud rechazada',
-        message: reason || `Tu solicitud para unirte a ${cls.name} ha sido rechazada`,
-      },
+    await notify({
+      userId: request.studentId,
+      type: 'join_rejected',
+      copy: 'join_rejected',
+      params: { class: cls.name },
+      // El motivo lo escribe el profesor con sus palabras: no se traduce.
+      messageOverride: reason,
+      metadata: { classId },
+      alsoByEmail: true,
     })
 
     return { success: true, message: 'Solicitud rechazada' }
@@ -1457,15 +1460,18 @@ export class TeachersService {
       },
     })
 
-    // Create notification for student
-    await prisma.notification.create({
-      data: {
-        userId: studentId,
-        type: 'class_invitation',
-        title: 'Nueva invitación',
-        message: `Has sido invitado a unirte a ${cls.name}`,
-        actionUrl: `/student/invitations`,
-      },
+    // TODO(fase 3, punto 9): cuando exista la pantalla de invitaciones del
+    // alumno, este enlace debería apuntar a ella; hoy no hay ninguna, así que
+    // lleva al listado de clases, que es desde donde se entra a la clase nueva.
+    await notify({
+      userId: studentId,
+      type: 'class_invitation',
+      copy: 'class_invitation',
+      params: { class: cls.name },
+      actionUrl: '/alumno/clases',
+      metadata: { classId, invitationId: invitation.id },
+      alsoByEmail: true,
+      emailAction: 'my_classes',
     })
 
     return {
