@@ -171,8 +171,8 @@
           "sort_xp_desc": "XP ↓",
           "sort_level_asc": "Nivel ↑",
           "sort_level_desc": "Nivel ↓",
-          "sort_coins_asc": "Monedes ↑",
-          "sort_coins_desc": "Monedes ↓",
+          "sort_coins_asc": "{coins} ↑",
+          "sort_coins_desc": "{coins} ↓",
           "sort_mana_asc": "Maná ↑",
           "sort_mana_desc": "Maná ↓",
           "sort_lives_asc": "Vida ↑",
@@ -338,8 +338,8 @@
               "desc": "Recompenses y poderes que los alumnos camuden."
             },
             "coins": {
-              "label": "Monedes",
-              "desc": "Amuesa'l saldu y los precios en monedes."
+              "label": "{coins}",
+              "desc": "Amuesa'l saldu y los precios en {coins}."
             },
             "mana": {
               "label": "Maná",
@@ -371,7 +371,7 @@
             }
           },
           "requires": "Necesita {feature}",
-          "requires_resource": "Necesita polo menos un recursu activu (XP, monedes, maná o vides)",
+          "requires_resource": "Necesita polo menos un recursu activu (XP, {coins}, maná o vides)",
           "general": {
             "title": "Datos xenerales",
             "name_label": "Nome",
@@ -574,7 +574,6 @@
         "enrolled_classes_count": "{count} clases",
         "not_enrolled": "Nun ta inscritu en nenguna de les tos clases",
         "label_progress": "Completáu",
-        "stat_coins": "Monedes",
         "stat_mana": "Maná",
         "stat_lives": "Puntos de vida",
         "no_activity": "Ensin actividá reciente",
@@ -679,7 +678,6 @@
           "description_required": "La descripción ye obligatoria"
         },
         "label_mana": "Maná",
-        "label_coins": "Monedes",
         "no_mana": "Ensin maná",
         "custom_value": "Valor personalizáu"
       },

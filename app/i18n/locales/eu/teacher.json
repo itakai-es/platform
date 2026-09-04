@@ -171,8 +171,8 @@
           "sort_xp_desc": "XP ↓",
           "sort_level_asc": "Maila ↑",
           "sort_level_desc": "Maila ↓",
-          "sort_coins_asc": "Txanponak ↑",
-          "sort_coins_desc": "Txanponak ↓",
+          "sort_coins_asc": "{coins} ↑",
+          "sort_coins_desc": "{coins} ↓",
           "sort_mana_asc": "Mana ↑",
           "sort_mana_desc": "Mana ↓",
           "sort_lives_asc": "Bizitza ↑",
@@ -338,8 +338,8 @@
               "desc": "Ikasleek trukatzen dituzten sariak eta botereak."
             },
             "coins": {
-              "label": "Txanponak",
-              "desc": "Txanponen saldoa eta prezioak erakusten ditu."
+              "label": "{coins}",
+              "desc": "{coins}: saldoa eta prezioak erakusten ditu."
             },
             "mana": {
               "label": "Mana",
@@ -371,7 +371,7 @@
             }
           },
           "requires": "{feature} behar du",
-          "requires_resource": "Baliabide bat aktibatuta behar du gutxienez (XP, txanponak, mana edo bizitzak)",
+          "requires_resource": "Baliabide bat aktibatuta behar du gutxienez (XP, {coins}, mana edo bizitzak)",
           "general": {
             "title": "Datu orokorrak",
             "name_label": "Izena",
@@ -574,7 +574,6 @@
         "enrolled_classes_count": "{count} klase",
         "not_enrolled": "Ez dago zure klaseetan matrikulatuta",
         "label_progress": "Osatuta",
-        "stat_coins": "Txanponak",
         "stat_mana": "Mana",
         "stat_lives": "Bizi puntuak",
         "no_activity": "Ez dago azken jarduerarik",
@@ -679,7 +678,6 @@
           "description_required": "Deskribapena derrigorrezkoa da"
         },
         "label_mana": "Mana",
-        "label_coins": "Txanponak",
         "no_mana": "Manarik gabe",
         "custom_value": "Balio pertsonalizatua"
       },

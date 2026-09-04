@@ -64,7 +64,7 @@
             </div>
           </div>
         </div>
-        <p v-if="rewardsLocked" class="mt-2 text-xs text-navy-700/60">
+        <p v-if="rewardsLocked" class="mt-2 text-xs text-navy-700/70">
           {{ t('teacher.components.enigma_form_modal.rewards_locked_hint') }}
         </p>
       </div>
@@ -90,7 +90,7 @@
       <div>
         <label class="block text-sm font-medium text-navy-700 mb-1.5">
           {{ t('teacher.components.enigma_form_modal.label_objectives') }}
-          <span class="text-navy-700/50 font-normal">{{
+          <span class="text-navy-700/70 font-normal">{{
             t('teacher.components.enigma_form_modal.label_objectives_optional')
           }}</span>
         </label>
@@ -159,6 +159,7 @@ import {
 } from '~/utils/gamification-config'
 
 const { t } = useI18n()
+const { coinLabel } = useCoinLabel()
 
 interface EnigmaFormData {
   id?: string
@@ -217,14 +218,14 @@ const quickPickClass = (active: boolean, disabled = false) =>
       ? 'text-gray-300 cursor-not-allowed'
       : active
         ? 'bg-navy-700/10 text-navy-700'
-        : 'text-navy-700/50 hover:text-navy-700 hover:bg-navy-700/5',
+        : 'text-navy-700/70 hover:text-navy-700 hover:bg-navy-700/5',
   ].join(' ')
 
 // Filas de recompensa visibles (según los recursos activos de la clase).
 const rewardRows = computed(() =>
   [
     { key: 'xp' as const, show: props.showXp, icon: XpIcon, label: t('teacher.components.enigma_form_modal.label_xp'), presets: xpPresets },
-    { key: 'coins' as const, show: props.showCoins, icon: CoinIcon, label: t('teacher.components.enigma_form_modal.label_coins'), presets: coinPresets },
+    { key: 'coins' as const, show: props.showCoins, icon: CoinIcon, label: coinLabel.value, presets: coinPresets },
     { key: 'mana' as const, show: props.showMana, icon: ManaIcon, label: t('teacher.components.enigma_form_modal.label_mana'), presets: manaPresets },
   ].filter(r => r.show)
 )

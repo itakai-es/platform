@@ -57,7 +57,7 @@
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <!-- Left Column: Classes Skeleton -->
         <div class="lg:col-span-2">
-          <div class="bg-[#6CF3AF] rounded-2xl shadow-lg p-5 animate-pulse">
+          <div class="bg-green rounded-2xl shadow-lg p-5 animate-pulse">
             <div class="flex items-center justify-between mb-4">
               <div class="flex items-center gap-2">
                 <div class="w-5 h-5 bg-navy-700/20 rounded" />
@@ -164,7 +164,7 @@
               </template>
             </CardHeader>
 
-            <div v-if="student.classes.length === 0" class="text-center py-8 text-navy-700/60">
+            <div v-if="student.classes.length === 0" class="text-center py-8 text-navy-700/70">
               <AcademicCapIcon class="w-10 h-10 mx-auto text-navy-700/30 mb-2" />
               <p>{{ t('teacher.students.detail.not_enrolled') }}</p>
             </div>
@@ -185,7 +185,7 @@
                   />
                   <div class="flex-1 min-w-0">
                     <h3 class="font-bold text-navy-700 truncate">{{ classItem.name }}</h3>
-                    <p class="text-sm text-navy-700/60 truncate">{{ classItem.nickname }}</p>
+                    <p class="text-sm text-navy-700/70 truncate">{{ classItem.nickname }}</p>
                   </div>
                   <!-- Level Badge — solo si la clase tiene XP activado -->
                   <div
@@ -206,12 +206,12 @@
                       <RocketLaunchIcon class="w-4 h-4 text-navy-700" />
                       <span class="font-bold text-navy-700"
                         >{{ classItem.missionsCompleted
-                        }}<span class="text-navy-700/30 font-normal"
+                        }}<span class="text-navy-700/70 font-normal"
                           >/{{ classItem.totalMissions }}</span
                         ></span
                       >
                     </div>
-                    <p class="text-xs text-navy-700/50">
+                    <p class="text-xs text-navy-700/70">
                       {{ t('teacher.students.detail.stat_missions') }}
                     </p>
                   </div>
@@ -223,24 +223,24 @@
                       <MapIcon class="w-4 h-4 text-navy-700" />
                       <span class="font-bold text-navy-700"
                         >{{ formatXP(classItem.xp)
-                        }}<span class="text-navy-700/30 font-normal"
+                        }}<span class="text-navy-700/70 font-normal"
                           >/{{ formatXP(classItem.totalXp) }}</span
                         ></span
                       >
                     </div>
-                    <p class="text-xs text-navy-700/50">XP</p>
+                    <p class="text-xs text-navy-700/70">XP</p>
                   </div>
                   <div class="bg-navy-700/5 rounded-lg px-3 py-2 text-center">
                     <div class="flex items-center justify-center gap-1">
                       <TrophyIcon class="w-4 h-4 text-navy-700" />
                       <span class="font-bold text-navy-700"
                         >{{ classItem.badgesEarned
-                        }}<span class="text-navy-700/30 font-normal"
+                        }}<span class="text-navy-700/70 font-normal"
                           >/{{ classItem.totalBadges }}</span
                         ></span
                       >
                     </div>
-                    <p class="text-xs text-navy-700/50">Insignias</p>
+                    <p class="text-xs text-navy-700/70">Insignias</p>
                   </div>
                 </div>
 
@@ -260,7 +260,7 @@
                   >
                     <LifeIcon class="w-4 h-4" />
                     <span class="font-bold text-navy-700">{{ classItem.lives ?? 100 }}</span>
-                    <span class="text-xs text-navy-700/50">{{
+                    <span class="text-xs text-navy-700/70">{{
                       t('teacher.students.detail.stat_lives')
                     }}</span>
                   </div>
@@ -270,9 +270,7 @@
                   >
                     <CoinIcon class="w-4 h-4" />
                     <span class="font-bold text-navy-700">{{ classItem.coins ?? 0 }}</span>
-                    <span class="text-xs text-navy-700/50">{{
-                      t('teacher.students.detail.stat_coins')
-                    }}</span>
+                    <span class="text-xs text-navy-700/70">{{ coinLabel }}</span>
                   </div>
                   <div
                     v-if="classCfg(classItem).mana"
@@ -280,7 +278,7 @@
                   >
                     <ManaIcon class="w-4 h-4" />
                     <span class="font-bold text-navy-700">{{ classItem.mana ?? 0 }}</span>
-                    <span class="text-xs text-navy-700/50">{{
+                    <span class="text-xs text-navy-700/70">{{
                       t('teacher.students.detail.stat_mana')
                     }}</span>
                   </div>
@@ -390,6 +388,7 @@ interface StudentDetail {
 }
 
 const { t } = useI18n()
+const { coinLabel } = useCoinLabel()
 
 // Per-class feature flags: hide a wallet chip when that resource is disabled for the class.
 const classCfg = (c: StudentClass) => resolveClassSettings(c.settings)

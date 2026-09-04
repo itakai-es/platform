@@ -171,8 +171,8 @@
           "sort_xp_desc": "XP ↓",
           "sort_level_asc": "Nível ↑",
           "sort_level_desc": "Nível ↓",
-          "sort_coins_asc": "Moedas ↑",
-          "sort_coins_desc": "Moedas ↓",
+          "sort_coins_asc": "{coins} ↑",
+          "sort_coins_desc": "{coins} ↓",
           "sort_mana_asc": "Mana ↑",
           "sort_mana_desc": "Mana ↓",
           "sort_lives_asc": "Vida ↑",
@@ -338,8 +338,8 @@
               "desc": "Recompensas e poderes que os alunos trocam."
             },
             "coins": {
-              "label": "Moedas",
-              "desc": "Mostra o saldo e os preços em moedas."
+              "label": "{coins}",
+              "desc": "Mostra o saldo e os preços em {coins}."
             },
             "mana": {
               "label": "Mana",
@@ -371,7 +371,7 @@
             }
           },
           "requires": "Precisa de {feature}",
-          "requires_resource": "Precisa de pelo menos um recurso ativo (XP, moedas, mana ou vidas)",
+          "requires_resource": "Precisa de pelo menos um recurso ativo (XP, {coins}, mana ou vidas)",
           "general": {
             "title": "Dados gerais",
             "name_label": "Nome",
@@ -574,7 +574,6 @@
         "enrolled_classes_count": "{count} turmas",
         "not_enrolled": "Não está inscrito em nenhuma das tuas turmas",
         "label_progress": "Concluído",
-        "stat_coins": "Moedas",
         "stat_mana": "Mana",
         "stat_lives": "Pontos de vida",
         "no_activity": "Sem atividade recente",
@@ -679,7 +678,6 @@
           "description_required": "A descrição é obrigatória"
         },
         "label_mana": "Mana",
-        "label_coins": "Moedas",
         "no_mana": "Sem mana",
         "custom_value": "Valor personalizado"
       },

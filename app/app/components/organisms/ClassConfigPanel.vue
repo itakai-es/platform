@@ -229,23 +229,24 @@
 
           <div class="min-w-0 flex-1">
             <p class="font-semibold leading-tight text-navy-700">
-              {{ t(`teacher.classes.detail.settings.items.${flag}.label`) }}
+              {{ t(`teacher.classes.detail.settings.items.${flag}.label`, { coins: coinLabel }) }}
             </p>
             <p class="mt-0.5 text-xs text-text-secondary">
               <template v-if="isBlocked(flag) && meta[flag].requires">
                 {{
                   t('teacher.classes.detail.settings.requires', {
                     feature: t(
-                      `teacher.classes.detail.settings.items.${meta[flag].requires}.label`
+                      `teacher.classes.detail.settings.items.${meta[flag].requires}.label`,
+                      { coins: coinLabel }
                     ),
                   })
                 }}
               </template>
               <template v-else-if="isBlocked(flag)">
-                {{ t('teacher.classes.detail.settings.requires_resource') }}
+                {{ t('teacher.classes.detail.settings.requires_resource', { coins: coinLabel }) }}
               </template>
               <template v-else>
-                {{ t(`teacher.classes.detail.settings.items.${flag}.desc`) }}
+                {{ t(`teacher.classes.detail.settings.items.${flag}.desc`, { coins: coinLabel }) }}
               </template>
             </p>
           </div>
@@ -401,6 +402,7 @@ const emit = defineEmits<{
 }>()
 
 const { t, locale } = useI18n()
+const { coinLabel } = useCoinLabel()
 const router = useRouter()
 const teacherStore = useTeacherStore()
 const classesStore = useClassesStore()

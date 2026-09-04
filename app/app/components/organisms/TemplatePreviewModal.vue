@@ -83,10 +83,10 @@
             </span>
             <div class="min-w-0 flex-1">
               <p class="font-semibold leading-tight text-navy-700">
-                {{ t(`teacher.classes.detail.settings.items.${flag}.label`) }}
+                {{ t(`teacher.classes.detail.settings.items.${flag}.label`, { coins: coinLabel }) }}
               </p>
               <p class="mt-0.5 text-xs text-text-secondary">
-                {{ t(`teacher.classes.detail.settings.items.${flag}.desc`) }}
+                {{ t(`teacher.classes.detail.settings.items.${flag}.desc`, { coins: coinLabel }) }}
               </p>
             </div>
             <Badge
@@ -281,6 +281,7 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
+const { coinLabel } = useCoinLabel()
 const config = useRuntimeConfig()
 const toast = useToast()
 const { getImageUrl } = useImageUrl()

@@ -174,7 +174,7 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
         <!-- Columna: Compras -->
         <div class="space-y-3">
-          <h4 class="flex items-center gap-2 text-sm font-semibold text-navy-700/60">
+          <h4 class="flex items-center gap-2 text-sm font-semibold text-navy-700/70">
             {{ t('student.classes.detail.shop.history_purchases_title') }}
             <span class="rounded-full bg-navy-700/10 px-1.5 py-0.5 text-xs text-navy-700">
               {{ historyPurchases.length }}
@@ -207,7 +207,7 @@
 
         <!-- Columna: Usos -->
         <div class="space-y-3">
-          <h4 class="flex items-center gap-2 text-sm font-semibold text-navy-700/60">
+          <h4 class="flex items-center gap-2 text-sm font-semibold text-navy-700/70">
             {{ t('student.classes.detail.shop.history_uses_title') }}
             <span class="rounded-full bg-navy-700/10 px-1.5 py-0.5 text-xs text-navy-700">
               {{ historyUses.length }}
@@ -274,11 +274,7 @@
               <span class="text-navy-700/70">{{ afterLabel }}</span>
               <span class="font-semibold" :class="canConfirm ? 'text-navy-700' : 'text-red'">
                 {{ Math.abs(currentBalance - currentCost).toLocaleString(locale) }}
-                {{
-                  payingMana
-                    ? t('student.classes.detail.shop.mana')
-                    : t('student.classes.detail.shop.coins')
-                }}
+                {{ payingMana ? t('student.classes.detail.shop.mana') : coinLabel }}
               </span>
             </div>
 
@@ -308,6 +304,7 @@ const props = withDefaults(
 )
 
 const { t, locale } = useI18n()
+const { coinLabel } = useCoinLabel()
 const shop = useShopStore()
 const effects = useEffects()
 const toast = useToast()

@@ -60,7 +60,7 @@
       <div v-else class="overflow-x-auto rounded-2xl bg-white shadow-lg">
         <table class="w-full min-w-[600px] text-sm">
           <thead>
-            <tr class="border-b border-navy-700/10 text-left text-navy-700/50">
+            <tr class="border-b border-navy-700/10 text-left text-navy-700/70">
               <th class="px-4 py-3 font-semibold">
                 {{ t('teacher.classes.detail.students.col_student') }}
               </th>
@@ -107,7 +107,7 @@
                     >
                       {{ student.name }}
                     </NuxtLink>
-                    <p class="text-xs text-navy-700/50 truncate">@{{ student.handle }}</p>
+                    <p class="text-xs text-navy-700/70 truncate">@{{ student.handle }}</p>
                   </div>
                 </div>
               </td>
@@ -221,6 +221,7 @@ interface ClassStudentRow {
 }
 
 const { t } = useI18n()
+const { coinLabel } = useCoinLabel()
 const route = useRoute()
 const config = useRuntimeConfig()
 
@@ -247,7 +248,8 @@ const sortBy = ref('name-asc')
 // Nombre y nivel siempre; los recursos solo si la clase los tiene activados.
 const sortOptions = computed(() => {
   const s = settings.value
-  const tr = (k: string) => t(`teacher.classes.detail.students.${k}`)
+  const tr = (k: string, params: Record<string, unknown> = {}) =>
+    t(`teacher.classes.detail.students.${k}`, params)
   const opts = [
     { value: 'name-asc', label: tr('sort_name_asc') },
     { value: 'name-desc', label: tr('sort_name_desc') },
@@ -259,8 +261,8 @@ const sortOptions = computed(() => {
     opts.push({ value: 'xp-desc', label: tr('sort_xp_desc') })
   }
   if (s.coins) {
-    opts.push({ value: 'coins-asc', label: tr('sort_coins_asc') })
-    opts.push({ value: 'coins-desc', label: tr('sort_coins_desc') })
+    opts.push({ value: 'coins-asc', label: tr('sort_coins_asc', { coins: coinLabel.value }) })
+    opts.push({ value: 'coins-desc', label: tr('sort_coins_desc', { coins: coinLabel.value }) })
   }
   if (s.mana) {
     opts.push({ value: 'mana-asc', label: tr('sort_mana_asc') })
