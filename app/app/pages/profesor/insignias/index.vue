@@ -193,7 +193,7 @@
           <div>
             <label class="block text-sm font-medium text-navy-700 mb-1.5">
               Misión asociada
-              <span class="text-navy-700/50 font-normal">(opcional)</span>
+              <span class="text-navy-700/70 font-normal">(opcional)</span>
             </label>
             <SelectDropdown
               v-model="form.missionId"
@@ -226,7 +226,7 @@
           <div>
             <label class="block text-sm font-medium text-navy-700 mb-1.5">
               {{ t('teacher.badges.form.label_description') }}
-              <span class="text-navy-700/50 font-normal">{{
+              <span class="text-navy-700/70 font-normal">{{
                 t('teacher.badges.form.image_optional')
               }}</span>
             </label>

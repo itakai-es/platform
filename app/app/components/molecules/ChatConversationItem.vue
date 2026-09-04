@@ -2,7 +2,7 @@
   <div
     :class="[
       'flex items-center gap-2.5 px-3 py-2.5 rounded-xl cursor-pointer transition-all',
-      isActive ? 'bg-[#FFC338] text-navy-700' : 'hover:bg-gray-50 text-navy-700',
+      isActive ? 'bg-yellow text-navy-700' : 'hover:bg-gray-50 text-navy-700',
     ]"
     @click="handleClick"
   >

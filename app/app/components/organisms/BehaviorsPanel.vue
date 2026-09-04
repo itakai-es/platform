@@ -97,7 +97,7 @@
                 </p>
               </div>
               <button
-                class="-mr-1 -mt-1 flex-shrink-0 rounded-full p-1.5 text-navy-700/60 hover:bg-gray-100"
+                class="-mr-1 -mt-1 flex-shrink-0 rounded-full p-1.5 text-navy-700/70 hover:bg-gray-100"
                 @click="pendingBehavior = null"
               >
                 <XMarkIcon class="w-5 h-5" />
@@ -148,7 +148,7 @@
                 }}
               </h3>
               <button
-                class="p-1.5 rounded-full hover:bg-gray-100 text-navy-700/60"
+                class="p-1.5 rounded-full hover:bg-gray-100 text-navy-700/70"
                 @click="showForm = false"
               >
                 <XMarkIcon class="w-5 h-5" />
@@ -336,7 +336,7 @@
                 </p>
               </div>
               <button
-                class="-mr-1 -mt-1 flex-shrink-0 rounded-full p-1.5 text-navy-700/60 hover:bg-gray-100"
+                class="-mr-1 -mt-1 flex-shrink-0 rounded-full p-1.5 text-navy-700/70 hover:bg-gray-100"
                 @click="showLibrary = false"
               >
                 <XMarkIcon class="w-5 h-5" />

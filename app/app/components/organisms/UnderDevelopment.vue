@@ -81,6 +81,9 @@ const backRoute = computed(() => props.backRoute || dashboardRoute.value)
 
 // Map god names to their colors (extracted from SVGs)
 const godColors: Record<string, string> = {
+  // Colores de identidad de cada dios, no estados de la interfaz: se quedan
+  // literales a propósito. Si fueran por tokens, el modo de daltonismo le
+  // cambiaría el color a los personajes, que es justo lo que no queremos.
   Atenea: '#00AAFC', // Blue/Azul (principal color de Atenea)
   Odisseu: '#FFC338', // Yellow/Amarillo dorado (color de Odisseu)
   Penelope: '#FF3C52', // Red/Rojo (color principal de Penelope)

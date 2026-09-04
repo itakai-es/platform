@@ -21,7 +21,7 @@
     </div>
 
     <div v-else-if="activities.length === 0" class="text-center py-8">
-      <p class="text-navy-700/60 text-sm">{{ emptyMessage }}</p>
+      <p class="text-navy-700/70 text-sm">{{ emptyMessage }}</p>
     </div>
 
     <div v-else class="space-y-3">
@@ -46,7 +46,7 @@
         <!-- Content -->
         <div class="flex-1 min-w-0">
           <p class="text-sm text-navy-700" v-html="activity.description"></p>
-          <p class="text-xs text-navy-700/60">{{ formatTimestamp(activity.timestamp) }}</p>
+          <p class="text-xs text-navy-700/70">{{ formatTimestamp(activity.timestamp) }}</p>
         </div>
 
         <!-- Badge image (for badge_unlocked type) -->

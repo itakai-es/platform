@@ -206,7 +206,7 @@
           <div>
             <label class="block text-sm font-medium text-navy-700 mb-1.5">
               {{ t('teacher.components.rewards_form_modal.label_image') }}
-              <span class="text-navy-700/50 font-normal">{{
+              <span class="text-navy-700/70 font-normal">{{
                 t('teacher.components.rewards_form_modal.image_optional')
               }}</span>
             </label>

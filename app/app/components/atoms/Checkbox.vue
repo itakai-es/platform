@@ -6,7 +6,7 @@
       :checked="modelValue"
       :disabled="disabled"
       :required="required"
-      class="w-4 h-4 border border-[#E6E3E5] rounded bg-white checked:bg-navy-700 checked:border-navy-700 focus:ring-2 focus:ring-navy-700 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
+      class="w-4 h-4 border border-border-primary rounded bg-white checked:bg-navy-700 checked:border-navy-700 focus:ring-2 focus:ring-navy-700 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
       @change="emit('update:modelValue', ($event.target as HTMLInputElement).checked)"
     />
     <label

@@ -13,7 +13,7 @@
         <img :src="god.avatar" :alt="god.name" class="w-full h-full object-contain" />
       </div>
       <div class="flex-1 min-w-0">
-        <p class="text-[11px] font-bold uppercase tracking-wider text-navy-700/40">
+        <p class="text-[11px] font-bold uppercase tracking-wider text-navy-700/70">
           Paso {{ step + 1 }} de {{ totalSteps }}
         </p>
         <p class="text-xl font-bold text-navy-700 leading-snug mt-0.5">{{ question }}</p>

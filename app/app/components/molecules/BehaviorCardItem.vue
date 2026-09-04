@@ -6,7 +6,7 @@
     <!-- Botón editar (esquina superior derecha) -->
     <button
       type="button"
-      class="absolute right-3 top-3 z-10 rounded-full p-1.5 text-navy-700/40 opacity-0 transition-opacity hover:bg-gray-100 hover:text-navy-700 group-hover:opacity-100"
+      class="absolute right-3 top-3 z-10 rounded-full p-1.5 text-navy-700/50 opacity-0 transition-opacity hover:bg-gray-100 hover:text-navy-700 group-hover:opacity-100"
       :title="t('teacher.classes.detail.behaviors.edit_aria')"
       @click.stop="$emit('edit')"
     >

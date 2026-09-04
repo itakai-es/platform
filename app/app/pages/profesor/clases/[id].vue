@@ -96,7 +96,7 @@
               class="absolute top-3 right-3 p-1 rounded-full hover:bg-gray-100 transition-colors"
               @click="closeActivityBadge"
             >
-              <XMarkIcon class="w-5 h-5 text-navy-700/60" />
+              <XMarkIcon class="w-5 h-5 text-navy-700/70" />
             </button>
             <img
               :src="state.selectedActivityBadge.image"

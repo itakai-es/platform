@@ -60,158 +60,251 @@
     /* Backgrounds - Fondos principales ITAKAI */
     /* Gris muy claro: el fondo de la app va ligeramente gris para que las cards,
        inputs y superficies (todas en blanco) resalten en lugar de quedar planas. */
-    --color-bg-primary: #FAFBFC;
-    --color-bg-secondary: #f2f2f4;      /* Gris fondo UI claro */
-    --color-bg-tertiary: #f3f6f7;       /* Gris contenedores suaves */
+    --color-bg-primary-rgb: 250 251 252;
+    --color-bg-primary: rgb(var(--color-bg-primary-rgb));
+    --color-bg-secondary-rgb: 242 242 244;
+    --color-bg-secondary: rgb(var(--color-bg-secondary-rgb));      /* Gris fondo UI claro */
+    --color-bg-tertiary-rgb: 243 246 247;
+    --color-bg-tertiary: rgb(var(--color-bg-tertiary-rgb));       /* Gris contenedores suaves */
 
     /* Surface - Cards, containers */
-    --color-surface: #FFFFFF;
-    --color-surface-hover: #F8F9FA;
-    --color-surface-active: #E9ECEF;
+    --color-surface-rgb: 255 255 255;
+    --color-surface: rgb(var(--color-surface-rgb));
+    --color-surface-hover-rgb: 248 249 250;
+    --color-surface-hover: rgb(var(--color-surface-hover-rgb));
+    --color-surface-active-rgb: 233 236 239;
+    --color-surface-active: rgb(var(--color-surface-active-rgb));
 
     /* Text - Textos ITAKAI */
-    --color-text-primary: #23245d;      /* Navy 700 - texto principal */
-    --color-text-secondary: #959fa9;    /* Gris texto secundario */
-    --color-text-tertiary: #6C757D;
-    --color-text-muted: #90919F;        /* Gris placeholder inputs */
-    --color-text-inverse: #FFFFFF;
+    --color-text-primary-rgb: 35 36 93;
+    --color-text-primary: rgb(var(--color-text-primary-rgb));      /* Navy 700 - texto principal */
+    --color-text-secondary-rgb: 149 159 169;
+    --color-text-secondary: rgb(var(--color-text-secondary-rgb));    /* Gris texto secundario */
+    --color-text-tertiary-rgb: 108 117 125;
+    --color-text-tertiary: rgb(var(--color-text-tertiary-rgb));
+    --color-text-muted-rgb: 144 145 159;
+    --color-text-muted: rgb(var(--color-text-muted-rgb));        /* Gris placeholder inputs */
+    --color-text-inverse-rgb: 255 255 255;
+    --color-text-inverse: rgb(var(--color-text-inverse-rgb));
 
     /* ============================================
        ITAKAI OFFICIAL BRAND COLORS (from mockups + PDF)
        ============================================ */
 
     /* Primary Navy - App Background */
-    --color-primary: #000144;           /* Azul noche, fondo principal app */
-    --color-primary-hover: #000133;
-    --color-primary-active: #000122;
+    --color-primary-rgb: 0 1 68;
+    --color-primary: rgb(var(--color-primary-rgb));           /* Azul noche, fondo principal app */
+    --color-primary-hover-rgb: 0 1 51;
+    --color-primary-hover: rgb(var(--color-primary-hover-rgb));
+    --color-primary-active-rgb: 0 1 34;
+    --color-primary-active: rgb(var(--color-primary-active-rgb));
 
     /* Navy Base - Login Hero Background */
-    --color-navy-base: #03003C;         /* Navy oscuro para hero login */
-    --color-navy-base-light: #0a0a52;   /* Variante más clara para onda */
+    --color-navy-base-rgb: 3 0 60;
+    --color-navy-base: rgb(var(--color-navy-base-rgb));         /* Navy oscuro para hero login */
+    --color-navy-base-light-rgb: 10 10 82;
+    --color-navy-base-light: rgb(var(--color-navy-base-light-rgb));   /* Variante más clara para onda */
 
     /* Navy 700 - Text & Headers & Primary Buttons */
-    --color-navy-700: #23245d;          /* Texto, headers, botones primary */
-    --color-navy-700-hover: #1a1b47;
-    --color-navy-700-active: #131431;
+    --color-navy-700-rgb: 35 36 93;
+    --color-navy-700: rgb(var(--color-navy-700-rgb));          /* Texto, headers, botones primary */
+    --color-navy-700-hover-rgb: 26 27 71;
+    --color-navy-700-hover: rgb(var(--color-navy-700-hover-rgb));
+    --color-navy-700-active-rgb: 19 20 49;
+    --color-navy-700-active: rgb(var(--color-navy-700-active-rgb));
 
     /* Purple Brand - Accent, Buttons, Labels */
-    --color-purple: #ac74fd;            /* Púrpura marca */
-    --color-purple-hover: #9d5ffd;
-    --color-purple-active: #8d49fd;
-    --color-purple-light: #e5d5fe;
+    --color-purple-rgb: 172 116 253;
+    --color-purple: rgb(var(--color-purple-rgb));            /* Púrpura marca */
+    --color-purple-hover-rgb: 157 95 253;
+    --color-purple-hover: rgb(var(--color-purple-hover-rgb));
+    --color-purple-active-rgb: 141 73 253;
+    --color-purple-active: rgb(var(--color-purple-active-rgb));
+    --color-purple-light-rgb: 229 213 254;
+    --color-purple-light: rgb(var(--color-purple-light-rgb));
 
     /* Lilac Panel - Login Panels, Light Surfaces */
-    --color-lilac: #d6bcfd;             /* Panel de login */
-    --color-lilac-hover: #c9a8fc;
-    --color-lilac-active: #bc94fb;
+    --color-lilac-rgb: 214 188 253;
+    --color-lilac: rgb(var(--color-lilac-rgb));             /* Panel de login */
+    --color-lilac-hover-rgb: 201 168 252;
+    --color-lilac-hover: rgb(var(--color-lilac-hover-rgb));
+    --color-lilac-active-rgb: 188 148 251;
+    --color-lilac-active: rgb(var(--color-lilac-active-rgb));
 
     /* Purple Dark - Social Buttons on Login */
-    --color-purple-dark: #5a3a8d;       /* Botones sociales en login */
-    --color-purple-dark-hover: #4e3278;
-    --color-purple-dark-active: #422a63;
+    --color-purple-dark-rgb: 90 58 141;
+    --color-purple-dark: rgb(var(--color-purple-dark-rgb));       /* Botones sociales en login */
+    --color-purple-dark-hover-rgb: 78 50 120;
+    --color-purple-dark-hover: rgb(var(--color-purple-dark-hover-rgb));
+    --color-purple-dark-active-rgb: 66 42 99;
+    --color-purple-dark-active: rgb(var(--color-purple-dark-active-rgb));
 
     /* Yellow Brand - AI Success, Chips, CTAs */
-    --color-yellow: #ffc338;            /* Amarillo marca */
-    --color-yellow-hover: #f5b825;
-    --color-yellow-active: #ebad12;
-    --color-yellow-light: #ffedd9;
+    --color-yellow-rgb: 255 195 56;
+    --color-yellow: rgb(var(--color-yellow-rgb));            /* Amarillo marca */
+    --color-yellow-hover-rgb: 245 184 37;
+    --color-yellow-hover: rgb(var(--color-yellow-hover-rgb));
+    --color-yellow-active-rgb: 235 173 18;
+    --color-yellow-active: rgb(var(--color-yellow-active-rgb));
+    --color-yellow-light-rgb: 255 237 217;
+    --color-yellow-light: rgb(var(--color-yellow-light-rgb));
 
     /* Mint Brand - Positive States, Success, Cards Info */
-    --color-mint: #B0EAE1;              /* Menta suave info/selección */
-    --color-mint-hover: #9ed9d1;
-    --color-mint-active: #8cc8c1;
-    --color-mint-light: #e5f5f2;
+    --color-mint-rgb: 176 234 225;
+    --color-mint: rgb(var(--color-mint-rgb));              /* Menta suave info/selección */
+    --color-mint-hover-rgb: 158 217 209;
+    --color-mint-hover: rgb(var(--color-mint-hover-rgb));
+    --color-mint-active-rgb: 140 200 193;
+    --color-mint-active: rgb(var(--color-mint-active-rgb));
+    --color-mint-light-rgb: 229 245 242;
+    --color-mint-light: rgb(var(--color-mint-light-rgb));
 
     /* Peach Brand - KPI/Fechas Cards */
-    --color-peach: #FBE5D6;             /* Melocotón KPI/fechas */
-    --color-peach-hover: #f9dac5;
-    --color-peach-active: #f7cfb4;
-    --color-peach-light: #fdf5ed;
+    --color-peach-rgb: 251 229 214;
+    --color-peach: rgb(var(--color-peach-rgb));             /* Melocotón KPI/fechas */
+    --color-peach-hover-rgb: 249 218 197;
+    --color-peach-hover: rgb(var(--color-peach-hover-rgb));
+    --color-peach-active-rgb: 247 207 180;
+    --color-peach-active: rgb(var(--color-peach-active-rgb));
+    --color-peach-light-rgb: 253 245 237;
+    --color-peach-light: rgb(var(--color-peach-light-rgb));
 
     /* Sky Blue Brand - Stats Cards, Info */
-    --color-sky: #00aafc;               /* Azul cielo marca */
-    --color-sky-hover: #0099e6;
-    --color-sky-active: #0088d0;
-    --color-sky-light: #d2efff;
-    --color-sky-light-alt: #9ad9f8;
+    --color-sky-rgb: 0 170 252;
+    --color-sky: rgb(var(--color-sky-rgb));               /* Azul cielo marca */
+    --color-sky-hover-rgb: 0 153 230;
+    --color-sky-hover: rgb(var(--color-sky-hover-rgb));
+    --color-sky-active-rgb: 0 136 208;
+    --color-sky-active: rgb(var(--color-sky-active-rgb));
+    --color-sky-light-rgb: 210 239 255;
+    --color-sky-light: rgb(var(--color-sky-light-rgb));
+    --color-sky-light-alt-rgb: 154 217 248;
+    --color-sky-light-alt: rgb(var(--color-sky-light-alt-rgb));
 
     /* Red/Pink Brand - Urgent Badges, Errors */
-    --color-red: #ff3c52;               /* Rojo/rosa marca */
-    --color-red-hover: #ff2341;
-    --color-red-active: #f00a30;
-    --color-red-light: #ff9aab;
-    --color-red-light-alt: #fb687a;
+    --color-red-rgb: 255 60 82;
+    --color-red: rgb(var(--color-red-rgb));               /* Rojo/rosa marca */
+    --color-red-hover-rgb: 255 35 65;
+    --color-red-hover: rgb(var(--color-red-hover-rgb));
+    --color-red-active-rgb: 240 10 48;
+    --color-red-active: rgb(var(--color-red-active-rgb));
+    --color-red-light-rgb: 255 154 171;
+    --color-red-light: rgb(var(--color-red-light-rgb));
+    --color-red-light-alt-rgb: 251 104 122;
+    --color-red-light-alt: rgb(var(--color-red-light-alt-rgb));
 
     /* Green Brand - Active States, Success Vivid */
-    --color-green: #6CF3AF;             /* Verde vivo estados activos */
-    --color-green-light: #B8F5D8;       /* Verde claro fondos */
+    --color-green-rgb: 108 243 175;
+    --color-green: rgb(var(--color-green-rgb));             /* Verde vivo estados activos */
+    --color-green-light-rgb: 184 245 216;
+    --color-green-light: rgb(var(--color-green-light-rgb));       /* Verde claro fondos */
 
     /* Yellow Dark - Text on Yellow Backgrounds */
-    --color-yellow-dark: #996515;       /* Texto dorado oscuro */
+    --color-yellow-dark-rgb: 153 101 21;
+    --color-yellow-dark: rgb(var(--color-yellow-dark-rgb));       /* Texto dorado oscuro */
 
     /* ============================================
        SEMANTIC MAPPINGS (backwards compatibility)
        ============================================ */
 
     /* Secondary maps to purple brand */
-    --color-secondary: var(--color-purple);
-    --color-secondary-hover: var(--color-purple-hover);
-    --color-secondary-active: var(--color-purple-active);
-    --color-secondary-light: var(--color-purple-light);
+    --color-secondary-rgb: var(--color-purple-rgb);
+    --color-secondary: rgb(var(--color-secondary-rgb));
+    --color-secondary-hover-rgb: var(--color-purple-hover-rgb);
+    --color-secondary-hover: rgb(var(--color-secondary-hover-rgb));
+    --color-secondary-active-rgb: var(--color-purple-active-rgb);
+    --color-secondary-active: rgb(var(--color-secondary-active-rgb));
+    --color-secondary-light-rgb: var(--color-purple-light-rgb);
+    --color-secondary-light: rgb(var(--color-secondary-light-rgb));
 
     /* Accent maps to yellow brand */
-    --color-accent: var(--color-yellow);
-    --color-accent-hover: var(--color-yellow-hover);
-    --color-accent-active: var(--color-yellow-active);
-    --color-accent-light: var(--color-yellow-light);
+    --color-accent-rgb: var(--color-yellow-rgb);
+    --color-accent: rgb(var(--color-accent-rgb));
+    --color-accent-hover-rgb: var(--color-yellow-hover-rgb);
+    --color-accent-hover: rgb(var(--color-accent-hover-rgb));
+    --color-accent-active-rgb: var(--color-yellow-active-rgb);
+    --color-accent-active: rgb(var(--color-accent-active-rgb));
+    --color-accent-light-rgb: var(--color-yellow-light-rgb);
+    --color-accent-light: rgb(var(--color-accent-light-rgb));
 
     /* Semantic - Estados ITAKAI */
-    --color-success: var(--color-mint);
-    --color-success-light: var(--color-mint-light);
-    --color-success-dark: var(--color-mint-active);
+    --color-success-rgb: var(--color-mint-rgb);
+    --color-success: rgb(var(--color-success-rgb));
+    --color-success-light-rgb: var(--color-mint-light-rgb);
+    --color-success-light: rgb(var(--color-success-light-rgb));
+    --color-success-dark-rgb: var(--color-mint-active-rgb);
+    --color-success-dark: rgb(var(--color-success-dark-rgb));
 
-    --color-warning: var(--color-yellow);
-    --color-warning-light: var(--color-yellow-light);
-    --color-warning-dark: var(--color-yellow-active);
+    --color-warning-rgb: var(--color-yellow-rgb);
+    --color-warning: rgb(var(--color-warning-rgb));
+    --color-warning-light-rgb: var(--color-yellow-light-rgb);
+    --color-warning-light: rgb(var(--color-warning-light-rgb));
+    --color-warning-dark-rgb: var(--color-yellow-active-rgb);
+    --color-warning-dark: rgb(var(--color-warning-dark-rgb));
 
-    --color-error: var(--color-red);
-    --color-error-light: var(--color-red-light);
-    --color-error-dark: var(--color-red-active);
+    --color-error-rgb: var(--color-red-rgb);
+    --color-error: rgb(var(--color-error-rgb));
+    --color-error-light-rgb: var(--color-red-light-rgb);
+    --color-error-light: rgb(var(--color-error-light-rgb));
+    --color-error-dark-rgb: var(--color-red-active-rgb);
+    --color-error-dark: rgb(var(--color-error-dark-rgb));
 
-    --color-info: var(--color-sky);
-    --color-info-light: var(--color-sky-light);
-    --color-info-dark: var(--color-sky-active);
+    --color-info-rgb: var(--color-sky-rgb);
+    --color-info: rgb(var(--color-info-rgb));
+    --color-info-light-rgb: var(--color-sky-light-rgb);
+    --color-info-light: rgb(var(--color-info-light-rgb));
+    --color-info-dark-rgb: var(--color-sky-active-rgb);
+    --color-info-dark: rgb(var(--color-info-dark-rgb));
 
     /* Borders ITAKAI */
-    --color-border-primary: #E6E3E5;    /* Gris borde inputs */
-    --color-border-secondary: #D1D5DB;
-    --color-border-tertiary: #9CA3AF;
+    --color-border-primary-rgb: 230 227 229;
+    --color-border-primary: rgb(var(--color-border-primary-rgb));    /* Gris borde inputs */
+    --color-border-secondary-rgb: 209 213 219;
+    --color-border-secondary: rgb(var(--color-border-secondary-rgb));
+    --color-border-tertiary-rgb: 156 163 175;
+    --color-border-tertiary: rgb(var(--color-border-tertiary-rgb));
 
     /* ============================================
        BADGES - Status & State Colors
        ============================================ */
 
     /* Badge States - Mission Status */
-    --color-badge-urgente: var(--color-red);        /* #ff3c52 - Urgente */
-    --color-badge-activa: var(--color-mint);        /* #6cf3af - Activa/Al día */
-    --color-badge-pendiente: var(--color-red-light);/* #ff9aab - Pendiente */
-    --color-badge-bloqueada: #9ea3ba;               /* Gris azulado - Bloqueada */
+    --color-badge-urgente-rgb: var(--color-red-rgb);
+    --color-badge-urgente: rgb(var(--color-badge-urgente-rgb));        /* #ff3c52 - Urgente */
+    --color-badge-activa-rgb: var(--color-mint-rgb);
+    --color-badge-activa: rgb(var(--color-badge-activa-rgb));        /* #6cf3af - Activa/Al día */
+    --color-badge-pendiente-rgb: var(--color-red-light-rgb);
+    --color-badge-pendiente: rgb(var(--color-badge-pendiente-rgb));/* #ff9aab - Pendiente */
+    --color-badge-bloqueada-rgb: 158 163 186;
+    --color-badge-bloqueada: rgb(var(--color-badge-bloqueada-rgb));               /* Gris azulado - Bloqueada */
 
     /* Badge Rarities - Mission Rarity */
-    --color-badge-epica: var(--color-purple);       /* #ac74fd - Épica */
-    --color-badge-rara: var(--color-purple);        /* #ac74fd - Rara (mismo color) */
+    --color-badge-comun-rgb: var(--color-green-rgb);
+    --color-badge-comun: rgb(var(--color-badge-comun-rgb));        /* #6cf3af - Común */
+    --color-badge-epica-rgb: var(--color-purple-rgb);
+    --color-badge-epica: rgb(var(--color-badge-epica-rgb));       /* #ac74fd - Épica */
+    --color-badge-rara-rgb: var(--color-purple-rgb);
+    --color-badge-rara: rgb(var(--color-badge-rara-rgb));        /* #ac74fd - Rara (mismo color) */
+    /* Legendaria comparte color con su barra de progreso: un solo sitio que tocar
+       (y así los modos de daltonismo la remapean una vez, no dos). */
+    --color-badge-legendaria-rgb: var(--color-progress-legendaria-rgb);
+    --color-badge-legendaria: rgb(var(--color-badge-legendaria-rgb));
 
     /* Badge Text Colors */
-    --color-badge-text-light: #ffffff;              /* Texto claro para fondos oscuros */
-    --color-badge-text-dark: var(--color-text-primary); /* #23245d - Texto oscuro para fondos claros */
+    --color-badge-text-light-rgb: 255 255 255;
+    --color-badge-text-light: rgb(var(--color-badge-text-light-rgb));              /* Texto claro para fondos oscuros */
+    --color-badge-text-dark-rgb: var(--color-text-primary-rgb);
+    --color-badge-text-dark: rgb(var(--color-badge-text-dark-rgb)); /* #23245d - Texto oscuro para fondos claros */
 
     /* ============================================
        PROGRESS BARS - ITAKAI Official
        ============================================ */
 
     /* Linear Progress Bar Colors */
-    --color-progress-track: #e6e3e5;               /* Track gris claro oficial */
-    --color-progress-fill: var(--color-navy-700);  /* Fill navy 700 indigo #23245d */
+    --color-progress-track-rgb: 230 227 229;
+    --color-progress-track: rgb(var(--color-progress-track-rgb));               /* Track gris claro oficial */
+    --color-progress-fill-rgb: var(--color-navy-700-rgb);
+    --color-progress-fill: rgb(var(--color-progress-fill-rgb));  /* Fill navy 700 indigo #23245d */
 
     /* ============================================
        TIPOGRAFÍA
@@ -322,6 +415,73 @@
     --z-popover: 1500;
     --z-tooltip: 1600;
 
+    /* ============================================
+       PALETA CRUDA DE TAILWIND (rojo, verde, ámbar…) — Fase 3, punto 14
+
+       Los tonos numéricos que la aplicación usa de verdad (`text-red-500`,
+       `bg-green-100`…) pasan por variable en vez de ir con el hex compilado
+       dentro. Los valores de aquí son EXACTAMENTE los de Tailwind, así que la
+       apariencia por defecto no cambia ni un píxel; lo que gana es que los
+       modos de daltonismo y de alto contraste (assets/css/accessibility.css)
+       puedan remapearlos, cosa que con el hex compilado era imposible.
+
+       Van en canales («239 68 68») y no en hex a propósito: es lo que permite
+       que sigan funcionando los modificadores de opacidad (`bg-red-500/20`).
+       ============================================ */
+
+    --palette-red-50: 254 242 242;
+    --palette-red-100: 254 226 226;
+    --palette-red-200: 254 202 202;
+    --palette-red-300: 252 165 165;
+    --palette-red-400: 248 113 113;
+    --palette-red-500: 239 68 68;
+    --palette-red-600: 220 38 38;
+    --palette-red-700: 185 28 28;
+    --palette-green-50: 240 253 244;
+    --palette-green-100: 220 252 231;
+    --palette-green-400: 74 222 128;
+    --palette-green-500: 34 197 94;
+    --palette-green-600: 22 163 74;
+    --palette-green-700: 21 128 61;
+    --palette-yellow-100: 254 249 195;
+    --palette-yellow-200: 254 240 138;
+    --palette-yellow-500: 234 179 8;
+    --palette-yellow-600: 202 138 4;
+    --palette-yellow-700: 161 98 7;
+    --palette-amber-50: 255 251 235;
+    --palette-amber-100: 254 243 199;
+    --palette-amber-200: 253 230 138;
+    --palette-amber-500: 245 158 11;
+    --palette-amber-600: 217 119 6;
+    --palette-amber-700: 180 83 9;
+    --palette-amber-800: 146 64 14;
+    --palette-orange-500: 249 115 22;
+    --palette-blue-50: 239 246 255;
+    --palette-blue-100: 219 234 254;
+    --palette-blue-200: 191 219 254;
+    --palette-blue-500: 59 130 246;
+    --palette-blue-600: 37 99 235;
+    --palette-blue-700: 29 78 216;
+    --palette-sky-100: 224 242 254;
+    --palette-sky-200: 186 230 253;
+    --palette-sky-300: 125 211 252;
+    --palette-sky-700: 3 105 161;
+    --palette-indigo-900: 49 46 129;
+    --palette-violet-100: 237 233 254;
+    --palette-violet-200: 221 214 254;
+    --palette-violet-700: 109 40 217;
+    --palette-purple-200: 233 213 255;
+    --palette-purple-500: 168 85 247;
+    --palette-emerald-500: 16 185 129;
+    --palette-gray-50: 249 250 251;
+    --palette-gray-100: 243 244 246;
+    --palette-gray-200: 229 231 235;
+    --palette-gray-300: 209 213 219;
+    --palette-gray-400: 156 163 175;
+    --palette-gray-500: 107 114 128;
+    --palette-gray-600: 75 85 99;
+    --palette-gray-700: 55 65 81;
+
     /* Card backgrounds */
     --color-card-ia: #FFC338;
     --color-card-stats: #ac74fd;
@@ -352,7 +512,8 @@
     --color-progress-comun: #6cf3af;
     --color-progress-rara: #E8B4D8;
     --color-progress-epica: #ac74fd;
-    --color-progress-legendaria: #F59E0B;
+    --color-progress-legendaria-rgb: 245 158 11;
+    --color-progress-legendaria: rgb(var(--color-progress-legendaria-rgb));
   }
 
   /* ============================================
@@ -363,43 +524,68 @@
     /* Solo colores de contenedores/tarjetas - más sobrios y profesionales */
 
     /* Purple → Azul acero */
-    --color-purple: #6B7DB8;
-    --color-purple-hover: #5C6FA8;
-    --color-purple-active: #4D6198;
-    --color-purple-light: #E0E4F0;
+    --color-purple-rgb: 107 125 184;
+    --color-purple: rgb(var(--color-purple-rgb));
+    --color-purple-hover-rgb: 92 111 168;
+    --color-purple-hover: rgb(var(--color-purple-hover-rgb));
+    --color-purple-active-rgb: 77 97 152;
+    --color-purple-active: rgb(var(--color-purple-active-rgb));
+    --color-purple-light-rgb: 224 228 240;
+    --color-purple-light: rgb(var(--color-purple-light-rgb));
 
     /* Lilac → Gris azulado suave */
-    --color-lilac: #C8CCDA;
-    --color-lilac-hover: #B8BDCE;
-    --color-lilac-active: #A8AEC2;
+    --color-lilac-rgb: 200 204 218;
+    --color-lilac: rgb(var(--color-lilac-rgb));
+    --color-lilac-hover-rgb: 184 189 206;
+    --color-lilac-hover: rgb(var(--color-lilac-hover-rgb));
+    --color-lilac-active-rgb: 168 174 194;
+    --color-lilac-active: rgb(var(--color-lilac-active-rgb));
 
     /* Mint → Verde sage */
-    --color-mint: #8CB4AD;
-    --color-mint-hover: #7DA6A0;
-    --color-mint-active: #6E9893;
-    --color-mint-light: #E5EFED;
+    --color-mint-rgb: 140 180 173;
+    --color-mint: rgb(var(--color-mint-rgb));
+    --color-mint-hover-rgb: 125 166 160;
+    --color-mint-hover: rgb(var(--color-mint-hover-rgb));
+    --color-mint-active-rgb: 110 152 147;
+    --color-mint-active: rgb(var(--color-mint-active-rgb));
+    --color-mint-light-rgb: 229 239 237;
+    --color-mint-light: rgb(var(--color-mint-light-rgb));
 
     /* Peach → Beige neutro */
-    --color-peach: #E8DDD4;
-    --color-peach-hover: #DED2C8;
-    --color-peach-active: #D4C7BC;
-    --color-peach-light: #F5F1ED;
+    --color-peach-rgb: 232 221 212;
+    --color-peach: rgb(var(--color-peach-rgb));
+    --color-peach-hover-rgb: 222 210 200;
+    --color-peach-hover: rgb(var(--color-peach-hover-rgb));
+    --color-peach-active-rgb: 212 199 188;
+    --color-peach-active: rgb(var(--color-peach-active-rgb));
+    --color-peach-light-rgb: 245 241 237;
+    --color-peach-light: rgb(var(--color-peach-light-rgb));
 
     /* Sky → Azul corporate */
-    --color-sky: #3B82B0;
-    --color-sky-hover: #33749E;
-    --color-sky-active: #2B668C;
-    --color-sky-light: #DCEAF4;
+    --color-sky-rgb: 59 130 176;
+    --color-sky: rgb(var(--color-sky-rgb));
+    --color-sky-hover-rgb: 51 116 158;
+    --color-sky-hover: rgb(var(--color-sky-hover-rgb));
+    --color-sky-active-rgb: 43 102 140;
+    --color-sky-active: rgb(var(--color-sky-active-rgb));
+    --color-sky-light-rgb: 220 234 244;
+    --color-sky-light: rgb(var(--color-sky-light-rgb));
 
     /* Red → Rojo sobrio */
-    --color-red: #DC3545;
-    --color-red-hover: #C82333;
-    --color-red-active: #B41D21;
-    --color-red-light: #D8D8DB; /* gris oscuro — filter bars, se marcan como contenedor */
+    --color-red-rgb: 220 53 69;
+    --color-red: rgb(var(--color-red-rgb));
+    --color-red-hover-rgb: 200 35 51;
+    --color-red-hover: rgb(var(--color-red-hover-rgb));
+    --color-red-active-rgb: 180 29 33;
+    --color-red-active: rgb(var(--color-red-active-rgb));
+    --color-red-light-rgb: 216 216 219;
+    --color-red-light: rgb(var(--color-red-light-rgb)); /* gris oscuro — filter bars, se marcan como contenedor */
 
     /* Green → Verde apagado */
-    --color-green: #7BAF9E;
-    --color-green-light: #D4E8E0;
+    --color-green-rgb: 123 175 158;
+    --color-green: rgb(var(--color-green-rgb));
+    --color-green-light-rgb: 212 232 224;
+    --color-green-light: rgb(var(--color-green-light-rgb));
 
     /* Card backgrounds — 3 niveles con saltos visibles:
        Fondo página: #F2F2F4
@@ -435,13 +621,18 @@
     --color-progress-comun: var(--color-navy-700);
     --color-progress-rara: var(--color-navy-700);
     --color-progress-epica: var(--color-navy-700);
-    --color-progress-legendaria: var(--color-navy-700);
+    --color-progress-legendaria-rgb: var(--color-navy-700-rgb);
+    --color-progress-legendaria: rgb(var(--color-progress-legendaria-rgb));
 
     /* Yellow → navy (botones Atenea, progress bar, iconos reward) */
-    --color-yellow: var(--color-navy-700);
-    --color-yellow-hover: var(--color-navy-700-hover);
-    --color-yellow-active: var(--color-navy-700-active);
-    --color-yellow-light: #E8EAF0;
+    --color-yellow-rgb: var(--color-navy-700-rgb);
+    --color-yellow: rgb(var(--color-yellow-rgb));
+    --color-yellow-hover-rgb: var(--color-navy-700-hover-rgb);
+    --color-yellow-hover: rgb(var(--color-yellow-hover-rgb));
+    --color-yellow-active-rgb: var(--color-navy-700-active-rgb);
+    --color-yellow-active: rgb(var(--color-yellow-active-rgb));
+    --color-yellow-light-rgb: 232 234 240;
+    --color-yellow-light: rgb(var(--color-yellow-light-rgb));
     /* --color-yellow-dark NO se sobreescribe: sigue siendo #996515 (dorado oscuro)
        para que text-yellow-dark sea legible sobre bg-yellow/25 en badges de rareza */
   }

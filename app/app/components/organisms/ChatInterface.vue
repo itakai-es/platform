@@ -77,7 +77,7 @@
           <p class="text-sm whitespace-pre-wrap">{{ message.content }}</p>
           <p
             class="text-xs mt-1"
-            :class="[message.role === 'user' ? 'text-navy-dark/60' : 'text-text-muted']"
+            :class="[message.role === 'user' ? 'text-navy-dark/70' : 'text-text-muted']"
           >
             {{ formatTime(message.timestamp) }}
           </p>

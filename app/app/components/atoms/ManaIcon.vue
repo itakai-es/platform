@@ -9,8 +9,8 @@
     />
     <!-- Gota de maná (estilo LoL): azul, con punta arriba y base redondeada -->
     <template v-else>
-      <path d="M12 2 C12 2 19 10.5 19 15 A7 7 0 1 1 5 15 C5 10.5 12 2 12 2 Z" fill="#0088d0" />
-      <path d="M12 4.4 C12 4.4 17 11 17 15 A5 5 0 1 1 7 15 C7 11 12 4.4 12 4.4 Z" fill="#00aafc" />
+      <path d="M12 2 C12 2 19 10.5 19 15 A7 7 0 1 1 5 15 C5 10.5 12 2 12 2 Z" style="fill: var(--color-sky-active)" />
+      <path d="M12 4.4 C12 4.4 17 11 17 15 A5 5 0 1 1 7 15 C7 11 12 4.4 12 4.4 Z" style="fill: var(--color-sky)" />
       <ellipse
         cx="9.6"
         cy="16"

@@ -324,7 +324,7 @@ const handleChatClick = () => {
 
 .progress-fill {
   @apply h-full transition-all duration-500 ease-out rounded-full;
-  background: linear-gradient(90deg, #ff3c52 0%, #ff9aab 100%);
+  background: linear-gradient(90deg, var(--color-red) 0%, var(--color-red-light) 100%);
 }
 
 .role-badge-card {

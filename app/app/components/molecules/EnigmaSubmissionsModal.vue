@@ -364,7 +364,7 @@ watch(
             <!-- Info -->
             <div class="flex-1 min-w-0">
               <p class="font-bold text-navy-700 text-base">{{ submission.student.name }}</p>
-              <span class="text-xs text-navy-700/60 block">{{
+              <span class="text-xs text-navy-700/70 block">{{
                 formatDate(submission.submittedAt)
               }}</span>
             </div>
@@ -425,7 +425,7 @@ watch(
                 <!-- Previsualización de recompensas + aprobar -->
                 <div class="flex items-center justify-between gap-3 flex-wrap">
                   <div class="flex items-center gap-2.5 text-sm">
-                    <span class="text-navy-700/60">Recibirá</span>
+                    <span class="text-navy-700/70">Recibirá</span>
                     <span
                       v-if="showXp"
                       class="inline-flex items-center gap-1 font-semibold text-navy-700"

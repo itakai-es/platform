@@ -73,7 +73,7 @@
           <div class="flex items-start justify-between gap-3 mb-3">
             <div class="min-w-0 flex-1">
               <h3 class="font-bold text-navy-700 text-lg">{{ mission.title }}</h3>
-              <p class="text-sm text-navy-700/50">
+              <p class="text-sm text-navy-700/70">
                 {{ mission.className }} · {{ mission.teacherName }}
               </p>
             </div>
@@ -84,15 +84,15 @@
           <div class="grid grid-cols-3 gap-2 text-center">
             <div class="bg-navy-700/5 rounded-xl py-2.5 px-2">
               <p class="text-lg font-bold text-navy-700">{{ mission.enigmaCount }}</p>
-              <p class="text-xs text-navy-700/50 uppercase tracking-wide">Enigmas</p>
+              <p class="text-xs text-navy-700/70 uppercase tracking-wide">Enigmas</p>
             </div>
             <div class="bg-navy-700/5 rounded-xl py-2.5 px-2">
               <p class="text-lg font-bold text-gold">{{ mission.xpReward }}</p>
-              <p class="text-xs text-navy-700/50 uppercase tracking-wide">XP</p>
+              <p class="text-xs text-navy-700/70 uppercase tracking-wide">XP</p>
             </div>
             <div class="bg-navy-700/5 rounded-xl py-2.5 px-2">
               <p class="text-lg font-bold text-navy-700">{{ statusLabel(mission.status) }}</p>
-              <p class="text-xs text-navy-700/50 uppercase tracking-wide">Estado</p>
+              <p class="text-xs text-navy-700/70 uppercase tracking-wide">Estado</p>
             </div>
           </div>
         </div>

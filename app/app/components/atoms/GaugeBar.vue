@@ -1,6 +1,6 @@
 <template>
   <div class="flex items-center gap-3">
-    <span class="text-xs font-medium text-navy-700/60 w-24 flex-shrink-0">{{ label }}</span>
+    <span class="text-xs font-medium text-navy-700/70 w-24 flex-shrink-0">{{ label }}</span>
     <div class="flex-1 h-3 bg-navy-700/10 rounded-full overflow-hidden">
       <div
         class="h-full rounded-full transition-all duration-300"

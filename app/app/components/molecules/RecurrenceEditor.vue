@@ -8,7 +8,7 @@
     >
       <span class="truncate">{{ summary }}</span>
       <ChevronDownIcon
-        class="h-4 w-4 flex-shrink-0 text-navy-700/60"
+        class="h-4 w-4 flex-shrink-0 text-navy-700/70"
         :class="menuOpen && 'rotate-180'"
       />
     </button>

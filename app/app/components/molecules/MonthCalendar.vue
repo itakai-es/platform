@@ -103,7 +103,7 @@ function cellClass(day: { date: Date; key: string }): string {
   if (!inMonth) parts.push('opacity-40')
   if (day.key === todayKey) parts.push('ring-2 ring-navy-700/40')
 
-  if (status === 'class') parts.push('bg-[#6cf3af] font-semibold text-navy-700')
+  if (status === 'class') parts.push('bg-green font-semibold text-navy-700')
   else if (status === 'off') parts.push('bg-gray-100 text-gray-400 line-through')
   else parts.push('text-navy-700', props.interactive ? 'hover:bg-gray-100' : '')
 

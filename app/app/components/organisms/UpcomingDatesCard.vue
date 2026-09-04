@@ -10,7 +10,7 @@
           <p class="font-semibold text-navy-700 truncate">{{ dateItem.title }}</p>
           <p class="text-sm text-text-secondary">
             {{ dateItem.date }}
-            <span v-if="dateItem.className" class="text-navy-700/60">
+            <span v-if="dateItem.className" class="text-navy-700/70">
               · {{ dateItem.className }}</span
             >
           </p>

@@ -28,7 +28,7 @@ const colorMap: Record<string, string> = {
 }
 
 const buttonClasses = computed(() => {
-  const base = 'font-medium rounded-lg text-[#23245D]'
+  const base = 'font-medium rounded-lg text-navy-700'
   const width = props.fullWidth ? 'block w-full' : 'inline-block'
   const align = props.centered ? 'text-center' : ''
 

@@ -189,7 +189,7 @@
                         "
                       >
                         <CheckIcon v-if="selectedTitle === title" class="w-4 h-4 text-white" />
-                        <SparklesIcon v-else class="w-4 h-4 text-navy-700/50" />
+                        <SparklesIcon v-else class="w-4 h-4 text-navy-700/70" />
                       </span>
                       <span
                         class="text-sm font-medium truncate"

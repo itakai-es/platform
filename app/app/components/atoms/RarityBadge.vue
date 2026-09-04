@@ -86,10 +86,10 @@ const badgeClasses = computed(() => {
     'inline-flex items-center justify-center font-medium rounded-full h-[26px] px-[10px] text-sm uppercase tracking-wide'
 
   const variants: Record<MissionRarity, string> = {
-    comun: 'bg-[#6cf3af] text-navy-700',
+    comun: 'bg-badge-comun text-navy-700',
     rara: 'bg-purple-light text-navy-700',
     epica: 'bg-purple text-white',
-    legendaria: 'bg-[#F59E0B] text-white',
+    legendaria: 'bg-badge-legendaria text-white',
   }
 
   return [base, variants[props.rarity]].join(' ')

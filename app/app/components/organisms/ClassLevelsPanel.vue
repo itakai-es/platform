@@ -88,7 +88,7 @@
 
         <!-- Explica en palabras el ritmo elegido (cambia al pulsar Lento/Normal/Rápido) -->
         <p class="flex items-start gap-2 rounded-xl bg-navy-700/5 px-3 py-2.5 text-sm text-navy-700/80">
-          <InformationCircleIcon class="w-4 h-4 mt-0.5 flex-shrink-0 text-navy-700/40" />
+          <InformationCircleIcon class="w-4 h-4 mt-0.5 flex-shrink-0 text-navy-700/50" />
           <span>{{ paceDesc }}</span>
         </p>
 
@@ -219,7 +219,7 @@
           </div>
           <button
             type="button"
-            class="p-2 rounded-lg text-navy-700/40 hover:text-error hover:bg-error/10 transition-colors"
+            class="p-2 rounded-lg text-navy-700/50 hover:text-error hover:bg-error/10 transition-colors"
             :title="t('teacher.classes.detail.settings.levels.tier_remove')"
             @click="removeTier(i)"
           >
@@ -283,6 +283,9 @@ import { PlusIcon, TrashIcon, InformationCircleIcon } from '@heroicons/vue/24/ou
 import type { LevelConfig, LevelTier } from '~/types/class.types'
 import { tierForLevel, totalXpForLevel } from '~/utils/level-config'
 
+// Paleta de rangos: bronce, teal, dorado… Es una identidad propia (como las
+// medallas de un podio), no la semántica de la interfaz, así que no pasa por
+// los tokens ni por los modos de accesibilidad.
 const DEFAULT_TIERS: LevelTier[] = [
   { fromLevel: 1, toLevel: 4, title: 'Mortal', color: '#9CA3AF' },
   { fromLevel: 5, toLevel: 9, title: 'Héroe Novato', color: '#34D399' },

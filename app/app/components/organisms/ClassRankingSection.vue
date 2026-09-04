@@ -400,7 +400,7 @@
           :class="[
             'transition-all',
             student.isCurrentUser && showCurrentUserHighlight
-              ? 'ring-2 ring-[#FFC338] shadow-md'
+              ? 'ring-2 ring-yellow shadow-md'
               : 'hover:shadow-md',
             clickable ? 'cursor-pointer' : '',
           ]"

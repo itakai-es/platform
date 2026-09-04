@@ -137,9 +137,9 @@
 
               <!-- Unlock info -->
               <div v-if="selectedBadge.unlocked" class="w-full">
-                <div class="bg-[#6CF3AF]/20 rounded-xl p-4 text-left">
+                <div class="bg-green/20 rounded-xl p-4 text-left">
                   <p class="text-sm text-navy-700">
-                    <CheckCircleIcon class="w-4 h-4 inline-block mr-1 text-[#6CF3AF]" />
+                    <CheckCircleIcon class="w-4 h-4 inline-block mr-1 text-green" />
                     {{
                       t('student.achievements.badge_detail.unlocked_on', {
                         date: formatDate(selectedBadge.unlockedAt),

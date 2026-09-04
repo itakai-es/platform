@@ -56,7 +56,7 @@
           <div class="flex-shrink-0">
             <div
               v-if="status === 'completada' || isFullyCompletedTeacher"
-              class="w-7 h-7 rounded-full flex items-center justify-center bg-[#6cf3af]"
+              class="w-7 h-7 rounded-full flex items-center justify-center bg-green"
             >
               <CheckIcon class="w-4 h-4 text-white" />
             </div>

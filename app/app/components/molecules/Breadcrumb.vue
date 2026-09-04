@@ -12,7 +12,7 @@
         </NuxtLink>
 
         <!-- Current page (no link) -->
-        <span v-else class="text-navy-700/60 font-medium">
+        <span v-else class="text-navy-700/70 font-medium">
           {{ item.label }}
         </span>
 

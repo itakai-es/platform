@@ -23,7 +23,7 @@
     <!-- Labels -->
     <div class="flex gap-1">
       <div v-for="(point, i) in data" :key="i" class="flex-1 text-center">
-        <span class="text-[9px] font-medium text-navy-700/40">{{ point.label }}</span>
+        <span class="text-[9px] font-medium text-navy-700/70">{{ point.label }}</span>
       </div>
     </div>
   </div>

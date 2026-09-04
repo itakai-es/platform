@@ -76,7 +76,7 @@
             </div>
             <div class="text-center">
               <p class="text-sm font-medium text-navy-700">{{ selectedFile.name }}</p>
-              <p class="text-xs text-navy-700/60">{{ formatFileSize(selectedFile.size) }}</p>
+              <p class="text-xs text-navy-700/70">{{ formatFileSize(selectedFile.size) }}</p>
             </div>
           </div>
           <div v-else class="text-gray-500">

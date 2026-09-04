@@ -34,7 +34,7 @@
       <button
         v-if="sessions.length > 1"
         type="button"
-        class="p-1.5 rounded-full text-navy-700/60 hover:bg-gray-100"
+        class="p-1.5 rounded-full text-navy-700/70 hover:bg-gray-100"
         :title="t('teacher.classes.detail.settings.general.schedule_remove')"
         @click="removeSession(idx)"
       >

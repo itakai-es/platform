@@ -1,6 +1,21 @@
 import type { Config } from 'tailwindcss'
 
 /**
+ * Tonos numéricos de la paleta cruda de Tailwind que la aplicación usa de
+ * verdad, enrutados por variable CSS para que los modos de accesibilidad
+ * (daltonismo, alto contraste) puedan remapearlos. Los valores por defecto
+ * están en `app/assets/css/tailwind.css` y son los de Tailwind, así que esto
+ * no cambia nada de lo que se ve hoy.
+ *
+ * El formato `rgb(var(--x) / <alpha-value>)` es el que conserva los
+ * modificadores de opacidad (`bg-red-500/20`).
+ */
+const paletteScale = (name: string, shades: number[]) =>
+  Object.fromEntries(
+    shades.map(shade => [shade, `rgb(var(--palette-${name}-${shade}) / <alpha-value>)`])
+  )
+
+/**
  * ITAKAI Tailwind Configuration
  *
  * Sistema de diseño centralizado usando CSS Variables.
@@ -40,91 +55,100 @@ export default {
       colors: {
         // Backgrounds
         bg: {
-          primary: 'var(--color-bg-primary)',
-          secondary: 'var(--color-bg-secondary)',
-          tertiary: 'var(--color-bg-tertiary)',
+          primary: 'rgb(var(--color-bg-primary-rgb) / <alpha-value>)',
+          secondary: 'rgb(var(--color-bg-secondary-rgb) / <alpha-value>)',
+          tertiary: 'rgb(var(--color-bg-tertiary-rgb) / <alpha-value>)',
         },
 
         // Surface (cards, containers)
         surface: {
-          DEFAULT: 'var(--color-surface)',
-          hover: 'var(--color-surface-hover)',
-          active: 'var(--color-surface-active)',
+          DEFAULT: 'rgb(var(--color-surface-rgb) / <alpha-value>)',
+          hover: 'rgb(var(--color-surface-hover-rgb) / <alpha-value>)',
+          active: 'rgb(var(--color-surface-active-rgb) / <alpha-value>)',
         },
 
         // Text
         text: {
-          primary: 'var(--color-text-primary)',
-          secondary: 'var(--color-text-secondary)',
-          tertiary: 'var(--color-text-tertiary)',
-          muted: 'var(--color-text-muted)',
-          inverse: 'var(--color-text-inverse)',
+          primary: 'rgb(var(--color-text-primary-rgb) / <alpha-value>)',
+          secondary: 'rgb(var(--color-text-secondary-rgb) / <alpha-value>)',
+          tertiary: 'rgb(var(--color-text-tertiary-rgb) / <alpha-value>)',
+          muted: 'rgb(var(--color-text-muted-rgb) / <alpha-value>)',
+          inverse: 'rgb(var(--color-text-inverse-rgb) / <alpha-value>)',
         },
 
         // Brand colors
         primary: {
-          DEFAULT: 'var(--color-primary)',
-          hover: 'var(--color-primary-hover)',
-          active: 'var(--color-primary-active)',
+          DEFAULT: 'rgb(var(--color-primary-rgb) / <alpha-value>)',
+          hover: 'rgb(var(--color-primary-hover-rgb) / <alpha-value>)',
+          active: 'rgb(var(--color-primary-active-rgb) / <alpha-value>)',
           light: 'var(--color-primary-light)',
         },
 
         secondary: {
-          DEFAULT: 'var(--color-secondary)',
-          hover: 'var(--color-secondary-hover)',
-          active: 'var(--color-secondary-active)',
-          light: 'var(--color-secondary-light)',
+          DEFAULT: 'rgb(var(--color-secondary-rgb) / <alpha-value>)',
+          hover: 'rgb(var(--color-secondary-hover-rgb) / <alpha-value>)',
+          active: 'rgb(var(--color-secondary-active-rgb) / <alpha-value>)',
+          light: 'rgb(var(--color-secondary-light-rgb) / <alpha-value>)',
         },
 
         accent: {
-          DEFAULT: 'var(--color-accent)',
-          hover: 'var(--color-accent-hover)',
-          active: 'var(--color-accent-active)',
-          light: 'var(--color-accent-light)',
+          DEFAULT: 'rgb(var(--color-accent-rgb) / <alpha-value>)',
+          hover: 'rgb(var(--color-accent-hover-rgb) / <alpha-value>)',
+          active: 'rgb(var(--color-accent-active-rgb) / <alpha-value>)',
+          light: 'rgb(var(--color-accent-light-rgb) / <alpha-value>)',
         },
 
         // Semantic colors
         success: {
-          DEFAULT: 'var(--color-success)',
-          light: 'var(--color-success-light)',
-          dark: 'var(--color-success-dark)',
+          DEFAULT: 'rgb(var(--color-success-rgb) / <alpha-value>)',
+          light: 'rgb(var(--color-success-light-rgb) / <alpha-value>)',
+          dark: 'rgb(var(--color-success-dark-rgb) / <alpha-value>)',
         },
 
         warning: {
-          DEFAULT: 'var(--color-warning)',
-          light: 'var(--color-warning-light)',
-          dark: 'var(--color-warning-dark)',
+          DEFAULT: 'rgb(var(--color-warning-rgb) / <alpha-value>)',
+          light: 'rgb(var(--color-warning-light-rgb) / <alpha-value>)',
+          dark: 'rgb(var(--color-warning-dark-rgb) / <alpha-value>)',
         },
 
         error: {
-          DEFAULT: 'var(--color-error)',
-          light: 'var(--color-error-light)',
-          dark: 'var(--color-error-dark)',
+          DEFAULT: 'rgb(var(--color-error-rgb) / <alpha-value>)',
+          light: 'rgb(var(--color-error-light-rgb) / <alpha-value>)',
+          dark: 'rgb(var(--color-error-dark-rgb) / <alpha-value>)',
         },
 
         info: {
-          DEFAULT: 'var(--color-info)',
-          light: 'var(--color-info-light)',
-          dark: 'var(--color-info-dark)',
+          DEFAULT: 'rgb(var(--color-info-rgb) / <alpha-value>)',
+          light: 'rgb(var(--color-info-light-rgb) / <alpha-value>)',
+          dark: 'rgb(var(--color-info-dark-rgb) / <alpha-value>)',
         },
 
         // Borders
         border: {
-          primary: 'var(--color-border-primary)',
-          secondary: 'var(--color-border-secondary)',
-          tertiary: 'var(--color-border-tertiary)',
+          primary: 'rgb(var(--color-border-primary-rgb) / <alpha-value>)',
+          secondary: 'rgb(var(--color-border-secondary-rgb) / <alpha-value>)',
+          tertiary: 'rgb(var(--color-border-tertiary-rgb) / <alpha-value>)',
         },
 
         // Badges - Status & State Colors
         badge: {
-          urgente: 'var(--color-badge-urgente)',
-          activa: 'var(--color-badge-activa)',
-          pendiente: 'var(--color-badge-pendiente)',
-          bloqueada: 'var(--color-badge-bloqueada)',
-          epica: 'var(--color-badge-epica)',
-          rara: 'var(--color-badge-rara)',
-          'text-light': 'var(--color-badge-text-light)',
-          'text-dark': 'var(--color-badge-text-dark)',
+          urgente: 'rgb(var(--color-badge-urgente-rgb) / <alpha-value>)',
+          activa: 'rgb(var(--color-badge-activa-rgb) / <alpha-value>)',
+          pendiente: 'rgb(var(--color-badge-pendiente-rgb) / <alpha-value>)',
+          bloqueada: 'rgb(var(--color-badge-bloqueada-rgb) / <alpha-value>)',
+          comun: 'rgb(var(--color-badge-comun-rgb) / <alpha-value>)',
+          rara: 'rgb(var(--color-badge-rara-rgb) / <alpha-value>)',
+          epica: 'rgb(var(--color-badge-epica-rgb) / <alpha-value>)',
+          legendaria: 'rgb(var(--color-badge-legendaria-rgb) / <alpha-value>)',
+          'text-light': 'rgb(var(--color-badge-text-light-rgb) / <alpha-value>)',
+          'text-dark': 'rgb(var(--color-badge-text-dark-rgb) / <alpha-value>)',
+        },
+
+        // Barra de progreso: los tokens existían desde el principio pero no había
+        // utilidad, así que los componentes escribían el hex a mano.
+        progress: {
+          track: 'rgb(var(--color-progress-track-rgb) / <alpha-value>)',
+          fill: 'rgb(var(--color-progress-fill-rgb) / <alpha-value>)',
         },
 
         /* ============================================
@@ -133,80 +157,95 @@ export default {
 
         // Navy 700 - Text, Headers, Primary Buttons
         navy: {
-          DEFAULT: 'var(--color-primary)',
-          base: 'var(--color-navy-base)', // #03003C - Login hero bg
-          'base-light': 'var(--color-navy-base-light)', // #0a0a52 - Onda
-          700: 'var(--color-navy-700)',
-          dark: 'var(--color-navy-700-hover)',
-          darker: 'var(--color-navy-700-active)',
+          DEFAULT: 'rgb(var(--color-primary-rgb) / <alpha-value>)',
+          base: 'rgb(var(--color-navy-base-rgb) / <alpha-value>)', // #03003C - Login hero bg
+          'base-light': 'rgb(var(--color-navy-base-light-rgb) / <alpha-value>)', // #0a0a52 - Onda
+          700: 'rgb(var(--color-navy-700-rgb) / <alpha-value>)',
+          dark: 'rgb(var(--color-navy-700-hover-rgb) / <alpha-value>)',
+          darker: 'rgb(var(--color-navy-700-active-rgb) / <alpha-value>)',
         },
 
         // Purple Brand - Accent, Buttons, Labels
         purple: {
-          DEFAULT: 'var(--color-purple)',
-          hover: 'var(--color-purple-hover)',
-          active: 'var(--color-purple-active)',
-          light: 'var(--color-purple-light)',
-          dark: 'var(--color-purple-dark)', // #5a3a8d - Social buttons
-          'dark-hover': 'var(--color-purple-dark-hover)',
-          'dark-active': 'var(--color-purple-dark-active)',
+          DEFAULT: 'rgb(var(--color-purple-rgb) / <alpha-value>)',
+          hover: 'rgb(var(--color-purple-hover-rgb) / <alpha-value>)',
+          active: 'rgb(var(--color-purple-active-rgb) / <alpha-value>)',
+          light: 'rgb(var(--color-purple-light-rgb) / <alpha-value>)',
+          dark: 'rgb(var(--color-purple-dark-rgb) / <alpha-value>)', // #5a3a8d - Social buttons
+          'dark-hover': 'rgb(var(--color-purple-dark-hover-rgb) / <alpha-value>)',
+          'dark-active': 'rgb(var(--color-purple-dark-active-rgb) / <alpha-value>)',
+          ...paletteScale('purple', [200, 500]),
         },
 
         // Lilac Panel - Login Panels, Light Surfaces
         lilac: {
-          DEFAULT: 'var(--color-lilac)',
-          hover: 'var(--color-lilac-hover)',
-          active: 'var(--color-lilac-active)',
+          DEFAULT: 'rgb(var(--color-lilac-rgb) / <alpha-value>)',
+          hover: 'rgb(var(--color-lilac-hover-rgb) / <alpha-value>)',
+          active: 'rgb(var(--color-lilac-active-rgb) / <alpha-value>)',
         },
 
         // Yellow Brand - AI Success, Chips, CTAs
         yellow: {
-          DEFAULT: 'var(--color-yellow)',
-          hover: 'var(--color-yellow-hover)',
-          active: 'var(--color-yellow-active)',
-          light: 'var(--color-yellow-light)',
-          dark: 'var(--color-yellow-dark)',
+          DEFAULT: 'rgb(var(--color-yellow-rgb) / <alpha-value>)',
+          hover: 'rgb(var(--color-yellow-hover-rgb) / <alpha-value>)',
+          active: 'rgb(var(--color-yellow-active-rgb) / <alpha-value>)',
+          light: 'rgb(var(--color-yellow-light-rgb) / <alpha-value>)',
+          dark: 'rgb(var(--color-yellow-dark-rgb) / <alpha-value>)',
+          ...paletteScale('yellow', [100, 200, 500, 600, 700]),
         },
 
         // Mint Brand - Positive States, Success
         mint: {
-          DEFAULT: 'var(--color-mint)',
-          hover: 'var(--color-mint-hover)',
-          active: 'var(--color-mint-active)',
-          light: 'var(--color-mint-light)',
+          DEFAULT: 'rgb(var(--color-mint-rgb) / <alpha-value>)',
+          hover: 'rgb(var(--color-mint-hover-rgb) / <alpha-value>)',
+          active: 'rgb(var(--color-mint-active-rgb) / <alpha-value>)',
+          light: 'rgb(var(--color-mint-light-rgb) / <alpha-value>)',
         },
 
         // Peach Brand - KPI/Fechas Cards
         peach: {
-          DEFAULT: 'var(--color-peach)',
-          hover: 'var(--color-peach-hover)',
-          active: 'var(--color-peach-active)',
-          light: 'var(--color-peach-light)',
+          DEFAULT: 'rgb(var(--color-peach-rgb) / <alpha-value>)',
+          hover: 'rgb(var(--color-peach-hover-rgb) / <alpha-value>)',
+          active: 'rgb(var(--color-peach-active-rgb) / <alpha-value>)',
+          light: 'rgb(var(--color-peach-light-rgb) / <alpha-value>)',
         },
 
         // Sky Blue Brand - Stats Cards, Info
         sky: {
-          DEFAULT: 'var(--color-sky)',
-          hover: 'var(--color-sky-hover)',
-          active: 'var(--color-sky-active)',
-          light: 'var(--color-sky-light)',
-          'light-alt': 'var(--color-sky-light-alt)',
+          DEFAULT: 'rgb(var(--color-sky-rgb) / <alpha-value>)',
+          hover: 'rgb(var(--color-sky-hover-rgb) / <alpha-value>)',
+          active: 'rgb(var(--color-sky-active-rgb) / <alpha-value>)',
+          light: 'rgb(var(--color-sky-light-rgb) / <alpha-value>)',
+          'light-alt': 'rgb(var(--color-sky-light-alt-rgb) / <alpha-value>)',
+          ...paletteScale('sky', [100, 200, 300, 700]),
         },
 
         // Green Brand - Active States, Success Vivid
         green: {
-          DEFAULT: 'var(--color-green)',
-          light: 'var(--color-green-light)',
+          DEFAULT: 'rgb(var(--color-green-rgb) / <alpha-value>)',
+          light: 'rgb(var(--color-green-light-rgb) / <alpha-value>)',
+          ...paletteScale('green', [50, 100, 400, 500, 600, 700]),
         },
 
         // Red/Pink Brand - Urgent Badges, Errors
         red: {
-          DEFAULT: 'var(--color-red)',
-          hover: 'var(--color-red-hover)',
-          active: 'var(--color-red-active)',
-          light: 'var(--color-red-light)',
-          'light-alt': 'var(--color-red-light-alt)',
+          DEFAULT: 'rgb(var(--color-red-rgb) / <alpha-value>)',
+          hover: 'rgb(var(--color-red-hover-rgb) / <alpha-value>)',
+          active: 'rgb(var(--color-red-active-rgb) / <alpha-value>)',
+          light: 'rgb(var(--color-red-light-rgb) / <alpha-value>)',
+          'light-alt': 'rgb(var(--color-red-light-alt-rgb) / <alpha-value>)',
+          ...paletteScale('red', [50, 100, 200, 300, 400, 500, 600, 700]),
         },
+
+        /* Tonos crudos que la aplicación usa y que deben responder a los
+           modos de accesibilidad (ver `paletteScale`). */
+        amber: paletteScale('amber', [50, 100, 200, 500, 600, 700, 800]),
+        orange: paletteScale('orange', [500]),
+        blue: paletteScale('blue', [50, 100, 200, 500, 600, 700]),
+        indigo: paletteScale('indigo', [900]),
+        violet: paletteScale('violet', [100, 200, 700]),
+        emerald: paletteScale('emerald', [500]),
+        gray: paletteScale('gray', [50, 100, 200, 300, 400, 500, 600, 700]),
       },
 
       /* ============================================

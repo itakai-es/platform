@@ -94,7 +94,7 @@
               </div>
               <div class="min-w-0 flex-1">
                 <h3 class="font-bold text-navy-700 truncate text-lg">{{ user.name }}</h3>
-                <p class="text-sm text-navy-700/50 truncate">{{ user.email }}</p>
+                <p class="text-sm text-navy-700/70 truncate">{{ user.email }}</p>
               </div>
             </div>
             <Badge :variant="getRoleBadgeVariant(user.role)" size="sm">
@@ -108,7 +108,7 @@
               <p class="text-sm font-bold" :class="getStatusColor(user.status)">
                 {{ getStatusLabel(user.status) }}
               </p>
-              <p class="text-xs text-navy-700/50 uppercase tracking-wide">
+              <p class="text-xs text-navy-700/70 uppercase tracking-wide">
                 {{ t('admin.users.card.status') }}
               </p>
             </div>
@@ -117,7 +117,7 @@
               <p class="text-sm font-bold text-navy-700">
                 {{ user.classCount ?? 0 }}
               </p>
-              <p class="text-xs text-navy-700/50 uppercase tracking-wide">
+              <p class="text-xs text-navy-700/70 uppercase tracking-wide">
                 {{ t('admin.users.card.classes') }}
               </p>
             </div>
@@ -126,7 +126,7 @@
               <p class="text-sm font-bold text-navy-700">
                 {{ user.lastLogin ? formatTimeAgo(user.lastLogin) : '—' }}
               </p>
-              <p class="text-xs text-navy-700/50 uppercase tracking-wide">
+              <p class="text-xs text-navy-700/70 uppercase tracking-wide">
                 {{ t('admin.users.card.last_login') }}
               </p>
             </div>

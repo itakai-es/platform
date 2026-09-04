@@ -111,7 +111,7 @@
       <div>
         <label class="block text-sm font-medium text-navy-700 mb-1.5">
           {{ t('teacher.components.document_form_modal.label_description') }}
-          <span class="text-navy-700/50 font-normal">{{
+          <span class="text-navy-700/70 font-normal">{{
             t('teacher.components.document_form_modal.label_description_optional')
           }}</span>
         </label>

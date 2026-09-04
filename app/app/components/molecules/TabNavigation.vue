@@ -8,7 +8,7 @@
           'whitespace-nowrap py-3 px-1 border-b-2 font-medium text-base transition-all duration-200',
           activeTab === tab.id
             ? 'border-student text-navy-700 font-semibold'
-            : 'border-transparent text-navy-700/60 hover:text-navy-700/80 hover:border-navy-700/30',
+            : 'border-transparent text-navy-700/70 hover:text-navy-700/80 hover:border-navy-700/30',
         ]"
         :aria-current="activeTab === tab.id ? 'page' : undefined"
         @click="handleTabClick(tab.id)"

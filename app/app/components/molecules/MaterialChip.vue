@@ -21,7 +21,7 @@
     <button
       v-if="removable"
       type="button"
-      class="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full text-navy-700/40 transition-colors hover:bg-navy-700/5 hover:text-navy-700"
+      class="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full text-navy-700/50 transition-colors hover:bg-navy-700/5 hover:text-navy-700"
       :title="removeLabel"
       @click="$emit('remove')"
     >
