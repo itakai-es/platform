@@ -5,7 +5,7 @@ export const ROUTE_NAMES = {
   PRIVACY_POLICY: '/privacy-policy',
   COOKIES: '/cookies',
   LICENSES: '/licenses',
-  DOCS: '/docs',
+  DOCS: '/ayuda',
 
   // Shared (authenticated, role-agnostic)
   NOTIFICACIONES: '/notificaciones',
@@ -42,6 +42,7 @@ export const ROUTE_NAMES = {
   ADMIN_ANALYTICS: '/admin/estadisticas',
   ADMIN_SCHOOLS: '/admin/centros',
   ADMIN_LOGS: '/admin/registros',
+  ADMIN_HELP: '/admin/ayuda',
   ADMIN_SETTINGS: '/admin/configuracion',
 } as const
 

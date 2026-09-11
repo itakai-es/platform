@@ -13,10 +13,14 @@
       "logs": "Logak",
       "features": "Ezaugarriak",
       "blog": "Bloga",
+      "help": "Laguntza",
       "section_management": "Kudeaketa",
       "section_system": "Sistema"
     },
     "actions": {
+      "save": "Gorde",
+      "cancel": "Utzi",
+      "edit": "Editatu",
       "rename": "Berrizendatu",
       "delete": "Ezabatu",
       "open_menu": "Menua ireki",
@@ -198,14 +202,37 @@
     "under_development": {
       "back_to_dashboard": "Dashboard-era itzuli"
     },
-    "docs": {
-      "title": "Laguntza Zentroa eta Dokumentazioa",
-      "description": "Hemen gida osoak, pausoz pausoko tutorialak, ohiko galderak eta laguntza baliabideak kontsultatu ahal izango dituzu ITAKAI plataformari ahalik eta etekin handiena ateratzeko.",
-      "btn_back": "Hasierako orrialdera itzuli",
+    "help": {
+      "title": "Laguntza gunea",
+      "hero_title": "Zertan lagun diezazukegu?",
+      "hero_subtitle": "Gidak, urratsez urratseko tutorialak eta plataformaren konfigurazioa. Irakasleentzat idatzita, ez informatikarientzat.",
+      "all_categories": "Kategoria guztiak",
+      "article_count": "{count} artikulu",
+      "keep_reading": "Irakurtzen jarraitu",
+      "on_this_page": "Orri honetan",
+      "previous": "Aurrekoa",
+      "next": "Hurrengoa",
+      "still_stuck": "Ez duzu bilatzen zenuena aurkitu?",
+      "contact_us": "Idatzi iezaguzu",
+      "updated_on": "{date}(e)an eguneratua",
+      "feedback_question": "Lagungarria izan zaizu?",
+      "feedback_yes": "Bai",
+      "feedback_no": "Ez guztiz",
+      "feedback_thanks": "Eskerrik asko. Zer berridatzi jakiten laguntzen digu.",
+      "empty_title": "Oraindik ez dago artikulurik",
+      "empty_description": "Lehen artikulua argitaratzean hemen agertuko da.",
+      "not_found_title": "Ez dugu orri hori aurkitu",
+      "not_found_description": "Baliteke artikulua mugitu izana edo oraindik argitaratu gabe egotea.",
       "meta": {
-        "title": "Dokumentazioa - ITAKAI",
-        "description": "ITAKAI-ren laguntza zentroa eta dokumentazioa"
-      }
+        "title": "Laguntza gunea · ITAKAI",
+        "description": "ITAKAI plataformaren gidak, tutorialak eta konfigurazioa."
+      },
+      "search": {
+        "placeholder": "Bilatu laguntzan…",
+        "empty": "Ezer ez «{query}» bilaketarako",
+        "empty_hint": "Saiatu beste hitz batzuekin: «entregak», «txanponak», «mailak»."
+      },
+      "most_read": "Gehien irakurriak"
     },
     "meta": {
       "site_title": "ITAKAI - Ikasteko abentura | Hezkuntza Plataforma Gamifikatua",

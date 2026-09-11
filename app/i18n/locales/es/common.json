@@ -13,10 +13,14 @@
       "logs": "Registros",
       "features": "Características",
       "blog": "Blog",
+      "help": "Ayuda",
       "section_management": "Gestión",
       "section_system": "Sistema"
     },
     "actions": {
+      "save": "Guardar",
+      "cancel": "Cancelar",
+      "edit": "Editar",
       "rename": "Renombrar",
       "delete": "Eliminar",
       "open_menu": "Abrir menú",
@@ -198,14 +202,37 @@
     "under_development": {
       "back_to_dashboard": "Volver al Inicio"
     },
-    "docs": {
-      "title": "Centro de Ayuda y Documentación",
-      "description": "Aquí podrás acceder a guías completas, tutoriales paso a paso, preguntas frecuentes y recursos de ayuda para aprovechar al máximo la plataforma ITAKAI.",
-      "btn_back": "Volver a la página principal",
+    "help": {
+      "title": "Centro de ayuda",
+      "hero_title": "¿En qué te echamos una mano?",
+      "hero_subtitle": "Guías, tutoriales paso a paso y configuración de la plataforma. Escritas para el profesorado, no para informáticos.",
+      "all_categories": "Todas las categorías",
+      "article_count": "{count} artículos",
+      "keep_reading": "Seguir leyendo",
+      "on_this_page": "En esta página",
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "still_stuck": "¿No has encontrado lo que buscabas?",
+      "contact_us": "Escríbenos",
+      "updated_on": "Actualizado el {date}",
+      "feedback_question": "¿Te ha resultado útil?",
+      "feedback_yes": "Sí",
+      "feedback_no": "No del todo",
+      "feedback_thanks": "Gracias. Nos ayuda a saber qué reescribir.",
+      "empty_title": "Todavía no hay artículos",
+      "empty_description": "Cuando se publique el primer artículo aparecerá aquí.",
+      "not_found_title": "No encontramos esa página",
+      "not_found_description": "Puede que el artículo se haya movido o todavía no esté publicado.",
       "meta": {
-        "title": "Documentación - ITAKAI",
-        "description": "Centro de ayuda y documentación de ITAKAI"
-      }
+        "title": "Centro de ayuda · ITAKAI",
+        "description": "Guías, tutoriales y configuración de la plataforma ITAKAI."
+      },
+      "search": {
+        "placeholder": "Buscar en la ayuda…",
+        "empty": "Nada por «{query}»",
+        "empty_hint": "Prueba con otras palabras: «entregas», «monedas», «niveles»."
+      },
+      "most_read": "Lo más consultado"
     },
     "meta": {
       "site_title": "ITAKAI - La aventura de aprender | Plataforma Educativa Gamificada",

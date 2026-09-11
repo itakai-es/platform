@@ -64,6 +64,15 @@
               {{ t('common.nav.blog') }}
             </a>
           </li>
+          <li>
+            <NuxtLink
+              to="/ayuda"
+              class="block px-4 py-3 rounded-lg text-navy-700 font-medium hover:bg-gray-100 transition-colors"
+              @click="emit('close')"
+            >
+              {{ t('common.nav.help') }}
+            </NuxtLink>
+          </li>
         </ul>
 
         <!-- Divider -->

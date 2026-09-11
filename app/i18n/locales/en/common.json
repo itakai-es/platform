@@ -13,10 +13,14 @@
       "logs": "Logs",
       "features": "Features",
       "blog": "Blog",
+      "help": "Help",
       "section_management": "Management",
       "section_system": "System"
     },
     "actions": {
+      "save": "Save",
+      "cancel": "Cancel",
+      "edit": "Edit",
       "rename": "Rename",
       "delete": "Delete",
       "open_menu": "Open menu",
@@ -198,14 +202,37 @@
     "under_development": {
       "back_to_dashboard": "Back to Dashboard"
     },
-    "docs": {
-      "title": "Help Center & Documentation",
-      "description": "Here you can access complete guides, step-by-step tutorials, frequently asked questions, and help resources to get the most out of the ITAKAI platform.",
-      "btn_back": "Back to main page",
+    "help": {
+      "title": "Help centre",
+      "hero_title": "How can we help?",
+      "hero_subtitle": "Guides, step-by-step tutorials and platform setup. Written for teachers, not for engineers.",
+      "all_categories": "All categories",
+      "article_count": "{count} articles",
+      "keep_reading": "Keep reading",
+      "on_this_page": "On this page",
+      "previous": "Previous",
+      "next": "Next",
+      "still_stuck": "Didn't find what you were looking for?",
+      "contact_us": "Get in touch",
+      "updated_on": "Updated on {date}",
+      "feedback_question": "Was this useful?",
+      "feedback_yes": "Yes",
+      "feedback_no": "Not really",
+      "feedback_thanks": "Thanks. It tells us what to rewrite.",
+      "empty_title": "No articles yet",
+      "empty_description": "The first published article will show up here.",
+      "not_found_title": "We could not find that page",
+      "not_found_description": "The article may have moved or may not be published yet.",
       "meta": {
-        "title": "Documentation - ITAKAI",
-        "description": "ITAKAI help center and documentation"
-      }
+        "title": "Help centre · ITAKAI",
+        "description": "Guides, tutorials and setup for the ITAKAI platform."
+      },
+      "search": {
+        "placeholder": "Search the help centre…",
+        "empty": "Nothing for “{query}”",
+        "empty_hint": "Try other words: “submissions”, “coins”, “levels”."
+      },
+      "most_read": "Most read"
     },
     "meta": {
       "site_title": "ITAKAI - The adventure of learning | Gamified Educational Platform",

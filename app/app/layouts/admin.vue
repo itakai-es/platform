@@ -50,6 +50,7 @@ import {
   RocketLaunchIcon,
   ChartBarIcon,
   ServerIcon,
+  BookOpenIcon,
   Cog6ToothIcon,
 } from '@heroicons/vue/24/outline'
 
@@ -125,6 +126,11 @@ const navItems = computed<AdminNavItem[]>(() => [
     to: '/admin/registros',
     label: t('common.nav.logs'),
     icon: ServerIcon,
+  },
+  {
+    to: '/admin/ayuda',
+    label: t('admin.help.title'),
+    icon: BookOpenIcon,
   },
   {
     to: '/admin/configuracion',

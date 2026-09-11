@@ -13,10 +13,14 @@
       "logs": "Registres",
       "features": "Característiques",
       "blog": "Blog",
+      "help": "Ajuda",
       "section_management": "Gestió",
       "section_system": "Sistema"
     },
     "actions": {
+      "save": "Guardar",
+      "cancel": "Cancel·lar",
+      "edit": "Editar",
       "rename": "Canviar el nom",
       "delete": "Eliminar",
       "open_menu": "Obrir menú",
@@ -198,14 +202,37 @@
     "under_development": {
       "back_to_dashboard": "Tornar a l'inici"
     },
-    "docs": {
-      "title": "Centre d'ajuda i documentació",
-      "description": "Ací podràs accedir a guies completes, tutorials pas a pas, preguntes freqüents i recursos d'ajuda per a aprofitar al màxim la plataforma ITAKAI.",
-      "btn_back": "Tornar a la pàgina principal",
+    "help": {
+      "title": "Centre d'ajuda",
+      "hero_title": "En què et podem ajudar?",
+      "hero_subtitle": "Guies, tutorials pas a pas i configuració de la plataforma. Escrites per al professorat, no per a informàtics.",
+      "all_categories": "Totes les categories",
+      "article_count": "{count} articles",
+      "keep_reading": "Continuar llegint",
+      "on_this_page": "En esta pàgina",
+      "previous": "Anterior",
+      "next": "Següent",
+      "still_stuck": "No has trobat el que buscaves?",
+      "contact_us": "Escriu-nos",
+      "updated_on": "Actualitzat el {date}",
+      "feedback_question": "T'ha resultat útil?",
+      "feedback_yes": "Sí",
+      "feedback_no": "No del tot",
+      "feedback_thanks": "Gràcies. Ens ajuda a saber què reescriure.",
+      "empty_title": "Encara no hi ha articles",
+      "empty_description": "Quan es publique el primer article apareixerà ací.",
+      "not_found_title": "No hem trobat esta pàgina",
+      "not_found_description": "Potser l'article s'ha mogut o encara no està publicat.",
       "meta": {
-        "title": "Documentació - ITAKAI",
-        "description": "Centre d'ajuda i documentació d'ITAKAI"
-      }
+        "title": "Centre d'ajuda · ITAKAI",
+        "description": "Guies, tutorials i configuració de la plataforma ITAKAI."
+      },
+      "search": {
+        "placeholder": "Cercar en l'ajuda…",
+        "empty": "Res per «{query}»",
+        "empty_hint": "Prova amb altres paraules: «lliuraments», «monedes», «nivells»."
+      },
+      "most_read": "El més consultat"
     },
     "meta": {
       "site_title": "ITAKAI - L'aventura d'aprendre | Plataforma educativa gamificada",

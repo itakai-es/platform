@@ -13,10 +13,14 @@
       "logs": "Jurnale",
       "features": "Funcționalități",
       "blog": "Blog",
+      "help": "Ajutor",
       "section_management": "Administrare",
       "section_system": "Sistem"
     },
     "actions": {
+      "save": "Salvează",
+      "cancel": "Anulează",
+      "edit": "Editează",
       "rename": "Redenumește",
       "delete": "Șterge",
       "open_menu": "Deschide meniul",
@@ -198,14 +202,37 @@
     "under_development": {
       "back_to_dashboard": "Înapoi acasă"
     },
-    "docs": {
-      "title": "Centru de ajutor și documentație",
-      "description": "Aici găsești ghiduri complete, tutoriale pas cu pas, întrebări frecvente și resurse de ajutor ca să profiți la maximum de platforma ITAKAI.",
-      "btn_back": "Înapoi la pagina principală",
+    "help": {
+      "title": "Centru de ajutor",
+      "hero_title": "Cu ce te putem ajuta?",
+      "hero_subtitle": "Ghiduri, tutoriale pas cu pas și configurarea platformei. Scrise pentru profesori, nu pentru informaticieni.",
+      "all_categories": "Toate categoriile",
+      "article_count": "{count} articole",
+      "keep_reading": "Continuă lectura",
+      "on_this_page": "Pe această pagină",
+      "previous": "Anterior",
+      "next": "Următorul",
+      "still_stuck": "Nu ai găsit ce căutai?",
+      "contact_us": "Scrie-ne",
+      "updated_on": "Actualizat pe {date}",
+      "feedback_question": "Ți-a fost de folos?",
+      "feedback_yes": "Da",
+      "feedback_no": "Nu prea",
+      "feedback_thanks": "Mulțumim. Ne ajută să știm ce să rescriem.",
+      "empty_title": "Încă nu există articole",
+      "empty_description": "Când se publică primul articol va apărea aici.",
+      "not_found_title": "Nu am găsit pagina",
+      "not_found_description": "Articolul poate să fi fost mutat sau să nu fie încă publicat.",
       "meta": {
-        "title": "Documentație - ITAKAI",
-        "description": "Centrul de ajutor și documentație ITAKAI"
-      }
+        "title": "Centru de ajutor · ITAKAI",
+        "description": "Ghiduri, tutoriale și configurarea platformei ITAKAI."
+      },
+      "search": {
+        "placeholder": "Caută în ajutor…",
+        "empty": "Nimic pentru „{query}”",
+        "empty_hint": "Încearcă alte cuvinte: „predări”, „monede”, „niveluri”."
+      },
+      "most_read": "Cele mai citite"
     },
     "meta": {
       "site_title": "ITAKAI - Aventura de a învăța | Platformă educațională gamificată",

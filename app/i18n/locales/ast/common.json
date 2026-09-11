@@ -13,10 +13,14 @@
       "logs": "Rexistros",
       "features": "Carauterístiques",
       "blog": "Blog",
+      "help": "Ayuda",
       "section_management": "Xestión",
       "section_system": "Sistema"
     },
     "actions": {
+      "save": "Guardar",
+      "cancel": "Encaboxar",
+      "edit": "Editar",
       "rename": "Renomar",
       "delete": "Desaniciar",
       "open_menu": "Abrir menú",
@@ -198,14 +202,37 @@
     "under_development": {
       "back_to_dashboard": "Volver al aniciu"
     },
-    "docs": {
-      "title": "Centru d'ayuda y documentación",
-      "description": "Equí vas poder acceder a guíes completes, tutoriales pasu ente pasu, entrugues frecuentes y recursos d'ayuda p'aprovechar al máximu la plataforma ITAKAI.",
-      "btn_back": "Volver a la páxina principal",
+    "help": {
+      "title": "Centru d'ayuda",
+      "hero_title": "¿En qué te echamos un gabitu?",
+      "hero_subtitle": "Guíes, tutoriales pasu a pasu y configuración de la plataforma. Escrites pal profesoráu, non pa informáticos.",
+      "all_categories": "Toles categoríes",
+      "article_count": "{count} artículos",
+      "keep_reading": "Siguir lleendo",
+      "on_this_page": "Nesta páxina",
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "still_stuck": "¿Nun atopesti lo que buscabes?",
+      "contact_us": "Escríbenos",
+      "updated_on": "Anováu el {date}",
+      "feedback_question": "¿Foi útil?",
+      "feedback_yes": "Sí",
+      "feedback_no": "Non del too",
+      "feedback_thanks": "Gracies. Ayúdanos a saber qué reescribir.",
+      "empty_title": "Entá nun hai artículos",
+      "empty_description": "Cuando se publique'l primer artículu va apaecer equí.",
+      "not_found_title": "Nun atopamos esa páxina",
+      "not_found_description": "Pue que l'artículu se moviera o entá nun tea publicáu.",
       "meta": {
-        "title": "Documentación - ITAKAI",
-        "description": "Centru d'ayuda y documentación d'ITAKAI"
-      }
+        "title": "Centru d'ayuda · ITAKAI",
+        "description": "Guíes, tutoriales y configuración de la plataforma ITAKAI."
+      },
+      "search": {
+        "placeholder": "Guetar na ayuda…",
+        "empty": "Nada por «{query}»",
+        "empty_hint": "Prueba con otres pallabres: «entregues», «monedes», «niveles»."
+      },
+      "most_read": "Lo más consultao"
     },
     "meta": {
       "site_title": "ITAKAI - L'aventura de deprender | Plataforma educativa gamificada",
