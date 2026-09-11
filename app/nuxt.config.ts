@@ -28,6 +28,22 @@ export default defineNuxtConfig({
 
   // Configuración de Vite para hot reload en Docker/WSL2
   vite: {
+    vue: {
+      template: {
+        /**
+         * Las rutas absolutas de las plantillas (`src="/logo/…"`) apuntan a
+         * `public/` y se sirven tal cual. Vite, por defecto, las convierte en
+         * un import de un módulo virtual, y en desarrollo ese módulo se genera
+         * mal en cuanto el componente lleva marca de HMR: la ruta sale con un
+         * `&` delante y la imagen se queda rota hasta reiniciar el servidor.
+         * En producción no pasa porque la ruta se resuelve al compilar.
+         *
+         * Aquí no hay `baseURL` ni `cdnURL`, así que la reescritura no aporta
+         * nada: dejamos las rutas absolutas como están.
+         */
+        transformAssetUrls: { includeAbsolute: false },
+      },
+    },
     server: {
       watch: {
         usePolling: true, // CRÍTICO: Usar polling en Docker/WSL2
