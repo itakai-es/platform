@@ -21,6 +21,7 @@ import { healthRoutes } from './modules/health/health.routes.js'
 import { submissionsRoutes } from './modules/submissions/submissions.routes.js'
 import { gamificationRoutes } from './modules/gamification/gamification.routes.js'
 import { profileRoutes } from './modules/profile/profile.routes.js'
+import { publicHelpRoutes, adminHelpRoutes } from './modules/help/help.routes.js'
 import { registerNotificationJobs } from './modules/notifications/notifications.jobs.js'
 import { startScheduler, stopScheduler } from './utils/scheduler.js'
 import { HttpError } from './utils/errors.js'
@@ -257,6 +258,9 @@ async function buildServer() {
   await fastify.register(submissionsRoutes, { prefix: '/submissions' })
   await fastify.register(gamificationRoutes, { prefix: '/gamification' })
   await fastify.register(profileRoutes, { prefix: '/profile' })
+  // Centro de ayuda: la parte pública no pide sesión (cuelga de la landing).
+  await fastify.register(publicHelpRoutes, { prefix: '/public/help' })
+  await fastify.register(adminHelpRoutes, { prefix: '/admin/help' })
 
   return fastify
 }

@@ -170,3 +170,11 @@ export const MessageRole = {
 } as const
 
 export type MessageRole = (typeof MessageRole)[keyof typeof MessageRole]
+
+
+export const HelpArticleStatus = {
+  borrador: 'borrador',
+  publicado: 'publicado'
+} as const
+
+export type HelpArticleStatus = (typeof HelpArticleStatus)[keyof typeof HelpArticleStatus]
