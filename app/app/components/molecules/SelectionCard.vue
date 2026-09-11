@@ -33,7 +33,7 @@
     <component :is="icon" v-if="icon" class="w-8 h-8 text-navy-700 mx-auto mb-2" />
     <img v-else-if="image" :src="image" :alt="title" class="w-8 h-8 mx-auto mb-2 object-contain" />
     <p class="font-medium text-navy-700">{{ title }}</p>
-    <p v-if="subtitle" class="text-xs text-navy-700/60">{{ subtitle }}</p>
+    <p v-if="subtitle" class="text-xs text-navy-700/70">{{ subtitle }}</p>
   </button>
 </template>
 

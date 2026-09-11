@@ -125,7 +125,7 @@ watch(
 // Background color based on variant
 const bgClass = computed(() => {
   const variants = {
-    mint: 'bg-[#B8F5D8]',
+    mint: 'bg-green-light',
     purple: 'bg-purple-light',
     yellow: 'bg-yellow-light',
     red: 'bg-red-light',

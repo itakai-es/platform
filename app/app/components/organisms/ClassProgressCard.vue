@@ -19,7 +19,7 @@
       <!-- Missions -->
       <div class="text-center">
         <p class="text-6xl sm:text-8xl font-light text-navy-700">
-          {{ missionsCompleted }}<span class="text-3xl text-navy-700/60">/{{ missionsTotal }}</span>
+          {{ missionsCompleted }}<span class="text-3xl text-navy-700/70">/{{ missionsTotal }}</span>
         </p>
         <p class="text-sm text-navy-700/80 mt-1">
           {{ t('student.classes.detail.progress.missions_completed') }}

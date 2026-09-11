@@ -560,7 +560,7 @@
                             class="font-semibold truncate"
                             :class="
                               enigma.status === 'completado'
-                                ? 'text-navy-700/60 line-through'
+                                ? 'text-navy-700/70 line-through'
                                 : 'text-navy-700'
                             "
                           >
@@ -1060,7 +1060,7 @@
                 <!-- Teacher: just show total enigma XP -->
                 <template v-if="isTeacher">
                   <p class="text-2xl font-bold text-navy-700">{{ totalEnigmaXp }}</p>
-                  <p class="text-sm text-navy-700/60">
+                  <p class="text-sm text-navy-700/70">
                     {{ t('teacher.components.mission_detail_template.xp_enigmas') }}
                   </p>
                 </template>
@@ -1068,9 +1068,9 @@
                 <template v-else>
                   <div class="flex items-baseline gap-1">
                     <span class="text-2xl font-bold text-navy-700">{{ earnedXp }}</span>
-                    <span class="text-sm text-navy-700/50">/ {{ totalEnigmaXp }}</span>
+                    <span class="text-sm text-navy-700/70">/ {{ totalEnigmaXp }}</span>
                   </div>
-                  <p class="text-sm text-navy-700/60">
+                  <p class="text-sm text-navy-700/70">
                     {{ t('teacher.components.mission_detail_template.xp_enigmas') }}
                   </p>
                   <!-- Progress bar -->
@@ -1104,10 +1104,10 @@
                 >
                   {{ missionCompletionBonus }}
                 </p>
-                <p class="text-sm text-navy-700/60">
+                <p class="text-sm text-navy-700/70">
                   {{ t('teacher.components.mission_detail_template.xp_mission') }}
                 </p>
-                <p v-if="!isTeacher && !isMissionComplete" class="text-xs text-navy-700/50 mt-2">
+                <p v-if="!isTeacher && !isMissionComplete" class="text-xs text-navy-700/70 mt-2">
                   {{ t('teacher.components.mission_detail_template.complete_all_enigmas') }}
                 </p>
               </div>
@@ -1131,15 +1131,15 @@
                 <!-- Teacher: just show total coins -->
                 <template v-if="isTeacher">
                   <p class="text-2xl font-bold text-navy-700">{{ totalCoins }}</p>
-                  <p class="text-sm text-navy-700/60">{{ t('common.resources.coins') }}</p>
+                  <p class="text-sm text-navy-700/70">{{ t('common.resources.coins') }}</p>
                 </template>
                 <!-- Student: show progress -->
                 <template v-else>
                   <div class="flex items-baseline gap-1">
                     <span class="text-2xl font-bold text-navy-700">{{ earnedCoins }}</span>
-                    <span class="text-sm text-navy-700/50">/ {{ totalCoins }}</span>
+                    <span class="text-sm text-navy-700/70">/ {{ totalCoins }}</span>
                   </div>
-                  <p class="text-sm text-navy-700/60">{{ t('common.resources.coins') }}</p>
+                  <p class="text-sm text-navy-700/70">{{ t('common.resources.coins') }}</p>
                   <div class="w-full h-2 bg-gray-200 rounded-full overflow-hidden mt-3">
                     <div
                       class="h-full bg-navy-700 rounded-full transition-all duration-500"
@@ -1166,15 +1166,15 @@
                 <!-- Teacher: just show total mana -->
                 <template v-if="isTeacher">
                   <p class="text-2xl font-bold text-navy-700">{{ totalMana }}</p>
-                  <p class="text-sm text-navy-700/60">{{ t('common.resources.mana') }}</p>
+                  <p class="text-sm text-navy-700/70">{{ t('common.resources.mana') }}</p>
                 </template>
                 <!-- Student: show progress -->
                 <template v-else>
                   <div class="flex items-baseline gap-1">
                     <span class="text-2xl font-bold text-navy-700">{{ earnedMana }}</span>
-                    <span class="text-sm text-navy-700/50">/ {{ totalMana }}</span>
+                    <span class="text-sm text-navy-700/70">/ {{ totalMana }}</span>
                   </div>
-                  <p class="text-sm text-navy-700/60">{{ t('common.resources.mana') }}</p>
+                  <p class="text-sm text-navy-700/70">{{ t('common.resources.mana') }}</p>
                   <div class="w-full h-2 bg-gray-200 rounded-full overflow-hidden mt-3">
                     <div
                       class="h-full bg-navy-700 rounded-full transition-all duration-500"
@@ -1784,7 +1784,7 @@ const getEnigmaIconClass = (enigma: MissionEnigma, _index: number) => {
   if (isTeacher.value) return 'bg-navy-700'
   if (enigma.status === 'disponible') return 'bg-navy-700'
   if (enigma.status === 'pendiente') return 'bg-yellow'
-  if (enigma.status === 'completado') return 'bg-[#6CF3AF]'
+  if (enigma.status === 'completado') return 'bg-green'
   return 'bg-gray-300'
 }
 
@@ -1876,7 +1876,7 @@ const getDocumentTagClasses = (type: MissionDocument['type']) => {
     pdf: 'bg-red-100 text-red-700',
     video: 'bg-purple/20 text-purple',
     docx: 'bg-blue-100 text-blue-700',
-    link: 'bg-[#6CF3AF]/30 text-navy-700',
+    link: 'bg-green/30 text-navy-700',
     image: 'bg-green-100 text-green-700',
   }
   return classes[type]

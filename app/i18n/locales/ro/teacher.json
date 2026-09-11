@@ -171,8 +171,8 @@
           "sort_xp_desc": "XP ↓",
           "sort_level_asc": "Nivel ↑",
           "sort_level_desc": "Nivel ↓",
-          "sort_coins_asc": "Monede ↑",
-          "sort_coins_desc": "Monede ↓",
+          "sort_coins_asc": "{coins} ↑",
+          "sort_coins_desc": "{coins} ↓",
           "sort_mana_asc": "Mana ↑",
           "sort_mana_desc": "Mana ↓",
           "sort_lives_asc": "Viață ↑",
@@ -338,8 +338,8 @@
               "desc": "Recompense și puteri pe care elevii le schimbă."
             },
             "coins": {
-              "label": "Monede",
-              "desc": "Afișează soldul și prețurile în monede."
+              "label": "{coins}",
+              "desc": "Afișează soldul și prețurile în {coins}."
             },
             "mana": {
               "label": "Mana",
@@ -371,7 +371,7 @@
             }
           },
           "requires": "Necesită {feature}",
-          "requires_resource": "Necesită cel puțin o resursă activă (XP, monede, mana sau vieți)",
+          "requires_resource": "Necesită cel puțin o resursă activă (XP, {coins}, mana sau vieți)",
           "general": {
             "title": "Date generale",
             "name_label": "Nume",
@@ -574,7 +574,6 @@
         "enrolled_classes_count": "{count} clase",
         "not_enrolled": "Nu este înscris la niciuna dintre clasele tale",
         "label_progress": "Finalizat",
-        "stat_coins": "Monede",
         "stat_mana": "Mana",
         "stat_lives": "Puncte de viață",
         "no_activity": "Fără activitate recentă",
@@ -679,7 +678,6 @@
           "description_required": "Descrierea este obligatorie"
         },
         "label_mana": "Mana",
-        "label_coins": "Monede",
         "no_mana": "Fără mana",
         "custom_value": "Valoare personalizată"
       },

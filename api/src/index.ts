@@ -21,6 +21,9 @@ import { healthRoutes } from './modules/health/health.routes.js'
 import { submissionsRoutes } from './modules/submissions/submissions.routes.js'
 import { gamificationRoutes } from './modules/gamification/gamification.routes.js'
 import { profileRoutes } from './modules/profile/profile.routes.js'
+import { publicHelpRoutes, adminHelpRoutes } from './modules/help/help.routes.js'
+import { registerNotificationJobs } from './modules/notifications/notifications.jobs.js'
+import { startScheduler, stopScheduler } from './utils/scheduler.js'
 import { HttpError } from './utils/errors.js'
 import { ZodError } from 'zod'
 import { Prisma } from './generated/prisma/client.js'
@@ -255,6 +258,9 @@ async function buildServer() {
   await fastify.register(submissionsRoutes, { prefix: '/submissions' })
   await fastify.register(gamificationRoutes, { prefix: '/gamification' })
   await fastify.register(profileRoutes, { prefix: '/profile' })
+  // Centro de ayuda: la parte pública no pide sesión (cuelga de la landing).
+  await fastify.register(publicHelpRoutes, { prefix: '/public/help' })
+  await fastify.register(adminHelpRoutes, { prefix: '/admin/help' })
 
   return fastify
 }
@@ -263,10 +269,22 @@ async function start() {
   try {
     const server = await buildServer()
 
+    // Tareas periódicas (recordatorios de entrega, limpieza de avisos). Se
+    // pueden desactivar con SCHEDULER_ENABLED=false (útil si algún día hay más
+    // de una instancia y solo una debe ejecutarlas). El hook de apagado se
+    // registra antes de escuchar: Fastify no admite `addHook` una vez arrancado.
+    if (env.SCHEDULER_ENABLED) {
+      registerNotificationJobs()
+      server.addHook('onClose', async () => stopScheduler())
+    }
+
     await server.listen({
       port: env.PORT,
       host: '0.0.0.0',
     })
+
+    // Los timers arrancan ya escuchando, para no retrasar el arranque.
+    if (env.SCHEDULER_ENABLED) startScheduler(server.log)
 
     console.log(`
 🚀 ITAKAI Backend running!

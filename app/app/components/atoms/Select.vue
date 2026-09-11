@@ -7,7 +7,7 @@
       </option>
     </select>
     <ChevronDownIcon
-      class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-navy-700/60"
+      class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-navy-700/70"
     />
   </div>
 </template>

@@ -74,7 +74,7 @@
         <button
           v-if="aiEnabled !== false"
           type="button"
-          class="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors bg-[#FFC338] hover:bg-[#FFD166] text-navy-700"
+          class="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors bg-yellow hover:bg-[#FFD166] text-navy-700"
           @click="openAiModal"
         >
           <img :src="godAvatar" :alt="godName" class="w-4 h-4 sm:w-5 sm:h-5 rounded-full" />

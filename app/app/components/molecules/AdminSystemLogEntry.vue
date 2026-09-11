@@ -8,14 +8,14 @@
       <p class="text-sm text-navy-700">
         <strong>{{ log.title }}</strong>
       </p>
-      <p class="text-sm text-navy-700/60 mt-0.5">{{ log.message }}</p>
+      <p class="text-sm text-navy-700/70 mt-0.5">{{ log.message }}</p>
       <div class="flex items-center gap-2 mt-1 flex-wrap">
-        <span v-if="log.service" class="text-xs font-medium text-navy-700/50">{{
+        <span v-if="log.service" class="text-xs font-medium text-navy-700/70">{{
           log.service
         }}</span>
         <span v-if="log.service && categoryLabel" class="text-navy-700/20">·</span>
-        <span v-if="categoryLabel" class="text-xs text-navy-700/50">{{ categoryLabel }}</span>
-        <span class="text-xs text-navy-700/40 ml-auto">{{ formattedTimestamp }}</span>
+        <span v-if="categoryLabel" class="text-xs text-navy-700/70">{{ categoryLabel }}</span>
+        <span class="text-xs text-navy-700/70 ml-auto">{{ formattedTimestamp }}</span>
       </div>
     </div>
   </div>

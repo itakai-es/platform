@@ -1,6 +1,6 @@
 <template>
   <div class="flex items-center gap-3 py-1">
-    <span class="text-xs font-medium text-navy-700/60 w-24 flex-shrink-0">{{ label }}</span>
+    <span class="text-xs font-medium text-navy-700/70 w-24 flex-shrink-0">{{ label }}</span>
     <div class="flex-1 h-5 bg-navy-700/10 rounded-full overflow-hidden">
       <div
         class="h-full rounded-full transition-all duration-300 flex items-center justify-end pr-2"
@@ -14,7 +14,7 @@
     <span v-if="(percentage ?? 0) <= 15" class="text-xs font-bold text-navy-700 w-8 text-right">{{
       value
     }}</span>
-    <span v-if="showCount" class="text-[10px] text-navy-700/50 w-14 text-right font-mono">{{
+    <span v-if="showCount" class="text-[10px] text-navy-700/70 w-14 text-right font-mono">{{
       formatCount(value)
     }}</span>
   </div>

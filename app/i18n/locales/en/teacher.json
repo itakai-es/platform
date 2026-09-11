@@ -171,8 +171,8 @@
           "sort_xp_desc": "XP ↓",
           "sort_level_asc": "Level ↑",
           "sort_level_desc": "Level ↓",
-          "sort_coins_asc": "Coins ↑",
-          "sort_coins_desc": "Coins ↓",
+          "sort_coins_asc": "{coins} ↑",
+          "sort_coins_desc": "{coins} ↓",
           "sort_mana_asc": "Mana ↑",
           "sort_mana_desc": "Mana ↓",
           "sort_lives_asc": "Lives ↑",
@@ -338,8 +338,8 @@
               "desc": "Rewards and powers students redeem."
             },
             "coins": {
-              "label": "Coins",
-              "desc": "Shows coin balance and prices."
+              "label": "{coins}",
+              "desc": "Shows the balance and prices in {coins}."
             },
             "mana": {
               "label": "Mana",
@@ -371,7 +371,7 @@
             }
           },
           "requires": "Needs {feature}",
-          "requires_resource": "Needs at least one resource enabled (XP, coins, mana or lives)",
+          "requires_resource": "Needs at least one resource enabled (XP, {coins}, mana or lives)",
           "general": {
             "title": "General details",
             "name_label": "Name",
@@ -574,7 +574,6 @@
         "enrolled_classes_count": "{count} classes",
         "not_enrolled": "Not enrolled in any of your classes",
         "label_progress": "Completed",
-        "stat_coins": "Coins",
         "stat_mana": "Mana",
         "stat_lives": "Life points",
         "no_activity": "No recent activity",
@@ -679,7 +678,6 @@
           "description_required": "Description is required"
         },
         "label_mana": "Mana",
-        "label_coins": "Coins",
         "no_mana": "No mana",
         "custom_value": "Custom value"
       },

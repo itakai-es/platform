@@ -1,30 +1,15 @@
-<template>
-  <div style="margin-top: 300px">
-    <UnderDevelopment
-      :title="t('common.docs.title')"
-      :description="t('common.docs.description')"
-      god-avatar="/app/avatars/atenea.svg"
-      god-name="Atenea"
-      back-route="/"
-      :back-button-text="t('common.docs.btn_back')"
-    />
-  </div>
-</template>
-
 <script setup lang="ts">
-const { t } = useI18n()
-
+/**
+ * `/docs` era el marcador de posición del centro de ayuda y está enlazado desde
+ * el pie de la landing desde el primer día. Ahora que la ayuda existe de verdad
+ * en `/ayuda` (Fase 3, punto 17), esta ruta se mantiene y redirige: los enlaces
+ * que ya circulan por ahí tienen que seguir llevando a algún sitio.
+ */
 definePageMeta({
-  layout: 'landing',
-})
-
-useHead({
-  title: () => t('common.docs.meta.title'),
-  meta: [
-    {
-      name: 'description',
-      content: () => t('common.docs.meta.description'),
-    },
-  ],
+  redirect: '/ayuda',
 })
 </script>
+
+<template>
+  <div />
+</template>

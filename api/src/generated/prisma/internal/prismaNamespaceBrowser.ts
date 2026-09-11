@@ -77,7 +77,9 @@ export const ModelName = {
   ChatConversation: 'ChatConversation',
   ChatMessage: 'ChatMessage',
   BehaviorTemplate: 'BehaviorTemplate',
-  BehaviorApplication: 'BehaviorApplication'
+  BehaviorApplication: 'BehaviorApplication',
+  HelpCategory: 'HelpCategory',
+  HelpArticle: 'HelpArticle'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -120,6 +122,10 @@ export const UserSettingsScalarFieldEnum = {
   language: 'language',
   theme: 'theme',
   menuDisplay: 'menuDisplay',
+  fontScale: 'fontScale',
+  contrastMode: 'contrastMode',
+  colorVision: 'colorVision',
+  reduceMotion: 'reduceMotion',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -514,6 +520,44 @@ export const BehaviorApplicationScalarFieldEnum = {
 } as const
 
 export type BehaviorApplicationScalarFieldEnum = (typeof BehaviorApplicationScalarFieldEnum)[keyof typeof BehaviorApplicationScalarFieldEnum]
+
+
+export const HelpCategoryScalarFieldEnum = {
+  id: 'id',
+  slug: 'slug',
+  name: 'name',
+  description: 'description',
+  icon: 'icon',
+  accent: 'accent',
+  orderIndex: 'orderIndex',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HelpCategoryScalarFieldEnum = (typeof HelpCategoryScalarFieldEnum)[keyof typeof HelpCategoryScalarFieldEnum]
+
+
+export const HelpArticleScalarFieldEnum = {
+  id: 'id',
+  categoryId: 'categoryId',
+  slug: 'slug',
+  title: 'title',
+  summary: 'summary',
+  coverImage: 'coverImage',
+  body: 'body',
+  locale: 'locale',
+  status: 'status',
+  orderIndex: 'orderIndex',
+  featured: 'featured',
+  views: 'views',
+  helpful: 'helpful',
+  notHelpful: 'notHelpful',
+  publishedAt: 'publishedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HelpArticleScalarFieldEnum = (typeof HelpArticleScalarFieldEnum)[keyof typeof HelpArticleScalarFieldEnum]
 
 
 export const SortOrder = {

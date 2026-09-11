@@ -13,10 +13,14 @@
       "logs": "Logak",
       "features": "Ezaugarriak",
       "blog": "Bloga",
+      "help": "Laguntza",
       "section_management": "Kudeaketa",
       "section_system": "Sistema"
     },
     "actions": {
+      "save": "Gorde",
+      "cancel": "Utzi",
+      "edit": "Editatu",
       "rename": "Berrizendatu",
       "delete": "Ezabatu",
       "open_menu": "Menua ireki",
@@ -198,14 +202,37 @@
     "under_development": {
       "back_to_dashboard": "Dashboard-era itzuli"
     },
-    "docs": {
-      "title": "Laguntza Zentroa eta Dokumentazioa",
-      "description": "Hemen gida osoak, pausoz pausoko tutorialak, ohiko galderak eta laguntza baliabideak kontsultatu ahal izango dituzu ITAKAI plataformari ahalik eta etekin handiena ateratzeko.",
-      "btn_back": "Hasierako orrialdera itzuli",
+    "help": {
+      "title": "Laguntza gunea",
+      "hero_title": "Zertan lagun diezazukegu?",
+      "hero_subtitle": "Gidak, urratsez urratseko tutorialak eta plataformaren konfigurazioa. Irakasleentzat idatzita, ez informatikarientzat.",
+      "all_categories": "Kategoria guztiak",
+      "article_count": "{count} artikulu",
+      "keep_reading": "Irakurtzen jarraitu",
+      "on_this_page": "Orri honetan",
+      "previous": "Aurrekoa",
+      "next": "Hurrengoa",
+      "still_stuck": "Ez duzu bilatzen zenuena aurkitu?",
+      "contact_us": "Idatzi iezaguzu",
+      "updated_on": "{date}(e)an eguneratua",
+      "feedback_question": "Lagungarria izan zaizu?",
+      "feedback_yes": "Bai",
+      "feedback_no": "Ez guztiz",
+      "feedback_thanks": "Eskerrik asko. Zer berridatzi jakiten laguntzen digu.",
+      "empty_title": "Oraindik ez dago artikulurik",
+      "empty_description": "Lehen artikulua argitaratzean hemen agertuko da.",
+      "not_found_title": "Ez dugu orri hori aurkitu",
+      "not_found_description": "Baliteke artikulua mugitu izana edo oraindik argitaratu gabe egotea.",
       "meta": {
-        "title": "Dokumentazioa - ITAKAI",
-        "description": "ITAKAI-ren laguntza zentroa eta dokumentazioa"
-      }
+        "title": "Laguntza gunea · ITAKAI",
+        "description": "ITAKAI plataformaren gidak, tutorialak eta konfigurazioa."
+      },
+      "search": {
+        "placeholder": "Bilatu laguntzan…",
+        "empty": "Ezer ez «{query}» bilaketarako",
+        "empty_hint": "Saiatu beste hitz batzuekin: «entregak», «txanponak», «mailak»."
+      },
+      "most_read": "Gehien irakurriak"
     },
     "meta": {
       "site_title": "ITAKAI - Ikasteko abentura | Hezkuntza Plataforma Gamifikatua",
@@ -230,6 +257,58 @@
       "both": "Ikonoa eta testua",
       "icon": "Ikonoa soilik",
       "text": "Testua soilik"
+    },
+    "accessibility": {
+      "title": "Irisgarritasuna",
+      "description": "Doitu testuaren tamaina, kontrastea eta koloreak. Zure kontuan gordetzen da eta gailu guztietan aplikatzen da.",
+      "updated": "Irisgarritasun-hobespenak eguneratu dira",
+      "update_error": "Ezin izan dira irisgarritasun-hobespenak gorde",
+      "font_scale": {
+        "title": "Letra-tamaina",
+        "description": "Plataforma osoko testua eta ikonoak handitzen ditu.",
+        "normal": "Arrunta",
+        "large": "Handia",
+        "xlarge": "Oso handia"
+      },
+      "contrast": {
+        "title": "Kontrastea",
+        "description": "Testuak, ertzak eta teklatuaren fokua indartzen ditu.",
+        "normal": "Arrunta",
+        "high": "Altua"
+      },
+      "color_vision": {
+        "title": "Kolore-ikusmena",
+        "description": "Paleta aldatzen du egoerak daltonismoarekin ere bereizteko.",
+        "default": "Doikuntzarik gabe",
+        "protanopia": "Protanopia",
+        "deuteranopia": "Deuteranopia",
+        "tritanopia": "Tritanopia"
+      },
+      "samples": {
+        "success": "Zuzena",
+        "error": "Errorea",
+        "warning": "Abisua",
+        "info": "Informazioa",
+        "accent": "Nabarmendua"
+      },
+      "reduce_motion": {
+        "title": "Animazio gutxiago",
+        "description": "Trantsizioak eta mugimendu-efektuak murrizten ditu."
+      }
+    },
+    "notification_settings": {
+      "title": "Abisuak",
+      "description": "Zeren berri ematen dizugun eta nondik. Abisuak beti agertzen dira plataforman; posta aukerakoa da.",
+      "updated": "Abisuen hobespenak eguneratu dira",
+      "update_error": "Ezin izan dira abisuen hobespenak gorde",
+      "email": {
+        "title": "Abisuak postaz",
+        "description": "Berrikusitako entregak, gonbidapenak eta baieztapenak zure postan ere."
+      },
+      "reminders": {
+        "title": "Entregen gogorarazpenak",
+        "description": "Abisu bat misio bat amaitzeko 24 ordu baino gutxiago falta direnean."
+      }
     },
     "markdown": {
       "insert_at_end": "Txertatu amaieran"

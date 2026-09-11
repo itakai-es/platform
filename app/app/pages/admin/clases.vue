@@ -51,17 +51,17 @@
         <div class="p-4">
           <div class="mb-3">
             <h3 class="font-bold text-navy-700 text-lg">{{ cls.name }}</h3>
-            <p class="text-sm text-navy-700/50">{{ cls.teacherName }}</p>
+            <p class="text-sm text-navy-700/70">{{ cls.teacherName }}</p>
           </div>
 
           <div class="grid grid-cols-2 gap-2 text-center">
             <div class="bg-navy-700/5 rounded-xl py-2.5 px-2">
               <p class="text-lg font-bold text-navy-700">{{ cls.studentCount }}</p>
-              <p class="text-xs text-navy-700/50 uppercase tracking-wide">Alumnos</p>
+              <p class="text-xs text-navy-700/70 uppercase tracking-wide">Alumnos</p>
             </div>
             <div class="bg-navy-700/5 rounded-xl py-2.5 px-2">
               <p class="text-lg font-bold text-navy-700">{{ cls.missionCount }}</p>
-              <p class="text-xs text-navy-700/50 uppercase tracking-wide">Misiones</p>
+              <p class="text-xs text-navy-700/70 uppercase tracking-wide">Misiones</p>
             </div>
           </div>
         </div>

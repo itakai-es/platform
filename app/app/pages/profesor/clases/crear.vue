@@ -160,7 +160,7 @@
                   </button>
                   <!-- El tope se avisa antes de elegir archivo: si no, el profe
                        se entera al fallar la subida. -->
-                  <span v-if="!extractingDocs" class="ml-2 text-xs text-navy-700/50">
+                  <span v-if="!extractingDocs" class="ml-2 text-xs text-navy-700/70">
                     {{
                       t('teacher.classes.create.onboarding.attach_hint', { max: MAX_MATERIAL_MB })
                     }}
@@ -327,7 +327,7 @@
                         "
                       >
                         <CheckIcon v-if="selectedTitle === title" class="w-4 h-4 text-white" />
-                        <SparklesIcon v-else class="w-4 h-4 text-navy-700/50" />
+                        <SparklesIcon v-else class="w-4 h-4 text-navy-700/70" />
                       </span>
                       <span
                         class="text-sm font-medium truncate"

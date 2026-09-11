@@ -54,7 +54,7 @@
           <button
             v-if="slots.length > 1"
             type="button"
-            class="mt-0.5 p-1.5 rounded-full text-navy-700/60 hover:bg-gray-100"
+            class="mt-0.5 p-1.5 rounded-full text-navy-700/70 hover:bg-gray-100"
             :title="t('teacher.schedule.remove_slot')"
             @click="removeSlot(idx)"
           >

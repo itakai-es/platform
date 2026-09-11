@@ -23,8 +23,10 @@
       </svg>
     </div>
 
-    <!-- Language switcher -->
-    <div class="absolute top-4 right-4 z-20">
+    <!-- Idioma y accesibilidad: los dos ajustes que hacen falta ANTES de poder
+         entrar (quien no lee la pantalla tampoco puede iniciar sesión). -->
+    <div class="absolute top-4 right-4 z-20 flex items-center gap-1">
+      <AccessibilityMenu variant="light" />
       <LanguageSwitcher variant="light" />
     </div>
 

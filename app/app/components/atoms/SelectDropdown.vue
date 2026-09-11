@@ -11,7 +11,7 @@
       <span class="truncate">{{ selectedLabel }}</span>
       <ChevronDownIcon
         :class="[
-          'w-4 h-4 text-navy-700/60 transition-transform duration-200 flex-shrink-0',
+          'w-4 h-4 text-navy-700/70 transition-transform duration-200 flex-shrink-0',
           isOpen ? 'rotate-180' : '',
         ]"
       />

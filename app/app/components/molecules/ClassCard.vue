@@ -39,7 +39,7 @@
             <!-- Completed -->
             <CheckCircleIcon
               v-if="activity.status === 'completed'"
-              class="w-4 h-4 flex-shrink-0 text-[#6CF3AF]"
+              class="w-4 h-4 flex-shrink-0 text-green"
             />
             <!-- Blocked -->
             <LockClosedIcon
@@ -170,7 +170,7 @@ const subjectColors: Record<string, string> = {
   matematicas: 'bg-purple',
   historia: 'bg-yellow',
   fisica: 'bg-navy-700',
-  lengua: 'bg-[#6CF3AF]',
+  lengua: 'bg-green',
   ciencias: 'bg-emerald-500',
   ingles: 'bg-blue-500',
   general: 'bg-purple',

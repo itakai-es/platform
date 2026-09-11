@@ -171,8 +171,8 @@
           "sort_xp_desc": "XP ↓",
           "sort_level_asc": "Επίπεδο ↑",
           "sort_level_desc": "Επίπεδο ↓",
-          "sort_coins_asc": "Νομίσματα ↑",
-          "sort_coins_desc": "Νομίσματα ↓",
+          "sort_coins_asc": "{coins} ↑",
+          "sort_coins_desc": "{coins} ↓",
           "sort_mana_asc": "Μάνα ↑",
           "sort_mana_desc": "Μάνα ↓",
           "sort_lives_asc": "Ζωή ↑",
@@ -338,8 +338,8 @@
               "desc": "Ανταμοιβές και δυνάμεις που εξαργυρώνουν οι μαθητές."
             },
             "coins": {
-              "label": "Νομίσματα",
-              "desc": "Εμφανίζει το υπόλοιπο και τις τιμές σε νομίσματα."
+              "label": "{coins}",
+              "desc": "Εμφανίζει το υπόλοιπο και τις τιμές σε {coins}."
             },
             "mana": {
               "label": "Μάνα",
@@ -371,7 +371,7 @@
             }
           },
           "requires": "Χρειάζεται {feature}",
-          "requires_resource": "Χρειάζεται τουλάχιστον έναν ενεργό πόρο (XP, νομίσματα, μάνα ή ζωές)",
+          "requires_resource": "Χρειάζεται τουλάχιστον έναν ενεργό πόρο (XP, {coins}, μάνα ή ζωές)",
           "general": {
             "title": "Γενικά στοιχεία",
             "name_label": "Όνομα",
@@ -574,7 +574,6 @@
         "enrolled_classes_count": "{count} τάξεις",
         "not_enrolled": "Δεν είναι εγγεγραμμένος σε καμία από τις τάξεις σου",
         "label_progress": "Ολοκληρωμένο",
-        "stat_coins": "Νομίσματα",
         "stat_mana": "Μάνα",
         "stat_lives": "Πόντοι ζωής",
         "no_activity": "Χωρίς πρόσφατη δραστηριότητα",
@@ -679,7 +678,6 @@
           "description_required": "Η περιγραφή είναι υποχρεωτική"
         },
         "label_mana": "Μάνα",
-        "label_coins": "Νομίσματα",
         "no_mana": "Χωρίς μάνα",
         "custom_value": "Προσαρμοσμένη τιμή"
       },

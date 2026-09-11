@@ -410,7 +410,9 @@ export const ModelName = {
   ChatConversation: 'ChatConversation',
   ChatMessage: 'ChatMessage',
   BehaviorTemplate: 'BehaviorTemplate',
-  BehaviorApplication: 'BehaviorApplication'
+  BehaviorApplication: 'BehaviorApplication',
+  HelpCategory: 'HelpCategory',
+  HelpArticle: 'HelpArticle'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -426,7 +428,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "userSettings" | "refreshToken" | "instanceSetting" | "class" | "classEnrollment" | "classGuide" | "shopItem" | "shopPurchase" | "shopItemUse" | "mission" | "missionDocument" | "missionEnigma" | "studentEnigmaProgress" | "enigmaSubmission" | "studentMissionProgress" | "badge" | "studentBadge" | "joinRequest" | "invitation" | "notification" | "activity" | "systemLog" | "chatConversation" | "chatMessage" | "behaviorTemplate" | "behaviorApplication"
+    modelProps: "user" | "userSettings" | "refreshToken" | "instanceSetting" | "class" | "classEnrollment" | "classGuide" | "shopItem" | "shopPurchase" | "shopItemUse" | "mission" | "missionDocument" | "missionEnigma" | "studentEnigmaProgress" | "enigmaSubmission" | "studentMissionProgress" | "badge" | "studentBadge" | "joinRequest" | "invitation" | "notification" | "activity" | "systemLog" | "chatConversation" | "chatMessage" | "behaviorTemplate" | "behaviorApplication" | "helpCategory" | "helpArticle"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2428,6 +2430,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    HelpCategory: {
+      payload: Prisma.$HelpCategoryPayload<ExtArgs>
+      fields: Prisma.HelpCategoryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.HelpCategoryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HelpCategoryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.HelpCategoryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HelpCategoryPayload>
+        }
+        findFirst: {
+          args: Prisma.HelpCategoryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HelpCategoryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.HelpCategoryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HelpCategoryPayload>
+        }
+        findMany: {
+          args: Prisma.HelpCategoryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HelpCategoryPayload>[]
+        }
+        create: {
+          args: Prisma.HelpCategoryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HelpCategoryPayload>
+        }
+        createMany: {
+          args: Prisma.HelpCategoryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.HelpCategoryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HelpCategoryPayload>[]
+        }
+        delete: {
+          args: Prisma.HelpCategoryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HelpCategoryPayload>
+        }
+        update: {
+          args: Prisma.HelpCategoryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HelpCategoryPayload>
+        }
+        deleteMany: {
+          args: Prisma.HelpCategoryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.HelpCategoryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.HelpCategoryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HelpCategoryPayload>[]
+        }
+        upsert: {
+          args: Prisma.HelpCategoryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HelpCategoryPayload>
+        }
+        aggregate: {
+          args: Prisma.HelpCategoryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateHelpCategory>
+        }
+        groupBy: {
+          args: Prisma.HelpCategoryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HelpCategoryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.HelpCategoryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HelpCategoryCountAggregateOutputType> | number
+        }
+      }
+    }
+    HelpArticle: {
+      payload: Prisma.$HelpArticlePayload<ExtArgs>
+      fields: Prisma.HelpArticleFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.HelpArticleFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HelpArticlePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.HelpArticleFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HelpArticlePayload>
+        }
+        findFirst: {
+          args: Prisma.HelpArticleFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HelpArticlePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.HelpArticleFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HelpArticlePayload>
+        }
+        findMany: {
+          args: Prisma.HelpArticleFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HelpArticlePayload>[]
+        }
+        create: {
+          args: Prisma.HelpArticleCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HelpArticlePayload>
+        }
+        createMany: {
+          args: Prisma.HelpArticleCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.HelpArticleCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HelpArticlePayload>[]
+        }
+        delete: {
+          args: Prisma.HelpArticleDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HelpArticlePayload>
+        }
+        update: {
+          args: Prisma.HelpArticleUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HelpArticlePayload>
+        }
+        deleteMany: {
+          args: Prisma.HelpArticleDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.HelpArticleUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.HelpArticleUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HelpArticlePayload>[]
+        }
+        upsert: {
+          args: Prisma.HelpArticleUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HelpArticlePayload>
+        }
+        aggregate: {
+          args: Prisma.HelpArticleAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateHelpArticle>
+        }
+        groupBy: {
+          args: Prisma.HelpArticleGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HelpArticleGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.HelpArticleCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HelpArticleCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -2491,6 +2641,10 @@ export const UserSettingsScalarFieldEnum = {
   language: 'language',
   theme: 'theme',
   menuDisplay: 'menuDisplay',
+  fontScale: 'fontScale',
+  contrastMode: 'contrastMode',
+  colorVision: 'colorVision',
+  reduceMotion: 'reduceMotion',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2887,6 +3041,44 @@ export const BehaviorApplicationScalarFieldEnum = {
 export type BehaviorApplicationScalarFieldEnum = (typeof BehaviorApplicationScalarFieldEnum)[keyof typeof BehaviorApplicationScalarFieldEnum]
 
 
+export const HelpCategoryScalarFieldEnum = {
+  id: 'id',
+  slug: 'slug',
+  name: 'name',
+  description: 'description',
+  icon: 'icon',
+  accent: 'accent',
+  orderIndex: 'orderIndex',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HelpCategoryScalarFieldEnum = (typeof HelpCategoryScalarFieldEnum)[keyof typeof HelpCategoryScalarFieldEnum]
+
+
+export const HelpArticleScalarFieldEnum = {
+  id: 'id',
+  categoryId: 'categoryId',
+  slug: 'slug',
+  title: 'title',
+  summary: 'summary',
+  coverImage: 'coverImage',
+  body: 'body',
+  locale: 'locale',
+  status: 'status',
+  orderIndex: 'orderIndex',
+  featured: 'featured',
+  views: 'views',
+  helpful: 'helpful',
+  notHelpful: 'notHelpful',
+  publishedAt: 'publishedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HelpArticleScalarFieldEnum = (typeof HelpArticleScalarFieldEnum)[keyof typeof HelpArticleScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -3201,6 +3393,20 @@ export type ListEnumMessageRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$
 
 
 /**
+ * Reference to a field of type 'HelpArticleStatus'
+ */
+export type EnumHelpArticleStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HelpArticleStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'HelpArticleStatus[]'
+ */
+export type ListEnumHelpArticleStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HelpArticleStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -3335,6 +3541,8 @@ export type GlobalOmitConfig = {
   chatMessage?: Prisma.ChatMessageOmit
   behaviorTemplate?: Prisma.BehaviorTemplateOmit
   behaviorApplication?: Prisma.BehaviorApplicationOmit
+  helpCategory?: Prisma.HelpCategoryOmit
+  helpArticle?: Prisma.HelpArticleOmit
 }
 
 /* Types for Logging */

@@ -90,7 +90,7 @@
             <div class="flex items-start justify-between gap-3 mb-3">
               <div class="min-w-0 flex-1">
                 <h3 class="font-bold text-navy-700 truncate text-lg">{{ student.name }}</h3>
-                <p class="text-sm text-navy-700/50 truncate">{{ student.email }}</p>
+                <p class="text-sm text-navy-700/70 truncate">{{ student.email }}</p>
               </div>
               <Button variant="primary" size="sm" class="flex-shrink-0">{{
                 t('teacher.students.index.btn_view')
@@ -104,12 +104,12 @@
                   <RocketLaunchIcon class="w-4 h-4 text-navy-700" />
                   <p class="text-lg font-bold text-navy-700">
                     {{ student.totalMissionsCompleted
-                    }}<span class="text-navy-700/30 font-normal"
+                    }}<span class="text-navy-700/70 font-normal"
                       >/{{ student.totalMissionsAvailable }}</span
                     >
                   </p>
                 </div>
-                <p class="text-xs text-navy-700/50 uppercase tracking-wide">
+                <p class="text-xs text-navy-700/70 uppercase tracking-wide">
                   {{ t('teacher.students.index.stat_missions') }}
                 </p>
               </div>
@@ -118,24 +118,24 @@
                   <MapIcon class="w-4 h-4 text-navy-700" />
                   <p class="text-lg font-bold text-navy-700">
                     {{ formatXP(student.totalXpEarned)
-                    }}<span class="text-navy-700/30 font-normal"
+                    }}<span class="text-navy-700/70 font-normal"
                       >/{{ formatXP(student.totalXpAvailable) }}</span
                     >
                   </p>
                 </div>
-                <p class="text-xs text-navy-700/50 uppercase tracking-wide">XP</p>
+                <p class="text-xs text-navy-700/70 uppercase tracking-wide">XP</p>
               </div>
               <div class="bg-navy-700/5 rounded-xl py-2.5 px-2">
                 <div class="flex items-center justify-center gap-1">
                   <TrophyIcon class="w-4 h-4 text-navy-700" />
                   <p class="text-lg font-bold text-navy-700">
                     {{ student.totalBadgesEarned
-                    }}<span class="text-navy-700/30 font-normal"
+                    }}<span class="text-navy-700/70 font-normal"
                       >/{{ student.totalBadgesAvailable }}</span
                     >
                   </p>
                 </div>
-                <p class="text-xs text-navy-700/50 uppercase tracking-wide">Insignias</p>
+                <p class="text-xs text-navy-700/70 uppercase tracking-wide">Insignias</p>
               </div>
             </div>
           </div>

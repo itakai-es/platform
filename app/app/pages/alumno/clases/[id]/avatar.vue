@@ -34,7 +34,7 @@
                 />
                 <div v-else class="flex flex-col items-center justify-center text-center p-4">
                   <UserIcon class="w-20 h-20 text-navy-700/20 mb-4" />
-                  <p class="text-navy-700/50 text-sm font-medium">
+                  <p class="text-navy-700/70 text-sm font-medium">
                     {{ t('student.classes.detail.avatar_tab.no_guide_hint') }}
                   </p>
                 </div>
@@ -57,7 +57,7 @@
                   :placeholder="t('student.classes.detail.avatar_tab.nickname_placeholder')"
                 />
                 <PencilSquareIcon
-                  class="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-navy-700/40 group-hover:text-navy-700/60 pointer-events-none"
+                  class="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-navy-700/50 group-hover:text-navy-700/60 pointer-events-none"
                 />
               </div>
             </div>

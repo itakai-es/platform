@@ -1,5 +1,5 @@
 <template>
-  <article class="rounded-2xl bg-[#6CF3AF] shadow-lg p-4 sm:p-6">
+  <article class="rounded-2xl bg-green shadow-lg p-4 sm:p-6">
     <!-- Header -->
     <div class="flex items-center gap-2 mb-3 sm:mb-4">
       <BookOpenIcon class="w-5 h-5 sm:w-6 sm:h-6 text-navy-700" />

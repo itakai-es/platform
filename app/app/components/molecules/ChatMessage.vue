@@ -53,7 +53,7 @@
 
       <!--  Timestamp -->
       <p
-        :class="['text-xs mt-2', message.role === 'user' ? 'text-navy-700/60' : 'text-text-muted']"
+        :class="['text-xs mt-2', message.role === 'user' ? 'text-navy-700/70' : 'text-text-muted']"
       >
         {{ formatTime(message.timestamp) }}
       </p>

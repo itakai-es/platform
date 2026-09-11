@@ -371,7 +371,7 @@ const currentGodMessage = computed(() => {
 .user-profile-card {
   @apply flex flex-col items-center relative;
   padding-bottom: 24px;
-  border-bottom: 1px solid #e6e3e5;
+  border-bottom: 1px solid var(--color-border-primary);
   margin-bottom: 16px;
 }
 
@@ -392,12 +392,12 @@ const currentGodMessage = computed(() => {
 
 .user-name {
   @apply text-lg font-bold text-center mb-1;
-  color: #23245d;
+  color: var(--color-navy-700);
 }
 
 .user-subtitle {
   @apply text-sm text-center;
-  color: #90919f;
+  color: var(--color-text-muted);
 }
 
 .progress-wrapper {
@@ -406,17 +406,17 @@ const currentGodMessage = computed(() => {
 
 .progress-bar-new {
   @apply w-full h-2 rounded-full overflow-hidden;
-  background-color: #e6e3e5;
+  background-color: var(--color-border-primary);
 }
 
 .progress-fill-new {
   @apply h-full transition-all duration-500 ease-out rounded-full;
-  background: linear-gradient(90deg, #ff3c52 0%, #ff9aab 100%);
+  background: linear-gradient(90deg, var(--color-red) 0%, var(--color-red-light) 100%);
 }
 
 .xp-display {
   @apply text-xs text-center mt-1;
-  color: #90919f;
+  color: var(--color-text-muted);
 }
 
 /* Navigation */
@@ -451,7 +451,7 @@ const currentGodMessage = computed(() => {
 /* Footer */
 .sidebar-footer {
   @apply pt-4;
-  border-top: 1px solid #e6e3e5;
+  border-top: 1px solid var(--color-border-primary);
   margin-top: 16px;
 }
 
@@ -486,7 +486,7 @@ const currentGodMessage = computed(() => {
   left: calc(100% - 8px);
   top: -40px;
   background-color: white;
-  color: #23245d;
+  color: var(--color-navy-700);
   padding: 8px 14px;
   border-radius: 16px;
   font-size: 13px;

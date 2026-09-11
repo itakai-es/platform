@@ -2,7 +2,7 @@
   <div class="flex h-screen bg-bg-primary overflow-hidden">
     <!-- Desktop Sidebar con Historial de Conversaciones -->
     <Sidebar
-      class="hidden lg:flex !w-[22rem] !bg-[#FFC338]"
+      class="hidden lg:flex !w-[22rem] !bg-yellow"
       :user-name="userName"
       :user-subtitle="userSubtitle"
       :user-id="userId"
@@ -81,7 +81,7 @@
     <Transition name="slide-right">
       <aside
         v-if="mobileMenuOpen"
-        class="fixed inset-y-0 left-0 w-80 sm:w-[22rem] bg-[#FFC338] z-50 lg:hidden flex flex-col p-4 shadow-2xl"
+        class="fixed inset-y-0 left-0 w-80 sm:w-[22rem] bg-yellow z-50 lg:hidden flex flex-col p-4 shadow-2xl"
       >
         <!-- White container (same as desktop sidebar) -->
         <div

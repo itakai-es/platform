@@ -407,7 +407,7 @@ function loginWithMicrosoft() {
 .login-form :deep(label) {
   font-size: 0.875rem !important; /* 14px base */
   font-weight: 700 !important; /* Bold */
-  color: #23245d !important; /* Navy 700 */
+  color: var(--color-navy-700) !important; /* Navy 700 */
 }
 
 @media (min-width: 640px) {
@@ -427,7 +427,7 @@ function loginWithMicrosoft() {
   /* Todos los botones auth cambian a color purple en mobile */
   .auth-button,
   .social-btn {
-    background-color: #ac74fd !important; /* purple */
+    background-color: var(--color-purple) !important; /* purple */
   }
 
   .auth-button:hover,

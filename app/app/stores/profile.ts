@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { ACCESSIBILITY_DEFAULTS } from '~/utils/accessibility'
 import type {
   UserProfile,
   SecuritySettings,
@@ -39,6 +40,7 @@ export const useProfileStore = defineStore('profile', () => {
         language: 'es' as const,
         theme: 'college' as const,
         menuDisplay: 'both' as const,
+        ...ACCESSIBILITY_DEFAULTS,
       }
   )
 

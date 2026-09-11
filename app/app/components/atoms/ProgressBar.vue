@@ -21,7 +21,7 @@
           :cy="center"
           :r="radius"
           fill="none"
-          :stroke="trackColor"
+          :style="{ stroke: trackColor }"
           :stroke-width="strokeWidth"
         />
 
@@ -31,7 +31,7 @@
           :cy="center"
           :r="radius"
           fill="none"
-          :stroke="fillColor"
+          :style="{ stroke: fillColor }"
           :stroke-width="strokeWidth"
           :stroke-dasharray="circumference"
           :stroke-dashoffset="strokeDashoffset"
@@ -69,7 +69,7 @@ const props = withDefaults(defineProps<Props>(), {
 // Linear Progress Classes
 const progressContainerClasses = computed(() => {
   // ITAKAI Official CSS structure
-  return 'flex-1 h-[10px] bg-[#e6e3e5] rounded-full overflow-hidden'
+  return 'flex-1 h-[10px] bg-progress-track rounded-full overflow-hidden'
 })
 
 const progressBarClasses = computed(() => {
@@ -95,12 +95,12 @@ const strokeDashoffset = computed(() => {
 })
 
 // Circular colors (from CSS variables)
-const trackColor = '#e6e3e5' // Track gris claro oficial
+const trackColor = 'var(--color-progress-track)'
 const fillColor = computed(() => {
   const variants = {
-    default: '#23245d', // Navy 700 indigo (ITAKAI oficial)
-    student: '#6cf3af', // Mint
-    teacher: '#ac74fd', // Purple
+    default: 'var(--color-navy-700)',
+    student: 'var(--color-green)',
+    teacher: 'var(--color-purple)',
   }
   return variants[props.variant]
 })

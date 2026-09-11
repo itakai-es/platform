@@ -36,7 +36,7 @@
       </div>
 
       <!-- Subject badge -->
-      <div class="rounded-xl bg-[#B0EAE1] px-3 py-2 text-center">
+      <div class="rounded-xl bg-mint px-3 py-2 text-center">
         <div class="text-xs font-semibold text-navy-700">{{ subject }}</div>
       </div>
 

@@ -13,10 +13,14 @@
       "logs": "Logs",
       "features": "Features",
       "blog": "Blog",
+      "help": "Help",
       "section_management": "Management",
       "section_system": "System"
     },
     "actions": {
+      "save": "Save",
+      "cancel": "Cancel",
+      "edit": "Edit",
       "rename": "Rename",
       "delete": "Delete",
       "open_menu": "Open menu",
@@ -198,14 +202,37 @@
     "under_development": {
       "back_to_dashboard": "Back to Dashboard"
     },
-    "docs": {
-      "title": "Help Center & Documentation",
-      "description": "Here you can access complete guides, step-by-step tutorials, frequently asked questions, and help resources to get the most out of the ITAKAI platform.",
-      "btn_back": "Back to main page",
+    "help": {
+      "title": "Help centre",
+      "hero_title": "How can we help?",
+      "hero_subtitle": "Guides, step-by-step tutorials and platform setup. Written for teachers, not for engineers.",
+      "all_categories": "All categories",
+      "article_count": "{count} articles",
+      "keep_reading": "Keep reading",
+      "on_this_page": "On this page",
+      "previous": "Previous",
+      "next": "Next",
+      "still_stuck": "Didn't find what you were looking for?",
+      "contact_us": "Get in touch",
+      "updated_on": "Updated on {date}",
+      "feedback_question": "Was this useful?",
+      "feedback_yes": "Yes",
+      "feedback_no": "Not really",
+      "feedback_thanks": "Thanks. It tells us what to rewrite.",
+      "empty_title": "No articles yet",
+      "empty_description": "The first published article will show up here.",
+      "not_found_title": "We could not find that page",
+      "not_found_description": "The article may have moved or may not be published yet.",
       "meta": {
-        "title": "Documentation - ITAKAI",
-        "description": "ITAKAI help center and documentation"
-      }
+        "title": "Help centre · ITAKAI",
+        "description": "Guides, tutorials and setup for the ITAKAI platform."
+      },
+      "search": {
+        "placeholder": "Search the help centre…",
+        "empty": "Nothing for “{query}”",
+        "empty_hint": "Try other words: “submissions”, “coins”, “levels”."
+      },
+      "most_read": "Most read"
     },
     "meta": {
       "site_title": "ITAKAI - The adventure of learning | Gamified Educational Platform",
@@ -230,6 +257,58 @@
       "both": "Icon and text",
       "icon": "Icon only",
       "text": "Text only"
+    },
+    "accessibility": {
+      "title": "Accessibility",
+      "description": "Adjust text size, contrast and colours. It is saved to your account and applies on every device.",
+      "updated": "Accessibility preferences updated",
+      "update_error": "Accessibility preferences could not be saved",
+      "font_scale": {
+        "title": "Text size",
+        "description": "Enlarges text and icons across the whole platform.",
+        "normal": "Normal",
+        "large": "Large",
+        "xlarge": "Extra large"
+      },
+      "contrast": {
+        "title": "Contrast",
+        "description": "Strengthens text, borders and keyboard focus.",
+        "normal": "Normal",
+        "high": "High"
+      },
+      "color_vision": {
+        "title": "Colour vision",
+        "description": "Switches the palette so states stay distinguishable with colour blindness.",
+        "default": "No adjustment",
+        "protanopia": "Protanopia",
+        "deuteranopia": "Deuteranopia",
+        "tritanopia": "Tritanopia"
+      },
+      "samples": {
+        "success": "Success",
+        "error": "Error",
+        "warning": "Warning",
+        "info": "Info",
+        "accent": "Highlight"
+      },
+      "reduce_motion": {
+        "title": "Less motion",
+        "description": "Reduces transitions and movement effects."
+      }
+    },
+    "notification_settings": {
+      "title": "Alerts",
+      "description": "What we tell you about, and where. Alerts always appear in the platform; email is optional.",
+      "updated": "Alert preferences updated",
+      "update_error": "Alert preferences could not be saved",
+      "email": {
+        "title": "Email alerts",
+        "description": "Reviewed work, invitations and confirmations also sent to your inbox."
+      },
+      "reminders": {
+        "title": "Deadline reminders",
+        "description": "An alert when a mission has less than 24 hours left."
+      }
     },
     "markdown": {
       "insert_at_end": "Insert at the end"

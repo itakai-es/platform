@@ -65,6 +65,12 @@ model UserSettings {
   language           String   @default("es")
   theme              String   @default("college")
   menuDisplay        String   @default("both") @map("menu_display")
+  // Accesibilidad (Fase 3, punto 14). Se guardan como texto libre y se validan
+  // en la ruta: añadir un modo nuevo no obliga a migrar la base de datos.
+  fontScale          String   @default("normal") @map("font_scale")
+  contrastMode       String   @default("normal") @map("contrast_mode")
+  colorVision        String   @default("default") @map("color_vision")
+  reduceMotion       Boolean  @default(false) @map("reduce_motion")
   createdAt          DateTime @default(now()) @map("created_at")
   updatedAt          DateTime @updatedAt @map("updated_at")
 
@@ -485,6 +491,10 @@ enum NotificationType {
   achievement_unlocked
   system_announcement
   chat_message
+  // Entregas (Fase 3, punto 3): el profesor recibe el aviso de que hay algo que
+  // revisar y el alumno la confirmación de que ya se ha revisado.
+  submission_received
+  submission_reviewed
 }
 
 enum NotificationPriority {
@@ -686,4 +696,80 @@ model BehaviorApplication {
   @@index([classId])
   @@index([studentId, classId])
   @@map("behavior_applications")
+}
+
+// ==================== CENTRO DE AYUDA (Fase 3, punto 17) ====================
+
+// El motor de contenidos es genérico a propósito: hoy solo sirve la ayuda, pero
+// el día que el blog se traiga de gamifp.es o lleguen los cursos de formación,
+// entran como otro tipo de contenido sin migrar nada.
+
+enum HelpArticleStatus {
+  borrador
+  publicado
+}
+
+model HelpCategory {
+  id          String   @id @default(uuid())
+  slug        String   @unique
+  name        String
+  description String?
+  /** Nombre del icono del sistema de diseño (ver `app/utils/help-icons.ts`). */
+  icon        String?
+  /** Tipo de `Card` del sistema de diseño: ia, stats, clases o pending. */
+  accent      String   @default("purple")
+  orderIndex  Int      @default(0) @map("order_index")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  articles HelpArticle[]
+
+  @@map("help_categories")
+}
+
+model HelpArticle {
+  id         String            @id @default(uuid())
+  categoryId String            @map("category_id")
+  slug       String
+  title      String
+  summary    String?
+  /**
+   * Imagen de portada del artículo: sale arriba del cuerpo y como miniatura en
+   * los listados. Guarda la URL que devuelve la capa de almacenamiento, así que
+   * vale igual para disco local que para R2.
+   */
+  coverImage String?           @map("cover_image")
+  /** Cuerpo en markdown; se pinta con el mismo `.md-rendered` que el resto. */
+  body       String            @db.Text
+  /**
+   * Idioma del artículo. De momento todo va en castellano y la interfaz se
+   * traduce sola; la columna está desde el principio para que traducir después
+   * no obligue a migrar.
+   */
+  locale     String            @default("es")
+  status     HelpArticleStatus @default(borrador)
+  orderIndex Int               @default(0) @map("order_index")
+  /** Aparece en «lo más consultado» de la portada. Curado, no automático. */
+  featured   Boolean           @default(false)
+  views      Int               @default(0)
+  helpful    Int               @default(0)
+  notHelpful Int               @default(0) @map("not_helpful")
+
+  /**
+   * Vector de búsqueda generado por la base de datos (título, resumen y cuerpo
+   * con pesos distintos) con una configuración castellana que ignora tildes.
+   * Prisma no sabe leer este tipo; se consulta con SQL en `help.service.ts`.
+   */
+  searchVector Unsupported("tsvector")? @map("search_vector")
+
+  publishedAt DateTime? @map("published_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  category HelpCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([categoryId, slug, locale])
+  @@index([status, locale])
+  @@index([categoryId, orderIndex])
+  @@map("help_articles")
 }

@@ -93,7 +93,9 @@ export const NotificationType = {
   join_rejected: 'join_rejected',
   achievement_unlocked: 'achievement_unlocked',
   system_announcement: 'system_announcement',
-  chat_message: 'chat_message'
+  chat_message: 'chat_message',
+  submission_received: 'submission_received',
+  submission_reviewed: 'submission_reviewed'
 } as const
 
 export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
@@ -168,3 +170,11 @@ export const MessageRole = {
 } as const
 
 export type MessageRole = (typeof MessageRole)[keyof typeof MessageRole]
+
+
+export const HelpArticleStatus = {
+  borrador: 'borrador',
+  publicado: 'publicado'
+} as const
+
+export type HelpArticleStatus = (typeof HelpArticleStatus)[keyof typeof HelpArticleStatus]

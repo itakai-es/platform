@@ -27,6 +27,11 @@ const updatePreferencesSchema = z.object({
   language: z.enum(APP_LANGUAGES).optional(),
   theme: z.enum(['college', 'university']).optional(),
   menuDisplay: z.enum(['both', 'icon', 'text']).optional(),
+  // Accesibilidad (Fase 3, punto 14)
+  fontScale: z.enum(['normal', 'large', 'xlarge']).optional(),
+  contrastMode: z.enum(['normal', 'high']).optional(),
+  colorVision: z.enum(['default', 'protanopia', 'deuteranopia', 'tritanopia']).optional(),
+  reduceMotion: z.boolean().optional(),
 })
 
 const deleteAccountSchema = z.object({

@@ -176,3 +176,13 @@ export type BehaviorTemplate = Prisma.BehaviorTemplateModel
  * 
  */
 export type BehaviorApplication = Prisma.BehaviorApplicationModel
+/**
+ * Model HelpCategory
+ * 
+ */
+export type HelpCategory = Prisma.HelpCategoryModel
+/**
+ * Model HelpArticle
+ * 
+ */
+export type HelpArticle = Prisma.HelpArticleModel

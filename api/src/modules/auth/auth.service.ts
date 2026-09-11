@@ -11,8 +11,9 @@ import {
 import type { LoginInput, LoginAliasInput, SignupInput, OnboardingInput } from './auth.schema.js'
 import type { UserRole } from '../../generated/prisma/client.js'
 import { sendPasswordResetEmail, sendPasswordChangedEmail } from '../../utils/email.js'
+import { getAppOrigin } from '../../utils/app-url.js'
 import { OAuth2Client } from 'google-auth-library'
-import { getDomainSettings, getGeneralSettings } from '../settings/settings.service.js'
+import { getGeneralSettings } from '../settings/settings.service.js'
 
 // ==================== TYPES ====================
 
@@ -546,8 +547,7 @@ export class AuthService {
       email: user.email,
     })
 
-    const { appUrl } = await getDomainSettings()
-    const appOrigin = appUrl || process.env.CORS_ORIGIN?.split(',')[0]?.trim() || 'http://localhost:4000'
+    const appOrigin = await getAppOrigin()
     const resetUrl = `${appOrigin}/auth/reset-password?token=${encodeURIComponent(resetToken)}`
 
     // Send the reset email (non-blocking — don't let email failure block the response)

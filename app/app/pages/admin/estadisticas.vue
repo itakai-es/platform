@@ -159,20 +159,20 @@
               <table class="w-full text-sm">
                 <thead>
                   <tr class="border-b border-navy-700/10">
-                    <th class="text-left py-2 px-2 text-xs font-semibold text-navy-700/60">
+                    <th class="text-left py-2 px-2 text-xs font-semibold text-navy-700/70">
                       {{ t('admin.analytics.table.service') }}
                     </th>
-                    <th class="text-center py-2 px-2 text-xs font-semibold text-navy-700/60">
+                    <th class="text-center py-2 px-2 text-xs font-semibold text-navy-700/70">
                       {{ t('admin.analytics.table.status') }}
                     </th>
-                    <th class="text-right py-2 px-2 text-xs font-semibold text-navy-700/60">
+                    <th class="text-right py-2 px-2 text-xs font-semibold text-navy-700/70">
                       {{ t('admin.analytics.table.uptime') }}
                     </th>
-                    <th class="text-right py-2 px-2 text-xs font-semibold text-navy-700/60">
+                    <th class="text-right py-2 px-2 text-xs font-semibold text-navy-700/70">
                       {{ t('admin.analytics.table.latency') }}
                     </th>
                     <th
-                      class="text-right py-2 px-2 text-xs font-semibold text-navy-700/60 hidden sm:table-cell"
+                      class="text-right py-2 px-2 text-xs font-semibold text-navy-700/70 hidden sm:table-cell"
                     >
                       P95
                     </th>
@@ -196,17 +196,17 @@
                         {{ statusLabel(svc.status) }}
                       </span>
                     </td>
-                    <td class="py-2.5 px-2 text-right text-xs text-navy-700/60">
+                    <td class="py-2.5 px-2 text-right text-xs text-navy-700/70">
                       {{ svc.uptime }}%
                     </td>
                     <td
                       class="py-2.5 px-2 text-right text-xs font-mono"
-                      :class="svc.avgLatency > 500 ? 'text-yellow-600' : 'text-navy-700/60'"
+                      :class="svc.avgLatency > 500 ? 'text-yellow-600' : 'text-navy-700/70'"
                     >
                       {{ svc.avgLatency }}ms
                     </td>
                     <td
-                      class="py-2.5 px-2 text-right text-xs font-mono text-navy-700/60 hidden sm:table-cell"
+                      class="py-2.5 px-2 text-right text-xs font-mono text-navy-700/70 hidden sm:table-cell"
                     >
                       {{ svc.p95Latency }}ms
                     </td>
@@ -227,28 +227,28 @@
         />
         <CardGrid cols="2">
           <CardItem padding="lg" layout="column">
-            <p class="text-xs font-semibold text-navy-700/60 mb-3">
+            <p class="text-xs font-semibold text-navy-700/70 mb-3">
               {{ t('admin.analytics.sections.response_time') }}
             </p>
             <MiniBarChart :data="analytics.responseTimeSeries" color="#8B5CF6" unit="ms" />
           </CardItem>
           <CardItem padding="lg" layout="column">
-            <p class="text-xs font-semibold text-navy-700/60 mb-3">
+            <p class="text-xs font-semibold text-navy-700/70 mb-3">
               {{ t('admin.analytics.sections.active_users') }}
             </p>
             <MiniBarChart :data="analytics.activeUsersSeries" color="#6FEDB7" />
           </CardItem>
           <CardItem padding="lg" layout="column">
-            <p class="text-xs font-semibold text-navy-700/60 mb-3">
+            <p class="text-xs font-semibold text-navy-700/70 mb-3">
               {{ t('admin.analytics.sections.requests') }}
             </p>
             <MiniBarChart :data="analytics.requestsSeries" color="#3B82F6" />
           </CardItem>
           <CardItem padding="lg" layout="column">
-            <p class="text-xs font-semibold text-navy-700/60 mb-3">
+            <p class="text-xs font-semibold text-navy-700/70 mb-3">
               {{ t('admin.analytics.sections.tokens_over_time') }}
             </p>
-            <MiniBarChart :data="analytics.aiUsage.tokensSeries" color="#F59E0B" />
+            <MiniBarChart :data="analytics.aiUsage.tokensSeries" color="rgb(var(--palette-amber-500))" />
           </CardItem>
         </CardGrid>
       </Card>
@@ -351,13 +351,13 @@
             <p class="text-2xl font-bold text-navy-700">
               {{ formatNumber(analytics.aiUsage.totalTokensUsed) }}
             </p>
-            <p class="text-xs text-navy-700/60 mt-1">{{ t('admin.analytics.ai.total_tokens') }}</p>
+            <p class="text-xs text-navy-700/70 mt-1">{{ t('admin.analytics.ai.total_tokens') }}</p>
           </CardItem>
           <CardItem padding="md" layout="column" centered>
             <p class="text-2xl font-bold text-navy-700">
               {{ formatNumber(analytics.aiUsage.avgTokensPerUser) }}
             </p>
-            <p class="text-xs text-navy-700/60 mt-1">
+            <p class="text-xs text-navy-700/70 mt-1">
               {{ t('admin.analytics.ai.avg_tokens_user') }}
             </p>
           </CardItem>
@@ -365,7 +365,7 @@
             <p class="text-2xl font-bold text-navy-700">
               {{ formatNumber(analytics.aiUsage.totalConversations) }}
             </p>
-            <p class="text-xs text-navy-700/60 mt-1">
+            <p class="text-xs text-navy-700/70 mt-1">
               {{ t('admin.analytics.ai.total_conversations') }}
             </p>
           </CardItem>
@@ -373,7 +373,7 @@
             <p class="text-2xl font-bold text-navy-700">
               {{ analytics.aiUsage.avgConversationsPerUser }}
             </p>
-            <p class="text-xs text-navy-700/60 mt-1">
+            <p class="text-xs text-navy-700/70 mt-1">
               {{ t('admin.analytics.ai.avg_conversations_user') }}
             </p>
           </CardItem>

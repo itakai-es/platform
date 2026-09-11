@@ -10,10 +10,10 @@
         <template v-if="activity.userName && activity.title"> · </template>
         <template v-if="activity.title">{{ activity.title }}</template>
       </p>
-      <p v-if="activity.description" class="text-sm text-navy-700/60 mt-0.5">
+      <p v-if="activity.description" class="text-sm text-navy-700/70 mt-0.5">
         {{ activity.description }}
       </p>
-      <p class="text-xs text-navy-700/40 mt-1">{{ formattedTimestamp }}</p>
+      <p class="text-xs text-navy-700/70 mt-1">{{ formattedTimestamp }}</p>
     </div>
   </div>
 </template>

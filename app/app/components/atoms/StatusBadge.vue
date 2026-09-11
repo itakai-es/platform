@@ -91,7 +91,7 @@ const badgeClasses = computed(() => {
     urgente: 'bg-badge-urgente text-badge-text-light',
     activa: 'bg-badge-activa text-badge-text-dark',
     pendiente: 'bg-badge-pendiente text-badge-text-dark',
-    completada: 'bg-[#9ea3ba] text-white',
+    completada: 'bg-badge-bloqueada text-white',
     bloqueada: 'bg-badge-bloqueada text-badge-text-light',
     expirada: 'bg-gray-500 text-white',
   }

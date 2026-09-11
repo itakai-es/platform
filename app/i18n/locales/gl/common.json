@@ -13,10 +13,14 @@
       "logs": "Logs",
       "features": "Características",
       "blog": "Blog",
+      "help": "Axuda",
       "section_management": "Xestión",
       "section_system": "Sistema"
     },
     "actions": {
+      "save": "Gardar",
+      "cancel": "Cancelar",
+      "edit": "Editar",
       "rename": "Renomear",
       "delete": "Eliminar",
       "open_menu": "Abrir menú",
@@ -198,14 +202,37 @@
     "under_development": {
       "back_to_dashboard": "Volver ao Dashboard"
     },
-    "docs": {
-      "title": "Centro de Axuda e Documentación",
-      "description": "Aquí poderás acceder a guías completas, titoriais paso a paso, preguntas frecuentes e recursos de axuda para aproveitar ao máximo a plataforma ITAKAI.",
-      "btn_back": "Volver á páxina principal",
+    "help": {
+      "title": "Centro de axuda",
+      "hero_title": "En que che botamos unha man?",
+      "hero_subtitle": "Guías, titoriais paso a paso e configuración da plataforma. Escritas para o profesorado, non para informáticos.",
+      "all_categories": "Todas as categorías",
+      "article_count": "{count} artigos",
+      "keep_reading": "Seguir lendo",
+      "on_this_page": "Nesta páxina",
+      "previous": "Anterior",
+      "next": "Seguinte",
+      "still_stuck": "Non atopaches o que buscabas?",
+      "contact_us": "Escríbenos",
+      "updated_on": "Actualizado o {date}",
+      "feedback_question": "Resultouche útil?",
+      "feedback_yes": "Si",
+      "feedback_no": "Non de todo",
+      "feedback_thanks": "Grazas. Axúdanos a saber que reescribir.",
+      "empty_title": "Aínda non hai artigos",
+      "empty_description": "Cando se publique o primeiro artigo aparecerá aquí.",
+      "not_found_title": "Non atopamos esa páxina",
+      "not_found_description": "Pode que o artigo se movese ou aínda non estea publicado.",
       "meta": {
-        "title": "Documentación - ITAKAI",
-        "description": "Centro de axuda e documentación de ITAKAI"
-      }
+        "title": "Centro de axuda · ITAKAI",
+        "description": "Guías, titoriais e configuración da plataforma ITAKAI."
+      },
+      "search": {
+        "placeholder": "Buscar na axuda…",
+        "empty": "Nada por «{query}»",
+        "empty_hint": "Proba con outras palabras: «entregas», «moedas», «niveis»."
+      },
+      "most_read": "O máis consultado"
     },
     "meta": {
       "site_title": "ITAKAI - A aventura de aprender | Plataforma Educativa Gamificada",
@@ -230,6 +257,58 @@
       "both": "Icona e texto",
       "icon": "Só icona",
       "text": "Só texto"
+    },
+    "accessibility": {
+      "title": "Accesibilidade",
+      "description": "Axusta o tamaño do texto, o contraste e as cores. Gárdase na túa conta e aplícase en todos os dispositivos.",
+      "updated": "Preferencias de accesibilidade actualizadas",
+      "update_error": "Non se puideron gardar as preferencias de accesibilidade",
+      "font_scale": {
+        "title": "Tamaño da letra",
+        "description": "Agranda o texto e as iconas de toda a plataforma.",
+        "normal": "Normal",
+        "large": "Grande",
+        "xlarge": "Moi grande"
+      },
+      "contrast": {
+        "title": "Contraste",
+        "description": "Reforza textos, bordos e foco do teclado.",
+        "normal": "Normal",
+        "high": "Alto"
+      },
+      "color_vision": {
+        "title": "Visión da cor",
+        "description": "Cambia a paleta para que os estados se sigan distinguindo con daltonismo.",
+        "default": "Sen axuste",
+        "protanopia": "Protanopía",
+        "deuteranopia": "Deuteranopía",
+        "tritanopia": "Tritanopía"
+      },
+      "samples": {
+        "success": "Correcto",
+        "error": "Erro",
+        "warning": "Aviso",
+        "info": "Información",
+        "accent": "Destacado"
+      },
+      "reduce_motion": {
+        "title": "Menos animación",
+        "description": "Reduce transicións e efectos de movemento."
+      }
+    },
+    "notification_settings": {
+      "title": "Avisos",
+      "description": "De que te avisamos e por onde. Os avisos sempre aparecen na plataforma; o correo é opcional.",
+      "updated": "Preferencias de avisos actualizadas",
+      "update_error": "Non se puideron gardar as preferencias de avisos",
+      "email": {
+        "title": "Avisos por correo",
+        "description": "Entregas revisadas, invitacións e confirmacións tamén no teu correo."
+      },
+      "reminders": {
+        "title": "Recordatorios de entrega",
+        "description": "Un aviso cando queden menos de 24 horas para o final dunha misión."
+      }
     },
     "markdown": {
       "insert_at_end": "Inserir ao final"

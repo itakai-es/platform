@@ -111,7 +111,7 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
         <!-- Columna: Compras -->
         <div class="space-y-3">
-          <h4 class="flex items-center gap-2 text-sm font-semibold text-navy-700/60">
+          <h4 class="flex items-center gap-2 text-sm font-semibold text-navy-700/70">
             {{ t('teacher.classes.detail.shop.history_purchases') }}
             <span class="rounded-full bg-navy-700/10 px-1.5 py-0.5 text-xs text-navy-700">
               {{ purchases.length }}
@@ -147,7 +147,7 @@
 
         <!-- Columna: Usos -->
         <div class="space-y-3">
-          <h4 class="flex items-center gap-2 text-sm font-semibold text-navy-700/60">
+          <h4 class="flex items-center gap-2 text-sm font-semibold text-navy-700/70">
             {{ t('teacher.classes.detail.shop.tab_uses') }}
             <span class="rounded-full bg-navy-700/10 px-1.5 py-0.5 text-xs text-navy-700">
               {{ uses.length }}
@@ -210,7 +210,7 @@
                 }}
               </h3>
               <button
-                class="p-1.5 rounded-full hover:bg-gray-100 text-navy-700/60"
+                class="p-1.5 rounded-full hover:bg-gray-100 text-navy-700/70"
                 @click="showForm = false"
               >
                 <XMarkIcon class="w-5 h-5" />
@@ -469,7 +469,7 @@
                 </p>
               </div>
               <button
-                class="-mr-1 -mt-1 flex-shrink-0 rounded-full p-1.5 text-navy-700/60 hover:bg-gray-100"
+                class="-mr-1 -mt-1 flex-shrink-0 rounded-full p-1.5 text-navy-700/70 hover:bg-gray-100"
                 @click="showLibrary = false"
               >
                 <XMarkIcon class="w-5 h-5" />
