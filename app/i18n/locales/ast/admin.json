@@ -331,7 +331,7 @@
       "views": "{count} visites",
       "toggle_status": "Publicar o pasar a borrador",
       "empty_title": "Entá nun hai artículos",
-      "empty_description": "Crea’l primeru dende equí. El conteníu inicial cárgase nel sirvidor con «pnpm db:seed:help».",
+      "empty_description": "Crea’l primeru dende equí. Los artículos iniciales vienen creaos cola instalación.",
       "field_category": "Categoría",
       "field_status": "Estáu",
       "field_title": "Títulu",

@@ -331,7 +331,7 @@
       "views": "{count} visites",
       "toggle_status": "Publicar o passar a esborrany",
       "empty_title": "Encara no hi ha articles",
-      "empty_description": "Crea el primer des d’aquí. El contingut inicial es carrega al servidor amb «pnpm db:seed:help».",
+      "empty_description": "Crea el primer des d’aquí. Els articles inicials vénen creats amb la instal·lació.",
       "field_category": "Categoria",
       "field_status": "Estat",
       "field_title": "Títol",

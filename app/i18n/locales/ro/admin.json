@@ -331,7 +331,7 @@
       "views": "{count} vizualizări",
       "toggle_status": "Publică sau treci la ciornă",
       "empty_title": "Încă nu există articole",
-      "empty_description": "Creează-l pe primul de aici. Conținutul inițial se încarcă pe server cu „pnpm db:seed:help”.",
+      "empty_description": "Creează-l pe primul de aici. Articolele inițiale vin create odată cu instalarea.",
       "field_category": "Categorie",
       "field_status": "Stare",
       "field_title": "Titlu",

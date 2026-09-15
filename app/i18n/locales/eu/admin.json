@@ -331,7 +331,7 @@
       "views": "{count} bisita",
       "toggle_status": "Argitaratu edo zirriborrora pasatu",
       "empty_title": "Oraindik ez dago artikulurik",
-      "empty_description": "Sortu lehena hemendik. Hasierako edukia zerbitzarian kargatzen da «pnpm db:seed:help» erabiliz.",
+      "empty_description": "Sortu lehena hemendik. Hasierako artikuluak instalazioarekin batera sortuta datoz.",
       "field_category": "Kategoria",
       "field_status": "Egoera",
       "field_title": "Izenburua",

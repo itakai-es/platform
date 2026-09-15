@@ -331,7 +331,7 @@
       "views": "{count} views",
       "toggle_status": "Publish or move to draft",
       "empty_title": "No articles yet",
-      "empty_description": "Create the first one here. The starter content is loaded on the server with “pnpm db:seed:help”.",
+      "empty_description": "Create the first one here. The starter articles come preloaded with the installation.",
       "field_category": "Category",
       "field_status": "Status",
       "field_title": "Title",

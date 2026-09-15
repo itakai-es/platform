@@ -331,7 +331,7 @@
       "views": "{count} visitas",
       "toggle_status": "Publicar ou pasar a borrador",
       "empty_title": "Aínda non hai artigos",
-      "empty_description": "Crea o primeiro desde aquí. O contido inicial cárgase no servidor con «pnpm db:seed:help».",
+      "empty_description": "Crea o primeiro desde aquí. Os artigos iniciais veñen creados coa instalación.",
       "field_category": "Categoría",
       "field_status": "Estado",
       "field_title": "Título",
