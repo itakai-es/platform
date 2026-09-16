@@ -1,8 +1,13 @@
 <template>
-  <NuxtLink
-    :to="to"
+  <component
+    :is="to ? NuxtLink : 'button'"
+    v-bind="to ? { to } : { type: 'button' }"
     class="nav-item group"
-    :class="[{ 'nav-item-active': isActive }, { 'nav-item-indent': indent }]"
+    :class="[
+      { 'nav-item-active': isActive },
+      { 'nav-item-indent': indent },
+      { 'w-full text-left': !to },
+    ]"
   >
     <component
       :is="icon"
@@ -24,15 +29,19 @@
     >
       {{ badge }}
     </span>
-  </NuxtLink>
+  </component>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, resolveComponent } from 'vue'
 import { useRoute } from 'vue-router'
 
+// Sin `to` el elemento es una acción (p. ej. cerrar sesión): se pinta como
+// botón y el clic llega por el listener que ponga quien lo use.
+const NuxtLink = resolveComponent('NuxtLink')
+
 interface Props {
-  to: string
+  to?: string
   label: string
   icon: any
   badge?: string | number
@@ -42,6 +51,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  to: undefined,
   badge: undefined,
   badgeVariant: 'primary',
   exact: false,
@@ -51,6 +61,8 @@ const props = withDefaults(defineProps<Props>(), {
 const route = useRoute()
 
 const isActive = computed(() => {
+  if (!props.to) return false
+
   if (props.exact) {
     return route.path === props.to
   }

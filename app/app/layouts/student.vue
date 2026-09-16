@@ -12,6 +12,7 @@
       :avatar="user?.avatar"
       :current-god="currentGod"
       user-role="student"
+      show-account
       @help-center="openHelpCenter"
     />
 
@@ -25,6 +26,7 @@
         label: t('common.mobile_sidebar.join_class'),
         to: '/alumno/clases?join=true',
       }"
+      show-account
       @close="mobileMenuOpen = false"
       @help-center="openHelpCenter"
     />
@@ -49,7 +51,9 @@ import {
   AcademicCapIcon,
   UserIcon,
   TrophyIcon,
+  BookOpenIcon,
 } from '@heroicons/vue/24/outline'
+import { getHelpPortalByRole } from '~/utils/navigation'
 
 const { t } = useI18n()
 const authStore = useAuthStore()
@@ -126,6 +130,12 @@ const navItems = computed(() => [
     to: '/alumno/insignias',
     label: t('common.nav.badges'),
     icon: TrophyIcon,
+  },
+  { type: 'divider' as const },
+  {
+    to: getHelpPortalByRole('student'),
+    label: t('common.help.title'),
+    icon: BookOpenIcon,
   },
 ])
 </script>

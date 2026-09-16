@@ -12,6 +12,7 @@
       :avatar="user?.avatar"
       :current-god="currentGod"
       user-role="teacher"
+      show-account
       @help-center="openHelpCenter"
     />
 
@@ -23,6 +24,7 @@
       role="teacher"
       :user-name="user?.name"
       :current-god="currentGod"
+      show-account
       @close="mobileMenuOpen = false"
       @help-center="openHelpCenter"
     />
@@ -46,7 +48,9 @@ import {
   UsersIcon,
   TrophyIcon,
   InformationCircleIcon,
+  BookOpenIcon,
 } from '@heroicons/vue/24/outline'
+import { getHelpPortalByRole } from '~/utils/navigation'
 
 const { t } = useI18n()
 const authStore = useAuthStore()
@@ -122,6 +126,12 @@ const navItems = computed(() => [
     to: '/profesor/alumnos',
     label: t('common.nav.students'),
     icon: UsersIcon,
+  },
+  { type: 'divider' as const },
+  {
+    to: getHelpPortalByRole('teacher'),
+    label: t('common.help.title'),
+    icon: BookOpenIcon,
   },
   {
     to: '/profesor/acerca-de',
