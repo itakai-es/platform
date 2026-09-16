@@ -434,23 +434,6 @@
         "title": "Licenças - ITAKAI",
         "description": "Informação sobre licenças do ITAKAI"
       }
-    },
-    "notifications": {
-      "title": "Notificações",
-      "btn_mark_all_read": "Marcar todas como lidas",
-      "tabs": {
-        "all": "Todas",
-        "unread": "Não lidas"
-      },
-      "unread_label": "Não lida",
-      "btn_view": "Ver",
-      "btn_delete": "Eliminar notificação",
-      "empty_unread": "Não tens notificações por ler",
-      "empty_all": "Não tens notificações",
-      "meta": {
-        "title": "Notificações | ITAKAI",
-        "description": "Consulta as tuas notificações e mantém-te a par das últimas atualizações das tuas missões e turmas."
-      }
     }
   }
 }

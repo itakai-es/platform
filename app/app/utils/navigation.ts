@@ -7,9 +7,6 @@ export const ROUTE_NAMES = {
   LICENSES: '/licenses',
   DOCS: '/ayuda',
 
-  // Shared (authenticated, role-agnostic)
-  NOTIFICACIONES: '/notificaciones',
-
   // Auth
   LOGIN: '/auth/login',
   SIGNUP: '/auth/registro',
@@ -24,6 +21,7 @@ export const ROUTE_NAMES = {
   STUDENT_AI_ASSISTANT: '/alumno/asistente',
   STUDENT_PROFILE: '/alumno/perfil',
   STUDENT_ACHIEVEMENTS: '/alumno/insignias',
+  STUDENT_NOTIFICATIONS: '/alumno/avisos',
 
   // Teacher
   TEACHER_DASHBOARD: '/profesor/inicio',
@@ -33,6 +31,7 @@ export const ROUTE_NAMES = {
   TEACHER_PROFILE: '/profesor/perfil',
   TEACHER_BADGES: '/profesor/insignias',
   TEACHER_AI_ASSISTANT: '/profesor/asistente',
+  TEACHER_NOTIFICATIONS: '/profesor/avisos',
 
   // Admin
   ADMIN_DASHBOARD: '/admin/inicio',
@@ -61,6 +60,13 @@ export const getDashboardByRole = (role: string): string => {
 export const getProfileByRole = (role?: string | null): string | null => {
   if (role === 'teacher') return ROUTE_NAMES.TEACHER_PROFILE
   if (role === 'student') return ROUTE_NAMES.STUDENT_PROFILE
+  return null
+}
+
+/** Página de avisos de cada rol. El administrador no recibe avisos. */
+export const getNotificationsByRole = (role?: string | null): string | null => {
+  if (role === 'teacher') return ROUTE_NAMES.TEACHER_NOTIFICATIONS
+  if (role === 'student') return ROUTE_NAMES.STUDENT_NOTIFICATIONS
   return null
 }
 

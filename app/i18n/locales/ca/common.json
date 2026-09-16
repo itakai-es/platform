@@ -70,13 +70,29 @@
       "join_request_reject_error": "Error en rebutjar la sol·licitud"
     },
     "notifications": {
-      "title": "Notificacions",
-      "panel_label": "Panell de notificacions",
-      "view_all": "Veure totes",
-      "empty": "No tens notificacions",
-      "unread_label": "No llegida",
-      "aria_label": "Notificacions",
-      "aria_label_unread": "Notificacions ({count} sense llegir)"
+      "title": "Avisos",
+      "subtitle": "Les novetats de les teves classes i missions.",
+      "unread_count": "{count} sense llegir",
+      "open_menu_unread": "Obrir menú ({count} avís sense llegir) | Obrir menú ({count} avisos sense llegir)",
+      "mark_all_read": "Marcar-los tots com a llegits",
+      "mark_read": "Marcar com a llegit",
+      "marked_read": "Avís marcat com a llegit",
+      "all_marked": "Tots els avisos s'han marcat com a llegits",
+      "delete": "Eliminar l'avís: {title}, {time}",
+      "deleted": "Avís eliminat",
+      "filter_label": "Mostrar avisos",
+      "filter_all": "Tots",
+      "filter_unread": "Sense llegir",
+      "new": "Nou",
+      "unread_status": "sense llegir",
+      "empty_title": "No tens cap avís",
+      "empty_description": "Quan hi hagi novetats a les teves classes, apareixeran aquí.",
+      "empty_unread_title": "No tens cap avís sense llegir",
+      "empty_unread_description": "Estàs al dia.",
+      "show_all": "Veure tots els avisos",
+      "load_error": "No s'han pogut carregar els avisos",
+      "retry": "Torna-ho a provar",
+      "action_error": "No s'ha pogut completar l'acció. Torna-ho a provar."
     },
     "errors": {
       "generic": "S'ha produït un error. Si us plau, torna-ho a provar."
@@ -324,17 +340,16 @@
       "opens_new_tab": "(s'obre en una pestanya nova)"
     },
     "notification_settings": {
-      "title": "Avisos",
-      "description": "Què t'avisem i per on. Els avisos sempre apareixen a la plataforma; el correu és opcional.",
+      "description": "Els teus avisos són sempre a «{section}», al menú. El correu és opcional.",
       "updated": "Preferències d'avisos actualitzades",
       "update_error": "No s'han pogut desar les preferències d'avisos",
       "email": {
         "title": "Avisos per correu",
-        "description": "Lliuraments revisats, invitacions i confirmacions també al teu correu."
+        "description": "Rep també al teu correu els lliuraments revisats, amb el seu percentatge, i els recordatoris de lliurament."
       },
       "reminders": {
         "title": "Recordatoris de lliurament",
-        "description": "Un avís quan quedin menys de 24 hores per al final d'una missió."
+        "description": "Un avís quan quedin menys de 24 hores per al final d'una missió que no has acabat. Si el desactives, no el reps ni a la plataforma ni per correu."
       }
     },
     "markdown": {

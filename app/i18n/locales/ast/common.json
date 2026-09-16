@@ -71,12 +71,28 @@
     },
     "notifications": {
       "title": "Avisos",
-      "panel_label": "Panel d'avisos",
-      "view_all": "Ver toos",
-      "empty": "Nun tienes avisos",
-      "unread_label": "Ensin lleer",
-      "aria_label": "Avisos",
-      "aria_label_unread": "Avisos ({count} ensin lleer)"
+      "subtitle": "Les novedaes de les tos clases y misiones.",
+      "unread_count": "{count} ensin lleer",
+      "open_menu_unread": "Abrir menú ({count} avisu ensin lleer) | Abrir menú ({count} avisos ensin lleer)",
+      "mark_all_read": "Marcar toos como lleíos",
+      "mark_read": "Marcar como lleíu",
+      "marked_read": "Avisu marcáu como lleíu",
+      "all_marked": "Tolos avisos tán marcaos como lleíos",
+      "delete": "Desaniciar l'avisu: {title}, {time}",
+      "deleted": "Avisu desaniciáu",
+      "filter_label": "Amosar avisos",
+      "filter_all": "Toos",
+      "filter_unread": "Ensin lleer",
+      "new": "Nuevu",
+      "unread_status": "ensin lleer",
+      "empty_title": "Nun tienes avisos",
+      "empty_description": "Cuando haya novedaes nes tos clases, van apaecer equí.",
+      "empty_unread_title": "Nun tienes avisos ensin lleer",
+      "empty_unread_description": "Tas al día.",
+      "show_all": "Ver tolos avisos",
+      "load_error": "Nun se pudieron cargar los avisos",
+      "retry": "Tornar a intentalo",
+      "action_error": "Nun se pudo completar l'aición. Inténtalo otra vuelta."
     },
     "errors": {
       "generic": "Hebo un fallu. Inténtalo otra vuelta."
@@ -324,17 +340,16 @@
       "opens_new_tab": "(ábrese nuna llingüeta nueva)"
     },
     "notification_settings": {
-      "title": "Avisos",
-      "description": "De qué t'avisamos y per ónde. Los avisos siempre apaecen na plataforma; el corréu ye opcional.",
+      "description": "Los tos avisos tán siempre en «{section}», nel menú. El corréu ye opcional.",
       "updated": "Preferencies d'avisos anovaes",
       "update_error": "Nun se pudieron guardar les preferencies d'avisos",
       "email": {
         "title": "Avisos per corréu",
-        "description": "Entregues revisaes, invitaciones y confirmaciones tamién nel to corréu."
+        "description": "Recibi tamién nel to corréu les entregues revisaes, col so porcentax, y los recordatorios d'entrega."
       },
       "reminders": {
         "title": "Recordatorios d'entrega",
-        "description": "Un avisu cuando queden menos de 24 hores pal final d'una misión."
+        "description": "Un avisu cuando queden menos de 24 hores pal final d'una misión que nun acabasti. Si lu desactives, nun te llega nin na plataforma nin per corréu."
       }
     },
     "markdown": {

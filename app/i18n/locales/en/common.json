@@ -71,12 +71,28 @@
     },
     "notifications": {
       "title": "Notifications",
-      "panel_label": "Notifications panel",
-      "view_all": "View all",
-      "empty": "You have no notifications",
-      "unread_label": "Unread",
-      "aria_label": "Notifications",
-      "aria_label_unread": "Notifications ({count} unread)"
+      "subtitle": "What's new in your classes and missions.",
+      "unread_count": "{count} unread",
+      "open_menu_unread": "Open menu ({count} unread notification) | Open menu ({count} unread notifications)",
+      "mark_all_read": "Mark all as read",
+      "mark_read": "Mark as read",
+      "marked_read": "Notification marked as read",
+      "all_marked": "All notifications marked as read",
+      "delete": "Delete notification: {title}, {time}",
+      "deleted": "Notification deleted",
+      "filter_label": "Show notifications",
+      "filter_all": "All",
+      "filter_unread": "Unread",
+      "new": "New",
+      "unread_status": "unread",
+      "empty_title": "You have no notifications",
+      "empty_description": "When something happens in your classes, you'll see it here.",
+      "empty_unread_title": "No unread notifications",
+      "empty_unread_description": "You're all caught up.",
+      "show_all": "Show all notifications",
+      "load_error": "Couldn't load your notifications",
+      "retry": "Try again",
+      "action_error": "That didn't work. Please try again."
     },
     "errors": {
       "generic": "An error occurred. Please try again."
@@ -324,17 +340,16 @@
       "opens_new_tab": "(opens in a new tab)"
     },
     "notification_settings": {
-      "title": "Alerts",
-      "description": "What we tell you about, and where. Alerts always appear in the platform; email is optional.",
-      "updated": "Alert preferences updated",
-      "update_error": "Alert preferences could not be saved",
+      "description": "Your notifications are always in \"{section}\", in the menu. Email is optional.",
+      "updated": "Notification preferences updated",
+      "update_error": "Notification preferences could not be saved",
       "email": {
-        "title": "Email alerts",
-        "description": "Reviewed work, invitations and confirmations also sent to your inbox."
+        "title": "Email notifications",
+        "description": "Also get reviewed submissions, with their percentage, and deadline reminders in your inbox."
       },
       "reminders": {
         "title": "Deadline reminders",
-        "description": "An alert when a mission has less than 24 hours left."
+        "description": "A notification when a mission you haven't finished has less than 24 hours left. If you turn it off, you won't get it in the platform or by email."
       }
     },
     "markdown": {

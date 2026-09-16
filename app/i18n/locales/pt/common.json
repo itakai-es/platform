@@ -70,13 +70,29 @@
       "join_request_reject_error": "Erro ao recusar o pedido"
     },
     "notifications": {
-      "title": "Notificações",
-      "panel_label": "Painel de notificações",
-      "view_all": "Ver todas",
-      "empty": "Não tens notificações",
-      "unread_label": "Não lida",
-      "aria_label": "Notificações",
-      "aria_label_unread": "Notificações ({count} por ler)"
+      "title": "Avisos",
+      "subtitle": "As novidades das tuas turmas e missões.",
+      "unread_count": "{count} por ler",
+      "open_menu_unread": "Abrir menu ({count} aviso por ler) | Abrir menu ({count} avisos por ler)",
+      "mark_all_read": "Marcar todos como lidos",
+      "mark_read": "Marcar como lido",
+      "marked_read": "Aviso marcado como lido",
+      "all_marked": "Todos os avisos foram marcados como lidos",
+      "delete": "Eliminar o aviso: {title}, {time}",
+      "deleted": "Aviso eliminado",
+      "filter_label": "Mostrar avisos",
+      "filter_all": "Todos",
+      "filter_unread": "Por ler",
+      "new": "Novo",
+      "unread_status": "por ler",
+      "empty_title": "Não tens avisos",
+      "empty_description": "Quando houver novidades nas tuas turmas, vão aparecer aqui.",
+      "empty_unread_title": "Não tens avisos por ler",
+      "empty_unread_description": "Está tudo em dia.",
+      "show_all": "Ver todos os avisos",
+      "load_error": "Não foi possível carregar os avisos",
+      "retry": "Tentar novamente",
+      "action_error": "Não foi possível concluir a ação. Tenta novamente."
     },
     "errors": {
       "generic": "Ocorreu um erro. Tenta novamente."
@@ -324,17 +340,16 @@
       "opens_new_tab": "(abre num novo separador)"
     },
     "notification_settings": {
-      "title": "Avisos",
-      "description": "Do que te avisamos e por onde. Os avisos aparecem sempre na plataforma; o email é opcional.",
+      "description": "Os teus avisos estão sempre em «{section}», no menu. O email é opcional.",
       "updated": "Preferências de avisos atualizadas",
       "update_error": "Não foi possível guardar as preferências de avisos",
       "email": {
         "title": "Avisos por email",
-        "description": "Entregas revistas, convites e confirmações também no teu email."
+        "description": "Recebe também no teu email as entregas revistas, com a respetiva percentagem, e os lembretes de entrega."
       },
       "reminders": {
         "title": "Lembretes de entrega",
-        "description": "Um aviso quando faltarem menos de 24 horas para o fim de uma missão."
+        "description": "Um aviso quando faltarem menos de 24 horas para o fim de uma missão que ainda não terminaste. Se o desativares, não o recebes nem na plataforma nem por email."
       }
     },
     "markdown": {

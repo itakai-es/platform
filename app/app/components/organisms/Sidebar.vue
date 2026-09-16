@@ -144,6 +144,8 @@
             :label="item.label ?? ''"
             :icon="item.icon"
             :exact="item.exact"
+            :badge="item.badge"
+            :badge-label="item.badgeLabel"
             :indent="item.indent"
           />
         </template>
@@ -211,6 +213,10 @@ const auth = useAuthStore()
 interface NavItem {
   type?: 'header' | 'link' | 'divider'
   label?: string
+  /** Contador de pendientes junto a la etiqueta (p. ej. avisos sin leer). */
+  badge?: number
+  /** Qué cuenta el contador, para el lector de pantalla (p. ej. «3 sin leer»). */
+  badgeLabel?: string
   to?: string
   icon?: any
   exact?: boolean

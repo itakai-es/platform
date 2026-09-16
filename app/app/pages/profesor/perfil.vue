@@ -251,8 +251,8 @@
               </div>
             </Card>
 
-            <!-- Avisos -->
-            <NotificationSettingsCard />
+            <!-- Sin tarjeta de avisos: al profesorado no le llega ningún correo ni
+                 recordatorio, así que sus interruptores no le cambiarían nada. -->
 
             <!-- Accesibilidad -->
             <AccessibilitySettingsCard />

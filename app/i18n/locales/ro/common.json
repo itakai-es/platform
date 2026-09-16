@@ -71,12 +71,28 @@
     },
     "notifications": {
       "title": "Notificări",
-      "panel_label": "Panou de notificări",
-      "view_all": "Vezi toate",
-      "empty": "Nu ai notificări",
-      "unread_label": "Necitită",
-      "aria_label": "Notificări",
-      "aria_label_unread": "Notificări ({count} necitite)"
+      "subtitle": "Noutățile din clasele și misiunile tale.",
+      "unread_count": "necitite: {count}",
+      "open_menu_unread": "Deschide meniul (notificări necitite: {count})",
+      "mark_all_read": "Marchează toate ca citite",
+      "mark_read": "Marchează ca citită",
+      "marked_read": "Notificare marcată ca citită",
+      "all_marked": "Toate notificările au fost marcate ca citite",
+      "delete": "Șterge notificarea: {title}, {time}",
+      "deleted": "Notificare ștearsă",
+      "filter_label": "Afișează notificările",
+      "filter_all": "Toate",
+      "filter_unread": "Necitite",
+      "new": "Nouă",
+      "unread_status": "necitită",
+      "empty_title": "Nu ai notificări",
+      "empty_description": "Când apar noutăți în clasele tale, le vei vedea aici.",
+      "empty_unread_title": "Nu ai notificări necitite",
+      "empty_unread_description": "Ești la zi.",
+      "show_all": "Vezi toate notificările",
+      "load_error": "Notificările nu au putut fi încărcate",
+      "retry": "Încearcă din nou",
+      "action_error": "Acțiunea nu a putut fi finalizată. Încearcă din nou."
     },
     "errors": {
       "generic": "A apărut o eroare. Încearcă din nou."
@@ -324,17 +340,16 @@
       "opens_new_tab": "(se deschide într-o filă nouă)"
     },
     "notification_settings": {
-      "title": "Anunțuri",
-      "description": "Despre ce te anunțăm și pe unde. Anunțurile apar mereu în platformă; emailul este opțional.",
-      "updated": "Preferințele de anunțuri au fost actualizate",
-      "update_error": "Preferințele de anunțuri nu au putut fi salvate",
+      "description": "Notificările tale sunt mereu în „{section}”, în meniu. Emailul este opțional.",
+      "updated": "Preferințele de notificări au fost actualizate",
+      "update_error": "Preferințele de notificări nu au putut fi salvate",
       "email": {
-        "title": "Anunțuri pe email",
-        "description": "Lucrări corectate, invitații și confirmări și pe emailul tău."
+        "title": "Notificări pe email",
+        "description": "Primește și pe email lucrările corectate, cu procentul acordat, și mementourile pentru termene."
       },
       "reminders": {
         "title": "Memento pentru termene",
-        "description": "Un anunț când mai sunt mai puțin de 24 de ore până la finalul unei misiuni."
+        "description": "O notificare când mai sunt mai puțin de 24 de ore până la finalul unei misiuni pe care nu ai terminat-o. Dacă o dezactivezi, nu o mai primești nici în platformă, nici pe email."
       }
     },
     "markdown": {

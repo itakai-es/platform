@@ -239,18 +239,22 @@ export const EMAIL_ACTION_LABELS = {
 
 export type EmailActionKey = keyof typeof EMAIL_ACTION_LABELS
 
-/** Pie de los correos de aviso: dónde se apagan. */
+/**
+ * Pie de los correos de aviso: dónde se apagan. Nombra la pestaña del perfil del
+ * alumnado (`student.profile.tabs.settings`) y la tarjeta, que se llama como el
+ * menú (`common.notifications.title`); si cambian en la app, cámbialos aquí.
+ */
 export const EMAIL_FOOTER: Translations = {
-  es: 'Puedes desactivar estos avisos desde tu perfil, en Configuración.',
-  en: 'You can turn these alerts off in your profile, under Settings.',
-  ca: 'Pots desactivar aquests avisos al teu perfil, a Configuració.',
-  val: 'Pots desactivar estos avisos al teu perfil, en Configuració.',
-  eu: 'Abisu hauek zure profilean desaktiba ditzakezu, Konfigurazioan.',
-  gl: 'Podes desactivar estes avisos no teu perfil, en Configuración.',
-  ast: 'Pues desactivar estos avisos nel to perfil, en Configuración.',
-  pt: 'Podes desativar estes avisos no teu perfil, em Configuração.',
-  el: 'Μπορείς να απενεργοποιήσεις αυτές τις ειδοποιήσεις από το προφίλ σου, στις Ρυθμίσεις.',
-  ro: 'Poți dezactiva aceste anunțuri din profilul tău, la Configurare.',
+  es: 'Puedes desactivar estos correos en tu perfil, pestaña «Configuración», apartado «Avisos».',
+  en: 'You can turn these emails off in your profile, "Settings" tab, "Notifications" section.',
+  ca: 'Pots desactivar aquests correus al teu perfil, pestanya «Configuració», apartat «Avisos».',
+  val: 'Pots desactivar estos correus en el teu perfil, pestanya «Configuració», apartat «Avisos».',
+  eu: 'Mezu hauek zure profilean desaktiba ditzakezu, «Ezarpenak» fitxako «Abisuak» atalean.',
+  gl: 'Podes desactivar estes correos no teu perfil, lapela «Configuración», apartado «Avisos».',
+  ast: 'Pues desactivar estos correos nel to perfil, pestaña «Configuración», apartáu «Avisos».',
+  pt: 'Podes desativar estes emails no teu perfil, separador «Definições», secção «Avisos».',
+  el: 'Μπορείς να απενεργοποιήσεις αυτά τα email από το προφίλ σου, καρτέλα «Ρυθμίσεις», ενότητα «Ειδοποιήσεις».',
+  ro: 'Poți dezactiva aceste emailuri din profilul tău, fila „Setări”, secțiunea „Notificări”.',
 }
 
 export const DEFAULT_LANGUAGE: AppLanguage = 'es'

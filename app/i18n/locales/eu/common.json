@@ -70,13 +70,29 @@
       "join_request_reject_error": "Eskaera baztertzean errore bat gertatu da"
     },
     "notifications": {
-      "title": "Jakinarazpenak",
-      "panel_label": "Jakinarazpenen panela",
-      "view_all": "Ikusi guztiak",
-      "empty": "Ez duzu jakinarazpenik",
-      "unread_label": "Irakurri gabea",
-      "aria_label": "Jakinarazpenak",
-      "aria_label_unread": "Jakinarazpenak ({count} irakurri gabe)"
+      "title": "Abisuak",
+      "subtitle": "Zure klase eta misioetako berritasunak.",
+      "unread_count": "{count} irakurri gabe",
+      "open_menu_unread": "Menua ireki (irakurri gabeko abisu {count}) | Menua ireki (irakurri gabeko {count} abisu)",
+      "mark_all_read": "Denak irakurritzat markatu",
+      "mark_read": "Irakurritzat markatu",
+      "marked_read": "Abisua irakurritzat markatu da",
+      "all_marked": "Abisu guztiak irakurritzat markatu dira",
+      "delete": "Abisua ezabatu: {title}, {time}",
+      "deleted": "Abisua ezabatu da",
+      "filter_label": "Abisuak erakutsi",
+      "filter_all": "Denak",
+      "filter_unread": "Irakurri gabeak",
+      "new": "Berria",
+      "unread_status": "irakurri gabea",
+      "empty_title": "Ez duzu abisurik",
+      "empty_description": "Zure klaseetan berritasunik dagoenean, hemen agertuko dira.",
+      "empty_unread_title": "Ez duzu irakurri gabeko abisurik",
+      "empty_unread_description": "Egunean zaude.",
+      "show_all": "Abisu guztiak ikusi",
+      "load_error": "Ezin izan dira abisuak kargatu",
+      "retry": "Saiatu berriro",
+      "action_error": "Ezin izan da ekintza osatu. Saiatu berriro."
     },
     "errors": {
       "generic": "Errore bat gertatu da. Mesedez, saiatu berriro."
@@ -324,17 +340,16 @@
       "opens_new_tab": "(fitxa berri batean irekitzen da)"
     },
     "notification_settings": {
-      "title": "Abisuak",
-      "description": "Zeren berri ematen dizugun eta nondik. Abisuak beti agertzen dira plataforman; posta aukerakoa da.",
+      "description": "Zure abisuak beti daude «{section}» atalean, menuan. Posta aukerakoa da.",
       "updated": "Abisuen hobespenak eguneratu dira",
       "update_error": "Ezin izan dira abisuen hobespenak gorde",
       "email": {
         "title": "Abisuak postaz",
-        "description": "Berrikusitako entregak, gonbidapenak eta baieztapenak zure postan ere."
+        "description": "Jaso zure postan ere berrikusitako entregak, beren ehunekoarekin, eta entregen gogorarazpenak."
       },
       "reminders": {
         "title": "Entregen gogorarazpenak",
-        "description": "Abisu bat misio bat amaitzeko 24 ordu baino gutxiago falta direnean."
+        "description": "Abisu bat amaitu ez duzun misio bati 24 ordu baino gutxiago falta zaizkionean. Desaktibatzen baduzu, ez duzu jasoko ez plataforman ez postaz."
       }
     },
     "markdown": {
