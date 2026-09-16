@@ -57,7 +57,15 @@ export const changelog: ChangelogEntry[] = [
       },
       {
         type: 'new',
-        text: 'Avisos por correo para el alumnado: un recordatorio un día antes de que venza una misión, un aviso cuando se revisa su entrega con el porcentaje de completado, y la respuesta a su solicitud para unirse a una clase. Cada correo sale en el idioma de quien lo recibe.',
+        text: 'Avisos dentro de ITAKAI: en el menú de la izquierda tienes «Avisos», con el número de los que no has leído (en el móvil, también sobre el botón del menú). Cada aviso te lleva a lo que avisa, y puedes marcarlos como leídos o borrarlos.',
+      },
+      {
+        type: 'new',
+        text: 'Cuando un alumno entrega un enigma te llega un aviso que abre directamente sus entregas, listas para valorar.',
+      },
+      {
+        type: 'new',
+        text: 'Avisos por correo para el alumnado: un recordatorio un día antes de que venza una misión, y un aviso cuando se revisa su entrega, con el porcentaje de completado. Cada correo sale en el idioma de quien lo recibe.',
       },
       {
         type: 'new',
@@ -96,6 +104,10 @@ export const changelog: ChangelogEntry[] = [
         text: 'El asistente de IA del editor de texto se abre en una ventana que funciona con teclado y lector de pantalla, y el mensaje «Generando» ya sale en tu idioma.',
       },
       {
+        type: 'improved',
+        text: 'La ventana para revisar entregas muestra las horas en tu idioma y se maneja mejor con el teclado.',
+      },
+      {
         type: 'fixed',
         text: 'El asistente de IA a veces tardaba mucho en cada paso. Ahora responde sin esas esperas.',
       },
@@ -106,6 +118,14 @@ export const changelog: ChangelogEntry[] = [
       {
         type: 'fixed',
         text: 'En las listas del centro de ayuda, los títulos y resúmenes largos ya no se cortan.',
+      },
+      {
+        type: 'fixed',
+        text: 'La lista de entregas de la clase aprobaba siempre al 100 %, sin preguntar. Se ha retirado: las entregas se revisan en cada misión, eligiendo el porcentaje.',
+      },
+      {
+        type: 'fixed',
+        text: 'Varias guías del centro de ayuda describían cosas que no existen, como invitaciones por correo o solicitudes para unirse a una clase. Ahora cuentan lo que hay: con el código de la clase se entra directamente.',
       },
       {
         type: 'fixed',
