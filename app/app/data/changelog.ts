@@ -81,7 +81,7 @@ export const changelog: ChangelogEntry[] = [
       },
       {
         type: 'improved',
-        text: 'La portada de ITAKAI enlaza al centro de ayuda, y el enlace «Documentación» lleva ahora también a la ayuda, en lugar de a una página vacía. Dentro de la ayuda, si ya has iniciado sesión, el botón «Volver a la app» te devuelve a tu panel desde el ordenador. En el móvil, el menú de la portada incluye también los ajustes de accesibilidad.',
+        text: 'La portada de ITAKAI enlaza al centro de ayuda, también desde el pie de página. Dentro de la ayuda, si ya has iniciado sesión, el botón «Volver a la app» te devuelve a tu panel desde el ordenador. En el móvil, el menú de la portada incluye también los ajustes de accesibilidad.',
       },
       {
         type: 'improved',

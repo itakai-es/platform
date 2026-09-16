@@ -57,11 +57,6 @@
               </NuxtLink>
             </li>
             <li>
-              <NuxtLink to="/ayuda" class="text-sm text-gray-300">
-                {{ $t('common.footer.documentation') }}
-              </NuxtLink>
-            </li>
-            <li>
               <a
                 href="https://gamifp.es/contacto/"
                 target="_blank"
