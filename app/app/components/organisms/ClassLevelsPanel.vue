@@ -87,10 +87,7 @@
         </div>
 
         <!-- Explica en palabras el ritmo elegido (cambia al pulsar Lento/Normal/Rápido) -->
-        <p class="flex items-start gap-2 rounded-xl bg-navy-700/5 px-3 py-2.5 text-sm text-navy-700/80">
-          <InformationCircleIcon class="w-4 h-4 mt-0.5 flex-shrink-0 text-navy-700/50" />
-          <span>{{ paceDesc }}</span>
-        </p>
+        <InfoNote>{{ paceDesc }}</InfoNote>
 
         <!-- Comparación: XP total para alcanzar niveles de referencia con cada
              ritmo. La columna del ritmo activo se resalta y cambia al pulsar. -->
@@ -279,7 +276,7 @@
 </template>
 
 <script setup lang="ts">
-import { PlusIcon, TrashIcon, InformationCircleIcon } from '@heroicons/vue/24/outline'
+import { PlusIcon, TrashIcon } from '@heroicons/vue/24/outline'
 import type { LevelConfig, LevelTier } from '~/types/class.types'
 import { tierForLevel, totalXpForLevel } from '~/utils/level-config'
 

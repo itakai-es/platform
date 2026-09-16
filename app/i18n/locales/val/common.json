@@ -15,12 +15,14 @@
       "blog": "Blog",
       "help": "Ajuda",
       "section_management": "Gestió",
-      "section_system": "Sistema"
+      "section_content": "Continguts",
+      "section_system": "Sistema",
+      "profile": "El meu perfil",
+      "logout": "Tancar sessió"
     },
     "actions": {
       "save": "Guardar",
       "cancel": "Cancel·lar",
-      "edit": "Editar",
       "rename": "Canviar el nom",
       "delete": "Eliminar",
       "open_menu": "Obrir menú",
@@ -32,6 +34,7 @@
       "create_new_account": "Crear un compte nou",
       "enter": "Entrar",
       "close": "Tancar",
+      "processing": "Processant…",
       "view_mode": "Mode de vista"
     },
     "status": {
@@ -83,11 +86,6 @@
       "teacher": "Professor",
       "admin": "Administrador",
       "admin_system": "Administrador del sistema"
-    },
-    "user_dropdown": {
-      "my_profile": "El meu perfil",
-      "logout": "Tancar sessió",
-      "user_menu_label": "Menú d'usuari"
     },
     "sidebar": {
       "new_conversation": "Nova conversa",
@@ -204,14 +202,27 @@
     },
     "help": {
       "title": "Centre d'ajuda",
-      "hero_title": "En què et podem ajudar?",
-      "hero_subtitle": "Guies, tutorials pas a pas i configuració de la plataforma. Escrites per al professorat, no per a informàtics.",
+      "hero": {
+        "todo": {
+          "title": "En què et podem ajudar?",
+          "subtitle": "Guies, tutorials i vídeos per al professorat i l'alumnat."
+        },
+        "profesor": {
+          "title": "Ajuda per al professorat",
+          "subtitle": "Guies pas a pas per a crear classes, missions i recompenses. Escrites per a docents, no per a informàtics."
+        },
+        "alumno": {
+          "title": "Ajuda per a l'alumnat",
+          "subtitle": "Com entrar en la teua classe, entregar missions i traure profit de l'XP, les monedes i el manà."
+        }
+      },
       "all_categories": "Totes les categories",
-      "article_count": "{count} articles",
+      "article_count": "Cap article | 1 article | {count} articles",
       "keep_reading": "Continuar llegint",
       "on_this_page": "En esta pàgina",
       "previous": "Anterior",
       "next": "Següent",
+      "article_pagination": "Article anterior i següent",
       "still_stuck": "No has trobat el que buscaves?",
       "contact_us": "Escriu-nos",
       "updated_on": "Actualitzat el {date}",
@@ -232,7 +243,22 @@
         "empty": "Res per «{query}»",
         "empty_hint": "Prova amb altres paraules: «lliuraments», «monedes», «nivells»."
       },
-      "most_read": "El més consultat"
+      "most_read": "El més consultat",
+      "kind": {
+        "guia": "Guia",
+        "tutorial": "Tutorial",
+        "faq": "Pregunta freqüent",
+        "video": "Vídeo"
+      },
+      "watch_video": "Mira el vídeo",
+      "scope_todo": "Tota l'ajuda",
+      "scope_label": "Secció d'ajuda",
+      "audience": {
+        "profesor": "Professorat",
+        "alumno": "Alumnat",
+        "ambos": "Professorat i alumnat"
+      },
+      "back_to_app": "Tornar a l'app"
     },
     "meta": {
       "site_title": "ITAKAI - L'aventura d'aprendre | Plataforma educativa gamificada",
@@ -294,7 +320,8 @@
       "reduce_motion": {
         "title": "Menys animació",
         "description": "Reduïx transicions i efectes de moviment."
-      }
+      },
+      "opens_new_tab": "(s'obri en una pestanya nova)"
     },
     "notification_settings": {
       "title": "Avisos",
@@ -311,7 +338,9 @@
       }
     },
     "markdown": {
-      "insert_at_end": "Inserir al final"
+      "insert_at_end": "Inserir al final",
+      "generating": "S'està generant…",
+      "send_to_ai": "Envia a la IA"
     },
     "student_preview": {
       "banner": "Estàs veient la plataforma com un alumne (demo)"

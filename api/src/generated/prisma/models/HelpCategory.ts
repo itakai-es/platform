@@ -41,6 +41,7 @@ export type HelpCategoryMinAggregateOutputType = {
   description: string | null
   icon: string | null
   accent: string | null
+  area: $Enums.HelpArea | null
   orderIndex: number | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -53,6 +54,7 @@ export type HelpCategoryMaxAggregateOutputType = {
   description: string | null
   icon: string | null
   accent: string | null
+  area: $Enums.HelpArea | null
   orderIndex: number | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -65,6 +67,7 @@ export type HelpCategoryCountAggregateOutputType = {
   description: number
   icon: number
   accent: number
+  area: number
   orderIndex: number
   createdAt: number
   updatedAt: number
@@ -87,6 +90,7 @@ export type HelpCategoryMinAggregateInputType = {
   description?: true
   icon?: true
   accent?: true
+  area?: true
   orderIndex?: true
   createdAt?: true
   updatedAt?: true
@@ -99,6 +103,7 @@ export type HelpCategoryMaxAggregateInputType = {
   description?: true
   icon?: true
   accent?: true
+  area?: true
   orderIndex?: true
   createdAt?: true
   updatedAt?: true
@@ -111,6 +116,7 @@ export type HelpCategoryCountAggregateInputType = {
   description?: true
   icon?: true
   accent?: true
+  area?: true
   orderIndex?: true
   createdAt?: true
   updatedAt?: true
@@ -210,6 +216,7 @@ export type HelpCategoryGroupByOutputType = {
   description: string | null
   icon: string | null
   accent: string
+  area: $Enums.HelpArea
   orderIndex: number
   createdAt: Date
   updatedAt: Date
@@ -245,6 +252,7 @@ export type HelpCategoryWhereInput = {
   description?: Prisma.StringNullableFilter<"HelpCategory"> | string | null
   icon?: Prisma.StringNullableFilter<"HelpCategory"> | string | null
   accent?: Prisma.StringFilter<"HelpCategory"> | string
+  area?: Prisma.EnumHelpAreaFilter<"HelpCategory"> | $Enums.HelpArea
   orderIndex?: Prisma.IntFilter<"HelpCategory"> | number
   createdAt?: Prisma.DateTimeFilter<"HelpCategory"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"HelpCategory"> | Date | string
@@ -258,6 +266,7 @@ export type HelpCategoryOrderByWithRelationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   icon?: Prisma.SortOrderInput | Prisma.SortOrder
   accent?: Prisma.SortOrder
+  area?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -274,6 +283,7 @@ export type HelpCategoryWhereUniqueInput = Prisma.AtLeast<{
   description?: Prisma.StringNullableFilter<"HelpCategory"> | string | null
   icon?: Prisma.StringNullableFilter<"HelpCategory"> | string | null
   accent?: Prisma.StringFilter<"HelpCategory"> | string
+  area?: Prisma.EnumHelpAreaFilter<"HelpCategory"> | $Enums.HelpArea
   orderIndex?: Prisma.IntFilter<"HelpCategory"> | number
   createdAt?: Prisma.DateTimeFilter<"HelpCategory"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"HelpCategory"> | Date | string
@@ -287,6 +297,7 @@ export type HelpCategoryOrderByWithAggregationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   icon?: Prisma.SortOrderInput | Prisma.SortOrder
   accent?: Prisma.SortOrder
+  area?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -307,6 +318,7 @@ export type HelpCategoryScalarWhereWithAggregatesInput = {
   description?: Prisma.StringNullableWithAggregatesFilter<"HelpCategory"> | string | null
   icon?: Prisma.StringNullableWithAggregatesFilter<"HelpCategory"> | string | null
   accent?: Prisma.StringWithAggregatesFilter<"HelpCategory"> | string
+  area?: Prisma.EnumHelpAreaWithAggregatesFilter<"HelpCategory"> | $Enums.HelpArea
   orderIndex?: Prisma.IntWithAggregatesFilter<"HelpCategory"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"HelpCategory"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"HelpCategory"> | Date | string
@@ -319,6 +331,7 @@ export type HelpCategoryCreateInput = {
   description?: string | null
   icon?: string | null
   accent?: string
+  area?: $Enums.HelpArea
   orderIndex?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -332,6 +345,7 @@ export type HelpCategoryUncheckedCreateInput = {
   description?: string | null
   icon?: string | null
   accent?: string
+  area?: $Enums.HelpArea
   orderIndex?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -345,6 +359,7 @@ export type HelpCategoryUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accent?: Prisma.StringFieldUpdateOperationsInput | string
+  area?: Prisma.EnumHelpAreaFieldUpdateOperationsInput | $Enums.HelpArea
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -358,6 +373,7 @@ export type HelpCategoryUncheckedUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accent?: Prisma.StringFieldUpdateOperationsInput | string
+  area?: Prisma.EnumHelpAreaFieldUpdateOperationsInput | $Enums.HelpArea
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -371,6 +387,7 @@ export type HelpCategoryCreateManyInput = {
   description?: string | null
   icon?: string | null
   accent?: string
+  area?: $Enums.HelpArea
   orderIndex?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -383,6 +400,7 @@ export type HelpCategoryUpdateManyMutationInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accent?: Prisma.StringFieldUpdateOperationsInput | string
+  area?: Prisma.EnumHelpAreaFieldUpdateOperationsInput | $Enums.HelpArea
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -395,6 +413,7 @@ export type HelpCategoryUncheckedUpdateManyInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accent?: Prisma.StringFieldUpdateOperationsInput | string
+  area?: Prisma.EnumHelpAreaFieldUpdateOperationsInput | $Enums.HelpArea
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -407,6 +426,7 @@ export type HelpCategoryCountOrderByAggregateInput = {
   description?: Prisma.SortOrder
   icon?: Prisma.SortOrder
   accent?: Prisma.SortOrder
+  area?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -423,6 +443,7 @@ export type HelpCategoryMaxOrderByAggregateInput = {
   description?: Prisma.SortOrder
   icon?: Prisma.SortOrder
   accent?: Prisma.SortOrder
+  area?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -435,6 +456,7 @@ export type HelpCategoryMinOrderByAggregateInput = {
   description?: Prisma.SortOrder
   icon?: Prisma.SortOrder
   accent?: Prisma.SortOrder
+  area?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -447,6 +469,10 @@ export type HelpCategorySumOrderByAggregateInput = {
 export type HelpCategoryScalarRelationFilter = {
   is?: Prisma.HelpCategoryWhereInput
   isNot?: Prisma.HelpCategoryWhereInput
+}
+
+export type EnumHelpAreaFieldUpdateOperationsInput = {
+  set?: $Enums.HelpArea
 }
 
 export type HelpCategoryCreateNestedOneWithoutArticlesInput = {
@@ -470,6 +496,7 @@ export type HelpCategoryCreateWithoutArticlesInput = {
   description?: string | null
   icon?: string | null
   accent?: string
+  area?: $Enums.HelpArea
   orderIndex?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -482,6 +509,7 @@ export type HelpCategoryUncheckedCreateWithoutArticlesInput = {
   description?: string | null
   icon?: string | null
   accent?: string
+  area?: $Enums.HelpArea
   orderIndex?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -510,6 +538,7 @@ export type HelpCategoryUpdateWithoutArticlesInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accent?: Prisma.StringFieldUpdateOperationsInput | string
+  area?: Prisma.EnumHelpAreaFieldUpdateOperationsInput | $Enums.HelpArea
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -522,6 +551,7 @@ export type HelpCategoryUncheckedUpdateWithoutArticlesInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accent?: Prisma.StringFieldUpdateOperationsInput | string
+  area?: Prisma.EnumHelpAreaFieldUpdateOperationsInput | $Enums.HelpArea
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -565,6 +595,7 @@ export type HelpCategorySelect<ExtArgs extends runtime.Types.Extensions.Internal
   description?: boolean
   icon?: boolean
   accent?: boolean
+  area?: boolean
   orderIndex?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -579,6 +610,7 @@ export type HelpCategorySelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   description?: boolean
   icon?: boolean
   accent?: boolean
+  area?: boolean
   orderIndex?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -591,6 +623,7 @@ export type HelpCategorySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   description?: boolean
   icon?: boolean
   accent?: boolean
+  area?: boolean
   orderIndex?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -603,12 +636,13 @@ export type HelpCategorySelectScalar = {
   description?: boolean
   icon?: boolean
   accent?: boolean
+  area?: boolean
   orderIndex?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type HelpCategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "name" | "description" | "icon" | "accent" | "orderIndex" | "createdAt" | "updatedAt", ExtArgs["result"]["helpCategory"]>
+export type HelpCategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "name" | "description" | "icon" | "accent" | "area" | "orderIndex" | "createdAt" | "updatedAt", ExtArgs["result"]["helpCategory"]>
 export type HelpCategoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   articles?: boolean | Prisma.HelpCategory$articlesArgs<ExtArgs>
   _count?: boolean | Prisma.HelpCategoryCountOutputTypeDefaultArgs<ExtArgs>
@@ -634,6 +668,10 @@ export type $HelpCategoryPayload<ExtArgs extends runtime.Types.Extensions.Intern
      * * Tipo de `Card` del sistema de diseño: ia, stats, clases o pending.
      */
     accent: string
+    /**
+     * * Área editorial. La ayuda pública solo lista `ayuda`; el blog tendrá su propia superficie.
+     */
+    area: $Enums.HelpArea
     orderIndex: number
     createdAt: Date
     updatedAt: Date
@@ -1067,6 +1105,7 @@ export interface HelpCategoryFieldRefs {
   readonly description: Prisma.FieldRef<"HelpCategory", 'String'>
   readonly icon: Prisma.FieldRef<"HelpCategory", 'String'>
   readonly accent: Prisma.FieldRef<"HelpCategory", 'String'>
+  readonly area: Prisma.FieldRef<"HelpCategory", 'HelpArea'>
   readonly orderIndex: Prisma.FieldRef<"HelpCategory", 'Int'>
   readonly createdAt: Prisma.FieldRef<"HelpCategory", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"HelpCategory", 'DateTime'>

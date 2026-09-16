@@ -3048,6 +3048,7 @@ export const HelpCategoryScalarFieldEnum = {
   description: 'description',
   icon: 'icon',
   accent: 'accent',
+  area: 'area',
   orderIndex: 'orderIndex',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -3068,6 +3069,9 @@ export const HelpArticleScalarFieldEnum = {
   status: 'status',
   orderIndex: 'orderIndex',
   featured: 'featured',
+  audience: 'audience',
+  kind: 'kind',
+  videoUrl: 'videoUrl',
   views: 'views',
   helpful: 'helpful',
   notHelpful: 'notHelpful',
@@ -3393,6 +3397,20 @@ export type ListEnumMessageRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$
 
 
 /**
+ * Reference to a field of type 'HelpArea'
+ */
+export type EnumHelpAreaFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HelpArea'>
+    
+
+
+/**
+ * Reference to a field of type 'HelpArea[]'
+ */
+export type ListEnumHelpAreaFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HelpArea[]'>
+    
+
+
+/**
  * Reference to a field of type 'HelpArticleStatus'
  */
 export type EnumHelpArticleStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HelpArticleStatus'>
@@ -3403,6 +3421,34 @@ export type EnumHelpArticleStatusFieldRefInput<$PrismaModel> = FieldRefInputType
  * Reference to a field of type 'HelpArticleStatus[]'
  */
 export type ListEnumHelpArticleStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HelpArticleStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'HelpAudience'
+ */
+export type EnumHelpAudienceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HelpAudience'>
+    
+
+
+/**
+ * Reference to a field of type 'HelpAudience[]'
+ */
+export type ListEnumHelpAudienceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HelpAudience[]'>
+    
+
+
+/**
+ * Reference to a field of type 'HelpArticleKind'
+ */
+export type EnumHelpArticleKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HelpArticleKind'>
+    
+
+
+/**
+ * Reference to a field of type 'HelpArticleKind[]'
+ */
+export type ListEnumHelpArticleKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HelpArticleKind[]'>
     
 
 

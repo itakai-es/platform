@@ -15,12 +15,14 @@
       "blog": "Blog",
       "help": "Help",
       "section_management": "Management",
-      "section_system": "System"
+      "section_content": "Content",
+      "section_system": "System",
+      "profile": "My profile",
+      "logout": "Log out"
     },
     "actions": {
       "save": "Save",
       "cancel": "Cancel",
-      "edit": "Edit",
       "rename": "Rename",
       "delete": "Delete",
       "open_menu": "Open menu",
@@ -32,6 +34,7 @@
       "create_new_account": "Create New Account",
       "enter": "Enter",
       "close": "Close",
+      "processing": "Processing…",
       "view_mode": "View mode"
     },
     "status": {
@@ -83,11 +86,6 @@
       "teacher": "Teacher",
       "admin": "Administrator",
       "admin_system": "System Administrator"
-    },
-    "user_dropdown": {
-      "my_profile": "My Profile",
-      "logout": "Log Out",
-      "user_menu_label": "User menu"
     },
     "sidebar": {
       "new_conversation": "New conversation",
@@ -204,14 +202,27 @@
     },
     "help": {
       "title": "Help centre",
-      "hero_title": "How can we help?",
-      "hero_subtitle": "Guides, step-by-step tutorials and platform setup. Written for teachers, not for engineers.",
+      "hero": {
+        "todo": {
+          "title": "How can we help?",
+          "subtitle": "Guides, tutorials and videos for teachers and students."
+        },
+        "profesor": {
+          "title": "Help for teachers",
+          "subtitle": "Step-by-step guides to set up classes, missions and rewards. Written for teachers, not for engineers."
+        },
+        "alumno": {
+          "title": "Help for students",
+          "subtitle": "How to join your class, hand in missions and make the most of your XP, coins and mana."
+        }
+      },
       "all_categories": "All categories",
-      "article_count": "{count} articles",
+      "article_count": "No articles | 1 article | {count} articles",
       "keep_reading": "Keep reading",
       "on_this_page": "On this page",
       "previous": "Previous",
       "next": "Next",
+      "article_pagination": "Previous and next article",
       "still_stuck": "Didn't find what you were looking for?",
       "contact_us": "Get in touch",
       "updated_on": "Updated on {date}",
@@ -232,7 +243,22 @@
         "empty": "Nothing for “{query}”",
         "empty_hint": "Try other words: “submissions”, “coins”, “levels”."
       },
-      "most_read": "Most read"
+      "most_read": "Most read",
+      "kind": {
+        "guia": "Guide",
+        "tutorial": "Tutorial",
+        "faq": "FAQ",
+        "video": "Video"
+      },
+      "watch_video": "Watch the video",
+      "scope_todo": "All help",
+      "scope_label": "Help section",
+      "audience": {
+        "profesor": "Teachers",
+        "alumno": "Students",
+        "ambos": "Teachers and students"
+      },
+      "back_to_app": "Back to the app"
     },
     "meta": {
       "site_title": "ITAKAI - The adventure of learning | Gamified Educational Platform",
@@ -294,7 +320,8 @@
       "reduce_motion": {
         "title": "Less motion",
         "description": "Reduces transitions and movement effects."
-      }
+      },
+      "opens_new_tab": "(opens in a new tab)"
     },
     "notification_settings": {
       "title": "Alerts",
@@ -311,7 +338,9 @@
       }
     },
     "markdown": {
-      "insert_at_end": "Insert at the end"
+      "insert_at_end": "Insert at the end",
+      "generating": "Generating…",
+      "send_to_ai": "Send to the AI"
     },
     "student_preview": {
       "banner": "You're viewing the platform as a student (demo)"

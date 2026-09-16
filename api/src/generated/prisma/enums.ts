@@ -178,3 +178,30 @@ export const HelpArticleStatus = {
 } as const
 
 export type HelpArticleStatus = (typeof HelpArticleStatus)[keyof typeof HelpArticleStatus]
+
+
+export const HelpAudience = {
+  profesor: 'profesor',
+  alumno: 'alumno',
+  ambos: 'ambos'
+} as const
+
+export type HelpAudience = (typeof HelpAudience)[keyof typeof HelpAudience]
+
+
+export const HelpArticleKind = {
+  guia: 'guia',
+  tutorial: 'tutorial',
+  faq: 'faq',
+  video: 'video'
+} as const
+
+export type HelpArticleKind = (typeof HelpArticleKind)[keyof typeof HelpArticleKind]
+
+
+export const HelpArea = {
+  ayuda: 'ayuda',
+  blog: 'blog'
+} as const
+
+export type HelpArea = (typeof HelpArea)[keyof typeof HelpArea]

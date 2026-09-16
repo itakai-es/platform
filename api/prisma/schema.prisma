@@ -709,6 +709,27 @@ enum HelpArticleStatus {
   publicado
 }
 
+/** A quién va dirigido un artículo. `ambos` sale en las dos portadas. */
+enum HelpAudience {
+  profesor
+  alumno
+  ambos
+}
+
+/** Forma del contenido. `video` pinta `videoUrl` encima del cuerpo y exige URL para publicarse. */
+enum HelpArticleKind {
+  guia
+  tutorial
+  faq
+  video
+}
+
+/** Área editorial de una categoría; sus artículos la heredan. */
+enum HelpArea {
+  ayuda
+  blog
+}
+
 model HelpCategory {
   id          String   @id @default(uuid())
   slug        String   @unique
@@ -717,13 +738,16 @@ model HelpCategory {
   /** Nombre del icono del sistema de diseño (ver `app/utils/help-icons.ts`). */
   icon        String?
   /** Tipo de `Card` del sistema de diseño: ia, stats, clases o pending. */
-  accent      String   @default("purple")
+  accent      String   @default("stats")
+  /** Área editorial. La ayuda pública solo lista `ayuda`; el blog tendrá su propia superficie. */
+  area        HelpArea @default(ayuda)
   orderIndex  Int      @default(0) @map("order_index")
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
   articles HelpArticle[]
 
+  @@index([area, orderIndex])
   @@map("help_categories")
 }
 
@@ -751,6 +775,12 @@ model HelpArticle {
   orderIndex Int               @default(0) @map("order_index")
   /** Aparece en «lo más consultado» de la portada. Curado, no automático. */
   featured   Boolean           @default(false)
+  /** Audiencia. Por defecto profesorado: es lo que era todo el contenido hasta ahora. */
+  audience   HelpAudience      @default(profesor)
+  /** Tipo editorial. `video` solo aloja la URL: el vídeo se aloja fuera de la plataforma. */
+  kind       HelpArticleKind   @default(guia)
+  /** URL https de YouTube, Vimeo o fichero .mp4/.webm. Solo se guarda si `kind = video`. */
+  videoUrl   String?           @map("video_url")
   views      Int               @default(0)
   helpful    Int               @default(0)
   notHelpful Int               @default(0) @map("not_helpful")

@@ -5,7 +5,9 @@
          onda decorativa pensada para ir sobre la foto de la portada; en una
          página de documentación solo estorba. -->
     <header class="sticky top-0 z-40 border-b border-border-primary bg-surface">
-      <div class="container mx-auto flex max-w-5xl items-center gap-4 px-4 py-3 md:px-6 lg:px-8">
+      <div
+        class="container mx-auto flex max-w-5xl flex-wrap items-center gap-4 px-4 py-3 md:px-6 lg:px-8"
+      >
         <NuxtLink
           to="/"
           class="flex shrink-0 items-center"
@@ -15,7 +17,7 @@
         </NuxtLink>
 
         <NuxtLink
-          to="/ayuda"
+          :to="portalPath(scope)"
           class="text-sm font-semibold text-navy-700 transition-colors hover:text-purple"
         >
           {{ t('common.help.title') }}
@@ -25,6 +27,16 @@
           <AccessibilityMenu variant="dark" />
           <LanguageSwitcher variant="dark" />
           <Button
+            v-if="authStore.isAuthenticated"
+            variant="outline"
+            size="sm"
+            class="ml-1 hidden sm:inline-flex"
+            @click="router.push(getDashboardByRole(authStore.userRole ?? ''))"
+          >
+            {{ t('common.help.back_to_app') }}
+          </Button>
+          <Button
+            v-else
             variant="primary"
             size="sm"
             class="ml-1 hidden sm:inline-flex"
@@ -33,6 +45,18 @@
             {{ t('common.actions.enter') }}
           </Button>
         </div>
+
+        <!-- Selector de portada: toda la ayuda, profesorado o alumnado. Va
+             detrás de los controles también en el DOM, sin `order`, para que
+             el tabulador siga el orden visual. En pantallas estrechas baja a
+             una segunda fila a lo ancho, para que la barra no desborde. -->
+        <OptionPillGroup
+          :model-value="scope"
+          :options="scopeOptions"
+          :columns="3"
+          :aria-label="t('common.help.scope_label')"
+          class="w-full sm:w-auto"
+        />
       </div>
     </header>
 
@@ -51,15 +75,37 @@
 </template>
 
 <script setup lang="ts">
+import { getDashboardByRole } from '~/utils/navigation'
+import type { HelpScope } from '~/types/help.types'
+
 /**
  * Layout del centro de ayuda (Fase 3, punto 17).
  *
- * Barra propia y sobria —logo, acceso a la ayuda, accesibilidad e idioma—, que
- * no flota sobre el contenido, así que las páginas no tienen que dejar huecos
- * ni esquivar decoraciones. El pie sí es el mismo que el del landing: de cara
- * al público son la misma web.
+ * Barra propia y sobria —logo, acceso a la ayuda, selector de portada,
+ * accesibilidad e idioma—, que no flota sobre el contenido, así que las páginas
+ * no tienen que dejar huecos ni esquivar decoraciones. El pie sí es el mismo
+ * que el del landing: de cara al público son la misma web.
+ *
+ * El layout no elige la portada: la fijan las páginas (cada portada la suya y
+ * el artículo según su audiencia). Si la fijara aquí, su `onMounted` correría
+ * después del de la página y pisaría lo que esta acaba de decidir.
  */
 
 const { t } = useI18n()
 const router = useRouter()
+const authStore = useAuthStore()
+const { scope, portalPath } = useHelp()
+
+/**
+ * Las tres portadas. Las etiquetas de profesorado y alumnado son las mismas
+ * que se enseñan en las píldoras y filtros del panel.
+ */
+const scopeOptions = computed(() => [
+  { value: 'todo' as HelpScope, label: t('common.help.scope_todo'), to: portalPath('todo') },
+  ...(['profesor', 'alumno'] as const).map(value => ({
+    value: value as HelpScope,
+    label: t(`common.help.audience.${value}`),
+    to: portalPath(value),
+  })),
+])
 </script>

@@ -15,12 +15,14 @@
       "blog": "Bloga",
       "help": "Laguntza",
       "section_management": "Kudeaketa",
-      "section_system": "Sistema"
+      "section_content": "Edukiak",
+      "section_system": "Sistema",
+      "profile": "Nire profila",
+      "logout": "Saioa itxi"
     },
     "actions": {
       "save": "Gorde",
       "cancel": "Utzi",
-      "edit": "Editatu",
       "rename": "Berrizendatu",
       "delete": "Ezabatu",
       "open_menu": "Menua ireki",
@@ -32,6 +34,7 @@
       "create_new_account": "Kontu Berria Sortu",
       "enter": "Sartu",
       "close": "Itxi",
+      "processing": "Prozesatzen…",
       "view_mode": "Ikuspegi modua"
     },
     "status": {
@@ -83,11 +86,6 @@
       "teacher": "Irakaslea",
       "admin": "Administratzailea",
       "admin_system": "Sistemaren Administratzailea"
-    },
-    "user_dropdown": {
-      "my_profile": "Nire Profila",
-      "logout": "Saioa Itxi",
-      "user_menu_label": "Erabiltzailearen menua"
     },
     "sidebar": {
       "new_conversation": "Elkarrizketa berria",
@@ -204,14 +202,27 @@
     },
     "help": {
       "title": "Laguntza gunea",
-      "hero_title": "Zertan lagun diezazukegu?",
-      "hero_subtitle": "Gidak, urratsez urratseko tutorialak eta plataformaren konfigurazioa. Irakasleentzat idatzita, ez informatikarientzat.",
+      "hero": {
+        "todo": {
+          "title": "Zertan lagun diezazukegu?",
+          "subtitle": "Gidak, tutorialak eta bideoak irakasleentzat eta ikasleentzat."
+        },
+        "profesor": {
+          "title": "Irakasleentzako laguntza",
+          "subtitle": "Urratsez urratseko gidak klaseak, misioak eta sariak sortzeko. Irakasleentzat idatzita, ez informatikarientzat."
+        },
+        "alumno": {
+          "title": "Ikasleentzako laguntza",
+          "subtitle": "Nola sartu zure klasean, nola entregatu misioak eta nola atera etekina zure XPari, txanponei eta manari."
+        }
+      },
       "all_categories": "Kategoria guztiak",
-      "article_count": "{count} artikulu",
+      "article_count": "Artikulurik ez | Artikulu 1 | {count} artikulu",
       "keep_reading": "Irakurtzen jarraitu",
       "on_this_page": "Orri honetan",
       "previous": "Aurrekoa",
       "next": "Hurrengoa",
+      "article_pagination": "Aurreko eta hurrengo artikulua",
       "still_stuck": "Ez duzu bilatzen zenuena aurkitu?",
       "contact_us": "Idatzi iezaguzu",
       "updated_on": "{date}(e)an eguneratua",
@@ -232,7 +243,22 @@
         "empty": "Ezer ez «{query}» bilaketarako",
         "empty_hint": "Saiatu beste hitz batzuekin: «entregak», «txanponak», «mailak»."
       },
-      "most_read": "Gehien irakurriak"
+      "most_read": "Gehien irakurriak",
+      "kind": {
+        "guia": "Gida",
+        "tutorial": "Tutoriala",
+        "faq": "Ohiko galdera",
+        "video": "Bideoa"
+      },
+      "watch_video": "Ikusi bideoa",
+      "scope_todo": "Laguntza guztia",
+      "scope_label": "Laguntza atala",
+      "audience": {
+        "profesor": "Irakasleak",
+        "alumno": "Ikasleak",
+        "ambos": "Irakasleak eta ikasleak"
+      },
+      "back_to_app": "Itzuli aplikaziora"
     },
     "meta": {
       "site_title": "ITAKAI - Ikasteko abentura | Hezkuntza Plataforma Gamifikatua",
@@ -294,7 +320,8 @@
       "reduce_motion": {
         "title": "Animazio gutxiago",
         "description": "Trantsizioak eta mugimendu-efektuak murrizten ditu."
-      }
+      },
+      "opens_new_tab": "(fitxa berri batean irekitzen da)"
     },
     "notification_settings": {
       "title": "Abisuak",
@@ -311,7 +338,9 @@
       }
     },
     "markdown": {
-      "insert_at_end": "Txertatu amaieran"
+      "insert_at_end": "Txertatu amaieran",
+      "generating": "Sortzen…",
+      "send_to_ai": "Bidali IAri"
     },
     "student_preview": {
       "banner": "Plataforma ikasle gisa ikusten ari zara (demoa)"

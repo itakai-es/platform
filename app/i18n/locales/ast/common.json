@@ -15,12 +15,14 @@
       "blog": "Blog",
       "help": "Ayuda",
       "section_management": "Xestión",
-      "section_system": "Sistema"
+      "section_content": "Conteníos",
+      "section_system": "Sistema",
+      "profile": "El mio perfil",
+      "logout": "Zarrar sesión"
     },
     "actions": {
       "save": "Guardar",
       "cancel": "Encaboxar",
-      "edit": "Editar",
       "rename": "Renomar",
       "delete": "Desaniciar",
       "open_menu": "Abrir menú",
@@ -32,6 +34,7 @@
       "create_new_account": "Crear una cuenta nueva",
       "enter": "Entrar",
       "close": "Zarrar",
+      "processing": "Procesando…",
       "view_mode": "Mou de vista"
     },
     "status": {
@@ -83,11 +86,6 @@
       "teacher": "Profesor",
       "admin": "Alministrador",
       "admin_system": "Alministrador del sistema"
-    },
-    "user_dropdown": {
-      "my_profile": "El mio perfil",
-      "logout": "Zarrar sesión",
-      "user_menu_label": "Menú d'usuariu"
     },
     "sidebar": {
       "new_conversation": "Conversación nueva",
@@ -204,14 +202,27 @@
     },
     "help": {
       "title": "Centru d'ayuda",
-      "hero_title": "¿En qué te echamos un gabitu?",
-      "hero_subtitle": "Guíes, tutoriales pasu a pasu y configuración de la plataforma. Escrites pal profesoráu, non pa informáticos.",
+      "hero": {
+        "todo": {
+          "title": "¿En qué te echamos un gabitu?",
+          "subtitle": "Guíes, tutoriales y videos pal profesoráu y l'alumnáu."
+        },
+        "profesor": {
+          "title": "Ayuda pal profesoráu",
+          "subtitle": "Guíes pasu a pasu pa crear clases, misiones y recompenses. Escrites pa docentes, non pa informáticos."
+        },
+        "alumno": {
+          "title": "Ayuda pal alumnáu",
+          "subtitle": "Cómo entrar na to clase, entregar misiones y sacar provechu a la to XP, les tos monedes y el to maná."
+        }
+      },
       "all_categories": "Toles categoríes",
-      "article_count": "{count} artículos",
+      "article_count": "Ensin artículos | 1 artículu | {count} artículos",
       "keep_reading": "Siguir lleendo",
       "on_this_page": "Nesta páxina",
       "previous": "Anterior",
       "next": "Siguiente",
+      "article_pagination": "Artículu anterior y siguiente",
       "still_stuck": "¿Nun atopesti lo que buscabes?",
       "contact_us": "Escríbenos",
       "updated_on": "Anováu el {date}",
@@ -232,7 +243,22 @@
         "empty": "Nada por «{query}»",
         "empty_hint": "Prueba con otres pallabres: «entregues», «monedes», «niveles»."
       },
-      "most_read": "Lo más consultao"
+      "most_read": "Lo más consultao",
+      "kind": {
+        "guia": "Guía",
+        "tutorial": "Tutorial",
+        "faq": "Entruga frecuente",
+        "video": "Videu"
+      },
+      "watch_video": "Ver el videu",
+      "scope_todo": "Tola ayuda",
+      "scope_label": "Seición d'ayuda",
+      "audience": {
+        "profesor": "Profesoráu",
+        "alumno": "Alumnáu",
+        "ambos": "Profesoráu y alumnáu"
+      },
+      "back_to_app": "Volver a l'app"
     },
     "meta": {
       "site_title": "ITAKAI - L'aventura de deprender | Plataforma educativa gamificada",
@@ -294,7 +320,8 @@
       "reduce_motion": {
         "title": "Menos animación",
         "description": "Amenorga transiciones y efeutos de movimientu."
-      }
+      },
+      "opens_new_tab": "(ábrese nuna llingüeta nueva)"
     },
     "notification_settings": {
       "title": "Avisos",
@@ -311,7 +338,9 @@
       }
     },
     "markdown": {
-      "insert_at_end": "Inxertar al final"
+      "insert_at_end": "Inxertar al final",
+      "generating": "Xenerando…",
+      "send_to_ai": "Unviar a la IA"
     },
     "student_preview": {
       "banner": "Tas viendo la plataforma como un alumnu (demo)"

@@ -16,6 +16,7 @@
       :user-subtitle="t('common.roles.admin_system')"
       user-role="admin"
       :hide-god-button="true"
+      show-account
     />
 
     <!-- Mobile Sidebar -->
@@ -27,6 +28,7 @@
       badge-class="bg-red-500/20 text-red-400"
       role="admin"
       :user-name="user?.name"
+      show-account
       @close="mobileMenuOpen = false"
     />
 
@@ -51,8 +53,10 @@ import {
   ChartBarIcon,
   ServerIcon,
   BookOpenIcon,
+  NewspaperIcon,
   Cog6ToothIcon,
 } from '@heroicons/vue/24/outline'
+import { ROUTE_NAMES } from '~/utils/navigation'
 
 const { t } = useI18n()
 const authStore = useAuthStore()
@@ -115,6 +119,20 @@ const navItems = computed<AdminNavItem[]>(() => [
   },
   {
     type: 'header',
+    label: t('common.nav.section_content'),
+  },
+  {
+    to: ROUTE_NAMES.ADMIN_HELP,
+    label: t('admin.help.title'),
+    icon: BookOpenIcon,
+  },
+  {
+    to: ROUTE_NAMES.ADMIN_BLOG,
+    label: t('common.nav.blog'),
+    icon: NewspaperIcon,
+  },
+  {
+    type: 'header',
     label: t('common.nav.section_system'),
   },
   {
@@ -126,11 +144,6 @@ const navItems = computed<AdminNavItem[]>(() => [
     to: '/admin/registros',
     label: t('common.nav.logs'),
     icon: ServerIcon,
-  },
-  {
-    to: '/admin/ayuda',
-    label: t('admin.help.title'),
-    icon: BookOpenIcon,
   },
   {
     to: '/admin/configuracion',

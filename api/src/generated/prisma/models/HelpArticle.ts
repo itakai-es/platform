@@ -52,6 +52,9 @@ export type HelpArticleMinAggregateOutputType = {
   status: $Enums.HelpArticleStatus | null
   orderIndex: number | null
   featured: boolean | null
+  audience: $Enums.HelpAudience | null
+  kind: $Enums.HelpArticleKind | null
+  videoUrl: string | null
   views: number | null
   helpful: number | null
   notHelpful: number | null
@@ -72,6 +75,9 @@ export type HelpArticleMaxAggregateOutputType = {
   status: $Enums.HelpArticleStatus | null
   orderIndex: number | null
   featured: boolean | null
+  audience: $Enums.HelpAudience | null
+  kind: $Enums.HelpArticleKind | null
+  videoUrl: string | null
   views: number | null
   helpful: number | null
   notHelpful: number | null
@@ -92,6 +98,9 @@ export type HelpArticleCountAggregateOutputType = {
   status: number
   orderIndex: number
   featured: number
+  audience: number
+  kind: number
+  videoUrl: number
   views: number
   helpful: number
   notHelpful: number
@@ -128,6 +137,9 @@ export type HelpArticleMinAggregateInputType = {
   status?: true
   orderIndex?: true
   featured?: true
+  audience?: true
+  kind?: true
+  videoUrl?: true
   views?: true
   helpful?: true
   notHelpful?: true
@@ -148,6 +160,9 @@ export type HelpArticleMaxAggregateInputType = {
   status?: true
   orderIndex?: true
   featured?: true
+  audience?: true
+  kind?: true
+  videoUrl?: true
   views?: true
   helpful?: true
   notHelpful?: true
@@ -168,6 +183,9 @@ export type HelpArticleCountAggregateInputType = {
   status?: true
   orderIndex?: true
   featured?: true
+  audience?: true
+  kind?: true
+  videoUrl?: true
   views?: true
   helpful?: true
   notHelpful?: true
@@ -275,6 +293,9 @@ export type HelpArticleGroupByOutputType = {
   status: $Enums.HelpArticleStatus
   orderIndex: number
   featured: boolean
+  audience: $Enums.HelpAudience
+  kind: $Enums.HelpArticleKind
+  videoUrl: string | null
   views: number
   helpful: number
   notHelpful: number
@@ -318,6 +339,9 @@ export type HelpArticleWhereInput = {
   status?: Prisma.EnumHelpArticleStatusFilter<"HelpArticle"> | $Enums.HelpArticleStatus
   orderIndex?: Prisma.IntFilter<"HelpArticle"> | number
   featured?: Prisma.BoolFilter<"HelpArticle"> | boolean
+  audience?: Prisma.EnumHelpAudienceFilter<"HelpArticle"> | $Enums.HelpAudience
+  kind?: Prisma.EnumHelpArticleKindFilter<"HelpArticle"> | $Enums.HelpArticleKind
+  videoUrl?: Prisma.StringNullableFilter<"HelpArticle"> | string | null
   views?: Prisma.IntFilter<"HelpArticle"> | number
   helpful?: Prisma.IntFilter<"HelpArticle"> | number
   notHelpful?: Prisma.IntFilter<"HelpArticle"> | number
@@ -339,6 +363,9 @@ export type HelpArticleOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
   featured?: Prisma.SortOrder
+  audience?: Prisma.SortOrder
+  kind?: Prisma.SortOrder
+  videoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   views?: Prisma.SortOrder
   helpful?: Prisma.SortOrder
   notHelpful?: Prisma.SortOrder
@@ -364,6 +391,9 @@ export type HelpArticleWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.EnumHelpArticleStatusFilter<"HelpArticle"> | $Enums.HelpArticleStatus
   orderIndex?: Prisma.IntFilter<"HelpArticle"> | number
   featured?: Prisma.BoolFilter<"HelpArticle"> | boolean
+  audience?: Prisma.EnumHelpAudienceFilter<"HelpArticle"> | $Enums.HelpAudience
+  kind?: Prisma.EnumHelpArticleKindFilter<"HelpArticle"> | $Enums.HelpArticleKind
+  videoUrl?: Prisma.StringNullableFilter<"HelpArticle"> | string | null
   views?: Prisma.IntFilter<"HelpArticle"> | number
   helpful?: Prisma.IntFilter<"HelpArticle"> | number
   notHelpful?: Prisma.IntFilter<"HelpArticle"> | number
@@ -385,6 +415,9 @@ export type HelpArticleOrderByWithAggregationInput = {
   status?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
   featured?: Prisma.SortOrder
+  audience?: Prisma.SortOrder
+  kind?: Prisma.SortOrder
+  videoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   views?: Prisma.SortOrder
   helpful?: Prisma.SortOrder
   notHelpful?: Prisma.SortOrder
@@ -413,6 +446,9 @@ export type HelpArticleScalarWhereWithAggregatesInput = {
   status?: Prisma.EnumHelpArticleStatusWithAggregatesFilter<"HelpArticle"> | $Enums.HelpArticleStatus
   orderIndex?: Prisma.IntWithAggregatesFilter<"HelpArticle"> | number
   featured?: Prisma.BoolWithAggregatesFilter<"HelpArticle"> | boolean
+  audience?: Prisma.EnumHelpAudienceWithAggregatesFilter<"HelpArticle"> | $Enums.HelpAudience
+  kind?: Prisma.EnumHelpArticleKindWithAggregatesFilter<"HelpArticle"> | $Enums.HelpArticleKind
+  videoUrl?: Prisma.StringNullableWithAggregatesFilter<"HelpArticle"> | string | null
   views?: Prisma.IntWithAggregatesFilter<"HelpArticle"> | number
   helpful?: Prisma.IntWithAggregatesFilter<"HelpArticle"> | number
   notHelpful?: Prisma.IntWithAggregatesFilter<"HelpArticle"> | number
@@ -432,6 +468,9 @@ export type HelpArticleCreateInput = {
   status?: $Enums.HelpArticleStatus
   orderIndex?: number
   featured?: boolean
+  audience?: $Enums.HelpAudience
+  kind?: $Enums.HelpArticleKind
+  videoUrl?: string | null
   views?: number
   helpful?: number
   notHelpful?: number
@@ -453,6 +492,9 @@ export type HelpArticleUncheckedCreateInput = {
   status?: $Enums.HelpArticleStatus
   orderIndex?: number
   featured?: boolean
+  audience?: $Enums.HelpAudience
+  kind?: $Enums.HelpArticleKind
+  videoUrl?: string | null
   views?: number
   helpful?: number
   notHelpful?: number
@@ -472,6 +514,9 @@ export type HelpArticleUpdateInput = {
   status?: Prisma.EnumHelpArticleStatusFieldUpdateOperationsInput | $Enums.HelpArticleStatus
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  audience?: Prisma.EnumHelpAudienceFieldUpdateOperationsInput | $Enums.HelpAudience
+  kind?: Prisma.EnumHelpArticleKindFieldUpdateOperationsInput | $Enums.HelpArticleKind
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   views?: Prisma.IntFieldUpdateOperationsInput | number
   helpful?: Prisma.IntFieldUpdateOperationsInput | number
   notHelpful?: Prisma.IntFieldUpdateOperationsInput | number
@@ -493,6 +538,9 @@ export type HelpArticleUncheckedUpdateInput = {
   status?: Prisma.EnumHelpArticleStatusFieldUpdateOperationsInput | $Enums.HelpArticleStatus
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  audience?: Prisma.EnumHelpAudienceFieldUpdateOperationsInput | $Enums.HelpAudience
+  kind?: Prisma.EnumHelpArticleKindFieldUpdateOperationsInput | $Enums.HelpArticleKind
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   views?: Prisma.IntFieldUpdateOperationsInput | number
   helpful?: Prisma.IntFieldUpdateOperationsInput | number
   notHelpful?: Prisma.IntFieldUpdateOperationsInput | number
@@ -513,6 +561,9 @@ export type HelpArticleCreateManyInput = {
   status?: $Enums.HelpArticleStatus
   orderIndex?: number
   featured?: boolean
+  audience?: $Enums.HelpAudience
+  kind?: $Enums.HelpArticleKind
+  videoUrl?: string | null
   views?: number
   helpful?: number
   notHelpful?: number
@@ -532,6 +583,9 @@ export type HelpArticleUpdateManyMutationInput = {
   status?: Prisma.EnumHelpArticleStatusFieldUpdateOperationsInput | $Enums.HelpArticleStatus
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  audience?: Prisma.EnumHelpAudienceFieldUpdateOperationsInput | $Enums.HelpAudience
+  kind?: Prisma.EnumHelpArticleKindFieldUpdateOperationsInput | $Enums.HelpArticleKind
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   views?: Prisma.IntFieldUpdateOperationsInput | number
   helpful?: Prisma.IntFieldUpdateOperationsInput | number
   notHelpful?: Prisma.IntFieldUpdateOperationsInput | number
@@ -552,6 +606,9 @@ export type HelpArticleUncheckedUpdateManyInput = {
   status?: Prisma.EnumHelpArticleStatusFieldUpdateOperationsInput | $Enums.HelpArticleStatus
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  audience?: Prisma.EnumHelpAudienceFieldUpdateOperationsInput | $Enums.HelpAudience
+  kind?: Prisma.EnumHelpArticleKindFieldUpdateOperationsInput | $Enums.HelpArticleKind
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   views?: Prisma.IntFieldUpdateOperationsInput | number
   helpful?: Prisma.IntFieldUpdateOperationsInput | number
   notHelpful?: Prisma.IntFieldUpdateOperationsInput | number
@@ -588,6 +645,9 @@ export type HelpArticleCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
   featured?: Prisma.SortOrder
+  audience?: Prisma.SortOrder
+  kind?: Prisma.SortOrder
+  videoUrl?: Prisma.SortOrder
   views?: Prisma.SortOrder
   helpful?: Prisma.SortOrder
   notHelpful?: Prisma.SortOrder
@@ -615,6 +675,9 @@ export type HelpArticleMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
   featured?: Prisma.SortOrder
+  audience?: Prisma.SortOrder
+  kind?: Prisma.SortOrder
+  videoUrl?: Prisma.SortOrder
   views?: Prisma.SortOrder
   helpful?: Prisma.SortOrder
   notHelpful?: Prisma.SortOrder
@@ -635,6 +698,9 @@ export type HelpArticleMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
   featured?: Prisma.SortOrder
+  audience?: Prisma.SortOrder
+  kind?: Prisma.SortOrder
+  videoUrl?: Prisma.SortOrder
   views?: Prisma.SortOrder
   helpful?: Prisma.SortOrder
   notHelpful?: Prisma.SortOrder
@@ -696,6 +762,14 @@ export type EnumHelpArticleStatusFieldUpdateOperationsInput = {
   set?: $Enums.HelpArticleStatus
 }
 
+export type EnumHelpAudienceFieldUpdateOperationsInput = {
+  set?: $Enums.HelpAudience
+}
+
+export type EnumHelpArticleKindFieldUpdateOperationsInput = {
+  set?: $Enums.HelpArticleKind
+}
+
 export type HelpArticleCreateWithoutCategoryInput = {
   id?: string
   slug: string
@@ -707,6 +781,9 @@ export type HelpArticleCreateWithoutCategoryInput = {
   status?: $Enums.HelpArticleStatus
   orderIndex?: number
   featured?: boolean
+  audience?: $Enums.HelpAudience
+  kind?: $Enums.HelpArticleKind
+  videoUrl?: string | null
   views?: number
   helpful?: number
   notHelpful?: number
@@ -726,6 +803,9 @@ export type HelpArticleUncheckedCreateWithoutCategoryInput = {
   status?: $Enums.HelpArticleStatus
   orderIndex?: number
   featured?: boolean
+  audience?: $Enums.HelpAudience
+  kind?: $Enums.HelpArticleKind
+  videoUrl?: string | null
   views?: number
   helpful?: number
   notHelpful?: number
@@ -775,6 +855,9 @@ export type HelpArticleScalarWhereInput = {
   status?: Prisma.EnumHelpArticleStatusFilter<"HelpArticle"> | $Enums.HelpArticleStatus
   orderIndex?: Prisma.IntFilter<"HelpArticle"> | number
   featured?: Prisma.BoolFilter<"HelpArticle"> | boolean
+  audience?: Prisma.EnumHelpAudienceFilter<"HelpArticle"> | $Enums.HelpAudience
+  kind?: Prisma.EnumHelpArticleKindFilter<"HelpArticle"> | $Enums.HelpArticleKind
+  videoUrl?: Prisma.StringNullableFilter<"HelpArticle"> | string | null
   views?: Prisma.IntFilter<"HelpArticle"> | number
   helpful?: Prisma.IntFilter<"HelpArticle"> | number
   notHelpful?: Prisma.IntFilter<"HelpArticle"> | number
@@ -794,6 +877,9 @@ export type HelpArticleCreateManyCategoryInput = {
   status?: $Enums.HelpArticleStatus
   orderIndex?: number
   featured?: boolean
+  audience?: $Enums.HelpAudience
+  kind?: $Enums.HelpArticleKind
+  videoUrl?: string | null
   views?: number
   helpful?: number
   notHelpful?: number
@@ -813,6 +899,9 @@ export type HelpArticleUpdateWithoutCategoryInput = {
   status?: Prisma.EnumHelpArticleStatusFieldUpdateOperationsInput | $Enums.HelpArticleStatus
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  audience?: Prisma.EnumHelpAudienceFieldUpdateOperationsInput | $Enums.HelpAudience
+  kind?: Prisma.EnumHelpArticleKindFieldUpdateOperationsInput | $Enums.HelpArticleKind
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   views?: Prisma.IntFieldUpdateOperationsInput | number
   helpful?: Prisma.IntFieldUpdateOperationsInput | number
   notHelpful?: Prisma.IntFieldUpdateOperationsInput | number
@@ -832,6 +921,9 @@ export type HelpArticleUncheckedUpdateWithoutCategoryInput = {
   status?: Prisma.EnumHelpArticleStatusFieldUpdateOperationsInput | $Enums.HelpArticleStatus
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  audience?: Prisma.EnumHelpAudienceFieldUpdateOperationsInput | $Enums.HelpAudience
+  kind?: Prisma.EnumHelpArticleKindFieldUpdateOperationsInput | $Enums.HelpArticleKind
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   views?: Prisma.IntFieldUpdateOperationsInput | number
   helpful?: Prisma.IntFieldUpdateOperationsInput | number
   notHelpful?: Prisma.IntFieldUpdateOperationsInput | number
@@ -851,6 +943,9 @@ export type HelpArticleUncheckedUpdateManyWithoutCategoryInput = {
   status?: Prisma.EnumHelpArticleStatusFieldUpdateOperationsInput | $Enums.HelpArticleStatus
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  audience?: Prisma.EnumHelpAudienceFieldUpdateOperationsInput | $Enums.HelpAudience
+  kind?: Prisma.EnumHelpArticleKindFieldUpdateOperationsInput | $Enums.HelpArticleKind
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   views?: Prisma.IntFieldUpdateOperationsInput | number
   helpful?: Prisma.IntFieldUpdateOperationsInput | number
   notHelpful?: Prisma.IntFieldUpdateOperationsInput | number
@@ -873,6 +968,9 @@ export type HelpArticleSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   status?: boolean
   orderIndex?: boolean
   featured?: boolean
+  audience?: boolean
+  kind?: boolean
+  videoUrl?: boolean
   views?: boolean
   helpful?: boolean
   notHelpful?: boolean
@@ -894,6 +992,9 @@ export type HelpArticleSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   status?: boolean
   orderIndex?: boolean
   featured?: boolean
+  audience?: boolean
+  kind?: boolean
+  videoUrl?: boolean
   views?: boolean
   helpful?: boolean
   notHelpful?: boolean
@@ -915,6 +1016,9 @@ export type HelpArticleSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   status?: boolean
   orderIndex?: boolean
   featured?: boolean
+  audience?: boolean
+  kind?: boolean
+  videoUrl?: boolean
   views?: boolean
   helpful?: boolean
   notHelpful?: boolean
@@ -936,6 +1040,9 @@ export type HelpArticleSelectScalar = {
   status?: boolean
   orderIndex?: boolean
   featured?: boolean
+  audience?: boolean
+  kind?: boolean
+  videoUrl?: boolean
   views?: boolean
   helpful?: boolean
   notHelpful?: boolean
@@ -944,7 +1051,7 @@ export type HelpArticleSelectScalar = {
   updatedAt?: boolean
 }
 
-export type HelpArticleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "categoryId" | "slug" | "title" | "summary" | "coverImage" | "body" | "locale" | "status" | "orderIndex" | "featured" | "views" | "helpful" | "notHelpful" | "publishedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["helpArticle"]>
+export type HelpArticleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "categoryId" | "slug" | "title" | "summary" | "coverImage" | "body" | "locale" | "status" | "orderIndex" | "featured" | "audience" | "kind" | "videoUrl" | "views" | "helpful" | "notHelpful" | "publishedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["helpArticle"]>
 export type HelpArticleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   category?: boolean | Prisma.HelpCategoryDefaultArgs<ExtArgs>
 }
@@ -990,6 +1097,18 @@ export type $HelpArticlePayload<ExtArgs extends runtime.Types.Extensions.Interna
      * * Aparece en «lo más consultado» de la portada. Curado, no automático.
      */
     featured: boolean
+    /**
+     * * Audiencia. Por defecto profesorado: es lo que era todo el contenido hasta ahora.
+     */
+    audience: $Enums.HelpAudience
+    /**
+     * * Tipo editorial. `video` solo aloja la URL: el vídeo se aloja fuera de la plataforma.
+     */
+    kind: $Enums.HelpArticleKind
+    /**
+     * * URL https de YouTube, Vimeo o fichero .mp4/.webm. Solo se guarda si `kind = video`.
+     */
+    videoUrl: string | null
     views: number
     helpful: number
     notHelpful: number
@@ -1431,6 +1550,9 @@ export interface HelpArticleFieldRefs {
   readonly status: Prisma.FieldRef<"HelpArticle", 'HelpArticleStatus'>
   readonly orderIndex: Prisma.FieldRef<"HelpArticle", 'Int'>
   readonly featured: Prisma.FieldRef<"HelpArticle", 'Boolean'>
+  readonly audience: Prisma.FieldRef<"HelpArticle", 'HelpAudience'>
+  readonly kind: Prisma.FieldRef<"HelpArticle", 'HelpArticleKind'>
+  readonly videoUrl: Prisma.FieldRef<"HelpArticle", 'String'>
   readonly views: Prisma.FieldRef<"HelpArticle", 'Int'>
   readonly helpful: Prisma.FieldRef<"HelpArticle", 'Int'>
   readonly notHelpful: Prisma.FieldRef<"HelpArticle", 'Int'>

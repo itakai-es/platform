@@ -15,12 +15,14 @@
       "blog": "Blog",
       "help": "Axuda",
       "section_management": "Xestión",
-      "section_system": "Sistema"
+      "section_content": "Contidos",
+      "section_system": "Sistema",
+      "profile": "O meu perfil",
+      "logout": "Pechar sesión"
     },
     "actions": {
       "save": "Gardar",
       "cancel": "Cancelar",
-      "edit": "Editar",
       "rename": "Renomear",
       "delete": "Eliminar",
       "open_menu": "Abrir menú",
@@ -32,6 +34,7 @@
       "create_new_account": "Crear Conta Nova",
       "enter": "Entrar",
       "close": "Pechar",
+      "processing": "Procesando…",
       "view_mode": "Modo de vista"
     },
     "status": {
@@ -83,11 +86,6 @@
       "teacher": "Profesor",
       "admin": "Administrador",
       "admin_system": "Administrador do Sistema"
-    },
-    "user_dropdown": {
-      "my_profile": "O Meu Perfil",
-      "logout": "Pechar Sesión",
-      "user_menu_label": "Menú de usuario"
     },
     "sidebar": {
       "new_conversation": "Nova conversa",
@@ -204,14 +202,27 @@
     },
     "help": {
       "title": "Centro de axuda",
-      "hero_title": "En que che botamos unha man?",
-      "hero_subtitle": "Guías, titoriais paso a paso e configuración da plataforma. Escritas para o profesorado, non para informáticos.",
+      "hero": {
+        "todo": {
+          "title": "En que che botamos unha man?",
+          "subtitle": "Guías, titoriais e vídeos para o profesorado e o alumnado."
+        },
+        "profesor": {
+          "title": "Axuda para o profesorado",
+          "subtitle": "Guías paso a paso para crear clases, misións e recompensas. Escritas para docentes, non para informáticos."
+        },
+        "alumno": {
+          "title": "Axuda para o alumnado",
+          "subtitle": "Como entrar na túa clase, entregar misións e sacarlle partido á túa XP, ás túas moedas e ao teu maná."
+        }
+      },
       "all_categories": "Todas as categorías",
-      "article_count": "{count} artigos",
+      "article_count": "Sen artigos | 1 artigo | {count} artigos",
       "keep_reading": "Seguir lendo",
       "on_this_page": "Nesta páxina",
       "previous": "Anterior",
       "next": "Seguinte",
+      "article_pagination": "Artigo anterior e seguinte",
       "still_stuck": "Non atopaches o que buscabas?",
       "contact_us": "Escríbenos",
       "updated_on": "Actualizado o {date}",
@@ -232,7 +243,22 @@
         "empty": "Nada por «{query}»",
         "empty_hint": "Proba con outras palabras: «entregas», «moedas», «niveis»."
       },
-      "most_read": "O máis consultado"
+      "most_read": "O máis consultado",
+      "kind": {
+        "guia": "Guía",
+        "tutorial": "Titorial",
+        "faq": "Pregunta frecuente",
+        "video": "Vídeo"
+      },
+      "watch_video": "Ver o vídeo",
+      "scope_todo": "Toda a axuda",
+      "scope_label": "Sección de axuda",
+      "audience": {
+        "profesor": "Profesorado",
+        "alumno": "Alumnado",
+        "ambos": "Profesorado e alumnado"
+      },
+      "back_to_app": "Volver á app"
     },
     "meta": {
       "site_title": "ITAKAI - A aventura de aprender | Plataforma Educativa Gamificada",
@@ -294,7 +320,8 @@
       "reduce_motion": {
         "title": "Menos animación",
         "description": "Reduce transicións e efectos de movemento."
-      }
+      },
+      "opens_new_tab": "(ábrese nunha lapela nova)"
     },
     "notification_settings": {
       "title": "Avisos",
@@ -311,7 +338,9 @@
       }
     },
     "markdown": {
-      "insert_at_end": "Inserir ao final"
+      "insert_at_end": "Inserir ao final",
+      "generating": "Xerando…",
+      "send_to_ai": "Enviar á IA"
     },
     "student_preview": {
       "banner": "Estás vendo a plataforma como un alumno (demo)"

@@ -25,16 +25,15 @@
            portada, en grande, para que se sepa dónde está uno de un vistazo. -->
       <Card :type="helpCardType(category.accent)" class="mb-6">
         <div class="flex items-start gap-4">
-          <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/60">
-            <component :is="helpIcon(category.icon)" class="h-7 w-7 text-navy-700" />
-          </span>
+          <HelpCategoryIcon :icon="category.icon" size="xl" on-card />
           <div class="min-w-0">
             <h1 class="text-2xl font-bold text-navy-700 sm:text-3xl">{{ category.name }}</h1>
-            <p v-if="category.description" class="mt-1 text-base text-navy-700/80">
+            <!-- Sin atenuar: sobre la tarjeta de color no llegaría al contraste mínimo. -->
+            <p v-if="category.description" class="mt-1 text-base text-navy-700">
               {{ category.description }}
             </p>
-            <p class="mt-3 text-xs font-medium text-navy-700/70">
-              {{ t('common.help.article_count', { count: category.total }) }}
+            <p class="mt-3 text-xs font-medium text-navy-700">
+              {{ t('common.help.article_count', { count: category.total }, category.total) }}
             </p>
           </div>
         </div>
@@ -55,21 +54,21 @@
 <script setup lang="ts">
 import { BookOpenIcon } from '@heroicons/vue/24/outline'
 import { helpCardType } from '~/utils/help-accents'
-import { helpIcon } from '~/utils/help-icons'
 
 /** Listado de una categoría del centro de ayuda (Fase 3, punto 17). */
 
 const { t } = useI18n()
 const route = useRoute()
-const { index, loadingIndex, ensureIndex, getCategory } = useHelp()
+const { index, loadingIndex, ensureIndex, getCategory, scope, portalPath } = useHelp()
 
 const slug = computed(() => String(route.params.categoria))
 const category = computed(() => getCategory(slug.value))
 
 // Mientras no se sabe el nombre de la categoría, la miga se queda en una sola:
-// pintar un separador seguido de nada solo parece un fallo.
+// pintar un separador seguido de nada solo parece un fallo. La primera lleva
+// a la portada activa (toda la ayuda, profesorado o alumnado).
 const breadcrumbs = computed(() => [
-  { label: t('common.help.title'), to: '/ayuda' },
+  { label: t('common.help.title'), to: portalPath(scope.value) },
   ...(category.value ? [{ label: category.value.name }] : []),
 ])
 

@@ -15,12 +15,14 @@
       "blog": "Blog",
       "help": "Ajutor",
       "section_management": "Administrare",
-      "section_system": "Sistem"
+      "section_content": "Conținut",
+      "section_system": "Sistem",
+      "profile": "Profilul meu",
+      "logout": "Deconectare"
     },
     "actions": {
       "save": "Salvează",
       "cancel": "Anulează",
-      "edit": "Editează",
       "rename": "Redenumește",
       "delete": "Șterge",
       "open_menu": "Deschide meniul",
@@ -32,6 +34,7 @@
       "create_new_account": "Creează un cont nou",
       "enter": "Intră",
       "close": "Închide",
+      "processing": "Se procesează…",
       "view_mode": "Mod de vizualizare"
     },
     "status": {
@@ -83,11 +86,6 @@
       "teacher": "Profesor",
       "admin": "Administrator",
       "admin_system": "Administrator de sistem"
-    },
-    "user_dropdown": {
-      "my_profile": "Profilul meu",
-      "logout": "Deconectare",
-      "user_menu_label": "Meniu utilizator"
     },
     "sidebar": {
       "new_conversation": "Conversație nouă",
@@ -204,14 +202,27 @@
     },
     "help": {
       "title": "Centru de ajutor",
-      "hero_title": "Cu ce te putem ajuta?",
-      "hero_subtitle": "Ghiduri, tutoriale pas cu pas și configurarea platformei. Scrise pentru profesori, nu pentru informaticieni.",
+      "hero": {
+        "todo": {
+          "title": "Cu ce te putem ajuta?",
+          "subtitle": "Ghiduri, tutoriale și videoclipuri pentru profesori și elevi."
+        },
+        "profesor": {
+          "title": "Ajutor pentru profesori",
+          "subtitle": "Ghiduri pas cu pas pentru a crea clase, misiuni și recompense. Scrise pentru profesori, nu pentru informaticieni."
+        },
+        "alumno": {
+          "title": "Ajutor pentru elevi",
+          "subtitle": "Cum intri în clasa ta, cum predai misiunile și cum profiți de XP, monede și mana."
+        }
+      },
       "all_categories": "Toate categoriile",
-      "article_count": "{count} articole",
+      "article_count": "Niciun articol | 1 articol | Articole: {count}",
       "keep_reading": "Continuă lectura",
       "on_this_page": "Pe această pagină",
       "previous": "Anterior",
       "next": "Următorul",
+      "article_pagination": "Articolul anterior și următorul",
       "still_stuck": "Nu ai găsit ce căutai?",
       "contact_us": "Scrie-ne",
       "updated_on": "Actualizat pe {date}",
@@ -232,7 +243,22 @@
         "empty": "Nimic pentru „{query}”",
         "empty_hint": "Încearcă alte cuvinte: „predări”, „monede”, „niveluri”."
       },
-      "most_read": "Cele mai citite"
+      "most_read": "Cele mai citite",
+      "kind": {
+        "guia": "Ghid",
+        "tutorial": "Tutorial",
+        "faq": "Întrebare frecventă",
+        "video": "Video"
+      },
+      "watch_video": "Vezi videoclipul",
+      "scope_todo": "Tot ajutorul",
+      "scope_label": "Secțiune de ajutor",
+      "audience": {
+        "profesor": "Profesori",
+        "alumno": "Elevi",
+        "ambos": "Profesori și elevi"
+      },
+      "back_to_app": "Înapoi la aplicație"
     },
     "meta": {
       "site_title": "ITAKAI - Aventura de a învăța | Platformă educațională gamificată",
@@ -294,7 +320,8 @@
       "reduce_motion": {
         "title": "Mai puțină animație",
         "description": "Reduce tranzițiile și efectele de mișcare."
-      }
+      },
+      "opens_new_tab": "(se deschide într-o filă nouă)"
     },
     "notification_settings": {
       "title": "Anunțuri",
@@ -311,7 +338,9 @@
       }
     },
     "markdown": {
-      "insert_at_end": "Inserează la final"
+      "insert_at_end": "Inserează la final",
+      "generating": "Se generează…",
+      "send_to_ai": "Trimite către IA"
     },
     "student_preview": {
       "banner": "Vezi platforma ca elev (demo)"
