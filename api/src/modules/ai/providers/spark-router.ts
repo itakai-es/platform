@@ -5,6 +5,7 @@ import type {
   GenerateTextOptions,
 } from './provider.interface.js'
 import { getAiSettings } from '../../settings/settings.service.js'
+import { openAiEndpoint } from './openai-endpoint.js'
 
 const DEFAULT_SPARK_ROUTER_BASE_URL = 'http://localhost:8000'
 const DEFAULT_SPARK_ROUTER_API_KEY = 'local-testing-key'
@@ -61,10 +62,9 @@ interface SparkImageGenerationResponse {
 }
 
 function normalizeBaseUrl(baseUrl?: string) {
-  // Se quita la barra final y un `/v1` final si lo hubiera: el proveedor añade
-  // `/v1/chat/completions` y `/v1/images/generations`, así que la base debe ser
-  // el host (poner `https://api.openai.com` o `https://api.openai.com/v1`, ambas valen).
-  return (baseUrl || DEFAULT_SPARK_ROUTER_BASE_URL).replace(/\/+$/, '').replace(/\/v1$/, '')
+  // Solo se quita la barra final: la versión (`/v1`, `/v4`…) la resuelve
+  // openAiEndpoint, que acepta tanto el host como una base ya versionada.
+  return (baseUrl || DEFAULT_SPARK_ROUTER_BASE_URL).replace(/\/+$/, '')
 }
 
 // La config se resuelve desde el panel de admin (con .env como default). Son dos
@@ -192,7 +192,7 @@ export class SparkRouterProvider implements AIProvider {
 
     try {
       const payload = await fetchJson<SparkChatCompletionResponse>(
-        `${baseUrl}/v1/chat/completions`,
+        openAiEndpoint(baseUrl, 'chat/completions'),
         {
           method: 'POST',
           headers: {
@@ -243,7 +243,7 @@ export class SparkRouterProvider implements AIProvider {
     }
 
     try {
-      const response = await fetch(`${baseUrl}/v1/chat/completions`, {
+      const response = await fetch(openAiEndpoint(baseUrl, 'chat/completions'), {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${apiKey}`,
@@ -329,7 +329,7 @@ export class SparkRouterProvider implements AIProvider {
       console.log(`[AI] 🎨 Image prompt → SparkRouter:\n${prompt}`)
 
       const payload = await fetchJson<SparkImageGenerationResponse>(
-        `${baseUrl}/v1/images/generations`,
+        openAiEndpoint(baseUrl, 'images/generations'),
         {
           method: 'POST',
           headers: {

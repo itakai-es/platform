@@ -4,6 +4,7 @@ import pdfParse from 'pdf-parse/lib/pdf-parse.js'
 import mammoth from 'mammoth'
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import { getAiSettings } from '../settings/settings.service.js'
+import { openAiEndpoint } from './providers/openai-endpoint.js'
 
 /**
  * Extrae texto de los materiales que sube el profesor (PDF, Word, texto plano)
@@ -42,10 +43,9 @@ const VISION_PROMPT =
 // (1) Visión vía el endpoint OpenAI-compatible configurado (gpt-4o, Spark, etc.).
 async function describeImageOpenAI(buffer: Buffer, mimeType: string): Promise<string> {
   const { text } = await getAiSettings()
-  const baseUrl = (text.baseUrl || '').replace(/\/+$/, '')
   const dataUri = `data:${mimeType};base64,${buffer.toString('base64')}`
 
-  const res = await fetch(`${baseUrl}/v1/chat/completions`, {
+  const res = await fetch(openAiEndpoint(text.baseUrl || '', 'chat/completions'), {
     method: 'POST',
     headers: { Authorization: `Bearer ${text.apiKey}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
