@@ -12,8 +12,10 @@ export function useApi() {
   ): Promise<T> => {
     const url = endpoint.startsWith('http') ? endpoint : `${config.public.apiBase}${endpoint}`
 
+    // Content-Type solo si hay cuerpo: Fastify rechaza con 400 una petición
+    // que anuncia JSON y llega vacía (p. ej. un DELETE).
     const headers: HeadersInit = {
-      'Content-Type': 'application/json',
+      ...(options.body !== undefined ? { 'Content-Type': 'application/json' } : {}),
       ...(options.headers || {}),
     }
 

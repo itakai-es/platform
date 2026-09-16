@@ -9,8 +9,15 @@
 <script setup lang="ts">
 // Entry point de la aplicación ITAKAI
 
-// Configurar fuentes de Google Fonts
+const { locale } = useI18n()
+const htmlLang = computed(
+  () => APP_LANGUAGES.find(lang => lang.code === locale.value)?.lang ?? locale.value
+)
+
+// Idioma del documento, al día con el que se elija: lo usan los lectores de
+// pantalla y el silabeo (`hyphens: auto`). Y las fuentes de Google Fonts.
 useHead({
+  htmlAttrs: { lang: htmlLang },
   link: [
     {
       rel: 'preconnect',

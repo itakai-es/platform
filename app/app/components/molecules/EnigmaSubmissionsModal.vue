@@ -281,9 +281,9 @@ watch(
     theme="light"
     @update:model-value="handleClose"
   >
-    <template #header>
+    <template #header="{ titleId }">
       <div class="flex items-center gap-3 flex-1 min-w-0">
-        <h3 class="text-xl font-bold text-navy-700 truncate">{{ enigma?.title }}</h3>
+        <h3 :id="titleId" class="text-xl font-bold text-navy-700 truncate">{{ enigma?.title }}</h3>
         <div v-if="enigma" class="flex items-center gap-1.5 flex-shrink-0">
           <span
             v-if="showXp"

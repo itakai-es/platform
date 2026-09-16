@@ -5,18 +5,38 @@
         <!-- Backdrop -->
         <div class="fixed inset-0 bg-black/50 transition-opacity" @click="handleBackdropClick" />
 
-        <!-- Modal Container -->
+        <!-- Modal Container. Es un diálogo: recibe el foco al abrirse, Escape
+             lo cierra como la X (si es `closable` y `closeOnEsc`, que por
+             defecto es lo contrario de `persistent`, para no descartar un
+             formulario a medias) y al cerrarse devuelve el foco. -->
         <div :class="containerClasses">
-          <div :class="modalClasses" @click.stop>
-            <!-- Header -->
+          <div
+            ref="modalRef"
+            role="dialog"
+            aria-modal="true"
+            :aria-labelledby="title || $slots.header ? titleId : undefined"
+            :aria-label="$slots.header ? title : undefined"
+            tabindex="-1"
+            :class="modalClasses"
+            @click.stop
+            @keydown.esc="handleEsc"
+            @keydown.tab="trapTab"
+          >
+            <!-- Centinela: el foco que sale hacia atrás de un reproductor
+                 incrustado (su teclado no llega aquí) vuelve al final. -->
+            <span tabindex="0" data-focus-guard class="sr-only" @focus="focusLast" />
+
+            <!-- Header. Una cabecera propia recibe `titleId` para su título;
+                 si no lo usa, `title` queda como nombre de respaldo. -->
             <div v-if="title || $slots.header" :class="headerClasses">
-              <slot name="header">
-                <h3 :class="titleClasses">{{ title }}</h3>
+              <slot name="header" :title-id="titleId">
+                <h3 :id="titleId" :class="titleClasses">{{ title }}</h3>
               </slot>
               <button
                 v-if="closable"
                 type="button"
                 :class="closeButtonClasses"
+                :aria-label="t('common.actions.close')"
                 @click="handleClose"
               >
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -39,6 +59,15 @@
             <div v-if="$slots.footer" :class="footerClasses">
               <slot name="footer" />
             </div>
+
+            <!-- Capa de menús y tooltips: dentro del diálogo para que
+                 `aria-modal` no los deje inertes. `position: fixed` los saca
+                 del recorte de `overflow-hidden`. -->
+            <div :id="layerId" />
+
+            <!-- Centinela: el foco que sale hacia delante de un reproductor
+                 incrustado vuelve al principio en vez de salir del diálogo. -->
+            <span tabindex="0" data-focus-guard class="sr-only" @focus="focusFirst" />
           </div>
         </div>
       </div>
@@ -55,6 +84,11 @@ interface Props {
   closable?: boolean
   persistent?: boolean // Prevents closing on backdrop click
   /**
+   * Escape cierra el diálogo. Sin indicar (`null`), solo si no es
+   * `persistent`. El `null` evita que Vue lo convierta en `false`.
+   */
+  closeOnEsc?: boolean | null
+  /**
    * Si true, la altura del modal se limita a la ventana y el scroll queda
    * dentro del body (header y footer se quedan pegados arriba/abajo).
    * Por defecto false para mantener el comportamiento clásico (scroll de la
@@ -69,12 +103,82 @@ const props = withDefaults(defineProps<Props>(), {
   closable: true,
   persistent: false,
   stickyChrome: false,
+  closeOnEsc: null,
 })
 
 const emit = defineEmits<{
   'update:modelValue': [value: boolean]
   close: []
 }>()
+
+const { t } = useI18n()
+
+const titleId = useId()
+const modalRef = ref<HTMLElement | null>(null)
+
+// Un id válido como selector CSS, sea cual sea el formato de `useId`.
+const layerId = `modal-layer-${useId()}`.replace(/[^\w-]/g, '-')
+provide(OVERLAY_LAYER_KEY, `#${layerId}`)
+
+const FOCUSABLE = [
+  'a[href]',
+  'button:not([disabled])',
+  'input:not([disabled])',
+  'select:not([disabled])',
+  'textarea:not([disabled])',
+  'iframe',
+  'video[controls]',
+  'audio[controls]',
+  '[tabindex]:not([tabindex="-1"])',
+]
+  .map(selector => `${selector}:not([data-focus-guard])`)
+  .join(', ')
+
+/** Los elementos del diálogo que reciben el foco con Tab, en orden. */
+function focusables(root: HTMLElement) {
+  return [...root.querySelectorAll<HTMLElement>(FOCUSABLE)].filter(
+    el => el.getClientRects().length > 0
+  )
+}
+
+function focusFirst() {
+  const root = modalRef.value
+  if (root) (focusables(root)[0] ?? root).focus()
+}
+
+function focusLast() {
+  const root = modalRef.value
+  if (root) (focusables(root).at(-1) ?? root).focus()
+}
+
+/**
+ * Retiene el foco dentro del diálogo: con `aria-modal` lo de detrás no existe
+ * para el lector, así que el teclado tampoco debe llegar ahí. La lista se
+ * calcula en cada pulsación porque el contenido del slot cambia.
+ */
+function trapTab(event: KeyboardEvent) {
+  const root = modalRef.value
+  if (!root) return
+  const list = focusables(root)
+  const first = list[0]
+  const last = list[list.length - 1]
+  if (!first || !last) {
+    event.preventDefault()
+    root.focus()
+    return
+  }
+  const active = document.activeElement
+  if (event.shiftKey && (active === first || active === root)) {
+    event.preventDefault()
+    last.focus()
+  } else if (!event.shiftKey && (active === last || active === root)) {
+    event.preventDefault()
+    first.focus()
+  }
+}
+
+/** Quien tenía el foco antes de abrir, para devolvérselo al cerrar. */
+let opener: HTMLElement | null = null
 
 const viewportClasses = computed(() =>
   props.stickyChrome
@@ -108,7 +212,7 @@ const modalClasses = computed(() => {
     ? 'flex flex-col h-[92vh] max-h-[92vh]'
     : ''
 
-  return `relative w-full ${sizes[props.size]} ${themes[props.theme]} rounded-2xl shadow-xl transition-all overflow-hidden ${layout}`
+  return `relative w-full ${sizes[props.size]} ${themes[props.theme]} rounded-2xl shadow-xl transition-all overflow-hidden focus:outline-none ${layout}`
 })
 
 const headerClasses = computed(() => {
@@ -161,32 +265,45 @@ const handleClose = () => {
   }
 }
 
+const handleEsc = (event: KeyboardEvent) => {
+  if (!(props.closeOnEsc ?? !props.persistent)) return
+  // Un diálogo anidado no debe cerrar también el que lo contiene.
+  event.stopPropagation()
+  handleClose()
+}
+
 const handleBackdropClick = () => {
   if (!props.persistent) {
     handleClose()
   }
 }
 
-// Bloquear scroll del body cuando el modal está abierto
+// Bloqueo compartido: un diálogo abierto desde otro (o desde un menú que ya
+// bloquea el scroll) no libera la página al cerrarse si queda algo abierto.
+const { lock: lockScroll, unlock: unlockScroll } = useBodyScrollLock()
+
+// Bloquear scroll del body cuando el modal está abierto, y mover el foco:
+// dentro al abrir (el nodo aparece tras el `v-if`, de ahí el `nextTick`) y
+// de vuelta a quien lo tenía al cerrar.
 watch(
   () => props.modelValue,
-  isOpen => {
-    if (import.meta.client) {
-      if (isOpen) {
-        document.body.style.overflow = 'hidden'
-      } else {
-        document.body.style.overflow = ''
-      }
+  async isOpen => {
+    if (!import.meta.client) return
+    if (isOpen) {
+      lockScroll()
+      opener = document.activeElement as HTMLElement | null
+      await nextTick()
+      modalRef.value?.focus()
+    } else {
+      unlockScroll()
+      opener?.focus()
+      opener = null
     }
   }
 )
 
 // Cleanup cuando el componente se desmonta
-onUnmounted(() => {
-  if (import.meta.client) {
-    document.body.style.overflow = ''
-  }
-})
+onUnmounted(unlockScroll)
 </script>
 
 <style scoped>

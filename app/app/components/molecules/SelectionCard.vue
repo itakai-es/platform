@@ -4,6 +4,7 @@
     v-if="variant === 'circular'"
     type="button"
     :class="circularContainerClasses"
+    :aria-pressed="selected"
     @click="emit('click')"
   >
     <div
@@ -29,7 +30,13 @@
   </button>
 
   <!-- Square variant (for themes) -->
-  <button v-else type="button" :class="squareContainerClasses" @click="emit('click')">
+  <button
+    v-else
+    type="button"
+    :class="squareContainerClasses"
+    :aria-pressed="selected"
+    @click="emit('click')"
+  >
     <component :is="icon" v-if="icon" class="w-8 h-8 text-navy-700 mx-auto mb-2" />
     <img v-else-if="image" :src="image" :alt="title" class="w-8 h-8 mx-auto mb-2 object-contain" />
     <p class="font-medium text-navy-700">{{ title }}</p>
@@ -61,7 +68,7 @@ const emit = defineEmits<{
 
 const circularContainerClasses = computed(() => {
   const base =
-    'flex flex-col items-center p-2 sm:p-3 rounded-xl sm:rounded-2xl transition-all focus:outline-none focus:ring-2 focus:ring-navy-700/30'
+    'flex flex-col items-center p-2 sm:p-3 rounded-xl sm:rounded-2xl transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-navy-700 focus-visible:ring-offset-1'
 
   const selectedClasses = props.selected
     ? 'bg-white/50 ring-2 sm:ring-4 ring-navy-700/30'
@@ -72,7 +79,7 @@ const circularContainerClasses = computed(() => {
 
 const squareContainerClasses = computed(() => {
   const base =
-    'p-4 rounded-xl border-2 transition-all text-center focus:outline-none focus:ring-2 focus:ring-navy-700/30'
+    'p-4 rounded-xl border-2 transition-all text-center focus:outline-none focus-visible:ring-2 focus-visible:ring-navy-700 focus-visible:ring-offset-1'
 
   const selectedClasses = props.selected
     ? 'border-navy-700 bg-navy-700/5'

@@ -121,6 +121,7 @@
         v-model="content"
         class="w-full h-full p-4 resize-none font-mono text-sm text-navy-700 outline-none"
         placeholder="Escribe en formato Markdown..."
+        :aria-labelledby="labelledby"
         @input="pushUndo"
       />
       <div v-else class="h-full p-4 overflow-auto bg-gray-50">
@@ -136,6 +137,7 @@
           v-model="content"
           class="w-full h-full p-4 resize-none font-mono text-sm text-navy-700 outline-none"
           placeholder="Escribe en formato Markdown..."
+          :aria-labelledby="labelledby"
           @input="pushUndo"
           @scroll="syncScroll"
         />
@@ -149,106 +151,91 @@
       </div>
     </div>
 
-    <!-- AI Modal -->
-    <Teleport to="body">
-      <Transition name="modal">
-        <div v-if="showAiModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div class="absolute inset-0 bg-black/50" />
-          <div
-            class="relative w-full max-w-4xl max-h-[85vh] flex flex-col bg-white rounded-2xl shadow-xl overflow-hidden"
-          >
-            <!-- Modal header -->
-            <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-              <div class="flex items-center gap-3">
-                <img :src="godAvatar" :alt="godName" class="w-10 h-10 rounded-full" />
-                <div>
-                  <p class="font-bold text-navy-700">{{ godName }}</p>
-                  <p class="text-xs text-text-secondary">{{ contextLabel }}</p>
-                </div>
-              </div>
-              <button
-                type="button"
-                class="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
-                :disabled="aiLoading"
-                @click="closeAiModal"
-              >
-                <XMarkIcon class="w-5 h-5" />
-              </button>
-            </div>
-
-            <!-- Modal content -->
-            <div class="flex-1 overflow-y-auto p-6 space-y-4">
-              <!-- AI suggestion (streamed) -->
-              <div
-                v-if="aiSuggestion"
-                class="bg-gray-50 rounded-xl p-6 md-rendered"
-                v-html="renderPageMarkdown(aiSuggestion)"
-              />
-
-              <!-- Loading -->
-              <div
-                v-if="aiLoading && !aiSuggestion"
-                class="flex items-center gap-2 text-text-secondary text-sm py-8 justify-center"
-              >
-                <SparklesIcon class="w-4 h-4 animate-pulse" />
-                <span>Generando...</span>
-              </div>
-
-              <!-- Empty state -->
-              <div v-if="!aiSuggestion && !aiLoading" class="text-center py-8">
-                <p class="text-text-secondary text-sm">{{ aiModalHint }}</p>
-              </div>
-            </div>
-
-            <!-- Accept/Reject (when suggestion ready) -->
-            <div
-              v-if="aiSuggestion && !aiLoading"
-              class="px-6 py-3 border-t border-gray-100 flex items-center justify-between"
-            >
-              <Button variant="outline" size="sm" @click="aiSuggestion = ''"
-                >Quiero cambiar algo</Button
-              >
-              <div class="flex gap-2">
-                <Button variant="ghost" size="sm" @click="closeAiModal">Descartar</Button>
-                <Button variant="outline" size="sm" @click="replaceAllWithSuggestion"
-                  >Reemplazar todo</Button
-                >
-                <Button variant="primary" size="sm" @click="acceptAiSuggestion"
-                  >{{ t('common.markdown.insert_at_end') }}</Button
-                >
-              </div>
-            </div>
-
-            <!-- Input (when no suggestion or wants to change) -->
-            <div v-if="!aiSuggestion && !aiLoading" class="px-6 py-3 border-t border-gray-100">
-              <div class="flex gap-2">
-                <input
-                  ref="aiInputRef"
-                  v-model="aiInput"
-                  type="text"
-                  class="flex-1 px-4 py-2.5 rounded-xl bg-gray-50 border border-gray-200 text-sm text-navy-700 outline-none focus:ring-2 focus:ring-gray-300"
-                  :placeholder="aiPlaceholder || 'Dile a la IA qué quieres...'"
-                  @keydown.enter="sendAi"
-                />
-                <button
-                  type="button"
-                  class="px-3.5 py-2.5 rounded-xl bg-navy-700 text-white disabled:opacity-40 hover:opacity-90 transition-colors"
-                  :disabled="!aiInput.trim()"
-                  @click="sendAi"
-                >
-                  <PaperAirplaneIcon class="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-
-            <!-- Input for feedback on suggestion -->
-            <div v-if="aiSuggestion && !aiLoading" class="px-6 pb-4">
-              <!-- feedback already handled by "Quiero cambiar algo" which clears suggestion and shows input -->
-            </div>
+    <!-- AI Modal. Es un diálogo propio (Modal): así tiene su rol, su trampa
+         de foco y su Escape aunque se abra desde otro diálogo. -->
+    <Modal
+      :model-value="showAiModal"
+      :title="godName"
+      size="xl"
+      sticky-chrome
+      close-on-esc
+      :closable="!aiLoading"
+      @close="closeAiModal"
+    >
+      <template #header="{ titleId }">
+        <div class="flex items-center gap-3">
+          <img :src="godAvatar" alt="" class="w-10 h-10 rounded-full" />
+          <div>
+            <h3 :id="titleId" class="font-bold text-navy-700">{{ godName }}</h3>
+            <p class="text-xs text-text-secondary">{{ contextLabel }}</p>
           </div>
         </div>
-      </Transition>
-    </Teleport>
+      </template>
+
+      <div class="space-y-4">
+        <!-- AI suggestion (streamed) -->
+        <div
+          v-if="aiSuggestion"
+          class="bg-gray-50 rounded-xl p-6 md-rendered"
+          v-html="renderPageMarkdown(aiSuggestion)"
+        />
+
+        <!-- Loading -->
+        <div
+          v-if="aiLoading && !aiSuggestion"
+          role="status"
+          class="flex items-center gap-2 text-text-secondary text-sm py-8 justify-center"
+        >
+          <SparklesIcon class="w-4 h-4 animate-pulse" aria-hidden="true" />
+          <span>{{ t('common.markdown.generating') }}</span>
+        </div>
+
+        <!-- Empty state -->
+        <div v-if="!aiSuggestion && !aiLoading" class="text-center py-8">
+          <p class="text-text-secondary text-sm">{{ aiModalHint }}</p>
+        </div>
+      </div>
+
+      <template v-if="!aiLoading" #footer>
+        <!-- Accept/Reject (when suggestion ready) -->
+        <div v-if="aiSuggestion" class="w-full flex items-center justify-between gap-2">
+          <Button variant="outline" size="sm" @click="aiSuggestion = ''"
+            >Quiero cambiar algo</Button
+          >
+          <div class="flex gap-2">
+            <Button variant="ghost" size="sm" @click="closeAiModal">Descartar</Button>
+            <Button variant="outline" size="sm" @click="replaceAllWithSuggestion"
+              >Reemplazar todo</Button
+            >
+            <Button variant="primary" size="sm" @click="acceptAiSuggestion">{{
+              t('common.markdown.insert_at_end')
+            }}</Button>
+          </div>
+        </div>
+
+        <!-- Input (when no suggestion or wants to change) -->
+        <div v-else class="w-full flex gap-2">
+          <input
+            ref="aiInputRef"
+            v-model="aiInput"
+            type="text"
+            class="flex-1 px-4 py-2.5 rounded-xl bg-white border border-gray-200 text-sm text-navy-700 outline-none focus:ring-2 focus:ring-gray-300"
+            :placeholder="aiPlaceholder || 'Dile a la IA qué quieres...'"
+            :aria-label="aiPlaceholder || 'Dile a la IA qué quieres...'"
+            @keydown.enter="sendAi"
+          />
+          <button
+            type="button"
+            class="px-3.5 py-2.5 rounded-xl bg-navy-700 text-white disabled:opacity-40 hover:opacity-90 transition-colors"
+            :disabled="!aiInput.trim()"
+            :aria-label="t('common.markdown.send_to_ai')"
+            @click="sendAi"
+          >
+            <PaperAirplaneIcon class="w-4 h-4" aria-hidden="true" />
+          </button>
+        </div>
+      </template>
+    </Modal>
   </div>
 </template>
 
@@ -259,7 +246,6 @@ import {
   ListBulletIcon,
   PaperAirplaneIcon,
   SparklesIcon,
-  XMarkIcon,
 } from '@heroicons/vue/24/outline'
 import { renderPageMarkdown } from '~/utils/markdown'
 
@@ -276,6 +262,8 @@ const props = defineProps<{
   aiSystemContext?: string
   /** When false, hides the AI assistant button (class has content generation disabled) */
   aiEnabled?: boolean
+  /** El `id` de la etiqueta externa que da nombre al área de texto. */
+  labelledby?: string
 }>()
 
 const emit = defineEmits<{
@@ -407,7 +395,9 @@ function openAiModal() {
   showAiModal.value = true
   aiSuggestion.value = ''
   aiInput.value = ''
-  nextTick(() => aiInputRef.value?.focus())
+  // Doble `nextTick`: el Modal enfoca el diálogo tras el primero; el campo
+  // debe recibir el foco después.
+  nextTick(() => nextTick(() => aiInputRef.value?.focus()))
 }
 
 function closeAiModal() {
@@ -488,22 +478,3 @@ function acceptAiSuggestion() {
 }
 </script>
 
-<style scoped>
-/* Modal transitions */
-.modal-enter-active,
-.modal-leave-active {
-  transition: opacity 0.2s ease;
-}
-.modal-enter-from,
-.modal-leave-to {
-  opacity: 0;
-}
-.modal-enter-active .relative,
-.modal-leave-active .relative {
-  transition: transform 0.2s ease;
-}
-.modal-enter-from .relative,
-.modal-leave-to .relative {
-  transform: scale(0.95);
-}
-</style>
