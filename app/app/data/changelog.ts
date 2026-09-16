@@ -111,30 +111,6 @@ export const changelog: ChangelogEntry[] = [
         type: 'fixed',
         text: 'El asistente de IA a veces tardaba mucho en cada paso. Ahora responde sin esas esperas.',
       },
-      {
-        type: 'fixed',
-        text: 'En los artículos de ayuda, pulsar un apartado de «En esta página» recargaba el texto y hacía saltar la pantalla. Ahora baja directamente al apartado, y un enlace a un apartado concreto se abre ya en ese punto.',
-      },
-      {
-        type: 'fixed',
-        text: 'En las listas del centro de ayuda, los títulos y resúmenes largos ya no se cortan.',
-      },
-      {
-        type: 'fixed',
-        text: 'La lista de entregas de la clase aprobaba siempre al 100 %, sin preguntar. Se ha retirado: las entregas se revisan en cada misión, eligiendo el porcentaje.',
-      },
-      {
-        type: 'fixed',
-        text: 'Varias guías del centro de ayuda describían cosas que no existen, como invitaciones por correo o solicitudes para unirse a una clase. Ahora cuentan lo que hay: con el código de la clase se entra directamente.',
-      },
-      {
-        type: 'fixed',
-        text: 'Para administración: desde el panel no se podían borrar artículos del centro de ayuda.',
-      },
-      {
-        type: 'fixed',
-        text: 'Para administración: la conexión con la inteligencia artificial acepta más formas de configurarla, y el botón para probarla en el panel indica con más claridad si funciona.',
-      },
     ],
   },
   {
