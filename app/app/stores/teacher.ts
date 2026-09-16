@@ -39,7 +39,6 @@ export const useTeacherStore = defineStore('teacher', () => {
   const classRankings = ref<Map<string, any>>(new Map())
   // Per-id / per-classId data added for ensureX wrappers
   const studentDetails = ref<Map<string, any>>(new Map())
-  const classSubmissions = ref<Map<string, any>>(new Map())
 
   // Cache flags (persist during session)
   const hasLoadedStats = ref(false)
@@ -58,7 +57,6 @@ export const useTeacherStore = defineStore('teacher', () => {
   const loadedClassRankings = ref<Set<string>>(new Set())
   // Per-id / per-classId fetched flags for new ensureX wrappers
   const loadedStudentDetails = ref<Set<string>>(new Set())
-  const loadedClassSubmissions = ref<Set<string>>(new Set())
   const hasLoadedPendingRequests = ref<Set<string>>(new Set())
   const hasLoadedSentInvitations = ref<Set<string>>(new Set())
   // Per-classId fetched flag for the per-class ensureTeacherClassById wrapper
@@ -66,7 +64,6 @@ export const useTeacherStore = defineStore('teacher', () => {
 
   // In-flight guards so concurrent ensureX calls don't fire duplicate fetches
   const isLoadingClassDetails = ref<Set<string>>(new Set())
-  const isLoadingClassSubmissions = ref<Set<string>>(new Set())
   const isLoadingStudentDetails = ref<Set<string>>(new Set())
   const isLoadingTotalPending = ref(false)
 
@@ -801,45 +798,6 @@ export const useTeacherStore = defineStore('teacher', () => {
     }
   }
 
-  /**
-   * Obtiene las entregas (submissions) pendientes de una clase. Cacheadas por classId.
-   * Llama al endpoint real `/submissions/classes/:classId?status=pendiente`.
-   */
-  async function fetchClassSubmissions(classId: string, force = false) {
-    if (!force && loadedClassSubmissions.value.has(classId)) {
-      const cached = classSubmissions.value.get(classId)
-      if (cached) return cached
-    }
-    try {
-      const config = useRuntimeConfig()
-      const response = await $fetch<{ submissions: any[]; total: number }>(
-        `${config.public.apiBase}/submissions/classes/${classId}`,
-        { params: { status: 'pendiente' } }
-      )
-      classSubmissions.value.set(classId, response)
-      loadedClassSubmissions.value.add(classId)
-      return response
-    } catch (error) {
-      console.error('Error fetching class submissions:', error)
-      throw error
-    }
-  }
-
-  /**
-   * Elimina una entrega de la cache local de submissions de una clase, p.ej. después
-   * de aprobarla. No invalida el flag fetched para no forzar refetch.
-   */
-  function removeSubmissionFromCache(classId: string, submissionId: string) {
-    const cached = classSubmissions.value.get(classId)
-    if (!cached || !cached.submissions) return
-    const next = {
-      ...cached,
-      submissions: cached.submissions.filter((s: any) => s.id !== submissionId),
-    }
-    next.total = next.submissions.length
-    classSubmissions.value.set(classId, next)
-  }
-
   // ==========================================
   // ENSURE WRAPPERS — patrón canónico
   // (ver useTeacherClassDetail.ts / useStudentClassDetail.ts).
@@ -947,19 +905,6 @@ export const useTeacherStore = defineStore('teacher', () => {
     }
   }
 
-  async function ensureClassSubmissions(classId: string, force = false) {
-    if (loadedClassSubmissions.value.has(classId) && !force) {
-      return classSubmissions.value.get(classId)
-    }
-    if (isLoadingClassSubmissions.value.has(classId)) return
-    isLoadingClassSubmissions.value.add(classId)
-    try {
-      return await fetchClassSubmissions(classId, force)
-    } finally {
-      isLoadingClassSubmissions.value.delete(classId)
-    }
-  }
-
   async function ensureArchivedClasses(force = false) {
     if (hasLoadedArchivedClasses.value && !force) {
       return { classes: archivedClasses.value, total: archivedClasses.value.length }
@@ -1045,7 +990,6 @@ export const useTeacherStore = defineStore('teacher', () => {
     classGuides.value.clear()
     classRankings.value.clear()
     studentDetails.value.clear()
-    classSubmissions.value.clear()
     // Cache flags
     hasLoadedStats.value = false
     hasLoadedClasses.value = false
@@ -1062,12 +1006,10 @@ export const useTeacherStore = defineStore('teacher', () => {
     loadedClassRankings.value.clear()
     loadedClassDetails.value.clear()
     loadedStudentDetails.value.clear()
-    loadedClassSubmissions.value.clear()
     hasLoadedPendingRequests.value.clear()
     hasLoadedSentInvitations.value.clear()
     // In-flight guards
     isLoadingClassDetails.value.clear()
-    isLoadingClassSubmissions.value.clear()
     isLoadingStudentDetails.value.clear()
     isLoadingTotalPending.value = false
     // Enrollment state
@@ -1102,7 +1044,6 @@ export const useTeacherStore = defineStore('teacher', () => {
     classGuides,
     classRankings,
     studentDetails,
-    classSubmissions,
     // Fetched flags (cache de sesión)
     hasLoadedStats,
     hasLoadedClasses,
@@ -1120,7 +1061,6 @@ export const useTeacherStore = defineStore('teacher', () => {
     loadedClassRankings,
     loadedClassDetails,
     loadedStudentDetails,
-    loadedClassSubmissions,
     // Enrollment state
     pendingRequests,
     sentInvitations,
@@ -1141,8 +1081,6 @@ export const useTeacherStore = defineStore('teacher', () => {
     fetchArchivedClasses,
     fetchArchivedStudents,
     fetchStudentById,
-    fetchClassSubmissions,
-    removeSubmissionFromCache,
     createClass,
     updateClass,
     publishTemplate,
@@ -1166,7 +1104,6 @@ export const useTeacherStore = defineStore('teacher', () => {
     ensureClassRanking,
     ensureClassGuide,
     ensureStudentById,
-    ensureClassSubmissions,
     ensureArchivedClasses,
     ensurePendingRequests,
     ensureSentInvitations,

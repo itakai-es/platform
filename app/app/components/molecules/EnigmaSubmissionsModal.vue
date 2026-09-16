@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ArrowDownTrayIcon } from '@heroicons/vue/24/outline'
 import { CheckCircleIcon } from '@heroicons/vue/24/solid'
+import { formatNotificationDate, formatNotificationTime } from '~/utils/notifications'
 
 interface Enigma {
   id: string
@@ -53,7 +54,7 @@ const emit = defineEmits<Emits>()
 
 const config = useRuntimeConfig()
 const toast = useToast()
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const effects = useEffects()
 
 // State
@@ -86,13 +87,9 @@ const fetchSubmissions = async (enigmaId: string) => {
       `${config.public.apiBase}/submissions/teacher/enigmas/${enigmaId}`
     )
     submissions.value = response.submissions || []
-
-    // Debug: ver qué datos estamos recibiendo
-    if (submissions.value.length > 0) {
-    }
   } catch (err: any) {
     console.error('Error fetching submissions:', err)
-    error.value = err.data?.message || err.message || 'Error al cargar entregas'
+    error.value = err.data?.message || t('teacher.components.enigma_submissions_modal.load_error')
     submissions.value = []
   } finally {
     loading.value = false
@@ -190,7 +187,7 @@ const handleApprove = async (submission: Submission) => {
     effects.play('enigma_approved')
   } catch (err: any) {
     console.error('Error approving submission:', err)
-    toast.error(err.data?.message || err.message || 'Error al aprobar entrega')
+    toast.error(err.data?.message || t('teacher.components.enigma_submissions_modal.approve_error'))
   }
 }
 
@@ -231,18 +228,9 @@ const downloadFile = async (submission: Submission) => {
   }
 }
 
-const formatDate = (dateStr: string) => {
-  const date = new Date(dateStr)
-  const now = new Date()
-  const diffMs = now.getTime() - date.getTime()
-  const diffHours = Math.floor(diffMs / 3600000)
-  const diffDays = Math.floor(diffMs / 86400000)
-
-  if (diffHours < 1) return 'Hace menos de 1 hora'
-  if (diffHours < 24) return `Hace ${diffHours} hora${diffHours > 1 ? 's' : ''}`
-  if (diffDays < 7) return `Hace ${diffDays} día${diffDays > 1 ? 's' : ''}`
-  return date.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })
-}
+// «hace 2 horas» en el idioma de la interfaz; la fecha completa, al pasar por encima.
+const formatDate = (dateStr: string) => formatNotificationTime(dateStr, locale.value)
+const formatFullDate = (dateStr: string) => formatNotificationDate(dateStr, locale.value)
 
 const getInitials = (name: string) => {
   return name
@@ -276,7 +264,7 @@ watch(
 <template>
   <Modal
     :model-value="isOpen"
-    :title="enigma?.title || 'Entregas'"
+    :title="enigma?.title || t('teacher.components.enigma_submissions_modal.title_fallback')"
     size="lg"
     theme="light"
     @update:model-value="handleClose"
@@ -318,7 +306,7 @@ watch(
         <div class="text-center">
           <p class="text-red-500 font-semibold">{{ error }}</p>
           <Button variant="outline" size="sm" class="mt-2" @click="fetchSubmissions(enigma!.id)">
-            Reintentar
+            {{ t('teacher.components.enigma_submissions_modal.retry') }}
           </Button>
         </div>
       </div>
@@ -334,7 +322,9 @@ watch(
           >
             <CheckCircleIcon class="w-8 h-8 text-mint" />
           </div>
-          <p class="text-navy-700 font-semibold">No hay entregas pendientes de revisión</p>
+          <p class="text-navy-700 font-semibold">
+            {{ t('teacher.components.enigma_submissions_modal.empty') }}
+          </p>
         </div>
       </div>
 
@@ -364,9 +354,12 @@ watch(
             <!-- Info -->
             <div class="flex-1 min-w-0">
               <p class="font-bold text-navy-700 text-base">{{ submission.student.name }}</p>
-              <span class="text-xs text-navy-700/70 block">{{
-                formatDate(submission.submittedAt)
-              }}</span>
+              <time
+                class="text-xs text-navy-700/70 block"
+                :datetime="submission.submittedAt"
+                :title="formatFullDate(submission.submittedAt)"
+                >{{ formatDate(submission.submittedAt) }}</time
+              >
             </div>
 
             <!-- Actions -->
@@ -378,7 +371,7 @@ watch(
                 :icon-left="ArrowDownTrayIcon"
                 @click="downloadFile(submission)"
               >
-                Descargar
+                {{ t('teacher.components.enigma_submissions_modal.download') }}
               </Button>
               <Button
                 v-if="editingSubmissionId !== submission.id"
@@ -386,9 +379,11 @@ watch(
                 size="sm"
                 @click="startEditing(submission)"
               >
-                Valorar
+                {{ t('teacher.components.enigma_submissions_modal.grade') }}
               </Button>
-              <Button v-else variant="outline" size="sm" @click="cancelEditing"> Cancelar </Button>
+              <Button v-else variant="outline" size="sm" @click="cancelEditing">
+                {{ t('common.actions.cancel') }}
+              </Button>
             </div>
           </div>
 
@@ -398,13 +393,23 @@ watch(
               <div class="pt-3 border-t border-gray-100 space-y-3">
                 <!-- Selector de porcentaje -->
                 <div>
-                  <p class="text-xs font-medium text-navy-700/70 mb-1.5">% completado de la tarea</p>
-                  <div class="flex items-center gap-2 flex-wrap">
+                  <p
+                    :id="`pct-label-${submission.id}`"
+                    class="text-xs font-medium text-navy-700/70 mb-1.5"
+                  >
+                    {{ t('teacher.components.enigma_submissions_modal.pct_label') }}
+                  </p>
+                  <div
+                    class="flex items-center gap-2 flex-wrap"
+                    role="group"
+                    :aria-labelledby="`pct-label-${submission.id}`"
+                  >
                     <button
                       v-for="p in pctPresets"
                       :key="p"
                       type="button"
                       :class="chipClass(selectedPct === p)"
+                      :aria-pressed="selectedPct === p"
                       @click="selectedPct = p"
                     >
                       {{ p }}%
@@ -415,6 +420,7 @@ watch(
                         type="number"
                         min="0"
                         max="100"
+                        :aria-label="t('teacher.components.enigma_submissions_modal.pct_custom')"
                         class="w-16 px-2 py-1.5 text-sm font-semibold text-center text-navy-700 border border-gray-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors tabular-nums [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                       />
                       <span class="text-sm text-navy-700/60">%</span>
@@ -425,7 +431,9 @@ watch(
                 <!-- Previsualización de recompensas + aprobar -->
                 <div class="flex items-center justify-between gap-3 flex-wrap">
                   <div class="flex items-center gap-2.5 text-sm">
-                    <span class="text-navy-700/70">Recibirá</span>
+                    <span class="text-navy-700/70">{{
+                      t('teacher.components.enigma_submissions_modal.will_receive')
+                    }}</span>
                     <span
                       v-if="showXp"
                       class="inline-flex items-center gap-1 font-semibold text-navy-700"
@@ -451,7 +459,9 @@ watch(
                     :disabled="!selectedPct || selectedPct <= 0"
                     @click="handleApprove(submission)"
                   >
-                    Aprobar {{ selectedPct }}%
+                    {{
+                      t('teacher.components.enigma_submissions_modal.approve', { pct: selectedPct })
+                    }}
                   </Button>
                 </div>
               </div>
@@ -463,7 +473,7 @@ watch(
 
     <template #footer>
       <div class="flex justify-center">
-        <Button variant="primary" @click="handleClose"> Cerrar </Button>
+        <Button variant="primary" @click="handleClose">{{ t('common.actions.close') }}</Button>
       </div>
     </template>
   </Modal>

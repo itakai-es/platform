@@ -833,6 +833,19 @@
           "legendary": "Legendarioa"
         },
         "btn_close": "Itxi"
+      },
+      "enigma_submissions_modal": {
+        "title_fallback": "Entregak",
+        "load_error": "Ezin izan dira entregak kargatu",
+        "retry": "Saiatu berriro",
+        "empty": "Ez dago berrikusteko entregarik",
+        "download": "Deskargatu",
+        "grade": "Baloratu",
+        "pct_label": "Zereginaren % osatua",
+        "pct_custom": "Beste ehuneko bat",
+        "will_receive": "Jasoko du",
+        "approve": "Onartu %{pct}",
+        "approve_error": "Ezin izan da entrega onartu"
       }
     },
     "templates": {
@@ -922,10 +935,6 @@
       "done": "Eginda",
       "wizard_question_schedule": "Jarri ordutegi bat zure klaseari",
       "wizard_question_cover": "Orain, azal bat zure klaserako"
-    },
-    "submissions": {
-      "subtitle": "Berrikusi eta onartu klase honetako entregak pantaila bakar batetik.",
-      "back_to_class": "Itzuli klasera"
     }
   }
 }
