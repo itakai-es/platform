@@ -2,9 +2,6 @@
   <aside class="sidebar">
     <!-- User Profile Card (non-chat mode) -->
     <div v-if="!hideUserProfile" class="user-profile-card">
-      <div class="user-dropdown-wrapper">
-        <UserDropdown />
-      </div>
       <div class="logo-wrapper">
         <img
           :src="theme === 'college' ? '/logo/itakai_color.svg' : '/logo/itakai_1tinta.svg'"
@@ -15,15 +12,13 @@
       <h3 class="user-name">{{ userName }}</h3>
       <p class="user-subtitle">{{ userSubtitle }}</p>
       <!-- Ver como alumno (modo demo): solo para profesores -->
-      <button
+      <UserCardPill
         v-if="userRole === 'teacher'"
-        type="button"
-        class="mt-2 inline-flex items-center gap-1.5 rounded-full border border-navy-700/20 px-3 py-1 text-xs font-medium text-navy-700 transition-colors hover:bg-navy-700/5"
+        :icon="EyeIcon"
         @click="auth.enterStudentPreview()"
       >
-        <EyeIcon class="h-3.5 w-3.5" />
         Ver como alumno
-      </button>
+      </UserCardPill>
       <div v-if="showProgress && progressPercentage !== undefined" class="progress-wrapper">
         <div class="progress-bar-new">
           <div class="progress-fill-new" :style="{ width: `${progressPercentage}%` }" />
@@ -139,16 +134,22 @@
             <span class="nav-section-label">{{ item.label }}</span>
           </div>
 
+          <!-- Separador entre bloques -->
+          <NavDivider v-else-if="item.type === 'divider'" />
+
           <!-- Nav Link -->
           <NavItem
             v-else-if="item.to"
             :to="item.to"
-            :label="item.label"
+            :label="item.label ?? ''"
             :icon="item.icon"
             :exact="item.exact"
+            :badge="item.badge"
+            :badge-label="item.badgeLabel"
             :indent="item.indent"
           />
         </template>
+        <NavAccountSection v-if="showAccount" />
       </template>
     </nav>
 
@@ -208,9 +209,14 @@ const { t, tm, rt } = useI18n()
 const { theme } = useTheme()
 const auth = useAuthStore()
 
+// Los separadores no llevan etiqueta ni destino propios
 interface NavItem {
-  type?: 'header' | 'link'
-  label: string
+  type?: 'header' | 'link' | 'divider'
+  label?: string
+  /** Contador de pendientes junto a la etiqueta (p. ej. avisos sin leer). */
+  badge?: number
+  /** Qué cuenta el contador, para el lector de pantalla (p. ej. «3 sin leer»). */
+  badgeLabel?: string
   to?: string
   icon?: any
   exact?: boolean
@@ -244,6 +250,8 @@ interface Props {
   backRoute?: string
   hideGodButton?: boolean
   hideUserProfile?: boolean
+  // Bloque «Tu cuenta» (perfil y cerrar sesión) al final del menú
+  showAccount?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -251,6 +259,7 @@ const props = withDefaults(defineProps<Props>(), {
   showBackButton: false,
   hideGodButton: false,
   hideUserProfile: false,
+  showAccount: false,
 })
 
 defineEmits(['help-center', 'new-conversation', 'conversation-click', 'load-more-conversations'])
@@ -373,13 +382,6 @@ const currentGodMessage = computed(() => {
   padding-bottom: 24px;
   border-bottom: 1px solid var(--color-border-primary);
   margin-bottom: 16px;
-}
-
-.user-dropdown-wrapper {
-  @apply absolute;
-  top: 0;
-  right: 0;
-  z-index: 50;
 }
 
 .logo-wrapper {

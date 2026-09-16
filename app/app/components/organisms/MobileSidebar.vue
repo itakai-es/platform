@@ -27,9 +27,6 @@
           </NuxtLink>
 
           <div class="flex items-center gap-2">
-            <!-- User Dropdown for logout -->
-            <UserDropdown />
-
             <button
               class="close-btn"
               :aria-label="t('common.actions.close_menu')"
@@ -64,16 +61,22 @@
             </p>
           </div>
 
+          <!-- Separador entre bloques -->
+          <NavDivider v-else-if="item.type === 'divider'" />
+
           <!-- Nav Link -->
           <NavItem
             v-else-if="item.to"
             :to="item.to"
-            :label="item.label"
+            :label="item.label ?? ''"
             :icon="item.icon"
             :exact="item.exact"
+            :badge="item.badge"
+            :badge-label="item.badgeLabel"
             @click="emit('close')"
           />
         </template>
+        <NavAccountSection v-if="showAccount" @navigate="emit('close')" />
       </nav>
 
       <!-- AI Chat Section (Always at bottom) -->
@@ -135,9 +138,14 @@ import {
 const { t } = useI18n()
 const { theme } = useTheme()
 
+// Los separadores no llevan etiqueta ni destino propios
 interface NavItem {
-  type?: 'header' | 'link'
-  label: string
+  type?: 'header' | 'link' | 'divider'
+  label?: string
+  /** Contador de pendientes junto a la etiqueta (p. ej. avisos sin leer). */
+  badge?: number
+  /** Qué cuenta el contador, para el lector de pantalla (p. ej. «3 sin leer»). */
+  badgeLabel?: string
   to?: string
   icon?: any
   exact?: boolean
@@ -178,6 +186,9 @@ interface Props {
 
   // For action button (e.g., Join Class)
   actionButton?: ActionButton | null
+
+  // Bloque «Tu cuenta» (perfil y cerrar sesión) al final del menú
+  showAccount?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -189,6 +200,7 @@ const props = withDefaults(defineProps<Props>(), {
   title: 'Mortal',
   currentGod: null,
   actionButton: null,
+  showAccount: false,
 })
 
 const emit = defineEmits(['close', 'help-center'])

@@ -6,21 +6,28 @@
       :to="`/ayuda/${categoryOf(article).slug}/${article.slug}`"
       class="group flex items-center gap-4 border-b border-border-primary px-4 py-3.5 transition-colors last:border-b-0 hover:bg-bg-secondary"
     >
-      <span
-        class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-transform duration-200 group-hover:scale-105"
-        :style="{
-          backgroundColor: `var(--color-card-${helpCardType(categoryOf(article).accent)})`,
-        }"
-      >
-        <component :is="helpIcon(categoryOf(article).icon)" class="h-5 w-5 text-navy-700" />
-      </span>
+      <HelpCategoryIcon
+        :icon="categoryOf(article).icon"
+        :accent="categoryOf(article).accent"
+        size="lg"
+        class="transition-transform duration-200 group-hover:scale-105"
+      />
 
       <span class="min-w-0 flex-1">
         <span class="flex items-baseline gap-3">
-          <span class="min-w-0 truncate font-semibold text-navy-700">{{ article.title }}</span>
+          <span class="min-w-0 font-semibold text-navy-700">{{ article.title }}</span>
+          <!-- La guía es lo normal y no se etiqueta; el resto de tipos sí. -->
+          <Badge
+            v-if="article.kind && article.kind !== 'guia'"
+            variant="common"
+            size="sm"
+            class="shrink-0"
+          >
+            {{ t(`common.help.kind.${article.kind}`) }}
+          </Badge>
           <span
             v-if="showCategory"
-            class="ml-auto hidden shrink-0 text-xs font-medium text-navy-700/60 sm:block"
+            class="ml-auto hidden shrink-0 text-xs font-medium text-navy-700/70 sm:block"
           >
             {{ categoryOf(article).name }}
           </span>
@@ -34,7 +41,9 @@
           v-html="cleanSnippet(article.snippet)"
         />
         <!-- eslint-enable vue/no-v-html -->
-        <span v-else-if="article.summary" class="mt-0.5 block truncate text-sm text-navy-700/70">
+        <!-- Título y resumen completos: son cortos y se escriben desde el panel,
+             así que pasan de línea en vez de cortarse. -->
+        <span v-else-if="article.summary" class="mt-0.5 block text-sm text-navy-700/70">
           {{ article.summary }}
         </span>
       </span>
@@ -48,10 +57,8 @@
 
 <script setup lang="ts">
 import { ChevronRightIcon } from '@heroicons/vue/24/outline'
-import { helpIcon } from '~/utils/help-icons'
-import { helpCardType } from '~/utils/help-accents'
 import { cleanSnippet } from '~/composables/useHelp'
-import type { HelpCategoryRef } from '~/types/help.types'
+import type { HelpArticleKind, HelpCategoryRef } from '~/types/help.types'
 
 /**
  * Lista de artículos del centro de ayuda.
@@ -69,9 +76,13 @@ interface HelpListItem {
   summary?: string | null
   /** Fragmento con <em> que devuelve la búsqueda; manda sobre el resumen. */
   snippet?: string | null
+  /** Tipo de contenido; solo se etiqueta cuando no es una guía. */
+  kind?: HelpArticleKind
   /** Dentro de una categoría las filas no la repiten: llega en `category`. */
   category?: HelpCategoryRef
 }
+
+const { t } = useI18n()
 
 const props = withDefaults(
   defineProps<{

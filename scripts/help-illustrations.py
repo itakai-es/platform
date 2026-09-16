@@ -756,10 +756,77 @@ def cuenta_bloqueada():
     return svg('cuenta-bloqueada', YELLOW, body)
 
 
+def gestionar_ayuda():
+    """Gestionar el centro de ayuda: la lista con su estado y el artículo previsualizado."""
+    body = card(110, 90, 520, 300, 26)
+    body += rect(146, 124, 150, 34, PURPLE, 17)
+    body += rect(308, 124, 130, 34, tint(NAVY, 0.06), 17)
+    for i, published in enumerate([True, False, True]):
+        y = 186 + i * 64
+        body += rect(146, y, 448, 50, tint(NAVY, 0.04), 14)
+        body += rect(162, y + 11, 28, 28, tint(PURPLE, 0.55), 8)
+        body += rect(206, y + 19, 180 - i * 30, 12, NAVY, 6, 0.3)
+        body += rect(420, y + 13, 84, 24, MINT if published else tint(NAVY, 0.12), 12)
+        body += (f'<path d="M530 {y + 22} l10 -9 l10 9 M530 {y + 30} l10 9 l10 -9" '
+                 f'stroke="{NAVY}" stroke-width="4" stroke-linecap="round" '
+                 f'stroke-linejoin="round" fill="none" opacity="0.35"/>')
+
+    body += card(700, 110, 380, 270, 26)
+    body += rect(730, 140, 320, 90, tint(PURPLE, 0.35), 16)
+    body += text_lines(730, 254, [300, 250, 280, 200], gap=26)
+    body += circle(1030, 110, 42, PURPLE)
+    body += (f'<path d="M1004 110 q26 -24 52 0 q-26 24 -52 0 z" stroke="{WHITE}" '
+             f'stroke-width="5" fill="none"/>')
+    body += circle(1030, 110, 8, WHITE)
+    return svg('gestionar-ayuda', PURPLE, body)
+
+
+def encontrar_ayuda():
+    """Dónde encontrar ayuda: el menú lateral con su enlace y la guía que abre."""
+    body = card(100, 70, 560, 340, 26)
+    body += rect(100, 70, 170, 340, tint(NAVY, 0.05), 26)
+    body += rect(246, 70, 24, 340, tint(NAVY, 0.05), 0)
+    body += circle(185, 118, 26, tint(YELLOW, 0.6))
+    body += rect(145, 156, 80, 11, NAVY, 5, 0.3)
+    for i in range(4):
+        y = 186 + i * 26
+        body += circle(132, y + 5, 6, NAVY, 0.14)
+        body += rect(146, y, 86 - (i % 2) * 22, 10, NAVY, 5, 0.14)
+    body += rect(120, 296, 130, 2, NAVY, 1, 0.12)
+    body += rect(114, 308, 142, 34, WHITE, 12)
+    body += (f'<rect x="114" y="308" width="142" height="34" rx="12" fill="none" '
+             f'stroke="{YELLOW}" stroke-width="4"/>')
+    body += circle(134, 325, 8, YELLOW)
+    body += rect(150, 320, 84, 10, NAVY, 5, 0.3)
+    body += rect(120, 356, 130, 2, NAVY, 1, 0.12)
+    for i in range(2):
+        body += rect(146, 370 + i * 18, 70 - i * 16, 8, NAVY, 4, 0.14)
+
+    body += rect(306, 106, 320, 90, tint(YELLOW, 0.3), 16)
+    body += text_lines(306, 222, [300, 250, 280], gap=28)
+    body += rect(306, 330, 130, 40, YELLOW, 20)
+
+    body += line(690, 240, 760, 240, NAVY, 7)
+    body += (f'<path d="M748 226 L764 240 L748 254" stroke="{NAVY}" stroke-width="7" '
+             f'stroke-linecap="round" stroke-linejoin="round" fill="none"/>')
+
+    body += card(800, 110, 300, 270, 26)
+    body += rect(800, 110, 300, 44, tint(NAVY, 0.06), 26)
+    body += rect(800, 132, 300, 22, tint(NAVY, 0.06), 0)
+    body += circle(828, 132, 7, tint(NAVY, 0.25))
+    body += circle(850, 132, 7, tint(NAVY, 0.25))
+    body += circle(950, 214, 38, tint(YELLOW, 0.5))
+    body += (f'<path d="M936 196 a14 14 0 1 1 14 18 v8" stroke="{NAVY}" stroke-width="8" '
+             f'stroke-linecap="round" stroke-linejoin="round" fill="none"/>')
+    body += circle(950, 234, 5, NAVY)
+    body += text_lines(830, 276, [240, 200, 220], gap=26)
+    return svg('encontrar-ayuda', YELLOW, body)
+
+
 for fn in (recorrido, clase_nueva, mision, enigmas, recompensas, entregas, tienda, insignias,
            niveles, vista_alumno, atenea, narrativa, plantilla, invitar, accesibilidad, avisos,
            comportamientos, recursos, guia, duplicar, publicar, rarezas, avatares, clasificacion,
            proveedor_ia, almacenamiento, seguridad, correo_invitacion, acceso_clase,
            ia_en_silencio, subida_fallida, deshacer, recompensas_descuadradas,
-           cuenta_bloqueada):
+           cuenta_bloqueada, gestionar_ayuda, encontrar_ayuda):
     print('✓', fn())

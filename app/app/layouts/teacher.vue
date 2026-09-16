@@ -1,7 +1,11 @@
 <template>
   <div class="min-h-screen bg-bg-primary w-full overflow-x-hidden">
     <!-- Mobile Header (visible only on mobile/tablet) -->
-    <MobileHeader title="ITAKAI" @toggle-menu="mobileMenuOpen = !mobileMenuOpen" />
+    <MobileHeader
+      title="ITAKAI"
+      :unread-notifications="unreadNotifications"
+      @toggle-menu="mobileMenuOpen = !mobileMenuOpen"
+    />
 
     <!-- Sidebar (Desktop only - Fixed position) -->
     <Sidebar
@@ -12,6 +16,7 @@
       :avatar="user?.avatar"
       :current-god="currentGod"
       user-role="teacher"
+      show-account
       @help-center="openHelpCenter"
     />
 
@@ -23,6 +28,7 @@
       role="teacher"
       :user-name="user?.name"
       :current-god="currentGod"
+      show-account
       @close="mobileMenuOpen = false"
       @help-center="openHelpCenter"
     />
@@ -46,7 +52,10 @@ import {
   UsersIcon,
   TrophyIcon,
   InformationCircleIcon,
+  BookOpenIcon,
+  BellIcon,
 } from '@heroicons/vue/24/outline'
+import { getHelpPortalByRole, getNotificationsByRole } from '~/utils/navigation'
 
 const { t } = useI18n()
 const authStore = useAuthStore()
@@ -57,6 +66,10 @@ const user = computed(() => authStore.user)
 
 // Current god for sidebar (random, changes every 5 minutes)
 const currentGod = computed(() => aiAssistantStore.currentGod)
+
+// Avisos: carga, refresco periódico y contador de sin leer
+const { enabled: notificationsEnabled, unreadCount: unreadNotifications } =
+  useNotificationsPolling('teacher')
 
 // Mobile menu state
 const mobileMenuOpen = ref(false)
@@ -103,6 +116,22 @@ const navItems = computed(() => [
     icon: HomeIcon,
     exact: true,
   },
+  // Solo con una sesión de profesor (lo decide el composable)
+  ...(notificationsEnabled.value
+    ? [
+        {
+          to: getNotificationsByRole('teacher') ?? '',
+          label: t('common.notifications.title'),
+          icon: BellIcon,
+          badge: unreadNotifications.value,
+          badgeLabel: t(
+            'common.notifications.unread_count',
+            { count: unreadNotifications.value },
+            unreadNotifications.value
+          ),
+        },
+      ]
+    : []),
   {
     to: '/profesor/clases',
     label: t('common.nav.my_classes'),
@@ -122,6 +151,12 @@ const navItems = computed(() => [
     to: '/profesor/alumnos',
     label: t('common.nav.students'),
     icon: UsersIcon,
+  },
+  { type: 'divider' as const },
+  {
+    to: getHelpPortalByRole('teacher'),
+    label: t('common.help.title'),
+    icon: BookOpenIcon,
   },
   {
     to: '/profesor/acerca-de',

@@ -833,6 +833,19 @@
           "legendary": "Llegendària"
         },
         "btn_close": "Tancar"
+      },
+      "enigma_submissions_modal": {
+        "title_fallback": "Entregues",
+        "load_error": "No s'han pogut carregar les entregues",
+        "retry": "Torna-ho a provar",
+        "empty": "No hi ha entregues pendents de revisió",
+        "download": "Descarrega",
+        "grade": "Valora",
+        "pct_label": "% completat de la tasca",
+        "pct_custom": "Un altre percentatge",
+        "will_receive": "Rebrà",
+        "approve": "Aprova {pct}%",
+        "approve_error": "No s'ha pogut aprovar l'entrega"
       }
     },
     "templates": {
@@ -922,10 +935,6 @@
       "done": "Fet",
       "wizard_question_schedule": "Posa-li un horari a la teua classe",
       "wizard_question_cover": "Ara, una portada per a la teua classe"
-    },
-    "submissions": {
-      "subtitle": "Revisa i aprova les entregues d'esta classe des d'una sola pantalla.",
-      "back_to_class": "Tornar a la classe"
     }
   }
 }

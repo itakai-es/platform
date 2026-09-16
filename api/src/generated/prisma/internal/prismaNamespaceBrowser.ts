@@ -529,6 +529,7 @@ export const HelpCategoryScalarFieldEnum = {
   description: 'description',
   icon: 'icon',
   accent: 'accent',
+  area: 'area',
   orderIndex: 'orderIndex',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -549,6 +550,9 @@ export const HelpArticleScalarFieldEnum = {
   status: 'status',
   orderIndex: 'orderIndex',
   featured: 'featured',
+  audience: 'audience',
+  kind: 'kind',
+  videoUrl: 'videoUrl',
   views: 'views',
   helpful: 'helpful',
   notHelpful: 'notHelpful',

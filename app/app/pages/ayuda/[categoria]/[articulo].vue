@@ -24,9 +24,7 @@
       <aside class="lg:sticky lg:top-24 lg:self-start">
         <Card v-if="category" :type="helpCardType(category.accent)" padding="sm" gap="none">
           <div class="mb-3 flex items-center gap-2.5 px-1">
-            <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/60">
-              <component :is="helpIcon(category.icon)" class="h-5 w-5 text-navy-700" />
-            </span>
+            <HelpCategoryIcon :icon="category.icon" size="md" on-card />
             <NuxtLink
               :to="`/ayuda/${category.slug}`"
               class="min-w-0 truncate text-sm font-bold text-navy-700 hover:underline"
@@ -43,7 +41,7 @@
             :class="
               sibling.slug === route.params.articulo
                 ? 'bg-white font-semibold text-navy-700 shadow-sm'
-                : 'text-navy-700/80 hover:bg-white hover:text-navy-700'
+                : 'text-navy-700 hover:bg-white'
             "
           >
             {{ sibling.title }}
@@ -56,9 +54,13 @@
              el lateral va encima del texto y estorbaría más que ayuda. -->
         <nav
           v-if="headings.length > 1"
+          aria-labelledby="help-toc-title"
           class="mt-4 hidden rounded-2xl bg-surface p-3 shadow-lg lg:block"
         >
-          <p class="mb-1 px-2 text-xs font-semibold uppercase tracking-wider text-navy-700/60">
+          <p
+            id="help-toc-title"
+            class="mb-1 px-2 text-xs font-semibold uppercase tracking-wider text-navy-700/70"
+          >
             {{ t('common.help.on_this_page') }}
           </p>
           <a
@@ -66,6 +68,7 @@
             :key="heading.id"
             :href="`#${heading.id}`"
             class="block rounded-lg px-2 py-1.5 text-sm leading-snug text-navy-700/80 transition-colors hover:bg-bg-secondary hover:text-navy-700"
+            @click="goToHeading($event, heading.id)"
           >
             {{ heading.text }}
           </a>
@@ -77,25 +80,14 @@
         <HelpArticleSkeleton v-if="!view || swapping" />
 
         <template v-else>
-          <div
-            class="help-body overflow-hidden rounded-2xl bg-surface shadow-lg"
-            :style="accentStyle"
-          >
-            <!-- Las ilustraciones son 5:2; con esa misma proporción no se recortan. -->
-            <img v-if="coverUrl" :src="coverUrl" alt="" class="aspect-[5/2] w-full object-cover" />
-
-            <div class="p-5 md:p-8">
-              <p class="mb-6 text-xs text-navy-700/70">
-                {{ t('common.help.updated_on', { date: formattedDate }) }}
-              </p>
-
-              <!-- eslint-disable-next-line vue/no-v-html -->
-              <div class="md-rendered" v-html="renderedBody" />
-            </div>
-          </div>
+          <HelpArticleBody :article="view.article" :accent="category?.accent" />
 
           <!-- Anterior y siguiente dentro de la categoría -->
-          <nav v-if="previous || next" class="mt-6 grid gap-3 sm:grid-cols-2">
+          <nav
+            v-if="previous || next"
+            :aria-label="t('common.help.article_pagination')"
+            class="mt-6 grid gap-3 sm:grid-cols-2"
+          >
             <NuxtLink
               v-if="previous"
               :to="`/ayuda/${category?.slug}/${previous.slug}`"
@@ -105,7 +97,7 @@
                 class="h-4 w-4 shrink-0 text-navy-700/40 transition-colors group-hover:text-purple"
               />
               <span class="min-w-0">
-                <span class="block text-xs font-medium text-navy-700/60">
+                <span class="block text-xs font-medium text-navy-700/70">
                   {{ t('common.help.previous') }}
                 </span>
                 <span class="block truncate text-sm font-semibold text-navy-700">
@@ -121,7 +113,7 @@
               class="group flex items-center gap-3 rounded-2xl bg-surface px-4 py-3 text-right shadow-lg transition-shadow hover:shadow-xl sm:col-start-2"
             >
               <span class="ml-auto min-w-0">
-                <span class="block text-xs font-medium text-navy-700/60">
+                <span class="block text-xs font-medium text-navy-700/70">
                   {{ t('common.help.next') }}
                 </span>
                 <span class="block truncate text-sm font-semibold text-navy-700">
@@ -169,6 +161,7 @@
                 class="font-semibold text-navy-700 underline underline-offset-2 hover:text-purple"
               >
                 {{ t('common.help.contact_us') }}
+                <span class="sr-only">{{ t('common.accessibility.opens_new_tab') }}</span>
               </a>
             </p>
           </div>
@@ -194,23 +187,20 @@ import {
   CheckCircleIcon,
 } from '@heroicons/vue/24/outline'
 import { helpCardType } from '~/utils/help-accents'
-import { helpIcon } from '~/utils/help-icons'
-import { renderPageMarkdown } from '~/utils/markdown'
+import { helpHeadings } from '~/utils/help-headings'
 import type { HelpArticleView } from '~/types/help.types'
 
 /**
  * Un artículo del centro de ayuda (Fase 3, punto 17).
  *
- * El cuerpo es markdown y se pinta con el mismo `.md-rendered` que la guía de
- * clase y el detalle de misión, así que la documentación se lee igual que el
- * resto del producto.
+ * El cuerpo lo pinta `HelpArticleBody`, la misma pieza que usa la
+ * previsualización del panel; aquí quedan la cabecera, el lateral, anterior y
+ * siguiente, la valoración y «Seguir leyendo».
  */
 
-const { t, locale } = useI18n()
+const { t } = useI18n()
 const route = useRoute()
-const config = useRuntimeConfig()
-const { getImageUrl } = useImageUrl()
-const { ensureIndex, getCategory, fetchArticle, rate } = useHelp()
+const { ensureIndex, getCategory, fetchArticle, rate, scope, portalPath, inferScope } = useHelp()
 
 const view = ref<HelpArticleView | null>(null)
 /** Primera carga: no hay nada en pantalla todavía. */
@@ -225,21 +215,50 @@ const rated = ref(false)
  * el cuerpo a la vez, y parecía que se recargaba la página entera. Aquí solo se
  * marca `swapping`, que vacía el cuerpo y deja el resto quieto.
  */
+/**
+ * Número de la carga vigente: al saltar deprisa entre artículos, una respuesta
+ * atrasada no pinta su cuerpo bajo la URL del siguiente.
+ */
+let loadSeq = 0
+
 const load = async () => {
+  const seq = ++loadSeq
   pending.value = !view.value
   swapping.value = !!view.value
   rated.value = false
   try {
-    view.value = await fetchArticle(String(route.params.categoria), String(route.params.articulo))
+    const categoria = String(route.params.categoria)
+    const articulo = String(route.params.articulo)
+    const article = await fetchArticle(categoria, articulo)
+    if (seq !== loadSeq) return
+    // Al llegar por un enlace directo no hay portada elegida: la fija la
+    // audiencia del artículo. Si cambia, se vuelve a pedir para que el lateral
+    // y «Seguir leyendo» salgan ya filtrados.
+    const before = scope.value
+    inferScope(article.article.audience)
+    const fresh = scope.value === before ? article : await fetchArticle(categoria, articulo)
+    if (seq !== loadSeq) return
+    view.value = fresh
+    // Un enlace compartido a un apartado: el cuerpo acaba de pintarse, así que
+    // es ahora cuando existe el apartado al que hay que bajar.
+    if (route.hash) nextTick(() => scrollToHeading(route.hash.slice(1)))
   } catch {
-    view.value = null
+    if (seq === loadSeq) view.value = null
   } finally {
-    pending.value = false
-    swapping.value = false
+    if (seq === loadSeq) {
+      pending.value = false
+      swapping.value = false
+    }
   }
 }
 
-watch(() => [route.params.categoria, route.params.articulo], load)
+/**
+ * Solo se recarga cuando cambia el artículo. Vigilar la ruta entera (o un array
+ * con sus parámetros, que es nuevo en cada cambio) recargaba también al pulsar
+ * un apartado del índice, que solo cambia el `#`: el cuerpo pasaba por el
+ * esqueleto y la página daba saltos.
+ */
+watch(() => `${route.params.categoria}/${route.params.articulo}`, load)
 
 onMounted(() => {
   load()
@@ -289,82 +308,48 @@ const next = computed(() =>
 const notFound = computed(() => !pending.value && !swapping.value && !view.value)
 
 const breadcrumbs = computed(() => [
-  { label: t('common.help.title'), to: '/ayuda' },
+  { label: t('common.help.title'), to: portalPath(scope.value) },
   ...(category.value ? [{ label: category.value.name, to: `/ayuda/${category.value.slug}` }] : []),
   ...(headerTitle.value ? [{ label: headerTitle.value }] : []),
 ])
 
-/** El color de la categoría, para los detalles del cuerpo del artículo. */
-const accentStyle = computed(() => ({
-  '--help-accent': `var(--color-card-${helpCardType(category.value?.accent)})`,
-}))
+/**
+ * Los apartados del artículo, para el índice «En esta página» del lateral. Un
+ * apartado sin texto conserva su anclaje en el cuerpo, pero no se lista.
+ */
+const headings = computed(() =>
+  view.value ? helpHeadings(view.value.article.body).filter(heading => heading.text) : []
+)
 
-const coverUrl = computed(() => getImageUrl(view.value?.article.coverImage))
-
-/** Un identificador estable para un encabezado: sin tildes, en minúsculas. */
-function anchorId(text: string) {
-  return text
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-    .slice(0, 60)
+/**
+ * Baja hasta un apartado y le pasa el foco, para que el teclado y el lector de
+ * pantalla sigan desde ahí. El desplazamiento lo decide el CSS: suave, salvo
+ * con «menos animación».
+ */
+const scrollToHeading = (id: string) => {
+  const target = document.getElementById(id)
+  if (!target) return false
+  target.setAttribute('tabindex', '-1')
+  target.scrollIntoView({ block: 'start' })
+  target.focus({ preventScroll: true })
+  return true
 }
 
 /**
- * Los apartados del artículo, sacados de los `##` del markdown.
- *
- * Alimentan el índice del lateral y los anclajes del cuerpo. Si dos apartados
- * se llaman igual se numera el segundo, para que cada enlace lleve al suyo.
+ * Un apartado del índice. Se baja aquí mismo en vez de dejarlo al navegador:
+ * así hay un solo desplazamiento, y el `#` se cambia sin pasar por el router ni
+ * apilar una entrada por apartado en el historial, de modo que «Atrás» sigue
+ * llevando a la página anterior. Con Ctrl, Mayúsculas o la rueda, el enlace se
+ * comporta como siempre (abrir en otra pestaña, copiar…).
  */
-const headings = computed(() => {
-  if (!view.value) return []
-  const used = new Map<string, number>()
-  return [...view.value.article.body.matchAll(/^## +(.+)$/gm)].map(match => {
-    const text = match[1].replace(/[*_`]/g, '').trim()
-    const base = anchorId(text) || 'apartado'
-    const seen = used.get(base) ?? 0
-    used.set(base, seen + 1)
-    return { id: seen ? `${base}-${seen + 1}` : base, text }
-  })
-})
-
-/**
- * El cuerpo, ya en HTML, con dos retoques.
- *
- * Uno: las imágenes que se suben desde el panel se guardan en `/uploads`, que
- * sirve la API, así que hay que apuntarlas a su origen —el markdown se pinta en
- * el frontend—; las que ya son absolutas, como las de R2, se quedan igual.
- *
- * Y dos: se numeran los `<h2>` con el mismo identificador que el índice, para
- * poder enlazar a un apartado concreto. Va después de pintar el markdown a
- * propósito: el saneado descarta los `id`, así que se ponen al final y con un
- * valor que se genera aquí, no en el texto del artículo.
- */
-const renderedBody = computed(() => {
-  if (!view.value) return ''
-
-  const withAssets = renderPageMarkdown(view.value.article.body).replaceAll(
-    'src="/uploads/',
-    `src="${config.public.apiBase}/uploads/`
-  )
-
-  let index = 0
-  return withAssets.replace(/<h2>/g, () => {
-    const heading = headings.value[index++]
-    return heading ? `<h2 id="${heading.id}">` : '<h2>'
-  })
-})
-
-const formattedDate = computed(() => {
-  if (!view.value) return ''
-  return new Date(view.value.article.updatedAt).toLocaleDateString(locale.value, {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  })
-})
+const goToHeading = (event: MouseEvent, id: string) => {
+  if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+    return
+  }
+  if (!scrollToHeading(id)) return
+  event.preventDefault()
+  history.replaceState(history.state, '', `#${encodeURIComponent(id)}`)
+}
 
 const sendFeedback = async (helpful: boolean) => {
   rated.value = true
@@ -395,37 +380,3 @@ useHead({
   ],
 })
 </script>
-
-<style scoped>
-/**
- * Detalles de color dentro del artículo.
- *
- * El cuerpo sigue siendo el `.md-rendered` común —misma tipografía, mismos
- * tamaños que la guía de clase—; aquí solo se le añade el color de la categoría
- * en los apartados y en las citas, para que la lectura no sea un muro gris. No
- * se tocan los enlaces: siguen en navy subrayado, que es lo que garantiza el
- * contraste también en modo alto contraste.
- */
-.help-body :deep(.md-rendered h2) {
-  padding-left: 0.75rem;
-  border-left: 4px solid var(--help-accent);
-  /* Al llegar desde el índice, que el apartado no quede debajo de la barra. */
-  scroll-margin-top: 6rem;
-}
-
-/* Los diagramas se leen como figura, no como parte del texto. */
-.help-body :deep(.md-rendered img) {
-  border: 1px solid var(--color-border-primary);
-  border-radius: 0.75rem;
-  margin: 1.5rem 0;
-}
-
-.help-body :deep(.md-rendered blockquote) {
-  border-left-color: var(--help-accent);
-  border-radius: 0 0.75rem 0.75rem 0;
-  background: var(--color-bg-secondary);
-  padding: 0.75rem 1rem;
-  font-style: normal;
-  opacity: 1;
-}
-</style>

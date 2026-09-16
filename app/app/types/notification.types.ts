@@ -32,50 +32,22 @@ export type NotificationPriority = 'low' | 'medium' | 'high' | 'urgent'
 export type ToastSeverity = 'success' | 'error' | 'warning' | 'info'
 
 /**
- * Interfaz para notificaciones persistentes (panel y página)
+ * Aviso interno tal como lo devuelve `GET /notifications`. Solo lleva lo que
+ * manda el servidor: el texto ya viene compuesto en el idioma del destinatario
+ * y la fecha, como cadena ISO.
  */
 export interface Notification {
-  /** ID único de la notificación */
   id: string
-
-  /** ID del usuario destinatario */
-  userId: string
-
-  /** Tipo de notificación */
   type: NotificationType
-
-  /** Título de la notificación */
   title: string
-
-  /** Mensaje detallado */
   message: string
-
-  /** Prioridad de la notificación */
   priority: NotificationPriority
-
-  /** Si la notificación ha sido leída */
   isRead: boolean
-
-  /** Icono personalizado (nombre del componente o URL) */
-  icon?: string
-
-  /** URL de acción (a dónde navegar al hacer click) */
-  actionUrl?: string
-
-  /** Label del botón de acción */
-  actionLabel?: string
-
-  /** Metadata adicional específica del tipo */
-  metadata?: Record<string, any>
-
-  /** Fecha de expiración (opcional) */
-  expiresAt?: string
-
-  /** Fecha de creación */
-  createdAt: Date
-
-  /** Fecha de última actualización */
-  updatedAt: Date
+  /** Ruta interna a la que lleva el aviso; algunos tipos no tienen destino. */
+  actionUrl: string | null
+  /** Datos propios del tipo (ids de clase, misión, entrega…). */
+  metadata: Record<string, unknown> | null
+  createdAt: string
 }
 
 /**
@@ -116,57 +88,15 @@ export interface ToastOptions {
 }
 
 /**
- * Estado del store de notificaciones
+ * Filtro de la página de avisos
  */
-export interface NotificationsState {
-  /** Lista de notificaciones persistentes */
-  notifications: Notification[]
-
-  /** Lista de mensajes toast activos */
-  toasts: ToastMessage[]
-
-  /** Estado de carga */
-  loading: boolean
-
-  /** Error si lo hay */
-  error: string | null
-}
+export type NotificationFilter = 'all' | 'unread'
 
 /**
- * Filtros para la página de notificaciones
- */
-export type NotificationFilter = 'all' | 'unread' | 'read'
-
-/**
- * Payload para crear una notificación (desde backend)
- */
-export interface CreateNotificationPayload {
-  userId: string
-  type: NotificationType
-  title: string
-  message: string
-  priority?: NotificationPriority
-  icon?: string
-  actionUrl?: string
-  actionLabel?: string
-  metadata?: Record<string, any>
-  expiresAt?: string
-}
-
-/**
- * Response del API al obtener notificaciones
+ * Respuesta de `GET /notifications` (los 50 avisos más recientes)
  */
 export interface NotificationsResponse {
   notifications: Notification[]
   total: number
   unreadCount: number
-}
-
-export interface NotificationPreferences {
-  email: boolean
-  push: boolean
-  inApp: boolean
-  types: {
-    [key in NotificationType]: boolean
-  }
 }

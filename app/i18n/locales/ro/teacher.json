@@ -833,6 +833,19 @@
           "legendary": "Legendară"
         },
         "btn_close": "Închide"
+      },
+      "enigma_submissions_modal": {
+        "title_fallback": "Lucrări",
+        "load_error": "Lucrările nu au putut fi încărcate",
+        "retry": "Încearcă din nou",
+        "empty": "Nu există lucrări de verificat",
+        "download": "Descarcă",
+        "grade": "Evaluează",
+        "pct_label": "% din sarcină finalizat",
+        "pct_custom": "Alt procentaj",
+        "will_receive": "Va primi",
+        "approve": "Aprobă {pct}%",
+        "approve_error": "Lucrarea nu a putut fi aprobată"
       }
     },
     "templates": {
@@ -922,10 +935,6 @@
       "done": "Gata",
       "wizard_question_schedule": "Stabilește un orar pentru clasa ta",
       "wizard_question_cover": "Acum, o copertă pentru clasa ta"
-    },
-    "submissions": {
-      "subtitle": "Verifică și aprobă lucrările acestei clase dintr-un singur ecran.",
-      "back_to_class": "Înapoi la clasă"
     }
   }
 }

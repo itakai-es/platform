@@ -833,6 +833,19 @@
           "legendary": "Llexendaria"
         },
         "btn_close": "Zarrar"
+      },
+      "enigma_submissions_modal": {
+        "title_fallback": "Entregues",
+        "load_error": "Nun se pudieron cargar les entregues",
+        "retry": "Volver intentalo",
+        "empty": "Nun hai entregues pendientes de revisión",
+        "download": "Descargar",
+        "grade": "Valorar",
+        "pct_label": "% completao de la xera",
+        "pct_custom": "Otru porcentaxe",
+        "will_receive": "Va recibir",
+        "approve": "Aprobar {pct}%",
+        "approve_error": "Nun se pudo aprobar la entrega"
       }
     },
     "templates": {
@@ -922,10 +935,6 @@
       "done": "Fecho",
       "wizard_question_schedule": "Ponle un horariu a la to clase",
       "wizard_question_cover": "Agora, una portada pa la to clase"
-    },
-    "submissions": {
-      "subtitle": "Revisa y aprueba les entregues d'esta clase dende una sola pantalla.",
-      "back_to_class": "Volver a la clase"
     }
   }
 }

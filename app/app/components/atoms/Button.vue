@@ -1,10 +1,21 @@
 <template>
-  <button :type="type" :disabled="disabled || loading" :class="buttonClasses" @click="handleClick">
+  <!-- Con `href` es un <a> con el mismo aspecto: un solo elemento interactivo,
+       sin anidar un botón dentro de un enlace. -->
+  <component
+    :is="href ? 'a' : 'button'"
+    :type="href ? undefined : type"
+    :disabled="href ? undefined : disabled || loading"
+    :href="href"
+    :target="href ? target : undefined"
+    :rel="href ? linkRel : undefined"
+    :class="buttonClasses"
+    @click="handleClick"
+  >
     <!-- No spinner visible (ITAKAI official spec) -->
     <component :is="iconLeft" v-if="iconLeft" :class="iconClasses" />
     <slot />
     <component :is="iconRight" v-if="iconRight" :class="iconClasses" />
-  </button>
+  </component>
 </template>
 
 <script setup lang="ts">
@@ -28,6 +39,10 @@ interface Props {
   iconRight?: any
   fullWidth?: boolean
   align?: 'center' | 'left'
+  /** Si se indica, el botón es un enlace `<a>` a esa URL. */
+  href?: string
+  target?: string
+  rel?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -43,6 +58,11 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits<{
   click: [event: MouseEvent]
 }>()
+
+// Un enlace a pestaña nueva no debe dar acceso a la ventana de origen.
+const linkRel = computed(
+  () => props.rel ?? (props.target === '_blank' ? 'noopener noreferrer' : undefined)
+)
 
 const buttonClasses = computed(() => {
   // Base: siempre píldora (rounded-full), DM Sans font-medium

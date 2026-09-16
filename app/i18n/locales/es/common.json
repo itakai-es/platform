@@ -15,12 +15,14 @@
       "blog": "Blog",
       "help": "Ayuda",
       "section_management": "Gestión",
-      "section_system": "Sistema"
+      "section_content": "Contenidos",
+      "section_system": "Sistema",
+      "profile": "Mi perfil",
+      "logout": "Cerrar sesión"
     },
     "actions": {
       "save": "Guardar",
       "cancel": "Cancelar",
-      "edit": "Editar",
       "rename": "Renombrar",
       "delete": "Eliminar",
       "open_menu": "Abrir menú",
@@ -32,6 +34,7 @@
       "create_new_account": "Crear Cuenta Nueva",
       "enter": "Entrar",
       "close": "Cerrar",
+      "processing": "Procesando…",
       "view_mode": "Modo de vista"
     },
     "status": {
@@ -67,13 +70,29 @@
       "join_request_reject_error": "Error al rechazar la solicitud"
     },
     "notifications": {
-      "title": "Notificaciones",
-      "panel_label": "Panel de notificaciones",
-      "view_all": "Ver todas",
-      "empty": "No tienes notificaciones",
-      "unread_label": "No leída",
-      "aria_label": "Notificaciones",
-      "aria_label_unread": "Notificaciones ({count} sin leer)"
+      "title": "Avisos",
+      "subtitle": "Las novedades de tus clases y misiones.",
+      "unread_count": "{count} sin leer",
+      "open_menu_unread": "Abrir menú ({count} aviso sin leer) | Abrir menú ({count} avisos sin leer)",
+      "mark_all_read": "Marcar todos como leídos",
+      "mark_read": "Marcar como leído",
+      "marked_read": "Aviso marcado como leído",
+      "all_marked": "Todos los avisos están marcados como leídos",
+      "delete": "Eliminar el aviso: {title}, {time}",
+      "deleted": "Aviso eliminado",
+      "filter_label": "Mostrar avisos",
+      "filter_all": "Todos",
+      "filter_unread": "Sin leer",
+      "new": "Nuevo",
+      "unread_status": "sin leer",
+      "empty_title": "No tienes avisos",
+      "empty_description": "Cuando haya novedades en tus clases, aparecerán aquí.",
+      "empty_unread_title": "No tienes avisos sin leer",
+      "empty_unread_description": "Estás al día.",
+      "show_all": "Ver todos los avisos",
+      "load_error": "No se han podido cargar los avisos",
+      "retry": "Reintentar",
+      "action_error": "No se ha podido completar la acción. Inténtalo de nuevo."
     },
     "errors": {
       "generic": "Ha ocurrido un error. Por favor intenta de nuevo."
@@ -83,11 +102,6 @@
       "teacher": "Profesor",
       "admin": "Administrador",
       "admin_system": "Administrador del Sistema"
-    },
-    "user_dropdown": {
-      "my_profile": "Mi Perfil",
-      "logout": "Cerrar Sesión",
-      "user_menu_label": "Menú de usuario"
     },
     "sidebar": {
       "new_conversation": "Nueva conversación",
@@ -126,6 +140,7 @@
       "stat_teachers": "Profesores",
       "stat_centers": "Centros",
       "partners_title": "¿Quienes somos?",
+      "developed_by": "Desarrollado por",
       "gods_title": "Tus Mentores Olímpicos",
       "gods_subtitle": "5 asistentes IA inspirados en dioses griegos, cada uno experto en su dominio",
       "cta_final_title": "¿Listo para tu Aventura Épica?",
@@ -167,8 +182,7 @@
       "system_access": "Acceso al sistema",
       "teacher_panel": "Panel del profesor",
       "student_panel": "Panel del estudiante",
-      "help_center": "Centro de ayuda",
-      "documentation": "Documentación"
+      "help_center": "Centro de ayuda"
     },
     "level_up": {
       "title": "¡Subiste de Nivel!",
@@ -204,14 +218,27 @@
     },
     "help": {
       "title": "Centro de ayuda",
-      "hero_title": "¿En qué te echamos una mano?",
-      "hero_subtitle": "Guías, tutoriales paso a paso y configuración de la plataforma. Escritas para el profesorado, no para informáticos.",
+      "hero": {
+        "todo": {
+          "title": "¿En qué te echamos una mano?",
+          "subtitle": "Guías, tutoriales y vídeos para profesorado y alumnado."
+        },
+        "profesor": {
+          "title": "Ayuda para el profesorado",
+          "subtitle": "Guías paso a paso para crear clases, misiones y recompensas. Escritas para docentes, no para informáticos."
+        },
+        "alumno": {
+          "title": "Ayuda para el alumnado",
+          "subtitle": "Cómo entrar en tu clase, entregar misiones y sacar partido a tu XP, tus monedas y tu maná."
+        }
+      },
       "all_categories": "Todas las categorías",
-      "article_count": "{count} artículos",
+      "article_count": "Sin artículos | 1 artículo | {count} artículos",
       "keep_reading": "Seguir leyendo",
       "on_this_page": "En esta página",
       "previous": "Anterior",
       "next": "Siguiente",
+      "article_pagination": "Artículo anterior y siguiente",
       "still_stuck": "¿No has encontrado lo que buscabas?",
       "contact_us": "Escríbenos",
       "updated_on": "Actualizado el {date}",
@@ -232,7 +259,22 @@
         "empty": "Nada por «{query}»",
         "empty_hint": "Prueba con otras palabras: «entregas», «monedas», «niveles»."
       },
-      "most_read": "Lo más consultado"
+      "most_read": "Lo más consultado",
+      "kind": {
+        "guia": "Guía",
+        "tutorial": "Tutorial",
+        "faq": "Pregunta frecuente",
+        "video": "Vídeo"
+      },
+      "watch_video": "Ver el vídeo",
+      "scope_todo": "Toda la ayuda",
+      "scope_label": "Sección de ayuda",
+      "audience": {
+        "profesor": "Profesorado",
+        "alumno": "Alumnado",
+        "ambos": "Profesorado y alumnado"
+      },
+      "back_to_app": "Volver a la app"
     },
     "meta": {
       "site_title": "ITAKAI - La aventura de aprender | Plataforma Educativa Gamificada",
@@ -294,24 +336,26 @@
       "reduce_motion": {
         "title": "Menos animación",
         "description": "Reduce transiciones y efectos de movimiento."
-      }
+      },
+      "opens_new_tab": "(se abre en una pestaña nueva)"
     },
     "notification_settings": {
-      "title": "Avisos",
-      "description": "Qué te avisamos y por dónde. Los avisos siempre aparecen en la plataforma; el correo es opcional.",
+      "description": "Tus avisos están siempre en «{section}», en el menú. El correo es opcional.",
       "updated": "Preferencias de avisos actualizadas",
       "update_error": "No se han podido guardar las preferencias de avisos",
       "email": {
         "title": "Avisos por correo",
-        "description": "Entregas revisadas, invitaciones y confirmaciones también en tu correo."
+        "description": "Recibe también en tu correo las entregas revisadas, con su porcentaje, y los recordatorios de entrega."
       },
       "reminders": {
         "title": "Recordatorios de entrega",
-        "description": "Un aviso cuando queden menos de 24 horas para el final de una misión."
+        "description": "Un aviso cuando queden menos de 24 horas para el final de una misión que no has terminado. Si lo desactivas, no te llega ni en la plataforma ni por correo."
       }
     },
     "markdown": {
-      "insert_at_end": "Insertar al final"
+      "insert_at_end": "Insertar al final",
+      "generating": "Generando…",
+      "send_to_ai": "Enviar a la IA"
     },
     "student_preview": {
       "banner": "Estás viendo la plataforma como un alumno (demo)"

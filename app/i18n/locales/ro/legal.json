@@ -434,23 +434,6 @@
         "title": "Licențe - ITAKAI",
         "description": "Informații despre licențele ITAKAI"
       }
-    },
-    "notifications": {
-      "title": "Notificări",
-      "btn_mark_all_read": "Marchează toate ca citite",
-      "tabs": {
-        "all": "Toate",
-        "unread": "Necitite"
-      },
-      "unread_label": "Necitită",
-      "btn_view": "Vezi",
-      "btn_delete": "Șterge notificarea",
-      "empty_unread": "Nu ai notificări necitite",
-      "empty_all": "Nu ai notificări",
-      "meta": {
-        "title": "Notificări | ITAKAI",
-        "description": "Consultă-ți notificările și fii la curent cu ultimele noutăți despre misiunile și clasele tale."
-      }
     }
   }
 }

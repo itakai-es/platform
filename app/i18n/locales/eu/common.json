@@ -15,12 +15,14 @@
       "blog": "Bloga",
       "help": "Laguntza",
       "section_management": "Kudeaketa",
-      "section_system": "Sistema"
+      "section_content": "Edukiak",
+      "section_system": "Sistema",
+      "profile": "Nire profila",
+      "logout": "Saioa itxi"
     },
     "actions": {
       "save": "Gorde",
       "cancel": "Utzi",
-      "edit": "Editatu",
       "rename": "Berrizendatu",
       "delete": "Ezabatu",
       "open_menu": "Menua ireki",
@@ -32,6 +34,7 @@
       "create_new_account": "Kontu Berria Sortu",
       "enter": "Sartu",
       "close": "Itxi",
+      "processing": "Prozesatzen…",
       "view_mode": "Ikuspegi modua"
     },
     "status": {
@@ -67,13 +70,29 @@
       "join_request_reject_error": "Eskaera baztertzean errore bat gertatu da"
     },
     "notifications": {
-      "title": "Jakinarazpenak",
-      "panel_label": "Jakinarazpenen panela",
-      "view_all": "Ikusi guztiak",
-      "empty": "Ez duzu jakinarazpenik",
-      "unread_label": "Irakurri gabea",
-      "aria_label": "Jakinarazpenak",
-      "aria_label_unread": "Jakinarazpenak ({count} irakurri gabe)"
+      "title": "Abisuak",
+      "subtitle": "Zure klase eta misioetako berritasunak.",
+      "unread_count": "{count} irakurri gabe",
+      "open_menu_unread": "Menua ireki (irakurri gabeko abisu {count}) | Menua ireki (irakurri gabeko {count} abisu)",
+      "mark_all_read": "Denak irakurritzat markatu",
+      "mark_read": "Irakurritzat markatu",
+      "marked_read": "Abisua irakurritzat markatu da",
+      "all_marked": "Abisu guztiak irakurritzat markatu dira",
+      "delete": "Abisua ezabatu: {title}, {time}",
+      "deleted": "Abisua ezabatu da",
+      "filter_label": "Abisuak erakutsi",
+      "filter_all": "Denak",
+      "filter_unread": "Irakurri gabeak",
+      "new": "Berria",
+      "unread_status": "irakurri gabea",
+      "empty_title": "Ez duzu abisurik",
+      "empty_description": "Zure klaseetan berritasunik dagoenean, hemen agertuko dira.",
+      "empty_unread_title": "Ez duzu irakurri gabeko abisurik",
+      "empty_unread_description": "Egunean zaude.",
+      "show_all": "Abisu guztiak ikusi",
+      "load_error": "Ezin izan dira abisuak kargatu",
+      "retry": "Saiatu berriro",
+      "action_error": "Ezin izan da ekintza osatu. Saiatu berriro."
     },
     "errors": {
       "generic": "Errore bat gertatu da. Mesedez, saiatu berriro."
@@ -83,11 +102,6 @@
       "teacher": "Irakaslea",
       "admin": "Administratzailea",
       "admin_system": "Sistemaren Administratzailea"
-    },
-    "user_dropdown": {
-      "my_profile": "Nire Profila",
-      "logout": "Saioa Itxi",
-      "user_menu_label": "Erabiltzailearen menua"
     },
     "sidebar": {
       "new_conversation": "Elkarrizketa berria",
@@ -126,6 +140,7 @@
       "stat_teachers": "Irakasleak",
       "stat_centers": "Ikastetxeak",
       "partners_title": "Nor gara?",
+      "developed_by": "Garapena:",
       "gods_title": "Zure Olinpoko Mentoreak",
       "gods_subtitle": "Jainko greko gaietan oinarritutako 5 AA laguntzaile, bakoitza bere alorrean aditua",
       "cta_final_title": "Prest zure Abentura Epikora?",
@@ -167,8 +182,7 @@
       "system_access": "Sistemarako sarbidea",
       "teacher_panel": "Irakaslearen panela",
       "student_panel": "Ikaslearen panela",
-      "help_center": "Laguntza zentroa",
-      "documentation": "Dokumentazioa"
+      "help_center": "Laguntza zentroa"
     },
     "level_up": {
       "title": "Maila igo duzu!",
@@ -204,14 +218,27 @@
     },
     "help": {
       "title": "Laguntza gunea",
-      "hero_title": "Zertan lagun diezazukegu?",
-      "hero_subtitle": "Gidak, urratsez urratseko tutorialak eta plataformaren konfigurazioa. Irakasleentzat idatzita, ez informatikarientzat.",
+      "hero": {
+        "todo": {
+          "title": "Zertan lagun diezazukegu?",
+          "subtitle": "Gidak, tutorialak eta bideoak irakasleentzat eta ikasleentzat."
+        },
+        "profesor": {
+          "title": "Irakasleentzako laguntza",
+          "subtitle": "Urratsez urratseko gidak klaseak, misioak eta sariak sortzeko. Irakasleentzat idatzita, ez informatikarientzat."
+        },
+        "alumno": {
+          "title": "Ikasleentzako laguntza",
+          "subtitle": "Nola sartu zure klasean, nola entregatu misioak eta nola atera etekina zure XPari, txanponei eta manari."
+        }
+      },
       "all_categories": "Kategoria guztiak",
-      "article_count": "{count} artikulu",
+      "article_count": "Artikulurik ez | Artikulu 1 | {count} artikulu",
       "keep_reading": "Irakurtzen jarraitu",
       "on_this_page": "Orri honetan",
       "previous": "Aurrekoa",
       "next": "Hurrengoa",
+      "article_pagination": "Aurreko eta hurrengo artikulua",
       "still_stuck": "Ez duzu bilatzen zenuena aurkitu?",
       "contact_us": "Idatzi iezaguzu",
       "updated_on": "{date}(e)an eguneratua",
@@ -232,7 +259,22 @@
         "empty": "Ezer ez «{query}» bilaketarako",
         "empty_hint": "Saiatu beste hitz batzuekin: «entregak», «txanponak», «mailak»."
       },
-      "most_read": "Gehien irakurriak"
+      "most_read": "Gehien irakurriak",
+      "kind": {
+        "guia": "Gida",
+        "tutorial": "Tutoriala",
+        "faq": "Ohiko galdera",
+        "video": "Bideoa"
+      },
+      "watch_video": "Ikusi bideoa",
+      "scope_todo": "Laguntza guztia",
+      "scope_label": "Laguntza atala",
+      "audience": {
+        "profesor": "Irakasleak",
+        "alumno": "Ikasleak",
+        "ambos": "Irakasleak eta ikasleak"
+      },
+      "back_to_app": "Itzuli aplikaziora"
     },
     "meta": {
       "site_title": "ITAKAI - Ikasteko abentura | Hezkuntza Plataforma Gamifikatua",
@@ -294,24 +336,26 @@
       "reduce_motion": {
         "title": "Animazio gutxiago",
         "description": "Trantsizioak eta mugimendu-efektuak murrizten ditu."
-      }
+      },
+      "opens_new_tab": "(fitxa berri batean irekitzen da)"
     },
     "notification_settings": {
-      "title": "Abisuak",
-      "description": "Zeren berri ematen dizugun eta nondik. Abisuak beti agertzen dira plataforman; posta aukerakoa da.",
+      "description": "Zure abisuak beti daude «{section}» atalean, menuan. Posta aukerakoa da.",
       "updated": "Abisuen hobespenak eguneratu dira",
       "update_error": "Ezin izan dira abisuen hobespenak gorde",
       "email": {
         "title": "Abisuak postaz",
-        "description": "Berrikusitako entregak, gonbidapenak eta baieztapenak zure postan ere."
+        "description": "Jaso zure postan ere berrikusitako entregak, beren ehunekoarekin, eta entregen gogorarazpenak."
       },
       "reminders": {
         "title": "Entregen gogorarazpenak",
-        "description": "Abisu bat misio bat amaitzeko 24 ordu baino gutxiago falta direnean."
+        "description": "Abisu bat amaitu ez duzun misio bati 24 ordu baino gutxiago falta zaizkionean. Desaktibatzen baduzu, ez duzu jasoko ez plataforman ez postaz."
       }
     },
     "markdown": {
-      "insert_at_end": "Txertatu amaieran"
+      "insert_at_end": "Txertatu amaieran",
+      "generating": "Sortzen…",
+      "send_to_ai": "Bidali IAri"
     },
     "student_preview": {
       "banner": "Plataforma ikasle gisa ikusten ari zara (demoa)"

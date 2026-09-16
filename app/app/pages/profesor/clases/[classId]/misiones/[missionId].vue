@@ -58,7 +58,7 @@
       :show-xp="classCfg.xp"
       :show-coins="classCfg.coins"
       :show-mana="classCfg.mana"
-      @close="selectedEnigma = null"
+      @close="closeSubmissionsModal"
       @refresh="updateEnigmaSubmissionsCount"
     />
 
@@ -122,6 +122,7 @@ definePageMeta({
 })
 
 const route = useRoute()
+const router = useRouter()
 const classId = route.params.classId as string
 const missionId = computed(() => route.params.missionId as string)
 
@@ -689,17 +690,50 @@ const openSubmissionsModal = (enigma: MissionEnigma) => {
   selectedEnigma.value = enigma
 }
 
-// Load mission data on mount
-onMounted(() => {
-  fetchMission()
+// `?entregas=<enigmaId>` (el aviso de entrega nueva) abre al cargar la ventana
+// de entregas de ese enigma. El parámetro se quita al cerrarla, o en el acto si
+// el enigma ya no existe; `?tab=` y lo demás de la URL se conservan.
+const submissionsQuery = () => {
+  const value = route.query.entregas
+  return typeof value === 'string' && value ? value : null
+}
+
+const clearSubmissionsQuery = () => {
+  if (!('entregas' in route.query)) return
+  const { entregas: _removed, ...query } = route.query
+  router.replace({ query })
+}
+
+const openSubmissionsFromQuery = () => {
+  const enigmaId = submissionsQuery()
+  if (!enigmaId || !mission.value) return
+  const enigma = mission.value.enigmas?.find(e => e.id === enigmaId)
+  if (enigma) selectedEnigma.value = enigma
+  else clearSubmissionsQuery()
+}
+
+const closeSubmissionsModal = () => {
+  selectedEnigma.value = null
+  clearSubmissionsQuery()
+}
+
+// Load mission data on mount. Si se llega desde un aviso, con datos frescos:
+// el número de entregas del enigma puede haber cambiado desde la caché.
+onMounted(async () => {
+  await fetchMission(!!submissionsQuery())
+  openSubmissionsFromQuery()
 })
 
-// Watch for route changes (when switching between missions)
+// Cambio de misión (otra misión, quizá desde un aviso) o solo de `?entregas=`
+// (un aviso de otro enigma con esta misión ya abierta). En un único watch para
+// no buscar el enigma nuevo en la misión anterior.
 watch(
-  () => route.params.missionId,
-  (newId, oldId) => {
+  () => [route.params.missionId, route.query.entregas] as const,
+  ([newId, entregas], [oldId, oldEntregas]) => {
     if (newId && newId !== oldId) {
-      fetchMission()
+      void fetchMission(!!submissionsQuery()).then(openSubmissionsFromQuery)
+    } else if (entregas && entregas !== oldEntregas && !loading.value) {
+      openSubmissionsFromQuery()
     }
   }
 )

@@ -10,6 +10,7 @@
       </p>
       <OptionPillGroup
         v-model="fontScale"
+        fluid
         :options="fontScaleOptions"
         :aria-label="t('common.accessibility.font_scale.title')"
       >
@@ -29,6 +30,7 @@
       </p>
       <OptionPillGroup
         v-model="contrastMode"
+        fluid
         :options="contrastOptions"
         :aria-label="t('common.accessibility.contrast.title')"
       />
@@ -44,6 +46,7 @@
       </p>
       <OptionPillGroup
         v-model="colorVision"
+        fluid
         :options="colorVisionOptions"
         :columns="2"
         :aria-label="t('common.accessibility.color_vision.title')"

@@ -15,12 +15,14 @@
       "blog": "Blog",
       "help": "Help",
       "section_management": "Management",
-      "section_system": "System"
+      "section_content": "Content",
+      "section_system": "System",
+      "profile": "My profile",
+      "logout": "Log out"
     },
     "actions": {
       "save": "Save",
       "cancel": "Cancel",
-      "edit": "Edit",
       "rename": "Rename",
       "delete": "Delete",
       "open_menu": "Open menu",
@@ -32,6 +34,7 @@
       "create_new_account": "Create New Account",
       "enter": "Enter",
       "close": "Close",
+      "processing": "Processing…",
       "view_mode": "View mode"
     },
     "status": {
@@ -68,12 +71,28 @@
     },
     "notifications": {
       "title": "Notifications",
-      "panel_label": "Notifications panel",
-      "view_all": "View all",
-      "empty": "You have no notifications",
-      "unread_label": "Unread",
-      "aria_label": "Notifications",
-      "aria_label_unread": "Notifications ({count} unread)"
+      "subtitle": "What's new in your classes and missions.",
+      "unread_count": "{count} unread",
+      "open_menu_unread": "Open menu ({count} unread notification) | Open menu ({count} unread notifications)",
+      "mark_all_read": "Mark all as read",
+      "mark_read": "Mark as read",
+      "marked_read": "Notification marked as read",
+      "all_marked": "All notifications marked as read",
+      "delete": "Delete notification: {title}, {time}",
+      "deleted": "Notification deleted",
+      "filter_label": "Show notifications",
+      "filter_all": "All",
+      "filter_unread": "Unread",
+      "new": "New",
+      "unread_status": "unread",
+      "empty_title": "You have no notifications",
+      "empty_description": "When something happens in your classes, you'll see it here.",
+      "empty_unread_title": "No unread notifications",
+      "empty_unread_description": "You're all caught up.",
+      "show_all": "Show all notifications",
+      "load_error": "Couldn't load your notifications",
+      "retry": "Try again",
+      "action_error": "That didn't work. Please try again."
     },
     "errors": {
       "generic": "An error occurred. Please try again."
@@ -83,11 +102,6 @@
       "teacher": "Teacher",
       "admin": "Administrator",
       "admin_system": "System Administrator"
-    },
-    "user_dropdown": {
-      "my_profile": "My Profile",
-      "logout": "Log Out",
-      "user_menu_label": "User menu"
     },
     "sidebar": {
       "new_conversation": "New conversation",
@@ -126,6 +140,7 @@
       "stat_teachers": "Teachers",
       "stat_centers": "Centers",
       "partners_title": "Who are we?",
+      "developed_by": "Developed by",
       "gods_title": "Your Olympic Mentors",
       "gods_subtitle": "5 AI assistants inspired by Greek gods, each an expert in their domain",
       "cta_final_title": "Ready for Your Epic Adventure?",
@@ -167,8 +182,7 @@
       "system_access": "System access",
       "teacher_panel": "Teacher panel",
       "student_panel": "Student panel",
-      "help_center": "Help center",
-      "documentation": "Documentation"
+      "help_center": "Help center"
     },
     "level_up": {
       "title": "Level Up!",
@@ -204,14 +218,27 @@
     },
     "help": {
       "title": "Help centre",
-      "hero_title": "How can we help?",
-      "hero_subtitle": "Guides, step-by-step tutorials and platform setup. Written for teachers, not for engineers.",
+      "hero": {
+        "todo": {
+          "title": "How can we help?",
+          "subtitle": "Guides, tutorials and videos for teachers and students."
+        },
+        "profesor": {
+          "title": "Help for teachers",
+          "subtitle": "Step-by-step guides to set up classes, missions and rewards. Written for teachers, not for engineers."
+        },
+        "alumno": {
+          "title": "Help for students",
+          "subtitle": "How to join your class, hand in missions and make the most of your XP, coins and mana."
+        }
+      },
       "all_categories": "All categories",
-      "article_count": "{count} articles",
+      "article_count": "No articles | 1 article | {count} articles",
       "keep_reading": "Keep reading",
       "on_this_page": "On this page",
       "previous": "Previous",
       "next": "Next",
+      "article_pagination": "Previous and next article",
       "still_stuck": "Didn't find what you were looking for?",
       "contact_us": "Get in touch",
       "updated_on": "Updated on {date}",
@@ -232,7 +259,22 @@
         "empty": "Nothing for “{query}”",
         "empty_hint": "Try other words: “submissions”, “coins”, “levels”."
       },
-      "most_read": "Most read"
+      "most_read": "Most read",
+      "kind": {
+        "guia": "Guide",
+        "tutorial": "Tutorial",
+        "faq": "FAQ",
+        "video": "Video"
+      },
+      "watch_video": "Watch the video",
+      "scope_todo": "All help",
+      "scope_label": "Help section",
+      "audience": {
+        "profesor": "Teachers",
+        "alumno": "Students",
+        "ambos": "Teachers and students"
+      },
+      "back_to_app": "Back to the app"
     },
     "meta": {
       "site_title": "ITAKAI - The adventure of learning | Gamified Educational Platform",
@@ -294,24 +336,26 @@
       "reduce_motion": {
         "title": "Less motion",
         "description": "Reduces transitions and movement effects."
-      }
+      },
+      "opens_new_tab": "(opens in a new tab)"
     },
     "notification_settings": {
-      "title": "Alerts",
-      "description": "What we tell you about, and where. Alerts always appear in the platform; email is optional.",
-      "updated": "Alert preferences updated",
-      "update_error": "Alert preferences could not be saved",
+      "description": "Your notifications are always in \"{section}\", in the menu. Email is optional.",
+      "updated": "Notification preferences updated",
+      "update_error": "Notification preferences could not be saved",
       "email": {
-        "title": "Email alerts",
-        "description": "Reviewed work, invitations and confirmations also sent to your inbox."
+        "title": "Email notifications",
+        "description": "Also get reviewed submissions, with their percentage, and deadline reminders in your inbox."
       },
       "reminders": {
         "title": "Deadline reminders",
-        "description": "An alert when a mission has less than 24 hours left."
+        "description": "A notification when a mission you haven't finished has less than 24 hours left. If you turn it off, you won't get it in the platform or by email."
       }
     },
     "markdown": {
-      "insert_at_end": "Insert at the end"
+      "insert_at_end": "Insert at the end",
+      "generating": "Generating…",
+      "send_to_ai": "Send to the AI"
     },
     "student_preview": {
       "banner": "You're viewing the platform as a student (demo)"

@@ -15,12 +15,14 @@
       "blog": "Blog",
       "help": "Axuda",
       "section_management": "Xestión",
-      "section_system": "Sistema"
+      "section_content": "Contidos",
+      "section_system": "Sistema",
+      "profile": "O meu perfil",
+      "logout": "Pechar sesión"
     },
     "actions": {
       "save": "Gardar",
       "cancel": "Cancelar",
-      "edit": "Editar",
       "rename": "Renomear",
       "delete": "Eliminar",
       "open_menu": "Abrir menú",
@@ -32,6 +34,7 @@
       "create_new_account": "Crear Conta Nova",
       "enter": "Entrar",
       "close": "Pechar",
+      "processing": "Procesando…",
       "view_mode": "Modo de vista"
     },
     "status": {
@@ -67,13 +70,29 @@
       "join_request_reject_error": "Erro ao rexeitar a solicitude"
     },
     "notifications": {
-      "title": "Notificacións",
-      "panel_label": "Panel de notificacións",
-      "view_all": "Ver todas",
-      "empty": "Non tes notificacións",
-      "unread_label": "Non lida",
-      "aria_label": "Notificacións",
-      "aria_label_unread": "Notificacións ({count} sen ler)"
+      "title": "Avisos",
+      "subtitle": "As novidades das túas clases e misións.",
+      "unread_count": "{count} sen ler",
+      "open_menu_unread": "Abrir menú ({count} aviso sen ler) | Abrir menú ({count} avisos sen ler)",
+      "mark_all_read": "Marcar todos como lidos",
+      "mark_read": "Marcar como lido",
+      "marked_read": "Aviso marcado como lido",
+      "all_marked": "Todos os avisos están marcados como lidos",
+      "delete": "Eliminar o aviso: {title}, {time}",
+      "deleted": "Aviso eliminado",
+      "filter_label": "Mostrar avisos",
+      "filter_all": "Todos",
+      "filter_unread": "Sen ler",
+      "new": "Novo",
+      "unread_status": "sen ler",
+      "empty_title": "Non tes avisos",
+      "empty_description": "Cando haxa novidades nas túas clases, aparecerán aquí.",
+      "empty_unread_title": "Non tes avisos sen ler",
+      "empty_unread_description": "Estás ao día.",
+      "show_all": "Ver todos os avisos",
+      "load_error": "Non se puideron cargar os avisos",
+      "retry": "Tentar de novo",
+      "action_error": "Non se puido completar a acción. Téntao de novo."
     },
     "errors": {
       "generic": "Ocorreu un erro. Por favor, téntao de novo."
@@ -83,11 +102,6 @@
       "teacher": "Profesor",
       "admin": "Administrador",
       "admin_system": "Administrador do Sistema"
-    },
-    "user_dropdown": {
-      "my_profile": "O Meu Perfil",
-      "logout": "Pechar Sesión",
-      "user_menu_label": "Menú de usuario"
     },
     "sidebar": {
       "new_conversation": "Nova conversa",
@@ -126,6 +140,7 @@
       "stat_teachers": "Profesores",
       "stat_centers": "Centros",
       "partners_title": "Quen somos?",
+      "developed_by": "Desenvolvido por",
       "gods_title": "Os Teus Mentores Olímpicos",
       "gods_subtitle": "5 asistentes IA inspirados en deuses gregos, cada un experto no seu dominio",
       "cta_final_title": "Listo para a túa Aventura Épica?",
@@ -167,8 +182,7 @@
       "system_access": "Acceso ao sistema",
       "teacher_panel": "Panel do profesor",
       "student_panel": "Panel do estudante",
-      "help_center": "Centro de axuda",
-      "documentation": "Documentación"
+      "help_center": "Centro de axuda"
     },
     "level_up": {
       "title": "Subiches de Nivel!",
@@ -204,14 +218,27 @@
     },
     "help": {
       "title": "Centro de axuda",
-      "hero_title": "En que che botamos unha man?",
-      "hero_subtitle": "Guías, titoriais paso a paso e configuración da plataforma. Escritas para o profesorado, non para informáticos.",
+      "hero": {
+        "todo": {
+          "title": "En que che botamos unha man?",
+          "subtitle": "Guías, titoriais e vídeos para o profesorado e o alumnado."
+        },
+        "profesor": {
+          "title": "Axuda para o profesorado",
+          "subtitle": "Guías paso a paso para crear clases, misións e recompensas. Escritas para docentes, non para informáticos."
+        },
+        "alumno": {
+          "title": "Axuda para o alumnado",
+          "subtitle": "Como entrar na túa clase, entregar misións e sacarlle partido á túa XP, ás túas moedas e ao teu maná."
+        }
+      },
       "all_categories": "Todas as categorías",
-      "article_count": "{count} artigos",
+      "article_count": "Sen artigos | 1 artigo | {count} artigos",
       "keep_reading": "Seguir lendo",
       "on_this_page": "Nesta páxina",
       "previous": "Anterior",
       "next": "Seguinte",
+      "article_pagination": "Artigo anterior e seguinte",
       "still_stuck": "Non atopaches o que buscabas?",
       "contact_us": "Escríbenos",
       "updated_on": "Actualizado o {date}",
@@ -232,7 +259,22 @@
         "empty": "Nada por «{query}»",
         "empty_hint": "Proba con outras palabras: «entregas», «moedas», «niveis»."
       },
-      "most_read": "O máis consultado"
+      "most_read": "O máis consultado",
+      "kind": {
+        "guia": "Guía",
+        "tutorial": "Titorial",
+        "faq": "Pregunta frecuente",
+        "video": "Vídeo"
+      },
+      "watch_video": "Ver o vídeo",
+      "scope_todo": "Toda a axuda",
+      "scope_label": "Sección de axuda",
+      "audience": {
+        "profesor": "Profesorado",
+        "alumno": "Alumnado",
+        "ambos": "Profesorado e alumnado"
+      },
+      "back_to_app": "Volver á app"
     },
     "meta": {
       "site_title": "ITAKAI - A aventura de aprender | Plataforma Educativa Gamificada",
@@ -294,24 +336,26 @@
       "reduce_motion": {
         "title": "Menos animación",
         "description": "Reduce transicións e efectos de movemento."
-      }
+      },
+      "opens_new_tab": "(ábrese nunha lapela nova)"
     },
     "notification_settings": {
-      "title": "Avisos",
-      "description": "De que te avisamos e por onde. Os avisos sempre aparecen na plataforma; o correo é opcional.",
+      "description": "Os teus avisos están sempre en «{section}», no menú. O correo é opcional.",
       "updated": "Preferencias de avisos actualizadas",
       "update_error": "Non se puideron gardar as preferencias de avisos",
       "email": {
         "title": "Avisos por correo",
-        "description": "Entregas revisadas, invitacións e confirmacións tamén no teu correo."
+        "description": "Recibe tamén no teu correo as entregas revisadas, coa súa porcentaxe, e os recordatorios de entrega."
       },
       "reminders": {
         "title": "Recordatorios de entrega",
-        "description": "Un aviso cando queden menos de 24 horas para o final dunha misión."
+        "description": "Un aviso cando queden menos de 24 horas para o final dunha misión que non remataches. Se o desactivas, non che chega nin na plataforma nin por correo."
       }
     },
     "markdown": {
-      "insert_at_end": "Inserir ao final"
+      "insert_at_end": "Inserir ao final",
+      "generating": "Xerando…",
+      "send_to_ai": "Enviar á IA"
     },
     "student_preview": {
       "banner": "Estás vendo a plataforma como un alumno (demo)"

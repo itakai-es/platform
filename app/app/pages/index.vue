@@ -680,6 +680,28 @@
             </div>
           </a>
         </div>
+
+        <!-- Developer credit -->
+        <div class="border-t border-gray-300 mt-12 pt-10 flex justify-center">
+          <a
+            href="https://beply.es/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 rounded-lg px-3 py-2 text-center hover:opacity-80 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-navy-700 focus-visible:ring-offset-2"
+            style="color: var(--color-primary)"
+          >
+            <span class="text-sm">{{ $t('common.landing.developed_by') }}</span>
+            <img
+              src="/app/landing/logos/logo_beply.webp"
+              alt="Beply"
+              width="480"
+              height="180"
+              loading="lazy"
+              class="h-8 w-auto"
+            />
+            <span class="sr-only">{{ $t('common.accessibility.opens_new_tab') }}</span>
+          </a>
+        </div>
       </div>
     </section>
 

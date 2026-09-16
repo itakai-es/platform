@@ -7,6 +7,7 @@ import { execSync } from 'child_process'
 import { fetchSystemLogs, logServiceHealthResults } from './system-log.service.js'
 import { getAiSettings, getAdminSettings, updateSection } from '../settings/settings.service.js'
 import { SETTINGS_SECTIONS, type SettingsSection } from '../settings/settings.types.js'
+import { openAiEndpoint } from '../ai/providers/openai-endpoint.js'
 
 const userFiltersSchema = z.object({
   role: z.string().optional(),
@@ -53,10 +54,9 @@ async function probeAiEndpoint(
   baseUrl: string,
   credentials?: { apiKey: string; model: string }
 ): Promise<{ status: ServiceStatus; detail: string }> {
-  // Misma normalización que el proveedor (ver normalizeBaseUrl en spark-router):
-  // la base es el host, así que se quita un `/v1` final si lo hubiera. Sin esto,
-  // una base configurada como `https://host/v1` se probaba en `/v1/v1/models`.
-  const url = (baseUrl || DEFAULT_SPARK_ROUTER_BASE_URL).replace(/\/+$/, '').replace(/\/v1$/, '')
+  // Mismas rutas que el proveedor: openAiEndpoint acepta el host o una base ya
+  // versionada (`https://host/v1`, `https://host/api/v4`).
+  const url = (baseUrl || DEFAULT_SPARK_ROUTER_BASE_URL).replace(/\/+$/, '')
   const start = performance.now()
 
   // 1) Spark /health (detalle rico si es un Spark propio)
@@ -77,7 +77,7 @@ async function probeAiEndpoint(
 
   // 2) Probe genérico OpenAI-compatible: cualquier respuesta HTTP = servidor vivo
   try {
-    const res = await fetch(`${url}/v1/models`, { signal: AbortSignal.timeout(2500) })
+    const res = await fetch(openAiEndpoint(url, 'models'), { signal: AbortSignal.timeout(2500) })
     const ms = Math.round(performance.now() - start)
     return { status: 'operational', detail: `Alcanzable (HTTP ${res.status}) · ${ms}ms` }
   } catch { /* tampoco expone /v1/models → se prueba la llamada real */ }
@@ -89,7 +89,7 @@ async function probeAiEndpoint(
   //    Preguntar por lo que de verdad se usa es lo único concluyente.
   if (credentials) {
     try {
-      const res = await fetch(`${url}/v1/chat/completions`, {
+      const res = await fetch(openAiEndpoint(url, 'chat/completions'), {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${credentials.apiKey}`,

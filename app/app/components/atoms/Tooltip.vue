@@ -4,9 +4,11 @@
     class="relative inline-flex"
     @mouseenter="onEnter"
     @mouseleave="show = false"
+    @focusin="onEnter"
+    @focusout="show = false"
   >
     <slot />
-    <Teleport to="body">
+    <Teleport :to="overlayTarget" defer>
       <Transition name="tooltip-fade">
         <span
           v-if="show && hasContent"
@@ -38,6 +40,8 @@ const props = withDefaults(defineProps<{ text?: string; variant?: 'dark' | 'ligh
 })
 
 const slots = useSlots()
+// Dentro de un modal, su capa; fuera, el body (ver `useOverlayTarget`).
+const overlayTarget = useOverlayTarget()
 const hasContent = computed(() => !!props.text || !!slots.content)
 
 const show = ref(false)

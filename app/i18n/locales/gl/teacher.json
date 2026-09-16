@@ -833,6 +833,19 @@
           "legendary": "Legendaria"
         },
         "btn_close": "Pechar"
+      },
+      "enigma_submissions_modal": {
+        "title_fallback": "Entregas",
+        "load_error": "Non se puideron cargar as entregas",
+        "retry": "Volver tentar",
+        "empty": "Non hai entregas pendentes de revisión",
+        "download": "Descargar",
+        "grade": "Valorar",
+        "pct_label": "% completado da tarefa",
+        "pct_custom": "Outra porcentaxe",
+        "will_receive": "Recibirá",
+        "approve": "Aprobar {pct}%",
+        "approve_error": "Non se puido aprobar a entrega"
       }
     },
     "templates": {
@@ -922,10 +935,6 @@
       "done": "Feito",
       "wizard_question_schedule": "Ponlle un horario á túa clase",
       "wizard_question_cover": "Agora, unha portada para a túa clase"
-    },
-    "submissions": {
-      "subtitle": "Revisa e aproba as entregas desta clase desde unha soa pantalla.",
-      "back_to_class": "Volver á clase"
     }
   }
 }

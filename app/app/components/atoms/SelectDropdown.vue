@@ -6,9 +6,13 @@
       type="button"
       :disabled="disabled"
       :class="triggerClasses"
+      :aria-labelledby="labelledby ? `${labelledby} ${valueId}` : undefined"
+      :aria-describedby="describedby"
+      :aria-expanded="isOpen"
       @click="toggleDropdown"
+      @keydown.esc="onTriggerEsc"
     >
-      <span class="truncate">{{ selectedLabel }}</span>
+      <span :id="valueId" class="truncate">{{ selectedLabel }}</span>
       <ChevronDownIcon
         :class="[
           'w-4 h-4 text-navy-700/70 transition-transform duration-200 flex-shrink-0',
@@ -20,7 +24,7 @@
     <!-- Dropdown Menu. Se teletransporta a <body> y se posiciona `fixed` respecto
          al botón para que ningún ancestro con overflow (p. ej. el <main> con scroll
          o las barras con overflow-x) lo recorte. -->
-    <Teleport to="body">
+    <Teleport :to="overlayTarget" defer>
       <Transition
         enter-active-class="transition duration-150 ease-out"
         enter-from-class="opacity-0 translate-y-1"
@@ -34,6 +38,7 @@
           ref="menuRef"
           :style="menuStyle"
           class="fixed z-50 min-w-[200px] bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden"
+          @keydown.esc.stop="closeMenu"
         >
           <!-- Buscador (opcional): útil en listas largas (provincias, asignaturas…) -->
           <div v-if="searchable" class="border-b border-gray-100 p-2">
@@ -100,6 +105,13 @@ interface Props {
   noResultsText?: string
   /** Resalta el campo en rojo para señalar un valor requerido que falta. */
   error?: boolean
+  /**
+   * El `id` de la etiqueta externa que da nombre al desplegable. Se encadena
+   * con el valor elegido para que el lector anuncie los dos.
+   */
+  labelledby?: string
+  /** El `id` de la pista o el error que describen el desplegable. */
+  describedby?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -115,6 +127,8 @@ const emit = defineEmits<{
   'update:modelValue': [value: string | number]
 }>()
 
+const valueId = useId()
+const overlayTarget = useOverlayTarget()
 const dropdownRef = ref<HTMLElement | null>(null)
 const triggerRef = ref<HTMLElement | null>(null)
 const menuRef = ref<HTMLElement | null>(null)
@@ -187,9 +201,27 @@ const toggleDropdown = () => {
   }
 }
 
+/**
+ * Cierra el menú. Si el foco estaba dentro (teclado o buscador), vuelve al
+ * botón: el menú se desmonta y, sin esto, el foco caería en <body> y el
+ * siguiente Tab saldría del diálogo que lo contenga.
+ */
+// Con el menú abierto y el foco en el botón, Escape solo cierra el menú (no
+// el diálogo que lo contiene); cerrado, deja pasar el evento.
+function onTriggerEsc(event: KeyboardEvent) {
+  if (!isOpen.value) return
+  event.stopPropagation()
+  closeMenu()
+}
+
+function closeMenu() {
+  if (menuRef.value?.contains(document.activeElement)) triggerRef.value?.focus()
+  isOpen.value = false
+}
+
 const selectOption = (option: Option) => {
   emit('update:modelValue', option.value)
-  isOpen.value = false
+  closeMenu()
 }
 
 // Reposiciona mientras esté abierto: el scroll ocurre en contenedores internos

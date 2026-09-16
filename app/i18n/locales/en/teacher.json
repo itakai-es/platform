@@ -833,6 +833,19 @@
           "legendary": "Legendary"
         },
         "btn_close": "Close"
+      },
+      "enigma_submissions_modal": {
+        "title_fallback": "Submissions",
+        "load_error": "Couldn't load the submissions",
+        "retry": "Try again",
+        "empty": "No submissions waiting for review",
+        "download": "Download",
+        "grade": "Grade",
+        "pct_label": "% of the task completed",
+        "pct_custom": "Custom percentage",
+        "will_receive": "Will receive",
+        "approve": "Approve {pct}%",
+        "approve_error": "Couldn't approve the submission"
       }
     },
     "templates": {
@@ -922,10 +935,6 @@
       "done": "Done",
       "wizard_question_schedule": "Set a schedule for your class",
       "wizard_question_cover": "Now, a cover for your class"
-    },
-    "submissions": {
-      "subtitle": "Review and approve this class's submissions from a single screen.",
-      "back_to_class": "Back to the class"
     }
   }
 }

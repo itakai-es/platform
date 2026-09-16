@@ -15,12 +15,14 @@
       "blog": "Blog",
       "help": "Ayuda",
       "section_management": "Xestión",
-      "section_system": "Sistema"
+      "section_content": "Conteníos",
+      "section_system": "Sistema",
+      "profile": "El mio perfil",
+      "logout": "Zarrar sesión"
     },
     "actions": {
       "save": "Guardar",
       "cancel": "Encaboxar",
-      "edit": "Editar",
       "rename": "Renomar",
       "delete": "Desaniciar",
       "open_menu": "Abrir menú",
@@ -32,6 +34,7 @@
       "create_new_account": "Crear una cuenta nueva",
       "enter": "Entrar",
       "close": "Zarrar",
+      "processing": "Procesando…",
       "view_mode": "Mou de vista"
     },
     "status": {
@@ -68,12 +71,28 @@
     },
     "notifications": {
       "title": "Avisos",
-      "panel_label": "Panel d'avisos",
-      "view_all": "Ver toos",
-      "empty": "Nun tienes avisos",
-      "unread_label": "Ensin lleer",
-      "aria_label": "Avisos",
-      "aria_label_unread": "Avisos ({count} ensin lleer)"
+      "subtitle": "Les novedaes de les tos clases y misiones.",
+      "unread_count": "{count} ensin lleer",
+      "open_menu_unread": "Abrir menú ({count} avisu ensin lleer) | Abrir menú ({count} avisos ensin lleer)",
+      "mark_all_read": "Marcar toos como lleíos",
+      "mark_read": "Marcar como lleíu",
+      "marked_read": "Avisu marcáu como lleíu",
+      "all_marked": "Tolos avisos tán marcaos como lleíos",
+      "delete": "Desaniciar l'avisu: {title}, {time}",
+      "deleted": "Avisu desaniciáu",
+      "filter_label": "Amosar avisos",
+      "filter_all": "Toos",
+      "filter_unread": "Ensin lleer",
+      "new": "Nuevu",
+      "unread_status": "ensin lleer",
+      "empty_title": "Nun tienes avisos",
+      "empty_description": "Cuando haya novedaes nes tos clases, van apaecer equí.",
+      "empty_unread_title": "Nun tienes avisos ensin lleer",
+      "empty_unread_description": "Tas al día.",
+      "show_all": "Ver tolos avisos",
+      "load_error": "Nun se pudieron cargar los avisos",
+      "retry": "Tornar a intentalo",
+      "action_error": "Nun se pudo completar l'aición. Inténtalo otra vuelta."
     },
     "errors": {
       "generic": "Hebo un fallu. Inténtalo otra vuelta."
@@ -83,11 +102,6 @@
       "teacher": "Profesor",
       "admin": "Alministrador",
       "admin_system": "Alministrador del sistema"
-    },
-    "user_dropdown": {
-      "my_profile": "El mio perfil",
-      "logout": "Zarrar sesión",
-      "user_menu_label": "Menú d'usuariu"
     },
     "sidebar": {
       "new_conversation": "Conversación nueva",
@@ -126,6 +140,7 @@
       "stat_teachers": "Profesoráu",
       "stat_centers": "Centros",
       "partners_title": "¿Quién somos?",
+      "developed_by": "Desendolcáu por",
       "gods_title": "Los tos mentores olímpicos",
       "gods_subtitle": "5 asistentes IA inspiraos en dioses griegos, cada ún espertu nel so dominiu",
       "cta_final_title": "¿Preparáu pa la to aventura épica?",
@@ -167,8 +182,7 @@
       "system_access": "Accesu al sistema",
       "teacher_panel": "Panel del profesor",
       "student_panel": "Panel del alumnu",
-      "help_center": "Centru d'ayuda",
-      "documentation": "Documentación"
+      "help_center": "Centru d'ayuda"
     },
     "level_up": {
       "title": "¡Xubiesti de nivel!",
@@ -204,14 +218,27 @@
     },
     "help": {
       "title": "Centru d'ayuda",
-      "hero_title": "¿En qué te echamos un gabitu?",
-      "hero_subtitle": "Guíes, tutoriales pasu a pasu y configuración de la plataforma. Escrites pal profesoráu, non pa informáticos.",
+      "hero": {
+        "todo": {
+          "title": "¿En qué te echamos un gabitu?",
+          "subtitle": "Guíes, tutoriales y videos pal profesoráu y l'alumnáu."
+        },
+        "profesor": {
+          "title": "Ayuda pal profesoráu",
+          "subtitle": "Guíes pasu a pasu pa crear clases, misiones y recompenses. Escrites pa docentes, non pa informáticos."
+        },
+        "alumno": {
+          "title": "Ayuda pal alumnáu",
+          "subtitle": "Cómo entrar na to clase, entregar misiones y sacar provechu a la to XP, les tos monedes y el to maná."
+        }
+      },
       "all_categories": "Toles categoríes",
-      "article_count": "{count} artículos",
+      "article_count": "Ensin artículos | 1 artículu | {count} artículos",
       "keep_reading": "Siguir lleendo",
       "on_this_page": "Nesta páxina",
       "previous": "Anterior",
       "next": "Siguiente",
+      "article_pagination": "Artículu anterior y siguiente",
       "still_stuck": "¿Nun atopesti lo que buscabes?",
       "contact_us": "Escríbenos",
       "updated_on": "Anováu el {date}",
@@ -232,7 +259,22 @@
         "empty": "Nada por «{query}»",
         "empty_hint": "Prueba con otres pallabres: «entregues», «monedes», «niveles»."
       },
-      "most_read": "Lo más consultao"
+      "most_read": "Lo más consultao",
+      "kind": {
+        "guia": "Guía",
+        "tutorial": "Tutorial",
+        "faq": "Entruga frecuente",
+        "video": "Videu"
+      },
+      "watch_video": "Ver el videu",
+      "scope_todo": "Tola ayuda",
+      "scope_label": "Seición d'ayuda",
+      "audience": {
+        "profesor": "Profesoráu",
+        "alumno": "Alumnáu",
+        "ambos": "Profesoráu y alumnáu"
+      },
+      "back_to_app": "Volver a l'app"
     },
     "meta": {
       "site_title": "ITAKAI - L'aventura de deprender | Plataforma educativa gamificada",
@@ -294,24 +336,26 @@
       "reduce_motion": {
         "title": "Menos animación",
         "description": "Amenorga transiciones y efeutos de movimientu."
-      }
+      },
+      "opens_new_tab": "(ábrese nuna llingüeta nueva)"
     },
     "notification_settings": {
-      "title": "Avisos",
-      "description": "De qué t'avisamos y per ónde. Los avisos siempre apaecen na plataforma; el corréu ye opcional.",
+      "description": "Los tos avisos tán siempre en «{section}», nel menú. El corréu ye opcional.",
       "updated": "Preferencies d'avisos anovaes",
       "update_error": "Nun se pudieron guardar les preferencies d'avisos",
       "email": {
         "title": "Avisos per corréu",
-        "description": "Entregues revisaes, invitaciones y confirmaciones tamién nel to corréu."
+        "description": "Recibi tamién nel to corréu les entregues revisaes, col so porcentax, y los recordatorios d'entrega."
       },
       "reminders": {
         "title": "Recordatorios d'entrega",
-        "description": "Un avisu cuando queden menos de 24 hores pal final d'una misión."
+        "description": "Un avisu cuando queden menos de 24 hores pal final d'una misión que nun acabasti. Si lu desactives, nun te llega nin na plataforma nin per corréu."
       }
     },
     "markdown": {
-      "insert_at_end": "Inxertar al final"
+      "insert_at_end": "Inxertar al final",
+      "generating": "Xenerando…",
+      "send_to_ai": "Unviar a la IA"
     },
     "student_preview": {
       "banner": "Tas viendo la plataforma como un alumnu (demo)"

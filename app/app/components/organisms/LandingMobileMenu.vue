@@ -78,9 +78,10 @@
         <!-- Divider -->
         <div class="my-6 border-t border-gray-200" />
 
-        <!-- Language Switcher -->
-        <div class="mb-4 flex justify-center">
+        <!-- Idioma y accesibilidad: los dos ajustes que hacen falta antes de entrar -->
+        <div class="mb-4 flex flex-wrap items-center justify-center gap-2">
           <LanguageSwitcher variant="dark" />
+          <AccessibilityMenu variant="dark" modal />
         </div>
 
         <!-- CTA Buttons -->
@@ -111,7 +112,7 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { watch } from 'vue'
+import { watch, onUnmounted } from 'vue'
 
 const { t } = useI18n()
 
@@ -137,16 +138,13 @@ const handleLogin = () => {
   router.push('/auth/login')
 }
 
-// Disable body scroll when menu is open
+// Bloquea el scroll de la página mientras el menú está abierto. Es el mismo
+// bloqueo compartido que usa Modal: cerrar la ventana de Accesibilidad no lo
+// libera mientras el menú siga abierto.
+const { lock, unlock } = useBodyScrollLock()
 watch(
   () => props.isOpen,
-  isOpen => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = ''
-    }
-  }
+  isOpen => (isOpen ? lock() : unlock())
 )
 
 // Close on escape key
@@ -167,6 +165,11 @@ watch(
     }
   }
 )
+
+onUnmounted(() => {
+  unlock()
+  document.removeEventListener('keydown', handleEscape)
+})
 </script>
 
 <style scoped>

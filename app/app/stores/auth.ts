@@ -196,6 +196,10 @@ export const useAuthStore = defineStore('auth', () => {
       localStorage.removeItem('itakai_theme')
       document.documentElement.removeAttribute('data-theme')
 
+      // Los avisos van aparte y primero: los `$reset()` de abajo pueden lanzar
+      // (los stores de tipo setup no lo implementan) y cortarían el resto.
+      useNotificationsStore().reset()
+
       // Reset all other stores to avoid data leakage between users
       try {
         const classesStore = useClassesStore()
@@ -224,6 +228,8 @@ export const useAuthStore = defineStore('auth', () => {
     if (import.meta.client) {
       localStorage.removeItem('auth_access_token')
       localStorage.removeItem('auth_user')
+      // La sesión ha caducado: quien entre después no debe ver estos avisos.
+      useNotificationsStore().reset()
     }
   }
 

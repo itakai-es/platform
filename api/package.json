@@ -1,6 +1,6 @@
 {
   "name": "itakai-backend",
-  "version": "1.0.0",
+  "version": "0.3.0",
   "description": "Backend API for ITAKAI educational platform",
   "main": "dist/index.js",
   "type": "module",
@@ -12,7 +12,6 @@
     "db:migrate": "prisma migrate dev",
     "db:push": "prisma db push",
     "db:seed": "tsx prisma/seed.ts",
-    "db:seed:help": "tsx prisma/seed-help.ts",
     "db:bootstrap": "tsx prisma/bootstrap.ts",
     "db:studio": "prisma studio",
     "db:reset": "prisma migrate reset --force",

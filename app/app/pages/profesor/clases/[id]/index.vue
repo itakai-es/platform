@@ -18,9 +18,6 @@
           <p class="text-sm text-navy-700/80 mt-2">
             {{ t('teacher.classes.detail.pending_reviews') }}
           </p>
-          <NuxtLink :to="`/profesor/clases/${classId}/entregas`" class="mt-4">
-            <Button variant="primary" size="sm"> Ver entregas </Button>
-          </NuxtLink>
         </div>
       </Card>
     </div>

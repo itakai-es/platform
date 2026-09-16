@@ -15,6 +15,13 @@ if (!existsSync(UPLOADS_DIR)) {
   mkdirSync(UPLOADS_DIR, { recursive: true })
 }
 
+/**
+ * Dónde revisa el profesor una entrega: la misión, con la ventana de entregas
+ * del enigma abierta (`?entregas=<enigmaId>`).
+ */
+export const submissionReviewUrl = (classId: string, missionId: string, enigmaId: string) =>
+  `/profesor/clases/${classId}/misiones/${missionId}?entregas=${enigmaId}`
+
 export class SubmissionsService {
   /**
    * Submit an enigma (student uploads a file)
@@ -125,7 +132,9 @@ export class SubmissionsService {
         enigma: enigma.title,
         class: enigma.mission.class.name,
       },
-      actionUrl: `/profesor/clases/${enigma.mission.classId}/entregas`,
+      // Lleva directo a lo que hay que revisar: la misión con la ventana de
+      // entregas de ese enigma abierta.
+      actionUrl: submissionReviewUrl(enigma.mission.classId, enigma.missionId, enigmaId),
       metadata: {
         submissionId: submission.id,
         enigmaId,

@@ -15,12 +15,14 @@
       "blog": "Blog",
       "help": "Ajuda",
       "section_management": "Gestió",
-      "section_system": "Sistema"
+      "section_content": "Continguts",
+      "section_system": "Sistema",
+      "profile": "El meu perfil",
+      "logout": "Tancar sessió"
     },
     "actions": {
       "save": "Guardar",
       "cancel": "Cancel·lar",
-      "edit": "Editar",
       "rename": "Canviar el nom",
       "delete": "Eliminar",
       "open_menu": "Obrir menú",
@@ -32,6 +34,7 @@
       "create_new_account": "Crear un compte nou",
       "enter": "Entrar",
       "close": "Tancar",
+      "processing": "Processant…",
       "view_mode": "Mode de vista"
     },
     "status": {
@@ -67,13 +70,29 @@
       "join_request_reject_error": "Error en rebutjar la sol·licitud"
     },
     "notifications": {
-      "title": "Notificacions",
-      "panel_label": "Panell de notificacions",
-      "view_all": "Veure-les totes",
-      "empty": "No tens notificacions",
-      "unread_label": "No llegida",
-      "aria_label": "Notificacions",
-      "aria_label_unread": "Notificacions ({count} sense llegir)"
+      "title": "Avisos",
+      "subtitle": "Les novetats de les teues classes i missions.",
+      "unread_count": "{count} sense llegir",
+      "open_menu_unread": "Obrir menú ({count} avís sense llegir) | Obrir menú ({count} avisos sense llegir)",
+      "mark_all_read": "Marcar-los tots com a llegits",
+      "mark_read": "Marcar com a llegit",
+      "marked_read": "Avís marcat com a llegit",
+      "all_marked": "Tots els avisos s'han marcat com a llegits",
+      "delete": "Eliminar l'avís: {title}, {time}",
+      "deleted": "Avís eliminat",
+      "filter_label": "Mostrar avisos",
+      "filter_all": "Tots",
+      "filter_unread": "Sense llegir",
+      "new": "Nou",
+      "unread_status": "sense llegir",
+      "empty_title": "No tens cap avís",
+      "empty_description": "Quan hi haja novetats en les teues classes, apareixeran ací.",
+      "empty_unread_title": "No tens cap avís sense llegir",
+      "empty_unread_description": "Estàs al dia.",
+      "show_all": "Vore tots els avisos",
+      "load_error": "No s'han pogut carregar els avisos",
+      "retry": "Torna-ho a intentar",
+      "action_error": "No s'ha pogut completar l'acció. Torna-ho a intentar."
     },
     "errors": {
       "generic": "S'ha produït un error. Torna-ho a intentar."
@@ -83,11 +102,6 @@
       "teacher": "Professor",
       "admin": "Administrador",
       "admin_system": "Administrador del sistema"
-    },
-    "user_dropdown": {
-      "my_profile": "El meu perfil",
-      "logout": "Tancar sessió",
-      "user_menu_label": "Menú d'usuari"
     },
     "sidebar": {
       "new_conversation": "Nova conversa",
@@ -126,6 +140,7 @@
       "stat_teachers": "Professors",
       "stat_centers": "Centres",
       "partners_title": "Qui som?",
+      "developed_by": "Desenvolupat per",
       "gods_title": "Els teus mentors olímpics",
       "gods_subtitle": "5 assistents IA inspirats en déus grecs, cadascun expert en el seu domini",
       "cta_final_title": "Preparat per a la teua aventura èpica?",
@@ -167,8 +182,7 @@
       "system_access": "Accés al sistema",
       "teacher_panel": "Panell del professor",
       "student_panel": "Panell de l'alumne",
-      "help_center": "Centre d'ajuda",
-      "documentation": "Documentació"
+      "help_center": "Centre d'ajuda"
     },
     "level_up": {
       "title": "Has pujat de nivell!",
@@ -204,14 +218,27 @@
     },
     "help": {
       "title": "Centre d'ajuda",
-      "hero_title": "En què et podem ajudar?",
-      "hero_subtitle": "Guies, tutorials pas a pas i configuració de la plataforma. Escrites per al professorat, no per a informàtics.",
+      "hero": {
+        "todo": {
+          "title": "En què et podem ajudar?",
+          "subtitle": "Guies, tutorials i vídeos per al professorat i l'alumnat."
+        },
+        "profesor": {
+          "title": "Ajuda per al professorat",
+          "subtitle": "Guies pas a pas per a crear classes, missions i recompenses. Escrites per a docents, no per a informàtics."
+        },
+        "alumno": {
+          "title": "Ajuda per a l'alumnat",
+          "subtitle": "Com entrar en la teua classe, entregar missions i traure profit de l'XP, les monedes i el manà."
+        }
+      },
       "all_categories": "Totes les categories",
-      "article_count": "{count} articles",
+      "article_count": "Cap article | 1 article | {count} articles",
       "keep_reading": "Continuar llegint",
       "on_this_page": "En esta pàgina",
       "previous": "Anterior",
       "next": "Següent",
+      "article_pagination": "Article anterior i següent",
       "still_stuck": "No has trobat el que buscaves?",
       "contact_us": "Escriu-nos",
       "updated_on": "Actualitzat el {date}",
@@ -232,7 +259,22 @@
         "empty": "Res per «{query}»",
         "empty_hint": "Prova amb altres paraules: «lliuraments», «monedes», «nivells»."
       },
-      "most_read": "El més consultat"
+      "most_read": "El més consultat",
+      "kind": {
+        "guia": "Guia",
+        "tutorial": "Tutorial",
+        "faq": "Pregunta freqüent",
+        "video": "Vídeo"
+      },
+      "watch_video": "Mira el vídeo",
+      "scope_todo": "Tota l'ajuda",
+      "scope_label": "Secció d'ajuda",
+      "audience": {
+        "profesor": "Professorat",
+        "alumno": "Alumnat",
+        "ambos": "Professorat i alumnat"
+      },
+      "back_to_app": "Tornar a l'app"
     },
     "meta": {
       "site_title": "ITAKAI - L'aventura d'aprendre | Plataforma educativa gamificada",
@@ -294,24 +336,26 @@
       "reduce_motion": {
         "title": "Menys animació",
         "description": "Reduïx transicions i efectes de moviment."
-      }
+      },
+      "opens_new_tab": "(s'obri en una pestanya nova)"
     },
     "notification_settings": {
-      "title": "Avisos",
-      "description": "Què t'avisem i per on. Els avisos sempre apareixen a la plataforma; el correu és opcional.",
+      "description": "Els teus avisos estan sempre en «{section}», en el menú. El correu és opcional.",
       "updated": "Preferències d'avisos actualitzades",
       "update_error": "No s'han pogut guardar les preferències d'avisos",
       "email": {
         "title": "Avisos per correu",
-        "description": "Lliuraments revisats, invitacions i confirmacions també al teu correu."
+        "description": "Rep també en el teu correu els lliuraments revisats, amb el seu percentatge, i els recordatoris de lliurament."
       },
       "reminders": {
         "title": "Recordatoris de lliurament",
-        "description": "Un avís quan queden menys de 24 hores per al final d'una missió."
+        "description": "Un avís quan queden menys de 24 hores per al final d'una missió que no has acabat. Si el desactives, no el reps ni en la plataforma ni per correu."
       }
     },
     "markdown": {
-      "insert_at_end": "Inserir al final"
+      "insert_at_end": "Inserir al final",
+      "generating": "S'està generant…",
+      "send_to_ai": "Envia a la IA"
     },
     "student_preview": {
       "banner": "Estàs veient la plataforma com un alumne (demo)"

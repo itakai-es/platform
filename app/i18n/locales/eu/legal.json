@@ -434,23 +434,6 @@
         "title": "Lizentziak - ITAKAI",
         "description": "ITAKAI-ren lizentziei buruzko informazioa"
       }
-    },
-    "notifications": {
-      "title": "Jakinarazpenak",
-      "btn_mark_all_read": "Denak irakurritako gisa markatu",
-      "tabs": {
-        "all": "Denak",
-        "unread": "Irakurri gabeak"
-      },
-      "unread_label": "Irakurri gabea",
-      "btn_view": "Ikusi",
-      "btn_delete": "Jakinarazpena ezabatu",
-      "empty_unread": "Ez duzu irakurri gabeko jakinarazpenik",
-      "empty_all": "Ez duzu jakinarazpenik",
-      "meta": {
-        "title": "Jakinarazpenak | ITAKAI",
-        "description": "Berrikusi zure jakinarazpenak eta egon eguneratuta zure misioen eta klaseen azken eguneraketekin."
-      }
     }
   }
 }

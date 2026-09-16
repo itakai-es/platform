@@ -9,18 +9,21 @@
  * traducción disponible (p. ej. el panel de administración). Los selectores de
  * perfil sí usan claves i18n (`*.profile.languages.<code>`) para mostrar el
  * nombre en el idioma activo.
+ *
+ * `lang` es la etiqueta BCP 47 que se pone en `<html lang>` (el código interno
+ * `val` no es una etiqueta válida; el valenciano es `ca-valencia`).
  */
 export const APP_LANGUAGES = [
-  { code: 'es', endonym: 'Castellano' },
-  { code: 'en', endonym: 'English' },
-  { code: 'ca', endonym: 'Català' },
-  { code: 'val', endonym: 'Valencià' },
-  { code: 'eu', endonym: 'Euskara' },
-  { code: 'gl', endonym: 'Galego' },
-  { code: 'ast', endonym: 'Asturianu' },
-  { code: 'pt', endonym: 'Português' },
-  { code: 'el', endonym: 'Ελληνικά' },
-  { code: 'ro', endonym: 'Română' },
+  { code: 'es', lang: 'es', endonym: 'Castellano' },
+  { code: 'en', lang: 'en', endonym: 'English' },
+  { code: 'ca', lang: 'ca', endonym: 'Català' },
+  { code: 'val', lang: 'ca-valencia', endonym: 'Valencià' },
+  { code: 'eu', lang: 'eu', endonym: 'Euskara' },
+  { code: 'gl', lang: 'gl', endonym: 'Galego' },
+  { code: 'ast', lang: 'ast', endonym: 'Asturianu' },
+  { code: 'pt', lang: 'pt', endonym: 'Português' },
+  { code: 'el', lang: 'el', endonym: 'Ελληνικά' },
+  { code: 'ro', lang: 'ro', endonym: 'Română' },
 ] as const
 
 /** Código de idioma de interfaz (`'es' | 'en' | ...`). */

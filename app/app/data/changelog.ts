@@ -39,6 +39,81 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.3.0',
+    date: '2026-09-16',
+    title: 'Centro de ayuda, accesibilidad y avisos',
+    changes: [
+      {
+        type: 'new',
+        text: 'Centro de ayuda con guías para el profesorado y para el alumnado. Cada uno tiene su propia portada. El buscador encuentra lo que buscas aunque no pongas tildes.',
+      },
+      {
+        type: 'new',
+        text: 'Los artículos de ayuda tienen índice de apartados y enlaces al anterior y al siguiente, y puedes decirnos si te han sido útiles. Cada uno indica si es un tutorial, una pregunta frecuente o un vídeo, y los vídeos se ven dentro del propio artículo.',
+      },
+      {
+        type: 'new',
+        text: 'Ajustes de accesibilidad: tamaño de letra, alto contraste, modos para daltonismo y menos animación. Se guardan en tu cuenta y te acompañan de un ordenador a otro. Los tienes en tu perfil, pestaña «Configuración», y también arriba, junto al selector de idioma, en la portada y en el centro de ayuda.',
+      },
+      {
+        type: 'new',
+        text: 'Avisos dentro de ITAKAI: en el menú de la izquierda tienes «Avisos», con el número de los que no has leído (en el móvil, también sobre el botón del menú). Cada aviso te lleva a lo que avisa, y puedes marcarlos como leídos o borrarlos.',
+      },
+      {
+        type: 'new',
+        text: 'Cuando un alumno entrega un enigma te llega un aviso que abre directamente sus entregas, listas para valorar.',
+      },
+      {
+        type: 'new',
+        text: 'Avisos por correo para el alumnado: un recordatorio un día antes de que venza una misión, y un aviso cuando se revisa su entrega, con el porcentaje de completado. Cada correo sale en el idioma de quien lo recibe.',
+      },
+      {
+        type: 'new',
+        text: 'El alumnado elige en su perfil, en la tarjeta «Avisos», si quiere recibir esos correos y si quiere recordatorios de entrega.',
+      },
+      {
+        type: 'new',
+        text: 'Para administración: el centro de ayuda y el blog tienen cada uno su sección en el panel, con sus artículos y sus categorías, que se crean, editan y borran desde ahí. Hay borradores, vista previa antes de publicar y un orden que se cambia arrastrando o con el teclado. En la ayuda, los artículos pueden llevar un vídeo. La guía «Gestionar el centro de ayuda» lo explica paso a paso.',
+      },
+      {
+        type: 'improved',
+        text: 'Menú de la izquierda más claro: ya no hay desplegable con tu nombre; la ayuda, tu perfil y «Cerrar sesión» están siempre a la vista. La ayuda te lleva directamente a las guías pensadas para ti. En el móvil los encontrarás dentro del menú. La guía «Dónde encontrar ayuda» te lo resume.',
+      },
+      {
+        type: 'improved',
+        text: 'La portada de ITAKAI enlaza al centro de ayuda, también desde el pie de página. Dentro de la ayuda, si ya has iniciado sesión, el botón «Volver a la app» te devuelve a tu panel desde el ordenador. En el móvil, el menú de la portada incluye también los ajustes de accesibilidad.',
+      },
+      {
+        type: 'improved',
+        text: 'Los colores del tema «Modo Universidad» se aplican en muchos más sitios, y los textos secundarios y los fondos suaves se ven como deben.',
+      },
+      {
+        type: 'improved',
+        text: 'Las ventanas emergentes funcionan mejor con el teclado y con lectores de pantalla. El foco se queda dentro y vuelve a su sitio al cerrarlas, y las confirmaciones se cierran con Escape y muestran «Procesando» en tu idioma. Los desplegables y las ayudas emergentes también se alcanzan con el teclado.',
+      },
+      {
+        type: 'improved',
+        text: 'Las etiquetas de color claro tienen más contraste y se leen mejor.',
+      },
+      {
+        type: 'improved',
+        text: 'Cada página indica al lector de pantalla el idioma que has elegido, para que pronuncie bien los menús y los botones.',
+      },
+      {
+        type: 'improved',
+        text: 'El asistente de IA del editor de texto se abre en una ventana que funciona con teclado y lector de pantalla, y el mensaje «Generando» ya sale en tu idioma.',
+      },
+      {
+        type: 'improved',
+        text: 'La ventana para revisar entregas muestra las horas en tu idioma y se maneja mejor con el teclado.',
+      },
+      {
+        type: 'fixed',
+        text: 'El asistente de IA a veces tardaba mucho en cada paso. Ahora responde sin esas esperas.',
+      },
+    ],
+  },
+  {
     version: '0.2.1',
     date: '2026-08-10',
     title: 'Más idiomas, horarios flexibles y un asistente que te escucha',

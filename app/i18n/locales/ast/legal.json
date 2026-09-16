@@ -434,23 +434,6 @@
         "title": "Llicencies - ITAKAI",
         "description": "Información sobre llicencies d'ITAKAI"
       }
-    },
-    "notifications": {
-      "title": "Avisos",
-      "btn_mark_all_read": "Marcar toos como lleíos",
-      "tabs": {
-        "all": "Toos",
-        "unread": "Ensin lleer"
-      },
-      "unread_label": "Ensin lleer",
-      "btn_view": "Ver",
-      "btn_delete": "Desaniciar l'avisu",
-      "empty_unread": "Nun tienes avisos ensin lleer",
-      "empty_all": "Nun tienes avisos",
-      "meta": {
-        "title": "Avisos | ITAKAI",
-        "description": "Revisa los tos avisos y mantente al día colos últimos anovamientos de les tos misiones y clases."
-      }
     }
   }
 }

@@ -6,9 +6,9 @@
     sticky-chrome
     @update:model-value="close"
   >
-    <template #header>
+    <template #header="{ titleId }">
       <div class="min-w-0 flex-1">
-        <h3 class="text-xl font-bold text-navy-700 break-words">
+        <h3 :id="titleId" class="text-xl font-bold text-navy-700 break-words">
           {{ tpl?.name || t('teacher.templates.preview.loading') }}
         </h3>
         <p v-if="tpl?.teacherName" class="mt-0.5 text-sm text-text-secondary">

@@ -54,7 +54,9 @@
       >
         <slot name="filters" />
 
+        <!-- Sin opciones de orden no hay desplegable (p. ej. listas con orden manual). -->
         <SelectDropdown
+          v-if="sortOptions.length > 0"
           :model-value="sort"
           :options="sortOptions"
           class="col-span-full sm:w-auto"

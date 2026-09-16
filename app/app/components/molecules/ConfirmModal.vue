@@ -5,6 +5,7 @@
     size="sm"
     theme="light"
     persistent
+    close-on-esc
     @update:model-value="emit('update:modelValue', $event)"
   >
     <div class="text-center">
@@ -30,7 +31,7 @@
         {{ cancelText }}
       </Button>
       <Button :variant="confirmVariant" class="flex-1" :disabled="loading" @click="handleConfirm">
-        {{ loading ? 'Procesando...' : confirmText }}
+        {{ loading ? t('common.actions.processing') : confirmText }}
       </Button>
     </template>
   </Modal>
@@ -48,6 +49,8 @@ interface Props {
   variant?: 'danger' | 'warning' | 'success'
   loading?: boolean
 }
+
+const { t } = useI18n()
 
 const props = withDefaults(defineProps<Props>(), {
   title: 'Confirmar acción',

@@ -4,11 +4,11 @@
       <div class="flex items-center gap-3 mb-4">
         <BellIcon class="w-6 h-6 text-navy-700" />
         <h3 class="text-lg font-bold text-navy-700">
-          {{ t('common.notification_settings.title') }}
+          {{ title }}
         </h3>
       </div>
       <p class="text-sm text-navy-700/70 mb-5">
-        {{ t('common.notification_settings.description') }}
+        {{ t('common.notification_settings.description', { section: title }) }}
       </p>
 
       <div class="space-y-5">
@@ -35,7 +35,9 @@ import { BellIcon } from '@heroicons/vue/24/outline'
  * leía ni podía cambiar. Ahora manda de verdad — el planificador lo consulta
  * antes de mandar cada recordatorio de entrega.
  *
- * Misma tarjeta para alumno y profesor: el ajuste es de cuenta, no de rol.
+ * Solo la monta el perfil del alumnado: al profesorado no le llega ningún
+ * correo ni recordatorio de entrega, así que estos interruptores no le cambian
+ * nada. Si algún día se le mandan avisos por correo, vuelve a su perfil.
  */
 
 type PreferenceKey = 'emailNotifications' | 'missionReminders'
@@ -43,6 +45,9 @@ type PreferenceKey = 'emailNotifications' | 'missionReminders'
 const { t } = useI18n()
 const toast = useToast()
 const profileStore = useProfileStore()
+
+// Se llama igual que el menú y la página de avisos, a los que remite el texto.
+const title = computed(() => t('common.notifications.title'))
 
 // Valor optimista mientras el guardado va de camino: el interruptor se mueve al
 // momento y el perfil (canónico) manda en cuanto responde el servidor.
