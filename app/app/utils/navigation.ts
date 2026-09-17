@@ -12,6 +12,8 @@ export const ROUTE_NAMES = {
   SIGNUP: '/auth/registro',
   FORGOT_PASSWORD: '/auth/recuperar-password',
   RESET_PASSWORD: '/auth/restablecer-password',
+  // Cambio obligatorio del primer acceso: pide sesión, así que no es pública.
+  CHANGE_PASSWORD: '/auth/cambiar-password',
 
   // Student
   STUDENT_DASHBOARD: '/alumno/inicio',

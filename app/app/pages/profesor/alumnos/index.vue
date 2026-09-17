@@ -90,7 +90,12 @@
             <div class="flex items-start justify-between gap-3 mb-3">
               <div class="min-w-0 flex-1">
                 <h3 class="font-bold text-navy-700 truncate text-lg">{{ student.name }}</h3>
-                <p class="text-sm text-navy-700/70 truncate">{{ student.email }}</p>
+                <!-- Un alumno sin correo se identifica por su usuario -->
+                <p class="text-sm text-navy-700/70 truncate">
+                  {{
+                    accountIdentifier({ email: student.email, username: student.accountUsername })
+                  }}
+                </p>
               </div>
               <Button variant="primary" size="sm" class="flex-shrink-0">{{
                 t('teacher.students.index.btn_view')
@@ -154,12 +159,8 @@
 </template>
 
 <script setup lang="ts">
-import {
-  UsersIcon,
-  RocketLaunchIcon,
-  MapIcon,
-  TrophyIcon,
-} from '@heroicons/vue/24/outline'
+import { UsersIcon, RocketLaunchIcon, MapIcon, TrophyIcon } from '@heroicons/vue/24/outline'
+import { accountIdentifier, matchesAccount } from '~/utils/identity'
 
 const formatXP = (xp: number): string => {
   if (xp >= 1000) {
@@ -253,11 +254,13 @@ const clearAllFilters = () => {
 const filteredStudents = computed(() => {
   let students = [...sourceStudents.value]
 
-  // Filter by search query
+  // Filter by search query: el nombre, el correo y el usuario.
   if (searchQuery.value) {
-    const query = searchQuery.value.toLowerCase()
-    students = students.filter(
-      s => s.name.toLowerCase().includes(query) || s.email.toLowerCase().includes(query)
+    students = students.filter(s =>
+      matchesAccount(
+        { name: s.name, email: s.email, username: s.accountUsername },
+        searchQuery.value
+      )
     )
   }
 

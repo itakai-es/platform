@@ -19,7 +19,8 @@
             <h3 class="text-sm font-semibold text-text-primary truncate">{{ user.name }}</h3>
             <Badge :variant="roleBadgeVariant" size="sm">{{ roleLabel }}</Badge>
           </div>
-          <p class="text-xs text-text-secondary truncate mt-0.5">{{ user.email }}</p>
+          <!-- Una cuenta sin correo se identifica por su usuario -->
+          <p class="text-xs text-text-secondary truncate mt-0.5">{{ accountIdentifier(user) }}</p>
           <div class="flex items-center gap-3 mt-1.5 flex-wrap">
             <span
               v-if="user.schoolName"
@@ -96,6 +97,7 @@ import {
   TrashIcon,
 } from '@heroicons/vue/24/outline'
 import type { AdminUser } from '~/types/admin.types'
+import { accountIdentifier } from '~/utils/identity'
 
 interface Props {
   user: AdminUser

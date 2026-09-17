@@ -20,8 +20,12 @@
       <div class="w-14 h-14 bg-mint/10 rounded-full flex items-center justify-center mx-auto mb-3">
         <CheckCircleIcon class="w-7 h-7 text-mint" />
       </div>
-      <h3 class="text-base font-semibold text-navy-700 mb-1">{{ t('teacher.classes.detail.join_requests.empty_title') }}</h3>
-      <p class="text-text-secondary text-sm">{{ t('teacher.classes.detail.join_requests.empty_description') }}</p>
+      <h3 class="text-base font-semibold text-navy-700 mb-1">
+        {{ t('teacher.classes.detail.join_requests.empty_title') }}
+      </h3>
+      <p class="text-text-secondary text-sm">
+        {{ t('teacher.classes.detail.join_requests.empty_description') }}
+      </p>
     </div>
 
     <!-- Requests List -->
@@ -46,7 +50,10 @@
                 Nivel {{ request.studentLevel }}
               </span>
             </div>
-            <p class="text-sm text-text-secondary">@{{ request.studentUsername }}</p>
+            <!-- Solo quien tiene usuario: una cuenta con correo no lo tiene. -->
+            <p v-if="request.studentUsername" class="text-sm text-text-secondary">
+              @{{ request.studentUsername }}
+            </p>
             <p v-if="request.message" class="text-sm text-text-muted mt-2 italic">
               "{{ request.message }}"
             </p>

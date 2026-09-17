@@ -68,7 +68,7 @@
                 <input
                   type="text"
                   name="username"
-                  :value="profileStore.currentEmail"
+                  :value="profileStore.accountLogin"
                   autocomplete="username"
                   class="sr-only"
                   tabindex="-1"
@@ -278,7 +278,7 @@
       <input
         type="text"
         name="username"
-        :value="profileStore.currentEmail"
+        :value="profileStore.accountLogin"
         autocomplete="username"
         class="sr-only"
         tabindex="-1"
@@ -314,6 +314,7 @@ import {
   BuildingLibraryIcon,
   ViewColumnsIcon,
 } from '@heroicons/vue/24/outline'
+import { PASSWORD_MIN_LENGTH } from '~/utils/password'
 
 const { t } = useI18n()
 
@@ -420,8 +421,10 @@ const changePassword = async () => {
     return
   }
 
-  if (securityForm.value.newPassword.length < 6) {
-    toast.error(t('teacher.profile.security.validation.password_min_length'))
+  if (securityForm.value.newPassword.length < PASSWORD_MIN_LENGTH) {
+    toast.error(
+      t('teacher.profile.security.validation.password_min_length', { min: PASSWORD_MIN_LENGTH })
+    )
     return
   }
 

@@ -109,12 +109,10 @@ async function loadRecipient(userId: string): Promise<NotificationRecipient | nu
 }
 
 /**
- * ¿Se le puede escribir a este usuario?
- *
- * Hoy `User.email` es obligatorio y único, así que siempre es que sí. Cuando
- * existan las cuentas de menores sin correo (punto 9), esas cuentas llevarán una
- * dirección interna no entregable y este es el único sitio que hay que enseñar a
- * reconocerla: el resto del sistema ya solo crea avisos internos.
+ * ¿Se le puede escribir a este usuario? Una cuenta sin correo (la que entra con
+ * usuario) no recibe ninguno: sus avisos se quedan dentro de la aplicación. Se
+ * descartan también las direcciones internas `*.invalid`, que existen solo para
+ * los datos de prueba.
  */
 function isDeliverableEmail(email: string | null | undefined): email is string {
   if (!email) return false

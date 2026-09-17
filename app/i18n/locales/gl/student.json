@@ -264,6 +264,12 @@
         "security": "Seguridade",
         "settings": "Configuración"
       },
+      "account": {
+        "title": "A túa conta",
+        "username": "Usuario",
+        "email": "Correo",
+        "managed_note": "A túa conta lévaa o profesorado: entras co teu usuario, non ten correo e non se pode eliminar desde aquí. Se necesitas algún cambio, pídello."
+      },
       "security": {
         "password_title": "Contrasinal",
         "current_password": "Contrasinal actual",
@@ -271,7 +277,7 @@
         "confirm_password": "Confirmar contrasinal",
         "update_button": "Actualizar",
         "passwords_mismatch": "Os contrasinais non coinciden",
-        "password_too_short": "O contrasinal debe ter polo menos 6 caracteres",
+        "password_too_short": "O contrasinal debe ter polo menos {min} caracteres",
         "sessions_title": "Sesións",
         "close_all_sessions": "Pechar todas",
         "current_session": "Actual",

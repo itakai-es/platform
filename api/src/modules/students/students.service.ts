@@ -1,7 +1,6 @@
 import { prisma } from '../../config/database.js'
 import { getLevelInfo, wouldLevelUp, calculateMissionTotalXP } from '../../utils/xp-calculator.js'
 import { resolveLevelConfig, tierForLevel } from '../../utils/level-config.js'
-import { hashPassword, verifyPassword } from '../../utils/password.js'
 import { formatMission, getMissionStatus } from '../../utils/mission-formatter.js'
 import { ensureSafeEducationalPrompt } from '../ai/ai-safety.js'
 import { generateFireRedAvatar } from '../ai/generators/avatar-firered.js'
@@ -9,12 +8,20 @@ import { getAIProvider } from '../ai/providers/index.js'
 import { AVATAR_PROMPTS } from '../ai/prompts/index.js'
 import { AvatarServiceUnavailableError } from '../../utils/errors.js'
 import { resolveClassSettings } from '../../utils/class-settings.js'
-import { ForbiddenError } from '../../utils/errors.js'
+import { ForbiddenError, ValidationError } from '../../utils/errors.js'
 import {
   getClassMembership,
   studentEnrollmentsWhere,
   type ClassUser,
 } from '../../utils/class-access.js'
+import {
+  DEFAULT_AVATARS,
+  enrollStudentNow,
+  getRandomAvatar,
+  getRandomNickname,
+} from '../../utils/enrollment.js'
+import { assertNotManagedAccount } from '../../utils/identity-db.js'
+import { changeOwnPassword } from '../../utils/password-change.js'
 
 /** Matricularse en una clase es cosa de alumnos: el profesorado la mira con la vista previa. */
 function assertStudentRole(user: ClassUser) {
@@ -24,63 +31,6 @@ function assertStudentRole(user: ClassUser) {
 }
 
 export { AvatarServiceUnavailableError }
-
-// Default avatar options (Greek gods)
-const DEFAULT_AVATARS = [
-  '/app/avatars/atenea.svg',
-  '/app/avatars/odiseo.svg',
-  '/app/avatars/penelope.svg',
-  '/app/avatars/polifemo.svg',
-  '/app/avatars/poseidon.svg',
-]
-
-// Mythological-themed nicknames
-const MYTHOLOGICAL_NICKNAMES = [
-  'Héroe Anónimo',
-  'Guerrero de Troya',
-  'Argonauta Valiente',
-  'Guardián del Olimpo',
-  'Explorador Épico',
-  'Titan Novato',
-  'Escudero de Atenea',
-  'Mensajero Hermes',
-  'Aprendiz de Hefesto',
-  'Discípulo de Quirón',
-  'Portador de la Llama',
-  'Navegante Audaz',
-  'Cazador de Artemisa',
-  'Defensor del Ágora',
-  'Sabio Itacense',
-  'Forjador de Leyendas',
-  'Voz del Oráculo',
-  'Protector del Templo',
-  'Hijo de las Musas',
-  'Centinela Espartano',
-  'Viajero Intrépido',
-  'Guardián Secreto',
-  'Buscador de Mitos',
-  'Aspirante a Héroe',
-  'Portador de Luz',
-  'Explorador Mítico',
-  'Escriba del Olimpo',
-  'Valiente de Atenas',
-  'Joven Estratega',
-  'Aprendiz del Destino',
-]
-
-/**
- * Selects a random default avatar URL
- */
-function getRandomAvatar(): string {
-  return DEFAULT_AVATARS[Math.floor(Math.random() * DEFAULT_AVATARS.length)]
-}
-
-/**
- * Generates a random mythological nickname
- */
-function getRandomNickname(): string {
-  return MYTHOLOGICAL_NICKNAMES[Math.floor(Math.random() * MYTHOLOGICAL_NICKNAMES.length)]
-}
 
 function hashText(content: string) {
   return Array.from(content).reduce((acc, char) => (acc * 31 + char.charCodeAt(0)) >>> 0, 7)
@@ -132,6 +82,8 @@ export class StudentsService {
     return {
       id: user.id,
       email: user.email,
+      username: user.username,
+      accountType: user.accountType,
       name: user.name,
       firstName: user.name.split(' ')[0],
       lastName: user.name.split(' ').slice(1).join(' ') || '',
@@ -155,6 +107,9 @@ export class StudentsService {
   async updateProfile(userId: string, data: { firstName?: string; lastName?: string; bio?: string }) {
     const updateData: any = {}
     if (data.firstName || data.lastName) {
+      // El nombre de una cuenta gestionada lo lleva su profesorado: es el nombre
+      // con el que le identifica en clase, y aquí se rechaza cambiarlo.
+      await assertNotManagedAccount(userId, 'no puede cambiar su nombre')
       updateData.name = `${data.firstName || ''} ${data.lastName || ''}`.trim()
     }
 
@@ -166,6 +121,7 @@ export class StudentsService {
     return {
       id: user.id,
       name: user.name,
+      username: user.username,
     }
   }
 
@@ -181,24 +137,23 @@ export class StudentsService {
     return { avatarUrl, message: 'Avatar generado correctamente' }
   }
 
-  async changePassword(userId: string, data: { currentPassword: string; newPassword: string; confirmPassword: string }) {
+  /** Cambio de contraseña del alumnado; el camino es el mismo para todos (utils/password-change.ts). */
+  async changePassword(
+    userId: string,
+    data: { currentPassword: string; newPassword: string; confirmPassword: string },
+    currentTokenFamily?: string
+  ) {
     if (data.newPassword !== data.confirmPassword) {
-      throw new Error('Las contraseñas no coinciden')
+      throw new ValidationError('Las contraseñas no coinciden', 'PASSWORD_MISMATCH')
     }
 
-    const user = await prisma.user.findUnique({ where: { id: userId } })
-    if (!user) throw new Error('Usuario no encontrado')
+    const result = await changeOwnPassword(
+      userId,
+      { currentPassword: data.currentPassword, newPassword: data.newPassword },
+      { keepSessionFamily: currentTokenFamily }
+    )
 
-    const isValid = await verifyPassword(data.currentPassword, user.passwordHash)
-    if (!isValid) throw new Error('Contraseña actual incorrecta')
-
-    const newHash = await hashPassword(data.newPassword)
-    await prisma.user.update({
-      where: { id: userId },
-      data: { passwordHash: newHash },
-    })
-
-    return { message: 'Contraseña actualizada correctamente' }
+    return { message: result.message }
   }
 
   // ==================== CLASSES ====================
@@ -782,30 +737,7 @@ export class StudentsService {
 
     if (existingEnrollment) throw new Error('Ya estás inscrito en esta clase')
 
-    // Create enrollment with random avatar and nickname
-    const enrollment = await prisma.classEnrollment.create({
-      data: {
-        studentId: userId,
-        classId: cls.id,
-        avatarUrl: getRandomAvatar(),
-        nickname: getRandomNickname(),
-      },
-    })
-
-    // Create activity with class-specific profile
-    await prisma.activity.create({
-      data: {
-        userId,
-        type: 'class_joined',
-        description: `Te has unido a la clase ${cls.name}`,
-        // Class-specific student profile
-        avatar: enrollment.avatarUrl,
-        username: enrollment.nickname || 'Estudiante',
-        classId: cls.id,
-        className: cls.name,
-        metadata: { classId: cls.id },
-      },
-    })
+    await enrollStudentNow({ studentId: userId, classId: cls.id, className: cls.name })
 
     return {
       // Incluimos los settings resueltos para que el front pueda decidir si
@@ -922,29 +854,10 @@ export class StudentsService {
       data: { status: 'accepted' },
     })
 
-    // Create enrollment with random avatar and nickname
-    const enrollment = await prisma.classEnrollment.create({
-      data: {
-        studentId: userId,
-        classId: invitation.classId,
-        avatarUrl: getRandomAvatar(),
-        nickname: getRandomNickname(),
-      },
-    })
-
-    // Create activity with class-specific profile
-    await prisma.activity.create({
-      data: {
-        userId,
-        type: 'class_joined',
-        description: `Te has unido a la clase ${invitation.class.name}`,
-        // Class-specific student profile
-        avatar: enrollment.avatarUrl,
-        username: enrollment.nickname || 'Estudiante',
-        classId: invitation.classId,
-        className: invitation.class.name,
-        metadata: { classId: invitation.classId },
-      },
+    await enrollStudentNow({
+      studentId: userId,
+      classId: invitation.classId,
+      className: invitation.class.name,
     })
 
     return {

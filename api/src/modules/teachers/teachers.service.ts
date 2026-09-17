@@ -23,6 +23,8 @@ import {
   classTeachersInclude,
   summarizeClassTeachers,
 } from '../../utils/class-access.js'
+import { accountHandle } from '../../utils/identity.js'
+import { enrollStudentNow } from '../../utils/enrollment.js'
 
 const BADGES_DIR = join(process.cwd(), 'uploads', 'badges')
 const COVERS_DIR = join(process.cwd(), 'uploads', 'covers')
@@ -41,63 +43,6 @@ for (const dir of [BADGES_DIR, COVERS_DIR]) {
   if (!existsSync(dir)) {
     mkdirSync(dir, { recursive: true })
   }
-}
-
-// Default avatar options (Greek gods)
-const DEFAULT_AVATARS = [
-  '/app/avatars/atenea.svg',
-  '/app/avatars/odiseo.svg',
-  '/app/avatars/penelope.svg',
-  '/app/avatars/polifemo.svg',
-  '/app/avatars/poseidon.svg',
-]
-
-// Mythological-themed nicknames
-const MYTHOLOGICAL_NICKNAMES = [
-  'Héroe Anónimo',
-  'Guerrero de Troya',
-  'Argonauta Valiente',
-  'Guardián del Olimpo',
-  'Explorador Épico',
-  'Titan Novato',
-  'Escudero de Atenea',
-  'Mensajero Hermes',
-  'Aprendiz de Hefesto',
-  'Discípulo de Quirón',
-  'Portador de la Llama',
-  'Navegante Audaz',
-  'Cazador de Artemisa',
-  'Defensor del Ágora',
-  'Sabio Itacense',
-  'Forjador de Leyendas',
-  'Voz del Oráculo',
-  'Protector del Templo',
-  'Hijo de las Musas',
-  'Centinela Espartano',
-  'Viajero Intrépido',
-  'Guardián Secreto',
-  'Buscador de Mitos',
-  'Aspirante a Héroe',
-  'Portador de Luz',
-  'Explorador Mítico',
-  'Escriba del Olimpo',
-  'Valiente de Atenas',
-  'Joven Estratega',
-  'Aprendiz del Destino',
-]
-
-/**
- * Selects a random default avatar URL
- */
-function getRandomAvatar(): string {
-  return DEFAULT_AVATARS[Math.floor(Math.random() * DEFAULT_AVATARS.length)]
-}
-
-/**
- * Generates a random mythological nickname
- */
-function getRandomNickname(): string {
-  return MYTHOLOGICAL_NICKNAMES[Math.floor(Math.random() * MYTHOLOGICAL_NICKNAMES.length)]
 }
 
 // Helper: Save base64 image to file and return URL. `subdir` selects the
@@ -844,7 +789,7 @@ export class TeachersService {
           id: e.student.id,
           // Nombre real del alumno + su alias de clase (el "@").
           name: e.student.name || 'Estudiante',
-          handle: e.nickname || e.student.email.split('@')[0],
+          handle: e.nickname || accountHandle(e.student),
           avatar: e.avatarUrl || '/app/avatars/atenea.svg',
           level: e.level,
           levelTitle: tier.title,
@@ -968,9 +913,11 @@ export class TeachersService {
         return {
           id: e.student.id,
           name: e.student.name,
-          username: e.nickname || e.student.email.split('@')[0],
+          username: e.nickname || accountHandle(e.student),
           nickname: e.nickname,
+          // Con qué se identifica la cuenta: su correo o, si no tiene, su usuario.
           email: e.student.email,
+          accountUsername: e.student.username,
           avatar: e.avatarUrl,
           highestLevel: e.level,
           totalXp: e.xp,
@@ -1177,6 +1124,7 @@ export class TeachersService {
         id: student.id,
         name: student.name,
         email: student.email,
+        username: student.username,
         // Per-class data
         classes: enrolledClasses.map((c) => {
           const enrollment = c.enrollments[0]
@@ -1294,7 +1242,9 @@ export class TeachersService {
         studentId: r.studentId,
         studentName: r.student.name,
         studentAvatar: null, // Avatar assigned on enrollment
+        // El correo puede no existir: una cuenta sin correo se nombra por su usuario.
         studentEmail: r.student.email,
+        studentUsername: r.student.username,
         message: r.message,
         createdAt: r.createdAt,
       })),
@@ -1329,30 +1279,7 @@ export class TeachersService {
       data: { status: 'accepted' },
     })
 
-    // Create enrollment with random avatar and nickname
-    const enrollment = await prisma.classEnrollment.create({
-      data: {
-        studentId: request.studentId,
-        classId,
-        avatarUrl: getRandomAvatar(),
-        nickname: getRandomNickname(),
-      },
-    })
-
-    // Create activity with class-specific profile
-    await prisma.activity.create({
-      data: {
-        userId: request.studentId,
-        type: 'class_joined',
-        description: `Te has unido a la clase ${cls.name}`,
-        // Class-specific student profile
-        avatar: enrollment.avatarUrl,
-        username: enrollment.nickname || 'Estudiante',
-        classId,
-        className: cls.name,
-        metadata: { classId },
-      },
-    })
+    await enrollStudentNow({ studentId: request.studentId, classId, className: cls.name })
 
     // Aviso al alumno (interno siempre, y por correo si tiene y lo permite).
     await notify({
@@ -1472,7 +1399,9 @@ export class TeachersService {
         id: i.id,
         studentId: i.studentId,
         studentName: i.student.name,
+        // El correo puede no existir: una cuenta sin correo se nombra por su usuario.
         studentEmail: i.student.email,
+        studentUsername: i.student.username,
         status: i.status,
         message: i.message,
         expiresAt: i.expiresAt,

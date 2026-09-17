@@ -6,8 +6,34 @@ import { behaviorsService } from '../behaviors/behaviors.service.js'
 import { z, ZodError } from 'zod'
 import { scheduleConfigSchema } from './schedule-config.schema.js'
 import { ServiceUnavailableError, rethrowHttpError } from '../../utils/errors.js'
+import { consumeRateLimit } from '../../utils/rate-limit.js'
+import { USERNAME_MAX_LENGTH, USERNAME_MIN_LENGTH } from '../../utils/identity.js'
+import {
+  createManagedStudent,
+  proposeUsername,
+  resetManagedStudentPassword,
+} from './managed-students.service.js'
+
+/** Quien hace la petición: el `id` y el `role` que viajan en el token. */
+type RequestUser = { id: string; role: string | null }
 
 // Schemas
+const createManagedStudentSchema = z.object({
+  name: z.string().min(2, 'El nombre debe tener al menos 2 caracteres').max(120),
+  // Sin usuario, lo propone el sistema.
+  username: z.string().min(USERNAME_MIN_LENGTH).max(USERNAME_MAX_LENGTH).optional(),
+})
+
+const usernameProposalSchema = z.object({
+  name: z.string().min(1, 'Escribe el nombre del alumno').max(120),
+})
+
+/**
+ * Altas de alumnado por hora y por profesor. Da de sobra para pasar varias listas
+ * de clase de una sentada y corta el crear cuentas en bucle, que es lo que
+ * abultaría la base sin coste para quien lo hace.
+ */
+const MANAGED_CREATE_LIMIT = { max: 200, windowMs: 60 * 60 * 1000 }
 const createClassSchema = z.object({
   name: z.string().min(1),
   narrative: z.string().optional(),
@@ -522,6 +548,72 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
+
+  // Alta de una cuenta de alumnado sin correo en esta clase. Devuelve el usuario
+  // y la contraseña temporal una sola vez: no se guardan en claro en ningún sitio.
+  fastify.post(
+    '/classes/:classId/students',
+    async (request: FastifyRequest<{ Params: { classId: string } }>, reply: FastifyReply) => {
+      try {
+        const actor = request.user as RequestUser
+        const { classId } = request.params
+        const data = createManagedStudentSchema.parse(request.body)
+        consumeRateLimit(`managed-student-create:${actor.id}`, MANAGED_CREATE_LIMIT)
+        const result = await createManagedStudent(actor, { classId, ...data })
+        return reply.status(201).send(result)
+      } catch (error) {
+        if (error instanceof ZodError) {
+          return reply.status(400).send({ message: error.errors[0]?.message || 'Datos inválidos' })
+        }
+        rethrowHttpError(error)
+        return reply.status(500).send({ message: 'Error interno' })
+      }
+    }
+  )
+
+  // Restablecer la contraseña de una cuenta gestionada. No lleva clase en el
+  // camino: quien puede hacerlo se decide por la clase de ORIGEN de la cuenta,
+  // que es la que la gestiona, y es también donde se registra la acción. Con una
+  // clase en el camino, el camino diría que se comprueba algo que no se comprueba.
+  fastify.post(
+    '/students/:studentId/reset-password',
+    async (request: FastifyRequest<{ Params: { studentId: string } }>, reply: FastifyReply) => {
+      try {
+        const actor = request.user as RequestUser
+        const { studentId } = request.params
+        const result = await resetManagedStudentPassword(actor, studentId)
+        return result
+      } catch (error) {
+        rethrowHttpError(error)
+        return reply.status(500).send({ message: 'Error interno' })
+      }
+    }
+  )
+
+  // Propuesta de usuario libre para un nombre. No responde si un usuario existe:
+  // devuelve uno que se puede usar, así que no sirve para averiguar qué cuentas hay.
+  fastify.get(
+    '/classes/:classId/students/username-proposal',
+    async (
+      request: FastifyRequest<{ Params: { classId: string }; Querystring: { name?: string } }>,
+      reply: FastifyReply
+    ) => {
+      try {
+        const actor = request.user as RequestUser
+        const { classId } = request.params
+        const { name } = usernameProposalSchema.parse(request.query)
+        consumeRateLimit(`username-proposal:${actor.id}`, { max: 120, windowMs: 60 * 60 * 1000 })
+        const result = await proposeUsername(actor, classId, name)
+        return result
+      } catch (error) {
+        if (error instanceof ZodError) {
+          return reply.status(400).send({ message: error.errors[0]?.message || 'Datos inválidos' })
+        }
+        rethrowHttpError(error)
+        return reply.status(500).send({ message: 'Error interno' })
+      }
+    }
+  )
 
   fastify.get('/classes/:classId/activities', async (request: FastifyRequest<{ Params: { classId: string }; Querystring: { limit?: string } }>, reply: FastifyReply) => {
     try {

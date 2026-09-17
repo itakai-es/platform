@@ -1,3 +1,5 @@
+import type { AccountType } from '~/types/auth.types'
+
 /**
  * Profile Module Type Definitions
  * Tipos para configuración de perfil de usuario
@@ -43,7 +45,12 @@ export interface UserPreferences extends AccessibilityPreferences {
  */
 export interface UserProfile {
   id: string
-  email: string
+  /** Nulo en una cuenta que entra con usuario: no tiene correo. */
+  email: string | null
+  /** Nulo en una cuenta que se registró con su correo. */
+  username: string | null
+  /** Quién lleva la cuenta: su dueño (`self`) o el profesorado (`managed`). */
+  accountType: AccountType
   name: string
   role: 'student' | 'teacher' | 'admin'
   security: SecuritySettings

@@ -55,6 +55,43 @@
       <!-- Tab: Seguridad -->
       <div v-if="activeTab === 'seguridad'">
         <div class="grid md:grid-cols-2 gap-4 md:gap-6">
+          <!-- Tu cuenta: con qué entras -->
+          <Card type="settings">
+            <div class="p-5 space-y-4">
+              <div class="flex items-center gap-3">
+                <IdentificationIcon class="w-5 h-5 text-navy-700" />
+                <h3 class="text-lg font-bold text-navy-700">
+                  {{ t('student.profile.account.title') }}
+                </h3>
+              </div>
+              <dl class="space-y-2">
+                <div v-if="profileStore.currentUsername" class="rounded-xl bg-navy-700/5 px-3 py-2">
+                  <dt class="text-xs uppercase tracking-wide text-navy-700/70">
+                    {{ t('student.profile.account.username') }}
+                  </dt>
+                  <dd class="font-mono text-base font-bold text-navy-700">
+                    {{ profileStore.currentUsername }}
+                  </dd>
+                </div>
+                <!-- Una cuenta que lleva el profesorado no tiene correo -->
+                <div
+                  v-if="profileStore.currentEmail && !profileStore.isManagedAccount"
+                  class="rounded-xl bg-navy-700/5 px-3 py-2"
+                >
+                  <dt class="text-xs uppercase tracking-wide text-navy-700/70">
+                    {{ t('student.profile.account.email') }}
+                  </dt>
+                  <dd class="text-base font-bold text-navy-700 break-all">
+                    {{ profileStore.currentEmail }}
+                  </dd>
+                </div>
+              </dl>
+              <InfoNote v-if="profileStore.isManagedAccount">
+                {{ t('student.profile.account.managed_note') }}
+              </InfoNote>
+            </div>
+          </Card>
+
           <!-- Cambiar Contraseña -->
           <Card type="settings">
             <div class="p-5">
@@ -68,7 +105,7 @@
                 <input
                   type="text"
                   name="username"
-                  :value="profileStore.currentEmail"
+                  :value="profileStore.accountLogin"
                   autocomplete="username"
                   class="sr-only"
                   tabindex="-1"
@@ -100,8 +137,8 @@
             </div>
           </Card>
 
-          <!-- Cambiar Email -->
-          <ChangeEmailCard />
+          <!-- Cambiar Email: una cuenta que lleva el profesorado no puede tener correo -->
+          <ChangeEmailCard v-if="!profileStore.isManagedAccount" />
 
           <!-- Sesiones activas -->
           <Card type="settings">
@@ -237,8 +274,12 @@
             <!-- Accesibilidad -->
             <AccessibilitySettingsCard />
 
-            <!-- Zona peligrosa -->
-            <Card type="settings" class="border-2 border-navy-700/20">
+            <!-- Zona peligrosa: una cuenta que lleva el profesorado no se borra sola -->
+            <Card
+              v-if="!profileStore.isManagedAccount"
+              type="settings"
+              class="border-2 border-navy-700/20"
+            >
               <div class="p-6">
                 <div class="flex items-center gap-3 mb-4">
                   <ExclamationTriangleIcon class="w-6 h-6 text-navy-700" />
@@ -278,7 +319,7 @@
       <input
         type="text"
         name="username"
-        :value="profileStore.currentEmail"
+        :value="profileStore.accountLogin"
         autocomplete="username"
         class="sr-only"
         tabindex="-1"
@@ -310,10 +351,12 @@ import {
   ExclamationTriangleIcon,
   TrashIcon,
   SwatchIcon,
+  IdentificationIcon,
   AcademicCapIcon,
   BuildingLibraryIcon,
   ViewColumnsIcon,
 } from '@heroicons/vue/24/outline'
+import { PASSWORD_MIN_LENGTH } from '~/utils/password'
 
 const { t } = useI18n()
 const { changeLanguage } = useLocale()
@@ -421,8 +464,8 @@ const changePassword = async () => {
     return
   }
 
-  if (securityForm.value.newPassword.length < 6) {
-    toast.error(t('student.profile.security.password_too_short'))
+  if (securityForm.value.newPassword.length < PASSWORD_MIN_LENGTH) {
+    toast.error(t('student.profile.security.password_too_short', { min: PASSWORD_MIN_LENGTH }))
     return
   }
 

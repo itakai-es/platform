@@ -33,7 +33,7 @@
       },
       "subtitle": "Manage all platform users",
       "filters": {
-        "search_placeholder": "Search by name or email...",
+        "search_placeholder": "Search by name, email or username...",
         "all_roles": "All roles",
         "students": "Students",
         "teachers": "Teachers",
@@ -42,7 +42,11 @@
         "active": "Active",
         "suspended": "Suspended",
         "inactive": "Inactive",
-        "clear": "Clear filters"
+        "clear": "Clear filters",
+        "all_account_types": "All accounts",
+        "self_accounts": "With email",
+        "managed_accounts": "Managed by teachers",
+        "orphan_accounts": "Managed with no class"
       },
       "roles": {
         "student": "Student",
@@ -52,11 +56,32 @@
       "card": {
         "status": "Status",
         "classes": "Classes",
-        "last_login": "Last login"
+        "last_login": "Last login",
+        "managed": "Managed by teachers",
+        "home_class": "Managed from {name}",
+        "no_home_class": "No home class"
       },
       "empty": {
         "title": "No users found",
         "description": "No users match the selected filters."
+      },
+      "create": {
+        "button": "New account without email",
+        "title": "New student account",
+        "note": "For students with no email: they sign in with a username and a temporary password they change on first sign-in.",
+        "name": "Name",
+        "name_placeholder": "First and last name",
+        "home_class": "Home class",
+        "home_class_placeholder": "Pick a class",
+        "home_class_hint": "The student is enrolled in it and its teachers manage the account.",
+        "username": "Username (optional)",
+        "username_placeholder": "Suggested by the system",
+        "username_hint": "Leave it blank and the system suggests one. If the one you type is taken, a suffix is added.",
+        "submit": "Create account",
+        "errors": {
+          "name": "Enter the name, at least 2 characters",
+          "home_class": "Pick the home class"
+        }
       },
       "actions": {
         "suspend_title": "Suspend user",
@@ -64,7 +89,23 @@
         "suspend_confirm": "Suspend",
         "delete_title": "Delete user",
         "delete_message": "Are you sure you want to delete {name}? This action cannot be undone.",
-        "delete_confirm": "Delete"
+        "delete_confirm": "Delete",
+        "menu_label": "Actions for {name}",
+        "suspend": "Suspend",
+        "activate": "Activate",
+        "delete": "Delete",
+        "reset_password": "Reset password",
+        "reset_password_title": "Reset the password",
+        "reset_password_message": "{name} will get a temporary password, their sessions will be closed and they will have to change it on sign-in.",
+        "reset_password_confirm": "Reset",
+        "credentials_title": "Temporary password",
+        "credentials_note": "Write it down now: it is not shown again. If it is lost, reset it once more.",
+        "credentials_username": "Username",
+        "credentials_password": "Temporary password",
+        "home_class": "Change home class",
+        "home_class_title": "Home class",
+        "home_class_note": "This is the class teachers manage the account from; changing it also enrolls the student in the new one. With no class, only administration can attend to it.",
+        "home_class_none": "No home class"
       },
       "sort": {
         "recent": "Most recent"

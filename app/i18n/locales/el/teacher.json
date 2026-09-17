@@ -609,7 +609,7 @@
         "session_close": "Τερματισμός",
         "validation": {
           "passwords_mismatch": "Οι κωδικοί δεν ταιριάζουν",
-          "password_min_length": "Ο κωδικός πρέπει να έχει τουλάχιστον 6 χαρακτήρες",
+          "password_min_length": "Ο κωδικός πρέπει να έχει τουλάχιστον {min} χαρακτήρες",
           "password_required": "Συμπλήρωσε τον κωδικό σου"
         }
       },

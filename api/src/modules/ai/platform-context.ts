@@ -48,6 +48,7 @@ const CONTEXT = {
   en: {
     shared: [
       'ITAKAI: gamified educational platform, Greek mythology theme.',
+      'Sign in: email or username + password. A teacher can create student accounts that have a username and no email; those students cannot add an email, and the teacher resets the password if it is lost.',
       'Class: teacher creates, 6-char invite code; the student types it in Join class and is in straight away, nobody has to accept anything (no join requests or personal invitations).',
       'Mission: inside class, has title/description/rarity(common|rare|epic|legendary)/deadline/XP.',
       'Enigma: task inside mission, objectives + own XP.',

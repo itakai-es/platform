@@ -609,7 +609,7 @@
         "session_close": "Cerrar",
         "validation": {
           "passwords_mismatch": "Las contraseñas no coinciden",
-          "password_min_length": "La contraseña debe tener al menos 6 caracteres",
+          "password_min_length": "La contraseña debe tener al menos {min} caracteres",
           "password_required": "Introduce tu contraseña"
         }
       },

@@ -264,6 +264,12 @@
         "security": "Segurtasuna",
         "settings": "Ezarpenak"
       },
+      "account": {
+        "title": "Zure kontua",
+        "username": "Erabiltzailea",
+        "email": "Emaila",
+        "managed_note": "Zure kontua irakasleek kudeatzen dute: zure erabiltzailearekin sartzen zara, ez du emailik eta hemendik ezin da ezabatu. Aldaketarik behar baduzu, eskatu haiei."
+      },
       "security": {
         "password_title": "Pasahitza",
         "current_password": "Uneko pasahitza",
@@ -271,7 +277,7 @@
         "confirm_password": "Pasahitza berretsi",
         "update_button": "Eguneratu",
         "passwords_mismatch": "Pasahitzak ez datoz bat",
-        "password_too_short": "Pasahitzak gutxienez 6 karaktere izan behar ditu",
+        "password_too_short": "Pasahitzak gutxienez {min} karaktere izan behar ditu",
         "sessions_title": "Saioak",
         "close_all_sessions": "Denak itxi",
         "current_session": "Unekoa",

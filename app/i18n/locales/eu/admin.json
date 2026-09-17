@@ -33,7 +33,7 @@
       },
       "subtitle": "Plataformako erabiltzaile guztiak administratu",
       "filters": {
-        "search_placeholder": "Bilatu izenez edo emailez...",
+        "search_placeholder": "Bilatu izenaren, emailaren edo erabiltzailearen arabera...",
         "all_roles": "Rol guztiak",
         "students": "Ikasleak",
         "teachers": "Irakasleak",
@@ -42,7 +42,11 @@
         "active": "Aktibo",
         "suspended": "Etenda",
         "inactive": "Inaktibo",
-        "clear": "Iragazkiak garbitu"
+        "clear": "Iragazkiak garbitu",
+        "all_account_types": "Kontu guztiak",
+        "self_accounts": "Emailarekin",
+        "managed_accounts": "Irakasleek kudeatzen dituztenak",
+        "orphan_accounts": "Kudeatuak, klaserik gabe"
       },
       "roles": {
         "student": "Ikaslea",
@@ -52,11 +56,32 @@
       "card": {
         "status": "Egoera",
         "classes": "Klaseak",
-        "last_login": "Azken sarrera"
+        "last_login": "Azken sarrera",
+        "managed": "Irakasleek kudeatzen dute",
+        "home_class": "{name} klasetik kudeatzen da",
+        "no_home_class": "Jatorrizko klaserik gabe"
       },
       "empty": {
         "title": "Ez da erabiltzailerik aurkitu",
         "description": "Ez dago hautatutako iragazkiekin bat datorren erabiltzailerik."
+      },
+      "create": {
+        "button": "Kontu berria posta gabe",
+        "title": "Ikaslearen kontu berria",
+        "note": "Postarik ez duenarentzat: bere erabiltzailearekin eta behin-behineko pasahitz batekin sartzen da, eta sartzean aldatu behar du.",
+        "name": "Izena",
+        "name_placeholder": "Izena eta abizena",
+        "home_class": "Jatorrizko klasea",
+        "home_class_placeholder": "Aukeratu klase bat",
+        "home_class_hint": "Ikaslea klase horretan matrikulatzen da eta bertako irakasleek kudeatzen dute kontua.",
+        "username": "Erabiltzailea (aukerakoa)",
+        "username_placeholder": "Sistemak proposatzen du",
+        "username_hint": "Hutsik utzita, sistemak bat proposatzen du. Idazten duzuna hartuta badago, atzizki bat gehitzen zaio.",
+        "submit": "Sortu kontua",
+        "errors": {
+          "name": "Idatzi izena, gutxienez 2 karaktere",
+          "home_class": "Aukeratu jatorrizko klasea"
+        }
       },
       "actions": {
         "suspend_title": "Erabiltzailea eten",
@@ -64,7 +89,23 @@
         "suspend_confirm": "Eten",
         "delete_title": "Erabiltzailea ezabatu",
         "delete_message": "Ziur zaude {name} ezabatu nahi duzula? Ekintza hau ezin da desegin.",
-        "delete_confirm": "Ezabatu"
+        "delete_confirm": "Ezabatu",
+        "menu_label": "{name}(r)en ekintzak",
+        "suspend": "Eten",
+        "activate": "Aktibatu",
+        "delete": "Ezabatu",
+        "reset_password": "Pasahitza berrezarri",
+        "reset_password_title": "Pasahitza berrezarri",
+        "reset_password_message": "{name}(r)i behin-behineko pasahitz bat emango zaio, bere saioak itxiko dira eta sartzean aldatu beharko du.",
+        "reset_password_confirm": "Berrezarri",
+        "credentials_title": "Behin-behineko pasahitza",
+        "credentials_note": "Idatzi orain: ez da berriro erakutsiko. Galtzen bada, berriro berrezarri.",
+        "credentials_username": "Erabiltzailea",
+        "credentials_password": "Behin-behineko pasahitza",
+        "home_class": "Jatorrizko klasea aldatu",
+        "home_class_title": "Jatorrizko klasea",
+        "home_class_note": "Irakasleek kontu hau kudeatzen duten klasea da; aldatzean, ikaslea klase berrian matrikulatzen da. Klaserik gabe, administrazioak baino ez du artatzen.",
+        "home_class_none": "Jatorrizko klaserik gabe"
       },
       "sort": {
         "recent": "Berrienak"

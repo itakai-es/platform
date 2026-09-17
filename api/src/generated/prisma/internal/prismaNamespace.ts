@@ -2770,11 +2770,17 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 export const UserScalarFieldEnum = {
   id: 'id',
   email: 'email',
+  username: 'username',
   passwordHash: 'passwordHash',
   name: 'name',
   role: 'role',
+  accountType: 'accountType',
   isOnboarded: 'isOnboarded',
   status: 'status',
+  createdById: 'createdById',
+  homeClassId: 'homeClassId',
+  mustChangePassword: 'mustChangePassword',
+  passwordChangedAt: 'passwordChangedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -3345,6 +3351,20 @@ export type EnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
  * Reference to a field of type 'UserRole[]'
  */
 export type ListEnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserRole[]'>
+    
+
+
+/**
+ * Reference to a field of type 'UserAccountType'
+ */
+export type EnumUserAccountTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserAccountType'>
+    
+
+
+/**
+ * Reference to a field of type 'UserAccountType[]'
+ */
+export type ListEnumUserAccountTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserAccountType[]'>
     
 
 

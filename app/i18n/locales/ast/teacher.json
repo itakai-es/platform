@@ -609,7 +609,7 @@
         "session_close": "Zarrar",
         "validation": {
           "passwords_mismatch": "Les contraseñes nun concasen",
-          "password_min_length": "La contraseña tien de tener polo menos 6 caráuteres",
+          "password_min_length": "La contraseña tien de tener polo menos {min} caráuteres",
           "password_required": "Introduz la to contraseña"
         }
       },

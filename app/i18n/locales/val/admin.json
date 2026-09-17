@@ -29,7 +29,7 @@
       "title": "Gestió d'usuaris",
       "subtitle": "Administra tots els usuaris de la plataforma",
       "filters": {
-        "search_placeholder": "Buscar per nom o correu...",
+        "search_placeholder": "Busca per nom, correu o usuari...",
         "all_roles": "Tots els rols",
         "students": "Alumnes",
         "teachers": "Professors",
@@ -38,7 +38,11 @@
         "active": "Actiu",
         "suspended": "Suspés",
         "inactive": "Inactiu",
-        "clear": "Netejar filtres"
+        "clear": "Netejar filtres",
+        "all_account_types": "Tots els comptes",
+        "self_accounts": "Amb correu",
+        "managed_accounts": "Les porta el professorat",
+        "orphan_accounts": "Gestionades sense classe"
       },
       "roles": {
         "student": "Alumne",
@@ -48,11 +52,32 @@
       "card": {
         "status": "Estat",
         "classes": "Classes",
-        "last_login": "Últim accés"
+        "last_login": "Últim accés",
+        "managed": "La porta el professorat",
+        "home_class": "Es gestiona des de {name}",
+        "no_home_class": "Sense classe d'origen"
       },
       "empty": {
         "title": "No s'han trobat usuaris",
         "description": "No hi ha usuaris que coincidisquen amb els filtres seleccionats."
+      },
+      "create": {
+        "button": "Nou compte sense correu",
+        "title": "Nou compte d'alumnat",
+        "note": "Per a qui no té correu: entra amb el seu usuari i una contrasenya temporal que canvia en entrar.",
+        "name": "Nom",
+        "name_placeholder": "Nom i cognom",
+        "home_class": "Classe d'origen",
+        "home_class_placeholder": "Tria una classe",
+        "home_class_hint": "L'alumne queda matriculat en ella i el seu professorat porta el compte.",
+        "username": "Usuari (opcional)",
+        "username_placeholder": "El proposa el sistema",
+        "username_hint": "En blanc, el proposa el sistema. Si el que escrius ja està agafat, se li afig un sufix.",
+        "submit": "Crear compte",
+        "errors": {
+          "name": "Escriu el nom, amb com a mínim 2 caràcters",
+          "home_class": "Tria la classe d'origen"
+        }
       },
       "actions": {
         "suspend_title": "Suspendre usuari",
@@ -60,7 +85,23 @@
         "suspend_confirm": "Suspendre",
         "delete_title": "Eliminar usuari",
         "delete_message": "Segur que vols eliminar {name}? Esta acció no es pot desfer.",
-        "delete_confirm": "Eliminar"
+        "delete_confirm": "Eliminar",
+        "menu_label": "Accions de {name}",
+        "suspend": "Suspendre",
+        "activate": "Activar",
+        "delete": "Eliminar",
+        "reset_password": "Restablir contrasenya",
+        "reset_password_title": "Restablir la contrasenya",
+        "reset_password_message": "Es donarà una contrasenya temporal a {name}, es tancaran les seues sessions i l'haurà de canviar quan entre.",
+        "reset_password_confirm": "Restablir",
+        "credentials_title": "Contrasenya temporal",
+        "credentials_note": "Apunta-la ara: no es torna a mostrar. Si es perd, es restablix una altra vegada.",
+        "credentials_username": "Usuari",
+        "credentials_password": "Contrasenya temporal",
+        "home_class": "Canviar classe d'origen",
+        "home_class_title": "Classe d'origen",
+        "home_class_note": "És la classe des de la qual el professorat porta este compte; en canviar-la, l'alumne queda matriculat en la nova. Sense classe, només l'atén l'administració.",
+        "home_class_none": "Sense classe d'origen"
       },
       "meta": {
         "title": "Gestió d'usuaris | ITAKAI Admin",

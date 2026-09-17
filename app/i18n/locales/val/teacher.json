@@ -609,7 +609,7 @@
         "session_close": "Tancar",
         "validation": {
           "passwords_mismatch": "Les contrasenyes no coincidixen",
-          "password_min_length": "La contrasenya ha de tindre com a mínim 6 caràcters",
+          "password_min_length": "La contrasenya ha de tindre com a mínim {min} caràcters",
           "password_required": "Introduïx la teua contrasenya"
         }
       },

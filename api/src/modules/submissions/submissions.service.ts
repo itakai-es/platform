@@ -251,7 +251,6 @@ export class SubmissionsService {
           select: {
             id: true,
             name: true,
-            email: true,
             enrollments: {
               where: { classId: enigma.mission.classId },
               select: { nickname: true, avatarUrl: true },
@@ -313,7 +312,7 @@ export class SubmissionsService {
     const submissions = await prisma.enigmaSubmission.findMany({
       where,
       include: {
-        student: { select: { id: true, name: true, email: true } },
+        student: { select: { id: true, name: true } },
         enigma: { include: { mission: true } },
       },
       orderBy: { submittedAt: 'desc' },

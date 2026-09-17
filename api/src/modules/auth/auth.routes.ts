@@ -11,6 +11,8 @@ import {
 import { ZodError } from 'zod'
 import { generateAccessToken, TokenError } from '../../utils/tokens.js'
 import { env } from '../../config/env.js'
+import { assertRateLimit, recordRateLimit } from '../../utils/rate-limit.js'
+import { RateLimitError } from '../../utils/errors.js'
 
 // ==================== COOKIE CONFIG ====================
 
@@ -80,6 +82,31 @@ function getRefreshTokenCookieOptions() {
 }
 
 // ==================== HELPERS ====================
+
+/**
+ * Cuántos intentos fallidos de entrada se aguantan. Por identificador, para que
+ * no se pueda ir probando contraseñas contra una cuenta concreta; y por origen,
+ * para que no se pueda ir probando identificadores. El de origen es más ancho
+ * porque un aula entera comparte salida a internet y los fallos de tecleo son
+ * normales. Es un límite en memoria del proceso: no frena un ataque repartido
+ * entre muchas máquinas, frena probar en bucle.
+ */
+const LOGIN_FAILURE_BY_IDENTIFIER = { max: 10, windowMs: 15 * 60 * 1000 }
+const LOGIN_FAILURE_BY_ORIGIN = { max: 100, windowMs: 15 * 60 * 1000 }
+
+interface LoginAttemptLimit {
+  key: string
+  limit: { max: number; windowMs: number }
+}
+
+/** Las claves con las que se cuentan los fallos de un intento de entrada. */
+function loginAttemptLimits(identifier: string, ip?: string): LoginAttemptLimit[] {
+  const limits: LoginAttemptLimit[] = [
+    { key: `login:identifier:${identifier.toLowerCase()}`, limit: LOGIN_FAILURE_BY_IDENTIFIER },
+  ]
+  if (ip) limits.push({ key: `login:origin:${ip}`, limit: LOGIN_FAILURE_BY_ORIGIN })
+  return limits
+}
 
 /**
  * Extract request context (IP, User-Agent) for security tracking
@@ -152,10 +179,17 @@ export async function authRoutes(fastify: FastifyInstance) {
     return { status: 'ok', timestamp: new Date().toISOString() }
   })
 
-  // Login with email/password
+  // Entrar con el correo o con el usuario
   fastify.post('/login', async (request: FastifyRequest, reply: FastifyReply) => {
+    let attempt: LoginAttemptLimit[] = []
     try {
       const input = loginSchema.parse(request.body)
+      // Solo se cuentan los intentos FALLIDOS: acertar no gasta cupo, así que un
+      // aula entera puede entrar a la vez, pero probar identificadores o
+      // contraseñas en bucle se acaba cortando.
+      attempt = loginAttemptLimits(input.identifier, request.ip)
+      for (const { key, limit } of attempt) assertRateLimit(key, limit)
+
       const context = getRequestContext(request)
       const result = await authService.login(input, context)
 
@@ -168,6 +202,10 @@ export async function authRoutes(fastify: FastifyInstance) {
         tokens: { accessToken: result.tokens.accessToken },
       }
     } catch (error) {
+      if (error instanceof RateLimitError) {
+        return reply.status(error.statusCode).send({ message: error.message, code: error.code })
+      }
+      for (const { key, limit } of attempt) recordRateLimit(key, limit)
       return handleError(error, reply, 401)
     }
   })

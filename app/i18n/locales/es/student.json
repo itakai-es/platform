@@ -264,6 +264,12 @@
         "security": "Seguridad",
         "settings": "Configuración"
       },
+      "account": {
+        "title": "Tu cuenta",
+        "username": "Usuario",
+        "email": "Correo",
+        "managed_note": "Tu cuenta la gestiona tu profesorado: entras con tu usuario, no tiene correo y no se puede borrar desde aquí. Si necesitas algún cambio, pídeselo."
+      },
       "security": {
         "password_title": "Contraseña",
         "current_password": "Contraseña actual",
@@ -271,7 +277,7 @@
         "confirm_password": "Confirmar contraseña",
         "update_button": "Actualizar",
         "passwords_mismatch": "Las contraseñas no coinciden",
-        "password_too_short": "La contraseña debe tener al menos 6 caracteres",
+        "password_too_short": "La contraseña debe tener al menos {min} caracteres",
         "sessions_title": "Sesiones",
         "close_all_sessions": "Cerrar todas",
         "current_session": "Actual",

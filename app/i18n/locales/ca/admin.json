@@ -33,7 +33,7 @@
       },
       "subtitle": "Administra tots els usuaris de la plataforma",
       "filters": {
-        "search_placeholder": "Cercar per nom o email...",
+        "search_placeholder": "Cerca per nom, correu o usuari...",
         "all_roles": "Tots els rols",
         "students": "Estudiants",
         "teachers": "Professors",
@@ -42,7 +42,11 @@
         "active": "Actiu",
         "suspended": "Suspès",
         "inactive": "Inactiu",
-        "clear": "Esborrar filtres"
+        "clear": "Esborrar filtres",
+        "all_account_types": "Tots els comptes",
+        "self_accounts": "Amb correu",
+        "managed_accounts": "Les porta el professorat",
+        "orphan_accounts": "Gestionades sense classe"
       },
       "roles": {
         "student": "Estudiant",
@@ -52,11 +56,32 @@
       "card": {
         "status": "Estat",
         "classes": "Classes",
-        "last_login": "Últ. accés"
+        "last_login": "Últ. accés",
+        "managed": "La porta el professorat",
+        "home_class": "Es gestiona des de {name}",
+        "no_home_class": "Sense classe d'origen"
       },
       "empty": {
         "title": "No s'han trobat usuaris",
         "description": "No hi ha usuaris que coincideixin amb els filtres seleccionats."
+      },
+      "create": {
+        "button": "Nou compte sense correu",
+        "title": "Nou compte d'alumnat",
+        "note": "Per a qui no té correu: entra amb el seu usuari i una contrasenya temporal que canvia en entrar.",
+        "name": "Nom",
+        "name_placeholder": "Nom i cognom",
+        "home_class": "Classe d'origen",
+        "home_class_placeholder": "Tria una classe",
+        "home_class_hint": "L'alumne queda matriculat en ella i el seu professorat porta el compte.",
+        "username": "Usuari (opcional)",
+        "username_placeholder": "El proposa el sistema",
+        "username_hint": "En blanc, el proposa el sistema. Si el que escrius ja està agafat, se li afegeix un sufix.",
+        "submit": "Crear compte",
+        "errors": {
+          "name": "Escriu el nom, amb almenys 2 caràcters",
+          "home_class": "Tria la classe d'origen"
+        }
       },
       "actions": {
         "suspend_title": "Suspendre usuari",
@@ -64,7 +89,23 @@
         "suspend_confirm": "Suspendre",
         "delete_title": "Eliminar usuari",
         "delete_message": "Estàs segur que vols eliminar {name}? Aquesta acció no es pot desfer.",
-        "delete_confirm": "Eliminar"
+        "delete_confirm": "Eliminar",
+        "menu_label": "Accions de {name}",
+        "suspend": "Suspendre",
+        "activate": "Activar",
+        "delete": "Eliminar",
+        "reset_password": "Restablir contrasenya",
+        "reset_password_title": "Restablir la contrasenya",
+        "reset_password_message": "Es donarà una contrasenya temporal a {name}, es tancaran les seves sessions i l'haurà de canviar quan entri.",
+        "reset_password_confirm": "Restablir",
+        "credentials_title": "Contrasenya temporal",
+        "credentials_note": "Apunta-la ara: no es torna a mostrar. Si es perd, es restableix una altra vegada.",
+        "credentials_username": "Usuari",
+        "credentials_password": "Contrasenya temporal",
+        "home_class": "Canviar classe d'origen",
+        "home_class_title": "Classe d'origen",
+        "home_class_note": "És la classe des de la qual el professorat porta aquest compte; en canviar-la, l'alumne queda matriculat en la nova. Sense classe, només l'atén l'administració.",
+        "home_class_none": "Sense classe d'origen"
       },
       "sort": {
         "recent": "Més recents"

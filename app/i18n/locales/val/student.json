@@ -264,6 +264,12 @@
         "security": "Seguretat",
         "settings": "Configuració"
       },
+      "account": {
+        "title": "El teu compte",
+        "username": "Usuari",
+        "email": "Correu",
+        "managed_note": "El teu compte el gestiona el professorat: entres amb el teu usuari, no té correu i no es pot eliminar des d'aquí. Si necessites algun canvi, demana'ls-ho."
+      },
       "security": {
         "password_title": "Contrasenya",
         "current_password": "Contrasenya actual",
@@ -271,7 +277,7 @@
         "confirm_password": "Confirmar contrasenya",
         "update_button": "Actualitzar",
         "passwords_mismatch": "Les contrasenyes no coincidixen",
-        "password_too_short": "La contrasenya ha de tindre com a mínim 6 caràcters",
+        "password_too_short": "La contrasenya ha de tindre com a mínim {min} caràcters",
         "sessions_title": "Sessions",
         "close_all_sessions": "Tancar-les totes",
         "current_session": "Actual",

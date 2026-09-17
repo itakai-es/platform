@@ -157,6 +157,8 @@ export async function createClassFixture(app: FastifyInstance): Promise<ClassFix
       await prisma.studentBadge.deleteMany({ where: { badge: { teacherId: { in: teacherIds } } } })
       await prisma.badge.deleteMany({ where: { teacherId: { in: teacherIds } } })
       await prisma.class.deleteMany({ where: { teacherId: { in: teacherIds } } })
+      // Las cuentas de alumnado que estos profesores hayan creado por las rutas.
+      await prisma.user.deleteMany({ where: { createdById: { in: teacherIds } } })
       await prisma.user.deleteMany({ where: { id: { in: userIds } } })
     },
   }

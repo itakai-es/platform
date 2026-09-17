@@ -9,34 +9,47 @@ import {
 } from '../../src/modules/auth/auth.schema.js'
 
 describe('loginSchema', () => {
-  it('should validate correct login input', () => {
+  it('acepta el identificador con un correo', () => {
     const result = loginSchema.safeParse({
-      email: 'user@example.com',
+      identifier: 'user@example.com',
       password: 'password123',
     })
     expect(result.success).toBe(true)
+    expect(result.success && result.data.identifier).toBe('user@example.com')
   })
 
-  it('should reject invalid email', () => {
+  it('acepta el identificador con un usuario', () => {
+    const result = loginSchema.safeParse({ identifier: 'ana.g.k7', password: 'password123' })
+    expect(result.success).toBe(true)
+    expect(result.success && result.data.identifier).toBe('ana.g.k7')
+  })
+
+  // Compatibilidad de despliegue: el frontend publicado manda `email`.
+  it('acepta el campo antiguo y lo trata como identificador', () => {
+    const result = loginSchema.safeParse({ email: 'user@example.com', password: 'password123' })
+    expect(result.success).toBe(true)
+    expect(result.success && result.data.identifier).toBe('user@example.com')
+  })
+
+  it('el identificador manda sobre el campo antiguo si llegan los dos', () => {
     const result = loginSchema.safeParse({
-      email: 'not-an-email',
+      identifier: 'ana.g.k7',
+      email: 'user@example.com',
       password: 'password123',
     })
+    expect(result.success && result.data.identifier).toBe('ana.g.k7')
+  })
+
+  it('rechaza la contraseña vacía', () => {
+    const result = loginSchema.safeParse({ identifier: 'user@example.com', password: '' })
     expect(result.success).toBe(false)
   })
 
-  it('should reject empty password', () => {
-    const result = loginSchema.safeParse({
-      email: 'user@example.com',
-      password: '',
-    })
-    expect(result.success).toBe(false)
-  })
-
-  it('should reject missing fields', () => {
+  it('rechaza que falte el identificador o la contraseña', () => {
     expect(loginSchema.safeParse({}).success).toBe(false)
-    expect(loginSchema.safeParse({ email: 'user@example.com' }).success).toBe(false)
+    expect(loginSchema.safeParse({ identifier: 'user@example.com' }).success).toBe(false)
     expect(loginSchema.safeParse({ password: 'pass' }).success).toBe(false)
+    expect(loginSchema.safeParse({ identifier: '   ', password: 'pass' }).success).toBe(false)
   })
 })
 
@@ -51,10 +64,10 @@ describe('signupSchema', () => {
     expect(result.success).toBe(true)
   })
 
-  it('should reject password shorter than 6 chars', () => {
+  it('rechaza una contraseña más corta que el mínimo', () => {
     const result = signupSchema.safeParse({
       email: 'new@user.com',
-      password: '12345',
+      password: '1234567',
       name: 'New User',
       acceptTerms: true,
     })
@@ -108,19 +121,12 @@ describe('onboardingSchema', () => {
     expect(result.success).toBe(false)
   })
 
-  it('should accept optional username', () => {
+  // Decisión: el usuario no se elige ni se cambia al terminar el alta. Aquí solo
+  // se elige el rol, así que un usuario que llegue en el cuerpo se queda fuera.
+  it('no deja poner el usuario al terminar el alta', () => {
     const result = onboardingSchema.safeParse({ role: 'student', username: 'myname' })
     expect(result.success).toBe(true)
-  })
-
-  it('should reject username shorter than 3 chars', () => {
-    const result = onboardingSchema.safeParse({ role: 'student', username: 'ab' })
-    expect(result.success).toBe(false)
-  })
-
-  it('should reject username longer than 20 chars', () => {
-    const result = onboardingSchema.safeParse({ role: 'student', username: 'a'.repeat(21) })
-    expect(result.success).toBe(false)
+    expect(result.success && result.data).toEqual({ role: 'student' })
   })
 })
 
@@ -157,10 +163,10 @@ describe('resetPasswordSchema', () => {
     expect(result.success).toBe(true)
   })
 
-  it('should reject short password', () => {
+  it('rechaza una contraseña más corta que el mínimo', () => {
     const result = resetPasswordSchema.safeParse({
       token: 'valid-token',
-      password: '12345',
+      password: '1234567',
     })
     expect(result.success).toBe(false)
   })

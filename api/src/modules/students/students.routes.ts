@@ -4,6 +4,8 @@ import { shopService } from '../shop/shop.service.js'
 import { z, ZodError } from 'zod'
 import { rethrowHttpError } from '../../utils/errors.js'
 import { requireStudentEnrollment } from '../../utils/class-access.js'
+import { PASSWORD_MIN_LENGTH } from '../../utils/password.js'
+import { currentTokenFamily } from '../../utils/session-cookie.js'
 
 type RequestUser = { id: string; role: string | null }
 
@@ -25,7 +27,7 @@ const generateAvatarSchema = z.object({
 
 const changePasswordSchema = z.object({
   currentPassword: z.string(),
-  newPassword: z.string().min(6),
+  newPassword: z.string().min(PASSWORD_MIN_LENGTH),
   confirmPassword: z.string(),
 })
 
@@ -95,6 +97,7 @@ export async function studentsRoutes(fastify: FastifyInstance) {
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
+      rethrowHttpError(error)
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
@@ -119,12 +122,17 @@ export async function studentsRoutes(fastify: FastifyInstance) {
     try {
       const { id } = request.user as { id: string }
       const data = changePasswordSchema.parse(request.body)
-      const result = await studentsService.changePassword(id, data)
+      const result = await studentsService.changePassword(
+        id,
+        data,
+        await currentTokenFamily(request)
+      )
       return result
     } catch (error) {
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(400).send({ message: error.message })
       }

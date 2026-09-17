@@ -44,7 +44,10 @@ export interface Student {
   id: string
   name: string // Nombre real para identificación del profesor
   username: string // Nombre público para rankings (gamificación)
-  email: string
+  /** Nulo en una cuenta que entra con usuario: no tiene correo. */
+  email: string | null
+  /** Usuario de la cuenta, con el que entra si no tiene correo. */
+  accountUsername?: string | null
   avatar?: string
   // Datos agregados (calculados desde classProgress)
   totalXp: number // Suma de XP en todas las clases

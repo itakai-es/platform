@@ -609,7 +609,7 @@
         "session_close": "Pechar",
         "validation": {
           "passwords_mismatch": "Os contrasinais non coinciden",
-          "password_min_length": "O contrasinal debe ter polo menos 6 caracteres",
+          "password_min_length": "O contrasinal debe ter polo menos {min} caracteres",
           "password_required": "Introduce o teu contrasinal"
         }
       },

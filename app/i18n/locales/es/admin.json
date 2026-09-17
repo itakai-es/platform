@@ -29,7 +29,7 @@
       "title": "Gestión de Usuarios",
       "subtitle": "Administra todos los usuarios de la plataforma",
       "filters": {
-        "search_placeholder": "Buscar por nombre o email...",
+        "search_placeholder": "Buscar por nombre, correo o usuario...",
         "all_roles": "Todos los roles",
         "students": "Alumnos",
         "teachers": "Profesores",
@@ -38,7 +38,11 @@
         "active": "Activo",
         "suspended": "Suspendido",
         "inactive": "Inactivo",
-        "clear": "Limpiar filtros"
+        "clear": "Limpiar filtros",
+        "all_account_types": "Todas las cuentas",
+        "self_accounts": "Con correo",
+        "managed_accounts": "Las lleva el profesorado",
+        "orphan_accounts": "Gestionadas sin clase"
       },
       "roles": {
         "student": "Estudiante",
@@ -48,11 +52,32 @@
       "card": {
         "status": "Estado",
         "classes": "Clases",
-        "last_login": "Últ. acceso"
+        "last_login": "Últ. acceso",
+        "managed": "La lleva el profesorado",
+        "home_class": "Se gestiona desde {name}",
+        "no_home_class": "Sin clase de origen"
       },
       "empty": {
         "title": "No se encontraron usuarios",
         "description": "No hay usuarios que coincidan con los filtros seleccionados."
+      },
+      "create": {
+        "button": "Nueva cuenta sin correo",
+        "title": "Nueva cuenta de alumnado",
+        "note": "Para quien no tiene correo: entra con su usuario y una contraseña temporal que cambia al entrar.",
+        "name": "Nombre",
+        "name_placeholder": "Nombre y apellido",
+        "home_class": "Clase de origen",
+        "home_class_placeholder": "Elige una clase",
+        "home_class_hint": "El alumno queda matriculado en ella y su profesorado lleva la cuenta.",
+        "username": "Usuario (opcional)",
+        "username_placeholder": "Lo propone el sistema",
+        "username_hint": "En blanco, lo propone el sistema. Si el que escribes está cogido, se le añade un sufijo.",
+        "submit": "Crear cuenta",
+        "errors": {
+          "name": "Escribe el nombre, con al menos 2 caracteres",
+          "home_class": "Elige la clase de origen"
+        }
       },
       "actions": {
         "suspend_title": "Suspender usuario",
@@ -60,7 +85,23 @@
         "suspend_confirm": "Suspender",
         "delete_title": "Eliminar usuario",
         "delete_message": "¿Estás seguro de que quieres eliminar a {name}? Esta acción no se puede deshacer.",
-        "delete_confirm": "Eliminar"
+        "delete_confirm": "Eliminar",
+        "menu_label": "Acciones de {name}",
+        "suspend": "Suspender",
+        "activate": "Activar",
+        "delete": "Eliminar",
+        "reset_password": "Restablecer contraseña",
+        "reset_password_title": "Restablecer la contraseña",
+        "reset_password_message": "Se le dará una contraseña temporal a {name}, se cerrarán sus sesiones y tendrá que cambiarla al entrar.",
+        "reset_password_confirm": "Restablecer",
+        "credentials_title": "Contraseña temporal",
+        "credentials_note": "Apúntala ahora: no se vuelve a mostrar. Si se pierde, se restablece otra vez.",
+        "credentials_username": "Usuario",
+        "credentials_password": "Contraseña temporal",
+        "home_class": "Cambiar clase de origen",
+        "home_class_title": "Clase de origen",
+        "home_class_note": "Es la clase desde la que el profesorado lleva esta cuenta; al cambiarla, el alumno queda matriculado en la nueva. Sin clase, solo la atiende la administración.",
+        "home_class_none": "Sin clase de origen"
       },
       "meta": {
         "title": "Gestión de Usuarios | ITAKAI Admin",

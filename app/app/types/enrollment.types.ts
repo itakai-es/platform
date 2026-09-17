@@ -17,9 +17,10 @@ export interface JoinRequest {
   id: string
   studentId: string
   studentName: string
-  studentUsername?: string
+  studentUsername?: string | null
   studentAvatar?: string
-  studentEmail?: string
+  /** Puede no tener: una cuenta sin correo se nombra por su usuario (`accountIdentifier`). */
+  studentEmail?: string | null
   studentLevel?: number
   classId: string
   className: string
@@ -92,7 +93,8 @@ export interface SearchableStudent {
   id: string
   name: string
   username: string
-  email: string
+  /** Nulo en una cuenta que entra con usuario: no tiene correo. */
+  email: string | null
   avatar?: string
   level: number
   xp?: number

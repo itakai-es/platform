@@ -16,7 +16,10 @@ export interface Profile {
   firstName: string
   lastName: string
   nickname?: string // MVP: Nickname público
-  email: string
+  /** Nulo en una cuenta que entra con usuario: no tiene correo. */
+  email: string | null
+  /** Nulo en una cuenta que se registró con su correo. */
+  username?: string | null
   avatar: string | null
   bio?: string
   // XP and level are now per-class, not global

@@ -264,6 +264,12 @@
         "security": "Securitate",
         "settings": "Setări"
       },
+      "account": {
+        "title": "Contul tău",
+        "username": "Utilizator",
+        "email": "E-mail",
+        "managed_note": "Contul tău este gestionat de profesori: te autentifici cu utilizatorul tău, nu are e-mail și nu poate fi șters de aici. Dacă ai nevoie de o modificare, cere-le-o."
+      },
       "security": {
         "password_title": "Parolă",
         "current_password": "Parola actuală",
@@ -271,7 +277,7 @@
         "confirm_password": "Confirmă parola",
         "update_button": "Actualizează",
         "passwords_mismatch": "Parolele nu coincid",
-        "password_too_short": "Parola trebuie să aibă cel puțin 6 caractere",
+        "password_too_short": "Parola trebuie să aibă cel puțin {min} caractere",
         "sessions_title": "Sesiuni",
         "close_all_sessions": "Închide toate",
         "current_session": "Curentă",

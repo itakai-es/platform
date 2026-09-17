@@ -130,6 +130,26 @@ export async function assertClassAccess(
   return access
 }
 
+/**
+ * Igual que `assertClassAccess`, salvo que quien administra la instancia pasa
+ * siempre: es el respaldo cuando en una clase ya no queda nadie que pueda
+ * hacerlo. Devuelve su acceso en la clase, o null si entra por ser
+ * administración de la instancia y no imparte esa clase.
+ */
+export async function assertClassAccessOrPlatformAdmin(
+  classId: string,
+  user: ClassUser,
+  action: ClassAction,
+  tx: Db = prisma
+): Promise<ClassAccess | null> {
+  if (user.role === 'admin') {
+    const exists = await tx.class.findUnique({ where: { id: classId }, select: { id: true } })
+    if (!exists) throw new NotFoundError('Clase no encontrada')
+    return getClassAccess(classId, user.id, tx)
+  }
+  return assertClassAccess(classId, user.id, action, tx)
+}
+
 // ---- Variantes por recurso ----
 // Resuelven la clase a la que pertenece el recurso y aplican la misma regla. Un
 // recurso que no existe y uno de una clase ajena responden igual: 404.

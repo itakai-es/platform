@@ -158,8 +158,10 @@ export const useAuthStore = defineStore('auth', () => {
     const demoUser: User = {
       id: `demo_${role}`,
       email: `${role}@demo.com`,
+      username: null,
       name: roleNames[role],
       role,
+      accountType: 'self',
       isOnboarded: true,
       createdAt: new Date(),
     }
@@ -263,6 +265,18 @@ export const useAuthStore = defineStore('auth', () => {
         localStorage.removeItem('auth_user')
       }
       throw error
+    }
+  }
+
+  /**
+   * El cambio de contraseña obligatorio ya está hecho: la cuenta deja de tener
+   * el aviso pendiente y el middleware la deja pasar.
+   */
+  const markPasswordChanged = () => {
+    if (!user.value) return
+    user.value = { ...user.value, mustChangePassword: false }
+    if (import.meta.client) {
+      localStorage.setItem('auth_user', JSON.stringify(user.value))
     }
   }
 
@@ -417,6 +431,7 @@ export const useAuthStore = defineStore('auth', () => {
     refreshToken,
     loadUserFromStorage,
     completeOnboarding,
+    markPasswordChanged,
     resetPassword,
     requestPasswordReset,
   }

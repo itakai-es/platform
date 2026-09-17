@@ -609,7 +609,7 @@
         "session_close": "Închide",
         "validation": {
           "passwords_mismatch": "Parolele nu coincid",
-          "password_min_length": "Parola trebuie să aibă cel puțin 6 caractere",
+          "password_min_length": "Parola trebuie să aibă cel puțin {min} caractere",
           "password_required": "Introdu-ți parola"
         }
       },

@@ -57,6 +57,11 @@
               </p>
             </div>
 
+            <!-- Quien entra con usuario y no tiene correo no puede recuperarla aquí -->
+            <div class="mb-3 sm:mb-4">
+              <InfoNote>{{ $t('auth.forgot_password.no_email_note') }}</InfoNote>
+            </div>
+
             <!-- Formulario -->
             <form class="space-y-3 sm:space-y-4 forgot-form" @submit.prevent="handleForgotPassword">
               <!-- Email -->

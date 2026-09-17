@@ -27,6 +27,14 @@ export const UserStatus = {
 export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus]
 
 
+export const UserAccountType = {
+  self: 'self',
+  managed: 'managed'
+} as const
+
+export type UserAccountType = (typeof UserAccountType)[keyof typeof UserAccountType]
+
+
 export const ClassAccessLevel = {
   read: 'read',
   edit: 'edit',

@@ -21,18 +21,42 @@ enum UserStatus {
   inactive
 }
 
+// Quién lleva la cuenta: `self`, su propio dueño, que se registró con su correo;
+// `managed`, el profesorado, que la creó para alguien que no tiene correo.
+enum UserAccountType {
+  self
+  managed
+}
+
+// Una cuenta entra con su correo o con su usuario. Los dos son opcionales por
+// separado, pero no a la vez: lo garantiza el CHECK `users_email_or_username`,
+// que Prisma no sabe expresar y vive en la migración
+// `20260917150000_optional_email_and_username`. El correo se guarda siempre en
+// minúsculas (lo normaliza la aplicación, ver utils/identity.ts).
 model User {
-  id            String     @id @default(uuid())
-  email         String     @unique
-  passwordHash  String     @map("password_hash")
-  name          String
-  role          UserRole?
-  isOnboarded   Boolean    @default(false) @map("is_onboarded")
-  status        UserStatus @default(active)
-  createdAt     DateTime   @default(now()) @map("created_at")
-  updatedAt     DateTime   @updatedAt @map("updated_at")
+  id                 String          @id @default(uuid())
+  email              String?         @unique
+  username           String?         @unique
+  passwordHash       String          @map("password_hash")
+  name               String
+  role               UserRole?
+  accountType        UserAccountType @default(self) @map("account_type")
+  isOnboarded        Boolean         @default(false) @map("is_onboarded")
+  status             UserStatus      @default(active)
+  // Quién creó la cuenta y en qué clase nació: quien tiene administración en esa
+  // clase es quien la gestiona. Las dos se quedan en null si se borra la fila
+  // apuntada, para no arrastrar el borrado a la cuenta del alumno.
+  createdById        String?         @map("created_by_id")
+  homeClassId        String?         @map("home_class_id")
+  mustChangePassword Boolean         @default(false) @map("must_change_password")
+  passwordChangedAt  DateTime?       @map("password_changed_at")
+  createdAt          DateTime        @default(now()) @map("created_at")
+  updatedAt          DateTime        @updatedAt @map("updated_at")
 
   // Relations
+  createdBy         User?               @relation("CreatedUsers", fields: [createdById], references: [id], onDelete: SetNull)
+  createdUsers      User[]              @relation("CreatedUsers")
+  homeClass         Class?              @relation("HomeClassStudents", fields: [homeClassId], references: [id], onDelete: SetNull)
   refreshTokens     RefreshToken[]
   teacherClasses    Class[]             @relation("TeacherClasses")
   enrollments       ClassEnrollment[]
@@ -57,6 +81,9 @@ model User {
   classActions       ClassActionLog[] @relation("ClassActionActor")
   classActionsTarget ClassActionLog[] @relation("ClassActionTarget")
 
+  @@index([createdById])
+  @@index([homeClassId])
+  @@index([accountType])
   @@map("users")
 }
 
@@ -162,6 +189,8 @@ model Class {
   behaviorApplications BehaviorApplication[]
   teachers      ClassTeacher[]
   actionLog     ClassActionLog[]
+  // Cuentas de alumnado creadas en esta clase: es la clase desde la que se gestionan.
+  homeStudents  User[]            @relation("HomeClassStudents")
 
   @@index([teacherId])
   @@map("classes")

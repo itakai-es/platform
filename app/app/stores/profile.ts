@@ -46,6 +46,23 @@ export const useProfileStore = defineStore('profile', () => {
 
   const currentEmail = computed(() => profile.value?.email || authStore.user?.email || '')
 
+  /** Usuario de la cuenta, con el que entra si no tiene correo. */
+  const currentUsername = computed(() => profile.value?.username || authStore.user?.username || '')
+
+  /**
+   * Con qué se identifica la cuenta: su correo y, si no tiene, su usuario. Es
+   * también lo que va en el campo oculto de los gestores de contraseñas.
+   */
+  const accountLogin = computed(() => currentEmail.value || currentUsername.value)
+
+  /**
+   * ¿La lleva el profesorado? Entonces no puede ponerse correo, ni cambiarse el
+   * nombre, ni borrarse: el servidor lo rechaza, y las pantallas no lo ofrecen.
+   */
+  const isManagedAccount = computed(
+    () => (profile.value?.accountType ?? authStore.user?.accountType) === 'managed'
+  )
+
   // Actions
   /**
    * Carga el perfil del usuario si no se ha cargado todavía (o si `force=true`).
@@ -365,6 +382,9 @@ export const useProfileStore = defineStore('profile', () => {
     security,
     preferences,
     currentEmail,
+    currentUsername,
+    accountLogin,
+    isManagedAccount,
     // Actions
     ensureProfile,
     fetchProfile,

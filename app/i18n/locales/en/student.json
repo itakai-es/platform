@@ -264,6 +264,12 @@
         "security": "Security",
         "settings": "Settings"
       },
+      "account": {
+        "title": "Your account",
+        "username": "Username",
+        "email": "Email",
+        "managed_note": "Your teachers manage this account: you sign in with your username, it has no email and it cannot be deleted from here. Ask them for any change."
+      },
       "security": {
         "password_title": "Password",
         "current_password": "Current password",
@@ -271,7 +277,7 @@
         "confirm_password": "Confirm password",
         "update_button": "Update",
         "passwords_mismatch": "Passwords do not match",
-        "password_too_short": "Password must be at least 6 characters",
+        "password_too_short": "Password must be at least {min} characters",
         "sessions_title": "Sessions",
         "close_all_sessions": "Close all",
         "current_session": "Current",

@@ -27,6 +27,7 @@ import { isPublicUploadPath } from './modules/storage/storage.service.js'
 import { registerNotificationJobs } from './modules/notifications/notifications.jobs.js'
 import { startScheduler, stopScheduler } from './utils/scheduler.js'
 import { HttpError } from './utils/errors.js'
+import { passwordChangeGate } from './utils/password-change-gate.js'
 import { ZodError } from 'zod'
 import { Prisma } from './generated/prisma/client.js'
 
@@ -221,6 +222,10 @@ async function buildServer() {
       code: 'MAINTENANCE',
     })
   })
+
+  // Cambio de contraseña pendiente: mientras lo esté, la sesión no sirve para
+  // nada más (ver utils/password-change-gate.ts).
+  fastify.addHook('onRequest', passwordChangeGate)
 
   // Role middleware helper
   const requireRole = (...roles: string[]) => {

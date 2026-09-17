@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest'
+import bcrypt from 'bcryptjs'
 import { hashPassword, verifyPassword } from '../../src/utils/password.js'
 
 describe('Password Utilities', () => {
@@ -38,5 +39,17 @@ describe('Password Utilities', () => {
     const hash = await hashPassword('contraseña123!@#')
     const isValid = await verifyPassword('contraseña123!@#', hash)
     expect(isValid).toBe(true)
+  })
+
+  it('las contraseñas nuevas se guardan con coste 12', async () => {
+    expect(await hashPassword('otra-contraseña')).toMatch(/^\$2[aby]?\$12\$/)
+  })
+
+  it('un hash con el coste anterior sigue valiendo', async () => {
+    // Las contraseñas que ya existen llevan su coste dentro del hash.
+    const viejo = await bcrypt.hash('la-de-siempre', 10)
+    expect(viejo).toMatch(/^\$2[aby]?\$10\$/)
+    expect(await verifyPassword('la-de-siempre', viejo)).toBe(true)
+    expect(await verifyPassword('otra', viejo)).toBe(false)
   })
 })

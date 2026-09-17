@@ -29,7 +29,7 @@
       "title": "Xestión d'usuarios",
       "subtitle": "Alministra tolos usuarios de la plataforma",
       "filters": {
-        "search_placeholder": "Guetar por nome o corréu...",
+        "search_placeholder": "Buscar por nome, corréu o usuariu...",
         "all_roles": "Tolos roles",
         "students": "Alumnos",
         "teachers": "Profesores",
@@ -38,7 +38,11 @@
         "active": "Activu",
         "suspended": "Suspendíu",
         "inactive": "Inactivu",
-        "clear": "Llimpiar filtros"
+        "clear": "Llimpiar filtros",
+        "all_account_types": "Toles cuentes",
+        "self_accounts": "Con corréu",
+        "managed_accounts": "Llévales el profesoráu",
+        "orphan_accounts": "Xestionaes ensin clase"
       },
       "roles": {
         "student": "Alumnu",
@@ -48,11 +52,32 @@
       "card": {
         "status": "Estáu",
         "classes": "Clases",
-        "last_login": "Últ. accesu"
+        "last_login": "Últ. accesu",
+        "managed": "Llévala el profesoráu",
+        "home_class": "Xestiónase dende {name}",
+        "no_home_class": "Ensin clase d'orixe"
       },
       "empty": {
         "title": "Nun s'atoparon usuarios",
         "description": "Nun hai usuarios que concasen colos filtros escoyíos."
+      },
+      "create": {
+        "button": "Cuenta nueva ensin corréu",
+        "title": "Cuenta nueva d'alumnáu",
+        "note": "Pa quien nun tien corréu: entra col so usuariu y una contraseña temporal que camuda al entrar.",
+        "name": "Nome",
+        "name_placeholder": "Nome y apellíu",
+        "home_class": "Clase d'orixe",
+        "home_class_placeholder": "Escueyi una clase",
+        "home_class_hint": "L'alumnu queda matriculáu nella y el so profesoráu lleva la cuenta.",
+        "username": "Usuariu (opcional)",
+        "username_placeholder": "Propónlu el sistema",
+        "username_hint": "En blancu, el sistema propón unu. Si'l que escribes yá ta cogíu, añádese-y un sufixu.",
+        "submit": "Crear cuenta",
+        "errors": {
+          "name": "Escribi el nome, con polo menos 2 caráuteres",
+          "home_class": "Escueyi la clase d'orixe"
+        }
       },
       "actions": {
         "suspend_title": "Suspender usuariu",
@@ -60,7 +85,23 @@
         "suspend_confirm": "Suspender",
         "delete_title": "Desaniciar usuariu",
         "delete_message": "¿De xuru que quies desaniciar a {name}? Esta aición nun se pue desfacer.",
-        "delete_confirm": "Desaniciar"
+        "delete_confirm": "Desaniciar",
+        "menu_label": "Aiciones de {name}",
+        "suspend": "Suspender",
+        "activate": "Activar",
+        "delete": "Desaniciar",
+        "reset_password": "Reafitar contraseña",
+        "reset_password_title": "Reafitar la contraseña",
+        "reset_password_message": "Va dase-y una contraseña temporal a {name}, van zarrase les sos sesiones y va tener que camudala al entrar.",
+        "reset_password_confirm": "Reafitar",
+        "credentials_title": "Contraseña temporal",
+        "credentials_note": "Apúntala agora: nun se vuelve amosar. Si se pierde, reafítase otra vuelta.",
+        "credentials_username": "Usuariu",
+        "credentials_password": "Contraseña temporal",
+        "home_class": "Camudar clase d'orixe",
+        "home_class_title": "Clase d'orixe",
+        "home_class_note": "Ye la clase dende la que'l profesoráu lleva esta cuenta; al camudala, l'alumnu queda matriculáu na nueva. Ensin clase, namás l'atiende l'alministración.",
+        "home_class_none": "Ensin clase d'orixe"
       },
       "meta": {
         "title": "Xestión d'usuarios | ITAKAI Admin",

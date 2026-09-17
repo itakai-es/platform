@@ -8,13 +8,34 @@ import { fetchSystemLogs, logServiceHealthResults } from './system-log.service.j
 import { getAiSettings, getAdminSettings, updateSection } from '../settings/settings.service.js'
 import { SETTINGS_SECTIONS, type SettingsSection } from '../settings/settings.types.js'
 import { openAiEndpoint } from '../ai/providers/openai-endpoint.js'
+import { rethrowHttpError } from '../../utils/errors.js'
+import { enrollStudent } from '../../utils/enrollment.js'
+import { USERNAME_MAX_LENGTH, USERNAME_MIN_LENGTH } from '../../utils/identity.js'
+import {
+  createManagedStudent,
+  resetManagedStudentPassword,
+} from '../teachers/managed-students.service.js'
 
 const userFiltersSchema = z.object({
   role: z.string().optional(),
   status: z.string().optional(),
   search: z.string().optional(),
+  // `managed`, las cuentas que lleva el profesorado; `orphan`, las gestionadas
+  // que se han quedado sin ninguna clase y solo puede atender la administración.
+  accountType: z.enum(['all', 'self', 'managed', 'orphan']).optional(),
   page: z.string().optional(),
   limit: z.string().optional(),
+})
+
+const homeClassSchema = z.object({
+  // Cadena vacía o nulo: se queda sin clase de origen.
+  classId: z.string().min(1).nullable().optional(),
+})
+
+const createManagedUserSchema = z.object({
+  classId: z.string().min(1, 'Elige la clase de origen'),
+  name: z.string().min(2, 'El nombre debe tener al menos 2 caracteres').max(120),
+  username: z.string().min(USERNAME_MIN_LENGTH).max(USERNAME_MAX_LENGTH).optional(),
 })
 
 type ServiceStatus = 'operational' | 'degraded' | 'down'
@@ -242,11 +263,20 @@ export async function adminRoutes(fastify: FastifyInstance) {
         whereClause.status = filters.status
       }
 
+      // Una cuenta sin correo se encuentra por su usuario: es su identificador.
       if (filters.search) {
         whereClause.OR = [
           { name: { contains: filters.search, mode: 'insensitive' } },
           { email: { contains: filters.search, mode: 'insensitive' } },
+          { username: { contains: filters.search, mode: 'insensitive' } },
         ]
+      }
+
+      if (filters.accountType === 'orphan') {
+        whereClause.accountType = 'managed'
+        whereClause.enrollments = { none: {} }
+      } else if (filters.accountType && filters.accountType !== 'all') {
+        whereClause.accountType = filters.accountType
       }
 
       const [users, total] = await Promise.all([
@@ -263,6 +293,7 @@ export async function adminRoutes(fastify: FastifyInstance) {
             },
             teacherClasses: { select: { id: true } },
             enrollments: { where: { isPreview: false }, select: { id: true } },
+            homeClass: { select: { name: true } },
           },
         }),
         prisma.user.count({ where: whereClause }),
@@ -273,6 +304,11 @@ export async function adminRoutes(fastify: FastifyInstance) {
           id: u.id,
           name: u.name,
           email: u.email,
+          username: u.username,
+          accountType: u.accountType,
+          homeClassId: u.homeClassId,
+          homeClassName: u.homeClass?.name ?? null,
+          mustChangePassword: u.mustChangePassword,
           role: u.role,
           status: u.status,
           createdAt: u.createdAt,
@@ -336,6 +372,121 @@ export async function adminRoutes(fastify: FastifyInstance) {
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
+
+  // Alta de una cuenta de alumnado sin correo desde el panel. Es el mismo camino
+  // que usa el profesorado, con la clase en el cuerpo: la administración de la
+  // instancia llega a cualquier clase.
+  fastify.post('/users/managed', async (request: FastifyRequest, reply: FastifyReply) => {
+    try {
+      const actor = request.user as { id: string; role: string | null }
+      const data = createManagedUserSchema.parse(request.body)
+      const result = await createManagedStudent(actor, data)
+      return reply.status(201).send(result)
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return reply.status(400).send({ message: error.errors[0]?.message || 'Datos inválidos' })
+      }
+      rethrowHttpError(error)
+      return reply.status(500).send({ message: 'Error interno' })
+    }
+  })
+
+  // Restablecer la contraseña de una cuenta gestionada. La administración de la
+  // instancia es el respaldo del profesorado: llega también a las cuentas que se
+  // han quedado sin clase. La temporal se ve una sola vez, en esta respuesta.
+  fastify.post(
+    '/users/:userId/reset-password',
+    async (request: FastifyRequest<{ Params: { userId: string } }>, reply: FastifyReply) => {
+      try {
+        const actor = request.user as { id: string; role: string | null }
+        const result = await resetManagedStudentPassword(actor, request.params.userId)
+        return result
+      } catch (error) {
+        rethrowHttpError(error)
+        return reply.status(500).send({ message: 'Error interno' })
+      }
+    }
+  )
+
+  // Clase de origen de una cuenta gestionada: desde qué clase la gestiona el
+  // profesorado. Cambiarla es pasar esa responsabilidad a otra clase.
+  fastify.put(
+    '/users/:userId/home-class',
+    async (request: FastifyRequest<{ Params: { userId: string } }>, reply: FastifyReply) => {
+      try {
+        const { userId } = request.params
+        const { classId } = homeClassSchema.parse(request.body)
+
+        const target = await prisma.user.findUnique({
+          where: { id: userId },
+          select: { accountType: true },
+        })
+        if (!target) {
+          return reply.status(404).send({ message: 'Usuario no encontrado' })
+        }
+        if (target.accountType !== 'managed') {
+          return reply.status(400).send({
+            message: 'Solo las cuentas que gestiona el profesorado tienen clase de origen',
+            code: 'NOT_A_MANAGED_ACCOUNT',
+          })
+        }
+        let cls: { id: string; name: string } | null = null
+        if (classId) {
+          cls = await prisma.class.findUnique({
+            where: { id: classId },
+            select: { id: true, name: true },
+          })
+          if (!cls) {
+            return reply.status(404).send({ message: 'Clase no encontrada' })
+          }
+        }
+
+        const user = await prisma.$transaction(async tx => {
+          const updated = await tx.user.update({
+            where: { id: userId },
+            data: { homeClassId: cls?.id ?? null },
+            select: { id: true, homeClassId: true, homeClass: { select: { name: true } } },
+          })
+
+          // El profesorado llega a la cuenta por la clase de origen, y para eso el
+          // alumno tiene que estar matriculado en ella: al mover la cuenta a otra
+          // clase se matricula también, o la cuenta se quedaría sin nadie que la
+          // atienda salvo la administración de la instancia.
+          if (cls) {
+            const enrolled = await tx.classEnrollment.findUnique({
+              where: { studentId_classId: { studentId: userId, classId: cls.id } },
+              select: { id: true },
+            })
+            if (!enrolled) {
+              await enrollStudent(tx, {
+                studentId: userId,
+                classId: cls.id,
+                className: cls.name,
+              })
+            }
+          }
+
+          return updated
+        })
+
+        return {
+          user: {
+            id: user.id,
+            homeClassId: user.homeClassId,
+            homeClassName: user.homeClass?.name ?? null,
+          },
+          success: true,
+          message: 'Clase de origen actualizada correctamente',
+        }
+      } catch (error) {
+        if (error instanceof ZodError) {
+          return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
+        }
+        rethrowHttpError(error)
+        return reply.status(500).send({ message: 'Error interno' })
+      }
+    }
+  )
 
   // Activate user
   fastify.put('/users/:userId/activate', async (request: FastifyRequest<{ Params: { userId: string } }>, reply: FastifyReply) => {

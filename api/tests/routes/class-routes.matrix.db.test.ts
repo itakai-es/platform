@@ -158,6 +158,40 @@ const TEACHER_CLASS: RouteCase[] = [
     student: 403,
   },
   {
+    route: 'POST /teacher/classes/:classId/students',
+    request: f => ({
+      method: 'POST',
+      url: `${c(f)}/students`,
+      payload: { name: 'Alumno sin correo' },
+    }),
+    owner: 201,
+    other: 404,
+    student: 403,
+  },
+  {
+    // No lleva clase en el camino: se decide por la clase de origen de la cuenta.
+    // La del alumno de la fixture tiene correo, así que el propietario recibe un
+    // 400: no es una cuenta que restablezca su profesorado.
+    route: 'POST /teacher/students/:studentId/reset-password',
+    request: f => ({
+      method: 'POST',
+      url: `/teacher/students/${f.users.student.id}/reset-password`,
+    }),
+    owner: 400,
+    other: 404,
+    student: 403,
+  },
+  {
+    route: 'GET /teacher/classes/:classId/students/username-proposal',
+    request: f => ({
+      method: 'GET',
+      url: `${c(f)}/students/username-proposal?name=Ana%20G%C3%B3mez`,
+    }),
+    owner: 200,
+    other: 404,
+    student: 403,
+  },
+  {
     route: 'GET /teacher/classes/:classId/activities',
     request: f => ({ method: 'GET', url: `${c(f)}/activities` }),
     owner: 200,
@@ -734,7 +768,9 @@ describeWithDatabase('matriz de acceso de las rutas de profesor', () => {
       f.users.student.id
     )
 
-    expect(JSON.parse(await get('/teacher/stats', 'owner')).totalStudents).toBe(1)
+    // El propietario cuenta el alumnado de su clase (el de la fixture y el que
+    // hayan dado de alta las rutas de más arriba); el otro profesor, ninguno.
+    expect(JSON.parse(await get('/teacher/stats', 'owner')).totalStudents).toBeGreaterThanOrEqual(1)
     expect(JSON.parse(await get('/teacher/stats', 'other')).totalStudents).toBe(0)
 
     const activity = await prisma.activity.create({

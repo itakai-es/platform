@@ -3,6 +3,7 @@
  * Tipos para el módulo de administración
  */
 import type { AppLanguage } from '~/utils/app-languages'
+import type { AccountType } from '~/types/auth.types'
 
 /**
  * User con información completa para admin
@@ -10,7 +11,17 @@ import type { AppLanguage } from '~/utils/app-languages'
 export interface AdminUser {
   id: string
   name: string
-  email: string
+  /** Nulo en una cuenta que entra con usuario: no tiene correo. */
+  email: string | null
+  /** Nulo en una cuenta que se registró con su correo. */
+  username: string | null
+  /** Quién lleva la cuenta: su dueño (`self`) o el profesorado (`managed`). */
+  accountType: AccountType
+  /** Clase desde la que el profesorado gestiona la cuenta, si es gestionada. */
+  homeClassId: string | null
+  homeClassName: string | null
+  /** Contraseña temporal pendiente de cambiar. */
+  mustChangePassword: boolean
   role: 'student' | 'teacher' | 'admin'
   status: 'active' | 'suspended' | 'inactive'
   createdAt: string
@@ -88,6 +99,8 @@ export interface UserAction {
 export interface UserFilters {
   role?: 'student' | 'teacher' | 'admin' | 'all'
   status?: 'active' | 'suspended' | 'inactive' | 'all'
+  /** `orphan`: cuentas gestionadas que se han quedado sin ninguna clase. */
+  accountType?: 'all' | AccountType | 'orphan'
   search?: string
   schoolId?: string
   page?: number

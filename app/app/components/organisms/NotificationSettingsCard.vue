@@ -56,12 +56,18 @@ const pending = reactive<Partial<Record<PreferenceKey, boolean>>>({})
 const valueOf = (key: PreferenceKey) => pending[key] ?? profileStore.preferences[key]
 
 const rows = computed(() => [
-  {
-    key: 'emailNotifications' as PreferenceKey,
-    label: t('common.notification_settings.email.title'),
-    hint: t('common.notification_settings.email.description'),
-    value: valueOf('emailNotifications'),
-  },
+  // Una cuenta sin correo no recibe ninguno: sus avisos se quedan dentro de la
+  // aplicación, así que el interruptor de correo no se le ofrece.
+  ...(profileStore.currentEmail
+    ? [
+        {
+          key: 'emailNotifications' as PreferenceKey,
+          label: t('common.notification_settings.email.title'),
+          hint: t('common.notification_settings.email.description'),
+          value: valueOf('emailNotifications'),
+        },
+      ]
+    : []),
   {
     key: 'missionReminders' as PreferenceKey,
     label: t('common.notification_settings.reminders.title'),

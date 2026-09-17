@@ -609,7 +609,7 @@
         "session_close": "Close",
         "validation": {
           "passwords_mismatch": "Passwords do not match",
-          "password_min_length": "Password must be at least 6 characters",
+          "password_min_length": "Password must be at least {min} characters",
           "password_required": "Enter your password"
         }
       },

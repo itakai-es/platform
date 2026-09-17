@@ -40,7 +40,8 @@
           <!-- Info -->
           <div class="flex-1 min-w-0">
             <h1 class="text-2xl sm:text-3xl font-bold text-white truncate">{{ student.name }}</h1>
-            <p class="text-white/70 text-sm sm:text-base">{{ student.email }}</p>
+            <!-- Un alumno sin correo se identifica por su usuario -->
+            <p class="text-white/70 text-sm sm:text-base">{{ accountIdentifier(student) }}</p>
           </div>
         </div>
       </div>
@@ -331,6 +332,7 @@ import {
 } from '@heroicons/vue/24/outline'
 import type { ClassSettings } from '~/types/class.types'
 import { resolveClassSettings } from '~/utils/class-settings'
+import { accountIdentifier } from '~/utils/identity'
 
 interface StudentClass {
   id: string
@@ -380,7 +382,10 @@ interface StudentStats {
 interface StudentDetail {
   id: string
   name: string
-  email: string
+  /** Nulo en una cuenta que entra con usuario: no tiene correo. */
+  email: string | null
+  /** Usuario de la cuenta, con el que entra si no tiene correo. */
+  username: string | null
   classes: StudentClass[]
   recentMissions: RecentMission[]
   recentActivity: Activity[]

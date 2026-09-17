@@ -264,6 +264,12 @@
         "security": "Segurança",
         "settings": "Definições"
       },
+      "account": {
+        "title": "A tua conta",
+        "username": "Utilizador",
+        "email": "E-mail",
+        "managed_note": "A tua conta é gerida pelos professores: entras com o teu utilizador, não tem e-mail e não pode ser eliminada aqui. Se precisares de alguma alteração, pede-lhes."
+      },
       "security": {
         "password_title": "Palavra-passe",
         "current_password": "Palavra-passe atual",
@@ -271,7 +277,7 @@
         "confirm_password": "Confirmar palavra-passe",
         "update_button": "Atualizar",
         "passwords_mismatch": "As palavras-passe não coincidem",
-        "password_too_short": "A palavra-passe tem de ter pelo menos 6 caracteres",
+        "password_too_short": "A palavra-passe tem de ter pelo menos {min} caracteres",
         "sessions_title": "Sessões",
         "close_all_sessions": "Terminar todas",
         "current_session": "Atual",

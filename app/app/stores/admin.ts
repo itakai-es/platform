@@ -25,6 +25,7 @@ import type {
   PaginatedMissionsResponse,
   AnalyticsData,
 } from '~/types/admin.types'
+import type { ManagedCredentials } from '~/types/auth.types'
 
 export const useAdminStore = defineStore('admin', () => {
   // State
@@ -189,6 +190,8 @@ export const useAdminStore = defineStore('admin', () => {
       const queryParams = new URLSearchParams()
       if (filters?.role && filters.role !== 'all') queryParams.append('role', filters.role)
       if (filters?.status && filters.status !== 'all') queryParams.append('status', filters.status)
+      if (filters?.accountType && filters.accountType !== 'all')
+        queryParams.append('accountType', filters.accountType)
       if (filters?.search) queryParams.append('search', filters.search)
       if (filters?.schoolId) queryParams.append('schoolId', filters.schoolId)
       if (filters?.page) queryParams.append('page', filters.page.toString())
@@ -255,6 +258,94 @@ export const useAdminStore = defineStore('admin', () => {
     } catch (err: unknown) {
       error.value = (err as Error).message || 'Error al activar el usuario'
       console.error('Error activating user:', err)
+      throw err
+    } finally {
+      isPerformingUserAction.value = false
+    }
+  }
+
+  /**
+   * Da de alta una cuenta de alumnado sin correo en una clase de la instancia.
+   * Devuelve el usuario con el que ha nacido —que puede no ser el escrito, si
+   * estaba cogido— y su contraseña temporal, que solo se ve una vez.
+   */
+  async function createManagedUser(input: {
+    classId: string
+    name: string
+    username?: string
+  }): Promise<ManagedCredentials> {
+    try {
+      isPerformingUserAction.value = true
+      error.value = null
+      const config = useRuntimeConfig()
+      const response = await $fetch<ManagedCredentials>(
+        `${config.public.apiBase}/admin/users/managed`,
+        { method: 'POST', body: input }
+      )
+      // La cuenta nueva no está en la lista cargada: se vuelve a pedir.
+      await fetchUsers({ limit: 1000 })
+      return response
+    } catch (err: unknown) {
+      error.value = (err as Error).message || 'Error al crear la cuenta'
+      console.error('Error creating managed user:', err)
+      throw err
+    } finally {
+      isPerformingUserAction.value = false
+    }
+  }
+
+  /**
+   * Restablece la contraseña de una cuenta que lleva el profesorado. Devuelve
+   * la contraseña temporal: solo se ve una vez, aquí, y no se guarda en ningún
+   * sitio; si se pierde, se restablece otra vez.
+   */
+  async function resetManagedPassword(userId: string) {
+    try {
+      isPerformingUserAction.value = true
+      error.value = null
+      const config = useRuntimeConfig()
+      const response = await $fetch<ManagedCredentials>(
+        `${config.public.apiBase}/admin/users/${userId}/reset-password`,
+        { method: 'POST' }
+      )
+      const idx = users.value.findIndex(u => u.id === userId)
+      if (idx !== -1) users.value[idx] = { ...users.value[idx]!, mustChangePassword: true }
+      return response
+    } catch (err: unknown) {
+      error.value = (err as Error).message || 'Error al restablecer la contraseña'
+      console.error('Error resetting managed password:', err)
+      throw err
+    } finally {
+      isPerformingUserAction.value = false
+    }
+  }
+
+  /** Cambia la clase desde la que el profesorado gestiona una cuenta. `null` la deja sin ninguna. */
+  async function updateHomeClass(userId: string, classId: string | null) {
+    try {
+      isPerformingUserAction.value = true
+      error.value = null
+      const config = useRuntimeConfig()
+      const response = await $fetch<{
+        success: boolean
+        message: string
+        user: { id: string; homeClassId: string | null; homeClassName: string | null }
+      }>(`${config.public.apiBase}/admin/users/${userId}/home-class`, {
+        method: 'PUT',
+        body: { classId },
+      })
+      const idx = users.value.findIndex(u => u.id === userId)
+      if (idx !== -1) {
+        users.value[idx] = {
+          ...users.value[idx]!,
+          homeClassId: response.user.homeClassId,
+          homeClassName: response.user.homeClassName,
+        }
+      }
+      return response
+    } catch (err: unknown) {
+      error.value = (err as Error).message || 'Error al cambiar la clase de origen'
+      console.error('Error updating home class:', err)
       throw err
     } finally {
       isPerformingUserAction.value = false
@@ -834,6 +925,9 @@ export const useAdminStore = defineStore('admin', () => {
     fetchUsers,
     suspendUser,
     activateUser,
+    createManagedUser,
+    resetManagedPassword,
+    updateHomeClass,
     deleteUser,
     fetchSchools,
     createSchool,

@@ -33,7 +33,7 @@
       },
       "subtitle": "Administra todos os usuarios da plataforma",
       "filters": {
-        "search_placeholder": "Buscar por nome ou email...",
+        "search_placeholder": "Buscar por nome, correo ou usuario...",
         "all_roles": "Todos os roles",
         "students": "Estudantes",
         "teachers": "Profesores",
@@ -42,7 +42,11 @@
         "active": "Activo",
         "suspended": "Suspendido",
         "inactive": "Inactivo",
-        "clear": "Limpar filtros"
+        "clear": "Limpar filtros",
+        "all_account_types": "Todas as contas",
+        "self_accounts": "Con correo",
+        "managed_accounts": "Lévaas o profesorado",
+        "orphan_accounts": "Xestionadas sen clase"
       },
       "roles": {
         "student": "Estudante",
@@ -52,11 +56,32 @@
       "card": {
         "status": "Estado",
         "classes": "Clases",
-        "last_login": "Últ. acceso"
+        "last_login": "Últ. acceso",
+        "managed": "Lévaa o profesorado",
+        "home_class": "Xestiónase desde {name}",
+        "no_home_class": "Sen clase de orixe"
       },
       "empty": {
         "title": "Non se atoparon usuarios",
         "description": "Non hai usuarios que coincidan cos filtros seleccionados."
+      },
+      "create": {
+        "button": "Nova conta sen correo",
+        "title": "Nova conta de alumnado",
+        "note": "Para quen non ten correo: entra co seu usuario e un contrasinal temporal que cambia ao entrar.",
+        "name": "Nome",
+        "name_placeholder": "Nome e apelido",
+        "home_class": "Clase de orixe",
+        "home_class_placeholder": "Escolle unha clase",
+        "home_class_hint": "O alumno queda matriculado nela e o seu profesorado leva a conta.",
+        "username": "Usuario (opcional)",
+        "username_placeholder": "O propón o sistema",
+        "username_hint": "En branco, o sistema propón un. Se o que escribes xa está collido, engádeselle un sufixo.",
+        "submit": "Crear conta",
+        "errors": {
+          "name": "Escribe o nome, con polo menos 2 caracteres",
+          "home_class": "Escolle a clase de orixe"
+        }
       },
       "actions": {
         "suspend_title": "Suspender usuario",
@@ -64,7 +89,23 @@
         "suspend_confirm": "Suspender",
         "delete_title": "Eliminar usuario",
         "delete_message": "Seguro que queres eliminar a {name}? Esta acción non se pode desfacer.",
-        "delete_confirm": "Eliminar"
+        "delete_confirm": "Eliminar",
+        "menu_label": "Accións de {name}",
+        "suspend": "Suspender",
+        "activate": "Activar",
+        "delete": "Eliminar",
+        "reset_password": "Restablecer contrasinal",
+        "reset_password_title": "Restablecer o contrasinal",
+        "reset_password_message": "Daráselle un contrasinal temporal a {name}, pecharanse as súas sesións e terá que cambialo ao entrar.",
+        "reset_password_confirm": "Restablecer",
+        "credentials_title": "Contrasinal temporal",
+        "credentials_note": "Apúntao agora: non se volve amosar. Se se perde, restablécese outra vez.",
+        "credentials_username": "Usuario",
+        "credentials_password": "Contrasinal temporal",
+        "home_class": "Cambiar clase de orixe",
+        "home_class_title": "Clase de orixe",
+        "home_class_note": "É a clase desde a que o profesorado leva esta conta; ao cambiala, o alumno queda matriculado na nova. Sen clase, só a atende a administración.",
+        "home_class_none": "Sen clase de orixe"
       },
       "sort": {
         "recent": "Máis recentes"

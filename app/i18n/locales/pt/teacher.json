@@ -609,7 +609,7 @@
         "session_close": "Terminar",
         "validation": {
           "passwords_mismatch": "As palavras-passe não coincidem",
-          "password_min_length": "A palavra-passe tem de ter pelo menos 6 caracteres",
+          "password_min_length": "A palavra-passe tem de ter pelo menos {min} caracteres",
           "password_required": "Introduz a tua palavra-passe"
         }
       },

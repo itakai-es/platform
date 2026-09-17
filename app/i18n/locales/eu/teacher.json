@@ -609,7 +609,7 @@
         "session_close": "Itxi",
         "validation": {
           "passwords_mismatch": "Pasahitzak ez datoz bat",
-          "password_min_length": "Pasahitzak gutxienez 6 karaktere izan behar ditu",
+          "password_min_length": "Pasahitzak gutxienez {min} karaktere izan behar ditu",
           "password_required": "Sartu zure pasahitza"
         }
       },

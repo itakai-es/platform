@@ -1,10 +1,11 @@
 import { PrismaClient } from '../src/generated/prisma/client.js'
 import { PrismaPg } from '@prisma/adapter-pg'
 import { Pool } from 'pg'
-import bcrypt from 'bcryptjs'
 import { randomBytes } from 'crypto'
 import 'dotenv/config'
 import { SYSTEM_BADGES } from './system-badges.js'
+import { hashPassword } from '../src/utils/password.js'
+import { normalizeEmail } from '../src/utils/identity.js'
 
 /**
  * Bootstrap para AUTO-HOSPEDAJE: crea las insignias del sistema y UN administrador
@@ -40,7 +41,8 @@ async function main() {
   if (anyAdmin) {
     console.log(`  ℹ️  Ya existe un administrador (${anyAdmin.email}) — no se crea otro.`)
   } else {
-    const email = process.env.ADMIN_EMAIL || 'admin@itakai.local'
+    // El correo se guarda en minúsculas, como en todas las vías de alta.
+    const email = normalizeEmail(process.env.ADMIN_EMAIL || 'admin@itakai.local')
     const provided = process.env.ADMIN_PASSWORD
     const password =
       provided || randomBytes(9).toString('base64').replace(/[^a-zA-Z0-9]/g, '').slice(0, 12)
@@ -51,7 +53,7 @@ async function main() {
         name: 'Administrador',
         role: 'admin',
         isOnboarded: true,
-        passwordHash: await bcrypt.hash(password, 10),
+        passwordHash: await hashPassword(password),
       },
     })
 

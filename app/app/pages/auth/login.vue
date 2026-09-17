@@ -57,15 +57,16 @@
 
           <!-- Formulario -->
           <form class="space-y-3 sm:space-y-4 login-form" @submit.prevent="handleLogin">
-            <!-- Email -->
+            <!-- Correo o usuario: una cuenta sin correo entra con su usuario -->
             <FormField
-              id="email"
-              v-model="email"
-              type="email"
-              :label="$t('auth.login.email_label')"
-              :placeholder="$t('auth.login.email_placeholder')"
+              id="identifier"
+              v-model="identifier"
+              type="text"
+              autocomplete="username"
+              :label="$t('auth.login.identifier_label')"
+              :placeholder="$t('auth.login.identifier_placeholder')"
               :required="true"
-              data-testid="email-input"
+              data-testid="identifier-input"
             />
 
             <!-- Contraseña -->
@@ -193,7 +194,7 @@ const router = useRouter()
 const authStore = useAuthStore()
 const toast = useToast()
 
-const email = ref('')
+const identifier = ref('')
 const password = ref('')
 const rememberMe = ref(false)
 const isLoading = ref(false)
@@ -204,7 +205,7 @@ async function handleLogin() {
     errorMessage.value = ''
     isLoading.value = true
     await authStore.login({
-      email: email.value,
+      identifier: identifier.value,
       password: password.value,
     })
 
