@@ -4,6 +4,7 @@ import { missionsService } from '../missions/missions.service.js'
 import { shopService } from '../shop/shop.service.js'
 import { behaviorsService } from '../behaviors/behaviors.service.js'
 import { z, ZodError } from 'zod'
+import { scheduleConfigSchema } from './schedule-config.schema.js'
 import { ServiceUnavailableError } from '../../utils/errors.js'
 
 // Schemas
@@ -63,6 +64,7 @@ const updateClassSchema = z.object({
   province: z.string().optional(),
   settings: classSettingsSchema.optional(),
   levelConfig: levelConfigSchema.optional(),
+  scheduleConfig: scheduleConfigSchema.optional(),
 })
 
 const sendInvitationSchema = z.object({
