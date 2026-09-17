@@ -10,6 +10,7 @@
 
 <script setup lang="ts">
 import type { ClassSettings, LevelConfig } from '~/types/class.types'
+import type { ScheduleConfig } from '~/types/schedule.types'
 
 definePageMeta({ layout: 'teacher', middleware: ['auth', 'role'] })
 
@@ -22,7 +23,12 @@ const { state, setClassData } = useTeacherClassDetail(classId)
 function onSettingsUpdate(settings: ClassSettings) {
   setClassData({ settings })
 }
-function onGeneralUpdate(data: { name: string; schedule: string; backgroundImage: string }) {
+function onGeneralUpdate(data: {
+  name: string
+  schedule: string
+  backgroundImage: string
+  scheduleConfig?: ScheduleConfig[]
+}) {
   setClassData(data)
 }
 function onLevelsUpdate(levelConfig: LevelConfig) {

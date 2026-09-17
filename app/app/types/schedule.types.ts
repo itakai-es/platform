@@ -49,9 +49,20 @@ export function emptyScheduleConfig(): ScheduleConfig {
   }
 }
 
-/** Un tramo tiene contenido si el profesor ha rellenado algo en él. */
+/**
+ * Un tramo tiene contenido si el profesor ha rellenado algo en él, incluida una
+ * periodicidad distinta de la de un tramo vacío ("Cada día", "No se repite"…).
+ */
 export function scheduleSlotHasContent(s: ScheduleConfig): boolean {
-  return s.weekdays.length > 0 || !!s.startDate || !!s.start
+  return (
+    s.weekdays.length > 0 ||
+    !!s.startDate ||
+    !!s.start ||
+    !!s.end ||
+    s.freq !== 'weekly' ||
+    s.interval > 1 ||
+    (!!s.ends && s.ends.type !== 'never')
+  )
 }
 
 /**

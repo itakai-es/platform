@@ -354,6 +354,7 @@ import {
   scheduleSlotHasContent,
   type ScheduleConfig,
 } from '~/types/schedule.types'
+import { scheduleSlotsFromText } from '~/utils/schedule-text'
 import {
   resolveClassSettings,
   coerceClassSettings,
@@ -397,7 +398,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   update: [settings: ClassSettings]
-  'general-update': [data: GeneralData]
+  'general-update': [data: GeneralData & { scheduleConfig?: ScheduleConfig[] }]
   'levels-update': [levelConfig: LevelConfig]
 }>()
 
@@ -438,19 +439,20 @@ const savingGeneral = ref(false)
 // Horario: el calendario edita una lista de tramos que se persiste en la
 // columna `scheduleConfig` (las clases antiguas guardan un objeto único; se
 // normaliza a lista al leer). `scheduleText` deriva el resumen para el campo
-// `schedule` (string) que muestran las tarjetas.
-const buildScheduleConfig = (): ScheduleConfig[] =>
-  normalizeScheduleSlots(
-    props.classData?.scheduleConfig
-      ? (JSON.parse(JSON.stringify(props.classData.scheduleConfig)) as
-          | ScheduleConfig
-          | ScheduleConfig[])
-      : null
-  )
+// `schedule` (string) que muestran las tarjetas. Si la clase no tiene config
+// guardada, el calendario se rellena leyendo ese texto.
+const buildScheduleConfig = (): ScheduleConfig[] => {
+  const saved = props.classData?.scheduleConfig
+  if (saved)
+    return normalizeScheduleSlots(
+      JSON.parse(JSON.stringify(saved)) as ScheduleConfig | ScheduleConfig[]
+    )
+  return normalizeScheduleSlots(scheduleSlotsFromText(props.classData?.schedule))
+}
+const filledSlots = (slots: ScheduleConfig[]) => slots.filter(scheduleSlotHasContent)
 const scheduleConfig = ref<ScheduleConfig[]>(buildScheduleConfig())
 const scheduleConfigSnapshot = ref<ScheduleConfig[]>(buildScheduleConfig())
 const { scheduleText } = useClassCalendar(scheduleConfig)
-const hasScheduleConfig = computed(() => scheduleConfig.value.some(scheduleSlotHasContent))
 
 // Setters de los selects de metadatos. Se extraen a métodos porque Prettier
 // expande los handlers inline multi-sentencia a varias líneas y el compilador
@@ -495,8 +497,11 @@ watch(
   }
 )
 
+// Solo cuentan los tramos rellenos: añadir uno vacío no es un cambio.
 const scheduleConfigDirty = computed(
-  () => JSON.stringify(scheduleConfig.value) !== JSON.stringify(scheduleConfigSnapshot.value)
+  () =>
+    JSON.stringify(filledSlots(scheduleConfig.value)) !==
+    JSON.stringify(filledSlots(scheduleConfigSnapshot.value))
 )
 
 const generalDirty = computed(() => {
@@ -624,10 +629,14 @@ async function saveGeneral() {
 
   savingGeneral.value = true
   // El horario solo se persiste (config + string derivado) si el profe editó el
-  // calendario, o si la clase ya tenía config guardada. Las clases antiguas
-  // pre-rellenadas desde el texto que no se tocan conservan su string intacto.
-  const persistSchedule =
-    hasScheduleConfig.value && (scheduleConfigDirty.value || !!props.classData?.scheduleConfig)
+  // calendario, o si la clase ya tenía config guardada. Las clases sin config,
+  // con el calendario rellenado a partir del texto, conservan su texto intacto
+  // mientras no se toque. Vaciar el calendario borra también el texto.
+  const persistSchedule = scheduleConfigDirty.value || !!props.classData?.scheduleConfig
+  // Copia: el calendario sigue editando los objetos de `scheduleConfig`.
+  const savedSlots = JSON.parse(
+    JSON.stringify(filledSlots(scheduleConfig.value))
+  ) as ScheduleConfig[]
   const scheduleStr = persistSchedule ? scheduleText.value.trim() : general.value.schedule.trim()
   const payload: GeneralData = {
     name: general.value.name.trim(),
@@ -642,7 +651,8 @@ async function saveGeneral() {
   try {
     await teacherStore.updateClass(props.classId, {
       name: payload.name,
-      schedule: payload.schedule || undefined,
+      // Cadena vacía solo al vaciar el calendario; si no, se deja como está.
+      schedule: persistSchedule ? payload.schedule : payload.schedule || undefined,
       backgroundImage: payload.backgroundImage || undefined,
       // Cadena vacía = "sin especificar" (se envía para poder limpiar el valor).
       subject: payload.subject,
@@ -651,16 +661,16 @@ async function saveGeneral() {
       province: payload.province,
       // Solo enviamos la config si corresponde persistir (ver `persistSchedule`).
       // Los tramos vacíos (añadidos y sin rellenar) no se guardan.
-      ...(persistSchedule
-        ? { scheduleConfig: scheduleConfig.value.filter(scheduleSlotHasContent) }
-        : {}),
+      ...(persistSchedule ? { scheduleConfig: savedSlots } : {}),
     })
     generalSnapshot.value = { ...payload }
     general.value = { ...payload }
     scheduleConfigSnapshot.value = JSON.parse(
       JSON.stringify(scheduleConfig.value)
     ) as ScheduleConfig[]
-    emit('general-update', payload)
+    // Con la config guardada, la página la actualiza junto al texto; si no, al
+    // recargarse el formulario volvería a la config anterior.
+    emit('general-update', persistSchedule ? { ...payload, scheduleConfig: savedSlots } : payload)
     toast.success(t('teacher.classes.detail.settings.general.toast_saved'))
   } catch (err: unknown) {
     // Surface el mensaje del backend si lo hay (p. ej. plantilla publicada sin

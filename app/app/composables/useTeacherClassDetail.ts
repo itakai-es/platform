@@ -18,6 +18,7 @@
  * clase el layout llama `loadAll(id, true)` y resetea.
  */
 import { resolveClassSettings } from '~/utils/class-settings'
+import type { ScheduleConfig } from '~/types/schedule.types'
 
 interface State {
   classData: any | null
@@ -199,6 +200,7 @@ export function useTeacherClassDetail(classIdRef: Ref<string> | ComputedRef<stri
       narrative: string
       settings: any
       levelConfig: any
+      scheduleConfig: ScheduleConfig[]
     }>
   ) {
     if (!state.value.classData) return
