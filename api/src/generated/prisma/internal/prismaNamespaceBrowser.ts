@@ -56,6 +56,8 @@ export const ModelName = {
   RefreshToken: 'RefreshToken',
   InstanceSetting: 'InstanceSetting',
   Class: 'Class',
+  ClassTeacher: 'ClassTeacher',
+  ClassActionLog: 'ClassActionLog',
   ClassEnrollment: 'ClassEnrollment',
   ClassGuide: 'ClassGuide',
   ShopItem: 'ShopItem',
@@ -180,6 +182,39 @@ export const ClassScalarFieldEnum = {
 } as const
 
 export type ClassScalarFieldEnum = (typeof ClassScalarFieldEnum)[keyof typeof ClassScalarFieldEnum]
+
+
+export const ClassTeacherScalarFieldEnum = {
+  id: 'id',
+  classId: 'classId',
+  userId: 'userId',
+  access: 'access',
+  profile: 'profile',
+  isOwner: 'isOwner',
+  addedById: 'addedById',
+  endsAt: 'endsAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ClassTeacherScalarFieldEnum = (typeof ClassTeacherScalarFieldEnum)[keyof typeof ClassTeacherScalarFieldEnum]
+
+
+export const ClassActionLogScalarFieldEnum = {
+  id: 'id',
+  classId: 'classId',
+  actorId: 'actorId',
+  actorName: 'actorName',
+  actorAvatar: 'actorAvatar',
+  action: 'action',
+  entityType: 'entityType',
+  entityId: 'entityId',
+  targetUserId: 'targetUserId',
+  metadata: 'metadata',
+  createdAt: 'createdAt'
+} as const
+
+export type ClassActionLogScalarFieldEnum = (typeof ClassActionLogScalarFieldEnum)[keyof typeof ClassActionLogScalarFieldEnum]
 
 
 export const ClassEnrollmentScalarFieldEnum = {

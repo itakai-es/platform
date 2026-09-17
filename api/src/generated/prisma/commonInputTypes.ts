@@ -284,6 +284,40 @@ export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
   _max?: Prisma.NestedJsonNullableFilter<$PrismaModel>
 }
 
+export type EnumClassAccessLevelFilter<$PrismaModel = never> = {
+  equals?: $Enums.ClassAccessLevel | Prisma.EnumClassAccessLevelFieldRefInput<$PrismaModel>
+  in?: $Enums.ClassAccessLevel[] | Prisma.ListEnumClassAccessLevelFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ClassAccessLevel[] | Prisma.ListEnumClassAccessLevelFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumClassAccessLevelFilter<$PrismaModel> | $Enums.ClassAccessLevel
+}
+
+export type EnumClassTeacherProfileFilter<$PrismaModel = never> = {
+  equals?: $Enums.ClassTeacherProfile | Prisma.EnumClassTeacherProfileFieldRefInput<$PrismaModel>
+  in?: $Enums.ClassTeacherProfile[] | Prisma.ListEnumClassTeacherProfileFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ClassTeacherProfile[] | Prisma.ListEnumClassTeacherProfileFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumClassTeacherProfileFilter<$PrismaModel> | $Enums.ClassTeacherProfile
+}
+
+export type EnumClassAccessLevelWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ClassAccessLevel | Prisma.EnumClassAccessLevelFieldRefInput<$PrismaModel>
+  in?: $Enums.ClassAccessLevel[] | Prisma.ListEnumClassAccessLevelFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ClassAccessLevel[] | Prisma.ListEnumClassAccessLevelFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumClassAccessLevelWithAggregatesFilter<$PrismaModel> | $Enums.ClassAccessLevel
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumClassAccessLevelFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumClassAccessLevelFilter<$PrismaModel>
+}
+
+export type EnumClassTeacherProfileWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ClassTeacherProfile | Prisma.EnumClassTeacherProfileFieldRefInput<$PrismaModel>
+  in?: $Enums.ClassTeacherProfile[] | Prisma.ListEnumClassTeacherProfileFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ClassTeacherProfile[] | Prisma.ListEnumClassTeacherProfileFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumClassTeacherProfileWithAggregatesFilter<$PrismaModel> | $Enums.ClassTeacherProfile
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumClassTeacherProfileFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumClassTeacherProfileFilter<$PrismaModel>
+}
+
 export type IntFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel>
   in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel>
@@ -837,6 +871,40 @@ export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
   gt?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel>
   gte?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel>
   not?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | Prisma.JsonNullValueFilter
+}
+
+export type NestedEnumClassAccessLevelFilter<$PrismaModel = never> = {
+  equals?: $Enums.ClassAccessLevel | Prisma.EnumClassAccessLevelFieldRefInput<$PrismaModel>
+  in?: $Enums.ClassAccessLevel[] | Prisma.ListEnumClassAccessLevelFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ClassAccessLevel[] | Prisma.ListEnumClassAccessLevelFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumClassAccessLevelFilter<$PrismaModel> | $Enums.ClassAccessLevel
+}
+
+export type NestedEnumClassTeacherProfileFilter<$PrismaModel = never> = {
+  equals?: $Enums.ClassTeacherProfile | Prisma.EnumClassTeacherProfileFieldRefInput<$PrismaModel>
+  in?: $Enums.ClassTeacherProfile[] | Prisma.ListEnumClassTeacherProfileFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ClassTeacherProfile[] | Prisma.ListEnumClassTeacherProfileFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumClassTeacherProfileFilter<$PrismaModel> | $Enums.ClassTeacherProfile
+}
+
+export type NestedEnumClassAccessLevelWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ClassAccessLevel | Prisma.EnumClassAccessLevelFieldRefInput<$PrismaModel>
+  in?: $Enums.ClassAccessLevel[] | Prisma.ListEnumClassAccessLevelFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ClassAccessLevel[] | Prisma.ListEnumClassAccessLevelFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumClassAccessLevelWithAggregatesFilter<$PrismaModel> | $Enums.ClassAccessLevel
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumClassAccessLevelFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumClassAccessLevelFilter<$PrismaModel>
+}
+
+export type NestedEnumClassTeacherProfileWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ClassTeacherProfile | Prisma.EnumClassTeacherProfileFieldRefInput<$PrismaModel>
+  in?: $Enums.ClassTeacherProfile[] | Prisma.ListEnumClassTeacherProfileFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ClassTeacherProfile[] | Prisma.ListEnumClassTeacherProfileFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumClassTeacherProfileWithAggregatesFilter<$PrismaModel> | $Enums.ClassTeacherProfile
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumClassTeacherProfileFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumClassTeacherProfileFilter<$PrismaModel>
 }
 
 export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {

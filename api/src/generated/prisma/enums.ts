@@ -27,6 +27,24 @@ export const UserStatus = {
 export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus]
 
 
+export const ClassAccessLevel = {
+  read: 'read',
+  edit: 'edit',
+  admin: 'admin'
+} as const
+
+export type ClassAccessLevel = (typeof ClassAccessLevel)[keyof typeof ClassAccessLevel]
+
+
+export const ClassTeacherProfile = {
+  titular: 'titular',
+  sustituto: 'sustituto',
+  practicas: 'practicas'
+} as const
+
+export type ClassTeacherProfile = (typeof ClassTeacherProfile)[keyof typeof ClassTeacherProfile]
+
+
 export const MissionStatus = {
   activa: 'activa',
   bloqueada: 'bloqueada'

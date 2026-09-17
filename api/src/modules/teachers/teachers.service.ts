@@ -17,6 +17,8 @@ import {
 import { resolveLevelConfig, tierForLevel, type LevelConfig } from '../../utils/level-config.js'
 import { saveUpload } from '../storage/storage.service.js'
 import { notify } from '../notifications/notifications.service.js'
+import { createClassWithOwner } from '../../utils/class-owner.js'
+import { classTeachersInclude, summarizeClassTeachers } from '../../utils/class-access.js'
 
 const BADGES_DIR = join(process.cwd(), 'uploads', 'badges')
 const COVERS_DIR = join(process.cwd(), 'uploads', 'covers')
@@ -156,6 +158,7 @@ export class TeachersService {
       include: {
         enrollments: { where: { isPreview: false }, include: { student: true } },
         missions: { include: { progress: true } },
+        teachers: classTeachersInclude(),
       },
       orderBy: { createdAt: 'desc' },
       ...(limit ? { take: limit } : {}),
@@ -187,6 +190,7 @@ export class TeachersService {
             participation: c.enrollments.length > 0 ? Math.round((completedProgress.length / (c.enrollments.length * totalMissions)) * 100) || 0 : 0,
           },
           createdAt: c.createdAt,
+          ...summarizeClassTeachers(c.teachers, userId),
         }
       }),
       total: classes.length,
@@ -200,6 +204,7 @@ export class TeachersService {
         enrollments: { where: { isPreview: false }, include: { student: true } },
         missions: { include: { enigmas: true, progress: true } },
         guide: true,
+        teachers: classTeachersInclude(),
       },
     })
 
@@ -240,6 +245,7 @@ export class TeachersService {
         pendingReviews,
       },
       createdAt: cls.createdAt,
+      ...summarizeClassTeachers(cls.teachers, userId),
     }
   }
 
@@ -252,13 +258,7 @@ export class TeachersService {
       data = { ...data, backgroundImage: (await saveBase64Image(data.backgroundImage, 'covers')) || undefined }
     }
 
-    const cls = await prisma.class.create({
-      data: {
-        ...data,
-        teacherId: userId,
-        invitationCode,
-      },
-    })
+    const cls = await prisma.$transaction((tx) => createClassWithOwner(tx, { ...data, invitationCode }, userId))
 
     // Sembrar la tienda por defecto (el profe puede editarla/borrarla). Los
     // comportamientos no se siembran: el profe los añade desde la biblioteca.
@@ -510,8 +510,11 @@ export class TeachersService {
 
     return prisma.$transaction(
       async (tx) => {
-        const newClass = await tx.class.create({
-          data: {
+        // La copia es de quien la hace: propietario único, sin el resto del
+        // profesorado de la clase de origen.
+        const newClass = await createClassWithOwner(
+          tx,
+          {
             name: `${source.name} (copia)`,
             narrative: options.narrative ? source.narrative : null,
             backgroundImage: options.narrative ? source.backgroundImage : null,
@@ -523,11 +526,11 @@ export class TeachersService {
             levelConfig: (options.features && source.levelConfig
               ? source.levelConfig
               : undefined) as Prisma.InputJsonValue | undefined,
-            teacherId: userId,
             invitationCode,
             isTemplate: false,
           },
-        })
+          userId
+        )
 
         if (options.shop && source.shopItems.length > 0) {
           await tx.shopItem.createMany({

@@ -41,6 +41,25 @@ export interface ClassSettings {
   sounds: boolean
 }
 
+/** Hasta dónde llega un profesor en una clase. Cada nivel incluye los anteriores. */
+export type ClassAccessLevel = 'read' | 'edit' | 'admin'
+
+/** Etiqueta del profesor en la clase. */
+export type ClassTeacherProfile = 'titular' | 'sustituto' | 'practicas'
+
+/** Acceso de quien pide la clase. */
+export interface ClassAccess {
+  access: ClassAccessLevel
+  profile: ClassTeacherProfile
+  isOwner: boolean
+}
+
+/** Un profesor de la clase. `id` es el del usuario. */
+export interface ClassTeacher extends ClassAccess {
+  id: string
+  name: string
+}
+
 /**
  * Clase/Curso
  */
@@ -68,6 +87,9 @@ export interface Class {
   // Estadísticas calculadas (opcionales, se añaden en el handler)
   stats?: ClassStats
   status?: ClassStatus
+  /** Acceso propio y profesorado: los devuelve la API de profesor en el listado y en el detalle. */
+  myAccess?: ClassAccess | null
+  teachers?: ClassTeacher[]
 }
 
 /**

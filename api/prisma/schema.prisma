@@ -52,6 +52,10 @@ model User {
   shopItemUses      ShopItemUse[]
   behaviorsApplied  BehaviorApplication[] @relation("BehaviorTeacher")
   behaviorsReceived BehaviorApplication[] @relation("BehaviorStudent")
+  classTeachers      ClassTeacher[]   @relation("ClassTeacherUser")
+  classTeachersAdded ClassTeacher[]   @relation("ClassTeacherAddedBy")
+  classActions       ClassActionLog[] @relation("ClassActionActor")
+  classActionsTarget ClassActionLog[] @relation("ClassActionTarget")
 
   @@map("users")
 }
@@ -138,6 +142,8 @@ model Class {
   // Configuración de horario/calendario (recurrencia estilo Google + fechas +
   // overrides por día). Nulo = sin horario configurado.
   scheduleConfig  Json?     @map("schedule_config")
+  // Propietario de la clase. Coincide siempre con la fila `isOwner` de
+  // `ClassTeacher`: las dos se escriben juntas (ver utils/class-owner.ts).
   teacherId       String    @map("teacher_id")
   createdAt       DateTime  @default(now()) @map("created_at")
   updatedAt       DateTime  @updatedAt @map("updated_at")
@@ -154,8 +160,81 @@ model Class {
   shopItemUses  ShopItemUse[]
   behaviorTemplates    BehaviorTemplate[]
   behaviorApplications BehaviorApplication[]
+  teachers      ClassTeacher[]
+  actionLog     ClassActionLog[]
 
+  @@index([teacherId])
   @@map("classes")
+}
+
+/** Hasta dónde llega un profesor en una clase. Cada nivel incluye los anteriores. */
+enum ClassAccessLevel {
+  read
+  edit
+  admin
+}
+
+/** Etiqueta del profesor en la clase. Sugiere un nivel, pero no lo impone. */
+enum ClassTeacherProfile {
+  titular
+  sustituto
+  practicas
+}
+
+// Profesorado de una clase: una fila por profesor con acceso. El propietario es
+// la fila con `isOwner` y hay exactamente uno por clase. Eso lo garantiza un
+// índice único parcial que Prisma no sabe expresar y que vive solo en el SQL de
+// la migración: `class_teachers_one_owner ON class_teachers(class_id) WHERE is_owner`.
+// Prisma tampoco lo ve al comparar con la base, así que hoy no propone borrarlo;
+// si alguna versión lo hiciera, se quita esa sentencia a mano
+// (tests/migrations/class_teachers.test.ts vigila que siga en la migración).
+model ClassTeacher {
+  id        String              @id @default(uuid())
+  classId   String              @map("class_id")
+  userId    String              @map("user_id")
+  access    ClassAccessLevel
+  profile   ClassTeacherProfile
+  isOwner   Boolean             @default(false) @map("is_owner")
+  addedById String?             @map("added_by_id")
+  /** Fin del acceso. Pasada esta fecha la fila deja de contar, sin borrarse. */
+  endsAt    DateTime?           @map("ends_at")
+  createdAt DateTime            @default(now()) @map("created_at")
+  updatedAt DateTime            @updatedAt @map("updated_at")
+
+  class   Class @relation(fields: [classId], references: [id], onDelete: Cascade)
+  user    User  @relation("ClassTeacherUser", fields: [userId], references: [id], onDelete: Cascade)
+  addedBy User? @relation("ClassTeacherAddedBy", fields: [addedById], references: [id], onDelete: SetNull)
+
+  @@unique([classId, userId])
+  @@index([userId])
+  @@map("class_teachers")
+}
+
+// Registro de lo que hace el profesorado en una clase. Guarda una copia del
+// nombre y del avatar de quien actuó para que la entrada se siga leyendo si esa
+// cuenta desaparece. `metadata` nunca lleva nombres de alumnos: al alumno se le
+// referencia con `targetUserId`. Se borra con la clase.
+model ClassActionLog {
+  id           String   @id @default(uuid())
+  classId      String   @map("class_id")
+  actorId      String?  @map("actor_id")
+  actorName    String   @map("actor_name")
+  actorAvatar  String?  @map("actor_avatar")
+  /** Clave `dominio.verbo`, p. ej. `submission.approved`. */
+  action       String
+  entityType   String?  @map("entity_type")
+  entityId     String?  @map("entity_id")
+  targetUserId String?  @map("target_user_id")
+  metadata     Json?
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  class      Class @relation(fields: [classId], references: [id], onDelete: Cascade)
+  actor      User? @relation("ClassActionActor", fields: [actorId], references: [id], onDelete: SetNull)
+  targetUser User? @relation("ClassActionTarget", fields: [targetUserId], references: [id], onDelete: SetNull)
+
+  @@index([classId, createdAt])
+  @@index([targetUserId, createdAt])
+  @@map("class_action_log")
 }
 
 model ClassEnrollment {

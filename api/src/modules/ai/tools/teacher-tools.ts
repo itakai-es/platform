@@ -6,6 +6,7 @@ import { generateQuiz } from '../generators/quiz.js'
 import { generateImage } from '../generators/image.js'
 import { prisma } from '../../../config/database.js'
 import { nanoid } from 'nanoid'
+import { createClassWithOwner } from '../../../utils/class-owner.js'
 
 /**
  * Register teacher-only tools that agents can invoke via function calling.
@@ -109,15 +110,18 @@ export function registerTeacherTools() {
 
       const invitationCode = nanoid(6).toUpperCase()
       try {
-        const cls = await prisma.class.create({
-          data: {
-            name,
-            narrative: args.description ? String(args.description).trim().slice(0, 500) : undefined,
-            schedule: args.schedule ? String(args.schedule).trim().slice(0, 200) : undefined,
-            teacherId: userId,
-            invitationCode,
-          },
-        })
+        const cls = await prisma.$transaction((tx) =>
+          createClassWithOwner(
+            tx,
+            {
+              name,
+              narrative: args.description ? String(args.description).trim().slice(0, 500) : undefined,
+              schedule: args.schedule ? String(args.schedule).trim().slice(0, 200) : undefined,
+              invitationCode,
+            },
+            userId
+          )
+        )
         return `Clase "${cls.name}" creada con codigo de invitacion: **${cls.invitationCode}**`
       } catch {
         return 'Error: no se pudo crear la clase. Es posible que ya exista una con ese nombre.'
