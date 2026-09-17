@@ -1,5 +1,4 @@
 import { createHash } from 'crypto'
-import { env } from '../../../config/env.js'
 import { BADGE_IMAGE, FALLBACK_IMAGE } from '../prompts/index.js'
 import type {
   AIProvider,
@@ -229,10 +228,11 @@ export class GoogleAdkProvider implements AIProvider {
       console.warn('[GoogleAdkProvider] Function calling loop reached max iterations (%d)', MAX_TOOL_ITERATIONS)
       return buildFallbackText(prompt, options)
     } catch (error) {
-      if (env.NODE_ENV !== 'production') {
-        console.error('[GoogleAdkProvider] generateText failed, using fallback:', error)
-      }
-      return buildFallbackText(prompt, options)
+      // Un fallo del proveedor no se disfraza de respuesta: el texto enlatado
+      // acababa como narrativa o como nombre de clase y nadie se enteraba del
+      // error (en producción ni siquiera quedaba en el log).
+      console.error('[AI] ❌ Gemini text failed:', (error as Error).message)
+      throw error
     }
   }
 
@@ -269,10 +269,10 @@ export class GoogleAdkProvider implements AIProvider {
         if (text) yield text
       }
     } catch (error) {
-      if (env.NODE_ENV !== 'production') {
-        console.error('[GoogleAdkProvider] stream failed, yielding fallback:', error)
-      }
-      yield buildFallbackText(prompt, options)
+      // Igual que en generateText: el error sube y la ruta emite el evento
+      // `error`, que es lo que el asistente sabe mostrar (con reintento).
+      console.error('[AI] ❌ Gemini stream failed:', (error as Error).message)
+      throw error
     }
   }
 

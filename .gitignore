@@ -68,9 +68,6 @@ core.*
 # Uploads
 uploads/
 
-# Docker
-.dockerignore
-
 # Database
 *.db
 *.sqlite
