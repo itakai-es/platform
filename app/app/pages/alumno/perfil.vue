@@ -101,27 +101,7 @@
           </Card>
 
           <!-- Cambiar Email -->
-          <Card type="settings">
-            <div class="p-5">
-              <div class="flex items-center gap-3 mb-4">
-                <EnvelopeIcon class="w-5 h-5 text-navy-700" />
-                <h3 class="text-lg font-bold text-navy-700">
-                  {{ t('student.profile.security.email_title') }}
-                </h3>
-              </div>
-              <div class="space-y-3">
-                <FormField :model-value="profileStore.currentEmail" type="email" disabled />
-                <FormField
-                  v-model="securityForm.newEmail"
-                  type="email"
-                  :placeholder="t('student.profile.security.new_email_placeholder')"
-                />
-                <Button variant="primary" size="sm" :loading="isChangingEmail" @click="changeEmail">
-                  {{ t('student.profile.security.update_button') }}
-                </Button>
-              </div>
-            </div>
-          </Card>
+          <ChangeEmailCard />
 
           <!-- Sesiones activas -->
           <Card type="settings">
@@ -329,7 +309,6 @@ import {
   LanguageIcon,
   ExclamationTriangleIcon,
   TrashIcon,
-  EnvelopeIcon,
   SwatchIcon,
   AcademicCapIcon,
   BuildingLibraryIcon,
@@ -377,7 +356,6 @@ const securityForm = ref({
   currentPassword: '',
   newPassword: '',
   confirmPassword: '',
-  newEmail: '',
 })
 
 // Form state for preferences (local copy for immediate UI updates)
@@ -393,7 +371,6 @@ const isDeleting = ref(false)
 
 // Loading states
 const isChangingPassword = ref(false)
-const isChangingEmail = ref(false)
 const isTogglingTwoFactor = ref(false)
 
 // Fetch profile on mount
@@ -461,27 +438,6 @@ const changePassword = async () => {
     securityForm.value.currentPassword = ''
     securityForm.value.newPassword = ''
     securityForm.value.confirmPassword = ''
-  } else {
-    toast.error(result.message)
-  }
-}
-
-const changeEmail = async () => {
-  if (!securityForm.value.newEmail) {
-    toast.error(t('student.profile.security.email_invalid'))
-    return
-  }
-
-  isChangingEmail.value = true
-  const result = await profileStore.changeEmail({
-    newEmail: securityForm.value.newEmail,
-    password: '',
-  })
-  isChangingEmail.value = false
-
-  if (result.success) {
-    toast.success(result.message)
-    securityForm.value.newEmail = ''
   } else {
     toast.error(result.message)
   }

@@ -5,7 +5,7 @@ import { shopService } from '../shop/shop.service.js'
 import { behaviorsService } from '../behaviors/behaviors.service.js'
 import { z, ZodError } from 'zod'
 import { scheduleConfigSchema } from './schedule-config.schema.js'
-import { ServiceUnavailableError } from '../../utils/errors.js'
+import { ServiceUnavailableError, rethrowHttpError } from '../../utils/errors.js'
 
 // Schemas
 const createClassSchema = z.object({
@@ -809,6 +809,9 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
+      // La insignia puede vincularse a una misión: si no hay acceso a ella, el
+      // servicio lanza el error con su estado y lo resuelve el manejador global.
+      rethrowHttpError(error)
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
@@ -824,6 +827,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(404).send({ message: error.message })
       }

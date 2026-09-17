@@ -18,7 +18,11 @@ import { resolveLevelConfig, tierForLevel, type LevelConfig } from '../../utils/
 import { saveUpload } from '../storage/storage.service.js'
 import { notify } from '../notifications/notifications.service.js'
 import { createClassWithOwner } from '../../utils/class-owner.js'
-import { classTeachersInclude, summarizeClassTeachers } from '../../utils/class-access.js'
+import {
+  assertMissionAccess,
+  classTeachersInclude,
+  summarizeClassTeachers,
+} from '../../utils/class-access.js'
 
 const BADGES_DIR = join(process.cwd(), 'uploads', 'badges')
 const COVERS_DIR = join(process.cwd(), 'uploads', 'covers')
@@ -456,7 +460,8 @@ export class TeachersService {
    *  para que el modal de previsualización enseñe qué te llevas al importar. */
   async getTemplateDetail(userId: string, templateClassId: string) {
     const tpl = await prisma.class.findFirst({
-      where: { id: templateClassId, isTemplate: true },
+      // Una plantilla cuya clase está archivada deja de estar disponible, como en el listado.
+      where: { id: templateClassId, isTemplate: true, archived: false },
       select: {
         id: true,
         name: true,
@@ -608,7 +613,8 @@ export class TeachersService {
    *  misiones se dejan fuera a propósito (cada profe monta las suyas). */
   async importTemplate(userId: string, templateClassId: string) {
     const tpl = await prisma.class.findFirst({
-      where: { id: templateClassId, isTemplate: true },
+      // Una plantilla cuya clase está archivada deja de estar disponible, como en el listado.
+      where: { id: templateClassId, isTemplate: true, archived: false },
       include: {
         shopItems: true,
         behaviorTemplates: true,
@@ -1110,9 +1116,11 @@ export class TeachersService {
 
     const student = enrolledClasses[0].enrollments[0].student
 
-    // Get all mission progress for this student
+    // Progreso del alumno, solo en las misiones de las clases de quien pregunta:
+    // de las demás no sale ni el título ni el nombre de la clase, y las
+    // estadísticas se calculan sobre ese mismo conjunto.
     const missionProgress = await prisma.studentMissionProgress.findMany({
-      where: { studentId },
+      where: { studentId, mission: { classId: { in: enrolledClasses.map(c => c.id) } } },
       include: { mission: { include: { class: true, enigmas: { select: { xpReward: true } } } } },
     })
 
@@ -1307,6 +1315,13 @@ export class TeachersService {
     })
 
     if (!request) throw new Error('Solicitud no encontrada')
+
+    // Solo se matricula a alumnos: el profesorado mira la clase con la vista previa.
+    const requester = await prisma.user.findUnique({
+      where: { id: request.studentId },
+      select: { role: true },
+    })
+    if (requester?.role !== 'student') throw new Error('Solo el alumnado puede unirse a una clase')
 
     // Update request status
     await prisma.joinRequest.update({
@@ -1701,6 +1716,9 @@ export class TeachersService {
   }
 
   async createBadge(userId: string, data: { name: string; description?: string; imageUrl?: string; rarity?: string; missionId?: string }) {
+    // Una insignia solo se vincula a una misión de una clase donde se puede editar el contenido.
+    if (data.missionId) await assertMissionAccess(data.missionId, userId, 'mission.edit')
+
     // If imageUrl is base64, save it as a file
     let imageUrl = data.imageUrl
     if (imageUrl && imageUrl.startsWith('data:image/')) {
@@ -1736,6 +1754,11 @@ export class TeachersService {
     })
 
     if (!badge) throw new Error('Insignia no encontrada')
+
+    // Igual que al crearla: la misión a la que se vincula tiene que ser editable por quien la vincula.
+    if (data.missionId && data.missionId !== badge.missionId) {
+      await assertMissionAccess(data.missionId, userId, 'mission.edit')
+    }
 
     // If imageUrl is base64, save it as a file
     let imageUrl = data.imageUrl

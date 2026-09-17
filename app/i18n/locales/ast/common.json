@@ -64,6 +64,8 @@
       "submission_student_approved": "Entrega de {name} aprobada (+{xp} XP)",
       "download_not_found": "Nun s'atopó'l ficheru pa baxalu",
       "download_error": "Nun se pudo baxar el ficheru",
+      "download_no_access": "Nun tienes accesu a esti ficheru",
+      "popup_blocked": "Permiti les ventanes emerxentes p'abrir el ficheru",
       "join_request_accepted": "{name} foi aceutáu na clase",
       "join_request_rejected": "Solicitú refugada",
       "join_request_accept_error": "Fallu al aceutar la solicitú",
@@ -359,6 +361,28 @@
     },
     "student_preview": {
       "banner": "Tas viendo la plataforma como un alumnu (demo)"
+    },
+    "change_email": {
+      "title": "Corréu electrónicu",
+      "current_email": "Corréu actual",
+      "new_email": "Corréu nuevu",
+      "password": "Contraseña actual",
+      "password_hint": "Pidímostela pa confirmar que yes tu quien camuda'l corréu.",
+      "submit": "Camudar el corréu",
+      "success": "Corréu anováu. D'equí p'alantre entres col nuevu.",
+      "errors": {
+        "email_invalid": "Escribi un corréu válidu.",
+        "email_same": "Esi yá ye'l to corréu.",
+        "password_required": "Escribi la to contraseña actual.",
+        "password_wrong": "La contraseña nun ye correcta.",
+        "password_not_set": "La to cuenta entra con Google y entá nun tien contraseña. Zarra la sesión, crea una dende «¿Escaeciesti la contraseña?» y vuelvi tentalo.",
+        "email_in_use": "Esi corréu yá lu usa otra cuenta.",
+        "generic": "Nun se pudo camudar el corréu. Vuelvi tentalo."
+      }
+    },
+    "file_unavailable": {
+      "title": "L'enllaz yá nun val",
+      "message": "L'enllaz pa abrir esti ficheru caducó. Vuelvi a la misión y ábrilu otra vez."
     }
   }
 }

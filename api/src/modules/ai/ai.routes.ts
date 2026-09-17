@@ -1,12 +1,11 @@
 import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import { z, ZodError } from 'zod'
-import { prisma } from '../../config/database.js'
 import { aiService } from './ai.service.js'
 import { ensureSafeEducationalPrompt } from './ai-safety.js'
 import { getAIProvider, getLastUsedProvider } from './providers/index.js'
 import { checkRateLimit } from './middleware/rate-limiter.js'
 import * as Prompts from './prompts/index.js'
-import { ServiceUnavailableError } from '../../utils/errors.js'
+import { ServiceUnavailableError, rethrowHttpError } from '../../utils/errors.js'
 import { getAiSettings } from '../settings/settings.service.js'
 import { extractContext } from './context-extract.service.js'
 
@@ -70,6 +69,8 @@ function handleAiRouteError(error: unknown, reply: FastifyReply, locale: string)
       : error.message
     return reply.status(503).send({ message, code: error.code })
   }
+
+  rethrowHttpError(error)
 
   if (error instanceof Error) {
     return reply.status(400).send({ message: error.message })
@@ -268,12 +269,14 @@ export async function aiRoutes(fastify: FastifyInstance) {
     const locale = resolveLocale((request.body as { locale?: string } | undefined)?.locale)
 
     try {
+      const { id } = request.user as { id: string }
       const data = narrativeSchema.parse(request.body)
       const safePrompt = ensureSafeEducationalPrompt(data.prompt)
+      const className = await aiService.resolveClassName(id, data.classId)
       const stream = aiService.streamNarrative({
         prompt: safePrompt,
         locale,
-        classId: data.classId,
+        className,
       })
 
       return streamNarrativeResponse(reply, stream)
@@ -663,11 +666,8 @@ Return ONLY the raw SVG code. No markdown, no backticks, no explanation.`
       const safeMessage = ensureSafeEducationalPrompt(data.message)
 
       // Resolve class name if classId provided
-      let classContext = ''
-      if (data.classId) {
-        const cls = await prisma.class.findFirst({ where: { id: data.classId, teacherId: id }, select: { name: true } })
-        if (cls) classContext = ` para la clase "${cls.name}"`
-      }
+      const className = await aiService.resolveClassName(id, data.classId)
+      const classContext = className ? ` para la clase "${className}"` : ''
       const enrichedMessage = safeMessage + classContext
 
       // Set SSE headers
@@ -733,6 +733,7 @@ Return ONLY the raw SVG code. No markdown, no backticks, no explanation.`
         if (error instanceof ZodError) {
           return reply.status(400).send({ message: 'Datos invalidos' })
         }
+        rethrowHttpError(error)
         return reply.status(500).send({ message: 'Error interno' })
       }
       if (!reply.raw.destroyed) reply.raw.end()
@@ -747,12 +748,13 @@ Return ONLY the raw SVG code. No markdown, no backticks, no explanation.`
       const data = missionAssistantSchema.parse(request.body)
       const safeMessage = ensureSafeEducationalPrompt(data.message)
 
+      const className = await aiService.resolveClassName(id, data.classId)
+
       const [narrative, quiz] = await Promise.all([
         aiService.createNarrative({
           prompt: safeMessage,
           locale,
-          classId: data.classId,
-          userId: id,
+          className,
         }),
         aiService.createQuiz({
           prompt: safeMessage,

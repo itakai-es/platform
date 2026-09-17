@@ -603,8 +603,6 @@
         "placeholder_new": "Contrasenya nova",
         "placeholder_confirm": "Confirmar contrasenya",
         "btn_update": "Actualitzar",
-        "email_title": "Correu electrònic",
-        "placeholder_new_email": "Correu nou",
         "sessions_title": "Sessions",
         "sessions_close_all": "Tancar-les totes",
         "session_current": "Actual",
@@ -612,7 +610,6 @@
         "validation": {
           "passwords_mismatch": "Les contrasenyes no coincidixen",
           "password_min_length": "La contrasenya ha de tindre com a mínim 6 caràcters",
-          "email_invalid": "Introduïx un correu vàlid",
           "password_required": "Introduïx la teua contrasenya"
         }
       },

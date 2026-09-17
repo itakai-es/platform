@@ -66,6 +66,7 @@ const selectedEnigmaForSubmission = ref<{
 const selectedEnigmaNumber = ref(1)
 
 const toast = useToast()
+const { openDocument } = useProtectedFiles()
 
 // Dynamic title
 useHead({
@@ -196,37 +197,23 @@ const handleSubmissionSubmit = async (data: { enigmaId: string; file: File }) =>
 }
 
 // Handle resource click
-const handleResourceClick = (resourceName: string) => {
+const handleResourceClick = async (resourceName: string) => {
   const doc = supportDocuments.value.find(
     d =>
       d.title.toLowerCase().includes(resourceName.toLowerCase()) ||
       resourceName.toLowerCase().includes(d.title.toLowerCase().split(':')[0])
   )
 
-  if (doc) {
-    if (!doc.fileUrl) {
-      scrollToDocuments()
-      return
-    }
-
-    const fileUrl = doc.fileUrl.startsWith('http')
-      ? doc.fileUrl
-      : `${useRuntimeConfig().public.apiBase}${doc.fileUrl}`
-
-    if (doc.type === 'video' || doc.type === 'link') {
-      window.open(fileUrl, '_blank', 'noopener,noreferrer')
-      return
-    }
-
-    const link = document.createElement('a')
-    link.href = fileUrl
-    link.download = doc.fileName || doc.title
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-    toast.success(`${t('student.mission_detail.submission.downloading')} "${doc.title}"`)
-  } else {
+  if (!doc || (!doc.storedFile && !doc.fileUrl)) {
     scrollToDocuments()
+    return
+  }
+
+  // El aviso de descarga espera a que el fichero salga de verdad: si no hay
+  // acceso o el documento ya no está, solo se ve el error.
+  const opened = await openDocument(doc)
+  if (opened && doc.storedFile && doc.type !== 'video') {
+    toast.success(`${t('student.mission_detail.submission.downloading')} "${doc.title}"`)
   }
 }
 

@@ -64,6 +64,8 @@
       "submission_student_approved": "Entrega de {name} aprovada (+{xp} XP)",
       "download_not_found": "O ficheiro para descarregar não foi encontrado",
       "download_error": "Não foi possível descarregar o ficheiro",
+      "download_no_access": "Não tens acesso a este ficheiro",
+      "popup_blocked": "Permite as janelas pop-up para abrir o ficheiro",
       "join_request_accepted": "{name} foi aceite na turma",
       "join_request_rejected": "Pedido recusado",
       "join_request_accept_error": "Erro ao aceitar o pedido",
@@ -359,6 +361,28 @@
     },
     "student_preview": {
       "banner": "Estás a ver a plataforma como aluno (demo)"
+    },
+    "change_email": {
+      "title": "E-mail",
+      "current_email": "E-mail atual",
+      "new_email": "Novo e-mail",
+      "password": "Palavra-passe atual",
+      "password_hint": "Pedimos-ta para confirmar que és tu quem altera o e-mail.",
+      "submit": "Alterar e-mail",
+      "success": "E-mail atualizado. A partir de agora entras com o novo.",
+      "errors": {
+        "email_invalid": "Escreve um e-mail válido.",
+        "email_same": "Esse já é o teu e-mail.",
+        "password_required": "Escreve a tua palavra-passe atual.",
+        "password_wrong": "A palavra-passe não está correta.",
+        "password_not_set": "A tua conta entra com o Google e ainda não tem palavra-passe. Termina a sessão, cria uma em «Esqueceste-te da palavra-passe?» e tenta de novo.",
+        "email_in_use": "Esse e-mail já é usado por outra conta.",
+        "generic": "Não foi possível alterar o e-mail. Tenta de novo."
+      }
+    },
+    "file_unavailable": {
+      "title": "O link já não é válido",
+      "message": "O link para abrir este ficheiro expirou. Volta à missão e abre-o outra vez."
     }
   }
 }

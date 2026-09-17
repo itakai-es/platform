@@ -1350,6 +1350,7 @@ import type { MissionRarity } from '~/utils/gamification-config'
 
 const { getImageUrl } = useImageUrl()
 const { t, locale } = useI18n()
+const { openDocument } = useProtectedFiles()
 const aiStore = useAIAssistantStore()
 
 // Monedas y maná que otorga cada enigma (vienen del backend en cada enigma).
@@ -1882,31 +1883,10 @@ const getDocumentTagClasses = (type: MissionDocument['type']) => {
   return classes[type]
 }
 
-// Handle document action (download/open)
-const handleDocumentAction = (doc: MissionDocument & { url?: string; fileUrl?: string }) => {
-  const url = doc.url || doc.fileUrl
-
-  if (!url) {
-    console.warn('Document has no URL:', doc)
-    return
-  }
-
-  if (doc.type === 'link') {
-    // Open link in new tab
-    window.open(url, '_blank', 'noopener,noreferrer')
-  } else if (doc.type === 'video') {
-    // Open video in new tab
-    window.open(url, '_blank', 'noopener,noreferrer')
-  } else {
-    // Download file (pdf, docx)
-    const link = document.createElement('a')
-    link.href = url
-    link.download = doc.title || 'documento'
-    link.target = '_blank'
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-  }
+// Abrir o descargar un documento. Los que son un fichero de la plataforma se
+// piden a la API, que comprueba el acceso; los enlaces se abren tal cual.
+const handleDocumentAction = (doc: MissionDocument) => {
+  void openDocument(doc)
 }
 
 // Teacher stats (from API)

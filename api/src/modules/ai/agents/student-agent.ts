@@ -2,6 +2,7 @@ import { prisma } from '../../../config/database.js'
 import { BaseAgent, type AgentRequestContext } from './base-agent.js'
 import { getPlatformContext, getSkinName } from '../platform-context.js'
 import { calculateMissionTotalXP } from '../../../utils/xp-calculator.js'
+import { assertMissionMember, passesAccessCheck } from '../../../utils/class-access.js'
 
 export class StudentAgent extends BaseAgent {
   protected buildSystemPrompt(context: AgentRequestContext) {
@@ -72,7 +73,7 @@ export class StudentAgent extends BaseAgent {
     // If missionId is provided, fetch full mission context for the AI
     let missionContext: string | null = null
     if (context.missionId) {
-      missionContext = await this.buildMissionContext(context.missionId, context.userId)
+      missionContext = await this.buildMissionContext(context.missionId, context.userId, context.role)
     }
 
     const enrollmentsSummary = enrollments.length > 0
@@ -123,7 +124,16 @@ export class StudentAgent extends BaseAgent {
    * Build detailed mission context string for AI prompt injection.
    * Fetches the full mission with enigmas, class name, and student progress.
    */
-  private async buildMissionContext(missionId: string, studentId: string): Promise<string | null> {
+  private async buildMissionContext(
+    missionId: string,
+    studentId: string,
+    role: string | null
+  ): Promise<string | null> {
+    // El contexto de una misión solo se carga para quien puede verla; si no, se ignora.
+    if (!(await passesAccessCheck(assertMissionMember(missionId, { id: studentId, role })))) {
+      return null
+    }
+
     const [mission, studentProgress, enigmaProgress] = await Promise.all([
       prisma.mission.findUnique({
         where: { id: missionId },

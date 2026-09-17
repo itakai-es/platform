@@ -231,6 +231,159 @@ export async function assertEnrollmentAccess(
   return assertResourceAccess(enrollment?.classId, 'Matrícula no encontrada', userId, action, tx)
 }
 
+// ---- Miembros de la clase: profesorado y alumnado ----
+// Lo que ven los dos lados (una misión, sus documentos, la guía) se abre a quien
+// es profesor de la clase o está matriculado en ella.
+
+/** Quien hace la petición: el `id` y el `role` que viajan en el token. */
+export interface ClassUser {
+  id: string
+  role?: string | null
+}
+
+export interface StudentEnrollmentRef {
+  id: string
+  isPreview: boolean
+}
+
+export interface ClassMembership {
+  /** Acceso como profesor, si lo tiene. */
+  teacher: ClassAccess | null
+  /** Matrícula con la que actúa como alumno, si la tiene. */
+  enrollment: StudentEnrollmentRef | null
+}
+
+/**
+ * ¿Vale esta matrícula para actuar como alumno? La de un alumno, siempre. Quien
+ * imparte la clase mira su clase como alumno con la matrícula que tenga en ella,
+ * sea de vista previa o no. Fuera de esos dos casos no da acceso: una matrícula
+ * corriente de quien no tiene rol alumno, o una de vista previa de quien ya no
+ * es profesor de la clase, no abren nada.
+ */
+function enrollmentCounts(
+  enrollment: StudentEnrollmentRef | null,
+  user: ClassUser,
+  teacher: ClassAccess | null
+): enrollment is StudentEnrollmentRef {
+  if (!enrollment) return false
+  if (teacher !== null) return true
+  return !enrollment.isPreview && user.role === 'student'
+}
+
+/** Relación de un usuario con una clase, o null si no tiene ninguna. */
+export async function getClassMembership(
+  classId: string,
+  user: ClassUser,
+  tx: Db = prisma
+): Promise<ClassMembership | null> {
+  const [teacher, row] = await Promise.all([
+    getClassAccess(classId, user.id, tx),
+    tx.classEnrollment.findUnique({
+      where: { studentId_classId: { studentId: user.id, classId } },
+      select: { id: true, isPreview: true },
+    }),
+  ])
+  const enrollment = enrollmentCounts(row, user, teacher) ? row : null
+  if (!teacher && !enrollment) return null
+  return { teacher, enrollment }
+}
+
+/** Matrícula con la que el usuario actúa como alumno en la clase, o null. */
+export async function getStudentEnrollment(classId: string, user: ClassUser, tx: Db = prisma) {
+  return (await getClassMembership(classId, user, tx))?.enrollment ?? null
+}
+
+/**
+ * Filtro de `ClassEnrollment` con las matrículas con las que el usuario actúa
+ * como alumno: mismo criterio que `getStudentEnrollment`, para los listados.
+ */
+export function studentEnrollmentsWhere(user: ClassUser): Prisma.ClassEnrollmentWhereInput {
+  if (user.role === 'student') return { studentId: user.id, isPreview: false }
+  return { studentId: user.id, class: accessibleClassesWhere(user.id) }
+}
+
+/** Exige ser profesor de la clase o estar matriculado en ella. Si no, 404. */
+export async function assertClassMember(
+  classId: string,
+  user: ClassUser,
+  tx: Db = prisma
+): Promise<ClassMembership> {
+  const membership = await getClassMembership(classId, user, tx)
+  if (!membership) throw new NotFoundError('Clase no encontrada')
+  return membership
+}
+
+/** Lo que hace falta de la misión para decidir si un alumno la ve. */
+interface MissionForMember {
+  classId: string
+  status: string
+  class: { archived: boolean }
+}
+
+/** Regla común de `assertMissionMember` y `assertDocumentMember`. */
+async function missionMembership(
+  mission: MissionForMember | null | undefined,
+  notFound: string,
+  user: ClassUser,
+  tx: Db
+): Promise<ClassMembership & { classId: string }> {
+  const membership = mission && (await getClassMembership(mission.classId, user, tx))
+  if (!mission || !membership) throw new NotFoundError(notFound)
+  if (!membership.teacher && (mission.class.archived || mission.status === 'bloqueada')) {
+    throw new NotFoundError(notFound)
+  }
+  return { ...membership, classId: mission.classId }
+}
+
+/**
+ * Exige poder ver la misión: profesorado de su clase o alumno matriculado. Al
+ * alumno se le cierra, además, si la clase está archivada o la misión bloqueada.
+ */
+export async function assertMissionMember(
+  missionId: string,
+  user: ClassUser,
+  tx: Db = prisma
+): Promise<ClassMembership & { classId: string }> {
+  const mission = await tx.mission.findUnique({
+    where: { id: missionId },
+    select: { classId: true, status: true, class: { select: { archived: true } } },
+  })
+  return missionMembership(mission, 'Misión no encontrada', user, tx)
+}
+
+/** Igual que `assertMissionMember`, partiendo de un documento de la misión. */
+export async function assertDocumentMember(
+  documentId: string,
+  user: ClassUser,
+  tx: Db = prisma
+): Promise<ClassMembership & { classId: string; missionId: string }> {
+  const document = await tx.missionDocument.findUnique({
+    where: { id: documentId },
+    select: {
+      missionId: true,
+      mission: { select: { classId: true, status: true, class: { select: { archived: true } } } },
+    },
+  })
+  if (!document) throw new NotFoundError('Documento no encontrado')
+  const membership = await missionMembership(document.mission, 'Documento no encontrado', user, tx)
+  return { ...membership, missionId: document.missionId }
+}
+
+/**
+ * Versión sin excepción de las comprobaciones `assert…`: false si la comprobación
+ * responde 404 o 403. Para cuando sin acceso no se rechaza la petición, solo se
+ * deja fuera lo que dependía de él.
+ */
+export async function passesAccessCheck(check: Promise<unknown>): Promise<boolean> {
+  try {
+    await check
+    return true
+  } catch (error) {
+    if (error instanceof NotFoundError || error instanceof ForbiddenError) return false
+    throw error
+  }
+}
+
 // ---- Listados y avisos ----
 
 /** Lo que se cuenta de cada profesor de una clase. */
@@ -403,6 +556,8 @@ declare module 'fastify' {
   interface FastifyRequest {
     /** Acceso a la clase de `:classId`. Lo deja `requireClassAccess`. */
     classAccess?: ClassAccess
+    /** Matrícula en la clase de `:classId`. La deja `requireStudentEnrollment`. */
+    studentEnrollment?: StudentEnrollmentRef
   }
 }
 
@@ -417,5 +572,20 @@ export function requireClassAccess(action: ClassAction) {
     const user = request.user as { id: string } | undefined
     if (!classId || !user?.id) throw new NotFoundError('Clase no encontrada')
     request.classAccess = await assertClassAccess(classId, user.id, action)
+  }
+}
+
+/**
+ * preHandler para las rutas de alumno con `:classId`, detrás de `authenticate`:
+ * exige la matrícula con la que el usuario actúa como alumno en esa clase y la
+ * deja en `request.studentEnrollment`. Sin ella responde 404.
+ */
+export function requireStudentEnrollment() {
+  return async (request: FastifyRequest, _reply: FastifyReply) => {
+    const { classId } = request.params as { classId?: string }
+    const user = request.user as ClassUser | undefined
+    const enrollment = classId && user?.id ? await getStudentEnrollment(classId, user) : null
+    if (!enrollment) throw new NotFoundError('No estás inscrito en esta clase')
+    request.studentEnrollment = enrollment
   }
 }

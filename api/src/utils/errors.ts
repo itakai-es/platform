@@ -84,6 +84,15 @@ export class AvatarServiceUnavailableError extends ServiceUnavailableError {
 }
 
 /**
+ * Para el `catch` de una ruta que responde con su propio código a cualquier
+ * `Error`: relanza los `HttpError`, que resuelve el manejador global con su
+ * estado y su `code`. Va antes de las ramas genéricas del catch.
+ */
+export function rethrowHttpError(error: unknown): void {
+  if (error instanceof HttpError) throw error
+}
+
+/**
  * Run an external AI/provider call and rethrow any failure as
  * AIServiceUnavailableError. Validation errors (ZodError) and already-typed
  * ServiceUnavailableError instances pass through unchanged.

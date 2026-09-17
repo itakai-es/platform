@@ -4,8 +4,16 @@ import { applyXpDelta } from '../../utils/enrollment-xp.js'
 import { formatMission, getMissionStatus } from '../../utils/mission-formatter.js'
 import { resolveClassSettings } from '../../utils/class-settings.js'
 import { resolveLevelConfig } from '../../utils/level-config.js'
+import { assertMissionMember, type ClassUser } from '../../utils/class-access.js'
 import { existsSync, mkdirSync } from 'fs'
-import { saveUpload, deleteUpload } from '../storage/storage.service.js'
+import {
+  saveUpload,
+  deleteUpload,
+  privateUploadResolver,
+  resolvePrivateUpload,
+  uploadExtension,
+  type StoredUpload,
+} from '../storage/storage.service.js'
 import { join } from 'path'
 import { randomUUID } from 'crypto'
 
@@ -57,18 +65,25 @@ function getDocumentMetadata(fileSize: number): string {
   return `${(fileSize / (1024 * 1024)).toFixed(1)} MB`
 }
 
-// Helper: Format document for frontend
-function formatDocumentForFrontend(d: {
-  id: string
-  name: string
-  description: string | null
-  fileUrl: string
-  fileName: string
-  fileSize: number
-  mimeType: string
-  tags: string[]
-  uploadedAt: Date
-}) {
+// Helper: Format document for frontend.
+// De un documento que es un fichero guardado no sale su URL: `storedFile` le
+// dice al cliente que lo pida a `/files/documents/:id`, que comprueba el acceso.
+// Los que son un enlace externo siguen saliendo con su URL, tal cual.
+function formatDocumentForFrontend(
+  d: {
+    id: string
+    name: string
+    description: string | null
+    fileUrl: string
+    fileName: string
+    fileSize: number
+    mimeType: string
+    tags: string[]
+    uploadedAt: Date
+  },
+  privateUploadOf: (fileUrl: string | null | undefined) => StoredUpload | null
+) {
+  const storedFile = privateUploadOf(d.fileUrl) !== null
   return {
     id: d.id,
     title: d.name, // Frontend expects 'title'
@@ -78,7 +93,8 @@ function formatDocumentForFrontend(d: {
     metadata: getDocumentMetadata(d.fileSize),
     description: d.description || '',
     tags: d.tags || [],
-    fileUrl: d.fileUrl,
+    storedFile,
+    fileUrl: storedFile ? null : d.fileUrl,
     fileName: d.fileName,
     fileSize: d.fileSize,
     mimeType: d.mimeType,
@@ -219,6 +235,8 @@ export class MissionsService {
       }
     }
 
+    const privateUploadOf = await privateUploadResolver()
+
     return {
       mission: {
         id: mission.id,
@@ -284,7 +302,7 @@ export class MissionsService {
             totalSubmissions,
           }
         }),
-        documents: mission.documents.map(formatDocumentForFrontend),
+        documents: mission.documents.map(d => formatDocumentForFrontend(d, privateUploadOf)),
         badgeReward: mission.badges[0]
           ? {
               id: mission.badges[0].id,
@@ -492,14 +510,19 @@ export class MissionsService {
   }
 
   // Document methods
-  async getMissionDocuments(missionId: string) {
+  async getMissionDocuments(user: ClassUser, missionId: string) {
+    // Los documentos los ve quien ve la misión: profesorado de la clase o alumno matriculado.
+    await assertMissionMember(missionId, user)
+
     const documents = await prisma.missionDocument.findMany({
       where: { missionId },
       orderBy: { orderIndex: 'asc' },
     })
 
+    const privateUploadOf = await privateUploadResolver()
+
     return {
-      documents: documents.map(formatDocumentForFrontend),
+      documents: documents.map(d => formatDocumentForFrontend(d, privateUploadOf)),
     }
   }
 
@@ -533,14 +556,18 @@ export class MissionsService {
 
     if (file) {
       // File upload
-      const ext = file.filename.split('.').pop() || 'bin'
-      const uniqueName = `${randomUUID()}.${ext}`
+      const uniqueName = `${randomUUID()}.${uploadExtension(file.filename)}`
       fileUrl = await saveUpload(`documents/${uniqueName}`, file.buffer, file.mimetype)
       fileName = file.filename
       fileSize = file.buffer.length
       mimeType = file.mimetype
     } else if (data.url) {
-      // URL/link document
+      // URL/link document. Un enlace apunta fuera: no sirve para señalar un
+      // fichero guardado de la plataforma, que solo se entrega tras comprobar el
+      // acceso a la misión a la que pertenece.
+      if (await resolvePrivateUpload(data.url)) {
+        throw new Error('La dirección del enlace no es válida')
+      }
       fileUrl = data.url
       fileName = data.name
       fileSize = 0
@@ -563,7 +590,7 @@ export class MissionsService {
     })
 
     return {
-      document: formatDocumentForFrontend(document),
+      document: formatDocumentForFrontend(document, await privateUploadResolver()),
       message: 'Documento subido correctamente',
     }
   }
@@ -598,7 +625,7 @@ export class MissionsService {
     })
 
     return {
-      document: formatDocumentForFrontend(document),
+      document: formatDocumentForFrontend(document, await privateUploadResolver()),
       message: 'Documento actualizado correctamente',
     }
   }
@@ -615,9 +642,15 @@ export class MissionsService {
       throw new Error('No tienes permiso para eliminar este documento')
     }
 
-    // Delete file from storage (local o R2, best-effort)
-    if (document.fileUrl) {
-      await deleteUpload(document.fileUrl)
+    // Se borra el fichero del documento, y solo ese: tiene que ser uno de la
+    // carpeta de documentos y no estar guardado en ninguna otra fila (un
+    // documento de tipo enlace lleva la dirección que escribió quien lo creó).
+    const stored = await resolvePrivateUpload(document.fileUrl)
+    if (stored?.key.startsWith('documents/')) {
+      const shared = await prisma.missionDocument.count({
+        where: { fileUrl: document.fileUrl, id: { not: documentId } },
+      })
+      if (shared === 0) await deleteUpload(document.fileUrl)
     }
 
     await prisma.missionDocument.delete({
@@ -748,10 +781,10 @@ export class MissionsService {
     if (!mission) throw new Error('Misión no encontrada')
     if (mission.class.teacherId !== teacherId) throw new Error('No tienes permiso para modificar esta misión')
 
-    // Update orderIndex for each enigma
+    // Solo se reordena lo que es de esta misión: un id de otra no cambia nada.
     const updates = enigmaIds.map((enigmaId, index) =>
-      prisma.missionEnigma.update({
-        where: { id: enigmaId },
+      prisma.missionEnigma.updateMany({
+        where: { id: enigmaId, missionId },
         data: { orderIndex: index },
       })
     )
@@ -772,10 +805,10 @@ export class MissionsService {
     if (!mission) throw new Error('Misión no encontrada')
     if (mission.class.teacherId !== teacherId) throw new Error('No tienes permiso para modificar esta misión')
 
-    // Update orderIndex for each document
+    // Solo se reordena lo que es de esta misión: un id de otra no cambia nada.
     const updates = documentIds.map((docId, index) =>
-      prisma.missionDocument.update({
-        where: { id: docId },
+      prisma.missionDocument.updateMany({
+        where: { id: docId, missionId },
         data: { orderIndex: index },
       })
     )

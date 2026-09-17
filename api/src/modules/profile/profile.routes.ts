@@ -3,6 +3,7 @@ import { profileService } from './profile.service.js'
 import { z, ZodError } from 'zod'
 import { prisma } from '../../config/database.js'
 import { APP_LANGUAGES } from '../settings/settings.types.js'
+import { rethrowHttpError } from '../../utils/errors.js'
 
 const REFRESH_TOKEN_COOKIE_NAME = 'refresh_token'
 
@@ -101,6 +102,7 @@ export async function profileRoutes(fastify: FastifyInstance) {
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(400).send({ message: error.message })
       }

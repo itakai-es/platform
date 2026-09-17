@@ -22,6 +22,8 @@ import { submissionsRoutes } from './modules/submissions/submissions.routes.js'
 import { gamificationRoutes } from './modules/gamification/gamification.routes.js'
 import { profileRoutes } from './modules/profile/profile.routes.js'
 import { publicHelpRoutes, adminHelpRoutes } from './modules/help/help.routes.js'
+import { filesRoutes } from './modules/files/files.routes.js'
+import { isPublicUploadPath } from './modules/storage/storage.service.js'
 import { registerNotificationJobs } from './modules/notifications/notifications.jobs.js'
 import { startScheduler, stopScheduler } from './utils/scheduler.js'
 import { HttpError } from './utils/errors.js'
@@ -152,15 +154,19 @@ async function buildServer() {
     },
   })
 
-  // Serve runtime user uploads (teacher badges, class covers, mission
-  // documents, etc.). Backed by the `api_uploads_prod` Docker volume so
-  // contents persist across deploys. Versioned static assets (system badge
-  // SVGs, seed imagery) live in the frontend's `public/` folder and are
-  // served by nginx directly — not here.
+  // Serve runtime user uploads (teacher badges, class covers, help imagery,
+  // etc.). Backed by the `api_uploads_prod` Docker volume so contents persist
+  // across deploys. Versioned static assets (system badge SVGs, seed imagery)
+  // live in the frontend's `public/` folder and are served by nginx directly —
+  // not here.
+  //
+  // Las carpetas privadas (entregas del alumnado y documentos de misión) quedan
+  // fuera: solo se entregan por `/files`, que comprueba el acceso antes.
   await fastify.register(fastifyStatic, {
     root: join(process.cwd(), 'uploads'),
     prefix: '/uploads/',
     decorateReply: false,
+    allowedPath: isPublicUploadPath,
   })
 
   // Register JWT with access token secret
@@ -258,6 +264,8 @@ async function buildServer() {
   await fastify.register(submissionsRoutes, { prefix: '/submissions' })
   await fastify.register(gamificationRoutes, { prefix: '/gamification' })
   await fastify.register(profileRoutes, { prefix: '/profile' })
+  // Ficheros privados (entregas y documentos de misión), con comprobación de acceso.
+  await fastify.register(filesRoutes, { prefix: '/files' })
   // Centro de ayuda: la parte pública no pide sesión (cuelga de la landing).
   await fastify.register(publicHelpRoutes, { prefix: '/public/help' })
   await fastify.register(adminHelpRoutes, { prefix: '/admin/help' })

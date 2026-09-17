@@ -64,6 +64,8 @@
       "submission_student_approved": "Entrega de {name} aprobada (+{xp} XP)",
       "download_not_found": "No se encontró el archivo para descargar",
       "download_error": "No se pudo descargar el archivo",
+      "download_no_access": "No tienes acceso a este archivo",
+      "popup_blocked": "Permite las ventanas emergentes para abrir el archivo",
       "join_request_accepted": "{name} ha sido aceptado en la clase",
       "join_request_rejected": "Solicitud rechazada",
       "join_request_accept_error": "Error al aceptar la solicitud",
@@ -359,6 +361,28 @@
     },
     "student_preview": {
       "banner": "Estás viendo la plataforma como un alumno (demo)"
+    },
+    "change_email": {
+      "title": "Correo electrónico",
+      "current_email": "Correo actual",
+      "new_email": "Correo nuevo",
+      "password": "Contraseña actual",
+      "password_hint": "Te la pedimos para confirmar que eres tú quien cambia el correo.",
+      "submit": "Cambiar correo",
+      "success": "Correo actualizado. A partir de ahora entras con el nuevo.",
+      "errors": {
+        "email_invalid": "Escribe un correo válido.",
+        "email_same": "Ese ya es tu correo.",
+        "password_required": "Escribe tu contraseña actual.",
+        "password_wrong": "La contraseña no es correcta.",
+        "password_not_set": "Tu cuenta entra con Google y aún no tiene contraseña. Cierra sesión, crea una desde «¿Olvidaste tu contraseña?» y vuelve a intentarlo.",
+        "email_in_use": "Ese correo ya lo usa otra cuenta.",
+        "generic": "No se ha podido cambiar el correo. Inténtalo de nuevo."
+      }
+    },
+    "file_unavailable": {
+      "title": "El enlace ya no es válido",
+      "message": "El enlace para abrir este archivo ha caducado. Vuelve a la misión y ábrelo otra vez."
     }
   }
 }

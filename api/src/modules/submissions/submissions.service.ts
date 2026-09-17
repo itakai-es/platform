@@ -1,6 +1,6 @@
 import { prisma } from '../../config/database.js'
 import { existsSync, mkdirSync } from 'fs'
-import { saveUpload } from '../storage/storage.service.js'
+import { saveUpload, uploadExtension } from '../storage/storage.service.js'
 import { join } from 'path'
 import { randomUUID } from 'crypto'
 import { getMissionCompletionRewards, validateCustomEnigmaXp } from '../../utils/xp-calculator.js'
@@ -13,6 +13,16 @@ const UPLOADS_DIR = join(process.cwd(), 'uploads', 'submissions')
 // Ensure uploads directory exists
 if (!existsSync(UPLOADS_DIR)) {
   mkdirSync(UPLOADS_DIR, { recursive: true })
+}
+
+/**
+ * Una entrega tal y como sale al cliente: sin la URL del fichero, que solo se
+ * entrega por `/files/submissions/:id` tras comprobar el acceso. `hasFile` dice
+ * si hay algo que descargar.
+ */
+function withoutFileUrl<T extends { fileUrl: string | null }>(submission: T) {
+  const { fileUrl, ...rest } = submission
+  return { ...rest, hasFile: !!fileUrl }
 }
 
 /**
@@ -69,8 +79,7 @@ export class SubmissionsService {
     let fileSize: number | null = null
 
     if (file) {
-      const ext = file.filename.split('.').pop() || 'bin'
-      const uniqueName = `${randomUUID()}.${ext}`
+      const uniqueName = `${randomUUID()}.${uploadExtension(file.filename)}`
 
       fileUrl = await saveUpload(`submissions/${uniqueName}`, file.buffer, file.mimetype)
       fileName = file.filename
@@ -166,9 +175,21 @@ export class SubmissionsService {
     const submissions = await prisma.enigmaSubmission.findMany({
       where: { studentId, enigmaId },
       orderBy: { submittedAt: 'desc' },
+      select: {
+        id: true,
+        enigmaId: true,
+        studentId: true,
+        fileName: true,
+        fileSize: true,
+        fileUrl: true,
+        status: true,
+        xpAwarded: true,
+        submittedAt: true,
+        reviewedAt: true,
+      },
     })
 
-    return { submissions }
+    return { submissions: submissions.map(withoutFileUrl) }
   }
 
   /**
@@ -195,6 +216,7 @@ export class SubmissionsService {
         className: s.enigma.mission.class.name,
         status: s.status,
         fileName: s.fileName,
+        hasFile: !!s.fileUrl,
         xpAwarded: s.xpAwarded,
         submittedAt: s.submittedAt,
         reviewedAt: s.reviewedAt,
@@ -260,7 +282,7 @@ export class SubmissionsService {
           },
           status: s.status,
           fileName: s.fileName,
-          fileUrl: s.fileUrl,
+          hasFile: !!s.fileUrl,
           fileSize: s.fileSize,
           xpAwarded: s.xpAwarded,
           submittedAt: s.submittedAt,
@@ -306,7 +328,7 @@ export class SubmissionsService {
         missionTitle: s.enigma.mission.title,
         status: s.status,
         fileName: s.fileName,
-        fileUrl: s.fileUrl,
+        hasFile: !!s.fileUrl,
         submittedAt: s.submittedAt,
       })),
       total: submissions.length,

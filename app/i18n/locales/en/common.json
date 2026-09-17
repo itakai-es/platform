@@ -64,6 +64,8 @@
       "submission_student_approved": "{name}'s submission approved (+{xp} XP)",
       "download_not_found": "File not found for download",
       "download_error": "Could not download the file",
+      "download_no_access": "You don't have access to this file",
+      "popup_blocked": "Allow pop-ups to open the file",
       "join_request_accepted": "{name} has been accepted into the class",
       "join_request_rejected": "Request rejected",
       "join_request_accept_error": "Error accepting the request",
@@ -359,6 +361,28 @@
     },
     "student_preview": {
       "banner": "You're viewing the platform as a student (demo)"
+    },
+    "change_email": {
+      "title": "Email",
+      "current_email": "Current email",
+      "new_email": "New email",
+      "password": "Current password",
+      "password_hint": "We ask for it to confirm that it is really you changing the email.",
+      "submit": "Change email",
+      "success": "Email updated. From now on you sign in with the new one.",
+      "errors": {
+        "email_invalid": "Enter a valid email.",
+        "email_same": "That is already your email.",
+        "password_required": "Enter your current password.",
+        "password_wrong": "The password is not correct.",
+        "password_not_set": "Your account signs in with Google and has no password yet. Sign out, create one from “Forgot your password?” and try again.",
+        "email_in_use": "That email is already used by another account.",
+        "generic": "The email could not be changed. Please try again."
+      }
+    },
+    "file_unavailable": {
+      "title": "This link is no longer valid",
+      "message": "The link to open this file has expired. Go back to the mission and open it again."
     }
   }
 }

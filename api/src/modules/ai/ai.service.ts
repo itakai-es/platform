@@ -7,6 +7,7 @@ import { generateImage } from './generators/image.js'
 import { generateQuiz } from './generators/quiz.js'
 import { initializeTools, getToolDeclarations, getTool } from './tools/index.js'
 import { wrapAICall, AIServiceUnavailableError } from '../../utils/errors.js'
+import { assertClassAccess } from '../../utils/class-access.js'
 
 function resolveLocale(locale?: string) {
   return locale?.toLowerCase().startsWith('en') ? 'en' : 'es'
@@ -120,40 +121,42 @@ export class AIService {
     }
   }
 
+  /**
+   * Nombre de la clase para la que se genera, o undefined si no se pidió para
+   * ninguna. Generar para una clase exige ser de su profesorado: si no, 404.
+   */
+  async resolveClassName(userId: string, classId?: string) {
+    if (!classId) return undefined
+    await assertClassAccess(classId, userId, 'class.view')
+    const cls = await prisma.class.findUnique({ where: { id: classId }, select: { name: true } })
+    return cls?.name
+  }
+
+  /** `className` llega ya resuelto con `resolveClassName`, antes de pedir nada al proveedor. */
   async createNarrative(input: {
     prompt: string
     locale?: string
-    classId?: string
-    userId?: string
+    className?: string
   }) {
-    const className = input.classId
-      ? await prisma.class.findFirst({
-          where: {
-            id: input.classId,
-            ...(input.userId ? { teacherId: input.userId } : {}),
-          },
-          select: { name: true },
-        }).then(result => result?.name)
-      : undefined
-
     return wrapAICall(() => generateNarrative(this.provider, {
       prompt: input.prompt,
       locale: resolveLocale(input.locale),
-      className,
+      className: input.className,
     }))
   }
 
+  /** Igual que `createNarrative`: la comprobación va antes de abrir el flujo. */
   async *streamNarrative(input: {
     prompt: string
     locale?: string
-    classId?: string
+    className?: string
   }): AsyncGenerator<string> {
     let stream: AsyncIterable<string>
     try {
       stream = streamNarrative(this.provider, {
         prompt: input.prompt,
         locale: resolveLocale(input.locale),
-        className: input.classId,
+        className: input.className,
       })
     } catch (err) {
       console.error('[AI] Narrative stream init failed:', err)

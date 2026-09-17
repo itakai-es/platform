@@ -25,7 +25,9 @@ vi.mock('../../src/utils/email.js', () => ({
   sendNotificationEmail: vi.fn(),
 }))
 
-vi.mock('../../src/modules/storage/storage.service.js', () => ({
+// Solo se simula la escritura: la resolución de claves privadas es la de verdad.
+vi.mock('../../src/modules/storage/storage.service.js', async importOriginal => ({
+  ...(await importOriginal<typeof import('../../src/modules/storage/storage.service.js')>()),
   saveUpload: vi.fn(async (path: string) => `/uploads/${path}`),
   deleteUpload: vi.fn(),
 }))
@@ -38,6 +40,7 @@ import {
   buildApp,
   createClassFixture,
   prisma,
+  type Actor,
   type ClassFixture,
 } from '../helpers/class-fixture.js'
 import { teacherRoutes } from '../../src/modules/teachers/teachers.routes.js'
@@ -582,7 +585,7 @@ describeWithDatabase('matriz de acceso de las rutas de profesor', () => {
     await app?.close()
   })
 
-  const send = (req: RouteRequest, actor?: 'owner' | 'other' | 'student') =>
+  const send = (req: RouteRequest, actor?: Actor) =>
     app.inject({
       method: req.method,
       url: req.url,
@@ -643,7 +646,7 @@ describeWithDatabase('matriz de acceso de las rutas de profesor', () => {
     expect(outsider.statusCode).toBe(404)
   })
 
-  it('GET /missions/:missionId/documents → propietario y alumno de la clase 200; sin sesión 401', async () => {
+  it('GET /missions/:missionId/documents → propietario y alumno de la clase 200; otro profesor y alumno ajeno 404; sin sesión 401', async () => {
     const missionId = await f.newMission()
     await f.newDocument(missionId)
     const url = `/missions/${missionId}/documents`
@@ -651,10 +654,62 @@ describeWithDatabase('matriz de acceso de las rutas de profesor', () => {
     expect((await send({ method: 'GET', url })).statusCode).toBe(401)
     expect((await send({ method: 'GET', url }, 'owner')).statusCode).toBe(200)
     expect((await send({ method: 'GET', url }, 'student')).statusCode).toBe(200)
+    expect((await send({ method: 'GET', url }, 'other')).statusCode).toBe(404)
+    expect((await send({ method: 'GET', url }, 'outsider')).statusCode).toBe(404)
   })
-  it.todo(
-    'GET /missions/:missionId/documents → otro profesor y alumno ajeno: hoy no se comprueba nada'
-  )
+
+  it('GET /missions/:missionId/documents → al alumno se le cierran con la misión bloqueada o la clase archivada; al propietario no', async () => {
+    const missionId = await f.newMission()
+    await f.newDocument(missionId)
+    const url = `/missions/${missionId}/documents`
+
+    await prisma.mission.update({ where: { id: missionId }, data: { status: 'bloqueada' } })
+    expect((await send({ method: 'GET', url }, 'student')).statusCode).toBe(404)
+    expect((await send({ method: 'GET', url }, 'owner')).statusCode).toBe(200)
+    await prisma.mission.update({ where: { id: missionId }, data: { status: 'activa' } })
+
+    await prisma.class.update({ where: { id: f.classId }, data: { archived: true } })
+    try {
+      expect((await send({ method: 'GET', url }, 'student')).statusCode).toBe(404)
+      expect((await send({ method: 'GET', url }, 'owner')).statusCode).toBe(200)
+    } finally {
+      await prisma.class.update({ where: { id: f.classId }, data: { archived: false } })
+    }
+  })
+
+  it('reordenar solo cambia el orden de lo que es de esa misión', async () => {
+    const propia = await f.newMission()
+    const ajena = await f.newMission(f.otherClassId)
+    const documentoAjeno = await f.newDocument(ajena)
+    const enigmaAjeno = await f.newEnigma(ajena)
+    const orden = async (table: 'missionDocument' | 'missionEnigma', id: string) =>
+      table === 'missionDocument'
+        ? (await prisma.missionDocument.findUnique({ where: { id } }))?.orderIndex
+        : (await prisma.missionEnigma.findUnique({ where: { id } }))?.orderIndex
+
+    const antesDocumento = await orden('missionDocument', documentoAjeno)
+    const antesEnigma = await orden('missionEnigma', enigmaAjeno)
+
+    const reordena = (recurso: 'documents' | 'enigmas', ids: string[]) =>
+      send(
+        {
+          method: 'PUT',
+          url: `/missions/${propia}/${recurso}/reorder`,
+          payload: { ids },
+        },
+        'owner'
+      )
+
+    expect(
+      (await reordena('documents', [await f.newDocument(propia), documentoAjeno])).statusCode
+    ).toBe(200)
+    expect((await reordena('enigmas', [await f.newEnigma(propia), enigmaAjeno])).statusCode).toBe(
+      200
+    )
+
+    expect(await orden('missionDocument', documentoAjeno)).toBe(antesDocumento)
+    expect(await orden('missionEnigma', enigmaAjeno)).toBe(antesEnigma)
+  })
 
   // ---- Listados: no rechazan a nadie, pero cada profesor ve solo lo suyo ----
 
@@ -726,8 +781,18 @@ describeWithDatabase('matriz de acceso de las rutas de profesor', () => {
       expect(listed.statusCode).toBe(200)
       expect(listed.body).toContain(f.classId)
       expect((await send(detail, 'other')).statusCode).toBe(200)
+
+      // Con la clase archivada la plantilla deja de estar disponible: ni listado, ni detalle, ni importación.
+      await prisma.class.update({ where: { id: f.classId }, data: { archived: true } })
+      expect((await send(list, 'other')).body).not.toContain(f.classId)
+      expect((await send(detail, 'other')).statusCode).toBe(404)
+      expect((await send(importIt, 'other')).statusCode).toBe(404)
+      expect(await countOthers()).toBe(before)
     } finally {
-      await prisma.class.update({ where: { id: f.classId }, data: { isTemplate: false } })
+      await prisma.class.update({
+        where: { id: f.classId },
+        data: { isTemplate: false, archived: false },
+      })
     }
   })
 
@@ -752,9 +817,58 @@ describeWithDatabase('matriz de acceso de las rutas de profesor', () => {
     expect((await send(put, 'owner')).statusCode).toBe(200)
     expect((await send(del, 'owner')).statusCode).toBe(200)
   })
-  it.todo(
-    'POST y PUT /teacher/badges con missionId de una misión ajena: hoy no se comprueba de quién es la misión'
-  )
+  it('insignias → solo se vinculan a una misión de una clase donde se puede editar el contenido', async () => {
+    const mine = await f.newMission()
+    const foreign = await f.newMission(f.otherClassId)
+    const post = (missionId: string) =>
+      ({
+        method: 'POST',
+        url: '/teacher/badges',
+        payload: { name: 'Con misión', missionId },
+      }) as const
+    const linkedTo = (missionId: string) => prisma.badge.count({ where: { missionId } })
+
+    // La misión de una clase ajena no se acepta y no queda nada vinculado a ella.
+    expect((await send(post(foreign), 'owner')).statusCode).toBe(404)
+    expect(await linkedTo(foreign)).toBe(0)
+
+    const created = await send(post(mine), 'owner')
+    expect(created.statusCode).toBe(201)
+    expect(await linkedTo(mine)).toBe(1)
+
+    const badgeId = created.json().badge.id
+    const put = (missionId: string) =>
+      ({ method: 'PUT', url: `/teacher/badges/${badgeId}`, payload: { missionId } }) as const
+    expect((await send(put(foreign), 'owner')).statusCode).toBe(404)
+    expect(await linkedTo(foreign)).toBe(0)
+    expect((await send(put(mine), 'owner')).statusCode).toBe(200)
+    expect(await linkedTo(mine)).toBe(1)
+
+    // Con lectura en la clase no basta: vincular una insignia es editar su contenido.
+    await prisma.classTeacher.create({
+      data: {
+        classId: f.classId,
+        userId: f.users.other.id,
+        access: 'read',
+        profile: 'practicas',
+        addedById: f.users.owner.id,
+      },
+    })
+    try {
+      expect((await send(post(mine), 'other')).statusCode).toBe(403)
+      expect(await linkedTo(mine)).toBe(1)
+      await prisma.classTeacher.update({
+        where: { classId_userId: { classId: f.classId, userId: f.users.other.id } },
+        data: { access: 'edit' },
+      })
+      expect((await send(post(mine), 'other')).statusCode).toBe(201)
+      expect(await linkedTo(mine)).toBe(2)
+    } finally {
+      await prisma.classTeacher.delete({
+        where: { classId_userId: { classId: f.classId, userId: f.users.other.id } },
+      })
+    }
+  })
 
   // ---- Las clases que nacen por una ruta llevan a su propietario en el profesorado ----
 

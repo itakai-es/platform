@@ -603,8 +603,6 @@
         "placeholder_new": "Pasahitz berria",
         "placeholder_confirm": "Pasahitza berretsi",
         "btn_update": "Eguneratu",
-        "email_title": "Emaila",
-        "placeholder_new_email": "Email berria",
         "sessions_title": "Saioak",
         "sessions_close_all": "Denak itxi",
         "session_current": "Unekoa",
@@ -612,7 +610,6 @@
         "validation": {
           "passwords_mismatch": "Pasahitzak ez datoz bat",
           "password_min_length": "Pasahitzak gutxienez 6 karaktere izan behar ditu",
-          "email_invalid": "Sartu baliozko email bat",
           "password_required": "Sartu zure pasahitza"
         }
       },

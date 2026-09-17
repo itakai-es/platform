@@ -1,5 +1,7 @@
 import { prisma } from '../../config/database.js'
 import { hashPassword, verifyPassword } from '../../utils/password.js'
+import { NotFoundError, ValidationError } from '../../utils/errors.js'
+import { privateUploadResolver } from '../storage/storage.service.js'
 
 function parseUserAgent(userAgent: string): { browser: string; os: string; device: 'desktop' | 'mobile' | 'tablet' } {
   const ua = userAgent.toLowerCase()
@@ -121,13 +123,33 @@ export class ProfileService {
   }
 
   /**
-   * Change user email
+   * Change user email. Exige la contraseña actual: el correo es con lo que se
+   * entra y se recupera la cuenta, así que cambiarlo pide lo mismo que cambiar
+   * la contraseña. Una cuenta que solo entra con Google no tiene contraseña y su
+   * correo es el de Google: antes tiene que crearse una con «He olvidado mi
+   * contraseña».
    */
-  async changeEmail(userId: string, data: { newEmail: string }) {
+  async changeEmail(userId: string, data: { newEmail: string; password?: string }) {
+    const user = await prisma.user.findUnique({ where: { id: userId } })
+    if (!user) throw new NotFoundError('Usuario no encontrado')
+
+    if (!user.passwordHash) {
+      throw new ValidationError(
+        'Tu cuenta entra con Google y no tiene contraseña. Crea una desde «He olvidado mi contraseña» para poder cambiar el correo.',
+        'PASSWORD_NOT_SET'
+      )
+    }
+    if (!data.password) {
+      throw new ValidationError('Escribe tu contraseña actual para cambiar el correo', 'PASSWORD_REQUIRED')
+    }
+    if (!(await verifyPassword(data.password, user.passwordHash))) {
+      throw new ValidationError('Contraseña actual incorrecta', 'INVALID_PASSWORD')
+    }
+
     // Check if email is already in use
     const existing = await prisma.user.findUnique({ where: { email: data.newEmail } })
     if (existing && existing.id !== userId) {
-      throw new Error('Este email ya está en uso')
+      throw new ValidationError('Este email ya está en uso', 'EMAIL_IN_USE')
     }
 
     await prisma.user.update({
@@ -302,6 +324,15 @@ export class ProfileService {
 
     if (!user) throw new Error('Usuario no encontrado')
 
+    // Los ficheros de las entregas y de los documentos de misión no se sirven
+    // por su dirección: en la exportación va la de la descarga que comprueba el
+    // acceso, para que el enlace lleve a algún sitio.
+    const privateUploadOf = await privateUploadResolver()
+    const withFileRoute = <T extends { id: string; fileUrl: string | null }>(
+      row: T,
+      route: string
+    ) => (privateUploadOf(row.fileUrl) ? { ...row, fileUrl: `${route}/${row.id}` } : row)
+
     return {
       exportedAt: new Date().toISOString(),
       account: {
@@ -317,7 +348,13 @@ export class ProfileService {
       settings: user.settings,
       sessions: user.refreshTokens,
       teacherData: {
-        classes: user.teacherClasses,
+        classes: user.teacherClasses.map(cls => ({
+          ...cls,
+          missions: cls.missions.map(mission => ({
+            ...mission,
+            documents: mission.documents.map(d => withFileRoute(d, '/files/documents')),
+          })),
+        })),
         createdBadges: user.createdBadges,
         sentInvitations: user.sentInvitations,
       },
@@ -326,7 +363,7 @@ export class ProfileService {
         earnedBadges: user.earnedBadges,
         missionProgress: user.missionProgress,
         enigmaProgress: user.enigmaProgress,
-        submissions: user.submissions,
+        submissions: user.submissions.map(s => withFileRoute(s, '/files/submissions')),
         joinRequests: user.joinRequests,
         receivedInvitations: user.receivedInvitations,
       },

@@ -64,6 +64,8 @@
       "submission_student_approved": "Entrega de {name} aprobada (+{xp} XP)",
       "download_not_found": "Non se atopou o ficheiro para descargar",
       "download_error": "Non se puido descargar o ficheiro",
+      "download_no_access": "Non tes acceso a este ficheiro",
+      "popup_blocked": "Permite as ventás emerxentes para abrir o ficheiro",
       "join_request_accepted": "{name} foi aceptado na clase",
       "join_request_rejected": "Solicitude rexeitada",
       "join_request_accept_error": "Erro ao aceptar a solicitude",
@@ -359,6 +361,28 @@
     },
     "student_preview": {
       "banner": "Estás vendo a plataforma como un alumno (demo)"
+    },
+    "change_email": {
+      "title": "Correo electrónico",
+      "current_email": "Correo actual",
+      "new_email": "Correo novo",
+      "password": "Contrasinal actual",
+      "password_hint": "Pedímoscho para confirmar que es ti quen cambia o correo.",
+      "submit": "Cambiar o correo",
+      "success": "Correo actualizado. A partir de agora entras co novo.",
+      "errors": {
+        "email_invalid": "Escribe un correo válido.",
+        "email_same": "Ese xa é o teu correo.",
+        "password_required": "Escribe o teu contrasinal actual.",
+        "password_wrong": "O contrasinal non é correcto.",
+        "password_not_set": "A túa conta entra con Google e aínda non ten contrasinal. Pecha a sesión, crea un desde «Esquecíches o contrasinal?» e téntao de novo.",
+        "email_in_use": "Ese correo xa o usa outra conta.",
+        "generic": "Non se puido cambiar o correo. Téntao de novo."
+      }
+    },
+    "file_unavailable": {
+      "title": "A ligazón xa non é válida",
+      "message": "A ligazón para abrir este ficheiro caducou. Volve á misión e ábreo outra vez."
     }
   }
 }

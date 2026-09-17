@@ -603,8 +603,6 @@
         "placeholder_new": "Novo contrasinal",
         "placeholder_confirm": "Confirmar contrasinal",
         "btn_update": "Actualizar",
-        "email_title": "Email",
-        "placeholder_new_email": "Novo email",
         "sessions_title": "Sesións",
         "sessions_close_all": "Pechar todas",
         "session_current": "Actual",
@@ -612,7 +610,6 @@
         "validation": {
           "passwords_mismatch": "Os contrasinais non coinciden",
           "password_min_length": "O contrasinal debe ter polo menos 6 caracteres",
-          "email_invalid": "Introduce un email válido",
           "password_required": "Introduce o teu contrasinal"
         }
       },

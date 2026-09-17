@@ -10,9 +10,13 @@ import {
 import {
   accessibleClassesWhere,
   assertMissionAccess,
+  assertMissionMember,
   classTeacherRecipients,
   getClassAccess,
+  getClassMembership,
+  passesAccessCheck,
   recordClassAction,
+  studentEnrollmentsWhere,
 } from '../../src/utils/class-access.js'
 import { ForbiddenError, NotFoundError } from '../../src/utils/errors.js'
 
@@ -41,6 +45,10 @@ describeWithDatabase('acceso a clases, con base de datos', () => {
       },
       update: { access, endsAt },
     })
+
+  /** Saca al otro profesor de la clase del propietario. */
+  const removeOther = () =>
+    prisma.classTeacher.deleteMany({ where: { classId: f.classId, userId: f.users.other.id } })
 
   const accessibleIds = async (
     userId: string,
@@ -173,5 +181,84 @@ describeWithDatabase('acceso a clases, con base de datos', () => {
          OR (SELECT count(*) FROM "class_teachers" t
              WHERE t."class_id" = c."id" AND t."is_owner") <> 1`
     expect(Number(count)).toBe(0)
+  })
+
+  it('miembros de la clase: profesorado, alumnado matriculado y vista previa del profesorado', async () => {
+    const asUser = (actor: 'owner' | 'other' | 'student' | 'outsider') => f.users[actor]
+    const membership = (actor: Parameters<typeof asUser>[0]) =>
+      getClassMembership(f.classId, asUser(actor))
+    await removeOther()
+
+    expect(await membership('owner')).toMatchObject({
+      teacher: { isOwner: true },
+      enrollment: null,
+    })
+    expect(await membership('student')).toMatchObject({
+      teacher: null,
+      enrollment: { isPreview: false },
+    })
+    expect(await membership('outsider')).toBeNull()
+    expect(await membership('other')).toBeNull()
+
+    // La matrícula de quien no es alumno ni profesor de la clase no cuenta, ni
+    // corriente ni de vista previa.
+    const enrollment = await prisma.classEnrollment.create({
+      data: { classId: f.classId, studentId: f.users.other.id },
+    })
+    const listed = () =>
+      prisma.classEnrollment.count({ where: studentEnrollmentsWhere(f.users.other) })
+    expect(await membership('other')).toBeNull()
+    expect(await listed()).toBe(0)
+    await prisma.classEnrollment.update({ where: { id: enrollment.id }, data: { isPreview: true } })
+    expect(await membership('other')).toBeNull()
+    expect(await listed()).toBe(0)
+
+    // En cuanto imparte la clase, la matrícula que tenga es su sitio de alumno,
+    // de vista previa o no, y sin tocar la fila.
+    await setOther('read')
+    expect(await membership('other')).toMatchObject({
+      teacher: { access: 'read' },
+      enrollment: { id: enrollment.id, isPreview: true },
+    })
+    expect(await listed()).toBe(1)
+    await prisma.classEnrollment.update({
+      where: { id: enrollment.id },
+      data: { isPreview: false },
+    })
+    expect(await membership('other')).toMatchObject({
+      enrollment: { id: enrollment.id, isPreview: false },
+    })
+    expect(await listed()).toBe(1)
+
+    // Y deja de contar cuando deja de impartirla.
+    await setOther('read', new Date(Date.now() - DAY))
+    expect(await membership('other')).toBeNull()
+    expect(await listed()).toBe(0)
+
+    await prisma.classEnrollment.delete({ where: { id: enrollment.id } })
+    await removeOther()
+  })
+
+  it('assertMissionMember: 404 para quien no es de la clase y, al alumno, con la misión bloqueada', async () => {
+    const missionId = await f.newMission()
+    await removeOther()
+
+    await expect(assertMissionMember(missionId, f.users.student)).resolves.toMatchObject({
+      classId: f.classId,
+    })
+    await expect(assertMissionMember(missionId, f.users.outsider)).rejects.toBeInstanceOf(
+      NotFoundError
+    )
+    await expect(assertMissionMember(missionId, f.users.other)).rejects.toBeInstanceOf(
+      NotFoundError
+    )
+
+    await prisma.mission.update({ where: { id: missionId }, data: { status: 'bloqueada' } })
+    await expect(assertMissionMember(missionId, f.users.student)).rejects.toBeInstanceOf(
+      NotFoundError
+    )
+    await expect(assertMissionMember(missionId, f.users.owner)).resolves.toBeTruthy()
+    expect(await passesAccessCheck(assertMissionMember(missionId, f.users.student))).toBe(false)
+    expect(await passesAccessCheck(assertMissionMember(missionId, f.users.owner))).toBe(true)
   })
 })

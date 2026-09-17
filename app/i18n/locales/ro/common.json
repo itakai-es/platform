@@ -64,6 +64,8 @@
       "submission_student_approved": "Lucrarea trimisă de {name} a fost aprobată (+{xp} XP)",
       "download_not_found": "Fișierul de descărcat nu a fost găsit",
       "download_error": "Fișierul nu a putut fi descărcat",
+      "download_no_access": "Nu ai acces la acest fișier",
+      "popup_blocked": "Permite ferestrele pop-up pentru a deschide fișierul",
       "join_request_accepted": "{name} a fost acceptat în clasă",
       "join_request_rejected": "Cerere respinsă",
       "join_request_accept_error": "Eroare la acceptarea cererii",
@@ -359,6 +361,28 @@
     },
     "student_preview": {
       "banner": "Vezi platforma ca elev (demo)"
+    },
+    "change_email": {
+      "title": "E-mail",
+      "current_email": "E-mail actual",
+      "new_email": "E-mail nou",
+      "password": "Parola actuală",
+      "password_hint": "Ți-o cerem ca să confirmăm că tu ești cel care schimbă e-mailul.",
+      "submit": "Schimbă e-mailul",
+      "success": "E-mail actualizat. De acum intri cu cel nou.",
+      "errors": {
+        "email_invalid": "Scrie un e-mail valid.",
+        "email_same": "Acesta este deja e-mailul tău.",
+        "password_required": "Scrie parola ta actuală.",
+        "password_wrong": "Parola nu este corectă.",
+        "password_not_set": "Contul tău intră cu Google și nu are încă o parolă. Deconectează-te, creează una din „Ai uitat parola?” și încearcă din nou.",
+        "email_in_use": "Acest e-mail este deja folosit de alt cont.",
+        "generic": "E-mailul nu a putut fi schimbat. Încearcă din nou."
+      }
+    },
+    "file_unavailable": {
+      "title": "Linkul nu mai este valid",
+      "message": "Linkul pentru deschiderea fișierului a expirat. Întoarce-te la misiune și deschide-l din nou."
     }
   }
 }

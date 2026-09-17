@@ -603,8 +603,6 @@
         "placeholder_new": "Nova palavra-passe",
         "placeholder_confirm": "Confirmar palavra-passe",
         "btn_update": "Atualizar",
-        "email_title": "E-mail",
-        "placeholder_new_email": "Novo e-mail",
         "sessions_title": "Sessões",
         "sessions_close_all": "Terminar todas",
         "session_current": "Atual",
@@ -612,7 +610,6 @@
         "validation": {
           "passwords_mismatch": "As palavras-passe não coincidem",
           "password_min_length": "A palavra-passe tem de ter pelo menos 6 caracteres",
-          "email_invalid": "Introduz um e-mail válido",
           "password_required": "Introduz a tua palavra-passe"
         }
       },

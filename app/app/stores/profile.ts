@@ -148,6 +148,7 @@ export const useProfileStore = defineStore('profile', () => {
       return {
         success: false,
         message: err.data?.message || 'Error al cambiar el email',
+        code: err.data?.code,
       }
     }
   }

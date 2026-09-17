@@ -603,8 +603,6 @@
         "placeholder_new": "Nueva contraseña",
         "placeholder_confirm": "Confirmar contraseña",
         "btn_update": "Actualizar",
-        "email_title": "Email",
-        "placeholder_new_email": "Nuevo email",
         "sessions_title": "Sesiones",
         "sessions_close_all": "Cerrar todas",
         "session_current": "Actual",
@@ -612,7 +610,6 @@
         "validation": {
           "passwords_mismatch": "Las contraseñas no coinciden",
           "password_min_length": "La contraseña debe tener al menos 6 caracteres",
-          "email_invalid": "Introduce un email válido",
           "password_required": "Introduce tu contraseña"
         }
       },

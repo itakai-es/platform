@@ -64,6 +64,8 @@
       "submission_student_approved": "{name}-(r)en entrega onartu da (+{xp} XP)",
       "download_not_found": "Ez da deskargatzeko fitxategia aurkitu",
       "download_error": "Ezin izan da fitxategia deskargatu",
+      "download_no_access": "Ez duzu fitxategi honetarako sarbiderik",
+      "popup_blocked": "Baimendu leiho gainerakorrak fitxategia irekitzeko",
       "join_request_accepted": "{name} klasera onartua izan da",
       "join_request_rejected": "Eskaera baztertuta",
       "join_request_accept_error": "Eskaera onartzean errore bat gertatu da",
@@ -359,6 +361,28 @@
     },
     "student_preview": {
       "banner": "Plataforma ikasle gisa ikusten ari zara (demoa)"
+    },
+    "change_email": {
+      "title": "Posta elektronikoa",
+      "current_email": "Uneko posta",
+      "new_email": "Posta berria",
+      "password": "Uneko pasahitza",
+      "password_hint": "Posta aldatzen ari dena zu zarela baieztatzeko eskatzen dizugu.",
+      "submit": "Aldatu posta",
+      "success": "Posta eguneratu da. Hemendik aurrera berriarekin sartuko zara.",
+      "errors": {
+        "email_invalid": "Idatzi baliozko posta bat.",
+        "email_same": "Hori da dagoeneko zure posta.",
+        "password_required": "Idatzi zure uneko pasahitza.",
+        "password_wrong": "Pasahitza ez da zuzena.",
+        "password_not_set": "Zure kontua Googlerekin sartzen da eta oraindik ez du pasahitzik. Itxi saioa, sortu bat «Pasahitza ahaztu duzu?» estekatik eta saiatu berriro.",
+        "email_in_use": "Posta hori beste kontu batek erabiltzen du.",
+        "generic": "Ezin izan da posta aldatu. Saiatu berriro."
+      }
+    },
+    "file_unavailable": {
+      "title": "Lotura honek jada ez du baliorik",
+      "message": "Fitxategi hau irekitzeko lotura iraungi da. Itzuli misiora eta ireki berriro."
     }
   }
 }

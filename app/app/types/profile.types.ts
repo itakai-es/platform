@@ -73,4 +73,6 @@ export interface ChangeEmailRequest {
 export interface ProfileActionResponse {
   success: boolean
   message: string
+  /** Código estable del error, cuando el servidor lo da. */
+  code?: string
 }

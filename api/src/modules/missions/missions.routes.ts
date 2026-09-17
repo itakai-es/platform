@@ -1,6 +1,7 @@
 import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
 import { missionsService } from './missions.service.js'
 import { z, ZodError } from 'zod'
+import { rethrowHttpError } from '../../utils/errors.js'
 
 const createMissionSchema = z.object({
   title: z.string().min(1),
@@ -210,10 +211,12 @@ export async function missionsRoutes(fastify: FastifyInstance) {
     '/:missionId/documents',
     async (request: FastifyRequest<{ Params: { missionId: string } }>, reply: FastifyReply) => {
       try {
+        const user = request.user as { id: string; role: string | null }
         const { missionId } = request.params
-        const result = await missionsService.getMissionDocuments(missionId)
+        const result = await missionsService.getMissionDocuments(user, missionId)
         return result
       } catch (error) {
+        rethrowHttpError(error)
         if (error instanceof Error) {
           return reply.status(404).send({ message: error.message })
         }

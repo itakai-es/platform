@@ -302,10 +302,26 @@ export async function adminRoutes(fastify: FastifyInstance) {
         return reply.status(400).send({ message: 'No puedes suspenderte a ti mismo' })
       }
 
-      const user = await prisma.user.update({
-        where: { id: userId },
-        data: { status: 'suspended' },
-      })
+      const target = await prisma.user.findUnique({ where: { id: userId }, select: { role: true } })
+      if (!target) {
+        return reply.status(404).send({ message: 'Usuario no encontrado' })
+      }
+      // A otro administrador no se le suspende desde el panel.
+      if (target.role === 'admin') {
+        return reply.status(403).send({ message: 'No se puede suspender a otro administrador' })
+      }
+
+      // Suspender cierra también sus sesiones: no puede renovar el acceso con las que tenía abiertas.
+      const [user] = await prisma.$transaction([
+        prisma.user.update({
+          where: { id: userId },
+          data: { status: 'suspended' },
+        }),
+        prisma.refreshToken.updateMany({
+          where: { userId, isRevoked: false },
+          data: { isRevoked: true },
+        }),
+      ])
 
       return {
         user: {

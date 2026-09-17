@@ -64,6 +64,8 @@
       "submission_student_approved": "Entrega de {name} aprovada (+{xp} XP)",
       "download_not_found": "No s'ha trobat el fitxer per a descarregar",
       "download_error": "No s'ha pogut descarregar el fitxer",
+      "download_no_access": "No tens accés a aquest fitxer",
+      "popup_blocked": "Permet les finestres emergents per a obrir el fitxer",
       "join_request_accepted": "{name} ha sigut acceptat a la classe",
       "join_request_rejected": "Sol·licitud rebutjada",
       "join_request_accept_error": "Error en acceptar la sol·licitud",
@@ -359,6 +361,28 @@
     },
     "student_preview": {
       "banner": "Estàs veient la plataforma com un alumne (demo)"
+    },
+    "change_email": {
+      "title": "Correu electrònic",
+      "current_email": "Correu actual",
+      "new_email": "Correu nou",
+      "password": "Contrasenya actual",
+      "password_hint": "Te la demanem per a confirmar que eres tu qui canvia el correu.",
+      "submit": "Canviar el correu",
+      "success": "Correu actualitzat. A partir d'ara entres amb el nou.",
+      "errors": {
+        "email_invalid": "Escriu un correu vàlid.",
+        "email_same": "Este ja és el teu correu.",
+        "password_required": "Escriu la teua contrasenya actual.",
+        "password_wrong": "La contrasenya no és correcta.",
+        "password_not_set": "El teu compte entra amb Google i encara no té contrasenya. Tanca la sessió, crea'n una des de «Has oblidat la contrasenya?» i torna-ho a provar.",
+        "email_in_use": "Este correu ja el fa servir un altre compte.",
+        "generic": "No s'ha pogut canviar el correu. Torna-ho a provar."
+      }
+    },
+    "file_unavailable": {
+      "title": "L'enllaç ja no és vàlid",
+      "message": "L'enllaç per a obrir aquest fitxer ha caducat. Torna a la missió i obri'l una altra vegada."
     }
   }
 }

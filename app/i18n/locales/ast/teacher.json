@@ -603,8 +603,6 @@
         "placeholder_new": "Contraseña nueva",
         "placeholder_confirm": "Confirmar contraseña",
         "btn_update": "Anovar",
-        "email_title": "Corréu electrónicu",
-        "placeholder_new_email": "Corréu nuevu",
         "sessions_title": "Sesiones",
         "sessions_close_all": "Zarrales toes",
         "session_current": "Actual",
@@ -612,7 +610,6 @@
         "validation": {
           "passwords_mismatch": "Les contraseñes nun concasen",
           "password_min_length": "La contraseña tien de tener polo menos 6 caráuteres",
-          "email_invalid": "Introduz un corréu válidu",
           "password_required": "Introduz la to contraseña"
         }
       },

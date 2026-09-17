@@ -9,6 +9,19 @@ import { getAIProvider } from '../ai/providers/index.js'
 import { AVATAR_PROMPTS } from '../ai/prompts/index.js'
 import { AvatarServiceUnavailableError } from '../../utils/errors.js'
 import { resolveClassSettings } from '../../utils/class-settings.js'
+import { ForbiddenError } from '../../utils/errors.js'
+import {
+  getClassMembership,
+  studentEnrollmentsWhere,
+  type ClassUser,
+} from '../../utils/class-access.js'
+
+/** Matricularse en una clase es cosa de alumnos: el profesorado la mira con la vista previa. */
+function assertStudentRole(user: ClassUser) {
+  if (user.role !== 'student') {
+    throw new ForbiddenError('Solo el alumnado puede unirse a una clase')
+  }
+}
 
 export { AvatarServiceUnavailableError }
 
@@ -190,9 +203,9 @@ export class StudentsService {
 
   // ==================== CLASSES ====================
 
-  async getClasses(userId: string) {
+  async getClasses(user: ClassUser) {
     const enrollments = await prisma.classEnrollment.findMany({
-      where: { studentId: userId },
+      where: studentEnrollmentsWhere(user),
       include: {
         class: {
           include: {
@@ -344,18 +357,9 @@ export class StudentsService {
     }
   }
 
-  async getClassGuide(userId: string, classId: string) {
-    // Check if user is enrolled as student OR is the teacher of the class
-    const [enrollment, classAsTeacher] = await Promise.all([
-      prisma.classEnrollment.findUnique({
-        where: { studentId_classId: { studentId: userId, classId } },
-      }),
-      prisma.class.findFirst({
-        where: { id: classId, teacherId: userId },
-      }),
-    ])
-
-    if (!enrollment && !classAsTeacher) {
+  async getClassGuide(user: ClassUser, classId: string) {
+    // La guía la leen el alumnado matriculado y el profesorado de la clase.
+    if (!(await getClassMembership(classId, user))) {
       throw new Error('No tienes acceso a esta clase')
     }
 
@@ -738,6 +742,8 @@ export class StudentsService {
     })
     if (!classes.length) return { enrolled: 0 }
 
+    // Solo se crean las que faltan: una matrícula que ya existía se deja como
+    // está, porque es la que cuenta en el ranking y en los listados de la clase.
     const existing = await prisma.classEnrollment.findMany({
       where: { studentId: teacherId, classId: { in: classes.map(c => c.id) } },
       select: { classId: true },
@@ -760,7 +766,9 @@ export class StudentsService {
     return { enrolled: toCreate.length }
   }
 
-  async joinClass(userId: string, code: string) {
+  async joinClass(user: ClassUser, code: string) {
+    assertStudentRole(user)
+    const userId = user.id
     const cls = await prisma.class.findUnique({
       where: { invitationCode: code },
     })
@@ -808,7 +816,9 @@ export class StudentsService {
     }
   }
 
-  async createJoinRequest(userId: string, code: string, message?: string) {
+  async createJoinRequest(user: ClassUser, code: string, message?: string) {
+    assertStudentRole(user)
+    const userId = user.id
     const cls = await prisma.class.findUnique({
       where: { invitationCode: code },
     })
@@ -890,7 +900,9 @@ export class StudentsService {
     }
   }
 
-  async acceptInvitation(userId: string, invitationId: string) {
+  async acceptInvitation(user: ClassUser, invitationId: string) {
+    assertStudentRole(user)
+    const userId = user.id
     const invitation = await prisma.invitation.findUnique({
       where: { id: invitationId },
       include: { class: true },
@@ -973,9 +985,10 @@ export class StudentsService {
 
   // ==================== MISSIONS ====================
 
-  async getMissions(userId: string) {
+  async getMissions(user: ClassUser) {
+    const userId = user.id
     const enrollments = await prisma.classEnrollment.findMany({
-      where: { studentId: userId },
+      where: studentEnrollmentsWhere(user),
     })
 
     const classIds = enrollments.map((e) => e.classId)
@@ -1001,7 +1014,8 @@ export class StudentsService {
 
   // ==================== BADGES & ACHIEVEMENTS ====================
 
-  async getBadges(userId: string, filter?: string, category?: string) {
+  async getBadges(user: ClassUser, filter?: string, category?: string) {
+    const userId = user.id
     const categoryLabels: Record<string, string> = {
       streak: 'Rachas',
       missions: 'Misiones',
@@ -1019,7 +1033,7 @@ export class StudentsService {
 
     // Get class IDs the student is enrolled in
     const enrollments = await prisma.classEnrollment.findMany({
-      where: { studentId: userId },
+      where: studentEnrollmentsWhere(user),
       select: { classId: true },
     })
     const classIds = enrollments.map(e => e.classId)
