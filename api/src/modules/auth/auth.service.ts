@@ -8,7 +8,7 @@ import {
   type AuthTokens,
   verifyPasswordResetToken,
 } from '../../utils/tokens.js'
-import type { LoginInput, LoginAliasInput, SignupInput, OnboardingInput } from './auth.schema.js'
+import type { LoginInput, SignupInput, OnboardingInput } from './auth.schema.js'
 import type { UserRole } from '../../generated/prisma/client.js'
 import { sendPasswordResetEmail, sendPasswordChangedEmail } from '../../utils/email.js'
 import { getAppOrigin } from '../../utils/app-url.js'
@@ -56,55 +56,6 @@ export class AuthService {
     const { accessToken, refreshToken } = generateTokens({ id: user.id, role: user.role })
 
     // Store refresh token in database
-    await prisma.refreshToken.create({
-      data: {
-        token: refreshToken.token,
-        userId: user.id,
-        family: refreshToken.family,
-        expiresAt: refreshToken.expiresAt,
-        userAgent: context?.userAgent,
-        ipAddress: context?.ipAddress,
-      },
-    })
-
-    return {
-      user: this.sanitizeUser(user),
-      tokens: {
-        accessToken,
-        refreshToken: refreshToken.token,
-      },
-    }
-  }
-
-  /**
-   * Login with alias (nickname) + code for younger students
-   * Searches for user by nickname in any of their class enrollments
-   */
-  async loginWithAlias(input: LoginAliasInput, context?: RequestContext): Promise<LoginResult> {
-    // Find enrollment with matching nickname
-    const enrollment = await prisma.classEnrollment.findFirst({
-      where: { nickname: input.alias, isPreview: false },
-      include: { student: true, class: { select: { invitationCode: true } } },
-    })
-
-    if (!enrollment?.student) {
-      throw new Error('Credenciales inválidas')
-    }
-
-    const user = enrollment.student
-
-    if (user.status !== 'active') {
-      throw new Error('Cuenta suspendida o inactiva')
-    }
-
-    // El código de acceso del alumno es el código de invitación de su clase
-    // (el que le da el profesor), no un número cualquiera.
-    if (input.code.trim() !== enrollment.class.invitationCode) {
-      throw new Error('Código inválido')
-    }
-
-    const { accessToken, refreshToken } = generateTokens({ id: user.id, role: user.role })
-
     await prisma.refreshToken.create({
       data: {
         token: refreshToken.token,
@@ -458,13 +409,21 @@ export class AuthService {
    * Complete onboarding - set user role
    */
   async completeOnboarding(userId: string, input: OnboardingInput) {
-    const user = await prisma.user.update({
-      where: { id: userId },
+    // El rol se elige una sola vez, al terminar el alta. La condición va en el
+    // propio UPDATE para que dos peticiones a la vez no puedan colarse entre la
+    // comprobación y la escritura.
+    const { count } = await prisma.user.updateMany({
+      where: { id: userId, isOnboarded: false },
       data: {
         role: input.role as UserRole,
         isOnboarded: true,
       },
     })
+    if (count === 0) {
+      throw new Error('El rol de esta cuenta ya está elegido')
+    }
+
+    const user = await prisma.user.findUniqueOrThrow({ where: { id: userId } })
 
     return this.sanitizeUser(user)
   }

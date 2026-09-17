@@ -17,7 +17,6 @@ export const ROUTE_NAMES = {
   STUDENT_DASHBOARD: '/alumno/inicio',
   STUDENT_CLASSES: '/alumno/clases',
   STUDENT_MISSIONS: '/alumno/misiones',
-  STUDENT_RANKINGS: '/alumno/clasificacion',
   STUDENT_AI_ASSISTANT: '/alumno/asistente',
   STUDENT_PROFILE: '/alumno/perfil',
   STUDENT_ACHIEVEMENTS: '/alumno/insignias',

@@ -73,7 +73,6 @@ export const useTeacherStore = defineStore('teacher', () => {
   const searchedStudents = ref<SearchableStudent[]>([])
   const isLoadingRequests = ref(false)
   const isLoadingInvitations = ref(false)
-  const isSearchingStudents = ref(false)
   const totalPendingRequests = ref(0)
 
   // Computed
@@ -584,30 +583,6 @@ export const useTeacherStore = defineStore('teacher', () => {
   }
 
   /**
-   * Busca estudiantes para invitar
-   */
-  async function searchStudents(classId: string, query: string) {
-    try {
-      isSearchingStudents.value = true
-      const config = useRuntimeConfig()
-      const response = await $fetch<{ students: SearchableStudent[]; total: number }>(
-        `${config.public.apiBase}/teacher/students/search`,
-        {
-          params: { q: query, classId },
-        }
-      )
-      searchedStudents.value = response.students || []
-      return response
-    } catch (error) {
-      console.error('Error searching students:', error)
-      searchedStudents.value = []
-      throw error
-    } finally {
-      isSearchingStudents.value = false
-    }
-  }
-
-  /**
    * Envía una invitación a un estudiante
    */
   async function sendInvitation(
@@ -1018,7 +993,6 @@ export const useTeacherStore = defineStore('teacher', () => {
     searchedStudents.value = []
     isLoadingRequests.value = false
     isLoadingInvitations.value = false
-    isSearchingStudents.value = false
     totalPendingRequests.value = 0
   }
 
@@ -1067,7 +1041,6 @@ export const useTeacherStore = defineStore('teacher', () => {
     searchedStudents,
     isLoadingRequests,
     isLoadingInvitations,
-    isSearchingStudents,
     totalPendingRequests,
     // Computed
     getTotalPendingRequests,
@@ -1112,7 +1085,6 @@ export const useTeacherStore = defineStore('teacher', () => {
     fetchPendingRequests,
     acceptJoinRequest,
     rejectJoinRequest,
-    searchStudents,
     sendInvitation,
     fetchSentInvitations,
     fetchTotalPendingRequests,

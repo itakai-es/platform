@@ -1,7 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import {
   loginSchema,
-  loginAliasSchema,
   signupSchema,
   onboardingSchema,
   refreshTokenSchema,
@@ -38,32 +37,6 @@ describe('loginSchema', () => {
     expect(loginSchema.safeParse({}).success).toBe(false)
     expect(loginSchema.safeParse({ email: 'user@example.com' }).success).toBe(false)
     expect(loginSchema.safeParse({ password: 'pass' }).success).toBe(false)
-  })
-})
-
-describe('loginAliasSchema', () => {
-  it('should validate correct alias login', () => {
-    const result = loginAliasSchema.safeParse({
-      alias: 'student1',
-      code: '123456',
-    })
-    expect(result.success).toBe(true)
-  })
-
-  it('should reject empty alias', () => {
-    const result = loginAliasSchema.safeParse({
-      alias: '',
-      code: '123456',
-    })
-    expect(result.success).toBe(false)
-  })
-
-  it('should reject empty code', () => {
-    const result = loginAliasSchema.safeParse({
-      alias: 'student1',
-      code: '',
-    })
-    expect(result.success).toBe(false)
   })
 })
 

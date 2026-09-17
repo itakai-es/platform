@@ -240,27 +240,6 @@
         "close": "Zarrar"
       }
     },
-    "leaderboard": {
-      "meta": {
-        "title": "Clasificación | ITAKAI",
-        "description": "La clasificación d'alumnos ta disponible dientro de cada clase."
-      },
-      "page_title": "Clasificación",
-      "page_subtitle": "Consulta la clasificación global y compara'l to progresu col restu del alumnáu.",
-      "pick_class": "Escueyi una clase",
-      "friends_soon_title": "Clasificación d'amigos ceo",
-      "friends_soon_description": "La parte social entá nun ta coneutada. Mentanto, pues usar la clasificación global o la de les tos clases.",
-      "choose_class_title": "Escueyi una clase",
-      "choose_class_description": "Escueyi una clase pa ver la to posición y la clasificación interna.",
-      "empty_class_title": "Nun hai clasificación disponible",
-      "empty_class_description": "Entá nun hai datos abondo pa construyir la clasificación d'esta clase.",
-      "empty_global_title": "Nun hai datos de clasificación",
-      "empty_global_description": "Entá nun hai actividá abondo p'amosar una clasificación global.",
-      "global_podium": "Podiu global",
-      "your_position": "La to posición",
-      "rest": "Restu de la clasificación",
-      "by_class": "Por clase"
-    },
     "ai_assistant": {
       "meta": {
         "title": "Asistente IA | ITAKAI",

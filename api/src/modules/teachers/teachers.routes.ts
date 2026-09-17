@@ -604,23 +604,6 @@ export async function teacherRoutes(fastify: FastifyInstance) {
     }
   })
 
-  fastify.get('/students/search', async (request: FastifyRequest<{ Querystring: { q: string; classId: string } }>, reply: FastifyReply) => {
-    try {
-      const { id } = request.user as { id: string }
-      const { q, classId } = request.query
-      if (!q || !classId) {
-        return reply.status(400).send({ message: 'Se requieren los parámetros q y classId' })
-      }
-      const result = await teachersService.searchStudents(id, classId, q)
-      return result
-    } catch (error) {
-      if (error instanceof Error) {
-        return reply.status(404).send({ message: error.message })
-      }
-      return reply.status(500).send({ message: 'Error interno' })
-    }
-  })
-
   // ==================== ENROLLMENTS ====================
 
   fastify.get('/classes/:classId/requests', async (request: FastifyRequest<{ Params: { classId: string } }>, reply: FastifyReply) => {

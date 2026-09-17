@@ -39,7 +39,7 @@ const CONTEXT = {
       'Revisar entregas: clase>Misiones>abrir mision>Ver entregas (N) del enigma (movil: menu ⋮); en la ventana: Descargar>Valorar>% completado (25/50/75/100 o libre)>Aprobar N%. No hay seccion Entregas ni rechazo. El aviso de entrega nueva abre directamente esa ventana. El Resumen de la clase solo cuenta las pendientes.',
     ].join(' '),
     student: [
-      'Nav alumno: Dashboard|Mis Clases|Misiones|Logros|Ranking|Asistente IA.',
+      'Nav alumno: Inicio|Avisos|Mis Clases|Misiones|Insignias|Centro de ayuda. El ranking esta dentro de cada clase (pestana Ranking); no hay clasificacion global.',
       'Unirse: Mis Clases>Unirse a Clase>codigo que da el profesor; se entra al momento.',
       'Completar mision: Misiones>elegir mision>ver enigmas>Enviar entrega(archivo).',
       'Profesor revisa: aprueba con % completado (recompensas proporcionales). Todos enigmas OK = mision completa.',
@@ -62,7 +62,7 @@ const CONTEXT = {
       'Review submissions: class>Missions>open mission>View submissions (N) on the enigma (mobile: ⋮ menu); in the window: Download>Grade>completion % (25/50/75/100 or custom)>Approve N%. There is no Submissions section and no reject. The new-submission notification opens that window directly. The class Summary only counts pending ones.',
     ].join(' '),
     student: [
-      'Student nav: Dashboard|My Classes|Missions|Achievements|Leaderboard|AI Assistant.',
+      'Student nav: Home|Notifications|My Classes|Missions|Badges|Help center. The ranking lives inside each class (Ranking tab); there is no global leaderboard.',
       'Join: My Classes>Join Class>code from the teacher; you are in straight away.',
       'Complete mission: Missions>choose mission>view enigmas>Submit deliverable(file).',
       'Teacher reviews: approves with a completion % (proportional rewards). All enigmas OK = mission complete.',

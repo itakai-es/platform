@@ -2,7 +2,6 @@ import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
 import { authService } from './auth.service.js'
 import {
   loginSchema,
-  loginAliasSchema,
   signupSchema,
   onboardingSchema,
   refreshTokenSchema,
@@ -164,25 +163,6 @@ export async function authRoutes(fastify: FastifyInstance) {
       setRefreshTokenCookie(reply, result.tokens.refreshToken)
 
       // Return only accessToken in body (refreshToken is in cookie)
-      return {
-        user: result.user,
-        tokens: { accessToken: result.tokens.accessToken },
-      }
-    } catch (error) {
-      return handleError(error, reply, 401)
-    }
-  })
-
-  // Login with alias + code (for younger students)
-  fastify.post('/login-alias', async (request: FastifyRequest, reply: FastifyReply) => {
-    try {
-      const input = loginAliasSchema.parse(request.body)
-      const context = getRequestContext(request)
-      const result = await authService.loginWithAlias(input, context)
-
-      // Set refresh token in HttpOnly cookie
-      setRefreshTokenCookie(reply, result.tokens.refreshToken)
-
       return {
         user: result.user,
         tokens: { accessToken: result.tokens.accessToken },

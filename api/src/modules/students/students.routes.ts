@@ -495,49 +495,4 @@ export async function studentsRoutes(fastify: FastifyInstance) {
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
-
-  // ==================== LEADERBOARD ====================
-
-  fastify.get('/leaderboard/me', async (request: FastifyRequest, reply: FastifyReply) => {
-    try {
-      const { id } = request.user as { id: string }
-      const result = await studentsService.getCurrentUserStats(id)
-      return result
-    } catch (error) {
-      return reply.status(500).send({ message: 'Error interno' })
-    }
-  })
-
-  fastify.get('/leaderboard/global', async (request: FastifyRequest<{ Querystring: { period?: string } }>, reply: FastifyReply) => {
-    try {
-      const { period } = request.query
-      const result = await studentsService.getGlobalLeaderboard(period)
-      return result
-    } catch (error) {
-      return reply.status(500).send({ message: 'Error interno' })
-    }
-  })
-
-  fastify.get('/leaderboard/class/:classId', async (request: FastifyRequest<{ Params: { classId: string }; Querystring: { period?: string } }>, reply: FastifyReply) => {
-    try {
-      const { id } = request.user as { id: string }
-      const { classId } = request.params
-      const { period } = request.query
-      const result = await studentsService.getClassLeaderboard(id, classId, period)
-      return result
-    } catch (error) {
-      return reply.status(500).send({ message: 'Error interno' })
-    }
-  })
-
-  fastify.get('/leaderboard/friends', async (request: FastifyRequest<{ Querystring: { period?: string } }>, reply: FastifyReply) => {
-    try {
-      const { id } = request.user as { id: string }
-      const { period } = request.query
-      const result = await studentsService.getFriendsLeaderboard(id, period)
-      return result
-    } catch (error) {
-      return reply.status(500).send({ message: 'Error interno' })
-    }
-  })
 }

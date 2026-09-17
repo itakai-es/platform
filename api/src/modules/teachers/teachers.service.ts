@@ -1262,51 +1262,6 @@ export class TeachersService {
     }
   }
 
-  async searchStudents(userId: string, classId: string, query: string) {
-    const cls = await prisma.class.findFirst({
-      where: { id: classId, teacherId: userId },
-    })
-
-    if (!cls) throw new Error('Clase no encontrada')
-
-    // Get all students not in this class
-    const enrolledStudentIds = await prisma.classEnrollment.findMany({
-      where: { classId },
-      select: { studentId: true },
-    })
-
-    const students = await prisma.user.findMany({
-      where: {
-        role: 'student',
-        id: { notIn: enrolledStudentIds.map((e) => e.studentId) },
-        OR: [{ name: { contains: query, mode: 'insensitive' } }, { email: { contains: query, mode: 'insensitive' } }],
-      },
-      take: 20,
-    })
-
-    // Check for pending requests and invitations
-    const pendingRequests = await prisma.joinRequest.findMany({
-      where: { classId, status: 'pending' },
-    })
-
-    const pendingInvitations = await prisma.invitation.findMany({
-      where: { classId, status: 'pending' },
-    })
-
-    return {
-      students: students.map((s) => ({
-        id: s.id,
-        name: s.name,
-        email: s.email,
-        avatar: null, // Avatar is per-class (assigned on enrollment)
-        isEnrolled: false,
-        hasPendingRequest: pendingRequests.some((r) => r.studentId === s.id),
-        hasPendingInvitation: pendingInvitations.some((i) => i.studentId === s.id),
-      })),
-      total: students.length,
-    }
-  }
-
   // ==================== ENROLLMENTS ====================
 
   async getPendingRequests(userId: string, classId: string) {
