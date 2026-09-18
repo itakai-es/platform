@@ -43,24 +43,35 @@
       </li>
     </ol>
 
-    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-      <Button
-        ref="addButtonRef"
-        variant="outline"
-        size="sm"
-        :icon-left="PlusIcon"
-        :disabled="rows.length >= STUDENT_LIST_MAX"
-        @click="addRow"
-      >
-        {{ t('teacher.classes.detail.accounts.row_add') }}
-      </Button>
-      <Button type="submit" variant="primary" size="md" :loading="submitting">
-        {{ submitting ? t('teacher.classes.detail.accounts.creating') : submitLabel }}
-      </Button>
-    </div>
+    <!-- Añadir otra fila, a todo lo ancho justo bajo la lista: que se vea que
+         caben varias cuentas de una vez. -->
+    <Button
+      ref="addButtonRef"
+      variant="outline"
+      size="md"
+      full-width
+      :icon-left="PlusIcon"
+      :disabled="rows.length >= STUDENT_LIST_MAX"
+      @click="addRow"
+    >
+      {{ t('teacher.classes.detail.accounts.row_add') }}
+    </Button>
     <p v-if="rows.length >= STUDENT_LIST_MAX" class="text-sm text-navy-700/70">
       {{ t('teacher.classes.detail.accounts.max_rows', { max: STUDENT_LIST_MAX }) }}
     </p>
+
+    <!-- En móvil, la acción principal ocupa todo el ancho como la de añadir. -->
+    <div class="flex justify-end">
+      <Button
+        type="submit"
+        variant="primary"
+        size="md"
+        class="w-full sm:w-auto"
+        :loading="submitting"
+      >
+        {{ submitting ? t('teacher.classes.detail.accounts.creating') : submitLabel }}
+      </Button>
+    </div>
   </form>
 </template>
 

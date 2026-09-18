@@ -9,6 +9,8 @@
  * o con coma.
  */
 
+import { toCsv } from '~/utils/csv'
+
 export interface StudentListRow {
   name: string
   username?: string
@@ -96,19 +98,13 @@ export function parseStudentList(
   }))
 }
 
-/** Un campo de CSV, entre comillas si hace falta. */
-function csvField(value: string): string {
-  return /[";\n]/.test(value) ? `"${value.replace(/"/g, '""')}"` : value
-}
-
 /**
- * Plantilla CSV con cabecera y ejemplos, separada por punto y coma. Empieza por
- * la marca de orden de bytes para que las hojas de cálculo lean bien las tildes.
+ * Plantilla CSV con cabecera y ejemplos, separada por punto y coma y lista para
+ * abrirse en una hoja de cálculo.
  */
 export function studentListTemplate(
   header: [string, string],
   examples: [string, string][]
 ): string {
-  const lines = [header, ...examples].map(fields => fields.map(csvField).join(';'))
-  return `\uFEFF${lines.join('\r\n')}\r\n`
+  return toCsv([header, ...examples])
 }

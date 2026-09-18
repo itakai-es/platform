@@ -26,16 +26,31 @@
       <dd class="font-mono font-bold tracking-widest">{{ classCode }}</dd>
     </dl>
 
-    <p class="mt-3 text-xs font-medium">
-      {{ t('teacher.classes.detail.credentials.card_first_login') }}
-    </p>
+    <footer class="mt-3 flex items-end justify-between gap-3">
+      <p class="text-xs font-medium">
+        {{ t('teacher.classes.detail.credentials.card_first_login') }}
+      </p>
+      <Button
+        class="shrink-0 print:hidden"
+        variant="outline"
+        size="sm"
+        :icon-left="ClipboardDocumentIcon"
+        :aria-label="t('teacher.classes.detail.credentials.copy_label', { name })"
+        @click="emit('copy')"
+      >
+        {{ t('teacher.classes.detail.credentials.copy') }}
+      </Button>
+    </footer>
   </article>
 </template>
 
 <script setup lang="ts">
+import { ClipboardDocumentIcon } from '@heroicons/vue/24/outline'
+
 /**
  * Una tarjeta de la hoja de credenciales: lo que el alumno necesita para entrar
  * por primera vez. El texto va en el idioma de la interfaz de quien la imprime.
+ * «Copiar» solo avisa: qué se copia y cómo lo decide la hoja.
  */
 defineProps<{
   name: string
@@ -45,6 +60,8 @@ defineProps<{
   classCode: string
   loginUrl: string
 }>()
+
+const emit = defineEmits<{ copy: [] }>()
 
 const { t } = useI18n()
 </script>

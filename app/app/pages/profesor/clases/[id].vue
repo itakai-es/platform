@@ -171,26 +171,43 @@ const tabs = computed(() => {
     { id: 'resumen', label: t('teacher.classes.detail.tabs.summary'), icon: Squares2X2IconSolid },
     { id: 'historia', label: t('teacher.classes.detail.tabs.narrative'), icon: BookOpenIconSolid },
     { id: 'guia', label: t('teacher.classes.detail.tabs.guide'), icon: SparklesIconSolid },
-    { id: 'misiones', label: t('teacher.classes.detail.tabs.missions'), icon: RocketLaunchIconSolid },
+    {
+      id: 'misiones',
+      label: t('teacher.classes.detail.tabs.missions'),
+      icon: RocketLaunchIconSolid,
+    },
     { id: 'alumnos', label: t('teacher.classes.detail.tabs.students'), icon: UsersIconSolid },
   ]
   // El ranking (podio) vive ahora como sub-vista dentro de "Alumnos".
   if (s.shop)
-    list.push({ id: 'tienda', label: t('teacher.classes.detail.tabs.tienda'), icon: ShoppingBagIconSolid })
+    list.push({
+      id: 'tienda',
+      label: t('teacher.classes.detail.tabs.tienda'),
+      icon: ShoppingBagIconSolid,
+    })
   if (s.behaviors)
     list.push({
       id: 'comportamientos',
       label: t('teacher.classes.detail.tabs.behaviors'),
       icon: HandRaisedIconSolid,
     })
-  list.push({ id: 'ajustes', label: t('teacher.classes.detail.tabs.settings'), icon: Cog6ToothIconSolid })
+  list.push({
+    id: 'ajustes',
+    label: t('teacher.classes.detail.tabs.settings'),
+    icon: Cog6ToothIconSolid,
+  })
   return list
 })
+
+// Páginas de la clase que no son una pestaña, con la pestaña de la que dependen:
+// la hoja de credenciales se abre desde Alumnos y la marca.
+const TAB_OF_PAGE: Record<string, string> = { credenciales: 'alumnos' }
 
 // Pestaña activa derivada del segmento siguiente al :id.
 const activeTab = computed(() => {
   const segs = route.path.split('/').filter(Boolean)
-  return segs[3] || 'resumen'
+  const page = segs[3] || 'resumen'
+  return TAB_OF_PAGE[page] ?? page
 })
 
 function tabHref(tabId: string) {
@@ -198,12 +215,8 @@ function tabHref(tabId: string) {
   return tabId === 'resumen' ? base : `${base}/${tabId}`
 }
 
-// Páginas de la clase que no son una pestaña (la hoja de credenciales).
-const PAGES_WITHOUT_TAB = new Set(['credenciales'])
-
 // Si la pestaña activa se desactiva en Ajustes (p. ej. Tienda off), volver a Resumen.
 watch(tabs, list => {
-  if (PAGES_WITHOUT_TAB.has(activeTab.value)) return
   if (!list.some(tab => tab.id === activeTab.value)) {
     navigateTo(tabHref('resumen'))
   }

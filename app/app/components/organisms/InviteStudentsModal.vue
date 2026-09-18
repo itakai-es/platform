@@ -46,12 +46,28 @@
         v-bind="panelAttrs('accounts')"
         class="space-y-4"
       >
+        <p class="text-sm font-medium text-navy-700">
+          {{ t('teacher.classes.detail.accounts.lead', { max: STUDENT_LIST_MAX }) }}
+        </p>
         <InfoNote>{{ t('teacher.classes.detail.accounts.intro') }}</InfoNote>
+        <!-- Las dos formas, con icono y una línea que dice qué hace cada una -->
         <OptionPillGroup
           v-model="mode"
           :options="modeOptions"
+          fluid
+          min-item-width="9rem"
           :aria-label="t('teacher.classes.detail.accounts.mode_label')"
-        />
+        >
+          <template #option="{ option, selected }">
+            <span class="flex flex-col items-center gap-1 py-1">
+              <component :is="MODE_ICONS[option.value]" class="h-6 w-6" aria-hidden="true" />
+              <span class="text-base font-semibold">{{ option.label }}</span>
+              <span class="text-xs" :class="selected ? 'text-white/80' : 'text-navy-700/70'">
+                {{ modeHints[option.value] }}
+              </span>
+            </span>
+          </template>
+        </OptionPillGroup>
         <ManagedAccountsRowsForm
           v-show="mode === 'rows'"
           :class-id="classId"
@@ -68,8 +84,14 @@
 </template>
 
 <script setup lang="ts">
-import { ClipboardDocumentIcon } from '@heroicons/vue/24/outline'
+import {
+  ClipboardDocumentIcon,
+  ClipboardDocumentListIcon,
+  PencilSquareIcon,
+} from '@heroicons/vue/24/outline'
 import type { ManagedCredentials } from '~/types/auth.types'
+import { copyText } from '~/utils/clipboard'
+import { STUDENT_LIST_MAX } from '~/utils/student-list'
 import { tabElementId, tabPanelId } from '~/utils/tabs'
 
 /**
@@ -128,6 +150,11 @@ const modeOptions = computed(() => [
   { value: 'rows' as const, label: t('teacher.classes.detail.accounts.mode_rows') },
   { value: 'import' as const, label: t('teacher.classes.detail.accounts.mode_import') },
 ])
+const MODE_ICONS = { rows: PencilSquareIcon, import: ClipboardDocumentListIcon }
+const modeHints = computed<Record<Mode, string>>(() => ({
+  rows: t('teacher.classes.detail.accounts.mode_rows_hint'),
+  import: t('teacher.classes.detail.accounts.mode_import_hint'),
+}))
 
 // Cada vez que se abre, empieza por el código.
 watch(
@@ -150,20 +177,7 @@ async function onCreated(list: ManagedCredentials[]) {
 
 const handleCopyCode = async () => {
   try {
-    // Try modern clipboard API first
-    if (navigator.clipboard?.writeText) {
-      await navigator.clipboard.writeText(props.invitationCode)
-    } else {
-      // Fallback for non-HTTPS contexts
-      const textArea = document.createElement('textarea')
-      textArea.value = props.invitationCode
-      textArea.style.position = 'fixed'
-      textArea.style.opacity = '0'
-      document.body.appendChild(textArea)
-      textArea.select()
-      document.execCommand('copy')
-      document.body.removeChild(textArea)
-    }
+    await copyText(props.invitationCode)
     toast.success(t('common.invite_students_modal.code_copied'))
     emit('codeCopied')
   } catch {
