@@ -65,11 +65,7 @@
       "download_not_found": "No s'ha trobat el fitxer per descarregar",
       "download_error": "No s'ha pogut descarregar el fitxer",
       "download_no_access": "No tens accés a aquest fitxer",
-      "popup_blocked": "Permet les finestres emergents per obrir el fitxer",
-      "join_request_accepted": "{name} ha estat acceptat a la classe",
-      "join_request_rejected": "Sol·licitud rebutjada",
-      "join_request_accept_error": "Error en acceptar la sol·licitud",
-      "join_request_reject_error": "Error en rebutjar la sol·licitud"
+      "popup_blocked": "Permet les finestres emergents per obrir el fitxer"
     },
     "notifications": {
       "title": "Avisos",
@@ -213,7 +209,10 @@
       "description": "Comparteix aquest codi amb els teus estudiants perquè s'uneixin a la classe:",
       "copy_code": "Copiar Codi",
       "code_copied": "Codi copiat al porta-retalls",
-      "copy_error": "Error en copiar el codi"
+      "copy_error": "Error en copiar el codi",
+      "tabs_label": "Maneres de convidar",
+      "tab_code": "Codi de classe",
+      "tab_accounts": "Crear comptes"
     },
     "under_development": {
       "back_to_dashboard": "Tornar al Dashboard"

@@ -90,3 +90,54 @@ export interface Activity {
   description: string
   timestamp: Date
 }
+
+// ==================== Alumnado de una clase ====================
+
+/** Tipo de cuenta: `self` se registró por su cuenta; `managed` la creó el profesorado, sin correo. */
+export type AccountType = 'self' | 'managed'
+
+/**
+ * Lo que hace falta de un alumno para ofrecer las acciones sobre él en una
+ * clase. `canResetPassword` lo decide la API: solo quien administra la clase
+ * donde se creó la cuenta restablece su contraseña.
+ */
+export interface ManageableStudent {
+  id: string
+  name: string
+  /** Alias en la clase; vacío si no tiene. */
+  nickname?: string | null
+  accountType: AccountType
+  canResetPassword: boolean
+  /** La clase donde se está actuando es la de origen de la cuenta. */
+  isHomeClass?: boolean
+}
+
+/** Una fila para dar de alta: el nombre y, si se quiere elegir, el usuario. */
+export interface ManagedRowInput {
+  name: string
+  username?: string
+}
+
+/**
+ * Estado de una fila tras revisarla. `ok` y `username_taken` se pueden crear
+ * (la segunda con otro usuario); las demás hay que corregirlas o quitarlas.
+ */
+export type ManagedRowStatus =
+  | 'ok'
+  | 'username_taken'
+  | 'duplicate'
+  | 'empty_name'
+  | 'invalid_name'
+  | 'invalid_username'
+
+/** Revisión de una fila, tal cual la devuelve la API. */
+export interface ManagedRowReview {
+  /** Posición en la lista enviada, desde 0. */
+  index: number
+  name: string
+  /** Usuario con el que nacería la cuenta; vacío si la fila no se puede crear. */
+  username: string
+  /** El usuario escrito, si no es el que se va a usar. */
+  requestedUsername?: string
+  status: ManagedRowStatus
+}

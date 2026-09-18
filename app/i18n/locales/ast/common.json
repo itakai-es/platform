@@ -65,11 +65,7 @@
       "download_not_found": "Nun s'atopó'l ficheru pa baxalu",
       "download_error": "Nun se pudo baxar el ficheru",
       "download_no_access": "Nun tienes accesu a esti ficheru",
-      "popup_blocked": "Permiti les ventanes emerxentes p'abrir el ficheru",
-      "join_request_accepted": "{name} foi aceutáu na clase",
-      "join_request_rejected": "Solicitú refugada",
-      "join_request_accept_error": "Fallu al aceutar la solicitú",
-      "join_request_reject_error": "Fallu al refugar la solicitú"
+      "popup_blocked": "Permiti les ventanes emerxentes p'abrir el ficheru"
     },
     "notifications": {
       "title": "Avisos",
@@ -213,7 +209,10 @@
       "description": "Comparti esti códigu colos tos alumnos pa que se xunan a la clase:",
       "copy_code": "Copiar códigu",
       "code_copied": "Códigu copiáu al cartafueyu",
-      "copy_error": "Fallu al copiar el códigu"
+      "copy_error": "Fallu al copiar el códigu",
+      "tabs_label": "Formes de convidar",
+      "tab_code": "Códigu de clase",
+      "tab_accounts": "Crear cuentes"
     },
     "under_development": {
       "back_to_dashboard": "Volver al aniciu"

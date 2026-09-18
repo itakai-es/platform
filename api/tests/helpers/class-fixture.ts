@@ -28,7 +28,6 @@ export interface ClassFixture {
   newEnigma: (missionId: string) => Promise<string>
   newDocument: (missionId: string) => Promise<string>
   newSubmission: (enigmaId: string) => Promise<string>
-  newJoinRequest: () => Promise<string>
   newBadge: (actor?: Actor) => Promise<string>
   cleanup: () => Promise<void>
 }
@@ -143,12 +142,6 @@ export async function createClassFixture(app: FastifyInstance): Promise<ClassFix
     newSubmission: async enigmaId =>
       (await prisma.enigmaSubmission.create({ data: { enigmaId, studentId: users.student.id } }))
         .id,
-    newJoinRequest: async () => {
-      await prisma.joinRequest.deleteMany({ where: { classId, studentId: users.outsider.id } })
-      await prisma.classEnrollment.deleteMany({ where: { classId, studentId: users.outsider.id } })
-      return (await prisma.joinRequest.create({ data: { classId, studentId: users.outsider.id } }))
-        .id
-    },
     newBadge: async (actor = 'owner') =>
       (await prisma.badge.create({ data: { name: 'Insignia', teacherId: users[actor].id } })).id,
     cleanup: async () => {

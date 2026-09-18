@@ -192,6 +192,59 @@ const TEACHER_CLASS: RouteCase[] = [
     student: 403,
   },
   {
+    route: 'POST /teacher/classes/:classId/students/import?dryRun=true',
+    request: f => ({
+      method: 'POST',
+      url: `${c(f)}/students/import?dryRun=true`,
+      payload: { students: [{ name: 'Lista revisada' }] },
+    }),
+    owner: 200,
+    other: 404,
+    student: 403,
+  },
+  {
+    route: 'POST /teacher/classes/:classId/students/import',
+    request: f => ({
+      method: 'POST',
+      url: `${c(f)}/students/import`,
+      payload: { students: [{ name: 'Lista creada' }] },
+    }),
+    owner: 201,
+    other: 404,
+    student: 403,
+  },
+  {
+    route: 'PATCH /teacher/classes/:classId/students/:studentId',
+    request: f => ({
+      method: 'PATCH',
+      url: `${c(f)}/students/${f.users.student.id}`,
+      payload: { nickname: 'Nuevo alias' },
+    }),
+    owner: 200,
+    other: 404,
+    student: 403,
+  },
+  {
+    route: 'DELETE /teacher/classes/:classId/students/:studentId',
+    request: async f => {
+      // Un alumno propio para esta ruta: el de la fixture lo usan las demás.
+      const student = await prisma.user.create({
+        data: {
+          username: `quitar.${Date.now().toString(36)}`,
+          passwordHash: 'x',
+          name: 'Para quitar',
+          role: 'student',
+          createdById: f.users.owner.id,
+        },
+      })
+      await prisma.classEnrollment.create({ data: { classId: f.classId, studentId: student.id } })
+      return { method: 'DELETE', url: `${c(f)}/students/${student.id}` }
+    },
+    owner: 200,
+    other: 404,
+    student: 403,
+  },
+  {
     route: 'GET /teacher/classes/:classId/activities',
     request: f => ({ method: 'GET', url: `${c(f)}/activities` }),
     owner: 200,
@@ -230,58 +283,6 @@ const TEACHER_CLASS: RouteCase[] = [
   {
     route: 'GET /teacher/students/:studentId',
     request: f => ({ method: 'GET', url: `/teacher/students/${f.users.student.id}` }),
-    owner: 200,
-    other: 404,
-    student: 403,
-  },
-  {
-    route: 'GET /teacher/classes/:classId/requests',
-    request: f => ({ method: 'GET', url: `${c(f)}/requests` }),
-    owner: 200,
-    other: 404,
-    student: 403,
-  },
-  {
-    route: 'PUT /teacher/classes/:classId/requests/:requestId/accept',
-    request: async f => ({
-      method: 'PUT',
-      url: `${c(f)}/requests/${await f.newJoinRequest()}/accept`,
-    }),
-    owner: 200,
-    other: 404,
-    student: 403,
-  },
-  {
-    route: 'PUT /teacher/classes/:classId/requests/:requestId/reject',
-    request: async f => ({
-      method: 'PUT',
-      url: `${c(f)}/requests/${await f.newJoinRequest()}/reject`,
-      payload: {},
-    }),
-    owner: 200,
-    other: 404,
-    student: 403,
-  },
-  {
-    route: 'POST /teacher/classes/:classId/invitations',
-    request: async f => {
-      await prisma.classEnrollment.deleteMany({
-        where: { classId: f.classId, studentId: f.users.outsider.id },
-      })
-      await prisma.invitation.deleteMany({ where: { classId: f.classId } })
-      return {
-        method: 'POST',
-        url: `${c(f)}/invitations`,
-        payload: { studentId: f.users.outsider.id },
-      }
-    },
-    owner: 201,
-    other: 400,
-    student: 403,
-  },
-  {
-    route: 'GET /teacher/classes/:classId/invitations',
-    request: f => ({ method: 'GET', url: `${c(f)}/invitations` }),
     owner: 200,
     other: 404,
     student: 403,
@@ -783,10 +784,6 @@ describeWithDatabase('matriz de acceso de las rutas de profesor', () => {
     })
     expect(await get('/teacher/activities', 'owner')).toContain(activity.id)
     expect(await get('/teacher/activities', 'other')).not.toContain(activity.id)
-
-    await f.newJoinRequest()
-    expect(JSON.parse(await get('/teacher/enrollment-counts', 'owner')).pendingRequests).toBe(1)
-    expect(JSON.parse(await get('/teacher/enrollment-counts', 'other')).pendingRequests).toBe(0)
   })
 
   // ---- Plantillas: una clase ajena solo se ve y se importa si está publicada ----

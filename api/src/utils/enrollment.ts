@@ -3,10 +3,10 @@ import type { Prisma } from '../generated/prisma/client.js'
 
 /**
  * Matricular a un alumno en una clase. Pasa por aquí todo lo que da de alta una
- * matrícula —el código de clase, una invitación aceptada, una solicitud aceptada
- * y el alta hecha por el profesorado—, porque las cuatro tienen que dejar lo
- * mismo: la matrícula con su alias y su avatar de clase, y la entrada en el
- * historial del alumno con ese mismo alias y avatar.
+ * matrícula —el código de clase, el alta hecha por el profesorado y el cambio de
+ * clase de origen desde el panel—, porque todas tienen que dejar lo mismo: la
+ * matrícula con su alias y su avatar de clase, y la entrada en el historial del
+ * alumno con ese mismo alias y avatar.
  */
 
 type Db = Prisma.TransactionClient

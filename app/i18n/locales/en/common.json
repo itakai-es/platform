@@ -65,11 +65,7 @@
       "download_not_found": "File not found for download",
       "download_error": "Could not download the file",
       "download_no_access": "You don't have access to this file",
-      "popup_blocked": "Allow pop-ups to open the file",
-      "join_request_accepted": "{name} has been accepted into the class",
-      "join_request_rejected": "Request rejected",
-      "join_request_accept_error": "Error accepting the request",
-      "join_request_reject_error": "Error rejecting the request"
+      "popup_blocked": "Allow pop-ups to open the file"
     },
     "notifications": {
       "title": "Notifications",
@@ -213,7 +209,10 @@
       "description": "Share this code with your students so they can join the class:",
       "copy_code": "Copy Code",
       "code_copied": "Code copied to clipboard",
-      "copy_error": "Error copying the code"
+      "copy_error": "Error copying the code",
+      "tabs_label": "Ways to invite",
+      "tab_code": "Class code",
+      "tab_accounts": "Create accounts"
     },
     "under_development": {
       "back_to_dashboard": "Back to Dashboard"

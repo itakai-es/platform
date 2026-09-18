@@ -65,11 +65,7 @@
       "download_not_found": "No se encontró el archivo para descargar",
       "download_error": "No se pudo descargar el archivo",
       "download_no_access": "No tienes acceso a este archivo",
-      "popup_blocked": "Permite las ventanas emergentes para abrir el archivo",
-      "join_request_accepted": "{name} ha sido aceptado en la clase",
-      "join_request_rejected": "Solicitud rechazada",
-      "join_request_accept_error": "Error al aceptar la solicitud",
-      "join_request_reject_error": "Error al rechazar la solicitud"
+      "popup_blocked": "Permite las ventanas emergentes para abrir el archivo"
     },
     "notifications": {
       "title": "Avisos",
@@ -213,7 +209,10 @@
       "description": "Comparte este código con tus alumnos para que se unan a la clase:",
       "copy_code": "Copiar Código",
       "code_copied": "Código copiado al portapapeles",
-      "copy_error": "Error al copiar el código"
+      "copy_error": "Error al copiar el código",
+      "tabs_label": "Formas de invitar",
+      "tab_code": "Código de clase",
+      "tab_accounts": "Crear cuentas"
     },
     "under_development": {
       "back_to_dashboard": "Volver al Inicio"

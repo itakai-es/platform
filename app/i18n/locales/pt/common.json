@@ -65,11 +65,7 @@
       "download_not_found": "O ficheiro para descarregar não foi encontrado",
       "download_error": "Não foi possível descarregar o ficheiro",
       "download_no_access": "Não tens acesso a este ficheiro",
-      "popup_blocked": "Permite as janelas pop-up para abrir o ficheiro",
-      "join_request_accepted": "{name} foi aceite na turma",
-      "join_request_rejected": "Pedido recusado",
-      "join_request_accept_error": "Erro ao aceitar o pedido",
-      "join_request_reject_error": "Erro ao recusar o pedido"
+      "popup_blocked": "Permite as janelas pop-up para abrir o ficheiro"
     },
     "notifications": {
       "title": "Avisos",
@@ -213,7 +209,10 @@
       "description": "Partilha este código com os teus alunos para que se juntem à turma:",
       "copy_code": "Copiar código",
       "code_copied": "Código copiado para a área de transferência",
-      "copy_error": "Erro ao copiar o código"
+      "copy_error": "Erro ao copiar o código",
+      "tabs_label": "Formas de convidar",
+      "tab_code": "Código da turma",
+      "tab_accounts": "Criar contas"
     },
     "under_development": {
       "back_to_dashboard": "Voltar ao início"

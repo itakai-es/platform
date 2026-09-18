@@ -97,6 +97,7 @@ describe('tabla de acciones', () => {
       'student.view': 'read',
       'student.avatar': 'edit',
       'student.manage': 'admin',
+      'student.nickname': 'admin',
       'teachers.view': 'read',
       'teachers.manage': 'admin',
     })

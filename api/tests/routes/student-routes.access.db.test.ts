@@ -144,15 +144,7 @@ describeWithDatabase('acceso a las rutas de alumno', () => {
     expect(await status('POST', '/students/classes/join', 'other', { code: invitationCode })).toBe(
       403
     )
-    expect(
-      await status('POST', '/students/classes/request', 'other', { code: invitationCode })
-    ).toBe(403)
     expect(await enrollments('other')).toBe(0)
-    expect(
-      await prisma.joinRequest.count({
-        where: { classId: f.classId, studentId: f.users.other.id },
-      })
-    ).toBe(0)
 
     try {
       expect(
@@ -163,25 +155,6 @@ describeWithDatabase('acceso a las rutas de alumno', () => {
     } finally {
       await unenroll('outsider', f.classId)
     }
-  })
-
-  it('una invitación pendiente tampoco matricula a quien no es alumno', async () => {
-    const invitation = await prisma.invitation.create({
-      data: {
-        classId: f.classId,
-        teacherId: f.users.owner.id,
-        studentId: f.users.other.id,
-        expiresAt: new Date(Date.now() + 60_000),
-      },
-    })
-
-    expect(await status('PUT', `/students/invitations/${invitation.id}/accept`, 'other')).toBe(403)
-    expect(
-      await prisma.classEnrollment.count({
-        where: { classId: f.classId, studentId: f.users.other.id },
-      })
-    ).toBe(0)
-    await prisma.invitation.delete({ where: { id: invitation.id } })
   })
 
   it('una matrícula corriente de quien no es alumno no abre la clase ni sale en sus listados', async () => {

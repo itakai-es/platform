@@ -21,6 +21,26 @@ describe('rutas retiradas', () => {
     expect(read('students/students.service.ts')).not.toMatch(/getGlobalLeaderboard/)
   })
 
+  it('no existen las solicitudes para unirse ni las invitaciones personales', () => {
+    // Con el código de clase se entra directamente: nadie tiene que aceptar nada.
+    const teacherRoutes = read('teachers/teachers.routes.ts')
+    expect(teacherRoutes).not.toMatch(/\/requests/)
+    expect(teacherRoutes).not.toMatch(/['/]invitations/)
+    expect(teacherRoutes).not.toMatch(/enrollment-counts/)
+
+    const studentRoutes = read('students/students.routes.ts')
+    expect(studentRoutes).not.toMatch(/classes\/request/)
+    expect(studentRoutes).not.toMatch(/join-requests/)
+    expect(studentRoutes).not.toMatch(/['/]invitations/)
+    expect(studentRoutes).not.toMatch(/enrollment-counts/)
+
+    for (const service of ['teachers/teachers.service.ts', 'students/students.service.ts']) {
+      const code = read(service)
+      expect(code).not.toMatch(/prisma\.(joinRequest|invitation)\b/)
+      expect(code).not.toMatch(/JoinRequest|Invitation\(/)
+    }
+  })
+
   it('no existe la búsqueda de alumnos de toda la plataforma', () => {
     expect(read('teachers/teachers.routes.ts')).not.toMatch(/students\/search/)
     expect(read('teachers/teachers.service.ts')).not.toMatch(/searchStudents/)

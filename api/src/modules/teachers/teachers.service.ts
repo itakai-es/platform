@@ -16,7 +16,6 @@ import {
 } from '../../utils/class-settings.js'
 import { resolveLevelConfig, tierForLevel, type LevelConfig } from '../../utils/level-config.js'
 import { saveUpload } from '../storage/storage.service.js'
-import { notify } from '../notifications/notifications.service.js'
 import { createClassWithOwner } from '../../utils/class-owner.js'
 import {
   assertMissionAccess,
@@ -24,7 +23,7 @@ import {
   summarizeClassTeachers,
 } from '../../utils/class-access.js'
 import { accountHandle } from '../../utils/identity.js'
-import { enrollStudentNow } from '../../utils/enrollment.js'
+import { manageableHomeClasses } from './class-students.service.js'
 
 const BADGES_DIR = join(process.cwd(), 'uploads', 'badges')
 const COVERS_DIR = join(process.cwd(), 'uploads', 'covers')
@@ -782,14 +781,28 @@ export class TeachersService {
     // Config de niveles de la clase → título y color del tramo de cada alumno.
     const levelCfg = resolveLevelConfig(cls.levelConfig)
 
+    // Cuentas sin correo cuya contraseña puede restablecer quien pregunta: las
+    // que nacieron en una clase donde tiene administración.
+    const resettable = await manageableHomeClasses(
+      userId,
+      cls.enrollments.map(e => e.student.homeClassId)
+    )
+
     const students = cls.enrollments
       .map((e) => {
         const tier = tierForLevel(e.level, levelCfg)
+        const managed = e.student.accountType === 'managed'
         return {
           id: e.student.id,
           // Nombre real del alumno + su alias de clase (el "@").
           name: e.student.name || 'Estudiante',
           handle: e.nickname || accountHandle(e.student),
+          nickname: e.nickname,
+          accountType: e.student.accountType,
+          canResetPassword:
+            managed && !!e.student.homeClassId && resettable.has(e.student.homeClassId),
+          // Quitarlo de su clase de origen deja la cuenta sin nadie que la gestione.
+          isHomeClass: managed && e.student.homeClassId === classId,
           avatar: e.avatarUrl || '/app/avatars/atenea.svg',
           level: e.level,
           levelTitle: tier.title,
@@ -1042,10 +1055,11 @@ export class TeachersService {
       where: { teacherId: userId },
       include: {
         enrollments: {
-          where: { studentId },
+          where: { studentId, isPreview: false },
           include: { student: true },
         },
         missions: { include: { enigmas: true, badges: { select: { id: true } } } },
+        teachers: classTeachersInclude(),
       },
     })
 
@@ -1119,12 +1133,22 @@ export class TeachersService {
     // Calculate streak (placeholder - would need login history for real streak)
     const streak = 0
 
+    // Solo quien administra la clase de origen restablece la contraseña de una
+    // cuenta sin correo; la de una cuenta con correo la recupera su dueño.
+    const canResetPassword =
+      student.accountType === 'managed' &&
+      !!student.homeClassId &&
+      (await manageableHomeClasses(userId, [student.homeClassId])).has(student.homeClassId)
+
     return {
       student: {
         id: student.id,
         name: student.name,
         email: student.email,
         username: student.username,
+        accountType: student.accountType,
+        homeClassId: student.homeClassId,
+        canResetPassword,
         // Per-class data
         classes: enrolledClasses.map((c) => {
           const enrollment = c.enrollments[0]
@@ -1153,6 +1177,9 @@ export class TeachersService {
           return {
             id: c.id,
             name: c.name,
+            archived: c.archived,
+            // Qué puede hacer quien pregunta con el alumno en esta clase.
+            myAccess: summarizeClassTeachers(c.teachers, userId).myAccess,
             nickname: enrollment.nickname || student.name,
             avatar: enrollment.avatarUrl || '/app/avatars/avatar-1.svg',
             level: enrollment.level || 1,
@@ -1219,210 +1246,6 @@ export class TeachersService {
         }),
       },
     }
-  }
-
-  // ==================== ENROLLMENTS ====================
-
-  async getPendingRequests(userId: string, classId: string) {
-    const cls = await prisma.class.findFirst({
-      where: { id: classId, teacherId: userId },
-    })
-
-    if (!cls) throw new Error('Clase no encontrada')
-
-    const requests = await prisma.joinRequest.findMany({
-      where: { classId, status: 'pending' },
-      include: { student: true },
-      orderBy: { createdAt: 'desc' },
-    })
-
-    return {
-      requests: requests.map((r) => ({
-        id: r.id,
-        studentId: r.studentId,
-        studentName: r.student.name,
-        studentAvatar: null, // Avatar assigned on enrollment
-        // El correo puede no existir: una cuenta sin correo se nombra por su usuario.
-        studentEmail: r.student.email,
-        studentUsername: r.student.username,
-        message: r.message,
-        createdAt: r.createdAt,
-      })),
-      total: requests.length,
-    }
-  }
-
-  async acceptJoinRequest(userId: string, classId: string, requestId: string) {
-    const cls = await prisma.class.findFirst({
-      where: { id: classId, teacherId: userId },
-    })
-
-    if (!cls) throw new Error('Clase no encontrada')
-    if (cls.archived) throw new Error('La clase estÃ¡ archivada y no admite nuevos alumnos')
-
-    const request = await prisma.joinRequest.findFirst({
-      where: { id: requestId, classId, status: 'pending' },
-    })
-
-    if (!request) throw new Error('Solicitud no encontrada')
-
-    // Solo se matricula a alumnos: el profesorado mira la clase con la vista previa.
-    const requester = await prisma.user.findUnique({
-      where: { id: request.studentId },
-      select: { role: true },
-    })
-    if (requester?.role !== 'student') throw new Error('Solo el alumnado puede unirse a una clase')
-
-    // Update request status
-    await prisma.joinRequest.update({
-      where: { id: requestId },
-      data: { status: 'accepted' },
-    })
-
-    await enrollStudentNow({ studentId: request.studentId, classId, className: cls.name })
-
-    // Aviso al alumno (interno siempre, y por correo si tiene y lo permite).
-    await notify({
-      userId: request.studentId,
-      type: 'join_accepted',
-      copy: 'join_accepted',
-      params: { class: cls.name },
-      actionUrl: `/alumno/clases/${classId}`,
-      metadata: { classId },
-      alsoByEmail: true,
-      emailAction: 'go_to_class',
-    })
-
-    return { success: true, message: 'Solicitud aceptada' }
-  }
-
-  async rejectJoinRequest(userId: string, classId: string, requestId: string, reason?: string) {
-    const cls = await prisma.class.findFirst({
-      where: { id: classId, teacherId: userId },
-    })
-
-    if (!cls) throw new Error('Clase no encontrada')
-
-    const request = await prisma.joinRequest.findFirst({
-      where: { id: requestId, classId, status: 'pending' },
-    })
-
-    if (!request) throw new Error('Solicitud no encontrada')
-
-    await prisma.joinRequest.update({
-      where: { id: requestId },
-      data: { status: 'rejected', rejectionReason: reason },
-    })
-
-    await notify({
-      userId: request.studentId,
-      type: 'join_rejected',
-      copy: 'join_rejected',
-      params: { class: cls.name },
-      // El motivo lo escribe el profesor con sus palabras: no se traduce.
-      messageOverride: reason,
-      metadata: { classId },
-      alsoByEmail: true,
-    })
-
-    return { success: true, message: 'Solicitud rechazada' }
-  }
-
-  async sendInvitation(userId: string, classId: string, studentId: string, message?: string) {
-    const cls = await prisma.class.findFirst({
-      where: { id: classId, teacherId: userId },
-    })
-
-    if (!cls) throw new Error('Clase no encontrada')
-    if (cls.archived) throw new Error('La clase estÃ¡ archivada y no admite nuevas invitaciones')
-
-    // Check if already enrolled
-    const existingEnrollment = await prisma.classEnrollment.findUnique({
-      where: { studentId_classId: { studentId, classId } },
-    })
-
-    if (existingEnrollment) throw new Error('El estudiante ya está inscrito en esta clase')
-
-    // Check for existing pending invitation
-    const existingInvitation = await prisma.invitation.findFirst({
-      where: { studentId, classId, status: 'pending' },
-    })
-
-    if (existingInvitation) throw new Error('Ya existe una invitación pendiente para este estudiante')
-
-    const invitation = await prisma.invitation.create({
-      data: {
-        classId,
-        teacherId: userId,
-        studentId,
-        message,
-        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
-      },
-    })
-
-    // TODO(fase 3, punto 9): cuando exista la pantalla de invitaciones del
-    // alumno, este enlace debería apuntar a ella; hoy no hay ninguna, así que
-    // lleva al listado de clases, que es desde donde se entra a la clase nueva.
-    await notify({
-      userId: studentId,
-      type: 'class_invitation',
-      copy: 'class_invitation',
-      params: { class: cls.name },
-      actionUrl: '/alumno/clases',
-      metadata: { classId, invitationId: invitation.id },
-      alsoByEmail: true,
-      emailAction: 'my_classes',
-    })
-
-    return {
-      invitation: { id: invitation.id, status: invitation.status },
-      success: true,
-      message: 'Invitación enviada correctamente',
-    }
-  }
-
-  async getSentInvitations(userId: string, classId: string) {
-    const cls = await prisma.class.findFirst({
-      where: { id: classId, teacherId: userId },
-    })
-
-    if (!cls) throw new Error('Clase no encontrada')
-
-    const invitations = await prisma.invitation.findMany({
-      where: { classId },
-      include: { student: true },
-      orderBy: { createdAt: 'desc' },
-    })
-
-    return {
-      invitations: invitations.map((i) => ({
-        id: i.id,
-        studentId: i.studentId,
-        studentName: i.student.name,
-        // El correo puede no existir: una cuenta sin correo se nombra por su usuario.
-        studentEmail: i.student.email,
-        studentUsername: i.student.username,
-        status: i.status,
-        message: i.message,
-        expiresAt: i.expiresAt,
-        createdAt: i.createdAt,
-      })),
-      total: invitations.length,
-    }
-  }
-
-  async getTotalPendingRequests(userId: string) {
-    const classes = await prisma.class.findMany({
-      where: { teacherId: userId },
-    })
-
-    const classIds = classes.map((c) => c.id)
-
-    const pendingRequests = await prisma.joinRequest.count({
-      where: { classId: { in: classIds }, status: 'pending' },
-    })
-
-    return { pendingRequests }
   }
 
   // ==================== MISSIONS ====================

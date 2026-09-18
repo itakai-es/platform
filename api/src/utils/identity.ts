@@ -67,6 +67,22 @@ export function accountIdentifier(user: AccountIdentity): string {
   return user.email ?? user.username ?? ''
 }
 
+/**
+ * Nombre visible o alias tal como se guarda: en forma NFC, sin caracteres de
+ * control ni invisibles (anchura cero, marcas de dirección) y con los espacios
+ * reducidos a uno. Vacío si no queda ninguna letra ni ningún número, porque un
+ * nombre así no se ve en pantalla.
+ */
+export function cleanDisplayName(text: string): string {
+  const clean = text
+    .normalize('NFC')
+    .replace(/\s+/g, ' ')
+    .replace(/[\p{Cc}\p{Cf}]/gu, '')
+    .replace(/ +/g, ' ')
+    .trim()
+  return /[\p{L}\p{N}]/u.test(clean) ? clean : ''
+}
+
 // ---- Usuario propuesto ----
 
 /** Longitud máxima del usuario, sufijo incluido. */

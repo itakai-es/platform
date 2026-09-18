@@ -41,7 +41,12 @@
           <div class="flex-1 min-w-0">
             <h1 class="text-2xl sm:text-3xl font-bold text-white truncate">{{ student.name }}</h1>
             <!-- Un alumno sin correo se identifica por su usuario -->
-            <p class="text-white/70 text-sm sm:text-base">{{ accountIdentifier(student) }}</p>
+            <p class="text-white/70 text-sm sm:text-base">
+              {{ accountIdentifier(student) }}
+              <span v-if="student.accountType === 'managed'">
+                · {{ t('teacher.classes.detail.students.managed_badge') }}
+              </span>
+            </p>
           </div>
         </div>
       </div>
@@ -195,6 +200,16 @@
                   >
                     Nv. {{ classItem.level }}
                   </div>
+                  <!-- Acciones sobre el alumno en esta clase -->
+                  <StudentActionsMenu
+                    class="flex-shrink-0 -mr-2 -mt-1"
+                    :class-id="classItem.id"
+                    :class-name="classItem.name"
+                    :student="manageable(classItem)"
+                    :access="classItem.myAccess"
+                    @renamed="onRenamed(classItem, $event)"
+                    @removed="onRemoved"
+                  />
                 </div>
 
                 <!-- Stats Row: Missions, XP, Badges (XP solo si está activado) -->
@@ -330,13 +345,17 @@ import {
   RocketLaunchIcon,
   TrophyIcon,
 } from '@heroicons/vue/24/outline'
-import type { ClassSettings } from '~/types/class.types'
+import type { ClassAccess, ClassSettings } from '~/types/class.types'
+import type { AccountType, ManageableStudent } from '~/types/teacher.types'
 import { resolveClassSettings } from '~/utils/class-settings'
 import { accountIdentifier } from '~/utils/identity'
 
 interface StudentClass {
   id: string
   name: string
+  archived?: boolean
+  /** Acceso propio en esta clase: decide qué acciones se ofrecen. */
+  myAccess?: ClassAccess | null
   progress: number
   missionsCompleted: number
   totalMissions: number
@@ -386,6 +405,11 @@ interface StudentDetail {
   email: string | null
   /** Usuario de la cuenta, con el que entra si no tiene correo. */
   username: string | null
+  accountType: AccountType
+  /** Clase donde se creó la cuenta, si es de las que lleva el profesorado. */
+  homeClassId: string | null
+  /** Quien pregunta administra su clase de origen: puede restablecer la contraseña. */
+  canResetPassword: boolean
   classes: StudentClass[]
   recentMissions: RecentMission[]
   recentActivity: Activity[]
@@ -434,6 +458,32 @@ const fetchStudent = async () => {
   } finally {
     loading.value = false
   }
+}
+
+/** Lo que necesita el menú de acciones del alumno en una de sus clases. */
+function manageable(classItem: StudentClass): ManageableStudent {
+  const current = student.value!
+  return {
+    id: current.id,
+    name: current.name,
+    nickname: classItem.nickname,
+    accountType: current.accountType,
+    canResetPassword: current.canResetPassword,
+    isHomeClass: current.homeClassId === classItem.id,
+  }
+}
+
+function onRenamed(classItem: StudentClass, nickname: string) {
+  classItem.nickname = nickname
+}
+
+/** Sin más clases en común ya no hay ficha que ver: vuelta al listado. */
+async function onRemoved() {
+  if ((student.value?.classes.length ?? 0) <= 1) {
+    await navigateTo('/profesor/alumnos')
+    return
+  }
+  await fetchStudent()
 }
 
 // Format XP for display

@@ -25,6 +25,7 @@ const CONTEXT = {
   es: {
     shared: [
       'ITAKAI: plataforma gamificacion educativa, tematica mitologica griega.',
+      'Entrar: correo o usuario + contrasena. El profesor puede crear cuentas de alumno con usuario y sin correo; esos alumnos no pueden anadir correo y, si pierden la contrasena, se la restablece el profesor.',
       'Clase: profesor crea, codigo invitacion 6 chars; el alumno lo escribe en Unirse a clase y entra al momento, sin que nadie acepte nada (no hay solicitudes ni invitaciones personales).',
       'Mision: dentro de clase, tiene titulo/descripcion/rareza(comun|rara|epica|legendaria)/deadline/XP.',
       'Enigma: tarea dentro de mision, objetivos + XP propio.',
@@ -35,6 +36,7 @@ const CONTEXT = {
     teacher: [
       'Nav profesor: Dashboard|Mis Clases|Misiones|Estudiantes|Asistente IA.',
       'Crear clase: Mis Clases>Nueva Clase. Crear mision: dentro de clase>Misiones>Nueva Mision.',
+      'Alumnos sin correo: clase>Invitar>Crear cuentas (una a una o importando una lista pegada o un CSV, hasta 50); al terminar sale la hoja de credenciales para imprimir; las contrasenas solo se ven entonces. En clase>Alumnos, menu ⋮ de cada alumno: restablecer contrasena (solo cuentas sin correo creadas en esa clase; las de correo usan Olvidaste tu contrasena), cambiar alias y quitar de la clase (borra lo que tenia en esa clase).',
       'Formularios tienen asistente IA lateral (sugiere, no crea directo).',
       'Revisar entregas: clase>Misiones>abrir mision>Ver entregas (N) del enigma (movil: menu ⋮); en la ventana: Descargar>Valorar>% completado (25/50/75/100 o libre)>Aprobar N%. No hay seccion Entregas ni rechazo. El aviso de entrega nueva abre directamente esa ventana. El Resumen de la clase solo cuenta las pendientes.',
     ].join(' '),
@@ -59,6 +61,7 @@ const CONTEXT = {
     teacher: [
       'Teacher nav: Dashboard|My Classes|Missions|Students|AI Assistant.',
       'Create class: My Classes>New Class. Create mission: inside class>Missions>New Mission.',
+      'Students without email: class>Invite>Create accounts (one by one or importing a pasted list or a CSV, up to 50); at the end the credentials sheet opens, ready to print; passwords are only shown then. In class>Students, each student ⋮ menu: reset password (only no-email accounts created in that class; email accounts use Forgot your password), change nickname and remove from class (deletes what they had in that class).',
       'Forms have AI assistant sidebar (suggests, does not create directly).',
       'Review submissions: class>Missions>open mission>View submissions (N) on the enigma (mobile: ⋮ menu); in the window: Download>Grade>completion % (25/50/75/100 or custom)>Approve N%. There is no Submissions section and no reject. The new-submission notification opens that window directly. The class Summary only counts pending ones.',
     ].join(' '),

@@ -59,6 +59,8 @@ export const CLASS_ACTION_LEVEL = {
   'student.view': 'read',
   'student.avatar': 'edit',
   'student.manage': 'admin',
+  // El alias del alumno en la clase. Él también lo cambia, desde su lado.
+  'student.nickname': 'admin',
   'teachers.view': 'read',
   'teachers.manage': 'admin',
 } as const satisfies Record<string, ClassRequiredLevel>

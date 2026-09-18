@@ -537,6 +537,10 @@ model StudentBadge {
 
 // ==================== ENROLLMENTS ====================
 
+// Solicitudes para unirse e invitaciones personales: ninguna ruta las crea ni las
+// lee ya (con el código de clase se entra directamente). Las tablas se conservan
+// con lo que tengan, y borrar una cuenta o una clase arrastra sus filas.
+
 enum JoinRequestStatus {
   pending
   accepted
@@ -578,8 +582,8 @@ model Invitation {
   updatedAt DateTime         @updatedAt @map("updated_at")
 
   class   Class @relation(fields: [classId], references: [id], onDelete: Cascade)
-  teacher User  @relation("SentInvitations", fields: [teacherId], references: [id])
-  student User  @relation("ReceivedInvitations", fields: [studentId], references: [id])
+  teacher User  @relation("SentInvitations", fields: [teacherId], references: [id], onDelete: Cascade)
+  student User  @relation("ReceivedInvitations", fields: [studentId], references: [id], onDelete: Cascade)
 
   @@map("invitations")
 }

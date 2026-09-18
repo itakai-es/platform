@@ -1,0 +1,177 @@
+import { prisma } from '../../config/database.js'
+import type { Prisma } from '../../generated/prisma/client.js'
+import {
+  accessibleClassesWhere,
+  assertClassAccess,
+  recordClassAction,
+  type ClassUser,
+} from '../../utils/class-access.js'
+import { NotFoundError, ValidationError } from '../../utils/errors.js'
+import { cleanDisplayName } from '../../utils/identity.js'
+import { deleteUpload } from '../storage/storage.service.js'
+
+/**
+ * Lo que el profesorado hace con un alumno dentro de una clase: cambiarle el
+ * alias con el que sale en ella y quitarlo de la clase. Vale para cualquier
+ * alumno, tenga correo o no: es la matrícula lo que se toca, no la cuenta.
+ */
+
+/** Longitud del alias: la misma que admite el alumno cuando lo cambia él. */
+export const NICKNAME_MAX_LENGTH = 20
+
+/** La matrícula corriente del alumno en la clase; la de vista previa no cuenta. */
+async function studentEnrollment(classId: string, studentId: string, tx: Prisma.TransactionClient) {
+  const enrollment = await tx.classEnrollment.findUnique({
+    where: { studentId_classId: { studentId, classId } },
+    select: { id: true, isPreview: true },
+  })
+  if (!enrollment || enrollment.isPreview) {
+    throw new NotFoundError('El alumno no está en esta clase')
+  }
+  return enrollment
+}
+
+/** Cambia el alias del alumno en la clase. Las entradas antiguas de su historial se quedan como estaban. */
+export async function updateStudentNickname(
+  actor: ClassUser,
+  classId: string,
+  studentId: string,
+  nickname: string
+): Promise<{ nickname: string }> {
+  await assertClassAccess(classId, actor.id, 'student.nickname')
+
+  const clean = cleanDisplayName(nickname)
+  if (!clean || clean.length > NICKNAME_MAX_LENGTH) {
+    throw new ValidationError(
+      `El alias debe tener entre 1 y ${NICKNAME_MAX_LENGTH} caracteres`,
+      'INVALID_NICKNAME'
+    )
+  }
+
+  return prisma.$transaction(async tx => {
+    const enrollment = await studentEnrollment(classId, studentId, tx)
+    const updated = await tx.classEnrollment.update({
+      where: { id: enrollment.id },
+      data: { nickname: clean },
+      select: { nickname: true },
+    })
+    // Sin el alias en metadata: el registro no guarda cómo se llama nadie.
+    await recordClassAction(tx, {
+      classId,
+      actorId: actor.id,
+      action: 'student.nickname_changed',
+      entityType: 'enrollment',
+      entityId: enrollment.id,
+      targetUserId: studentId,
+    })
+    return { nickname: updated.nickname ?? clean }
+  })
+}
+
+/**
+ * Quita al alumno de la clase y borra lo que tenía en ella: la matrícula (con
+ * su XP, nivel, monedas, maná y vidas), el progreso y las entregas de las
+ * misiones de la clase, las insignias de esas misiones, las compras y usos de la
+ * tienda, los comportamientos, su historial en la clase, sus conversaciones con
+ * el asistente sobre la clase y los avisos que hablaban de ella o de sus
+ * entregas. Lo que tenga en otras clases no se toca, ni tampoco su cuenta.
+ *
+ * Si la clase era la de origen de una cuenta gestionada, la cuenta se queda sin
+ * clase de origen: desde aquí ya no la gestiona nadie, y queda para quien
+ * administra la plataforma, que puede darle otra.
+ *
+ * El registro de acciones de la clase se conserva: apunta al alumno por su id.
+ */
+export async function removeStudentFromClass(
+  actor: ClassUser,
+  classId: string,
+  studentId: string
+): Promise<{ removed: true }> {
+  await assertClassAccess(classId, actor.id, 'student.manage')
+
+  const files = await prisma.$transaction(async tx => {
+    const enrollment = await studentEnrollment(classId, studentId, tx)
+
+    const missionIds = (
+      await tx.mission.findMany({ where: { classId }, select: { id: true } })
+    ).map(m => m.id)
+    const enigmaIds = (
+      await tx.missionEnigma.findMany({
+        where: { missionId: { in: missionIds } },
+        select: { id: true },
+      })
+    ).map(e => e.id)
+
+    const submissions = await tx.enigmaSubmission.findMany({
+      where: { studentId, enigmaId: { in: enigmaIds } },
+      select: { id: true, fileUrl: true },
+    })
+    const submissionIds = submissions.map(s => s.id)
+
+    // Avisos que hablan de esta clase: los del alumno (sus entregas revisadas,
+    // los plazos) y los del profesorado sobre sus entregas, que ya no existirán.
+    await tx.notification.deleteMany({
+      where: {
+        OR: [
+          { userId: studentId, metadata: { path: ['classId'], equals: classId } },
+          ...submissionIds.map(id => ({ metadata: { path: ['submissionId'], equals: id } })),
+        ],
+      },
+    })
+    await tx.enigmaSubmission.deleteMany({ where: { id: { in: submissionIds } } })
+    await tx.studentEnigmaProgress.deleteMany({ where: { studentId, enigmaId: { in: enigmaIds } } })
+    await tx.studentMissionProgress.deleteMany({
+      where: { studentId, missionId: { in: missionIds } },
+    })
+    await tx.studentBadge.deleteMany({
+      where: { studentId, badge: { missionId: { in: missionIds } } },
+    })
+    await tx.shopPurchase.deleteMany({ where: { studentId, classId } })
+    await tx.shopItemUse.deleteMany({ where: { studentId, classId } })
+    await tx.behaviorApplication.deleteMany({ where: { studentId, classId } })
+    await tx.activity.deleteMany({ where: { userId: studentId, classId } })
+    // Los mensajes se van con su conversación (borrado en cascada).
+    await tx.chatConversation.deleteMany({
+      where: { userId: studentId, OR: [{ classId }, { missionId: { in: missionIds } }] },
+    })
+    await tx.classEnrollment.delete({ where: { id: enrollment.id } })
+
+    await tx.user.updateMany({
+      where: { id: studentId, homeClassId: classId },
+      data: { homeClassId: null },
+    })
+
+    await recordClassAction(tx, {
+      classId,
+      actorId: actor.id,
+      action: 'student.removed',
+      entityType: 'user',
+      entityId: studentId,
+      targetUserId: studentId,
+    })
+
+    return submissions.map(s => s.fileUrl)
+  })
+
+  // Los ficheros, al final y sin tumbar nada: la base ya no los apunta.
+  await Promise.all(files.map(url => deleteUpload(url)))
+  return { removed: true }
+}
+
+/**
+ * De estas clases de origen, en cuáles tiene administración quien pregunta: son
+ * las cuentas cuya contraseña puede restablecer. La API lo comprueba igualmente
+ * al restablecer; esto es para no ofrecer lo que luego se rechazaría.
+ */
+export async function manageableHomeClasses(
+  userId: string,
+  homeClassIds: (string | null | undefined)[]
+): Promise<Set<string>> {
+  const ids = [...new Set(homeClassIds.filter((id): id is string => Boolean(id)))]
+  if (ids.length === 0) return new Set()
+  const rows = await prisma.class.findMany({
+    where: { id: { in: ids }, ...accessibleClassesWhere(userId, 'admin') },
+    select: { id: true },
+  })
+  return new Set(rows.map(r => r.id))
+}

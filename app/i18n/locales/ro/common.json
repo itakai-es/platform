@@ -65,11 +65,7 @@
       "download_not_found": "Fișierul de descărcat nu a fost găsit",
       "download_error": "Fișierul nu a putut fi descărcat",
       "download_no_access": "Nu ai acces la acest fișier",
-      "popup_blocked": "Permite ferestrele pop-up pentru a deschide fișierul",
-      "join_request_accepted": "{name} a fost acceptat în clasă",
-      "join_request_rejected": "Cerere respinsă",
-      "join_request_accept_error": "Eroare la acceptarea cererii",
-      "join_request_reject_error": "Eroare la respingerea cererii"
+      "popup_blocked": "Permite ferestrele pop-up pentru a deschide fișierul"
     },
     "notifications": {
       "title": "Notificări",
@@ -213,7 +209,10 @@
       "description": "Distribuie acest cod elevilor tăi ca să se alăture clasei:",
       "copy_code": "Copiază codul",
       "code_copied": "Codul a fost copiat în clipboard",
-      "copy_error": "Eroare la copierea codului"
+      "copy_error": "Eroare la copierea codului",
+      "tabs_label": "Moduri de a invita",
+      "tab_code": "Codul clasei",
+      "tab_accounts": "Creează conturi"
     },
     "under_development": {
       "back_to_dashboard": "Înapoi acasă"

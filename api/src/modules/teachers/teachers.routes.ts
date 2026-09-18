@@ -6,13 +6,21 @@ import { behaviorsService } from '../behaviors/behaviors.service.js'
 import { z, ZodError } from 'zod'
 import { scheduleConfigSchema } from './schedule-config.schema.js'
 import { ServiceUnavailableError, rethrowHttpError } from '../../utils/errors.js'
-import { consumeRateLimit } from '../../utils/rate-limit.js'
+import { consumeRateLimit, releaseRateLimit } from '../../utils/rate-limit.js'
 import { USERNAME_MAX_LENGTH, USERNAME_MIN_LENGTH } from '../../utils/identity.js'
 import {
   createManagedStudent,
+  createManagedStudents,
+  ManagedRowsError,
+  MANAGED_BATCH_MAX,
   proposeUsername,
   resetManagedStudentPassword,
 } from './managed-students.service.js'
+import {
+  NICKNAME_MAX_LENGTH,
+  removeStudentFromClass,
+  updateStudentNickname,
+} from './class-students.service.js'
 
 /** Quien hace la petición: el `id` y el `role` que viajan en el token. */
 type RequestUser = { id: string; role: string | null }
@@ -23,6 +31,36 @@ const createManagedStudentSchema = z.object({
   // Sin usuario, lo propone el sistema.
   username: z.string().min(USERNAME_MIN_LENGTH).max(USERNAME_MAX_LENGTH).optional(),
 })
+
+// Las filas llegan tal cual se han escrito o importado: la revisión de cada una
+// (nombre vacío, repetido, usuario mal formado) la hace el servicio y la devuelve
+// fila a fila, así que aquí solo se acota el tamaño.
+const managedBatchSchema = z.object({
+  students: z
+    .array(
+      z.object({
+        name: z.string().max(200),
+        username: z.string().max(100).optional(),
+      })
+    )
+    .min(1, 'La lista está vacía')
+    .max(MANAGED_BATCH_MAX, `Como mucho ${MANAGED_BATCH_MAX} alumnos de una vez`),
+})
+
+const batchQuerySchema = z.object({
+  dryRun: z.enum(['true', 'false']).optional(),
+})
+
+const studentNicknameSchema = z.object({
+  nickname: z.string().max(NICKNAME_MAX_LENGTH * 2),
+})
+
+/**
+ * Revisiones de listas por hora y por profesor. Revisar no crea nada, pero cada
+ * revisión dice qué usuarios escritos están ocupados: con este límite no sirve
+ * para recorrer usuarios en bucle.
+ */
+const MANAGED_REVIEW_LIMIT = { max: 30, windowMs: 60 * 60 * 1000 }
 
 const usernameProposalSchema = z.object({
   name: z.string().min(1, 'Escribe el nombre del alumno').max(120),
@@ -91,15 +129,6 @@ const updateClassSchema = z.object({
   settings: classSettingsSchema.optional(),
   levelConfig: levelConfigSchema.optional(),
   scheduleConfig: scheduleConfigSchema.optional(),
-})
-
-const sendInvitationSchema = z.object({
-  studentId: z.string(),
-  message: z.string().optional(),
-})
-
-const rejectRequestSchema = z.object({
-  reason: z.string().optional(),
 })
 
 const createBadgeSchema = z.object({
@@ -615,6 +644,98 @@ export async function teacherRoutes(fastify: FastifyInstance) {
     }
   )
 
+  // Varias cuentas de una vez: las filas del formulario o una lista importada.
+  // Con ?dryRun=true solo revisa la lista y dice el estado de cada fila; sin él,
+  // crea todas en una transacción o ninguna, y devuelve las contraseñas
+  // temporales una sola vez.
+  fastify.post(
+    '/classes/:classId/students/import',
+    async (
+      request: FastifyRequest<{ Params: { classId: string }; Querystring: { dryRun?: string } }>,
+      reply: FastifyReply
+    ) => {
+      try {
+        const actor = request.user as RequestUser
+        const { classId } = request.params
+        const dryRun = batchQuerySchema.parse(request.query).dryRun === 'true'
+        const { students } = managedBatchSchema.parse(request.body)
+        if (dryRun) {
+          consumeRateLimit(`managed-student-review:${actor.id}`, MANAGED_REVIEW_LIMIT)
+          return await createManagedStudents(actor, classId, students, { dryRun })
+        }
+        // Las altas cuentan de una en una, y solo las que se crean. El cupo se
+        // aparta antes de crear, para que varias listas a la vez no quepan todas
+        // en el mismo hueco, y se devuelve lo que no se llega a crear.
+        const createKey = `managed-student-create:${actor.id}`
+        consumeRateLimit(createKey, MANAGED_CREATE_LIMIT, students.length)
+        let created = 0
+        try {
+          const result = await createManagedStudents(actor, classId, students)
+          created = result.dryRun ? 0 : result.created.length
+          return reply.status(201).send(result)
+        } finally {
+          releaseRateLimit(createKey, students.length - created)
+        }
+      } catch (error) {
+        if (error instanceof ZodError) {
+          return reply.status(400).send({ message: error.errors[0]?.message || 'Datos inválidos' })
+        }
+        if (error instanceof ManagedRowsError) {
+          // Una lista rechazada enseña su revisión igual que el modo de prueba,
+          // así que gasta del mismo cupo de revisiones.
+          consumeRateLimit(`managed-student-review:${(request.user as RequestUser).id}`, MANAGED_REVIEW_LIMIT)
+          return reply
+            .status(400)
+            .send({ message: error.message, code: error.code, rows: error.rows })
+        }
+        rethrowHttpError(error)
+        return reply.status(500).send({ message: 'Error interno' })
+      }
+    }
+  )
+
+  // Alias del alumno en esta clase.
+  fastify.patch(
+    '/classes/:classId/students/:studentId',
+    async (
+      request: FastifyRequest<{ Params: { classId: string; studentId: string } }>,
+      reply: FastifyReply
+    ) => {
+      try {
+        const actor = request.user as RequestUser
+        const { classId, studentId } = request.params
+        const { nickname } = studentNicknameSchema.parse(request.body)
+        const result = await updateStudentNickname(actor, classId, studentId, nickname)
+        return result
+      } catch (error) {
+        if (error instanceof ZodError) {
+          return reply.status(400).send({ message: error.errors[0]?.message || 'Datos inválidos' })
+        }
+        rethrowHttpError(error)
+        return reply.status(500).send({ message: 'Error interno' })
+      }
+    }
+  )
+
+  // Quitar al alumno de esta clase: su matrícula y lo que tenía en ella.
+  fastify.delete(
+    '/classes/:classId/students/:studentId',
+    async (
+      request: FastifyRequest<{ Params: { classId: string; studentId: string } }>,
+      reply: FastifyReply
+    ) => {
+      try {
+        const actor = request.user as RequestUser
+        const { classId, studentId } = request.params
+        const result = await removeStudentFromClass(actor, classId, studentId)
+        return result
+      } catch (error) {
+        rethrowHttpError(error)
+        return reply.status(500).send({ message: 'Error interno' })
+      }
+    }
+  )
+
   fastify.get('/classes/:classId/activities', async (request: FastifyRequest<{ Params: { classId: string }; Querystring: { limit?: string } }>, reply: FastifyReply) => {
     try {
       const { id } = request.user as { id: string }
@@ -694,93 +815,6 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       if (error instanceof Error) {
         return reply.status(404).send({ message: error.message })
       }
-      return reply.status(500).send({ message: 'Error interno' })
-    }
-  })
-
-  // ==================== ENROLLMENTS ====================
-
-  fastify.get('/classes/:classId/requests', async (request: FastifyRequest<{ Params: { classId: string } }>, reply: FastifyReply) => {
-    try {
-      const { id } = request.user as { id: string }
-      const { classId } = request.params
-      const result = await teachersService.getPendingRequests(id, classId)
-      return result
-    } catch (error) {
-      if (error instanceof Error) {
-        return reply.status(404).send({ message: error.message })
-      }
-      return reply.status(500).send({ message: 'Error interno' })
-    }
-  })
-
-  fastify.put('/classes/:classId/requests/:requestId/accept', async (request: FastifyRequest<{ Params: { classId: string; requestId: string } }>, reply: FastifyReply) => {
-    try {
-      const { id } = request.user as { id: string }
-      const { classId, requestId } = request.params
-      const result = await teachersService.acceptJoinRequest(id, classId, requestId)
-      return result
-    } catch (error) {
-      if (error instanceof Error) {
-        return reply.status(404).send({ message: error.message })
-      }
-      return reply.status(500).send({ message: 'Error interno' })
-    }
-  })
-
-  fastify.put('/classes/:classId/requests/:requestId/reject', async (request: FastifyRequest<{ Params: { classId: string; requestId: string } }>, reply: FastifyReply) => {
-    try {
-      const { id } = request.user as { id: string }
-      const { classId, requestId } = request.params
-      const body = rejectRequestSchema.parse(request.body || {})
-      const result = await teachersService.rejectJoinRequest(id, classId, requestId, body.reason)
-      return result
-    } catch (error) {
-      if (error instanceof Error) {
-        return reply.status(404).send({ message: error.message })
-      }
-      return reply.status(500).send({ message: 'Error interno' })
-    }
-  })
-
-  fastify.post('/classes/:classId/invitations', async (request: FastifyRequest<{ Params: { classId: string } }>, reply: FastifyReply) => {
-    try {
-      const { id } = request.user as { id: string }
-      const { classId } = request.params
-      const data = sendInvitationSchema.parse(request.body)
-      const result = await teachersService.sendInvitation(id, classId, data.studentId, data.message)
-      return reply.status(201).send(result)
-    } catch (error) {
-      if (error instanceof ZodError) {
-        return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
-      }
-      if (error instanceof Error) {
-        return reply.status(400).send({ message: error.message })
-      }
-      return reply.status(500).send({ message: 'Error interno' })
-    }
-  })
-
-  fastify.get('/classes/:classId/invitations', async (request: FastifyRequest<{ Params: { classId: string } }>, reply: FastifyReply) => {
-    try {
-      const { id } = request.user as { id: string }
-      const { classId } = request.params
-      const result = await teachersService.getSentInvitations(id, classId)
-      return result
-    } catch (error) {
-      if (error instanceof Error) {
-        return reply.status(404).send({ message: error.message })
-      }
-      return reply.status(500).send({ message: 'Error interno' })
-    }
-  })
-
-  fastify.get('/enrollment-counts', async (request: FastifyRequest, reply: FastifyReply) => {
-    try {
-      const { id } = request.user as { id: string }
-      const result = await teachersService.getTotalPendingRequests(id)
-      return result
-    } catch (error) {
       return reply.status(500).send({ message: 'Error interno' })
     }
   })

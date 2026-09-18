@@ -1,42 +1,45 @@
 <template>
-  <div class="min-h-screen bg-bg-primary w-full overflow-x-hidden">
-    <!-- Mobile Header (visible only on mobile/tablet) -->
-    <MobileHeader
-      title="ITAKAI"
-      :unread-notifications="unreadNotifications"
-      @toggle-menu="mobileMenuOpen = !mobileMenuOpen"
-    />
+  <div class="min-h-screen bg-bg-primary w-full overflow-x-hidden print:bg-white">
+    <!-- Menús y cabecera: fuera al imprimir (p. ej. la hoja de credenciales) -->
+    <div class="contents print:hidden">
+      <!-- Mobile Header (visible only on mobile/tablet) -->
+      <MobileHeader
+        title="ITAKAI"
+        :unread-notifications="unreadNotifications"
+        @toggle-menu="mobileMenuOpen = !mobileMenuOpen"
+      />
 
-    <!-- Sidebar (Desktop only - Fixed position) -->
-    <Sidebar
-      :nav-items="navItems"
-      :user-id="user?.id || 'teacher'"
-      :user-name="user?.name || t('common.roles.teacher')"
-      :user-subtitle="t('common.roles.teacher')"
-      :avatar="user?.avatar"
-      :current-god="currentGod"
-      user-role="teacher"
-      show-account
-      @help-center="openHelpCenter"
-    />
+      <!-- Sidebar (Desktop only - Fixed position) -->
+      <Sidebar
+        :nav-items="navItems"
+        :user-id="user?.id || 'teacher'"
+        :user-name="user?.name || t('common.roles.teacher')"
+        :user-subtitle="t('common.roles.teacher')"
+        :avatar="user?.avatar"
+        :current-god="currentGod"
+        user-role="teacher"
+        show-account
+        @help-center="openHelpCenter"
+      />
 
-    <!-- Mobile Sidebar -->
-    <MobileSidebar
-      :is-open="mobileMenuOpen"
-      :nav-items="navItems"
-      home-route="/profesor/inicio"
-      role="teacher"
-      :user-name="user?.name"
-      :current-god="currentGod"
-      show-account
-      @close="mobileMenuOpen = false"
-      @help-center="openHelpCenter"
-    />
+      <!-- Mobile Sidebar -->
+      <MobileSidebar
+        :is-open="mobileMenuOpen"
+        :nav-items="navItems"
+        home-route="/profesor/inicio"
+        role="teacher"
+        :user-name="user?.name"
+        :current-god="currentGod"
+        show-account
+        @close="mobileMenuOpen = false"
+        @help-center="openHelpCenter"
+      />
+    </div>
 
     <!-- Main Content with left margin for sidebar and top padding for mobile header -->
-    <div class="flex-1 flex flex-col lg:ml-80 pt-14 lg:pt-0">
+    <div class="flex-1 flex flex-col lg:ml-80 pt-14 lg:pt-0 print:ml-0 print:pt-0">
       <!-- Page Content -->
-      <main class="flex-1 overflow-y-auto overflow-x-hidden p-4 md:p-6 max-w-full">
+      <main class="flex-1 overflow-y-auto overflow-x-hidden p-4 md:p-6 max-w-full print:p-0">
         <slot />
       </main>
     </div>

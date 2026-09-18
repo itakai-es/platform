@@ -29,6 +29,7 @@
     <!-- Main Content -->
     <template v-else>
       <ClassDetailHeader
+        class="print:hidden"
         :name="state.classData.name"
         :background-image="resolvedClassImage"
         home-to="/profesor/inicio"
@@ -41,7 +42,7 @@
         :education-level="state.classData.educationLevel"
         :language="state.classData.language"
       >
-        <template #actions>
+        <template v-if="canAdminister" #actions>
           <Button
             variant="secondary"
             size="md"
@@ -63,8 +64,7 @@
           <div
             class="rounded-2xl bg-yellow/20 border border-yellow/30 px-4 py-3 text-sm text-white"
           >
-            Esta clase está archivada. Se mantiene accesible para consulta, pero no admite nuevos
-            alumnos ni invitaciones.
+            {{ t('teacher.classes.detail.archived_notice') }}
           </div>
         </template>
       </ClassDetailHeader>
@@ -76,10 +76,12 @@
 
     <!-- Invite Modal -->
     <InviteStudentsModal
-      v-if="state.classData"
+      v-if="state.classData && canAdminister"
       v-model="state.showInviteModal"
       :class-id="classId"
       :invitation-code="state.classData.invitationCode || ''"
+      :can-create-accounts="!state.classData.archived"
+      @created="onAccountsCreated"
     />
 
     <!-- Activity Badge Modal -->
@@ -128,6 +130,7 @@ import {
   Cog6ToothIcon as Cog6ToothIconSolid,
   UsersIcon as UsersIconSolid,
 } from '@heroicons/vue/24/solid'
+import { hasClassLevel } from '~/utils/class-access'
 
 definePageMeta({
   layout: 'teacher',
@@ -153,6 +156,14 @@ const route = useRoute()
 const classId = computed(() => route.params.id as string)
 const detail = useTeacherClassDetail(classId)
 const { state, classSettings, resolvedClassImage, loadAll, closeActivityBadge } = detail
+
+// Invitar y dar de alta alumnado es de quien administra la clase.
+const canAdminister = computed(() => hasClassLevel(state.value.classData?.myAccess, 'admin'))
+
+/** Las cuentas nuevas ya están matriculadas: se cuentan sin volver a pedir la clase. */
+function onAccountsCreated(count: number) {
+  if (state.value.classData) state.value.classData.studentCount += count
+}
 
 const tabs = computed(() => {
   const s = classSettings.value
@@ -187,8 +198,12 @@ function tabHref(tabId: string) {
   return tabId === 'resumen' ? base : `${base}/${tabId}`
 }
 
+// Páginas de la clase que no son una pestaña (la hoja de credenciales).
+const PAGES_WITHOUT_TAB = new Set(['credenciales'])
+
 // Si la pestaña activa se desactiva en Ajustes (p. ej. Tienda off), volver a Resumen.
 watch(tabs, list => {
+  if (PAGES_WITHOUT_TAB.has(activeTab.value)) return
   if (!list.some(tab => tab.id === activeTab.value)) {
     navigateTo(tabHref('resumen'))
   }

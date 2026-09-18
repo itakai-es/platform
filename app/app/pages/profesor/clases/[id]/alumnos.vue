@@ -82,6 +82,9 @@
               <th v-if="settings.behaviors" class="px-4 py-3 font-semibold text-center">
                 {{ t('teacher.classes.detail.students.col_behaviors') }}
               </th>
+              <th v-if="showActions" class="px-2 py-3">
+                <span class="sr-only">{{ t('teacher.classes.detail.students.col_actions') }}</span>
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -107,7 +110,12 @@
                     >
                       {{ student.name }}
                     </NuxtLink>
-                    <p class="text-xs text-navy-700/70 truncate">@{{ student.handle }}</p>
+                    <p class="flex min-w-0 items-center gap-1.5 text-xs text-navy-700/70">
+                      <span class="truncate">@{{ student.handle }}</span>
+                      <Badge v-if="student.accountType === 'managed'" variant="info" size="sm">
+                        {{ t('teacher.classes.detail.students.managed_badge') }}
+                      </Badge>
+                    </p>
                   </div>
                 </div>
               </td>
@@ -156,6 +164,16 @@
                   <span class="text-error">−{{ student.negativeBehaviors }}</span>
                 </div>
               </td>
+              <td v-if="showActions" class="px-2 py-3 text-right">
+                <StudentActionsMenu
+                  :class-id="classId"
+                  :class-name="className"
+                  :student="student"
+                  :access="myAccess"
+                  @renamed="onRenamed(student, $event)"
+                  @removed="onRemoved(student)"
+                />
+              </td>
             </tr>
           </tbody>
         </table>
@@ -189,6 +207,9 @@
         @student-click="viewStudentProfile"
       />
     </template>
+
+    <!-- Resultado de la última acción sobre un alumno, para lectores de pantalla -->
+    <p class="sr-only" aria-live="polite">{{ announcement }}</p>
   </div>
 </template>
 
@@ -200,7 +221,9 @@ import CoinIcon from '~/components/atoms/CoinIcon.vue'
 import ManaIcon from '~/components/atoms/ManaIcon.vue'
 import LifeIcon from '~/components/atoms/LifeIcon.vue'
 import type { ClassSettings } from '~/types/class.types'
+import type { AccountType } from '~/types/teacher.types'
 import { resolveClassSettings } from '~/utils/class-settings'
+import { hasClassLevel } from '~/utils/class-access'
 
 definePageMeta({ layout: 'teacher', middleware: ['auth', 'role'] })
 
@@ -218,6 +241,10 @@ interface ClassStudentRow {
   lives: number
   positiveBehaviors: number
   negativeBehaviors: number
+  nickname: string | null
+  accountType: AccountType
+  canResetPassword: boolean
+  isHomeClass: boolean
 }
 
 const { t } = useI18n()
@@ -228,6 +255,35 @@ const config = useRuntimeConfig()
 const classId = computed(() => route.params.id as string)
 
 const allStudents = ref<ClassStudentRow[]>([])
+
+// Acceso propio y nombre de la clase: los carga la página de la clase.
+const { state: classState } = useTeacherClassDetail(classId)
+const myAccess = computed(() => classState.value.classData?.myAccess ?? null)
+const className = computed(() => classState.value.classData?.name ?? '')
+// La columna de acciones aparece si hay algo que hacer con alguien: administrar
+// la clase o restablecer la contraseña de alguna cuenta.
+const showActions = computed(
+  () => hasClassLevel(myAccess.value, 'admin') || allStudents.value.some(s => s.canResetPassword)
+)
+
+const announcement = ref('')
+
+function onRenamed(student: ClassStudentRow, nickname: string) {
+  student.nickname = nickname
+  student.handle = nickname
+}
+
+function onRemoved(student: ClassStudentRow) {
+  allStudents.value = allStudents.value.filter(s => s.id !== student.id)
+  if (classState.value.classData) {
+    classState.value.classData.studentCount = Math.max(
+      0,
+      (classState.value.classData.studentCount ?? 1) - 1
+    )
+  }
+  announcement.value = t('teacher.students.actions.removed', { name: student.name })
+}
+
 const settings = ref<ClassSettings>(resolveClassSettings(null))
 const isLoading = ref(true)
 

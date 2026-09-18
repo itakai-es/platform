@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
+import type { ManagedCredentials } from '~/types/auth.types'
 import type {
   Class,
   Student,
@@ -7,13 +8,9 @@ import type {
   Activity,
   CreateClassData,
   UpdateClassData,
+  ManagedRowInput,
+  ManagedRowReview,
 } from '~/types/teacher.types'
-import type {
-  JoinRequest,
-  Invitation,
-  SearchableStudent,
-  InvitationResponse,
-} from '~/types/enrollment.types'
 
 export const useTeacherStore = defineStore('teacher', () => {
   // State
@@ -48,7 +45,6 @@ export const useTeacherStore = defineStore('teacher', () => {
   const hasLoadedArchivedStudents = ref(false)
   const hasLoadedActivities = ref(false)
   const hasLoadedMissions = ref(false)
-  const hasLoadedTotalPending = ref(false)
 
   // Per-class cache flags
   const loadedClassStudents = ref<Set<string>>(new Set())
@@ -57,30 +53,12 @@ export const useTeacherStore = defineStore('teacher', () => {
   const loadedClassRankings = ref<Set<string>>(new Set())
   // Per-id / per-classId fetched flags for new ensureX wrappers
   const loadedStudentDetails = ref<Set<string>>(new Set())
-  const hasLoadedPendingRequests = ref<Set<string>>(new Set())
-  const hasLoadedSentInvitations = ref<Set<string>>(new Set())
   // Per-classId fetched flag for the per-class ensureTeacherClassById wrapper
   const loadedClassDetails = ref<Set<string>>(new Set())
 
   // In-flight guards so concurrent ensureX calls don't fire duplicate fetches
   const isLoadingClassDetails = ref<Set<string>>(new Set())
   const isLoadingStudentDetails = ref<Set<string>>(new Set())
-  const isLoadingTotalPending = ref(false)
-
-  // Enrollment state
-  const pendingRequests = ref<Record<string, JoinRequest[]>>({}) // Por classId
-  const sentInvitations = ref<Record<string, Invitation[]>>({}) // Por classId
-  const searchedStudents = ref<SearchableStudent[]>([])
-  const isLoadingRequests = ref(false)
-  const isLoadingInvitations = ref(false)
-  const totalPendingRequests = ref(0)
-
-  // Computed
-  const getTotalPendingRequests = computed(() => {
-    return Object.values(pendingRequests.value)
-      .flat()
-      .filter(r => r.status === 'pending').length
-  })
 
   // Actions
   /**
@@ -500,169 +478,94 @@ export const useTeacherStore = defineStore('teacher', () => {
   }
 
   // ==========================================
-  // ENROLLMENT SYSTEM - Join Requests & Invitations
+  // ALUMNADO DE UNA CLASE: altas, alias, quitar y contraseñas
   // ==========================================
 
   /**
-   * Obtiene las solicitudes pendientes de una clase
+   * Da por viejo lo cacheado de un alumno y de los listados donde sale, para que
+   * la próxima visita lo pida de nuevo. La ficha del alumno se queda hasta que
+   * llegue la nueva, para no dejar la pantalla en blanco mientras tanto. Sin
+   * alumno, solo los listados (tras un alta).
    */
-  async function fetchPendingRequests(classId: string) {
-    try {
-      isLoadingRequests.value = true
-      const config = useRuntimeConfig()
-      const response = await $fetch<{ requests: JoinRequest[]; total: number }>(
-        `${config.public.apiBase}/teacher/classes/${classId}/requests`
-      )
-      pendingRequests.value[classId] = response.requests || []
-      return response
-    } catch (error) {
-      console.error('Error fetching pending requests:', error)
-      throw error
-    } finally {
-      isLoadingRequests.value = false
+  function forgetStudent(studentId?: string, classId?: string) {
+    if (studentId) loadedStudentDetails.value.delete(studentId)
+    if (classId) {
+      classStudents.value.delete(classId)
+      loadedClassStudents.value.delete(classId)
+      classRankings.value.delete(`${classId}-general`)
+      loadedClassRankings.value.delete(`${classId}-general`)
     }
+    hasLoadedStudents.value = false
+    hasLoadedArchivedStudents.value = false
+    hasLoadedStats.value = false
   }
 
   /**
-   * Acepta una solicitud de unión
+   * Usuario libre para un nombre. La API no dice si existe ninguno: responde
+   * siempre con uno que se puede usar.
    */
-  async function acceptJoinRequest(classId: string, requestId: string) {
-    try {
-      const config = useRuntimeConfig()
-      const response = await $fetch<{ success: boolean; message: string }>(
-        `${config.public.apiBase}/teacher/classes/${classId}/requests/${requestId}/accept`,
-        { method: 'PUT' }
-      )
+  async function proposeUsername(classId: string, name: string) {
+    const config = useRuntimeConfig()
+    const response = await $fetch<{ username: string }>(
+      `${config.public.apiBase}/teacher/classes/${classId}/students/username-proposal`,
+      { params: { name } }
+    )
+    return response.username
+  }
 
-      // Remove from local state
-      if (pendingRequests.value[classId]) {
-        pendingRequests.value[classId] = pendingRequests.value[classId].filter(
-          r => r.id !== requestId
-        )
-      }
-
-      // Update class student count
-      const classIndex = classes.value.findIndex(c => c.id === classId)
-      if (classIndex !== -1) {
-        classes.value[classIndex].studentCount++
-      }
-
-      return response
-    } catch (error) {
-      console.error('Error accepting join request:', error)
-      throw error
-    }
+  /** Revisa una lista sin crear nada: el estado de cada fila y el usuario con el que nacería. */
+  async function reviewManagedStudents(classId: string, students: ManagedRowInput[]) {
+    const config = useRuntimeConfig()
+    return await $fetch<{ dryRun: true; rows: ManagedRowReview[]; canCreate: boolean }>(
+      `${config.public.apiBase}/teacher/classes/${classId}/students/import`,
+      { method: 'POST', params: { dryRun: 'true' }, body: { students } }
+    )
   }
 
   /**
-   * Rechaza una solicitud de unión
+   * Da de alta varias cuentas sin correo de una vez: todas o ninguna. Devuelve
+   * las contraseñas temporales, que solo llegan aquí. Si alguna fila no se puede
+   * crear, la API responde 400 con la revisión de cada una (`data.rows`).
    */
-  async function rejectJoinRequest(classId: string, requestId: string, reason?: string) {
-    try {
-      const config = useRuntimeConfig()
-      const response = await $fetch<{ success: boolean; message: string }>(
-        `${config.public.apiBase}/teacher/classes/${classId}/requests/${requestId}/reject`,
-        {
-          method: 'PUT',
-          body: { reason },
-        }
-      )
-
-      // Remove from local state
-      if (pendingRequests.value[classId]) {
-        pendingRequests.value[classId] = pendingRequests.value[classId].filter(
-          r => r.id !== requestId
-        )
-      }
-
-      return response
-    } catch (error) {
-      console.error('Error rejecting join request:', error)
-      throw error
-    }
+  async function createManagedStudents(classId: string, students: ManagedRowInput[]) {
+    const config = useRuntimeConfig()
+    const response = await $fetch<{ dryRun: false; created: ManagedCredentials[] }>(
+      `${config.public.apiBase}/teacher/classes/${classId}/students/import`,
+      { method: 'POST', body: { students } }
+    )
+    forgetStudent(undefined, classId)
+    return response.created
   }
 
-  /**
-   * Envía una invitación a un estudiante
-   */
-  async function sendInvitation(
-    classId: string,
-    studentId: string,
-    message?: string
-  ): Promise<InvitationResponse> {
-    try {
-      const config = useRuntimeConfig()
-      const response = await $fetch<InvitationResponse>(
-        `${config.public.apiBase}/teacher/classes/${classId}/invitations`,
-        {
-          method: 'POST',
-          body: { studentId, message },
-        }
-      )
-
-      // Add to local state
-      if (response.invitation) {
-        if (!sentInvitations.value[classId]) {
-          sentInvitations.value[classId] = []
-        }
-        sentInvitations.value[classId].push(response.invitation)
-      }
-
-      // Update searched student state
-      const studentIndex = searchedStudents.value.findIndex(s => s.id === studentId)
-      if (studentIndex !== -1) {
-        searchedStudents.value[studentIndex].hasPendingInvitation = true
-      }
-
-      return response
-    } catch (error) {
-      console.error('Error sending invitation:', error)
-      throw error
-    }
+  /** Nueva contraseña temporal para una cuenta sin correo. Solo se ve en esta respuesta. */
+  async function resetStudentPassword(studentId: string) {
+    const config = useRuntimeConfig()
+    return await $fetch<ManagedCredentials>(
+      `${config.public.apiBase}/teacher/students/${studentId}/reset-password`,
+      { method: 'POST' }
+    )
   }
 
-  /**
-   * Obtiene las invitaciones enviadas de una clase
-   */
-  async function fetchSentInvitations(classId: string) {
-    try {
-      isLoadingInvitations.value = true
-      const config = useRuntimeConfig()
-      const response = await $fetch<{ invitations: Invitation[]; total: number }>(
-        `${config.public.apiBase}/teacher/classes/${classId}/invitations`
-      )
-      sentInvitations.value[classId] = response.invitations || []
-      return response
-    } catch (error) {
-      console.error('Error fetching sent invitations:', error)
-      throw error
-    } finally {
-      isLoadingInvitations.value = false
-    }
+  /** Cambia el alias del alumno en la clase. */
+  async function updateStudentNickname(classId: string, studentId: string, nickname: string) {
+    const config = useRuntimeConfig()
+    const response = await $fetch<{ nickname: string }>(
+      `${config.public.apiBase}/teacher/classes/${classId}/students/${studentId}`,
+      { method: 'PATCH', body: { nickname } }
+    )
+    forgetStudent(studentId, classId)
+    return response.nickname
   }
 
-  /**
-   * Obtiene el conteo total de solicitudes pendientes
-   */
-  async function fetchTotalPendingRequests() {
-    try {
-      const config = useRuntimeConfig()
-      const response = await $fetch<{ pendingRequests: number }>(
-        `${config.public.apiBase}/teacher/enrollment-counts`
-      )
-      totalPendingRequests.value = response.pendingRequests
-      return response.pendingRequests
-    } catch (error) {
-      console.error('Error fetching pending requests count:', error)
-      return 0
-    }
-  }
-
-  /**
-   * Limpia los resultados de búsqueda
-   */
-  function clearSearchResults() {
-    searchedStudents.value = []
+  /** Quita al alumno de la clase, con todo lo que tenía en ella. */
+  async function removeStudentFromClass(classId: string, studentId: string) {
+    const config = useRuntimeConfig()
+    await $fetch(`${config.public.apiBase}/teacher/classes/${classId}/students/${studentId}`, {
+      method: 'DELETE',
+    })
+    forgetStudent(studentId, classId)
+    const cls = classes.value.find(c => c.id === classId)
+    if (cls && cls.studentCount > 0) cls.studentCount--
   }
 
   /**
@@ -890,45 +793,6 @@ export const useTeacherStore = defineStore('teacher', () => {
     return await fetchArchivedClasses(force)
   }
 
-  async function ensurePendingRequests(classId: string, force = false) {
-    if (hasLoadedPendingRequests.value.has(classId) && !force) {
-      return {
-        requests: pendingRequests.value[classId] || [],
-        total: (pendingRequests.value[classId] || []).length,
-      }
-    }
-    if (isLoadingRequests.value) return
-    const response = await fetchPendingRequests(classId)
-    hasLoadedPendingRequests.value.add(classId)
-    return response
-  }
-
-  async function ensureSentInvitations(classId: string, force = false) {
-    if (hasLoadedSentInvitations.value.has(classId) && !force) {
-      return {
-        invitations: sentInvitations.value[classId] || [],
-        total: (sentInvitations.value[classId] || []).length,
-      }
-    }
-    if (isLoadingInvitations.value) return
-    const response = await fetchSentInvitations(classId)
-    hasLoadedSentInvitations.value.add(classId)
-    return response
-  }
-
-  async function ensureTotalPendingRequests(force = false) {
-    if (hasLoadedTotalPending.value && !force) return totalPendingRequests.value
-    if (isLoadingTotalPending.value) return totalPendingRequests.value
-    isLoadingTotalPending.value = true
-    try {
-      const result = await fetchTotalPendingRequests()
-      hasLoadedTotalPending.value = true
-      return result
-    } finally {
-      isLoadingTotalPending.value = false
-    }
-  }
-
   /**
    * Refresca todos los datos del dashboard
    */
@@ -973,7 +837,6 @@ export const useTeacherStore = defineStore('teacher', () => {
     hasLoadedArchivedStudents.value = false
     hasLoadedActivities.value = false
     hasLoadedMissions.value = false
-    hasLoadedTotalPending.value = false
     // Per-class cache flags
     loadedClassStudents.value.clear()
     loadedClassMissions.value.clear()
@@ -981,19 +844,9 @@ export const useTeacherStore = defineStore('teacher', () => {
     loadedClassRankings.value.clear()
     loadedClassDetails.value.clear()
     loadedStudentDetails.value.clear()
-    hasLoadedPendingRequests.value.clear()
-    hasLoadedSentInvitations.value.clear()
     // In-flight guards
     isLoadingClassDetails.value.clear()
     isLoadingStudentDetails.value.clear()
-    isLoadingTotalPending.value = false
-    // Enrollment state
-    pendingRequests.value = {}
-    sentInvitations.value = {}
-    searchedStudents.value = []
-    isLoadingRequests.value = false
-    isLoadingInvitations.value = false
-    totalPendingRequests.value = 0
   }
 
   return {
@@ -1026,24 +879,12 @@ export const useTeacherStore = defineStore('teacher', () => {
     hasLoadedArchivedStudents,
     hasLoadedActivities,
     hasLoadedMissions,
-    hasLoadedTotalPending,
-    hasLoadedPendingRequests,
-    hasLoadedSentInvitations,
     loadedClassStudents,
     loadedClassMissions,
     loadedClassGuides,
     loadedClassRankings,
     loadedClassDetails,
     loadedStudentDetails,
-    // Enrollment state
-    pendingRequests,
-    sentInvitations,
-    searchedStudents,
-    isLoadingRequests,
-    isLoadingInvitations,
-    totalPendingRequests,
-    // Computed
-    getTotalPendingRequests,
     // Actions
     fetchStats,
     fetchClasses,
@@ -1078,17 +919,14 @@ export const useTeacherStore = defineStore('teacher', () => {
     ensureClassGuide,
     ensureStudentById,
     ensureArchivedClasses,
-    ensurePendingRequests,
-    ensureSentInvitations,
-    ensureTotalPendingRequests,
-    // Enrollment actions
-    fetchPendingRequests,
-    acceptJoinRequest,
-    rejectJoinRequest,
-    sendInvitation,
-    fetchSentInvitations,
-    fetchTotalPendingRequests,
-    clearSearchResults,
+    // Alumnado de una clase
+    proposeUsername,
+    reviewManagedStudents,
+    createManagedStudents,
+    resetStudentPassword,
+    updateStudentNickname,
+    removeStudentFromClass,
+    forgetStudent,
     $reset,
   }
 })
