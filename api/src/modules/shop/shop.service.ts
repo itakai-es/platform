@@ -1,6 +1,8 @@
 import { prisma } from '../../config/database.js'
 import { resolveClassSettings } from '../../utils/class-settings.js'
 import type { Prisma } from '../../generated/prisma/client.js'
+import { assertClassAccess } from '../../utils/class-access.js'
+import { NotFoundError } from '../../utils/errors.js'
 
 /** Load + resolve the per-class feature settings (used to guard mutations). */
 async function getClassSettings(
@@ -451,15 +453,11 @@ export class ShopService {
   }
 
   // ==================== TEACHER ====================
-
-  private async assertTeacherOwnsClass(teacherId: string, classId: string) {
-    const cls = await prisma.class.findFirst({ where: { id: classId, teacherId }, select: { id: true } })
-    if (!cls) throw new Error('No tienes permiso sobre esta clase')
-  }
+  // La ve todo el profesorado de la clase; la cambia quien tiene edición.
 
   /** Teacher view: all items (incl. hidden) + recent redemptions across students. */
-  async getTeacherShop(teacherId: string, classId: string) {
-    await this.assertTeacherOwnsClass(teacherId, classId)
+  async getTeacherShop(userId: string, classId: string) {
+    await assertClassAccess(classId, userId, 'shop.view')
 
     const [items, purchases, uses, enrollments] = await Promise.all([
       prisma.shopItem.findMany({ where: { classId }, orderBy: { createdAt: 'asc' } }),
@@ -521,8 +519,8 @@ export class ShopService {
     }
   }
 
-  async createItem(teacherId: string, classId: string, data: ItemInput) {
-    await this.assertTeacherOwnsClass(teacherId, classId)
+  async createItem(userId: string, classId: string, data: ItemInput) {
+    await assertClassAccess(classId, userId, 'shop.edit')
     const item = await prisma.shopItem.create({
       data: {
         classId,
@@ -537,10 +535,10 @@ export class ShopService {
     return formatItem(item)
   }
 
-  async updateItem(teacherId: string, classId: string, itemId: string, data: Partial<ItemInput>) {
-    await this.assertTeacherOwnsClass(teacherId, classId)
+  async updateItem(userId: string, classId: string, itemId: string, data: Partial<ItemInput>) {
+    await assertClassAccess(classId, userId, 'shop.edit')
     const existing = await prisma.shopItem.findFirst({ where: { id: itemId, classId }, select: { id: true } })
-    if (!existing) throw new Error('El artículo no existe')
+    if (!existing) throw new NotFoundError('El artículo no existe')
 
     const item = await prisma.shopItem.update({
       where: { id: itemId },
@@ -558,10 +556,10 @@ export class ShopService {
     return formatItem(item)
   }
 
-  async deleteItem(teacherId: string, classId: string, itemId: string) {
-    await this.assertTeacherOwnsClass(teacherId, classId)
+  async deleteItem(userId: string, classId: string, itemId: string) {
+    await assertClassAccess(classId, userId, 'shop.edit')
     const existing = await prisma.shopItem.findFirst({ where: { id: itemId, classId }, select: { id: true } })
-    if (!existing) throw new Error('El artículo no existe')
+    if (!existing) throw new NotFoundError('El artículo no existe')
     await prisma.shopItem.delete({ where: { id: itemId } })
     return { success: true }
   }

@@ -235,6 +235,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       const cls = await teachersService.getClassById(id, classId)
       return { class: cls }
     } catch (error) {
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(404).send({ message: error.message })
       }
@@ -257,15 +258,15 @@ export async function teacherRoutes(fastify: FastifyInstance) {
   })
 
   // ==================== SHOP (teacher) ====================
+  // El acceso a la clase lo comprueba el servicio: sin acceso responde 404 y con
+  // un nivel que no llega, 403, a través del manejador global.
 
   fastify.get('/classes/:classId/shop', async (request: FastifyRequest<{ Params: { classId: string } }>, reply: FastifyReply) => {
     try {
       const { id } = request.user as { id: string }
       return await shopService.getTeacherShop(id, request.params.classId)
     } catch (error) {
-      if (error instanceof Error) {
-        return reply.status(403).send({ message: error.message })
-      }
+      rethrowHttpError(error)
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
@@ -280,9 +281,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
-      if (error instanceof Error) {
-        return reply.status(403).send({ message: error.message })
-      }
+      rethrowHttpError(error)
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
@@ -297,6 +296,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(404).send({ message: error.message })
       }
@@ -310,6 +310,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       const result = await shopService.deleteItem(id, request.params.classId, request.params.itemId)
       return result
     } catch (error) {
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(404).send({ message: error.message })
       }
@@ -324,9 +325,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       const { id } = request.user as { id: string }
       return await behaviorsService.getBehaviors(id, request.params.classId)
     } catch (error) {
-      if (error instanceof Error) {
-        return reply.status(403).send({ message: error.message })
-      }
+      rethrowHttpError(error)
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
@@ -341,9 +340,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
-      if (error instanceof Error) {
-        return reply.status(403).send({ message: error.message })
-      }
+      rethrowHttpError(error)
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
@@ -363,6 +360,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(404).send({ message: error.message })
       }
@@ -380,6 +378,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       )
       return result
     } catch (error) {
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(404).send({ message: error.message })
       }
@@ -402,6 +401,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(400).send({ message: error.message })
       }
@@ -420,11 +420,11 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
+      // El acceso (404/403) y las validaciones, como la de una plantilla publicada
+      // sin metadatos (400), llegan con su estado.
+      rethrowHttpError(error)
       if (error instanceof Error) {
-        // Validaciones (p. ej. plantilla publicada sin metadatos) marcan statusCode 400;
-        // el resto (clase no encontrada) sigue devolviendo 404 como hasta ahora.
-        const status = (error as Error & { statusCode?: number }).statusCode ?? 404
-        return reply.status(status).send({ message: error.message })
+        return reply.status(404).send({ message: error.message })
       }
       return reply.status(500).send({ message: 'Error interno' })
     }
@@ -441,6 +441,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(400).send({ message: error.message })
       }
@@ -498,6 +499,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(404).send({ message: error.message })
       }
@@ -515,6 +517,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(404).send({ message: error.message })
       }
@@ -529,6 +532,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       const result = await teachersService.getInvitationCode(id, classId)
       return result
     } catch (error) {
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(404).send({ message: error.message })
       }
@@ -543,6 +547,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       const result = await teachersService.getClassMissions(id, classId)
       return result
     } catch (error) {
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(404).send({ message: error.message })
       }
@@ -557,6 +562,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       const result = await teachersService.getClassRanking(id, classId)
       return result
     } catch (error) {
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(404).send({ message: error.message })
       }
@@ -571,6 +577,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       const result = await teachersService.getClassStudents(id, classId)
       return result
     } catch (error) {
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(404).send({ message: error.message })
       }
@@ -744,6 +751,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       const result = await teachersService.getClassActivities(id, classId, limit)
       return result
     } catch (error) {
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(404).send({ message: error.message })
       }
@@ -763,6 +771,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(404).send({ message: error.message })
       }
@@ -784,6 +793,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       if (error instanceof ServiceUnavailableError) {
         return reply.status(503).send({ message: error.message, code: error.code })
       }
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(400).send({ message: error.message })
       }
@@ -801,6 +811,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       const result = await teachersService.getStudents(id, classId, archived)
       return result
     } catch (error) {
+      rethrowHttpError(error)
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
@@ -812,6 +823,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       const result = await teachersService.getStudentById(id, studentId)
       return result
     } catch (error) {
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(404).send({ message: error.message })
       }
@@ -828,6 +840,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       const result = await teachersService.getMissions(id, classIdFilter, limit ? parseInt(limit) : undefined)
       return result
     } catch (error) {
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(404).send({ message: error.message })
       }
@@ -854,6 +867,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       const result = await missionsService.createMission(id, data)
       return reply.status(201).send(result)
     } catch (error) {
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(400).send({ message: error.message })
       }
@@ -879,6 +893,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       const result = await missionsService.updateMission(id, missionId, data)
       return result
     } catch (error) {
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(400).send({ message: error.message })
       }
@@ -968,6 +983,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       const result = await teachersService.deleteBadge(id, badgeId)
       return result
     } catch (error) {
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(404).send({ message: error.message })
       }

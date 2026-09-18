@@ -1,5 +1,6 @@
 import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
 import { submissionsService } from './submissions.service.js'
+import { rethrowHttpError } from '../../utils/errors.js'
 
 export async function submissionsRoutes(fastify: FastifyInstance) {
   // All routes require authentication
@@ -10,7 +11,7 @@ export async function submissionsRoutes(fastify: FastifyInstance) {
     '/enigmas/:enigmaId',
     async (request: FastifyRequest<{ Params: { enigmaId: string } }>, reply: FastifyReply) => {
       try {
-        const { id } = request.user as { id: string }
+        const { id, role } = request.user as { id: string; role: string | null }
         const { enigmaId } = request.params
 
         // Handle multipart form data
@@ -26,9 +27,10 @@ export async function submissionsRoutes(fastify: FastifyInstance) {
           }
         }
 
-        const result = await submissionsService.submitEnigma(id, enigmaId, file)
+        const result = await submissionsService.submitEnigma({ id, role }, enigmaId, file)
         return reply.status(201).send(result)
       } catch (error) {
+        rethrowHttpError(error)
         if (error instanceof Error) {
           return reply.status(400).send({ message: error.message })
         }
@@ -84,6 +86,8 @@ export async function submissionsRoutes(fastify: FastifyInstance) {
         const result = await submissionsService.getEnigmaSubmissionsForTeacher(id, enigmaId, status)
         return result
       } catch (error) {
+        // Sin acceso a la clase, 404; con un nivel que no llega, 403.
+        rethrowHttpError(error)
         if (error instanceof Error) {
           return reply.status(400).send({ message: error.message })
         }
@@ -109,6 +113,7 @@ export async function submissionsRoutes(fastify: FastifyInstance) {
         const result = await submissionsService.getClassSubmissions(id, classId, status)
         return result
       } catch (error) {
+        rethrowHttpError(error)
         if (error instanceof Error) {
           return reply.status(400).send({ message: error.message })
         }
@@ -140,6 +145,7 @@ export async function submissionsRoutes(fastify: FastifyInstance) {
         })
         return result
       } catch (error) {
+        rethrowHttpError(error)
         if (error instanceof Error) {
           return reply.status(400).send({ message: error.message })
         }

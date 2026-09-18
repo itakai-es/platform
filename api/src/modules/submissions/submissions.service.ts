@@ -6,7 +6,16 @@ import { randomUUID } from 'crypto'
 import { getMissionCompletionRewards, validateCustomEnigmaXp } from '../../utils/xp-calculator.js'
 import { applyXpDelta } from '../../utils/enrollment-xp.js'
 import { resolveClassSettings } from '../../utils/class-settings.js'
-import { notify } from '../notifications/notifications.service.js'
+import { notify, notifyMany } from '../notifications/notifications.service.js'
+import {
+  assertClassAccess,
+  assertEnigmaAccess,
+  assertSubmissionAccess,
+  classTeacherRecipients,
+  getStudentEnrollment,
+  type ClassUser,
+} from '../../utils/class-access.js'
+import { NotFoundError } from '../../utils/errors.js'
 
 const UPLOADS_DIR = join(process.cwd(), 'uploads', 'submissions')
 
@@ -37,32 +46,32 @@ export class SubmissionsService {
    * Submit an enigma (student uploads a file)
    */
   async submitEnigma(
-    studentId: string,
+    user: ClassUser,
     enigmaId: string,
     file?: { buffer: Buffer; filename: string; mimetype: string }
   ) {
+    const studentId = user.id
     // Verify enigma exists and get mission info
     const enigma = await prisma.missionEnigma.findUnique({
       where: { id: enigmaId },
       include: { mission: { include: { class: true } } },
     })
 
-    if (!enigma) throw new Error('Enigma no encontrado')
+    // Sin matrícula válida en la clase, el enigma no existe para quien entrega.
+    const ref = enigma && (await getStudentEnrollment(enigma.mission.classId, user))
+    if (!enigma || !ref) throw new NotFoundError('Enigma no encontrado')
     if (enigma.mission.class.archived) throw new Error('La clase está archivada y no admite nuevas entregas')
     if (enigma.mission.status === 'bloqueada') throw new Error('La misión está bloqueada y no admite entregas')
     if (enigma.mission.deadline && new Date(enigma.mission.deadline) < new Date()) {
       throw new Error('La misión ha expirado y ya no admite entregas')
     }
 
-    // Verify student is enrolled in the class
-    const enrollment = await prisma.classEnrollment.findUnique({
-      where: { studentId_classId: { studentId, classId: enigma.mission.classId } },
+    const enrollment = await prisma.classEnrollment.findUniqueOrThrow({
+      where: { id: ref.id },
       // El nombre real es el recurso si el alumno no se ha puesto alias en la clase:
       // el aviso al profesor tiene que decir quién ha entregado.
       include: { student: { select: { name: true } } },
     })
-
-    if (!enrollment) throw new Error('No estás inscrito en esta clase')
 
     // Check if already submitted and pending
     const existingSubmission = await prisma.enigmaSubmission.findFirst({
@@ -128,14 +137,13 @@ export class SubmissionsService {
       },
     })
 
-    // Aviso al profesor de que tiene algo que revisar (Fase 3, punto 3). Va sin
-    // correo a propósito: una clase de treinta alumnos entregando la misma
+    // Aviso al profesorado que puede revisarla (edición o más), uno por persona.
+    // Va sin correo a propósito: una clase de treinta alumnos entregando la misma
     // misión llenaría el buzón, y el profesor las ve agrupadas en la aplicación.
     // No bloquea la respuesta: la entrega ya está guardada.
-    notify({
-      userId: enigma.mission.class.teacherId,
-      type: 'submission_received',
-      copy: 'submission_received',
+    this.notifyReviewers({
+      classId: enigma.mission.classId,
+      studentId,
       params: {
         student: enrollment.nickname || enrollment.student.name,
         enigma: enigma.title,
@@ -151,7 +159,7 @@ export class SubmissionsService {
         classId: enigma.mission.classId,
       },
     }).catch(error => {
-      console.error('[submissions] no se pudo avisar al profesor de la entrega:', error)
+      console.error('[submissions] no se pudo avisar al profesorado de la entrega:', error)
     })
 
     return {
@@ -166,6 +174,33 @@ export class SubmissionsService {
       },
       message: 'Entrega enviada correctamente. Será revisada por el profesor.',
     }
+  }
+
+  /**
+   * Avisa de una entrega nueva a quien la puede revisar. Quien la ha hecho no se
+   * avisa a sí mismo aunque imparta la clase (entregas desde la vista previa).
+   * Sin clave antiduplicados: cada entrega avisa una sola vez, al crearse.
+   */
+  private async notifyReviewers(input: {
+    classId: string
+    studentId: string
+    params: Record<string, string>
+    actionUrl: string
+    metadata: { submissionId: string } & Record<string, string>
+  }) {
+    const recipients = await classTeacherRecipients(input.classId, 'edit')
+    await notifyMany(
+      recipients
+        .filter(userId => userId !== input.studentId)
+        .map(userId => ({
+          userId,
+          type: 'submission_received' as const,
+          copy: 'submission_received' as const,
+          params: input.params,
+          actionUrl: input.actionUrl,
+          metadata: input.metadata,
+        }))
+    )
   }
 
   /**
@@ -228,18 +263,14 @@ export class SubmissionsService {
   /**
    * Teacher: Get submissions for a specific enigma
    */
-  async getEnigmaSubmissionsForTeacher(teacherId: string, enigmaId: string, status?: string) {
-    // Get enigma and verify teacher owns the class
+  async getEnigmaSubmissionsForTeacher(userId: string, enigmaId: string, status?: string) {
+    await assertEnigmaAccess(enigmaId, userId, 'submission.view')
     const enigma = await prisma.missionEnigma.findUnique({
       where: { id: enigmaId },
-      include: { mission: { include: { class: true } } },
+      include: { mission: true },
     })
 
-    if (!enigma) throw new Error('Enigma no encontrado')
-
-    if (enigma.mission.class.teacherId !== teacherId) {
-      throw new Error('No tienes permiso para ver estas entregas')
-    }
+    if (!enigma) throw new NotFoundError('Enigma no encontrado')
 
     const where: any = { enigmaId }
     if (status) where.status = status
@@ -296,13 +327,8 @@ export class SubmissionsService {
   /**
    * Teacher: Get pending submissions for a class
    */
-  async getClassSubmissions(teacherId: string, classId: string, status?: string) {
-    // Verify teacher owns the class
-    const cls = await prisma.class.findFirst({
-      where: { id: classId, teacherId },
-    })
-
-    if (!cls) throw new Error('Clase no encontrada')
+  async getClassSubmissions(userId: string, classId: string, status?: string) {
+    await assertClassAccess(classId, userId, 'submission.view')
 
     const where: any = {
       enigma: { mission: { classId } },
@@ -342,10 +368,11 @@ export class SubmissionsService {
    * `updateMany` that marks the mission as complete.
    */
   async approveSubmission(
-    teacherId: string,
+    userId: string,
     submissionId: string,
     opts: { xpAwarded?: number; percentage?: number } = {}
   ) {
+    const access = await assertSubmissionAccess(submissionId, userId, 'submission.approve')
     const submission = await prisma.enigmaSubmission.findUnique({
       where: { id: submissionId },
       include: {
@@ -354,14 +381,7 @@ export class SubmissionsService {
       },
     })
 
-    if (!submission) throw new Error('Entrega no encontrada')
-
-    // Verify teacher owns the class
-    const cls = await prisma.class.findFirst({
-      where: { id: submission.enigma.mission.classId, teacherId },
-    })
-
-    if (!cls) throw new Error('No tienes permiso para revisar esta entrega')
+    if (!submission) throw new NotFoundError('Entrega no encontrada')
 
     if (submission.status !== 'pendiente') {
       throw new Error('Esta entrega ya fue revisada')
@@ -394,9 +414,24 @@ export class SubmissionsService {
     if (!Number.isFinite(pct)) pct = 100
     pct = Math.min(100, Math.max(0, pct))
 
+    const studentId = submission.studentId
+    const classId = submission.enigma.mission.classId
+    const missionId = submission.enigma.missionId
+
+    // Pre-fetch class info (read-only) before the write transaction so we don't
+    // hold locks while talking to unrelated tables. En el feed del alumno figura
+    // quien revisa la entrega, que no tiene por qué ser el propietario de la clase.
+    const [classInfo, reviewer] = await Promise.all([
+      prisma.class.findUnique({
+        where: { id: classId },
+        select: { name: true, settings: true },
+      }),
+      prisma.user.findUnique({ where: { id: userId }, select: { name: true } }),
+    ])
+
     // Respect the class settings: don't award resources the class has disabled
-    // (keeps balances consistent with what's shown). `cls` already carries settings.
-    const classSettings = resolveClassSettings(cls.settings)
+    // (keeps balances consistent with what's shown).
+    const classSettings = resolveClassSettings(classInfo?.settings)
 
     // Validate + resolve XP to award (integer, 0..xpReward).
     const xpToAward = classSettings.xp
@@ -404,17 +439,6 @@ export class SubmissionsService {
       : 0
     const coinsToAward = classSettings.coins ? Math.round(((coinReward ?? 0) * pct) / 100) : 0
     const manaToAward = classSettings.mana ? Math.round(((manaReward ?? 0) * pct) / 100) : 0
-
-    const studentId = submission.studentId
-    const classId = submission.enigma.mission.classId
-    const missionId = submission.enigma.missionId
-
-    // Pre-fetch class info (read-only) before the write transaction so we don't
-    // hold locks while talking to unrelated tables.
-    const classInfo = await prisma.class.findUnique({
-      where: { id: classId },
-      select: { name: true, teacher: { select: { name: true } } },
-    })
 
     const result = await prisma.$transaction(async (tx) => {
       // Re-check status inside the tx to close the race window between
@@ -526,7 +550,7 @@ export class SubmissionsService {
           username: enrollmentAfter.nickname || 'Estudiante',
           classId,
           className: classInfo?.name,
-          teacherName: classInfo?.teacher.name,
+          teacherName: reviewer?.name,
           enigmaTitle: submission.enigma.title,
           enigmaXp: xpToAward,
           metadata: {
@@ -582,7 +606,26 @@ export class SubmissionsService {
 
     const updated = result.updated
 
-    // Confirmación al alumno (Fase 3, punto 3). Esta sí sale también por correo:
+    // La entrega ya está revisada: su aviso deja de estar pendiente para todo el
+    // profesorado que lo recibió. Se busca solo entre los avisos del profesorado
+    // de la clase. Si falla, la aprobación sigue valiendo.
+    classTeacherRecipients(access.classId, 'read')
+      .then(teachers =>
+        prisma.notification.updateMany({
+          where: {
+            userId: { in: teachers },
+            type: 'submission_received',
+            isRead: false,
+            metadata: { path: ['submissionId'], equals: submissionId },
+          },
+          data: { isRead: true },
+        })
+      )
+      .catch(error => {
+        console.error('[submissions] no se pudo marcar como leído el aviso de la entrega:', error)
+      })
+
+    // Confirmación al alumno. Esta sí sale también por correo:
     // es un aviso por entrega revisada, no una avalancha, y es justo lo que el
     // alumno está esperando.
     notify({

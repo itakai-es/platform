@@ -10,6 +10,7 @@ import { AvatarServiceUnavailableError } from '../../utils/errors.js'
 import { resolveClassSettings } from '../../utils/class-settings.js'
 import { ForbiddenError, ValidationError } from '../../utils/errors.js'
 import {
+  accessibleClassesWhere,
   getClassMembership,
   studentEnrollmentsWhere,
   type ClassUser,
@@ -264,7 +265,8 @@ export class StudentsService {
       language: cls.language,
       educationLevel: cls.educationLevel,
       settings: resolveClassSettings(cls.settings),
-      invitationCode: cls.invitationCode,
+      // Sin código de invitación: desde este lado entra también la vista previa
+      // del profesorado, y el código es solo de quien administra la clase.
       studentCount: cls.enrollments.length,
       missionCount: cls.missions.length,
       coins: enrollment.coins,
@@ -686,30 +688,23 @@ export class StudentsService {
 
   /**
    * Matrícula "fantasma" para el modo "Ver como alumno": auto-matricula al
-   * profesor (isPreview=true) en todas las clases que imparte, de forma
-   * idempotente. Estas matrículas se excluyen de listados/recuentos/rankings,
-   * así que solo las ve el propio profesor al previsualizar.
+   * profesor (isPreview=true) en todas las clases a las que tiene acceso, con
+   * cualquier nivel, de forma idempotente. Estas matrículas se excluyen de
+   * listados/recuentos/rankings, así que solo las ve el propio profesor al
+   * previsualizar.
    */
-  async ensurePreviewEnrollments(teacherId: string) {
-    const classes = await prisma.class.findMany({
-      where: { teacherId },
-      select: { id: true },
-    })
-    if (!classes.length) return { enrolled: 0 }
-
+  async ensurePreviewEnrollments(userId: string) {
     // Solo se crean las que faltan: una matrícula que ya existía se deja como
     // está, porque es la que cuenta en el ranking y en los listados de la clase.
-    const existing = await prisma.classEnrollment.findMany({
-      where: { studentId: teacherId, classId: { in: classes.map(c => c.id) } },
-      select: { classId: true },
+    const toCreate = await prisma.class.findMany({
+      where: { ...accessibleClassesWhere(userId), enrollments: { none: { studentId: userId } } },
+      select: { id: true },
     })
-    const existingIds = new Set(existing.map(e => e.classId))
-    const toCreate = classes.filter(c => !existingIds.has(c.id))
 
     if (toCreate.length) {
       await prisma.classEnrollment.createMany({
         data: toCreate.map(c => ({
-          studentId: teacherId,
+          studentId: userId,
           classId: c.id,
           isPreview: true,
           avatarUrl: getRandomAvatar(),

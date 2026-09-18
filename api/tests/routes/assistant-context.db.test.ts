@@ -38,6 +38,8 @@ import {
 } from '../helpers/class-fixture.js'
 import { chatRoutes } from '../../src/modules/chat/chat.routes.js'
 import { aiRoutes } from '../../src/modules/ai/ai.routes.js'
+import { registerTeacherTools } from '../../src/modules/ai/tools/teacher-tools.js'
+import { getTool } from '../../src/modules/ai/tools/tool-registry.js'
 
 const MISSION_CONTEXT = 'CURRENT MISSION CONTEXT'
 
@@ -163,6 +165,109 @@ describeWithDatabase('contexto de misión y de clase en el asistente', () => {
       expect(provider.prompts).toHaveLength(0)
       expect((await post(url, 'owner', payload)).statusCode).toBe(200)
       provider.prompts.length = 0
+    }
+  })
+
+  it('POST /ai/generate/narrative y /ai/mission-assistant con classId → también el profesorado añadido, mientras su acceso siga vigente', async () => {
+    const tag = f.classId.slice(0, 8)
+    const teachers = await Promise.all(
+      [
+        { label: 'lectura', endsAt: null },
+        { label: 'vencido', endsAt: new Date(Date.now() - 60_000) },
+      ].map(async ({ label, endsAt }) => {
+        const user = await prisma.user.create({
+          data: {
+            email: `co-ia-${label}.${tag}@test.invalid`,
+            passwordHash: 'x',
+            name: `Co IA ${label}`,
+            role: 'teacher',
+            isOnboarded: true,
+          },
+        })
+        await prisma.classTeacher.create({
+          data: {
+            classId: f.classId,
+            userId: user.id,
+            access: 'read',
+            profile: 'practicas',
+            addedById: f.users.owner.id,
+            endsAt,
+          },
+        })
+        return { id: user.id, token: app.jwt.sign({ id: user.id, role: 'teacher' }) }
+      })
+    )
+    const [reader, expired] = teachers
+    const postAs = (url: string, token: string, payload: Record<string, unknown>) =>
+      app.inject({ method: 'POST', url, payload, headers: { authorization: `Bearer ${token}` } })
+    const calls: Array<[string, Record<string, unknown>]> = [
+      ['/ai/generate/narrative', { prompt: 'Una historia de piratas', classId: f.classId }],
+      ['/ai/mission-assistant', { message: 'Una misión sobre redes', classId: f.classId }],
+      ['/ai/mission-assistant/stream', { message: 'Una misión sobre redes', classId: f.classId }],
+    ]
+
+    try {
+      for (const [url, payload] of calls) {
+        expect((await postAs(url, expired.token, payload)).statusCode, url).toBe(404)
+        expect(provider.prompts, url).toHaveLength(0)
+        expect((await postAs(url, reader.token, payload)).statusCode, url).toBe(200)
+        provider.prompts.length = 0
+      }
+    } finally {
+      await prisma.classTeacher.deleteMany({ where: { userId: { in: teachers.map(t => t.id) } } })
+      await prisma.user.deleteMany({ where: { id: { in: teachers.map(t => t.id) } } })
+    }
+  })
+
+  it('el asistente del profesor y su herramienta de clases cuentan las clases a las que tiene acceso; el código, solo con administración', async () => {
+    const cls = await prisma.class.findUniqueOrThrow({ where: { id: f.classId } })
+    const co = await prisma.user.create({
+      data: {
+        email: `co-asistente.${f.classId.slice(0, 8)}@test.invalid`,
+        passwordHash: 'x',
+        name: 'Co asistente',
+        role: 'teacher',
+        isOnboarded: true,
+      },
+    })
+    await prisma.classTeacher.create({
+      data: {
+        classId: f.classId,
+        userId: co.id,
+        access: 'read',
+        profile: 'practicas',
+        addedById: f.users.owner.id,
+      },
+    })
+    const promptFor = async (userId: string) => {
+      const conversation = await prisma.chatConversation.create({
+        data: { userId, assistantId: 'atenea' },
+      })
+      provider.prompts.length = 0
+      const response = await app.inject({
+        method: 'POST',
+        url: `/chat/conversations/${conversation.id}/messages`,
+        payload: { content: '¿Qué clases tengo?' },
+        headers: { authorization: `Bearer ${app.jwt.sign({ id: userId, role: 'teacher' })}` },
+      })
+      expect(response.statusCode).toBe(200)
+      return provider.prompts.join('\n')
+    }
+
+    try {
+      expect(await promptFor(co.id)).toContain(cls.name)
+      expect(await promptFor(f.users.other.id)).not.toContain(cls.name)
+
+      registerTeacherTools()
+      const listClasses = getTool('list_classes')!
+      const forCo = await listClasses.execute({ _userId: co.id })
+      expect(forCo).toContain(cls.name)
+      expect(forCo).not.toContain(cls.invitationCode)
+      expect(await listClasses.execute({ _userId: f.users.owner.id })).toContain(cls.invitationCode)
+      expect(await listClasses.execute({ _userId: f.users.other.id })).not.toContain(cls.name)
+    } finally {
+      await prisma.chatConversation.deleteMany({ where: { userId: co.id } })
+      await prisma.user.delete({ where: { id: co.id } })
     }
   })
 })

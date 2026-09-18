@@ -2,7 +2,11 @@ import { prisma } from '../../../config/database.js'
 import { BaseAgent, type AgentRequestContext } from './base-agent.js'
 import { getPlatformContext, getSkinName } from '../platform-context.js'
 import { calculateMissionTotalXP } from '../../../utils/xp-calculator.js'
-import { assertMissionMember, passesAccessCheck } from '../../../utils/class-access.js'
+import {
+  assertMissionMember,
+  passesAccessCheck,
+  studentEnrollmentsWhere,
+} from '../../../utils/class-access.js'
 
 export class StudentAgent extends BaseAgent {
   protected buildSystemPrompt(context: AgentRequestContext) {
@@ -17,13 +21,15 @@ export class StudentAgent extends BaseAgent {
   }
 
   protected async buildPrompt(context: AgentRequestContext) {
+    // Las clases en las que actúa como alumno, con el mismo criterio que sus rutas.
+    const asStudent = studentEnrollmentsWhere({ id: context.userId, role: context.role })
     const [student, enrollments, missionProgress, availableMissions] = await Promise.all([
       prisma.user.findUnique({
         where: { id: context.userId },
         select: { name: true },
       }),
       prisma.classEnrollment.findMany({
-        where: { studentId: context.userId },
+        where: asStudent,
         include: {
           class: {
             select: {
@@ -53,7 +59,7 @@ export class StudentAgent extends BaseAgent {
       prisma.mission.findMany({
         where: {
           class: {
-            enrollments: { some: { studentId: context.userId } },
+            enrollments: { some: asStudent },
             archived: false,
           },
           status: 'activa',

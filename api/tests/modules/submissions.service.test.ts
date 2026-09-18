@@ -16,7 +16,6 @@ const mocks = vi.hoisted(() => ({
   enigmaSubmissionFindUnique: vi.fn(),
   enigmaSubmissionFindUniqueTx: vi.fn(),
   enigmaSubmissionUpdate: vi.fn(),
-  classFindFirst: vi.fn(),
   classFindUnique: vi.fn(),
   studentEnigmaProgressUpsert: vi.fn(),
   studentEnigmaProgressCount: vi.fn(),
@@ -29,14 +28,26 @@ const mocks = vi.hoisted(() => ({
   studentBadgeCreate: vi.fn(),
   $transaction: vi.fn(),
   applyXpDelta: vi.fn(),
+  userFindUnique: vi.fn(),
+  notificationUpdateMany: vi.fn(),
+  assertSubmissionAccess: vi.fn(),
 }))
 
 vi.mock('../../src/config/database.js', () => ({
   prisma: {
     enigmaSubmission: { findUnique: mocks.enigmaSubmissionFindUnique },
-    class: { findFirst: mocks.classFindFirst, findUnique: mocks.classFindUnique },
+    class: { findUnique: mocks.classFindUnique },
+    user: { findUnique: mocks.userFindUnique },
+    notification: { updateMany: mocks.notificationUpdateMany },
     $transaction: mocks.$transaction,
   },
+}))
+
+vi.mock('../../src/utils/class-access.js', () => ({
+  assertSubmissionAccess: mocks.assertSubmissionAccess,
+  assertEnigmaAccess: vi.fn(),
+  assertClassAccess: vi.fn(),
+  classTeacherRecipients: vi.fn(async () => []),
 }))
 
 vi.mock('../../src/utils/enrollment-xp.js', () => ({
@@ -44,6 +55,7 @@ vi.mock('../../src/utils/enrollment-xp.js', () => ({
 }))
 
 import { submissionsService } from '../../src/modules/submissions/submissions.service.js'
+import { ForbiddenError, NotFoundError } from '../../src/utils/errors.js'
 
 const TEACHER = 'teacher-1'
 const STUDENT = 'student-1'
@@ -106,8 +118,15 @@ beforeEach(() => {
   setupTxMock()
 
   // Sensible defaults so individual tests only override what they care about.
-  mocks.classFindFirst.mockResolvedValue({ id: CLASS, teacherId: TEACHER })
-  mocks.classFindUnique.mockResolvedValue({ name: 'Clase', teacher: { name: 'Profe' } })
+  mocks.assertSubmissionAccess.mockResolvedValue({
+    classId: CLASS,
+    access: 'edit',
+    profile: 'sustituto',
+    isOwner: false,
+  })
+  mocks.classFindUnique.mockResolvedValue({ name: 'Clase', settings: null })
+  mocks.userFindUnique.mockResolvedValue({ name: 'Profe' })
+  mocks.notificationUpdateMany.mockResolvedValue({ count: 0 })
   mocks.enigmaSubmissionFindUniqueTx.mockResolvedValue({ status: 'pendiente' })
   mocks.enigmaSubmissionUpdate.mockResolvedValue({ id: SUB, status: 'aprobada' })
   mocks.studentEnigmaProgressUpsert.mockResolvedValue({})
@@ -133,11 +152,23 @@ describe('approveSubmission — validation', () => {
     await expect(submissionsService.approveSubmission(TEACHER, SUB)).rejects.toThrow(/Entrega no encontrada/)
   })
 
-  it('rejects a teacher that does not own the class', async () => {
-    mocks.enigmaSubmissionFindUnique.mockResolvedValueOnce(baseSubmission())
-    mocks.classFindFirst.mockResolvedValueOnce(null)
+  it('asks the class access layer for the approve action before reading anything', async () => {
+    mocks.assertSubmissionAccess.mockRejectedValueOnce(new NotFoundError('Entrega no encontrada'))
 
-    await expect(submissionsService.approveSubmission(TEACHER, SUB)).rejects.toThrow(/No tienes permiso/)
+    await expect(submissionsService.approveSubmission(TEACHER, SUB)).rejects.toBeInstanceOf(
+      NotFoundError
+    )
+    expect(mocks.assertSubmissionAccess).toHaveBeenCalledWith(SUB, TEACHER, 'submission.approve')
+    expect(mocks.enigmaSubmissionFindUnique).not.toHaveBeenCalled()
+  })
+
+  it('rejects a teacher whose level in the class does not reach approving', async () => {
+    mocks.assertSubmissionAccess.mockRejectedValueOnce(new ForbiddenError())
+
+    await expect(submissionsService.approveSubmission(TEACHER, SUB)).rejects.toBeInstanceOf(
+      ForbiddenError
+    )
+    expect(mocks.$transaction).not.toHaveBeenCalled()
   })
 
   it('rejects an already-reviewed submission (pre-check)', async () => {

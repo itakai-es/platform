@@ -61,9 +61,9 @@ export async function missionsRoutes(fastify: FastifyInstance) {
   // Get all missions for current user
   fastify.get('/', async (request: FastifyRequest<{ Querystring: { subject?: string; search?: string } }>, reply: FastifyReply) => {
     try {
-      const { id } = request.user as { id: string }
+      const { id, role } = request.user as { id: string; role: string | null }
       const { subject, search } = request.query
-      const result = await missionsService.getMissions(id, { subject, search })
+      const result = await missionsService.getMissions({ id, role }, { subject, search })
       return result
     } catch (error) {
       return reply.status(500).send({ message: 'Error interno' })
@@ -73,8 +73,8 @@ export async function missionsRoutes(fastify: FastifyInstance) {
   // Get enhanced missions (same as regular for now)
   fastify.get('/enhanced', async (request: FastifyRequest<{ Querystring: { category?: string; status?: string } }>, reply: FastifyReply) => {
     try {
-      const { id } = request.user as { id: string }
-      const result = await missionsService.getMissions(id)
+      const { id, role } = request.user as { id: string; role: string | null }
+      const result = await missionsService.getMissions({ id, role })
       return result
     } catch (error) {
       return reply.status(500).send({ message: 'Error interno' })
@@ -94,8 +94,8 @@ export async function missionsRoutes(fastify: FastifyInstance) {
   // Get mission stats
   fastify.get('/stats', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
-      const { id } = request.user as { id: string }
-      const result = await missionsService.getStats(id)
+      const { id, role } = request.user as { id: string; role: string | null }
+      const result = await missionsService.getStats({ id, role })
       return result
     } catch (error) {
       return reply.status(500).send({ message: 'Error interno' })
@@ -105,11 +105,12 @@ export async function missionsRoutes(fastify: FastifyInstance) {
   // Get mission by ID
   fastify.get('/:missionId', async (request: FastifyRequest<{ Params: { missionId: string } }>, reply: FastifyReply) => {
     try {
-      const { id } = request.user as { id: string }
+      const user = request.user as { id: string; role: string | null }
       const { missionId } = request.params
-      const result = await missionsService.getMissionById(id, missionId)
+      const result = await missionsService.getMissionById(user, missionId)
       return result
     } catch (error) {
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(404).send({ message: error.message })
       }
@@ -120,11 +121,12 @@ export async function missionsRoutes(fastify: FastifyInstance) {
   // Start mission
   fastify.post('/:missionId/start', async (request: FastifyRequest<{ Params: { missionId: string } }>, reply: FastifyReply) => {
     try {
-      const { id } = request.user as { id: string }
+      const { id, role } = request.user as { id: string; role: string | null }
       const { missionId } = request.params
-      const result = await missionsService.startMission(id, missionId)
+      const result = await missionsService.startMission({ id, role }, missionId)
       return result
     } catch (error) {
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(404).send({ message: error.message })
       }
@@ -143,12 +145,13 @@ export async function missionsRoutes(fastify: FastifyInstance) {
       reply: FastifyReply
     ) => {
       try {
-        const { id } = request.user as { id: string }
+        const { id, role } = request.user as { id: string; role: string | null }
         const { missionId, enigmaId } = request.params
         const body = request.body as { fileName?: string; fileSize?: number }
-        const result = await missionsService.submitEnigma(id, missionId, enigmaId, body)
+        const result = await missionsService.submitEnigma({ id, role }, missionId, enigmaId, body)
         return result
       } catch (error) {
+        rethrowHttpError(error)
         if (error instanceof Error) {
           return reply.status(400).send({ message: error.message })
         }
@@ -171,6 +174,7 @@ export async function missionsRoutes(fastify: FastifyInstance) {
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: error.errors[0]?.message || 'Datos inválidos', errors: error.errors })
       }
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(400).send({ message: error.message })
       }
@@ -198,6 +202,7 @@ export async function missionsRoutes(fastify: FastifyInstance) {
         if (error instanceof ZodError) {
           return reply.status(400).send({ message: error.errors[0]?.message || 'Datos inválidos', errors: error.errors })
         }
+        rethrowHttpError(error)
         if (error instanceof Error) {
           return reply.status(400).send({ message: error.message })
         }
@@ -287,6 +292,7 @@ export async function missionsRoutes(fastify: FastifyInstance) {
         )
         return reply.status(201).send(result)
       } catch (error) {
+        rethrowHttpError(error)
         if (error instanceof Error) {
           return reply.status(400).send({ message: error.message })
         }
@@ -317,6 +323,7 @@ export async function missionsRoutes(fastify: FastifyInstance) {
         })
         return result
       } catch (error) {
+        rethrowHttpError(error)
         if (error instanceof Error) {
           return reply.status(400).send({ message: error.message })
         }
@@ -341,6 +348,7 @@ export async function missionsRoutes(fastify: FastifyInstance) {
         const result = await missionsService.deleteMissionDocument(id, documentId)
         return result
       } catch (error) {
+        rethrowHttpError(error)
         if (error instanceof Error) {
           return reply.status(404).send({ message: error.message })
         }
@@ -369,6 +377,7 @@ export async function missionsRoutes(fastify: FastifyInstance) {
         if (error instanceof ZodError) {
           return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
         }
+        rethrowHttpError(error)
         if (error instanceof Error) {
           return reply.status(400).send({ message: error.message })
         }
@@ -397,6 +406,7 @@ export async function missionsRoutes(fastify: FastifyInstance) {
         if (error instanceof ZodError) {
           return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
         }
+        rethrowHttpError(error)
         if (error instanceof Error) {
           return reply.status(404).send({ message: error.message })
         }
@@ -425,6 +435,7 @@ export async function missionsRoutes(fastify: FastifyInstance) {
         if (error instanceof ZodError) {
           return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
         }
+        rethrowHttpError(error)
         if (error instanceof Error) {
           return reply.status(400).send({ message: error.message })
         }
@@ -449,6 +460,7 @@ export async function missionsRoutes(fastify: FastifyInstance) {
         const result = await missionsService.deleteEnigma(id, enigmaId)
         return result
       } catch (error) {
+        rethrowHttpError(error)
         if (error instanceof Error) {
           if (error.message.includes('ya tiene entregas')) {
             return reply.status(409).send({ message: error.message })
@@ -480,6 +492,7 @@ export async function missionsRoutes(fastify: FastifyInstance) {
         if (error instanceof ZodError) {
           return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
         }
+        rethrowHttpError(error)
         if (error instanceof Error) {
           return reply.status(404).send({ message: error.message })
         }
@@ -505,6 +518,7 @@ export async function missionsRoutes(fastify: FastifyInstance) {
         const result = await missionsService.updateMissionRewards(id, missionId, badgeId)
         return result
       } catch (error) {
+        rethrowHttpError(error)
         if (error instanceof Error) {
           return reply.status(400).send({ message: error.message })
         }

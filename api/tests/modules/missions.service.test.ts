@@ -10,17 +10,20 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
  *  - deleteEnigma refuses when progress or submissions exist, and won't delete
  *    the last enigma of a mission
  *
- * Prisma is mocked so we can assert on inputs and short-circuit DB calls.
+ * Prisma is mocked so we can assert on inputs and short-circuit DB calls. The
+ * class access layer is mocked too: the tests check which action each method
+ * asks it for, and that nothing is read or written when it refuses.
  */
 
 const mocks = vi.hoisted(() => ({
-  classFindFirst: vi.fn(),
+  assertClassAccess: vi.fn(),
+  assertMissionAccess: vi.fn(),
+  assertEnigmaAccess: vi.fn(),
   missionCreate: vi.fn(),
-  missionFindFirst: vi.fn(),
   missionFindUnique: vi.fn(),
   missionUpdate: vi.fn(),
   missionEnigmaCreateMany: vi.fn(),
-  missionEnigmaFindFirst: vi.fn(),
+  missionEnigmaFindUnique: vi.fn(),
   missionEnigmaUpdate: vi.fn(),
   missionEnigmaDelete: vi.fn(),
   classEnrollmentFindUnique: vi.fn(),
@@ -37,16 +40,14 @@ const mocks = vi.hoisted(() => ({
 
 vi.mock('../../src/config/database.js', () => ({
   prisma: {
-    class: { findFirst: mocks.classFindFirst },
     mission: {
       create: mocks.missionCreate,
-      findFirst: mocks.missionFindFirst,
       findUnique: mocks.missionFindUnique,
       update: mocks.missionUpdate,
     },
     missionEnigma: {
       createMany: mocks.missionEnigmaCreateMany,
-      findFirst: mocks.missionEnigmaFindFirst,
+      findUnique: mocks.missionEnigmaFindUnique,
       update: mocks.missionEnigmaUpdate,
       delete: mocks.missionEnigmaDelete,
     },
@@ -64,6 +65,13 @@ vi.mock('../../src/config/database.js', () => ({
   },
 }))
 
+vi.mock('../../src/utils/class-access.js', async importOriginal => ({
+  ...(await importOriginal<typeof import('../../src/utils/class-access.js')>()),
+  assertClassAccess: mocks.assertClassAccess,
+  assertMissionAccess: mocks.assertMissionAccess,
+  assertEnigmaAccess: mocks.assertEnigmaAccess,
+}))
+
 vi.mock('../../src/utils/enrollment-xp.js', () => ({
   applyXpDelta: mocks.applyXpDelta,
 }))
@@ -75,6 +83,7 @@ vi.mock('../../src/utils/mission-formatter.js', () => ({
 }))
 
 import { missionsService } from '../../src/modules/missions/missions.service.js'
+import { ForbiddenError, NotFoundError } from '../../src/utils/errors.js'
 
 const TEACHER = 'teacher-1'
 const STUDENT = 'student-1'
@@ -82,8 +91,13 @@ const CLASS = 'class-1'
 const MISSION = 'mission-1'
 const ENIGMA = 'enigma-1'
 
+const EDIT_ACCESS = { classId: CLASS, access: 'edit', profile: 'sustituto', isOwner: false }
+
 beforeEach(() => {
   for (const m of Object.values(mocks)) m.mockReset()
+  mocks.assertClassAccess.mockResolvedValue(EDIT_ACCESS)
+  mocks.assertMissionAccess.mockResolvedValue(EDIT_ACCESS)
+  mocks.assertEnigmaAccess.mockResolvedValue(EDIT_ACCESS)
   // $transaction default: just run the callback with a tx = prisma stub.
   mocks.$transaction.mockImplementation(async (cb: any) => {
     if (typeof cb === 'function') {
@@ -105,7 +119,6 @@ beforeEach(() => {
 
 describe('createMission', () => {
   it('rejects missions with zero enigmas', async () => {
-    mocks.classFindFirst.mockResolvedValueOnce({ id: CLASS, teacherId: TEACHER })
 
     await expect(
       missionsService.createMission(TEACHER, {
@@ -119,7 +132,6 @@ describe('createMission', () => {
   })
 
   it('rejects missions when enigmas key is missing entirely', async () => {
-    mocks.classFindFirst.mockResolvedValueOnce({ id: CLASS, teacherId: TEACHER })
 
     await expect(
       missionsService.createMission(TEACHER, { classId: CLASS, title: 'Test' }),
@@ -127,7 +139,6 @@ describe('createMission', () => {
   })
 
   it('accepts enigmas with any positive XP value (presets are only suggestions)', async () => {
-    mocks.classFindFirst.mockResolvedValueOnce({ id: CLASS, teacherId: TEACHER })
     mocks.missionCreate.mockResolvedValueOnce({ id: MISSION })
     mocks.missionEnigmaCreateMany.mockResolvedValueOnce({ count: 1 })
 
@@ -141,7 +152,6 @@ describe('createMission', () => {
   })
 
   it('accepts each preset XP value', async () => {
-    mocks.classFindFirst.mockResolvedValue({ id: CLASS, teacherId: TEACHER })
     mocks.missionCreate.mockResolvedValue({ id: MISSION })
     mocks.missionEnigmaCreateMany.mockResolvedValue({ count: 1 })
 
@@ -156,8 +166,8 @@ describe('createMission', () => {
     }
   })
 
-  it('rejects when the teacher does not own the class', async () => {
-    mocks.classFindFirst.mockResolvedValueOnce(null)
+  it('asks the access layer for mission.edit on the class and creates nothing when it refuses', async () => {
+    mocks.assertClassAccess.mockRejectedValueOnce(new NotFoundError('Clase no encontrada'))
 
     await expect(
       missionsService.createMission(TEACHER, {
@@ -165,17 +175,25 @@ describe('createMission', () => {
         title: 'Test',
         enigmas: [{ title: 'E', xp: 20 }],
       }),
-    ).rejects.toThrow(/Clase no encontrada/)
+    ).rejects.toBeInstanceOf(NotFoundError)
+    expect(mocks.assertClassAccess).toHaveBeenCalledWith(CLASS, TEACHER, 'mission.edit')
+    expect(mocks.missionCreate).not.toHaveBeenCalled()
+  })
+
+  it('answers 404 without asking when there is no class', async () => {
+    await expect(
+      missionsService.createMission(TEACHER, { title: 'Test', enigmas: [{ title: 'E' }] }),
+    ).rejects.toBeInstanceOf(NotFoundError)
+    expect(mocks.assertClassAccess).not.toHaveBeenCalled()
   })
 })
 
 describe('updateMission', () => {
   it('rejects rarity change when students already completed the mission', async () => {
-    mocks.missionFindFirst.mockResolvedValueOnce({
+    mocks.missionFindUnique.mockResolvedValueOnce({
       id: MISSION,
       classId: CLASS,
       rarity: 'comun',
-      class: { teacherId: TEACHER },
     })
     mocks.studentMissionProgressCount.mockResolvedValueOnce(3)
 
@@ -187,11 +205,10 @@ describe('updateMission', () => {
   })
 
   it('allows rarity change when no student has completed the mission', async () => {
-    mocks.missionFindFirst.mockResolvedValueOnce({
+    mocks.missionFindUnique.mockResolvedValueOnce({
       id: MISSION,
       classId: CLASS,
       rarity: 'comun',
-      class: { teacherId: TEACHER },
     })
     mocks.studentMissionProgressCount.mockResolvedValueOnce(0)
     mocks.missionUpdate.mockResolvedValueOnce({ id: MISSION, rarity: 'rara' })
@@ -204,11 +221,10 @@ describe('updateMission', () => {
   })
 
   it('allows non-rarity field updates regardless of completions', async () => {
-    mocks.missionFindFirst.mockResolvedValueOnce({
+    mocks.missionFindUnique.mockResolvedValueOnce({
       id: MISSION,
       classId: CLASS,
       rarity: 'comun',
-      class: { teacherId: TEACHER },
     })
     mocks.missionUpdate.mockResolvedValueOnce({ id: MISSION })
 
@@ -219,27 +235,44 @@ describe('updateMission', () => {
     expect(mocks.missionUpdate).toHaveBeenCalled()
   })
 
-  it('rejects updates from the wrong teacher', async () => {
-    mocks.missionFindFirst.mockResolvedValueOnce({
-      id: MISSION,
-      classId: CLASS,
-      rarity: 'comun',
-      class: { teacherId: 'other-teacher' },
-    })
+  it('asks the access layer for mission.edit and changes nothing when the level falls short', async () => {
+    mocks.assertMissionAccess.mockRejectedValueOnce(new ForbiddenError())
 
     await expect(
       missionsService.updateMission(TEACHER, MISSION, { title: 'X' }),
-    ).rejects.toThrow(/No tienes permiso/)
+    ).rejects.toBeInstanceOf(ForbiddenError)
+    expect(mocks.assertMissionAccess).toHaveBeenCalledWith(MISSION, TEACHER, 'mission.edit')
+    expect(mocks.missionFindUnique).not.toHaveBeenCalled()
+    expect(mocks.missionUpdate).not.toHaveBeenCalled()
+  })
+
+  it('moving it to another class also needs mission.edit there', async () => {
+    mocks.missionFindUnique.mockResolvedValueOnce({ id: MISSION, classId: CLASS, rarity: 'comun' })
+    mocks.assertClassAccess.mockRejectedValueOnce(new NotFoundError('Clase no encontrada'))
+
+    await expect(
+      missionsService.updateMission(TEACHER, MISSION, { classId: 'class-2' }),
+    ).rejects.toBeInstanceOf(NotFoundError)
+    expect(mocks.assertClassAccess).toHaveBeenCalledWith('class-2', TEACHER, 'mission.edit')
+    expect(mocks.missionUpdate).not.toHaveBeenCalled()
+  })
+
+  it('does not check the target class when it stays in the same one', async () => {
+    mocks.missionFindUnique.mockResolvedValueOnce({ id: MISSION, classId: CLASS, rarity: 'comun' })
+    mocks.missionUpdate.mockResolvedValueOnce({ id: MISSION })
+
+    await missionsService.updateMission(TEACHER, MISSION, { classId: CLASS, title: 'Y' })
+    expect(mocks.assertClassAccess).not.toHaveBeenCalled()
   })
 })
 
 describe('updateEnigma', () => {
   // TODO: mock desactualizado tras renombrar `missionEnigma` en Prisma schema; refrescar helpers de mock.
   it.skip('rejects XP change when students already completed this enigma', async () => {
-    mocks.missionEnigmaFindFirst.mockResolvedValueOnce({
+    mocks.missionEnigmaFindUnique.mockResolvedValueOnce({
       id: ENIGMA,
       xpReward: 40,
-      mission: { class: { teacherId: TEACHER } },
+      mission: { classId: CLASS, class: { settings: null } },
     })
     mocks.studentEnigmaProgressCount.mockResolvedValueOnce(2)
 
@@ -256,7 +289,7 @@ describe('updateEnigma', () => {
   // TODO: mock desactualizado (missionEnigmaUpdate) tras renombrar en Prisma schema.
 
   it.skip('allows XP change when no student has completed this enigma yet', async () => {
-    mocks.missionEnigmaFindFirst.mockResolvedValueOnce({
+    mocks.missionEnigmaFindUnique.mockResolvedValueOnce({
       id: ENIGMA,
       xpReward: 40,
       title: 't',
@@ -264,7 +297,7 @@ describe('updateEnigma', () => {
       objectives: [],
       isOptional: false,
       orderIndex: 0,
-      mission: { class: { teacherId: TEACHER } },
+      mission: { classId: CLASS, class: { settings: null } },
     })
     mocks.studentEnigmaProgressCount.mockResolvedValueOnce(0)
     mocks.missionEnigmaUpdate.mockResolvedValueOnce({
@@ -285,7 +318,7 @@ describe('updateEnigma', () => {
   // TODO: mock desactualizado (missionEnigmaUpdate) tras renombrar en Prisma schema.
 
   it.skip('allows non-XP updates without checking progress', async () => {
-    mocks.missionEnigmaFindFirst.mockResolvedValueOnce({
+    mocks.missionEnigmaFindUnique.mockResolvedValueOnce({
       id: ENIGMA,
       xpReward: 40,
       title: 'old',
@@ -293,7 +326,7 @@ describe('updateEnigma', () => {
       objectives: [],
       isOptional: false,
       orderIndex: 0,
-      mission: { class: { teacherId: TEACHER } },
+      mission: { classId: CLASS, class: { settings: null } },
     })
     mocks.missionEnigmaUpdate.mockResolvedValueOnce({
       id: ENIGMA,
@@ -314,13 +347,22 @@ describe('updateEnigma', () => {
 
 describe('deleteEnigma', () => {
   const baseMissionWithEnigmas = (count: number) => ({
-    id: MISSION,
-    class: { teacherId: TEACHER },
     enigmas: Array.from({ length: count }, (_, i) => ({ id: `e${i}` })),
   })
 
+  it('asks the access layer for mission.edit on the enigma and deletes nothing when it refuses', async () => {
+    mocks.assertEnigmaAccess.mockRejectedValueOnce(new NotFoundError('Enigma no encontrado'))
+
+    await expect(missionsService.deleteEnigma(TEACHER, ENIGMA)).rejects.toBeInstanceOf(
+      NotFoundError
+    )
+    expect(mocks.assertEnigmaAccess).toHaveBeenCalledWith(ENIGMA, TEACHER, 'mission.edit')
+    expect(mocks.missionEnigmaFindUnique).not.toHaveBeenCalled()
+    expect(mocks.missionEnigmaDelete).not.toHaveBeenCalled()
+  })
+
   it('rejects deleting an enigma that has submissions', async () => {
-    mocks.missionEnigmaFindFirst.mockResolvedValueOnce({
+    mocks.missionEnigmaFindUnique.mockResolvedValueOnce({
       id: ENIGMA,
       submissions: [{ id: 's1' }],
       progress: [],
@@ -332,7 +374,7 @@ describe('deleteEnigma', () => {
   })
 
   it('rejects deleting an enigma that has progress', async () => {
-    mocks.missionEnigmaFindFirst.mockResolvedValueOnce({
+    mocks.missionEnigmaFindUnique.mockResolvedValueOnce({
       id: ENIGMA,
       submissions: [],
       progress: [{ id: 'p1' }],
@@ -344,7 +386,7 @@ describe('deleteEnigma', () => {
   })
 
   it('rejects deleting the last enigma of a mission', async () => {
-    mocks.missionEnigmaFindFirst.mockResolvedValueOnce({
+    mocks.missionEnigmaFindUnique.mockResolvedValueOnce({
       id: ENIGMA,
       submissions: [],
       progress: [],
@@ -356,7 +398,7 @@ describe('deleteEnigma', () => {
   })
 
   it('deletes an enigma when conditions are met', async () => {
-    mocks.missionEnigmaFindFirst.mockResolvedValueOnce({
+    mocks.missionEnigmaFindUnique.mockResolvedValueOnce({
       id: ENIGMA,
       submissions: [],
       progress: [],

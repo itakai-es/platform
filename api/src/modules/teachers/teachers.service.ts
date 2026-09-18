@@ -6,7 +6,11 @@ import { existsSync, mkdirSync } from 'fs'
 import { join } from 'path'
 import { randomUUID } from 'crypto'
 import { generateFireRedAvatar } from '../ai/generators/avatar-firered.js'
-import { AvatarServiceUnavailableError } from '../../utils/errors.js'
+import {
+  AvatarServiceUnavailableError,
+  NotFoundError,
+  ValidationError,
+} from '../../utils/errors.js'
 import { seedDefaultShopItems } from '../shop/shop.service.js'
 import {
   resolveClassSettings,
@@ -18,11 +22,17 @@ import { resolveLevelConfig, tierForLevel, type LevelConfig } from '../../utils/
 import { saveUpload } from '../storage/storage.service.js'
 import { createClassWithOwner } from '../../utils/class-owner.js'
 import {
+  accessibleClassesWhere,
+  assertClassAccess,
   assertMissionAccess,
+  CLASS_ACTION_LEVEL,
   classTeachersInclude,
+  hasClassLevel,
   summarizeClassTeachers,
+  type ClassAccess,
 } from '../../utils/class-access.js'
 import { accountHandle } from '../../utils/identity.js'
+import { assignableBadgesWhere, manageableBadgesWhere } from '../../utils/badge-access.js'
 import { manageableHomeClasses } from './class-students.service.js'
 
 const BADGES_DIR = join(process.cwd(), 'uploads', 'badges')
@@ -35,6 +45,14 @@ export interface ClassCopyOptions {
   shop: boolean
   behaviors: boolean
   missions: boolean
+}
+
+/** Metadatos de la clase: cambiarlos es un ajuste, no contenido. */
+const CLASS_METADATA_FIELDS = ['subject', 'language', 'educationLevel', 'province'] as const
+
+/** El código de invitación solo lo recibe quien puede invitar alumnos a la clase. */
+function visibleInvitationCode(access: ClassAccess | null, code: string) {
+  return access && hasClassLevel(access, CLASS_ACTION_LEVEL['class.inviteCode']) ? code : null
 }
 
 // Ensure upload directories exist
@@ -63,16 +81,17 @@ async function saveBase64Image(base64Data: string, subdir: 'badges' | 'covers' =
 }
 
 export class TeachersService {
+  /** Clases a las que el profesor tiene acceso, con cualquier nivel, según su estado de archivo. */
   private buildArchivedWhere(
     userId: string,
     archived: 'active' | 'archived' | 'all' = 'active'
-  ) {
+  ): Prisma.ClassWhereInput {
     if (archived === 'all') {
-      return { teacherId: userId }
+      return accessibleClassesWhere(userId)
     }
 
     return {
-      teacherId: userId,
+      ...accessibleClassesWhere(userId),
       archived: archived === 'archived',
     }
   }
@@ -81,7 +100,7 @@ export class TeachersService {
 
   async getStats(userId: string) {
     const classes = await prisma.class.findMany({
-      where: { teacherId: userId, archived: false },
+      where: this.buildArchivedWhere(userId, 'active'),
       include: { enrollments: { where: { isPreview: false } }, missions: true },
     })
 
@@ -116,6 +135,7 @@ export class TeachersService {
       classes: classes.map((c) => {
         const totalMissions = c.missions.length
         const completedProgress = c.missions.flatMap((m) => m.progress.filter((p) => p.completedAt))
+        const access = summarizeClassTeachers(c.teachers, userId)
 
         return {
           id: c.id,
@@ -123,7 +143,7 @@ export class TeachersService {
           narrative: c.narrative,
           schedule: c.schedule,
           archived: c.archived,
-          invitationCode: c.invitationCode,
+          invitationCode: visibleInvitationCode(access.myAccess, c.invitationCode),
           backgroundImage: c.backgroundImage,
           subject: c.subject,
           language: c.language,
@@ -138,7 +158,7 @@ export class TeachersService {
             participation: c.enrollments.length > 0 ? Math.round((completedProgress.length / (c.enrollments.length * totalMissions)) * 100) || 0 : 0,
           },
           createdAt: c.createdAt,
-          ...summarizeClassTeachers(c.teachers, userId),
+          ...access,
         }
       }),
       total: classes.length,
@@ -146,8 +166,9 @@ export class TeachersService {
   }
 
   async getClassById(userId: string, classId: string) {
-    const cls = await prisma.class.findFirst({
-      where: { id: classId, teacherId: userId },
+    await assertClassAccess(classId, userId, 'class.view')
+    const cls = await prisma.class.findUnique({
+      where: { id: classId },
       include: {
         enrollments: { where: { isPreview: false }, include: { student: true } },
         missions: { include: { enigmas: true, progress: true } },
@@ -156,7 +177,8 @@ export class TeachersService {
       },
     })
 
-    if (!cls) throw new Error('Clase no encontrada')
+    if (!cls) throw new NotFoundError('Clase no encontrada')
+    const access = summarizeClassTeachers(cls.teachers, userId)
 
     // Count pending submissions for this class
     const missionIds = cls.missions.map((m) => m.id)
@@ -175,7 +197,7 @@ export class TeachersService {
       narrative: cls.narrative,
       schedule: cls.schedule,
       archived: cls.archived,
-      invitationCode: cls.invitationCode,
+      invitationCode: visibleInvitationCode(access.myAccess, cls.invitationCode),
       backgroundImage: cls.backgroundImage,
       subject: cls.subject,
       language: cls.language,
@@ -193,7 +215,7 @@ export class TeachersService {
         pendingReviews,
       },
       createdAt: cls.createdAt,
-      ...summarizeClassTeachers(cls.teachers, userId),
+      ...access,
     }
   }
 
@@ -235,11 +257,21 @@ export class TeachersService {
     classId: string,
     data: { name?: string; narrative?: string; schedule?: string; backgroundImage?: string; subject?: string; language?: string; educationLevel?: string; province?: string; settings?: Partial<ClassSettings>; levelConfig?: Partial<LevelConfig>; scheduleConfig?: unknown }
   ) {
-    const cls = await prisma.class.findFirst({
-      where: { id: classId, teacherId: userId },
-    })
+    // El contenido (nombre, narrativa, portada, horario) es de edición; los ajustes
+    // de gamificación, los niveles y los metadatos, de administración. El
+    // formulario general manda los metadatos siempre, también sin tocarlos: solo
+    // cuenta como ajuste el que cambia de valor (vacío y sin especificar son lo mismo).
+    let access = await assertClassAccess(classId, userId, 'class.editContent')
+    const cls = await prisma.class.findUnique({ where: { id: classId } })
+    if (!cls) throw new NotFoundError('Clase no encontrada')
 
-    if (!cls) throw new Error('Clase no encontrada')
+    const touchesSettings =
+      data.settings !== undefined ||
+      data.levelConfig !== undefined ||
+      CLASS_METADATA_FIELDS.some(
+        field => data[field] !== undefined && (data[field] || null) !== (cls[field] || null)
+      )
+    if (touchesSettings) access = await assertClassAccess(classId, userId, 'class.editSettings')
 
     // Invariante del marketplace: una plantilla publicada no puede quedarse sin
     // los metadatos que exige el filtro (asignatura, nivel, idioma). Se comprueba
@@ -250,11 +282,9 @@ export class TeachersService {
         field in data ? Boolean(data[field]) : Boolean(cls[field])
       )
       if (!stillComplete) {
-        const err = new Error(
+        throw new ValidationError(
           'La clase está publicada como plantilla: no puedes dejar sin especificar la asignatura, el nivel o el idioma. Despublícala primero.'
-        ) as Error & { statusCode?: number }
-        err.statusCode = 400
-        throw err
+        )
       }
     }
 
@@ -317,7 +347,7 @@ export class TeachersService {
         name: updated.name,
         schedule: updated.schedule,
         archived: updated.archived,
-        invitationCode: updated.invitationCode,
+        invitationCode: visibleInvitationCode(access, updated.invitationCode),
         backgroundImage: updated.backgroundImage,
         subject: updated.subject,
         language: updated.language,
@@ -335,8 +365,10 @@ export class TeachersService {
   /** Publica/retira una clase como plantilla pública. Al publicar exige metadatos
    *  mínimos (asignatura, nivel, idioma) para que el marketplace pueda filtrarla. */
   async publishTemplate(userId: string, classId: string, publish: boolean) {
-    const cls = await prisma.class.findFirst({ where: { id: classId, teacherId: userId } })
-    if (!cls) throw new Error('Clase no encontrada')
+    // Publicar y retirar es solo del propietario: el resto del profesorado recibe 403.
+    await assertClassAccess(classId, userId, 'class.publishTemplate')
+    const cls = await prisma.class.findUnique({ where: { id: classId } })
+    if (!cls) throw new NotFoundError('Clase no encontrada')
 
     if (publish) {
       const missing: string[] = []
@@ -577,20 +609,22 @@ export class TeachersService {
     return { class: { id: created.id, name: created.name }, message: 'Plantilla importada como nueva clase' }
   }
 
-  /** Duplica una clase propia del profesor en una clase independiente
-   *  "<nombre> (copia)". El profesor elige en `options` qué partes copiar
-   *  (narrativa, funcionalidades, tienda, comportamientos, misiones). Nunca
-   *  arrastra alumnos ni progreso. */
+  /** Duplica una clase a la que el profesor tiene acceso (basta con lectura) en
+   *  una clase independiente "<nombre> (copia)" de la que él es el propietario.
+   *  El profesor elige en `options` qué partes copiar (narrativa,
+   *  funcionalidades, tienda, comportamientos, misiones). Nunca arrastra
+   *  alumnos ni progreso. */
   async duplicateClass(userId: string, classId: string, options: ClassCopyOptions) {
-    const source = await prisma.class.findFirst({
-      where: { id: classId, teacherId: userId },
+    await assertClassAccess(classId, userId, 'class.duplicate')
+    const source = await prisma.class.findUnique({
+      where: { id: classId },
       include: {
         shopItems: true,
         behaviorTemplates: true,
         missions: { include: { enigmas: true } },
       },
     })
-    if (!source) throw new Error('Clase no encontrada')
+    if (!source) throw new NotFoundError('Clase no encontrada')
 
     const created = await this.copyClass(source, userId, options)
 
@@ -598,11 +632,10 @@ export class TeachersService {
   }
 
   async setClassArchived(userId: string, classId: string, archived: boolean) {
-    const cls = await prisma.class.findFirst({
-      where: { id: classId, teacherId: userId },
-    })
+    await assertClassAccess(classId, userId, 'class.archive')
+    const cls = await prisma.class.findUnique({ where: { id: classId } })
 
-    if (!cls) throw new Error('Clase no encontrada')
+    if (!cls) throw new NotFoundError('Clase no encontrada')
     if (cls.archived && !archived) {
       const updated = await prisma.class.update({
         where: { id: classId },
@@ -643,24 +676,22 @@ export class TeachersService {
   }
 
   async getInvitationCode(userId: string, classId: string) {
-    const cls = await prisma.class.findFirst({
-      where: { id: classId, teacherId: userId },
+    await assertClassAccess(classId, userId, 'class.inviteCode')
+    const cls = await prisma.class.findUnique({
+      where: { id: classId },
+      select: { invitationCode: true },
     })
 
-    if (!cls) throw new Error('Clase no encontrada')
+    if (!cls) throw new NotFoundError('Clase no encontrada')
 
     return { invitationCode: cls.invitationCode }
   }
 
   async getClassMissions(userId: string, classId: string) {
-    const cls = await prisma.class.findFirst({
-      where: { id: classId, teacherId: userId },
-      include: { enrollments: { where: { isPreview: false } } },
+    await assertClassAccess(classId, userId, 'class.view')
+    const totalStudents = await prisma.classEnrollment.count({
+      where: { classId, isPreview: false },
     })
-
-    if (!cls) throw new Error('Clase no encontrada')
-
-    const totalStudents = cls.enrollments.length
 
     const missions = await prisma.mission.findMany({
       where: { classId },
@@ -689,14 +720,15 @@ export class TeachersService {
   }
 
   async getClassRanking(userId: string, classId: string) {
-    const cls = await prisma.class.findFirst({
-      where: { id: classId, teacherId: userId },
+    await assertClassAccess(classId, userId, 'class.view')
+    const cls = await prisma.class.findUnique({
+      where: { id: classId },
       include: {
         enrollments: { where: { isPreview: false }, include: { student: true } },
       },
     })
 
-    if (!cls) throw new Error('Clase no encontrada')
+    if (!cls) throw new NotFoundError('Clase no encontrada')
 
     // Get per-student mission progress
     const totalMissionsInClass = await prisma.mission.count({ where: { classId } })
@@ -758,12 +790,13 @@ export class TeachersService {
    * Alimenta la pestaña "Alumnos" del detalle de la clase.
    */
   async getClassStudents(userId: string, classId: string) {
-    const cls = await prisma.class.findFirst({
-      where: { id: classId, teacherId: userId },
+    await assertClassAccess(classId, userId, 'student.view')
+    const cls = await prisma.class.findUnique({
+      where: { id: classId },
       include: { enrollments: { where: { isPreview: false }, include: { student: true } } },
     })
 
-    if (!cls) throw new Error('Clase no encontrada')
+    if (!cls) throw new NotFoundError('Clase no encontrada')
 
     // Recuento de comportamientos por alumno (positivos / negativos) en esta clase.
     const behaviorCounts = await prisma.behaviorApplication.groupBy({
@@ -826,15 +859,12 @@ export class TeachersService {
   }
 
   async generateStudentAvatar(
-    teacherId: string,
+    userId: string,
     classId: string,
     studentId: string,
     data: { avatar_id: string; wardrobe_prompt: string; background_prompt: string }
   ) {
-    const cls = await prisma.class.findFirst({
-      where: { id: classId, teacherId },
-    })
-    if (!cls) throw new Error('Clase no encontrada')
+    await assertClassAccess(classId, userId, 'student.avatar')
 
     const enrollment = await prisma.classEnrollment.findUnique({
       where: { studentId_classId: { studentId, classId } },
@@ -860,21 +890,22 @@ export class TeachersService {
   // ==================== STUDENTS ====================
 
   /**
-   * Lista los alumnos del profesor. Un alumno se considera archivado cuando TODAS
-   * sus clases con este profesor están archivadas: no hay estado de archivado propio
-   * del alumno, se deriva de las clases (así desarchivar una clase lo devuelve solo).
-   * Al filtrar por `classId` se devuelven los alumnos de esa clase sin importar el
-   * estado, porque la clase se ha abierto a propósito.
+   * Lista los alumnos de las clases a las que el profesor tiene acceso. Un alumno
+   * se considera archivado cuando TODAS esas clases suyas están archivadas: no hay
+   * estado de archivado propio del alumno, se deriva de las clases (así desarchivar
+   * una clase lo devuelve solo). Al filtrar por `classId` se devuelven los alumnos
+   * de esa clase sin importar el estado, porque la clase se ha abierto a propósito;
+   * una clase sin acceso responde 404, como cualquier otra ruta de la clase.
    */
   async getStudents(
     userId: string,
     classId?: string,
     archived: 'active' | 'archived' | 'all' = 'active'
   ) {
-    const whereClause: any = { teacherId: userId }
-
+    // Con `classId` solo se carga esa clase, no el progreso de todas las accesibles.
+    if (classId) await assertClassAccess(classId, userId, 'student.view')
     const classes = await prisma.class.findMany({
-      where: whereClause,
+      where: classId ? { id: classId } : accessibleClassesWhere(userId),
       include: {
         missions: {
           include: {
@@ -957,6 +988,18 @@ export class TeachersService {
     )
 
     if (classId) {
+      // De una clase archivada, sus otras clases accesibles dicen quién sigue activo.
+      if (classes[0]?.archived && students.length > 0) {
+        const elsewhere = await prisma.classEnrollment.findMany({
+          where: {
+            studentId: { in: students.map((s) => s.id) },
+            isPreview: false,
+            class: { ...accessibleClassesWhere(userId), archived: false },
+          },
+          select: { studentId: true },
+        })
+        for (const e of elsewhere) activeStudentIds.add(e.studentId)
+      }
       students = students.filter((s) => s.classId === classId).map((s) => ({
         ...s,
         archived: !activeStudentIds.has(s.id),
@@ -1050,9 +1093,12 @@ export class TeachersService {
   }
 
   async getStudentById(userId: string, studentId: string) {
-    // Verify the student is in one of the teacher's classes
+    // Solo las clases a las que se tiene acceso y en las que está el alumno.
     const classes = await prisma.class.findMany({
-      where: { teacherId: userId },
+      where: {
+        ...accessibleClassesWhere(userId),
+        enrollments: { some: { studentId, isPreview: false } },
+      },
       include: {
         enrollments: {
           where: { studentId, isPreview: false },
@@ -1072,7 +1118,7 @@ export class TeachersService {
 
     const enrolledClasses = classes.filter((c) => c.enrollments.length > 0)
     if (enrolledClasses.length === 0) {
-      throw new Error('Estudiante no encontrado en tus clases')
+      throw new NotFoundError('Estudiante no encontrado en tus clases')
     }
 
     const student = enrolledClasses[0].enrollments[0].student
@@ -1251,22 +1297,15 @@ export class TeachersService {
   // ==================== MISSIONS ====================
 
   async getMissions(userId: string, classIdFilter?: string, limit = 100) {
-    const whereClause: any = {}
+    let whereClause: Prisma.MissionWhereInput
 
     if (classIdFilter) {
-      // Verify ownership
-      const cls = await prisma.class.findFirst({
-        where: { id: classIdFilter, teacherId: userId },
-      })
-      if (!cls) throw new Error('Clase no encontrada')
-      whereClause.classId = classIdFilter
+      await assertClassAccess(classIdFilter, userId, 'class.view')
+      whereClause = { classId: classIdFilter }
     } else {
       // Vista agregada: excluye las misiones de clases archivadas. Si se filtra por
       // una clase concreta (arriba) sí se muestran, porque se ha abierto a propósito.
-      const classes = await prisma.class.findMany({
-        where: { teacherId: userId, archived: false },
-      })
-      whereClause.classId = { in: classes.map((c) => c.id) }
+      whereClause = { class: this.buildArchivedWhere(userId, 'active') }
     }
 
     const missions = await prisma.mission.findMany({
@@ -1313,7 +1352,8 @@ export class TeachersService {
 
   async getActivities(userId: string, limit = 10) {
     const classes = await prisma.class.findMany({
-      where: { teacherId: userId },
+      where: accessibleClassesWhere(userId),
+      select: { id: true, name: true },
     })
 
     const classIds = classes.map((c) => c.id)
@@ -1326,9 +1366,12 @@ export class TeachersService {
 
     const studentIds = enrollments.map((e) => e.studentId)
 
+    // Lo que esos alumnos hacen en estas clases, más lo que no es de ninguna
+    // (subir de nivel, insignias del sistema); lo de clases ajenas se queda fuera.
     const activities = await prisma.activity.findMany({
       where: {
         userId: { in: studentIds },
+        OR: [{ classId: { in: classIds } }, { classId: null }],
       },
       include: { user: true },
       orderBy: { createdAt: 'desc' },
@@ -1370,12 +1413,13 @@ export class TeachersService {
   }
 
   async getClassActivities(userId: string, classId: string, limit = 10) {
-    // Verify teacher owns this class
-    const cls = await prisma.class.findFirst({
-      where: { id: classId, teacherId: userId },
+    await assertClassAccess(classId, userId, 'class.view')
+    const cls = await prisma.class.findUnique({
+      where: { id: classId },
+      select: { name: true },
     })
 
-    if (!cls) throw new Error('Clase no encontrada')
+    if (!cls) throw new NotFoundError('Clase no encontrada')
 
     // Get student IDs enrolled in this class
     const enrollments = await prisma.classEnrollment.findMany({
@@ -1430,10 +1474,12 @@ export class TeachersService {
   }
 
   // ==================== BADGES ====================
+  // Las del sistema, las propias y las vinculadas a misiones de clases donde se
+  // tiene edición (ver `manageableBadgesWhere`).
 
   async getBadges(userId: string) {
     const badges = await prisma.badge.findMany({
-      where: { OR: [{ teacherId: userId }, { teacherId: null }] },
+      where: { OR: [{ teacherId: null }, manageableBadgesWhere(userId)] },
       orderBy: { createdAt: 'desc' },
       include: {
         mission: {
@@ -1502,14 +1548,19 @@ export class TeachersService {
 
   async updateBadge(userId: string, badgeId: string, data: { name?: string; description?: string; imageUrl?: string; rarity?: string; missionId?: string }) {
     const badge = await prisma.badge.findFirst({
-      where: { id: badgeId, teacherId: userId },
+      where: { id: badgeId, ...manageableBadgesWhere(userId) },
     })
 
-    if (!badge) throw new Error('Insignia no encontrada')
+    if (!badge) throw new NotFoundError('Insignia no encontrada')
 
-    // Igual que al crearla: la misión a la que se vincula tiene que ser editable por quien la vincula.
+    // Igual que al crearla: la misión a la que se vincula tiene que ser editable
+    // por quien la vincula, y la insignia, de las que se pueden usar en esa clase.
     if (data.missionId && data.missionId !== badge.missionId) {
-      await assertMissionAccess(data.missionId, userId, 'mission.edit')
+      const { classId } = await assertMissionAccess(data.missionId, userId, 'mission.edit')
+      const assignable = await prisma.badge.count({
+        where: { AND: [{ id: badgeId }, assignableBadgesWhere(userId, classId)] },
+      })
+      if (!assignable) throw new NotFoundError('Insignia no encontrada')
     }
 
     // If imageUrl is base64, save it as a file
@@ -1543,10 +1594,10 @@ export class TeachersService {
 
   async deleteBadge(userId: string, badgeId: string) {
     const badge = await prisma.badge.findFirst({
-      where: { id: badgeId, teacherId: userId },
+      where: { id: badgeId, ...manageableBadgesWhere(userId) },
     })
 
-    if (!badge) throw new Error('Insignia no encontrada')
+    if (!badge) throw new NotFoundError('Insignia no encontrada')
 
     await prisma.badge.delete({ where: { id: badgeId } })
 
@@ -1555,13 +1606,8 @@ export class TeachersService {
 
   // ==================== CLASS GUIDE ====================
 
-  async updateClassGuide(teacherId: string, classId: string, content: string) {
-    // Verify teacher owns the class
-    const cls = await prisma.class.findFirst({
-      where: { id: classId, teacherId },
-    })
-
-    if (!cls) throw new Error('Clase no encontrada')
+  async updateClassGuide(userId: string, classId: string, content: string) {
+    await assertClassAccess(classId, userId, 'class.editContent')
 
     // Upsert guide (create if doesn't exist, update if it does)
     const guide = await prisma.classGuide.upsert({

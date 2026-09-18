@@ -11,7 +11,8 @@ import fastifyStatic from '@fastify/static'
  * entregas del alumnado y los documentos de misión.
  *
  * Lo que se fija aquí:
- *  - una entrega la ven su autor y el profesorado de la clase; nadie más;
+ *  - una entrega la ven su autor y el profesorado de la clase, con cualquier
+ *    nivel y mientras su acceso siga vigente; nadie más;
  *  - un documento, el profesorado de la clase y el alumnado matriculado, con las
  *    mismas puertas que la misión (bloqueada, clase archivada);
  *  - un enlace temporal vale para su fichero y caduca; tocado o vencido, no vale;
@@ -369,6 +370,75 @@ describeWithDatabase('acceso a los ficheros privados', () => {
 
       await prisma.missionDocument.delete({ where: { id: doomed.id } })
       expect((await send('GET', url)).statusCode).toBe(404)
+    })
+  })
+
+  describe('profesorado añadido a la clase', () => {
+    type Level = 'read' | 'edit' | 'admin'
+    const tokens = {} as Record<Level | 'expired', string>
+    const ids: string[] = []
+
+    beforeAll(async () => {
+      const rows: Array<[Level | 'expired', Level, Date | null]> = [
+        ['read', 'read', null],
+        ['edit', 'edit', null],
+        ['admin', 'admin', null],
+        // Tuvo administración, pero su acceso ya venció.
+        ['expired', 'admin', new Date(Date.now() - 60_000)],
+      ]
+      for (const [label, access, endsAt] of rows) {
+        const user = await prisma.user.create({
+          data: {
+            email: `ficheros-${label}.${randomUUID().slice(0, 8)}@test.invalid`,
+            passwordHash: 'x',
+            name: `Ficheros ${label}`,
+            role: 'teacher',
+            isOnboarded: true,
+          },
+        })
+        ids.push(user.id)
+        await prisma.classTeacher.create({
+          data: {
+            classId: f.classId,
+            userId: user.id,
+            access,
+            profile: 'sustituto',
+            addedById: f.users.owner.id,
+            endsAt,
+          },
+        })
+        tokens[label] = app.jwt.sign({ id: user.id, role: 'teacher' })
+      }
+    })
+
+    afterAll(async () => {
+      await prisma.classTeacher.deleteMany({ where: { userId: { in: ids } } })
+      await prisma.user.deleteMany({ where: { id: { in: ids } } })
+    })
+
+    const as = (method: 'GET' | 'POST', url: string, label: Level | 'expired') =>
+      app.inject({ method, url, headers: { authorization: `Bearer ${tokens[label]}` } })
+
+    const routes = () =>
+      [
+        ['GET', `/files/submissions/${submissionId}`],
+        ['POST', `/files/submissions/${submissionId}/link`],
+        ['GET', `/files/documents/${documentId}`],
+        ['POST', `/files/documents/${documentId}/link`],
+      ] as const
+
+    it('con lectura, edición o administración se bajan y se enlazan entregas y documentos', async () => {
+      for (const level of ['read', 'edit', 'admin'] as const) {
+        for (const [method, url] of routes()) {
+          expect((await as(method, url, level)).statusCode, `${level} ${method} ${url}`).toBe(200)
+        }
+      }
+    })
+
+    it('con el acceso vencido, como quien no es de la clase: 404', async () => {
+      for (const [method, url] of routes()) {
+        expect((await as(method, url, 'expired')).statusCode, `${method} ${url}`).toBe(404)
+      }
     })
   })
 

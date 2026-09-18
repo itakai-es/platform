@@ -631,6 +631,9 @@ model Notification {
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  // Los avisos se leen siempre por destinatario: la lista, los no leídos y
+  // marcarlos como leídos.
+  @@index([userId, isRead])
   @@map("notifications")
 }
 

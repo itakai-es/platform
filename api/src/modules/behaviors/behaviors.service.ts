@@ -2,6 +2,8 @@ import { prisma } from '../../config/database.js'
 import { getLevelFromXP } from '../../utils/xp-calculator.js'
 import { resolveClassSettings } from '../../utils/class-settings.js'
 import { resolveLevelConfig } from '../../utils/level-config.js'
+import { assertClassAccess } from '../../utils/class-access.js'
+import { NotFoundError } from '../../utils/errors.js'
 
 /**
  * Per-class behaviors. Teachers maintain a catalog of positive/negative actions
@@ -11,6 +13,9 @@ import { resolveLevelConfig } from '../../utils/level-config.js'
  * Deltas in the template are stored as absolute amounts; the sign on application
  * comes from the `kind` (positive = +, negative = −). All updated balances clamp
  * at 0 (no negatives) and lives have no upper cap, per product spec.
+ *
+ * El catálogo lo ve todo el profesorado de la clase; lo cambia y lo aplica quien
+ * tiene edición en ella.
  */
 
 interface BehaviorTemplateInput {
@@ -54,13 +59,8 @@ function normalize(value: number | undefined | null): number {
 }
 
 class BehaviorsService {
-  private async assertTeacherOwnsClass(teacherId: string, classId: string) {
-    const cls = await prisma.class.findFirst({ where: { id: classId, teacherId }, select: { id: true } })
-    if (!cls) throw new Error('No tienes permiso sobre esta clase')
-  }
-
-  async getBehaviors(teacherId: string, classId: string) {
-    await this.assertTeacherOwnsClass(teacherId, classId)
+  async getBehaviors(userId: string, classId: string) {
+    await assertClassAccess(classId, userId, 'behavior.view')
     const behaviors = await prisma.behaviorTemplate.findMany({
       where: { classId },
       orderBy: { createdAt: 'asc' },
@@ -68,8 +68,8 @@ class BehaviorsService {
     return behaviors.map(formatBehavior)
   }
 
-  async createBehavior(teacherId: string, classId: string, data: BehaviorTemplateInput) {
-    await this.assertTeacherOwnsClass(teacherId, classId)
+  async createBehavior(userId: string, classId: string, data: BehaviorTemplateInput) {
+    await assertClassAccess(classId, userId, 'behavior.edit')
     const behavior = await prisma.behaviorTemplate.create({
       data: {
         classId,
@@ -85,17 +85,17 @@ class BehaviorsService {
   }
 
   async updateBehavior(
-    teacherId: string,
+    userId: string,
     classId: string,
     behaviorId: string,
     data: Partial<BehaviorTemplateInput>,
   ) {
-    await this.assertTeacherOwnsClass(teacherId, classId)
+    await assertClassAccess(classId, userId, 'behavior.edit')
     const existing = await prisma.behaviorTemplate.findFirst({
       where: { id: behaviorId, classId },
       select: { id: true },
     })
-    if (!existing) throw new Error('El comportamiento no existe')
+    if (!existing) throw new NotFoundError('El comportamiento no existe')
 
     const behavior = await prisma.behaviorTemplate.update({
       where: { id: behaviorId },
@@ -111,13 +111,13 @@ class BehaviorsService {
     return formatBehavior(behavior)
   }
 
-  async deleteBehavior(teacherId: string, classId: string, behaviorId: string) {
-    await this.assertTeacherOwnsClass(teacherId, classId)
+  async deleteBehavior(userId: string, classId: string, behaviorId: string) {
+    await assertClassAccess(classId, userId, 'behavior.edit')
     const existing = await prisma.behaviorTemplate.findFirst({
       where: { id: behaviorId, classId },
       select: { id: true },
     })
-    if (!existing) throw new Error('El comportamiento no existe')
+    if (!existing) throw new NotFoundError('El comportamiento no existe')
     await prisma.behaviorTemplate.delete({ where: { id: behaviorId } })
     return { success: true }
   }
@@ -125,16 +125,17 @@ class BehaviorsService {
   /**
    * Aplica un comportamiento a un alumno. Calcula los deltas firmados (positivos
    * suman, negativos restan), recalcula el nivel del enrollment a partir del XP
-   * resultante y registra una BehaviorApplication. Todo en una sola transacción.
+   * resultante y registra una BehaviorApplication, con quien lo aplica como
+   * autor. Todo en una sola transacción.
    */
-  async applyBehavior(teacherId: string, classId: string, behaviorId: string, studentId: string) {
-    await this.assertTeacherOwnsClass(teacherId, classId)
+  async applyBehavior(userId: string, classId: string, behaviorId: string, studentId: string) {
+    await assertClassAccess(classId, userId, 'behavior.apply')
 
     return prisma.$transaction(async (tx) => {
       const behavior = await tx.behaviorTemplate.findFirst({
         where: { id: behaviorId, classId },
       })
-      if (!behavior) throw new Error('El comportamiento no existe')
+      if (!behavior) throw new NotFoundError('El comportamiento no existe')
 
       const enrollment = await tx.classEnrollment.findUnique({
         where: { studentId_classId: { studentId, classId } },
@@ -168,7 +169,7 @@ class BehaviorsService {
         data: {
           classId,
           behaviorId: behavior.id,
-          teacherId,
+          teacherId: userId,
           studentId,
           kind: behavior.kind,
           name: behavior.name,

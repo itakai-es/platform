@@ -2,7 +2,11 @@ import { prisma } from '../../../config/database.js'
 import { BaseAgent, type AgentRequestContext } from './base-agent.js'
 import { getPlatformContext, getSkinName } from '../platform-context.js'
 import { calculateMissionTotalXP } from '../../../utils/xp-calculator.js'
-import { assertMissionAccess, passesAccessCheck } from '../../../utils/class-access.js'
+import {
+  accessibleClassesWhere,
+  assertMissionAccess,
+  passesAccessCheck,
+} from '../../../utils/class-access.js'
 
 export class TeacherAgent extends BaseAgent {
   protected buildSystemPrompt(context: AgentRequestContext) {
@@ -17,13 +21,16 @@ export class TeacherAgent extends BaseAgent {
   }
 
   protected async buildPrompt(context: AgentRequestContext) {
+    // Las clases a las que el profesor tiene acceso, con cualquier nivel: lo que
+    // puede ver en la aplicación es lo que el asistente puede contarle.
+    const myClasses = accessibleClassesWhere(context.userId)
     const [teacher, classes, pendingSubmissions, missions] = await Promise.all([
       prisma.user.findUnique({
         where: { id: context.userId },
         select: { name: true },
       }),
       prisma.class.findMany({
-        where: { teacherId: context.userId },
+        where: myClasses,
         include: {
           _count: {
             select: {
@@ -38,21 +45,11 @@ export class TeacherAgent extends BaseAgent {
       prisma.enigmaSubmission.count({
         where: {
           status: 'pendiente',
-          enigma: {
-            mission: {
-              class: {
-                teacherId: context.userId,
-              },
-            },
-          },
+          enigma: { mission: { class: myClasses } },
         },
       }),
       prisma.mission.findMany({
-        where: {
-          class: {
-            teacherId: context.userId,
-          },
-        },
+        where: { class: myClasses },
         include: {
           class: { select: { name: true } },
           _count: { select: { enigmas: true } },
@@ -113,9 +110,9 @@ export class TeacherAgent extends BaseAgent {
    * Build detailed mission context string for AI prompt injection (teacher perspective).
    * Fetches the full mission with enigmas, class info, and student submission stats.
    */
-  private async buildMissionContext(missionId: string, teacherId: string): Promise<string | null> {
+  private async buildMissionContext(missionId: string, userId: string): Promise<string | null> {
     // El contexto de una misión solo se carga para el profesorado de su clase; si no, se ignora.
-    if (!(await passesAccessCheck(assertMissionAccess(missionId, teacherId, 'mission.view')))) {
+    if (!(await passesAccessCheck(assertMissionAccess(missionId, userId, 'mission.view')))) {
       return null
     }
 

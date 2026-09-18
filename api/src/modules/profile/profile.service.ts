@@ -297,7 +297,8 @@ export class ProfileService {
                 narrative: true,
                 schedule: true,
                 archived: true,
-                invitationCode: true,
+                // Sin el código de invitación: es de quien administra la clase, y
+                // aquí entran también las matrículas de vista previa.
                 teacherId: true,
                 createdAt: true,
                 updatedAt: true,

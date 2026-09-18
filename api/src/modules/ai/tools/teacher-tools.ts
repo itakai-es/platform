@@ -7,6 +7,11 @@ import { generateImage } from '../generators/image.js'
 import { prisma } from '../../../config/database.js'
 import { nanoid } from 'nanoid'
 import { createClassWithOwner } from '../../../utils/class-owner.js'
+import {
+  accessibleClassesWhere,
+  CLASS_ACTION_LEVEL,
+  hasClassLevel,
+} from '../../../utils/class-access.js'
 
 /**
  * Register teacher-only tools that agents can invoke via function calling.
@@ -142,18 +147,28 @@ export function registerTeacherTools() {
       const userId = (args as Record<string, unknown>)._userId as string | undefined
       if (!userId) return 'Error: no se pudo identificar al profesor.'
 
+      // Las clases a las que tiene acceso; el código de invitación, solo en las
+      // que puede invitar alumnos.
       const classes = await prisma.class.findMany({
-        where: { teacherId: userId },
-        include: { _count: { select: { enrollments: { where: { isPreview: false } }, missions: true } } },
+        where: accessibleClassesWhere(userId),
+        include: {
+          _count: { select: { enrollments: { where: { isPreview: false } }, missions: true } },
+          teachers: { where: { userId }, select: { access: true, profile: true, isOwner: true } },
+        },
         orderBy: { createdAt: 'desc' },
         take: 10,
       })
 
       if (classes.length === 0) return 'No tienes clases creadas todavia.'
 
-      return classes.map(c =>
-        `- **${c.name}** (${c._count.enrollments} alumnos, ${c._count.missions} misiones, codigo: ${c.invitationCode})`
-      ).join('\n')
+      return classes
+        .map(c => {
+          const mine = c.teachers[0]
+          const canInvite = mine && hasClassLevel(mine, CLASS_ACTION_LEVEL['class.inviteCode'])
+          const code = canInvite ? `, codigo: ${c.invitationCode}` : ''
+          return `- **${c.name}** (${c._count.enrollments} alumnos, ${c._count.missions} misiones${code})`
+        })
+        .join('\n')
     },
   })
 }

@@ -4,7 +4,20 @@ import { applyXpDelta } from '../../utils/enrollment-xp.js'
 import { formatMission, getMissionStatus } from '../../utils/mission-formatter.js'
 import { resolveClassSettings } from '../../utils/class-settings.js'
 import { resolveLevelConfig } from '../../utils/level-config.js'
-import { assertMissionMember, type ClassUser } from '../../utils/class-access.js'
+import {
+  CLASS_ACTION_LEVEL,
+  assertClassAccess,
+  assertDocumentAccess,
+  assertEnigmaAccess,
+  assertMissionAccess,
+  assertMissionMember,
+  getStudentEnrollment,
+  hasClassLevel,
+  studentEnrollmentsWhere,
+  type ClassUser,
+} from '../../utils/class-access.js'
+import { assignableBadgesWhere } from '../../utils/badge-access.js'
+import { NotFoundError } from '../../utils/errors.js'
 import { existsSync, mkdirSync } from 'fs'
 import {
   saveUpload,
@@ -103,10 +116,13 @@ function formatDocumentForFrontend(
 }
 
 export class MissionsService {
-  async getMissions(userId: string, filters?: { subject?: string; search?: string }) {
-    // Get user's enrolled classes
+  async getMissions(user: ClassUser, filters?: { subject?: string; search?: string }) {
+    const userId = user.id
+    // Clases en las que actúa como alumno: las suyas o, para el profesorado, la
+    // vista previa de las que sigue impartiendo.
     const enrollments = await prisma.classEnrollment.findMany({
-      where: { studentId: userId },
+      where: studentEnrollmentsWhere(user),
+      select: { classId: true },
     })
 
     const classIds = enrollments.map((e) => e.classId)
@@ -136,7 +152,18 @@ export class MissionsService {
     }
   }
 
-  async getMissionById(userId: string, missionId: string) {
+  async getMissionById(user: ClassUser, missionId: string) {
+    // La ve el profesorado de la clase, con cualquier nivel, y el alumnado
+    // matriculado. Al alumno se le cierra (404) con la clase archivada o la
+    // misión bloqueada; al profesorado no, que la sigue gestionando. Quien es
+    // las dos cosas (vista previa) la ve como profesor.
+    const membership = await assertMissionMember(missionId, user)
+    const isTeacher = membership.teacher !== null
+    const canEdit =
+      membership.teacher !== null &&
+      hasClassLevel(membership.teacher, CLASS_ACTION_LEVEL['mission.edit'])
+    const userId = user.id
+
     const mission = await prisma.mission.findUnique({
       where: { id: missionId },
       include: {
@@ -157,29 +184,7 @@ export class MissionsService {
       },
     })
 
-    if (!mission) throw new Error('Misión no encontrada')
-
-    // Check if user is teacher of the class
-    const isTeacher = mission.class.teacherId === userId
-
-    // Check if user is enrolled as student
-    const enrollment = await prisma.classEnrollment.findUnique({
-      where: { studentId_classId: { studentId: userId, classId: mission.classId } },
-    })
-
-    if (!isTeacher && !enrollment) throw new Error('No tienes acceso a esta misión')
-
-    // Si la clase está archivada, el alumno pierde el acceso a sus misiones aunque
-    // conserve el link. El profesor sí puede seguir viéndolas para gestionarlas.
-    if (!isTeacher && mission.class.archived) {
-      throw new Error('Esta clase está archivada y sus misiones ya no están disponibles')
-    }
-
-    // Una misión bloqueada está cerrada para el alumno (aunque tenga la URL): el
-    // profesor la ha bloqueado a propósito. El profesor sí puede seguir viéndola.
-    if (!isTeacher && mission.status === 'bloqueada') {
-      throw new Error('Esta misión está bloqueada por el profesor')
-    }
+    if (!mission) throw new NotFoundError('Misión no encontrada')
 
     const progress = mission.progress[0]
 
@@ -253,6 +258,8 @@ export class MissionsService {
         deadline: mission.deadline,
         backgroundImage: mission.backgroundImage,
         isTeacher,
+        // Si quien la mira como profesor puede cambiarla (con lectura, solo la ve).
+        canEdit,
         progress: {
           done: progress?.enigmasCompleted || 0,
           total: mission.enigmas.length,
@@ -321,22 +328,21 @@ export class MissionsService {
     }
   }
 
-  async startMission(userId: string, missionId: string) {
+  async startMission(user: ClassUser, missionId: string) {
+    const userId = user.id
     const mission = await prisma.mission.findUnique({
       where: { id: missionId },
       include: { enigmas: true, class: true },
     })
 
-    if (!mission) throw new Error('Misión no encontrada')
+    // Sin matrícula válida en la clase, la misión no existe para quien pregunta.
+    const ref = mission && (await getStudentEnrollment(mission.classId, user))
+    if (!mission || !ref) throw new NotFoundError('Misión no encontrada')
     if (mission.class.archived) throw new Error('La clase está archivada y no admite nuevas acciones')
     if (mission.status === 'bloqueada') throw new Error('Esta misión está bloqueada por el profesor')
 
-    // Get enrollment for class-specific profile
-    const enrollment = await prisma.classEnrollment.findUnique({
-      where: { studentId_classId: { studentId: userId, classId: mission.classId } },
-    })
-
-    if (!enrollment) throw new Error('No estás inscrito en esta clase')
+    // Perfil del alumno en la clase (alias y avatar) para la actividad.
+    const enrollment = await prisma.classEnrollment.findUniqueOrThrow({ where: { id: ref.id } })
 
     // Create or update progress
     const progress = await prisma.studentMissionProgress.upsert({
@@ -376,9 +382,11 @@ export class MissionsService {
     }
   }
 
-  async getStats(userId: string) {
+  async getStats(user: ClassUser) {
+    const userId = user.id
     const enrollments = await prisma.classEnrollment.findMany({
-      where: { studentId: userId },
+      where: studentEnrollmentsWhere(user),
+      select: { classId: true },
     })
 
     const classIds = enrollments.map((e) => e.classId)
@@ -417,26 +425,22 @@ export class MissionsService {
 
   // Submit enigma for review
   async submitEnigma(
-    userId: string,
+    user: ClassUser,
     missionId: string,
     enigmaId: string,
     data: { fileName?: string; fileSize?: number }
   ) {
+    const userId = user.id
     // Verify enigma exists and belongs to mission
     const enigma = await prisma.missionEnigma.findFirst({
       where: { id: enigmaId, missionId },
       include: { mission: { include: { class: true } } },
     })
 
-    if (!enigma) throw new Error('Enigma no encontrado')
+    // Sin matrícula válida en la clase, el enigma no existe para quien pregunta.
+    const enrollment = enigma && (await getStudentEnrollment(enigma.mission.classId, user))
+    if (!enigma || !enrollment) throw new NotFoundError('Enigma no encontrado')
     if (enigma.mission.class.archived) throw new Error('La clase está archivada y no admite nuevas entregas')
-
-    // Verify student is enrolled
-    const enrollment = await prisma.classEnrollment.findUnique({
-      where: { studentId_classId: { studentId: userId, classId: enigma.mission.classId } },
-    })
-
-    if (!enrollment) throw new Error('No estás inscrito en esta clase')
 
     // Check if already has pending submission
     const existingSubmission = await prisma.enigmaSubmission.findFirst({
@@ -527,7 +531,7 @@ export class MissionsService {
   }
 
   async uploadMissionDocument(
-    teacherId: string,
+    userId: string,
     missionId: string,
     data: {
       name: string
@@ -538,16 +542,7 @@ export class MissionsService {
     },
     file?: { buffer: Buffer; filename: string; mimetype: string }
   ) {
-    // Verify teacher owns the mission's class
-    const mission = await prisma.mission.findUnique({
-      where: { id: missionId },
-      include: { class: true },
-    })
-
-    if (!mission) throw new Error('Misión no encontrada')
-    if (mission.class.teacherId !== teacherId) {
-      throw new Error('No tienes permiso para añadir documentos a esta misión')
-    }
+    await assertMissionAccess(missionId, userId, 'mission.edit')
 
     let fileUrl: string
     let fileName: string
@@ -596,7 +591,7 @@ export class MissionsService {
   }
 
   async updateMissionDocument(
-    teacherId: string,
+    userId: string,
     documentId: string,
     data: {
       name?: string
@@ -604,16 +599,7 @@ export class MissionsService {
       tags?: string[]
     }
   ) {
-    // Find document and verify teacher owns the mission's class
-    const existingDoc = await prisma.missionDocument.findUnique({
-      where: { id: documentId },
-      include: { mission: { include: { class: true } } },
-    })
-
-    if (!existingDoc) throw new Error('Documento no encontrado')
-    if (existingDoc.mission.class.teacherId !== teacherId) {
-      throw new Error('No tienes permiso para editar este documento')
-    }
+    await assertDocumentAccess(documentId, userId, 'mission.edit')
 
     const document = await prisma.missionDocument.update({
       where: { id: documentId },
@@ -630,17 +616,13 @@ export class MissionsService {
     }
   }
 
-  async deleteMissionDocument(teacherId: string, documentId: string) {
-    // Find document and verify teacher owns the mission's class
+  async deleteMissionDocument(userId: string, documentId: string) {
+    await assertDocumentAccess(documentId, userId, 'mission.edit')
     const document = await prisma.missionDocument.findUnique({
       where: { id: documentId },
-      include: { mission: { include: { class: true } } },
+      select: { fileUrl: true },
     })
-
-    if (!document) throw new Error('Documento no encontrado')
-    if (document.mission.class.teacherId !== teacherId) {
-      throw new Error('No tienes permiso para eliminar este documento')
-    }
+    if (!document) throw new NotFoundError('Documento no encontrado')
 
     // Se borra el fichero del documento, y solo ese: tiene que ser uno de la
     // carpeta de documentos y no estar guardado en ninguna otra fila (un
@@ -661,13 +643,11 @@ export class MissionsService {
   }
 
   // Teacher methods
-  async createMission(teacherId: string, data: any) {
-    // Verify teacher owns the class
-    const cls = await prisma.class.findFirst({
-      where: { id: data.classId, teacherId },
-    })
-
-    if (!cls) throw new Error('Clase no encontrada')
+  // Crear, cambiar, bloquear o mover misiones y tocar sus enigmas, documentos y
+  // recompensas es editar el contenido de la clase: hace falta edición en ella.
+  async createMission(userId: string, data: any) {
+    if (!data.classId) throw new NotFoundError('Clase no encontrada')
+    await assertClassAccess(data.classId, userId, 'mission.edit')
 
     // A mission without enigmas would be trivially "complete" on first check,
     // handing out a free bonus. Require at least one enigma up front.
@@ -708,21 +688,14 @@ export class MissionsService {
     })
   }
 
-  async updateMission(teacherId: string, missionId: string, data: any) {
-    const mission = await prisma.mission.findFirst({
-      where: { id: missionId },
-      include: { class: true },
-    })
+  async updateMission(userId: string, missionId: string, data: any) {
+    await assertMissionAccess(missionId, userId, 'mission.edit')
+    const mission = await prisma.mission.findUnique({ where: { id: missionId } })
+    if (!mission) throw new NotFoundError('Misión no encontrada')
 
-    if (!mission) throw new Error('Misión no encontrada')
-    if (mission.class.teacherId !== teacherId) throw new Error('No tienes permiso para modificar esta misión')
-
+    // Moverla a otra clase es añadirle contenido a esa también: la misma exigencia allí.
     if (data.classId && data.classId !== mission.classId) {
-      const targetClass = await prisma.class.findFirst({
-        where: { id: data.classId, teacherId },
-      })
-
-      if (!targetClass) throw new Error('Clase no encontrada')
+      await assertClassAccess(data.classId, userId, 'mission.edit')
     }
 
     // Changing the rarity of a mission that has already been completed by any
@@ -771,15 +744,8 @@ export class MissionsService {
   }
 
   // Teacher: Reorder enigmas
-  async reorderEnigmas(teacherId: string, missionId: string, enigmaIds: string[]) {
-    // Verify mission exists and teacher owns it
-    const mission = await prisma.mission.findFirst({
-      where: { id: missionId },
-      include: { class: true },
-    })
-
-    if (!mission) throw new Error('Misión no encontrada')
-    if (mission.class.teacherId !== teacherId) throw new Error('No tienes permiso para modificar esta misión')
+  async reorderEnigmas(userId: string, missionId: string, enigmaIds: string[]) {
+    await assertMissionAccess(missionId, userId, 'mission.edit')
 
     // Solo se reordena lo que es de esta misión: un id de otra no cambia nada.
     const updates = enigmaIds.map((enigmaId, index) =>
@@ -795,15 +761,8 @@ export class MissionsService {
   }
 
   // Teacher: Reorder documents
-  async reorderDocuments(teacherId: string, missionId: string, documentIds: string[]) {
-    // Verify mission exists and teacher owns it
-    const mission = await prisma.mission.findFirst({
-      where: { id: missionId },
-      include: { class: true },
-    })
-
-    if (!mission) throw new Error('Misión no encontrada')
-    if (mission.class.teacherId !== teacherId) throw new Error('No tienes permiso para modificar esta misión')
+  async reorderDocuments(userId: string, missionId: string, documentIds: string[]) {
+    await assertMissionAccess(missionId, userId, 'mission.edit')
 
     // Solo se reordena lo que es de esta misión: un id de otra no cambia nada.
     const updates = documentIds.map((docId, index) =>
@@ -819,7 +778,7 @@ export class MissionsService {
   }
 
   // Teacher: Create enigma for existing mission
-  async createEnigma(teacherId: string, missionId: string, data: {
+  async createEnigma(userId: string, missionId: string, data: {
     title: string
     description?: string
     xp?: number
@@ -828,13 +787,12 @@ export class MissionsService {
     objectives?: string[]
     isOptional?: boolean
   }) {
-    const mission = await prisma.mission.findFirst({
+    await assertMissionAccess(missionId, userId, 'mission.edit')
+    const mission = await prisma.mission.findUnique({
       where: { id: missionId },
-      include: { class: true, enigmas: { select: { id: true } } },
+      select: { enigmas: { select: { id: true } } },
     })
-
-    if (!mission) throw new Error('Misión no encontrada')
-    if (mission.class.teacherId !== teacherId) throw new Error('No tienes permiso para modificar esta misión')
+    if (!mission) throw new NotFoundError('Misión no encontrada')
 
     const enigma = await prisma.missionEnigma.create({
       data: {
@@ -868,7 +826,7 @@ export class MissionsService {
   }
 
   // Teacher: Update enigma
-  async updateEnigma(teacherId: string, enigmaId: string, data: {
+  async updateEnigma(userId: string, enigmaId: string, data: {
     title?: string
     description?: string
     xp?: number
@@ -877,13 +835,12 @@ export class MissionsService {
     objectives?: string[]
     isOptional?: boolean
   }) {
-    const enigma = await prisma.missionEnigma.findFirst({
+    await assertEnigmaAccess(enigmaId, userId, 'mission.edit')
+    const enigma = await prisma.missionEnigma.findUnique({
       where: { id: enigmaId },
       include: { mission: { include: { class: true } } },
     })
-
-    if (!enigma) throw new Error('Enigma no encontrado')
-    if (enigma.mission.class.teacherId !== teacherId) throw new Error('No tienes permiso para modificar este enigma')
+    if (!enigma) throw new NotFoundError('Enigma no encontrado')
 
     // El XP admite cualquier valor entero ≥ 0 (input libre + atajos rápidos en la
     // UI). El schema de la ruta ya garantiza `int().min(0)`.
@@ -997,18 +954,18 @@ export class MissionsService {
   }
 
   // Teacher: Delete enigma
-  async deleteEnigma(teacherId: string, enigmaId: string) {
-    const enigma = await prisma.missionEnigma.findFirst({
+  async deleteEnigma(userId: string, enigmaId: string) {
+    await assertEnigmaAccess(enigmaId, userId, 'mission.edit')
+    const enigma = await prisma.missionEnigma.findUnique({
       where: { id: enigmaId },
       include: {
-        mission: { include: { class: true, enigmas: { select: { id: true } } } },
+        mission: { select: { enigmas: { select: { id: true } } } },
         submissions: { select: { id: true } },
         progress: { select: { id: true } },
       },
     })
 
-    if (!enigma) throw new Error('Enigma no encontrado')
-    if (enigma.mission.class.teacherId !== teacherId) throw new Error('No tienes permiso para eliminar este enigma')
+    if (!enigma) throw new NotFoundError('Enigma no encontrado')
     if (enigma.submissions.length > 0) throw new Error('No se puede eliminar un enigma que ya tiene entregas de alumnos')
     if (enigma.progress.length > 0) throw new Error('No se puede eliminar un enigma que ya tiene alumnos que lo completaron')
     if (enigma.mission.enigmas.length <= 1) {
@@ -1021,38 +978,25 @@ export class MissionsService {
   }
 
   // Teacher: Update mission rewards (assign/remove badge)
-  async updateMissionRewards(teacherId: string, missionId: string, badgeId: string | null) {
-    // Verify mission exists and teacher owns it
-    const mission = await prisma.mission.findFirst({
-      where: { id: missionId },
-      include: { class: true, badges: true },
-    })
+  async updateMissionRewards(userId: string, missionId: string, badgeId: string | null) {
+    const { classId } = await assertMissionAccess(missionId, userId, 'mission.edit')
 
-    if (!mission) throw new Error('Misión no encontrada')
-    if (mission.class.teacherId !== teacherId) throw new Error('No tienes permiso para modificar esta misión')
-
-    // Remove any existing badges from this mission
-    if (mission.badges.length > 0) {
-      await prisma.badge.updateMany({
-        where: { missionId },
-        data: { missionId: null },
-      })
-    }
-
-    // Assign new badge if provided
+    // Solo se asigna una insignia que quien edita puede usar en esta clase: una
+    // suelta suya, una de otra misión de la clase o una suya de otra clase donde
+    // también edita (ver `assignableBadgesWhere`).
     if (badgeId) {
-      // Verify badge exists and belongs to teacher
       const badge = await prisma.badge.findFirst({
-        where: { id: badgeId, teacherId },
+        where: { AND: [{ id: badgeId }, assignableBadgesWhere(userId, classId)] },
+        select: { id: true },
       })
-
-      if (!badge) throw new Error('Insignia no encontrada')
-
-      await prisma.badge.update({
-        where: { id: badgeId },
-        data: { missionId },
-      })
+      if (!badge) throw new NotFoundError('Insignia no encontrada')
     }
+
+    // Se quita la que tuviera y se pone la nueva a la vez: o las dos cosas o ninguna.
+    await prisma.$transaction(async tx => {
+      await tx.badge.updateMany({ where: { missionId }, data: { missionId: null } })
+      if (badgeId) await tx.badge.update({ where: { id: badgeId }, data: { missionId } })
+    })
 
     return { message: badgeId ? 'Insignia asignada correctamente' : 'Insignia eliminada de la misión' }
   }
