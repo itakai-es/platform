@@ -223,7 +223,6 @@ import LifeIcon from '~/components/atoms/LifeIcon.vue'
 import type { ClassSettings } from '~/types/class.types'
 import type { AccountType } from '~/types/teacher.types'
 import { resolveClassSettings } from '~/utils/class-settings'
-import { hasClassLevel } from '~/utils/class-access'
 
 definePageMeta({ layout: 'teacher', middleware: ['auth', 'role'] })
 
@@ -257,13 +256,13 @@ const classId = computed(() => route.params.id as string)
 const allStudents = ref<ClassStudentRow[]>([])
 
 // Acceso propio y nombre de la clase: los carga la página de la clase.
-const { state: classState } = useTeacherClassDetail(classId)
+const { state: classState, can } = useTeacherClassDetail(classId)
 const myAccess = computed(() => classState.value.classData?.myAccess ?? null)
 const className = computed(() => classState.value.classData?.name ?? '')
-// La columna de acciones aparece si hay algo que hacer con alguien: administrar
-// la clase o restablecer la contraseña de alguna cuenta.
+// La columna de acciones aparece si hay algo que hacer con alguien: gestionar
+// el alumnado de la clase o restablecer la contraseña de alguna cuenta.
 const showActions = computed(
-  () => hasClassLevel(myAccess.value, 'admin') || allStudents.value.some(s => s.canResetPassword)
+  () => can('student.manage') || allStudents.value.some(s => s.canResetPassword)
 )
 
 const announcement = ref('')

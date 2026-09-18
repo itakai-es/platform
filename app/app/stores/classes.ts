@@ -563,12 +563,13 @@ export const useClassesStore = defineStore('classes', () => {
           body: data,
         }
       )
+      // Sobre lo que ya había: la respuesta no trae todo lo del listado (estadísticas…).
       const index = classes.value.findIndex(c => c.id === classId)
       if (index !== -1) {
-        classes.value[index] = response.class
+        classes.value[index] = { ...classes.value[index], ...response.class }
       }
       if (selectedClass.value?.id === classId) {
-        selectedClass.value = response.class
+        selectedClass.value = { ...selectedClass.value, ...response.class }
       }
       loadedClasses.value.add(classId)
       return response

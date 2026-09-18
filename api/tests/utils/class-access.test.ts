@@ -100,6 +100,8 @@ describe('tabla de acciones', () => {
       'student.nickname': 'admin',
       'teachers.view': 'read',
       'teachers.manage': 'admin',
+      'teachers.leave': 'read',
+      'class.history': 'read',
     })
   })
 

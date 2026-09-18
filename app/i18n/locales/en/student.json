@@ -199,6 +199,10 @@
           "bought_toast": "You bought \"{name}\"!",
           "used_toast": "You used \"{name}\"!",
           "mana_after": "Mana after use"
+        },
+        "teachers": {
+          "title": "Teachers",
+          "empty": "This class has no teachers yet."
         }
       }
     },
@@ -326,7 +330,8 @@
       "recent_activity_card": {
         "title": "Recent Activity",
         "empty": "No recent activity",
-        "user_fallback": "User"
+        "user_fallback": "User",
+        "by_actor": "By {name}"
       },
       "submission_modal": {
         "title": "Submit Enigma",

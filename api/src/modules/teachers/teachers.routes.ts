@@ -21,6 +21,19 @@ import {
   removeStudentFromClass,
   updateStudentNickname,
 } from './class-students.service.js'
+import {
+  addClassTeacher,
+  leaveClass,
+  listClassTeachers,
+  removeClassTeacher,
+  transferClass,
+  updateClassTeacher,
+} from './class-teachers.service.js'
+import {
+  CLASS_HISTORY_MAX_LIMIT,
+  CLASS_HISTORY_TYPES,
+  getClassHistory,
+} from './class-history.service.js'
 
 /** Quien hace la petición: el `id` y el `role` que viajan en el token. */
 type RequestUser = { id: string; role: string | null }
@@ -72,6 +85,37 @@ const usernameProposalSchema = z.object({
  * abultaría la base sin coste para quien lo hace.
  */
 const MANAGED_CREATE_LIMIT = { max: 200, windowMs: 60 * 60 * 1000 }
+const teacherProfileSchema = z.enum(['titular', 'sustituto', 'practicas'])
+const teacherAccessSchema = z.enum(['read', 'edit', 'admin'])
+
+const addClassTeacherSchema = z.object({
+  email: z.string().email('Escribe un correo válido').max(254),
+  profile: teacherProfileSchema,
+  access: teacherAccessSchema.optional(),
+})
+
+const updateClassTeacherSchema = z
+  .object({ profile: teacherProfileSchema.optional(), access: teacherAccessSchema.optional() })
+  .refine(data => data.profile || data.access, 'Indica el perfil o el nivel')
+
+const transferClassSchema = z.object({
+  userId: z.string().min(1, 'Elige a quién pasar la clase'),
+})
+
+const classHistoryQuerySchema = z.object({
+  page: z.coerce.number().int().min(1).optional(),
+  limit: z.coerce.number().int().min(1).max(CLASS_HISTORY_MAX_LIMIT).optional(),
+  actorId: z.string().min(1).optional(),
+  type: z.enum(CLASS_HISTORY_TYPES).optional(),
+})
+
+/**
+ * Intentos de añadir profesorado por hora y por profesor, salgan bien o mal. La
+ * respuesta dice si un correo es de una cuenta de profesorado: con este límite
+ * no sirve para recorrer correos.
+ */
+const CLASS_TEACHER_ADD_LIMIT = { max: 20, windowMs: 60 * 60 * 1000 }
+
 const createClassSchema = z.object({
   name: z.string().min(1),
   narrative: z.string().optional(),
@@ -740,6 +784,72 @@ export async function teacherRoutes(fastify: FastifyInstance) {
         rethrowHttpError(error)
         return reply.status(500).send({ message: 'Error interno' })
       }
+    }
+  )
+
+  // ==================== PROFESORADO DE LA CLASE ====================
+  // Sin try/catch propio: el acceso (404/403), la validación y el límite de
+  // intentos los resuelve el manejador global con su estado.
+
+  fastify.get(
+    '/classes/:classId/teachers',
+    async (request: FastifyRequest<{ Params: { classId: string } }>) => {
+      return listClassTeachers(request.user as RequestUser, request.params.classId)
+    }
+  )
+
+  // Añadir por correo exacto: entra al momento, sin aceptar nada.
+  fastify.post(
+    '/classes/:classId/teachers',
+    async (request: FastifyRequest<{ Params: { classId: string } }>, reply: FastifyReply) => {
+      const actor = request.user as RequestUser
+      const data = addClassTeacherSchema.parse(request.body)
+      consumeRateLimit(`class-teacher-add:${actor.id}`, CLASS_TEACHER_ADD_LIMIT)
+      const result = await addClassTeacher(actor, request.params.classId, data)
+      return reply.status(201).send(result)
+    }
+  )
+
+  fastify.patch(
+    '/classes/:classId/teachers/:userId',
+    async (request: FastifyRequest<{ Params: { classId: string; userId: string } }>) => {
+      const { classId, userId } = request.params
+      const data = updateClassTeacherSchema.parse(request.body)
+      return updateClassTeacher(request.user as RequestUser, classId, userId, data)
+    }
+  )
+
+  fastify.delete(
+    '/classes/:classId/teachers/:userId',
+    async (request: FastifyRequest<{ Params: { classId: string; userId: string } }>) => {
+      const { classId, userId } = request.params
+      return removeClassTeacher(request.user as RequestUser, classId, userId)
+    }
+  )
+
+  // Salir de la clase: todo el profesorado menos el propietario.
+  fastify.post(
+    '/classes/:classId/leave',
+    async (request: FastifyRequest<{ Params: { classId: string } }>) => {
+      return leaveClass(request.user as RequestUser, request.params.classId)
+    }
+  )
+
+  // Pasar la propiedad: solo el propietario, a alguien con administración.
+  fastify.post(
+    '/classes/:classId/transfer',
+    async (request: FastifyRequest<{ Params: { classId: string } }>) => {
+      const { userId } = transferClassSchema.parse(request.body)
+      return transferClass(request.user as RequestUser, request.params.classId, userId)
+    }
+  )
+
+  // Historial de lo que ha hecho el profesorado en la clase, por páginas.
+  fastify.get(
+    '/classes/:classId/history',
+    async (request: FastifyRequest<{ Params: { classId: string } }>) => {
+      const query = classHistoryQuerySchema.parse(request.query)
+      return getClassHistory(request.user as RequestUser, request.params.classId, query)
     }
   )
 

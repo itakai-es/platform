@@ -48,6 +48,7 @@ vi.mock('../../src/utils/class-access.js', () => ({
   assertEnigmaAccess: vi.fn(),
   assertClassAccess: vi.fn(),
   classTeacherRecipients: vi.fn(async () => []),
+  recordClassAction: vi.fn(),
 }))
 
 vi.mock('../../src/utils/enrollment-xp.js', () => ({

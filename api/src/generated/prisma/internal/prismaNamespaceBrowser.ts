@@ -368,7 +368,8 @@ export const EnigmaSubmissionScalarFieldEnum = {
   status: 'status',
   xpAwarded: 'xpAwarded',
   submittedAt: 'submittedAt',
-  reviewedAt: 'reviewedAt'
+  reviewedAt: 'reviewedAt',
+  reviewedById: 'reviewedById'
 } as const
 
 export type EnigmaSubmissionScalarFieldEnum = (typeof EnigmaSubmissionScalarFieldEnum)[keyof typeof EnigmaSubmissionScalarFieldEnum]
@@ -483,7 +484,9 @@ export const ActivityScalarFieldEnum = {
   badgeImage: 'badgeImage',
   achievementName: 'achievementName',
   xpAmount: 'xpAmount',
-  source: 'source'
+  source: 'source',
+  actorId: 'actorId',
+  actorName: 'actorName'
 } as const
 
 export type ActivityScalarFieldEnum = (typeof ActivityScalarFieldEnum)[keyof typeof ActivityScalarFieldEnum]

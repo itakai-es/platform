@@ -157,7 +157,8 @@
           "students": "Alumnos",
           "tienda": "Tienda",
           "behaviors": "Comportamientos",
-          "settings": "Axustes"
+          "settings": "Axustes",
+          "history": "Historial"
         },
         "students": {
           "empty_title": "Entá nun hai alumnos",
@@ -417,7 +418,8 @@
           },
           "management": {
             "title": "Xestión"
-          }
+          },
+          "edit_level_note": "Pues camudar el nome, l'horariu y la portada. La clasificación, les funcionalidaes y los niveles cámudalos quien alministra la clase."
         },
         "badges_empty": "Nun hai insinies nesta clase",
         "archived_notice": "Esta clase ta archivada: pue consultase, pero nun almite alumnos nuevos.",
@@ -508,6 +510,173 @@
           "card_login_url": "Entra en",
           "card_class_code": "Códigu de clase",
           "card_first_login": "Cuando entres per primer vegada, camuda la to contraseña."
+        },
+        "read_only_notice": "El to accesu a esta clase déxate ver esto, pero non camudalo.",
+        "teachers": {
+          "title": "Profesoráu",
+          "description": "Quién imparte esta clase, con qué perfil y qué pue facer nella.",
+          "add": "Amestar docente",
+          "add_title": "Amestar docente",
+          "add_confirm": "Amestar",
+          "load_error": "Nun se pudo cargar el profesoráu.",
+          "retry": "Tornar a intentalo",
+          "you": "Tu",
+          "access_line": "Accesu: {access}",
+          "menu_label": "Aiciones pa {name}",
+          "owner_note": "Yes el propietariu d'esta clase. Pa salir d'ella, pasa primero la propiedá a daquién con alministración.",
+          "leave_title": "Salir de la clase",
+          "leave": "Salir de la clase",
+          "leave_confirm": "Salir",
+          "leave_hint": "Vas dexar de ver esta clase. Pa volver, daquién con alministración va tener qu'amestate de nuevo.",
+          "leave_message": "¿Salir de {class}? Vas dexar de vela y, pa volver, daquién con alministración va tener qu'amestate de nuevo.",
+          "field_email": "Corréu electrónicu",
+          "field_email_hint": "El corréu exactu de la so cuenta de docente na aplicación.",
+          "add_note": "Entra na clase al momentu y recibe un avisu. Nun tien qu'aceptar nada.",
+          "field_profile": "Perfil",
+          "field_access": "Nivel d'accesu",
+          "access_hint": {
+            "read": "Ve la clase, les misiones, l'alumnáu y les entregues, ensin camudar nada.",
+            "edit": "Amás, camuda'l conteníu, la tienda y los comportamientos, y aprueba entregues.",
+            "admin": "Amás, camuda los axustes, xestiona l'alumnáu y el profesoráu y archiva la clase."
+          },
+          "edit": "Camudar perfil o nivel",
+          "edit_title": "Perfil y nivel de {name}",
+          "edit_self_note": "Tas camudando'l to propiu accesu: si lu baxes, ye posible que nun puedas xubilu de nuevo.",
+          "remove": "Quitar de la clase",
+          "remove_title": "Quitar del profesoráu",
+          "remove_confirm": "Quitar",
+          "remove_message": "¿Quitar a {name} del profesoráu de {class}? Va dexar de ver la clase y va recibir un avisu. Lo que yá fixo nella queda.",
+          "transfer": "Pasar la propiedá",
+          "transfer_confirm": "Pasar la propiedá",
+          "transfer_title": "Pasar la propiedá de la clase",
+          "transfer_message": "¿Pasar la propiedá de {class} a {name}? Nun lo vas poder desfacer dende la to cuenta: namás {name} podría devolvétela.",
+          "transfer_keeps": "Sigues na clase con accesu d'alministración.",
+          "transfer_loses": "Yá nun vas poder publicala como plantía nin pasar la so propiedá.",
+          "added": "{name} yá forma parte del profesoráu",
+          "changed": "Anovóse l'accesu de {name}",
+          "removed": "{name} yá nun ta nel profesoráu",
+          "transferred": "Agora la clase ye de {name}",
+          "left": "Saliesti de {class}",
+          "errors": {
+            "not_addable": "Nun se pue amestar a esa persona. Comprueba que'l corréu ye el d'una cuenta de docente.",
+            "already_teacher": "Esa persona yá forma parte del profesoráu d'esta clase.",
+            "owner_locked": "Al propietariu nun se-y pue camudar nin quitar: primero tien de pasar la propiedá.",
+            "owner_cannot_leave": "Yes el propietariu: pa salir, pasa primero la propiedá a daquién con alministración.",
+            "transfer_not_admin": "La propiedá namás se pue pasar a daquién con accesu d'alministración.",
+            "already_owner": "Esa persona yá ye la propietaria de la clase.",
+            "too_many": "Ficiesti demasiaos intentos. Espera un momentu y tórnalo a intentar.",
+            "forbidden": "El to accesu a esta clase nun permite facer esto.",
+            "not_found": "Esto yá nun ta disponible. Recarga la páxina pa ver la clase como ta agora.",
+            "invalid_email": "Escribi un corréu válidu.",
+            "add": "Nun se pudo amestar. Tórnalo a intentar.",
+            "change": "Nun se pudo camudar l'accesu. Tórnalo a intentar.",
+            "remove": "Nun se pudo quitar. Tórnalo a intentar.",
+            "transfer": "Nun se pudo pasar la propiedá. Tórnalo a intentar.",
+            "leave": "Nun se pudo salir de la clase. Tórnalo a intentar."
+          }
+        },
+        "history": {
+          "filter_actor": "Docente",
+          "filter_type": "Tipu",
+          "filter_search": "Buscar docente…",
+          "all_actors": "Tol profesoráu",
+          "all_types": "Tolos tipos",
+          "empty_title": "Entá nun hai nada nel historial",
+          "empty_description": "Equí va apaecer lo que faiga'l profesoráu na clase: misiones, entregues, alumnáu, axustes…",
+          "no_results_title": "Nada con estos filtros",
+          "no_results_description": "Prueba con otru docente o con otru tipu.",
+          "error_title": "Nun se pudo cargar l'historial",
+          "error_description": "Comprueba la conexón y tórnalo a intentar.",
+          "retry": "Tornar a intentalo",
+          "unknown_actor": "Cuenta desaniciada",
+          "unknown_target": "una cuenta desaniciada",
+          "unknown_action": "fizo un cambéu na clase",
+          "types": {
+            "class": "Clase",
+            "teacher": "Profesoráu",
+            "student": "Alumnáu",
+            "mission": "Misiones",
+            "enigma": "Enigmes",
+            "document": "Documentos",
+            "submission": "Entregues",
+            "behavior": "Comportamientos",
+            "shop": "Tienda"
+          },
+          "actions": {
+            "class": {
+              "updated": "camudó los datos de la clase",
+              "settings_changed": "camudó los axustes de la clase",
+              "guide_updated": "anovó la guía de la clase",
+              "archived": "archivó la clase",
+              "unarchived": "desarchivó la clase",
+              "template_published": "publicó la clase como plantía",
+              "template_unpublished": "retiró la clase de les plantíes",
+              "duplicated": "duplicó la clase",
+              "ownership_transferred": "pasó-y la propiedá de la clase a {target}",
+              "ownership_inherited": "la clase pasó a {target} al desaniciase la cuenta del so propietariu"
+            },
+            "teacher": {
+              "added": "amestó a {target} al profesoráu ({profile}, {access})",
+              "changed": "camudó l'accesu de {target}: {profile}, {access}",
+              "removed": "quitó a {target} del profesoráu",
+              "left": "salió de la clase"
+            },
+            "student": {
+              "account_created": "creó la cuenta de {target}",
+              "password_reset": "reafitó la contraseña de {target}",
+              "nickname_changed": "camudó'l nomatu de {target}",
+              "removed": "quitó a {target} de la clase",
+              "avatar_generated": "xeneró un avatar nuevu pa {target}"
+            },
+            "mission": {
+              "created": "creó la misión «{title}»",
+              "updated": "editó la misión «{title}»",
+              "blocked": "bloquió la misión «{title}»",
+              "unblocked": "desbloquió la misión «{title}»",
+              "moved": "camudó de clase la misión «{title}»",
+              "rewards_changed": "camudó la recompensa de la misión «{title}»"
+            },
+            "enigma": {
+              "created": "amestó l'enigma «{title}»",
+              "updated": "editó l'enigma «{title}»",
+              "deleted": "desanició l'enigma «{title}»",
+              "rewards_changed": "camudó les recompenses de l'enigma «{title}»"
+            },
+            "document": {
+              "created": "amestó'l documentu «{title}»",
+              "updated": "editó'l documentu «{title}»",
+              "deleted": "desanició'l documentu «{title}»"
+            },
+            "submission": {
+              "approved": "aprobó la entrega de {target} en «{title}» con un {percentage} %"
+            },
+            "behavior": {
+              "applied": "aplicó-y «{title}» a {target}",
+              "created": "creó'l comportamientu «{title}»",
+              "updated": "editó'l comportamientu «{title}»",
+              "deleted": "desanició'l comportamientu «{title}»"
+            },
+            "shop": {
+              "item_created": "amestó «{title}» a la tienda",
+              "item_updated": "editó «{title}» na tienda",
+              "item_deleted": "quitó «{title}» de la tienda"
+            }
+          },
+          "anonymous": {
+            "student": {
+              "account_created": "creó la cuenta d'un alumnu que yá nun ta na clase",
+              "password_reset": "reafitó la contraseña d'un alumnu que yá nun ta na clase",
+              "nickname_changed": "camudó'l nomatu d'un alumnu que yá nun ta na clase",
+              "removed": "quitó a un alumnu de la clase",
+              "avatar_generated": "xeneró un avatar nuevu pa un alumnu que yá nun ta na clase"
+            },
+            "submission": {
+              "approved": "aprobó en «{title}» la entrega d'un alumnu que yá nun ta na clase, con un {percentage} %"
+            },
+            "behavior": {
+              "applied": "aplicó-y «{title}» a un alumnu que yá nun ta na clase"
+            }
+          }
         }
       }
     },
@@ -526,7 +695,9 @@
         "pick_class": "Escueyi una clase",
         "idea_placeholder": "Ex.: Quiero una misión sobre cinemática onde los alumnos calculen traxeutories d'escobes voladores...",
         "narrative_error": "Nun pudi crear la narrativa",
-        "ai_unavailable": "El serviciu d'IA nun ta disponible agora mesmo. Inténtalo otra vuelta en dellos minutos."
+        "ai_unavailable": "El serviciu d'IA nun ta disponible agora mesmo. Inténtalo otra vuelta en dellos minutos.",
+        "no_editable_classes": "Nun tienes nenguna clase na que puedas crear misiones: fai falta accesu d'edición.",
+        "no_classes": "Entá nun tienes nenguna clase: crea una primero pa poder amestar-y misiones."
       },
       "detail": {
         "delete_confirm_btn": "Desaniciar",
@@ -616,7 +787,9 @@
         "description": "Crea, edita y xestiona insinies personalizaes pa premiar los llogros de los tos alumnos."
       },
       "filter_system": "Del sistema",
-      "generate_error": "Nun se pudo xenerar la insinia."
+      "generate_error": "Nun se pudo xenerar la insinia.",
+      "save_error": "Nun se pudo guardar la insinia.",
+      "delete_error": "Nun se pudo desaniciar la insinia."
     },
     "students": {
       "index": {

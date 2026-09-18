@@ -3,6 +3,7 @@
     :class-id="classId"
     :students="state.students"
     :settings="classSettings"
+    :readonly="!can('behavior.edit')"
   />
 </template>
 
@@ -11,5 +12,5 @@ definePageMeta({ layout: 'teacher', middleware: ['auth', 'role'] })
 
 const route = useRoute()
 const classId = computed(() => route.params.id as string)
-const { state, classSettings } = useTeacherClassDetail(classId)
+const { state, classSettings, can } = useTeacherClassDetail(classId)
 </script>

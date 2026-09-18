@@ -13,9 +13,13 @@
       :coins="coins"
       :mana="mana"
       :lives="lives"
-      :has-actions="showArchiveAction || showDuplicateAction"
+      :has-actions="canArchive || canDuplicate"
       @click="$emit('click')"
-    />
+    >
+      <template v-if="profileTag" #tag>
+        <ClassTeacherProfileBadge :profile="profileTag" />
+      </template>
+    </ClassCardRow>
     <ClassCard
       v-else
       :icon="AcademicCapIcon"
@@ -30,17 +34,21 @@
       :mana="mana"
       :lives="lives"
       @click="$emit('click')"
-    />
+    >
+      <template v-if="profileTag" #tag>
+        <ClassTeacherProfileBadge :profile="profileTag" />
+      </template>
+    </ClassCard>
 
     <!-- Overlay actions (duplicate + archive) -->
     <div
-      v-if="showArchiveAction || showDuplicateAction"
+      v-if="canArchive || canDuplicate"
       class="absolute top-3 right-3 z-20 flex items-center gap-1.5"
       @click.stop
     >
       <!-- Duplicate action (oculto mientras se confirma archivar, para no saturar) -->
       <button
-        v-if="showDuplicateAction && !classItem.archived && !confirming"
+        v-if="canDuplicate && !classItem.archived && !confirming"
         class="w-8 h-8 rounded-xl bg-white/90 backdrop-blur-sm shadow-md border border-white/60 flex items-center justify-center text-text-secondary hover:text-navy-700 hover:bg-white transition-all duration-150 disabled:opacity-60"
         title="Duplicar clase"
         :disabled="duplicating"
@@ -51,7 +59,7 @@
       </button>
 
       <!-- Archive/unarchive action -->
-      <Transition v-if="showArchiveAction" name="fade-scale">
+      <Transition v-if="canArchive" name="fade-scale">
         <!-- Confirm state -->
         <div
           v-if="confirming"
@@ -101,7 +109,7 @@ import {
   DocumentDuplicateIcon,
   XMarkIcon,
 } from '@heroicons/vue/24/outline'
-import type { ClassSettings } from '~/types/class.types'
+import type { ClassAccess, ClassSettings } from '~/types/class.types'
 import type { ViewMode } from '~/composables/useViewMode'
 import { resolveClassSettings } from '~/utils/class-settings'
 
@@ -121,6 +129,8 @@ interface ClassItemData {
   stats?: {
     totalMissions?: number
   }
+  /** Acceso propio en la clase (vista del profesor). Sin él no se ofrece archivar ni duplicar. */
+  myAccess?: ClassAccess | null
 }
 
 const props = defineProps<{
@@ -143,6 +153,18 @@ const mana = computed(() => (props.showCoins && cfg.value.mana ? props.classItem
 const lives = computed(() =>
   props.showCoins && cfg.value.lives ? (props.classItem.lives ?? 100) : undefined
 )
+
+// Archivar pide administración; duplicar, solo ver la clase. En listados sin
+// acceso propio (p. ej. los del alumno) no se ofrece ninguna de las dos.
+const { can } = useClassPermissions(() => props.classItem.myAccess)
+const canArchive = computed(() => props.showArchiveAction && can('class.archive'))
+const canDuplicate = computed(() => props.showDuplicateAction && can('class.duplicate'))
+
+// En «Mis clases», el perfil propio en las clases que no son tuyas.
+const profileTag = computed(() => {
+  const access = props.classItem.myAccess
+  return access && !access.isOwner ? access.profile : null
+})
 
 const emit = defineEmits<{
   click: []

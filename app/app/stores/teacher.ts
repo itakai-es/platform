@@ -1,6 +1,15 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import type { ManagedCredentials } from '~/types/auth.types'
+import type {
+  ClassAccess,
+  ClassAccessLevel,
+  ClassHistoryResponse,
+  ClassHistoryType,
+  ClassTeacherMember,
+  ClassTeacherProfile,
+  ClassTeachersResponse,
+} from '~/types/class.types'
 import type {
   Class,
   Student,
@@ -11,6 +20,7 @@ import type {
   ManagedRowInput,
   ManagedRowReview,
 } from '~/types/teacher.types'
+import { canInClass } from '~/utils/class-access'
 
 export const useTeacherStore = defineStore('teacher', () => {
   // State
@@ -148,8 +158,166 @@ export const useTeacherStore = defineStore('teacher', () => {
       return response.class
     } catch (error) {
       console.error('Error fetching class:', error)
+      if (isClassGone(error)) forgetClass(classId)
       throw error
     }
+  }
+
+  // ==========================================
+  // CLASES A LAS QUE YA NO SE LLEGA
+  // ==========================================
+
+  /**
+   * ¿Dice este error que la clase ya no es accesible? La API responde 404 a
+   * quien no tiene acceso y 403 a quien no llega al nivel: en los dos casos lo
+   * que se tenía guardado de la clase ya no vale.
+   */
+  function isClassGone(error: unknown): boolean {
+    const e = error as { statusCode?: number; status?: number; response?: { status?: number } }
+    const status = e?.statusCode ?? e?.status ?? e?.response?.status
+    return status === 403 || status === 404
+  }
+
+  /**
+   * Olvida todo lo guardado de una clase: sale de los listados y de las cachés
+   * por clase, y los listados se volverán a pedir en la próxima visita. Tras
+   * salir de una clase, que te quiten de ella o que te cambien el nivel.
+   */
+  function forgetClass(classId: string) {
+    classes.value = classes.value.filter(c => c.id !== classId)
+    archivedClasses.value = archivedClasses.value.filter(c => c.id !== classId)
+    for (const map of [classStudents, classMissions, classGuides]) map.value.delete(classId)
+    for (const set of [loadedClassStudents, loadedClassMissions, loadedClassGuides]) {
+      set.value.delete(classId)
+    }
+    for (const key of [...classRankings.value.keys()]) {
+      if (key.startsWith(`${classId}-`)) {
+        classRankings.value.delete(key)
+        loadedClassRankings.value.delete(key)
+      }
+    }
+    loadedClassDetails.value.delete(classId)
+    isLoadingClassDetails.value.delete(classId)
+    hasLoadedClasses.value = false
+    hasLoadedArchivedClasses.value = false
+    hasLoadedStudents.value = false
+    hasLoadedStats.value = false
+    hasLoadedActivities.value = false
+    hasLoadedMissions.value = false
+    // El listado de «Mis clases» vive en el almacén de clases.
+    const classesStore = useClassesStore()
+    classesStore.classes = classesStore.classes.filter(c => c.id !== classId)
+    classesStore.hasLoadedClasses = false
+  }
+
+  /**
+   * Acceso propio en una clase, si ya está en algún listado cargado. `undefined`
+   * si no se sabe (hay que pedir la clase); `null` si se sabe que no hay.
+   */
+  function cachedClassAccess(classId: string): ClassAccess | null | undefined {
+    const cached = [...classes.value, ...archivedClasses.value, ...useClassesStore().classes].find(
+      c => c.id === classId && c.myAccess !== undefined
+    )
+    return cached?.myAccess
+  }
+
+  /**
+   * Cambios de acceso propio avisados desde fuera de la clase (un aviso de que
+   * te han cambiado el nivel o quitado): cada uno sube el contador de su clase,
+   * y la pantalla que la tenga abierta vuelve a pedirla.
+   */
+  const classAccessRevision = ref<Record<string, number>>({})
+
+  /** Lo guardado de la clase ya no vale: se olvida y se avisa a quien la tenga abierta. */
+  function markClassAccessChanged(classId: string) {
+    forgetClass(classId)
+    classAccessRevision.value = {
+      ...classAccessRevision.value,
+      [classId]: (classAccessRevision.value[classId] ?? 0) + 1,
+    }
+  }
+
+  /**
+   * ¿Se ofrece crear misiones? Hace falta edición en alguna clase. Mientras no se
+   * sabe, o sin ninguna clase aún (el asistente lo explica), se ofrece.
+   */
+  const canCreateMissions = computed(
+    () =>
+      !hasLoadedClasses.value ||
+      classes.value.length === 0 ||
+      classes.value.some(c => canInClass(c.myAccess, 'mission.edit'))
+  )
+
+  /** Apunta el acceso propio nuevo de una clase en los listados que la tengan. */
+  function setClassAccess(classId: string, access: ClassAccess | null) {
+    for (const list of [classes.value, archivedClasses.value, useClassesStore().classes]) {
+      const cls = list.find(c => c.id === classId)
+      if (cls) cls.myAccess = access
+    }
+  }
+
+  // ==========================================
+  // PROFESORADO DE UNA CLASE
+  // ==========================================
+
+  function classTeachersUrl(classId: string) {
+    return `${useRuntimeConfig().public.apiBase}/teacher/classes/${classId}`
+  }
+
+  async function fetchClassTeachers(classId: string) {
+    return await $fetch<ClassTeachersResponse>(`${classTeachersUrl(classId)}/teachers`)
+  }
+
+  /** Añade por correo exacto. Sin nivel, el del perfil. */
+  async function addClassTeacher(
+    classId: string,
+    data: { email: string; profile: ClassTeacherProfile; access?: ClassAccessLevel }
+  ) {
+    const response = await $fetch<{ teacher: ClassTeacherMember }>(
+      `${classTeachersUrl(classId)}/teachers`,
+      { method: 'POST', body: data }
+    )
+    return response.teacher
+  }
+
+  async function updateClassTeacher(
+    classId: string,
+    userId: string,
+    data: { profile?: ClassTeacherProfile; access?: ClassAccessLevel }
+  ) {
+    const response = await $fetch<{ teacher: ClassTeacherMember }>(
+      `${classTeachersUrl(classId)}/teachers/${userId}`,
+      { method: 'PATCH', body: data }
+    )
+    return response.teacher
+  }
+
+  async function removeClassTeacher(classId: string, userId: string) {
+    await $fetch(`${classTeachersUrl(classId)}/teachers/${userId}`, { method: 'DELETE' })
+  }
+
+  /** Sale de la clase: desde ese momento ya no se llega a ella. */
+  async function leaveClass(classId: string) {
+    await $fetch(`${classTeachersUrl(classId)}/leave`, { method: 'POST' })
+    forgetClass(classId)
+  }
+
+  /** Pasa la propiedad. Devuelve el profesorado tal como queda. */
+  async function transferClass(classId: string, userId: string) {
+    const response = await $fetch<{ teachers: ClassTeacherMember[] }>(
+      `${classTeachersUrl(classId)}/transfer`,
+      { method: 'POST', body: { userId } }
+    )
+    return response.teachers
+  }
+
+  async function fetchClassHistory(
+    classId: string,
+    query: { page?: number; limit?: number; actorId?: string; type?: ClassHistoryType }
+  ) {
+    return await $fetch<ClassHistoryResponse>(`${classTeachersUrl(classId)}/history`, {
+      params: query,
+    })
   }
 
   /**
@@ -276,10 +444,10 @@ export const useTeacherStore = defineStore('teacher', () => {
           body: data,
         }
       )
-      // Actualizar la clase en el array local
+      // Sobre lo que ya había: la respuesta no trae todo lo del listado (estadísticas…).
       const index = classes.value.findIndex(c => c.id === classId)
       if (index !== -1) {
-        classes.value[index] = response.class
+        classes.value[index] = { ...classes.value[index], ...response.class }
       }
       return response
     } catch (error) {
@@ -318,7 +486,7 @@ export const useTeacherStore = defineStore('teacher', () => {
         if (response.class.archived) {
           classes.value.splice(index, 1)
         } else {
-          classes.value[index] = response.class
+          classes.value[index] = { ...classes.value[index], ...response.class }
         }
       } else if (!response.class.archived) {
         classes.value.unshift(response.class)
@@ -906,6 +1074,22 @@ export const useTeacherStore = defineStore('teacher', () => {
     updateClassGuideCache,
     fetchClassRanking,
     refreshDashboard,
+    // Clases a las que ya no se llega y acceso propio
+    isClassGone,
+    forgetClass,
+    cachedClassAccess,
+    setClassAccess,
+    canCreateMissions,
+    classAccessRevision,
+    markClassAccessChanged,
+    // Profesorado e historial de una clase
+    fetchClassTeachers,
+    addClassTeacher,
+    updateClassTeacher,
+    removeClassTeacher,
+    leaveClass,
+    transferClass,
+    fetchClassHistory,
     // Ensure wrappers (patrón canónico — usar desde la UI)
     ensureStats,
     ensureClasses,

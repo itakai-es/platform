@@ -171,7 +171,7 @@
               </div>
               <!-- Teacher: Edit controls -->
               <Button
-                v-if="isTeacher"
+                v-if="canEdit"
                 variant="primary"
                 size="sm"
                 :icon-left="PencilIcon"
@@ -256,7 +256,7 @@
                 </h2>
               </div>
               <!-- Teacher: Add control -->
-              <div v-if="isTeacher" class="flex items-center gap-2">
+              <div v-if="canEdit" class="flex items-center gap-2">
                 <Button
                   variant="primary"
                   size="sm"
@@ -270,10 +270,12 @@
 
             <!-- Enigmas list -->
             <div class="space-y-6">
-              <!-- Draggable list for teachers (always active, handle appears on hover) -->
+              <!-- Draggable list for teachers (always active, handle appears on hover).
+                   Sin edición es la misma lista, sin arrastrar ni botones de cambio. -->
               <draggable
                 v-if="isTeacher"
                 v-model="localEnigmas"
+                :disabled="!canEdit"
                 item-key="id"
                 handle=".drag-handle-enigma"
                 :animation="200"
@@ -294,6 +296,7 @@
                       <div class="flex items-center gap-2">
                         <!-- Mobile/Tablet drag handle (always visible) -->
                         <div
+                          v-if="canEdit"
                           class="drag-handle-enigma flex items-center justify-center w-6 h-10 cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600 flex-shrink-0 -ml-1"
                         >
                           <svg class="w-4 h-4" viewBox="0 0 16 16" fill="currentColor">
@@ -327,6 +330,7 @@
                             class="absolute right-0 top-full mt-1 w-48 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden z-50"
                           >
                             <button
+                              v-if="canEdit"
                               type="button"
                               class="flex items-center gap-3 w-full px-4 py-3 text-sm text-navy-700 hover:bg-gray-50 transition-colors"
                               @click="editEnigmaAction(enigma)"
@@ -348,6 +352,7 @@
                               }}
                             </button>
                             <button
+                              v-if="canEdit"
                               type="button"
                               class="flex items-center gap-3 w-full px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors"
                               @click="deleteEnigmaAction(enigma.id)"
@@ -416,13 +421,18 @@
                       <div class="relative w-10 h-10 flex-shrink-0">
                         <!-- Number (hidden on hover) -->
                         <div
-                          class="absolute inset-0 rounded-full flex items-center justify-center transition-all duration-200 ease-out group-hover:opacity-0 group-hover:scale-90 group-hover:pointer-events-none"
-                          :class="getEnigmaIconClass(enigma, index)"
+                          class="absolute inset-0 rounded-full flex items-center justify-center transition-all duration-200 ease-out"
+                          :class="[
+                            getEnigmaIconClass(enigma, index),
+                            canEdit &&
+                              'group-hover:opacity-0 group-hover:scale-90 group-hover:pointer-events-none',
+                          ]"
                         >
                           <span class="text-white font-bold text-sm">{{ index + 1 }}</span>
                         </div>
                         <!-- Drag handle (visible on hover) -->
                         <div
+                          v-if="canEdit"
                           class="drag-handle-enigma absolute inset-0 rounded-full flex items-center justify-center cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600 opacity-0 scale-110 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 ease-out pointer-events-none group-hover:pointer-events-auto"
                         >
                           <svg class="w-4 h-4" viewBox="0 0 16 16" fill="currentColor">
@@ -506,6 +516,7 @@
                         </div>
                         <!-- Editar / Eliminar -->
                         <div
+                          v-if="canEdit"
                           class="flex items-center justify-end gap-2 mt-3 pt-3 border-t border-gray-100"
                         >
                           <Button
@@ -684,7 +695,7 @@
                   {{ t('teacher.components.mission_detail_template.no_enigmas') }}
                 </p>
                 <Button
-                  v-if="isTeacher"
+                  v-if="canEdit"
                   variant="primary"
                   size="sm"
                   class="mt-4"
@@ -720,7 +731,7 @@
                 </h2>
               </div>
               <!-- Teacher: Add control -->
-              <div v-if="isTeacher" class="flex items-center gap-2">
+              <div v-if="canEdit" class="flex items-center gap-2">
                 <Button
                   variant="primary"
                   size="sm"
@@ -735,7 +746,7 @@
             <div class="space-y-6">
               <!-- Draggable list for teachers (always active, handle appears on hover) -->
               <draggable
-                v-if="isTeacher"
+                v-if="canEdit"
                 v-model="localDocuments"
                 item-key="id"
                 handle=".drag-handle-doc"
@@ -875,7 +886,7 @@
                 </template>
               </draggable>
 
-              <!-- Regular list for students only -->
+              <!-- Regular list for students (and for teachers who can't edit) -->
               <template v-else>
                 <div v-for="doc in supportDocuments" :key="doc.id" class="bg-white rounded-xl p-4">
                   <div class="flex items-start gap-3">
@@ -897,7 +908,7 @@
                           </p>
                         </div>
                         <!-- Teacher: Actions -->
-                        <template v-if="isTeacher">
+                        <template v-if="canEdit">
                           <!-- Desktop: Hover buttons -->
                           <div
                             class="hidden 2xl:flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity"
@@ -1466,12 +1477,15 @@ interface Props {
   activeTab?: string
   /** Constructor del destino (:to) de una pestaña por su id. */
   tabHref?: (tabId: string) => TabLink
+  /** Profesor: si puede cambiar la misión. Sin ello la ve entera, pero sin controles de edición. */
+  editable?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   tabs: () => [],
   activeTab: 'resumen',
   tabHref: undefined,
+  editable: true,
 })
 
 // Sin tabHref las pestañas no navegan a ningún sitio (caso por defecto: sin pestañas).
@@ -1680,6 +1694,7 @@ const onDocumentReorderAndSave = () => {
 
 // Computed
 const isTeacher = computed(() => props.mode === 'teacher')
+const canEdit = computed(() => isTeacher.value && props.editable)
 const baseRoute = computed(() => (isTeacher.value ? '/profesor' : '/alumno'))
 const dashboardLink = computed(() => `${baseRoute.value}/inicio`)
 const classesLink = computed(() => `${baseRoute.value}/clases`)

@@ -8,6 +8,7 @@ import type {
   ChangePasswordRequest,
   ChangeEmailRequest,
   ProfileActionResponse,
+  AccountDeletionCheck,
 } from '~/types/profile.types'
 
 export const useProfileStore = defineStore('profile', () => {
@@ -337,6 +338,19 @@ export const useProfileStore = defineStore('profile', () => {
     }
   }
 
+  /** Qué pasaría con las clases propias al borrar la cuenta. `null` si no se pudo saber. */
+  const checkAccountDeletion = async (): Promise<AccountDeletionCheck | null> => {
+    try {
+      return await $fetch<AccountDeletionCheck>(
+        `${config.public.apiBase}/profile/delete-account/check`,
+        { headers: { Authorization: `Bearer ${authStore.tokens?.accessToken}` } }
+      )
+    } catch (err) {
+      console.error('Error checking account deletion:', err)
+      return null
+    }
+  }
+
   const deleteAccount = async (password: string): Promise<ProfileActionResponse> => {
     try {
       const response = await $fetch<ProfileActionResponse>(
@@ -361,6 +375,7 @@ export const useProfileStore = defineStore('profile', () => {
       return {
         success: false,
         message: err.data?.message || 'Error al eliminar la cuenta',
+        code: err.data?.code,
       }
     }
   }
@@ -395,6 +410,7 @@ export const useProfileStore = defineStore('profile', () => {
     closeAllSessions,
     updatePreferences,
     exportMyData,
+    checkAccountDeletion,
     deleteAccount,
     $reset,
   }

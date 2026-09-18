@@ -1,4 +1,5 @@
 import { prisma } from '../../config/database.js'
+import type { Prisma } from '../../generated/prisma/client.js'
 import { getMissionCompletionRewards, calculateMissionTotalXP, ENIGMA_XP_PRESETS, getLevelFromXP } from '../../utils/xp-calculator.js'
 import { applyXpDelta } from '../../utils/enrollment-xp.js'
 import { formatMission, getMissionStatus } from '../../utils/mission-formatter.js'
@@ -13,6 +14,7 @@ import {
   assertMissionMember,
   getStudentEnrollment,
   hasClassLevel,
+  recordClassAction,
   studentEnrollmentsWhere,
   type ClassUser,
 } from '../../utils/class-access.js'
@@ -44,6 +46,98 @@ async function saveBase64Image(base64Data: string, subdir: 'covers' = 'covers'):
   const ext = matches[1] === 'jpeg' ? 'jpg' : matches[1]
   const buffer = Buffer.from(matches[2], 'base64')
   return saveUpload(`${subdir}/${randomUUID()}.${ext}`, buffer, `image/${matches[1]}`)
+}
+
+type Db = Prisma.TransactionClient
+
+/** Campos de un enigma que no son recompensas: cambiarlos es editarlo. */
+const ENIGMA_CONTENT_FIELDS = ['title', 'description', 'objectives', 'isOptional'] as const
+
+/** Mismo valor, también para listas y fechas. */
+function sameValue(a: unknown, b: unknown) {
+  return JSON.stringify(a ?? null) === JSON.stringify(b ?? null)
+}
+
+function enigmaRewards(enigma: { xpReward: number; coinReward: number; manaReward: number }) {
+  return { xp: enigma.xpReward, coins: enigma.coinReward, mana: enigma.manaReward }
+}
+
+/** Apunta en el registro de la clase un cambio en los documentos de una misión. */
+function recordDocumentChange(
+  tx: Db,
+  actorId: string,
+  classId: string,
+  action: 'document.created' | 'document.updated' | 'document.deleted',
+  document: { id: string; missionId: string; name: string }
+) {
+  return recordClassAction(tx, {
+    classId,
+    actorId,
+    action,
+    entityType: 'document',
+    entityId: document.id,
+    metadata: { title: document.name, missionId: document.missionId },
+  })
+}
+
+/** Campos de la misión que se comparan al editarla; la clase va aparte. */
+const MISSION_FIELDS = [
+  'title',
+  'description',
+  'status',
+  'rarity',
+  'deadline',
+  'backgroundImage',
+] as const
+
+type MissionFields = { id: string; classId: string; title: string } & Record<
+  (typeof MISSION_FIELDS)[number],
+  unknown
+>
+
+/**
+ * Apunta la edición de una misión con los campos que cambiaron. Si pasa a otra
+ * clase, queda en las dos: en cada una se ve de dónde salió y adónde fue.
+ */
+async function recordMissionUpdate(
+  tx: Db,
+  actorId: string,
+  before: MissionFields,
+  after: MissionFields
+) {
+  const fields = MISSION_FIELDS.filter(field => !sameValue(before[field], after[field]))
+  if (before.classId !== after.classId) {
+    for (const classId of [before.classId, after.classId]) {
+      await recordClassAction(tx, {
+        classId,
+        actorId,
+        action: 'mission.moved',
+        entityType: 'mission',
+        entityId: after.id,
+        metadata: {
+          title: after.title,
+          fromClassId: before.classId,
+          toClassId: after.classId,
+          fields,
+        },
+      })
+    }
+    return
+  }
+  if (fields.length === 0) return
+  await recordClassAction(tx, {
+    classId: after.classId,
+    actorId,
+    action: 'mission.updated',
+    entityType: 'mission',
+    entityId: after.id,
+    // Bloquear o abrir la misión se ve en el historial tal cual.
+    metadata: {
+      title: after.title,
+      fields,
+      ...(fields.includes('status') ? { status: String(after.status) } : {}),
+    },
+  })
 }
 
 // Helper: Convert mimeType to document type
@@ -542,7 +636,7 @@ export class MissionsService {
     },
     file?: { buffer: Buffer; filename: string; mimetype: string }
   ) {
-    await assertMissionAccess(missionId, userId, 'mission.edit')
+    const { classId } = await assertMissionAccess(missionId, userId, 'mission.edit')
 
     let fileUrl: string
     let fileName: string
@@ -571,17 +665,21 @@ export class MissionsService {
       throw new Error('Debes proporcionar un archivo o una URL')
     }
 
-    const document = await prisma.missionDocument.create({
-      data: {
-        missionId,
-        name: data.name,
-        description: data.description,
-        fileUrl,
-        fileName,
-        fileSize,
-        mimeType,
-        tags: data.tags || [],
-      },
+    const document = await prisma.$transaction(async tx => {
+      const created = await tx.missionDocument.create({
+        data: {
+          missionId,
+          name: data.name,
+          description: data.description,
+          fileUrl,
+          fileName,
+          fileSize,
+          mimeType,
+          tags: data.tags || [],
+        },
+      })
+      await recordDocumentChange(tx, userId, classId, 'document.created', created)
+      return created
     })
 
     return {
@@ -599,15 +697,19 @@ export class MissionsService {
       tags?: string[]
     }
   ) {
-    await assertDocumentAccess(documentId, userId, 'mission.edit')
+    const { classId } = await assertDocumentAccess(documentId, userId, 'mission.edit')
 
-    const document = await prisma.missionDocument.update({
-      where: { id: documentId },
-      data: {
-        name: data.name,
-        description: data.description,
-        tags: data.tags,
-      },
+    const document = await prisma.$transaction(async tx => {
+      const updated = await tx.missionDocument.update({
+        where: { id: documentId },
+        data: {
+          name: data.name,
+          description: data.description,
+          tags: data.tags,
+        },
+      })
+      await recordDocumentChange(tx, userId, classId, 'document.updated', updated)
+      return updated
     })
 
     return {
@@ -617,10 +719,10 @@ export class MissionsService {
   }
 
   async deleteMissionDocument(userId: string, documentId: string) {
-    await assertDocumentAccess(documentId, userId, 'mission.edit')
+    const { classId } = await assertDocumentAccess(documentId, userId, 'mission.edit')
     const document = await prisma.missionDocument.findUnique({
       where: { id: documentId },
-      select: { fileUrl: true },
+      select: { id: true, missionId: true, name: true, fileUrl: true },
     })
     if (!document) throw new NotFoundError('Documento no encontrado')
 
@@ -635,8 +737,9 @@ export class MissionsService {
       if (shared === 0) await deleteUpload(document.fileUrl)
     }
 
-    await prisma.missionDocument.delete({
-      where: { id: documentId },
+    await prisma.$transaction(async tx => {
+      await tx.missionDocument.delete({ where: { id: documentId } })
+      await recordDocumentChange(tx, userId, classId, 'document.deleted', document)
     })
 
     return { message: 'Documento eliminado correctamente' }
@@ -684,6 +787,15 @@ export class MissionsService {
         })),
       })
 
+      await recordClassAction(tx, {
+        classId: mission.classId,
+        actorId: userId,
+        action: 'mission.created',
+        entityType: 'mission',
+        entityId: mission.id,
+        metadata: { title: mission.title, enigmas: data.enigmas.length, status: mission.status },
+      })
+
       return { mission }
     })
   }
@@ -719,22 +831,26 @@ export class MissionsService {
         : null
     }
 
-    const updated = await prisma.mission.update({
-      where: { id: missionId },
-      data: {
-        classId: data.classId ?? mission.classId,
-        title: data.title ?? mission.title,
-        description: data.description ?? mission.description,
-        status: data.status ?? mission.status,
-        rarity: data.rarity ?? mission.rarity,
-        deadline: data.deadline !== undefined ? (data.deadline ? new Date(data.deadline) : null) : mission.deadline,
-        backgroundImage,
-      },
-      include: {
-        enigmas: true,
-        badges: true,
-        class: true,
-      },
+    const updated = await prisma.$transaction(async tx => {
+      const saved = await tx.mission.update({
+        where: { id: missionId },
+        data: {
+          classId: data.classId ?? mission.classId,
+          title: data.title ?? mission.title,
+          description: data.description ?? mission.description,
+          status: data.status ?? mission.status,
+          rarity: data.rarity ?? mission.rarity,
+          deadline: data.deadline !== undefined ? (data.deadline ? new Date(data.deadline) : null) : mission.deadline,
+          backgroundImage,
+        },
+        include: {
+          enigmas: true,
+          badges: true,
+          class: true,
+        },
+      })
+      await recordMissionUpdate(tx, userId, mission, saved)
+      return saved
     })
 
     return {
@@ -787,25 +903,36 @@ export class MissionsService {
     objectives?: string[]
     isOptional?: boolean
   }) {
-    await assertMissionAccess(missionId, userId, 'mission.edit')
+    const { classId } = await assertMissionAccess(missionId, userId, 'mission.edit')
     const mission = await prisma.mission.findUnique({
       where: { id: missionId },
       select: { enigmas: { select: { id: true } } },
     })
     if (!mission) throw new NotFoundError('Misión no encontrada')
 
-    const enigma = await prisma.missionEnigma.create({
-      data: {
-        missionId,
-        title: data.title,
-        description: data.description || '',
-        xpReward: data.xp || ENIGMA_XP_PRESETS[0],
-        coinReward: data.coins ?? 0,
-        manaReward: data.mana ?? 0,
-        objectives: data.objectives || [],
-        isOptional: data.isOptional || false,
-        orderIndex: mission.enigmas.length,
-      },
+    const enigma = await prisma.$transaction(async tx => {
+      const created = await tx.missionEnigma.create({
+        data: {
+          missionId,
+          title: data.title,
+          description: data.description || '',
+          xpReward: data.xp || ENIGMA_XP_PRESETS[0],
+          coinReward: data.coins ?? 0,
+          manaReward: data.mana ?? 0,
+          objectives: data.objectives || [],
+          isOptional: data.isOptional || false,
+          orderIndex: mission.enigmas.length,
+        },
+      })
+      await recordClassAction(tx, {
+        classId,
+        actorId: userId,
+        action: 'enigma.created',
+        entityType: 'enigma',
+        entityId: created.id,
+        metadata: { title: created.title, missionId, rewards: enigmaRewards(created) },
+      })
+      return created
     })
 
     return {
@@ -888,6 +1015,22 @@ export class MissionsService {
         },
       })
 
+      const contentFields = ENIGMA_CONTENT_FIELDS.filter(
+        field => data[field] !== undefined && !sameValue(data[field], enigma[field])
+      )
+      if (contentFields.length > 0) {
+        await recordClassAction(tx, {
+          classId,
+          actorId: userId,
+          action: 'enigma.updated',
+          entityType: 'enigma',
+          entityId: enigmaId,
+          metadata: { title: u.title, missionId: enigma.missionId, fields: contentFields },
+        })
+      }
+      // Cuántos alumnos reciben la diferencia en el reparto retroactivo de abajo.
+      let affectedCount = 0
+
       // If the rewards changed, re-grant every student who already completed this
       // enigma the partial share of the NEW rewards (the same % they were graded),
       // adjusting their per-class wallet by the difference. Keeps XP, coins and
@@ -906,6 +1049,7 @@ export class MissionsService {
           const addCoin = classSettings.coins ? Math.max(0, Math.round(newCoinReward * f) - p.coinsEarned) : 0
           const addMana = classSettings.mana ? Math.max(0, Math.round(newManaReward * f) - p.manaEarned) : 0
           if (addXp === 0 && addCoin === 0 && addMana === 0) continue
+          affectedCount += 1
 
           const enr = await tx.classEnrollment.update({
             where: { studentId_classId: { studentId: p.studentId, classId } },
@@ -931,6 +1075,21 @@ export class MissionsService {
             },
           })
         }
+
+        await recordClassAction(tx, {
+          classId,
+          actorId: userId,
+          action: 'enigma.rewards_changed',
+          entityType: 'enigma',
+          entityId: enigmaId,
+          metadata: {
+            title: u.title,
+            missionId: enigma.missionId,
+            before: enigmaRewards(enigma),
+            after: enigmaRewards(u),
+            affectedCount,
+          },
+        })
       }
 
       return u
@@ -955,7 +1114,7 @@ export class MissionsService {
 
   // Teacher: Delete enigma
   async deleteEnigma(userId: string, enigmaId: string) {
-    await assertEnigmaAccess(enigmaId, userId, 'mission.edit')
+    const { classId } = await assertEnigmaAccess(enigmaId, userId, 'mission.edit')
     const enigma = await prisma.missionEnigma.findUnique({
       where: { id: enigmaId },
       include: {
@@ -972,7 +1131,17 @@ export class MissionsService {
       throw new Error('La misión debe tener al menos un enigma; no puedes eliminar el último')
     }
 
-    await prisma.missionEnigma.delete({ where: { id: enigmaId } })
+    await prisma.$transaction(async tx => {
+      await tx.missionEnigma.delete({ where: { id: enigmaId } })
+      await recordClassAction(tx, {
+        classId,
+        actorId: userId,
+        action: 'enigma.deleted',
+        entityType: 'enigma',
+        entityId: enigmaId,
+        metadata: { title: enigma.title, missionId: enigma.missionId },
+      })
+    })
 
     return { message: 'Enigma eliminado correctamente' }
   }
@@ -996,6 +1165,18 @@ export class MissionsService {
     await prisma.$transaction(async tx => {
       await tx.badge.updateMany({ where: { missionId }, data: { missionId: null } })
       if (badgeId) await tx.badge.update({ where: { id: badgeId }, data: { missionId } })
+      const mission = await tx.mission.findUnique({
+        where: { id: missionId },
+        select: { title: true },
+      })
+      await recordClassAction(tx, {
+        classId,
+        actorId: userId,
+        action: 'mission.rewards_changed',
+        entityType: 'mission',
+        entityId: missionId,
+        metadata: { title: mission?.title ?? '', badgeId },
+      })
     })
 
     return { message: badgeId ? 'Insignia asignada correctamente' : 'Insignia eliminada de la misión' }

@@ -63,6 +63,8 @@ export type ActivityMinAggregateOutputType = {
   achievementName: string | null
   xpAmount: number | null
   source: string | null
+  actorId: string | null
+  actorName: string | null
 }
 
 export type ActivityMaxAggregateOutputType = {
@@ -88,6 +90,8 @@ export type ActivityMaxAggregateOutputType = {
   achievementName: string | null
   xpAmount: number | null
   source: string | null
+  actorId: string | null
+  actorName: string | null
 }
 
 export type ActivityCountAggregateOutputType = {
@@ -114,6 +118,8 @@ export type ActivityCountAggregateOutputType = {
   achievementName: number
   xpAmount: number
   source: number
+  actorId: number
+  actorName: number
   _all: number
 }
 
@@ -155,6 +161,8 @@ export type ActivityMinAggregateInputType = {
   achievementName?: true
   xpAmount?: true
   source?: true
+  actorId?: true
+  actorName?: true
 }
 
 export type ActivityMaxAggregateInputType = {
@@ -180,6 +188,8 @@ export type ActivityMaxAggregateInputType = {
   achievementName?: true
   xpAmount?: true
   source?: true
+  actorId?: true
+  actorName?: true
 }
 
 export type ActivityCountAggregateInputType = {
@@ -206,6 +216,8 @@ export type ActivityCountAggregateInputType = {
   achievementName?: true
   xpAmount?: true
   source?: true
+  actorId?: true
+  actorName?: true
   _all?: true
 }
 
@@ -319,6 +331,8 @@ export type ActivityGroupByOutputType = {
   achievementName: string | null
   xpAmount: number | null
   source: string | null
+  actorId: string | null
+  actorName: string | null
   _count: ActivityCountAggregateOutputType | null
   _avg: ActivityAvgAggregateOutputType | null
   _sum: ActivitySumAggregateOutputType | null
@@ -368,7 +382,10 @@ export type ActivityWhereInput = {
   achievementName?: Prisma.StringNullableFilter<"Activity"> | string | null
   xpAmount?: Prisma.IntNullableFilter<"Activity"> | number | null
   source?: Prisma.StringNullableFilter<"Activity"> | string | null
+  actorId?: Prisma.StringNullableFilter<"Activity"> | string | null
+  actorName?: Prisma.StringNullableFilter<"Activity"> | string | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  actor?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }
 
 export type ActivityOrderByWithRelationInput = {
@@ -395,7 +412,10 @@ export type ActivityOrderByWithRelationInput = {
   achievementName?: Prisma.SortOrderInput | Prisma.SortOrder
   xpAmount?: Prisma.SortOrderInput | Prisma.SortOrder
   source?: Prisma.SortOrderInput | Prisma.SortOrder
+  actorId?: Prisma.SortOrderInput | Prisma.SortOrder
+  actorName?: Prisma.SortOrderInput | Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
+  actor?: Prisma.UserOrderByWithRelationInput
 }
 
 export type ActivityWhereUniqueInput = Prisma.AtLeast<{
@@ -425,7 +445,10 @@ export type ActivityWhereUniqueInput = Prisma.AtLeast<{
   achievementName?: Prisma.StringNullableFilter<"Activity"> | string | null
   xpAmount?: Prisma.IntNullableFilter<"Activity"> | number | null
   source?: Prisma.StringNullableFilter<"Activity"> | string | null
+  actorId?: Prisma.StringNullableFilter<"Activity"> | string | null
+  actorName?: Prisma.StringNullableFilter<"Activity"> | string | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  actor?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }, "id">
 
 export type ActivityOrderByWithAggregationInput = {
@@ -452,6 +475,8 @@ export type ActivityOrderByWithAggregationInput = {
   achievementName?: Prisma.SortOrderInput | Prisma.SortOrder
   xpAmount?: Prisma.SortOrderInput | Prisma.SortOrder
   source?: Prisma.SortOrderInput | Prisma.SortOrder
+  actorId?: Prisma.SortOrderInput | Prisma.SortOrder
+  actorName?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ActivityCountOrderByAggregateInput
   _avg?: Prisma.ActivityAvgOrderByAggregateInput
   _max?: Prisma.ActivityMaxOrderByAggregateInput
@@ -486,6 +511,8 @@ export type ActivityScalarWhereWithAggregatesInput = {
   achievementName?: Prisma.StringNullableWithAggregatesFilter<"Activity"> | string | null
   xpAmount?: Prisma.IntNullableWithAggregatesFilter<"Activity"> | number | null
   source?: Prisma.StringNullableWithAggregatesFilter<"Activity"> | string | null
+  actorId?: Prisma.StringNullableWithAggregatesFilter<"Activity"> | string | null
+  actorName?: Prisma.StringNullableWithAggregatesFilter<"Activity"> | string | null
 }
 
 export type ActivityCreateInput = {
@@ -511,7 +538,9 @@ export type ActivityCreateInput = {
   achievementName?: string | null
   xpAmount?: number | null
   source?: string | null
+  actorName?: string | null
   user: Prisma.UserCreateNestedOneWithoutActivitiesInput
+  actor?: Prisma.UserCreateNestedOneWithoutActivitiesActedInput
 }
 
 export type ActivityUncheckedCreateInput = {
@@ -538,6 +567,8 @@ export type ActivityUncheckedCreateInput = {
   achievementName?: string | null
   xpAmount?: number | null
   source?: string | null
+  actorId?: string | null
+  actorName?: string | null
 }
 
 export type ActivityUpdateInput = {
@@ -563,7 +594,9 @@ export type ActivityUpdateInput = {
   achievementName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xpAmount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   user?: Prisma.UserUpdateOneRequiredWithoutActivitiesNestedInput
+  actor?: Prisma.UserUpdateOneWithoutActivitiesActedNestedInput
 }
 
 export type ActivityUncheckedUpdateInput = {
@@ -590,6 +623,8 @@ export type ActivityUncheckedUpdateInput = {
   achievementName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xpAmount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ActivityCreateManyInput = {
@@ -616,6 +651,8 @@ export type ActivityCreateManyInput = {
   achievementName?: string | null
   xpAmount?: number | null
   source?: string | null
+  actorId?: string | null
+  actorName?: string | null
 }
 
 export type ActivityUpdateManyMutationInput = {
@@ -641,6 +678,7 @@ export type ActivityUpdateManyMutationInput = {
   achievementName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xpAmount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ActivityUncheckedUpdateManyInput = {
@@ -667,6 +705,8 @@ export type ActivityUncheckedUpdateManyInput = {
   achievementName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xpAmount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ActivityListRelationFilter = {
@@ -703,6 +743,8 @@ export type ActivityCountOrderByAggregateInput = {
   achievementName?: Prisma.SortOrder
   xpAmount?: Prisma.SortOrder
   source?: Prisma.SortOrder
+  actorId?: Prisma.SortOrder
+  actorName?: Prisma.SortOrder
 }
 
 export type ActivityAvgOrderByAggregateInput = {
@@ -735,6 +777,8 @@ export type ActivityMaxOrderByAggregateInput = {
   achievementName?: Prisma.SortOrder
   xpAmount?: Prisma.SortOrder
   source?: Prisma.SortOrder
+  actorId?: Prisma.SortOrder
+  actorName?: Prisma.SortOrder
 }
 
 export type ActivityMinOrderByAggregateInput = {
@@ -760,6 +804,8 @@ export type ActivityMinOrderByAggregateInput = {
   achievementName?: Prisma.SortOrder
   xpAmount?: Prisma.SortOrder
   source?: Prisma.SortOrder
+  actorId?: Prisma.SortOrder
+  actorName?: Prisma.SortOrder
 }
 
 export type ActivitySumOrderByAggregateInput = {
@@ -776,10 +822,24 @@ export type ActivityCreateNestedManyWithoutUserInput = {
   connect?: Prisma.ActivityWhereUniqueInput | Prisma.ActivityWhereUniqueInput[]
 }
 
+export type ActivityCreateNestedManyWithoutActorInput = {
+  create?: Prisma.XOR<Prisma.ActivityCreateWithoutActorInput, Prisma.ActivityUncheckedCreateWithoutActorInput> | Prisma.ActivityCreateWithoutActorInput[] | Prisma.ActivityUncheckedCreateWithoutActorInput[]
+  connectOrCreate?: Prisma.ActivityCreateOrConnectWithoutActorInput | Prisma.ActivityCreateOrConnectWithoutActorInput[]
+  createMany?: Prisma.ActivityCreateManyActorInputEnvelope
+  connect?: Prisma.ActivityWhereUniqueInput | Prisma.ActivityWhereUniqueInput[]
+}
+
 export type ActivityUncheckedCreateNestedManyWithoutUserInput = {
   create?: Prisma.XOR<Prisma.ActivityCreateWithoutUserInput, Prisma.ActivityUncheckedCreateWithoutUserInput> | Prisma.ActivityCreateWithoutUserInput[] | Prisma.ActivityUncheckedCreateWithoutUserInput[]
   connectOrCreate?: Prisma.ActivityCreateOrConnectWithoutUserInput | Prisma.ActivityCreateOrConnectWithoutUserInput[]
   createMany?: Prisma.ActivityCreateManyUserInputEnvelope
+  connect?: Prisma.ActivityWhereUniqueInput | Prisma.ActivityWhereUniqueInput[]
+}
+
+export type ActivityUncheckedCreateNestedManyWithoutActorInput = {
+  create?: Prisma.XOR<Prisma.ActivityCreateWithoutActorInput, Prisma.ActivityUncheckedCreateWithoutActorInput> | Prisma.ActivityCreateWithoutActorInput[] | Prisma.ActivityUncheckedCreateWithoutActorInput[]
+  connectOrCreate?: Prisma.ActivityCreateOrConnectWithoutActorInput | Prisma.ActivityCreateOrConnectWithoutActorInput[]
+  createMany?: Prisma.ActivityCreateManyActorInputEnvelope
   connect?: Prisma.ActivityWhereUniqueInput | Prisma.ActivityWhereUniqueInput[]
 }
 
@@ -797,6 +857,20 @@ export type ActivityUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.ActivityScalarWhereInput | Prisma.ActivityScalarWhereInput[]
 }
 
+export type ActivityUpdateManyWithoutActorNestedInput = {
+  create?: Prisma.XOR<Prisma.ActivityCreateWithoutActorInput, Prisma.ActivityUncheckedCreateWithoutActorInput> | Prisma.ActivityCreateWithoutActorInput[] | Prisma.ActivityUncheckedCreateWithoutActorInput[]
+  connectOrCreate?: Prisma.ActivityCreateOrConnectWithoutActorInput | Prisma.ActivityCreateOrConnectWithoutActorInput[]
+  upsert?: Prisma.ActivityUpsertWithWhereUniqueWithoutActorInput | Prisma.ActivityUpsertWithWhereUniqueWithoutActorInput[]
+  createMany?: Prisma.ActivityCreateManyActorInputEnvelope
+  set?: Prisma.ActivityWhereUniqueInput | Prisma.ActivityWhereUniqueInput[]
+  disconnect?: Prisma.ActivityWhereUniqueInput | Prisma.ActivityWhereUniqueInput[]
+  delete?: Prisma.ActivityWhereUniqueInput | Prisma.ActivityWhereUniqueInput[]
+  connect?: Prisma.ActivityWhereUniqueInput | Prisma.ActivityWhereUniqueInput[]
+  update?: Prisma.ActivityUpdateWithWhereUniqueWithoutActorInput | Prisma.ActivityUpdateWithWhereUniqueWithoutActorInput[]
+  updateMany?: Prisma.ActivityUpdateManyWithWhereWithoutActorInput | Prisma.ActivityUpdateManyWithWhereWithoutActorInput[]
+  deleteMany?: Prisma.ActivityScalarWhereInput | Prisma.ActivityScalarWhereInput[]
+}
+
 export type ActivityUncheckedUpdateManyWithoutUserNestedInput = {
   create?: Prisma.XOR<Prisma.ActivityCreateWithoutUserInput, Prisma.ActivityUncheckedCreateWithoutUserInput> | Prisma.ActivityCreateWithoutUserInput[] | Prisma.ActivityUncheckedCreateWithoutUserInput[]
   connectOrCreate?: Prisma.ActivityCreateOrConnectWithoutUserInput | Prisma.ActivityCreateOrConnectWithoutUserInput[]
@@ -808,6 +882,20 @@ export type ActivityUncheckedUpdateManyWithoutUserNestedInput = {
   connect?: Prisma.ActivityWhereUniqueInput | Prisma.ActivityWhereUniqueInput[]
   update?: Prisma.ActivityUpdateWithWhereUniqueWithoutUserInput | Prisma.ActivityUpdateWithWhereUniqueWithoutUserInput[]
   updateMany?: Prisma.ActivityUpdateManyWithWhereWithoutUserInput | Prisma.ActivityUpdateManyWithWhereWithoutUserInput[]
+  deleteMany?: Prisma.ActivityScalarWhereInput | Prisma.ActivityScalarWhereInput[]
+}
+
+export type ActivityUncheckedUpdateManyWithoutActorNestedInput = {
+  create?: Prisma.XOR<Prisma.ActivityCreateWithoutActorInput, Prisma.ActivityUncheckedCreateWithoutActorInput> | Prisma.ActivityCreateWithoutActorInput[] | Prisma.ActivityUncheckedCreateWithoutActorInput[]
+  connectOrCreate?: Prisma.ActivityCreateOrConnectWithoutActorInput | Prisma.ActivityCreateOrConnectWithoutActorInput[]
+  upsert?: Prisma.ActivityUpsertWithWhereUniqueWithoutActorInput | Prisma.ActivityUpsertWithWhereUniqueWithoutActorInput[]
+  createMany?: Prisma.ActivityCreateManyActorInputEnvelope
+  set?: Prisma.ActivityWhereUniqueInput | Prisma.ActivityWhereUniqueInput[]
+  disconnect?: Prisma.ActivityWhereUniqueInput | Prisma.ActivityWhereUniqueInput[]
+  delete?: Prisma.ActivityWhereUniqueInput | Prisma.ActivityWhereUniqueInput[]
+  connect?: Prisma.ActivityWhereUniqueInput | Prisma.ActivityWhereUniqueInput[]
+  update?: Prisma.ActivityUpdateWithWhereUniqueWithoutActorInput | Prisma.ActivityUpdateWithWhereUniqueWithoutActorInput[]
+  updateMany?: Prisma.ActivityUpdateManyWithWhereWithoutActorInput | Prisma.ActivityUpdateManyWithWhereWithoutActorInput[]
   deleteMany?: Prisma.ActivityScalarWhereInput | Prisma.ActivityScalarWhereInput[]
 }
 
@@ -838,6 +926,8 @@ export type ActivityCreateWithoutUserInput = {
   achievementName?: string | null
   xpAmount?: number | null
   source?: string | null
+  actorName?: string | null
+  actor?: Prisma.UserCreateNestedOneWithoutActivitiesActedInput
 }
 
 export type ActivityUncheckedCreateWithoutUserInput = {
@@ -863,6 +953,8 @@ export type ActivityUncheckedCreateWithoutUserInput = {
   achievementName?: string | null
   xpAmount?: number | null
   source?: string | null
+  actorId?: string | null
+  actorName?: string | null
 }
 
 export type ActivityCreateOrConnectWithoutUserInput = {
@@ -872,6 +964,70 @@ export type ActivityCreateOrConnectWithoutUserInput = {
 
 export type ActivityCreateManyUserInputEnvelope = {
   data: Prisma.ActivityCreateManyUserInput | Prisma.ActivityCreateManyUserInput[]
+  skipDuplicates?: boolean
+}
+
+export type ActivityCreateWithoutActorInput = {
+  id?: string
+  type: $Enums.ActivityType
+  description: string
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  avatar?: string | null
+  username?: string | null
+  classId?: string | null
+  enigmaTitle?: string | null
+  enigmaXp?: number | null
+  missionTitle?: string | null
+  missionXp?: number | null
+  newLevel?: number | null
+  newTitle?: string | null
+  className?: string | null
+  teacherName?: string | null
+  badgeName?: string | null
+  badgeRarity?: string | null
+  badgeImage?: string | null
+  achievementName?: string | null
+  xpAmount?: number | null
+  source?: string | null
+  actorName?: string | null
+  user: Prisma.UserCreateNestedOneWithoutActivitiesInput
+}
+
+export type ActivityUncheckedCreateWithoutActorInput = {
+  id?: string
+  userId: string
+  type: $Enums.ActivityType
+  description: string
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  avatar?: string | null
+  username?: string | null
+  classId?: string | null
+  enigmaTitle?: string | null
+  enigmaXp?: number | null
+  missionTitle?: string | null
+  missionXp?: number | null
+  newLevel?: number | null
+  newTitle?: string | null
+  className?: string | null
+  teacherName?: string | null
+  badgeName?: string | null
+  badgeRarity?: string | null
+  badgeImage?: string | null
+  achievementName?: string | null
+  xpAmount?: number | null
+  source?: string | null
+  actorName?: string | null
+}
+
+export type ActivityCreateOrConnectWithoutActorInput = {
+  where: Prisma.ActivityWhereUniqueInput
+  create: Prisma.XOR<Prisma.ActivityCreateWithoutActorInput, Prisma.ActivityUncheckedCreateWithoutActorInput>
+}
+
+export type ActivityCreateManyActorInputEnvelope = {
+  data: Prisma.ActivityCreateManyActorInput | Prisma.ActivityCreateManyActorInput[]
   skipDuplicates?: boolean
 }
 
@@ -918,6 +1074,24 @@ export type ActivityScalarWhereInput = {
   achievementName?: Prisma.StringNullableFilter<"Activity"> | string | null
   xpAmount?: Prisma.IntNullableFilter<"Activity"> | number | null
   source?: Prisma.StringNullableFilter<"Activity"> | string | null
+  actorId?: Prisma.StringNullableFilter<"Activity"> | string | null
+  actorName?: Prisma.StringNullableFilter<"Activity"> | string | null
+}
+
+export type ActivityUpsertWithWhereUniqueWithoutActorInput = {
+  where: Prisma.ActivityWhereUniqueInput
+  update: Prisma.XOR<Prisma.ActivityUpdateWithoutActorInput, Prisma.ActivityUncheckedUpdateWithoutActorInput>
+  create: Prisma.XOR<Prisma.ActivityCreateWithoutActorInput, Prisma.ActivityUncheckedCreateWithoutActorInput>
+}
+
+export type ActivityUpdateWithWhereUniqueWithoutActorInput = {
+  where: Prisma.ActivityWhereUniqueInput
+  data: Prisma.XOR<Prisma.ActivityUpdateWithoutActorInput, Prisma.ActivityUncheckedUpdateWithoutActorInput>
+}
+
+export type ActivityUpdateManyWithWhereWithoutActorInput = {
+  where: Prisma.ActivityScalarWhereInput
+  data: Prisma.XOR<Prisma.ActivityUpdateManyMutationInput, Prisma.ActivityUncheckedUpdateManyWithoutActorInput>
 }
 
 export type ActivityCreateManyUserInput = {
@@ -943,6 +1117,35 @@ export type ActivityCreateManyUserInput = {
   achievementName?: string | null
   xpAmount?: number | null
   source?: string | null
+  actorId?: string | null
+  actorName?: string | null
+}
+
+export type ActivityCreateManyActorInput = {
+  id?: string
+  userId: string
+  type: $Enums.ActivityType
+  description: string
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  avatar?: string | null
+  username?: string | null
+  classId?: string | null
+  enigmaTitle?: string | null
+  enigmaXp?: number | null
+  missionTitle?: string | null
+  missionXp?: number | null
+  newLevel?: number | null
+  newTitle?: string | null
+  className?: string | null
+  teacherName?: string | null
+  badgeName?: string | null
+  badgeRarity?: string | null
+  badgeImage?: string | null
+  achievementName?: string | null
+  xpAmount?: number | null
+  source?: string | null
+  actorName?: string | null
 }
 
 export type ActivityUpdateWithoutUserInput = {
@@ -968,6 +1171,8 @@ export type ActivityUpdateWithoutUserInput = {
   achievementName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xpAmount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actor?: Prisma.UserUpdateOneWithoutActivitiesActedNestedInput
 }
 
 export type ActivityUncheckedUpdateWithoutUserInput = {
@@ -993,6 +1198,8 @@ export type ActivityUncheckedUpdateWithoutUserInput = {
   achievementName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xpAmount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ActivityUncheckedUpdateManyWithoutUserInput = {
@@ -1018,6 +1225,89 @@ export type ActivityUncheckedUpdateManyWithoutUserInput = {
   achievementName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xpAmount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type ActivityUpdateWithoutActorInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enigmaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enigmaXp?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  missionTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  missionXp?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  newLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  newTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  className?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  teacherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  badgeName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  badgeRarity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  badgeImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  achievementName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xpAmount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  user?: Prisma.UserUpdateOneRequiredWithoutActivitiesNestedInput
+}
+
+export type ActivityUncheckedUpdateWithoutActorInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enigmaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enigmaXp?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  missionTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  missionXp?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  newLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  newTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  className?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  teacherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  badgeName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  badgeRarity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  badgeImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  achievementName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xpAmount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type ActivityUncheckedUpdateManyWithoutActorInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enigmaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enigmaXp?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  missionTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  missionXp?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  newLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  newTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  className?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  teacherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  badgeName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  badgeRarity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  badgeImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  achievementName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xpAmount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -1046,7 +1336,10 @@ export type ActivitySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   achievementName?: boolean
   xpAmount?: boolean
   source?: boolean
+  actorId?: boolean
+  actorName?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  actor?: boolean | Prisma.Activity$actorArgs<ExtArgs>
 }, ExtArgs["result"]["activity"]>
 
 export type ActivitySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1073,7 +1366,10 @@ export type ActivitySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   achievementName?: boolean
   xpAmount?: boolean
   source?: boolean
+  actorId?: boolean
+  actorName?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  actor?: boolean | Prisma.Activity$actorArgs<ExtArgs>
 }, ExtArgs["result"]["activity"]>
 
 export type ActivitySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1100,7 +1396,10 @@ export type ActivitySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   achievementName?: boolean
   xpAmount?: boolean
   source?: boolean
+  actorId?: boolean
+  actorName?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  actor?: boolean | Prisma.Activity$actorArgs<ExtArgs>
 }, ExtArgs["result"]["activity"]>
 
 export type ActivitySelectScalar = {
@@ -1127,23 +1426,29 @@ export type ActivitySelectScalar = {
   achievementName?: boolean
   xpAmount?: boolean
   source?: boolean
+  actorId?: boolean
+  actorName?: boolean
 }
 
-export type ActivityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "type" | "description" | "metadata" | "createdAt" | "avatar" | "username" | "classId" | "enigmaTitle" | "enigmaXp" | "missionTitle" | "missionXp" | "newLevel" | "newTitle" | "className" | "teacherName" | "badgeName" | "badgeRarity" | "badgeImage" | "achievementName" | "xpAmount" | "source", ExtArgs["result"]["activity"]>
+export type ActivityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "type" | "description" | "metadata" | "createdAt" | "avatar" | "username" | "classId" | "enigmaTitle" | "enigmaXp" | "missionTitle" | "missionXp" | "newLevel" | "newTitle" | "className" | "teacherName" | "badgeName" | "badgeRarity" | "badgeImage" | "achievementName" | "xpAmount" | "source" | "actorId" | "actorName", ExtArgs["result"]["activity"]>
 export type ActivityInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  actor?: boolean | Prisma.Activity$actorArgs<ExtArgs>
 }
 export type ActivityIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  actor?: boolean | Prisma.Activity$actorArgs<ExtArgs>
 }
 export type ActivityIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  actor?: boolean | Prisma.Activity$actorArgs<ExtArgs>
 }
 
 export type $ActivityPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Activity"
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
+    actor: Prisma.$UserPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1169,6 +1474,8 @@ export type $ActivityPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     achievementName: string | null
     xpAmount: number | null
     source: string | null
+    actorId: string | null
+    actorName: string | null
   }, ExtArgs["result"]["activity"]>
   composites: {}
 }
@@ -1564,6 +1871,7 @@ readonly fields: ActivityFieldRefs;
 export interface Prisma__ActivityClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  actor<T extends Prisma.Activity$actorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Activity$actorArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1616,6 +1924,8 @@ export interface ActivityFieldRefs {
   readonly achievementName: Prisma.FieldRef<"Activity", 'String'>
   readonly xpAmount: Prisma.FieldRef<"Activity", 'Int'>
   readonly source: Prisma.FieldRef<"Activity", 'String'>
+  readonly actorId: Prisma.FieldRef<"Activity", 'String'>
+  readonly actorName: Prisma.FieldRef<"Activity", 'String'>
 }
     
 
@@ -2014,6 +2324,25 @@ export type ActivityDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Limit how many Activities to delete.
    */
   limit?: number
+}
+
+/**
+ * Activity.actor
+ */
+export type Activity$actorArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
 }
 
 /**

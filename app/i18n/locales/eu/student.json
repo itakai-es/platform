@@ -199,6 +199,10 @@
           "bought_toast": "\"{name}\" erosi duzu!",
           "used_toast": "\"{name}\" erabili duzu!",
           "mana_after": "Mana erabili ondoren"
+        },
+        "teachers": {
+          "title": "Irakasleak",
+          "empty": "Klase honek ez du irakaslerik oraindik."
         }
       }
     },
@@ -326,7 +330,8 @@
       "recent_activity_card": {
         "title": "Azken Jarduera",
         "empty": "Ez dago azken jarduerarik",
-        "user_fallback": "Erabiltzailea"
+        "user_fallback": "Erabiltzailea",
+        "by_actor": "Egilea: {name}"
       },
       "submission_modal": {
         "title": "Enigma Entregatu",

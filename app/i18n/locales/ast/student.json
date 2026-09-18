@@ -199,6 +199,10 @@
           "bought_toast": "¡Mercasti \"{name}\"!",
           "used_toast": "¡Usasti \"{name}\"!",
           "mana_after": "Maná depués del usu"
+        },
+        "teachers": {
+          "title": "Profesoráu",
+          "empty": "Esta clase entá nun tien profesoráu."
         }
       }
     },
@@ -326,7 +330,8 @@
       "recent_activity_card": {
         "title": "Actividá reciente",
         "empty": "Nun hai actividá reciente",
-        "user_fallback": "Usuariu"
+        "user_fallback": "Usuariu",
+        "by_actor": "Por {name}"
       },
       "submission_modal": {
         "title": "Entregar enigma",

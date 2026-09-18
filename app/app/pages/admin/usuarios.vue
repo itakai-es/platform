@@ -312,9 +312,13 @@
       :confirm-text="t('admin.users.actions.delete_confirm')"
       variant="danger"
       :loading="isPerformingUserAction"
+      :confirm-disabled="deletionCheck?.canDelete === false"
       @confirm="confirmDelete"
       @cancel="showDeleteModal = false"
-    />
+    >
+      <!-- A quién pasan sus clases, o por qué aún no se puede borrar -->
+      <AccountDeletionImpact v-if="deletionCheck" :check="deletionCheck" audience="admin" />
+    </ConfirmModal>
   </div>
 </template>
 
@@ -331,6 +335,7 @@ import {
 import type { AdminUser } from '~/types/admin.types'
 import type { ActionMenuItem } from '~/types/action-menu.types'
 import type { ManagedCredentials } from '~/types/auth.types'
+import type { AccountDeletionCheck } from '~/types/profile.types'
 import { accountIdentifier, matchesAccount } from '~/utils/identity'
 
 const { t } = useI18n()
@@ -541,7 +546,22 @@ const handleAction = (user: AdminUser, action: string) => {
   else if (action === 'activate') handleActivate(user)
   else if (action === 'reset-password') showResetModal.value = true
   else if (action === 'home-class') openHomeClass(user)
-  else if (action === 'delete') showDeleteModal.value = true
+  else if (action === 'delete') openDelete(user)
+}
+
+/** Las cuentas de profesor pueden tener clases: antes de confirmar se dice qué pasa con ellas. */
+const deletionCheck = ref<AccountDeletionCheck | null>(null)
+
+async function loadDeletionCheck(user: AdminUser) {
+  deletionCheck.value = null
+  if (user.role !== 'teacher') return
+  const check = await adminStore.fetchUserDeletionCheck(user.id)
+  if (selectedUser.value?.id === user.id) deletionCheck.value = check
+}
+
+function openDelete(user: AdminUser) {
+  showDeleteModal.value = true
+  void loadDeletionCheck(user)
 }
 
 const openHomeClass = async (user: AdminUser) => {
@@ -599,13 +619,16 @@ const confirmSuspend = async () => {
 }
 
 const confirmDelete = async () => {
-  if (!selectedUser.value) return
+  const user = selectedUser.value
+  if (!user) return
   try {
-    await adminStore.deleteUser(selectedUser.value.id)
+    await adminStore.deleteUser(user.id)
     showDeleteModal.value = false
     selectedUser.value = null
-  } catch {
-    /* handled in store */
+  } catch (error) {
+    // Mientras tanto ha dejado de haber a quién pasar alguna clase: la ventana lo explica.
+    const code = (error as { data?: { code?: string } })?.data?.code
+    if (code === 'OWNS_CLASSES_WITHOUT_SUCCESSOR') await loadDeletionCheck(user)
   }
 }
 

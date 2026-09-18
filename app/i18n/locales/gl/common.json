@@ -382,6 +382,32 @@
     "file_unavailable": {
       "title": "A ligazón xa non é válida",
       "message": "A ligazón para abrir este ficheiro caducou. Volve á misión e ábreo outra vez."
+    },
+    "class_teachers": {
+      "owner": "Propietario",
+      "profiles": {
+        "titular": "Titular",
+        "sustituto": "Substituto",
+        "practicas": "Prácticas"
+      },
+      "access": {
+        "read": "Lectura",
+        "edit": "Edición",
+        "admin": "Administración"
+      }
+    },
+    "pagination": {
+      "label": "Paxinación",
+      "page_of": "Páxina {page} de {total}",
+      "previous": "Anterior",
+      "next": "Seguinte"
+    },
+    "account_deletion": {
+      "blocked_self": "Aínda non podes borrar a túa conta: es o propietario destas clases e nelas non hai ninguén máis con administración. Dálle administración a outro profesor ou pásalle a propiedade, e volve aquí.",
+      "blocked_admin": "Esta conta aínda non se pode borrar: é a propietaria destas clases e nelas non hai ninguén máis con administración. Antes hai que pasar a súa propiedade a outro profesor.",
+      "transfers_self": "As túas clases pasarán a outro profesor con administración nelas:",
+      "transfers_admin": "As súas clases pasarán a outro profesor con administración nelas:",
+      "transfer_item": "{class}, a {name}"
     }
   }
 }

@@ -60,6 +60,68 @@ export interface ClassTeacher extends ClassAccess {
   name: string
 }
 
+/** Un profesor en la sección de profesorado de los ajustes (`GET …/teachers`). */
+export interface ClassTeacherMember extends ClassTeacher {
+  email: string | null
+  addedAt: string
+  endsAt: string | null
+}
+
+/** Profesorado de la clase tal como lo devuelve `GET /teacher/classes/:id/teachers`. */
+export interface ClassTeachersResponse {
+  teachers: ClassTeacherMember[]
+  myAccess: ClassAccess | null
+  canManage: boolean
+}
+
+/** Lo que el alumnado ve de quien imparte su clase: sin correo ni nivel. */
+export interface ClassTeacherPublic {
+  name: string
+  profile: ClassTeacherProfile
+  isOwner: boolean
+}
+
+/** Tipos por los que se filtra el historial: la primera parte de la clave de la acción. */
+export type ClassHistoryType =
+  | 'class'
+  | 'teacher'
+  | 'student'
+  | 'mission'
+  | 'enigma'
+  | 'document'
+  | 'submission'
+  | 'behavior'
+  | 'shop'
+
+/** Una entrada del historial de la clase. El texto lo compone la pantalla con `action` y `params`. */
+export interface ClassHistoryEntry {
+  id: string
+  /** Clave `dominio.verbo`: `submission.approved`, `teacher.added`… */
+  action: string
+  type: ClassHistoryType
+  createdAt: string
+  actor: { id: string | null; name: string; avatar: string | null }
+  /**
+   * Persona sobre la que recae la acción, si sigue existiendo. De un alumno que
+   * ya no está en la clase llega solo el papel, sin id ni nombre.
+   */
+  target: { id: string | null; name: string | null; role: string | null } | null
+  entity: { type: string; id: string | null } | null
+  params: Record<string, unknown>
+}
+
+export interface ClassHistoryResponse {
+  entries: ClassHistoryEntry[]
+  total: number
+  page: number
+  limit: number
+  totalPages: number
+  filters: {
+    actors: { id: string; name: string }[]
+    types: ClassHistoryType[]
+  }
+}
+
 /**
  * Clase/Curso
  */

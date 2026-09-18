@@ -83,3 +83,14 @@ export interface ProfileActionResponse {
   /** Código estable del error, cuando el servidor lo da. */
   code?: string
 }
+
+/**
+ * Qué pasaría con las clases de una cuenta si se borrase: cada clase de la que
+ * es propietaria pasa a otra persona con administración; si en alguna no hay
+ * nadie, la cuenta no se puede borrar.
+ */
+export interface AccountDeletionCheck {
+  canDelete: boolean
+  blockingClasses: { id: string; name: string }[]
+  transfers: { classId: string; className: string; toUser: { id: string; name: string } }[]
+}

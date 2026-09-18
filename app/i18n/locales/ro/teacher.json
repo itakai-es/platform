@@ -157,7 +157,8 @@
           "students": "Elevi",
           "tienda": "Magazin",
           "behaviors": "Comportamente",
-          "settings": "Setări"
+          "settings": "Setări",
+          "history": "Istoric"
         },
         "students": {
           "empty_title": "Încă nu sunt elevi",
@@ -417,7 +418,8 @@
           },
           "management": {
             "title": "Administrare"
-          }
+          },
+          "edit_level_note": "Poți schimba numele, orarul și coperta. Clasificarea, funcționalitățile și nivelurile le schimbă cine administrează clasa."
         },
         "badges_empty": "Nu există insigne în această clasă",
         "archived_notice": "Această clasă este arhivată: poate fi consultată, dar nu mai primește elevi noi.",
@@ -508,6 +510,173 @@
           "card_login_url": "Intră pe",
           "card_class_code": "Codul clasei",
           "card_first_login": "Când intri prima dată, schimbă-ți parola."
+        },
+        "read_only_notice": "Accesul tău la această clasă îți permite să vezi asta, dar nu să o schimbi.",
+        "teachers": {
+          "title": "Profesori",
+          "description": "Cine predă la această clasă, cu ce profil și ce poate face în ea.",
+          "add": "Adaugă profesor",
+          "add_title": "Adaugă profesor",
+          "add_confirm": "Adaugă",
+          "load_error": "Profesorii nu au putut fi încărcați.",
+          "retry": "Încearcă din nou",
+          "you": "Tu",
+          "access_line": "Acces: {access}",
+          "menu_label": "Acțiuni pentru {name}",
+          "owner_note": "Ești proprietarul acestei clase. Ca să ieși din ea, transferă mai întâi proprietatea cuiva cu acces de administrare.",
+          "leave_title": "Ieșire din clasă",
+          "leave": "Ieși din clasă",
+          "leave_confirm": "Ieși",
+          "leave_hint": "Nu vei mai vedea această clasă. Ca să revii, cineva cu acces de administrare va trebui să te adauge din nou.",
+          "leave_message": "Ieși din {class}? Nu o vei mai vedea și, ca să revii, cineva cu acces de administrare va trebui să te adauge din nou.",
+          "field_email": "Adresă de email",
+          "field_email_hint": "Adresa exactă a contului de profesor din aplicație.",
+          "add_note": "Intră în clasă imediat și primește o notificare. Nu trebuie să accepte nimic.",
+          "field_profile": "Profil",
+          "field_access": "Nivel de acces",
+          "access_hint": {
+            "read": "Vede clasa, misiunile, elevii și lucrările, fără să schimbe nimic.",
+            "edit": "În plus, schimbă conținutul, magazinul și comportamentele și aprobă lucrări.",
+            "admin": "În plus, schimbă setările, gestionează elevii și profesorii și arhivează clasa."
+          },
+          "edit": "Schimbă profilul sau nivelul",
+          "edit_title": "Profil și nivel: {name}",
+          "edit_self_note": "Îți schimbi propriul acces: dacă îl scazi, s-ar putea să nu-l mai poți crește.",
+          "remove": "Scoate din clasă",
+          "remove_title": "Scoatere dintre profesori",
+          "remove_confirm": "Scoate",
+          "remove_message": "Scoți {name} dintre profesorii clasei {class}? Nu va mai vedea clasa și va primi o notificare. Ce a făcut deja în ea rămâne.",
+          "transfer": "Transferă proprietatea",
+          "transfer_confirm": "Transferă proprietatea",
+          "transfer_title": "Transferul proprietății clasei",
+          "transfer_message": "Transferi proprietatea clasei {class} către {name}? Nu poți anula asta din contul tău: doar {name} ți-ar putea-o da înapoi.",
+          "transfer_keeps": "Rămâi în clasă cu acces de administrare.",
+          "transfer_loses": "Nu o mai poți publica drept șablon și nici transfera proprietatea ei.",
+          "added": "{name} face acum parte dintre profesori",
+          "changed": "Acces actualizat pentru {name}",
+          "removed": "{name} nu mai face parte dintre profesori",
+          "transferred": "Clasa aparține acum lui {name}",
+          "left": "Ai ieșit din {class}",
+          "errors": {
+            "not_addable": "Persoana nu poate fi adăugată. Verifică dacă adresa este a unui cont de profesor.",
+            "already_teacher": "Persoana face deja parte dintre profesorii acestei clase.",
+            "owner_locked": "Proprietarul nu poate fi schimbat sau scos: mai întâi trebuie să transfere proprietatea.",
+            "owner_cannot_leave": "Ești proprietarul: ca să ieși, transferă mai întâi proprietatea cuiva cu acces de administrare.",
+            "transfer_not_admin": "Proprietatea poate fi transferată doar cuiva cu acces de administrare.",
+            "already_owner": "Persoana este deja proprietarul clasei.",
+            "too_many": "Ai făcut prea multe încercări. Așteaptă puțin și încearcă din nou.",
+            "forbidden": "Accesul tău la această clasă nu permite asta.",
+            "not_found": "Acest lucru nu mai este disponibil. Reîncarcă pagina ca să vezi clasa așa cum este acum.",
+            "invalid_email": "Scrie o adresă de email validă.",
+            "add": "Nu s-a putut adăuga. Încearcă din nou.",
+            "change": "Nu s-a putut schimba accesul. Încearcă din nou.",
+            "remove": "Nu s-a putut scoate. Încearcă din nou.",
+            "transfer": "Nu s-a putut transfera proprietatea. Încearcă din nou.",
+            "leave": "Nu s-a putut ieși din clasă. Încearcă din nou."
+          }
+        },
+        "history": {
+          "filter_actor": "Profesor",
+          "filter_type": "Tip",
+          "filter_search": "Caută profesor…",
+          "all_actors": "Toți profesorii",
+          "all_types": "Toate tipurile",
+          "empty_title": "Încă nu există nimic în istoric",
+          "empty_description": "Aici va apărea ce fac profesorii în clasă: misiuni, lucrări, elevi, setări…",
+          "no_results_title": "Nimic cu aceste filtre",
+          "no_results_description": "Încearcă alt profesor sau alt tip.",
+          "error_title": "Istoricul nu a putut fi încărcat",
+          "error_description": "Verifică conexiunea și încearcă din nou.",
+          "retry": "Încearcă din nou",
+          "unknown_actor": "Cont șters",
+          "unknown_target": "un cont șters",
+          "unknown_action": "a făcut o modificare în clasă",
+          "types": {
+            "class": "Clasă",
+            "teacher": "Profesori",
+            "student": "Elevi",
+            "mission": "Misiuni",
+            "enigma": "Enigme",
+            "document": "Documente",
+            "submission": "Lucrări",
+            "behavior": "Comportamente",
+            "shop": "Magazin"
+          },
+          "actions": {
+            "class": {
+              "updated": "a schimbat datele clasei",
+              "settings_changed": "a schimbat setările clasei",
+              "guide_updated": "a actualizat ghidul clasei",
+              "archived": "a arhivat clasa",
+              "unarchived": "a dezarhivat clasa",
+              "template_published": "a publicat clasa drept șablon",
+              "template_unpublished": "a retras clasa din șabloane",
+              "duplicated": "a duplicat clasa",
+              "ownership_transferred": "a transferat proprietatea clasei către {target}",
+              "ownership_inherited": "clasa a trecut la {target} când contul proprietarului a fost șters"
+            },
+            "teacher": {
+              "added": "a adăugat {target} la profesori ({profile}, {access})",
+              "changed": "a schimbat accesul pentru {target}: {profile}, {access}",
+              "removed": "a scos {target} dintre profesori",
+              "left": "a ieșit din clasă"
+            },
+            "student": {
+              "account_created": "a creat contul pentru {target}",
+              "password_reset": "a resetat parola pentru {target}",
+              "nickname_changed": "a schimbat porecla pentru {target}",
+              "removed": "a scos {target} din clasă",
+              "avatar_generated": "a generat un avatar nou pentru {target}"
+            },
+            "mission": {
+              "created": "a creat misiunea «{title}»",
+              "updated": "a editat misiunea «{title}»",
+              "blocked": "a blocat misiunea «{title}»",
+              "unblocked": "a deblocat misiunea «{title}»",
+              "moved": "a schimbat clasa misiunii «{title}»",
+              "rewards_changed": "a schimbat recompensa misiunii «{title}»"
+            },
+            "enigma": {
+              "created": "a adăugat enigma «{title}»",
+              "updated": "a editat enigma «{title}»",
+              "deleted": "a șters enigma «{title}»",
+              "rewards_changed": "a schimbat recompensele enigmei «{title}»"
+            },
+            "document": {
+              "created": "a adăugat documentul «{title}»",
+              "updated": "a editat documentul «{title}»",
+              "deleted": "a șters documentul «{title}»"
+            },
+            "submission": {
+              "approved": "a aprobat lucrarea de la {target} pentru «{title}» cu {percentage} %"
+            },
+            "behavior": {
+              "applied": "a aplicat «{title}» pentru {target}",
+              "created": "a creat comportamentul «{title}»",
+              "updated": "a editat comportamentul «{title}»",
+              "deleted": "a șters comportamentul «{title}»"
+            },
+            "shop": {
+              "item_created": "a adăugat «{title}» în magazin",
+              "item_updated": "a editat «{title}» în magazin",
+              "item_deleted": "a scos «{title}» din magazin"
+            }
+          },
+          "anonymous": {
+            "student": {
+              "account_created": "a creat contul unui elev care nu mai este în clasă",
+              "password_reset": "a resetat parola unui elev care nu mai este în clasă",
+              "nickname_changed": "a schimbat porecla unui elev care nu mai este în clasă",
+              "removed": "a scos un elev din clasă",
+              "avatar_generated": "a generat un avatar nou pentru un elev care nu mai este în clasă"
+            },
+            "submission": {
+              "approved": "a aprobat lucrarea pentru «{title}» a unui elev care nu mai este în clasă, cu {percentage} %"
+            },
+            "behavior": {
+              "applied": "a aplicat «{title}» unui elev care nu mai este în clasă"
+            }
+          }
         }
       }
     },
@@ -526,7 +695,9 @@
         "pick_class": "Selectează o clasă",
         "idea_placeholder": "Ex.: Vreau o misiune despre cinematică, în care elevii să calculeze traiectorii de mături zburătoare...",
         "narrative_error": "Nu am reușit să creez narațiunea",
-        "ai_unavailable": "Serviciul de IA nu este disponibil acum. Încearcă din nou peste câteva minute."
+        "ai_unavailable": "Serviciul de IA nu este disponibil acum. Încearcă din nou peste câteva minute.",
+        "no_editable_classes": "Nu ai nicio clasă în care să poți crea misiuni: este nevoie de acces de editare.",
+        "no_classes": "Nu ai încă nicio clasă: creează mai întâi una ca să îi adaugi misiuni."
       },
       "detail": {
         "delete_confirm_btn": "Șterge",
@@ -616,7 +787,9 @@
         "description": "Creează, editează și administrează insigne personalizate ca să premiezi realizările elevilor tăi."
       },
       "filter_system": "Ale sistemului",
-      "generate_error": "Insigna nu a putut fi generată."
+      "generate_error": "Insigna nu a putut fi generată.",
+      "save_error": "Insigna nu a putut fi salvată.",
+      "delete_error": "Insigna nu a putut fi ștearsă."
     },
     "students": {
       "index": {

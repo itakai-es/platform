@@ -43,7 +43,8 @@ const classId = computed(() => route.params.id as string)
 // `loadAll()` al montar; esta llamada es idempotente y permite que la página
 // funcione aunque se entre directa sin pasar por el layout.
 const store = useTeacherStore()
-await store.ensureTeacherClassById(classId.value)
+// Sin acceso a la clase la página padre ya dice que no está: aquí no se para nada.
+await store.ensureTeacherClassById(classId.value).catch(() => undefined)
 
 // El estado compartido entre tabs (clase, actividades, ranking…) sigue
 // viviendo en el composable para que las páginas hermanas se sincronicen sin

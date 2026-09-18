@@ -30,7 +30,12 @@
       <Button variant="outline" class="flex-1" @click="handleCancel">
         {{ cancelText }}
       </Button>
-      <Button :variant="confirmVariant" class="flex-1" :disabled="loading" @click="handleConfirm">
+      <Button
+        :variant="confirmVariant"
+        class="flex-1"
+        :disabled="loading || confirmDisabled"
+        @click="handleConfirm"
+      >
         {{ loading ? t('common.actions.processing') : confirmText }}
       </Button>
     </template>
@@ -48,6 +53,8 @@ interface Props {
   cancelText?: string
   variant?: 'danger' | 'warning' | 'success'
   loading?: boolean
+  /** La acción no se puede confirmar ahora (el contenido explica por qué). */
+  confirmDisabled?: boolean
 }
 
 const { t } = useI18n()
@@ -58,6 +65,7 @@ const props = withDefaults(defineProps<Props>(), {
   cancelText: 'Cancelar',
   variant: 'danger',
   loading: false,
+  confirmDisabled: false,
 })
 
 const emit = defineEmits<{
@@ -111,6 +119,7 @@ const confirmVariant = computed(() => {
 })
 
 const handleConfirm = () => {
+  if (props.loading || props.confirmDisabled) return
   emit('confirm')
 }
 

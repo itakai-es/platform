@@ -42,7 +42,7 @@
         :education-level="state.classData.educationLevel"
         :language="state.classData.language"
       >
-        <template v-if="canAdminister" #actions>
+        <template v-if="can('class.inviteCode')" #actions>
           <Button
             variant="secondary"
             size="md"
@@ -76,7 +76,7 @@
 
     <!-- Invite Modal -->
     <InviteStudentsModal
-      v-if="state.classData && canAdminister"
+      v-if="state.classData && can('class.inviteCode')"
       v-model="state.showInviteModal"
       :class-id="classId"
       :invitation-code="state.classData.invitationCode || ''"
@@ -129,8 +129,8 @@ import {
   HandRaisedIcon as HandRaisedIconSolid,
   Cog6ToothIcon as Cog6ToothIconSolid,
   UsersIcon as UsersIconSolid,
+  ClockIcon as ClockIconSolid,
 } from '@heroicons/vue/24/solid'
-import { hasClassLevel } from '~/utils/class-access'
 
 definePageMeta({
   layout: 'teacher',
@@ -155,10 +155,9 @@ const route = useRoute()
 
 const classId = computed(() => route.params.id as string)
 const detail = useTeacherClassDetail(classId)
-const { state, classSettings, resolvedClassImage, loadAll, closeActivityBadge } = detail
-
-// Invitar y dar de alta alumnado es de quien administra la clase.
-const canAdminister = computed(() => hasClassLevel(state.value.classData?.myAccess, 'admin'))
+const { state, classSettings, resolvedClassImage, can, loadAll, revalidate, closeActivityBadge } =
+  detail
+const teacherStore = useTeacherStore()
 
 /** Las cuentas nuevas ya están matriculadas: se cuentan sin volver a pedir la clase. */
 function onAccountsCreated(count: number) {
@@ -190,6 +189,12 @@ const tabs = computed(() => {
       id: 'comportamientos',
       label: t('teacher.classes.detail.tabs.behaviors'),
       icon: HandRaisedIconSolid,
+    })
+  if (can('class.history'))
+    list.push({
+      id: 'historial',
+      label: t('teacher.classes.detail.tabs.history'),
+      icon: ClockIconSolid,
     })
   list.push({
     id: 'ajustes',
@@ -225,4 +230,13 @@ watch(tabs, list => {
 onMounted(() => {
   void loadAll()
 })
+
+// Un aviso de cambio de acceso a esta clase, abierto con la clase ya en pantalla:
+// se vuelve a pedir para que pestañas y controles sigan al nivel nuevo.
+watch(
+  () => teacherStore.classAccessRevision[classId.value],
+  () => {
+    void revalidate()
+  }
+)
 </script>

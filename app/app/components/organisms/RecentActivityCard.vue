@@ -77,6 +77,12 @@
             >{{ activity.username }}&nbsp;</span>
             <span v-html="activity.description"></span>
           </p>
+          <!-- Quién lo hizo, si la descripción no lo dice -->
+          <p v-if="activity.actorName" class="mt-1 text-xs text-navy-700/70">
+            {{
+              t('student.components.recent_activity_card.by_actor', { name: activity.actorName })
+            }}
+          </p>
           <!-- Chips de recursos involucrados (XP, monedas, maná, vidas) -->
           <div
             v-if="activity.resources?.length"
@@ -134,6 +140,8 @@ export interface ActivityItem {
   timeAgo: string
   badge?: ActivityBadgeType
   resources?: ResourceDelta[]
+  /** Profesor que lo hizo (aplicar un comportamiento…). */
+  actorName?: string
 }
 
 interface Props {

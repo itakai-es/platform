@@ -199,6 +199,10 @@
           "bought_toast": "¡Has comprado \"{name}\"!",
           "used_toast": "¡Has usado \"{name}\"!",
           "mana_after": "Maná tras el uso"
+        },
+        "teachers": {
+          "title": "Profesorado",
+          "empty": "Esta clase todavía no tiene profesorado."
         }
       }
     },
@@ -326,7 +330,8 @@
       "recent_activity_card": {
         "title": "Actividad Reciente",
         "empty": "No hay actividad reciente",
-        "user_fallback": "Usuario"
+        "user_fallback": "Usuario",
+        "by_actor": "Por {name}"
       },
       "submission_modal": {
         "title": "Entregar Enigma",

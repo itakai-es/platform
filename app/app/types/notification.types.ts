@@ -23,6 +23,10 @@ export type NotificationType =
   | 'chat_message' // Mensaje del asistente
   | 'submission_received' // Entrega pendiente de revisar (profesor)
   | 'submission_reviewed' // Entrega ya revisada (alumno)
+  | 'class_teacher_added' // Te han añadido al profesorado de una clase
+  | 'class_teacher_changed' // Ha cambiado tu perfil o tu nivel en una clase
+  | 'class_teacher_removed' // Te han quitado del profesorado de una clase
+  | 'class_ownership_received' // Ahora eres el propietario de una clase
 
 export type NotificationPriority = 'low' | 'medium' | 'high' | 'urgent'
 

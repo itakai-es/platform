@@ -382,6 +382,32 @@
     "file_unavailable": {
       "title": "O link já não é válido",
       "message": "O link para abrir este ficheiro expirou. Volta à missão e abre-o outra vez."
+    },
+    "class_teachers": {
+      "owner": "Proprietário",
+      "profiles": {
+        "titular": "Titular",
+        "sustituto": "Substituto",
+        "practicas": "Estágio"
+      },
+      "access": {
+        "read": "Leitura",
+        "edit": "Edição",
+        "admin": "Administração"
+      }
+    },
+    "pagination": {
+      "label": "Paginação",
+      "page_of": "Página {page} de {total}",
+      "previous": "Anterior",
+      "next": "Seguinte"
+    },
+    "account_deletion": {
+      "blocked_self": "Ainda não podes apagar a tua conta: és o proprietário destas turmas e nelas não há mais ninguém com administração. Dá administração a outro professor ou passa-lhe a propriedade, e volta aqui.",
+      "blocked_admin": "Esta conta ainda não pode ser apagada: é a proprietária destas turmas e nelas não há mais ninguém com administração. Primeiro é preciso passar a sua propriedade a outro professor.",
+      "transfers_self": "As tuas turmas vão passar para outro professor com administração nelas:",
+      "transfers_admin": "As suas turmas vão passar para outro professor com administração nelas:",
+      "transfer_item": "{class}, para {name}"
     }
   }
 }

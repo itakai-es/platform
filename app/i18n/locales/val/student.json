@@ -199,6 +199,10 @@
           "bought_toast": "Has comprat \"{name}\"!",
           "used_toast": "Has usat \"{name}\"!",
           "mana_after": "Mana després de l'ús"
+        },
+        "teachers": {
+          "title": "Professorat",
+          "empty": "Esta classe encara no té professorat."
         }
       }
     },
@@ -326,7 +330,8 @@
       "recent_activity_card": {
         "title": "Activitat recent",
         "empty": "No hi ha activitat recent",
-        "user_fallback": "Usuari"
+        "user_fallback": "Usuari",
+        "by_actor": "Per {name}"
       },
       "submission_modal": {
         "title": "Entregar enigma",

@@ -157,7 +157,8 @@
           "narrative": "Història",
           "tienda": "Botiga",
           "behaviors": "Comportaments",
-          "settings": "Ajustos"
+          "settings": "Ajustos",
+          "history": "Historial"
         },
         "students": {
           "empty_title": "Encara no hi ha alumnes",
@@ -417,7 +418,8 @@
           },
           "management": {
             "title": "Gestió"
-          }
+          },
+          "edit_level_note": "Pots canviar el nom, l'horari i la portada. La classificació, les funcionalitats i els nivells els canvia qui administra la classe."
         },
         "badges_empty": "No hi ha insígnies en aquesta classe",
         "archived_notice": "Aquesta classe està arxivada: es pot consultar, però no admet alumnes nous.",
@@ -508,6 +510,173 @@
           "card_login_url": "Entra a",
           "card_class_code": "Codi de classe",
           "card_first_login": "Quan entris per primer cop, canvia la contrasenya."
+        },
+        "read_only_notice": "El teu accés a aquesta classe et deixa veure això, però no canviar-ho.",
+        "teachers": {
+          "title": "Professorat",
+          "description": "Qui imparteix aquesta classe, amb quin perfil i què hi pot fer.",
+          "add": "Afegeix un docent",
+          "add_title": "Afegir un docent",
+          "add_confirm": "Afegeix",
+          "load_error": "No s'ha pogut carregar el professorat.",
+          "retry": "Torna-ho a provar",
+          "you": "Tu",
+          "access_line": "Accés: {access}",
+          "menu_label": "Accions per a {name}",
+          "owner_note": "Ets el propietari d'aquesta classe. Per sortir-ne, abans passa'n la propietat a algú amb administració.",
+          "leave_title": "Sortir de la classe",
+          "leave": "Surt de la classe",
+          "leave_confirm": "Surt",
+          "leave_hint": "Deixaràs de veure aquesta classe. Per tornar-hi, algú amb administració t'hi haurà d'afegir de nou.",
+          "leave_message": "Vols sortir de {class}? Deixaràs de veure-la i, per tornar-hi, algú amb administració t'hi haurà d'afegir de nou.",
+          "field_email": "Correu electrònic",
+          "field_email_hint": "El correu exacte del seu compte de docent a l'aplicació.",
+          "add_note": "Entra a la classe al moment i rep un avís. No ha d'acceptar res.",
+          "field_profile": "Perfil",
+          "field_access": "Nivell d'accés",
+          "access_hint": {
+            "read": "Veu la classe, les missions, l'alumnat i els lliuraments, sense canviar res.",
+            "edit": "A més, canvia el contingut, la botiga i els comportaments, i aprova lliuraments.",
+            "admin": "A més, canvia els ajustos, gestiona l'alumnat i el professorat i arxiva la classe."
+          },
+          "edit": "Canvia el perfil o el nivell",
+          "edit_title": "Perfil i nivell de {name}",
+          "edit_self_note": "Estàs canviant el teu propi accés: si el baixes, potser no el podràs tornar a pujar.",
+          "remove": "Treu de la classe",
+          "remove_title": "Treure del professorat",
+          "remove_confirm": "Treu",
+          "remove_message": "Vols treure {name} del professorat de {class}? Deixarà de veure la classe i rebrà un avís. El que ja hi ha fet s'hi queda.",
+          "transfer": "Passa la propietat",
+          "transfer_confirm": "Passa la propietat",
+          "transfer_title": "Passar la propietat de la classe",
+          "transfer_message": "Vols passar la propietat de {class} a {name}? No ho podràs desfer des del teu compte: només {name} te la podria tornar.",
+          "transfer_keeps": "Continues a la classe amb accés d'administració.",
+          "transfer_loses": "Ja no la podràs publicar com a plantilla ni passar-ne la propietat.",
+          "added": "{name} ja forma part del professorat",
+          "changed": "S'ha actualitzat l'accés de {name}",
+          "removed": "{name} ja no és al professorat",
+          "transferred": "Ara la classe és de {name}",
+          "left": "Has sortit de {class}",
+          "errors": {
+            "not_addable": "No es pot afegir aquesta persona. Comprova que el correu és el d'un compte de docent.",
+            "already_teacher": "Aquesta persona ja forma part del professorat de la classe.",
+            "owner_locked": "Al propietari no se'l pot canviar ni treure: abans ha de passar la propietat.",
+            "owner_cannot_leave": "Ets el propietari: per sortir, abans passa la propietat a algú amb administració.",
+            "transfer_not_admin": "La propietat només es pot passar a algú amb accés d'administració.",
+            "already_owner": "Aquesta persona ja és la propietària de la classe.",
+            "too_many": "Has fet massa intents. Espera una estona i torna-ho a provar.",
+            "forbidden": "El teu accés a aquesta classe no permet fer això.",
+            "not_found": "Això ja no està disponible. Torna a carregar la pàgina per veure la classe tal com és ara.",
+            "invalid_email": "Escriu un correu vàlid.",
+            "add": "No s'ha pogut afegir. Torna-ho a provar.",
+            "change": "No s'ha pogut canviar l'accés. Torna-ho a provar.",
+            "remove": "No s'ha pogut treure. Torna-ho a provar.",
+            "transfer": "No s'ha pogut passar la propietat. Torna-ho a provar.",
+            "leave": "No s'ha pogut sortir de la classe. Torna-ho a provar."
+          }
+        },
+        "history": {
+          "filter_actor": "Docent",
+          "filter_type": "Tipus",
+          "filter_search": "Cerca un docent…",
+          "all_actors": "Tot el professorat",
+          "all_types": "Tots els tipus",
+          "empty_title": "Encara no hi ha res a l'historial",
+          "empty_description": "Aquí apareixerà el que faci el professorat a la classe: missions, lliuraments, alumnat, ajustos…",
+          "no_results_title": "Res amb aquests filtres",
+          "no_results_description": "Prova amb un altre docent o amb un altre tipus.",
+          "error_title": "No s'ha pogut carregar l'historial",
+          "error_description": "Comprova la connexió i torna-ho a provar.",
+          "retry": "Torna-ho a provar",
+          "unknown_actor": "Compte eliminat",
+          "unknown_target": "un compte eliminat",
+          "unknown_action": "va fer un canvi a la classe",
+          "types": {
+            "class": "Classe",
+            "teacher": "Professorat",
+            "student": "Alumnat",
+            "mission": "Missions",
+            "enigma": "Enigmes",
+            "document": "Documents",
+            "submission": "Lliuraments",
+            "behavior": "Comportaments",
+            "shop": "Botiga"
+          },
+          "actions": {
+            "class": {
+              "updated": "va canviar les dades de la classe",
+              "settings_changed": "va canviar els ajustos de la classe",
+              "guide_updated": "va actualitzar la guia de la classe",
+              "archived": "va arxivar la classe",
+              "unarchived": "va desarxivar la classe",
+              "template_published": "va publicar la classe com a plantilla",
+              "template_unpublished": "va retirar la classe de les plantilles",
+              "duplicated": "va duplicar la classe",
+              "ownership_transferred": "va passar la propietat de la classe a {target}",
+              "ownership_inherited": "la classe va passar a {target} en eliminar-se el compte del seu propietari"
+            },
+            "teacher": {
+              "added": "va afegir {target} al professorat ({profile}, {access})",
+              "changed": "va canviar l'accés de {target}: {profile}, {access}",
+              "removed": "va treure {target} del professorat",
+              "left": "va sortir de la classe"
+            },
+            "student": {
+              "account_created": "va crear el compte de {target}",
+              "password_reset": "va restablir la contrasenya de {target}",
+              "nickname_changed": "va canviar l'àlies de {target}",
+              "removed": "va treure {target} de la classe",
+              "avatar_generated": "va generar un avatar nou per a {target}"
+            },
+            "mission": {
+              "created": "va crear la missió «{title}»",
+              "updated": "va editar la missió «{title}»",
+              "blocked": "va bloquejar la missió «{title}»",
+              "unblocked": "va desbloquejar la missió «{title}»",
+              "moved": "va canviar de classe la missió «{title}»",
+              "rewards_changed": "va canviar la recompensa de la missió «{title}»"
+            },
+            "enigma": {
+              "created": "va afegir l'enigma «{title}»",
+              "updated": "va editar l'enigma «{title}»",
+              "deleted": "va esborrar l'enigma «{title}»",
+              "rewards_changed": "va canviar les recompenses de l'enigma «{title}»"
+            },
+            "document": {
+              "created": "va afegir el document «{title}»",
+              "updated": "va editar el document «{title}»",
+              "deleted": "va esborrar el document «{title}»"
+            },
+            "submission": {
+              "approved": "va aprovar el lliurament de {target} a «{title}» amb un {percentage} %"
+            },
+            "behavior": {
+              "applied": "va aplicar «{title}» a {target}",
+              "created": "va crear el comportament «{title}»",
+              "updated": "va editar el comportament «{title}»",
+              "deleted": "va esborrar el comportament «{title}»"
+            },
+            "shop": {
+              "item_created": "va afegir «{title}» a la botiga",
+              "item_updated": "va editar «{title}» a la botiga",
+              "item_deleted": "va treure «{title}» de la botiga"
+            }
+          },
+          "anonymous": {
+            "student": {
+              "account_created": "va crear el compte d'un alumne que ja no és a la classe",
+              "password_reset": "va restablir la contrasenya d'un alumne que ja no és a la classe",
+              "nickname_changed": "va canviar l'àlies d'un alumne que ja no és a la classe",
+              "removed": "va treure un alumne de la classe",
+              "avatar_generated": "va generar un avatar nou per a un alumne que ja no és a la classe"
+            },
+            "submission": {
+              "approved": "va aprovar a «{title}» el lliurament d'un alumne que ja no és a la classe, amb un {percentage} %"
+            },
+            "behavior": {
+              "applied": "va aplicar «{title}» a un alumne que ja no és a la classe"
+            }
+          }
         }
       }
     },
@@ -526,7 +695,9 @@
         "pick_class": "Selecciona una classe",
         "idea_placeholder": "Ex.: Vull una missió sobre cinemàtica on els alumnes calculin trajectòries d'escombres voladores...",
         "narrative_error": "No he pogut crear la narrativa",
-        "ai_unavailable": "El servei d'IA no està disponible ara mateix. Torna-ho a provar d'aquí a uns minuts."
+        "ai_unavailable": "El servei d'IA no està disponible ara mateix. Torna-ho a provar d'aquí a uns minuts.",
+        "no_editable_classes": "No tens cap classe on puguis crear missions: cal accés d'edició.",
+        "no_classes": "Encara no tens cap classe: crea'n una primer per afegir-hi missions."
       },
       "detail": {
         "delete_confirm_btn": "Eliminar",
@@ -616,7 +787,9 @@
         "description": "Crea, edita i gestiona insígnies personalitzades per premiar les fites dels teus estudiants."
       },
       "filter_system": "Del sistema",
-      "generate_error": "No s'ha pogut generar la insígnia."
+      "generate_error": "No s'ha pogut generar la insígnia.",
+      "save_error": "No s'ha pogut desar la insígnia.",
+      "delete_error": "No s'ha pogut suprimir la insígnia."
     },
     "students": {
       "index": {

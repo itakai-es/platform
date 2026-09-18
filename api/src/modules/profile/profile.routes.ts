@@ -5,6 +5,7 @@ import { APP_LANGUAGES } from '../settings/settings.types.js'
 import { rethrowHttpError } from '../../utils/errors.js'
 import { PASSWORD_MIN_LENGTH } from '../../utils/password.js'
 import { currentTokenFamily } from '../../utils/session-cookie.js'
+import { AccountDeletionBlockedError, accountDeletionCheck } from './account-deletion.service.js'
 
 // Schemas
 const changePasswordSchema = z.object({
@@ -171,6 +172,13 @@ export async function profileRoutes(fastify: FastifyInstance) {
     }
   })
 
+  // Antes de pedir la contraseña: qué clases pasarían a otra persona y cuáles
+  // impiden borrar la cuenta.
+  fastify.get('/delete-account/check', async (request: FastifyRequest) => {
+    const { id } = request.user as { id: string }
+    return accountDeletionCheck(id)
+  })
+
   // DELETE /profile/delete-account
   fastify.delete('/delete-account', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -181,6 +189,11 @@ export async function profileRoutes(fastify: FastifyInstance) {
     } catch (error) {
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
+      }
+      if (error instanceof AccountDeletionBlockedError) {
+        return reply
+          .status(409)
+          .send({ message: error.message, code: error.code, classes: error.classes })
       }
       rethrowHttpError(error)
       if (error instanceof Error) {

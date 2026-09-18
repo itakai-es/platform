@@ -193,11 +193,15 @@ import {
   ExclamationTriangleIcon,
   FlagIcon,
   InboxArrowDownIcon,
+  KeyIcon,
   MegaphoneIcon,
   RocketLaunchIcon,
   StarIcon,
   TrashIcon,
   TrophyIcon,
+  UserGroupIcon,
+  UserMinusIcon,
+  UserPlusIcon,
   XCircleIcon,
 } from '@heroicons/vue/24/outline'
 import type { Notification, NotificationFilter, NotificationType } from '~/types/notification.types'
@@ -251,6 +255,10 @@ const TYPE_ICONS: Partial<Record<NotificationType, { icon: Component; tone: stri
   mission_completed: { icon: FlagIcon, tone: 'bg-mint-light' },
   system_announcement: { icon: MegaphoneIcon, tone: 'bg-sky-light' },
   chat_message: { icon: ChatBubbleLeftRightIcon, tone: 'bg-purple-light' },
+  class_teacher_added: { icon: UserPlusIcon, tone: 'bg-mint-light' },
+  class_teacher_changed: { icon: UserGroupIcon, tone: 'bg-sky-light' },
+  class_teacher_removed: { icon: UserMinusIcon, tone: 'bg-red-light' },
+  class_ownership_received: { icon: KeyIcon, tone: 'bg-yellow-light' },
 }
 
 const iconFor = (type: NotificationType) =>
@@ -297,9 +305,22 @@ const focusAfterRemoval = async (index: number) => {
   target?.focus()
 }
 
-// Abrir un aviso lo da por leído; la navegación no espera a la respuesta
+/** Avisos de un cambio en el acceso propio a una clase. */
+const CLASS_ACCESS_NOTICES = new Set<NotificationType>([
+  'class_teacher_added',
+  'class_teacher_changed',
+  'class_teacher_removed',
+  'class_ownership_received',
+])
+
+// Abrir un aviso lo da por leído; la navegación no espera a la respuesta. Si
+// cambia el acceso a una clase, lo guardado de ella ya no vale: se vuelve a pedir.
 const openNotification = (notification: Notification) => {
   if (!notification.isRead) store.markAsRead(notification.id)
+  const classId = notification.metadata?.classId
+  if (CLASS_ACCESS_NOTICES.has(notification.type) && typeof classId === 'string') {
+    useTeacherStore().markClassAccessChanged(classId)
+  }
 }
 
 const markRead = async (notification: Notification, index: number) => {

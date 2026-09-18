@@ -21,3 +21,33 @@ export async function createClassWithOwner(
   })
   return cls
 }
+
+/**
+ * Pasa la propiedad de la clase a `toUserId`, que ya tiene que tener su fila de
+ * profesorado en ella. En la misma transacción: la fila del propietario actual
+ * deja de serlo (se queda con administración), la del nuevo lo es, con
+ * administración y sin fecha de fin, y `Class.teacherId` pasa a nombrarle.
+ *
+ * El orden importa: el índice de un solo propietario por clase no admite dos a
+ * la vez, ni siquiera entre dos sentencias. Devuelve quién lo era antes.
+ */
+export async function transferClassOwnership(
+  tx: Prisma.TransactionClient,
+  classId: string,
+  toUserId: string
+): Promise<{ fromUserId: string | null }> {
+  const current = await tx.classTeacher.findFirst({
+    where: { classId, isOwner: true },
+    select: { userId: true },
+  })
+  await tx.classTeacher.updateMany({
+    where: { classId, isOwner: true },
+    data: { isOwner: false, access: 'admin' },
+  })
+  await tx.classTeacher.update({
+    where: { classId_userId: { classId, userId: toUserId } },
+    data: { isOwner: true, access: 'admin', endsAt: null },
+  })
+  await tx.class.update({ where: { id: classId }, data: { teacherId: toUserId } })
+  return { fromUserId: current?.userId ?? null }
+}

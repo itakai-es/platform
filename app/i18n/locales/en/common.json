@@ -382,6 +382,32 @@
     "file_unavailable": {
       "title": "This link is no longer valid",
       "message": "The link to open this file has expired. Go back to the mission and open it again."
+    },
+    "class_teachers": {
+      "owner": "Owner",
+      "profiles": {
+        "titular": "Main teacher",
+        "sustituto": "Substitute",
+        "practicas": "Trainee"
+      },
+      "access": {
+        "read": "View only",
+        "edit": "Editing",
+        "admin": "Admin"
+      }
+    },
+    "pagination": {
+      "label": "Pagination",
+      "page_of": "Page {page} of {total}",
+      "previous": "Previous",
+      "next": "Next"
+    },
+    "account_deletion": {
+      "blocked_self": "You can't delete your account yet: you own these classes and nobody else has admin access in them. Give admin access to another teacher or hand ownership over to them, then come back here.",
+      "blocked_admin": "This account can't be deleted yet: it owns these classes and nobody else has admin access in them. Ownership has to be handed over to another teacher first.",
+      "transfers_self": "Your classes will pass to another teacher with admin access in them:",
+      "transfers_admin": "Their classes will pass to another teacher with admin access in them:",
+      "transfer_item": "{class}, to {name}"
     }
   }
 }

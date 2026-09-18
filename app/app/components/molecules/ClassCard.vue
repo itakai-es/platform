@@ -8,11 +8,16 @@
     <div class="flex-1 flex flex-col justify-between p-6 bg-white z-10 order-2 md:order-1 min-w-0">
       <!-- Top: Badge and subtitle -->
       <div>
-        <div v-if="badgeVariant || subtitle" class="flex items-center gap-2 mb-2">
+        <div
+          v-if="badgeVariant || subtitle || $slots.tag"
+          class="flex flex-wrap items-center gap-2 mb-2"
+        >
           <StatusBadge v-if="badgeVariant && badgeText" :variant="badgeVariant">{{
             badgeText
           }}</StatusBadge>
           <span v-if="subtitle" class="text-xs text-text-secondary">{{ subtitle }}</span>
+          <!-- Etiqueta propia de quien la usa (p. ej. el perfil en la clase) -->
+          <slot name="tag" />
         </div>
 
         <!-- Title -->

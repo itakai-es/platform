@@ -91,50 +91,15 @@ export async function removeStudentFromClass(
 
   const files = await prisma.$transaction(async tx => {
     const enrollment = await studentEnrollment(classId, studentId, tx)
+    const files = await deleteEnrollmentData(tx, classId, studentId, enrollment.id)
 
+    // Los mensajes se van con su conversación (borrado en cascada).
     const missionIds = (
       await tx.mission.findMany({ where: { classId }, select: { id: true } })
     ).map(m => m.id)
-    const enigmaIds = (
-      await tx.missionEnigma.findMany({
-        where: { missionId: { in: missionIds } },
-        select: { id: true },
-      })
-    ).map(e => e.id)
-
-    const submissions = await tx.enigmaSubmission.findMany({
-      where: { studentId, enigmaId: { in: enigmaIds } },
-      select: { id: true, fileUrl: true },
-    })
-    const submissionIds = submissions.map(s => s.id)
-
-    // Avisos que hablan de esta clase: los del alumno (sus entregas revisadas,
-    // los plazos) y los del profesorado sobre sus entregas, que ya no existirán.
-    await tx.notification.deleteMany({
-      where: {
-        OR: [
-          { userId: studentId, metadata: { path: ['classId'], equals: classId } },
-          ...submissionIds.map(id => ({ metadata: { path: ['submissionId'], equals: id } })),
-        ],
-      },
-    })
-    await tx.enigmaSubmission.deleteMany({ where: { id: { in: submissionIds } } })
-    await tx.studentEnigmaProgress.deleteMany({ where: { studentId, enigmaId: { in: enigmaIds } } })
-    await tx.studentMissionProgress.deleteMany({
-      where: { studentId, missionId: { in: missionIds } },
-    })
-    await tx.studentBadge.deleteMany({
-      where: { studentId, badge: { missionId: { in: missionIds } } },
-    })
-    await tx.shopPurchase.deleteMany({ where: { studentId, classId } })
-    await tx.shopItemUse.deleteMany({ where: { studentId, classId } })
-    await tx.behaviorApplication.deleteMany({ where: { studentId, classId } })
-    await tx.activity.deleteMany({ where: { userId: studentId, classId } })
-    // Los mensajes se van con su conversación (borrado en cascada).
     await tx.chatConversation.deleteMany({
       where: { userId: studentId, OR: [{ classId }, { missionId: { in: missionIds } }] },
     })
-    await tx.classEnrollment.delete({ where: { id: enrollment.id } })
 
     await tx.user.updateMany({
       where: { id: studentId, homeClassId: classId },
@@ -150,12 +115,76 @@ export async function removeStudentFromClass(
       targetUserId: studentId,
     })
 
-    return submissions.map(s => s.fileUrl)
+    return files
   })
 
   // Los ficheros, al final y sin tumbar nada: la base ya no los apunta.
-  await Promise.all(files.map(url => deleteUpload(url)))
+  await deleteUploads(files)
   return { removed: true }
+}
+
+/**
+ * Borra una matrícula y lo que colgaba de ella en la clase: el progreso y las
+ * entregas de sus misiones, las insignias de esas misiones, las compras y usos
+ * de la tienda, los comportamientos, el historial y los avisos que hablaban de
+ * la clase o de esas entregas. Vale también para la matrícula de vista previa
+ * de un profesor al que quitan de la clase. Devuelve los ficheros de las
+ * entregas, que se borran después de la transacción (`deleteUploads`).
+ */
+export async function deleteEnrollmentData(
+  tx: Prisma.TransactionClient,
+  classId: string,
+  userId: string,
+  enrollmentId: string
+): Promise<(string | null)[]> {
+  const missionIds = (await tx.mission.findMany({ where: { classId }, select: { id: true } })).map(
+    m => m.id
+  )
+  const enigmaIds = (
+    await tx.missionEnigma.findMany({
+      where: { missionId: { in: missionIds } },
+      select: { id: true },
+    })
+  ).map(e => e.id)
+
+  const submissions = await tx.enigmaSubmission.findMany({
+    where: { studentId: userId, enigmaId: { in: enigmaIds } },
+    select: { id: true, fileUrl: true },
+  })
+  const submissionIds = submissions.map(s => s.id)
+
+  // Avisos que hablan de esta clase: los suyos (entregas revisadas, plazos) y
+  // los del profesorado sobre sus entregas, que ya no existirán.
+  await tx.notification.deleteMany({
+    where: {
+      OR: [
+        { userId, metadata: { path: ['classId'], equals: classId } },
+        ...submissionIds.map(id => ({ metadata: { path: ['submissionId'], equals: id } })),
+      ],
+    },
+  })
+  await tx.enigmaSubmission.deleteMany({ where: { id: { in: submissionIds } } })
+  await tx.studentEnigmaProgress.deleteMany({
+    where: { studentId: userId, enigmaId: { in: enigmaIds } },
+  })
+  await tx.studentMissionProgress.deleteMany({
+    where: { studentId: userId, missionId: { in: missionIds } },
+  })
+  await tx.studentBadge.deleteMany({
+    where: { studentId: userId, badge: { missionId: { in: missionIds } } },
+  })
+  await tx.shopPurchase.deleteMany({ where: { studentId: userId, classId } })
+  await tx.shopItemUse.deleteMany({ where: { studentId: userId, classId } })
+  await tx.behaviorApplication.deleteMany({ where: { studentId: userId, classId } })
+  await tx.activity.deleteMany({ where: { userId, classId } })
+  await tx.classEnrollment.delete({ where: { id: enrollmentId } })
+
+  return submissions.map(s => s.fileUrl)
+}
+
+/** Borra los ficheros que devolvió `deleteEnrollmentData`. */
+export async function deleteUploads(files: (string | null)[]) {
+  await Promise.all(files.map(url => deleteUpload(url)))
 }
 
 /**

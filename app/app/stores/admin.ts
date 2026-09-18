@@ -25,6 +25,7 @@ import type {
   PaginatedMissionsResponse,
   AnalyticsData,
 } from '~/types/admin.types'
+import type { AccountDeletionCheck } from '~/types/profile.types'
 import type { ManagedCredentials } from '~/types/auth.types'
 
 export const useAdminStore = defineStore('admin', () => {
@@ -349,6 +350,19 @@ export const useAdminStore = defineStore('admin', () => {
       throw err
     } finally {
       isPerformingUserAction.value = false
+    }
+  }
+
+  /** Qué pasaría con las clases de una cuenta al borrarla. `null` si no se pudo saber. */
+  async function fetchUserDeletionCheck(userId: string) {
+    try {
+      const config = useRuntimeConfig()
+      return await $fetch<AccountDeletionCheck>(
+        `${config.public.apiBase}/admin/users/${userId}/deletion-check`
+      )
+    } catch (err: unknown) {
+      console.error('Error checking user deletion:', err)
+      return null
     }
   }
 
@@ -928,6 +942,7 @@ export const useAdminStore = defineStore('admin', () => {
     createManagedUser,
     resetManagedPassword,
     updateHomeClass,
+    fetchUserDeletionCheck,
     deleteUser,
     fetchSchools,
     createSchool,

@@ -26,6 +26,7 @@
       :tabs="tabs"
       :active-tab="activeTab"
       :tab-href="tabHref"
+      :editable="can('mission.edit')"
       @update-title="updateMissionTitle"
       @update-deadline="updateMissionDeadline"
       @edit-narrative="editNarrative"
@@ -58,6 +59,7 @@
       :show-xp="classCfg.xp"
       :show-coins="classCfg.coins"
       :show-mana="classCfg.mana"
+      :can-approve="can('submission.approve')"
       @close="closeSubmissionsModal"
       @refresh="updateEnigmaSubmissionsCount"
     />
@@ -126,14 +128,30 @@ const router = useRouter()
 const classId = route.params.classId as string
 const missionId = computed(() => route.params.missionId as string)
 
+// Qué deja hacer en la misión el acceso propio a su clase.
+const { can } = useClassPermissionsById(classId)
+
 // --------- Pestañas del detalle (como en una clase) ---------
+// Ajustes (título, fecha, imagen, bloquear) solo para quien puede editar la misión.
 const tabs = computed(() => [
   { id: 'resumen', label: t('teacher.missions.detail.tabs.summary'), icon: Squares2X2IconSolid },
-  { id: 'ajustes', label: t('teacher.missions.detail.tabs.settings'), icon: Cog6ToothIconSolid },
+  ...(can('mission.edit')
+    ? [
+        {
+          id: 'ajustes',
+          label: t('teacher.missions.detail.tabs.settings'),
+          icon: Cog6ToothIconSolid,
+        },
+      ]
+    : []),
 ])
 
-// Pestaña activa desde ?tab=; el resumen es la vista por defecto (sin query).
-const activeTab = computed(() => (route.query.tab as string) || 'resumen')
+// Pestaña activa desde ?tab=; el resumen es la vista por defecto (sin query) y
+// la de una pestaña que no se ofrece.
+const activeTab = computed(() => {
+  const tab = (route.query.tab as string) || 'resumen'
+  return tabs.value.some(item => item.id === tab) ? tab : 'resumen'
+})
 
 function tabHref(tabId: string) {
   return tabId === 'resumen' ? { query: {} } : { query: { tab: tabId } }

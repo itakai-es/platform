@@ -157,7 +157,8 @@
           "students": "Alunos",
           "tienda": "Loja",
           "behaviors": "Comportamentos",
-          "settings": "Definições"
+          "settings": "Definições",
+          "history": "Histórico"
         },
         "students": {
           "empty_title": "Ainda não há alunos",
@@ -417,7 +418,8 @@
           },
           "management": {
             "title": "Gestão"
-          }
+          },
+          "edit_level_note": "Podes alterar o nome, o horário e a capa. A classificação, as funcionalidades e os níveis são alterados por quem administra a turma."
         },
         "badges_empty": "Não há emblemas nesta turma",
         "archived_notice": "Esta turma está arquivada: pode ser consultada, mas não aceita novos alunos.",
@@ -508,6 +510,173 @@
           "card_login_url": "Entra em",
           "card_class_code": "Código da turma",
           "card_first_login": "Quando entrares pela primeira vez, muda a tua palavra-passe."
+        },
+        "read_only_notice": "O teu acesso a esta turma permite-te ver isto, mas não alterá-lo.",
+        "teachers": {
+          "title": "Professores",
+          "description": "Quem dá esta turma, com que perfil e o que pode fazer nela.",
+          "add": "Adicionar professor",
+          "add_title": "Adicionar professor",
+          "add_confirm": "Adicionar",
+          "load_error": "Não foi possível carregar os professores.",
+          "retry": "Tentar novamente",
+          "you": "Tu",
+          "access_line": "Acesso: {access}",
+          "menu_label": "Ações para {name}",
+          "owner_note": "És o proprietário desta turma. Para saíres dela, passa primeiro a propriedade a alguém com administração.",
+          "leave_title": "Sair da turma",
+          "leave": "Sair da turma",
+          "leave_confirm": "Sair",
+          "leave_hint": "Deixarás de ver esta turma. Para voltares, alguém com administração terá de te adicionar de novo.",
+          "leave_message": "Sair de {class}? Deixarás de a ver e, para voltares, alguém com administração terá de te adicionar de novo.",
+          "field_email": "Email",
+          "field_email_hint": "O email exato da conta de professor na aplicação.",
+          "add_note": "Entra na turma de imediato e recebe um aviso. Não tem de aceitar nada.",
+          "field_profile": "Perfil",
+          "field_access": "Nível de acesso",
+          "access_hint": {
+            "read": "Vê a turma, as missões, os alunos e as entregas, sem alterar nada.",
+            "edit": "Além disso, altera o conteúdo, a loja e os comportamentos, e aprova entregas.",
+            "admin": "Além disso, altera as definições, gere os alunos e os professores e arquiva a turma."
+          },
+          "edit": "Alterar perfil ou nível",
+          "edit_title": "Perfil e nível de {name}",
+          "edit_self_note": "Estás a alterar o teu próprio acesso: se o baixares, talvez não o possas voltar a subir.",
+          "remove": "Remover da turma",
+          "remove_title": "Remover dos professores",
+          "remove_confirm": "Remover",
+          "remove_message": "Remover {name} dos professores de {class}? Deixará de ver a turma e receberá um aviso. O que já fez nela fica.",
+          "transfer": "Passar a propriedade",
+          "transfer_confirm": "Passar a propriedade",
+          "transfer_title": "Passar a propriedade da turma",
+          "transfer_message": "Passar a propriedade de {class} para {name}? Não poderás desfazê-lo a partir da tua conta: só {name} ta poderia devolver.",
+          "transfer_keeps": "Continuas na turma com acesso de administração.",
+          "transfer_loses": "Deixas de poder publicá-la como modelo e de passar a sua propriedade.",
+          "added": "{name} já faz parte dos professores",
+          "changed": "Acesso de {name} atualizado",
+          "removed": "{name} já não faz parte dos professores",
+          "transferred": "A turma é agora de {name}",
+          "left": "Saíste de {class}",
+          "errors": {
+            "not_addable": "Não é possível adicionar essa pessoa. Confirma que o email é de uma conta de professor.",
+            "already_teacher": "Essa pessoa já faz parte dos professores desta turma.",
+            "owner_locked": "O proprietário não pode ser alterado nem removido: primeiro tem de passar a propriedade.",
+            "owner_cannot_leave": "És o proprietário: para saíres, passa primeiro a propriedade a alguém com administração.",
+            "transfer_not_admin": "A propriedade só pode passar para alguém com acesso de administração.",
+            "already_owner": "Essa pessoa já é a proprietária da turma.",
+            "too_many": "Fizeste demasiadas tentativas. Espera um pouco e tenta novamente.",
+            "forbidden": "O teu acesso a esta turma não permite fazer isto.",
+            "not_found": "Isto já não está disponível. Recarrega a página para veres a turma como está agora.",
+            "invalid_email": "Escreve um email válido.",
+            "add": "Não foi possível adicionar. Tenta novamente.",
+            "change": "Não foi possível alterar o acesso. Tenta novamente.",
+            "remove": "Não foi possível remover. Tenta novamente.",
+            "transfer": "Não foi possível passar a propriedade. Tenta novamente.",
+            "leave": "Não foi possível sair da turma. Tenta novamente."
+          }
+        },
+        "history": {
+          "filter_actor": "Professor",
+          "filter_type": "Tipo",
+          "filter_search": "Procurar professor…",
+          "all_actors": "Todos os professores",
+          "all_types": "Todos os tipos",
+          "empty_title": "Ainda não há nada no histórico",
+          "empty_description": "Aqui vai aparecer o que os professores fazem na turma: missões, entregas, alunos, definições…",
+          "no_results_title": "Nada com estes filtros",
+          "no_results_description": "Experimenta outro professor ou outro tipo.",
+          "error_title": "Não foi possível carregar o histórico",
+          "error_description": "Verifica a ligação e tenta novamente.",
+          "retry": "Tentar novamente",
+          "unknown_actor": "Conta eliminada",
+          "unknown_target": "uma conta eliminada",
+          "unknown_action": "fez uma alteração na turma",
+          "types": {
+            "class": "Turma",
+            "teacher": "Professores",
+            "student": "Alunos",
+            "mission": "Missões",
+            "enigma": "Enigmas",
+            "document": "Documentos",
+            "submission": "Entregas",
+            "behavior": "Comportamentos",
+            "shop": "Loja"
+          },
+          "actions": {
+            "class": {
+              "updated": "alterou os dados da turma",
+              "settings_changed": "alterou as definições da turma",
+              "guide_updated": "atualizou o guia da turma",
+              "archived": "arquivou a turma",
+              "unarchived": "desarquivou a turma",
+              "template_published": "publicou a turma como modelo",
+              "template_unpublished": "retirou a turma dos modelos",
+              "duplicated": "duplicou a turma",
+              "ownership_transferred": "passou a propriedade da turma para {target}",
+              "ownership_inherited": "a turma passou para {target} quando a conta do proprietário foi eliminada"
+            },
+            "teacher": {
+              "added": "adicionou {target} aos professores ({profile}, {access})",
+              "changed": "alterou o acesso de {target}: {profile}, {access}",
+              "removed": "removeu {target} dos professores",
+              "left": "saiu da turma"
+            },
+            "student": {
+              "account_created": "criou a conta de {target}",
+              "password_reset": "repôs a palavra-passe de {target}",
+              "nickname_changed": "mudou a alcunha de {target}",
+              "removed": "removeu {target} da turma",
+              "avatar_generated": "gerou um novo avatar para {target}"
+            },
+            "mission": {
+              "created": "criou a missão «{title}»",
+              "updated": "editou a missão «{title}»",
+              "blocked": "bloqueou a missão «{title}»",
+              "unblocked": "desbloqueou a missão «{title}»",
+              "moved": "mudou de turma a missão «{title}»",
+              "rewards_changed": "alterou a recompensa da missão «{title}»"
+            },
+            "enigma": {
+              "created": "adicionou o enigma «{title}»",
+              "updated": "editou o enigma «{title}»",
+              "deleted": "eliminou o enigma «{title}»",
+              "rewards_changed": "alterou as recompensas do enigma «{title}»"
+            },
+            "document": {
+              "created": "adicionou o documento «{title}»",
+              "updated": "editou o documento «{title}»",
+              "deleted": "eliminou o documento «{title}»"
+            },
+            "submission": {
+              "approved": "aprovou a entrega de {target} em «{title}» com {percentage} %"
+            },
+            "behavior": {
+              "applied": "aplicou «{title}» a {target}",
+              "created": "criou o comportamento «{title}»",
+              "updated": "editou o comportamento «{title}»",
+              "deleted": "eliminou o comportamento «{title}»"
+            },
+            "shop": {
+              "item_created": "adicionou «{title}» à loja",
+              "item_updated": "editou «{title}» na loja",
+              "item_deleted": "removeu «{title}» da loja"
+            }
+          },
+          "anonymous": {
+            "student": {
+              "account_created": "criou a conta de um aluno que já não está na turma",
+              "password_reset": "repôs a palavra-passe de um aluno que já não está na turma",
+              "nickname_changed": "mudou a alcunha de um aluno que já não está na turma",
+              "removed": "removeu um aluno da turma",
+              "avatar_generated": "gerou um novo avatar para um aluno que já não está na turma"
+            },
+            "submission": {
+              "approved": "aprovou em «{title}» a entrega de um aluno que já não está na turma, com {percentage} %"
+            },
+            "behavior": {
+              "applied": "aplicou «{title}» a um aluno que já não está na turma"
+            }
+          }
         }
       }
     },
@@ -526,7 +695,9 @@
         "pick_class": "Seleciona uma turma",
         "idea_placeholder": "Ex.: Quero uma missão sobre cinemática em que os alunos calculem trajetórias de vassouras voadoras...",
         "narrative_error": "Não consegui criar a narrativa",
-        "ai_unavailable": "O serviço de IA não está disponível neste momento. Tenta novamente daqui a uns minutos."
+        "ai_unavailable": "O serviço de IA não está disponível neste momento. Tenta novamente daqui a uns minutos.",
+        "no_editable_classes": "Não tens nenhuma turma onde possas criar missões: é preciso acesso de edição.",
+        "no_classes": "Ainda não tens nenhuma turma: cria uma primeiro para lhe adicionares missões."
       },
       "detail": {
         "delete_confirm_btn": "Eliminar",
@@ -616,7 +787,9 @@
         "description": "Cria, edita e faz a gestão de emblemas personalizados para premiar as conquistas dos teus alunos."
       },
       "filter_system": "Do sistema",
-      "generate_error": "Não foi possível gerar o emblema."
+      "generate_error": "Não foi possível gerar o emblema.",
+      "save_error": "Não foi possível guardar o emblema.",
+      "delete_error": "Não foi possível eliminar o emblema."
     },
     "students": {
       "index": {

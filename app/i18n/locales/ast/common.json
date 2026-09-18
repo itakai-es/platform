@@ -382,6 +382,32 @@
     "file_unavailable": {
       "title": "L'enllaz yá nun val",
       "message": "L'enllaz pa abrir esti ficheru caducó. Vuelvi a la misión y ábrilu otra vez."
+    },
+    "class_teachers": {
+      "owner": "Propietariu",
+      "profiles": {
+        "titular": "Titular",
+        "sustituto": "Sustitutu",
+        "practicas": "Práutiques"
+      },
+      "access": {
+        "read": "Llectura",
+        "edit": "Edición",
+        "admin": "Alministración"
+      }
+    },
+    "pagination": {
+      "label": "Paxinación",
+      "page_of": "Páxina {page} de {total}",
+      "previous": "Anterior",
+      "next": "Siguiente"
+    },
+    "account_deletion": {
+      "blocked_self": "Entá nun pues borrar la to cuenta: yes el propietariu d'estes clases y nelles nun hai naide más con alministración. Da-y alministración a otru profesor o pása-y la propiedá, y vuelvi equí.",
+      "blocked_admin": "Esta cuenta entá nun se pue borrar: ye la propietaria d'estes clases y nelles nun hai naide más con alministración. Primero hai que pasa-y la so propiedá a otru profesor.",
+      "transfers_self": "Les tos clases van pasar a otru profesor con alministración nelles:",
+      "transfers_admin": "Les sos clases van pasar a otru profesor con alministración nelles:",
+      "transfer_item": "{class}, a {name}"
     }
   }
 }

@@ -199,6 +199,10 @@
           "bought_toast": "Αγόρασες το «{name}»!",
           "used_toast": "Χρησιμοποίησες το «{name}»!",
           "mana_after": "Μάνα μετά τη χρήση"
+        },
+        "teachers": {
+          "title": "Εκπαιδευτικοί",
+          "empty": "Αυτή η τάξη δεν έχει ακόμα εκπαιδευτικούς."
         }
       }
     },
@@ -326,7 +330,8 @@
       "recent_activity_card": {
         "title": "Πρόσφατη δραστηριότητα",
         "empty": "Δεν υπάρχει πρόσφατη δραστηριότητα",
-        "user_fallback": "Χρήστης"
+        "user_fallback": "Χρήστης",
+        "by_actor": "Από: {name}"
       },
       "submission_modal": {
         "title": "Υποβολή γρίφου",

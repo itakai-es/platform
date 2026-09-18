@@ -121,7 +121,11 @@ export const NotificationType = {
   system_announcement: 'system_announcement',
   chat_message: 'chat_message',
   submission_received: 'submission_received',
-  submission_reviewed: 'submission_reviewed'
+  submission_reviewed: 'submission_reviewed',
+  class_teacher_added: 'class_teacher_added',
+  class_teacher_changed: 'class_teacher_changed',
+  class_teacher_removed: 'class_teacher_removed',
+  class_ownership_received: 'class_ownership_received'
 } as const
 
 export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]

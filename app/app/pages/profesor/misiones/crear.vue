@@ -39,6 +39,13 @@
                     :placeholder="t('teacher.missions.create.pick_class')"
                     @update:model-value="selectedClassId = String($event)"
                   />
+                  <InfoNote v-if="classesLoaded && !classSelectOptions.length" class="mt-2">
+                    {{
+                      classesStore.classes.length
+                        ? t('teacher.missions.create.no_editable_classes')
+                        : t('teacher.missions.create.no_classes')
+                    }}
+                  </InfoNote>
                 </div>
                 <textarea
                   ref="inputRef"
@@ -845,6 +852,7 @@ import { renderPageMarkdown } from '~/utils/markdown'
 import { MISSION_COMPLETION_BONUS, type MissionRarity } from '~/utils/gamification-config'
 import { resolveClassSettings } from '~/utils/class-settings'
 import { classMetaLine } from '~/utils/class-metadata'
+import { canInClass } from '~/utils/class-access'
 import type { ClassSettings } from '~/types/class.types'
 import CoinIcon from '~/components/atoms/CoinIcon.vue'
 import ManaIcon from '~/components/atoms/ManaIcon.vue'
@@ -867,7 +875,11 @@ const god = computed(
   () => aiStore.currentGod || { id: 'atenea', name: 'Atenea', avatar: '/app/avatars/atenea.svg' }
 )
 const teacherName = computed(() => authStore.user?.name?.split(' ')[0] || '')
-const teacherClasses = computed(() => classesStore.classes || [])
+// Solo las clases donde se pueden crear misiones (edición o más).
+const teacherClasses = computed(() =>
+  (classesStore.classes || []).filter(c => canInClass(c.myAccess, 'mission.edit'))
+)
+const classesLoaded = ref(false)
 
 // Wizard
 const totalSteps = 8
@@ -1063,6 +1075,7 @@ const currentQuestion = computed(() => {
 // Load classes
 onMounted(async () => {
   await classesStore.fetchTeacherClasses()
+  classesLoaded.value = true
   // Preselect class from query param
   const qClassId = route.query.classId as string
   if (qClassId && teacherClasses.value.some(c => c.id === qClassId)) {

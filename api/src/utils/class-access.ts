@@ -29,6 +29,16 @@ export interface ClassAccess {
   isOwner: boolean
 }
 
+/**
+ * Nivel con el que entra cada perfil si no se elige otro. Es una sugerencia: el
+ * nivel se guarda aparte y se puede cambiar sin tocar el perfil.
+ */
+export const PROFILE_DEFAULT_ACCESS: Record<ClassTeacherProfile, ClassAccessLevel> = {
+  titular: 'admin',
+  sustituto: 'edit',
+  practicas: 'read',
+}
+
 /** Orden de los niveles: cada uno incluye a los anteriores. */
 const LEVEL_RANK: Record<ClassRequiredLevel, number> = { read: 1, edit: 2, admin: 3, owner: 4 }
 
@@ -63,6 +73,9 @@ export const CLASS_ACTION_LEVEL = {
   'student.nickname': 'admin',
   'teachers.view': 'read',
   'teachers.manage': 'admin',
+  // Salir de la clase: cualquiera del profesorado menos el propietario, que antes la traspasa.
+  'teachers.leave': 'read',
+  'class.history': 'read',
 } as const satisfies Record<string, ClassRequiredLevel>
 
 export type ClassAction = keyof typeof CLASS_ACTION_LEVEL
@@ -82,7 +95,7 @@ function levelsFrom(minLevel: ClassAccessLevel): ClassAccessLevel[] {
 }
 
 /** Filtro de filas de profesorado vigentes (sin fecha de fin o con ella en el futuro) que llegan a `minLevel`. */
-function activeTeacherWhere(
+export function activeTeacherWhere(
   minLevel: ClassRequiredLevel,
   now = new Date()
 ): Prisma.ClassTeacherWhereInput {

@@ -11,6 +11,7 @@ import { resolveClassSettings } from '../../utils/class-settings.js'
 import { ForbiddenError, ValidationError } from '../../utils/errors.js'
 import {
   accessibleClassesWhere,
+  classTeachersInclude,
   getClassMembership,
   studentEnrollmentsWhere,
   type ClassUser,
@@ -60,6 +61,16 @@ function pickAvatarFromPrompt(prompt: string) {
   }
 
   return DEFAULT_AVATARS[hashText(normalizedPrompt) % DEFAULT_AVATARS.length]
+}
+
+/**
+ * Quién hizo lo que cuenta una entrada del feed, cuando no es el propio alumno:
+ * el profesor que aprobó su entrega o le aplicó un comportamiento. El profesorado
+ * aún no tiene avatar propio, así que va vacío.
+ */
+function activityActor(activity: { actorId: string | null; actorName: string | null }) {
+  if (!activity.actorName) return null
+  return { id: activity.actorId, name: activity.actorName, avatar: null }
 }
 
 export class StudentsService {
@@ -205,6 +216,7 @@ export class StudentsService {
             missions: { include: { enigmas: true } },
             enrollments: { where: { isPreview: false } },
             guide: true,
+            teachers: classTeachersInclude(),
           },
         },
       },
@@ -259,6 +271,13 @@ export class StudentsService {
       narrative: cls.narrative,
       schedule: cls.schedule,
       teacherName: cls.teacher.name,
+      // Quién imparte la clase, con su perfil; también quien está en prácticas,
+      // que ve los datos del alumnado. Sin correo ni nivel de acceso.
+      teachers: cls.teachers.map(t => ({
+        name: t.user.name,
+        profile: t.profile,
+        isOwner: t.isOwner,
+      })),
       archived: cls.archived,
       backgroundImage: cls.backgroundImage,
       subject: cls.subject,
@@ -667,6 +686,7 @@ export class StudentsService {
         classId: a.classId,
         className: a.className,
         teacherName: a.teacherName,
+        actor: activityActor(a),
         // Activity-specific fields (from Activity model directly)
         enigmaTitle: a.enigmaTitle,
         enigmaXp: a.enigmaXp,
@@ -889,6 +909,7 @@ export class StudentsService {
           classId: a.classId,
           className: a.className,
           teacherName: a.teacherName,
+          actor: activityActor(a),
           // Activity-specific fields (from Activity model directly)
           enigmaTitle: a.enigmaTitle,
           enigmaXp: a.enigmaXp,

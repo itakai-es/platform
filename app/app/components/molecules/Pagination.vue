@@ -1,22 +1,32 @@
 <template>
-  <nav v-if="totalPages > 1" class="flex items-center justify-between pt-4" aria-label="Paginación">
-    <div class="text-sm text-text-secondary">Página {{ currentPage }} de {{ totalPages }}</div>
+  <nav
+    v-if="totalPages > 1"
+    class="flex flex-wrap items-center justify-between gap-2 pt-4"
+    :aria-label="t('common.pagination.label')"
+  >
+    <div class="text-sm text-text-secondary">
+      {{ t('common.pagination.page_of', { page: currentPage, total: totalPages }) }}
+    </div>
 
-    <div class="flex items-center gap-1">
+    <div class="flex flex-wrap items-center gap-1">
       <!-- Previous -->
       <button
+        type="button"
         :disabled="currentPage <= 1"
         class="px-3 py-1.5 text-sm rounded-lg border border-border-primary text-text-primary hover:bg-surface-hover disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         @click="$emit('pageChange', currentPage - 1)"
       >
-        Anterior
+        {{ t('common.pagination.previous') }}
       </button>
 
       <!-- Page Numbers -->
-      <template v-for="page in visiblePages" :key="page">
+      <!-- Cada número con su propia clave: el botón pulsado no se rehace y conserva el foco -->
+      <template v-for="(page, index) in visiblePages" :key="page === '...' ? `gap-${index}` : page">
         <span v-if="page === '...'" class="px-2 py-1.5 text-sm text-text-secondary"> ... </span>
         <button
           v-else
+          type="button"
+          :aria-current="page === currentPage ? 'page' : undefined"
           :class="[
             'px-3 py-1.5 text-sm rounded-lg transition-colors',
             page === currentPage
@@ -31,11 +41,12 @@
 
       <!-- Next -->
       <button
+        type="button"
         :disabled="currentPage >= totalPages"
         class="px-3 py-1.5 text-sm rounded-lg border border-border-primary text-text-primary hover:bg-surface-hover disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         @click="$emit('pageChange', currentPage + 1)"
       >
-        Siguiente
+        {{ t('common.pagination.next') }}
       </button>
     </div>
   </nav>
@@ -48,6 +59,8 @@ interface Props {
 }
 
 const props = defineProps<Props>()
+
+const { t } = useI18n()
 
 defineEmits<{
   pageChange: [page: number]

@@ -92,7 +92,6 @@ import { KeyIcon, PencilSquareIcon, UserMinusIcon } from '@heroicons/vue/24/outl
 import type { ActionMenuItem } from '~/types/action-menu.types'
 import type { ClassAccess } from '~/types/class.types'
 import type { ManageableStudent } from '~/types/teacher.types'
-import { hasClassLevel } from '~/utils/class-access'
 
 /**
  * El menú «⋮» de un alumno en una clase: restablecer su contraseña, cambiar su
@@ -126,20 +125,26 @@ const toast = useToast()
 const teacherStore = useTeacherStore()
 const credentialsStore = useCredentialsSheetStore()
 
-const canAdminister = computed(() => hasClassLevel(props.access, 'admin'))
+const { can } = useClassPermissions(() => props.access)
 
 const items = computed<ActionMenuItem[]>(() => {
   const list: ActionMenuItem[] = []
-  if (props.student.canResetPassword || canAdminister.value) {
+  if (props.student.canResetPassword || can('student.manage')) {
     list.push({
       id: 'reset',
       label: t('teacher.students.actions.reset'),
       icon: KeyIcon,
     })
   }
-  if (canAdminister.value) {
+  if (can('student.nickname')) {
+    list.push({
+      id: 'nickname',
+      label: t('teacher.students.actions.nickname'),
+      icon: PencilSquareIcon,
+    })
+  }
+  if (can('student.manage')) {
     list.push(
-      { id: 'nickname', label: t('teacher.students.actions.nickname'), icon: PencilSquareIcon },
       { divider: true },
       {
         id: 'remove',

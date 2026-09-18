@@ -2,14 +2,14 @@
   <div>
     <div
       v-if="!isEditing"
-      :class="{ 'cursor-pointer': state.classData?.narrative }"
-      @click="state.classData?.narrative && startEditing()"
+      :class="{ 'cursor-pointer': canEdit && state.classData?.narrative }"
+      @click="canEdit && state.classData?.narrative && startEditing()"
     >
       <ClassGuideMarkdown
         :content="state.classData?.narrative"
         :last-updated="state.classData?.updatedAt"
         :loading="false"
-        is-teacher
+        :is-teacher="canEdit"
         @add-guide="startEditing"
       />
     </div>
@@ -38,7 +38,9 @@ const teacherStore = useTeacherStore()
 const aiStore = useAIAssistantStore()
 
 const classId = computed(() => route.params.id as string)
-const { state, setClassData } = useTeacherClassDetail(classId)
+const { state, setClassData, can } = useTeacherClassDetail(classId)
+// La historia la cambia quien puede editar el contenido; el resto solo la lee.
+const canEdit = computed(() => can('class.editContent'))
 
 const isEditing = ref(false)
 const editContent = ref('')

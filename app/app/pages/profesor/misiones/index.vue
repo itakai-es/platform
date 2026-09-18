@@ -2,7 +2,7 @@
   <div class="space-y-4 xs:space-y-5 sm:space-y-6">
     <!-- Page Header -->
     <PageHeader title="Mis Misiones" :subtitle="t('teacher.missions.index.subtitle')">
-      <template #actions>
+      <template v-if="canCreate" #actions>
         <NuxtLink to="/profesor/misiones/crear">
           <Button variant="primary">
             <PlusIcon class="w-4 h-4 mr-2" />
@@ -44,7 +44,7 @@
       title="Sin misiones"
       :description="getEmptyStateMessage()"
     >
-      <template v-if="!searchQuery" #action>
+      <template v-if="!searchQuery && canCreate" #action>
         <NuxtLink
           :to="
             selectedClassIds?.length === 1
@@ -127,6 +127,9 @@ definePageMeta({
 
 // Store
 const teacherStore = useTeacherStore()
+
+// Crear misiones pide edición en alguna clase (lo decide el almacén, igual que en Inicio).
+const canCreate = computed(() => teacherStore.canCreateMissions)
 
 // State
 const activeFilters = ref<string[]>([])

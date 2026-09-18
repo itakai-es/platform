@@ -11,7 +11,8 @@
  *    una tab puede lanzar bajo demanda si quiere refrescar
  *  - el estado de UI compartido entre el layout y los hijos (`showInviteModal`,
  *    `selectedActivityBadge`)
- *  - las derivadas (`classSettings`, `classStats`, `resolvedClassImage`).
+ *  - las derivadas (`classSettings`, `classStats`, `resolvedClassImage`)
+ *  - qué puede hacer el usuario en la clase (`can`), a partir de su acceso.
  *
  * El estado se memoriza por `classId` con `useState` para que sea SSR-safe y
  * para no refetchar al navegar entre tabs de la misma clase. Al cambiar de
@@ -19,6 +20,7 @@
  */
 import { resolveClassSettings } from '~/utils/class-settings'
 import type { ScheduleConfig } from '~/types/schedule.types'
+import type { ClassAccess } from '~/types/class.types'
 
 interface State {
   classData: any | null
@@ -83,6 +85,7 @@ export function useTeacherClassDetail(classIdRef: Ref<string> | ComputedRef<stri
   const state = useState<State>(`teacherClassDetail:${classId.value}`, emptyState)
 
   const classSettings = computed(() => resolveClassSettings(state.value.classData?.settings))
+  const { can, isOwner } = useClassPermissions(() => state.value.classData?.myAccess)
   const classStats = computed(
     () =>
       state.value.classData?.stats || {
@@ -104,7 +107,10 @@ export function useTeacherClassDetail(classIdRef: Ref<string> | ComputedRef<stri
   /** Carga principal: clase + estudiantes + misiones. Lanza también los fetches
    *  diferidos en background para que las tabs los encuentren listos. */
   async function loadAll(force = false) {
-    if (state.value.isLoaded && !force) return
+    if (state.value.isLoaded && !force) {
+      void revalidate()
+      return
+    }
     state.value.isLoading = true
     try {
       const classResult = await teacherStore.fetchClassById(classId.value)
@@ -136,9 +142,32 @@ export function useTeacherClassDetail(classIdRef: Ref<string> | ComputedRef<stri
       void ensureActivities()
     } catch (error) {
       console.error('Error loading class:', error)
+      // Sin acceso (o ya sin él): nada de lo cargado vale y la página dice que no está.
+      if (teacherStore.isClassGone(error)) forget()
     } finally {
       state.value.isLoading = false
     }
+  }
+
+  /**
+   * Al volver a una clase ya cargada se enseña lo guardado y, por detrás, se
+   * pide la clase de nuevo: el acceso propio puede haber cambiado (o haberse
+   * perdido) mientras tanto.
+   */
+  async function revalidate() {
+    try {
+      const fresh = await teacherStore.fetchClassById(classId.value, true)
+      if (fresh && state.value.classData) {
+        state.value.classData = { ...state.value.classData, ...fresh }
+      }
+    } catch (error) {
+      if (teacherStore.isClassGone(error)) forget()
+    }
+  }
+
+  /** Vacía el estado de la clase, p. ej. al salir de ella: la próxima visita la vuelve a pedir. */
+  function forget() {
+    state.value = { ...emptyState(), isLoading: false }
   }
 
   /** Carga la guía si no se ha cargado todavía (o si `force=true`). Es idempotente:
@@ -206,6 +235,12 @@ export function useTeacherClassDetail(classIdRef: Ref<string> | ComputedRef<stri
     if (!state.value.classData) return
     state.value.classData = { ...state.value.classData, ...patch }
   }
+  /** Acceso propio nuevo en la clase (p. ej. tras cambiarse el nivel o pasar la propiedad). */
+  function setMyAccess(access: ClassAccess | null) {
+    if (state.value.classData)
+      state.value.classData = { ...state.value.classData, myAccess: access }
+    teacherStore.setClassAccess(classId.value, access)
+  }
   function openActivityBadge(badge: { image?: string; text: string }) {
     if (badge.image) state.value.selectedActivityBadge = { image: badge.image, text: badge.text }
   }
@@ -219,7 +254,12 @@ export function useTeacherClassDetail(classIdRef: Ref<string> | ComputedRef<stri
     classSettings,
     classStats,
     resolvedClassImage,
+    can,
+    isOwner,
     loadAll,
+    revalidate,
+    forget,
+    setMyAccess,
     ensureGuide,
     ensureRanking,
     ensureActivities,

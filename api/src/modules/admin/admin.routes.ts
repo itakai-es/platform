@@ -15,6 +15,12 @@ import {
   createManagedStudent,
   resetManagedStudentPassword,
 } from '../teachers/managed-students.service.js'
+import { listClassTeachers, transferClass } from '../teachers/class-teachers.service.js'
+import {
+  AccountDeletionBlockedError,
+  accountDeletionCheck,
+  deleteUserAccount,
+} from '../profile/account-deletion.service.js'
 
 const userFiltersSchema = z.object({
   role: z.string().optional(),
@@ -36,6 +42,10 @@ const createManagedUserSchema = z.object({
   classId: z.string().min(1, 'Elige la clase de origen'),
   name: z.string().min(2, 'El nombre debe tener al menos 2 caracteres').max(120),
   username: z.string().min(USERNAME_MIN_LENGTH).max(USERNAME_MAX_LENGTH).optional(),
+})
+
+const transferClassSchema = z.object({
+  userId: z.string().min(1, 'Elige a quién pasar la clase'),
 })
 
 type ServiceStatus = 'operational' | 'degraded' | 'down'
@@ -522,13 +532,38 @@ export async function adminRoutes(fastify: FastifyInstance) {
         return reply.status(400).send({ message: 'No puedes eliminarte a ti mismo' })
       }
 
-      await prisma.user.delete({ where: { id: userId } })
+      const target = await prisma.user.findUnique({ where: { id: userId }, select: { id: true } })
+      if (!target) {
+        return reply.status(404).send({ message: 'Usuario no encontrado' })
+      }
+
+      // Sus clases pasan antes a otra persona y sus insignias a quien corresponda;
+      // si alguna clase no tiene a quién pasar, no se borra nada.
+      await deleteUserAccount(userId, { actorId: adminId, bySelf: false })
 
       return { success: true, message: 'Usuario eliminado correctamente' }
     } catch (error) {
+      if (error instanceof AccountDeletionBlockedError) {
+        return reply
+          .status(409)
+          .send({ message: error.message, code: error.code, classes: error.classes })
+      }
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
+
+  // Antes de borrar una cuenta: qué clases pasarían a otra persona y cuáles lo impiden.
+  fastify.get(
+    '/users/:userId/deletion-check',
+    async (request: FastifyRequest<{ Params: { userId: string } }>, reply: FastifyReply) => {
+      const { userId } = request.params
+      const target = await prisma.user.findUnique({ where: { id: userId }, select: { id: true } })
+      if (!target) {
+        return reply.status(404).send({ message: 'Usuario no encontrado' })
+      }
+      return accountDeletionCheck(userId)
+    }
+  )
 
   // Get activities
   fastify.get('/activities', async (request: FastifyRequest<{ Querystring: { period?: string } }>, reply: FastifyReply) => {
@@ -696,6 +731,25 @@ export async function adminRoutes(fastify: FastifyInstance) {
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
+
+  // Profesorado de una clase y traspaso de su propiedad. Quien administra la
+  // instancia es el respaldo cuando en la clase no queda nadie que pueda hacerlo.
+  fastify.get(
+    '/classes/:classId/teachers',
+    async (request: FastifyRequest<{ Params: { classId: string } }>) => {
+      const admin = request.user as { id: string; role: string }
+      return listClassTeachers(admin, request.params.classId)
+    }
+  )
+
+  fastify.post(
+    '/classes/:classId/transfer',
+    async (request: FastifyRequest<{ Params: { classId: string } }>) => {
+      const admin = request.user as { id: string; role: string }
+      const { userId } = transferClassSchema.parse(request.body)
+      return transferClass(admin, request.params.classId, userId)
+    }
+  )
 
   // Get analytics
   fastify.get('/analytics', async (request: FastifyRequest<{ Querystring: { period?: string } }>, reply: FastifyReply) => {

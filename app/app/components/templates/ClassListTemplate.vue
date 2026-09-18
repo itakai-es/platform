@@ -67,6 +67,7 @@
 
 <script setup lang="ts">
 import { AcademicCapIcon } from '@heroicons/vue/24/outline'
+import type { ClassAccess } from '~/types/class.types'
 
 interface ClassItem {
   id: string
@@ -85,6 +86,8 @@ interface ClassItem {
     avgMissionsCompleted?: number
     totalMissions?: number
   }
+  /** Acceso propio (listados del profesor): decide qué acciones y etiquetas lleva cada tarjeta. */
+  myAccess?: ClassAccess | null
 }
 
 interface Props {

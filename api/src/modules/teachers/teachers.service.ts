@@ -28,6 +28,7 @@ import {
   CLASS_ACTION_LEVEL,
   classTeachersInclude,
   hasClassLevel,
+  recordClassAction,
   summarizeClassTeachers,
   type ClassAccess,
 } from '../../utils/class-access.js'
@@ -46,6 +47,21 @@ export interface ClassCopyOptions {
   behaviors: boolean
   missions: boolean
 }
+
+/** Lo que se puede cambiar de una clase, para apuntar en el registro qué se tocó. */
+const CLASS_UPDATE_FIELDS = [
+  'name',
+  'narrative',
+  'schedule',
+  'backgroundImage',
+  'subject',
+  'language',
+  'educationLevel',
+  'province',
+  'settings',
+  'levelConfig',
+  'scheduleConfig',
+] as const
 
 /** Metadatos de la clase: cambiarlos es un ajuste, no contenido. */
 const CLASS_METADATA_FIELDS = ['subject', 'language', 'educationLevel', 'province'] as const
@@ -247,6 +263,7 @@ export class TeachersService {
         language: cls.language,
         educationLevel: cls.educationLevel,
         province: cls.province,
+        ...(await this.classAccessSummary(cls.id, userId)),
       },
       message: 'Clase creada correctamente',
     }
@@ -295,51 +312,67 @@ export class TeachersService {
 
     const { settings: settingsPatch, levelConfig: levelConfigPatch, scheduleConfig: scheduleConfigPatch, ...rest } = data
 
-    const updated = await prisma.class.update({
-      where: { id: classId },
-      data: {
-        ...rest,
-        // Merge incoming flags over current settings, then normalize dependencies so the
-        // stored config is always coherent (e.g. shop off ⇒ mana off).
-        ...(settingsPatch
-          ? { settings: { ...normalizeClassSettings({ ...resolveClassSettings(cls.settings), ...settingsPatch }) } }
-          : {}),
-        // La config de niveles se normaliza (curva + tramos válidos) antes de guardar.
-        ...(levelConfigPatch
-          ? { levelConfig: resolveLevelConfig({ ...resolveLevelConfig(cls.levelConfig), ...levelConfigPatch }) as unknown as Prisma.InputJsonValue }
-          : {}),
-        // El horario se guarda tal cual (objeto JSON estructurado); null lo limpia.
-        ...(scheduleConfigPatch !== undefined
-          ? { scheduleConfig: (scheduleConfigPatch ?? Prisma.JsonNull) as Prisma.InputJsonValue }
-          : {}),
-      },
-    })
-
-    // Al cambiar la curva de niveles, recalculamos el nivel guardado de TODOS los
-    // alumnos de la clase (si no, el ranking y el listado seguirían con el nivel
-    // viejo hasta el próximo cambio de XP). El título/color se calculan al vuelo.
-    if (levelConfigPatch) {
-      const finalCfg = resolveLevelConfig(updated.levelConfig)
-      const enrollments = await prisma.classEnrollment.findMany({
-        where: { classId },
-        select: { studentId: true, xp: true, level: true },
+    const updated = await prisma.$transaction(async tx => {
+      const saved = await tx.class.update({
+        where: { id: classId },
+        data: {
+          ...rest,
+          // Merge incoming flags over current settings, then normalize dependencies so the
+          // stored config is always coherent (e.g. shop off ⇒ mana off).
+          ...(settingsPatch
+            ? { settings: { ...normalizeClassSettings({ ...resolveClassSettings(cls.settings), ...settingsPatch }) } }
+            : {}),
+          // La config de niveles se normaliza (curva + tramos válidos) antes de guardar.
+          ...(levelConfigPatch
+            ? { levelConfig: resolveLevelConfig({ ...resolveLevelConfig(cls.levelConfig), ...levelConfigPatch }) as unknown as Prisma.InputJsonValue }
+            : {}),
+          // El horario se guarda tal cual (objeto JSON estructurado); null lo limpia.
+          ...(scheduleConfigPatch !== undefined
+            ? { scheduleConfig: (scheduleConfigPatch ?? Prisma.JsonNull) as Prisma.InputJsonValue }
+            : {}),
+        },
       })
-      // Agrupamos por nuevo nivel para hacer un updateMany por nivel en vez de N updates.
-      const byLevel = new Map<number, string[]>()
-      for (const e of enrollments) {
-        const lvl = getLevelFromXP(e.xp, finalCfg)
-        if (lvl !== e.level) {
-          if (!byLevel.has(lvl)) byLevel.set(lvl, [])
-          byLevel.get(lvl)!.push(e.studentId)
+
+      // Al cambiar la curva de niveles, recalculamos el nivel guardado de TODOS los
+      // alumnos de la clase (si no, el ranking y el listado seguirían con el nivel
+      // viejo hasta el próximo cambio de XP). El título/color se calculan al vuelo.
+      if (levelConfigPatch) {
+        const finalCfg = resolveLevelConfig(saved.levelConfig)
+        const enrollments = await tx.classEnrollment.findMany({
+          where: { classId },
+          select: { studentId: true, xp: true, level: true },
+        })
+        // Agrupamos por nuevo nivel para hacer un updateMany por nivel en vez de N updates.
+        const byLevel = new Map<number, string[]>()
+        for (const e of enrollments) {
+          const lvl = getLevelFromXP(e.xp, finalCfg)
+          if (lvl !== e.level) {
+            if (!byLevel.has(lvl)) byLevel.set(lvl, [])
+            byLevel.get(lvl)!.push(e.studentId)
+          }
+        }
+        for (const [lvl, ids] of byLevel) {
+          await tx.classEnrollment.updateMany({
+            where: { classId, studentId: { in: ids } },
+            data: { level: lvl },
+          })
         }
       }
-      for (const [lvl, ids] of byLevel) {
-        await prisma.classEnrollment.updateMany({
-          where: { classId, studentId: { in: ids } },
-          data: { level: lvl },
+
+      // Qué se tocó, sin valores: los textos de la clase pueden ser largos.
+      const fields = CLASS_UPDATE_FIELDS.filter(field => data[field] !== undefined)
+      if (fields.length > 0) {
+        await recordClassAction(tx, {
+          classId,
+          actorId: userId,
+          action: touchesSettings ? 'class.settings_changed' : 'class.updated',
+          entityType: 'class',
+          entityId: classId,
+          metadata: { fields },
         })
       }
-    }
+      return saved
+    })
 
     return {
       class: {
@@ -355,6 +388,7 @@ export class TeachersService {
         province: updated.province,
         settings: resolveClassSettings(updated.settings),
         scheduleConfig: updated.scheduleConfig,
+        ...(await this.classAccessSummary(classId, userId)),
       },
       message: 'Clase actualizada correctamente',
     }
@@ -380,7 +414,16 @@ export class TeachersService {
       }
     }
 
-    await prisma.class.update({ where: { id: classId }, data: { isTemplate: publish } })
+    await prisma.$transaction(async tx => {
+      await tx.class.update({ where: { id: classId }, data: { isTemplate: publish } })
+      await recordClassAction(tx, {
+        classId,
+        actorId: userId,
+        action: publish ? 'class.template_published' : 'class.template_unpublished',
+        entityType: 'class',
+        entityId: classId,
+      })
+    })
     return { isTemplate: publish }
   }
 
@@ -485,7 +528,9 @@ export class TeachersService {
       missions?: Prisma.MissionGetPayload<{ include: { enigmas: true } }>[]
     },
     userId: string,
-    options: ClassCopyOptions
+    options: ClassCopyOptions,
+    /** Lo que va en la misma transacción que la copia, con la clase nueva ya creada. */
+    afterCopy?: (tx: Prisma.TransactionClient, created: { id: string }) => Promise<unknown>
   ) {
     const invitationCode = nanoid(6).toUpperCase()
 
@@ -578,6 +623,7 @@ export class TeachersService {
           }
         }
 
+        await afterCopy?.(tx, newClass)
         return newClass
       },
       { timeout: 30000 }
@@ -626,7 +672,17 @@ export class TeachersService {
     })
     if (!source) throw new NotFoundError('Clase no encontrada')
 
-    const created = await this.copyClass(source, userId, options)
+    // En la clase de origen queda quién sacó una copia; la copia ya es de otra persona.
+    const created = await this.copyClass(source, userId, options, (tx, copy) =>
+      recordClassAction(tx, {
+        classId,
+        actorId: userId,
+        action: 'class.duplicated',
+        entityType: 'class',
+        entityId: copy.id,
+        metadata: { ...options },
+      })
+    )
 
     return { class: { id: created.id, name: created.name }, message: 'Clase duplicada' }
   }
@@ -637,10 +693,7 @@ export class TeachersService {
 
     if (!cls) throw new NotFoundError('Clase no encontrada')
     if (cls.archived && !archived) {
-      const updated = await prisma.class.update({
-        where: { id: classId },
-        data: { archived },
-      })
+      const updated = await this.saveArchived(userId, classId, false)
 
       return {
         class: {
@@ -650,16 +703,14 @@ export class TeachersService {
           archived: updated.archived,
           invitationCode: updated.invitationCode,
           backgroundImage: updated.backgroundImage,
+          ...(await this.classAccessSummary(classId, userId)),
         },
         message: 'Clase desarchivada correctamente',
       }
     }
     if (cls.archived) throw new Error('La clase ya está archivada')
 
-    const updated = await prisma.class.update({
-      where: { id: classId },
-      data: { archived },
-    })
+    const updated = await this.saveArchived(userId, classId, archived)
 
     return {
       class: {
@@ -670,9 +721,40 @@ export class TeachersService {
         archived: updated.archived,
         invitationCode: updated.invitationCode,
         backgroundImage: updated.backgroundImage,
+        ...(await this.classAccessSummary(classId, userId)),
       },
       message: archived ? 'Clase archivada correctamente' : 'Clase desarchivada correctamente',
     }
+  }
+
+  /**
+   * Acceso propio y profesorado de la clase, como en el listado: la pantalla
+   * guarda la clase que devuelve crear, editar o archivar en sus listados y
+   * decide con esto qué ofrecer.
+   */
+  private async classAccessSummary(classId: string, userId: string) {
+    const include = classTeachersInclude()
+    const rows = await prisma.classTeacher.findMany({
+      where: { classId, ...include.where },
+      select: include.select,
+      orderBy: include.orderBy,
+    })
+    return summarizeClassTeachers(rows, userId)
+  }
+
+  /** Archiva o desarchiva la clase y lo apunta en su registro. */
+  private saveArchived(userId: string, classId: string, archived: boolean) {
+    return prisma.$transaction(async tx => {
+      const updated = await tx.class.update({ where: { id: classId }, data: { archived } })
+      await recordClassAction(tx, {
+        classId,
+        actorId: userId,
+        action: archived ? 'class.archived' : 'class.unarchived',
+        entityType: 'class',
+        entityId: classId,
+      })
+      return updated
+    })
   }
 
   async getInvitationCode(userId: string, classId: string) {
@@ -879,9 +961,20 @@ export class TeachersService {
       throw new AvatarServiceUnavailableError()
     }
 
-    const updated = await prisma.classEnrollment.update({
-      where: { studentId_classId: { studentId, classId } },
-      data: { avatarUrl: fileUrl },
+    const updated = await prisma.$transaction(async tx => {
+      const saved = await tx.classEnrollment.update({
+        where: { studentId_classId: { studentId, classId } },
+        data: { avatarUrl: fileUrl },
+      })
+      await recordClassAction(tx, {
+        classId,
+        actorId: userId,
+        action: 'student.avatar_generated',
+        entityType: 'enrollment',
+        entityId: saved.id,
+        targetUserId: studentId,
+      })
+      return saved
     })
 
     return { avatarUrl: updated.avatarUrl, message: 'Avatar del estudiante actualizado correctamente' }
@@ -1503,7 +1596,10 @@ export class TeachersService {
         rarity: b.rarity,
         category: b.category,
         isSystem: b.teacherId === null,
+        // Para saber a qué misiones se puede vincular: una ajena no sale de su clase.
+        isMine: b.teacherId === userId,
         missionId: b.missionId,
+        missionClassId: b.mission?.classId ?? null,
         missionTitle: b.mission?.title,
         className: b.mission?.class?.name,
         classNarrative: b.mission?.class?.narrative,
@@ -1610,16 +1706,26 @@ export class TeachersService {
     await assertClassAccess(classId, userId, 'class.editContent')
 
     // Upsert guide (create if doesn't exist, update if it does)
-    const guide = await prisma.classGuide.upsert({
-      where: { classId },
-      update: {
-        content,
-        lastUpdated: new Date(),
-      },
-      create: {
+    const guide = await prisma.$transaction(async tx => {
+      const saved = await tx.classGuide.upsert({
+        where: { classId },
+        update: {
+          content,
+          lastUpdated: new Date(),
+        },
+        create: {
+          classId,
+          content,
+        },
+      })
+      await recordClassAction(tx, {
         classId,
-        content,
-      },
+        actorId: userId,
+        action: 'class.guide_updated',
+        entityType: 'class',
+        entityId: classId,
+      })
+      return saved
     })
 
     return {

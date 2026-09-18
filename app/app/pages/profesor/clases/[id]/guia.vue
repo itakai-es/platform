@@ -2,14 +2,14 @@
   <div>
     <div
       v-if="!isEditing"
-      :class="{ 'cursor-pointer': state.classGuide?.content }"
-      @click="state.classGuide?.content && startEditing()"
+      :class="{ 'cursor-pointer': canEdit && state.classGuide?.content }"
+      @click="canEdit && state.classGuide?.content && startEditing()"
     >
       <ClassGuideMarkdown
         :content="state.classGuide?.content"
         :last-updated="state.classGuide?.lastUpdated"
         :loading="state.isLoadingGuide"
-        is-teacher
+        :is-teacher="canEdit"
         @add-guide="startEditing"
       />
     </div>
@@ -39,7 +39,9 @@ const teacherStore = useTeacherStore()
 const aiStore = useAIAssistantStore()
 
 const classId = computed(() => route.params.id as string)
-const { state, ensureGuide } = useTeacherClassDetail(classId)
+const { state, ensureGuide, can } = useTeacherClassDetail(classId)
+// La guía la cambia quien puede editar el contenido; el resto solo la lee.
+const canEdit = computed(() => can('class.editContent'))
 
 const isEditing = ref(false)
 const editContent = ref('')

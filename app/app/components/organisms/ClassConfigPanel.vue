@@ -17,194 +17,204 @@
       </button>
     </div>
 
+    <!-- Lo que el nivel propio no deja cambiar se ve, pero desactivado -->
+    <InfoNote v-if="readOnlyNote">{{ readOnlyNote }}</InfoNote>
+
     <!-- Section: Datos generales -->
     <div v-if="activeSection === 'general'">
-      <form class="space-y-8" @submit.prevent="saveGeneral">
-        <!-- Bloque 1 · Identidad: nombre + clasificación (los metadatos alimentan
+      <form @submit.prevent="saveGeneral">
+        <fieldset :disabled="!canEditContent" class="min-w-0 space-y-8">
+          <!-- Bloque 1 · Identidad: nombre + clasificación (los metadatos alimentan
              los filtros del marketplace; obligatorios al publicar como plantilla). -->
-        <div class="space-y-4">
-          <FormField
-            id="cfg-name"
-            v-model="general.name"
-            :label="t('teacher.classes.detail.settings.general.name_label')"
-            required
-          />
+          <div class="space-y-4">
+            <FormField
+              id="cfg-name"
+              v-model="general.name"
+              :label="t('teacher.classes.detail.settings.general.name_label')"
+              required
+            />
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div>
-              <label class="text-sm font-medium text-text-primary mb-2 block">
-                {{ t('teacher.classes.detail.settings.general.language_label') }}
-              </label>
-              <SelectDropdown
-                :model-value="general.language"
-                :options="languageOptions"
-                :error="publishErrors.language"
-                :placeholder="t('teacher.classes.detail.settings.general.metadata_none')"
-                @update:model-value="setLanguage"
-              />
-            </div>
-            <div>
-              <label class="text-sm font-medium text-text-primary mb-2 block">
-                {{ t('teacher.classes.detail.settings.general.province_label') }}
-              </label>
-              <SelectDropdown
-                :model-value="general.province"
-                :options="provinceOptions"
-                searchable
-                :placeholder="t('teacher.classes.detail.settings.general.metadata_none')"
-                :search-placeholder="t('teacher.classes.detail.settings.general.metadata_search')"
-                @update:model-value="general.province = String($event)"
-              />
-            </div>
-            <div>
-              <label class="text-sm font-medium text-text-primary mb-2 block">
-                {{ t('teacher.classes.detail.settings.general.level_label') }}
-              </label>
-              <SelectDropdown
-                :model-value="general.educationLevel"
-                :options="educationLevelOptions"
-                :error="publishErrors.educationLevel"
-                :placeholder="t('teacher.classes.detail.settings.general.metadata_none')"
-                @update:model-value="setEducationLevel"
-              />
-            </div>
-            <div>
-              <label class="text-sm font-medium text-text-primary mb-2 block">
-                {{ t('teacher.classes.detail.settings.general.subject_label') }}
-              </label>
-              <SelectDropdown
-                :model-value="general.subject"
-                :disabled="!general.educationLevel"
-                :options="subjectOptions"
-                searchable
-                :error="publishErrors.subject"
-                :placeholder="
-                  general.educationLevel
-                    ? t('teacher.classes.detail.settings.general.metadata_none')
-                    : t('teacher.classes.detail.settings.general.subject_needs_level')
-                "
-                :search-placeholder="t('teacher.classes.detail.settings.general.metadata_search')"
-                @update:model-value="setSubject"
-              />
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div>
+                <label class="text-sm font-medium text-text-primary mb-2 block">
+                  {{ t('teacher.classes.detail.settings.general.language_label') }}
+                </label>
+                <SelectDropdown
+                  :model-value="general.language"
+                  :options="languageOptions"
+                  :error="publishErrors.language"
+                  :disabled="!canEditSettings"
+                  :placeholder="t('teacher.classes.detail.settings.general.metadata_none')"
+                  @update:model-value="setLanguage"
+                />
+              </div>
+              <div>
+                <label class="text-sm font-medium text-text-primary mb-2 block">
+                  {{ t('teacher.classes.detail.settings.general.province_label') }}
+                </label>
+                <SelectDropdown
+                  :model-value="general.province"
+                  :options="provinceOptions"
+                  :disabled="!canEditSettings"
+                  searchable
+                  :placeholder="t('teacher.classes.detail.settings.general.metadata_none')"
+                  :search-placeholder="t('teacher.classes.detail.settings.general.metadata_search')"
+                  @update:model-value="general.province = String($event)"
+                />
+              </div>
+              <div>
+                <label class="text-sm font-medium text-text-primary mb-2 block">
+                  {{ t('teacher.classes.detail.settings.general.level_label') }}
+                </label>
+                <SelectDropdown
+                  :model-value="general.educationLevel"
+                  :options="educationLevelOptions"
+                  :error="publishErrors.educationLevel"
+                  :disabled="!canEditSettings"
+                  :placeholder="t('teacher.classes.detail.settings.general.metadata_none')"
+                  @update:model-value="setEducationLevel"
+                />
+              </div>
+              <div>
+                <label class="text-sm font-medium text-text-primary mb-2 block">
+                  {{ t('teacher.classes.detail.settings.general.subject_label') }}
+                </label>
+                <SelectDropdown
+                  :model-value="general.subject"
+                  :disabled="!canEditSettings || !general.educationLevel"
+                  :options="subjectOptions"
+                  searchable
+                  :error="publishErrors.subject"
+                  :placeholder="
+                    general.educationLevel
+                      ? t('teacher.classes.detail.settings.general.metadata_none')
+                      : t('teacher.classes.detail.settings.general.subject_needs_level')
+                  "
+                  :search-placeholder="t('teacher.classes.detail.settings.general.metadata_search')"
+                  @update:model-value="setSubject"
+                />
+              </div>
             </div>
           </div>
-        </div>
 
-        <hr class="border-border-primary" />
+          <hr class="border-border-primary" />
 
-        <!-- Bloque 2 · Horario -->
-        <div>
-          <label class="text-sm font-medium text-text-primary mb-2 block">
-            {{ t('teacher.classes.detail.settings.general.schedule_label') }}
-          </label>
-          <ClassScheduleCalendar v-model="scheduleConfig" />
-        </div>
+          <!-- Bloque 2 · Horario -->
+          <div>
+            <label class="text-sm font-medium text-text-primary mb-2 block">
+              {{ t('teacher.classes.detail.settings.general.schedule_label') }}
+            </label>
+            <ClassScheduleCalendar v-model="scheduleConfig" />
+          </div>
 
-        <hr class="border-border-primary" />
+          <hr class="border-border-primary" />
 
-        <!-- Bloque 3 · Imagen de fondo -->
-        <div>
-          <label class="text-sm font-medium text-text-primary mb-2 block">
-            {{ t('teacher.classes.detail.settings.general.background_label') }}
-          </label>
-          <div class="flex flex-col sm:flex-row sm:items-center gap-4">
-            <!-- Preview -->
-            <div
-              class="relative w-full sm:w-40 h-28 rounded-xl overflow-hidden bg-navy-700/5 flex-shrink-0"
-            >
-              <img
-                v-if="general.backgroundImage"
-                :src="getImageUrl(general.backgroundImage)"
-                alt=""
-                class="w-full h-full object-cover"
-              />
+          <!-- Bloque 3 · Imagen de fondo -->
+          <div>
+            <label class="text-sm font-medium text-text-primary mb-2 block">
+              {{ t('teacher.classes.detail.settings.general.background_label') }}
+            </label>
+            <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+              <!-- Preview -->
               <div
-                v-else
-                class="w-full h-full flex items-center justify-center text-text-secondary text-xs"
+                class="relative w-full sm:w-40 h-28 rounded-xl overflow-hidden bg-navy-700/5 flex-shrink-0"
               >
-                <PhotoIcon class="w-8 h-8 opacity-40" />
-              </div>
-              <div
-                v-if="generatingImage"
-                class="absolute inset-0 bg-navy-700/60 flex items-center justify-center"
-              >
-                <Spinner size="sm" class="text-white" />
-              </div>
-            </div>
-
-            <!-- Acciones -->
-            <div class="flex-1 space-y-2">
-              <div class="flex flex-wrap gap-2">
-                <Button
-                  type="button"
-                  variant="primary"
-                  size="sm"
-                  :icon-left="SparklesIcon"
-                  :loading="generatingImage"
-                  :disabled="generatingImage"
-                  @click="regenerateImage"
-                >
-                  {{
-                    general.backgroundImage
-                      ? t('teacher.classes.detail.settings.general.background_regenerate')
-                      : t('teacher.classes.detail.settings.general.background_generate')
-                  }}
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  :icon-left="ArrowUpTrayIcon"
-                  :disabled="generatingImage"
-                  @click="coverFileRef?.click()"
-                >
-                  {{ t('teacher.classes.detail.settings.general.background_upload') }}
-                </Button>
-                <Button
+                <img
                   v-if="general.backgroundImage"
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  :icon-left="TrashIcon"
-                  :disabled="generatingImage"
-                  @click="clearImage"
+                  :src="getImageUrl(general.backgroundImage)"
+                  alt=""
+                  class="w-full h-full object-cover"
+                />
+                <div
+                  v-else
+                  class="w-full h-full flex items-center justify-center text-text-secondary text-xs"
                 >
-                  {{ t('teacher.classes.detail.settings.general.background_clear') }}
-                </Button>
+                  <PhotoIcon class="w-8 h-8 opacity-40" />
+                </div>
+                <div
+                  v-if="generatingImage"
+                  class="absolute inset-0 bg-navy-700/60 flex items-center justify-center"
+                >
+                  <Spinner size="sm" class="text-white" />
+                </div>
               </div>
-              <input
-                ref="coverFileRef"
-                type="file"
-                accept="image/png,image/jpeg,image/webp"
-                class="hidden"
-                @change="handleCoverUpload"
-              />
+
+              <!-- Acciones -->
+              <div class="flex-1 space-y-2">
+                <div class="flex flex-wrap gap-2">
+                  <Button
+                    type="button"
+                    variant="primary"
+                    size="sm"
+                    :icon-left="SparklesIcon"
+                    :loading="generatingImage"
+                    :disabled="generatingImage"
+                    @click="regenerateImage"
+                  >
+                    {{
+                      general.backgroundImage
+                        ? t('teacher.classes.detail.settings.general.background_regenerate')
+                        : t('teacher.classes.detail.settings.general.background_generate')
+                    }}
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    :icon-left="ArrowUpTrayIcon"
+                    :disabled="generatingImage"
+                    @click="coverFileRef?.click()"
+                  >
+                    {{ t('teacher.classes.detail.settings.general.background_upload') }}
+                  </Button>
+                  <Button
+                    v-if="general.backgroundImage"
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    :icon-left="TrashIcon"
+                    :disabled="generatingImage"
+                    @click="clearImage"
+                  >
+                    {{ t('teacher.classes.detail.settings.general.background_clear') }}
+                  </Button>
+                </div>
+                <input
+                  ref="coverFileRef"
+                  type="file"
+                  accept="image/png,image/jpeg,image/webp"
+                  class="hidden"
+                  @change="handleCoverUpload"
+                />
+              </div>
             </div>
           </div>
-        </div>
 
-        <hr class="border-border-primary" />
+          <template v-if="canEditContent">
+            <hr class="border-border-primary" />
 
-        <div class="flex justify-end gap-2">
-          <Button
-            type="button"
-            variant="outline"
-            size="md"
-            :disabled="!generalDirty || savingGeneral"
-            @click="resetGeneral"
-          >
-            {{ t('teacher.classes.detail.settings.general.discard') }}
-          </Button>
-          <Button
-            type="submit"
-            variant="primary"
-            size="md"
-            :disabled="!generalDirty || savingGeneral"
-            :loading="savingGeneral"
-          >
-            {{ t('teacher.classes.detail.settings.general.save') }}
-          </Button>
-        </div>
+            <div class="flex justify-end gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="md"
+                :disabled="!generalDirty || savingGeneral"
+                @click="resetGeneral"
+              >
+                {{ t('teacher.classes.detail.settings.general.discard') }}
+              </Button>
+              <Button
+                type="submit"
+                variant="primary"
+                size="md"
+                :disabled="!generalDirty || savingGeneral"
+                :loading="savingGeneral"
+              >
+                {{ t('teacher.classes.detail.settings.general.save') }}
+              </Button>
+            </div>
+          </template>
+        </fieldset>
       </form>
     </div>
 
@@ -253,7 +263,7 @@
 
           <Toggle
             :model-value="localSettings[flag]"
-            :disabled="isBlocked(flag)"
+            :disabled="!canEditSettings || isBlocked(flag)"
             @update:model-value="setFlag(flag, $event)"
           />
         </div>
@@ -261,21 +271,23 @@
     </div>
 
     <!-- Section: Niveles (sistema de niveles configurable de la clase) -->
-    <div v-else-if="activeSection === 'levels'">
+    <fieldset v-else-if="activeSection === 'levels'" :disabled="!canEditSettings" class="min-w-0">
       <ClassLevelsPanel
         :class-id="classId"
         :level-config="classData?.levelConfig"
         @update="emit('levels-update', $event)"
       />
-    </div>
+    </fieldset>
 
     <!-- Section: Gestión (acciones sobre la clase: publicar como plantilla,
          duplicar y, más adelante, archivar / eliminar). Separada del formulario
          para que ninguna acción cuelgue del botón de "Guardar cambios". -->
     <div v-else-if="activeSection === 'management'" class="space-y-3">
-      <!-- Publicar como plantilla en el marketplace. La validación de metadatos
-           (asignatura/nivel/idioma) salta a Datos generales y los resalta. -->
+      <!-- Publicar como plantilla en el marketplace (solo el propietario). La
+           validación de metadatos (asignatura/nivel/idioma) salta a Datos
+           generales y los resalta. -->
       <div
+        v-if="can('class.publishTemplate')"
         class="flex flex-col gap-3 rounded-2xl border border-border-primary p-4 sm:flex-row sm:items-center sm:justify-between"
       >
         <div class="min-w-0">
@@ -320,6 +332,16 @@
       </div>
     </div>
 
+    <!-- Section: Profesorado -->
+    <ClassTeachersPanel
+      v-else-if="activeSection === 'teachers'"
+      :class-id="classId"
+      :class-name="classData?.name ?? ''"
+      :access="access"
+      @access-change="emit('access-change', $event)"
+      @left="emit('left')"
+    />
+
     <!-- Modal de duplicado: reutiliza el mismo componente/opciones que el listado. -->
     <DuplicateClassModal
       v-model="duplicateModalOpen"
@@ -348,7 +370,7 @@ import ManaIcon from '~/components/atoms/ManaIcon.vue'
 import XpIcon from '~/components/atoms/XpIcon.vue'
 import LifeIcon from '~/components/atoms/LifeIcon.vue'
 import type { Component } from 'vue'
-import type { ClassSettings, LevelConfig } from '~/types/class.types'
+import type { ClassAccess, ClassSettings, LevelConfig } from '~/types/class.types'
 import {
   normalizeScheduleSlots,
   scheduleSlotHasContent,
@@ -394,12 +416,16 @@ const props = defineProps<{
     levelConfig?: LevelConfig | null
     scheduleConfig?: ScheduleConfig | ScheduleConfig[] | null
   } | null
+  /** Acceso propio en la clase: lo que su nivel no permite cambiar se ve desactivado. */
+  access?: ClassAccess | null
 }>()
 
 const emit = defineEmits<{
   update: [settings: ClassSettings]
   'general-update': [data: GeneralData & { scheduleConfig?: ScheduleConfig[] }]
   'levels-update': [levelConfig: LevelConfig]
+  'access-change': [access: ClassAccess | null]
+  left: []
 }>()
 
 const { t, locale } = useI18n()
@@ -411,15 +437,33 @@ const toast = useToast()
 const config = useRuntimeConfig()
 const { getImageUrl } = useImageUrl()
 
+// --------- Permisos ---------
+// El nombre, el horario y la portada son contenido (edición); los metadatos,
+// las funcionalidades y los niveles son ajustes (administración).
+const { can } = useClassPermissions(() => props.access)
+const canEditContent = computed(() => can('class.editContent'))
+const canEditSettings = computed(() => can('class.editSettings'))
+
 // --------- Sub-navegación (pills) ---------
-type SectionId = 'general' | 'features' | 'levels' | 'management'
+type SectionId = 'general' | 'features' | 'levels' | 'management' | 'teachers'
 const activeSection = ref<SectionId>('general')
 const sections = computed<{ id: SectionId; label: string }[]>(() => [
   { id: 'general', label: t('teacher.classes.detail.settings.general.title') },
   { id: 'features', label: t('teacher.classes.detail.settings.features.title') },
   { id: 'levels', label: t('teacher.classes.detail.settings.levels.title') },
   { id: 'management', label: t('teacher.classes.detail.settings.management.title') },
+  { id: 'teachers', label: t('teacher.classes.detail.teachers.title') },
 ])
+
+/** Aviso de solo lectura de la sección abierta, si el nivel propio no llega. */
+const readOnlyNote = computed(() => {
+  if (activeSection.value === 'teachers' || activeSection.value === 'management') return ''
+  if (!props.access || canEditSettings.value) return ''
+  if (activeSection.value === 'general' && canEditContent.value) {
+    return t('teacher.classes.detail.settings.edit_level_note')
+  }
+  return t('teacher.classes.detail.read_only_notice')
+})
 
 // --------- Datos generales ---------
 const buildGeneral = (): GeneralData => ({

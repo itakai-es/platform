@@ -157,7 +157,8 @@
           "narrative": "Istorioa",
           "tienda": "Denda",
           "behaviors": "Jokabideak",
-          "settings": "Ezarpenak"
+          "settings": "Ezarpenak",
+          "history": "Historia"
         },
         "students": {
           "empty_title": "Oraindik ez dago ikaslerik",
@@ -417,7 +418,8 @@
           },
           "management": {
             "title": "Kudeaketa"
-          }
+          },
+          "edit_level_note": "Izena, ordutegia eta azala alda ditzakezu. Sailkapena, funtzionalitateak eta mailak klasea administratzen duenak aldatzen ditu."
         },
         "badges_empty": "Ez dago domarik klase honetan",
         "archived_notice": "Klase hau artxibatuta dago: kontsulta daiteke, baina ez du ikasle berririk onartzen.",
@@ -508,6 +510,173 @@
           "card_login_url": "Sartu hemen",
           "card_class_code": "Klasearen kodea",
           "card_first_login": "Lehen aldiz sartzean, aldatu zure pasahitza."
+        },
+        "read_only_notice": "Klase honetarako duzun sarbideak hau ikusten uzten dizu, baina ez aldatzen.",
+        "teachers": {
+          "title": "Irakasleak",
+          "description": "Nork ematen duen klase hau, zein profilekin eta zer egin dezakeen bertan.",
+          "add": "Irakaslea gehitu",
+          "add_title": "Irakaslea gehitu",
+          "add_confirm": "Gehitu",
+          "load_error": "Ezin izan dira irakasleak kargatu.",
+          "retry": "Saiatu berriro",
+          "you": "Zu",
+          "access_line": "Sarbidea: {access}",
+          "menu_label": "{name}: ekintzak",
+          "owner_note": "Klase honen jabea zara. Bertatik irteteko, eman lehenago jabetza administrazio-sarbidea duen norbaiti.",
+          "leave_title": "Klasetik irten",
+          "leave": "Klasetik irten",
+          "leave_confirm": "Irten",
+          "leave_hint": "Ez duzu klase hau gehiago ikusiko. Itzultzeko, administrazio-sarbidea duen norbaitek berriro gehitu beharko zaitu.",
+          "leave_message": "{class} klasetik irten nahi duzu? Ez duzu gehiago ikusiko, eta itzultzeko administrazio-sarbidea duen norbaitek berriro gehitu beharko zaitu.",
+          "field_email": "Helbide elektronikoa",
+          "field_email_hint": "Aplikazioko irakasle-kontuaren helbide zehatza.",
+          "add_note": "Berehala sartzen da klasean eta abisu bat jasotzen du. Ez du ezer onartu behar.",
+          "field_profile": "Profila",
+          "field_access": "Sarbide-maila",
+          "access_hint": {
+            "read": "Klasea, misioak, ikasleak eta entregak ikusten ditu, ezer aldatu gabe.",
+            "edit": "Gainera, edukia, denda eta jokabideak aldatzen ditu, eta entregak onartzen ditu.",
+            "admin": "Gainera, ezarpenak aldatzen ditu, ikasleak eta irakasleak kudeatzen ditu eta klasea artxibatzen du."
+          },
+          "edit": "Profila edo maila aldatu",
+          "edit_title": "{name}: profila eta maila",
+          "edit_self_note": "Zure sarbidea aldatzen ari zara: jaisten baduzu, baliteke berriro igo ezin izatea.",
+          "remove": "Klasetik kendu",
+          "remove_title": "Irakasleen artetik kendu",
+          "remove_confirm": "Kendu",
+          "remove_message": "{name} {class} klaseko irakasleen artetik kendu nahi duzu? Ez du klasea gehiago ikusiko eta abisu bat jasoko du. Bertan egindakoa geratu egingo da.",
+          "transfer": "Jabetza eman",
+          "transfer_confirm": "Jabetza eman",
+          "transfer_title": "Klasearen jabetza eman",
+          "transfer_message": "{class} klasearen jabetza {name} irakasleari eman nahi diozu? Ezin duzu zure kontutik desegin: {name} irakasleak bakarrik itzul liezazuke.",
+          "transfer_keeps": "Klasean jarraituko duzu, administrazio-sarbidearekin.",
+          "transfer_loses": "Ezin izango duzu txantiloi gisa argitaratu ezta haren jabetza eman ere.",
+          "added": "{name} irakasleen artean dago orain",
+          "changed": "{name} irakaslearen sarbidea eguneratu da",
+          "removed": "{name} ez dago jada irakasleen artean",
+          "transferred": "Klasea {name} irakaslearena da orain",
+          "left": "{class} klasetik irten zara",
+          "errors": {
+            "not_addable": "Ezin da pertsona hori gehitu. Egiaztatu helbidea irakasle-kontu batena dela.",
+            "already_teacher": "Pertsona hori klase honetako irakasleen artean dago jada.",
+            "owner_locked": "Jabea ezin da aldatu ez kendu: lehenago jabetza eman behar du.",
+            "owner_cannot_leave": "Jabea zara: irteteko, eman lehenago jabetza administrazio-sarbidea duen norbaiti.",
+            "transfer_not_admin": "Jabetza administrazio-sarbidea duen norbaiti bakarrik eman dakioke.",
+            "already_owner": "Pertsona hori da jada klasearen jabea.",
+            "too_many": "Saiakera gehiegi egin dituzu. Itxaron pixka bat eta saiatu berriro.",
+            "forbidden": "Klase honetarako duzun sarbideak ez du hau egiten uzten.",
+            "not_found": "Hau ez dago jada eskuragarri. Kargatu berriro orria klasea orain nola dagoen ikusteko.",
+            "invalid_email": "Idatzi helbide elektroniko zuzena.",
+            "add": "Ezin izan da gehitu. Saiatu berriro.",
+            "change": "Ezin izan da sarbidea aldatu. Saiatu berriro.",
+            "remove": "Ezin izan da kendu. Saiatu berriro.",
+            "transfer": "Ezin izan da jabetza eman. Saiatu berriro.",
+            "leave": "Ezin izan da klasetik irten. Saiatu berriro."
+          }
+        },
+        "history": {
+          "filter_actor": "Irakaslea",
+          "filter_type": "Mota",
+          "filter_search": "Bilatu irakaslea…",
+          "all_actors": "Irakasle guztiak",
+          "all_types": "Mota guztiak",
+          "empty_title": "Oraindik ez dago ezer historian",
+          "empty_description": "Irakasleek klasean egiten dutena hemen agertuko da: misioak, entregak, ikasleak, ezarpenak…",
+          "no_results_title": "Ezer ez iragazki hauekin",
+          "no_results_description": "Probatu beste irakasle batekin edo beste mota batekin.",
+          "error_title": "Ezin izan da historia kargatu",
+          "error_description": "Egiaztatu konexioa eta saiatu berriro.",
+          "retry": "Saiatu berriro",
+          "unknown_actor": "Ezabatutako kontua",
+          "unknown_target": "ezabatutako kontu bat",
+          "unknown_action": "aldaketa bat egin du klasean",
+          "types": {
+            "class": "Klasea",
+            "teacher": "Irakasleak",
+            "student": "Ikasleak",
+            "mission": "Misioak",
+            "enigma": "Enigmak",
+            "document": "Dokumentuak",
+            "submission": "Entregak",
+            "behavior": "Jokabideak",
+            "shop": "Denda"
+          },
+          "actions": {
+            "class": {
+              "updated": "klasearen datuak aldatu ditu",
+              "settings_changed": "klasearen ezarpenak aldatu ditu",
+              "guide_updated": "klasearen gida eguneratu du",
+              "archived": "klasea artxibatu du",
+              "unarchived": "klasea desartxibatu du",
+              "template_published": "klasea txantiloi gisa argitaratu du",
+              "template_unpublished": "klasea txantiloietatik kendu du",
+              "duplicated": "klasea bikoiztu du",
+              "ownership_transferred": "klasearen jabetza {target} irakasleari eman dio",
+              "ownership_inherited": "klasea {target} irakaslearena da orain, jabearen kontua ezabatu delako"
+            },
+            "teacher": {
+              "added": "{target} irakasleen artean gehitu du ({profile}, {access})",
+              "changed": "{target} irakaslearen sarbidea aldatu du: {profile}, {access}",
+              "removed": "{target} irakasleen artetik kendu du",
+              "left": "klasetik irten da"
+            },
+            "student": {
+              "account_created": "{target} ikaslearen kontua sortu du",
+              "password_reset": "{target} ikaslearen pasahitza berrezarri du",
+              "nickname_changed": "{target} ikaslearen ezizena aldatu du",
+              "removed": "{target} klasetik kendu du",
+              "avatar_generated": "avatar berri bat sortu du {target} ikaslearentzat"
+            },
+            "mission": {
+              "created": "«{title}» misioa sortu du",
+              "updated": "«{title}» misioa editatu du",
+              "blocked": "«{title}» misioa blokeatu du",
+              "unblocked": "«{title}» misioa desblokeatu du",
+              "moved": "«{title}» misioaren klasea aldatu du",
+              "rewards_changed": "«{title}» misioaren saria aldatu du"
+            },
+            "enigma": {
+              "created": "«{title}» enigma gehitu du",
+              "updated": "«{title}» enigma editatu du",
+              "deleted": "«{title}» enigma ezabatu du",
+              "rewards_changed": "«{title}» enigmaren sariak aldatu ditu"
+            },
+            "document": {
+              "created": "«{title}» dokumentua gehitu du",
+              "updated": "«{title}» dokumentua editatu du",
+              "deleted": "«{title}» dokumentua ezabatu du"
+            },
+            "submission": {
+              "approved": "{target} ikaslearen «{title}» entrega onartu du (%{percentage})"
+            },
+            "behavior": {
+              "applied": "«{title}» aplikatu dio {target} ikasleari",
+              "created": "«{title}» jokabidea sortu du",
+              "updated": "«{title}» jokabidea editatu du",
+              "deleted": "«{title}» jokabidea ezabatu du"
+            },
+            "shop": {
+              "item_created": "«{title}» dendan gehitu du",
+              "item_updated": "«{title}» dendan editatu du",
+              "item_deleted": "«{title}» dendatik kendu du"
+            }
+          },
+          "anonymous": {
+            "student": {
+              "account_created": "klasean jada ez dagoen ikasle baten kontua sortu du",
+              "password_reset": "klasean jada ez dagoen ikasle baten pasahitza berrezarri du",
+              "nickname_changed": "klasean jada ez dagoen ikasle baten ezizena aldatu du",
+              "removed": "ikasle bat klasetik kendu du",
+              "avatar_generated": "avatar berri bat sortu du klasean jada ez dagoen ikasle batentzat"
+            },
+            "submission": {
+              "approved": "klasean jada ez dagoen ikasle baten «{title}» entrega onartu du (%{percentage})"
+            },
+            "behavior": {
+              "applied": "«{title}» aplikatu dio klasean jada ez dagoen ikasle bati"
+            }
+          }
         }
       }
     },
@@ -526,7 +695,9 @@
         "pick_class": "Hautatu klase bat",
         "idea_placeholder": "Adib.: Zinematikari buruzko misio bat nahi dut, non ikasleek eskuila hegalarien ibilbideak kalkulatzen dituzten...",
         "narrative_error": "Ezin izan dut narratiba sortu",
-        "ai_unavailable": "AA zerbitzua ez dago erabilgarri une honetan. Saiatu berriro minutu batzuk barru."
+        "ai_unavailable": "AA zerbitzua ez dago erabilgarri une honetan. Saiatu berriro minutu batzuk barru.",
+        "no_editable_classes": "Ez duzu misioak sor ditzakezun klaserik: edizio-sarbidea behar da.",
+        "no_classes": "Oraindik ez duzu klaserik: sortu bat lehenik, misioak gehitu ahal izateko."
       },
       "detail": {
         "delete_confirm_btn": "Ezabatu",
@@ -616,7 +787,9 @@
         "description": "Sortu, editatu eta kudeatu dominari pertsonalizatuak zure ikasleen lorpenak saritzeko."
       },
       "filter_system": "Sistemakoak",
-      "generate_error": "Ezin izan da doma sortu."
+      "generate_error": "Ezin izan da doma sortu.",
+      "save_error": "Ezin izan da doma gorde.",
+      "delete_error": "Ezin izan da doma ezabatu."
     },
     "students": {
       "index": {

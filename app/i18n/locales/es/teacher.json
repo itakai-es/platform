@@ -157,7 +157,8 @@
           "students": "Alumnos",
           "tienda": "Tienda",
           "behaviors": "Comportamientos",
-          "settings": "Ajustes"
+          "settings": "Ajustes",
+          "history": "Historial"
         },
         "students": {
           "empty_title": "Aún no hay alumnos",
@@ -417,7 +418,8 @@
           },
           "management": {
             "title": "Gestión"
-          }
+          },
+          "edit_level_note": "Puedes cambiar el nombre, el horario y la portada. La clasificación, las funcionalidades y los niveles los cambia quien administra la clase."
         },
         "badges_empty": "No hay insignias en esta clase",
         "archived_notice": "Esta clase está archivada: se puede consultar, pero no admite alumnos nuevos.",
@@ -508,6 +510,173 @@
           "card_login_url": "Entra en",
           "card_class_code": "Código de clase",
           "card_first_login": "Al entrar por primera vez, cambia tu contraseña."
+        },
+        "read_only_notice": "Tu acceso a esta clase te deja ver esto, pero no cambiarlo.",
+        "teachers": {
+          "title": "Profesorado",
+          "description": "Quién imparte esta clase, con qué perfil y qué puede hacer en ella.",
+          "add": "Añadir profesor",
+          "add_title": "Añadir profesor",
+          "add_confirm": "Añadir",
+          "load_error": "No se ha podido cargar el profesorado.",
+          "retry": "Reintentar",
+          "you": "Tú",
+          "access_line": "Acceso: {access}",
+          "menu_label": "Acciones para {name}",
+          "owner_note": "Eres el propietario de esta clase. Para salir de ella, pasa antes la propiedad a alguien con administración.",
+          "leave_title": "Salir de la clase",
+          "leave": "Salir de la clase",
+          "leave_confirm": "Salir",
+          "leave_hint": "Dejarás de ver esta clase. Para volver, alguien con administración tendrá que añadirte de nuevo.",
+          "leave_message": "¿Salir de {class}? Dejarás de verla y, para volver, alguien con administración tendrá que añadirte de nuevo.",
+          "field_email": "Correo electrónico",
+          "field_email_hint": "El correo exacto de su cuenta de profesor en la aplicación.",
+          "add_note": "Entra en la clase al momento y recibe un aviso. No tiene que aceptar nada.",
+          "field_profile": "Perfil",
+          "field_access": "Nivel de acceso",
+          "access_hint": {
+            "read": "Ve la clase, las misiones, el alumnado y las entregas, sin cambiar nada.",
+            "edit": "Además, cambia el contenido, la tienda y los comportamientos, y aprueba entregas.",
+            "admin": "Además, cambia los ajustes, gestiona el alumnado y el profesorado y archiva la clase."
+          },
+          "edit": "Cambiar perfil o nivel",
+          "edit_title": "Perfil y nivel de {name}",
+          "edit_self_note": "Estás cambiando tu propio acceso: si lo bajas, puede que no puedas volver a subirlo.",
+          "remove": "Quitar de la clase",
+          "remove_title": "Quitar del profesorado",
+          "remove_confirm": "Quitar",
+          "remove_message": "¿Quitar a {name} del profesorado de {class}? Dejará de ver la clase y recibirá un aviso. Lo que ya ha hecho en ella se queda.",
+          "transfer": "Pasar la propiedad",
+          "transfer_confirm": "Pasar la propiedad",
+          "transfer_title": "Pasar la propiedad de la clase",
+          "transfer_message": "¿Pasar la propiedad de {class} a {name}? No podrás deshacerlo desde tu cuenta: solo {name} podría devolvértela.",
+          "transfer_keeps": "Sigues en la clase con acceso de administración.",
+          "transfer_loses": "Dejas de poder publicarla como plantilla y de pasar su propiedad.",
+          "added": "{name} ya forma parte del profesorado",
+          "changed": "Acceso de {name} actualizado",
+          "removed": "{name} ya no está en el profesorado",
+          "transferred": "Ahora la clase es de {name}",
+          "left": "Has salido de {class}",
+          "errors": {
+            "not_addable": "No se puede añadir a esa persona. Comprueba que el correo es el de una cuenta de profesor.",
+            "already_teacher": "Esa persona ya forma parte del profesorado de esta clase.",
+            "owner_locked": "Al propietario no se le puede cambiar ni quitar: antes tiene que pasar la propiedad.",
+            "owner_cannot_leave": "Eres el propietario: para salir, pasa antes la propiedad a alguien con administración.",
+            "transfer_not_admin": "La propiedad solo se puede pasar a alguien con acceso de administración.",
+            "already_owner": "Esa persona ya es la propietaria de la clase.",
+            "too_many": "Has hecho demasiados intentos. Espera un rato y vuelve a probar.",
+            "forbidden": "Tu acceso a esta clase no permite hacer esto.",
+            "not_found": "Esto ya no está disponible. Recarga la página para ver la clase tal como está ahora.",
+            "invalid_email": "Escribe un correo válido.",
+            "add": "No se ha podido añadir. Inténtalo de nuevo.",
+            "change": "No se ha podido cambiar el acceso. Inténtalo de nuevo.",
+            "remove": "No se ha podido quitar. Inténtalo de nuevo.",
+            "transfer": "No se ha podido pasar la propiedad. Inténtalo de nuevo.",
+            "leave": "No se ha podido salir de la clase. Inténtalo de nuevo."
+          }
+        },
+        "history": {
+          "filter_actor": "Profesor",
+          "filter_type": "Tipo",
+          "filter_search": "Buscar profesor…",
+          "all_actors": "Todo el profesorado",
+          "all_types": "Todos los tipos",
+          "empty_title": "Aún no hay nada en el historial",
+          "empty_description": "Aquí aparecerá lo que haga el profesorado en la clase: misiones, entregas, alumnado, ajustes…",
+          "no_results_title": "Nada con estos filtros",
+          "no_results_description": "Prueba con otro profesor o con otro tipo.",
+          "error_title": "No se ha podido cargar el historial",
+          "error_description": "Comprueba la conexión e inténtalo de nuevo.",
+          "retry": "Reintentar",
+          "unknown_actor": "Cuenta eliminada",
+          "unknown_target": "una cuenta eliminada",
+          "unknown_action": "hizo un cambio en la clase",
+          "types": {
+            "class": "Clase",
+            "teacher": "Profesorado",
+            "student": "Alumnado",
+            "mission": "Misiones",
+            "enigma": "Enigmas",
+            "document": "Documentos",
+            "submission": "Entregas",
+            "behavior": "Comportamientos",
+            "shop": "Tienda"
+          },
+          "actions": {
+            "class": {
+              "updated": "cambió los datos de la clase",
+              "settings_changed": "cambió los ajustes de la clase",
+              "guide_updated": "actualizó la guía de la clase",
+              "archived": "archivó la clase",
+              "unarchived": "desarchivó la clase",
+              "template_published": "publicó la clase como plantilla",
+              "template_unpublished": "retiró la clase de las plantillas",
+              "duplicated": "duplicó la clase",
+              "ownership_transferred": "pasó la propiedad de la clase a {target}",
+              "ownership_inherited": "la clase pasó a {target} al eliminarse la cuenta de su propietario"
+            },
+            "teacher": {
+              "added": "añadió a {target} al profesorado ({profile}, {access})",
+              "changed": "cambió el acceso de {target}: {profile}, {access}",
+              "removed": "quitó a {target} del profesorado",
+              "left": "salió de la clase"
+            },
+            "student": {
+              "account_created": "creó la cuenta de {target}",
+              "password_reset": "restableció la contraseña de {target}",
+              "nickname_changed": "cambió el alias de {target}",
+              "removed": "quitó a {target} de la clase",
+              "avatar_generated": "generó un avatar nuevo para {target}"
+            },
+            "mission": {
+              "created": "creó la misión «{title}»",
+              "updated": "editó la misión «{title}»",
+              "blocked": "bloqueó la misión «{title}»",
+              "unblocked": "desbloqueó la misión «{title}»",
+              "moved": "cambió de clase la misión «{title}»",
+              "rewards_changed": "cambió la recompensa de la misión «{title}»"
+            },
+            "enigma": {
+              "created": "añadió el enigma «{title}»",
+              "updated": "editó el enigma «{title}»",
+              "deleted": "borró el enigma «{title}»",
+              "rewards_changed": "cambió las recompensas del enigma «{title}»"
+            },
+            "document": {
+              "created": "añadió el documento «{title}»",
+              "updated": "editó el documento «{title}»",
+              "deleted": "borró el documento «{title}»"
+            },
+            "submission": {
+              "approved": "aprobó la entrega de {target} en «{title}» con un {percentage} %"
+            },
+            "behavior": {
+              "applied": "aplicó «{title}» a {target}",
+              "created": "creó el comportamiento «{title}»",
+              "updated": "editó el comportamiento «{title}»",
+              "deleted": "borró el comportamiento «{title}»"
+            },
+            "shop": {
+              "item_created": "añadió «{title}» a la tienda",
+              "item_updated": "editó «{title}» en la tienda",
+              "item_deleted": "quitó «{title}» de la tienda"
+            }
+          },
+          "anonymous": {
+            "student": {
+              "account_created": "creó la cuenta de un alumno que ya no está en la clase",
+              "password_reset": "restableció la contraseña de un alumno que ya no está en la clase",
+              "nickname_changed": "cambió el alias de un alumno que ya no está en la clase",
+              "removed": "quitó a un alumno de la clase",
+              "avatar_generated": "generó un avatar nuevo para un alumno que ya no está en la clase"
+            },
+            "submission": {
+              "approved": "aprobó en «{title}» la entrega de un alumno que ya no está en la clase, con un {percentage} %"
+            },
+            "behavior": {
+              "applied": "aplicó «{title}» a un alumno que ya no está en la clase"
+            }
+          }
         }
       }
     },
@@ -526,7 +695,9 @@
         "ai_unavailable": "El servicio de IA no está disponible ahora mismo. Inténtalo de nuevo en unos minutos.",
         "idea_placeholder": "Ej: Quiero una misión sobre cinemática donde los alumnos calculen trayectorias de escobas voladoras...",
         "narrative_error": "No he podido crear la narrativa",
-        "pick_class": "Selecciona una clase"
+        "pick_class": "Selecciona una clase",
+        "no_editable_classes": "No tienes ninguna clase en la que puedas crear misiones: hace falta acceso de edición.",
+        "no_classes": "Aún no tienes ninguna clase: crea una primero para añadirle misiones."
       },
       "detail": {
         "delete_confirm_btn": "Eliminar",
@@ -616,7 +787,9 @@
         "description": "Crea, edita y gestiona insignias personalizadas para premiar los logros de tus alumnos."
       },
       "filter_system": "Del sistema",
-      "generate_error": "No se pudo generar la insignia."
+      "generate_error": "No se pudo generar la insignia.",
+      "save_error": "No se ha podido guardar la insignia.",
+      "delete_error": "No se ha podido borrar la insignia."
     },
     "students": {
       "index": {

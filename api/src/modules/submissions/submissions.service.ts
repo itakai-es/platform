@@ -13,6 +13,7 @@ import {
   assertSubmissionAccess,
   classTeacherRecipients,
   getStudentEnrollment,
+  recordClassAction,
   type ClassUser,
 } from '../../utils/class-access.js'
 import { NotFoundError } from '../../utils/errors.js'
@@ -458,6 +459,7 @@ export class SubmissionsService {
           status: 'aprobada',
           xpAwarded: xpToAward,
           reviewedAt: new Date(),
+          reviewedById: userId,
         },
       })
 
@@ -551,6 +553,8 @@ export class SubmissionsService {
           classId,
           className: classInfo?.name,
           teacherName: reviewer?.name,
+          actorId: userId,
+          actorName: reviewer?.name,
           enigmaTitle: submission.enigma.title,
           enigmaXp: xpToAward,
           metadata: {
@@ -600,6 +604,24 @@ export class SubmissionsService {
           },
         })
       }
+
+      await recordClassAction(tx, {
+        classId,
+        actorId: userId,
+        action: 'submission.approved',
+        entityType: 'submission',
+        entityId: submissionId,
+        targetUserId: studentId,
+        metadata: {
+          title: submission.enigma.title,
+          enigmaId: submission.enigmaId,
+          missionId,
+          percentage: roundedPct,
+          xpAwarded: xpToAward,
+          coinsAwarded: coinsToAward,
+          manaAwarded: manaToAward,
+        },
+      })
 
       return { updated, enigmaXpResult }
     })

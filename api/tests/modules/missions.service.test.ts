@@ -35,6 +35,7 @@ const mocks = vi.hoisted(() => ({
   studentBadgeCreate: vi.fn(),
   activityCreate: vi.fn(),
   applyXpDelta: vi.fn(),
+  recordClassAction: vi.fn(),
   $transaction: vi.fn(),
 }))
 
@@ -70,6 +71,7 @@ vi.mock('../../src/utils/class-access.js', async importOriginal => ({
   assertClassAccess: mocks.assertClassAccess,
   assertMissionAccess: mocks.assertMissionAccess,
   assertEnigmaAccess: mocks.assertEnigmaAccess,
+  recordClassAction: mocks.recordClassAction,
 }))
 
 vi.mock('../../src/utils/enrollment-xp.js', () => ({
@@ -102,8 +104,16 @@ beforeEach(() => {
   mocks.$transaction.mockImplementation(async (cb: any) => {
     if (typeof cb === 'function') {
       return cb({
-        mission: { create: mocks.missionCreate },
-        missionEnigma: { createMany: mocks.missionEnigmaCreateMany },
+        mission: {
+          create: mocks.missionCreate,
+          update: mocks.missionUpdate,
+          findUnique: mocks.missionFindUnique,
+        },
+        missionEnigma: {
+          createMany: mocks.missionEnigmaCreateMany,
+          update: mocks.missionEnigmaUpdate,
+          delete: mocks.missionEnigmaDelete,
+        },
         studentMissionProgress: {
           upsert: mocks.studentMissionProgressUpsert,
           updateMany: mocks.studentMissionProgressUpdateMany,
@@ -139,7 +149,7 @@ describe('createMission', () => {
   })
 
   it('accepts enigmas with any positive XP value (presets are only suggestions)', async () => {
-    mocks.missionCreate.mockResolvedValueOnce({ id: MISSION })
+    mocks.missionCreate.mockResolvedValueOnce({ id: MISSION, classId: CLASS, title: 'Test' })
     mocks.missionEnigmaCreateMany.mockResolvedValueOnce({ count: 1 })
 
     await expect(
@@ -149,6 +159,17 @@ describe('createMission', () => {
         enigmas: [{ title: 'E1', xp: 33 }],
       }),
     ).resolves.toBeDefined()
+    // Queda en el registro de la clase, a nombre de quien la crea.
+    expect(mocks.recordClassAction).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        classId: CLASS,
+        actorId: TEACHER,
+        action: 'mission.created',
+        entityId: MISSION,
+        metadata: expect.objectContaining({ title: 'Test', enigmas: 1 }),
+      })
+    )
   })
 
   it('accepts each preset XP value', async () => {
@@ -226,13 +247,27 @@ describe('updateMission', () => {
       classId: CLASS,
       rarity: 'comun',
     })
-    mocks.missionUpdate.mockResolvedValueOnce({ id: MISSION })
+    mocks.missionUpdate.mockResolvedValueOnce({
+      id: MISSION,
+      classId: CLASS,
+      rarity: 'comun',
+      title: 'Nuevo título',
+    })
 
     await missionsService.updateMission(TEACHER, MISSION, { title: 'Nuevo título' })
 
     // studentMissionProgress.count should NOT be called when rarity isn't changing.
     expect(mocks.studentMissionProgressCount).not.toHaveBeenCalled()
     expect(mocks.missionUpdate).toHaveBeenCalled()
+    // En el registro, qué campos cambiaron: solo el título.
+    expect(mocks.recordClassAction).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        classId: CLASS,
+        action: 'mission.updated',
+        metadata: { title: 'Nuevo título', fields: ['title'] },
+      })
+    )
   })
 
   it('asks the access layer for mission.edit and changes nothing when the level falls short', async () => {
@@ -410,6 +445,10 @@ describe('deleteEnigma', () => {
       message: expect.stringContaining('eliminado'),
     })
     expect(mocks.missionEnigmaDelete).toHaveBeenCalled()
+    expect(mocks.recordClassAction).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({ classId: CLASS, action: 'enigma.deleted', entityId: ENIGMA })
+    )
   })
 })
 

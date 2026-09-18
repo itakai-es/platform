@@ -9,6 +9,7 @@ import {
   renderNotificationCopy,
   type EmailActionKey,
   type NotificationCopyKey,
+  type NotificationParam,
 } from './notifications.messages.js'
 
 /**
@@ -41,7 +42,7 @@ export interface NotifyInput {
   /** Clave del catálogo de textos; se traduce al idioma del destinatario. */
   copy: NotificationCopyKey
   /** Valores de los `{parametros}` del texto. */
-  params?: Record<string, string | number>
+  params?: Record<string, NotificationParam>
   /**
    * Texto libre que sustituye al del catálogo. Solo para lo que escribe una
    * persona (el motivo con el que un profesor rechaza una solicitud): no se

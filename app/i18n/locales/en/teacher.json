@@ -157,7 +157,8 @@
           "students": "Students",
           "tienda": "Shop",
           "behaviors": "Behaviors",
-          "settings": "Settings"
+          "settings": "Settings",
+          "history": "History"
         },
         "students": {
           "empty_title": "No students yet",
@@ -417,7 +418,8 @@
           },
           "management": {
             "title": "Management"
-          }
+          },
+          "edit_level_note": "You can change the name, the schedule and the cover. The classification, features and levels are changed by whoever administers the class."
         },
         "badges_empty": "No badges in this class",
         "archived_notice": "This class is archived: you can still look through it, but it does not take new students.",
@@ -508,6 +510,173 @@
           "card_login_url": "Sign in at",
           "card_class_code": "Class code",
           "card_first_login": "When you sign in for the first time, change your password."
+        },
+        "read_only_notice": "Your access to this class lets you see this, but not change it.",
+        "teachers": {
+          "title": "Teachers",
+          "description": "Who teaches this class, with which profile and what they can do in it.",
+          "add": "Add teacher",
+          "add_title": "Add teacher",
+          "add_confirm": "Add",
+          "load_error": "The teachers could not be loaded.",
+          "retry": "Try again",
+          "you": "You",
+          "access_line": "Access: {access}",
+          "menu_label": "Actions for {name}",
+          "owner_note": "You are the owner of this class. To leave it, first hand over ownership to someone with admin access.",
+          "leave_title": "Leave the class",
+          "leave": "Leave the class",
+          "leave_confirm": "Leave",
+          "leave_hint": "You will stop seeing this class. To come back, someone with admin access will have to add you again.",
+          "leave_message": "Leave {class}? You will stop seeing it, and to come back someone with admin access will have to add you again.",
+          "field_email": "Email",
+          "field_email_hint": "The exact email of their teacher account in the app.",
+          "add_note": "They join the class straight away and get a notice. They don't need to accept anything.",
+          "field_profile": "Profile",
+          "field_access": "Access level",
+          "access_hint": {
+            "read": "Sees the class, missions, students and submissions without changing anything.",
+            "edit": "Also changes the content, shop and behaviors, and approves submissions.",
+            "admin": "Also changes the settings, manages students and teachers, and archives the class."
+          },
+          "edit": "Change profile or level",
+          "edit_title": "Profile and level of {name}",
+          "edit_self_note": "You are changing your own access: if you lower it, you may not be able to raise it again.",
+          "remove": "Remove from class",
+          "remove_title": "Remove from teachers",
+          "remove_confirm": "Remove",
+          "remove_message": "Remove {name} from the teachers of {class}? They will stop seeing the class and get a notice. What they have already done in it stays.",
+          "transfer": "Hand over ownership",
+          "transfer_confirm": "Hand over ownership",
+          "transfer_title": "Hand over class ownership",
+          "transfer_message": "Hand over ownership of {class} to {name}? You can't undo this from your account: only {name} could give it back.",
+          "transfer_keeps": "You stay in the class with admin access.",
+          "transfer_loses": "You can no longer publish it as a template or hand over its ownership.",
+          "added": "{name} is now one of the teachers",
+          "changed": "{name}'s access updated",
+          "removed": "{name} is no longer one of the teachers",
+          "transferred": "The class now belongs to {name}",
+          "left": "You have left {class}",
+          "errors": {
+            "not_addable": "That person can't be added. Check that the email belongs to a teacher account.",
+            "already_teacher": "That person is already one of this class's teachers.",
+            "owner_locked": "The owner can't be changed or removed: they must hand over ownership first.",
+            "owner_cannot_leave": "You are the owner: to leave, first hand over ownership to someone with admin access.",
+            "transfer_not_admin": "Ownership can only be handed over to someone with admin access.",
+            "already_owner": "That person already owns the class.",
+            "too_many": "Too many attempts. Wait a while and try again.",
+            "forbidden": "Your access to this class doesn't allow this.",
+            "not_found": "This is no longer available. Reload the page to see the class as it is now.",
+            "invalid_email": "Enter a valid email.",
+            "add": "Could not add. Please try again.",
+            "change": "Could not change the access. Please try again.",
+            "remove": "Could not remove. Please try again.",
+            "transfer": "Could not hand over ownership. Please try again.",
+            "leave": "Could not leave the class. Please try again."
+          }
+        },
+        "history": {
+          "filter_actor": "Teacher",
+          "filter_type": "Type",
+          "filter_search": "Search teacher…",
+          "all_actors": "All teachers",
+          "all_types": "All types",
+          "empty_title": "Nothing in the history yet",
+          "empty_description": "What teachers do in the class will appear here: missions, submissions, students, settings…",
+          "no_results_title": "Nothing with these filters",
+          "no_results_description": "Try another teacher or another type.",
+          "error_title": "The history could not be loaded",
+          "error_description": "Check your connection and try again.",
+          "retry": "Try again",
+          "unknown_actor": "Deleted account",
+          "unknown_target": "a deleted account",
+          "unknown_action": "made a change to the class",
+          "types": {
+            "class": "Class",
+            "teacher": "Teachers",
+            "student": "Students",
+            "mission": "Missions",
+            "enigma": "Enigmas",
+            "document": "Documents",
+            "submission": "Submissions",
+            "behavior": "Behaviors",
+            "shop": "Shop"
+          },
+          "actions": {
+            "class": {
+              "updated": "changed the class details",
+              "settings_changed": "changed the class settings",
+              "guide_updated": "updated the class guide",
+              "archived": "archived the class",
+              "unarchived": "unarchived the class",
+              "template_published": "published the class as a template",
+              "template_unpublished": "withdrew the class from the templates",
+              "duplicated": "duplicated the class",
+              "ownership_transferred": "handed over the class to {target}",
+              "ownership_inherited": "the class passed to {target} when its owner's account was deleted"
+            },
+            "teacher": {
+              "added": "added {target} to the teachers ({profile}, {access})",
+              "changed": "changed {target}'s access: {profile}, {access}",
+              "removed": "removed {target} from the teachers",
+              "left": "left the class"
+            },
+            "student": {
+              "account_created": "created an account for {target}",
+              "password_reset": "reset {target}'s password",
+              "nickname_changed": "changed {target}'s nickname",
+              "removed": "removed {target} from the class",
+              "avatar_generated": "generated a new avatar for {target}"
+            },
+            "mission": {
+              "created": "created the mission “{title}”",
+              "updated": "edited the mission “{title}”",
+              "blocked": "locked the mission “{title}”",
+              "unblocked": "unlocked the mission “{title}”",
+              "moved": "moved the mission “{title}” between classes",
+              "rewards_changed": "changed the reward of the mission “{title}”"
+            },
+            "enigma": {
+              "created": "added the enigma “{title}”",
+              "updated": "edited the enigma “{title}”",
+              "deleted": "deleted the enigma “{title}”",
+              "rewards_changed": "changed the rewards of the enigma “{title}”"
+            },
+            "document": {
+              "created": "added the document “{title}”",
+              "updated": "edited the document “{title}”",
+              "deleted": "deleted the document “{title}”"
+            },
+            "submission": {
+              "approved": "approved {target}'s submission for “{title}” at {percentage}%"
+            },
+            "behavior": {
+              "applied": "applied “{title}” to {target}",
+              "created": "created the behavior “{title}”",
+              "updated": "edited the behavior “{title}”",
+              "deleted": "deleted the behavior “{title}”"
+            },
+            "shop": {
+              "item_created": "added “{title}” to the shop",
+              "item_updated": "edited “{title}” in the shop",
+              "item_deleted": "removed “{title}” from the shop"
+            }
+          },
+          "anonymous": {
+            "student": {
+              "account_created": "created an account for a student who is no longer in the class",
+              "password_reset": "reset the password of a student who is no longer in the class",
+              "nickname_changed": "changed the nickname of a student who is no longer in the class",
+              "removed": "removed a student from the class",
+              "avatar_generated": "generated a new avatar for a student who is no longer in the class"
+            },
+            "submission": {
+              "approved": "approved a submission for “{title}” at {percentage}% from a student who is no longer in the class"
+            },
+            "behavior": {
+              "applied": "applied “{title}” to a student who is no longer in the class"
+            }
+          }
         }
       }
     },
@@ -526,7 +695,9 @@
         "pick_class": "Select a class",
         "idea_placeholder": "E.g. I want a mission about kinematics where students calculate the trajectories of flying broomsticks...",
         "narrative_error": "I couldn't create the narrative",
-        "ai_unavailable": "The AI service isn't available right now. Try again in a few minutes."
+        "ai_unavailable": "The AI service isn't available right now. Try again in a few minutes.",
+        "no_editable_classes": "You have no class where you can create missions: editing access is needed.",
+        "no_classes": "You don't have any classes yet: create one first to add missions to it."
       },
       "detail": {
         "delete_confirm_btn": "Delete",
@@ -616,7 +787,9 @@
         "description": "Create, edit, and manage custom badges to reward your students' achievements."
       },
       "filter_system": "System",
-      "generate_error": "The badge couldn't be generated."
+      "generate_error": "The badge couldn't be generated.",
+      "save_error": "The badge couldn't be saved.",
+      "delete_error": "The badge couldn't be deleted."
     },
     "students": {
       "index": {

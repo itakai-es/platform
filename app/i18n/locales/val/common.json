@@ -382,6 +382,32 @@
     "file_unavailable": {
       "title": "L'enllaç ja no és vàlid",
       "message": "L'enllaç per a obrir aquest fitxer ha caducat. Torna a la missió i obri'l una altra vegada."
+    },
+    "class_teachers": {
+      "owner": "Propietari",
+      "profiles": {
+        "titular": "Titular",
+        "sustituto": "Substitut",
+        "practicas": "Pràctiques"
+      },
+      "access": {
+        "read": "Lectura",
+        "edit": "Edició",
+        "admin": "Administració"
+      }
+    },
+    "pagination": {
+      "label": "Paginació",
+      "page_of": "Pàgina {page} de {total}",
+      "previous": "Anterior",
+      "next": "Següent"
+    },
+    "account_deletion": {
+      "blocked_self": "Encara no pots esborrar el teu compte: eres el propietari d'estes classes i no hi ha ningú més amb administració. Dona administració a un altre professor o passa-li la propietat, i torna ací.",
+      "blocked_admin": "Este compte encara no es pot esborrar: és el propietari d'estes classes i no hi ha ningú més amb administració. Abans cal passar-ne la propietat a un altre professor.",
+      "transfers_self": "Les teues classes passaran a un altre professor amb administració:",
+      "transfers_admin": "Les seues classes passaran a un altre professor amb administració:",
+      "transfer_item": "{class}, a {name}"
     }
   }
 }

@@ -23,24 +23,29 @@
           </span>
         </button>
       </div>
-      <div class="flex flex-shrink-0 gap-2">
+      <div v-if="!props.readonly" class="flex flex-shrink-0 gap-2">
         <Button variant="outline" :icon-left="SparklesIcon" @click="showLibrary = true">
-          <span class="whitespace-nowrap">{{ t('teacher.classes.detail.behaviors.library_button') }}</span>
+          <span class="whitespace-nowrap">{{
+            t('teacher.classes.detail.behaviors.library_button')
+          }}</span>
         </Button>
         <Button variant="primary" :icon-left="PlusIcon" @click="openNew">
           <span class="whitespace-nowrap">
-            <span class="sm:hidden">{{ t('teacher.classes.detail.behaviors.new_button_short') }}</span>
-            <span class="hidden sm:inline">{{ t('teacher.classes.detail.behaviors.new_button') }}</span>
+            <span class="sm:hidden">{{
+              t('teacher.classes.detail.behaviors.new_button_short')
+            }}</span>
+            <span class="hidden sm:inline">{{
+              t('teacher.classes.detail.behaviors.new_button')
+            }}</span>
           </span>
         </Button>
       </div>
     </div>
 
+    <InfoNote v-if="props.readonly">{{ t('teacher.classes.detail.read_only_notice') }}</InfoNote>
+
     <!-- Skeletons de carga inicial -->
-    <div
-      v-if="loading"
-      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
-    >
+    <div v-if="loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
       <IconCardSkeleton v-for="n in 6" :key="n" />
     </div>
 
@@ -50,7 +55,7 @@
       :title="t('teacher.classes.detail.behaviors.empty_title')"
       :description="t('teacher.classes.detail.behaviors.empty_description')"
     >
-      <template #action>
+      <template v-if="!props.readonly" #action>
         <Button variant="primary" :icon-left="SparklesIcon" @click="showLibrary = true">
           {{ t('teacher.classes.detail.behaviors.library_button') }}
         </Button>
@@ -66,6 +71,7 @@
         :xp-enabled="cfg.xp"
         :coins-enabled="cfg.coins"
         :lives-enabled="cfg.lives"
+        :readonly="props.readonly"
         @click="openApply(b)"
         @edit="openEdit(b)"
       />
@@ -352,16 +358,15 @@
                   class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full"
                   :class="s.kind === 'positive' ? 'bg-navy-700' : 'bg-red'"
                 >
-                  <HandThumbUpIcon
-                    v-if="s.kind === 'positive'"
-                    class="h-4 w-4 text-white"
-                  />
+                  <HandThumbUpIcon v-if="s.kind === 'positive'" class="h-4 w-4 text-white" />
                   <HandThumbDownIcon v-else class="h-4 w-4 text-white" />
                 </span>
                 <div class="min-w-0 flex-1">
                   <p class="font-medium text-navy-700 truncate">{{ s.name }}</p>
                   <p class="text-xs text-text-secondary truncate">{{ s.description }}</p>
-                  <div class="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs font-semibold">
+                  <div
+                    class="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs font-semibold"
+                  >
                     <span v-if="s.xp && cfg.xp" class="inline-flex items-center gap-0.5">
                       <XpIcon class="h-3 w-3" />
                       <span :class="signClass(s)">{{ sign(s) }}{{ s.xp }}</span>
@@ -424,6 +429,8 @@ const props = defineProps<{
   classId: string
   students: StudentLike[]
   settings?: Partial<ClassSettings> | null
+  /** Solo ver las plantillas: sin aplicarlas, crearlas ni cambiarlas. */
+  readonly?: boolean
 }>()
 
 // Per-class flags: hide resource impacts (XP/coins/lives) that the class has disabled.
@@ -474,7 +481,7 @@ const displayedBehaviors = computed(() => {
 
 watch(
   () => props.classId,
-  async (id) => {
+  async id => {
     loading.value = store.getBehaviors(id).length === 0
     try {
       await store.fetchBehaviors(id)
@@ -484,13 +491,14 @@ watch(
       loading.value = false
     }
   },
-  { immediate: true },
+  { immediate: true }
 )
 
 // --- Apply ---
 const pendingBehavior = ref<Behavior | null>(null)
 const applying = ref(false)
 function openApply(b: Behavior) {
+  if (props.readonly) return
   pendingBehavior.value = b
 }
 async function apply(student: StudentLike) {
@@ -503,7 +511,7 @@ async function apply(student: StudentLike) {
       t('teacher.classes.detail.behaviors.applied_toast', {
         behavior: b.name,
         student: displayName(student),
-      }),
+      })
     )
     // Feedback al profe: sparkle + sonido positivo, o sonido fail si es negativo.
     // El cliente del profe no muestra floaters de delta porque son varios recursos
@@ -552,11 +560,13 @@ function resetForm(seed?: Behavior) {
 const isValid = computed(() => form.name.trim().length > 0)
 
 function openNew() {
+  if (props.readonly) return
   editingId.value = null
   resetForm()
   showForm.value = true
 }
 function openEdit(b: Behavior) {
+  if (props.readonly) return
   editingId.value = b.id
   resetForm(b)
   showForm.value = true

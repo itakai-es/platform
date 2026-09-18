@@ -382,6 +382,32 @@
     "file_unavailable": {
       "title": "Lotura honek jada ez du baliorik",
       "message": "Fitxategi hau irekitzeko lotura iraungi da. Itzuli misiora eta ireki berriro."
+    },
+    "class_teachers": {
+      "owner": "Jabea",
+      "profiles": {
+        "titular": "Titularra",
+        "sustituto": "Ordezkoa",
+        "practicas": "Praktikak"
+      },
+      "access": {
+        "read": "Irakurketa",
+        "edit": "Edizioa",
+        "admin": "Administrazioa"
+      }
+    },
+    "pagination": {
+      "label": "Orrikatzea",
+      "page_of": "{page}/{total} orria",
+      "previous": "Aurrekoa",
+      "next": "Hurrengoa"
+    },
+    "account_deletion": {
+      "blocked_self": "Oraindik ezin duzu zure kontua ezabatu: klase hauen jabea zara, eta haietan ez dago administrazioa duen beste inor. Eman administrazioa beste irakasle bati edo eman iezaiozu jabetza, eta itzuli hona.",
+      "blocked_admin": "Kontu hau oraindik ezin da ezabatu: klase hauen jabea da, eta haietan ez dago administrazioa duen beste inor. Lehenago, haien jabetza beste irakasle bati eman behar zaio.",
+      "transfers_self": "Zure klaseak haietan administrazioa duen beste irakasle batenak izango dira:",
+      "transfers_admin": "Bere klaseak haietan administrazioa duen beste irakasle batenak izango dira:",
+      "transfer_item": "{class}: {name}"
     }
   }
 }

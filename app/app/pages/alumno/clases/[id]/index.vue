@@ -81,6 +81,7 @@
         avatar-path="/guides/atenea.webp"
         :class-id="classId"
       />
+      <ClassTeachersCard v-if="classTeachers" :teachers="classTeachers" />
       <RecentActivityCard
         :activities="formattedActivities"
         :loading="loadingActivities"
@@ -97,6 +98,7 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import { ArrowTrendingUpIcon } from '@heroicons/vue/24/outline'
+import type { ClassTeacherPublic } from '~/types/class.types'
 
 definePageMeta({ layout: 'student', middleware: ['auth', 'role'] })
 
@@ -132,6 +134,11 @@ const progress = computed(() => {
     }
   )
 })
+
+// Profesorado de la clase: nombre, perfil y propietario (sin correo ni nivel).
+const classTeachers = computed(
+  () => (classData.value as { teachers?: ClassTeacherPublic[] } | null)?.teachers ?? null
+)
 
 // Avatar guide actual (para fallback del avatar de la barra XP).
 const currentGuide = computed(() => {

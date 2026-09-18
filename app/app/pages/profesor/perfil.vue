@@ -249,12 +249,7 @@
                 <p class="text-sm text-navy-700/70 mb-4">
                   {{ t('teacher.profile.settings.danger_zone_description') }}
                 </p>
-                <Button
-                  variant="outline"
-                  size="md"
-                  :icon-left="TrashIcon"
-                  @click="showDeleteModal = true"
-                >
+                <Button variant="outline" size="md" :icon-left="TrashIcon" @click="openDeleteModal">
                   {{ t('teacher.profile.settings.btn_delete_account') }}
                 </Button>
               </div>
@@ -273,8 +268,11 @@
       :cancel-text="t('teacher.profile.settings.btn_cancel')"
       variant="danger"
       :loading="isDeleting"
+      :confirm-disabled="deletionBlocked"
       @confirm="deleteAccount"
     >
+      <!-- A quién pasan las clases propias, o por qué aún no se puede borrar -->
+      <AccountDeletionImpact :check="deletionCheck" audience="self" class="mb-3" />
       <input
         type="text"
         name="username"
@@ -286,6 +284,7 @@
         readonly
       />
       <FormField
+        v-if="!deletionBlocked"
         v-model="deletePassword"
         type="password"
         autocomplete="current-password"
@@ -315,6 +314,7 @@ import {
   ViewColumnsIcon,
 } from '@heroicons/vue/24/outline'
 import { PASSWORD_MIN_LENGTH } from '~/utils/password'
+import type { AccountDeletionCheck } from '~/types/profile.types'
 
 const { t } = useI18n()
 
@@ -369,6 +369,9 @@ const preferencesForm = ref({
 const showDeleteModal = ref(false)
 const deletePassword = ref('')
 const isDeleting = ref(false)
+/** Qué pasaría con las clases propias; se pide al abrir la confirmación. */
+const deletionCheck = ref<AccountDeletionCheck | null>(null)
+const deletionBlocked = computed(() => deletionCheck.value?.canDelete === false)
 
 // Loading states
 const isChangingPassword = ref(false)
@@ -475,6 +478,13 @@ const closeAllSessions = async () => {
   }
 }
 
+async function openDeleteModal() {
+  deletePassword.value = ''
+  deletionCheck.value = null
+  showDeleteModal.value = true
+  deletionCheck.value = await profileStore.checkAccountDeletion()
+}
+
 const deleteAccount = async () => {
   if (!deletePassword.value) {
     toast.error(t('teacher.profile.security.validation.password_required'))
@@ -487,9 +497,14 @@ const deleteAccount = async () => {
 
   if (result.success) {
     toast.success(result.message)
-  } else {
-    toast.error(result.message)
+    return
   }
+  // Mientras tanto ha dejado de haber a quién pasar alguna clase: la ventana lo explica.
+  if (result.code === 'OWNS_CLASSES_WITHOUT_SUCCESSOR') {
+    deletionCheck.value = await profileStore.checkAccountDeletion()
+    if (deletionBlocked.value) return
+  }
+  toast.error(result.message)
 }
 
 // Language options for select

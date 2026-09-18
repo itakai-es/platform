@@ -283,6 +283,8 @@ export type UserWhereInput = {
   shopPurchases?: Prisma.ShopPurchaseListRelationFilter
   shopItemUses?: Prisma.ShopItemUseListRelationFilter
   behaviorsApplied?: Prisma.BehaviorApplicationListRelationFilter
+  submissionsReviewed?: Prisma.EnigmaSubmissionListRelationFilter
+  activitiesActed?: Prisma.ActivityListRelationFilter
   behaviorsReceived?: Prisma.BehaviorApplicationListRelationFilter
   classTeachers?: Prisma.ClassTeacherListRelationFilter
   classTeachersAdded?: Prisma.ClassTeacherListRelationFilter
@@ -327,6 +329,8 @@ export type UserOrderByWithRelationInput = {
   shopPurchases?: Prisma.ShopPurchaseOrderByRelationAggregateInput
   shopItemUses?: Prisma.ShopItemUseOrderByRelationAggregateInput
   behaviorsApplied?: Prisma.BehaviorApplicationOrderByRelationAggregateInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionOrderByRelationAggregateInput
+  activitiesActed?: Prisma.ActivityOrderByRelationAggregateInput
   behaviorsReceived?: Prisma.BehaviorApplicationOrderByRelationAggregateInput
   classTeachers?: Prisma.ClassTeacherOrderByRelationAggregateInput
   classTeachersAdded?: Prisma.ClassTeacherOrderByRelationAggregateInput
@@ -374,6 +378,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   shopPurchases?: Prisma.ShopPurchaseListRelationFilter
   shopItemUses?: Prisma.ShopItemUseListRelationFilter
   behaviorsApplied?: Prisma.BehaviorApplicationListRelationFilter
+  submissionsReviewed?: Prisma.EnigmaSubmissionListRelationFilter
+  activitiesActed?: Prisma.ActivityListRelationFilter
   behaviorsReceived?: Prisma.BehaviorApplicationListRelationFilter
   classTeachers?: Prisma.ClassTeacherListRelationFilter
   classTeachersAdded?: Prisma.ClassTeacherListRelationFilter
@@ -458,6 +464,8 @@ export type UserCreateInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
@@ -500,6 +508,8 @@ export type UserUncheckedCreateInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
@@ -542,6 +552,8 @@ export type UserUpdateInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
@@ -584,6 +596,8 @@ export type UserUncheckedUpdateInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
@@ -1015,12 +1029,28 @@ export type UserCreateNestedOneWithoutSubmissionsInput = {
   connect?: Prisma.UserWhereUniqueInput
 }
 
+export type UserCreateNestedOneWithoutSubmissionsReviewedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSubmissionsReviewedInput, Prisma.UserUncheckedCreateWithoutSubmissionsReviewedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSubmissionsReviewedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
 export type UserUpdateOneRequiredWithoutSubmissionsNestedInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutSubmissionsInput, Prisma.UserUncheckedCreateWithoutSubmissionsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutSubmissionsInput
   upsert?: Prisma.UserUpsertWithoutSubmissionsInput
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSubmissionsInput, Prisma.UserUpdateWithoutSubmissionsInput>, Prisma.UserUncheckedUpdateWithoutSubmissionsInput>
+}
+
+export type UserUpdateOneWithoutSubmissionsReviewedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSubmissionsReviewedInput, Prisma.UserUncheckedCreateWithoutSubmissionsReviewedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSubmissionsReviewedInput
+  upsert?: Prisma.UserUpsertWithoutSubmissionsReviewedInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSubmissionsReviewedInput, Prisma.UserUpdateWithoutSubmissionsReviewedInput>, Prisma.UserUncheckedUpdateWithoutSubmissionsReviewedInput>
 }
 
 export type UserCreateNestedOneWithoutMissionProgressInput = {
@@ -1129,12 +1159,28 @@ export type UserCreateNestedOneWithoutActivitiesInput = {
   connect?: Prisma.UserWhereUniqueInput
 }
 
+export type UserCreateNestedOneWithoutActivitiesActedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutActivitiesActedInput, Prisma.UserUncheckedCreateWithoutActivitiesActedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutActivitiesActedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
 export type UserUpdateOneRequiredWithoutActivitiesNestedInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutActivitiesInput, Prisma.UserUncheckedCreateWithoutActivitiesInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutActivitiesInput
   upsert?: Prisma.UserUpsertWithoutActivitiesInput
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutActivitiesInput, Prisma.UserUpdateWithoutActivitiesInput>, Prisma.UserUncheckedUpdateWithoutActivitiesInput>
+}
+
+export type UserUpdateOneWithoutActivitiesActedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutActivitiesActedInput, Prisma.UserUncheckedCreateWithoutActivitiesActedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutActivitiesActedInput
+  upsert?: Prisma.UserUpsertWithoutActivitiesActedInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutActivitiesActedInput, Prisma.UserUpdateWithoutActivitiesActedInput>, Prisma.UserUncheckedUpdateWithoutActivitiesActedInput>
 }
 
 export type UserCreateNestedOneWithoutConversationsInput = {
@@ -1163,10 +1209,12 @@ export type UserCreateNestedOneWithoutBehaviorsReceivedInput = {
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserUpdateOneRequiredWithoutBehaviorsAppliedNestedInput = {
+export type UserUpdateOneWithoutBehaviorsAppliedNestedInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutBehaviorsAppliedInput, Prisma.UserUncheckedCreateWithoutBehaviorsAppliedInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutBehaviorsAppliedInput
   upsert?: Prisma.UserUpsertWithoutBehaviorsAppliedInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutBehaviorsAppliedInput, Prisma.UserUpdateWithoutBehaviorsAppliedInput>, Prisma.UserUncheckedUpdateWithoutBehaviorsAppliedInput>
 }
@@ -1213,6 +1261,8 @@ export type UserCreateWithoutCreatedUsersInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
@@ -1254,6 +1304,8 @@ export type UserUncheckedCreateWithoutCreatedUsersInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
@@ -1300,6 +1352,8 @@ export type UserCreateWithoutCreatedByInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
@@ -1341,6 +1395,8 @@ export type UserUncheckedCreateWithoutCreatedByInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
@@ -1403,6 +1459,8 @@ export type UserUpdateWithoutCreatedUsersInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
@@ -1444,6 +1502,8 @@ export type UserUncheckedUpdateWithoutCreatedUsersInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
@@ -1522,6 +1582,8 @@ export type UserCreateWithoutSettingsInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
@@ -1563,6 +1625,8 @@ export type UserUncheckedCreateWithoutSettingsInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
@@ -1620,6 +1684,8 @@ export type UserUpdateWithoutSettingsInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
@@ -1661,6 +1727,8 @@ export type UserUncheckedUpdateWithoutSettingsInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
@@ -1702,6 +1770,8 @@ export type UserCreateWithoutRefreshTokensInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
@@ -1743,6 +1813,8 @@ export type UserUncheckedCreateWithoutRefreshTokensInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
@@ -1800,6 +1872,8 @@ export type UserUpdateWithoutRefreshTokensInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
@@ -1841,6 +1915,8 @@ export type UserUncheckedUpdateWithoutRefreshTokensInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
@@ -1882,6 +1958,8 @@ export type UserCreateWithoutTeacherClassesInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
@@ -1923,6 +2001,8 @@ export type UserUncheckedCreateWithoutTeacherClassesInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
@@ -1969,6 +2049,8 @@ export type UserCreateWithoutHomeClassInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
@@ -2010,6 +2092,8 @@ export type UserUncheckedCreateWithoutHomeClassInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
@@ -2072,6 +2156,8 @@ export type UserUpdateWithoutTeacherClassesInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
@@ -2113,6 +2199,8 @@ export type UserUncheckedUpdateWithoutTeacherClassesInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
@@ -2171,6 +2259,8 @@ export type UserCreateWithoutClassTeachersInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
   classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
   classActions?: Prisma.ClassActionLogCreateNestedManyWithoutActorInput
@@ -2212,6 +2302,8 @@ export type UserUncheckedCreateWithoutClassTeachersInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
   classActions?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutActorInput
@@ -2258,6 +2350,8 @@ export type UserCreateWithoutClassTeachersAddedInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
   classActions?: Prisma.ClassActionLogCreateNestedManyWithoutActorInput
@@ -2299,6 +2393,8 @@ export type UserUncheckedCreateWithoutClassTeachersAddedInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
   classActions?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutActorInput
@@ -2356,6 +2452,8 @@ export type UserUpdateWithoutClassTeachersInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
   classActions?: Prisma.ClassActionLogUpdateManyWithoutActorNestedInput
@@ -2397,6 +2495,8 @@ export type UserUncheckedUpdateWithoutClassTeachersInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
   classActions?: Prisma.ClassActionLogUncheckedUpdateManyWithoutActorNestedInput
@@ -2449,6 +2549,8 @@ export type UserUpdateWithoutClassTeachersAddedInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
   classActions?: Prisma.ClassActionLogUpdateManyWithoutActorNestedInput
@@ -2490,6 +2592,8 @@ export type UserUncheckedUpdateWithoutClassTeachersAddedInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
   classActions?: Prisma.ClassActionLogUncheckedUpdateManyWithoutActorNestedInput
@@ -2531,6 +2635,8 @@ export type UserCreateWithoutClassActionsInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
@@ -2572,6 +2678,8 @@ export type UserUncheckedCreateWithoutClassActionsInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
@@ -2618,6 +2726,8 @@ export type UserCreateWithoutClassActionsTargetInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
@@ -2659,6 +2769,8 @@ export type UserUncheckedCreateWithoutClassActionsTargetInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
@@ -2716,6 +2828,8 @@ export type UserUpdateWithoutClassActionsInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
@@ -2757,6 +2871,8 @@ export type UserUncheckedUpdateWithoutClassActionsInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
@@ -2809,6 +2925,8 @@ export type UserUpdateWithoutClassActionsTargetInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
@@ -2850,6 +2968,8 @@ export type UserUncheckedUpdateWithoutClassActionsTargetInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
@@ -2890,6 +3010,8 @@ export type UserCreateWithoutEnrollmentsInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
@@ -2931,6 +3053,8 @@ export type UserUncheckedCreateWithoutEnrollmentsInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
@@ -2988,6 +3112,8 @@ export type UserUpdateWithoutEnrollmentsInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
@@ -3029,6 +3155,8 @@ export type UserUncheckedUpdateWithoutEnrollmentsInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
@@ -3070,6 +3198,8 @@ export type UserCreateWithoutShopPurchasesInput = {
   settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
@@ -3111,6 +3241,8 @@ export type UserUncheckedCreateWithoutShopPurchasesInput = {
   settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
@@ -3168,6 +3300,8 @@ export type UserUpdateWithoutShopPurchasesInput = {
   settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
@@ -3209,6 +3343,8 @@ export type UserUncheckedUpdateWithoutShopPurchasesInput = {
   settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
@@ -3250,6 +3386,8 @@ export type UserCreateWithoutShopItemUsesInput = {
   settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
@@ -3291,6 +3429,8 @@ export type UserUncheckedCreateWithoutShopItemUsesInput = {
   settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
@@ -3348,6 +3488,8 @@ export type UserUpdateWithoutShopItemUsesInput = {
   settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
@@ -3389,6 +3531,8 @@ export type UserUncheckedUpdateWithoutShopItemUsesInput = {
   settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
@@ -3430,6 +3574,8 @@ export type UserCreateWithoutEnigmaProgressInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
@@ -3471,6 +3617,8 @@ export type UserUncheckedCreateWithoutEnigmaProgressInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
@@ -3528,6 +3676,8 @@ export type UserUpdateWithoutEnigmaProgressInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
@@ -3569,6 +3719,8 @@ export type UserUncheckedUpdateWithoutEnigmaProgressInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
@@ -3610,6 +3762,8 @@ export type UserCreateWithoutSubmissionsInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
@@ -3651,6 +3805,8 @@ export type UserUncheckedCreateWithoutSubmissionsInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
@@ -3661,6 +3817,97 @@ export type UserUncheckedCreateWithoutSubmissionsInput = {
 export type UserCreateOrConnectWithoutSubmissionsInput = {
   where: Prisma.UserWhereUniqueInput
   create: Prisma.XOR<Prisma.UserCreateWithoutSubmissionsInput, Prisma.UserUncheckedCreateWithoutSubmissionsInput>
+}
+
+export type UserCreateWithoutSubmissionsReviewedInput = {
+  id?: string
+  email?: string | null
+  username?: string | null
+  passwordHash: string
+  name: string
+  role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
+  isOnboarded?: boolean
+  status?: $Enums.UserStatus
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
+  createdUsers?: Prisma.UserCreateNestedManyWithoutCreatedByInput
+  homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
+  enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
+  createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
+  earnedBadges?: Prisma.StudentBadgeCreateNestedManyWithoutStudentInput
+  missionProgress?: Prisma.StudentMissionProgressCreateNestedManyWithoutStudentInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressCreateNestedManyWithoutStudentInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ChatConversationCreateNestedManyWithoutUserInput
+  joinRequests?: Prisma.JoinRequestCreateNestedManyWithoutStudentInput
+  sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
+  receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
+  submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
+  shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
+  shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
+  behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
+  behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogCreateNestedManyWithoutTargetUserInput
+}
+
+export type UserUncheckedCreateWithoutSubmissionsReviewedInput = {
+  id?: string
+  email?: string | null
+  username?: string | null
+  passwordHash: string
+  name: string
+  role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
+  isOnboarded?: boolean
+  status?: $Enums.UserStatus
+  createdById?: string | null
+  homeClassId?: string | null
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
+  enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
+  earnedBadges?: Prisma.StudentBadgeUncheckedCreateNestedManyWithoutStudentInput
+  missionProgress?: Prisma.StudentMissionProgressUncheckedCreateNestedManyWithoutStudentInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressUncheckedCreateNestedManyWithoutStudentInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ChatConversationUncheckedCreateNestedManyWithoutUserInput
+  joinRequests?: Prisma.JoinRequestUncheckedCreateNestedManyWithoutStudentInput
+  sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
+  receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
+  submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
+  shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
+  shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
+  behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
+  behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutTargetUserInput
+}
+
+export type UserCreateOrConnectWithoutSubmissionsReviewedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutSubmissionsReviewedInput, Prisma.UserUncheckedCreateWithoutSubmissionsReviewedInput>
 }
 
 export type UserUpsertWithoutSubmissionsInput = {
@@ -3708,6 +3955,8 @@ export type UserUpdateWithoutSubmissionsInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
@@ -3749,6 +3998,105 @@ export type UserUncheckedUpdateWithoutSubmissionsInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
+  behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUncheckedUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedUpdateManyWithoutTargetUserNestedInput
+}
+
+export type UserUpsertWithoutSubmissionsReviewedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSubmissionsReviewedInput, Prisma.UserUncheckedUpdateWithoutSubmissionsReviewedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSubmissionsReviewedInput, Prisma.UserUncheckedCreateWithoutSubmissionsReviewedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSubmissionsReviewedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSubmissionsReviewedInput, Prisma.UserUncheckedUpdateWithoutSubmissionsReviewedInput>
+}
+
+export type UserUpdateWithoutSubmissionsReviewedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
+  createdUsers?: Prisma.UserUpdateManyWithoutCreatedByNestedInput
+  homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
+  enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
+  createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
+  earnedBadges?: Prisma.StudentBadgeUpdateManyWithoutStudentNestedInput
+  missionProgress?: Prisma.StudentMissionProgressUpdateManyWithoutStudentNestedInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressUpdateManyWithoutStudentNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ChatConversationUpdateManyWithoutUserNestedInput
+  joinRequests?: Prisma.JoinRequestUpdateManyWithoutStudentNestedInput
+  sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
+  receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
+  submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
+  shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
+  shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
+  behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
+  behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUpdateManyWithoutTargetUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSubmissionsReviewedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
+  enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
+  earnedBadges?: Prisma.StudentBadgeUncheckedUpdateManyWithoutStudentNestedInput
+  missionProgress?: Prisma.StudentMissionProgressUncheckedUpdateManyWithoutStudentNestedInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressUncheckedUpdateManyWithoutStudentNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ChatConversationUncheckedUpdateManyWithoutUserNestedInput
+  joinRequests?: Prisma.JoinRequestUncheckedUpdateManyWithoutStudentNestedInput
+  sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
+  receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
+  submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
+  shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
+  shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
+  behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
@@ -3790,6 +4138,8 @@ export type UserCreateWithoutMissionProgressInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
@@ -3831,6 +4181,8 @@ export type UserUncheckedCreateWithoutMissionProgressInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
@@ -3888,6 +4240,8 @@ export type UserUpdateWithoutMissionProgressInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
@@ -3929,6 +4283,8 @@ export type UserUncheckedUpdateWithoutMissionProgressInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
@@ -3970,6 +4326,8 @@ export type UserCreateWithoutCreatedBadgesInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
@@ -4011,6 +4369,8 @@ export type UserUncheckedCreateWithoutCreatedBadgesInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
@@ -4068,6 +4428,8 @@ export type UserUpdateWithoutCreatedBadgesInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
@@ -4109,6 +4471,8 @@ export type UserUncheckedUpdateWithoutCreatedBadgesInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
@@ -4150,6 +4514,8 @@ export type UserCreateWithoutEarnedBadgesInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
@@ -4191,6 +4557,8 @@ export type UserUncheckedCreateWithoutEarnedBadgesInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
@@ -4248,6 +4616,8 @@ export type UserUpdateWithoutEarnedBadgesInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
@@ -4289,6 +4659,8 @@ export type UserUncheckedUpdateWithoutEarnedBadgesInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
@@ -4330,6 +4702,8 @@ export type UserCreateWithoutJoinRequestsInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
@@ -4371,6 +4745,8 @@ export type UserUncheckedCreateWithoutJoinRequestsInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
@@ -4428,6 +4804,8 @@ export type UserUpdateWithoutJoinRequestsInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
@@ -4469,6 +4847,8 @@ export type UserUncheckedUpdateWithoutJoinRequestsInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
@@ -4510,6 +4890,8 @@ export type UserCreateWithoutSentInvitationsInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
@@ -4551,6 +4933,8 @@ export type UserUncheckedCreateWithoutSentInvitationsInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
@@ -4597,6 +4981,8 @@ export type UserCreateWithoutReceivedInvitationsInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
@@ -4638,6 +5024,8 @@ export type UserUncheckedCreateWithoutReceivedInvitationsInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
@@ -4695,6 +5083,8 @@ export type UserUpdateWithoutSentInvitationsInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
@@ -4736,6 +5126,8 @@ export type UserUncheckedUpdateWithoutSentInvitationsInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
@@ -4788,6 +5180,8 @@ export type UserUpdateWithoutReceivedInvitationsInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
@@ -4829,6 +5223,8 @@ export type UserUncheckedUpdateWithoutReceivedInvitationsInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
@@ -4870,6 +5266,8 @@ export type UserCreateWithoutNotificationsInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
@@ -4911,6 +5309,8 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
@@ -4968,6 +5368,8 @@ export type UserUpdateWithoutNotificationsInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
@@ -5009,6 +5411,8 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
@@ -5050,6 +5454,8 @@ export type UserCreateWithoutActivitiesInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
@@ -5091,6 +5497,8 @@ export type UserUncheckedCreateWithoutActivitiesInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
@@ -5101,6 +5509,97 @@ export type UserUncheckedCreateWithoutActivitiesInput = {
 export type UserCreateOrConnectWithoutActivitiesInput = {
   where: Prisma.UserWhereUniqueInput
   create: Prisma.XOR<Prisma.UserCreateWithoutActivitiesInput, Prisma.UserUncheckedCreateWithoutActivitiesInput>
+}
+
+export type UserCreateWithoutActivitiesActedInput = {
+  id?: string
+  email?: string | null
+  username?: string | null
+  passwordHash: string
+  name: string
+  role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
+  isOnboarded?: boolean
+  status?: $Enums.UserStatus
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
+  createdUsers?: Prisma.UserCreateNestedManyWithoutCreatedByInput
+  homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
+  enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
+  createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
+  earnedBadges?: Prisma.StudentBadgeCreateNestedManyWithoutStudentInput
+  missionProgress?: Prisma.StudentMissionProgressCreateNestedManyWithoutStudentInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressCreateNestedManyWithoutStudentInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ChatConversationCreateNestedManyWithoutUserInput
+  joinRequests?: Prisma.JoinRequestCreateNestedManyWithoutStudentInput
+  sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
+  receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
+  submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
+  shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
+  shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
+  behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogCreateNestedManyWithoutTargetUserInput
+}
+
+export type UserUncheckedCreateWithoutActivitiesActedInput = {
+  id?: string
+  email?: string | null
+  username?: string | null
+  passwordHash: string
+  name: string
+  role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
+  isOnboarded?: boolean
+  status?: $Enums.UserStatus
+  createdById?: string | null
+  homeClassId?: string | null
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
+  enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
+  earnedBadges?: Prisma.StudentBadgeUncheckedCreateNestedManyWithoutStudentInput
+  missionProgress?: Prisma.StudentMissionProgressUncheckedCreateNestedManyWithoutStudentInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressUncheckedCreateNestedManyWithoutStudentInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ChatConversationUncheckedCreateNestedManyWithoutUserInput
+  joinRequests?: Prisma.JoinRequestUncheckedCreateNestedManyWithoutStudentInput
+  sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
+  receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
+  submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
+  shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
+  shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
+  behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutTargetUserInput
+}
+
+export type UserCreateOrConnectWithoutActivitiesActedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutActivitiesActedInput, Prisma.UserUncheckedCreateWithoutActivitiesActedInput>
 }
 
 export type UserUpsertWithoutActivitiesInput = {
@@ -5148,6 +5647,8 @@ export type UserUpdateWithoutActivitiesInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
@@ -5189,6 +5690,105 @@ export type UserUncheckedUpdateWithoutActivitiesInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
+  behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUncheckedUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedUpdateManyWithoutTargetUserNestedInput
+}
+
+export type UserUpsertWithoutActivitiesActedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutActivitiesActedInput, Prisma.UserUncheckedUpdateWithoutActivitiesActedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutActivitiesActedInput, Prisma.UserUncheckedCreateWithoutActivitiesActedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutActivitiesActedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutActivitiesActedInput, Prisma.UserUncheckedUpdateWithoutActivitiesActedInput>
+}
+
+export type UserUpdateWithoutActivitiesActedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
+  createdUsers?: Prisma.UserUpdateManyWithoutCreatedByNestedInput
+  homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
+  enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
+  createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
+  earnedBadges?: Prisma.StudentBadgeUpdateManyWithoutStudentNestedInput
+  missionProgress?: Prisma.StudentMissionProgressUpdateManyWithoutStudentNestedInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressUpdateManyWithoutStudentNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ChatConversationUpdateManyWithoutUserNestedInput
+  joinRequests?: Prisma.JoinRequestUpdateManyWithoutStudentNestedInput
+  sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
+  receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
+  submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
+  shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
+  shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
+  behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUpdateManyWithoutTargetUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutActivitiesActedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
+  enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
+  earnedBadges?: Prisma.StudentBadgeUncheckedUpdateManyWithoutStudentNestedInput
+  missionProgress?: Prisma.StudentMissionProgressUncheckedUpdateManyWithoutStudentNestedInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressUncheckedUpdateManyWithoutStudentNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ChatConversationUncheckedUpdateManyWithoutUserNestedInput
+  joinRequests?: Prisma.JoinRequestUncheckedUpdateManyWithoutStudentNestedInput
+  sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
+  receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
+  submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
+  shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
+  shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
+  behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
@@ -5230,6 +5830,8 @@ export type UserCreateWithoutConversationsInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
@@ -5271,6 +5873,8 @@ export type UserUncheckedCreateWithoutConversationsInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
@@ -5328,6 +5932,8 @@ export type UserUpdateWithoutConversationsInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
@@ -5369,6 +5975,8 @@ export type UserUncheckedUpdateWithoutConversationsInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
@@ -5410,6 +6018,8 @@ export type UserCreateWithoutBehaviorsAppliedInput = {
   settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
@@ -5451,6 +6061,8 @@ export type UserUncheckedCreateWithoutBehaviorsAppliedInput = {
   settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
   classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
@@ -5498,6 +6110,8 @@ export type UserCreateWithoutBehaviorsReceivedInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
   classActions?: Prisma.ClassActionLogCreateNestedManyWithoutActorInput
@@ -5539,6 +6153,8 @@ export type UserUncheckedCreateWithoutBehaviorsReceivedInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
   classActions?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutActorInput
@@ -5595,6 +6211,8 @@ export type UserUpdateWithoutBehaviorsAppliedInput = {
   settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
@@ -5636,6 +6254,8 @@ export type UserUncheckedUpdateWithoutBehaviorsAppliedInput = {
   settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
@@ -5689,6 +6309,8 @@ export type UserUpdateWithoutBehaviorsReceivedInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
   classActions?: Prisma.ClassActionLogUpdateManyWithoutActorNestedInput
@@ -5730,6 +6352,8 @@ export type UserUncheckedUpdateWithoutBehaviorsReceivedInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
   classActions?: Prisma.ClassActionLogUncheckedUpdateManyWithoutActorNestedInput
@@ -5787,6 +6411,8 @@ export type UserUpdateWithoutCreatedByInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
@@ -5828,6 +6454,8 @@ export type UserUncheckedUpdateWithoutCreatedByInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
@@ -5903,6 +6531,8 @@ export type UserUpdateWithoutHomeClassInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
@@ -5944,6 +6574,8 @@ export type UserUncheckedUpdateWithoutHomeClassInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
   classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
   classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
@@ -5992,6 +6624,8 @@ export type UserCountOutputType = {
   shopPurchases: number
   shopItemUses: number
   behaviorsApplied: number
+  submissionsReviewed: number
+  activitiesActed: number
   behaviorsReceived: number
   classTeachers: number
   classTeachersAdded: number
@@ -6018,6 +6652,8 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   shopPurchases?: boolean | UserCountOutputTypeCountShopPurchasesArgs
   shopItemUses?: boolean | UserCountOutputTypeCountShopItemUsesArgs
   behaviorsApplied?: boolean | UserCountOutputTypeCountBehaviorsAppliedArgs
+  submissionsReviewed?: boolean | UserCountOutputTypeCountSubmissionsReviewedArgs
+  activitiesActed?: boolean | UserCountOutputTypeCountActivitiesActedArgs
   behaviorsReceived?: boolean | UserCountOutputTypeCountBehaviorsReceivedArgs
   classTeachers?: boolean | UserCountOutputTypeCountClassTeachersArgs
   classTeachersAdded?: boolean | UserCountOutputTypeCountClassTeachersAddedArgs
@@ -6164,6 +6800,20 @@ export type UserCountOutputTypeCountBehaviorsAppliedArgs<ExtArgs extends runtime
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountSubmissionsReviewedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EnigmaSubmissionWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountActivitiesActedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ActivityWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountBehaviorsReceivedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.BehaviorApplicationWhereInput
 }
@@ -6234,6 +6884,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   shopPurchases?: boolean | Prisma.User$shopPurchasesArgs<ExtArgs>
   shopItemUses?: boolean | Prisma.User$shopItemUsesArgs<ExtArgs>
   behaviorsApplied?: boolean | Prisma.User$behaviorsAppliedArgs<ExtArgs>
+  submissionsReviewed?: boolean | Prisma.User$submissionsReviewedArgs<ExtArgs>
+  activitiesActed?: boolean | Prisma.User$activitiesActedArgs<ExtArgs>
   behaviorsReceived?: boolean | Prisma.User$behaviorsReceivedArgs<ExtArgs>
   classTeachers?: boolean | Prisma.User$classTeachersArgs<ExtArgs>
   classTeachersAdded?: boolean | Prisma.User$classTeachersAddedArgs<ExtArgs>
@@ -6323,6 +6975,8 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   shopPurchases?: boolean | Prisma.User$shopPurchasesArgs<ExtArgs>
   shopItemUses?: boolean | Prisma.User$shopItemUsesArgs<ExtArgs>
   behaviorsApplied?: boolean | Prisma.User$behaviorsAppliedArgs<ExtArgs>
+  submissionsReviewed?: boolean | Prisma.User$submissionsReviewedArgs<ExtArgs>
+  activitiesActed?: boolean | Prisma.User$activitiesActedArgs<ExtArgs>
   behaviorsReceived?: boolean | Prisma.User$behaviorsReceivedArgs<ExtArgs>
   classTeachers?: boolean | Prisma.User$classTeachersArgs<ExtArgs>
   classTeachersAdded?: boolean | Prisma.User$classTeachersAddedArgs<ExtArgs>
@@ -6363,6 +7017,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     shopPurchases: Prisma.$ShopPurchasePayload<ExtArgs>[]
     shopItemUses: Prisma.$ShopItemUsePayload<ExtArgs>[]
     behaviorsApplied: Prisma.$BehaviorApplicationPayload<ExtArgs>[]
+    submissionsReviewed: Prisma.$EnigmaSubmissionPayload<ExtArgs>[]
+    activitiesActed: Prisma.$ActivityPayload<ExtArgs>[]
     behaviorsReceived: Prisma.$BehaviorApplicationPayload<ExtArgs>[]
     classTeachers: Prisma.$ClassTeacherPayload<ExtArgs>[]
     classTeachersAdded: Prisma.$ClassTeacherPayload<ExtArgs>[]
@@ -6800,6 +7456,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   shopPurchases<T extends Prisma.User$shopPurchasesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$shopPurchasesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ShopPurchasePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   shopItemUses<T extends Prisma.User$shopItemUsesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$shopItemUsesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ShopItemUsePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   behaviorsApplied<T extends Prisma.User$behaviorsAppliedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$behaviorsAppliedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BehaviorApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  submissionsReviewed<T extends Prisma.User$submissionsReviewedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$submissionsReviewedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EnigmaSubmissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  activitiesActed<T extends Prisma.User$activitiesActedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$activitiesActedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ActivityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   behaviorsReceived<T extends Prisma.User$behaviorsReceivedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$behaviorsReceivedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BehaviorApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   classTeachers<T extends Prisma.User$classTeachersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$classTeachersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClassTeacherPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   classTeachersAdded<T extends Prisma.User$classTeachersAddedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$classTeachersAddedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClassTeacherPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -7736,6 +8394,54 @@ export type User$behaviorsAppliedArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.BehaviorApplicationScalarFieldEnum | Prisma.BehaviorApplicationScalarFieldEnum[]
+}
+
+/**
+ * User.submissionsReviewed
+ */
+export type User$submissionsReviewedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EnigmaSubmission
+   */
+  select?: Prisma.EnigmaSubmissionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the EnigmaSubmission
+   */
+  omit?: Prisma.EnigmaSubmissionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EnigmaSubmissionInclude<ExtArgs> | null
+  where?: Prisma.EnigmaSubmissionWhereInput
+  orderBy?: Prisma.EnigmaSubmissionOrderByWithRelationInput | Prisma.EnigmaSubmissionOrderByWithRelationInput[]
+  cursor?: Prisma.EnigmaSubmissionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EnigmaSubmissionScalarFieldEnum | Prisma.EnigmaSubmissionScalarFieldEnum[]
+}
+
+/**
+ * User.activitiesActed
+ */
+export type User$activitiesActedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Activity
+   */
+  select?: Prisma.ActivitySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Activity
+   */
+  omit?: Prisma.ActivityOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ActivityInclude<ExtArgs> | null
+  where?: Prisma.ActivityWhereInput
+  orderBy?: Prisma.ActivityOrderByWithRelationInput | Prisma.ActivityOrderByWithRelationInput[]
+  cursor?: Prisma.ActivityWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ActivityScalarFieldEnum | Prisma.ActivityScalarFieldEnum[]
 }
 
 /**

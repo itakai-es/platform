@@ -199,6 +199,10 @@
           "bought_toast": "Ai cumpărat „{name}”!",
           "used_toast": "Ai folosit „{name}”!",
           "mana_after": "Mana după utilizare"
+        },
+        "teachers": {
+          "title": "Profesori",
+          "empty": "Această clasă nu are încă profesori."
         }
       }
     },
@@ -326,7 +330,8 @@
       "recent_activity_card": {
         "title": "Activitate recentă",
         "empty": "Nu există activitate recentă",
-        "user_fallback": "Utilizator"
+        "user_fallback": "Utilizator",
+        "by_actor": "De {name}"
       },
       "submission_modal": {
         "title": "Trimite enigma",

@@ -356,6 +356,7 @@ import {
   XMarkIcon,
   SparklesIcon,
 } from '@heroicons/vue/24/outline'
+import { canInClass } from '~/utils/class-access'
 
 const { getImageUrl } = useImageUrl()
 const { t, locale } = useI18n()
@@ -381,7 +382,10 @@ interface Badge {
   imageUrl?: string
   rarity?: 'common' | 'rare' | 'epic' | 'legendary'
   isSystem?: boolean
+  /** La creó quien la mira. Una ajena vinculada no sale de la clase de su misión. */
+  isMine?: boolean
   missionId?: string
+  missionClassId?: string | null
   missionTitle?: string
   className?: string
   classNarrative?: string
@@ -500,6 +504,7 @@ const { recentMissions: storeRecentMissions } = storeToRefs(teacherStore)
 const allTeacherMissions = computed<
   Array<{
     id: string
+    classId: string
     title: string
     rarity: string
     description?: string
@@ -509,6 +514,7 @@ const allTeacherMissions = computed<
 >(() =>
   (storeRecentMissions.value || []).map((m: any) => ({
     id: m.id,
+    classId: m.classId,
     title: m.title,
     rarity: m.rarity || 'comun',
     description: m.description,
@@ -517,12 +523,23 @@ const allTeacherMissions = computed<
   }))
 )
 
-// Only show missions without a badge (or the current one being edited)
+// Solo misiones sin insignia (o la de la que se edita) y de clases donde se
+// pueden editar: una insignia se vincula a una misión que se puede cambiar.
+const editableClassIds = computed(
+  () =>
+    new Set(teacherStore.classes.filter(c => canInClass(c.myAccess, 'mission.edit')).map(c => c.id))
+)
+// Una insignia ajena ya vinculada solo cambia a otra misión de su misma clase.
+const lockedClassId = computed(() => {
+  const badge = editingBadge.value
+  return badge?.missionId && !badge.isMine ? (badge.missionClassId ?? null) : null
+})
 const teacherMissions = computed(() => {
   const missionIdsWithBadge = new Set(badges.value.filter(b => b.missionId).map(b => b.missionId))
   return allTeacherMissions.value.filter(m => {
     if (editingBadge.value?.missionId === m.id) return true
-    return !missionIdsWithBadge.has(m.id)
+    if (lockedClassId.value && m.classId !== lockedClassId.value) return false
+    return editableClassIds.value.has(m.classId) && !missionIdsWithBadge.has(m.id)
   })
 })
 
@@ -684,6 +701,7 @@ const handleSubmit = async () => {
     closeFormModal()
   } catch (error) {
     console.error('Error saving badge:', error)
+    toast.error(t('teacher.badges.save_error'))
   } finally {
     isSubmitting.value = false
   }
@@ -699,6 +717,7 @@ const handleDelete = async () => {
     badgeToDelete.value = null
   } catch (error) {
     console.error('Error deleting badge:', error)
+    toast.error(t('teacher.badges.delete_error'))
   } finally {
     isDeleting.value = false
   }

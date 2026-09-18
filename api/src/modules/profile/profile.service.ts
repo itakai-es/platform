@@ -4,6 +4,7 @@ import { ForbiddenError, NotFoundError, ValidationError } from '../../utils/erro
 import { normalizeEmail } from '../../utils/identity.js'
 import { changeOwnPassword } from '../../utils/password-change.js'
 import { privateUploadResolver } from '../storage/storage.service.js'
+import { deleteUserAccount } from './account-deletion.service.js'
 
 function parseUserAgent(userAgent: string): { browser: string; os: string; device: 'desktop' | 'mobile' | 'tablet' } {
   const ua = userAgent.toLowerCase()
@@ -405,8 +406,9 @@ export class ProfileService {
     const isValid = await verifyPassword(password, user.passwordHash)
     if (!isValid) throw new Error('Contraseña incorrecta')
 
-    // Cascade delete handles related records
-    await prisma.user.delete({ where: { id: userId } })
+    // Lo suyo se borra en cascada; antes, sus clases pasan a otra persona y sus
+    // insignias a quien corresponda, o no se borra nada (ver account-deletion.service).
+    await deleteUserAccount(userId, { actorId: userId, bySelf: true })
 
     return { success: true, message: 'Cuenta eliminada correctamente' }
   }

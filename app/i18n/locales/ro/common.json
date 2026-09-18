@@ -382,6 +382,32 @@
     "file_unavailable": {
       "title": "Linkul nu mai este valid",
       "message": "Linkul pentru deschiderea fișierului a expirat. Întoarce-te la misiune și deschide-l din nou."
+    },
+    "class_teachers": {
+      "owner": "Proprietar",
+      "profiles": {
+        "titular": "Titular",
+        "sustituto": "Suplinitor",
+        "practicas": "Practică"
+      },
+      "access": {
+        "read": "Citire",
+        "edit": "Editare",
+        "admin": "Administrare"
+      }
+    },
+    "pagination": {
+      "label": "Paginare",
+      "page_of": "Pagina {page} din {total}",
+      "previous": "Anterioara",
+      "next": "Următoarea"
+    },
+    "account_deletion": {
+      "blocked_self": "Încă nu îți poți șterge contul: ești proprietarul acestor clase și în ele nu mai are nimeni altcineva acces de administrare. Dă acces de administrare altui profesor sau transferă-i proprietatea, apoi revino aici.",
+      "blocked_admin": "Acest cont nu poate fi șters încă: este proprietarul acestor clase și în ele nu mai are nimeni altcineva acces de administrare. Mai întâi trebuie transferată proprietatea lor altui profesor.",
+      "transfers_self": "Clasele tale vor trece la un alt profesor cu acces de administrare în ele:",
+      "transfers_admin": "Clasele sale vor trece la un alt profesor cu acces de administrare în ele:",
+      "transfer_item": "{class}, la {name}"
     }
   }
 }

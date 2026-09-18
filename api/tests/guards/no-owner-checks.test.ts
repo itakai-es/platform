@@ -42,9 +42,14 @@ interface Allowed {
 /** Apariciones permitidas de `teacherId`, por fichero relativo a `src/`. */
 const ALLOWED_TEACHER_ID: Record<string, Allowed> = {
   'utils/class-owner.ts': {
-    count: 3,
+    count: 5,
     reason:
-      'createClassWithOwner escribe el propietario en Class.teacherId a la vez que su fila de profesorado (el tipo lo deja fuera de los datos de entrada y un comentario lo explica)',
+      'createClassWithOwner y transferClassOwnership escriben el propietario en Class.teacherId a la vez que su fila de profesorado (el tipo lo deja fuera de los datos de entrada y los comentarios lo explican)',
+  },
+  'modules/profile/account-deletion.service.ts': {
+    count: 4,
+    reason:
+      'Badge.teacherId es el autor de la insignia: al borrar su cuenta, las de sus misiones y las sueltas ya ganadas pasan al propietario de una clase, y las demás se borran',
   },
   'utils/badge-access.ts': {
     count: 3,
@@ -71,9 +76,9 @@ const ALLOWED_TEACHER_ID: Record<string, Allowed> = {
       'exportación de datos del usuario: el propietario de cada clase en la que está matriculado',
   },
   'modules/teachers/teachers.service.ts': {
-    count: 6,
+    count: 7,
     reason:
-      'plantillas publicadas (isOwn marca las del propietario, 3), insignias del sistema en la biblioteca (2) y autor de una insignia nueva (1)',
+      'plantillas publicadas (isOwn marca las del propietario, 3), insignias del sistema en la biblioteca (2), autor de una insignia en el listado (isMine, 1) y autor de una insignia nueva (1)',
   },
 }
 

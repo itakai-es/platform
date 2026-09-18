@@ -75,6 +75,8 @@ model User {
   shopPurchases     ShopPurchase[]
   shopItemUses      ShopItemUse[]
   behaviorsApplied  BehaviorApplication[] @relation("BehaviorTeacher")
+  submissionsReviewed EnigmaSubmission[] @relation("SubmissionReviewer")
+  activitiesActed   Activity[]          @relation("ActivityActor")
   behaviorsReceived BehaviorApplication[] @relation("BehaviorStudent")
   classTeachers      ClassTeacher[]   @relation("ClassTeacherUser")
   classTeachersAdded ClassTeacher[]   @relation("ClassTeacherAddedBy")
@@ -473,9 +475,12 @@ model EnigmaSubmission {
   xpAwarded   Int?             @map("xp_awarded")
   submittedAt DateTime         @default(now()) @map("submitted_at")
   reviewedAt  DateTime?        @map("reviewed_at")
+  // Quién la aprobó. Se queda en null si esa cuenta se borra: la entrega sigue aprobada.
+  reviewedById String?         @map("reviewed_by_id")
 
-  student  User          @relation("StudentSubmissions", fields: [studentId], references: [id], onDelete: Cascade)
-  enigma   MissionEnigma @relation(fields: [enigmaId], references: [id], onDelete: Cascade)
+  student    User          @relation("StudentSubmissions", fields: [studentId], references: [id], onDelete: Cascade)
+  enigma     MissionEnigma @relation(fields: [enigmaId], references: [id], onDelete: Cascade)
+  reviewedBy User?         @relation("SubmissionReviewer", fields: [reviewedById], references: [id], onDelete: SetNull)
 
   @@map("enigma_submissions")
 }
@@ -513,7 +518,11 @@ model Badge {
   triggerValue Int?     @map("trigger_value")
   createdAt    DateTime @default(now()) @map("created_at")
 
-  teacher  User?          @relation("CreatedBadges", fields: [teacherId], references: [id])
+  // Sin autor, una insignia es del sistema: por eso borrar la cuenta del autor no
+  // puede dejarla en null. La base lo impide y el borrado de la cuenta la pasa
+  // antes a quien corresponda (ver reassignBadges en
+  // modules/profile/account-deletion.service.ts).
+  teacher  User?          @relation("CreatedBadges", fields: [teacherId], references: [id], onDelete: Restrict)
   mission  Mission?       @relation(fields: [missionId], references: [id])
   students StudentBadge[]
 
@@ -607,6 +616,11 @@ enum NotificationType {
   // revisar y el alumno la confirmación de que ya se ha revisado.
   submission_received
   submission_reviewed
+  // Profesorado de una clase: al afectado le llega lo que cambia de su acceso.
+  class_teacher_added
+  class_teacher_changed
+  class_teacher_removed
+  class_ownership_received
 }
 
 enum NotificationPriority {
@@ -685,8 +699,17 @@ model Activity {
   xpAmount      Int?     @map("xp_amount")
   source        String?
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // Quién hizo lo que cuenta la entrada, cuando no es el propio alumno: el
+  // profesor que aprobó la entrega o aplicó el comportamiento. El nombre se copia
+  // para que la entrada se siga leyendo si esa cuenta se borra.
+  actorId       String?  @map("actor_id")
+  actorName     String?  @map("actor_name")
 
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  actor User? @relation("ActivityActor", fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([userId, createdAt])
+  @@index([classId, createdAt])
   @@map("activities")
 }
 
@@ -794,7 +817,8 @@ model BehaviorApplication {
   id         String   @id @default(uuid())
   classId    String   @map("class_id")
   behaviorId String?  @map("behavior_id")
-  teacherId  String   @map("teacher_id")
+  // Quién lo aplicó. Si esa cuenta se borra, la aplicación se conserva sin autor.
+  teacherId  String?  @map("teacher_id")
   studentId  String   @map("student_id")
   kind       String   // "positive" | "negative" — snapshotted from the template
   name       String   // Snapshotted from the template
@@ -805,7 +829,7 @@ model BehaviorApplication {
 
   class    Class             @relation(fields: [classId], references: [id], onDelete: Cascade)
   behavior BehaviorTemplate? @relation(fields: [behaviorId], references: [id], onDelete: SetNull)
-  teacher  User              @relation("BehaviorTeacher", fields: [teacherId], references: [id], onDelete: Cascade)
+  teacher  User?             @relation("BehaviorTeacher", fields: [teacherId], references: [id], onDelete: SetNull)
   student  User              @relation("BehaviorStudent", fields: [studentId], references: [id], onDelete: Cascade)
 
   @@index([classId])

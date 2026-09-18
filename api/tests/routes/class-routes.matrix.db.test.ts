@@ -73,6 +73,8 @@ interface RouteCase {
   student: number
   /** Código para un profesor añadido a la clase con cada nivel. */
   levels?: Record<CoLevel, number>
+  /** Deshace lo que el caso deja en la clase y cambiaría lo que ven los demás. */
+  after?: (f: ClassFixture) => Promise<void>
 }
 
 type CoLevel = 'read' | 'edit' | 'admin'
@@ -97,6 +99,31 @@ function formData(fields: Record<string, string>) {
 }
 
 const c = (f: ClassFixture) => `/teacher/classes/${f.classId}`
+
+/** Cuentas de profesorado que crean los casos del profesorado de la clase; se borran al final. */
+const routeTeachers: string[] = []
+
+/** Una cuenta de profesorado nueva y, con `classId`, en esa clase con lectura (en prácticas). */
+async function newRouteTeacher(classId?: string) {
+  const email = `ruta-${randomUUID().slice(0, 8)}@test.invalid`
+  const user = await prisma.user.create({
+    data: { email, passwordHash: 'x', name: 'Profe de ruta', role: 'teacher', isOnboarded: true },
+  })
+  routeTeachers.push(user.id)
+  if (classId) {
+    await prisma.classTeacher.create({
+      data: { classId, userId: user.id, access: 'read', profile: 'practicas' },
+    })
+  }
+  return { id: user.id, email }
+}
+
+/** Saca de la clase al profesorado que han metido los casos: los demás cuentan con el de la fixture. */
+async function dropRouteTeachers(f: ClassFixture) {
+  await prisma.classTeacher.deleteMany({
+    where: { classId: f.classId, userId: { in: routeTeachers } },
+  })
+}
 
 // ---------------------------------------------------------------- /teacher
 
@@ -326,6 +353,107 @@ const TEACHER_CLASS: RouteCase[] = [
     other: 404,
     student: 403,
     levels: levels('read', 200),
+  },
+  {
+    route: 'GET /teacher/classes/:classId/history',
+    request: f => ({ method: 'GET', url: `${c(f)}/history?page=1&limit=5` }),
+    owner: 200,
+    other: 404,
+    student: 403,
+    levels: levels('read', 200),
+  },
+  {
+    route: 'GET /teacher/classes/:classId/teachers',
+    request: f => ({ method: 'GET', url: `${c(f)}/teachers` }),
+    owner: 200,
+    other: 404,
+    student: 403,
+    levels: levels('read', 200),
+  },
+  {
+    route: 'POST /teacher/classes/:classId/teachers',
+    request: async f => ({
+      method: 'POST',
+      url: `${c(f)}/teachers`,
+      payload: { email: (await newRouteTeacher()).email, profile: 'practicas' },
+    }),
+    owner: 201,
+    other: 404,
+    student: 403,
+    levels: levels('admin', 201),
+    after: dropRouteTeachers,
+  },
+  {
+    route: 'PATCH /teacher/classes/:classId/teachers/:userId',
+    request: async f => ({
+      method: 'PATCH',
+      url: `${c(f)}/teachers/${(await newRouteTeacher(f.classId)).id}`,
+      payload: { access: 'edit' },
+    }),
+    owner: 200,
+    other: 404,
+    student: 403,
+    levels: levels('admin', 200),
+    after: dropRouteTeachers,
+  },
+  {
+    route: 'DELETE /teacher/classes/:classId/teachers/:userId',
+    request: async f => ({
+      method: 'DELETE',
+      url: `${c(f)}/teachers/${(await newRouteTeacher(f.classId)).id}`,
+    }),
+    owner: 200,
+    other: 404,
+    student: 403,
+    levels: levels('admin', 200),
+    after: dropRouteTeachers,
+  },
+  {
+    // Al propietario no lo cambia ni lo quita nadie: ni él mismo por esta vía.
+    route: 'PATCH /teacher/classes/:classId/teachers/:userId (el propietario)',
+    request: f => ({
+      method: 'PATCH',
+      url: `${c(f)}/teachers/${f.users.owner.id}`,
+      payload: { access: 'read' },
+    }),
+    owner: 403,
+    other: 404,
+    student: 403,
+    levels: { read: 403, edit: 403, admin: 403 },
+  },
+  {
+    route: 'DELETE /teacher/classes/:classId/teachers/:userId (el propietario)',
+    request: f => ({ method: 'DELETE', url: `${c(f)}/teachers/${f.users.owner.id}` }),
+    owner: 403,
+    other: 404,
+    student: 403,
+    levels: { read: 403, edit: 403, admin: 403 },
+  },
+  {
+    // Pasar la clase es solo del propietario. Aquí a alguien con lectura, que no
+    // puede recibirla: el propietario pasa el acceso y se queda en el 400, y la
+    // clase de la matriz no cambia de manos. El traspaso que sale bien está en
+    // tests/routes/class-teachers.db.test.ts.
+    route: 'POST /teacher/classes/:classId/transfer',
+    request: async f => ({
+      method: 'POST',
+      url: `${c(f)}/transfer`,
+      payload: { userId: (await newRouteTeacher(f.classId)).id },
+    }),
+    owner: 400,
+    other: 404,
+    student: 403,
+    levels: { read: 403, edit: 403, admin: 403 },
+    after: dropRouteTeachers,
+  },
+  {
+    // El propietario no sale de su clase: antes la pasa. Lo que consigue cada
+    // nivel está en su propio caso, más abajo, con profesorado de usar y tirar.
+    route: 'POST /teacher/classes/:classId/leave',
+    request: f => ({ method: 'POST', url: `${c(f)}/leave` }),
+    owner: 403,
+    other: 404,
+    student: 403,
   },
   {
     route: 'PUT /teacher/classes/:classId/guide',
@@ -790,6 +918,7 @@ describeWithDatabase('matriz de acceso de las rutas de profesor', () => {
 
   afterAll(async () => {
     await f?.cleanup()
+    await prisma.user.deleteMany({ where: { id: { in: routeTeachers } } })
     await app?.close()
   })
 
@@ -811,6 +940,7 @@ describeWithDatabase('matriz de acceso de las rutas de profesor', () => {
         const student = await send(req, 'student')
         const other = await send(req, 'other')
         const owner = await send(req, 'owner')
+        await routeCase.after?.(f)
 
         expect({
           anonymous: anonymous.statusCode,
@@ -1197,7 +1327,7 @@ describeWithDatabase('matriz de acceso del profesorado añadido a una clase', ()
     await prisma.class.deleteMany({ where: { teacherId: { in: coIds } } })
     await prisma.user.deleteMany({ where: { createdById: { in: coIds } } })
     await f?.cleanup()
-    await prisma.user.deleteMany({ where: { id: { in: coIds } } })
+    await prisma.user.deleteMany({ where: { id: { in: [...coIds, ...routeTeachers] } } })
     await app?.close()
   })
 
@@ -1262,6 +1392,7 @@ describeWithDatabase('matriz de acceso del profesorado añadido a una clase', ()
         for (const level of CO_LEVELS) {
           got[level] = (await sendAs(await routeCase.request(f), co[level].token)).statusCode
         }
+        await routeCase.after?.(f)
         expect(got).toEqual(expected)
       })
     }
@@ -1328,6 +1459,25 @@ describeWithDatabase('matriz de acceso del profesorado añadido a una clase', ()
       where: { id: applied.json().application.id },
     })
     expect(application.teacherId).toBe(co.edit.id)
+  })
+
+  it('profesorado → sale de la clase con cualquier nivel; su fila y su vista previa se van', async () => {
+    for (const level of CO_LEVELS) {
+      const teacher = await newTeacher(level)
+      await prisma.classEnrollment.create({
+        data: { classId: f.classId, studentId: teacher.id, isPreview: true },
+      })
+      const left = await sendAs({ method: 'POST', url: `${c(f)}/leave` }, teacher.token)
+      expect(left.statusCode, level).toBe(200)
+      expect(
+        await prisma.classTeacher.count({ where: { classId: f.classId, userId: teacher.id } })
+      ).toBe(0)
+      expect(
+        await prisma.classEnrollment.count({ where: { classId: f.classId, studentId: teacher.id } })
+      ).toBe(0)
+      // Fuera de la clase ya no la encuentra.
+      expect((await sendAs({ method: 'GET', url: c(f) }, teacher.token)).statusCode).toBe(404)
+    }
   })
 
   // ---- Misiones ----

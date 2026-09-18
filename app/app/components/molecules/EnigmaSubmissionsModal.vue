@@ -36,6 +36,8 @@ interface Props {
   showXp?: boolean
   showCoins?: boolean
   showMana?: boolean
+  /** Aprobar pide edición en la clase; sin ella las entregas se ven y se descargan. */
+  canApprove?: boolean
 }
 
 interface Emits {
@@ -49,6 +51,7 @@ const props = withDefaults(defineProps<Props>(), {
   showXp: true,
   showCoins: true,
   showMana: true,
+  canApprove: true,
 })
 const emit = defineEmits<Emits>()
 
@@ -337,23 +340,25 @@ watch(
               >
                 {{ t('teacher.components.enigma_submissions_modal.download') }}
               </Button>
-              <Button
-                v-if="editingSubmissionId !== submission.id"
-                variant="primary"
-                size="sm"
-                @click="startEditing(submission)"
-              >
-                {{ t('teacher.components.enigma_submissions_modal.grade') }}
-              </Button>
-              <Button v-else variant="outline" size="sm" @click="cancelEditing">
-                {{ t('common.actions.cancel') }}
-              </Button>
+              <template v-if="canApprove">
+                <Button
+                  v-if="editingSubmissionId !== submission.id"
+                  variant="primary"
+                  size="sm"
+                  @click="startEditing(submission)"
+                >
+                  {{ t('teacher.components.enigma_submissions_modal.grade') }}
+                </Button>
+                <Button v-else variant="outline" size="sm" @click="cancelEditing">
+                  {{ t('common.actions.cancel') }}
+                </Button>
+              </template>
             </div>
           </div>
 
           <!-- Inline review: % completado → escala todas las recompensas -->
           <Transition name="expand">
-            <div v-if="editingSubmissionId === submission.id" class="px-4 pb-4 pt-0">
+            <div v-if="canApprove && editingSubmissionId === submission.id" class="px-4 pb-4 pt-0">
               <div class="pt-3 border-t border-gray-100 space-y-3">
                 <!-- Selector de porcentaje -->
                 <div>
