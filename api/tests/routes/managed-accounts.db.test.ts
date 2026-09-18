@@ -32,7 +32,7 @@ import { studentsRoutes } from '../../src/modules/students/students.routes.js'
 import { authRoutes } from '../../src/modules/auth/auth.routes.js'
 import { hashPassword, verifyPassword } from '../../src/utils/password.js'
 import { invalidateSettingsCache } from '../../src/modules/settings/settings.service.js'
-import { passwordChangeGate } from '../../src/utils/password-change-gate.js'
+import { sessionGate } from '../../src/utils/session-gate.js'
 import { resetRateLimits } from '../../src/utils/rate-limit.js'
 
 describeWithDatabase('cuentas de alumnado sin correo', () => {
@@ -78,7 +78,7 @@ describeWithDatabase('cuentas de alumnado sin correo', () => {
   beforeAll(async () => {
     app = await buildApp(async instance => {
       await instance.register(cookie)
-      instance.addHook('onRequest', passwordChangeGate)
+      instance.addHook('onRequest', sessionGate)
       await instance.register(authRoutes, { prefix: '/auth' })
       await instance.register(teacherRoutes, { prefix: '/teacher' })
       await instance.register(studentsRoutes, { prefix: '/students' })

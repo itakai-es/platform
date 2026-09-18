@@ -83,3 +83,8 @@ aparte de tu red — ITAKAI solo necesita saber su dominio con esas variables.
   solas al arrancar.
 - **Prioridad de configuración**: los valores del panel (en base de datos) tienen
   prioridad sobre el `.env`, que solo aporta los defaults de arranque.
+- **Permisos, cuentas y privacidad**: cómo se reparte el acceso del profesorado a
+  cada clase, las cuentas de alumnado sin correo, los límites de intentos, la
+  variable `TRUST_PROXY` si hay más proxies delante de nginx, qué carpetas del
+  almacenamiento deben ser privadas y qué revisar (textos legales, responsable
+  del tratamiento) están en [docs/permisos-y-cuentas.md](docs/permisos-y-cuentas.md).

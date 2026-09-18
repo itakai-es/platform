@@ -92,7 +92,7 @@ export async function changeOwnPassword(
 
   if (!user.passwordHash) {
     throw new ValidationError(
-      'Tu cuenta entra con Google y no tiene contraseña. Crea una desde «He olvidado mi contraseña».',
+      'Tu cuenta entra con Google y no tiene contraseña. Crea una desde «¿Olvidaste tu contraseña?».',
       'PASSWORD_NOT_SET'
     )
   }

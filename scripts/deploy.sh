@@ -72,6 +72,13 @@ if $do_api || $do_migrate || $do_env; then
   ok "api/.env.prod define la conexión a itakai_prod."
 fi
 
+# Los textos legales con marcadores pendientes no salen; se comprueba antes de
+# tocar nada, para no dejar la API desplegada y el frontend a medias.
+if $do_app; then
+  log "Comprobando que la versión se puede publicar…"
+  python3 scripts/release-check.py || fail "La versión no se puede publicar todavía (ver arriba)."
+fi
+
 # Build first so the migrate step uses the new image (with new migration files).
 if $do_api; then
   log "Rebuilding API image…"

@@ -13,6 +13,7 @@ import { generateAccessToken, TokenError } from '../../utils/tokens.js'
 import { env } from '../../config/env.js'
 import { assertRateLimit, recordRateLimit } from '../../utils/rate-limit.js'
 import { RateLimitError } from '../../utils/errors.js'
+import { rateLimitOrigin } from '../../utils/trust-proxy.js'
 
 // ==================== COOKIE CONFIG ====================
 
@@ -104,17 +105,23 @@ function loginAttemptLimits(identifier: string, ip?: string): LoginAttemptLimit[
   const limits: LoginAttemptLimit[] = [
     { key: `login:identifier:${identifier.toLowerCase()}`, limit: LOGIN_FAILURE_BY_IDENTIFIER },
   ]
-  if (ip) limits.push({ key: `login:origin:${ip}`, limit: LOGIN_FAILURE_BY_ORIGIN })
+  if (ip) {
+    limits.push({ key: `login:origin:${rateLimitOrigin(ip)}`, limit: LOGIN_FAILURE_BY_ORIGIN })
+  }
   return limits
 }
 
 /**
- * Extract request context (IP, User-Agent) for security tracking
+ * Extract request context (IP, User-Agent) for security tracking.
+ *
+ * La dirección es siempre `request.ip`, que ya resuelve el proxy de confianza
+ * (ver utils/trust-proxy.ts); leer `X-Forwarded-For` a mano sería guardar lo que
+ * el cliente quiera escribir.
  */
 function getRequestContext(request: FastifyRequest) {
   return {
     userAgent: request.headers['user-agent'] || undefined,
-    ipAddress: request.ip || request.headers['x-forwarded-for']?.toString() || undefined,
+    ipAddress: request.ip || undefined,
   }
 }
 
@@ -240,11 +247,7 @@ export async function authRoutes(fastify: FastifyInstance) {
         return reply.status(400).send({ message: 'Credencial de Google requerida' })
       }
 
-      const context = {
-        userAgent: request.headers['user-agent'],
-        ipAddress: request.ip,
-      }
-
+      const context = getRequestContext(request)
       const result = await authService.loginWithGoogle(body.credential, context)
 
       // Set refresh token in HttpOnly cookie

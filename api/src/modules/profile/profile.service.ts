@@ -143,7 +143,7 @@ export class ProfileService {
 
     if (!user.passwordHash) {
       throw new ValidationError(
-        'Tu cuenta entra con Google y no tiene contraseña. Crea una desde «He olvidado mi contraseña» para poder cambiar el correo.',
+        'Tu cuenta entra con Google y no tiene contraseña. Crea una desde «¿Olvidaste tu contraseña?» para poder cambiar el correo.',
         'PASSWORD_NOT_SET'
       )
     }

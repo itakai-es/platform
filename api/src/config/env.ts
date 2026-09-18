@@ -16,6 +16,10 @@ const envSchema = z
     RESEND_API_KEY: z.string().optional(),
     EMAIL_FROM: z.string().default('ITAKAI <noreply@itakai.es>'),
 
+    // De qué proxy se fía la API para saber la dirección real del cliente (ver
+    // utils/trust-proxy.ts). Sin definir: solo del salto inmediato en red privada.
+    TRUST_PROXY: z.string().optional(),
+
     // Interruptor de las tareas periódicas (recordatorios de entrega, limpiezas).
     // Solo las arranca `start()`, así que los tests nunca las ven; esto está
     // para poder apagarlas en caliente o dejarlas en una sola instancia.

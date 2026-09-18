@@ -200,7 +200,7 @@ export async function resetManagedStudentPassword(
 
   if (student.accountType !== 'managed') {
     throw new ValidationError(
-      'Esta cuenta tiene correo: su dueño la recupera desde «He olvidado mi contraseña»',
+      'Esta cuenta tiene correo: su dueño la recupera desde «¿Olvidaste tu contraseña?»',
       'NOT_A_MANAGED_ACCOUNT'
     )
   }

@@ -162,7 +162,7 @@ export class AuthService {
   /**
    * La cuenta que corresponde a un correo de Google, creándola si hace falta y
    * si la instancia admite registros. Una cuenta creada así no tiene contraseña:
-   * entra siempre por Google hasta que se cree una con «He olvidado mi contraseña».
+   * entra siempre por Google hasta que se cree una con «¿Olvidaste tu contraseña?».
    */
   private async findOrCreateGoogleUser(googleEmail: string, googleName?: string) {
     const email = normalizeEmail(googleEmail)
@@ -388,6 +388,10 @@ export class AuthService {
     if (!user || !user.email || user.email !== payload.email) {
       throw new Error('No se pudo validar el reseteo de contraseña')
     }
+    // Si la contraseña ha cambiado desde que se pidió el enlace, ya no vale.
+    if ((user.passwordChangedAt?.getTime() ?? null) !== payload.passwordChangedAt) {
+      throw new TokenError('TOKEN_INVALID', 'Este enlace ya no es válido. Pide uno nuevo.')
+    }
 
     return setUserPassword(user.id, password)
   }
@@ -413,6 +417,7 @@ export class AuthService {
     const resetToken = generatePasswordResetToken({
       userId: user.id,
       email: user.email,
+      passwordChangedAt: user.passwordChangedAt?.getTime() ?? null,
     })
 
     const appOrigin = await getAppOrigin()

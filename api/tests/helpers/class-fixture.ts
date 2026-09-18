@@ -1,11 +1,12 @@
 import './test-db.js'
-import Fastify, { type FastifyInstance } from 'fastify'
+import Fastify, { type FastifyInstance, type FastifyServerOptions } from 'fastify'
 import jwt from '@fastify/jwt'
 import multipart from '@fastify/multipart'
 import { randomUUID } from 'node:crypto'
 import { ZodError } from 'zod'
 import { prisma } from '../../src/config/database.js'
 import { HttpError } from '../../src/utils/errors.js'
+import { authenticate } from '../../src/utils/session-gate.js'
 import { createClassWithOwner } from '../../src/utils/class-owner.js'
 
 /**
@@ -32,9 +33,15 @@ export interface ClassFixture {
   cleanup: () => Promise<void>
 }
 
-/** Fastify con el mismo `authenticate` y el mismo criterio de errores que index.ts, y JWT de verdad. */
-export async function buildApp(register: (app: FastifyInstance) => Promise<void>) {
-  const app = Fastify()
+/**
+ * Fastify con el mismo `authenticate` y el mismo criterio de errores que index.ts, y JWT de verdad.
+ * `options` va tal cual a Fastify (para probar `trustProxy`, por ejemplo).
+ */
+export async function buildApp(
+  register: (app: FastifyInstance) => Promise<void>,
+  options: FastifyServerOptions = {}
+) {
+  const app = Fastify(options)
   app.setErrorHandler((error: unknown, _request, reply) => {
     if (error instanceof HttpError) {
       return reply.status(error.statusCode).send({ message: error.message, code: error.code })
@@ -51,13 +58,7 @@ export async function buildApp(register: (app: FastifyInstance) => Promise<void>
   })
   await app.register(multipart)
   await app.register(jwt, { secret: process.env.JWT_ACCESS_SECRET! })
-  app.decorate('authenticate', async function (request: any, reply: any) {
-    try {
-      await request.jwtVerify()
-    } catch {
-      reply.status(401).send({ message: 'No autorizado' })
-    }
-  })
+  app.decorate('authenticate', authenticate)
   await register(app)
   await app.ready()
   return app

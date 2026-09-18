@@ -153,21 +153,44 @@ describe('generateTokens', () => {
 
 describe('Password Reset Tokens', () => {
   it('should generate a valid password reset token', () => {
-    const token = generatePasswordResetToken({ userId: 'user-1', email: 'test@test.com' })
+    const token = generatePasswordResetToken({
+      userId: 'user-1',
+      email: 'test@test.com',
+      passwordChangedAt: null,
+    })
     expect(typeof token).toBe('string')
     expect(token.split('.')).toHaveLength(3)
   })
 
   it('should verify a valid password reset token', () => {
-    const token = generatePasswordResetToken({ userId: 'user-1', email: 'test@test.com' })
+    const token = generatePasswordResetToken({
+      userId: 'user-1',
+      email: 'test@test.com',
+      passwordChangedAt: null,
+    })
     const decoded = verifyPasswordResetToken(token)
     expect(decoded.userId).toBe('user-1')
     expect(decoded.email).toBe('test@test.com')
     expect(decoded.type).toBe('password_reset')
   })
 
+  it('no se verifica como token de acceso, ni un token de acceso como enlace', () => {
+    const reset = generatePasswordResetToken({
+      userId: 'user-1',
+      email: 'test@test.com',
+      passwordChangedAt: null,
+    })
+    expect(() => verifyAccessToken(reset)).toThrow()
+    const access = generateAccessToken({ id: 'user-1', role: 'student' })
+    expect(() => verifyPasswordResetToken(access)).toThrow()
+  })
+
   it('should reject a tampered reset token', () => {
-    const token = generatePasswordResetToken({ userId: 'user-1', email: 'test@test.com' })
+    const token = generatePasswordResetToken({
+      userId: 'user-1',
+      email: 'test@test.com',
+      passwordChangedAt: null,
+    })
     expect(() => verifyPasswordResetToken(token + 'x')).toThrow()
   })
 })

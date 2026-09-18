@@ -27,7 +27,8 @@ import { isPublicUploadPath } from './modules/storage/storage.service.js'
 import { registerNotificationJobs } from './modules/notifications/notifications.jobs.js'
 import { startScheduler, stopScheduler } from './utils/scheduler.js'
 import { HttpError } from './utils/errors.js'
-import { passwordChangeGate } from './utils/password-change-gate.js'
+import { authenticate, sessionGate } from './utils/session-gate.js'
+import { resolveTrustProxy } from './utils/trust-proxy.js'
 import { ZodError } from 'zod'
 import { Prisma } from './generated/prisma/client.js'
 
@@ -62,6 +63,9 @@ async function buildServer() {
     },
     // Increase body limit to 10MB for base64 images in JSON payloads
     bodyLimit: 10 * 1024 * 1024,
+    // `request.ip` es la dirección del cliente que da el proxy de delante, sin
+    // hacer caso a la cabecera que mande el propio cliente (ver utils/trust-proxy.ts).
+    trustProxy: resolveTrustProxy(env.TRUST_PROXY),
   })
 
   // Global error handler — last-resort net so no raw error ever leaks to the user.
@@ -175,14 +179,8 @@ async function buildServer() {
     secret: env.JWT_ACCESS_SECRET,
   })
 
-  // Auth middleware decorator
-  fastify.decorate('authenticate', async function (request, reply) {
-    try {
-      await request.jwtVerify()
-    } catch (err) {
-      reply.status(401).send({ message: 'No autorizado' })
-    }
-  })
+  // Auth middleware decorator (ver utils/session-gate.ts)
+  fastify.decorate('authenticate', authenticate)
 
   // Modo mantenimiento (configurable desde el panel). Si está activo se bloquea
   // a todos con 503, salvo administradores — que pueden seguir entrando para
@@ -223,9 +221,10 @@ async function buildServer() {
     })
   })
 
-  // Cambio de contraseña pendiente: mientras lo esté, la sesión no sirve para
-  // nada más (ver utils/password-change-gate.ts).
-  fastify.addHook('onRequest', passwordChangeGate)
+  // Cada petición con sesión comprueba que la cuenta sigue activa, que la sesión
+  // es posterior al último cambio de contraseña y que no tiene uno pendiente
+  // (ver utils/session-gate.ts).
+  fastify.addHook('onRequest', sessionGate)
 
   // Role middleware helper
   const requireRole = (...roles: string[]) => {

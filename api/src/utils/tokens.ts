@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken'
+import { createHmac } from 'node:crypto'
 import { env } from '../config/env.js'
 import { nanoid } from 'nanoid'
 
@@ -29,6 +30,12 @@ export interface RefreshTokenData {
 export interface PasswordResetTokenPayload {
   userId: string
   email: string
+  /**
+   * Fecha del último cambio de contraseña (ms) cuando se pidió el enlace. Si ya
+   * no coincide, la contraseña ha cambiado desde entonces (con este enlace o de
+   * otra forma) y el enlace deja de valer: así sirve una sola vez.
+   */
+  passwordChangedAt: number | null
   type: 'password_reset'
 }
 
@@ -36,6 +43,13 @@ export interface PasswordResetTokenPayload {
 
 const ACCESS_TOKEN_ALGORITHM = 'HS256' as const
 const PASSWORD_RESET_EXPIRES_IN = '1h'
+
+/**
+ * El enlace de recuperación se firma con una clave derivada, no con la del token
+ * de acceso: así nunca puede pasar por un token de sesión, ni al revés.
+ */
+const passwordResetSecret = () =>
+  createHmac('sha256', env.JWT_ACCESS_SECRET).update('password-reset').digest('hex')
 
 // ==================== DURATION PARSING ====================
 
@@ -156,7 +170,7 @@ export function generateTokens(payload: TokenPayload, existingFamily?: string): 
 export function generatePasswordResetToken(payload: Omit<PasswordResetTokenPayload, 'type'>): string {
   return jwt.sign(
     { ...payload, type: 'password_reset' },
-    env.JWT_ACCESS_SECRET,
+    passwordResetSecret(),
     {
       algorithm: ACCESS_TOKEN_ALGORITHM,
       expiresIn: PASSWORD_RESET_EXPIRES_IN,
@@ -166,7 +180,7 @@ export function generatePasswordResetToken(payload: Omit<PasswordResetTokenPaylo
 
 export function verifyPasswordResetToken(token: string): PasswordResetTokenPayload {
   try {
-    const decoded = jwt.verify(token, env.JWT_ACCESS_SECRET, {
+    const decoded = jwt.verify(token, passwordResetSecret(), {
       algorithms: [ACCESS_TOKEN_ALGORITHM],
     }) as PasswordResetTokenPayload
 
