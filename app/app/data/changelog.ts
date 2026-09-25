@@ -4,7 +4,9 @@
  * Fuente única de la página "Acerca de". Para publicar una versión nueva:
  *   1. Añade su entrada AL PRINCIPIO del array `changelog` (más reciente primero).
  *   2. Sube el número en `app/package.json` y `api/package.json` para que coincida.
- *   3. Etiqueta la release en git: `git tag vX.Y.Z && git push --tags`.
+ *   3. Comprueba que `python3 scripts/release-check.py` pasa (textos legales sin
+ *      marcadores «[PENDIENTE»). Si no pasa, la versión no sale.
+ *   4. Etiqueta la release en git: `git tag vX.Y.Z && git push --tags`.
  *
  * Versionado SemVer (MAJOR.MINOR.PATCH). La app está en BETA, así que estamos en
  * la serie 0.x.x (major 0 = desarrollo inicial). El 1.0.0 se reservará para cuando
@@ -38,6 +40,101 @@ export interface ChangelogEntry {
 }
 
 export const changelog: ChangelogEntry[] = [
+  {
+    version: '0.4.0',
+    date: '2026-09-25',
+    title: 'Clases compartidas y cuentas sin correo',
+    changes: [
+      {
+        type: 'new',
+        text: 'Una clase puede tener varios profesores. En los ajustes de la clase, sección «Profesorado», añades a un compañero con el correo de su cuenta. Entra al momento y recibe un aviso.',
+      },
+      {
+        type: 'new',
+        text: 'Cada profesor tiene un perfil (titular, sustituto o en prácticas) y un nivel de acceso: lectura, edición o administración. El perfil propone un nivel, pero puedes cambiarlo. Cada uno ve solo los botones que su nivel le permite usar.',
+      },
+      {
+        type: 'new',
+        text: 'Quien crea la clase es su propietario. Puede pasar la propiedad a otro profesor con administración. El resto del profesorado puede salir de la clase cuando quiera.',
+      },
+      {
+        type: 'new',
+        text: 'Nueva pestaña «Historial» en cada clase: qué ha hecho cada profesor y cuándo. Puedes filtrar por profesor y por tipo de acción.',
+      },
+      {
+        type: 'new',
+        text: 'Cuentas para alumnado sin correo. En «Invitar», pestaña «Crear cuentas», las creas una a una o pegando una lista de hasta 50 nombres. ITAKAI propone un usuario y una contraseña temporal para cada alumno.',
+      },
+      {
+        type: 'new',
+        text: 'Al crear las cuentas verás la hoja de credenciales. Puedes copiarlas todas o una a una, descargar la lista o imprimirla. Las contraseñas solo se ven en ese momento: guárdalas bien.',
+      },
+      {
+        type: 'new',
+        text: 'La primera vez que el alumno entra, con su usuario y su contraseña temporal, tiene que cambiar la contraseña.',
+      },
+      {
+        type: 'new',
+        text: 'Cada alumno tiene un menú en la clase para restablecer su contraseña (en las cuentas sin correo creadas en esa clase), cambiar su alias o quitarlo de la clase.',
+      },
+      {
+        type: 'new',
+        text: 'El alumnado ve quién es el profesorado de su clase y quién le ha aprobado una entrega o le ha aplicado un comportamiento.',
+      },
+      {
+        type: 'improved',
+        text: 'Para cambiar tu correo tienes que escribir tu contraseña actual.',
+      },
+      {
+        type: 'improved',
+        text: 'Los archivos de las entregas y los documentos de las misiones solo se abren con la sesión iniciada.',
+      },
+      {
+        type: 'improved',
+        text: 'Los lectores de pantalla leen en voz alta los errores de los formularios.',
+      },
+      {
+        type: 'improved',
+        text: 'El menú lateral agrupa sus entradas bajo títulos («Clases», «Ayuda», «Cuenta»), también en el móvil.',
+      },
+      {
+        type: 'improved',
+        text: 'Las tarjetas de clase y la cabecera de cada clase resumen el horario en días y horas.',
+      },
+      {
+        type: 'improved',
+        text: 'Textos de toda la aplicación repasados en los diez idiomas: títulos y botones con mayúscula solo al principio.',
+      },
+      {
+        type: 'fixed',
+        text: 'El enlace del correo de «¿Olvidaste tu contraseña?» llevaba a una página vacía. Ahora abre la pantalla de crear la contraseña nueva, también en los correos ya enviados.',
+      },
+      {
+        type: 'fixed',
+        text: 'El alias que la clase reparte al azar podía repetirse entre compañeros. Ahora cada alumno recibe uno distinto.',
+      },
+      {
+        type: 'fixed',
+        text: 'En pantallas bajas, los botones de idioma y accesibilidad ya no tapan el formulario de entrada, el menú lateral enseña su barra de desplazamiento cuando la lista sigue, y el primer paso de crear una clase ya no se sale por debajo.',
+      },
+      {
+        type: 'fixed',
+        text: 'El horario de la clase no siempre se guardaba desde «Ajustes», y el calendario a veces salía vacío. Ahora se guarda y muestra el horario que ya tenías.',
+      },
+      {
+        type: 'fixed',
+        text: 'Cuando el asistente de IA fallaba, a veces usaba un mensaje de disculpa como historia o como nombre de la clase. Ahora te avisa del error y puedes volver a intentarlo.',
+      },
+      {
+        type: 'fixed',
+        text: 'Al crear una misión desde el asistente, la portada se perdía: la misión nacía sin imagen y había que volver a ponerla editándola. Ahora se guarda a la primera.',
+      },
+      {
+        type: 'fixed',
+        text: 'En la vista previa del asistente de misiones faltaban las monedas y el maná que se ganan; ahora se ven junto a la experiencia (XP).',
+      },
+    ],
+  },
   {
     version: '0.3.0',
     date: '2026-09-16',

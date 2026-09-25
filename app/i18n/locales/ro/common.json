@@ -17,6 +17,8 @@
       "section_management": "Administrare",
       "section_content": "Conținut",
       "section_system": "Sistem",
+      "section_classes": "Clase",
+      "section_account": "Cont",
       "profile": "Profilul meu",
       "logout": "Deconectare"
     },
@@ -64,10 +66,8 @@
       "submission_student_approved": "Lucrarea trimisă de {name} a fost aprobată (+{xp} XP)",
       "download_not_found": "Fișierul de descărcat nu a fost găsit",
       "download_error": "Fișierul nu a putut fi descărcat",
-      "join_request_accepted": "{name} a fost acceptat în clasă",
-      "join_request_rejected": "Cerere respinsă",
-      "join_request_accept_error": "Eroare la acceptarea cererii",
-      "join_request_reject_error": "Eroare la respingerea cererii"
+      "download_no_access": "Nu ai acces la acest fișier",
+      "popup_blocked": "Permite ferestrele pop-up pentru a deschide fișierul"
     },
     "notifications": {
       "title": "Notificări",
@@ -134,7 +134,7 @@
       "feature_ai_desc": "Asistenți care personalizează învățarea pentru fiecare elev",
       "profiles_title": "Alege-ți profilul ca să începi",
       "about_title": "Ce este ITAKAI?",
-      "about_description_1": "ITAKAI este evoluția <strong>MyClassGame</strong>, potențată cu <strong>Inteligență Artificială</strong>. O platformă educațională gamificată care transformă învățământul profesional într-o experiență imersivă.",
+      "about_description_1": "ITAKAI este evoluția <strong>MyClassGame</strong>, potențată cu <strong>inteligență artificială</strong>. O platformă educațională gamificată care transformă învățământul profesional într-o experiență imersivă.",
       "about_description_2": "Generare automată de conținut, asistenți IA personalizați pentru fiecare elev și analiză predictivă a performanței. Totul integrat într-un ecosistem în care a învăța este o aventură.",
       "stat_students": "Elevi",
       "stat_teachers": "Profesori",
@@ -211,7 +211,10 @@
       "description": "Distribuie acest cod elevilor tăi ca să se alăture clasei:",
       "copy_code": "Copiază codul",
       "code_copied": "Codul a fost copiat în clipboard",
-      "copy_error": "Eroare la copierea codului"
+      "copy_error": "Eroare la copierea codului",
+      "tabs_label": "Moduri de a invita",
+      "tab_code": "Codul clasei",
+      "tab_accounts": "Creează conturi"
     },
     "under_development": {
       "back_to_dashboard": "Înapoi acasă"
@@ -359,6 +362,83 @@
     },
     "student_preview": {
       "banner": "Vezi platforma ca elev (demo)"
+    },
+    "change_email": {
+      "title": "E-mail",
+      "current_email": "E-mail actual",
+      "new_email": "E-mail nou",
+      "password": "Parola actuală",
+      "password_hint": "Ți-o cerem ca să confirmăm că tu ești cel care schimbă e-mailul.",
+      "submit": "Schimbă e-mailul",
+      "success": "E-mail actualizat. De acum intri cu cel nou.",
+      "errors": {
+        "email_invalid": "Scrie un e-mail valid.",
+        "email_same": "Acesta este deja e-mailul tău.",
+        "password_required": "Scrie parola ta actuală.",
+        "password_wrong": "Parola nu este corectă.",
+        "password_not_set": "Contul tău intră cu Google și nu are încă o parolă. Deconectează-te, creează una din „Ai uitat parola?” și încearcă din nou.",
+        "email_in_use": "Acest e-mail este deja folosit de alt cont.",
+        "generic": "E-mailul nu a putut fi schimbat. Încearcă din nou."
+      }
+    },
+    "file_unavailable": {
+      "title": "Linkul nu mai este valid",
+      "message": "Linkul pentru deschiderea fișierului a expirat. Întoarce-te la misiune și deschide-l din nou."
+    },
+    "class_teachers": {
+      "owner": "Proprietar",
+      "profiles": {
+        "titular": "Titular",
+        "sustituto": "Suplinitor",
+        "practicas": "Practică"
+      },
+      "access": {
+        "read": "Citire",
+        "edit": "Editare",
+        "admin": "Administrare"
+      }
+    },
+    "pagination": {
+      "label": "Paginare",
+      "page_of": "Pagina {page} din {total}",
+      "previous": "Anterioara",
+      "next": "Următoarea"
+    },
+    "account_deletion": {
+      "blocked_self": "Încă nu îți poți șterge contul: ești proprietarul acestor clase și în ele nu mai are nimeni altcineva acces de administrare. Dă acces de administrare altui profesor sau transferă-i proprietatea, apoi revino aici.",
+      "blocked_admin": "Acest cont nu poate fi șters încă: este proprietarul acestor clase și în ele nu mai are nimeni altcineva acces de administrare. Mai întâi trebuie transferată proprietatea lor altui profesor.",
+      "transfers_self": "Clasele tale vor trece la un alt profesor cu acces de administrare în ele:",
+      "transfers_admin": "Clasele sale vor trece la un alt profesor cu acces de administrare în ele:",
+      "transfer_item": "{class}, la {name}"
+    },
+    "copy": {
+      "label": "Copiază: {what}",
+      "copied": "Copiat în clipboard",
+      "error": "Nu s-a putut copia"
+    },
+    "change_password": {
+      "title": "Parolă",
+      "current_password": "Parola actuală",
+      "new_password": "Parolă nouă",
+      "new_password_placeholder": "Cel puțin {min} caractere",
+      "confirm_password": "Confirmă parola",
+      "confirm_password_placeholder": "Repetă parola nouă",
+      "submit": "Schimbă parola",
+      "success": "Parola a fost schimbată. Pe celelalte dispozitive va trebui să te autentifici din nou.",
+      "errors": {
+        "current_required": "Scrie parola ta actuală.",
+        "current_wrong": "Parola actuală nu este corectă.",
+        "password_not_set": "Contul tău intră cu Google și nu are încă o parolă. Deconectează-te și creează una din „Ai uitat parola?”.",
+        "too_short": "Parola trebuie să aibă cel puțin {min} caractere.",
+        "mismatch": "Parolele nu coincid.",
+        "generic": "Parola nu a putut fi schimbată. Verifică parola actuală și încearcă din nou."
+      }
+    },
+    "filter_bar": {
+      "search": "Caută...",
+      "filters": "Filtre",
+      "filters_count": "Filtre ({count})",
+      "clear": "Șterge filtrele"
     }
   }
 }

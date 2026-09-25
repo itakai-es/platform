@@ -1,17 +1,36 @@
+/** Quién lleva la cuenta: su dueño (`self`) o el profesorado (`managed`). */
+export type AccountType = 'self' | 'managed'
+
 export interface User {
   id: string
-  email: string
+  /** Nulo en una cuenta que entra con usuario: no tiene correo. */
+  email: string | null
   name: string
-  username?: string
+  /** Nulo en una cuenta que se registró con su correo. */
+  username: string | null
   role: 'teacher' | 'student' | 'admin' | null
+  accountType?: AccountType
   avatar?: string
   isOnboarded: boolean
+  /** Contraseña temporal pendiente de cambiar: hasta que se cambie, no se puede hacer nada más. */
+  mustChangePassword?: boolean
   createdAt: Date
 }
 
 export interface LoginCredentials {
-  email: string
+  /** El correo o el usuario: la API decide por la arroba. */
+  identifier: string
   password: string
+}
+
+/**
+ * Credenciales de una cuenta que lleva el profesorado, tal y como llegan del
+ * servidor al crearla o al restablecerla. La contraseña temporal solo viaja en
+ * esa respuesta: no se guarda en ningún sitio y, si se pierde, se restablece.
+ */
+export interface ManagedCredentials {
+  student: { id: string; name: string; username: string }
+  temporaryPassword: string
 }
 
 export interface SignupData {

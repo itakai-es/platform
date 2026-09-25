@@ -1,19 +1,19 @@
 {
   "admin": {
     "dashboard": {
-      "title": "Administratzailearen Panela",
+      "title": "Administratzailearen panela",
       "subtitle": "ITAKAI sistemaren kontrol-panela",
       "activity": {
-        "title": "Sistemaren Jarduera",
+        "title": "Sistemaren jarduera",
         "period_24h": "Azken 24 orduak",
         "period_week": "Azken astea",
         "period_month": "Azken hilabetea"
       },
       "quick_actions": {
-        "manage_users": "Erabiltzaileak Kudeatu"
+        "manage_users": "Erabiltzaileak kudeatu"
       },
       "system_status": {
-        "title": "Sistemaren Egoera",
+        "title": "Sistemaren egoera",
         "operational": "Operatibo",
         "degraded": "Degradatuta",
         "down": "Zerbitzutik kanpo",
@@ -21,19 +21,19 @@
         "empty": "Ez dago zerbitzu eskuragarririk"
       },
       "meta": {
-        "title": "Admin Panela | ITAKAI",
+        "title": "Admin panela | ITAKAI",
         "description": "ITAKAI sistemaren kontrol-panela. Kudeatu erabiltzaileak, ikastetxeak eta monitorizatu plataformaren egoera."
       }
     },
     "users": {
-      "title": "Erabiltzaileen Kudeaketa",
+      "title": "Erabiltzaileen kudeaketa",
       "meta": {
-        "title": "Erabiltzaileen Kudeaketa | ITAKAI Admin",
+        "title": "Erabiltzaileen kudeaketa | ITAKAI Admin",
         "description": "Administratu sistemako erabiltzaile guztiak, sortu profil berriak, editatu rolak eta monitorizatu jarduera."
       },
       "subtitle": "Plataformako erabiltzaile guztiak administratu",
       "filters": {
-        "search_placeholder": "Bilatu izenez edo emailez...",
+        "search_placeholder": "Bilatu izenaren, emailaren edo erabiltzailearen arabera...",
         "all_roles": "Rol guztiak",
         "students": "Ikasleak",
         "teachers": "Irakasleak",
@@ -42,7 +42,11 @@
         "active": "Aktibo",
         "suspended": "Etenda",
         "inactive": "Inaktibo",
-        "clear": "Iragazkiak garbitu"
+        "clear": "Iragazkiak garbitu",
+        "all_account_types": "Kontu guztiak",
+        "self_accounts": "Emailarekin",
+        "managed_accounts": "Posta gabe",
+        "orphan_accounts": "Posta eta klaserik gabe"
       },
       "roles": {
         "student": "Ikaslea",
@@ -52,11 +56,40 @@
       "card": {
         "status": "Egoera",
         "classes": "Klaseak",
-        "last_login": "Azken sarrera"
+        "last_login": "Azken sarrera",
+        "managed": "Posta gabe",
+        "home_class": "{name} klasetik kudeatzen da",
+        "no_home_class": "Jatorrizko klaserik gabe"
       },
       "empty": {
         "title": "Ez da erabiltzailerik aurkitu",
         "description": "Ez dago hautatutako iragazkiekin bat datorren erabiltzailerik."
+      },
+      "create": {
+        "button": "Kontu berria posta gabe",
+        "title": "Ikaslearen kontu berria",
+        "note": "Postarik ez duenarentzat: bere erabiltzailearekin eta behin-behineko pasahitz batekin sartzen da, eta sartzean aldatu behar du.",
+        "name": "Izena",
+        "name_placeholder": "Izena eta abizena",
+        "home_class": "Jatorrizko klasea",
+        "home_class_placeholder": "Aukeratu klase bat",
+        "home_class_hint": "Ikaslea klase horretan matrikulatzen da eta bertako irakasleek kudeatzen dute kontua.",
+        "username": "Erabiltzailea (aukerakoa)",
+        "username_placeholder": "Sistemak proposatzen du",
+        "username_hint": "Hutsik utzita, sistemak bat proposatzen du. Idazten duzuna hartuta badago, atzizki bat gehitzen zaio.",
+        "submit": "Sortu kontua",
+        "errors": {
+          "name": "Idatzi izena, gutxienez 2 karaktere",
+          "home_class": "Aukeratu jatorrizko klasea"
+        },
+        "error": "Ezin izan da kontua sortu."
+      },
+      "class_search": {
+        "placeholder": "Bilatu klasea, irakaslea edo kodea",
+        "searching": "Bilatzen…",
+        "no_results": "Ez dago bat datorren klaserik",
+        "more": "Klase gehiago daude: idatzi gehiago bilaketa zehazteko",
+        "option_hint": "{teacher} · ikaslerik gabe | {teacher} · ikasle 1 | {teacher} · {count} ikasle"
       },
       "actions": {
         "suspend_title": "Erabiltzailea eten",
@@ -64,16 +97,37 @@
         "suspend_confirm": "Eten",
         "delete_title": "Erabiltzailea ezabatu",
         "delete_message": "Ziur zaude {name} ezabatu nahi duzula? Ekintza hau ezin da desegin.",
-        "delete_confirm": "Ezabatu"
+        "delete_confirm": "Ezabatu",
+        "menu_label": "{name}(r)en ekintzak",
+        "suspend": "Eten",
+        "activate": "Aktibatu",
+        "delete": "Ezabatu",
+        "reset_password": "Pasahitza berrezarri",
+        "reset_password_title": "Pasahitza berrezarri",
+        "reset_password_message": "{name}(r)i behin-behineko pasahitz bat emango zaio, bere saioak itxiko dira eta sartzean aldatu beharko du.",
+        "reset_password_confirm": "Berrezarri",
+        "credentials_title": "Behin-behineko pasahitza",
+        "credentials_note": "Idatzi orain: ez da berriro erakutsiko. Galtzen bada, berriro berrezarri.",
+        "credentials_username": "Erabiltzailea",
+        "credentials_password": "Behin-behineko pasahitza",
+        "home_class": "Jatorrizko klasea aldatu",
+        "home_class_title": "Jatorrizko klasea",
+        "home_class_note": "Irakasleek kontu hau kudeatzen duten klasea da; aldatzean, ikaslea klase berrian matrikulatzen da. Klaserik gabe, administrazioak baino ez du artatzen.",
+        "home_class_none": "Jatorrizko klaserik gabe",
+        "suspend_error": "Ezin izan da kontua eten.",
+        "activate_error": "Ezin izan da kontua aktibatu.",
+        "reset_password_error": "Ezin izan da pasahitza berrezarri.",
+        "home_class_error": "Ezin izan da jatorrizko klasea aldatu.",
+        "delete_error": "Ezin izan da kontua ezabatu."
       },
       "sort": {
         "recent": "Berrienak"
       }
     },
     "classes": {
-      "title": "Klaseen Kudeaketa",
+      "title": "Klaseen kudeaketa",
       "meta": {
-        "title": "Klaseen Kudeaketa | ITAKAI Admin"
+        "title": "Klaseen kudeaketa | ITAKAI Admin"
       },
       "subtitle": "Plataformako klase guztiak ikusi",
       "filters": {
@@ -89,9 +143,9 @@
       }
     },
     "missions": {
-      "title": "Misioen Kudeaketa",
+      "title": "Misioen kudeaketa",
       "meta": {
-        "title": "Misioen Kudeaketa | ITAKAI Admin"
+        "title": "Misioen kudeaketa | ITAKAI Admin"
       },
       "subtitle": "Plataformako misio guztiak ikusi",
       "filters": {
@@ -108,44 +162,8 @@
         "enigmas_desc": "Enigma gehiago"
       }
     },
-    "schools": {
-      "title": "Ikastetxeen Kudeaketa",
-      "meta": {
-        "title": "Ikastetxeen Kudeaketa | ITAKAI Admin",
-        "description": "Administratu sistemako hezkuntza-ikastetxe guztiak, sortu ikastetxe berriak eta monitorizatu haien jarduera."
-      },
-      "subtitle": "Hezkuntza-ikastetxeak administratu",
-      "filters": {
-        "search_placeholder": "Ikastetxea bilatu...",
-        "all_statuses": "Egoera guztiak",
-        "active": "Aktibo",
-        "inactive": "Inaktibo"
-      },
-      "form": {
-        "create_title": "Ikastetxe berria",
-        "edit_title": "Ikastetxea editatu",
-        "name": "Izena",
-        "name_placeholder": "Ikastetxearen izena",
-        "city": "Hiria",
-        "city_placeholder": "Hiria",
-        "country": "Herrialdea",
-        "country_placeholder": "Herrialdea",
-        "save": "Gorde",
-        "cancel": "Utzi"
-      },
-      "actions": {
-        "create": "Ikastetxea sortu",
-        "delete_title": "Ikastetxea ezabatu",
-        "delete_message": "Ziur zaude {name} ezabatu nahi duzula?",
-        "delete_confirm": "Ezabatu"
-      },
-      "empty": {
-        "title": "Ez da ikastetxerik aurkitu",
-        "description": "Ez dago hautatutako iragazkiekin bat datorren ikastetxerik."
-      }
-    },
     "analytics": {
-      "title": "Sistemaren Analitikak",
+      "title": "Sistemaren analitikak",
       "subtitle": "Plataformaren metrikak eta estatistikak",
       "period": {
         "week": "Astea",
@@ -159,27 +177,27 @@
         "uptime": "Erabilgarritasuna"
       },
       "overview": {
-        "total_users": "Erabiltzaileak Guztira",
-        "missions_completed": "Misio Burututakoak",
+        "total_users": "Erabiltzaileak guztira",
+        "missions_completed": "Misio burututakoak",
         "completion_rate": "Burutze-tasa",
         "active_today": "Gaur aktibo"
       },
       "sections": {
-        "system_resources": "Sistemaren Baliabideak",
-        "service_health": "Zerbitzuen Egoera",
+        "system_resources": "Sistemaren baliabideak",
+        "service_health": "Zerbitzuen egoera",
         "response_time": "Erantzun-denbora",
-        "active_users": "Erabiltzaile Aktiboak",
+        "active_users": "Erabiltzaile aktiboak",
         "requests": "Eskaerak",
-        "tokens_over_time": "Kontsumitutako Tokenak",
-        "users_by_role": "Erabiltzaileak Rolaren Arabera",
-        "missions_by_status": "Misioak Egoeraren Arabera",
-        "missions_by_rarity": "Misioak Bakantasunaren Arabera",
-        "ai_usage": "AA-ren Erabilera (Laguntzaileak)"
+        "tokens_over_time": "Kontsumitutako tokenak",
+        "users_by_role": "Erabiltzaileak rolaren arabera",
+        "missions_by_status": "Misioak egoeraren arabera",
+        "missions_by_rarity": "Misioak bakantasunaren arabera",
+        "ai_usage": "AA-ren erabilera (laguntzaileak)"
       },
       "system": {
         "memory": "Memoria",
         "disk": "Diskoa",
-        "db_latency": "BD Latentzia"
+        "db_latency": "BD latentzia"
       },
       "ai": {
         "total_tokens": "Token guztiak",
@@ -199,14 +217,14 @@
         "down": "Eroria"
       },
       "meta": {
-        "title": "Sistemaren Analitikak | ITAKAI Admin",
+        "title": "Sistemaren analitikak | ITAKAI Admin",
         "description": "Ikusi metrika aurreratuak, errendimendu-grafikoak eta plataformaren analisi xeheak."
       }
     },
     "logs": {
-      "title": "Sistemaren Logak",
+      "title": "Sistemaren logak",
       "meta": {
-        "title": "Sistemaren Logak | ITAKAI Admin",
+        "title": "Sistemaren logak | ITAKAI Admin",
         "description": "Berrikusi sistemaren jarduera-erregistroak, ikuskatu erabiltzaileen ekintzak eta diagnostikatu arazo teknikoak."
       },
       "tab": "Jarduera",
@@ -248,7 +266,7 @@
         "success": "OK"
       },
       "categories": {
-        "health_check": "Health Check",
+        "health_check": "Health check",
         "service_status": "Zerbitzu-egoera",
         "security": "Segurtasuna",
         "performance": "Errendimendua",

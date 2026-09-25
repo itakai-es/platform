@@ -262,6 +262,8 @@ pnpm preview
 |---------|-------------|
 | 🤝 [Guía de Contribución](./CONTRIBUTING.md) | Cómo contribuir al proyecto |
 | 🔒 [Seguridad](./SECURITY.md) | Política de seguridad y reporte de vulnerabilidades |
+| 🏫 [Auto-hospedaje](./SELF_HOSTING.md) | Desplegar tu propia instancia con Docker |
+| 🔑 [Permisos y cuentas](./docs/permisos-y-cuentas.md) | Niveles del profesorado, cuentas sin correo y qué revisar al autohospedar |
 | 📋 [Código de Conducta](./CODE_OF_CONDUCT.md) | Reglas de convivencia en el proyecto |
 
 ---

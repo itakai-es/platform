@@ -41,6 +41,87 @@ export interface ClassSettings {
   sounds: boolean
 }
 
+/** Hasta dónde llega un profesor en una clase. Cada nivel incluye los anteriores. */
+export type ClassAccessLevel = 'read' | 'edit' | 'admin'
+
+/** Etiqueta del profesor en la clase. */
+export type ClassTeacherProfile = 'titular' | 'sustituto' | 'practicas'
+
+/** Acceso de quien pide la clase. */
+export interface ClassAccess {
+  access: ClassAccessLevel
+  profile: ClassTeacherProfile
+  isOwner: boolean
+}
+
+/** Un profesor de la clase. `id` es el del usuario. */
+export interface ClassTeacher extends ClassAccess {
+  id: string
+  name: string
+}
+
+/** Un profesor en la sección de profesorado de los ajustes (`GET …/teachers`). */
+export interface ClassTeacherMember extends ClassTeacher {
+  email: string | null
+  addedAt: string
+  endsAt: string | null
+}
+
+/** Profesorado de la clase tal como lo devuelve `GET /teacher/classes/:id/teachers`. */
+export interface ClassTeachersResponse {
+  teachers: ClassTeacherMember[]
+  myAccess: ClassAccess | null
+  canManage: boolean
+}
+
+/** Lo que el alumnado ve de quien imparte su clase: sin correo ni nivel. */
+export interface ClassTeacherPublic {
+  name: string
+  profile: ClassTeacherProfile
+  isOwner: boolean
+}
+
+/** Tipos por los que se filtra el historial: la primera parte de la clave de la acción. */
+export type ClassHistoryType =
+  | 'class'
+  | 'teacher'
+  | 'student'
+  | 'mission'
+  | 'enigma'
+  | 'document'
+  | 'submission'
+  | 'behavior'
+  | 'shop'
+
+/** Una entrada del historial de la clase. El texto lo compone la pantalla con `action` y `params`. */
+export interface ClassHistoryEntry {
+  id: string
+  /** Clave `dominio.verbo`: `submission.approved`, `teacher.added`… */
+  action: string
+  type: ClassHistoryType
+  createdAt: string
+  actor: { id: string | null; name: string; avatar: string | null }
+  /**
+   * Persona sobre la que recae la acción, si sigue existiendo. De un alumno que
+   * ya no está en la clase llega solo el papel, sin id ni nombre.
+   */
+  target: { id: string | null; name: string | null; role: string | null } | null
+  entity: { type: string; id: string | null } | null
+  params: Record<string, unknown>
+}
+
+export interface ClassHistoryResponse {
+  entries: ClassHistoryEntry[]
+  total: number
+  page: number
+  limit: number
+  totalPages: number
+  filters: {
+    actors: { id: string; name: string }[]
+    types: ClassHistoryType[]
+  }
+}
+
 /**
  * Clase/Curso
  */
@@ -68,6 +149,9 @@ export interface Class {
   // Estadísticas calculadas (opcionales, se añaden en el handler)
   stats?: ClassStats
   status?: ClassStatus
+  /** Acceso propio y profesorado: los devuelve la API de profesor en el listado y en el detalle. */
+  myAccess?: ClassAccess | null
+  teachers?: ClassTeacher[]
 }
 
 /**

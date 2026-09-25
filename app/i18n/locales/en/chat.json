@@ -1,7 +1,7 @@
 {
   "chat": {
     "assistant": {
-      "default_name": "AI Assistant",
+      "default_name": "AI assistant",
       "default_title": "Available to help you",
       "default_description": "I'm here to help you with your studies.",
       "itakai_assistant": "ITAKAI Assistant"
@@ -53,7 +53,12 @@
         "Let's plan the lesson!",
         "How can I help you today?"
       ],
-      "admin": ["Need help?", "At your service", "How can I help you?", "I'm here!"]
+      "admin": [
+        "Need help?",
+        "At your service",
+        "How can I help you?",
+        "I'm here!"
+      ]
     },
     "user_subtitles": {
       "teacher": "Teacher",

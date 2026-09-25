@@ -82,6 +82,9 @@
               <th v-if="settings.behaviors" class="px-4 py-3 font-semibold text-center">
                 {{ t('teacher.classes.detail.students.col_behaviors') }}
               </th>
+              <th v-if="showActions" class="px-2 py-3">
+                <span class="sr-only">{{ t('teacher.classes.detail.students.col_actions') }}</span>
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -107,7 +110,19 @@
                     >
                       {{ student.name }}
                     </NuxtLink>
-                    <p class="text-xs text-navy-700/70 truncate">@{{ student.handle }}</p>
+                    <p class="truncate text-xs text-navy-700/70">@{{ student.handle }}</p>
+                    <!-- Las etiquetas, en su línea: así el alias no se corta por ellas -->
+                    <div
+                      v-if="student.accountType === 'managed' || student.pendingSignIn"
+                      class="mt-1 flex flex-wrap gap-1"
+                    >
+                      <Badge v-if="student.accountType === 'managed'" variant="info" size="sm">
+                        {{ t('teacher.classes.detail.students.managed_badge') }}
+                      </Badge>
+                      <Badge v-if="student.pendingSignIn" variant="warning" size="sm">
+                        {{ t('teacher.classes.detail.students.pending_sign_in_badge') }}
+                      </Badge>
+                    </div>
                   </div>
                 </div>
               </td>
@@ -156,6 +171,16 @@
                   <span class="text-error">−{{ student.negativeBehaviors }}</span>
                 </div>
               </td>
+              <td v-if="showActions" class="px-2 py-3 text-right">
+                <StudentActionsMenu
+                  :class-id="classId"
+                  :class-name="className"
+                  :student="student"
+                  :access="myAccess"
+                  @renamed="onRenamed(student, $event)"
+                  @removed="onRemoved(student)"
+                />
+              </td>
             </tr>
           </tbody>
         </table>
@@ -189,6 +214,9 @@
         @student-click="viewStudentProfile"
       />
     </template>
+
+    <!-- Resultado de la última acción sobre un alumno, para lectores de pantalla -->
+    <p class="sr-only" aria-live="polite">{{ announcement }}</p>
   </div>
 </template>
 
@@ -200,6 +228,7 @@ import CoinIcon from '~/components/atoms/CoinIcon.vue'
 import ManaIcon from '~/components/atoms/ManaIcon.vue'
 import LifeIcon from '~/components/atoms/LifeIcon.vue'
 import type { ClassSettings } from '~/types/class.types'
+import type { AccountType } from '~/types/teacher.types'
 import { resolveClassSettings } from '~/utils/class-settings'
 
 definePageMeta({ layout: 'teacher', middleware: ['auth', 'role'] })
@@ -218,6 +247,13 @@ interface ClassStudentRow {
   lives: number
   positiveBehaviors: number
   negativeBehaviors: number
+  nickname: string | null
+  accountType: AccountType
+  canResetPassword: boolean
+  isHomeClass: boolean
+  /** Tiene la contraseña temporal sin usar: aún no ha entrado. */
+  pendingSignIn: boolean
+  removalDeletesAccount: boolean
 }
 
 const { t } = useI18n()
@@ -228,6 +264,35 @@ const config = useRuntimeConfig()
 const classId = computed(() => route.params.id as string)
 
 const allStudents = ref<ClassStudentRow[]>([])
+
+// Acceso propio y nombre de la clase: los carga la página de la clase.
+const { state: classState, can } = useTeacherClassDetail(classId)
+const myAccess = computed(() => classState.value.classData?.myAccess ?? null)
+const className = computed(() => classState.value.classData?.name ?? '')
+// La columna de acciones aparece si hay algo que hacer con alguien: gestionar
+// el alumnado de la clase o restablecer la contraseña de alguna cuenta.
+const showActions = computed(
+  () => can('student.manage') || allStudents.value.some(s => s.canResetPassword)
+)
+
+const announcement = ref('')
+
+function onRenamed(student: ClassStudentRow, nickname: string) {
+  student.nickname = nickname
+  student.handle = nickname
+}
+
+function onRemoved(student: ClassStudentRow) {
+  allStudents.value = allStudents.value.filter(s => s.id !== student.id)
+  if (classState.value.classData) {
+    classState.value.classData.studentCount = Math.max(
+      0,
+      (classState.value.classData.studentCount ?? 1) - 1
+    )
+  }
+  announcement.value = t('teacher.students.actions.removed', { name: student.name })
+}
+
 const settings = ref<ClassSettings>(resolveClassSettings(null))
 const isLoading = ref(true)
 
@@ -280,9 +345,7 @@ const students = computed(() => {
   const q = searchQuery.value.trim().toLowerCase()
   let list = allStudents.value
   if (q) {
-    list = list.filter(
-      s => s.name.toLowerCase().includes(q) || s.handle.toLowerCase().includes(q)
-    )
+    list = list.filter(s => s.name.toLowerCase().includes(q) || s.handle.toLowerCase().includes(q))
   }
   // sortBy tiene forma "<campo>-<asc|desc>"; se compara en ascendente y se invierte.
   const [field, direction] = sortBy.value.split('-')
@@ -320,19 +383,16 @@ function viewStudentProfile(studentId: string) {
 
 // Carga perezosa del ranking la primera vez que se abre esa sub-vista; si ya
 // estaba cacheado por el store, `ensureClassRanking` es no-op (cache hit).
-watch(
-  activeView,
-  async view => {
-    if (view !== 'ranking' || rankingLoaded.value) return
-    rankingLoading.value = true
-    try {
-      await teacherStore.ensureClassRanking(classId.value)
-      rankingLoaded.value = true
-    } finally {
-      rankingLoading.value = false
-    }
+watch(activeView, async view => {
+  if (view !== 'ranking' || rankingLoaded.value) return
+  rankingLoading.value = true
+  try {
+    await teacherStore.ensureClassRanking(classId.value)
+    rankingLoaded.value = true
+  } finally {
+    rankingLoading.value = false
   }
-)
+})
 
 onMounted(async () => {
   try {

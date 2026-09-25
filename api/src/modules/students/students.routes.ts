@@ -2,6 +2,13 @@ import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
 import { studentsService, AvatarServiceUnavailableError } from './students.service.js'
 import { shopService } from '../shop/shop.service.js'
 import { z, ZodError } from 'zod'
+import { rethrowHttpError } from '../../utils/errors.js'
+import { requireStudentEnrollment } from '../../utils/class-access.js'
+import { PASSWORD_MIN_LENGTH } from '../../utils/password.js'
+import { currentTokenFamily } from '../../utils/session-cookie.js'
+import { NICKNAME_MAX_LENGTH } from '../../utils/enrollment.js'
+
+type RequestUser = { id: string; role: string | null }
 
 // Schemas
 const updateProfileSchema = z.object({
@@ -21,7 +28,7 @@ const generateAvatarSchema = z.object({
 
 const changePasswordSchema = z.object({
   currentPassword: z.string(),
-  newPassword: z.string().min(6),
+  newPassword: z.string().min(PASSWORD_MIN_LENGTH),
   confirmPassword: z.string(),
 })
 
@@ -29,13 +36,8 @@ const joinClassSchema = z.object({
   code: z.string(),
 })
 
-const joinRequestSchema = z.object({
-  code: z.string(),
-  message: z.string().optional(),
-})
-
 const updateClassProfileSchema = z.object({
-  nickname: z.string().min(1).max(20).optional().nullable(),
+  nickname: z.string().min(1).max(NICKNAME_MAX_LENGTH).optional().nullable(),
   avatarUrl: z.string().optional().nullable(),
 })
 
@@ -54,6 +56,17 @@ const generateClassAvatarSchema = z.union([
 export async function studentsRoutes(fastify: FastifyInstance) {
   // All routes require authentication
   fastify.addHook('preHandler', fastify.authenticate)
+
+  // Toda ruta con `:classId` exige la matrícula con la que se actúa como alumno en
+  // esa clase: la del alumno o, para el profesorado de la clase, la de vista
+  // previa. La guía es la excepción: también la lee el profesorado sin matrícula.
+  const enrolled = requireStudentEnrollment()
+  fastify.addHook('preHandler', async (request, reply) => {
+    if (reply.sent) return
+    const { classId } = request.params as { classId?: string }
+    if (!classId || request.routeOptions.url?.endsWith('/classes/:classId/guide')) return
+    await enrolled(request, reply)
+  })
 
   // ==================== PROFILE ====================
 
@@ -80,6 +93,7 @@ export async function studentsRoutes(fastify: FastifyInstance) {
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
+      rethrowHttpError(error)
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
@@ -104,12 +118,17 @@ export async function studentsRoutes(fastify: FastifyInstance) {
     try {
       const { id } = request.user as { id: string }
       const data = changePasswordSchema.parse(request.body)
-      const result = await studentsService.changePassword(id, data)
+      const result = await studentsService.changePassword(
+        id,
+        data,
+        await currentTokenFamily(request)
+      )
       return result
     } catch (error) {
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(400).send({ message: error.message })
       }
@@ -135,8 +154,7 @@ export async function studentsRoutes(fastify: FastifyInstance) {
 
   fastify.get('/classes', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
-      const { id } = request.user as { id: string }
-      const result = await studentsService.getClasses(id)
+      const result = await studentsService.getClasses(request.user as RequestUser)
       return result
     } catch (error) {
       return reply.status(500).send({ message: 'Error interno' })
@@ -159,9 +177,8 @@ export async function studentsRoutes(fastify: FastifyInstance) {
 
   fastify.get('/classes/:classId/guide', async (request: FastifyRequest<{ Params: { classId: string } }>, reply: FastifyReply) => {
     try {
-      const { id } = request.user as { id: string }
       const { classId } = request.params
-      const result = await studentsService.getClassGuide(id, classId)
+      const result = await studentsService.getClassGuide(request.user as RequestUser, classId)
       return result
     } catch (error) {
       if (error instanceof Error) {
@@ -351,94 +368,17 @@ export async function studentsRoutes(fastify: FastifyInstance) {
 
   fastify.post('/classes/join', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
-      const { id } = request.user as { id: string }
       const data = joinClassSchema.parse(request.body)
-      const result = await studentsService.joinClass(id, data.code)
+      const result = await studentsService.joinClass(request.user as RequestUser, data.code)
       return result
     } catch (error) {
+      rethrowHttpError(error)
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
       if (error instanceof Error) {
         return reply.status(400).send({ message: error.message })
       }
-      return reply.status(500).send({ message: 'Error interno' })
-    }
-  })
-
-  fastify.post('/classes/request', async (request: FastifyRequest, reply: FastifyReply) => {
-    try {
-      const { id } = request.user as { id: string }
-      const data = joinRequestSchema.parse(request.body)
-      const result = await studentsService.createJoinRequest(id, data.code, data.message)
-      return reply.status(201).send(result)
-    } catch (error) {
-      if (error instanceof ZodError) {
-        return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
-      }
-      if (error instanceof Error) {
-        return reply.status(400).send({ message: error.message })
-      }
-      return reply.status(500).send({ message: 'Error interno' })
-    }
-  })
-
-  // ==================== ENROLLMENTS ====================
-
-  fastify.get('/join-requests', async (request: FastifyRequest, reply: FastifyReply) => {
-    try {
-      const { id } = request.user as { id: string }
-      const result = await studentsService.getJoinRequests(id)
-      return result
-    } catch (error) {
-      return reply.status(500).send({ message: 'Error interno' })
-    }
-  })
-
-  fastify.get('/invitations', async (request: FastifyRequest, reply: FastifyReply) => {
-    try {
-      const { id } = request.user as { id: string }
-      const result = await studentsService.getInvitations(id)
-      return result
-    } catch (error) {
-      return reply.status(500).send({ message: 'Error interno' })
-    }
-  })
-
-  fastify.put('/invitations/:invitationId/accept', async (request: FastifyRequest<{ Params: { invitationId: string } }>, reply: FastifyReply) => {
-    try {
-      const { id } = request.user as { id: string }
-      const { invitationId } = request.params
-      const result = await studentsService.acceptInvitation(id, invitationId)
-      return result
-    } catch (error) {
-      if (error instanceof Error) {
-        return reply.status(400).send({ message: error.message })
-      }
-      return reply.status(500).send({ message: 'Error interno' })
-    }
-  })
-
-  fastify.put('/invitations/:invitationId/reject', async (request: FastifyRequest<{ Params: { invitationId: string } }>, reply: FastifyReply) => {
-    try {
-      const { id } = request.user as { id: string }
-      const { invitationId } = request.params
-      const result = await studentsService.rejectInvitation(id, invitationId)
-      return result
-    } catch (error) {
-      if (error instanceof Error) {
-        return reply.status(400).send({ message: error.message })
-      }
-      return reply.status(500).send({ message: 'Error interno' })
-    }
-  })
-
-  fastify.get('/enrollment-counts', async (request: FastifyRequest, reply: FastifyReply) => {
-    try {
-      const { id } = request.user as { id: string }
-      const result = await studentsService.getEnrollmentCounts(id)
-      return result
-    } catch (error) {
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
@@ -447,8 +387,7 @@ export async function studentsRoutes(fastify: FastifyInstance) {
 
   fastify.get('/missions', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
-      const { id } = request.user as { id: string }
-      const result = await studentsService.getMissions(id)
+      const result = await studentsService.getMissions(request.user as RequestUser)
       return result
     } catch (error) {
       return reply.status(500).send({ message: 'Error interno' })
@@ -459,9 +398,8 @@ export async function studentsRoutes(fastify: FastifyInstance) {
 
   fastify.get('/badges', async (request: FastifyRequest<{ Querystring: { filter?: string; category?: string } }>, reply: FastifyReply) => {
     try {
-      const { id } = request.user as { id: string }
       const { filter, category } = request.query
-      const result = await studentsService.getBadges(id, filter, category)
+      const result = await studentsService.getBadges(request.user as RequestUser, filter, category)
       return result
     } catch (error) {
       return reply.status(500).send({ message: 'Error interno' })
@@ -470,8 +408,7 @@ export async function studentsRoutes(fastify: FastifyInstance) {
 
   fastify.get('/badges/:badgeId', async (request: FastifyRequest<{ Params: { badgeId: string } }>, reply: FastifyReply) => {
     try {
-      const { id } = request.user as { id: string }
-      const result = await studentsService.getBadges(id)
+      const result = await studentsService.getBadges(request.user as RequestUser)
       const badge = result.badges.find((b) => b.id === request.params.badgeId)
       if (!badge) {
         return reply.status(404).send({ message: 'Insignia no encontrada' })
@@ -490,51 +427,6 @@ export async function studentsRoutes(fastify: FastifyInstance) {
       const { id } = request.user as { id: string }
       const limit = request.query.limit ? parseInt(request.query.limit) : 10
       const result = await studentsService.getActivities(id, limit)
-      return result
-    } catch (error) {
-      return reply.status(500).send({ message: 'Error interno' })
-    }
-  })
-
-  // ==================== LEADERBOARD ====================
-
-  fastify.get('/leaderboard/me', async (request: FastifyRequest, reply: FastifyReply) => {
-    try {
-      const { id } = request.user as { id: string }
-      const result = await studentsService.getCurrentUserStats(id)
-      return result
-    } catch (error) {
-      return reply.status(500).send({ message: 'Error interno' })
-    }
-  })
-
-  fastify.get('/leaderboard/global', async (request: FastifyRequest<{ Querystring: { period?: string } }>, reply: FastifyReply) => {
-    try {
-      const { period } = request.query
-      const result = await studentsService.getGlobalLeaderboard(period)
-      return result
-    } catch (error) {
-      return reply.status(500).send({ message: 'Error interno' })
-    }
-  })
-
-  fastify.get('/leaderboard/class/:classId', async (request: FastifyRequest<{ Params: { classId: string }; Querystring: { period?: string } }>, reply: FastifyReply) => {
-    try {
-      const { id } = request.user as { id: string }
-      const { classId } = request.params
-      const { period } = request.query
-      const result = await studentsService.getClassLeaderboard(id, classId, period)
-      return result
-    } catch (error) {
-      return reply.status(500).send({ message: 'Error interno' })
-    }
-  })
-
-  fastify.get('/leaderboard/friends', async (request: FastifyRequest<{ Querystring: { period?: string } }>, reply: FastifyReply) => {
-    try {
-      const { id } = request.user as { id: string }
-      const { period } = request.query
-      const result = await studentsService.getFriendsLeaderboard(id, period)
       return result
     } catch (error) {
       return reply.status(500).send({ message: 'Error interno' })

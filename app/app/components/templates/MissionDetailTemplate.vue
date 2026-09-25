@@ -130,6 +130,11 @@
         </div>
       </div>
 
+      <!-- Aviso de solo lectura para el profesor cuyo acceso no le deja cambiar la misión -->
+      <InfoNote v-if="isTeacher && !canEdit" class="mb-6">
+        {{ t('teacher.classes.detail.read_only_notice') }}
+      </InfoNote>
+
       <!-- Aviso de solo lectura para el alumno cuando la misión ha expirado -->
       <div
         v-if="!isTeacher && missionExpired"
@@ -171,7 +176,7 @@
               </div>
               <!-- Teacher: Edit controls -->
               <Button
-                v-if="isTeacher"
+                v-if="canEdit"
                 variant="primary"
                 size="sm"
                 :icon-left="PencilIcon"
@@ -256,7 +261,7 @@
                 </h2>
               </div>
               <!-- Teacher: Add control -->
-              <div v-if="isTeacher" class="flex items-center gap-2">
+              <div v-if="canEdit" class="flex items-center gap-2">
                 <Button
                   variant="primary"
                   size="sm"
@@ -270,10 +275,12 @@
 
             <!-- Enigmas list -->
             <div class="space-y-6">
-              <!-- Draggable list for teachers (always active, handle appears on hover) -->
+              <!-- Draggable list for teachers (always active, handle appears on hover).
+                   Sin edición es la misma lista, sin arrastrar ni botones de cambio. -->
               <draggable
                 v-if="isTeacher"
                 v-model="localEnigmas"
+                :disabled="!canEdit"
                 item-key="id"
                 handle=".drag-handle-enigma"
                 :animation="200"
@@ -294,6 +301,7 @@
                       <div class="flex items-center gap-2">
                         <!-- Mobile/Tablet drag handle (always visible) -->
                         <div
+                          v-if="canEdit"
                           class="drag-handle-enigma flex items-center justify-center w-6 h-10 cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600 flex-shrink-0 -ml-1"
                         >
                           <svg class="w-4 h-4" viewBox="0 0 16 16" fill="currentColor">
@@ -327,6 +335,7 @@
                             class="absolute right-0 top-full mt-1 w-48 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden z-50"
                           >
                             <button
+                              v-if="canEdit"
                               type="button"
                               class="flex items-center gap-3 w-full px-4 py-3 text-sm text-navy-700 hover:bg-gray-50 transition-colors"
                               @click="editEnigmaAction(enigma)"
@@ -348,6 +357,7 @@
                               }}
                             </button>
                             <button
+                              v-if="canEdit"
                               type="button"
                               class="flex items-center gap-3 w-full px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors"
                               @click="deleteEnigmaAction(enigma.id)"
@@ -416,13 +426,18 @@
                       <div class="relative w-10 h-10 flex-shrink-0">
                         <!-- Number (hidden on hover) -->
                         <div
-                          class="absolute inset-0 rounded-full flex items-center justify-center transition-all duration-200 ease-out group-hover:opacity-0 group-hover:scale-90 group-hover:pointer-events-none"
-                          :class="getEnigmaIconClass(enigma, index)"
+                          class="absolute inset-0 rounded-full flex items-center justify-center transition-all duration-200 ease-out"
+                          :class="[
+                            getEnigmaIconClass(enigma, index),
+                            canEdit &&
+                              'group-hover:opacity-0 group-hover:scale-90 group-hover:pointer-events-none',
+                          ]"
                         >
                           <span class="text-white font-bold text-sm">{{ index + 1 }}</span>
                         </div>
                         <!-- Drag handle (visible on hover) -->
                         <div
+                          v-if="canEdit"
                           class="drag-handle-enigma absolute inset-0 rounded-full flex items-center justify-center cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600 opacity-0 scale-110 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 ease-out pointer-events-none group-hover:pointer-events-auto"
                         >
                           <svg class="w-4 h-4" viewBox="0 0 16 16" fill="currentColor">
@@ -506,6 +521,7 @@
                         </div>
                         <!-- Editar / Eliminar -->
                         <div
+                          v-if="canEdit"
                           class="flex items-center justify-end gap-2 mt-3 pt-3 border-t border-gray-100"
                         >
                           <Button
@@ -684,7 +700,7 @@
                   {{ t('teacher.components.mission_detail_template.no_enigmas') }}
                 </p>
                 <Button
-                  v-if="isTeacher"
+                  v-if="canEdit"
                   variant="primary"
                   size="sm"
                   class="mt-4"
@@ -720,7 +736,7 @@
                 </h2>
               </div>
               <!-- Teacher: Add control -->
-              <div v-if="isTeacher" class="flex items-center gap-2">
+              <div v-if="canEdit" class="flex items-center gap-2">
                 <Button
                   variant="primary"
                   size="sm"
@@ -735,7 +751,7 @@
             <div class="space-y-6">
               <!-- Draggable list for teachers (always active, handle appears on hover) -->
               <draggable
-                v-if="isTeacher"
+                v-if="canEdit"
                 v-model="localDocuments"
                 item-key="id"
                 handle=".drag-handle-doc"
@@ -799,61 +815,64 @@
                               {{ doc.format }} &bull; {{ doc.metadata }}
                             </p>
                           </div>
-                          <!-- Desktop: Hover buttons -->
-                          <div
-                            class="hidden 2xl:flex items-center gap-2 opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200 ease-out pointer-events-none group-hover:pointer-events-auto"
-                          >
-                            <Button
-                              variant="primary"
-                              size="sm"
-                              :icon-left="PencilIcon"
-                              class="whitespace-nowrap"
-                              @click="emit('editDocument', doc)"
+                          <div class="flex items-center gap-2 flex-shrink-0">
+                            <!-- Desktop: Hover buttons -->
+                            <div
+                              class="hidden 2xl:flex items-center gap-2 opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200 ease-out pointer-events-none group-hover:pointer-events-auto"
                             >
-                              {{ t('teacher.components.mission_detail_template.btn_edit') }}
-                            </Button>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              :icon-left="TrashIcon"
-                              class="whitespace-nowrap"
-                              @click="emit('deleteDocument', doc.id)"
-                            >
-                              {{ t('teacher.missions.detail.delete_confirm_btn') }}
-                            </Button>
-                          </div>
-                          <!-- Mobile/Tablet: Actions dropdown -->
-                          <div class="relative 2xl:hidden">
-                            <button
-                              type="button"
-                              class="p-2 rounded-lg hover:bg-gray-100 transition-colors"
-                              @click="toggleDocumentDropdown(doc.id)"
-                            >
-                              <EllipsisVerticalIcon class="w-5 h-5 text-navy-700" />
-                            </button>
-                            <Transition name="dropdown">
-                              <div
-                                v-if="openDocumentDropdown === doc.id"
-                                class="absolute right-0 top-full mt-1 w-48 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden z-50"
+                              <Button
+                                variant="primary"
+                                size="sm"
+                                :icon-left="PencilIcon"
+                                class="whitespace-nowrap"
+                                @click="emit('editDocument', doc)"
                               >
-                                <button
-                                  type="button"
-                                  class="flex items-center gap-3 w-full px-4 py-3 text-sm text-navy-700 hover:bg-gray-50 transition-colors"
-                                  @click="editDocumentAction(doc)"
+                                {{ t('teacher.components.mission_detail_template.btn_edit') }}
+                              </Button>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                :icon-left="TrashIcon"
+                                class="whitespace-nowrap"
+                                @click="emit('deleteDocument', doc.id)"
+                              >
+                                {{ t('teacher.missions.detail.delete_confirm_btn') }}
+                              </Button>
+                            </div>
+                            <!-- Mobile/Tablet: Actions dropdown -->
+                            <div class="relative 2xl:hidden">
+                              <button
+                                type="button"
+                                class="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                                @click="toggleDocumentDropdown(doc.id)"
+                              >
+                                <EllipsisVerticalIcon class="w-5 h-5 text-navy-700" />
+                              </button>
+                              <Transition name="dropdown">
+                                <div
+                                  v-if="openDocumentDropdown === doc.id"
+                                  class="absolute right-0 top-full mt-1 w-48 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden z-50"
                                 >
-                                  <PencilIcon class="w-5 h-5" />
-                                  {{ t('teacher.components.mission_detail_template.btn_edit') }}
-                                </button>
-                                <button
-                                  type="button"
-                                  class="flex items-center gap-3 w-full px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors"
-                                  @click="deleteDocumentAction(doc.id)"
-                                >
-                                  <TrashIcon class="w-5 h-5" />
-                                  {{ t('teacher.missions.detail.delete_confirm_btn') }}
-                                </button>
-                              </div>
-                            </Transition>
+                                  <button
+                                    type="button"
+                                    class="flex items-center gap-3 w-full px-4 py-3 text-sm text-navy-700 hover:bg-gray-50 transition-colors"
+                                    @click="editDocumentAction(doc)"
+                                  >
+                                    <PencilIcon class="w-5 h-5" />
+                                    {{ t('teacher.components.mission_detail_template.btn_edit') }}
+                                  </button>
+                                  <button
+                                    type="button"
+                                    class="flex items-center gap-3 w-full px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors"
+                                    @click="deleteDocumentAction(doc.id)"
+                                  >
+                                    <TrashIcon class="w-5 h-5" />
+                                    {{ t('teacher.missions.detail.delete_confirm_btn') }}
+                                  </button>
+                                </div>
+                              </Transition>
+                            </div>
+                            <DocumentOpenButton :doc="doc" />
                           </div>
                         </div>
                         <p class="text-sm text-navy-700/80 mt-2">{{ doc.description }}</p>
@@ -875,7 +894,7 @@
                 </template>
               </draggable>
 
-              <!-- Regular list for students only -->
+              <!-- Regular list for students (and for teachers who can't edit) -->
               <template v-else>
                 <div v-for="doc in supportDocuments" :key="doc.id" class="bg-white rounded-xl p-4">
                   <div class="flex items-start gap-3">
@@ -896,90 +915,7 @@
                             {{ doc.format }} &bull; {{ doc.metadata }}
                           </p>
                         </div>
-                        <!-- Teacher: Actions -->
-                        <template v-if="isTeacher">
-                          <!-- Desktop: Hover buttons -->
-                          <div
-                            class="hidden 2xl:flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity"
-                          >
-                            <Button
-                              variant="primary"
-                              size="sm"
-                              :icon-left="PencilIcon"
-                              class="whitespace-nowrap"
-                              @click="emit('editDocument', doc)"
-                            >
-                              {{ t('teacher.components.mission_detail_template.btn_edit') }}
-                            </Button>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              :icon-left="TrashIcon"
-                              class="whitespace-nowrap"
-                              @click="emit('deleteDocument', doc.id)"
-                            >
-                              {{ t('teacher.missions.detail.delete_confirm_btn') }}
-                            </Button>
-                          </div>
-                          <!-- Mobile/Tablet: Actions dropdown -->
-                          <div class="relative 2xl:hidden">
-                            <button
-                              type="button"
-                              class="p-2 rounded-lg hover:bg-gray-100 transition-colors"
-                              @click="toggleDocumentDropdown(doc.id)"
-                            >
-                              <EllipsisVerticalIcon class="w-5 h-5 text-navy-700" />
-                            </button>
-                            <!-- Dropdown menu -->
-                            <Transition name="dropdown">
-                              <div
-                                v-if="openDocumentDropdown === doc.id"
-                                class="absolute right-0 top-full mt-1 w-48 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden z-50"
-                              >
-                                <button
-                                  type="button"
-                                  class="flex items-center gap-3 w-full px-4 py-3 text-sm text-navy-700 hover:bg-gray-50 transition-colors"
-                                  @click="editDocumentAction(doc)"
-                                >
-                                  <PencilIcon class="w-5 h-5" />
-                                  {{ t('teacher.components.mission_detail_template.btn_edit') }}
-                                </button>
-                                <button
-                                  type="button"
-                                  class="flex items-center gap-3 w-full px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors"
-                                  @click="deleteDocumentAction(doc.id)"
-                                >
-                                  <TrashIcon class="w-5 h-5" />
-                                  {{ t('teacher.missions.detail.delete_confirm_btn') }}
-                                </button>
-                              </div>
-                            </Transition>
-                          </div>
-                        </template>
-                        <!-- Student: Action button -->
-                        <button
-                          v-else
-                          class="w-10 h-10 rounded-xl bg-navy-700 hover:bg-navy-800 flex items-center justify-center flex-shrink-0 transition-colors shadow-md"
-                          :title="
-                            doc.type === 'link'
-                              ? t('student.mission_detail.documents.action_open_link')
-                              : doc.type === 'video'
-                                ? t('student.mission_detail.documents.action_play_video')
-                                : t('student.mission_detail.documents.action_download')
-                          "
-                          @click="handleDocumentAction(doc)"
-                        >
-                          <component
-                            :is="
-                              doc.type === 'link'
-                                ? ArrowTopRightOnSquareIcon
-                                : doc.type === 'video'
-                                  ? PlayCircleIcon
-                                  : ArrowDownTrayIcon
-                            "
-                            class="w-5 h-5 text-white"
-                          />
-                        </button>
+                        <DocumentOpenButton :doc="doc" />
                       </div>
                       <p class="text-sm text-navy-700/80 mt-2">{{ doc.description }}</p>
 
@@ -1315,8 +1251,6 @@ import {
   CheckIcon,
   LockClosedIcon,
   DocumentTextIcon,
-  ArrowDownTrayIcon,
-  ArrowTopRightOnSquareIcon,
   ArrowUpTrayIcon,
   PlayCircleIcon,
   DocumentIcon,
@@ -1465,12 +1399,15 @@ interface Props {
   activeTab?: string
   /** Constructor del destino (:to) de una pestaña por su id. */
   tabHref?: (tabId: string) => TabLink
+  /** Profesor: si puede cambiar la misión. Sin ello la ve entera, pero sin controles de edición. */
+  editable?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   tabs: () => [],
   activeTab: 'resumen',
   tabHref: undefined,
+  editable: true,
 })
 
 // Sin tabHref las pestañas no navegan a ningún sitio (caso por defecto: sin pestañas).
@@ -1679,6 +1616,7 @@ const onDocumentReorderAndSave = () => {
 
 // Computed
 const isTeacher = computed(() => props.mode === 'teacher')
+const canEdit = computed(() => isTeacher.value && props.editable)
 const baseRoute = computed(() => (isTeacher.value ? '/profesor' : '/alumno'))
 const dashboardLink = computed(() => `${baseRoute.value}/inicio`)
 const classesLink = computed(() => `${baseRoute.value}/clases`)
@@ -1880,33 +1818,6 @@ const getDocumentTagClasses = (type: MissionDocument['type']) => {
     image: 'bg-green-100 text-green-700',
   }
   return classes[type]
-}
-
-// Handle document action (download/open)
-const handleDocumentAction = (doc: MissionDocument & { url?: string; fileUrl?: string }) => {
-  const url = doc.url || doc.fileUrl
-
-  if (!url) {
-    console.warn('Document has no URL:', doc)
-    return
-  }
-
-  if (doc.type === 'link') {
-    // Open link in new tab
-    window.open(url, '_blank', 'noopener,noreferrer')
-  } else if (doc.type === 'video') {
-    // Open video in new tab
-    window.open(url, '_blank', 'noopener,noreferrer')
-  } else {
-    // Download file (pdf, docx)
-    const link = document.createElement('a')
-    link.href = url
-    link.download = doc.title || 'documento'
-    link.target = '_blank'
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-  }
 }
 
 // Teacher stats (from API)

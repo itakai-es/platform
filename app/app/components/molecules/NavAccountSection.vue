@@ -1,5 +1,5 @@
 <template>
-  <NavDivider />
+  <NavSectionHeader :label="t('common.nav.section_account')" />
   <NavItem
     v-if="profileRoute"
     :to="profileRoute"
@@ -19,12 +19,13 @@ import { ArrowRightStartOnRectangleIcon, UserCircleIcon } from '@heroicons/vue/2
 import { getProfileByRole } from '~/utils/navigation'
 
 /**
- * El bloque «Tu cuenta» al final del menú lateral: perfil y cerrar sesión, a la
- * vista y no dentro de un desplegable. En un aula los ordenadores se comparten,
- * así que salir tiene que encontrarse sin buscarlo. El administrador no tiene
- * página de perfil y solo ve «Cerrar sesión». Los ajustes de accesibilidad
- * siguen en la pestaña Configuración del perfil. Emite `navigate` al pulsar
- * cualquiera de los dos, para que el menú móvil se cierre.
+ * El bloque «Cuenta» al final del menú lateral, con su título como los demás
+ * bloques: perfil y cerrar sesión, a la vista y no dentro de un desplegable.
+ * En un aula los ordenadores se comparten, así que salir tiene que
+ * encontrarse sin buscarlo. El administrador no tiene página de perfil y solo
+ * ve «Cerrar sesión». Los ajustes de accesibilidad siguen en la pestaña
+ * Configuración del perfil. Emite `navigate` al pulsar cualquiera de los dos,
+ * para que el menú móvil se cierre.
  */
 const emit = defineEmits<{ navigate: [] }>()
 

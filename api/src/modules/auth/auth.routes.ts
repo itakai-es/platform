@@ -2,7 +2,6 @@ import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
 import { authService } from './auth.service.js'
 import {
   loginSchema,
-  loginAliasSchema,
   signupSchema,
   onboardingSchema,
   refreshTokenSchema,
@@ -12,6 +11,9 @@ import {
 import { ZodError } from 'zod'
 import { generateAccessToken, TokenError } from '../../utils/tokens.js'
 import { env } from '../../config/env.js'
+import { assertRateLimit, recordRateLimit } from '../../utils/rate-limit.js'
+import { RateLimitError } from '../../utils/errors.js'
+import { rateLimitOrigin } from '../../utils/trust-proxy.js'
 
 // ==================== COOKIE CONFIG ====================
 
@@ -83,12 +85,50 @@ function getRefreshTokenCookieOptions() {
 // ==================== HELPERS ====================
 
 /**
- * Extract request context (IP, User-Agent) for security tracking
+ * Cuántos intentos fallidos de entrada se aguantan. Por identificador, para que
+ * no se pueda ir probando contraseñas contra una cuenta concreta; y por origen,
+ * para que no se pueda ir probando identificadores. Es un límite en memoria del
+ * proceso: no frena un ataque repartido entre muchas máquinas, frena probar en
+ * bucle.
+ *
+ * El de origen es mucho más ancho porque en un centro educativo todas las aulas
+ * suelen salir a internet por la misma dirección, los fallos de tecleo son
+ * normales (más aún con contraseñas temporales recién repartidas) y, pasado el
+ * límite, no entra nadie desde ese origen, tampoco quien pone bien la
+ * contraseña. Con cien, unas cuantas aulas a primera hora dejaban a todo el
+ * centro sin entrar durante un cuarto de hora; trescientos siguen cortando a
+ * quien prueba identificadores en bucle.
+ */
+export const LOGIN_FAILURE_BY_IDENTIFIER = { max: 10, windowMs: 15 * 60 * 1000 }
+export const LOGIN_FAILURE_BY_ORIGIN = { max: 300, windowMs: 15 * 60 * 1000 }
+
+interface LoginAttemptLimit {
+  key: string
+  limit: { max: number; windowMs: number }
+}
+
+/** Las claves con las que se cuentan los fallos de un intento de entrada. */
+function loginAttemptLimits(identifier: string, ip?: string): LoginAttemptLimit[] {
+  const limits: LoginAttemptLimit[] = [
+    { key: `login:identifier:${identifier.toLowerCase()}`, limit: LOGIN_FAILURE_BY_IDENTIFIER },
+  ]
+  if (ip) {
+    limits.push({ key: `login:origin:${rateLimitOrigin(ip)}`, limit: LOGIN_FAILURE_BY_ORIGIN })
+  }
+  return limits
+}
+
+/**
+ * Extract request context (IP, User-Agent) for security tracking.
+ *
+ * La dirección es siempre `request.ip`, que ya resuelve el proxy de confianza
+ * (ver utils/trust-proxy.ts); leer `X-Forwarded-For` a mano sería guardar lo que
+ * el cliente quiera escribir.
  */
 function getRequestContext(request: FastifyRequest) {
   return {
     userAgent: request.headers['user-agent'] || undefined,
-    ipAddress: request.ip || request.headers['x-forwarded-for']?.toString() || undefined,
+    ipAddress: request.ip || undefined,
   }
 }
 
@@ -153,10 +193,17 @@ export async function authRoutes(fastify: FastifyInstance) {
     return { status: 'ok', timestamp: new Date().toISOString() }
   })
 
-  // Login with email/password
+  // Entrar con el correo o con el usuario
   fastify.post('/login', async (request: FastifyRequest, reply: FastifyReply) => {
+    let attempt: LoginAttemptLimit[] = []
     try {
       const input = loginSchema.parse(request.body)
+      // Solo se cuentan los intentos FALLIDOS: acertar no gasta cupo, así que un
+      // aula entera puede entrar a la vez, pero probar identificadores o
+      // contraseñas en bucle se acaba cortando.
+      attempt = loginAttemptLimits(input.identifier, request.ip)
+      for (const { key, limit } of attempt) assertRateLimit(key, limit)
+
       const context = getRequestContext(request)
       const result = await authService.login(input, context)
 
@@ -169,25 +216,10 @@ export async function authRoutes(fastify: FastifyInstance) {
         tokens: { accessToken: result.tokens.accessToken },
       }
     } catch (error) {
-      return handleError(error, reply, 401)
-    }
-  })
-
-  // Login with alias + code (for younger students)
-  fastify.post('/login-alias', async (request: FastifyRequest, reply: FastifyReply) => {
-    try {
-      const input = loginAliasSchema.parse(request.body)
-      const context = getRequestContext(request)
-      const result = await authService.loginWithAlias(input, context)
-
-      // Set refresh token in HttpOnly cookie
-      setRefreshTokenCookie(reply, result.tokens.refreshToken)
-
-      return {
-        user: result.user,
-        tokens: { accessToken: result.tokens.accessToken },
+      if (error instanceof RateLimitError) {
+        return reply.status(error.statusCode).send({ message: error.message, code: error.code })
       }
-    } catch (error) {
+      for (const { key, limit } of attempt) recordRateLimit(key, limit)
       return handleError(error, reply, 401)
     }
   })
@@ -222,11 +254,7 @@ export async function authRoutes(fastify: FastifyInstance) {
         return reply.status(400).send({ message: 'Credencial de Google requerida' })
       }
 
-      const context = {
-        userAgent: request.headers['user-agent'],
-        ipAddress: request.ip,
-      }
-
+      const context = getRequestContext(request)
       const result = await authService.loginWithGoogle(body.credential, context)
 
       // Set refresh token in HttpOnly cookie

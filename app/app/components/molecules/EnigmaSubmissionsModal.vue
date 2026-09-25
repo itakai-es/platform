@@ -22,7 +22,7 @@ interface Submission {
   }
   status: 'pendiente' | 'aprobada'
   fileName?: string
-  fileUrl?: string
+  hasFile?: boolean
   fileSize?: number
   xpAwarded?: number
   submittedAt: string
@@ -36,6 +36,8 @@ interface Props {
   showXp?: boolean
   showCoins?: boolean
   showMana?: boolean
+  /** Aprobar pide edición en la clase; sin ella las entregas se ven y se descargan. */
+  canApprove?: boolean
 }
 
 interface Emits {
@@ -49,11 +51,13 @@ const props = withDefaults(defineProps<Props>(), {
   showXp: true,
   showCoins: true,
   showMana: true,
+  canApprove: true,
 })
 const emit = defineEmits<Emits>()
 
 const config = useRuntimeConfig()
 const toast = useToast()
+const { downloadSubmission } = useProtectedFiles()
 const { t, locale } = useI18n()
 const effects = useEffects()
 
@@ -188,43 +192,6 @@ const handleApprove = async (submission: Submission) => {
   } catch (err: any) {
     console.error('Error approving submission:', err)
     toast.error(err.data?.message || t('teacher.components.enigma_submissions_modal.approve_error'))
-  }
-}
-
-const downloadFile = async (submission: Submission) => {
-  try {
-    // Construct file URL
-    let fileUrl = submission.fileUrl
-    if (!fileUrl) {
-      console.error('No fileUrl available for submission:', submission)
-      toast.error(t('common.toast.download_not_found'))
-      return
-    }
-
-    // Make absolute URL
-    if (!fileUrl.startsWith('http')) {
-      fileUrl = `${config.public.apiBase}${fileUrl}`
-    }
-
-    // Fetch the file
-    const response = await fetch(fileUrl)
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
-    }
-
-    // Create blob and download
-    const blob = await response.blob()
-    const url = window.URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = submission.fileName || 'archivo'
-    document.body.appendChild(a)
-    a.click()
-    window.URL.revokeObjectURL(url)
-    document.body.removeChild(a)
-  } catch (error) {
-    console.error('Error downloading file:', error)
-    toast.error(t('common.toast.download_error'))
   }
 }
 
@@ -365,31 +332,33 @@ watch(
             <!-- Actions -->
             <div class="flex items-center gap-2 flex-shrink-0">
               <Button
-                v-if="submission.fileName"
+                v-if="submission.hasFile"
                 variant="outline"
                 size="sm"
                 :icon-left="ArrowDownTrayIcon"
-                @click="downloadFile(submission)"
+                @click="downloadSubmission(submission)"
               >
                 {{ t('teacher.components.enigma_submissions_modal.download') }}
               </Button>
-              <Button
-                v-if="editingSubmissionId !== submission.id"
-                variant="primary"
-                size="sm"
-                @click="startEditing(submission)"
-              >
-                {{ t('teacher.components.enigma_submissions_modal.grade') }}
-              </Button>
-              <Button v-else variant="outline" size="sm" @click="cancelEditing">
-                {{ t('common.actions.cancel') }}
-              </Button>
+              <template v-if="canApprove">
+                <Button
+                  v-if="editingSubmissionId !== submission.id"
+                  variant="primary"
+                  size="sm"
+                  @click="startEditing(submission)"
+                >
+                  {{ t('teacher.components.enigma_submissions_modal.grade') }}
+                </Button>
+                <Button v-else variant="outline" size="sm" @click="cancelEditing">
+                  {{ t('common.actions.cancel') }}
+                </Button>
+              </template>
             </div>
           </div>
 
           <!-- Inline review: % completado → escala todas las recompensas -->
           <Transition name="expand">
-            <div v-if="editingSubmissionId === submission.id" class="px-4 pb-4 pt-0">
+            <div v-if="canApprove && editingSubmissionId === submission.id" class="px-4 pb-4 pt-0">
               <div class="pt-3 border-t border-gray-100 space-y-3">
                 <!-- Selector de porcentaje -->
                 <div>

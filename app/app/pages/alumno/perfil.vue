@@ -55,73 +55,39 @@
       <!-- Tab: Seguridad -->
       <div v-if="activeTab === 'seguridad'">
         <div class="grid md:grid-cols-2 gap-4 md:gap-6">
-          <!-- Cambiar Contraseña -->
-          <Card type="settings">
-            <div class="p-5">
-              <div class="flex items-center gap-3 mb-4">
-                <KeyIcon class="w-5 h-5 text-navy-700" />
+          <!--
+            Tu cuenta: con qué entras. Solo si hay usuario o la lleva el
+            profesorado; el correo ya sale en la tarjeta de cambiarlo.
+          -->
+          <Card
+            v-if="profileStore.currentUsername || profileStore.isManagedAccount"
+            type="settings"
+          >
+            <div class="p-5 space-y-4">
+              <div class="flex items-center gap-3">
+                <IdentificationIcon class="w-5 h-5 text-navy-700" />
                 <h3 class="text-lg font-bold text-navy-700">
-                  {{ t('student.profile.security.password_title') }}
+                  {{ t('student.profile.account.title') }}
                 </h3>
               </div>
-              <form class="space-y-3" autocomplete="on" @submit.prevent="changePassword">
-                <input
-                  type="text"
-                  name="username"
-                  :value="profileStore.currentEmail"
-                  autocomplete="username"
-                  class="sr-only"
-                  tabindex="-1"
-                  aria-hidden="true"
-                  readonly
+              <dl v-if="profileStore.currentUsername">
+                <CopyableValue
+                  :label="t('student.profile.account.username')"
+                  :value="profileStore.currentUsername"
+                  :copyable="false"
                 />
-                <FormField
-                  v-model="securityForm.currentPassword"
-                  type="password"
-                  autocomplete="current-password"
-                  :placeholder="t('student.profile.security.current_password')"
-                />
-                <FormField
-                  v-model="securityForm.newPassword"
-                  type="password"
-                  autocomplete="new-password"
-                  :placeholder="t('student.profile.security.new_password')"
-                />
-                <FormField
-                  v-model="securityForm.confirmPassword"
-                  type="password"
-                  autocomplete="new-password"
-                  :placeholder="t('student.profile.security.confirm_password')"
-                />
-                <Button type="submit" variant="primary" size="sm" :loading="isChangingPassword">
-                  {{ t('student.profile.security.update_button') }}
-                </Button>
-              </form>
+              </dl>
+              <InfoNote v-if="profileStore.isManagedAccount">
+                {{ t('student.profile.account.managed_note') }}
+              </InfoNote>
             </div>
           </Card>
 
-          <!-- Cambiar Email -->
-          <Card type="settings">
-            <div class="p-5">
-              <div class="flex items-center gap-3 mb-4">
-                <EnvelopeIcon class="w-5 h-5 text-navy-700" />
-                <h3 class="text-lg font-bold text-navy-700">
-                  {{ t('student.profile.security.email_title') }}
-                </h3>
-              </div>
-              <div class="space-y-3">
-                <FormField :model-value="profileStore.currentEmail" type="email" disabled />
-                <FormField
-                  v-model="securityForm.newEmail"
-                  type="email"
-                  :placeholder="t('student.profile.security.new_email_placeholder')"
-                />
-                <Button variant="primary" size="sm" :loading="isChangingEmail" @click="changeEmail">
-                  {{ t('student.profile.security.update_button') }}
-                </Button>
-              </div>
-            </div>
-          </Card>
+          <!-- Cambiar Contraseña -->
+          <ChangePasswordCard />
+
+          <!-- Cambiar Email: una cuenta que lleva el profesorado no puede tener correo -->
+          <ChangeEmailCard v-if="!profileStore.isManagedAccount" />
 
           <!-- Sesiones activas -->
           <Card type="settings">
@@ -257,8 +223,12 @@
             <!-- Accesibilidad -->
             <AccessibilitySettingsCard />
 
-            <!-- Zona peligrosa -->
-            <Card type="settings" class="border-2 border-navy-700/20">
+            <!-- Zona peligrosa: una cuenta que lleva el profesorado no se borra sola -->
+            <Card
+              v-if="!profileStore.isManagedAccount"
+              type="settings"
+              class="border-2 border-navy-700/20"
+            >
               <div class="p-6">
                 <div class="flex items-center gap-3 mb-4">
                   <ExclamationTriangleIcon class="w-6 h-6 text-navy-700" />
@@ -298,7 +268,7 @@
       <input
         type="text"
         name="username"
-        :value="profileStore.currentEmail"
+        :value="profileStore.accountLogin"
         autocomplete="username"
         class="sr-only"
         tabindex="-1"
@@ -323,14 +293,13 @@ import {
   UserIcon,
   ShieldCheckIcon,
   Cog6ToothIcon,
-  KeyIcon,
   DevicePhoneMobileIcon,
   ComputerDesktopIcon,
   LanguageIcon,
   ExclamationTriangleIcon,
   TrashIcon,
-  EnvelopeIcon,
   SwatchIcon,
+  IdentificationIcon,
   AcademicCapIcon,
   BuildingLibraryIcon,
   ViewColumnsIcon,
@@ -372,14 +341,6 @@ const setActiveTab = (tabId: string) => {
   activeTab.value = tabId
 }
 
-// Form state for security
-const securityForm = ref({
-  currentPassword: '',
-  newPassword: '',
-  confirmPassword: '',
-  newEmail: '',
-})
-
 // Form state for preferences (local copy for immediate UI updates)
 const preferencesForm = ref({
   language: 'es' as AppLanguage,
@@ -392,8 +353,6 @@ const deletePassword = ref('')
 const isDeleting = ref(false)
 
 // Loading states
-const isChangingPassword = ref(false)
-const isChangingEmail = ref(false)
 const isTogglingTwoFactor = ref(false)
 
 // Fetch profile on mount
@@ -438,55 +397,6 @@ watch(
 )
 
 // Actions
-const changePassword = async () => {
-  if (securityForm.value.newPassword !== securityForm.value.confirmPassword) {
-    toast.error(t('student.profile.security.passwords_mismatch'))
-    return
-  }
-
-  if (securityForm.value.newPassword.length < 6) {
-    toast.error(t('student.profile.security.password_too_short'))
-    return
-  }
-
-  isChangingPassword.value = true
-  const result = await profileStore.changePassword({
-    currentPassword: securityForm.value.currentPassword,
-    newPassword: securityForm.value.newPassword,
-  })
-  isChangingPassword.value = false
-
-  if (result.success) {
-    toast.success(result.message)
-    securityForm.value.currentPassword = ''
-    securityForm.value.newPassword = ''
-    securityForm.value.confirmPassword = ''
-  } else {
-    toast.error(result.message)
-  }
-}
-
-const changeEmail = async () => {
-  if (!securityForm.value.newEmail) {
-    toast.error(t('student.profile.security.email_invalid'))
-    return
-  }
-
-  isChangingEmail.value = true
-  const result = await profileStore.changeEmail({
-    newEmail: securityForm.value.newEmail,
-    password: '',
-  })
-  isChangingEmail.value = false
-
-  if (result.success) {
-    toast.success(result.message)
-    securityForm.value.newEmail = ''
-  } else {
-    toast.error(result.message)
-  }
-}
-
 const toggleTwoFactor = async (enabled: boolean) => {
   isTogglingTwoFactor.value = true
   const result = await profileStore.toggleTwoFactor(enabled)

@@ -103,87 +103,195 @@ export const NOTIFICATION_COPY = {
       ro: 'Predarea ta pentru «{enigma}» a fost evaluată la {percentage} %.',
     },
   },
-  join_accepted: {
+  class_teacher_added: {
     title: {
-      es: 'Solicitud aceptada',
-      en: 'Request accepted',
-      ca: 'Sol·licitud acceptada',
-      val: 'Sol·licitud acceptada',
-      eu: 'Eskaera onartuta',
-      gl: 'Solicitude aceptada',
-      ast: 'Solicitú aceptada',
-      pt: 'Pedido aceite',
-      el: 'Το αίτημα εγκρίθηκε',
-      ro: 'Cerere acceptată',
+      es: 'Te han añadido a una clase',
+      en: 'You were added to a class',
+      ca: 'T\'han afegit a una classe',
+      val: 'T\'han afegit a una classe',
+      eu: 'Klase batera gehitu zaituzte',
+      gl: 'Engadíronte a unha clase',
+      ast: 'Amestáronte a una clase',
+      pt: 'Adicionaram-te a uma turma',
+      el: 'Σε πρόσθεσαν σε μια τάξη',
+      ro: 'Ai fost adăugat într-o clasă',
     },
     message: {
-      es: 'Tu solicitud para unirte a {class} ha sido aceptada.',
-      en: 'Your request to join {class} was accepted.',
-      ca: 'La teva sol·licitud per unir-te a {class} s\'ha acceptat.',
-      val: 'La teua sol·licitud per unir-te a {class} s\'ha acceptat.',
-      eu: '{class} klasean sartzeko zure eskaera onartu dute.',
-      gl: 'A túa solicitude para unirte a {class} foi aceptada.',
-      ast: 'La to solicitú pa xunite a {class} aceptóse.',
-      pt: 'O teu pedido para entrar em {class} foi aceite.',
-      el: 'Το αίτημά σου να μπεις στο {class} εγκρίθηκε.',
-      ro: 'Cererea ta de a te alătura la {class} a fost acceptată.',
+      es: '{actor} te ha añadido al profesorado de {class} con el perfil «{profile}» y acceso de {access}.',
+      en: '{actor} added you to the teachers of {class} with the "{profile}" profile and {access} access.',
+      ca: '{actor} t\'ha afegit al professorat de {class} amb el perfil «{profile}» i accés de {access}.',
+      val: '{actor} t\'ha afegit al professorat de {class} amb el perfil «{profile}» i accés de {access}.',
+      eu: '{actor} irakasleak {class} klaseko irakasleen artean gehitu zaitu, «{profile}» profilarekin eta {access} sarbidearekin.',
+      gl: '{actor} engadiute ao profesorado de {class} co perfil «{profile}» e acceso de {access}.',
+      ast: '{actor} amestóte al profesoráu de {class} col perfil «{profile}» y accesu de {access}.',
+      pt: '{actor} adicionou-te ao corpo docente de {class} com o perfil «{profile}» e acesso de {access}.',
+      el: 'Ο/Η {actor} σε πρόσθεσε στους εκπαιδευτικούς του {class} με το προφίλ «{profile}» και πρόσβαση {access}.',
+      ro: '{actor} te-a adăugat în echipa de profesori a clasei {class}, cu profilul «{profile}» și acces de {access}.',
     },
   },
-  join_rejected: {
+  class_teacher_changed: {
     title: {
-      es: 'Solicitud rechazada',
-      en: 'Request declined',
-      ca: 'Sol·licitud rebutjada',
-      val: 'Sol·licitud rebutjada',
-      eu: 'Eskaera ukatuta',
-      gl: 'Solicitude rexeitada',
-      ast: 'Solicitú refugada',
-      pt: 'Pedido recusado',
-      el: 'Το αίτημα απορρίφθηκε',
-      ro: 'Cerere respinsă',
+      es: 'Ha cambiado tu acceso a una clase',
+      en: 'Your access to a class changed',
+      ca: 'Ha canviat el teu accés a una classe',
+      val: 'Ha canviat el teu accés a una classe',
+      eu: 'Klase baterako zure sarbidea aldatu da',
+      gl: 'Cambiou o teu acceso a unha clase',
+      ast: 'Camudó\'l to accesu a una clase',
+      pt: 'O teu acesso a uma turma mudou',
+      el: 'Άλλαξε η πρόσβασή σου σε μια τάξη',
+      ro: 'Accesul tău la o clasă s-a schimbat',
     },
     message: {
-      es: 'Tu solicitud para unirte a {class} ha sido rechazada.',
-      en: 'Your request to join {class} was declined.',
-      ca: 'La teva sol·licitud per unir-te a {class} s\'ha rebutjat.',
-      val: 'La teua sol·licitud per unir-te a {class} s\'ha rebutjat.',
-      eu: '{class} klasean sartzeko zure eskaera ukatu dute.',
-      gl: 'A túa solicitude para unirte a {class} foi rexeitada.',
-      ast: 'La to solicitú pa xunite a {class} refugóse.',
-      pt: 'O teu pedido para entrar em {class} foi recusado.',
-      el: 'Το αίτημά σου να μπεις στο {class} απορρίφθηκε.',
-      ro: 'Cererea ta de a te alătura la {class} a fost respinsă.',
+      es: '{actor} ha cambiado tu acceso a {class}: ahora tienes el perfil «{profile}» y acceso de {access}.',
+      en: '{actor} changed your access to {class}: you now have the "{profile}" profile and {access} access.',
+      ca: '{actor} ha canviat el teu accés a {class}: ara tens el perfil «{profile}» i accés de {access}.',
+      val: '{actor} ha canviat el teu accés a {class}: ara tens el perfil «{profile}» i accés de {access}.',
+      eu: '{actor} irakasleak {class} klaserako zure sarbidea aldatu du: orain «{profile}» profila eta {access} sarbidea dituzu.',
+      gl: '{actor} cambiou o teu acceso a {class}: agora tes o perfil «{profile}» e acceso de {access}.',
+      ast: '{actor} camudó\'l to accesu a {class}: agora tienes el perfil «{profile}» y accesu de {access}.',
+      pt: '{actor} alterou o teu acesso a {class}: agora tens o perfil «{profile}» e acesso de {access}.',
+      el: 'Ο/Η {actor} άλλαξε την πρόσβασή σου στο {class}: τώρα έχεις το προφίλ «{profile}» και πρόσβαση {access}.',
+      ro: '{actor} ți-a schimbat accesul la {class}: acum ai profilul «{profile}» și acces de {access}.',
     },
   },
-  class_invitation: {
+  class_teacher_removed: {
     title: {
-      es: 'Nueva invitación',
-      en: 'New invitation',
-      ca: 'Nova invitació',
-      val: 'Nova invitació',
-      eu: 'Gonbidapen berria',
-      gl: 'Nova invitación',
-      ast: 'Nueva invitación',
-      pt: 'Novo convite',
-      el: 'Νέα πρόσκληση',
-      ro: 'Invitație nouă',
+      es: 'Ya no estás en una clase',
+      en: 'You were removed from a class',
+      ca: 'Ja no ets en una classe',
+      val: 'Ja no estàs en una classe',
+      eu: 'Jada ez zaude klase batean',
+      gl: 'Xa non estás nunha clase',
+      ast: 'Yá nun tas nuna clase',
+      pt: 'Já não estás numa turma',
+      el: 'Δεν είσαι πια σε μια τάξη',
+      ro: 'Nu mai ești într-o clasă',
     },
     message: {
-      es: 'Has sido invitado a unirte a {class}.',
-      en: 'You have been invited to join {class}.',
-      ca: 'T\'han convidat a unir-te a {class}.',
-      val: 'T\'han convidat a unir-te a {class}.',
-      eu: '{class} klasean sartzeko gonbidapena jaso duzu.',
-      gl: 'Convidáronte a unirte a {class}.',
-      ast: 'Convidáronte a xunite a {class}.',
-      pt: 'Foste convidado a entrar em {class}.',
-      el: 'Έλαβες πρόσκληση να μπεις στο {class}.',
-      ro: 'Ai fost invitat să te alături la {class}.',
+      es: '{actor} te ha quitado del profesorado de {class}.',
+      en: '{actor} removed you from the teachers of {class}.',
+      ca: '{actor} t\'ha tret del professorat de {class}.',
+      val: '{actor} t\'ha llevat del professorat de {class}.',
+      eu: '{actor} irakasleak {class} klaseko irakasleen artetik kendu zaitu.',
+      gl: '{actor} quitoute do profesorado de {class}.',
+      ast: '{actor} quitóte del profesoráu de {class}.',
+      pt: '{actor} retirou-te do corpo docente de {class}.',
+      el: 'Ο/Η {actor} σε αφαίρεσε από τους εκπαιδευτικούς του {class}.',
+      ro: '{actor} te-a scos din echipa de profesori a clasei {class}.',
+    },
+  },
+  class_ownership_received: {
+    title: {
+      es: 'Ahora una clase es tuya',
+      en: 'A class is now yours',
+      ca: 'Ara una classe és teva',
+      val: 'Ara una classe és teua',
+      eu: 'Klase bat zurea da orain',
+      gl: 'Agora unha clase é túa',
+      ast: 'Agora una clase ye tuya',
+      pt: 'Agora uma turma é tua',
+      el: 'Μια τάξη είναι πλέον δική σου',
+      ro: 'O clasă este acum a ta',
+    },
+    message: {
+      es: 'Ahora tienes la propiedad de {class}.',
+      en: 'You are now the owner of {class}.',
+      ca: 'Ara tens la propietat de {class}.',
+      val: 'Ara tens la propietat de {class}.',
+      eu: 'Orain {class} klasearen jabea zara.',
+      gl: 'Agora tes a propiedade de {class}.',
+      ast: 'Agora tienes la propiedá de {class}.',
+      pt: 'Agora tens a propriedade de {class}.',
+      el: 'Η τάξη {class} είναι πλέον δική σου.',
+      ro: 'Clasa {class} este acum a ta.',
     },
   },
 } as const satisfies Record<string, NotificationCopy>
 
 export type NotificationCopyKey = keyof typeof NOTIFICATION_COPY
+
+/**
+ * Perfil y nivel del profesorado de una clase, para los avisos que los nombran.
+ * Van como parámetro traducido: el aviso se compone en el idioma de quien lo recibe.
+ */
+export const CLASS_TEACHER_PROFILE_LABELS = {
+  titular: {
+    es: 'Titular',
+    en: 'Main teacher',
+    ca: 'Titular',
+    val: 'Titular',
+    eu: 'Titularra',
+    gl: 'Titular',
+    ast: 'Titular',
+    pt: 'Titular',
+    el: 'Υπεύθυνος/η',
+    ro: 'Titular',
+  },
+  sustituto: {
+    es: 'Sustituto',
+    en: 'Substitute',
+    ca: 'Substitut',
+    val: 'Substitut',
+    eu: 'Ordezkoa',
+    gl: 'Substituto',
+    ast: 'Sustitutu',
+    pt: 'Substituto',
+    el: 'Αναπληρωτής/τρια',
+    ro: 'Suplinitor',
+  },
+  practicas: {
+    es: 'Prácticas',
+    en: 'Trainee',
+    ca: 'Pràctiques',
+    val: 'Pràctiques',
+    eu: 'Praktikak',
+    gl: 'Prácticas',
+    ast: 'Práutiques',
+    pt: 'Estágio',
+    el: 'Πρακτική άσκηση',
+    ro: 'Practică',
+  },
+} as const satisfies Record<string, Translations>
+
+export const CLASS_ACCESS_LABELS = {
+  read: {
+    es: 'lectura',
+    en: 'view-only',
+    ca: 'lectura',
+    val: 'lectura',
+    eu: 'irakurketa',
+    gl: 'lectura',
+    ast: 'llectura',
+    pt: 'leitura',
+    el: 'ανάγνωσης',
+    ro: 'citire',
+  },
+  edit: {
+    es: 'edición',
+    en: 'editing',
+    ca: 'edició',
+    val: 'edició',
+    eu: 'edizio',
+    gl: 'edición',
+    ast: 'edición',
+    pt: 'edição',
+    el: 'επεξεργασίας',
+    ro: 'editare',
+  },
+  admin: {
+    es: 'administración',
+    en: 'admin',
+    ca: 'administració',
+    val: 'administració',
+    eu: 'administrazio',
+    gl: 'administración',
+    ast: 'alministración',
+    pt: 'administração',
+    el: 'διαχείρισης',
+    ro: 'administrare',
+  },
+} as const satisfies Record<string, Translations>
 
 /** Etiquetas del botón de los correos. */
 export const EMAIL_ACTION_LABELS = {
@@ -198,30 +306,6 @@ export const EMAIL_ACTION_LABELS = {
     pt: 'Ver a missão',
     el: 'Δες την αποστολή',
     ro: 'Vezi misiunea',
-  },
-  go_to_class: {
-    es: 'Ir a la clase',
-    en: 'Go to the class',
-    ca: 'Anar a la classe',
-    val: 'Anar a la classe',
-    eu: 'Joan klasera',
-    gl: 'Ir á clase',
-    ast: 'Dir a la clase',
-    pt: 'Ir para a turma',
-    el: 'Πήγαινε στην τάξη',
-    ro: 'Mergi la clasă',
-  },
-  my_classes: {
-    es: 'Ver mis clases',
-    en: 'View my classes',
-    ca: 'Veure les meves classes',
-    val: 'Veure les meues classes',
-    eu: 'Ikusi nire klaseak',
-    gl: 'Ver as miñas clases',
-    ast: 'Ver les mios clases',
-    pt: 'Ver as minhas turmas',
-    el: 'Δες τις τάξεις μου',
-    ro: 'Vezi clasele mele',
   },
   open: {
     es: 'Abrir en ITAKAI',
@@ -259,6 +343,12 @@ export const EMAIL_FOOTER: Translations = {
 
 export const DEFAULT_LANGUAGE: AppLanguage = 'es'
 
+/**
+ * Valor de un `{parametro}`: tal cual (un nombre, un número) o, si es una palabra
+ * de la propia aplicación, con su traducción a cada idioma.
+ */
+export type NotificationParam = string | number | Translations
+
 /** Sustituye `{parametro}` por su valor. Lo que no venga se deja tal cual. */
 export function interpolate(template: string, params: Record<string, string | number> = {}) {
   return template.replace(/\{(\w+)\}/g, (match, key) =>
@@ -266,16 +356,27 @@ export function interpolate(template: string, params: Record<string, string | nu
   )
 }
 
+/** Los parámetros en el idioma de quien recibe el aviso. */
+function localizeParams(params: Record<string, NotificationParam>, language: AppLanguage) {
+  return Object.fromEntries(
+    Object.entries(params).map(([key, value]) => [
+      key,
+      typeof value === 'object' ? (value[language] ?? value[DEFAULT_LANGUAGE]) : value,
+    ])
+  )
+}
+
 /** Compone título y mensaje de un aviso en el idioma del destinatario. */
 export function renderNotificationCopy(
   key: NotificationCopyKey,
   language: AppLanguage,
-  params: Record<string, string | number> = {}
+  params: Record<string, NotificationParam> = {}
 ) {
   const copy = NOTIFICATION_COPY[key]
+  const values = localizeParams(params, language)
   return {
-    title: interpolate(copy.title[language] ?? copy.title[DEFAULT_LANGUAGE], params),
-    message: interpolate(copy.message[language] ?? copy.message[DEFAULT_LANGUAGE], params),
+    title: interpolate(copy.title[language] ?? copy.title[DEFAULT_LANGUAGE], values),
+    message: interpolate(copy.message[language] ?? copy.message[DEFAULT_LANGUAGE], values),
   }
 }
 

@@ -1,15 +1,16 @@
 import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
 import { profileService } from './profile.service.js'
 import { z, ZodError } from 'zod'
-import { prisma } from '../../config/database.js'
 import { APP_LANGUAGES } from '../settings/settings.types.js'
-
-const REFRESH_TOKEN_COOKIE_NAME = 'refresh_token'
+import { rethrowHttpError } from '../../utils/errors.js'
+import { PASSWORD_MIN_LENGTH } from '../../utils/password.js'
+import { currentTokenFamily } from '../../utils/session-cookie.js'
+import { AccountDeletionBlockedError, accountDeletionCheck } from './account-deletion.service.js'
 
 // Schemas
 const changePasswordSchema = z.object({
   currentPassword: z.string().min(1),
-  newPassword: z.string().min(6),
+  newPassword: z.string().min(PASSWORD_MIN_LENGTH),
 })
 
 const changeEmailSchema = z.object({
@@ -38,21 +39,6 @@ const deleteAccountSchema = z.object({
   password: z.string().min(1),
 })
 
-/**
- * Get the current token family from the refresh token cookie
- */
-async function getCurrentTokenFamily(request: FastifyRequest): Promise<string | undefined> {
-  const cookieToken = request.cookies[REFRESH_TOKEN_COOKIE_NAME]
-  if (!cookieToken) return undefined
-
-  const token = await prisma.refreshToken.findUnique({
-    where: { token: cookieToken },
-    select: { family: true },
-  })
-
-  return token?.family
-}
-
 export async function profileRoutes(fastify: FastifyInstance) {
   // All routes require authentication
   fastify.addHook('preHandler', fastify.authenticate)
@@ -61,7 +47,7 @@ export async function profileRoutes(fastify: FastifyInstance) {
   fastify.get('/', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { id } = request.user as { id: string }
-      const currentFamily = await getCurrentTokenFamily(request)
+      const currentFamily = await currentTokenFamily(request)
       const result = await profileService.getProfile(id, currentFamily)
       return result
     } catch (error) {
@@ -77,12 +63,14 @@ export async function profileRoutes(fastify: FastifyInstance) {
     try {
       const { id } = request.user as { id: string }
       const data = changePasswordSchema.parse(request.body)
-      const result = await profileService.changePassword(id, data)
+      const currentFamily = await currentTokenFamily(request)
+      const result = await profileService.changePassword(id, data, currentFamily)
       return result
     } catch (error) {
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(400).send({ message: error.message })
       }
@@ -101,6 +89,7 @@ export async function profileRoutes(fastify: FastifyInstance) {
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(400).send({ message: error.message })
       }
@@ -142,7 +131,7 @@ export async function profileRoutes(fastify: FastifyInstance) {
   fastify.delete('/sessions', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { id } = request.user as { id: string }
-      const currentFamily = await getCurrentTokenFamily(request)
+      const currentFamily = await currentTokenFamily(request)
       const result = await profileService.closeAllSessions(id, currentFamily)
       return result
     } catch (error) {
@@ -183,6 +172,13 @@ export async function profileRoutes(fastify: FastifyInstance) {
     }
   })
 
+  // Antes de pedir la contraseña: qué clases pasarían a otra persona y cuáles
+  // impiden borrar la cuenta.
+  fastify.get('/delete-account/check', async (request: FastifyRequest) => {
+    const { id } = request.user as { id: string }
+    return accountDeletionCheck(id)
+  })
+
   // DELETE /profile/delete-account
   fastify.delete('/delete-account', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -194,6 +190,12 @@ export async function profileRoutes(fastify: FastifyInstance) {
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
+      if (error instanceof AccountDeletionBlockedError) {
+        return reply
+          .status(409)
+          .send({ message: error.message, code: error.code, classes: error.classes })
+      }
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(400).send({ message: error.message })
       }

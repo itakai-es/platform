@@ -12,7 +12,7 @@
             {{ t('teacher.dashboard.new_class') }}
           </Button>
         </NuxtLink>
-        <NuxtLink to="/profesor/misiones/crear">
+        <NuxtLink v-if="teacherStore.canCreateMissions" to="/profesor/misiones/crear">
           <Button variant="primary" size="md">
             <PlusIcon class="w-4 h-4 mr-2" />
             {{ t('teacher.dashboard.new_mission') }}

@@ -2,8 +2,11 @@
  * Composable to get the full URL for images referenced from API payloads.
  *
  * URLs starting with `/uploads/` point to backend-served user content
- * (teacher badges, class covers, mission documents, etc.) backed by the
+ * (teacher badges, class covers, help imagery, etc.) backed by the
  * `api_uploads_prod` Docker volume. Those need `${apiBase}` prepended.
+ *
+ * Las entregas y los documentos de misión no se piden por su URL: van por
+ * `useProtectedFiles`, que pasa por la API y comprueba el acceso.
  *
  * Every other relative path resolves against the frontend's own origin:
  *   - `/badges/` → versioned system badge SVGs in `app/public/badges/`

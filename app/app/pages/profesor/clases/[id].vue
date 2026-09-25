@@ -29,6 +29,7 @@
     <!-- Main Content -->
     <template v-else>
       <ClassDetailHeader
+        class="print:hidden"
         :name="state.classData.name"
         :background-image="resolvedClassImage"
         home-to="/profesor/inicio"
@@ -41,7 +42,7 @@
         :education-level="state.classData.educationLevel"
         :language="state.classData.language"
       >
-        <template #actions>
+        <template v-if="can('class.inviteCode')" #actions>
           <Button
             variant="secondary"
             size="md"
@@ -53,18 +54,17 @@
             }}</span>
           </Button>
         </template>
-        <template v-if="state.classData.schedule" #subtitle>
+        <template v-if="scheduleSummary" #subtitle>
           <span class="inline-flex items-center gap-1.5">
             <CalendarDaysIcon class="w-4 h-4 text-white/60" />
-            {{ state.classData.schedule }}
+            {{ scheduleSummary }}
           </span>
         </template>
         <template v-if="state.classData.archived" #meta>
           <div
             class="rounded-2xl bg-yellow/20 border border-yellow/30 px-4 py-3 text-sm text-white"
           >
-            Esta clase está archivada. Se mantiene accesible para consulta, pero no admite nuevos
-            alumnos ni invitaciones.
+            {{ t('teacher.classes.detail.archived_notice') }}
           </div>
         </template>
       </ClassDetailHeader>
@@ -76,10 +76,12 @@
 
     <!-- Invite Modal -->
     <InviteStudentsModal
-      v-if="state.classData"
+      v-if="state.classData && can('class.inviteCode')"
       v-model="state.showInviteModal"
       :class-id="classId"
       :invitation-code="state.classData.invitationCode || ''"
+      :can-create-accounts="!state.classData.archived"
+      @created="onAccountsCreated"
     />
 
     <!-- Activity Badge Modal -->
@@ -127,6 +129,7 @@ import {
   HandRaisedIcon as HandRaisedIconSolid,
   Cog6ToothIcon as Cog6ToothIconSolid,
   UsersIcon as UsersIconSolid,
+  ClockIcon as ClockIconSolid,
 } from '@heroicons/vue/24/solid'
 
 definePageMeta({
@@ -152,7 +155,20 @@ const route = useRoute()
 
 const classId = computed(() => route.params.id as string)
 const detail = useTeacherClassDetail(classId)
-const { state, classSettings, resolvedClassImage, loadAll, closeActivityBadge } = detail
+const { state, classSettings, resolvedClassImage, can, loadAll, revalidate, closeActivityBadge } =
+  detail
+const teacherStore = useTeacherStore()
+
+// Días y horas de la clase; el horario completo, con fechas, está en Ajustes.
+const { summarize } = useScheduleSummary()
+const scheduleSummary = computed(() =>
+  summarize(state.value.classData?.scheduleConfig, state.value.classData?.schedule).join(' · ')
+)
+
+/** Las cuentas nuevas ya están matriculadas: se cuentan sin volver a pedir la clase. */
+function onAccountsCreated(count: number) {
+  if (state.value.classData) state.value.classData.studentCount += count
+}
 
 const tabs = computed(() => {
   const s = classSettings.value
@@ -160,26 +176,49 @@ const tabs = computed(() => {
     { id: 'resumen', label: t('teacher.classes.detail.tabs.summary'), icon: Squares2X2IconSolid },
     { id: 'historia', label: t('teacher.classes.detail.tabs.narrative'), icon: BookOpenIconSolid },
     { id: 'guia', label: t('teacher.classes.detail.tabs.guide'), icon: SparklesIconSolid },
-    { id: 'misiones', label: t('teacher.classes.detail.tabs.missions'), icon: RocketLaunchIconSolid },
+    {
+      id: 'misiones',
+      label: t('teacher.classes.detail.tabs.missions'),
+      icon: RocketLaunchIconSolid,
+    },
     { id: 'alumnos', label: t('teacher.classes.detail.tabs.students'), icon: UsersIconSolid },
   ]
   // El ranking (podio) vive ahora como sub-vista dentro de "Alumnos".
   if (s.shop)
-    list.push({ id: 'tienda', label: t('teacher.classes.detail.tabs.tienda'), icon: ShoppingBagIconSolid })
+    list.push({
+      id: 'tienda',
+      label: t('teacher.classes.detail.tabs.tienda'),
+      icon: ShoppingBagIconSolid,
+    })
   if (s.behaviors)
     list.push({
       id: 'comportamientos',
       label: t('teacher.classes.detail.tabs.behaviors'),
       icon: HandRaisedIconSolid,
     })
-  list.push({ id: 'ajustes', label: t('teacher.classes.detail.tabs.settings'), icon: Cog6ToothIconSolid })
+  if (can('class.history'))
+    list.push({
+      id: 'historial',
+      label: t('teacher.classes.detail.tabs.history'),
+      icon: ClockIconSolid,
+    })
+  list.push({
+    id: 'ajustes',
+    label: t('teacher.classes.detail.tabs.settings'),
+    icon: Cog6ToothIconSolid,
+  })
   return list
 })
+
+// Páginas de la clase que no son una pestaña, con la pestaña de la que dependen:
+// la hoja de credenciales se abre desde Alumnos y la marca.
+const TAB_OF_PAGE: Record<string, string> = { credenciales: 'alumnos' }
 
 // Pestaña activa derivada del segmento siguiente al :id.
 const activeTab = computed(() => {
   const segs = route.path.split('/').filter(Boolean)
-  return segs[3] || 'resumen'
+  const page = segs[3] || 'resumen'
+  return TAB_OF_PAGE[page] ?? page
 })
 
 function tabHref(tabId: string) {
@@ -197,4 +236,13 @@ watch(tabs, list => {
 onMounted(() => {
   void loadAll()
 })
+
+// Un aviso de cambio de acceso a esta clase, abierto con la clase ya en pantalla:
+// se vuelve a pedir para que pestañas y controles sigan al nivel nuevo.
+watch(
+  () => teacherStore.classAccessRevision[classId.value],
+  () => {
+    void revalidate()
+  }
+)
 </script>

@@ -8,6 +8,8 @@ interface Activity {
   avatar?: string
   username?: string
   teacherName?: string
+  /** Quién hizo lo que cuenta la entrada, si no es el propio alumno (aprobar, aplicar). */
+  actor?: { id: string | null; name: string; avatar: string | null } | null
   enigmaTitle?: string
   enigmaXp?: number
   missionTitle?: string
@@ -48,6 +50,21 @@ interface FormattedActivity {
   }
   /** Chips visuales de recursos involucrados (XP, monedas, maná, vidas). */
   resources?: ResourceDelta[]
+  /** Profesor que lo hizo, cuando la descripción no lo nombra ya. */
+  actorName?: string
+}
+
+/**
+ * La descripción se pinta como HTML (lleva `<strong>`): lo que escriben las
+ * personas (títulos, nombres) entra escapado.
+ */
+function esc(value: unknown): string {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
 }
 
 /** Construye un ResourceDelta a partir de un delta firmado (positivo o negativo). */
@@ -95,32 +112,36 @@ export function useActivityFormatter(perspective: 'student' | 'teacher' = 'stude
             }
           | undefined
         let resources: ResourceDelta[] | undefined
+        let actorName: string | undefined
 
         // Format based on perspective
         const isTeacher = perspective === 'teacher'
 
         switch (normalizedType) {
-          case 'enigma_completed':
+          case 'enigma_completed': {
+            // Quien aprobó: el actor de la entrada; las antiguas solo guardan el nombre.
+            const reviewer = activity.actor?.name || activity.teacherName || 'El profesor'
             if (isTeacher) {
-              description = `${activity.teacherName || 'El profesor'} aprobó su entrega de <strong>"${activity.enigmaTitle}"</strong>`
+              description = `${esc(reviewer)} aprobó su entrega de <strong>"${esc(activity.enigmaTitle)}"</strong>`
             } else {
-              description = `${activity.teacherName || 'El profesor'} aprobó tu entrega de <strong>"${activity.enigmaTitle}"</strong>`
+              description = `${esc(reviewer)} aprobó tu entrega de <strong>"${esc(activity.enigmaTitle)}"</strong>`
             }
             badge = { type: 'xp', text: `+${activity.enigmaXp} XP` }
             break
+          }
 
           case 'enigma_submitted':
             description = isTeacher
-              ? `Envió <strong>"${activity.enigmaTitle}"</strong> a revisión`
-              : `Entregaste <strong>"${activity.enigmaTitle}"</strong>`
+              ? `Envió <strong>"${esc(activity.enigmaTitle)}"</strong> a revisión`
+              : `Entregaste <strong>"${esc(activity.enigmaTitle)}"</strong>`
             // No badge for submissions (only when approved)
             badge = undefined
             break
 
           case 'mission_completed':
             description = isTeacher
-              ? `Completó la misión <strong>"${activity.missionTitle}"</strong>`
-              : `Completaste la misión <strong>"${activity.missionTitle}"</strong>`
+              ? `Completó la misión <strong>"${esc(activity.missionTitle)}"</strong>`
+              : `Completaste la misión <strong>"${esc(activity.missionTitle)}"</strong>`
             badge = activity.missionXp
               ? { type: 'mission', text: `+${activity.missionXp} XP` }
               : undefined
@@ -128,29 +149,29 @@ export function useActivityFormatter(perspective: 'student' | 'teacher' = 'stude
 
           case 'level_up':
             description = isTeacher
-              ? `Subió al nivel <strong>${activity.newLevel}</strong>`
-              : `Subiste al nivel <strong>${activity.newLevel}</strong>`
+              ? `Subió al nivel <strong>${esc(activity.newLevel)}</strong>`
+              : `Subiste al nivel <strong>${esc(activity.newLevel)}</strong>`
             badge = { type: 'level', text: `Nivel ${activity.newLevel}` }
             break
 
           case 'class_joined':
             description = isTeacher
-              ? `Se unió a <strong>"${activity.className || 'una clase'}"</strong>`
-              : `Te uniste a <strong>"${activity.className || 'una clase'}"</strong>`
+              ? `Se unió a <strong>"${esc(activity.className || 'una clase')}"</strong>`
+              : `Te uniste a <strong>"${esc(activity.className || 'una clase')}"</strong>`
             badge = { type: 'new', text: 'Nueva' }
             break
 
           case 'achievement_unlocked':
             description = isTeacher
-              ? `Desbloqueó el logro <strong>"${activity.achievementName}"</strong>`
-              : `Desbloqueaste el logro <strong>"${activity.achievementName}"</strong>`
+              ? `Desbloqueó el logro <strong>"${esc(activity.achievementName)}"</strong>`
+              : `Desbloqueaste el logro <strong>"${esc(activity.achievementName)}"</strong>`
             badge = { type: 'achievement', text: 'Logro' }
             break
 
           case 'badge_unlocked':
             description = isTeacher
-              ? `Desbloqueó la insignia <strong>"${activity.badgeName}"</strong>`
-              : `Desbloqueaste la insignia <strong>"${activity.badgeName}"</strong>`
+              ? `Desbloqueó la insignia <strong>"${esc(activity.badgeName)}"</strong>`
+              : `Desbloqueaste la insignia <strong>"${esc(activity.badgeName)}"</strong>`
             badge = {
               type: 'achievement',
               text: activity.badgeName || '',
@@ -161,8 +182,8 @@ export function useActivityFormatter(perspective: 'student' | 'teacher' = 'stude
           case 'xp_gained':
             if (activity.xpAmount != null && activity.xpAmount > 0) {
               description = isTeacher
-                ? `Ganó <strong>+${activity.xpAmount} XP</strong> en ${activity.source || 'una actividad'}`
-                : `Ganaste <strong>+${activity.xpAmount} XP</strong> en ${activity.source || 'una actividad'}`
+                ? `Ganó <strong>+${esc(activity.xpAmount)} XP</strong> en ${esc(activity.source || 'una actividad')}`
+                : `Ganaste <strong>+${esc(activity.xpAmount)} XP</strong> en ${esc(activity.source || 'una actividad')}`
               badge = { type: 'xp', text: `+${activity.xpAmount} XP` }
             } else {
               // Skip activities with no real XP
@@ -179,8 +200,8 @@ export function useActivityFormatter(perspective: 'student' | 'teacher' = 'stude
 
           case 'progress_milestone':
             description = isTeacher
-              ? activity.source || 'Alcanzó un hito de progreso'
-              : activity.source || 'Alcanzaste un hito de progreso'
+              ? esc(activity.source || 'Alcanzó un hito de progreso')
+              : esc(activity.source || 'Alcanzaste un hito de progreso')
             badge = { type: 'achievement', text: 'Hito' }
             break
 
@@ -193,13 +214,14 @@ export function useActivityFormatter(perspective: 'student' | 'teacher' = 'stude
             }
             const name = activity.source || 'un comportamiento'
             description = isTeacher
-              ? `Recibió el comportamiento <strong>"${name}"</strong>`
-              : `Recibiste el comportamiento <strong>"${name}"</strong>`
+              ? `Recibió el comportamiento <strong>"${esc(name)}"</strong>`
+              : `Recibiste el comportamiento <strong>"${esc(name)}"</strong>`
             resources = [
               makeDelta('xp', meta.xpDelta),
               makeDelta('coin', meta.coinDelta),
               makeDelta('life', meta.lifeDelta),
             ].filter((r): r is ResourceDelta => r !== null)
+            actorName = activity.actor?.name || undefined
             // Propagamos el tipo (positivo/negativo) al badge para que el
             // frontend pueda elegir icono pulgar arriba/abajo.
             badge = {
@@ -214,8 +236,8 @@ export function useActivityFormatter(perspective: 'student' | 'teacher' = 'stude
             const meta = (activity.metadata || {}) as { price?: number }
             const name = activity.source || 'un artículo'
             description = isTeacher
-              ? `Compró <strong>"${name}"</strong> en la tienda`
-              : `Compraste <strong>"${name}"</strong> en la tienda`
+              ? `Compró <strong>"${esc(name)}"</strong> en la tienda`
+              : `Compraste <strong>"${esc(name)}"</strong> en la tienda`
             // El precio sale de monedas, así que va firmado en negativo.
             resources = [makeDelta('coin', meta.price != null ? -meta.price : 0)].filter(
               (r): r is ResourceDelta => r !== null
@@ -228,8 +250,8 @@ export function useActivityFormatter(perspective: 'student' | 'teacher' = 'stude
             const meta = (activity.metadata || {}) as { manaCost?: number; lifeRestore?: number }
             const name = activity.source || 'un artículo'
             description = isTeacher
-              ? `Usó <strong>"${name}"</strong>`
-              : `Usaste <strong>"${name}"</strong>`
+              ? `Usó <strong>"${esc(name)}"</strong>`
+              : `Usaste <strong>"${esc(name)}"</strong>`
             resources = [
               // El maná se gasta (negativo), las vidas se recuperan (positivo).
               makeDelta('mana', meta.manaCost ? -meta.manaCost : 0),
@@ -258,6 +280,7 @@ export function useActivityFormatter(perspective: 'student' | 'teacher' = 'stude
           avatar: activity.avatar || '/app/avatars/atenea.svg',
           badge,
           resources: resources?.length ? resources : undefined,
+          actorName,
         }
       })
       .filter((a): a is FormattedActivity => a !== null)

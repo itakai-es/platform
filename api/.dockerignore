@@ -1,0 +1,11 @@
+# Nada de esto debe acabar dentro de la imagen: los secretos y la config
+# de cada entorno llegan por env_file / variables del compose, no horneados.
+.env
+.env.*
+!.env.example
+!.env.prod.example
+node_modules
+dist
+uploads
+.git
+verify-*.ts

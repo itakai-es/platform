@@ -1,7 +1,6 @@
 import { prisma } from '../../config/database.js'
 import { getLevelInfo, wouldLevelUp, calculateMissionTotalXP } from '../../utils/xp-calculator.js'
 import { resolveLevelConfig, tierForLevel } from '../../utils/level-config.js'
-import { hashPassword, verifyPassword } from '../../utils/password.js'
 import { formatMission, getMissionStatus } from '../../utils/mission-formatter.js'
 import { ensureSafeEducationalPrompt } from '../ai/ai-safety.js'
 import { generateFireRedAvatar } from '../ai/generators/avatar-firered.js'
@@ -9,65 +8,33 @@ import { getAIProvider } from '../ai/providers/index.js'
 import { AVATAR_PROMPTS } from '../ai/prompts/index.js'
 import { AvatarServiceUnavailableError } from '../../utils/errors.js'
 import { resolveClassSettings } from '../../utils/class-settings.js'
+import { ForbiddenError, ValidationError } from '../../utils/errors.js'
+import {
+  accessibleClassesWhere,
+  classTeachersInclude,
+  getClassMembership,
+  studentEnrollmentsWhere,
+  type ClassUser,
+} from '../../utils/class-access.js'
+import {
+  DEFAULT_AVATARS,
+  enrollStudentNow,
+  freeNicknamesForPreview,
+  getRandomAvatar,
+  participatingEnrollmentWhere,
+} from '../../utils/enrollment.js'
+import { activityActor } from '../../utils/activity.js'
+import { assertNotManagedAccount } from '../../utils/identity-db.js'
+import { changeOwnPassword } from '../../utils/password-change.js'
+
+/** Matricularse en una clase es cosa de alumnos: el profesorado la mira con la vista previa. */
+function assertStudentRole(user: ClassUser) {
+  if (user.role !== 'student') {
+    throw new ForbiddenError('Solo el alumnado puede unirse a una clase')
+  }
+}
 
 export { AvatarServiceUnavailableError }
-
-// Default avatar options (Greek gods)
-const DEFAULT_AVATARS = [
-  '/app/avatars/atenea.svg',
-  '/app/avatars/odiseo.svg',
-  '/app/avatars/penelope.svg',
-  '/app/avatars/polifemo.svg',
-  '/app/avatars/poseidon.svg',
-]
-
-// Mythological-themed nicknames
-const MYTHOLOGICAL_NICKNAMES = [
-  'Héroe Anónimo',
-  'Guerrero de Troya',
-  'Argonauta Valiente',
-  'Guardián del Olimpo',
-  'Explorador Épico',
-  'Titan Novato',
-  'Escudero de Atenea',
-  'Mensajero Hermes',
-  'Aprendiz de Hefesto',
-  'Discípulo de Quirón',
-  'Portador de la Llama',
-  'Navegante Audaz',
-  'Cazador de Artemisa',
-  'Defensor del Ágora',
-  'Sabio Itacense',
-  'Forjador de Leyendas',
-  'Voz del Oráculo',
-  'Protector del Templo',
-  'Hijo de las Musas',
-  'Centinela Espartano',
-  'Viajero Intrépido',
-  'Guardián Secreto',
-  'Buscador de Mitos',
-  'Aspirante a Héroe',
-  'Portador de Luz',
-  'Explorador Mítico',
-  'Escriba del Olimpo',
-  'Valiente de Atenas',
-  'Joven Estratega',
-  'Aprendiz del Destino',
-]
-
-/**
- * Selects a random default avatar URL
- */
-function getRandomAvatar(): string {
-  return DEFAULT_AVATARS[Math.floor(Math.random() * DEFAULT_AVATARS.length)]
-}
-
-/**
- * Generates a random mythological nickname
- */
-function getRandomNickname(): string {
-  return MYTHOLOGICAL_NICKNAMES[Math.floor(Math.random() * MYTHOLOGICAL_NICKNAMES.length)]
-}
 
 function hashText(content: string) {
   return Array.from(content).reduce((acc, char) => (acc * 31 + char.charCodeAt(0)) >>> 0, 7)
@@ -119,6 +86,8 @@ export class StudentsService {
     return {
       id: user.id,
       email: user.email,
+      username: user.username,
+      accountType: user.accountType,
       name: user.name,
       firstName: user.name.split(' ')[0],
       lastName: user.name.split(' ').slice(1).join(' ') || '',
@@ -142,6 +111,9 @@ export class StudentsService {
   async updateProfile(userId: string, data: { firstName?: string; lastName?: string; bio?: string }) {
     const updateData: any = {}
     if (data.firstName || data.lastName) {
+      // El nombre de una cuenta gestionada lo lleva su profesorado: es el nombre
+      // con el que le identifica en clase, y aquí se rechaza cambiarlo.
+      await assertNotManagedAccount(userId, 'no puede cambiar su nombre')
       updateData.name = `${data.firstName || ''} ${data.lastName || ''}`.trim()
     }
 
@@ -153,6 +125,7 @@ export class StudentsService {
     return {
       id: user.id,
       name: user.name,
+      username: user.username,
     }
   }
 
@@ -168,37 +141,36 @@ export class StudentsService {
     return { avatarUrl, message: 'Avatar generado correctamente' }
   }
 
-  async changePassword(userId: string, data: { currentPassword: string; newPassword: string; confirmPassword: string }) {
+  /** Cambio de contraseña del alumnado; el camino es el mismo para todos (utils/password-change.ts). */
+  async changePassword(
+    userId: string,
+    data: { currentPassword: string; newPassword: string; confirmPassword: string },
+    currentTokenFamily?: string
+  ) {
     if (data.newPassword !== data.confirmPassword) {
-      throw new Error('Las contraseñas no coinciden')
+      throw new ValidationError('Las contraseñas no coinciden', 'PASSWORD_MISMATCH')
     }
 
-    const user = await prisma.user.findUnique({ where: { id: userId } })
-    if (!user) throw new Error('Usuario no encontrado')
+    const result = await changeOwnPassword(
+      userId,
+      { currentPassword: data.currentPassword, newPassword: data.newPassword },
+      { keepSessionFamily: currentTokenFamily }
+    )
 
-    const isValid = await verifyPassword(data.currentPassword, user.passwordHash)
-    if (!isValid) throw new Error('Contraseña actual incorrecta')
-
-    const newHash = await hashPassword(data.newPassword)
-    await prisma.user.update({
-      where: { id: userId },
-      data: { passwordHash: newHash },
-    })
-
-    return { message: 'Contraseña actualizada correctamente' }
+    return { message: result.message }
   }
 
   // ==================== CLASSES ====================
 
-  async getClasses(userId: string) {
+  async getClasses(user: ClassUser) {
     const enrollments = await prisma.classEnrollment.findMany({
-      where: { studentId: userId },
+      where: studentEnrollmentsWhere(user),
       include: {
         class: {
           include: {
             teacher: true,
             missions: true,
-            enrollments: { where: { isPreview: false } },
+            enrollments: { where: { isPreview: false, AND: [participatingEnrollmentWhere] } },
           },
         },
       },
@@ -211,6 +183,7 @@ export class StudentsService {
         id: e.class.id,
         name: e.class.name,
         schedule: e.class.schedule,
+        scheduleConfig: e.class.scheduleConfig,
         archived: e.class.archived,
         teacherName: e.class.teacher.name,
         backgroundImage: e.class.backgroundImage,
@@ -234,8 +207,9 @@ export class StudentsService {
           include: {
             teacher: true,
             missions: { include: { enigmas: true } },
-            enrollments: { where: { isPreview: false } },
+            enrollments: { where: { isPreview: false, AND: [participatingEnrollmentWhere] } },
             guide: true,
+            teachers: classTeachersInclude(),
           },
         },
       },
@@ -289,14 +263,23 @@ export class StudentsService {
       name: cls.name,
       narrative: cls.narrative,
       schedule: cls.schedule,
+      scheduleConfig: cls.scheduleConfig,
       teacherName: cls.teacher.name,
+      // Quién imparte la clase, con su perfil; también quien está en prácticas,
+      // que ve los datos del alumnado. Sin correo ni nivel de acceso.
+      teachers: cls.teachers.map(t => ({
+        name: t.user.name,
+        profile: t.profile,
+        isOwner: t.isOwner,
+      })),
       archived: cls.archived,
       backgroundImage: cls.backgroundImage,
       subject: cls.subject,
       language: cls.language,
       educationLevel: cls.educationLevel,
       settings: resolveClassSettings(cls.settings),
-      invitationCode: cls.invitationCode,
+      // Sin código de invitación: desde este lado entra también la vista previa
+      // del profesorado, y el código es solo de quien administra la clase.
       studentCount: cls.enrollments.length,
       missionCount: cls.missions.length,
       coins: enrollment.coins,
@@ -344,18 +327,9 @@ export class StudentsService {
     }
   }
 
-  async getClassGuide(userId: string, classId: string) {
-    // Check if user is enrolled as student OR is the teacher of the class
-    const [enrollment, classAsTeacher] = await Promise.all([
-      prisma.classEnrollment.findUnique({
-        where: { studentId_classId: { studentId: userId, classId } },
-      }),
-      prisma.class.findFirst({
-        where: { id: classId, teacherId: userId },
-      }),
-    ])
-
-    if (!enrollment && !classAsTeacher) {
+  async getClassGuide(user: ClassUser, classId: string) {
+    // La guía la leen el alumnado matriculado y el profesorado de la clase.
+    if (!(await getClassMembership(classId, user))) {
       throw new Error('No tienes acceso a esta clase')
     }
 
@@ -416,7 +390,7 @@ export class StudentsService {
 
     // Get ranking in class (order by enrollment XP)
     const classStudents = await prisma.classEnrollment.findMany({
-      where: { classId, isPreview: false },
+      where: { classId, isPreview: false, AND: [participatingEnrollmentWhere] },
       orderBy: { xp: 'desc' },
     })
 
@@ -459,7 +433,7 @@ export class StudentsService {
 
     // Order by enrollment XP (per-class XP)
     const enrollments = await prisma.classEnrollment.findMany({
-      where: { classId, isPreview: false },
+      where: { classId, isPreview: false, AND: [participatingEnrollmentWhere] },
       include: { student: true },
       orderBy: { xp: 'desc' },
     })
@@ -706,6 +680,7 @@ export class StudentsService {
         classId: a.classId,
         className: a.className,
         teacherName: a.teacherName,
+        actor: activityActor(a),
         // Activity-specific fields (from Activity model directly)
         enigmaTitle: a.enigmaTitle,
         enigmaXp: a.enigmaXp,
@@ -727,32 +702,29 @@ export class StudentsService {
 
   /**
    * Matrícula "fantasma" para el modo "Ver como alumno": auto-matricula al
-   * profesor (isPreview=true) en todas las clases que imparte, de forma
-   * idempotente. Estas matrículas se excluyen de listados/recuentos/rankings,
-   * así que solo las ve el propio profesor al previsualizar.
+   * profesor (isPreview=true) en todas las clases a las que tiene acceso, con
+   * cualquier nivel, de forma idempotente. Estas matrículas se excluyen de
+   * listados/recuentos/rankings, así que solo las ve el propio profesor al
+   * previsualizar.
    */
-  async ensurePreviewEnrollments(teacherId: string) {
-    const classes = await prisma.class.findMany({
-      where: { teacherId },
+  async ensurePreviewEnrollments(userId: string) {
+    // Solo se crean las que faltan: una matrícula que ya existía se deja como
+    // está, porque es la que cuenta en el ranking y en los listados de la clase.
+    const toCreate = await prisma.class.findMany({
+      where: { ...accessibleClassesWhere(userId), enrollments: { none: { studentId: userId } } },
       select: { id: true },
     })
-    if (!classes.length) return { enrolled: 0 }
-
-    const existing = await prisma.classEnrollment.findMany({
-      where: { studentId: teacherId, classId: { in: classes.map(c => c.id) } },
-      select: { classId: true },
-    })
-    const existingIds = new Set(existing.map(e => e.classId))
-    const toCreate = classes.filter(c => !existingIds.has(c.id))
 
     if (toCreate.length) {
+      // Un alias que no tenga nadie de la clase, para no verse repetido en ella.
+      const nicknames = await freeNicknamesForPreview(toCreate.map(c => c.id))
       await prisma.classEnrollment.createMany({
         data: toCreate.map(c => ({
-          studentId: teacherId,
+          studentId: userId,
           classId: c.id,
           isPreview: true,
           avatarUrl: getRandomAvatar(),
-          nickname: getRandomNickname(),
+          nickname: nicknames.get(c.id),
         })),
         skipDuplicates: true,
       })
@@ -760,7 +732,9 @@ export class StudentsService {
     return { enrolled: toCreate.length }
   }
 
-  async joinClass(userId: string, code: string) {
+  async joinClass(user: ClassUser, code: string) {
+    assertStudentRole(user)
+    const userId = user.id
     const cls = await prisma.class.findUnique({
       where: { invitationCode: code },
     })
@@ -774,30 +748,7 @@ export class StudentsService {
 
     if (existingEnrollment) throw new Error('Ya estás inscrito en esta clase')
 
-    // Create enrollment with random avatar and nickname
-    const enrollment = await prisma.classEnrollment.create({
-      data: {
-        studentId: userId,
-        classId: cls.id,
-        avatarUrl: getRandomAvatar(),
-        nickname: getRandomNickname(),
-      },
-    })
-
-    // Create activity with class-specific profile
-    await prisma.activity.create({
-      data: {
-        userId,
-        type: 'class_joined',
-        description: `Te has unido a la clase ${cls.name}`,
-        // Class-specific student profile
-        avatar: enrollment.avatarUrl,
-        username: enrollment.nickname || 'Estudiante',
-        classId: cls.id,
-        className: cls.name,
-        metadata: { classId: cls.id },
-      },
-    })
+    await enrollStudentNow({ studentId: userId, classId: cls.id, className: cls.name })
 
     return {
       // Incluimos los settings resueltos para que el front pueda decidir si
@@ -808,174 +759,12 @@ export class StudentsService {
     }
   }
 
-  async createJoinRequest(userId: string, code: string, message?: string) {
-    const cls = await prisma.class.findUnique({
-      where: { invitationCode: code },
-    })
-
-    if (!cls) throw new Error('Código de clase inválido')
-    if (cls.archived) throw new Error('Esta clase está archivada y no admite nuevas solicitudes')
-
-    const existingEnrollment = await prisma.classEnrollment.findUnique({
-      where: { studentId_classId: { studentId: userId, classId: cls.id } },
-    })
-
-    if (existingEnrollment) throw new Error('Ya estás inscrito en esta clase')
-
-    const existingRequest = await prisma.joinRequest.findFirst({
-      where: { studentId: userId, classId: cls.id, status: 'pending' },
-    })
-
-    if (existingRequest) throw new Error('Ya tienes una solicitud pendiente para esta clase')
-
-    const request = await prisma.joinRequest.create({
-      data: {
-        studentId: userId,
-        classId: cls.id,
-        message,
-      },
-    })
-
-    return {
-      request: { id: request.id, status: request.status },
-      success: true,
-      message: 'Solicitud enviada correctamente',
-    }
-  }
-
-  // ==================== ENROLLMENTS ====================
-
-  async getJoinRequests(userId: string) {
-    const requests = await prisma.joinRequest.findMany({
-      where: { studentId: userId },
-      include: { class: { include: { teacher: true } } },
-      orderBy: { createdAt: 'desc' },
-    })
-
-    return {
-      requests: requests.map((r) => ({
-        id: r.id,
-        classId: r.classId,
-        className: r.class.name,
-        teacherName: r.class.teacher.name,
-        status: r.status,
-        message: r.message,
-        rejectionReason: r.rejectionReason,
-        createdAt: r.createdAt,
-      })),
-      total: requests.length,
-    }
-  }
-
-  async getInvitations(userId: string) {
-    const invitations = await prisma.invitation.findMany({
-      where: { studentId: userId, status: 'pending' },
-      include: { class: true, teacher: true },
-      orderBy: { createdAt: 'desc' },
-    })
-
-    return {
-      invitations: invitations.map((i) => ({
-        id: i.id,
-        classId: i.classId,
-        className: i.class.name,
-        classImage: i.class.backgroundImage,
-        teacherId: i.teacherId,
-        teacherName: i.teacher.name,
-        message: i.message,
-        expiresAt: i.expiresAt,
-        createdAt: i.createdAt,
-      })),
-      total: invitations.length,
-    }
-  }
-
-  async acceptInvitation(userId: string, invitationId: string) {
-    const invitation = await prisma.invitation.findUnique({
-      where: { id: invitationId },
-      include: { class: true },
-    })
-
-    if (!invitation || invitation.studentId !== userId) {
-      throw new Error('Invitación no encontrada')
-    }
-
-    if (invitation.status !== 'pending') {
-      throw new Error('Esta invitación ya no está disponible')
-    }
-
-    // Update invitation status
-    await prisma.invitation.update({
-      where: { id: invitationId },
-      data: { status: 'accepted' },
-    })
-
-    // Create enrollment with random avatar and nickname
-    const enrollment = await prisma.classEnrollment.create({
-      data: {
-        studentId: userId,
-        classId: invitation.classId,
-        avatarUrl: getRandomAvatar(),
-        nickname: getRandomNickname(),
-      },
-    })
-
-    // Create activity with class-specific profile
-    await prisma.activity.create({
-      data: {
-        userId,
-        type: 'class_joined',
-        description: `Te has unido a la clase ${invitation.class.name}`,
-        // Class-specific student profile
-        avatar: enrollment.avatarUrl,
-        username: enrollment.nickname || 'Estudiante',
-        classId: invitation.classId,
-        className: invitation.class.name,
-        metadata: { classId: invitation.classId },
-      },
-    })
-
-    return {
-      class: { id: invitation.class.id, name: invitation.class.name },
-      success: true,
-      message: 'Te has unido a la clase correctamente',
-    }
-  }
-
-  async rejectInvitation(userId: string, invitationId: string) {
-    const invitation = await prisma.invitation.findUnique({
-      where: { id: invitationId },
-    })
-
-    if (!invitation || invitation.studentId !== userId) {
-      throw new Error('Invitación no encontrada')
-    }
-
-    await prisma.invitation.update({
-      where: { id: invitationId },
-      data: { status: 'rejected' },
-    })
-
-    return { success: true, message: 'Invitación rechazada' }
-  }
-
-  async getEnrollmentCounts(userId: string) {
-    const pendingInvitations = await prisma.invitation.count({
-      where: { studentId: userId, status: 'pending' },
-    })
-
-    const pendingRequests = await prisma.joinRequest.count({
-      where: { studentId: userId, status: 'pending' },
-    })
-
-    return { pendingInvitations, pendingRequests }
-  }
-
   // ==================== MISSIONS ====================
 
-  async getMissions(userId: string) {
+  async getMissions(user: ClassUser) {
+    const userId = user.id
     const enrollments = await prisma.classEnrollment.findMany({
-      where: { studentId: userId },
+      where: studentEnrollmentsWhere(user),
     })
 
     const classIds = enrollments.map((e) => e.classId)
@@ -1001,7 +790,8 @@ export class StudentsService {
 
   // ==================== BADGES & ACHIEVEMENTS ====================
 
-  async getBadges(userId: string, filter?: string, category?: string) {
+  async getBadges(user: ClassUser, filter?: string, category?: string) {
+    const userId = user.id
     const categoryLabels: Record<string, string> = {
       streak: 'Rachas',
       missions: 'Misiones',
@@ -1019,7 +809,7 @@ export class StudentsService {
 
     // Get class IDs the student is enrolled in
     const enrollments = await prisma.classEnrollment.findMany({
-      where: { studentId: userId },
+      where: studentEnrollmentsWhere(user),
       select: { classId: true },
     })
     const classIds = enrollments.map(e => e.classId)
@@ -1115,6 +905,7 @@ export class StudentsService {
           classId: a.classId,
           className: a.className,
           teacherName: a.teacherName,
+          actor: activityActor(a),
           // Activity-specific fields (from Activity model directly)
           enigmaTitle: a.enigmaTitle,
           enigmaXp: a.enigmaXp,
@@ -1133,86 +924,6 @@ export class StudentsService {
       }),
       total: activities.length,
     }
-  }
-
-  // ==================== LEADERBOARD ====================
-
-  async getCurrentUserStats(userId: string) {
-    const user = await prisma.user.findUnique({ where: { id: userId } })
-    if (!user) throw new Error('Usuario no encontrado')
-
-    const users = await prisma.user.findMany({
-      where: { role: 'student' },
-      include: { enrollments: true },
-      take: 100,
-    })
-
-    const usersWithTotalXp = users
-      .map((u) => ({
-        ...u,
-        totalXp: u.enrollments.reduce((sum, e) => sum + e.xp, 0),
-      }))
-      .sort((a, b) => b.totalXp - a.totalXp)
-
-    const currentUserIndex = usersWithTotalXp.findIndex((u) => u.id === userId)
-    const totalXp = usersWithTotalXp[currentUserIndex]?.totalXp || 0
-    const levelInfo = getLevelInfo(totalXp)
-
-    return {
-      user: {
-        id: user.id,
-        name: user.name,
-        avatar: null,
-        rank: currentUserIndex >= 0 ? currentUserIndex + 1 : null,
-        xp: totalXp,
-        level: levelInfo.level,
-        weeklyXP: 0,
-        monthlyXP: 0,
-      },
-    }
-  }
-
-  async getGlobalLeaderboard(period?: string) {
-    // Get all students with their enrollments to aggregate XP
-    const users = await prisma.user.findMany({
-      where: { role: 'student' },
-      include: { enrollments: true },
-      take: 100,
-    })
-
-    // Calculate total XP across all classes for each student
-    const usersWithTotalXp = users.map((u) => ({
-      ...u,
-      totalXp: u.enrollments.reduce((sum, e) => sum + e.xp, 0),
-    }))
-
-    // Sort by total XP descending
-    usersWithTotalXp.sort((a, b) => b.totalXp - a.totalXp)
-
-    return {
-      leaderboard: usersWithTotalXp.map((u, index) => {
-        const levelInfo = getLevelInfo(u.totalXp)
-        return {
-          id: u.id,
-          name: u.name,
-          avatar: null, // Avatar is per-class (in enrollment)
-          rank: index + 1,
-          xp: u.totalXp,
-          level: levelInfo.level,
-        }
-      }),
-      total: usersWithTotalXp.length,
-      period: period || 'all',
-    }
-  }
-
-  async getClassLeaderboard(userId: string, classId: string, period?: string) {
-    return this.getClassRanking(userId, classId)
-  }
-
-  async getFriendsLeaderboard(userId: string, period?: string) {
-    // For now, return empty - friends system not implemented
-    return { leaderboard: [], total: 0, period: period || 'all' }
   }
 }
 

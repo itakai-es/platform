@@ -8,6 +8,7 @@ import type {
   ChangePasswordRequest,
   ChangeEmailRequest,
   ProfileActionResponse,
+  AccountDeletionCheck,
 } from '~/types/profile.types'
 
 export const useProfileStore = defineStore('profile', () => {
@@ -46,6 +47,33 @@ export const useProfileStore = defineStore('profile', () => {
 
   const currentEmail = computed(() => profile.value?.email || authStore.user?.email || '')
 
+  /** Usuario de la cuenta, con el que entra si no tiene correo. */
+  const currentUsername = computed(() => profile.value?.username || authStore.user?.username || '')
+
+  /**
+   * Con qué se identifica la cuenta: su correo y, si no tiene, su usuario. Es
+   * también lo que va en el campo oculto de los gestores de contraseñas.
+   */
+  const accountLogin = computed(() => currentEmail.value || currentUsername.value)
+
+  /**
+   * ¿La lleva el profesorado? Entonces no puede ponerse correo, ni cambiarse el
+   * nombre, ni borrarse: el servidor lo rechaza, y las pantallas no lo ofrecen.
+   */
+  const isManagedAccount = computed(
+    () => (profile.value?.accountType ?? authStore.user?.accountType) === 'managed'
+  )
+
+  /** El perfil tal y como lo tiene el servidor. */
+  const requestProfile = async () => {
+    const response = await $fetch<{ profile: UserProfile }>(`${config.public.apiBase}/profile`, {
+      headers: {
+        Authorization: `Bearer ${authStore.tokens?.accessToken}`,
+      },
+    })
+    return response.profile
+  }
+
   // Actions
   /**
    * Carga el perfil del usuario si no se ha cargado todavía (o si `force=true`).
@@ -60,12 +88,7 @@ export const useProfileStore = defineStore('profile', () => {
     error.value = null
 
     try {
-      const response = await $fetch<{ profile: UserProfile }>(`${config.public.apiBase}/profile`, {
-        headers: {
-          Authorization: `Bearer ${authStore.tokens?.accessToken}`,
-        },
-      })
-      profile.value = response.profile
+      profile.value = await requestProfile()
       // localStorage es la fuente de verdad para el tema
       if (import.meta.client && profile.value?.preferences) {
         const storedTheme = localStorage.getItem('itakai_theme') as 'college' | 'university' | null
@@ -93,6 +116,25 @@ export const useProfileStore = defineStore('profile', () => {
     await ensureProfile(true)
   }
 
+  /**
+   * Vuelve a pedir las sesiones abiertas sin tocar el resto del perfil. Solo si
+   * ya estaba cargado: sin perfil, nadie está enseñando la lista.
+   */
+  const refreshSessions = async () => {
+    if (!profile.value) return
+    try {
+      const fresh = await requestProfile()
+      if (profile.value) profile.value.security.sessions = fresh.security.sessions
+    } catch (err) {
+      console.error('Error refreshing sessions:', err)
+    }
+  }
+
+  /**
+   * Cambiar la contraseña cierra en el servidor las demás sesiones de la cuenta,
+   * así que después se vuelven a pedir: la lista del perfil no enseña las que ya
+   * no están abiertas.
+   */
   const changePassword = async (data: ChangePasswordRequest): Promise<ProfileActionResponse> => {
     try {
       const response = await $fetch<ProfileActionResponse>(
@@ -105,12 +147,14 @@ export const useProfileStore = defineStore('profile', () => {
           },
         }
       )
+      if (response.success) await refreshSessions()
       return response
     } catch (err: any) {
       console.error('Error changing password:', err)
       return {
         success: false,
         message: err.data?.message || 'Error al cambiar la contraseña',
+        code: err.data?.code,
       }
     }
   }
@@ -129,13 +173,14 @@ export const useProfileStore = defineStore('profile', () => {
       )
 
       if (response.success) {
-        // Update profile store
+        // El servidor lo guarda recortado y en minúsculas: aquí se enseña igual.
+        const savedEmail = data.newEmail.trim().toLowerCase()
         if (profile.value) {
-          profile.value.email = data.newEmail
+          profile.value.email = savedEmail
         }
         // Sync with auth store so sidebar/header reflect the change
         if (authStore.user) {
-          authStore.user.email = data.newEmail
+          authStore.user.email = savedEmail
           if (import.meta.client) {
             localStorage.setItem('auth_user', JSON.stringify(authStore.user))
           }
@@ -148,6 +193,7 @@ export const useProfileStore = defineStore('profile', () => {
       return {
         success: false,
         message: err.data?.message || 'Error al cambiar el email',
+        code: err.data?.code,
       }
     }
   }
@@ -319,6 +365,19 @@ export const useProfileStore = defineStore('profile', () => {
     }
   }
 
+  /** Qué pasaría con las clases propias al borrar la cuenta. `null` si no se pudo saber. */
+  const checkAccountDeletion = async (): Promise<AccountDeletionCheck | null> => {
+    try {
+      return await $fetch<AccountDeletionCheck>(
+        `${config.public.apiBase}/profile/delete-account/check`,
+        { headers: { Authorization: `Bearer ${authStore.tokens?.accessToken}` } }
+      )
+    } catch (err) {
+      console.error('Error checking account deletion:', err)
+      return null
+    }
+  }
+
   const deleteAccount = async (password: string): Promise<ProfileActionResponse> => {
     try {
       const response = await $fetch<ProfileActionResponse>(
@@ -343,6 +402,7 @@ export const useProfileStore = defineStore('profile', () => {
       return {
         success: false,
         message: err.data?.message || 'Error al eliminar la cuenta',
+        code: err.data?.code,
       }
     }
   }
@@ -364,9 +424,13 @@ export const useProfileStore = defineStore('profile', () => {
     security,
     preferences,
     currentEmail,
+    currentUsername,
+    accountLogin,
+    isManagedAccount,
     // Actions
     ensureProfile,
     fetchProfile,
+    refreshSessions,
     changePassword,
     changeEmail,
     toggleTwoFactor,
@@ -374,6 +438,7 @@ export const useProfileStore = defineStore('profile', () => {
     closeAllSessions,
     updatePreferences,
     exportMyData,
+    checkAccountDeletion,
     deleteAccount,
     $reset,
   }

@@ -39,6 +39,13 @@
                     :placeholder="t('teacher.missions.create.pick_class')"
                     @update:model-value="selectedClassId = String($event)"
                   />
+                  <InfoNote v-if="classesLoaded && !classSelectOptions.length" class="mt-2">
+                    {{
+                      classesStore.classes.length
+                        ? t('teacher.missions.create.no_editable_classes')
+                        : t('teacher.missions.create.no_classes')
+                    }}
+                  </InfoNote>
                 </div>
                 <textarea
                   ref="inputRef"
@@ -766,6 +773,8 @@
             :total-students="0"
             :deadline="form.deadline"
             :xp-reward="totalXp"
+            :coin-reward="totalCoins"
+            :mana-reward="totalMana"
             :background-image="generatedImageUrl || rawImagePath"
           />
         </div>
@@ -845,6 +854,7 @@ import { renderPageMarkdown } from '~/utils/markdown'
 import { MISSION_COMPLETION_BONUS, type MissionRarity } from '~/utils/gamification-config'
 import { resolveClassSettings } from '~/utils/class-settings'
 import { classMetaLine } from '~/utils/class-metadata'
+import { canInClass } from '~/utils/class-access'
 import type { ClassSettings } from '~/types/class.types'
 import CoinIcon from '~/components/atoms/CoinIcon.vue'
 import ManaIcon from '~/components/atoms/ManaIcon.vue'
@@ -867,7 +877,11 @@ const god = computed(
   () => aiStore.currentGod || { id: 'atenea', name: 'Atenea', avatar: '/app/avatars/atenea.svg' }
 )
 const teacherName = computed(() => authStore.user?.name?.split(' ')[0] || '')
-const teacherClasses = computed(() => classesStore.classes || [])
+// Solo las clases donde se pueden crear misiones (edición o más).
+const teacherClasses = computed(() =>
+  (classesStore.classes || []).filter(c => canInClass(c.myAccess, 'mission.edit'))
+)
+const classesLoaded = ref(false)
 
 // Wizard
 const totalSteps = 8
@@ -1024,6 +1038,14 @@ const totalXp = computed(() => {
   const rarityBonus = MISSION_COMPLETION_BONUS[rarity.value as MissionRarity] ?? 0
   return enigmasXp + rarityBonus
 })
+// Monedas y maná de la misión, como los calcula la API para el listado: la suma
+// de los enigmas, sin bonus de rareza, y 0 si la clase no usa ese recurso.
+const totalCoins = computed(() =>
+  enigmaResources.value.coins ? enigmas.value.reduce((sum, e) => sum + (e.coins || 0), 0) : 0
+)
+const totalMana = computed(() =>
+  enigmaResources.value.mana ? enigmas.value.reduce((sum, e) => sum + (e.mana || 0), 0) : 0
+)
 
 const form = computed(() => ({
   title: chosenTitle.value,
@@ -1063,6 +1085,7 @@ const currentQuestion = computed(() => {
 // Load classes
 onMounted(async () => {
   await classesStore.fetchTeacherClasses()
+  classesLoaded.value = true
   // Preselect class from query param
   const qClassId = route.query.classId as string
   if (qClassId && teacherClasses.value.some(c => c.id === qClassId)) {

@@ -2,10 +2,10 @@
   <div class="rounded-2xl p-2.5 sm:p-3 space-y-2" :class="bgClass">
     <!-- Row 1: Search + Filters toggle + Count -->
     <div class="flex gap-2 sm:gap-3 items-center">
-      <div class="flex-1 min-w-0">
+      <div v-if="!hideSearch" class="flex-1 min-w-0">
         <SearchInput
           :model-value="search"
-          :placeholder="searchPlaceholder"
+          :placeholder="searchPlaceholder ?? t('common.filter_bar.search')"
           @update:model-value="$emit('update:search', $event)"
         />
       </div>
@@ -15,12 +15,12 @@
         v-if="$slots.filters || sortOptions.length > 0"
         type="button"
         class="flex-shrink-0 relative flex items-center gap-1.5 px-3 sm:px-4 py-2.5 sm:py-3 border border-border-primary bg-surface text-text-primary hover:bg-gray-50 rounded-2xl text-sm sm:text-base font-medium transition-colors duration-200"
+        :aria-label="filtersLabel"
+        :aria-expanded="filtersOpen"
         @click="filtersOpen = !filtersOpen"
       >
-        <FunnelIcon class="w-4 h-4" />
-        <span class="hidden sm:inline"
-          >Filtros<template v-if="activeFilterCount > 0"> ({{ activeFilterCount }})</template></span
-        >
+        <FunnelIcon class="w-4 h-4" aria-hidden="true" />
+        <span class="hidden sm:inline">{{ filtersLabel }}</span>
       </button>
 
       <!-- View toggle (grid/list) - only rendered when a view is provided -->
@@ -31,8 +31,9 @@
         @update:model-value="$emit('update:view', $event)"
       />
 
-      <!-- Results count -->
+      <!-- Results count (sin buscador, se va a la derecha igualmente) -->
       <div
+        :class="{ 'ml-auto': hideSearch }"
         class="flex-shrink-0 bg-sky text-white w-10 h-10 sm:w-12 sm:h-12 rounded-full text-sm sm:text-base font-semibold flex items-center justify-center"
       >
         {{ resultsCount }}
@@ -67,10 +68,11 @@
           v-if="isFiltering"
           type="button"
           class="flex-shrink-0 p-2.5 sm:p-3 border border-border-primary bg-surface hover:bg-gray-50 text-text-primary rounded-2xl transition-colors"
-          title="Limpiar filtros"
+          :title="t('common.filter_bar.clear')"
+          :aria-label="t('common.filter_bar.clear')"
           @click="$emit('reset')"
         >
-          <XMarkIcon class="w-5 h-5 mx-auto" />
+          <XMarkIcon class="w-5 h-5 mx-auto" aria-hidden="true" />
         </button>
       </div>
     </Transition>
@@ -87,7 +89,8 @@ interface SelectOption {
 }
 
 interface Props {
-  search: string
+  /** Texto del buscador; sin buscador (`hide-search`) no hace falta. */
+  search?: string
   sort: string
   resultsCount: number
   searchPlaceholder?: string
@@ -97,13 +100,17 @@ interface Props {
   activeFilterCount?: number
   // Modo de vista (cuadrícula/lista). Si se omite, el toggle no se muestra.
   view?: ViewMode
+  /** Oculta el buscador, para listas que solo se filtran por los desplegables. */
+  hideSearch?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  searchPlaceholder: 'Buscar...',
+  search: '',
+  searchPlaceholder: undefined,
   variant: 'mint',
   hasActiveFilters: false,
   activeFilterCount: 0,
+  hideSearch: false,
 })
 
 defineEmits<{
@@ -113,7 +120,17 @@ defineEmits<{
   reset: []
 }>()
 
-const filtersOpen = ref(false)
+const { t } = useI18n()
+
+/** «Filtros», con cuántos hay puestos. */
+const filtersLabel = computed(() =>
+  props.activeFilterCount > 0
+    ? t('common.filter_bar.filters_count', { count: props.activeFilterCount })
+    : t('common.filter_bar.filters')
+)
+
+// Sin buscador, los filtros son lo único que hay en la barra: salen abiertos.
+const filtersOpen = ref(props.hideSearch)
 
 // Auto-open filters when there are active filters
 watch(

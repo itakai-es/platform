@@ -12,12 +12,13 @@ export const ROUTE_NAMES = {
   SIGNUP: '/auth/registro',
   FORGOT_PASSWORD: '/auth/recuperar-password',
   RESET_PASSWORD: '/auth/restablecer-password',
+  // Cambio obligatorio del primer acceso: pide sesión, así que no es pública.
+  CHANGE_PASSWORD: '/auth/cambiar-password',
 
   // Student
   STUDENT_DASHBOARD: '/alumno/inicio',
   STUDENT_CLASSES: '/alumno/clases',
   STUDENT_MISSIONS: '/alumno/misiones',
-  STUDENT_RANKINGS: '/alumno/clasificacion',
   STUDENT_AI_ASSISTANT: '/alumno/asistente',
   STUDENT_PROFILE: '/alumno/perfil',
   STUDENT_ACHIEVEMENTS: '/alumno/insignias',
@@ -39,7 +40,6 @@ export const ROUTE_NAMES = {
   ADMIN_CLASSES: '/admin/clases',
   ADMIN_MISSIONS: '/admin/misiones',
   ADMIN_ANALYTICS: '/admin/estadisticas',
-  ADMIN_SCHOOLS: '/admin/centros',
   ADMIN_LOGS: '/admin/registros',
   ADMIN_HELP: '/admin/ayuda',
   ADMIN_BLOG: '/admin/blog',

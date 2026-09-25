@@ -17,6 +17,8 @@
       "section_management": "Xestión",
       "section_content": "Conteníos",
       "section_system": "Sistema",
+      "section_classes": "Clases",
+      "section_account": "Cuenta",
       "profile": "El mio perfil",
       "logout": "Zarrar sesión"
     },
@@ -64,10 +66,8 @@
       "submission_student_approved": "Entrega de {name} aprobada (+{xp} XP)",
       "download_not_found": "Nun s'atopó'l ficheru pa baxalu",
       "download_error": "Nun se pudo baxar el ficheru",
-      "join_request_accepted": "{name} foi aceutáu na clase",
-      "join_request_rejected": "Solicitú refugada",
-      "join_request_accept_error": "Fallu al aceutar la solicitú",
-      "join_request_reject_error": "Fallu al refugar la solicitú"
+      "download_no_access": "Nun tienes accesu a esti ficheru",
+      "popup_blocked": "Permiti les ventanes emerxentes p'abrir el ficheru"
     },
     "notifications": {
       "title": "Avisos",
@@ -134,7 +134,7 @@
       "feature_ai_desc": "Asistentes que personalicen l'aprendizaxe pa cada alumnu",
       "profiles_title": "Escueyi'l to perfil pa entamar",
       "about_title": "¿Qué ye ITAKAI?",
-      "about_description_1": "ITAKAI ye la evolución de <strong>MyClassGame</strong>, sofitada con <strong>Intelixencia Artificial</strong>. Una plataforma educativa gamificada que tresforma la formación profesional nuna esperiencia inmersiva.",
+      "about_description_1": "ITAKAI ye la evolución de <strong>MyClassGame</strong>, sofitada con <strong>intelixencia artificial</strong>. Una plataforma educativa gamificada que tresforma la formación profesional nuna esperiencia inmersiva.",
       "about_description_2": "Xeneración automática de conteníos, asistentes IA personalizaos pa cada alumnu y analís predictivu del rendimientu. Too integráu nun ecosistema onde deprender ye una aventura.",
       "stat_students": "Alumnáu",
       "stat_teachers": "Profesoráu",
@@ -211,7 +211,10 @@
       "description": "Comparti esti códigu colos tos alumnos pa que se xunan a la clase:",
       "copy_code": "Copiar códigu",
       "code_copied": "Códigu copiáu al cartafueyu",
-      "copy_error": "Fallu al copiar el códigu"
+      "copy_error": "Fallu al copiar el códigu",
+      "tabs_label": "Formes de convidar",
+      "tab_code": "Códigu de clase",
+      "tab_accounts": "Crear cuentes"
     },
     "under_development": {
       "back_to_dashboard": "Volver al aniciu"
@@ -359,6 +362,83 @@
     },
     "student_preview": {
       "banner": "Tas viendo la plataforma como un alumnu (demo)"
+    },
+    "change_email": {
+      "title": "Corréu electrónicu",
+      "current_email": "Corréu actual",
+      "new_email": "Corréu nuevu",
+      "password": "Contraseña actual",
+      "password_hint": "Pidímostela pa confirmar que yes tu quien camuda'l corréu.",
+      "submit": "Camudar el corréu",
+      "success": "Corréu anováu. D'equí p'alantre entres col nuevu.",
+      "errors": {
+        "email_invalid": "Escribi un corréu válidu.",
+        "email_same": "Esi yá ye'l to corréu.",
+        "password_required": "Escribi la to contraseña actual.",
+        "password_wrong": "La contraseña nun ye correcta.",
+        "password_not_set": "La to cuenta entra con Google y entá nun tien contraseña. Zarra la sesión, crea una dende «¿Escaeciesti la contraseña?» y vuelvi tentalo.",
+        "email_in_use": "Esi corréu yá lu usa otra cuenta.",
+        "generic": "Nun se pudo camudar el corréu. Vuelvi tentalo."
+      }
+    },
+    "file_unavailable": {
+      "title": "L'enllaz yá nun val",
+      "message": "L'enllaz pa abrir esti ficheru caducó. Vuelvi a la misión y ábrilu otra vez."
+    },
+    "class_teachers": {
+      "owner": "Propietariu",
+      "profiles": {
+        "titular": "Titular",
+        "sustituto": "Sustitutu",
+        "practicas": "Práutiques"
+      },
+      "access": {
+        "read": "Llectura",
+        "edit": "Edición",
+        "admin": "Alministración"
+      }
+    },
+    "pagination": {
+      "label": "Paxinación",
+      "page_of": "Páxina {page} de {total}",
+      "previous": "Anterior",
+      "next": "Siguiente"
+    },
+    "account_deletion": {
+      "blocked_self": "Entá nun pues borrar la to cuenta: yes el propietariu d'estes clases y nelles nun hai naide más con alministración. Da-y alministración a otru profesor o pása-y la propiedá, y vuelvi equí.",
+      "blocked_admin": "Esta cuenta entá nun se pue borrar: ye la propietaria d'estes clases y nelles nun hai naide más con alministración. Primero hai que pasa-y la so propiedá a otru profesor.",
+      "transfers_self": "Les tos clases van pasar a otru profesor con alministración nelles:",
+      "transfers_admin": "Les sos clases van pasar a otru profesor con alministración nelles:",
+      "transfer_item": "{class}, a {name}"
+    },
+    "copy": {
+      "label": "Copiar: {what}",
+      "copied": "Copiáu al cartafueyu",
+      "error": "Nun se pudo copiar"
+    },
+    "change_password": {
+      "title": "Contraseña",
+      "current_password": "Contraseña actual",
+      "new_password": "Contraseña nueva",
+      "new_password_placeholder": "Polo menos {min} caráuteres",
+      "confirm_password": "Confirmar contraseña",
+      "confirm_password_placeholder": "Repiti la contraseña nueva",
+      "submit": "Camudar la contraseña",
+      "success": "Contraseña camudada. Nos tos otros preseos vas tener qu'entrar otra vuelta.",
+      "errors": {
+        "current_required": "Escribi la to contraseña actual.",
+        "current_wrong": "La contraseña actual nun ye correcta.",
+        "password_not_set": "La to cuenta entra con Google y entá nun tien contraseña. Zarra la sesión y crea una dende «¿Escaeciesti la contraseña?».",
+        "too_short": "La contraseña tien de tener polo menos {min} caráuteres.",
+        "mismatch": "Les contraseñes nun concasen.",
+        "generic": "Nun se pudo camudar la contraseña. Comprueba l'actual y vuelvi tentalo."
+      }
+    },
+    "filter_bar": {
+      "search": "Buscar...",
+      "filters": "Filtros",
+      "filters_count": "Filtros ({count})",
+      "clear": "Llimpiar filtros"
     }
   }
 }

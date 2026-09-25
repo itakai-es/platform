@@ -2,28 +2,28 @@
   <div class="space-y-6">
     <PageHeader :title="t('admin.missions.title')" :subtitle="t('admin.missions.subtitle')" />
 
-    <!-- Filters -->
+    <!-- Filters: búsqueda, filtros y orden van al servidor, que pagina -->
     <FilterBar
-      :search="searchQuery"
-      :sort="sortBy"
-      :results-count="filteredMissions.length"
+      :search="search"
+      :sort="sort"
+      :results-count="totalMissions"
       :search-placeholder="t('admin.missions.filters.search_placeholder')"
       :sort-options="sortOptions"
       variant="red"
       :has-active-filters="hasActiveFilters"
       :active-filter-count="activeFilterCount"
-      @update:search="searchQuery = $event"
-      @update:sort="sortBy = $event"
-      @reset="clearAllFilters"
+      @update:search="search = $event"
+      @update:sort="sort = $event"
+      @reset="reset"
     >
       <template #filters>
         <SelectDropdown
-          v-model="selectedStatus"
+          v-model="filters.status"
           :options="statusOptions"
           :placeholder="t('admin.missions.filters.all_statuses')"
         />
         <SelectDropdown
-          v-model="selectedRarity"
+          v-model="filters.rarity"
           :options="rarityOptions"
           :placeholder="t('admin.missions.filters.all_rarities')"
         />
@@ -55,7 +55,7 @@
 
     <!-- Empty -->
     <EmptyState
-      v-else-if="filteredMissions.length === 0"
+      v-else-if="missions.length === 0"
       :icon="RocketLaunchIcon"
       :title="t('admin.missions.empty.title')"
       :description="t('admin.missions.empty.description')"
@@ -64,7 +64,7 @@
     <!-- Missions Grid -->
     <CardGrid v-else>
       <article
-        v-for="mission in filteredMissions"
+        v-for="mission in missions"
         :key="mission.id"
         class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 overflow-hidden"
       >
@@ -98,24 +98,36 @@
         </div>
       </article>
     </CardGrid>
+
+    <Pagination
+      :current-page="page"
+      :total-pages="missionsTotalPages"
+      @page-change="page = $event"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { RocketLaunchIcon } from '@heroicons/vue/24/outline'
 import type { MissionRarity } from '~/types/mission.types'
+import type { AdminMissionFilters } from '~/types/admin.types'
 
 const { t } = useI18n()
 useHead({ title: () => t('admin.missions.meta.title') })
 definePageMeta({ layout: 'admin', middleware: ['auth', 'onboarding', 'role'], role: 'admin' })
 
 const adminStore = useAdminStore()
-const { missions, isLoadingMissions } = storeToRefs(adminStore)
+const { missions, totalMissions, missionsTotalPages, isLoadingMissions } = storeToRefs(adminStore)
 
-const searchQuery = ref('')
-const sortBy = ref('name-asc')
-const selectedStatus = ref('')
-const selectedRarity = ref('')
+/** Búsqueda, filtros, orden y página: los aplica el servidor, que devuelve una página cada vez. */
+const { search, filters, sort, page, activeFilterCount, hasActiveFilters, reset } =
+  useAdminListQuery({
+    filters: { status: '', rarity: '' },
+    sort: 'name-asc',
+    pageSize: 24,
+    totalPages: missionsTotalPages,
+    load: query => adminStore.ensureAllMissions(query as AdminMissionFilters),
+  })
 
 const sortOptions = computed(() => [
   { value: 'name-asc', label: 'Nombre A-Z' },
@@ -138,62 +150,8 @@ const rarityOptions = computed(() => [
   { value: 'legendaria', label: 'Legendaria' },
 ])
 
-const activeFilterCount = computed(
-  () => (selectedStatus.value ? 1 : 0) + (selectedRarity.value ? 1 : 0)
-)
-
-const hasActiveFilters = computed(() => selectedStatus.value !== '' || selectedRarity.value !== '')
-
-const filteredMissions = computed(() => {
-  let result = [...missions.value]
-
-  if (searchQuery.value) {
-    const q = searchQuery.value.toLowerCase()
-    result = result.filter(
-      m =>
-        m.title.toLowerCase().includes(q) ||
-        m.className.toLowerCase().includes(q) ||
-        m.teacherName.toLowerCase().includes(q)
-    )
-  }
-
-  if (selectedStatus.value) {
-    result = result.filter(m => m.status === selectedStatus.value)
-  }
-
-  if (selectedRarity.value) {
-    result = result.filter(m => m.rarity === selectedRarity.value)
-  }
-
-  switch (sortBy.value) {
-    case 'name-asc':
-      result.sort((a, b) => a.title.localeCompare(b.title))
-      break
-    case 'name-desc':
-      result.sort((a, b) => b.title.localeCompare(a.title))
-      break
-    case 'xp-desc':
-      result.sort((a, b) => b.xpReward - a.xpReward)
-      break
-    case 'enigmas-desc':
-      result.sort((a, b) => b.enigmaCount - a.enigmaCount)
-      break
-  }
-
-  return result
-})
-
-const clearAllFilters = () => {
-  searchQuery.value = ''
-  sortBy.value = 'name-asc'
-  selectedStatus.value = ''
-  selectedRarity.value = ''
-}
-
 const statusLabel = (status: string) => {
   const map: Record<string, string> = { activa: 'Activa', bloqueada: 'Bloqueada' }
   return map[status] || status
 }
-
-onMounted(() => adminStore.ensureAllMissions({ limit: 1000 }))
 </script>

@@ -1,5 +1,9 @@
 <template>
   <div class="space-y-6">
+    <InfoNote v-if="!can('mission.edit')">
+      {{ t('teacher.classes.detail.read_only_notice') }}
+    </InfoNote>
+
     <!-- Empty: no missions at all -->
     <EmptyState
       v-if="state.missions.length === 0"
@@ -7,7 +11,7 @@
       :title="t('teacher.classes.detail.missions_tab.no_missions_title')"
       :description="t('teacher.classes.detail.missions_tab.no_missions_description')"
     >
-      <template #action>
+      <template v-if="can('mission.edit')" #action>
         <NuxtLink :to="`/profesor/misiones/crear?classId=${classId}`">
           <Button variant="primary">
             {{ t('teacher.classes.detail.missions_tab.create_first') }}
@@ -18,7 +22,7 @@
 
     <template v-else>
       <!-- Acción -->
-      <div class="flex justify-end">
+      <div v-if="can('mission.edit')" class="flex justify-end">
         <NuxtLink :to="`/profesor/misiones/crear?classId=${classId}`">
           <Button variant="primary">
             <PlusIcon class="w-4 h-4 mr-2" />
@@ -81,7 +85,7 @@ definePageMeta({ layout: 'teacher', middleware: ['auth', 'role'] })
 const { t } = useI18n()
 const route = useRoute()
 const classId = computed(() => route.params.id as string)
-const { state } = useTeacherClassDetail(classId)
+const { state, can } = useTeacherClassDetail(classId)
 const view = useViewMode('teacher-class-missions')
 
 // Filtros (estado local de la tab).

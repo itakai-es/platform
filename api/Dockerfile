@@ -14,8 +14,11 @@ RUN pnpm install --frozen-lockfile
 # Copy source
 COPY . .
 
-# Generate Prisma client
-RUN pnpm db:generate
+# Generate Prisma client. `prisma generate` no se conecta a la base, pero
+# prisma.config.ts exige DATABASE_URL y los .env no entran en la imagen
+# (.dockerignore): basta un valor de relleno para este paso. La conexión real
+# llega al arrancar, por env_file.
+RUN DATABASE_URL="postgresql://build:build@localhost:5432/build" pnpm db:generate
 
 # Set production environment
 ENV NODE_ENV=production

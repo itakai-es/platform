@@ -17,7 +17,7 @@
         variant="red"
         :has-active-filters="hasActiveSystemFilters"
         :active-filter-count="activeSystemFilterCount"
-        @update:search="systemSearch = $event; debouncedFetchSystem();"
+        @update:search="onSystemSearch"
         @reset="resetSystemFilters"
       >
         <template #filters>
@@ -77,7 +77,7 @@
         variant="red"
         :has-active-filters="hasActiveActivityFilters"
         :active-filter-count="activeActivityFilterCount"
-        @update:search="activitySearch = $event; debouncedFetchActivity();"
+        @update:search="onActivitySearch"
         @reset="resetActivityFilters"
       >
         <template #filters>
@@ -230,6 +230,11 @@ function fetchSystemLogsFn(force = false) {
   )
 }
 
+function onSystemSearch(value: string) {
+  systemSearch.value = value
+  debouncedFetchSystem()
+}
+
 function debouncedFetchSystem() {
   if (systemSearchTimeout) clearTimeout(systemSearchTimeout)
   systemSearchTimeout = setTimeout(() => fetchSystemLogsFn(), 300)
@@ -303,6 +308,11 @@ function fetchActivityLogs(force = false) {
     },
     force
   )
+}
+
+function onActivitySearch(value: string) {
+  activitySearch.value = value
+  debouncedFetchActivity()
 }
 
 function debouncedFetchActivity() {

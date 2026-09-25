@@ -27,7 +27,8 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const badgeClasses = computed(() => {
-  const base = 'inline-flex items-center font-medium rounded-full'
+  // Una etiqueta nunca se parte en dos líneas: si no cabe, baja entera.
+  const base = 'inline-flex items-center whitespace-nowrap font-medium rounded-full'
 
   // Variantes según ITAKAI Official Brand Colors. En las de fondo claro el
   // texto va en navy: el color del estado lo dan el fondo y el borde, y el

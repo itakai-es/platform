@@ -227,7 +227,7 @@ export type BehaviorApplicationGroupByOutputType = {
   id: string
   classId: string
   behaviorId: string | null
-  teacherId: string
+  teacherId: string | null
   studentId: string
   kind: string
   name: string
@@ -264,7 +264,7 @@ export type BehaviorApplicationWhereInput = {
   id?: Prisma.StringFilter<"BehaviorApplication"> | string
   classId?: Prisma.StringFilter<"BehaviorApplication"> | string
   behaviorId?: Prisma.StringNullableFilter<"BehaviorApplication"> | string | null
-  teacherId?: Prisma.StringFilter<"BehaviorApplication"> | string
+  teacherId?: Prisma.StringNullableFilter<"BehaviorApplication"> | string | null
   studentId?: Prisma.StringFilter<"BehaviorApplication"> | string
   kind?: Prisma.StringFilter<"BehaviorApplication"> | string
   name?: Prisma.StringFilter<"BehaviorApplication"> | string
@@ -274,7 +274,7 @@ export type BehaviorApplicationWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"BehaviorApplication"> | Date | string
   class?: Prisma.XOR<Prisma.ClassScalarRelationFilter, Prisma.ClassWhereInput>
   behavior?: Prisma.XOR<Prisma.BehaviorTemplateNullableScalarRelationFilter, Prisma.BehaviorTemplateWhereInput> | null
-  teacher?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  teacher?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   student?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
 
@@ -282,7 +282,7 @@ export type BehaviorApplicationOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   classId?: Prisma.SortOrder
   behaviorId?: Prisma.SortOrderInput | Prisma.SortOrder
-  teacherId?: Prisma.SortOrder
+  teacherId?: Prisma.SortOrderInput | Prisma.SortOrder
   studentId?: Prisma.SortOrder
   kind?: Prisma.SortOrder
   name?: Prisma.SortOrder
@@ -303,7 +303,7 @@ export type BehaviorApplicationWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.BehaviorApplicationWhereInput | Prisma.BehaviorApplicationWhereInput[]
   classId?: Prisma.StringFilter<"BehaviorApplication"> | string
   behaviorId?: Prisma.StringNullableFilter<"BehaviorApplication"> | string | null
-  teacherId?: Prisma.StringFilter<"BehaviorApplication"> | string
+  teacherId?: Prisma.StringNullableFilter<"BehaviorApplication"> | string | null
   studentId?: Prisma.StringFilter<"BehaviorApplication"> | string
   kind?: Prisma.StringFilter<"BehaviorApplication"> | string
   name?: Prisma.StringFilter<"BehaviorApplication"> | string
@@ -313,7 +313,7 @@ export type BehaviorApplicationWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"BehaviorApplication"> | Date | string
   class?: Prisma.XOR<Prisma.ClassScalarRelationFilter, Prisma.ClassWhereInput>
   behavior?: Prisma.XOR<Prisma.BehaviorTemplateNullableScalarRelationFilter, Prisma.BehaviorTemplateWhereInput> | null
-  teacher?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  teacher?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   student?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id">
 
@@ -321,7 +321,7 @@ export type BehaviorApplicationOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   classId?: Prisma.SortOrder
   behaviorId?: Prisma.SortOrderInput | Prisma.SortOrder
-  teacherId?: Prisma.SortOrder
+  teacherId?: Prisma.SortOrderInput | Prisma.SortOrder
   studentId?: Prisma.SortOrder
   kind?: Prisma.SortOrder
   name?: Prisma.SortOrder
@@ -343,7 +343,7 @@ export type BehaviorApplicationScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"BehaviorApplication"> | string
   classId?: Prisma.StringWithAggregatesFilter<"BehaviorApplication"> | string
   behaviorId?: Prisma.StringNullableWithAggregatesFilter<"BehaviorApplication"> | string | null
-  teacherId?: Prisma.StringWithAggregatesFilter<"BehaviorApplication"> | string
+  teacherId?: Prisma.StringNullableWithAggregatesFilter<"BehaviorApplication"> | string | null
   studentId?: Prisma.StringWithAggregatesFilter<"BehaviorApplication"> | string
   kind?: Prisma.StringWithAggregatesFilter<"BehaviorApplication"> | string
   name?: Prisma.StringWithAggregatesFilter<"BehaviorApplication"> | string
@@ -363,7 +363,7 @@ export type BehaviorApplicationCreateInput = {
   createdAt?: Date | string
   class: Prisma.ClassCreateNestedOneWithoutBehaviorApplicationsInput
   behavior?: Prisma.BehaviorTemplateCreateNestedOneWithoutApplicationsInput
-  teacher: Prisma.UserCreateNestedOneWithoutBehaviorsAppliedInput
+  teacher?: Prisma.UserCreateNestedOneWithoutBehaviorsAppliedInput
   student: Prisma.UserCreateNestedOneWithoutBehaviorsReceivedInput
 }
 
@@ -371,7 +371,7 @@ export type BehaviorApplicationUncheckedCreateInput = {
   id?: string
   classId: string
   behaviorId?: string | null
-  teacherId: string
+  teacherId?: string | null
   studentId: string
   kind: string
   name: string
@@ -391,7 +391,7 @@ export type BehaviorApplicationUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   class?: Prisma.ClassUpdateOneRequiredWithoutBehaviorApplicationsNestedInput
   behavior?: Prisma.BehaviorTemplateUpdateOneWithoutApplicationsNestedInput
-  teacher?: Prisma.UserUpdateOneRequiredWithoutBehaviorsAppliedNestedInput
+  teacher?: Prisma.UserUpdateOneWithoutBehaviorsAppliedNestedInput
   student?: Prisma.UserUpdateOneRequiredWithoutBehaviorsReceivedNestedInput
 }
 
@@ -399,7 +399,7 @@ export type BehaviorApplicationUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   classId?: Prisma.StringFieldUpdateOperationsInput | string
   behaviorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  teacherId?: Prisma.StringFieldUpdateOperationsInput | string
+  teacherId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -413,7 +413,7 @@ export type BehaviorApplicationCreateManyInput = {
   id?: string
   classId: string
   behaviorId?: string | null
-  teacherId: string
+  teacherId?: string | null
   studentId: string
   kind: string
   name: string
@@ -437,7 +437,7 @@ export type BehaviorApplicationUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   classId?: Prisma.StringFieldUpdateOperationsInput | string
   behaviorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  teacherId?: Prisma.StringFieldUpdateOperationsInput | string
+  teacherId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -725,14 +725,14 @@ export type BehaviorApplicationCreateWithoutStudentInput = {
   createdAt?: Date | string
   class: Prisma.ClassCreateNestedOneWithoutBehaviorApplicationsInput
   behavior?: Prisma.BehaviorTemplateCreateNestedOneWithoutApplicationsInput
-  teacher: Prisma.UserCreateNestedOneWithoutBehaviorsAppliedInput
+  teacher?: Prisma.UserCreateNestedOneWithoutBehaviorsAppliedInput
 }
 
 export type BehaviorApplicationUncheckedCreateWithoutStudentInput = {
   id?: string
   classId: string
   behaviorId?: string | null
-  teacherId: string
+  teacherId?: string | null
   kind: string
   name: string
   xpDelta: number
@@ -774,7 +774,7 @@ export type BehaviorApplicationScalarWhereInput = {
   id?: Prisma.StringFilter<"BehaviorApplication"> | string
   classId?: Prisma.StringFilter<"BehaviorApplication"> | string
   behaviorId?: Prisma.StringNullableFilter<"BehaviorApplication"> | string | null
-  teacherId?: Prisma.StringFilter<"BehaviorApplication"> | string
+  teacherId?: Prisma.StringNullableFilter<"BehaviorApplication"> | string | null
   studentId?: Prisma.StringFilter<"BehaviorApplication"> | string
   kind?: Prisma.StringFilter<"BehaviorApplication"> | string
   name?: Prisma.StringFilter<"BehaviorApplication"> | string
@@ -809,14 +809,14 @@ export type BehaviorApplicationCreateWithoutClassInput = {
   lifeDelta: number
   createdAt?: Date | string
   behavior?: Prisma.BehaviorTemplateCreateNestedOneWithoutApplicationsInput
-  teacher: Prisma.UserCreateNestedOneWithoutBehaviorsAppliedInput
+  teacher?: Prisma.UserCreateNestedOneWithoutBehaviorsAppliedInput
   student: Prisma.UserCreateNestedOneWithoutBehaviorsReceivedInput
 }
 
 export type BehaviorApplicationUncheckedCreateWithoutClassInput = {
   id?: string
   behaviorId?: string | null
-  teacherId: string
+  teacherId?: string | null
   studentId: string
   kind: string
   name: string
@@ -861,14 +861,14 @@ export type BehaviorApplicationCreateWithoutBehaviorInput = {
   lifeDelta: number
   createdAt?: Date | string
   class: Prisma.ClassCreateNestedOneWithoutBehaviorApplicationsInput
-  teacher: Prisma.UserCreateNestedOneWithoutBehaviorsAppliedInput
+  teacher?: Prisma.UserCreateNestedOneWithoutBehaviorsAppliedInput
   student: Prisma.UserCreateNestedOneWithoutBehaviorsReceivedInput
 }
 
 export type BehaviorApplicationUncheckedCreateWithoutBehaviorInput = {
   id?: string
   classId: string
-  teacherId: string
+  teacherId?: string | null
   studentId: string
   kind: string
   name: string
@@ -921,7 +921,7 @@ export type BehaviorApplicationCreateManyStudentInput = {
   id?: string
   classId: string
   behaviorId?: string | null
-  teacherId: string
+  teacherId?: string | null
   kind: string
   name: string
   xpDelta: number
@@ -979,14 +979,14 @@ export type BehaviorApplicationUpdateWithoutStudentInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   class?: Prisma.ClassUpdateOneRequiredWithoutBehaviorApplicationsNestedInput
   behavior?: Prisma.BehaviorTemplateUpdateOneWithoutApplicationsNestedInput
-  teacher?: Prisma.UserUpdateOneRequiredWithoutBehaviorsAppliedNestedInput
+  teacher?: Prisma.UserUpdateOneWithoutBehaviorsAppliedNestedInput
 }
 
 export type BehaviorApplicationUncheckedUpdateWithoutStudentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   classId?: Prisma.StringFieldUpdateOperationsInput | string
   behaviorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  teacherId?: Prisma.StringFieldUpdateOperationsInput | string
+  teacherId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   kind?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   xpDelta?: Prisma.IntFieldUpdateOperationsInput | number
@@ -999,7 +999,7 @@ export type BehaviorApplicationUncheckedUpdateManyWithoutStudentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   classId?: Prisma.StringFieldUpdateOperationsInput | string
   behaviorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  teacherId?: Prisma.StringFieldUpdateOperationsInput | string
+  teacherId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   kind?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   xpDelta?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1011,7 +1011,7 @@ export type BehaviorApplicationUncheckedUpdateManyWithoutStudentInput = {
 export type BehaviorApplicationCreateManyClassInput = {
   id?: string
   behaviorId?: string | null
-  teacherId: string
+  teacherId?: string | null
   studentId: string
   kind: string
   name: string
@@ -1030,14 +1030,14 @@ export type BehaviorApplicationUpdateWithoutClassInput = {
   lifeDelta?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   behavior?: Prisma.BehaviorTemplateUpdateOneWithoutApplicationsNestedInput
-  teacher?: Prisma.UserUpdateOneRequiredWithoutBehaviorsAppliedNestedInput
+  teacher?: Prisma.UserUpdateOneWithoutBehaviorsAppliedNestedInput
   student?: Prisma.UserUpdateOneRequiredWithoutBehaviorsReceivedNestedInput
 }
 
 export type BehaviorApplicationUncheckedUpdateWithoutClassInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   behaviorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  teacherId?: Prisma.StringFieldUpdateOperationsInput | string
+  teacherId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1050,7 +1050,7 @@ export type BehaviorApplicationUncheckedUpdateWithoutClassInput = {
 export type BehaviorApplicationUncheckedUpdateManyWithoutClassInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   behaviorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  teacherId?: Prisma.StringFieldUpdateOperationsInput | string
+  teacherId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1063,7 +1063,7 @@ export type BehaviorApplicationUncheckedUpdateManyWithoutClassInput = {
 export type BehaviorApplicationCreateManyBehaviorInput = {
   id?: string
   classId: string
-  teacherId: string
+  teacherId?: string | null
   studentId: string
   kind: string
   name: string
@@ -1082,14 +1082,14 @@ export type BehaviorApplicationUpdateWithoutBehaviorInput = {
   lifeDelta?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   class?: Prisma.ClassUpdateOneRequiredWithoutBehaviorApplicationsNestedInput
-  teacher?: Prisma.UserUpdateOneRequiredWithoutBehaviorsAppliedNestedInput
+  teacher?: Prisma.UserUpdateOneWithoutBehaviorsAppliedNestedInput
   student?: Prisma.UserUpdateOneRequiredWithoutBehaviorsReceivedNestedInput
 }
 
 export type BehaviorApplicationUncheckedUpdateWithoutBehaviorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   classId?: Prisma.StringFieldUpdateOperationsInput | string
-  teacherId?: Prisma.StringFieldUpdateOperationsInput | string
+  teacherId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1102,7 +1102,7 @@ export type BehaviorApplicationUncheckedUpdateWithoutBehaviorInput = {
 export type BehaviorApplicationUncheckedUpdateManyWithoutBehaviorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   classId?: Prisma.StringFieldUpdateOperationsInput | string
-  teacherId?: Prisma.StringFieldUpdateOperationsInput | string
+  teacherId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1128,7 +1128,7 @@ export type BehaviorApplicationSelect<ExtArgs extends runtime.Types.Extensions.I
   createdAt?: boolean
   class?: boolean | Prisma.ClassDefaultArgs<ExtArgs>
   behavior?: boolean | Prisma.BehaviorApplication$behaviorArgs<ExtArgs>
-  teacher?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  teacher?: boolean | Prisma.BehaviorApplication$teacherArgs<ExtArgs>
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["behaviorApplication"]>
 
@@ -1146,7 +1146,7 @@ export type BehaviorApplicationSelectCreateManyAndReturn<ExtArgs extends runtime
   createdAt?: boolean
   class?: boolean | Prisma.ClassDefaultArgs<ExtArgs>
   behavior?: boolean | Prisma.BehaviorApplication$behaviorArgs<ExtArgs>
-  teacher?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  teacher?: boolean | Prisma.BehaviorApplication$teacherArgs<ExtArgs>
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["behaviorApplication"]>
 
@@ -1164,7 +1164,7 @@ export type BehaviorApplicationSelectUpdateManyAndReturn<ExtArgs extends runtime
   createdAt?: boolean
   class?: boolean | Prisma.ClassDefaultArgs<ExtArgs>
   behavior?: boolean | Prisma.BehaviorApplication$behaviorArgs<ExtArgs>
-  teacher?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  teacher?: boolean | Prisma.BehaviorApplication$teacherArgs<ExtArgs>
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["behaviorApplication"]>
 
@@ -1186,19 +1186,19 @@ export type BehaviorApplicationOmit<ExtArgs extends runtime.Types.Extensions.Int
 export type BehaviorApplicationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   class?: boolean | Prisma.ClassDefaultArgs<ExtArgs>
   behavior?: boolean | Prisma.BehaviorApplication$behaviorArgs<ExtArgs>
-  teacher?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  teacher?: boolean | Prisma.BehaviorApplication$teacherArgs<ExtArgs>
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type BehaviorApplicationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   class?: boolean | Prisma.ClassDefaultArgs<ExtArgs>
   behavior?: boolean | Prisma.BehaviorApplication$behaviorArgs<ExtArgs>
-  teacher?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  teacher?: boolean | Prisma.BehaviorApplication$teacherArgs<ExtArgs>
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type BehaviorApplicationIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   class?: boolean | Prisma.ClassDefaultArgs<ExtArgs>
   behavior?: boolean | Prisma.BehaviorApplication$behaviorArgs<ExtArgs>
-  teacher?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  teacher?: boolean | Prisma.BehaviorApplication$teacherArgs<ExtArgs>
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 
@@ -1207,14 +1207,14 @@ export type $BehaviorApplicationPayload<ExtArgs extends runtime.Types.Extensions
   objects: {
     class: Prisma.$ClassPayload<ExtArgs>
     behavior: Prisma.$BehaviorTemplatePayload<ExtArgs> | null
-    teacher: Prisma.$UserPayload<ExtArgs>
+    teacher: Prisma.$UserPayload<ExtArgs> | null
     student: Prisma.$UserPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     classId: string
     behaviorId: string | null
-    teacherId: string
+    teacherId: string | null
     studentId: string
     kind: string
     name: string
@@ -1618,7 +1618,7 @@ export interface Prisma__BehaviorApplicationClient<T, Null = never, ExtArgs exte
   readonly [Symbol.toStringTag]: "PrismaPromise"
   class<T extends Prisma.ClassDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ClassDefaultArgs<ExtArgs>>): Prisma.Prisma__ClassClient<runtime.Types.Result.GetResult<Prisma.$ClassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   behavior<T extends Prisma.BehaviorApplication$behaviorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BehaviorApplication$behaviorArgs<ExtArgs>>): Prisma.Prisma__BehaviorTemplateClient<runtime.Types.Result.GetResult<Prisma.$BehaviorTemplatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  teacher<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  teacher<T extends Prisma.BehaviorApplication$teacherArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BehaviorApplication$teacherArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   student<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2077,6 +2077,25 @@ export type BehaviorApplication$behaviorArgs<ExtArgs extends runtime.Types.Exten
    */
   include?: Prisma.BehaviorTemplateInclude<ExtArgs> | null
   where?: Prisma.BehaviorTemplateWhereInput
+}
+
+/**
+ * BehaviorApplication.teacher
+ */
+export type BehaviorApplication$teacherArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
 }
 
 /**

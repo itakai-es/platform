@@ -28,9 +28,14 @@
 
     <template #footer>
       <Button variant="outline" class="flex-1" @click="handleCancel">
-        {{ cancelText }}
+        {{ cancelText ?? t('common.actions.cancel') }}
       </Button>
-      <Button :variant="confirmVariant" class="flex-1" :disabled="loading" @click="handleConfirm">
+      <Button
+        :variant="confirmVariant"
+        class="flex-1"
+        :disabled="loading || confirmDisabled"
+        @click="handleConfirm"
+      >
         {{ loading ? t('common.actions.processing') : confirmText }}
       </Button>
     </template>
@@ -45,9 +50,12 @@ interface Props {
   title?: string
   message: string
   confirmText?: string
+  /** Sin indicar, «Cancelar» en el idioma de quien lo usa. */
   cancelText?: string
   variant?: 'danger' | 'warning' | 'success'
   loading?: boolean
+  /** La acción no se puede confirmar ahora (el contenido explica por qué). */
+  confirmDisabled?: boolean
 }
 
 const { t } = useI18n()
@@ -55,9 +63,9 @@ const { t } = useI18n()
 const props = withDefaults(defineProps<Props>(), {
   title: 'Confirmar acción',
   confirmText: 'Confirmar',
-  cancelText: 'Cancelar',
   variant: 'danger',
   loading: false,
+  confirmDisabled: false,
 })
 
 const emit = defineEmits<{
@@ -111,6 +119,7 @@ const confirmVariant = computed(() => {
 })
 
 const handleConfirm = () => {
+  if (props.loading || props.confirmDisabled) return
   emit('confirm')
 }
 

@@ -6,7 +6,11 @@ import { existsSync, mkdirSync } from 'fs'
 import { join } from 'path'
 import { randomUUID } from 'crypto'
 import { generateFireRedAvatar } from '../ai/generators/avatar-firered.js'
-import { AvatarServiceUnavailableError } from '../../utils/errors.js'
+import {
+  AvatarServiceUnavailableError,
+  NotFoundError,
+  ValidationError,
+} from '../../utils/errors.js'
 import { seedDefaultShopItems } from '../shop/shop.service.js'
 import {
   resolveClassSettings,
@@ -16,7 +20,27 @@ import {
 } from '../../utils/class-settings.js'
 import { resolveLevelConfig, tierForLevel, type LevelConfig } from '../../utils/level-config.js'
 import { saveUpload } from '../storage/storage.service.js'
-import { notify } from '../notifications/notifications.service.js'
+import { createClassWithOwner } from '../../utils/class-owner.js'
+import {
+  accessibleClassesWhere,
+  assertClassAccess,
+  assertMissionAccess,
+  CLASS_ACTION_LEVEL,
+  classTeachersInclude,
+  hasClassLevel,
+  recordClassAction,
+  summarizeClassTeachers,
+  type ClassAccess,
+} from '../../utils/class-access.js'
+import { accountHandle } from '../../utils/identity.js'
+import { participatingEnrollmentWhere } from '../../utils/enrollment.js'
+import { activityActor } from '../../utils/activity.js'
+import { assignableBadgesWhere, manageableBadgesWhere } from '../../utils/badge-access.js'
+import {
+  manageableHomeClasses,
+  UNUSED_ACCOUNT_SELECT,
+  unusedAccountHomeClass,
+} from './class-students.service.js'
 
 const BADGES_DIR = join(process.cwd(), 'uploads', 'badges')
 const COVERS_DIR = join(process.cwd(), 'uploads', 'covers')
@@ -30,68 +54,34 @@ export interface ClassCopyOptions {
   missions: boolean
 }
 
+/** Lo que se puede cambiar de una clase, para apuntar en el registro qué se tocó. */
+const CLASS_UPDATE_FIELDS = [
+  'name',
+  'narrative',
+  'schedule',
+  'backgroundImage',
+  'subject',
+  'language',
+  'educationLevel',
+  'province',
+  'settings',
+  'levelConfig',
+  'scheduleConfig',
+] as const
+
+/** Metadatos de la clase: cambiarlos es un ajuste, no contenido. */
+const CLASS_METADATA_FIELDS = ['subject', 'language', 'educationLevel', 'province'] as const
+
+/** El código de invitación solo lo recibe quien puede invitar alumnos a la clase. */
+function visibleInvitationCode(access: ClassAccess | null, code: string) {
+  return access && hasClassLevel(access, CLASS_ACTION_LEVEL['class.inviteCode']) ? code : null
+}
+
 // Ensure upload directories exist
 for (const dir of [BADGES_DIR, COVERS_DIR]) {
   if (!existsSync(dir)) {
     mkdirSync(dir, { recursive: true })
   }
-}
-
-// Default avatar options (Greek gods)
-const DEFAULT_AVATARS = [
-  '/app/avatars/atenea.svg',
-  '/app/avatars/odiseo.svg',
-  '/app/avatars/penelope.svg',
-  '/app/avatars/polifemo.svg',
-  '/app/avatars/poseidon.svg',
-]
-
-// Mythological-themed nicknames
-const MYTHOLOGICAL_NICKNAMES = [
-  'Héroe Anónimo',
-  'Guerrero de Troya',
-  'Argonauta Valiente',
-  'Guardián del Olimpo',
-  'Explorador Épico',
-  'Titan Novato',
-  'Escudero de Atenea',
-  'Mensajero Hermes',
-  'Aprendiz de Hefesto',
-  'Discípulo de Quirón',
-  'Portador de la Llama',
-  'Navegante Audaz',
-  'Cazador de Artemisa',
-  'Defensor del Ágora',
-  'Sabio Itacense',
-  'Forjador de Leyendas',
-  'Voz del Oráculo',
-  'Protector del Templo',
-  'Hijo de las Musas',
-  'Centinela Espartano',
-  'Viajero Intrépido',
-  'Guardián Secreto',
-  'Buscador de Mitos',
-  'Aspirante a Héroe',
-  'Portador de Luz',
-  'Explorador Mítico',
-  'Escriba del Olimpo',
-  'Valiente de Atenas',
-  'Joven Estratega',
-  'Aprendiz del Destino',
-]
-
-/**
- * Selects a random default avatar URL
- */
-function getRandomAvatar(): string {
-  return DEFAULT_AVATARS[Math.floor(Math.random() * DEFAULT_AVATARS.length)]
-}
-
-/**
- * Generates a random mythological nickname
- */
-function getRandomNickname(): string {
-  return MYTHOLOGICAL_NICKNAMES[Math.floor(Math.random() * MYTHOLOGICAL_NICKNAMES.length)]
 }
 
 // Helper: Save base64 image to file and return URL. `subdir` selects the
@@ -113,16 +103,17 @@ async function saveBase64Image(base64Data: string, subdir: 'badges' | 'covers' =
 }
 
 export class TeachersService {
+  /** Clases a las que el profesor tiene acceso, con cualquier nivel, según su estado de archivo. */
   private buildArchivedWhere(
     userId: string,
     archived: 'active' | 'archived' | 'all' = 'active'
-  ) {
+  ): Prisma.ClassWhereInput {
     if (archived === 'all') {
-      return { teacherId: userId }
+      return accessibleClassesWhere(userId)
     }
 
     return {
-      teacherId: userId,
+      ...accessibleClassesWhere(userId),
       archived: archived === 'archived',
     }
   }
@@ -131,7 +122,7 @@ export class TeachersService {
 
   async getStats(userId: string) {
     const classes = await prisma.class.findMany({
-      where: { teacherId: userId, archived: false },
+      where: this.buildArchivedWhere(userId, 'active'),
       include: { enrollments: { where: { isPreview: false } }, missions: true },
     })
 
@@ -156,6 +147,7 @@ export class TeachersService {
       include: {
         enrollments: { where: { isPreview: false }, include: { student: true } },
         missions: { include: { progress: true } },
+        teachers: classTeachersInclude(),
       },
       orderBy: { createdAt: 'desc' },
       ...(limit ? { take: limit } : {}),
@@ -165,6 +157,7 @@ export class TeachersService {
       classes: classes.map((c) => {
         const totalMissions = c.missions.length
         const completedProgress = c.missions.flatMap((m) => m.progress.filter((p) => p.completedAt))
+        const access = summarizeClassTeachers(c.teachers, userId)
 
         return {
           id: c.id,
@@ -172,7 +165,7 @@ export class TeachersService {
           narrative: c.narrative,
           schedule: c.schedule,
           archived: c.archived,
-          invitationCode: c.invitationCode,
+          invitationCode: visibleInvitationCode(access.myAccess, c.invitationCode),
           backgroundImage: c.backgroundImage,
           subject: c.subject,
           language: c.language,
@@ -187,6 +180,7 @@ export class TeachersService {
             participation: c.enrollments.length > 0 ? Math.round((completedProgress.length / (c.enrollments.length * totalMissions)) * 100) || 0 : 0,
           },
           createdAt: c.createdAt,
+          ...access,
         }
       }),
       total: classes.length,
@@ -194,16 +188,19 @@ export class TeachersService {
   }
 
   async getClassById(userId: string, classId: string) {
-    const cls = await prisma.class.findFirst({
-      where: { id: classId, teacherId: userId },
+    await assertClassAccess(classId, userId, 'class.view')
+    const cls = await prisma.class.findUnique({
+      where: { id: classId },
       include: {
         enrollments: { where: { isPreview: false }, include: { student: true } },
         missions: { include: { enigmas: true, progress: true } },
         guide: true,
+        teachers: classTeachersInclude(),
       },
     })
 
-    if (!cls) throw new Error('Clase no encontrada')
+    if (!cls) throw new NotFoundError('Clase no encontrada')
+    const access = summarizeClassTeachers(cls.teachers, userId)
 
     // Count pending submissions for this class
     const missionIds = cls.missions.map((m) => m.id)
@@ -222,7 +219,7 @@ export class TeachersService {
       narrative: cls.narrative,
       schedule: cls.schedule,
       archived: cls.archived,
-      invitationCode: cls.invitationCode,
+      invitationCode: visibleInvitationCode(access.myAccess, cls.invitationCode),
       backgroundImage: cls.backgroundImage,
       subject: cls.subject,
       language: cls.language,
@@ -240,6 +237,7 @@ export class TeachersService {
         pendingReviews,
       },
       createdAt: cls.createdAt,
+      ...access,
     }
   }
 
@@ -252,13 +250,7 @@ export class TeachersService {
       data = { ...data, backgroundImage: (await saveBase64Image(data.backgroundImage, 'covers')) || undefined }
     }
 
-    const cls = await prisma.class.create({
-      data: {
-        ...data,
-        teacherId: userId,
-        invitationCode,
-      },
-    })
+    const cls = await prisma.$transaction((tx) => createClassWithOwner(tx, { ...data, invitationCode }, userId))
 
     // Sembrar la tienda por defecto (el profe puede editarla/borrarla). Los
     // comportamientos no se siembran: el profe los añade desde la biblioteca.
@@ -277,6 +269,7 @@ export class TeachersService {
         language: cls.language,
         educationLevel: cls.educationLevel,
         province: cls.province,
+        ...(await this.classAccessSummary(cls.id, userId)),
       },
       message: 'Clase creada correctamente',
     }
@@ -287,11 +280,21 @@ export class TeachersService {
     classId: string,
     data: { name?: string; narrative?: string; schedule?: string; backgroundImage?: string; subject?: string; language?: string; educationLevel?: string; province?: string; settings?: Partial<ClassSettings>; levelConfig?: Partial<LevelConfig>; scheduleConfig?: unknown }
   ) {
-    const cls = await prisma.class.findFirst({
-      where: { id: classId, teacherId: userId },
-    })
+    // El contenido (nombre, narrativa, portada, horario) es de edición; los ajustes
+    // de gamificación, los niveles y los metadatos, de administración. El
+    // formulario general manda los metadatos siempre, también sin tocarlos: solo
+    // cuenta como ajuste el que cambia de valor (vacío y sin especificar son lo mismo).
+    let access = await assertClassAccess(classId, userId, 'class.editContent')
+    const cls = await prisma.class.findUnique({ where: { id: classId } })
+    if (!cls) throw new NotFoundError('Clase no encontrada')
 
-    if (!cls) throw new Error('Clase no encontrada')
+    const touchesSettings =
+      data.settings !== undefined ||
+      data.levelConfig !== undefined ||
+      CLASS_METADATA_FIELDS.some(
+        field => data[field] !== undefined && (data[field] || null) !== (cls[field] || null)
+      )
+    if (touchesSettings) access = await assertClassAccess(classId, userId, 'class.editSettings')
 
     // Invariante del marketplace: una plantilla publicada no puede quedarse sin
     // los metadatos que exige el filtro (asignatura, nivel, idioma). Se comprueba
@@ -302,11 +305,9 @@ export class TeachersService {
         field in data ? Boolean(data[field]) : Boolean(cls[field])
       )
       if (!stillComplete) {
-        const err = new Error(
+        throw new ValidationError(
           'La clase está publicada como plantilla: no puedes dejar sin especificar la asignatura, el nivel o el idioma. Despublícala primero.'
-        ) as Error & { statusCode?: number }
-        err.statusCode = 400
-        throw err
+        )
       }
     }
 
@@ -317,51 +318,67 @@ export class TeachersService {
 
     const { settings: settingsPatch, levelConfig: levelConfigPatch, scheduleConfig: scheduleConfigPatch, ...rest } = data
 
-    const updated = await prisma.class.update({
-      where: { id: classId },
-      data: {
-        ...rest,
-        // Merge incoming flags over current settings, then normalize dependencies so the
-        // stored config is always coherent (e.g. shop off ⇒ mana off).
-        ...(settingsPatch
-          ? { settings: { ...normalizeClassSettings({ ...resolveClassSettings(cls.settings), ...settingsPatch }) } }
-          : {}),
-        // La config de niveles se normaliza (curva + tramos válidos) antes de guardar.
-        ...(levelConfigPatch
-          ? { levelConfig: resolveLevelConfig({ ...resolveLevelConfig(cls.levelConfig), ...levelConfigPatch }) as unknown as Prisma.InputJsonValue }
-          : {}),
-        // El horario se guarda tal cual (objeto JSON estructurado); null lo limpia.
-        ...(scheduleConfigPatch !== undefined
-          ? { scheduleConfig: (scheduleConfigPatch ?? Prisma.JsonNull) as Prisma.InputJsonValue }
-          : {}),
-      },
-    })
-
-    // Al cambiar la curva de niveles, recalculamos el nivel guardado de TODOS los
-    // alumnos de la clase (si no, el ranking y el listado seguirían con el nivel
-    // viejo hasta el próximo cambio de XP). El título/color se calculan al vuelo.
-    if (levelConfigPatch) {
-      const finalCfg = resolveLevelConfig(updated.levelConfig)
-      const enrollments = await prisma.classEnrollment.findMany({
-        where: { classId },
-        select: { studentId: true, xp: true, level: true },
+    const updated = await prisma.$transaction(async tx => {
+      const saved = await tx.class.update({
+        where: { id: classId },
+        data: {
+          ...rest,
+          // Merge incoming flags over current settings, then normalize dependencies so the
+          // stored config is always coherent (e.g. shop off ⇒ mana off).
+          ...(settingsPatch
+            ? { settings: { ...normalizeClassSettings({ ...resolveClassSettings(cls.settings), ...settingsPatch }) } }
+            : {}),
+          // La config de niveles se normaliza (curva + tramos válidos) antes de guardar.
+          ...(levelConfigPatch
+            ? { levelConfig: resolveLevelConfig({ ...resolveLevelConfig(cls.levelConfig), ...levelConfigPatch }) as unknown as Prisma.InputJsonValue }
+            : {}),
+          // El horario se guarda tal cual (objeto JSON estructurado); null lo limpia.
+          ...(scheduleConfigPatch !== undefined
+            ? { scheduleConfig: (scheduleConfigPatch ?? Prisma.JsonNull) as Prisma.InputJsonValue }
+            : {}),
+        },
       })
-      // Agrupamos por nuevo nivel para hacer un updateMany por nivel en vez de N updates.
-      const byLevel = new Map<number, string[]>()
-      for (const e of enrollments) {
-        const lvl = getLevelFromXP(e.xp, finalCfg)
-        if (lvl !== e.level) {
-          if (!byLevel.has(lvl)) byLevel.set(lvl, [])
-          byLevel.get(lvl)!.push(e.studentId)
+
+      // Al cambiar la curva de niveles, recalculamos el nivel guardado de TODOS los
+      // alumnos de la clase (si no, el ranking y el listado seguirían con el nivel
+      // viejo hasta el próximo cambio de XP). El título/color se calculan al vuelo.
+      if (levelConfigPatch) {
+        const finalCfg = resolveLevelConfig(saved.levelConfig)
+        const enrollments = await tx.classEnrollment.findMany({
+          where: { classId },
+          select: { studentId: true, xp: true, level: true },
+        })
+        // Agrupamos por nuevo nivel para hacer un updateMany por nivel en vez de N updates.
+        const byLevel = new Map<number, string[]>()
+        for (const e of enrollments) {
+          const lvl = getLevelFromXP(e.xp, finalCfg)
+          if (lvl !== e.level) {
+            if (!byLevel.has(lvl)) byLevel.set(lvl, [])
+            byLevel.get(lvl)!.push(e.studentId)
+          }
+        }
+        for (const [lvl, ids] of byLevel) {
+          await tx.classEnrollment.updateMany({
+            where: { classId, studentId: { in: ids } },
+            data: { level: lvl },
+          })
         }
       }
-      for (const [lvl, ids] of byLevel) {
-        await prisma.classEnrollment.updateMany({
-          where: { classId, studentId: { in: ids } },
-          data: { level: lvl },
+
+      // Qué se tocó, sin valores: los textos de la clase pueden ser largos.
+      const fields = CLASS_UPDATE_FIELDS.filter(field => data[field] !== undefined)
+      if (fields.length > 0) {
+        await recordClassAction(tx, {
+          classId,
+          actorId: userId,
+          action: touchesSettings ? 'class.settings_changed' : 'class.updated',
+          entityType: 'class',
+          entityId: classId,
+          metadata: { fields },
         })
       }
-    }
+      return saved
+    })
 
     return {
       class: {
@@ -369,7 +386,7 @@ export class TeachersService {
         name: updated.name,
         schedule: updated.schedule,
         archived: updated.archived,
-        invitationCode: updated.invitationCode,
+        invitationCode: visibleInvitationCode(access, updated.invitationCode),
         backgroundImage: updated.backgroundImage,
         subject: updated.subject,
         language: updated.language,
@@ -377,6 +394,7 @@ export class TeachersService {
         province: updated.province,
         settings: resolveClassSettings(updated.settings),
         scheduleConfig: updated.scheduleConfig,
+        ...(await this.classAccessSummary(classId, userId)),
       },
       message: 'Clase actualizada correctamente',
     }
@@ -387,8 +405,10 @@ export class TeachersService {
   /** Publica/retira una clase como plantilla pública. Al publicar exige metadatos
    *  mínimos (asignatura, nivel, idioma) para que el marketplace pueda filtrarla. */
   async publishTemplate(userId: string, classId: string, publish: boolean) {
-    const cls = await prisma.class.findFirst({ where: { id: classId, teacherId: userId } })
-    if (!cls) throw new Error('Clase no encontrada')
+    // Publicar y retirar es solo del propietario: el resto del profesorado recibe 403.
+    await assertClassAccess(classId, userId, 'class.publishTemplate')
+    const cls = await prisma.class.findUnique({ where: { id: classId } })
+    if (!cls) throw new NotFoundError('Clase no encontrada')
 
     if (publish) {
       const missing: string[] = []
@@ -400,7 +420,16 @@ export class TeachersService {
       }
     }
 
-    await prisma.class.update({ where: { id: classId }, data: { isTemplate: publish } })
+    await prisma.$transaction(async tx => {
+      await tx.class.update({ where: { id: classId }, data: { isTemplate: publish } })
+      await recordClassAction(tx, {
+        classId,
+        actorId: userId,
+        action: publish ? 'class.template_published' : 'class.template_unpublished',
+        entityType: 'class',
+        entityId: classId,
+      })
+    })
     return { isTemplate: publish }
   }
 
@@ -456,7 +485,8 @@ export class TeachersService {
    *  para que el modal de previsualización enseñe qué te llevas al importar. */
   async getTemplateDetail(userId: string, templateClassId: string) {
     const tpl = await prisma.class.findFirst({
-      where: { id: templateClassId, isTemplate: true },
+      // Una plantilla cuya clase está archivada deja de estar disponible, como en el listado.
+      where: { id: templateClassId, isTemplate: true, archived: false },
       select: {
         id: true,
         name: true,
@@ -504,14 +534,19 @@ export class TeachersService {
       missions?: Prisma.MissionGetPayload<{ include: { enigmas: true } }>[]
     },
     userId: string,
-    options: ClassCopyOptions
+    options: ClassCopyOptions,
+    /** Lo que va en la misma transacción que la copia, con la clase nueva ya creada. */
+    afterCopy?: (tx: Prisma.TransactionClient, created: { id: string }) => Promise<unknown>
   ) {
     const invitationCode = nanoid(6).toUpperCase()
 
     return prisma.$transaction(
       async (tx) => {
-        const newClass = await tx.class.create({
-          data: {
+        // La copia es de quien la hace: propietario único, sin el resto del
+        // profesorado de la clase de origen.
+        const newClass = await createClassWithOwner(
+          tx,
+          {
             name: `${source.name} (copia)`,
             narrative: options.narrative ? source.narrative : null,
             backgroundImage: options.narrative ? source.backgroundImage : null,
@@ -523,11 +558,11 @@ export class TeachersService {
             levelConfig: (options.features && source.levelConfig
               ? source.levelConfig
               : undefined) as Prisma.InputJsonValue | undefined,
-            teacherId: userId,
             invitationCode,
             isTemplate: false,
           },
-        })
+          userId
+        )
 
         if (options.shop && source.shopItems.length > 0) {
           await tx.shopItem.createMany({
@@ -594,6 +629,7 @@ export class TeachersService {
           }
         }
 
+        await afterCopy?.(tx, newClass)
         return newClass
       },
       { timeout: 30000 }
@@ -605,7 +641,8 @@ export class TeachersService {
    *  misiones se dejan fuera a propósito (cada profe monta las suyas). */
   async importTemplate(userId: string, templateClassId: string) {
     const tpl = await prisma.class.findFirst({
-      where: { id: templateClassId, isTemplate: true },
+      // Una plantilla cuya clase está archivada deja de estar disponible, como en el listado.
+      where: { id: templateClassId, isTemplate: true, archived: false },
       include: {
         shopItems: true,
         behaviorTemplates: true,
@@ -624,37 +661,45 @@ export class TeachersService {
     return { class: { id: created.id, name: created.name }, message: 'Plantilla importada como nueva clase' }
   }
 
-  /** Duplica una clase propia del profesor en una clase independiente
-   *  "<nombre> (copia)". El profesor elige en `options` qué partes copiar
-   *  (narrativa, funcionalidades, tienda, comportamientos, misiones). Nunca
-   *  arrastra alumnos ni progreso. */
+  /** Duplica una clase a la que el profesor tiene acceso (basta con lectura) en
+   *  una clase independiente "<nombre> (copia)" de la que él es el propietario.
+   *  El profesor elige en `options` qué partes copiar (narrativa,
+   *  funcionalidades, tienda, comportamientos, misiones). Nunca arrastra
+   *  alumnos ni progreso. */
   async duplicateClass(userId: string, classId: string, options: ClassCopyOptions) {
-    const source = await prisma.class.findFirst({
-      where: { id: classId, teacherId: userId },
+    await assertClassAccess(classId, userId, 'class.duplicate')
+    const source = await prisma.class.findUnique({
+      where: { id: classId },
       include: {
         shopItems: true,
         behaviorTemplates: true,
         missions: { include: { enigmas: true } },
       },
     })
-    if (!source) throw new Error('Clase no encontrada')
+    if (!source) throw new NotFoundError('Clase no encontrada')
 
-    const created = await this.copyClass(source, userId, options)
+    // En la clase de origen queda quién sacó una copia; la copia ya es de otra persona.
+    const created = await this.copyClass(source, userId, options, (tx, copy) =>
+      recordClassAction(tx, {
+        classId,
+        actorId: userId,
+        action: 'class.duplicated',
+        entityType: 'class',
+        entityId: copy.id,
+        metadata: { ...options },
+      })
+    )
 
     return { class: { id: created.id, name: created.name }, message: 'Clase duplicada' }
   }
 
   async setClassArchived(userId: string, classId: string, archived: boolean) {
-    const cls = await prisma.class.findFirst({
-      where: { id: classId, teacherId: userId },
-    })
+    await assertClassAccess(classId, userId, 'class.archive')
+    const cls = await prisma.class.findUnique({ where: { id: classId } })
 
-    if (!cls) throw new Error('Clase no encontrada')
+    if (!cls) throw new NotFoundError('Clase no encontrada')
     if (cls.archived && !archived) {
-      const updated = await prisma.class.update({
-        where: { id: classId },
-        data: { archived },
-      })
+      const updated = await this.saveArchived(userId, classId, false)
 
       return {
         class: {
@@ -664,16 +709,14 @@ export class TeachersService {
           archived: updated.archived,
           invitationCode: updated.invitationCode,
           backgroundImage: updated.backgroundImage,
+          ...(await this.classAccessSummary(classId, userId)),
         },
         message: 'Clase desarchivada correctamente',
       }
     }
     if (cls.archived) throw new Error('La clase ya está archivada')
 
-    const updated = await prisma.class.update({
-      where: { id: classId },
-      data: { archived },
-    })
+    const updated = await this.saveArchived(userId, classId, archived)
 
     return {
       class: {
@@ -684,30 +727,59 @@ export class TeachersService {
         archived: updated.archived,
         invitationCode: updated.invitationCode,
         backgroundImage: updated.backgroundImage,
+        ...(await this.classAccessSummary(classId, userId)),
       },
       message: archived ? 'Clase archivada correctamente' : 'Clase desarchivada correctamente',
     }
   }
 
+  /**
+   * Acceso propio y profesorado de la clase, como en el listado: la pantalla
+   * guarda la clase que devuelve crear, editar o archivar en sus listados y
+   * decide con esto qué ofrecer.
+   */
+  private async classAccessSummary(classId: string, userId: string) {
+    const include = classTeachersInclude()
+    const rows = await prisma.classTeacher.findMany({
+      where: { classId, ...include.where },
+      select: include.select,
+      orderBy: include.orderBy,
+    })
+    return summarizeClassTeachers(rows, userId)
+  }
+
+  /** Archiva o desarchiva la clase y lo apunta en su registro. */
+  private saveArchived(userId: string, classId: string, archived: boolean) {
+    return prisma.$transaction(async tx => {
+      const updated = await tx.class.update({ where: { id: classId }, data: { archived } })
+      await recordClassAction(tx, {
+        classId,
+        actorId: userId,
+        action: archived ? 'class.archived' : 'class.unarchived',
+        entityType: 'class',
+        entityId: classId,
+      })
+      return updated
+    })
+  }
+
   async getInvitationCode(userId: string, classId: string) {
-    const cls = await prisma.class.findFirst({
-      where: { id: classId, teacherId: userId },
+    await assertClassAccess(classId, userId, 'class.inviteCode')
+    const cls = await prisma.class.findUnique({
+      where: { id: classId },
+      select: { invitationCode: true },
     })
 
-    if (!cls) throw new Error('Clase no encontrada')
+    if (!cls) throw new NotFoundError('Clase no encontrada')
 
     return { invitationCode: cls.invitationCode }
   }
 
   async getClassMissions(userId: string, classId: string) {
-    const cls = await prisma.class.findFirst({
-      where: { id: classId, teacherId: userId },
-      include: { enrollments: { where: { isPreview: false } } },
+    await assertClassAccess(classId, userId, 'class.view')
+    const totalStudents = await prisma.classEnrollment.count({
+      where: { classId, isPreview: false },
     })
-
-    if (!cls) throw new Error('Clase no encontrada')
-
-    const totalStudents = cls.enrollments.length
 
     const missions = await prisma.mission.findMany({
       where: { classId },
@@ -736,14 +808,19 @@ export class TeachersService {
   }
 
   async getClassRanking(userId: string, classId: string) {
-    const cls = await prisma.class.findFirst({
-      where: { id: classId, teacherId: userId },
+    await assertClassAccess(classId, userId, 'class.view')
+    // El mismo podio que ve el alumnado: sin quien aún no ha entrado nunca.
+    const cls = await prisma.class.findUnique({
+      where: { id: classId },
       include: {
-        enrollments: { where: { isPreview: false }, include: { student: true } },
+        enrollments: {
+          where: { isPreview: false, AND: [participatingEnrollmentWhere] },
+          include: { student: true },
+        },
       },
     })
 
-    if (!cls) throw new Error('Clase no encontrada')
+    if (!cls) throw new NotFoundError('Clase no encontrada')
 
     // Get per-student mission progress
     const totalMissionsInClass = await prisma.mission.count({ where: { classId } })
@@ -805,12 +882,18 @@ export class TeachersService {
    * Alimenta la pestaña "Alumnos" del detalle de la clase.
    */
   async getClassStudents(userId: string, classId: string) {
-    const cls = await prisma.class.findFirst({
-      where: { id: classId, teacherId: userId },
-      include: { enrollments: { where: { isPreview: false }, include: { student: true } } },
+    await assertClassAccess(classId, userId, 'student.view')
+    const cls = await prisma.class.findUnique({
+      where: { id: classId },
+      include: {
+        enrollments: {
+          where: { isPreview: false },
+          include: { student: { include: { _count: UNUSED_ACCOUNT_SELECT._count } } },
+        },
+      },
     })
 
-    if (!cls) throw new Error('Clase no encontrada')
+    if (!cls) throw new NotFoundError('Clase no encontrada')
 
     // Recuento de comportamientos por alumno (positivos / negativos) en esta clase.
     const behaviorCounts = await prisma.behaviorApplication.groupBy({
@@ -828,14 +911,32 @@ export class TeachersService {
     // Config de niveles de la clase → título y color del tramo de cada alumno.
     const levelCfg = resolveLevelConfig(cls.levelConfig)
 
+    // Cuentas sin correo cuya contraseña puede restablecer quien pregunta: las
+    // que nacieron en una clase donde tiene administración.
+    const resettable = await manageableHomeClasses(
+      userId,
+      cls.enrollments.map(e => e.student.homeClassId)
+    )
+
     const students = cls.enrollments
       .map((e) => {
         const tier = tierForLevel(e.level, levelCfg)
+        const managed = e.student.accountType === 'managed'
         return {
           id: e.student.id,
           // Nombre real del alumno + su alias de clase (el "@").
           name: e.student.name || 'Estudiante',
-          handle: e.nickname || e.student.email.split('@')[0],
+          handle: e.nickname || accountHandle(e.student),
+          nickname: e.nickname,
+          accountType: e.student.accountType,
+          canResetPassword:
+            managed && !!e.student.homeClassId && resettable.has(e.student.homeClassId),
+          // Quitarlo de su clase de origen deja la cuenta sin nadie que la gestione.
+          isHomeClass: managed && e.student.homeClassId === classId,
+          // Aún no ha entrado con la contraseña temporal (recién creada o restablecida).
+          pendingSignIn: managed && e.student.mustChangePassword,
+          // Nunca se ha usado: quitarlo de aquí borra la cuenta.
+          removalDeletesAccount: unusedAccountHomeClass(e.student) === classId,
           avatar: e.avatarUrl || '/app/avatars/atenea.svg',
           level: e.level,
           levelTitle: tier.title,
@@ -859,15 +960,12 @@ export class TeachersService {
   }
 
   async generateStudentAvatar(
-    teacherId: string,
+    userId: string,
     classId: string,
     studentId: string,
     data: { avatar_id: string; wardrobe_prompt: string; background_prompt: string }
   ) {
-    const cls = await prisma.class.findFirst({
-      where: { id: classId, teacherId },
-    })
-    if (!cls) throw new Error('Clase no encontrada')
+    await assertClassAccess(classId, userId, 'student.avatar')
 
     const enrollment = await prisma.classEnrollment.findUnique({
       where: { studentId_classId: { studentId, classId } },
@@ -882,9 +980,20 @@ export class TeachersService {
       throw new AvatarServiceUnavailableError()
     }
 
-    const updated = await prisma.classEnrollment.update({
-      where: { studentId_classId: { studentId, classId } },
-      data: { avatarUrl: fileUrl },
+    const updated = await prisma.$transaction(async tx => {
+      const saved = await tx.classEnrollment.update({
+        where: { studentId_classId: { studentId, classId } },
+        data: { avatarUrl: fileUrl },
+      })
+      await recordClassAction(tx, {
+        classId,
+        actorId: userId,
+        action: 'student.avatar_generated',
+        entityType: 'enrollment',
+        entityId: saved.id,
+        targetUserId: studentId,
+      })
+      return saved
     })
 
     return { avatarUrl: updated.avatarUrl, message: 'Avatar del estudiante actualizado correctamente' }
@@ -892,204 +1001,20 @@ export class TeachersService {
 
   // ==================== STUDENTS ====================
 
-  /**
-   * Lista los alumnos del profesor. Un alumno se considera archivado cuando TODAS
-   * sus clases con este profesor están archivadas: no hay estado de archivado propio
-   * del alumno, se deriva de las clases (así desarchivar una clase lo devuelve solo).
-   * Al filtrar por `classId` se devuelven los alumnos de esa clase sin importar el
-   * estado, porque la clase se ha abierto a propósito.
-   */
-  async getStudents(
-    userId: string,
-    classId?: string,
-    archived: 'active' | 'archived' | 'all' = 'active'
-  ) {
-    const whereClause: any = { teacherId: userId }
-
-    const classes = await prisma.class.findMany({
-      where: whereClause,
-      include: {
-        missions: {
-          include: {
-            enigmas: { select: { id: true, xpReward: true } },
-            badges: { select: { id: true } },
-          },
-        },
-        enrollments: {
-          where: { isPreview: false },
-          include: {
-            student: {
-              include: {
-                missionProgress: true,
-                enigmaProgress: { select: { enigmaId: true } },
-                earnedBadges: { select: { badgeId: true } },
-              },
-            },
-          },
-        },
-      },
-    })
-
-    let students = classes.flatMap((c) => {
-      // Calculate totals for this class
-      const totalMissions = c.missions.length
-      const missionIds = c.missions.map((m) => m.id)
-      const classEnigmas = c.missions.flatMap((m) => m.enigmas)
-      const classEnigmaIds = classEnigmas.map((e) => e.id)
-      const totalEnigmas = classEnigmaIds.length
-      const classTotalXp = classEnigmas.reduce((sum, en) => sum + (en.xpReward || 0), 0)
-      const classBadgeIds = c.missions.flatMap((m) => m.badges.map((b) => b.id))
-      const classTotalBadges = classBadgeIds.length
-
-      return c.enrollments.map((e) => {
-        // Filter progress to only count missions from THIS class
-        const completed = e.student.missionProgress.filter(
-          (p) => p.completedAt && missionIds.includes(p.missionId)
-        ).length
-        // Progress is enigma-based: enigmas done in this class / total enigmas in this class
-        const completedEnigmas = e.student.enigmaProgress.filter((ep) =>
-          classEnigmaIds.includes(ep.enigmaId)
-        ).length
-        const progressPercentage =
-          totalEnigmas > 0 ? Math.round((completedEnigmas / totalEnigmas) * 100) : 0
-        // Per-class badges earned (intersect student's badges with badges linked to this class's missions)
-        const earnedBadgeIdSet = new Set(e.student.earnedBadges.map((eb) => eb.badgeId))
-        const classBadgesEarned = classBadgeIds.filter((id) => earnedBadgeIdSet.has(id)).length
-
-        return {
-          id: e.student.id,
-          name: e.student.name,
-          username: e.nickname || e.student.email.split('@')[0],
-          nickname: e.nickname,
-          email: e.student.email,
-          avatar: e.avatarUrl,
-          highestLevel: e.level,
-          totalXp: e.xp,
-          classTotalXp,
-          classId: c.id,
-          className: c.name,
-          classArchived: c.archived,
-          totalMissionsCompleted: completed,
-          totalMissionsAvailable: totalMissions,
-          totalEnigmasCompleted: completedEnigmas,
-          totalEnigmasAvailable: totalEnigmas,
-          overallProgress: progressPercentage,
-          badgesEarned: classBadgesEarned,
-          totalBadgesAvailable: classTotalBadges,
-          enrolledAt: e.enrolledAt,
-          createdAt: e.student.createdAt,
-        }
-      })
-    })
-
-    // Un alumno sigue activo mientras le quede al menos una clase sin archivar.
-    const activeStudentIds = new Set(
-      students.filter((s) => !s.classArchived).map((s) => s.id)
-    )
-
-    if (classId) {
-      students = students.filter((s) => s.classId === classId).map((s) => ({
-        ...s,
-        archived: !activeStudentIds.has(s.id),
-        totalXpEarned: s.totalXp,
-        totalXpAvailable: s.classTotalXp,
-        totalBadgesEarned: s.badgesEarned,
-        totalBadgesAvailable: s.totalBadgesAvailable,
-        classIds: [s.classId],
-        classCount: 1,
-        classProgress: [{
-          classId: s.classId,
-          className: s.className,
-          level: s.highestLevel,
-          xp: s.totalXp,
-          missionsCompleted: s.totalMissionsCompleted,
-          totalMissions: s.totalMissionsAvailable,
-          progress: s.overallProgress,
-        }],
-      }))
-      return { students, total: students.length }
-    }
-
-    if (archived === 'active') {
-      // Vista activa: solo clases vivas, así las archivadas no suman a sus totales.
-      students = students.filter((s) => !s.classArchived)
-    } else if (archived === 'archived') {
-      students = students.filter((s) => s.classArchived && !activeStudentIds.has(s.id))
-    }
-
-    // For "all classes" view, aggregate data per student
-    const studentMap = new Map<string, any>()
-
-    students.forEach((s) => {
-      if (studentMap.has(s.id)) {
-        const existing = studentMap.get(s.id)
-        // Aggregate missions, enigmas, xp and badges across classes
-        existing.totalMissionsCompleted += s.totalMissionsCompleted
-        existing.totalMissionsAvailable += s.totalMissionsAvailable
-        existing.totalEnigmasCompleted += s.totalEnigmasCompleted
-        existing.totalEnigmasAvailable += s.totalEnigmasAvailable
-        existing.totalXpEarned += s.totalXp
-        existing.totalXpAvailable += s.classTotalXp
-        existing.totalBadgesEarned += s.badgesEarned
-        existing.totalBadgesAvailable += s.totalBadgesAvailable
-        // Overall progress is enigma-based across all enrolled classes
-        existing.overallProgress = existing.totalEnigmasAvailable > 0
-          ? Math.round((existing.totalEnigmasCompleted / existing.totalEnigmasAvailable) * 100)
-          : 0
-        // Keep the higher level/xp for display
-        if (s.totalXp > existing.totalXp) {
-          existing.totalXp = s.totalXp
-          existing.highestLevel = s.highestLevel
-        }
-        existing.badgesEarned += s.badgesEarned
-        existing.classIds.push(s.classId)
-        existing.classCount += 1
-        existing.classProgress.push({
-          classId: s.classId,
-          className: s.className,
-          level: s.highestLevel,
-          xp: s.totalXp,
-          missionsCompleted: s.totalMissionsCompleted,
-          totalMissions: s.totalMissionsAvailable,
-          progress: s.overallProgress,
-        })
-      } else {
-        studentMap.set(s.id, {
-          ...s,
-          archived: !activeStudentIds.has(s.id),
-          totalXpEarned: s.totalXp,
-          totalXpAvailable: s.classTotalXp,
-          totalBadgesEarned: s.badgesEarned,
-          totalBadgesAvailable: s.totalBadgesAvailable,
-          classIds: [s.classId],
-          classCount: 1,
-          classProgress: [{
-            classId: s.classId,
-            className: s.className,
-            level: s.highestLevel,
-            xp: s.totalXp,
-            missionsCompleted: s.totalMissionsCompleted,
-            totalMissions: s.totalMissionsAvailable,
-            progress: s.overallProgress,
-          }],
-        })
-      }
-    })
-
-    const uniqueStudents = Array.from(studentMap.values())
-    return { students: uniqueStudents, total: uniqueStudents.length }
-  }
-
   async getStudentById(userId: string, studentId: string) {
-    // Verify the student is in one of the teacher's classes
+    // Solo las clases a las que se tiene acceso y en las que está el alumno.
     const classes = await prisma.class.findMany({
-      where: { teacherId: userId },
+      where: {
+        ...accessibleClassesWhere(userId),
+        enrollments: { some: { studentId, isPreview: false } },
+      },
       include: {
         enrollments: {
-          where: { studentId },
+          where: { studentId, isPreview: false },
           include: { student: true },
         },
         missions: { include: { enigmas: true, badges: { select: { id: true } } } },
+        teachers: classTeachersInclude(),
       },
     })
 
@@ -1102,14 +1027,20 @@ export class TeachersService {
 
     const enrolledClasses = classes.filter((c) => c.enrollments.length > 0)
     if (enrolledClasses.length === 0) {
-      throw new Error('Estudiante no encontrado en tus clases')
+      throw new NotFoundError('Estudiante no encontrado en tus clases')
     }
 
     const student = enrolledClasses[0].enrollments[0].student
+    const accountFacts = await prisma.user.findUniqueOrThrow({
+      where: { id: studentId },
+      select: UNUSED_ACCOUNT_SELECT,
+    })
 
-    // Get all mission progress for this student
+    // Progreso del alumno, solo en las misiones de las clases de quien pregunta:
+    // de las demás no sale ni el título ni el nombre de la clase, y las
+    // estadísticas se calculan sobre ese mismo conjunto.
     const missionProgress = await prisma.studentMissionProgress.findMany({
-      where: { studentId },
+      where: { studentId, mission: { classId: { in: enrolledClasses.map(c => c.id) } } },
       include: { mission: { include: { class: true, enigmas: { select: { xpReward: true } } } } },
     })
 
@@ -1161,11 +1092,25 @@ export class TeachersService {
     // Calculate streak (placeholder - would need login history for real streak)
     const streak = 0
 
+    // Solo quien administra la clase de origen restablece la contraseña de una
+    // cuenta sin correo; la de una cuenta con correo la recupera su dueño.
+    const canResetPassword =
+      student.accountType === 'managed' &&
+      !!student.homeClassId &&
+      (await manageableHomeClasses(userId, [student.homeClassId])).has(student.homeClassId)
+
     return {
       student: {
         id: student.id,
         name: student.name,
         email: student.email,
+        username: student.username,
+        accountType: student.accountType,
+        homeClassId: student.homeClassId,
+        canResetPassword,
+        pendingSignIn: student.accountType === 'managed' && student.mustChangePassword,
+        // La clase de la que quitarlo borra la cuenta, si nunca se ha usado.
+        unusedAccountHomeClassId: unusedAccountHomeClass(accountFacts),
         // Per-class data
         classes: enrolledClasses.map((c) => {
           const enrollment = c.enrollments[0]
@@ -1194,6 +1139,9 @@ export class TeachersService {
           return {
             id: c.id,
             name: c.name,
+            archived: c.archived,
+            // Qué puede hacer quien pregunta con el alumno en esta clase.
+            myAccess: summarizeClassTeachers(c.teachers, userId).myAccess,
             nickname: enrollment.nickname || student.name,
             avatar: enrollment.avatarUrl || '/app/avatars/avatar-1.svg',
             level: enrollment.level || 1,
@@ -1256,292 +1204,26 @@ export class TeachersService {
             teacherName: a.teacherName ?? metadata.teacherName,
             metadata: a.metadata,
             studentId: a.userId,
+            // Quién lo hizo (aprobó, aplicó…), para el «Por …» de la tarjeta.
+            actor: activityActor(a),
           }
         }),
       },
     }
   }
 
-  async searchStudents(userId: string, classId: string, query: string) {
-    const cls = await prisma.class.findFirst({
-      where: { id: classId, teacherId: userId },
-    })
-
-    if (!cls) throw new Error('Clase no encontrada')
-
-    // Get all students not in this class
-    const enrolledStudentIds = await prisma.classEnrollment.findMany({
-      where: { classId },
-      select: { studentId: true },
-    })
-
-    const students = await prisma.user.findMany({
-      where: {
-        role: 'student',
-        id: { notIn: enrolledStudentIds.map((e) => e.studentId) },
-        OR: [{ name: { contains: query, mode: 'insensitive' } }, { email: { contains: query, mode: 'insensitive' } }],
-      },
-      take: 20,
-    })
-
-    // Check for pending requests and invitations
-    const pendingRequests = await prisma.joinRequest.findMany({
-      where: { classId, status: 'pending' },
-    })
-
-    const pendingInvitations = await prisma.invitation.findMany({
-      where: { classId, status: 'pending' },
-    })
-
-    return {
-      students: students.map((s) => ({
-        id: s.id,
-        name: s.name,
-        email: s.email,
-        avatar: null, // Avatar is per-class (assigned on enrollment)
-        isEnrolled: false,
-        hasPendingRequest: pendingRequests.some((r) => r.studentId === s.id),
-        hasPendingInvitation: pendingInvitations.some((i) => i.studentId === s.id),
-      })),
-      total: students.length,
-    }
-  }
-
-  // ==================== ENROLLMENTS ====================
-
-  async getPendingRequests(userId: string, classId: string) {
-    const cls = await prisma.class.findFirst({
-      where: { id: classId, teacherId: userId },
-    })
-
-    if (!cls) throw new Error('Clase no encontrada')
-
-    const requests = await prisma.joinRequest.findMany({
-      where: { classId, status: 'pending' },
-      include: { student: true },
-      orderBy: { createdAt: 'desc' },
-    })
-
-    return {
-      requests: requests.map((r) => ({
-        id: r.id,
-        studentId: r.studentId,
-        studentName: r.student.name,
-        studentAvatar: null, // Avatar assigned on enrollment
-        studentEmail: r.student.email,
-        message: r.message,
-        createdAt: r.createdAt,
-      })),
-      total: requests.length,
-    }
-  }
-
-  async acceptJoinRequest(userId: string, classId: string, requestId: string) {
-    const cls = await prisma.class.findFirst({
-      where: { id: classId, teacherId: userId },
-    })
-
-    if (!cls) throw new Error('Clase no encontrada')
-    if (cls.archived) throw new Error('La clase estÃ¡ archivada y no admite nuevos alumnos')
-
-    const request = await prisma.joinRequest.findFirst({
-      where: { id: requestId, classId, status: 'pending' },
-    })
-
-    if (!request) throw new Error('Solicitud no encontrada')
-
-    // Update request status
-    await prisma.joinRequest.update({
-      where: { id: requestId },
-      data: { status: 'accepted' },
-    })
-
-    // Create enrollment with random avatar and nickname
-    const enrollment = await prisma.classEnrollment.create({
-      data: {
-        studentId: request.studentId,
-        classId,
-        avatarUrl: getRandomAvatar(),
-        nickname: getRandomNickname(),
-      },
-    })
-
-    // Create activity with class-specific profile
-    await prisma.activity.create({
-      data: {
-        userId: request.studentId,
-        type: 'class_joined',
-        description: `Te has unido a la clase ${cls.name}`,
-        // Class-specific student profile
-        avatar: enrollment.avatarUrl,
-        username: enrollment.nickname || 'Estudiante',
-        classId,
-        className: cls.name,
-        metadata: { classId },
-      },
-    })
-
-    // Aviso al alumno (interno siempre, y por correo si tiene y lo permite).
-    await notify({
-      userId: request.studentId,
-      type: 'join_accepted',
-      copy: 'join_accepted',
-      params: { class: cls.name },
-      actionUrl: `/alumno/clases/${classId}`,
-      metadata: { classId },
-      alsoByEmail: true,
-      emailAction: 'go_to_class',
-    })
-
-    return { success: true, message: 'Solicitud aceptada' }
-  }
-
-  async rejectJoinRequest(userId: string, classId: string, requestId: string, reason?: string) {
-    const cls = await prisma.class.findFirst({
-      where: { id: classId, teacherId: userId },
-    })
-
-    if (!cls) throw new Error('Clase no encontrada')
-
-    const request = await prisma.joinRequest.findFirst({
-      where: { id: requestId, classId, status: 'pending' },
-    })
-
-    if (!request) throw new Error('Solicitud no encontrada')
-
-    await prisma.joinRequest.update({
-      where: { id: requestId },
-      data: { status: 'rejected', rejectionReason: reason },
-    })
-
-    await notify({
-      userId: request.studentId,
-      type: 'join_rejected',
-      copy: 'join_rejected',
-      params: { class: cls.name },
-      // El motivo lo escribe el profesor con sus palabras: no se traduce.
-      messageOverride: reason,
-      metadata: { classId },
-      alsoByEmail: true,
-    })
-
-    return { success: true, message: 'Solicitud rechazada' }
-  }
-
-  async sendInvitation(userId: string, classId: string, studentId: string, message?: string) {
-    const cls = await prisma.class.findFirst({
-      where: { id: classId, teacherId: userId },
-    })
-
-    if (!cls) throw new Error('Clase no encontrada')
-    if (cls.archived) throw new Error('La clase estÃ¡ archivada y no admite nuevas invitaciones')
-
-    // Check if already enrolled
-    const existingEnrollment = await prisma.classEnrollment.findUnique({
-      where: { studentId_classId: { studentId, classId } },
-    })
-
-    if (existingEnrollment) throw new Error('El estudiante ya está inscrito en esta clase')
-
-    // Check for existing pending invitation
-    const existingInvitation = await prisma.invitation.findFirst({
-      where: { studentId, classId, status: 'pending' },
-    })
-
-    if (existingInvitation) throw new Error('Ya existe una invitación pendiente para este estudiante')
-
-    const invitation = await prisma.invitation.create({
-      data: {
-        classId,
-        teacherId: userId,
-        studentId,
-        message,
-        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
-      },
-    })
-
-    // TODO(fase 3, punto 9): cuando exista la pantalla de invitaciones del
-    // alumno, este enlace debería apuntar a ella; hoy no hay ninguna, así que
-    // lleva al listado de clases, que es desde donde se entra a la clase nueva.
-    await notify({
-      userId: studentId,
-      type: 'class_invitation',
-      copy: 'class_invitation',
-      params: { class: cls.name },
-      actionUrl: '/alumno/clases',
-      metadata: { classId, invitationId: invitation.id },
-      alsoByEmail: true,
-      emailAction: 'my_classes',
-    })
-
-    return {
-      invitation: { id: invitation.id, status: invitation.status },
-      success: true,
-      message: 'Invitación enviada correctamente',
-    }
-  }
-
-  async getSentInvitations(userId: string, classId: string) {
-    const cls = await prisma.class.findFirst({
-      where: { id: classId, teacherId: userId },
-    })
-
-    if (!cls) throw new Error('Clase no encontrada')
-
-    const invitations = await prisma.invitation.findMany({
-      where: { classId },
-      include: { student: true },
-      orderBy: { createdAt: 'desc' },
-    })
-
-    return {
-      invitations: invitations.map((i) => ({
-        id: i.id,
-        studentId: i.studentId,
-        studentName: i.student.name,
-        studentEmail: i.student.email,
-        status: i.status,
-        message: i.message,
-        expiresAt: i.expiresAt,
-        createdAt: i.createdAt,
-      })),
-      total: invitations.length,
-    }
-  }
-
-  async getTotalPendingRequests(userId: string) {
-    const classes = await prisma.class.findMany({
-      where: { teacherId: userId },
-    })
-
-    const classIds = classes.map((c) => c.id)
-
-    const pendingRequests = await prisma.joinRequest.count({
-      where: { classId: { in: classIds }, status: 'pending' },
-    })
-
-    return { pendingRequests }
-  }
-
   // ==================== MISSIONS ====================
 
   async getMissions(userId: string, classIdFilter?: string, limit = 100) {
-    const whereClause: any = {}
+    let whereClause: Prisma.MissionWhereInput
 
     if (classIdFilter) {
-      // Verify ownership
-      const cls = await prisma.class.findFirst({
-        where: { id: classIdFilter, teacherId: userId },
-      })
-      if (!cls) throw new Error('Clase no encontrada')
-      whereClause.classId = classIdFilter
+      await assertClassAccess(classIdFilter, userId, 'class.view')
+      whereClause = { classId: classIdFilter }
     } else {
       // Vista agregada: excluye las misiones de clases archivadas. Si se filtra por
       // una clase concreta (arriba) sí se muestran, porque se ha abierto a propósito.
-      const classes = await prisma.class.findMany({
-        where: { teacherId: userId, archived: false },
-      })
-      whereClause.classId = { in: classes.map((c) => c.id) }
+      whereClause = { class: this.buildArchivedWhere(userId, 'active') }
     }
 
     const missions = await prisma.mission.findMany({
@@ -1588,7 +1270,8 @@ export class TeachersService {
 
   async getActivities(userId: string, limit = 10) {
     const classes = await prisma.class.findMany({
-      where: { teacherId: userId },
+      where: accessibleClassesWhere(userId),
+      select: { id: true, name: true },
     })
 
     const classIds = classes.map((c) => c.id)
@@ -1601,9 +1284,12 @@ export class TeachersService {
 
     const studentIds = enrollments.map((e) => e.studentId)
 
+    // Lo que esos alumnos hacen en estas clases, más lo que no es de ninguna
+    // (subir de nivel, insignias del sistema); lo de clases ajenas se queda fuera.
     const activities = await prisma.activity.findMany({
       where: {
         userId: { in: studentIds },
+        OR: [{ classId: { in: classIds } }, { classId: null }],
       },
       include: { user: true },
       orderBy: { createdAt: 'desc' },
@@ -1638,6 +1324,8 @@ export class TeachersService {
           teacherName: a.teacherName ?? metadata.teacherName,
           metadata: a.metadata,
           studentId: a.userId,
+          // Quién lo hizo (aprobó, aplicó…), para el «Por …» de la tarjeta.
+          actor: activityActor(a),
         }
       }),
       total: activities.length,
@@ -1645,12 +1333,13 @@ export class TeachersService {
   }
 
   async getClassActivities(userId: string, classId: string, limit = 10) {
-    // Verify teacher owns this class
-    const cls = await prisma.class.findFirst({
-      where: { id: classId, teacherId: userId },
+    await assertClassAccess(classId, userId, 'class.view')
+    const cls = await prisma.class.findUnique({
+      where: { id: classId },
+      select: { name: true },
     })
 
-    if (!cls) throw new Error('Clase no encontrada')
+    if (!cls) throw new NotFoundError('Clase no encontrada')
 
     // Get student IDs enrolled in this class
     const enrollments = await prisma.classEnrollment.findMany({
@@ -1698,6 +1387,8 @@ export class TeachersService {
           teacherName: a.teacherName ?? metadata.teacherName,
           metadata: a.metadata,
           studentId: a.userId,
+          // Quién lo hizo (aprobó, aplicó…), para el «Por …» de la tarjeta.
+          actor: activityActor(a),
         }
       }),
       total: activities.length,
@@ -1705,10 +1396,12 @@ export class TeachersService {
   }
 
   // ==================== BADGES ====================
+  // Las del sistema, las propias y las vinculadas a misiones de clases donde se
+  // tiene edición (ver `manageableBadgesWhere`).
 
   async getBadges(userId: string) {
     const badges = await prisma.badge.findMany({
-      where: { OR: [{ teacherId: userId }, { teacherId: null }] },
+      where: { OR: [{ teacherId: null }, manageableBadgesWhere(userId)] },
       orderBy: { createdAt: 'desc' },
       include: {
         mission: {
@@ -1732,7 +1425,10 @@ export class TeachersService {
         rarity: b.rarity,
         category: b.category,
         isSystem: b.teacherId === null,
+        // Para saber a qué misiones se puede vincular: una ajena no sale de su clase.
+        isMine: b.teacherId === userId,
         missionId: b.missionId,
+        missionClassId: b.mission?.classId ?? null,
         missionTitle: b.mission?.title,
         className: b.mission?.class?.name,
         classNarrative: b.mission?.class?.narrative,
@@ -1743,6 +1439,9 @@ export class TeachersService {
   }
 
   async createBadge(userId: string, data: { name: string; description?: string; imageUrl?: string; rarity?: string; missionId?: string }) {
+    // Una insignia solo se vincula a una misión de una clase donde se puede editar el contenido.
+    if (data.missionId) await assertMissionAccess(data.missionId, userId, 'mission.edit')
+
     // If imageUrl is base64, save it as a file
     let imageUrl = data.imageUrl
     if (imageUrl && imageUrl.startsWith('data:image/')) {
@@ -1774,10 +1473,20 @@ export class TeachersService {
 
   async updateBadge(userId: string, badgeId: string, data: { name?: string; description?: string; imageUrl?: string; rarity?: string; missionId?: string }) {
     const badge = await prisma.badge.findFirst({
-      where: { id: badgeId, teacherId: userId },
+      where: { id: badgeId, ...manageableBadgesWhere(userId) },
     })
 
-    if (!badge) throw new Error('Insignia no encontrada')
+    if (!badge) throw new NotFoundError('Insignia no encontrada')
+
+    // Igual que al crearla: la misión a la que se vincula tiene que ser editable
+    // por quien la vincula, y la insignia, de las que se pueden usar en esa clase.
+    if (data.missionId && data.missionId !== badge.missionId) {
+      const { classId } = await assertMissionAccess(data.missionId, userId, 'mission.edit')
+      const assignable = await prisma.badge.count({
+        where: { AND: [{ id: badgeId }, assignableBadgesWhere(userId, classId)] },
+      })
+      if (!assignable) throw new NotFoundError('Insignia no encontrada')
+    }
 
     // If imageUrl is base64, save it as a file
     let imageUrl = data.imageUrl
@@ -1810,10 +1519,10 @@ export class TeachersService {
 
   async deleteBadge(userId: string, badgeId: string) {
     const badge = await prisma.badge.findFirst({
-      where: { id: badgeId, teacherId: userId },
+      where: { id: badgeId, ...manageableBadgesWhere(userId) },
     })
 
-    if (!badge) throw new Error('Insignia no encontrada')
+    if (!badge) throw new NotFoundError('Insignia no encontrada')
 
     await prisma.badge.delete({ where: { id: badgeId } })
 
@@ -1822,25 +1531,30 @@ export class TeachersService {
 
   // ==================== CLASS GUIDE ====================
 
-  async updateClassGuide(teacherId: string, classId: string, content: string) {
-    // Verify teacher owns the class
-    const cls = await prisma.class.findFirst({
-      where: { id: classId, teacherId },
-    })
-
-    if (!cls) throw new Error('Clase no encontrada')
+  async updateClassGuide(userId: string, classId: string, content: string) {
+    await assertClassAccess(classId, userId, 'class.editContent')
 
     // Upsert guide (create if doesn't exist, update if it does)
-    const guide = await prisma.classGuide.upsert({
-      where: { classId },
-      update: {
-        content,
-        lastUpdated: new Date(),
-      },
-      create: {
+    const guide = await prisma.$transaction(async tx => {
+      const saved = await tx.classGuide.upsert({
+        where: { classId },
+        update: {
+          content,
+          lastUpdated: new Date(),
+        },
+        create: {
+          classId,
+          content,
+        },
+      })
+      await recordClassAction(tx, {
         classId,
-        content,
-      },
+        actorId: userId,
+        action: 'class.guide_updated',
+        entityType: 'class',
+        entityId: classId,
+      })
+      return saved
     })
 
     return {

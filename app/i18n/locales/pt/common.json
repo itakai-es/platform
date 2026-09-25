@@ -17,6 +17,8 @@
       "section_management": "Gestão",
       "section_content": "Conteúdos",
       "section_system": "Sistema",
+      "section_classes": "Turmas",
+      "section_account": "Conta",
       "profile": "O meu perfil",
       "logout": "Terminar sessão"
     },
@@ -64,10 +66,8 @@
       "submission_student_approved": "Entrega de {name} aprovada (+{xp} XP)",
       "download_not_found": "O ficheiro para descarregar não foi encontrado",
       "download_error": "Não foi possível descarregar o ficheiro",
-      "join_request_accepted": "{name} foi aceite na turma",
-      "join_request_rejected": "Pedido recusado",
-      "join_request_accept_error": "Erro ao aceitar o pedido",
-      "join_request_reject_error": "Erro ao recusar o pedido"
+      "download_no_access": "Não tens acesso a este ficheiro",
+      "popup_blocked": "Permite as janelas pop-up para abrir o ficheiro"
     },
     "notifications": {
       "title": "Avisos",
@@ -134,7 +134,7 @@
       "feature_ai_desc": "Assistentes que personalizam a aprendizagem para cada aluno",
       "profiles_title": "Escolhe o teu perfil para começar",
       "about_title": "O que é o ITAKAI?",
-      "about_description_1": "O ITAKAI é a evolução do <strong>MyClassGame</strong>, potenciada com <strong>Inteligência Artificial</strong>. Uma plataforma educativa gamificada que transforma o ensino profissional numa experiência imersiva.",
+      "about_description_1": "O ITAKAI é a evolução do <strong>MyClassGame</strong>, potenciada com <strong>inteligência artificial</strong>. Uma plataforma educativa gamificada que transforma o ensino profissional numa experiência imersiva.",
       "about_description_2": "Geração automática de conteúdos, assistentes de IA personalizados para cada aluno e análise preditiva do desempenho. Tudo integrado num ecossistema onde aprender é uma aventura.",
       "stat_students": "Alunos",
       "stat_teachers": "Professores",
@@ -211,7 +211,10 @@
       "description": "Partilha este código com os teus alunos para que se juntem à turma:",
       "copy_code": "Copiar código",
       "code_copied": "Código copiado para a área de transferência",
-      "copy_error": "Erro ao copiar o código"
+      "copy_error": "Erro ao copiar o código",
+      "tabs_label": "Formas de convidar",
+      "tab_code": "Código da turma",
+      "tab_accounts": "Criar contas"
     },
     "under_development": {
       "back_to_dashboard": "Voltar ao início"
@@ -359,6 +362,83 @@
     },
     "student_preview": {
       "banner": "Estás a ver a plataforma como aluno (demo)"
+    },
+    "change_email": {
+      "title": "E-mail",
+      "current_email": "E-mail atual",
+      "new_email": "Novo e-mail",
+      "password": "Palavra-passe atual",
+      "password_hint": "Pedimos-ta para confirmar que és tu quem altera o e-mail.",
+      "submit": "Alterar e-mail",
+      "success": "E-mail atualizado. A partir de agora entras com o novo.",
+      "errors": {
+        "email_invalid": "Escreve um e-mail válido.",
+        "email_same": "Esse já é o teu e-mail.",
+        "password_required": "Escreve a tua palavra-passe atual.",
+        "password_wrong": "A palavra-passe não está correta.",
+        "password_not_set": "A tua conta entra com o Google e ainda não tem palavra-passe. Termina a sessão, cria uma em «Esqueceste-te da palavra-passe?» e tenta de novo.",
+        "email_in_use": "Esse e-mail já é usado por outra conta.",
+        "generic": "Não foi possível alterar o e-mail. Tenta de novo."
+      }
+    },
+    "file_unavailable": {
+      "title": "O link já não é válido",
+      "message": "O link para abrir este ficheiro expirou. Volta à missão e abre-o outra vez."
+    },
+    "class_teachers": {
+      "owner": "Proprietário",
+      "profiles": {
+        "titular": "Titular",
+        "sustituto": "Substituto",
+        "practicas": "Estágio"
+      },
+      "access": {
+        "read": "Leitura",
+        "edit": "Edição",
+        "admin": "Administração"
+      }
+    },
+    "pagination": {
+      "label": "Paginação",
+      "page_of": "Página {page} de {total}",
+      "previous": "Anterior",
+      "next": "Seguinte"
+    },
+    "account_deletion": {
+      "blocked_self": "Ainda não podes apagar a tua conta: és o proprietário destas turmas e nelas não há mais ninguém com administração. Dá administração a outro professor ou passa-lhe a propriedade, e volta aqui.",
+      "blocked_admin": "Esta conta ainda não pode ser apagada: é a proprietária destas turmas e nelas não há mais ninguém com administração. Primeiro é preciso passar a sua propriedade a outro professor.",
+      "transfers_self": "As tuas turmas vão passar para outro professor com administração nelas:",
+      "transfers_admin": "As suas turmas vão passar para outro professor com administração nelas:",
+      "transfer_item": "{class}, para {name}"
+    },
+    "copy": {
+      "label": "Copiar: {what}",
+      "copied": "Copiado para a área de transferência",
+      "error": "Não foi possível copiar"
+    },
+    "change_password": {
+      "title": "Palavra-passe",
+      "current_password": "Palavra-passe atual",
+      "new_password": "Nova palavra-passe",
+      "new_password_placeholder": "Pelo menos {min} caracteres",
+      "confirm_password": "Confirmar palavra-passe",
+      "confirm_password_placeholder": "Repete a nova palavra-passe",
+      "submit": "Alterar palavra-passe",
+      "success": "Palavra-passe alterada. Nos teus outros dispositivos vais ter de entrar de novo.",
+      "errors": {
+        "current_required": "Escreve a tua palavra-passe atual.",
+        "current_wrong": "A palavra-passe atual não está correta.",
+        "password_not_set": "A tua conta entra com o Google e ainda não tem palavra-passe. Termina a sessão e cria uma em «Esqueceste-te da palavra-passe?».",
+        "too_short": "A palavra-passe tem de ter pelo menos {min} caracteres.",
+        "mismatch": "As palavras-passe não coincidem.",
+        "generic": "Não foi possível alterar a palavra-passe. Verifica a atual e tenta de novo."
+      }
+    },
+    "filter_bar": {
+      "search": "Pesquisar...",
+      "filters": "Filtros",
+      "filters_count": "Filtros ({count})",
+      "clear": "Limpar filtros"
     }
   }
 }

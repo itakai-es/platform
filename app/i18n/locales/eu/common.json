@@ -2,7 +2,7 @@
   "common": {
     "nav": {
       "dashboard": "Dashboard",
-      "my_classes": "Nire Klaseak",
+      "my_classes": "Nire klaseak",
       "missions": "Misioak",
       "badges": "Dominak",
       "students": "Ikasleak",
@@ -17,6 +17,8 @@
       "section_management": "Kudeaketa",
       "section_content": "Edukiak",
       "section_system": "Sistema",
+      "section_classes": "Klaseak",
+      "section_account": "Kontua",
       "profile": "Nire profila",
       "logout": "Saioa itxi"
     },
@@ -31,7 +33,7 @@
       "scroll_left": "Ezkerrera mugitu",
       "scroll_right": "Eskuinera mugitu",
       "back_to_dashboard": "Dashboard-era itzuli",
-      "create_new_account": "Kontu Berria Sortu",
+      "create_new_account": "Kontu berria sortu",
       "enter": "Sartu",
       "close": "Itxi",
       "processing": "Prozesatzen…",
@@ -64,10 +66,8 @@
       "submission_student_approved": "{name}-(r)en entrega onartu da (+{xp} XP)",
       "download_not_found": "Ez da deskargatzeko fitxategia aurkitu",
       "download_error": "Ezin izan da fitxategia deskargatu",
-      "join_request_accepted": "{name} klasera onartua izan da",
-      "join_request_rejected": "Eskaera baztertuta",
-      "join_request_accept_error": "Eskaera onartzean errore bat gertatu da",
-      "join_request_reject_error": "Eskaera baztertzean errore bat gertatu da"
+      "download_no_access": "Ez duzu fitxategi honetarako sarbiderik",
+      "popup_blocked": "Baimendu leiho gainerakorrak fitxategia irekitzeko"
     },
     "notifications": {
       "title": "Abisuak",
@@ -101,7 +101,7 @@
       "student": "Ikaslea",
       "teacher": "Irakaslea",
       "admin": "Administratzailea",
-      "admin_system": "Sistemaren Administratzailea"
+      "admin_system": "Sistemaren administratzailea"
     },
     "sidebar": {
       "new_conversation": "Elkarrizketa berria",
@@ -112,7 +112,7 @@
       "chat_with_label": "Txatea honekin:"
     },
     "mobile_sidebar": {
-      "join_class": "Klasera Batu"
+      "join_class": "Klasera batu"
     },
     "landing": {
       "hero_title": "Ikasteko abentura",
@@ -120,32 +120,32 @@
       "cta_start": "Hasi",
       "features_title": "Zer egin dezakezu ITAKAI-rekin?",
       "features_subtitle": "Ezagutu hezkuntza esperientzia bakarra bihurtzen duten tresna eta funtzionaltasun guztiak",
-      "feature_gamification_title": "Gamifikazio Osoa",
+      "feature_gamification_title": "Gamifikazio osoa",
       "feature_gamification_desc": "Puntu, maila, dominari eta sari sistema etengabeko ikaskuntza bultzatzen duena",
-      "feature_narrative_title": "Narratiba Murgilgarria",
+      "feature_narrative_title": "Narratiba murgilgarria",
       "feature_narrative_desc": "Klase bakoitza pertsonaia eta istorioekin arreta hartzen duen abentura bakarra da",
-      "feature_teamwork_title": "Talde Lana",
+      "feature_teamwork_title": "Talde lana",
       "feature_teamwork_desc": "Talde lana eta etengabeko hobekuntza sustatzen duten erronka kolaboratiboak eta rankingak",
-      "feature_analytics_title": "Analisi Adimentsua",
+      "feature_analytics_title": "Analisi adimentsua",
       "feature_analytics_desc": "Ikasleen aurrerapenaren jarraipena eta analisi tresna aurreratuak",
-      "feature_access_title": "Sarbide Unibertsala",
+      "feature_access_title": "Sarbide unibertsala",
       "feature_access_desc": "Edozein gailutan funtzionatzen du, munduko edozein lekutatik",
       "feature_ai_title": "Hezkuntza AA",
       "feature_ai_desc": "Ikasle bakoitzarentzat ikaskuntza pertsonalizatzen duten laguntzaileak",
       "profiles_title": "Aukeratu zure profila hasteko",
       "about_title": "Zer da ITAKAI?",
-      "about_description_1": "ITAKAI <strong>MyClassGame</strong>-ren bilakaera da, <strong>Adimen Artifizialarekin</strong> indartua. Lanbide heziketa esperientzia murgilgarri bihurtzen duen hezkuntza plataforma gamifikatua.",
+      "about_description_1": "ITAKAI <strong>MyClassGame</strong>-ren bilakaera da, <strong>adimen artifizialarekin</strong> indartua. Lanbide heziketa esperientzia murgilgarri bihurtzen duen hezkuntza plataforma gamifikatua.",
       "about_description_2": "Edukien sorrera automatikoa, ikasle bakoitzarentzat AA laguntzaile pertsonalizatuak eta errendimenduaren analisi prediktiboa. Dena ikastea abentura bat den ekosistema batean integratuta.",
       "stat_students": "Ikasleak",
       "stat_teachers": "Irakasleak",
       "stat_centers": "Ikastetxeak",
       "partners_title": "Nor gara?",
       "developed_by": "Garapena:",
-      "gods_title": "Zure Olinpoko Mentoreak",
+      "gods_title": "Zure Olinpoko mentoreak",
       "gods_subtitle": "Jainko greko gaietan oinarritutako 5 AA laguntzaile, bakoitza bere alorrean aditua",
-      "cta_final_title": "Prest zure Abentura Epikora?",
+      "cta_final_title": "Prest zure abentura epikora?",
       "cta_final_subtitle": "Batu dagoeneko ITAKAI-rekin ikaskuntza eraldatzen ari diren milaka ikasletara",
-      "cta_final_button": "Hasi Orain Doan",
+      "cta_final_button": "Hasi orain doan",
       "footer_copyright_alt": "(c) {year} ITAKAI. Hezkuntza sistema gamifikatua",
       "gods": {
         "atenea": {
@@ -188,11 +188,11 @@
       "title": "Maila igo duzu!",
       "congratulations": "Zorionak! {level} maila lortu duzu",
       "congratulations_class": "Zorionak! {level} maila lortu duzu {className} klasean",
-      "rewards_title": "Lortutako Sariak",
+      "rewards_title": "Lortutako sariak",
       "continue": "Jarraitu!"
     },
     "join_class_modal": {
-      "title": "Klase batera Batu",
+      "title": "Klase batera batu",
       "description": "Sartu zure irakasleak eman dizun klase kodea",
       "placeholder": "ABC123",
       "joining": "Batzen...",
@@ -207,11 +207,14 @@
       "success": "{className} klasera batu zara"
     },
     "invite_students_modal": {
-      "title": "Ikasleak Gonbidatu",
+      "title": "Ikasleak gonbidatu",
       "description": "Partekatu kode hau zure ikasleekin klasera batu daitezen:",
-      "copy_code": "Kodea Kopiatu",
+      "copy_code": "Kodea kopiatu",
       "code_copied": "Kodea arbelean kopiatu da",
-      "copy_error": "Errorea kodea kopiatzean"
+      "copy_error": "Errorea kodea kopiatzean",
+      "tabs_label": "Gonbidatzeko moduak",
+      "tab_code": "Klasearen kodea",
+      "tab_accounts": "Kontuak sortu"
     },
     "under_development": {
       "back_to_dashboard": "Dashboard-era itzuli"
@@ -277,7 +280,7 @@
       "back_to_app": "Itzuli aplikaziora"
     },
     "meta": {
-      "site_title": "ITAKAI - Ikasteko abentura | Hezkuntza Plataforma Gamifikatua",
+      "site_title": "ITAKAI - Ikasteko abentura | Hezkuntza plataforma gamifikatua",
       "site_description": "Eraldatu hezkuntza ITAKAI-rekin, ikasleak, irakasleak eta familiak inspiratzen, motibatzen eta konektatzen dituen plataforma gamifikatua. Batu 50.000 ikasle baino gehiagotara.",
       "og_title": "ITAKAI - Ikasteko abentura",
       "og_description": "AA-rekin hezkuntza plataforma gamifikatua, narratiba murgilgarriak eta analisi adimentsua."
@@ -359,6 +362,83 @@
     },
     "student_preview": {
       "banner": "Plataforma ikasle gisa ikusten ari zara (demoa)"
+    },
+    "change_email": {
+      "title": "Posta elektronikoa",
+      "current_email": "Uneko posta",
+      "new_email": "Posta berria",
+      "password": "Uneko pasahitza",
+      "password_hint": "Posta aldatzen ari dena zu zarela baieztatzeko eskatzen dizugu.",
+      "submit": "Aldatu posta",
+      "success": "Posta eguneratu da. Hemendik aurrera berriarekin sartuko zara.",
+      "errors": {
+        "email_invalid": "Idatzi baliozko posta bat.",
+        "email_same": "Hori da dagoeneko zure posta.",
+        "password_required": "Idatzi zure uneko pasahitza.",
+        "password_wrong": "Pasahitza ez da zuzena.",
+        "password_not_set": "Zure kontua Googlerekin sartzen da eta oraindik ez du pasahitzik. Itxi saioa, sortu bat «Pasahitza ahaztu duzu?» estekatik eta saiatu berriro.",
+        "email_in_use": "Posta hori beste kontu batek erabiltzen du.",
+        "generic": "Ezin izan da posta aldatu. Saiatu berriro."
+      }
+    },
+    "file_unavailable": {
+      "title": "Lotura honek jada ez du baliorik",
+      "message": "Fitxategi hau irekitzeko lotura iraungi da. Itzuli misiora eta ireki berriro."
+    },
+    "class_teachers": {
+      "owner": "Jabea",
+      "profiles": {
+        "titular": "Titularra",
+        "sustituto": "Ordezkoa",
+        "practicas": "Praktikak"
+      },
+      "access": {
+        "read": "Irakurketa",
+        "edit": "Edizioa",
+        "admin": "Administrazioa"
+      }
+    },
+    "pagination": {
+      "label": "Orrikatzea",
+      "page_of": "{page}/{total} orria",
+      "previous": "Aurrekoa",
+      "next": "Hurrengoa"
+    },
+    "account_deletion": {
+      "blocked_self": "Oraindik ezin duzu zure kontua ezabatu: klase hauen jabea zara, eta haietan ez dago administrazioa duen beste inor. Eman administrazioa beste irakasle bati edo eman iezaiozu jabetza, eta itzuli hona.",
+      "blocked_admin": "Kontu hau oraindik ezin da ezabatu: klase hauen jabea da, eta haietan ez dago administrazioa duen beste inor. Lehenago, haien jabetza beste irakasle bati eman behar zaio.",
+      "transfers_self": "Zure klaseak haietan administrazioa duen beste irakasle batenak izango dira:",
+      "transfers_admin": "Bere klaseak haietan administrazioa duen beste irakasle batenak izango dira:",
+      "transfer_item": "{class}: {name}"
+    },
+    "copy": {
+      "label": "Kopiatu: {what}",
+      "copied": "Arbelean kopiatu da",
+      "error": "Ezin izan da kopiatu"
+    },
+    "change_password": {
+      "title": "Pasahitza",
+      "current_password": "Uneko pasahitza",
+      "new_password": "Pasahitz berria",
+      "new_password_placeholder": "Gutxienez {min} karaktere",
+      "confirm_password": "Pasahitza berretsi",
+      "confirm_password_placeholder": "Errepikatu pasahitz berria",
+      "submit": "Aldatu pasahitza",
+      "success": "Pasahitza aldatu da. Zure beste gailuetan berriro sartu beharko duzu.",
+      "errors": {
+        "current_required": "Idatzi zure uneko pasahitza.",
+        "current_wrong": "Uneko pasahitza ez da zuzena.",
+        "password_not_set": "Zure kontua Googlerekin sartzen da eta oraindik ez du pasahitzik. Itxi saioa eta sortu bat «Pasahitza ahaztu duzu?» estekatik.",
+        "too_short": "Pasahitzak gutxienez {min} karaktere izan behar ditu.",
+        "mismatch": "Pasahitzak ez datoz bat.",
+        "generic": "Ezin izan da pasahitza aldatu. Egiaztatu unekoa eta saiatu berriro."
+      }
+    },
+    "filter_bar": {
+      "search": "Bilatu...",
+      "filters": "Iragazkiak",
+      "filters_count": "Iragazkiak ({count})",
+      "clear": "Garbitu iragazkiak"
     }
   }
 }

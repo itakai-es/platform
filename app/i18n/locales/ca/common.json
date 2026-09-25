@@ -2,7 +2,7 @@
   "common": {
     "nav": {
       "dashboard": "Dashboard",
-      "my_classes": "Les Meves Classes",
+      "my_classes": "Les meves classes",
       "missions": "Missions",
       "badges": "Insígnies",
       "students": "Estudiants",
@@ -17,6 +17,8 @@
       "section_management": "Gestió",
       "section_content": "Continguts",
       "section_system": "Sistema",
+      "section_classes": "Classes",
+      "section_account": "Compte",
       "profile": "El meu perfil",
       "logout": "Tancar sessió"
     },
@@ -30,15 +32,15 @@
       "toggle_menu": "Toggle menú",
       "scroll_left": "Desplaçar a l'esquerra",
       "scroll_right": "Desplaçar a la dreta",
-      "back_to_dashboard": "Tornar al Dashboard",
-      "create_new_account": "Crear Compte Nou",
+      "back_to_dashboard": "Tornar al dashboard",
+      "create_new_account": "Crear compte nou",
       "enter": "Entrar",
       "close": "Tancar",
       "processing": "Processant…",
       "view_mode": "Mode de vista"
     },
     "status": {
-      "under_development": "En Desenvolupament"
+      "under_development": "En desenvolupament"
     },
     "time": {
       "now": "Ara",
@@ -64,10 +66,8 @@
       "submission_student_approved": "Lliurament de {name} aprovat (+{xp} XP)",
       "download_not_found": "No s'ha trobat el fitxer per descarregar",
       "download_error": "No s'ha pogut descarregar el fitxer",
-      "join_request_accepted": "{name} ha estat acceptat a la classe",
-      "join_request_rejected": "Sol·licitud rebutjada",
-      "join_request_accept_error": "Error en acceptar la sol·licitud",
-      "join_request_reject_error": "Error en rebutjar la sol·licitud"
+      "download_no_access": "No tens accés a aquest fitxer",
+      "popup_blocked": "Permet les finestres emergents per obrir el fitxer"
     },
     "notifications": {
       "title": "Avisos",
@@ -101,7 +101,7 @@
       "student": "Estudiant",
       "teacher": "Professor",
       "admin": "Administrador",
-      "admin_system": "Administrador del Sistema"
+      "admin_system": "Administrador del sistema"
     },
     "sidebar": {
       "new_conversation": "Nova conversa",
@@ -112,7 +112,7 @@
       "chat_with_label": "Xat amb"
     },
     "mobile_sidebar": {
-      "join_class": "Unir-se a Classe"
+      "join_class": "Unir-se a classe"
     },
     "landing": {
       "hero_title": "L'aventura d'aprendre",
@@ -120,32 +120,32 @@
       "cta_start": "Començar",
       "features_title": "Què pots fer amb ITAKAI?",
       "features_subtitle": "Descobreix totes les eines i funcionalitats que transformen l'educació en una experiència única",
-      "feature_gamification_title": "Gamificació Completa",
+      "feature_gamification_title": "Gamificació completa",
       "feature_gamification_desc": "Sistema de punts, nivells, insígnies i recompenses que motiva l'aprenentatge continu",
-      "feature_narrative_title": "Narrativa Immersiva",
+      "feature_narrative_title": "Narrativa immersiva",
       "feature_narrative_desc": "Cada classe és una aventura única amb personatges i històries que capturen l'atenció",
-      "feature_teamwork_title": "Treball en Equip",
+      "feature_teamwork_title": "Treball en equip",
       "feature_teamwork_desc": "Reptes col·laboratius i ranquings que fomenten el treball en equip i la superació constant",
-      "feature_analytics_title": "Anàlisi Intel·ligent",
+      "feature_analytics_title": "Anàlisi intel·ligent",
       "feature_analytics_desc": "Eines avançades de seguiment i anàlisi del progrés estudiantil",
-      "feature_access_title": "Accés Universal",
+      "feature_access_title": "Accés universal",
       "feature_access_desc": "Funciona en qualsevol dispositiu, des de qualsevol lloc del món",
-      "feature_ai_title": "IA Educativa",
+      "feature_ai_title": "IA educativa",
       "feature_ai_desc": "Assistents que personalitzen l'aprenentatge per a cada estudiant",
       "profiles_title": "Tria el teu perfil per començar",
       "about_title": "Què és ITAKAI?",
-      "about_description_1": "ITAKAI és l'evolució de <strong>MyClassGame</strong>, potenciada amb <strong>Intel·ligència Artificial</strong>. Una plataforma educativa gamificada que transforma la formació professional en una experiència immersiva.",
+      "about_description_1": "ITAKAI és l'evolució de <strong>MyClassGame</strong>, potenciada amb <strong>intel·ligència artificial</strong>. Una plataforma educativa gamificada que transforma la formació professional en una experiència immersiva.",
       "about_description_2": "Generació automàtica de continguts, assistents IA personalitzats per a cada estudiant, i anàlisi predictiva del rendiment. Tot integrat en un ecosistema on aprendre és una aventura.",
       "stat_students": "Estudiants",
       "stat_teachers": "Professors",
       "stat_centers": "Centres",
       "partners_title": "Qui som?",
       "developed_by": "Desenvolupat per",
-      "gods_title": "Els Teus Mentors Olímpics",
+      "gods_title": "Els teus mentors olímpics",
       "gods_subtitle": "5 assistents IA inspirats en déus grecs, cadascun expert en el seu domini",
-      "cta_final_title": "Preparat per a la Teva Aventura Èpica?",
+      "cta_final_title": "Preparat per a la teva aventura èpica?",
       "cta_final_subtitle": "Uneix-te a milers d'estudiants que ja estan transformant el seu aprenentatge amb ITAKAI",
-      "cta_final_button": "Començar Gratis Ara",
+      "cta_final_button": "Començar gratis ara",
       "footer_copyright_alt": "© {year} ITAKAI. Sistema educatiu gamificat",
       "gods": {
         "atenea": {
@@ -185,14 +185,14 @@
       "help_center": "Centre d'ajuda"
     },
     "level_up": {
-      "title": "Has Pujat de Nivell!",
+      "title": "Has pujat de nivell!",
       "congratulations": "Felicitats! Has assolit el nivell {level}",
       "congratulations_class": "Felicitats! Has assolit el nivell {level} a {className}",
-      "rewards_title": "Recompenses Obtingudes",
+      "rewards_title": "Recompenses obtingudes",
       "continue": "Continuar!"
     },
     "join_class_modal": {
-      "title": "Unir-se a una Classe",
+      "title": "Unir-se a una classe",
       "description": "Introdueix el codi de classe que t'ha proporcionat el teu professor",
       "placeholder": "ABC123",
       "joining": "Unint-se...",
@@ -207,14 +207,17 @@
       "success": "T'has unit a {className}"
     },
     "invite_students_modal": {
-      "title": "Convidar Estudiants",
+      "title": "Convidar estudiants",
       "description": "Comparteix aquest codi amb els teus estudiants perquè s'uneixin a la classe:",
-      "copy_code": "Copiar Codi",
+      "copy_code": "Copiar codi",
       "code_copied": "Codi copiat al porta-retalls",
-      "copy_error": "Error en copiar el codi"
+      "copy_error": "Error en copiar el codi",
+      "tabs_label": "Maneres de convidar",
+      "tab_code": "Codi de classe",
+      "tab_accounts": "Crear comptes"
     },
     "under_development": {
-      "back_to_dashboard": "Tornar al Dashboard"
+      "back_to_dashboard": "Tornar al dashboard"
     },
     "help": {
       "title": "Centre d'ajuda",
@@ -277,7 +280,7 @@
       "back_to_app": "Tornar a l'app"
     },
     "meta": {
-      "site_title": "ITAKAI - L'aventura d'aprendre | Plataforma Educativa Gamificada",
+      "site_title": "ITAKAI - L'aventura d'aprendre | Plataforma educativa gamificada",
       "site_description": "Transforma l'educació amb ITAKAI, la plataforma gamificada que inspira, motiva i connecta estudiants, professors i famílies. Uneix-te a més de 50.000 estudiants.",
       "og_title": "ITAKAI - L'aventura d'aprendre",
       "og_description": "Plataforma educativa gamificada amb IA, narratives immersives i anàlisi intel·ligent."
@@ -359,6 +362,83 @@
     },
     "student_preview": {
       "banner": "Estàs veient la plataforma com un alumne (demo)"
+    },
+    "change_email": {
+      "title": "Correu electrònic",
+      "current_email": "Correu actual",
+      "new_email": "Correu nou",
+      "password": "Contrasenya actual",
+      "password_hint": "Te la demanem per confirmar que ets tu qui canvia el correu.",
+      "submit": "Canviar el correu",
+      "success": "Correu actualitzat. A partir d'ara entres amb el nou.",
+      "errors": {
+        "email_invalid": "Escriu un correu vàlid.",
+        "email_same": "Aquest ja és el teu correu.",
+        "password_required": "Escriu la teva contrasenya actual.",
+        "password_wrong": "La contrasenya no és correcta.",
+        "password_not_set": "El teu compte entra amb Google i encara no té contrasenya. Tanca la sessió, crea'n una des de «Has oblidat la contrasenya?» i torna-ho a provar.",
+        "email_in_use": "Aquest correu ja el fa servir un altre compte.",
+        "generic": "No s'ha pogut canviar el correu. Torna-ho a provar."
+      }
+    },
+    "file_unavailable": {
+      "title": "L'enllaç ja no és vàlid",
+      "message": "L'enllaç per obrir aquest fitxer ha caducat. Torna a la missió i obre'l una altra vegada."
+    },
+    "class_teachers": {
+      "owner": "Propietari",
+      "profiles": {
+        "titular": "Titular",
+        "sustituto": "Substitut",
+        "practicas": "Pràctiques"
+      },
+      "access": {
+        "read": "Lectura",
+        "edit": "Edició",
+        "admin": "Administració"
+      }
+    },
+    "pagination": {
+      "label": "Paginació",
+      "page_of": "Pàgina {page} de {total}",
+      "previous": "Anterior",
+      "next": "Següent"
+    },
+    "account_deletion": {
+      "blocked_self": "Encara no pots esborrar el teu compte: ets el propietari d'aquestes classes i no hi ha ningú més amb administració. Dona administració a un altre professor o passa-li la propietat, i torna aquí.",
+      "blocked_admin": "Aquest compte encara no es pot esborrar: és el propietari d'aquestes classes i no hi ha ningú més amb administració. Abans cal passar-ne la propietat a un altre professor.",
+      "transfers_self": "Les teves classes passaran a un altre professor amb administració:",
+      "transfers_admin": "Les seves classes passaran a un altre professor amb administració:",
+      "transfer_item": "{class}, a {name}"
+    },
+    "copy": {
+      "label": "Copiar: {what}",
+      "copied": "Copiat al porta-retalls",
+      "error": "No s'ha pogut copiar"
+    },
+    "change_password": {
+      "title": "Contrasenya",
+      "current_password": "Contrasenya actual",
+      "new_password": "Nova contrasenya",
+      "new_password_placeholder": "Almenys {min} caràcters",
+      "confirm_password": "Confirmar contrasenya",
+      "confirm_password_placeholder": "Repeteix la nova contrasenya",
+      "submit": "Canviar la contrasenya",
+      "success": "Contrasenya canviada. Als teus altres dispositius hauràs de tornar a entrar.",
+      "errors": {
+        "current_required": "Escriu la teva contrasenya actual.",
+        "current_wrong": "La contrasenya actual no és correcta.",
+        "password_not_set": "El teu compte entra amb Google i encara no té contrasenya. Tanca la sessió i crea'n una des de «Has oblidat la contrasenya?».",
+        "too_short": "La contrasenya ha de tenir almenys {min} caràcters.",
+        "mismatch": "Les contrasenyes no coincideixen.",
+        "generic": "No s'ha pogut canviar la contrasenya. Comprova l'actual i torna-ho a provar."
+      }
+    },
+    "filter_bar": {
+      "search": "Cerca...",
+      "filters": "Filtres",
+      "filters_count": "Filtres ({count})",
+      "clear": "Neteja els filtres"
     }
   }
 }

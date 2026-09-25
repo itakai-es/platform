@@ -21,18 +21,42 @@ enum UserStatus {
   inactive
 }
 
+// Quién lleva la cuenta: `self`, su propio dueño, que se registró con su correo;
+// `managed`, el profesorado, que la creó para alguien que no tiene correo.
+enum UserAccountType {
+  self
+  managed
+}
+
+// Una cuenta entra con su correo o con su usuario. Los dos son opcionales por
+// separado, pero no a la vez: lo garantiza el CHECK `users_email_or_username`,
+// que Prisma no sabe expresar y vive en la migración
+// `20260917150000_optional_email_and_username`. El correo se guarda siempre en
+// minúsculas (lo normaliza la aplicación, ver utils/identity.ts).
 model User {
-  id            String     @id @default(uuid())
-  email         String     @unique
-  passwordHash  String     @map("password_hash")
-  name          String
-  role          UserRole?
-  isOnboarded   Boolean    @default(false) @map("is_onboarded")
-  status        UserStatus @default(active)
-  createdAt     DateTime   @default(now()) @map("created_at")
-  updatedAt     DateTime   @updatedAt @map("updated_at")
+  id                 String          @id @default(uuid())
+  email              String?         @unique
+  username           String?         @unique
+  passwordHash       String          @map("password_hash")
+  name               String
+  role               UserRole?
+  accountType        UserAccountType @default(self) @map("account_type")
+  isOnboarded        Boolean         @default(false) @map("is_onboarded")
+  status             UserStatus      @default(active)
+  // Quién creó la cuenta y en qué clase nació: quien tiene administración en esa
+  // clase es quien la gestiona. Las dos se quedan en null si se borra la fila
+  // apuntada, para no arrastrar el borrado a la cuenta del alumno.
+  createdById        String?         @map("created_by_id")
+  homeClassId        String?         @map("home_class_id")
+  mustChangePassword Boolean         @default(false) @map("must_change_password")
+  passwordChangedAt  DateTime?       @map("password_changed_at")
+  createdAt          DateTime        @default(now()) @map("created_at")
+  updatedAt          DateTime        @updatedAt @map("updated_at")
 
   // Relations
+  createdBy         User?               @relation("CreatedUsers", fields: [createdById], references: [id], onDelete: SetNull)
+  createdUsers      User[]              @relation("CreatedUsers")
+  homeClass         Class?              @relation("HomeClassStudents", fields: [homeClassId], references: [id], onDelete: SetNull)
   refreshTokens     RefreshToken[]
   teacherClasses    Class[]             @relation("TeacherClasses")
   enrollments       ClassEnrollment[]
@@ -51,8 +75,17 @@ model User {
   shopPurchases     ShopPurchase[]
   shopItemUses      ShopItemUse[]
   behaviorsApplied  BehaviorApplication[] @relation("BehaviorTeacher")
+  submissionsReviewed EnigmaSubmission[] @relation("SubmissionReviewer")
+  activitiesActed   Activity[]          @relation("ActivityActor")
   behaviorsReceived BehaviorApplication[] @relation("BehaviorStudent")
+  classTeachers      ClassTeacher[]   @relation("ClassTeacherUser")
+  classTeachersAdded ClassTeacher[]   @relation("ClassTeacherAddedBy")
+  classActions       ClassActionLog[] @relation("ClassActionActor")
+  classActionsTarget ClassActionLog[] @relation("ClassActionTarget")
 
+  @@index([createdById])
+  @@index([homeClassId])
+  @@index([accountType])
   @@map("users")
 }
 
@@ -138,6 +171,8 @@ model Class {
   // Configuración de horario/calendario (recurrencia estilo Google + fechas +
   // overrides por día). Nulo = sin horario configurado.
   scheduleConfig  Json?     @map("schedule_config")
+  // Propietario de la clase. Coincide siempre con la fila `isOwner` de
+  // `ClassTeacher`: las dos se escriben juntas (ver utils/class-owner.ts).
   teacherId       String    @map("teacher_id")
   createdAt       DateTime  @default(now()) @map("created_at")
   updatedAt       DateTime  @updatedAt @map("updated_at")
@@ -154,8 +189,83 @@ model Class {
   shopItemUses  ShopItemUse[]
   behaviorTemplates    BehaviorTemplate[]
   behaviorApplications BehaviorApplication[]
+  teachers      ClassTeacher[]
+  actionLog     ClassActionLog[]
+  // Cuentas de alumnado creadas en esta clase: es la clase desde la que se gestionan.
+  homeStudents  User[]            @relation("HomeClassStudents")
 
+  @@index([teacherId])
   @@map("classes")
+}
+
+/** Hasta dónde llega un profesor en una clase. Cada nivel incluye los anteriores. */
+enum ClassAccessLevel {
+  read
+  edit
+  admin
+}
+
+/** Etiqueta del profesor en la clase. Sugiere un nivel, pero no lo impone. */
+enum ClassTeacherProfile {
+  titular
+  sustituto
+  practicas
+}
+
+// Profesorado de una clase: una fila por profesor con acceso. El propietario es
+// la fila con `isOwner` y hay exactamente uno por clase. Eso lo garantiza un
+// índice único parcial que Prisma no sabe expresar y que vive solo en el SQL de
+// la migración: `class_teachers_one_owner ON class_teachers(class_id) WHERE is_owner`.
+// Prisma tampoco lo ve al comparar con la base, así que hoy no propone borrarlo;
+// si alguna versión lo hiciera, se quita esa sentencia a mano
+// (tests/migrations/class_teachers.test.ts vigila que siga en la migración).
+model ClassTeacher {
+  id        String              @id @default(uuid())
+  classId   String              @map("class_id")
+  userId    String              @map("user_id")
+  access    ClassAccessLevel
+  profile   ClassTeacherProfile
+  isOwner   Boolean             @default(false) @map("is_owner")
+  addedById String?             @map("added_by_id")
+  /** Fin del acceso. Pasada esta fecha la fila deja de contar, sin borrarse. */
+  endsAt    DateTime?           @map("ends_at")
+  createdAt DateTime            @default(now()) @map("created_at")
+  updatedAt DateTime            @updatedAt @map("updated_at")
+
+  class   Class @relation(fields: [classId], references: [id], onDelete: Cascade)
+  user    User  @relation("ClassTeacherUser", fields: [userId], references: [id], onDelete: Cascade)
+  addedBy User? @relation("ClassTeacherAddedBy", fields: [addedById], references: [id], onDelete: SetNull)
+
+  @@unique([classId, userId])
+  @@index([userId])
+  @@map("class_teachers")
+}
+
+// Registro de lo que hace el profesorado en una clase. Guarda una copia del
+// nombre y del avatar de quien actuó para que la entrada se siga leyendo si esa
+// cuenta desaparece. `metadata` nunca lleva nombres de alumnos: al alumno se le
+// referencia con `targetUserId`. Se borra con la clase.
+model ClassActionLog {
+  id           String   @id @default(uuid())
+  classId      String   @map("class_id")
+  actorId      String?  @map("actor_id")
+  actorName    String   @map("actor_name")
+  actorAvatar  String?  @map("actor_avatar")
+  /** Clave `dominio.verbo`, p. ej. `submission.approved`. */
+  action       String
+  entityType   String?  @map("entity_type")
+  entityId     String?  @map("entity_id")
+  targetUserId String?  @map("target_user_id")
+  metadata     Json?
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  class      Class @relation(fields: [classId], references: [id], onDelete: Cascade)
+  actor      User? @relation("ClassActionActor", fields: [actorId], references: [id], onDelete: SetNull)
+  targetUser User? @relation("ClassActionTarget", fields: [targetUserId], references: [id], onDelete: SetNull)
+
+  @@index([classId, createdAt])
+  @@index([targetUserId, createdAt])
+  @@map("class_action_log")
 }
 
 model ClassEnrollment {
@@ -365,9 +475,12 @@ model EnigmaSubmission {
   xpAwarded   Int?             @map("xp_awarded")
   submittedAt DateTime         @default(now()) @map("submitted_at")
   reviewedAt  DateTime?        @map("reviewed_at")
+  // Quién la aprobó. Se queda en null si esa cuenta se borra: la entrega sigue aprobada.
+  reviewedById String?         @map("reviewed_by_id")
 
-  student  User          @relation("StudentSubmissions", fields: [studentId], references: [id], onDelete: Cascade)
-  enigma   MissionEnigma @relation(fields: [enigmaId], references: [id], onDelete: Cascade)
+  student    User          @relation("StudentSubmissions", fields: [studentId], references: [id], onDelete: Cascade)
+  enigma     MissionEnigma @relation(fields: [enigmaId], references: [id], onDelete: Cascade)
+  reviewedBy User?         @relation("SubmissionReviewer", fields: [reviewedById], references: [id], onDelete: SetNull)
 
   @@map("enigma_submissions")
 }
@@ -405,7 +518,11 @@ model Badge {
   triggerValue Int?     @map("trigger_value")
   createdAt    DateTime @default(now()) @map("created_at")
 
-  teacher  User?          @relation("CreatedBadges", fields: [teacherId], references: [id])
+  // Sin autor, una insignia es del sistema: por eso borrar la cuenta del autor no
+  // puede dejarla en null. La base lo impide y el borrado de la cuenta la pasa
+  // antes a quien corresponda (ver reassignBadges en
+  // modules/profile/account-deletion.service.ts).
+  teacher  User?          @relation("CreatedBadges", fields: [teacherId], references: [id], onDelete: Restrict)
   mission  Mission?       @relation(fields: [missionId], references: [id])
   students StudentBadge[]
 
@@ -428,6 +545,10 @@ model StudentBadge {
 
 
 // ==================== ENROLLMENTS ====================
+
+// Solicitudes para unirse e invitaciones personales: ninguna ruta las crea ni las
+// lee ya (con el código de clase se entra directamente). Las tablas se conservan
+// con lo que tengan, y borrar una cuenta o una clase arrastra sus filas.
 
 enum JoinRequestStatus {
   pending
@@ -470,8 +591,8 @@ model Invitation {
   updatedAt DateTime         @updatedAt @map("updated_at")
 
   class   Class @relation(fields: [classId], references: [id], onDelete: Cascade)
-  teacher User  @relation("SentInvitations", fields: [teacherId], references: [id])
-  student User  @relation("ReceivedInvitations", fields: [studentId], references: [id])
+  teacher User  @relation("SentInvitations", fields: [teacherId], references: [id], onDelete: Cascade)
+  student User  @relation("ReceivedInvitations", fields: [studentId], references: [id], onDelete: Cascade)
 
   @@map("invitations")
 }
@@ -495,6 +616,11 @@ enum NotificationType {
   // revisar y el alumno la confirmación de que ya se ha revisado.
   submission_received
   submission_reviewed
+  // Profesorado de una clase: al afectado le llega lo que cambia de su acceso.
+  class_teacher_added
+  class_teacher_changed
+  class_teacher_removed
+  class_ownership_received
 }
 
 enum NotificationPriority {
@@ -519,6 +645,9 @@ model Notification {
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  // Los avisos se leen siempre por destinatario: la lista, los no leídos y
+  // marcarlos como leídos.
+  @@index([userId, isRead])
   @@map("notifications")
 }
 
@@ -570,8 +699,17 @@ model Activity {
   xpAmount      Int?     @map("xp_amount")
   source        String?
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // Quién hizo lo que cuenta la entrada, cuando no es el propio alumno: el
+  // profesor que aprobó la entrega o aplicó el comportamiento. El nombre se copia
+  // para que la entrada se siga leyendo si esa cuenta se borra.
+  actorId       String?  @map("actor_id")
+  actorName     String?  @map("actor_name")
 
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  actor User? @relation("ActivityActor", fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([userId, createdAt])
+  @@index([classId, createdAt])
   @@map("activities")
 }
 
@@ -679,7 +817,8 @@ model BehaviorApplication {
   id         String   @id @default(uuid())
   classId    String   @map("class_id")
   behaviorId String?  @map("behavior_id")
-  teacherId  String   @map("teacher_id")
+  // Quién lo aplicó. Si esa cuenta se borra, la aplicación se conserva sin autor.
+  teacherId  String?  @map("teacher_id")
   studentId  String   @map("student_id")
   kind       String   // "positive" | "negative" — snapshotted from the template
   name       String   // Snapshotted from the template
@@ -690,7 +829,7 @@ model BehaviorApplication {
 
   class    Class             @relation(fields: [classId], references: [id], onDelete: Cascade)
   behavior BehaviorTemplate? @relation(fields: [behaviorId], references: [id], onDelete: SetNull)
-  teacher  User              @relation("BehaviorTeacher", fields: [teacherId], references: [id], onDelete: Cascade)
+  teacher  User?             @relation("BehaviorTeacher", fields: [teacherId], references: [id], onDelete: SetNull)
   student  User              @relation("BehaviorStudent", fields: [studentId], references: [id], onDelete: Cascade)
 
   @@index([classId])

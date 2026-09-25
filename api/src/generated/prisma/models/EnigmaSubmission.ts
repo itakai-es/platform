@@ -47,6 +47,7 @@ export type EnigmaSubmissionMinAggregateOutputType = {
   xpAwarded: number | null
   submittedAt: Date | null
   reviewedAt: Date | null
+  reviewedById: string | null
 }
 
 export type EnigmaSubmissionMaxAggregateOutputType = {
@@ -60,6 +61,7 @@ export type EnigmaSubmissionMaxAggregateOutputType = {
   xpAwarded: number | null
   submittedAt: Date | null
   reviewedAt: Date | null
+  reviewedById: string | null
 }
 
 export type EnigmaSubmissionCountAggregateOutputType = {
@@ -73,6 +75,7 @@ export type EnigmaSubmissionCountAggregateOutputType = {
   xpAwarded: number
   submittedAt: number
   reviewedAt: number
+  reviewedById: number
   _all: number
 }
 
@@ -98,6 +101,7 @@ export type EnigmaSubmissionMinAggregateInputType = {
   xpAwarded?: true
   submittedAt?: true
   reviewedAt?: true
+  reviewedById?: true
 }
 
 export type EnigmaSubmissionMaxAggregateInputType = {
@@ -111,6 +115,7 @@ export type EnigmaSubmissionMaxAggregateInputType = {
   xpAwarded?: true
   submittedAt?: true
   reviewedAt?: true
+  reviewedById?: true
 }
 
 export type EnigmaSubmissionCountAggregateInputType = {
@@ -124,6 +129,7 @@ export type EnigmaSubmissionCountAggregateInputType = {
   xpAwarded?: true
   submittedAt?: true
   reviewedAt?: true
+  reviewedById?: true
   _all?: true
 }
 
@@ -224,6 +230,7 @@ export type EnigmaSubmissionGroupByOutputType = {
   xpAwarded: number | null
   submittedAt: Date
   reviewedAt: Date | null
+  reviewedById: string | null
   _count: EnigmaSubmissionCountAggregateOutputType | null
   _avg: EnigmaSubmissionAvgAggregateOutputType | null
   _sum: EnigmaSubmissionSumAggregateOutputType | null
@@ -260,8 +267,10 @@ export type EnigmaSubmissionWhereInput = {
   xpAwarded?: Prisma.IntNullableFilter<"EnigmaSubmission"> | number | null
   submittedAt?: Prisma.DateTimeFilter<"EnigmaSubmission"> | Date | string
   reviewedAt?: Prisma.DateTimeNullableFilter<"EnigmaSubmission"> | Date | string | null
+  reviewedById?: Prisma.StringNullableFilter<"EnigmaSubmission"> | string | null
   student?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   enigma?: Prisma.XOR<Prisma.MissionEnigmaScalarRelationFilter, Prisma.MissionEnigmaWhereInput>
+  reviewedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }
 
 export type EnigmaSubmissionOrderByWithRelationInput = {
@@ -275,8 +284,10 @@ export type EnigmaSubmissionOrderByWithRelationInput = {
   xpAwarded?: Prisma.SortOrderInput | Prisma.SortOrder
   submittedAt?: Prisma.SortOrder
   reviewedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  reviewedById?: Prisma.SortOrderInput | Prisma.SortOrder
   student?: Prisma.UserOrderByWithRelationInput
   enigma?: Prisma.MissionEnigmaOrderByWithRelationInput
+  reviewedBy?: Prisma.UserOrderByWithRelationInput
 }
 
 export type EnigmaSubmissionWhereUniqueInput = Prisma.AtLeast<{
@@ -293,8 +304,10 @@ export type EnigmaSubmissionWhereUniqueInput = Prisma.AtLeast<{
   xpAwarded?: Prisma.IntNullableFilter<"EnigmaSubmission"> | number | null
   submittedAt?: Prisma.DateTimeFilter<"EnigmaSubmission"> | Date | string
   reviewedAt?: Prisma.DateTimeNullableFilter<"EnigmaSubmission"> | Date | string | null
+  reviewedById?: Prisma.StringNullableFilter<"EnigmaSubmission"> | string | null
   student?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   enigma?: Prisma.XOR<Prisma.MissionEnigmaScalarRelationFilter, Prisma.MissionEnigmaWhereInput>
+  reviewedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }, "id">
 
 export type EnigmaSubmissionOrderByWithAggregationInput = {
@@ -308,6 +321,7 @@ export type EnigmaSubmissionOrderByWithAggregationInput = {
   xpAwarded?: Prisma.SortOrderInput | Prisma.SortOrder
   submittedAt?: Prisma.SortOrder
   reviewedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  reviewedById?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.EnigmaSubmissionCountOrderByAggregateInput
   _avg?: Prisma.EnigmaSubmissionAvgOrderByAggregateInput
   _max?: Prisma.EnigmaSubmissionMaxOrderByAggregateInput
@@ -329,6 +343,7 @@ export type EnigmaSubmissionScalarWhereWithAggregatesInput = {
   xpAwarded?: Prisma.IntNullableWithAggregatesFilter<"EnigmaSubmission"> | number | null
   submittedAt?: Prisma.DateTimeWithAggregatesFilter<"EnigmaSubmission"> | Date | string
   reviewedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"EnigmaSubmission"> | Date | string | null
+  reviewedById?: Prisma.StringNullableWithAggregatesFilter<"EnigmaSubmission"> | string | null
 }
 
 export type EnigmaSubmissionCreateInput = {
@@ -342,6 +357,7 @@ export type EnigmaSubmissionCreateInput = {
   reviewedAt?: Date | string | null
   student: Prisma.UserCreateNestedOneWithoutSubmissionsInput
   enigma: Prisma.MissionEnigmaCreateNestedOneWithoutSubmissionsInput
+  reviewedBy?: Prisma.UserCreateNestedOneWithoutSubmissionsReviewedInput
 }
 
 export type EnigmaSubmissionUncheckedCreateInput = {
@@ -355,6 +371,7 @@ export type EnigmaSubmissionUncheckedCreateInput = {
   xpAwarded?: number | null
   submittedAt?: Date | string
   reviewedAt?: Date | string | null
+  reviewedById?: string | null
 }
 
 export type EnigmaSubmissionUpdateInput = {
@@ -368,6 +385,7 @@ export type EnigmaSubmissionUpdateInput = {
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   student?: Prisma.UserUpdateOneRequiredWithoutSubmissionsNestedInput
   enigma?: Prisma.MissionEnigmaUpdateOneRequiredWithoutSubmissionsNestedInput
+  reviewedBy?: Prisma.UserUpdateOneWithoutSubmissionsReviewedNestedInput
 }
 
 export type EnigmaSubmissionUncheckedUpdateInput = {
@@ -381,6 +399,7 @@ export type EnigmaSubmissionUncheckedUpdateInput = {
   xpAwarded?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   submittedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type EnigmaSubmissionCreateManyInput = {
@@ -394,6 +413,7 @@ export type EnigmaSubmissionCreateManyInput = {
   xpAwarded?: number | null
   submittedAt?: Date | string
   reviewedAt?: Date | string | null
+  reviewedById?: string | null
 }
 
 export type EnigmaSubmissionUpdateManyMutationInput = {
@@ -418,6 +438,7 @@ export type EnigmaSubmissionUncheckedUpdateManyInput = {
   xpAwarded?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   submittedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type EnigmaSubmissionListRelationFilter = {
@@ -441,6 +462,7 @@ export type EnigmaSubmissionCountOrderByAggregateInput = {
   xpAwarded?: Prisma.SortOrder
   submittedAt?: Prisma.SortOrder
   reviewedAt?: Prisma.SortOrder
+  reviewedById?: Prisma.SortOrder
 }
 
 export type EnigmaSubmissionAvgOrderByAggregateInput = {
@@ -459,6 +481,7 @@ export type EnigmaSubmissionMaxOrderByAggregateInput = {
   xpAwarded?: Prisma.SortOrder
   submittedAt?: Prisma.SortOrder
   reviewedAt?: Prisma.SortOrder
+  reviewedById?: Prisma.SortOrder
 }
 
 export type EnigmaSubmissionMinOrderByAggregateInput = {
@@ -472,6 +495,7 @@ export type EnigmaSubmissionMinOrderByAggregateInput = {
   xpAwarded?: Prisma.SortOrder
   submittedAt?: Prisma.SortOrder
   reviewedAt?: Prisma.SortOrder
+  reviewedById?: Prisma.SortOrder
 }
 
 export type EnigmaSubmissionSumOrderByAggregateInput = {
@@ -486,10 +510,24 @@ export type EnigmaSubmissionCreateNestedManyWithoutStudentInput = {
   connect?: Prisma.EnigmaSubmissionWhereUniqueInput | Prisma.EnigmaSubmissionWhereUniqueInput[]
 }
 
+export type EnigmaSubmissionCreateNestedManyWithoutReviewedByInput = {
+  create?: Prisma.XOR<Prisma.EnigmaSubmissionCreateWithoutReviewedByInput, Prisma.EnigmaSubmissionUncheckedCreateWithoutReviewedByInput> | Prisma.EnigmaSubmissionCreateWithoutReviewedByInput[] | Prisma.EnigmaSubmissionUncheckedCreateWithoutReviewedByInput[]
+  connectOrCreate?: Prisma.EnigmaSubmissionCreateOrConnectWithoutReviewedByInput | Prisma.EnigmaSubmissionCreateOrConnectWithoutReviewedByInput[]
+  createMany?: Prisma.EnigmaSubmissionCreateManyReviewedByInputEnvelope
+  connect?: Prisma.EnigmaSubmissionWhereUniqueInput | Prisma.EnigmaSubmissionWhereUniqueInput[]
+}
+
 export type EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput = {
   create?: Prisma.XOR<Prisma.EnigmaSubmissionCreateWithoutStudentInput, Prisma.EnigmaSubmissionUncheckedCreateWithoutStudentInput> | Prisma.EnigmaSubmissionCreateWithoutStudentInput[] | Prisma.EnigmaSubmissionUncheckedCreateWithoutStudentInput[]
   connectOrCreate?: Prisma.EnigmaSubmissionCreateOrConnectWithoutStudentInput | Prisma.EnigmaSubmissionCreateOrConnectWithoutStudentInput[]
   createMany?: Prisma.EnigmaSubmissionCreateManyStudentInputEnvelope
+  connect?: Prisma.EnigmaSubmissionWhereUniqueInput | Prisma.EnigmaSubmissionWhereUniqueInput[]
+}
+
+export type EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput = {
+  create?: Prisma.XOR<Prisma.EnigmaSubmissionCreateWithoutReviewedByInput, Prisma.EnigmaSubmissionUncheckedCreateWithoutReviewedByInput> | Prisma.EnigmaSubmissionCreateWithoutReviewedByInput[] | Prisma.EnigmaSubmissionUncheckedCreateWithoutReviewedByInput[]
+  connectOrCreate?: Prisma.EnigmaSubmissionCreateOrConnectWithoutReviewedByInput | Prisma.EnigmaSubmissionCreateOrConnectWithoutReviewedByInput[]
+  createMany?: Prisma.EnigmaSubmissionCreateManyReviewedByInputEnvelope
   connect?: Prisma.EnigmaSubmissionWhereUniqueInput | Prisma.EnigmaSubmissionWhereUniqueInput[]
 }
 
@@ -507,6 +545,20 @@ export type EnigmaSubmissionUpdateManyWithoutStudentNestedInput = {
   deleteMany?: Prisma.EnigmaSubmissionScalarWhereInput | Prisma.EnigmaSubmissionScalarWhereInput[]
 }
 
+export type EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput = {
+  create?: Prisma.XOR<Prisma.EnigmaSubmissionCreateWithoutReviewedByInput, Prisma.EnigmaSubmissionUncheckedCreateWithoutReviewedByInput> | Prisma.EnigmaSubmissionCreateWithoutReviewedByInput[] | Prisma.EnigmaSubmissionUncheckedCreateWithoutReviewedByInput[]
+  connectOrCreate?: Prisma.EnigmaSubmissionCreateOrConnectWithoutReviewedByInput | Prisma.EnigmaSubmissionCreateOrConnectWithoutReviewedByInput[]
+  upsert?: Prisma.EnigmaSubmissionUpsertWithWhereUniqueWithoutReviewedByInput | Prisma.EnigmaSubmissionUpsertWithWhereUniqueWithoutReviewedByInput[]
+  createMany?: Prisma.EnigmaSubmissionCreateManyReviewedByInputEnvelope
+  set?: Prisma.EnigmaSubmissionWhereUniqueInput | Prisma.EnigmaSubmissionWhereUniqueInput[]
+  disconnect?: Prisma.EnigmaSubmissionWhereUniqueInput | Prisma.EnigmaSubmissionWhereUniqueInput[]
+  delete?: Prisma.EnigmaSubmissionWhereUniqueInput | Prisma.EnigmaSubmissionWhereUniqueInput[]
+  connect?: Prisma.EnigmaSubmissionWhereUniqueInput | Prisma.EnigmaSubmissionWhereUniqueInput[]
+  update?: Prisma.EnigmaSubmissionUpdateWithWhereUniqueWithoutReviewedByInput | Prisma.EnigmaSubmissionUpdateWithWhereUniqueWithoutReviewedByInput[]
+  updateMany?: Prisma.EnigmaSubmissionUpdateManyWithWhereWithoutReviewedByInput | Prisma.EnigmaSubmissionUpdateManyWithWhereWithoutReviewedByInput[]
+  deleteMany?: Prisma.EnigmaSubmissionScalarWhereInput | Prisma.EnigmaSubmissionScalarWhereInput[]
+}
+
 export type EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput = {
   create?: Prisma.XOR<Prisma.EnigmaSubmissionCreateWithoutStudentInput, Prisma.EnigmaSubmissionUncheckedCreateWithoutStudentInput> | Prisma.EnigmaSubmissionCreateWithoutStudentInput[] | Prisma.EnigmaSubmissionUncheckedCreateWithoutStudentInput[]
   connectOrCreate?: Prisma.EnigmaSubmissionCreateOrConnectWithoutStudentInput | Prisma.EnigmaSubmissionCreateOrConnectWithoutStudentInput[]
@@ -518,6 +570,20 @@ export type EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput = {
   connect?: Prisma.EnigmaSubmissionWhereUniqueInput | Prisma.EnigmaSubmissionWhereUniqueInput[]
   update?: Prisma.EnigmaSubmissionUpdateWithWhereUniqueWithoutStudentInput | Prisma.EnigmaSubmissionUpdateWithWhereUniqueWithoutStudentInput[]
   updateMany?: Prisma.EnigmaSubmissionUpdateManyWithWhereWithoutStudentInput | Prisma.EnigmaSubmissionUpdateManyWithWhereWithoutStudentInput[]
+  deleteMany?: Prisma.EnigmaSubmissionScalarWhereInput | Prisma.EnigmaSubmissionScalarWhereInput[]
+}
+
+export type EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput = {
+  create?: Prisma.XOR<Prisma.EnigmaSubmissionCreateWithoutReviewedByInput, Prisma.EnigmaSubmissionUncheckedCreateWithoutReviewedByInput> | Prisma.EnigmaSubmissionCreateWithoutReviewedByInput[] | Prisma.EnigmaSubmissionUncheckedCreateWithoutReviewedByInput[]
+  connectOrCreate?: Prisma.EnigmaSubmissionCreateOrConnectWithoutReviewedByInput | Prisma.EnigmaSubmissionCreateOrConnectWithoutReviewedByInput[]
+  upsert?: Prisma.EnigmaSubmissionUpsertWithWhereUniqueWithoutReviewedByInput | Prisma.EnigmaSubmissionUpsertWithWhereUniqueWithoutReviewedByInput[]
+  createMany?: Prisma.EnigmaSubmissionCreateManyReviewedByInputEnvelope
+  set?: Prisma.EnigmaSubmissionWhereUniqueInput | Prisma.EnigmaSubmissionWhereUniqueInput[]
+  disconnect?: Prisma.EnigmaSubmissionWhereUniqueInput | Prisma.EnigmaSubmissionWhereUniqueInput[]
+  delete?: Prisma.EnigmaSubmissionWhereUniqueInput | Prisma.EnigmaSubmissionWhereUniqueInput[]
+  connect?: Prisma.EnigmaSubmissionWhereUniqueInput | Prisma.EnigmaSubmissionWhereUniqueInput[]
+  update?: Prisma.EnigmaSubmissionUpdateWithWhereUniqueWithoutReviewedByInput | Prisma.EnigmaSubmissionUpdateWithWhereUniqueWithoutReviewedByInput[]
+  updateMany?: Prisma.EnigmaSubmissionUpdateManyWithWhereWithoutReviewedByInput | Prisma.EnigmaSubmissionUpdateManyWithWhereWithoutReviewedByInput[]
   deleteMany?: Prisma.EnigmaSubmissionScalarWhereInput | Prisma.EnigmaSubmissionScalarWhereInput[]
 }
 
@@ -585,6 +651,7 @@ export type EnigmaSubmissionCreateWithoutStudentInput = {
   submittedAt?: Date | string
   reviewedAt?: Date | string | null
   enigma: Prisma.MissionEnigmaCreateNestedOneWithoutSubmissionsInput
+  reviewedBy?: Prisma.UserCreateNestedOneWithoutSubmissionsReviewedInput
 }
 
 export type EnigmaSubmissionUncheckedCreateWithoutStudentInput = {
@@ -597,6 +664,7 @@ export type EnigmaSubmissionUncheckedCreateWithoutStudentInput = {
   xpAwarded?: number | null
   submittedAt?: Date | string
   reviewedAt?: Date | string | null
+  reviewedById?: string | null
 }
 
 export type EnigmaSubmissionCreateOrConnectWithoutStudentInput = {
@@ -606,6 +674,42 @@ export type EnigmaSubmissionCreateOrConnectWithoutStudentInput = {
 
 export type EnigmaSubmissionCreateManyStudentInputEnvelope = {
   data: Prisma.EnigmaSubmissionCreateManyStudentInput | Prisma.EnigmaSubmissionCreateManyStudentInput[]
+  skipDuplicates?: boolean
+}
+
+export type EnigmaSubmissionCreateWithoutReviewedByInput = {
+  id?: string
+  fileUrl?: string | null
+  fileName?: string | null
+  fileSize?: number | null
+  status?: $Enums.SubmissionStatus
+  xpAwarded?: number | null
+  submittedAt?: Date | string
+  reviewedAt?: Date | string | null
+  student: Prisma.UserCreateNestedOneWithoutSubmissionsInput
+  enigma: Prisma.MissionEnigmaCreateNestedOneWithoutSubmissionsInput
+}
+
+export type EnigmaSubmissionUncheckedCreateWithoutReviewedByInput = {
+  id?: string
+  studentId: string
+  enigmaId: string
+  fileUrl?: string | null
+  fileName?: string | null
+  fileSize?: number | null
+  status?: $Enums.SubmissionStatus
+  xpAwarded?: number | null
+  submittedAt?: Date | string
+  reviewedAt?: Date | string | null
+}
+
+export type EnigmaSubmissionCreateOrConnectWithoutReviewedByInput = {
+  where: Prisma.EnigmaSubmissionWhereUniqueInput
+  create: Prisma.XOR<Prisma.EnigmaSubmissionCreateWithoutReviewedByInput, Prisma.EnigmaSubmissionUncheckedCreateWithoutReviewedByInput>
+}
+
+export type EnigmaSubmissionCreateManyReviewedByInputEnvelope = {
+  data: Prisma.EnigmaSubmissionCreateManyReviewedByInput | Prisma.EnigmaSubmissionCreateManyReviewedByInput[]
   skipDuplicates?: boolean
 }
 
@@ -639,6 +743,23 @@ export type EnigmaSubmissionScalarWhereInput = {
   xpAwarded?: Prisma.IntNullableFilter<"EnigmaSubmission"> | number | null
   submittedAt?: Prisma.DateTimeFilter<"EnigmaSubmission"> | Date | string
   reviewedAt?: Prisma.DateTimeNullableFilter<"EnigmaSubmission"> | Date | string | null
+  reviewedById?: Prisma.StringNullableFilter<"EnigmaSubmission"> | string | null
+}
+
+export type EnigmaSubmissionUpsertWithWhereUniqueWithoutReviewedByInput = {
+  where: Prisma.EnigmaSubmissionWhereUniqueInput
+  update: Prisma.XOR<Prisma.EnigmaSubmissionUpdateWithoutReviewedByInput, Prisma.EnigmaSubmissionUncheckedUpdateWithoutReviewedByInput>
+  create: Prisma.XOR<Prisma.EnigmaSubmissionCreateWithoutReviewedByInput, Prisma.EnigmaSubmissionUncheckedCreateWithoutReviewedByInput>
+}
+
+export type EnigmaSubmissionUpdateWithWhereUniqueWithoutReviewedByInput = {
+  where: Prisma.EnigmaSubmissionWhereUniqueInput
+  data: Prisma.XOR<Prisma.EnigmaSubmissionUpdateWithoutReviewedByInput, Prisma.EnigmaSubmissionUncheckedUpdateWithoutReviewedByInput>
+}
+
+export type EnigmaSubmissionUpdateManyWithWhereWithoutReviewedByInput = {
+  where: Prisma.EnigmaSubmissionScalarWhereInput
+  data: Prisma.XOR<Prisma.EnigmaSubmissionUpdateManyMutationInput, Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByInput>
 }
 
 export type EnigmaSubmissionCreateWithoutEnigmaInput = {
@@ -651,6 +772,7 @@ export type EnigmaSubmissionCreateWithoutEnigmaInput = {
   submittedAt?: Date | string
   reviewedAt?: Date | string | null
   student: Prisma.UserCreateNestedOneWithoutSubmissionsInput
+  reviewedBy?: Prisma.UserCreateNestedOneWithoutSubmissionsReviewedInput
 }
 
 export type EnigmaSubmissionUncheckedCreateWithoutEnigmaInput = {
@@ -663,6 +785,7 @@ export type EnigmaSubmissionUncheckedCreateWithoutEnigmaInput = {
   xpAwarded?: number | null
   submittedAt?: Date | string
   reviewedAt?: Date | string | null
+  reviewedById?: string | null
 }
 
 export type EnigmaSubmissionCreateOrConnectWithoutEnigmaInput = {
@@ -701,6 +824,20 @@ export type EnigmaSubmissionCreateManyStudentInput = {
   xpAwarded?: number | null
   submittedAt?: Date | string
   reviewedAt?: Date | string | null
+  reviewedById?: string | null
+}
+
+export type EnigmaSubmissionCreateManyReviewedByInput = {
+  id?: string
+  studentId: string
+  enigmaId: string
+  fileUrl?: string | null
+  fileName?: string | null
+  fileSize?: number | null
+  status?: $Enums.SubmissionStatus
+  xpAwarded?: number | null
+  submittedAt?: Date | string
+  reviewedAt?: Date | string | null
 }
 
 export type EnigmaSubmissionUpdateWithoutStudentInput = {
@@ -713,6 +850,7 @@ export type EnigmaSubmissionUpdateWithoutStudentInput = {
   submittedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   enigma?: Prisma.MissionEnigmaUpdateOneRequiredWithoutSubmissionsNestedInput
+  reviewedBy?: Prisma.UserUpdateOneWithoutSubmissionsReviewedNestedInput
 }
 
 export type EnigmaSubmissionUncheckedUpdateWithoutStudentInput = {
@@ -725,10 +863,51 @@ export type EnigmaSubmissionUncheckedUpdateWithoutStudentInput = {
   xpAwarded?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   submittedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type EnigmaSubmissionUncheckedUpdateManyWithoutStudentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  enigmaId?: Prisma.StringFieldUpdateOperationsInput | string
+  fileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumSubmissionStatusFieldUpdateOperationsInput | $Enums.SubmissionStatus
+  xpAwarded?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  submittedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type EnigmaSubmissionUpdateWithoutReviewedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumSubmissionStatusFieldUpdateOperationsInput | $Enums.SubmissionStatus
+  xpAwarded?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  submittedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  student?: Prisma.UserUpdateOneRequiredWithoutSubmissionsNestedInput
+  enigma?: Prisma.MissionEnigmaUpdateOneRequiredWithoutSubmissionsNestedInput
+}
+
+export type EnigmaSubmissionUncheckedUpdateWithoutReviewedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  studentId?: Prisma.StringFieldUpdateOperationsInput | string
+  enigmaId?: Prisma.StringFieldUpdateOperationsInput | string
+  fileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumSubmissionStatusFieldUpdateOperationsInput | $Enums.SubmissionStatus
+  xpAwarded?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  submittedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  studentId?: Prisma.StringFieldUpdateOperationsInput | string
   enigmaId?: Prisma.StringFieldUpdateOperationsInput | string
   fileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -749,6 +928,7 @@ export type EnigmaSubmissionCreateManyEnigmaInput = {
   xpAwarded?: number | null
   submittedAt?: Date | string
   reviewedAt?: Date | string | null
+  reviewedById?: string | null
 }
 
 export type EnigmaSubmissionUpdateWithoutEnigmaInput = {
@@ -761,6 +941,7 @@ export type EnigmaSubmissionUpdateWithoutEnigmaInput = {
   submittedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   student?: Prisma.UserUpdateOneRequiredWithoutSubmissionsNestedInput
+  reviewedBy?: Prisma.UserUpdateOneWithoutSubmissionsReviewedNestedInput
 }
 
 export type EnigmaSubmissionUncheckedUpdateWithoutEnigmaInput = {
@@ -773,6 +954,7 @@ export type EnigmaSubmissionUncheckedUpdateWithoutEnigmaInput = {
   xpAwarded?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   submittedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type EnigmaSubmissionUncheckedUpdateManyWithoutEnigmaInput = {
@@ -785,6 +967,7 @@ export type EnigmaSubmissionUncheckedUpdateManyWithoutEnigmaInput = {
   xpAwarded?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   submittedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -800,8 +983,10 @@ export type EnigmaSubmissionSelect<ExtArgs extends runtime.Types.Extensions.Inte
   xpAwarded?: boolean
   submittedAt?: boolean
   reviewedAt?: boolean
+  reviewedById?: boolean
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   enigma?: boolean | Prisma.MissionEnigmaDefaultArgs<ExtArgs>
+  reviewedBy?: boolean | Prisma.EnigmaSubmission$reviewedByArgs<ExtArgs>
 }, ExtArgs["result"]["enigmaSubmission"]>
 
 export type EnigmaSubmissionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -815,8 +1000,10 @@ export type EnigmaSubmissionSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   xpAwarded?: boolean
   submittedAt?: boolean
   reviewedAt?: boolean
+  reviewedById?: boolean
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   enigma?: boolean | Prisma.MissionEnigmaDefaultArgs<ExtArgs>
+  reviewedBy?: boolean | Prisma.EnigmaSubmission$reviewedByArgs<ExtArgs>
 }, ExtArgs["result"]["enigmaSubmission"]>
 
 export type EnigmaSubmissionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -830,8 +1017,10 @@ export type EnigmaSubmissionSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   xpAwarded?: boolean
   submittedAt?: boolean
   reviewedAt?: boolean
+  reviewedById?: boolean
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   enigma?: boolean | Prisma.MissionEnigmaDefaultArgs<ExtArgs>
+  reviewedBy?: boolean | Prisma.EnigmaSubmission$reviewedByArgs<ExtArgs>
 }, ExtArgs["result"]["enigmaSubmission"]>
 
 export type EnigmaSubmissionSelectScalar = {
@@ -845,20 +1034,24 @@ export type EnigmaSubmissionSelectScalar = {
   xpAwarded?: boolean
   submittedAt?: boolean
   reviewedAt?: boolean
+  reviewedById?: boolean
 }
 
-export type EnigmaSubmissionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "studentId" | "enigmaId" | "fileUrl" | "fileName" | "fileSize" | "status" | "xpAwarded" | "submittedAt" | "reviewedAt", ExtArgs["result"]["enigmaSubmission"]>
+export type EnigmaSubmissionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "studentId" | "enigmaId" | "fileUrl" | "fileName" | "fileSize" | "status" | "xpAwarded" | "submittedAt" | "reviewedAt" | "reviewedById", ExtArgs["result"]["enigmaSubmission"]>
 export type EnigmaSubmissionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   enigma?: boolean | Prisma.MissionEnigmaDefaultArgs<ExtArgs>
+  reviewedBy?: boolean | Prisma.EnigmaSubmission$reviewedByArgs<ExtArgs>
 }
 export type EnigmaSubmissionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   enigma?: boolean | Prisma.MissionEnigmaDefaultArgs<ExtArgs>
+  reviewedBy?: boolean | Prisma.EnigmaSubmission$reviewedByArgs<ExtArgs>
 }
 export type EnigmaSubmissionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   enigma?: boolean | Prisma.MissionEnigmaDefaultArgs<ExtArgs>
+  reviewedBy?: boolean | Prisma.EnigmaSubmission$reviewedByArgs<ExtArgs>
 }
 
 export type $EnigmaSubmissionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -866,6 +1059,7 @@ export type $EnigmaSubmissionPayload<ExtArgs extends runtime.Types.Extensions.In
   objects: {
     student: Prisma.$UserPayload<ExtArgs>
     enigma: Prisma.$MissionEnigmaPayload<ExtArgs>
+    reviewedBy: Prisma.$UserPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -878,6 +1072,7 @@ export type $EnigmaSubmissionPayload<ExtArgs extends runtime.Types.Extensions.In
     xpAwarded: number | null
     submittedAt: Date
     reviewedAt: Date | null
+    reviewedById: string | null
   }, ExtArgs["result"]["enigmaSubmission"]>
   composites: {}
 }
@@ -1274,6 +1469,7 @@ export interface Prisma__EnigmaSubmissionClient<T, Null = never, ExtArgs extends
   readonly [Symbol.toStringTag]: "PrismaPromise"
   student<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   enigma<T extends Prisma.MissionEnigmaDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MissionEnigmaDefaultArgs<ExtArgs>>): Prisma.Prisma__MissionEnigmaClient<runtime.Types.Result.GetResult<Prisma.$MissionEnigmaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  reviewedBy<T extends Prisma.EnigmaSubmission$reviewedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EnigmaSubmission$reviewedByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1313,6 +1509,7 @@ export interface EnigmaSubmissionFieldRefs {
   readonly xpAwarded: Prisma.FieldRef<"EnigmaSubmission", 'Int'>
   readonly submittedAt: Prisma.FieldRef<"EnigmaSubmission", 'DateTime'>
   readonly reviewedAt: Prisma.FieldRef<"EnigmaSubmission", 'DateTime'>
+  readonly reviewedById: Prisma.FieldRef<"EnigmaSubmission", 'String'>
 }
     
 
@@ -1711,6 +1908,25 @@ export type EnigmaSubmissionDeleteManyArgs<ExtArgs extends runtime.Types.Extensi
    * Limit how many EnigmaSubmissions to delete.
    */
   limit?: number
+}
+
+/**
+ * EnigmaSubmission.reviewedBy
+ */
+export type EnigmaSubmission$reviewedByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
 }
 
 /**

@@ -389,6 +389,8 @@ export const ModelName = {
   RefreshToken: 'RefreshToken',
   InstanceSetting: 'InstanceSetting',
   Class: 'Class',
+  ClassTeacher: 'ClassTeacher',
+  ClassActionLog: 'ClassActionLog',
   ClassEnrollment: 'ClassEnrollment',
   ClassGuide: 'ClassGuide',
   ShopItem: 'ShopItem',
@@ -428,7 +430,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "userSettings" | "refreshToken" | "instanceSetting" | "class" | "classEnrollment" | "classGuide" | "shopItem" | "shopPurchase" | "shopItemUse" | "mission" | "missionDocument" | "missionEnigma" | "studentEnigmaProgress" | "enigmaSubmission" | "studentMissionProgress" | "badge" | "studentBadge" | "joinRequest" | "invitation" | "notification" | "activity" | "systemLog" | "chatConversation" | "chatMessage" | "behaviorTemplate" | "behaviorApplication" | "helpCategory" | "helpArticle"
+    modelProps: "user" | "userSettings" | "refreshToken" | "instanceSetting" | "class" | "classTeacher" | "classActionLog" | "classEnrollment" | "classGuide" | "shopItem" | "shopPurchase" | "shopItemUse" | "mission" | "missionDocument" | "missionEnigma" | "studentEnigmaProgress" | "enigmaSubmission" | "studentMissionProgress" | "badge" | "studentBadge" | "joinRequest" | "invitation" | "notification" | "activity" | "systemLog" | "chatConversation" | "chatMessage" | "behaviorTemplate" | "behaviorApplication" | "helpCategory" | "helpArticle"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -799,6 +801,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.ClassCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.ClassCountAggregateOutputType> | number
+        }
+      }
+    }
+    ClassTeacher: {
+      payload: Prisma.$ClassTeacherPayload<ExtArgs>
+      fields: Prisma.ClassTeacherFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ClassTeacherFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassTeacherPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ClassTeacherFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassTeacherPayload>
+        }
+        findFirst: {
+          args: Prisma.ClassTeacherFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassTeacherPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ClassTeacherFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassTeacherPayload>
+        }
+        findMany: {
+          args: Prisma.ClassTeacherFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassTeacherPayload>[]
+        }
+        create: {
+          args: Prisma.ClassTeacherCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassTeacherPayload>
+        }
+        createMany: {
+          args: Prisma.ClassTeacherCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ClassTeacherCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassTeacherPayload>[]
+        }
+        delete: {
+          args: Prisma.ClassTeacherDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassTeacherPayload>
+        }
+        update: {
+          args: Prisma.ClassTeacherUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassTeacherPayload>
+        }
+        deleteMany: {
+          args: Prisma.ClassTeacherDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ClassTeacherUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ClassTeacherUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassTeacherPayload>[]
+        }
+        upsert: {
+          args: Prisma.ClassTeacherUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassTeacherPayload>
+        }
+        aggregate: {
+          args: Prisma.ClassTeacherAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateClassTeacher>
+        }
+        groupBy: {
+          args: Prisma.ClassTeacherGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ClassTeacherGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ClassTeacherCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ClassTeacherCountAggregateOutputType> | number
+        }
+      }
+    }
+    ClassActionLog: {
+      payload: Prisma.$ClassActionLogPayload<ExtArgs>
+      fields: Prisma.ClassActionLogFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ClassActionLogFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassActionLogPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ClassActionLogFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassActionLogPayload>
+        }
+        findFirst: {
+          args: Prisma.ClassActionLogFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassActionLogPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ClassActionLogFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassActionLogPayload>
+        }
+        findMany: {
+          args: Prisma.ClassActionLogFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassActionLogPayload>[]
+        }
+        create: {
+          args: Prisma.ClassActionLogCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassActionLogPayload>
+        }
+        createMany: {
+          args: Prisma.ClassActionLogCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ClassActionLogCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassActionLogPayload>[]
+        }
+        delete: {
+          args: Prisma.ClassActionLogDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassActionLogPayload>
+        }
+        update: {
+          args: Prisma.ClassActionLogUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassActionLogPayload>
+        }
+        deleteMany: {
+          args: Prisma.ClassActionLogDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ClassActionLogUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ClassActionLogUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassActionLogPayload>[]
+        }
+        upsert: {
+          args: Prisma.ClassActionLogUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassActionLogPayload>
+        }
+        aggregate: {
+          args: Prisma.ClassActionLogAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateClassActionLog>
+        }
+        groupBy: {
+          args: Prisma.ClassActionLogGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ClassActionLogGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ClassActionLogCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ClassActionLogCountAggregateOutputType> | number
         }
       }
     }
@@ -2620,11 +2770,17 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 export const UserScalarFieldEnum = {
   id: 'id',
   email: 'email',
+  username: 'username',
   passwordHash: 'passwordHash',
   name: 'name',
   role: 'role',
+  accountType: 'accountType',
   isOnboarded: 'isOnboarded',
   status: 'status',
+  createdById: 'createdById',
+  homeClassId: 'homeClassId',
+  mustChangePassword: 'mustChangePassword',
+  passwordChangedAt: 'passwordChangedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2699,6 +2855,39 @@ export const ClassScalarFieldEnum = {
 } as const
 
 export type ClassScalarFieldEnum = (typeof ClassScalarFieldEnum)[keyof typeof ClassScalarFieldEnum]
+
+
+export const ClassTeacherScalarFieldEnum = {
+  id: 'id',
+  classId: 'classId',
+  userId: 'userId',
+  access: 'access',
+  profile: 'profile',
+  isOwner: 'isOwner',
+  addedById: 'addedById',
+  endsAt: 'endsAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ClassTeacherScalarFieldEnum = (typeof ClassTeacherScalarFieldEnum)[keyof typeof ClassTeacherScalarFieldEnum]
+
+
+export const ClassActionLogScalarFieldEnum = {
+  id: 'id',
+  classId: 'classId',
+  actorId: 'actorId',
+  actorName: 'actorName',
+  actorAvatar: 'actorAvatar',
+  action: 'action',
+  entityType: 'entityType',
+  entityId: 'entityId',
+  targetUserId: 'targetUserId',
+  metadata: 'metadata',
+  createdAt: 'createdAt'
+} as const
+
+export type ClassActionLogScalarFieldEnum = (typeof ClassActionLogScalarFieldEnum)[keyof typeof ClassActionLogScalarFieldEnum]
 
 
 export const ClassEnrollmentScalarFieldEnum = {
@@ -2846,7 +3035,8 @@ export const EnigmaSubmissionScalarFieldEnum = {
   status: 'status',
   xpAwarded: 'xpAwarded',
   submittedAt: 'submittedAt',
-  reviewedAt: 'reviewedAt'
+  reviewedAt: 'reviewedAt',
+  reviewedById: 'reviewedById'
 } as const
 
 export type EnigmaSubmissionScalarFieldEnum = (typeof EnigmaSubmissionScalarFieldEnum)[keyof typeof EnigmaSubmissionScalarFieldEnum]
@@ -2961,7 +3151,9 @@ export const ActivityScalarFieldEnum = {
   badgeImage: 'badgeImage',
   achievementName: 'achievementName',
   xpAmount: 'xpAmount',
-  source: 'source'
+  source: 'source',
+  actorId: 'actorId',
+  actorName: 'actorName'
 } as const
 
 export type ActivityScalarFieldEnum = (typeof ActivityScalarFieldEnum)[keyof typeof ActivityScalarFieldEnum]
@@ -3166,6 +3358,20 @@ export type ListEnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$Pri
 
 
 /**
+ * Reference to a field of type 'UserAccountType'
+ */
+export type EnumUserAccountTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserAccountType'>
+    
+
+
+/**
+ * Reference to a field of type 'UserAccountType[]'
+ */
+export type ListEnumUserAccountTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserAccountType[]'>
+    
+
+
+/**
  * Reference to a field of type 'Boolean'
  */
 export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
@@ -3211,6 +3417,34 @@ export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'J
  * Reference to a field of type 'QueryMode'
  */
 export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+/**
+ * Reference to a field of type 'ClassAccessLevel'
+ */
+export type EnumClassAccessLevelFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ClassAccessLevel'>
+    
+
+
+/**
+ * Reference to a field of type 'ClassAccessLevel[]'
+ */
+export type ListEnumClassAccessLevelFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ClassAccessLevel[]'>
+    
+
+
+/**
+ * Reference to a field of type 'ClassTeacherProfile'
+ */
+export type EnumClassTeacherProfileFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ClassTeacherProfile'>
+    
+
+
+/**
+ * Reference to a field of type 'ClassTeacherProfile[]'
+ */
+export type ListEnumClassTeacherProfileFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ClassTeacherProfile[]'>
     
 
 
@@ -3565,6 +3799,8 @@ export type GlobalOmitConfig = {
   refreshToken?: Prisma.RefreshTokenOmit
   instanceSetting?: Prisma.InstanceSettingOmit
   class?: Prisma.ClassOmit
+  classTeacher?: Prisma.ClassTeacherOmit
+  classActionLog?: Prisma.ClassActionLogOmit
   classEnrollment?: Prisma.ClassEnrollmentOmit
   classGuide?: Prisma.ClassGuideOmit
   shopItem?: Prisma.ShopItemOmit

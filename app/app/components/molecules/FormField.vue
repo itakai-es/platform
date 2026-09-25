@@ -24,21 +24,31 @@
       :required="required"
       :autocomplete="autocomplete"
       :error="!!errorMessage"
+      :aria-invalid="errorMessage ? 'true' : undefined"
+      :aria-describedby="describedby"
       @update:model-value="emit('update:modelValue', $event)"
       @blur="emit('blur')"
     />
 
-    <p v-if="errorMessage" class="mt-1 text-sm text-error">
+    <p v-if="errorMessage" :id="messageId" role="alert" class="mt-1 text-sm text-error">
       {{ errorMessage }}
     </p>
 
-    <p v-else-if="hint" class="mt-1 text-sm text-text-muted">
+    <p v-else-if="hint" :id="messageId" class="mt-1 text-sm text-text-muted">
       {{ hint }}
     </p>
   </div>
 </template>
 
 <script setup lang="ts">
+/**
+ * Un campo de formulario: etiqueta, `Input` y, debajo, una pista o el error.
+ *
+ * El error y la pista van asociados al campo (`aria-describedby`) y el error se
+ * anuncia al aparecer (`role="alert"`), así que quien usa un lector de pantalla
+ * se entera de por qué no ha salido el envío sin tener que rastrear el
+ * formulario. El campo con error queda marcado con `aria-invalid`.
+ */
 interface Props {
   id?: string
   label?: string
@@ -64,4 +74,7 @@ const emit = defineEmits<{
   'update:modelValue': [value: string | number]
   blur: []
 }>()
+
+const messageId = `${useId()}-message`
+const describedby = computed(() => (props.errorMessage || props.hint ? messageId : undefined))
 </script>

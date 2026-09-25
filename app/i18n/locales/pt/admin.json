@@ -29,7 +29,7 @@
       "title": "Gestão de utilizadores",
       "subtitle": "Administra todos os utilizadores da plataforma",
       "filters": {
-        "search_placeholder": "Procurar por nome ou e-mail...",
+        "search_placeholder": "Pesquisar por nome, e-mail ou utilizador...",
         "all_roles": "Todos os perfis",
         "students": "Alunos",
         "teachers": "Professores",
@@ -38,7 +38,11 @@
         "active": "Ativo",
         "suspended": "Suspenso",
         "inactive": "Inativo",
-        "clear": "Limpar filtros"
+        "clear": "Limpar filtros",
+        "all_account_types": "Todas as contas",
+        "self_accounts": "Com e-mail",
+        "managed_accounts": "Sem e-mail",
+        "orphan_accounts": "Sem e-mail nem turma"
       },
       "roles": {
         "student": "Aluno",
@@ -48,11 +52,40 @@
       "card": {
         "status": "Estado",
         "classes": "Turmas",
-        "last_login": "Últ. acesso"
+        "last_login": "Últ. acesso",
+        "managed": "Sem e-mail",
+        "home_class": "É gerida a partir de {name}",
+        "no_home_class": "Sem turma de origem"
       },
       "empty": {
         "title": "Não foram encontrados utilizadores",
         "description": "Não há utilizadores que correspondam aos filtros selecionados."
+      },
+      "create": {
+        "button": "Nova conta sem e-mail",
+        "title": "Nova conta de aluno",
+        "note": "Para quem não tem e-mail: entra com o seu utilizador e uma palavra-passe temporária que muda ao entrar.",
+        "name": "Nome",
+        "name_placeholder": "Nome e apelido",
+        "home_class": "Turma de origem",
+        "home_class_placeholder": "Escolhe uma turma",
+        "home_class_hint": "O aluno fica inscrito nela e os seus professores gerem a conta.",
+        "username": "Utilizador (opcional)",
+        "username_placeholder": "É o sistema que o propõe",
+        "username_hint": "Em branco, o sistema propõe um. Se o que escreveres já estiver ocupado, é acrescentado um sufixo.",
+        "submit": "Criar conta",
+        "errors": {
+          "name": "Escreve o nome, com pelo menos 2 caracteres",
+          "home_class": "Escolhe a turma de origem"
+        },
+        "error": "Não foi possível criar a conta."
+      },
+      "class_search": {
+        "placeholder": "Pesquisa por turma, professor ou código",
+        "searching": "A pesquisar…",
+        "no_results": "Nenhuma turma corresponde",
+        "more": "Há mais turmas: escreve mais para afinar",
+        "option_hint": "{teacher} · sem alunos | {teacher} · 1 aluno | {teacher} · {count} alunos"
       },
       "actions": {
         "suspend_title": "Suspender utilizador",
@@ -60,7 +93,28 @@
         "suspend_confirm": "Suspender",
         "delete_title": "Eliminar utilizador",
         "delete_message": "Tens a certeza de que queres eliminar {name}? Esta ação não pode ser anulada.",
-        "delete_confirm": "Eliminar"
+        "delete_confirm": "Eliminar",
+        "menu_label": "Ações de {name}",
+        "suspend": "Suspender",
+        "activate": "Ativar",
+        "delete": "Eliminar",
+        "reset_password": "Repor palavra-passe",
+        "reset_password_title": "Repor a palavra-passe",
+        "reset_password_message": "{name} vai receber uma palavra-passe temporária, as sessões serão fechadas e terá de a alterar ao entrar.",
+        "reset_password_confirm": "Repor",
+        "credentials_title": "Palavra-passe temporária",
+        "credentials_note": "Aponta-a agora: não volta a ser mostrada. Se se perder, repõe-se outra vez.",
+        "credentials_username": "Utilizador",
+        "credentials_password": "Palavra-passe temporária",
+        "home_class": "Mudar turma de origem",
+        "home_class_title": "Turma de origem",
+        "home_class_note": "É a turma a partir da qual os professores gerem esta conta; ao mudá-la, o aluno fica inscrito na nova. Sem turma, só a administração a pode atender.",
+        "home_class_none": "Sem turma de origem",
+        "suspend_error": "Não foi possível suspender a conta.",
+        "activate_error": "Não foi possível ativar a conta.",
+        "reset_password_error": "Não foi possível repor a palavra-passe.",
+        "home_class_error": "Não foi possível mudar a turma de origem.",
+        "delete_error": "Não foi possível eliminar a conta."
       },
       "meta": {
         "title": "Gestão de utilizadores | ITAKAI Admin",
@@ -68,42 +122,6 @@
       },
       "sort": {
         "recent": "Mais recentes"
-      }
-    },
-    "schools": {
-      "title": "Gestão de instituições",
-      "subtitle": "Administra as instituições de ensino da plataforma",
-      "filters": {
-        "search_placeholder": "Procurar instituição...",
-        "all_statuses": "Todos os estados",
-        "active": "Ativa",
-        "inactive": "Inativa"
-      },
-      "form": {
-        "create_title": "Nova instituição",
-        "edit_title": "Editar instituição",
-        "name": "Nome",
-        "name_placeholder": "Nome da instituição",
-        "city": "Cidade",
-        "city_placeholder": "Cidade",
-        "country": "País",
-        "country_placeholder": "País",
-        "save": "Guardar",
-        "cancel": "Cancelar"
-      },
-      "actions": {
-        "create": "Nova instituição",
-        "delete_title": "Eliminar instituição",
-        "delete_message": "Tens a certeza de que queres eliminar {name}? Será desassociada de todos os utilizadores.",
-        "delete_confirm": "Eliminar"
-      },
-      "empty": {
-        "title": "Não foram encontradas instituições",
-        "description": "Não há instituições que correspondam aos filtros."
-      },
-      "meta": {
-        "title": "Gestão de instituições | ITAKAI Admin",
-        "description": "Administra todas as instituições de ensino do sistema, cria novas escolas e acompanha a sua atividade."
       }
     },
     "classes": {

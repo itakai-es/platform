@@ -29,7 +29,7 @@
       "title": "Gestionarea utilizatorilor",
       "subtitle": "Administrează toți utilizatorii platformei",
       "filters": {
-        "search_placeholder": "Caută după nume sau e-mail...",
+        "search_placeholder": "Caută după nume, e-mail sau utilizator...",
         "all_roles": "Toate rolurile",
         "students": "Elevi",
         "teachers": "Profesori",
@@ -38,7 +38,11 @@
         "active": "Activ",
         "suspended": "Suspendat",
         "inactive": "Inactiv",
-        "clear": "Șterge filtrele"
+        "clear": "Șterge filtrele",
+        "all_account_types": "Toate conturile",
+        "self_accounts": "Cu e-mail",
+        "managed_accounts": "Fără e-mail",
+        "orphan_accounts": "Fără e-mail și clasă"
       },
       "roles": {
         "student": "Elev",
@@ -48,11 +52,40 @@
       "card": {
         "status": "Stare",
         "classes": "Clase",
-        "last_login": "Ultimul acces"
+        "last_login": "Ultimul acces",
+        "managed": "Fără e-mail",
+        "home_class": "Se gestionează din {name}",
+        "no_home_class": "Fără clasă de origine"
       },
       "empty": {
         "title": "Nu s-au găsit utilizatori",
         "description": "Nu există utilizatori care să corespundă filtrelor selectate."
+      },
+      "create": {
+        "button": "Cont nou fără e-mail",
+        "title": "Cont nou de elev",
+        "note": "Pentru cine nu are e-mail: intră cu utilizatorul său și o parolă temporară pe care o schimbă la prima intrare.",
+        "name": "Nume",
+        "name_placeholder": "Nume și prenume",
+        "home_class": "Clasă de origine",
+        "home_class_placeholder": "Alege o clasă",
+        "home_class_hint": "Elevul este înscris în ea, iar profesorii ei gestionează contul.",
+        "username": "Utilizator (opțional)",
+        "username_placeholder": "Îl propune sistemul",
+        "username_hint": "Lăsat gol, sistemul propune unul. Dacă cel scris este luat, i se adaugă un sufix.",
+        "submit": "Creează contul",
+        "errors": {
+          "name": "Scrie numele, cu cel puțin 2 caractere",
+          "home_class": "Alege clasa de origine"
+        },
+        "error": "Contul nu a putut fi creat."
+      },
+      "class_search": {
+        "placeholder": "Caută după clasă, profesor sau cod",
+        "searching": "Se caută…",
+        "no_results": "Nicio clasă nu corespunde",
+        "more": "Mai sunt clase: scrie mai mult pentru a restrânge",
+        "option_hint": "{teacher} · fără elevi | {teacher} · 1 elev | {teacher} · {count} elevi"
       },
       "actions": {
         "suspend_title": "Suspendă utilizatorul",
@@ -60,7 +93,28 @@
         "suspend_confirm": "Suspendă",
         "delete_title": "Șterge utilizatorul",
         "delete_message": "Sigur vrei să îl ștergi pe {name}? Această acțiune nu poate fi anulată.",
-        "delete_confirm": "Șterge"
+        "delete_confirm": "Șterge",
+        "menu_label": "Acțiuni pentru {name}",
+        "suspend": "Suspendă",
+        "activate": "Activează",
+        "delete": "Șterge",
+        "reset_password": "Resetează parola",
+        "reset_password_title": "Resetarea parolei",
+        "reset_password_message": "{name} va primi o parolă temporară, sesiunile i se vor închide și va trebui să o schimbe la autentificare.",
+        "reset_password_confirm": "Resetează",
+        "credentials_title": "Parolă temporară",
+        "credentials_note": "Notează-o acum: nu se mai afișează. Dacă se pierde, o resetezi din nou.",
+        "credentials_username": "Utilizator",
+        "credentials_password": "Parolă temporară",
+        "home_class": "Schimbă clasa de origine",
+        "home_class_title": "Clasă de origine",
+        "home_class_note": "Este clasa din care profesorii gestionează acest cont; la schimbare, elevul este înscris în cea nouă. Fără clasă, îl poate gestiona doar administrarea.",
+        "home_class_none": "Fără clasă de origine",
+        "suspend_error": "Contul nu a putut fi suspendat.",
+        "activate_error": "Contul nu a putut fi activat.",
+        "reset_password_error": "Parola nu a putut fi resetată.",
+        "home_class_error": "Clasa de origine nu a putut fi schimbată.",
+        "delete_error": "Contul nu a putut fi șters."
       },
       "meta": {
         "title": "Gestionarea utilizatorilor | ITAKAI Admin",
@@ -68,42 +122,6 @@
       },
       "sort": {
         "recent": "Cele mai recente"
-      }
-    },
-    "schools": {
-      "title": "Gestionarea instituțiilor",
-      "subtitle": "Administrează instituțiile de învățământ ale platformei",
-      "filters": {
-        "search_placeholder": "Caută instituția...",
-        "all_statuses": "Toate stările",
-        "active": "Activă",
-        "inactive": "Inactivă"
-      },
-      "form": {
-        "create_title": "Instituție nouă",
-        "edit_title": "Editează instituția",
-        "name": "Nume",
-        "name_placeholder": "Numele instituției",
-        "city": "Oraș",
-        "city_placeholder": "Oraș",
-        "country": "Țară",
-        "country_placeholder": "Țară",
-        "save": "Salvează",
-        "cancel": "Anulează"
-      },
-      "actions": {
-        "create": "Instituție nouă",
-        "delete_title": "Șterge instituția",
-        "delete_message": "Sigur vrei să ștergi {name}? Va fi deconectată de la toți utilizatorii.",
-        "delete_confirm": "Șterge"
-      },
-      "empty": {
-        "title": "Nu s-au găsit instituții",
-        "description": "Nu există instituții care să corespundă filtrelor."
-      },
-      "meta": {
-        "title": "Gestionarea instituțiilor | ITAKAI Admin",
-        "description": "Administrează toate instituțiile de învățământ din sistem, creează școli noi și urmărește activitatea lor."
       }
     },
     "classes": {

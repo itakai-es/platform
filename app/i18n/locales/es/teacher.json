@@ -20,34 +20,34 @@
       }
     },
     "dashboard": {
-      "title": "Inicio del Profesor",
+      "title": "Inicio del profesor",
       "subtitle": "¡Bienvenido, {name}!",
-      "new_class": "Nueva Clase",
-      "new_mission": "Nueva Misión",
+      "new_class": "Nueva clase",
+      "new_mission": "Nueva misión",
       "stats": {
-        "total_students": "Alumnos Totales",
-        "active_classes": "Clases Activas",
-        "active_missions": "Misiones Activas"
+        "total_students": "Alumnos totales",
+        "active_classes": "Clases activas",
+        "active_missions": "Misiones activas"
       },
-      "my_classes": "Mis Clases",
+      "my_classes": "Mis clases",
       "view_all": "Ver todas",
       "no_classes_yet": "No tienes clases todavía",
-      "recent_missions": "Últimas Misiones",
+      "recent_missions": "Últimas misiones",
       "no_missions_description": "Crea tu primera misión para tus alumnos",
       "meta": {
-        "title": "Inicio Profesor | ITAKAI",
+        "title": "Inicio profesor | ITAKAI",
         "description": "Inicio principal del profesor. Gestiona tus clases, misiones y revisa el progreso de tus alumnos."
       }
     },
     "classes": {
       "index": {
-        "title": "Mis Clases",
+        "title": "Mis clases",
         "subtitle": "Gestiona tus clases y revisa el progreso de tus alumnos",
-        "new_class": "Nueva Clase",
-        "create_first": "Crear Primera Clase",
+        "new_class": "Nueva clase",
+        "create_first": "Crear primera clase",
         "no_classes_description": "No has creado ninguna clase todavía",
         "meta": {
-          "title": "Mis Clases | ITAKAI Profesor",
+          "title": "Mis clases | ITAKAI Profesor",
           "description": "Gestiona todas tus clases, alumnos inscritos y misiones asignadas."
         },
         "templates": "Plantillas",
@@ -83,10 +83,10 @@
         }
       },
       "create": {
-        "breadcrumb_classes": "Mis Clases",
+        "breadcrumb_classes": "Mis clases",
         "breadcrumb_new": "Nueva",
         "btn_creating": "Creando...",
-        "btn_create": "Crear Clase",
+        "btn_create": "Crear clase",
         "success_title": "¡Clase creada!",
         "success_message": "Tu clase \"{name}\" está lista.",
         "invite_code_label": "Código de invitación",
@@ -139,7 +139,7 @@
           "guide_question": "He preparado una guía para tus alumnos"
         },
         "meta": {
-          "title": "Crear Nueva Clase | ITAKAI Profesor"
+          "title": "Crear nueva clase | ITAKAI Profesor"
         },
         "narrative_error": "No he podido crear la narrativa"
       },
@@ -157,7 +157,8 @@
           "students": "Alumnos",
           "tienda": "Tienda",
           "behaviors": "Comportamientos",
-          "settings": "Ajustes"
+          "settings": "Ajustes",
+          "history": "Historial"
         },
         "students": {
           "empty_title": "Aún no hay alumnos",
@@ -181,10 +182,13 @@
           "no_results_description": "No hay alumnos que coincidan con la búsqueda.",
           "col_behaviors": "Comportamientos",
           "view_list": "Listado",
-          "view_ranking": "Ranking"
+          "view_ranking": "Ranking",
+          "col_actions": "Acciones",
+          "managed_badge": "Sin correo",
+          "pending_sign_in_badge": "Pendiente de entrar"
         },
-        "stats_title": "Estadísticas de la Clase",
-        "pending_reviews": "Entregas por Revisar",
+        "stats_title": "Estadísticas de la clase",
+        "pending_reviews": "Entregas por revisar",
         "guide_editor": {
           "toast_saved": "Guía guardada correctamente",
           "toast_error": "Error al guardar la guía"
@@ -196,8 +200,8 @@
         "missions_tab": {
           "no_missions_title": "No hay misiones",
           "no_missions_description": "No hay misiones asignadas a esta clase todavía",
-          "create_first": "Crear Primera Misión",
-          "new_mission": "Nueva Misión",
+          "create_first": "Crear primera misión",
+          "new_mission": "Nueva misión",
           "no_results": "Sin resultados",
           "empty_search": "No se encontraron misiones para \"{query}\"",
           "empty_status": "No hay misiones con los estados seleccionados",
@@ -205,7 +209,7 @@
           "empty_default": "No hay misiones en esta clase"
         },
         "meta": {
-          "title": "Detalle de Clase | ITAKAI Profesor",
+          "title": "Detalle de clase | ITAKAI Profesor",
           "description": "Gestiona la clase. Revisa alumnos, misiones asignadas y progreso general."
         },
         "behaviors": {
@@ -248,7 +252,8 @@
           "toast_save_error": "No se pudo guardar el comportamiento.",
           "toast_delete_error": "No se pudo eliminar el comportamiento.",
           "fetch_error": "No se pudieron cargar los comportamientos.",
-          "apply_error": "No se pudo aplicar el comportamiento."
+          "apply_error": "No se pudo aplicar el comportamiento.",
+          "empty_description_readonly": "Cuando se añadan comportamientos a esta clase, aparecerán aquí."
         },
         "shop": {
           "tab_items": "Artículos",
@@ -294,7 +299,8 @@
           "tab_history": "Historial",
           "history_purchases": "Compras",
           "view_student_profile": "Ver estudiante",
-          "mana_disabled_chip": "Maná desactivado"
+          "mana_disabled_chip": "Maná desactivado",
+          "empty_description_readonly": "Cuando se añadan artículos a la tienda de esta clase, aparecerán aquí."
         },
         "settings": {
           "levels": {
@@ -374,6 +380,8 @@
           "requires_resource": "Necesita al menos un recurso activo (XP, {coins}, maná o vidas)",
           "general": {
             "title": "Datos generales",
+            "identity_title": "Nombre y clasificación",
+            "identity_hint": "El idioma, la provincia, el nivel y la asignatura sirven para encontrar la clase si la publicas como plantilla.",
             "name_label": "Nombre",
             "subject_label": "Asignatura",
             "level_label": "Nivel educativo",
@@ -414,32 +422,289 @@
             "title": "Funcionalidades"
           },
           "management": {
-            "title": "Gestión"
-          }
+            "title": "Gestión",
+            "hint": "Publícala como plantilla para que otros profesores la importen, o haz una copia."
+          },
+          "edit_level_note": "Puedes cambiar el nombre, el horario y la portada. La clasificación, las funcionalidades y los niveles los cambia quien administra la clase."
         },
         "badges_empty": "No hay insignias en esta clase",
-        "join_requests": {
-          "empty_description": "No hay solicitudes pendientes para esta clase",
-          "empty_title": "Sin solicitudes"
+        "archived_notice": "Esta clase está archivada: se puede consultar, pero no admite alumnos nuevos.",
+        "accounts": {
+          "intro": "Para el alumnado sin correo. Cada cuenta entra con su usuario y una contraseña temporal, que se cambia la primera vez. Al terminar verás la hoja de credenciales, para copiarlas, descargarlas o imprimirlas.",
+          "lead": "Puedes crear hasta {max} cuentas de una vez, escribiendo los nombres o pegando una lista.",
+          "mode_label": "Cómo crear las cuentas",
+          "mode_rows": "Escribir los nombres",
+          "mode_import": "Pegar o subir una lista",
+          "mode_rows_hint": "Una fila por alumno",
+          "mode_import_hint": "Desde una hoja de cálculo o un CSV",
+          "rows_intro": "Escribe el nombre de cada alumno: el usuario se propone solo y puedes cambiarlo.",
+          "row_legend": "Alumno {n}",
+          "name_label": "Nombre",
+          "name_placeholder": "Nombre y apellido",
+          "username_label": "Usuario",
+          "username_hint": "Propuesto a partir del nombre. Puedes cambiarlo.",
+          "username_proposing": "Buscando un usuario libre…",
+          "row_remove": "Quitar al alumno {n}",
+          "row_add": "Añadir otro alumno",
+          "creating": "Creando cuentas…",
+          "create_count": "Crear cuentas | Crear 1 cuenta | Crear {count} cuentas",
+          "max_rows": "Como mucho {max} alumnos de una vez.",
+          "create_error": "No se han podido crear las cuentas. Inténtalo de nuevo.",
+          "status": {
+            "ok": "Lista para crear",
+            "username_taken": "«{requested}» está ocupado: se usará «{username}»",
+            "duplicate": "Repetido en la lista: añade una inicial para distinguirlo o quita la fila",
+            "empty_name": "Falta el nombre",
+            "invalid_name": "El nombre debe tener entre 2 y 120 caracteres",
+            "invalid_username": "Usuario no válido: solo letras sin tilde, números y . _ - (de 3 a 30)"
+          },
+          "import_label": "Lista de alumnos",
+          "import_hint": "Uno por línea. Puedes pegar una columna copiada de una hoja de cálculo; si quieres elegir el usuario, ponlo en una segunda columna.",
+          "import_placeholder": "Ana García\nLuis Pérez\nMarta Ruiz",
+          "import_upload": "Subir un CSV",
+          "import_template": "Descargar plantilla CSV",
+          "import_file_read": "Leído «{file}».",
+          "import_count": "La lista está vacía. | 1 alumno en la lista. | {count} alumnos en la lista.",
+          "import_review": "Revisar la lista",
+          "import_only_csv": "Solo se admiten ficheros CSV. En tu hoja de cálculo, usa «Guardar como» y elige CSV.",
+          "import_file_too_big": "El fichero es demasiado grande para ser una lista de clase.",
+          "import_file_error": "No se ha podido leer el fichero.",
+          "import_empty": "Pega al menos un nombre o sube un CSV.",
+          "import_too_many": "Como mucho {max} alumnos de una vez: divide la lista.",
+          "review_title": "Revisión de la lista",
+          "review_ok": "Ninguna fila se puede crear | 1 fila lista para crear | {count} filas listas para crear",
+          "review_errors": "sin errores | 1 fila con errores | {count} filas con errores",
+          "review_fix": "Corrige las filas con errores en la lista o quítalas para poder crear las cuentas.",
+          "col_line": "Línea",
+          "col_status": "Estado",
+          "col_actions": "Acciones",
+          "review_empty": "(sin nombre)",
+          "review_remove": "Quitar la línea {n}",
+          "review_back": "Volver a la lista",
+          "review_remove_errors": "Quitar las filas con errores",
+          "review_error": "No se ha podido revisar la lista. Inténtalo de nuevo.",
+          "template_name": "nombre",
+          "template_username": "usuario",
+          "template_example_one": "Ana García",
+          "template_example_two": "Luis Pérez",
+          "template_example_two_username": "luis.p",
+          "template_file": "plantilla-alumnado"
+        },
+        "credentials": {
+          "meta_title": "Hoja de credenciales | ITAKAI",
+          "title": "Hoja de credenciales",
+          "count": "Sin cuentas | 1 cuenta | {count} cuentas",
+          "back": "Volver a Alumnos",
+          "print": "Imprimir / guardar como PDF",
+          "copy_all": "Copiar todas",
+          "download_csv": "Descargar lista (CSV)",
+          "csv_note": "El fichero lleva las contraseñas y queda en tu ordenador: guárdalo con cuidado o bórralo cuando las hayas repartido.",
+          "copy": "Copiar",
+          "copy_label": "Copiar las credenciales de {name}",
+          "copied_one": "Credenciales de {name} copiadas.",
+          "copied_all": "Se han copiado todas las credenciales.",
+          "copy_error": "No se ha podido copiar. Selecciona el texto y cópialo a mano, o descarga la lista.",
+          "file_name": "credenciales",
+          "field_name": "Nombre",
+          "field_class": "Clase",
+          "field_login_url": "Dirección de entrada",
+          "once_note": "Las contraseñas temporales solo se ven ahora: no se guardan en ningún sitio. Cópialas, descarga la lista o imprime la hoja antes de recargar la página o cerrar la sesión, y dale a cada alumno las suyas.",
+          "gone_title": "Las contraseñas ya no se pueden mostrar",
+          "gone_description": "Por seguridad, las contraseñas temporales solo se ven justo después de crearlas o restablecerlas, y no se guardan en ningún sitio. Si has perdido la hoja, restablece la contraseña desde la pestaña Alumnos, en el menú de cada alumno: se genera una nueva.",
+          "card_username": "Usuario",
+          "card_password": "Contraseña",
+          "card_login_url": "Entra en",
+          "card_class_code": "Código de clase",
+          "card_first_login": "Al entrar por primera vez, cambia tu contraseña."
+        },
+        "read_only_notice": "Tu acceso a esta clase te deja ver esto, pero no cambiarlo.",
+        "teachers": {
+          "title": "Profesorado",
+          "description": "Quién imparte esta clase, con qué perfil y qué puede hacer en ella.",
+          "add": "Añadir profesor",
+          "add_title": "Añadir profesor",
+          "add_confirm": "Añadir",
+          "load_error": "No se ha podido cargar el profesorado.",
+          "retry": "Reintentar",
+          "you": "Tú",
+          "access_line": "Acceso: {access}",
+          "menu_label": "Acciones para {name}",
+          "owner_note": "Eres el propietario de esta clase. Para salir de ella, pasa antes la propiedad a alguien con administración.",
+          "leave_title": "Salir de la clase",
+          "leave_confirm": "Salir",
+          "leave_hint": "Dejarás de ver esta clase. Para volver, alguien con administración tendrá que añadirte de nuevo.",
+          "leave_message": "¿Salir de {class}? Dejarás de verla y, para volver, alguien con administración tendrá que añadirte de nuevo.",
+          "field_email": "Correo electrónico",
+          "field_email_hint": "El correo exacto de su cuenta de profesor en la aplicación.",
+          "add_note": "Entra en la clase al momento y recibe un aviso. No tiene que aceptar nada.",
+          "field_profile": "Perfil",
+          "field_access": "Nivel de acceso",
+          "access_hint": {
+            "read": "Ve la clase, las misiones, el alumnado y las entregas, sin cambiar nada.",
+            "edit": "Además, cambia el contenido, la tienda y los comportamientos, y aprueba entregas.",
+            "admin": "Además, cambia los ajustes, gestiona el alumnado y el profesorado y archiva la clase."
+          },
+          "edit": "Cambiar perfil o nivel",
+          "edit_title": "Perfil y nivel de {name}",
+          "edit_self_note": "Estás cambiando tu propio acceso: si lo bajas, puede que no puedas volver a subirlo.",
+          "remove": "Quitar de la clase",
+          "remove_title": "Quitar del profesorado",
+          "remove_confirm": "Quitar",
+          "remove_message": "¿Quitar a {name} del profesorado de {class}? Dejará de ver la clase y recibirá un aviso. Lo que ya ha hecho en ella se queda.",
+          "transfer": "Pasar la propiedad",
+          "transfer_confirm": "Pasar la propiedad",
+          "transfer_title": "Pasar la propiedad de la clase",
+          "transfer_message": "¿Pasar la propiedad de {class} a {name}? No podrás deshacerlo desde tu cuenta: solo {name} podría devolvértela.",
+          "transfer_keeps": "Sigues en la clase con acceso de administración.",
+          "transfer_loses": "Dejas de poder publicarla como plantilla y de pasar su propiedad.",
+          "added": "{name} ya forma parte del profesorado",
+          "changed": "Acceso de {name} actualizado",
+          "removed": "{name} ya no está en el profesorado",
+          "transferred": "Ahora la clase es de {name}",
+          "left": "Has salido de {class}",
+          "errors": {
+            "not_addable": "No se puede añadir a esa persona. Comprueba que el correo es el de una cuenta de profesor.",
+            "already_teacher": "Esa persona ya forma parte del profesorado de esta clase.",
+            "owner_locked": "Al propietario no se le puede cambiar ni quitar: antes tiene que pasar la propiedad.",
+            "owner_cannot_leave": "Eres el propietario: para salir, pasa antes la propiedad a alguien con administración.",
+            "transfer_not_admin": "La propiedad solo se puede pasar a alguien con acceso de administración.",
+            "already_owner": "Esa persona ya es la propietaria de la clase.",
+            "too_many": "Has hecho demasiados intentos. Espera un rato y vuelve a probar.",
+            "forbidden": "Tu acceso a esta clase no permite hacer esto.",
+            "not_found": "Esto ya no está disponible. Recarga la página para ver la clase tal como está ahora.",
+            "invalid_email": "Escribe un correo válido.",
+            "add": "No se ha podido añadir. Inténtalo de nuevo.",
+            "change": "No se ha podido cambiar el acceso. Inténtalo de nuevo.",
+            "remove": "No se ha podido quitar. Inténtalo de nuevo.",
+            "transfer": "No se ha podido pasar la propiedad. Inténtalo de nuevo.",
+            "leave": "No se ha podido salir de la clase. Inténtalo de nuevo."
+          }
+        },
+        "history": {
+          "filter_actor": "Profesor",
+          "filter_type": "Tipo",
+          "filter_search": "Buscar profesor…",
+          "all_actors": "Todo el profesorado",
+          "all_types": "Todos los tipos",
+          "empty_title": "Aún no hay nada en el historial",
+          "empty_description": "Aquí aparecerá lo que haga el profesorado en la clase: misiones, entregas, alumnado, ajustes…",
+          "no_results_title": "Nada con estos filtros",
+          "no_results_description": "Prueba con otro profesor o con otro tipo.",
+          "error_title": "No se ha podido cargar el historial",
+          "error_description": "Comprueba la conexión e inténtalo de nuevo.",
+          "retry": "Reintentar",
+          "unknown_actor": "Cuenta eliminada",
+          "unknown_target": "una cuenta eliminada",
+          "unknown_action": "hizo un cambio en la clase",
+          "types": {
+            "class": "Clase",
+            "teacher": "Profesorado",
+            "student": "Alumnado",
+            "mission": "Misiones",
+            "enigma": "Enigmas",
+            "document": "Documentos",
+            "submission": "Entregas",
+            "behavior": "Comportamientos",
+            "shop": "Tienda"
+          },
+          "actions": {
+            "class": {
+              "updated": "cambió los datos de la clase",
+              "settings_changed": "cambió los ajustes de la clase",
+              "guide_updated": "actualizó la guía de la clase",
+              "archived": "archivó la clase",
+              "unarchived": "desarchivó la clase",
+              "template_published": "publicó la clase como plantilla",
+              "template_unpublished": "retiró la clase de las plantillas",
+              "duplicated": "duplicó la clase",
+              "ownership_transferred": "pasó la propiedad de la clase a {target}",
+              "ownership_inherited": "la clase pasó a {target} al eliminarse la cuenta de su propietario"
+            },
+            "teacher": {
+              "added": "añadió a {target} al profesorado ({profile}, {access})",
+              "changed": "cambió el acceso de {target}: {profile}, {access}",
+              "removed": "quitó a {target} del profesorado",
+              "left": "salió de la clase"
+            },
+            "student": {
+              "account_created": "creó la cuenta de {target}",
+              "password_reset": "restableció la contraseña de {target}",
+              "nickname_changed": "cambió el alias de {target}",
+              "removed": "quitó a {target} de la clase",
+              "removed_unused": "quitó a {target} de la clase y borró su cuenta, que no se había usado",
+              "avatar_generated": "generó un avatar nuevo para {target}"
+            },
+            "mission": {
+              "created": "creó la misión «{title}»",
+              "updated": "editó la misión «{title}»",
+              "blocked": "bloqueó la misión «{title}»",
+              "unblocked": "desbloqueó la misión «{title}»",
+              "moved": "cambió de clase la misión «{title}»",
+              "rewards_changed": "cambió la recompensa de la misión «{title}»"
+            },
+            "enigma": {
+              "created": "añadió el enigma «{title}»",
+              "updated": "editó el enigma «{title}»",
+              "deleted": "borró el enigma «{title}»",
+              "rewards_changed": "cambió las recompensas del enigma «{title}»"
+            },
+            "document": {
+              "created": "añadió el documento «{title}»",
+              "updated": "editó el documento «{title}»",
+              "deleted": "borró el documento «{title}»"
+            },
+            "submission": {
+              "approved": "aprobó la entrega de {target} en «{title}» con un {percentage} %"
+            },
+            "behavior": {
+              "applied": "aplicó «{title}» a {target}",
+              "created": "creó el comportamiento «{title}»",
+              "updated": "editó el comportamiento «{title}»",
+              "deleted": "borró el comportamiento «{title}»"
+            },
+            "shop": {
+              "item_created": "añadió «{title}» a la tienda",
+              "item_updated": "editó «{title}» en la tienda",
+              "item_deleted": "quitó «{title}» de la tienda"
+            }
+          },
+          "anonymous": {
+            "student": {
+              "account_created": "creó la cuenta de un alumno que ya no está en la clase",
+              "password_reset": "restableció la contraseña de un alumno que ya no está en la clase",
+              "nickname_changed": "cambió el alias de un alumno que ya no está en la clase",
+              "removed": "quitó a un alumno de la clase",
+              "removed_unused": "quitó de la clase a un alumno que no había entrado nunca y borró su cuenta",
+              "avatar_generated": "generó un avatar nuevo para un alumno que ya no está en la clase"
+            },
+            "submission": {
+              "approved": "aprobó en «{title}» la entrega de un alumno que ya no está en la clase, con un {percentage} %"
+            },
+            "behavior": {
+              "applied": "aplicó «{title}» a un alumno que ya no está en la clase"
+            }
+          }
         }
       }
     },
     "missions": {
       "index": {
         "meta": {
-          "title": "Mis Misiones | ITAKAI Profesor",
+          "title": "Mis misiones | ITAKAI Profesor",
           "description": "Gestiona todas tus misiones creadas, edítalas o crea nuevas para tus alumnos."
         },
         "subtitle": "Gestiona las misiones de tus clases"
       },
       "create": {
         "meta": {
-          "title": "Crear Misión | ITAKAI Profesor"
+          "title": "Crear misión | ITAKAI Profesor"
         },
         "ai_unavailable": "El servicio de IA no está disponible ahora mismo. Inténtalo de nuevo en unos minutos.",
         "idea_placeholder": "Ej: Quiero una misión sobre cinemática donde los alumnos calculen trayectorias de escobas voladoras...",
         "narrative_error": "No he podido crear la narrativa",
-        "pick_class": "Selecciona una clase"
+        "pick_class": "Selecciona una clase",
+        "no_editable_classes": "No tienes ninguna clase en la que puedas crear misiones: hace falta acceso de edición.",
+        "no_classes": "Aún no tienes ninguna clase: crea una primero para añadirle misiones."
       },
       "detail": {
         "delete_confirm_btn": "Eliminar",
@@ -447,7 +712,7 @@
           "enigma_has_submissions": "No se puede eliminar un enigma que ya tiene entregas de alumnos"
         },
         "meta": {
-          "title": "Detalle de Misión | ITAKAI Profesor",
+          "title": "Detalle de misión | ITAKAI Profesor",
           "title_loading": "Cargando misión... | ITAKAI Profesor",
           "description_fallback": "Detalle de misión en ITAKAI"
         },
@@ -488,7 +753,7 @@
       }
     },
     "badges": {
-      "title": "Mis Insignias",
+      "title": "Mis insignias",
       "subtitle": "Crea y gestiona insignias personalizadas para recompensar los logros de tus alumnos",
       "new_badge": "Nueva insignia",
       "btn_delete": "Eliminar",
@@ -496,13 +761,13 @@
       "no_badges_description": "Crea tu primera insignia para recompensar a tus alumnos",
       "create_first": "Crear primera insignia",
       "form": {
-        "edit_title": "Editar Insignia",
-        "create_title": "Nueva Insignia",
+        "edit_title": "Editar insignia",
+        "create_title": "Nueva insignia",
         "label_name": "Nombre",
         "label_description": "Descripción",
         "label_image": "Imagen",
         "image_optional": "(opcional)",
-        "placeholder_name": "Ej: Maestro de Ecuaciones",
+        "placeholder_name": "Ej: Maestro de ecuaciones",
         "placeholder_description": "Describe qué logro representa esta insignia...",
         "btn_remove_image": "Quitar imagen",
         "preview_label": "Vista previa:",
@@ -516,7 +781,7 @@
         "btn_edit": "Editar",
         "btn_close": "Cerrar"
       },
-      "delete_title": "Eliminar Insignia",
+      "delete_title": "Eliminar insignia",
       "delete_confirm": "¿Estás seguro de que deseas eliminar la insignia '{name}'? Esta acción no se puede deshacer.",
       "validation": {
         "name_required": "El nombre es obligatorio",
@@ -525,17 +790,19 @@
         "image_type": "Solo se permiten archivos PNG, JPG, SVG o WebP"
       },
       "meta": {
-        "title": "Mis Insignias | ITAKAI Profesor",
+        "title": "Mis insignias | ITAKAI Profesor",
         "description": "Crea, edita y gestiona insignias personalizadas para premiar los logros de tus alumnos."
       },
       "filter_system": "Del sistema",
-      "generate_error": "No se pudo generar la insignia."
+      "generate_error": "No se pudo generar la insignia.",
+      "save_error": "No se ha podido guardar la insignia.",
+      "delete_error": "No se ha podido borrar la insignia."
     },
     "students": {
       "index": {
-        "title": "Mis Alumnos",
+        "title": "Mis alumnos",
         "subtitle": "Gestiona y visualiza el progreso de tus alumnos",
-        "search_placeholder": "Buscar por nombre o email...",
+        "search_placeholder": "Buscar por nombre, correo o usuario...",
         "filter_all_classes": "Todas las clases",
         "filter_all_progress": "Todo progreso",
         "progress_excellent": "Excelente (≥80%)",
@@ -557,9 +824,10 @@
         "btn_view": "Ver",
         "stat_missions": "Misiones",
         "meta": {
-          "title": "Mis Alumnos | ITAKAI Profesor",
+          "title": "Mis alumnos | ITAKAI Profesor",
           "description": "Gestiona todos tus alumnos, revisa su progreso y estadísticas de desempeño académico."
-        }
+        },
+        "stat_badges": "Insignias"
       },
       "detail": {
         "breadcrumb_students": "Alumnos",
@@ -570,7 +838,7 @@
         "stat_classes": "Clases",
         "stat_missions": "Misiones",
         "stat_completed": "Completado",
-        "enrolled_classes_title": "Clases Inscritas",
+        "enrolled_classes_title": "Clases inscritas",
         "enrolled_classes_count": "{count} clases",
         "not_enrolled": "No está inscrito en ninguna de tus clases",
         "label_progress": "Completado",
@@ -578,50 +846,73 @@
         "stat_lives": "Puntos de vida",
         "no_activity": "Sin actividad reciente",
         "meta": {
-          "title": "Perfil de Estudiante | ITAKAI Profesor",
+          "title": "Perfil de estudiante | ITAKAI Profesor",
           "description": "Perfil detallado del estudiante con estadísticas de rendimiento, progreso en misiones y actividad reciente."
         }
+      },
+      "actions": {
+        "menu_label": "Acciones para {name}",
+        "reset": "Restablecer contraseña",
+        "reset_title": "Restablecer contraseña",
+        "reset_message": "Se generará una contraseña temporal nueva para {name} y se cerrarán sus sesiones abiertas. La que tiene ahora dejará de funcionar.",
+        "reset_confirm": "Restablecer",
+        "reset_not_home": "La contraseña de {name} la restablece el profesorado con administración en la clase donde se creó su cuenta, o la administración de la plataforma.",
+        "reset_has_email": "{name} entra con su correo. Si ha olvidado la contraseña, puede recuperarla con «¿Olvidaste tu contraseña?», en la pantalla de entrada.",
+        "reset_error": "No se ha podido restablecer la contraseña.",
+        "nickname": "Cambiar alias",
+        "nickname_title": "Alias en la clase",
+        "nickname_label": "Alias",
+        "nickname_hint": "Es el nombre con el que sale en esta clase y en su ranking. Hasta {max} caracteres.",
+        "nickname_invalid": "Escribe un alias de 1 a {max} caracteres.",
+        "nickname_saved": "Alias cambiado",
+        "nickname_error": "No se ha podido cambiar el alias.",
+        "remove": "Quitar de la clase",
+        "remove_title": "Quitar de la clase",
+        "remove_message": "¿Quitar a {name} de {class}?",
+        "remove_confirm": "Quitar de la clase",
+        "remove_loses": "Se borrará todo lo que tiene en esta clase:",
+        "remove_loses_progress": "su nivel, XP, monedas, maná y vidas;",
+        "remove_loses_submissions": "su progreso en las misiones, sus entregas y las insignias de esas misiones;",
+        "remove_loses_shop": "sus compras y usos en la tienda y los comportamientos que se le han aplicado;",
+        "remove_loses_history": "su historial, sus avisos y sus conversaciones con el asistente sobre esta clase.",
+        "remove_keeps": "Lo que tenga en otras clases no cambia y su cuenta sigue existiendo. No se puede deshacer.",
+        "remove_home_class": "Su cuenta se creó en esta clase: después, solo la administración de la plataforma podrá restablecer su contraseña.",
+        "remove_unused": "{name} no ha entrado nunca y solo está en esta clase, así que su cuenta se borrará del todo, no solo de la clase. No se puede deshacer.",
+        "remove_unused_confirm": "Quitar y borrar la cuenta",
+        "removed": "{name} ya no está en la clase",
+        "removed_account_deleted": "{name} ya no está en la clase y su cuenta sin usar se ha borrado",
+        "remove_error": "No se ha podido quitar al alumno de la clase."
       }
     },
     "ai_assistant": {
       "meta": {
-        "title": "Asistente IA Profesor | ITAKAI",
+        "title": "Asistente IA profesor | ITAKAI",
         "description": "Asistente de IA especializado para profesores. Obtén ayuda sobre gestión de clases y misiones."
       }
     },
     "profile": {
       "breadcrumb_home": "Inicio",
       "breadcrumb_profile": "Mi perfil",
-      "title": "Mi Perfil",
+      "title": "Mi perfil",
       "tabs": {
         "security": "Seguridad",
         "settings": "Configuración"
       },
       "security": {
-        "password_title": "Contraseña",
-        "placeholder_current": "Contraseña actual",
-        "placeholder_new": "Nueva contraseña",
-        "placeholder_confirm": "Confirmar contraseña",
-        "btn_update": "Actualizar",
-        "email_title": "Email",
-        "placeholder_new_email": "Nuevo email",
         "sessions_title": "Sesiones",
         "sessions_close_all": "Cerrar todas",
         "session_current": "Actual",
         "session_close": "Cerrar",
         "validation": {
-          "passwords_mismatch": "Las contraseñas no coinciden",
-          "password_min_length": "La contraseña debe tener al menos 6 caracteres",
-          "email_invalid": "Introduce un email válido",
           "password_required": "Introduce tu contraseña"
         }
       },
       "settings": {
         "theme_title": "Tema",
         "theme_description": "Elige el estilo visual de la plataforma",
-        "theme_college": "Modo Colegio",
+        "theme_college": "Modo colegio",
         "theme_college_desc": "Visual gamificado",
-        "theme_university": "Modo Universidad",
+        "theme_university": "Modo universidad",
         "theme_university_desc": "Visual profesional",
         "language_title": "Idioma",
         "language_updated": "Idioma actualizado",
@@ -645,19 +936,20 @@
           "pt": "Português",
           "el": "Ελληνικά",
           "ro": "Română"
-        }
+        },
+        "delete_modal_blocked": "Hay clases que dependen de tu cuenta."
       },
       "meta": {
-        "title": "Mi Perfil | ITAKAI",
+        "title": "Mi perfil | ITAKAI",
         "description": "Gestiona tu perfil de profesor, configura la seguridad y personaliza tu experiencia."
       }
     },
     "components": {
       "enigma_form_modal": {
-        "edit_title": "Editar Enigma",
-        "add_title": "Añadir Enigma",
+        "edit_title": "Editar enigma",
+        "add_title": "Añadir enigma",
         "label_title": "Título del enigma",
-        "placeholder_title": "Ej: El Despertar de las Máquinas",
+        "placeholder_title": "Ej: El despertar de las máquinas",
         "label_xp": "XP",
         "label_rewards": "Recompensas al completar",
         "rewards_locked_hint": "Solo puedes aumentar las recompensas: algún alumno ya las ha ganado.",
@@ -682,15 +974,15 @@
         "custom_value": "Valor personalizado"
       },
       "document_form_modal": {
-        "edit_title": "Editar Documento",
-        "add_title": "Añadir Documento",
+        "edit_title": "Editar documento",
+        "add_title": "Añadir documento",
         "label_title": "Título",
-        "placeholder_title": "Ej: Guía de Sistemas de Ecuaciones",
+        "placeholder_title": "Ej: Guía de sistemas de ecuaciones",
         "btn_upload_file": "Subir archivo",
         "btn_add_link": "Añadir enlace",
         "label_file": "Archivo",
         "drop_hint": "Arrastra un archivo o haz clic para seleccionar",
-        "file_types_hint": "PDF, Word, Video, Imágenes (max 50MB)",
+        "file_types_hint": "PDF, Word, video, imágenes (max 50MB)",
         "label_url": "URL",
         "label_description": "Descripción",
         "label_description_optional": "(opcional)",
@@ -754,7 +1046,7 @@
         }
       },
       "rewards_form_modal": {
-        "title": "Editar Recompensas",
+        "title": "Editar recompensas",
         "badge_label": "Insignia de recompensa",
         "remove_badge": "Quitar insignia",
         "no_badge_title": "Sin insignia asignada",
@@ -768,7 +1060,7 @@
         "label_description": "Descripción",
         "label_image": "Imagen",
         "image_optional": "(opcional)",
-        "placeholder_name": "Ej: Maestro de Ecuaciones",
+        "placeholder_name": "Ej: Maestro de ecuaciones",
         "placeholder_description": "Describe qué logro representa esta insignia...",
         "image_selected": "Imagen seleccionada",
         "btn_remove_image": "Quitar imagen",
@@ -803,7 +1095,7 @@
         "breadcrumb_classes": "Mis clases",
         "deadline_none": "Sin fecha límite",
         "expired_readonly": "Esta misión ha expirado: puedes consultarla, pero ya no admite entregas.",
-        "narrative_title": "Historia de la Misión",
+        "narrative_title": "Historia de la misión",
         "btn_see_more": "Ver más",
         "btn_see_less": "Ver menos",
         "btn_edit": "Editar",
@@ -813,18 +1105,18 @@
         "objectives_label": "Objetivos:",
         "no_enigmas": "No hay enigmas en esta misión",
         "btn_add_first_enigma": "Añadir primer enigma",
-        "documents_title": "Documentos de Apoyo",
+        "documents_title": "Documentos de apoyo",
         "no_documents": "No hay documentos de apoyo",
         "btn_view_submissions": "Ver entregas ({count})",
         "btn_submit": "Entregar",
         "status_available": "Disponible",
         "status_in_review": "En revisión",
         "status_completed": "Completado",
-        "global_progress": "Progreso Global",
+        "global_progress": "Progreso global",
         "class_average": "Promedio de la clase",
         "rewards_title": "Recompensas",
-        "xp_enigmas": "XP de Enigmas",
-        "xp_mission": "XP de Misión",
+        "xp_enigmas": "XP de enigmas",
+        "xp_mission": "XP de misión",
         "complete_all_enigmas": "Completa todos los enigmas",
         "badge_rarity": {
           "common": "Común",

@@ -158,8 +158,10 @@ export const useAuthStore = defineStore('auth', () => {
     const demoUser: User = {
       id: `demo_${role}`,
       email: `${role}@demo.com`,
+      username: null,
       name: roleNames[role],
       role,
+      accountType: 'self',
       isOnboarded: true,
       createdAt: new Date(),
     }
@@ -196,9 +198,11 @@ export const useAuthStore = defineStore('auth', () => {
       localStorage.removeItem('itakai_theme')
       document.documentElement.removeAttribute('data-theme')
 
-      // Los avisos van aparte y primero: los `$reset()` de abajo pueden lanzar
-      // (los stores de tipo setup no lo implementan) y cortarían el resto.
+      // Los avisos y la hoja de credenciales van aparte y primero: los `$reset()`
+      // de abajo pueden lanzar (los stores de tipo setup no lo implementan) y
+      // cortarían el resto.
       useNotificationsStore().reset()
+      useCredentialsSheetStore().reset()
 
       // Reset all other stores to avoid data leakage between users
       try {
@@ -228,8 +232,10 @@ export const useAuthStore = defineStore('auth', () => {
     if (import.meta.client) {
       localStorage.removeItem('auth_access_token')
       localStorage.removeItem('auth_user')
-      // La sesión ha caducado: quien entre después no debe ver estos avisos.
+      // La sesión ha caducado: quien entre después no debe ver estos avisos ni
+      // las contraseñas de la última hoja de credenciales.
       useNotificationsStore().reset()
+      useCredentialsSheetStore().reset()
     }
   }
 
@@ -263,6 +269,18 @@ export const useAuthStore = defineStore('auth', () => {
         localStorage.removeItem('auth_user')
       }
       throw error
+    }
+  }
+
+  /**
+   * El cambio de contraseña obligatorio ya está hecho: la cuenta deja de tener
+   * el aviso pendiente y el middleware la deja pasar.
+   */
+  const markPasswordChanged = () => {
+    if (!user.value) return
+    user.value = { ...user.value, mustChangePassword: false }
+    if (import.meta.client) {
+      localStorage.setItem('auth_user', JSON.stringify(user.value))
     }
   }
 
@@ -417,6 +435,7 @@ export const useAuthStore = defineStore('auth', () => {
     refreshToken,
     loadUserFromStorage,
     completeOnboarding,
+    markPasswordChanged,
     resetPassword,
     requestPasswordReset,
   }

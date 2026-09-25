@@ -59,14 +59,14 @@ describe('notify', () => {
   it('crea el aviso con el texto compuesto en castellano', async () => {
     await notify({
       userId: USER,
-      type: 'join_accepted',
-      copy: 'join_accepted',
-      params: { class: '1º ESO' },
+      type: 'submission_reviewed',
+      copy: 'submission_reviewed',
+      params: { enigma: 'El mapa', percentage: 75 },
     })
 
     const { data } = mocks.notificationCreate.mock.calls[0][0]
-    expect(data.title).toBe('Solicitud aceptada')
-    expect(data.message).toBe('Tu solicitud para unirte a 1º ESO ha sido aceptada.')
+    expect(data.title).toBe('Entrega revisada')
+    expect(data.message).toBe('Tu entrega de «El mapa» se ha revisado al 75 %.')
     expect(data.priority).toBe('medium')
   })
 
@@ -88,21 +88,26 @@ describe('notify', () => {
   it('cae al castellano cuando el usuario no tiene ajustes', async () => {
     mocks.userFindUnique.mockResolvedValue(userRow({ settings: null }))
 
-    await notify({ userId: USER, type: 'class_invitation', copy: 'class_invitation', params: { class: 'Historia' } })
+    await notify({
+      userId: USER,
+      type: 'submission_reviewed',
+      copy: 'submission_reviewed',
+      params: { enigma: 'Historia', percentage: 50 },
+    })
 
-    expect(mocks.notificationCreate.mock.calls[0][0].data.title).toBe('Nueva invitación')
+    expect(mocks.notificationCreate.mock.calls[0][0].data.title).toBe('Entrega revisada')
   })
 
   it('respeta el texto libre que escribe una persona', async () => {
     await notify({
       userId: USER,
-      type: 'join_rejected',
-      copy: 'join_rejected',
-      params: { class: '1º ESO' },
-      messageOverride: 'Este grupo ya está completo',
+      type: 'submission_reviewed',
+      copy: 'submission_reviewed',
+      params: { enigma: 'El mapa', percentage: 100 },
+      messageOverride: 'Muy buen trabajo',
     })
 
-    expect(mocks.notificationCreate.mock.calls[0][0].data.message).toBe('Este grupo ya está completo')
+    expect(mocks.notificationCreate.mock.calls[0][0].data.message).toBe('Muy buen trabajo')
   })
 
   it('no crea nada si ya existe un aviso con la misma clave', async () => {
@@ -137,7 +142,12 @@ describe('notify', () => {
   })
 
   it('no manda correo si no se pide', async () => {
-    await notify({ userId: USER, type: 'join_accepted', copy: 'join_accepted', params: { class: 'C' } })
+    await notify({
+      userId: USER,
+      type: 'submission_reviewed',
+      copy: 'submission_reviewed',
+      params: { enigma: 'E', percentage: 100 },
+    })
     expect(mocks.sendNotificationEmail).not.toHaveBeenCalled()
   })
 
@@ -146,20 +156,20 @@ describe('notify', () => {
 
     await notify({
       userId: USER,
-      type: 'join_accepted',
-      copy: 'join_accepted',
-      params: { class: 'Turma A' },
-      actionUrl: '/alumno/clases/c1',
+      type: 'submission_reviewed',
+      copy: 'submission_reviewed',
+      params: { enigma: 'O mapa', percentage: 100 },
+      actionUrl: '/alumno/misiones/m1',
       alsoByEmail: true,
-      emailAction: 'go_to_class',
+      emailAction: 'view_mission',
     })
 
     const [to, language, payload] = mocks.sendNotificationEmail.mock.calls[0]
     expect(to).toBe('alumna@example.com')
     expect(language).toBe('pt')
-    expect(payload.title).toBe('Pedido aceite')
-    expect(payload.actionUrl).toBe('https://itakai.es/alumno/clases/c1')
-    expect(payload.actionLabel).toBe('Ir para a turma')
+    expect(payload.title).toBe('Entrega revista')
+    expect(payload.actionUrl).toBe('https://itakai.es/alumno/misiones/m1')
+    expect(payload.actionLabel).toBe('Ver a missão')
   })
 
   it('no manda correo a quien lo ha desactivado, pero sí crea el aviso interno', async () => {
@@ -167,9 +177,9 @@ describe('notify', () => {
 
     const result = await notify({
       userId: USER,
-      type: 'join_accepted',
-      copy: 'join_accepted',
-      params: { class: 'C' },
+      type: 'submission_reviewed',
+      copy: 'submission_reviewed',
+      params: { enigma: 'E', percentage: 100 },
       alsoByEmail: true,
     })
 
@@ -182,9 +192,9 @@ describe('notify', () => {
 
     await notify({
       userId: USER,
-      type: 'join_accepted',
-      copy: 'join_accepted',
-      params: { class: 'C' },
+      type: 'submission_reviewed',
+      copy: 'submission_reviewed',
+      params: { enigma: 'E', percentage: 100 },
       alsoByEmail: true,
     })
 
@@ -198,9 +208,9 @@ describe('notify', () => {
 
     const result = await notify({
       userId: USER,
-      type: 'join_accepted',
-      copy: 'join_accepted',
-      params: { class: 'C' },
+      type: 'submission_reviewed',
+      copy: 'submission_reviewed',
+      params: { enigma: 'E', percentage: 100 },
       alsoByEmail: true,
     })
 
@@ -212,7 +222,12 @@ describe('notify', () => {
   it('no crea nada si el destinatario ya no existe', async () => {
     mocks.userFindUnique.mockResolvedValue(null)
 
-    const result = await notify({ userId: USER, type: 'join_accepted', copy: 'join_accepted', params: { class: 'C' } })
+    const result = await notify({
+      userId: USER,
+      type: 'submission_reviewed',
+      copy: 'submission_reviewed',
+      params: { enigma: 'E', percentage: 100 },
+    })
 
     expect(result).toBeNull()
     expect(mocks.notificationCreate).not.toHaveBeenCalled()

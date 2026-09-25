@@ -24,7 +24,7 @@
           </span>
         </button>
       </div>
-      <div v-if="view === 'articulos'" class="flex flex-shrink-0 gap-2">
+      <div v-if="view === 'articulos' && !props.readonly" class="flex flex-shrink-0 gap-2">
         <Button variant="outline" :icon-left="SparklesIcon" @click="showLibrary = true">
           {{ t('teacher.classes.detail.shop.library_button') }}
         </Button>
@@ -34,21 +34,24 @@
       </div>
     </div>
 
+    <InfoNote v-if="props.readonly">{{ t('teacher.classes.detail.read_only_notice') }}</InfoNote>
+
     <!-- Vista: Artículos -->
     <template v-if="view === 'articulos'">
-      <div
-        v-if="loading"
-        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
-      >
+      <div v-if="loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
         <IconCardSkeleton v-for="n in 6" :key="n" />
       </div>
       <EmptyState
         v-else-if="items.length === 0"
         :icon="ShoppingBagIcon"
         :title="t('teacher.classes.detail.shop.empty_title')"
-        :description="t('teacher.classes.detail.shop.empty_description')"
+        :description="
+          props.readonly
+            ? t('teacher.classes.detail.shop.empty_description_readonly')
+            : t('teacher.classes.detail.shop.empty_description')
+        "
       >
-        <template #action>
+        <template v-if="!props.readonly" #action>
           <Button variant="primary" :icon-left="PlusIcon" @click="openNew">
             {{ t('teacher.classes.detail.shop.new_item') }}
           </Button>
@@ -65,6 +68,7 @@
               : t('teacher.classes.detail.shop.type_reward')
           "
           :faded="!item.active || (isPower(item) && !manaEnabled)"
+          :clickable="!props.readonly"
           @click="openEdit(item)"
         >
           <template #chip>
@@ -176,12 +180,7 @@
               <template #badge>
                 <!-- Solo mostrar maná cuando hay coste (uso de poder); los canjes de
                      recompensas no gastan maná, así que omitimos el badge. -->
-                <ManaBadge
-                  v-if="u.manaCost > 0"
-                  :amount="-u.manaCost"
-                  size="sm"
-                  variant="plain"
-                />
+                <ManaBadge v-if="u.manaCost > 0" :amount="-u.manaCost" size="sm" variant="plain" />
               </template>
             </ShopHistoryRow>
           </ul>
@@ -425,7 +424,9 @@
         >
           <div class="absolute inset-0 bg-black/50" @click="pendingDelete = null" />
           <div class="relative bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl text-center">
-            <div class="w-14 h-14 rounded-full bg-red/10 flex items-center justify-center mx-auto mb-4">
+            <div
+              class="w-14 h-14 rounded-full bg-red/10 flex items-center justify-center mx-auto mb-4"
+            >
               <TrashIcon class="w-7 h-7 text-red" />
             </div>
             <h3 class="text-lg font-bold text-navy-700">
@@ -506,7 +507,9 @@
                       {{ t('teacher.classes.detail.shop.usage_single') }}
                     </span>
                     <Tooltip v-if="s.lifeRestore" :text="t('common.resources.lives')">
-                      <span class="inline-flex items-center gap-0.5 text-xs font-semibold text-navy-700">
+                      <span
+                        class="inline-flex items-center gap-0.5 text-xs font-semibold text-navy-700"
+                      >
                         <LifeIcon class="h-3.5 w-3.5" />
                         +{{ s.lifeRestore }}
                       </span>
@@ -551,8 +554,10 @@ const props = withDefaults(
     /** Si la clase tiene el maná desactivado, los alumnos no verán los poderes
      *  aunque existan en el catálogo del profesor. Lo avisamos visualmente. */
     manaEnabled?: boolean
+    /** Solo ver: el catálogo y el historial, sin crear ni cambiar artículos. */
+    readonly?: boolean
   }>(),
-  { manaEnabled: true }
+  { manaEnabled: true, readonly: false }
 )
 
 const { t, locale } = useI18n()
@@ -656,6 +661,7 @@ async function addSuggestion(s: ShopSuggestion) {
 }
 
 function openNew() {
+  if (props.readonly) return
   editingId.value = null
   Object.assign(form, {
     name: '',
@@ -670,6 +676,7 @@ function openNew() {
 }
 
 function openEdit(item: ShopItem) {
+  if (props.readonly) return
   editingId.value = item.id
   Object.assign(form, {
     name: item.name,

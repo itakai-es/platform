@@ -1,10 +1,12 @@
 <template>
   <div
-    class="group relative flex cursor-pointer flex-col rounded-2xl bg-white p-5 shadow-sm transition-shadow duration-200 hover:shadow-md"
+    class="group relative flex flex-col rounded-2xl bg-white p-5 shadow-sm transition-shadow duration-200 hover:shadow-md"
+    :class="props.readonly ? 'cursor-default' : 'cursor-pointer'"
     @click="$emit('click')"
   >
     <!-- Botón editar (esquina superior derecha) -->
     <button
+      v-if="!props.readonly"
       type="button"
       class="absolute right-3 top-3 z-10 rounded-full p-1.5 text-navy-700/50 opacity-0 transition-opacity hover:bg-gray-100 hover:text-navy-700 group-hover:opacity-100"
       :title="t('teacher.classes.detail.behaviors.edit_aria')"
@@ -69,8 +71,10 @@ const props = withDefaults(
     xpEnabled?: boolean
     coinsEnabled?: boolean
     livesEnabled?: boolean
+    /** Solo se ve: sin editar ni aplicar. */
+    readonly?: boolean
   }>(),
-  { xpEnabled: true, coinsEnabled: true, livesEnabled: true }
+  { xpEnabled: true, coinsEnabled: true, livesEnabled: true, readonly: false }
 )
 defineEmits<{ click: []; edit: [] }>()
 

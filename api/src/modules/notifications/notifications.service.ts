@@ -9,6 +9,7 @@ import {
   renderNotificationCopy,
   type EmailActionKey,
   type NotificationCopyKey,
+  type NotificationParam,
 } from './notifications.messages.js'
 
 /**
@@ -41,7 +42,7 @@ export interface NotifyInput {
   /** Clave del catálogo de textos; se traduce al idioma del destinatario. */
   copy: NotificationCopyKey
   /** Valores de los `{parametros}` del texto. */
-  params?: Record<string, string | number>
+  params?: Record<string, NotificationParam>
   /**
    * Texto libre que sustituye al del catálogo. Solo para lo que escribe una
    * persona (el motivo con el que un profesor rechaza una solicitud): no se
@@ -109,12 +110,10 @@ async function loadRecipient(userId: string): Promise<NotificationRecipient | nu
 }
 
 /**
- * ¿Se le puede escribir a este usuario?
- *
- * Hoy `User.email` es obligatorio y único, así que siempre es que sí. Cuando
- * existan las cuentas de menores sin correo (punto 9), esas cuentas llevarán una
- * dirección interna no entregable y este es el único sitio que hay que enseñar a
- * reconocerla: el resto del sistema ya solo crea avisos internos.
+ * ¿Se le puede escribir a este usuario? Una cuenta sin correo (la que entra con
+ * usuario) no recibe ninguno: sus avisos se quedan dentro de la aplicación. Se
+ * descartan también las direcciones internas `*.invalid`, que existen solo para
+ * los datos de prueba.
  */
 function isDeliverableEmail(email: string | null | undefined): email is string {
   if (!email) return false

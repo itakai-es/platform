@@ -1,5 +1,10 @@
 import { prisma } from '../../config/database.js'
-import { hashPassword, verifyPassword } from '../../utils/password.js'
+import { verifyPassword } from '../../utils/password.js'
+import { ForbiddenError, NotFoundError, ValidationError } from '../../utils/errors.js'
+import { normalizeEmail } from '../../utils/identity.js'
+import { changeOwnPassword } from '../../utils/password-change.js'
+import { privateUploadResolver } from '../storage/storage.service.js'
+import { deleteUserAccount } from './account-deletion.service.js'
 
 function parseUserAgent(userAgent: string): { browser: string; os: string; device: 'desktop' | 'mobile' | 'tablet' } {
   const ua = userAgent.toLowerCase()
@@ -79,6 +84,8 @@ export class ProfileService {
       profile: {
         id: user.id,
         email: user.email,
+        username: user.username,
+        accountType: user.accountType,
         name: user.name,
         role: user.role,
         security: {
@@ -102,37 +109,61 @@ export class ProfileService {
   }
 
   /**
-   * Change user password
+   * Cambio de contraseña del dueño de la cuenta. El camino es el mismo para
+   * todos (utils/password-change.ts): la sesión que lo pide sigue abierta y las
+   * demás se cierran.
    */
-  async changePassword(userId: string, data: { currentPassword: string; newPassword: string }) {
-    const user = await prisma.user.findUnique({ where: { id: userId } })
-    if (!user) throw new Error('Usuario no encontrado')
-
-    const isValid = await verifyPassword(data.currentPassword, user.passwordHash)
-    if (!isValid) throw new Error('Contraseña actual incorrecta')
-
-    const newHash = await hashPassword(data.newPassword)
-    await prisma.user.update({
-      where: { id: userId },
-      data: { passwordHash: newHash },
-    })
-
-    return { success: true, message: 'Contraseña actualizada correctamente' }
+  async changePassword(
+    userId: string,
+    data: { currentPassword: string; newPassword: string },
+    currentTokenFamily?: string
+  ) {
+    return changeOwnPassword(userId, data, { keepSessionFamily: currentTokenFamily })
   }
 
   /**
-   * Change user email
+   * Change user email. Exige la contraseña actual: el correo es con lo que se
+   * entra y se recupera la cuenta, así que cambiarlo pide lo mismo que cambiar
+   * la contraseña. Una cuenta que solo entra con Google no tiene contraseña y su
+   * correo es el de Google: antes tiene que crearse una con «He olvidado mi
+   * contraseña».
    */
-  async changeEmail(userId: string, data: { newEmail: string }) {
-    // Check if email is already in use
-    const existing = await prisma.user.findUnique({ where: { email: data.newEmail } })
+  async changeEmail(userId: string, data: { newEmail: string; password?: string }) {
+    const user = await prisma.user.findUnique({ where: { id: userId } })
+    if (!user) throw new NotFoundError('Usuario no encontrado')
+
+    // Una cuenta gestionada no tiene correo y no puede ponerse uno: el correo es
+    // con lo que se recupera la cuenta y, en estas, eso lo lleva el profesorado.
+    if (user.accountType === 'managed') {
+      throw new ForbiddenError(
+        'Tu cuenta la gestiona tu profesorado y no puede tener correo. Pídeselo a quien te la creó.',
+        'MANAGED_ACCOUNT'
+      )
+    }
+
+    if (!user.passwordHash) {
+      throw new ValidationError(
+        'Tu cuenta entra con Google y no tiene contraseña. Crea una desde «¿Olvidaste tu contraseña?» para poder cambiar el correo.',
+        'PASSWORD_NOT_SET'
+      )
+    }
+    if (!data.password) {
+      throw new ValidationError('Escribe tu contraseña actual para cambiar el correo', 'PASSWORD_REQUIRED')
+    }
+    if (!(await verifyPassword(data.password, user.passwordHash))) {
+      throw new ValidationError('Contraseña actual incorrecta', 'INVALID_PASSWORD')
+    }
+
+    // El correo se guarda en minúsculas, así que la comprobación va sobre lo mismo.
+    const newEmail = normalizeEmail(data.newEmail)
+    const existing = await prisma.user.findUnique({ where: { email: newEmail } })
     if (existing && existing.id !== userId) {
-      throw new Error('Este email ya está en uso')
+      throw new ValidationError('Este email ya está en uso', 'EMAIL_IN_USE')
     }
 
     await prisma.user.update({
       where: { id: userId },
-      data: { email: data.newEmail },
+      data: { email: newEmail },
     })
 
     return { success: true, message: 'Email actualizado correctamente' }
@@ -267,7 +298,8 @@ export class ProfileService {
                 narrative: true,
                 schedule: true,
                 archived: true,
-                invitationCode: true,
+                // Sin el código de invitación: es de quien administra la clase, y
+                // aquí entran también las matrículas de vista previa.
                 teacherId: true,
                 createdAt: true,
                 updatedAt: true,
@@ -302,11 +334,22 @@ export class ProfileService {
 
     if (!user) throw new Error('Usuario no encontrado')
 
+    // Los ficheros de las entregas y de los documentos de misión no se sirven
+    // por su dirección: en la exportación va la de la descarga que comprueba el
+    // acceso, para que el enlace lleve a algún sitio.
+    const privateUploadOf = await privateUploadResolver()
+    const withFileRoute = <T extends { id: string; fileUrl: string | null }>(
+      row: T,
+      route: string
+    ) => (privateUploadOf(row.fileUrl) ? { ...row, fileUrl: `${route}/${row.id}` } : row)
+
     return {
       exportedAt: new Date().toISOString(),
       account: {
         id: user.id,
         email: user.email,
+        username: user.username,
+        accountType: user.accountType,
         name: user.name,
         role: user.role,
         isOnboarded: user.isOnboarded,
@@ -317,7 +360,13 @@ export class ProfileService {
       settings: user.settings,
       sessions: user.refreshTokens,
       teacherData: {
-        classes: user.teacherClasses,
+        classes: user.teacherClasses.map(cls => ({
+          ...cls,
+          missions: cls.missions.map(mission => ({
+            ...mission,
+            documents: mission.documents.map(d => withFileRoute(d, '/files/documents')),
+          })),
+        })),
         createdBadges: user.createdBadges,
         sentInvitations: user.sentInvitations,
       },
@@ -326,7 +375,7 @@ export class ProfileService {
         earnedBadges: user.earnedBadges,
         missionProgress: user.missionProgress,
         enigmaProgress: user.enigmaProgress,
-        submissions: user.submissions,
+        submissions: user.submissions.map(s => withFileRoute(s, '/files/submissions')),
         joinRequests: user.joinRequests,
         receivedInvitations: user.receivedInvitations,
       },
@@ -345,11 +394,21 @@ export class ProfileService {
     const user = await prisma.user.findUnique({ where: { id: userId } })
     if (!user) throw new Error('Usuario no encontrado')
 
+    // Una cuenta gestionada no se borra a sí misma: quien ejerce ese derecho es
+    // su profesorado o quien administra la instancia.
+    if (user.accountType === 'managed') {
+      throw new ForbiddenError(
+        'Tu cuenta la gestiona tu profesorado y no puedes borrarla. Pídeselo a quien te la creó.',
+        'MANAGED_ACCOUNT'
+      )
+    }
+
     const isValid = await verifyPassword(password, user.passwordHash)
     if (!isValid) throw new Error('Contraseña incorrecta')
 
-    // Cascade delete handles related records
-    await prisma.user.delete({ where: { id: userId } })
+    // Lo suyo se borra en cascada; antes, sus clases pasan a otra persona y sus
+    // insignias a quien corresponda, o no se borra nada (ver account-deletion.service).
+    await deleteUserAccount(userId, { actorId: userId, bySelf: true })
 
     return { success: true, message: 'Cuenta eliminada correctamente' }
   }

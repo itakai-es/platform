@@ -1,5 +1,6 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+  <!-- pt-16: franja superior libre para idioma y accesibilidad (ver layout auth). -->
+  <div class="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-16 pb-6 sm:pb-8">
     <div
       class="w-full max-w-7xl flex flex-col lg:flex-row lg:justify-between lg:items-center gap-6 sm:gap-8 lg:gap-16"
     >
@@ -57,8 +58,17 @@
               </p>
             </div>
 
+            <!-- Quien entra con usuario y no tiene correo no puede recuperarla aquí -->
+            <div class="forgot-note mb-3 sm:mb-4">
+              <InfoNote>{{ $t('auth.forgot_password.no_email_note') }}</InfoNote>
+            </div>
+
             <!-- Formulario -->
-            <form class="space-y-3 sm:space-y-4 forgot-form" @submit.prevent="handleForgotPassword">
+            <form
+              class="space-y-3 sm:space-y-4 forgot-form"
+              novalidate
+              @submit.prevent="handleForgotPassword"
+            >
               <!-- Email -->
               <FormField
                 id="email"
@@ -193,6 +203,11 @@ async function handleForgotPassword() {
 
     if (!email.value) {
       errorMessage.value = t('auth.forgot_password.validation.email_required')
+      return
+    }
+    // Sin la validación del navegador (novalidate), el formato se mira aquí.
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) {
+      errorMessage.value = t('auth.forgot_password.validation.email_invalid')
       return
     }
 
@@ -370,6 +385,15 @@ async function handleForgotPassword() {
   /* Links blancos */
   .forgot-form a {
     color: white !important;
+  }
+
+  /* La nota sin correo: su caja e icono, en blanco translúcido como el texto */
+  .forgot-note :deep(p) {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+  }
+
+  .forgot-note :deep(svg) {
+    color: rgba(255, 255, 255, 0.6) !important;
   }
 }
 

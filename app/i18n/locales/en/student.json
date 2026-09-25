@@ -2,24 +2,24 @@
   "student": {
     "dashboard": {
       "meta": {
-        "title": "My Dashboard | ITAKAI",
+        "title": "My dashboard | ITAKAI",
         "description": "Student main dashboard. Review your progress, latest missions, and XP stats."
       },
       "welcome": "Welcome, {name}!",
       "welcome_fallback_name": "Student",
       "subtitle": "Continue your learning journey and complete new missions",
       "stats": {
-        "classes_enrolled": "Classes Enrolled",
-        "missions_completed": "Missions Completed",
-        "badges_earned": "Badges Earned"
+        "classes_enrolled": "Classes enrolled",
+        "missions_completed": "Missions completed",
+        "badges_earned": "Badges earned"
       },
       "my_classes": {
-        "title": "My Classes",
+        "title": "My classes",
         "view_all": "View all",
         "empty": "You are not enrolled in any class yet"
       },
       "latest_missions": {
-        "title": "Latest Missions",
+        "title": "Latest missions",
         "view_all": "View all",
         "empty": "No recent missions. Explore new missions!"
       },
@@ -35,10 +35,10 @@
     },
     "missions": {
       "meta": {
-        "title": "My Missions | ITAKAI",
+        "title": "My missions | ITAKAI",
         "description": "Explore and complete educational missions. Earn XP and unlock new challenges."
       },
-      "page_title": "My Missions",
+      "page_title": "My missions",
       "page_subtitle": "Explore and complete missions to gain experience",
       "empty": {
         "title": "No missions",
@@ -59,13 +59,13 @@
         "bloqueada": "Locked",
         "pendiente": "Pending",
         "expirada": "Expired",
-        "en_progreso": "In Progress"
+        "en_progreso": "In progress"
       }
     },
     "mission_detail": {
       "meta": {
         "title": "{title} | ITAKAI",
-        "title_loading": "Mission Detail | ITAKAI",
+        "title_loading": "Mission detail | ITAKAI",
         "description_fallback": "Mission detail on ITAKAI"
       },
       "error": {
@@ -91,10 +91,10 @@
     },
     "classes": {
       "meta": {
-        "title": "My Classes | ITAKAI",
+        "title": "My classes | ITAKAI",
         "description": "Access your enrolled classes, review your progress, and discover new assigned missions."
       },
-      "page_title": "My Classes",
+      "page_title": "My classes",
       "page_subtitle": "Classes you are enrolled in",
       "join_class_button": "Join class",
       "empty": {
@@ -116,11 +116,11 @@
           "tienda": "Shop"
         },
         "progress": {
-          "title": "My Progress",
+          "title": "My progress",
           "completion_rate": "Completed",
-          "missions_completed": "Missions Completed",
+          "missions_completed": "Missions completed",
           "xp_total": "Total XP",
-          "badges_earned": "Badges Earned"
+          "badges_earned": "Badges earned"
         },
         "ai_assistant": {
           "subtitle": "Your guide in this class",
@@ -199,15 +199,19 @@
           "bought_toast": "You bought \"{name}\"!",
           "used_toast": "You used \"{name}\"!",
           "mana_after": "Mana after use"
+        },
+        "teachers": {
+          "title": "Teachers",
+          "empty": "This class has no teachers yet."
         }
       }
     },
     "achievements": {
       "meta": {
-        "title": "My Badges | ITAKAI",
+        "title": "My badges | ITAKAI",
         "description": "Discover all your badges earned by completing missions and special achievements."
       },
-      "page_title": "My Badges",
+      "page_title": "My badges",
       "page_subtitle": "Rewards earned by completing missions and achievements",
       "filter": {
         "search_placeholder": "Search badges...",
@@ -240,30 +244,9 @@
         "close": "Close"
       }
     },
-    "leaderboard": {
-      "meta": {
-        "title": "Ranking | ITAKAI",
-        "description": "The student ranking is available within each class."
-      },
-      "page_title": "Leaderboard",
-      "page_subtitle": "Check the global ranking and compare your progress with the other students.",
-      "pick_class": "Select a class",
-      "friends_soon_title": "Friends ranking coming soon",
-      "friends_soon_description": "The social side isn't connected yet. In the meantime, you can use the global ranking or your class rankings.",
-      "choose_class_title": "Choose a class",
-      "choose_class_description": "Select a class to see your position and its internal ranking.",
-      "empty_class_title": "No ranking available",
-      "empty_class_description": "There isn't enough data yet to build this class's ranking.",
-      "empty_global_title": "No ranking data",
-      "empty_global_description": "There isn't enough activity yet to show a global leaderboard.",
-      "global_podium": "Global podium",
-      "your_position": "Your position",
-      "rest": "Rest of the leaderboard",
-      "by_class": "By class"
-    },
     "ai_assistant": {
       "meta": {
-        "title": "AI Assistant | ITAKAI",
+        "title": "AI assistant | ITAKAI",
         "description": "Chat with your AI assistant to resolve questions about missions, progress, and the platform."
       },
       "suggestions": {
@@ -275,27 +258,22 @@
     },
     "profile": {
       "meta": {
-        "title": "My Profile | ITAKAI",
+        "title": "My profile | ITAKAI",
         "description": "Manage your student profile, configure security, and personalize your experience."
       },
       "breadcrumb_home": "Home",
       "breadcrumb_profile": "My profile",
-      "page_title": "My Profile",
+      "page_title": "My profile",
       "tabs": {
         "security": "Security",
         "settings": "Settings"
       },
+      "account": {
+        "title": "Your account",
+        "username": "Username",
+        "managed_note": "Your teachers manage this account: you sign in with your username, it has no email and it cannot be deleted from here. Ask them for any change."
+      },
       "security": {
-        "password_title": "Password",
-        "current_password": "Current password",
-        "new_password": "New password",
-        "confirm_password": "Confirm password",
-        "update_button": "Update",
-        "passwords_mismatch": "Passwords do not match",
-        "password_too_short": "Password must be at least 6 characters",
-        "email_title": "Email",
-        "new_email_placeholder": "New email",
-        "email_invalid": "Enter a valid email",
         "sessions_title": "Sessions",
         "close_all_sessions": "Close all",
         "current_session": "Current",
@@ -304,9 +282,9 @@
       "settings": {
         "theme_title": "Theme",
         "theme_description": "Choose the visual style of the platform",
-        "theme_college": "School Mode",
+        "theme_college": "School mode",
         "theme_college_desc": "Gamified visual",
-        "theme_university": "University Mode",
+        "theme_university": "University mode",
         "theme_university_desc": "Professional visual",
         "language_title": "Language",
         "language_updated": "Language updated",
@@ -339,15 +317,16 @@
     "components": {
       "mission_card": {
         "progress": "Progress",
-        "view_mission": "View Mission"
+        "view_mission": "View mission"
       },
       "recent_activity_card": {
-        "title": "Recent Activity",
+        "title": "Recent activity",
         "empty": "No recent activity",
-        "user_fallback": "User"
+        "user_fallback": "User",
+        "by_actor": "By {name}"
       },
       "submission_modal": {
-        "title": "Submit Enigma",
+        "title": "Submit enigma",
         "file_label": "Submission file",
         "file_required": "*",
         "drag_hint": "Drag your file here or click to select",
@@ -365,7 +344,7 @@
         "empty_title": "No content",
         "empty_student": "The teacher has not added the guide for this class yet.",
         "empty_teacher": "You have not added the guide for this class yet.",
-        "add_guide_button": "Add Guide",
+        "add_guide_button": "Add guide",
         "last_updated": "Last updated: {date}"
       },
       "rarity_badge": {
@@ -375,16 +354,16 @@
         "legendaria": "Legendary"
       },
       "class_ranking_section": {
-        "podium_title": "Champions Podium",
+        "podium_title": "Champions podium",
         "stats_title": "Statistics",
-        "rest_title": "Rest of Ranking",
+        "rest_title": "Rest of ranking",
         "level_abbr": "Lv.",
         "missions_suffix": "missions",
         "you_badge": "You",
         "avg_xp": "Average XP",
-        "avg_progress": "Average Progress",
-        "avg_missions": "Average Missions",
-        "total_xp": "Total Class XP"
+        "avg_progress": "Average progress",
+        "avg_missions": "Average missions",
+        "total_xp": "Total class XP"
       }
     }
   }

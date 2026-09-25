@@ -12,6 +12,8 @@
 #
 # Guardas que aplican (cada una viene de un incidente real):
 #   - Aborta si hay cambios sin commitear (no subir trabajo a medias a prod).
+#   - Aborta si scripts/release-check.py falla (textos legales con marcadores
+#     pendientes, por ejemplo).
 #   - Aborta si app/.env tiene finales de línea CRLF (un \r colado en
 #     NUXT_PUBLIC_GOOGLE_CLIENT_ID rompió el login con Google el 2026-07-28).
 #   - Fuerza NUXT_PUBLIC_API_BASE de prod (el contenedor dev inyecta la URL dev).
@@ -52,6 +54,9 @@ if grep -q $'\r' app/.env; then
   fail "app/.env tiene CRLF (¿editado desde Windows?). Arréglalo con: sed -i 's/\\r\$//' app/.env"
 fi
 ok "app/.env sin CRLF."
+
+log "Comprobando que la versión se puede publicar…"
+python3 scripts/release-check.py || fail "La versión no se puede publicar todavía (ver arriba)."
 
 docker inspect itakai-app-dev --format '{{.State.Status}}' 2>/dev/null | grep -q running \
   || fail "El contenedor itakai-app-dev no está corriendo."

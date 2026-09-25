@@ -1,20 +1,48 @@
 import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
 import { prisma } from '../../config/database.js'
 import { z, ZodError } from 'zod'
-import { calculateMissionTotalXP } from '../../utils/xp-calculator.js'
 import os from 'os'
 import { execSync } from 'child_process'
 import { fetchSystemLogs, logServiceHealthResults } from './system-log.service.js'
 import { getAiSettings, getAdminSettings, updateSection } from '../settings/settings.service.js'
 import { SETTINGS_SECTIONS, type SettingsSection } from '../settings/settings.types.js'
 import { openAiEndpoint } from '../ai/providers/openai-endpoint.js'
+import { rethrowHttpError, ValidationError } from '../../utils/errors.js'
+import { ENROLL_TX_OPTIONS, enrollStudent } from '../../utils/enrollment.js'
+import { USERNAME_MAX_LENGTH, USERNAME_MIN_LENGTH } from '../../utils/identity.js'
+import {
+  createManagedStudent,
+  resetManagedStudentPassword,
+} from '../teachers/managed-students.service.js'
+import { listClassTeachers, transferClass } from '../teachers/class-teachers.service.js'
+import {
+  AccountDeletionBlockedError,
+  accountDeletionCheck,
+  deleteUserAccount,
+} from '../profile/account-deletion.service.js'
+import {
+  adminUserCard,
+  classListQuerySchema,
+  listAdminClasses,
+  listAdminMissions,
+  listAdminUsers,
+  missionListQuerySchema,
+  userListQuerySchema,
+} from './admin-lists.service.js'
 
-const userFiltersSchema = z.object({
-  role: z.string().optional(),
-  status: z.string().optional(),
-  search: z.string().optional(),
-  page: z.string().optional(),
-  limit: z.string().optional(),
+const homeClassSchema = z.object({
+  // Cadena vacía o nulo: se queda sin clase de origen.
+  classId: z.string().min(1).nullable().optional(),
+})
+
+const createManagedUserSchema = z.object({
+  classId: z.string().min(1, 'Elige la clase de origen'),
+  name: z.string().min(2, 'El nombre debe tener al menos 2 caracteres').max(120),
+  username: z.string().min(USERNAME_MIN_LENGTH).max(USERNAME_MAX_LENGTH).optional(),
+})
+
+const transferClassSchema = z.object({
+  userId: z.string().min(1, 'Elige a quién pasar la clase'),
 })
 
 type ServiceStatus = 'operational' | 'degraded' | 'down'
@@ -224,70 +252,16 @@ export async function adminRoutes(fastify: FastifyInstance) {
     }
   })
 
-  // Get users
+  // Usuarios de la instancia, una página cada vez: búsqueda, filtros y orden
+  // van en la consulta (ver admin-lists.service.ts).
   fastify.get('/users', async (request: FastifyRequest<{ Querystring: Record<string, string> }>, reply: FastifyReply) => {
     try {
-      const filters = userFiltersSchema.parse(request.query)
-      const page = parseInt(filters.page || '1')
-      const limit = parseInt(filters.limit || '20')
-      const skip = (page - 1) * limit
-
-      const whereClause: any = {}
-
-      if (filters.role && filters.role !== 'all') {
-        whereClause.role = filters.role
-      }
-
-      if (filters.status && filters.status !== 'all') {
-        whereClause.status = filters.status
-      }
-
-      if (filters.search) {
-        whereClause.OR = [
-          { name: { contains: filters.search, mode: 'insensitive' } },
-          { email: { contains: filters.search, mode: 'insensitive' } },
-        ]
-      }
-
-      const [users, total] = await Promise.all([
-        prisma.user.findMany({
-          where: whereClause,
-          skip,
-          take: limit,
-          orderBy: { createdAt: 'desc' },
-          include: {
-            refreshTokens: {
-              orderBy: { createdAt: 'desc' },
-              take: 1,
-              select: { createdAt: true },
-            },
-            teacherClasses: { select: { id: true } },
-            enrollments: { where: { isPreview: false }, select: { id: true } },
-          },
-        }),
-        prisma.user.count({ where: whereClause }),
-      ])
-
-      return {
-        users: users.map((u) => ({
-          id: u.id,
-          name: u.name,
-          email: u.email,
-          role: u.role,
-          status: u.status,
-          createdAt: u.createdAt,
-          lastLogin: u.refreshTokens[0]?.createdAt || null,
-          classCount: u.role === 'teacher' ? u.teacherClasses.length : u.enrollments.length,
-        })),
-        total,
-        page,
-        limit,
-        totalPages: Math.ceil(total / limit),
-      }
+      return await listAdminUsers(userListQuerySchema.parse(request.query))
     } catch (error) {
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
+      request.log.error(error, 'Error in /admin/users')
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
@@ -302,17 +276,30 @@ export async function adminRoutes(fastify: FastifyInstance) {
         return reply.status(400).send({ message: 'No puedes suspenderte a ti mismo' })
       }
 
-      const user = await prisma.user.update({
-        where: { id: userId },
-        data: { status: 'suspended' },
-      })
+      const target = await prisma.user.findUnique({ where: { id: userId }, select: { role: true } })
+      if (!target) {
+        return reply.status(404).send({ message: 'Usuario no encontrado' })
+      }
+      // A otro administrador no se le suspende desde el panel.
+      if (target.role === 'admin') {
+        return reply.status(403).send({ message: 'No se puede suspender a otro administrador' })
+      }
 
+      // Suspender cierra también sus sesiones: no puede renovar el acceso con las que tenía abiertas.
+      await prisma.$transaction([
+        prisma.user.update({
+          where: { id: userId },
+          data: { status: 'suspended' },
+        }),
+        prisma.refreshToken.updateMany({
+          where: { userId, isRevoked: false },
+          data: { isRevoked: true },
+        }),
+      ])
+
+      // La tarjeta entera, como en el listado: el panel la sustituye tal cual.
       return {
-        user: {
-          id: user.id,
-          name: user.name,
-          status: user.status,
-        },
+        user: await adminUserCard(userId),
         success: true,
         message: 'Usuario suspendido correctamente',
       }
@@ -321,22 +308,156 @@ export async function adminRoutes(fastify: FastifyInstance) {
     }
   })
 
+  // Alta de una cuenta de alumnado sin correo desde el panel. Es el mismo camino
+  // que usa el profesorado, con la clase en el cuerpo: la administración de la
+  // instancia llega a cualquier clase.
+  fastify.post('/users/managed', async (request: FastifyRequest, reply: FastifyReply) => {
+    try {
+      const actor = request.user as { id: string; role: string | null }
+      const data = createManagedUserSchema.parse(request.body)
+      const result = await createManagedStudent(actor, data)
+      return reply.status(201).send(result)
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return reply.status(400).send({ message: error.errors[0]?.message || 'Datos inválidos' })
+      }
+      rethrowHttpError(error)
+      return reply.status(500).send({ message: 'Error interno' })
+    }
+  })
+
+  // Restablecer la contraseña de una cuenta gestionada. La administración de la
+  // instancia es el respaldo del profesorado: llega también a las cuentas que se
+  // han quedado sin clase. La temporal se ve una sola vez, en esta respuesta.
+  fastify.post(
+    '/users/:userId/reset-password',
+    async (request: FastifyRequest<{ Params: { userId: string } }>, reply: FastifyReply) => {
+      try {
+        const actor = request.user as { id: string; role: string | null }
+        const result = await resetManagedStudentPassword(actor, request.params.userId)
+        return result
+      } catch (error) {
+        rethrowHttpError(error)
+        return reply.status(500).send({ message: 'Error interno' })
+      }
+    }
+  )
+
+  // Clase de origen de una cuenta gestionada: desde qué clase la gestiona el
+  // profesorado. Cambiarla es pasar esa responsabilidad a otra clase.
+  fastify.put(
+    '/users/:userId/home-class',
+    async (request: FastifyRequest<{ Params: { userId: string } }>, reply: FastifyReply) => {
+      try {
+        const { userId } = request.params
+        const { classId } = homeClassSchema.parse(request.body)
+
+        const target = await prisma.user.findUnique({
+          where: { id: userId },
+          select: { accountType: true, homeClassId: true },
+        })
+        if (!target) {
+          return reply.status(404).send({ message: 'Usuario no encontrado' })
+        }
+        if (target.accountType !== 'managed') {
+          return reply.status(400).send({
+            message: 'Solo las cuentas que gestiona el profesorado tienen clase de origen',
+            code: 'NOT_A_MANAGED_ACCOUNT',
+          })
+        }
+        let cls: { id: string; name: string } | null = null
+        if (classId) {
+          const found = await prisma.class.findUnique({
+            where: { id: classId },
+            select: { id: true, name: true, archived: true },
+          })
+          if (!found) {
+            return reply.status(404).send({ message: 'Clase no encontrada' })
+          }
+          // Una clase archivada no admite alumnado nuevo, igual que al dar de
+          // alta una cuenta en ella (managed-students.service.ts). Guardar la
+          // que ya tenía, sin cambiar nada, no es un error.
+          if (found.archived) {
+            if (found.id !== target.homeClassId) {
+              throw new ValidationError(
+                'Esta clase está archivada y no admite nuevas cuentas',
+                'CLASS_ARCHIVED'
+              )
+            }
+            return {
+              user: { id: userId, homeClassId: found.id, homeClassName: found.name },
+              success: true,
+              message: 'Clase de origen actualizada correctamente',
+            }
+          }
+          cls = { id: found.id, name: found.name }
+        }
+
+        const user = await prisma.$transaction(async tx => {
+          const updated = await tx.user.update({
+            where: { id: userId },
+            data: { homeClassId: cls?.id ?? null },
+            select: { id: true, homeClassId: true, homeClass: { select: { name: true } } },
+          })
+
+          // El profesorado llega a la cuenta por la clase de origen, y para eso el
+          // alumno tiene que estar matriculado en ella: al mover la cuenta a otra
+          // clase se matricula también, o la cuenta se quedaría sin nadie que la
+          // atienda salvo la administración de la instancia.
+          if (cls) {
+            const enrolled = await tx.classEnrollment.findUnique({
+              where: { studentId_classId: { studentId: userId, classId: cls.id } },
+              select: { id: true },
+            })
+            if (!enrolled) {
+              await enrollStudent(tx, {
+                studentId: userId,
+                classId: cls.id,
+                className: cls.name,
+              })
+            }
+          }
+
+          return updated
+        }, ENROLL_TX_OPTIONS)
+
+        return {
+          user: {
+            id: user.id,
+            homeClassId: user.homeClassId,
+            homeClassName: user.homeClass?.name ?? null,
+          },
+          success: true,
+          message: 'Clase de origen actualizada correctamente',
+        }
+      } catch (error) {
+        if (error instanceof ZodError) {
+          return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
+        }
+        rethrowHttpError(error)
+        return reply.status(500).send({ message: 'Error interno' })
+      }
+    }
+  )
+
   // Activate user
   fastify.put('/users/:userId/activate', async (request: FastifyRequest<{ Params: { userId: string } }>, reply: FastifyReply) => {
     try {
       const { userId } = request.params
 
-      const user = await prisma.user.update({
+      const target = await prisma.user.findUnique({ where: { id: userId }, select: { id: true } })
+      if (!target) {
+        return reply.status(404).send({ message: 'Usuario no encontrado' })
+      }
+
+      await prisma.user.update({
         where: { id: userId },
         data: { status: 'active' },
       })
 
+      // La tarjeta entera, como en el listado: el panel la sustituye tal cual.
       return {
-        user: {
-          id: user.id,
-          name: user.name,
-          status: user.status,
-        },
+        user: await adminUserCard(userId),
         success: true,
         message: 'Usuario activado correctamente',
       }
@@ -355,13 +476,38 @@ export async function adminRoutes(fastify: FastifyInstance) {
         return reply.status(400).send({ message: 'No puedes eliminarte a ti mismo' })
       }
 
-      await prisma.user.delete({ where: { id: userId } })
+      const target = await prisma.user.findUnique({ where: { id: userId }, select: { id: true } })
+      if (!target) {
+        return reply.status(404).send({ message: 'Usuario no encontrado' })
+      }
+
+      // Sus clases pasan antes a otra persona y sus insignias a quien corresponda;
+      // si alguna clase no tiene a quién pasar, no se borra nada.
+      await deleteUserAccount(userId, { actorId: adminId, bySelf: false })
 
       return { success: true, message: 'Usuario eliminado correctamente' }
     } catch (error) {
+      if (error instanceof AccountDeletionBlockedError) {
+        return reply
+          .status(409)
+          .send({ message: error.message, code: error.code, classes: error.classes })
+      }
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
+
+  // Antes de borrar una cuenta: qué clases pasarían a otra persona y cuáles lo impiden.
+  fastify.get(
+    '/users/:userId/deletion-check',
+    async (request: FastifyRequest<{ Params: { userId: string } }>, reply: FastifyReply) => {
+      const { userId } = request.params
+      const target = await prisma.user.findUnique({ where: { id: userId }, select: { id: true } })
+      if (!target) {
+        return reply.status(404).send({ message: 'Usuario no encontrado' })
+      }
+      return accountDeletionCheck(userId)
+    }
+  )
 
   // Get activities
   fastify.get('/activities', async (request: FastifyRequest<{ Querystring: { period?: string } }>, reply: FastifyReply) => {
@@ -481,54 +627,38 @@ export async function adminRoutes(fastify: FastifyInstance) {
     }
   })
 
-  // Get all classes
-  fastify.get('/classes', async (request: FastifyRequest<{ Querystring: { search?: string; page?: string; limit?: string } }>, reply: FastifyReply) => {
+  // Clases de la instancia, una página cada vez (ver admin-lists.service.ts).
+  // El buscador de clase de origen del panel también pasa por aquí.
+  fastify.get('/classes', async (request: FastifyRequest<{ Querystring: Record<string, string> }>, reply: FastifyReply) => {
     try {
-      const { search, page: pageStr, limit: limitStr } = request.query
-      const page = parseInt(pageStr || '1')
-      const limit = parseInt(limitStr || '20')
-      const skip = (page - 1) * limit
-
-      const where: Record<string, unknown> = {}
-      if (search) {
-        where.OR = [
-          { name: { contains: search, mode: 'insensitive' } },
-          { teacher: { name: { contains: search, mode: 'insensitive' } } },
-        ]
-      }
-
-      const [classes, total] = await Promise.all([
-        prisma.class.findMany({
-          where,
-          skip,
-          take: limit,
-          orderBy: { createdAt: 'desc' },
-          include: {
-            teacher: { select: { name: true } },
-            _count: { select: { enrollments: { where: { isPreview: false } }, missions: true } },
-          },
-        }),
-        prisma.class.count({ where }),
-      ])
-
-      return {
-        classes: classes.map((c) => ({
-          id: c.id,
-          name: c.name,
-          teacherName: c.teacher.name,
-          studentCount: c._count.enrollments,
-          missionCount: c._count.missions,
-          createdAt: c.createdAt,
-        })),
-        total,
-        page,
-        limit,
-        totalPages: Math.ceil(total / limit),
-      }
+      return await listAdminClasses(classListQuerySchema.parse(request.query))
     } catch (error) {
+      if (error instanceof ZodError) {
+        return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
+      }
+      request.log.error(error, 'Error in /admin/classes')
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
+
+  // Profesorado de una clase y traspaso de su propiedad. Quien administra la
+  // instancia es el respaldo cuando en la clase no queda nadie que pueda hacerlo.
+  fastify.get(
+    '/classes/:classId/teachers',
+    async (request: FastifyRequest<{ Params: { classId: string } }>) => {
+      const admin = request.user as { id: string; role: string }
+      return listClassTeachers(admin, request.params.classId)
+    }
+  )
+
+  fastify.post(
+    '/classes/:classId/transfer',
+    async (request: FastifyRequest<{ Params: { classId: string } }>) => {
+      const admin = request.user as { id: string; role: string }
+      const { userId } = transferClassSchema.parse(request.body)
+      return transferClass(admin, request.params.classId, userId)
+    }
+  )
 
   // Get analytics
   fastify.get('/analytics', async (request: FastifyRequest<{ Querystring: { period?: string } }>, reply: FastifyReply) => {
@@ -885,56 +1015,15 @@ export async function adminRoutes(fastify: FastifyInstance) {
     }
   })
 
-  // Get all missions
-  fastify.get('/missions', async (request: FastifyRequest<{ Querystring: { search?: string; page?: string; limit?: string } }>, reply: FastifyReply) => {
+  // Misiones de la instancia, una página cada vez (ver admin-lists.service.ts).
+  fastify.get('/missions', async (request: FastifyRequest<{ Querystring: Record<string, string> }>, reply: FastifyReply) => {
     try {
-      const { search, page: pageStr, limit: limitStr } = request.query
-      const page = parseInt(pageStr || '1')
-      const limit = parseInt(limitStr || '20')
-      const skip = (page - 1) * limit
-
-      const where: Record<string, unknown> = {}
-      if (search) {
-        where.OR = [
-          { title: { contains: search, mode: 'insensitive' } },
-          { class: { name: { contains: search, mode: 'insensitive' } } },
-        ]
-      }
-
-      const [missions, total] = await Promise.all([
-        prisma.mission.findMany({
-          where,
-          skip,
-          take: limit,
-          orderBy: { createdAt: 'desc' },
-          include: {
-            class: { select: { name: true, teacher: { select: { name: true } } } },
-            enigmas: { select: { xpReward: true } },
-            _count: { select: { enigmas: true } },
-          },
-        }),
-        prisma.mission.count({ where }),
-      ])
-
-      return {
-        missions: missions.map((m) => ({
-          id: m.id,
-          title: m.title,
-          className: m.class.name,
-          teacherName: m.class.teacher.name,
-          enigmaCount: m._count.enigmas,
-          rarity: m.rarity,
-          xpReward: calculateMissionTotalXP(m.rarity, m.enigmas.map(e => e.xpReward)),
-          status: m.status,
-          deadline: m.deadline,
-          createdAt: m.createdAt,
-        })),
-        total,
-        page,
-        limit,
-        totalPages: Math.ceil(total / limit),
-      }
+      return await listAdminMissions(missionListQuerySchema.parse(request.query))
     } catch (error) {
+      if (error instanceof ZodError) {
+        return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
+      }
+      request.log.error(error, 'Error in /admin/missions')
       return reply.status(500).send({ message: 'Error interno' })
     }
   })

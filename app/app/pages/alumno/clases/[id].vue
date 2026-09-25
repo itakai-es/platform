@@ -43,7 +43,7 @@
       >
         <template #subtitle>
           {{ classData.teacherName || t('student.classes.detail.teacher_fallback')
-          }}{{ classData.schedule ? ` - ${classData.schedule}` : '' }}
+          }}{{ scheduleSummary ? ` · ${scheduleSummary}` : '' }}
         </template>
         <template
           v-if="classSettings.lives || classSettings.coins || classSettings.mana"
@@ -146,6 +146,12 @@ const {
 
 const { isLoadingClass, error } = storeToRefs(classesStore)
 const { showLevelUpModal, levelUpData } = storeToRefs(classGamificationStore)
+
+// Días y horas de la clase, junto al nombre de quien la imparte.
+const { summarize } = useScheduleSummary()
+const scheduleSummary = computed(() =>
+  summarize(classData.value?.scheduleConfig, classData.value?.schedule).join(' · ')
+)
 const loading = computed(() => isLoadingClass.value)
 
 const tabs = computed(() => {

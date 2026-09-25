@@ -2,24 +2,24 @@
   "student": {
     "dashboard": {
       "meta": {
-        "title": "Mi Inicio | ITAKAI",
+        "title": "Mi inicio | ITAKAI",
         "description": "Inicio principal del estudiante. Revisa tu progreso, últimas misiones y estadísticas de XP."
       },
       "welcome": "¡Bienvenido, {name}!",
       "welcome_fallback_name": "Estudiante",
       "subtitle": "Continúa tu viaje de aprendizaje y completa nuevas misiones",
       "stats": {
-        "classes_enrolled": "Clases Inscritas",
-        "missions_completed": "Misiones Completadas",
-        "badges_earned": "Insignias Conseguidas"
+        "classes_enrolled": "Clases inscritas",
+        "missions_completed": "Misiones completadas",
+        "badges_earned": "Insignias conseguidas"
       },
       "my_classes": {
-        "title": "Mis Clases",
+        "title": "Mis clases",
         "view_all": "Ver todas",
         "empty": "No estás inscrito en ninguna clase todavía"
       },
       "latest_missions": {
-        "title": "Últimas Misiones",
+        "title": "Últimas misiones",
         "view_all": "Ver todas",
         "empty": "No hay misiones recientes. ¡Explora nuevas misiones!"
       },
@@ -35,10 +35,10 @@
     },
     "missions": {
       "meta": {
-        "title": "Mis Misiones | ITAKAI",
+        "title": "Mis misiones | ITAKAI",
         "description": "Explora y completa misiones educativas. Gana XP y desbloquea nuevos desafíos."
       },
-      "page_title": "Mis Misiones",
+      "page_title": "Mis misiones",
       "page_subtitle": "Explora y completa misiones para ganar experiencia",
       "empty": {
         "title": "Sin misiones",
@@ -59,13 +59,13 @@
         "bloqueada": "Bloqueada",
         "pendiente": "Pendiente",
         "expirada": "Expirada",
-        "en_progreso": "En Progreso"
+        "en_progreso": "En progreso"
       }
     },
     "mission_detail": {
       "meta": {
         "title": "{title} | ITAKAI",
-        "title_loading": "Detalle de Misión | ITAKAI",
+        "title_loading": "Detalle de misión | ITAKAI",
         "description_fallback": "Detalle de misión en ITAKAI"
       },
       "error": {
@@ -91,10 +91,10 @@
     },
     "classes": {
       "meta": {
-        "title": "Mis Clases | ITAKAI",
+        "title": "Mis clases | ITAKAI",
         "description": "Accede a tus clases inscritas, revisa el progreso y descubre nuevas misiones asignadas."
       },
-      "page_title": "Mis Clases",
+      "page_title": "Mis clases",
       "page_subtitle": "Clases en las que estás inscrito",
       "join_class_button": "Unirse a clase",
       "empty": {
@@ -116,11 +116,11 @@
           "tienda": "Tienda"
         },
         "progress": {
-          "title": "Mi Progreso",
+          "title": "Mi progreso",
           "completion_rate": "Completado",
-          "missions_completed": "Misiones Completadas",
-          "xp_total": "XP Total",
-          "badges_earned": "Insignias Obtenidas"
+          "missions_completed": "Misiones completadas",
+          "xp_total": "XP total",
+          "badges_earned": "Insignias obtenidas"
         },
         "ai_assistant": {
           "subtitle": "Tu guía en esta clase",
@@ -199,15 +199,19 @@
           "bought_toast": "¡Has comprado \"{name}\"!",
           "used_toast": "¡Has usado \"{name}\"!",
           "mana_after": "Maná tras el uso"
+        },
+        "teachers": {
+          "title": "Profesorado",
+          "empty": "Esta clase todavía no tiene profesorado."
         }
       }
     },
     "achievements": {
       "meta": {
-        "title": "Mis Insignias | ITAKAI",
+        "title": "Mis insignias | ITAKAI",
         "description": "Descubre todas tus insignias obtenidas al completar misiones y logros especiales."
       },
-      "page_title": "Mis Insignias",
+      "page_title": "Mis insignias",
       "page_subtitle": "Recompensas obtenidas al completar misiones y logros",
       "filter": {
         "search_placeholder": "Buscar insignias...",
@@ -240,27 +244,6 @@
         "close": "Cerrar"
       }
     },
-    "leaderboard": {
-      "meta": {
-        "title": "Ranking | ITAKAI",
-        "description": "El ranking de alumnos está disponible dentro de cada clase."
-      },
-      "by_class": "Por clase",
-      "choose_class_description": "Selecciona una clase para ver tu posición y el ranking interno.",
-      "choose_class_title": "Elige una clase",
-      "empty_class_description": "Todavía no hay suficientes datos para construir el ranking de esta clase.",
-      "empty_class_title": "No hay ranking disponible",
-      "empty_global_description": "Todavía no hay suficiente actividad para mostrar una clasificación global.",
-      "empty_global_title": "No hay datos de ranking",
-      "friends_soon_description": "La parte social todavía no está conectada. Mientras tanto, puedes usar el ranking global o el de tus clases.",
-      "friends_soon_title": "Ranking de amigos próximamente",
-      "global_podium": "Podio global",
-      "page_subtitle": "Consulta el ranking global y compara tu progreso con el resto de estudiantes.",
-      "page_title": "Clasificación",
-      "pick_class": "Selecciona una clase",
-      "rest": "Resto de la clasificación",
-      "your_position": "Tu posición"
-    },
     "ai_assistant": {
       "meta": {
         "title": "Asistente IA | ITAKAI",
@@ -275,27 +258,22 @@
     },
     "profile": {
       "meta": {
-        "title": "Mi Perfil | ITAKAI",
+        "title": "Mi perfil | ITAKAI",
         "description": "Gestiona tu perfil de estudiante, configura la seguridad y personaliza tu experiencia."
       },
       "breadcrumb_home": "Inicio",
       "breadcrumb_profile": "Mi perfil",
-      "page_title": "Mi Perfil",
+      "page_title": "Mi perfil",
       "tabs": {
         "security": "Seguridad",
         "settings": "Configuración"
       },
+      "account": {
+        "title": "Tu cuenta",
+        "username": "Usuario",
+        "managed_note": "Tu cuenta la gestiona tu profesorado: entras con tu usuario, no tiene correo y no se puede borrar desde aquí. Si necesitas algún cambio, pídeselo."
+      },
       "security": {
-        "password_title": "Contraseña",
-        "current_password": "Contraseña actual",
-        "new_password": "Nueva contraseña",
-        "confirm_password": "Confirmar contraseña",
-        "update_button": "Actualizar",
-        "passwords_mismatch": "Las contraseñas no coinciden",
-        "password_too_short": "La contraseña debe tener al menos 6 caracteres",
-        "email_title": "Email",
-        "new_email_placeholder": "Nuevo email",
-        "email_invalid": "Introduce un email válido",
         "sessions_title": "Sesiones",
         "close_all_sessions": "Cerrar todas",
         "current_session": "Actual",
@@ -304,9 +282,9 @@
       "settings": {
         "theme_title": "Tema",
         "theme_description": "Elige el estilo visual de la plataforma",
-        "theme_college": "Modo Colegio",
+        "theme_college": "Modo colegio",
         "theme_college_desc": "Visual gamificado",
-        "theme_university": "Modo Universidad",
+        "theme_university": "Modo universidad",
         "theme_university_desc": "Visual profesional",
         "language_title": "Idioma",
         "language_updated": "Idioma actualizado",
@@ -339,15 +317,16 @@
     "components": {
       "mission_card": {
         "progress": "Progreso",
-        "view_mission": "Ver Misión"
+        "view_mission": "Ver misión"
       },
       "recent_activity_card": {
-        "title": "Actividad Reciente",
+        "title": "Actividad reciente",
         "empty": "No hay actividad reciente",
-        "user_fallback": "Usuario"
+        "user_fallback": "Usuario",
+        "by_actor": "Por {name}"
       },
       "submission_modal": {
-        "title": "Entregar Enigma",
+        "title": "Entregar enigma",
         "file_label": "Archivo de entrega",
         "file_required": "*",
         "drag_hint": "Arrastra tu archivo aquí o haz clic para seleccionar",
@@ -365,7 +344,7 @@
         "empty_title": "Sin contenido",
         "empty_student": "El profesor aún no ha añadido la guía de esta clase.",
         "empty_teacher": "Aún no has añadido la guía de esta clase.",
-        "add_guide_button": "Añadir Guía",
+        "add_guide_button": "Añadir guía",
         "last_updated": "Última actualización: {date}"
       },
       "rarity_badge": {
@@ -375,16 +354,16 @@
         "legendaria": "Legendaria"
       },
       "class_ranking_section": {
-        "podium_title": "Podio de Campeones",
+        "podium_title": "Podio de campeones",
         "stats_title": "Estadísticas",
-        "rest_title": "Resto del Ranking",
+        "rest_title": "Resto del ranking",
         "level_abbr": "Nv.",
         "missions_suffix": "misiones",
         "you_badge": "Tú",
-        "avg_xp": "XP Promedio",
-        "avg_progress": "Progreso Promedio",
-        "avg_missions": "Misiones Promedio",
-        "total_xp": "XP Total Clase"
+        "avg_xp": "XP promedio",
+        "avg_progress": "Progreso promedio",
+        "avg_missions": "Misiones promedio",
+        "total_xp": "XP total clase"
       }
     }
   }

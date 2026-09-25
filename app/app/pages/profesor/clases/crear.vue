@@ -51,133 +51,138 @@
         >
           <Transition name="onb-fade" mode="out-in">
               <!-- ===== STEP 0: Idea ===== -->
-              <div v-if="step === 0" key="s0" class="flex-1 flex flex-col">
-                <!-- Datos básicos: se configuran antes de nada. El idioma manda
-                     el idioma en el que la IA genera todo en esta clase. -->
-                <div
-                  class="onb-reveal grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4"
-                  style="animation-delay: 0.18s"
-                >
-                  <div>
-                    <label class="text-sm font-medium text-text-primary mb-1.5 block">
-                      {{ t('teacher.classes.detail.settings.general.language_label') }}
-                    </label>
-                    <SelectDropdown
-                      :model-value="meta.language"
-                      :options="languageOptions"
-                      @update:model-value="meta.language = String($event)"
-                    />
-                  </div>
-                  <div>
-                    <label class="text-sm font-medium text-text-primary mb-1.5 block">
-                      {{ t('teacher.classes.detail.settings.general.province_label') }}
-                    </label>
-                    <SelectDropdown
-                      :model-value="meta.province"
-                      :error="showMetaErrors && !meta.province"
-                      :options="provinceOptions"
-                      searchable
-                      :placeholder="t('teacher.classes.detail.settings.general.metadata_none')"
-                      :search-placeholder="
-                        t('teacher.classes.detail.settings.general.metadata_search')
-                      "
-                      @update:model-value="meta.province = String($event)"
-                    />
-                  </div>
-                  <div>
-                    <label class="text-sm font-medium text-text-primary mb-1.5 block">
-                      {{ t('teacher.classes.detail.settings.general.level_label') }}
-                    </label>
-                    <SelectDropdown
-                      :model-value="meta.educationLevel"
-                      :error="showMetaErrors && !meta.educationLevel"
-                      :options="educationLevelOptions"
-                      :placeholder="t('teacher.classes.detail.settings.general.metadata_none')"
-                      @update:model-value="meta.educationLevel = String($event)"
-                    />
-                  </div>
-                  <div>
-                    <label class="text-sm font-medium text-text-primary mb-1.5 block">
-                      {{ t('teacher.classes.detail.settings.general.subject_label') }}
-                    </label>
-                    <SelectDropdown
-                      :model-value="meta.subject"
-                      :disabled="!meta.educationLevel"
-                      :error="showMetaErrors && !meta.subject"
-                      :options="subjectOptions"
-                      searchable
-                      :placeholder="
-                        meta.educationLevel
-                          ? t('teacher.classes.detail.settings.general.metadata_none')
-                          : t('teacher.classes.detail.settings.general.subject_needs_level')
-                      "
-                      :search-placeholder="
-                        t('teacher.classes.detail.settings.general.metadata_search')
-                      "
-                      @update:model-value="meta.subject = String($event)"
-                    />
-                  </div>
-                </div>
-
-                <textarea
-                  ref="inputRef"
-                  v-model="idea"
-                  rows="6"
-                  :placeholder="t('teacher.classes.create.onboarding.placeholder_idea')"
-                  class="onb-input onb-reveal resize-none"
-                  style="animation-delay: 0.26s"
-                />
-
-                <!-- Materiales de contexto (opcional): la IA los usa para crear la clase -->
-                <div class="onb-reveal mt-3" style="animation-delay: 0.32s">
-                  <input
-                    ref="materialsFileRef"
-                    type="file"
-                    multiple
-                    accept=".pdf,.doc,.docx,.txt,.md,image/*"
-                    class="hidden"
-                    @change="handleMaterialsUpload"
-                  />
-                  <button
-                    type="button"
-                    class="inline-flex items-center gap-1.5 text-sm text-navy-700/70 hover:text-navy-700 disabled:opacity-50"
-                    :disabled="extractingDocs"
-                    @click="materialsFileRef?.click()"
+              <div v-if="step === 0" key="s0" class="flex-1 flex flex-col min-h-0">
+                <!-- Como en los demás pasos, el contenido desplaza dentro de la
+                     tarjeta y el botón de seguir queda fijo abajo: con varias
+                     filas de adjuntos (o una pantalla baja) se salía por debajo. -->
+                <div class="flex-1 min-h-0 overflow-y-auto pr-1">
+                  <!-- Datos básicos: se configuran antes de nada. El idioma manda
+                       el idioma en el que la IA genera todo en esta clase. -->
+                  <div
+                    class="onb-reveal grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4"
+                    style="animation-delay: 0.18s"
                   >
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"
+                    <div>
+                      <label class="text-sm font-medium text-text-primary mb-1.5 block">
+                        {{ t('teacher.classes.detail.settings.general.language_label') }}
+                      </label>
+                      <SelectDropdown
+                        :model-value="meta.language"
+                        :options="languageOptions"
+                        @update:model-value="meta.language = String($event)"
                       />
-                    </svg>
-                    {{
-                      extractingDocs
-                        ? t('teacher.classes.create.onboarding.attach_processing')
-                        : t('teacher.classes.create.onboarding.attach_materials')
-                    }}
-                  </button>
-                  <!-- El tope se avisa antes de elegir archivo: si no, el profe
-                       se entera al fallar la subida. -->
-                  <span v-if="!extractingDocs" class="ml-2 text-xs text-navy-700/70">
-                    {{
-                      t('teacher.classes.create.onboarding.attach_hint', { max: MAX_MATERIAL_MB })
-                    }}
-                  </span>
+                    </div>
+                    <div>
+                      <label class="text-sm font-medium text-text-primary mb-1.5 block">
+                        {{ t('teacher.classes.detail.settings.general.province_label') }}
+                      </label>
+                      <SelectDropdown
+                        :model-value="meta.province"
+                        :error="showMetaErrors && !meta.province"
+                        :options="provinceOptions"
+                        searchable
+                        :placeholder="t('teacher.classes.detail.settings.general.metadata_none')"
+                        :search-placeholder="
+                          t('teacher.classes.detail.settings.general.metadata_search')
+                        "
+                        @update:model-value="meta.province = String($event)"
+                      />
+                    </div>
+                    <div>
+                      <label class="text-sm font-medium text-text-primary mb-1.5 block">
+                        {{ t('teacher.classes.detail.settings.general.level_label') }}
+                      </label>
+                      <SelectDropdown
+                        :model-value="meta.educationLevel"
+                        :error="showMetaErrors && !meta.educationLevel"
+                        :options="educationLevelOptions"
+                        :placeholder="t('teacher.classes.detail.settings.general.metadata_none')"
+                        @update:model-value="meta.educationLevel = String($event)"
+                      />
+                    </div>
+                    <div>
+                      <label class="text-sm font-medium text-text-primary mb-1.5 block">
+                        {{ t('teacher.classes.detail.settings.general.subject_label') }}
+                      </label>
+                      <SelectDropdown
+                        :model-value="meta.subject"
+                        :disabled="!meta.educationLevel"
+                        :error="showMetaErrors && !meta.subject"
+                        :options="subjectOptions"
+                        searchable
+                        :placeholder="
+                          meta.educationLevel
+                            ? t('teacher.classes.detail.settings.general.metadata_none')
+                            : t('teacher.classes.detail.settings.general.subject_needs_level')
+                        "
+                        :search-placeholder="
+                          t('teacher.classes.detail.settings.general.metadata_search')
+                        "
+                        @update:model-value="meta.subject = String($event)"
+                      />
+                    </div>
+                  </div>
 
-                  <!-- Archivos subidos (ver MaterialChip.vue) -->
-                  <div v-if="docSources.length" class="mt-2 flex flex-wrap gap-2">
-                    <MaterialChip
-                      v-for="(s, i) in docSources"
-                      :key="`${s.name}-${i}`"
-                      :name="s.name"
-                      :kind="s.kind"
-                      :note="s.note"
-                      removable
-                      :remove-label="t('teacher.classes.create.onboarding.attach_remove')"
-                      @remove="removeMaterial(i)"
+                  <textarea
+                    ref="inputRef"
+                    v-model="idea"
+                    rows="6"
+                    :placeholder="t('teacher.classes.create.onboarding.placeholder_idea')"
+                    class="onb-input onb-reveal resize-none"
+                    style="animation-delay: 0.26s"
+                  />
+
+                  <!-- Materiales de contexto (opcional): la IA los usa para crear la clase -->
+                  <div class="onb-reveal mt-3" style="animation-delay: 0.32s">
+                    <input
+                      ref="materialsFileRef"
+                      type="file"
+                      multiple
+                      accept=".pdf,.doc,.docx,.txt,.md,image/*"
+                      class="hidden"
+                      @change="handleMaterialsUpload"
                     />
+                    <button
+                      type="button"
+                      class="inline-flex items-center gap-1.5 text-sm text-navy-700/70 hover:text-navy-700 disabled:opacity-50"
+                      :disabled="extractingDocs"
+                      @click="materialsFileRef?.click()"
+                    >
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"
+                        />
+                      </svg>
+                      {{
+                        extractingDocs
+                          ? t('teacher.classes.create.onboarding.attach_processing')
+                          : t('teacher.classes.create.onboarding.attach_materials')
+                      }}
+                    </button>
+                    <!-- El tope se avisa antes de elegir archivo: si no, el profe
+                         se entera al fallar la subida. -->
+                    <span v-if="!extractingDocs" class="ml-2 text-xs text-navy-700/70">
+                      {{
+                        t('teacher.classes.create.onboarding.attach_hint', { max: MAX_MATERIAL_MB })
+                      }}
+                    </span>
+
+                    <!-- Archivos subidos (ver MaterialChip.vue) -->
+                    <div v-if="docSources.length" class="mt-2 flex flex-wrap gap-2">
+                      <MaterialChip
+                        v-for="(s, i) in docSources"
+                        :key="`${s.name}-${i}`"
+                        :name="s.name"
+                        :kind="s.kind"
+                        :note="s.note"
+                        removable
+                        :remove-label="t('teacher.classes.create.onboarding.attach_remove')"
+                        @remove="removeMaterial(i)"
+                      />
+                    </div>
                   </div>
                 </div>
 
@@ -641,7 +646,7 @@
           v-model="previewTab"
           :title="form.name"
           :cover-image="resolvedImageUrl || form.backgroundImage"
-          :schedule="form.schedule"
+          :schedule="scheduleSummary"
           :chips="summaryChips"
           :tabs="previewTabs"
         >
@@ -909,8 +914,11 @@ const selectedTitle = ref('')
 const customTitle = ref('')
 const chosenTitle = computed(() => customTitle.value.trim() || selectedTitle.value)
 const scheduleConfig = ref<ScheduleConfig[]>([emptyScheduleConfig()])
-// Texto legible derivado del patrón semanal (para el campo `schedule` y las tarjetas).
+// Texto completo derivado del calendario, para el campo `schedule` que se guarda.
 const { scheduleText: schedule } = useClassCalendar(scheduleConfig)
+// Resumen corto (días y hora) para la maqueta de la cabecera, como en la clase real.
+const { summarize } = useScheduleSummary()
+const scheduleSummary = computed(() => summarize(scheduleConfig.value).join(' · '))
 const generatedImageUrl = ref('')
 // The AI cover arrives as a relative /uploads/... path served by the API host,
 // while a teacher-uploaded cover is a base64 data URL. getImageUrl resolves

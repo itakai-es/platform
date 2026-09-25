@@ -27,11 +27,17 @@ export type AggregateUser = {
 export type UserMinAggregateOutputType = {
   id: string | null
   email: string | null
+  username: string | null
   passwordHash: string | null
   name: string | null
   role: $Enums.UserRole | null
+  accountType: $Enums.UserAccountType | null
   isOnboarded: boolean | null
   status: $Enums.UserStatus | null
+  createdById: string | null
+  homeClassId: string | null
+  mustChangePassword: boolean | null
+  passwordChangedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -39,11 +45,17 @@ export type UserMinAggregateOutputType = {
 export type UserMaxAggregateOutputType = {
   id: string | null
   email: string | null
+  username: string | null
   passwordHash: string | null
   name: string | null
   role: $Enums.UserRole | null
+  accountType: $Enums.UserAccountType | null
   isOnboarded: boolean | null
   status: $Enums.UserStatus | null
+  createdById: string | null
+  homeClassId: string | null
+  mustChangePassword: boolean | null
+  passwordChangedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -51,11 +63,17 @@ export type UserMaxAggregateOutputType = {
 export type UserCountAggregateOutputType = {
   id: number
   email: number
+  username: number
   passwordHash: number
   name: number
   role: number
+  accountType: number
   isOnboarded: number
   status: number
+  createdById: number
+  homeClassId: number
+  mustChangePassword: number
+  passwordChangedAt: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -65,11 +83,17 @@ export type UserCountAggregateOutputType = {
 export type UserMinAggregateInputType = {
   id?: true
   email?: true
+  username?: true
   passwordHash?: true
   name?: true
   role?: true
+  accountType?: true
   isOnboarded?: true
   status?: true
+  createdById?: true
+  homeClassId?: true
+  mustChangePassword?: true
+  passwordChangedAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -77,11 +101,17 @@ export type UserMinAggregateInputType = {
 export type UserMaxAggregateInputType = {
   id?: true
   email?: true
+  username?: true
   passwordHash?: true
   name?: true
   role?: true
+  accountType?: true
   isOnboarded?: true
   status?: true
+  createdById?: true
+  homeClassId?: true
+  mustChangePassword?: true
+  passwordChangedAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -89,11 +119,17 @@ export type UserMaxAggregateInputType = {
 export type UserCountAggregateInputType = {
   id?: true
   email?: true
+  username?: true
   passwordHash?: true
   name?: true
   role?: true
+  accountType?: true
   isOnboarded?: true
   status?: true
+  createdById?: true
+  homeClassId?: true
+  mustChangePassword?: true
+  passwordChangedAt?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -173,12 +209,18 @@ export type UserGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 
 export type UserGroupByOutputType = {
   id: string
-  email: string
+  email: string | null
+  username: string | null
   passwordHash: string
   name: string
   role: $Enums.UserRole | null
+  accountType: $Enums.UserAccountType
   isOnboarded: boolean
   status: $Enums.UserStatus
+  createdById: string | null
+  homeClassId: string | null
+  mustChangePassword: boolean
+  passwordChangedAt: Date | null
   createdAt: Date
   updatedAt: Date
   _count: UserCountAggregateOutputType | null
@@ -206,14 +248,23 @@ export type UserWhereInput = {
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   id?: Prisma.StringFilter<"User"> | string
-  email?: Prisma.StringFilter<"User"> | string
+  email?: Prisma.StringNullableFilter<"User"> | string | null
+  username?: Prisma.StringNullableFilter<"User"> | string | null
   passwordHash?: Prisma.StringFilter<"User"> | string
   name?: Prisma.StringFilter<"User"> | string
   role?: Prisma.EnumUserRoleNullableFilter<"User"> | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFilter<"User"> | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFilter<"User"> | boolean
   status?: Prisma.EnumUserStatusFilter<"User"> | $Enums.UserStatus
+  createdById?: Prisma.StringNullableFilter<"User"> | string | null
+  homeClassId?: Prisma.StringNullableFilter<"User"> | string | null
+  mustChangePassword?: Prisma.BoolFilter<"User"> | boolean
+  passwordChangedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  createdBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  createdUsers?: Prisma.UserListRelationFilter
+  homeClass?: Prisma.XOR<Prisma.ClassNullableScalarRelationFilter, Prisma.ClassWhereInput> | null
   refreshTokens?: Prisma.RefreshTokenListRelationFilter
   teacherClasses?: Prisma.ClassListRelationFilter
   enrollments?: Prisma.ClassEnrollmentListRelationFilter
@@ -232,19 +283,34 @@ export type UserWhereInput = {
   shopPurchases?: Prisma.ShopPurchaseListRelationFilter
   shopItemUses?: Prisma.ShopItemUseListRelationFilter
   behaviorsApplied?: Prisma.BehaviorApplicationListRelationFilter
+  submissionsReviewed?: Prisma.EnigmaSubmissionListRelationFilter
+  activitiesActed?: Prisma.ActivityListRelationFilter
   behaviorsReceived?: Prisma.BehaviorApplicationListRelationFilter
+  classTeachers?: Prisma.ClassTeacherListRelationFilter
+  classTeachersAdded?: Prisma.ClassTeacherListRelationFilter
+  classActions?: Prisma.ClassActionLogListRelationFilter
+  classActionsTarget?: Prisma.ClassActionLogListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  email?: Prisma.SortOrder
+  email?: Prisma.SortOrderInput | Prisma.SortOrder
+  username?: Prisma.SortOrderInput | Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   name?: Prisma.SortOrder
   role?: Prisma.SortOrderInput | Prisma.SortOrder
+  accountType?: Prisma.SortOrder
   isOnboarded?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  homeClassId?: Prisma.SortOrderInput | Prisma.SortOrder
+  mustChangePassword?: Prisma.SortOrder
+  passwordChangedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  createdBy?: Prisma.UserOrderByWithRelationInput
+  createdUsers?: Prisma.UserOrderByRelationAggregateInput
+  homeClass?: Prisma.ClassOrderByWithRelationInput
   refreshTokens?: Prisma.RefreshTokenOrderByRelationAggregateInput
   teacherClasses?: Prisma.ClassOrderByRelationAggregateInput
   enrollments?: Prisma.ClassEnrollmentOrderByRelationAggregateInput
@@ -263,22 +329,37 @@ export type UserOrderByWithRelationInput = {
   shopPurchases?: Prisma.ShopPurchaseOrderByRelationAggregateInput
   shopItemUses?: Prisma.ShopItemUseOrderByRelationAggregateInput
   behaviorsApplied?: Prisma.BehaviorApplicationOrderByRelationAggregateInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionOrderByRelationAggregateInput
+  activitiesActed?: Prisma.ActivityOrderByRelationAggregateInput
   behaviorsReceived?: Prisma.BehaviorApplicationOrderByRelationAggregateInput
+  classTeachers?: Prisma.ClassTeacherOrderByRelationAggregateInput
+  classTeachersAdded?: Prisma.ClassTeacherOrderByRelationAggregateInput
+  classActions?: Prisma.ClassActionLogOrderByRelationAggregateInput
+  classActionsTarget?: Prisma.ClassActionLogOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   email?: string
+  username?: string
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   passwordHash?: Prisma.StringFilter<"User"> | string
   name?: Prisma.StringFilter<"User"> | string
   role?: Prisma.EnumUserRoleNullableFilter<"User"> | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFilter<"User"> | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFilter<"User"> | boolean
   status?: Prisma.EnumUserStatusFilter<"User"> | $Enums.UserStatus
+  createdById?: Prisma.StringNullableFilter<"User"> | string | null
+  homeClassId?: Prisma.StringNullableFilter<"User"> | string | null
+  mustChangePassword?: Prisma.BoolFilter<"User"> | boolean
+  passwordChangedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  createdBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  createdUsers?: Prisma.UserListRelationFilter
+  homeClass?: Prisma.XOR<Prisma.ClassNullableScalarRelationFilter, Prisma.ClassWhereInput> | null
   refreshTokens?: Prisma.RefreshTokenListRelationFilter
   teacherClasses?: Prisma.ClassListRelationFilter
   enrollments?: Prisma.ClassEnrollmentListRelationFilter
@@ -297,17 +378,29 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   shopPurchases?: Prisma.ShopPurchaseListRelationFilter
   shopItemUses?: Prisma.ShopItemUseListRelationFilter
   behaviorsApplied?: Prisma.BehaviorApplicationListRelationFilter
+  submissionsReviewed?: Prisma.EnigmaSubmissionListRelationFilter
+  activitiesActed?: Prisma.ActivityListRelationFilter
   behaviorsReceived?: Prisma.BehaviorApplicationListRelationFilter
-}, "id" | "email">
+  classTeachers?: Prisma.ClassTeacherListRelationFilter
+  classTeachersAdded?: Prisma.ClassTeacherListRelationFilter
+  classActions?: Prisma.ClassActionLogListRelationFilter
+  classActionsTarget?: Prisma.ClassActionLogListRelationFilter
+}, "id" | "email" | "username">
 
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  email?: Prisma.SortOrder
+  email?: Prisma.SortOrderInput | Prisma.SortOrder
+  username?: Prisma.SortOrderInput | Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   name?: Prisma.SortOrder
   role?: Prisma.SortOrderInput | Prisma.SortOrder
+  accountType?: Prisma.SortOrder
   isOnboarded?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  homeClassId?: Prisma.SortOrderInput | Prisma.SortOrder
+  mustChangePassword?: Prisma.SortOrder
+  passwordChangedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
@@ -320,26 +413,39 @@ export type UserScalarWhereWithAggregatesInput = {
   OR?: Prisma.UserScalarWhereWithAggregatesInput[]
   NOT?: Prisma.UserScalarWhereWithAggregatesInput | Prisma.UserScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"User"> | string
-  email?: Prisma.StringWithAggregatesFilter<"User"> | string
+  email?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  username?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   passwordHash?: Prisma.StringWithAggregatesFilter<"User"> | string
   name?: Prisma.StringWithAggregatesFilter<"User"> | string
   role?: Prisma.EnumUserRoleNullableWithAggregatesFilter<"User"> | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeWithAggregatesFilter<"User"> | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   status?: Prisma.EnumUserStatusWithAggregatesFilter<"User"> | $Enums.UserStatus
+  createdById?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  homeClassId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  mustChangePassword?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
+  passwordChangedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
 
 export type UserCreateInput = {
   id?: string
-  email: string
+  email?: string | null
+  username?: string | null
   passwordHash: string
   name: string
   role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
   status?: $Enums.UserStatus
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
+  createdUsers?: Prisma.UserCreateNestedManyWithoutCreatedByInput
+  homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
@@ -358,19 +464,32 @@ export type UserCreateInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogCreateNestedManyWithoutTargetUserInput
 }
 
 export type UserUncheckedCreateInput = {
   id?: string
-  email: string
+  email?: string | null
+  username?: string | null
   passwordHash: string
   name: string
   role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
   status?: $Enums.UserStatus
+  createdById?: string | null
+  homeClassId?: string | null
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
@@ -389,19 +508,32 @@ export type UserUncheckedCreateInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutTargetUserInput
 }
 
 export type UserUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
+  createdUsers?: Prisma.UserUpdateManyWithoutCreatedByNestedInput
+  homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
@@ -420,19 +552,32 @@ export type UserUpdateInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUpdateManyWithoutTargetUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
@@ -451,53 +596,96 @@ export type UserUncheckedUpdateInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUncheckedUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedUpdateManyWithoutTargetUserNestedInput
 }
 
 export type UserCreateManyInput = {
   id?: string
-  email: string
+  email?: string | null
+  username?: string | null
   passwordHash: string
   name: string
   role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
   status?: $Enums.UserStatus
+  createdById?: string | null
+  homeClassId?: string | null
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type UserUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type UserUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type UserNullableScalarRelationFilter = {
+  is?: Prisma.UserWhereInput | null
+  isNot?: Prisma.UserWhereInput | null
+}
+
+export type UserListRelationFilter = {
+  every?: Prisma.UserWhereInput
+  some?: Prisma.UserWhereInput
+  none?: Prisma.UserWhereInput
+}
+
+export type UserOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type UserCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  username?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   name?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  accountType?: Prisma.SortOrder
   isOnboarded?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  homeClassId?: Prisma.SortOrder
+  mustChangePassword?: Prisma.SortOrder
+  passwordChangedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -505,11 +693,17 @@ export type UserCountOrderByAggregateInput = {
 export type UserMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  username?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   name?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  accountType?: Prisma.SortOrder
   isOnboarded?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  homeClassId?: Prisma.SortOrder
+  mustChangePassword?: Prisma.SortOrder
+  passwordChangedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -517,11 +711,17 @@ export type UserMaxOrderByAggregateInput = {
 export type UserMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  username?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   name?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  accountType?: Prisma.SortOrder
   isOnboarded?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  homeClassId?: Prisma.SortOrder
+  mustChangePassword?: Prisma.SortOrder
+  passwordChangedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -531,17 +731,40 @@ export type UserScalarRelationFilter = {
   isNot?: Prisma.UserWhereInput
 }
 
-export type UserNullableScalarRelationFilter = {
-  is?: Prisma.UserWhereInput | null
-  isNot?: Prisma.UserWhereInput | null
+export type UserCreateNestedOneWithoutCreatedUsersInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedUsersInput, Prisma.UserUncheckedCreateWithoutCreatedUsersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedUsersInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedManyWithoutCreatedByInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedByInput, Prisma.UserUncheckedCreateWithoutCreatedByInput> | Prisma.UserCreateWithoutCreatedByInput[] | Prisma.UserUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedByInput | Prisma.UserCreateOrConnectWithoutCreatedByInput[]
+  createMany?: Prisma.UserCreateManyCreatedByInputEnvelope
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+}
+
+export type UserUncheckedCreateNestedManyWithoutCreatedByInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedByInput, Prisma.UserUncheckedCreateWithoutCreatedByInput> | Prisma.UserCreateWithoutCreatedByInput[] | Prisma.UserUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedByInput | Prisma.UserCreateOrConnectWithoutCreatedByInput[]
+  createMany?: Prisma.UserCreateManyCreatedByInputEnvelope
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
 }
 
 export type StringFieldUpdateOperationsInput = {
   set?: string
 }
 
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
+}
+
 export type NullableEnumUserRoleFieldUpdateOperationsInput = {
   set?: $Enums.UserRole | null
+}
+
+export type EnumUserAccountTypeFieldUpdateOperationsInput = {
+  set?: $Enums.UserAccountType
 }
 
 export type BoolFieldUpdateOperationsInput = {
@@ -552,8 +775,50 @@ export type EnumUserStatusFieldUpdateOperationsInput = {
   set?: $Enums.UserStatus
 }
 
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
+}
+
+export type UserUpdateOneWithoutCreatedUsersNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedUsersInput, Prisma.UserUncheckedCreateWithoutCreatedUsersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedUsersInput
+  upsert?: Prisma.UserUpsertWithoutCreatedUsersInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedUsersInput, Prisma.UserUpdateWithoutCreatedUsersInput>, Prisma.UserUncheckedUpdateWithoutCreatedUsersInput>
+}
+
+export type UserUpdateManyWithoutCreatedByNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedByInput, Prisma.UserUncheckedCreateWithoutCreatedByInput> | Prisma.UserCreateWithoutCreatedByInput[] | Prisma.UserUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedByInput | Prisma.UserCreateOrConnectWithoutCreatedByInput[]
+  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutCreatedByInput | Prisma.UserUpsertWithWhereUniqueWithoutCreatedByInput[]
+  createMany?: Prisma.UserCreateManyCreatedByInputEnvelope
+  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  update?: Prisma.UserUpdateWithWhereUniqueWithoutCreatedByInput | Prisma.UserUpdateWithWhereUniqueWithoutCreatedByInput[]
+  updateMany?: Prisma.UserUpdateManyWithWhereWithoutCreatedByInput | Prisma.UserUpdateManyWithWhereWithoutCreatedByInput[]
+  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+}
+
+export type UserUncheckedUpdateManyWithoutCreatedByNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedByInput, Prisma.UserUncheckedCreateWithoutCreatedByInput> | Prisma.UserCreateWithoutCreatedByInput[] | Prisma.UserUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedByInput | Prisma.UserCreateOrConnectWithoutCreatedByInput[]
+  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutCreatedByInput | Prisma.UserUpsertWithWhereUniqueWithoutCreatedByInput[]
+  createMany?: Prisma.UserCreateManyCreatedByInputEnvelope
+  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  update?: Prisma.UserUpdateWithWhereUniqueWithoutCreatedByInput | Prisma.UserUpdateWithWhereUniqueWithoutCreatedByInput[]
+  updateMany?: Prisma.UserUpdateManyWithWhereWithoutCreatedByInput | Prisma.UserUpdateManyWithWhereWithoutCreatedByInput[]
+  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
 }
 
 export type UserCreateNestedOneWithoutSettingsInput = {
@@ -590,12 +855,116 @@ export type UserCreateNestedOneWithoutTeacherClassesInput = {
   connect?: Prisma.UserWhereUniqueInput
 }
 
+export type UserCreateNestedManyWithoutHomeClassInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutHomeClassInput, Prisma.UserUncheckedCreateWithoutHomeClassInput> | Prisma.UserCreateWithoutHomeClassInput[] | Prisma.UserUncheckedCreateWithoutHomeClassInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutHomeClassInput | Prisma.UserCreateOrConnectWithoutHomeClassInput[]
+  createMany?: Prisma.UserCreateManyHomeClassInputEnvelope
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+}
+
+export type UserUncheckedCreateNestedManyWithoutHomeClassInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutHomeClassInput, Prisma.UserUncheckedCreateWithoutHomeClassInput> | Prisma.UserCreateWithoutHomeClassInput[] | Prisma.UserUncheckedCreateWithoutHomeClassInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutHomeClassInput | Prisma.UserCreateOrConnectWithoutHomeClassInput[]
+  createMany?: Prisma.UserCreateManyHomeClassInputEnvelope
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+}
+
 export type UserUpdateOneRequiredWithoutTeacherClassesNestedInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutTeacherClassesInput, Prisma.UserUncheckedCreateWithoutTeacherClassesInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutTeacherClassesInput
   upsert?: Prisma.UserUpsertWithoutTeacherClassesInput
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTeacherClassesInput, Prisma.UserUpdateWithoutTeacherClassesInput>, Prisma.UserUncheckedUpdateWithoutTeacherClassesInput>
+}
+
+export type UserUpdateManyWithoutHomeClassNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutHomeClassInput, Prisma.UserUncheckedCreateWithoutHomeClassInput> | Prisma.UserCreateWithoutHomeClassInput[] | Prisma.UserUncheckedCreateWithoutHomeClassInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutHomeClassInput | Prisma.UserCreateOrConnectWithoutHomeClassInput[]
+  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutHomeClassInput | Prisma.UserUpsertWithWhereUniqueWithoutHomeClassInput[]
+  createMany?: Prisma.UserCreateManyHomeClassInputEnvelope
+  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  update?: Prisma.UserUpdateWithWhereUniqueWithoutHomeClassInput | Prisma.UserUpdateWithWhereUniqueWithoutHomeClassInput[]
+  updateMany?: Prisma.UserUpdateManyWithWhereWithoutHomeClassInput | Prisma.UserUpdateManyWithWhereWithoutHomeClassInput[]
+  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+}
+
+export type UserUncheckedUpdateManyWithoutHomeClassNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutHomeClassInput, Prisma.UserUncheckedCreateWithoutHomeClassInput> | Prisma.UserCreateWithoutHomeClassInput[] | Prisma.UserUncheckedCreateWithoutHomeClassInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutHomeClassInput | Prisma.UserCreateOrConnectWithoutHomeClassInput[]
+  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutHomeClassInput | Prisma.UserUpsertWithWhereUniqueWithoutHomeClassInput[]
+  createMany?: Prisma.UserCreateManyHomeClassInputEnvelope
+  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  update?: Prisma.UserUpdateWithWhereUniqueWithoutHomeClassInput | Prisma.UserUpdateWithWhereUniqueWithoutHomeClassInput[]
+  updateMany?: Prisma.UserUpdateManyWithWhereWithoutHomeClassInput | Prisma.UserUpdateManyWithWhereWithoutHomeClassInput[]
+  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+}
+
+export type UserCreateNestedOneWithoutClassTeachersInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutClassTeachersInput, Prisma.UserUncheckedCreateWithoutClassTeachersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutClassTeachersInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutClassTeachersAddedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutClassTeachersAddedInput, Prisma.UserUncheckedCreateWithoutClassTeachersAddedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutClassTeachersAddedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutClassTeachersNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutClassTeachersInput, Prisma.UserUncheckedCreateWithoutClassTeachersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutClassTeachersInput
+  upsert?: Prisma.UserUpsertWithoutClassTeachersInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutClassTeachersInput, Prisma.UserUpdateWithoutClassTeachersInput>, Prisma.UserUncheckedUpdateWithoutClassTeachersInput>
+}
+
+export type UserUpdateOneWithoutClassTeachersAddedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutClassTeachersAddedInput, Prisma.UserUncheckedCreateWithoutClassTeachersAddedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutClassTeachersAddedInput
+  upsert?: Prisma.UserUpsertWithoutClassTeachersAddedInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutClassTeachersAddedInput, Prisma.UserUpdateWithoutClassTeachersAddedInput>, Prisma.UserUncheckedUpdateWithoutClassTeachersAddedInput>
+}
+
+export type UserCreateNestedOneWithoutClassActionsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutClassActionsInput, Prisma.UserUncheckedCreateWithoutClassActionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutClassActionsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutClassActionsTargetInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutClassActionsTargetInput, Prisma.UserUncheckedCreateWithoutClassActionsTargetInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutClassActionsTargetInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutClassActionsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutClassActionsInput, Prisma.UserUncheckedCreateWithoutClassActionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutClassActionsInput
+  upsert?: Prisma.UserUpsertWithoutClassActionsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutClassActionsInput, Prisma.UserUpdateWithoutClassActionsInput>, Prisma.UserUncheckedUpdateWithoutClassActionsInput>
+}
+
+export type UserUpdateOneWithoutClassActionsTargetNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutClassActionsTargetInput, Prisma.UserUncheckedCreateWithoutClassActionsTargetInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutClassActionsTargetInput
+  upsert?: Prisma.UserUpsertWithoutClassActionsTargetInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutClassActionsTargetInput, Prisma.UserUpdateWithoutClassActionsTargetInput>, Prisma.UserUncheckedUpdateWithoutClassActionsTargetInput>
 }
 
 export type UserCreateNestedOneWithoutEnrollmentsInput = {
@@ -660,12 +1029,28 @@ export type UserCreateNestedOneWithoutSubmissionsInput = {
   connect?: Prisma.UserWhereUniqueInput
 }
 
+export type UserCreateNestedOneWithoutSubmissionsReviewedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSubmissionsReviewedInput, Prisma.UserUncheckedCreateWithoutSubmissionsReviewedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSubmissionsReviewedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
 export type UserUpdateOneRequiredWithoutSubmissionsNestedInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutSubmissionsInput, Prisma.UserUncheckedCreateWithoutSubmissionsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutSubmissionsInput
   upsert?: Prisma.UserUpsertWithoutSubmissionsInput
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSubmissionsInput, Prisma.UserUpdateWithoutSubmissionsInput>, Prisma.UserUncheckedUpdateWithoutSubmissionsInput>
+}
+
+export type UserUpdateOneWithoutSubmissionsReviewedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSubmissionsReviewedInput, Prisma.UserUncheckedCreateWithoutSubmissionsReviewedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSubmissionsReviewedInput
+  upsert?: Prisma.UserUpsertWithoutSubmissionsReviewedInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSubmissionsReviewedInput, Prisma.UserUpdateWithoutSubmissionsReviewedInput>, Prisma.UserUncheckedUpdateWithoutSubmissionsReviewedInput>
 }
 
 export type UserCreateNestedOneWithoutMissionProgressInput = {
@@ -774,12 +1159,28 @@ export type UserCreateNestedOneWithoutActivitiesInput = {
   connect?: Prisma.UserWhereUniqueInput
 }
 
+export type UserCreateNestedOneWithoutActivitiesActedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutActivitiesActedInput, Prisma.UserUncheckedCreateWithoutActivitiesActedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutActivitiesActedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
 export type UserUpdateOneRequiredWithoutActivitiesNestedInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutActivitiesInput, Prisma.UserUncheckedCreateWithoutActivitiesInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutActivitiesInput
   upsert?: Prisma.UserUpsertWithoutActivitiesInput
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutActivitiesInput, Prisma.UserUpdateWithoutActivitiesInput>, Prisma.UserUncheckedUpdateWithoutActivitiesInput>
+}
+
+export type UserUpdateOneWithoutActivitiesActedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutActivitiesActedInput, Prisma.UserUncheckedCreateWithoutActivitiesActedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutActivitiesActedInput
+  upsert?: Prisma.UserUpsertWithoutActivitiesActedInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutActivitiesActedInput, Prisma.UserUpdateWithoutActivitiesActedInput>, Prisma.UserUncheckedUpdateWithoutActivitiesActedInput>
 }
 
 export type UserCreateNestedOneWithoutConversationsInput = {
@@ -808,10 +1209,12 @@ export type UserCreateNestedOneWithoutBehaviorsReceivedInput = {
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserUpdateOneRequiredWithoutBehaviorsAppliedNestedInput = {
+export type UserUpdateOneWithoutBehaviorsAppliedNestedInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutBehaviorsAppliedInput, Prisma.UserUncheckedCreateWithoutBehaviorsAppliedInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutBehaviorsAppliedInput
   upsert?: Prisma.UserUpsertWithoutBehaviorsAppliedInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutBehaviorsAppliedInput, Prisma.UserUpdateWithoutBehaviorsAppliedInput>, Prisma.UserUncheckedUpdateWithoutBehaviorsAppliedInput>
 }
@@ -824,16 +1227,344 @@ export type UserUpdateOneRequiredWithoutBehaviorsReceivedNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutBehaviorsReceivedInput, Prisma.UserUpdateWithoutBehaviorsReceivedInput>, Prisma.UserUncheckedUpdateWithoutBehaviorsReceivedInput>
 }
 
-export type UserCreateWithoutSettingsInput = {
+export type UserCreateWithoutCreatedUsersInput = {
   id?: string
-  email: string
+  email?: string | null
+  username?: string | null
   passwordHash: string
   name: string
   role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
   status?: $Enums.UserStatus
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
+  homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
+  enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
+  createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
+  earnedBadges?: Prisma.StudentBadgeCreateNestedManyWithoutStudentInput
+  missionProgress?: Prisma.StudentMissionProgressCreateNestedManyWithoutStudentInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressCreateNestedManyWithoutStudentInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ChatConversationCreateNestedManyWithoutUserInput
+  joinRequests?: Prisma.JoinRequestCreateNestedManyWithoutStudentInput
+  sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
+  receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
+  submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
+  shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
+  shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
+  behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
+  behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogCreateNestedManyWithoutTargetUserInput
+}
+
+export type UserUncheckedCreateWithoutCreatedUsersInput = {
+  id?: string
+  email?: string | null
+  username?: string | null
+  passwordHash: string
+  name: string
+  role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
+  isOnboarded?: boolean
+  status?: $Enums.UserStatus
+  createdById?: string | null
+  homeClassId?: string | null
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
+  enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
+  earnedBadges?: Prisma.StudentBadgeUncheckedCreateNestedManyWithoutStudentInput
+  missionProgress?: Prisma.StudentMissionProgressUncheckedCreateNestedManyWithoutStudentInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressUncheckedCreateNestedManyWithoutStudentInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ChatConversationUncheckedCreateNestedManyWithoutUserInput
+  joinRequests?: Prisma.JoinRequestUncheckedCreateNestedManyWithoutStudentInput
+  sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
+  receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
+  submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
+  shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
+  shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
+  behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
+  behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutTargetUserInput
+}
+
+export type UserCreateOrConnectWithoutCreatedUsersInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedUsersInput, Prisma.UserUncheckedCreateWithoutCreatedUsersInput>
+}
+
+export type UserCreateWithoutCreatedByInput = {
+  id?: string
+  email?: string | null
+  username?: string | null
+  passwordHash: string
+  name: string
+  role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
+  isOnboarded?: boolean
+  status?: $Enums.UserStatus
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdUsers?: Prisma.UserCreateNestedManyWithoutCreatedByInput
+  homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
+  enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
+  createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
+  earnedBadges?: Prisma.StudentBadgeCreateNestedManyWithoutStudentInput
+  missionProgress?: Prisma.StudentMissionProgressCreateNestedManyWithoutStudentInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressCreateNestedManyWithoutStudentInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ChatConversationCreateNestedManyWithoutUserInput
+  joinRequests?: Prisma.JoinRequestCreateNestedManyWithoutStudentInput
+  sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
+  receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
+  submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
+  shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
+  shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
+  behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
+  behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogCreateNestedManyWithoutTargetUserInput
+}
+
+export type UserUncheckedCreateWithoutCreatedByInput = {
+  id?: string
+  email?: string | null
+  username?: string | null
+  passwordHash: string
+  name: string
+  role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
+  isOnboarded?: boolean
+  status?: $Enums.UserStatus
+  homeClassId?: string | null
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
+  enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
+  earnedBadges?: Prisma.StudentBadgeUncheckedCreateNestedManyWithoutStudentInput
+  missionProgress?: Prisma.StudentMissionProgressUncheckedCreateNestedManyWithoutStudentInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressUncheckedCreateNestedManyWithoutStudentInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ChatConversationUncheckedCreateNestedManyWithoutUserInput
+  joinRequests?: Prisma.JoinRequestUncheckedCreateNestedManyWithoutStudentInput
+  sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
+  receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
+  submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
+  shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
+  shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
+  behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
+  behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutTargetUserInput
+}
+
+export type UserCreateOrConnectWithoutCreatedByInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedByInput, Prisma.UserUncheckedCreateWithoutCreatedByInput>
+}
+
+export type UserCreateManyCreatedByInputEnvelope = {
+  data: Prisma.UserCreateManyCreatedByInput | Prisma.UserCreateManyCreatedByInput[]
+  skipDuplicates?: boolean
+}
+
+export type UserUpsertWithoutCreatedUsersInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCreatedUsersInput, Prisma.UserUncheckedUpdateWithoutCreatedUsersInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedUsersInput, Prisma.UserUncheckedCreateWithoutCreatedUsersInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCreatedUsersInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCreatedUsersInput, Prisma.UserUncheckedUpdateWithoutCreatedUsersInput>
+}
+
+export type UserUpdateWithoutCreatedUsersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
+  homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
+  enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
+  createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
+  earnedBadges?: Prisma.StudentBadgeUpdateManyWithoutStudentNestedInput
+  missionProgress?: Prisma.StudentMissionProgressUpdateManyWithoutStudentNestedInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressUpdateManyWithoutStudentNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ChatConversationUpdateManyWithoutUserNestedInput
+  joinRequests?: Prisma.JoinRequestUpdateManyWithoutStudentNestedInput
+  sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
+  receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
+  submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
+  shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
+  shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
+  behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
+  behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUpdateManyWithoutTargetUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCreatedUsersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
+  enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
+  earnedBadges?: Prisma.StudentBadgeUncheckedUpdateManyWithoutStudentNestedInput
+  missionProgress?: Prisma.StudentMissionProgressUncheckedUpdateManyWithoutStudentNestedInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressUncheckedUpdateManyWithoutStudentNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ChatConversationUncheckedUpdateManyWithoutUserNestedInput
+  joinRequests?: Prisma.JoinRequestUncheckedUpdateManyWithoutStudentNestedInput
+  sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
+  receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
+  submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
+  shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
+  shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
+  behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
+  behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUncheckedUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedUpdateManyWithoutTargetUserNestedInput
+}
+
+export type UserUpsertWithWhereUniqueWithoutCreatedByInput = {
+  where: Prisma.UserWhereUniqueInput
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCreatedByInput, Prisma.UserUncheckedUpdateWithoutCreatedByInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedByInput, Prisma.UserUncheckedCreateWithoutCreatedByInput>
+}
+
+export type UserUpdateWithWhereUniqueWithoutCreatedByInput = {
+  where: Prisma.UserWhereUniqueInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCreatedByInput, Prisma.UserUncheckedUpdateWithoutCreatedByInput>
+}
+
+export type UserUpdateManyWithWhereWithoutCreatedByInput = {
+  where: Prisma.UserScalarWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateManyMutationInput, Prisma.UserUncheckedUpdateManyWithoutCreatedByInput>
+}
+
+export type UserScalarWhereInput = {
+  AND?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+  OR?: Prisma.UserScalarWhereInput[]
+  NOT?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+  id?: Prisma.StringFilter<"User"> | string
+  email?: Prisma.StringNullableFilter<"User"> | string | null
+  username?: Prisma.StringNullableFilter<"User"> | string | null
+  passwordHash?: Prisma.StringFilter<"User"> | string
+  name?: Prisma.StringFilter<"User"> | string
+  role?: Prisma.EnumUserRoleNullableFilter<"User"> | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFilter<"User"> | $Enums.UserAccountType
+  isOnboarded?: Prisma.BoolFilter<"User"> | boolean
+  status?: Prisma.EnumUserStatusFilter<"User"> | $Enums.UserStatus
+  createdById?: Prisma.StringNullableFilter<"User"> | string | null
+  homeClassId?: Prisma.StringNullableFilter<"User"> | string | null
+  mustChangePassword?: Prisma.BoolFilter<"User"> | boolean
+  passwordChangedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+}
+
+export type UserCreateWithoutSettingsInput = {
+  id?: string
+  email?: string | null
+  username?: string | null
+  passwordHash: string
+  name: string
+  role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
+  isOnboarded?: boolean
+  status?: $Enums.UserStatus
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
+  createdUsers?: Prisma.UserCreateNestedManyWithoutCreatedByInput
+  homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
@@ -851,19 +1582,32 @@ export type UserCreateWithoutSettingsInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogCreateNestedManyWithoutTargetUserInput
 }
 
 export type UserUncheckedCreateWithoutSettingsInput = {
   id?: string
-  email: string
+  email?: string | null
+  username?: string | null
   passwordHash: string
   name: string
   role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
   status?: $Enums.UserStatus
+  createdById?: string | null
+  homeClassId?: string | null
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
@@ -881,7 +1625,13 @@ export type UserUncheckedCreateWithoutSettingsInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutTargetUserInput
 }
 
 export type UserCreateOrConnectWithoutSettingsInput = {
@@ -902,14 +1652,21 @@ export type UserUpdateToOneWithWhereWithoutSettingsInput = {
 
 export type UserUpdateWithoutSettingsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
+  createdUsers?: Prisma.UserUpdateManyWithoutCreatedByNestedInput
+  homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
@@ -927,19 +1684,32 @@ export type UserUpdateWithoutSettingsInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUpdateManyWithoutTargetUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSettingsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
@@ -957,19 +1727,32 @@ export type UserUncheckedUpdateWithoutSettingsInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUncheckedUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedUpdateManyWithoutTargetUserNestedInput
 }
 
 export type UserCreateWithoutRefreshTokensInput = {
   id?: string
-  email: string
+  email?: string | null
+  username?: string | null
   passwordHash: string
   name: string
   role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
   status?: $Enums.UserStatus
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
+  createdUsers?: Prisma.UserCreateNestedManyWithoutCreatedByInput
+  homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
@@ -987,19 +1770,32 @@ export type UserCreateWithoutRefreshTokensInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogCreateNestedManyWithoutTargetUserInput
 }
 
 export type UserUncheckedCreateWithoutRefreshTokensInput = {
   id?: string
-  email: string
+  email?: string | null
+  username?: string | null
   passwordHash: string
   name: string
   role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
   status?: $Enums.UserStatus
+  createdById?: string | null
+  homeClassId?: string | null
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
@@ -1017,7 +1813,13 @@ export type UserUncheckedCreateWithoutRefreshTokensInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutTargetUserInput
 }
 
 export type UserCreateOrConnectWithoutRefreshTokensInput = {
@@ -1038,14 +1840,21 @@ export type UserUpdateToOneWithWhereWithoutRefreshTokensInput = {
 
 export type UserUpdateWithoutRefreshTokensInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
+  createdUsers?: Prisma.UserUpdateManyWithoutCreatedByNestedInput
+  homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
@@ -1063,19 +1872,32 @@ export type UserUpdateWithoutRefreshTokensInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUpdateManyWithoutTargetUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRefreshTokensInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
@@ -1093,19 +1915,32 @@ export type UserUncheckedUpdateWithoutRefreshTokensInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUncheckedUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedUpdateManyWithoutTargetUserNestedInput
 }
 
 export type UserCreateWithoutTeacherClassesInput = {
   id?: string
-  email: string
+  email?: string | null
+  username?: string | null
   passwordHash: string
   name: string
   role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
   status?: $Enums.UserStatus
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
+  createdUsers?: Prisma.UserCreateNestedManyWithoutCreatedByInput
+  homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
@@ -1123,19 +1958,32 @@ export type UserCreateWithoutTeacherClassesInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogCreateNestedManyWithoutTargetUserInput
 }
 
 export type UserUncheckedCreateWithoutTeacherClassesInput = {
   id?: string
-  email: string
+  email?: string | null
+  username?: string | null
   passwordHash: string
   name: string
   role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
   status?: $Enums.UserStatus
+  createdById?: string | null
+  homeClassId?: string | null
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
@@ -1153,12 +2001,114 @@ export type UserUncheckedCreateWithoutTeacherClassesInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutTargetUserInput
 }
 
 export type UserCreateOrConnectWithoutTeacherClassesInput = {
   where: Prisma.UserWhereUniqueInput
   create: Prisma.XOR<Prisma.UserCreateWithoutTeacherClassesInput, Prisma.UserUncheckedCreateWithoutTeacherClassesInput>
+}
+
+export type UserCreateWithoutHomeClassInput = {
+  id?: string
+  email?: string | null
+  username?: string | null
+  passwordHash: string
+  name: string
+  role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
+  isOnboarded?: boolean
+  status?: $Enums.UserStatus
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
+  createdUsers?: Prisma.UserCreateNestedManyWithoutCreatedByInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
+  enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
+  createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
+  earnedBadges?: Prisma.StudentBadgeCreateNestedManyWithoutStudentInput
+  missionProgress?: Prisma.StudentMissionProgressCreateNestedManyWithoutStudentInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressCreateNestedManyWithoutStudentInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ChatConversationCreateNestedManyWithoutUserInput
+  joinRequests?: Prisma.JoinRequestCreateNestedManyWithoutStudentInput
+  sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
+  receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
+  submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
+  shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
+  shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
+  behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
+  behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogCreateNestedManyWithoutTargetUserInput
+}
+
+export type UserUncheckedCreateWithoutHomeClassInput = {
+  id?: string
+  email?: string | null
+  username?: string | null
+  passwordHash: string
+  name: string
+  role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
+  isOnboarded?: boolean
+  status?: $Enums.UserStatus
+  createdById?: string | null
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
+  enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
+  earnedBadges?: Prisma.StudentBadgeUncheckedCreateNestedManyWithoutStudentInput
+  missionProgress?: Prisma.StudentMissionProgressUncheckedCreateNestedManyWithoutStudentInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressUncheckedCreateNestedManyWithoutStudentInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ChatConversationUncheckedCreateNestedManyWithoutUserInput
+  joinRequests?: Prisma.JoinRequestUncheckedCreateNestedManyWithoutStudentInput
+  sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
+  receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
+  submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
+  shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
+  shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
+  behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
+  behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutTargetUserInput
+}
+
+export type UserCreateOrConnectWithoutHomeClassInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutHomeClassInput, Prisma.UserUncheckedCreateWithoutHomeClassInput>
+}
+
+export type UserCreateManyHomeClassInputEnvelope = {
+  data: Prisma.UserCreateManyHomeClassInput | Prisma.UserCreateManyHomeClassInput[]
+  skipDuplicates?: boolean
 }
 
 export type UserUpsertWithoutTeacherClassesInput = {
@@ -1174,14 +2124,21 @@ export type UserUpdateToOneWithWhereWithoutTeacherClassesInput = {
 
 export type UserUpdateWithoutTeacherClassesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
+  createdUsers?: Prisma.UserUpdateManyWithoutCreatedByNestedInput
+  homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
@@ -1199,19 +2156,32 @@ export type UserUpdateWithoutTeacherClassesInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUpdateManyWithoutTargetUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTeacherClassesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
@@ -1229,19 +2199,800 @@ export type UserUncheckedUpdateWithoutTeacherClassesInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUncheckedUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedUpdateManyWithoutTargetUserNestedInput
+}
+
+export type UserUpsertWithWhereUniqueWithoutHomeClassInput = {
+  where: Prisma.UserWhereUniqueInput
+  update: Prisma.XOR<Prisma.UserUpdateWithoutHomeClassInput, Prisma.UserUncheckedUpdateWithoutHomeClassInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutHomeClassInput, Prisma.UserUncheckedCreateWithoutHomeClassInput>
+}
+
+export type UserUpdateWithWhereUniqueWithoutHomeClassInput = {
+  where: Prisma.UserWhereUniqueInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutHomeClassInput, Prisma.UserUncheckedUpdateWithoutHomeClassInput>
+}
+
+export type UserUpdateManyWithWhereWithoutHomeClassInput = {
+  where: Prisma.UserScalarWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateManyMutationInput, Prisma.UserUncheckedUpdateManyWithoutHomeClassInput>
+}
+
+export type UserCreateWithoutClassTeachersInput = {
+  id?: string
+  email?: string | null
+  username?: string | null
+  passwordHash: string
+  name: string
+  role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
+  isOnboarded?: boolean
+  status?: $Enums.UserStatus
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
+  createdUsers?: Prisma.UserCreateNestedManyWithoutCreatedByInput
+  homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
+  enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
+  createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
+  earnedBadges?: Prisma.StudentBadgeCreateNestedManyWithoutStudentInput
+  missionProgress?: Prisma.StudentMissionProgressCreateNestedManyWithoutStudentInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressCreateNestedManyWithoutStudentInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ChatConversationCreateNestedManyWithoutUserInput
+  joinRequests?: Prisma.JoinRequestCreateNestedManyWithoutStudentInput
+  sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
+  receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
+  submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
+  shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
+  shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
+  behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
+  behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
+  classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogCreateNestedManyWithoutTargetUserInput
+}
+
+export type UserUncheckedCreateWithoutClassTeachersInput = {
+  id?: string
+  email?: string | null
+  username?: string | null
+  passwordHash: string
+  name: string
+  role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
+  isOnboarded?: boolean
+  status?: $Enums.UserStatus
+  createdById?: string | null
+  homeClassId?: string | null
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
+  enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
+  earnedBadges?: Prisma.StudentBadgeUncheckedCreateNestedManyWithoutStudentInput
+  missionProgress?: Prisma.StudentMissionProgressUncheckedCreateNestedManyWithoutStudentInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressUncheckedCreateNestedManyWithoutStudentInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ChatConversationUncheckedCreateNestedManyWithoutUserInput
+  joinRequests?: Prisma.JoinRequestUncheckedCreateNestedManyWithoutStudentInput
+  sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
+  receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
+  submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
+  shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
+  shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
+  behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
+  behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutTargetUserInput
+}
+
+export type UserCreateOrConnectWithoutClassTeachersInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutClassTeachersInput, Prisma.UserUncheckedCreateWithoutClassTeachersInput>
+}
+
+export type UserCreateWithoutClassTeachersAddedInput = {
+  id?: string
+  email?: string | null
+  username?: string | null
+  passwordHash: string
+  name: string
+  role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
+  isOnboarded?: boolean
+  status?: $Enums.UserStatus
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
+  createdUsers?: Prisma.UserCreateNestedManyWithoutCreatedByInput
+  homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
+  enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
+  createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
+  earnedBadges?: Prisma.StudentBadgeCreateNestedManyWithoutStudentInput
+  missionProgress?: Prisma.StudentMissionProgressCreateNestedManyWithoutStudentInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressCreateNestedManyWithoutStudentInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ChatConversationCreateNestedManyWithoutUserInput
+  joinRequests?: Prisma.JoinRequestCreateNestedManyWithoutStudentInput
+  sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
+  receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
+  submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
+  shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
+  shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
+  behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
+  behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
+  classActions?: Prisma.ClassActionLogCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogCreateNestedManyWithoutTargetUserInput
+}
+
+export type UserUncheckedCreateWithoutClassTeachersAddedInput = {
+  id?: string
+  email?: string | null
+  username?: string | null
+  passwordHash: string
+  name: string
+  role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
+  isOnboarded?: boolean
+  status?: $Enums.UserStatus
+  createdById?: string | null
+  homeClassId?: string | null
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
+  enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
+  earnedBadges?: Prisma.StudentBadgeUncheckedCreateNestedManyWithoutStudentInput
+  missionProgress?: Prisma.StudentMissionProgressUncheckedCreateNestedManyWithoutStudentInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressUncheckedCreateNestedManyWithoutStudentInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ChatConversationUncheckedCreateNestedManyWithoutUserInput
+  joinRequests?: Prisma.JoinRequestUncheckedCreateNestedManyWithoutStudentInput
+  sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
+  receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
+  submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
+  shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
+  shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
+  behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
+  behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
+  classActions?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutTargetUserInput
+}
+
+export type UserCreateOrConnectWithoutClassTeachersAddedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutClassTeachersAddedInput, Prisma.UserUncheckedCreateWithoutClassTeachersAddedInput>
+}
+
+export type UserUpsertWithoutClassTeachersInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutClassTeachersInput, Prisma.UserUncheckedUpdateWithoutClassTeachersInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutClassTeachersInput, Prisma.UserUncheckedCreateWithoutClassTeachersInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutClassTeachersInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutClassTeachersInput, Prisma.UserUncheckedUpdateWithoutClassTeachersInput>
+}
+
+export type UserUpdateWithoutClassTeachersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
+  createdUsers?: Prisma.UserUpdateManyWithoutCreatedByNestedInput
+  homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
+  enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
+  createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
+  earnedBadges?: Prisma.StudentBadgeUpdateManyWithoutStudentNestedInput
+  missionProgress?: Prisma.StudentMissionProgressUpdateManyWithoutStudentNestedInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressUpdateManyWithoutStudentNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ChatConversationUpdateManyWithoutUserNestedInput
+  joinRequests?: Prisma.JoinRequestUpdateManyWithoutStudentNestedInput
+  sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
+  receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
+  submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
+  shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
+  shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
+  behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
+  behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUpdateManyWithoutTargetUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutClassTeachersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
+  enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
+  earnedBadges?: Prisma.StudentBadgeUncheckedUpdateManyWithoutStudentNestedInput
+  missionProgress?: Prisma.StudentMissionProgressUncheckedUpdateManyWithoutStudentNestedInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressUncheckedUpdateManyWithoutStudentNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ChatConversationUncheckedUpdateManyWithoutUserNestedInput
+  joinRequests?: Prisma.JoinRequestUncheckedUpdateManyWithoutStudentNestedInput
+  sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
+  receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
+  submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
+  shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
+  shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
+  behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
+  behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUncheckedUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedUpdateManyWithoutTargetUserNestedInput
+}
+
+export type UserUpsertWithoutClassTeachersAddedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutClassTeachersAddedInput, Prisma.UserUncheckedUpdateWithoutClassTeachersAddedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutClassTeachersAddedInput, Prisma.UserUncheckedCreateWithoutClassTeachersAddedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutClassTeachersAddedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutClassTeachersAddedInput, Prisma.UserUncheckedUpdateWithoutClassTeachersAddedInput>
+}
+
+export type UserUpdateWithoutClassTeachersAddedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
+  createdUsers?: Prisma.UserUpdateManyWithoutCreatedByNestedInput
+  homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
+  enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
+  createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
+  earnedBadges?: Prisma.StudentBadgeUpdateManyWithoutStudentNestedInput
+  missionProgress?: Prisma.StudentMissionProgressUpdateManyWithoutStudentNestedInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressUpdateManyWithoutStudentNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ChatConversationUpdateManyWithoutUserNestedInput
+  joinRequests?: Prisma.JoinRequestUpdateManyWithoutStudentNestedInput
+  sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
+  receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
+  submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
+  shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
+  shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
+  behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
+  behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
+  classActions?: Prisma.ClassActionLogUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUpdateManyWithoutTargetUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutClassTeachersAddedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
+  enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
+  earnedBadges?: Prisma.StudentBadgeUncheckedUpdateManyWithoutStudentNestedInput
+  missionProgress?: Prisma.StudentMissionProgressUncheckedUpdateManyWithoutStudentNestedInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressUncheckedUpdateManyWithoutStudentNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ChatConversationUncheckedUpdateManyWithoutUserNestedInput
+  joinRequests?: Prisma.JoinRequestUncheckedUpdateManyWithoutStudentNestedInput
+  sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
+  receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
+  submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
+  shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
+  shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
+  behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
+  behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
+  classActions?: Prisma.ClassActionLogUncheckedUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedUpdateManyWithoutTargetUserNestedInput
+}
+
+export type UserCreateWithoutClassActionsInput = {
+  id?: string
+  email?: string | null
+  username?: string | null
+  passwordHash: string
+  name: string
+  role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
+  isOnboarded?: boolean
+  status?: $Enums.UserStatus
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
+  createdUsers?: Prisma.UserCreateNestedManyWithoutCreatedByInput
+  homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
+  enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
+  createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
+  earnedBadges?: Prisma.StudentBadgeCreateNestedManyWithoutStudentInput
+  missionProgress?: Prisma.StudentMissionProgressCreateNestedManyWithoutStudentInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressCreateNestedManyWithoutStudentInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ChatConversationCreateNestedManyWithoutUserInput
+  joinRequests?: Prisma.JoinRequestCreateNestedManyWithoutStudentInput
+  sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
+  receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
+  submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
+  shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
+  shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
+  behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
+  behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
+  classActionsTarget?: Prisma.ClassActionLogCreateNestedManyWithoutTargetUserInput
+}
+
+export type UserUncheckedCreateWithoutClassActionsInput = {
+  id?: string
+  email?: string | null
+  username?: string | null
+  passwordHash: string
+  name: string
+  role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
+  isOnboarded?: boolean
+  status?: $Enums.UserStatus
+  createdById?: string | null
+  homeClassId?: string | null
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
+  enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
+  earnedBadges?: Prisma.StudentBadgeUncheckedCreateNestedManyWithoutStudentInput
+  missionProgress?: Prisma.StudentMissionProgressUncheckedCreateNestedManyWithoutStudentInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressUncheckedCreateNestedManyWithoutStudentInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ChatConversationUncheckedCreateNestedManyWithoutUserInput
+  joinRequests?: Prisma.JoinRequestUncheckedCreateNestedManyWithoutStudentInput
+  sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
+  receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
+  submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
+  shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
+  shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
+  behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
+  behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutTargetUserInput
+}
+
+export type UserCreateOrConnectWithoutClassActionsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutClassActionsInput, Prisma.UserUncheckedCreateWithoutClassActionsInput>
+}
+
+export type UserCreateWithoutClassActionsTargetInput = {
+  id?: string
+  email?: string | null
+  username?: string | null
+  passwordHash: string
+  name: string
+  role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
+  isOnboarded?: boolean
+  status?: $Enums.UserStatus
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
+  createdUsers?: Prisma.UserCreateNestedManyWithoutCreatedByInput
+  homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
+  enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
+  createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
+  earnedBadges?: Prisma.StudentBadgeCreateNestedManyWithoutStudentInput
+  missionProgress?: Prisma.StudentMissionProgressCreateNestedManyWithoutStudentInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressCreateNestedManyWithoutStudentInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ChatConversationCreateNestedManyWithoutUserInput
+  joinRequests?: Prisma.JoinRequestCreateNestedManyWithoutStudentInput
+  sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
+  receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
+  submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
+  shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
+  shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
+  behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
+  behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogCreateNestedManyWithoutActorInput
+}
+
+export type UserUncheckedCreateWithoutClassActionsTargetInput = {
+  id?: string
+  email?: string | null
+  username?: string | null
+  passwordHash: string
+  name: string
+  role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
+  isOnboarded?: boolean
+  status?: $Enums.UserStatus
+  createdById?: string | null
+  homeClassId?: string | null
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
+  enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
+  earnedBadges?: Prisma.StudentBadgeUncheckedCreateNestedManyWithoutStudentInput
+  missionProgress?: Prisma.StudentMissionProgressUncheckedCreateNestedManyWithoutStudentInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressUncheckedCreateNestedManyWithoutStudentInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ChatConversationUncheckedCreateNestedManyWithoutUserInput
+  joinRequests?: Prisma.JoinRequestUncheckedCreateNestedManyWithoutStudentInput
+  sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
+  receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
+  submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
+  shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
+  shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
+  behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
+  behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutActorInput
+}
+
+export type UserCreateOrConnectWithoutClassActionsTargetInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutClassActionsTargetInput, Prisma.UserUncheckedCreateWithoutClassActionsTargetInput>
+}
+
+export type UserUpsertWithoutClassActionsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutClassActionsInput, Prisma.UserUncheckedUpdateWithoutClassActionsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutClassActionsInput, Prisma.UserUncheckedCreateWithoutClassActionsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutClassActionsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutClassActionsInput, Prisma.UserUncheckedUpdateWithoutClassActionsInput>
+}
+
+export type UserUpdateWithoutClassActionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
+  createdUsers?: Prisma.UserUpdateManyWithoutCreatedByNestedInput
+  homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
+  enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
+  createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
+  earnedBadges?: Prisma.StudentBadgeUpdateManyWithoutStudentNestedInput
+  missionProgress?: Prisma.StudentMissionProgressUpdateManyWithoutStudentNestedInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressUpdateManyWithoutStudentNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ChatConversationUpdateManyWithoutUserNestedInput
+  joinRequests?: Prisma.JoinRequestUpdateManyWithoutStudentNestedInput
+  sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
+  receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
+  submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
+  shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
+  shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
+  behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
+  behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUpdateManyWithoutTargetUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutClassActionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
+  enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
+  earnedBadges?: Prisma.StudentBadgeUncheckedUpdateManyWithoutStudentNestedInput
+  missionProgress?: Prisma.StudentMissionProgressUncheckedUpdateManyWithoutStudentNestedInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressUncheckedUpdateManyWithoutStudentNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ChatConversationUncheckedUpdateManyWithoutUserNestedInput
+  joinRequests?: Prisma.JoinRequestUncheckedUpdateManyWithoutStudentNestedInput
+  sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
+  receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
+  submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
+  shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
+  shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
+  behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
+  behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedUpdateManyWithoutTargetUserNestedInput
+}
+
+export type UserUpsertWithoutClassActionsTargetInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutClassActionsTargetInput, Prisma.UserUncheckedUpdateWithoutClassActionsTargetInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutClassActionsTargetInput, Prisma.UserUncheckedCreateWithoutClassActionsTargetInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutClassActionsTargetInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutClassActionsTargetInput, Prisma.UserUncheckedUpdateWithoutClassActionsTargetInput>
+}
+
+export type UserUpdateWithoutClassActionsTargetInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
+  createdUsers?: Prisma.UserUpdateManyWithoutCreatedByNestedInput
+  homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
+  enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
+  createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
+  earnedBadges?: Prisma.StudentBadgeUpdateManyWithoutStudentNestedInput
+  missionProgress?: Prisma.StudentMissionProgressUpdateManyWithoutStudentNestedInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressUpdateManyWithoutStudentNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ChatConversationUpdateManyWithoutUserNestedInput
+  joinRequests?: Prisma.JoinRequestUpdateManyWithoutStudentNestedInput
+  sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
+  receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
+  submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
+  shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
+  shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
+  behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
+  behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUpdateManyWithoutActorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutClassActionsTargetInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
+  enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
+  earnedBadges?: Prisma.StudentBadgeUncheckedUpdateManyWithoutStudentNestedInput
+  missionProgress?: Prisma.StudentMissionProgressUncheckedUpdateManyWithoutStudentNestedInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressUncheckedUpdateManyWithoutStudentNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ChatConversationUncheckedUpdateManyWithoutUserNestedInput
+  joinRequests?: Prisma.JoinRequestUncheckedUpdateManyWithoutStudentNestedInput
+  sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
+  receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
+  submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
+  shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
+  shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
+  behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
+  behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type UserCreateWithoutEnrollmentsInput = {
   id?: string
-  email: string
+  email?: string | null
+  username?: string | null
   passwordHash: string
   name: string
   role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
   status?: $Enums.UserStatus
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
+  createdUsers?: Prisma.UserCreateNestedManyWithoutCreatedByInput
+  homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
   createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
@@ -1259,19 +3010,32 @@ export type UserCreateWithoutEnrollmentsInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogCreateNestedManyWithoutTargetUserInput
 }
 
 export type UserUncheckedCreateWithoutEnrollmentsInput = {
   id?: string
-  email: string
+  email?: string | null
+  username?: string | null
   passwordHash: string
   name: string
   role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
   status?: $Enums.UserStatus
+  createdById?: string | null
+  homeClassId?: string | null
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
   createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
@@ -1289,7 +3053,13 @@ export type UserUncheckedCreateWithoutEnrollmentsInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutTargetUserInput
 }
 
 export type UserCreateOrConnectWithoutEnrollmentsInput = {
@@ -1310,14 +3080,21 @@ export type UserUpdateToOneWithWhereWithoutEnrollmentsInput = {
 
 export type UserUpdateWithoutEnrollmentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
+  createdUsers?: Prisma.UserUpdateManyWithoutCreatedByNestedInput
+  homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
   createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
@@ -1335,19 +3112,32 @@ export type UserUpdateWithoutEnrollmentsInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUpdateManyWithoutTargetUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutEnrollmentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
   createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
@@ -1365,19 +3155,32 @@ export type UserUncheckedUpdateWithoutEnrollmentsInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUncheckedUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedUpdateManyWithoutTargetUserNestedInput
 }
 
 export type UserCreateWithoutShopPurchasesInput = {
   id?: string
-  email: string
+  email?: string | null
+  username?: string | null
   passwordHash: string
   name: string
   role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
   status?: $Enums.UserStatus
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
+  createdUsers?: Prisma.UserCreateNestedManyWithoutCreatedByInput
+  homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
@@ -1395,19 +3198,32 @@ export type UserCreateWithoutShopPurchasesInput = {
   settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogCreateNestedManyWithoutTargetUserInput
 }
 
 export type UserUncheckedCreateWithoutShopPurchasesInput = {
   id?: string
-  email: string
+  email?: string | null
+  username?: string | null
   passwordHash: string
   name: string
   role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
   status?: $Enums.UserStatus
+  createdById?: string | null
+  homeClassId?: string | null
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
@@ -1425,7 +3241,13 @@ export type UserUncheckedCreateWithoutShopPurchasesInput = {
   settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutTargetUserInput
 }
 
 export type UserCreateOrConnectWithoutShopPurchasesInput = {
@@ -1446,14 +3268,21 @@ export type UserUpdateToOneWithWhereWithoutShopPurchasesInput = {
 
 export type UserUpdateWithoutShopPurchasesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
+  createdUsers?: Prisma.UserUpdateManyWithoutCreatedByNestedInput
+  homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
@@ -1471,19 +3300,32 @@ export type UserUpdateWithoutShopPurchasesInput = {
   settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUpdateManyWithoutTargetUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutShopPurchasesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
@@ -1501,19 +3343,32 @@ export type UserUncheckedUpdateWithoutShopPurchasesInput = {
   settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUncheckedUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedUpdateManyWithoutTargetUserNestedInput
 }
 
 export type UserCreateWithoutShopItemUsesInput = {
   id?: string
-  email: string
+  email?: string | null
+  username?: string | null
   passwordHash: string
   name: string
   role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
   status?: $Enums.UserStatus
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
+  createdUsers?: Prisma.UserCreateNestedManyWithoutCreatedByInput
+  homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
@@ -1531,19 +3386,32 @@ export type UserCreateWithoutShopItemUsesInput = {
   settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogCreateNestedManyWithoutTargetUserInput
 }
 
 export type UserUncheckedCreateWithoutShopItemUsesInput = {
   id?: string
-  email: string
+  email?: string | null
+  username?: string | null
   passwordHash: string
   name: string
   role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
   status?: $Enums.UserStatus
+  createdById?: string | null
+  homeClassId?: string | null
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
@@ -1561,7 +3429,13 @@ export type UserUncheckedCreateWithoutShopItemUsesInput = {
   settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutTargetUserInput
 }
 
 export type UserCreateOrConnectWithoutShopItemUsesInput = {
@@ -1582,14 +3456,21 @@ export type UserUpdateToOneWithWhereWithoutShopItemUsesInput = {
 
 export type UserUpdateWithoutShopItemUsesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
+  createdUsers?: Prisma.UserUpdateManyWithoutCreatedByNestedInput
+  homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
@@ -1607,19 +3488,32 @@ export type UserUpdateWithoutShopItemUsesInput = {
   settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUpdateManyWithoutTargetUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutShopItemUsesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
@@ -1637,19 +3531,32 @@ export type UserUncheckedUpdateWithoutShopItemUsesInput = {
   settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUncheckedUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedUpdateManyWithoutTargetUserNestedInput
 }
 
 export type UserCreateWithoutEnigmaProgressInput = {
   id?: string
-  email: string
+  email?: string | null
+  username?: string | null
   passwordHash: string
   name: string
   role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
   status?: $Enums.UserStatus
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
+  createdUsers?: Prisma.UserCreateNestedManyWithoutCreatedByInput
+  homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
@@ -1667,19 +3574,32 @@ export type UserCreateWithoutEnigmaProgressInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogCreateNestedManyWithoutTargetUserInput
 }
 
 export type UserUncheckedCreateWithoutEnigmaProgressInput = {
   id?: string
-  email: string
+  email?: string | null
+  username?: string | null
   passwordHash: string
   name: string
   role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
   status?: $Enums.UserStatus
+  createdById?: string | null
+  homeClassId?: string | null
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
@@ -1697,7 +3617,13 @@ export type UserUncheckedCreateWithoutEnigmaProgressInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutTargetUserInput
 }
 
 export type UserCreateOrConnectWithoutEnigmaProgressInput = {
@@ -1718,14 +3644,21 @@ export type UserUpdateToOneWithWhereWithoutEnigmaProgressInput = {
 
 export type UserUpdateWithoutEnigmaProgressInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
+  createdUsers?: Prisma.UserUpdateManyWithoutCreatedByNestedInput
+  homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
@@ -1743,19 +3676,32 @@ export type UserUpdateWithoutEnigmaProgressInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUpdateManyWithoutTargetUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutEnigmaProgressInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
@@ -1773,19 +3719,32 @@ export type UserUncheckedUpdateWithoutEnigmaProgressInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUncheckedUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedUpdateManyWithoutTargetUserNestedInput
 }
 
 export type UserCreateWithoutSubmissionsInput = {
   id?: string
-  email: string
+  email?: string | null
+  username?: string | null
   passwordHash: string
   name: string
   role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
   status?: $Enums.UserStatus
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
+  createdUsers?: Prisma.UserCreateNestedManyWithoutCreatedByInput
+  homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
@@ -1803,19 +3762,32 @@ export type UserCreateWithoutSubmissionsInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogCreateNestedManyWithoutTargetUserInput
 }
 
 export type UserUncheckedCreateWithoutSubmissionsInput = {
   id?: string
-  email: string
+  email?: string | null
+  username?: string | null
   passwordHash: string
   name: string
   role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
   status?: $Enums.UserStatus
+  createdById?: string | null
+  homeClassId?: string | null
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
@@ -1833,12 +3805,109 @@ export type UserUncheckedCreateWithoutSubmissionsInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutTargetUserInput
 }
 
 export type UserCreateOrConnectWithoutSubmissionsInput = {
   where: Prisma.UserWhereUniqueInput
   create: Prisma.XOR<Prisma.UserCreateWithoutSubmissionsInput, Prisma.UserUncheckedCreateWithoutSubmissionsInput>
+}
+
+export type UserCreateWithoutSubmissionsReviewedInput = {
+  id?: string
+  email?: string | null
+  username?: string | null
+  passwordHash: string
+  name: string
+  role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
+  isOnboarded?: boolean
+  status?: $Enums.UserStatus
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
+  createdUsers?: Prisma.UserCreateNestedManyWithoutCreatedByInput
+  homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
+  enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
+  createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
+  earnedBadges?: Prisma.StudentBadgeCreateNestedManyWithoutStudentInput
+  missionProgress?: Prisma.StudentMissionProgressCreateNestedManyWithoutStudentInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressCreateNestedManyWithoutStudentInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ChatConversationCreateNestedManyWithoutUserInput
+  joinRequests?: Prisma.JoinRequestCreateNestedManyWithoutStudentInput
+  sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
+  receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
+  submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
+  shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
+  shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
+  behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
+  behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogCreateNestedManyWithoutTargetUserInput
+}
+
+export type UserUncheckedCreateWithoutSubmissionsReviewedInput = {
+  id?: string
+  email?: string | null
+  username?: string | null
+  passwordHash: string
+  name: string
+  role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
+  isOnboarded?: boolean
+  status?: $Enums.UserStatus
+  createdById?: string | null
+  homeClassId?: string | null
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
+  enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
+  earnedBadges?: Prisma.StudentBadgeUncheckedCreateNestedManyWithoutStudentInput
+  missionProgress?: Prisma.StudentMissionProgressUncheckedCreateNestedManyWithoutStudentInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressUncheckedCreateNestedManyWithoutStudentInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ChatConversationUncheckedCreateNestedManyWithoutUserInput
+  joinRequests?: Prisma.JoinRequestUncheckedCreateNestedManyWithoutStudentInput
+  sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
+  receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
+  submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
+  shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
+  shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
+  behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
+  behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutTargetUserInput
+}
+
+export type UserCreateOrConnectWithoutSubmissionsReviewedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutSubmissionsReviewedInput, Prisma.UserUncheckedCreateWithoutSubmissionsReviewedInput>
 }
 
 export type UserUpsertWithoutSubmissionsInput = {
@@ -1854,14 +3923,21 @@ export type UserUpdateToOneWithWhereWithoutSubmissionsInput = {
 
 export type UserUpdateWithoutSubmissionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
+  createdUsers?: Prisma.UserUpdateManyWithoutCreatedByNestedInput
+  homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
@@ -1879,19 +3955,32 @@ export type UserUpdateWithoutSubmissionsInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUpdateManyWithoutTargetUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSubmissionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
@@ -1909,19 +3998,129 @@ export type UserUncheckedUpdateWithoutSubmissionsInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUncheckedUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedUpdateManyWithoutTargetUserNestedInput
+}
+
+export type UserUpsertWithoutSubmissionsReviewedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSubmissionsReviewedInput, Prisma.UserUncheckedUpdateWithoutSubmissionsReviewedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSubmissionsReviewedInput, Prisma.UserUncheckedCreateWithoutSubmissionsReviewedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSubmissionsReviewedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSubmissionsReviewedInput, Prisma.UserUncheckedUpdateWithoutSubmissionsReviewedInput>
+}
+
+export type UserUpdateWithoutSubmissionsReviewedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
+  createdUsers?: Prisma.UserUpdateManyWithoutCreatedByNestedInput
+  homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
+  enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
+  createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
+  earnedBadges?: Prisma.StudentBadgeUpdateManyWithoutStudentNestedInput
+  missionProgress?: Prisma.StudentMissionProgressUpdateManyWithoutStudentNestedInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressUpdateManyWithoutStudentNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ChatConversationUpdateManyWithoutUserNestedInput
+  joinRequests?: Prisma.JoinRequestUpdateManyWithoutStudentNestedInput
+  sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
+  receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
+  submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
+  shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
+  shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
+  behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
+  behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUpdateManyWithoutTargetUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSubmissionsReviewedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
+  enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
+  earnedBadges?: Prisma.StudentBadgeUncheckedUpdateManyWithoutStudentNestedInput
+  missionProgress?: Prisma.StudentMissionProgressUncheckedUpdateManyWithoutStudentNestedInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressUncheckedUpdateManyWithoutStudentNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ChatConversationUncheckedUpdateManyWithoutUserNestedInput
+  joinRequests?: Prisma.JoinRequestUncheckedUpdateManyWithoutStudentNestedInput
+  sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
+  receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
+  submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
+  shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
+  shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
+  behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
+  behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUncheckedUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedUpdateManyWithoutTargetUserNestedInput
 }
 
 export type UserCreateWithoutMissionProgressInput = {
   id?: string
-  email: string
+  email?: string | null
+  username?: string | null
   passwordHash: string
   name: string
   role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
   status?: $Enums.UserStatus
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
+  createdUsers?: Prisma.UserCreateNestedManyWithoutCreatedByInput
+  homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
@@ -1939,19 +4138,32 @@ export type UserCreateWithoutMissionProgressInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogCreateNestedManyWithoutTargetUserInput
 }
 
 export type UserUncheckedCreateWithoutMissionProgressInput = {
   id?: string
-  email: string
+  email?: string | null
+  username?: string | null
   passwordHash: string
   name: string
   role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
   status?: $Enums.UserStatus
+  createdById?: string | null
+  homeClassId?: string | null
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
@@ -1969,7 +4181,13 @@ export type UserUncheckedCreateWithoutMissionProgressInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutTargetUserInput
 }
 
 export type UserCreateOrConnectWithoutMissionProgressInput = {
@@ -1990,14 +4208,21 @@ export type UserUpdateToOneWithWhereWithoutMissionProgressInput = {
 
 export type UserUpdateWithoutMissionProgressInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
+  createdUsers?: Prisma.UserUpdateManyWithoutCreatedByNestedInput
+  homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
@@ -2015,19 +4240,32 @@ export type UserUpdateWithoutMissionProgressInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUpdateManyWithoutTargetUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutMissionProgressInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
@@ -2045,19 +4283,32 @@ export type UserUncheckedUpdateWithoutMissionProgressInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUncheckedUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedUpdateManyWithoutTargetUserNestedInput
 }
 
 export type UserCreateWithoutCreatedBadgesInput = {
   id?: string
-  email: string
+  email?: string | null
+  username?: string | null
   passwordHash: string
   name: string
   role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
   status?: $Enums.UserStatus
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
+  createdUsers?: Prisma.UserCreateNestedManyWithoutCreatedByInput
+  homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
@@ -2075,19 +4326,32 @@ export type UserCreateWithoutCreatedBadgesInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogCreateNestedManyWithoutTargetUserInput
 }
 
 export type UserUncheckedCreateWithoutCreatedBadgesInput = {
   id?: string
-  email: string
+  email?: string | null
+  username?: string | null
   passwordHash: string
   name: string
   role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
   status?: $Enums.UserStatus
+  createdById?: string | null
+  homeClassId?: string | null
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
@@ -2105,7 +4369,13 @@ export type UserUncheckedCreateWithoutCreatedBadgesInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutTargetUserInput
 }
 
 export type UserCreateOrConnectWithoutCreatedBadgesInput = {
@@ -2126,14 +4396,21 @@ export type UserUpdateToOneWithWhereWithoutCreatedBadgesInput = {
 
 export type UserUpdateWithoutCreatedBadgesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
+  createdUsers?: Prisma.UserUpdateManyWithoutCreatedByNestedInput
+  homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
@@ -2151,19 +4428,32 @@ export type UserUpdateWithoutCreatedBadgesInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUpdateManyWithoutTargetUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedBadgesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
@@ -2181,19 +4471,32 @@ export type UserUncheckedUpdateWithoutCreatedBadgesInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUncheckedUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedUpdateManyWithoutTargetUserNestedInput
 }
 
 export type UserCreateWithoutEarnedBadgesInput = {
   id?: string
-  email: string
+  email?: string | null
+  username?: string | null
   passwordHash: string
   name: string
   role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
   status?: $Enums.UserStatus
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
+  createdUsers?: Prisma.UserCreateNestedManyWithoutCreatedByInput
+  homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
@@ -2211,19 +4514,32 @@ export type UserCreateWithoutEarnedBadgesInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogCreateNestedManyWithoutTargetUserInput
 }
 
 export type UserUncheckedCreateWithoutEarnedBadgesInput = {
   id?: string
-  email: string
+  email?: string | null
+  username?: string | null
   passwordHash: string
   name: string
   role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
   status?: $Enums.UserStatus
+  createdById?: string | null
+  homeClassId?: string | null
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
@@ -2241,7 +4557,13 @@ export type UserUncheckedCreateWithoutEarnedBadgesInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutTargetUserInput
 }
 
 export type UserCreateOrConnectWithoutEarnedBadgesInput = {
@@ -2262,14 +4584,21 @@ export type UserUpdateToOneWithWhereWithoutEarnedBadgesInput = {
 
 export type UserUpdateWithoutEarnedBadgesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
+  createdUsers?: Prisma.UserUpdateManyWithoutCreatedByNestedInput
+  homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
@@ -2287,19 +4616,32 @@ export type UserUpdateWithoutEarnedBadgesInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUpdateManyWithoutTargetUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutEarnedBadgesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
@@ -2317,19 +4659,32 @@ export type UserUncheckedUpdateWithoutEarnedBadgesInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUncheckedUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedUpdateManyWithoutTargetUserNestedInput
 }
 
 export type UserCreateWithoutJoinRequestsInput = {
   id?: string
-  email: string
+  email?: string | null
+  username?: string | null
   passwordHash: string
   name: string
   role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
   status?: $Enums.UserStatus
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
+  createdUsers?: Prisma.UserCreateNestedManyWithoutCreatedByInput
+  homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
@@ -2347,19 +4702,32 @@ export type UserCreateWithoutJoinRequestsInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogCreateNestedManyWithoutTargetUserInput
 }
 
 export type UserUncheckedCreateWithoutJoinRequestsInput = {
   id?: string
-  email: string
+  email?: string | null
+  username?: string | null
   passwordHash: string
   name: string
   role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
   status?: $Enums.UserStatus
+  createdById?: string | null
+  homeClassId?: string | null
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
@@ -2377,7 +4745,13 @@ export type UserUncheckedCreateWithoutJoinRequestsInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutTargetUserInput
 }
 
 export type UserCreateOrConnectWithoutJoinRequestsInput = {
@@ -2398,14 +4772,21 @@ export type UserUpdateToOneWithWhereWithoutJoinRequestsInput = {
 
 export type UserUpdateWithoutJoinRequestsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
+  createdUsers?: Prisma.UserUpdateManyWithoutCreatedByNestedInput
+  homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
@@ -2423,19 +4804,32 @@ export type UserUpdateWithoutJoinRequestsInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUpdateManyWithoutTargetUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutJoinRequestsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
@@ -2453,19 +4847,32 @@ export type UserUncheckedUpdateWithoutJoinRequestsInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUncheckedUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedUpdateManyWithoutTargetUserNestedInput
 }
 
 export type UserCreateWithoutSentInvitationsInput = {
   id?: string
-  email: string
+  email?: string | null
+  username?: string | null
   passwordHash: string
   name: string
   role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
   status?: $Enums.UserStatus
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
+  createdUsers?: Prisma.UserCreateNestedManyWithoutCreatedByInput
+  homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
@@ -2483,19 +4890,32 @@ export type UserCreateWithoutSentInvitationsInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogCreateNestedManyWithoutTargetUserInput
 }
 
 export type UserUncheckedCreateWithoutSentInvitationsInput = {
   id?: string
-  email: string
+  email?: string | null
+  username?: string | null
   passwordHash: string
   name: string
   role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
   status?: $Enums.UserStatus
+  createdById?: string | null
+  homeClassId?: string | null
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
@@ -2513,7 +4933,13 @@ export type UserUncheckedCreateWithoutSentInvitationsInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutTargetUserInput
 }
 
 export type UserCreateOrConnectWithoutSentInvitationsInput = {
@@ -2523,14 +4949,21 @@ export type UserCreateOrConnectWithoutSentInvitationsInput = {
 
 export type UserCreateWithoutReceivedInvitationsInput = {
   id?: string
-  email: string
+  email?: string | null
+  username?: string | null
   passwordHash: string
   name: string
   role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
   status?: $Enums.UserStatus
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
+  createdUsers?: Prisma.UserCreateNestedManyWithoutCreatedByInput
+  homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
@@ -2548,19 +4981,32 @@ export type UserCreateWithoutReceivedInvitationsInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogCreateNestedManyWithoutTargetUserInput
 }
 
 export type UserUncheckedCreateWithoutReceivedInvitationsInput = {
   id?: string
-  email: string
+  email?: string | null
+  username?: string | null
   passwordHash: string
   name: string
   role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
   status?: $Enums.UserStatus
+  createdById?: string | null
+  homeClassId?: string | null
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
@@ -2578,7 +5024,13 @@ export type UserUncheckedCreateWithoutReceivedInvitationsInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutTargetUserInput
 }
 
 export type UserCreateOrConnectWithoutReceivedInvitationsInput = {
@@ -2599,14 +5051,21 @@ export type UserUpdateToOneWithWhereWithoutSentInvitationsInput = {
 
 export type UserUpdateWithoutSentInvitationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
+  createdUsers?: Prisma.UserUpdateManyWithoutCreatedByNestedInput
+  homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
@@ -2624,19 +5083,32 @@ export type UserUpdateWithoutSentInvitationsInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUpdateManyWithoutTargetUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSentInvitationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
@@ -2654,7 +5126,13 @@ export type UserUncheckedUpdateWithoutSentInvitationsInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUncheckedUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedUpdateManyWithoutTargetUserNestedInput
 }
 
 export type UserUpsertWithoutReceivedInvitationsInput = {
@@ -2670,14 +5148,21 @@ export type UserUpdateToOneWithWhereWithoutReceivedInvitationsInput = {
 
 export type UserUpdateWithoutReceivedInvitationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
+  createdUsers?: Prisma.UserUpdateManyWithoutCreatedByNestedInput
+  homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
@@ -2695,19 +5180,32 @@ export type UserUpdateWithoutReceivedInvitationsInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUpdateManyWithoutTargetUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutReceivedInvitationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
@@ -2725,19 +5223,32 @@ export type UserUncheckedUpdateWithoutReceivedInvitationsInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUncheckedUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedUpdateManyWithoutTargetUserNestedInput
 }
 
 export type UserCreateWithoutNotificationsInput = {
   id?: string
-  email: string
+  email?: string | null
+  username?: string | null
   passwordHash: string
   name: string
   role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
   status?: $Enums.UserStatus
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
+  createdUsers?: Prisma.UserCreateNestedManyWithoutCreatedByInput
+  homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
@@ -2755,19 +5266,32 @@ export type UserCreateWithoutNotificationsInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogCreateNestedManyWithoutTargetUserInput
 }
 
 export type UserUncheckedCreateWithoutNotificationsInput = {
   id?: string
-  email: string
+  email?: string | null
+  username?: string | null
   passwordHash: string
   name: string
   role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
   status?: $Enums.UserStatus
+  createdById?: string | null
+  homeClassId?: string | null
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
@@ -2785,7 +5309,13 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutTargetUserInput
 }
 
 export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -2806,14 +5336,21 @@ export type UserUpdateToOneWithWhereWithoutNotificationsInput = {
 
 export type UserUpdateWithoutNotificationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
+  createdUsers?: Prisma.UserUpdateManyWithoutCreatedByNestedInput
+  homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
@@ -2831,19 +5368,32 @@ export type UserUpdateWithoutNotificationsInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUpdateManyWithoutTargetUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
@@ -2861,19 +5411,32 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUncheckedUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedUpdateManyWithoutTargetUserNestedInput
 }
 
 export type UserCreateWithoutActivitiesInput = {
   id?: string
-  email: string
+  email?: string | null
+  username?: string | null
   passwordHash: string
   name: string
   role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
   status?: $Enums.UserStatus
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
+  createdUsers?: Prisma.UserCreateNestedManyWithoutCreatedByInput
+  homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
@@ -2891,19 +5454,32 @@ export type UserCreateWithoutActivitiesInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogCreateNestedManyWithoutTargetUserInput
 }
 
 export type UserUncheckedCreateWithoutActivitiesInput = {
   id?: string
-  email: string
+  email?: string | null
+  username?: string | null
   passwordHash: string
   name: string
   role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
   status?: $Enums.UserStatus
+  createdById?: string | null
+  homeClassId?: string | null
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
@@ -2921,12 +5497,109 @@ export type UserUncheckedCreateWithoutActivitiesInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutTargetUserInput
 }
 
 export type UserCreateOrConnectWithoutActivitiesInput = {
   where: Prisma.UserWhereUniqueInput
   create: Prisma.XOR<Prisma.UserCreateWithoutActivitiesInput, Prisma.UserUncheckedCreateWithoutActivitiesInput>
+}
+
+export type UserCreateWithoutActivitiesActedInput = {
+  id?: string
+  email?: string | null
+  username?: string | null
+  passwordHash: string
+  name: string
+  role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
+  isOnboarded?: boolean
+  status?: $Enums.UserStatus
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
+  createdUsers?: Prisma.UserCreateNestedManyWithoutCreatedByInput
+  homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
+  enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
+  createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
+  earnedBadges?: Prisma.StudentBadgeCreateNestedManyWithoutStudentInput
+  missionProgress?: Prisma.StudentMissionProgressCreateNestedManyWithoutStudentInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressCreateNestedManyWithoutStudentInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ChatConversationCreateNestedManyWithoutUserInput
+  joinRequests?: Prisma.JoinRequestCreateNestedManyWithoutStudentInput
+  sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
+  receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
+  submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
+  shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
+  shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
+  behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogCreateNestedManyWithoutTargetUserInput
+}
+
+export type UserUncheckedCreateWithoutActivitiesActedInput = {
+  id?: string
+  email?: string | null
+  username?: string | null
+  passwordHash: string
+  name: string
+  role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
+  isOnboarded?: boolean
+  status?: $Enums.UserStatus
+  createdById?: string | null
+  homeClassId?: string | null
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
+  enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
+  earnedBadges?: Prisma.StudentBadgeUncheckedCreateNestedManyWithoutStudentInput
+  missionProgress?: Prisma.StudentMissionProgressUncheckedCreateNestedManyWithoutStudentInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressUncheckedCreateNestedManyWithoutStudentInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ChatConversationUncheckedCreateNestedManyWithoutUserInput
+  joinRequests?: Prisma.JoinRequestUncheckedCreateNestedManyWithoutStudentInput
+  sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
+  receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
+  submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
+  shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
+  shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
+  behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutTargetUserInput
+}
+
+export type UserCreateOrConnectWithoutActivitiesActedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutActivitiesActedInput, Prisma.UserUncheckedCreateWithoutActivitiesActedInput>
 }
 
 export type UserUpsertWithoutActivitiesInput = {
@@ -2942,14 +5615,21 @@ export type UserUpdateToOneWithWhereWithoutActivitiesInput = {
 
 export type UserUpdateWithoutActivitiesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
+  createdUsers?: Prisma.UserUpdateManyWithoutCreatedByNestedInput
+  homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
@@ -2967,19 +5647,32 @@ export type UserUpdateWithoutActivitiesInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUpdateManyWithoutTargetUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutActivitiesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
@@ -2997,19 +5690,129 @@ export type UserUncheckedUpdateWithoutActivitiesInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUncheckedUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedUpdateManyWithoutTargetUserNestedInput
+}
+
+export type UserUpsertWithoutActivitiesActedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutActivitiesActedInput, Prisma.UserUncheckedUpdateWithoutActivitiesActedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutActivitiesActedInput, Prisma.UserUncheckedCreateWithoutActivitiesActedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutActivitiesActedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutActivitiesActedInput, Prisma.UserUncheckedUpdateWithoutActivitiesActedInput>
+}
+
+export type UserUpdateWithoutActivitiesActedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
+  createdUsers?: Prisma.UserUpdateManyWithoutCreatedByNestedInput
+  homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
+  enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
+  createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
+  earnedBadges?: Prisma.StudentBadgeUpdateManyWithoutStudentNestedInput
+  missionProgress?: Prisma.StudentMissionProgressUpdateManyWithoutStudentNestedInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressUpdateManyWithoutStudentNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ChatConversationUpdateManyWithoutUserNestedInput
+  joinRequests?: Prisma.JoinRequestUpdateManyWithoutStudentNestedInput
+  sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
+  receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
+  submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
+  shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
+  shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
+  behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUpdateManyWithoutTargetUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutActivitiesActedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
+  enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
+  earnedBadges?: Prisma.StudentBadgeUncheckedUpdateManyWithoutStudentNestedInput
+  missionProgress?: Prisma.StudentMissionProgressUncheckedUpdateManyWithoutStudentNestedInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressUncheckedUpdateManyWithoutStudentNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ChatConversationUncheckedUpdateManyWithoutUserNestedInput
+  joinRequests?: Prisma.JoinRequestUncheckedUpdateManyWithoutStudentNestedInput
+  sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
+  receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
+  submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
+  shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
+  shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
+  behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUncheckedUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedUpdateManyWithoutTargetUserNestedInput
 }
 
 export type UserCreateWithoutConversationsInput = {
   id?: string
-  email: string
+  email?: string | null
+  username?: string | null
   passwordHash: string
   name: string
   role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
   status?: $Enums.UserStatus
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
+  createdUsers?: Prisma.UserCreateNestedManyWithoutCreatedByInput
+  homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
@@ -3027,19 +5830,32 @@ export type UserCreateWithoutConversationsInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogCreateNestedManyWithoutTargetUserInput
 }
 
 export type UserUncheckedCreateWithoutConversationsInput = {
   id?: string
-  email: string
+  email?: string | null
+  username?: string | null
   passwordHash: string
   name: string
   role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
   status?: $Enums.UserStatus
+  createdById?: string | null
+  homeClassId?: string | null
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
@@ -3057,7 +5873,13 @@ export type UserUncheckedCreateWithoutConversationsInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutTargetUserInput
 }
 
 export type UserCreateOrConnectWithoutConversationsInput = {
@@ -3078,14 +5900,21 @@ export type UserUpdateToOneWithWhereWithoutConversationsInput = {
 
 export type UserUpdateWithoutConversationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
+  createdUsers?: Prisma.UserUpdateManyWithoutCreatedByNestedInput
+  homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
@@ -3103,19 +5932,32 @@ export type UserUpdateWithoutConversationsInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUpdateManyWithoutTargetUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutConversationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
@@ -3133,19 +5975,32 @@ export type UserUncheckedUpdateWithoutConversationsInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUncheckedUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedUpdateManyWithoutTargetUserNestedInput
 }
 
 export type UserCreateWithoutBehaviorsAppliedInput = {
   id?: string
-  email: string
+  email?: string | null
+  username?: string | null
   passwordHash: string
   name: string
   role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
   status?: $Enums.UserStatus
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
+  createdUsers?: Prisma.UserCreateNestedManyWithoutCreatedByInput
+  homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
@@ -3163,19 +6018,32 @@ export type UserCreateWithoutBehaviorsAppliedInput = {
   settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogCreateNestedManyWithoutTargetUserInput
 }
 
 export type UserUncheckedCreateWithoutBehaviorsAppliedInput = {
   id?: string
-  email: string
+  email?: string | null
+  username?: string | null
   passwordHash: string
   name: string
   role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
   status?: $Enums.UserStatus
+  createdById?: string | null
+  homeClassId?: string | null
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
@@ -3193,7 +6061,13 @@ export type UserUncheckedCreateWithoutBehaviorsAppliedInput = {
   settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutTargetUserInput
 }
 
 export type UserCreateOrConnectWithoutBehaviorsAppliedInput = {
@@ -3203,14 +6077,21 @@ export type UserCreateOrConnectWithoutBehaviorsAppliedInput = {
 
 export type UserCreateWithoutBehaviorsReceivedInput = {
   id?: string
-  email: string
+  email?: string | null
+  username?: string | null
   passwordHash: string
   name: string
   role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
   status?: $Enums.UserStatus
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
+  createdUsers?: Prisma.UserCreateNestedManyWithoutCreatedByInput
+  homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
@@ -3229,18 +6110,31 @@ export type UserCreateWithoutBehaviorsReceivedInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
+  classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogCreateNestedManyWithoutTargetUserInput
 }
 
 export type UserUncheckedCreateWithoutBehaviorsReceivedInput = {
   id?: string
-  email: string
+  email?: string | null
+  username?: string | null
   passwordHash: string
   name: string
   role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
   status?: $Enums.UserStatus
+  createdById?: string | null
+  homeClassId?: string | null
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
@@ -3259,6 +6153,12 @@ export type UserUncheckedCreateWithoutBehaviorsReceivedInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
+  classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutTargetUserInput
 }
 
 export type UserCreateOrConnectWithoutBehaviorsReceivedInput = {
@@ -3279,14 +6179,21 @@ export type UserUpdateToOneWithWhereWithoutBehaviorsAppliedInput = {
 
 export type UserUpdateWithoutBehaviorsAppliedInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
+  createdUsers?: Prisma.UserUpdateManyWithoutCreatedByNestedInput
+  homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
@@ -3304,19 +6211,32 @@ export type UserUpdateWithoutBehaviorsAppliedInput = {
   settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUpdateManyWithoutTargetUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBehaviorsAppliedInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
@@ -3334,7 +6254,13 @@ export type UserUncheckedUpdateWithoutBehaviorsAppliedInput = {
   settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
   behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUncheckedUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedUpdateManyWithoutTargetUserNestedInput
 }
 
 export type UserUpsertWithoutBehaviorsReceivedInput = {
@@ -3350,14 +6276,21 @@ export type UserUpdateToOneWithWhereWithoutBehaviorsReceivedInput = {
 
 export type UserUpdateWithoutBehaviorsReceivedInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
+  createdUsers?: Prisma.UserUpdateManyWithoutCreatedByNestedInput
+  homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
@@ -3376,18 +6309,31 @@ export type UserUpdateWithoutBehaviorsReceivedInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
+  classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUpdateManyWithoutTargetUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBehaviorsReceivedInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
@@ -3406,6 +6352,252 @@ export type UserUncheckedUpdateWithoutBehaviorsReceivedInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
+  classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUncheckedUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedUpdateManyWithoutTargetUserNestedInput
+}
+
+export type UserCreateManyCreatedByInput = {
+  id?: string
+  email?: string | null
+  username?: string | null
+  passwordHash: string
+  name: string
+  role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
+  isOnboarded?: boolean
+  status?: $Enums.UserStatus
+  homeClassId?: string | null
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type UserUpdateWithoutCreatedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdUsers?: Prisma.UserUpdateManyWithoutCreatedByNestedInput
+  homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
+  enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
+  createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
+  earnedBadges?: Prisma.StudentBadgeUpdateManyWithoutStudentNestedInput
+  missionProgress?: Prisma.StudentMissionProgressUpdateManyWithoutStudentNestedInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressUpdateManyWithoutStudentNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ChatConversationUpdateManyWithoutUserNestedInput
+  joinRequests?: Prisma.JoinRequestUpdateManyWithoutStudentNestedInput
+  sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
+  receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
+  submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
+  shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
+  shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
+  behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
+  behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUpdateManyWithoutTargetUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCreatedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
+  enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
+  earnedBadges?: Prisma.StudentBadgeUncheckedUpdateManyWithoutStudentNestedInput
+  missionProgress?: Prisma.StudentMissionProgressUncheckedUpdateManyWithoutStudentNestedInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressUncheckedUpdateManyWithoutStudentNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ChatConversationUncheckedUpdateManyWithoutUserNestedInput
+  joinRequests?: Prisma.JoinRequestUncheckedUpdateManyWithoutStudentNestedInput
+  sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
+  receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
+  submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
+  shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
+  shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
+  behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
+  behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUncheckedUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedUpdateManyWithoutTargetUserNestedInput
+}
+
+export type UserUncheckedUpdateManyWithoutCreatedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type UserCreateManyHomeClassInput = {
+  id?: string
+  email?: string | null
+  username?: string | null
+  passwordHash: string
+  name: string
+  role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
+  isOnboarded?: boolean
+  status?: $Enums.UserStatus
+  createdById?: string | null
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type UserUpdateWithoutHomeClassInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
+  createdUsers?: Prisma.UserUpdateManyWithoutCreatedByNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
+  enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
+  createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
+  earnedBadges?: Prisma.StudentBadgeUpdateManyWithoutStudentNestedInput
+  missionProgress?: Prisma.StudentMissionProgressUpdateManyWithoutStudentNestedInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressUpdateManyWithoutStudentNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ChatConversationUpdateManyWithoutUserNestedInput
+  joinRequests?: Prisma.JoinRequestUpdateManyWithoutStudentNestedInput
+  sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
+  receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
+  submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
+  shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
+  shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
+  behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
+  behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUpdateManyWithoutTargetUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutHomeClassInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
+  enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
+  earnedBadges?: Prisma.StudentBadgeUncheckedUpdateManyWithoutStudentNestedInput
+  missionProgress?: Prisma.StudentMissionProgressUncheckedUpdateManyWithoutStudentNestedInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressUncheckedUpdateManyWithoutStudentNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ChatConversationUncheckedUpdateManyWithoutUserNestedInput
+  joinRequests?: Prisma.JoinRequestUncheckedUpdateManyWithoutStudentNestedInput
+  sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
+  receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
+  submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
+  shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
+  shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
+  behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
+  behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUncheckedUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedUpdateManyWithoutTargetUserNestedInput
+}
+
+export type UserUncheckedUpdateManyWithoutHomeClassInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -3414,6 +6606,7 @@ export type UserUncheckedUpdateWithoutBehaviorsReceivedInput = {
  */
 
 export type UserCountOutputType = {
+  createdUsers: number
   refreshTokens: number
   teacherClasses: number
   enrollments: number
@@ -3431,10 +6624,17 @@ export type UserCountOutputType = {
   shopPurchases: number
   shopItemUses: number
   behaviorsApplied: number
+  submissionsReviewed: number
+  activitiesActed: number
   behaviorsReceived: number
+  classTeachers: number
+  classTeachersAdded: number
+  classActions: number
+  classActionsTarget: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  createdUsers?: boolean | UserCountOutputTypeCountCreatedUsersArgs
   refreshTokens?: boolean | UserCountOutputTypeCountRefreshTokensArgs
   teacherClasses?: boolean | UserCountOutputTypeCountTeacherClassesArgs
   enrollments?: boolean | UserCountOutputTypeCountEnrollmentsArgs
@@ -3452,7 +6652,13 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   shopPurchases?: boolean | UserCountOutputTypeCountShopPurchasesArgs
   shopItemUses?: boolean | UserCountOutputTypeCountShopItemUsesArgs
   behaviorsApplied?: boolean | UserCountOutputTypeCountBehaviorsAppliedArgs
+  submissionsReviewed?: boolean | UserCountOutputTypeCountSubmissionsReviewedArgs
+  activitiesActed?: boolean | UserCountOutputTypeCountActivitiesActedArgs
   behaviorsReceived?: boolean | UserCountOutputTypeCountBehaviorsReceivedArgs
+  classTeachers?: boolean | UserCountOutputTypeCountClassTeachersArgs
+  classTeachersAdded?: boolean | UserCountOutputTypeCountClassTeachersAddedArgs
+  classActions?: boolean | UserCountOutputTypeCountClassActionsArgs
+  classActionsTarget?: boolean | UserCountOutputTypeCountClassActionsTargetArgs
 }
 
 /**
@@ -3463,6 +6669,13 @@ export type UserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
    * Select specific fields to fetch from the UserCountOutputType
    */
   select?: Prisma.UserCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCreatedUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserWhereInput
 }
 
 /**
@@ -3587,21 +6800,72 @@ export type UserCountOutputTypeCountBehaviorsAppliedArgs<ExtArgs extends runtime
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountSubmissionsReviewedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EnigmaSubmissionWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountActivitiesActedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ActivityWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountBehaviorsReceivedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.BehaviorApplicationWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountClassTeachersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ClassTeacherWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountClassTeachersAddedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ClassTeacherWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountClassActionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ClassActionLogWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountClassActionsTargetArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ClassActionLogWhereInput
 }
 
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   email?: boolean
+  username?: boolean
   passwordHash?: boolean
   name?: boolean
   role?: boolean
+  accountType?: boolean
   isOnboarded?: boolean
   status?: boolean
+  createdById?: boolean
+  homeClassId?: boolean
+  mustChangePassword?: boolean
+  passwordChangedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  createdBy?: boolean | Prisma.User$createdByArgs<ExtArgs>
+  createdUsers?: boolean | Prisma.User$createdUsersArgs<ExtArgs>
+  homeClass?: boolean | Prisma.User$homeClassArgs<ExtArgs>
   refreshTokens?: boolean | Prisma.User$refreshTokensArgs<ExtArgs>
   teacherClasses?: boolean | Prisma.User$teacherClassesArgs<ExtArgs>
   enrollments?: boolean | Prisma.User$enrollmentsArgs<ExtArgs>
@@ -3620,48 +6884,79 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   shopPurchases?: boolean | Prisma.User$shopPurchasesArgs<ExtArgs>
   shopItemUses?: boolean | Prisma.User$shopItemUsesArgs<ExtArgs>
   behaviorsApplied?: boolean | Prisma.User$behaviorsAppliedArgs<ExtArgs>
+  submissionsReviewed?: boolean | Prisma.User$submissionsReviewedArgs<ExtArgs>
+  activitiesActed?: boolean | Prisma.User$activitiesActedArgs<ExtArgs>
   behaviorsReceived?: boolean | Prisma.User$behaviorsReceivedArgs<ExtArgs>
+  classTeachers?: boolean | Prisma.User$classTeachersArgs<ExtArgs>
+  classTeachersAdded?: boolean | Prisma.User$classTeachersAddedArgs<ExtArgs>
+  classActions?: boolean | Prisma.User$classActionsArgs<ExtArgs>
+  classActionsTarget?: boolean | Prisma.User$classActionsTargetArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   email?: boolean
+  username?: boolean
   passwordHash?: boolean
   name?: boolean
   role?: boolean
+  accountType?: boolean
   isOnboarded?: boolean
   status?: boolean
+  createdById?: boolean
+  homeClassId?: boolean
+  mustChangePassword?: boolean
+  passwordChangedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  createdBy?: boolean | Prisma.User$createdByArgs<ExtArgs>
+  homeClass?: boolean | Prisma.User$homeClassArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   email?: boolean
+  username?: boolean
   passwordHash?: boolean
   name?: boolean
   role?: boolean
+  accountType?: boolean
   isOnboarded?: boolean
   status?: boolean
+  createdById?: boolean
+  homeClassId?: boolean
+  mustChangePassword?: boolean
+  passwordChangedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  createdBy?: boolean | Prisma.User$createdByArgs<ExtArgs>
+  homeClass?: boolean | Prisma.User$homeClassArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
   id?: boolean
   email?: boolean
+  username?: boolean
   passwordHash?: boolean
   name?: boolean
   role?: boolean
+  accountType?: boolean
   isOnboarded?: boolean
   status?: boolean
+  createdById?: boolean
+  homeClassId?: boolean
+  mustChangePassword?: boolean
+  passwordChangedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "passwordHash" | "name" | "role" | "isOnboarded" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "username" | "passwordHash" | "name" | "role" | "accountType" | "isOnboarded" | "status" | "createdById" | "homeClassId" | "mustChangePassword" | "passwordChangedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  createdBy?: boolean | Prisma.User$createdByArgs<ExtArgs>
+  createdUsers?: boolean | Prisma.User$createdUsersArgs<ExtArgs>
+  homeClass?: boolean | Prisma.User$homeClassArgs<ExtArgs>
   refreshTokens?: boolean | Prisma.User$refreshTokensArgs<ExtArgs>
   teacherClasses?: boolean | Prisma.User$teacherClassesArgs<ExtArgs>
   enrollments?: boolean | Prisma.User$enrollmentsArgs<ExtArgs>
@@ -3680,15 +6975,30 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   shopPurchases?: boolean | Prisma.User$shopPurchasesArgs<ExtArgs>
   shopItemUses?: boolean | Prisma.User$shopItemUsesArgs<ExtArgs>
   behaviorsApplied?: boolean | Prisma.User$behaviorsAppliedArgs<ExtArgs>
+  submissionsReviewed?: boolean | Prisma.User$submissionsReviewedArgs<ExtArgs>
+  activitiesActed?: boolean | Prisma.User$activitiesActedArgs<ExtArgs>
   behaviorsReceived?: boolean | Prisma.User$behaviorsReceivedArgs<ExtArgs>
+  classTeachers?: boolean | Prisma.User$classTeachersArgs<ExtArgs>
+  classTeachersAdded?: boolean | Prisma.User$classTeachersAddedArgs<ExtArgs>
+  classActions?: boolean | Prisma.User$classActionsArgs<ExtArgs>
+  classActionsTarget?: boolean | Prisma.User$classActionsTargetArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  createdBy?: boolean | Prisma.User$createdByArgs<ExtArgs>
+  homeClass?: boolean | Prisma.User$homeClassArgs<ExtArgs>
+}
+export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  createdBy?: boolean | Prisma.User$createdByArgs<ExtArgs>
+  homeClass?: boolean | Prisma.User$homeClassArgs<ExtArgs>
+}
 
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "User"
   objects: {
+    createdBy: Prisma.$UserPayload<ExtArgs> | null
+    createdUsers: Prisma.$UserPayload<ExtArgs>[]
+    homeClass: Prisma.$ClassPayload<ExtArgs> | null
     refreshTokens: Prisma.$RefreshTokenPayload<ExtArgs>[]
     teacherClasses: Prisma.$ClassPayload<ExtArgs>[]
     enrollments: Prisma.$ClassEnrollmentPayload<ExtArgs>[]
@@ -3707,16 +7017,28 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     shopPurchases: Prisma.$ShopPurchasePayload<ExtArgs>[]
     shopItemUses: Prisma.$ShopItemUsePayload<ExtArgs>[]
     behaviorsApplied: Prisma.$BehaviorApplicationPayload<ExtArgs>[]
+    submissionsReviewed: Prisma.$EnigmaSubmissionPayload<ExtArgs>[]
+    activitiesActed: Prisma.$ActivityPayload<ExtArgs>[]
     behaviorsReceived: Prisma.$BehaviorApplicationPayload<ExtArgs>[]
+    classTeachers: Prisma.$ClassTeacherPayload<ExtArgs>[]
+    classTeachersAdded: Prisma.$ClassTeacherPayload<ExtArgs>[]
+    classActions: Prisma.$ClassActionLogPayload<ExtArgs>[]
+    classActionsTarget: Prisma.$ClassActionLogPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    email: string
+    email: string | null
+    username: string | null
     passwordHash: string
     name: string
     role: $Enums.UserRole | null
+    accountType: $Enums.UserAccountType
     isOnboarded: boolean
     status: $Enums.UserStatus
+    createdById: string | null
+    homeClassId: string | null
+    mustChangePassword: boolean
+    passwordChangedAt: Date | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["user"]>
@@ -4113,6 +7435,9 @@ readonly fields: UserFieldRefs;
  */
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  createdBy<T extends Prisma.User$createdByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  createdUsers<T extends Prisma.User$createdUsersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdUsersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  homeClass<T extends Prisma.User$homeClassArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$homeClassArgs<ExtArgs>>): Prisma.Prisma__ClassClient<runtime.Types.Result.GetResult<Prisma.$ClassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   refreshTokens<T extends Prisma.User$refreshTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$refreshTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RefreshTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   teacherClasses<T extends Prisma.User$teacherClassesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$teacherClassesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   enrollments<T extends Prisma.User$enrollmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClassEnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -4131,7 +7456,13 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   shopPurchases<T extends Prisma.User$shopPurchasesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$shopPurchasesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ShopPurchasePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   shopItemUses<T extends Prisma.User$shopItemUsesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$shopItemUsesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ShopItemUsePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   behaviorsApplied<T extends Prisma.User$behaviorsAppliedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$behaviorsAppliedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BehaviorApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  submissionsReviewed<T extends Prisma.User$submissionsReviewedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$submissionsReviewedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EnigmaSubmissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  activitiesActed<T extends Prisma.User$activitiesActedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$activitiesActedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ActivityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   behaviorsReceived<T extends Prisma.User$behaviorsReceivedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$behaviorsReceivedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BehaviorApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  classTeachers<T extends Prisma.User$classTeachersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$classTeachersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClassTeacherPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  classTeachersAdded<T extends Prisma.User$classTeachersAddedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$classTeachersAddedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClassTeacherPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  classActions<T extends Prisma.User$classActionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$classActionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClassActionLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  classActionsTarget<T extends Prisma.User$classActionsTargetArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$classActionsTargetArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClassActionLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4163,11 +7494,17 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
 export interface UserFieldRefs {
   readonly id: Prisma.FieldRef<"User", 'String'>
   readonly email: Prisma.FieldRef<"User", 'String'>
+  readonly username: Prisma.FieldRef<"User", 'String'>
   readonly passwordHash: Prisma.FieldRef<"User", 'String'>
   readonly name: Prisma.FieldRef<"User", 'String'>
   readonly role: Prisma.FieldRef<"User", 'UserRole'>
+  readonly accountType: Prisma.FieldRef<"User", 'UserAccountType'>
   readonly isOnboarded: Prisma.FieldRef<"User", 'Boolean'>
   readonly status: Prisma.FieldRef<"User", 'UserStatus'>
+  readonly createdById: Prisma.FieldRef<"User", 'String'>
+  readonly homeClassId: Prisma.FieldRef<"User", 'String'>
+  readonly mustChangePassword: Prisma.FieldRef<"User", 'Boolean'>
+  readonly passwordChangedAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
 }
@@ -4424,6 +7761,10 @@ export type UserCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
    */
   data: Prisma.UserCreateManyInput | Prisma.UserCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -4494,6 +7835,10 @@ export type UserUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
    * Limit how many Users to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -4560,6 +7905,68 @@ export type UserDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Limit how many Users to delete.
    */
   limit?: number
+}
+
+/**
+ * User.createdBy
+ */
+export type User$createdByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
+}
+
+/**
+ * User.createdUsers
+ */
+export type User$createdUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
+  orderBy?: Prisma.UserOrderByWithRelationInput | Prisma.UserOrderByWithRelationInput[]
+  cursor?: Prisma.UserWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserScalarFieldEnum | Prisma.UserScalarFieldEnum[]
+}
+
+/**
+ * User.homeClass
+ */
+export type User$homeClassArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Class
+   */
+  select?: Prisma.ClassSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Class
+   */
+  omit?: Prisma.ClassOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ClassInclude<ExtArgs> | null
+  where?: Prisma.ClassWhereInput
 }
 
 /**
@@ -4990,6 +8397,54 @@ export type User$behaviorsAppliedArgs<ExtArgs extends runtime.Types.Extensions.I
 }
 
 /**
+ * User.submissionsReviewed
+ */
+export type User$submissionsReviewedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EnigmaSubmission
+   */
+  select?: Prisma.EnigmaSubmissionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the EnigmaSubmission
+   */
+  omit?: Prisma.EnigmaSubmissionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EnigmaSubmissionInclude<ExtArgs> | null
+  where?: Prisma.EnigmaSubmissionWhereInput
+  orderBy?: Prisma.EnigmaSubmissionOrderByWithRelationInput | Prisma.EnigmaSubmissionOrderByWithRelationInput[]
+  cursor?: Prisma.EnigmaSubmissionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EnigmaSubmissionScalarFieldEnum | Prisma.EnigmaSubmissionScalarFieldEnum[]
+}
+
+/**
+ * User.activitiesActed
+ */
+export type User$activitiesActedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Activity
+   */
+  select?: Prisma.ActivitySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Activity
+   */
+  omit?: Prisma.ActivityOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ActivityInclude<ExtArgs> | null
+  where?: Prisma.ActivityWhereInput
+  orderBy?: Prisma.ActivityOrderByWithRelationInput | Prisma.ActivityOrderByWithRelationInput[]
+  cursor?: Prisma.ActivityWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ActivityScalarFieldEnum | Prisma.ActivityScalarFieldEnum[]
+}
+
+/**
  * User.behaviorsReceived
  */
 export type User$behaviorsReceivedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -5011,6 +8466,102 @@ export type User$behaviorsReceivedArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   distinct?: Prisma.BehaviorApplicationScalarFieldEnum | Prisma.BehaviorApplicationScalarFieldEnum[]
+}
+
+/**
+ * User.classTeachers
+ */
+export type User$classTeachersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ClassTeacher
+   */
+  select?: Prisma.ClassTeacherSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ClassTeacher
+   */
+  omit?: Prisma.ClassTeacherOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ClassTeacherInclude<ExtArgs> | null
+  where?: Prisma.ClassTeacherWhereInput
+  orderBy?: Prisma.ClassTeacherOrderByWithRelationInput | Prisma.ClassTeacherOrderByWithRelationInput[]
+  cursor?: Prisma.ClassTeacherWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ClassTeacherScalarFieldEnum | Prisma.ClassTeacherScalarFieldEnum[]
+}
+
+/**
+ * User.classTeachersAdded
+ */
+export type User$classTeachersAddedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ClassTeacher
+   */
+  select?: Prisma.ClassTeacherSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ClassTeacher
+   */
+  omit?: Prisma.ClassTeacherOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ClassTeacherInclude<ExtArgs> | null
+  where?: Prisma.ClassTeacherWhereInput
+  orderBy?: Prisma.ClassTeacherOrderByWithRelationInput | Prisma.ClassTeacherOrderByWithRelationInput[]
+  cursor?: Prisma.ClassTeacherWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ClassTeacherScalarFieldEnum | Prisma.ClassTeacherScalarFieldEnum[]
+}
+
+/**
+ * User.classActions
+ */
+export type User$classActionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ClassActionLog
+   */
+  select?: Prisma.ClassActionLogSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ClassActionLog
+   */
+  omit?: Prisma.ClassActionLogOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ClassActionLogInclude<ExtArgs> | null
+  where?: Prisma.ClassActionLogWhereInput
+  orderBy?: Prisma.ClassActionLogOrderByWithRelationInput | Prisma.ClassActionLogOrderByWithRelationInput[]
+  cursor?: Prisma.ClassActionLogWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ClassActionLogScalarFieldEnum | Prisma.ClassActionLogScalarFieldEnum[]
+}
+
+/**
+ * User.classActionsTarget
+ */
+export type User$classActionsTargetArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ClassActionLog
+   */
+  select?: Prisma.ClassActionLogSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ClassActionLog
+   */
+  omit?: Prisma.ClassActionLogOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ClassActionLogInclude<ExtArgs> | null
+  where?: Prisma.ClassActionLogWhereInput
+  orderBy?: Prisma.ClassActionLogOrderByWithRelationInput | Prisma.ClassActionLogOrderByWithRelationInput[]
+  cursor?: Prisma.ClassActionLogWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ClassActionLogScalarFieldEnum | Prisma.ClassActionLogScalarFieldEnum[]
 }
 
 /**

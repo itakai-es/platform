@@ -1,5 +1,5 @@
 import { prisma } from '../../config/database.js'
-import { hashPassword, verifyPassword } from '../../utils/password.js'
+import { hashPassword, verifyAgainstDecoy, verifyPassword } from '../../utils/password.js'
 import {
   generateTokens,
   generateAccessToken,
@@ -8,12 +8,14 @@ import {
   type AuthTokens,
   verifyPasswordResetToken,
 } from '../../utils/tokens.js'
-import type { LoginInput, LoginAliasInput, SignupInput, OnboardingInput } from './auth.schema.js'
-import type { UserRole } from '../../generated/prisma/client.js'
-import { sendPasswordResetEmail, sendPasswordChangedEmail } from '../../utils/email.js'
+import type { LoginInput, SignupInput, OnboardingInput } from './auth.schema.js'
+import type { UserAccountType, UserRole } from '../../generated/prisma/client.js'
+import { sendPasswordResetEmail } from '../../utils/email.js'
 import { getAppOrigin } from '../../utils/app-url.js'
 import { OAuth2Client } from 'google-auth-library'
 import { getGeneralSettings } from '../settings/settings.service.js'
+import { identifierWhere, normalizeEmail } from '../../utils/identity.js'
+import { setUserPassword } from '../../utils/password-change.js'
 
 // ==================== TYPES ====================
 
@@ -27,24 +29,36 @@ interface LoginResult {
   tokens: AuthTokens
 }
 
+/** Lo que hace falta de la cuenta para abrirle una sesión. */
+interface SessionUser {
+  id: string
+  role: UserRole | null
+}
+
 // ==================== SERVICE ====================
 
 export class AuthService {
   /**
-   * Login with email and password
-   * Creates a new token family for this session
+   * Entrar con el correo o con el usuario y la contraseña. El identificador con
+   * arroba se busca por correo y el resto por usuario (ver utils/identity.ts).
+   *
+   * Probar identificadores no dice qué cuentas hay: todos los fallos responden
+   * lo mismo, y cuando el identificador no existe se comprueba la contraseña
+   * contra un hash señuelo para que la respuesta tarde lo mismo. El estado de la
+   * cuenta se mira DESPUÉS de la contraseña, así que enterarse de que una cuenta
+   * está suspendida exige acertar sus credenciales. Con el usuario como
+   * identificador esto importa más que antes: un usuario es corto y se puede
+   * adivinar a partir del nombre, así que lo único que separa de la cuenta es la
+   * contraseña (la ruta, además, cuenta los intentos fallidos).
    */
   async login(input: LoginInput, context?: RequestContext): Promise<LoginResult> {
     const user = await prisma.user.findUnique({
-      where: { email: input.email },
+      where: identifierWhere(input.identifier),
     })
 
     if (!user) {
+      await verifyAgainstDecoy(input.password)
       throw new Error('Credenciales inválidas')
-    }
-
-    if (user.status !== 'active') {
-      throw new Error('Cuenta suspendida o inactiva')
     }
 
     const validPassword = await verifyPassword(input.password, user.passwordHash)
@@ -52,76 +66,13 @@ export class AuthService {
       throw new Error('Credenciales inválidas')
     }
 
-    // Generate new token pair with new family
-    const { accessToken, refreshToken } = generateTokens({ id: user.id, role: user.role })
-
-    // Store refresh token in database
-    await prisma.refreshToken.create({
-      data: {
-        token: refreshToken.token,
-        userId: user.id,
-        family: refreshToken.family,
-        expiresAt: refreshToken.expiresAt,
-        userAgent: context?.userAgent,
-        ipAddress: context?.ipAddress,
-      },
-    })
-
-    return {
-      user: this.sanitizeUser(user),
-      tokens: {
-        accessToken,
-        refreshToken: refreshToken.token,
-      },
-    }
-  }
-
-  /**
-   * Login with alias (nickname) + code for younger students
-   * Searches for user by nickname in any of their class enrollments
-   */
-  async loginWithAlias(input: LoginAliasInput, context?: RequestContext): Promise<LoginResult> {
-    // Find enrollment with matching nickname
-    const enrollment = await prisma.classEnrollment.findFirst({
-      where: { nickname: input.alias, isPreview: false },
-      include: { student: true, class: { select: { invitationCode: true } } },
-    })
-
-    if (!enrollment?.student) {
-      throw new Error('Credenciales inválidas')
-    }
-
-    const user = enrollment.student
-
     if (user.status !== 'active') {
       throw new Error('Cuenta suspendida o inactiva')
     }
 
-    // El código de acceso del alumno es el código de invitación de su clase
-    // (el que le da el profesor), no un número cualquiera.
-    if (input.code.trim() !== enrollment.class.invitationCode) {
-      throw new Error('Código inválido')
-    }
-
-    const { accessToken, refreshToken } = generateTokens({ id: user.id, role: user.role })
-
-    await prisma.refreshToken.create({
-      data: {
-        token: refreshToken.token,
-        userId: user.id,
-        family: refreshToken.family,
-        expiresAt: refreshToken.expiresAt,
-        userAgent: context?.userAgent,
-        ipAddress: context?.ipAddress,
-      },
-    })
-
     return {
       user: this.sanitizeUser(user),
-      tokens: {
-        accessToken,
-        refreshToken: refreshToken.token,
-      },
+      tokens: await this.issueSession(user, context),
     }
   }
 
@@ -162,49 +113,11 @@ export class AuthService {
       throw new Error('Token de Google no contiene información de email')
     }
 
-    // Check if user already exists
-    let user = await prisma.user.findUnique({
-      where: { email: payload.email },
-    })
-
-    if (user) {
-      if (user.status !== 'active') {
-        throw new Error('Cuenta suspendida o inactiva')
-      }
-    } else {
-      const { registrationOpen } = await getGeneralSettings()
-      if (!registrationOpen) {
-        throw new Error('El registro de nuevos usuarios está deshabilitado en esta instancia')
-      }
-      user = await prisma.user.create({
-        data: {
-          email: payload.email,
-          name: payload.name || payload.email.split('@')[0],
-          passwordHash: '',
-          isOnboarded: false,
-        },
-      })
-    }
-
-    const { accessToken, refreshToken } = generateTokens({ id: user.id, role: user.role })
-
-    await prisma.refreshToken.create({
-      data: {
-        token: refreshToken.token,
-        userId: user.id,
-        family: refreshToken.family,
-        expiresAt: refreshToken.expiresAt,
-        userAgent: context?.userAgent,
-        ipAddress: context?.ipAddress,
-      },
-    })
+    const user = await this.findOrCreateGoogleUser(payload.email, payload.name)
 
     return {
       user: this.sanitizeUser(user),
-      tokens: {
-        accessToken,
-        refreshToken: refreshToken.token,
-      },
+      tokens: await this.issueSession(user, context),
     }
   }
 
@@ -238,55 +151,43 @@ export class AuthService {
       throw new Error('Token de Google no contiene información de email')
     }
 
-    // Check if user already exists
-    let user = await prisma.user.findUnique({
-      where: { email: payload.email },
-    })
-
-    if (user) {
-      // User exists - check if account is active
-      if (user.status !== 'active') {
-        throw new Error('Cuenta suspendida o inactiva')
-      }
-    } else {
-      const { registrationOpen } = await getGeneralSettings()
-      if (!registrationOpen) {
-        throw new Error('El registro de nuevos usuarios está deshabilitado en esta instancia')
-      }
-      // Create new user from Google account
-      user = await prisma.user.create({
-        data: {
-          email: payload.email,
-          name: payload.name || payload.email.split('@')[0],
-          passwordHash: '', // No password for OAuth users
-          isOnboarded: false, // Needs to select role
-          // avatar: payload.picture, // Uncomment if User model has avatar field
-        },
-      })
-    }
-
-    // Generate tokens
-    const { accessToken, refreshToken } = generateTokens({ id: user.id, role: user.role })
-
-    // Store refresh token
-    await prisma.refreshToken.create({
-      data: {
-        token: refreshToken.token,
-        userId: user.id,
-        family: refreshToken.family,
-        expiresAt: refreshToken.expiresAt,
-        userAgent: context?.userAgent,
-        ipAddress: context?.ipAddress,
-      },
-    })
+    const user = await this.findOrCreateGoogleUser(payload.email, payload.name)
 
     return {
       user: this.sanitizeUser(user),
-      tokens: {
-        accessToken,
-        refreshToken: refreshToken.token,
-      },
+      tokens: await this.issueSession(user, context),
     }
+  }
+
+  /**
+   * La cuenta que corresponde a un correo de Google, creándola si hace falta y
+   * si la instancia admite registros. Una cuenta creada así no tiene contraseña:
+   * entra siempre por Google hasta que se cree una con «¿Olvidaste tu contraseña?».
+   */
+  private async findOrCreateGoogleUser(googleEmail: string, googleName?: string) {
+    const email = normalizeEmail(googleEmail)
+    const existing = await prisma.user.findUnique({ where: { email } })
+
+    if (existing) {
+      if (existing.status !== 'active') {
+        throw new Error('Cuenta suspendida o inactiva')
+      }
+      return existing
+    }
+
+    const { registrationOpen } = await getGeneralSettings()
+    if (!registrationOpen) {
+      throw new Error('El registro de nuevos usuarios está deshabilitado en esta instancia')
+    }
+
+    return prisma.user.create({
+      data: {
+        email,
+        name: googleName || email.split('@')[0],
+        passwordHash: '',
+        isOnboarded: false, // Le queda elegir el rol
+      },
+    })
   }
 
   /**
@@ -298,9 +199,8 @@ export class AuthService {
       throw new Error('El registro de nuevos usuarios está deshabilitado en esta instancia')
     }
 
-    const existingUser = await prisma.user.findUnique({
-      where: { email: input.email },
-    })
+    const email = normalizeEmail(input.email)
+    const existingUser = await prisma.user.findUnique({ where: { email } })
 
     if (existingUser) {
       throw new Error('El email ya está registrado')
@@ -310,33 +210,18 @@ export class AuthService {
 
     const user = await prisma.user.create({
       data: {
-        email: input.email,
+        email,
         passwordHash,
         name: input.name,
         isOnboarded: false,
+        passwordChangedAt: new Date(),
         settings: { create: {} },
-      },
-    })
-
-    const { accessToken, refreshToken } = generateTokens({ id: user.id, role: user.role })
-
-    await prisma.refreshToken.create({
-      data: {
-        token: refreshToken.token,
-        userId: user.id,
-        family: refreshToken.family,
-        expiresAt: refreshToken.expiresAt,
-        userAgent: context?.userAgent,
-        ipAddress: context?.ipAddress,
       },
     })
 
     return {
       user: this.sanitizeUser(user),
-      tokens: {
-        accessToken,
-        refreshToken: refreshToken.token,
-      },
+      tokens: await this.issueSession(user, context),
     }
   }
 
@@ -458,13 +343,21 @@ export class AuthService {
    * Complete onboarding - set user role
    */
   async completeOnboarding(userId: string, input: OnboardingInput) {
-    const user = await prisma.user.update({
-      where: { id: userId },
+    // El rol se elige una sola vez, al terminar el alta. La condición va en el
+    // propio UPDATE para que dos peticiones a la vez no puedan colarse entre la
+    // comprobación y la escritura.
+    const { count } = await prisma.user.updateMany({
+      where: { id: userId, isOnboarded: false },
       data: {
         role: input.role as UserRole,
         isOnboarded: true,
       },
     })
+    if (count === 0) {
+      throw new Error('El rol de esta cuenta ya está elegido')
+    }
+
+    const user = await prisma.user.findUniqueOrThrow({ where: { id: userId } })
 
     return this.sanitizeUser(user)
   }
@@ -484,23 +377,7 @@ export class AuthService {
     return this.sanitizeUser(user)
   }
 
-  /**
-   * Request password reset
-   */
-  async forgotPassword(email: string) {
-    const user = await prisma.user.findUnique({
-      where: { email },
-    })
-
-    // Always return success to prevent email enumeration
-    if (!user) {
-      return { success: true, message: 'Si el email existe, recibirás instrucciones para restablecer tu contraseña' }
-    }
-
-    // TODO: Implement actual email sending
-    return { success: true, message: 'Si el email existe, recibirás instrucciones para restablecer tu contraseña' }
-  }
-
+  /** Cambia la contraseña con el enlace que llegó por correo y cierra todas las sesiones. */
   async resetPassword(token: string, password: string) {
     const payload = verifyPasswordResetToken(token)
 
@@ -508,47 +385,45 @@ export class AuthService {
       where: { id: payload.userId },
     })
 
-    if (!user || user.email !== payload.email) {
+    if (!user || !user.email || user.email !== payload.email) {
       throw new Error('No se pudo validar el reseteo de contraseña')
     }
+    // Si la contraseña ha cambiado desde que se pidió el enlace, ya no vale.
+    if ((user.passwordChangedAt?.getTime() ?? null) !== payload.passwordChangedAt) {
+      throw new TokenError('TOKEN_INVALID', 'Este enlace ya no es válido. Pide uno nuevo.')
+    }
 
-    const passwordHash = await hashPassword(password)
-
-    await prisma.$transaction([
-      prisma.user.update({
-        where: { id: user.id },
-        data: { passwordHash },
-      }),
-      prisma.refreshToken.updateMany({
-        where: { userId: user.id, isRevoked: false },
-        data: { isRevoked: true },
-      }),
-    ])
-
-    // Notify user of the password change (non-blocking)
-    sendPasswordChangedEmail(user.email).catch((err) => {
-      console.error('[auth] Failed to send password changed email:', err)
-    })
-
-    return { success: true, message: 'Contraseña actualizada correctamente' }
+    return setUserPassword(user.id, password)
   }
 
-  async requestPasswordReset(email: string) {
-    const user = await prisma.user.findUnique({
-      where: { email },
-    })
+  /**
+   * Pide el enlace de recuperación. Responde siempre lo mismo, exista o no la
+   * cuenta y tenga o no correo: quien entra con usuario y no tiene correo pide a
+   * su profesor que se la restablezca.
+   */
+  async requestPasswordReset(inputEmail: string) {
+    const email = normalizeEmail(inputEmail)
+    const sameAnswer = {
+      success: true,
+      message: 'Si el email existe, recibirás instrucciones para restablecer tu contraseña',
+    }
 
-    if (!user) {
-      return { success: true, message: 'Si el email existe, recibirás instrucciones para restablecer tu contraseña' }
+    const user = await prisma.user.findUnique({ where: { email } })
+
+    if (!user?.email) {
+      return sameAnswer
     }
 
     const resetToken = generatePasswordResetToken({
       userId: user.id,
       email: user.email,
+      passwordChangedAt: user.passwordChangedAt?.getTime() ?? null,
     })
 
     const appOrigin = await getAppOrigin()
-    const resetUrl = `${appOrigin}/auth/reset-password?token=${encodeURIComponent(resetToken)}`
+    // La página del enlace es la de la app (/auth/restablecer-password), no la
+    // ruta de la API que lo canjea (/auth/reset-password).
+    const resetUrl = `${appOrigin}/auth/restablecer-password?token=${encodeURIComponent(resetToken)}`
 
     // Send the reset email (non-blocking — don't let email failure block the response)
     sendPasswordResetEmail(user.email, resetUrl).catch((err) => {
@@ -556,8 +431,7 @@ export class AuthService {
     })
 
     return {
-      success: true,
-      message: 'Si el email existe, recibirás instrucciones para restablecer tu contraseña',
+      ...sameAnswer,
       resetToken: process.env.NODE_ENV !== 'production' ? resetToken : undefined,
       resetUrl: process.env.NODE_ENV !== 'production' ? resetUrl : undefined,
     }
@@ -619,6 +493,28 @@ export class AuthService {
   // ==================== PRIVATE METHODS ====================
 
   /**
+   * Abre una sesión: el par de tokens y la fila del refresh que lo respalda.
+   * Lo hacen igual todas las formas de entrar (contraseña, Google y registro),
+   * así que vive en un solo sitio.
+   */
+  private async issueSession(user: SessionUser, context?: RequestContext): Promise<AuthTokens> {
+    const { accessToken, refreshToken } = generateTokens({ id: user.id, role: user.role })
+
+    await prisma.refreshToken.create({
+      data: {
+        token: refreshToken.token,
+        userId: user.id,
+        family: refreshToken.family,
+        expiresAt: refreshToken.expiresAt,
+        userAgent: context?.userAgent,
+        ipAddress: context?.ipAddress,
+      },
+    })
+
+    return { accessToken, refreshToken: refreshToken.token }
+  }
+
+  /**
    * Revoke all tokens in a family (security breach response)
    */
   private async revokeTokenFamily(family: string, userId: string) {
@@ -639,22 +535,30 @@ export class AuthService {
   }
 
   /**
-   * Clean user object for API response
+   * La cuenta tal y como la ve el cliente. Lleva el usuario y el tipo de cuenta
+   * porque de ellos dependen las pantallas: con qué identificador se entró, si
+   * se puede cambiar el correo y si toca cambiar la contraseña antes de nada.
    */
   private sanitizeUser(user: {
     id: string
-    email: string
+    email: string | null
+    username: string | null
     name: string
     role: UserRole | null
+    accountType: UserAccountType
     isOnboarded: boolean
+    mustChangePassword: boolean
     createdAt: Date
   }) {
     return {
       id: user.id,
       email: user.email,
+      username: user.username,
       name: user.name,
       role: user.role,
+      accountType: user.accountType,
       isOnboarded: user.isOnboarded,
+      mustChangePassword: user.mustChangePassword,
       createdAt: user.createdAt,
     }
   }

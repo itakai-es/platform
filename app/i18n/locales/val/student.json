@@ -199,6 +199,10 @@
           "bought_toast": "Has comprat \"{name}\"!",
           "used_toast": "Has usat \"{name}\"!",
           "mana_after": "Mana després de l'ús"
+        },
+        "teachers": {
+          "title": "Professorat",
+          "empty": "Esta classe encara no té professorat."
         }
       }
     },
@@ -240,27 +244,6 @@
         "close": "Tancar"
       }
     },
-    "leaderboard": {
-      "meta": {
-        "title": "Classificació | ITAKAI",
-        "description": "La classificació d'alumnes està disponible dins de cada classe."
-      },
-      "page_title": "Classificació",
-      "page_subtitle": "Consulta el rànquing global i compara el teu progrés amb la resta d'alumnes.",
-      "pick_class": "Selecciona una classe",
-      "friends_soon_title": "Rànquing d'amics pròximament",
-      "friends_soon_description": "La part social encara no està connectada. Mentrestant, pots usar el rànquing global o el de les teues classes.",
-      "choose_class_title": "Tria una classe",
-      "choose_class_description": "Selecciona una classe per veure la teua posició i el rànquing intern.",
-      "empty_class_title": "No hi ha rànquing disponible",
-      "empty_class_description": "Encara no hi ha prou dades per construir el rànquing d'esta classe.",
-      "empty_global_title": "No hi ha dades de rànquing",
-      "empty_global_description": "Encara no hi ha prou activitat per mostrar una classificació global.",
-      "global_podium": "Podi global",
-      "your_position": "La teua posició",
-      "rest": "Resta de la classificació",
-      "by_class": "Per classe"
-    },
     "ai_assistant": {
       "meta": {
         "title": "Assistent IA | ITAKAI",
@@ -285,17 +268,12 @@
         "security": "Seguretat",
         "settings": "Configuració"
       },
+      "account": {
+        "title": "El teu compte",
+        "username": "Usuari",
+        "managed_note": "El teu compte el gestiona el professorat: entres amb el teu usuari, no té correu i no es pot eliminar des d'aquí. Si necessites algun canvi, demana'ls-ho."
+      },
       "security": {
-        "password_title": "Contrasenya",
-        "current_password": "Contrasenya actual",
-        "new_password": "Contrasenya nova",
-        "confirm_password": "Confirmar contrasenya",
-        "update_button": "Actualitzar",
-        "passwords_mismatch": "Les contrasenyes no coincidixen",
-        "password_too_short": "La contrasenya ha de tindre com a mínim 6 caràcters",
-        "email_title": "Correu electrònic",
-        "new_email_placeholder": "Correu nou",
-        "email_invalid": "Introduïx un correu vàlid",
         "sessions_title": "Sessions",
         "close_all_sessions": "Tancar-les totes",
         "current_session": "Actual",
@@ -344,7 +322,8 @@
       "recent_activity_card": {
         "title": "Activitat recent",
         "empty": "No hi ha activitat recent",
-        "user_fallback": "Usuari"
+        "user_fallback": "Usuari",
+        "by_actor": "Per {name}"
       },
       "submission_modal": {
         "title": "Entregar enigma",

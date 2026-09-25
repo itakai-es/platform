@@ -26,7 +26,6 @@ vi.mock('../../src/config/database.js', () => ({
     mission: { findMany: vi.fn().mockResolvedValue([]) },
     classEnrollment: { findMany: vi.fn().mockResolvedValue([]) },
     studentMissionProgress: { findMany: vi.fn().mockResolvedValue([]) },
-    invitation: { count: vi.fn().mockResolvedValue(0) },
     chatMessage: { findMany: vi.fn().mockResolvedValue([]) },
   },
 }))

@@ -10,7 +10,8 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-itakai_dev}
       POSTGRES_DB: ${POSTGRES_DB:-itakai_dev}
     ports:
-      - "5433:5432"
+      # Solo en local: la contraseña de desarrollo es la de ejemplo del repo.
+      - "127.0.0.1:5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./api/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro

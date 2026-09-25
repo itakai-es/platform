@@ -285,6 +285,9 @@ export type ClassWhereInput = {
   shopItemUses?: Prisma.ShopItemUseListRelationFilter
   behaviorTemplates?: Prisma.BehaviorTemplateListRelationFilter
   behaviorApplications?: Prisma.BehaviorApplicationListRelationFilter
+  teachers?: Prisma.ClassTeacherListRelationFilter
+  actionLog?: Prisma.ClassActionLogListRelationFilter
+  homeStudents?: Prisma.UserListRelationFilter
 }
 
 export type ClassOrderByWithRelationInput = {
@@ -317,6 +320,9 @@ export type ClassOrderByWithRelationInput = {
   shopItemUses?: Prisma.ShopItemUseOrderByRelationAggregateInput
   behaviorTemplates?: Prisma.BehaviorTemplateOrderByRelationAggregateInput
   behaviorApplications?: Prisma.BehaviorApplicationOrderByRelationAggregateInput
+  teachers?: Prisma.ClassTeacherOrderByRelationAggregateInput
+  actionLog?: Prisma.ClassActionLogOrderByRelationAggregateInput
+  homeStudents?: Prisma.UserOrderByRelationAggregateInput
 }
 
 export type ClassWhereUniqueInput = Prisma.AtLeast<{
@@ -352,6 +358,9 @@ export type ClassWhereUniqueInput = Prisma.AtLeast<{
   shopItemUses?: Prisma.ShopItemUseListRelationFilter
   behaviorTemplates?: Prisma.BehaviorTemplateListRelationFilter
   behaviorApplications?: Prisma.BehaviorApplicationListRelationFilter
+  teachers?: Prisma.ClassTeacherListRelationFilter
+  actionLog?: Prisma.ClassActionLogListRelationFilter
+  homeStudents?: Prisma.UserListRelationFilter
 }, "id" | "invitationCode">
 
 export type ClassOrderByWithAggregationInput = {
@@ -431,6 +440,9 @@ export type ClassCreateInput = {
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationCreateNestedManyWithoutClassInput
+  teachers?: Prisma.ClassTeacherCreateNestedManyWithoutClassInput
+  actionLog?: Prisma.ClassActionLogCreateNestedManyWithoutClassInput
+  homeStudents?: Prisma.UserCreateNestedManyWithoutHomeClassInput
 }
 
 export type ClassUncheckedCreateInput = {
@@ -462,6 +474,9 @@ export type ClassUncheckedCreateInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutClassInput
+  teachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutClassInput
+  actionLog?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutClassInput
+  homeStudents?: Prisma.UserUncheckedCreateNestedManyWithoutHomeClassInput
 }
 
 export type ClassUpdateInput = {
@@ -493,6 +508,9 @@ export type ClassUpdateInput = {
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUpdateManyWithoutClassNestedInput
+  teachers?: Prisma.ClassTeacherUpdateManyWithoutClassNestedInput
+  actionLog?: Prisma.ClassActionLogUpdateManyWithoutClassNestedInput
+  homeStudents?: Prisma.UserUpdateManyWithoutHomeClassNestedInput
 }
 
 export type ClassUncheckedUpdateInput = {
@@ -524,6 +542,9 @@ export type ClassUncheckedUpdateInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutClassNestedInput
+  teachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutClassNestedInput
+  actionLog?: Prisma.ClassActionLogUncheckedUpdateManyWithoutClassNestedInput
+  homeStudents?: Prisma.UserUncheckedUpdateManyWithoutHomeClassNestedInput
 }
 
 export type ClassCreateManyInput = {
@@ -586,6 +607,11 @@ export type ClassUncheckedUpdateManyInput = {
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type ClassNullableScalarRelationFilter = {
+  is?: Prisma.ClassWhereInput | null
+  isNot?: Prisma.ClassWhereInput | null
 }
 
 export type ClassListRelationFilter = {
@@ -660,6 +686,12 @@ export type ClassScalarRelationFilter = {
   isNot?: Prisma.ClassWhereInput
 }
 
+export type ClassCreateNestedOneWithoutHomeStudentsInput = {
+  create?: Prisma.XOR<Prisma.ClassCreateWithoutHomeStudentsInput, Prisma.ClassUncheckedCreateWithoutHomeStudentsInput>
+  connectOrCreate?: Prisma.ClassCreateOrConnectWithoutHomeStudentsInput
+  connect?: Prisma.ClassWhereUniqueInput
+}
+
 export type ClassCreateNestedManyWithoutTeacherInput = {
   create?: Prisma.XOR<Prisma.ClassCreateWithoutTeacherInput, Prisma.ClassUncheckedCreateWithoutTeacherInput> | Prisma.ClassCreateWithoutTeacherInput[] | Prisma.ClassUncheckedCreateWithoutTeacherInput[]
   connectOrCreate?: Prisma.ClassCreateOrConnectWithoutTeacherInput | Prisma.ClassCreateOrConnectWithoutTeacherInput[]
@@ -672,6 +704,16 @@ export type ClassUncheckedCreateNestedManyWithoutTeacherInput = {
   connectOrCreate?: Prisma.ClassCreateOrConnectWithoutTeacherInput | Prisma.ClassCreateOrConnectWithoutTeacherInput[]
   createMany?: Prisma.ClassCreateManyTeacherInputEnvelope
   connect?: Prisma.ClassWhereUniqueInput | Prisma.ClassWhereUniqueInput[]
+}
+
+export type ClassUpdateOneWithoutHomeStudentsNestedInput = {
+  create?: Prisma.XOR<Prisma.ClassCreateWithoutHomeStudentsInput, Prisma.ClassUncheckedCreateWithoutHomeStudentsInput>
+  connectOrCreate?: Prisma.ClassCreateOrConnectWithoutHomeStudentsInput
+  upsert?: Prisma.ClassUpsertWithoutHomeStudentsInput
+  disconnect?: Prisma.ClassWhereInput | boolean
+  delete?: Prisma.ClassWhereInput | boolean
+  connect?: Prisma.ClassWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ClassUpdateToOneWithWhereWithoutHomeStudentsInput, Prisma.ClassUpdateWithoutHomeStudentsInput>, Prisma.ClassUncheckedUpdateWithoutHomeStudentsInput>
 }
 
 export type ClassUpdateManyWithoutTeacherNestedInput = {
@@ -700,6 +742,34 @@ export type ClassUncheckedUpdateManyWithoutTeacherNestedInput = {
   update?: Prisma.ClassUpdateWithWhereUniqueWithoutTeacherInput | Prisma.ClassUpdateWithWhereUniqueWithoutTeacherInput[]
   updateMany?: Prisma.ClassUpdateManyWithWhereWithoutTeacherInput | Prisma.ClassUpdateManyWithWhereWithoutTeacherInput[]
   deleteMany?: Prisma.ClassScalarWhereInput | Prisma.ClassScalarWhereInput[]
+}
+
+export type ClassCreateNestedOneWithoutTeachersInput = {
+  create?: Prisma.XOR<Prisma.ClassCreateWithoutTeachersInput, Prisma.ClassUncheckedCreateWithoutTeachersInput>
+  connectOrCreate?: Prisma.ClassCreateOrConnectWithoutTeachersInput
+  connect?: Prisma.ClassWhereUniqueInput
+}
+
+export type ClassUpdateOneRequiredWithoutTeachersNestedInput = {
+  create?: Prisma.XOR<Prisma.ClassCreateWithoutTeachersInput, Prisma.ClassUncheckedCreateWithoutTeachersInput>
+  connectOrCreate?: Prisma.ClassCreateOrConnectWithoutTeachersInput
+  upsert?: Prisma.ClassUpsertWithoutTeachersInput
+  connect?: Prisma.ClassWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ClassUpdateToOneWithWhereWithoutTeachersInput, Prisma.ClassUpdateWithoutTeachersInput>, Prisma.ClassUncheckedUpdateWithoutTeachersInput>
+}
+
+export type ClassCreateNestedOneWithoutActionLogInput = {
+  create?: Prisma.XOR<Prisma.ClassCreateWithoutActionLogInput, Prisma.ClassUncheckedCreateWithoutActionLogInput>
+  connectOrCreate?: Prisma.ClassCreateOrConnectWithoutActionLogInput
+  connect?: Prisma.ClassWhereUniqueInput
+}
+
+export type ClassUpdateOneRequiredWithoutActionLogNestedInput = {
+  create?: Prisma.XOR<Prisma.ClassCreateWithoutActionLogInput, Prisma.ClassUncheckedCreateWithoutActionLogInput>
+  connectOrCreate?: Prisma.ClassCreateOrConnectWithoutActionLogInput
+  upsert?: Prisma.ClassUpsertWithoutActionLogInput
+  connect?: Prisma.ClassWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ClassUpdateToOneWithWhereWithoutActionLogInput, Prisma.ClassUpdateWithoutActionLogInput>, Prisma.ClassUncheckedUpdateWithoutActionLogInput>
 }
 
 export type ClassCreateNestedOneWithoutEnrollmentsInput = {
@@ -842,6 +912,77 @@ export type ClassUpdateOneRequiredWithoutBehaviorApplicationsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ClassUpdateToOneWithWhereWithoutBehaviorApplicationsInput, Prisma.ClassUpdateWithoutBehaviorApplicationsInput>, Prisma.ClassUncheckedUpdateWithoutBehaviorApplicationsInput>
 }
 
+export type ClassCreateWithoutHomeStudentsInput = {
+  id?: string
+  name: string
+  narrative?: string | null
+  schedule?: string | null
+  archived?: boolean
+  invitationCode: string
+  backgroundImage?: string | null
+  subject?: string | null
+  language?: string | null
+  educationLevel?: string | null
+  province?: string | null
+  isTemplate?: boolean
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  teacher: Prisma.UserCreateNestedOneWithoutTeacherClassesInput
+  enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutClassInput
+  missions?: Prisma.MissionCreateNestedManyWithoutClassInput
+  guide?: Prisma.ClassGuideCreateNestedOneWithoutClassInput
+  joinRequests?: Prisma.JoinRequestCreateNestedManyWithoutClassInput
+  invitations?: Prisma.InvitationCreateNestedManyWithoutClassInput
+  shopItems?: Prisma.ShopItemCreateNestedManyWithoutClassInput
+  shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutClassInput
+  shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutClassInput
+  behaviorTemplates?: Prisma.BehaviorTemplateCreateNestedManyWithoutClassInput
+  behaviorApplications?: Prisma.BehaviorApplicationCreateNestedManyWithoutClassInput
+  teachers?: Prisma.ClassTeacherCreateNestedManyWithoutClassInput
+  actionLog?: Prisma.ClassActionLogCreateNestedManyWithoutClassInput
+}
+
+export type ClassUncheckedCreateWithoutHomeStudentsInput = {
+  id?: string
+  name: string
+  narrative?: string | null
+  schedule?: string | null
+  archived?: boolean
+  invitationCode: string
+  backgroundImage?: string | null
+  subject?: string | null
+  language?: string | null
+  educationLevel?: string | null
+  province?: string | null
+  isTemplate?: boolean
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  teacherId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutClassInput
+  missions?: Prisma.MissionUncheckedCreateNestedManyWithoutClassInput
+  guide?: Prisma.ClassGuideUncheckedCreateNestedOneWithoutClassInput
+  joinRequests?: Prisma.JoinRequestUncheckedCreateNestedManyWithoutClassInput
+  invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutClassInput
+  shopItems?: Prisma.ShopItemUncheckedCreateNestedManyWithoutClassInput
+  shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutClassInput
+  shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutClassInput
+  behaviorTemplates?: Prisma.BehaviorTemplateUncheckedCreateNestedManyWithoutClassInput
+  behaviorApplications?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutClassInput
+  teachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutClassInput
+  actionLog?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutClassInput
+}
+
+export type ClassCreateOrConnectWithoutHomeStudentsInput = {
+  where: Prisma.ClassWhereUniqueInput
+  create: Prisma.XOR<Prisma.ClassCreateWithoutHomeStudentsInput, Prisma.ClassUncheckedCreateWithoutHomeStudentsInput>
+}
+
 export type ClassCreateWithoutTeacherInput = {
   id?: string
   name: string
@@ -870,6 +1011,9 @@ export type ClassCreateWithoutTeacherInput = {
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationCreateNestedManyWithoutClassInput
+  teachers?: Prisma.ClassTeacherCreateNestedManyWithoutClassInput
+  actionLog?: Prisma.ClassActionLogCreateNestedManyWithoutClassInput
+  homeStudents?: Prisma.UserCreateNestedManyWithoutHomeClassInput
 }
 
 export type ClassUncheckedCreateWithoutTeacherInput = {
@@ -900,6 +1044,9 @@ export type ClassUncheckedCreateWithoutTeacherInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutClassInput
+  teachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutClassInput
+  actionLog?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutClassInput
+  homeStudents?: Prisma.UserUncheckedCreateNestedManyWithoutHomeClassInput
 }
 
 export type ClassCreateOrConnectWithoutTeacherInput = {
@@ -910,6 +1057,83 @@ export type ClassCreateOrConnectWithoutTeacherInput = {
 export type ClassCreateManyTeacherInputEnvelope = {
   data: Prisma.ClassCreateManyTeacherInput | Prisma.ClassCreateManyTeacherInput[]
   skipDuplicates?: boolean
+}
+
+export type ClassUpsertWithoutHomeStudentsInput = {
+  update: Prisma.XOR<Prisma.ClassUpdateWithoutHomeStudentsInput, Prisma.ClassUncheckedUpdateWithoutHomeStudentsInput>
+  create: Prisma.XOR<Prisma.ClassCreateWithoutHomeStudentsInput, Prisma.ClassUncheckedCreateWithoutHomeStudentsInput>
+  where?: Prisma.ClassWhereInput
+}
+
+export type ClassUpdateToOneWithWhereWithoutHomeStudentsInput = {
+  where?: Prisma.ClassWhereInput
+  data: Prisma.XOR<Prisma.ClassUpdateWithoutHomeStudentsInput, Prisma.ClassUncheckedUpdateWithoutHomeStudentsInput>
+}
+
+export type ClassUpdateWithoutHomeStudentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  narrative?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  schedule?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  invitationCode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  teacher?: Prisma.UserUpdateOneRequiredWithoutTeacherClassesNestedInput
+  enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutClassNestedInput
+  missions?: Prisma.MissionUpdateManyWithoutClassNestedInput
+  guide?: Prisma.ClassGuideUpdateOneWithoutClassNestedInput
+  joinRequests?: Prisma.JoinRequestUpdateManyWithoutClassNestedInput
+  invitations?: Prisma.InvitationUpdateManyWithoutClassNestedInput
+  shopItems?: Prisma.ShopItemUpdateManyWithoutClassNestedInput
+  shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutClassNestedInput
+  shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutClassNestedInput
+  behaviorTemplates?: Prisma.BehaviorTemplateUpdateManyWithoutClassNestedInput
+  behaviorApplications?: Prisma.BehaviorApplicationUpdateManyWithoutClassNestedInput
+  teachers?: Prisma.ClassTeacherUpdateManyWithoutClassNestedInput
+  actionLog?: Prisma.ClassActionLogUpdateManyWithoutClassNestedInput
+}
+
+export type ClassUncheckedUpdateWithoutHomeStudentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  narrative?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  schedule?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  invitationCode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  teacherId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutClassNestedInput
+  missions?: Prisma.MissionUncheckedUpdateManyWithoutClassNestedInput
+  guide?: Prisma.ClassGuideUncheckedUpdateOneWithoutClassNestedInput
+  joinRequests?: Prisma.JoinRequestUncheckedUpdateManyWithoutClassNestedInput
+  invitations?: Prisma.InvitationUncheckedUpdateManyWithoutClassNestedInput
+  shopItems?: Prisma.ShopItemUncheckedUpdateManyWithoutClassNestedInput
+  shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutClassNestedInput
+  shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutClassNestedInput
+  behaviorTemplates?: Prisma.BehaviorTemplateUncheckedUpdateManyWithoutClassNestedInput
+  behaviorApplications?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutClassNestedInput
+  teachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutClassNestedInput
+  actionLog?: Prisma.ClassActionLogUncheckedUpdateManyWithoutClassNestedInput
 }
 
 export type ClassUpsertWithWhereUniqueWithoutTeacherInput = {
@@ -952,6 +1176,302 @@ export type ClassScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Class"> | Date | string
 }
 
+export type ClassCreateWithoutTeachersInput = {
+  id?: string
+  name: string
+  narrative?: string | null
+  schedule?: string | null
+  archived?: boolean
+  invitationCode: string
+  backgroundImage?: string | null
+  subject?: string | null
+  language?: string | null
+  educationLevel?: string | null
+  province?: string | null
+  isTemplate?: boolean
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  teacher: Prisma.UserCreateNestedOneWithoutTeacherClassesInput
+  enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutClassInput
+  missions?: Prisma.MissionCreateNestedManyWithoutClassInput
+  guide?: Prisma.ClassGuideCreateNestedOneWithoutClassInput
+  joinRequests?: Prisma.JoinRequestCreateNestedManyWithoutClassInput
+  invitations?: Prisma.InvitationCreateNestedManyWithoutClassInput
+  shopItems?: Prisma.ShopItemCreateNestedManyWithoutClassInput
+  shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutClassInput
+  shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutClassInput
+  behaviorTemplates?: Prisma.BehaviorTemplateCreateNestedManyWithoutClassInput
+  behaviorApplications?: Prisma.BehaviorApplicationCreateNestedManyWithoutClassInput
+  actionLog?: Prisma.ClassActionLogCreateNestedManyWithoutClassInput
+  homeStudents?: Prisma.UserCreateNestedManyWithoutHomeClassInput
+}
+
+export type ClassUncheckedCreateWithoutTeachersInput = {
+  id?: string
+  name: string
+  narrative?: string | null
+  schedule?: string | null
+  archived?: boolean
+  invitationCode: string
+  backgroundImage?: string | null
+  subject?: string | null
+  language?: string | null
+  educationLevel?: string | null
+  province?: string | null
+  isTemplate?: boolean
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  teacherId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutClassInput
+  missions?: Prisma.MissionUncheckedCreateNestedManyWithoutClassInput
+  guide?: Prisma.ClassGuideUncheckedCreateNestedOneWithoutClassInput
+  joinRequests?: Prisma.JoinRequestUncheckedCreateNestedManyWithoutClassInput
+  invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutClassInput
+  shopItems?: Prisma.ShopItemUncheckedCreateNestedManyWithoutClassInput
+  shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutClassInput
+  shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutClassInput
+  behaviorTemplates?: Prisma.BehaviorTemplateUncheckedCreateNestedManyWithoutClassInput
+  behaviorApplications?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutClassInput
+  actionLog?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutClassInput
+  homeStudents?: Prisma.UserUncheckedCreateNestedManyWithoutHomeClassInput
+}
+
+export type ClassCreateOrConnectWithoutTeachersInput = {
+  where: Prisma.ClassWhereUniqueInput
+  create: Prisma.XOR<Prisma.ClassCreateWithoutTeachersInput, Prisma.ClassUncheckedCreateWithoutTeachersInput>
+}
+
+export type ClassUpsertWithoutTeachersInput = {
+  update: Prisma.XOR<Prisma.ClassUpdateWithoutTeachersInput, Prisma.ClassUncheckedUpdateWithoutTeachersInput>
+  create: Prisma.XOR<Prisma.ClassCreateWithoutTeachersInput, Prisma.ClassUncheckedCreateWithoutTeachersInput>
+  where?: Prisma.ClassWhereInput
+}
+
+export type ClassUpdateToOneWithWhereWithoutTeachersInput = {
+  where?: Prisma.ClassWhereInput
+  data: Prisma.XOR<Prisma.ClassUpdateWithoutTeachersInput, Prisma.ClassUncheckedUpdateWithoutTeachersInput>
+}
+
+export type ClassUpdateWithoutTeachersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  narrative?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  schedule?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  invitationCode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  teacher?: Prisma.UserUpdateOneRequiredWithoutTeacherClassesNestedInput
+  enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutClassNestedInput
+  missions?: Prisma.MissionUpdateManyWithoutClassNestedInput
+  guide?: Prisma.ClassGuideUpdateOneWithoutClassNestedInput
+  joinRequests?: Prisma.JoinRequestUpdateManyWithoutClassNestedInput
+  invitations?: Prisma.InvitationUpdateManyWithoutClassNestedInput
+  shopItems?: Prisma.ShopItemUpdateManyWithoutClassNestedInput
+  shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutClassNestedInput
+  shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutClassNestedInput
+  behaviorTemplates?: Prisma.BehaviorTemplateUpdateManyWithoutClassNestedInput
+  behaviorApplications?: Prisma.BehaviorApplicationUpdateManyWithoutClassNestedInput
+  actionLog?: Prisma.ClassActionLogUpdateManyWithoutClassNestedInput
+  homeStudents?: Prisma.UserUpdateManyWithoutHomeClassNestedInput
+}
+
+export type ClassUncheckedUpdateWithoutTeachersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  narrative?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  schedule?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  invitationCode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  teacherId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutClassNestedInput
+  missions?: Prisma.MissionUncheckedUpdateManyWithoutClassNestedInput
+  guide?: Prisma.ClassGuideUncheckedUpdateOneWithoutClassNestedInput
+  joinRequests?: Prisma.JoinRequestUncheckedUpdateManyWithoutClassNestedInput
+  invitations?: Prisma.InvitationUncheckedUpdateManyWithoutClassNestedInput
+  shopItems?: Prisma.ShopItemUncheckedUpdateManyWithoutClassNestedInput
+  shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutClassNestedInput
+  shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutClassNestedInput
+  behaviorTemplates?: Prisma.BehaviorTemplateUncheckedUpdateManyWithoutClassNestedInput
+  behaviorApplications?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutClassNestedInput
+  actionLog?: Prisma.ClassActionLogUncheckedUpdateManyWithoutClassNestedInput
+  homeStudents?: Prisma.UserUncheckedUpdateManyWithoutHomeClassNestedInput
+}
+
+export type ClassCreateWithoutActionLogInput = {
+  id?: string
+  name: string
+  narrative?: string | null
+  schedule?: string | null
+  archived?: boolean
+  invitationCode: string
+  backgroundImage?: string | null
+  subject?: string | null
+  language?: string | null
+  educationLevel?: string | null
+  province?: string | null
+  isTemplate?: boolean
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  teacher: Prisma.UserCreateNestedOneWithoutTeacherClassesInput
+  enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutClassInput
+  missions?: Prisma.MissionCreateNestedManyWithoutClassInput
+  guide?: Prisma.ClassGuideCreateNestedOneWithoutClassInput
+  joinRequests?: Prisma.JoinRequestCreateNestedManyWithoutClassInput
+  invitations?: Prisma.InvitationCreateNestedManyWithoutClassInput
+  shopItems?: Prisma.ShopItemCreateNestedManyWithoutClassInput
+  shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutClassInput
+  shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutClassInput
+  behaviorTemplates?: Prisma.BehaviorTemplateCreateNestedManyWithoutClassInput
+  behaviorApplications?: Prisma.BehaviorApplicationCreateNestedManyWithoutClassInput
+  teachers?: Prisma.ClassTeacherCreateNestedManyWithoutClassInput
+  homeStudents?: Prisma.UserCreateNestedManyWithoutHomeClassInput
+}
+
+export type ClassUncheckedCreateWithoutActionLogInput = {
+  id?: string
+  name: string
+  narrative?: string | null
+  schedule?: string | null
+  archived?: boolean
+  invitationCode: string
+  backgroundImage?: string | null
+  subject?: string | null
+  language?: string | null
+  educationLevel?: string | null
+  province?: string | null
+  isTemplate?: boolean
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  teacherId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutClassInput
+  missions?: Prisma.MissionUncheckedCreateNestedManyWithoutClassInput
+  guide?: Prisma.ClassGuideUncheckedCreateNestedOneWithoutClassInput
+  joinRequests?: Prisma.JoinRequestUncheckedCreateNestedManyWithoutClassInput
+  invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutClassInput
+  shopItems?: Prisma.ShopItemUncheckedCreateNestedManyWithoutClassInput
+  shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutClassInput
+  shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutClassInput
+  behaviorTemplates?: Prisma.BehaviorTemplateUncheckedCreateNestedManyWithoutClassInput
+  behaviorApplications?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutClassInput
+  teachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutClassInput
+  homeStudents?: Prisma.UserUncheckedCreateNestedManyWithoutHomeClassInput
+}
+
+export type ClassCreateOrConnectWithoutActionLogInput = {
+  where: Prisma.ClassWhereUniqueInput
+  create: Prisma.XOR<Prisma.ClassCreateWithoutActionLogInput, Prisma.ClassUncheckedCreateWithoutActionLogInput>
+}
+
+export type ClassUpsertWithoutActionLogInput = {
+  update: Prisma.XOR<Prisma.ClassUpdateWithoutActionLogInput, Prisma.ClassUncheckedUpdateWithoutActionLogInput>
+  create: Prisma.XOR<Prisma.ClassCreateWithoutActionLogInput, Prisma.ClassUncheckedCreateWithoutActionLogInput>
+  where?: Prisma.ClassWhereInput
+}
+
+export type ClassUpdateToOneWithWhereWithoutActionLogInput = {
+  where?: Prisma.ClassWhereInput
+  data: Prisma.XOR<Prisma.ClassUpdateWithoutActionLogInput, Prisma.ClassUncheckedUpdateWithoutActionLogInput>
+}
+
+export type ClassUpdateWithoutActionLogInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  narrative?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  schedule?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  invitationCode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  teacher?: Prisma.UserUpdateOneRequiredWithoutTeacherClassesNestedInput
+  enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutClassNestedInput
+  missions?: Prisma.MissionUpdateManyWithoutClassNestedInput
+  guide?: Prisma.ClassGuideUpdateOneWithoutClassNestedInput
+  joinRequests?: Prisma.JoinRequestUpdateManyWithoutClassNestedInput
+  invitations?: Prisma.InvitationUpdateManyWithoutClassNestedInput
+  shopItems?: Prisma.ShopItemUpdateManyWithoutClassNestedInput
+  shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutClassNestedInput
+  shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutClassNestedInput
+  behaviorTemplates?: Prisma.BehaviorTemplateUpdateManyWithoutClassNestedInput
+  behaviorApplications?: Prisma.BehaviorApplicationUpdateManyWithoutClassNestedInput
+  teachers?: Prisma.ClassTeacherUpdateManyWithoutClassNestedInput
+  homeStudents?: Prisma.UserUpdateManyWithoutHomeClassNestedInput
+}
+
+export type ClassUncheckedUpdateWithoutActionLogInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  narrative?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  schedule?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  invitationCode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  teacherId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutClassNestedInput
+  missions?: Prisma.MissionUncheckedUpdateManyWithoutClassNestedInput
+  guide?: Prisma.ClassGuideUncheckedUpdateOneWithoutClassNestedInput
+  joinRequests?: Prisma.JoinRequestUncheckedUpdateManyWithoutClassNestedInput
+  invitations?: Prisma.InvitationUncheckedUpdateManyWithoutClassNestedInput
+  shopItems?: Prisma.ShopItemUncheckedUpdateManyWithoutClassNestedInput
+  shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutClassNestedInput
+  shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutClassNestedInput
+  behaviorTemplates?: Prisma.BehaviorTemplateUncheckedUpdateManyWithoutClassNestedInput
+  behaviorApplications?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutClassNestedInput
+  teachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutClassNestedInput
+  homeStudents?: Prisma.UserUncheckedUpdateManyWithoutHomeClassNestedInput
+}
+
 export type ClassCreateWithoutEnrollmentsInput = {
   id?: string
   name: string
@@ -980,6 +1500,9 @@ export type ClassCreateWithoutEnrollmentsInput = {
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationCreateNestedManyWithoutClassInput
+  teachers?: Prisma.ClassTeacherCreateNestedManyWithoutClassInput
+  actionLog?: Prisma.ClassActionLogCreateNestedManyWithoutClassInput
+  homeStudents?: Prisma.UserCreateNestedManyWithoutHomeClassInput
 }
 
 export type ClassUncheckedCreateWithoutEnrollmentsInput = {
@@ -1010,6 +1533,9 @@ export type ClassUncheckedCreateWithoutEnrollmentsInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutClassInput
+  teachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutClassInput
+  actionLog?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutClassInput
+  homeStudents?: Prisma.UserUncheckedCreateNestedManyWithoutHomeClassInput
 }
 
 export type ClassCreateOrConnectWithoutEnrollmentsInput = {
@@ -1056,6 +1582,9 @@ export type ClassUpdateWithoutEnrollmentsInput = {
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUpdateManyWithoutClassNestedInput
+  teachers?: Prisma.ClassTeacherUpdateManyWithoutClassNestedInput
+  actionLog?: Prisma.ClassActionLogUpdateManyWithoutClassNestedInput
+  homeStudents?: Prisma.UserUpdateManyWithoutHomeClassNestedInput
 }
 
 export type ClassUncheckedUpdateWithoutEnrollmentsInput = {
@@ -1086,6 +1615,9 @@ export type ClassUncheckedUpdateWithoutEnrollmentsInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutClassNestedInput
+  teachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutClassNestedInput
+  actionLog?: Prisma.ClassActionLogUncheckedUpdateManyWithoutClassNestedInput
+  homeStudents?: Prisma.UserUncheckedUpdateManyWithoutHomeClassNestedInput
 }
 
 export type ClassCreateWithoutGuideInput = {
@@ -1116,6 +1648,9 @@ export type ClassCreateWithoutGuideInput = {
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationCreateNestedManyWithoutClassInput
+  teachers?: Prisma.ClassTeacherCreateNestedManyWithoutClassInput
+  actionLog?: Prisma.ClassActionLogCreateNestedManyWithoutClassInput
+  homeStudents?: Prisma.UserCreateNestedManyWithoutHomeClassInput
 }
 
 export type ClassUncheckedCreateWithoutGuideInput = {
@@ -1146,6 +1681,9 @@ export type ClassUncheckedCreateWithoutGuideInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutClassInput
+  teachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutClassInput
+  actionLog?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutClassInput
+  homeStudents?: Prisma.UserUncheckedCreateNestedManyWithoutHomeClassInput
 }
 
 export type ClassCreateOrConnectWithoutGuideInput = {
@@ -1192,6 +1730,9 @@ export type ClassUpdateWithoutGuideInput = {
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUpdateManyWithoutClassNestedInput
+  teachers?: Prisma.ClassTeacherUpdateManyWithoutClassNestedInput
+  actionLog?: Prisma.ClassActionLogUpdateManyWithoutClassNestedInput
+  homeStudents?: Prisma.UserUpdateManyWithoutHomeClassNestedInput
 }
 
 export type ClassUncheckedUpdateWithoutGuideInput = {
@@ -1222,6 +1763,9 @@ export type ClassUncheckedUpdateWithoutGuideInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutClassNestedInput
+  teachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutClassNestedInput
+  actionLog?: Prisma.ClassActionLogUncheckedUpdateManyWithoutClassNestedInput
+  homeStudents?: Prisma.UserUncheckedUpdateManyWithoutHomeClassNestedInput
 }
 
 export type ClassCreateWithoutShopItemsInput = {
@@ -1252,6 +1796,9 @@ export type ClassCreateWithoutShopItemsInput = {
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationCreateNestedManyWithoutClassInput
+  teachers?: Prisma.ClassTeacherCreateNestedManyWithoutClassInput
+  actionLog?: Prisma.ClassActionLogCreateNestedManyWithoutClassInput
+  homeStudents?: Prisma.UserCreateNestedManyWithoutHomeClassInput
 }
 
 export type ClassUncheckedCreateWithoutShopItemsInput = {
@@ -1282,6 +1829,9 @@ export type ClassUncheckedCreateWithoutShopItemsInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutClassInput
+  teachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutClassInput
+  actionLog?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutClassInput
+  homeStudents?: Prisma.UserUncheckedCreateNestedManyWithoutHomeClassInput
 }
 
 export type ClassCreateOrConnectWithoutShopItemsInput = {
@@ -1328,6 +1878,9 @@ export type ClassUpdateWithoutShopItemsInput = {
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUpdateManyWithoutClassNestedInput
+  teachers?: Prisma.ClassTeacherUpdateManyWithoutClassNestedInput
+  actionLog?: Prisma.ClassActionLogUpdateManyWithoutClassNestedInput
+  homeStudents?: Prisma.UserUpdateManyWithoutHomeClassNestedInput
 }
 
 export type ClassUncheckedUpdateWithoutShopItemsInput = {
@@ -1358,6 +1911,9 @@ export type ClassUncheckedUpdateWithoutShopItemsInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutClassNestedInput
+  teachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutClassNestedInput
+  actionLog?: Prisma.ClassActionLogUncheckedUpdateManyWithoutClassNestedInput
+  homeStudents?: Prisma.UserUncheckedUpdateManyWithoutHomeClassNestedInput
 }
 
 export type ClassCreateWithoutShopPurchasesInput = {
@@ -1388,6 +1944,9 @@ export type ClassCreateWithoutShopPurchasesInput = {
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationCreateNestedManyWithoutClassInput
+  teachers?: Prisma.ClassTeacherCreateNestedManyWithoutClassInput
+  actionLog?: Prisma.ClassActionLogCreateNestedManyWithoutClassInput
+  homeStudents?: Prisma.UserCreateNestedManyWithoutHomeClassInput
 }
 
 export type ClassUncheckedCreateWithoutShopPurchasesInput = {
@@ -1418,6 +1977,9 @@ export type ClassUncheckedCreateWithoutShopPurchasesInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutClassInput
+  teachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutClassInput
+  actionLog?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutClassInput
+  homeStudents?: Prisma.UserUncheckedCreateNestedManyWithoutHomeClassInput
 }
 
 export type ClassCreateOrConnectWithoutShopPurchasesInput = {
@@ -1464,6 +2026,9 @@ export type ClassUpdateWithoutShopPurchasesInput = {
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUpdateManyWithoutClassNestedInput
+  teachers?: Prisma.ClassTeacherUpdateManyWithoutClassNestedInput
+  actionLog?: Prisma.ClassActionLogUpdateManyWithoutClassNestedInput
+  homeStudents?: Prisma.UserUpdateManyWithoutHomeClassNestedInput
 }
 
 export type ClassUncheckedUpdateWithoutShopPurchasesInput = {
@@ -1494,6 +2059,9 @@ export type ClassUncheckedUpdateWithoutShopPurchasesInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutClassNestedInput
+  teachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutClassNestedInput
+  actionLog?: Prisma.ClassActionLogUncheckedUpdateManyWithoutClassNestedInput
+  homeStudents?: Prisma.UserUncheckedUpdateManyWithoutHomeClassNestedInput
 }
 
 export type ClassCreateWithoutShopItemUsesInput = {
@@ -1524,6 +2092,9 @@ export type ClassCreateWithoutShopItemUsesInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationCreateNestedManyWithoutClassInput
+  teachers?: Prisma.ClassTeacherCreateNestedManyWithoutClassInput
+  actionLog?: Prisma.ClassActionLogCreateNestedManyWithoutClassInput
+  homeStudents?: Prisma.UserCreateNestedManyWithoutHomeClassInput
 }
 
 export type ClassUncheckedCreateWithoutShopItemUsesInput = {
@@ -1554,6 +2125,9 @@ export type ClassUncheckedCreateWithoutShopItemUsesInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutClassInput
+  teachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutClassInput
+  actionLog?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutClassInput
+  homeStudents?: Prisma.UserUncheckedCreateNestedManyWithoutHomeClassInput
 }
 
 export type ClassCreateOrConnectWithoutShopItemUsesInput = {
@@ -1600,6 +2174,9 @@ export type ClassUpdateWithoutShopItemUsesInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUpdateManyWithoutClassNestedInput
+  teachers?: Prisma.ClassTeacherUpdateManyWithoutClassNestedInput
+  actionLog?: Prisma.ClassActionLogUpdateManyWithoutClassNestedInput
+  homeStudents?: Prisma.UserUpdateManyWithoutHomeClassNestedInput
 }
 
 export type ClassUncheckedUpdateWithoutShopItemUsesInput = {
@@ -1630,6 +2207,9 @@ export type ClassUncheckedUpdateWithoutShopItemUsesInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutClassNestedInput
+  teachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutClassNestedInput
+  actionLog?: Prisma.ClassActionLogUncheckedUpdateManyWithoutClassNestedInput
+  homeStudents?: Prisma.UserUncheckedUpdateManyWithoutHomeClassNestedInput
 }
 
 export type ClassCreateWithoutMissionsInput = {
@@ -1660,6 +2240,9 @@ export type ClassCreateWithoutMissionsInput = {
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationCreateNestedManyWithoutClassInput
+  teachers?: Prisma.ClassTeacherCreateNestedManyWithoutClassInput
+  actionLog?: Prisma.ClassActionLogCreateNestedManyWithoutClassInput
+  homeStudents?: Prisma.UserCreateNestedManyWithoutHomeClassInput
 }
 
 export type ClassUncheckedCreateWithoutMissionsInput = {
@@ -1690,6 +2273,9 @@ export type ClassUncheckedCreateWithoutMissionsInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutClassInput
+  teachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutClassInput
+  actionLog?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutClassInput
+  homeStudents?: Prisma.UserUncheckedCreateNestedManyWithoutHomeClassInput
 }
 
 export type ClassCreateOrConnectWithoutMissionsInput = {
@@ -1736,6 +2322,9 @@ export type ClassUpdateWithoutMissionsInput = {
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUpdateManyWithoutClassNestedInput
+  teachers?: Prisma.ClassTeacherUpdateManyWithoutClassNestedInput
+  actionLog?: Prisma.ClassActionLogUpdateManyWithoutClassNestedInput
+  homeStudents?: Prisma.UserUpdateManyWithoutHomeClassNestedInput
 }
 
 export type ClassUncheckedUpdateWithoutMissionsInput = {
@@ -1766,6 +2355,9 @@ export type ClassUncheckedUpdateWithoutMissionsInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutClassNestedInput
+  teachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutClassNestedInput
+  actionLog?: Prisma.ClassActionLogUncheckedUpdateManyWithoutClassNestedInput
+  homeStudents?: Prisma.UserUncheckedUpdateManyWithoutHomeClassNestedInput
 }
 
 export type ClassCreateWithoutJoinRequestsInput = {
@@ -1796,6 +2388,9 @@ export type ClassCreateWithoutJoinRequestsInput = {
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationCreateNestedManyWithoutClassInput
+  teachers?: Prisma.ClassTeacherCreateNestedManyWithoutClassInput
+  actionLog?: Prisma.ClassActionLogCreateNestedManyWithoutClassInput
+  homeStudents?: Prisma.UserCreateNestedManyWithoutHomeClassInput
 }
 
 export type ClassUncheckedCreateWithoutJoinRequestsInput = {
@@ -1826,6 +2421,9 @@ export type ClassUncheckedCreateWithoutJoinRequestsInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutClassInput
+  teachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutClassInput
+  actionLog?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutClassInput
+  homeStudents?: Prisma.UserUncheckedCreateNestedManyWithoutHomeClassInput
 }
 
 export type ClassCreateOrConnectWithoutJoinRequestsInput = {
@@ -1872,6 +2470,9 @@ export type ClassUpdateWithoutJoinRequestsInput = {
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUpdateManyWithoutClassNestedInput
+  teachers?: Prisma.ClassTeacherUpdateManyWithoutClassNestedInput
+  actionLog?: Prisma.ClassActionLogUpdateManyWithoutClassNestedInput
+  homeStudents?: Prisma.UserUpdateManyWithoutHomeClassNestedInput
 }
 
 export type ClassUncheckedUpdateWithoutJoinRequestsInput = {
@@ -1902,6 +2503,9 @@ export type ClassUncheckedUpdateWithoutJoinRequestsInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutClassNestedInput
+  teachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutClassNestedInput
+  actionLog?: Prisma.ClassActionLogUncheckedUpdateManyWithoutClassNestedInput
+  homeStudents?: Prisma.UserUncheckedUpdateManyWithoutHomeClassNestedInput
 }
 
 export type ClassCreateWithoutInvitationsInput = {
@@ -1932,6 +2536,9 @@ export type ClassCreateWithoutInvitationsInput = {
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationCreateNestedManyWithoutClassInput
+  teachers?: Prisma.ClassTeacherCreateNestedManyWithoutClassInput
+  actionLog?: Prisma.ClassActionLogCreateNestedManyWithoutClassInput
+  homeStudents?: Prisma.UserCreateNestedManyWithoutHomeClassInput
 }
 
 export type ClassUncheckedCreateWithoutInvitationsInput = {
@@ -1962,6 +2569,9 @@ export type ClassUncheckedCreateWithoutInvitationsInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutClassInput
+  teachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutClassInput
+  actionLog?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutClassInput
+  homeStudents?: Prisma.UserUncheckedCreateNestedManyWithoutHomeClassInput
 }
 
 export type ClassCreateOrConnectWithoutInvitationsInput = {
@@ -2008,6 +2618,9 @@ export type ClassUpdateWithoutInvitationsInput = {
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUpdateManyWithoutClassNestedInput
+  teachers?: Prisma.ClassTeacherUpdateManyWithoutClassNestedInput
+  actionLog?: Prisma.ClassActionLogUpdateManyWithoutClassNestedInput
+  homeStudents?: Prisma.UserUpdateManyWithoutHomeClassNestedInput
 }
 
 export type ClassUncheckedUpdateWithoutInvitationsInput = {
@@ -2038,6 +2651,9 @@ export type ClassUncheckedUpdateWithoutInvitationsInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutClassNestedInput
+  teachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutClassNestedInput
+  actionLog?: Prisma.ClassActionLogUncheckedUpdateManyWithoutClassNestedInput
+  homeStudents?: Prisma.UserUncheckedUpdateManyWithoutHomeClassNestedInput
 }
 
 export type ClassCreateWithoutBehaviorTemplatesInput = {
@@ -2068,6 +2684,9 @@ export type ClassCreateWithoutBehaviorTemplatesInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutClassInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationCreateNestedManyWithoutClassInput
+  teachers?: Prisma.ClassTeacherCreateNestedManyWithoutClassInput
+  actionLog?: Prisma.ClassActionLogCreateNestedManyWithoutClassInput
+  homeStudents?: Prisma.UserCreateNestedManyWithoutHomeClassInput
 }
 
 export type ClassUncheckedCreateWithoutBehaviorTemplatesInput = {
@@ -2098,6 +2717,9 @@ export type ClassUncheckedCreateWithoutBehaviorTemplatesInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutClassInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutClassInput
+  teachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutClassInput
+  actionLog?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutClassInput
+  homeStudents?: Prisma.UserUncheckedCreateNestedManyWithoutHomeClassInput
 }
 
 export type ClassCreateOrConnectWithoutBehaviorTemplatesInput = {
@@ -2144,6 +2766,9 @@ export type ClassUpdateWithoutBehaviorTemplatesInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutClassNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUpdateManyWithoutClassNestedInput
+  teachers?: Prisma.ClassTeacherUpdateManyWithoutClassNestedInput
+  actionLog?: Prisma.ClassActionLogUpdateManyWithoutClassNestedInput
+  homeStudents?: Prisma.UserUpdateManyWithoutHomeClassNestedInput
 }
 
 export type ClassUncheckedUpdateWithoutBehaviorTemplatesInput = {
@@ -2174,6 +2799,9 @@ export type ClassUncheckedUpdateWithoutBehaviorTemplatesInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutClassNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutClassNestedInput
+  teachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutClassNestedInput
+  actionLog?: Prisma.ClassActionLogUncheckedUpdateManyWithoutClassNestedInput
+  homeStudents?: Prisma.UserUncheckedUpdateManyWithoutHomeClassNestedInput
 }
 
 export type ClassCreateWithoutBehaviorApplicationsInput = {
@@ -2204,6 +2832,9 @@ export type ClassCreateWithoutBehaviorApplicationsInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutClassInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateCreateNestedManyWithoutClassInput
+  teachers?: Prisma.ClassTeacherCreateNestedManyWithoutClassInput
+  actionLog?: Prisma.ClassActionLogCreateNestedManyWithoutClassInput
+  homeStudents?: Prisma.UserCreateNestedManyWithoutHomeClassInput
 }
 
 export type ClassUncheckedCreateWithoutBehaviorApplicationsInput = {
@@ -2234,6 +2865,9 @@ export type ClassUncheckedCreateWithoutBehaviorApplicationsInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutClassInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedCreateNestedManyWithoutClassInput
+  teachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutClassInput
+  actionLog?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutClassInput
+  homeStudents?: Prisma.UserUncheckedCreateNestedManyWithoutHomeClassInput
 }
 
 export type ClassCreateOrConnectWithoutBehaviorApplicationsInput = {
@@ -2280,6 +2914,9 @@ export type ClassUpdateWithoutBehaviorApplicationsInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutClassNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUpdateManyWithoutClassNestedInput
+  teachers?: Prisma.ClassTeacherUpdateManyWithoutClassNestedInput
+  actionLog?: Prisma.ClassActionLogUpdateManyWithoutClassNestedInput
+  homeStudents?: Prisma.UserUpdateManyWithoutHomeClassNestedInput
 }
 
 export type ClassUncheckedUpdateWithoutBehaviorApplicationsInput = {
@@ -2310,6 +2947,9 @@ export type ClassUncheckedUpdateWithoutBehaviorApplicationsInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutClassNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedUpdateManyWithoutClassNestedInput
+  teachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutClassNestedInput
+  actionLog?: Prisma.ClassActionLogUncheckedUpdateManyWithoutClassNestedInput
+  homeStudents?: Prisma.UserUncheckedUpdateManyWithoutHomeClassNestedInput
 }
 
 export type ClassCreateManyTeacherInput = {
@@ -2360,6 +3000,9 @@ export type ClassUpdateWithoutTeacherInput = {
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUpdateManyWithoutClassNestedInput
+  teachers?: Prisma.ClassTeacherUpdateManyWithoutClassNestedInput
+  actionLog?: Prisma.ClassActionLogUpdateManyWithoutClassNestedInput
+  homeStudents?: Prisma.UserUpdateManyWithoutHomeClassNestedInput
 }
 
 export type ClassUncheckedUpdateWithoutTeacherInput = {
@@ -2390,6 +3033,9 @@ export type ClassUncheckedUpdateWithoutTeacherInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutClassNestedInput
+  teachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutClassNestedInput
+  actionLog?: Prisma.ClassActionLogUncheckedUpdateManyWithoutClassNestedInput
+  homeStudents?: Prisma.UserUncheckedUpdateManyWithoutHomeClassNestedInput
 }
 
 export type ClassUncheckedUpdateManyWithoutTeacherInput = {
@@ -2427,6 +3073,9 @@ export type ClassCountOutputType = {
   shopItemUses: number
   behaviorTemplates: number
   behaviorApplications: number
+  teachers: number
+  actionLog: number
+  homeStudents: number
 }
 
 export type ClassCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2439,6 +3088,9 @@ export type ClassCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.
   shopItemUses?: boolean | ClassCountOutputTypeCountShopItemUsesArgs
   behaviorTemplates?: boolean | ClassCountOutputTypeCountBehaviorTemplatesArgs
   behaviorApplications?: boolean | ClassCountOutputTypeCountBehaviorApplicationsArgs
+  teachers?: boolean | ClassCountOutputTypeCountTeachersArgs
+  actionLog?: boolean | ClassCountOutputTypeCountActionLogArgs
+  homeStudents?: boolean | ClassCountOutputTypeCountHomeStudentsArgs
 }
 
 /**
@@ -2514,6 +3166,27 @@ export type ClassCountOutputTypeCountBehaviorApplicationsArgs<ExtArgs extends ru
   where?: Prisma.BehaviorApplicationWhereInput
 }
 
+/**
+ * ClassCountOutputType without action
+ */
+export type ClassCountOutputTypeCountTeachersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ClassTeacherWhereInput
+}
+
+/**
+ * ClassCountOutputType without action
+ */
+export type ClassCountOutputTypeCountActionLogArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ClassActionLogWhereInput
+}
+
+/**
+ * ClassCountOutputType without action
+ */
+export type ClassCountOutputTypeCountHomeStudentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserWhereInput
+}
+
 
 export type ClassSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2545,6 +3218,9 @@ export type ClassSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   shopItemUses?: boolean | Prisma.Class$shopItemUsesArgs<ExtArgs>
   behaviorTemplates?: boolean | Prisma.Class$behaviorTemplatesArgs<ExtArgs>
   behaviorApplications?: boolean | Prisma.Class$behaviorApplicationsArgs<ExtArgs>
+  teachers?: boolean | Prisma.Class$teachersArgs<ExtArgs>
+  actionLog?: boolean | Prisma.Class$actionLogArgs<ExtArgs>
+  homeStudents?: boolean | Prisma.Class$homeStudentsArgs<ExtArgs>
   _count?: boolean | Prisma.ClassCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["class"]>
 
@@ -2626,6 +3302,9 @@ export type ClassInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   shopItemUses?: boolean | Prisma.Class$shopItemUsesArgs<ExtArgs>
   behaviorTemplates?: boolean | Prisma.Class$behaviorTemplatesArgs<ExtArgs>
   behaviorApplications?: boolean | Prisma.Class$behaviorApplicationsArgs<ExtArgs>
+  teachers?: boolean | Prisma.Class$teachersArgs<ExtArgs>
+  actionLog?: boolean | Prisma.Class$actionLogArgs<ExtArgs>
+  homeStudents?: boolean | Prisma.Class$homeStudentsArgs<ExtArgs>
   _count?: boolean | Prisma.ClassCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ClassIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2649,6 +3328,9 @@ export type $ClassPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     shopItemUses: Prisma.$ShopItemUsePayload<ExtArgs>[]
     behaviorTemplates: Prisma.$BehaviorTemplatePayload<ExtArgs>[]
     behaviorApplications: Prisma.$BehaviorApplicationPayload<ExtArgs>[]
+    teachers: Prisma.$ClassTeacherPayload<ExtArgs>[]
+    actionLog: Prisma.$ClassActionLogPayload<ExtArgs>[]
+    homeStudents: Prisma.$UserPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3074,6 +3756,9 @@ export interface Prisma__ClassClient<T, Null = never, ExtArgs extends runtime.Ty
   shopItemUses<T extends Prisma.Class$shopItemUsesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Class$shopItemUsesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ShopItemUsePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   behaviorTemplates<T extends Prisma.Class$behaviorTemplatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Class$behaviorTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BehaviorTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   behaviorApplications<T extends Prisma.Class$behaviorApplicationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Class$behaviorApplicationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BehaviorApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  teachers<T extends Prisma.Class$teachersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Class$teachersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClassTeacherPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  actionLog<T extends Prisma.Class$actionLogArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Class$actionLogArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClassActionLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  homeStudents<T extends Prisma.Class$homeStudentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Class$homeStudentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3754,6 +4439,78 @@ export type Class$behaviorApplicationsArgs<ExtArgs extends runtime.Types.Extensi
   take?: number
   skip?: number
   distinct?: Prisma.BehaviorApplicationScalarFieldEnum | Prisma.BehaviorApplicationScalarFieldEnum[]
+}
+
+/**
+ * Class.teachers
+ */
+export type Class$teachersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ClassTeacher
+   */
+  select?: Prisma.ClassTeacherSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ClassTeacher
+   */
+  omit?: Prisma.ClassTeacherOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ClassTeacherInclude<ExtArgs> | null
+  where?: Prisma.ClassTeacherWhereInput
+  orderBy?: Prisma.ClassTeacherOrderByWithRelationInput | Prisma.ClassTeacherOrderByWithRelationInput[]
+  cursor?: Prisma.ClassTeacherWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ClassTeacherScalarFieldEnum | Prisma.ClassTeacherScalarFieldEnum[]
+}
+
+/**
+ * Class.actionLog
+ */
+export type Class$actionLogArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ClassActionLog
+   */
+  select?: Prisma.ClassActionLogSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ClassActionLog
+   */
+  omit?: Prisma.ClassActionLogOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ClassActionLogInclude<ExtArgs> | null
+  where?: Prisma.ClassActionLogWhereInput
+  orderBy?: Prisma.ClassActionLogOrderByWithRelationInput | Prisma.ClassActionLogOrderByWithRelationInput[]
+  cursor?: Prisma.ClassActionLogWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ClassActionLogScalarFieldEnum | Prisma.ClassActionLogScalarFieldEnum[]
+}
+
+/**
+ * Class.homeStudents
+ */
+export type Class$homeStudentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
+  orderBy?: Prisma.UserOrderByWithRelationInput | Prisma.UserOrderByWithRelationInput[]
+  cursor?: Prisma.UserWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserScalarFieldEnum | Prisma.UserScalarFieldEnum[]
 }
 
 /**

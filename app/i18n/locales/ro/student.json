@@ -199,6 +199,10 @@
           "bought_toast": "Ai cumpărat „{name}”!",
           "used_toast": "Ai folosit „{name}”!",
           "mana_after": "Mana după utilizare"
+        },
+        "teachers": {
+          "title": "Profesori",
+          "empty": "Această clasă nu are încă profesori."
         }
       }
     },
@@ -240,27 +244,6 @@
         "close": "Închide"
       }
     },
-    "leaderboard": {
-      "meta": {
-        "title": "Clasament | ITAKAI",
-        "description": "Clasamentul elevilor este disponibil în interiorul fiecărei clase."
-      },
-      "page_title": "Clasament",
-      "page_subtitle": "Vezi clasamentul general și compară-ți progresul cu ceilalți elevi.",
-      "pick_class": "Selectează o clasă",
-      "friends_soon_title": "Clasamentul prietenilor, în curând",
-      "friends_soon_description": "Partea socială nu este încă conectată. Între timp, poți folosi clasamentul general sau pe cel al claselor tale.",
-      "choose_class_title": "Alege o clasă",
-      "choose_class_description": "Selectează o clasă ca să îți vezi poziția și clasamentul intern.",
-      "empty_class_title": "Nu există clasament disponibil",
-      "empty_class_description": "Încă nu sunt destule date ca să construim clasamentul acestei clase.",
-      "empty_global_title": "Nu există date de clasament",
-      "empty_global_description": "Încă nu este destulă activitate ca să afișăm un clasament general.",
-      "global_podium": "Podium general",
-      "your_position": "Poziția ta",
-      "rest": "Restul clasamentului",
-      "by_class": "Pe clase"
-    },
     "ai_assistant": {
       "meta": {
         "title": "Asistent IA | ITAKAI",
@@ -285,17 +268,12 @@
         "security": "Securitate",
         "settings": "Setări"
       },
+      "account": {
+        "title": "Contul tău",
+        "username": "Utilizator",
+        "managed_note": "Contul tău este gestionat de profesori: te autentifici cu utilizatorul tău, nu are e-mail și nu poate fi șters de aici. Dacă ai nevoie de o modificare, cere-le-o."
+      },
       "security": {
-        "password_title": "Parolă",
-        "current_password": "Parola actuală",
-        "new_password": "Parolă nouă",
-        "confirm_password": "Confirmă parola",
-        "update_button": "Actualizează",
-        "passwords_mismatch": "Parolele nu coincid",
-        "password_too_short": "Parola trebuie să aibă cel puțin 6 caractere",
-        "email_title": "E-mail",
-        "new_email_placeholder": "E-mail nou",
-        "email_invalid": "Introdu un e-mail valid",
         "sessions_title": "Sesiuni",
         "close_all_sessions": "Închide toate",
         "current_session": "Curentă",
@@ -344,7 +322,8 @@
       "recent_activity_card": {
         "title": "Activitate recentă",
         "empty": "Nu există activitate recentă",
-        "user_fallback": "Utilizator"
+        "user_fallback": "Utilizator",
+        "by_actor": "De {name}"
       },
       "submission_modal": {
         "title": "Trimite enigma",

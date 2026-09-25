@@ -1,67 +1,58 @@
 <template>
-  <div class="min-h-screen bg-navy-700 flex items-center justify-center px-4">
-    <div class="w-full max-w-md rounded-3xl bg-white p-8 shadow-xl space-y-6">
-      <div class="space-y-2 text-center">
-        <h1 class="text-3xl font-bold text-navy-700">{{ t('auth.reset_password.card_title') }}</h1>
-        <p class="text-navy-700/70">{{ t('auth.reset_password.card_subtitle') }}</p>
-      </div>
+  <AuthCardShell
+    :title="t('auth.reset_password.card_title')"
+    :subtitle="t('auth.reset_password.card_subtitle')"
+    :error="errorMessage"
+  >
+    <div
+      v-if="successMessage"
+      role="status"
+      class="rounded-2xl bg-green-50 px-4 py-3 text-sm text-green-700"
+    >
+      {{ successMessage }}
+    </div>
 
-      <div v-if="successMessage" class="rounded-2xl bg-green-50 px-4 py-3 text-sm text-green-700">
-        {{ successMessage }}
-      </div>
+    <form class="space-y-4" novalidate @submit.prevent="handleResetPassword">
+      <NewPasswordFields
+        v-model:password="password"
+        v-model:confirm-password="confirmPassword"
+        id-prefix="reset"
+        :password-label="t('auth.reset_password.password_label')"
+        :password-placeholder="
+          t('auth.reset_password.password_placeholder', { min: PASSWORD_MIN_LENGTH })
+        "
+        :confirm-label="t('auth.reset_password.confirm_password_label')"
+        :confirm-placeholder="t('auth.reset_password.confirm_password_placeholder')"
+        :password-error="fieldErrors.password"
+        :confirm-error="fieldErrors.confirm"
+      />
 
-      <div v-if="errorMessage" class="rounded-2xl bg-red-50 px-4 py-3 text-sm text-red-700">
-        {{ errorMessage }}
-      </div>
+      <Button variant="primary" size="lg" class="w-full" :loading="isLoading" type="submit">
+        {{
+          isLoading
+            ? t('auth.reset_password.submit_loading')
+            : t('auth.reset_password.submit_button')
+        }}
+      </Button>
+    </form>
 
-      <form class="space-y-4" @submit.prevent="handleResetPassword">
-        <input
-          type="text"
-          name="username"
-          autocomplete="username"
-          aria-hidden="true"
-          tabindex="-1"
-          class="sr-only"
-        />
-
-        <FormField
-          v-model="password"
-          :label="t('auth.reset_password.password_label')"
-          type="password"
-          :placeholder="t('auth.reset_password.password_placeholder')"
-          autocomplete="new-password"
-          required
-        />
-
-        <FormField
-          v-model="confirmPassword"
-          :label="t('auth.reset_password.confirm_password_label')"
-          type="password"
-          :placeholder="t('auth.reset_password.confirm_password_placeholder')"
-          autocomplete="new-password"
-          required
-        />
-
-        <Button variant="primary" size="lg" class="w-full" :loading="isLoading" type="submit">
-          {{
-            isLoading
-              ? t('auth.reset_password.submit_loading')
-              : t('auth.reset_password.submit_button')
-          }}
-        </Button>
-      </form>
-
-      <NuxtLink
-        to="/auth/login"
-        class="block text-center text-sm font-medium text-purple hover:text-purple-dark"
-      >
+    <template #footer>
+      <NuxtLink to="/auth/login" class="text-purple hover:text-purple-dark">
         {{ t('auth.reset_password.back_to_login') }}
       </NuxtLink>
-    </div>
-  </div>
+    </template>
+  </AuthCardShell>
 </template>
 
 <script setup lang="ts">
+/**
+ * Contraseña nueva desde el enlace del correo. Lo que falla en un campo sale
+ * junto a ese campo, que es lo que `FormField` anuncia y marca; lo que no es de
+ * ningún campo (el enlace caducado, un fallo del servidor) sale arriba, en un
+ * bloque que también se anuncia.
+ */
+import { PASSWORD_MIN_LENGTH } from '~/utils/password'
+
 const { t } = useI18n()
 const route = useRoute()
 const authStore = useAuthStore()
@@ -81,6 +72,25 @@ const confirmPassword = ref('')
 const isLoading = ref(false)
 const errorMessage = ref('')
 const successMessage = ref('')
+const fieldErrors = reactive({ password: '', confirm: '' })
+
+/** Al escribir desaparece el error del campo: el aviso es de lo que se envió. */
+watch(password, () => {
+  fieldErrors.password = ''
+})
+watch(confirmPassword, () => {
+  fieldErrors.confirm = ''
+})
+
+/** El foco al campo que hay que corregir, cuando ya está pintado su error. */
+const focusField = async (id: string) => {
+  await nextTick()
+  document.getElementById(id)?.focus()
+}
+
+onMounted(() => {
+  void focusField('reset-password')
+})
 
 async function handleResetPassword() {
   errorMessage.value = ''
@@ -92,13 +102,17 @@ async function handleResetPassword() {
     return
   }
 
-  if (password.value.length < 6) {
-    errorMessage.value = t('auth.reset_password.validation.password_too_short')
+  if (password.value.length < PASSWORD_MIN_LENGTH) {
+    fieldErrors.password = t('auth.reset_password.validation.password_too_short', {
+      min: PASSWORD_MIN_LENGTH,
+    })
+    void focusField('reset-password')
     return
   }
 
   if (password.value !== confirmPassword.value) {
-    errorMessage.value = t('auth.reset_password.validation.passwords_dont_match')
+    fieldErrors.confirm = t('auth.reset_password.validation.passwords_dont_match')
+    void focusField('reset-confirm-password')
     return
   }
 

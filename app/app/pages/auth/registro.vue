@@ -1,5 +1,6 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+  <!-- pt-16: franja superior libre para idioma y accesibilidad (ver layout auth). -->
+  <div class="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-16 pb-6 sm:pb-8">
     <div
       class="w-full max-w-7xl flex flex-col lg:flex-row lg:justify-between lg:items-center gap-6 sm:gap-8 lg:gap-16"
     >
@@ -122,7 +123,7 @@
 
           <template v-else>
           <!-- Formulario -->
-          <form class="space-y-3 sm:space-y-4 signup-form" @submit.prevent="handleSubmit">
+          <form class="space-y-3 sm:space-y-4 signup-form" novalidate @submit.prevent="handleSubmit">
             <!-- PASO 1: Información personal -->
             <div v-if="step === 1" class="space-y-3 sm:space-y-4">
               <!-- Nombre completo -->

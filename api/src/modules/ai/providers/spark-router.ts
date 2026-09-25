@@ -11,7 +11,13 @@ const DEFAULT_SPARK_ROUTER_BASE_URL = 'http://localhost:8000'
 const DEFAULT_SPARK_ROUTER_API_KEY = 'local-testing-key'
 const DEFAULT_SPARK_ROUTER_MODEL = 'google/gemma-4-26b-a4b-it'
 const DEFAULT_SPARK_ROUTER_IMAGE_MODEL = 'black-forest-labs/flux.2-klein-4b'
-const DEFAULT_TEXT_TIMEOUT_MS = 60_000
+// Sin stream: tope total generoso. Los modelos que razonan (GLM, o-series…)
+// pueden pasar más de un minuto pensando antes de contestar.
+const DEFAULT_TEXT_TIMEOUT_MS = 180_000
+// Con stream: se corta por INACTIVIDAD (los modelos que razonan mandan chunks
+// de reasoning todo el rato), con un tope de seguridad para no colgar la petición.
+const STREAM_IDLE_TIMEOUT_MS = 60_000
+const STREAM_MAX_TIMEOUT_MS = 10 * 60_000
 const DEFAULT_IMAGE_TIMEOUT_MS = 90_000
 
 // ── Sonda de alcanzabilidad con memoria ──────────────────────────────────────
@@ -167,6 +173,26 @@ async function fetchJson<T>(
   return response.json() as Promise<T>
 }
 
+// Cuerpo de una petición de chat. `reasoning_effort: 'low'` hace que los modelos
+// que razonan (GLM 5.x, o-series…) empiecen a escribir en un par de segundos en
+// vez de en decenas; si un endpoint no admite el parámetro y contesta 400, se
+// recuerda y no se vuelve a mandar a ese endpoint.
+const rejectsReasoningEffort = new Set<string>()
+
+function chatBody(baseUrl: string, model: string, prompt: string, options: GenerateTextOptions | undefined, stream: boolean) {
+  return JSON.stringify({
+    model,
+    messages: buildMessages(prompt, options),
+    temperature: options?.temperature ?? 0.7,
+    ...(stream ? { stream: true } : {}),
+    ...(rejectsReasoningEffort.has(baseUrl) ? {} : { reasoning_effort: 'low' }),
+  })
+}
+
+function isBadRequest(error: unknown) {
+  return error instanceof Error && error.message.startsWith('Spark Router 400')
+}
+
 export class SparkRouterProvider implements AIProvider {
   lastUsedProvider: 'spark' | 'gemini' | 'flux' = 'spark'
 
@@ -175,7 +201,13 @@ export class SparkRouterProvider implements AIProvider {
   // variable y reiniciar para volver a usar Spark.
   private readonly bypass = process.env.AI_DISABLE_SPARK === 'true'
 
-  constructor(private readonly fallbackProvider?: AIProvider) {}
+  constructor(private readonly fallbackProvider?: AIProvider) {
+    // Con la escotilla activa el endpoint de texto/imágenes del panel se ignora
+    // en silencio; que al menos quede dicho en el arranque.
+    if (this.bypass) {
+      console.warn('[AI] ⚠️ AI_DISABLE_SPARK=true: se ignora el endpoint configurado en el panel y todo va al respaldo Google')
+    }
+  }
 
   async generateText(prompt: string, options?: GenerateTextOptions): Promise<string> {
     if (this.bypass && this.fallbackProvider) {
@@ -191,7 +223,7 @@ export class SparkRouterProvider implements AIProvider {
     }
 
     try {
-      const payload = await fetchJson<SparkChatCompletionResponse>(
+      const request = () => fetchJson<SparkChatCompletionResponse>(
         openAiEndpoint(baseUrl, 'chat/completions'),
         {
           method: 'POST',
@@ -199,14 +231,18 @@ export class SparkRouterProvider implements AIProvider {
             Authorization: `Bearer ${apiKey}`,
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-            model,
-            messages: buildMessages(prompt, options),
-            temperature: options?.temperature ?? 0.7,
-          }),
+          body: chatBody(baseUrl, model, prompt, options, false),
         },
         DEFAULT_TEXT_TIMEOUT_MS
       )
+      let payload: SparkChatCompletionResponse
+      try {
+        payload = await request()
+      } catch (error) {
+        if (rejectsReasoningEffort.has(baseUrl) || !isBadRequest(error)) throw error
+        rejectsReasoningEffort.add(baseUrl)
+        payload = await request()
+      }
 
       const content = payload.choices?.[0]?.message?.content?.trim()
       if (!content) {
@@ -242,21 +278,29 @@ export class SparkRouterProvider implements AIProvider {
       return
     }
 
+    const controller = new AbortController()
+    let idleTimer = setTimeout(() => controller.abort(), STREAM_IDLE_TIMEOUT_MS)
+    const touch = () => {
+      clearTimeout(idleTimer)
+      idleTimer = setTimeout(() => controller.abort(), STREAM_IDLE_TIMEOUT_MS)
+    }
+    const hardTimer = setTimeout(() => controller.abort(), STREAM_MAX_TIMEOUT_MS)
+
     try {
-      const response = await fetch(openAiEndpoint(baseUrl, 'chat/completions'), {
+      const request = () => fetch(openAiEndpoint(baseUrl, 'chat/completions'), {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${apiKey}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          model,
-          messages: buildMessages(prompt, options),
-          temperature: options?.temperature ?? 0.7,
-          stream: true,
-        }),
-        signal: AbortSignal.timeout(DEFAULT_TEXT_TIMEOUT_MS),
+        body: chatBody(baseUrl, model, prompt, options, true),
+        signal: controller.signal,
       })
+      let response = await request()
+      if (response.status === 400 && !rejectsReasoningEffort.has(baseUrl)) {
+        rejectsReasoningEffort.add(baseUrl)
+        response = await request()
+      }
 
       if (!response.ok) {
         const detail = await response.text().catch(() => '')
@@ -272,6 +316,7 @@ export class SparkRouterProvider implements AIProvider {
 
       while (true) {
         const { done, value } = await reader.read()
+        touch()
         if (done) break
 
         buffer += decoder.decode(value, { stream: true })
@@ -308,6 +353,9 @@ export class SparkRouterProvider implements AIProvider {
       }
 
       throw error
+    } finally {
+      clearTimeout(idleTimer)
+      clearTimeout(hardTimer)
     }
   }
 

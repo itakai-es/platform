@@ -1,5 +1,15 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { computed, ref } from 'vue'
+import type { ManagedCredentials } from '~/types/auth.types'
+import type {
+  ClassAccess,
+  ClassAccessLevel,
+  ClassHistoryResponse,
+  ClassHistoryType,
+  ClassTeacherMember,
+  ClassTeacherProfile,
+  ClassTeachersResponse,
+} from '~/types/class.types'
 import type {
   Class,
   Student,
@@ -7,28 +17,29 @@ import type {
   Activity,
   CreateClassData,
   UpdateClassData,
+  ManagedRowInput,
+  ManagedRowReview,
+  StudentListQuery,
+  StudentListResponse,
 } from '~/types/teacher.types'
-import type {
-  JoinRequest,
-  Invitation,
-  SearchableStudent,
-  InvitationResponse,
-} from '~/types/enrollment.types'
+import { canInClass } from '~/utils/class-access'
 
 export const useTeacherStore = defineStore('teacher', () => {
   // State
   const stats = ref<TeacherStats | null>(null)
   const classes = ref<Class[]>([])
   const archivedClasses = ref<Class[]>([])
+  // Listado general de alumnos: la página a la vista, con sus totales.
   const students = ref<Student[]>([])
-  const archivedStudents = ref<Student[]>([])
+  const studentsTotal = ref(0)
+  const studentsTotalPages = ref(1)
+  const studentCounts = ref({ active: 0, archived: 0 })
   const activities = ref<Activity[]>([])
   const recentMissions = ref<any[]>([])
   const isLoadingStats = ref(true)
   const isLoadingClasses = ref(true)
   const isLoadingArchivedClasses = ref(false)
   const isLoadingStudents = ref(true)
-  const isLoadingArchivedStudents = ref(false)
   const isLoadingActivities = ref(true)
   const isLoadingMissions = ref(true)
 
@@ -45,10 +56,8 @@ export const useTeacherStore = defineStore('teacher', () => {
   const hasLoadedClasses = ref(false)
   const hasLoadedArchivedClasses = ref(false)
   const hasLoadedStudents = ref(false)
-  const hasLoadedArchivedStudents = ref(false)
   const hasLoadedActivities = ref(false)
   const hasLoadedMissions = ref(false)
-  const hasLoadedTotalPending = ref(false)
 
   // Per-class cache flags
   const loadedClassStudents = ref<Set<string>>(new Set())
@@ -57,31 +66,12 @@ export const useTeacherStore = defineStore('teacher', () => {
   const loadedClassRankings = ref<Set<string>>(new Set())
   // Per-id / per-classId fetched flags for new ensureX wrappers
   const loadedStudentDetails = ref<Set<string>>(new Set())
-  const hasLoadedPendingRequests = ref<Set<string>>(new Set())
-  const hasLoadedSentInvitations = ref<Set<string>>(new Set())
   // Per-classId fetched flag for the per-class ensureTeacherClassById wrapper
   const loadedClassDetails = ref<Set<string>>(new Set())
 
   // In-flight guards so concurrent ensureX calls don't fire duplicate fetches
   const isLoadingClassDetails = ref<Set<string>>(new Set())
   const isLoadingStudentDetails = ref<Set<string>>(new Set())
-  const isLoadingTotalPending = ref(false)
-
-  // Enrollment state
-  const pendingRequests = ref<Record<string, JoinRequest[]>>({}) // Por classId
-  const sentInvitations = ref<Record<string, Invitation[]>>({}) // Por classId
-  const searchedStudents = ref<SearchableStudent[]>([])
-  const isLoadingRequests = ref(false)
-  const isLoadingInvitations = ref(false)
-  const isSearchingStudents = ref(false)
-  const totalPendingRequests = ref(0)
-
-  // Computed
-  const getTotalPendingRequests = computed(() => {
-    return Object.values(pendingRequests.value)
-      .flat()
-      .filter(r => r.status === 'pending').length
-  })
 
   // Actions
   /**
@@ -171,57 +161,244 @@ export const useTeacherStore = defineStore('teacher', () => {
       return response.class
     } catch (error) {
       console.error('Error fetching class:', error)
+      if (isClassGone(error)) forgetClass(classId)
       throw error
     }
   }
 
+  // ==========================================
+  // CLASES A LAS QUE YA NO SE LLEGA
+  // ==========================================
+
   /**
-   * Obtiene los estudiantes
+   * ¿Dice este error que la clase ya no es accesible? La API responde 404 a
+   * quien no tiene acceso y 403 a quien no llega al nivel: en los dos casos lo
+   * que se tenía guardado de la clase ya no vale.
    */
-  async function fetchStudents(classId?: string, force = false) {
-    // If filtering by classId, check per-class cache
-    if (classId) {
-      if (!force && loadedClassStudents.value.has(classId)) {
-        const cached = classStudents.value.get(classId)
-        if (cached) {
-          return { students: cached, total: cached.length }
-        }
-      }
-    } else {
-      // No filter, check global cache
-      if (!force && hasLoadedStudents.value) {
-        return { students: students.value, total: students.value.length }
+  function isClassGone(error: unknown): boolean {
+    const e = error as { statusCode?: number; status?: number; response?: { status?: number } }
+    const status = e?.statusCode ?? e?.status ?? e?.response?.status
+    return status === 403 || status === 404
+  }
+
+  /**
+   * Olvida todo lo guardado de una clase: sale de los listados y de las cachés
+   * por clase, y los listados se volverán a pedir en la próxima visita. Tras
+   * salir de una clase, que te quiten de ella o que te cambien el nivel.
+   */
+  function forgetClass(classId: string) {
+    classes.value = classes.value.filter(c => c.id !== classId)
+    archivedClasses.value = archivedClasses.value.filter(c => c.id !== classId)
+    for (const map of [classStudents, classMissions, classGuides]) map.value.delete(classId)
+    for (const set of [loadedClassStudents, loadedClassMissions, loadedClassGuides]) {
+      set.value.delete(classId)
+    }
+    for (const key of [...classRankings.value.keys()]) {
+      if (key.startsWith(`${classId}-`)) {
+        classRankings.value.delete(key)
+        loadedClassRankings.value.delete(key)
       }
     }
+    loadedClassDetails.value.delete(classId)
+    isLoadingClassDetails.value.delete(classId)
+    hasLoadedClasses.value = false
+    hasLoadedArchivedClasses.value = false
+    hasLoadedStudents.value = false
+    hasLoadedStats.value = false
+    hasLoadedActivities.value = false
+    hasLoadedMissions.value = false
+    // El listado de «Mis clases» vive en el almacén de clases.
+    const classesStore = useClassesStore()
+    classesStore.classes = classesStore.classes.filter(c => c.id !== classId)
+    classesStore.hasLoadedClasses = false
+  }
 
+  /**
+   * Acceso propio en una clase, si ya está en algún listado cargado. `undefined`
+   * si no se sabe (hay que pedir la clase); `null` si se sabe que no hay.
+   */
+  function cachedClassAccess(classId: string): ClassAccess | null | undefined {
+    const cached = [...classes.value, ...archivedClasses.value, ...useClassesStore().classes].find(
+      c => c.id === classId && c.myAccess !== undefined
+    )
+    return cached?.myAccess
+  }
+
+  /**
+   * Cambios de acceso propio avisados desde fuera de la clase (un aviso de que
+   * te han cambiado el nivel o quitado): cada uno sube el contador de su clase,
+   * y la pantalla que la tenga abierta vuelve a pedirla.
+   */
+  const classAccessRevision = ref<Record<string, number>>({})
+
+  /** Lo guardado de la clase ya no vale: se olvida y se avisa a quien la tenga abierta. */
+  function markClassAccessChanged(classId: string) {
+    forgetClass(classId)
+    classAccessRevision.value = {
+      ...classAccessRevision.value,
+      [classId]: (classAccessRevision.value[classId] ?? 0) + 1,
+    }
+  }
+
+  /**
+   * ¿Se ofrece crear misiones? Hace falta edición en alguna clase. Mientras no se
+   * sabe, o sin ninguna clase aún (el asistente lo explica), se ofrece.
+   */
+  const canCreateMissions = computed(
+    () =>
+      !hasLoadedClasses.value ||
+      classes.value.length === 0 ||
+      classes.value.some(c => canInClass(c.myAccess, 'mission.edit'))
+  )
+
+  /** Apunta el acceso propio nuevo de una clase en los listados que la tengan. */
+  function setClassAccess(classId: string, access: ClassAccess | null) {
+    for (const list of [classes.value, archivedClasses.value, useClassesStore().classes]) {
+      const cls = list.find(c => c.id === classId)
+      if (cls) cls.myAccess = access
+    }
+  }
+
+  // ==========================================
+  // PROFESORADO DE UNA CLASE
+  // ==========================================
+
+  function classTeachersUrl(classId: string) {
+    return `${useRuntimeConfig().public.apiBase}/teacher/classes/${classId}`
+  }
+
+  async function fetchClassTeachers(classId: string) {
+    return await $fetch<ClassTeachersResponse>(`${classTeachersUrl(classId)}/teachers`)
+  }
+
+  /** Añade por correo exacto. Sin nivel, el del perfil. */
+  async function addClassTeacher(
+    classId: string,
+    data: { email: string; profile: ClassTeacherProfile; access?: ClassAccessLevel }
+  ) {
+    const response = await $fetch<{ teacher: ClassTeacherMember }>(
+      `${classTeachersUrl(classId)}/teachers`,
+      { method: 'POST', body: data }
+    )
+    return response.teacher
+  }
+
+  async function updateClassTeacher(
+    classId: string,
+    userId: string,
+    data: { profile?: ClassTeacherProfile; access?: ClassAccessLevel }
+  ) {
+    const response = await $fetch<{ teacher: ClassTeacherMember }>(
+      `${classTeachersUrl(classId)}/teachers/${userId}`,
+      { method: 'PATCH', body: data }
+    )
+    return response.teacher
+  }
+
+  async function removeClassTeacher(classId: string, userId: string) {
+    await $fetch(`${classTeachersUrl(classId)}/teachers/${userId}`, { method: 'DELETE' })
+  }
+
+  /** Sale de la clase: desde ese momento ya no se llega a ella. */
+  async function leaveClass(classId: string) {
+    await $fetch(`${classTeachersUrl(classId)}/leave`, { method: 'POST' })
+    forgetClass(classId)
+  }
+
+  /** Pasa la propiedad. Devuelve el profesorado tal como queda. */
+  async function transferClass(classId: string, userId: string) {
+    const response = await $fetch<{ teachers: ClassTeacherMember[] }>(
+      `${classTeachersUrl(classId)}/transfer`,
+      { method: 'POST', body: { userId } }
+    )
+    return response.teachers
+  }
+
+  async function fetchClassHistory(
+    classId: string,
+    query: { page?: number; limit?: number; actorId?: string; type?: ClassHistoryType }
+  ) {
+    return await $fetch<ClassHistoryResponse>(`${classTeachersUrl(classId)}/history`, {
+      params: query,
+    })
+  }
+
+  /** Alumnado de una clase, entero y sin paginar: la vista de la clase lo usa todo. */
+  async function fetchStudents(classId: string, force = false) {
+    if (!force && loadedClassStudents.value.has(classId)) {
+      const cached = classStudents.value.get(classId)
+      if (cached) return { students: cached, total: cached.length }
+    }
+    try {
+      const config = useRuntimeConfig()
+      const response = await $fetch<StudentListResponse>(
+        `${config.public.apiBase}/teacher/students`,
+        { params: { classId } }
+      )
+      classStudents.value.set(classId, response.students)
+      loadedClassStudents.value.add(classId)
+      return response
+    } catch (error) {
+      console.error('Error fetching students:', error)
+      throw error
+    }
+  }
+
+  // Petición más reciente del listado, consulta de lo que se ve y la que va en
+  // camino: una respuesta que llega tarde (se ha seguido escribiendo, se ha
+  // vuelto a la página de antes) no pisa a la última.
+  let studentListRequest = 0
+  let studentListKey = ''
+  let studentListPendingKey: string | null = null
+
+  /** Una página del listado general de alumnos: la API busca, filtra, ordena y pagina. */
+  async function fetchStudentList(query: StudentListQuery) {
+    const request = ++studentListRequest
+    const key = JSON.stringify(query)
+    studentListPendingKey = key
     try {
       isLoadingStudents.value = true
       const config = useRuntimeConfig()
-      const response = await $fetch<{ students: Student[]; total: number }>(
+      // La pestaña va siempre: con ella, la clase solo acota quién sale y las
+      // tarjetas llevan los números de todas las clases de la pestaña.
+      const params: Record<string, string | number> = {
+        archived: query.archived,
+        page: query.page,
+        limit: query.limit,
+      }
+      if (query.search?.trim()) params.search = query.search.trim()
+      if (query.classId) params.classId = query.classId
+      if (query.progress) params.progress = query.progress
+      if (query.sort) params.sort = query.sort
+      const response = await $fetch<StudentListResponse>(
         `${config.public.apiBase}/teacher/students`,
-        {
-          // Sin classId la vista es agregada: solo alumnos con alguna clase activa.
-          params: classId ? { classId } : { archived: 'active' },
-        }
+        { params }
       )
-
-      if (classId) {
-        // Store per-class data
-        classStudents.value.set(classId, response.students)
-        loadedClassStudents.value.add(classId)
-      } else {
-        // Store global data
+      if (request === studentListRequest) {
         students.value = response.students
+        studentsTotal.value = response.total
+        studentsTotalPages.value = response.totalPages
+        studentCounts.value = response.counts
+        studentListKey = key
         hasLoadedStudents.value = true
       }
-
       return response
     } catch (error) {
       console.error('Error fetching students:', error)
       throw error
     } finally {
-      isLoadingStudents.value = false
+      if (request === studentListRequest) {
+        isLoadingStudents.value = false
+        studentListPendingKey = null
+      }
     }
+  }
+
+  /** Deja sin efecto la petición del listado que vaya en camino. */
+  function dropStudentListRequest() {
+    ++studentListRequest
+    studentListPendingKey = null
+    isLoadingStudents.value = false
   }
 
   /**
@@ -299,10 +476,10 @@ export const useTeacherStore = defineStore('teacher', () => {
           body: data,
         }
       )
-      // Actualizar la clase en el array local
+      // Sobre lo que ya había: la respuesta no trae todo lo del listado (estadísticas…).
       const index = classes.value.findIndex(c => c.id === classId)
       if (index !== -1) {
-        classes.value[index] = response.class
+        classes.value[index] = { ...classes.value[index], ...response.class }
       }
       return response
     } catch (error) {
@@ -341,16 +518,15 @@ export const useTeacherStore = defineStore('teacher', () => {
         if (response.class.archived) {
           classes.value.splice(index, 1)
         } else {
-          classes.value[index] = response.class
+          classes.value[index] = { ...classes.value[index], ...response.class }
         }
       } else if (!response.class.archived) {
         classes.value.unshift(response.class)
       }
 
-      // Archivar/desarchivar mueve alumnos entre las listas activa y archivada:
-      // invalida ambas cachés para que la próxima visita las recargue.
+      // Archivar/desarchivar mueve alumnos entre las pestañas activa y archivada:
+      // el listado se vuelve a pedir en la próxima visita.
       hasLoadedStudents.value = false
-      hasLoadedArchivedStudents.value = false
       hasLoadedStats.value = false
 
       return response
@@ -501,193 +677,95 @@ export const useTeacherStore = defineStore('teacher', () => {
   }
 
   // ==========================================
-  // ENROLLMENT SYSTEM - Join Requests & Invitations
+  // ALUMNADO DE UNA CLASE: altas, alias, quitar y contraseñas
   // ==========================================
 
   /**
-   * Obtiene las solicitudes pendientes de una clase
+   * Da por viejo lo cacheado de un alumno y de los listados donde sale, para que
+   * la próxima visita lo pida de nuevo. La ficha del alumno se queda hasta que
+   * llegue la nueva, para no dejar la pantalla en blanco mientras tanto. Sin
+   * alumno, solo los listados (tras un alta).
    */
-  async function fetchPendingRequests(classId: string) {
-    try {
-      isLoadingRequests.value = true
-      const config = useRuntimeConfig()
-      const response = await $fetch<{ requests: JoinRequest[]; total: number }>(
-        `${config.public.apiBase}/teacher/classes/${classId}/requests`
-      )
-      pendingRequests.value[classId] = response.requests || []
-      return response
-    } catch (error) {
-      console.error('Error fetching pending requests:', error)
-      throw error
-    } finally {
-      isLoadingRequests.value = false
+  function forgetStudent(studentId?: string, classId?: string) {
+    if (studentId) loadedStudentDetails.value.delete(studentId)
+    if (classId) {
+      classStudents.value.delete(classId)
+      loadedClassStudents.value.delete(classId)
+      classRankings.value.delete(`${classId}-general`)
+      loadedClassRankings.value.delete(`${classId}-general`)
     }
+    hasLoadedStudents.value = false
+    hasLoadedStats.value = false
   }
 
   /**
-   * Acepta una solicitud de unión
+   * Usuario libre para un nombre. La API no dice si existe ninguno: responde
+   * siempre con uno que se puede usar.
    */
-  async function acceptJoinRequest(classId: string, requestId: string) {
-    try {
-      const config = useRuntimeConfig()
-      const response = await $fetch<{ success: boolean; message: string }>(
-        `${config.public.apiBase}/teacher/classes/${classId}/requests/${requestId}/accept`,
-        { method: 'PUT' }
-      )
+  async function proposeUsername(classId: string, name: string) {
+    const config = useRuntimeConfig()
+    const response = await $fetch<{ username: string }>(
+      `${config.public.apiBase}/teacher/classes/${classId}/students/username-proposal`,
+      { params: { name } }
+    )
+    return response.username
+  }
 
-      // Remove from local state
-      if (pendingRequests.value[classId]) {
-        pendingRequests.value[classId] = pendingRequests.value[classId].filter(
-          r => r.id !== requestId
-        )
-      }
-
-      // Update class student count
-      const classIndex = classes.value.findIndex(c => c.id === classId)
-      if (classIndex !== -1) {
-        classes.value[classIndex].studentCount++
-      }
-
-      return response
-    } catch (error) {
-      console.error('Error accepting join request:', error)
-      throw error
-    }
+  /** Revisa una lista sin crear nada: el estado de cada fila y el usuario con el que nacería. */
+  async function reviewManagedStudents(classId: string, students: ManagedRowInput[]) {
+    const config = useRuntimeConfig()
+    return await $fetch<{ dryRun: true; rows: ManagedRowReview[]; canCreate: boolean }>(
+      `${config.public.apiBase}/teacher/classes/${classId}/students/import`,
+      { method: 'POST', params: { dryRun: 'true' }, body: { students } }
+    )
   }
 
   /**
-   * Rechaza una solicitud de unión
+   * Da de alta varias cuentas sin correo de una vez: todas o ninguna. Devuelve
+   * las contraseñas temporales, que solo llegan aquí. Si alguna fila no se puede
+   * crear, la API responde 400 con la revisión de cada una (`data.rows`).
    */
-  async function rejectJoinRequest(classId: string, requestId: string, reason?: string) {
-    try {
-      const config = useRuntimeConfig()
-      const response = await $fetch<{ success: boolean; message: string }>(
-        `${config.public.apiBase}/teacher/classes/${classId}/requests/${requestId}/reject`,
-        {
-          method: 'PUT',
-          body: { reason },
-        }
-      )
-
-      // Remove from local state
-      if (pendingRequests.value[classId]) {
-        pendingRequests.value[classId] = pendingRequests.value[classId].filter(
-          r => r.id !== requestId
-        )
-      }
-
-      return response
-    } catch (error) {
-      console.error('Error rejecting join request:', error)
-      throw error
-    }
+  async function createManagedStudents(classId: string, students: ManagedRowInput[]) {
+    const config = useRuntimeConfig()
+    const response = await $fetch<{ dryRun: false; created: ManagedCredentials[] }>(
+      `${config.public.apiBase}/teacher/classes/${classId}/students/import`,
+      { method: 'POST', body: { students } }
+    )
+    forgetStudent(undefined, classId)
+    return response.created
   }
 
-  /**
-   * Busca estudiantes para invitar
-   */
-  async function searchStudents(classId: string, query: string) {
-    try {
-      isSearchingStudents.value = true
-      const config = useRuntimeConfig()
-      const response = await $fetch<{ students: SearchableStudent[]; total: number }>(
-        `${config.public.apiBase}/teacher/students/search`,
-        {
-          params: { q: query, classId },
-        }
-      )
-      searchedStudents.value = response.students || []
-      return response
-    } catch (error) {
-      console.error('Error searching students:', error)
-      searchedStudents.value = []
-      throw error
-    } finally {
-      isSearchingStudents.value = false
-    }
+  /** Nueva contraseña temporal para una cuenta sin correo. Solo se ve en esta respuesta. */
+  async function resetStudentPassword(studentId: string) {
+    const config = useRuntimeConfig()
+    return await $fetch<ManagedCredentials>(
+      `${config.public.apiBase}/teacher/students/${studentId}/reset-password`,
+      { method: 'POST' }
+    )
   }
 
-  /**
-   * Envía una invitación a un estudiante
-   */
-  async function sendInvitation(
-    classId: string,
-    studentId: string,
-    message?: string
-  ): Promise<InvitationResponse> {
-    try {
-      const config = useRuntimeConfig()
-      const response = await $fetch<InvitationResponse>(
-        `${config.public.apiBase}/teacher/classes/${classId}/invitations`,
-        {
-          method: 'POST',
-          body: { studentId, message },
-        }
-      )
-
-      // Add to local state
-      if (response.invitation) {
-        if (!sentInvitations.value[classId]) {
-          sentInvitations.value[classId] = []
-        }
-        sentInvitations.value[classId].push(response.invitation)
-      }
-
-      // Update searched student state
-      const studentIndex = searchedStudents.value.findIndex(s => s.id === studentId)
-      if (studentIndex !== -1) {
-        searchedStudents.value[studentIndex].hasPendingInvitation = true
-      }
-
-      return response
-    } catch (error) {
-      console.error('Error sending invitation:', error)
-      throw error
-    }
+  /** Cambia el alias del alumno en la clase. */
+  async function updateStudentNickname(classId: string, studentId: string, nickname: string) {
+    const config = useRuntimeConfig()
+    const response = await $fetch<{ nickname: string }>(
+      `${config.public.apiBase}/teacher/classes/${classId}/students/${studentId}`,
+      { method: 'PATCH', body: { nickname } }
+    )
+    forgetStudent(studentId, classId)
+    return response.nickname
   }
 
-  /**
-   * Obtiene las invitaciones enviadas de una clase
-   */
-  async function fetchSentInvitations(classId: string) {
-    try {
-      isLoadingInvitations.value = true
-      const config = useRuntimeConfig()
-      const response = await $fetch<{ invitations: Invitation[]; total: number }>(
-        `${config.public.apiBase}/teacher/classes/${classId}/invitations`
-      )
-      sentInvitations.value[classId] = response.invitations || []
-      return response
-    } catch (error) {
-      console.error('Error fetching sent invitations:', error)
-      throw error
-    } finally {
-      isLoadingInvitations.value = false
-    }
-  }
-
-  /**
-   * Obtiene el conteo total de solicitudes pendientes
-   */
-  async function fetchTotalPendingRequests() {
-    try {
-      const config = useRuntimeConfig()
-      const response = await $fetch<{ pendingRequests: number }>(
-        `${config.public.apiBase}/teacher/enrollment-counts`
-      )
-      totalPendingRequests.value = response.pendingRequests
-      return response.pendingRequests
-    } catch (error) {
-      console.error('Error fetching pending requests count:', error)
-      return 0
-    }
-  }
-
-  /**
-   * Limpia los resultados de búsqueda
-   */
-  function clearSearchResults() {
-    searchedStudents.value = []
+  /** Quita al alumno de la clase, con todo lo que tenía en ella. */
+  async function removeStudentFromClass(classId: string, studentId: string) {
+    const config = useRuntimeConfig()
+    const result = await $fetch<{ removed: true; accountDeleted: boolean }>(
+      `${config.public.apiBase}/teacher/classes/${classId}/students/${studentId}`,
+      { method: 'DELETE' }
+    )
+    forgetStudent(studentId, classId)
+    const cls = classes.value.find(c => c.id === classId)
+    if (cls && cls.studentCount > 0) cls.studentCount--
+    return result
   }
 
   /**
@@ -750,35 +828,6 @@ export const useTeacherStore = defineStore('teacher', () => {
   }
 
   /**
-   * Obtiene los alumnos archivados: los que ya no tienen ninguna clase activa
-   * con este profesor (todas sus clases están archivadas).
-   */
-  async function fetchArchivedStudents(force = false) {
-    if (!force && hasLoadedArchivedStudents.value) {
-      return { students: archivedStudents.value, total: archivedStudents.value.length }
-    }
-    try {
-      isLoadingArchivedStudents.value = true
-      const config = useRuntimeConfig()
-      const response = await $fetch<{ students: Student[]; total: number }>(
-        `${config.public.apiBase}/teacher/students`,
-        {
-          params: { archived: 'archived' },
-        }
-      )
-      archivedStudents.value = response.students || []
-      hasLoadedArchivedStudents.value = true
-      return { students: archivedStudents.value, total: archivedStudents.value.length }
-    } catch (error) {
-      console.error('Error fetching archived students:', error)
-      archivedStudents.value = []
-      throw error
-    } finally {
-      isLoadingArchivedStudents.value = false
-    }
-  }
-
-  /**
    * Obtiene el detalle de un estudiante por id. Cacheado en Map.
    */
   async function fetchStudentById(studentId: string, force = false) {
@@ -821,21 +870,16 @@ export const useTeacherStore = defineStore('teacher', () => {
     return await fetchClasses(undefined, force)
   }
 
-  async function ensureStudents(force = false) {
-    if (hasLoadedStudents.value && !force) {
-      return { students: students.value, total: students.value.length }
+  /** La página pedida del listado, salvo que ya sea la que se tiene. */
+  async function ensureStudentList(query: StudentListQuery, force = false) {
+    const key = JSON.stringify(query)
+    if (!force && hasLoadedStudents.value && studentListKey === key) {
+      // Es la que se ve. Si va en camino otra (se ha ido a la página 2 y se ha
+      // vuelto a la 1 antes de que responda), al llegar no debe pisarla.
+      if (studentListPendingKey !== null && studentListPendingKey !== key) dropStudentListRequest()
+      return
     }
-    return await fetchStudents(undefined, force)
-  }
-
-  async function ensureArchivedStudents(force = false) {
-    if (hasLoadedArchivedStudents.value && !force) {
-      return { students: archivedStudents.value, total: archivedStudents.value.length }
-    }
-    if (isLoadingArchivedStudents.value) {
-      return { students: archivedStudents.value, total: archivedStudents.value.length }
-    }
-    return await fetchArchivedStudents(force)
+    await fetchStudentList(query)
   }
 
   async function ensureActivities(force = false) {
@@ -915,45 +959,6 @@ export const useTeacherStore = defineStore('teacher', () => {
     return await fetchArchivedClasses(force)
   }
 
-  async function ensurePendingRequests(classId: string, force = false) {
-    if (hasLoadedPendingRequests.value.has(classId) && !force) {
-      return {
-        requests: pendingRequests.value[classId] || [],
-        total: (pendingRequests.value[classId] || []).length,
-      }
-    }
-    if (isLoadingRequests.value) return
-    const response = await fetchPendingRequests(classId)
-    hasLoadedPendingRequests.value.add(classId)
-    return response
-  }
-
-  async function ensureSentInvitations(classId: string, force = false) {
-    if (hasLoadedSentInvitations.value.has(classId) && !force) {
-      return {
-        invitations: sentInvitations.value[classId] || [],
-        total: (sentInvitations.value[classId] || []).length,
-      }
-    }
-    if (isLoadingInvitations.value) return
-    const response = await fetchSentInvitations(classId)
-    hasLoadedSentInvitations.value.add(classId)
-    return response
-  }
-
-  async function ensureTotalPendingRequests(force = false) {
-    if (hasLoadedTotalPending.value && !force) return totalPendingRequests.value
-    if (isLoadingTotalPending.value) return totalPendingRequests.value
-    isLoadingTotalPending.value = true
-    try {
-      const result = await fetchTotalPendingRequests()
-      hasLoadedTotalPending.value = true
-      return result
-    } finally {
-      isLoadingTotalPending.value = false
-    }
-  }
-
   /**
    * Refresca todos los datos del dashboard
    */
@@ -974,14 +979,17 @@ export const useTeacherStore = defineStore('teacher', () => {
     classes.value = []
     archivedClasses.value = []
     students.value = []
-    archivedStudents.value = []
+    studentsTotal.value = 0
+    studentsTotalPages.value = 1
+    studentCounts.value = { active: 0, archived: 0 }
+    studentListKey = ''
+    dropStudentListRequest()
     activities.value = []
     recentMissions.value = []
     isLoadingStats.value = false
     isLoadingClasses.value = false
     isLoadingArchivedClasses.value = false
     isLoadingStudents.value = false
-    isLoadingArchivedStudents.value = false
     isLoadingActivities.value = false
     isLoadingMissions.value = false
     // Per-class data
@@ -995,10 +1003,8 @@ export const useTeacherStore = defineStore('teacher', () => {
     hasLoadedClasses.value = false
     hasLoadedArchivedClasses.value = false
     hasLoadedStudents.value = false
-    hasLoadedArchivedStudents.value = false
     hasLoadedActivities.value = false
     hasLoadedMissions.value = false
-    hasLoadedTotalPending.value = false
     // Per-class cache flags
     loadedClassStudents.value.clear()
     loadedClassMissions.value.clear()
@@ -1006,20 +1012,9 @@ export const useTeacherStore = defineStore('teacher', () => {
     loadedClassRankings.value.clear()
     loadedClassDetails.value.clear()
     loadedStudentDetails.value.clear()
-    hasLoadedPendingRequests.value.clear()
-    hasLoadedSentInvitations.value.clear()
     // In-flight guards
     isLoadingClassDetails.value.clear()
     isLoadingStudentDetails.value.clear()
-    isLoadingTotalPending.value = false
-    // Enrollment state
-    pendingRequests.value = {}
-    sentInvitations.value = {}
-    searchedStudents.value = []
-    isLoadingRequests.value = false
-    isLoadingInvitations.value = false
-    isSearchingStudents.value = false
-    totalPendingRequests.value = 0
   }
 
   return {
@@ -1028,14 +1023,15 @@ export const useTeacherStore = defineStore('teacher', () => {
     classes,
     archivedClasses,
     students,
-    archivedStudents,
+    studentsTotal,
+    studentsTotalPages,
+    studentCounts,
     activities,
     recentMissions,
     isLoadingStats,
     isLoadingClasses,
     isLoadingArchivedClasses,
     isLoadingStudents,
-    isLoadingArchivedStudents,
     isLoadingActivities,
     isLoadingMissions,
     // Per-class data
@@ -1049,37 +1045,23 @@ export const useTeacherStore = defineStore('teacher', () => {
     hasLoadedClasses,
     hasLoadedArchivedClasses,
     hasLoadedStudents,
-    hasLoadedArchivedStudents,
     hasLoadedActivities,
     hasLoadedMissions,
-    hasLoadedTotalPending,
-    hasLoadedPendingRequests,
-    hasLoadedSentInvitations,
     loadedClassStudents,
     loadedClassMissions,
     loadedClassGuides,
     loadedClassRankings,
     loadedClassDetails,
     loadedStudentDetails,
-    // Enrollment state
-    pendingRequests,
-    sentInvitations,
-    searchedStudents,
-    isLoadingRequests,
-    isLoadingInvitations,
-    isSearchingStudents,
-    totalPendingRequests,
-    // Computed
-    getTotalPendingRequests,
     // Actions
     fetchStats,
     fetchClasses,
     fetchClassById,
     fetchStudents,
+    fetchStudentList,
     fetchActivities,
     fetchRecentMissions,
     fetchArchivedClasses,
-    fetchArchivedStudents,
     fetchStudentById,
     createClass,
     updateClass,
@@ -1092,11 +1074,26 @@ export const useTeacherStore = defineStore('teacher', () => {
     updateClassGuideCache,
     fetchClassRanking,
     refreshDashboard,
+    // Clases a las que ya no se llega y acceso propio
+    isClassGone,
+    forgetClass,
+    cachedClassAccess,
+    setClassAccess,
+    canCreateMissions,
+    classAccessRevision,
+    markClassAccessChanged,
+    // Profesorado e historial de una clase
+    fetchClassTeachers,
+    addClassTeacher,
+    updateClassTeacher,
+    removeClassTeacher,
+    leaveClass,
+    transferClass,
+    fetchClassHistory,
     // Ensure wrappers (patrón canónico — usar desde la UI)
     ensureStats,
     ensureClasses,
-    ensureStudents,
-    ensureArchivedStudents,
+    ensureStudentList,
     ensureActivities,
     ensureRecentMissions,
     ensureTeacherClassById,
@@ -1105,18 +1102,14 @@ export const useTeacherStore = defineStore('teacher', () => {
     ensureClassGuide,
     ensureStudentById,
     ensureArchivedClasses,
-    ensurePendingRequests,
-    ensureSentInvitations,
-    ensureTotalPendingRequests,
-    // Enrollment actions
-    fetchPendingRequests,
-    acceptJoinRequest,
-    rejectJoinRequest,
-    searchStudents,
-    sendInvitation,
-    fetchSentInvitations,
-    fetchTotalPendingRequests,
-    clearSearchResults,
+    // Alumnado de una clase
+    proposeUsername,
+    reviewManagedStudents,
+    createManagedStudents,
+    resetStudentPassword,
+    updateStudentNickname,
+    removeStudentFromClass,
+    forgetStudent,
     $reset,
   }
 })

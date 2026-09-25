@@ -56,6 +56,8 @@ export const ModelName = {
   RefreshToken: 'RefreshToken',
   InstanceSetting: 'InstanceSetting',
   Class: 'Class',
+  ClassTeacher: 'ClassTeacher',
+  ClassActionLog: 'ClassActionLog',
   ClassEnrollment: 'ClassEnrollment',
   ClassGuide: 'ClassGuide',
   ShopItem: 'ShopItem',
@@ -101,11 +103,17 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 export const UserScalarFieldEnum = {
   id: 'id',
   email: 'email',
+  username: 'username',
   passwordHash: 'passwordHash',
   name: 'name',
   role: 'role',
+  accountType: 'accountType',
   isOnboarded: 'isOnboarded',
   status: 'status',
+  createdById: 'createdById',
+  homeClassId: 'homeClassId',
+  mustChangePassword: 'mustChangePassword',
+  passwordChangedAt: 'passwordChangedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -180,6 +188,39 @@ export const ClassScalarFieldEnum = {
 } as const
 
 export type ClassScalarFieldEnum = (typeof ClassScalarFieldEnum)[keyof typeof ClassScalarFieldEnum]
+
+
+export const ClassTeacherScalarFieldEnum = {
+  id: 'id',
+  classId: 'classId',
+  userId: 'userId',
+  access: 'access',
+  profile: 'profile',
+  isOwner: 'isOwner',
+  addedById: 'addedById',
+  endsAt: 'endsAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ClassTeacherScalarFieldEnum = (typeof ClassTeacherScalarFieldEnum)[keyof typeof ClassTeacherScalarFieldEnum]
+
+
+export const ClassActionLogScalarFieldEnum = {
+  id: 'id',
+  classId: 'classId',
+  actorId: 'actorId',
+  actorName: 'actorName',
+  actorAvatar: 'actorAvatar',
+  action: 'action',
+  entityType: 'entityType',
+  entityId: 'entityId',
+  targetUserId: 'targetUserId',
+  metadata: 'metadata',
+  createdAt: 'createdAt'
+} as const
+
+export type ClassActionLogScalarFieldEnum = (typeof ClassActionLogScalarFieldEnum)[keyof typeof ClassActionLogScalarFieldEnum]
 
 
 export const ClassEnrollmentScalarFieldEnum = {
@@ -327,7 +368,8 @@ export const EnigmaSubmissionScalarFieldEnum = {
   status: 'status',
   xpAwarded: 'xpAwarded',
   submittedAt: 'submittedAt',
-  reviewedAt: 'reviewedAt'
+  reviewedAt: 'reviewedAt',
+  reviewedById: 'reviewedById'
 } as const
 
 export type EnigmaSubmissionScalarFieldEnum = (typeof EnigmaSubmissionScalarFieldEnum)[keyof typeof EnigmaSubmissionScalarFieldEnum]
@@ -442,7 +484,9 @@ export const ActivityScalarFieldEnum = {
   badgeImage: 'badgeImage',
   achievementName: 'achievementName',
   xpAmount: 'xpAmount',
-  source: 'source'
+  source: 'source',
+  actorId: 'actorId',
+  actorName: 'actorName'
 } as const
 
 export type ActivityScalarFieldEnum = (typeof ActivityScalarFieldEnum)[keyof typeof ActivityScalarFieldEnum]

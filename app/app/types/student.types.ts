@@ -3,10 +3,16 @@
  *
  * Types for student role according to MVP specifications.
  */
+import type { AccountType } from '~/types/auth.types'
 
 export interface StudentProfile {
   id: string
-  email: string
+  /** Nulo en una cuenta que entra con usuario: no tiene correo. */
+  email: string | null
+  /** Nulo en una cuenta que se registró con su correo. */
+  username: string | null
+  /** Quién lleva la cuenta: su dueño (`self`) o el profesorado (`managed`). */
+  accountType?: AccountType
   firstName: string
   lastName: string
   nickname?: string // Público - ej: "LoboValiente34"

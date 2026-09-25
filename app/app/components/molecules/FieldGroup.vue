@@ -8,6 +8,7 @@
         class="block text-sm font-medium text-navy-700"
       >
         {{ label }}
+        <span v-if="required" class="text-error">*</span>
       </component>
       <slot name="actions" />
     </div>
@@ -55,6 +56,8 @@ const props = defineProps<{
   htmlFor?: string
   /** El slot pone `id` en un control nativo (`input`, `textarea`). */
   nativeControl?: boolean
+  /** Campo obligatorio: asterisco tras la etiqueta, como en `FormField`. */
+  required?: boolean
 }>()
 
 const generatedId = useId()

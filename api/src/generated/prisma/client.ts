@@ -67,6 +67,16 @@ export type InstanceSetting = Prisma.InstanceSettingModel
  */
 export type Class = Prisma.ClassModel
 /**
+ * Model ClassTeacher
+ * 
+ */
+export type ClassTeacher = Prisma.ClassTeacherModel
+/**
+ * Model ClassActionLog
+ * 
+ */
+export type ClassActionLog = Prisma.ClassActionLogModel
+/**
  * Model ClassEnrollment
  * 
  */

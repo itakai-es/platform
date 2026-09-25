@@ -37,7 +37,10 @@ export interface MissionDocumentDetail {
   description: string
   tags: string[]
   url?: string
-  fileUrl?: string
+  /** true cuando el documento es un fichero guardado: se pide a la API, que comprueba el acceso. */
+  storedFile?: boolean
+  /** Solo la traen los documentos que son un enlace externo. */
+  fileUrl?: string | null
   fileName?: string
   fileSize?: number
   mimeType?: string

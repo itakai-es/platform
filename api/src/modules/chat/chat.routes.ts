@@ -4,7 +4,14 @@ import { z, ZodError } from 'zod'
 import { aiService } from '../ai/ai.service.js'
 import { checkRateLimit } from '../ai/middleware/rate-limiter.js'
 import { getAIProvider } from '../ai/providers/index.js'
-import { ServiceUnavailableError } from '../../utils/errors.js'
+import { ServiceUnavailableError, rethrowHttpError } from '../../utils/errors.js'
+import {
+  assertClassAccess,
+  assertClassMember,
+  assertMissionAccess,
+  assertMissionMember,
+  type ClassUser,
+} from '../../utils/class-access.js'
 
 const createConversationSchema = z.object({
   message: z.string().min(1),
@@ -38,6 +45,28 @@ async function generateConversationTitle(userMessage: string, locale?: string): 
     return clean || userMessage.substring(0, 50)
   } catch {
     return userMessage.substring(0, 50)
+  }
+}
+
+/**
+ * Una conversación solo se abre sobre una misión o una clase de quien pregunta:
+ * el profesorado, las de sus clases; el resto, aquellas en las que está
+ * matriculado. Si no, responde 404, igual que si no existieran.
+ */
+async function assertConversationContext(
+  user: ClassUser,
+  context: { missionId?: string; classId?: string }
+) {
+  const asTeacher = user.role === 'teacher'
+  if (context.missionId) {
+    await (asTeacher
+      ? assertMissionAccess(context.missionId, user.id, 'mission.view')
+      : assertMissionMember(context.missionId, user))
+  }
+  if (context.classId) {
+    await (asTeacher
+      ? assertClassAccess(context.classId, user.id, 'class.view')
+      : assertClassMember(context.classId, user))
   }
 }
 
@@ -131,8 +160,10 @@ export async function chatRoutes(fastify: FastifyInstance) {
 
   fastify.post('/conversations', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
-      const { id } = request.user as { id: string }
+      const user = request.user as { id: string; role: string | null }
+      const { id } = user
       const data = createConversationSchema.parse(request.body)
+      await assertConversationContext(user, data)
       const assistantId = data.assistantId || pickRandomAssistantId()
 
       // Create conversation + save user message only. No AI call.
@@ -169,6 +200,7 @@ export async function chatRoutes(fastify: FastifyInstance) {
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos invalidos', errors: error.errors })
       }
+      rethrowHttpError(error)
 
       return reply.status(500).send({ message: 'Error interno' })
     }

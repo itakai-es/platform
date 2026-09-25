@@ -4,9 +4,140 @@ import { missionsService } from '../missions/missions.service.js'
 import { shopService } from '../shop/shop.service.js'
 import { behaviorsService } from '../behaviors/behaviors.service.js'
 import { z, ZodError } from 'zod'
-import { ServiceUnavailableError } from '../../utils/errors.js'
+import { scheduleConfigSchema } from './schedule-config.schema.js'
+import { ServiceUnavailableError, rethrowHttpError } from '../../utils/errors.js'
+import { consumeRateLimit, releaseRateLimit } from '../../utils/rate-limit.js'
+import { USERNAME_MAX_LENGTH, USERNAME_MIN_LENGTH } from '../../utils/identity.js'
+import {
+  createManagedStudent,
+  createManagedStudents,
+  ManagedRowsError,
+  MANAGED_BATCH_MAX,
+  proposeUsername,
+  resetManagedStudentPassword,
+} from './managed-students.service.js'
+import {
+  NICKNAME_MAX_LENGTH,
+  removeStudentFromClass,
+  updateStudentNickname,
+} from './class-students.service.js'
+import {
+  addClassTeacher,
+  leaveClass,
+  listClassTeachers,
+  removeClassTeacher,
+  transferClass,
+  updateClassTeacher,
+} from './class-teachers.service.js'
+import {
+  CLASS_HISTORY_MAX_LIMIT,
+  CLASS_HISTORY_TYPES,
+  getClassHistory,
+} from './class-history.service.js'
+import {
+  listTeacherStudents,
+  STUDENT_LIST_MAX_LIMIT,
+  STUDENT_LIST_MAX_PAGE,
+  STUDENT_LIST_SORTS,
+  STUDENT_PROGRESS_RANGES,
+} from './student-list.service.js'
+
+/** Quien hace la petición: el `id` y el `role` que viajan en el token. */
+type RequestUser = { id: string; role: string | null }
 
 // Schemas
+const createManagedStudentSchema = z.object({
+  name: z.string().min(2, 'El nombre debe tener al menos 2 caracteres').max(120),
+  // Sin usuario, lo propone el sistema.
+  username: z.string().min(USERNAME_MIN_LENGTH).max(USERNAME_MAX_LENGTH).optional(),
+})
+
+// Las filas llegan tal cual se han escrito o importado: la revisión de cada una
+// (nombre vacío, repetido, usuario mal formado) la hace el servicio y la devuelve
+// fila a fila, así que aquí solo se acota el tamaño.
+const managedBatchSchema = z.object({
+  students: z
+    .array(
+      z.object({
+        name: z.string().max(200),
+        username: z.string().max(100).optional(),
+      })
+    )
+    .min(1, 'La lista está vacía')
+    .max(MANAGED_BATCH_MAX, `Como mucho ${MANAGED_BATCH_MAX} alumnos de una vez`),
+})
+
+const batchQuerySchema = z.object({
+  dryRun: z.enum(['true', 'false']).optional(),
+})
+
+const studentNicknameSchema = z.object({
+  nickname: z.string().max(NICKNAME_MAX_LENGTH * 2),
+})
+
+/**
+ * Revisiones de listas por hora y por profesor. Revisar no crea nada, pero cada
+ * revisión dice qué usuarios escritos están ocupados: con este límite no sirve
+ * para recorrer usuarios en bucle.
+ */
+const MANAGED_REVIEW_LIMIT = { max: 30, windowMs: 60 * 60 * 1000 }
+
+const usernameProposalSchema = z.object({
+  name: z.string().min(1, 'Escribe el nombre del alumno').max(120),
+})
+
+/**
+ * Altas de alumnado por hora y por profesor. Da de sobra para pasar varias listas
+ * de clase de una sentada y corta el crear cuentas en bucle, que es lo que
+ * abultaría la base sin coste para quien lo hace.
+ */
+const MANAGED_CREATE_LIMIT = { max: 200, windowMs: 60 * 60 * 1000 }
+const teacherProfileSchema = z.enum(['titular', 'sustituto', 'practicas'])
+const teacherAccessSchema = z.enum(['read', 'edit', 'admin'])
+
+const addClassTeacherSchema = z.object({
+  email: z.string().email('Escribe un correo válido').max(254),
+  profile: teacherProfileSchema,
+  access: teacherAccessSchema.optional(),
+})
+
+const updateClassTeacherSchema = z
+  .object({ profile: teacherProfileSchema.optional(), access: teacherAccessSchema.optional() })
+  .refine(data => data.profile || data.access, 'Indica el perfil o el nivel')
+
+const transferClassSchema = z.object({
+  userId: z.string().min(1, 'Elige a quién pasar la clase'),
+})
+
+// Un parámetro vacío (`?classId=`) cuenta como no puesto.
+const optionalParam = <T extends z.ZodTypeAny>(schema: T) =>
+  z.preprocess(value => (value === '' ? undefined : value), schema.optional())
+
+const studentListQuerySchema = z.object({
+  classId: optionalParam(z.string()),
+  archived: optionalParam(z.enum(['active', 'archived', 'all'])),
+  search: optionalParam(z.string().max(100)),
+  progress: optionalParam(z.enum(STUDENT_PROGRESS_RANGES)),
+  sort: optionalParam(z.enum(STUDENT_LIST_SORTS)),
+  page: optionalParam(z.coerce.number().int().min(1).max(STUDENT_LIST_MAX_PAGE)),
+  // Sin límite solo sale todo con `classId`; si no, una página por defecto.
+  limit: optionalParam(z.coerce.number().int().min(1).max(STUDENT_LIST_MAX_LIMIT)),
+})
+
+const classHistoryQuerySchema = z.object({
+  page: z.coerce.number().int().min(1).optional(),
+  limit: z.coerce.number().int().min(1).max(CLASS_HISTORY_MAX_LIMIT).optional(),
+  actorId: z.string().min(1).optional(),
+  type: z.enum(CLASS_HISTORY_TYPES).optional(),
+})
+
+/**
+ * Intentos de añadir profesorado por hora y por profesor, salgan bien o mal. La
+ * respuesta dice si un correo es de una cuenta de profesorado: con este límite
+ * no sirve para recorrer correos.
+ */
+const CLASS_TEACHER_ADD_LIMIT = { max: 20, windowMs: 60 * 60 * 1000 }
+
 const createClassSchema = z.object({
   name: z.string().min(1),
   narrative: z.string().optional(),
@@ -63,15 +194,7 @@ const updateClassSchema = z.object({
   province: z.string().optional(),
   settings: classSettingsSchema.optional(),
   levelConfig: levelConfigSchema.optional(),
-})
-
-const sendInvitationSchema = z.object({
-  studentId: z.string(),
-  message: z.string().optional(),
-})
-
-const rejectRequestSchema = z.object({
-  reason: z.string().optional(),
+  scheduleConfig: scheduleConfigSchema.optional(),
 })
 
 const createBadgeSchema = z.object({
@@ -178,6 +301,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       const cls = await teachersService.getClassById(id, classId)
       return { class: cls }
     } catch (error) {
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(404).send({ message: error.message })
       }
@@ -200,15 +324,15 @@ export async function teacherRoutes(fastify: FastifyInstance) {
   })
 
   // ==================== SHOP (teacher) ====================
+  // El acceso a la clase lo comprueba el servicio: sin acceso responde 404 y con
+  // un nivel que no llega, 403, a través del manejador global.
 
   fastify.get('/classes/:classId/shop', async (request: FastifyRequest<{ Params: { classId: string } }>, reply: FastifyReply) => {
     try {
       const { id } = request.user as { id: string }
       return await shopService.getTeacherShop(id, request.params.classId)
     } catch (error) {
-      if (error instanceof Error) {
-        return reply.status(403).send({ message: error.message })
-      }
+      rethrowHttpError(error)
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
@@ -223,9 +347,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
-      if (error instanceof Error) {
-        return reply.status(403).send({ message: error.message })
-      }
+      rethrowHttpError(error)
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
@@ -240,6 +362,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(404).send({ message: error.message })
       }
@@ -253,6 +376,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       const result = await shopService.deleteItem(id, request.params.classId, request.params.itemId)
       return result
     } catch (error) {
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(404).send({ message: error.message })
       }
@@ -267,9 +391,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       const { id } = request.user as { id: string }
       return await behaviorsService.getBehaviors(id, request.params.classId)
     } catch (error) {
-      if (error instanceof Error) {
-        return reply.status(403).send({ message: error.message })
-      }
+      rethrowHttpError(error)
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
@@ -284,9 +406,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
-      if (error instanceof Error) {
-        return reply.status(403).send({ message: error.message })
-      }
+      rethrowHttpError(error)
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
@@ -306,6 +426,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(404).send({ message: error.message })
       }
@@ -323,6 +444,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       )
       return result
     } catch (error) {
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(404).send({ message: error.message })
       }
@@ -345,6 +467,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(400).send({ message: error.message })
       }
@@ -363,11 +486,11 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
+      // El acceso (404/403) y las validaciones, como la de una plantilla publicada
+      // sin metadatos (400), llegan con su estado.
+      rethrowHttpError(error)
       if (error instanceof Error) {
-        // Validaciones (p. ej. plantilla publicada sin metadatos) marcan statusCode 400;
-        // el resto (clase no encontrada) sigue devolviendo 404 como hasta ahora.
-        const status = (error as Error & { statusCode?: number }).statusCode ?? 404
-        return reply.status(status).send({ message: error.message })
+        return reply.status(404).send({ message: error.message })
       }
       return reply.status(500).send({ message: 'Error interno' })
     }
@@ -384,6 +507,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(400).send({ message: error.message })
       }
@@ -441,6 +565,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(404).send({ message: error.message })
       }
@@ -458,6 +583,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(404).send({ message: error.message })
       }
@@ -472,6 +598,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       const result = await teachersService.getInvitationCode(id, classId)
       return result
     } catch (error) {
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(404).send({ message: error.message })
       }
@@ -486,6 +613,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       const result = await teachersService.getClassMissions(id, classId)
       return result
     } catch (error) {
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(404).send({ message: error.message })
       }
@@ -500,6 +628,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       const result = await teachersService.getClassRanking(id, classId)
       return result
     } catch (error) {
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(404).send({ message: error.message })
       }
@@ -514,12 +643,237 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       const result = await teachersService.getClassStudents(id, classId)
       return result
     } catch (error) {
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(404).send({ message: error.message })
       }
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
+
+  // Alta de una cuenta de alumnado sin correo en esta clase. Devuelve el usuario
+  // y la contraseña temporal una sola vez: no se guardan en claro en ningún sitio.
+  fastify.post(
+    '/classes/:classId/students',
+    async (request: FastifyRequest<{ Params: { classId: string } }>, reply: FastifyReply) => {
+      try {
+        const actor = request.user as RequestUser
+        const { classId } = request.params
+        const data = createManagedStudentSchema.parse(request.body)
+        consumeRateLimit(`managed-student-create:${actor.id}`, MANAGED_CREATE_LIMIT)
+        const result = await createManagedStudent(actor, { classId, ...data })
+        return reply.status(201).send(result)
+      } catch (error) {
+        if (error instanceof ZodError) {
+          return reply.status(400).send({ message: error.errors[0]?.message || 'Datos inválidos' })
+        }
+        rethrowHttpError(error)
+        return reply.status(500).send({ message: 'Error interno' })
+      }
+    }
+  )
+
+  // Restablecer la contraseña de una cuenta gestionada. No lleva clase en el
+  // camino: quien puede hacerlo se decide por la clase de ORIGEN de la cuenta,
+  // que es la que la gestiona, y es también donde se registra la acción. Con una
+  // clase en el camino, el camino diría que se comprueba algo que no se comprueba.
+  fastify.post(
+    '/students/:studentId/reset-password',
+    async (request: FastifyRequest<{ Params: { studentId: string } }>, reply: FastifyReply) => {
+      try {
+        const actor = request.user as RequestUser
+        const { studentId } = request.params
+        const result = await resetManagedStudentPassword(actor, studentId)
+        return result
+      } catch (error) {
+        rethrowHttpError(error)
+        return reply.status(500).send({ message: 'Error interno' })
+      }
+    }
+  )
+
+  // Propuesta de usuario libre para un nombre. No responde si un usuario existe:
+  // devuelve uno que se puede usar, así que no sirve para averiguar qué cuentas hay.
+  fastify.get(
+    '/classes/:classId/students/username-proposal',
+    async (
+      request: FastifyRequest<{ Params: { classId: string }; Querystring: { name?: string } }>,
+      reply: FastifyReply
+    ) => {
+      try {
+        const actor = request.user as RequestUser
+        const { classId } = request.params
+        const { name } = usernameProposalSchema.parse(request.query)
+        consumeRateLimit(`username-proposal:${actor.id}`, { max: 120, windowMs: 60 * 60 * 1000 })
+        const result = await proposeUsername(actor, classId, name)
+        return result
+      } catch (error) {
+        if (error instanceof ZodError) {
+          return reply.status(400).send({ message: error.errors[0]?.message || 'Datos inválidos' })
+        }
+        rethrowHttpError(error)
+        return reply.status(500).send({ message: 'Error interno' })
+      }
+    }
+  )
+
+  // Varias cuentas de una vez: las filas del formulario o una lista importada.
+  // Con ?dryRun=true solo revisa la lista y dice el estado de cada fila; sin él,
+  // crea todas en una transacción o ninguna, y devuelve las contraseñas
+  // temporales una sola vez.
+  fastify.post(
+    '/classes/:classId/students/import',
+    async (
+      request: FastifyRequest<{ Params: { classId: string }; Querystring: { dryRun?: string } }>,
+      reply: FastifyReply
+    ) => {
+      try {
+        const actor = request.user as RequestUser
+        const { classId } = request.params
+        const dryRun = batchQuerySchema.parse(request.query).dryRun === 'true'
+        const { students } = managedBatchSchema.parse(request.body)
+        if (dryRun) {
+          consumeRateLimit(`managed-student-review:${actor.id}`, MANAGED_REVIEW_LIMIT)
+          return await createManagedStudents(actor, classId, students, { dryRun })
+        }
+        // Las altas cuentan de una en una, y solo las que se crean. El cupo se
+        // aparta antes de crear, para que varias listas a la vez no quepan todas
+        // en el mismo hueco, y se devuelve lo que no se llega a crear.
+        const createKey = `managed-student-create:${actor.id}`
+        consumeRateLimit(createKey, MANAGED_CREATE_LIMIT, students.length)
+        let created = 0
+        try {
+          const result = await createManagedStudents(actor, classId, students)
+          created = result.dryRun ? 0 : result.created.length
+          return reply.status(201).send(result)
+        } finally {
+          releaseRateLimit(createKey, students.length - created)
+        }
+      } catch (error) {
+        if (error instanceof ZodError) {
+          return reply.status(400).send({ message: error.errors[0]?.message || 'Datos inválidos' })
+        }
+        if (error instanceof ManagedRowsError) {
+          // Una lista rechazada enseña su revisión igual que el modo de prueba,
+          // así que gasta del mismo cupo de revisiones.
+          consumeRateLimit(`managed-student-review:${(request.user as RequestUser).id}`, MANAGED_REVIEW_LIMIT)
+          return reply
+            .status(400)
+            .send({ message: error.message, code: error.code, rows: error.rows })
+        }
+        rethrowHttpError(error)
+        return reply.status(500).send({ message: 'Error interno' })
+      }
+    }
+  )
+
+  // Alias del alumno en esta clase.
+  fastify.patch(
+    '/classes/:classId/students/:studentId',
+    async (
+      request: FastifyRequest<{ Params: { classId: string; studentId: string } }>,
+      reply: FastifyReply
+    ) => {
+      try {
+        const actor = request.user as RequestUser
+        const { classId, studentId } = request.params
+        const { nickname } = studentNicknameSchema.parse(request.body)
+        const result = await updateStudentNickname(actor, classId, studentId, nickname)
+        return result
+      } catch (error) {
+        if (error instanceof ZodError) {
+          return reply.status(400).send({ message: error.errors[0]?.message || 'Datos inválidos' })
+        }
+        rethrowHttpError(error)
+        return reply.status(500).send({ message: 'Error interno' })
+      }
+    }
+  )
+
+  // Quitar al alumno de esta clase: su matrícula y lo que tenía en ella.
+  fastify.delete(
+    '/classes/:classId/students/:studentId',
+    async (
+      request: FastifyRequest<{ Params: { classId: string; studentId: string } }>,
+      reply: FastifyReply
+    ) => {
+      try {
+        const actor = request.user as RequestUser
+        const { classId, studentId } = request.params
+        const result = await removeStudentFromClass(actor, classId, studentId)
+        return result
+      } catch (error) {
+        rethrowHttpError(error)
+        return reply.status(500).send({ message: 'Error interno' })
+      }
+    }
+  )
+
+  // ==================== PROFESORADO DE LA CLASE ====================
+  // Sin try/catch propio: el acceso (404/403), la validación y el límite de
+  // intentos los resuelve el manejador global con su estado.
+
+  fastify.get(
+    '/classes/:classId/teachers',
+    async (request: FastifyRequest<{ Params: { classId: string } }>) => {
+      return listClassTeachers(request.user as RequestUser, request.params.classId)
+    }
+  )
+
+  // Añadir por correo exacto: entra al momento, sin aceptar nada.
+  fastify.post(
+    '/classes/:classId/teachers',
+    async (request: FastifyRequest<{ Params: { classId: string } }>, reply: FastifyReply) => {
+      const actor = request.user as RequestUser
+      const data = addClassTeacherSchema.parse(request.body)
+      consumeRateLimit(`class-teacher-add:${actor.id}`, CLASS_TEACHER_ADD_LIMIT)
+      const result = await addClassTeacher(actor, request.params.classId, data)
+      return reply.status(201).send(result)
+    }
+  )
+
+  fastify.patch(
+    '/classes/:classId/teachers/:userId',
+    async (request: FastifyRequest<{ Params: { classId: string; userId: string } }>) => {
+      const { classId, userId } = request.params
+      const data = updateClassTeacherSchema.parse(request.body)
+      return updateClassTeacher(request.user as RequestUser, classId, userId, data)
+    }
+  )
+
+  fastify.delete(
+    '/classes/:classId/teachers/:userId',
+    async (request: FastifyRequest<{ Params: { classId: string; userId: string } }>) => {
+      const { classId, userId } = request.params
+      return removeClassTeacher(request.user as RequestUser, classId, userId)
+    }
+  )
+
+  // Salir de la clase: todo el profesorado menos el propietario.
+  fastify.post(
+    '/classes/:classId/leave',
+    async (request: FastifyRequest<{ Params: { classId: string } }>) => {
+      return leaveClass(request.user as RequestUser, request.params.classId)
+    }
+  )
+
+  // Pasar la propiedad: solo el propietario, a alguien con administración.
+  fastify.post(
+    '/classes/:classId/transfer',
+    async (request: FastifyRequest<{ Params: { classId: string } }>) => {
+      const { userId } = transferClassSchema.parse(request.body)
+      return transferClass(request.user as RequestUser, request.params.classId, userId)
+    }
+  )
+
+  // Historial de lo que ha hecho el profesorado en la clase, por páginas.
+  fastify.get(
+    '/classes/:classId/history',
+    async (request: FastifyRequest<{ Params: { classId: string } }>) => {
+      const query = classHistoryQuerySchema.parse(request.query)
+      return getClassHistory(request.user as RequestUser, request.params.classId, query)
+    }
+  )
 
   fastify.get('/classes/:classId/activities', async (request: FastifyRequest<{ Params: { classId: string }; Querystring: { limit?: string } }>, reply: FastifyReply) => {
     try {
@@ -529,6 +883,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       const result = await teachersService.getClassActivities(id, classId, limit)
       return result
     } catch (error) {
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(404).send({ message: error.message })
       }
@@ -548,6 +903,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(404).send({ message: error.message })
       }
@@ -569,6 +925,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       if (error instanceof ServiceUnavailableError) {
         return reply.status(503).send({ message: error.message, code: error.code })
       }
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(400).send({ message: error.message })
       }
@@ -578,16 +935,10 @@ export async function teacherRoutes(fastify: FastifyInstance) {
 
   // ==================== STUDENTS ====================
 
-  fastify.get('/students', async (request: FastifyRequest<{ Querystring: { classId?: string; archived?: 'active' | 'archived' | 'all' } }>, reply: FastifyReply) => {
-    try {
-      const { id } = request.user as { id: string }
-      const { classId } = request.query
-      const archived = request.query.archived || 'active'
-      const result = await teachersService.getStudents(id, classId, archived)
-      return result
-    } catch (error) {
-      return reply.status(500).send({ message: 'Error interno' })
-    }
+  // Alumnado de las clases accesibles, buscado, filtrado y por páginas.
+  fastify.get('/students', async (request: FastifyRequest) => {
+    const query = studentListQuerySchema.parse(request.query)
+    return listTeacherStudents((request.user as RequestUser).id, query)
   })
 
   fastify.get('/students/:studentId', async (request: FastifyRequest<{ Params: { studentId: string } }>, reply: FastifyReply) => {
@@ -597,113 +948,10 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       const result = await teachersService.getStudentById(id, studentId)
       return result
     } catch (error) {
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(404).send({ message: error.message })
       }
-      return reply.status(500).send({ message: 'Error interno' })
-    }
-  })
-
-  fastify.get('/students/search', async (request: FastifyRequest<{ Querystring: { q: string; classId: string } }>, reply: FastifyReply) => {
-    try {
-      const { id } = request.user as { id: string }
-      const { q, classId } = request.query
-      if (!q || !classId) {
-        return reply.status(400).send({ message: 'Se requieren los parámetros q y classId' })
-      }
-      const result = await teachersService.searchStudents(id, classId, q)
-      return result
-    } catch (error) {
-      if (error instanceof Error) {
-        return reply.status(404).send({ message: error.message })
-      }
-      return reply.status(500).send({ message: 'Error interno' })
-    }
-  })
-
-  // ==================== ENROLLMENTS ====================
-
-  fastify.get('/classes/:classId/requests', async (request: FastifyRequest<{ Params: { classId: string } }>, reply: FastifyReply) => {
-    try {
-      const { id } = request.user as { id: string }
-      const { classId } = request.params
-      const result = await teachersService.getPendingRequests(id, classId)
-      return result
-    } catch (error) {
-      if (error instanceof Error) {
-        return reply.status(404).send({ message: error.message })
-      }
-      return reply.status(500).send({ message: 'Error interno' })
-    }
-  })
-
-  fastify.put('/classes/:classId/requests/:requestId/accept', async (request: FastifyRequest<{ Params: { classId: string; requestId: string } }>, reply: FastifyReply) => {
-    try {
-      const { id } = request.user as { id: string }
-      const { classId, requestId } = request.params
-      const result = await teachersService.acceptJoinRequest(id, classId, requestId)
-      return result
-    } catch (error) {
-      if (error instanceof Error) {
-        return reply.status(404).send({ message: error.message })
-      }
-      return reply.status(500).send({ message: 'Error interno' })
-    }
-  })
-
-  fastify.put('/classes/:classId/requests/:requestId/reject', async (request: FastifyRequest<{ Params: { classId: string; requestId: string } }>, reply: FastifyReply) => {
-    try {
-      const { id } = request.user as { id: string }
-      const { classId, requestId } = request.params
-      const body = rejectRequestSchema.parse(request.body || {})
-      const result = await teachersService.rejectJoinRequest(id, classId, requestId, body.reason)
-      return result
-    } catch (error) {
-      if (error instanceof Error) {
-        return reply.status(404).send({ message: error.message })
-      }
-      return reply.status(500).send({ message: 'Error interno' })
-    }
-  })
-
-  fastify.post('/classes/:classId/invitations', async (request: FastifyRequest<{ Params: { classId: string } }>, reply: FastifyReply) => {
-    try {
-      const { id } = request.user as { id: string }
-      const { classId } = request.params
-      const data = sendInvitationSchema.parse(request.body)
-      const result = await teachersService.sendInvitation(id, classId, data.studentId, data.message)
-      return reply.status(201).send(result)
-    } catch (error) {
-      if (error instanceof ZodError) {
-        return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
-      }
-      if (error instanceof Error) {
-        return reply.status(400).send({ message: error.message })
-      }
-      return reply.status(500).send({ message: 'Error interno' })
-    }
-  })
-
-  fastify.get('/classes/:classId/invitations', async (request: FastifyRequest<{ Params: { classId: string } }>, reply: FastifyReply) => {
-    try {
-      const { id } = request.user as { id: string }
-      const { classId } = request.params
-      const result = await teachersService.getSentInvitations(id, classId)
-      return result
-    } catch (error) {
-      if (error instanceof Error) {
-        return reply.status(404).send({ message: error.message })
-      }
-      return reply.status(500).send({ message: 'Error interno' })
-    }
-  })
-
-  fastify.get('/enrollment-counts', async (request: FastifyRequest, reply: FastifyReply) => {
-    try {
-      const { id } = request.user as { id: string }
-      const result = await teachersService.getTotalPendingRequests(id)
-      return result
-    } catch (error) {
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
@@ -717,6 +965,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       const result = await teachersService.getMissions(id, classIdFilter, limit ? parseInt(limit) : undefined)
       return result
     } catch (error) {
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(404).send({ message: error.message })
       }
@@ -737,12 +986,16 @@ export async function teacherRoutes(fastify: FastifyInstance) {
         status: body.status === 'publicada' ? 'activa' : body.status === 'borrador' ? 'bloqueada' : (body.status || 'activa'),
         rarity: body.rarity,
         deadline: body.dueDate || body.deadline,
+        // La portada (ruta /uploads/… generada por la IA o data URL subida por el
+        // profesor) se perdía aquí: el asistente la manda y nadie la copiaba.
+        backgroundImage: typeof body.backgroundImage === 'string' ? body.backgroundImage : undefined,
         enigmas: body.enigmas,
       }
 
       const result = await missionsService.createMission(id, data)
       return reply.status(201).send(result)
     } catch (error) {
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(400).send({ message: error.message })
       }
@@ -768,6 +1021,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       const result = await missionsService.updateMission(id, missionId, data)
       return result
     } catch (error) {
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(400).send({ message: error.message })
       }
@@ -824,6 +1078,9 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
+      // La insignia puede vincularse a una misión: si no hay acceso a ella, el
+      // servicio lanza el error con su estado y lo resuelve el manejador global.
+      rethrowHttpError(error)
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
@@ -839,6 +1096,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(404).send({ message: error.message })
       }
@@ -853,6 +1111,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       const result = await teachersService.deleteBadge(id, badgeId)
       return result
     } catch (error) {
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(404).send({ message: error.message })
       }

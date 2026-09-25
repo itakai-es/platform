@@ -2,7 +2,6 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { Class, CreateClassData, UpdateClassData } from '~/types/class.types'
 import type { EnhancedMission } from '~/types/mission.types'
-import type { JoinRequest, Invitation, JoinRequestResponse } from '~/types/enrollment.types'
 
 interface RecentMission {
   id: string
@@ -105,26 +104,10 @@ export const useClassesStore = defineStore('classes', () => {
   const loadedGuides = ref<Set<string>>(new Set())
   const loadedBadges = ref<Set<string>>(new Set())
   const loadedActivities = ref<Set<string>>(new Set())
-  const hasLoadedMyJoinRequests = ref(false)
-  const hasLoadedMyInvitations = ref(false)
-
-  // Enrollment state
-  const pendingInvitations = ref<Invitation[]>([])
-  const myJoinRequests = ref<JoinRequest[]>([])
-  const isLoadingInvitations = ref(false)
-  const isLoadingJoinRequests = ref(false)
-  const isSubmittingRequest = ref(false)
 
   // Getters
   const totalClasses = computed(() => classes.value.length)
   const hasClasses = computed(() => classes.value.length > 0)
-
-  // Enrollment getters
-  const pendingInvitationsCount = computed(() => pendingInvitations.value.length)
-  const pendingRequestsCount = computed(
-    () => myJoinRequests.value.filter(r => r.status === 'pending').length
-  )
-  const hasPendingInvitations = computed(() => pendingInvitations.value.length > 0)
 
   // Actions
 
@@ -487,22 +470,6 @@ export const useClassesStore = defineStore('classes', () => {
     return fetchClassActivities(classId, offset, limit, force)
   }
 
-  async function ensureMyJoinRequests(force = false) {
-    if (hasLoadedMyJoinRequests.value && !force) return
-    if (isLoadingJoinRequests.value) return
-    const res = await fetchMyJoinRequests()
-    hasLoadedMyJoinRequests.value = true
-    return res
-  }
-
-  async function ensureMyInvitations(force = false) {
-    if (hasLoadedMyInvitations.value && !force) return
-    if (isLoadingInvitations.value) return
-    const res = await fetchMyInvitations()
-    hasLoadedMyInvitations.value = true
-    return res
-  }
-
   /**
    * Join a class using invitation code (student only)
    */
@@ -557,166 +524,6 @@ export const useClassesStore = defineStore('classes', () => {
   }
 
   /**
-   * Create a join request (student only) - New enrollment system
-   */
-  async function createJoinRequest(code: string, message?: string): Promise<JoinRequestResponse> {
-    try {
-      isSubmittingRequest.value = true
-      error.value = null
-
-      const config = useRuntimeConfig()
-      const response = await $fetch<JoinRequestResponse>(
-        `${config.public.apiBase}/students/classes/request`,
-        {
-          method: 'POST',
-          body: { code, message },
-        }
-      )
-
-      // Add to local state if successful
-      if (response.success && response.request) {
-        myJoinRequests.value.push(response.request)
-        // El listado en caché ya refleja la nueva request; no invalidamos
-        // explícitamente para mantener la bandera coherente.
-        hasLoadedMyJoinRequests.value = true
-      }
-
-      return response
-    } catch (err: any) {
-      error.value = err.data?.message || err.message || 'Error al enviar la solicitud'
-      throw err
-    } finally {
-      isSubmittingRequest.value = false
-    }
-  }
-
-  /**
-   * Fetch my join requests (student only)
-   */
-  async function fetchMyJoinRequests() {
-    try {
-      isLoadingJoinRequests.value = true
-      error.value = null
-
-      const config = useRuntimeConfig()
-      const response = await $fetch<{ requests: JoinRequest[]; total: number }>(
-        `${config.public.apiBase}/students/join-requests`
-      )
-
-      myJoinRequests.value = response.requests || []
-      hasLoadedMyJoinRequests.value = true
-      return response
-    } catch (err: any) {
-      error.value = err.message || 'Error al cargar las solicitudes'
-      throw err
-    } finally {
-      isLoadingJoinRequests.value = false
-    }
-  }
-
-  /**
-   * Fetch pending invitations (student only)
-   */
-  async function fetchMyInvitations() {
-    try {
-      isLoadingInvitations.value = true
-      error.value = null
-
-      const config = useRuntimeConfig()
-      const response = await $fetch<{ invitations: Invitation[]; total: number }>(
-        `${config.public.apiBase}/students/invitations`
-      )
-
-      pendingInvitations.value = response.invitations || []
-      hasLoadedMyInvitations.value = true
-      return response
-    } catch (err: any) {
-      error.value = err.message || 'Error al cargar las invitaciones'
-      throw err
-    } finally {
-      isLoadingInvitations.value = false
-    }
-  }
-
-  /**
-   * Accept an invitation (student only)
-   */
-  async function acceptInvitation(invitationId: string) {
-    try {
-      isLoading.value = true
-      error.value = null
-
-      const config = useRuntimeConfig()
-      const response = await $fetch<{ success: boolean; message: string; class?: ClassWithExtras }>(
-        `${config.public.apiBase}/students/invitations/${invitationId}/accept`,
-        { method: 'PUT' }
-      )
-
-      // Remove from pending invitations (la lista en caché ya refleja el cambio,
-      // mantenemos la bandera para no refetchar si nadie lo fuerza).
-      pendingInvitations.value = pendingInvitations.value.filter(i => i.id !== invitationId)
-
-      // Add class to list if returned
-      if (response.class) {
-        const existingIndex = classes.value.findIndex(c => c.id === response.class!.id)
-        if (existingIndex === -1) {
-          classes.value.push(response.class)
-        }
-      }
-
-      // Invalidate caches so dashboard reloads fresh data on next visit
-      hasLoadedClasses.value = false
-
-      // Invalidate related store caches (missions, activities, profile stats)
-      try {
-        const studentStore = useStudentStore()
-        studentStore.$reset()
-      } catch {
-        // Store may not be initialized yet
-      }
-      try {
-        const gamificationStore = useGamificationStore()
-        gamificationStore.$reset()
-      } catch {
-        // Store may not be initialized yet
-      }
-
-      return response
-    } catch (err: any) {
-      error.value = err.message || 'Error al aceptar la invitación'
-      throw err
-    } finally {
-      isLoading.value = false
-    }
-  }
-
-  /**
-   * Reject an invitation (student only)
-   */
-  async function rejectInvitation(invitationId: string) {
-    try {
-      isLoading.value = true
-      error.value = null
-
-      const config = useRuntimeConfig()
-      const response = await $fetch<{ success: boolean; message: string }>(
-        `${config.public.apiBase}/students/invitations/${invitationId}/reject`,
-        { method: 'PUT' }
-      )
-
-      // Remove from pending invitations
-      pendingInvitations.value = pendingInvitations.value.filter(i => i.id !== invitationId)
-
-      return response
-    } catch (err: any) {
-      error.value = err.message || 'Error al rechazar la invitación'
-      throw err
-    } finally {
-      isLoading.value = false
-    }
-  }
-
-  /**
    * Create a new class (teacher only)
    */
   async function createClass(data: CreateClassData) {
@@ -756,12 +563,13 @@ export const useClassesStore = defineStore('classes', () => {
           body: data,
         }
       )
+      // Sobre lo que ya había: la respuesta no trae todo lo del listado (estadísticas…).
       const index = classes.value.findIndex(c => c.id === classId)
       if (index !== -1) {
-        classes.value[index] = response.class
+        classes.value[index] = { ...classes.value[index], ...response.class }
       }
       if (selectedClass.value?.id === classId) {
-        selectedClass.value = response.class
+        selectedClass.value = { ...selectedClass.value, ...response.class }
       }
       loadedClasses.value.add(classId)
       return response
@@ -806,14 +614,6 @@ export const useClassesStore = defineStore('classes', () => {
     loadedGuides.value.clear()
     loadedBadges.value.clear()
     loadedActivities.value.clear()
-    hasLoadedMyJoinRequests.value = false
-    hasLoadedMyInvitations.value = false
-    // Enrollment state
-    pendingInvitations.value = []
-    myJoinRequests.value = []
-    isLoadingInvitations.value = false
-    isLoadingJoinRequests.value = false
-    isSubmittingRequest.value = false
   }
 
   return {
@@ -834,25 +634,13 @@ export const useClassesStore = defineStore('classes', () => {
     isJoining,
     error,
 
-    // Enrollment state
-    pendingInvitations,
-    myJoinRequests,
-    isLoadingInvitations,
-    isLoadingJoinRequests,
-    isSubmittingRequest,
-
     // Cache flags expuestos para que los composables/páginas puedan
     // decidir si llamar `ensureX(force = true)`.
     hasLoadedClasses,
-    hasLoadedMyJoinRequests,
-    hasLoadedMyInvitations,
 
     // Getters
     totalClasses,
     hasClasses,
-    pendingInvitationsCount,
-    pendingRequestsCount,
-    hasPendingInvitations,
 
     // Actions
     fetchStudentClasses,
@@ -864,11 +652,6 @@ export const useClassesStore = defineStore('classes', () => {
     fetchClassBadges,
     fetchClassActivities,
     joinClass,
-    createJoinRequest,
-    fetchMyJoinRequests,
-    fetchMyInvitations,
-    acceptInvitation,
-    rejectInvitation,
     createClass,
     updateClass,
     clearError,
@@ -883,7 +666,5 @@ export const useClassesStore = defineStore('classes', () => {
     ensureClassGuide,
     ensureClassBadges,
     ensureClassActivities,
-    ensureMyJoinRequests,
-    ensureMyInvitations,
   }
 })

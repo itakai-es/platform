@@ -1,6 +1,8 @@
 import { prisma } from '../../config/database.js'
 import { resolveClassSettings } from '../../utils/class-settings.js'
 import type { Prisma } from '../../generated/prisma/client.js'
+import { assertClassAccess, recordClassAction } from '../../utils/class-access.js'
+import { NotFoundError } from '../../utils/errors.js'
 
 /** Load + resolve the per-class feature settings (used to guard mutations). */
 async function getClassSettings(
@@ -97,6 +99,23 @@ interface ItemInput {
   manaCost?: number
   usage?: string
   lifeRestore?: number
+}
+
+/** Apunta en el registro de la clase un cambio en su tienda. */
+function recordItemChange(
+  tx: Prisma.TransactionClient,
+  actorId: string,
+  action: 'shop.item_created' | 'shop.item_updated' | 'shop.item_deleted',
+  item: { id: string; classId: string; name: string; kind: string; price: number; active: boolean }
+) {
+  return recordClassAction(tx, {
+    classId: item.classId,
+    actorId,
+    action,
+    entityType: 'shopItem',
+    entityId: item.id,
+    metadata: { title: item.name, kind: item.kind, price: item.price, active: item.active },
+  })
 }
 
 function formatItem(item: {
@@ -451,15 +470,11 @@ export class ShopService {
   }
 
   // ==================== TEACHER ====================
-
-  private async assertTeacherOwnsClass(teacherId: string, classId: string) {
-    const cls = await prisma.class.findFirst({ where: { id: classId, teacherId }, select: { id: true } })
-    if (!cls) throw new Error('No tienes permiso sobre esta clase')
-  }
+  // La ve todo el profesorado de la clase; la cambia quien tiene edición.
 
   /** Teacher view: all items (incl. hidden) + recent redemptions across students. */
-  async getTeacherShop(teacherId: string, classId: string) {
-    await this.assertTeacherOwnsClass(teacherId, classId)
+  async getTeacherShop(userId: string, classId: string) {
+    await assertClassAccess(classId, userId, 'shop.view')
 
     const [items, purchases, uses, enrollments] = await Promise.all([
       prisma.shopItem.findMany({ where: { classId }, orderBy: { createdAt: 'asc' } }),
@@ -521,48 +536,59 @@ export class ShopService {
     }
   }
 
-  async createItem(teacherId: string, classId: string, data: ItemInput) {
-    await this.assertTeacherOwnsClass(teacherId, classId)
-    const item = await prisma.shopItem.create({
-      data: {
-        classId,
-        name: data.name.trim(),
-        description: data.description?.trim() ?? '',
-        price: Math.max(0, Math.round(data.price)),
-        active: data.active ?? true,
-        lifeRestore: Math.max(0, Math.round(data.lifeRestore ?? 0)),
-        ...normalizeItemType(data),
-      },
+  async createItem(userId: string, classId: string, data: ItemInput) {
+    await assertClassAccess(classId, userId, 'shop.edit')
+    const item = await prisma.$transaction(async tx => {
+      const created = await tx.shopItem.create({
+        data: {
+          classId,
+          name: data.name.trim(),
+          description: data.description?.trim() ?? '',
+          price: Math.max(0, Math.round(data.price)),
+          active: data.active ?? true,
+          lifeRestore: Math.max(0, Math.round(data.lifeRestore ?? 0)),
+          ...normalizeItemType(data),
+        },
+      })
+      await recordItemChange(tx, userId, 'shop.item_created', created)
+      return created
     })
     return formatItem(item)
   }
 
-  async updateItem(teacherId: string, classId: string, itemId: string, data: Partial<ItemInput>) {
-    await this.assertTeacherOwnsClass(teacherId, classId)
+  async updateItem(userId: string, classId: string, itemId: string, data: Partial<ItemInput>) {
+    await assertClassAccess(classId, userId, 'shop.edit')
     const existing = await prisma.shopItem.findFirst({ where: { id: itemId, classId }, select: { id: true } })
-    if (!existing) throw new Error('El artículo no existe')
+    if (!existing) throw new NotFoundError('El artículo no existe')
 
-    const item = await prisma.shopItem.update({
-      where: { id: itemId },
-      data: {
-        ...(data.name !== undefined ? { name: data.name.trim() } : {}),
-        ...(data.description !== undefined ? { description: data.description.trim() } : {}),
-        ...(data.price !== undefined ? { price: Math.max(0, Math.round(data.price)) } : {}),
-        ...(data.active !== undefined ? { active: data.active } : {}),
-        ...(data.lifeRestore !== undefined ? { lifeRestore: Math.max(0, Math.round(data.lifeRestore)) } : {}),
-        // The teacher form always sends the type fields together; normalise them
-        // so a reward can't keep a stale mana cost (or a power a stale usage mode).
-        ...(data.kind !== undefined ? normalizeItemType(data) : {}),
-      },
+    const item = await prisma.$transaction(async tx => {
+      const updated = await tx.shopItem.update({
+        where: { id: itemId },
+        data: {
+          ...(data.name !== undefined ? { name: data.name.trim() } : {}),
+          ...(data.description !== undefined ? { description: data.description.trim() } : {}),
+          ...(data.price !== undefined ? { price: Math.max(0, Math.round(data.price)) } : {}),
+          ...(data.active !== undefined ? { active: data.active } : {}),
+          ...(data.lifeRestore !== undefined ? { lifeRestore: Math.max(0, Math.round(data.lifeRestore)) } : {}),
+          // The teacher form always sends the type fields together; normalise them
+          // so a reward can't keep a stale mana cost (or a power a stale usage mode).
+          ...(data.kind !== undefined ? normalizeItemType(data) : {}),
+        },
+      })
+      await recordItemChange(tx, userId, 'shop.item_updated', updated)
+      return updated
     })
     return formatItem(item)
   }
 
-  async deleteItem(teacherId: string, classId: string, itemId: string) {
-    await this.assertTeacherOwnsClass(teacherId, classId)
-    const existing = await prisma.shopItem.findFirst({ where: { id: itemId, classId }, select: { id: true } })
-    if (!existing) throw new Error('El artículo no existe')
-    await prisma.shopItem.delete({ where: { id: itemId } })
+  async deleteItem(userId: string, classId: string, itemId: string) {
+    await assertClassAccess(classId, userId, 'shop.edit')
+    const existing = await prisma.shopItem.findFirst({ where: { id: itemId, classId } })
+    if (!existing) throw new NotFoundError('El artículo no existe')
+    await prisma.$transaction(async tx => {
+      await tx.shopItem.delete({ where: { id: itemId } })
+      await recordItemChange(tx, userId, 'shop.item_deleted', existing)
+    })
     return { success: true }
   }
 }
