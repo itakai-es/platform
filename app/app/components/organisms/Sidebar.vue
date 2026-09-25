@@ -29,7 +29,7 @@
 
     <!-- Navigation Items OR Chat Conversations -->
     <nav
-      :class="chatConversations !== undefined ? 'flex-1 flex flex-col px-2 min-h-0' : 'sidebar-nav'"
+      :class="chatConversations !== undefined ? 'flex-1 flex flex-col px-2 min-h-0' : 'sidebar-nav scrollbar-custom'"
     >
       <!-- Chat Conversations Mode — buttons + list inside white container -->
       <template v-if="chatConversations !== undefined">
@@ -159,10 +159,11 @@
         <!-- God Avatar (Position Absolute) -->
         <div v-if="currentGod" class="god-avatar-wrapper">
           <img :src="currentGod.avatar" :alt="currentGod.name" class="god-avatar" />
-          <!-- Speech Bubble (from avatar) -->
-          <div class="speech-bubble">
-            {{ currentGodMessage }}
-          </div>
+        </div>
+        <!-- Bocadillo del avatar: cuelga del contenedor, no del avatar, para poder
+             limitarle el ancho al del menú (los mensajes largos se parten en líneas). -->
+        <div v-if="currentGod" class="speech-bubble">
+          {{ currentGodMessage }}
         </div>
 
         <!-- Button -->
@@ -421,13 +422,13 @@ const currentGodMessage = computed(() => {
   color: var(--color-text-muted);
 }
 
-/* Navigation */
+/* Navigation: barra fina siempre visible cuando desborda (scrollbar-custom en
+   la plantilla): sin barra, en pantallas bajas nadie veía que el menú seguía.
+   El relleno inferior deja el último elemento por encima del bocadillo del
+   avatar (hasta dos líneas) cuando se llega al final de la lista. */
 .sidebar-nav {
   @apply flex-1 overflow-y-auto space-y-1 px-2;
-  scrollbar-width: none; /* Firefox */
-}
-.sidebar-nav::-webkit-scrollbar {
-  display: none; /* Chrome, Safari */
+  padding-bottom: 3rem;
 }
 .chat-conversations-container {
   scrollbar-width: none;
@@ -462,10 +463,11 @@ const currentGodMessage = computed(() => {
   @apply relative;
 }
 
-/* God Avatar Wrapper (Absolute Position) */
+/* God Avatar Wrapper (Absolute Position). left: 0 lo deja pegado al relleno
+   del menú: con un valor negativo el círculo asomaba fuera del borde redondeado. */
 .god-avatar-wrapper {
   @apply absolute;
-  left: -20px;
+  left: 0;
   top: 50%;
   transform: translateY(-50%);
   z-index: 10;
@@ -482,18 +484,21 @@ const currentGodMessage = computed(() => {
   padding: 4px;
 }
 
-/* Speech Bubble */
+/* Speech Bubble: empieza 8px antes del borde derecho del avatar (64px) y no
+   pasa de 8px antes del borde exterior del menú; crece hacia arriba. */
 .speech-bubble {
   @apply absolute;
-  left: calc(100% - 8px);
-  top: -40px;
+  left: 56px;
+  bottom: calc(100% + 16px);
+  width: max-content;
+  max-width: calc(100% - 48px);
   background-color: white;
   color: var(--color-navy-700);
   padding: 8px 14px;
   border-radius: 16px;
   font-size: 13px;
   font-weight: 500;
-  white-space: nowrap;
+  line-height: 1.3;
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
   pointer-events: none;
   z-index: 20;
@@ -523,7 +528,7 @@ const currentGodMessage = computed(() => {
   font-size: 14px;
   font-weight: 600;
   filter: saturate(1.4) brightness(0.9);
-  padding-left: 60px; /* Extra space for avatar */
+  padding-left: 72px; /* Avatar (64px) + 8px de aire */
   padding-right: 16px;
 }
 
