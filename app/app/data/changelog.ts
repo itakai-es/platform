@@ -42,8 +42,7 @@ export interface ChangelogEntry {
 export const changelog: ChangelogEntry[] = [
   {
     version: '0.4.0',
-    // Fecha provisional: se ajusta al publicar.
-    date: '2026-09-19',
+    date: '2026-09-25',
     title: 'Clases compartidas y cuentas sin correo',
     changes: [
       {
