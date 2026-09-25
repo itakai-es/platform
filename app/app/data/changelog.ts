@@ -116,7 +116,7 @@ export const changelog: ChangelogEntry[] = [
       },
       {
         type: 'fixed',
-        text: 'En pantallas bajas, los botones de idioma y accesibilidad ya no tapan el formulario de entrada, y el menú lateral enseña su barra de desplazamiento cuando la lista sigue.',
+        text: 'En pantallas bajas, los botones de idioma y accesibilidad ya no tapan el formulario de entrada, el menú lateral enseña su barra de desplazamiento cuando la lista sigue, y el primer paso de crear una clase ya no se sale por debajo.',
       },
       {
         type: 'fixed',
@@ -128,11 +128,11 @@ export const changelog: ChangelogEntry[] = [
       },
       {
         type: 'fixed',
-        text: 'Al crear una misión desde el asistente, la portada no se guardaba y la misión aparecía sin imagen hasta que la editabas. Ahora se guarda a la primera.',
+        text: 'Al crear una misión desde el asistente, la portada se perdía: la misión nacía sin imagen y había que volver a ponerla editándola. Ahora se guarda a la primera.',
       },
       {
         type: 'fixed',
-        text: 'En la vista previa del asistente de misiones faltaban las monedas y el maná que se ganan; ahora se ven junto a las estrellas.',
+        text: 'En la vista previa del asistente de misiones faltaban las monedas y el maná que se ganan; ahora se ven junto a la experiencia (XP).',
       },
     ],
   },
