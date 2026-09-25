@@ -123,7 +123,7 @@
 
           <template v-else>
           <!-- Formulario -->
-          <form class="space-y-3 sm:space-y-4 signup-form" @submit.prevent="handleSubmit">
+          <form class="space-y-3 sm:space-y-4 signup-form" novalidate @submit.prevent="handleSubmit">
             <!-- PASO 1: Información personal -->
             <div v-if="step === 1" class="space-y-3 sm:space-y-4">
               <!-- Nombre completo -->

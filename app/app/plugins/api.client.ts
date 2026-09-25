@@ -42,6 +42,12 @@ export default defineNuxtPlugin(() => {
         if (!window.location.pathname.includes('/auth/')) {
           const router = useRouter()
           router.push('/auth/login')
+          // La sesión ya no vale y la app se va a la pantalla de acceso: lo que
+          // estuviera pidiendo esta pantalla ya no tiene a dónde volver. Su
+          // petición se queda sin resolver a propósito, en vez de reventar en
+          // cada sitio que no espera un error (y llenar la consola de fallos
+          // que nadie puede atender).
+          return new Promise<void>(() => {})
         }
 
         throw error

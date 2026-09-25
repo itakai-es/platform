@@ -1,13 +1,12 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center px-4">
-    <div class="w-full max-w-md rounded-3xl bg-white p-8 shadow-xl space-y-6 text-center">
-      <h1 class="text-3xl font-bold text-navy-700">{{ t('common.file_unavailable.title') }}</h1>
-      <p class="text-navy-700/70">{{ t('common.file_unavailable.message') }}</p>
-      <Button variant="primary" @click="goBack">
-        {{ t('common.actions.back_to_dashboard') }}
-      </Button>
-    </div>
-  </div>
+  <AuthCardShell
+    :title="t('common.file_unavailable.title')"
+    :subtitle="t('common.file_unavailable.message')"
+  >
+    <Button variant="primary" size="lg" class="w-full" @click="goBack">
+      {{ t('common.actions.back_to_dashboard') }}
+    </Button>
+  </AuthCardShell>
 </template>
 
 <script setup lang="ts">

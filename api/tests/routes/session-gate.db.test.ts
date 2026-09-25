@@ -23,6 +23,7 @@ import { profileRoutes } from '../../src/modules/profile/profile.routes.js'
 import { adminRoutes } from '../../src/modules/admin/admin.routes.js'
 import { hashPassword } from '../../src/utils/password.js'
 import { resetRateLimits } from '../../src/utils/rate-limit.js'
+import { sendPasswordResetEmail } from '../../src/utils/email.js'
 import {
   sessionGate,
   ACCOUNT_SUSPENDED,
@@ -206,6 +207,10 @@ describeWithDatabase('la sesión sigue el estado de la cuenta', () => {
     expect(forgot.statusCode).toBe(200)
     const resetToken = forgot.json().resetToken as string
     expect(resetToken).toBeTruthy()
+    // El correo lleva a la página de la app que pide la contraseña nueva, no a la ruta de la API.
+    const link = vi.mocked(sendPasswordResetEmail).mock.calls.at(-1)?.[1] as string
+    expect(new URL(link).pathname).toBe('/auth/restablecer-password')
+    expect(new URL(link).searchParams.get('token')).toBe(resetToken)
 
     for (const url of ['/auth/me', '/auth/sessions', '/auth/%73essions', '/profile']) {
       expect((await request('GET', url, resetToken)).statusCode, url).toBe(401)

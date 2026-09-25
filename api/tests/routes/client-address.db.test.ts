@@ -4,7 +4,7 @@ import { randomUUID } from 'node:crypto'
 import type { FastifyInstance } from 'fastify'
 import cookie from '@fastify/cookie'
 import { buildApp, prisma } from '../helpers/class-fixture.js'
-import { authRoutes } from '../../src/modules/auth/auth.routes.js'
+import { authRoutes, LOGIN_FAILURE_BY_ORIGIN } from '../../src/modules/auth/auth.routes.js'
 import { hashPassword } from '../../src/utils/password.js'
 import { recordRateLimit, resetRateLimits } from '../../src/utils/rate-limit.js'
 import { rateLimitOrigin, resolveTrustProxy } from '../../src/utils/trust-proxy.js'
@@ -93,7 +93,7 @@ describeWithDatabase('dirección del cliente tras el proxy', () => {
 
   it('los fallos por origen se cuentan por cliente, no para todos los que pasan por el proxy', async () => {
     // El origen CLIENT ya agotó su cupo de fallos.
-    recordRateLimit(`login:origin:${CLIENT}`, { max: 100, windowMs: 60_000 }, 100)
+    recordRateLimit(`login:origin:${CLIENT}`, LOGIN_FAILURE_BY_ORIGIN, LOGIN_FAILURE_BY_ORIGIN.max)
 
     const blocked = await login(`nadie.${tag}`, 'lo-que-sea', PROXY, CLIENT)
     expect(blocked.statusCode).toBe(429)
@@ -107,7 +107,7 @@ describeWithDatabase('dirección del cliente tras el proxy', () => {
   })
 
   it('un cliente directo no se libra del límite cambiando la cabecera', async () => {
-    recordRateLimit(`login:origin:${CLIENT}`, { max: 100, windowMs: 60_000 }, 100)
+    recordRateLimit(`login:origin:${CLIENT}`, LOGIN_FAILURE_BY_ORIGIN, LOGIN_FAILURE_BY_ORIGIN.max)
 
     for (const forged of [FORGED, OTHER_CLIENT, '127.0.0.1']) {
       const response = await login(`nadie.${tag}`, 'lo-que-sea', CLIENT, forged)
@@ -118,8 +118,8 @@ describeWithDatabase('dirección del cliente tras el proxy', () => {
   it('una IPv6 cuenta por su /64: estrenar dirección dentro de él no da más intentos', async () => {
     recordRateLimit(
       `login:origin:${rateLimitOrigin('2001:db8:1:2::1')}`,
-      { max: 100, windowMs: 60_000 },
-      100
+      LOGIN_FAILURE_BY_ORIGIN,
+      LOGIN_FAILURE_BY_ORIGIN.max
     )
 
     const sameNetwork = await login(`nadie.${tag}`, 'lo-que-sea', PROXY, '2001:db8:1:2:abcd::99')

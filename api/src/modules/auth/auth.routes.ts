@@ -87,13 +87,20 @@ function getRefreshTokenCookieOptions() {
 /**
  * Cuántos intentos fallidos de entrada se aguantan. Por identificador, para que
  * no se pueda ir probando contraseñas contra una cuenta concreta; y por origen,
- * para que no se pueda ir probando identificadores. El de origen es más ancho
- * porque un aula entera comparte salida a internet y los fallos de tecleo son
- * normales. Es un límite en memoria del proceso: no frena un ataque repartido
- * entre muchas máquinas, frena probar en bucle.
+ * para que no se pueda ir probando identificadores. Es un límite en memoria del
+ * proceso: no frena un ataque repartido entre muchas máquinas, frena probar en
+ * bucle.
+ *
+ * El de origen es mucho más ancho porque en un centro educativo todas las aulas
+ * suelen salir a internet por la misma dirección, los fallos de tecleo son
+ * normales (más aún con contraseñas temporales recién repartidas) y, pasado el
+ * límite, no entra nadie desde ese origen, tampoco quien pone bien la
+ * contraseña. Con cien, unas cuantas aulas a primera hora dejaban a todo el
+ * centro sin entrar durante un cuarto de hora; trescientos siguen cortando a
+ * quien prueba identificadores en bucle.
  */
-const LOGIN_FAILURE_BY_IDENTIFIER = { max: 10, windowMs: 15 * 60 * 1000 }
-const LOGIN_FAILURE_BY_ORIGIN = { max: 100, windowMs: 15 * 60 * 1000 }
+export const LOGIN_FAILURE_BY_IDENTIFIER = { max: 10, windowMs: 15 * 60 * 1000 }
+export const LOGIN_FAILURE_BY_ORIGIN = { max: 300, windowMs: 15 * 60 * 1000 }
 
 interface LoginAttemptLimit {
   key: string

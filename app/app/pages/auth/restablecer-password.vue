@@ -1,59 +1,47 @@
 <template>
-  <div class="min-h-screen bg-navy-700 flex items-center justify-center px-4">
-    <div class="w-full max-w-md rounded-3xl bg-white p-8 shadow-xl space-y-6">
-      <div class="space-y-2 text-center">
-        <h1 class="text-3xl font-bold text-navy-700">{{ t('auth.reset_password.card_title') }}</h1>
-        <p class="text-navy-700/70">{{ t('auth.reset_password.card_subtitle') }}</p>
-      </div>
+  <AuthCardShell
+    :title="t('auth.reset_password.card_title')"
+    :subtitle="t('auth.reset_password.card_subtitle')"
+    :error="errorMessage"
+  >
+    <div
+      v-if="successMessage"
+      role="status"
+      class="rounded-2xl bg-green-50 px-4 py-3 text-sm text-green-700"
+    >
+      {{ successMessage }}
+    </div>
 
-      <div
-        v-if="successMessage"
-        role="status"
-        class="rounded-2xl bg-green-50 px-4 py-3 text-sm text-green-700"
-      >
-        {{ successMessage }}
-      </div>
+    <form class="space-y-4" novalidate @submit.prevent="handleResetPassword">
+      <NewPasswordFields
+        v-model:password="password"
+        v-model:confirm-password="confirmPassword"
+        id-prefix="reset"
+        :password-label="t('auth.reset_password.password_label')"
+        :password-placeholder="
+          t('auth.reset_password.password_placeholder', { min: PASSWORD_MIN_LENGTH })
+        "
+        :confirm-label="t('auth.reset_password.confirm_password_label')"
+        :confirm-placeholder="t('auth.reset_password.confirm_password_placeholder')"
+        :password-error="fieldErrors.password"
+        :confirm-error="fieldErrors.confirm"
+      />
 
-      <div
-        v-if="errorMessage"
-        role="alert"
-        class="rounded-2xl bg-red-50 px-4 py-3 text-sm text-red-700"
-      >
-        {{ errorMessage }}
-      </div>
+      <Button variant="primary" size="lg" class="w-full" :loading="isLoading" type="submit">
+        {{
+          isLoading
+            ? t('auth.reset_password.submit_loading')
+            : t('auth.reset_password.submit_button')
+        }}
+      </Button>
+    </form>
 
-      <form class="space-y-4" @submit.prevent="handleResetPassword">
-        <NewPasswordFields
-          v-model:password="password"
-          v-model:confirm-password="confirmPassword"
-          id-prefix="reset"
-          :password-label="t('auth.reset_password.password_label')"
-          :password-placeholder="
-            t('auth.reset_password.password_placeholder', { min: PASSWORD_MIN_LENGTH })
-          "
-          :confirm-label="t('auth.reset_password.confirm_password_label')"
-          :confirm-placeholder="t('auth.reset_password.confirm_password_placeholder')"
-          :password-error="fieldErrors.password"
-          :confirm-error="fieldErrors.confirm"
-        />
-
-        <Button variant="primary" size="lg" class="w-full" :loading="isLoading" type="submit">
-          {{
-            isLoading
-              ? t('auth.reset_password.submit_loading')
-              : t('auth.reset_password.submit_button')
-          }}
-        </Button>
-      </form>
-
-      <NuxtLink
-        to="/auth/login"
-        class="block text-center text-sm font-medium text-purple hover:text-purple-dark"
-      >
+    <template #footer>
+      <NuxtLink to="/auth/login" class="text-purple hover:text-purple-dark">
         {{ t('auth.reset_password.back_to_login') }}
       </NuxtLink>
-    </div>
-  </div>
+    </template>
+  </AuthCardShell>
 </template>
 
 <script setup lang="ts">

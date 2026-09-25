@@ -1,75 +1,60 @@
 <template>
-  <div class="min-h-screen bg-navy-700 flex items-center justify-center px-4">
-    <div class="w-full max-w-md rounded-3xl bg-white p-8 shadow-xl space-y-6">
-      <div class="space-y-2 text-center">
-        <h1 class="text-3xl font-bold text-navy-700">
-          {{ t('auth.change_password.card_title') }}
-        </h1>
-        <p class="text-navy-700/70">{{ t('auth.change_password.card_subtitle') }}</p>
-      </div>
+  <AuthCardShell
+    :title="t('auth.change_password.card_title')"
+    :subtitle="t('auth.change_password.card_subtitle')"
+    :error="errors.general"
+  >
+    <InfoNote v-if="username">
+      {{ t('auth.change_password.account_note', { username }) }}
+    </InfoNote>
 
-      <InfoNote v-if="username">
-        {{ t('auth.change_password.account_note', { username }) }}
-      </InfoNote>
+    <form class="space-y-4" novalidate @submit.prevent="handleChangePassword">
+      <FormField
+        id="change-current-password"
+        v-model="currentPassword"
+        :label="t('auth.change_password.current_password_label')"
+        type="password"
+        :placeholder="t('auth.change_password.current_password_placeholder')"
+        autocomplete="current-password"
+        required
+        :error-message="errors.current"
+      />
 
-      <div
-        v-if="errors.general"
-        role="alert"
-        class="rounded-2xl bg-red-50 px-4 py-3 text-sm text-red-700"
-      >
-        {{ errors.general }}
-      </div>
+      <NewPasswordFields
+        v-model:password="password"
+        v-model:confirm-password="confirmPassword"
+        id-prefix="change"
+        :username="username"
+        :password-label="t('auth.change_password.password_label')"
+        :password-placeholder="
+          t('auth.change_password.password_placeholder', { min: PASSWORD_MIN_LENGTH })
+        "
+        :confirm-label="t('auth.change_password.confirm_password_label')"
+        :confirm-placeholder="t('auth.change_password.confirm_password_placeholder')"
+        :password-error="errors.password"
+        :confirm-error="errors.confirm"
+      />
 
-      <form class="space-y-4" @submit.prevent="handleChangePassword">
-        <FormField
-          id="change-current-password"
-          v-model="currentPassword"
-          :label="t('auth.change_password.current_password_label')"
-          type="password"
-          :placeholder="t('auth.change_password.current_password_placeholder')"
-          autocomplete="current-password"
-          required
-          :error-message="errors.current"
-        />
+      <Button variant="primary" size="lg" class="w-full" :loading="isLoading" type="submit">
+        {{
+          isLoading
+            ? t('auth.change_password.submit_loading')
+            : t('auth.change_password.submit_button')
+        }}
+      </Button>
+    </form>
 
-        <NewPasswordFields
-          v-model:password="password"
-          v-model:confirm-password="confirmPassword"
-          id-prefix="change"
-          :username="username"
-          :password-label="t('auth.change_password.password_label')"
-          :password-placeholder="
-            t('auth.change_password.password_placeholder', { min: PASSWORD_MIN_LENGTH })
-          "
-          :confirm-label="t('auth.change_password.confirm_password_label')"
-          :confirm-placeholder="t('auth.change_password.confirm_password_placeholder')"
-          :password-error="errors.password"
-          :confirm-error="errors.confirm"
-        />
-
-        <Button variant="primary" size="lg" class="w-full" :loading="isLoading" type="submit">
-          {{
-            isLoading
-              ? t('auth.change_password.submit_loading')
-              : t('auth.change_password.submit_button')
-          }}
-        </Button>
-      </form>
-
-      <!--
-        La única salida sin cambiar la contraseña: si la sesión abierta no es la
-        de quien está delante (un portátil compartido, una temporal equivocada),
-        se sale de aquí y se vuelve a entrar.
-      -->
-      <button
-        type="button"
-        class="block w-full text-center text-sm font-medium text-purple hover:text-purple-dark"
-        @click="handleLogout"
-      >
+    <!--
+      La única salida sin cambiar la contraseña: si la sesión abierta no es la
+      de quien está delante (un portátil compartido, una temporal equivocada),
+      se sale de aquí y se vuelve a entrar.
+    -->
+    <template #footer>
+      <button type="button" class="text-purple hover:text-purple-dark" @click="handleLogout">
         {{ t('auth.change_password.logout') }}
       </button>
-    </div>
-  </div>
+    </template>
+  </AuthCardShell>
 </template>
 
 <script setup lang="ts">
@@ -81,7 +66,9 @@
  *
  * Los errores van junto al campo que los provoca, así que `FormField` los anuncia
  * y marca el campo; el foco va al primero que haya que corregir, y al cargar la
- * pantalla, a la contraseña temporal.
+ * pantalla, a la contraseña temporal. El formulario va con `novalidate`: los
+ * campos siguen marcados como obligatorios, pero el aviso es el nuestro y no el
+ * globo del navegador.
  */
 import { PASSWORD_MIN_LENGTH } from '~/utils/password'
 import { getDashboardByRole } from '~/utils/navigation'

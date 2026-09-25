@@ -421,7 +421,9 @@ export class AuthService {
     })
 
     const appOrigin = await getAppOrigin()
-    const resetUrl = `${appOrigin}/auth/reset-password?token=${encodeURIComponent(resetToken)}`
+    // La página del enlace es la de la app (/auth/restablecer-password), no la
+    // ruta de la API que lo canjea (/auth/reset-password).
+    const resetUrl = `${appOrigin}/auth/restablecer-password?token=${encodeURIComponent(resetToken)}`
 
     // Send the reset email (non-blocking — don't let email failure block the response)
     sendPasswordResetEmail(user.email, resetUrl).catch((err) => {
