@@ -17,6 +17,8 @@
       "section_management": "Management",
       "section_content": "Content",
       "section_system": "System",
+      "section_classes": "Classes",
+      "section_account": "Account",
       "profile": "My profile",
       "logout": "Log out"
     },

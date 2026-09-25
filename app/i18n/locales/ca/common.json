@@ -17,6 +17,8 @@
       "section_management": "Gestió",
       "section_content": "Continguts",
       "section_system": "Sistema",
+      "section_classes": "Classes",
+      "section_account": "Compte",
       "profile": "El meu perfil",
       "logout": "Tancar sessió"
     },

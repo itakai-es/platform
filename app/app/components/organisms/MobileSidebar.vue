@@ -55,11 +55,11 @@
       <nav class="mobile-sidebar-nav">
         <template v-for="(item, index) in navItems" :key="index">
           <!-- Section Header -->
-          <div v-if="item.type === 'header'" class="px-4 py-2 mt-2">
-            <p class="text-xs font-semibold text-text-muted uppercase">
-              {{ item.label }}
-            </p>
-          </div>
+          <NavSectionHeader
+            v-if="item.type === 'header'"
+            :label="item.label ?? ''"
+            :icon="item.icon"
+          />
 
           <!-- Separador entre bloques -->
           <NavDivider v-else-if="item.type === 'divider'" />

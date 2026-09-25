@@ -17,6 +17,8 @@
       "section_management": "Gestão",
       "section_content": "Conteúdos",
       "section_system": "Sistema",
+      "section_classes": "Turmas",
+      "section_account": "Conta",
       "profile": "O meu perfil",
       "logout": "Terminar sessão"
     },

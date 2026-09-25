@@ -17,6 +17,8 @@
       "section_management": "Gestión",
       "section_content": "Contenidos",
       "section_system": "Sistema",
+      "section_classes": "Clases",
+      "section_account": "Cuenta",
       "profile": "Mi perfil",
       "logout": "Cerrar sesión"
     },

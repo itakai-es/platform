@@ -17,6 +17,8 @@
       "section_management": "Xestión",
       "section_content": "Conteníos",
       "section_system": "Sistema",
+      "section_classes": "Clases",
+      "section_account": "Cuenta",
       "profile": "El mio perfil",
       "logout": "Zarrar sesión"
     },

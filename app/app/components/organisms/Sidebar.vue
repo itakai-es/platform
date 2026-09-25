@@ -129,10 +129,11 @@
       <template v-else>
         <template v-for="(item, index) in navItems" :key="index">
           <!-- Section Header -->
-          <div v-if="item.type === 'header'" class="nav-section-header">
-            <component :is="item.icon" v-if="item.icon" class="nav-section-icon" />
-            <span class="nav-section-label">{{ item.label }}</span>
-          </div>
+          <NavSectionHeader
+            v-if="item.type === 'header'"
+            :label="item.label ?? ''"
+            :icon="item.icon"
+          />
 
           <!-- Separador entre bloques -->
           <NavDivider v-else-if="item.type === 'divider'" />
@@ -435,20 +436,6 @@ const currentGodMessage = computed(() => {
 }
 .chat-conversations-container::-webkit-scrollbar {
   display: none;
-}
-
-.nav-section-header {
-  @apply flex items-center gap-2 px-3 py-2 mt-3 mb-1;
-}
-
-.nav-section-icon {
-  @apply w-5 h-5;
-  color: #5b5675;
-}
-
-.nav-section-label {
-  @apply text-sm font-semibold;
-  color: #5b5675;
 }
 
 /* Footer */

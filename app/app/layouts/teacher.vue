@@ -135,6 +135,7 @@ const navItems = computed(() => [
         },
       ]
     : []),
+  { type: 'header' as const, label: t('common.nav.section_classes') },
   {
     to: '/profesor/clases',
     label: t('common.nav.my_classes'),
@@ -155,7 +156,7 @@ const navItems = computed(() => [
     label: t('common.nav.students'),
     icon: UsersIcon,
   },
-  { type: 'divider' as const },
+  { type: 'header' as const, label: t('common.nav.help') },
   {
     to: getHelpPortalByRole('teacher'),
     label: t('common.help.title'),
