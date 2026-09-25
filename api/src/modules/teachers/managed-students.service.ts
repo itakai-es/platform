@@ -5,7 +5,7 @@ import {
   recordClassAction,
   type ClassUser,
 } from '../../utils/class-access.js'
-import { enrollStudent } from '../../utils/enrollment.js'
+import { ENROLL_TX_OPTIONS, enrollStudent } from '../../utils/enrollment.js'
 import { ForbiddenError, NotFoundError, ValidationError } from '../../utils/errors.js'
 import {
   buildUsernameProposal,
@@ -143,7 +143,7 @@ export async function createManagedStudent(
       })
 
       return student
-    })
+    }, ENROLL_TX_OPTIONS)
 
   try {
     // El usuario siempre se resuelve reintentando: con el escrito se prueba tal

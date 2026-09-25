@@ -48,6 +48,8 @@ export interface Student {
   email: string | null
   /** Usuario de la cuenta, con el que entra si no tiene correo. */
   accountUsername?: string | null
+  /** `managed`: cuenta sin correo creada por el profesorado. */
+  accountType?: AccountType
   avatar?: string
   // Datos agregados (calculados desde classProgress)
   totalXp: number // Suma de XP en todas las clases
@@ -65,6 +67,38 @@ export interface Student {
   classIds: string[] // Para filtros y retrocompatibilidad
   archived?: boolean // Todas sus clases con este profesor están archivadas
   createdAt: Date
+}
+
+/** Orden del listado general de alumnos. */
+export type StudentListSort =
+  | 'name-asc'
+  | 'name-desc'
+  | 'progress-desc'
+  | 'progress-asc'
+  | 'missions-desc'
+
+/** Tramo de progreso: 80 % o más, de 50 a 79, de 20 a 49 y menos de 20. */
+export type StudentProgressRange = 'excellent' | 'good' | 'progress' | 'initial'
+
+/** Una página del listado general de alumnos: la búsqueda y los filtros van a la API. */
+export interface StudentListQuery {
+  archived: 'active' | 'archived'
+  search?: string
+  classId?: string
+  progress?: StudentProgressRange
+  sort?: StudentListSort
+  page: number
+  limit: number
+}
+
+export interface StudentListResponse {
+  students: Student[]
+  total: number
+  page: number
+  limit: number
+  totalPages: number
+  /** Alumnos de cada pestaña, sin búsqueda ni filtros. */
+  counts: { active: number; archived: number }
 }
 
 /**
@@ -110,6 +144,8 @@ export interface ManageableStudent {
   canResetPassword: boolean
   /** La clase donde se está actuando es la de origen de la cuenta. */
   isHomeClass?: boolean
+  /** La cuenta no se ha usado nunca: quitarla de esta clase la borra del todo. */
+  removalDeletesAccount?: boolean
 }
 
 /** Una fila para dar de alta: el nombre y, si se quiere elegir, el usuario. */

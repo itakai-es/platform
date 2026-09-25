@@ -33,8 +33,14 @@ import {
   type ClassAccess,
 } from '../../utils/class-access.js'
 import { accountHandle } from '../../utils/identity.js'
+import { participatingEnrollmentWhere } from '../../utils/enrollment.js'
+import { activityActor } from '../../utils/activity.js'
 import { assignableBadgesWhere, manageableBadgesWhere } from '../../utils/badge-access.js'
-import { manageableHomeClasses } from './class-students.service.js'
+import {
+  manageableHomeClasses,
+  UNUSED_ACCOUNT_SELECT,
+  unusedAccountHomeClass,
+} from './class-students.service.js'
 
 const BADGES_DIR = join(process.cwd(), 'uploads', 'badges')
 const COVERS_DIR = join(process.cwd(), 'uploads', 'covers')
@@ -803,10 +809,14 @@ export class TeachersService {
 
   async getClassRanking(userId: string, classId: string) {
     await assertClassAccess(classId, userId, 'class.view')
+    // El mismo podio que ve el alumnado: sin quien aún no ha entrado nunca.
     const cls = await prisma.class.findUnique({
       where: { id: classId },
       include: {
-        enrollments: { where: { isPreview: false }, include: { student: true } },
+        enrollments: {
+          where: { isPreview: false, AND: [participatingEnrollmentWhere] },
+          include: { student: true },
+        },
       },
     })
 
@@ -875,7 +885,12 @@ export class TeachersService {
     await assertClassAccess(classId, userId, 'student.view')
     const cls = await prisma.class.findUnique({
       where: { id: classId },
-      include: { enrollments: { where: { isPreview: false }, include: { student: true } } },
+      include: {
+        enrollments: {
+          where: { isPreview: false },
+          include: { student: { include: { _count: UNUSED_ACCOUNT_SELECT._count } } },
+        },
+      },
     })
 
     if (!cls) throw new NotFoundError('Clase no encontrada')
@@ -918,6 +933,10 @@ export class TeachersService {
             managed && !!e.student.homeClassId && resettable.has(e.student.homeClassId),
           // Quitarlo de su clase de origen deja la cuenta sin nadie que la gestione.
           isHomeClass: managed && e.student.homeClassId === classId,
+          // Aún no ha entrado con la contraseña temporal (recién creada o restablecida).
+          pendingSignIn: managed && e.student.mustChangePassword,
+          // Nunca se ha usado: quitarlo de aquí borra la cuenta.
+          removalDeletesAccount: unusedAccountHomeClass(e.student) === classId,
           avatar: e.avatarUrl || '/app/avatars/atenea.svg',
           level: e.level,
           levelTitle: tier.title,
@@ -982,209 +1001,6 @@ export class TeachersService {
 
   // ==================== STUDENTS ====================
 
-  /**
-   * Lista los alumnos de las clases a las que el profesor tiene acceso. Un alumno
-   * se considera archivado cuando TODAS esas clases suyas están archivadas: no hay
-   * estado de archivado propio del alumno, se deriva de las clases (así desarchivar
-   * una clase lo devuelve solo). Al filtrar por `classId` se devuelven los alumnos
-   * de esa clase sin importar el estado, porque la clase se ha abierto a propósito;
-   * una clase sin acceso responde 404, como cualquier otra ruta de la clase.
-   */
-  async getStudents(
-    userId: string,
-    classId?: string,
-    archived: 'active' | 'archived' | 'all' = 'active'
-  ) {
-    // Con `classId` solo se carga esa clase, no el progreso de todas las accesibles.
-    if (classId) await assertClassAccess(classId, userId, 'student.view')
-    const classes = await prisma.class.findMany({
-      where: classId ? { id: classId } : accessibleClassesWhere(userId),
-      include: {
-        missions: {
-          include: {
-            enigmas: { select: { id: true, xpReward: true } },
-            badges: { select: { id: true } },
-          },
-        },
-        enrollments: {
-          where: { isPreview: false },
-          include: {
-            student: {
-              include: {
-                missionProgress: true,
-                enigmaProgress: { select: { enigmaId: true } },
-                earnedBadges: { select: { badgeId: true } },
-              },
-            },
-          },
-        },
-      },
-    })
-
-    let students = classes.flatMap((c) => {
-      // Calculate totals for this class
-      const totalMissions = c.missions.length
-      const missionIds = c.missions.map((m) => m.id)
-      const classEnigmas = c.missions.flatMap((m) => m.enigmas)
-      const classEnigmaIds = classEnigmas.map((e) => e.id)
-      const totalEnigmas = classEnigmaIds.length
-      const classTotalXp = classEnigmas.reduce((sum, en) => sum + (en.xpReward || 0), 0)
-      const classBadgeIds = c.missions.flatMap((m) => m.badges.map((b) => b.id))
-      const classTotalBadges = classBadgeIds.length
-
-      return c.enrollments.map((e) => {
-        // Filter progress to only count missions from THIS class
-        const completed = e.student.missionProgress.filter(
-          (p) => p.completedAt && missionIds.includes(p.missionId)
-        ).length
-        // Progress is enigma-based: enigmas done in this class / total enigmas in this class
-        const completedEnigmas = e.student.enigmaProgress.filter((ep) =>
-          classEnigmaIds.includes(ep.enigmaId)
-        ).length
-        const progressPercentage =
-          totalEnigmas > 0 ? Math.round((completedEnigmas / totalEnigmas) * 100) : 0
-        // Per-class badges earned (intersect student's badges with badges linked to this class's missions)
-        const earnedBadgeIdSet = new Set(e.student.earnedBadges.map((eb) => eb.badgeId))
-        const classBadgesEarned = classBadgeIds.filter((id) => earnedBadgeIdSet.has(id)).length
-
-        return {
-          id: e.student.id,
-          name: e.student.name,
-          username: e.nickname || accountHandle(e.student),
-          nickname: e.nickname,
-          // Con qué se identifica la cuenta: su correo o, si no tiene, su usuario.
-          email: e.student.email,
-          accountUsername: e.student.username,
-          avatar: e.avatarUrl,
-          highestLevel: e.level,
-          totalXp: e.xp,
-          classTotalXp,
-          classId: c.id,
-          className: c.name,
-          classArchived: c.archived,
-          totalMissionsCompleted: completed,
-          totalMissionsAvailable: totalMissions,
-          totalEnigmasCompleted: completedEnigmas,
-          totalEnigmasAvailable: totalEnigmas,
-          overallProgress: progressPercentage,
-          badgesEarned: classBadgesEarned,
-          totalBadgesAvailable: classTotalBadges,
-          enrolledAt: e.enrolledAt,
-          createdAt: e.student.createdAt,
-        }
-      })
-    })
-
-    // Un alumno sigue activo mientras le quede al menos una clase sin archivar.
-    const activeStudentIds = new Set(
-      students.filter((s) => !s.classArchived).map((s) => s.id)
-    )
-
-    if (classId) {
-      // De una clase archivada, sus otras clases accesibles dicen quién sigue activo.
-      if (classes[0]?.archived && students.length > 0) {
-        const elsewhere = await prisma.classEnrollment.findMany({
-          where: {
-            studentId: { in: students.map((s) => s.id) },
-            isPreview: false,
-            class: { ...accessibleClassesWhere(userId), archived: false },
-          },
-          select: { studentId: true },
-        })
-        for (const e of elsewhere) activeStudentIds.add(e.studentId)
-      }
-      students = students.filter((s) => s.classId === classId).map((s) => ({
-        ...s,
-        archived: !activeStudentIds.has(s.id),
-        totalXpEarned: s.totalXp,
-        totalXpAvailable: s.classTotalXp,
-        totalBadgesEarned: s.badgesEarned,
-        totalBadgesAvailable: s.totalBadgesAvailable,
-        classIds: [s.classId],
-        classCount: 1,
-        classProgress: [{
-          classId: s.classId,
-          className: s.className,
-          level: s.highestLevel,
-          xp: s.totalXp,
-          missionsCompleted: s.totalMissionsCompleted,
-          totalMissions: s.totalMissionsAvailable,
-          progress: s.overallProgress,
-        }],
-      }))
-      return { students, total: students.length }
-    }
-
-    if (archived === 'active') {
-      // Vista activa: solo clases vivas, así las archivadas no suman a sus totales.
-      students = students.filter((s) => !s.classArchived)
-    } else if (archived === 'archived') {
-      students = students.filter((s) => s.classArchived && !activeStudentIds.has(s.id))
-    }
-
-    // For "all classes" view, aggregate data per student
-    const studentMap = new Map<string, any>()
-
-    students.forEach((s) => {
-      if (studentMap.has(s.id)) {
-        const existing = studentMap.get(s.id)
-        // Aggregate missions, enigmas, xp and badges across classes
-        existing.totalMissionsCompleted += s.totalMissionsCompleted
-        existing.totalMissionsAvailable += s.totalMissionsAvailable
-        existing.totalEnigmasCompleted += s.totalEnigmasCompleted
-        existing.totalEnigmasAvailable += s.totalEnigmasAvailable
-        existing.totalXpEarned += s.totalXp
-        existing.totalXpAvailable += s.classTotalXp
-        existing.totalBadgesEarned += s.badgesEarned
-        existing.totalBadgesAvailable += s.totalBadgesAvailable
-        // Overall progress is enigma-based across all enrolled classes
-        existing.overallProgress = existing.totalEnigmasAvailable > 0
-          ? Math.round((existing.totalEnigmasCompleted / existing.totalEnigmasAvailable) * 100)
-          : 0
-        // Keep the higher level/xp for display
-        if (s.totalXp > existing.totalXp) {
-          existing.totalXp = s.totalXp
-          existing.highestLevel = s.highestLevel
-        }
-        existing.badgesEarned += s.badgesEarned
-        existing.classIds.push(s.classId)
-        existing.classCount += 1
-        existing.classProgress.push({
-          classId: s.classId,
-          className: s.className,
-          level: s.highestLevel,
-          xp: s.totalXp,
-          missionsCompleted: s.totalMissionsCompleted,
-          totalMissions: s.totalMissionsAvailable,
-          progress: s.overallProgress,
-        })
-      } else {
-        studentMap.set(s.id, {
-          ...s,
-          archived: !activeStudentIds.has(s.id),
-          totalXpEarned: s.totalXp,
-          totalXpAvailable: s.classTotalXp,
-          totalBadgesEarned: s.badgesEarned,
-          totalBadgesAvailable: s.totalBadgesAvailable,
-          classIds: [s.classId],
-          classCount: 1,
-          classProgress: [{
-            classId: s.classId,
-            className: s.className,
-            level: s.highestLevel,
-            xp: s.totalXp,
-            missionsCompleted: s.totalMissionsCompleted,
-            totalMissions: s.totalMissionsAvailable,
-            progress: s.overallProgress,
-          }],
-        })
-      }
-    })
-
-    const uniqueStudents = Array.from(studentMap.values())
-    return { students: uniqueStudents, total: uniqueStudents.length }
-  }
-
   async getStudentById(userId: string, studentId: string) {
     // Solo las clases a las que se tiene acceso y en las que está el alumno.
     const classes = await prisma.class.findMany({
@@ -1215,6 +1031,10 @@ export class TeachersService {
     }
 
     const student = enrolledClasses[0].enrollments[0].student
+    const accountFacts = await prisma.user.findUniqueOrThrow({
+      where: { id: studentId },
+      select: UNUSED_ACCOUNT_SELECT,
+    })
 
     // Progreso del alumno, solo en las misiones de las clases de quien pregunta:
     // de las demás no sale ni el título ni el nombre de la clase, y las
@@ -1288,6 +1108,9 @@ export class TeachersService {
         accountType: student.accountType,
         homeClassId: student.homeClassId,
         canResetPassword,
+        pendingSignIn: student.accountType === 'managed' && student.mustChangePassword,
+        // La clase de la que quitarlo borra la cuenta, si nunca se ha usado.
+        unusedAccountHomeClassId: unusedAccountHomeClass(accountFacts),
         // Per-class data
         classes: enrolledClasses.map((c) => {
           const enrollment = c.enrollments[0]
@@ -1381,6 +1204,8 @@ export class TeachersService {
             teacherName: a.teacherName ?? metadata.teacherName,
             metadata: a.metadata,
             studentId: a.userId,
+            // Quién lo hizo (aprobó, aplicó…), para el «Por …» de la tarjeta.
+            actor: activityActor(a),
           }
         }),
       },
@@ -1499,6 +1324,8 @@ export class TeachersService {
           teacherName: a.teacherName ?? metadata.teacherName,
           metadata: a.metadata,
           studentId: a.userId,
+          // Quién lo hizo (aprobó, aplicó…), para el «Por …» de la tarjeta.
+          actor: activityActor(a),
         }
       }),
       total: activities.length,
@@ -1560,6 +1387,8 @@ export class TeachersService {
           teacherName: a.teacherName ?? metadata.teacherName,
           metadata: a.metadata,
           studentId: a.userId,
+          // Quién lo hizo (aprobó, aplicó…), para el «Por …» de la tarjeta.
+          actor: activityActor(a),
         }
       }),
       total: activities.length,

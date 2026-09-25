@@ -64,13 +64,21 @@
       :message="
         t('teacher.students.actions.remove_message', { name: student.name, class: className })
       "
-      :confirm-text="t('teacher.students.actions.remove_confirm')"
+      :confirm-text="
+        student.removalDeletesAccount
+          ? t('teacher.students.actions.remove_unused_confirm')
+          : t('teacher.students.actions.remove_confirm')
+      "
       :cancel-text="t('common.actions.cancel')"
       variant="danger"
       :loading="busy"
       @confirm="confirmRemove"
     >
-      <div class="space-y-3 text-left text-sm text-navy-700">
+      <!-- Una cuenta que nunca se ha usado no tiene nada que perder: se borra entera -->
+      <InfoNote v-if="student.removalDeletesAccount" class="text-left">
+        {{ t('teacher.students.actions.remove_unused', { name: student.name }) }}
+      </InfoNote>
+      <div v-else class="space-y-3 text-left text-sm text-navy-700">
         <p class="font-semibold">{{ t('teacher.students.actions.remove_loses') }}</p>
         <ul class="list-disc space-y-1 pl-5">
           <li>{{ t('teacher.students.actions.remove_loses_progress') }}</li>
@@ -238,9 +246,17 @@ async function saveNickname() {
 async function confirmRemove() {
   busy.value = true
   try {
-    await teacherStore.removeStudentFromClass(props.classId, props.student.id)
+    const { accountDeleted } = await teacherStore.removeStudentFromClass(
+      props.classId,
+      props.student.id
+    )
     showRemove.value = false
-    toast.success(t('teacher.students.actions.removed', { name: props.student.name }))
+    const name = props.student.name
+    toast.success(
+      accountDeleted
+        ? t('teacher.students.actions.removed_account_deleted', { name })
+        : t('teacher.students.actions.removed', { name })
+    )
     emit('removed')
   } catch (error) {
     toast.error(apiMessage(error, t('teacher.students.actions.remove_error')))

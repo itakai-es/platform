@@ -19,9 +19,11 @@ import {
 import {
   DEFAULT_AVATARS,
   enrollStudentNow,
+  freeNicknamesForPreview,
   getRandomAvatar,
-  getRandomNickname,
+  participatingEnrollmentWhere,
 } from '../../utils/enrollment.js'
+import { activityActor } from '../../utils/activity.js'
 import { assertNotManagedAccount } from '../../utils/identity-db.js'
 import { changeOwnPassword } from '../../utils/password-change.js'
 
@@ -61,16 +63,6 @@ function pickAvatarFromPrompt(prompt: string) {
   }
 
   return DEFAULT_AVATARS[hashText(normalizedPrompt) % DEFAULT_AVATARS.length]
-}
-
-/**
- * Quién hizo lo que cuenta una entrada del feed, cuando no es el propio alumno:
- * el profesor que aprobó su entrega o le aplicó un comportamiento. El profesorado
- * aún no tiene avatar propio, así que va vacío.
- */
-function activityActor(activity: { actorId: string | null; actorName: string | null }) {
-  if (!activity.actorName) return null
-  return { id: activity.actorId, name: activity.actorName, avatar: null }
 }
 
 export class StudentsService {
@@ -178,7 +170,7 @@ export class StudentsService {
           include: {
             teacher: true,
             missions: true,
-            enrollments: { where: { isPreview: false } },
+            enrollments: { where: { isPreview: false, AND: [participatingEnrollmentWhere] } },
           },
         },
       },
@@ -215,7 +207,7 @@ export class StudentsService {
           include: {
             teacher: true,
             missions: { include: { enigmas: true } },
-            enrollments: { where: { isPreview: false } },
+            enrollments: { where: { isPreview: false, AND: [participatingEnrollmentWhere] } },
             guide: true,
             teachers: classTeachersInclude(),
           },
@@ -398,7 +390,7 @@ export class StudentsService {
 
     // Get ranking in class (order by enrollment XP)
     const classStudents = await prisma.classEnrollment.findMany({
-      where: { classId, isPreview: false },
+      where: { classId, isPreview: false, AND: [participatingEnrollmentWhere] },
       orderBy: { xp: 'desc' },
     })
 
@@ -441,7 +433,7 @@ export class StudentsService {
 
     // Order by enrollment XP (per-class XP)
     const enrollments = await prisma.classEnrollment.findMany({
-      where: { classId, isPreview: false },
+      where: { classId, isPreview: false, AND: [participatingEnrollmentWhere] },
       include: { student: true },
       orderBy: { xp: 'desc' },
     })
@@ -724,13 +716,15 @@ export class StudentsService {
     })
 
     if (toCreate.length) {
+      // Un alias que no tenga nadie de la clase, para no verse repetido en ella.
+      const nicknames = await freeNicknamesForPreview(toCreate.map(c => c.id))
       await prisma.classEnrollment.createMany({
         data: toCreate.map(c => ({
           studentId: userId,
           classId: c.id,
           isPreview: true,
           avatarUrl: getRandomAvatar(),
-          nickname: getRandomNickname(),
+          nickname: nicknames.get(c.id),
         })),
         skipDuplicates: true,
       })

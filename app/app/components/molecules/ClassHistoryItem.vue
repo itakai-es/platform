@@ -72,6 +72,7 @@ function textKey(entry: ClassHistoryEntry): string {
   if (action === 'class.ownership_transferred' && params.reason === 'account_deleted') {
     return 'class.ownership_inherited'
   }
+  if (action === 'student.removed' && params.accountDeleted) return 'student.removed_unused'
   return action
 }
 

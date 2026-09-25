@@ -8,6 +8,7 @@ import {
 } from '../../utils/class-access.js'
 import { NotFoundError, ValidationError } from '../../utils/errors.js'
 import { cleanDisplayName } from '../../utils/identity.js'
+import { NICKNAME_MAX_LENGTH } from '../../utils/enrollment.js'
 import { deleteUpload } from '../storage/storage.service.js'
 
 /**
@@ -17,7 +18,35 @@ import { deleteUpload } from '../storage/storage.service.js'
  */
 
 /** Longitud del alias: la misma que admite el alumno cuando lo cambia él. */
-export const NICKNAME_MAX_LENGTH = 20
+export { NICKNAME_MAX_LENGTH }
+
+/** Lo que hace falta de una cuenta para saber si está sin usar. */
+export const UNUSED_ACCOUNT_SELECT = {
+  accountType: true,
+  homeClassId: true,
+  _count: { select: { refreshTokens: true, enrollments: true } },
+} satisfies Prisma.UserSelect
+
+type UnusedAccountFacts = {
+  accountType: string
+  homeClassId: string | null
+  _count: { refreshTokens: number; enrollments: number }
+}
+
+/**
+ * Si la cuenta es una cuenta sin correo que nadie ha usado, la clase de la que
+ * quitarla la borra del todo; si no, null. Sin usar es que no ha iniciado sesión
+ * nunca (cada entrada deja una sesión, que al cerrarse o caducar se revoca pero
+ * no se borra) y que solo está en su clase de origen: quitada de ella, sería una
+ * cuenta que no gestiona nadie y que nunca ha servido para nada, típicamente
+ * creada por error. Una cuenta que ha entrado alguna vez nunca se borra desde la
+ * clase: se queda sin clase de origen, para la administración.
+ */
+export function unusedAccountHomeClass(account: UnusedAccountFacts): string | null {
+  if (account.accountType !== 'managed' || !account.homeClassId) return null
+  if (account._count.refreshTokens > 0 || account._count.enrollments !== 1) return null
+  return account.homeClassId
+}
 
 /** La matrícula corriente del alumno en la clase; la de vista previa no cuenta. */
 async function studentEnrollment(classId: string, studentId: string, tx: Prisma.TransactionClient) {
@@ -78,19 +107,27 @@ export async function updateStudentNickname(
  *
  * Si la clase era la de origen de una cuenta gestionada, la cuenta se queda sin
  * clase de origen: desde aquí ya no la gestiona nadie, y queda para quien
- * administra la plataforma, que puede darle otra.
+ * administra la plataforma, que puede darle otra. Salvo que la cuenta no se haya
+ * usado nunca (`unusedAccountHomeClass`): entonces se borra del todo.
  *
- * El registro de acciones de la clase se conserva: apunta al alumno por su id.
+ * El registro de acciones de la clase se conserva: apunta al alumno por su id
+ * (y, si su cuenta se borra, se queda sin él y lo dice en `accountDeleted`).
  */
 export async function removeStudentFromClass(
   actor: ClassUser,
   classId: string,
   studentId: string
-): Promise<{ removed: true }> {
+): Promise<{ removed: true; accountDeleted: boolean }> {
   await assertClassAccess(classId, actor.id, 'student.manage')
 
-  const files = await prisma.$transaction(async tx => {
+  const { files, accountDeleted } = await prisma.$transaction(async tx => {
     const enrollment = await studentEnrollment(classId, studentId, tx)
+    // Se decide antes de borrar la matrícula, que es una de las que cuenta.
+    const account = await tx.user.findUniqueOrThrow({
+      where: { id: studentId },
+      select: UNUSED_ACCOUNT_SELECT,
+    })
+    const accountDeleted = unusedAccountHomeClass(account) === classId
     const files = await deleteEnrollmentData(tx, classId, studentId, enrollment.id)
 
     // Los mensajes se van con su conversación (borrado en cascada).
@@ -101,11 +138,8 @@ export async function removeStudentFromClass(
       where: { userId: studentId, OR: [{ classId }, { missionId: { in: missionIds } }] },
     })
 
-    await tx.user.updateMany({
-      where: { id: studentId, homeClassId: classId },
-      data: { homeClassId: null },
-    })
-
+    // La entrada va antes que el borrado de la cuenta: al borrarla, el registro
+    // se queda sin ella en lugar de impedirlo.
     await recordClassAction(tx, {
       classId,
       actorId: actor.id,
@@ -113,14 +147,24 @@ export async function removeStudentFromClass(
       entityType: 'user',
       entityId: studentId,
       targetUserId: studentId,
+      ...(accountDeleted ? { metadata: { accountDeleted: true } } : {}),
     })
 
-    return files
+    if (accountDeleted) {
+      await tx.user.delete({ where: { id: studentId } })
+    } else {
+      await tx.user.updateMany({
+        where: { id: studentId, homeClassId: classId },
+        data: { homeClassId: null },
+      })
+    }
+
+    return { files, accountDeleted }
   })
 
   // Los ficheros, al final y sin tumbar nada: la base ya no los apunta.
   await deleteUploads(files)
-  return { removed: true }
+  return { removed: true, accountDeleted }
 }
 
 /**

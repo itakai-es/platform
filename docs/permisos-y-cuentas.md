@@ -219,7 +219,18 @@ Cada cuenta sin correo recuerda la clase donde se creó: su **clase de origen**.
   clases es un alumno más: su profesorado ve su progreso, pero no gestiona la
   cuenta.
 - Si se **quita al alumno de su clase de origen**, la cuenta se queda sin clase
-  de origen y solo la gestiona la administración de la plataforma.
+  de origen y solo la gestiona la administración de la plataforma. Salvo que la
+  cuenta **no se haya usado nunca** (no ha iniciado sesión ninguna vez y solo
+  está en esa clase): entonces se borra del todo, porque sin clase sería una
+  cuenta que no gestiona nadie y que nunca ha servido, normalmente creada por
+  error. La ventana de confirmación lo avisa antes.
+- En la lista de alumnos de la clase, la etiqueta **«Pendiente de entrar»**
+  marca las cuentas sin correo que tienen la contraseña temporal sin usar
+  (recién creadas o restablecidas).
+- Hasta que una cuenta sin correo **entra por primera vez**, el resto de la
+  clase no la ve: no sale en el ranking ni en el podio, no cuenta en las medias
+  ni en el número de alumnos. El podio del profesorado es el mismo; en su lista
+  de alumnos sí sale, con la etiqueta.
 - La administración de la plataforma puede **cambiar la clase de origen**; al
   hacerlo, el alumno queda matriculado también en la clase nueva.
 
@@ -228,7 +239,9 @@ Cada cuenta sin correo recuerda la clase donde se creó: su **clase de origen**.
 Quitar a un alumno (cualquier alumno, con o sin correo) borra, en una sola
 operación y solo en esa clase, su progreso, entregas y ficheros, compras,
 comportamientos, avisos y conversaciones con el asistente sobre esa clase. La
-acción queda en el historial. La cuenta no se borra.
+acción queda en el historial. La cuenta no se borra, salvo la de una cuenta sin
+correo que no se ha usado nunca y que se quita de su clase de origen (ver
+arriba); el historial lo dice sin nombrarla.
 
 ## 4. Primer acceso, restablecimiento y sesiones
 

@@ -12,13 +12,13 @@
       <FilterBar
         :search="searchQuery"
         :sort="sortBy"
-        :results-count="filteredStudents.length"
+        :results-count="teacherStore.studentsTotal"
         :search-placeholder="t('teacher.students.index.search_placeholder')"
         :sort-options="sortOptions"
         variant="red"
         :has-active-filters="hasActiveFilters"
         :active-filter-count="activeFilterCount"
-        @update:search="searchQuery = $event"
+        @update:search="onSearch"
         @update:sort="sortBy = $event"
         @reset="clearAllFilters"
       >
@@ -38,14 +38,14 @@
 
       <ArchiveTabs
         v-model="viewMode"
-        :active-count="teacherStore.students.length"
-        :archived-count="teacherStore.archivedStudents.length"
+        :active-count="teacherStore.studentCounts.active"
+        :archived-count="teacherStore.studentCounts.archived"
         :active-label="t('teacher.students.index.tab_active')"
         :archived-label="t('teacher.students.index.tab_archived')"
       />
 
       <!-- Loading State -->
-      <CardGrid v-if="isLoading">
+      <CardGrid v-if="teacherStore.isLoadingStudents">
         <div
           v-for="i in 6"
           :key="i"
@@ -71,7 +71,7 @@
 
       <!-- Empty State -->
       <EmptyState
-        v-else-if="filteredStudents.length === 0"
+        v-else-if="teacherStore.students.length === 0"
         :icon="UsersIcon"
         :title="emptyTitle"
         :description="emptyDescription"
@@ -80,7 +80,7 @@
       <!-- Students Grid -->
       <CardGrid v-else>
         <article
-          v-for="student in filteredStudents"
+          v-for="student in teacherStore.students"
           :key="student.id"
           class="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 overflow-hidden cursor-pointer"
           @click="viewStudentProfile(student.id)"
@@ -91,10 +91,13 @@
               <div class="min-w-0 flex-1">
                 <h3 class="font-bold text-navy-700 truncate text-lg">{{ student.name }}</h3>
                 <!-- Un alumno sin correo se identifica por su usuario -->
-                <p class="text-sm text-navy-700/70 truncate">
-                  {{
+                <p class="flex min-w-0 items-center gap-1.5 text-sm text-navy-700/70">
+                  <span class="truncate">{{
                     accountIdentifier({ email: student.email, username: student.accountUsername })
-                  }}
+                  }}</span>
+                  <Badge v-if="student.accountType === 'managed'" variant="info" size="sm">
+                    {{ t('teacher.classes.detail.students.managed_badge') }}
+                  </Badge>
                 </p>
               </div>
               <Button variant="primary" size="sm" class="flex-shrink-0">{{
@@ -140,7 +143,9 @@
                     >
                   </p>
                 </div>
-                <p class="text-xs text-navy-700/70 uppercase tracking-wide">Insignias</p>
+                <p class="text-xs text-navy-700/70 uppercase tracking-wide">
+                  {{ t('teacher.students.index.stat_badges') }}
+                </p>
               </div>
             </div>
           </div>
@@ -154,13 +159,20 @@
           </div>
         </article>
       </CardGrid>
+
+      <Pagination
+        :current-page="currentPage"
+        :total-pages="teacherStore.studentsTotalPages"
+        @page-change="goToPage"
+      />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { UsersIcon, RocketLaunchIcon, MapIcon, TrophyIcon } from '@heroicons/vue/24/outline'
-import { accountIdentifier, matchesAccount } from '~/utils/identity'
+import { accountIdentifier } from '~/utils/identity'
+import type { StudentListSort, StudentProgressRange } from '~/types/teacher.types'
 
 const formatXP = (xp: number): string => {
   if (xp >= 1000) {
@@ -184,24 +196,17 @@ definePageMeta({
 const teacherStore = useTeacherStore()
 const router = useRouter()
 
+/** Tarjetas por página: tres filas completas en escritorio. */
+const PAGE_SIZE = 12
+
 // Filters state
 const searchQuery = ref('')
 const selectedClassId = ref('')
 const selectedProgressRange = ref('')
 const sortBy = ref('name-asc')
+const currentPage = ref(1)
 // Un alumno está archivado cuando todas sus clases con este profesor lo están.
 const viewMode = ref<'active' | 'archived'>('active')
-
-const isLoading = computed(() =>
-  viewMode.value === 'archived'
-    ? teacherStore.isLoadingArchivedStudents
-    : teacherStore.isLoadingStudents
-)
-
-// Lista base según la pestaña activa
-const sourceStudents = computed(() =>
-  viewMode.value === 'archived' ? teacherStore.archivedStudents : teacherStore.students
-)
 
 // Options for SelectDropdown components
 const classOptions = computed(() => {
@@ -210,11 +215,6 @@ const classOptions = computed(() => {
     { value: '', label: t('teacher.students.index.filter_all_classes') },
     ...source.map(c => ({ value: c.id, label: c.name })),
   ]
-})
-
-// La clase elegida no existe en la otra pestaña: al cambiar se descarta el filtro.
-watch(viewMode, () => {
-  selectedClassId.value = ''
 })
 
 // Progress range options
@@ -243,71 +243,81 @@ const hasActiveFilters = computed(() => {
   return selectedClassId.value !== '' || selectedProgressRange.value !== ''
 })
 
+/** Pide la página a la vista con la búsqueda y los filtros de ahora. */
+async function loadStudents(force = false) {
+  try {
+    await teacherStore.ensureStudentList(
+      {
+        archived: viewMode.value,
+        search: searchQuery.value,
+        classId: selectedClassId.value,
+        progress: (selectedProgressRange.value || undefined) as StudentProgressRange | undefined,
+        sort: sortBy.value as StudentListSort,
+        page: currentPage.value,
+        limit: PAGE_SIZE,
+      },
+      force
+    )
+  } catch {
+    // El store ya lo ha dejado en la consola; se queda lo que había.
+    return
+  }
+  // La página ya no existe (han salido alumnos mientras tanto): a la última.
+  if (currentPage.value > teacherStore.studentsTotalPages) {
+    currentPage.value = teacherStore.studentsTotalPages
+    await loadStudents()
+  }
+}
+
+// La búsqueda va a la API cuando se deja de escribir.
+let searchTimeout: ReturnType<typeof setTimeout> | null = null
+
+function onSearch(value: string) {
+  searchQuery.value = value
+  if (searchTimeout) clearTimeout(searchTimeout)
+  searchTimeout = setTimeout(() => {
+    currentPage.value = 1
+    loadStudents()
+  }, 300)
+}
+
+onBeforeUnmount(() => {
+  if (searchTimeout) clearTimeout(searchTimeout)
+})
+
+function goToPage(page: number) {
+  currentPage.value = page
+  loadStudents()
+}
+
+// La clase elegida no existe en la otra pestaña: al cambiar se descarta el filtro
+// antes de pedir nada, así el cambio de pestaña hace una sola petición.
+watch(
+  viewMode,
+  () => {
+    selectedClassId.value = ''
+  },
+  { flush: 'sync' }
+)
+
+// Otra pestaña, otro filtro u otro orden: se vuelve a la primera página.
+watch([viewMode, selectedClassId, selectedProgressRange, sortBy], () => {
+  currentPage.value = 1
+  loadStudents()
+})
+
 // Clear all filters
 const clearAllFilters = () => {
+  if (searchTimeout) clearTimeout(searchTimeout)
+  // Si había un filtro puesto, al quitarlo ya pide la página el watcher.
+  const reloadsByItself = hasActiveFilters.value
   searchQuery.value = ''
   selectedClassId.value = ''
   selectedProgressRange.value = ''
+  if (reloadsByItself) return
+  currentPage.value = 1
+  loadStudents()
 }
-
-// Filtered and sorted students
-const filteredStudents = computed(() => {
-  let students = [...sourceStudents.value]
-
-  // Filter by search query: el nombre, el correo y el usuario.
-  if (searchQuery.value) {
-    students = students.filter(s =>
-      matchesAccount(
-        { name: s.name, email: s.email, username: s.accountUsername },
-        searchQuery.value
-      )
-    )
-  }
-
-  // Filter by class
-  if (selectedClassId.value) {
-    students = students.filter(s => s.classIds.includes(selectedClassId.value))
-  }
-
-  // Filter by progress range
-  if (selectedProgressRange.value) {
-    students = students.filter(s => {
-      const progress = s.overallProgress
-      switch (selectedProgressRange.value) {
-        case 'excellent':
-          return progress >= 80
-        case 'good':
-          return progress >= 50 && progress < 80
-        case 'progress':
-          return progress >= 20 && progress < 50
-        case 'initial':
-          return progress < 20
-        default:
-          return true
-      }
-    })
-  }
-
-  // Sort
-  const [field, direction] = sortBy.value.split('-')
-  students.sort((a, b) => {
-    let comparison = 0
-    switch (field) {
-      case 'name':
-        comparison = a.name.localeCompare(b.name)
-        break
-      case 'progress':
-        comparison = a.overallProgress - b.overallProgress
-        break
-      case 'missions':
-        comparison = a.totalMissionsCompleted - b.totalMissionsCompleted
-        break
-    }
-    return direction === 'desc' ? -comparison : comparison
-  })
-
-  return students
-})
 
 const emptyTitle = computed(() =>
   viewMode.value === 'archived'
@@ -334,8 +344,7 @@ onMounted(async () => {
   await Promise.all([
     teacherStore.ensureClasses(),
     teacherStore.ensureArchivedClasses(),
-    teacherStore.ensureStudents(),
-    teacherStore.ensureArchivedStudents(),
+    loadStudents(),
   ])
 })
 </script>

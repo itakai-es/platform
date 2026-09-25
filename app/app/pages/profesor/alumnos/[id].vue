@@ -41,11 +41,14 @@
           <div class="flex-1 min-w-0">
             <h1 class="text-2xl sm:text-3xl font-bold text-white truncate">{{ student.name }}</h1>
             <!-- Un alumno sin correo se identifica por su usuario -->
-            <p class="text-white/70 text-sm sm:text-base">
+            <p class="flex flex-wrap items-center gap-2 text-white/70 text-sm sm:text-base">
               {{ accountIdentifier(student) }}
-              <span v-if="student.accountType === 'managed'">
-                · {{ t('teacher.classes.detail.students.managed_badge') }}
-              </span>
+              <Badge v-if="student.accountType === 'managed'" variant="info" size="sm">
+                {{ t('teacher.classes.detail.students.managed_badge') }}
+              </Badge>
+              <Badge v-if="student.pendingSignIn" variant="warning" size="sm">
+                {{ t('teacher.classes.detail.students.pending_sign_in_badge') }}
+              </Badge>
             </p>
           </div>
         </div>
@@ -410,6 +413,10 @@ interface StudentDetail {
   homeClassId: string | null
   /** Quien pregunta administra su clase de origen: puede restablecer la contraseña. */
   canResetPassword: boolean
+  /** Tiene la contraseña temporal sin usar: aún no ha entrado. */
+  pendingSignIn: boolean
+  /** Cuenta sin usar: la clase de la que quitarla la borra del todo. */
+  unusedAccountHomeClassId: string | null
   classes: StudentClass[]
   recentMissions: RecentMission[]
   recentActivity: Activity[]
@@ -470,6 +477,7 @@ function manageable(classItem: StudentClass): ManageableStudent {
     accountType: current.accountType,
     canResetPassword: current.canResetPassword,
     isHomeClass: current.homeClassId === classItem.id,
+    removalDeletesAccount: current.unusedAccountHomeClassId === classItem.id,
   }
 }
 

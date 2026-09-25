@@ -6,6 +6,7 @@ import { rethrowHttpError } from '../../utils/errors.js'
 import { requireStudentEnrollment } from '../../utils/class-access.js'
 import { PASSWORD_MIN_LENGTH } from '../../utils/password.js'
 import { currentTokenFamily } from '../../utils/session-cookie.js'
+import { NICKNAME_MAX_LENGTH } from '../../utils/enrollment.js'
 
 type RequestUser = { id: string; role: string | null }
 
@@ -36,7 +37,7 @@ const joinClassSchema = z.object({
 })
 
 const updateClassProfileSchema = z.object({
-  nickname: z.string().min(1).max(20).optional().nullable(),
+  nickname: z.string().min(1).max(NICKNAME_MAX_LENGTH).optional().nullable(),
   avatarUrl: z.string().optional().nullable(),
 })
 

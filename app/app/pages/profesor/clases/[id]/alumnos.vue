@@ -110,12 +110,19 @@
                     >
                       {{ student.name }}
                     </NuxtLink>
-                    <p class="flex min-w-0 items-center gap-1.5 text-xs text-navy-700/70">
-                      <span class="truncate">@{{ student.handle }}</span>
+                    <p class="truncate text-xs text-navy-700/70">@{{ student.handle }}</p>
+                    <!-- Las etiquetas, en su línea: así el alias no se corta por ellas -->
+                    <div
+                      v-if="student.accountType === 'managed' || student.pendingSignIn"
+                      class="mt-1 flex flex-wrap gap-1"
+                    >
                       <Badge v-if="student.accountType === 'managed'" variant="info" size="sm">
                         {{ t('teacher.classes.detail.students.managed_badge') }}
                       </Badge>
-                    </p>
+                      <Badge v-if="student.pendingSignIn" variant="warning" size="sm">
+                        {{ t('teacher.classes.detail.students.pending_sign_in_badge') }}
+                      </Badge>
+                    </div>
                   </div>
                 </div>
               </td>
@@ -244,6 +251,9 @@ interface ClassStudentRow {
   accountType: AccountType
   canResetPassword: boolean
   isHomeClass: boolean
+  /** Tiene la contraseña temporal sin usar: aún no ha entrado. */
+  pendingSignIn: boolean
+  removalDeletesAccount: boolean
 }
 
 const { t } = useI18n()
@@ -335,9 +345,7 @@ const students = computed(() => {
   const q = searchQuery.value.trim().toLowerCase()
   let list = allStudents.value
   if (q) {
-    list = list.filter(
-      s => s.name.toLowerCase().includes(q) || s.handle.toLowerCase().includes(q)
-    )
+    list = list.filter(s => s.name.toLowerCase().includes(q) || s.handle.toLowerCase().includes(q))
   }
   // sortBy tiene forma "<campo>-<asc|desc>"; se compara en ascendente y se invierte.
   const [field, direction] = sortBy.value.split('-')
@@ -375,19 +383,16 @@ function viewStudentProfile(studentId: string) {
 
 // Carga perezosa del ranking la primera vez que se abre esa sub-vista; si ya
 // estaba cacheado por el store, `ensureClassRanking` es no-op (cache hit).
-watch(
-  activeView,
-  async view => {
-    if (view !== 'ranking' || rankingLoaded.value) return
-    rankingLoading.value = true
-    try {
-      await teacherStore.ensureClassRanking(classId.value)
-      rankingLoaded.value = true
-    } finally {
-      rankingLoading.value = false
-    }
+watch(activeView, async view => {
+  if (view !== 'ranking' || rankingLoaded.value) return
+  rankingLoading.value = true
+  try {
+    await teacherStore.ensureClassRanking(classId.value)
+    rankingLoaded.value = true
+  } finally {
+    rankingLoading.value = false
   }
-)
+})
 
 onMounted(async () => {
   try {

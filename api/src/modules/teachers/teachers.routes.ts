@@ -34,6 +34,13 @@ import {
   CLASS_HISTORY_TYPES,
   getClassHistory,
 } from './class-history.service.js'
+import {
+  listTeacherStudents,
+  STUDENT_LIST_MAX_LIMIT,
+  STUDENT_LIST_MAX_PAGE,
+  STUDENT_LIST_SORTS,
+  STUDENT_PROGRESS_RANGES,
+} from './student-list.service.js'
 
 /** Quien hace la petición: el `id` y el `role` que viajan en el token. */
 type RequestUser = { id: string; role: string | null }
@@ -100,6 +107,21 @@ const updateClassTeacherSchema = z
 
 const transferClassSchema = z.object({
   userId: z.string().min(1, 'Elige a quién pasar la clase'),
+})
+
+// Un parámetro vacío (`?classId=`) cuenta como no puesto.
+const optionalParam = <T extends z.ZodTypeAny>(schema: T) =>
+  z.preprocess(value => (value === '' ? undefined : value), schema.optional())
+
+const studentListQuerySchema = z.object({
+  classId: optionalParam(z.string()),
+  archived: optionalParam(z.enum(['active', 'archived', 'all'])),
+  search: optionalParam(z.string().max(100)),
+  progress: optionalParam(z.enum(STUDENT_PROGRESS_RANGES)),
+  sort: optionalParam(z.enum(STUDENT_LIST_SORTS)),
+  page: optionalParam(z.coerce.number().int().min(1).max(STUDENT_LIST_MAX_PAGE)),
+  // Sin límite solo sale todo con `classId`; si no, una página por defecto.
+  limit: optionalParam(z.coerce.number().int().min(1).max(STUDENT_LIST_MAX_LIMIT)),
 })
 
 const classHistoryQuerySchema = z.object({
@@ -913,17 +935,10 @@ export async function teacherRoutes(fastify: FastifyInstance) {
 
   // ==================== STUDENTS ====================
 
-  fastify.get('/students', async (request: FastifyRequest<{ Querystring: { classId?: string; archived?: 'active' | 'archived' | 'all' } }>, reply: FastifyReply) => {
-    try {
-      const { id } = request.user as { id: string }
-      const { classId } = request.query
-      const archived = request.query.archived || 'active'
-      const result = await teachersService.getStudents(id, classId, archived)
-      return result
-    } catch (error) {
-      rethrowHttpError(error)
-      return reply.status(500).send({ message: 'Error interno' })
-    }
+  // Alumnado de las clases accesibles, buscado, filtrado y por páginas.
+  fastify.get('/students', async (request: FastifyRequest) => {
+    const query = studentListQuerySchema.parse(request.query)
+    return listTeacherStudents((request.user as RequestUser).id, query)
   })
 
   fastify.get('/students/:studentId', async (request: FastifyRequest<{ Params: { studentId: string } }>, reply: FastifyReply) => {
