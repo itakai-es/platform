@@ -126,6 +126,14 @@ export const changelog: ChangelogEntry[] = [
         type: 'fixed',
         text: 'Cuando el asistente de IA fallaba, a veces usaba un mensaje de disculpa como historia o como nombre de la clase. Ahora te avisa del error y puedes volver a intentarlo.',
       },
+      {
+        type: 'fixed',
+        text: 'Al crear una misión desde el asistente, la portada no se guardaba y la misión aparecía sin imagen hasta que la editabas. Ahora se guarda a la primera.',
+      },
+      {
+        type: 'fixed',
+        text: 'En la vista previa del asistente de misiones faltaban las monedas y el maná que se ganan; ahora se ven junto a las estrellas.',
+      },
     ],
   },
   {

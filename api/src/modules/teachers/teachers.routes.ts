@@ -986,6 +986,9 @@ export async function teacherRoutes(fastify: FastifyInstance) {
         status: body.status === 'publicada' ? 'activa' : body.status === 'borrador' ? 'bloqueada' : (body.status || 'activa'),
         rarity: body.rarity,
         deadline: body.dueDate || body.deadline,
+        // La portada (ruta /uploads/… generada por la IA o data URL subida por el
+        // profesor) se perdía aquí: el asistente la manda y nadie la copiaba.
+        backgroundImage: typeof body.backgroundImage === 'string' ? body.backgroundImage : undefined,
         enigmas: body.enigmas,
       }
 

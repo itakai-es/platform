@@ -773,6 +773,8 @@
             :total-students="0"
             :deadline="form.deadline"
             :xp-reward="totalXp"
+            :coin-reward="totalCoins"
+            :mana-reward="totalMana"
             :background-image="generatedImageUrl || rawImagePath"
           />
         </div>
@@ -1036,6 +1038,14 @@ const totalXp = computed(() => {
   const rarityBonus = MISSION_COMPLETION_BONUS[rarity.value as MissionRarity] ?? 0
   return enigmasXp + rarityBonus
 })
+// Monedas y maná de la misión, como los calcula la API para el listado: la suma
+// de los enigmas, sin bonus de rareza, y 0 si la clase no usa ese recurso.
+const totalCoins = computed(() =>
+  enigmaResources.value.coins ? enigmas.value.reduce((sum, e) => sum + (e.coins || 0), 0) : 0
+)
+const totalMana = computed(() =>
+  enigmaResources.value.mana ? enigmas.value.reduce((sum, e) => sum + (e.mana || 0), 0) : 0
+)
 
 const form = computed(() => ({
   title: chosenTitle.value,

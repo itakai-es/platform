@@ -761,6 +761,15 @@ export class MissionsService {
     // Las recompensas admiten cualquier valor entero ≥ 0 (los presets son solo
     // sugerencias de UI/IA). El schema de la ruta ya garantiza `int().min(0)`.
 
+    // Una portada subida por el profesor llega como data URL y se guarda en
+    // disco antes de anotarla, igual que al editar; la generada por la IA ya es
+    // una ruta /uploads/….
+    const backgroundImage: string | null = data.backgroundImage
+      ? data.backgroundImage.startsWith('data:image/')
+        ? await saveBase64Image(data.backgroundImage, 'covers')
+        : data.backgroundImage
+      : null
+
     return await prisma.$transaction(async (tx) => {
       const mission = await tx.mission.create({
         data: {
@@ -770,7 +779,7 @@ export class MissionsService {
           status: data.status || 'activa',
           rarity: data.rarity || 'comun',
           deadline: data.deadline ? new Date(data.deadline) : null,
-          backgroundImage: data.backgroundImage || null,
+          backgroundImage,
         },
       })
 
