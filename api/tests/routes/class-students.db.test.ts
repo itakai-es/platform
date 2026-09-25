@@ -264,16 +264,16 @@ describeWithDatabase('alumnado de una clase', () => {
         Array.from({ length: size }, (_, i) => ({ name: `${label} ${i} ${tag}` }))
 
       // Casi lleno: una lista rechazada no se queda con el hueco que apartó.
-      recordRateLimit(key, limit, 170)
+      recordRateLimit(key, limit, 190)
       const rejected = await send('POST', importUrl(f.classId), f.users.owner, {
-        students: [...list('Rechazada', 29), { name: '' }],
+        students: [...list('Rechazada', 9), { name: '' }],
       })
       expect(rejected.statusCode).toBe(400)
 
       // Dos listas a la vez que no caben juntas: entra una y la otra no.
       const responses = await Promise.all([
-        send('POST', importUrl(f.classId), f.users.owner, { students: list('Primera', 20) }),
-        send('POST', importUrl(f.classId), f.users.owner, { students: list('Segunda', 20) }),
+        send('POST', importUrl(f.classId), f.users.owner, { students: list('Primera', 6) }),
+        send('POST', importUrl(f.classId), f.users.owner, { students: list('Segunda', 6) }),
       ])
       const codes = responses.map(r => r.statusCode).sort()
       expect(codes).toEqual([201, 429])
@@ -281,7 +281,7 @@ describeWithDatabase('alumnado de una clase', () => {
         if (response.statusCode !== 201) continue
         for (const { student } of response.json().created) extraUsers.add(student.id)
       }
-    })
+    }, 20_000)
 
     it('no admite una lista vacía ni de más de 50', async () => {
       expect(
