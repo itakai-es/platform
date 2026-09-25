@@ -1,7 +1,7 @@
 {
   "chat": {
     "assistant": {
-      "default_name": "AA Laguntzailea",
+      "default_name": "AA laguntzailea",
       "default_title": "Laguntzeko prest",
       "default_description": "Hemen nago zure ikasketekin laguntzeko.",
       "itakai_assistant": "ITAKAI Assistant"
@@ -53,7 +53,12 @@
         "Planifika dezagun ikasgaia!",
         "Nola lagundu dezaket gaur?"
       ],
-      "admin": ["Laguntza behar duzu?", "Zure zerbitzura", "Zertan lagundu?", "Hemen nago!"]
+      "admin": [
+        "Laguntza behar duzu?",
+        "Zure zerbitzura",
+        "Zertan lagundu?",
+        "Hemen nago!"
+      ]
     },
     "user_subtitles": {
       "teacher": "Irakaslea",

@@ -20,34 +20,34 @@
       }
     },
     "dashboard": {
-      "title": "Irakaslearen Dashboarda",
+      "title": "Irakaslearen dashboarda",
       "subtitle": "Ongi etorri, {name}!",
-      "new_class": "Klase Berria",
-      "new_mission": "Misio Berria",
+      "new_class": "Klase berria",
+      "new_mission": "Misio berria",
       "stats": {
-        "total_students": "Ikasle Guztira",
-        "active_classes": "Klase Aktiboak",
-        "active_missions": "Misio Aktiboak"
+        "total_students": "Ikasle guztira",
+        "active_classes": "Klase aktiboak",
+        "active_missions": "Misio aktiboak"
       },
-      "my_classes": "Nire Klaseak",
+      "my_classes": "Nire klaseak",
       "view_all": "Ikusi denak",
       "no_classes_yet": "Oraindik ez duzu klaserik",
-      "recent_missions": "Azken Misioak",
+      "recent_missions": "Azken misioak",
       "no_missions_description": "Sortu zure lehen misioa zure ikasleentzat",
       "meta": {
-        "title": "Irakaslearen Dashboarda | ITAKAI",
+        "title": "Irakaslearen dashboarda | ITAKAI",
         "description": "Irakaslearen dashboard nagusia. Kudeatu zure klaseak, misioak eta berrikusi zure ikasleen aurrerapena."
       }
     },
     "classes": {
       "index": {
-        "title": "Nire Klaseak",
+        "title": "Nire klaseak",
         "subtitle": "Kudeatu zure klaseak eta berrikusi zure ikasleen aurrerapena",
-        "new_class": "Klase Berria",
-        "create_first": "Lehen Klasea Sortu",
+        "new_class": "Klase berria",
+        "create_first": "Lehen klasea sortu",
         "no_classes_description": "Oraindik ez duzu klaserik sortu",
         "meta": {
-          "title": "Nire Klaseak | ITAKAI Irakaslea",
+          "title": "Nire klaseak | ITAKAI Irakaslea",
           "description": "Kudeatu zure klase guztiak, matrikulatutako ikasleak eta esleitutako misioak."
         },
         "templates": "Txantiloiak",
@@ -83,10 +83,10 @@
         }
       },
       "create": {
-        "breadcrumb_classes": "Nire Klaseak",
+        "breadcrumb_classes": "Nire klaseak",
         "breadcrumb_new": "Berria",
         "btn_creating": "Sortzen...",
-        "btn_create": "Klasea Sortu",
+        "btn_create": "Klasea sortu",
         "success_title": "Klasea sortuta!",
         "success_message": "Zure \"{name}\" klasea prest dago.",
         "invite_code_label": "Gonbidapen kodea",
@@ -100,7 +100,7 @@
           "create_error": "Errorea klasea sortzean. Mesedez, saiatu berriro."
         },
         "meta": {
-          "title": "Klase Berria Sortu | ITAKAI Irakaslea"
+          "title": "Klase berria sortu | ITAKAI Irakaslea"
         },
         "summary": {
           "edit": "Editatu",
@@ -184,10 +184,11 @@
           "view_list": "Zerrenda",
           "view_ranking": "Rankinga",
           "col_actions": "Ekintzak",
-          "managed_badge": "Posta gabe"
+          "managed_badge": "Posta gabe",
+          "pending_sign_in_badge": "Sartzeko zain"
         },
-        "stats_title": "Klasearen Estatistikak",
-        "pending_reviews": "Berrikusteko Entregak",
+        "stats_title": "Klasearen estatistikak",
+        "pending_reviews": "Berrikusteko entregak",
         "guide_editor": {
           "toast_saved": "Gida behar bezala gorde da",
           "toast_error": "Errorea gida gordetzean"
@@ -199,8 +200,8 @@
         "missions_tab": {
           "no_missions_title": "Ez dago misiorik",
           "no_missions_description": "Oraindik ez dago misiorik esleituta klase honetan",
-          "create_first": "Lehen Misioa Sortu",
-          "new_mission": "Misio Berria",
+          "create_first": "Lehen misioa sortu",
+          "new_mission": "Misio berria",
           "no_results": "Emaitzarik gabe",
           "empty_search": "Ez da misiorik aurkitu \"{query}\" bilaketarako",
           "empty_status": "Ez dago hautatutako egoeretako misiorik",
@@ -208,7 +209,7 @@
           "empty_default": "Ez dago misiorik klase honetan"
         },
         "meta": {
-          "title": "Klasearen Xehetasuna | ITAKAI Irakaslea",
+          "title": "Klasearen xehetasuna | ITAKAI Irakaslea",
           "description": "Kudeatu klasea. Berrikusi ikasleak, esleitutako misioak eta aurrerapen orokorra."
         },
         "behaviors": {
@@ -251,7 +252,8 @@
           "toast_save_error": "Ezin izan da jokabidea gorde.",
           "toast_delete_error": "Ezin izan da jokabidea ezabatu.",
           "fetch_error": "Ezin izan dira jokabideak kargatu.",
-          "apply_error": "Ezin izan da jokabidea aplikatu."
+          "apply_error": "Ezin izan da jokabidea aplikatu.",
+          "empty_description_readonly": "Klase honi jokabideak gehitzen zaizkionean, hemen agertuko dira."
         },
         "shop": {
           "tab_items": "Artikuluak",
@@ -297,7 +299,8 @@
           "tab_history": "Historia",
           "history_purchases": "Erosketak",
           "view_student_profile": "Ikusi ikaslea",
-          "mana_disabled_chip": "Mana desaktibatuta"
+          "mana_disabled_chip": "Mana desaktibatuta",
+          "empty_description_readonly": "Klase honen dendari artikuluak gehitzen zaizkionean, hemen agertuko dira."
         },
         "settings": {
           "levels": {
@@ -377,6 +380,8 @@
           "requires_resource": "Baliabide bat aktibatuta behar du gutxienez (XP, {coins}, mana edo bizitzak)",
           "general": {
             "title": "Datu orokorrak",
+            "identity_title": "Izena eta sailkapena",
+            "identity_hint": "Hizkuntzak, probintziak, mailak eta irakasgaiak klasea aurkitzeko balio dute txantiloi gisa argitaratzen baduzu.",
             "name_label": "Izena",
             "subject_label": "Irakasgaia",
             "level_label": "Hezkuntza-maila",
@@ -417,7 +422,8 @@
             "title": "Funtzionalitateak"
           },
           "management": {
-            "title": "Kudeaketa"
+            "title": "Kudeaketa",
+            "hint": "Argitaratu txantiloi gisa beste irakasle batzuek inporta dezaten, edo egin kopia bat."
           },
           "edit_level_note": "Izena, ordutegia eta azala alda ditzakezu. Sailkapena, funtzionalitateak eta mailak klasea administratzen duenak aldatzen ditu."
         },
@@ -525,7 +531,6 @@
           "menu_label": "{name}: ekintzak",
           "owner_note": "Klase honen jabea zara. Bertatik irteteko, eman lehenago jabetza administrazio-sarbidea duen norbaiti.",
           "leave_title": "Klasetik irten",
-          "leave": "Klasetik irten",
           "leave_confirm": "Irten",
           "leave_hint": "Ez duzu klase hau gehiago ikusiko. Itzultzeko, administrazio-sarbidea duen norbaitek berriro gehitu beharko zaitu.",
           "leave_message": "{class} klasetik irten nahi duzu? Ez duzu gehiago ikusiko, eta itzultzeko administrazio-sarbidea duen norbaitek berriro gehitu beharko zaitu.",
@@ -626,6 +631,7 @@
               "password_reset": "{target} ikaslearen pasahitza berrezarri du",
               "nickname_changed": "{target} ikaslearen ezizena aldatu du",
               "removed": "{target} klasetik kendu du",
+              "removed_unused": "{target} klasetik kendu du eta erabili gabeko bere kontua ezabatu du",
               "avatar_generated": "avatar berri bat sortu du {target} ikaslearentzat"
             },
             "mission": {
@@ -668,6 +674,7 @@
               "password_reset": "klasean jada ez dagoen ikasle baten pasahitza berrezarri du",
               "nickname_changed": "klasean jada ez dagoen ikasle baten ezizena aldatu du",
               "removed": "ikasle bat klasetik kendu du",
+              "removed_unused": "inoiz sartu ez den ikasle bat klasetik kendu du eta bere kontua ezabatu du",
               "avatar_generated": "avatar berri bat sortu du klasean jada ez dagoen ikasle batentzat"
             },
             "submission": {
@@ -683,14 +690,14 @@
     "missions": {
       "index": {
         "meta": {
-          "title": "Nire Misioak | ITAKAI Irakaslea",
+          "title": "Nire misioak | ITAKAI Irakaslea",
           "description": "Kudeatu sortutako misio guztiak, editatu edo sortu berriak zure ikasleentzat."
         },
         "subtitle": "Kudeatu zure klaseetako misioak"
       },
       "create": {
         "meta": {
-          "title": "Misioa Sortu | ITAKAI Irakaslea"
+          "title": "Misioa sortu | ITAKAI Irakaslea"
         },
         "pick_class": "Hautatu klase bat",
         "idea_placeholder": "Adib.: Zinematikari buruzko misio bat nahi dut, non ikasleek eskuila hegalarien ibilbideak kalkulatzen dituzten...",
@@ -705,7 +712,7 @@
           "enigma_has_submissions": "Ezin da ezabatu dagoeneko ikasleen entregak dituen enigma bat"
         },
         "meta": {
-          "title": "Misioaren Xehetasuna | ITAKAI Irakaslea",
+          "title": "Misioaren xehetasuna | ITAKAI Irakaslea",
           "title_loading": "Misioa kargatzen... | ITAKAI Irakaslea",
           "description_fallback": "ITAKAI-ko misioaren xehetasuna"
         },
@@ -746,7 +753,7 @@
       }
     },
     "badges": {
-      "title": "Nire Dominariak",
+      "title": "Nire dominariak",
       "subtitle": "Sortu eta kudeatu dominari pertsonalizatuak zure ikasleen lorpenak saritzeko",
       "new_badge": "Dominari berria",
       "btn_delete": "Ezabatu",
@@ -754,13 +761,13 @@
       "no_badges_description": "Sortu zure lehen dominaria zure ikasleak saritzeko",
       "create_first": "Lehen dominaria sortu",
       "form": {
-        "edit_title": "Dominaria Editatu",
-        "create_title": "Dominari Berria",
+        "edit_title": "Dominaria editatu",
+        "create_title": "Dominari berria",
         "label_name": "Izena",
         "label_description": "Deskribapena",
         "label_image": "Irudia",
         "image_optional": "(aukerakoa)",
-        "placeholder_name": "Adib: Ekuazioen Maisua",
+        "placeholder_name": "Adib: Ekuazioen maisua",
         "placeholder_description": "Deskribatu dominari honek zer lorpen adierazten duen...",
         "btn_remove_image": "Irudia kendu",
         "preview_label": "Aurrebista:",
@@ -774,7 +781,7 @@
         "btn_edit": "Editatu",
         "btn_close": "Itxi"
       },
-      "delete_title": "Dominaria Ezabatu",
+      "delete_title": "Dominaria ezabatu",
       "delete_confirm": "Ziur zaude '{name}' dominaria ezabatu nahi duzula? Ekintza hau ezin da desegin.",
       "validation": {
         "name_required": "Izena derrigorrezkoa da",
@@ -783,7 +790,7 @@
         "image_type": "PNG, JPG, SVG edo WebP fitxategiak soilik onartzen dira"
       },
       "meta": {
-        "title": "Nire Dominariak | ITAKAI Irakaslea",
+        "title": "Nire dominariak | ITAKAI Irakaslea",
         "description": "Sortu, editatu eta kudeatu dominari pertsonalizatuak zure ikasleen lorpenak saritzeko."
       },
       "filter_system": "Sistemakoak",
@@ -793,9 +800,9 @@
     },
     "students": {
       "index": {
-        "title": "Nire Ikasleak",
+        "title": "Nire ikasleak",
         "subtitle": "Kudeatu eta bistaratu zure ikasleen aurrerapena",
-        "search_placeholder": "Bilatu izenez edo emailez...",
+        "search_placeholder": "Bilatu izenez, emailez edo erabiltzailez...",
         "filter_all_classes": "Klase guztiak",
         "filter_all_progress": "Aurrerapen guztia",
         "progress_excellent": "Bikaina (≥80%)",
@@ -817,9 +824,10 @@
         "btn_view": "Ikusi",
         "stat_missions": "Misioak",
         "meta": {
-          "title": "Nire Ikasleak | ITAKAI Irakaslea",
+          "title": "Nire ikasleak | ITAKAI Irakaslea",
           "description": "Kudeatu ikasle guztiak, berrikusi aurrerapena eta errendimendu akademikoaren estatistikak."
-        }
+        },
+        "stat_badges": "Dominak"
       },
       "detail": {
         "breadcrumb_students": "Ikasleak",
@@ -830,7 +838,7 @@
         "stat_classes": "Klaseak",
         "stat_missions": "Misioak",
         "stat_completed": "Osatua",
-        "enrolled_classes_title": "Matrikulatutako Klaseak",
+        "enrolled_classes_title": "Matrikulatutako klaseak",
         "enrolled_classes_count": "{count} klase",
         "not_enrolled": "Ez dago zure klaseetan matrikulatuta",
         "label_progress": "Osatuta",
@@ -838,7 +846,7 @@
         "stat_lives": "Bizi puntuak",
         "no_activity": "Ez dago azken jarduerarik",
         "meta": {
-          "title": "Ikaslearen Profila | ITAKAI Irakaslea",
+          "title": "Ikaslearen profila | ITAKAI Irakaslea",
           "description": "Ikaslearen profil zehatza errendimendu estatistikekin, misioen aurrerapenarekin eta azken jarduerarekin."
         }
       },
@@ -869,46 +877,42 @@
         "remove_loses_history": "klase honi buruzko historia, jakinarazpenak eta laguntzailearekin izandako elkarrizketak.",
         "remove_keeps": "Beste klaseetan duena ez da aldatzen, eta bere kontuak bere horretan jarraitzen du. Ezin da desegin.",
         "remove_home_class": "Bere kontua klase honetan sortu zen: aurrerantzean, plataformaren administrazioak bakarrik berrezarri ahal izango du pasahitza.",
+        "remove_unused": "{name} ez da inoiz sartu eta klase honetan bakarrik dago; beraz, bere kontua osorik ezabatuko da, ez klasetik bakarrik. Ezin da desegin.",
+        "remove_unused_confirm": "Kendu eta kontua ezabatu",
         "removed": "{name} ez dago jada klasean",
+        "removed_account_deleted": "{name} ez dago jada klasean, eta erabili gabeko bere kontua ezabatu da",
         "remove_error": "Ezin izan da ikaslea klasetik kendu."
       }
     },
     "ai_assistant": {
       "meta": {
-        "title": "Irakaslearen AA Laguntzailea | ITAKAI",
+        "title": "Irakaslearen AA laguntzailea | ITAKAI",
         "description": "Irakasleentzat espezializatutako AA laguntzailea. Lortu laguntza klaseen eta misioen kudeaketarako."
       }
     },
     "profile": {
       "breadcrumb_home": "Hasiera",
       "breadcrumb_profile": "Nire profila",
-      "title": "Nire Profila",
+      "title": "Nire profila",
       "tabs": {
         "security": "Segurtasuna",
         "settings": "Ezarpenak"
       },
       "security": {
-        "password_title": "Pasahitza",
-        "placeholder_current": "Uneko pasahitza",
-        "placeholder_new": "Pasahitz berria",
-        "placeholder_confirm": "Pasahitza berretsi",
-        "btn_update": "Eguneratu",
         "sessions_title": "Saioak",
         "sessions_close_all": "Denak itxi",
         "session_current": "Unekoa",
         "session_close": "Itxi",
         "validation": {
-          "passwords_mismatch": "Pasahitzak ez datoz bat",
-          "password_min_length": "Pasahitzak gutxienez {min} karaktere izan behar ditu",
           "password_required": "Sartu zure pasahitza"
         }
       },
       "settings": {
         "theme_title": "Gaia",
         "theme_description": "Aukeratu plataformaren estilo bisuala",
-        "theme_college": "Eskola Modua",
+        "theme_college": "Eskola modua",
         "theme_college_desc": "Bistara gamifikatua",
-        "theme_university": "Unibertsitate Modua",
+        "theme_university": "Unibertsitate modua",
         "theme_university_desc": "Bistara profesionala",
         "language_title": "Hizkuntza",
         "language_updated": "Hizkuntza eguneratu da",
@@ -932,19 +936,20 @@
           "pt": "Portugesa",
           "el": "Greziera",
           "ro": "Errumaniera"
-        }
+        },
+        "delete_modal_blocked": "Badaude zure kontuaren mende dauden klaseak."
       },
       "meta": {
-        "title": "Nire Profila | ITAKAI",
+        "title": "Nire profila | ITAKAI",
         "description": "Kudeatu zure irakasle profila, konfiguratu segurtasuna eta pertsonalizatu zure esperientzia."
       }
     },
     "components": {
       "enigma_form_modal": {
-        "edit_title": "Enigma Editatu",
-        "add_title": "Enigma Gehitu",
+        "edit_title": "Enigma editatu",
+        "add_title": "Enigma gehitu",
         "label_title": "Enigmaren izenburua",
-        "placeholder_title": "Adib: Makinen Esnaera",
+        "placeholder_title": "Adib: Makinen esnaera",
         "label_xp": "XP",
         "label_rewards": "Sariak osatzean",
         "rewards_locked_hint": "Sariak handitu baino ezin dituzu: ikasleren batek jada irabazi ditu.",
@@ -969,15 +974,15 @@
         "custom_value": "Balio pertsonalizatua"
       },
       "document_form_modal": {
-        "edit_title": "Dokumentua Editatu",
-        "add_title": "Dokumentua Gehitu",
+        "edit_title": "Dokumentua editatu",
+        "add_title": "Dokumentua gehitu",
         "label_title": "Izenburua",
-        "placeholder_title": "Adib: Ekuazio Sistemen Gida",
+        "placeholder_title": "Adib: Ekuazio sistemen gida",
         "btn_upload_file": "Fitxategia igo",
         "btn_add_link": "Esteka gehitu",
         "label_file": "Fitxategia",
         "drop_hint": "Arrastatu fitxategi bat edo egin klik hautatzeko",
-        "file_types_hint": "PDF, Word, Bideoa, Irudiak (geh. 50MB)",
+        "file_types_hint": "PDF, Word, bideoa, irudiak (geh. 50MB)",
         "label_url": "URL",
         "label_description": "Deskribapena",
         "label_description_optional": "(aukerakoa)",
@@ -1041,7 +1046,7 @@
         }
       },
       "rewards_form_modal": {
-        "title": "Sariak Editatu",
+        "title": "Sariak editatu",
         "badge_label": "Sari-insignia",
         "remove_badge": "Insignia kendu",
         "no_badge_title": "Ez dago insigniarik esleituta",
@@ -1055,7 +1060,7 @@
         "label_description": "Deskribapena",
         "label_image": "Irudia",
         "image_optional": "(aukerakoa)",
-        "placeholder_name": "Adib: Ekuazioen Maisua",
+        "placeholder_name": "Adib: Ekuazioen maisua",
         "placeholder_description": "Deskribatu zer lorpen adierazten duen insignia honek...",
         "image_selected": "Irudia hautatuta",
         "btn_remove_image": "Irudia kendu",
@@ -1090,7 +1095,7 @@
         "breadcrumb_classes": "Nire klaseak",
         "deadline_none": "Epemugarik gabe",
         "expired_readonly": "Misio hau iraungi da: kontsultatu dezakezu, baina ez du entregarik onartzen.",
-        "narrative_title": "Misioaren Historia",
+        "narrative_title": "Misioaren historia",
         "btn_see_more": "Ikusi gehiago",
         "btn_see_less": "Ikusi gutxiago",
         "btn_edit": "Editatu",
@@ -1100,14 +1105,14 @@
         "objectives_label": "Helburuak:",
         "no_enigmas": "Ez dago enigmarik misio honetan",
         "btn_add_first_enigma": "Lehen enigma gehitu",
-        "documents_title": "Laguntza Dokumentuak",
+        "documents_title": "Laguntza dokumentuak",
         "no_documents": "Ez dago laguntza dokumenturik",
         "btn_view_submissions": "Entregak ikusi ({count})",
         "btn_submit": "Entregatu",
         "status_available": "Eskuragarri",
         "status_in_review": "Berrikuspenen",
         "status_completed": "Osatua",
-        "global_progress": "Aurrerapen Orokorra",
+        "global_progress": "Aurrerapen orokorra",
         "class_average": "Klasearen batez bestekoa",
         "rewards_title": "Sariak",
         "xp_enigmas": "Enigmen XP",

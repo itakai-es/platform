@@ -2,7 +2,7 @@
   "common": {
     "nav": {
       "dashboard": "Dashboard",
-      "my_classes": "My Classes",
+      "my_classes": "My classes",
       "missions": "Missions",
       "badges": "Badges",
       "students": "Students",
@@ -32,15 +32,15 @@
       "toggle_menu": "Toggle menu",
       "scroll_left": "Scroll left",
       "scroll_right": "Scroll right",
-      "back_to_dashboard": "Back to Dashboard",
-      "create_new_account": "Create New Account",
+      "back_to_dashboard": "Back to dashboard",
+      "create_new_account": "Create new account",
       "enter": "Enter",
       "close": "Close",
       "processing": "Processing…",
       "view_mode": "View mode"
     },
     "status": {
-      "under_development": "Under Development"
+      "under_development": "Under development"
     },
     "time": {
       "now": "Now",
@@ -101,7 +101,7 @@
       "student": "Student",
       "teacher": "Teacher",
       "admin": "Administrator",
-      "admin_system": "System Administrator"
+      "admin_system": "System administrator"
     },
     "sidebar": {
       "new_conversation": "New conversation",
@@ -112,40 +112,40 @@
       "chat_with_label": "Chat with"
     },
     "mobile_sidebar": {
-      "join_class": "Join Class"
+      "join_class": "Join class"
     },
     "landing": {
       "hero_title": "The adventure of learning",
       "hero_subtitle": "Educational management system with gamification elements for students and teachers",
-      "cta_start": "Get Started",
+      "cta_start": "Get started",
       "features_title": "What can you do with ITAKAI?",
       "features_subtitle": "Discover all the tools and features that transform education into a unique experience",
-      "feature_gamification_title": "Full Gamification",
+      "feature_gamification_title": "Full gamification",
       "feature_gamification_desc": "Points, levels, badges, and rewards system that motivates continuous learning",
-      "feature_narrative_title": "Immersive Narrative",
+      "feature_narrative_title": "Immersive narrative",
       "feature_narrative_desc": "Each class is a unique adventure with characters and stories that capture attention",
       "feature_teamwork_title": "Teamwork",
       "feature_teamwork_desc": "Collaborative challenges and rankings that foster teamwork and constant improvement",
-      "feature_analytics_title": "Smart Analytics",
+      "feature_analytics_title": "Smart analytics",
       "feature_analytics_desc": "Advanced tools for tracking and analyzing student progress",
-      "feature_access_title": "Universal Access",
+      "feature_access_title": "Universal access",
       "feature_access_desc": "Works on any device, from anywhere in the world",
       "feature_ai_title": "Educational AI",
       "feature_ai_desc": "Assistants that personalize learning for each student",
       "profiles_title": "Choose your profile to get started",
       "about_title": "What is ITAKAI?",
-      "about_description_1": "ITAKAI is the evolution of <strong>MyClassGame</strong>, powered by <strong>Artificial Intelligence</strong>. A gamified educational platform that transforms professional training into an immersive experience.",
+      "about_description_1": "ITAKAI is the evolution of <strong>MyClassGame</strong>, powered by <strong>artificial intelligence</strong>. A gamified educational platform that transforms professional training into an immersive experience.",
       "about_description_2": "Automatic content generation, personalized AI assistants for each student, and predictive performance analysis. All integrated into an ecosystem where learning is an adventure.",
       "stat_students": "Students",
       "stat_teachers": "Teachers",
       "stat_centers": "Centers",
       "partners_title": "Who are we?",
       "developed_by": "Developed by",
-      "gods_title": "Your Olympic Mentors",
+      "gods_title": "Your Olympic mentors",
       "gods_subtitle": "5 AI assistants inspired by Greek gods, each an expert in their domain",
-      "cta_final_title": "Ready for Your Epic Adventure?",
+      "cta_final_title": "Ready for your epic adventure?",
       "cta_final_subtitle": "Join thousands of students who are already transforming their learning with ITAKAI",
-      "cta_final_button": "Start Free Now",
+      "cta_final_button": "Start free now",
       "footer_copyright_alt": "© {year} ITAKAI. Gamified educational system",
       "gods": {
         "atenea": {
@@ -175,8 +175,8 @@
       "platform": "Platform",
       "support": "Support",
       "contact": "Contact",
-      "terms_of_service": "Terms of Service",
-      "privacy_policy": "Privacy Policy",
+      "terms_of_service": "Terms of service",
+      "privacy_policy": "Privacy policy",
       "cookies": "Cookies",
       "licenses": "Licenses",
       "system_access": "System access",
@@ -185,14 +185,14 @@
       "help_center": "Help center"
     },
     "level_up": {
-      "title": "Level Up!",
+      "title": "Level up!",
       "congratulations": "Congratulations! You reached level {level}",
       "congratulations_class": "Congratulations! You reached level {level} in {className}",
-      "rewards_title": "Rewards Earned",
+      "rewards_title": "Rewards earned",
       "continue": "Continue!"
     },
     "join_class_modal": {
-      "title": "Join a Class",
+      "title": "Join a class",
       "description": "Enter the class code provided by your teacher",
       "placeholder": "ABC123",
       "joining": "Joining...",
@@ -207,9 +207,9 @@
       "success": "You have joined {className}"
     },
     "invite_students_modal": {
-      "title": "Invite Students",
+      "title": "Invite students",
       "description": "Share this code with your students so they can join the class:",
-      "copy_code": "Copy Code",
+      "copy_code": "Copy code",
       "code_copied": "Code copied to clipboard",
       "copy_error": "Error copying the code",
       "tabs_label": "Ways to invite",
@@ -217,7 +217,7 @@
       "tab_accounts": "Create accounts"
     },
     "under_development": {
-      "back_to_dashboard": "Back to Dashboard"
+      "back_to_dashboard": "Back to dashboard"
     },
     "help": {
       "title": "Help centre",
@@ -280,7 +280,7 @@
       "back_to_app": "Back to the app"
     },
     "meta": {
-      "site_title": "ITAKAI - The adventure of learning | Gamified Educational Platform",
+      "site_title": "ITAKAI - The adventure of learning | Gamified educational platform",
       "site_description": "Transform education with ITAKAI, the gamified platform that inspires, motivates, and connects students, teachers, and families. Join over 50,000 students.",
       "og_title": "ITAKAI - The adventure of learning",
       "og_description": "Gamified educational platform with AI, immersive narratives, and smart analytics."
@@ -410,6 +410,35 @@
       "transfers_self": "Your classes will pass to another teacher with admin access in them:",
       "transfers_admin": "Their classes will pass to another teacher with admin access in them:",
       "transfer_item": "{class}, to {name}"
+    },
+    "copy": {
+      "label": "Copy: {what}",
+      "copied": "Copied to clipboard",
+      "error": "Couldn't copy"
+    },
+    "change_password": {
+      "title": "Password",
+      "current_password": "Current password",
+      "new_password": "New password",
+      "new_password_placeholder": "At least {min} characters",
+      "confirm_password": "Confirm password",
+      "confirm_password_placeholder": "Repeat the new password",
+      "submit": "Change password",
+      "success": "Password changed. On your other devices you will have to sign in again.",
+      "errors": {
+        "current_required": "Enter your current password.",
+        "current_wrong": "The current password is not correct.",
+        "password_not_set": "Your account signs in with Google and has no password yet. Sign out and create one from “Forgot your password?”.",
+        "too_short": "Password must be at least {min} characters.",
+        "mismatch": "Passwords do not match.",
+        "generic": "The password could not be changed. Check the current one and try again."
+      }
+    },
+    "filter_bar": {
+      "search": "Search...",
+      "filters": "Filters",
+      "filters_count": "Filters ({count})",
+      "clear": "Clear filters"
     }
   }
 }

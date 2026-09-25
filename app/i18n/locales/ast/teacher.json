@@ -184,7 +184,8 @@
           "view_list": "Llistáu",
           "view_ranking": "Clasificación",
           "col_actions": "Aiciones",
-          "managed_badge": "Ensin corréu"
+          "managed_badge": "Ensin corréu",
+          "pending_sign_in_badge": "Pendiente d'entrar"
         },
         "stats_title": "Estadístiques de la clase",
         "pending_reviews": "Entregues por revisar",
@@ -251,7 +252,8 @@
           "toast_save_error": "Nun se pudo guardar el comportamientu.",
           "toast_delete_error": "Nun se pudo desaniciar el comportamientu.",
           "fetch_error": "Nun se pudieron cargar los comportamientos.",
-          "apply_error": "Nun se pudo aplicar el comportamientu."
+          "apply_error": "Nun se pudo aplicar el comportamientu.",
+          "empty_description_readonly": "Cuando s'amiesten comportamientos a esta clase, apaecerán equí."
         },
         "shop": {
           "tab_items": "Artículos",
@@ -297,7 +299,8 @@
           "tab_history": "Historial",
           "history_purchases": "Compres",
           "view_student_profile": "Ver l'alumnu",
-          "mana_disabled_chip": "Maná desactiváu"
+          "mana_disabled_chip": "Maná desactiváu",
+          "empty_description_readonly": "Cuando s'amiesten artículos a la tienda d'esta clase, apaecerán equí."
         },
         "settings": {
           "levels": {
@@ -377,6 +380,8 @@
           "requires_resource": "Necesita polo menos un recursu activu (XP, {coins}, maná o vides)",
           "general": {
             "title": "Datos xenerales",
+            "identity_title": "Nome y clasificación",
+            "identity_hint": "La llingua, la provincia, el nivel y l'asignatura sirven p'alcontrar la clase si la espublices como plantía.",
             "name_label": "Nome",
             "subject_label": "Asignatura",
             "level_label": "Nivel educativu",
@@ -417,7 +422,8 @@
             "title": "Funcionalidaes"
           },
           "management": {
-            "title": "Xestión"
+            "title": "Xestión",
+            "hint": "Espublízala como plantía pa que otros profesores la importen, o fai una copia."
           },
           "edit_level_note": "Pues camudar el nome, l'horariu y la portada. La clasificación, les funcionalidaes y los niveles cámudalos quien alministra la clase."
         },
@@ -525,7 +531,6 @@
           "menu_label": "Aiciones pa {name}",
           "owner_note": "Yes el propietariu d'esta clase. Pa salir d'ella, pasa primero la propiedá a daquién con alministración.",
           "leave_title": "Salir de la clase",
-          "leave": "Salir de la clase",
           "leave_confirm": "Salir",
           "leave_hint": "Vas dexar de ver esta clase. Pa volver, daquién con alministración va tener qu'amestate de nuevo.",
           "leave_message": "¿Salir de {class}? Vas dexar de vela y, pa volver, daquién con alministración va tener qu'amestate de nuevo.",
@@ -626,6 +631,7 @@
               "password_reset": "reafitó la contraseña de {target}",
               "nickname_changed": "camudó'l nomatu de {target}",
               "removed": "quitó a {target} de la clase",
+              "removed_unused": "quitó a {target} de la clase y borró la so cuenta, que nun se usara",
               "avatar_generated": "xeneró un avatar nuevu pa {target}"
             },
             "mission": {
@@ -668,6 +674,7 @@
               "password_reset": "reafitó la contraseña d'un alumnu que yá nun ta na clase",
               "nickname_changed": "camudó'l nomatu d'un alumnu que yá nun ta na clase",
               "removed": "quitó a un alumnu de la clase",
+              "removed_unused": "quitó de la clase a un alumnu que nun entrara enxamás y borró la so cuenta",
               "avatar_generated": "xeneró un avatar nuevu pa un alumnu que yá nun ta na clase"
             },
             "submission": {
@@ -795,7 +802,7 @@
       "index": {
         "title": "Los mios alumnos",
         "subtitle": "Xestiona y visualiza'l progresu de los tos alumnos",
-        "search_placeholder": "Guetar por nome o corréu...",
+        "search_placeholder": "Guetar por nome, corréu o usuariu...",
         "filter_all_classes": "Toles clases",
         "filter_all_progress": "Tol progresu",
         "progress_excellent": "Escelente (≥80 %)",
@@ -819,7 +826,8 @@
         "meta": {
           "title": "Los mios alumnos | ITAKAI Profesor",
           "description": "Xestiona tolos tos alumnos y revisa'l so progresu y les estadístiques de rendimientu académicu."
-        }
+        },
+        "stat_badges": "Insinies"
       },
       "detail": {
         "breadcrumb_students": "Alumnos",
@@ -869,7 +877,10 @@
         "remove_loses_history": "el so historial, los sos avisos y les sos conversaciones col asistente sobre esta clase.",
         "remove_keeps": "Lo que tenga n'otres clases nun camuda y la so cuenta sigue esistiendo. Nun se pue desfacer.",
         "remove_home_class": "La so cuenta creóse nesta clase: dempués, namái l'alministración de la plataforma va poder reafitar la so contraseña.",
+        "remove_unused": "{name} nun entró enxamás y namái ta nesta clase, asina que la so cuenta va borrase dafechu, non solo de la clase. Nun se pue desfacer.",
+        "remove_unused_confirm": "Quitar y borrar la cuenta",
         "removed": "{name} yá nun ta na clase",
+        "removed_account_deleted": "{name} yá nun ta na clase y la so cuenta ensin usar borróse",
         "remove_error": "Nun se pudo quitar l'alumnu de la clase."
       }
     },
@@ -888,18 +899,11 @@
         "settings": "Configuración"
       },
       "security": {
-        "password_title": "Contraseña",
-        "placeholder_current": "Contraseña actual",
-        "placeholder_new": "Contraseña nueva",
-        "placeholder_confirm": "Confirmar contraseña",
-        "btn_update": "Anovar",
         "sessions_title": "Sesiones",
         "sessions_close_all": "Zarrales toes",
         "session_current": "Actual",
         "session_close": "Zarrar",
         "validation": {
-          "passwords_mismatch": "Les contraseñes nun concasen",
-          "password_min_length": "La contraseña tien de tener polo menos {min} caráuteres",
           "password_required": "Introduz la to contraseña"
         }
       },
@@ -932,7 +936,8 @@
           "pt": "Portugués",
           "el": "Griegu",
           "ro": "Rumanu"
-        }
+        },
+        "delete_modal_blocked": "Hai clases que dependen de la to cuenta."
       },
       "meta": {
         "title": "El mio perfil | ITAKAI",

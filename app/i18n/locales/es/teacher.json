@@ -20,34 +20,34 @@
       }
     },
     "dashboard": {
-      "title": "Inicio del Profesor",
+      "title": "Inicio del profesor",
       "subtitle": "¡Bienvenido, {name}!",
-      "new_class": "Nueva Clase",
-      "new_mission": "Nueva Misión",
+      "new_class": "Nueva clase",
+      "new_mission": "Nueva misión",
       "stats": {
-        "total_students": "Alumnos Totales",
-        "active_classes": "Clases Activas",
-        "active_missions": "Misiones Activas"
+        "total_students": "Alumnos totales",
+        "active_classes": "Clases activas",
+        "active_missions": "Misiones activas"
       },
-      "my_classes": "Mis Clases",
+      "my_classes": "Mis clases",
       "view_all": "Ver todas",
       "no_classes_yet": "No tienes clases todavía",
-      "recent_missions": "Últimas Misiones",
+      "recent_missions": "Últimas misiones",
       "no_missions_description": "Crea tu primera misión para tus alumnos",
       "meta": {
-        "title": "Inicio Profesor | ITAKAI",
+        "title": "Inicio profesor | ITAKAI",
         "description": "Inicio principal del profesor. Gestiona tus clases, misiones y revisa el progreso de tus alumnos."
       }
     },
     "classes": {
       "index": {
-        "title": "Mis Clases",
+        "title": "Mis clases",
         "subtitle": "Gestiona tus clases y revisa el progreso de tus alumnos",
-        "new_class": "Nueva Clase",
-        "create_first": "Crear Primera Clase",
+        "new_class": "Nueva clase",
+        "create_first": "Crear primera clase",
         "no_classes_description": "No has creado ninguna clase todavía",
         "meta": {
-          "title": "Mis Clases | ITAKAI Profesor",
+          "title": "Mis clases | ITAKAI Profesor",
           "description": "Gestiona todas tus clases, alumnos inscritos y misiones asignadas."
         },
         "templates": "Plantillas",
@@ -83,10 +83,10 @@
         }
       },
       "create": {
-        "breadcrumb_classes": "Mis Clases",
+        "breadcrumb_classes": "Mis clases",
         "breadcrumb_new": "Nueva",
         "btn_creating": "Creando...",
-        "btn_create": "Crear Clase",
+        "btn_create": "Crear clase",
         "success_title": "¡Clase creada!",
         "success_message": "Tu clase \"{name}\" está lista.",
         "invite_code_label": "Código de invitación",
@@ -139,7 +139,7 @@
           "guide_question": "He preparado una guía para tus alumnos"
         },
         "meta": {
-          "title": "Crear Nueva Clase | ITAKAI Profesor"
+          "title": "Crear nueva clase | ITAKAI Profesor"
         },
         "narrative_error": "No he podido crear la narrativa"
       },
@@ -184,10 +184,11 @@
           "view_list": "Listado",
           "view_ranking": "Ranking",
           "col_actions": "Acciones",
-          "managed_badge": "Sin correo"
+          "managed_badge": "Sin correo",
+          "pending_sign_in_badge": "Pendiente de entrar"
         },
-        "stats_title": "Estadísticas de la Clase",
-        "pending_reviews": "Entregas por Revisar",
+        "stats_title": "Estadísticas de la clase",
+        "pending_reviews": "Entregas por revisar",
         "guide_editor": {
           "toast_saved": "Guía guardada correctamente",
           "toast_error": "Error al guardar la guía"
@@ -199,8 +200,8 @@
         "missions_tab": {
           "no_missions_title": "No hay misiones",
           "no_missions_description": "No hay misiones asignadas a esta clase todavía",
-          "create_first": "Crear Primera Misión",
-          "new_mission": "Nueva Misión",
+          "create_first": "Crear primera misión",
+          "new_mission": "Nueva misión",
           "no_results": "Sin resultados",
           "empty_search": "No se encontraron misiones para \"{query}\"",
           "empty_status": "No hay misiones con los estados seleccionados",
@@ -208,7 +209,7 @@
           "empty_default": "No hay misiones en esta clase"
         },
         "meta": {
-          "title": "Detalle de Clase | ITAKAI Profesor",
+          "title": "Detalle de clase | ITAKAI Profesor",
           "description": "Gestiona la clase. Revisa alumnos, misiones asignadas y progreso general."
         },
         "behaviors": {
@@ -251,7 +252,8 @@
           "toast_save_error": "No se pudo guardar el comportamiento.",
           "toast_delete_error": "No se pudo eliminar el comportamiento.",
           "fetch_error": "No se pudieron cargar los comportamientos.",
-          "apply_error": "No se pudo aplicar el comportamiento."
+          "apply_error": "No se pudo aplicar el comportamiento.",
+          "empty_description_readonly": "Cuando se añadan comportamientos a esta clase, aparecerán aquí."
         },
         "shop": {
           "tab_items": "Artículos",
@@ -297,7 +299,8 @@
           "tab_history": "Historial",
           "history_purchases": "Compras",
           "view_student_profile": "Ver estudiante",
-          "mana_disabled_chip": "Maná desactivado"
+          "mana_disabled_chip": "Maná desactivado",
+          "empty_description_readonly": "Cuando se añadan artículos a la tienda de esta clase, aparecerán aquí."
         },
         "settings": {
           "levels": {
@@ -377,6 +380,8 @@
           "requires_resource": "Necesita al menos un recurso activo (XP, {coins}, maná o vidas)",
           "general": {
             "title": "Datos generales",
+            "identity_title": "Nombre y clasificación",
+            "identity_hint": "El idioma, la provincia, el nivel y la asignatura sirven para encontrar la clase si la publicas como plantilla.",
             "name_label": "Nombre",
             "subject_label": "Asignatura",
             "level_label": "Nivel educativo",
@@ -417,7 +422,8 @@
             "title": "Funcionalidades"
           },
           "management": {
-            "title": "Gestión"
+            "title": "Gestión",
+            "hint": "Publícala como plantilla para que otros profesores la importen, o haz una copia."
           },
           "edit_level_note": "Puedes cambiar el nombre, el horario y la portada. La clasificación, las funcionalidades y los niveles los cambia quien administra la clase."
         },
@@ -525,7 +531,6 @@
           "menu_label": "Acciones para {name}",
           "owner_note": "Eres el propietario de esta clase. Para salir de ella, pasa antes la propiedad a alguien con administración.",
           "leave_title": "Salir de la clase",
-          "leave": "Salir de la clase",
           "leave_confirm": "Salir",
           "leave_hint": "Dejarás de ver esta clase. Para volver, alguien con administración tendrá que añadirte de nuevo.",
           "leave_message": "¿Salir de {class}? Dejarás de verla y, para volver, alguien con administración tendrá que añadirte de nuevo.",
@@ -626,6 +631,7 @@
               "password_reset": "restableció la contraseña de {target}",
               "nickname_changed": "cambió el alias de {target}",
               "removed": "quitó a {target} de la clase",
+              "removed_unused": "quitó a {target} de la clase y borró su cuenta, que no se había usado",
               "avatar_generated": "generó un avatar nuevo para {target}"
             },
             "mission": {
@@ -668,6 +674,7 @@
               "password_reset": "restableció la contraseña de un alumno que ya no está en la clase",
               "nickname_changed": "cambió el alias de un alumno que ya no está en la clase",
               "removed": "quitó a un alumno de la clase",
+              "removed_unused": "quitó de la clase a un alumno que no había entrado nunca y borró su cuenta",
               "avatar_generated": "generó un avatar nuevo para un alumno que ya no está en la clase"
             },
             "submission": {
@@ -683,14 +690,14 @@
     "missions": {
       "index": {
         "meta": {
-          "title": "Mis Misiones | ITAKAI Profesor",
+          "title": "Mis misiones | ITAKAI Profesor",
           "description": "Gestiona todas tus misiones creadas, edítalas o crea nuevas para tus alumnos."
         },
         "subtitle": "Gestiona las misiones de tus clases"
       },
       "create": {
         "meta": {
-          "title": "Crear Misión | ITAKAI Profesor"
+          "title": "Crear misión | ITAKAI Profesor"
         },
         "ai_unavailable": "El servicio de IA no está disponible ahora mismo. Inténtalo de nuevo en unos minutos.",
         "idea_placeholder": "Ej: Quiero una misión sobre cinemática donde los alumnos calculen trayectorias de escobas voladoras...",
@@ -705,7 +712,7 @@
           "enigma_has_submissions": "No se puede eliminar un enigma que ya tiene entregas de alumnos"
         },
         "meta": {
-          "title": "Detalle de Misión | ITAKAI Profesor",
+          "title": "Detalle de misión | ITAKAI Profesor",
           "title_loading": "Cargando misión... | ITAKAI Profesor",
           "description_fallback": "Detalle de misión en ITAKAI"
         },
@@ -746,7 +753,7 @@
       }
     },
     "badges": {
-      "title": "Mis Insignias",
+      "title": "Mis insignias",
       "subtitle": "Crea y gestiona insignias personalizadas para recompensar los logros de tus alumnos",
       "new_badge": "Nueva insignia",
       "btn_delete": "Eliminar",
@@ -754,13 +761,13 @@
       "no_badges_description": "Crea tu primera insignia para recompensar a tus alumnos",
       "create_first": "Crear primera insignia",
       "form": {
-        "edit_title": "Editar Insignia",
-        "create_title": "Nueva Insignia",
+        "edit_title": "Editar insignia",
+        "create_title": "Nueva insignia",
         "label_name": "Nombre",
         "label_description": "Descripción",
         "label_image": "Imagen",
         "image_optional": "(opcional)",
-        "placeholder_name": "Ej: Maestro de Ecuaciones",
+        "placeholder_name": "Ej: Maestro de ecuaciones",
         "placeholder_description": "Describe qué logro representa esta insignia...",
         "btn_remove_image": "Quitar imagen",
         "preview_label": "Vista previa:",
@@ -774,7 +781,7 @@
         "btn_edit": "Editar",
         "btn_close": "Cerrar"
       },
-      "delete_title": "Eliminar Insignia",
+      "delete_title": "Eliminar insignia",
       "delete_confirm": "¿Estás seguro de que deseas eliminar la insignia '{name}'? Esta acción no se puede deshacer.",
       "validation": {
         "name_required": "El nombre es obligatorio",
@@ -783,7 +790,7 @@
         "image_type": "Solo se permiten archivos PNG, JPG, SVG o WebP"
       },
       "meta": {
-        "title": "Mis Insignias | ITAKAI Profesor",
+        "title": "Mis insignias | ITAKAI Profesor",
         "description": "Crea, edita y gestiona insignias personalizadas para premiar los logros de tus alumnos."
       },
       "filter_system": "Del sistema",
@@ -793,9 +800,9 @@
     },
     "students": {
       "index": {
-        "title": "Mis Alumnos",
+        "title": "Mis alumnos",
         "subtitle": "Gestiona y visualiza el progreso de tus alumnos",
-        "search_placeholder": "Buscar por nombre o email...",
+        "search_placeholder": "Buscar por nombre, correo o usuario...",
         "filter_all_classes": "Todas las clases",
         "filter_all_progress": "Todo progreso",
         "progress_excellent": "Excelente (≥80%)",
@@ -817,9 +824,10 @@
         "btn_view": "Ver",
         "stat_missions": "Misiones",
         "meta": {
-          "title": "Mis Alumnos | ITAKAI Profesor",
+          "title": "Mis alumnos | ITAKAI Profesor",
           "description": "Gestiona todos tus alumnos, revisa su progreso y estadísticas de desempeño académico."
-        }
+        },
+        "stat_badges": "Insignias"
       },
       "detail": {
         "breadcrumb_students": "Alumnos",
@@ -830,7 +838,7 @@
         "stat_classes": "Clases",
         "stat_missions": "Misiones",
         "stat_completed": "Completado",
-        "enrolled_classes_title": "Clases Inscritas",
+        "enrolled_classes_title": "Clases inscritas",
         "enrolled_classes_count": "{count} clases",
         "not_enrolled": "No está inscrito en ninguna de tus clases",
         "label_progress": "Completado",
@@ -838,7 +846,7 @@
         "stat_lives": "Puntos de vida",
         "no_activity": "Sin actividad reciente",
         "meta": {
-          "title": "Perfil de Estudiante | ITAKAI Profesor",
+          "title": "Perfil de estudiante | ITAKAI Profesor",
           "description": "Perfil detallado del estudiante con estadísticas de rendimiento, progreso en misiones y actividad reciente."
         }
       },
@@ -869,46 +877,42 @@
         "remove_loses_history": "su historial, sus avisos y sus conversaciones con el asistente sobre esta clase.",
         "remove_keeps": "Lo que tenga en otras clases no cambia y su cuenta sigue existiendo. No se puede deshacer.",
         "remove_home_class": "Su cuenta se creó en esta clase: después, solo la administración de la plataforma podrá restablecer su contraseña.",
+        "remove_unused": "{name} no ha entrado nunca y solo está en esta clase, así que su cuenta se borrará del todo, no solo de la clase. No se puede deshacer.",
+        "remove_unused_confirm": "Quitar y borrar la cuenta",
         "removed": "{name} ya no está en la clase",
+        "removed_account_deleted": "{name} ya no está en la clase y su cuenta sin usar se ha borrado",
         "remove_error": "No se ha podido quitar al alumno de la clase."
       }
     },
     "ai_assistant": {
       "meta": {
-        "title": "Asistente IA Profesor | ITAKAI",
+        "title": "Asistente IA profesor | ITAKAI",
         "description": "Asistente de IA especializado para profesores. Obtén ayuda sobre gestión de clases y misiones."
       }
     },
     "profile": {
       "breadcrumb_home": "Inicio",
       "breadcrumb_profile": "Mi perfil",
-      "title": "Mi Perfil",
+      "title": "Mi perfil",
       "tabs": {
         "security": "Seguridad",
         "settings": "Configuración"
       },
       "security": {
-        "password_title": "Contraseña",
-        "placeholder_current": "Contraseña actual",
-        "placeholder_new": "Nueva contraseña",
-        "placeholder_confirm": "Confirmar contraseña",
-        "btn_update": "Actualizar",
         "sessions_title": "Sesiones",
         "sessions_close_all": "Cerrar todas",
         "session_current": "Actual",
         "session_close": "Cerrar",
         "validation": {
-          "passwords_mismatch": "Las contraseñas no coinciden",
-          "password_min_length": "La contraseña debe tener al menos {min} caracteres",
           "password_required": "Introduce tu contraseña"
         }
       },
       "settings": {
         "theme_title": "Tema",
         "theme_description": "Elige el estilo visual de la plataforma",
-        "theme_college": "Modo Colegio",
+        "theme_college": "Modo colegio",
         "theme_college_desc": "Visual gamificado",
-        "theme_university": "Modo Universidad",
+        "theme_university": "Modo universidad",
         "theme_university_desc": "Visual profesional",
         "language_title": "Idioma",
         "language_updated": "Idioma actualizado",
@@ -932,19 +936,20 @@
           "pt": "Português",
           "el": "Ελληνικά",
           "ro": "Română"
-        }
+        },
+        "delete_modal_blocked": "Hay clases que dependen de tu cuenta."
       },
       "meta": {
-        "title": "Mi Perfil | ITAKAI",
+        "title": "Mi perfil | ITAKAI",
         "description": "Gestiona tu perfil de profesor, configura la seguridad y personaliza tu experiencia."
       }
     },
     "components": {
       "enigma_form_modal": {
-        "edit_title": "Editar Enigma",
-        "add_title": "Añadir Enigma",
+        "edit_title": "Editar enigma",
+        "add_title": "Añadir enigma",
         "label_title": "Título del enigma",
-        "placeholder_title": "Ej: El Despertar de las Máquinas",
+        "placeholder_title": "Ej: El despertar de las máquinas",
         "label_xp": "XP",
         "label_rewards": "Recompensas al completar",
         "rewards_locked_hint": "Solo puedes aumentar las recompensas: algún alumno ya las ha ganado.",
@@ -969,15 +974,15 @@
         "custom_value": "Valor personalizado"
       },
       "document_form_modal": {
-        "edit_title": "Editar Documento",
-        "add_title": "Añadir Documento",
+        "edit_title": "Editar documento",
+        "add_title": "Añadir documento",
         "label_title": "Título",
-        "placeholder_title": "Ej: Guía de Sistemas de Ecuaciones",
+        "placeholder_title": "Ej: Guía de sistemas de ecuaciones",
         "btn_upload_file": "Subir archivo",
         "btn_add_link": "Añadir enlace",
         "label_file": "Archivo",
         "drop_hint": "Arrastra un archivo o haz clic para seleccionar",
-        "file_types_hint": "PDF, Word, Video, Imágenes (max 50MB)",
+        "file_types_hint": "PDF, Word, video, imágenes (max 50MB)",
         "label_url": "URL",
         "label_description": "Descripción",
         "label_description_optional": "(opcional)",
@@ -1041,7 +1046,7 @@
         }
       },
       "rewards_form_modal": {
-        "title": "Editar Recompensas",
+        "title": "Editar recompensas",
         "badge_label": "Insignia de recompensa",
         "remove_badge": "Quitar insignia",
         "no_badge_title": "Sin insignia asignada",
@@ -1055,7 +1060,7 @@
         "label_description": "Descripción",
         "label_image": "Imagen",
         "image_optional": "(opcional)",
-        "placeholder_name": "Ej: Maestro de Ecuaciones",
+        "placeholder_name": "Ej: Maestro de ecuaciones",
         "placeholder_description": "Describe qué logro representa esta insignia...",
         "image_selected": "Imagen seleccionada",
         "btn_remove_image": "Quitar imagen",
@@ -1090,7 +1095,7 @@
         "breadcrumb_classes": "Mis clases",
         "deadline_none": "Sin fecha límite",
         "expired_readonly": "Esta misión ha expirado: puedes consultarla, pero ya no admite entregas.",
-        "narrative_title": "Historia de la Misión",
+        "narrative_title": "Historia de la misión",
         "btn_see_more": "Ver más",
         "btn_see_less": "Ver menos",
         "btn_edit": "Editar",
@@ -1100,18 +1105,18 @@
         "objectives_label": "Objetivos:",
         "no_enigmas": "No hay enigmas en esta misión",
         "btn_add_first_enigma": "Añadir primer enigma",
-        "documents_title": "Documentos de Apoyo",
+        "documents_title": "Documentos de apoyo",
         "no_documents": "No hay documentos de apoyo",
         "btn_view_submissions": "Ver entregas ({count})",
         "btn_submit": "Entregar",
         "status_available": "Disponible",
         "status_in_review": "En revisión",
         "status_completed": "Completado",
-        "global_progress": "Progreso Global",
+        "global_progress": "Progreso global",
         "class_average": "Promedio de la clase",
         "rewards_title": "Recompensas",
-        "xp_enigmas": "XP de Enigmas",
-        "xp_mission": "XP de Misión",
+        "xp_enigmas": "XP de enigmas",
+        "xp_mission": "XP de misión",
         "complete_all_enigmas": "Completa todos los enigmas",
         "badge_rarity": {
           "common": "Común",

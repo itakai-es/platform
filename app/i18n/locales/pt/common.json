@@ -134,7 +134,7 @@
       "feature_ai_desc": "Assistentes que personalizam a aprendizagem para cada aluno",
       "profiles_title": "Escolhe o teu perfil para começar",
       "about_title": "O que é o ITAKAI?",
-      "about_description_1": "O ITAKAI é a evolução do <strong>MyClassGame</strong>, potenciada com <strong>Inteligência Artificial</strong>. Uma plataforma educativa gamificada que transforma o ensino profissional numa experiência imersiva.",
+      "about_description_1": "O ITAKAI é a evolução do <strong>MyClassGame</strong>, potenciada com <strong>inteligência artificial</strong>. Uma plataforma educativa gamificada que transforma o ensino profissional numa experiência imersiva.",
       "about_description_2": "Geração automática de conteúdos, assistentes de IA personalizados para cada aluno e análise preditiva do desempenho. Tudo integrado num ecossistema onde aprender é uma aventura.",
       "stat_students": "Alunos",
       "stat_teachers": "Professores",
@@ -410,6 +410,35 @@
       "transfers_self": "As tuas turmas vão passar para outro professor com administração nelas:",
       "transfers_admin": "As suas turmas vão passar para outro professor com administração nelas:",
       "transfer_item": "{class}, para {name}"
+    },
+    "copy": {
+      "label": "Copiar: {what}",
+      "copied": "Copiado para a área de transferência",
+      "error": "Não foi possível copiar"
+    },
+    "change_password": {
+      "title": "Palavra-passe",
+      "current_password": "Palavra-passe atual",
+      "new_password": "Nova palavra-passe",
+      "new_password_placeholder": "Pelo menos {min} caracteres",
+      "confirm_password": "Confirmar palavra-passe",
+      "confirm_password_placeholder": "Repete a nova palavra-passe",
+      "submit": "Alterar palavra-passe",
+      "success": "Palavra-passe alterada. Nos teus outros dispositivos vais ter de entrar de novo.",
+      "errors": {
+        "current_required": "Escreve a tua palavra-passe atual.",
+        "current_wrong": "A palavra-passe atual não está correta.",
+        "password_not_set": "A tua conta entra com o Google e ainda não tem palavra-passe. Termina a sessão e cria uma em «Esqueceste-te da palavra-passe?».",
+        "too_short": "A palavra-passe tem de ter pelo menos {min} caracteres.",
+        "mismatch": "As palavras-passe não coincidem.",
+        "generic": "Não foi possível alterar a palavra-passe. Verifica a atual e tenta de novo."
+      }
+    },
+    "filter_bar": {
+      "search": "Pesquisar...",
+      "filters": "Filtros",
+      "filters_count": "Filtros ({count})",
+      "clear": "Limpar filtros"
     }
   }
 }

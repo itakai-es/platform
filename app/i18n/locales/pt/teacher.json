@@ -184,7 +184,8 @@
           "view_list": "Lista",
           "view_ranking": "Ranking",
           "col_actions": "Ações",
-          "managed_badge": "Sem e-mail"
+          "managed_badge": "Sem e-mail",
+          "pending_sign_in_badge": "Ainda não entrou"
         },
         "stats_title": "Estatísticas da turma",
         "pending_reviews": "Entregas por rever",
@@ -251,7 +252,8 @@
           "toast_save_error": "Não foi possível guardar o comportamento.",
           "toast_delete_error": "Não foi possível eliminar o comportamento.",
           "fetch_error": "Não foi possível carregar os comportamentos.",
-          "apply_error": "Não foi possível aplicar o comportamento."
+          "apply_error": "Não foi possível aplicar o comportamento.",
+          "empty_description_readonly": "Quando forem adicionados comportamentos a esta turma, vão aparecer aqui."
         },
         "shop": {
           "tab_items": "Artigos",
@@ -297,7 +299,8 @@
           "tab_history": "Histórico",
           "history_purchases": "Compras",
           "view_student_profile": "Ver aluno",
-          "mana_disabled_chip": "Mana desativado"
+          "mana_disabled_chip": "Mana desativado",
+          "empty_description_readonly": "Quando forem adicionados artigos à loja desta turma, vão aparecer aqui."
         },
         "settings": {
           "levels": {
@@ -377,6 +380,8 @@
           "requires_resource": "Precisa de pelo menos um recurso ativo (XP, {coins}, mana ou vidas)",
           "general": {
             "title": "Dados gerais",
+            "identity_title": "Nome e classificação",
+            "identity_hint": "O idioma, a província, o nível e a disciplina servem para encontrar a turma se a publicares como modelo.",
             "name_label": "Nome",
             "subject_label": "Disciplina",
             "level_label": "Nível de ensino",
@@ -417,7 +422,8 @@
             "title": "Funcionalidades"
           },
           "management": {
-            "title": "Gestão"
+            "title": "Gestão",
+            "hint": "Publica-a como modelo para que outros professores a importem, ou faz uma cópia."
           },
           "edit_level_note": "Podes alterar o nome, o horário e a capa. A classificação, as funcionalidades e os níveis são alterados por quem administra a turma."
         },
@@ -525,7 +531,6 @@
           "menu_label": "Ações para {name}",
           "owner_note": "És o proprietário desta turma. Para saíres dela, passa primeiro a propriedade a alguém com administração.",
           "leave_title": "Sair da turma",
-          "leave": "Sair da turma",
           "leave_confirm": "Sair",
           "leave_hint": "Deixarás de ver esta turma. Para voltares, alguém com administração terá de te adicionar de novo.",
           "leave_message": "Sair de {class}? Deixarás de a ver e, para voltares, alguém com administração terá de te adicionar de novo.",
@@ -626,6 +631,7 @@
               "password_reset": "repôs a palavra-passe de {target}",
               "nickname_changed": "mudou a alcunha de {target}",
               "removed": "removeu {target} da turma",
+              "removed_unused": "removeu {target} da turma e apagou a sua conta, que nunca tinha sido usada",
               "avatar_generated": "gerou um novo avatar para {target}"
             },
             "mission": {
@@ -668,6 +674,7 @@
               "password_reset": "repôs a palavra-passe de um aluno que já não está na turma",
               "nickname_changed": "mudou a alcunha de um aluno que já não está na turma",
               "removed": "removeu um aluno da turma",
+              "removed_unused": "removeu da turma um aluno que nunca tinha entrado e apagou a sua conta",
               "avatar_generated": "gerou um novo avatar para um aluno que já não está na turma"
             },
             "submission": {
@@ -795,7 +802,7 @@
       "index": {
         "title": "Os meus alunos",
         "subtitle": "Faz a gestão e acompanha o progresso dos teus alunos",
-        "search_placeholder": "Procurar por nome ou e-mail...",
+        "search_placeholder": "Procurar por nome, e-mail ou utilizador...",
         "filter_all_classes": "Todas as turmas",
         "filter_all_progress": "Todo o progresso",
         "progress_excellent": "Excelente (≥80 %)",
@@ -819,7 +826,8 @@
         "meta": {
           "title": "Os meus alunos | ITAKAI Professor",
           "description": "Faz a gestão de todos os teus alunos e consulta o seu progresso e as estatísticas de desempenho académico."
-        }
+        },
+        "stat_badges": "Emblemas"
       },
       "detail": {
         "breadcrumb_students": "Alunos",
@@ -869,7 +877,10 @@
         "remove_loses_history": "o seu histórico, os seus avisos e as suas conversas com o assistente sobre esta turma.",
         "remove_keeps": "O que tiver noutras turmas não muda e a sua conta continua a existir. Não pode ser anulado.",
         "remove_home_class": "A conta foi criada nesta turma: depois, só a administração da plataforma poderá repor a palavra-passe.",
+        "remove_unused": "{name} nunca entrou e só está nesta turma, por isso a sua conta será apagada por completo, não só da turma. Não é possível desfazer.",
+        "remove_unused_confirm": "Remover e apagar a conta",
         "removed": "{name} já não está na turma",
+        "removed_account_deleted": "{name} já não está na turma e a sua conta por usar foi apagada",
         "remove_error": "Não foi possível remover o aluno da turma."
       }
     },
@@ -888,18 +899,11 @@
         "settings": "Definições"
       },
       "security": {
-        "password_title": "Palavra-passe",
-        "placeholder_current": "Palavra-passe atual",
-        "placeholder_new": "Nova palavra-passe",
-        "placeholder_confirm": "Confirmar palavra-passe",
-        "btn_update": "Atualizar",
         "sessions_title": "Sessões",
         "sessions_close_all": "Terminar todas",
         "session_current": "Atual",
         "session_close": "Terminar",
         "validation": {
-          "passwords_mismatch": "As palavras-passe não coincidem",
-          "password_min_length": "A palavra-passe tem de ter pelo menos {min} caracteres",
           "password_required": "Introduz a tua palavra-passe"
         }
       },
@@ -932,7 +936,8 @@
           "pt": "Português",
           "el": "Grego",
           "ro": "Romeno"
-        }
+        },
+        "delete_modal_blocked": "Há turmas que dependem da tua conta."
       },
       "meta": {
         "title": "O meu perfil | ITAKAI",

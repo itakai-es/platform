@@ -134,7 +134,7 @@
       "feature_ai_desc": "Asistenți care personalizează învățarea pentru fiecare elev",
       "profiles_title": "Alege-ți profilul ca să începi",
       "about_title": "Ce este ITAKAI?",
-      "about_description_1": "ITAKAI este evoluția <strong>MyClassGame</strong>, potențată cu <strong>Inteligență Artificială</strong>. O platformă educațională gamificată care transformă învățământul profesional într-o experiență imersivă.",
+      "about_description_1": "ITAKAI este evoluția <strong>MyClassGame</strong>, potențată cu <strong>inteligență artificială</strong>. O platformă educațională gamificată care transformă învățământul profesional într-o experiență imersivă.",
       "about_description_2": "Generare automată de conținut, asistenți IA personalizați pentru fiecare elev și analiză predictivă a performanței. Totul integrat într-un ecosistem în care a învăța este o aventură.",
       "stat_students": "Elevi",
       "stat_teachers": "Profesori",
@@ -410,6 +410,35 @@
       "transfers_self": "Clasele tale vor trece la un alt profesor cu acces de administrare în ele:",
       "transfers_admin": "Clasele sale vor trece la un alt profesor cu acces de administrare în ele:",
       "transfer_item": "{class}, la {name}"
+    },
+    "copy": {
+      "label": "Copiază: {what}",
+      "copied": "Copiat în clipboard",
+      "error": "Nu s-a putut copia"
+    },
+    "change_password": {
+      "title": "Parolă",
+      "current_password": "Parola actuală",
+      "new_password": "Parolă nouă",
+      "new_password_placeholder": "Cel puțin {min} caractere",
+      "confirm_password": "Confirmă parola",
+      "confirm_password_placeholder": "Repetă parola nouă",
+      "submit": "Schimbă parola",
+      "success": "Parola a fost schimbată. Pe celelalte dispozitive va trebui să te autentifici din nou.",
+      "errors": {
+        "current_required": "Scrie parola ta actuală.",
+        "current_wrong": "Parola actuală nu este corectă.",
+        "password_not_set": "Contul tău intră cu Google și nu are încă o parolă. Deconectează-te și creează una din „Ai uitat parola?”.",
+        "too_short": "Parola trebuie să aibă cel puțin {min} caractere.",
+        "mismatch": "Parolele nu coincid.",
+        "generic": "Parola nu a putut fi schimbată. Verifică parola actuală și încearcă din nou."
+      }
+    },
+    "filter_bar": {
+      "search": "Caută...",
+      "filters": "Filtre",
+      "filters_count": "Filtre ({count})",
+      "clear": "Șterge filtrele"
     }
   }
 }

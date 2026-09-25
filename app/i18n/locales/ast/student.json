@@ -271,17 +271,9 @@
       "account": {
         "title": "La to cuenta",
         "username": "Usuariu",
-        "email": "Corréu",
         "managed_note": "La to cuenta llévala el profesoráu: entres col to usuariu, nun tien corréu y nun se pue desaniciar dende equí. Si necesites dalgún cambiu, pídi-yoslo."
       },
       "security": {
-        "password_title": "Contraseña",
-        "current_password": "Contraseña actual",
-        "new_password": "Contraseña nueva",
-        "confirm_password": "Confirmar contraseña",
-        "update_button": "Anovar",
-        "passwords_mismatch": "Les contraseñes nun concasen",
-        "password_too_short": "La contraseña tien de tener polo menos {min} caráuteres",
         "sessions_title": "Sesiones",
         "close_all_sessions": "Zarrales toes",
         "current_session": "Actual",

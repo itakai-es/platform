@@ -1,19 +1,19 @@
 {
   "admin": {
     "dashboard": {
-      "title": "Panel de Administrador",
+      "title": "Panel de administrador",
       "subtitle": "Panel de control do sistema ITAKAI",
       "activity": {
-        "title": "Actividade do Sistema",
+        "title": "Actividade do sistema",
         "period_24h": "Últimas 24 horas",
         "period_week": "Última semana",
         "period_month": "Último mes"
       },
       "quick_actions": {
-        "manage_users": "Xestionar Usuarios"
+        "manage_users": "Xestionar usuarios"
       },
       "system_status": {
-        "title": "Estado do Sistema",
+        "title": "Estado do sistema",
         "operational": "Operativo",
         "degraded": "Degradado",
         "down": "Fóra de servizo",
@@ -21,14 +21,14 @@
         "empty": "Non hai servizos dispoñibles"
       },
       "meta": {
-        "title": "Panel Admin | ITAKAI",
+        "title": "Panel admin | ITAKAI",
         "description": "Panel de control do sistema ITAKAI. Xestiona usuarios, institucións e monitoriza o estado da plataforma."
       }
     },
     "users": {
-      "title": "Xestión de Usuarios",
+      "title": "Xestión de usuarios",
       "meta": {
-        "title": "Xestión de Usuarios | ITAKAI Admin",
+        "title": "Xestión de usuarios | ITAKAI Admin",
         "description": "Administra todos os usuarios do sistema, crea novos perfís, edita roles e monitoriza a actividade."
       },
       "subtitle": "Administra todos os usuarios da plataforma",
@@ -45,8 +45,8 @@
         "clear": "Limpar filtros",
         "all_account_types": "Todas as contas",
         "self_accounts": "Con correo",
-        "managed_accounts": "Lévaas o profesorado",
-        "orphan_accounts": "Xestionadas sen clase"
+        "managed_accounts": "Sen correo",
+        "orphan_accounts": "Sen correo nin clase"
       },
       "roles": {
         "student": "Estudante",
@@ -57,7 +57,7 @@
         "status": "Estado",
         "classes": "Clases",
         "last_login": "Últ. acceso",
-        "managed": "Lévaa o profesorado",
+        "managed": "Sen correo",
         "home_class": "Xestiónase desde {name}",
         "no_home_class": "Sen clase de orixe"
       },
@@ -81,7 +81,15 @@
         "errors": {
           "name": "Escribe o nome, con polo menos 2 caracteres",
           "home_class": "Escolle a clase de orixe"
-        }
+        },
+        "error": "Non se puido crear a conta."
+      },
+      "class_search": {
+        "placeholder": "Busca por clase, profesor ou código",
+        "searching": "Buscando…",
+        "no_results": "Ningunha clase coincide",
+        "more": "Hai máis clases: escribe máis para afinar",
+        "option_hint": "{teacher} · sen alumnos | {teacher} · 1 alumno | {teacher} · {count} alumnos"
       },
       "actions": {
         "suspend_title": "Suspender usuario",
@@ -105,16 +113,21 @@
         "home_class": "Cambiar clase de orixe",
         "home_class_title": "Clase de orixe",
         "home_class_note": "É a clase desde a que o profesorado leva esta conta; ao cambiala, o alumno queda matriculado na nova. Sen clase, só a atende a administración.",
-        "home_class_none": "Sen clase de orixe"
+        "home_class_none": "Sen clase de orixe",
+        "suspend_error": "Non se puido suspender a conta.",
+        "activate_error": "Non se puido activar a conta.",
+        "reset_password_error": "Non se puido restablecer o contrasinal.",
+        "home_class_error": "Non se puido cambiar a clase de orixe.",
+        "delete_error": "Non se puido eliminar a conta."
       },
       "sort": {
         "recent": "Máis recentes"
       }
     },
     "classes": {
-      "title": "Xestión de Clases",
+      "title": "Xestión de clases",
       "meta": {
-        "title": "Xestión de Clases | ITAKAI Admin"
+        "title": "Xestión de clases | ITAKAI Admin"
       },
       "subtitle": "Visualiza todas as clases da plataforma",
       "filters": {
@@ -130,9 +143,9 @@
       }
     },
     "missions": {
-      "title": "Xestión de Misións",
+      "title": "Xestión de misións",
       "meta": {
-        "title": "Xestión de Misións | ITAKAI Admin"
+        "title": "Xestión de misións | ITAKAI Admin"
       },
       "subtitle": "Visualiza todas as misións da plataforma",
       "filters": {
@@ -149,44 +162,8 @@
         "enigmas_desc": "Máis enigmas"
       }
     },
-    "schools": {
-      "title": "Xestión de Institucións",
-      "meta": {
-        "title": "Xestión de Institucións | ITAKAI Admin",
-        "description": "Administra todas as institucións educativas do sistema, crea novas escolas e monitoriza a súa actividade."
-      },
-      "subtitle": "Administra as institucións educativas",
-      "filters": {
-        "search_placeholder": "Buscar institución...",
-        "all_statuses": "Todos os estados",
-        "active": "Activa",
-        "inactive": "Inactiva"
-      },
-      "form": {
-        "create_title": "Nova institución",
-        "edit_title": "Editar institución",
-        "name": "Nome",
-        "name_placeholder": "Nome da institución",
-        "city": "Cidade",
-        "city_placeholder": "Cidade",
-        "country": "País",
-        "country_placeholder": "País",
-        "save": "Gardar",
-        "cancel": "Cancelar"
-      },
-      "actions": {
-        "create": "Crear institución",
-        "delete_title": "Eliminar institución",
-        "delete_message": "Seguro que queres eliminar a {name}?",
-        "delete_confirm": "Eliminar"
-      },
-      "empty": {
-        "title": "Non se atoparon institucións",
-        "description": "Non hai institucións que coincidan cos filtros seleccionados."
-      }
-    },
     "analytics": {
-      "title": "Analíticas do Sistema",
+      "title": "Analíticas do sistema",
       "subtitle": "Métricas e estatísticas da plataforma",
       "period": {
         "week": "Semana",
@@ -200,22 +177,22 @@
         "uptime": "Dispoñibilidade"
       },
       "overview": {
-        "total_users": "Usuarios Totais",
-        "missions_completed": "Misións Completadas",
-        "completion_rate": "Taxa de Completado",
+        "total_users": "Usuarios totais",
+        "missions_completed": "Misións completadas",
+        "completion_rate": "Taxa de completado",
         "active_today": "Activos hoxe"
       },
       "sections": {
-        "system_resources": "Recursos do Sistema",
-        "service_health": "Estado de Servizos",
-        "response_time": "Tempo de Resposta",
-        "active_users": "Usuarios Activos",
+        "system_resources": "Recursos do sistema",
+        "service_health": "Estado de servizos",
+        "response_time": "Tempo de resposta",
+        "active_users": "Usuarios activos",
         "requests": "Peticións",
-        "tokens_over_time": "Tokens Consumidos",
-        "users_by_role": "Usuarios por Rol",
-        "missions_by_status": "Misións por Estado",
-        "missions_by_rarity": "Misións por Rareza",
-        "ai_usage": "Uso de IA (Asistentes)"
+        "tokens_over_time": "Tokens consumidos",
+        "users_by_role": "Usuarios por rol",
+        "missions_by_status": "Misións por estado",
+        "missions_by_rarity": "Misións por rareza",
+        "ai_usage": "Uso de IA (asistentes)"
       },
       "system": {
         "memory": "Memoria",
@@ -240,14 +217,14 @@
         "down": "Caído"
       },
       "meta": {
-        "title": "Analíticas do Sistema | ITAKAI Admin",
+        "title": "Analíticas do sistema | ITAKAI Admin",
         "description": "Visualiza métricas avanzadas, gráficos de rendemento e análises detalladas da plataforma."
       }
     },
     "logs": {
-      "title": "Logs do Sistema",
+      "title": "Logs do sistema",
       "meta": {
-        "title": "Logs do Sistema | ITAKAI Admin",
+        "title": "Logs do sistema | ITAKAI Admin",
         "description": "Revisa os rexistros de actividade do sistema, audita accións de usuarios e diagnostica problemas técnicos."
       },
       "tab": "Actividade",
@@ -289,8 +266,8 @@
         "success": "OK"
       },
       "categories": {
-        "health_check": "Health Check",
-        "service_status": "Estado de Servizo",
+        "health_check": "Health check",
+        "service_status": "Estado de servizo",
         "security": "Seguridade",
         "performance": "Rendemento",
         "maintenance": "Mantemento",

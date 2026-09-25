@@ -2,24 +2,24 @@
   "student": {
     "dashboard": {
       "meta": {
-        "title": "El Meu Dashboard | ITAKAI",
+        "title": "El meu dashboard | ITAKAI",
         "description": "Dashboard principal de l'estudiant. Revisa el teu progrés, últimes missions i estadístiques d'XP."
       },
       "welcome": "Benvingut, {name}!",
       "welcome_fallback_name": "Estudiant",
       "subtitle": "Continua el teu viatge d'aprenentatge i completa noves missions",
       "stats": {
-        "classes_enrolled": "Classes Inscrites",
-        "missions_completed": "Missions Completades",
-        "badges_earned": "Insígnies Aconseguides"
+        "classes_enrolled": "Classes inscrites",
+        "missions_completed": "Missions completades",
+        "badges_earned": "Insígnies aconseguides"
       },
       "my_classes": {
-        "title": "Les Meves Classes",
+        "title": "Les meves classes",
         "view_all": "Veure totes",
         "empty": "No estàs inscrit en cap classe encara"
       },
       "latest_missions": {
-        "title": "Últimes Missions",
+        "title": "Últimes missions",
         "view_all": "Veure totes",
         "empty": "No hi ha missions recents. Explora noves missions!"
       },
@@ -35,10 +35,10 @@
     },
     "missions": {
       "meta": {
-        "title": "Les Meves Missions | ITAKAI",
+        "title": "Les meves missions | ITAKAI",
         "description": "Explora i completa missions educatives. Guanya XP i desbloqueja nous reptes."
       },
-      "page_title": "Les Meves Missions",
+      "page_title": "Les meves missions",
       "page_subtitle": "Explora i completa missions per guanyar experiència",
       "empty": {
         "title": "Sense missions",
@@ -59,13 +59,13 @@
         "bloqueada": "Bloquejada",
         "pendiente": "Pendent",
         "expirada": "Expirada",
-        "en_progreso": "En Progrés"
+        "en_progreso": "En progrés"
       }
     },
     "mission_detail": {
       "meta": {
         "title": "{title} | ITAKAI",
-        "title_loading": "Detall de Missió | ITAKAI",
+        "title_loading": "Detall de missió | ITAKAI",
         "description_fallback": "Detall de missió a ITAKAI"
       },
       "error": {
@@ -91,10 +91,10 @@
     },
     "classes": {
       "meta": {
-        "title": "Les Meves Classes | ITAKAI",
+        "title": "Les meves classes | ITAKAI",
         "description": "Accedeix a les teves classes inscrites, revisa el progrés i descobreix noves missions assignades."
       },
-      "page_title": "Les Meves Classes",
+      "page_title": "Les meves classes",
       "page_subtitle": "Classes en les quals estàs inscrit",
       "join_class_button": "Unir-se a classe",
       "empty": {
@@ -116,11 +116,11 @@
           "tienda": "Botiga"
         },
         "progress": {
-          "title": "El Meu Progrés",
+          "title": "El meu progrés",
           "completion_rate": "Completat",
-          "missions_completed": "Missions Completades",
-          "xp_total": "XP Total",
-          "badges_earned": "Insígnies Obtingudes"
+          "missions_completed": "Missions completades",
+          "xp_total": "XP total",
+          "badges_earned": "Insígnies obtingudes"
         },
         "ai_assistant": {
           "subtitle": "La teva guia en aquesta classe",
@@ -208,10 +208,10 @@
     },
     "achievements": {
       "meta": {
-        "title": "Les Meves Insígnies | ITAKAI",
+        "title": "Les meves insígnies | ITAKAI",
         "description": "Descobreix totes les teves insignies obtingudes en completar missions i fites especials."
       },
-      "page_title": "Les Meves Insígnies",
+      "page_title": "Les meves insígnies",
       "page_subtitle": "Recompenses obtingudes en completar missions i fites",
       "filter": {
         "search_placeholder": "Cercar insignies...",
@@ -258,12 +258,12 @@
     },
     "profile": {
       "meta": {
-        "title": "El Meu Perfil | ITAKAI",
+        "title": "El meu perfil | ITAKAI",
         "description": "Gestiona el teu perfil d'estudiant, configura la seguretat i personalitza la teva experiència."
       },
       "breadcrumb_home": "Inici",
       "breadcrumb_profile": "El meu perfil",
-      "page_title": "El Meu Perfil",
+      "page_title": "El meu perfil",
       "tabs": {
         "security": "Seguretat",
         "settings": "Configuració"
@@ -271,17 +271,9 @@
       "account": {
         "title": "El teu compte",
         "username": "Usuari",
-        "email": "Correu",
         "managed_note": "El teu compte el gestiona el professorat: entres amb el teu usuari, no té correu i no es pot eliminar des d'aquí. Si necessites algun canvi, demana'ls-ho."
       },
       "security": {
-        "password_title": "Contrasenya",
-        "current_password": "Contrasenya actual",
-        "new_password": "Nova contrasenya",
-        "confirm_password": "Confirmar contrasenya",
-        "update_button": "Actualitzar",
-        "passwords_mismatch": "Les contrasenyes no coincideixen",
-        "password_too_short": "La contrasenya ha de tenir almenys {min} caràcters",
         "sessions_title": "Sessions",
         "close_all_sessions": "Tancar totes",
         "current_session": "Actual",
@@ -290,9 +282,9 @@
       "settings": {
         "theme_title": "Tema",
         "theme_description": "Tria l'estil visual de la plataforma",
-        "theme_college": "Mode Col·legi",
+        "theme_college": "Mode col·legi",
         "theme_college_desc": "Visual gamificat",
-        "theme_university": "Mode Universitat",
+        "theme_university": "Mode universitat",
         "theme_university_desc": "Visual professional",
         "language_title": "Idioma",
         "language_updated": "Idioma actualitzat",
@@ -325,16 +317,16 @@
     "components": {
       "mission_card": {
         "progress": "Progrés",
-        "view_mission": "Veure Missió"
+        "view_mission": "Veure missió"
       },
       "recent_activity_card": {
-        "title": "Activitat Recent",
+        "title": "Activitat recent",
         "empty": "No hi ha activitat recent",
         "user_fallback": "Usuari",
         "by_actor": "Per {name}"
       },
       "submission_modal": {
-        "title": "Lliurar Enigma",
+        "title": "Lliurar enigma",
         "file_label": "Fitxer de lliurament",
         "file_required": "*",
         "drag_hint": "Arrossega el teu fitxer aquí o fes clic per seleccionar",
@@ -352,7 +344,7 @@
         "empty_title": "Sense contingut",
         "empty_student": "El professor encara no ha afegit la guia d'aquesta classe.",
         "empty_teacher": "Encara no has afegit la guia d'aquesta classe.",
-        "add_guide_button": "Afegir Guia",
+        "add_guide_button": "Afegir guia",
         "last_updated": "Última actualització: {date}"
       },
       "rarity_badge": {
@@ -362,16 +354,16 @@
         "legendaria": "Llegendària"
       },
       "class_ranking_section": {
-        "podium_title": "Podi de Campions",
+        "podium_title": "Podi de campions",
         "stats_title": "Estadístiques",
-        "rest_title": "Resta del Ranquing",
+        "rest_title": "Resta del ranquing",
         "level_abbr": "Nv.",
         "missions_suffix": "missions",
         "you_badge": "Tu",
-        "avg_xp": "XP Mitjana",
-        "avg_progress": "Progrés Mitjà",
-        "avg_missions": "Missions Mitjana",
-        "total_xp": "XP Total Classe"
+        "avg_xp": "XP mitjana",
+        "avg_progress": "Progrés mitjà",
+        "avg_missions": "Missions mitjana",
+        "total_xp": "XP total classe"
       }
     }
   }

@@ -271,17 +271,9 @@
       "account": {
         "title": "Ο λογαριασμός σου",
         "username": "Όνομα χρήστη",
-        "email": "Email",
         "managed_note": "Τον λογαριασμό σου τον διαχειρίζονται οι καθηγητές σου: συνδέεσαι με το όνομα χρήστη, δεν έχει email και δεν διαγράφεται από εδώ. Αν χρειάζεσαι κάποια αλλαγή, ζήτα τους την."
       },
       "security": {
-        "password_title": "Κωδικός πρόσβασης",
-        "current_password": "Τρέχων κωδικός",
-        "new_password": "Νέος κωδικός",
-        "confirm_password": "Επιβεβαίωση κωδικού",
-        "update_button": "Ενημέρωση",
-        "passwords_mismatch": "Οι κωδικοί δεν ταιριάζουν",
-        "password_too_short": "Ο κωδικός πρέπει να έχει τουλάχιστον {min} χαρακτήρες",
         "sessions_title": "Συνεδρίες",
         "close_all_sessions": "Τερματισμός όλων",
         "current_session": "Τρέχουσα",

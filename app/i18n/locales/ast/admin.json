@@ -41,8 +41,8 @@
         "clear": "Llimpiar filtros",
         "all_account_types": "Toles cuentes",
         "self_accounts": "Con corréu",
-        "managed_accounts": "Llévales el profesoráu",
-        "orphan_accounts": "Xestionaes ensin clase"
+        "managed_accounts": "Ensin corréu",
+        "orphan_accounts": "Ensin corréu nin clase"
       },
       "roles": {
         "student": "Alumnu",
@@ -53,7 +53,7 @@
         "status": "Estáu",
         "classes": "Clases",
         "last_login": "Últ. accesu",
-        "managed": "Llévala el profesoráu",
+        "managed": "Ensin corréu",
         "home_class": "Xestiónase dende {name}",
         "no_home_class": "Ensin clase d'orixe"
       },
@@ -77,7 +77,15 @@
         "errors": {
           "name": "Escribi el nome, con polo menos 2 caráuteres",
           "home_class": "Escueyi la clase d'orixe"
-        }
+        },
+        "error": "Nun se pudo crear la cuenta."
+      },
+      "class_search": {
+        "placeholder": "Busca por clase, profesor o códigu",
+        "searching": "Buscando…",
+        "no_results": "Nenguna clase coincide",
+        "more": "Hai más clases: escribi más p'afinar",
+        "option_hint": "{teacher} · ensin alumnos | {teacher} · 1 alumnu | {teacher} · {count} alumnos"
       },
       "actions": {
         "suspend_title": "Suspender usuariu",
@@ -101,7 +109,12 @@
         "home_class": "Camudar clase d'orixe",
         "home_class_title": "Clase d'orixe",
         "home_class_note": "Ye la clase dende la que'l profesoráu lleva esta cuenta; al camudala, l'alumnu queda matriculáu na nueva. Ensin clase, namás l'atiende l'alministración.",
-        "home_class_none": "Ensin clase d'orixe"
+        "home_class_none": "Ensin clase d'orixe",
+        "suspend_error": "Nun se pudo suspender la cuenta.",
+        "activate_error": "Nun se pudo activar la cuenta.",
+        "reset_password_error": "Nun se pudo reafitar la contraseña.",
+        "home_class_error": "Nun se pudo camudar la clase d'orixe.",
+        "delete_error": "Nun se pudo desaniciar la cuenta."
       },
       "meta": {
         "title": "Xestión d'usuarios | ITAKAI Admin",
@@ -109,42 +122,6 @@
       },
       "sort": {
         "recent": "Más recientes"
-      }
-    },
-    "schools": {
-      "title": "Xestión d'instituciones",
-      "subtitle": "Alministra les instituciones educatives de la plataforma",
-      "filters": {
-        "search_placeholder": "Guetar institución...",
-        "all_statuses": "Tolos estaos",
-        "active": "Activa",
-        "inactive": "Inactiva"
-      },
-      "form": {
-        "create_title": "Institución nueva",
-        "edit_title": "Editar institución",
-        "name": "Nome",
-        "name_placeholder": "Nome de la institución",
-        "city": "Ciudá",
-        "city_placeholder": "Ciudá",
-        "country": "País",
-        "country_placeholder": "País",
-        "save": "Guardar",
-        "cancel": "Encaboxar"
-      },
-      "actions": {
-        "create": "Institución nueva",
-        "delete_title": "Desaniciar institución",
-        "delete_message": "¿De xuru que quies desaniciar {name}? Va desvinculase de tolos usuarios.",
-        "delete_confirm": "Desaniciar"
-      },
-      "empty": {
-        "title": "Nun s'atoparon instituciones",
-        "description": "Nun hai instituciones que concasen colos filtros."
-      },
-      "meta": {
-        "title": "Xestión d'instituciones | ITAKAI Admin",
-        "description": "Alministra toles instituciones educatives del sistema, crea centros nuevos y supervisa la so actividá."
       }
     },
     "classes": {

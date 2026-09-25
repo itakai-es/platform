@@ -1,19 +1,19 @@
 {
   "admin": {
     "dashboard": {
-      "title": "Inicio de Administrador",
+      "title": "Inicio de administrador",
       "subtitle": "Panel de control del sistema ITAKAI",
       "activity": {
-        "title": "Actividad del Sistema",
+        "title": "Actividad del sistema",
         "period_24h": "Últimas 24 horas",
         "period_week": "Última semana",
         "period_month": "Último mes"
       },
       "quick_actions": {
-        "manage_users": "Gestionar Usuarios"
+        "manage_users": "Gestionar usuarios"
       },
       "system_status": {
-        "title": "Estado del Sistema",
+        "title": "Estado del sistema",
         "operational": "Operativo",
         "degraded": "Degradado",
         "down": "Fuera de servicio",
@@ -21,12 +21,12 @@
         "empty": "No hay servicios disponibles"
       },
       "meta": {
-        "title": "Inicio Admin | ITAKAI",
+        "title": "Inicio admin | ITAKAI",
         "description": "Panel de control del sistema ITAKAI. Gestiona usuarios, instituciones y monitorea el estado de la plataforma."
       }
     },
     "users": {
-      "title": "Gestión de Usuarios",
+      "title": "Gestión de usuarios",
       "subtitle": "Administra todos los usuarios de la plataforma",
       "filters": {
         "search_placeholder": "Buscar por nombre, correo o usuario...",
@@ -41,8 +41,8 @@
         "clear": "Limpiar filtros",
         "all_account_types": "Todas las cuentas",
         "self_accounts": "Con correo",
-        "managed_accounts": "Las lleva el profesorado",
-        "orphan_accounts": "Gestionadas sin clase"
+        "managed_accounts": "Sin correo",
+        "orphan_accounts": "Sin correo ni clase"
       },
       "roles": {
         "student": "Estudiante",
@@ -53,7 +53,7 @@
         "status": "Estado",
         "classes": "Clases",
         "last_login": "Últ. acceso",
-        "managed": "La lleva el profesorado",
+        "managed": "Sin correo",
         "home_class": "Se gestiona desde {name}",
         "no_home_class": "Sin clase de origen"
       },
@@ -77,7 +77,15 @@
         "errors": {
           "name": "Escribe el nombre, con al menos 2 caracteres",
           "home_class": "Elige la clase de origen"
-        }
+        },
+        "error": "No se ha podido crear la cuenta."
+      },
+      "class_search": {
+        "placeholder": "Busca por clase, profesor o código",
+        "searching": "Buscando…",
+        "no_results": "Ninguna clase coincide",
+        "more": "Hay más clases: escribe más para afinar",
+        "option_hint": "{teacher} · sin alumnos | {teacher} · 1 alumno | {teacher} · {count} alumnos"
       },
       "actions": {
         "suspend_title": "Suspender usuario",
@@ -101,54 +109,23 @@
         "home_class": "Cambiar clase de origen",
         "home_class_title": "Clase de origen",
         "home_class_note": "Es la clase desde la que el profesorado lleva esta cuenta; al cambiarla, el alumno queda matriculado en la nueva. Sin clase, solo la atiende la administración.",
-        "home_class_none": "Sin clase de origen"
+        "home_class_none": "Sin clase de origen",
+        "suspend_error": "No se ha podido suspender la cuenta.",
+        "activate_error": "No se ha podido activar la cuenta.",
+        "reset_password_error": "No se ha podido restablecer la contraseña.",
+        "home_class_error": "No se ha podido cambiar la clase de origen.",
+        "delete_error": "No se ha podido eliminar la cuenta."
       },
       "meta": {
-        "title": "Gestión de Usuarios | ITAKAI Admin",
+        "title": "Gestión de usuarios | ITAKAI Admin",
         "description": "Administra todos los usuarios del sistema, crea nuevos perfiles, edita roles y monitorea la actividad."
       },
       "sort": {
         "recent": "Más recientes"
       }
     },
-    "schools": {
-      "title": "Gestión de Instituciones",
-      "subtitle": "Administra las instituciones educativas de la plataforma",
-      "filters": {
-        "search_placeholder": "Buscar institución...",
-        "all_statuses": "Todos los estados",
-        "active": "Activa",
-        "inactive": "Inactiva"
-      },
-      "form": {
-        "create_title": "Nueva Institución",
-        "edit_title": "Editar Institución",
-        "name": "Nombre",
-        "name_placeholder": "Nombre de la institución",
-        "city": "Ciudad",
-        "city_placeholder": "Ciudad",
-        "country": "País",
-        "country_placeholder": "País",
-        "save": "Guardar",
-        "cancel": "Cancelar"
-      },
-      "actions": {
-        "create": "Nueva Institución",
-        "delete_title": "Eliminar institución",
-        "delete_message": "¿Estás seguro de que quieres eliminar {name}? Se desvinculará de todos los usuarios.",
-        "delete_confirm": "Eliminar"
-      },
-      "empty": {
-        "title": "No se encontraron instituciones",
-        "description": "No hay instituciones que coincidan con los filtros."
-      },
-      "meta": {
-        "title": "Gestión de Instituciones | ITAKAI Admin",
-        "description": "Administra todas las instituciones educativas del sistema, crea nuevas escuelas y monitorea su actividad."
-      }
-    },
     "classes": {
-      "title": "Gestión de Clases",
+      "title": "Gestión de clases",
       "subtitle": "Supervisa todas las clases del sistema",
       "filters": {
         "search_placeholder": "Buscar clase..."
@@ -158,7 +135,7 @@
         "description": "No hay clases que coincidan con los filtros."
       },
       "meta": {
-        "title": "Gestión de Clases | ITAKAI Admin"
+        "title": "Gestión de clases | ITAKAI Admin"
       },
       "sort": {
         "missions_desc": "Más misiones",
@@ -166,7 +143,7 @@
       }
     },
     "missions": {
-      "title": "Gestión de Misiones",
+      "title": "Gestión de misiones",
       "subtitle": "Supervisa todas las misiones del sistema",
       "filters": {
         "search_placeholder": "Buscar misión...",
@@ -178,7 +155,7 @@
         "description": "No hay misiones que coincidan con los filtros."
       },
       "meta": {
-        "title": "Gestión de Misiones | ITAKAI Admin"
+        "title": "Gestión de misiones | ITAKAI Admin"
       },
       "sort": {
         "enigmas_desc": "Más enigmas",
@@ -186,7 +163,7 @@
       }
     },
     "analytics": {
-      "title": "Analíticas del Sistema",
+      "title": "Analíticas del sistema",
       "subtitle": "Métricas y estadísticas de la plataforma",
       "period": {
         "week": "Semana",
@@ -200,22 +177,22 @@
         "uptime": "Disponibilidad"
       },
       "overview": {
-        "total_users": "Usuarios Totales",
-        "active_today": "Activos Hoy",
-        "missions_completed": "Misiones Completadas",
-        "completion_rate": "Tasa de Completado"
+        "total_users": "Usuarios totales",
+        "active_today": "Activos hoy",
+        "missions_completed": "Misiones completadas",
+        "completion_rate": "Tasa de completado"
       },
       "sections": {
-        "system_resources": "Recursos del Sistema",
-        "service_health": "Estado de Servicios",
-        "response_time": "Tiempo de Respuesta",
-        "active_users": "Usuarios Activos",
+        "system_resources": "Recursos del sistema",
+        "service_health": "Estado de servicios",
+        "response_time": "Tiempo de respuesta",
+        "active_users": "Usuarios activos",
         "requests": "Peticiones",
-        "tokens_over_time": "Tokens Consumidos",
-        "users_by_role": "Usuarios por Rol",
-        "missions_by_status": "Misiones por Estado",
-        "missions_by_rarity": "Misiones por Rareza",
-        "ai_usage": "Uso de IA (Asistentes)"
+        "tokens_over_time": "Tokens consumidos",
+        "users_by_role": "Usuarios por rol",
+        "missions_by_status": "Misiones por estado",
+        "missions_by_rarity": "Misiones por rareza",
+        "ai_usage": "Uso de IA (asistentes)"
       },
       "ai": {
         "total_tokens": "Tokens totales",
@@ -226,7 +203,7 @@
       "system": {
         "memory": "Memoria",
         "disk": "Disco",
-        "db_latency": "DB Latencia"
+        "db_latency": "DB latencia"
       },
       "table": {
         "service": "Servicio",
@@ -240,12 +217,12 @@
         "down": "Caído"
       },
       "meta": {
-        "title": "Analíticas del Sistema | ITAKAI Admin",
+        "title": "Analíticas del sistema | ITAKAI Admin",
         "description": "Visualiza métricas avanzadas, gráficos de rendimiento y análisis detallados de la plataforma."
       }
     },
     "logs": {
-      "title": "Registros del Sistema",
+      "title": "Registros del sistema",
       "subtitle": "Registros de actividad y eventos de la plataforma",
       "tab": "Actividad",
       "filters": {
@@ -271,7 +248,7 @@
         "description": "No hay registros que coincidan con los filtros."
       },
       "meta": {
-        "title": "Registros del Sistema | ITAKAI Admin",
+        "title": "Registros del sistema | ITAKAI Admin",
         "description": "Revisa los registros de actividad del sistema, audita acciones de usuarios y diagnostica problemas técnicos."
       }
     },
@@ -289,8 +266,8 @@
         "success": "Éxito"
       },
       "categories": {
-        "health_check": "Estado del Sistema",
-        "service_status": "Estado de Servicio",
+        "health_check": "Estado del sistema",
+        "service_status": "Estado de servicio",
         "security": "Seguridad",
         "performance": "Rendimiento",
         "maintenance": "Mantenimiento",

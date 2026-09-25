@@ -2,24 +2,24 @@
   "student": {
     "dashboard": {
       "meta": {
-        "title": "Nire Dashboarda | ITAKAI",
+        "title": "Nire dashboarda | ITAKAI",
         "description": "Ikaslearen dashboard nagusia. Begiratu zure aurrerapena, azken misioak eta XP estatistikak."
       },
       "welcome": "Ongi etorri, {name}!",
       "welcome_fallback_name": "Ikaslea",
       "subtitle": "Jarraitu zure ikaskuntza bidaia eta osatu misio berriak",
       "stats": {
-        "classes_enrolled": "Matrikulatutako Klaseak",
-        "missions_completed": "Osatutako Misioak",
-        "badges_earned": "Lortutako Dominak"
+        "classes_enrolled": "Matrikulatutako klaseak",
+        "missions_completed": "Osatutako misioak",
+        "badges_earned": "Lortutako dominak"
       },
       "my_classes": {
-        "title": "Nire Klaseak",
+        "title": "Nire klaseak",
         "view_all": "Ikusi denak",
         "empty": "Oraindik ez zaude inongo klasetan matrikulatuta"
       },
       "latest_missions": {
-        "title": "Azken Misioak",
+        "title": "Azken misioak",
         "view_all": "Ikusi denak",
         "empty": "Ez dago azken misiorik. Esploratu misio berriak!"
       },
@@ -35,10 +35,10 @@
     },
     "missions": {
       "meta": {
-        "title": "Nire Misioak | ITAKAI",
+        "title": "Nire misioak | ITAKAI",
         "description": "Esploratu eta osatu hezkuntza misioak. Irabazi XP eta desblokeatu erronka berriak."
       },
-      "page_title": "Nire Misioak",
+      "page_title": "Nire misioak",
       "page_subtitle": "Esploratu eta osatu misioak esperientzia irabazteko",
       "empty": {
         "title": "Misiorik gabe",
@@ -65,7 +65,7 @@
     "mission_detail": {
       "meta": {
         "title": "{title} | ITAKAI",
-        "title_loading": "Misioaren Xehetasuna | ITAKAI",
+        "title_loading": "Misioaren xehetasuna | ITAKAI",
         "description_fallback": "ITAKAI-ko misioaren xehetasuna"
       },
       "error": {
@@ -91,10 +91,10 @@
     },
     "classes": {
       "meta": {
-        "title": "Nire Klaseak | ITAKAI",
+        "title": "Nire klaseak | ITAKAI",
         "description": "Sartu zure matrikulatutako klaseetara, begiratu aurrerapena eta aurkitu esleitutako misio berriak."
       },
-      "page_title": "Nire Klaseak",
+      "page_title": "Nire klaseak",
       "page_subtitle": "Matrikulatuta zauden klaseak",
       "join_class_button": "Klasera batu",
       "empty": {
@@ -116,11 +116,11 @@
           "tienda": "Denda"
         },
         "progress": {
-          "title": "Nire Aurrerapena",
+          "title": "Nire aurrerapena",
           "completion_rate": "Osatua",
-          "missions_completed": "Osatutako Misioak",
+          "missions_completed": "Osatutako misioak",
           "xp_total": "Guztirako XP",
-          "badges_earned": "Lortutako Dominak"
+          "badges_earned": "Lortutako dominak"
         },
         "ai_assistant": {
           "subtitle": "Zure gida klase honetan",
@@ -136,7 +136,7 @@
           "choose_guide": "Aukeratu zure gida klase honetarako",
           "describe_avatar": "Deskribatu nola nahi duzun zure avatarra:",
           "example_label": "Adibidea:",
-          "example_text": "Urrezko armadura duen gerlari gaztea, ile iluna eta begi distiratsuak dituena, Atenearen sinboloa duen ezkutua eusten. Estilo epiko eta heroikoa, Greziar mitologian inspiratua ...",
+          "example_text": "Urrezko armadura duen gerlari gaztea, ile iluna eta begi distiratsuak dituena, Atenearen sinboloa duen ezkutua eusten. Estilo epiko eta heroikoa, greziar mitologian inspiratua ...",
           "placeholder": "Deskribatu zure avatarra hemen...",
           "tip": "Aholkua: Izan zehatz koloreekin, janzkerarekin, osagarriekin eta estiloarekin. AA-k zure avatarra sortuko du hautatutako pertsonaian oinarrituz.",
           "generate_button": "Avatarra sortu",
@@ -208,10 +208,10 @@
     },
     "achievements": {
       "meta": {
-        "title": "Nire Dominak | ITAKAI",
+        "title": "Nire dominak | ITAKAI",
         "description": "Ezagutu misioak eta lorpen bereziak osatzean lortutako domina guztiak."
       },
-      "page_title": "Nire Dominak",
+      "page_title": "Nire dominak",
       "page_subtitle": "Misioak eta lorpenak osatzean lortutako sariak",
       "filter": {
         "search_placeholder": "Dominak bilatu...",
@@ -246,7 +246,7 @@
     },
     "ai_assistant": {
       "meta": {
-        "title": "AA Laguntzailea | ITAKAI",
+        "title": "AA laguntzailea | ITAKAI",
         "description": "Txateatu zure AA laguntzailearekin misioei, aurrerapenari eta plataformari buruzko zalantzak argitzeko."
       },
       "suggestions": {
@@ -258,12 +258,12 @@
     },
     "profile": {
       "meta": {
-        "title": "Nire Profila | ITAKAI",
+        "title": "Nire profila | ITAKAI",
         "description": "Kudeatu zure ikasle profila, konfiguratu segurtasuna eta pertsonalizatu zure esperientzia."
       },
       "breadcrumb_home": "Hasiera",
       "breadcrumb_profile": "Nire profila",
-      "page_title": "Nire Profila",
+      "page_title": "Nire profila",
       "tabs": {
         "security": "Segurtasuna",
         "settings": "Ezarpenak"
@@ -271,17 +271,9 @@
       "account": {
         "title": "Zure kontua",
         "username": "Erabiltzailea",
-        "email": "Emaila",
         "managed_note": "Zure kontua irakasleek kudeatzen dute: zure erabiltzailearekin sartzen zara, ez du emailik eta hemendik ezin da ezabatu. Aldaketarik behar baduzu, eskatu haiei."
       },
       "security": {
-        "password_title": "Pasahitza",
-        "current_password": "Uneko pasahitza",
-        "new_password": "Pasahitz berria",
-        "confirm_password": "Pasahitza berretsi",
-        "update_button": "Eguneratu",
-        "passwords_mismatch": "Pasahitzak ez datoz bat",
-        "password_too_short": "Pasahitzak gutxienez {min} karaktere izan behar ditu",
         "sessions_title": "Saioak",
         "close_all_sessions": "Denak itxi",
         "current_session": "Unekoa",
@@ -290,9 +282,9 @@
       "settings": {
         "theme_title": "Gaia",
         "theme_description": "Aukeratu plataformaren estilo bisuala",
-        "theme_college": "Eskola Modua",
+        "theme_college": "Eskola modua",
         "theme_college_desc": "Itxura gamifikatua",
-        "theme_university": "Unibertsitate Modua",
+        "theme_university": "Unibertsitate modua",
         "theme_university_desc": "Itxura profesionala",
         "language_title": "Hizkuntza",
         "language_updated": "Hizkuntza eguneratu da",
@@ -325,16 +317,16 @@
     "components": {
       "mission_card": {
         "progress": "Aurrerapena",
-        "view_mission": "Ikusi Misioa"
+        "view_mission": "Ikusi misioa"
       },
       "recent_activity_card": {
-        "title": "Azken Jarduera",
+        "title": "Azken jarduera",
         "empty": "Ez dago azken jarduerarik",
         "user_fallback": "Erabiltzailea",
         "by_actor": "Egilea: {name}"
       },
       "submission_modal": {
-        "title": "Enigma Entregatu",
+        "title": "Enigma entregatu",
         "file_label": "Entregako fitxategia",
         "file_required": "*",
         "drag_hint": "Arrastatu zure fitxategia hona edo egin klik hautatzeko",
@@ -352,7 +344,7 @@
         "empty_title": "Edukirik gabe",
         "empty_student": "Irakasleak oraindik ez du klase honen gida gehitu.",
         "empty_teacher": "Oraindik ez duzu klase honen gida gehitu.",
-        "add_guide_button": "Gida Gehitu",
+        "add_guide_button": "Gida gehitu",
         "last_updated": "Azken eguneraketa: {date}"
       },
       "rarity_badge": {
@@ -362,16 +354,16 @@
         "legendaria": "Legendarioa"
       },
       "class_ranking_section": {
-        "podium_title": "Txapeldunen Podiuma",
+        "podium_title": "Txapeldunen podiuma",
         "stats_title": "Estatistikak",
         "rest_title": "Rankingaren gainerakoa",
         "level_abbr": "Ml.",
         "missions_suffix": "misio",
         "you_badge": "Zu",
         "avg_xp": "Batez besteko XP",
-        "avg_progress": "Batez besteko Aurrerapena",
-        "avg_missions": "Batez besteko Misioak",
-        "total_xp": "Klaseko Guztirako XP"
+        "avg_progress": "Batez besteko aurrerapena",
+        "avg_missions": "Batez besteko misioak",
+        "total_xp": "Klaseko guztirako XP"
       }
     }
   }

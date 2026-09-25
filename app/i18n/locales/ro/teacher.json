@@ -184,7 +184,8 @@
           "view_list": "Listă",
           "view_ranking": "Clasament",
           "col_actions": "Acțiuni",
-          "managed_badge": "Fără e-mail"
+          "managed_badge": "Fără e-mail",
+          "pending_sign_in_badge": "Încă nu a intrat"
         },
         "stats_title": "Statisticile clasei",
         "pending_reviews": "Lucrări de verificat",
@@ -251,7 +252,8 @@
           "toast_save_error": "Comportamentul nu a putut fi salvat.",
           "toast_delete_error": "Comportamentul nu a putut fi șters.",
           "fetch_error": "Comportamentele nu au putut fi încărcate.",
-          "apply_error": "Comportamentul nu a putut fi aplicat."
+          "apply_error": "Comportamentul nu a putut fi aplicat.",
+          "empty_description_readonly": "Când se vor adăuga comportamente la această clasă, vor apărea aici."
         },
         "shop": {
           "tab_items": "Articole",
@@ -297,7 +299,8 @@
           "tab_history": "Istoric",
           "history_purchases": "Cumpărături",
           "view_student_profile": "Vezi elevul",
-          "mana_disabled_chip": "Mana dezactivată"
+          "mana_disabled_chip": "Mana dezactivată",
+          "empty_description_readonly": "Când se vor adăuga articole în magazinul acestei clase, vor apărea aici."
         },
         "settings": {
           "levels": {
@@ -377,6 +380,8 @@
           "requires_resource": "Necesită cel puțin o resursă activă (XP, {coins}, mana sau vieți)",
           "general": {
             "title": "Date generale",
+            "identity_title": "Nume și clasificare",
+            "identity_hint": "Limba, provincia, nivelul și materia ajută la găsirea clasei dacă o publici drept șablon.",
             "name_label": "Nume",
             "subject_label": "Materie",
             "level_label": "Nivel de învățământ",
@@ -417,7 +422,8 @@
             "title": "Funcționalități"
           },
           "management": {
-            "title": "Administrare"
+            "title": "Administrare",
+            "hint": "Public-o drept șablon ca alți profesori să o importe sau fă o copie."
           },
           "edit_level_note": "Poți schimba numele, orarul și coperta. Clasificarea, funcționalitățile și nivelurile le schimbă cine administrează clasa."
         },
@@ -525,7 +531,6 @@
           "menu_label": "Acțiuni pentru {name}",
           "owner_note": "Ești proprietarul acestei clase. Ca să ieși din ea, transferă mai întâi proprietatea cuiva cu acces de administrare.",
           "leave_title": "Ieșire din clasă",
-          "leave": "Ieși din clasă",
           "leave_confirm": "Ieși",
           "leave_hint": "Nu vei mai vedea această clasă. Ca să revii, cineva cu acces de administrare va trebui să te adauge din nou.",
           "leave_message": "Ieși din {class}? Nu o vei mai vedea și, ca să revii, cineva cu acces de administrare va trebui să te adauge din nou.",
@@ -626,6 +631,7 @@
               "password_reset": "a resetat parola pentru {target}",
               "nickname_changed": "a schimbat porecla pentru {target}",
               "removed": "a scos {target} din clasă",
+              "removed_unused": "a scos {target} din clasă și i-a șters contul, care nu fusese folosit",
               "avatar_generated": "a generat un avatar nou pentru {target}"
             },
             "mission": {
@@ -668,6 +674,7 @@
               "password_reset": "a resetat parola unui elev care nu mai este în clasă",
               "nickname_changed": "a schimbat porecla unui elev care nu mai este în clasă",
               "removed": "a scos un elev din clasă",
+              "removed_unused": "a scos din clasă un elev care nu intrase niciodată și i-a șters contul",
               "avatar_generated": "a generat un avatar nou pentru un elev care nu mai este în clasă"
             },
             "submission": {
@@ -795,7 +802,7 @@
       "index": {
         "title": "Elevii mei",
         "subtitle": "Administrează și urmărește progresul elevilor tăi",
-        "search_placeholder": "Caută după nume sau e-mail...",
+        "search_placeholder": "Caută după nume, e-mail sau utilizator...",
         "filter_all_classes": "Toate clasele",
         "filter_all_progress": "Tot progresul",
         "progress_excellent": "Excelent (≥80 %)",
@@ -819,7 +826,8 @@
         "meta": {
           "title": "Elevii mei | ITAKAI Profesor",
           "description": "Administrează toți elevii tăi și consultă progresul și statisticile lor de performanță academică."
-        }
+        },
+        "stat_badges": "Insigne"
       },
       "detail": {
         "breadcrumb_students": "Elevi",
@@ -869,7 +877,10 @@
         "remove_loses_history": "istoricul, notificările și conversațiile cu asistentul despre această clasă.",
         "remove_keeps": "Ce are în alte clase nu se schimbă, iar contul său continuă să existe. Nu se poate anula.",
         "remove_home_class": "Contul a fost creat în această clasă: după aceea, doar administrarea platformei îi va putea reseta parola.",
+        "remove_unused": "{name} nu a intrat niciodată și este doar în această clasă, așa că contul său va fi șters complet, nu doar din clasă. Nu se poate anula.",
+        "remove_unused_confirm": "Elimină și șterge contul",
         "removed": "{name} nu mai este în clasă",
+        "removed_account_deleted": "{name} nu mai este în clasă, iar contul său nefolosit a fost șters",
         "remove_error": "Elevul nu a putut fi eliminat din clasă."
       }
     },
@@ -888,18 +899,11 @@
         "settings": "Setări"
       },
       "security": {
-        "password_title": "Parolă",
-        "placeholder_current": "Parola actuală",
-        "placeholder_new": "Parolă nouă",
-        "placeholder_confirm": "Confirmă parola",
-        "btn_update": "Actualizează",
         "sessions_title": "Sesiuni",
         "sessions_close_all": "Închide toate",
         "session_current": "Curentă",
         "session_close": "Închide",
         "validation": {
-          "passwords_mismatch": "Parolele nu coincid",
-          "password_min_length": "Parola trebuie să aibă cel puțin {min} caractere",
           "password_required": "Introdu-ți parola"
         }
       },
@@ -932,7 +936,8 @@
           "pt": "Portugheză",
           "el": "Greacă",
           "ro": "Română"
-        }
+        },
+        "delete_modal_blocked": "Există clase care depind de contul tău."
       },
       "meta": {
         "title": "Profilul meu | ITAKAI",

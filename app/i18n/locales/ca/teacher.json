@@ -20,34 +20,34 @@
       }
     },
     "dashboard": {
-      "title": "Dashboard del Professor",
+      "title": "Dashboard del professor",
       "subtitle": "Benvingut, {name}!",
-      "new_class": "Nova Classe",
-      "new_mission": "Nova Missió",
+      "new_class": "Nova classe",
+      "new_mission": "Nova missió",
       "stats": {
-        "total_students": "Estudiants Totals",
-        "active_classes": "Classes Actives",
-        "active_missions": "Missions Actives"
+        "total_students": "Estudiants totals",
+        "active_classes": "Classes actives",
+        "active_missions": "Missions actives"
       },
-      "my_classes": "Les Meves Classes",
+      "my_classes": "Les meves classes",
       "view_all": "Veure totes",
       "no_classes_yet": "No tens classes encara",
-      "recent_missions": "Últimes Missions",
+      "recent_missions": "Últimes missions",
       "no_missions_description": "Crea la teva primera missió per als teus estudiants",
       "meta": {
-        "title": "Dashboard Professor | ITAKAI",
+        "title": "Dashboard professor | ITAKAI",
         "description": "Dashboard principal del professor. Gestiona les teves classes, missions i revisa el progrés dels teus estudiants."
       }
     },
     "classes": {
       "index": {
-        "title": "Les Meves Classes",
+        "title": "Les meves classes",
         "subtitle": "Gestiona les teves classes i revisa el progrés dels teus estudiants",
-        "new_class": "Nova Classe",
-        "create_first": "Crear Primera Classe",
+        "new_class": "Nova classe",
+        "create_first": "Crear primera classe",
         "no_classes_description": "No has creat cap classe encara",
         "meta": {
-          "title": "Les Meves Classes | ITAKAI Professor",
+          "title": "Les meves classes | ITAKAI Professor",
           "description": "Gestiona totes les teves classes, estudiants inscrits i missions assignades."
         },
         "templates": "Plantilles",
@@ -83,10 +83,10 @@
         }
       },
       "create": {
-        "breadcrumb_classes": "Les Meves Classes",
+        "breadcrumb_classes": "Les meves classes",
         "breadcrumb_new": "Nova",
         "btn_creating": "Creant...",
-        "btn_create": "Crear Classe",
+        "btn_create": "Crear classe",
         "success_title": "Classe creada!",
         "success_message": "La teva classe \"{name}\" està llesta.",
         "invite_code_label": "Codi d'invitació",
@@ -100,7 +100,7 @@
           "create_error": "Error en crear la classe. Si us plau, torna-ho a provar."
         },
         "meta": {
-          "title": "Crear Nova Classe | ITAKAI Professor"
+          "title": "Crear nova classe | ITAKAI Professor"
         },
         "summary": {
           "edit": "Edita",
@@ -184,10 +184,11 @@
           "view_list": "Llistat",
           "view_ranking": "Ranquing",
           "col_actions": "Accions",
-          "managed_badge": "Sense correu"
+          "managed_badge": "Sense correu",
+          "pending_sign_in_badge": "Pendent d'entrar"
         },
-        "stats_title": "Estadístiques de la Classe",
-        "pending_reviews": "Lliuraments per Revisar",
+        "stats_title": "Estadístiques de la classe",
+        "pending_reviews": "Lliuraments per revisar",
         "guide_editor": {
           "toast_saved": "Guia desada correctament",
           "toast_error": "Error en desar la guia"
@@ -199,8 +200,8 @@
         "missions_tab": {
           "no_missions_title": "No hi ha missions",
           "no_missions_description": "No hi ha missions assignades a aquesta classe encara",
-          "create_first": "Crear Primera Missió",
-          "new_mission": "Nova Missió",
+          "create_first": "Crear primera missió",
+          "new_mission": "Nova missió",
           "no_results": "Sense resultats",
           "empty_search": "No s'han trobat missions per a \"{query}\"",
           "empty_status": "No hi ha missions amb els estats seleccionats",
@@ -208,7 +209,7 @@
           "empty_default": "No hi ha missions en aquesta classe"
         },
         "meta": {
-          "title": "Detall de Classe | ITAKAI Professor",
+          "title": "Detall de classe | ITAKAI Professor",
           "description": "Gestiona la classe. Revisa estudiants, missions assignades i progrés general."
         },
         "behaviors": {
@@ -251,7 +252,8 @@
           "toast_save_error": "No s'ha pogut desar el comportament.",
           "toast_delete_error": "No s'ha pogut eliminar el comportament.",
           "fetch_error": "No s'han pogut carregar els comportaments.",
-          "apply_error": "No s'ha pogut aplicar el comportament."
+          "apply_error": "No s'ha pogut aplicar el comportament.",
+          "empty_description_readonly": "Quan s'afegeixin comportaments a aquesta classe, apareixeran aquí."
         },
         "shop": {
           "tab_items": "Articles",
@@ -297,7 +299,8 @@
           "tab_history": "Historial",
           "history_purchases": "Compres",
           "view_student_profile": "Veure estudiant",
-          "mana_disabled_chip": "Mana desactivat"
+          "mana_disabled_chip": "Mana desactivat",
+          "empty_description_readonly": "Quan s'afegeixin articles a la botiga d'aquesta classe, apareixeran aquí."
         },
         "settings": {
           "levels": {
@@ -377,6 +380,8 @@
           "requires_resource": "Necessita almenys un recurs actiu (XP, {coins}, mana o vides)",
           "general": {
             "title": "Dades generals",
+            "identity_title": "Nom i classificació",
+            "identity_hint": "L'idioma, la província, el nivell i l'assignatura serveixen per trobar la classe si la publiques com a plantilla.",
             "name_label": "Nom",
             "subject_label": "Assignatura",
             "level_label": "Nivell educatiu",
@@ -417,7 +422,8 @@
             "title": "Funcionalitats"
           },
           "management": {
-            "title": "Gestió"
+            "title": "Gestió",
+            "hint": "Publica-la com a plantilla perquè altres professors la importin, o fes-ne una còpia."
           },
           "edit_level_note": "Pots canviar el nom, l'horari i la portada. La classificació, les funcionalitats i els nivells els canvia qui administra la classe."
         },
@@ -525,7 +531,6 @@
           "menu_label": "Accions per a {name}",
           "owner_note": "Ets el propietari d'aquesta classe. Per sortir-ne, abans passa'n la propietat a algú amb administració.",
           "leave_title": "Sortir de la classe",
-          "leave": "Surt de la classe",
           "leave_confirm": "Surt",
           "leave_hint": "Deixaràs de veure aquesta classe. Per tornar-hi, algú amb administració t'hi haurà d'afegir de nou.",
           "leave_message": "Vols sortir de {class}? Deixaràs de veure-la i, per tornar-hi, algú amb administració t'hi haurà d'afegir de nou.",
@@ -626,6 +631,7 @@
               "password_reset": "va restablir la contrasenya de {target}",
               "nickname_changed": "va canviar l'àlies de {target}",
               "removed": "va treure {target} de la classe",
+              "removed_unused": "va treure {target} de la classe i va esborrar el seu compte, que no s'havia fet servir",
               "avatar_generated": "va generar un avatar nou per a {target}"
             },
             "mission": {
@@ -668,6 +674,7 @@
               "password_reset": "va restablir la contrasenya d'un alumne que ja no és a la classe",
               "nickname_changed": "va canviar l'àlies d'un alumne que ja no és a la classe",
               "removed": "va treure un alumne de la classe",
+              "removed_unused": "va treure de la classe un alumne que no havia entrat mai i va esborrar el seu compte",
               "avatar_generated": "va generar un avatar nou per a un alumne que ja no és a la classe"
             },
             "submission": {
@@ -683,14 +690,14 @@
     "missions": {
       "index": {
         "meta": {
-          "title": "Les Meves Missions | ITAKAI Professor",
+          "title": "Les meves missions | ITAKAI Professor",
           "description": "Gestiona totes les teves missions creades, edita-les o crea'n de noves per als teus estudiants."
         },
         "subtitle": "Gestiona les missions de les teves classes"
       },
       "create": {
         "meta": {
-          "title": "Crear Missió | ITAKAI Professor"
+          "title": "Crear missió | ITAKAI Professor"
         },
         "pick_class": "Selecciona una classe",
         "idea_placeholder": "Ex.: Vull una missió sobre cinemàtica on els alumnes calculin trajectòries d'escombres voladores...",
@@ -705,7 +712,7 @@
           "enigma_has_submissions": "No es pot eliminar un enigma que ja té lliuraments d'alumnes"
         },
         "meta": {
-          "title": "Detall de Missió | ITAKAI Professor",
+          "title": "Detall de missió | ITAKAI Professor",
           "title_loading": "Carregant missió... | ITAKAI Professor",
           "description_fallback": "Detall de missió a ITAKAI"
         },
@@ -746,7 +753,7 @@
       }
     },
     "badges": {
-      "title": "Les Meves Insígnies",
+      "title": "Les meves insígnies",
       "subtitle": "Crea i gestiona insígnies personalitzades per recompensar les fites dels teus estudiants",
       "new_badge": "Nova insígnia",
       "btn_delete": "Eliminar",
@@ -754,13 +761,13 @@
       "no_badges_description": "Crea la teva primera insígnia per recompensar els teus estudiants",
       "create_first": "Crear primera insígnia",
       "form": {
-        "edit_title": "Editar Insígnia",
-        "create_title": "Nova Insígnia",
+        "edit_title": "Editar insígnia",
+        "create_title": "Nova insígnia",
         "label_name": "Nom",
         "label_description": "Descripció",
         "label_image": "Imatge",
         "image_optional": "(opcional)",
-        "placeholder_name": "Ex: Mestre d'Equacions",
+        "placeholder_name": "Ex: Mestre d'equacions",
         "placeholder_description": "Descriu quina fita representa aquesta insígnia...",
         "btn_remove_image": "Treure imatge",
         "preview_label": "Vista prèvia:",
@@ -774,7 +781,7 @@
         "btn_edit": "Editar",
         "btn_close": "Tancar"
       },
-      "delete_title": "Eliminar Insígnia",
+      "delete_title": "Eliminar insígnia",
       "delete_confirm": "Estàs segur que vols eliminar la insígnia '{name}'? Aquesta acció no es pot desfer.",
       "validation": {
         "name_required": "El nom és obligatori",
@@ -783,7 +790,7 @@
         "image_type": "Només es permeten fitxers PNG, JPG, SVG o WebP"
       },
       "meta": {
-        "title": "Les Meves Insígnies | ITAKAI Professor",
+        "title": "Les meves insígnies | ITAKAI Professor",
         "description": "Crea, edita i gestiona insígnies personalitzades per premiar les fites dels teus estudiants."
       },
       "filter_system": "Del sistema",
@@ -793,9 +800,9 @@
     },
     "students": {
       "index": {
-        "title": "Els Meus Estudiants",
+        "title": "Els meus estudiants",
         "subtitle": "Gestiona i visualitza el progrés dels teus estudiants",
-        "search_placeholder": "Cercar per nom o email...",
+        "search_placeholder": "Cercar per nom, correu o usuari...",
         "filter_all_classes": "Totes les classes",
         "filter_all_progress": "Tot el progrés",
         "progress_excellent": "Excel·lent (≥80%)",
@@ -817,9 +824,10 @@
         "btn_view": "Veure",
         "stat_missions": "Missions",
         "meta": {
-          "title": "Els Meus Estudiants | ITAKAI Professor",
+          "title": "Els meus estudiants | ITAKAI Professor",
           "description": "Gestiona tots els teus estudiants, revisa el seu progrés i estadístiques de rendiment acadèmic."
-        }
+        },
+        "stat_badges": "Insígnies"
       },
       "detail": {
         "breadcrumb_students": "Estudiants",
@@ -830,7 +838,7 @@
         "stat_classes": "Classes",
         "stat_missions": "Missions",
         "stat_completed": "Completat",
-        "enrolled_classes_title": "Classes Inscrites",
+        "enrolled_classes_title": "Classes inscrites",
         "enrolled_classes_count": "{count} classes",
         "not_enrolled": "No està inscrit en cap de les teves classes",
         "label_progress": "Completat",
@@ -838,7 +846,7 @@
         "stat_lives": "Punts de vida",
         "no_activity": "Sense activitat recent",
         "meta": {
-          "title": "Perfil d'Estudiant | ITAKAI Professor",
+          "title": "Perfil d'estudiant | ITAKAI Professor",
           "description": "Perfil detallat de l'estudiant amb estadístiques de rendiment, progrés en missions i activitat recent."
         }
       },
@@ -869,46 +877,42 @@
         "remove_loses_history": "el seu historial, els seus avisos i les seves converses amb l'assistent sobre aquesta classe.",
         "remove_keeps": "El que tingui en altres classes no canvia i el seu compte continua existint. No es pot desfer.",
         "remove_home_class": "El seu compte es va crear en aquesta classe: després, només l'administració de la plataforma en podrà restablir la contrasenya.",
+        "remove_unused": "{name} no ha entrat mai i només és en aquesta classe, així que el seu compte s'esborrarà del tot, no només de la classe. No es pot desfer.",
+        "remove_unused_confirm": "Treure i esborrar el compte",
         "removed": "{name} ja no és a la classe",
+        "removed_account_deleted": "{name} ja no és a la classe i el seu compte sense ús s'ha esborrat",
         "remove_error": "No s'ha pogut treure l'alumne de la classe."
       }
     },
     "ai_assistant": {
       "meta": {
-        "title": "Assistent IA Professor | ITAKAI",
+        "title": "Assistent IA professor | ITAKAI",
         "description": "Assistent d'IA especialitzat per a professors. Obtén ajuda sobre gestió de classes i missions."
       }
     },
     "profile": {
       "breadcrumb_home": "Inici",
       "breadcrumb_profile": "El meu perfil",
-      "title": "El Meu Perfil",
+      "title": "El meu perfil",
       "tabs": {
         "security": "Seguretat",
         "settings": "Configuració"
       },
       "security": {
-        "password_title": "Contrasenya",
-        "placeholder_current": "Contrasenya actual",
-        "placeholder_new": "Nova contrasenya",
-        "placeholder_confirm": "Confirmar contrasenya",
-        "btn_update": "Actualitzar",
         "sessions_title": "Sessions",
         "sessions_close_all": "Tancar totes",
         "session_current": "Actual",
         "session_close": "Tancar",
         "validation": {
-          "passwords_mismatch": "Les contrasenyes no coincideixen",
-          "password_min_length": "La contrasenya ha de tenir almenys {min} caràcters",
           "password_required": "Introdueix la teva contrasenya"
         }
       },
       "settings": {
         "theme_title": "Tema",
         "theme_description": "Tria l'estil visual de la plataforma",
-        "theme_college": "Mode Col·legi",
+        "theme_college": "Mode col·legi",
         "theme_college_desc": "Visual gamificat",
-        "theme_university": "Mode Universitat",
+        "theme_university": "Mode universitat",
         "theme_university_desc": "Visual professional",
         "language_title": "Idioma",
         "language_updated": "Idioma actualitzat",
@@ -932,19 +936,20 @@
           "pt": "Portuguès",
           "el": "Grec",
           "ro": "Romanès"
-        }
+        },
+        "delete_modal_blocked": "Hi ha classes que depenen del teu compte."
       },
       "meta": {
-        "title": "El Meu Perfil | ITAKAI",
+        "title": "El meu perfil | ITAKAI",
         "description": "Gestiona el teu perfil de professor, configura la seguretat i personalitza la teva experiència."
       }
     },
     "components": {
       "enigma_form_modal": {
-        "edit_title": "Editar Enigma",
-        "add_title": "Afegir Enigma",
+        "edit_title": "Editar enigma",
+        "add_title": "Afegir enigma",
         "label_title": "Títol de l'enigma",
-        "placeholder_title": "Ex: El Despertar de les Màquines",
+        "placeholder_title": "Ex: El despertar de les màquines",
         "label_xp": "XP",
         "label_rewards": "Recompenses en completar",
         "rewards_locked_hint": "Només pots augmentar les recompenses: algun alumne ja les ha guanyat.",
@@ -969,15 +974,15 @@
         "custom_value": "Valor personalitzat"
       },
       "document_form_modal": {
-        "edit_title": "Editar Document",
-        "add_title": "Afegir Document",
+        "edit_title": "Editar document",
+        "add_title": "Afegir document",
         "label_title": "Títol",
-        "placeholder_title": "Ex: Guia de Sistemes d'Equacions",
+        "placeholder_title": "Ex: Guia de sistemes d'equacions",
         "btn_upload_file": "Pujar fitxer",
         "btn_add_link": "Afegir enllaç",
         "label_file": "Fitxer",
         "drop_hint": "Arrossega un fitxer o fes clic per seleccionar",
-        "file_types_hint": "PDF, Word, Vídeo, Imatges (max 50MB)",
+        "file_types_hint": "PDF, Word, vídeo, imatges (max 50MB)",
         "label_url": "URL",
         "label_description": "Descripció",
         "label_description_optional": "(opcional)",
@@ -1041,7 +1046,7 @@
         }
       },
       "rewards_form_modal": {
-        "title": "Editar Recompenses",
+        "title": "Editar recompenses",
         "badge_label": "Insígnia de recompensa",
         "remove_badge": "Treure insígnia",
         "no_badge_title": "Sense insígnia assignada",
@@ -1055,7 +1060,7 @@
         "label_description": "Descripció",
         "label_image": "Imatge",
         "image_optional": "(opcional)",
-        "placeholder_name": "Ex: Mestre d'Equacions",
+        "placeholder_name": "Ex: Mestre d'equacions",
         "placeholder_description": "Descriu quin assoliment representa aquesta insígnia...",
         "image_selected": "Imatge seleccionada",
         "btn_remove_image": "Treure imatge",
@@ -1090,7 +1095,7 @@
         "breadcrumb_classes": "Les meves classes",
         "deadline_none": "Sense data límit",
         "expired_readonly": "Aquesta missió ha caducat: pots consultar-la, però ja no admet lliuraments.",
-        "narrative_title": "Història de la Missió",
+        "narrative_title": "Història de la missió",
         "btn_see_more": "Veure més",
         "btn_see_less": "Veure menys",
         "btn_edit": "Editar",
@@ -1100,18 +1105,18 @@
         "objectives_label": "Objectius:",
         "no_enigmas": "No hi ha enigmes en aquesta missió",
         "btn_add_first_enigma": "Afegir primer enigma",
-        "documents_title": "Documents de Suport",
+        "documents_title": "Documents de suport",
         "no_documents": "No hi ha documents de suport",
         "btn_view_submissions": "Veure lliuraments ({count})",
         "btn_submit": "Lliurar",
         "status_available": "Disponible",
         "status_in_review": "En revisió",
         "status_completed": "Completat",
-        "global_progress": "Progrés Global",
+        "global_progress": "Progrés global",
         "class_average": "Mitjana de la classe",
         "rewards_title": "Recompenses",
-        "xp_enigmas": "XP d'Enigmes",
-        "xp_mission": "XP de Missió",
+        "xp_enigmas": "XP d'enigmes",
+        "xp_mission": "XP de missió",
         "complete_all_enigmas": "Completa tots els enigmes",
         "badge_rarity": {
           "common": "Comuna",

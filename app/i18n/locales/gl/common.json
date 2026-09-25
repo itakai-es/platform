@@ -2,7 +2,7 @@
   "common": {
     "nav": {
       "dashboard": "Dashboard",
-      "my_classes": "As Miñas Clases",
+      "my_classes": "As miñas clases",
       "missions": "Misións",
       "badges": "Insignias",
       "students": "Estudantes",
@@ -32,15 +32,15 @@
       "toggle_menu": "Alternar menú",
       "scroll_left": "Desprazar á esquerda",
       "scroll_right": "Desprazar á dereita",
-      "back_to_dashboard": "Volver ao Dashboard",
-      "create_new_account": "Crear Conta Nova",
+      "back_to_dashboard": "Volver ao dashboard",
+      "create_new_account": "Crear conta nova",
       "enter": "Entrar",
       "close": "Pechar",
       "processing": "Procesando…",
       "view_mode": "Modo de vista"
     },
     "status": {
-      "under_development": "En Desenvolvemento"
+      "under_development": "En desenvolvemento"
     },
     "time": {
       "now": "Agora",
@@ -101,7 +101,7 @@
       "student": "Estudante",
       "teacher": "Profesor",
       "admin": "Administrador",
-      "admin_system": "Administrador do Sistema"
+      "admin_system": "Administrador do sistema"
     },
     "sidebar": {
       "new_conversation": "Nova conversa",
@@ -112,7 +112,7 @@
       "chat_with_label": "Conversa con"
     },
     "mobile_sidebar": {
-      "join_class": "Unirse a Clase"
+      "join_class": "Unirse a clase"
     },
     "landing": {
       "hero_title": "A aventura de aprender",
@@ -120,32 +120,32 @@
       "cta_start": "Comezar",
       "features_title": "Que podes facer con ITAKAI?",
       "features_subtitle": "Descobre todas as ferramentas e funcionalidades que transforman a educación nunha experiencia única",
-      "feature_gamification_title": "Gamificación Completa",
+      "feature_gamification_title": "Gamificación completa",
       "feature_gamification_desc": "Sistema de puntos, niveis, insignias e recompensas que motiva a aprendizaxe continua",
-      "feature_narrative_title": "Narrativa Inmersiva",
+      "feature_narrative_title": "Narrativa inmersiva",
       "feature_narrative_desc": "Cada clase é unha aventura única con personaxes e historias que capturan a atención",
-      "feature_teamwork_title": "Traballo en Equipo",
+      "feature_teamwork_title": "Traballo en equipo",
       "feature_teamwork_desc": "Desafíos colaborativos e rankings que fomentan o traballo en equipo e a superación constante",
-      "feature_analytics_title": "Análise Intelixente",
+      "feature_analytics_title": "Análise intelixente",
       "feature_analytics_desc": "Ferramentas avanzadas de seguimento e análise do progreso estudantil",
-      "feature_access_title": "Acceso Universal",
+      "feature_access_title": "Acceso universal",
       "feature_access_desc": "Funciona en calquera dispositivo, desde calquera lugar do mundo",
-      "feature_ai_title": "IA Educativa",
+      "feature_ai_title": "IA educativa",
       "feature_ai_desc": "Asistentes que personalizan a aprendizaxe para cada estudante",
       "profiles_title": "Elixe o teu perfil para comezar",
       "about_title": "Que é ITAKAI?",
-      "about_description_1": "ITAKAI é a evolución de <strong>MyClassGame</strong>, potenciada con <strong>Intelixencia Artificial</strong>. Unha plataforma educativa gamificada que transforma a formación profesional nunha experiencia inmersiva.",
+      "about_description_1": "ITAKAI é a evolución de <strong>MyClassGame</strong>, potenciada con <strong>intelixencia artificial</strong>. Unha plataforma educativa gamificada que transforma a formación profesional nunha experiencia inmersiva.",
       "about_description_2": "Xeración automática de contidos, asistentes IA personalizados para cada estudante, e análise preditiva do rendemento. Todo integrado nun ecosistema onde aprender é unha aventura.",
       "stat_students": "Estudantes",
       "stat_teachers": "Profesores",
       "stat_centers": "Centros",
       "partners_title": "Quen somos?",
       "developed_by": "Desenvolvido por",
-      "gods_title": "Os Teus Mentores Olímpicos",
+      "gods_title": "Os teus mentores olímpicos",
       "gods_subtitle": "5 asistentes IA inspirados en deuses gregos, cada un experto no seu dominio",
-      "cta_final_title": "Listo para a túa Aventura Épica?",
+      "cta_final_title": "Listo para a túa aventura épica?",
       "cta_final_subtitle": "Únete a miles de estudantes que xa están transformando a súa aprendizaxe con ITAKAI",
-      "cta_final_button": "Comezar Gratis Agora",
+      "cta_final_button": "Comezar gratis agora",
       "footer_copyright_alt": "(c) {year} ITAKAI. Sistema educativo gamificado",
       "gods": {
         "atenea": {
@@ -185,14 +185,14 @@
       "help_center": "Centro de axuda"
     },
     "level_up": {
-      "title": "Subiches de Nivel!",
+      "title": "Subiches de nivel!",
       "congratulations": "Parabéns! Alcanzaches o nivel {level}",
       "congratulations_class": "Parabéns! Alcanzaches o nivel {level} en {className}",
-      "rewards_title": "Recompensas Obtidas",
+      "rewards_title": "Recompensas obtidas",
       "continue": "Continuar!"
     },
     "join_class_modal": {
-      "title": "Unirse a unha Clase",
+      "title": "Unirse a unha clase",
       "description": "Introduce o código de clase que che proporcionou o teu profesor",
       "placeholder": "ABC123",
       "joining": "Uníndose...",
@@ -207,9 +207,9 @@
       "success": "Unícheste a {className}"
     },
     "invite_students_modal": {
-      "title": "Convidar Estudantes",
+      "title": "Convidar estudantes",
       "description": "Comparte este código cos teus estudantes para que se unan á clase:",
-      "copy_code": "Copiar Código",
+      "copy_code": "Copiar código",
       "code_copied": "Código copiado ao portapapeis",
       "copy_error": "Erro ao copiar o código",
       "tabs_label": "Formas de convidar",
@@ -217,7 +217,7 @@
       "tab_accounts": "Crear contas"
     },
     "under_development": {
-      "back_to_dashboard": "Volver ao Dashboard"
+      "back_to_dashboard": "Volver ao dashboard"
     },
     "help": {
       "title": "Centro de axuda",
@@ -280,7 +280,7 @@
       "back_to_app": "Volver á app"
     },
     "meta": {
-      "site_title": "ITAKAI - A aventura de aprender | Plataforma Educativa Gamificada",
+      "site_title": "ITAKAI - A aventura de aprender | Plataforma educativa gamificada",
       "site_description": "Transforma a educación con ITAKAI, a plataforma gamificada que inspira, motiva e conecta a estudantes, profesores e familias. Únete a máis de 50.000 estudantes.",
       "og_title": "ITAKAI - A aventura de aprender",
       "og_description": "Plataforma educativa gamificada con IA, narrativas inmersivas e análise intelixente."
@@ -410,6 +410,35 @@
       "transfers_self": "As túas clases pasarán a outro profesor con administración nelas:",
       "transfers_admin": "As súas clases pasarán a outro profesor con administración nelas:",
       "transfer_item": "{class}, a {name}"
+    },
+    "copy": {
+      "label": "Copiar: {what}",
+      "copied": "Copiado ao portapapeis",
+      "error": "Non se puido copiar"
+    },
+    "change_password": {
+      "title": "Contrasinal",
+      "current_password": "Contrasinal actual",
+      "new_password": "Novo contrasinal",
+      "new_password_placeholder": "Polo menos {min} caracteres",
+      "confirm_password": "Confirmar contrasinal",
+      "confirm_password_placeholder": "Repite o novo contrasinal",
+      "submit": "Cambiar o contrasinal",
+      "success": "Contrasinal cambiado. Nos teus outros dispositivos terás que volver entrar.",
+      "errors": {
+        "current_required": "Escribe o teu contrasinal actual.",
+        "current_wrong": "O contrasinal actual non é correcto.",
+        "password_not_set": "A túa conta entra con Google e aínda non ten contrasinal. Pecha a sesión e crea un desde «Esquecíches o contrasinal?».",
+        "too_short": "O contrasinal debe ter polo menos {min} caracteres.",
+        "mismatch": "Os contrasinais non coinciden.",
+        "generic": "Non se puido cambiar o contrasinal. Comproba o actual e téntao de novo."
+      }
+    },
+    "filter_bar": {
+      "search": "Buscar...",
+      "filters": "Filtros",
+      "filters_count": "Filtros ({count})",
+      "clear": "Limpar filtros"
     }
   }
 }

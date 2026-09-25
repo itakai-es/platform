@@ -41,8 +41,8 @@
         "clear": "Netejar filtres",
         "all_account_types": "Tots els comptes",
         "self_accounts": "Amb correu",
-        "managed_accounts": "Les porta el professorat",
-        "orphan_accounts": "Gestionades sense classe"
+        "managed_accounts": "Sense correu",
+        "orphan_accounts": "Sense correu ni classe"
       },
       "roles": {
         "student": "Alumne",
@@ -53,7 +53,7 @@
         "status": "Estat",
         "classes": "Classes",
         "last_login": "Últim accés",
-        "managed": "La porta el professorat",
+        "managed": "Sense correu",
         "home_class": "Es gestiona des de {name}",
         "no_home_class": "Sense classe d'origen"
       },
@@ -77,7 +77,15 @@
         "errors": {
           "name": "Escriu el nom, amb com a mínim 2 caràcters",
           "home_class": "Tria la classe d'origen"
-        }
+        },
+        "error": "No s'ha pogut crear el compte."
+      },
+      "class_search": {
+        "placeholder": "Busca per classe, professor o codi",
+        "searching": "S'està buscant…",
+        "no_results": "Cap classe no coincidix",
+        "more": "Hi ha més classes: escriu més per a afinar",
+        "option_hint": "{teacher} · sense alumnes | {teacher} · 1 alumne | {teacher} · {count} alumnes"
       },
       "actions": {
         "suspend_title": "Suspendre usuari",
@@ -101,7 +109,12 @@
         "home_class": "Canviar classe d'origen",
         "home_class_title": "Classe d'origen",
         "home_class_note": "És la classe des de la qual el professorat porta este compte; en canviar-la, l'alumne queda matriculat en la nova. Sense classe, només l'atén l'administració.",
-        "home_class_none": "Sense classe d'origen"
+        "home_class_none": "Sense classe d'origen",
+        "suspend_error": "No s'ha pogut suspendre el compte.",
+        "activate_error": "No s'ha pogut activar el compte.",
+        "reset_password_error": "No s'ha pogut restablir la contrasenya.",
+        "home_class_error": "No s'ha pogut canviar la classe d'origen.",
+        "delete_error": "No s'ha pogut eliminar el compte."
       },
       "meta": {
         "title": "Gestió d'usuaris | ITAKAI Admin",
@@ -109,42 +122,6 @@
       },
       "sort": {
         "recent": "Més recents"
-      }
-    },
-    "schools": {
-      "title": "Gestió d'institucions",
-      "subtitle": "Administra les institucions educatives de la plataforma",
-      "filters": {
-        "search_placeholder": "Buscar institució...",
-        "all_statuses": "Tots els estats",
-        "active": "Activa",
-        "inactive": "Inactiva"
-      },
-      "form": {
-        "create_title": "Nova institució",
-        "edit_title": "Editar institució",
-        "name": "Nom",
-        "name_placeholder": "Nom de la institució",
-        "city": "Ciutat",
-        "city_placeholder": "Ciutat",
-        "country": "País",
-        "country_placeholder": "País",
-        "save": "Guardar",
-        "cancel": "Cancel·lar"
-      },
-      "actions": {
-        "create": "Nova institució",
-        "delete_title": "Eliminar institució",
-        "delete_message": "Segur que vols eliminar {name}? Es desvincularà de tots els usuaris.",
-        "delete_confirm": "Eliminar"
-      },
-      "empty": {
-        "title": "No s'han trobat institucions",
-        "description": "No hi ha institucions que coincidisquen amb els filtres."
-      },
-      "meta": {
-        "title": "Gestió d'institucions | ITAKAI Admin",
-        "description": "Administra totes les institucions educatives del sistema, crea nous centres i supervisa la seua activitat."
       }
     },
     "classes": {

@@ -41,8 +41,8 @@
         "clear": "Limpar filtros",
         "all_account_types": "Todas as contas",
         "self_accounts": "Com e-mail",
-        "managed_accounts": "Geridas pelos professores",
-        "orphan_accounts": "Geridas sem turma"
+        "managed_accounts": "Sem e-mail",
+        "orphan_accounts": "Sem e-mail nem turma"
       },
       "roles": {
         "student": "Aluno",
@@ -53,7 +53,7 @@
         "status": "Estado",
         "classes": "Turmas",
         "last_login": "Últ. acesso",
-        "managed": "Gerida pelos professores",
+        "managed": "Sem e-mail",
         "home_class": "É gerida a partir de {name}",
         "no_home_class": "Sem turma de origem"
       },
@@ -77,7 +77,15 @@
         "errors": {
           "name": "Escreve o nome, com pelo menos 2 caracteres",
           "home_class": "Escolhe a turma de origem"
-        }
+        },
+        "error": "Não foi possível criar a conta."
+      },
+      "class_search": {
+        "placeholder": "Pesquisa por turma, professor ou código",
+        "searching": "A pesquisar…",
+        "no_results": "Nenhuma turma corresponde",
+        "more": "Há mais turmas: escreve mais para afinar",
+        "option_hint": "{teacher} · sem alunos | {teacher} · 1 aluno | {teacher} · {count} alunos"
       },
       "actions": {
         "suspend_title": "Suspender utilizador",
@@ -101,7 +109,12 @@
         "home_class": "Mudar turma de origem",
         "home_class_title": "Turma de origem",
         "home_class_note": "É a turma a partir da qual os professores gerem esta conta; ao mudá-la, o aluno fica inscrito na nova. Sem turma, só a administração a pode atender.",
-        "home_class_none": "Sem turma de origem"
+        "home_class_none": "Sem turma de origem",
+        "suspend_error": "Não foi possível suspender a conta.",
+        "activate_error": "Não foi possível ativar a conta.",
+        "reset_password_error": "Não foi possível repor a palavra-passe.",
+        "home_class_error": "Não foi possível mudar a turma de origem.",
+        "delete_error": "Não foi possível eliminar a conta."
       },
       "meta": {
         "title": "Gestão de utilizadores | ITAKAI Admin",
@@ -109,42 +122,6 @@
       },
       "sort": {
         "recent": "Mais recentes"
-      }
-    },
-    "schools": {
-      "title": "Gestão de instituições",
-      "subtitle": "Administra as instituições de ensino da plataforma",
-      "filters": {
-        "search_placeholder": "Procurar instituição...",
-        "all_statuses": "Todos os estados",
-        "active": "Ativa",
-        "inactive": "Inativa"
-      },
-      "form": {
-        "create_title": "Nova instituição",
-        "edit_title": "Editar instituição",
-        "name": "Nome",
-        "name_placeholder": "Nome da instituição",
-        "city": "Cidade",
-        "city_placeholder": "Cidade",
-        "country": "País",
-        "country_placeholder": "País",
-        "save": "Guardar",
-        "cancel": "Cancelar"
-      },
-      "actions": {
-        "create": "Nova instituição",
-        "delete_title": "Eliminar instituição",
-        "delete_message": "Tens a certeza de que queres eliminar {name}? Será desassociada de todos os utilizadores.",
-        "delete_confirm": "Eliminar"
-      },
-      "empty": {
-        "title": "Não foram encontradas instituições",
-        "description": "Não há instituições que correspondam aos filtros."
-      },
-      "meta": {
-        "title": "Gestão de instituições | ITAKAI Admin",
-        "description": "Administra todas as instituições de ensino do sistema, cria novas escolas e acompanha a sua atividade."
       }
     },
     "classes": {

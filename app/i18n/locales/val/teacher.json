@@ -184,7 +184,8 @@
           "view_list": "Llistat",
           "view_ranking": "Classificació",
           "col_actions": "Accions",
-          "managed_badge": "Sense correu"
+          "managed_badge": "Sense correu",
+          "pending_sign_in_badge": "Pendent d'entrar"
         },
         "stats_title": "Estadístiques de la classe",
         "pending_reviews": "Entregues per revisar",
@@ -251,7 +252,8 @@
           "toast_save_error": "No s'ha pogut guardar el comportament.",
           "toast_delete_error": "No s'ha pogut eliminar el comportament.",
           "fetch_error": "No s'han pogut carregar els comportaments.",
-          "apply_error": "No s'ha pogut aplicar el comportament."
+          "apply_error": "No s'ha pogut aplicar el comportament.",
+          "empty_description_readonly": "Quan s'afigen comportaments a esta classe, apareixeran ací."
         },
         "shop": {
           "tab_items": "Articles",
@@ -297,7 +299,8 @@
           "tab_history": "Historial",
           "history_purchases": "Compres",
           "view_student_profile": "Veure l'alumne",
-          "mana_disabled_chip": "Mana desactivat"
+          "mana_disabled_chip": "Mana desactivat",
+          "empty_description_readonly": "Quan s'afigen articles a la botiga d'esta classe, apareixeran ací."
         },
         "settings": {
           "levels": {
@@ -377,6 +380,8 @@
           "requires_resource": "Necessita almenys un recurs actiu (XP, {coins}, mana o vides)",
           "general": {
             "title": "Dades generals",
+            "identity_title": "Nom i classificació",
+            "identity_hint": "L'idioma, la província, el nivell i l'assignatura servixen per a trobar la classe si la publiques com a plantilla.",
             "name_label": "Nom",
             "subject_label": "Assignatura",
             "level_label": "Nivell educatiu",
@@ -417,7 +422,8 @@
             "title": "Funcionalitats"
           },
           "management": {
-            "title": "Gestió"
+            "title": "Gestió",
+            "hint": "Publica-la com a plantilla perquè altres professors la importen, o fes-ne una còpia."
           },
           "edit_level_note": "Pots canviar el nom, l'horari i la portada. La classificació, les funcionalitats i els nivells els canvia qui administra la classe."
         },
@@ -525,7 +531,6 @@
           "menu_label": "Accions per a {name}",
           "owner_note": "Eres el propietari d'esta classe. Per a eixir-ne, abans passa'n la propietat a algú amb administració.",
           "leave_title": "Eixir de la classe",
-          "leave": "Eixir de la classe",
           "leave_confirm": "Eixir",
           "leave_hint": "Deixaràs de vore esta classe. Per a tornar-hi, algú amb administració t'hi haurà d'afegir de nou.",
           "leave_message": "Vols eixir de {class}? Deixaràs de vore-la i, per a tornar-hi, algú amb administració t'hi haurà d'afegir de nou.",
@@ -626,6 +631,7 @@
               "password_reset": "va restablir la contrasenya de {target}",
               "nickname_changed": "va canviar el sobrenom de {target}",
               "removed": "va llevar {target} de la classe",
+              "removed_unused": "va llevar {target} de la classe i va esborrar el seu compte, que no s'havia utilitzat",
               "avatar_generated": "va generar un avatar nou per a {target}"
             },
             "mission": {
@@ -668,6 +674,7 @@
               "password_reset": "va restablir la contrasenya d'un alumne que ja no està en la classe",
               "nickname_changed": "va canviar el sobrenom d'un alumne que ja no està en la classe",
               "removed": "va llevar un alumne de la classe",
+              "removed_unused": "va llevar de la classe un alumne que no havia entrat mai i va esborrar el seu compte",
               "avatar_generated": "va generar un avatar nou per a un alumne que ja no està en la classe"
             },
             "submission": {
@@ -795,7 +802,7 @@
       "index": {
         "title": "Els meus alumnes",
         "subtitle": "Gestiona i visualitza el progrés dels teus alumnes",
-        "search_placeholder": "Buscar per nom o correu...",
+        "search_placeholder": "Buscar per nom, correu o usuari...",
         "filter_all_classes": "Totes les classes",
         "filter_all_progress": "Tot el progrés",
         "progress_excellent": "Excel·lent (≥80 %)",
@@ -819,7 +826,8 @@
         "meta": {
           "title": "Els meus alumnes | ITAKAI Professor",
           "description": "Gestiona tots els teus alumnes i revisa el seu progrés i les estadístiques de rendiment acadèmic."
-        }
+        },
+        "stat_badges": "Insígnies"
       },
       "detail": {
         "breadcrumb_students": "Alumnes",
@@ -869,7 +877,10 @@
         "remove_loses_history": "el seu historial, els seus avisos i les seues converses amb l'assistent sobre esta classe.",
         "remove_keeps": "El que tinga en altres classes no canvia i el seu compte continua existint. No es pot desfer.",
         "remove_home_class": "El seu compte es va crear en esta classe: després, només l'administració de la plataforma en podrà restablir la contrasenya.",
+        "remove_unused": "{name} no ha entrat mai i només està en esta classe, així que el seu compte s'esborrarà del tot, no sols de la classe. No es pot desfer.",
+        "remove_unused_confirm": "Llevar i esborrar el compte",
         "removed": "{name} ja no està en la classe",
+        "removed_account_deleted": "{name} ja no està en la classe i el seu compte sense ús s'ha esborrat",
         "remove_error": "No s'ha pogut llevar l'alumne de la classe."
       }
     },
@@ -888,18 +899,11 @@
         "settings": "Configuració"
       },
       "security": {
-        "password_title": "Contrasenya",
-        "placeholder_current": "Contrasenya actual",
-        "placeholder_new": "Contrasenya nova",
-        "placeholder_confirm": "Confirmar contrasenya",
-        "btn_update": "Actualitzar",
         "sessions_title": "Sessions",
         "sessions_close_all": "Tancar-les totes",
         "session_current": "Actual",
         "session_close": "Tancar",
         "validation": {
-          "passwords_mismatch": "Les contrasenyes no coincidixen",
-          "password_min_length": "La contrasenya ha de tindre com a mínim {min} caràcters",
           "password_required": "Introduïx la teua contrasenya"
         }
       },
@@ -932,7 +936,8 @@
           "pt": "Portugués",
           "el": "Grec",
           "ro": "Romanés"
-        }
+        },
+        "delete_modal_blocked": "Hi ha classes que depenen del teu compte."
       },
       "meta": {
         "title": "El meu perfil | ITAKAI",

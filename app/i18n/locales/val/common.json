@@ -134,7 +134,7 @@
       "feature_ai_desc": "Assistents que personalitzen l'aprenentatge per a cada alumne",
       "profiles_title": "Tria el teu perfil per a començar",
       "about_title": "Què és ITAKAI?",
-      "about_description_1": "ITAKAI és l'evolució de <strong>MyClassGame</strong>, potenciada amb <strong>Intel·ligència Artificial</strong>. Una plataforma educativa gamificada que transforma la formació professional en una experiència immersiva.",
+      "about_description_1": "ITAKAI és l'evolució de <strong>MyClassGame</strong>, potenciada amb <strong>intel·ligència artificial</strong>. Una plataforma educativa gamificada que transforma la formació professional en una experiència immersiva.",
       "about_description_2": "Generació automàtica de continguts, assistents IA personalitzats per a cada alumne i anàlisi predictiva del rendiment. Tot integrat en un ecosistema on aprendre és una aventura.",
       "stat_students": "Alumnes",
       "stat_teachers": "Professors",
@@ -410,6 +410,35 @@
       "transfers_self": "Les teues classes passaran a un altre professor amb administració:",
       "transfers_admin": "Les seues classes passaran a un altre professor amb administració:",
       "transfer_item": "{class}, a {name}"
+    },
+    "copy": {
+      "label": "Copiar: {what}",
+      "copied": "Copiat al porta-retalls",
+      "error": "No s'ha pogut copiar"
+    },
+    "change_password": {
+      "title": "Contrasenya",
+      "current_password": "Contrasenya actual",
+      "new_password": "Contrasenya nova",
+      "new_password_placeholder": "Com a mínim {min} caràcters",
+      "confirm_password": "Confirmar contrasenya",
+      "confirm_password_placeholder": "Repetix la contrasenya nova",
+      "submit": "Canviar la contrasenya",
+      "success": "Contrasenya canviada. En els teus altres dispositius hauràs de tornar a entrar.",
+      "errors": {
+        "current_required": "Escriu la teua contrasenya actual.",
+        "current_wrong": "La contrasenya actual no és correcta.",
+        "password_not_set": "El teu compte entra amb Google i encara no té contrasenya. Tanca la sessió i crea'n una des de «Has oblidat la contrasenya?».",
+        "too_short": "La contrasenya ha de tindre com a mínim {min} caràcters.",
+        "mismatch": "Les contrasenyes no coincidixen.",
+        "generic": "No s'ha pogut canviar la contrasenya. Comprova l'actual i torna-ho a provar."
+      }
+    },
+    "filter_bar": {
+      "search": "Busca...",
+      "filters": "Filtres",
+      "filters_count": "Filtres ({count})",
+      "clear": "Neteja els filtres"
     }
   }
 }

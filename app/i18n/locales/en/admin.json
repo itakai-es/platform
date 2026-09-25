@@ -1,19 +1,19 @@
 {
   "admin": {
     "dashboard": {
-      "title": "Administrator Dashboard",
+      "title": "Administrator dashboard",
       "subtitle": "ITAKAI system control panel",
       "activity": {
-        "title": "System Activity",
+        "title": "System activity",
         "period_24h": "Last 24 hours",
         "period_week": "Last week",
         "period_month": "Last month"
       },
       "quick_actions": {
-        "manage_users": "Manage Users"
+        "manage_users": "Manage users"
       },
       "system_status": {
-        "title": "System Status",
+        "title": "System status",
         "operational": "Operational",
         "degraded": "Degraded",
         "down": "Down",
@@ -21,14 +21,14 @@
         "empty": "No services available"
       },
       "meta": {
-        "title": "Admin Dashboard | ITAKAI",
+        "title": "Admin dashboard | ITAKAI",
         "description": "ITAKAI system control panel. Manage users, institutions and monitor platform status."
       }
     },
     "users": {
-      "title": "User Management",
+      "title": "User management",
       "meta": {
-        "title": "User Management | ITAKAI Admin",
+        "title": "User management | ITAKAI Admin",
         "description": "Manage all system users, create new profiles, edit roles and monitor activity."
       },
       "subtitle": "Manage all platform users",
@@ -45,8 +45,8 @@
         "clear": "Clear filters",
         "all_account_types": "All accounts",
         "self_accounts": "With email",
-        "managed_accounts": "Managed by teachers",
-        "orphan_accounts": "Managed with no class"
+        "managed_accounts": "No email",
+        "orphan_accounts": "No email or class"
       },
       "roles": {
         "student": "Student",
@@ -57,7 +57,7 @@
         "status": "Status",
         "classes": "Classes",
         "last_login": "Last login",
-        "managed": "Managed by teachers",
+        "managed": "No email",
         "home_class": "Managed from {name}",
         "no_home_class": "No home class"
       },
@@ -81,7 +81,15 @@
         "errors": {
           "name": "Enter the name, at least 2 characters",
           "home_class": "Pick the home class"
-        }
+        },
+        "error": "The account could not be created."
+      },
+      "class_search": {
+        "placeholder": "Search by class, teacher or code",
+        "searching": "Searching…",
+        "no_results": "No class matches",
+        "more": "There are more classes: type more to narrow it down",
+        "option_hint": "{teacher} · no students | {teacher} · 1 student | {teacher} · {count} students"
       },
       "actions": {
         "suspend_title": "Suspend user",
@@ -105,16 +113,21 @@
         "home_class": "Change home class",
         "home_class_title": "Home class",
         "home_class_note": "This is the class teachers manage the account from; changing it also enrolls the student in the new one. With no class, only administration can attend to it.",
-        "home_class_none": "No home class"
+        "home_class_none": "No home class",
+        "suspend_error": "The account could not be suspended.",
+        "activate_error": "The account could not be activated.",
+        "reset_password_error": "The password could not be reset.",
+        "home_class_error": "The home class could not be changed.",
+        "delete_error": "The account could not be deleted."
       },
       "sort": {
         "recent": "Most recent"
       }
     },
     "classes": {
-      "title": "Class Management",
+      "title": "Class management",
       "meta": {
-        "title": "Class Management | ITAKAI Admin"
+        "title": "Class management | ITAKAI Admin"
       },
       "subtitle": "View all platform classes",
       "filters": {
@@ -130,9 +143,9 @@
       }
     },
     "missions": {
-      "title": "Mission Management",
+      "title": "Mission management",
       "meta": {
-        "title": "Mission Management | ITAKAI Admin"
+        "title": "Mission management | ITAKAI Admin"
       },
       "subtitle": "View all platform missions",
       "filters": {
@@ -149,44 +162,8 @@
         "enigmas_desc": "Most enigmas"
       }
     },
-    "schools": {
-      "title": "Institution Management",
-      "meta": {
-        "title": "Institution Management | ITAKAI Admin",
-        "description": "Manage all educational institutions in the system, create new schools and monitor their activity."
-      },
-      "subtitle": "Manage educational institutions",
-      "filters": {
-        "search_placeholder": "Search schools...",
-        "all_statuses": "All statuses",
-        "active": "Active",
-        "inactive": "Inactive"
-      },
-      "form": {
-        "create_title": "New school",
-        "edit_title": "Edit school",
-        "name": "Name",
-        "name_placeholder": "School name",
-        "city": "City",
-        "city_placeholder": "City",
-        "country": "Country",
-        "country_placeholder": "Country",
-        "save": "Save",
-        "cancel": "Cancel"
-      },
-      "actions": {
-        "create": "Create school",
-        "delete_title": "Delete school",
-        "delete_message": "Are you sure you want to delete {name}?",
-        "delete_confirm": "Delete"
-      },
-      "empty": {
-        "title": "No schools found",
-        "description": "No schools match the selected filters."
-      }
-    },
     "analytics": {
-      "title": "System Analytics",
+      "title": "System analytics",
       "subtitle": "Platform metrics and statistics",
       "period": {
         "week": "Week",
@@ -194,33 +171,33 @@
         "quarter": "Quarter"
       },
       "kpis": {
-        "avg_response": "Response Time",
+        "avg_response": "Response time",
         "requests_per_min": "Requests/min",
-        "error_rate": "Error Rate",
+        "error_rate": "Error rate",
         "uptime": "Uptime"
       },
       "overview": {
-        "total_users": "Total Users",
-        "missions_completed": "Missions Completed",
-        "completion_rate": "Completion Rate",
+        "total_users": "Total users",
+        "missions_completed": "Missions completed",
+        "completion_rate": "Completion rate",
         "active_today": "Active today"
       },
       "sections": {
-        "system_resources": "System Resources",
-        "service_health": "Service Health",
-        "response_time": "Response Time",
-        "active_users": "Active Users",
+        "system_resources": "System resources",
+        "service_health": "Service health",
+        "response_time": "Response time",
+        "active_users": "Active users",
         "requests": "Requests",
-        "tokens_over_time": "Tokens Used",
-        "users_by_role": "Users by Role",
-        "missions_by_status": "Missions by Status",
-        "missions_by_rarity": "Missions by Rarity",
-        "ai_usage": "AI Usage (Assistants)"
+        "tokens_over_time": "Tokens used",
+        "users_by_role": "Users by role",
+        "missions_by_status": "Missions by status",
+        "missions_by_rarity": "Missions by rarity",
+        "ai_usage": "AI usage (assistants)"
       },
       "system": {
         "memory": "Memory",
         "disk": "Disk",
-        "db_latency": "DB Latency"
+        "db_latency": "DB latency"
       },
       "ai": {
         "total_tokens": "Total tokens",
@@ -240,14 +217,14 @@
         "down": "Down"
       },
       "meta": {
-        "title": "System Analytics | ITAKAI Admin",
+        "title": "System analytics | ITAKAI Admin",
         "description": "View advanced metrics, performance graphs and detailed platform analysis."
       }
     },
     "logs": {
-      "title": "System Logs",
+      "title": "System logs",
       "meta": {
-        "title": "System Logs | ITAKAI Admin",
+        "title": "System logs | ITAKAI Admin",
         "description": "Review system activity logs, audit user actions and diagnose technical issues."
       },
       "tab": "Activity",
@@ -289,8 +266,8 @@
         "success": "OK"
       },
       "categories": {
-        "health_check": "Health Check",
-        "service_status": "Service Status",
+        "health_check": "Health check",
+        "service_status": "Service status",
         "security": "Security",
         "performance": "Performance",
         "maintenance": "Maintenance",
@@ -329,8 +306,8 @@
         "endpoint": "Endpoint",
         "region": "Region",
         "bucket": "Bucket",
-        "access_key": "Access Key ID",
-        "secret_key": "Secret Access Key",
+        "access_key": "Access key ID",
+        "secret_key": "Secret access key",
         "public_url": "Public base URL",
         "public_url_hint": "URL the files are served from (public bucket or your own R2 domain).",
         "path_style": "Use path-style (recommended for R2)"
