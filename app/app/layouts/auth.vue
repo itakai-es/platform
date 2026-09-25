@@ -24,7 +24,10 @@
     </div>
 
     <!-- Idioma y accesibilidad: los dos ajustes que hacen falta ANTES de poder
-         entrar (quien no lee la pantalla tampoco puede iniciar sesión). -->
+         entrar (quien no lee la pantalla tampoco puede iniciar sesión).
+         Flotan sobre la página, así que cada página de este layout deja libre
+         la franja superior (pt-16): si no, en pantallas bajas (portátil) la
+         tarjeta centrada se les monta encima. -->
     <div class="absolute top-4 right-4 z-20 flex items-center gap-1">
       <AccessibilityMenu variant="light" />
       <LanguageSwitcher variant="light" />
