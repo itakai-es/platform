@@ -95,6 +95,30 @@ export const changelog: ChangelogEntry[] = [
         text: 'Los lectores de pantalla leen en voz alta los errores de los formularios.',
       },
       {
+        type: 'improved',
+        text: 'El menú lateral agrupa sus entradas bajo títulos («Clases», «Ayuda», «Cuenta»), también en el móvil.',
+      },
+      {
+        type: 'improved',
+        text: 'Las tarjetas de clase y la cabecera de cada clase resumen el horario en días y horas.',
+      },
+      {
+        type: 'improved',
+        text: 'Textos de toda la aplicación repasados en los diez idiomas: títulos y botones con mayúscula solo al principio.',
+      },
+      {
+        type: 'fixed',
+        text: 'El enlace del correo de «¿Olvidaste tu contraseña?» llevaba a una página vacía. Ahora abre la pantalla de crear la contraseña nueva, también en los correos ya enviados.',
+      },
+      {
+        type: 'fixed',
+        text: 'El alias que la clase reparte al azar podía repetirse entre compañeros. Ahora cada alumno recibe uno distinto.',
+      },
+      {
+        type: 'fixed',
+        text: 'En pantallas bajas, los botones de idioma y accesibilidad ya no tapan el formulario de entrada, y el menú lateral enseña su barra de desplazamiento cuando la lista sigue.',
+      },
+      {
         type: 'fixed',
         text: 'El horario de la clase no siempre se guardaba desde «Ajustes», y el calendario a veces salía vacío. Ahora se guarda y muestra el horario que ya tenías.',
       },
