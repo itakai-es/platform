@@ -9,7 +9,7 @@
       :missions-count="
         classItem.stats?.totalMissions ?? classItem.missionCount ?? classItem.totalMissions
       "
-      :schedule="classItem.schedule"
+      :schedule="scheduleLines"
       :coins="coins"
       :mana="mana"
       :lives="lives"
@@ -29,7 +29,7 @@
       :missions-count="
         classItem.stats?.totalMissions ?? classItem.missionCount ?? classItem.totalMissions
       "
-      :schedule="classItem.schedule"
+      :schedule="scheduleLines"
       :coins="coins"
       :mana="mana"
       :lives="lives"
@@ -110,7 +110,9 @@ import {
   XMarkIcon,
 } from '@heroicons/vue/24/outline'
 import type { ClassAccess, ClassSettings } from '~/types/class.types'
+import type { ScheduleConfig } from '~/types/schedule.types'
 import type { ViewMode } from '~/composables/useViewMode'
+import { useScheduleSummary } from '~/composables/useClassCalendar'
 import { resolveClassSettings } from '~/utils/class-settings'
 
 interface ClassItemData {
@@ -119,6 +121,8 @@ interface ClassItemData {
   backgroundImage?: string
   studentCount?: number
   schedule?: string
+  /** Tramos del horario; de ellos sale el resumen de la tarjeta. Sin ellos se enseña `schedule` tal cual. */
+  scheduleConfig?: ScheduleConfig | ScheduleConfig[] | null
   archived?: boolean
   totalMissions?: number
   missionCount?: number
@@ -142,6 +146,12 @@ const props = defineProps<{
   showCoins?: boolean
   layout?: ViewMode
 }>()
+
+// Días y horas de la clase, sin periodicidad ni fechas de fin.
+const { summarize } = useScheduleSummary()
+const scheduleLines = computed(() =>
+  summarize(props.classItem.scheduleConfig, props.classItem.schedule)
+)
 
 // Saldo de monedas, maná y puntos de vida de la clase. Solo en la vista del alumno,
 // y respetando los ajustes de la clase (monedas → coins, maná → tienda, vidas → lives).

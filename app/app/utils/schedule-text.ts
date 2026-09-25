@@ -9,8 +9,9 @@ import { APP_LANGUAGES } from '~/utils/app-languages'
  * descartaba la config al guardar.
  *
  * Entiende el texto que genera el propio calendario en cualquier idioma de la
- * app ("Cada semana: lunes y martes, hasta el 31 de agosto de 2026 20:51-21:51")
- * y las formas habituales escritas a mano ("Lunes de 10 a 11 y jueves de 12:00
+ * app ("Cada semana: lunes y martes 20:51-21:51, hasta el 31 de agosto de 2026";
+ * las clases guardadas antes de septiembre de 2026 llevan la hora al final) y
+ * las formas habituales escritas a mano ("Lunes de 10 a 11 y jueves de 12:00
  * a 13:00"). Es una lectura de mejor esfuerzo: lo que no entiende se ignora.
  */
 

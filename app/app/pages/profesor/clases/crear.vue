@@ -641,7 +641,7 @@
           v-model="previewTab"
           :title="form.name"
           :cover-image="resolvedImageUrl || form.backgroundImage"
-          :schedule="form.schedule"
+          :schedule="scheduleSummary"
           :chips="summaryChips"
           :tabs="previewTabs"
         >
@@ -909,8 +909,11 @@ const selectedTitle = ref('')
 const customTitle = ref('')
 const chosenTitle = computed(() => customTitle.value.trim() || selectedTitle.value)
 const scheduleConfig = ref<ScheduleConfig[]>([emptyScheduleConfig()])
-// Texto legible derivado del patrón semanal (para el campo `schedule` y las tarjetas).
+// Texto completo derivado del calendario, para el campo `schedule` que se guarda.
 const { scheduleText: schedule } = useClassCalendar(scheduleConfig)
+// Resumen corto (días y hora) para la maqueta de la cabecera, como en la clase real.
+const { summarize } = useScheduleSummary()
+const scheduleSummary = computed(() => summarize(scheduleConfig.value).join(' · '))
 const generatedImageUrl = ref('')
 // The AI cover arrives as a relative /uploads/... path served by the API host,
 // while a teacher-uploaded cover is a base64 data URL. getImageUrl resolves

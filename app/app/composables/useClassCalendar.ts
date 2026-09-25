@@ -1,5 +1,6 @@
 import type { Ref } from 'vue'
 import type { ScheduleConfig, RecurrenceEnd, RecurrenceFreq } from '~/types/schedule.types'
+import { scheduleSummarySlots } from '~/utils/schedule-summary'
 
 export type DayStatus = 'class' | 'off' | 'none'
 
@@ -72,7 +73,11 @@ export function useRecurrenceText() {
     }
   }
 
-  function describe(rec: RecurrenceLike, startDate: string): string {
+  /**
+   * Texto completo de un tramo: periodicidad, hora (si se pasa) y cómo termina,
+   * en ese orden ("Cada semana: lunes y martes 10:00-11:00, hasta el 30 de junio de 2026").
+   */
+  function describe(rec: RecurrenceLike, startDate: string, time = ''): string {
     const n = Math.max(1, rec.interval || 1)
     let base: string
     switch (rec.freq) {
@@ -96,6 +101,7 @@ export function useRecurrenceText() {
         else if (sameSet(rec.weekdays, [0, 1, 2, 3, 4])) base = t('teacher.schedule.all_weekdays')
         else base = t('teacher.schedule.weekly_days', { days: listDays(rec.weekdays) })
     }
+    if (time) base += ` ${time}`
     if (rec.ends?.type === 'on' && rec.ends.onDate)
       base += `, ${t('teacher.schedule.ends_on_suffix', { date: formatDateKey(rec.ends.onDate) })}`
     else if (rec.ends?.type === 'after' && rec.ends.afterCount)
@@ -103,25 +109,83 @@ export function useRecurrenceText() {
     return base
   }
 
-  return { t, describe, presetLabels, dayName, listDays, formatDateKey }
+  return { t, locale, describe, presetLabels, dayName, listDays, formatDateKey }
 }
 
 /**
- * useClassCalendar - Deriva el texto legible del horario (en el idioma activo)
- * para el campo `schedule` que muestran las tarjetas. Acepta un tramo único
- * (clases antiguas) o la lista de tramos; los tramos se unen con "; ".
+ * useClassCalendar - Deriva el texto completo del horario (en el idioma activo)
+ * que se guarda en el campo `schedule` y se enseña como vista previa al
+ * configurarlo. Acepta un tramo único (clases antiguas) o la lista de tramos;
+ * los tramos se unen con "; ". Para tarjetas y cabeceras está useScheduleSummary.
  */
 export function useClassCalendar(config: Ref<ScheduleConfig | ScheduleConfig[]>) {
   const { describe } = useRecurrenceText()
   const slotText = (c: ScheduleConfig): string => {
     // Sin días elegidos en modo semanal = incompleto → sin texto.
     if (c.freq === 'weekly' && c.weekdays.length === 0) return ''
-    const time = c.start && c.end ? ` ${c.start}-${c.end}` : ''
-    return `${describe(c, c.startDate)}${time}`.trim()
+    const time = c.start && c.end ? `${c.start}-${c.end}` : ''
+    return describe(c, c.startDate, time).trim()
   }
   const scheduleText = computed(() => {
     const v = config.value
     return (Array.isArray(v) ? v : [v]).map(slotText).filter(Boolean).join('; ')
   })
   return { scheduleText }
+}
+
+/**
+ * useScheduleSummary - Resumen corto del horario para tarjetas y cabeceras: una
+ * línea por tramo con los días y la hora ("Lunes y martes 10:00-11:00"). Omite
+ * "Cada semana" y las fechas de inicio y fin, que ya se ven en la configuración,
+ * y funde en una línea los tramos semanales que comparten hora. Qué tramos se
+ * resumen lo decide scheduleSummarySlots; si no hay ninguno, el texto `schedule`
+ * se enseña tal cual (horarios escritos a mano).
+ */
+export function useScheduleSummary() {
+  const { t, locale, listDays, formatDateKey } = useRecurrenceText()
+
+  const capitalize = (s: string) => s.charAt(0).toLocaleUpperCase(locale.value) + s.slice(1)
+
+  function slotLine(slot: ScheduleConfig): string {
+    const time = slot.start && slot.end ? `${slot.start}-${slot.end}` : ''
+    let when: string
+    switch (slot.freq) {
+      case 'none':
+        // Una sola sesión: lo que importa es la fecha.
+        when = slot.startDate ? formatDateKey(slot.startDate) : t('teacher.schedule.freq_none')
+        break
+      case 'daily':
+        when = t('teacher.schedule.freq_daily')
+        break
+      case 'monthly':
+        when = t('teacher.schedule.freq_monthly')
+        break
+      case 'yearly':
+        when = t('teacher.schedule.freq_yearly')
+        break
+      default: {
+        // Sin días elegidos el tramo está incompleto: no se resume.
+        if (!slot.weekdays.length) return ''
+        const n = Math.max(1, slot.interval || 1)
+        if (n > 1)
+          when = t('teacher.schedule.every_weeks_days', { n, days: listDays(slot.weekdays) })
+        else if (sameSet(slot.weekdays, [0, 1, 2, 3, 4])) when = t('teacher.schedule.all_weekdays')
+        else when = listDays(slot.weekdays)
+      }
+    }
+    return capitalize(`${when} ${time}`.trim())
+  }
+
+  /** Líneas del resumen; si no hay tramos que resumir, el texto `schedule` tal cual. */
+  function summarize(
+    config?: ScheduleConfig | ScheduleConfig[] | null,
+    text?: string | null
+  ): string[] {
+    const lines = scheduleSummarySlots(config, text).map(slotLine).filter(Boolean)
+    if (lines.length) return lines
+    const raw = text?.trim()
+    return raw ? [raw] : []
+  }
+
+  return { summarize }
 }

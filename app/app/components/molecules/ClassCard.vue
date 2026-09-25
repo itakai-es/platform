@@ -25,10 +25,13 @@
           {{ name }}
         </h3>
 
-        <!-- Schedule (below title, teacher-written content) -->
-        <div v-if="schedule" class="flex items-center gap-1 text-sm text-text-secondary mb-3">
-          <ClockIcon class="w-4 h-4 flex-shrink-0" />
-          <span>{{ schedule }}</span>
+        <!-- Horario: una línea por tramo ("Lunes y martes 10:00-11:00"). Un
+             horario escrito a mano llega como una sola línea y se recorta. -->
+        <div v-if="schedule?.length" class="flex items-start gap-1 text-sm text-text-secondary mb-3">
+          <ClockIcon class="w-4 h-4 flex-shrink-0 mt-0.5" />
+          <div class="min-w-0">
+            <p v-for="(line, i) in schedule" :key="i" class="line-clamp-2">{{ line }}</p>
+          </div>
         </div>
       </div>
 
@@ -154,7 +157,8 @@ interface Props {
   subject?: string
   missionsCount?: number
   participation?: number
-  schedule?: string
+  /** Líneas del resumen de horario (ver useScheduleSummary). */
+  schedule?: string[]
   coins?: number
   mana?: number
   lives?: number
@@ -206,12 +210,3 @@ const cardRingClass = computed(() => {
   return ''
 })
 </script>
-
-<style scoped>
-.line-clamp-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-</style>

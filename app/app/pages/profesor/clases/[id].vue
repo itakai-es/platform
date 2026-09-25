@@ -54,10 +54,10 @@
             }}</span>
           </Button>
         </template>
-        <template v-if="state.classData.schedule" #subtitle>
+        <template v-if="scheduleSummary" #subtitle>
           <span class="inline-flex items-center gap-1.5">
             <CalendarDaysIcon class="w-4 h-4 text-white/60" />
-            {{ state.classData.schedule }}
+            {{ scheduleSummary }}
           </span>
         </template>
         <template v-if="state.classData.archived" #meta>
@@ -158,6 +158,12 @@ const detail = useTeacherClassDetail(classId)
 const { state, classSettings, resolvedClassImage, can, loadAll, revalidate, closeActivityBadge } =
   detail
 const teacherStore = useTeacherStore()
+
+// Días y horas de la clase; el horario completo, con fechas, está en Ajustes.
+const { summarize } = useScheduleSummary()
+const scheduleSummary = computed(() =>
+  summarize(state.value.classData?.scheduleConfig, state.value.classData?.schedule).join(' · ')
+)
 
 /** Las cuentas nuevas ya están matriculadas: se cuentan sin volver a pedir la clase. */
 function onAccountsCreated(count: number) {

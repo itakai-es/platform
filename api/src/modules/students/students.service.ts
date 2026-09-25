@@ -191,6 +191,7 @@ export class StudentsService {
         id: e.class.id,
         name: e.class.name,
         schedule: e.class.schedule,
+        scheduleConfig: e.class.scheduleConfig,
         archived: e.class.archived,
         teacherName: e.class.teacher.name,
         backgroundImage: e.class.backgroundImage,
@@ -270,6 +271,7 @@ export class StudentsService {
       name: cls.name,
       narrative: cls.narrative,
       schedule: cls.schedule,
+      scheduleConfig: cls.scheduleConfig,
       teacherName: cls.teacher.name,
       // Quién imparte la clase, con su perfil; también quien está en prácticas,
       // que ve los datos del alumnado. Sin correo ni nivel de acceso.

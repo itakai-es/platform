@@ -30,9 +30,9 @@
         <slot name="tag" />
       </div>
 
-      <div v-if="schedule" class="flex items-center gap-1 text-sm text-text-secondary">
+      <div v-if="schedule?.length" class="flex items-center gap-1 text-sm text-text-secondary">
         <ClockIcon class="h-4 w-4 flex-shrink-0" />
-        <span class="truncate">{{ schedule }}</span>
+        <span class="truncate">{{ schedule.join(' · ') }}</span>
       </div>
 
       <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-text-secondary">
@@ -82,7 +82,8 @@ defineProps<{
   backgroundImage?: string
   studentCount?: number
   missionsCount?: number
-  schedule?: string
+  /** Líneas del resumen de horario (ver useScheduleSummary). */
+  schedule?: string[]
   coins?: number
   mana?: number
   lives?: number
