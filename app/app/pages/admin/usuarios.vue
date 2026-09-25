@@ -3,39 +3,40 @@
     <!-- Page Header -->
     <PageHeader :title="t('admin.users.title')" :subtitle="t('admin.users.subtitle')">
       <template #actions>
-        <Button variant="primary" size="sm" @click="openCreate">
+        <Button variant="primary" size="md" @click="openCreate">
+          <PlusIcon class="w-4 h-4 mr-2" />
           {{ t('admin.users.create.button') }}
         </Button>
       </template>
     </PageHeader>
 
-    <!-- Filters -->
+    <!-- Filters: búsqueda, filtros y orden van al servidor, que pagina -->
     <FilterBar
-      :search="searchQuery"
-      :sort="sortBy"
-      :results-count="filteredUsers.length"
+      :search="search"
+      :sort="sort"
+      :results-count="totalUsers"
       :search-placeholder="t('admin.users.filters.search_placeholder')"
       :sort-options="sortOptions"
       variant="red"
       :has-active-filters="hasActiveFilters"
       :active-filter-count="activeFilterCount"
-      @update:search="searchQuery = $event"
-      @update:sort="sortBy = $event"
-      @reset="clearAllFilters"
+      @update:search="search = $event"
+      @update:sort="sort = $event"
+      @reset="reset"
     >
       <template #filters>
         <SelectDropdown
-          v-model="selectedRole"
+          v-model="filters.role"
           :options="roleOptions"
           :placeholder="t('admin.users.filters.all_roles')"
         />
         <SelectDropdown
-          v-model="selectedStatus"
+          v-model="filters.status"
           :options="statusOptions"
           :placeholder="t('admin.users.filters.all_statuses')"
         />
         <SelectDropdown
-          v-model="selectedAccountType"
+          v-model="filters.accountType"
           :options="accountTypeOptions"
           :placeholder="t('admin.users.filters.all_account_types')"
         />
@@ -72,13 +73,13 @@
 
     <!-- Empty State -->
     <EmptyState
-      v-else-if="filteredUsers.length === 0"
+      v-else-if="users.length === 0"
       :icon="UsersIcon"
       :title="t('admin.users.empty.title')"
       :description="t('admin.users.empty.description')"
     >
-      <template v-if="hasActiveFilters" #action>
-        <Button variant="secondary" size="sm" @click="clearAllFilters">
+      <template v-if="isFiltering" #action>
+        <Button variant="secondary" size="sm" @click="reset">
           {{ t('admin.users.filters.clear') }}
         </Button>
       </template>
@@ -87,7 +88,7 @@
     <!-- Users Grid -->
     <CardGrid v-else>
       <article
-        v-for="user in filteredUsers"
+        v-for="user in users"
         :key="user.id"
         class="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 overflow-hidden"
       >
@@ -166,6 +167,8 @@
       </article>
     </CardGrid>
 
+    <Pagination :current-page="page" :total-pages="totalPages" @page-change="page = $event" />
+
     <!-- Suspend Confirmation Modal -->
     <ConfirmModal
       v-model="showSuspendModal"
@@ -191,8 +194,8 @@
     />
 
     <!-- Alta de una cuenta de alumnado sin correo -->
-    <Modal v-model="showCreateModal" :title="t('admin.users.create.title')" size="sm">
-      <div class="space-y-4">
+    <Modal v-model="showCreateModal" :title="t('admin.users.create.title')" size="sm" persistent>
+      <form :id="CREATE_FORM_ID" class="space-y-4" novalidate @submit.prevent="confirmCreate">
         <InfoNote>{{ t('admin.users.create.note') }}</InfoNote>
         <FormField
           id="managed-name"
@@ -206,11 +209,13 @@
           :label="t('admin.users.create.home_class')"
           :error="createErrors.classId"
           :hint="t('admin.users.create.home_class_hint')"
+          required
         >
           <template #default="{ labelId, describedby }">
             <SelectDropdown
               v-model="createForm.classId"
-              :options="classOptions"
+              v-bind="classSearchProps"
+              :options="[]"
               :placeholder="t('admin.users.create.home_class_placeholder')"
               :labelledby="labelId"
               :describedby="describedby"
@@ -225,47 +230,43 @@
           :placeholder="t('admin.users.create.username_placeholder')"
           :hint="t('admin.users.create.username_hint')"
         />
-      </div>
+      </form>
       <template #footer>
-        <Button variant="secondary" size="md" @click="showCreateModal = false">
+        <Button variant="outline" size="md" @click="showCreateModal = false">
           {{ t('common.actions.cancel') }}
         </Button>
         <Button
           variant="primary"
           size="md"
+          type="submit"
+          :form="CREATE_FORM_ID"
           :loading="isPerformingUserAction"
-          @click="confirmCreate"
         >
           {{ t('admin.users.create.submit') }}
         </Button>
       </template>
     </Modal>
 
-    <!-- La contraseña temporal, que solo se ve aquí y una vez -->
+    <!-- La contraseña temporal, que solo se ve aquí y una vez. No se cierra con
+         un clic fuera, y la X pasa por `closeCredentials`, que la borra de memoria. -->
     <Modal
-      v-model="showCredentialsModal"
+      :model-value="showCredentialsModal"
       :title="t('admin.users.actions.credentials_title')"
       size="sm"
+      persistent
+      @update:model-value="closeCredentials"
     >
       <div v-if="credentials" class="space-y-4">
         <InfoNote>{{ t('admin.users.actions.credentials_note') }}</InfoNote>
         <dl class="space-y-2">
-          <div class="rounded-xl bg-navy-700/5 px-3 py-2">
-            <dt class="text-xs uppercase tracking-wide text-navy-700/70">
-              {{ t('admin.users.actions.credentials_username') }}
-            </dt>
-            <dd class="font-mono text-base font-bold text-navy-700">
-              {{ credentials.student.username }}
-            </dd>
-          </div>
-          <div class="rounded-xl bg-navy-700/5 px-3 py-2">
-            <dt class="text-xs uppercase tracking-wide text-navy-700/70">
-              {{ t('admin.users.actions.credentials_password') }}
-            </dt>
-            <dd class="font-mono text-base font-bold text-navy-700">
-              {{ credentials.temporaryPassword }}
-            </dd>
-          </div>
+          <CopyableValue
+            :label="t('admin.users.actions.credentials_username')"
+            :value="credentials.student.username"
+          />
+          <CopyableValue
+            :label="t('admin.users.actions.credentials_password')"
+            :value="credentials.temporaryPassword"
+          />
         </dl>
       </div>
       <template #footer>
@@ -280,24 +281,37 @@
       v-model="showHomeClassModal"
       :title="t('admin.users.actions.home_class_title')"
       size="sm"
+      persistent
     >
-      <div class="space-y-4">
+      <form
+        :id="HOME_CLASS_FORM_ID"
+        class="space-y-4"
+        novalidate
+        @submit.prevent="confirmHomeClass"
+      >
         <InfoNote>{{ t('admin.users.actions.home_class_note') }}</InfoNote>
-        <SelectDropdown
-          v-model="homeClassSelection"
-          :options="homeClassOptions"
-          :placeholder="t('admin.users.actions.home_class_none')"
-        />
-      </div>
+        <FieldGroup v-slot="{ labelId, describedby }" :label="t('admin.users.create.home_class')">
+          <SelectDropdown
+            v-model="homeClassSelection"
+            v-bind="classSearchProps"
+            :options="noHomeClassOption"
+            :value-label="selectedUser?.homeClassName ?? undefined"
+            :placeholder="t('admin.users.actions.home_class_none')"
+            :labelledby="labelId"
+            :describedby="describedby"
+          />
+        </FieldGroup>
+      </form>
       <template #footer>
-        <Button variant="secondary" size="md" @click="showHomeClassModal = false">
+        <Button variant="outline" size="md" @click="showHomeClassModal = false">
           {{ t('common.actions.cancel') }}
         </Button>
         <Button
           variant="primary"
           size="md"
+          type="submit"
+          :form="HOME_CLASS_FORM_ID"
           :loading="isPerformingUserAction"
-          @click="confirmHomeClass"
         >
           {{ t('common.actions.save') }}
         </Button>
@@ -312,12 +326,13 @@
       :confirm-text="t('admin.users.actions.delete_confirm')"
       variant="danger"
       :loading="isPerformingUserAction"
-      :confirm-disabled="deletionCheck?.canDelete === false"
+      :confirm-disabled="isCheckingDeletion || deletionCheck?.canDelete === false"
       @confirm="confirmDelete"
       @cancel="showDeleteModal = false"
     >
       <!-- A quién pasan sus clases, o por qué aún no se puede borrar -->
-      <AccountDeletionImpact v-if="deletionCheck" :check="deletionCheck" audience="admin" />
+      <Skeleton v-if="isCheckingDeletion" height="h-12" custom-class="rounded-xl" />
+      <AccountDeletionImpact v-else-if="deletionCheck" :check="deletionCheck" audience="admin" />
     </ConfirmModal>
   </div>
 </template>
@@ -329,14 +344,15 @@ import {
   CheckCircleIcon,
   KeyIcon,
   NoSymbolIcon,
+  PlusIcon,
   TrashIcon,
   UsersIcon,
 } from '@heroicons/vue/24/outline'
-import type { AdminUser } from '~/types/admin.types'
+import type { AdminUser, UserFilters } from '~/types/admin.types'
 import type { ActionMenuItem } from '~/types/action-menu.types'
 import type { ManagedCredentials } from '~/types/auth.types'
 import type { AccountDeletionCheck } from '~/types/profile.types'
-import { accountIdentifier, matchesAccount } from '~/utils/identity'
+import { accountIdentifier } from '~/utils/identity'
 
 const { t } = useI18n()
 
@@ -353,14 +369,24 @@ definePageMeta({
 
 // Store
 const adminStore = useAdminStore()
-const { users, classes, isLoadingUsers, isPerformingUserAction } = storeToRefs(adminStore)
+const { users, totalUsers, totalPages, isLoadingUsers, isPerformingUserAction } =
+  storeToRefs(adminStore)
+const toast = useToast()
 
-// Local filter state
-const searchQuery = ref('')
-const selectedRole = ref('')
-const selectedStatus = ref('')
-const selectedAccountType = ref('')
-const sortBy = ref('name-asc')
+/**
+ * Búsqueda, filtros, orden y página: los aplica el servidor, que devuelve una
+ * página cada vez. Tras cada acción sobre una cuenta, el store recarga la
+ * página que se ve con estos mismos criterios.
+ */
+const { search, filters, sort, page, activeFilterCount, hasActiveFilters, isFiltering, reset } =
+  useAdminListQuery({
+    filters: { role: '', status: '', accountType: '' },
+    sort: 'name-asc',
+    pageSize: 24,
+    totalPages,
+    load: query => adminStore.ensureUsers(query as UserFilters),
+  })
+
 const selectedUser = ref<AdminUser | null>(null)
 const showSuspendModal = ref(false)
 const showDeleteModal = ref(false)
@@ -373,6 +399,9 @@ const createForm = ref({ name: '', classId: '', username: '' })
 const createErrors = ref({ name: '', classId: '' })
 /** La contraseña temporal recién generada: solo vive en memoria y solo se ve una vez. */
 const credentials = ref<ManagedCredentials | null>(null)
+/** Los botones de guardar están en el pie de la ventana, fuera del formulario. */
+const CREATE_FORM_ID = 'managed-create-form'
+const HOME_CLASS_FORM_ID = 'home-class-form'
 
 // Filter options
 const roleOptions = computed(() => [
@@ -402,75 +431,39 @@ const sortOptions = computed(() => [
   { value: 'recent', label: t('admin.users.sort.recent') },
 ])
 
-const activeFilterCount = computed(
-  () =>
-    (selectedRole.value ? 1 : 0) +
-    (selectedStatus.value ? 1 : 0) +
-    (selectedAccountType.value ? 1 : 0)
-)
-
-const hasActiveFilters = computed(
-  () => selectedRole.value !== '' || selectedStatus.value !== '' || selectedAccountType.value !== ''
-)
-
-// Client-side filtering (same pattern as teacher/students)
-const filteredUsers = computed(() => {
-  let result = [...users.value]
-
-  // Filter by search: el nombre, el correo y el usuario, que es con lo que
-  // entra quien no tiene correo.
-  if (searchQuery.value) {
-    result = result.filter(u => matchesAccount(u, searchQuery.value))
+/**
+ * Clases entre las que elegir la de origen. Se buscan en el servidor por
+ * nombre, profesor o código: en una instancia con cientos de clases no se
+ * pueden listar todas.
+ */
+const searchClassOptions = async (query: string) => {
+  const { classes, hasMore } = await adminStore.searchClasses(query)
+  return {
+    hasMore,
+    options: classes.map(cls => ({
+      value: cls.id,
+      label: cls.name,
+      hint: t(
+        'admin.users.class_search.option_hint',
+        { teacher: cls.teacherName, count: cls.studentCount },
+        cls.studentCount
+      ),
+    })),
   }
-
-  // Filter by role
-  if (selectedRole.value) {
-    result = result.filter(u => u.role === selectedRole.value)
-  }
-
-  // Filter by status
-  if (selectedStatus.value) {
-    result = result.filter(u => u.status === selectedStatus.value)
-  }
-
-  // Cuentas gestionadas, autogestionadas o gestionadas sin ninguna clase
-  if (selectedAccountType.value === 'orphan') {
-    result = result.filter(u => u.accountType === 'managed' && (u.classCount ?? 0) === 0)
-  } else if (selectedAccountType.value) {
-    result = result.filter(u => u.accountType === selectedAccountType.value)
-  }
-
-  // Sort
-  switch (sortBy.value) {
-    case 'name-asc':
-      result.sort((a, b) => a.name.localeCompare(b.name))
-      break
-    case 'name-desc':
-      result.sort((a, b) => b.name.localeCompare(a.name))
-      break
-    case 'recent':
-      result.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-      break
-  }
-
-  return result
-})
-
-const clearAllFilters = () => {
-  searchQuery.value = ''
-  selectedRole.value = ''
-  selectedStatus.value = ''
-  selectedAccountType.value = ''
-  sortBy.value = 'name-asc'
 }
 
-/** Clases de la instancia entre las que elegir. */
-const classOptions = computed(() => classes.value.map(cls => ({ value: cls.id, label: cls.name })))
+/** Lo que comparten los dos selectores de clase: el alta y el cambio de clase de origen. */
+const classSearchProps = computed(() => ({
+  remoteSearch: searchClassOptions,
+  searchPlaceholder: t('admin.users.class_search.placeholder'),
+  searchingText: t('admin.users.class_search.searching'),
+  noResultsText: t('admin.users.class_search.no_results'),
+  moreText: t('admin.users.class_search.more'),
+}))
 
-/** Igual, con la opción de dejar la cuenta sin clase de origen. */
-const homeClassOptions = computed(() => [
+/** Al cambiar la clase de origen también se puede dejar la cuenta sin ella. */
+const noHomeClassOption = computed(() => [
   { value: '', label: t('admin.users.actions.home_class_none') },
-  ...classOptions.value,
 ])
 
 /**
@@ -479,14 +472,15 @@ const homeClassOptions = computed(() => [
  * teniendo la cuenta se ve en la hoja de credenciales, que es la misma que
  * aparece al restablecer la contraseña.
  */
-const openCreate = async () => {
+const openCreate = () => {
   createForm.value = { name: '', classId: '', username: '' }
   createErrors.value = { name: '', classId: '' }
   showCreateModal.value = true
-  await adminStore.ensureAllClasses({ limit: 1000 })
 }
 
 const confirmCreate = async () => {
+  // Intro en el formulario no debe mandar un segundo alta mientras va el primero.
+  if (isPerformingUserAction.value) return
   createErrors.value = {
     name: createForm.value.name.trim().length >= 2 ? '' : t('admin.users.create.errors.name'),
     classId: createForm.value.classId ? '' : t('admin.users.create.errors.home_class'),
@@ -502,8 +496,8 @@ const confirmCreate = async () => {
     })
     showCreateModal.value = false
     showCredentialsModal.value = true
-  } catch {
-    /* handled in store */
+  } catch (error) {
+    toast.error(apiMessage(error, t('admin.users.create.error')))
   }
 }
 
@@ -551,12 +545,22 @@ const handleAction = (user: AdminUser, action: string) => {
 
 /** Las cuentas de profesor pueden tener clases: antes de confirmar se dice qué pasa con ellas. */
 const deletionCheck = ref<AccountDeletionCheck | null>(null)
+/**
+ * La comprobación está en camino: no se puede confirmar todavía. Es un estado
+ * aparte porque `deletionCheck` a `null` también quiere decir que no es
+ * profesor o que la comprobación ha fallado (y entonces decide el servidor).
+ */
+const isCheckingDeletion = ref(false)
 
 async function loadDeletionCheck(user: AdminUser) {
   deletionCheck.value = null
-  if (user.role !== 'teacher') return
+  isCheckingDeletion.value = user.role === 'teacher'
+  if (!isCheckingDeletion.value) return
   const check = await adminStore.fetchUserDeletionCheck(user.id)
-  if (selectedUser.value?.id === user.id) deletionCheck.value = check
+  // Si mientras tanto se ha elegido a otra persona, su comprobación es otra.
+  if (selectedUser.value?.id !== user.id) return
+  deletionCheck.value = check
+  isCheckingDeletion.value = false
 }
 
 function openDelete(user: AdminUser) {
@@ -564,10 +568,9 @@ function openDelete(user: AdminUser) {
   void loadDeletionCheck(user)
 }
 
-const openHomeClass = async (user: AdminUser) => {
+const openHomeClass = (user: AdminUser) => {
   homeClassSelection.value = user.homeClassId ?? ''
   showHomeClassModal.value = true
-  await adminStore.ensureAllClasses({ limit: 1000 })
 }
 
 const confirmReset = async () => {
@@ -576,8 +579,8 @@ const confirmReset = async () => {
     credentials.value = await adminStore.resetManagedPassword(selectedUser.value.id)
     showResetModal.value = false
     showCredentialsModal.value = true
-  } catch {
-    /* handled in store */
+  } catch (error) {
+    toast.error(apiMessage(error, t('admin.users.actions.reset_password_error')))
   }
 }
 
@@ -588,22 +591,29 @@ const closeCredentials = () => {
 }
 
 const confirmHomeClass = async () => {
-  if (!selectedUser.value) return
+  if (!selectedUser.value || isPerformingUserAction.value) return
   try {
     await adminStore.updateHomeClass(selectedUser.value.id, homeClassSelection.value || null)
     showHomeClassModal.value = false
     selectedUser.value = null
-  } catch {
-    /* handled in store */
+  } catch (error) {
+    // P. ej., una clase archivada: la API explica por qué no.
+    toast.error(apiMessage(error, t('admin.users.actions.home_class_error')))
   }
+}
+
+/** El mensaje de la API si lo trae (p. ej., por qué no se admite); si no, el genérico de la acción. */
+function apiMessage(error: unknown, fallback: string): string {
+  const message = (error as { data?: { message?: string } })?.data?.message
+  return message || fallback
 }
 
 // User actions
 const handleActivate = async (user: AdminUser) => {
   try {
     await adminStore.activateUser(user.id)
-  } catch {
-    /* handled in store */
+  } catch (error) {
+    toast.error(apiMessage(error, t('admin.users.actions.activate_error')))
   }
 }
 
@@ -613,8 +623,8 @@ const confirmSuspend = async () => {
     await adminStore.suspendUser(selectedUser.value.id)
     showSuspendModal.value = false
     selectedUser.value = null
-  } catch {
-    /* handled in store */
+  } catch (error) {
+    toast.error(apiMessage(error, t('admin.users.actions.suspend_error')))
   }
 }
 
@@ -629,6 +639,7 @@ const confirmDelete = async () => {
     // Mientras tanto ha dejado de haber a quién pasar alguna clase: la ventana lo explica.
     const code = (error as { data?: { code?: string } })?.data?.code
     if (code === 'OWNS_CLASSES_WITHOUT_SUCCESSOR') await loadDeletionCheck(user)
+    else toast.error(apiMessage(error, t('admin.users.actions.delete_error')))
   }
 }
 
@@ -720,8 +731,4 @@ const formatTimeAgo = (dateStr: string) => {
   if (diffDays < 30) return `${diffDays}d`
   return new Date(dateStr).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' })
 }
-
-// Load all users on mount (no pagination, filter client-side)
-// Usa ensureUsers para aprovechar cache del store (no refetch si ya estan cargados)
-onMounted(() => adminStore.ensureUsers({ limit: 1000 }))
 </script>

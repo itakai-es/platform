@@ -1,16 +1,12 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, type Ref } from 'vue'
 import type {
   AdminUser,
   SystemStats,
   SystemActivity,
   SystemService,
-  School,
   UserFilters,
   PaginatedUsersResponse,
-  CreateSchoolPayload,
-  UpdateSchoolPayload,
-  SchoolFilters,
   ActivityFilters,
   PaginatedActivitiesResponse,
   SystemLog,
@@ -23,10 +19,18 @@ import type {
   AdminMission,
   AdminMissionFilters,
   PaginatedMissionsResponse,
+  AdminListQuery,
   AnalyticsData,
 } from '~/types/admin.types'
 import type { AccountDeletionCheck } from '~/types/profile.types'
 import type { ManagedCredentials } from '~/types/auth.types'
+
+/** Lo que comparten las respuestas de los listados que pagina el servidor. */
+interface PaginatedResponse {
+  total: number
+  page: number
+  totalPages: number
+}
 
 export const useAdminStore = defineStore('admin', () => {
   // State
@@ -34,7 +38,6 @@ export const useAdminStore = defineStore('admin', () => {
   const users = ref<AdminUser[]>([])
   const activities = ref<SystemActivity[]>([])
   const services = ref<SystemService[]>([])
-  const schools = ref<School[]>([])
   const selectedUser = ref<AdminUser | null>(null)
 
   // Pagination state (users)
@@ -59,14 +62,14 @@ export const useAdminStore = defineStore('admin', () => {
   const totalClasses = ref(0)
   const classesPage = ref(1)
   const classesTotalPages = ref(1)
-  const isLoadingClasses = ref(false)
+  const isLoadingClasses = ref(true)
 
   // Missions state
   const missions = ref<AdminMission[]>([])
   const totalMissions = ref(0)
   const missionsPage = ref(1)
   const missionsTotalPages = ref(1)
-  const isLoadingMissions = ref(false)
+  const isLoadingMissions = ref(true)
 
   // Settings state
   const settings = ref<SystemSettings | null>(null)
@@ -82,9 +85,7 @@ export const useAdminStore = defineStore('admin', () => {
   const isLoadingUsers = ref(true)
   const isLoadingActivities = ref(true)
   const isLoadingServices = ref(true)
-  const isLoadingSchools = ref(true)
   const isPerformingUserAction = ref(false)
-  const isPerformingSchoolAction = ref(false)
 
   // Error state
   const error = ref<string | null>(null)
@@ -96,7 +97,6 @@ export const useAdminStore = defineStore('admin', () => {
   // un argumento de periodo. ensureX(force=true) ignora el flag.
   const hasLoadedStats = ref(false)
   const hasLoadedUsers = ref(false)
-  const hasLoadedSchools = ref(false)
   const hasLoadedActivities = ref(false)
   const hasLoadedSystemLogs = ref(false)
   const hasLoadedSettings = ref(false)
@@ -111,7 +111,7 @@ export const useAdminStore = defineStore('admin', () => {
   const loadedActivityLogHashes = ref<Map<string, boolean>>(new Map())
   const loadedSystemLogHashes = ref<Map<string, boolean>>(new Map())
 
-  function hashFilters(filters?: Record<string, unknown> | string): string {
+  function hashFilters(filters?: object | string): string {
     if (filters === undefined || filters === null) return '__default__'
     if (typeof filters === 'string') return filters
     // Normaliza: ordena llaves, omite valores vacios/undefined para hits estables.
@@ -180,47 +180,140 @@ export const useAdminStore = defineStore('admin', () => {
   }
 
   // =========================================================================
+  // Listados que pagina el servidor (usuarios, clases, misiones)
+  // =========================================================================
+
+  /** Parámetros de la URL de un listado: sin los vacíos ni «all», que es no filtrar. */
+  function listParams(query: object) {
+    const params = new URLSearchParams()
+    Object.entries(query).forEach(([key, value]) => {
+      if (value === undefined || value === null || value === '' || value === 'all') return
+      params.append(key, String(value))
+    })
+    return params
+  }
+
+  /**
+   * Un listado del panel que pagina el servidor. Recuerda la última consulta
+   * pedida, para repetirla tras una acción, y la que está pintada, para no
+   * pedirla otra vez al volver a la página. Cada petición lleva un número: la
+   * respuesta de una búsqueda que ya ha cambiado llega tarde y se descarta.
+   */
+  function pagedList<T, Q extends AdminListQuery, R extends PaginatedResponse>(list: {
+    path: string
+    items: Ref<T[]>
+    total: Ref<number>
+    page: Ref<number>
+    totalPages: Ref<number>
+    loading: Ref<boolean>
+    loaded: Ref<boolean>
+    pick: (response: R) => T[] | undefined
+    errorMessage: string
+  }) {
+    let lastQuery: Q = {} as Q
+    /** La consulta de la última petición, esté en camino o no. */
+    let requestedHash: string | null = null
+    /** La consulta de lo que está pintado; null si lo pintado no es de ninguna. */
+    let shownHash: string | null = null
+    let request = 0
+
+    /** `quiet`: sin el esqueleto de carga, y si falla se queda la página que había. */
+    async function fetch(query: Q = {} as Q, { quiet = false } = {}) {
+      const current = ++request
+      const hash = hashFilters(query)
+      lastQuery = { ...query }
+      requestedHash = hash
+      try {
+        if (!quiet) list.loading.value = true
+        error.value = null
+        const config = useRuntimeConfig()
+        const response = (await $fetch<R>(
+          `${config.public.apiBase}${list.path}?${listParams(query)}`
+        )) as R
+        if (current !== request) return response
+        list.items.value = list.pick(response) || []
+        list.total.value = response.total || 0
+        list.page.value = response.page || 1
+        list.totalPages.value = response.totalPages || 1
+        list.loaded.value = true
+        shownHash = hash
+        return response
+      } catch (err: unknown) {
+        if (current === request) {
+          error.value = (err as Error).message || list.errorMessage
+          if (!quiet) {
+            // La lista vacía no es la respuesta de ninguna consulta: volver a
+            // la que se veía antes tiene que pedirla otra vez.
+            list.items.value = []
+            shownHash = null
+          }
+        }
+        console.error(`Error fetching ${list.path}:`, err)
+        throw err
+      } finally {
+        if (current === request) list.loading.value = false
+      }
+    }
+
+    async function ensure(query: Q = {} as Q, force = false) {
+      const hash = hashFilters(query)
+      if (list.loaded.value && !force && shownHash === hash) {
+        // Se vuelve a lo que ya está pintado mientras otra consulta sigue en
+        // camino: su respuesta ya no es de esta pantalla y no puede pisarla al
+        // llegar (se vería una página con la paginación de otra).
+        if (requestedHash !== hash) {
+          request++
+          list.loading.value = false
+          lastQuery = { ...query }
+          requestedHash = hash
+        }
+        return list.items.value
+      }
+      await fetch(query)
+      return list.items.value
+    }
+
+    /** Vuelve a pedir la página que se ve, con los mismos filtros. No lanza. */
+    async function refresh() {
+      try {
+        await fetch(lastQuery, { quiet: true })
+      } catch {
+        /* ya registrado; se queda la página que había */
+      }
+    }
+
+    return { fetch, ensure, refresh }
+  }
+
+  // =========================================================================
   // User Management Actions
   // =========================================================================
 
-  async function fetchUsers(filters?: UserFilters) {
-    try {
-      isLoadingUsers.value = true
-      error.value = null
-      const config = useRuntimeConfig()
-      const queryParams = new URLSearchParams()
-      if (filters?.role && filters.role !== 'all') queryParams.append('role', filters.role)
-      if (filters?.status && filters.status !== 'all') queryParams.append('status', filters.status)
-      if (filters?.accountType && filters.accountType !== 'all')
-        queryParams.append('accountType', filters.accountType)
-      if (filters?.search) queryParams.append('search', filters.search)
-      if (filters?.schoolId) queryParams.append('schoolId', filters.schoolId)
-      if (filters?.page) queryParams.append('page', filters.page.toString())
-      if (filters?.limit) queryParams.append('limit', filters.limit.toString())
+  const usersList = pagedList<AdminUser, UserFilters, PaginatedUsersResponse>({
+    path: '/admin/users',
+    items: users,
+    total: totalUsers,
+    page: currentPage,
+    totalPages,
+    loading: isLoadingUsers,
+    loaded: hasLoadedUsers,
+    pick: response => response.users,
+    errorMessage: 'Error al cargar los usuarios',
+  })
+  const fetchUsers = usersList.fetch
+  const ensureUsers = usersList.ensure
+  /**
+   * Tras cada acción sobre una cuenta se vuelve a pedir la página que se ve, con
+   * los filtros vigentes: la tarjeta puede haber cambiado (sus clases, su estado)
+   * o haber dejado de casar con un filtro, y el total también cambia.
+   */
+  const refreshUsers = usersList.refresh
 
-      const response = await $fetch<PaginatedUsersResponse>(
-        `${config.public.apiBase}/admin/users?${queryParams}`
-      )
-      users.value = response.users || []
-      totalUsers.value = response.total || 0
-      currentPage.value = response.page || 1
-      totalPages.value = response.totalPages || 1
-      hasLoadedUsers.value = true
-      return response
-    } catch (err: unknown) {
-      error.value = (err as Error).message || 'Error al cargar los usuarios'
-      console.error('Error fetching users:', err)
-      users.value = []
-      throw err
-    } finally {
-      isLoadingUsers.value = false
-    }
-  }
-
-  async function ensureUsers(filters?: UserFilters, force = false) {
-    if (hasLoadedUsers.value && !force) return users.value
-    await fetchUsers(filters)
-    return users.value
+  /** Sustituye la tarjeta de un usuario por la que devuelve la API, que viene entera. */
+  function replaceUser(user: AdminUser | undefined) {
+    if (!user) return
+    const idx = users.value.findIndex(u => u.id === user.id)
+    if (idx !== -1) users.value[idx] = user
   }
 
   async function suspendUser(userId: string, reason?: string) {
@@ -232,8 +325,8 @@ export const useAdminStore = defineStore('admin', () => {
         `${config.public.apiBase}/admin/users/${userId}/suspend`,
         { method: 'PUT', body: { reason } }
       )
-      const idx = users.value.findIndex(u => u.id === userId)
-      if (idx !== -1 && response.user) users.value[idx] = response.user
+      replaceUser(response.user)
+      await refreshUsers()
       return response
     } catch (err: unknown) {
       error.value = (err as Error).message || 'Error al suspender el usuario'
@@ -253,8 +346,8 @@ export const useAdminStore = defineStore('admin', () => {
         `${config.public.apiBase}/admin/users/${userId}/activate`,
         { method: 'PUT' }
       )
-      const idx = users.value.findIndex(u => u.id === userId)
-      if (idx !== -1 && response.user) users.value[idx] = response.user
+      replaceUser(response.user)
+      await refreshUsers()
       return response
     } catch (err: unknown) {
       error.value = (err as Error).message || 'Error al activar el usuario'
@@ -283,8 +376,7 @@ export const useAdminStore = defineStore('admin', () => {
         `${config.public.apiBase}/admin/users/managed`,
         { method: 'POST', body: input }
       )
-      // La cuenta nueva no está en la lista cargada: se vuelve a pedir.
-      await fetchUsers({ limit: 1000 })
+      await refreshUsers()
       return response
     } catch (err: unknown) {
       error.value = (err as Error).message || 'Error al crear la cuenta'
@@ -309,8 +401,7 @@ export const useAdminStore = defineStore('admin', () => {
         `${config.public.apiBase}/admin/users/${userId}/reset-password`,
         { method: 'POST' }
       )
-      const idx = users.value.findIndex(u => u.id === userId)
-      if (idx !== -1) users.value[idx] = { ...users.value[idx]!, mustChangePassword: true }
+      await refreshUsers()
       return response
     } catch (err: unknown) {
       error.value = (err as Error).message || 'Error al restablecer la contraseña'
@@ -321,7 +412,11 @@ export const useAdminStore = defineStore('admin', () => {
     }
   }
 
-  /** Cambia la clase desde la que el profesorado gestiona una cuenta. `null` la deja sin ninguna. */
+  /**
+   * Cambia la clase desde la que el profesorado gestiona una cuenta. `null` la
+   * deja sin ninguna. Al moverla, la API la matricula en la clase nueva: la
+   * recarga trae sus clases y la saca de «sin correo ni clase» si estaba ahí.
+   */
   async function updateHomeClass(userId: string, classId: string | null) {
     try {
       isPerformingUserAction.value = true
@@ -335,14 +430,7 @@ export const useAdminStore = defineStore('admin', () => {
         method: 'PUT',
         body: { classId },
       })
-      const idx = users.value.findIndex(u => u.id === userId)
-      if (idx !== -1) {
-        users.value[idx] = {
-          ...users.value[idx]!,
-          homeClassId: response.user.homeClassId,
-          homeClassName: response.user.homeClassName,
-        }
-      }
+      await refreshUsers()
       return response
     } catch (err: unknown) {
       error.value = (err as Error).message || 'Error al cambiar la clase de origen'
@@ -375,11 +463,7 @@ export const useAdminStore = defineStore('admin', () => {
         `${config.public.apiBase}/admin/users/${userId}`,
         { method: 'DELETE' }
       )
-      const idx = users.value.findIndex(u => u.id === userId)
-      if (idx !== -1) {
-        users.value.splice(idx, 1)
-        totalUsers.value -= 1
-      }
+      await refreshUsers()
       return response
     } catch (err: unknown) {
       error.value = (err as Error).message || 'Error al eliminar el usuario'
@@ -387,130 +471,6 @@ export const useAdminStore = defineStore('admin', () => {
       throw err
     } finally {
       isPerformingUserAction.value = false
-    }
-  }
-
-  // =========================================================================
-  // School Management Actions
-  // =========================================================================
-
-  async function fetchSchools(limitOrFilters?: number | SchoolFilters) {
-    try {
-      isLoadingSchools.value = true
-      error.value = null
-      const config = useRuntimeConfig()
-      const queryParams = new URLSearchParams()
-
-      if (typeof limitOrFilters === 'number') {
-        queryParams.append('limit', limitOrFilters.toString())
-      } else if (limitOrFilters) {
-        if (limitOrFilters.search) queryParams.append('search', limitOrFilters.search)
-        if (limitOrFilters.status && limitOrFilters.status !== 'all')
-          queryParams.append('status', limitOrFilters.status)
-        if (limitOrFilters.page) queryParams.append('page', limitOrFilters.page.toString())
-        if (limitOrFilters.limit) queryParams.append('limit', limitOrFilters.limit.toString())
-      }
-
-      const response = await $fetch<{ schools: School[] }>(
-        `${config.public.apiBase}/admin/schools?${queryParams}`
-      )
-      schools.value = response.schools || []
-      hasLoadedSchools.value = true
-      return response.schools
-    } catch (err: unknown) {
-      error.value = (err as Error).message || 'Error al cargar las instituciones'
-      console.error('Error fetching schools:', err)
-      schools.value = []
-      throw err
-    } finally {
-      isLoadingSchools.value = false
-    }
-  }
-
-  async function ensureSchools(limitOrFilters?: number | SchoolFilters, force = false) {
-    if (hasLoadedSchools.value && !force) return schools.value
-    await fetchSchools(limitOrFilters)
-    return schools.value
-  }
-
-  async function createSchool(data: CreateSchoolPayload) {
-    try {
-      isPerformingSchoolAction.value = true
-      error.value = null
-      const config = useRuntimeConfig()
-      const response = await $fetch<{ success: boolean; school: School }>(
-        `${config.public.apiBase}/admin/schools`,
-        { method: 'POST', body: data }
-      )
-      if (response.school) schools.value.push(response.school)
-      return response
-    } catch (err: unknown) {
-      error.value = (err as Error).message || 'Error al crear la institución'
-      console.error('Error creating school:', err)
-      throw err
-    } finally {
-      isPerformingSchoolAction.value = false
-    }
-  }
-
-  async function updateSchool(schoolId: string, data: UpdateSchoolPayload) {
-    try {
-      isPerformingSchoolAction.value = true
-      error.value = null
-      const config = useRuntimeConfig()
-      const response = await $fetch<{ success: boolean; school: School }>(
-        `${config.public.apiBase}/admin/schools/${schoolId}`,
-        { method: 'PUT', body: data }
-      )
-      const idx = schools.value.findIndex(s => s.id === schoolId)
-      if (idx !== -1 && response.school) schools.value[idx] = response.school
-      return response
-    } catch (err: unknown) {
-      error.value = (err as Error).message || 'Error al actualizar la institución'
-      console.error('Error updating school:', err)
-      throw err
-    } finally {
-      isPerformingSchoolAction.value = false
-    }
-  }
-
-  async function deleteSchool(schoolId: string) {
-    try {
-      isPerformingSchoolAction.value = true
-      error.value = null
-      const config = useRuntimeConfig()
-      await $fetch<{ success: boolean }>(`${config.public.apiBase}/admin/schools/${schoolId}`, {
-        method: 'DELETE',
-      })
-      const idx = schools.value.findIndex(s => s.id === schoolId)
-      if (idx !== -1) schools.value.splice(idx, 1)
-    } catch (err: unknown) {
-      error.value = (err as Error).message || 'Error al eliminar la institución'
-      console.error('Error deleting school:', err)
-      throw err
-    } finally {
-      isPerformingSchoolAction.value = false
-    }
-  }
-
-  async function toggleSchoolStatus(schoolId: string) {
-    try {
-      isPerformingSchoolAction.value = true
-      error.value = null
-      const config = useRuntimeConfig()
-      const response = await $fetch<{ success: boolean; school: School }>(
-        `${config.public.apiBase}/admin/schools/${schoolId}/status`,
-        { method: 'PUT' }
-      )
-      const idx = schools.value.findIndex(s => s.id === schoolId)
-      if (idx !== -1 && response.school) schools.value[idx] = response.school
-      return response
-    } catch (err: unknown) {
-      error.value = (err as Error).message || 'Error al cambiar el estado de la institución'
-      console.error('Error toggling school status:', err)
-      throw err
-    } finally {
-      isPerformingSchoolAction.value = false
     }
   }
 
@@ -695,86 +655,52 @@ export const useAdminStore = defineStore('admin', () => {
   // Classes Actions
   // =========================================================================
 
-  async function fetchAllClasses(filters?: AdminClassFilters) {
-    try {
-      isLoadingClasses.value = true
-      error.value = null
-      const config = useRuntimeConfig()
-      const queryParams = new URLSearchParams()
-      if (filters?.search) queryParams.append('search', filters.search)
-      if (filters?.schoolId) queryParams.append('schoolId', filters.schoolId)
-      if (filters?.status && filters.status !== 'all') queryParams.append('status', filters.status)
-      if (filters?.page) queryParams.append('page', filters.page.toString())
-      if (filters?.limit) queryParams.append('limit', filters.limit.toString())
+  const classesList = pagedList<AdminClass, AdminClassFilters, PaginatedClassesResponse>({
+    path: '/admin/classes',
+    items: classes,
+    total: totalClasses,
+    page: classesPage,
+    totalPages: classesTotalPages,
+    loading: isLoadingClasses,
+    loaded: hasLoadedAllClasses,
+    pick: response => response.classes,
+    errorMessage: 'Error al cargar las clases',
+  })
+  const fetchAllClasses = classesList.fetch
+  const ensureAllClasses = classesList.ensure
 
-      const response = await $fetch<PaginatedClassesResponse>(
-        `${config.public.apiBase}/admin/classes?${queryParams}`
-      )
-      classes.value = response.classes || []
-      totalClasses.value = response.total || 0
-      classesPage.value = response.page || 1
-      classesTotalPages.value = response.totalPages || 1
-      hasLoadedAllClasses.value = true
-      return response
-    } catch (err: unknown) {
-      error.value = (err as Error).message || 'Error al cargar las clases'
-      console.error('Error fetching classes:', err)
-      classes.value = []
-      throw err
-    } finally {
-      isLoadingClasses.value = false
-    }
-  }
-
-  async function ensureAllClasses(filters?: AdminClassFilters, force = false) {
-    if (hasLoadedAllClasses.value && !force) return classes.value
-    if (isLoadingClasses.value) return classes.value
-    await fetchAllClasses(filters)
-    return classes.value
+  /**
+   * Busca clases para elegir una (clase de origen de una cuenta). No toca el
+   * listado de la página de clases: devuelve solo las primeras coincidencias y
+   * si hay más, para que quien busca afine en vez de recorrer la instancia.
+   */
+  async function searchClasses(search: string, limit = 8) {
+    const config = useRuntimeConfig()
+    const queryParams = new URLSearchParams({ limit: String(limit) })
+    if (search.trim()) queryParams.append('search', search.trim())
+    const response = await $fetch<PaginatedClassesResponse>(
+      `${config.public.apiBase}/admin/classes?${queryParams}`
+    )
+    return { classes: response.classes || [], hasMore: (response.total || 0) > limit }
   }
 
   // =========================================================================
   // Missions Actions
   // =========================================================================
 
-  async function fetchAllMissions(filters?: AdminMissionFilters) {
-    try {
-      isLoadingMissions.value = true
-      error.value = null
-      const config = useRuntimeConfig()
-      const queryParams = new URLSearchParams()
-      if (filters?.search) queryParams.append('search', filters.search)
-      if (filters?.schoolId) queryParams.append('schoolId', filters.schoolId)
-      if (filters?.status && filters.status !== 'all') queryParams.append('status', filters.status)
-      if (filters?.rarity && filters.rarity !== 'all') queryParams.append('rarity', filters.rarity)
-      if (filters?.page) queryParams.append('page', filters.page.toString())
-      if (filters?.limit) queryParams.append('limit', filters.limit.toString())
-
-      const response = await $fetch<PaginatedMissionsResponse>(
-        `${config.public.apiBase}/admin/missions?${queryParams}`
-      )
-      missions.value = response.missions || []
-      totalMissions.value = response.total || 0
-      missionsPage.value = response.page || 1
-      missionsTotalPages.value = response.totalPages || 1
-      hasLoadedAllMissions.value = true
-      return response
-    } catch (err: unknown) {
-      error.value = (err as Error).message || 'Error al cargar las misiones'
-      console.error('Error fetching missions:', err)
-      missions.value = []
-      throw err
-    } finally {
-      isLoadingMissions.value = false
-    }
-  }
-
-  async function ensureAllMissions(filters?: AdminMissionFilters, force = false) {
-    if (hasLoadedAllMissions.value && !force) return missions.value
-    if (isLoadingMissions.value) return missions.value
-    await fetchAllMissions(filters)
-    return missions.value
-  }
+  const missionsList = pagedList<AdminMission, AdminMissionFilters, PaginatedMissionsResponse>({
+    path: '/admin/missions',
+    items: missions,
+    total: totalMissions,
+    page: missionsPage,
+    totalPages: missionsTotalPages,
+    loading: isLoadingMissions,
+    loaded: hasLoadedAllMissions,
+    pick: response => response.missions,
+    errorMessage: 'Error al cargar las misiones',
+  })
+  const fetchAllMissions = missionsList.fetch
+  const ensureAllMissions = missionsList.ensure
 
   // =========================================================================
   // Analytics Actions
@@ -820,7 +746,6 @@ export const useAdminStore = defineStore('admin', () => {
     users.value = []
     activities.value = []
     services.value = []
-    schools.value = []
     classes.value = []
     missions.value = []
     settings.value = null
@@ -847,19 +772,16 @@ export const useAdminStore = defineStore('admin', () => {
     isLoadingUsers.value = false
     isLoadingActivities.value = false
     isLoadingServices.value = false
-    isLoadingSchools.value = false
     isLoadingClasses.value = false
     isLoadingMissions.value = false
     isLoadingSettings.value = false
     isLoadingAnalytics.value = false
     isPerformingUserAction.value = false
-    isPerformingSchoolAction.value = false
     isSavingSettings.value = false
     error.value = null
     // Reset cache flags
     hasLoadedStats.value = false
     hasLoadedUsers.value = false
-    hasLoadedSchools.value = false
     hasLoadedActivities.value = false
     hasLoadedSystemLogs.value = false
     hasLoadedSettings.value = false
@@ -879,7 +801,6 @@ export const useAdminStore = defineStore('admin', () => {
     users,
     activities,
     services,
-    schools,
     systemLogs,
     classes,
     missions,
@@ -907,21 +828,18 @@ export const useAdminStore = defineStore('admin', () => {
     isLoadingUsers,
     isLoadingActivities,
     isLoadingServices,
-    isLoadingSchools,
     isLoadingSystemLogs,
     isLoadingClasses,
     isLoadingMissions,
     isLoadingSettings,
     isLoadingAnalytics,
     isPerformingUserAction,
-    isPerformingSchoolAction,
     isSavingSettings,
     // Error
     error,
     // Cache flags
     hasLoadedStats,
     hasLoadedUsers,
-    hasLoadedSchools,
     hasLoadedActivities,
     hasLoadedSystemLogs,
     hasLoadedSettings,
@@ -944,22 +862,18 @@ export const useAdminStore = defineStore('admin', () => {
     updateHomeClass,
     fetchUserDeletionCheck,
     deleteUser,
-    fetchSchools,
-    createSchool,
-    updateSchool,
-    deleteSchool,
-    toggleSchoolStatus,
     fetchActivities,
     fetchSystemLogs,
     fetchSettings,
     updateSettings,
     fetchAllClasses,
+    searchClasses,
     fetchAllMissions,
     fetchAnalytics,
     // Actions (ensureX - patron canonico con cache)
     ensureStats,
     ensureUsers,
-    ensureSchools,
+    refreshUsers,
     ensureActivities,
     ensureActivityLogs,
     ensureSystemLogs,

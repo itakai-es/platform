@@ -27,7 +27,6 @@ export interface AdminUser {
   createdAt: string
   lastLogin: string | null
   classCount: number
-  schoolName?: string
 }
 
 /**
@@ -69,22 +68,6 @@ export interface SystemService {
 }
 
 /**
- * Institución educativa (school)
- */
-export interface School {
-  id: string
-  name: string
-  status: 'active' | 'inactive'
-  activeStudents: number
-  activeTeachers: number
-  totalClasses: number
-  activityRate: number
-  createdAt: string
-  city?: string
-  country?: string
-}
-
-/**
  * Acción sobre un usuario (suspender, activar, eliminar)
  */
 export interface UserAction {
@@ -94,17 +77,25 @@ export interface UserAction {
 }
 
 /**
+ * Página de un listado del panel que pagina el servidor: búsqueda, orden,
+ * página (desde 1) y tamaño. Los filtros de cada listado se añaden encima.
+ */
+export interface AdminListQuery {
+  search?: string
+  sort?: string
+  page?: number
+  limit?: number
+}
+
+/**
  * Filtros para la tabla de usuarios
  */
-export interface UserFilters {
+export interface UserFilters extends AdminListQuery {
   role?: 'student' | 'teacher' | 'admin' | 'all'
   status?: 'active' | 'suspended' | 'inactive' | 'all'
   /** `orphan`: cuentas gestionadas que se han quedado sin ninguna clase. */
   accountType?: 'all' | AccountType | 'orphan'
-  search?: string
-  schoolId?: string
-  page?: number
-  limit?: number
+  sort?: 'name-asc' | 'name-desc' | 'recent'
 }
 
 /**
@@ -116,29 +107,6 @@ export interface PaginatedUsersResponse {
   page: number
   limit: number
   totalPages: number
-}
-
-// =============================================================================
-// Schools CRUD
-// =============================================================================
-
-export interface CreateSchoolPayload {
-  name: string
-  city: string
-  country: string
-}
-
-export interface UpdateSchoolPayload {
-  name?: string
-  city?: string
-  country?: string
-}
-
-export interface SchoolFilters {
-  search?: string
-  status?: 'active' | 'inactive' | 'all'
-  page?: number
-  limit?: number
 }
 
 // =============================================================================
@@ -256,12 +224,8 @@ export interface AdminClass {
   createdAt: string
 }
 
-export interface AdminClassFilters {
-  search?: string
-  schoolId?: string
-  status?: 'active' | 'inactive' | 'all'
-  page?: number
-  limit?: number
+export interface AdminClassFilters extends AdminListQuery {
+  sort?: 'name-asc' | 'name-desc' | 'students-desc' | 'missions-desc' | 'recent'
 }
 
 export interface PaginatedClassesResponse {
@@ -285,13 +249,10 @@ export interface AdminMission {
   createdAt: string
 }
 
-export interface AdminMissionFilters {
-  search?: string
-  schoolId?: string
-  status?: 'active' | 'completed' | 'expired' | 'all'
+export interface AdminMissionFilters extends AdminListQuery {
+  status?: 'activa' | 'bloqueada' | 'all'
   rarity?: 'comun' | 'rara' | 'epica' | 'legendaria' | 'all'
-  page?: number
-  limit?: number
+  sort?: 'name-asc' | 'name-desc' | 'xp-desc' | 'enigmas-desc' | 'recent'
 }
 
 export interface PaginatedMissionsResponse {

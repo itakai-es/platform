@@ -40,7 +40,6 @@ export const ROUTE_NAMES = {
   ADMIN_CLASSES: '/admin/clases',
   ADMIN_MISSIONS: '/admin/misiones',
   ADMIN_ANALYTICS: '/admin/estadisticas',
-  ADMIN_SCHOOLS: '/admin/centros',
   ADMIN_LOGS: '/admin/registros',
   ADMIN_HELP: '/admin/ayuda',
   ADMIN_BLOG: '/admin/blog',

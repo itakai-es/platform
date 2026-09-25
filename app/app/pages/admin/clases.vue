@@ -2,17 +2,17 @@
   <div class="space-y-6">
     <PageHeader :title="t('admin.classes.title')" :subtitle="t('admin.classes.subtitle')" />
 
-    <!-- Filters -->
+    <!-- Filters: búsqueda y orden van al servidor, que pagina -->
     <FilterBar
-      :search="searchQuery"
-      :sort="sortBy"
-      :results-count="filteredClasses.length"
+      :search="search"
+      :sort="sort"
+      :results-count="totalClasses"
       :search-placeholder="t('admin.classes.filters.search_placeholder')"
       :sort-options="sortOptions"
       variant="red"
-      @update:search="searchQuery = $event"
-      @update:sort="sortBy = $event"
-      @reset="clearAllFilters"
+      @update:search="search = $event"
+      @update:sort="sort = $event"
+      @reset="reset"
     />
 
     <!-- Loading -->
@@ -35,7 +35,7 @@
 
     <!-- Empty -->
     <EmptyState
-      v-else-if="filteredClasses.length === 0"
+      v-else-if="classes.length === 0"
       :icon="AcademicCapIcon"
       :title="t('admin.classes.empty.title')"
       :description="t('admin.classes.empty.description')"
@@ -44,7 +44,7 @@
     <!-- Classes Grid -->
     <CardGrid v-else>
       <article
-        v-for="cls in filteredClasses"
+        v-for="cls in classes"
         :key="cls.id"
         class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 overflow-hidden"
       >
@@ -67,21 +67,34 @@
         </div>
       </article>
     </CardGrid>
+
+    <Pagination
+      :current-page="page"
+      :total-pages="classesTotalPages"
+      @page-change="page = $event"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { AcademicCapIcon } from '@heroicons/vue/24/outline'
+import type { AdminClassFilters } from '~/types/admin.types'
 
 const { t } = useI18n()
 useHead({ title: () => t('admin.classes.meta.title') })
 definePageMeta({ layout: 'admin', middleware: ['auth', 'onboarding', 'role'], role: 'admin' })
 
 const adminStore = useAdminStore()
-const { classes, isLoadingClasses } = storeToRefs(adminStore)
+const { classes, totalClasses, classesTotalPages, isLoadingClasses } = storeToRefs(adminStore)
 
-const searchQuery = ref('')
-const sortBy = ref('name-asc')
+/** Búsqueda, orden y página: los aplica el servidor, que devuelve una página cada vez. */
+const { search, sort, page, reset } = useAdminListQuery({
+  filters: {},
+  sort: 'name-asc',
+  pageSize: 24,
+  totalPages: classesTotalPages,
+  load: query => adminStore.ensureAllClasses(query as AdminClassFilters),
+})
 
 const sortOptions = computed(() => [
   { value: 'name-asc', label: 'Nombre A-Z' },
@@ -89,39 +102,4 @@ const sortOptions = computed(() => [
   { value: 'students-desc', label: t('admin.classes.sort.students_desc') },
   { value: 'missions-desc', label: t('admin.classes.sort.missions_desc') },
 ])
-
-const filteredClasses = computed(() => {
-  let result = [...classes.value]
-
-  if (searchQuery.value) {
-    const q = searchQuery.value.toLowerCase()
-    result = result.filter(
-      c => c.name.toLowerCase().includes(q) || c.teacherName.toLowerCase().includes(q)
-    )
-  }
-
-  switch (sortBy.value) {
-    case 'name-asc':
-      result.sort((a, b) => a.name.localeCompare(b.name))
-      break
-    case 'name-desc':
-      result.sort((a, b) => b.name.localeCompare(a.name))
-      break
-    case 'students-desc':
-      result.sort((a, b) => b.studentCount - a.studentCount)
-      break
-    case 'missions-desc':
-      result.sort((a, b) => b.missionCount - a.missionCount)
-      break
-  }
-
-  return result
-})
-
-const clearAllFilters = () => {
-  searchQuery.value = ''
-  sortBy.value = 'name-asc'
-}
-
-onMounted(() => adminStore.ensureAllClasses({ limit: 1000 }))
 </script>

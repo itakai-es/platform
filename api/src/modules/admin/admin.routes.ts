@@ -1,15 +1,14 @@
 import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
 import { prisma } from '../../config/database.js'
 import { z, ZodError } from 'zod'
-import { calculateMissionTotalXP } from '../../utils/xp-calculator.js'
 import os from 'os'
 import { execSync } from 'child_process'
 import { fetchSystemLogs, logServiceHealthResults } from './system-log.service.js'
 import { getAiSettings, getAdminSettings, updateSection } from '../settings/settings.service.js'
 import { SETTINGS_SECTIONS, type SettingsSection } from '../settings/settings.types.js'
 import { openAiEndpoint } from '../ai/providers/openai-endpoint.js'
-import { rethrowHttpError } from '../../utils/errors.js'
-import { enrollStudent } from '../../utils/enrollment.js'
+import { rethrowHttpError, ValidationError } from '../../utils/errors.js'
+import { ENROLL_TX_OPTIONS, enrollStudent } from '../../utils/enrollment.js'
 import { USERNAME_MAX_LENGTH, USERNAME_MIN_LENGTH } from '../../utils/identity.js'
 import {
   createManagedStudent,
@@ -21,17 +20,15 @@ import {
   accountDeletionCheck,
   deleteUserAccount,
 } from '../profile/account-deletion.service.js'
-
-const userFiltersSchema = z.object({
-  role: z.string().optional(),
-  status: z.string().optional(),
-  search: z.string().optional(),
-  // `managed`, las cuentas que lleva el profesorado; `orphan`, las gestionadas
-  // que se han quedado sin ninguna clase y solo puede atender la administración.
-  accountType: z.enum(['all', 'self', 'managed', 'orphan']).optional(),
-  page: z.string().optional(),
-  limit: z.string().optional(),
-})
+import {
+  adminUserCard,
+  classListQuerySchema,
+  listAdminClasses,
+  listAdminMissions,
+  listAdminUsers,
+  missionListQuerySchema,
+  userListQuerySchema,
+} from './admin-lists.service.js'
 
 const homeClassSchema = z.object({
   // Cadena vacía o nulo: se queda sin clase de origen.
@@ -255,85 +252,16 @@ export async function adminRoutes(fastify: FastifyInstance) {
     }
   })
 
-  // Get users
+  // Usuarios de la instancia, una página cada vez: búsqueda, filtros y orden
+  // van en la consulta (ver admin-lists.service.ts).
   fastify.get('/users', async (request: FastifyRequest<{ Querystring: Record<string, string> }>, reply: FastifyReply) => {
     try {
-      const filters = userFiltersSchema.parse(request.query)
-      const page = parseInt(filters.page || '1')
-      const limit = parseInt(filters.limit || '20')
-      const skip = (page - 1) * limit
-
-      const whereClause: any = {}
-
-      if (filters.role && filters.role !== 'all') {
-        whereClause.role = filters.role
-      }
-
-      if (filters.status && filters.status !== 'all') {
-        whereClause.status = filters.status
-      }
-
-      // Una cuenta sin correo se encuentra por su usuario: es su identificador.
-      if (filters.search) {
-        whereClause.OR = [
-          { name: { contains: filters.search, mode: 'insensitive' } },
-          { email: { contains: filters.search, mode: 'insensitive' } },
-          { username: { contains: filters.search, mode: 'insensitive' } },
-        ]
-      }
-
-      if (filters.accountType === 'orphan') {
-        whereClause.accountType = 'managed'
-        whereClause.enrollments = { none: {} }
-      } else if (filters.accountType && filters.accountType !== 'all') {
-        whereClause.accountType = filters.accountType
-      }
-
-      const [users, total] = await Promise.all([
-        prisma.user.findMany({
-          where: whereClause,
-          skip,
-          take: limit,
-          orderBy: { createdAt: 'desc' },
-          include: {
-            refreshTokens: {
-              orderBy: { createdAt: 'desc' },
-              take: 1,
-              select: { createdAt: true },
-            },
-            teacherClasses: { select: { id: true } },
-            enrollments: { where: { isPreview: false }, select: { id: true } },
-            homeClass: { select: { name: true } },
-          },
-        }),
-        prisma.user.count({ where: whereClause }),
-      ])
-
-      return {
-        users: users.map((u) => ({
-          id: u.id,
-          name: u.name,
-          email: u.email,
-          username: u.username,
-          accountType: u.accountType,
-          homeClassId: u.homeClassId,
-          homeClassName: u.homeClass?.name ?? null,
-          mustChangePassword: u.mustChangePassword,
-          role: u.role,
-          status: u.status,
-          createdAt: u.createdAt,
-          lastLogin: u.refreshTokens[0]?.createdAt || null,
-          classCount: u.role === 'teacher' ? u.teacherClasses.length : u.enrollments.length,
-        })),
-        total,
-        page,
-        limit,
-        totalPages: Math.ceil(total / limit),
-      }
+      return await listAdminUsers(userListQuerySchema.parse(request.query))
     } catch (error) {
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
+      request.log.error(error, 'Error in /admin/users')
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
@@ -358,7 +286,7 @@ export async function adminRoutes(fastify: FastifyInstance) {
       }
 
       // Suspender cierra también sus sesiones: no puede renovar el acceso con las que tenía abiertas.
-      const [user] = await prisma.$transaction([
+      await prisma.$transaction([
         prisma.user.update({
           where: { id: userId },
           data: { status: 'suspended' },
@@ -369,12 +297,9 @@ export async function adminRoutes(fastify: FastifyInstance) {
         }),
       ])
 
+      // La tarjeta entera, como en el listado: el panel la sustituye tal cual.
       return {
-        user: {
-          id: user.id,
-          name: user.name,
-          status: user.status,
-        },
+        user: await adminUserCard(userId),
         success: true,
         message: 'Usuario suspendido correctamente',
       }
@@ -429,7 +354,7 @@ export async function adminRoutes(fastify: FastifyInstance) {
 
         const target = await prisma.user.findUnique({
           where: { id: userId },
-          select: { accountType: true },
+          select: { accountType: true, homeClassId: true },
         })
         if (!target) {
           return reply.status(404).send({ message: 'Usuario no encontrado' })
@@ -442,13 +367,30 @@ export async function adminRoutes(fastify: FastifyInstance) {
         }
         let cls: { id: string; name: string } | null = null
         if (classId) {
-          cls = await prisma.class.findUnique({
+          const found = await prisma.class.findUnique({
             where: { id: classId },
-            select: { id: true, name: true },
+            select: { id: true, name: true, archived: true },
           })
-          if (!cls) {
+          if (!found) {
             return reply.status(404).send({ message: 'Clase no encontrada' })
           }
+          // Una clase archivada no admite alumnado nuevo, igual que al dar de
+          // alta una cuenta en ella (managed-students.service.ts). Guardar la
+          // que ya tenía, sin cambiar nada, no es un error.
+          if (found.archived) {
+            if (found.id !== target.homeClassId) {
+              throw new ValidationError(
+                'Esta clase está archivada y no admite nuevas cuentas',
+                'CLASS_ARCHIVED'
+              )
+            }
+            return {
+              user: { id: userId, homeClassId: found.id, homeClassName: found.name },
+              success: true,
+              message: 'Clase de origen actualizada correctamente',
+            }
+          }
+          cls = { id: found.id, name: found.name }
         }
 
         const user = await prisma.$transaction(async tx => {
@@ -477,7 +419,7 @@ export async function adminRoutes(fastify: FastifyInstance) {
           }
 
           return updated
-        })
+        }, ENROLL_TX_OPTIONS)
 
         return {
           user: {
@@ -503,17 +445,19 @@ export async function adminRoutes(fastify: FastifyInstance) {
     try {
       const { userId } = request.params
 
-      const user = await prisma.user.update({
+      const target = await prisma.user.findUnique({ where: { id: userId }, select: { id: true } })
+      if (!target) {
+        return reply.status(404).send({ message: 'Usuario no encontrado' })
+      }
+
+      await prisma.user.update({
         where: { id: userId },
         data: { status: 'active' },
       })
 
+      // La tarjeta entera, como en el listado: el panel la sustituye tal cual.
       return {
-        user: {
-          id: user.id,
-          name: user.name,
-          status: user.status,
-        },
+        user: await adminUserCard(userId),
         success: true,
         message: 'Usuario activado correctamente',
       }
@@ -683,51 +627,16 @@ export async function adminRoutes(fastify: FastifyInstance) {
     }
   })
 
-  // Get all classes
-  fastify.get('/classes', async (request: FastifyRequest<{ Querystring: { search?: string; page?: string; limit?: string } }>, reply: FastifyReply) => {
+  // Clases de la instancia, una página cada vez (ver admin-lists.service.ts).
+  // El buscador de clase de origen del panel también pasa por aquí.
+  fastify.get('/classes', async (request: FastifyRequest<{ Querystring: Record<string, string> }>, reply: FastifyReply) => {
     try {
-      const { search, page: pageStr, limit: limitStr } = request.query
-      const page = parseInt(pageStr || '1')
-      const limit = parseInt(limitStr || '20')
-      const skip = (page - 1) * limit
-
-      const where: Record<string, unknown> = {}
-      if (search) {
-        where.OR = [
-          { name: { contains: search, mode: 'insensitive' } },
-          { teacher: { name: { contains: search, mode: 'insensitive' } } },
-        ]
-      }
-
-      const [classes, total] = await Promise.all([
-        prisma.class.findMany({
-          where,
-          skip,
-          take: limit,
-          orderBy: { createdAt: 'desc' },
-          include: {
-            teacher: { select: { name: true } },
-            _count: { select: { enrollments: { where: { isPreview: false } }, missions: true } },
-          },
-        }),
-        prisma.class.count({ where }),
-      ])
-
-      return {
-        classes: classes.map((c) => ({
-          id: c.id,
-          name: c.name,
-          teacherName: c.teacher.name,
-          studentCount: c._count.enrollments,
-          missionCount: c._count.missions,
-          createdAt: c.createdAt,
-        })),
-        total,
-        page,
-        limit,
-        totalPages: Math.ceil(total / limit),
-      }
+      return await listAdminClasses(classListQuerySchema.parse(request.query))
     } catch (error) {
+      if (error instanceof ZodError) {
+        return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
+      }
+      request.log.error(error, 'Error in /admin/classes')
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
@@ -1106,56 +1015,15 @@ export async function adminRoutes(fastify: FastifyInstance) {
     }
   })
 
-  // Get all missions
-  fastify.get('/missions', async (request: FastifyRequest<{ Querystring: { search?: string; page?: string; limit?: string } }>, reply: FastifyReply) => {
+  // Misiones de la instancia, una página cada vez (ver admin-lists.service.ts).
+  fastify.get('/missions', async (request: FastifyRequest<{ Querystring: Record<string, string> }>, reply: FastifyReply) => {
     try {
-      const { search, page: pageStr, limit: limitStr } = request.query
-      const page = parseInt(pageStr || '1')
-      const limit = parseInt(limitStr || '20')
-      const skip = (page - 1) * limit
-
-      const where: Record<string, unknown> = {}
-      if (search) {
-        where.OR = [
-          { title: { contains: search, mode: 'insensitive' } },
-          { class: { name: { contains: search, mode: 'insensitive' } } },
-        ]
-      }
-
-      const [missions, total] = await Promise.all([
-        prisma.mission.findMany({
-          where,
-          skip,
-          take: limit,
-          orderBy: { createdAt: 'desc' },
-          include: {
-            class: { select: { name: true, teacher: { select: { name: true } } } },
-            enigmas: { select: { xpReward: true } },
-            _count: { select: { enigmas: true } },
-          },
-        }),
-        prisma.mission.count({ where }),
-      ])
-
-      return {
-        missions: missions.map((m) => ({
-          id: m.id,
-          title: m.title,
-          className: m.class.name,
-          teacherName: m.class.teacher.name,
-          enigmaCount: m._count.enigmas,
-          rarity: m.rarity,
-          xpReward: calculateMissionTotalXP(m.rarity, m.enigmas.map(e => e.xpReward)),
-          status: m.status,
-          deadline: m.deadline,
-          createdAt: m.createdAt,
-        })),
-        total,
-        page,
-        limit,
-        totalPages: Math.ceil(total / limit),
-      }
+      return await listAdminMissions(missionListQuerySchema.parse(request.query))
     } catch (error) {
+      if (error instanceof ZodError) {
+        return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
+      }
+      request.log.error(error, 'Error in /admin/missions')
       return reply.status(500).send({ message: 'Error interno' })
     }
   })

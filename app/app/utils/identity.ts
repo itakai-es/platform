@@ -21,15 +21,3 @@ export interface AccountIdentity {
 export function accountIdentifier(account: AccountIdentity | null | undefined): string {
   return account?.email || account?.username || ''
 }
-
-/** ¿Coincide el texto buscado con el nombre, el correo o el usuario? Para las búsquedas en cliente. */
-export function matchesAccount(
-  account: AccountIdentity & { name?: string | null },
-  query: string
-): boolean {
-  const needle = query.trim().toLowerCase()
-  if (!needle) return true
-  return [account.name, account.email, account.username].some(
-    field => field?.toLowerCase().includes(needle) ?? false
-  )
-}

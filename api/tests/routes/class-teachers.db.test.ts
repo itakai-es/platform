@@ -480,6 +480,23 @@ describeWithDatabase('profesorado de una clase y autoría', () => {
         ).statusCode
       ).toBe(404)
     })
+
+    it('la administración encuentra una clase por su código, sin cargarlas todas', async () => {
+      const { classId } = await classWithStaff()
+      const platform = await newUser('admin', 'plataforma-busca')
+      const { invitationCode } = await prisma.class.findUniqueOrThrow({
+        where: { id: classId },
+        select: { invitationCode: true },
+      })
+
+      const found = await send(
+        'GET',
+        `/admin/classes?limit=8&search=${encodeURIComponent(invitationCode.toLowerCase())}`,
+        platform
+      )
+      expect(found.statusCode).toBe(200)
+      expect(found.json().classes.map((c: { id: string }) => c.id)).toEqual([classId])
+    })
   })
 
   // ==================== BORRAR UNA CUENTA ====================

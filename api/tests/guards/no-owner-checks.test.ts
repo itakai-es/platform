@@ -100,10 +100,6 @@ const ALLOWED_TEACHER_CLASSES: Record<string, Allowed> = {
     count: 2,
     reason: 'exportación de datos del usuario: las clases de las que es propietario',
   },
-  'modules/admin/admin.routes.ts': {
-    count: 2,
-    reason: 'panel de administración: cuántas clases tiene cada profesor como propietario',
-  },
 }
 
 /**

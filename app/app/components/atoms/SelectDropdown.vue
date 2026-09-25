@@ -41,12 +41,13 @@
           @keydown.esc.stop="closeMenu"
         >
           <!-- Buscador (opcional): útil en listas largas (provincias, asignaturas…) -->
-          <div v-if="searchable" class="border-b border-gray-100 p-2">
+          <div v-if="isSearchable" class="border-b border-gray-100 p-2">
             <input
               ref="searchRef"
               v-model="query"
               type="text"
               :placeholder="searchPlaceholder"
+              :aria-label="searchPlaceholder"
               class="w-full rounded-lg border border-border-primary bg-surface px-3 py-2 text-sm text-text-primary outline-none focus:ring-2 focus:ring-primary/20"
               @click.stop
             />
@@ -68,17 +69,27 @@
               v-if="modelValue === option.value"
               class="w-4 h-4 text-primary flex-shrink-0"
             />
-            <span :class="modelValue !== option.value ? 'ml-7' : ''">
-              {{ option.label }}
+            <span :class="['min-w-0', modelValue !== option.value ? 'ml-7' : '']">
+              <span class="block">{{ option.label }}</span>
+              <span v-if="option.hint" class="block text-xs font-normal text-text-secondary">
+                {{ option.hint }}
+              </span>
             </span>
           </button>
           <p
-            v-if="searchable && filteredOptions.length === 0"
+            v-if="isSearchable && filteredOptions.length === 0"
             class="px-4 py-2.5 text-sm text-text-secondary"
+            role="status"
           >
-            {{ noResultsText }}
+            {{ searching ? searchingText : noResultsText }}
           </p>
           </div>
+          <p
+            v-if="remoteHasMore"
+            class="border-t border-gray-100 px-4 py-2 text-xs text-text-secondary"
+          >
+            {{ moreText }}
+          </p>
         </div>
       </Transition>
     </Teleport>
@@ -92,6 +103,14 @@ import { onClickOutside } from '@vueuse/core'
 interface Option {
   value: string | number
   label: string
+  /** Segunda línea, más discreta (p. ej. el profesor de una clase). */
+  hint?: string
+}
+
+/** Resultado de una búsqueda en el servidor: primeras coincidencias y si hay más. */
+interface RemoteResult {
+  options: Option[]
+  hasMore?: boolean
 }
 
 interface Props {
@@ -112,6 +131,17 @@ interface Props {
   labelledby?: string
   /** El `id` de la pista o el error que describen el desplegable. */
   describedby?: string
+  /**
+   * Busca las opciones en el servidor según lo escrito, para listas que no se
+   * pueden cargar enteras (las clases de toda la instancia). Implica buscador.
+   * Las `options` fijas se muestran siempre delante de los resultados.
+   */
+  remoteSearch?: (query: string) => Promise<RemoteResult>
+  /** Etiqueta del valor elegido cuando no está entre las opciones cargadas. */
+  valueLabel?: string
+  searchingText?: string
+  /** Aviso bajo la lista cuando la búsqueda tiene más coincidencias. */
+  moreText?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -121,6 +151,10 @@ const props = withDefaults(defineProps<Props>(), {
   searchPlaceholder: 'Buscar...',
   noResultsText: 'Sin resultados',
   error: false,
+  remoteSearch: undefined,
+  valueLabel: undefined,
+  searchingText: 'Buscando…',
+  moreText: '',
 })
 
 const emit = defineEmits<{
@@ -135,6 +169,40 @@ const menuRef = ref<HTMLElement | null>(null)
 const searchRef = ref<HTMLInputElement | null>(null)
 const isOpen = ref(false)
 const query = ref('')
+
+const isSearchable = computed(() => props.searchable || !!props.remoteSearch)
+const remoteOptions = ref<Option[]>([])
+const remoteHasMore = ref(false)
+const searching = ref(false)
+/** La opción elegida: con búsqueda remota puede no estar en los resultados de ahora. */
+const picked = ref<Option | null>(null)
+let searchSeq = 0
+let searchTimer: ReturnType<typeof setTimeout> | undefined
+
+/** Solo cuenta la última búsqueda: una respuesta vieja no pisa a una nueva. */
+async function runRemoteSearch(q: string) {
+  if (!props.remoteSearch) return
+  const seq = ++searchSeq
+  searching.value = true
+  try {
+    const result = await props.remoteSearch(q)
+    if (seq !== searchSeq) return
+    remoteOptions.value = result.options
+    remoteHasMore.value = !!result.hasMore
+  } catch {
+    if (seq !== searchSeq) return
+    remoteOptions.value = []
+    remoteHasMore.value = false
+  } finally {
+    if (seq === searchSeq) searching.value = false
+  }
+}
+
+watch(query, q => {
+  if (!props.remoteSearch || !isOpen.value) return
+  clearTimeout(searchTimer)
+  searchTimer = setTimeout(() => runRemoteSearch(q.trim()), 250)
+})
 
 // El menú va teletransportado a <body> con posición `fixed`, así que calculamos
 // su posición a partir del rect del botón. Se recalcula al abrir y en scroll/resize.
@@ -152,7 +220,7 @@ function updatePosition() {
   // Abre hacia arriba solo si abajo no cabe un menú razonable y arriba hay más sitio.
   const openUp = spaceBelow < 200 && spaceAbove > spaceBelow
   const avail = Math.max(120, openUp ? spaceAbove : spaceBelow)
-  listMaxHeight.value = Math.min(320, avail - (props.searchable ? 56 : 0))
+  listMaxHeight.value = Math.min(320, avail - (isSearchable.value ? 56 : 0))
   const style: Record<string, string> = {
     left: `${rect.left}px`,
     width: `${rect.width}px`,
@@ -163,8 +231,13 @@ function updatePosition() {
 }
 
 const selectedLabel = computed(() => {
-  const selected = props.options.find(opt => opt.value === props.modelValue)
-  return selected?.label || props.placeholder
+  const selected =
+    props.options.find(opt => opt.value === props.modelValue) ??
+    remoteOptions.value.find(opt => opt.value === props.modelValue) ??
+    (picked.value?.value === props.modelValue ? picked.value : null)
+  if (selected) return selected.label
+  if (props.modelValue !== '' && props.valueLabel) return props.valueLabel
+  return props.placeholder
 })
 
 /** Normaliza para buscar sin distinguir mayúsculas ni acentos. */
@@ -172,9 +245,12 @@ const normalize = (s: string) =>
   s.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '')
 
 const filteredOptions = computed(() => {
-  if (!props.searchable || !query.value.trim()) return props.options
   const q = normalize(query.value.trim())
-  return props.options.filter(opt => normalize(opt.label).includes(q))
+  const fixed =
+    isSearchable.value && q
+      ? props.options.filter(opt => normalize(opt.label).includes(q))
+      : props.options
+  return props.remoteSearch ? [...fixed, ...remoteOptions.value] : fixed
 })
 
 const triggerClasses = computed(() => {
@@ -220,6 +296,7 @@ function closeMenu() {
 }
 
 const selectOption = (option: Option) => {
+  picked.value = option
   emit('update:modelValue', option.value)
   closeMenu()
 }
@@ -235,18 +312,21 @@ watch(isOpen, open => {
     // Posiciona antes de pintar y engancha listeners de scroll/resize.
     nextTick(() => {
       updatePosition()
-      if (props.searchable) searchRef.value?.focus()
+      if (isSearchable.value) searchRef.value?.focus()
     })
+    if (props.remoteSearch) runRemoteSearch('')
     window.addEventListener('scroll', onReposition, true)
     window.addEventListener('resize', onReposition)
   } else {
     query.value = ''
+    clearTimeout(searchTimer)
     window.removeEventListener('scroll', onReposition, true)
     window.removeEventListener('resize', onReposition)
   }
 })
 
 onBeforeUnmount(() => {
+  clearTimeout(searchTimer)
   window.removeEventListener('scroll', onReposition, true)
   window.removeEventListener('resize', onReposition)
 })
