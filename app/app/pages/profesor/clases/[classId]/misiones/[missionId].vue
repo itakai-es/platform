@@ -21,7 +21,7 @@
       :class-id="classId"
       :mission-id="missionId"
       :mission="mission"
-      :loading="loading"
+      :loading="loading || !accessKnown"
       :error="error"
       :tabs="tabs"
       :active-tab="activeTab"
@@ -129,22 +129,28 @@ const classId = route.params.classId as string
 const missionId = computed(() => route.params.missionId as string)
 
 // Qué deja hacer en la misión el acceso propio a su clase.
-const { can } = useClassPermissionsById(classId)
+const { can, known: accessKnown } = useClassPermissionsById(classId)
 
 // --------- Pestañas del detalle (como en una clase) ---------
-// Ajustes (título, fecha, imagen, bloquear) solo para quien puede editar la misión.
-const tabs = computed(() => [
-  { id: 'resumen', label: t('teacher.missions.detail.tabs.summary'), icon: Squares2X2IconSolid },
-  ...(can('mission.edit')
+// Ajustes (título, fecha, imagen, bloquear) solo para quien puede editar la
+// misión. Sin Ajustes no hay pestañas: una barra con solo «Resumen» no lleva a
+// ningún sitio, y la cabecera queda como la del alumno.
+const tabs = computed(() =>
+  can('mission.edit')
     ? [
+        {
+          id: 'resumen',
+          label: t('teacher.missions.detail.tabs.summary'),
+          icon: Squares2X2IconSolid,
+        },
         {
           id: 'ajustes',
           label: t('teacher.missions.detail.tabs.settings'),
           icon: Cog6ToothIconSolid,
         },
       ]
-    : []),
-])
+    : []
+)
 
 // Pestaña activa desde ?tab=; el resumen es la vista por defecto (sin query) y
 // la de una pestaña que no se ofrece.

@@ -1,101 +1,89 @@
 <template>
   <div class="space-y-4">
-    <div class="rounded-2xl bg-white p-4 shadow-lg sm:p-6">
-      <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div class="min-w-0">
-          <h3 class="text-lg font-bold text-navy-700">
-            {{ t('teacher.classes.detail.teachers.title') }}
-          </h3>
-          <p class="mt-0.5 text-sm text-text-secondary">
-            {{ t('teacher.classes.detail.teachers.description') }}
-          </p>
-        </div>
-        <Button
-          v-if="can('teachers.manage')"
-          variant="primary"
-          size="md"
-          :icon-left="UserPlusIcon"
-          class="flex-shrink-0"
-          @click="openAdd"
-        >
+    <SettingsSection
+      :title="t('teacher.classes.detail.teachers.title')"
+      :hint="t('teacher.classes.detail.teachers.description')"
+    >
+      <template v-if="can('teachers.manage')" #actions>
+        <Button variant="primary" size="md" :icon-left="UserPlusIcon" @click="openAdd">
           {{ t('teacher.classes.detail.teachers.add') }}
         </Button>
-      </div>
+      </template>
 
       <!-- Cargando -->
-      <div v-if="loading" class="mt-4 space-y-3">
+      <div v-if="loading" class="space-y-3">
         <Skeleton v-for="i in 3" :key="i" height="h-12" />
       </div>
 
       <!-- No se pudo cargar -->
-      <div v-else-if="loadError" class="mt-4 space-y-3">
-        <InfoNote role="alert">{{ t('teacher.classes.detail.teachers.load_error') }}</InfoNote>
-        <Button variant="outline" size="sm" @click="load">
-          {{ t('teacher.classes.detail.teachers.retry') }}
-        </Button>
-      </div>
+      <EmptyState
+        v-else-if="loadError"
+        :icon="ExclamationTriangleIcon"
+        :title="t('teacher.classes.detail.teachers.load_error')"
+        :description="t('common.errors.generic')"
+      >
+        <template #action>
+          <Button variant="primary" @click="load">
+            {{ t('teacher.classes.detail.teachers.retry') }}
+          </Button>
+        </template>
+      </EmptyState>
 
-      <ul v-else class="mt-2 divide-y divide-border-primary">
-        <ClassTeacherItem
-          v-for="teacher in teachers"
-          :key="teacher.id"
-          :name="teacher.name"
-          :profile="teacher.profile"
-          :is-owner="teacher.isOwner"
-        >
-          <template #details>
-            <!-- Solo el correo se corta por cualquier sitio: las palabras, enteras -->
-            <span class="break-words">
-              <template v-if="teacher.id === myId">
-                {{ t('teacher.classes.detail.teachers.you') }} ·
-              </template>
-              <template v-if="teacher.email"
-                ><span class="break-all">{{ teacher.email }}</span> ·
-              </template>
-              {{
-                t('teacher.classes.detail.teachers.access_line', {
-                  access: t(`common.class_teachers.access.${teacher.access}`),
-                })
-              }}
-            </span>
-          </template>
-          <template v-if="menuFor(teacher).length" #actions>
-            <ActionMenu
-              :label="t('teacher.classes.detail.teachers.menu_label', { name: teacher.name })"
-              :items="menuFor(teacher)"
-              @select="onSelect(teacher, $event)"
-            />
-          </template>
-        </ClassTeacherItem>
+      <ul v-else class="divide-y divide-border-primary">
+        <li v-for="teacher in teachers" :key="teacher.id" class="py-3">
+          <ClassTeacherItem
+            :name="teacher.name"
+            :profile="teacher.profile"
+            :is-owner="teacher.isOwner"
+          >
+            <template #details>
+              <!-- Solo el correo se corta por cualquier sitio: las palabras, enteras -->
+              <span class="break-words">
+                <template v-if="teacher.id === myId">
+                  {{ t('teacher.classes.detail.teachers.you') }} ·
+                </template>
+                <template v-if="teacher.email"
+                  ><span class="break-all">{{ teacher.email }}</span> ·
+                </template>
+                {{
+                  t('teacher.classes.detail.teachers.access_line', {
+                    access: t(`common.class_teachers.access.${teacher.access}`),
+                  })
+                }}
+              </span>
+            </template>
+            <template v-if="menuFor(teacher).length" #actions>
+              <ActionMenu
+                :label="t('teacher.classes.detail.teachers.menu_label', { name: teacher.name })"
+                :items="menuFor(teacher)"
+                @select="onSelect(teacher, $event)"
+              />
+            </template>
+          </ClassTeacherItem>
+        </li>
       </ul>
-    </div>
+    </SettingsSection>
 
     <!-- Propiedad y salida -->
     <InfoNote v-if="isOwner && !loading">
       {{ t('teacher.classes.detail.teachers.owner_note') }}
     </InfoNote>
-    <div
+    <SettingsActionRow
       v-else-if="can('teachers.leave') && !loading"
-      class="flex flex-col gap-3 rounded-2xl border border-border-primary p-4 sm:flex-row sm:items-center sm:justify-between"
+      :title="t('teacher.classes.detail.teachers.leave_title')"
+      :hint="t('teacher.classes.detail.teachers.leave_hint')"
     >
-      <div class="min-w-0">
-        <p class="font-semibold text-navy-700">
-          {{ t('teacher.classes.detail.teachers.leave_title') }}
-        </p>
-        <p class="mt-0.5 text-sm text-text-secondary">
-          {{ t('teacher.classes.detail.teachers.leave_hint') }}
-        </p>
-      </div>
-      <Button
-        variant="outline"
-        size="md"
-        :icon-left="ArrowRightStartOnRectangleIcon"
-        class="flex-shrink-0"
-        @click="showLeave = true"
-      >
-        {{ t('teacher.classes.detail.teachers.leave') }}
-      </Button>
-    </div>
+      <template #action>
+        <Button
+          variant="outline"
+          size="md"
+          :icon-left="ArrowRightStartOnRectangleIcon"
+          @click="showLeave = true"
+        >
+          {{ t('teacher.classes.detail.teachers.leave_confirm') }}
+        </Button>
+      </template>
+    </SettingsActionRow>
 
     <!-- Añadir por correo -->
     <Modal
@@ -221,6 +209,7 @@
 import {
   ArrowRightStartOnRectangleIcon,
   ArrowsRightLeftIcon,
+  ExclamationTriangleIcon,
   PencilSquareIcon,
   UserMinusIcon,
   UserPlusIcon,

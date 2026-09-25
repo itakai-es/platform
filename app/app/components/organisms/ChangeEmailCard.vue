@@ -7,7 +7,7 @@
           {{ t('common.change_email.title') }}
         </h3>
       </div>
-      <form class="space-y-3" autocomplete="on" @submit.prevent="submit">
+      <form class="space-y-4" autocomplete="on" novalidate @submit.prevent="submit">
         <FormField
           :id="`${uid}-current`"
           :label="t('common.change_email.current_email')"

@@ -1,5 +1,5 @@
 <template>
-  <li class="flex items-center gap-3 py-3">
+  <div class="flex min-w-0 flex-1 items-center gap-3">
     <Avatar :username="name" size="xs" class="flex-shrink-0" aria-hidden="true" />
     <div class="min-w-0 flex-1">
       <p class="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
@@ -17,7 +17,7 @@
     <div v-if="$slots.actions" class="flex flex-shrink-0 items-center">
       <slot name="actions" />
     </div>
-  </li>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -27,6 +27,9 @@ import type { ClassTeacherProfile } from '~/types/class.types'
  * Una persona del profesorado de una clase: avatar, nombre, marca de propietario
  * y perfil. La usan la sección de profesorado de los ajustes (con el nivel y el
  * menú de acciones en sus huecos) y la vista de la clase del alumnado.
+ *
+ * Solo pinta la fila: el `<li>` y la caja que la rodea (separadores en los
+ * ajustes, un `CardItem` en la tarjeta del alumnado) los pone quien la usa.
  */
 defineProps<{
   name: string

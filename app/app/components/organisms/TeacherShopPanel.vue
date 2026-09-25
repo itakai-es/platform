@@ -45,7 +45,11 @@
         v-else-if="items.length === 0"
         :icon="ShoppingBagIcon"
         :title="t('teacher.classes.detail.shop.empty_title')"
-        :description="t('teacher.classes.detail.shop.empty_description')"
+        :description="
+          props.readonly
+            ? t('teacher.classes.detail.shop.empty_description_readonly')
+            : t('teacher.classes.detail.shop.empty_description')
+        "
       >
         <template v-if="!props.readonly" #action>
           <Button variant="primary" :icon-left="PlusIcon" @click="openNew">

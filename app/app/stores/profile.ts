@@ -64,6 +64,16 @@ export const useProfileStore = defineStore('profile', () => {
     () => (profile.value?.accountType ?? authStore.user?.accountType) === 'managed'
   )
 
+  /** El perfil tal y como lo tiene el servidor. */
+  const requestProfile = async () => {
+    const response = await $fetch<{ profile: UserProfile }>(`${config.public.apiBase}/profile`, {
+      headers: {
+        Authorization: `Bearer ${authStore.tokens?.accessToken}`,
+      },
+    })
+    return response.profile
+  }
+
   // Actions
   /**
    * Carga el perfil del usuario si no se ha cargado todavía (o si `force=true`).
@@ -78,12 +88,7 @@ export const useProfileStore = defineStore('profile', () => {
     error.value = null
 
     try {
-      const response = await $fetch<{ profile: UserProfile }>(`${config.public.apiBase}/profile`, {
-        headers: {
-          Authorization: `Bearer ${authStore.tokens?.accessToken}`,
-        },
-      })
-      profile.value = response.profile
+      profile.value = await requestProfile()
       // localStorage es la fuente de verdad para el tema
       if (import.meta.client && profile.value?.preferences) {
         const storedTheme = localStorage.getItem('itakai_theme') as 'college' | 'university' | null
@@ -111,6 +116,25 @@ export const useProfileStore = defineStore('profile', () => {
     await ensureProfile(true)
   }
 
+  /**
+   * Vuelve a pedir las sesiones abiertas sin tocar el resto del perfil. Solo si
+   * ya estaba cargado: sin perfil, nadie está enseñando la lista.
+   */
+  const refreshSessions = async () => {
+    if (!profile.value) return
+    try {
+      const fresh = await requestProfile()
+      if (profile.value) profile.value.security.sessions = fresh.security.sessions
+    } catch (err) {
+      console.error('Error refreshing sessions:', err)
+    }
+  }
+
+  /**
+   * Cambiar la contraseña cierra en el servidor las demás sesiones de la cuenta,
+   * así que después se vuelven a pedir: la lista del perfil no enseña las que ya
+   * no están abiertas.
+   */
   const changePassword = async (data: ChangePasswordRequest): Promise<ProfileActionResponse> => {
     try {
       const response = await $fetch<ProfileActionResponse>(
@@ -123,12 +147,14 @@ export const useProfileStore = defineStore('profile', () => {
           },
         }
       )
+      if (response.success) await refreshSessions()
       return response
     } catch (err: any) {
       console.error('Error changing password:', err)
       return {
         success: false,
         message: err.data?.message || 'Error al cambiar la contraseña',
+        code: err.data?.code,
       }
     }
   }
@@ -147,13 +173,14 @@ export const useProfileStore = defineStore('profile', () => {
       )
 
       if (response.success) {
-        // Update profile store
+        // El servidor lo guarda recortado y en minúsculas: aquí se enseña igual.
+        const savedEmail = data.newEmail.trim().toLowerCase()
         if (profile.value) {
-          profile.value.email = data.newEmail
+          profile.value.email = savedEmail
         }
         // Sync with auth store so sidebar/header reflect the change
         if (authStore.user) {
-          authStore.user.email = data.newEmail
+          authStore.user.email = savedEmail
           if (import.meta.client) {
             localStorage.setItem('auth_user', JSON.stringify(authStore.user))
           }
@@ -403,6 +430,7 @@ export const useProfileStore = defineStore('profile', () => {
     // Actions
     ensureProfile,
     fetchProfile,
+    refreshSessions,
     changePassword,
     changeEmail,
     toggleTwoFactor,

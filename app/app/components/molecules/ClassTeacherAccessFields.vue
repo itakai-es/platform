@@ -60,8 +60,11 @@ const accessOptions = computed(() =>
 )
 
 function setProfile(value: string | number) {
-  profile.value = value as ClassTeacherProfile
-  access.value = PROFILE_DEFAULT_ACCESS[profile.value]
+  const chosen = value as ClassTeacherProfile
+  profile.value = chosen
+  // Con el perfil elegido, no con profile.value: el modelo no cambia hasta que
+  // el padre vuelve a pintar, y leerlo aquí daría el nivel del perfil anterior.
+  access.value = PROFILE_DEFAULT_ACCESS[chosen]
 }
 
 function setAccess(value: string | number) {

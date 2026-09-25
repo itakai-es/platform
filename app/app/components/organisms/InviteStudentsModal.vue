@@ -5,6 +5,8 @@
     :size="canCreateAccounts ? 'lg' : 'sm'"
     theme="light"
     :persistent="activeTab === 'accounts'"
+    :closable="!creatingAccounts"
+    :sticky-chrome="activeTab === 'accounts'"
     @update:model-value="emit('update:modelValue', $event)"
   >
     <div class="space-y-5">
@@ -70,16 +72,88 @@
         </OptionPillGroup>
         <ManagedAccountsRowsForm
           v-show="mode === 'rows'"
+          ref="rowsRef"
           :class-id="classId"
+          :form-id="rowsFormId"
           @created="onCreated"
         />
         <ManagedAccountsImport
           v-show="mode === 'import'"
+          ref="importRef"
           :class-id="classId"
           @created="onCreated"
         />
       </div>
     </div>
+
+    <!-- Pie de «Crear cuentas»: Cancelar y la acción del paso en curso; en la
+         revisión de una lista, volver y quitar errores quedan a la izquierda. -->
+    <template v-if="activeTab === 'accounts'" #footer>
+      <div class="flex w-full flex-wrap items-center justify-between gap-3">
+        <div v-if="importInReview" class="flex flex-wrap gap-3">
+          <Button variant="outline" size="md" @click="importRef?.backToInput()">
+            {{ t('teacher.classes.detail.accounts.review_back') }}
+          </Button>
+          <Button
+            v-if="importErrorCount > 0"
+            variant="outline"
+            size="md"
+            @click="importRef?.removeErrorRows()"
+          >
+            {{ t('teacher.classes.detail.accounts.review_remove_errors') }}
+          </Button>
+        </div>
+        <div class="ml-auto flex flex-wrap justify-end gap-3">
+          <Button
+            variant="outline"
+            size="md"
+            :disabled="creatingAccounts"
+            @click="emit('update:modelValue', false)"
+          >
+            {{ t('common.actions.cancel') }}
+          </Button>
+          <Button
+            v-if="mode === 'rows'"
+            variant="primary"
+            size="md"
+            type="submit"
+            :form="rowsFormId"
+            :loading="rowsSubmitting"
+          >
+            {{
+              rowsSubmitting ? t('teacher.classes.detail.accounts.creating') : rowsRef?.submitLabel
+            }}
+          </Button>
+          <Button
+            v-else-if="importInReview"
+            variant="primary"
+            size="md"
+            :disabled="importErrorCount > 0 || importOkCount === 0"
+            :loading="importCreating"
+            @click="importRef?.create()"
+          >
+            {{
+              importCreating
+                ? t('teacher.classes.detail.accounts.creating')
+                : t(
+                    'teacher.classes.detail.accounts.create_count',
+                    { count: importOkCount },
+                    importOkCount
+                  )
+            }}
+          </Button>
+          <Button
+            v-else
+            variant="primary"
+            size="md"
+            :loading="importReviewing"
+            @click="importRef?.review()"
+          >
+            {{ t('teacher.classes.detail.accounts.import_review') }}
+          </Button>
+        </div>
+      </div>
+    </template>
   </Modal>
 </template>
 
@@ -146,6 +220,37 @@ function selectTab(tab: string) {
 
 type Mode = 'rows' | 'import'
 const mode = ref<Mode>('rows')
+
+// Los formularios de cada modo exponen su estado y sus acciones para que los
+// botones vayan en el pie de la ventana, como en el resto de ventanas.
+interface RowsFormHandle {
+  submitting: boolean
+  submitLabel: string
+}
+interface ImportHandle {
+  step: 'input' | 'review'
+  okCount: number
+  errorCount: number
+  reviewing: boolean
+  creating: boolean
+  review: () => Promise<void>
+  backToInput: () => void
+  removeErrorRows: () => void
+  create: () => Promise<void>
+}
+const rowsRef = ref<RowsFormHandle | null>(null)
+const importRef = ref<ImportHandle | null>(null)
+const rowsFormId = `account-rows-${useId()}`.replace(/[^\w-]/g, '-')
+
+const rowsSubmitting = computed(() => rowsRef.value?.submitting ?? false)
+const importInReview = computed(() => mode.value === 'import' && importRef.value?.step === 'review')
+const importOkCount = computed(() => importRef.value?.okCount ?? 0)
+const importErrorCount = computed(() => importRef.value?.errorCount ?? 0)
+const importReviewing = computed(() => importRef.value?.reviewing ?? false)
+const importCreating = computed(() => importRef.value?.creating ?? false)
+// Mientras se crean las cuentas no se puede cerrar: la hoja de credenciales se
+// abre al acabar, y con la ventana cerrada se perdería.
+const creatingAccounts = computed(() => rowsSubmitting.value || importCreating.value)
 const modeOptions = computed(() => [
   { value: 'rows' as const, label: t('teacher.classes.detail.accounts.mode_rows') },
   { value: 'import' as const, label: t('teacher.classes.detail.accounts.mode_import') },

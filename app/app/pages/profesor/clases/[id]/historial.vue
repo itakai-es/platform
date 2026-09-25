@@ -1,26 +1,40 @@
 <template>
   <div class="space-y-4">
-    <!-- Filtros: quién y qué -->
-    <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:max-w-2xl">
-      <FieldGroup v-slot="{ labelId }" :label="t('teacher.classes.detail.history.filter_actor')">
+    <!-- Filtros: quién y qué. La API no busca por texto: la barra va sin buscador. -->
+    <FilterBar
+      hide-search
+      sort=""
+      :sort-options="[]"
+      :results-count="data?.total ?? 0"
+      variant="red"
+      :has-active-filters="isFiltering"
+      :active-filter-count="activeFilterCount"
+      @reset="resetFilters"
+    >
+      <!-- Cada filtro lleva una etiqueta oculta: el desplegable solo enseña el valor. -->
+      <template #filters>
+        <span :id="actorLabelId" class="sr-only">
+          {{ t('teacher.classes.detail.history.filter_actor') }}
+        </span>
         <SelectDropdown
           :model-value="actorId"
           :options="actorOptions"
-          :labelledby="labelId"
+          :labelledby="actorLabelId"
           searchable
           :search-placeholder="t('teacher.classes.detail.history.filter_search')"
           @update:model-value="setActor"
         />
-      </FieldGroup>
-      <FieldGroup v-slot="{ labelId }" :label="t('teacher.classes.detail.history.filter_type')">
+        <span :id="typeLabelId" class="sr-only">
+          {{ t('teacher.classes.detail.history.filter_type') }}
+        </span>
         <SelectDropdown
           :model-value="type"
           :options="typeOptions"
-          :labelledby="labelId"
+          :labelledby="typeLabelId"
           @update:model-value="setType"
         />
-      </FieldGroup>
-    </div>
+      </template>
+    </FilterBar>
 
     <!-- Cargando (solo la primera vez: al cambiar de página se queda la lista) -->
     <div v-if="loading && !data" class="space-y-3">
@@ -102,6 +116,12 @@ const actorId = ref('')
 const type = ref<ClassHistoryType | ''>('')
 
 const isFiltering = computed(() => Boolean(actorId.value || type.value))
+const activeFilterCount = computed(() => (actorId.value ? 1 : 0) + (type.value ? 1 : 0))
+
+// Etiquetas ocultas de los desplegables de la barra de filtros.
+const filterId = useId()
+const actorLabelId = `${filterId}-actor`
+const typeLabelId = `${filterId}-type`
 
 const actorOptions = computed(() => [
   { value: '', label: t('teacher.classes.detail.history.all_actors') },
@@ -146,6 +166,13 @@ function setActor(value: string | number) {
 
 function setType(value: string | number) {
   type.value = String(value) as ClassHistoryType | ''
+  page.value = 1
+  void load()
+}
+
+function resetFilters() {
+  actorId.value = ''
+  type.value = ''
   page.value = 1
   void load()
 }

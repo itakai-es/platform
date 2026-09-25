@@ -53,7 +53,11 @@
       v-else-if="!behaviors.length"
       :icon="HandRaisedIcon"
       :title="t('teacher.classes.detail.behaviors.empty_title')"
-      :description="t('teacher.classes.detail.behaviors.empty_description')"
+      :description="
+        props.readonly
+          ? t('teacher.classes.detail.behaviors.empty_description_readonly')
+          : t('teacher.classes.detail.behaviors.empty_description')
+      "
     >
       <template v-if="!props.readonly" #action>
         <Button variant="primary" :icon-left="SparklesIcon" @click="showLibrary = true">

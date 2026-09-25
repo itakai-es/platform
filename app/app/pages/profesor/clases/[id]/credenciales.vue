@@ -6,7 +6,7 @@
           <h2
             ref="headingRef"
             tabindex="-1"
-            class="text-xl font-bold text-navy-700 focus:outline-none"
+            class="text-lg font-bold text-navy-700 focus:outline-none"
           >
             {{ t('teacher.classes.detail.credentials.title') }}
           </h2>

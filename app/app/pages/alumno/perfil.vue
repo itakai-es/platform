@@ -55,8 +55,14 @@
       <!-- Tab: Seguridad -->
       <div v-if="activeTab === 'seguridad'">
         <div class="grid md:grid-cols-2 gap-4 md:gap-6">
-          <!-- Tu cuenta: con qué entras -->
-          <Card type="settings">
+          <!--
+            Tu cuenta: con qué entras. Solo si hay usuario o la lleva el
+            profesorado; el correo ya sale en la tarjeta de cambiarlo.
+          -->
+          <Card
+            v-if="profileStore.currentUsername || profileStore.isManagedAccount"
+            type="settings"
+          >
             <div class="p-5 space-y-4">
               <div class="flex items-center gap-3">
                 <IdentificationIcon class="w-5 h-5 text-navy-700" />
@@ -64,27 +70,12 @@
                   {{ t('student.profile.account.title') }}
                 </h3>
               </div>
-              <dl class="space-y-2">
-                <div v-if="profileStore.currentUsername" class="rounded-xl bg-navy-700/5 px-3 py-2">
-                  <dt class="text-xs uppercase tracking-wide text-navy-700/70">
-                    {{ t('student.profile.account.username') }}
-                  </dt>
-                  <dd class="font-mono text-base font-bold text-navy-700">
-                    {{ profileStore.currentUsername }}
-                  </dd>
-                </div>
-                <!-- Una cuenta que lleva el profesorado no tiene correo -->
-                <div
-                  v-if="profileStore.currentEmail && !profileStore.isManagedAccount"
-                  class="rounded-xl bg-navy-700/5 px-3 py-2"
-                >
-                  <dt class="text-xs uppercase tracking-wide text-navy-700/70">
-                    {{ t('student.profile.account.email') }}
-                  </dt>
-                  <dd class="text-base font-bold text-navy-700 break-all">
-                    {{ profileStore.currentEmail }}
-                  </dd>
-                </div>
+              <dl v-if="profileStore.currentUsername">
+                <CopyableValue
+                  :label="t('student.profile.account.username')"
+                  :value="profileStore.currentUsername"
+                  :copyable="false"
+                />
               </dl>
               <InfoNote v-if="profileStore.isManagedAccount">
                 {{ t('student.profile.account.managed_note') }}
@@ -93,49 +84,7 @@
           </Card>
 
           <!-- Cambiar Contraseña -->
-          <Card type="settings">
-            <div class="p-5">
-              <div class="flex items-center gap-3 mb-4">
-                <KeyIcon class="w-5 h-5 text-navy-700" />
-                <h3 class="text-lg font-bold text-navy-700">
-                  {{ t('student.profile.security.password_title') }}
-                </h3>
-              </div>
-              <form class="space-y-3" autocomplete="on" @submit.prevent="changePassword">
-                <input
-                  type="text"
-                  name="username"
-                  :value="profileStore.accountLogin"
-                  autocomplete="username"
-                  class="sr-only"
-                  tabindex="-1"
-                  aria-hidden="true"
-                  readonly
-                />
-                <FormField
-                  v-model="securityForm.currentPassword"
-                  type="password"
-                  autocomplete="current-password"
-                  :placeholder="t('student.profile.security.current_password')"
-                />
-                <FormField
-                  v-model="securityForm.newPassword"
-                  type="password"
-                  autocomplete="new-password"
-                  :placeholder="t('student.profile.security.new_password')"
-                />
-                <FormField
-                  v-model="securityForm.confirmPassword"
-                  type="password"
-                  autocomplete="new-password"
-                  :placeholder="t('student.profile.security.confirm_password')"
-                />
-                <Button type="submit" variant="primary" size="sm" :loading="isChangingPassword">
-                  {{ t('student.profile.security.update_button') }}
-                </Button>
-              </form>
-            </div>
-          </Card>
+          <ChangePasswordCard />
 
           <!-- Cambiar Email: una cuenta que lleva el profesorado no puede tener correo -->
           <ChangeEmailCard v-if="!profileStore.isManagedAccount" />
@@ -344,7 +293,6 @@ import {
   UserIcon,
   ShieldCheckIcon,
   Cog6ToothIcon,
-  KeyIcon,
   DevicePhoneMobileIcon,
   ComputerDesktopIcon,
   LanguageIcon,
@@ -356,7 +304,6 @@ import {
   BuildingLibraryIcon,
   ViewColumnsIcon,
 } from '@heroicons/vue/24/outline'
-import { PASSWORD_MIN_LENGTH } from '~/utils/password'
 
 const { t } = useI18n()
 const { changeLanguage } = useLocale()
@@ -394,13 +341,6 @@ const setActiveTab = (tabId: string) => {
   activeTab.value = tabId
 }
 
-// Form state for security
-const securityForm = ref({
-  currentPassword: '',
-  newPassword: '',
-  confirmPassword: '',
-})
-
 // Form state for preferences (local copy for immediate UI updates)
 const preferencesForm = ref({
   language: 'es' as AppLanguage,
@@ -413,7 +353,6 @@ const deletePassword = ref('')
 const isDeleting = ref(false)
 
 // Loading states
-const isChangingPassword = ref(false)
 const isTogglingTwoFactor = ref(false)
 
 // Fetch profile on mount
@@ -458,34 +397,6 @@ watch(
 )
 
 // Actions
-const changePassword = async () => {
-  if (securityForm.value.newPassword !== securityForm.value.confirmPassword) {
-    toast.error(t('student.profile.security.passwords_mismatch'))
-    return
-  }
-
-  if (securityForm.value.newPassword.length < PASSWORD_MIN_LENGTH) {
-    toast.error(t('student.profile.security.password_too_short', { min: PASSWORD_MIN_LENGTH }))
-    return
-  }
-
-  isChangingPassword.value = true
-  const result = await profileStore.changePassword({
-    currentPassword: securityForm.value.currentPassword,
-    newPassword: securityForm.value.newPassword,
-  })
-  isChangingPassword.value = false
-
-  if (result.success) {
-    toast.success(result.message)
-    securityForm.value.currentPassword = ''
-    securityForm.value.newPassword = ''
-    securityForm.value.confirmPassword = ''
-  } else {
-    toast.error(result.message)
-  }
-}
-
 const toggleTwoFactor = async (enabled: boolean) => {
   isTogglingTwoFactor.value = true
   const result = await profileStore.toggleTwoFactor(enabled)

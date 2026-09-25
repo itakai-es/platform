@@ -56,49 +56,7 @@
       <div v-if="activeTab === 'seguridad'">
         <div class="grid md:grid-cols-2 gap-4 md:gap-6">
           <!-- Cambiar Contraseña -->
-          <Card type="settings">
-            <div class="p-5">
-              <div class="flex items-center gap-3 mb-4">
-                <KeyIcon class="w-5 h-5 text-navy-700" />
-                <h3 class="text-lg font-bold text-navy-700">
-                  {{ t('teacher.profile.security.password_title') }}
-                </h3>
-              </div>
-              <form class="space-y-3" autocomplete="on" @submit.prevent="changePassword">
-                <input
-                  type="text"
-                  name="username"
-                  :value="profileStore.accountLogin"
-                  autocomplete="username"
-                  class="sr-only"
-                  tabindex="-1"
-                  aria-hidden="true"
-                  readonly
-                />
-                <FormField
-                  v-model="securityForm.currentPassword"
-                  type="password"
-                  autocomplete="current-password"
-                  :placeholder="t('teacher.profile.security.placeholder_current')"
-                />
-                <FormField
-                  v-model="securityForm.newPassword"
-                  type="password"
-                  autocomplete="new-password"
-                  :placeholder="t('teacher.profile.security.placeholder_new')"
-                />
-                <FormField
-                  v-model="securityForm.confirmPassword"
-                  type="password"
-                  autocomplete="new-password"
-                  :placeholder="t('teacher.profile.security.placeholder_confirm')"
-                />
-                <Button type="submit" variant="primary" size="sm" :loading="isChangingPassword">
-                  {{ t('teacher.profile.security.btn_update') }}
-                </Button>
-              </form>
-            </div>
-          </Card>
+          <ChangePasswordCard />
 
           <!-- Cambiar Email -->
           <ChangeEmailCard />
@@ -263,16 +221,17 @@
     <ConfirmModal
       v-model="showDeleteModal"
       :title="t('teacher.profile.settings.delete_modal_title')"
-      :message="t('teacher.profile.settings.delete_modal_confirm_prompt')"
+      :message="deleteModalMessage"
       :confirm-text="t('teacher.profile.settings.btn_delete_confirm')"
       :cancel-text="t('teacher.profile.settings.btn_cancel')"
       variant="danger"
       :loading="isDeleting"
-      :confirm-disabled="deletionBlocked"
+      :confirm-disabled="isCheckingDeletion || deletionBlocked"
       @confirm="deleteAccount"
     >
       <!-- A quién pasan las clases propias, o por qué aún no se puede borrar -->
-      <AccountDeletionImpact :check="deletionCheck" audience="self" class="mb-3" />
+      <Skeleton v-if="isCheckingDeletion" height="h-12" custom-class="rounded-xl mb-3" />
+      <AccountDeletionImpact v-else :check="deletionCheck" audience="self" class="mb-3" />
       <input
         type="text"
         name="username"
@@ -302,7 +261,6 @@ import {
   UserIcon,
   ShieldCheckIcon,
   Cog6ToothIcon,
-  KeyIcon,
   DevicePhoneMobileIcon,
   ComputerDesktopIcon,
   LanguageIcon,
@@ -313,7 +271,6 @@ import {
   BuildingLibraryIcon,
   ViewColumnsIcon,
 } from '@heroicons/vue/24/outline'
-import { PASSWORD_MIN_LENGTH } from '~/utils/password'
 import type { AccountDeletionCheck } from '~/types/profile.types'
 
 const { t } = useI18n()
@@ -352,13 +309,6 @@ const setActiveTab = (tabId: string) => {
   activeTab.value = tabId
 }
 
-// Form state for security
-const securityForm = ref({
-  currentPassword: '',
-  newPassword: '',
-  confirmPassword: '',
-})
-
 // Form state for preferences (local copy for immediate UI updates)
 const preferencesForm = ref({
   language: 'es' as AppLanguage,
@@ -372,9 +322,20 @@ const isDeleting = ref(false)
 /** Qué pasaría con las clases propias; se pide al abrir la confirmación. */
 const deletionCheck = ref<AccountDeletionCheck | null>(null)
 const deletionBlocked = computed(() => deletionCheck.value?.canDelete === false)
+/** Con el borrado bloqueado no se pide la contraseña: el campo no está. */
+const deleteModalMessage = computed(() => {
+  if (deletionBlocked.value) return t('teacher.profile.settings.delete_modal_blocked')
+  return t('teacher.profile.settings.delete_modal_confirm_prompt')
+})
+/**
+ * La comprobación está en camino: no se puede confirmar todavía. Es un estado
+ * aparte porque `deletionCheck` a `null` también quiere decir que la
+ * comprobación ha fallado, y entonces decide el servidor al borrar.
+ */
+const isCheckingDeletion = ref(false)
+let deletionCheckRun = 0
 
 // Loading states
-const isChangingPassword = ref(false)
 const isTogglingTwoFactor = ref(false)
 
 // Fetch profile on mount (uses cached load via hasLoadedProfile flag)
@@ -418,36 +379,6 @@ watch(
 )
 
 // Actions
-const changePassword = async () => {
-  if (securityForm.value.newPassword !== securityForm.value.confirmPassword) {
-    toast.error(t('teacher.profile.security.validation.passwords_mismatch'))
-    return
-  }
-
-  if (securityForm.value.newPassword.length < PASSWORD_MIN_LENGTH) {
-    toast.error(
-      t('teacher.profile.security.validation.password_min_length', { min: PASSWORD_MIN_LENGTH })
-    )
-    return
-  }
-
-  isChangingPassword.value = true
-  const result = await profileStore.changePassword({
-    currentPassword: securityForm.value.currentPassword,
-    newPassword: securityForm.value.newPassword,
-  })
-  isChangingPassword.value = false
-
-  if (result.success) {
-    toast.success(result.message)
-    securityForm.value.currentPassword = ''
-    securityForm.value.newPassword = ''
-    securityForm.value.confirmPassword = ''
-  } else {
-    toast.error(result.message)
-  }
-}
-
 const toggleTwoFactor = async (enabled: boolean) => {
   isTogglingTwoFactor.value = true
   const result = await profileStore.toggleTwoFactor(enabled)
@@ -478,11 +409,22 @@ const closeAllSessions = async () => {
   }
 }
 
+/** Pide qué pasaría con las clases propias; mientras llega, la ventana no deja confirmar. */
+async function loadDeletionCheck() {
+  const run = ++deletionCheckRun
+  isCheckingDeletion.value = true
+  const check = await profileStore.checkAccountDeletion()
+  // Si mientras tanto se ha vuelto a abrir la ventana, vale la comprobación nueva.
+  if (run !== deletionCheckRun) return
+  deletionCheck.value = check
+  isCheckingDeletion.value = false
+}
+
 async function openDeleteModal() {
   deletePassword.value = ''
   deletionCheck.value = null
   showDeleteModal.value = true
-  deletionCheck.value = await profileStore.checkAccountDeletion()
+  await loadDeletionCheck()
 }
 
 const deleteAccount = async () => {
@@ -501,7 +443,7 @@ const deleteAccount = async () => {
   }
   // Mientras tanto ha dejado de haber a quién pasar alguna clase: la ventana lo explica.
   if (result.code === 'OWNS_CLASSES_WITHOUT_SUCCESSOR') {
-    deletionCheck.value = await profileStore.checkAccountDeletion()
+    await loadDeletionCheck()
     if (deletionBlocked.value) return
   }
   toast.error(result.message)

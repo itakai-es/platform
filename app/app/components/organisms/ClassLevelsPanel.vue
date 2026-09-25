@@ -1,16 +1,10 @@
 <template>
   <div class="space-y-6">
     <!-- ===== Curva / cómo se gana XP ===== -->
-    <section class="bg-white rounded-2xl shadow-lg p-4 sm:p-5 space-y-4">
-      <div>
-        <h3 class="font-semibold text-navy-700">
-          {{ t('teacher.classes.detail.settings.levels.curve_title') }}
-        </h3>
-        <p class="text-sm text-text-secondary">
-          {{ t('teacher.classes.detail.settings.levels.curve_hint') }}
-        </p>
-      </div>
-
+    <SettingsSection
+      :title="t('teacher.classes.detail.settings.levels.curve_title')"
+      :hint="t('teacher.classes.detail.settings.levels.curve_hint')"
+    >
       <!-- Nº de niveles + modo de cálculo -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-end">
         <div>
@@ -123,7 +117,9 @@
                     v-for="col in paceCompare"
                     :key="col.label"
                     class="px-3 py-2 text-right tabular-nums"
-                    :class="col.active ? 'bg-navy-700/5 font-bold text-navy-700' : 'text-text-secondary'"
+                    :class="
+                      col.active ? 'bg-navy-700/5 font-bold text-navy-700' : 'text-text-secondary'
+                    "
                   >
                     {{ col.totals[ri] }} XP
                   </td>
@@ -152,7 +148,9 @@
               class="w-2.5 h-2.5 rounded-full flex-shrink-0"
               :style="{ backgroundColor: tierColorOf(i + 1) }"
             />
-            <span class="text-sm text-navy-700 whitespace-nowrap"> Nvl {{ i + 1 }} → {{ i + 2 }} </span>
+            <span class="text-sm text-navy-700 whitespace-nowrap">
+              Nvl {{ i + 1 }} → {{ i + 2 }}
+            </span>
             <input
               v-model.number="form.levelXp[i]"
               type="number"
@@ -163,20 +161,14 @@
           </div>
         </div>
       </template>
-
-    </section>
+    </SettingsSection>
 
     <!-- ===== Rangos (título + color por tramo de niveles) ===== -->
-    <section class="bg-white rounded-2xl shadow-lg p-4 sm:p-5 space-y-3">
-      <div>
-        <h3 class="font-semibold text-navy-700">
-          {{ t('teacher.classes.detail.settings.levels.tiers_title') }}
-        </h3>
-        <p class="text-sm text-text-secondary">
-          {{ t('teacher.classes.detail.settings.levels.tiers_hint') }}
-        </p>
-      </div>
-
+    <SettingsSection
+      :title="t('teacher.classes.detail.settings.levels.tiers_title')"
+      :hint="t('teacher.classes.detail.settings.levels.tiers_hint')"
+      body-class="space-y-3"
+    >
       <div class="space-y-2">
         <div
           v-for="(tier, i) in form.tiers"
@@ -244,7 +236,7 @@
       <Button type="button" variant="outline" size="sm" :icon-left="PlusIcon" @click="addTier">
         {{ t('teacher.classes.detail.settings.levels.tier_add') }}
       </Button>
-    </section>
+    </SettingsSection>
 
     <!-- ===== Acciones ===== -->
     <div class="flex flex-wrap justify-end gap-2">

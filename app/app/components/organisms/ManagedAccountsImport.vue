@@ -19,6 +19,7 @@
             :aria-describedby="describedby"
             :aria-invalid="inputError ? 'true' : undefined"
             @update:model-value="onTextInput"
+            @paste="onPaste"
           />
         </template>
       </FieldGroup>
@@ -49,12 +50,6 @@
           t('teacher.classes.detail.accounts.import_count', { count: parsed.length }, parsed.length)
         }}
       </p>
-
-      <div class="flex justify-end">
-        <Button variant="primary" size="md" :loading="reviewing" @click="review">
-          {{ t('teacher.classes.detail.accounts.import_review') }}
-        </Button>
-      </div>
     </div>
 
     <!-- Paso 2: revisión fila a fila antes de crear nada -->
@@ -115,7 +110,7 @@
               <td class="px-3 py-2 font-medium text-navy-700 break-words">
                 {{ row.name || t('teacher.classes.detail.accounts.review_empty') }}
               </td>
-              <td class="px-3 py-2 font-mono text-navy-700 break-all">
+              <td class="whitespace-nowrap px-3 py-2 font-mono text-navy-700">
                 <template v-if="row.username">{{ row.username }}</template>
                 <template v-else-if="row.requestedUsername">{{ row.requestedUsername }}</template>
                 <template v-else>—</template>
@@ -144,30 +139,6 @@
           </tbody>
         </table>
       </div>
-
-      <div class="flex flex-col-reverse gap-2 sm:flex-row sm:justify-between">
-        <div class="flex flex-wrap gap-2">
-          <Button variant="outline" size="md" @click="backToInput">
-            {{ t('teacher.classes.detail.accounts.review_back') }}
-          </Button>
-          <Button v-if="errorCount > 0" variant="outline" size="md" @click="removeErrorRows">
-            {{ t('teacher.classes.detail.accounts.review_remove_errors') }}
-          </Button>
-        </div>
-        <Button
-          variant="primary"
-          size="md"
-          :disabled="errorCount > 0 || okCount === 0"
-          :loading="creating"
-          @click="create"
-        >
-          {{
-            creating
-              ? t('teacher.classes.detail.accounts.creating')
-              : t('teacher.classes.detail.accounts.create_count', { count: okCount }, okCount)
-          }}
-        </Button>
-      </div>
     </div>
   </div>
 </template>
@@ -192,6 +163,9 @@ import { parseStudentList, STUDENT_LIST_MAX, studentListTemplate } from '~/utils
  * crear nada se revisa con la API (modo de prueba) y se enseña el estado de
  * cada fila; con errores no se deja crear hasta corregirlos o quitar esas filas.
  * Se crean todas de una vez, o ninguna.
+ *
+ * Los botones de cada paso (revisar, volver, quitar errores y crear) los pone la
+ * ventana en su pie: por eso se exponen el paso, los recuentos y las acciones.
  */
 const props = defineProps<{ classId: string }>()
 const emit = defineEmits<{ created: [list: ManagedCredentials[]] }>()
@@ -224,9 +198,25 @@ const parsed = computed(() =>
   parseStudentList(text.value, { fromFile: fromFile.value, headerNames: headerNames.value })
 )
 
+/**
+ * Lo que hay en el cuadro sigue siendo el fichero mientras se corrige ahí mismo;
+ * vaciarlo o pegar encima de todo es empezar otra lista, que ya se lee como texto
+ * pegado (la coma deja de separar columnas y deja de salir el nombre del fichero).
+ */
+function forgetFile() {
+  fromFile.value = false
+  fileName.value = ''
+}
+
 function onTextInput(value: string) {
   text.value = value
   inputError.value = ''
+  if (value.trim() === '') forgetFile()
+}
+
+function onPaste(event: ClipboardEvent) {
+  const box = event.target as HTMLTextAreaElement
+  if (box.selectionStart === 0 && box.selectionEnd === box.value.length) forgetFile()
 }
 
 // ---- Fichero y plantilla ----
@@ -382,4 +372,16 @@ async function create() {
     creating.value = false
   }
 }
+
+defineExpose({
+  step,
+  okCount,
+  errorCount,
+  reviewing,
+  creating,
+  review,
+  backToInput,
+  removeErrorRows,
+  create,
+})
 </script>

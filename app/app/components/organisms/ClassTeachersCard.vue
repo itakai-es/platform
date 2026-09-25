@@ -4,14 +4,16 @@
     <CardItem v-if="teachers.length === 0" padding="lg" layout="column" centered>
       <p class="text-text-secondary">{{ t('student.classes.detail.teachers.empty') }}</p>
     </CardItem>
-    <ul v-else class="divide-y divide-border-primary rounded-xl bg-white px-4">
-      <ClassTeacherItem
-        v-for="(teacher, index) in teachers"
-        :key="`${index}-${teacher.name}`"
-        :name="teacher.name"
-        :profile="teacher.profile"
-        :is-owner="teacher.isOwner"
-      />
+    <ul v-else class="space-y-6">
+      <li v-for="(teacher, index) in teachers" :key="`${index}-${teacher.name}`">
+        <CardItem padding="sm">
+          <ClassTeacherItem
+            :name="teacher.name"
+            :profile="teacher.profile"
+            :is-owner="teacher.isOwner"
+          />
+        </CardItem>
+      </li>
     </ul>
   </Card>
 </template>

@@ -23,10 +23,13 @@
     <!-- Section: Datos generales -->
     <div v-if="activeSection === 'general'">
       <form @submit.prevent="saveGeneral">
-        <fieldset :disabled="!canEditContent" class="min-w-0 space-y-8">
-          <!-- Bloque 1 · Identidad: nombre + clasificación (los metadatos alimentan
-             los filtros del marketplace; obligatorios al publicar como plantilla). -->
-          <div class="space-y-4">
+        <fieldset :disabled="!canEditContent" class="min-w-0 space-y-6">
+          <!-- Identidad: nombre + clasificación (los metadatos alimentan los
+               filtros del marketplace; obligatorios al publicar como plantilla). -->
+          <SettingsSection
+            :title="t('teacher.classes.detail.settings.general.identity_title')"
+            :hint="t('teacher.classes.detail.settings.general.identity_hint')"
+          >
             <FormField
               id="cfg-name"
               v-model="general.name"
@@ -95,25 +98,13 @@
                 />
               </div>
             </div>
-          </div>
+          </SettingsSection>
 
-          <hr class="border-border-primary" />
-
-          <!-- Bloque 2 · Horario -->
-          <div>
-            <label class="text-sm font-medium text-text-primary mb-2 block">
-              {{ t('teacher.classes.detail.settings.general.schedule_label') }}
-            </label>
+          <SettingsSection :title="t('teacher.classes.detail.settings.general.schedule_label')">
             <ClassScheduleCalendar v-model="scheduleConfig" />
-          </div>
+          </SettingsSection>
 
-          <hr class="border-border-primary" />
-
-          <!-- Bloque 3 · Imagen de fondo -->
-          <div>
-            <label class="text-sm font-medium text-text-primary mb-2 block">
-              {{ t('teacher.classes.detail.settings.general.background_label') }}
-            </label>
+          <SettingsSection :title="t('teacher.classes.detail.settings.general.background_label')">
             <div class="flex flex-col sm:flex-row sm:items-center gap-4">
               <!-- Preview -->
               <div
@@ -188,12 +179,11 @@
                 />
               </div>
             </div>
-          </div>
+          </SettingsSection>
 
+          <!-- Guardar o descartar, debajo de las secciones, como en Niveles -->
           <template v-if="canEditContent">
-            <hr class="border-border-primary" />
-
-            <div class="flex justify-end gap-2">
+            <div class="flex flex-wrap justify-end gap-2">
               <Button
                 type="button"
                 variant="outline"
@@ -282,55 +272,48 @@
     <!-- Section: Gestión (acciones sobre la clase: publicar como plantilla,
          duplicar y, más adelante, archivar / eliminar). Separada del formulario
          para que ninguna acción cuelgue del botón de "Guardar cambios". -->
-    <div v-else-if="activeSection === 'management'" class="space-y-3">
+    <SettingsSection
+      v-else-if="activeSection === 'management'"
+      :title="t('teacher.classes.detail.settings.management.title')"
+      :hint="t('teacher.classes.detail.settings.management.hint')"
+      body-class="space-y-3"
+    >
       <!-- Publicar como plantilla en el marketplace (solo el propietario). La
            validación de metadatos (asignatura/nivel/idioma) salta a Datos
            generales y los resalta. -->
-      <div
+      <SettingsActionRow
         v-if="can('class.publishTemplate')"
-        class="flex flex-col gap-3 rounded-2xl border border-border-primary p-4 sm:flex-row sm:items-center sm:justify-between"
+        :title="t('teacher.classes.detail.settings.general.publish_title')"
+        :hint="t('teacher.classes.detail.settings.general.publish_hint')"
       >
-        <div class="min-w-0">
-          <p class="font-semibold text-navy-700">
-            {{ t('teacher.classes.detail.settings.general.publish_title') }}
-          </p>
-          <p class="mt-0.5 text-sm text-text-secondary">
-            {{ t('teacher.classes.detail.settings.general.publish_hint') }}
-          </p>
-        </div>
-        <Toggle
-          :model-value="isTemplate"
-          :disabled="publishing"
-          class="flex-shrink-0"
-          @update:model-value="togglePublish"
-        />
-      </div>
+        <template #action>
+          <Toggle
+            :model-value="isTemplate"
+            :disabled="publishing"
+            @update:model-value="togglePublish"
+          />
+        </template>
+      </SettingsActionRow>
 
       <!-- Duplicar clase -->
-      <div
-        class="flex flex-col gap-3 rounded-2xl border border-border-primary p-4 sm:flex-row sm:items-center sm:justify-between"
+      <SettingsActionRow
+        :title="t('teacher.classes.detail.settings.general.duplicate_title')"
+        :hint="t('teacher.classes.detail.settings.general.duplicate_hint')"
       >
-        <div class="min-w-0">
-          <p class="font-semibold text-navy-700">
-            {{ t('teacher.classes.detail.settings.general.duplicate_title') }}
-          </p>
-          <p class="mt-0.5 text-sm text-text-secondary">
-            {{ t('teacher.classes.detail.settings.general.duplicate_hint') }}
-          </p>
-        </div>
-        <Button
-          type="button"
-          variant="outline"
-          size="md"
-          :icon-left="DocumentDuplicateIcon"
-          :disabled="duplicating"
-          class="flex-shrink-0"
-          @click="duplicateModalOpen = true"
-        >
-          {{ t('teacher.classes.detail.settings.general.duplicate_cta') }}
-        </Button>
-      </div>
-    </div>
+        <template #action>
+          <Button
+            type="button"
+            variant="outline"
+            size="md"
+            :icon-left="DocumentDuplicateIcon"
+            :disabled="duplicating"
+            @click="duplicateModalOpen = true"
+          >
+            {{ t('teacher.classes.detail.settings.general.duplicate_cta') }}
+          </Button>
+        </template>
+      </SettingsActionRow>
+    </SettingsSection>
 
     <!-- Section: Profesorado -->
     <ClassTeachersPanel
@@ -583,9 +566,7 @@ const subjectOptions = computed(() => {
   const options = subjectsForLevel(general.value.educationLevel)
   const current = general.value.subject
   const legacy =
-    current && !options.some(o => o.value === current)
-      ? [{ value: current, label: current }]
-      : []
+    current && !options.some(o => o.value === current) ? [{ value: current, label: current }] : []
   return [noneOption.value, ...options, ...legacy]
 })
 const languageOptions = computed(() => [noneOption.value, ...CLASS_LANGUAGES])

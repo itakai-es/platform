@@ -18,7 +18,8 @@ export function useClassPermissions(access: MaybeRefOrGetter<ClassAccess | null 
 /**
  * Lo mismo para una pantalla que no tiene la clase cargada (el detalle de una
  * misión): busca el acceso en las clases que ya tiene el almacén y, si no está,
- * pide la clase.
+ * pide la clase. `known` dice si ya se sabe: hasta entonces `can()` responde que
+ * no, y la pantalla debe esperar para no enseñar un «solo lectura» que no es.
  */
 export function useClassPermissionsById(classId: MaybeRefOrGetter<string>) {
   const teacherStore = useTeacherStore()
@@ -40,5 +41,6 @@ export function useClassPermissionsById(classId: MaybeRefOrGetter<string>) {
     { immediate: true }
   )
 
-  return useClassPermissions(access)
+  const known = computed(() => access.value !== undefined)
+  return { ...useClassPermissions(access), known }
 }

@@ -130,6 +130,11 @@
         </div>
       </div>
 
+      <!-- Aviso de solo lectura para el profesor cuyo acceso no le deja cambiar la misión -->
+      <InfoNote v-if="isTeacher && !canEdit" class="mb-6">
+        {{ t('teacher.classes.detail.read_only_notice') }}
+      </InfoNote>
+
       <!-- Aviso de solo lectura para el alumno cuando la misión ha expirado -->
       <div
         v-if="!isTeacher && missionExpired"
@@ -810,61 +815,64 @@
                               {{ doc.format }} &bull; {{ doc.metadata }}
                             </p>
                           </div>
-                          <!-- Desktop: Hover buttons -->
-                          <div
-                            class="hidden 2xl:flex items-center gap-2 opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200 ease-out pointer-events-none group-hover:pointer-events-auto"
-                          >
-                            <Button
-                              variant="primary"
-                              size="sm"
-                              :icon-left="PencilIcon"
-                              class="whitespace-nowrap"
-                              @click="emit('editDocument', doc)"
+                          <div class="flex items-center gap-2 flex-shrink-0">
+                            <!-- Desktop: Hover buttons -->
+                            <div
+                              class="hidden 2xl:flex items-center gap-2 opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200 ease-out pointer-events-none group-hover:pointer-events-auto"
                             >
-                              {{ t('teacher.components.mission_detail_template.btn_edit') }}
-                            </Button>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              :icon-left="TrashIcon"
-                              class="whitespace-nowrap"
-                              @click="emit('deleteDocument', doc.id)"
-                            >
-                              {{ t('teacher.missions.detail.delete_confirm_btn') }}
-                            </Button>
-                          </div>
-                          <!-- Mobile/Tablet: Actions dropdown -->
-                          <div class="relative 2xl:hidden">
-                            <button
-                              type="button"
-                              class="p-2 rounded-lg hover:bg-gray-100 transition-colors"
-                              @click="toggleDocumentDropdown(doc.id)"
-                            >
-                              <EllipsisVerticalIcon class="w-5 h-5 text-navy-700" />
-                            </button>
-                            <Transition name="dropdown">
-                              <div
-                                v-if="openDocumentDropdown === doc.id"
-                                class="absolute right-0 top-full mt-1 w-48 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden z-50"
+                              <Button
+                                variant="primary"
+                                size="sm"
+                                :icon-left="PencilIcon"
+                                class="whitespace-nowrap"
+                                @click="emit('editDocument', doc)"
                               >
-                                <button
-                                  type="button"
-                                  class="flex items-center gap-3 w-full px-4 py-3 text-sm text-navy-700 hover:bg-gray-50 transition-colors"
-                                  @click="editDocumentAction(doc)"
+                                {{ t('teacher.components.mission_detail_template.btn_edit') }}
+                              </Button>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                :icon-left="TrashIcon"
+                                class="whitespace-nowrap"
+                                @click="emit('deleteDocument', doc.id)"
+                              >
+                                {{ t('teacher.missions.detail.delete_confirm_btn') }}
+                              </Button>
+                            </div>
+                            <!-- Mobile/Tablet: Actions dropdown -->
+                            <div class="relative 2xl:hidden">
+                              <button
+                                type="button"
+                                class="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                                @click="toggleDocumentDropdown(doc.id)"
+                              >
+                                <EllipsisVerticalIcon class="w-5 h-5 text-navy-700" />
+                              </button>
+                              <Transition name="dropdown">
+                                <div
+                                  v-if="openDocumentDropdown === doc.id"
+                                  class="absolute right-0 top-full mt-1 w-48 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden z-50"
                                 >
-                                  <PencilIcon class="w-5 h-5" />
-                                  {{ t('teacher.components.mission_detail_template.btn_edit') }}
-                                </button>
-                                <button
-                                  type="button"
-                                  class="flex items-center gap-3 w-full px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors"
-                                  @click="deleteDocumentAction(doc.id)"
-                                >
-                                  <TrashIcon class="w-5 h-5" />
-                                  {{ t('teacher.missions.detail.delete_confirm_btn') }}
-                                </button>
-                              </div>
-                            </Transition>
+                                  <button
+                                    type="button"
+                                    class="flex items-center gap-3 w-full px-4 py-3 text-sm text-navy-700 hover:bg-gray-50 transition-colors"
+                                    @click="editDocumentAction(doc)"
+                                  >
+                                    <PencilIcon class="w-5 h-5" />
+                                    {{ t('teacher.components.mission_detail_template.btn_edit') }}
+                                  </button>
+                                  <button
+                                    type="button"
+                                    class="flex items-center gap-3 w-full px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors"
+                                    @click="deleteDocumentAction(doc.id)"
+                                  >
+                                    <TrashIcon class="w-5 h-5" />
+                                    {{ t('teacher.missions.detail.delete_confirm_btn') }}
+                                  </button>
+                                </div>
+                              </Transition>
+                            </div>
+                            <DocumentOpenButton :doc="doc" />
                           </div>
                         </div>
                         <p class="text-sm text-navy-700/80 mt-2">{{ doc.description }}</p>
@@ -907,90 +915,7 @@
                             {{ doc.format }} &bull; {{ doc.metadata }}
                           </p>
                         </div>
-                        <!-- Teacher: Actions -->
-                        <template v-if="canEdit">
-                          <!-- Desktop: Hover buttons -->
-                          <div
-                            class="hidden 2xl:flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity"
-                          >
-                            <Button
-                              variant="primary"
-                              size="sm"
-                              :icon-left="PencilIcon"
-                              class="whitespace-nowrap"
-                              @click="emit('editDocument', doc)"
-                            >
-                              {{ t('teacher.components.mission_detail_template.btn_edit') }}
-                            </Button>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              :icon-left="TrashIcon"
-                              class="whitespace-nowrap"
-                              @click="emit('deleteDocument', doc.id)"
-                            >
-                              {{ t('teacher.missions.detail.delete_confirm_btn') }}
-                            </Button>
-                          </div>
-                          <!-- Mobile/Tablet: Actions dropdown -->
-                          <div class="relative 2xl:hidden">
-                            <button
-                              type="button"
-                              class="p-2 rounded-lg hover:bg-gray-100 transition-colors"
-                              @click="toggleDocumentDropdown(doc.id)"
-                            >
-                              <EllipsisVerticalIcon class="w-5 h-5 text-navy-700" />
-                            </button>
-                            <!-- Dropdown menu -->
-                            <Transition name="dropdown">
-                              <div
-                                v-if="openDocumentDropdown === doc.id"
-                                class="absolute right-0 top-full mt-1 w-48 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden z-50"
-                              >
-                                <button
-                                  type="button"
-                                  class="flex items-center gap-3 w-full px-4 py-3 text-sm text-navy-700 hover:bg-gray-50 transition-colors"
-                                  @click="editDocumentAction(doc)"
-                                >
-                                  <PencilIcon class="w-5 h-5" />
-                                  {{ t('teacher.components.mission_detail_template.btn_edit') }}
-                                </button>
-                                <button
-                                  type="button"
-                                  class="flex items-center gap-3 w-full px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors"
-                                  @click="deleteDocumentAction(doc.id)"
-                                >
-                                  <TrashIcon class="w-5 h-5" />
-                                  {{ t('teacher.missions.detail.delete_confirm_btn') }}
-                                </button>
-                              </div>
-                            </Transition>
-                          </div>
-                        </template>
-                        <!-- Student: Action button -->
-                        <button
-                          v-else
-                          class="w-10 h-10 rounded-xl bg-navy-700 hover:bg-navy-800 flex items-center justify-center flex-shrink-0 transition-colors shadow-md"
-                          :title="
-                            doc.type === 'link'
-                              ? t('student.mission_detail.documents.action_open_link')
-                              : doc.type === 'video'
-                                ? t('student.mission_detail.documents.action_play_video')
-                                : t('student.mission_detail.documents.action_download')
-                          "
-                          @click="handleDocumentAction(doc)"
-                        >
-                          <component
-                            :is="
-                              doc.type === 'link'
-                                ? ArrowTopRightOnSquareIcon
-                                : doc.type === 'video'
-                                  ? PlayCircleIcon
-                                  : ArrowDownTrayIcon
-                            "
-                            class="w-5 h-5 text-white"
-                          />
-                        </button>
+                        <DocumentOpenButton :doc="doc" />
                       </div>
                       <p class="text-sm text-navy-700/80 mt-2">{{ doc.description }}</p>
 
@@ -1326,8 +1251,6 @@ import {
   CheckIcon,
   LockClosedIcon,
   DocumentTextIcon,
-  ArrowDownTrayIcon,
-  ArrowTopRightOnSquareIcon,
   ArrowUpTrayIcon,
   PlayCircleIcon,
   DocumentIcon,
@@ -1361,7 +1284,6 @@ import type { MissionRarity } from '~/utils/gamification-config'
 
 const { getImageUrl } = useImageUrl()
 const { t, locale } = useI18n()
-const { openDocument } = useProtectedFiles()
 const aiStore = useAIAssistantStore()
 
 // Monedas y maná que otorga cada enigma (vienen del backend en cada enigma).
@@ -1896,12 +1818,6 @@ const getDocumentTagClasses = (type: MissionDocument['type']) => {
     image: 'bg-green-100 text-green-700',
   }
   return classes[type]
-}
-
-// Abrir o descargar un documento. Los que son un fichero de la plataforma se
-// piden a la API, que comprueba el acceso; los enlaces se abren tal cual.
-const handleDocumentAction = (doc: MissionDocument) => {
-  void openDocument(doc)
 }
 
 // Teacher stats (from API)

@@ -1,5 +1,9 @@
 <template>
   <div class="space-y-6">
+    <InfoNote v-if="!can('mission.edit')">
+      {{ t('teacher.classes.detail.read_only_notice') }}
+    </InfoNote>
+
     <!-- Empty: no missions at all -->
     <EmptyState
       v-if="state.missions.length === 0"

@@ -28,7 +28,7 @@
 
     <template #footer>
       <Button variant="outline" class="flex-1" @click="handleCancel">
-        {{ cancelText }}
+        {{ cancelText ?? t('common.actions.cancel') }}
       </Button>
       <Button
         :variant="confirmVariant"
@@ -50,6 +50,7 @@ interface Props {
   title?: string
   message: string
   confirmText?: string
+  /** Sin indicar, «Cancelar» en el idioma de quien lo usa. */
   cancelText?: string
   variant?: 'danger' | 'warning' | 'success'
   loading?: boolean
@@ -62,7 +63,6 @@ const { t } = useI18n()
 const props = withDefaults(defineProps<Props>(), {
   title: 'Confirmar acción',
   confirmText: 'Confirmar',
-  cancelText: 'Cancelar',
   variant: 'danger',
   loading: false,
   confirmDisabled: false,

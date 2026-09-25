@@ -1,14 +1,17 @@
 <template>
-  <form class="space-y-4" novalidate @submit.prevent="submit">
+  <!-- El botón de crear está en el pie de la ventana, unido a este formulario
+       por su `id` (`formId`). -->
+  <form :id="formId" class="space-y-4" novalidate @submit.prevent="submit">
     <p class="text-sm text-navy-700/80">{{ t('teacher.classes.detail.accounts.rows_intro') }}</p>
 
     <ol class="space-y-3">
       <li v-for="(row, index) in rows" :key="row.key">
         <fieldset class="min-w-0 rounded-2xl border border-border-primary p-3 sm:p-4">
-          <legend class="px-1 text-sm font-semibold text-navy-700">
+          <!-- Flotante, para que se pinte dentro de la caja y no sobre el borde. -->
+          <legend class="float-left mb-2 w-full text-sm font-semibold text-navy-700">
             {{ t('teacher.classes.detail.accounts.row_legend', { n: index + 1 }) }}
           </legend>
-          <div class="flex flex-col gap-3 sm:flex-row sm:items-start">
+          <div class="clear-both flex flex-col gap-3 sm:flex-row sm:items-start">
             <FormField
               :id="fieldId('name', row)"
               class="min-w-0 flex-1"
@@ -43,13 +46,10 @@
       </li>
     </ol>
 
-    <!-- Añadir otra fila, a todo lo ancho justo bajo la lista: que se vea que
-         caben varias cuentas de una vez. -->
     <Button
       ref="addButtonRef"
       variant="outline"
-      size="md"
-      full-width
+      size="sm"
       :icon-left="PlusIcon"
       :disabled="rows.length >= STUDENT_LIST_MAX"
       @click="addRow"
@@ -59,19 +59,6 @@
     <p v-if="rows.length >= STUDENT_LIST_MAX" class="text-sm text-navy-700/70">
       {{ t('teacher.classes.detail.accounts.max_rows', { max: STUDENT_LIST_MAX }) }}
     </p>
-
-    <!-- En móvil, la acción principal ocupa todo el ancho como la de añadir. -->
-    <div class="flex justify-end">
-      <Button
-        type="submit"
-        variant="primary"
-        size="md"
-        class="w-full sm:w-auto"
-        :loading="submitting"
-      >
-        {{ submitting ? t('teacher.classes.detail.accounts.creating') : submitLabel }}
-      </Button>
-    </div>
   </form>
 </template>
 
@@ -86,8 +73,11 @@ import { STUDENT_LIST_MAX } from '~/utils/student-list'
  * usuario se propone al escribir el nombre (la API devuelve siempre uno libre y
  * nunca dice si otro existe) y se puede cambiar; si se cambia, deja de
  * proponerse. Todas las filas se crean de una vez, o ninguna.
+ *
+ * El botón de crear lo pone la ventana en su pie, con `form` igual a `formId`;
+ * por eso se exponen `submitting` y `submitLabel`.
  */
-const props = defineProps<{ classId: string }>()
+const props = defineProps<{ classId: string; formId: string }>()
 const emit = defineEmits<{ created: [list: ManagedCredentials[]] }>()
 
 const { t } = useI18n()
@@ -296,4 +286,6 @@ async function submit() {
     submitting.value = false
   }
 }
+
+defineExpose({ submitting, submitLabel })
 </script>

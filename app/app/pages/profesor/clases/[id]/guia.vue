@@ -1,5 +1,8 @@
 <template>
   <div>
+    <InfoNote v-if="!canEdit" class="mb-6">
+      {{ t('teacher.classes.detail.read_only_notice') }}
+    </InfoNote>
     <div
       v-if="!isEditing"
       :class="{ 'cursor-pointer': canEdit && state.classGuide?.content }"
