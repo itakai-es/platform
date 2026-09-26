@@ -931,6 +931,16 @@ model HelpArticle {
    */
   searchVector Unsupported("tsvector")? @map("search_vector")
 
+  /**
+   * Firma de una entrada del blog, en texto libre («Equipo ITAKAI», una
+   * invitada…): no apunta a ninguna cuenta. Solo la enseña el blog.
+   */
+  authorName  String?   @map("author_name")
+  /**
+   * Primera publicación. La pone el sistema al publicar por primera vez y no
+   * cambia al retirar y volver a publicar; en el blog se puede corregir desde
+   * el panel (entradas antiguas traídas con su fecha real).
+   */
   publishedAt DateTime? @map("published_at")
   createdAt   DateTime  @default(now()) @map("created_at")
   updatedAt   DateTime  @updatedAt @map("updated_at")

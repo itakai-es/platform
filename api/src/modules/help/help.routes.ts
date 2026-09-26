@@ -144,6 +144,18 @@ const articleSchema = z.object({
   kind: kindEnum.optional(),
   /** `null` la vacía; ausente no la toca. Mismo contrato que `coverImage`. */
   videoUrl: z.string().url().max(500).regex(/^https:\/\//).nullable().optional(),
+  /** Firma de la entrada, solo en el blog. `null` la quita; ausente no la toca. */
+  authorName: z.string().max(120).nullable().optional(),
+  /**
+   * Fecha de publicación corregida a mano, solo en el blog: fecha y hora ISO
+   * con zona. No se vacía; si no viene, la pone el sistema al publicar. El
+   * servicio comprueba que sea razonable (ni antes del 2000 ni en el futuro).
+   */
+  publishedAt: z
+    .string()
+    .datetime({ offset: true })
+    .transform(value => new Date(value))
+    .optional(),
 })
 
 const orderSchema = z.object({ orderedIds: z.array(z.string().uuid()) })

@@ -58,6 +58,7 @@ export type HelpArticleMinAggregateOutputType = {
   views: number | null
   helpful: number | null
   notHelpful: number | null
+  authorName: string | null
   publishedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -81,6 +82,7 @@ export type HelpArticleMaxAggregateOutputType = {
   views: number | null
   helpful: number | null
   notHelpful: number | null
+  authorName: string | null
   publishedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -104,6 +106,7 @@ export type HelpArticleCountAggregateOutputType = {
   views: number
   helpful: number
   notHelpful: number
+  authorName: number
   publishedAt: number
   createdAt: number
   updatedAt: number
@@ -143,6 +146,7 @@ export type HelpArticleMinAggregateInputType = {
   views?: true
   helpful?: true
   notHelpful?: true
+  authorName?: true
   publishedAt?: true
   createdAt?: true
   updatedAt?: true
@@ -166,6 +170,7 @@ export type HelpArticleMaxAggregateInputType = {
   views?: true
   helpful?: true
   notHelpful?: true
+  authorName?: true
   publishedAt?: true
   createdAt?: true
   updatedAt?: true
@@ -189,6 +194,7 @@ export type HelpArticleCountAggregateInputType = {
   views?: true
   helpful?: true
   notHelpful?: true
+  authorName?: true
   publishedAt?: true
   createdAt?: true
   updatedAt?: true
@@ -299,6 +305,7 @@ export type HelpArticleGroupByOutputType = {
   views: number
   helpful: number
   notHelpful: number
+  authorName: string | null
   publishedAt: Date | null
   createdAt: Date
   updatedAt: Date
@@ -345,6 +352,7 @@ export type HelpArticleWhereInput = {
   views?: Prisma.IntFilter<"HelpArticle"> | number
   helpful?: Prisma.IntFilter<"HelpArticle"> | number
   notHelpful?: Prisma.IntFilter<"HelpArticle"> | number
+  authorName?: Prisma.StringNullableFilter<"HelpArticle"> | string | null
   publishedAt?: Prisma.DateTimeNullableFilter<"HelpArticle"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"HelpArticle"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"HelpArticle"> | Date | string
@@ -369,6 +377,7 @@ export type HelpArticleOrderByWithRelationInput = {
   views?: Prisma.SortOrder
   helpful?: Prisma.SortOrder
   notHelpful?: Prisma.SortOrder
+  authorName?: Prisma.SortOrderInput | Prisma.SortOrder
   publishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -397,6 +406,7 @@ export type HelpArticleWhereUniqueInput = Prisma.AtLeast<{
   views?: Prisma.IntFilter<"HelpArticle"> | number
   helpful?: Prisma.IntFilter<"HelpArticle"> | number
   notHelpful?: Prisma.IntFilter<"HelpArticle"> | number
+  authorName?: Prisma.StringNullableFilter<"HelpArticle"> | string | null
   publishedAt?: Prisma.DateTimeNullableFilter<"HelpArticle"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"HelpArticle"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"HelpArticle"> | Date | string
@@ -421,6 +431,7 @@ export type HelpArticleOrderByWithAggregationInput = {
   views?: Prisma.SortOrder
   helpful?: Prisma.SortOrder
   notHelpful?: Prisma.SortOrder
+  authorName?: Prisma.SortOrderInput | Prisma.SortOrder
   publishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -452,6 +463,7 @@ export type HelpArticleScalarWhereWithAggregatesInput = {
   views?: Prisma.IntWithAggregatesFilter<"HelpArticle"> | number
   helpful?: Prisma.IntWithAggregatesFilter<"HelpArticle"> | number
   notHelpful?: Prisma.IntWithAggregatesFilter<"HelpArticle"> | number
+  authorName?: Prisma.StringNullableWithAggregatesFilter<"HelpArticle"> | string | null
   publishedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"HelpArticle"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"HelpArticle"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"HelpArticle"> | Date | string
@@ -474,6 +486,7 @@ export type HelpArticleCreateInput = {
   views?: number
   helpful?: number
   notHelpful?: number
+  authorName?: string | null
   publishedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -498,6 +511,7 @@ export type HelpArticleUncheckedCreateInput = {
   views?: number
   helpful?: number
   notHelpful?: number
+  authorName?: string | null
   publishedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -520,6 +534,7 @@ export type HelpArticleUpdateInput = {
   views?: Prisma.IntFieldUpdateOperationsInput | number
   helpful?: Prisma.IntFieldUpdateOperationsInput | number
   notHelpful?: Prisma.IntFieldUpdateOperationsInput | number
+  authorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -544,6 +559,7 @@ export type HelpArticleUncheckedUpdateInput = {
   views?: Prisma.IntFieldUpdateOperationsInput | number
   helpful?: Prisma.IntFieldUpdateOperationsInput | number
   notHelpful?: Prisma.IntFieldUpdateOperationsInput | number
+  authorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -567,6 +583,7 @@ export type HelpArticleCreateManyInput = {
   views?: number
   helpful?: number
   notHelpful?: number
+  authorName?: string | null
   publishedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -589,6 +606,7 @@ export type HelpArticleUpdateManyMutationInput = {
   views?: Prisma.IntFieldUpdateOperationsInput | number
   helpful?: Prisma.IntFieldUpdateOperationsInput | number
   notHelpful?: Prisma.IntFieldUpdateOperationsInput | number
+  authorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -612,6 +630,7 @@ export type HelpArticleUncheckedUpdateManyInput = {
   views?: Prisma.IntFieldUpdateOperationsInput | number
   helpful?: Prisma.IntFieldUpdateOperationsInput | number
   notHelpful?: Prisma.IntFieldUpdateOperationsInput | number
+  authorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -651,6 +670,7 @@ export type HelpArticleCountOrderByAggregateInput = {
   views?: Prisma.SortOrder
   helpful?: Prisma.SortOrder
   notHelpful?: Prisma.SortOrder
+  authorName?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -681,6 +701,7 @@ export type HelpArticleMaxOrderByAggregateInput = {
   views?: Prisma.SortOrder
   helpful?: Prisma.SortOrder
   notHelpful?: Prisma.SortOrder
+  authorName?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -704,6 +725,7 @@ export type HelpArticleMinOrderByAggregateInput = {
   views?: Prisma.SortOrder
   helpful?: Prisma.SortOrder
   notHelpful?: Prisma.SortOrder
+  authorName?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -787,6 +809,7 @@ export type HelpArticleCreateWithoutCategoryInput = {
   views?: number
   helpful?: number
   notHelpful?: number
+  authorName?: string | null
   publishedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -809,6 +832,7 @@ export type HelpArticleUncheckedCreateWithoutCategoryInput = {
   views?: number
   helpful?: number
   notHelpful?: number
+  authorName?: string | null
   publishedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -861,6 +885,7 @@ export type HelpArticleScalarWhereInput = {
   views?: Prisma.IntFilter<"HelpArticle"> | number
   helpful?: Prisma.IntFilter<"HelpArticle"> | number
   notHelpful?: Prisma.IntFilter<"HelpArticle"> | number
+  authorName?: Prisma.StringNullableFilter<"HelpArticle"> | string | null
   publishedAt?: Prisma.DateTimeNullableFilter<"HelpArticle"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"HelpArticle"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"HelpArticle"> | Date | string
@@ -883,6 +908,7 @@ export type HelpArticleCreateManyCategoryInput = {
   views?: number
   helpful?: number
   notHelpful?: number
+  authorName?: string | null
   publishedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -905,6 +931,7 @@ export type HelpArticleUpdateWithoutCategoryInput = {
   views?: Prisma.IntFieldUpdateOperationsInput | number
   helpful?: Prisma.IntFieldUpdateOperationsInput | number
   notHelpful?: Prisma.IntFieldUpdateOperationsInput | number
+  authorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -927,6 +954,7 @@ export type HelpArticleUncheckedUpdateWithoutCategoryInput = {
   views?: Prisma.IntFieldUpdateOperationsInput | number
   helpful?: Prisma.IntFieldUpdateOperationsInput | number
   notHelpful?: Prisma.IntFieldUpdateOperationsInput | number
+  authorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -949,6 +977,7 @@ export type HelpArticleUncheckedUpdateManyWithoutCategoryInput = {
   views?: Prisma.IntFieldUpdateOperationsInput | number
   helpful?: Prisma.IntFieldUpdateOperationsInput | number
   notHelpful?: Prisma.IntFieldUpdateOperationsInput | number
+  authorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -974,6 +1003,7 @@ export type HelpArticleSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   views?: boolean
   helpful?: boolean
   notHelpful?: boolean
+  authorName?: boolean
   publishedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -998,6 +1028,7 @@ export type HelpArticleSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   views?: boolean
   helpful?: boolean
   notHelpful?: boolean
+  authorName?: boolean
   publishedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1022,6 +1053,7 @@ export type HelpArticleSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   views?: boolean
   helpful?: boolean
   notHelpful?: boolean
+  authorName?: boolean
   publishedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1046,12 +1078,13 @@ export type HelpArticleSelectScalar = {
   views?: boolean
   helpful?: boolean
   notHelpful?: boolean
+  authorName?: boolean
   publishedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type HelpArticleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "categoryId" | "slug" | "title" | "summary" | "coverImage" | "body" | "locale" | "status" | "orderIndex" | "featured" | "audience" | "kind" | "videoUrl" | "views" | "helpful" | "notHelpful" | "publishedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["helpArticle"]>
+export type HelpArticleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "categoryId" | "slug" | "title" | "summary" | "coverImage" | "body" | "locale" | "status" | "orderIndex" | "featured" | "audience" | "kind" | "videoUrl" | "views" | "helpful" | "notHelpful" | "authorName" | "publishedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["helpArticle"]>
 export type HelpArticleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   category?: boolean | Prisma.HelpCategoryDefaultArgs<ExtArgs>
 }
@@ -1112,6 +1145,18 @@ export type $HelpArticlePayload<ExtArgs extends runtime.Types.Extensions.Interna
     views: number
     helpful: number
     notHelpful: number
+    /**
+     * *
+     *    * Firma de una entrada del blog, en texto libre («Equipo ITAKAI», una
+     *    * invitada…): no apunta a ninguna cuenta. Solo la enseña el blog.
+     */
+    authorName: string | null
+    /**
+     * *
+     *    * Primera publicación. La pone el sistema al publicar por primera vez y no
+     *    * cambia al retirar y volver a publicar; en el blog se puede corregir desde
+     *    * el panel (entradas antiguas traídas con su fecha real).
+     */
     publishedAt: Date | null
     createdAt: Date
     updatedAt: Date
@@ -1556,6 +1601,7 @@ export interface HelpArticleFieldRefs {
   readonly views: Prisma.FieldRef<"HelpArticle", 'Int'>
   readonly helpful: Prisma.FieldRef<"HelpArticle", 'Int'>
   readonly notHelpful: Prisma.FieldRef<"HelpArticle", 'Int'>
+  readonly authorName: Prisma.FieldRef<"HelpArticle", 'String'>
   readonly publishedAt: Prisma.FieldRef<"HelpArticle", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"HelpArticle", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"HelpArticle", 'DateTime'>

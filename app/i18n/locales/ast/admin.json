@@ -451,7 +451,14 @@
       "placeholder_title": "Cinco idees pa gamificar la to aula",
       "ai_placeholder": "Espon-y a Atenea qué quies contar…",
       "delete_message": "Va desaniciase «{title}» y va dexar de vese nel blog. Nun se pue desfacer.",
-      "public_notice": "Les entraes publicaes van salir nel blog públicu cuando tea disponible."
+      "public_notice": "Les entraes publicaes van salir nel blog públicu cuando tea disponible.",
+      "field_author": "Autor",
+      "author_hint": "Opcional. Sal xunto a la data na entrada publicada: una persona o un equipu.",
+      "placeholder_author": "Equipu ITAKAI",
+      "field_published_at": "Data de publicación",
+      "published_at_hint": "Por defeutu, el día de la primer publicación. Cámbiala pa trayer una entrada vieya cola so data real.",
+      "published_at_draft_hint": "Ponse sola al publicar la entrada per primer vegada.",
+      "published_at_invalid": "Escueyi una data ente'l 1 de xineru de 2000 y güei."
     }
   }
 }

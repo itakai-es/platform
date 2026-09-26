@@ -277,7 +277,9 @@
         "alumno": "Alumnáu",
         "ambos": "Profesoráu y alumnáu"
       },
-      "back_to_app": "Volver a l'app"
+      "back_to_app": "Volver a l'app",
+      "published_on": "Publicáu el {date}",
+      "by_author": "Por {name}"
     },
     "meta": {
       "site_title": "ITAKAI - L'aventura de deprender | Plataforma educativa gamificada",

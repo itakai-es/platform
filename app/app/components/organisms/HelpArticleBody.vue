@@ -9,8 +9,10 @@
         {{ t(`common.help.kind.${article.kind}`) }}
       </Badge>
 
+      <!-- La ayuda dice cuándo se actualizó; el blog, cuándo se publicó y quién firma. -->
       <p class="mb-6 text-xs text-navy-700/70">
-        {{ t('common.help.updated_on', { date: formattedDate }) }}
+        <time :datetime="shownDate.iso">{{ shownDate.label }}</time>
+        <template v-if="byline"> · {{ byline }}</template>
       </p>
 
       <HelpVideoEmbed
@@ -30,12 +32,16 @@
 import { helpCardType } from '~/utils/help-accents'
 import { helpDocument } from '~/utils/help-headings'
 import { renderHelpMarkdown } from '~/utils/markdown'
-import type { HelpArticle } from '~/types/help.types'
+import type { HelpArea, HelpArticle } from '~/types/help.types'
 
 /**
  * El cuerpo de un artículo del centro de ayuda: portada, tipo, fecha, vídeo y
  * texto. Es la misma pieza en la página pública y en la previsualización del
  * panel, así que lo que se revisa es exactamente lo que se publica.
+ *
+ * En el blog (`area="blog"`) la fecha es la de publicación y, si la entrada
+ * va firmada, sale también la firma. Un borrador que aún no se ha publicado
+ * no tiene fecha de publicación y enseña la de actualización, como la ayuda.
  *
  * El texto es markdown y se pinta con el mismo `.md-rendered` que la guía de
  * clase y el detalle de misión, para que la documentación se lea igual que el
@@ -44,11 +50,23 @@ import type { HelpArticle } from '~/types/help.types'
 
 const props = withDefaults(
   defineProps<{
-    article: Pick<HelpArticle, 'title' | 'body' | 'coverImage' | 'updatedAt' | 'kind' | 'videoUrl'>
+    article: Pick<
+      HelpArticle,
+      | 'title'
+      | 'body'
+      | 'coverImage'
+      | 'updatedAt'
+      | 'kind'
+      | 'videoUrl'
+      | 'publishedAt'
+      | 'authorName'
+    >
     /** El color de la categoría (tipo de `Card`), para apartados y citas. */
     accent?: string
+    /** Del área sale la fecha que se enseña y si va la firma. */
+    area?: HelpArea
   }>(),
-  { accent: undefined }
+  { accent: undefined, area: 'ayuda' }
 )
 
 const { t, locale } = useI18n()
@@ -93,13 +111,30 @@ const renderedBody = computed(() => {
   return holder.innerHTML
 })
 
-const formattedDate = computed(() =>
-  new Date(props.article.updatedAt).toLocaleDateString(locale.value, {
+const isBlog = computed(() => props.area === 'blog')
+
+function longDate(iso: string) {
+  return new Date(iso).toLocaleDateString(locale.value, {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
   })
-)
+}
+
+const shownDate = computed(() => {
+  const published = isBlog.value ? props.article.publishedAt : null
+  if (published) {
+    return { iso: published, label: t('common.help.published_on', { date: longDate(published) }) }
+  }
+  const updated = props.article.updatedAt
+  return { iso: updated, label: t('common.help.updated_on', { date: longDate(updated) }) }
+})
+
+/** La firma, solo en el blog y si la hay. */
+const byline = computed(() => {
+  const name = isBlog.value ? props.article.authorName?.trim() : ''
+  return name ? t('common.help.by_author', { name }) : ''
+})
 </script>
 
 <style scoped>

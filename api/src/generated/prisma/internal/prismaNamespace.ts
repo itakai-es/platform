@@ -3267,6 +3267,7 @@ export const HelpArticleScalarFieldEnum = {
   views: 'views',
   helpful: 'helpful',
   notHelpful: 'notHelpful',
+  authorName: 'authorName',
   publishedAt: 'publishedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

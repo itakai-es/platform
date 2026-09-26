@@ -277,7 +277,9 @@
         "alumno": "Alumnado",
         "ambos": "Profesorado y alumnado"
       },
-      "back_to_app": "Volver a la app"
+      "back_to_app": "Volver a la app",
+      "published_on": "Publicado el {date}",
+      "by_author": "Por {name}"
     },
     "meta": {
       "site_title": "ITAKAI - La aventura de aprender | Plataforma educativa gamificada",

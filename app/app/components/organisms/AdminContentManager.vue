@@ -180,6 +180,14 @@
                 <Badge :variant="item.status === 'publicado' ? 'success' : 'warning'" size="sm">
                   {{ t(`admin.help.status_${item.status}`) }}
                 </Badge>
+                <!-- En el blog, junto al estado: cuándo se publicó y quién firma. -->
+                <span
+                  v-if="!isHelp && rowByline(item)"
+                  class="max-w-[16rem] truncate text-xs text-navy-700/70"
+                  :title="rowByline(item)"
+                >
+                  {{ rowByline(item) }}
+                </span>
                 <template v-if="isHelp">
                   <Badge variant="common" size="sm">
                     {{ t(`common.help.audience.${item.audience}`) }}
@@ -247,6 +255,50 @@
           </FieldGroup>
           <FieldGroup v-slot="{ labelId }" :label="t('admin.help.field_status')">
             <SelectDropdown v-model="form.status" :options="statusChoices" :labelledby="labelId" />
+          </FieldGroup>
+        </div>
+
+        <!-- Firma y fecha de publicación son cosas del blog. La fecha solo se
+             elige para lo que se publica o ya se publicó: en un borrador que
+             nunca ha salido se pone sola al publicarlo. -->
+        <div v-if="!isHelp" class="grid gap-4 sm:grid-cols-2">
+          <FieldGroup
+            v-slot="{ id, describedby }"
+            :label="t('admin.blog.field_author')"
+            :hint="t('admin.blog.author_hint')"
+            native-control
+          >
+            <Input
+              :id="id"
+              v-model="form.authorName"
+              :placeholder="t('admin.blog.placeholder_author')"
+              maxlength="120"
+              autocomplete="off"
+              :aria-describedby="describedby"
+            />
+          </FieldGroup>
+          <FieldGroup
+            v-slot="{ id, describedby }"
+            :label="t('admin.blog.field_published_at')"
+            :hint="
+              dateEditable
+                ? t('admin.blog.published_at_hint')
+                : t('admin.blog.published_at_draft_hint')
+            "
+            :error="publishedAtError"
+            native-control
+          >
+            <Input
+              :id="id"
+              :model-value="dateEditable ? form.publishedDate : ''"
+              type="date"
+              :min="EARLIEST_PUBLISHED_DATE"
+              :max="todayKey"
+              :disabled="!dateEditable"
+              :error="!!publishedAtError"
+              :aria-describedby="describedby"
+              @update:model-value="setPublishedDate"
+            />
           </FieldGroup>
         </div>
 
@@ -418,7 +470,7 @@
           <Badge v-if="preview.status === 'borrador'" variant="warning">
             {{ t('admin.help.preview_draft_notice') }}
           </Badge>
-          <HelpArticleBody :article="preview.article" :accent="preview.accent" />
+          <HelpArticleBody :article="preview.article" :accent="preview.accent" :area="props.area" />
         </template>
       </div>
     </Modal>
@@ -462,6 +514,7 @@ import {
 import type { ActionMenuItem } from '~/types/action-menu.types'
 import type { AdminArticlePayload, AdminHelpArticle, HelpStatus } from '~/composables/useHelpAdmin'
 import type { HelpArea, HelpArticle, HelpArticleKind, HelpAudience } from '~/types/help.types'
+import { dateKey } from '~/composables/useClassCalendar'
 
 /**
  * Gestor de contenidos del panel: lo usan las secciones «Centro de ayuda» y
@@ -476,14 +529,16 @@ import type { HelpArea, HelpArticle, HelpArticleKind, HelpAudience } from '~/typ
  * artículos, que se reordenan arrastrando el asa de cada fila (o, desde el
  * teclado, con las flechas sobre ella). Audiencia, tipo y vídeo solo existen
  * en el centro de ayuda: en el blog no se enseñan, no se filtran y no se
- * mandan (la API pone sus valores por defecto).
+ * mandan (la API pone sus valores por defecto). Al revés, la firma y la fecha
+ * de publicación solo existen en el blog: se editan, salen en cada fila y en
+ * la previsualización, y la ayuda no las manda.
  */
 
 const props = defineProps<{
   area: HelpArea
 }>()
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const toast = useToast()
 const {
   categories,
@@ -512,6 +567,7 @@ const KINDS: HelpArticleKind[] = ['guia', 'tutorial', 'faq', 'video']
  */
 const API_ERROR_KEYS: Record<string, string> = {
   HELP_VIDEO_URL_REQUIRED: 'admin.help.video_required',
+  HELP_PUBLISHED_AT_INVALID: 'admin.blog.published_at_invalid',
 }
 
 function apiMessage(error: unknown, fallback: string) {
@@ -807,6 +863,26 @@ async function saveArticleOrder(categoryId: string, orderedIds: string[]) {
 /** El nombre de cada fila, para el nombre accesible de su asa. */
 const articleTitle = (article: AdminHelpArticle) => article.title
 
+/**
+ * Fecha de publicación y firma de una fila del blog: «10 mar 2024 · Por Ana».
+ * La fecha va delante porque es lo que más se mira en una lista, y así una
+ * firma larga, que se recorta al final, nunca se la come.
+ */
+function rowByline(article: AdminHelpArticle) {
+  const author = article.authorName?.trim()
+  const parts = [
+    article.publishedAt
+      ? new Date(article.publishedAt).toLocaleDateString(locale.value, {
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric',
+        })
+      : '',
+    author ? t('common.help.by_author', { name: author }) : '',
+  ]
+  return parts.filter(Boolean).join(' · ')
+}
+
 function rowElement(id: string) {
   return listRef.value?.querySelector<HTMLElement>(`[data-sortable-id="${id}"]`) ?? null
 }
@@ -891,6 +967,9 @@ const form = ref({
   audience: 'profesor' as HelpAudience,
   kind: 'guia' as HelpArticleKind,
   videoUrl: '',
+  authorName: '',
+  /** Día de publicación elegido en el blog, `YYYY-MM-DD` en la hora local. */
+  publishedDate: '',
 })
 
 const categoryChoices = computed(() =>
@@ -955,16 +1034,74 @@ const aiContext = computed(() => {
   )
 })
 
+// ---- fecha de publicación (blog) ----
+
+/** Lo más antiguo que acepta la API: una entrada de antes del 2000 no tiene sentido aquí. */
+const EARLIEST_PUBLISHED_DATE = '2000-01-01'
+
+/** Hoy, en la hora de quien edita: el tope del selector (publicar no programa nada). */
+const todayKey = ref(dateKey(new Date()))
+
+/** La primera publicación del artículo que se edita, tal y como la guarda la API. */
+const originalPublishedAt = ref<string | null>(null)
+
+/** El día que el selector enseña si nadie lo toca: el de la primera publicación, o hoy. */
+const defaultPublishedDate = computed(() =>
+  originalPublishedAt.value ? dateKey(new Date(originalPublishedAt.value)) : todayKey.value
+)
+
+/**
+ * La fecha se elige para lo que se publica o ya se publicó alguna vez. En un
+ * borrador que nunca ha salido la pone la API al publicarlo (y no la acepta antes).
+ */
+const dateEditable = computed(
+  () => !isHelp.value && (form.value.status === 'publicado' || !!originalPublishedAt.value)
+)
+
+function setPublishedDate(value: string | number) {
+  form.value.publishedDate = String(value)
+}
+
+/** La misma regla que la API (entre el 2000 y hoy), para verlo en el campo y no en un 400. */
+const publishedAtError = computed(() => {
+  const value = form.value.publishedDate
+  // La fecha por defecto no se envía (chosenPublishedAt), así que no se valida:
+  // un día local posterior al de quien edita no debe bloquear el guardado.
+  if (!dateEditable.value || !value || value === defaultPublishedDate.value) return ''
+  return value < EARLIEST_PUBLISHED_DATE || value > todayKey.value
+    ? t('admin.blog.published_at_invalid')
+    : ''
+})
+
+/** Mediodía local del día elegido: sigue siendo ese día para casi cualquier zona horaria. */
+function noonOf(key: string) {
+  const [year, month, day] = key.split('-').map(Number)
+  return new Date(year, month - 1, day, 12).toISOString()
+}
+
+/**
+ * La fecha que se manda: solo si se ha cambiado el día. Si no, no viaja y se
+ * conserva la hora exacta de la primera publicación (o la pone la API al publicar).
+ */
+function chosenPublishedAt() {
+  const value = form.value.publishedDate
+  if (!dateEditable.value || !value || value === defaultPublishedDate.value) return undefined
+  return noonOf(value)
+}
+
 const canSave = computed(
   () =>
     !editorLoading.value &&
     Boolean(form.value.categoryId && form.value.title.trim() && form.value.body.trim()) &&
-    !videoError.value
+    !videoError.value &&
+    !publishedAtError.value
 )
 
 function openNew() {
   editSeq++
   editing.value = null
+  todayKey.value = dateKey(new Date())
+  originalPublishedAt.value = null
   form.value = {
     categoryId: categories.value[0]?.id ?? '',
     title: '',
@@ -976,6 +1113,8 @@ function openNew() {
     audience: 'profesor',
     kind: 'guia',
     videoUrl: '',
+    authorName: '',
+    publishedDate: todayKey.value,
   }
   editorOpen.value = true
 }
@@ -990,9 +1129,11 @@ async function openEdit(article: AdminHelpArticle) {
   editing.value = article
   editorLoading.value = true
   editorOpen.value = true
+  todayKey.value = dateKey(new Date())
   try {
     const full = await getArticle(article.id)
     if (seq !== editSeq) return
+    originalPublishedAt.value = full.publishedAt
     form.value = {
       categoryId: full.categoryId,
       title: full.title,
@@ -1004,6 +1145,8 @@ async function openEdit(article: AdminHelpArticle) {
       audience: full.audience,
       kind: full.kind,
       videoUrl: full.videoUrl ?? '',
+      authorName: full.authorName ?? '',
+      publishedDate: defaultPublishedDate.value,
     }
   } catch {
     if (seq !== editSeq) return
@@ -1028,12 +1171,16 @@ async function save() {
     }
     // En el blog no viajan tipo ni vídeo (al crear, la API pone los suyos; al
     // editar, no se tocan). La audiencia sí al crear: el blog es para todos.
+    // Firma y fecha solo en el blog: la ayuda no las acepta.
     if (isHelp.value) {
       payload.audience = form.value.audience
       payload.kind = form.value.kind
       payload.videoUrl = effectiveVideoUrl.value
-    } else if (!editing.value) {
-      payload.audience = 'ambos'
+    } else {
+      if (!editing.value) payload.audience = 'ambos'
+      payload.authorName = form.value.authorName.trim() || null
+      const publishedAt = chosenPublishedAt()
+      if (publishedAt) payload.publishedAt = publishedAt
     }
     if (editing.value) await updateArticle(editing.value.id, payload)
     else await createArticle(payload)
@@ -1052,7 +1199,17 @@ async function save() {
 // ---- previsualización ----
 
 interface PreviewView {
-  article: Pick<HelpArticle, 'title' | 'body' | 'coverImage' | 'updatedAt' | 'kind' | 'videoUrl'>
+  article: Pick<
+    HelpArticle,
+    | 'title'
+    | 'body'
+    | 'coverImage'
+    | 'updatedAt'
+    | 'kind'
+    | 'videoUrl'
+    | 'publishedAt'
+    | 'authorName'
+  >
   accent: string | undefined
   status: HelpStatus
 }
@@ -1097,6 +1254,12 @@ function openFormPreview() {
       updatedAt: new Date().toISOString(),
       kind: isHelp.value ? form.value.kind : 'guia',
       videoUrl: effectiveVideoUrl.value,
+      // Como saldría: el día elegido, el de la primera publicación o, si se
+      // publica ahora, hoy. Un borrador que nunca ha salido aún no tiene.
+      publishedAt: dateEditable.value
+        ? (chosenPublishedAt() ?? originalPublishedAt.value ?? new Date().toISOString())
+        : null,
+      authorName: form.value.authorName.trim() || null,
     },
     accent: categories.value.find(category => category.id === form.value.categoryId)?.accent,
     status: form.value.status,

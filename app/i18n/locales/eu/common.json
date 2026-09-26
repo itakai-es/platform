@@ -277,7 +277,9 @@
         "alumno": "Ikasleak",
         "ambos": "Irakasleak eta ikasleak"
       },
-      "back_to_app": "Itzuli aplikaziora"
+      "back_to_app": "Itzuli aplikaziora",
+      "published_on": "{date}(e)an argitaratua",
+      "by_author": "Egilea: {name}"
     },
     "meta": {
       "site_title": "ITAKAI - Ikasteko abentura | Hezkuntza plataforma gamifikatua",

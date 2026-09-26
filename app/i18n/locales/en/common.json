@@ -277,7 +277,9 @@
         "alumno": "Students",
         "ambos": "Teachers and students"
       },
-      "back_to_app": "Back to the app"
+      "back_to_app": "Back to the app",
+      "published_on": "Published on {date}",
+      "by_author": "By {name}"
     },
     "meta": {
       "site_title": "ITAKAI - The adventure of learning | Gamified educational platform",

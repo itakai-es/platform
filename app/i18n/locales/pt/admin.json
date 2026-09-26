@@ -451,7 +451,14 @@
       "placeholder_title": "Cinco ideias para gamificar a tua sala de aula",
       "ai_placeholder": "Explica à Atena o que queres contar…",
       "delete_message": "«{title}» será eliminada e deixará de aparecer no blogue. Não pode ser desfeito.",
-      "public_notice": "As publicações que publicares vão aparecer no blogue público quando este estiver disponível."
+      "public_notice": "As publicações que publicares vão aparecer no blogue público quando este estiver disponível.",
+      "field_author": "Autor",
+      "author_hint": "Opcional. Aparece junto à data na publicação: uma pessoa ou uma equipa.",
+      "placeholder_author": "Equipa ITAKAI",
+      "field_published_at": "Data de publicação",
+      "published_at_hint": "Por predefinição, o dia da primeira publicação. Altera-a para trazer uma publicação antiga com a sua data real.",
+      "published_at_draft_hint": "Fica definida automaticamente quando publicares pela primeira vez.",
+      "published_at_invalid": "Escolhe uma data entre 1 de janeiro de 2000 e hoje."
     }
   }
 }

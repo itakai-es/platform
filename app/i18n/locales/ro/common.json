@@ -277,7 +277,9 @@
         "alumno": "Elevi",
         "ambos": "Profesori și elevi"
       },
-      "back_to_app": "Înapoi la aplicație"
+      "back_to_app": "Înapoi la aplicație",
+      "published_on": "Publicat pe {date}",
+      "by_author": "De {name}"
     },
     "meta": {
       "site_title": "ITAKAI - Aventura de a învăța | Platformă educațională gamificată",

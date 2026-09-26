@@ -20,7 +20,17 @@ export type HelpArea = 'ayuda' | 'blog'
  */
 export type HelpScope = 'todo' | 'profesor' | 'alumno'
 
-export interface HelpArticleCard {
+/**
+ * Lo que solo trae el blog: la firma, en texto libre, y el día en que se
+ * publicó por primera vez (o el que se corrigió desde el panel). La ayuda no
+ * los manda: enseña «Actualizado el…» y no firma.
+ */
+export interface HelpBlogFields {
+  publishedAt?: string | null
+  authorName?: string | null
+}
+
+export interface HelpArticleCard extends HelpBlogFields {
   id: string
   slug: string
   title: string
@@ -59,7 +69,7 @@ export interface HelpIndex {
   featured: HelpFeaturedArticle[]
 }
 
-export interface HelpArticle {
+export interface HelpArticle extends HelpBlogFields {
   id: string
   slug: string
   title: string
@@ -81,7 +91,7 @@ export interface HelpArticleView {
   related: HelpArticleCard[]
 }
 
-export interface HelpSearchResult {
+export interface HelpSearchResult extends HelpBlogFields {
   id: string
   slug: string
   title: string

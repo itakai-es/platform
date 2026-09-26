@@ -451,7 +451,14 @@
       "placeholder_title": "Cinco ideas para gamificar tu aula",
       "ai_placeholder": "Explícale a Atenea qué quieres contar…",
       "delete_message": "Se eliminará «{title}» y dejará de verse en el blog. No se puede deshacer.",
-      "public_notice": "Las entradas publicadas saldrán en el blog público cuando esté disponible."
+      "public_notice": "Las entradas publicadas saldrán en el blog público cuando esté disponible.",
+      "field_author": "Autor",
+      "author_hint": "Opcional. Sale junto a la fecha en la entrada publicada: una persona o un equipo.",
+      "placeholder_author": "Equipo ITAKAI",
+      "field_published_at": "Fecha de publicación",
+      "published_at_hint": "Por defecto, el día de la primera publicación. Cámbiala para traer una entrada antigua con su fecha real.",
+      "published_at_draft_hint": "Se pone sola al publicar la entrada por primera vez.",
+      "published_at_invalid": "Elige una fecha entre el 1 de enero de 2000 y hoy."
     }
   }
 }
