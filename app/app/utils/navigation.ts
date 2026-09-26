@@ -6,6 +6,7 @@ export const ROUTE_NAMES = {
   COOKIES: '/cookies',
   LICENSES: '/licenses',
   DOCS: '/ayuda',
+  BLOG: '/blog',
 
   // Auth
   LOGIN: '/auth/login',
@@ -92,6 +93,7 @@ export const isPublicRoute = (path: string): boolean => {
     ROUTE_NAMES.COOKIES,
     ROUTE_NAMES.LICENSES,
     ROUTE_NAMES.DOCS,
+    ROUTE_NAMES.BLOG,
     ROUTE_NAMES.LOGIN,
     ROUTE_NAMES.SIGNUP,
     ROUTE_NAMES.FORGOT_PASSWORD,

@@ -447,18 +447,17 @@
       "edit_article": "Editatu sarrera",
       "empty_title": "Oraindik ez dago sarrerarik",
       "empty_description": "Sortu lehen sarrera hemendik.",
-      "reorder_disabled_filtered": "Ordena aldatzeko, kendu egoera iragazkia eta bilaketa.",
       "placeholder_title": "Zure ikasgela gamifikatzeko bost ideia",
       "ai_placeholder": "Azaldu Ateneari zer kontatu nahi duzun…",
       "delete_message": "«{title}» ezabatuko da eta ez da gehiago blogean agertuko. Ezin da desegin.",
-      "public_notice": "Argitaratutako sarrerak blog publikoan agertuko dira, erabilgarri dagoenean.",
       "field_author": "Egilea",
       "author_hint": "Aukerakoa. Argitaratutako sarreran agertzen da, dataren ondoan: pertsona bat edo talde bat.",
       "placeholder_author": "ITAKAI taldea",
       "field_published_at": "Argitalpen-data",
       "published_at_hint": "Lehenespenez, lehen argitalpenaren eguna. Aldatu sarrera zahar bat bere benetako datarekin ekartzeko.",
       "published_at_draft_hint": "Automatikoki jartzen da sarrera lehen aldiz argitaratzean.",
-      "published_at_invalid": "Aukeratu 2000ko urtarrilaren 1etik gaur arteko data bat."
+      "published_at_invalid": "Aukeratu 2000ko urtarrilaren 1etik gaur arteko data bat.",
+      "view_public": "Ikusi bloga"
     }
   }
 }

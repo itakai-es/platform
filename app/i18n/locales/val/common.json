@@ -279,7 +279,9 @@
       },
       "back_to_app": "Tornar a l'app",
       "published_on": "Publicat el {date}",
-      "by_author": "Per {name}"
+      "by_author": "Per {name}",
+      "load_error": "No s'ha pogut carregar el contingut",
+      "retry": "Torna-ho a intentar"
     },
     "meta": {
       "site_title": "ITAKAI - L'aventura d'aprendre | Plataforma educativa gamificada",
@@ -441,6 +443,25 @@
       "filters": "Filtres",
       "filters_count": "Filtres ({count})",
       "clear": "Neteja els filtres"
+    },
+    "blog": {
+      "hero_title": "El blog d'ITAKAI",
+      "hero_subtitle": "Novetats de la plataforma, idees per a gamificar l'aula i experiències d'altres docents.",
+      "search_placeholder": "Cercar en el blog…",
+      "search_empty_hint": "Prova amb altres paraules o esborra la cerca per a veure totes les entrades.",
+      "all_posts": "Totes",
+      "categories_label": "Categories del blog",
+      "featured": "Destacades",
+      "latest": "Últimes entrades",
+      "empty_title": "Encara no hi ha entrades",
+      "empty_description": "Quan es publique la primera entrada apareixerà ací.",
+      "post_count": "Cap entrada | 1 entrada | {count} entrades",
+      "not_found_description": "Potser l'entrada s'ha mogut o encara no està publicada.",
+      "post_pagination": "Entrada anterior i següent",
+      "meta": {
+        "title": "Blog · ITAKAI",
+        "description": "Novetats, idees i experiències d'aula d'ITAKAI, la plataforma educativa gamificada."
+      }
     }
   }
 }

@@ -447,18 +447,17 @@
       "edit_article": "Editează postarea",
       "empty_title": "Încă nu există postări",
       "empty_description": "Creează prima postare de aici.",
-      "reorder_disabled_filtered": "Elimină filtrul de stare și căutarea pentru a schimba ordinea.",
       "placeholder_title": "Cinci idei pentru a-ți gamifica clasa",
       "ai_placeholder": "Spune-i Atenei despre ce vrei să scrii…",
       "delete_message": "„{title}” va fi ștearsă și nu va mai apărea pe blog. Nu se poate anula.",
-      "public_notice": "Postările publicate vor apărea pe blogul public când va fi disponibil.",
       "field_author": "Autor",
       "author_hint": "Opțional. Apare lângă dată în postarea publicată: o persoană sau o echipă.",
       "placeholder_author": "Echipa ITAKAI",
       "field_published_at": "Data publicării",
       "published_at_hint": "Implicit, ziua primei publicări. Schimb-o ca să aduci o postare veche cu data ei reală.",
       "published_at_draft_hint": "Se completează automat când postarea este publicată prima dată.",
-      "published_at_invalid": "Alege o dată între 1 ianuarie 2000 și azi."
+      "published_at_invalid": "Alege o dată între 1 ianuarie 2000 și azi.",
+      "view_public": "Vezi blogul"
     }
   }
 }

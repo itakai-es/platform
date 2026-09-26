@@ -1,4 +1,5 @@
 import type {
+  HelpArea,
   HelpArticleView,
   HelpAudience,
   HelpCategory,
@@ -6,13 +7,22 @@ import type {
   HelpScope,
   HelpSearchResult,
 } from '~/types/help.types'
+import { helpArticlePath, helpBasePath, helpCategoryPath, orderForArea } from '~/utils/help-area'
 
 /**
- * useHelp — contenido del centro de ayuda (Fase 3, punto 17).
+ * useHelp — contenido público del centro de ayuda y del blog (Fase 3, puntos
+ * 17 y B3).
+ *
+ * Las dos áreas comparten modelo y API y se separan por el área de la
+ * categoría. Cada una tiene su propio estado (índice, carga, portada), así que
+ * visitar el blog no pisa lo cargado de la ayuda ni al revés. **El área viaja
+ * siempre en cada llamada**: la API sirve la ayuda por defecto, y sin ella el
+ * blog enseñaría el índice de la ayuda o daría un 404 mudo en cada entrada.
  *
  * Estas páginas cuelgan de la landing y tienen que funcionar sin sesión: del
- * store de autenticación solo se lee el rol, y solo para elegir una portada por
- * defecto cuando un artículo vale para los dos; sin sesión ese rol es null.
+ * store de autenticación solo se lee el rol, y solo para elegir una portada de
+ * la ayuda por defecto cuando un artículo vale para los dos; sin sesión ese
+ * rol es null. El blog no tiene portadas por rol: es para todos.
  *
  * El índice completo se pide una sola vez y se guarda en `useState`: son unos
  * pocos kilobytes y con él en memoria el buscador filtra por título sin ir al
@@ -21,39 +31,62 @@ import type {
  *
  * Las portadas por rol no vuelven a pedir nada: el mismo índice se filtra en
  * memoria según el `scope` activo, así que cambiar de portada es instantáneo.
+ *
+ * El orden también depende del área: la ayuda respeta el que se fija en el
+ * panel y el blog va de lo más reciente a lo más antiguo (`orderForArea`).
  */
-export function useHelp() {
+export function useHelp(area: HelpArea = 'ayuda') {
   const config = useRuntimeConfig()
+  const { t } = useI18n()
   const base = `${config.public.apiBase}/public/help`
+  const isBlog = area === 'blog'
+  const areaParams = { area }
 
-  const index = useState<HelpIndex | null>('help-index', () => null)
-  const loadingIndex = useState<boolean>('help-index-loading', () => false)
+  const index = useState<HelpIndex | null>(`help-index-${area}`, () => null)
+  const loadingIndex = useState<boolean>(`help-index-loading-${area}`, () => false)
+  /** La última carga del índice falló: se enseña el error y se puede reintentar. */
+  const indexError = useState<boolean>(`help-index-error-${area}`, () => false)
 
   /** La portada activa: toda la ayuda, la del profesorado o la del alumnado. */
-  const scope = useState<HelpScope>('help-scope', () => 'todo')
+  const scope = useState<HelpScope>(`help-scope-${area}`, () => 'todo')
   /**
    * Si la portada la ha fijado una portada o el selector. «Toda la ayuda»
    * elegida a mano y «sin elegir» valen igual `'todo'`; esto las distingue.
    */
-  const scopeChosen = useState<boolean>('help-scope-chosen', () => false)
+  const scopeChosen = useState<boolean>(`help-scope-chosen-${area}`, () => false)
 
+  /** Fija la portada. El blog solo tiene una. */
   const setScope = (value: HelpScope) => {
+    if (isBlog) return
     scope.value = value
     scopeChosen.value = true
   }
 
-  /** La ruta de la portada de cada ámbito, para migas y selector. */
-  const portalPath = (value: HelpScope) => (value === 'todo' ? '/ayuda' : `/ayuda/${value}`)
+  /** El nombre de la sección, para migas, barra y títulos de pestaña. */
+  const sectionTitle = computed(() => (isBlog ? t('common.nav.blog') : t('common.help.title')))
 
-  /** Carga el índice si no está ya. Idempotente. */
+  /** La ruta de la portada de cada ámbito, para migas y selector. */
+  const portalPath = (value: HelpScope) =>
+    isBlog || value === 'todo' ? helpBasePath(area) : `${helpBasePath(area)}/${value}`
+
+  const categoryPath = (categorySlug: string) => helpCategoryPath(area, categorySlug)
+  const articlePath = (categorySlug: string, articleSlug: string) =>
+    helpArticlePath(area, categorySlug, articleSlug)
+
+  /**
+   * Carga el índice si no está ya. Idempotente. Si falla, el índice se queda
+   * sin cargar: la siguiente página que lo pida (o el botón de reintentar)
+   * vuelve a intentarlo.
+   */
   const ensureIndex = async () => {
     if (index.value || loadingIndex.value) return index.value
     loadingIndex.value = true
+    indexError.value = false
     try {
-      index.value = await $fetch<HelpIndex>(base)
+      index.value = await $fetch<HelpIndex>(base, { params: areaParams })
     } catch (error) {
-      console.error('[ayuda] no se pudo cargar el índice:', error)
-      index.value = { categories: [], featured: [] }
+      console.error(`[${area}] no se pudo cargar el índice:`, error)
+      indexError.value = true
     } finally {
       loadingIndex.value = false
     }
@@ -65,21 +98,28 @@ export function useHelp() {
     scope.value === 'todo' || audience === scope.value || audience === 'ambos'
 
   /**
-   * Las categorías de la portada activa, con solo sus artículos y el total
-   * recalculado; las que se quedan vacías no se pintan. El total del servidor
-   * cuenta todos los artículos publicados, así que aquí no sirve.
+   * Las categorías de la portada activa, con solo sus artículos (en el orden
+   * de lectura del área) y el total recalculado; las que se quedan vacías no
+   * se pintan. El total del servidor cuenta todos los artículos publicados, así
+   * que aquí no sirve.
    */
   const categories = computed<HelpCategory[]>(() =>
     (index.value?.categories ?? [])
       .map(category => {
-        const articles = category.articles.filter(article => inScope(article.audience))
+        const articles = orderForArea(
+          area,
+          category.articles.filter(article => inScope(article.audience))
+        )
         return { ...category, articles, total: articles.length }
       })
       .filter(category => category.articles.length > 0)
   )
 
   const featured = computed(() =>
-    (index.value?.featured ?? []).filter(article => inScope(article.audience))
+    orderForArea(
+      area,
+      (index.value?.featured ?? []).filter(article => inScope(article.audience))
+    )
   )
 
   /**
@@ -87,32 +127,34 @@ export function useHelp() {
    * no tiene nada pero sí existe en el índice completo, se devuelve completa:
    * un enlace directo a una categoría siempre tiene que abrir.
    */
-  const getCategory = (slug: string) =>
-    categories.value.find(category => category.slug === slug) ??
-    index.value?.categories.find(category => category.slug === slug) ??
-    null
+  const getCategory = (slug: string) => {
+    const inPortal = categories.value.find(category => category.slug === slug)
+    if (inPortal) return inPortal
+    const full = index.value?.categories.find(category => category.slug === slug)
+    return full ? { ...full, articles: orderForArea(area, full.articles) } : null
+  }
 
   /** Los parámetros de audiencia que se mandan al servidor, salvo en «todo». */
-  const audienceParams = () => (scope.value === 'todo' ? {} : { audience: scope.value })
+  const audienceParams = () => (isBlog || scope.value === 'todo' ? {} : { audience: scope.value })
 
   const fetchArticle = (categorySlug: string, articleSlug: string) =>
     $fetch<HelpArticleView>(`${base}/${categorySlug}/${articleSlug}`, {
-      params: audienceParams(),
+      params: { ...areaParams, ...audienceParams() },
     })
 
   const search = (query: string) =>
     $fetch<{ results: HelpSearchResult[]; total: number }>(`${base}/buscar`, {
-      params: { q: query, ...audienceParams() },
+      params: { q: query, ...areaParams, ...audienceParams() },
     })
 
   /**
    * Fija la portada a partir del artículo que se está leyendo, cuando se llega
    * por un enlace directo. Solo actúa si no hay una portada elegida: si el
    * artículo vale para los dos roles, decide la sesión, y sin sesión se queda
-   * en toda la ayuda.
+   * en toda la ayuda. En el blog no hace nada: no hay portadas.
    */
   const inferScope = (audience: HelpAudience) => {
-    if (scopeChosen.value || scope.value !== 'todo') return
+    if (isBlog || scopeChosen.value || scope.value !== 'todo') return
     if (audience !== 'ambos') {
       scope.value = audience
       return
@@ -127,29 +169,44 @@ export function useHelp() {
     $fetch(`${base}/${articleId}/util`, { method: 'POST', body: { helpful } }).catch(() => null)
 
   /**
-   * Todos los artículos de la portada activa en una lista plana, para filtrar
-   * por título nada más teclear, mientras el servidor no ha contestado todavía.
+   * Todos los artículos de la portada activa en una lista plana, en el orden
+   * de lectura del área: para filtrar por título nada más teclear, mientras el
+   * servidor no ha contestado todavía, y para el listado de entradas del blog.
    */
   const allArticles = computed(() =>
-    categories.value.flatMap(category =>
-      category.articles.map(article => ({
-        ...article,
-        category: {
-          slug: category.slug,
-          name: category.name,
-          icon: category.icon,
-          accent: category.accent,
-        },
-      }))
+    orderForArea(
+      area,
+      categories.value.flatMap(category =>
+        category.articles.map(article => ({
+          ...article,
+          category: {
+            slug: category.slug,
+            name: category.name,
+            icon: category.icon,
+            accent: category.accent,
+          },
+        }))
+      )
     )
   )
 
+  /** Ordena una lista de artículos como se leen en esta área. */
+  const ordered = <T extends { publishedAt?: string | null; updatedAt: string }>(
+    items: readonly T[]
+  ) => orderForArea(area, items)
+
   return {
+    area,
+    isBlog,
     index,
     loadingIndex,
+    indexError,
     scope,
     setScope,
+    sectionTitle,
     portalPath,
+    categoryPath,
+    articlePath,
     ensureIndex,
     categories,
     featured,
@@ -159,6 +216,7 @@ export function useHelp() {
     inferScope,
     rate,
     allArticles,
+    ordered,
   }
 }
 

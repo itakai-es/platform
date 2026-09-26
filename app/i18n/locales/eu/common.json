@@ -279,7 +279,9 @@
       },
       "back_to_app": "Itzuli aplikaziora",
       "published_on": "{date}(e)an argitaratua",
-      "by_author": "Egilea: {name}"
+      "by_author": "Egilea: {name}",
+      "load_error": "Ezin izan da edukia kargatu",
+      "retry": "Saiatu berriro"
     },
     "meta": {
       "site_title": "ITAKAI - Ikasteko abentura | Hezkuntza plataforma gamifikatua",
@@ -441,6 +443,25 @@
       "filters": "Iragazkiak",
       "filters_count": "Iragazkiak ({count})",
       "clear": "Garbitu iragazkiak"
+    },
+    "blog": {
+      "hero_title": "ITAKAIren bloga",
+      "hero_subtitle": "Plataformaren berriak, ikasgela gamifikatzeko ideiak eta beste irakasle batzuen esperientziak.",
+      "search_placeholder": "Bilatu blogean…",
+      "search_empty_hint": "Saiatu beste hitz batzuekin edo ezabatu bilaketa sarrera guztiak ikusteko.",
+      "all_posts": "Guztiak",
+      "categories_label": "Blogeko kategoriak",
+      "featured": "Nabarmenduak",
+      "latest": "Azken sarrerak",
+      "empty_title": "Oraindik ez dago sarrerarik",
+      "empty_description": "Lehen sarrera argitaratzean hemen agertuko da.",
+      "post_count": "Sarrerarik ez | Sarrera 1 | {count} sarrera",
+      "not_found_description": "Baliteke sarrera mugitu izana edo oraindik argitaratu gabe egotea.",
+      "post_pagination": "Aurreko eta hurrengo sarrera",
+      "meta": {
+        "title": "Bloga · ITAKAI",
+        "description": "ITAKAIren berriak, ideiak eta ikasgelako esperientziak, hezkuntza-plataforma gamifikatua."
+      }
     }
   }
 }

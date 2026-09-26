@@ -32,14 +32,12 @@
                 >
                   {{ $t('common.nav.features') }}
                 </NuxtLink>
-                <a
-                  href="https://gamifp.es/blog/"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <NuxtLink
+                  to="/blog"
                   class="text-base font-medium transition-colors text-white hover:text-navy-700"
                 >
                   {{ $t('common.nav.blog') }}
-                </a>
+                </NuxtLink>
                 <NuxtLink
                   to="/ayuda"
                   class="text-base font-medium transition-colors text-white hover:text-navy-700 whitespace-nowrap"
@@ -131,14 +129,12 @@
                 >
                   {{ $t('common.nav.features') }}
                 </NuxtLink>
-                <a
-                  href="https://gamifp.es/blog/"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <NuxtLink
+                  to="/blog"
                   class="text-base font-medium transition-colors text-white hover:text-navy-700"
                 >
                   {{ $t('common.nav.blog') }}
-                </a>
+                </NuxtLink>
                 <NuxtLink
                   to="/ayuda"
                   class="text-base font-medium transition-colors text-white hover:text-navy-700 whitespace-nowrap"

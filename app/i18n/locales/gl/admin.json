@@ -447,18 +447,17 @@
       "edit_article": "Editar entrada",
       "empty_title": "Aínda non hai entradas",
       "empty_description": "Crea a primeira entrada desde aquí.",
-      "reorder_disabled_filtered": "Quita o filtro de estado e a busca para cambiar a orde.",
       "placeholder_title": "Cinco ideas para gamificar a túa aula",
       "ai_placeholder": "Explícalle a Atenea que queres contar…",
       "delete_message": "Eliminarase «{title}» e deixará de verse no blog. Non se pode desfacer.",
-      "public_notice": "As entradas publicadas sairán no blog público cando estea dispoñible.",
       "field_author": "Autor",
       "author_hint": "Opcional. Sae xunto á data na entrada publicada: unha persoa ou un equipo.",
       "placeholder_author": "Equipo ITAKAI",
       "field_published_at": "Data de publicación",
       "published_at_hint": "Por defecto, o día da primeira publicación. Cámbiaa para traer unha entrada antiga coa súa data real.",
       "published_at_draft_hint": "Ponse soa ao publicar a entrada por primeira vez.",
-      "published_at_invalid": "Escolle unha data entre o 1 de xaneiro de 2000 e hoxe."
+      "published_at_invalid": "Escolle unha data entre o 1 de xaneiro de 2000 e hoxe.",
+      "view_public": "Ver o blog"
     }
   }
 }

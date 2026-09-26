@@ -279,7 +279,9 @@
       },
       "back_to_app": "Înapoi la aplicație",
       "published_on": "Publicat pe {date}",
-      "by_author": "De {name}"
+      "by_author": "De {name}",
+      "load_error": "Conținutul nu a putut fi încărcat",
+      "retry": "Încearcă din nou"
     },
     "meta": {
       "site_title": "ITAKAI - Aventura de a învăța | Platformă educațională gamificată",
@@ -441,6 +443,25 @@
       "filters": "Filtre",
       "filters_count": "Filtre ({count})",
       "clear": "Șterge filtrele"
+    },
+    "blog": {
+      "hero_title": "Blogul ITAKAI",
+      "hero_subtitle": "Noutăți despre platformă, idei pentru gamificarea clasei și experiențe ale altor profesori.",
+      "search_placeholder": "Caută pe blog…",
+      "search_empty_hint": "Încearcă alte cuvinte sau șterge căutarea ca să vezi toate postările.",
+      "all_posts": "Toate",
+      "categories_label": "Categoriile blogului",
+      "featured": "Recomandate",
+      "latest": "Cele mai noi postări",
+      "empty_title": "Încă nu există postări",
+      "empty_description": "Când se publică prima postare va apărea aici.",
+      "post_count": "Nicio postare | 1 postare | Postări: {count}",
+      "not_found_description": "Postarea poate să fi fost mutată sau să nu fie încă publicată.",
+      "post_pagination": "Postarea anterioară și următoarea",
+      "meta": {
+        "title": "Blog · ITAKAI",
+        "description": "Noutăți, idei și experiențe de la clasă de la ITAKAI, platforma educațională gamificată."
+      }
     }
   }
 }

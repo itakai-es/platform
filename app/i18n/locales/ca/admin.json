@@ -447,18 +447,17 @@
       "edit_article": "Editar entrada",
       "empty_title": "Encara no hi ha entrades",
       "empty_description": "Crea la primera entrada des d'aquí.",
-      "reorder_disabled_filtered": "Treu el filtre d'estat i la cerca per canviar l'ordre.",
       "placeholder_title": "Cinc idees per gamificar la teva aula",
       "ai_placeholder": "Explica-li a Atenea què vols explicar…",
       "delete_message": "S'eliminarà «{title}» i deixarà de veure's al blog. No es pot desfer.",
-      "public_notice": "Les entrades publicades sortiran al blog públic quan estigui disponible.",
       "field_author": "Autor",
       "author_hint": "Opcional. Surt al costat de la data a l'entrada publicada: una persona o un equip.",
       "placeholder_author": "Equip ITAKAI",
       "field_published_at": "Data de publicació",
       "published_at_hint": "Per defecte, el dia de la primera publicació. Canvia-la per portar una entrada antiga amb la seva data real.",
       "published_at_draft_hint": "Es posa sola en publicar l'entrada per primera vegada.",
-      "published_at_invalid": "Tria una data entre l'1 de gener de 2000 i avui."
+      "published_at_invalid": "Tria una data entre l'1 de gener de 2000 i avui.",
+      "view_public": "Veure el blog"
     }
   }
 }

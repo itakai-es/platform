@@ -3,14 +3,13 @@
     <PageHeader :title="text.title" :subtitle="text.subtitle">
       <template #actions>
         <Button
-          v-if="isHelp"
           variant="outline"
-          href="/ayuda"
+          :href="helpBasePath(props.area)"
           target="_blank"
           rel="noopener noreferrer"
           :icon-right="ArrowTopRightOnSquareIcon"
         >
-          {{ t('admin.help.view_public') }}
+          {{ text.viewPublic }}
           <span class="sr-only">{{ t('common.accessibility.opens_new_tab') }}</span>
         </Button>
         <!-- Sin categorías no se puede crear nada: el listado explica por qué
@@ -32,9 +31,6 @@
         <TabNavigation :tabs="tabs" :active-tab="tab" @tab-change="setTab" />
       </template>
     </PageHeader>
-
-    <!-- El blog aún no tiene página pública: se avisa de dónde acabará lo publicado. -->
-    <InfoNote v-if="!isHelp">{{ t('admin.blog.public_notice') }}</InfoNote>
 
     <template v-if="tab === 'articles'">
       <FilterBar
@@ -70,9 +66,10 @@
         class="space-y-4 focus:outline-none"
         :aria-busy="reorderingArticles"
       >
-        <!-- Con estos filtros la lista está incompleta y el orden se bloquea: se dice por qué. -->
-        <InfoNote v-if="!canReorder && !showSkeleton && byCategory.length">
-          {{ text.reorderDisabled }}
+        <!-- Con estos filtros la lista está incompleta y el orden se bloquea: se dice
+             por qué. En el blog no hay orden a mano que bloquear. -->
+        <InfoNote v-if="isHelp && !canReorder && !showSkeleton && groups.length">
+          {{ t('admin.help.reorder_disabled_filtered') }}
         </InfoNote>
 
         <template v-if="showSkeleton">
@@ -106,7 +103,7 @@
           </EmptyState>
         </div>
 
-        <div v-else-if="!byCategory.length" class="rounded-2xl bg-white shadow-lg">
+        <div v-else-if="!groups.length" class="rounded-2xl bg-white shadow-lg">
           <EmptyState
             v-if="hasActiveFilters"
             :icon="BookOpenIcon"
@@ -131,7 +128,7 @@
              que `overflow-hidden` no lo recorta y redondea el fondo de las filas. -->
         <template v-else>
           <section
-            v-for="group in byCategory"
+            v-for="group in groups"
             :key="group.category.id"
             class="overflow-hidden rounded-2xl bg-white shadow-lg"
             :aria-labelledby="`${groupId}-${group.category.id}`"
@@ -141,16 +138,14 @@
               <h2 :id="`${groupId}-${group.category.id}`" class="font-semibold text-navy-700">
                 {{ group.category.name }}
               </h2>
-              <span class="text-xs text-navy-700/70">
-                {{
-                  t('common.help.article_count', { count: group.items.length }, group.items.length)
-                }}
-              </span>
+              <span class="text-xs text-navy-700/70">{{ countLabel(group.items.length) }}</span>
             </header>
 
+            <!-- En el blog manda la fecha: sin asa ni arrastre, de lo más nuevo a
+                 lo más antiguo. -->
             <AdminSortableList
               :items="group.items"
-              :locked="!canReorder"
+              :locked="!isHelp || !canReorder"
               :item-label="articleTitle"
               :save="ids => saveArticleOrder(group.category.id, ids)"
             >
@@ -182,11 +177,11 @@
                 </Badge>
                 <!-- En el blog, junto al estado: cuándo se publicó y quién firma. -->
                 <span
-                  v-if="!isHelp && rowByline(item)"
+                  v-if="!isHelp && shortByline(item)"
                   class="max-w-[16rem] truncate text-xs text-navy-700/70"
-                  :title="rowByline(item)"
+                  :title="shortByline(item)"
                 >
-                  {{ rowByline(item) }}
+                  {{ shortByline(item) }}
                 </span>
                 <template v-if="isHelp">
                   <Badge variant="common" size="sm">
@@ -515,6 +510,7 @@ import type { ActionMenuItem } from '~/types/action-menu.types'
 import type { AdminArticlePayload, AdminHelpArticle, HelpStatus } from '~/composables/useHelpAdmin'
 import type { HelpArea, HelpArticle, HelpArticleKind, HelpAudience } from '~/types/help.types'
 import { dateKey } from '~/composables/useClassCalendar'
+import { helpBasePath, newestFirst } from '~/utils/help-area'
 
 /**
  * Gestor de contenidos del panel: lo usan las secciones «Centro de ayuda» y
@@ -526,8 +522,10 @@ import { dateKey } from '~/composables/useClassCalendar'
  * mismas herramientas que quien la usa.
  *
  * Dos pestañas, artículos y categorías. Cada categoría es una tarjeta con sus
- * artículos, que se reordenan arrastrando el asa de cada fila (o, desde el
- * teclado, con las flechas sobre ella). Audiencia, tipo y vídeo solo existen
+ * artículos. En la ayuda se reordenan arrastrando el asa de cada fila (o,
+ * desde el teclado, con las flechas sobre ella); en el blog no hay asa: manda
+ * la fecha de publicación y se listan de lo más nuevo a lo más antiguo, como
+ * se leen en el blog público. Audiencia, tipo y vídeo solo existen
  * en el centro de ayuda: en el blog no se enseñan, no se filtran y no se
  * mandan (la API pone sus valores por defecto). Al revés, la firma y la fecha
  * de publicación solo existen en el blog: se editan, salen en cada fila y en
@@ -538,8 +536,9 @@ const props = defineProps<{
   area: HelpArea
 }>()
 
-const { t, locale } = useI18n()
+const { t } = useI18n()
 const toast = useToast()
+const { shortByline } = useBlogByline()
 const {
   categories,
   loading,
@@ -590,9 +589,9 @@ const text = computed(() =>
         editArticle: t('admin.help.edit_article'),
         emptyTitle: t('admin.help.empty_title'),
         emptyDescription: t('admin.help.empty_description'),
-        reorderDisabled: t('admin.help.reorder_disabled_filtered'),
         placeholderTitle: t('admin.help.placeholder_title'),
         aiPlaceholder: t('admin.help.ai_placeholder'),
+        viewPublic: t('admin.help.view_public'),
       }
     : {
         title: t('admin.blog.title'),
@@ -601,11 +600,18 @@ const text = computed(() =>
         editArticle: t('admin.blog.edit_article'),
         emptyTitle: t('admin.blog.empty_title'),
         emptyDescription: t('admin.blog.empty_description'),
-        reorderDisabled: t('admin.blog.reorder_disabled_filtered'),
         placeholderTitle: t('admin.blog.placeholder_title'),
         aiPlaceholder: t('admin.blog.ai_placeholder'),
+        viewPublic: t('admin.blog.view_public'),
       }
 )
+
+/** «2 artículos» en la ayuda, «2 entradas» en el blog. */
+function countLabel(count: number) {
+  return isHelp.value
+    ? t('common.help.article_count', { count }, count)
+    : t('common.blog.post_count', { count }, count)
+}
 
 const deleteMessage = computed(() => {
   const title = pendingDelete.value?.title ?? ''
@@ -822,6 +828,17 @@ onMounted(() => reloadAll())
 // ---- orden de los artículos ----
 
 /**
+ * Las tarjetas de cada categoría tal y como se enseñan: en la ayuda, en el
+ * orden que se fija arrastrando; en el blog, de la entrada más reciente a la
+ * más antigua (los borradores que nunca han salido, por su última edición).
+ */
+const groups = computed(() =>
+  isHelp.value
+    ? byCategory.value
+    : byCategory.value.map(group => ({ ...group, items: newestFirst(group.items) }))
+)
+
+/**
  * Con una búsqueda o un filtro de estado, audiencia o tipo activo la lista de cada categoría
  * está incompleta y reordenarla pisaría el orden de los que no se ven.
  */
@@ -862,26 +879,6 @@ async function saveArticleOrder(categoryId: string, orderedIds: string[]) {
 
 /** El nombre de cada fila, para el nombre accesible de su asa. */
 const articleTitle = (article: AdminHelpArticle) => article.title
-
-/**
- * Fecha de publicación y firma de una fila del blog: «10 mar 2024 · Por Ana».
- * La fecha va delante porque es lo que más se mira en una lista, y así una
- * firma larga, que se recorta al final, nunca se la come.
- */
-function rowByline(article: AdminHelpArticle) {
-  const author = article.authorName?.trim()
-  const parts = [
-    article.publishedAt
-      ? new Date(article.publishedAt).toLocaleDateString(locale.value, {
-          day: 'numeric',
-          month: 'short',
-          year: 'numeric',
-        })
-      : '',
-    author ? t('common.help.by_author', { name: author }) : '',
-  ]
-  return parts.filter(Boolean).join(' · ')
-}
 
 function rowElement(id: string) {
   return listRef.value?.querySelector<HTMLElement>(`[data-sortable-id="${id}"]`) ?? null
@@ -1392,7 +1389,7 @@ async function confirmDelete() {
   const article = pendingDelete.value
   if (!article || deleting.value) return
   deleting.value = true
-  const siblings = byCategory.value.find(group => group.category.id === article.category.id)
+  const siblings = groups.value.find(group => group.category.id === article.category.id)
   const ids = siblings?.items.map(item => item.id) ?? []
   const position = ids.indexOf(article.id)
   const neighbour = ids[position + 1] ?? ids[position - 1]

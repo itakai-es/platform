@@ -279,7 +279,9 @@
       },
       "back_to_app": "Volver á app",
       "published_on": "Publicado o {date}",
-      "by_author": "Por {name}"
+      "by_author": "Por {name}",
+      "load_error": "Non se puido cargar o contido",
+      "retry": "Tentar de novo"
     },
     "meta": {
       "site_title": "ITAKAI - A aventura de aprender | Plataforma educativa gamificada",
@@ -441,6 +443,25 @@
       "filters": "Filtros",
       "filters_count": "Filtros ({count})",
       "clear": "Limpar filtros"
+    },
+    "blog": {
+      "hero_title": "O blog de ITAKAI",
+      "hero_subtitle": "Novidades da plataforma, ideas para gamificar a aula e experiencias doutros docentes.",
+      "search_placeholder": "Buscar no blog…",
+      "search_empty_hint": "Proba con outras palabras ou borra a busca para ver todas as entradas.",
+      "all_posts": "Todas",
+      "categories_label": "Categorías do blog",
+      "featured": "Destacadas",
+      "latest": "Últimas entradas",
+      "empty_title": "Aínda non hai entradas",
+      "empty_description": "Cando se publique a primeira entrada aparecerá aquí.",
+      "post_count": "Sen entradas | 1 entrada | {count} entradas",
+      "not_found_description": "Pode que a entrada se movese ou aínda non estea publicada.",
+      "post_pagination": "Entrada anterior e seguinte",
+      "meta": {
+        "title": "Blog · ITAKAI",
+        "description": "Novidades, ideas e experiencias de aula de ITAKAI, a plataforma educativa gamificada."
+      }
     }
   }
 }

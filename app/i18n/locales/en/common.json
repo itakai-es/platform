@@ -279,7 +279,9 @@
       },
       "back_to_app": "Back to the app",
       "published_on": "Published on {date}",
-      "by_author": "By {name}"
+      "by_author": "By {name}",
+      "load_error": "The content couldn't be loaded",
+      "retry": "Try again"
     },
     "meta": {
       "site_title": "ITAKAI - The adventure of learning | Gamified educational platform",
@@ -441,6 +443,25 @@
       "filters": "Filters",
       "filters_count": "Filters ({count})",
       "clear": "Clear filters"
+    },
+    "blog": {
+      "hero_title": "The ITAKAI blog",
+      "hero_subtitle": "Platform news, ideas for gamifying your classroom and stories from other teachers.",
+      "search_placeholder": "Search the blog…",
+      "search_empty_hint": "Try other words, or clear the search to see every post.",
+      "all_posts": "All",
+      "categories_label": "Blog categories",
+      "featured": "Featured",
+      "latest": "Latest posts",
+      "empty_title": "No posts yet",
+      "empty_description": "The first published post will show up here.",
+      "post_count": "No posts | 1 post | {count} posts",
+      "not_found_description": "The post may have moved or may not be published yet.",
+      "post_pagination": "Previous and next post",
+      "meta": {
+        "title": "Blog · ITAKAI",
+        "description": "News, ideas and classroom stories from ITAKAI, the gamified learning platform."
+      }
     }
   }
 }

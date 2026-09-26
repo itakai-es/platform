@@ -3,7 +3,7 @@
     <NuxtLink
       v-for="article in articles"
       :key="article.id"
-      :to="`/ayuda/${categoryOf(article).slug}/${article.slug}`"
+      :to="helpArticlePath(props.area, categoryOf(article).slug, article.slug)"
       class="group flex items-center gap-4 border-b border-border-primary px-4 py-3.5 transition-colors last:border-b-0 hover:bg-bg-secondary"
     >
       <HelpCategoryIcon
@@ -58,13 +58,14 @@
 <script setup lang="ts">
 import { ChevronRightIcon } from '@heroicons/vue/24/outline'
 import { cleanSnippet } from '~/composables/useHelp'
-import type { HelpArticleKind, HelpCategoryRef } from '~/types/help.types'
+import { helpArticlePath } from '~/utils/help-area'
+import type { HelpArea, HelpArticleKind, HelpCategoryRef } from '~/types/help.types'
 
 /**
- * Lista de artículos del centro de ayuda.
+ * Lista de artículos del centro de ayuda y del blog.
  *
- * La misma pieza sirve para lo más consultado, para los resultados de búsqueda
- * y para el listado de una categoría. Cada fila lleva el icono de su categoría
+ * La misma pieza sirve para los resultados de búsqueda de las dos áreas y para
+ * el listado de una categoría de la ayuda; `area` decide adónde enlaza. Cada fila lleva el icono de su categoría
  * sobre el color de marca que le corresponde —el mismo que pinta su tarjeta en
  * la portada—, así que el listado se lee de un vistazo y no queda apagado.
  */
@@ -91,8 +92,10 @@ const props = withDefaults(
     category?: HelpCategoryRef
     /** Muestra a qué categoría pertenece cada artículo (portada y búsqueda). */
     showCategory?: boolean
+    /** El área de los artículos: decide adónde lleva cada fila. */
+    area?: HelpArea
   }>(),
-  { category: undefined, showCategory: false }
+  { category: undefined, showCategory: false, area: 'ayuda' }
 )
 
 const FALLBACK: HelpCategoryRef = { slug: '', name: '', icon: null, accent: 'stats' }

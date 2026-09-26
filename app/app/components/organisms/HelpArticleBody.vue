@@ -69,9 +69,10 @@ const props = withDefaults(
   { accent: undefined, area: 'ayuda' }
 )
 
-const { t, locale } = useI18n()
+const { t } = useI18n()
 const config = useRuntimeConfig()
 const { getImageUrl } = useImageUrl()
+const { formatDate, authorLine } = useBlogByline()
 
 /** El color de la categoría, para los detalles del cuerpo del artículo. */
 const accentStyle = computed(() => ({
@@ -113,28 +114,18 @@ const renderedBody = computed(() => {
 
 const isBlog = computed(() => props.area === 'blog')
 
-function longDate(iso: string) {
-  return new Date(iso).toLocaleDateString(locale.value, {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  })
-}
-
 const shownDate = computed(() => {
   const published = isBlog.value ? props.article.publishedAt : null
   if (published) {
-    return { iso: published, label: t('common.help.published_on', { date: longDate(published) }) }
+    const date = formatDate(published, 'long')
+    return { iso: published, label: t('common.help.published_on', { date }) }
   }
   const updated = props.article.updatedAt
-  return { iso: updated, label: t('common.help.updated_on', { date: longDate(updated) }) }
+  return { iso: updated, label: t('common.help.updated_on', { date: formatDate(updated, 'long') }) }
 })
 
 /** La firma, solo en el blog y si la hay. */
-const byline = computed(() => {
-  const name = isBlog.value ? props.article.authorName?.trim() : ''
-  return name ? t('common.help.by_author', { name }) : ''
-})
+const byline = computed(() => (isBlog.value ? authorLine(props.article.authorName) : ''))
 </script>
 
 <style scoped>

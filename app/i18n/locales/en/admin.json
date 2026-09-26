@@ -447,18 +447,17 @@
       "edit_article": "Edit post",
       "empty_title": "No posts yet",
       "empty_description": "Create the first post here.",
-      "reorder_disabled_filtered": "Clear the status filter and the search to change the order.",
       "placeholder_title": "Five ideas to gamify your classroom",
       "ai_placeholder": "Tell Atenea what you want to write about…",
       "delete_message": "“{title}” will be deleted and will stop appearing on the blog. This cannot be undone.",
-      "public_notice": "Published posts will appear on the public blog once it is available.",
       "field_author": "Author",
       "author_hint": "Optional. Shown next to the date on the published post: a person or a team.",
       "placeholder_author": "ITAKAI team",
       "field_published_at": "Publication date",
       "published_at_hint": "By default, the day it was first published. Change it to bring in an older post with its real date.",
       "published_at_draft_hint": "It is set automatically when the post is first published.",
-      "published_at_invalid": "Choose a date between 1 January 2000 and today."
+      "published_at_invalid": "Choose a date between 1 January 2000 and today.",
+      "view_public": "View the blog"
     }
   }
 }

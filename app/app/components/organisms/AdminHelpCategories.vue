@@ -50,9 +50,7 @@
         </template>
 
         <template #meta="{ item }">
-          <span class="text-xs text-navy-700/70">
-            {{ t('common.help.article_count', { count: item.articles }, item.articles) }}
-          </span>
+          <span class="text-xs text-navy-700/70">{{ countLabel(item.articles) }}</span>
         </template>
 
         <template #actions="{ item }">
@@ -193,6 +191,13 @@ const props = defineProps<{
 const { t } = useI18n()
 const toast = useToast()
 const { createCategory, updateCategory, deleteCategory, reorderCategories } = useHelpAdmin()
+
+/** «2 artículos» en la ayuda, «2 entradas» en el blog. */
+function countLabel(count: number) {
+  return props.area === 'blog'
+    ? t('common.blog.post_count', { count }, count)
+    : t('common.help.article_count', { count }, count)
+}
 
 const accentOptions = computed(() =>
   HELP_CARD_TYPES.map(value => ({ value, label: t(`admin.help.accent.${value}`) }))
