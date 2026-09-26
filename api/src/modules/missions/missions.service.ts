@@ -725,22 +725,24 @@ export class MissionsService {
       select: { id: true, missionId: true, name: true, fileUrl: true },
     })
     if (!document) throw new NotFoundError('Documento no encontrado')
-
-    // Se borra el fichero del documento, y solo ese: tiene que ser uno de la
-    // carpeta de documentos y no estar guardado en ninguna otra fila (un
-    // documento de tipo enlace lleva la dirección que escribió quien lo creó).
+    // Un documento de tipo enlace lleva la dirección que escribió quien lo creó:
+    // solo se borra un fichero de la carpeta de documentos.
     const stored = await resolvePrivateUpload(document.fileUrl)
-    if (stored?.key.startsWith('documents/')) {
-      const shared = await prisma.missionDocument.count({
-        where: { fileUrl: document.fileUrl, id: { not: documentId } },
-      })
-      if (shared === 0) await deleteUpload(document.fileUrl)
-    }
 
     await prisma.$transaction(async tx => {
       await tx.missionDocument.delete({ where: { id: documentId } })
       await recordDocumentChange(tx, userId, classId, 'document.deleted', document)
     })
+
+    // El fichero se borra cuando ya no lo usa ninguna fila (la copia de una
+    // misión importada comparte el del original), y se cuenta después de
+    // confirmar el borrado: con dos borrados a la vez, el último ve que no queda
+    // ninguna; y una importación en curso, que bloquea los documentos que copia
+    // (ver readMissionForCopy), ya está confirmada cuando se cuenta.
+    if (stored?.key.startsWith('documents/')) {
+      const inUse = await prisma.missionDocument.count({ where: { fileUrl: document.fileUrl } })
+      if (inUse === 0) await deleteUpload(document.fileUrl)
+    }
 
     return { message: 'Documento eliminado correctamente' }
   }

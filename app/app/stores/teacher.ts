@@ -19,6 +19,7 @@ import type {
   UpdateClassData,
   ManagedRowInput,
   ManagedRowReview,
+  MissionImportResult,
   StudentListQuery,
   StudentListResponse,
 } from '~/types/teacher.types'
@@ -604,6 +605,30 @@ export const useTeacherStore = defineStore('teacher', () => {
   }
 
   /**
+   * Importa una misión de otra clase en `targetClassId`: una copia independiente
+   * con sus enigmas, sus documentos y, si `copyBadge`, su insignia (como insignia
+   * nueva de quien importa). Llega bloqueada y sin fecha límite; la original no
+   * cambia. Se vuelven a pedir en la próxima visita las misiones de la clase de
+   * destino (su pestaña Misiones, aunque ya se hubiera abierto, las pide al
+   * volver), el listado general y las clases, que dicen cuántas misiones tienen
+   * (Inicio y «Mis clases»). Lo que esté a la vista lo refresca quien llama.
+   */
+  async function importMission(missionId: string, targetClassId: string, copyBadge: boolean) {
+    const config = useRuntimeConfig()
+    const response = await $fetch<MissionImportResult>(
+      `${config.public.apiBase}/teacher/missions/${missionId}/import`,
+      { method: 'POST', body: { targetClassId, copyBadge } }
+    )
+    loadedClassMissions.value.delete(targetClassId)
+    hasLoadedMissions.value = false
+    hasLoadedClasses.value = false
+    useClassesStore().hasLoadedClasses = false
+    // La insignia copiada es nueva y de quien importa: que salga en «Insignias».
+    if (response.copied.badges.length > 0) useBadgeStore().invalidate()
+    return response
+  }
+
+  /**
    * Obtiene la guía de una clase
    */
   async function fetchClassGuide(classId: string, force = false) {
@@ -820,7 +845,9 @@ export const useTeacherStore = defineStore('teacher', () => {
       return { classes: archivedClasses.value, total: archivedClasses.value.length }
     } catch (error) {
       console.error('Error fetching archived classes:', error)
-      archivedClasses.value = []
+      // Lo que ya se tenía se queda, pero no se da por cargado: la próxima
+      // visita lo vuelve a pedir en vez de quedarse con una lista vacía.
+      hasLoadedArchivedClasses.value = false
       throw error
     } finally {
       isLoadingArchivedClasses.value = false
@@ -1070,6 +1097,7 @@ export const useTeacherStore = defineStore('teacher', () => {
     duplicateClass,
     getInvitationCode,
     fetchClassMissions,
+    importMission,
     fetchClassGuide,
     updateClassGuideCache,
     fetchClassRanking,

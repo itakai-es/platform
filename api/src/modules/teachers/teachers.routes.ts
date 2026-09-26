@@ -222,6 +222,16 @@ const duplicateClassSchema = z.object({
   missions: z.boolean().default(true),
 })
 
+// Importar una misión a otra clase. Los documentos van siempre; la insignia
+// vinculada, salvo que se diga que no. Estricto: una opción con otro nombre
+// (`withBadge`…) no se descarta en silencio, da 400.
+const importMissionSchema = z
+  .object({
+    targetClassId: z.string().uuid(),
+    copyBadge: z.boolean().default(true),
+  })
+  .strict()
+
 const shopItemSchema = z.object({
   name: z.string().min(1).max(60),
   description: z.string().max(200).optional(),
@@ -1028,6 +1038,29 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
+
+  // Copia la misión en otra clase: hace falta verla en su clase y editar las
+  // misiones de la de destino (ver teachersService.importMission).
+  fastify.post(
+    '/missions/:missionId/import',
+    async (request: FastifyRequest<{ Params: { missionId: string } }>, reply: FastifyReply) => {
+      try {
+        const { id } = request.user as { id: string }
+        const options = importMissionSchema.parse(request.body ?? {})
+        const result = await teachersService.importMission(id, request.params.missionId, options)
+        return reply.status(201).send(result)
+      } catch (error) {
+        if (error instanceof ZodError) {
+          return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
+        }
+        rethrowHttpError(error)
+        if (error instanceof Error) {
+          return reply.status(400).send({ message: error.message })
+        }
+        return reply.status(500).send({ message: 'Error interno' })
+      }
+    }
+  )
 
   // ==================== ACTIVITIES ====================
 

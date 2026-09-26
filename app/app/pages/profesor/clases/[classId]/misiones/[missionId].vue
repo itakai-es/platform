@@ -41,6 +41,17 @@
       @edit-rewards="editRewards"
       @view-submissions="openSubmissionsModal"
     >
+      <!-- Copiarla en otra clase (o en la suya: duplicarla). El texto, solo en
+           pantallas anchas: por debajo, junto a las migas, las partiría en dos. -->
+      <template v-if="canCopy" #actions>
+        <Button variant="secondary" size="md" @click="copyOpen = true">
+          <DocumentDuplicateIcon class="w-5 h-5 xl:mr-2" aria-hidden="true" /><span
+            class="sr-only xl:not-sr-only"
+            >{{ t('teacher.missions.import.copy_button') }}</span
+          >
+        </Button>
+      </template>
+
       <!-- Pestaña Ajustes: título, fecha límite e imagen de la misión -->
       <template #tab="{ activeTab: current }">
         <MissionConfigPanel
@@ -102,6 +113,13 @@
       @submit="handleRewardsSubmit"
       @load-badges="fetchAvailableBadges"
     />
+
+    <!-- Copiar la misión en otra clase: una copia que llega bloqueada -->
+    <ImportMissionModal
+      v-if="copySource && canCopy"
+      v-model="copyOpen"
+      :source-mission="copySource"
+    />
   </div>
 </template>
 
@@ -110,6 +128,7 @@ import {
   Squares2X2Icon as Squares2X2IconSolid,
   Cog6ToothIcon as Cog6ToothIconSolid,
 } from '@heroicons/vue/24/solid'
+import { DocumentDuplicateIcon } from '@heroicons/vue/24/outline'
 import type {
   MissionDetail,
   MissionEnigmaDetail as MissionEnigma,
@@ -117,6 +136,7 @@ import type {
   BadgeRewardDetail as BadgeReward,
 } from '~/types/mission-detail.types'
 import { resolveClassSettings } from '~/utils/class-settings'
+import { canInClass } from '~/utils/class-access'
 
 definePageMeta({
   layout: 'teacher',
@@ -130,6 +150,19 @@ const missionId = computed(() => route.params.missionId as string)
 
 // Qué deja hacer en la misión el acceso propio a su clase.
 const { can, known: accessKnown } = useClassPermissionsById(classId)
+
+// --------- Copiar la misión en otra clase ---------
+// Para copiarla basta con verla; hace falta un destino: una clase activa en la
+// que poder editar misiones, que puede ser la suya (sería duplicarla). Las
+// clases del almacén de profesor son justo las activas.
+const teacherStore = useTeacherStore()
+const copyOpen = ref(false)
+const canCopy = computed(() =>
+  teacherStore.classes.some(c => canInClass(c.myAccess, 'mission.edit'))
+)
+const copySource = computed(() =>
+  mission.value ? { id: missionId.value, title: mission.value.title, classId } : null
+)
 
 // --------- Pestañas del detalle (como en una clase) ---------
 // Ajustes (título, fecha, imagen, bloquear) solo para quien puede editar la
@@ -746,6 +779,15 @@ const closeSubmissionsModal = () => {
 onMounted(async () => {
   await fetchMission(!!submissionsQuery())
   openSubmissionsFromQuery()
+})
+
+// Las clases del profesor dicen si hay alguna en la que copiarla.
+onMounted(async () => {
+  try {
+    await teacherStore.ensureClasses()
+  } catch (err) {
+    console.error('Error fetching classes:', err)
+  }
 })
 
 // Cambio de misión (otra misión, quizá desde un aviso) o solo de `?entregas=`

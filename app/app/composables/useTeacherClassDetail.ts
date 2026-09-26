@@ -152,13 +152,19 @@ export function useTeacherClassDetail(classIdRef: Ref<string> | ComputedRef<stri
   /**
    * Al volver a una clase ya cargada se enseña lo guardado y, por detrás, se
    * pide la clase de nuevo: el acceso propio puede haber cambiado (o haberse
-   * perdido) mientras tanto.
+   * perdido) mientras tanto. Sus misiones, solo si el almacén las ha dado por
+   * caducadas (p. ej. se ha importado una en esta clase desde otra pantalla):
+   * la pestaña Misiones las lee de aquí, no del almacén.
    */
   async function revalidate() {
     try {
       const fresh = await teacherStore.fetchClassById(classId.value, true)
       if (fresh && state.value.classData) {
         state.value.classData = { ...state.value.classData, ...fresh }
+      }
+      if (!teacherStore.loadedClassMissions.has(classId.value)) {
+        const missionsResult = await teacherStore.fetchClassMissions(classId.value, true)
+        state.value.missions = missionsResult?.missions || []
       }
     } catch (error) {
       if (teacherStore.isClassGone(error)) forget()

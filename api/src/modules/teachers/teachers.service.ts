@@ -41,6 +41,7 @@ import {
   UNUSED_ACCOUNT_SELECT,
   unusedAccountHomeClass,
 } from './class-students.service.js'
+import { copyMissionInto, readMissionForCopy } from './mission-copy.js'
 
 const BADGES_DIR = join(process.cwd(), 'uploads', 'badges')
 const COVERS_DIR = join(process.cwd(), 'uploads', 'covers')
@@ -594,38 +595,12 @@ export class TeachersService {
           })
         }
 
-        // Misiones + enigmas: mission-por-mission (createMany no anida relaciones),
-        // preservando el orden de los enigmas (orderIndex). Nunca se copia el
-        // progreso de alumnos ni las entregas.
+        // Misiones + enigmas: misión a misión (createMany no anida relaciones),
+        // tal cual (estado y fecha límite incluidos) y sin documentos ni
+        // insignia. Nunca se copia el progreso de alumnos ni las entregas.
         if (options.missions && source.missions && source.missions.length > 0) {
           for (const m of source.missions) {
-            const newMission = await tx.mission.create({
-              data: {
-                classId: newClass.id,
-                title: m.title,
-                description: m.description,
-                status: m.status,
-                rarity: m.rarity,
-                deadline: m.deadline,
-                backgroundImage: m.backgroundImage,
-              },
-            })
-
-            if (m.enigmas.length > 0) {
-              await tx.missionEnigma.createMany({
-                data: m.enigmas.map((e) => ({
-                  missionId: newMission.id,
-                  title: e.title,
-                  description: e.description,
-                  objectives: e.objectives,
-                  isOptional: e.isOptional,
-                  xpReward: e.xpReward,
-                  coinReward: e.coinReward,
-                  manaReward: e.manaReward,
-                  orderIndex: e.orderIndex,
-                })),
-              })
-            }
+            await copyMissionInto(tx, m, newClass.id)
           }
         }
 
@@ -691,6 +666,90 @@ export class TeachersService {
     )
 
     return { class: { id: created.id, name: created.name }, message: 'Clase duplicada' }
+  }
+
+  /** Importa una misión de una clase a otra: una copia independiente con sus
+   *  enigmas, sus documentos (compartiendo fichero con el origen) y, salvo que
+   *  se pida lo contrario, su insignia, copiada como insignia nueva de quien
+   *  importa. Basta con poder ver la misión de origen y editar las misiones de
+   *  la clase de destino. La copia llega bloqueada y sin fecha límite, para
+   *  revisarla antes de abrirla al alumnado; el origen no cambia. Queda en el
+   *  registro de las dos clases: en el destino, de dónde vino; en el origen,
+   *  quién se llevó una copia y adónde. */
+  async importMission(
+    userId: string,
+    missionId: string,
+    options: { targetClassId: string; copyBadge: boolean }
+  ) {
+    const { classId: fromClassId } = await assertMissionAccess(missionId, userId, 'mission.view')
+    await assertClassAccess(options.targetClassId, userId, 'mission.edit')
+
+    const copy = await prisma.$transaction(
+      async tx => {
+        const source = await readMissionForCopy(tx, missionId)
+        // Si entretanto ha pasado a otra clase, el permiso comprobado ya no vale.
+        if (!source || source.classId !== fromClassId) {
+          throw new NotFoundError('Misión no encontrada')
+        }
+        const result = await copyMissionInto(tx, source, options.targetClassId, {
+          status: 'bloqueada',
+          deadline: null,
+          documents: true,
+          badgeAuthorId: options.copyBadge ? userId : undefined,
+        })
+        const copied = {
+          enigmas: result.enigmas,
+          documents: result.documents,
+          badges: result.badges.length,
+        }
+        await recordClassAction(tx, {
+          classId: options.targetClassId,
+          actorId: userId,
+          action: 'mission.imported',
+          entityType: 'mission',
+          entityId: result.mission.id,
+          metadata: {
+            title: result.mission.title,
+            fromClassId,
+            fromMissionId: missionId,
+            ...copied,
+          },
+        })
+        // Como al duplicar una clase, en el origen queda quién se llevó una copia
+        // (con sus documentos) y adónde. Importada en la misma clase, basta una entrada.
+        if (fromClassId !== options.targetClassId) {
+          await recordClassAction(tx, {
+            classId: fromClassId,
+            actorId: userId,
+            action: 'mission.exported',
+            entityType: 'mission',
+            entityId: missionId,
+            metadata: {
+              title: source.title,
+              toClassId: options.targetClassId,
+              toMissionId: result.mission.id,
+              ...copied,
+            },
+          })
+        }
+        return result
+      },
+      { timeout: 30000 }
+    )
+
+    return {
+      mission: {
+        id: copy.mission.id,
+        classId: copy.mission.classId,
+        title: copy.mission.title,
+        status: copy.mission.status,
+        rarity: copy.mission.rarity,
+        deadline: copy.mission.deadline,
+        backgroundImage: copy.mission.backgroundImage,
+      },
+      copied: { enigmas: copy.enigmas, documents: copy.documents, badges: copy.badges },
+      message: 'Misión importada',
+    }
   }
 
   async setClassArchived(userId: string, classId: string, archived: boolean) {

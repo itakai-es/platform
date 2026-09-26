@@ -12,19 +12,33 @@
       :description="t('teacher.classes.detail.missions_tab.no_missions_description')"
     >
       <template v-if="can('mission.edit')" #action>
-        <NuxtLink :to="`/profesor/misiones/crear?classId=${classId}`">
-          <Button variant="primary">
-            {{ t('teacher.classes.detail.missions_tab.create_first') }}
+        <div class="flex flex-wrap justify-center gap-3">
+          <NuxtLink :to="`/profesor/misiones/crear?classId=${classId}`">
+            <Button variant="primary">
+              {{ t('teacher.classes.detail.missions_tab.create_first') }}
+            </Button>
+          </NuxtLink>
+          <Button variant="outline" @click="openImport">
+            <ArrowDownTrayIcon class="w-4 h-4 mr-2" />
+            {{ t('teacher.missions.import.button_in_class') }}
           </Button>
-        </NuxtLink>
+        </div>
       </template>
     </EmptyState>
 
     <template v-else>
-      <!-- Acción -->
-      <div v-if="can('mission.edit')" class="flex justify-end">
+      <!-- Acciones. En móvil no caben en una fila: una encima de otra, a todo el
+           ancho y con la principal arriba. -->
+      <div
+        v-if="can('mission.edit')"
+        class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end"
+      >
+        <Button :id="importButtonId" variant="outline" class="w-full sm:w-auto" @click="openImport">
+          <ArrowDownTrayIcon class="w-4 h-4 mr-2" />
+          {{ t('teacher.missions.import.button_in_class') }}
+        </Button>
         <NuxtLink :to="`/profesor/misiones/crear?classId=${classId}`">
-          <Button variant="primary">
+          <Button variant="primary" class="w-full sm:w-auto">
             <PlusIcon class="w-4 h-4 mr-2" />
             {{ t('teacher.classes.detail.missions_tab.new_mission') }}
           </Button>
@@ -74,11 +88,21 @@
         />
       </CardCollection>
     </template>
+
+    <!-- Importar una misión de otra clase: una copia que llega bloqueada -->
+    <ImportMissionModal
+      v-if="can('mission.edit')"
+      v-model="importOpen"
+      :class-id="classId"
+      :class-name="state.classData?.name"
+      :return-focus="headerImportButton"
+      @imported="refreshMissions"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { RocketLaunchIcon, PlusIcon } from '@heroicons/vue/24/outline'
+import { RocketLaunchIcon, PlusIcon, ArrowDownTrayIcon } from '@heroicons/vue/24/outline'
 
 definePageMeta({ layout: 'teacher', middleware: ['auth', 'role'] })
 
@@ -162,5 +186,27 @@ const emptyMessage = computed(() => {
 
 function navigateToMission(missionId: string) {
   navigateTo(`/profesor/clases/${classId.value}/misiones/${missionId}`)
+}
+
+// Importar de otra clase. La misión importada llega bloqueada: la lista se
+// vuelve a pedir para que aparezca ya, mientras la ventana dice qué ha llegado.
+const teacherStore = useTeacherStore()
+const importOpen = ref(false)
+// El botón de importar de la cabecera: si se importa desde el estado vacío, ese
+// botón se va con la primera misión y, al cerrar, el foco viene a este.
+const importButtonId = useId()
+const headerImportButton = () => document.getElementById(importButtonId)
+
+function openImport() {
+  importOpen.value = true
+}
+
+async function refreshMissions() {
+  try {
+    const res = await teacherStore.fetchClassMissions(classId.value, true)
+    state.value.missions = res.missions
+  } catch (error) {
+    console.error('Error refreshing class missions:', error)
+  }
 }
 </script>
