@@ -1,6 +1,6 @@
 {
   "name": "itakai-backend",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Backend API for ITAKAI educational platform",
   "main": "dist/index.js",
   "type": "module",

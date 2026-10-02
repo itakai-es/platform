@@ -41,6 +41,85 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.5.0',
+    date: '2026-10-02',
+    title: 'Blog, catálogo público de plantillas e importar misiones',
+    changes: [
+      {
+        type: 'new',
+        text: 'El blog de ITAKAI ya se lee en la propia web, en «Blog»: entradas con portada, fecha y autor, categorías, buscador y, al final de cada una, otras entradas para seguir leyendo.',
+      },
+      {
+        type: 'new',
+        text: 'Catálogo público de plantillas en «Plantillas», sin necesidad de cuenta. Puedes buscar y filtrar por nivel, asignatura, idioma y provincia.',
+      },
+      {
+        type: 'new',
+        text: 'Cada plantilla tiene su propia página con la historia, las funcionalidades, las misiones, la tienda y los comportamientos. Con «Copiar enlace» la compartes con quien quieras. No se muestra quién la publicó.',
+      },
+      {
+        type: 'new',
+        text: 'Al importar una plantilla puedes traer también sus misiones. Llegan con sus enigmas y sin fecha límite. Los documentos y las insignias no se copian.',
+      },
+      {
+        type: 'new',
+        text: 'Importar misiones entre tus clases. En la pestaña «Misiones» de una clase, «Importar de otra clase» copia una misión de otra de tus clases, o de una compartida contigo, con sus enigmas, sus documentos y, si quieres, su insignia.',
+      },
+      {
+        type: 'new',
+        text: 'También puedes importar una misión desde «Misiones», el listado de todas tus misiones, eligiendo antes a qué clase va. Y desde una misión, «Copiar en otra clase» la lleva a otra clase o la duplica en la suya.',
+      },
+      {
+        type: 'new',
+        text: 'La misión importada llega bloqueada y sin fecha límite, para que la revises antes de abrirla al alumnado. Queda apuntada en el historial de las dos clases. Las clases archivadas también sirven de origen si las pides.',
+      },
+      {
+        type: 'new',
+        text: 'Papelera de clases. Quien es propietario de una clase puede enviarla a la papelera desde sus ajustes, en «Gestión». Antes, un aviso dice todo lo que se pierde: estudiantes, entregas, cuentas sin correo, misiones y compras.',
+      },
+      {
+        type: 'new',
+        text: 'En «Mis clases», la «Papelera» enseña las clases enviadas y los días que quedan. Con «Restaurar» vuelve como archivada. Mientras está en la papelera no aparece en ningún listado, ni al alumnado. A los 30 días se borra para siempre, o antes con «Borrar ya».',
+      },
+      {
+        type: 'improved',
+        text: 'Los textos de la aplicación usan un lenguaje que vale para todo el mundo: «docente» y «alumnado» en lugar de «profesor» y «alumno», y saludos y avisos sin masculino genérico. En castellano, catalán, valenciano, gallego, asturiano, portugués y rumano. La IA también escribe así.',
+      },
+      {
+        type: 'improved',
+        text: '«Acerca de», con las novedades de cada versión, aparece también en el menú de administración.',
+      },
+      {
+        type: 'improved',
+        text: 'Nuevas guías en el centro de ayuda: importar una misión de otra clase y el catálogo público de plantillas.',
+      },
+      {
+        type: 'improved',
+        text: 'Más contraste en los textos grises de los avisos de lista vacía, la paginación y el contador de los filtros.',
+      },
+      {
+        type: 'fixed',
+        text: 'Al borrar tu propia cuenta desde el perfil, la ventana se quedaba abierta. Ahora la app te lleva a la pantalla de entrar.',
+      },
+      {
+        type: 'fixed',
+        text: 'En el editor de la ayuda y del blog, la vista previa no enseñaba las imágenes.',
+      },
+      {
+        type: 'fixed',
+        text: 'El icono de ITAKAI no salía en la pestaña de algunos navegadores, como Safari, Edge o Firefox. Ahora sale en todos, y también al añadir la web a la pantalla de inicio del móvil.',
+      },
+      {
+        type: 'fixed',
+        text: 'El botón de la IA no aparecía en algunos editores de texto. Además, en el editor de la ayuda y del blog sobraban unos botones de guardar y cancelar que no hacían nada.',
+      },
+      {
+        type: 'fixed',
+        text: 'Más seguridad en las historias de clases y misiones. Si se escribe HTML, ya no puede imitar botones ni tapar la pantalla.',
+      },
+    ],
+  },
+  {
     version: '0.4.0',
     date: '2026-09-25',
     title: 'Clases compartidas y cuentas sin correo',
