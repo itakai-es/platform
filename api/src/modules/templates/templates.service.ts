@@ -195,6 +195,14 @@ function withPublisher<T extends PublisherRow>(
 }
 
 /**
+ * Largo máximo de un metadato de clase (asignatura, nivel, idioma, provincia),
+ * holgado para las listas cerradas del frontend: ningún valor pasa de 50
+ * caracteres. Es también lo más largo que se lee de un filtro del catálogo: un
+ * valor que no cabe en una clase no casa con ninguna.
+ */
+export const TEMPLATE_METADATA_MAX_LENGTH = 120
+
+/**
  * Filtros del catálogo. De cada metadato se puede pedir más de un valor y vale
  * cualquiera de ellos. Dónde y cómo busca `q` lo dice cada catálogo
  * (`findTemplates` y `listPublicTemplates`).
@@ -205,6 +213,15 @@ export interface TemplateFilters {
   language?: string[]
   province?: string[]
   q?: string
+}
+
+/**
+ * Si `id` puede ser el de una plantilla: los ids son uuid, y con otra forma no
+ * hay nada que buscar. Se comprueba antes de consultar porque un id con un byte
+ * nulo hace fallar la consulta (un 500) donde toca un 404.
+ */
+export function isTemplateId(id: string) {
+  return z.string().uuid().safeParse(id).success
 }
 
 /**
@@ -219,6 +236,7 @@ export function findTemplate(
   userId: string
 ): Promise<(TemplateDetail & TemplatePublisher) | null>
 export async function findTemplate(id: string, userId?: string) {
+  if (!isTemplateId(id)) return null
   const where = { ...AVAILABLE, id }
   if (userId === undefined) {
     const tpl = await prisma.class.findFirst({ where, select: TEMPLATE_DETAIL })
@@ -277,8 +295,8 @@ export async function findTemplates(filters: TemplateFilters, take: number, user
 export const EXCERPT_LENGTH = 200
 /**
  * Cuánto del principio de la narrativa se lee para sacar el extracto: de sobra
- * para `EXCERPT_LENGTH` caracteres de prosa. La narrativa no tiene tope de
- * largo, y la tarjeta no necesita más.
+ * para `EXCERPT_LENGTH` caracteres de prosa. La narrativa puede ser muy larga
+ * (ver `CLASS_TEXT_LIMITS` en teachers.service), y la tarjeta no necesita más.
  */
 export const EXCERPT_SOURCE_LENGTH = 2000
 
@@ -445,8 +463,8 @@ const TEMPLATE_NOT_FOUND = 'Plantilla no encontrada'
  * otra cosa, exista o no, da 404, para no desvelar qué clases existen.
  */
 export async function getPublicTemplate(id: string): Promise<PublicTemplateDetail> {
-  // Los ids son uuid: con otra forma no hay nada que buscar.
-  if (!z.string().uuid().safeParse(id).success) throw new NotFoundError(TEMPLATE_NOT_FOUND)
+  // Antes de nada: con otra forma de id tampoco hay nada que buscar en el historial.
+  if (!isTemplateId(id)) throw new NotFoundError(TEMPLATE_NOT_FOUND)
 
   const [tpl, publicCover] = await Promise.all([findTemplate(id), publicUploadResolver()])
   if (!tpl) {

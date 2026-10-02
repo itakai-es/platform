@@ -1061,7 +1061,7 @@ describeWithDatabase('catálogo público de plantillas', () => {
     for (const id of [retiredId, archivedId, privateId, 'no-es-un-uuid']) {
       const missing = await get(`/teacher/templates/${id}`, { actor: 'other' })
       expect(missing.statusCode, id).toBe(404)
-      expect(missing.json()).toEqual({ message: 'Plantilla no encontrada' })
+      expect(missing.json()).toEqual({ message: 'Plantilla no encontrada', code: 'NOT_FOUND' })
     }
   })
 })

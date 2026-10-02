@@ -28,20 +28,25 @@ export const PUBLIC_TEMPLATES_MAX_PAGE_SIZE = 48
 const MAX_PAGE = 10_000
 
 /**
- * De cada filtro se leen como mucho tantos valores y de este largo, holgados
- * para las listas cerradas del frontend (la más larga, las asignaturas de todos
- * los niveles, no llega a 80; ningún valor pasa de 50 caracteres).
+ * De cada filtro se leen como mucho tantos valores y del largo de un metadato
+ * de clase, holgados para las listas cerradas del frontend (la más larga, las
+ * asignaturas de todos los niveles, no llega a 80; ningún valor pasa de 50
+ * caracteres).
  */
 const MAX_FILTER_VALUES = 100
-const MAX_FILTER_LENGTH = 120
+const MAX_FILTER_LENGTH = templates.TEMPLATE_METADATA_MAX_LENGTH
 const MAX_SEARCH_LENGTH = 100
 
-interface PublicTemplatesQuery {
+/** Los filtros del catálogo tal como llegan en la consulta, sin comprobar. */
+export interface TemplateFiltersQuery {
   subject?: unknown
   educationLevel?: unknown
   language?: unknown
   province?: unknown
   q?: unknown
+}
+
+interface PublicTemplatesQuery extends TemplateFiltersQuery {
   sort?: unknown
   page?: unknown
   limit?: unknown
@@ -68,6 +73,21 @@ function searchTerm(value: unknown) {
 }
 
 /**
+ * Los filtros de la consulta, leídos sin rechazar nada: lo que no tiene la
+ * forma esperada (un valor que no es texto, un byte nulo, uno demasiado largo)
+ * se ignora. Los leen así los dos catálogos, el público y el del profesorado.
+ */
+export function templateFiltersOf(query: TemplateFiltersQuery): templates.TemplateFilters {
+  return {
+    subject: strList(query.subject),
+    educationLevel: strList(query.educationLevel),
+    language: strList(query.language),
+    province: strList(query.province),
+    q: searchTerm(query.q),
+  }
+}
+
+/**
  * Página pedida (desde 1) y tamaño, ya dentro de límites: lo que pasa de ellos
  * se recorta y lo que no es un número cuenta como no puesto.
  */
@@ -86,16 +106,10 @@ export async function publicTemplateRoutes(fastify: FastifyInstance) {
   fastify.get('/', async (request: FastifyRequest<{ Querystring: PublicTemplatesQuery }>) => {
     consumeRateLimit(`public-templates:list:${rateLimitOrigin(request.ip)}`, PUBLIC_TEMPLATES_LIMIT)
     const { query } = request
-    return templates.listPublicTemplates(
-      {
-        subject: strList(query.subject),
-        educationLevel: strList(query.educationLevel),
-        language: strList(query.language),
-        province: strList(query.province),
-        q: searchTerm(query.q),
-      },
-      { sort: pickOne(templates.TEMPLATE_SORTS, query.sort), ...pageOf(query) }
-    )
+    return templates.listPublicTemplates(templateFiltersOf(query), {
+      sort: pickOne(templates.TEMPLATE_SORTS, query.sort),
+      ...pageOf(query),
+    })
   })
 
   /** La ficha de una plantilla: adonde lleva un enlace compartido. */

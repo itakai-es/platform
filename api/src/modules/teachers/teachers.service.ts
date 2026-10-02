@@ -42,7 +42,13 @@ import {
   unusedAccountHomeClass,
 } from './class-students.service.js'
 import { copyMissionInto, readMissionForCopy, type MissionCopyOptions } from './mission-copy.js'
-import { findTemplate, findTemplates } from '../templates/templates.service.js'
+import {
+  findTemplate,
+  findTemplates,
+  isTemplateId,
+  TEMPLATE_METADATA_MAX_LENGTH,
+  type TemplateFilters,
+} from '../templates/templates.service.js'
 import { missionRewards } from '../../utils/mission-formatter.js'
 
 const BADGES_DIR = join(process.cwd(), 'uploads', 'badges')
@@ -74,6 +80,75 @@ const CLASS_UPDATE_FIELDS = [
 
 /** Metadatos de la clase: cambiarlos es un ajuste, no contenido. */
 const CLASS_METADATA_FIELDS = ['subject', 'language', 'educationLevel', 'province'] as const
+
+/**
+ * Largo máximo, en caracteres, de lo que se escribe en una clase y sale en
+ * abierto en la ficha pública de una plantilla, con cómo se nombra en el
+ * mensaje de error. Muy por encima de lo que hay guardado (en desarrollo, el
+ * nombre más largo es de 86 y la historia más larga, de unos 6.500): no
+ * estorban a nadie y cortan lo que no es una clase. El nombre, como al crearla
+ * desde el asistente; la historia, unas 25 páginas de texto, cuando las que
+ * escribe la IA rondan las 2 o 3; los metadatos, los de las listas cerradas del
+ * frontend (ver `TEMPLATE_METADATA_MAX_LENGTH`).
+ */
+export const CLASS_TEXT_LIMITS = {
+  name: { max: 200, label: 'El nombre de la clase' },
+  narrative: { max: 50_000, label: 'La historia de la clase' },
+  subject: { max: TEMPLATE_METADATA_MAX_LENGTH, label: 'La asignatura' },
+  language: { max: TEMPLATE_METADATA_MAX_LENGTH, label: 'El idioma' },
+  educationLevel: { max: TEMPLATE_METADATA_MAX_LENGTH, label: 'El nivel educativo' },
+  province: { max: TEMPLATE_METADATA_MAX_LENGTH, label: 'La provincia' },
+} as const
+
+/** Lo que se añade al nombre de una clase al duplicarla o importarla. */
+const COPY_SUFFIX = ' (copia)'
+
+/**
+ * Los topes cuentan caracteres de verdad: un emoji es uno, aunque en JavaScript
+ * ocupe dos unidades (un par sustituto). Y al recortar no se parte ningún par,
+ * que se guardaría como «�».
+ */
+const charLength = (value: string) => Array.from(value).length
+const clipChars = (value: string, max: number) =>
+  value.length <= max ? value : Array.from(value).slice(0, max).join('')
+
+type ClassTextField = keyof typeof CLASS_TEXT_LIMITS
+
+/**
+ * Comprueba los textos y la portada que llegan para guardar en una clase, antes
+ * de tocar nada. Lo que llega igual que lo guardado (`current`) pasa siempre:
+ * el formulario de ajustes manda el nombre y la portada aunque no se toquen, y
+ * una clase de antes de los topes, o con una portada de cuando el
+ * almacenamiento era otro, no puede quedarse sin poder editar lo demás.
+ *
+ * La portada nueva tiene que ser una imagen subida en ese momento (una data URL,
+ * que se guarda en /uploads) o un fichero público de la plataforma, como los que
+ * devuelven la subida y la portada de la IA: la ficha pública no enseña otra
+ * (ver `publicUploadFromUrl`), y una de fuera la pediría el navegador de cada
+ * alumno. Vacía, la quita.
+ */
+async function assertClassFields(
+  data: Partial<Record<ClassTextField | 'backgroundImage', string>>,
+  current?: Partial<Record<ClassTextField | 'backgroundImage', string | null>>
+) {
+  for (const field of Object.keys(CLASS_TEXT_LIMITS) as ClassTextField[]) {
+    const value = data[field]
+    if (value === undefined || value === current?.[field]) continue
+    const { max, label } = CLASS_TEXT_LIMITS[field]
+    // Con menos unidades que el tope ya cabe: solo se cuentan los largos.
+    if (value.length > max && charLength(value) > max) {
+      throw new ValidationError(
+        `${label} no puede pasar de ${max.toLocaleString('es-ES')} caracteres.`
+      )
+    }
+  }
+
+  const cover = data.backgroundImage
+  if (!cover || cover === current?.backgroundImage || cover.startsWith('data:image/')) return
+  if (!(await publicUploadResolver())(cover)) {
+    throw new ValidationError('La portada tiene que ser una imagen subida a la plataforma.')
+  }
+}
 
 /** El código de invitación solo lo recibe quien puede invitar alumnos a la clase. */
 function visibleInvitationCode(access: ClassAccess | null, code: string) {
@@ -245,6 +320,7 @@ export class TeachersService {
   }
 
   async createClass(userId: string, data: { name: string; narrative?: string; schedule?: string; backgroundImage?: string; subject?: string; language?: string; educationLevel?: string; province?: string }) {
+    await assertClassFields(data)
     const invitationCode = nanoid(6).toUpperCase()
 
     // If the teacher uploaded their own cover it arrives as a base64 data URL;
@@ -298,6 +374,8 @@ export class TeachersService {
         field => data[field] !== undefined && (data[field] || null) !== (cls[field] || null)
       )
     if (touchesSettings) access = await assertClassAccess(classId, userId, 'class.editSettings')
+
+    await assertClassFields(data, cls)
 
     // Invariante del marketplace: una plantilla publicada no puede quedarse sin
     // los metadatos que exige el filtro (asignatura, nivel, idioma). Se comprueba
@@ -419,7 +497,7 @@ export class TeachersService {
       if (!cls.educationLevel) missing.push('educationLevel')
       if (!cls.language) missing.push('language')
       if (missing.length > 0) {
-        throw new Error('Completa los metadatos de la clase (asignatura, nivel e idioma) antes de publicarla como plantilla.')
+        throw new ValidationError('Completa los metadatos de la clase (asignatura, nivel e idioma) antes de publicarla como plantilla.')
       }
     }
 
@@ -437,24 +515,10 @@ export class TeachersService {
   }
 
   /** Lista las plantillas públicas del marketplace, con filtros opcionales. La
-   *  consulta vive con la del catálogo público (ver modules/templates); aquí, un
-   *  valor por filtro y sin paginar: hasta 100. */
-  async listTemplates(
-    userId: string,
-    filters: { subject?: string; educationLevel?: string; language?: string; province?: string; q?: string } = {}
-  ) {
-    const one = (value?: string) => (value ? [value] : undefined)
-    const templates = await findTemplates(
-      {
-        subject: one(filters.subject),
-        educationLevel: one(filters.educationLevel),
-        language: one(filters.language),
-        province: one(filters.province),
-        q: filters.q,
-      },
-      100,
-      userId
-    )
+   *  consulta y la lectura de los filtros viven con las del catálogo público
+   *  (ver modules/templates); aquí, sin paginar: hasta 100. */
+  async listTemplates(userId: string, filters: TemplateFilters = {}) {
+    const templates = await findTemplates(filters, 100, userId)
 
     return {
       templates: templates.map(t => ({
@@ -481,7 +545,7 @@ export class TeachersService {
    *  Una plantilla cuya clase está archivada deja de estar disponible, como en el listado. */
   async getTemplateDetail(userId: string, templateClassId: string) {
     const tpl = await findTemplate(templateClassId, userId)
-    if (!tpl) throw new Error('Plantilla no encontrada')
+    if (!tpl) throw new NotFoundError('Plantilla no encontrada')
 
     return {
       id: tpl.id,
@@ -531,7 +595,8 @@ export class TeachersService {
         const newClass = await createClassWithOwner(
           tx,
           {
-            name: `${source.name} (copia)`,
+            // Recortado para que la copia quepa en el tope del nombre.
+            name: `${clipChars(source.name, CLASS_TEXT_LIMITS.name.max - COPY_SUFFIX.length)}${COPY_SUFFIX}`,
             narrative: options.narrative ? source.narrative : null,
             backgroundImage: options.narrative ? source.backgroundImage : null,
             settings: (options.features
@@ -613,6 +678,7 @@ export class TeachersService {
     templateClassId: string,
     options: { missions: boolean } = { missions: false }
   ) {
+    if (!isTemplateId(templateClassId)) throw new NotFoundError('Plantilla no encontrada')
     const tpl = await prisma.class.findFirst({
       // Una plantilla cuya clase está archivada deja de estar disponible, como en el listado.
       where: { id: templateClassId, isTemplate: true, archived: false },

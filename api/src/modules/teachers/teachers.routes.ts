@@ -5,6 +5,7 @@ import { shopService } from '../shop/shop.service.js'
 import { behaviorsService } from '../behaviors/behaviors.service.js'
 import { z, ZodError } from 'zod'
 import { scheduleConfigSchema } from './schedule-config.schema.js'
+import { templateFiltersOf, type TemplateFiltersQuery } from '../templates/templates.routes.js'
 import { ServiceUnavailableError, rethrowHttpError } from '../../utils/errors.js'
 import { consumeRateLimit, releaseRateLimit } from '../../utils/rate-limit.js'
 import { USERNAME_MAX_LENGTH, USERNAME_MIN_LENGTH } from '../../utils/identity.js'
@@ -338,6 +339,8 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
+      // Un texto que no cabe o una portada que no vale (400) llegan con su mensaje.
+      rethrowHttpError(error)
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
@@ -506,11 +509,11 @@ export async function teacherRoutes(fastify: FastifyInstance) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
       // El acceso (404/403) y las validaciones, como la de una plantilla publicada
-      // sin metadatos (400), llegan con su estado.
+      // sin metadatos o la del largo de la historia (400), llegan con su estado;
+      // cualquier otro fallo, un 500 sin el detalle interno (el editor de la
+      // historia enseña el mensaje que llega).
       rethrowHttpError(error)
-      if (error instanceof Error) {
-        return reply.status(404).send({ message: error.message })
-      }
+      request.log.error(error, 'Error al guardar la clase')
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
@@ -526,23 +529,24 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
+      // El acceso (404/403) y los metadatos que faltan (400) llegan con su
+      // estado; cualquier otro fallo, como un 500 sin el detalle interno.
       rethrowHttpError(error)
-      if (error instanceof Error) {
-        return reply.status(400).send({ message: error.message })
-      }
+      request.log.error(error, 'Error al publicar o retirar una plantilla')
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
 
-  fastify.get('/templates', async (request: FastifyRequest<{ Querystring: { subject?: string; educationLevel?: string; language?: string; province?: string; q?: string } }>, reply: FastifyReply) => {
+  // El catálogo lee los filtros como el público: lo que no tiene la forma
+  // esperada (la clave repetida, un byte nulo…) se ignora en vez de llegar a la
+  // base. Ante un fallo interno, el detalle va al registro y no a la respuesta.
+  fastify.get('/templates', async (request: FastifyRequest<{ Querystring: TemplateFiltersQuery }>, reply: FastifyReply) => {
     try {
       const { id } = request.user as { id: string }
-      const result = await teachersService.listTemplates(id, request.query)
+      const result = await teachersService.listTemplates(id, templateFiltersOf(request.query))
       return result
     } catch (error) {
-      if (error instanceof Error) {
-        return reply.status(500).send({ message: error.message })
-      }
+      request.log.error(error, 'Error al listar las plantillas')
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
@@ -553,9 +557,9 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       const result = await teachersService.getTemplateDetail(id, request.params.classId)
       return result
     } catch (error) {
-      if (error instanceof Error) {
-        return reply.status(404).send({ message: error.message })
-      }
+      // La plantilla que no está da su 404; cualquier otro fallo, un 500 sin el detalle.
+      rethrowHttpError(error)
+      request.log.error(error, 'Error al leer una plantilla')
       return reply.status(500).send({ message: 'Error interno' })
     }
   })

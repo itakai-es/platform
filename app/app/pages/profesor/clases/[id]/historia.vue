@@ -71,8 +71,12 @@ async function save(content: string) {
     setClassData({ narrative: content })
     isEditing.value = false
     toast.success(t('teacher.classes.detail.guide_editor.toast_saved'))
-  } catch {
-    toast.error(t('teacher.classes.detail.guide_editor.toast_error'))
+  } catch (err: unknown) {
+    // El mensaje del backend cuando rechaza lo escrito (un 4xx, p. ej. una
+    // historia que pasa del tope de largo); ante un fallo suyo, el genérico.
+    const { statusCode, data } = (err ?? {}) as { statusCode?: number; data?: { message?: string } }
+    const rejected = statusCode !== undefined && statusCode < 500 ? data?.message : undefined
+    toast.error(rejected || t('teacher.classes.detail.guide_editor.toast_error'))
   }
 }
 </script>
