@@ -287,6 +287,25 @@
       "load_error": "Ezin izan da edukia kargatu",
       "retry": "Saiatu berriro"
     },
+    "about": {
+      "title": "ITAKAIri buruz",
+      "subtitle": "Berritasunak eta bertsioen erregistroa",
+      "breadcrumb": "Honi buruz",
+      "breadcrumb_home": "Hasiera",
+      "current_version": "Uneko bertsioa",
+      "latest": "Azken bertsioa",
+      "versions_index": "Bertsioak",
+      "footer_note": "Zerbait falta duzu edo akatsen bat aurkitu duzu? Esaguzu eta hurrengo bertsioetarako kontuan hartuko dugu.",
+      "groups": {
+        "new": "Berritasunak",
+        "improved": "Hobekuntzak",
+        "fixed": "Konponketak"
+      },
+      "meta": {
+        "title": "Honi buruz | ITAKAI",
+        "description": "ITAKAIren bertsio bakoitzeko berritasunak, hobekuntzak eta konponketak."
+      }
+    },
     "meta": {
       "site_title": "ITAKAI - Ikasteko abentura | Hezkuntza plataforma gamifikatua",
       "site_description": "Eraldatu hezkuntza ITAKAI-rekin, ikasleak, irakasleak eta familiak inspiratzen, motibatzen eta konektatzen dituen plataforma gamifikatua. Batu 50.000 ikasle baino gehiagotara.",

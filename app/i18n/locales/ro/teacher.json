@@ -1,24 +1,5 @@
 {
   "teacher": {
-    "about": {
-      "title": "Despre ITAKAI",
-      "subtitle": "Noutăți și istoricul versiunilor",
-      "breadcrumb": "Despre",
-      "breadcrumb_home": "Acasă",
-      "current_version": "Versiunea actuală",
-      "latest": "Ultima versiune",
-      "versions_index": "Versiuni",
-      "footer_note": "Îți lipsește ceva sau ai găsit o eroare? Spune-ne și vom ține cont în versiunile următoare.",
-      "groups": {
-        "new": "Noutăți",
-        "improved": "Îmbunătățiri",
-        "fixed": "Remedieri"
-      },
-      "meta": {
-        "title": "Despre | ITAKAI",
-        "description": "Noutăți, îmbunătățiri și remedieri pentru fiecare versiune ITAKAI."
-      }
-    },
     "dashboard": {
       "title": "Pagina cadrului didactic",
       "subtitle": "Bine ai venit, {name}!",

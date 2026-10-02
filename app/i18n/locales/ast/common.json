@@ -287,6 +287,25 @@
       "load_error": "Nun se pudo cargar el conteníu",
       "retry": "Volver tentalo"
     },
+    "about": {
+      "title": "Tocante a ITAKAI",
+      "subtitle": "Novedaes y rexistru de versiones",
+      "breadcrumb": "Tocante a",
+      "breadcrumb_home": "Aniciu",
+      "current_version": "Versión actual",
+      "latest": "Última versión",
+      "versions_index": "Versiones",
+      "footer_note": "¿Eches en falta daqué o atopasti un fallu? Cuéntanoslo y vamos tenelo en cuenta pa les próximes versiones.",
+      "groups": {
+        "new": "Novedaes",
+        "improved": "Ameyores",
+        "fixed": "Igües"
+      },
+      "meta": {
+        "title": "Tocante a | ITAKAI",
+        "description": "Novedaes, ameyores y correiciones de cada versión d'ITAKAI."
+      }
+    },
     "meta": {
       "site_title": "ITAKAI - L'aventura de deprender | Plataforma educativa gamificada",
       "site_description": "Tresforma la educación con ITAKAI, la plataforma gamificada qu'inspira, motiva y coneuta al alumnáu, al profesoráu y a les families. Xúnite a más de 50.000 estudiantes.",

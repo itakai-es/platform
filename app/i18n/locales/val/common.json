@@ -287,6 +287,25 @@
       "load_error": "No s'ha pogut carregar el contingut",
       "retry": "Torna-ho a intentar"
     },
+    "about": {
+      "title": "Sobre ITAKAI",
+      "subtitle": "Novetats i registre de versions",
+      "breadcrumb": "Sobre",
+      "breadcrumb_home": "Inici",
+      "current_version": "Versió actual",
+      "latest": "Última versió",
+      "versions_index": "Versions",
+      "footer_note": "Trobes a faltar alguna cosa o has trobat un error? Conta-nos-ho i ho tindrem en compte per a pròximes versions.",
+      "groups": {
+        "new": "Novetats",
+        "improved": "Millores",
+        "fixed": "Correccions"
+      },
+      "meta": {
+        "title": "Sobre | ITAKAI",
+        "description": "Novetats, millores i correccions de cada versió d'ITAKAI."
+      }
+    },
     "meta": {
       "site_title": "ITAKAI - L'aventura d'aprendre | Plataforma educativa gamificada",
       "site_description": "Transforma l'educació amb ITAKAI, la plataforma gamificada que inspira, motiva i connecta l'alumnat, el professorat i les famílies. Unix-te a més de 50.000 estudiants.",

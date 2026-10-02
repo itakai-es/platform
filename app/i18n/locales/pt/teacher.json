@@ -1,24 +1,5 @@
 {
   "teacher": {
-    "about": {
-      "title": "Sobre o ITAKAI",
-      "subtitle": "Novidades e registo de versões",
-      "breadcrumb": "Sobre",
-      "breadcrumb_home": "Início",
-      "current_version": "Versão atual",
-      "latest": "Última versão",
-      "versions_index": "Versões",
-      "footer_note": "Sentes falta de alguma coisa ou encontraste um erro? Diz-nos e teremos isso em conta nas próximas versões.",
-      "groups": {
-        "new": "Novidades",
-        "improved": "Melhorias",
-        "fixed": "Correções"
-      },
-      "meta": {
-        "title": "Sobre | ITAKAI",
-        "description": "Novidades, melhorias e correções de cada versão do ITAKAI."
-      }
-    },
     "dashboard": {
       "title": "Início docente",
       "subtitle": "Olá, {name}!",

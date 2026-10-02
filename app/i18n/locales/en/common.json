@@ -287,6 +287,25 @@
       "load_error": "The content couldn't be loaded",
       "retry": "Try again"
     },
+    "about": {
+      "title": "About ITAKAI",
+      "subtitle": "What's new and version history",
+      "breadcrumb": "About",
+      "breadcrumb_home": "Home",
+      "current_version": "Current version",
+      "latest": "Latest version",
+      "versions_index": "Versions",
+      "footer_note": "Missing something or found a bug? Let us know and we'll consider it for upcoming versions.",
+      "groups": {
+        "new": "New",
+        "improved": "Improvements",
+        "fixed": "Fixes"
+      },
+      "meta": {
+        "title": "About | ITAKAI",
+        "description": "What's new, improvements and fixes in each version of ITAKAI."
+      }
+    },
     "meta": {
       "site_title": "ITAKAI - The adventure of learning | Gamified educational platform",
       "site_description": "Transform education with ITAKAI, the gamified platform that inspires, motivates, and connects students, teachers, and families. Join over 50,000 students.",

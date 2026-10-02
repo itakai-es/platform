@@ -47,7 +47,6 @@ import { ref, computed, watch, onMounted } from 'vue'
 import {
   HomeIcon,
   UsersIcon,
-  BuildingOffice2Icon,
   AcademicCapIcon,
   RocketLaunchIcon,
   ChartBarIcon,
@@ -55,6 +54,7 @@ import {
   BookOpenIcon,
   NewspaperIcon,
   Cog6ToothIcon,
+  InformationCircleIcon,
 } from '@heroicons/vue/24/outline'
 import { ROUTE_NAMES } from '~/utils/navigation'
 
@@ -149,6 +149,13 @@ const navItems = computed<AdminNavItem[]>(() => [
     to: '/admin/configuracion',
     label: t('admin.settings.title'),
     icon: Cog6ToothIcon,
+  },
+  // La versión instalada y sus novedades: cierra «Sistema», como en el
+  // profesorado cierra «Ayuda».
+  {
+    to: ROUTE_NAMES.ADMIN_ABOUT,
+    label: t('common.nav.about'),
+    icon: InformationCircleIcon,
   },
 ])
 </script>

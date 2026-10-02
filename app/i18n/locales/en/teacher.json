@@ -1,24 +1,5 @@
 {
   "teacher": {
-    "about": {
-      "title": "About ITAKAI",
-      "subtitle": "What's new and version history",
-      "breadcrumb": "About",
-      "breadcrumb_home": "Home",
-      "current_version": "Current version",
-      "latest": "Latest version",
-      "versions_index": "Versions",
-      "footer_note": "Missing something or found a bug? Let us know and we'll consider it for upcoming versions.",
-      "groups": {
-        "new": "New",
-        "improved": "Improvements",
-        "fixed": "Fixes"
-      },
-      "meta": {
-        "title": "About | ITAKAI",
-        "description": "What's new, improvements and fixes in each version of ITAKAI."
-      }
-    },
     "dashboard": {
       "title": "Teacher dashboard",
       "subtitle": "Welcome, {name}!",

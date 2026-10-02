@@ -1,24 +1,5 @@
 {
   "teacher": {
-    "about": {
-      "title": "ITAKAIri buruz",
-      "subtitle": "Berritasunak eta bertsioen erregistroa",
-      "breadcrumb": "Honi buruz",
-      "breadcrumb_home": "Hasiera",
-      "current_version": "Uneko bertsioa",
-      "latest": "Azken bertsioa",
-      "versions_index": "Bertsioak",
-      "footer_note": "Zerbait falta duzu edo akatsen bat aurkitu duzu? Esaguzu eta hurrengo bertsioetarako kontuan hartuko dugu.",
-      "groups": {
-        "new": "Berritasunak",
-        "improved": "Hobekuntzak",
-        "fixed": "Konponketak"
-      },
-      "meta": {
-        "title": "Honi buruz | ITAKAI",
-        "description": "ITAKAIren bertsio bakoitzeko berritasunak, hobekuntzak eta konponketak."
-      }
-    },
     "dashboard": {
       "title": "Irakaslearen dashboarda",
       "subtitle": "Ongi etorri, {name}!",

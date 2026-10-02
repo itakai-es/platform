@@ -1,24 +1,5 @@
 {
   "teacher": {
-    "about": {
-      "title": "Tocante a ITAKAI",
-      "subtitle": "Novedaes y rexistru de versiones",
-      "breadcrumb": "Tocante a",
-      "breadcrumb_home": "Aniciu",
-      "current_version": "Versión actual",
-      "latest": "Última versión",
-      "versions_index": "Versiones",
-      "footer_note": "¿Eches en falta daqué o atopasti un fallu? Cuéntanoslo y vamos tenelo en cuenta pa les próximes versiones.",
-      "groups": {
-        "new": "Novedaes",
-        "improved": "Ameyores",
-        "fixed": "Igües"
-      },
-      "meta": {
-        "title": "Tocante a | ITAKAI",
-        "description": "Novedaes, ameyores y correiciones de cada versión d'ITAKAI."
-      }
-    },
     "dashboard": {
       "title": "Aniciu docente",
       "subtitle": "¡Hola, {name}!",

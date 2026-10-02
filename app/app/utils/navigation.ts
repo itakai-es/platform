@@ -36,6 +36,7 @@ export const ROUTE_NAMES = {
   TEACHER_BADGES: '/profesor/insignias',
   TEACHER_AI_ASSISTANT: '/profesor/asistente',
   TEACHER_NOTIFICATIONS: '/profesor/avisos',
+  TEACHER_ABOUT: '/profesor/acerca-de',
 
   // Admin
   ADMIN_DASHBOARD: '/admin/inicio',
@@ -47,6 +48,7 @@ export const ROUTE_NAMES = {
   ADMIN_HELP: '/admin/ayuda',
   ADMIN_BLOG: '/admin/blog',
   ADMIN_SETTINGS: '/admin/configuracion',
+  ADMIN_ABOUT: '/admin/acerca-de',
 } as const
 
 export const getDashboardByRole = (role: string): string => {

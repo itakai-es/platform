@@ -287,6 +287,25 @@
       "load_error": "Conținutul nu a putut fi încărcat",
       "retry": "Încearcă din nou"
     },
+    "about": {
+      "title": "Despre ITAKAI",
+      "subtitle": "Noutăți și istoricul versiunilor",
+      "breadcrumb": "Despre",
+      "breadcrumb_home": "Acasă",
+      "current_version": "Versiunea actuală",
+      "latest": "Ultima versiune",
+      "versions_index": "Versiuni",
+      "footer_note": "Îți lipsește ceva sau ai găsit o eroare? Spune-ne și vom ține cont în versiunile următoare.",
+      "groups": {
+        "new": "Noutăți",
+        "improved": "Îmbunătățiri",
+        "fixed": "Remedieri"
+      },
+      "meta": {
+        "title": "Despre | ITAKAI",
+        "description": "Noutăți, îmbunătățiri și remedieri pentru fiecare versiune ITAKAI."
+      }
+    },
     "meta": {
       "site_title": "ITAKAI - Aventura de a învăța | Platformă educațională gamificată",
       "site_description": "Transformă educația cu ITAKAI, platforma gamificată care inspiră, motivează și conectează elevi, cadre didactice și familii. Alătură-te celor peste 50.000 de elevi.",
