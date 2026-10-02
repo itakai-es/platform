@@ -193,7 +193,7 @@ describeWithDatabase('profesorado de una clase y autoría', () => {
       )
       expect(notice.metadata).toMatchObject({ classId: f.classId })
       expect(notice.actionUrl).toBe(`/profesor/clases/${f.classId}`)
-      expect(notice.message).toContain('«Sustituto»')
+      expect(notice.message).toContain('«Sustitución»')
       expect(notice.message).toContain('edición')
     })
 

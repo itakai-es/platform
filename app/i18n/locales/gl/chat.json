@@ -28,14 +28,14 @@
       "teacher_suggestions": [
         "Como creo unha nova misión?",
         "Como xestiono a miña clase?",
-        "Como reviso o progreso dos estudantes?",
+        "Como reviso o progreso do meu alumnado?",
         "Como asigno puntos extra?"
       ]
     },
     "god_messages": {
       "student": [
         "Necesitas axuda coa túa misión?",
-        "Imos aprender xuntos!",
+        "Imos aprender en equipo!",
         "Dúbidas coa tarefa?",
         "Pregúntame o que queiras!",
         "Estou aquí para axudarche",
@@ -46,9 +46,9 @@
       "teacher": [
         "Como van as túas clases?",
         "Necesitas crear unha misión?",
-        "Dúbidas sobre os teus estudantes?",
+        "Dúbidas sobre o teu alumnado?",
         "Estou para asistirche",
-        "Revisamos algo xuntos?",
+        "Revisamos algo en equipo?",
         "Ideas para a túa clase?",
         "Planifiquemos a lección!",
         "Como che axudo hoxe?"
@@ -56,8 +56,8 @@
       "admin": ["Necesitas axuda?", "Ao teu servizo", "En que che axudo?", "Estou aquí!"]
     },
     "user_subtitles": {
-      "teacher": "Profesor",
-      "default": "Usuario"
+      "teacher": "Docente",
+      "default": "A túa conta"
     },
     "mission_actions": {
       "fallback_title": "esta misión",
@@ -71,7 +71,7 @@
       },
       "m3": {
         "label": "Imos comezar!",
-        "message": "Ola {god}, estou listo para comezar a misión \"{title}\". Por onde empezo?"
+        "message": "Ola {god}, teño ganas de comezar a misión \"{title}\". Por onde empezo?"
       },
       "m4": {
         "label": "Explícame os enigmas",
@@ -79,7 +79,7 @@
       },
       "m5": {
         "label": "Dáme pistas sen spoilers",
-        "message": "Ola {god}, estou atascado na misión \"{title}\". Podes darme algunha pista sen spoilers?"
+        "message": "Ola {god}, atranqueime na misión \"{title}\". Podes darme algunha pista sen spoilers?"
       },
       "m6": {
         "label": "Como mellorar a miña entrega?",
@@ -110,15 +110,15 @@
         },
         "t4": {
           "label": "Deseña criterios de avaliación",
-          "message": "Axúdame a deseñar criterios de avaliación xustos e motivadores para os meus alumnos."
+          "message": "Axúdame a deseñar criterios de avaliación xustos e motivadores para o meu alumnado."
         },
         "t5": {
           "label": "Suxire unha insignia temática",
-          "message": "Necesito ideas para crear unha insignia que motive os meus alumnos. Que suxires?"
+          "message": "Necesito ideas para crear unha insignia que motive o meu alumnado. Que suxires?"
         },
         "t6": {
-          "label": "Mellora a miña guía do alumno",
-          "message": "Quero mellorar a guía que lles dou aos meus alumnos. Como podo facela máis útil?"
+          "label": "Mellora a miña guía da clase",
+          "message": "Quero mellorar a guía que lle dou ao meu alumnado. Como podo facela máis útil?"
         },
         "t7": {
           "label": "Ideas para gamificar un tema",
@@ -126,19 +126,19 @@
         },
         "t8": {
           "label": "Crea un reto semanal",
-          "message": "Quero lanzar un reto semanal para motivar os meus alumnos. Que ideas tes?"
+          "message": "Quero lanzar un reto semanal para motivar o meu alumnado. Que ideas tes?"
         },
         "t9": {
           "label": "Estratexias para motivar",
-          "message": "Algúns alumnos están desmotivados. Que estratexias de gamificación me recomendas?"
+          "message": "Parte do meu alumnado perdeu a motivación. Que estratexias de gamificación me recomendas?"
         },
         "t10": {
           "label": "Adapta unha actividade a niveis",
-          "message": "Teño alumnos de distintos niveis. Como podo adaptar unha actividade para todos?"
+          "message": "Teño estudantes de distintos niveis. Como podo adaptar unha actividade para toda a clase?"
         },
         "t11": {
           "label": "Redacta unha guía de misión",
-          "message": "Necesito redactar unha guía para presentar unha misión aos meus alumnos. Bótasme unha man?"
+          "message": "Necesito redactar unha guía para presentar unha misión ao meu alumnado. Bótasme unha man?"
         },
         "t12": {
           "label": "Planifica unha secuencia didáctica",
@@ -152,7 +152,7 @@
         },
         "s2": {
           "label": "Dáme pistas para un enigma",
-          "message": "Estou atascado nun enigma. Podes darme algunha pista sen spoilers?"
+          "message": "Atranqueime nun enigma. Podes darme algunha pista sen spoilers?"
         },
         "s3": {
           "label": "Consellos para subir de nivel",
@@ -176,7 +176,7 @@
         },
         "s8": {
           "label": "Motívame para seguir",
-          "message": "Estou un pouco desanimado. Podes motivarme para seguir avanzando?"
+          "message": "Fáltame un pouco de ánimo. Podes motivarme para seguir avanzando?"
         },
         "s9": {
           "label": "Explícame cun exemplo",

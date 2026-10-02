@@ -151,7 +151,7 @@ export const useAuthStore = defineStore('auth', () => {
   const loginAsRole = (role: 'student' | 'teacher' | 'admin') => {
     const roleNames = {
       student: 'Estudiante Demo',
-      teacher: 'Profesor Demo',
+      teacher: 'Docente Demo',
       admin: 'Admin Demo',
     }
 

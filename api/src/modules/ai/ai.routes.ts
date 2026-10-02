@@ -235,17 +235,17 @@ export async function aiRoutes(fastify: FastifyInstance) {
       const contextPart = data.context
         ? (locale === 'en'
           ? `Context about the class the teacher wants to create: ${data.context}`
-          : `Contexto sobre la clase que el profesor quiere crear: ${data.context}`)
+          : `Contexto sobre la clase que su docente quiere crear: ${data.context}`)
         : ''
       const feedbackPart = data.feedback
         ? (locale === 'en'
           ? `The teacher says about the titles: "${data.feedback}". Take their feedback into account.`
-          : `El profesor dice sobre los titulos: "${data.feedback}". Ten en cuenta su feedback.`)
+          : `Su docente dice sobre los titulos: "${data.feedback}". Ten en cuenta su feedback.`)
         : ''
 
       const prompt = (locale === 'en'
         ? `${contextPart} ${feedbackPart} Generate exactly 20 names for this class. They must fit the class theme and narrative and weave in the subject naturally and evocatively. Vary the style a lot so they don't all sound alike (some epic, some elegant, some playful, some sober). They can be creative but still recognizable as a class name. Do NOT put the course or academic level (e.g. "Grade 7", "1st ESO") in the name unless the teacher explicitly asks. Return ONLY a JSON array of strings. No extra text.`
-        : `${contextPart} ${feedbackPart} Genera exactamente 20 nombres para esta clase. Deben encajar con la temática y la narrativa de la clase e integrar la asignatura de forma natural y evocadora. Varía mucho el estilo para que no suenen todos igual (algunos épicos, otros elegantes, otros desenfadados, otros sobrios). Pueden ser creativos, pero reconocibles como el nombre de una clase. NO incluyas el curso ni el nivel académico (ej. "1º ESO") en el nombre, salvo que el profesor lo pida explícitamente. Devuelve SOLO un array JSON de strings. Sin texto extra.`)
+        : `${contextPart} ${feedbackPart} Genera exactamente 20 nombres para esta clase. Deben encajar con la temática y la narrativa de la clase e integrar la asignatura de forma natural y evocadora. Varía mucho el estilo para que no suenen todos igual (algunos épicos, otros elegantes, otros desenfadados, otros sobrios). Pueden ser creativos, pero reconocibles como el nombre de una clase. NO incluyas el curso ni el nivel académico (ej. "1º ESO") en el nombre, salvo que su docente lo pida explícitamente. Devuelve SOLO un array JSON de strings. Sin texto extra.`)
         + Prompts.teacherBriefBlock(data.brief || '', data.meta || '', locale)
         + Prompts.outputLanguageDirective(data.locale)
 
@@ -331,12 +331,12 @@ export async function aiRoutes(fastify: FastifyInstance) {
       const safeMessage = ensureSafeEducationalPrompt(data.message)
       const provider = getAIProvider()
       // Sanitize teacherName to prevent prompt injection — only allow alphanumeric + spaces
-      const rawName = data.teacherName || (locale === 'en' ? 'teacher' : 'profesor')
-      const teacherName = rawName.replace(/[^a-zA-ZáéíóúñÁÉÍÓÚÑüÜ\s]/g, '').trim().slice(0, 50) || 'profesor'
+      const rawName = data.teacherName || (locale === 'en' ? 'teacher' : 'docente')
+      const teacherName = rawName.replace(/[^a-zA-ZáéíóúñÁÉÍÓÚÑüÜ\s]/g, '').trim().slice(0, 50) || 'docente'
 
       const systemPrompt = locale === 'en'
         ? `You are Atenea, a class creation assistant helping ${teacherName}. Generate a class proposal based on their request. Respond ONLY with a JSON object: { "name": "class name", "description": "2-3 sentence description", "schedule": "suggested schedule", "message": "brief explanation addressing ${teacherName} by name" }. No markdown, no extra text — pure JSON only.`
-        : `Eres Atenea, asistente de creacion de clases ayudando a ${teacherName}. Genera una propuesta de clase basada en su peticion. Responde SOLO con un objeto JSON: { "name": "nombre de la clase", "description": "descripcion de 2-3 frases", "schedule": "horario sugerido", "message": "explicacion breve dirigida a ${teacherName} por su nombre" }. Sin markdown, sin texto extra — solo JSON puro.`
+        : `Eres Atenea, asistente de creacion de clases ayudando a ${teacherName}. Genera una propuesta de clase basada en su peticion. Responde SOLO con un objeto JSON: { "name": "nombre de la clase", "description": "descripcion de 2-3 frases", "schedule": "horario sugerido", "message": "explicacion breve dirigida a ${teacherName} por su nombre" }. ${Prompts.INCLUSIVE_LANGUAGE_ES} Sin markdown, sin texto extra — solo JSON puro.`
 
       const text = await provider.generateText(safeMessage, {
         systemPrompt,

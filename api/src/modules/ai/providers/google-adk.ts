@@ -21,8 +21,8 @@ function extractTopic(prompt: string) {
     .filter(Boolean)
 
   const labeledPrefixes = [
-    'consulta del profesor:',
-    'consulta del alumno:',
+    'consulta de docente:',
+    'consulta de estudiante:',
     'teacher request:',
     'student request:',
     'clase actual:',
@@ -85,13 +85,13 @@ function buildFallbackText(prompt: string, options?: GenerateTextOptions) {
   if (normalizedSystem.includes('enigma') || normalizedPrompt.includes('ideas de enigmas')) {
     return buildFallbackQuiz(locale, prompt)
   }
-  if (normalizedPrompt.includes('rol del usuario: profesor')) {
+  if (normalizedPrompt.includes('rol de quien escribe: docente')) {
     const topic = extractTopic(prompt)
     return locale === 'en'
       ? `I can help you shape this into a workable classroom flow: ${topic}.\n1. Define the mission objective.\n2. Split into 3 enigmas with increasing difficulty.\n3. Attach support documents before publishing.`
       : `Puedo ayudarte a convertir esto en un flujo de clase util: ${topic}.\n1. Define el objetivo de la mision.\n2. Divide en 3 enigmas con dificultad creciente.\n3. Adjunta documentos de apoyo antes de publicar.`
   }
-  if (normalizedPrompt.includes('rol del usuario: alumno')) {
+  if (normalizedPrompt.includes('rol de quien escribe: estudiante')) {
     const topic = extractTopic(prompt)
     return locale === 'en'
       ? `Let's approach this step by step: ${topic}.\n1. Identify what the task is asking.\n2. Write down clues you already have.\n3. Try one small next step.`

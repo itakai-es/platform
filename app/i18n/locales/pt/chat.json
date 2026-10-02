@@ -28,27 +28,27 @@
       "teacher_suggestions": [
         "Como crio uma nova missão?",
         "Como faço a gestão da minha turma?",
-        "Como reviso o progresso dos alunos?",
+        "Como reviso o progresso da minha turma?",
         "Como atribuo pontos extra?"
       ]
     },
     "god_messages": {
       "student": [
         "Precisas de ajuda com a tua missão?",
-        "Vamos aprender juntos!",
+        "Vamos aprender em equipa!",
         "Dúvidas com a tarefa?",
         "Pergunta-me o que quiseres!",
         "Estou aqui para te ajudar",
-        "Ficaste preso? Vamos falar!",
+        "Não sabes como avançar? Vamos falar!",
         "Conquista esse desafio!",
         "Como vai o teu progresso?"
       ],
       "teacher": [
         "Como vão as tuas turmas?",
         "Precisas de criar uma missão?",
-        "Dúvidas sobre os teus alunos?",
+        "Dúvidas sobre a tua turma?",
         "Estou aqui para te apoiar",
-        "Revemos alguma coisa juntos?",
+        "Revemos alguma coisa em equipa?",
         "Ideias para a tua turma?",
         "Vamos planear a aula!",
         "Como te ajudo hoje?"
@@ -56,8 +56,8 @@
       "admin": ["Precisas de ajuda?", "Ao teu dispor", "Em que te ajudo?", "Estou aqui!"]
     },
     "user_subtitles": {
-      "teacher": "Professor",
-      "default": "Utilizador"
+      "teacher": "Docente",
+      "default": "A tua conta"
     },
     "mission_actions": {
       "fallback_title": "esta missão",
@@ -71,7 +71,7 @@
       },
       "m3": {
         "label": "Vamos começar!",
-        "message": "Olá {god}, estou pronto para começar a missão \"{title}\". Por onde começo?"
+        "message": "Olá {god}, tenho vontade de começar a missão \"{title}\". Por onde começo?"
       },
       "m4": {
         "label": "Explica-me os enigmas",
@@ -79,7 +79,7 @@
       },
       "m5": {
         "label": "Dá-me pistas sem spoilers",
-        "message": "Olá {god}, estou preso na missão \"{title}\". Podes dar-me alguma pista sem spoilers?"
+        "message": "Olá {god}, não consigo avançar na missão \"{title}\". Podes dar-me alguma pista sem spoilers?"
       },
       "m6": {
         "label": "Como melhoro a minha entrega?",
@@ -110,15 +110,15 @@
         },
         "t4": {
           "label": "Desenha critérios de avaliação",
-          "message": "Ajuda-me a desenhar critérios de avaliação justos e motivadores para os meus alunos."
+          "message": "Ajuda-me a desenhar critérios de avaliação justos e motivadores para a minha turma."
         },
         "t5": {
           "label": "Sugere um emblema temático",
-          "message": "Preciso de ideias para criar um emblema que motive os meus alunos. O que sugeres?"
+          "message": "Preciso de ideias para criar um emblema que motive a minha turma. O que sugeres?"
         },
         "t6": {
-          "label": "Melhora o meu guia do aluno",
-          "message": "Quero melhorar o guia que dou aos meus alunos. Como posso torná-lo mais útil?"
+          "label": "Melhora o meu guia da turma",
+          "message": "Quero melhorar o guia que dou à minha turma. Como posso torná-lo mais útil?"
         },
         "t7": {
           "label": "Ideias para gamificar um tema",
@@ -126,19 +126,19 @@
         },
         "t8": {
           "label": "Cria um desafio semanal",
-          "message": "Quero lançar um desafio semanal para motivar os meus alunos. Que ideias tens?"
+          "message": "Quero lançar um desafio semanal para motivar a minha turma. Que ideias tens?"
         },
         "t9": {
           "label": "Estratégias para motivar",
-          "message": "Alguns alunos estão desmotivados. Que estratégias de gamificação me recomendas?"
+          "message": "Parte da minha turma perdeu a motivação. Que estratégias de gamificação me recomendas?"
         },
         "t10": {
           "label": "Adapta uma atividade a vários níveis",
-          "message": "Tenho alunos de níveis diferentes. Como posso adaptar uma atividade para todos?"
+          "message": "Tenho estudantes de níveis diferentes. Como posso adaptar uma atividade para toda a turma?"
         },
         "t11": {
           "label": "Escreve um guia de missão",
-          "message": "Preciso de escrever um guia para apresentar uma missão aos meus alunos. Dás-me uma ajuda?"
+          "message": "Preciso de escrever um guia para apresentar uma missão à minha turma. Dás-me uma ajuda?"
         },
         "t12": {
           "label": "Planeia uma sequência didática",
@@ -152,7 +152,7 @@
         },
         "s2": {
           "label": "Dá-me pistas para um enigma",
-          "message": "Estou preso num enigma. Podes dar-me alguma pista sem spoilers?"
+          "message": "Não consigo resolver um enigma. Podes dar-me alguma pista sem spoilers?"
         },
         "s3": {
           "label": "Dicas para subir de nível",
@@ -176,7 +176,7 @@
         },
         "s8": {
           "label": "Motiva-me para continuar",
-          "message": "Estou um pouco desanimado. Podes motivar-me para continuar a avançar?"
+          "message": "Falta-me um pouco de ânimo. Podes motivar-me para continuar a avançar?"
         },
         "s9": {
           "label": "Explica-me com um exemplo",

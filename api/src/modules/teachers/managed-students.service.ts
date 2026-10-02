@@ -185,7 +185,7 @@ export async function resetManagedStudentPassword(
     where: { id: studentId },
     select: { id: true, name: true, username: true, accountType: true, homeClassId: true },
   })
-  if (!student) throw new NotFoundError('Alumno no encontrado')
+  if (!student) throw new NotFoundError('Cuenta de estudiante no encontrada')
 
   // Antes de contar nada de la cuenta: quien pregunta tiene que administrar
   // alguna clase suya. Si no, responde como si el alumno no existiera, así que
@@ -195,12 +195,12 @@ export async function resetManagedStudentPassword(
       where: { studentId: student.id, class: accessibleClassesWhere(actor.id, 'admin') },
       select: { id: true },
     })
-    if (!reachable) throw new NotFoundError('Alumno no encontrado')
+    if (!reachable) throw new NotFoundError('Cuenta de estudiante no encontrada')
   }
 
   if (student.accountType !== 'managed') {
     throw new ValidationError(
-      'Esta cuenta tiene correo: su dueño la recupera desde «¿Olvidaste tu contraseña?»',
+      'Esta cuenta tiene correo: quien la usa la recupera desde «¿Olvidaste tu contraseña?»',
       'NOT_A_MANAGED_ACCOUNT'
     )
   }
@@ -433,7 +433,7 @@ export async function createManagedStudents(
   const cls = await classForManaging(classId, actor)
   if (rows.length === 0 || rows.length > MANAGED_BATCH_MAX) {
     throw new ValidationError(
-      `La lista tiene que tener entre 1 y ${MANAGED_BATCH_MAX} alumnos`,
+      `La lista tiene que tener entre 1 y ${MANAGED_BATCH_MAX} estudiantes`,
       'INVALID_ROW_COUNT'
     )
   }

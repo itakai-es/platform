@@ -1,6 +1,7 @@
 import { prisma } from '../../../config/database.js'
 import { BaseAgent, type AgentRequestContext } from './base-agent.js'
 import { getPlatformContext, getSkinName } from '../platform-context.js'
+import { INCLUSIVE_LANGUAGE_ES } from '../prompts/index.js'
 import { calculateMissionTotalXP } from '../../../utils/xp-calculator.js'
 import {
   accessibleClassesWhere,
@@ -15,7 +16,7 @@ export class TeacherAgent extends BaseAgent {
 
     const rules = context.locale.startsWith('en')
       ? `You are ${skinName}, teacher assistant in ITAKAI. IMPORTANT: When the teacher asks to create something (mission, badge, narrative, enigma) and does NOT specify which class it is for, ASK FIRST which class they want it for before proceeding. List their available classes. When the teacher asks for ideas or creative help: be creative and specific. When asked how to do something in the platform: give the navigation path. Be BRIEF but USEFUL: max 4-5 sentences. Use data from context (class names, student counts). Markdown OK for lists/bold.`
-      : `Eres ${skinName}, asistente del profesor en ITAKAI. IMPORTANTE: Cuando el profesor pida crear algo (misión, insignia, narrativa, enigma) y NO especifique para qué clase es, PREGUNTA PRIMERO para qué clase lo quiere. Lista sus clases disponibles para que elija. Cuando pida ideas o ayuda creativa: sé creativo y específico. Cuando pregunte cómo hacer algo en la plataforma: da la ruta de navegación. Sé BREVE pero ÚTIL: máximo 4-5 frases. Usa datos del contexto (nombres de clases, cantidad de alumnos). Markdown OK para listas/negrita.`
+      : `Eres ${skinName}, asistente del profesorado en ITAKAI. IMPORTANTE: Cuando te pida crear algo (misión, insignia, narrativa, enigma) y NO especifique para qué clase es, PREGUNTA PRIMERO para qué clase lo quiere. Lista sus clases disponibles para que elija. Cuando pida ideas o ayuda creativa: aporta creatividad y concreción. Cuando pregunte cómo hacer algo en la plataforma: da la ruta de navegación. Sé BREVE pero ÚTIL: máximo 4-5 frases. Usa datos del contexto (nombres de clases, número de estudiantes). Markdown OK para listas/negrita. ${INCLUSIVE_LANGUAGE_ES}`
 
     return `${platform}\n\n${rules}`
   }
@@ -66,7 +67,7 @@ export class TeacherAgent extends BaseAgent {
     }
 
     const classesSummary = classes.length > 0
-      ? classes.map(cls => `${cls.name} (${cls._count.enrollments} alumnos, ${cls._count.missions} misiones)`).join('; ')
+      ? classes.map(cls => `${cls.name} (${cls._count.enrollments} estudiantes, ${cls._count.missions} misiones)`).join('; ')
       : 'Sin clases creadas'
     const missionsSummary = missions.length > 0
       ? missions.map(mission => `${mission.title} en ${mission.class.name} (${mission._count.enigmas} enigmas)`).join('; ')
@@ -75,8 +76,8 @@ export class TeacherAgent extends BaseAgent {
     const teacherName = teacher?.name?.split(' ')[0] || ''
 
     const parts = [
-      `Rol del usuario: profesor`,
-      teacherName ? `Nombre del profesor: ${teacherName}` : '',
+      `Rol de quien escribe: docente`,
+      teacherName ? `Nombre: ${teacherName}` : '',
       `Skin visual: ${getSkinName(context.assistantId)}`,
       `Clases: ${classesSummary}`,
       `Misiones: ${missionsSummary}`,
@@ -91,13 +92,13 @@ export class TeacherAgent extends BaseAgent {
     // Include conversation history for multi-turn context
     if (context.history && context.history.length > 0) {
       const historyBlock = context.history
-        .map(m => `${m.role === 'user' ? 'Profesor' : getSkinName(context.assistantId)}: ${m.content}`)
+        .map(m => `${m.role === 'user' ? 'Docente' : getSkinName(context.assistantId)}: ${m.content}`)
         .join('\n')
       parts.push(`\nHistorial reciente de la conversacion:\n${historyBlock}`)
     }
 
     parts.push(
-      `\nConsulta del profesor: ${context.message}`,
+      `\nConsulta de docente: ${context.message}`,
       context.locale.startsWith('en')
         ? 'Be brief. Max 3-4 sentences with specific data. No filler.'
         : 'Se breve. Maximo 3-4 frases con datos concretos. Sin relleno.',

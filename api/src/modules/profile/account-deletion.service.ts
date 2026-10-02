@@ -77,9 +77,9 @@ export class AccountDeletionBlockedError extends ConflictError {
 }
 
 const BLOCKED_MESSAGE = {
-  self: 'No puedes borrar tu cuenta: eres propietario de clases en las que no hay nadie más con administración. Da administración a otro profesor en ellas (la propiedad pasará a él) o pásale la propiedad antes de borrarla.',
+  self: 'No puedes borrar tu cuenta: tienes la propiedad de clases en las que no hay nadie más con administración. Da administración en ellas a otra persona del profesorado (la propiedad pasará a ella) o pásale la propiedad antes de borrarla.',
   admin:
-    'No se puede borrar esta cuenta: es propietaria de clases en las que no hay nadie más con administración. Pasa antes la propiedad de esas clases a otro profesor.',
+    'No se puede borrar esta cuenta: es propietaria de clases en las que no hay nadie más con administración. Pasa antes la propiedad de esas clases a otra persona del profesorado.',
 }
 
 /** Lo que se le enseña a quien va a borrar la cuenta, antes de pedir la confirmación. */

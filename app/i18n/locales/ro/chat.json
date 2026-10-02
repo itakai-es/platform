@@ -56,8 +56,8 @@
       "admin": ["Ai nevoie de ajutor?", "La dispoziția ta", "Cu ce te ajut?", "Sunt aici!"]
     },
     "user_subtitles": {
-      "teacher": "Profesor",
-      "default": "Utilizator"
+      "teacher": "Cadru didactic",
+      "default": "Contul tău"
     },
     "mission_actions": {
       "fallback_title": "această misiune",
@@ -117,7 +117,7 @@
           "message": "Am nevoie de idei ca să creez o insignă care să îmi motiveze elevii. Ce sugerezi?"
         },
         "t6": {
-          "label": "Îmbunătățește-mi ghidul elevului",
+          "label": "Îmbunătățește-mi ghidul pentru clasă",
           "message": "Vreau să îmbunătățesc ghidul pe care îl dau elevilor mei. Cum îl pot face mai util?"
         },
         "t7": {
@@ -130,11 +130,11 @@
         },
         "t9": {
           "label": "Strategii de motivare",
-          "message": "Unii elevi sunt demotivați. Ce strategii de gamificare îmi recomanzi?"
+          "message": "O parte din clasă și-a pierdut motivația. Ce strategii de gamificare îmi recomanzi?"
         },
         "t10": {
           "label": "Adaptează o activitate pe niveluri",
-          "message": "Am elevi de niveluri diferite. Cum pot adapta o activitate pentru toți?"
+          "message": "Am elevi de niveluri diferite. Cum pot adapta o activitate pentru toată clasa?"
         },
         "t11": {
           "label": "Redactează un ghid de misiune",
@@ -176,7 +176,7 @@
         },
         "s8": {
           "label": "Motivează-mă să continui",
-          "message": "Sunt puțin descurajat. Mă poți motiva să merg mai departe?"
+          "message": "Îmi lipsește puțin cheful. Mă poți motiva să merg mai departe?"
         },
         "s9": {
           "label": "Explică-mi cu un exemplu",

@@ -7,7 +7,7 @@
       "badges": "Insinies",
       "students": "Alumnáu",
       "about": "Tocante a",
-      "users": "Usuarios",
+      "users": "Cuentes",
       "classes": "Clases",
       "analytics": "Analítiques",
       "logs": "Rexistros",
@@ -101,10 +101,10 @@
       "rate_limited": "Dende la to conexón fixéronse munches consultes en pocu tiempu. Espera un par de minutos y vuelvi tentalo."
     },
     "roles": {
-      "student": "Alumnu",
-      "teacher": "Profesor",
-      "admin": "Alministrador",
-      "admin_system": "Alministrador del sistema"
+      "student": "Estudiante",
+      "teacher": "Docente",
+      "admin": "Alministración",
+      "admin_system": "Alministración del sistema"
     },
     "sidebar": {
       "new_conversation": "Conversación nueva",
@@ -134,20 +134,20 @@
       "feature_access_title": "Accesu universal",
       "feature_access_desc": "Funciona en cualquier preséu, dende cualquier llugar del mundu",
       "feature_ai_title": "IA educativa",
-      "feature_ai_desc": "Asistentes que personalicen l'aprendizaxe pa cada alumnu",
+      "feature_ai_desc": "Asistentes que personalicen l'aprendizaxe pa cada estudiante",
       "profiles_title": "Escueyi'l to perfil pa entamar",
       "about_title": "¿Qué ye ITAKAI?",
       "about_description_1": "ITAKAI ye la evolución de <strong>MyClassGame</strong>, sofitada con <strong>intelixencia artificial</strong>. Una plataforma educativa gamificada que tresforma la formación profesional nuna esperiencia inmersiva.",
-      "about_description_2": "Xeneración automática de conteníos, asistentes IA personalizaos pa cada alumnu y analís predictivu del rendimientu. Too integráu nun ecosistema onde deprender ye una aventura.",
-      "stat_students": "Alumnáu",
-      "stat_teachers": "Profesoráu",
+      "about_description_2": "Xeneración automática de conteníos, asistentes IA personalizaos pa cada estudiante y analís predictivu del rendimientu. Too integráu nun ecosistema onde deprender ye una aventura.",
+      "stat_students": "Estudiantes",
+      "stat_teachers": "Docentes",
       "stat_centers": "Centros",
       "partners_title": "¿Quién somos?",
       "developed_by": "Desendolcáu por",
-      "gods_title": "Los tos mentores olímpicos",
-      "gods_subtitle": "5 asistentes IA inspiraos en dioses griegos, cada ún espertu nel so dominiu",
-      "cta_final_title": "¿Preparáu pa la to aventura épica?",
-      "cta_final_subtitle": "Xúnite a miles d'alumnos que yá tán tresformando'l so aprendizaxe con ITAKAI",
+      "gods_title": "Les tos guíes del Olimpu",
+      "gods_subtitle": "5 asistentes IA inspiraos na mitoloxía griega, caún cola so especialidá",
+      "cta_final_title": "¿Llánceste a la to aventura épica?",
+      "cta_final_subtitle": "Xúnite a miles d'estudiantes que yá tán tresformando'l so aprendizaxe con ITAKAI",
       "cta_final_button": "Entamar de baldre agora",
       "footer_copyright_alt": "© {year} ITAKAI. Sistema educativu gamificáu",
       "gods": {
@@ -183,8 +183,8 @@
       "cookies": "Cookies",
       "licenses": "Llicencies",
       "system_access": "Accesu al sistema",
-      "teacher_panel": "Panel del profesor",
-      "student_panel": "Panel del alumnu",
+      "teacher_panel": "Panel docente",
+      "student_panel": "Panel d'estudiante",
       "templates": "Plantíes de clase",
       "help_center": "Centru d'ayuda"
     },
@@ -197,7 +197,7 @@
     },
     "join_class_modal": {
       "title": "Xunise a una clase",
-      "description": "Introduz el códigu de clase que te dio'l to profesor",
+      "description": "Introduz el códigu de clase que te dio'l to docente",
       "placeholder": "ABC123",
       "joining": "Xuniéndose...",
       "join_button": "Xunise a la clase",
@@ -205,14 +205,14 @@
       "error_min_length": "El códigu tien de tener polo menos 4 caráuteres",
       "error_not_found": "Nun s'atopó nenguna clase con esi códigu",
       "error_invalid_code": "Códigu de clase inválidu",
-      "error_already_enrolled": "Yá tas inscritu nesta clase",
+      "error_already_enrolled": "Yá tas nesta clase",
       "error_generic": "Fallu al xunise a la clase. Inténtalo otra vuelta.",
       "error_generic_short": "Fallu al xunise a la clase",
       "success": "Xuniéstite a {className}"
     },
     "invite_students_modal": {
-      "title": "Convidar alumnos",
-      "description": "Comparti esti códigu colos tos alumnos pa que se xunan a la clase:",
+      "title": "Convidar al alumnáu",
+      "description": "Comparti esti códigu col to alumnáu pa que se xuna a la clase:",
       "copy_code": "Copiar códigu",
       "code_copied": "Códigu copiáu al cartafueyu",
       "copy_error": "Fallu al copiar el códigu",
@@ -232,7 +232,7 @@
         },
         "profesor": {
           "title": "Ayuda pal profesoráu",
-          "subtitle": "Guíes pasu a pasu pa crear clases, misiones y recompenses. Escrites pa docentes, non pa informáticos."
+          "subtitle": "Guíes pasu a pasu pa crear clases, misiones y recompenses. Escrites pa docentes, ensin xerga técnica."
         },
         "alumno": {
           "title": "Ayuda pal alumnáu",
@@ -289,7 +289,7 @@
     },
     "meta": {
       "site_title": "ITAKAI - L'aventura de deprender | Plataforma educativa gamificada",
-      "site_description": "Tresforma la educación con ITAKAI, la plataforma gamificada qu'inspira, motiva y coneuta al alumnáu, al profesoráu y a les families. Xúnite a más de 50.000 alumnos.",
+      "site_description": "Tresforma la educación con ITAKAI, la plataforma gamificada qu'inspira, motiva y coneuta al alumnáu, al profesoráu y a les families. Xúnite a más de 50.000 estudiantes.",
       "og_title": "ITAKAI - L'aventura de deprender",
       "og_description": "Plataforma educativa gamificada con IA, narratives inmersives y analís intelixente."
     },
@@ -302,7 +302,7 @@
     "maintenance": {
       "title": "En mantenimientu",
       "message": "Tamos faciendo ameyores. Vuelvi en dellos minutos.",
-      "admin_notice": "Mou mantenimientu activu — namás los alministradores puen acceder."
+      "admin_notice": "Mou mantenimientu activu — namás pue entrar l'equipu d'alministración."
     },
     "menu_display": {
       "title": "Menú superior",
@@ -369,7 +369,7 @@
       "send_to_ai": "Unviar a la IA"
     },
     "student_preview": {
-      "banner": "Tas viendo la plataforma como un alumnu (demo)"
+      "banner": "Tas viendo la plataforma como estudiante (demo)"
     },
     "change_email": {
       "title": "Corréu electrónicu",
@@ -394,10 +394,10 @@
       "message": "L'enllaz pa abrir esti ficheru caducó. Vuelvi a la misión y ábrilu otra vez."
     },
     "class_teachers": {
-      "owner": "Propietariu",
+      "owner": "Propiedá",
       "profiles": {
         "titular": "Titular",
-        "sustituto": "Sustitutu",
+        "sustituto": "Sustitución",
         "practicas": "Práutiques"
       },
       "access": {
@@ -413,10 +413,10 @@
       "next": "Siguiente"
     },
     "account_deletion": {
-      "blocked_self": "Entá nun pues borrar la to cuenta: yes el propietariu d'estes clases y nelles nun hai naide más con alministración. Da-y alministración a otru profesor o pása-y la propiedá, y vuelvi equí.",
-      "blocked_admin": "Esta cuenta entá nun se pue borrar: ye la propietaria d'estes clases y nelles nun hai naide más con alministración. Primero hai que pasa-y la so propiedá a otru profesor.",
-      "transfers_self": "Les tos clases van pasar a otru profesor con alministración nelles:",
-      "transfers_admin": "Les sos clases van pasar a otru profesor con alministración nelles:",
+      "blocked_self": "Entá nun pues borrar la to cuenta: la propiedá d'estes clases ye tuya y nelles nun hai naide más con alministración. Da-y alministración a daquién más del profesoráu o pása-y la propiedá, y vuelvi equí.",
+      "blocked_admin": "Esta cuenta entá nun se pue borrar: ye la propietaria d'estes clases y nelles nun hai naide más con alministración. Primero hai que pasar la so propiedá a otra cuenta docente.",
+      "transfers_self": "Les tos clases van pasar a daquién del profesoráu con alministración nelles:",
+      "transfers_admin": "Les sos clases van pasar a daquién del profesoráu con alministración nelles:",
       "transfer_item": "{class}, a {name}"
     },
     "copy": {
@@ -450,7 +450,7 @@
     },
     "blog": {
       "hero_title": "El blog d'ITAKAI",
-      "hero_subtitle": "Noveaes de la plataforma, idees pa gamificar l'aula y esperiencies d'otros docentes.",
+      "hero_subtitle": "Noveaes de la plataforma, idees pa gamificar l'aula y esperiencies d'otres aules.",
       "search_placeholder": "Guetar nel blog…",
       "search_empty_hint": "Prueba con otres pallabres o desanicia la gueta pa ver toles entraes.",
       "all_posts": "Toes",
@@ -469,7 +469,7 @@
     },
     "templates": {
       "hero_title": "Plantíes de clase",
-      "hero_subtitle": "Clases gamificaes qu'otros docentes publicaron pa que nun entames de cero: cola so hestoria, les sos misiones, la so tienda y los sos comportamientos llistos pa usar.",
+      "hero_subtitle": "Clases gamificaes que publicó'l profesoráu pa que nun entames de cero: cola so hestoria, les sos misiones, la so tienda y los sos comportamientos llistos pa usar.",
       "view": "Ver la plantía",
       "copy_link": "Copiar l'enllaz",
       "result_count": "Nenguna plantía | 1 plantía | {count} plantíes",
@@ -486,8 +486,8 @@
         "what_you_get_missions": "Importala crea una clase nueva y tuya cola hestoria, la portada, les funcionalidaes, la tienda y los comportamientos de la plantía y, si quies, coles sos misiones.",
         "import_missions": "Importar tamién la so misión | Importar tamién les sos {count} misiones",
         "import_missions_hint": "Lleguen ensin data llende, ensin documentos y ensin insinies.",
-        "login_note": "Pa importala tienes d'entrar con una cuenta de profesor.",
-        "teacher_only": "Pa importala fai falta una cuenta de profesor."
+        "login_note": "Pa importala tienes d'entrar con una cuenta docente.",
+        "teacher_only": "Pa importala fai falta una cuenta docente."
       },
       "gone": {
         "title": "Esta plantía yá nun ta disponible",
@@ -499,7 +499,7 @@
       },
       "meta": {
         "title": "Plantíes de clase · ITAKAI",
-        "description": "Clases gamificaes que'l profesoráu publicó n'ITAKAI pa qu'otros docentes partan d'elles."
+        "description": "Clases gamificaes que'l profesoráu publicó n'ITAKAI pa que cualquier docente parta d'elles."
       }
     }
   }

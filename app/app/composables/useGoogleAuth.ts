@@ -131,7 +131,7 @@ export const useGoogleAuth = () => {
           callback: async (response: { code: string; error?: string }) => {
             if (response.error) {
               if (response.error === 'access_denied') {
-                reject(new Error('El usuario canceló el login con Google'))
+                reject(new Error('Se canceló el acceso con Google'))
               } else {
                 reject(new Error('Error de Google: ' + response.error))
               }

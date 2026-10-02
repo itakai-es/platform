@@ -65,7 +65,7 @@ const managedBatchSchema = z.object({
       })
     )
     .min(1, 'La lista está vacía')
-    .max(MANAGED_BATCH_MAX, `Como mucho ${MANAGED_BATCH_MAX} alumnos de una vez`),
+    .max(MANAGED_BATCH_MAX, `Como mucho ${MANAGED_BATCH_MAX} estudiantes de una vez`),
 })
 
 const batchQuerySchema = z.object({
@@ -84,7 +84,7 @@ const studentNicknameSchema = z.object({
 const MANAGED_REVIEW_LIMIT = { max: 30, windowMs: 60 * 60 * 1000 }
 
 const usernameProposalSchema = z.object({
-  name: z.string().min(1, 'Escribe el nombre del alumno').max(120),
+  name: z.string().min(1, 'Escribe el nombre de quien va a usar la cuenta').max(120),
 })
 
 /**
@@ -284,7 +284,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
 
     const user = request.user as { role: string | null }
     if (user.role !== 'teacher') {
-      reply.status(403).send({ message: 'Acceso denegado. Solo profesores.' })
+      reply.status(403).send({ message: 'Acceso denegado. Solo para el profesorado.' })
     }
   })
 

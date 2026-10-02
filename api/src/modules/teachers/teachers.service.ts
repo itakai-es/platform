@@ -1118,7 +1118,7 @@ export class TeachersService {
     const enrollment = await prisma.classEnrollment.findUnique({
       where: { studentId_classId: { studentId, classId } },
     })
-    if (!enrollment) throw new Error('El estudiante no está inscrito en esta clase')
+    if (!enrollment) throw new Error('Esa cuenta de estudiante no está en esta clase')
 
     let fileUrl: string
     try {
@@ -1175,7 +1175,7 @@ export class TeachersService {
 
     const enrolledClasses = classes.filter((c) => c.enrollments.length > 0)
     if (enrolledClasses.length === 0) {
-      throw new NotFoundError('Estudiante no encontrado en tus clases')
+      throw new NotFoundError('No se ha encontrado esa cuenta de estudiante en tus clases')
     }
 
     const student = enrolledClasses[0].enrollments[0].student

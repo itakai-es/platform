@@ -81,7 +81,7 @@ export async function applyXpDelta(options: ApplyXpDeltaOptions): Promise<ApplyX
       },
     })
   } catch {
-    throw new Error('No estás inscrito en esta clase')
+    throw new Error('No estás en esta clase')
   }
 
   // Floor at 0: if a negative delta pushed XP below zero, correct in a

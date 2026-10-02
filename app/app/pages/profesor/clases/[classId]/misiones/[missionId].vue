@@ -10,7 +10,7 @@
         ai-placeholder="Ej: Añade más detalles sobre el mundo de la misión..."
         context-label="Editando la historia de la misión"
         ai-modal-hint="Dile a la IA qué quieres añadir o cambiar de la historia de la misión. Tiene acceso al contenido actual."
-        ai-system-context="El profesor esta editando la NARRATIVA/HISTORIA de una misión gamificada. Genera contenido narrativo, inmersivo y creativo."
+        ai-system-context="Quien imparte la clase está editando la NARRATIVA/HISTORIA de una misión gamificada. Genera contenido narrativo, inmersivo y creativo."
         @cancel="isEditingNarrative = false"
         @save="saveNarrative"
       />
@@ -259,7 +259,7 @@ const deleteModalConfig = computed(() => {
   const isEnigma = deleteTarget.value.type === 'enigma'
   return {
     title: isEnigma ? 'Eliminar Enigma' : 'Eliminar Documento',
-    message: `¿Estás seguro de eliminar "${deleteTarget.value.name}"? Esta acción no se puede deshacer.`,
+    message: `¿Seguro que quieres eliminar "${deleteTarget.value.name}"? Esta acción no se puede deshacer.`,
     confirmText: 'Eliminar',
   }
 })

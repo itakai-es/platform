@@ -20,12 +20,12 @@
       }
     },
     "dashboard": {
-      "title": "Inici del professor",
-      "subtitle": "Benvingut, {name}!",
+      "title": "Inici docent",
+      "subtitle": "Hola, {name}!",
       "new_class": "Nova classe",
       "new_mission": "Nova missió",
       "stats": {
-        "total_students": "Alumnes totals",
+        "total_students": "Estudiants en total",
         "active_classes": "Classes actives",
         "active_missions": "Missions actives"
       },
@@ -33,22 +33,22 @@
       "view_all": "Veure-les totes",
       "no_classes_yet": "Encara no tens classes",
       "recent_missions": "Últimes missions",
-      "no_missions_description": "Crea la teua primera missió per als teus alumnes",
+      "no_missions_description": "Crea la teua primera missió per al teu alumnat",
       "meta": {
-        "title": "Inici professor | ITAKAI",
-        "description": "Inici principal del professor. Gestiona les teues classes i missions i revisa el progrés dels teus alumnes."
+        "title": "Inici docent | ITAKAI",
+        "description": "El teu inici com a docent. Gestiona les teues classes i missions i revisa el progrés del teu alumnat."
       }
     },
     "classes": {
       "index": {
         "title": "Les meues classes",
-        "subtitle": "Gestiona les teues classes i revisa el progrés dels teus alumnes",
+        "subtitle": "Gestiona les teues classes i revisa el progrés del teu alumnat",
         "new_class": "Nova classe",
         "create_first": "Crear la primera classe",
         "no_classes_description": "Encara no has creat cap classe",
         "meta": {
-          "title": "Les meues classes | ITAKAI Professor",
-          "description": "Gestiona totes les teues classes, els alumnes inscrits i les missions assignades."
+          "title": "Les meues classes | ITAKAI Docent",
+          "description": "Gestiona totes les teues classes, el seu alumnat i les missions assignades."
         },
         "templates": "Plantilles",
         "duplicate_success": "Classe duplicada com a \"{name}\"",
@@ -90,7 +90,7 @@
         "success_title": "Classe creada!",
         "success_message": "La teua classe \"{name}\" ja està llesta.",
         "invite_code_label": "Codi d'invitació",
-        "invite_code_hint": "Compartix este codi amb els teus alumnes",
+        "invite_code_hint": "Compartix este codi amb el teu alumnat",
         "btn_view_classes": "Veure les classes",
         "btn_copied": "Copiat!",
         "btn_copy_code": "Copiar codi",
@@ -104,7 +104,7 @@
           "ask_idea": "Hola {name}! Soc {god}. Conta'm, quin món o quina temàtica vols per a la teua classe?",
           "review_approach": "Açò és el que t'he preparat, t'agrada?",
           "pick_title": "Quin títol li posem a la teua classe?",
-          "placeholder_idea": "Ex.: Una escola de màgia amb 4 cases que competixen per punts, alumnes-mags i reptes com masmorres…",
+          "placeholder_idea": "Ex.: Una escola de màgia amb 4 cases que competixen per punts, aprenents de màgia i reptes com masmorres…",
           "generating_approach": "Estic creant la narrativa de la teua classe...",
           "narrative_feedback_placeholder": "Ex.: Vull més referències a les cases de Hogwarts...",
           "btn_change_something": "Vull canviar alguna cosa",
@@ -129,10 +129,10 @@
           "attach_error_size": "«{name}» pesa {size} MB. El màxim és {max} MB per fitxer.",
           "attach_error_too_large": "Els materials pesen massa en conjunt. Puja'ls d'un en un (màx. {max} MB per fitxer).",
           "attach_hint": "Màx. {max} MB per fitxer",
-          "guide_question": "He preparat una guia per als teus alumnes"
+          "guide_question": "He preparat una guia per al teu alumnat"
         },
         "meta": {
-          "title": "Crear una classe nova | ITAKAI Professor"
+          "title": "Crear una classe nova | ITAKAI Docent"
         },
         "narrative_error": "No he pogut crear la narrativa",
         "summary": {
@@ -154,18 +154,18 @@
           "narrative": "Història",
           "guide": "Guia",
           "missions": "Missions",
-          "students": "Alumnes",
+          "students": "Alumnat",
           "tienda": "Botiga",
           "behaviors": "Comportaments",
           "settings": "Ajustos",
           "history": "Historial"
         },
         "students": {
-          "empty_title": "Encara no hi ha alumnes",
-          "empty_description": "Quan els alumnes s'unisquen a la classe, apareixeran ací amb les seues estadístiques.",
-          "col_student": "Alumne",
+          "empty_title": "Encara no hi ha estudiants",
+          "empty_description": "Quan hi haja estudiants en la classe, apareixeran ací amb les seues estadístiques.",
+          "col_student": "Estudiant",
           "col_level": "Nivell",
-          "search_placeholder": "Buscar alumne...",
+          "search_placeholder": "Buscar estudiant...",
           "sort_name_asc": "Nom A-Z",
           "sort_name_desc": "Nom Z-A",
           "sort_xp_asc": "XP ↑",
@@ -179,7 +179,7 @@
           "sort_lives_asc": "Vida ↑",
           "sort_lives_desc": "Vida ↓",
           "no_results_title": "Sense resultats",
-          "no_results_description": "No hi ha alumnes que coincidisquen amb la busca.",
+          "no_results_description": "Cap estudiant coincidix amb la busca.",
           "col_behaviors": "Comportaments",
           "view_list": "Llistat",
           "view_ranking": "Classificació",
@@ -194,8 +194,8 @@
           "toast_error": "Error en guardar la guia"
         },
         "ranking": {
-          "no_students_title": "No hi ha alumnes",
-          "no_students_description": "Encara no hi ha alumnes en esta classe"
+          "no_students_title": "No hi ha estudiants",
+          "no_students_description": "Encara no hi ha estudiants en esta classe"
         },
         "missions_tab": {
           "no_missions_title": "No hi ha missions",
@@ -209,8 +209,8 @@
           "empty_default": "No hi ha missions en esta classe"
         },
         "meta": {
-          "title": "Detall de classe | ITAKAI Professor",
-          "description": "Gestiona la classe. Revisa els alumnes, les missions assignades i el progrés general."
+          "title": "Detall de classe | ITAKAI Docent",
+          "description": "Gestiona la classe. Revisa l'alumnat, les missions assignades i el progrés general."
         },
         "behaviors": {
           "new_button": "Nou comportament",
@@ -226,9 +226,9 @@
           "section_negatives": "Negatius",
           "filter_all": "Tots",
           "apply_title": "Aplicar \"{name}\"",
-          "pick_student": "Selecciona l'alumne a qui li ho aplicaràs.",
+          "pick_student": "Tria a quin estudiant li ho aplicaràs.",
           "applied_toast": "{behavior} aplicat a {student}",
-          "empty_students": "Encara no hi ha alumnes en esta classe.",
+          "empty_students": "Encara no hi ha estudiants en esta classe.",
           "form_new_title": "Nou comportament",
           "form_edit_title": "Editar comportament",
           "form_type": "Tipus",
@@ -265,7 +265,7 @@
           "library_subtitle": "Afig articles suggerits amb un toc. Després els pots editar o esborrar.",
           "library_add": "Afegir",
           "empty_title": "Encara no hi ha articles",
-          "empty_description": "Crea la primera recompensa que els teus alumnes podran canviar.",
+          "empty_description": "Crea la primera recompensa que el teu alumnat podrà canviar.",
           "hidden": "Ocult",
           "purchases_empty_title": "Encara sense canvis",
           "form_edit_title": "Editar article",
@@ -273,15 +273,15 @@
           "form_name": "Nom",
           "form_name_placeholder": "Ex.: Saltar-se una tasca",
           "form_description": "Descripció",
-          "form_description_placeholder": "Què obté l'alumne en canviar-lo?",
+          "form_description_placeholder": "Què s'obté en canviar-lo?",
           "form_price": "Preu",
-          "form_visible": "Visible per als alumnes",
+          "form_visible": "Visible per a l'alumnat",
           "form_cancel": "Cancel·lar",
           "form_delete": "Eliminar",
           "form_save": "Guardar",
           "form_create": "Crear",
           "delete_title": "Eliminar \"{name}\"?",
-          "delete_description": "Els alumnes deixaran de veure'l a la botiga. Esta acció no es pot desfer.",
+          "delete_description": "L'alumnat deixarà de veure'l a la botiga. Esta acció no es pot desfer.",
           "toast_created": "Article creat",
           "toast_updated": "Article actualitzat",
           "toast_deleted": "Article eliminat",
@@ -298,7 +298,7 @@
           "form_life_restore_hint": "Punts de vida que se sumen en canviar-lo (recompenses) o en usar-lo (poders). 0 = no recupera vida.",
           "tab_history": "Historial",
           "history_purchases": "Compres",
-          "view_student_profile": "Veure l'alumne",
+          "view_student_profile": "Veure la fitxa d'estudiant",
           "mana_disabled_chip": "Mana desactivat",
           "empty_description_readonly": "Quan s'afigen articles a la botiga d'esta classe, apareixeran ací."
         },
@@ -341,7 +341,7 @@
           "items": {
             "shop": {
               "label": "Botiga",
-              "desc": "Recompenses i poders que els alumnes canvien."
+              "desc": "Recompenses i poders que canvia l'alumnat."
             },
             "coins": {
               "label": "{coins}",
@@ -353,7 +353,7 @@
             },
             "rankings": {
               "label": "Classificació",
-              "desc": "Classificació dels alumnes de la classe."
+              "desc": "Classificació de l'alumnat de la classe."
             },
             "xp": {
               "label": "Experiència (XP)",
@@ -391,7 +391,7 @@
             "metadata_search": "Buscar...",
             "subject_needs_level": "Tria primer el nivell",
             "publish_title": "Publicar com a plantilla",
-            "publish_hint": "Apareixerà en el catàleg públic de plantilles: qualsevol persona, encara que no tinga compte, en podrà vore el nom, la història, la portada, les missions, la botiga i els comportaments, i altres professors la podran importar amb tot això. Les dates límit, els documents i les insígnies de les missions no es compartixen.",
+            "publish_hint": "Apareixerà en el catàleg públic de plantilles: qualsevol persona, encara que no tinga compte, en podrà vore el nom, la història, la portada, les missions, la botiga i els comportaments, i la resta del professorat la podrà importar amb tot això. Les dates límit, els documents i les insígnies de les missions no es compartixen.",
             "publish_missing_metadata": "Guarda l'assignatura, el nivell i l'idioma abans de publicar.",
             "publish_on": "Classe publicada com a plantilla",
             "publish_off": "Plantilla retirada del marketplace",
@@ -423,32 +423,32 @@
           },
           "management": {
             "title": "Gestió",
-            "hint": "Publica-la com a plantilla perquè altres professors la importen, o fes-ne una còpia."
+            "hint": "Publica-la com a plantilla perquè la resta del professorat la importe, o fes-ne una còpia."
           },
           "edit_level_note": "Pots canviar el nom, l'horari i la portada. La classificació, les funcionalitats i els nivells els canvia qui administra la classe."
         },
         "badges_empty": "No hi ha insígnies en esta classe",
-        "archived_notice": "Esta classe està arxivada: es pot consultar, però no admet alumnes nous.",
+        "archived_notice": "Esta classe està arxivada: es pot consultar, però no admet més estudiants.",
         "accounts": {
           "intro": "Per a l'alumnat sense correu. Cada compte entra amb el seu usuari i una contrasenya temporal, que es canvia la primera vegada. En acabar voràs el full de credencials per a copiar-les, baixar-les o imprimir-les.",
           "lead": "Pots crear fins a {max} comptes d'una vegada, escrivint els noms o apegant una llista.",
           "mode_label": "Com crear els comptes",
           "mode_rows": "Escriure els noms",
           "mode_import": "Apegar o pujar una llista",
-          "mode_rows_hint": "Una fila per alumne",
+          "mode_rows_hint": "Una fila per estudiant",
           "mode_import_hint": "Des d'un full de càlcul o un CSV",
-          "rows_intro": "Escriu el nom de cada alumne: l'usuari es proposa a soles i el pots canviar.",
-          "row_legend": "Alumne {n}",
+          "rows_intro": "Escriu el nom de cada estudiant: l'usuari es proposa a soles i el pots canviar.",
+          "row_legend": "Estudiant {n}",
           "name_label": "Nom",
           "name_placeholder": "Nom i cognom",
           "username_label": "Usuari",
           "username_hint": "Proposat a partir del nom. El pots canviar.",
           "username_proposing": "Buscant un usuari lliure…",
-          "row_remove": "Llevar l'alumne {n}",
-          "row_add": "Afegir un altre alumne",
+          "row_remove": "Llevar la fila {n}",
+          "row_add": "Afegir una altra fila",
           "creating": "Creant comptes…",
           "create_count": "Crear comptes | Crear 1 compte | Crear {count} comptes",
-          "max_rows": "Com a màxim {max} alumnes d'una vegada.",
+          "max_rows": "Com a màxim {max} comptes d'una vegada.",
           "create_error": "No s'han pogut crear els comptes. Torna-ho a provar.",
           "status": {
             "ok": "A punt per a crear",
@@ -458,19 +458,19 @@
             "invalid_name": "El nom ha de tindre entre 2 i 120 caràcters",
             "invalid_username": "Usuari no vàlid: només lletres sense accent, números i . _ - (de 3 a 30)"
           },
-          "import_label": "Llista d'alumnes",
-          "import_hint": "Un per línia. Pots apegar una columna copiada d'un full de càlcul; si vols triar l'usuari, posa'l en una segona columna.",
+          "import_label": "Llista d'estudiants",
+          "import_hint": "Un nom per línia. Pots apegar una columna copiada d'un full de càlcul; si vols triar l'usuari, posa'l en una segona columna.",
           "import_placeholder": "Anna Puig\nLluís Soler\nMarta Vila",
           "import_upload": "Pujar un CSV",
           "import_template": "Baixar la plantilla CSV",
           "import_file_read": "S'ha llegit «{file}».",
-          "import_count": "La llista està buida. | 1 alumne en la llista. | {count} alumnes en la llista.",
+          "import_count": "La llista està buida. | 1 estudiant en la llista. | {count} estudiants en la llista.",
           "import_review": "Revisar la llista",
           "import_only_csv": "Només s'admeten fitxers CSV. En el full de càlcul, utilitza «Guarda com a» i tria CSV.",
           "import_file_too_big": "El fitxer és massa gran per a ser una llista de classe.",
           "import_file_error": "No s'ha pogut llegir el fitxer.",
           "import_empty": "Apega almenys un nom o puja un CSV.",
-          "import_too_many": "Com a màxim {max} alumnes d'una vegada: dividix la llista.",
+          "import_too_many": "Com a màxim {max} comptes d'una vegada: dividix la llista.",
           "review_title": "Revisió de la llista",
           "review_ok": "Cap fila es pot crear | 1 fila a punt per a crear | {count} files a punt per a crear",
           "review_errors": "sense errors | 1 fila amb errors | {count} files amb errors",
@@ -494,7 +494,7 @@
           "meta_title": "Full de credencials | ITAKAI",
           "title": "Full de credencials",
           "count": "Cap compte | 1 compte | {count} comptes",
-          "back": "Tornar a Alumnes",
+          "back": "Tornar a Alumnat",
           "print": "Imprimir / guardar com a PDF",
           "copy_all": "Copiar totes",
           "download_csv": "Baixar la llista (CSV)",
@@ -508,9 +508,9 @@
           "field_name": "Nom",
           "field_class": "Classe",
           "field_login_url": "Adreça d'entrada",
-          "once_note": "Les contrasenyes temporals només es veuen ara: no es guarden enlloc. Copia-les, baixa la llista o imprimix el full abans de recarregar la pàgina o tancar la sessió, i dona a cada alumne les seues.",
+          "once_note": "Les contrasenyes temporals només es veuen ara: no es guarden enlloc. Copia-les, baixa la llista o imprimix el full abans de recarregar la pàgina o tancar la sessió, i dona a cada estudiant les seues.",
           "gone_title": "Les contrasenyes ja no es poden mostrar",
-          "gone_description": "Per seguretat, les contrasenyes temporals només es veuen just després de crear-les o restablir-les, i no es guarden enlloc. Si has perdut el full, restablix la contrasenya des de la pestanya Alumnes, en el menú de cada alumne: se'n genera una de nova.",
+          "gone_description": "Per seguretat, les contrasenyes temporals només es veuen just després de crear-les o restablir-les, i no es guarden enlloc. Si has perdut el full, restablix la contrasenya des de la pestanya Alumnat, en el menú de cada estudiant: se'n genera una de nova.",
           "card_username": "Usuari",
           "card_password": "Contrasenya",
           "card_login_url": "Entra en",
@@ -529,13 +529,13 @@
           "you": "Tu",
           "access_line": "Accés: {access}",
           "menu_label": "Accions per a {name}",
-          "owner_note": "Eres el propietari d'esta classe. Per a eixir-ne, abans passa'n la propietat a algú amb administració.",
+          "owner_note": "La propietat d'esta classe és teua. Per a eixir-ne, abans passa'n la propietat a algú amb administració.",
           "leave_title": "Eixir de la classe",
           "leave_confirm": "Eixir",
           "leave_hint": "Deixaràs de vore esta classe. Per a tornar-hi, algú amb administració t'hi haurà d'afegir de nou.",
           "leave_message": "Vols eixir de {class}? Deixaràs de vore-la i, per a tornar-hi, algú amb administració t'hi haurà d'afegir de nou.",
           "field_email": "Correu electrònic",
-          "field_email_hint": "El correu exacte del seu compte de docent en l'aplicació.",
+          "field_email_hint": "El correu exacte del seu compte docent en l'aplicació.",
           "add_note": "Entra en la classe al moment i rep un avís. No ha d'acceptar res.",
           "field_profile": "Perfil",
           "field_access": "Nivell d'accés",
@@ -563,12 +563,12 @@
           "transferred": "Ara la classe és de {name}",
           "left": "Has eixit de {class}",
           "errors": {
-            "not_addable": "No es pot afegir esta persona. Comprova que el correu és el d'un compte de docent.",
+            "not_addable": "No es pot afegir esta persona. Comprova que el correu és el d'un compte docent.",
             "already_teacher": "Esta persona ja forma part del professorat de la classe.",
-            "owner_locked": "Al propietari no se'l pot canviar ni llevar: abans ha de passar la propietat.",
-            "owner_cannot_leave": "Eres el propietari: per a eixir, abans passa la propietat a algú amb administració.",
+            "owner_locked": "A qui té la propietat no se la pot canviar ni llevar: abans l'ha de passar.",
+            "owner_cannot_leave": "La classe és teua: per a eixir, abans passa la propietat a algú amb administració.",
             "transfer_not_admin": "La propietat només es pot passar a algú amb accés d'administració.",
-            "already_owner": "Esta persona ja és la propietària de la classe.",
+            "already_owner": "La propietat de la classe ja és d'esta persona.",
             "too_many": "Has fet massa intents. Espera una estona i torna-ho a intentar.",
             "forbidden": "El teu accés a esta classe no permet fer açò.",
             "not_found": "Açò ja no està disponible. Torna a carregar la pàgina per a vore la classe tal com és ara.",
@@ -589,7 +589,7 @@
           "empty_title": "Encara no hi ha res en l'historial",
           "empty_description": "Ací apareixerà el que faça el professorat en la classe: missions, entregues, alumnat, ajustos…",
           "no_results_title": "Res amb estos filtres",
-          "no_results_description": "Prova amb un altre docent o amb un altre tipus.",
+          "no_results_description": "Prova amb una altra persona del professorat o amb un altre tipus.",
           "error_title": "No s'ha pogut carregar l'historial",
           "error_description": "Comprova la connexió i torna-ho a intentar.",
           "retry": "Torna-ho a intentar",
@@ -618,7 +618,7 @@
               "template_unpublished": "va retirar la classe de les plantilles",
               "duplicated": "va duplicar la classe",
               "ownership_transferred": "va passar la propietat de la classe a {target}",
-              "ownership_inherited": "la classe va passar a {target} en eliminar-se el compte del seu propietari"
+              "ownership_inherited": "la classe va passar a {target} en eliminar-se el compte que en tenia la propietat"
             },
             "teacher": {
               "added": "va afegir {target} al professorat ({profile}, {access})",
@@ -672,18 +672,18 @@
           },
           "anonymous": {
             "student": {
-              "account_created": "va crear el compte d'un alumne que ja no està en la classe",
-              "password_reset": "va restablir la contrasenya d'un alumne que ja no està en la classe",
-              "nickname_changed": "va canviar el sobrenom d'un alumne que ja no està en la classe",
-              "removed": "va llevar un alumne de la classe",
-              "removed_unused": "va llevar de la classe un alumne que no havia entrat mai i va esborrar el seu compte",
-              "avatar_generated": "va generar un avatar nou per a un alumne que ja no està en la classe"
+              "account_created": "va crear el compte d'algú que ja no està en la classe",
+              "password_reset": "va restablir la contrasenya d'algú que ja no està en la classe",
+              "nickname_changed": "va canviar el sobrenom d'algú que ja no està en la classe",
+              "removed": "va llevar algú de la classe",
+              "removed_unused": "va llevar de la classe algú que no havia entrat mai i va esborrar el seu compte",
+              "avatar_generated": "va generar un avatar nou per a algú que ja no està en la classe"
             },
             "submission": {
-              "approved": "va aprovar en «{title}» l'entrega d'un alumne que ja no està en la classe, amb un {percentage} %"
+              "approved": "va aprovar en «{title}» l'entrega d'algú que ja no està en la classe, amb un {percentage} %"
             },
             "behavior": {
-              "applied": "va aplicar «{title}» a un alumne que ja no està en la classe"
+              "applied": "va aplicar «{title}» a algú que ja no està en la classe"
             }
           }
         }
@@ -692,17 +692,17 @@
     "missions": {
       "index": {
         "meta": {
-          "title": "Les meues missions | ITAKAI Professor",
-          "description": "Gestiona totes les missions que has creat, edita-les o crea'n de noves per als teus alumnes."
+          "title": "Les meues missions | ITAKAI Docent",
+          "description": "Gestiona totes les missions que has creat, edita-les o crea'n de noves per al teu alumnat."
         },
         "subtitle": "Gestiona les missions de les teues classes"
       },
       "create": {
         "meta": {
-          "title": "Crear missió | ITAKAI Professor"
+          "title": "Crear missió | ITAKAI Docent"
         },
         "pick_class": "Selecciona una classe",
-        "idea_placeholder": "Ex.: Vull una missió sobre cinemàtica on els alumnes calculen trajectòries d'graneres voladores...",
+        "idea_placeholder": "Ex.: Vull una missió sobre cinemàtica en què l'alumnat calcule trajectòries de graneres voladores...",
         "narrative_error": "No he pogut crear la narrativa",
         "ai_unavailable": "El servei d'IA no està disponible ara mateix. Torna-ho a provar d'ací a uns minuts.",
         "no_editable_classes": "No tens cap classe on pugues crear missions: cal accés d'edició.",
@@ -711,11 +711,11 @@
       "detail": {
         "delete_confirm_btn": "Eliminar",
         "toast": {
-          "enigma_has_submissions": "No es pot eliminar un enigma que ja té entregues d'alumnes"
+          "enigma_has_submissions": "No es pot eliminar un enigma que ja té entregues"
         },
         "meta": {
-          "title": "Detall de missió | ITAKAI Professor",
-          "title_loading": "Carregant la missió... | ITAKAI Professor",
+          "title": "Detall de missió | ITAKAI Docent",
+          "title_loading": "Carregant la missió... | ITAKAI Docent",
           "description_fallback": "Detall de missió en ITAKAI"
         },
         "tabs": {
@@ -728,7 +728,7 @@
           "deadline_label": "Data límit",
           "deadline_hint": "Deixa-la buida perquè la missió no caduque.",
           "rarity_label": "Raresa",
-          "rarity_locked_hint": "No pots canviar la raresa: algun alumne ja ha completat la missió.",
+          "rarity_locked_hint": "No pots canviar la raresa: algú de la classe ja ha completat la missió.",
           "rarity": {
             "comun": "Comuna",
             "rara": "Rara",
@@ -738,7 +738,7 @@
           "status_label": "Estat",
           "status_active": "Activa",
           "status_blocked": "Bloquejada",
-          "status_hint": "Bloquejada: els alumnes la veuen amb cadenat i no hi poden entrar.",
+          "status_hint": "Bloquejada: l'alumnat la veu amb cadenat i no hi pot entrar.",
           "background_label": "Imatge de la missió",
           "background_generate": "Generar amb IA",
           "background_regenerate": "Regenerar amb IA",
@@ -802,11 +802,11 @@
     },
     "badges": {
       "title": "Les meues insígnies",
-      "subtitle": "Crea i gestiona insígnies personalitzades per a recompensar els assoliments dels teus alumnes",
+      "subtitle": "Crea i gestiona insígnies personalitzades per a recompensar els assoliments del teu alumnat",
       "new_badge": "Nova insígnia",
       "btn_delete": "Eliminar",
       "no_badges_title": "Sense insígnies",
-      "no_badges_description": "Crea la teua primera insígnia per a recompensar els teus alumnes",
+      "no_badges_description": "Crea la teua primera insígnia per a recompensar el teu alumnat",
       "create_first": "Crear la primera insígnia",
       "form": {
         "edit_title": "Editar insígnia",
@@ -815,7 +815,7 @@
         "label_description": "Descripció",
         "label_image": "Imatge",
         "image_optional": "(opcional)",
-        "placeholder_name": "Ex.: Mestre d'equacions",
+        "placeholder_name": "Ex.: Mestratge en equacions",
         "placeholder_description": "Descriu quin assoliment representa esta insígnia...",
         "btn_remove_image": "Llevar la imatge",
         "preview_label": "Vista prèvia:",
@@ -838,8 +838,8 @@
         "image_type": "Només s'admeten fitxers PNG, JPG, SVG o WebP"
       },
       "meta": {
-        "title": "Les meues insígnies | ITAKAI Professor",
-        "description": "Crea, edita i gestiona insígnies personalitzades per a premiar els assoliments dels teus alumnes."
+        "title": "Les meues insígnies | ITAKAI Docent",
+        "description": "Crea, edita i gestiona insígnies personalitzades per a premiar els assoliments del teu alumnat."
       },
       "filter_system": "Del sistema",
       "generate_error": "No s'ha pogut generar la insígnia.",
@@ -848,8 +848,8 @@
     },
     "students": {
       "index": {
-        "title": "Els meus alumnes",
-        "subtitle": "Gestiona i visualitza el progrés dels teus alumnes",
+        "title": "El meu alumnat",
+        "subtitle": "Gestiona i visualitza el progrés del teu alumnat",
         "search_placeholder": "Buscar per nom, correu o usuari...",
         "filter_all_classes": "Totes les classes",
         "filter_all_progress": "Tot el progrés",
@@ -862,40 +862,40 @@
         "sort_progress_desc": "Més progrés",
         "sort_progress_asc": "Menys progrés",
         "sort_missions_desc": "Més missions",
-        "tab_active": "Actius",
-        "tab_archived": "Arxivats",
-        "no_students_title": "Sense alumnes",
-        "no_students_filtered": "No s'han trobat alumnes amb estos filtres",
-        "no_students_default": "No hi ha alumnes a les teues classes",
-        "no_archived_students_title": "Sense alumnes arxivats",
-        "no_archived_students_default": "No hi ha alumnes a les teues classes arxivades",
+        "tab_active": "En classes actives",
+        "tab_archived": "En classes arxivades",
+        "no_students_title": "Sense estudiants",
+        "no_students_filtered": "Cap resultat amb estos filtres",
+        "no_students_default": "No hi ha estudiants a les teues classes",
+        "no_archived_students_title": "Ningú en classes arxivades",
+        "no_archived_students_default": "No hi ha estudiants a les teues classes arxivades",
         "btn_view": "Veure",
         "stat_missions": "Missions",
         "meta": {
-          "title": "Els meus alumnes | ITAKAI Professor",
-          "description": "Gestiona tots els teus alumnes i revisa el seu progrés i les estadístiques de rendiment acadèmic."
+          "title": "El meu alumnat | ITAKAI Docent",
+          "description": "Gestiona el teu alumnat i revisa el seu progrés i les estadístiques de rendiment acadèmic."
         },
         "stat_badges": "Insígnies"
       },
       "detail": {
-        "breadcrumb_students": "Alumnes",
+        "breadcrumb_students": "Alumnat",
         "loading": "Carregant...",
-        "error_title": "Error en carregar l'alumne",
-        "error_default": "Error en carregar les dades de l'alumne",
+        "error_title": "Error en carregar la fitxa d'estudiant",
+        "error_default": "Error en carregar les dades de la fitxa",
         "btn_retry": "Reintentar",
         "stat_classes": "Classes",
         "stat_missions": "Missions",
         "stat_completed": "Completat",
         "enrolled_classes_title": "Classes inscrites",
         "enrolled_classes_count": "{count} classes",
-        "not_enrolled": "No està inscrit en cap de les teues classes",
+        "not_enrolled": "No està en cap de les teues classes",
         "label_progress": "Completat",
         "stat_mana": "Mana",
         "stat_lives": "Punts de vida",
         "no_activity": "Sense activitat recent",
         "meta": {
-          "title": "Perfil d'alumne | ITAKAI Professor",
-          "description": "Perfil detallat de l'alumne amb estadístiques de rendiment, progrés en missions i activitat recent."
+          "title": "Perfil d'estudiant | ITAKAI Docent",
+          "description": "Perfil detallat de cada estudiant amb estadístiques de rendiment, progrés en missions i activitat recent."
         }
       },
       "actions": {
@@ -929,13 +929,13 @@
         "remove_unused_confirm": "Llevar i esborrar el compte",
         "removed": "{name} ja no està en la classe",
         "removed_account_deleted": "{name} ja no està en la classe i el seu compte sense ús s'ha esborrat",
-        "remove_error": "No s'ha pogut llevar l'alumne de la classe."
+        "remove_error": "No s'ha pogut llevar de la classe."
       }
     },
     "ai_assistant": {
       "meta": {
-        "title": "Assistent IA professor | ITAKAI",
-        "description": "Assistent d'IA especialitzat per a professors. Obtín ajuda sobre gestió de classes i missions."
+        "title": "Assistent IA docent | ITAKAI",
+        "description": "Assistent d'IA especialitzat per al professorat. Obtín ajuda sobre gestió de classes i missions."
       }
     },
     "profile": {
@@ -966,7 +966,7 @@
         "language_updated": "Idioma actualitzat",
         "theme_updated": "Tema actualitzat",
         "danger_zone_title": "Zona perillosa",
-        "danger_zone_description": "Una vegada eliminat el teu compte, no hi ha marxa arrere. Assegura't que n'estàs segur.",
+        "danger_zone_description": "Una vegada eliminat el teu compte, no hi ha marxa arrere. Pensa-t'ho bé abans de continuar.",
         "btn_delete_account": "Eliminar el compte",
         "delete_modal_title": "Eliminar el compte",
         "delete_modal_confirm_prompt": "Per a confirmar, introduïx la teua contrasenya:",
@@ -989,7 +989,7 @@
       },
       "meta": {
         "title": "El meu perfil | ITAKAI",
-        "description": "Gestiona el teu perfil de professor, configura la seguretat i personalitza la teua experiència."
+        "description": "Gestiona el teu perfil docent, configura la seguretat i personalitza la teua experiència."
       }
     },
     "components": {
@@ -1000,9 +1000,9 @@
         "placeholder_title": "Ex.: El despertar de les màquines",
         "label_xp": "XP",
         "label_rewards": "Recompenses en completar-lo",
-        "rewards_locked_hint": "Només pots augmentar les recompenses: algun alumne ja les ha guanyades.",
+        "rewards_locked_hint": "Només pots augmentar les recompenses: algú de la classe ja les ha guanyades.",
         "label_description": "Descripció",
-        "placeholder_description": "Descriu què ha de fer l'alumne...",
+        "placeholder_description": "Descriu què cal fer...",
         "label_objectives": "Objectius",
         "label_objectives_optional": "(opcional)",
         "placeholder_objective": "Escriu un objectiu...",
@@ -1053,8 +1053,8 @@
         "sort": {
           "name_asc": "Nom A-Z",
           "name_desc": "Nom Z-A",
-          "most_students": "Més alumnes",
-          "least_students": "Menys alumnes",
+          "most_students": "Més estudiants",
+          "least_students": "Menys estudiants",
           "most_missions": "Més missions",
           "least_missions": "Menys missions"
         }
@@ -1108,7 +1108,7 @@
         "label_description": "Descripció",
         "label_image": "Imatge",
         "image_optional": "(opcional)",
-        "placeholder_name": "Ex.: Mestre d'equacions",
+        "placeholder_name": "Ex.: Mestratge en equacions",
         "placeholder_description": "Descriu quin assoliment representa esta insígnia...",
         "image_selected": "Imatge seleccionada",
         "btn_remove_image": "Llevar la imatge",
@@ -1190,7 +1190,7 @@
     },
     "templates": {
       "page_title": "Plantilles de classe",
-      "page_subtitle": "Explora classes que altres professors han publicat i importa-les a les teues.",
+      "page_subtitle": "Explora classes que ha publicat el professorat i importa-les a les teues.",
       "search": "Buscar plantilles…",
       "own": "Teua",
       "import": "Importar",
@@ -1199,7 +1199,7 @@
       "import_error": "No s'ha pogut importar la plantilla",
       "load_error": "No s'han pogut carregar les plantilles",
       "empty_title": "Encara no hi ha plantilles",
-      "empty_description": "Quan algun professor publique una classe com a plantilla, apareixerà ací.",
+      "empty_description": "Quan algú del professorat publique una classe com a plantilla, apareixerà ací.",
       "no_results_title": "Sense resultats",
       "no_results_description": "No hi ha plantilles que coincidisquen amb els filtres.",
       "preview_action": "Previsualitzar",

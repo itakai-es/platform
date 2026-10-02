@@ -5,9 +5,9 @@
       "my_classes": "Mis clases",
       "missions": "Misiones",
       "badges": "Insignias",
-      "students": "Alumnos",
+      "students": "Alumnado",
       "about": "Acerca de",
-      "users": "Usuarios",
+      "users": "Cuentas",
       "classes": "Clases",
       "analytics": "Analíticas",
       "logs": "Registros",
@@ -102,9 +102,9 @@
     },
     "roles": {
       "student": "Estudiante",
-      "teacher": "Profesor",
-      "admin": "Administrador",
-      "admin_system": "Administrador del sistema"
+      "teacher": "Docente",
+      "admin": "Administración",
+      "admin_system": "Administración del sistema"
     },
     "sidebar": {
       "new_conversation": "Nueva conversación",
@@ -119,7 +119,7 @@
     },
     "landing": {
       "hero_title": "La aventura de aprender",
-      "hero_subtitle": "Sistema de gestión educativa con elementos de gamificación para estudiantes y profesores",
+      "hero_subtitle": "Sistema de gestión educativa con elementos de gamificación para estudiantes y profesorado",
       "cta_start": "Comenzar",
       "features_title": "¿Qué puedes hacer con ITAKAI?",
       "features_subtitle": "Descubre todas las herramientas y funcionalidades que transforman la educación en una experiencia única",
@@ -139,14 +139,14 @@
       "about_title": "¿Qué es ITAKAI?",
       "about_description_1": "ITAKAI es la evolución de <strong>MyClassGame</strong>, potenciada con <strong>inteligencia artificial</strong>. Una plataforma educativa gamificada que transforma la formación profesional en una experiencia inmersiva.",
       "about_description_2": "Generación automática de contenidos, asistentes IA personalizados para cada estudiante, y análisis predictivo del rendimiento. Todo integrado en un ecosistema donde aprender es una aventura.",
-      "stat_students": "Alumnos",
-      "stat_teachers": "Profesores",
+      "stat_students": "Estudiantes",
+      "stat_teachers": "Docentes",
       "stat_centers": "Centros",
       "partners_title": "¿Quienes somos?",
       "developed_by": "Desarrollado por",
-      "gods_title": "Tus mentores olímpicos",
-      "gods_subtitle": "5 asistentes IA inspirados en dioses griegos, cada uno experto en su dominio",
-      "cta_final_title": "¿Listo para tu aventura épica?",
+      "gods_title": "Tus guías del Olimpo",
+      "gods_subtitle": "5 asistentes IA inspirados en la mitología griega, cada cual con su especialidad",
+      "cta_final_title": "¿Te lanzas a tu aventura épica?",
       "cta_final_subtitle": "Únete a miles de estudiantes que ya están transformando su aprendizaje con ITAKAI",
       "cta_final_button": "Comenzar gratis ahora",
       "footer_copyright_alt": "© {year} ITAKAI. Sistema educativo gamificado",
@@ -183,8 +183,8 @@
       "cookies": "Cookies",
       "licenses": "Licencias",
       "system_access": "Acceso al sistema",
-      "teacher_panel": "Panel del profesor",
-      "student_panel": "Panel del estudiante",
+      "teacher_panel": "Panel docente",
+      "student_panel": "Panel de estudiante",
       "templates": "Plantillas de clase",
       "help_center": "Centro de ayuda"
     },
@@ -197,7 +197,7 @@
     },
     "join_class_modal": {
       "title": "Unirse a una clase",
-      "description": "Introduce el código de clase que te proporcionó tu profesor",
+      "description": "Introduce el código de clase que te dio tu docente",
       "placeholder": "ABC123",
       "joining": "Uniéndose...",
       "join_button": "Unirse a la clase",
@@ -205,14 +205,14 @@
       "error_min_length": "El código debe tener al menos 4 caracteres",
       "error_not_found": "No se encontró una clase con ese código",
       "error_invalid_code": "Código de clase no válido",
-      "error_already_enrolled": "Ya estás inscrito en esta clase",
+      "error_already_enrolled": "Ya estás en esta clase",
       "error_generic": "Error al unirse a la clase. Inténtalo de nuevo.",
       "error_generic_short": "Error al unirse a la clase",
       "success": "Te has unido a {className}"
     },
     "invite_students_modal": {
-      "title": "Invitar alumnos",
-      "description": "Comparte este código con tus alumnos para que se unan a la clase:",
+      "title": "Invitar al alumnado",
+      "description": "Comparte este código con tu alumnado para que se una a la clase:",
       "copy_code": "Copiar código",
       "code_copied": "Código copiado al portapapeles",
       "copy_error": "Error al copiar el código",
@@ -232,7 +232,7 @@
         },
         "profesor": {
           "title": "Ayuda para el profesorado",
-          "subtitle": "Guías paso a paso para crear clases, misiones y recompensas. Escritas para docentes, no para informáticos."
+          "subtitle": "Guías paso a paso para crear clases, misiones y recompensas. Escritas para docentes, sin jerga técnica."
         },
         "alumno": {
           "title": "Ayuda para el alumnado",
@@ -289,7 +289,7 @@
     },
     "meta": {
       "site_title": "ITAKAI - La aventura de aprender | Plataforma educativa gamificada",
-      "site_description": "Transforma la educación con ITAKAI, la plataforma gamificada que inspira, motiva y conecta a estudiantes, profesores y familias. Únete a más de 50,000 estudiantes.",
+      "site_description": "Transforma la educación con ITAKAI, la plataforma gamificada que inspira, motiva y conecta a estudiantes, profesorado y familias. Únete a más de 50,000 estudiantes.",
       "og_title": "ITAKAI - La aventura de aprender",
       "og_description": "Plataforma educativa gamificada con IA, narrativas inmersivas y análisis inteligente."
     },
@@ -302,7 +302,7 @@
     "maintenance": {
       "title": "En mantenimiento",
       "message": "Estamos haciendo mejoras. Vuelve en unos minutos.",
-      "admin_notice": "Modo mantenimiento activo — solo los administradores pueden acceder."
+      "admin_notice": "Modo mantenimiento activo — solo puede entrar el equipo de administración."
     },
     "menu_display": {
       "title": "Menú superior",
@@ -369,7 +369,7 @@
       "send_to_ai": "Enviar a la IA"
     },
     "student_preview": {
-      "banner": "Estás viendo la plataforma como un alumno (demo)"
+      "banner": "Estás viendo la plataforma como estudiante (demo)"
     },
     "change_email": {
       "title": "Correo electrónico",
@@ -394,10 +394,10 @@
       "message": "El enlace para abrir este archivo ha caducado. Vuelve a la misión y ábrelo otra vez."
     },
     "class_teachers": {
-      "owner": "Propietario",
+      "owner": "Propiedad",
       "profiles": {
         "titular": "Titular",
-        "sustituto": "Sustituto",
+        "sustituto": "Sustitución",
         "practicas": "Prácticas"
       },
       "access": {
@@ -413,10 +413,10 @@
       "next": "Siguiente"
     },
     "account_deletion": {
-      "blocked_self": "Aún no puedes borrar tu cuenta: eres el propietario de estas clases y en ellas no hay nadie más con administración. Da administración a otro profesor o pásale la propiedad, y vuelve aquí.",
-      "blocked_admin": "Esta cuenta aún no se puede borrar: es la propietaria de estas clases y en ellas no hay nadie más con administración. Antes hay que pasar su propiedad a otro profesor.",
-      "transfers_self": "Tus clases pasarán a otro profesor con administración en ellas:",
-      "transfers_admin": "Sus clases pasarán a otro profesor con administración en ellas:",
+      "blocked_self": "Aún no puedes borrar tu cuenta: la propiedad de estas clases es tuya y en ellas no hay nadie más con administración. Da administración a alguien más del profesorado o pásale la propiedad, y vuelve aquí.",
+      "blocked_admin": "Esta cuenta aún no se puede borrar: es la propietaria de estas clases y en ellas no hay nadie más con administración. Antes hay que pasar su propiedad a otra cuenta docente.",
+      "transfers_self": "Tus clases pasarán a alguien del profesorado con administración en ellas:",
+      "transfers_admin": "Sus clases pasarán a alguien del profesorado con administración en ellas:",
       "transfer_item": "{class}, a {name}"
     },
     "copy": {
@@ -450,7 +450,7 @@
     },
     "blog": {
       "hero_title": "El blog de ITAKAI",
-      "hero_subtitle": "Novedades de la plataforma, ideas para gamificar el aula y experiencias de otros docentes.",
+      "hero_subtitle": "Novedades de la plataforma, ideas para gamificar el aula y experiencias de otras aulas.",
       "search_placeholder": "Buscar en el blog…",
       "search_empty_hint": "Prueba con otras palabras o borra la búsqueda para ver todas las entradas.",
       "all_posts": "Todas",
@@ -469,7 +469,7 @@
     },
     "templates": {
       "hero_title": "Plantillas de clase",
-      "hero_subtitle": "Clases gamificadas que otros docentes han publicado para que no empieces de cero: con su historia, sus misiones, su tienda y sus comportamientos listos para usar.",
+      "hero_subtitle": "Clases gamificadas que ha publicado el profesorado para que no empieces de cero: con su historia, sus misiones, su tienda y sus comportamientos listos para usar.",
       "view": "Ver plantilla",
       "copy_link": "Copiar enlace",
       "result_count": "Ninguna plantilla | 1 plantilla | {count} plantillas",
@@ -486,8 +486,8 @@
         "what_you_get_missions": "Importarla crea una clase nueva y tuya con la historia, la portada, las funcionalidades, la tienda y los comportamientos de la plantilla y, si quieres, con sus misiones.",
         "import_missions": "Importar también su misión | Importar también sus {count} misiones",
         "import_missions_hint": "Llegan sin fecha límite, sin documentos y sin insignias.",
-        "login_note": "Para importarla hace falta entrar con una cuenta de profesor.",
-        "teacher_only": "Para importarla hace falta una cuenta de profesor."
+        "login_note": "Para importarla hace falta entrar con una cuenta docente.",
+        "teacher_only": "Para importarla hace falta una cuenta docente."
       },
       "gone": {
         "title": "Esta plantilla ya no está disponible",
@@ -499,7 +499,7 @@
       },
       "meta": {
         "title": "Plantillas de clase · ITAKAI",
-        "description": "Clases gamificadas que el profesorado ha publicado en ITAKAI para que otros docentes partan de ellas."
+        "description": "Clases gamificadas que el profesorado ha publicado en ITAKAI para que cualquier docente parta de ellas."
       }
     }
   }

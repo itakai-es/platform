@@ -416,7 +416,7 @@ describe('deleteEnigma', () => {
       mission: baseMissionWithEnigmas(3),
     })
 
-    await expect(missionsService.deleteEnigma(TEACHER, ENIGMA)).rejects.toThrow(/lo completaron/)
+    await expect(missionsService.deleteEnigma(TEACHER, ENIGMA)).rejects.toThrow(/ya ha completado/)
     expect(mocks.missionEnigmaDelete).not.toHaveBeenCalled()
   })
 
@@ -479,7 +479,7 @@ describe.skip('completeMission', () => {
     mocks.missionFindUnique.mockResolvedValueOnce(baseMission(2))
     mocks.classEnrollmentFindUnique.mockResolvedValueOnce(null)
 
-    await expect(missionsService.completeMission(STUDENT, MISSION)).rejects.toThrow(/No estás inscrito/)
+    await expect(missionsService.completeMission(STUDENT, MISSION)).rejects.toThrow(/No estás en esta clase/)
   })
 
   it('short-circuits when the mission was already completed (idempotent)', async () => {

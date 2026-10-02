@@ -24,7 +24,7 @@
       ai-placeholder="Ej: Añade una sección sobre las casas de Hogwarts..."
       context-label="Editando la historia de la clase"
       ai-modal-hint="Dile a la IA qué quieres añadir o cambiar de la historia. Tiene acceso al contenido actual."
-      ai-system-context="El profesor esta editando la NARRATIVA/HISTORIA de su clase gamificada. Es la historia que envuelve toda la clase y motiva a los alumnos. Genera contenido narrativo, inmersivo y creativo que encaje con la tematica de la clase."
+      ai-system-context="Quien imparte la clase está editando la NARRATIVA/HISTORIA de su clase gamificada. Es la historia que envuelve toda la clase y motiva al alumnado. Genera contenido narrativo, inmersivo y creativo que encaje con la tematica de la clase."
       @cancel="isEditing = false"
       @save="save"
     />

@@ -10,8 +10,8 @@ describe('contexto fijo del asistente', () => {
   it('al profesorado le cuenta las clases compartidas, el historial y las cuentas sin correo', () => {
     const es = getPlatformContext('teacher', 'es')
     for (const label of [
-      'Ajustes>Profesorado>Añadir profesor',
-      'Titular|Sustituto|Prácticas',
+      'Ajustes>Profesorado>Añadir docente',
+      'Titular|Sustitución|Prácticas',
       'Pasar la propiedad',
       'Salir de la clase',
       'Historial',
@@ -42,9 +42,9 @@ describe('contexto fijo del asistente', () => {
 
   it('al alumnado no le cuenta lo del profesorado, y el resto de idiomas van en español', () => {
     const student = getPlatformContext('student', 'ca')
-    expect(student).toContain('Menú del alumno')
+    expect(student).toContain('Menú de estudiante')
     expect(student).toContain('Cambia tu contraseña')
-    expect(student).not.toContain('Añadir profesor')
-    expect(student).not.toContain('Menú del profesor')
+    expect(student).not.toContain('Añadir docente')
+    expect(student).not.toContain('Menú docente')
   })
 })

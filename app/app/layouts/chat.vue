@@ -207,7 +207,7 @@ const userRole = computed(() => user.value?.role || 'student')
 
 const userSubtitle = computed(() => {
   if (userRole.value === 'student') {
-    return t('chat.user_subtitles.default')
+    return t('common.roles.student')
   }
   if (userRole.value === 'teacher') {
     return t('chat.user_subtitles.teacher')

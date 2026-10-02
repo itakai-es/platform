@@ -39,7 +39,7 @@ async function main() {
   // se imprime aquí. Cualquiera se puede fijar con ADMIN_EMAIL / ADMIN_PASSWORD.
   const anyAdmin = await prisma.user.findFirst({ where: { role: 'admin' } })
   if (anyAdmin) {
-    console.log(`  ℹ️  Ya existe un administrador (${anyAdmin.email}) — no se crea otro.`)
+    console.log(`  ℹ️  Ya existe una cuenta de administración (${anyAdmin.email}) — no se crea otra.`)
   } else {
     // El correo se guarda en minúsculas, como en todas las vías de alta.
     const email = normalizeEmail(process.env.ADMIN_EMAIL || 'admin@itakai.local')
@@ -50,7 +50,7 @@ async function main() {
     await prisma.user.create({
       data: {
         email,
-        name: 'Administrador',
+        name: 'Administración',
         role: 'admin',
         isOnboarded: true,
         passwordHash: await hashPassword(password),
@@ -58,7 +58,7 @@ async function main() {
     })
 
     console.log('\n  ══════════════════════════════════════════════════')
-    console.log('  ✅ Administrador creado — entra con estas credenciales:')
+    console.log('  ✅ Cuenta de administración creada — entra con estas credenciales:')
     console.log(`       Email:      ${email}`)
     console.log(
       `       Contraseña: ${provided ? '(la que definiste en ADMIN_PASSWORD)' : password + '   ← generada, apúntala'}`

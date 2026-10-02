@@ -433,7 +433,7 @@ export class MissionsService {
     const ref = mission && (await getStudentEnrollment(mission.classId, user))
     if (!mission || !ref) throw new NotFoundError('Misión no encontrada')
     if (mission.class.archived) throw new Error('La clase está archivada y no admite nuevas acciones')
-    if (mission.status === 'bloqueada') throw new Error('Esta misión está bloqueada por el profesor')
+    if (mission.status === 'bloqueada') throw new Error('Tu docente ha bloqueado esta misión')
 
     // Perfil del alumno en la clase (alias y avatar) para la actividad.
     const enrollment = await prisma.classEnrollment.findUniqueOrThrow({ where: { id: ref.id } })
@@ -828,7 +828,7 @@ export class MissionsService {
         where: { missionId, completedAt: { not: null } },
       })
       if (completedCount > 0) {
-        throw new Error('No puedes cambiar la rareza de una misión que ya tiene alumnos que la completaron')
+        throw new Error('No puedes cambiar la rareza de una misión que alguien de la clase ya ha completado')
       }
     }
 
@@ -1007,7 +1007,7 @@ export class MissionsService {
           newManaReward < enigma.manaReward)
       ) {
         throw new Error(
-          'No puedes reducir las recompensas (XP, monedas o maná) de un enigma que ya completaron alumnos, porque podrían haberlas gastado. Solo puedes mantenerlas o aumentarlas.'
+          'No puedes reducir las recompensas (XP, monedas o maná) de un enigma que alguien de la clase ya ha completado, porque podría haberlas gastado. Solo puedes mantenerlas o aumentarlas.'
         )
       }
     }
@@ -1136,8 +1136,8 @@ export class MissionsService {
     })
 
     if (!enigma) throw new NotFoundError('Enigma no encontrado')
-    if (enigma.submissions.length > 0) throw new Error('No se puede eliminar un enigma que ya tiene entregas de alumnos')
-    if (enigma.progress.length > 0) throw new Error('No se puede eliminar un enigma que ya tiene alumnos que lo completaron')
+    if (enigma.submissions.length > 0) throw new Error('No se puede eliminar un enigma que ya tiene entregas del alumnado')
+    if (enigma.progress.length > 0) throw new Error('No se puede eliminar un enigma que alguien de la clase ya ha completado')
     if (enigma.mission.enigmas.length <= 1) {
       throw new Error('La misión debe tener al menos un enigma; no puedes eliminar el último')
     }

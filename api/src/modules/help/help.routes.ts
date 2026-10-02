@@ -160,7 +160,7 @@ export async function adminHelpRoutes(fastify: FastifyInstance) {
     if (reply.sent) return
     const user = request.user as { role: string | null }
     if (user.role !== 'admin') {
-      return reply.status(403).send({ message: 'Solo los administradores pueden editar la ayuda' })
+      return reply.status(403).send({ message: 'Solo el equipo de administración puede editar la ayuda' })
     }
   })
 

@@ -57,7 +57,7 @@
           <div class="grid grid-cols-2 gap-2 text-center">
             <div class="bg-navy-700/5 rounded-xl py-2.5 px-2">
               <p class="text-lg font-bold text-navy-700">{{ cls.studentCount }}</p>
-              <p class="text-xs text-navy-700/70 uppercase tracking-wide">Alumnos</p>
+              <p class="text-xs text-navy-700/70 uppercase tracking-wide">Estudiantes</p>
             </div>
             <div class="bg-navy-700/5 rounded-xl py-2.5 px-2">
               <p class="text-lg font-bold text-navy-700">{{ cls.missionCount }}</p>

@@ -55,7 +55,7 @@ async function studentEnrollment(classId: string, studentId: string, tx: Prisma.
     select: { id: true, isPreview: true },
   })
   if (!enrollment || enrollment.isPreview) {
-    throw new NotFoundError('El alumno no está en esta clase')
+    throw new NotFoundError('Esa cuenta de estudiante no está en esta clase')
   }
   return enrollment
 }

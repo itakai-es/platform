@@ -5,9 +5,9 @@
       "my_classes": "As minhas turmas",
       "missions": "Missões",
       "badges": "Emblemas",
-      "students": "Alunos",
+      "students": "Estudantes",
       "about": "Sobre",
-      "users": "Utilizadores",
+      "users": "Contas",
       "classes": "Turmas",
       "analytics": "Análises",
       "logs": "Registos",
@@ -101,10 +101,10 @@
       "rate_limited": "A partir da tua ligação foram feitos muitos pedidos em pouco tempo. Espera um par de minutos e tenta novamente."
     },
     "roles": {
-      "student": "Aluno",
-      "teacher": "Professor",
-      "admin": "Administrador",
-      "admin_system": "Administrador do sistema"
+      "student": "Estudante",
+      "teacher": "Docente",
+      "admin": "Administração",
+      "admin_system": "Administração do sistema"
     },
     "sidebar": {
       "new_conversation": "Nova conversa",
@@ -119,7 +119,7 @@
     },
     "landing": {
       "hero_title": "A aventura de aprender",
-      "hero_subtitle": "Sistema de gestão educativa com elementos de gamificação para alunos e professores",
+      "hero_subtitle": "Sistema de gestão educativa com elementos de gamificação para estudantes e corpo docente",
       "cta_start": "Começar",
       "features_title": "O que podes fazer com o ITAKAI?",
       "features_subtitle": "Descobre todas as ferramentas e funcionalidades que transformam a educação numa experiência única",
@@ -130,24 +130,24 @@
       "feature_teamwork_title": "Trabalho em equipa",
       "feature_teamwork_desc": "Desafios colaborativos e rankings que promovem o trabalho em equipa e a superação constante",
       "feature_analytics_title": "Análise inteligente",
-      "feature_analytics_desc": "Ferramentas avançadas de acompanhamento e análise do progresso dos alunos",
+      "feature_analytics_desc": "Ferramentas avançadas de acompanhamento e análise do progresso de cada estudante",
       "feature_access_title": "Acesso universal",
       "feature_access_desc": "Funciona em qualquer dispositivo, a partir de qualquer lugar do mundo",
       "feature_ai_title": "IA educativa",
-      "feature_ai_desc": "Assistentes que personalizam a aprendizagem para cada aluno",
+      "feature_ai_desc": "Assistentes que personalizam a aprendizagem para cada estudante",
       "profiles_title": "Escolhe o teu perfil para começar",
       "about_title": "O que é o ITAKAI?",
       "about_description_1": "O ITAKAI é a evolução do <strong>MyClassGame</strong>, potenciada com <strong>inteligência artificial</strong>. Uma plataforma educativa gamificada que transforma o ensino profissional numa experiência imersiva.",
-      "about_description_2": "Geração automática de conteúdos, assistentes de IA personalizados para cada aluno e análise preditiva do desempenho. Tudo integrado num ecossistema onde aprender é uma aventura.",
-      "stat_students": "Alunos",
-      "stat_teachers": "Professores",
+      "about_description_2": "Geração automática de conteúdos, assistentes de IA personalizados para cada estudante e análise preditiva do desempenho. Tudo integrado num ecossistema onde aprender é uma aventura.",
+      "stat_students": "Estudantes",
+      "stat_teachers": "Docentes",
       "stat_centers": "Escolas",
       "partners_title": "Quem somos?",
       "developed_by": "Desenvolvido por",
-      "gods_title": "Os teus mentores olímpicos",
-      "gods_subtitle": "5 assistentes de IA inspirados em deuses gregos, cada um especialista no seu domínio",
-      "cta_final_title": "Pronto para a tua aventura épica?",
-      "cta_final_subtitle": "Junta-te a milhares de alunos que já estão a transformar a sua aprendizagem com o ITAKAI",
+      "gods_title": "Os teus guias do Olimpo",
+      "gods_subtitle": "5 assistentes de IA inspirados na mitologia grega, cada qual com a sua especialidade",
+      "cta_final_title": "Embarcas na tua aventura épica?",
+      "cta_final_subtitle": "Junta-te a milhares de estudantes que já estão a transformar a sua aprendizagem com o ITAKAI",
       "cta_final_button": "Começar grátis agora",
       "footer_copyright_alt": "© {year} ITAKAI. Sistema educativo gamificado",
       "gods": {
@@ -183,8 +183,8 @@
       "cookies": "Cookies",
       "licenses": "Licenças",
       "system_access": "Acesso ao sistema",
-      "teacher_panel": "Painel do professor",
-      "student_panel": "Painel do aluno",
+      "teacher_panel": "Painel docente",
+      "student_panel": "Painel de estudante",
       "templates": "Modelos de turma",
       "help_center": "Centro de ajuda"
     },
@@ -197,7 +197,7 @@
     },
     "join_class_modal": {
       "title": "Juntar-se a uma turma",
-      "description": "Introduz o código de turma que o teu professor te deu",
+      "description": "Introduz o código de turma que te foi dado por quem te dá aulas",
       "placeholder": "ABC123",
       "joining": "A juntar-se...",
       "join_button": "Juntar-se à turma",
@@ -205,14 +205,14 @@
       "error_min_length": "O código tem de ter pelo menos 4 caracteres",
       "error_not_found": "Não foi encontrada nenhuma turma com esse código",
       "error_invalid_code": "Código de turma inválido",
-      "error_already_enrolled": "Já estás inscrito nesta turma",
+      "error_already_enrolled": "Já estás nesta turma",
       "error_generic": "Erro ao juntar-se à turma. Tenta novamente.",
       "error_generic_short": "Erro ao juntar-se à turma",
       "success": "Juntaste-te a {className}"
     },
     "invite_students_modal": {
-      "title": "Convidar alunos",
-      "description": "Partilha este código com os teus alunos para que se juntem à turma:",
+      "title": "Convidar estudantes",
+      "description": "Partilha este código com a tua turma para que se junte:",
       "copy_code": "Copiar código",
       "code_copied": "Código copiado para a área de transferência",
       "copy_error": "Erro ao copiar o código",
@@ -228,14 +228,14 @@
       "hero": {
         "todo": {
           "title": "Em que podemos ajudar?",
-          "subtitle": "Guias, tutoriais e vídeos para docentes e alunos."
+          "subtitle": "Guias, tutoriais e vídeos para docentes e estudantes."
         },
         "profesor": {
           "title": "Ajuda para docentes",
-          "subtitle": "Guias passo a passo para criar turmas, missões e recompensas. Escritos para docentes, não para informáticos."
+          "subtitle": "Guias passo a passo para criar turmas, missões e recompensas. Escritos para docentes, sem jargão técnico."
         },
         "alumno": {
-          "title": "Ajuda para alunos",
+          "title": "Ajuda para estudantes",
           "subtitle": "Como entrar na tua turma, entregar missões e tirar partido do teu XP, das tuas moedas e do teu mana."
         }
       },
@@ -252,7 +252,7 @@
       "feedback_question": "Foi útil?",
       "feedback_yes": "Sim",
       "feedback_no": "Nem por isso",
-      "feedback_thanks": "Obrigado. Ajuda-nos a saber o que reescrever.",
+      "feedback_thanks": "Agradecemos-te. Ajuda-nos a saber o que reescrever.",
       "empty_title": "Ainda não há artigos",
       "empty_description": "Quando o primeiro artigo for publicado aparecerá aqui.",
       "not_found_title": "Não encontrámos essa página",
@@ -278,8 +278,8 @@
       "scope_label": "Secção de ajuda",
       "audience": {
         "profesor": "Docentes",
-        "alumno": "Alunos",
-        "ambos": "Docentes e alunos"
+        "alumno": "Estudantes",
+        "ambos": "Docentes e estudantes"
       },
       "back_to_app": "Voltar à app",
       "published_on": "Publicado a {date}",
@@ -289,7 +289,7 @@
     },
     "meta": {
       "site_title": "ITAKAI - A aventura de aprender | Plataforma educativa gamificada",
-      "site_description": "Transforma a educação com o ITAKAI, a plataforma gamificada que inspira, motiva e liga alunos, professores e famílias. Junta-te a mais de 50 000 alunos.",
+      "site_description": "Transforma a educação com o ITAKAI, a plataforma gamificada que inspira, motiva e liga estudantes, corpo docente e famílias. Junta-te a mais de 50 000 estudantes.",
       "og_title": "ITAKAI - A aventura de aprender",
       "og_description": "Plataforma educativa gamificada com IA, narrativas imersivas e análise inteligente."
     },
@@ -302,7 +302,7 @@
     "maintenance": {
       "title": "Em manutenção",
       "message": "Estamos a fazer melhorias. Volta daqui a uns minutos.",
-      "admin_notice": "Modo de manutenção ativo — só os administradores podem aceder."
+      "admin_notice": "Modo de manutenção ativo — só a equipa de administração pode aceder."
     },
     "menu_display": {
       "title": "Menu superior",
@@ -369,7 +369,7 @@
       "send_to_ai": "Enviar para a IA"
     },
     "student_preview": {
-      "banner": "Estás a ver a plataforma como aluno (demo)"
+      "banner": "Estás a ver a plataforma como estudante (demo)"
     },
     "change_email": {
       "title": "E-mail",
@@ -394,10 +394,10 @@
       "message": "O link para abrir este ficheiro expirou. Volta à missão e abre-o outra vez."
     },
     "class_teachers": {
-      "owner": "Proprietário",
+      "owner": "Propriedade",
       "profiles": {
         "titular": "Titular",
-        "sustituto": "Substituto",
+        "sustituto": "Substituição",
         "practicas": "Estágio"
       },
       "access": {
@@ -413,10 +413,10 @@
       "next": "Seguinte"
     },
     "account_deletion": {
-      "blocked_self": "Ainda não podes apagar a tua conta: és o proprietário destas turmas e nelas não há mais ninguém com administração. Dá administração a outro professor ou passa-lhe a propriedade, e volta aqui.",
-      "blocked_admin": "Esta conta ainda não pode ser apagada: é a proprietária destas turmas e nelas não há mais ninguém com administração. Primeiro é preciso passar a sua propriedade a outro professor.",
-      "transfers_self": "As tuas turmas vão passar para outro professor com administração nelas:",
-      "transfers_admin": "As suas turmas vão passar para outro professor com administração nelas:",
+      "blocked_self": "Ainda não podes apagar a tua conta: estas turmas são tuas e nelas não há mais ninguém com administração. Dá administração a outra pessoa do corpo docente ou passa-lhe a propriedade, e volta aqui.",
+      "blocked_admin": "Esta conta ainda não pode ser apagada: é a proprietária destas turmas e nelas não há mais ninguém com administração. Primeiro é preciso passar a sua propriedade a outra conta docente.",
+      "transfers_self": "As tuas turmas vão passar para outra pessoa do corpo docente com administração nelas:",
+      "transfers_admin": "As suas turmas vão passar para outra pessoa do corpo docente com administração nelas:",
       "transfer_item": "{class}, para {name}"
     },
     "copy": {
@@ -450,7 +450,7 @@
     },
     "blog": {
       "hero_title": "O blogue do ITAKAI",
-      "hero_subtitle": "Novidades da plataforma, ideias para gamificar a sala de aula e experiências de outros professores.",
+      "hero_subtitle": "Novidades da plataforma, ideias para gamificar a sala de aula e experiências de outras salas de aula.",
       "search_placeholder": "Pesquisar no blogue…",
       "search_empty_hint": "Tenta outras palavras ou apaga a pesquisa para ver todas as publicações.",
       "all_posts": "Todas",
@@ -469,7 +469,7 @@
     },
     "templates": {
       "hero_title": "Modelos de turma",
-      "hero_subtitle": "Turmas gamificadas que outros professores publicaram para não começares do zero: com a sua história, as suas missões, a sua loja e os seus comportamentos prontos a usar.",
+      "hero_subtitle": "Turmas gamificadas publicadas pelo corpo docente para não começares do zero: com a sua história, as suas missões, a sua loja e os seus comportamentos prontos a usar.",
       "view": "Ver modelo",
       "copy_link": "Copiar link",
       "result_count": "Nenhum modelo | 1 modelo | {count} modelos",
@@ -486,8 +486,8 @@
         "what_you_get_missions": "Importá-lo cria uma turma nova e tua com a história, a capa, as funcionalidades, a loja e os comportamentos do modelo e, se quiseres, com as suas missões.",
         "import_missions": "Importar também a sua missão | Importar também as suas {count} missões",
         "import_missions_hint": "Chegam sem prazo, sem documentos e sem emblemas.",
-        "login_note": "Para o importar, tens de entrar com uma conta de professor.",
-        "teacher_only": "Para o importar, é preciso uma conta de professor."
+        "login_note": "Para o importar, tens de entrar com uma conta docente.",
+        "teacher_only": "Para o importar, é preciso uma conta docente."
       },
       "gone": {
         "title": "Este modelo já não está disponível",
@@ -499,7 +499,7 @@
       },
       "meta": {
         "title": "Modelos de turma · ITAKAI",
-        "description": "Turmas gamificadas que os professores publicaram no ITAKAI para que outros docentes partam delas."
+        "description": "Turmas gamificadas que o corpo docente publicou no ITAKAI para que qualquer docente parta delas."
       }
     }
   }

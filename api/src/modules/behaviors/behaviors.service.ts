@@ -182,7 +182,7 @@ class BehaviorsService {
       const enrollment = await tx.classEnrollment.findUnique({
         where: { studentId_classId: { studentId, classId } },
       })
-      if (!enrollment) throw new Error('El alumno no está inscrito en esta clase')
+      if (!enrollment) throw new Error('Esa cuenta de estudiante no está en esta clase')
 
       // Respeta los ajustes de la clase: si los comportamientos están desactivados no se
       // pueden aplicar, y los deltas de recursos desactivados (XP/monedas/vidas) se ignoran

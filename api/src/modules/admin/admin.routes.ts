@@ -215,7 +215,7 @@ export async function adminRoutes(fastify: FastifyInstance) {
 
     const user = request.user as { role: string | null }
     if (user.role !== 'admin') {
-      reply.status(403).send({ message: 'Acceso denegado. Solo administradores.' })
+      reply.status(403).send({ message: 'Acceso denegado. Solo para administración.' })
     }
   })
 
@@ -278,11 +278,11 @@ export async function adminRoutes(fastify: FastifyInstance) {
 
       const target = await prisma.user.findUnique({ where: { id: userId }, select: { role: true } })
       if (!target) {
-        return reply.status(404).send({ message: 'Usuario no encontrado' })
+        return reply.status(404).send({ message: 'Cuenta no encontrada' })
       }
       // A otro administrador no se le suspende desde el panel.
       if (target.role === 'admin') {
-        return reply.status(403).send({ message: 'No se puede suspender a otro administrador' })
+        return reply.status(403).send({ message: 'No se puede suspender otra cuenta de administración' })
       }
 
       // Suspender cierra también sus sesiones: no puede renovar el acceso con las que tenía abiertas.
@@ -301,7 +301,7 @@ export async function adminRoutes(fastify: FastifyInstance) {
       return {
         user: await adminUserCard(userId),
         success: true,
-        message: 'Usuario suspendido correctamente',
+        message: 'Cuenta suspendida correctamente',
       }
     } catch (error) {
       return reply.status(500).send({ message: 'Error interno' })
@@ -357,7 +357,7 @@ export async function adminRoutes(fastify: FastifyInstance) {
           select: { accountType: true, homeClassId: true },
         })
         if (!target) {
-          return reply.status(404).send({ message: 'Usuario no encontrado' })
+          return reply.status(404).send({ message: 'Cuenta no encontrada' })
         }
         if (target.accountType !== 'managed') {
           return reply.status(400).send({
@@ -447,7 +447,7 @@ export async function adminRoutes(fastify: FastifyInstance) {
 
       const target = await prisma.user.findUnique({ where: { id: userId }, select: { id: true } })
       if (!target) {
-        return reply.status(404).send({ message: 'Usuario no encontrado' })
+        return reply.status(404).send({ message: 'Cuenta no encontrada' })
       }
 
       await prisma.user.update({
@@ -459,7 +459,7 @@ export async function adminRoutes(fastify: FastifyInstance) {
       return {
         user: await adminUserCard(userId),
         success: true,
-        message: 'Usuario activado correctamente',
+        message: 'Cuenta activada correctamente',
       }
     } catch (error) {
       return reply.status(500).send({ message: 'Error interno' })
@@ -478,14 +478,14 @@ export async function adminRoutes(fastify: FastifyInstance) {
 
       const target = await prisma.user.findUnique({ where: { id: userId }, select: { id: true } })
       if (!target) {
-        return reply.status(404).send({ message: 'Usuario no encontrado' })
+        return reply.status(404).send({ message: 'Cuenta no encontrada' })
       }
 
       // Sus clases pasan antes a otra persona y sus insignias a quien corresponda;
       // si alguna clase no tiene a quién pasar, no se borra nada.
       await deleteUserAccount(userId, { actorId: adminId, bySelf: false })
 
-      return { success: true, message: 'Usuario eliminado correctamente' }
+      return { success: true, message: 'Cuenta eliminada correctamente' }
     } catch (error) {
       if (error instanceof AccountDeletionBlockedError) {
         return reply
@@ -503,7 +503,7 @@ export async function adminRoutes(fastify: FastifyInstance) {
       const { userId } = request.params
       const target = await prisma.user.findUnique({ where: { id: userId }, select: { id: true } })
       if (!target) {
-        return reply.status(404).send({ message: 'Usuario no encontrado' })
+        return reply.status(404).send({ message: 'Cuenta no encontrada' })
       }
       return accountDeletionCheck(userId)
     }
@@ -879,7 +879,7 @@ export async function adminRoutes(fastify: FastifyInstance) {
 
       // ── Format distribution data ──
       const roleColors: Record<string, string> = { student: '#6FEDB7', teacher: '#8B5CF6', admin: '#F87171' }
-      const roleLabels: Record<string, string> = { student: 'Estudiantes', teacher: 'Profesores', admin: 'Administradores' }
+      const roleLabels: Record<string, string> = { student: 'Estudiantes', teacher: 'Docentes', admin: 'Administración' }
       const statusColors: Record<string, string> = { activa: '#6FEDB7', bloqueada: '#F87171' }
       const statusLabels: Record<string, string> = { activa: 'Activas', bloqueada: 'Bloqueadas' }
       const rarityColors: Record<string, string> = { comun: '#94A3B8', rara: '#3B82F6', epica: '#A855F7', legendaria: '#F59E0B' }

@@ -79,7 +79,7 @@ export async function submissionsRoutes(fastify: FastifyInstance) {
       try {
         const { id, role } = request.user as { id: string; role: string }
         if (role !== 'teacher') {
-          return reply.status(403).send({ message: 'Solo profesores pueden ver entregas' })
+          return reply.status(403).send({ message: 'Solo el profesorado puede ver entregas' })
         }
         const { enigmaId } = request.params
         const { status } = request.query
@@ -106,7 +106,7 @@ export async function submissionsRoutes(fastify: FastifyInstance) {
       try {
         const { id, role } = request.user as { id: string; role: string }
         if (role !== 'teacher') {
-          return reply.status(403).send({ message: 'Solo profesores pueden ver entregas' })
+          return reply.status(403).send({ message: 'Solo el profesorado puede ver entregas' })
         }
         const { classId } = request.params
         const { status } = request.query
@@ -135,7 +135,7 @@ export async function submissionsRoutes(fastify: FastifyInstance) {
       try {
         const { id, role } = request.user as { id: string; role: string }
         if (role !== 'teacher') {
-          return reply.status(403).send({ message: 'Solo profesores pueden aprobar entregas' })
+          return reply.status(403).send({ message: 'Solo el profesorado puede aprobar entregas' })
         }
         const { submissionId } = request.params
         const { xpAwarded, percentage } = request.body || {}

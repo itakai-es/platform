@@ -17,7 +17,7 @@
         :icon="EyeIcon"
         @click="auth.enterStudentPreview()"
       >
-        Ver como alumno
+        Ver como estudiante
       </UserCardPill>
       <div v-if="showProgress && progressPercentage !== undefined" class="progress-wrapper">
         <div class="progress-bar-new">

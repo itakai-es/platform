@@ -1,7 +1,7 @@
 {
   "admin": {
     "dashboard": {
-      "title": "Inicio de administrador",
+      "title": "Inicio de administración",
       "subtitle": "Panel de control del sistema ITAKAI",
       "activity": {
         "title": "Actividad del sistema",
@@ -10,7 +10,7 @@
         "period_month": "Último mes"
       },
       "quick_actions": {
-        "manage_users": "Gestionar usuarios"
+        "manage_users": "Gestionar cuentas"
       },
       "system_status": {
         "title": "Estado del sistema",
@@ -22,22 +22,22 @@
       },
       "meta": {
         "title": "Inicio admin | ITAKAI",
-        "description": "Panel de control del sistema ITAKAI. Gestiona usuarios, instituciones y monitorea el estado de la plataforma."
+        "description": "Panel de control del sistema ITAKAI. Gestiona cuentas, instituciones y monitorea el estado de la plataforma."
       }
     },
     "users": {
-      "title": "Gestión de usuarios",
-      "subtitle": "Administra todos los usuarios de la plataforma",
+      "title": "Gestión de cuentas",
+      "subtitle": "Administra todas las cuentas de la plataforma",
       "filters": {
         "search_placeholder": "Buscar por nombre, correo o usuario...",
         "all_roles": "Todos los roles",
-        "students": "Alumnos",
-        "teachers": "Profesores",
-        "admins": "Administradores",
+        "students": "Estudiantes",
+        "teachers": "Docentes",
+        "admins": "Administración",
         "all_statuses": "Todos los estados",
-        "active": "Activo",
-        "suspended": "Suspendido",
-        "inactive": "Inactivo",
+        "active": "Activa",
+        "suspended": "Suspendida",
+        "inactive": "Inactiva",
         "clear": "Limpiar filtros",
         "all_account_types": "Todas las cuentas",
         "self_accounts": "Con correo",
@@ -46,7 +46,7 @@
       },
       "roles": {
         "student": "Estudiante",
-        "teacher": "Profesor",
+        "teacher": "Docente",
         "admin": "Admin"
       },
       "card": {
@@ -58,8 +58,8 @@
         "no_home_class": "Sin clase de origen"
       },
       "empty": {
-        "title": "No se encontraron usuarios",
-        "description": "No hay usuarios que coincidan con los filtros seleccionados."
+        "title": "No se encontraron cuentas",
+        "description": "No hay cuentas que coincidan con los filtros seleccionados."
       },
       "create": {
         "button": "Nueva cuenta sin correo",
@@ -69,7 +69,7 @@
         "name_placeholder": "Nombre y apellido",
         "home_class": "Clase de origen",
         "home_class_placeholder": "Elige una clase",
-        "home_class_hint": "El alumno queda matriculado en ella y su profesorado lleva la cuenta.",
+        "home_class_hint": "La cuenta entra en esa clase y su profesorado la lleva.",
         "username": "Usuario (opcional)",
         "username_placeholder": "Lo propone el sistema",
         "username_hint": "En blanco, lo propone el sistema. Si el que escribes está cogido, se le añade un sufijo.",
@@ -81,18 +81,18 @@
         "error": "No se ha podido crear la cuenta."
       },
       "class_search": {
-        "placeholder": "Busca por clase, profesor o código",
+        "placeholder": "Busca por clase, docente o código",
         "searching": "Buscando…",
         "no_results": "Ninguna clase coincide",
         "more": "Hay más clases: escribe más para afinar",
-        "option_hint": "{teacher} · sin alumnos | {teacher} · 1 alumno | {teacher} · {count} alumnos"
+        "option_hint": "{teacher} · sin estudiantes | {teacher} · 1 estudiante | {teacher} · {count} estudiantes"
       },
       "actions": {
-        "suspend_title": "Suspender usuario",
-        "suspend_message": "¿Estás seguro de que quieres suspender a {name}? No podrá acceder a la plataforma.",
+        "suspend_title": "Suspender cuenta",
+        "suspend_message": "¿Seguro que quieres suspender a {name}? No podrá acceder a la plataforma.",
         "suspend_confirm": "Suspender",
-        "delete_title": "Eliminar usuario",
-        "delete_message": "¿Estás seguro de que quieres eliminar a {name}? Esta acción no se puede deshacer.",
+        "delete_title": "Eliminar cuenta",
+        "delete_message": "¿Seguro que quieres eliminar a {name}? Esta acción no se puede deshacer.",
         "delete_confirm": "Eliminar",
         "menu_label": "Acciones de {name}",
         "suspend": "Suspender",
@@ -108,7 +108,7 @@
         "credentials_password": "Contraseña temporal",
         "home_class": "Cambiar clase de origen",
         "home_class_title": "Clase de origen",
-        "home_class_note": "Es la clase desde la que el profesorado lleva esta cuenta; al cambiarla, el alumno queda matriculado en la nueva. Sin clase, solo la atiende la administración.",
+        "home_class_note": "Es la clase desde la que el profesorado lleva esta cuenta; al cambiarla, la cuenta pasa a estar en la nueva. Sin clase, solo la atiende la administración.",
         "home_class_none": "Sin clase de origen",
         "suspend_error": "No se ha podido suspender la cuenta.",
         "activate_error": "No se ha podido activar la cuenta.",
@@ -117,8 +117,8 @@
         "delete_error": "No se ha podido eliminar la cuenta."
       },
       "meta": {
-        "title": "Gestión de usuarios | ITAKAI Admin",
-        "description": "Administra todos los usuarios del sistema, crea nuevos perfiles, edita roles y monitorea la actividad."
+        "title": "Gestión de cuentas | ITAKAI Admin",
+        "description": "Administra todas las cuentas del sistema, crea perfiles nuevos, edita roles y monitorea la actividad."
       },
       "sort": {
         "recent": "Más recientes"
@@ -139,7 +139,7 @@
       },
       "sort": {
         "missions_desc": "Más misiones",
-        "students_desc": "Más alumnos"
+        "students_desc": "Más estudiantes"
       }
     },
     "missions": {
@@ -177,8 +177,8 @@
         "uptime": "Disponibilidad"
       },
       "overview": {
-        "total_users": "Usuarios totales",
-        "active_today": "Activos hoy",
+        "total_users": "Cuentas totales",
+        "active_today": "Activas hoy",
         "missions_completed": "Misiones completadas",
         "completion_rate": "Tasa de completado"
       },
@@ -186,19 +186,19 @@
         "system_resources": "Recursos del sistema",
         "service_health": "Estado de servicios",
         "response_time": "Tiempo de respuesta",
-        "active_users": "Usuarios activos",
+        "active_users": "Cuentas activas",
         "requests": "Peticiones",
         "tokens_over_time": "Tokens consumidos",
-        "users_by_role": "Usuarios por rol",
+        "users_by_role": "Cuentas por rol",
         "missions_by_status": "Misiones por estado",
         "missions_by_rarity": "Misiones por rareza",
         "ai_usage": "Uso de IA (asistentes)"
       },
       "ai": {
         "total_tokens": "Tokens totales",
-        "avg_tokens_user": "Media por usuario",
+        "avg_tokens_user": "Media por cuenta",
         "total_conversations": "Conversaciones",
-        "avg_conversations_user": "Conv. por usuario"
+        "avg_conversations_user": "Conv. por cuenta"
       },
       "system": {
         "memory": "Memoria",
@@ -237,11 +237,11 @@
         "success": "Éxito",
         "all_types": "Todos los tipos",
         "new_school": "Nueva institución",
-        "new_users": "Nuevos usuarios",
+        "new_users": "Cuentas nuevas",
         "alert": "Alerta",
         "system_update": "Actualización",
         "missions_completed": "Misiones completadas",
-        "user_action": "Acción de usuario"
+        "user_action": "Acción de una cuenta"
       },
       "empty": {
         "title": "No se encontraron logs",
@@ -249,7 +249,7 @@
       },
       "meta": {
         "title": "Registros del sistema | ITAKAI Admin",
-        "description": "Revisa los registros de actividad del sistema, audita acciones de usuarios y diagnostica problemas técnicos."
+        "description": "Revisa los registros de actividad del sistema, audita la actividad de las cuentas y diagnostica problemas técnicos."
       }
     },
     "system_logs": {
@@ -327,9 +327,9 @@
         "contact_email": "Email de contacto",
         "default_language": "Idioma por defecto",
         "registration_open": "Registro abierto",
-        "registration_hint": "Permite que se registren nuevos usuarios.",
+        "registration_hint": "Permite crear cuentas nuevas desde el registro.",
         "maintenance_mode": "Modo mantenimiento",
-        "maintenance_hint": "Muestra un aviso de mantenimiento a los usuarios."
+        "maintenance_hint": "Muestra un aviso de mantenimiento a quien entre."
       }
     },
     "help": {
@@ -435,7 +435,7 @@
         "alumnado": "Alumnado",
         "ia-y-configuracion": "IA y configuración",
         "tu-cuenta": "Tu cuenta",
-        "si-eres-alumno": "Si eres alumno",
+        "si-eres-alumno": "Si eres estudiante",
         "cuando-algo-falla": "Cuando algo falla",
         "configuracion": "Configuración"
       }
@@ -450,7 +450,7 @@
       "placeholder_title": "Cinco ideas para gamificar tu aula",
       "ai_placeholder": "Explícale a Atenea qué quieres contar…",
       "delete_message": "Se eliminará «{title}» y dejará de verse en el blog. No se puede deshacer.",
-      "field_author": "Autor",
+      "field_author": "Autoría",
       "author_hint": "Opcional. Sale junto a la fecha en la entrada publicada: una persona o un equipo.",
       "placeholder_author": "Equipo ITAKAI",
       "field_published_at": "Fecha de publicación",

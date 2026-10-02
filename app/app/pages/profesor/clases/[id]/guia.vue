@@ -24,7 +24,7 @@
       ai-placeholder="Ej: Crea una sección de criterios de evaluación..."
       context-label="Editando la guía de la clase"
       ai-modal-hint="Dile a la IA qué quieres para tu guía: normas, evaluación, asistencia, metodología..."
-      ai-system-context="El profesor esta editando la GUIA de su clase. La guia contiene informacion practica para los alumnos: criterios de evaluacion (porcentajes de examenes, trabajos, participacion), normas de asistencia, reglas de la clase, metodologia, calendario, y cualquier informacion organizativa. Genera contenido practico, claro y bien estructurado."
+      ai-system-context="Quien imparte la clase está editando la GUIA de su clase. La guia contiene informacion practica para el alumnado: criterios de evaluacion (porcentajes de examenes, trabajos, participacion), normas de asistencia, reglas de la clase, metodologia, calendario, y cualquier informacion organizativa. Genera contenido practico, claro y bien estructurado."
       @cancel="isEditing = false"
       @save="save"
     />

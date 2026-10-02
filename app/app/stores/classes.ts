@@ -215,7 +215,7 @@ export const useClassesStore = defineStore('classes', () => {
       if (err?.status === 404 || err?.statusCode === 404) {
         error.value = 'No se encontró la clase'
       } else if (err?.status === 403 || err?.statusCode === 403) {
-        error.value = 'No estás inscrito en esta clase'
+        error.value = 'No estás en esta clase'
       } else {
         error.value = 'Error al cargar la clase'
       }

@@ -120,7 +120,7 @@ export function useActivityFormatter(perspective: 'student' | 'teacher' = 'stude
         switch (normalizedType) {
           case 'enigma_completed': {
             // Quien aprobó: el actor de la entrada; las antiguas solo guardan el nombre.
-            const reviewer = activity.actor?.name || activity.teacherName || 'El profesor'
+            const reviewer = activity.actor?.name || activity.teacherName || 'El profesorado'
             if (isTeacher) {
               description = `${esc(reviewer)} aprobó su entrega de <strong>"${esc(activity.enigmaTitle)}"</strong>`
             } else {
@@ -195,7 +195,7 @@ export function useActivityFormatter(perspective: 'student' | 'teacher' = 'stude
             description = isTeacher
               ? `Se registró en la plataforma`
               : `Te registraste en la plataforma`
-            badge = { type: 'new', text: 'Bienvenido' }
+            badge = { type: 'new', text: 'Bienvenida' }
             break
 
           case 'progress_milestone':

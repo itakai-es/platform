@@ -173,7 +173,7 @@ export class SubmissionsService {
         fileName: submission.fileName,
         submittedAt: submission.submittedAt,
       },
-      message: 'Entrega enviada correctamente. Será revisada por el profesor.',
+      message: 'Entrega enviada correctamente. Tu docente la revisará.',
     }
   }
 
@@ -395,7 +395,7 @@ export class SubmissionsService {
       where: { studentId_enigmaId: { studentId: submission.studentId, enigmaId: submission.enigmaId } },
     })
     if (alreadyApproved) {
-      throw new Error('Este enigma ya fue aprobado para este alumno')
+      throw new Error('Este enigma ya se aprobó para esta cuenta de estudiante')
     }
 
     const { xpReward, coinReward, manaReward } = submission.enigma

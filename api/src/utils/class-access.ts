@@ -620,7 +620,7 @@ export function requireStudentEnrollment() {
     const { classId } = request.params as { classId?: string }
     const user = request.user as ClassUser | undefined
     const enrollment = classId && user?.id ? await getStudentEnrollment(classId, user) : null
-    if (!enrollment) throw new NotFoundError('No estás inscrito en esta clase')
+    if (!enrollment) throw new NotFoundError('No estás en esta clase')
     request.studentEnrollment = enrollment
   }
 }

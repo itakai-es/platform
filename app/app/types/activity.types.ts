@@ -104,7 +104,7 @@ export const ACTIVITY_CONFIG: Record<ActivityType, ActivityDisplayConfig> = {
     icon: 'academic-cap',
     bgColor: 'bg-indigo-500/20',
     textColor: 'text-indigo-500',
-    label: 'Estudiante registrado',
+    label: 'Nueva matrícula',
   },
   progress_milestone: {
     icon: 'chart-bar',

@@ -112,7 +112,7 @@ const handleAteneaAction = (action: 'chat' | 'help' | 'start') => {
   const messages: Record<string, string> = {
     chat: `Hola ${godName}, quiero charlar sobre la misión "${title}"`,
     help: `Hola ${godName}, necesito ayuda con la misión "${title}"`,
-    start: `Hola ${godName}, estoy listo para empezar la misión "${title}". ¿Por dónde empiezo?`,
+    start: `Hola ${godName}, tengo ganas de empezar la misión "${title}". ¿Por dónde empiezo?`,
   }
   navigateTo({
     path: '/alumno/asistente',
