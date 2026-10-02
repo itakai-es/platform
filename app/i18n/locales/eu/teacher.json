@@ -404,7 +404,31 @@
           },
           "management": {
             "title": "Kudeaketa",
-            "hint": "Argitaratu txantiloi gisa beste irakasle batzuek inporta dezaten, edo egin kopia bat."
+            "hint": "Argitaratu txantiloi gisa beste irakasle batzuek inporta dezaten, edo egin kopia bat.",
+            "trash": {
+              "title": "Klasea ezabatu",
+              "hint": "Zakarrontzira doa: {days} egunez leheneratu dezakezu, eta gero betiko ezabatzen da.",
+              "cta": "Ezabatu",
+              "modal_title": "Klasea ezabatu",
+              "message": "«{name}» zakarrontzira joango da. {days} egunez leheneratu ahal izango duzu; gero betiko ezabatuko da.",
+              "impact_loading": "Zer galduko litzatekeen kalkulatzen…",
+              "impact_error": "Ezin izan da kalkulatu zer galduko litzatekeen. Saiatu berriro.",
+              "retry": "Saiatu berriro",
+              "loses": "{days} egunak igarotakoan, hau ezabatuko da:",
+              "loses_class": "klasea, bere ipuin, gida, denda eta portaerekin",
+              "loses_missions": "misio bat, bere enigma eta dokumentuekin | {count} misio, beren enigma eta dokumentuekin",
+              "loses_students": "ikasle baten aurrerapena klasean | {count} ikasleren aurrerapena klasean",
+              "loses_submissions": "fitxategidun entrega bat | fitxategidun {count} entrega",
+              "loses_purchases": "dendako erosketa bat | dendako {count} erosketa",
+              "loses_accounts": "inoiz erabili ez den posta gabeko kontu bat, osorik | inoiz erabili ez diren posta gabeko {count} kontu, osorik",
+              "while_trashed": "Zakarrontzian dagoen bitartean, ikasleek ezingo dute bertan sartu ezta ezer entregatu ere.",
+              "while_trashed_teachers": "Zakarrontzian dagoen bitartean, ikasleek ezingo dute bertan sartu ezta ezer entregatu ere, eta klaseko beste irakasle batek ere ez du ikusiko. | Zakarrontzian dagoen bitartean, ikasleek ezingo dute bertan sartu ezta ezer entregatu ere, eta klaseko beste {count} irakaslek ere ez dute ikusiko.",
+              "unmanaged_accounts": "Ezabatzean, klase honetan sortutako posta gabeko kontu bat jatorrizko klaserik gabe geratuko da: plataformaren administrazioak bakarrik berrezarri ahal izango du pasahitza. | Ezabatzean, klase honetan sortutako posta gabeko {count} kontu jatorrizko klaserik gabe geratuko dira: plataformaren administrazioak bakarrik berrezarri ahal izango ditu pasahitzak.",
+              "template": "Txantiloi gisa argitaratuta dago: orain katalogotik kentzen da, eta leheneratzen baduzu ez da berez berriro argitaratuko.",
+              "confirm": "Zakarrontzira bidali",
+              "done": "«{name}» zakarrontzian dago. {days} egunez leheneratu dezakezu.",
+              "error": "Ezin izan da klasea zakarrontzira bidali. Saiatu berriro."
+            }
           },
           "edit_level_note": "Izena, ordutegia eta azala alda ditzakezu. Sailkapena, funtzionalitateak eta mailak klasea administratzen duenak aldatzen ditu."
         },
@@ -599,7 +623,9 @@
               "template_unpublished": "klasea txantiloietatik kendu du",
               "duplicated": "klasea bikoiztu du",
               "ownership_transferred": "klasearen jabetza {target} irakasleari eman dio",
-              "ownership_inherited": "klasea {target} irakaslearena da orain, jabearen kontua ezabatu delako"
+              "ownership_inherited": "klasea {target} irakaslearena da orain, jabearen kontua ezabatu delako",
+              "trashed": "klasea zakarrontzira bidali du",
+              "restored": "klasea zakarrontzitik atera du"
             },
             "teacher": {
               "added": "{target} irakasleen artean gehitu du ({profile}, {access})",
@@ -667,7 +693,38 @@
               "applied": "«{title}» aplikatu dio klasean jada ez dagoen ikasle bati"
             }
           }
+        },
+        "in_trash": {
+          "title": "«{name}» zakarrontzian dago",
+          "description": "Zakarrontzira bidali zen: {date}. Inork leheneratzen ez badu, betiko ezabatuko da: {purge}.",
+          "owner_hint": "Leheneratu berriro irekitzeko. Artxibatuta itzultzen da: ikasleek ezingo dute sartu desartxibatzen duzun arte.",
+          "not_owner": "Klasearen jabetza duenak bakarrik leheneratu dezake. Behar baduzu, eskatu data hori baino lehen.",
+          "go_trash": "Ikusi zakarrontzia"
         }
+      },
+      "trash": {
+        "meta": {
+          "title": "Zakarrontzia | ITAKAI Irakaslea",
+          "description": "Zakarrontzira bidali dituzun klaseak, betiko ezabatu aurretik leheneratzeko."
+        },
+        "title": "Zakarrontzia",
+        "subtitle": "Zakarrontzira bidaltzen dituzun klaseak betiko ezabatzen dira {days} egunen buruan. Ordura arte, leheneratu ditzakezu.",
+        "link": "Zakarrontzia ({count})",
+        "restore_note": "Klase bat leheneratzean, «Nire klaseak» atalera itzultzen da artxibatuta: ikasleek ezingo dute sartu desartxibatzen duzun arte.",
+        "sent_by_me": "Zuk bidali zenuen, {date}",
+        "sent_by": "{name}(e)k bidali zuen, {date}",
+        "sent_on": "Zakarrontzira bidalia: {date}",
+        "purge_on": "Betiko ezabatuko da: {date}",
+        "days_left": "Egun bat geratzen da | {count} egun geratzen dira",
+        "purge_today": "Gaur ezabatuko da",
+        "restore": "Leheneratu",
+        "restored": "«{name}» «Nire klaseak» atalera itzuli da, Artxibatuak fitxan. Desartxibatu berriro erabili nahi duzunean.",
+        "restore_error": "Ezin izan da klasea leheneratu. Saiatu berriro.",
+        "empty_title": "Zakarrontzia hutsik dago",
+        "empty_description": "Klase bat ezabatzen baduzu, {days} egunez egongo da hemen betiko ezabatu aurretik.",
+        "error_title": "Ezin izan da zakarrontzia kargatu",
+        "error_description": "Egiaztatu konexioa eta saiatu berriro.",
+        "retry": "Saiatu berriro"
       }
     },
     "missions": {

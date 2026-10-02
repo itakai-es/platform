@@ -520,6 +520,13 @@
         "title": "Modelos de turma · ITAKAI",
         "description": "Turmas gamificadas que o corpo docente publicou no ITAKAI para que qualquer docente parta delas."
       }
+    },
+    "class_list": {
+      "tab_active": "Ativas",
+      "tab_archived": "Arquivadas",
+      "empty_title": "Sem turmas",
+      "empty_archived_title": "Sem turmas arquivadas",
+      "no_results": "Não há turmas que correspondam a «{query}»"
     }
   }
 }

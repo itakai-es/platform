@@ -36,6 +36,12 @@ import {
   getClassHistory,
 } from './class-history.service.js'
 import {
+  classDeletionImpact,
+  listClassTrash,
+  restoreClass,
+  trashClass,
+} from './class-trash.service.js'
+import {
   listTeacherStudents,
   STUDENT_LIST_MAX_LIMIT,
   STUDENT_LIST_MAX_PAGE,
@@ -600,6 +606,39 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
+
+  // ── Papelera ──
+  // Sin try/catch propio: el acceso (404/403) y el estado (409, ya en la
+  // papelera o fuera de ella) los resuelve el manejador global con su estado.
+
+  // Las clases de la papelera de quien pregunta, como propietario.
+  fastify.get('/classes/trash', async (request: FastifyRequest) => {
+    return listClassTrash((request.user as RequestUser).id)
+  })
+
+  // Lo que se perdería al purgarla, para el aviso antes de confirmar. No borra nada.
+  fastify.get(
+    '/classes/:classId/deletion-impact',
+    async (request: FastifyRequest<{ Params: { classId: string } }>) => {
+      return classDeletionImpact(request.user as RequestUser, request.params.classId)
+    }
+  )
+
+  // A la papelera: se archiva, se retira del marketplace y a los 30 días se purga.
+  fastify.delete(
+    '/classes/:classId',
+    async (request: FastifyRequest<{ Params: { classId: string } }>) => {
+      return trashClass(request.user as RequestUser, request.params.classId)
+    }
+  )
+
+  // Fuera de la papelera: vuelve archivada.
+  fastify.post(
+    '/classes/:classId/restore',
+    async (request: FastifyRequest<{ Params: { classId: string } }>) => {
+      return restoreClass(request.user as RequestUser, request.params.classId)
+    }
+  )
 
   fastify.post('/classes/:classId/duplicate', async (request: FastifyRequest<{ Params: { classId: string } }>, reply: FastifyReply) => {
     try {

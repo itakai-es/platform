@@ -520,6 +520,13 @@
         "title": "Klase-txantiloiak · ITAKAI",
         "description": "Irakasleek ITAKAIn argitaratutako klase gamifikatuak, beste irakasle batzuek haietatik abiatzeko."
       }
+    },
+    "class_list": {
+      "tab_active": "Aktiboak",
+      "tab_archived": "Artxibatuak",
+      "empty_title": "Klaserik ez",
+      "empty_archived_title": "Ez dago artxibatutako klaserik",
+      "no_results": "Ez dago «{query}» bilaketarekin bat datorren klaserik"
     }
   }
 }

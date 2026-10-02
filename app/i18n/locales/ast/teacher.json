@@ -404,7 +404,31 @@
           },
           "management": {
             "title": "Xestión",
-            "hint": "Espublízala como plantía pa que'l restu del profesoráu la importe, o fai una copia."
+            "hint": "Espublízala como plantía pa que'l restu del profesoráu la importe, o fai una copia.",
+            "trash": {
+              "title": "Desaniciar clase",
+              "hint": "Va a la papelera: pues restaurala demientres {days} díes y dempués bórrase pa siempre.",
+              "cta": "Desaniciar",
+              "modal_title": "Desaniciar la clase",
+              "message": "«{name}» va dir a la papelera. Vas poder restaurala demientres {days} díes; dempués va borrase pa siempre.",
+              "impact_loading": "Calculando lo que se perdería…",
+              "impact_error": "Nun se pudo calcular lo que se perdería. Tórnalo a intentar.",
+              "retry": "Tornar a intentalo",
+              "loses": "Pasaos los {days} díes, va borrase:",
+              "loses_class": "la clase, cola so hestoria, la so guía, la so tienda y los sos comportamientos",
+              "loses_missions": "{count} misión, colos sos enigmes y documentos | {count} misiones, colos sos enigmes y documentos",
+              "loses_students": "el progresu de {count} estudiante na clase | el progresu de {count} estudiantes na clase",
+              "loses_submissions": "{count} entrega con ficheru | {count} entregues con ficheru",
+              "loses_purchases": "{count} compra na tienda | {count} compres na tienda",
+              "loses_accounts": "{count} cuenta ensin corréu que nunca s'usó, entera | {count} cuentes ensin corréu que nunca s'usaron, enteres",
+              "while_trashed": "Mentanto tea na papelera, l'alumnáu nun va poder entrar nella nin entregar nada.",
+              "while_trashed_teachers": "Mentanto tea na papelera, l'alumnáu nun va poder entrar nella nin entregar nada, y tampoco nun la va ver {count} docente más de la clase. | Mentanto tea na papelera, l'alumnáu nun va poder entrar nella nin entregar nada, y tampoco nun la van ver {count} docentes más de la clase.",
+              "unmanaged_accounts": "Al borrase, {count} cuenta ensin corréu creada nesta clase va quedar ensin clase d'orixe: namái l'alministración de la plataforma va poder reafitar la so contraseña. | Al borrase, {count} cuentes ensin corréu creaes nesta clase van quedar ensin clase d'orixe: namái l'alministración de la plataforma va poder reafitar les sos contraseñes.",
+              "template": "Ta espublizada como plantía: retírase yá del catálogu y nun se torna espublizar sola si la restaures.",
+              "confirm": "Unviar a la papelera",
+              "done": "«{name}» ta na papelera. Pues restaurala demientres {days} díes.",
+              "error": "Nun se pudo unviar la clase a la papelera. Tórnalo a intentar."
+            }
           },
           "edit_level_note": "Pues camudar el nome, l'horariu y la portada. La clasificación, les funcionalidaes y los niveles cámudalos quien alministra la clase."
         },
@@ -599,7 +623,9 @@
               "template_unpublished": "retiró la clase de les plantíes",
               "duplicated": "duplicó la clase",
               "ownership_transferred": "pasó-y la propiedá de la clase a {target}",
-              "ownership_inherited": "la clase pasó a {target} al desaniciase la cuenta que tenía la so propiedá"
+              "ownership_inherited": "la clase pasó a {target} al desaniciase la cuenta que tenía la so propiedá",
+              "trashed": "unvió la clase a la papelera",
+              "restored": "sacó la clase de la papelera"
             },
             "teacher": {
               "added": "amestó a {target} al profesoráu ({profile}, {access})",
@@ -667,7 +693,38 @@
               "applied": "aplicó-y «{title}» a daquién que yá nun ta na clase"
             }
           }
+        },
+        "in_trash": {
+          "title": "«{name}» ta na papelera",
+          "description": "Unvióse a la papelera el {date}. Si naide la restaura, va borrase pa siempre el {purge}.",
+          "owner_hint": "Restáurala pa tornar a abrila. Torna archivada: l'alumnáu nun va poder entrar hasta que la desarchives.",
+          "not_owner": "Namái quien tien la propiedá de la clase pue restaurala. Si la precises, pídiyelo enantes d'esa data.",
+          "go_trash": "Ver la papelera"
         }
+      },
+      "trash": {
+        "meta": {
+          "title": "Papelera | ITAKAI Docente",
+          "description": "Les clases qu'unviesti a la papelera, pa restaurales enantes de que se borren pa siempre."
+        },
+        "title": "Papelera",
+        "subtitle": "Les clases qu'unvies a la papelera bórrense pa siempre a los {days} díes. Hasta entós, pues restaurales.",
+        "link": "Papelera ({count})",
+        "restore_note": "Al restaurar una clase, torna a «Les mios clases» archivada: l'alumnáu nun va poder entrar hasta que la desarchives.",
+        "sent_by_me": "Unviástila el {date}",
+        "sent_by": "Unvióla {name} el {date}",
+        "sent_on": "Unviada a la papelera el {date}",
+        "purge_on": "Va borrase pa siempre el {date}",
+        "days_left": "Queda {count} día | Queden {count} díes",
+        "purge_today": "Bórrase güei",
+        "restore": "Restaurar",
+        "restored": "«{name}» tornó a «Les mios clases», n'Archivaes. Desarchívala cuando quieras tornar a usala.",
+        "restore_error": "Nun se pudo restaurar la clase. Tórnalo a intentar.",
+        "empty_title": "La papelera ta balera",
+        "empty_description": "Si desanicies una clase, va tar equí {days} díes enantes de borrase pa siempre.",
+        "error_title": "Nun se pudo cargar la papelera",
+        "error_description": "Comprueba la conexón y tórnalo a intentar.",
+        "retry": "Tornar a intentalo"
       }
     },
     "missions": {

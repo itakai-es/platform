@@ -404,7 +404,31 @@
           },
           "management": {
             "title": "Xestión",
-            "hint": "Publícaa como modelo para que o resto do profesorado a importe, ou fai unha copia."
+            "hint": "Publícaa como modelo para que o resto do profesorado a importe, ou fai unha copia.",
+            "trash": {
+              "title": "Eliminar clase",
+              "hint": "Vai á papeleira: podes restaurala durante {days} días e despois bórrase para sempre.",
+              "cta": "Eliminar",
+              "modal_title": "Eliminar a clase",
+              "message": "«{name}» irá á papeleira. Poderás restaurala durante {days} días; despois borrarase para sempre.",
+              "impact_loading": "Calculando o que se perdería…",
+              "impact_error": "Non se puido calcular o que se perdería. Téntao de novo.",
+              "retry": "Tentar de novo",
+              "loses": "Pasados os {days} días, borrarase:",
+              "loses_class": "a clase, coa súa historia, a súa guía, a súa tenda e os seus comportamentos",
+              "loses_missions": "{count} misión, cos seus enigmas e documentos | {count} misións, cos seus enigmas e documentos",
+              "loses_students": "o progreso de {count} estudante na clase | o progreso de {count} estudantes na clase",
+              "loses_submissions": "{count} entrega con ficheiro | {count} entregas con ficheiro",
+              "loses_purchases": "{count} compra na tenda | {count} compras na tenda",
+              "loses_accounts": "{count} conta sen correo que nunca se usou, enteira | {count} contas sen correo que nunca se usaron, enteiras",
+              "while_trashed": "Mentres estea na papeleira, o alumnado non poderá entrar nela nin entregar nada.",
+              "while_trashed_teachers": "Mentres estea na papeleira, o alumnado non poderá entrar nela nin entregar nada, e tampouco a verá {count} docente máis da clase. | Mentres estea na papeleira, o alumnado non poderá entrar nela nin entregar nada, e tampouco a verán {count} docentes máis da clase.",
+              "unmanaged_accounts": "Ao borrarse, {count} conta sen correo creada nesta clase quedará sen clase de orixe: só a administración da plataforma poderá restablecer o seu contrasinal. | Ao borrarse, {count} contas sen correo creadas nesta clase quedarán sen clase de orixe: só a administración da plataforma poderá restablecer os seus contrasinais.",
+              "template": "Está publicada como modelo: retírase xa do catálogo e non se volve publicar soa se a restauras.",
+              "confirm": "Enviar á papeleira",
+              "done": "«{name}» está na papeleira. Podes restaurala durante {days} días.",
+              "error": "Non se puido enviar a clase á papeleira. Téntao de novo."
+            }
           },
           "edit_level_note": "Podes cambiar o nome, o horario e a portada. A clasificación, as funcionalidades e os niveis cámbiaos quen administra a clase."
         },
@@ -599,7 +623,9 @@
               "template_unpublished": "retirou a clase dos modelos",
               "duplicated": "duplicou a clase",
               "ownership_transferred": "pasoulle a propiedade da clase a {target}",
-              "ownership_inherited": "a clase pasou a {target} ao eliminarse a conta que tiña a súa propiedade"
+              "ownership_inherited": "a clase pasou a {target} ao eliminarse a conta que tiña a súa propiedade",
+              "trashed": "enviou a clase á papeleira",
+              "restored": "sacou a clase da papeleira"
             },
             "teacher": {
               "added": "engadiu a {target} ao profesorado ({profile}, {access})",
@@ -667,7 +693,38 @@
               "applied": "aplicoulle «{title}» a alguén que xa non está na clase"
             }
           }
+        },
+        "in_trash": {
+          "title": "«{name}» está na papeleira",
+          "description": "Enviouse á papeleira o {date}. Se ninguén a restaura, borrarase para sempre o {purge}.",
+          "owner_hint": "Restáuraa para volver abrila. Volve arquivada: o alumnado non poderá entrar ata que a desarquives.",
+          "not_owner": "Só quen ten a propiedade da clase pode restaurala. Se a necesitas, pídello antes desa data.",
+          "go_trash": "Ver a papeleira"
         }
+      },
+      "trash": {
+        "meta": {
+          "title": "Papeleira | ITAKAI Docente",
+          "description": "As clases que enviaches á papeleira, para restauralas antes de que se borren para sempre."
+        },
+        "title": "Papeleira",
+        "subtitle": "As clases que envías á papeleira bórranse para sempre aos {days} días. Ata entón, podes restauralas.",
+        "link": "Papeleira ({count})",
+        "restore_note": "Ao restaurar unha clase, volve a «As miñas clases» arquivada: o alumnado non poderá entrar ata que a desarquives.",
+        "sent_by_me": "Enviáchela o {date}",
+        "sent_by": "Enviouna {name} o {date}",
+        "sent_on": "Enviada á papeleira o {date}",
+        "purge_on": "Borrarase para sempre o {date}",
+        "days_left": "Queda {count} día | Quedan {count} días",
+        "purge_today": "Bórrase hoxe",
+        "restore": "Restaurar",
+        "restored": "«{name}» volveu a «As miñas clases», en Arquivadas. Desarquívaa cando queiras volver usala.",
+        "restore_error": "Non se puido restaurar a clase. Téntao de novo.",
+        "empty_title": "A papeleira está baleira",
+        "empty_description": "Se eliminas unha clase, estará aquí {days} días antes de borrarse para sempre.",
+        "error_title": "Non se puido cargar a papeleira",
+        "error_description": "Comproba a conexión e téntao de novo.",
+        "retry": "Tentar de novo"
       }
     },
     "missions": {

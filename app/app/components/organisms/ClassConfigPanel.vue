@@ -270,8 +270,8 @@
     </fieldset>
 
     <!-- Section: Gestión (acciones sobre la clase: publicar como plantilla,
-         duplicar y, más adelante, archivar / eliminar). Separada del formulario
-         para que ninguna acción cuelgue del botón de "Guardar cambios". -->
+         duplicar y eliminar). Separada del formulario para que ninguna acción
+         cuelgue del botón de "Guardar cambios". -->
     <SettingsSection
       v-else-if="activeSection === 'management'"
       :title="t('teacher.classes.detail.settings.management.title')"
@@ -313,6 +313,14 @@
           </Button>
         </template>
       </SettingsActionRow>
+
+      <!-- Eliminar: a la papelera, con el aviso de lo que se perderá (solo el propietario) -->
+      <ClassTrashAction
+        v-if="can('class.delete')"
+        :class-id="classId"
+        :class-name="classData?.name ?? ''"
+        @trashed="emit('trashed')"
+      />
     </SettingsSection>
 
     <!-- Section: Profesorado -->
@@ -409,6 +417,7 @@ const emit = defineEmits<{
   'levels-update': [levelConfig: LevelConfig]
   'access-change': [access: ClassAccess | null]
   left: []
+  trashed: []
 }>()
 
 const { t, locale } = useI18n()

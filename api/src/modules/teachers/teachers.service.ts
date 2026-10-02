@@ -8,6 +8,7 @@ import { randomUUID } from 'crypto'
 import { generateFireRedAvatar } from '../ai/generators/avatar-firered.js'
 import {
   AvatarServiceUnavailableError,
+  ConflictError,
   NotFoundError,
   ValidationError,
 } from '../../utils/errors.js'
@@ -22,12 +23,12 @@ import { resolveLevelConfig, tierForLevel, type LevelConfig } from '../../utils/
 import { publicUploadResolver, saveUpload } from '../storage/storage.service.js'
 import { createClassWithOwner } from '../../utils/class-owner.js'
 import {
-  accessibleClassesWhere,
   assertClassAccess,
   assertMissionAccess,
   CLASS_ACTION_LEVEL,
   classTeachersInclude,
   hasClassLevel,
+  listedClassesWhere,
   recordClassAction,
   summarizeClassTeachers,
   type ClassAccess,
@@ -180,18 +181,42 @@ async function saveBase64Image(base64Data: string, subdir: 'badges' | 'covers' =
   return saveUpload(`${subdir}/${filename}`, buffer, `image/${matches[1]}`)
 }
 
+const TEMPLATE_IN_TRASH = 'Restaura la clase antes de publicarla o retirarla como plantilla'
+const ARCHIVE_IN_TRASH = 'Restaura la clase antes de archivarla o desarchivarla'
+
+/** 409 si la clase está en la papelera: lo que pide hay que hacerlo después de restaurarla. */
+function assertNotInTrash(cls: { deletedAt: Date | null }, message: string) {
+  if (cls.deletedAt) throw new ConflictError(message, 'CLASS_IN_TRASH')
+}
+
+/**
+ * Escribe en la clase solo si sigue fuera de la papelera; si no, 409. La
+ * comprobación de antes no basta: la papelera puede llegar entre medias, y el
+ * UPDATE condicionado espera a su bloqueo de fila y vuelve a mirar `deletedAt`.
+ */
+async function updateOutsideTrash(
+  tx: Prisma.TransactionClient,
+  classId: string,
+  data: Prisma.ClassUpdateManyMutationInput,
+  message: string
+) {
+  const { count } = await tx.class.updateMany({ where: { id: classId, deletedAt: null }, data })
+  if (count === 0) throw new ConflictError(message, 'CLASS_IN_TRASH')
+}
+
 export class TeachersService {
-  /** Clases a las que el profesor tiene acceso, con cualquier nivel, según su estado de archivo. */
+  /** Clases a las que el profesor tiene acceso, con cualquier nivel, según su
+   *  estado de archivo. Las de la papelera no salen en ninguno: tienen su listado. */
   private buildArchivedWhere(
     userId: string,
     archived: 'active' | 'archived' | 'all' = 'active'
   ): Prisma.ClassWhereInput {
     if (archived === 'all') {
-      return accessibleClassesWhere(userId)
+      return listedClassesWhere(userId)
     }
 
     return {
-      ...accessibleClassesWhere(userId),
+      ...listedClassesWhere(userId),
       archived: archived === 'archived',
     }
   }
@@ -304,6 +329,8 @@ export class TeachersService {
       educationLevel: cls.educationLevel,
       province: cls.province,
       isTemplate: cls.isTemplate,
+      // En la papelera desde esta fecha; null si no lo está.
+      deletedAt: cls.deletedAt,
       settings: resolveClassSettings(cls.settings),
       levelConfig: resolveLevelConfig(cls.levelConfig),
       scheduleConfig: cls.scheduleConfig,
@@ -490,6 +517,8 @@ export class TeachersService {
     await assertClassAccess(classId, userId, 'class.publishTemplate')
     const cls = await prisma.class.findUnique({ where: { id: classId } })
     if (!cls) throw new NotFoundError('Clase no encontrada')
+    // En la papelera ya está retirada; se publica, si acaso, después de restaurarla.
+    assertNotInTrash(cls, TEMPLATE_IN_TRASH)
 
     if (publish) {
       const missing: string[] = []
@@ -502,7 +531,9 @@ export class TeachersService {
     }
 
     await prisma.$transaction(async tx => {
-      await tx.class.update({ where: { id: classId }, data: { isTemplate: publish } })
+      // Condicionado a que siga fuera de la papelera: si la envían a la vez, gana
+      // la papelera y no queda publicada dentro de ella.
+      await updateOutsideTrash(tx, classId, { isTemplate: publish }, TEMPLATE_IN_TRASH)
       await recordClassAction(tx, {
         classId,
         actorId: userId,
@@ -680,8 +711,9 @@ export class TeachersService {
   ) {
     if (!isTemplateId(templateClassId)) throw new NotFoundError('Plantilla no encontrada')
     const tpl = await prisma.class.findFirst({
-      // Una plantilla cuya clase está archivada deja de estar disponible, como en el listado.
-      where: { id: templateClassId, isTemplate: true, archived: false },
+      // Una plantilla cuya clase está archivada (o en la papelera) deja de estar
+      // disponible, como en el listado.
+      where: { id: templateClassId, isTemplate: true, archived: false, deletedAt: null },
       include: {
         shopItems: true,
         behaviorTemplates: true,
@@ -848,6 +880,8 @@ export class TeachersService {
     const cls = await prisma.class.findUnique({ where: { id: classId } })
 
     if (!cls) throw new NotFoundError('Clase no encontrada')
+    // En la papelera sigue archivada hasta que se restaura.
+    assertNotInTrash(cls, ARCHIVE_IN_TRASH)
     if (cls.archived && !archived) {
       const updated = await this.saveArchived(userId, classId, false)
 
@@ -901,7 +935,10 @@ export class TeachersService {
   /** Archiva o desarchiva la clase y lo apunta en su registro. */
   private saveArchived(userId: string, classId: string, archived: boolean) {
     return prisma.$transaction(async tx => {
-      const updated = await tx.class.update({ where: { id: classId }, data: { archived } })
+      // Condicionado a que siga fuera de la papelera: desarchivar a la vez que se
+      // envía no puede dejarla en la papelera y sin archivar.
+      await updateOutsideTrash(tx, classId, { archived }, ARCHIVE_IN_TRASH)
+      const updated = await tx.class.findUniqueOrThrow({ where: { id: classId } })
       await recordClassAction(tx, {
         classId,
         actorId: userId,
@@ -1153,7 +1190,7 @@ export class TeachersService {
     // Solo las clases a las que se tiene acceso y en las que está el alumno.
     const classes = await prisma.class.findMany({
       where: {
-        ...accessibleClassesWhere(userId),
+        ...listedClassesWhere(userId),
         enrollments: { some: { studentId, isPreview: false } },
       },
       include: {
@@ -1416,7 +1453,7 @@ export class TeachersService {
 
   async getActivities(userId: string, limit = 10) {
     const classes = await prisma.class.findMany({
-      where: accessibleClassesWhere(userId),
+      where: listedClassesWhere(userId),
       select: { id: true, name: true },
     })
 

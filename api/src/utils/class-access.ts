@@ -45,8 +45,8 @@ const LEVEL_RANK: Record<ClassRequiredLevel, number> = { read: 1, edit: 2, admin
 /**
  * Nivel mínimo de cada acción. Lectura ve; edición toca el contenido, la tienda,
  * los comportamientos y las entregas; administración lleva los ajustes, el
- * alumnado, el archivo y el profesorado. Publicar la plantilla y traspasar la
- * clase son solo del propietario.
+ * alumnado, el archivo y el profesorado. Publicar la plantilla, traspasar la
+ * clase y enviarla a la papelera (o sacarla de ella) son solo del propietario.
  */
 export const CLASS_ACTION_LEVEL = {
   'class.view': 'read',
@@ -57,6 +57,8 @@ export const CLASS_ACTION_LEVEL = {
   'class.inviteCode': 'admin',
   'class.publishTemplate': 'owner',
   'class.transfer': 'owner',
+  'class.delete': 'owner',
+  'class.restore': 'owner',
   'mission.view': 'read',
   'mission.edit': 'edit',
   'shop.view': 'read',
@@ -289,20 +291,23 @@ export interface ClassMembership {
 }
 
 /**
- * ¿Vale esta matrícula para actuar como alumno? La de un alumno, siempre. Quien
- * imparte la clase mira su clase como alumno con la matrícula que tenga en ella,
- * sea de vista previa o no. Fuera de esos dos casos no da acceso: una matrícula
+ * ¿Vale esta matrícula para actuar como alumno? La de un alumno, siempre que la
+ * clase no esté en la papelera. Quien imparte la clase mira su clase como
+ * alumno con la matrícula que tenga en ella, sea de vista previa o no (también
+ * en la papelera). Fuera de esos dos casos no da acceso: una matrícula
  * corriente de quien no tiene rol alumno, o una de vista previa de quien ya no
  * es profesor de la clase, no abren nada.
  */
 function enrollmentCounts(
-  enrollment: StudentEnrollmentRef | null,
+  enrollment: (StudentEnrollmentRef & { class: { deletedAt: Date | null } }) | null,
   user: ClassUser,
   teacher: ClassAccess | null
-): enrollment is StudentEnrollmentRef {
+): enrollment is StudentEnrollmentRef & { class: { deletedAt: Date | null } } {
   if (!enrollment) return false
   if (teacher !== null) return true
-  return !enrollment.isPreview && user.role === 'student'
+  // Al alumnado, una clase en la papelera se le cierra entera (ranking, guía,
+  // tienda…), no solo en los listados.
+  return !enrollment.isPreview && user.role === 'student' && enrollment.class.deletedAt === null
 }
 
 /** Relación de un usuario con una clase, o null si no tiene ninguna. */
@@ -315,10 +320,12 @@ export async function getClassMembership(
     getClassAccess(classId, user.id, tx),
     tx.classEnrollment.findUnique({
       where: { studentId_classId: { studentId: user.id, classId } },
-      select: { id: true, isPreview: true },
+      select: { id: true, isPreview: true, class: { select: { deletedAt: true } } },
     }),
   ])
-  const enrollment = enrollmentCounts(row, user, teacher) ? row : null
+  const enrollment = enrollmentCounts(row, user, teacher)
+    ? { id: row.id, isPreview: row.isPreview }
+    : null
   if (!teacher && !enrollment) return null
   return { teacher, enrollment }
 }
@@ -331,10 +338,13 @@ export async function getStudentEnrollment(classId: string, user: ClassUser, tx:
 /**
  * Filtro de `ClassEnrollment` con las matrículas con las que el usuario actúa
  * como alumno: mismo criterio que `getStudentEnrollment`, para los listados.
+ * Las de clases en la papelera no salen (ver `listedClassesWhere`).
  */
 export function studentEnrollmentsWhere(user: ClassUser): Prisma.ClassEnrollmentWhereInput {
-  if (user.role === 'student') return { studentId: user.id, isPreview: false }
-  return { studentId: user.id, class: accessibleClassesWhere(user.id) }
+  if (user.role === 'student') {
+    return { studentId: user.id, isPreview: false, class: LIVE_CLASS_WHERE }
+  }
+  return { studentId: user.id, class: listedClassesWhere(user.id) }
 }
 
 /** Exige ser profesor de la clase o estar matriculado en ella. Si no, 404. */
@@ -477,6 +487,22 @@ export function accessibleClassesWhere(
   minLevel: ClassRequiredLevel = 'read'
 ): Prisma.ClassWhereInput {
   return { teachers: { some: { userId, ...activeTeacherWhere(minLevel) } } }
+}
+
+/** Clases fuera de la papelera: las únicas que salen en un listado. */
+export const LIVE_CLASS_WHERE = { deletedAt: null } satisfies Prisma.ClassWhereInput
+
+/**
+ * Como `accessibleClassesWhere`, sin las clases de la papelera: para listar.
+ * El acceso a una clase concreta no mira la papelera (quien la tiene en ella
+ * puede seguir abriéndola hasta la purga); los listados sí, así que una clase
+ * en la papelera solo sale en el de la papelera.
+ */
+export function listedClassesWhere(
+  userId: string,
+  minLevel: ClassRequiredLevel = 'read'
+): Prisma.ClassWhereInput {
+  return { ...accessibleClassesWhere(userId, minLevel), ...LIVE_CLASS_WHERE }
 }
 
 /** Ids de los profesores de la clase que llegan a `minLevel`: a quién avisar de algo que pasa en ella. */

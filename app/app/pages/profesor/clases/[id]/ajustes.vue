@@ -8,6 +8,7 @@
     @levels-update="onLevelsUpdate"
     @access-change="setMyAccess"
     @left="onLeft"
+    @trashed="onLeft"
   />
 </template>
 
@@ -38,7 +39,8 @@ function onLevelsUpdate(levelConfig: LevelConfig) {
   setClassData({ levelConfig })
 }
 
-// Tras salir de la clase ya no se llega a ella: se olvida y se vuelve a «Mis clases».
+// Tras salir de la clase o enviarla a la papelera ya no se llega a ella como
+// antes: se olvida y se vuelve a «Mis clases».
 async function onLeft() {
   await navigateTo('/profesor/clases')
   forget()

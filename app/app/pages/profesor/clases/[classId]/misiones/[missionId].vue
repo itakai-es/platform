@@ -22,7 +22,7 @@
       :class-id="classId"
       :mission-id="missionId"
       :mission="mission"
-      :loading="loading || !accessKnown"
+      :loading="loading || !accessKnown || !classChecked"
       :error="error"
       :tabs="tabs"
       :active-tab="activeTab"
@@ -780,6 +780,24 @@ const closeSubmissionsModal = () => {
 onMounted(async () => {
   await fetchMission(!!submissionsQuery())
   openSubmissionsFromQuery()
+})
+
+// Una clase en la papelera no se abre (solo lectura por interfaz): su misión
+// tampoco. Se lleva a la clase, que enseña el aviso y, a quien tiene la
+// propiedad, Restaurar. Con la clase pedida de nuevo: la puede haber enviado
+// a la papelera otra persona. Hasta saberlo, la misión no se pinta.
+const classChecked = ref(false)
+onMounted(async () => {
+  try {
+    const cls = await teacherStore.fetchClassById(classId, true)
+    if (cls?.deletedAt) {
+      await navigateTo(`/profesor/clases/${classId}`, { replace: true })
+      return
+    }
+  } catch {
+    // Sin la clase, el error lo da la propia misión al cargarse.
+  }
+  classChecked.value = true
 })
 
 // Las clases del profesor dicen si hay alguna en la que copiarla.

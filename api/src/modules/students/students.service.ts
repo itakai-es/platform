@@ -10,9 +10,9 @@ import { AvatarServiceUnavailableError } from '../../utils/errors.js'
 import { resolveClassSettings } from '../../utils/class-settings.js'
 import { ForbiddenError, ValidationError } from '../../utils/errors.js'
 import {
-  accessibleClassesWhere,
   classTeachersInclude,
   getClassMembership,
+  listedClassesWhere,
   studentEnrollmentsWhere,
   type ClassUser,
 } from '../../utils/class-access.js'
@@ -710,8 +710,9 @@ export class StudentsService {
   async ensurePreviewEnrollments(userId: string) {
     // Solo se crean las que faltan: una matrícula que ya existía se deja como
     // está, porque es la que cuenta en el ranking y en los listados de la clase.
+    // Las de la papelera, no: tampoco se listan como alumno (`studentEnrollmentsWhere`).
     const toCreate = await prisma.class.findMany({
-      where: { ...accessibleClassesWhere(userId), enrollments: { none: { studentId: userId } } },
+      where: { ...listedClassesWhere(userId), enrollments: { none: { studentId: userId } } },
       select: { id: true },
     })
 

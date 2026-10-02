@@ -404,7 +404,31 @@
           },
           "management": {
             "title": "Gestión",
-            "hint": "Publícala como plantilla para que el resto del profesorado la importe, o haz una copia."
+            "hint": "Publícala como plantilla para que el resto del profesorado la importe, o haz una copia.",
+            "trash": {
+              "title": "Eliminar clase",
+              "hint": "Va a la papelera: puedes restaurarla durante {days} días y después se borra para siempre.",
+              "cta": "Eliminar",
+              "modal_title": "Eliminar la clase",
+              "message": "«{name}» irá a la papelera. Podrás restaurarla durante {days} días; después se borrará para siempre.",
+              "impact_loading": "Calculando lo que se perdería…",
+              "impact_error": "No se ha podido calcular lo que se perdería. Inténtalo de nuevo.",
+              "retry": "Reintentar",
+              "loses": "Pasados los {days} días, se borrará:",
+              "loses_class": "la clase, con su historia, su guía, su tienda y sus comportamientos",
+              "loses_missions": "{count} misión, con sus enigmas y documentos | {count} misiones, con sus enigmas y documentos",
+              "loses_students": "el progreso de {count} estudiante en la clase | el progreso de {count} estudiantes en la clase",
+              "loses_submissions": "{count} entrega con archivo | {count} entregas con archivo",
+              "loses_purchases": "{count} compra en la tienda | {count} compras en la tienda",
+              "loses_accounts": "{count} cuenta sin correo que nunca se ha usado, entera | {count} cuentas sin correo que nunca se han usado, enteras",
+              "while_trashed": "Mientras esté en la papelera, el alumnado no podrá entrar en ella ni entregar nada.",
+              "while_trashed_teachers": "Mientras esté en la papelera, el alumnado no podrá entrar en ella ni entregar nada, y tampoco la verá {count} docente más de la clase. | Mientras esté en la papelera, el alumnado no podrá entrar en ella ni entregar nada, y tampoco la verán {count} docentes más de la clase.",
+              "unmanaged_accounts": "Al borrarse, {count} cuenta sin correo creada en esta clase se quedará sin clase de origen: solo la administración de la plataforma podrá restablecer su contraseña. | Al borrarse, {count} cuentas sin correo creadas en esta clase se quedarán sin clase de origen: solo la administración de la plataforma podrá restablecer sus contraseñas.",
+              "template": "Está publicada como plantilla: se retira ya del catálogo y no vuelve a publicarse sola si la restauras.",
+              "confirm": "Enviar a la papelera",
+              "done": "«{name}» está en la papelera. Puedes restaurarla durante {days} días.",
+              "error": "No se ha podido enviar la clase a la papelera. Inténtalo de nuevo."
+            }
           },
           "edit_level_note": "Puedes cambiar el nombre, el horario y la portada. La clasificación, las funcionalidades y los niveles los cambia quien administra la clase."
         },
@@ -599,7 +623,9 @@
               "template_unpublished": "retiró la clase de las plantillas",
               "duplicated": "duplicó la clase",
               "ownership_transferred": "pasó la propiedad de la clase a {target}",
-              "ownership_inherited": "la clase pasó a {target} al eliminarse la cuenta que tenía su propiedad"
+              "ownership_inherited": "la clase pasó a {target} al eliminarse la cuenta que tenía su propiedad",
+              "trashed": "envió la clase a la papelera",
+              "restored": "sacó la clase de la papelera"
             },
             "teacher": {
               "added": "añadió a {target} al profesorado ({profile}, {access})",
@@ -667,7 +693,38 @@
               "applied": "aplicó «{title}» a alguien que ya no está en la clase"
             }
           }
+        },
+        "in_trash": {
+          "title": "«{name}» está en la papelera",
+          "description": "Se envió a la papelera el {date}. Si nadie la restaura, se borrará para siempre el {purge}.",
+          "owner_hint": "Restáurala para volver a abrirla. Vuelve archivada: el alumnado no podrá entrar hasta que la desarchives.",
+          "not_owner": "Solo quien tiene la propiedad de la clase puede restaurarla. Si la necesitas, pídeselo antes de esa fecha.",
+          "go_trash": "Ver la papelera"
         }
+      },
+      "trash": {
+        "meta": {
+          "title": "Papelera | ITAKAI Docente",
+          "description": "Las clases que has enviado a la papelera, para restaurarlas antes de que se borren para siempre."
+        },
+        "title": "Papelera",
+        "subtitle": "Las clases que envías a la papelera se borran para siempre a los {days} días. Hasta entonces, puedes restaurarlas.",
+        "link": "Papelera ({count})",
+        "restore_note": "Al restaurar una clase, vuelve a «Mis clases» archivada: el alumnado no podrá entrar hasta que la desarchives.",
+        "sent_by_me": "La enviaste el {date}",
+        "sent_by": "La envió {name} el {date}",
+        "sent_on": "Enviada a la papelera el {date}",
+        "purge_on": "Se borrará para siempre el {date}",
+        "days_left": "Queda {count} día | Quedan {count} días",
+        "purge_today": "Se borra hoy",
+        "restore": "Restaurar",
+        "restored": "«{name}» ha vuelto a «Mis clases», en Archivadas. Desarchívala cuando quieras volver a usarla.",
+        "restore_error": "No se ha podido restaurar la clase. Inténtalo de nuevo.",
+        "empty_title": "La papelera está vacía",
+        "empty_description": "Si eliminas una clase, estará aquí {days} días antes de borrarse para siempre.",
+        "error_title": "No se ha podido cargar la papelera",
+        "error_description": "Comprueba la conexión e inténtalo de nuevo.",
+        "retry": "Reintentar"
       }
     },
     "missions": {

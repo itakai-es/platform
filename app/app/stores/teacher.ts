@@ -4,11 +4,14 @@ import type { ManagedCredentials } from '~/types/auth.types'
 import type {
   ClassAccess,
   ClassAccessLevel,
+  ClassDeletionImpact,
   ClassHistoryResponse,
   ClassHistoryType,
   ClassTeacherMember,
   ClassTeacherProfile,
   ClassTeachersResponse,
+  ClassTrashResponse,
+  TrashedClass,
 } from '~/types/class.types'
 import type {
   Class,
@@ -535,6 +538,43 @@ export const useTeacherStore = defineStore('teacher', () => {
       console.error('Error archiving class:', error)
       throw error
     }
+  }
+
+  // ==========================================
+  // PAPELERA DE CLASES
+  // ==========================================
+
+  /** Lo que se perdería al borrar la clase: los números del aviso antes de enviarla a la papelera. */
+  async function fetchClassDeletionImpact(classId: string) {
+    return await $fetch<ClassDeletionImpact>(`${classTeachersUrl(classId)}/deletion-impact`)
+  }
+
+  /**
+   * Envía la clase a la papelera. Desde ese momento no sale en ningún listado:
+   * se olvida todo lo guardado de ella para que se vuelva a pedir.
+   */
+  async function trashClass(classId: string) {
+    const response = await $fetch<{ class: TrashedClass }>(classTeachersUrl(classId), {
+      method: 'DELETE',
+    })
+    forgetClass(classId)
+    return response.class
+  }
+
+  /** Saca la clase de la papelera; vuelve archivada, así que los listados se vuelven a pedir. */
+  async function restoreClass(classId: string) {
+    const response = await $fetch<{ class: { id: string; name: string; archived: boolean } }>(
+      `${classTeachersUrl(classId)}/restore`,
+      { method: 'POST' }
+    )
+    forgetClass(classId)
+    return response.class
+  }
+
+  /** Las clases propias en la papelera. Sin caché: cambia poco y se mira poco. */
+  async function fetchClassTrash() {
+    const config = useRuntimeConfig()
+    return await $fetch<ClassTrashResponse>(`${config.public.apiBase}/teacher/classes/trash`)
   }
 
   /**
@@ -1094,6 +1134,10 @@ export const useTeacherStore = defineStore('teacher', () => {
     updateClass,
     publishTemplate,
     setClassArchived,
+    fetchClassDeletionImpact,
+    trashClass,
+    restoreClass,
+    fetchClassTrash,
     duplicateClass,
     getInvitationCode,
     fetchClassMissions,

@@ -404,7 +404,31 @@
           },
           "management": {
             "title": "Management",
-            "hint": "Publish it as a template for other teachers to import, or make a copy."
+            "hint": "Publish it as a template for other teachers to import, or make a copy.",
+            "trash": {
+              "title": "Delete class",
+              "hint": "It goes to the trash: you can restore it for {days} days, and after that it's deleted for good.",
+              "cta": "Delete",
+              "modal_title": "Delete the class",
+              "message": "“{name}” will go to the trash. You can restore it for {days} days; after that it will be deleted for good.",
+              "impact_loading": "Working out what would be lost…",
+              "impact_error": "We couldn't work out what would be lost. Please try again.",
+              "retry": "Try again",
+              "loses": "Once the {days} days are up, this will be deleted:",
+              "loses_class": "the class, with its story, guide, shop and behaviors",
+              "loses_missions": "{count} mission, with its enigmas and documents | {count} missions, with their enigmas and documents",
+              "loses_students": "the progress of {count} student in the class | the progress of {count} students in the class",
+              "loses_submissions": "{count} submission with a file | {count} submissions with a file",
+              "loses_purchases": "{count} shop purchase | {count} shop purchases",
+              "loses_accounts": "{count} account without an email address that has never been used, in full | {count} accounts without an email address that have never been used, in full",
+              "while_trashed": "While it's in the trash, students won't be able to enter it or submit anything.",
+              "while_trashed_teachers": "While it's in the trash, students won't be able to enter it or submit anything, and {count} other teacher in the class won't see it either. | While it's in the trash, students won't be able to enter it or submit anything, and {count} other teachers in the class won't see it either.",
+              "unmanaged_accounts": "Once it is deleted, {count} account without an email address created in this class will be left without a home class: only the platform administrators will be able to reset its password. | Once it is deleted, {count} accounts without an email address created in this class will be left without a home class: only the platform administrators will be able to reset their passwords.",
+              "template": "It's published as a template: it's withdrawn from the catalog now and won't be published again on its own if you restore it.",
+              "confirm": "Move to trash",
+              "done": "“{name}” is in the trash. You can restore it for {days} days.",
+              "error": "The class couldn't be moved to the trash. Please try again."
+            }
           },
           "edit_level_note": "You can change the name, the schedule and the cover. The classification, features and levels are changed by whoever administers the class."
         },
@@ -599,7 +623,9 @@
               "template_unpublished": "withdrew the class from the templates",
               "duplicated": "duplicated the class",
               "ownership_transferred": "handed over the class to {target}",
-              "ownership_inherited": "the class passed to {target} when its owner's account was deleted"
+              "ownership_inherited": "the class passed to {target} when its owner's account was deleted",
+              "trashed": "moved the class to the trash",
+              "restored": "restored the class from the trash"
             },
             "teacher": {
               "added": "added {target} to the teachers ({profile}, {access})",
@@ -667,7 +693,38 @@
               "applied": "applied “{title}” to a student who is no longer in the class"
             }
           }
+        },
+        "in_trash": {
+          "title": "“{name}” is in the trash",
+          "description": "It was moved to the trash on {date}. If nobody restores it, it will be deleted for good on {purge}.",
+          "owner_hint": "Restore it to open it again. It comes back archived: students can't enter it until you unarchive it.",
+          "not_owner": "Only the owner of the class can restore it. If you need it, ask them before that date.",
+          "go_trash": "View the trash"
         }
+      },
+      "trash": {
+        "meta": {
+          "title": "Trash | ITAKAI Teacher",
+          "description": "The classes you've moved to the trash, so you can restore them before they're deleted for good."
+        },
+        "title": "Trash",
+        "subtitle": "Classes you move to the trash are deleted for good after {days} days. Until then, you can restore them.",
+        "link": "Trash ({count})",
+        "restore_note": "A restored class goes back to “My classes” as archived: students can't enter it until you unarchive it.",
+        "sent_by_me": "You moved it on {date}",
+        "sent_by": "{name} moved it on {date}",
+        "sent_on": "Moved to the trash on {date}",
+        "purge_on": "It will be deleted for good on {date}",
+        "days_left": "{count} day left | {count} days left",
+        "purge_today": "Deleted today",
+        "restore": "Restore",
+        "restored": "“{name}” is back in “My classes”, under Archived. Unarchive it whenever you want to use it again.",
+        "restore_error": "The class couldn't be restored. Please try again.",
+        "empty_title": "The trash is empty",
+        "empty_description": "If you delete a class, it will stay here for {days} days before being deleted for good.",
+        "error_title": "The trash couldn't be loaded",
+        "error_description": "Check your connection and try again.",
+        "retry": "Try again"
       }
     },
     "missions": {

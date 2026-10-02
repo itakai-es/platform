@@ -211,6 +211,41 @@ const TEACHER_CLASS: RouteCase[] = [
     levels: levels('admin', 200),
   },
   {
+    // A la papelera: solo el propietario. Después se saca a mano, para que la
+    // clase siga igual en el resto de casos.
+    route: 'DELETE /teacher/classes/:classId',
+    request: f => ({ method: 'DELETE', url: c(f) }),
+    owner: 200,
+    other: 404,
+    student: 403,
+    levels: { read: 403, edit: 403, admin: 403 },
+    after: async f => {
+      await prisma.class.update({
+        where: { id: f.classId },
+        data: { deletedAt: null, deletedById: null, archived: false },
+      })
+    },
+  },
+  {
+    // Restaurar también es solo del propietario. Esta clase no está en la
+    // papelera: el propietario pasa el acceso y se queda en el 409. La que se
+    // restaura de verdad está en tests/routes/class-trash.db.test.ts.
+    route: 'POST /teacher/classes/:classId/restore',
+    request: f => ({ method: 'POST', url: `${c(f)}/restore` }),
+    owner: 409,
+    other: 404,
+    student: 403,
+    levels: { read: 403, edit: 403, admin: 403 },
+  },
+  {
+    route: 'GET /teacher/classes/:classId/deletion-impact',
+    request: f => ({ method: 'GET', url: `${c(f)}/deletion-impact` }),
+    owner: 200,
+    other: 404,
+    student: 403,
+    levels: { read: 403, edit: 403, admin: 403 },
+  },
+  {
     route: 'POST /teacher/classes/:classId/duplicate',
     request: f => ({ method: 'POST', url: `${c(f)}/duplicate`, payload: {} }),
     owner: 200,

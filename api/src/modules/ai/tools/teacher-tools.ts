@@ -8,7 +8,7 @@ import { prisma } from '../../../config/database.js'
 import { nanoid } from 'nanoid'
 import { createClassWithOwner } from '../../../utils/class-owner.js'
 import {
-  accessibleClassesWhere,
+  listedClassesWhere,
   CLASS_ACTION_LEVEL,
   hasClassLevel,
 } from '../../../utils/class-access.js'
@@ -150,7 +150,7 @@ export function registerTeacherTools() {
       // Las clases a las que tiene acceso; el código de invitación, solo en las
       // que puede invitar alumnos.
       const classes = await prisma.class.findMany({
-        where: accessibleClassesWhere(userId),
+        where: listedClassesWhere(userId),
         include: {
           _count: { select: { enrollments: { where: { isPreview: false } }, missions: true } },
           teachers: { where: { userId }, select: { access: true, profile: true, isOwner: true } },

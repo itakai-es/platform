@@ -232,7 +232,8 @@ export class SubmissionsService {
    * Get all student's pending submissions
    */
   async getMySubmissions(studentId: string, status?: string) {
-    const where: any = { studentId }
+    // Las de clases en la papelera no salen: la clase ya no aparece al alumnado.
+    const where: any = { studentId, enigma: { mission: { class: { deletedAt: null } } } }
     if (status) where.status = status
 
     const submissions = await prisma.enigmaSubmission.findMany({

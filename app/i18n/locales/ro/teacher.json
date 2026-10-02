@@ -404,7 +404,31 @@
           },
           "management": {
             "title": "Administrare",
-            "hint": "Public-o drept șablon ca alte cadre didactice să o importe sau fă o copie."
+            "hint": "Public-o drept șablon ca alte cadre didactice să o importe sau fă o copie.",
+            "trash": {
+              "title": "Șterge clasa",
+              "hint": "Ajunge în coșul de gunoi: o poți restaura timp de {days} zile, apoi se șterge definitiv.",
+              "cta": "Șterge",
+              "modal_title": "Ștergerea clasei",
+              "message": "„{name}” va ajunge în coșul de gunoi. O vei putea restaura timp de {days} zile; apoi se va șterge definitiv.",
+              "impact_loading": "Se calculează ce s-ar pierde…",
+              "impact_error": "Nu s-a putut calcula ce s-ar pierde. Încearcă din nou.",
+              "retry": "Încearcă din nou",
+              "loses": "După cele {days} zile, se va șterge:",
+              "loses_class": "clasa, cu povestea, ghidul, magazinul și comportamentele ei",
+              "loses_missions": "misiunea, cu enigmele și documentele ei | misiunile ({count}), cu enigmele și documentele lor",
+              "loses_students": "progresul unui elev sau al unei eleve în clasă | progresul elevilor din clasă ({count})",
+              "loses_submissions": "o lucrare cu fișier | lucrările cu fișier ({count})",
+              "loses_purchases": "o achiziție din magazin | achizițiile din magazin ({count})",
+              "loses_accounts": "un cont fără e-mail care nu a fost folosit niciodată, complet | conturile fără e-mail care nu au fost folosite niciodată ({count}), complet",
+              "while_trashed": "Cât timp este în coșul de gunoi, elevii nu vor putea intra în ea și nici preda nimic.",
+              "while_trashed_teachers": "Cât timp este în coșul de gunoi, elevii nu vor putea intra în ea și nici preda nimic, iar încă un cadru didactic al clasei nu o va mai vedea. | Cât timp este în coșul de gunoi, elevii nu vor putea intra în ea și nici preda nimic, iar celelalte cadre didactice ale clasei ({count}) nu o vor mai vedea.",
+              "unmanaged_accounts": "La ștergere, un cont fără e-mail creat în această clasă va rămâne fără clasă de origine: doar administrarea platformei îi va putea reseta parola. | La ștergere, conturile fără e-mail create în această clasă ({count}) vor rămâne fără clasă de origine: doar administrarea platformei le va putea reseta parolele.",
+              "template": "Este publicată drept șablon: se retrage acum din catalog și nu se va publica din nou singură dacă o restaurezi.",
+              "confirm": "Mută în coșul de gunoi",
+              "done": "„{name}” este în coșul de gunoi. O poți restaura timp de {days} zile.",
+              "error": "Clasa nu a putut fi mutată în coșul de gunoi. Încearcă din nou."
+            }
           },
           "edit_level_note": "Poți schimba numele, orarul și coperta. Clasificarea, funcționalitățile și nivelurile le schimbă cine administrează clasa."
         },
@@ -599,7 +623,9 @@
               "template_unpublished": "a retras clasa din șabloane",
               "duplicated": "a duplicat clasa",
               "ownership_transferred": "a transferat proprietatea clasei către {target}",
-              "ownership_inherited": "clasa a trecut la {target} când a fost șters contul care o deținea"
+              "ownership_inherited": "clasa a trecut la {target} când a fost șters contul care o deținea",
+              "trashed": "a mutat clasa în coșul de gunoi",
+              "restored": "a scos clasa din coșul de gunoi"
             },
             "teacher": {
               "added": "a adăugat {target} în echipa didactică ({profile}, {access})",
@@ -667,7 +693,38 @@
               "applied": "a aplicat «{title}» unei persoane care nu mai este în clasă"
             }
           }
+        },
+        "in_trash": {
+          "title": "„{name}” este în coșul de gunoi",
+          "description": "A fost mutată în coșul de gunoi pe {date}. Dacă nu o restaurează nimeni, se va șterge definitiv pe {purge}.",
+          "owner_hint": "Restaureaz-o ca să o deschizi din nou. Revine arhivată: elevii nu vor putea intra până nu o dezarhivezi.",
+          "not_owner": "Doar cine deține clasa o poate restaura. Dacă ai nevoie de ea, cere-i asta înainte de data respectivă.",
+          "go_trash": "Vezi coșul de gunoi"
         }
+      },
+      "trash": {
+        "meta": {
+          "title": "Coș de gunoi | ITAKAI Cadru didactic",
+          "description": "Clasele pe care le-ai mutat în coșul de gunoi, ca să le restaurezi înainte să se șteargă definitiv."
+        },
+        "title": "Coș de gunoi",
+        "subtitle": "Clasele pe care le muți în coșul de gunoi se șterg definitiv după {days} zile. Până atunci, le poți restaura.",
+        "link": "Coș de gunoi ({count})",
+        "restore_note": "Când restaurezi o clasă, revine în „Clasele mele” arhivată: elevii nu vor putea intra până nu o dezarhivezi.",
+        "sent_by_me": "Ai mutat-o pe {date}",
+        "sent_by": "A mutat-o {name} pe {date}",
+        "sent_on": "Mutată în coșul de gunoi pe {date}",
+        "purge_on": "Se va șterge definitiv pe {date}",
+        "days_left": "Mai rămâne o zi | Zile rămase: {count}",
+        "purge_today": "Se șterge azi",
+        "restore": "Restaurează",
+        "restored": "„{name}” a revenit în „Clasele mele”, la Arhivate. Dezarhiveaz-o când vrei să o folosești din nou.",
+        "restore_error": "Clasa nu a putut fi restaurată. Încearcă din nou.",
+        "empty_title": "Coșul de gunoi este gol",
+        "empty_description": "Dacă ștergi o clasă, va sta aici {days} zile înainte să se șteargă definitiv.",
+        "error_title": "Coșul de gunoi nu a putut fi încărcat",
+        "error_description": "Verifică conexiunea și încearcă din nou.",
+        "retry": "Încearcă din nou"
       }
     },
     "missions": {

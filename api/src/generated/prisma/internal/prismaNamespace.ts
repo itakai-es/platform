@@ -2850,6 +2850,8 @@ export const ClassScalarFieldEnum = {
   levelConfig: 'levelConfig',
   scheduleConfig: 'scheduleConfig',
   teacherId: 'teacherId',
+  deletedAt: 'deletedAt',
+  deletedById: 'deletedById',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

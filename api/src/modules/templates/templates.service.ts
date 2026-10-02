@@ -30,11 +30,17 @@ import { publicUploadResolver } from '../storage/storage.service.js'
 // ==================== CONSULTA COMPARTIDA ====================
 
 /**
- * Disponible: publicada y con la clase sin archivar. Una archivada sale del
- * catálogo. El listado público lo dice en SQL (`publicTemplatesWhere`): si
- * cambia aquí, cambia allí.
+ * Disponible: publicada, con la clase sin archivar y fuera de la papelera. Una
+ * archivada sale del catálogo. Enviar una clase a la papelera ya la archiva y
+ * la retira; `deletedAt` va igualmente, por si algún día deja de hacerlo. El
+ * listado público lo dice en SQL (`publicTemplatesWhere`): si cambia aquí,
+ * cambia allí.
  */
-const AVAILABLE = { isTemplate: true, archived: false } satisfies Prisma.ClassWhereInput
+const AVAILABLE = {
+  isTemplate: true,
+  archived: false,
+  deletedAt: null,
+} satisfies Prisma.ClassWhereInput
 
 /** Los órdenes del catálogo, los mismos que ofrece el del profesorado. */
 export const TEMPLATE_SORTS = ['recent', 'name-asc', 'name-desc'] as const
@@ -370,7 +376,11 @@ const PUBLIC_ORDER: Record<TemplateSort, Prisma.Sql> = {
  * de LIKE incluidos.
  */
 function publicTemplatesWhere(filters: TemplateFilters): Prisma.Sql {
-  const conditions = [Prisma.sql`c.is_template`, Prisma.sql`NOT c.archived`]
+  const conditions = [
+    Prisma.sql`c.is_template`,
+    Prisma.sql`NOT c.archived`,
+    Prisma.sql`c.deleted_at IS NULL`,
+  ]
   // Sin valores, sin filtro.
   const anyOf = (column: Prisma.Sql, values?: string[]) => {
     if (values?.length) conditions.push(Prisma.sql`${column} IN (${Prisma.join(values)})`)

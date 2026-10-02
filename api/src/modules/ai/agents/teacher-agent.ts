@@ -4,7 +4,7 @@ import { getPlatformContext, getSkinName } from '../platform-context.js'
 import { INCLUSIVE_LANGUAGE_ES } from '../prompts/index.js'
 import { calculateMissionTotalXP } from '../../../utils/xp-calculator.js'
 import {
-  accessibleClassesWhere,
+  listedClassesWhere,
   assertMissionAccess,
   passesAccessCheck,
 } from '../../../utils/class-access.js'
@@ -24,7 +24,8 @@ export class TeacherAgent extends BaseAgent {
   protected async buildPrompt(context: AgentRequestContext) {
     // Las clases a las que el profesor tiene acceso, con cualquier nivel: lo que
     // puede ver en la aplicación es lo que el asistente puede contarle.
-    const myClasses = accessibleClassesWhere(context.userId)
+    // Las de la papelera, no: tampoco salen en sus listados.
+    const myClasses = listedClassesWhere(context.userId)
     const [teacher, classes, pendingSubmissions, missions] = await Promise.all([
       prisma.user.findUnique({
         where: { id: context.userId },

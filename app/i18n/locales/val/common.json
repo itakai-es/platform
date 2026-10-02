@@ -520,6 +520,13 @@
         "title": "Plantilles de classe · ITAKAI",
         "description": "Classes gamificades que el professorat ha publicat en ITAKAI perquè qualsevol docent en partisca."
       }
+    },
+    "class_list": {
+      "tab_active": "Actives",
+      "tab_archived": "Arxivades",
+      "empty_title": "Sense classes",
+      "empty_archived_title": "Sense classes arxivades",
+      "no_results": "No hi ha cap classe que coincidisca amb «{query}»"
     }
   }
 }

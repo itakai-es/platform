@@ -59,6 +59,7 @@ model User {
   homeClass         Class?              @relation("HomeClassStudents", fields: [homeClassId], references: [id], onDelete: SetNull)
   refreshTokens     RefreshToken[]
   teacherClasses    Class[]             @relation("TeacherClasses")
+  trashedClasses    Class[]             @relation("TrashedClasses")
   enrollments       ClassEnrollment[]
   createdBadges     Badge[]             @relation("CreatedBadges")
   earnedBadges      StudentBadge[]
@@ -174,11 +175,18 @@ model Class {
   // Propietario de la clase. Coincide siempre con la fila `isOwner` de
   // `ClassTeacher`: las dos se escriben juntas (ver utils/class-owner.ts).
   teacherId       String    @map("teacher_id")
+  // Papelera: con fecha, la clase está en ella y sale de todos los listados; la
+  // purga la borra del todo a los 30 días. Al enviarla se archiva y se retira
+  // del marketplace; restaurarla la deja archivada. `deletedById` es quién la
+  // envió, y se queda en null si se borra esa cuenta.
+  deletedAt       DateTime? @map("deleted_at")
+  deletedById     String?   @map("deleted_by_id")
   createdAt       DateTime  @default(now()) @map("created_at")
   updatedAt       DateTime  @updatedAt @map("updated_at")
 
   // Relations
   teacher       User              @relation("TeacherClasses", fields: [teacherId], references: [id])
+  deletedBy     User?             @relation("TrashedClasses", fields: [deletedById], references: [id], onDelete: SetNull)
   enrollments   ClassEnrollment[]
   missions      Mission[]
   guide         ClassGuide?

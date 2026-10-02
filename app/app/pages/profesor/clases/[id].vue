@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div ref="rootRef">
     <!-- Loading State -->
     <div v-if="state.isLoading" class="space-y-6">
       <Skeleton width="w-48" height="h-4" />
@@ -25,6 +25,16 @@
         </NuxtLink>
       </template>
     </EmptyState>
+
+    <!-- En la papelera: no se abre como una clase normal (solo lectura por interfaz) -->
+    <ClassInTrashNotice
+      v-else-if="state.classData.deletedAt"
+      :name="state.classData.name"
+      :deleted-at="state.classData.deletedAt"
+      :can-restore="can('class.restore')"
+      :restoring="restoring"
+      @restore="restore"
+    />
 
     <!-- Main Content -->
     <template v-else>
@@ -76,7 +86,7 @@
 
     <!-- Invite Modal -->
     <InviteStudentsModal
-      v-if="state.classData && can('class.inviteCode')"
+      v-if="state.classData && !state.classData.deletedAt && can('class.inviteCode')"
       v-model="state.showInviteModal"
       :class-id="classId"
       :invitation-code="state.classData.invitationCode || ''"
@@ -164,6 +174,31 @@ const { summarize } = useScheduleSummary()
 const scheduleSummary = computed(() =>
   summarize(state.value.classData?.scheduleConfig, state.value.classData?.schedule).join(' · ')
 )
+
+// Restaurar desde el aviso de la papelera: vuelve archivada y se abre ya como clase.
+// El botón desaparece con el aviso: el foco pasa al nombre de la clase.
+const toast = useToast()
+const restoring = ref(false)
+const rootRef = ref<HTMLElement | null>(null)
+async function restore() {
+  if (restoring.value) return
+  restoring.value = true
+  try {
+    await teacherStore.restoreClass(classId.value)
+    await loadAll(true)
+    toast.success(
+      t('teacher.classes.trash.restored', { name: state.value.classData?.name ?? '' }),
+      { duration: 6000 }
+    )
+    await nextTick()
+    rootRef.value?.querySelector('h1')?.focus()
+  } catch (error) {
+    const message = (error as { data?: { message?: string } })?.data?.message
+    toast.error(message || t('teacher.classes.trash.restore_error'))
+  } finally {
+    restoring.value = false
+  }
+}
 
 /** Las cuentas nuevas ya están matriculadas: se cuentan sin volver a pedir la clase. */
 function onAccountsCreated(count: number) {

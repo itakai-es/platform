@@ -221,14 +221,15 @@ const CLASS_ORDER: Record<NonNullable<ClassListQuery['sort']>, Prisma.Sql> = {
 export async function listAdminClasses(query: ClassListQuery) {
   const { page, limit, skip } = pageOf(query)
 
-  // Por nombre, por su propietario o por el código de invitación exacto.
+  // Por nombre, por su propietario o por el código de invitación exacto. Las de
+  // la papelera no salen: siguen ahí solo hasta la purga.
   const search = query.search?.trim()
   const pattern = search ? containsPattern(search) : ''
   const where = search
-    ? Prisma.sql`WHERE (c.name ILIKE ${pattern}
+    ? Prisma.sql`WHERE c.deleted_at IS NULL AND (c.name ILIKE ${pattern}
         OR c.invitation_code = ${search.toUpperCase()}
         OR ${ownerNameMatches(pattern)})`
-    : Prisma.empty
+    : Prisma.sql`WHERE c.deleted_at IS NULL`
 
   const [idRows, countRows] = await Promise.all([
     prisma.$queryRaw<{ id: string }[]>`
@@ -295,7 +296,8 @@ const MISSION_ORDER: Record<NonNullable<MissionListQuery['sort']>, Prisma.Sql> =
 export async function listAdminMissions(query: MissionListQuery) {
   const { page, limit, skip } = pageOf(query)
 
-  const conditions: Prisma.Sql[] = []
+  // Las misiones de clases en la papelera no salen, como sus clases.
+  const conditions: Prisma.Sql[] = [Prisma.sql`c.deleted_at IS NULL`]
   if (query.status && query.status !== 'all') {
     conditions.push(Prisma.sql`m.status = ${query.status}::"MissionStatus"`)
   }
@@ -310,9 +312,7 @@ export async function listAdminMissions(query: MissionListQuery) {
       Prisma.sql`(m.title ILIKE ${pattern} OR c.name ILIKE ${pattern} OR ${ownerNameMatches(pattern)})`
     )
   }
-  const where = conditions.length
-    ? Prisma.sql`WHERE ${Prisma.join(conditions, ' AND ')}`
-    : Prisma.empty
+  const where = Prisma.sql`WHERE ${Prisma.join(conditions, ' AND ')}`
 
   const [idRows, countRows] = await Promise.all([
     prisma.$queryRaw<{ id: string }[]>`

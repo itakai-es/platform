@@ -520,6 +520,13 @@
         "title": "Class templates · ITAKAI",
         "description": "Gamified classes that teachers have published on ITAKAI for other teachers to build on."
       }
+    },
+    "class_list": {
+      "tab_active": "Active",
+      "tab_archived": "Archived",
+      "empty_title": "No classes",
+      "empty_archived_title": "No archived classes",
+      "no_results": "No classes match “{query}”"
     }
   }
 }

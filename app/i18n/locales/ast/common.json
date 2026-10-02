@@ -520,6 +520,13 @@
         "title": "Plantíes de clase · ITAKAI",
         "description": "Clases gamificaes que'l profesoráu publicó n'ITAKAI pa que cualquier docente parta d'elles."
       }
+    },
+    "class_list": {
+      "tab_active": "Actives",
+      "tab_archived": "Archivaes",
+      "empty_title": "Ensin clases",
+      "empty_archived_title": "Ensin clases archivaes",
+      "no_results": "Nun hai clases que coincidan con «{query}»"
     }
   }
 }

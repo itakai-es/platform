@@ -37,6 +37,8 @@ export const CLASS_ACTION_LEVEL = {
   'class.inviteCode': 'admin',
   'class.publishTemplate': 'owner',
   'class.transfer': 'owner',
+  'class.delete': 'owner',
+  'class.restore': 'owner',
   'mission.view': 'read',
   'mission.edit': 'edit',
   'shop.view': 'read',

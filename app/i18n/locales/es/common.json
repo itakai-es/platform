@@ -520,6 +520,13 @@
         "title": "Plantillas de clase · ITAKAI",
         "description": "Clases gamificadas que el profesorado ha publicado en ITAKAI para que cualquier docente parta de ellas."
       }
+    },
+    "class_list": {
+      "tab_active": "Activas",
+      "tab_archived": "Archivadas",
+      "empty_title": "Sin clases",
+      "empty_archived_title": "Sin clases archivadas",
+      "no_results": "No hay clases que coincidan con «{query}»"
     }
   }
 }

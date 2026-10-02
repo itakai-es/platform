@@ -267,6 +267,7 @@ export type UserWhereInput = {
   homeClass?: Prisma.XOR<Prisma.ClassNullableScalarRelationFilter, Prisma.ClassWhereInput> | null
   refreshTokens?: Prisma.RefreshTokenListRelationFilter
   teacherClasses?: Prisma.ClassListRelationFilter
+  trashedClasses?: Prisma.ClassListRelationFilter
   enrollments?: Prisma.ClassEnrollmentListRelationFilter
   createdBadges?: Prisma.BadgeListRelationFilter
   earnedBadges?: Prisma.StudentBadgeListRelationFilter
@@ -313,6 +314,7 @@ export type UserOrderByWithRelationInput = {
   homeClass?: Prisma.ClassOrderByWithRelationInput
   refreshTokens?: Prisma.RefreshTokenOrderByRelationAggregateInput
   teacherClasses?: Prisma.ClassOrderByRelationAggregateInput
+  trashedClasses?: Prisma.ClassOrderByRelationAggregateInput
   enrollments?: Prisma.ClassEnrollmentOrderByRelationAggregateInput
   createdBadges?: Prisma.BadgeOrderByRelationAggregateInput
   earnedBadges?: Prisma.StudentBadgeOrderByRelationAggregateInput
@@ -362,6 +364,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   homeClass?: Prisma.XOR<Prisma.ClassNullableScalarRelationFilter, Prisma.ClassWhereInput> | null
   refreshTokens?: Prisma.RefreshTokenListRelationFilter
   teacherClasses?: Prisma.ClassListRelationFilter
+  trashedClasses?: Prisma.ClassListRelationFilter
   enrollments?: Prisma.ClassEnrollmentListRelationFilter
   createdBadges?: Prisma.BadgeListRelationFilter
   earnedBadges?: Prisma.StudentBadgeListRelationFilter
@@ -448,6 +451,7 @@ export type UserCreateInput = {
   homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeCreateNestedManyWithoutStudentInput
@@ -492,6 +496,7 @@ export type UserUncheckedCreateInput = {
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeUncheckedCreateNestedManyWithoutStudentInput
@@ -536,6 +541,7 @@ export type UserUpdateInput = {
   homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUpdateManyWithoutStudentNestedInput
@@ -580,6 +586,7 @@ export type UserUncheckedUpdateInput = {
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUncheckedUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUncheckedUpdateManyWithoutStudentNestedInput
@@ -855,6 +862,12 @@ export type UserCreateNestedOneWithoutTeacherClassesInput = {
   connect?: Prisma.UserWhereUniqueInput
 }
 
+export type UserCreateNestedOneWithoutTrashedClassesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTrashedClassesInput, Prisma.UserUncheckedCreateWithoutTrashedClassesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTrashedClassesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
 export type UserCreateNestedManyWithoutHomeClassInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutHomeClassInput, Prisma.UserUncheckedCreateWithoutHomeClassInput> | Prisma.UserCreateWithoutHomeClassInput[] | Prisma.UserUncheckedCreateWithoutHomeClassInput[]
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutHomeClassInput | Prisma.UserCreateOrConnectWithoutHomeClassInput[]
@@ -875,6 +888,16 @@ export type UserUpdateOneRequiredWithoutTeacherClassesNestedInput = {
   upsert?: Prisma.UserUpsertWithoutTeacherClassesInput
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTeacherClassesInput, Prisma.UserUpdateWithoutTeacherClassesInput>, Prisma.UserUncheckedUpdateWithoutTeacherClassesInput>
+}
+
+export type UserUpdateOneWithoutTrashedClassesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTrashedClassesInput, Prisma.UserUncheckedCreateWithoutTrashedClassesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTrashedClassesInput
+  upsert?: Prisma.UserUpsertWithoutTrashedClassesInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTrashedClassesInput, Prisma.UserUpdateWithoutTrashedClassesInput>, Prisma.UserUncheckedUpdateWithoutTrashedClassesInput>
 }
 
 export type UserUpdateManyWithoutHomeClassNestedInput = {
@@ -1245,6 +1268,7 @@ export type UserCreateWithoutCreatedUsersInput = {
   homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeCreateNestedManyWithoutStudentInput
@@ -1288,6 +1312,7 @@ export type UserUncheckedCreateWithoutCreatedUsersInput = {
   updatedAt?: Date | string
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeUncheckedCreateNestedManyWithoutStudentInput
@@ -1336,6 +1361,7 @@ export type UserCreateWithoutCreatedByInput = {
   homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeCreateNestedManyWithoutStudentInput
@@ -1379,6 +1405,7 @@ export type UserUncheckedCreateWithoutCreatedByInput = {
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeUncheckedCreateNestedManyWithoutStudentInput
@@ -1443,6 +1470,7 @@ export type UserUpdateWithoutCreatedUsersInput = {
   homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUpdateManyWithoutStudentNestedInput
@@ -1486,6 +1514,7 @@ export type UserUncheckedUpdateWithoutCreatedUsersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUncheckedUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUncheckedUpdateManyWithoutStudentNestedInput
@@ -1567,6 +1596,7 @@ export type UserCreateWithoutSettingsInput = {
   homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeCreateNestedManyWithoutStudentInput
@@ -1610,6 +1640,7 @@ export type UserUncheckedCreateWithoutSettingsInput = {
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeUncheckedCreateNestedManyWithoutStudentInput
@@ -1669,6 +1700,7 @@ export type UserUpdateWithoutSettingsInput = {
   homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUpdateManyWithoutStudentNestedInput
@@ -1712,6 +1744,7 @@ export type UserUncheckedUpdateWithoutSettingsInput = {
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUncheckedUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUncheckedUpdateManyWithoutStudentNestedInput
@@ -1754,6 +1787,7 @@ export type UserCreateWithoutRefreshTokensInput = {
   createdUsers?: Prisma.UserCreateNestedManyWithoutCreatedByInput
   homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeCreateNestedManyWithoutStudentInput
@@ -1797,6 +1831,7 @@ export type UserUncheckedCreateWithoutRefreshTokensInput = {
   updatedAt?: Date | string
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeUncheckedCreateNestedManyWithoutStudentInput
@@ -1856,6 +1891,7 @@ export type UserUpdateWithoutRefreshTokensInput = {
   createdUsers?: Prisma.UserUpdateManyWithoutCreatedByNestedInput
   homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUpdateManyWithoutStudentNestedInput
@@ -1899,6 +1935,7 @@ export type UserUncheckedUpdateWithoutRefreshTokensInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUncheckedUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUncheckedUpdateManyWithoutStudentNestedInput
@@ -1942,6 +1979,7 @@ export type UserCreateWithoutTeacherClassesInput = {
   createdUsers?: Prisma.UserCreateNestedManyWithoutCreatedByInput
   homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  trashedClasses?: Prisma.ClassCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeCreateNestedManyWithoutStudentInput
@@ -1985,6 +2023,7 @@ export type UserUncheckedCreateWithoutTeacherClassesInput = {
   updatedAt?: Date | string
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  trashedClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeUncheckedCreateNestedManyWithoutStudentInput
@@ -2015,6 +2054,99 @@ export type UserCreateOrConnectWithoutTeacherClassesInput = {
   create: Prisma.XOR<Prisma.UserCreateWithoutTeacherClassesInput, Prisma.UserUncheckedCreateWithoutTeacherClassesInput>
 }
 
+export type UserCreateWithoutTrashedClassesInput = {
+  id?: string
+  email?: string | null
+  username?: string | null
+  passwordHash: string
+  name: string
+  role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
+  isOnboarded?: boolean
+  status?: $Enums.UserStatus
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
+  createdUsers?: Prisma.UserCreateNestedManyWithoutCreatedByInput
+  homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
+  enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
+  createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
+  earnedBadges?: Prisma.StudentBadgeCreateNestedManyWithoutStudentInput
+  missionProgress?: Prisma.StudentMissionProgressCreateNestedManyWithoutStudentInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressCreateNestedManyWithoutStudentInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ChatConversationCreateNestedManyWithoutUserInput
+  joinRequests?: Prisma.JoinRequestCreateNestedManyWithoutStudentInput
+  sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
+  receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
+  submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
+  shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
+  shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
+  behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
+  behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogCreateNestedManyWithoutTargetUserInput
+}
+
+export type UserUncheckedCreateWithoutTrashedClassesInput = {
+  id?: string
+  email?: string | null
+  username?: string | null
+  passwordHash: string
+  name: string
+  role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
+  isOnboarded?: boolean
+  status?: $Enums.UserStatus
+  createdById?: string | null
+  homeClassId?: string | null
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
+  enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
+  earnedBadges?: Prisma.StudentBadgeUncheckedCreateNestedManyWithoutStudentInput
+  missionProgress?: Prisma.StudentMissionProgressUncheckedCreateNestedManyWithoutStudentInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressUncheckedCreateNestedManyWithoutStudentInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ChatConversationUncheckedCreateNestedManyWithoutUserInput
+  joinRequests?: Prisma.JoinRequestUncheckedCreateNestedManyWithoutStudentInput
+  sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
+  receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
+  submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
+  shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
+  shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
+  behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
+  behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
+  classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutTargetUserInput
+}
+
+export type UserCreateOrConnectWithoutTrashedClassesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutTrashedClassesInput, Prisma.UserUncheckedCreateWithoutTrashedClassesInput>
+}
+
 export type UserCreateWithoutHomeClassInput = {
   id?: string
   email?: string | null
@@ -2033,6 +2165,7 @@ export type UserCreateWithoutHomeClassInput = {
   createdUsers?: Prisma.UserCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeCreateNestedManyWithoutStudentInput
@@ -2076,6 +2209,7 @@ export type UserUncheckedCreateWithoutHomeClassInput = {
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeUncheckedCreateNestedManyWithoutStudentInput
@@ -2140,6 +2274,7 @@ export type UserUpdateWithoutTeacherClassesInput = {
   createdUsers?: Prisma.UserUpdateManyWithoutCreatedByNestedInput
   homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  trashedClasses?: Prisma.ClassUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUpdateManyWithoutStudentNestedInput
@@ -2183,6 +2318,106 @@ export type UserUncheckedUpdateWithoutTeacherClassesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  trashedClasses?: Prisma.ClassUncheckedUpdateManyWithoutDeletedByNestedInput
+  enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
+  earnedBadges?: Prisma.StudentBadgeUncheckedUpdateManyWithoutStudentNestedInput
+  missionProgress?: Prisma.StudentMissionProgressUncheckedUpdateManyWithoutStudentNestedInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressUncheckedUpdateManyWithoutStudentNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ChatConversationUncheckedUpdateManyWithoutUserNestedInput
+  joinRequests?: Prisma.JoinRequestUncheckedUpdateManyWithoutStudentNestedInput
+  sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
+  receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
+  submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
+  shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
+  shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
+  behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
+  behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUncheckedUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedUpdateManyWithoutTargetUserNestedInput
+}
+
+export type UserUpsertWithoutTrashedClassesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutTrashedClassesInput, Prisma.UserUncheckedUpdateWithoutTrashedClassesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutTrashedClassesInput, Prisma.UserUncheckedCreateWithoutTrashedClassesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutTrashedClassesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutTrashedClassesInput, Prisma.UserUncheckedUpdateWithoutTrashedClassesInput>
+}
+
+export type UserUpdateWithoutTrashedClassesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
+  createdUsers?: Prisma.UserUpdateManyWithoutCreatedByNestedInput
+  homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
+  enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
+  createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
+  earnedBadges?: Prisma.StudentBadgeUpdateManyWithoutStudentNestedInput
+  missionProgress?: Prisma.StudentMissionProgressUpdateManyWithoutStudentNestedInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressUpdateManyWithoutStudentNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ChatConversationUpdateManyWithoutUserNestedInput
+  joinRequests?: Prisma.JoinRequestUpdateManyWithoutStudentNestedInput
+  sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
+  receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
+  submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
+  shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
+  shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
+  behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
+  behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
+  classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUpdateManyWithoutTargetUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutTrashedClassesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUncheckedUpdateManyWithoutStudentNestedInput
@@ -2243,6 +2478,7 @@ export type UserCreateWithoutClassTeachersInput = {
   homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeCreateNestedManyWithoutStudentInput
@@ -2286,6 +2522,7 @@ export type UserUncheckedCreateWithoutClassTeachersInput = {
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeUncheckedCreateNestedManyWithoutStudentInput
@@ -2334,6 +2571,7 @@ export type UserCreateWithoutClassTeachersAddedInput = {
   homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeCreateNestedManyWithoutStudentInput
@@ -2377,6 +2615,7 @@ export type UserUncheckedCreateWithoutClassTeachersAddedInput = {
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeUncheckedCreateNestedManyWithoutStudentInput
@@ -2436,6 +2675,7 @@ export type UserUpdateWithoutClassTeachersInput = {
   homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUpdateManyWithoutStudentNestedInput
@@ -2479,6 +2719,7 @@ export type UserUncheckedUpdateWithoutClassTeachersInput = {
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUncheckedUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUncheckedUpdateManyWithoutStudentNestedInput
@@ -2533,6 +2774,7 @@ export type UserUpdateWithoutClassTeachersAddedInput = {
   homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUpdateManyWithoutStudentNestedInput
@@ -2576,6 +2818,7 @@ export type UserUncheckedUpdateWithoutClassTeachersAddedInput = {
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUncheckedUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUncheckedUpdateManyWithoutStudentNestedInput
@@ -2619,6 +2862,7 @@ export type UserCreateWithoutClassActionsInput = {
   homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeCreateNestedManyWithoutStudentInput
@@ -2662,6 +2906,7 @@ export type UserUncheckedCreateWithoutClassActionsInput = {
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeUncheckedCreateNestedManyWithoutStudentInput
@@ -2710,6 +2955,7 @@ export type UserCreateWithoutClassActionsTargetInput = {
   homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeCreateNestedManyWithoutStudentInput
@@ -2753,6 +2999,7 @@ export type UserUncheckedCreateWithoutClassActionsTargetInput = {
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeUncheckedCreateNestedManyWithoutStudentInput
@@ -2812,6 +3059,7 @@ export type UserUpdateWithoutClassActionsInput = {
   homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUpdateManyWithoutStudentNestedInput
@@ -2855,6 +3103,7 @@ export type UserUncheckedUpdateWithoutClassActionsInput = {
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUncheckedUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUncheckedUpdateManyWithoutStudentNestedInput
@@ -2909,6 +3158,7 @@ export type UserUpdateWithoutClassActionsTargetInput = {
   homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUpdateManyWithoutStudentNestedInput
@@ -2952,6 +3202,7 @@ export type UserUncheckedUpdateWithoutClassActionsTargetInput = {
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUncheckedUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUncheckedUpdateManyWithoutStudentNestedInput
@@ -2995,6 +3246,7 @@ export type UserCreateWithoutEnrollmentsInput = {
   homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassCreateNestedManyWithoutDeletedByInput
   createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeCreateNestedManyWithoutStudentInput
   missionProgress?: Prisma.StudentMissionProgressCreateNestedManyWithoutStudentInput
@@ -3038,6 +3290,7 @@ export type UserUncheckedCreateWithoutEnrollmentsInput = {
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutDeletedByInput
   createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeUncheckedCreateNestedManyWithoutStudentInput
   missionProgress?: Prisma.StudentMissionProgressUncheckedCreateNestedManyWithoutStudentInput
@@ -3097,6 +3350,7 @@ export type UserUpdateWithoutEnrollmentsInput = {
   homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUpdateManyWithoutDeletedByNestedInput
   createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUpdateManyWithoutStudentNestedInput
   missionProgress?: Prisma.StudentMissionProgressUpdateManyWithoutStudentNestedInput
@@ -3140,6 +3394,7 @@ export type UserUncheckedUpdateWithoutEnrollmentsInput = {
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUncheckedUpdateManyWithoutDeletedByNestedInput
   createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUncheckedUpdateManyWithoutStudentNestedInput
   missionProgress?: Prisma.StudentMissionProgressUncheckedUpdateManyWithoutStudentNestedInput
@@ -3183,6 +3438,7 @@ export type UserCreateWithoutShopPurchasesInput = {
   homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeCreateNestedManyWithoutStudentInput
@@ -3226,6 +3482,7 @@ export type UserUncheckedCreateWithoutShopPurchasesInput = {
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeUncheckedCreateNestedManyWithoutStudentInput
@@ -3285,6 +3542,7 @@ export type UserUpdateWithoutShopPurchasesInput = {
   homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUpdateManyWithoutStudentNestedInput
@@ -3328,6 +3586,7 @@ export type UserUncheckedUpdateWithoutShopPurchasesInput = {
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUncheckedUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUncheckedUpdateManyWithoutStudentNestedInput
@@ -3371,6 +3630,7 @@ export type UserCreateWithoutShopItemUsesInput = {
   homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeCreateNestedManyWithoutStudentInput
@@ -3414,6 +3674,7 @@ export type UserUncheckedCreateWithoutShopItemUsesInput = {
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeUncheckedCreateNestedManyWithoutStudentInput
@@ -3473,6 +3734,7 @@ export type UserUpdateWithoutShopItemUsesInput = {
   homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUpdateManyWithoutStudentNestedInput
@@ -3516,6 +3778,7 @@ export type UserUncheckedUpdateWithoutShopItemUsesInput = {
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUncheckedUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUncheckedUpdateManyWithoutStudentNestedInput
@@ -3559,6 +3822,7 @@ export type UserCreateWithoutEnigmaProgressInput = {
   homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeCreateNestedManyWithoutStudentInput
@@ -3602,6 +3866,7 @@ export type UserUncheckedCreateWithoutEnigmaProgressInput = {
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeUncheckedCreateNestedManyWithoutStudentInput
@@ -3661,6 +3926,7 @@ export type UserUpdateWithoutEnigmaProgressInput = {
   homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUpdateManyWithoutStudentNestedInput
@@ -3704,6 +3970,7 @@ export type UserUncheckedUpdateWithoutEnigmaProgressInput = {
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUncheckedUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUncheckedUpdateManyWithoutStudentNestedInput
@@ -3747,6 +4014,7 @@ export type UserCreateWithoutSubmissionsInput = {
   homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeCreateNestedManyWithoutStudentInput
@@ -3790,6 +4058,7 @@ export type UserUncheckedCreateWithoutSubmissionsInput = {
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeUncheckedCreateNestedManyWithoutStudentInput
@@ -3838,6 +4107,7 @@ export type UserCreateWithoutSubmissionsReviewedInput = {
   homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeCreateNestedManyWithoutStudentInput
@@ -3881,6 +4151,7 @@ export type UserUncheckedCreateWithoutSubmissionsReviewedInput = {
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeUncheckedCreateNestedManyWithoutStudentInput
@@ -3940,6 +4211,7 @@ export type UserUpdateWithoutSubmissionsInput = {
   homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUpdateManyWithoutStudentNestedInput
@@ -3983,6 +4255,7 @@ export type UserUncheckedUpdateWithoutSubmissionsInput = {
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUncheckedUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUncheckedUpdateManyWithoutStudentNestedInput
@@ -4037,6 +4310,7 @@ export type UserUpdateWithoutSubmissionsReviewedInput = {
   homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUpdateManyWithoutStudentNestedInput
@@ -4080,6 +4354,7 @@ export type UserUncheckedUpdateWithoutSubmissionsReviewedInput = {
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUncheckedUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUncheckedUpdateManyWithoutStudentNestedInput
@@ -4123,6 +4398,7 @@ export type UserCreateWithoutMissionProgressInput = {
   homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeCreateNestedManyWithoutStudentInput
@@ -4166,6 +4442,7 @@ export type UserUncheckedCreateWithoutMissionProgressInput = {
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeUncheckedCreateNestedManyWithoutStudentInput
@@ -4225,6 +4502,7 @@ export type UserUpdateWithoutMissionProgressInput = {
   homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUpdateManyWithoutStudentNestedInput
@@ -4268,6 +4546,7 @@ export type UserUncheckedUpdateWithoutMissionProgressInput = {
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUncheckedUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUncheckedUpdateManyWithoutStudentNestedInput
@@ -4311,6 +4590,7 @@ export type UserCreateWithoutCreatedBadgesInput = {
   homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
   earnedBadges?: Prisma.StudentBadgeCreateNestedManyWithoutStudentInput
   missionProgress?: Prisma.StudentMissionProgressCreateNestedManyWithoutStudentInput
@@ -4354,6 +4634,7 @@ export type UserUncheckedCreateWithoutCreatedBadgesInput = {
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   earnedBadges?: Prisma.StudentBadgeUncheckedCreateNestedManyWithoutStudentInput
   missionProgress?: Prisma.StudentMissionProgressUncheckedCreateNestedManyWithoutStudentInput
@@ -4413,6 +4694,7 @@ export type UserUpdateWithoutCreatedBadgesInput = {
   homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
   earnedBadges?: Prisma.StudentBadgeUpdateManyWithoutStudentNestedInput
   missionProgress?: Prisma.StudentMissionProgressUpdateManyWithoutStudentNestedInput
@@ -4456,6 +4738,7 @@ export type UserUncheckedUpdateWithoutCreatedBadgesInput = {
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUncheckedUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   earnedBadges?: Prisma.StudentBadgeUncheckedUpdateManyWithoutStudentNestedInput
   missionProgress?: Prisma.StudentMissionProgressUncheckedUpdateManyWithoutStudentNestedInput
@@ -4499,6 +4782,7 @@ export type UserCreateWithoutEarnedBadgesInput = {
   homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
   missionProgress?: Prisma.StudentMissionProgressCreateNestedManyWithoutStudentInput
@@ -4542,6 +4826,7 @@ export type UserUncheckedCreateWithoutEarnedBadgesInput = {
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
   missionProgress?: Prisma.StudentMissionProgressUncheckedCreateNestedManyWithoutStudentInput
@@ -4601,6 +4886,7 @@ export type UserUpdateWithoutEarnedBadgesInput = {
   homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
   missionProgress?: Prisma.StudentMissionProgressUpdateManyWithoutStudentNestedInput
@@ -4644,6 +4930,7 @@ export type UserUncheckedUpdateWithoutEarnedBadgesInput = {
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUncheckedUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
   missionProgress?: Prisma.StudentMissionProgressUncheckedUpdateManyWithoutStudentNestedInput
@@ -4687,6 +4974,7 @@ export type UserCreateWithoutJoinRequestsInput = {
   homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeCreateNestedManyWithoutStudentInput
@@ -4730,6 +5018,7 @@ export type UserUncheckedCreateWithoutJoinRequestsInput = {
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeUncheckedCreateNestedManyWithoutStudentInput
@@ -4789,6 +5078,7 @@ export type UserUpdateWithoutJoinRequestsInput = {
   homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUpdateManyWithoutStudentNestedInput
@@ -4832,6 +5122,7 @@ export type UserUncheckedUpdateWithoutJoinRequestsInput = {
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUncheckedUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUncheckedUpdateManyWithoutStudentNestedInput
@@ -4875,6 +5166,7 @@ export type UserCreateWithoutSentInvitationsInput = {
   homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeCreateNestedManyWithoutStudentInput
@@ -4918,6 +5210,7 @@ export type UserUncheckedCreateWithoutSentInvitationsInput = {
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeUncheckedCreateNestedManyWithoutStudentInput
@@ -4966,6 +5259,7 @@ export type UserCreateWithoutReceivedInvitationsInput = {
   homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeCreateNestedManyWithoutStudentInput
@@ -5009,6 +5303,7 @@ export type UserUncheckedCreateWithoutReceivedInvitationsInput = {
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeUncheckedCreateNestedManyWithoutStudentInput
@@ -5068,6 +5363,7 @@ export type UserUpdateWithoutSentInvitationsInput = {
   homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUpdateManyWithoutStudentNestedInput
@@ -5111,6 +5407,7 @@ export type UserUncheckedUpdateWithoutSentInvitationsInput = {
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUncheckedUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUncheckedUpdateManyWithoutStudentNestedInput
@@ -5165,6 +5462,7 @@ export type UserUpdateWithoutReceivedInvitationsInput = {
   homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUpdateManyWithoutStudentNestedInput
@@ -5208,6 +5506,7 @@ export type UserUncheckedUpdateWithoutReceivedInvitationsInput = {
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUncheckedUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUncheckedUpdateManyWithoutStudentNestedInput
@@ -5251,6 +5550,7 @@ export type UserCreateWithoutNotificationsInput = {
   homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeCreateNestedManyWithoutStudentInput
@@ -5294,6 +5594,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeUncheckedCreateNestedManyWithoutStudentInput
@@ -5353,6 +5654,7 @@ export type UserUpdateWithoutNotificationsInput = {
   homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUpdateManyWithoutStudentNestedInput
@@ -5396,6 +5698,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUncheckedUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUncheckedUpdateManyWithoutStudentNestedInput
@@ -5439,6 +5742,7 @@ export type UserCreateWithoutActivitiesInput = {
   homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeCreateNestedManyWithoutStudentInput
@@ -5482,6 +5786,7 @@ export type UserUncheckedCreateWithoutActivitiesInput = {
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeUncheckedCreateNestedManyWithoutStudentInput
@@ -5530,6 +5835,7 @@ export type UserCreateWithoutActivitiesActedInput = {
   homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeCreateNestedManyWithoutStudentInput
@@ -5573,6 +5879,7 @@ export type UserUncheckedCreateWithoutActivitiesActedInput = {
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeUncheckedCreateNestedManyWithoutStudentInput
@@ -5632,6 +5939,7 @@ export type UserUpdateWithoutActivitiesInput = {
   homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUpdateManyWithoutStudentNestedInput
@@ -5675,6 +5983,7 @@ export type UserUncheckedUpdateWithoutActivitiesInput = {
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUncheckedUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUncheckedUpdateManyWithoutStudentNestedInput
@@ -5729,6 +6038,7 @@ export type UserUpdateWithoutActivitiesActedInput = {
   homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUpdateManyWithoutStudentNestedInput
@@ -5772,6 +6082,7 @@ export type UserUncheckedUpdateWithoutActivitiesActedInput = {
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUncheckedUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUncheckedUpdateManyWithoutStudentNestedInput
@@ -5815,6 +6126,7 @@ export type UserCreateWithoutConversationsInput = {
   homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeCreateNestedManyWithoutStudentInput
@@ -5858,6 +6170,7 @@ export type UserUncheckedCreateWithoutConversationsInput = {
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeUncheckedCreateNestedManyWithoutStudentInput
@@ -5917,6 +6230,7 @@ export type UserUpdateWithoutConversationsInput = {
   homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUpdateManyWithoutStudentNestedInput
@@ -5960,6 +6274,7 @@ export type UserUncheckedUpdateWithoutConversationsInput = {
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUncheckedUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUncheckedUpdateManyWithoutStudentNestedInput
@@ -6003,6 +6318,7 @@ export type UserCreateWithoutBehaviorsAppliedInput = {
   homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeCreateNestedManyWithoutStudentInput
@@ -6046,6 +6362,7 @@ export type UserUncheckedCreateWithoutBehaviorsAppliedInput = {
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeUncheckedCreateNestedManyWithoutStudentInput
@@ -6094,6 +6411,7 @@ export type UserCreateWithoutBehaviorsReceivedInput = {
   homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeCreateNestedManyWithoutStudentInput
@@ -6137,6 +6455,7 @@ export type UserUncheckedCreateWithoutBehaviorsReceivedInput = {
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutDeletedByInput
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
   earnedBadges?: Prisma.StudentBadgeUncheckedCreateNestedManyWithoutStudentInput
@@ -6196,6 +6515,7 @@ export type UserUpdateWithoutBehaviorsAppliedInput = {
   homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUpdateManyWithoutStudentNestedInput
@@ -6239,6 +6559,7 @@ export type UserUncheckedUpdateWithoutBehaviorsAppliedInput = {
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUncheckedUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUncheckedUpdateManyWithoutStudentNestedInput
@@ -6293,6 +6614,7 @@ export type UserUpdateWithoutBehaviorsReceivedInput = {
   homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUpdateManyWithoutStudentNestedInput
@@ -6336,6 +6658,7 @@ export type UserUncheckedUpdateWithoutBehaviorsReceivedInput = {
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUncheckedUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUncheckedUpdateManyWithoutStudentNestedInput
@@ -6395,6 +6718,7 @@ export type UserUpdateWithoutCreatedByInput = {
   homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUpdateManyWithoutStudentNestedInput
@@ -6438,6 +6762,7 @@ export type UserUncheckedUpdateWithoutCreatedByInput = {
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUncheckedUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUncheckedUpdateManyWithoutStudentNestedInput
@@ -6515,6 +6840,7 @@ export type UserUpdateWithoutHomeClassInput = {
   createdUsers?: Prisma.UserUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUpdateManyWithoutStudentNestedInput
@@ -6558,6 +6884,7 @@ export type UserUncheckedUpdateWithoutHomeClassInput = {
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUncheckedUpdateManyWithoutDeletedByNestedInput
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
   earnedBadges?: Prisma.StudentBadgeUncheckedUpdateManyWithoutStudentNestedInput
@@ -6609,6 +6936,7 @@ export type UserCountOutputType = {
   createdUsers: number
   refreshTokens: number
   teacherClasses: number
+  trashedClasses: number
   enrollments: number
   createdBadges: number
   earnedBadges: number
@@ -6637,6 +6965,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   createdUsers?: boolean | UserCountOutputTypeCountCreatedUsersArgs
   refreshTokens?: boolean | UserCountOutputTypeCountRefreshTokensArgs
   teacherClasses?: boolean | UserCountOutputTypeCountTeacherClassesArgs
+  trashedClasses?: boolean | UserCountOutputTypeCountTrashedClassesArgs
   enrollments?: boolean | UserCountOutputTypeCountEnrollmentsArgs
   createdBadges?: boolean | UserCountOutputTypeCountCreatedBadgesArgs
   earnedBadges?: boolean | UserCountOutputTypeCountEarnedBadgesArgs
@@ -6689,6 +7018,13 @@ export type UserCountOutputTypeCountRefreshTokensArgs<ExtArgs extends runtime.Ty
  * UserCountOutputType without action
  */
 export type UserCountOutputTypeCountTeacherClassesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ClassWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountTrashedClassesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.ClassWhereInput
 }
 
@@ -6868,6 +7204,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   homeClass?: boolean | Prisma.User$homeClassArgs<ExtArgs>
   refreshTokens?: boolean | Prisma.User$refreshTokensArgs<ExtArgs>
   teacherClasses?: boolean | Prisma.User$teacherClassesArgs<ExtArgs>
+  trashedClasses?: boolean | Prisma.User$trashedClassesArgs<ExtArgs>
   enrollments?: boolean | Prisma.User$enrollmentsArgs<ExtArgs>
   createdBadges?: boolean | Prisma.User$createdBadgesArgs<ExtArgs>
   earnedBadges?: boolean | Prisma.User$earnedBadgesArgs<ExtArgs>
@@ -6959,6 +7296,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   homeClass?: boolean | Prisma.User$homeClassArgs<ExtArgs>
   refreshTokens?: boolean | Prisma.User$refreshTokensArgs<ExtArgs>
   teacherClasses?: boolean | Prisma.User$teacherClassesArgs<ExtArgs>
+  trashedClasses?: boolean | Prisma.User$trashedClassesArgs<ExtArgs>
   enrollments?: boolean | Prisma.User$enrollmentsArgs<ExtArgs>
   createdBadges?: boolean | Prisma.User$createdBadgesArgs<ExtArgs>
   earnedBadges?: boolean | Prisma.User$earnedBadgesArgs<ExtArgs>
@@ -7001,6 +7339,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     homeClass: Prisma.$ClassPayload<ExtArgs> | null
     refreshTokens: Prisma.$RefreshTokenPayload<ExtArgs>[]
     teacherClasses: Prisma.$ClassPayload<ExtArgs>[]
+    trashedClasses: Prisma.$ClassPayload<ExtArgs>[]
     enrollments: Prisma.$ClassEnrollmentPayload<ExtArgs>[]
     createdBadges: Prisma.$BadgePayload<ExtArgs>[]
     earnedBadges: Prisma.$StudentBadgePayload<ExtArgs>[]
@@ -7440,6 +7779,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   homeClass<T extends Prisma.User$homeClassArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$homeClassArgs<ExtArgs>>): Prisma.Prisma__ClassClient<runtime.Types.Result.GetResult<Prisma.$ClassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   refreshTokens<T extends Prisma.User$refreshTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$refreshTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RefreshTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   teacherClasses<T extends Prisma.User$teacherClassesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$teacherClassesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  trashedClasses<T extends Prisma.User$trashedClassesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$trashedClassesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   enrollments<T extends Prisma.User$enrollmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClassEnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   createdBadges<T extends Prisma.User$createdBadgesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdBadgesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BadgePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   earnedBadges<T extends Prisma.User$earnedBadgesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$earnedBadgesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StudentBadgePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -7997,6 +8337,30 @@ export type User$refreshTokensArgs<ExtArgs extends runtime.Types.Extensions.Inte
  * User.teacherClasses
  */
 export type User$teacherClassesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Class
+   */
+  select?: Prisma.ClassSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Class
+   */
+  omit?: Prisma.ClassOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ClassInclude<ExtArgs> | null
+  where?: Prisma.ClassWhereInput
+  orderBy?: Prisma.ClassOrderByWithRelationInput | Prisma.ClassOrderByWithRelationInput[]
+  cursor?: Prisma.ClassWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ClassScalarFieldEnum | Prisma.ClassScalarFieldEnum[]
+}
+
+/**
+ * User.trashedClasses
+ */
+export type User$trashedClassesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the Class
    */

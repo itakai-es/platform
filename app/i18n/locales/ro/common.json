@@ -520,6 +520,13 @@
         "title": "Șabloane de clase · ITAKAI",
         "description": "Clase gamificate publicate de cadre didactice pe ITAKAI, de la care poate porni orice cadru didactic."
       }
+    },
+    "class_list": {
+      "tab_active": "Active",
+      "tab_archived": "Arhivate",
+      "empty_title": "Nicio clasă",
+      "empty_archived_title": "Nicio clasă arhivată",
+      "no_results": "Nicio clasă nu corespunde cu „{query}”"
     }
   }
 }

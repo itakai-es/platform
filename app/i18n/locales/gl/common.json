@@ -520,6 +520,13 @@
         "title": "Modelos de clase · ITAKAI",
         "description": "Clases gamificadas que o profesorado publicou en ITAKAI para que calquera docente parta delas."
       }
+    },
+    "class_list": {
+      "tab_active": "Activas",
+      "tab_archived": "Arquivadas",
+      "empty_title": "Sen clases",
+      "empty_archived_title": "Sen clases arquivadas",
+      "no_results": "Non hai clases que coincidan con «{query}»"
     }
   }
 }

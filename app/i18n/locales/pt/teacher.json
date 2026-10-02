@@ -404,7 +404,31 @@
           },
           "management": {
             "title": "Gestão",
-            "hint": "Publica-a como modelo para que o resto do corpo docente a importe, ou faz uma cópia."
+            "hint": "Publica-a como modelo para que o resto do corpo docente a importe, ou faz uma cópia.",
+            "trash": {
+              "title": "Eliminar turma",
+              "hint": "Vai para o lixo: podes restaurá-la durante {days} dias e depois é apagada para sempre.",
+              "cta": "Eliminar",
+              "modal_title": "Eliminar a turma",
+              "message": "«{name}» vai para o lixo. Poderás restaurá-la durante {days} dias; depois será apagada para sempre.",
+              "impact_loading": "A calcular o que se perderia…",
+              "impact_error": "Não foi possível calcular o que se perderia. Tenta novamente.",
+              "retry": "Tentar novamente",
+              "loses": "Passados os {days} dias, será apagado:",
+              "loses_class": "a turma, com a sua história, o guia, a loja e os comportamentos",
+              "loses_missions": "{count} missão, com os seus enigmas e documentos | {count} missões, com os seus enigmas e documentos",
+              "loses_students": "o progresso de {count} estudante na turma | o progresso de {count} estudantes na turma",
+              "loses_submissions": "{count} entrega com ficheiro | {count} entregas com ficheiro",
+              "loses_purchases": "{count} compra na loja | {count} compras na loja",
+              "loses_accounts": "{count} conta sem e-mail que nunca foi usada, por completo | {count} contas sem e-mail que nunca foram usadas, por completo",
+              "while_trashed": "Enquanto estiver no lixo, os estudantes não poderão entrar nela nem entregar nada.",
+              "while_trashed_teachers": "Enquanto estiver no lixo, os estudantes não poderão entrar nela nem entregar nada, e também não a verá mais {count} docente da turma. | Enquanto estiver no lixo, os estudantes não poderão entrar nela nem entregar nada, e também não a verão mais {count} docentes da turma.",
+              "unmanaged_accounts": "Ao ser apagada, {count} conta sem e-mail criada nesta turma ficará sem turma de origem: só a administração da plataforma poderá repor a palavra-passe. | Ao ser apagada, {count} contas sem e-mail criadas nesta turma ficarão sem turma de origem: só a administração da plataforma poderá repor as palavras-passe.",
+              "template": "Está publicada como modelo: é retirada já do catálogo e não volta a ser publicada sozinha se a restaurares.",
+              "confirm": "Enviar para o lixo",
+              "done": "«{name}» está no lixo. Podes restaurá-la durante {days} dias.",
+              "error": "Não foi possível enviar a turma para o lixo. Tenta novamente."
+            }
           },
           "edit_level_note": "Podes alterar o nome, o horário e a capa. A classificação, as funcionalidades e os níveis são alterados por quem administra a turma."
         },
@@ -599,7 +623,9 @@
               "template_unpublished": "retirou a turma dos modelos",
               "duplicated": "duplicou a turma",
               "ownership_transferred": "passou a propriedade da turma para {target}",
-              "ownership_inherited": "a turma passou para {target} quando a conta que tinha a propriedade foi eliminada"
+              "ownership_inherited": "a turma passou para {target} quando a conta que tinha a propriedade foi eliminada",
+              "trashed": "enviou a turma para o lixo",
+              "restored": "tirou a turma do lixo"
             },
             "teacher": {
               "added": "adicionou {target} ao corpo docente ({profile}, {access})",
@@ -667,7 +693,38 @@
               "applied": "aplicou «{title}» a alguém que já não está na turma"
             }
           }
+        },
+        "in_trash": {
+          "title": "«{name}» está no lixo",
+          "description": "Foi enviada para o lixo a {date}. Se ninguém a restaurar, será apagada para sempre a {purge}.",
+          "owner_hint": "Restaura-a para a voltares a abrir. Volta arquivada: os estudantes não poderão entrar até a desarquivares.",
+          "not_owner": "Só quem tem a propriedade da turma a pode restaurar. Se precisares dela, pede-o antes dessa data.",
+          "go_trash": "Ver o lixo"
         }
+      },
+      "trash": {
+        "meta": {
+          "title": "Lixo | ITAKAI Docente",
+          "description": "As turmas que enviaste para o lixo, para as restaurares antes de serem apagadas para sempre."
+        },
+        "title": "Lixo",
+        "subtitle": "As turmas que envias para o lixo são apagadas para sempre ao fim de {days} dias. Até lá, podes restaurá-las.",
+        "link": "Lixo ({count})",
+        "restore_note": "Ao restaurar uma turma, ela volta a «As minhas turmas» arquivada: os estudantes não poderão entrar até a desarquivares.",
+        "sent_by_me": "Enviaste-a a {date}",
+        "sent_by": "{name} enviou-a a {date}",
+        "sent_on": "Enviada para o lixo a {date}",
+        "purge_on": "Será apagada para sempre a {date}",
+        "days_left": "Falta {count} dia | Faltam {count} dias",
+        "purge_today": "É apagada hoje",
+        "restore": "Restaurar",
+        "restored": "«{name}» voltou a «As minhas turmas», em Arquivadas. Desarquiva-a quando quiseres voltar a usá-la.",
+        "restore_error": "Não foi possível restaurar a turma. Tenta novamente.",
+        "empty_title": "O lixo está vazio",
+        "empty_description": "Se eliminares uma turma, ficará aqui {days} dias antes de ser apagada para sempre.",
+        "error_title": "Não foi possível carregar o lixo",
+        "error_description": "Verifica a ligação e tenta novamente.",
+        "retry": "Tentar novamente"
       }
     },
     "missions": {

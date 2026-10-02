@@ -236,8 +236,8 @@ export async function adminRoutes(fastify: FastifyInstance) {
         // Submissions waiting for teacher review
         prisma.enigmaSubmission.count({ where: { status: 'pendiente' } }),
 
-        // Missions with status 'activa'
-        prisma.mission.count({ where: { status: 'activa' } }),
+        // Missions with status 'activa' (sin las de clases en la papelera)
+        prisma.mission.count({ where: { status: 'activa', class: { deletedAt: null } } }),
       ])
 
       return {

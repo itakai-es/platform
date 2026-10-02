@@ -404,7 +404,31 @@
           },
           "management": {
             "title": "Gestió",
-            "hint": "Publica-la com a plantilla perquè la resta del professorat la importi, o fes-ne una còpia."
+            "hint": "Publica-la com a plantilla perquè la resta del professorat la importi, o fes-ne una còpia.",
+            "trash": {
+              "title": "Elimina la classe",
+              "hint": "Va a la paperera: la pots restaurar durant {days} dies i després s'esborra per sempre.",
+              "cta": "Elimina",
+              "modal_title": "Eliminar la classe",
+              "message": "«{name}» anirà a la paperera. La podràs restaurar durant {days} dies; després s'esborrarà per sempre.",
+              "impact_loading": "Calculant què es perdria…",
+              "impact_error": "No s'ha pogut calcular què es perdria. Torna-ho a provar.",
+              "retry": "Torna-ho a provar",
+              "loses": "Passats els {days} dies, s'esborrarà:",
+              "loses_class": "la classe, amb la seva història, la guia, la botiga i els comportaments",
+              "loses_missions": "{count} missió, amb els seus enigmes i documents | {count} missions, amb els seus enigmes i documents",
+              "loses_students": "el progrés d'{count} estudiant a la classe | el progrés de {count} estudiants a la classe",
+              "loses_submissions": "{count} lliurament amb fitxer | {count} lliuraments amb fitxer",
+              "loses_purchases": "{count} compra a la botiga | {count} compres a la botiga",
+              "loses_accounts": "{count} compte sense correu que no s'ha fet servir mai, sencer | {count} comptes sense correu que no s'han fet servir mai, sencers",
+              "while_trashed": "Mentre sigui a la paperera, l'alumnat no hi podrà entrar ni lliurar res.",
+              "while_trashed_teachers": "Mentre sigui a la paperera, l'alumnat no hi podrà entrar ni lliurar res, i tampoc no la veurà {count} docent més de la classe. | Mentre sigui a la paperera, l'alumnat no hi podrà entrar ni lliurar res, i tampoc no la veuran {count} docents més de la classe.",
+              "unmanaged_accounts": "En esborrar-se, {count} compte sense correu creat en aquesta classe es quedarà sense classe d'origen: només l'administració de la plataforma en podrà restablir la contrasenya. | En esborrar-se, {count} comptes sense correu creats en aquesta classe es quedaran sense classe d'origen: només l'administració de la plataforma en podrà restablir les contrasenyes.",
+              "template": "Està publicada com a plantilla: es retira ara del catàleg i no es torna a publicar sola si la restaures.",
+              "confirm": "Envia a la paperera",
+              "done": "«{name}» és a la paperera. La pots restaurar durant {days} dies.",
+              "error": "No s'ha pogut enviar la classe a la paperera. Torna-ho a provar."
+            }
           },
           "edit_level_note": "Pots canviar el nom, l'horari i la portada. La classificació, les funcionalitats i els nivells els canvia qui administra la classe."
         },
@@ -599,7 +623,9 @@
               "template_unpublished": "va retirar la classe de les plantilles",
               "duplicated": "va duplicar la classe",
               "ownership_transferred": "va passar la propietat de la classe a {target}",
-              "ownership_inherited": "la classe va passar a {target} en eliminar-se el compte que en tenia la propietat"
+              "ownership_inherited": "la classe va passar a {target} en eliminar-se el compte que en tenia la propietat",
+              "trashed": "va enviar la classe a la paperera",
+              "restored": "va treure la classe de la paperera"
             },
             "teacher": {
               "added": "va afegir {target} al professorat ({profile}, {access})",
@@ -667,7 +693,38 @@
               "applied": "va aplicar «{title}» a algú que ja no és a la classe"
             }
           }
+        },
+        "in_trash": {
+          "title": "«{name}» és a la paperera",
+          "description": "Es va enviar a la paperera el {date}. Si ningú no la restaura, s'esborrarà per sempre el {purge}.",
+          "owner_hint": "Restaura-la per tornar-la a obrir. Torna arxivada: l'alumnat no hi podrà entrar fins que la desarxivis.",
+          "not_owner": "Només qui té la propietat de la classe la pot restaurar. Si la necessites, demana-li-ho abans d'aquesta data.",
+          "go_trash": "Mostra la paperera"
         }
+      },
+      "trash": {
+        "meta": {
+          "title": "Paperera | ITAKAI Docent",
+          "description": "Les classes que has enviat a la paperera, per restaurar-les abans que s'esborrin per sempre."
+        },
+        "title": "Paperera",
+        "subtitle": "Les classes que envies a la paperera s'esborren per sempre al cap de {days} dies. Fins aleshores, les pots restaurar.",
+        "link": "Paperera ({count})",
+        "restore_note": "Quan restaures una classe, torna a «Les meves classes» arxivada: l'alumnat no hi podrà entrar fins que la desarxivis.",
+        "sent_by_me": "La vas enviar el {date}",
+        "sent_by": "La va enviar {name} el {date}",
+        "sent_on": "Enviada a la paperera el {date}",
+        "purge_on": "S'esborrarà per sempre el {date}",
+        "days_left": "Queda {count} dia | Queden {count} dies",
+        "purge_today": "S'esborra avui",
+        "restore": "Restaura",
+        "restored": "«{name}» ha tornat a «Les meves classes», a Arxivades. Desarxiva-la quan la vulguis tornar a fer servir.",
+        "restore_error": "No s'ha pogut restaurar la classe. Torna-ho a provar.",
+        "empty_title": "La paperera és buida",
+        "empty_description": "Si elimines una classe, serà aquí {days} dies abans d'esborrar-se per sempre.",
+        "error_title": "No s'ha pogut carregar la paperera",
+        "error_description": "Comprova la connexió i torna-ho a provar.",
+        "retry": "Torna-ho a provar"
       }
     },
     "missions": {
