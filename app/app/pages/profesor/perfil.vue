@@ -272,6 +272,7 @@ import {
   ViewColumnsIcon,
 } from '@heroicons/vue/24/outline'
 import type { AccountDeletionCheck } from '~/types/profile.types'
+import { ROUTE_NAMES } from '~/utils/navigation'
 
 const { t } = useI18n()
 
@@ -438,7 +439,10 @@ const deleteAccount = async () => {
   isDeleting.value = false
 
   if (result.success) {
+    // La sesión ya está cerrada: fuera la ventana y al login, como al cerrar sesión.
+    showDeleteModal.value = false
     toast.success(result.message)
+    await navigateTo(ROUTE_NAMES.LOGIN)
     return
   }
   // Mientras tanto ha dejado de haber a quién pasar alguna clase: la ventana lo explica.

@@ -392,8 +392,9 @@ export const useProfileStore = defineStore('profile', () => {
       )
 
       if (response.success) {
-        // Logout the user after account deletion
-        authStore.logout()
+        // La cuenta ya no existe: se cierra la sesión del todo antes de volver,
+        // para que quien llama pueda ir al login sin que lo devuelva dentro.
+        await authStore.logout()
       }
 
       return response

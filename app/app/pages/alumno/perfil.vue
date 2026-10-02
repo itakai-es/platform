@@ -304,6 +304,7 @@ import {
   BuildingLibraryIcon,
   ViewColumnsIcon,
 } from '@heroicons/vue/24/outline'
+import { ROUTE_NAMES } from '~/utils/navigation'
 
 const { t } = useI18n()
 const { changeLanguage } = useLocale()
@@ -438,7 +439,10 @@ const deleteAccount = async () => {
   isDeleting.value = false
 
   if (result.success) {
+    // La sesión ya está cerrada: fuera la ventana y al login, como al cerrar sesión.
+    showDeleteModal.value = false
     toast.success(result.message)
+    await navigateTo(ROUTE_NAMES.LOGIN)
   } else {
     toast.error(result.message)
   }
