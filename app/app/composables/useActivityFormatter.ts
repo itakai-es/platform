@@ -195,7 +195,7 @@ export function useActivityFormatter(perspective: 'student' | 'teacher' = 'stude
             description = isTeacher
               ? `Se registró en la plataforma`
               : `Te registraste en la plataforma`
-            badge = { type: 'new', text: 'Bienvenida' }
+            badge = { type: 'new', text: 'Nueva cuenta' }
             break
 
           case 'progress_milestone':
