@@ -1,24 +1,5 @@
 {
   "teacher": {
-    "about": {
-      "title": "About ITAKAI",
-      "subtitle": "What's new and version history",
-      "breadcrumb": "About",
-      "breadcrumb_home": "Home",
-      "current_version": "Current version",
-      "latest": "Latest version",
-      "versions_index": "Versions",
-      "footer_note": "Missing something or found a bug? Let us know and we'll consider it for upcoming versions.",
-      "groups": {
-        "new": "New",
-        "improved": "Improvements",
-        "fixed": "Fixes"
-      },
-      "meta": {
-        "title": "About | ITAKAI",
-        "description": "What's new, improvements and fixes in each version of ITAKAI."
-      }
-    },
     "dashboard": {
       "title": "Teacher dashboard",
       "subtitle": "Welcome, {name}!",
@@ -391,7 +372,7 @@
             "metadata_search": "Search...",
             "subject_needs_level": "Choose a level first",
             "publish_title": "Publish as template",
-            "publish_hint": "Share it in the marketplace so other teachers can import it.",
+            "publish_hint": "It will appear in the public template catalog: anyone, even without an account, will be able to see its name, story, cover, missions, shop and behaviors, and other teachers will be able to import it with all of that. Mission deadlines, documents and badges aren't shared.",
             "publish_missing_metadata": "Save subject, level and language before publishing.",
             "publish_on": "Class published as a template",
             "publish_off": "Template removed from the marketplace",
@@ -423,7 +404,31 @@
           },
           "management": {
             "title": "Management",
-            "hint": "Publish it as a template for other teachers to import, or make a copy."
+            "hint": "Publish it as a template for other teachers to import, or make a copy.",
+            "trash": {
+              "title": "Delete class",
+              "hint": "It goes to the trash: you can restore it for {days} days, and after that it's deleted for good.",
+              "cta": "Delete",
+              "modal_title": "Delete the class",
+              "message": "“{name}” will go to the trash. You can restore it for {days} days; after that it will be deleted for good.",
+              "impact_loading": "Working out what would be lost…",
+              "impact_error": "We couldn't work out what would be lost. Please try again.",
+              "retry": "Try again",
+              "loses": "Once the {days} days are up, this will be deleted:",
+              "loses_class": "the class, with its story, guide, shop and behaviors",
+              "loses_missions": "{count} mission, with its enigmas and documents | {count} missions, with their enigmas and documents",
+              "loses_students": "the progress of {count} student in the class | the progress of {count} students in the class",
+              "loses_submissions": "{count} submission with a file | {count} submissions with a file",
+              "loses_purchases": "{count} shop purchase | {count} shop purchases",
+              "loses_accounts": "{count} account without an email address that has never been used, in full | {count} accounts without an email address that have never been used, in full",
+              "while_trashed": "While it's in the trash, students won't be able to enter it or submit anything.",
+              "while_trashed_teachers": "While it's in the trash, students won't be able to enter it or submit anything, and {count} other teacher in the class won't see it either. | While it's in the trash, students won't be able to enter it or submit anything, and {count} other teachers in the class won't see it either.",
+              "unmanaged_accounts": "Once it is deleted, {count} account without an email address created in this class will be left without a home class: only the platform administrators will be able to reset its password. | Once it is deleted, {count} accounts without an email address created in this class will be left without a home class: only the platform administrators will be able to reset their passwords.",
+              "template": "It's published as a template: it's withdrawn from the catalog now and won't be published again on its own if you restore it.",
+              "confirm": "Move to trash",
+              "done": "“{name}” is in the trash. You can restore it for {days} days.",
+              "error": "The class couldn't be moved to the trash. Please try again."
+            }
           },
           "edit_level_note": "You can change the name, the schedule and the cover. The classification, features and levels are changed by whoever administers the class."
         },
@@ -618,7 +623,9 @@
               "template_unpublished": "withdrew the class from the templates",
               "duplicated": "duplicated the class",
               "ownership_transferred": "handed over the class to {target}",
-              "ownership_inherited": "the class passed to {target} when its owner's account was deleted"
+              "ownership_inherited": "the class passed to {target} when its owner's account was deleted",
+              "trashed": "moved the class to the trash",
+              "restored": "restored the class from the trash"
             },
             "teacher": {
               "added": "added {target} to the teachers ({profile}, {access})",
@@ -640,7 +647,9 @@
               "blocked": "locked the mission “{title}”",
               "unblocked": "unlocked the mission “{title}”",
               "moved": "moved the mission “{title}” between classes",
-              "rewards_changed": "changed the reward of the mission “{title}”"
+              "rewards_changed": "changed the reward of the mission “{title}”",
+              "imported": "imported the mission “{title}”",
+              "exported": "copied the mission “{title}” to another class"
             },
             "enigma": {
               "created": "added the enigma “{title}”",
@@ -684,6 +693,47 @@
               "applied": "applied “{title}” to a student who is no longer in the class"
             }
           }
+        },
+        "in_trash": {
+          "title": "“{name}” is in the trash",
+          "description": "It was moved to the trash on {date}. If nobody restores it, it will be deleted for good on {purge}.",
+          "owner_hint": "Restore it to open it again. It comes back archived: students can't enter it until you unarchive it.",
+          "not_owner": "Only the owner of the class can restore it. If you need it, ask them before that date.",
+          "go_trash": "View the trash"
+        }
+      },
+      "trash": {
+        "meta": {
+          "title": "Trash | ITAKAI Teacher",
+          "description": "The classes you've moved to the trash, so you can restore them before they're deleted for good."
+        },
+        "title": "Trash",
+        "subtitle": "Classes you move to the trash are deleted for good after {days} days. Until then, you can restore them.",
+        "link": "Trash ({count})",
+        "restore_note": "A restored class goes back to “My classes” as archived: students can't enter it until you unarchive it.",
+        "sent_by_me": "You moved it on {date}",
+        "sent_by": "{name} moved it on {date}",
+        "sent_on": "Moved to the trash on {date}",
+        "purge_on": "It will be deleted for good on {date}",
+        "days_left": "{count} day left | {count} days left",
+        "purge_today": "Deleted today",
+        "restore": "Restore",
+        "restored": "“{name}” is back in “My classes”, under Archived. Unarchive it whenever you want to use it again.",
+        "restore_error": "The class couldn't be restored. Please try again.",
+        "empty_title": "The trash is empty",
+        "empty_description": "If you delete a class, it will stay here for {days} days before being deleted for good.",
+        "error_title": "The trash couldn't be loaded",
+        "error_description": "Check your connection and try again.",
+        "retry": "Try again",
+        "purge": {
+          "cta": "Delete now",
+          "modal_title": "Delete the class for good",
+          "message": "“{name}” will be deleted now, without waiting for its time in the trash to run out. This can’t be undone: nobody will be able to recover it.",
+          "loses": "This will be deleted now, for good:",
+          "understood": "I understand it will be deleted for good and can’t be recovered.",
+          "confirm": "Delete for good",
+          "done": "“{name}” has been deleted for good.",
+          "error": "The class couldn’t be deleted. Please try again."
         }
       }
     },
@@ -750,6 +800,52 @@
           "toast_saved": "Details saved",
           "toast_error": "Could not save details"
         }
+      },
+      "import": {
+        "button": "Import mission",
+        "button_in_class": "Import from another class",
+        "copy_button": "Copy to another class",
+        "title": "Import a mission",
+        "copy_title": "Copy the mission",
+        "subtitle": "Copy a mission from another of your classes into “{name}”. The original doesn't change.",
+        "subtitle_free": "Copy a mission from one of your classes into another. The original doesn't change.",
+        "copy_subtitle": "Copy “{title}” into one of your classes. The original doesn't change.",
+        "target_label": "Destination class",
+        "target_same": "This mission's class: it will be duplicated",
+        "no_targets": "You can't edit missions in any of your classes.",
+        "source_label": "Source class",
+        "class_placeholder": "Choose a class",
+        "class_search": "Search for a class…",
+        "no_class_matches": "No class matches.",
+        "class_missions": "No missions | 1 mission | {count} missions",
+        "class_shared": "Owned by {name}",
+        "class_archived": "Archived",
+        "no_classes": "You have no other classes to import a mission from.",
+        "show_archived": "Also show archived classes",
+        "mission_label": "Mission",
+        "mission_search": "Search for a mission…",
+        "no_missions": "This class has no missions yet.",
+        "no_matches": "No mission matches “{query}”.",
+        "enigmas": "No enigmas | 1 enigma | {count} enigmas",
+        "documents": "No documents | 1 document | {count} documents",
+        "badges": "No badge | 1 badge | {count} badges",
+        "will_copy": "What gets copied",
+        "copied": "What was copied",
+        "copy_badge": "Also copy its badge “{name}”",
+        "copy_badge_hint": "It will be a new badge of yours, with the same image.",
+        "locked_note": "The copy arrives locked and without a deadline, so you can review it before opening it to your students.",
+        "load_error": "It couldn't be loaded. Check your connection and try again.",
+        "retry": "Try again",
+        "confirm": "Import",
+        "copy_confirm": "Copy",
+        "duplicate_confirm": "Duplicate",
+        "error": "The mission couldn't be imported.",
+        "copy_error": "The mission couldn't be copied.",
+        "success_title": "Mission imported",
+        "copy_success_title": "Mission copied",
+        "duplicate_success_title": "Mission duplicated",
+        "success_description": "The copy of “{title}” is now in “{name}”, locked and without a deadline. Review it and unlock it when you want your students to see it.",
+        "open_mission": "Open the mission"
       }
     },
     "badges": {
@@ -1147,6 +1243,7 @@
       "own": "Yours",
       "import": "Import",
       "import_success": "“{name}” imported. Make it your own!",
+      "import_success_missions": "“{name}” imported with its mission. Make it your own! | “{name}” imported with its {count} missions. Make it your own!",
       "import_error": "Couldn't import the template",
       "load_error": "Couldn't load templates",
       "empty_title": "No templates yet",
@@ -1161,16 +1258,23 @@
         "inactive": "Off",
         "load_error": "Could not load the template",
         "error": "Template not found.",
+        "tabs_label": "Template contents",
         "tab_narrative": "Story",
         "tab_features": "Features",
+        "tab_missions": "Missions ({n})",
         "tab_shop": "Shop ({n})",
         "tab_behaviors": "Behaviors ({n})",
         "no_narrative_title": "No story",
         "no_narrative_description": "This template does not have a story defined.",
+        "no_missions_title": "No missions",
+        "no_missions_description": "This template has no missions. You can create your own.",
         "no_shop_title": "No shop",
         "no_shop_description": "This template has no shop items. You can add your own.",
+        "hidden": "Hidden from students",
+        "shop_off": "This template has the shop turned off. Its items are copied anyway, and you can turn it on in your class whenever you like.",
         "no_behaviors_title": "No behaviors",
-        "no_behaviors_description": "This template has no behaviors. You can define your own."
+        "no_behaviors_description": "This template has no behaviors. You can define your own.",
+        "behaviors_off": "This template has behaviors turned off. They're copied anyway, and you can turn them on in your class whenever you like."
       },
       "filter_all": {
         "subject": "All subjects",

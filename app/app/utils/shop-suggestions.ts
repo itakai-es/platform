@@ -113,7 +113,7 @@ export const SHOP_SUGGESTIONS: ShopSuggestion[] = [
   // ── Poderes (se compran con monedas y se usan gastando maná) ──
   {
     name: 'Pista mágica',
-    description: 'Pídele al profe una pista extra cuando la necesites.',
+    description: 'Pide a tu docente una pista extra cuando la necesites.',
     price: 300,
     kind: 'power',
     manaCost: 20,

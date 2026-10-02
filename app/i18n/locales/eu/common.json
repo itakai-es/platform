@@ -13,6 +13,7 @@
       "logs": "Logak",
       "features": "Ezaugarriak",
       "blog": "Bloga",
+      "templates": "Txantiloiak",
       "help": "Laguntza",
       "section_management": "Kudeaketa",
       "section_content": "Edukiak",
@@ -95,7 +96,9 @@
       "action_error": "Ezin izan da ekintza osatu. Saiatu berriro."
     },
     "errors": {
-      "generic": "Errore bat gertatu da. Mesedez, saiatu berriro."
+      "generic": "Errore bat gertatu da. Mesedez, saiatu berriro.",
+      "rate_limited_title": "Kontsulta gehiegi jarraian",
+      "rate_limited": "Zure konexiotik kontsulta asko egin dira denbora gutxian. Itxaron minutu pare bat eta saiatu berriro."
     },
     "roles": {
       "student": "Ikaslea",
@@ -182,6 +185,7 @@
       "system_access": "Sistemarako sarbidea",
       "teacher_panel": "Irakaslearen panela",
       "student_panel": "Ikaslearen panela",
+      "templates": "Klase-txantiloiak",
       "help_center": "Laguntza zentroa"
     },
     "level_up": {
@@ -277,7 +281,30 @@
         "alumno": "Ikasleak",
         "ambos": "Irakasleak eta ikasleak"
       },
-      "back_to_app": "Itzuli aplikaziora"
+      "back_to_app": "Itzuli aplikaziora",
+      "published_on": "{date}(e)an argitaratua",
+      "by_author": "Egilea: {name}",
+      "load_error": "Ezin izan da edukia kargatu",
+      "retry": "Saiatu berriro"
+    },
+    "about": {
+      "title": "ITAKAIri buruz",
+      "subtitle": "Berritasunak eta bertsioen erregistroa",
+      "breadcrumb": "Honi buruz",
+      "breadcrumb_home": "Hasiera",
+      "current_version": "Uneko bertsioa",
+      "latest": "Azken bertsioa",
+      "versions_index": "Bertsioak",
+      "footer_note": "Zerbait falta duzu edo akatsen bat aurkitu duzu? Esaguzu eta hurrengo bertsioetarako kontuan hartuko dugu.",
+      "groups": {
+        "new": "Berritasunak",
+        "improved": "Hobekuntzak",
+        "fixed": "Konponketak"
+      },
+      "meta": {
+        "title": "Honi buruz | ITAKAI",
+        "description": "ITAKAIren bertsio bakoitzeko berritasunak, hobekuntzak eta konponketak."
+      }
     },
     "meta": {
       "site_title": "ITAKAI - Ikasteko abentura | Hezkuntza plataforma gamifikatua",
@@ -409,7 +436,9 @@
       "blocked_admin": "Kontu hau oraindik ezin da ezabatu: klase hauen jabea da, eta haietan ez dago administrazioa duen beste inor. Lehenago, haien jabetza beste irakasle bati eman behar zaio.",
       "transfers_self": "Zure klaseak haietan administrazioa duen beste irakasle batenak izango dira:",
       "transfers_admin": "Bere klaseak haietan administrazioa duen beste irakasle batenak izango dira:",
-      "transfer_item": "{class}: {name}"
+      "transfer_item": "{class}: {name}",
+      "trashed_self": "Zakarrontzian duzun klasea ere betiko ezabatuko da: | Zakarrontzian dituzun {count} klaseak ere betiko ezabatuko dira:",
+      "trashed_admin": "Zakarrontzian duen klasea ere betiko ezabatuko da: | Zakarrontzian dituen {count} klaseak ere betiko ezabatuko dira:"
     },
     "copy": {
       "label": "Kopiatu: {what}",
@@ -439,6 +468,67 @@
       "filters": "Iragazkiak",
       "filters_count": "Iragazkiak ({count})",
       "clear": "Garbitu iragazkiak"
+    },
+    "blog": {
+      "hero_title": "ITAKAIren bloga",
+      "hero_subtitle": "Plataformaren berriak, ikasgela gamifikatzeko ideiak eta beste irakasle batzuen esperientziak.",
+      "search_placeholder": "Bilatu blogean…",
+      "search_empty_hint": "Saiatu beste hitz batzuekin edo ezabatu bilaketa sarrera guztiak ikusteko.",
+      "all_posts": "Guztiak",
+      "categories_label": "Blogeko kategoriak",
+      "featured": "Nabarmenduak",
+      "latest": "Azken sarrerak",
+      "empty_title": "Oraindik ez dago sarrerarik",
+      "empty_description": "Lehen sarrera argitaratzean hemen agertuko da.",
+      "post_count": "Sarrerarik ez | Sarrera 1 | {count} sarrera",
+      "not_found_description": "Baliteke sarrera mugitu izana edo oraindik argitaratu gabe egotea.",
+      "post_pagination": "Aurreko eta hurrengo sarrera",
+      "meta": {
+        "title": "Bloga · ITAKAI",
+        "description": "ITAKAIren berriak, ideiak eta ikasgelako esperientziak, hezkuntza-plataforma gamifikatua."
+      }
+    },
+    "templates": {
+      "hero_title": "Klase-txantiloiak",
+      "hero_subtitle": "Beste irakasle batzuek argitaratutako klase gamifikatuak, hutsetik hasi behar ez izateko: ipuina, misioak, denda eta portaerak erabiltzeko prest.",
+      "view": "Ikusi txantiloia",
+      "copy_link": "Kopiatu esteka",
+      "result_count": "Txantiloirik ez | Txantiloi 1 | {count} txantiloi",
+      "back_to_catalog": "Ikusi katalogoa",
+      "contents_title": "Zer dakar txantiloi honek",
+      "counts": {
+        "missions": "Misiorik ez | Misio 1 | {count} misio",
+        "shop_items": "Denda-artikulurik ez | Denda-artikulu 1 | {count} denda-artikulu",
+        "behaviors": "Portaerarik ez | Portaera 1 | {count} portaera"
+      },
+      "use": {
+        "title": "Erabili txantiloi hau",
+        "what_you_get": "Inportatzean, klase berri bat sortzen da zuretzat, txantiloiaren ipuina, azala, funtzionalitateak, denda eta portaerak dituena.",
+        "what_you_get_missions": "Inportatzean, klase berri bat sortzen da zuretzat, txantiloiaren ipuina, azala, funtzionalitateak, denda eta portaerak dituena, eta, nahi baduzu, haren misioak ere bai.",
+        "import_missions": "Haren misioa ere inportatu | Haren {count} misioak ere inportatu",
+        "import_missions_hint": "Epemugarik, dokumenturik eta insigniarik gabe iristen dira.",
+        "login_note": "Inportatzeko, irakasle-kontu batekin sartu behar duzu.",
+        "teacher_only": "Inportatzeko, irakasle-kontu bat behar da."
+      },
+      "gone": {
+        "title": "Txantiloi hau jada ez dago eskuragarri",
+        "description": "Argitaratu zuenak katalogotik kendu du. Begiratu gainerakoei: agian antzeko bat aurkituko duzu."
+      },
+      "not_found": {
+        "title": "Txantiloi hau ez da existitzen",
+        "description": "Baliteke esteka osatu gabe edo gaizki kopiatuta egotea. Argitaratutako guztiak katalogoan daude."
+      },
+      "meta": {
+        "title": "Klase-txantiloiak · ITAKAI",
+        "description": "Irakasleek ITAKAIn argitaratutako klase gamifikatuak, beste irakasle batzuek haietatik abiatzeko."
+      }
+    },
+    "class_list": {
+      "tab_active": "Aktiboak",
+      "tab_archived": "Artxibatuak",
+      "empty_title": "Klaserik ez",
+      "empty_archived_title": "Ez dago artxibatutako klaserik",
+      "no_results": "Ez dago «{query}» bilaketarekin bat datorren klaserik"
     }
   }
 }

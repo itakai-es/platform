@@ -51,7 +51,10 @@ export interface AdminHelpArticle {
   helpful: number
   notHelpful: number
   updatedAt: string
+  /** Primera publicación (en el blog, la corregida a mano si se cambió). */
   publishedAt: string | null
+  /** Firma de la entrada; solo la usa el blog. */
+  authorName: string | null
   audience: HelpAudience
   kind: HelpArticleKind
   videoUrl: string | null
@@ -78,6 +81,13 @@ export interface AdminArticlePayload {
   kind?: HelpArticleKind
   /** Solo en el centro de ayuda; el blog no la manda. */
   videoUrl?: string | null
+  /** Solo en el blog: la firma; `null` la quita. */
+  authorName?: string | null
+  /**
+   * Solo en el blog: la fecha de publicación elegida (ISO). Si no viaja, la
+   * pone la API al publicar por primera vez y después no cambia.
+   */
+  publishedAt?: string
 }
 
 /** Lo que el panel manda al crear o editar una categoría. */

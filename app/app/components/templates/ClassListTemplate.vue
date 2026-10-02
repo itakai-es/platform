@@ -14,14 +14,18 @@
       @reset="resetFilters"
     />
 
-    <ArchiveTabs
-      v-if="showArchiveToggle"
-      v-model="viewMode"
-      :active-count="activeClasses.length"
-      :archived-count="archivedClasses.length"
-      active-label="Activas"
-      archived-label="Archivadas"
-    />
+    <!-- Pestañas Activas/Archivadas y, a la derecha, lo que la página añada
+         junto a ellas (p. ej. el enlace a la papelera). -->
+    <div v-if="showArchiveToggle" class="flex flex-wrap items-center justify-between gap-2">
+      <ArchiveTabs
+        v-model="viewMode"
+        :active-count="activeClasses.length"
+        :archived-count="archivedClasses.length"
+        :active-label="t('common.class_list.tab_active')"
+        :archived-label="t('common.class_list.tab_archived')"
+      />
+      <slot name="tabs-extra" />
+    </div>
 
     <CardCollection v-if="loading" :view="cardView" cols="2-wide">
       <template v-if="cardView === 'grid'">
@@ -125,6 +129,8 @@ defineEmits<{
   'duplicate-class': [classId: string]
 }>()
 
+const { t } = useI18n()
+
 const searchQuery = ref('')
 const sortBy = ref('name-asc')
 const viewMode = ref<'active' | 'archived'>('active')
@@ -181,12 +187,14 @@ const displayedClasses = computed(() => {
 
 const computedEmptyTitle = computed(() => {
   if (props.emptyTitle) return props.emptyTitle
-  return viewMode.value === 'active' ? 'Sin clases' : 'Sin clases archivadas'
+  return viewMode.value === 'active'
+    ? t('common.class_list.empty_title')
+    : t('common.class_list.empty_archived_title')
 })
 
 const computedEmptyDescription = computed(() => {
   if (searchQuery.value.trim()) {
-    return `No se encontraron clases para "${searchQuery.value}"`
+    return t('common.class_list.no_results', { query: searchQuery.value.trim() })
   }
   if (props.emptyDescription) return props.emptyDescription
   return ''

@@ -27,8 +27,8 @@ export const BEHAVIOR_SUGGESTIONS: BehaviorSuggestion[] = [
     coins: 5,
   },
   {
-    name: 'Ayuda a un compañero',
-    description: 'Apoya a otro alumno con paciencia o le explica algo.',
+    name: 'Ayuda a quien lo necesita',
+    description: 'Apoya con paciencia a alguien de la clase o le explica algo.',
     kind: 'positive',
     xp: 15,
     coins: 5,
@@ -86,7 +86,7 @@ export const BEHAVIOR_SUGGESTIONS: BehaviorSuggestion[] = [
   },
   {
     name: 'Falta de respeto',
-    description: 'Comportamiento irrespetuoso con compañeros o profesor.',
+    description: 'Comportamiento irrespetuoso con la clase o con su docente.',
     kind: 'negative',
     coins: 10,
     lives: 20,

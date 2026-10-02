@@ -57,7 +57,29 @@ const ARTICLE_CARD = {
   updatedAt: true,
   audience: true,
   kind: true,
+  publishedAt: true,
+  authorName: true,
 } as const
+
+/** Lo que solo enseña el blog: la firma y la fecha de publicación. */
+interface BlogFields {
+  publishedAt: Date | null
+  authorName: string | null
+}
+
+/**
+ * Firma y fecha de publicación de un artículo del blog; nada en la ayuda, que
+ * enseña «Actualizado el…» y no firma: sus respuestas no cambian.
+ */
+function blogFields(item: BlogFields, area: HelpArea): Partial<BlogFields> {
+  return area === 'blog' ? { publishedAt: item.publishedAt, authorName: item.authorName } : {}
+}
+
+/** Una tarjeta de la superficie pública, con los campos del blog solo si es del blog. */
+function publicCard<T extends BlogFields>(card: T, area: HelpArea) {
+  const { publishedAt, authorName, ...rest } = card
+  return { ...rest, ...blogFields({ publishedAt, authorName }, area) }
+}
 
 // ==================== SUPERFICIE PÚBLICA ====================
 
@@ -114,7 +136,7 @@ export async function getPublicIndex(filters: PublicFilters = {}) {
       accent: category.accent,
       area: category.area,
       total: category.articles.length,
-      articles: category.articles,
+      articles: category.articles.map(article => publicCard(article, area)),
     }))
 
   const featured = await prisma.helpArticle.findMany({
@@ -126,7 +148,7 @@ export async function getPublicIndex(filters: PublicFilters = {}) {
     },
   })
 
-  return { categories: visible, featured }
+  return { categories: visible, featured: featured.map(article => publicCard(article, area)) }
 }
 
 type ArticleWithCategory = Prisma.HelpArticleGetPayload<{ include: { category: true } }>
@@ -137,7 +159,9 @@ type ArticleCard = Prisma.HelpArticleGetPayload<{ select: typeof ARTICLE_CARD }>
  * comparten la ruta pública y la previsualización del panel, así que lo que
  * ve quien corrige es exactamente lo que se publicará.
  */
-function buildArticleView(article: ArticleWithCategory, siblings: ArticleCard[]) {
+function buildArticleView(article: ArticleWithCategory, cards: ArticleCard[]) {
+  const area = article.category.area
+  const siblings = cards.map(card => publicCard(card, area))
   return {
     article: {
       id: article.id,
@@ -151,6 +175,7 @@ function buildArticleView(article: ArticleWithCategory, siblings: ArticleCard[])
       audience: article.audience,
       kind: article.kind,
       videoUrl: article.videoUrl,
+      ...blogFields(article, area),
     },
     category: {
       slug: article.category.slug,
@@ -215,6 +240,8 @@ interface SearchRow {
   cover_image: string | null
   audience: HelpAudience
   kind: HelpArticleKind
+  published_at: Date | null
+  author_name: string | null
   category_slug: string
   category_name: string
   category_icon: string | null
@@ -248,6 +275,8 @@ export async function searchArticles(query: string, filters: PublicFilters = {},
            a.cover_image,
            a.audience,
            a.kind,
+           a.published_at,
+           a.author_name,
            c.slug AS category_slug,
            c.name AS category_name,
            c.icon AS category_icon,
@@ -278,6 +307,7 @@ export async function searchArticles(query: string, filters: PublicFilters = {},
     coverImage: row.cover_image,
     audience: row.audience,
     kind: row.kind,
+    ...blogFields({ publishedAt: row.published_at, authorName: row.author_name }, area),
     snippet: row.snippet,
     category: {
       slug: row.category_slug,
@@ -454,6 +484,7 @@ export async function listArticles(filters: ArticleFilters = {}) {
       notHelpful: true,
       updatedAt: true,
       publishedAt: true,
+      authorName: true,
       category: { select: { id: true, name: true, slug: true, area: true } },
     },
   })
@@ -507,6 +538,76 @@ export interface ArticleInput {
   kind?: HelpArticleKind
   /** Solo se guarda si el tipo es vídeo; para el resto se vacía. */
   videoUrl?: string | null
+  /** Firma, solo en el blog. `null` o en blanco la quitan; ausente no la toca. */
+  authorName?: string | null
+  /**
+   * Fecha de publicación corregida a mano, solo en el blog. Ausente, la pone
+   * el sistema al publicar por primera vez, como en la ayuda.
+   */
+  publishedAt?: Date
+}
+
+/** La fecha de publicación más antigua que se admite a mano. */
+const EARLIEST_PUBLISHED_AT = new Date('2000-01-01T00:00:00Z')
+
+/**
+ * Cuánto puede adelantarse al reloj del servidor: el panel manda el mediodía
+ * del día elegido en la hora de quien edita, que puede ir por delante de la
+ * del servidor. Más allá sería una fecha futura de verdad, y publicar con
+ * fecha futura no programa nada: solo mentiría.
+ */
+const PUBLISHED_AT_FUTURE_MARGIN_MS = 24 * 60 * 60 * 1000
+
+/** Firma normalizada: sin espacios sobrantes, y vacía es ninguna. */
+function authorNameFor(value: string | null | undefined) {
+  return value === undefined ? undefined : value?.trim() || null
+}
+
+/**
+ * Firma y fecha de publicación a mano son cosas del blog: la ayuda no las
+ * enseña y su fecha la pone siempre el sistema, así que no se aceptan en ella.
+ * La fecha, además, tiene que ser razonable y solo vale para lo que se publica
+ * o ya se publicó alguna vez: en un borrador que nunca ha salido congelaría su
+ * slug (ver `updateArticle`) sin que nadie lo haya publicado.
+ */
+async function checkBlogFields(
+  categoryId: string,
+  data: Pick<ArticleInput, 'authorName' | 'publishedAt'>,
+  /** Queda publicado con este cambio o ya se publicó alguna vez. */
+  everPublished: boolean
+) {
+  if (data.publishedAt === undefined && !authorNameFor(data.authorName)) return
+
+  const category = await prisma.helpCategory.findUnique({
+    where: { id: categoryId },
+    select: { area: true },
+  })
+  if (!category) throw new NotFoundError('Categoría no encontrada')
+  if (category.area !== 'blog') {
+    throw new ValidationError(
+      'La firma y la fecha de publicación solo existen en el blog',
+      'HELP_BLOG_ONLY_FIELD'
+    )
+  }
+
+  if (data.publishedAt === undefined) return
+  const time = data.publishedAt.getTime()
+  if (
+    Number.isNaN(time) ||
+    time < EARLIEST_PUBLISHED_AT.getTime() ||
+    time > Date.now() + PUBLISHED_AT_FUTURE_MARGIN_MS
+  ) {
+    throw new ValidationError(
+      'La fecha de publicación tiene que estar entre el año 2000 y hoy',
+      'HELP_PUBLISHED_AT_INVALID'
+    )
+  }
+  if (!everPublished) {
+    throw new ValidationError(
+      'Un borrador que nunca se ha publicado no lleva fecha de publicación',
+      'HELP_PUBLISHED_AT_UNPUBLISHED'
+    )
+  }
 }
 
 /**
@@ -530,6 +631,7 @@ export async function createArticle(data: ArticleInput) {
   const status = data.status ?? 'borrador'
   const kind = data.kind ?? 'guia'
   const videoUrl = videoUrlFor(kind, status, data.videoUrl ?? null)
+  await checkBlogFields(data.categoryId, data, status === 'publicado')
 
   return prisma.helpArticle.create({
     data: {
@@ -546,7 +648,8 @@ export async function createArticle(data: ArticleInput) {
       kind,
       videoUrl,
       orderIndex: data.orderIndex ?? (await nextArticleOrder(data.categoryId)),
-      publishedAt: status === 'publicado' ? new Date() : null,
+      authorName: authorNameFor(data.authorName) ?? null,
+      publishedAt: status === 'publicado' ? (data.publishedAt ?? new Date()) : null,
     },
   })
 }
@@ -566,6 +669,7 @@ export async function updateArticle(id: string, data: Partial<ArticleInput>) {
     status,
     data.videoUrl === undefined ? current.videoUrl : data.videoUrl
   )
+  await checkBlogFields(categoryId, data, status === 'publicado' || Boolean(current.publishedAt))
 
   const patch: Prisma.HelpArticleUpdateInput = {
     title: data.title,
@@ -577,6 +681,7 @@ export async function updateArticle(id: string, data: Partial<ArticleInput>) {
     audience: data.audience,
     kind: data.kind,
     videoUrl,
+    authorName: authorNameFor(data.authorName),
   }
 
   const categoryChanged = Boolean(data.categoryId && data.categoryId !== current.categoryId)
@@ -610,6 +715,9 @@ export async function updateArticle(id: string, data: Partial<ArticleInput>) {
     patch.status = data.status
     if (data.status === 'publicado' && !current.publishedAt) patch.publishedAt = new Date()
   }
+
+  // La fecha corregida a mano (solo en el blog, ya validada) manda sobre la automática.
+  if (data.publishedAt) patch.publishedAt = data.publishedAt
 
   return prisma.helpArticle.update({ where: { id }, data: patch, include: { category: true } })
 }

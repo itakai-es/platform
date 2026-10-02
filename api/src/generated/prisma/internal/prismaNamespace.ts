@@ -2850,6 +2850,8 @@ export const ClassScalarFieldEnum = {
   levelConfig: 'levelConfig',
   scheduleConfig: 'scheduleConfig',
   teacherId: 'teacherId',
+  deletedAt: 'deletedAt',
+  deletedById: 'deletedById',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -3267,6 +3269,7 @@ export const HelpArticleScalarFieldEnum = {
   views: 'views',
   helpful: 'helpful',
   notHelpful: 'notHelpful',
+  authorName: 'authorName',
   publishedAt: 'publishedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

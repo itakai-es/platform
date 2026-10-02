@@ -31,10 +31,11 @@
         @update:model-value="$emit('update:view', $event)"
       />
 
-      <!-- Results count (sin buscador, se va a la derecha igualmente) -->
+      <!-- Results count (sin buscador, se va a la derecha igualmente). Celeste oscuro y no el
+           de marca: el blanco sobre `bg-sky` se queda en 2,6:1 y no se lee bien. -->
       <div
         :class="{ 'ml-auto': hideSearch }"
-        class="flex-shrink-0 bg-sky text-white w-10 h-10 sm:w-12 sm:h-12 rounded-full text-sm sm:text-base font-semibold flex items-center justify-center"
+        class="flex-shrink-0 bg-sky-700 text-white w-10 h-10 sm:w-12 sm:h-12 rounded-full text-sm sm:text-base font-semibold flex items-center justify-center"
       >
         {{ resultsCount }}
       </div>

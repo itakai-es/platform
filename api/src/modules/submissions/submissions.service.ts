@@ -173,7 +173,7 @@ export class SubmissionsService {
         fileName: submission.fileName,
         submittedAt: submission.submittedAt,
       },
-      message: 'Entrega enviada correctamente. Será revisada por el profesor.',
+      message: 'Entrega enviada correctamente. Tu docente la revisará.',
     }
   }
 
@@ -232,7 +232,8 @@ export class SubmissionsService {
    * Get all student's pending submissions
    */
   async getMySubmissions(studentId: string, status?: string) {
-    const where: any = { studentId }
+    // Las de clases en la papelera no salen: la clase ya no aparece al alumnado.
+    const where: any = { studentId, enigma: { mission: { class: { deletedAt: null } } } }
     if (status) where.status = status
 
     const submissions = await prisma.enigmaSubmission.findMany({
@@ -395,7 +396,7 @@ export class SubmissionsService {
       where: { studentId_enigmaId: { studentId: submission.studentId, enigmaId: submission.enigmaId } },
     })
     if (alreadyApproved) {
-      throw new Error('Este enigma ya fue aprobado para este alumno')
+      throw new Error('Este enigma ya se aprobó para esta cuenta de estudiante')
     }
 
     const { xpReward, coinReward, manaReward } = submission.enigma

@@ -58,7 +58,7 @@ import {
   BookOpenIcon,
   BellIcon,
 } from '@heroicons/vue/24/outline'
-import { getHelpPortalByRole, getNotificationsByRole } from '~/utils/navigation'
+import { ROUTE_NAMES, getHelpPortalByRole, getNotificationsByRole } from '~/utils/navigation'
 
 const { t } = useI18n()
 const authStore = useAuthStore()
@@ -163,7 +163,7 @@ const navItems = computed(() => [
     icon: BookOpenIcon,
   },
   {
-    to: '/profesor/acerca-de',
+    to: ROUTE_NAMES.TEACHER_ABOUT,
     label: t('common.nav.about'),
     icon: InformationCircleIcon,
   },

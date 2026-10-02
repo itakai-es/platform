@@ -8,7 +8,7 @@ import { prisma } from '../../../config/database.js'
 import { nanoid } from 'nanoid'
 import { createClassWithOwner } from '../../../utils/class-owner.js'
 import {
-  accessibleClassesWhere,
+  listedClassesWhere,
   CLASS_ACTION_LEVEL,
   hasClassLevel,
 } from '../../../utils/class-access.js'
@@ -106,7 +106,7 @@ export function registerTeacherTools() {
     async execute(args) {
       // userId is injected at call time via the tool executor closure in ai.service.ts
       const userId = (args as Record<string, unknown>)._userId as string | undefined
-      if (!userId) return 'Error: no se pudo identificar al profesor. Inicia sesion de nuevo.'
+      if (!userId) return 'Error: no se pudo identificar tu cuenta. Inicia sesion de nuevo.'
 
       const name = String(args.name || '').trim()
       if (!name || name.length < 2 || name.length > 200) {
@@ -145,12 +145,12 @@ export function registerTeacherTools() {
     },
     async execute(args) {
       const userId = (args as Record<string, unknown>)._userId as string | undefined
-      if (!userId) return 'Error: no se pudo identificar al profesor.'
+      if (!userId) return 'Error: no se pudo identificar tu cuenta.'
 
       // Las clases a las que tiene acceso; el código de invitación, solo en las
       // que puede invitar alumnos.
       const classes = await prisma.class.findMany({
-        where: accessibleClassesWhere(userId),
+        where: listedClassesWhere(userId),
         include: {
           _count: { select: { enrollments: { where: { isPreview: false } }, missions: true } },
           teachers: { where: { userId }, select: { access: true, profile: true, isOwner: true } },
@@ -166,7 +166,7 @@ export function registerTeacherTools() {
           const mine = c.teachers[0]
           const canInvite = mine && hasClassLevel(mine, CLASS_ACTION_LEVEL['class.inviteCode'])
           const code = canInvite ? `, codigo: ${c.invitationCode}` : ''
-          return `- **${c.name}** (${c._count.enrollments} alumnos, ${c._count.missions} misiones${code})`
+          return `- **${c.name}** (${c._count.enrollments} estudiantes, ${c._count.missions} misiones${code})`
         })
         .join('\n')
     },

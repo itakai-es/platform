@@ -6,7 +6,7 @@
       "sections": {
         "acceptance": {
           "title": "1. Acceptarea termenilor",
-          "p1": "Bine ai venit în ITAKAI. Prin accesarea și utilizarea platformei noastre educaționale gamificate, accepți să fii obligat de acești Termeni și condiții („Termenii”). Dacă nu ești de acord cu vreo parte a acestor termeni, nu trebuie să folosești serviciile noastre.",
+          "p1": "Bine ai venit în ITAKAI. Prin accesarea și utilizarea platformei noastre educaționale gamificate, accepți acești Termeni și condiții („Termenii”) și te angajezi să îi respecți. Dacă nu ești de acord cu vreo parte a acestor termeni, nu trebuie să folosești serviciile noastre.",
           "p2": "Acești Termeni constituie un acord legal între tine („Utilizatorul”) și ITAKAI („Platforma”, „noi”, „al nostru”). Îți recomandăm să citești cu atenție acești termeni înainte de a te înregistra."
         },
         "service_description": {
@@ -16,21 +16,21 @@
             "missions": "Misiuni educative interactive (sarcini gamificate)",
             "ai_assistants": "Cinci asistenți de inteligență artificială bazați pe personaje mitologice (Atena, Ulise, Penelopa, Polifem, Poseidon)",
             "progress": "Sistem de progres cu experiență (XP), niveluri și realizări",
-            "management": "Instrumente de administrare pentru profesori și administratori",
+            "management": "Instrumente de administrare pentru cadrele didactice și echipa de administrare",
             "chat": "Discuții în timp real cu asistenți IA pentru sprijin educațional"
           },
           "disclaimer": "Ne rezervăm dreptul de a modifica, suspenda sau întrerupe orice aspect al serviciului în orice moment, cu sau fără notificare prealabilă."
         },
         "accounts": {
-          "title": "3. Înregistrarea și conturile de utilizator",
+          "title": "3. Înregistrarea și conturile",
           "eligibility_title": "3.1 Eligibilitate",
-          "eligibility_text": "Ca să folosești ITAKAI trebuie să ai cel puțin 13 ani. Minorii sub 18 ani au nevoie de consimțământul unui părinte sau tutore legal ca să se înregistreze. Utilizarea de către minori trebuie supravegheată de o instituție de învățământ sau de un tutore.",
+          "eligibility_text": "Ca să folosești ITAKAI trebuie să ai cel puțin 13 ani. Persoanele sub 18 ani au nevoie de consimțământul unui părinte sau al reprezentantului legal ca să se înregistreze. Utilizarea de către minori trebuie supravegheată de o instituție de învățământ sau de reprezentantul legal.",
           "account_types_title": "3.2 Tipuri de cont",
-          "account_student": "Elev: pentru utilizatorii care realizează misiuni și învață prin intermediul platformei",
-          "account_teacher": "Profesor: pentru cadrele didactice care creează misiuni, administrează clase și urmăresc progresul elevilor",
-          "account_admin": "Administrator: pentru personalul intern ITAKAI cu acces la funcțiile administrative ale sistemului",
+          "account_student": "Elev: pentru a realiza misiuni și a învăța prin intermediul platformei",
+          "account_teacher": "Cadru didactic: pentru a crea misiuni, a administra clase și a urmări progresul elevilor",
+          "account_admin": "Administrație: pentru echipa internă ITAKAI cu acces la funcțiile administrative ale sistemului",
           "security_title": "3.3 Securitatea contului",
-          "security_intro": "Ești responsabil pentru:",
+          "security_intro": "Responsabilitatea ta include:",
           "security_password": "Păstrarea confidențialității parolei tale",
           "security_activity": "Toate activitățile desfășurate din contul tău",
           "security_notify": "Notificarea noastră imediată privind orice utilizare neautorizată a contului tău",
@@ -41,19 +41,19 @@
           "permitted_title": "4.1 Conduită permisă",
           "permitted_intro": "Folosind ITAKAI, te angajezi să:",
           "permitted_educational": "Folosești platforma exclusiv în scopuri educative și legitime",
-          "permitted_respect": "Respecți ceilalți utilizatori, profesorii și administratorii",
+          "permitted_respect": "Respecți celelalte persoane care folosesc platforma, cadrele didactice și echipa de administrare",
           "permitted_content": "Furnizezi conținut adecvat și respectuos",
           "permitted_laws": "Respecți toate legile și reglementările aplicabile",
           "prohibited_title": "4.2 Conduită interzisă",
           "prohibited_intro": "Este strict interzis:",
           "prohibited_hacking": "Să spargi sisteme, să faci inginerie inversă sau să încerci accesul la sisteme neautorizate",
           "prohibited_offensive": "Să încarci conținut ofensator, defăimător, ilegal sau inadecvat",
-          "prohibited_harassment": "Să hărțuiești, să intimidezi sau să ameninți alți utilizatori",
+          "prohibited_harassment": "Să hărțuiești, să intimidezi sau să ameninți alte persoane",
           "prohibited_cheating": "Să trișezi sau să manipulezi sistemul de puncte, XP sau realizări",
           "prohibited_sharing": "Să îți partajezi contul cu terți",
           "prohibited_bots": "Să folosești boți, scripturi sau instrumente automatizate fără autorizare",
           "prohibited_ip": "Să încalci drepturile de proprietate intelectuală ale terților",
-          "prohibited_data": "Să colectezi date ale altor utilizatori fără consimțământ"
+          "prohibited_data": "Să colectezi date ale altor persoane fără consimțământ"
         },
         "intellectual_property": {
           "title": "5. Proprietate intelectuală",
@@ -63,16 +63,16 @@
           "license_text": "Îți acordăm o licență limitată, neexclusivă, netransferabilă și revocabilă pentru a accesa și folosi ITAKAI exclusiv în scopuri educative personale. Nu poți copia, modifica, distribui, vinde sau exploata comercial nicio parte a platformei fără consimțământul nostru prealabil scris."
         },
         "user_content": {
-          "title": "6. Conținutul utilizatorului",
+          "title": "6. Conținutul tău",
           "p1": "Prin trimiterea de conținut către ITAKAI (răspunsuri la misiuni, mesaje de chat, comentarii), ne acorzi o licență mondială, fără redevențe, sublicențiabilă și transferabilă pentru a folosi, reproduce, distribui, afișa și modifica acel conținut în scopul furnizării și îmbunătățirii serviciilor noastre.",
-          "p2": "Ești singurul responsabil pentru conținutul pe care îl publici și garantezi că deții toate drepturile necesare pentru acordarea acestei licențe. Nu publicăm conținut care încalcă drepturile terților sau legile aplicabile."
+          "p2": "Responsabilitatea pentru conținutul pe care îl publici îți aparține în exclusivitate și garantezi că deții toate drepturile necesare pentru acordarea acestei licențe. Nu publicăm conținut care încalcă drepturile terților sau legile aplicabile."
         },
         "liability": {
           "title": "7. Limitarea răspunderii",
           "availability_title": "7.1 Disponibilitatea serviciului",
           "availability_text": "ITAKAI este furnizat „ca atare” și „în funcție de disponibilitate”. Nu garantăm că serviciul va fi disponibil neîntrerupt, în siguranță sau fără erori. Pot apărea întreruperi din cauza mentenanței, actualizărilor sau problemelor tehnice.",
           "educational_title": "7.2 Conținut educațional",
-          "educational_text": "Deși ne străduim să oferim conținut educațional de calitate, nu garantăm exactitatea, integralitatea sau actualitatea întregului conținut. Asistenții IA sunt instrumente de sprijin educațional și nu înlocuiesc supravegherea unui profesor calificat.",
+          "educational_text": "Deși ne străduim să oferim conținut educațional de calitate, nu garantăm exactitatea, integralitatea sau actualitatea întregului conținut. Asistenții IA sunt instrumente de sprijin educațional și nu înlocuiesc supravegherea unui cadru didactic calificat.",
           "warranty_title": "7.3 Excluderea garanțiilor",
           "warranty_text": "În limita maximă permisă de lege, ITAKAI exclude toate garanțiile, exprese sau implicite, inclusiv garanțiile de vandabilitate, de adecvare pentru un anumit scop și de neîncălcare a drepturilor."
         },
@@ -83,7 +83,7 @@
         },
         "termination": {
           "title": "9. Închiderea contului",
-          "by_user_title": "9.1 Închidere de către utilizator",
+          "by_user_title": "9.1 Închidere la cererea ta",
           "by_user_text": "Îți poți șterge contul oricând din setările profilului tău sau contactându-ne la suport{'@'}itakai.com. Ștergerea contului duce la pierderea definitivă a tuturor datelor, a progresului, a realizărilor și a conținutului asociat.",
           "by_itakai_title": "9.2 Închidere de către ITAKAI",
           "by_itakai_intro": "Ne rezervăm dreptul de a suspenda sau închide contul tău dacă:",
@@ -124,7 +124,7 @@
       "sections": {
         "introduction": {
           "title": "1. Introducere",
-          "p1": "La ITAKAI („noi”, „al nostru” sau „platforma”) ne angajăm să îți protejăm confidențialitatea și datele personale. Această Politică de confidențialitate descrie cum colectăm, folosim, partajăm și protejăm informațiile personale ale utilizatorilor noștri (elevi, profesori și administratori).",
+          "p1": "La ITAKAI („noi”, „al nostru” sau „platforma”) ne angajăm să îți protejăm confidențialitatea și datele personale. Această Politică de confidențialitate descrie cum colectăm, folosim, partajăm și protejăm informațiile personale ale persoanelor care folosesc platforma (elevi, cadre didactice și echipa de administrare).",
           "p2": "Prin utilizarea ITAKAI, accepți practicile descrise în această politică. Dacă nu ești de acord cu vreo parte a acestei politici, te rugăm să nu folosești serviciile noastre."
         },
         "information_collected": {
@@ -134,14 +134,14 @@
           "account_name": "Nume complet",
           "account_email": "Adresă de e-mail",
           "account_password": "Parolă (criptată)",
-          "account_role": "Rol (elev, profesor, administrator)",
+          "account_role": "Rol (elev, cadru didactic, administrație)",
           "account_avatar": "Avatar sau fotografie de profil (opțional)",
           "usage_title": "2.2 Informații de utilizare",
           "usage_intro": "În timpul utilizării platformei, colectăm:",
           "usage_missions": "Misiuni finalizate și progres educațional",
           "usage_xp": "Puncte de experiență (XP) și niveluri atinse",
           "usage_ai": "Interacțiuni cu asistenții IA",
-          "usage_chat": "Mesaje în discuțiile cu profesori și asistenți",
+          "usage_chat": "Mesaje în discuțiile cu cadre didactice și asistenți",
           "usage_badges": "Realizări și insigne deblocate",
           "usage_stats": "Statistici de performanță academică",
           "technical_title": "2.3 Informații tehnice",
@@ -157,18 +157,18 @@
           "intro": "Folosim informațiile tale personale pentru a:",
           "educational": "Furniza serviciul educațional: administrarea contului tău, livrarea de conținut personalizat și urmărirea progresului tău academic",
           "personalization": "Personalizare cu IA: adaptarea recomandărilor asistenților noștri IA la nivelul și nevoile tale",
-          "communication": "Comunicare: trimiterea de notificări importante, actualizări ale misiunilor și mesaje de la profesori",
-          "improvement": "Îmbunătățirea serviciului: analiza utilizării platformei pentru a îmbunătăți funcționalitățile și experiența utilizatorului",
+          "communication": "Comunicare: trimiterea de notificări importante, actualizări ale misiunilor și mesaje de la cadrele didactice",
+          "improvement": "Îmbunătățirea serviciului: analiza utilizării platformei pentru a îmbunătăți funcționalitățile și experiența de utilizare",
           "security": "Securitate: detectarea și prevenirea fraudei, abuzului sau activităților neautorizate",
           "legal": "Conformitate legală: respectarea obligațiilor legale și de reglementare aplicabile"
         },
         "sharing": {
           "title": "4. Partajarea informațiilor",
           "intro": "Nu vindem și nu închiriem informațiile tale personale către terți. Putem partaja datele tale în următoarele situații:",
-          "teachers": "Cu profesorii: dacă ești elev, profesorii tăi pot vedea progresul tău academic și statisticile de performanță",
+          "teachers": "Cu cadrele didactice: dacă ai cont de elev, cadrele didactice ale clasei tale pot vedea progresul tău academic și statisticile de performanță",
           "providers": "Furnizori de servicii: partajăm informații cu furnizorii care ne ajută să operăm platforma (găzduire, analiză, IA)",
           "legal_requirements": "Cerințe legale: atunci când este impus de lege, de o hotărâre judecătorească sau de autorități guvernamentale",
-          "rights": "Protejarea drepturilor: pentru a proteja drepturile, proprietatea sau siguranța ITAKAI, a utilizatorilor sau a altora"
+          "rights": "Protejarea drepturilor: pentru a proteja drepturile, proprietatea sau siguranța ITAKAI, a persoanelor care o folosesc sau a terților"
         },
         "data_security": {
           "title": "5. Securitatea datelor",
@@ -200,7 +200,7 @@
         },
         "minors": {
           "title": "9. Minori",
-          "text": "ITAKAI este conceput pentru utilizare educațională și poate include utilizatori sub 18 ani, sub supravegherea profesorilor sau a instituțiilor de învățământ. Dacă ești părinte sau tutore și ai întrebări despre cum tratăm datele minorilor, contactează-ne la suport{'@'}itakai.com"
+          "text": "ITAKAI este conceput pentru utilizare educațională și poate include persoane sub 18 ani, sub supravegherea cadrelor didactice sau a instituțiilor de învățământ. Dacă ești părinte sau reprezentant legal și ai întrebări despre cum tratăm datele minorilor, contactează-ne la suport{'@'}itakai.com"
         },
         "policy_changes": {
           "title": "10. Modificări ale acestei politici",
@@ -247,14 +247,14 @@
           "functionality_chat": "Reținerea ultimei conversații active",
           "functionality_note": "Poți controla aceste cookie-uri din setările browserului, dar dezactivarea lor poate afecta funcționarea platformei.",
           "analytics_title": "2.3 Cookie-uri de performanță și analiză",
-          "analytics_text": "Aceste cookie-uri colectează informații despre modul în care utilizatorii folosesc ITAKAI, de exemplu ce pagini vizitează cel mai des sau dacă primesc mesaje de eroare. Toate informațiile colectate sunt agregate și anonime.",
+          "analytics_text": "Aceste cookie-uri colectează informații despre modul în care este folosit ITAKAI, de exemplu ce pagini sunt vizitate cel mai des sau dacă apar mesaje de eroare. Toate informațiile colectate sunt agregate și anonime.",
           "analytics_examples_title": "Exemple de utilizare:",
           "analytics_patterns": "Analiza tiparelor de navigare și de utilizare a platformei",
-          "analytics_visitors": "Numărarea vizitatorilor și înțelegerea modului în care navighează pe site",
+          "analytics_visitors": "Numărarea vizitelor și înțelegerea modului în care se navighează pe site",
           "analytics_effectiveness": "Măsurarea eficacității misiunilor și a conținutului educațional",
           "analytics_errors": "Detectarea și rezolvarea erorilor tehnice",
           "analytics_performance": "Îmbunătățirea performanței site-ului",
-          "analytics_note": "Folosim instrumente de analiză ca să înțelegem mai bine cum putem îmbunătăți experiența utilizatorului. Poți refuza urmărirea analitică din setările browserului tău.",
+          "analytics_note": "Folosim instrumente de analiză ca să înțelegem mai bine cum putem îmbunătăți experiența de utilizare. Poți refuza urmărirea analitică din setările browserului tău.",
           "third_party_title": "2.4 Cookie-uri de la terți",
           "third_party_text": "Unele dintre serviciile noastre folosesc cookie-uri setate de terți de încredere, pentru a oferi funcționalități suplimentare:",
           "third_party_google": "Google OAuth: pentru a permite autentificarea cu contul tău Google",
@@ -334,8 +334,8 @@
       "last_updated": "Ultima actualizare: ianuarie 2026",
       "sections": {
         "identification": {
-          "title": "1. Date de identificare ale titularului",
-          "intro": "În conformitate cu obligația de informare prevăzută la articolul 10 din Legea spaniolă 34/2002 din 11 iulie privind serviciile societății informaționale și comerțul electronic (LSSICE), titularul acestui site vă informează următoarele:",
+          "title": "1. Date de identificare ale entității titulare",
+          "intro": "În conformitate cu obligația de informare prevăzută la articolul 10 din Legea spaniolă 34/2002 din 11 iulie privind serviciile societății informaționale și comerțul electronic (LSSICE), entitatea titulară a acestui site informează următoarele:",
           "company_name": "Denumire socială: ITAKAI",
           "domain": "Domeniu: itakai.com",
           "email_legal": "E-mail de contact:",
@@ -349,14 +349,14 @@
         "conditions": {
           "title": "3. Condiții de utilizare",
           "access_title": "3.1 Acces și navigare",
-          "access_text": "Accesul Utilizatorului la Site este liber și gratuit. Înregistrarea ca utilizator și utilizarea anumitor servicii pot fi supuse unor condiții specifice și pot necesita înregistrarea prealabilă a Utilizatorului.",
+          "access_text": "Accesul la Site este liber și gratuit. Înregistrarea și utilizarea anumitor servicii pot fi supuse unor condiții specifice și pot necesita înregistrarea prealabilă.",
           "correct_use_title": "3.2 Utilizare corectă",
           "correct_use_text": "Utilizatorul se angajează să folosească Site-ul și serviciile în conformitate cu legea, cu prezenta Notă legală, cu Termenii și condițiile și cu bunele moravuri. Utilizatorul se obligă să folosească serviciile cu diligență și să nu le destineze unor activități ilicite sau contrare bunei-credințe.",
           "prohibitions_title": "3.3 Interdicții",
           "prohibitions_intro": "Este interzis în mod expres:",
           "prohibitions_damage": "Să întreprinzi acțiuni care pot deteriora, face inutilizabil, supraîncărca sau degrada Site-ul",
-          "prohibitions_impede": "Să împiedici utilizarea normală a Site-ului de către alți utilizatori",
-          "prohibitions_impersonate": "Să te dai drept alt utilizator",
+          "prohibitions_impede": "Să împiedici utilizarea normală a Site-ului de către alte persoane",
+          "prohibitions_impersonate": "Să uzurpi identitatea altor persoane",
           "prohibitions_illegal_content": "Să difuzezi conținut ilegal, rasist, xenofob, pornografic, de apologie a terorismului sau care încalcă drepturile omului",
           "prohibitions_malware": "Să introduci viruși informatici, troieni, viermi, bombe logice sau orice alt program ori material dăunător",
           "prohibitions_unauthorized_access": "Să încerci să accesezi zone restricționate ale sistemelor informatice ale ITAKAI sau ale terților"

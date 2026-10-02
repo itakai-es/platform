@@ -49,7 +49,7 @@ export class ProfileService {
       },
     })
 
-    if (!user) throw new Error('Usuario no encontrado')
+    if (!user) throw new Error('Cuenta no encontrada')
 
     // Map refresh tokens to sessions
     const sessions = user.refreshTokens.map((token) => {
@@ -130,7 +130,7 @@ export class ProfileService {
    */
   async changeEmail(userId: string, data: { newEmail: string; password?: string }) {
     const user = await prisma.user.findUnique({ where: { id: userId } })
-    if (!user) throw new NotFoundError('Usuario no encontrado')
+    if (!user) throw new NotFoundError('Cuenta no encontrada')
 
     // Una cuenta gestionada no tiene correo y no puede ponerse uno: el correo es
     // con lo que se recupera la cuenta y, en estas, eso lo lleva el profesorado.
@@ -332,7 +332,7 @@ export class ProfileService {
       },
     })
 
-    if (!user) throw new Error('Usuario no encontrado')
+    if (!user) throw new Error('Cuenta no encontrada')
 
     // Los ficheros de las entregas y de los documentos de misión no se sirven
     // por su dirección: en la exportación va la de la descarga que comprueba el
@@ -392,7 +392,7 @@ export class ProfileService {
    */
   async deleteAccount(userId: string, password: string) {
     const user = await prisma.user.findUnique({ where: { id: userId } })
-    if (!user) throw new Error('Usuario no encontrado')
+    if (!user) throw new Error('Cuenta no encontrada')
 
     // Una cuenta gestionada no se borra a sí misma: quien ejerce ese derecho es
     // su profesorado o quien administra la instancia.

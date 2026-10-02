@@ -66,7 +66,7 @@ const DEFAULT_SHOP_ITEMS: {
   // ── Poderes (se compran con monedas y se usan gastando maná) ──
   {
     name: 'Pista mágica',
-    description: 'Pídele al profe una pista extra cuando la necesites.',
+    description: 'Pídele a tu docente una pista extra cuando la necesites.',
     price: 300,
     kind: 'power',
     manaCost: 20,
@@ -162,7 +162,7 @@ export class ShopService {
       where: { studentId_classId: { studentId, classId } },
       select: { coins: true, mana: true },
     })
-    if (!enrollment) throw new Error('No estás inscrito en esta clase')
+    if (!enrollment) throw new Error('No estás en esta clase')
 
     const [items, purchases, uses, ownedRows] = await Promise.all([
       prisma.shopItem.findMany({
@@ -259,7 +259,7 @@ export class ShopService {
         where: { studentId_classId: { studentId, classId } },
         select: { mana: true, avatarUrl: true, nickname: true },
       })
-      if (!enrollment) throw new Error('No estás inscrito en esta clase')
+      if (!enrollment) throw new Error('No estás en esta clase')
 
       const item = await tx.shopItem.findFirst({ where: { id: itemId, classId } })
       if (!item) throw new Error('El poder ya no existe')
@@ -330,7 +330,7 @@ export class ShopService {
         where: { studentId_classId: { studentId, classId } },
         select: { coins: true, avatarUrl: true, nickname: true },
       })
-      if (!enrollment) throw new Error('No estás inscrito en esta clase')
+      if (!enrollment) throw new Error('No estás en esta clase')
 
       const item = await tx.shopItem.findFirst({ where: { id: itemId, classId } })
       if (!item) throw new Error('El artículo ya no existe')

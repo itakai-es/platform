@@ -76,7 +76,7 @@
                   ai-placeholder="Ej: Hazlo más épico, añade referencias al tema..."
                   context-label="Editando la narrativa de la misión"
                   ai-modal-hint="Dile a la IA qué quieres añadir o cambiar de la narrativa."
-                  ai-system-context="El profesor está editando la NARRATIVA de una misión gamificada. Es la historia que ambienta la misión y engancha a los alumnos. Genera contenido narrativo, inmersivo y épico acorde a la temática."
+                  ai-system-context="Quien imparte la clase está editando la NARRATIVA de una misión gamificada. Es la historia que ambienta la misión y engancha al alumnado. Genera contenido narrativo, inmersivo y épico acorde a la temática."
                 >
                   <template #default="{ edit }">
                     <div class="flex-1 onb-result-box overflow-y-auto min-h-0">
@@ -563,13 +563,13 @@
                   ai-placeholder="Ej: Añade consejos para los enigmas, hazlo más épico..."
                   context-label="Editando la guía de la misión"
                   ai-modal-hint="Dile a la IA qué quieres añadir o cambiar de la guía."
-                  ai-system-context="El profesor está editando la GUÍA para los alumnos de una misión gamificada. Orienta a los alumnos sobre cómo abordar la misión y sus enigmas. Genera contenido claro, útil y motivador."
+                  ai-system-context="Quien imparte la clase está editando la GUÍA para el alumnado de una misión gamificada. Orienta al alumnado sobre cómo abordar la misión y sus enigmas. Genera contenido claro, útil y motivador."
                 >
                   <template #default="{ edit }">
                     <div class="flex-1 onb-result-box overflow-y-auto min-h-0">
                       <OnboardingLoading
                         v-if="(waitingForFirstChunk || isGeneratingMissionGuide) && !missionGuide"
-                        text="Generando guía para los alumnos..."
+                        text="Generando guía para el alumnado..."
                         :show-bar="generationProgress > 0 || isOvertime"
                         :progress="generationProgress"
                         :is-overtime="isOvertime"
@@ -1076,7 +1076,7 @@ const currentQuestion = computed(() => {
     'Estos son los enigmas que he preparado',
     'Configuración final',
     'He creado esta portada para tu misión',
-    'Esta es la guía para tus alumnos',
+    'Esta es la guía para tu alumnado',
     '¿Quieres crear una insignia para esta misión?',
   ]
   return questions[step.value] || ''
@@ -1491,7 +1491,7 @@ async function generateMissionGuide(extraPrompt?: string) {
         // extraPrompt es el "quiero cambiar algo" del profesor: llegaba a esta
         // función y no se usaba, así que regenerar devolvía otra vez lo mismo.
         enigmasSummary: extraPrompt
-          ? `${enigmaSummary}\n\nEl profesor pide sobre el briefing: ${extraPrompt}`
+          ? `${enigmaSummary}\n\nQuien imparte la clase pide sobre el briefing: ${extraPrompt}`
           : enigmaSummary,
         totalXp: String(totalXp.value),
         ...aiBrief(),

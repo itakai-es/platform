@@ -1,12 +1,16 @@
 <template>
-  <div class="flex items-center">
+  <!-- Arriba y sin encogerse: con una etiqueta de varias líneas, la casilla sigue
+       siendo un cuadrado a la altura de la primera. -->
+  <div class="flex items-start">
     <input
       :id="id"
       type="checkbox"
       :checked="modelValue"
       :disabled="disabled"
       :required="required"
-      class="w-4 h-4 border border-border-primary rounded bg-white checked:bg-navy-700 checked:border-navy-700 focus:ring-2 focus:ring-navy-700 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
+      :aria-describedby="describedBy"
+      :class="{ 'mt-0.5': label }"
+      class="w-4 h-4 shrink-0 border border-border-primary rounded bg-white checked:bg-navy-700 checked:border-navy-700 focus:ring-2 focus:ring-navy-700 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
       @change="emit('update:modelValue', ($event.target as HTMLInputElement).checked)"
     />
     <label
@@ -38,6 +42,8 @@ interface Props {
   label?: string
   disabled?: boolean
   required?: boolean
+  /** Id del texto que explica la casilla: el lector de pantalla lo lee con ella. */
+  describedBy?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -45,6 +51,7 @@ const props = withDefaults(defineProps<Props>(), {
   label: undefined,
   disabled: false,
   required: false,
+  describedBy: undefined,
 })
 
 const emit = defineEmits<{

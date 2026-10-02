@@ -55,7 +55,7 @@ async function studentEnrollment(classId: string, studentId: string, tx: Prisma.
     select: { id: true, isPreview: true },
   })
   if (!enrollment || enrollment.isPreview) {
-    throw new NotFoundError('El alumno no está en esta clase')
+    throw new NotFoundError('Esa cuenta de estudiante no está en esta clase')
   }
   return enrollment
 }
@@ -226,9 +226,19 @@ export async function deleteEnrollmentData(
   return submissions.map(s => s.fileUrl)
 }
 
-/** Borra los ficheros que devolvió `deleteEnrollmentData`. */
-export async function deleteUploads(files: (string | null)[]) {
-  await Promise.all(files.map(url => deleteUpload(url)))
+/**
+ * Borra los ficheros que devolvió `deleteEnrollmentData` (o la purga de una
+ * clase). Devuelve los que no se han podido borrar: la base ya no los apunta, y
+ * quien quiera puede contarlos o dejarlos apuntados.
+ */
+export async function deleteUploads(files: (string | null)[]): Promise<string[]> {
+  const results = await Promise.allSettled(files.map(url => deleteUpload(url)))
+  const failed: string[] = []
+  results.forEach((result, i) => {
+    const url = files[i]
+    if (url && (result.status === 'rejected' || !result.value)) failed.push(url)
+  })
+  return failed
 }
 
 /**

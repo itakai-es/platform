@@ -2,6 +2,7 @@ import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 import * as help from './help.service.js'
 import { NotFoundError } from '../../utils/errors.js'
+import { pickOne, str } from '../../utils/query-params.js'
 
 /**
  * Rutas del centro de ayuda (Fase 3, punto 17).
@@ -18,22 +19,6 @@ const areaEnum = z.enum(['ayuda', 'blog'])
 const statusEnum = z.enum(['borrador', 'publicado'])
 /** Los cuatro acentos que entiende la tarjeta de categoría del frontend. */
 const accentEnum = z.enum(['ia', 'stats', 'clases', 'pending'])
-
-/** Devuelve el valor si es uno de los admitidos; cualquier otro se ignora sin error. */
-function pickOne<const T extends readonly string[]>(allowed: T, value: unknown): T[number] | undefined {
-  return typeof value === 'string' && (allowed as readonly string[]).includes(value)
-    ? (value as T[number])
-    : undefined
-}
-
-/**
- * Un parámetro de texto libre, o nada si no es una cadena: con la clave
- * repetida (`?locale=es&locale=en`) Fastify entrega un array, que llegaría a
- * Prisma o a `.trim()` y acabaría en 500.
- */
-function str(value: unknown) {
-  return typeof value === 'string' ? value : undefined
-}
 
 /** Audiencia que se puede pedir desde fuera. `ambos` no se pide: siempre se incluye. */
 function parseAudience(query: { audience?: string }) {
@@ -144,6 +129,18 @@ const articleSchema = z.object({
   kind: kindEnum.optional(),
   /** `null` la vacía; ausente no la toca. Mismo contrato que `coverImage`. */
   videoUrl: z.string().url().max(500).regex(/^https:\/\//).nullable().optional(),
+  /** Firma de la entrada, solo en el blog. `null` la quita; ausente no la toca. */
+  authorName: z.string().max(120).nullable().optional(),
+  /**
+   * Fecha de publicación corregida a mano, solo en el blog: fecha y hora ISO
+   * con zona. No se vacía; si no viene, la pone el sistema al publicar. El
+   * servicio comprueba que sea razonable (ni antes del 2000 ni en el futuro).
+   */
+  publishedAt: z
+    .string()
+    .datetime({ offset: true })
+    .transform(value => new Date(value))
+    .optional(),
 })
 
 const orderSchema = z.object({ orderedIds: z.array(z.string().uuid()) })
@@ -163,7 +160,7 @@ export async function adminHelpRoutes(fastify: FastifyInstance) {
     if (reply.sent) return
     const user = request.user as { role: string | null }
     if (user.role !== 'admin') {
-      return reply.status(403).send({ message: 'Solo los administradores pueden editar la ayuda' })
+      return reply.status(403).send({ message: 'Solo el equipo de administración puede editar la ayuda' })
     }
   })
 

@@ -42,6 +42,11 @@
                 {{ $t('common.footer.student_panel') }}
               </NuxtLink>
             </li>
+            <li>
+              <NuxtLink to="/plantillas" class="text-sm text-gray-300">
+                {{ $t('common.footer.templates') }}
+              </NuxtLink>
+            </li>
           </ul>
         </div>
 

@@ -63,31 +63,42 @@
         </div>
 
         <div class="relative z-10 space-y-4">
-          <!-- Breadcrumb + Status -->
-          <nav class="flex items-center flex-wrap gap-x-1.5 gap-y-1 sm:gap-x-2 text-sm">
-            <NuxtLink :to="dashboardLink" class="text-white/70 hover:text-white flex-shrink-0">
-              <HomeIcon class="w-4 h-4" />
-            </NuxtLink>
-            <ChevronRightIcon class="w-4 h-4 text-white/70 flex-shrink-0 hidden sm:block" />
-            <NuxtLink
-              :to="classesLink"
-              class="text-white/70 hover:text-white whitespace-nowrap hidden sm:inline"
+          <!-- Breadcrumb + Status y, a la derecha, las acciones (como en la cabecera de una clase) -->
+          <div class="flex items-center gap-2 sm:gap-3">
+            <nav
+              class="flex min-w-0 flex-1 items-center flex-wrap gap-x-1.5 gap-y-1 sm:gap-x-2 text-sm"
             >
-              {{ t('teacher.components.mission_detail_template.breadcrumb_classes') }}
-            </NuxtLink>
-            <ChevronRightIcon class="w-4 h-4 text-white/70 flex-shrink-0 hidden sm:block" />
-            <NuxtLink
-              :to="classDetailLink"
-              class="text-white/70 hover:text-white whitespace-nowrap hidden sm:inline"
-            >
-              {{ mission.className }}
-            </NuxtLink>
-            <ChevronRightIcon class="w-4 h-4 text-white/70 flex-shrink-0" />
-            <span class="text-white font-medium">{{ mission.title }}</span>
-            <StatusBadge class="flex-shrink-0 ml-auto" :variant="statusVariant">{{
-              statusLabel
-            }}</StatusBadge>
-          </nav>
+              <NuxtLink
+                :to="dashboardLink"
+                :aria-label="t('common.nav.dashboard')"
+                class="text-white/70 hover:text-white flex-shrink-0"
+              >
+                <HomeIcon class="w-4 h-4" />
+              </NuxtLink>
+              <ChevronRightIcon class="w-4 h-4 text-white/70 flex-shrink-0 hidden sm:block" />
+              <NuxtLink
+                :to="classesLink"
+                class="text-white/70 hover:text-white whitespace-nowrap hidden sm:inline"
+              >
+                {{ t('teacher.components.mission_detail_template.breadcrumb_classes') }}
+              </NuxtLink>
+              <ChevronRightIcon class="w-4 h-4 text-white/70 flex-shrink-0 hidden sm:block" />
+              <NuxtLink
+                :to="classDetailLink"
+                class="text-white/70 hover:text-white whitespace-nowrap hidden sm:inline"
+              >
+                {{ mission.className }}
+              </NuxtLink>
+              <ChevronRightIcon class="w-4 h-4 text-white/70 flex-shrink-0" />
+              <span class="text-white font-medium">{{ mission.title }}</span>
+              <StatusBadge class="flex-shrink-0 ml-auto" :variant="statusVariant">{{
+                statusLabel
+              }}</StatusBadge>
+            </nav>
+            <div v-if="$slots.actions" class="flex-shrink-0">
+              <slot name="actions" />
+            </div>
+          </div>
 
           <!-- Título + fecha límite (edición en la pestaña Ajustes) -->
           <div class="min-w-0">

@@ -3,14 +3,13 @@
     <PageHeader :title="text.title" :subtitle="text.subtitle">
       <template #actions>
         <Button
-          v-if="isHelp"
           variant="outline"
-          href="/ayuda"
+          :href="helpBasePath(props.area)"
           target="_blank"
           rel="noopener noreferrer"
           :icon-right="ArrowTopRightOnSquareIcon"
         >
-          {{ t('admin.help.view_public') }}
+          {{ text.viewPublic }}
           <span class="sr-only">{{ t('common.accessibility.opens_new_tab') }}</span>
         </Button>
         <!-- Sin categorías no se puede crear nada: el listado explica por qué
@@ -32,9 +31,6 @@
         <TabNavigation :tabs="tabs" :active-tab="tab" @tab-change="setTab" />
       </template>
     </PageHeader>
-
-    <!-- El blog aún no tiene página pública: se avisa de dónde acabará lo publicado. -->
-    <InfoNote v-if="!isHelp">{{ t('admin.blog.public_notice') }}</InfoNote>
 
     <template v-if="tab === 'articles'">
       <FilterBar
@@ -70,9 +66,10 @@
         class="space-y-4 focus:outline-none"
         :aria-busy="reorderingArticles"
       >
-        <!-- Con estos filtros la lista está incompleta y el orden se bloquea: se dice por qué. -->
-        <InfoNote v-if="!canReorder && !showSkeleton && byCategory.length">
-          {{ text.reorderDisabled }}
+        <!-- Con estos filtros la lista está incompleta y el orden se bloquea: se dice
+             por qué. En el blog no hay orden a mano que bloquear. -->
+        <InfoNote v-if="isHelp && !canReorder && !showSkeleton && groups.length">
+          {{ t('admin.help.reorder_disabled_filtered') }}
         </InfoNote>
 
         <template v-if="showSkeleton">
@@ -106,7 +103,7 @@
           </EmptyState>
         </div>
 
-        <div v-else-if="!byCategory.length" class="rounded-2xl bg-white shadow-lg">
+        <div v-else-if="!groups.length" class="rounded-2xl bg-white shadow-lg">
           <EmptyState
             v-if="hasActiveFilters"
             :icon="BookOpenIcon"
@@ -131,7 +128,7 @@
              que `overflow-hidden` no lo recorta y redondea el fondo de las filas. -->
         <template v-else>
           <section
-            v-for="group in byCategory"
+            v-for="group in groups"
             :key="group.category.id"
             class="overflow-hidden rounded-2xl bg-white shadow-lg"
             :aria-labelledby="`${groupId}-${group.category.id}`"
@@ -141,16 +138,14 @@
               <h2 :id="`${groupId}-${group.category.id}`" class="font-semibold text-navy-700">
                 {{ group.category.name }}
               </h2>
-              <span class="text-xs text-navy-700/70">
-                {{
-                  t('common.help.article_count', { count: group.items.length }, group.items.length)
-                }}
-              </span>
+              <span class="text-xs text-navy-700/70">{{ countLabel(group.items.length) }}</span>
             </header>
 
+            <!-- En el blog manda la fecha: sin asa ni arrastre, de lo más nuevo a
+                 lo más antiguo. -->
             <AdminSortableList
               :items="group.items"
-              :locked="!canReorder"
+              :locked="!isHelp || !canReorder"
               :item-label="articleTitle"
               :save="ids => saveArticleOrder(group.category.id, ids)"
             >
@@ -180,6 +175,14 @@
                 <Badge :variant="item.status === 'publicado' ? 'success' : 'warning'" size="sm">
                   {{ t(`admin.help.status_${item.status}`) }}
                 </Badge>
+                <!-- En el blog, junto al estado: cuándo se publicó y quién firma. -->
+                <span
+                  v-if="!isHelp && shortByline(item)"
+                  class="max-w-[16rem] truncate text-xs text-navy-700/70"
+                  :title="shortByline(item)"
+                >
+                  {{ shortByline(item) }}
+                </span>
                 <template v-if="isHelp">
                   <Badge variant="common" size="sm">
                     {{ t(`common.help.audience.${item.audience}`) }}
@@ -247,6 +250,50 @@
           </FieldGroup>
           <FieldGroup v-slot="{ labelId }" :label="t('admin.help.field_status')">
             <SelectDropdown v-model="form.status" :options="statusChoices" :labelledby="labelId" />
+          </FieldGroup>
+        </div>
+
+        <!-- Firma y fecha de publicación son cosas del blog. La fecha solo se
+             elige para lo que se publica o ya se publicó: en un borrador que
+             nunca ha salido se pone sola al publicarlo. -->
+        <div v-if="!isHelp" class="grid gap-4 sm:grid-cols-2">
+          <FieldGroup
+            v-slot="{ id, describedby }"
+            :label="t('admin.blog.field_author')"
+            :hint="t('admin.blog.author_hint')"
+            native-control
+          >
+            <Input
+              :id="id"
+              v-model="form.authorName"
+              :placeholder="t('admin.blog.placeholder_author')"
+              maxlength="120"
+              autocomplete="off"
+              :aria-describedby="describedby"
+            />
+          </FieldGroup>
+          <FieldGroup
+            v-slot="{ id, describedby }"
+            :label="t('admin.blog.field_published_at')"
+            :hint="
+              dateEditable
+                ? t('admin.blog.published_at_hint')
+                : t('admin.blog.published_at_draft_hint')
+            "
+            :error="publishedAtError"
+            native-control
+          >
+            <Input
+              :id="id"
+              :model-value="dateEditable ? form.publishedDate : ''"
+              type="date"
+              :min="EARLIEST_PUBLISHED_DATE"
+              :max="todayKey"
+              :disabled="!dateEditable"
+              :error="!!publishedAtError"
+              :aria-describedby="describedby"
+              @update:model-value="setPublishedDate"
+            />
           </FieldGroup>
         </div>
 
@@ -331,7 +378,7 @@
             >
               <img
                 v-if="form.coverImage"
-                :src="form.coverImage"
+                :src="getImageUrl(form.coverImage)"
                 alt=""
                 class="h-full w-full object-cover"
               />
@@ -366,9 +413,16 @@
             </Button>
           </template>
           <template #default="{ labelId }">
+            <!-- Alto acotado, como en el editor de misiones: con imágenes, la
+                 vista previa mide mucho más que el texto, y sin tope estiraría
+                 el área de texto con una cola en blanco. Así cada columna
+                 tiene su propio scroll y se mueven juntas. -->
             <MarkdownEditor
               v-model="form.body"
+              class="h-[70vh] min-h-[28rem]"
               :labelledby="labelId"
+              allow-images
+              :show-actions="false"
               god-name="Atenea"
               god-avatar="/app/avatars/atenea.svg"
               :ai-placeholder="text.aiPlaceholder"
@@ -418,7 +472,7 @@
           <Badge v-if="preview.status === 'borrador'" variant="warning">
             {{ t('admin.help.preview_draft_notice') }}
           </Badge>
-          <HelpArticleBody :article="preview.article" :accent="preview.accent" />
+          <HelpArticleBody :article="preview.article" :accent="preview.accent" :area="props.area" />
         </template>
       </div>
     </Modal>
@@ -462,6 +516,8 @@ import {
 import type { ActionMenuItem } from '~/types/action-menu.types'
 import type { AdminArticlePayload, AdminHelpArticle, HelpStatus } from '~/composables/useHelpAdmin'
 import type { HelpArea, HelpArticle, HelpArticleKind, HelpAudience } from '~/types/help.types'
+import { dateKey } from '~/composables/useClassCalendar'
+import { helpBasePath, newestFirst } from '~/utils/help-area'
 
 /**
  * Gestor de contenidos del panel: lo usan las secciones «Centro de ayuda» y
@@ -473,10 +529,14 @@ import type { HelpArea, HelpArticle, HelpArticleKind, HelpAudience } from '~/typ
  * mismas herramientas que quien la usa.
  *
  * Dos pestañas, artículos y categorías. Cada categoría es una tarjeta con sus
- * artículos, que se reordenan arrastrando el asa de cada fila (o, desde el
- * teclado, con las flechas sobre ella). Audiencia, tipo y vídeo solo existen
+ * artículos. En la ayuda se reordenan arrastrando el asa de cada fila (o,
+ * desde el teclado, con las flechas sobre ella); en el blog no hay asa: manda
+ * la fecha de publicación y se listan de lo más nuevo a lo más antiguo, como
+ * se leen en el blog público. Audiencia, tipo y vídeo solo existen
  * en el centro de ayuda: en el blog no se enseñan, no se filtran y no se
- * mandan (la API pone sus valores por defecto).
+ * mandan (la API pone sus valores por defecto). Al revés, la firma y la fecha
+ * de publicación solo existen en el blog: se editan, salen en cada fila y en
+ * la previsualización, y la ayuda no las manda.
  */
 
 const props = defineProps<{
@@ -485,6 +545,9 @@ const props = defineProps<{
 
 const { t } = useI18n()
 const toast = useToast()
+const { shortByline } = useBlogByline()
+// La portada subida desde el panel vive en `/uploads`, que sirve la API.
+const { getImageUrl } = useImageUrl()
 const {
   categories,
   loading,
@@ -512,6 +575,7 @@ const KINDS: HelpArticleKind[] = ['guia', 'tutorial', 'faq', 'video']
  */
 const API_ERROR_KEYS: Record<string, string> = {
   HELP_VIDEO_URL_REQUIRED: 'admin.help.video_required',
+  HELP_PUBLISHED_AT_INVALID: 'admin.blog.published_at_invalid',
 }
 
 function apiMessage(error: unknown, fallback: string) {
@@ -534,9 +598,9 @@ const text = computed(() =>
         editArticle: t('admin.help.edit_article'),
         emptyTitle: t('admin.help.empty_title'),
         emptyDescription: t('admin.help.empty_description'),
-        reorderDisabled: t('admin.help.reorder_disabled_filtered'),
         placeholderTitle: t('admin.help.placeholder_title'),
         aiPlaceholder: t('admin.help.ai_placeholder'),
+        viewPublic: t('admin.help.view_public'),
       }
     : {
         title: t('admin.blog.title'),
@@ -545,11 +609,18 @@ const text = computed(() =>
         editArticle: t('admin.blog.edit_article'),
         emptyTitle: t('admin.blog.empty_title'),
         emptyDescription: t('admin.blog.empty_description'),
-        reorderDisabled: t('admin.blog.reorder_disabled_filtered'),
         placeholderTitle: t('admin.blog.placeholder_title'),
         aiPlaceholder: t('admin.blog.ai_placeholder'),
+        viewPublic: t('admin.blog.view_public'),
       }
 )
+
+/** «2 artículos» en la ayuda, «2 entradas» en el blog. */
+function countLabel(count: number) {
+  return isHelp.value
+    ? t('common.help.article_count', { count }, count)
+    : t('common.blog.post_count', { count }, count)
+}
 
 const deleteMessage = computed(() => {
   const title = pendingDelete.value?.title ?? ''
@@ -766,6 +837,17 @@ onMounted(() => reloadAll())
 // ---- orden de los artículos ----
 
 /**
+ * Las tarjetas de cada categoría tal y como se enseñan: en la ayuda, en el
+ * orden que se fija arrastrando; en el blog, de la entrada más reciente a la
+ * más antigua (los borradores que nunca han salido, por su última edición).
+ */
+const groups = computed(() =>
+  isHelp.value
+    ? byCategory.value
+    : byCategory.value.map(group => ({ ...group, items: newestFirst(group.items) }))
+)
+
+/**
  * Con una búsqueda o un filtro de estado, audiencia o tipo activo la lista de cada categoría
  * está incompleta y reordenarla pisaría el orden de los que no se ven.
  */
@@ -891,6 +973,9 @@ const form = ref({
   audience: 'profesor' as HelpAudience,
   kind: 'guia' as HelpArticleKind,
   videoUrl: '',
+  authorName: '',
+  /** Día de publicación elegido en el blog, `YYYY-MM-DD` en la hora local. */
+  publishedDate: '',
 })
 
 const categoryChoices = computed(() =>
@@ -955,16 +1040,74 @@ const aiContext = computed(() => {
   )
 })
 
+// ---- fecha de publicación (blog) ----
+
+/** Lo más antiguo que acepta la API: una entrada de antes del 2000 no tiene sentido aquí. */
+const EARLIEST_PUBLISHED_DATE = '2000-01-01'
+
+/** Hoy, en la hora de quien edita: el tope del selector (publicar no programa nada). */
+const todayKey = ref(dateKey(new Date()))
+
+/** La primera publicación del artículo que se edita, tal y como la guarda la API. */
+const originalPublishedAt = ref<string | null>(null)
+
+/** El día que el selector enseña si nadie lo toca: el de la primera publicación, o hoy. */
+const defaultPublishedDate = computed(() =>
+  originalPublishedAt.value ? dateKey(new Date(originalPublishedAt.value)) : todayKey.value
+)
+
+/**
+ * La fecha se elige para lo que se publica o ya se publicó alguna vez. En un
+ * borrador que nunca ha salido la pone la API al publicarlo (y no la acepta antes).
+ */
+const dateEditable = computed(
+  () => !isHelp.value && (form.value.status === 'publicado' || !!originalPublishedAt.value)
+)
+
+function setPublishedDate(value: string | number) {
+  form.value.publishedDate = String(value)
+}
+
+/** La misma regla que la API (entre el 2000 y hoy), para verlo en el campo y no en un 400. */
+const publishedAtError = computed(() => {
+  const value = form.value.publishedDate
+  // La fecha por defecto no se envía (chosenPublishedAt), así que no se valida:
+  // un día local posterior al de quien edita no debe bloquear el guardado.
+  if (!dateEditable.value || !value || value === defaultPublishedDate.value) return ''
+  return value < EARLIEST_PUBLISHED_DATE || value > todayKey.value
+    ? t('admin.blog.published_at_invalid')
+    : ''
+})
+
+/** Mediodía local del día elegido: sigue siendo ese día para casi cualquier zona horaria. */
+function noonOf(key: string) {
+  const [year, month, day] = key.split('-').map(Number)
+  return new Date(year, month - 1, day, 12).toISOString()
+}
+
+/**
+ * La fecha que se manda: solo si se ha cambiado el día. Si no, no viaja y se
+ * conserva la hora exacta de la primera publicación (o la pone la API al publicar).
+ */
+function chosenPublishedAt() {
+  const value = form.value.publishedDate
+  if (!dateEditable.value || !value || value === defaultPublishedDate.value) return undefined
+  return noonOf(value)
+}
+
 const canSave = computed(
   () =>
     !editorLoading.value &&
     Boolean(form.value.categoryId && form.value.title.trim() && form.value.body.trim()) &&
-    !videoError.value
+    !videoError.value &&
+    !publishedAtError.value
 )
 
 function openNew() {
   editSeq++
   editing.value = null
+  todayKey.value = dateKey(new Date())
+  originalPublishedAt.value = null
   form.value = {
     categoryId: categories.value[0]?.id ?? '',
     title: '',
@@ -976,6 +1119,8 @@ function openNew() {
     audience: 'profesor',
     kind: 'guia',
     videoUrl: '',
+    authorName: '',
+    publishedDate: todayKey.value,
   }
   editorOpen.value = true
 }
@@ -990,9 +1135,11 @@ async function openEdit(article: AdminHelpArticle) {
   editing.value = article
   editorLoading.value = true
   editorOpen.value = true
+  todayKey.value = dateKey(new Date())
   try {
     const full = await getArticle(article.id)
     if (seq !== editSeq) return
+    originalPublishedAt.value = full.publishedAt
     form.value = {
       categoryId: full.categoryId,
       title: full.title,
@@ -1004,6 +1151,8 @@ async function openEdit(article: AdminHelpArticle) {
       audience: full.audience,
       kind: full.kind,
       videoUrl: full.videoUrl ?? '',
+      authorName: full.authorName ?? '',
+      publishedDate: defaultPublishedDate.value,
     }
   } catch {
     if (seq !== editSeq) return
@@ -1028,12 +1177,16 @@ async function save() {
     }
     // En el blog no viajan tipo ni vídeo (al crear, la API pone los suyos; al
     // editar, no se tocan). La audiencia sí al crear: el blog es para todos.
+    // Firma y fecha solo en el blog: la ayuda no las acepta.
     if (isHelp.value) {
       payload.audience = form.value.audience
       payload.kind = form.value.kind
       payload.videoUrl = effectiveVideoUrl.value
-    } else if (!editing.value) {
-      payload.audience = 'ambos'
+    } else {
+      if (!editing.value) payload.audience = 'ambos'
+      payload.authorName = form.value.authorName.trim() || null
+      const publishedAt = chosenPublishedAt()
+      if (publishedAt) payload.publishedAt = publishedAt
     }
     if (editing.value) await updateArticle(editing.value.id, payload)
     else await createArticle(payload)
@@ -1052,7 +1205,17 @@ async function save() {
 // ---- previsualización ----
 
 interface PreviewView {
-  article: Pick<HelpArticle, 'title' | 'body' | 'coverImage' | 'updatedAt' | 'kind' | 'videoUrl'>
+  article: Pick<
+    HelpArticle,
+    | 'title'
+    | 'body'
+    | 'coverImage'
+    | 'updatedAt'
+    | 'kind'
+    | 'videoUrl'
+    | 'publishedAt'
+    | 'authorName'
+  >
   accent: string | undefined
   status: HelpStatus
 }
@@ -1097,6 +1260,12 @@ function openFormPreview() {
       updatedAt: new Date().toISOString(),
       kind: isHelp.value ? form.value.kind : 'guia',
       videoUrl: effectiveVideoUrl.value,
+      // Como saldría: el día elegido, el de la primera publicación o, si se
+      // publica ahora, hoy. Un borrador que nunca ha salido aún no tiene.
+      publishedAt: dateEditable.value
+        ? (chosenPublishedAt() ?? originalPublishedAt.value ?? new Date().toISOString())
+        : null,
+      authorName: form.value.authorName.trim() || null,
     },
     accent: categories.value.find(category => category.id === form.value.categoryId)?.accent,
     status: form.value.status,
@@ -1229,7 +1398,7 @@ async function confirmDelete() {
   const article = pendingDelete.value
   if (!article || deleting.value) return
   deleting.value = true
-  const siblings = byCategory.value.find(group => group.category.id === article.category.id)
+  const siblings = groups.value.find(group => group.category.id === article.category.id)
   const ids = siblings?.items.map(item => item.id) ?? []
   const position = ids.indexOf(article.id)
   const neighbour = ids[position + 1] ?? ids[position - 1]

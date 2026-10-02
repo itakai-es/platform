@@ -7,12 +7,13 @@
       "badges": "Insigne",
       "students": "Elevi",
       "about": "Despre",
-      "users": "Utilizatori",
+      "users": "Conturi",
       "classes": "Clase",
       "analytics": "Analize",
       "logs": "Jurnale",
       "features": "Funcționalități",
       "blog": "Blog",
+      "templates": "Șabloane",
       "help": "Ajutor",
       "section_management": "Administrare",
       "section_content": "Conținut",
@@ -95,13 +96,15 @@
       "action_error": "Acțiunea nu a putut fi finalizată. Încearcă din nou."
     },
     "errors": {
-      "generic": "A apărut o eroare. Încearcă din nou."
+      "generic": "A apărut o eroare. Încearcă din nou.",
+      "rate_limited_title": "Prea multe solicitări la rând",
+      "rate_limited": "De la conexiunea ta s-au făcut multe solicitări într-un timp scurt. Așteaptă câteva minute și încearcă din nou."
     },
     "roles": {
       "student": "Elev",
-      "teacher": "Profesor",
-      "admin": "Administrator",
-      "admin_system": "Administrator de sistem"
+      "teacher": "Cadru didactic",
+      "admin": "Administrație",
+      "admin_system": "Administrația sistemului"
     },
     "sidebar": {
       "new_conversation": "Conversație nouă",
@@ -116,7 +119,7 @@
     },
     "landing": {
       "hero_title": "Aventura de a învăța",
-      "hero_subtitle": "Sistem de gestiune educațională cu elemente de gamificare pentru elevi și profesori",
+      "hero_subtitle": "Sistem de gestiune educațională cu elemente de gamificare pentru elevi și cadre didactice",
       "cta_start": "Începe",
       "features_title": "Ce poți face cu ITAKAI?",
       "features_subtitle": "Descoperă toate instrumentele și funcționalitățile care transformă educația într-o experiență unică",
@@ -137,12 +140,12 @@
       "about_description_1": "ITAKAI este evoluția <strong>MyClassGame</strong>, potențată cu <strong>inteligență artificială</strong>. O platformă educațională gamificată care transformă învățământul profesional într-o experiență imersivă.",
       "about_description_2": "Generare automată de conținut, asistenți IA personalizați pentru fiecare elev și analiză predictivă a performanței. Totul integrat într-un ecosistem în care a învăța este o aventură.",
       "stat_students": "Elevi",
-      "stat_teachers": "Profesori",
+      "stat_teachers": "Cadre didactice",
       "stat_centers": "Școli",
       "partners_title": "Cine suntem?",
       "developed_by": "Dezvoltat de",
       "gods_title": "Mentorii tăi olimpieni",
-      "gods_subtitle": "5 asistenți IA inspirați de zeii greci, fiecare expert în domeniul său",
+      "gods_subtitle": "5 asistenți IA inspirați de mitologia greacă, fiecare cu specialitatea sa",
       "cta_final_title": "Ești gata pentru aventura ta epică?",
       "cta_final_subtitle": "Alătură-te miilor de elevi care își transformă deja învățarea cu ITAKAI",
       "cta_final_button": "Începe gratuit acum",
@@ -180,8 +183,9 @@
       "cookies": "Cookie-uri",
       "licenses": "Licențe",
       "system_access": "Acces la sistem",
-      "teacher_panel": "Panoul profesorului",
-      "student_panel": "Panoul elevului",
+      "teacher_panel": "Panoul pentru cadre didactice",
+      "student_panel": "Panoul de elev",
+      "templates": "Șabloane de clase",
       "help_center": "Centru de ajutor"
     },
     "level_up": {
@@ -193,7 +197,7 @@
     },
     "join_class_modal": {
       "title": "Alătură-te unei clase",
-      "description": "Introdu codul clasei primit de la profesorul tău",
+      "description": "Introdu codul clasei primit de la cadrul didactic",
       "placeholder": "ABC123",
       "joining": "Se face înscrierea...",
       "join_button": "Alătură-te clasei",
@@ -201,7 +205,7 @@
       "error_min_length": "Codul trebuie să aibă cel puțin 4 caractere",
       "error_not_found": "Nu s-a găsit nicio clasă cu acest cod",
       "error_invalid_code": "Cod de clasă invalid",
-      "error_already_enrolled": "Ești deja înscris în această clasă",
+      "error_already_enrolled": "Ești deja în această clasă",
       "error_generic": "Eroare la înscrierea în clasă. Încearcă din nou.",
       "error_generic_short": "Eroare la înscrierea în clasă",
       "success": "Te-ai alăturat clasei {className}"
@@ -224,11 +228,11 @@
       "hero": {
         "todo": {
           "title": "Cu ce te putem ajuta?",
-          "subtitle": "Ghiduri, tutoriale și videoclipuri pentru profesori și elevi."
+          "subtitle": "Ghiduri, tutoriale și videoclipuri pentru cadre didactice și elevi."
         },
         "profesor": {
-          "title": "Ajutor pentru profesori",
-          "subtitle": "Ghiduri pas cu pas pentru a crea clase, misiuni și recompense. Scrise pentru profesori, nu pentru informaticieni."
+          "title": "Ajutor pentru cadre didactice",
+          "subtitle": "Ghiduri pas cu pas pentru a crea clase, misiuni și recompense. Scrise pentru cadre didactice, fără jargon tehnic."
         },
         "alumno": {
           "title": "Ajutor pentru elevi",
@@ -273,15 +277,38 @@
       "scope_todo": "Tot ajutorul",
       "scope_label": "Secțiune de ajutor",
       "audience": {
-        "profesor": "Profesori",
+        "profesor": "Cadre didactice",
         "alumno": "Elevi",
-        "ambos": "Profesori și elevi"
+        "ambos": "Cadre didactice și elevi"
       },
-      "back_to_app": "Înapoi la aplicație"
+      "back_to_app": "Înapoi la aplicație",
+      "published_on": "Publicat pe {date}",
+      "by_author": "De {name}",
+      "load_error": "Conținutul nu a putut fi încărcat",
+      "retry": "Încearcă din nou"
+    },
+    "about": {
+      "title": "Despre ITAKAI",
+      "subtitle": "Noutăți și istoricul versiunilor",
+      "breadcrumb": "Despre",
+      "breadcrumb_home": "Acasă",
+      "current_version": "Versiunea actuală",
+      "latest": "Ultima versiune",
+      "versions_index": "Versiuni",
+      "footer_note": "Îți lipsește ceva sau ai găsit o eroare? Spune-ne și vom ține cont în versiunile următoare.",
+      "groups": {
+        "new": "Noutăți",
+        "improved": "Îmbunătățiri",
+        "fixed": "Remedieri"
+      },
+      "meta": {
+        "title": "Despre | ITAKAI",
+        "description": "Noutăți, îmbunătățiri și remedieri pentru fiecare versiune ITAKAI."
+      }
     },
     "meta": {
       "site_title": "ITAKAI - Aventura de a învăța | Platformă educațională gamificată",
-      "site_description": "Transformă educația cu ITAKAI, platforma gamificată care inspiră, motivează și conectează elevi, profesori și familii. Alătură-te celor peste 50.000 de elevi.",
+      "site_description": "Transformă educația cu ITAKAI, platforma gamificată care inspiră, motivează și conectează elevi, cadre didactice și familii. Alătură-te celor peste 50.000 de elevi.",
       "og_title": "ITAKAI - Aventura de a învăța",
       "og_description": "Platformă educațională gamificată cu IA, narațiuni imersive și analiză inteligentă."
     },
@@ -294,7 +321,7 @@
     "maintenance": {
       "title": "În mentenanță",
       "message": "Facem îmbunătățiri. Revino peste câteva minute.",
-      "admin_notice": "Modul mentenanță este activ — doar administratorii pot intra."
+      "admin_notice": "Modul mentenanță este activ — doar echipa de administrare poate intra."
     },
     "menu_display": {
       "title": "Meniul de sus",
@@ -389,7 +416,7 @@
       "owner": "Proprietar",
       "profiles": {
         "titular": "Titular",
-        "sustituto": "Suplinitor",
+        "sustituto": "Suplinire",
         "practicas": "Practică"
       },
       "access": {
@@ -405,11 +432,13 @@
       "next": "Următoarea"
     },
     "account_deletion": {
-      "blocked_self": "Încă nu îți poți șterge contul: ești proprietarul acestor clase și în ele nu mai are nimeni altcineva acces de administrare. Dă acces de administrare altui profesor sau transferă-i proprietatea, apoi revino aici.",
-      "blocked_admin": "Acest cont nu poate fi șters încă: este proprietarul acestor clase și în ele nu mai are nimeni altcineva acces de administrare. Mai întâi trebuie transferată proprietatea lor altui profesor.",
-      "transfers_self": "Clasele tale vor trece la un alt profesor cu acces de administrare în ele:",
-      "transfers_admin": "Clasele sale vor trece la un alt profesor cu acces de administrare în ele:",
-      "transfer_item": "{class}, la {name}"
+      "blocked_self": "Încă nu îți poți șterge contul: aceste clase îți aparțin și în ele nu mai are nimeni altcineva acces de administrare. Dă acces de administrare altui cadru didactic sau transferă-i proprietatea, apoi revino aici.",
+      "blocked_admin": "Acest cont nu poate fi șters încă: îi aparțin aceste clase și în ele nu mai are nimeni altcineva acces de administrare. Mai întâi trebuie transferată proprietatea lor altui cont de cadru didactic.",
+      "transfers_self": "Clasele tale vor trece la alt cadru didactic cu acces de administrare în ele:",
+      "transfers_admin": "Clasele sale vor trece la alt cadru didactic cu acces de administrare în ele:",
+      "transfer_item": "{class}, la {name}",
+      "trashed_self": "Se va șterge definitiv și clasa pe care o ai în coșul de gunoi: | Se vor șterge definitiv și clasele pe care le ai în coșul de gunoi ({count}):",
+      "trashed_admin": "Se va șterge definitiv și clasa pe care o are în coșul de gunoi: | Se vor șterge definitiv și clasele pe care le are în coșul de gunoi ({count}):"
     },
     "copy": {
       "label": "Copiază: {what}",
@@ -439,6 +468,67 @@
       "filters": "Filtre",
       "filters_count": "Filtre ({count})",
       "clear": "Șterge filtrele"
+    },
+    "blog": {
+      "hero_title": "Blogul ITAKAI",
+      "hero_subtitle": "Noutăți despre platformă, idei pentru gamificarea clasei și experiențe din alte clase.",
+      "search_placeholder": "Caută pe blog…",
+      "search_empty_hint": "Încearcă alte cuvinte sau șterge căutarea ca să vezi toate postările.",
+      "all_posts": "Toate",
+      "categories_label": "Categoriile blogului",
+      "featured": "Recomandate",
+      "latest": "Cele mai noi postări",
+      "empty_title": "Încă nu există postări",
+      "empty_description": "Când se publică prima postare va apărea aici.",
+      "post_count": "Nicio postare | 1 postare | Postări: {count}",
+      "not_found_description": "Postarea poate să fi fost mutată sau să nu fie încă publicată.",
+      "post_pagination": "Postarea anterioară și următoarea",
+      "meta": {
+        "title": "Blog · ITAKAI",
+        "description": "Noutăți, idei și experiențe de la clasă de la ITAKAI, platforma educațională gamificată."
+      }
+    },
+    "templates": {
+      "hero_title": "Șabloane de clase",
+      "hero_subtitle": "Clase gamificate publicate de alte cadre didactice, ca să nu începi de la zero: cu povestea, misiunile, magazinul și comportamentele gata de folosit.",
+      "view": "Vezi șablonul",
+      "copy_link": "Copiază linkul",
+      "result_count": "Niciun șablon | 1 șablon | Șabloane: {count}",
+      "back_to_catalog": "Vezi catalogul",
+      "contents_title": "Ce aduce acest șablon",
+      "counts": {
+        "missions": "Nicio misiune | 1 misiune | Misiuni: {count}",
+        "shop_items": "Niciun articol în magazin | 1 articol în magazin | Articole în magazin: {count}",
+        "behaviors": "Niciun comportament | 1 comportament | Comportamente: {count}"
+      },
+      "use": {
+        "title": "Folosește acest șablon",
+        "what_you_get": "Importul creează o clasă nouă, a ta, cu povestea, coperta, funcționalitățile, magazinul și comportamentele șablonului.",
+        "what_you_get_missions": "Importul creează o clasă nouă, a ta, cu povestea, coperta, funcționalitățile, magazinul și comportamentele șablonului și, dacă vrei, cu misiunile lui.",
+        "import_missions": "Importă și misiunea șablonului | Importă și misiunile șablonului ({count})",
+        "import_missions_hint": "Ajung fără termen-limită, fără documente și fără insigne.",
+        "login_note": "Ca să-l imporți, intră cu un cont de cadru didactic.",
+        "teacher_only": "Ca să-l imporți, ai nevoie de un cont de cadru didactic."
+      },
+      "gone": {
+        "title": "Acest șablon nu mai este disponibil",
+        "description": "Cine l-a publicat l-a retras din catalog. Aruncă o privire la celelalte: poate găsești unul asemănător."
+      },
+      "not_found": {
+        "title": "Acest șablon nu există",
+        "description": "Poate că linkul este incomplet sau copiat greșit. În catalog găsești toate șabloanele publicate."
+      },
+      "meta": {
+        "title": "Șabloane de clase · ITAKAI",
+        "description": "Clase gamificate publicate de cadre didactice pe ITAKAI, de la care poate porni orice cadru didactic."
+      }
+    },
+    "class_list": {
+      "tab_active": "Active",
+      "tab_archived": "Arhivate",
+      "empty_title": "Nicio clasă",
+      "empty_archived_title": "Nicio clasă arhivată",
+      "no_results": "Nicio clasă nu corespunde cu „{query}”"
     }
   }
 }

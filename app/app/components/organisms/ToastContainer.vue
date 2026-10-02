@@ -1,6 +1,15 @@
 <template>
   <Teleport to="body">
-    <div class="fixed top-4 right-4 z-[99999] flex flex-col gap-2 pointer-events-none print:hidden">
+    <!-- Región viva: lo que dice un aviso («Copiado al portapapeles», un
+         error…) llega también a los lectores de pantalla. Está siempre en la
+         página, vacía o no, para que lo anuncien al aparecer; uno a uno, no la
+         lista entera. -->
+    <div
+      role="status"
+      aria-live="polite"
+      aria-atomic="false"
+      class="fixed top-4 right-4 z-[99999] flex flex-col gap-2 pointer-events-none print:hidden"
+    >
       <TransitionGroup name="toast">
         <div
           v-for="toast in toasts"

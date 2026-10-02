@@ -177,3 +177,28 @@ export interface ManagedRowReview {
   requestedUsername?: string
   status: ManagedRowStatus
 }
+
+/**
+ * Qué se ha copiado al importar una misión de otra clase: cuántos enigmas y
+ * documentos, y qué insignias (nuevas, de quien importa).
+ */
+export interface MissionImportCopied {
+  enigmas: number
+  documents: number
+  badges: { id: string; name: string }[]
+}
+
+/** Respuesta de `POST /teacher/missions/:missionId/import`: la misión nueva, en la clase de destino. */
+export interface MissionImportResult {
+  mission: {
+    id: string
+    classId: string
+    title: string
+    status: string
+    rarity: string
+    deadline: string | null
+    backgroundImage: string | null
+  }
+  copied: MissionImportCopied
+  message: string
+}

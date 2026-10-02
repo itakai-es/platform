@@ -1,26 +1,7 @@
 {
   "teacher": {
-    "about": {
-      "title": "Despre ITAKAI",
-      "subtitle": "Noutăți și istoricul versiunilor",
-      "breadcrumb": "Despre",
-      "breadcrumb_home": "Acasă",
-      "current_version": "Versiunea actuală",
-      "latest": "Ultima versiune",
-      "versions_index": "Versiuni",
-      "footer_note": "Îți lipsește ceva sau ai găsit o eroare? Spune-ne și vom ține cont în versiunile următoare.",
-      "groups": {
-        "new": "Noutăți",
-        "improved": "Îmbunătățiri",
-        "fixed": "Remedieri"
-      },
-      "meta": {
-        "title": "Despre | ITAKAI",
-        "description": "Noutăți, îmbunătățiri și remedieri pentru fiecare versiune ITAKAI."
-      }
-    },
     "dashboard": {
-      "title": "Pagina profesorului",
+      "title": "Pagina cadrului didactic",
       "subtitle": "Bine ai venit, {name}!",
       "new_class": "Clasă nouă",
       "new_mission": "Misiune nouă",
@@ -35,8 +16,8 @@
       "recent_missions": "Ultimele misiuni",
       "no_missions_description": "Creează prima misiune pentru elevii tăi",
       "meta": {
-        "title": "Pagina profesorului | ITAKAI",
-        "description": "Pagina principală a profesorului. Administrează-ți clasele și misiunile și urmărește progresul elevilor tăi."
+        "title": "Pagina cadrului didactic | ITAKAI",
+        "description": "Pagina ta principală. Administrează-ți clasele și misiunile și urmărește progresul elevilor tăi."
       }
     },
     "classes": {
@@ -47,8 +28,8 @@
         "create_first": "Creează prima clasă",
         "no_classes_description": "Încă nu ai creat nicio clasă",
         "meta": {
-          "title": "Clasele mele | ITAKAI Profesor",
-          "description": "Administrează toate clasele tale, elevii înscriși și misiunile atribuite."
+          "title": "Clasele mele | ITAKAI Cadru didactic",
+          "description": "Administrează toate clasele tale, elevii lor și misiunile atribuite."
         },
         "templates": "Șabloane",
         "duplicate_success": "Clasă duplicată ca „{name}”",
@@ -132,7 +113,7 @@
           "guide_question": "Am pregătit un ghid pentru elevii tăi"
         },
         "meta": {
-          "title": "Creează o clasă nouă | ITAKAI Profesor"
+          "title": "Creează o clasă nouă | ITAKAI Cadru didactic"
         },
         "narrative_error": "Nu am reușit să creez narațiunea",
         "summary": {
@@ -209,7 +190,7 @@
           "empty_default": "Nu există misiuni în această clasă"
         },
         "meta": {
-          "title": "Detaliile clasei | ITAKAI Profesor",
+          "title": "Detaliile clasei | ITAKAI Cadru didactic",
           "description": "Administrează clasa. Vezi elevii, misiunile atribuite și progresul general."
         },
         "behaviors": {
@@ -226,7 +207,7 @@
           "section_negatives": "Negative",
           "filter_all": "Toate",
           "apply_title": "Aplică „{name}”",
-          "pick_student": "Alege elevul căruia i-l vei aplica.",
+          "pick_student": "Alege din clasă persoana căreia i-l vei aplica.",
           "applied_toast": "{behavior} aplicat lui {student}",
           "empty_students": "Încă nu sunt elevi în această clasă.",
           "form_new_title": "Comportament nou",
@@ -273,7 +254,7 @@
           "form_name": "Nume",
           "form_name_placeholder": "Ex.: Sări peste o temă",
           "form_description": "Descriere",
-          "form_description_placeholder": "Ce primește elevul când îl schimbă?",
+          "form_description_placeholder": "Ce se obține când este schimbat?",
           "form_price": "Preț",
           "form_visible": "Vizibil pentru elevi",
           "form_cancel": "Anulează",
@@ -298,7 +279,7 @@
           "form_life_restore_hint": "Puncte de viață adăugate la schimb (recompense) sau la utilizare (puteri). 0 = nu recuperează viață.",
           "tab_history": "Istoric",
           "history_purchases": "Cumpărături",
-          "view_student_profile": "Vezi elevul",
+          "view_student_profile": "Vezi profilul",
           "mana_disabled_chip": "Mana dezactivată",
           "empty_description_readonly": "Când se vor adăuga articole în magazinul acestei clase, vor apărea aici."
         },
@@ -391,7 +372,7 @@
             "metadata_search": "Caută...",
             "subject_needs_level": "Alege mai întâi nivelul",
             "publish_title": "Publică drept șablon",
-            "publish_hint": "Distribuie-l în marketplace ca alți profesori să îl importe.",
+            "publish_hint": "Va apărea în catalogul public de șabloane: oricine, chiar și fără cont, îi va putea vedea numele, povestea, coperta, misiunile, magazinul și comportamentele, iar alte cadre didactice o vor putea importa cu toate acestea. Termenele-limită, documentele și insignele misiunilor nu se partajează.",
             "publish_missing_metadata": "Salvează materia, nivelul și limba înainte de publicare.",
             "publish_on": "Clasa a fost publicată drept șablon",
             "publish_off": "Șablonul a fost retras din marketplace",
@@ -423,7 +404,31 @@
           },
           "management": {
             "title": "Administrare",
-            "hint": "Public-o drept șablon ca alți profesori să o importe sau fă o copie."
+            "hint": "Public-o drept șablon ca alte cadre didactice să o importe sau fă o copie.",
+            "trash": {
+              "title": "Șterge clasa",
+              "hint": "Ajunge în coșul de gunoi: o poți restaura timp de {days} zile, apoi se șterge definitiv.",
+              "cta": "Șterge",
+              "modal_title": "Ștergerea clasei",
+              "message": "„{name}” va ajunge în coșul de gunoi. O vei putea restaura timp de {days} zile; apoi se va șterge definitiv.",
+              "impact_loading": "Se calculează ce s-ar pierde…",
+              "impact_error": "Nu s-a putut calcula ce s-ar pierde. Încearcă din nou.",
+              "retry": "Încearcă din nou",
+              "loses": "După cele {days} zile, se va șterge:",
+              "loses_class": "clasa, cu povestea, ghidul, magazinul și comportamentele ei",
+              "loses_missions": "misiunea, cu enigmele și documentele ei | misiunile ({count}), cu enigmele și documentele lor",
+              "loses_students": "progresul unui elev sau al unei eleve în clasă | progresul elevilor din clasă ({count})",
+              "loses_submissions": "o lucrare cu fișier | lucrările cu fișier ({count})",
+              "loses_purchases": "o achiziție din magazin | achizițiile din magazin ({count})",
+              "loses_accounts": "un cont fără e-mail care nu a fost folosit niciodată, complet | conturile fără e-mail care nu au fost folosite niciodată ({count}), complet",
+              "while_trashed": "Cât timp este în coșul de gunoi, elevii nu vor putea intra în ea și nici preda nimic.",
+              "while_trashed_teachers": "Cât timp este în coșul de gunoi, elevii nu vor putea intra în ea și nici preda nimic, iar încă un cadru didactic al clasei nu o va mai vedea. | Cât timp este în coșul de gunoi, elevii nu vor putea intra în ea și nici preda nimic, iar celelalte cadre didactice ale clasei ({count}) nu o vor mai vedea.",
+              "unmanaged_accounts": "La ștergere, un cont fără e-mail creat în această clasă va rămâne fără clasă de origine: doar administrarea platformei îi va putea reseta parola. | La ștergere, conturile fără e-mail create în această clasă ({count}) vor rămâne fără clasă de origine: doar administrarea platformei le va putea reseta parolele.",
+              "template": "Este publicată drept șablon: se retrage acum din catalog și nu se va publica din nou singură dacă o restaurezi.",
+              "confirm": "Mută în coșul de gunoi",
+              "done": "„{name}” este în coșul de gunoi. O poți restaura timp de {days} zile.",
+              "error": "Clasa nu a putut fi mutată în coșul de gunoi. Încearcă din nou."
+            }
           },
           "edit_level_note": "Poți schimba numele, orarul și coperta. Clasificarea, funcționalitățile și nivelurile le schimbă cine administrează clasa."
         },
@@ -438,17 +443,17 @@
           "mode_rows_hint": "Câte un rând pentru fiecare elev",
           "mode_import_hint": "Dintr-o foaie de calcul sau un CSV",
           "rows_intro": "Scrie numele fiecărui elev: utilizatorul se propune singur și îl poți schimba.",
-          "row_legend": "Elevul {n}",
+          "row_legend": "Rândul {n}",
           "name_label": "Nume",
           "name_placeholder": "Prenume și nume",
           "username_label": "Utilizator",
           "username_hint": "Propus pornind de la nume. Îl poți schimba.",
           "username_proposing": "Se caută un utilizator liber…",
-          "row_remove": "Elimină elevul {n}",
-          "row_add": "Adaugă alt elev",
+          "row_remove": "Elimină rândul {n}",
+          "row_add": "Adaugă alt rând",
           "creating": "Se creează conturile…",
           "create_count": "Creează conturi | Creează 1 cont | Creează {count} conturi",
-          "max_rows": "Cel mult {max} elevi o dată.",
+          "max_rows": "Cel mult {max} conturi o dată.",
           "create_error": "Conturile nu au putut fi create. Încearcă din nou.",
           "status": {
             "ok": "Gata de creat",
@@ -459,7 +464,7 @@
             "invalid_username": "Utilizator nevalid: doar litere fără diacritice, cifre și . _ - (între 3 și 30)"
           },
           "import_label": "Lista de elevi",
-          "import_hint": "Câte unul pe rând. Poți lipi o coloană copiată dintr-o foaie de calcul; dacă vrei să alegi utilizatorul, pune-l într-o a doua coloană.",
+          "import_hint": "Câte un nume pe rând. Poți lipi o coloană copiată dintr-o foaie de calcul; dacă vrei să alegi utilizatorul, pune-l într-o a doua coloană.",
           "import_placeholder": "Ana Popescu\nLuca Ionescu\nMaria Dumitru",
           "import_upload": "Încarcă un CSV",
           "import_template": "Descarcă șablonul CSV",
@@ -470,7 +475,7 @@
           "import_file_too_big": "Fișierul este prea mare pentru a fi o listă de clasă.",
           "import_file_error": "Fișierul nu a putut fi citit.",
           "import_empty": "Lipește cel puțin un nume sau încarcă un CSV.",
-          "import_too_many": "Cel mult {max} elevi o dată: împarte lista.",
+          "import_too_many": "Cel mult {max} conturi o dată: împarte lista.",
           "review_title": "Verificarea listei",
           "review_ok": "Niciun rând nu poate fi creat | 1 rând gata de creat | Rânduri gata de creat: {count}",
           "review_errors": "fără erori | 1 rând cu erori | Rânduri cu erori: {count}",
@@ -508,9 +513,9 @@
           "field_name": "Nume",
           "field_class": "Clasa",
           "field_login_url": "Adresa de conectare",
-          "once_note": "Parolele temporare se văd doar acum: nu sunt salvate nicăieri. Copiază-le, descarcă lista sau tipărește foaia înainte să reîncarci pagina sau să te deconectezi și dă-i fiecărui elev datele lui.",
+          "once_note": "Parolele temporare se văd doar acum: nu sunt salvate nicăieri. Copiază-le, descarcă lista sau tipărește foaia înainte să reîncarci pagina sau să te deconectezi și dă fiecărei persoane datele sale.",
           "gone_title": "Parolele nu mai pot fi afișate",
-          "gone_description": "Din motive de securitate, parolele temporare se văd doar imediat după ce sunt create sau resetate și nu sunt salvate nicăieri. Dacă ai pierdut foaia, resetează parola din fila Elevi, din meniul fiecărui elev: se generează una nouă.",
+          "gone_description": "Din motive de securitate, parolele temporare se văd doar imediat după ce sunt create sau resetate și nu sunt salvate nicăieri. Dacă ai pierdut foaia, resetează parola din fila Elevi, din meniul de lângă fiecare nume: se generează una nouă.",
           "card_username": "Utilizator",
           "card_password": "Parolă",
           "card_login_url": "Intră pe",
@@ -519,56 +524,56 @@
         },
         "read_only_notice": "Accesul tău la această clasă îți permite să vezi asta, dar nu să o schimbi.",
         "teachers": {
-          "title": "Profesori",
+          "title": "Cadre didactice",
           "description": "Cine predă la această clasă, cu ce profil și ce poate face în ea.",
-          "add": "Adaugă profesor",
-          "add_title": "Adaugă profesor",
+          "add": "Adaugă cadru didactic",
+          "add_title": "Adaugă cadru didactic",
           "add_confirm": "Adaugă",
-          "load_error": "Profesorii nu au putut fi încărcați.",
+          "load_error": "Cadrele didactice nu au putut fi încărcate.",
           "retry": "Încearcă din nou",
           "you": "Tu",
           "access_line": "Acces: {access}",
           "menu_label": "Acțiuni pentru {name}",
-          "owner_note": "Ești proprietarul acestei clase. Ca să ieși din ea, transferă mai întâi proprietatea cuiva cu acces de administrare.",
+          "owner_note": "Această clasă îți aparține. Ca să ieși din ea, transferă mai întâi proprietatea cuiva cu acces de administrare.",
           "leave_title": "Ieșire din clasă",
           "leave_confirm": "Ieși",
           "leave_hint": "Nu vei mai vedea această clasă. Ca să revii, cineva cu acces de administrare va trebui să te adauge din nou.",
           "leave_message": "Ieși din {class}? Nu o vei mai vedea și, ca să revii, cineva cu acces de administrare va trebui să te adauge din nou.",
           "field_email": "Adresă de email",
-          "field_email_hint": "Adresa exactă a contului de profesor din aplicație.",
+          "field_email_hint": "Adresa exactă a contului de cadru didactic din aplicație.",
           "add_note": "Intră în clasă imediat și primește o notificare. Nu trebuie să accepte nimic.",
           "field_profile": "Profil",
           "field_access": "Nivel de acces",
           "access_hint": {
             "read": "Vede clasa, misiunile, elevii și lucrările, fără să schimbe nimic.",
             "edit": "În plus, schimbă conținutul, magazinul și comportamentele și aprobă lucrări.",
-            "admin": "În plus, schimbă setările, gestionează elevii și profesorii și arhivează clasa."
+            "admin": "În plus, schimbă setările, gestionează elevii și cadrele didactice și arhivează clasa."
           },
           "edit": "Schimbă profilul sau nivelul",
           "edit_title": "Profil și nivel: {name}",
           "edit_self_note": "Îți schimbi propriul acces: dacă îl scazi, s-ar putea să nu-l mai poți crește.",
           "remove": "Scoate din clasă",
-          "remove_title": "Scoatere dintre profesori",
+          "remove_title": "Scoatere din echipa didactică",
           "remove_confirm": "Scoate",
-          "remove_message": "Scoți {name} dintre profesorii clasei {class}? Nu va mai vedea clasa și va primi o notificare. Ce a făcut deja în ea rămâne.",
+          "remove_message": "Scoți {name} din echipa didactică a clasei {class}? Nu va mai vedea clasa și va primi o notificare. Ce a făcut deja în ea rămâne.",
           "transfer": "Transferă proprietatea",
           "transfer_confirm": "Transferă proprietatea",
           "transfer_title": "Transferul proprietății clasei",
           "transfer_message": "Transferi proprietatea clasei {class} către {name}? Nu poți anula asta din contul tău: doar {name} ți-ar putea-o da înapoi.",
           "transfer_keeps": "Rămâi în clasă cu acces de administrare.",
           "transfer_loses": "Nu o mai poți publica drept șablon și nici transfera proprietatea ei.",
-          "added": "{name} face acum parte dintre profesori",
+          "added": "{name} face acum parte din echipa didactică",
           "changed": "Acces actualizat pentru {name}",
-          "removed": "{name} nu mai face parte dintre profesori",
+          "removed": "{name} nu mai face parte din echipa didactică",
           "transferred": "Clasa aparține acum lui {name}",
           "left": "Ai ieșit din {class}",
           "errors": {
-            "not_addable": "Persoana nu poate fi adăugată. Verifică dacă adresa este a unui cont de profesor.",
-            "already_teacher": "Persoana face deja parte dintre profesorii acestei clase.",
-            "owner_locked": "Proprietarul nu poate fi schimbat sau scos: mai întâi trebuie să transfere proprietatea.",
-            "owner_cannot_leave": "Ești proprietarul: ca să ieși, transferă mai întâi proprietatea cuiva cu acces de administrare.",
+            "not_addable": "Persoana nu poate fi adăugată. Verifică dacă adresa este a unui cont de cadru didactic.",
+            "already_teacher": "Persoana face deja parte din echipa didactică a acestei clase.",
+            "owner_locked": "Persoana care deține clasa nu poate fi schimbată sau scoasă: mai întâi trebuie să transfere proprietatea.",
+            "owner_cannot_leave": "Clasa îți aparține: ca să ieși, transferă mai întâi proprietatea cuiva cu acces de administrare.",
             "transfer_not_admin": "Proprietatea poate fi transferată doar cuiva cu acces de administrare.",
-            "already_owner": "Persoana este deja proprietarul clasei.",
+            "already_owner": "Clasa îi aparține deja acestei persoane.",
             "too_many": "Ai făcut prea multe încercări. Așteaptă puțin și încearcă din nou.",
             "forbidden": "Accesul tău la această clasă nu permite asta.",
             "not_found": "Acest lucru nu mai este disponibil. Reîncarcă pagina ca să vezi clasa așa cum este acum.",
@@ -581,15 +586,15 @@
           }
         },
         "history": {
-          "filter_actor": "Profesor",
+          "filter_actor": "Cadru didactic",
           "filter_type": "Tip",
-          "filter_search": "Caută profesor…",
-          "all_actors": "Toți profesorii",
+          "filter_search": "Caută cadru didactic…",
+          "all_actors": "Toate cadrele didactice",
           "all_types": "Toate tipurile",
           "empty_title": "Încă nu există nimic în istoric",
-          "empty_description": "Aici va apărea ce fac profesorii în clasă: misiuni, lucrări, elevi, setări…",
+          "empty_description": "Aici va apărea ce fac cadrele didactice în clasă: misiuni, lucrări, elevi, setări…",
           "no_results_title": "Nimic cu aceste filtre",
-          "no_results_description": "Încearcă alt profesor sau alt tip.",
+          "no_results_description": "Încearcă alt cadru didactic sau alt tip.",
           "error_title": "Istoricul nu a putut fi încărcat",
           "error_description": "Verifică conexiunea și încearcă din nou.",
           "retry": "Încearcă din nou",
@@ -598,7 +603,7 @@
           "unknown_action": "a făcut o modificare în clasă",
           "types": {
             "class": "Clasă",
-            "teacher": "Profesori",
+            "teacher": "Cadre didactice",
             "student": "Elevi",
             "mission": "Misiuni",
             "enigma": "Enigme",
@@ -618,12 +623,14 @@
               "template_unpublished": "a retras clasa din șabloane",
               "duplicated": "a duplicat clasa",
               "ownership_transferred": "a transferat proprietatea clasei către {target}",
-              "ownership_inherited": "clasa a trecut la {target} când contul proprietarului a fost șters"
+              "ownership_inherited": "clasa a trecut la {target} când a fost șters contul care o deținea",
+              "trashed": "a mutat clasa în coșul de gunoi",
+              "restored": "a scos clasa din coșul de gunoi"
             },
             "teacher": {
-              "added": "a adăugat {target} la profesori ({profile}, {access})",
+              "added": "a adăugat {target} în echipa didactică ({profile}, {access})",
               "changed": "a schimbat accesul pentru {target}: {profile}, {access}",
-              "removed": "a scos {target} dintre profesori",
+              "removed": "a scos {target} din echipa didactică",
               "left": "a ieșit din clasă"
             },
             "student": {
@@ -640,7 +647,9 @@
               "blocked": "a blocat misiunea «{title}»",
               "unblocked": "a deblocat misiunea «{title}»",
               "moved": "a schimbat clasa misiunii «{title}»",
-              "rewards_changed": "a schimbat recompensa misiunii «{title}»"
+              "rewards_changed": "a schimbat recompensa misiunii «{title}»",
+              "imported": "a importat misiunea «{title}»",
+              "exported": "a copiat misiunea «{title}» în altă clasă"
             },
             "enigma": {
               "created": "a adăugat enigma «{title}»",
@@ -670,34 +679,75 @@
           },
           "anonymous": {
             "student": {
-              "account_created": "a creat contul unui elev care nu mai este în clasă",
-              "password_reset": "a resetat parola unui elev care nu mai este în clasă",
-              "nickname_changed": "a schimbat porecla unui elev care nu mai este în clasă",
-              "removed": "a scos un elev din clasă",
-              "removed_unused": "a scos din clasă un elev care nu intrase niciodată și i-a șters contul",
-              "avatar_generated": "a generat un avatar nou pentru un elev care nu mai este în clasă"
+              "account_created": "a creat contul unei persoane care nu mai este în clasă",
+              "password_reset": "a resetat parola unei persoane care nu mai este în clasă",
+              "nickname_changed": "a schimbat porecla unei persoane care nu mai este în clasă",
+              "removed": "a scos pe cineva din clasă",
+              "removed_unused": "a scos din clasă o persoană care nu intrase niciodată și i-a șters contul",
+              "avatar_generated": "a generat un avatar nou pentru o persoană care nu mai este în clasă"
             },
             "submission": {
-              "approved": "a aprobat lucrarea pentru «{title}» a unui elev care nu mai este în clasă, cu {percentage} %"
+              "approved": "a aprobat lucrarea pentru «{title}» a unei persoane care nu mai este în clasă, cu {percentage} %"
             },
             "behavior": {
-              "applied": "a aplicat «{title}» unui elev care nu mai este în clasă"
+              "applied": "a aplicat «{title}» unei persoane care nu mai este în clasă"
             }
           }
+        },
+        "in_trash": {
+          "title": "„{name}” este în coșul de gunoi",
+          "description": "A fost mutată în coșul de gunoi pe {date}. Dacă nu o restaurează nimeni, se va șterge definitiv pe {purge}.",
+          "owner_hint": "Restaureaz-o ca să o deschizi din nou. Revine arhivată: elevii nu vor putea intra până nu o dezarhivezi.",
+          "not_owner": "Doar cine deține clasa o poate restaura. Dacă ai nevoie de ea, cere-i asta înainte de data respectivă.",
+          "go_trash": "Vezi coșul de gunoi"
+        }
+      },
+      "trash": {
+        "meta": {
+          "title": "Coș de gunoi | ITAKAI Cadru didactic",
+          "description": "Clasele pe care le-ai mutat în coșul de gunoi, ca să le restaurezi înainte să se șteargă definitiv."
+        },
+        "title": "Coș de gunoi",
+        "subtitle": "Clasele pe care le muți în coșul de gunoi se șterg definitiv după {days} zile. Până atunci, le poți restaura.",
+        "link": "Coș de gunoi ({count})",
+        "restore_note": "Când restaurezi o clasă, revine în „Clasele mele” arhivată: elevii nu vor putea intra până nu o dezarhivezi.",
+        "sent_by_me": "Ai mutat-o pe {date}",
+        "sent_by": "A mutat-o {name} pe {date}",
+        "sent_on": "Mutată în coșul de gunoi pe {date}",
+        "purge_on": "Se va șterge definitiv pe {date}",
+        "days_left": "Mai rămâne o zi | Zile rămase: {count}",
+        "purge_today": "Se șterge azi",
+        "restore": "Restaurează",
+        "restored": "„{name}” a revenit în „Clasele mele”, la Arhivate. Dezarhiveaz-o când vrei să o folosești din nou.",
+        "restore_error": "Clasa nu a putut fi restaurată. Încearcă din nou.",
+        "empty_title": "Coșul de gunoi este gol",
+        "empty_description": "Dacă ștergi o clasă, va sta aici {days} zile înainte să se șteargă definitiv.",
+        "error_title": "Coșul de gunoi nu a putut fi încărcat",
+        "error_description": "Verifică conexiunea și încearcă din nou.",
+        "retry": "Încearcă din nou",
+        "purge": {
+          "cta": "Șterge acum",
+          "modal_title": "Ștergerea definitivă a clasei",
+          "message": "„{name}” se va șterge acum, fără să mai aștepte să expire termenul din coșul de gunoi. Acțiunea nu poate fi anulată: nimeni nu o va mai putea recupera.",
+          "loses": "Se va șterge acum, definitiv:",
+          "understood": "Înțeleg că se șterge definitiv și că nu mai poate fi recuperată.",
+          "confirm": "Șterge definitiv",
+          "done": "„{name}” a fost ștearsă definitiv.",
+          "error": "Clasa nu a putut fi ștearsă. Încearcă din nou."
         }
       }
     },
     "missions": {
       "index": {
         "meta": {
-          "title": "Misiunile mele | ITAKAI Profesor",
+          "title": "Misiunile mele | ITAKAI Cadru didactic",
           "description": "Administrează toate misiunile pe care le-ai creat, editează-le sau creează altele noi pentru elevii tăi."
         },
         "subtitle": "Administrează misiunile claselor tale"
       },
       "create": {
         "meta": {
-          "title": "Creează misiune | ITAKAI Profesor"
+          "title": "Creează misiune | ITAKAI Cadru didactic"
         },
         "pick_class": "Selectează o clasă",
         "idea_placeholder": "Ex.: Vreau o misiune despre cinematică, în care elevii să calculeze traiectorii de mături zburătoare...",
@@ -709,11 +759,11 @@
       "detail": {
         "delete_confirm_btn": "Șterge",
         "toast": {
-          "enigma_has_submissions": "Nu se poate șterge o enigmă care are deja lucrări trimise de elevi"
+          "enigma_has_submissions": "Nu se poate șterge o enigmă care are deja lucrări trimise"
         },
         "meta": {
-          "title": "Detaliile misiunii | ITAKAI Profesor",
-          "title_loading": "Se încarcă misiunea... | ITAKAI Profesor",
+          "title": "Detaliile misiunii | ITAKAI Cadru didactic",
+          "title_loading": "Se încarcă misiunea... | ITAKAI Cadru didactic",
           "description_fallback": "Detaliile unei misiuni în ITAKAI"
         },
         "tabs": {
@@ -726,7 +776,7 @@
           "deadline_label": "Termen-limită",
           "deadline_hint": "Lasă-l gol ca misiunea să nu expire.",
           "rarity_label": "Raritate",
-          "rarity_locked_hint": "Nu poți schimba raritatea: un elev a finalizat deja misiunea.",
+          "rarity_locked_hint": "Nu poți schimba raritatea: cineva din clasă a finalizat deja misiunea.",
           "rarity": {
             "comun": "Comună",
             "rara": "Rară",
@@ -750,6 +800,52 @@
           "toast_saved": "Datele au fost salvate",
           "toast_error": "Datele nu au putut fi salvate"
         }
+      },
+      "import": {
+        "button": "Importă o misiune",
+        "button_in_class": "Importă din altă clasă",
+        "copy_button": "Copiază în altă clasă",
+        "title": "Importă o misiune",
+        "copy_title": "Copiază misiunea",
+        "subtitle": "Copiază în „{name}” o misiune din altă clasă de-a ta. Originalul nu se schimbă.",
+        "subtitle_free": "Copiază o misiune dintr-o clasă de-a ta în alta. Originalul nu se schimbă.",
+        "copy_subtitle": "Copiază „{title}” într-una dintre clasele tale. Originalul nu se schimbă.",
+        "target_label": "Clasa de destinație",
+        "target_same": "Clasa acestei misiuni: va fi duplicată",
+        "no_targets": "Nu poți edita misiuni în niciuna dintre clasele tale.",
+        "source_label": "Clasa de origine",
+        "class_placeholder": "Alege o clasă",
+        "class_search": "Caută o clasă…",
+        "no_class_matches": "Nicio clasă nu se potrivește.",
+        "class_missions": "Fără misiuni | 1 misiune | Misiuni: {count}",
+        "class_shared": "Deținută de {name}",
+        "class_archived": "Arhivată",
+        "no_classes": "Nu ai alte clase din care să imporți o misiune.",
+        "show_archived": "Afișează și clasele arhivate",
+        "mission_label": "Misiune",
+        "mission_search": "Caută o misiune…",
+        "no_missions": "Această clasă nu are încă misiuni.",
+        "no_matches": "Nicio misiune nu se potrivește cu „{query}”.",
+        "enigmas": "Fără enigme | 1 enigmă | Enigme: {count}",
+        "documents": "Fără documente | 1 document | Documente: {count}",
+        "badges": "Fără insignă | 1 insignă | Insigne: {count}",
+        "will_copy": "Se va copia",
+        "copied": "S-a copiat",
+        "copy_badge": "Copiază și insigna ei „{name}”",
+        "copy_badge_hint": "Va fi o insignă nouă a ta, cu aceeași imagine.",
+        "locked_note": "Copia ajunge blocată și fără termen-limită, ca s-o verifici înainte de a o deschide elevilor tăi.",
+        "load_error": "Nu s-a putut încărca. Verifică conexiunea și încearcă din nou.",
+        "retry": "Încearcă din nou",
+        "confirm": "Importă",
+        "copy_confirm": "Copiază",
+        "duplicate_confirm": "Duplică",
+        "error": "Misiunea nu a putut fi importată.",
+        "copy_error": "Misiunea nu a putut fi copiată.",
+        "success_title": "Misiune importată",
+        "copy_success_title": "Misiune copiată",
+        "duplicate_success_title": "Misiune duplicată",
+        "success_description": "Copia misiunii „{title}” este acum în „{name}”, blocată și fără termen-limită. Verific-o și deblocheaz-o când vrei să o vadă elevii tăi.",
+        "open_mission": "Deschide misiunea"
       }
     },
     "badges": {
@@ -767,7 +863,7 @@
         "label_description": "Descriere",
         "label_image": "Imagine",
         "image_optional": "(opțional)",
-        "placeholder_name": "Ex.: Maestru al ecuațiilor",
+        "placeholder_name": "Ex.: Măiestrie în ecuații",
         "placeholder_description": "Descrie ce realizare reprezintă această insignă...",
         "btn_remove_image": "Elimină imaginea",
         "preview_label": "Previzualizare:",
@@ -790,7 +886,7 @@
         "image_type": "Sunt acceptate doar fișiere PNG, JPG, SVG sau WebP"
       },
       "meta": {
-        "title": "Insignele mele | ITAKAI Profesor",
+        "title": "Insignele mele | ITAKAI Cadru didactic",
         "description": "Creează, editează și administrează insigne personalizate ca să premiezi realizările elevilor tăi."
       },
       "filter_system": "Ale sistemului",
@@ -814,39 +910,39 @@
         "sort_progress_desc": "Progres mai mare",
         "sort_progress_asc": "Progres mai mic",
         "sort_missions_desc": "Mai multe misiuni",
-        "tab_active": "Activi",
-        "tab_archived": "Arhivați",
+        "tab_active": "În clase active",
+        "tab_archived": "În clase arhivate",
         "no_students_title": "Fără elevi",
-        "no_students_filtered": "Nu s-au găsit elevi cu aceste filtre",
+        "no_students_filtered": "Niciun rezultat cu aceste filtre",
         "no_students_default": "Nu există elevi în clasele tale",
-        "no_archived_students_title": "Fără elevi arhivați",
+        "no_archived_students_title": "Nimeni în clase arhivate",
         "no_archived_students_default": "Nu există elevi în clasele tale arhivate",
         "btn_view": "Vezi",
         "stat_missions": "Misiuni",
         "meta": {
-          "title": "Elevii mei | ITAKAI Profesor",
-          "description": "Administrează toți elevii tăi și consultă progresul și statisticile lor de performanță academică."
+          "title": "Elevii mei | ITAKAI Cadru didactic",
+          "description": "Administrează-ți elevii și consultă progresul și statisticile lor de performanță academică."
         },
         "stat_badges": "Insigne"
       },
       "detail": {
         "breadcrumb_students": "Elevi",
         "loading": "Se încarcă...",
-        "error_title": "Eroare la încărcarea elevului",
-        "error_default": "Eroare la încărcarea datelor elevului",
+        "error_title": "Eroare la încărcarea fișei",
+        "error_default": "Eroare la încărcarea datelor din fișă",
         "btn_retry": "Reîncearcă",
         "stat_classes": "Clase",
         "stat_missions": "Misiuni",
         "stat_completed": "Finalizat",
-        "enrolled_classes_title": "Clase la care este înscris",
+        "enrolled_classes_title": "Clase din care face parte",
         "enrolled_classes_count": "{count} clase",
-        "not_enrolled": "Nu este înscris la niciuna dintre clasele tale",
+        "not_enrolled": "Nu face parte din niciuna dintre clasele tale",
         "label_progress": "Finalizat",
         "stat_mana": "Mana",
         "stat_lives": "Puncte de viață",
         "no_activity": "Fără activitate recentă",
         "meta": {
-          "title": "Profilul elevului | ITAKAI Profesor",
+          "title": "Profilul elevului | ITAKAI Cadru didactic",
           "description": "Profil detaliat al elevului, cu statistici de performanță, progres în misiuni și activitate recentă."
         }
       },
@@ -856,7 +952,7 @@
         "reset_title": "Resetarea parolei",
         "reset_message": "Se va genera o parolă temporară nouă pentru {name}, iar sesiunile deschise vor fi închise. Parola actuală nu va mai funcționa.",
         "reset_confirm": "Resetează",
-        "reset_not_home": "Parola lui {name} o resetează profesorii care administrează clasa în care a fost creat contul sau administrarea platformei.",
+        "reset_not_home": "Parola pentru {name} o resetează cadrele didactice care administrează clasa în care a fost creat contul sau administrarea platformei.",
         "reset_has_email": "{name} intră cu adresa de e-mail. Dacă și-a uitat parola, o poate recupera cu „Ai uitat parola?” din ecranul de conectare.",
         "reset_error": "Parola nu a putut fi resetată.",
         "nickname": "Schimbă porecla",
@@ -881,13 +977,13 @@
         "remove_unused_confirm": "Elimină și șterge contul",
         "removed": "{name} nu mai este în clasă",
         "removed_account_deleted": "{name} nu mai este în clasă, iar contul său nefolosit a fost șters",
-        "remove_error": "Elevul nu a putut fi eliminat din clasă."
+        "remove_error": "Eliminarea din clasă nu a reușit."
       }
     },
     "ai_assistant": {
       "meta": {
-        "title": "Asistent IA profesor | ITAKAI",
-        "description": "Asistent IA specializat pentru profesori. Primește ajutor pentru administrarea claselor și a misiunilor."
+        "title": "Asistent IA pentru cadre didactice | ITAKAI",
+        "description": "Asistent IA specializat pentru cadre didactice. Primește ajutor pentru administrarea claselor și a misiunilor."
       }
     },
     "profile": {
@@ -941,7 +1037,7 @@
       },
       "meta": {
         "title": "Profilul meu | ITAKAI",
-        "description": "Administrează-ți profilul de profesor, configurează securitatea și personalizează-ți experiența."
+        "description": "Administrează-ți profilul de cadru didactic, configurează securitatea și personalizează-ți experiența."
       }
     },
     "components": {
@@ -952,9 +1048,9 @@
         "placeholder_title": "Ex.: Trezirea mașinilor",
         "label_xp": "XP",
         "label_rewards": "Recompense la finalizare",
-        "rewards_locked_hint": "Poți doar să mărești recompensele: un elev le-a câștigat deja.",
+        "rewards_locked_hint": "Poți doar să mărești recompensele: cineva din clasă le-a câștigat deja.",
         "label_description": "Descriere",
-        "placeholder_description": "Descrie ce trebuie să facă elevul...",
+        "placeholder_description": "Descrie ce trebuie făcut...",
         "label_objectives": "Obiective",
         "label_objectives_optional": "(opțional)",
         "placeholder_objective": "Scrie un obiectiv...",
@@ -1060,7 +1156,7 @@
         "label_description": "Descriere",
         "label_image": "Imagine",
         "image_optional": "(opțional)",
-        "placeholder_name": "Ex.: Maestru al ecuațiilor",
+        "placeholder_name": "Ex.: Măiestrie în ecuații",
         "placeholder_description": "Descrie ce realizare reprezintă această insignă...",
         "image_selected": "Imagine selectată",
         "btn_remove_image": "Elimină imaginea",
@@ -1142,15 +1238,16 @@
     },
     "templates": {
       "page_title": "Șabloane de clase",
-      "page_subtitle": "Explorează clase publicate de alți profesori și importă-le în ale tale.",
+      "page_subtitle": "Explorează clase publicate de alte cadre didactice și importă-le în ale tale.",
       "search": "Caută șabloane…",
       "own": "A ta",
       "import": "Importă",
       "import_success": "«{name}» a fost importată. Editeaz-o cum vrei!",
+      "import_success_missions": "«{name}» a fost importată cu misiunea ei. Editeaz-o cum vrei! | «{name}» a fost importată cu misiunile ei ({count}). Editeaz-o cum vrei!",
       "import_error": "Șablonul nu a putut fi importat",
       "load_error": "Șabloanele nu au putut fi încărcate",
       "empty_title": "Încă nu există șabloane",
-      "empty_description": "Când un profesor publică o clasă drept șablon, va apărea aici.",
+      "empty_description": "Când un cadru didactic publică o clasă drept șablon, va apărea aici.",
       "no_results_title": "Fără rezultate",
       "no_results_description": "Nu există șabloane care să corespundă filtrelor.",
       "preview_action": "Previzualizează",
@@ -1161,16 +1258,23 @@
         "inactive": "Dezactivată",
         "load_error": "Șablonul nu a putut fi încărcat",
         "error": "Șablonul nu a fost găsit.",
+        "tabs_label": "Conținutul șablonului",
         "tab_narrative": "Poveste",
         "tab_features": "Funcționalități",
+        "tab_missions": "Misiuni ({n})",
         "tab_shop": "Magazin ({n})",
         "tab_behaviors": "Comportamente ({n})",
         "no_narrative_title": "Fără poveste",
         "no_narrative_description": "Acest șablon nu are o poveste definită.",
+        "no_missions_title": "Fără misiuni",
+        "no_missions_description": "Acest șablon nu vine cu misiuni. Le poți crea tu.",
         "no_shop_title": "Fără magazin",
         "no_shop_description": "Acest șablon nu vine cu articole de magazin. Le poți adăuga tu.",
+        "hidden": "Ascuns pentru elevi",
+        "shop_off": "Acest șablon are magazinul dezactivat. Articolele lui se copiază oricum și îl poți activa în clasa ta oricând vrei.",
         "no_behaviors_title": "Fără comportamente",
-        "no_behaviors_description": "Acest șablon nu vine cu comportamente. Le poți defini tu."
+        "no_behaviors_description": "Acest șablon nu vine cu comportamente. Le poți defini tu.",
+        "behaviors_off": "Acest șablon are comportamentele dezactivate. Se copiază oricum și le poți activa în clasa ta oricând vrei."
       },
       "filter_all": {
         "subject": "Toate materiile",

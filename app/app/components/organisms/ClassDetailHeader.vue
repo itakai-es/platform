@@ -49,7 +49,12 @@
           <div class="min-w-0 flex-1">
             <!-- break-words (no break-all): parte por espacios y solo trocea una
                  palabra si por sí sola no cabe, así "Gringotts" no queda cortado. -->
-            <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-white break-words">
+            <!-- tabindex -1: la página puede llevar el foco al nombre (p. ej. al
+                 restaurar la clase desde la papelera) sin que entre en el orden de Tab -->
+            <h1
+              tabindex="-1"
+              class="text-2xl sm:text-3xl md:text-4xl font-bold text-white break-words focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+            >
               {{ name }}
             </h1>
             <p v-if="$slots.subtitle" class="text-white/70 text-sm sm:text-base">

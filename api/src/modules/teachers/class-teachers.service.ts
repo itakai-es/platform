@@ -89,7 +89,7 @@ async function teacherRow(tx: Prisma.TransactionClient, classId: string, userId:
     where: { classId, userId, ...activeTeacherWhere('read') },
     select: TEACHER_ROW_SELECT,
   })
-  if (!row) throw new NotFoundError('Esa persona no es profesorado de esta clase')
+  if (!row) throw new NotFoundError('Esa persona no es docente de esta clase')
   return row
 }
 
@@ -175,7 +175,7 @@ export async function addClassTeacher(
     // Una fila vencida se reaprovecha: vuelve a entrar como si fuera nueva.
     if (existing && (!existing.endsAt || existing.endsAt.getTime() > Date.now())) {
       throw new ConflictError(
-        'Esa persona ya es profesorado de esta clase',
+        'Esa persona ya es docente de esta clase',
         'ALREADY_CLASS_TEACHER'
       )
     }
@@ -239,7 +239,7 @@ export async function updateClassTeacher(
     const current = await teacherRow(tx, classId, userId)
     if (current.isOwner) {
       throw new ForbiddenError(
-        'Al propietario de la clase no se le cambia el perfil ni el nivel',
+        'A quien tiene la propiedad de la clase no se le cambia el perfil ni el nivel',
         'CLASS_OWNER_LOCKED'
       )
     }
@@ -323,7 +323,7 @@ export async function removeClassTeacher(
     const current = await teacherRow(tx, classId, userId)
     if (current.isOwner) {
       throw new ForbiddenError(
-        'Al propietario no se le puede quitar de la clase',
+        'A quien tiene la propiedad no se le puede quitar de la clase',
         'CLASS_OWNER_LOCKED'
       )
     }
@@ -360,7 +360,7 @@ export async function leaveClass(actor: ClassUser, classId: string): Promise<{ l
   const access = await assertClassAccess(classId, actor.id, 'teachers.leave')
   if (access.isOwner) {
     throw new ForbiddenError(
-      'Eres el propietario de la clase: para salir de ella, pasa antes la propiedad a otra persona con administración',
+      'Tienes la propiedad de la clase: para salir de ella, pásala antes a otra persona con administración',
       'CLASS_OWNER_CANNOT_LEAVE'
     )
   }
@@ -400,7 +400,7 @@ export async function transferClass(
 
   await prisma.$transaction(async tx => {
     const target = await getClassAccess(classId, toUserId, tx)
-    if (!target) throw new NotFoundError('Esa persona no es profesorado de esta clase')
+    if (!target) throw new NotFoundError('Esa persona no es docente de esta clase')
     if (target.isOwner) {
       throw new ValidationError(
         'Esa persona ya es la propietaria de la clase',

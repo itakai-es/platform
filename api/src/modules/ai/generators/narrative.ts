@@ -1,4 +1,5 @@
 import type { AIProvider } from '../providers/provider.interface.js'
+import { INCLUSIVE_LANGUAGE_ES } from '../prompts/index.js'
 
 export interface NarrativeRequest {
   prompt: string
@@ -13,7 +14,7 @@ export async function generateNarrative(provider: AIProvider, request: Narrative
   const locale = request.locale.toLowerCase().startsWith('en') ? 'en' : 'es'
   const systemPrompt = locale === 'en'
     ? `You are Atenea, an educational design assistant for teachers. Return practical classroom narrative content. ${MD_RULES_EN}`
-    : `Eres Atenea, una asistente de diseño educativo para profesorado. Devuelve contenido narrativo práctico para clase. ${MD_RULES_ES}`
+    : `Eres Atenea, una asistente de diseño educativo para profesorado. Devuelve contenido narrativo práctico para clase. ${MD_RULES_ES} ${INCLUSIVE_LANGUAGE_ES}`
 
   const enrichedPrompt = request.className
     ? `${request.prompt}\n\nClase actual: ${request.className}`
@@ -34,7 +35,7 @@ export function streamNarrative(provider: AIProvider, request: NarrativeRequest)
   const locale = request.locale.toLowerCase().startsWith('en') ? 'en' : 'es'
   const systemPrompt = locale === 'en'
     ? `You are Atenea, an educational design assistant for teachers. Return practical classroom narrative content. ${MD_RULES_EN}`
-    : `Eres Atenea, una asistente de diseño educativo para profesorado. Devuelve contenido narrativo práctico para clase. ${MD_RULES_ES}`
+    : `Eres Atenea, una asistente de diseño educativo para profesorado. Devuelve contenido narrativo práctico para clase. ${MD_RULES_ES} ${INCLUSIVE_LANGUAGE_ES}`
 
   const enrichedPrompt = request.className
     ? `${request.prompt}\n\nClase actual: ${request.className}`

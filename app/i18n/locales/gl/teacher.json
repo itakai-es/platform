@@ -1,31 +1,12 @@
 {
   "teacher": {
-    "about": {
-      "title": "Acerca de ITAKAI",
-      "subtitle": "Novidades e rexistro de versións",
-      "breadcrumb": "Acerca de",
-      "breadcrumb_home": "Inicio",
-      "current_version": "Versión actual",
-      "latest": "Última versión",
-      "versions_index": "Versións",
-      "footer_note": "Bótas en falta algo ou atopaches un fallo? Cóntanolo e terémolo en conta para próximas versións.",
-      "groups": {
-        "new": "Novidades",
-        "improved": "Melloras",
-        "fixed": "Arranxos"
-      },
-      "meta": {
-        "title": "Acerca de | ITAKAI",
-        "description": "Novidades, melloras e correccións de cada versión de ITAKAI."
-      }
-    },
     "dashboard": {
-      "title": "Dashboard do profesor",
-      "subtitle": "Benvido, {name}!",
+      "title": "Inicio docente",
+      "subtitle": "Ola, {name}!",
       "new_class": "Nova clase",
       "new_mission": "Nova misión",
       "stats": {
-        "total_students": "Estudantes totais",
+        "total_students": "Estudantes en total",
         "active_classes": "Clases activas",
         "active_missions": "Misións activas"
       },
@@ -33,22 +14,22 @@
       "view_all": "Ver todas",
       "no_classes_yet": "Aínda non tes clases",
       "recent_missions": "Últimas misións",
-      "no_missions_description": "Crea a túa primeira misión para os teus estudantes",
+      "no_missions_description": "Crea a túa primeira misión para o teu alumnado",
       "meta": {
-        "title": "Dashboard profesor | ITAKAI",
-        "description": "Dashboard principal do profesor. Xestiona as túas clases, misións e revisa o progreso dos teus estudantes."
+        "title": "Inicio docente | ITAKAI",
+        "description": "O teu inicio como docente. Xestiona as túas clases, misións e revisa o progreso do teu alumnado."
       }
     },
     "classes": {
       "index": {
         "title": "As miñas clases",
-        "subtitle": "Xestiona as túas clases e revisa o progreso dos teus estudantes",
+        "subtitle": "Xestiona as túas clases e revisa o progreso do teu alumnado",
         "new_class": "Nova clase",
         "create_first": "Crear primeira clase",
         "no_classes_description": "Aínda non creaches ningunha clase",
         "meta": {
-          "title": "As miñas clases | ITAKAI Profesor",
-          "description": "Xestiona todas as túas clases, estudantes inscritos e misións asignadas."
+          "title": "As miñas clases | ITAKAI Docente",
+          "description": "Xestiona todas as túas clases, o seu alumnado e as misións asignadas."
         },
         "templates": "Modelos",
         "duplicate_success": "Clase duplicada como \"{name}\"",
@@ -90,7 +71,7 @@
         "success_title": "Clase creada!",
         "success_message": "A túa clase \"{name}\" está lista.",
         "invite_code_label": "Código de convite",
-        "invite_code_hint": "Comparte este código cos teus estudantes",
+        "invite_code_hint": "Comparte este código co teu alumnado",
         "btn_view_classes": "Ver clases",
         "btn_copied": "Copiado!",
         "btn_copy_code": "Copiar código",
@@ -100,7 +81,7 @@
           "create_error": "Erro ao crear a clase. Por favor, téntao de novo."
         },
         "meta": {
-          "title": "Crear nova clase | ITAKAI Profesor"
+          "title": "Crear nova clase | ITAKAI Docente"
         },
         "summary": {
           "edit": "Editar",
@@ -114,7 +95,7 @@
           "ask_idea": "Ola {name}! Son {god}. Cóntame, que mundo ou temática queres para a túa clase?",
           "review_approach": "Isto é o que preparei para ti, gústache?",
           "pick_title": "Que título lle poñemos á túa clase?",
-          "placeholder_idea": "Ex: Unha escola de maxia con 4 casas que compiten por puntos, alumnos-magos e retos como mazmorras…",
+          "placeholder_idea": "Ex: Unha escola de maxia con 4 casas que compiten por puntos, aprendices de maxia e retos como mazmorras…",
           "generating_approach": "Estou a crear a narrativa da túa clase...",
           "narrative_feedback_placeholder": "Ex: Quero máis referencias ás casas de Hogwarts...",
           "btn_change_something": "Quero cambiar algo",
@@ -139,7 +120,7 @@
           "attach_hint": "Máx. {max} MB por ficheiro",
           "attach_error_size": "«{name}» pesa {size} MB. O máximo é {max} MB por ficheiro.",
           "attach_error_too_large": "Os materiais pesan demasiado en conxunto. Súbeos un a un (máx. {max} MB por ficheiro).",
-          "guide_question": "Preparei unha guía para os teus alumnos"
+          "guide_question": "Preparei unha guía para o teu alumnado"
         },
         "narrative_error": "Non puiden crear a narrativa"
       },
@@ -161,11 +142,11 @@
           "history": "Historial"
         },
         "students": {
-          "empty_title": "Aínda non hai alumnado",
-          "empty_description": "Cando o alumnado se una á clase, aparecerá aquí coas súas estatísticas.",
-          "col_student": "Alumno",
+          "empty_title": "Aínda non hai estudantes",
+          "empty_description": "Cando haxa estudantes na clase, aparecerán aquí coas súas estatísticas.",
+          "col_student": "Estudante",
           "col_level": "Nivel",
-          "search_placeholder": "Buscar alumno...",
+          "search_placeholder": "Buscar estudante...",
           "sort_name_asc": "Nome A-Z",
           "sort_name_desc": "Nome Z-A",
           "sort_xp_asc": "XP ↑",
@@ -179,7 +160,7 @@
           "sort_lives_asc": "Vida ↑",
           "sort_lives_desc": "Vida ↓",
           "no_results_title": "Sen resultados",
-          "no_results_description": "Non hai alumnos que coincidan coa busca.",
+          "no_results_description": "Ningún estudante coincide coa busca.",
           "col_behaviors": "Comportamentos",
           "view_list": "Listaxe",
           "view_ranking": "Ranking",
@@ -209,8 +190,8 @@
           "empty_default": "Non hai misións nesta clase"
         },
         "meta": {
-          "title": "Detalle de clase | ITAKAI Profesor",
-          "description": "Xestiona a clase. Revisa estudantes, misións asignadas e progreso xeral."
+          "title": "Detalle de clase | ITAKAI Docente",
+          "description": "Xestiona a clase. Revisa o alumnado, as misións asignadas e o progreso xeral."
         },
         "behaviors": {
           "new_button": "Novo comportamento",
@@ -226,9 +207,9 @@
           "section_negatives": "Negativos",
           "filter_all": "Todos",
           "apply_title": "Aplicar \"{name}\"",
-          "pick_student": "Selecciona o alumno ao que llo aplicarás.",
+          "pick_student": "Elixe a que estudante llo vas aplicar.",
           "applied_toast": "{behavior} aplicado a {student}",
-          "empty_students": "Aínda non hai alumnos nesta clase.",
+          "empty_students": "Aínda non hai estudantes nesta clase.",
           "form_new_title": "Novo comportamento",
           "form_edit_title": "Editar comportamento",
           "form_type": "Tipo",
@@ -265,7 +246,7 @@
           "library_subtitle": "Engade artigos suxeridos cun toque. Despois podes editalos ou borralos.",
           "library_add": "Engadir",
           "empty_title": "Aínda non hai artigos",
-          "empty_description": "Crea a primeira recompensa que os teus alumnos poderán trocar.",
+          "empty_description": "Crea a primeira recompensa que o teu alumnado poderá trocar.",
           "hidden": "Oculto",
           "purchases_empty_title": "Sen troques aínda",
           "form_edit_title": "Editar artigo",
@@ -273,15 +254,15 @@
           "form_name": "Nome",
           "form_name_placeholder": "Ex: Saltar unha tarefa",
           "form_description": "Descrición",
-          "form_description_placeholder": "Que obtén o alumno ao trocalo?",
+          "form_description_placeholder": "Que se obtén ao trocalo?",
           "form_price": "Prezo",
-          "form_visible": "Visible para os alumnos",
+          "form_visible": "Visible para o alumnado",
           "form_cancel": "Cancelar",
           "form_delete": "Eliminar",
           "form_save": "Gardar",
           "form_create": "Crear",
           "delete_title": "Eliminar \"{name}\"?",
-          "delete_description": "Os alumnos deixarán de velo na tenda. Esta acción non se pode desfacer.",
+          "delete_description": "O alumnado deixará de velo na tenda. Esta acción non se pode desfacer.",
           "toast_created": "Artigo creado",
           "toast_updated": "Artigo actualizado",
           "toast_deleted": "Artigo eliminado",
@@ -341,7 +322,7 @@
           "items": {
             "shop": {
               "label": "Tenda",
-              "desc": "Recompensas e poderes que os alumnos cambian."
+              "desc": "Recompensas e poderes que troca o alumnado."
             },
             "coins": {
               "label": "{coins}",
@@ -353,7 +334,7 @@
             },
             "rankings": {
               "label": "Ranking",
-              "desc": "Clasificación dos alumnos da clase."
+              "desc": "Clasificación do alumnado da clase."
             },
             "xp": {
               "label": "Experiencia (XP)",
@@ -389,9 +370,9 @@
             "province_label": "Provincia",
             "metadata_none": "Sen especificar",
             "metadata_search": "Buscar...",
-            "subject_needs_level": "Escolle primeiro o nivel",
+            "subject_needs_level": "Escolle antes o nivel",
             "publish_title": "Publicar como modelo",
-            "publish_hint": "Compárteo no marketplace para que outros profesores o importen.",
+            "publish_hint": "Aparecerá no catálogo público de modelos: calquera persoa, aínda que non teña conta, poderá ver o seu nome, a súa historia, a súa portada, as súas misións, a súa tenda e os seus comportamentos, e o resto do profesorado poderá importala con todo iso. As datas límite, os documentos e as insignias das misións non se comparten.",
             "publish_missing_metadata": "Garda materia, nivel e idioma antes de publicar.",
             "publish_on": "Clase publicada como modelo",
             "publish_off": "Modelo retirado do marketplace",
@@ -423,32 +404,56 @@
           },
           "management": {
             "title": "Xestión",
-            "hint": "Publícaa como modelo para que outros profesores a importen, ou fai unha copia."
+            "hint": "Publícaa como modelo para que o resto do profesorado a importe, ou fai unha copia.",
+            "trash": {
+              "title": "Eliminar clase",
+              "hint": "Vai á papeleira: podes restaurala durante {days} días e despois bórrase para sempre.",
+              "cta": "Eliminar",
+              "modal_title": "Eliminar a clase",
+              "message": "«{name}» irá á papeleira. Poderás restaurala durante {days} días; despois borrarase para sempre.",
+              "impact_loading": "Calculando o que se perdería…",
+              "impact_error": "Non se puido calcular o que se perdería. Téntao de novo.",
+              "retry": "Tentar de novo",
+              "loses": "Pasados os {days} días, borrarase:",
+              "loses_class": "a clase, coa súa historia, a súa guía, a súa tenda e os seus comportamentos",
+              "loses_missions": "{count} misión, cos seus enigmas e documentos | {count} misións, cos seus enigmas e documentos",
+              "loses_students": "o progreso de {count} estudante na clase | o progreso de {count} estudantes na clase",
+              "loses_submissions": "{count} entrega con ficheiro | {count} entregas con ficheiro",
+              "loses_purchases": "{count} compra na tenda | {count} compras na tenda",
+              "loses_accounts": "{count} conta sen correo que nunca se usou, enteira | {count} contas sen correo que nunca se usaron, enteiras",
+              "while_trashed": "Mentres estea na papeleira, o alumnado non poderá entrar nela nin entregar nada.",
+              "while_trashed_teachers": "Mentres estea na papeleira, o alumnado non poderá entrar nela nin entregar nada, e tampouco a verá {count} docente máis da clase. | Mentres estea na papeleira, o alumnado non poderá entrar nela nin entregar nada, e tampouco a verán {count} docentes máis da clase.",
+              "unmanaged_accounts": "Ao borrarse, {count} conta sen correo creada nesta clase quedará sen clase de orixe: só a administración da plataforma poderá restablecer o seu contrasinal. | Ao borrarse, {count} contas sen correo creadas nesta clase quedarán sen clase de orixe: só a administración da plataforma poderá restablecer os seus contrasinais.",
+              "template": "Está publicada como modelo: retírase xa do catálogo e non se volve publicar soa se a restauras.",
+              "confirm": "Enviar á papeleira",
+              "done": "«{name}» está na papeleira. Podes restaurala durante {days} días.",
+              "error": "Non se puido enviar a clase á papeleira. Téntao de novo."
+            }
           },
           "edit_level_note": "Podes cambiar o nome, o horario e a portada. A clasificación, as funcionalidades e os niveis cámbiaos quen administra a clase."
         },
         "badges_empty": "Non hai insignias nesta clase",
-        "archived_notice": "Esta clase está arquivada: pódese consultar, pero non admite alumnado novo.",
+        "archived_notice": "Esta clase está arquivada: pódese consultar, pero non admite máis estudantes.",
         "accounts": {
           "intro": "Para o alumnado sen correo. Cada conta entra co seu usuario e un contrasinal temporal, que se cambia a primeira vez. Ao rematar verás a folla de credenciais para copialas, descargalas ou imprimilas.",
           "lead": "Podes crear ata {max} contas dunha vez, escribindo os nomes ou pegando unha lista.",
           "mode_label": "Como crear as contas",
           "mode_rows": "Escribir os nomes",
           "mode_import": "Pegar ou subir unha lista",
-          "mode_rows_hint": "Unha fila por alumno",
+          "mode_rows_hint": "Unha fila por estudante",
           "mode_import_hint": "Desde unha folla de cálculo ou un CSV",
-          "rows_intro": "Escribe o nome de cada alumno: o usuario proponse só e podes cambialo.",
-          "row_legend": "Alumno {n}",
+          "rows_intro": "Escribe o nome de cada estudante: o usuario proponse só e podes cambialo.",
+          "row_legend": "Estudante {n}",
           "name_label": "Nome",
           "name_placeholder": "Nome e apelido",
           "username_label": "Usuario",
           "username_hint": "Proposto a partir do nome. Podes cambialo.",
           "username_proposing": "Buscando un usuario libre…",
-          "row_remove": "Quitar o alumno {n}",
-          "row_add": "Engadir outro alumno",
+          "row_remove": "Quitar a fila {n}",
+          "row_add": "Engadir outra fila",
           "creating": "Creando contas…",
           "create_count": "Crear contas | Crear 1 conta | Crear {count} contas",
-          "max_rows": "Como moito {max} alumnos dunha vez.",
+          "max_rows": "Como moito {max} contas dunha vez.",
           "create_error": "Non se puideron crear as contas. Téntao de novo.",
           "status": {
             "ok": "Lista para crear",
@@ -458,19 +463,19 @@
             "invalid_name": "O nome debe ter entre 2 e 120 caracteres",
             "invalid_username": "Usuario non válido: só letras sen til, números e . _ - (de 3 a 30)"
           },
-          "import_label": "Lista de alumnado",
-          "import_hint": "Un por liña. Podes pegar unha columna copiada dunha folla de cálculo; se queres escoller o usuario, pono nunha segunda columna.",
+          "import_label": "Lista de estudantes",
+          "import_hint": "Un nome por liña. Podes pegar unha columna copiada dunha folla de cálculo; se queres escoller o usuario, pono nunha segunda columna.",
           "import_placeholder": "Ana Castro\nLuís Pereira\nMarta Rei",
           "import_upload": "Subir un CSV",
           "import_template": "Descargar modelo CSV",
           "import_file_read": "Lido «{file}».",
-          "import_count": "A lista está baleira. | 1 alumno na lista. | {count} alumnos na lista.",
+          "import_count": "A lista está baleira. | 1 estudante na lista. | {count} estudantes na lista.",
           "import_review": "Revisar a lista",
           "import_only_csv": "Só se admiten ficheiros CSV. Na folla de cálculo, usa «Gardar como» e escolle CSV.",
           "import_file_too_big": "O ficheiro é demasiado grande para ser unha lista de clase.",
           "import_file_error": "Non se puido ler o ficheiro.",
           "import_empty": "Pega polo menos un nome ou sube un CSV.",
-          "import_too_many": "Como moito {max} alumnos dunha vez: divide a lista.",
+          "import_too_many": "Como moito {max} contas dunha vez: divide a lista.",
           "review_title": "Revisión da lista",
           "review_ok": "Non se pode crear ningunha fila | 1 fila lista para crear | {count} filas listas para crear",
           "review_errors": "sen erros | 1 fila con erros | {count} filas con erros",
@@ -508,9 +513,9 @@
           "field_name": "Nome",
           "field_class": "Clase",
           "field_login_url": "Enderezo de entrada",
-          "once_note": "Os contrasinais temporais só se ven agora: non se gardan en ningures. Cópiaos, descarga a lista ou imprime a folla antes de recargar a páxina ou pechar a sesión, e dálle a cada alumno os seus.",
+          "once_note": "Os contrasinais temporais só se ven agora: non se gardan en ningures. Cópiaos, descarga a lista ou imprime a folla antes de recargar a páxina ou pechar a sesión, e dálle a cada estudante os seus.",
           "gone_title": "Os contrasinais xa non se poden amosar",
-          "gone_description": "Por seguridade, os contrasinais temporais só se ven xusto despois de crealos ou restablecelos, e non se gardan en ningures. Se perdiches a folla, restablece o contrasinal desde a lapela Alumnado, no menú de cada alumno: xérase un novo.",
+          "gone_description": "Por seguridade, os contrasinais temporais só se ven xusto despois de crealos ou restablecelos, e non se gardan en ningures. Se perdiches a folla, restablece o contrasinal desde a lapela Alumnado, no menú de cada estudante: xérase un novo.",
           "card_username": "Usuario",
           "card_password": "Contrasinal",
           "card_login_url": "Entra en",
@@ -529,13 +534,13 @@
           "you": "Ti",
           "access_line": "Acceso: {access}",
           "menu_label": "Accións para {name}",
-          "owner_note": "Es o propietario desta clase. Para saír dela, pasa antes a propiedade a alguén con administración.",
+          "owner_note": "A propiedade desta clase é túa. Para saír dela, pasa antes a propiedade a alguén con administración.",
           "leave_title": "Saír da clase",
           "leave_confirm": "Saír",
           "leave_hint": "Deixarás de ver esta clase. Para volver, alguén con administración terá que engadirte de novo.",
           "leave_message": "Queres saír de {class}? Deixarás de vela e, para volver, alguén con administración terá que engadirte de novo.",
           "field_email": "Correo electrónico",
-          "field_email_hint": "O correo exacto da súa conta de docente na aplicación.",
+          "field_email_hint": "O correo exacto da súa conta docente na aplicación.",
           "add_note": "Entra na clase ao momento e recibe un aviso. Non ten que aceptar nada.",
           "field_profile": "Perfil",
           "field_access": "Nivel de acceso",
@@ -563,12 +568,12 @@
           "transferred": "Agora a clase é de {name}",
           "left": "Saíches de {class}",
           "errors": {
-            "not_addable": "Non se pode engadir esa persoa. Comproba que o correo é o dunha conta de docente.",
+            "not_addable": "Non se pode engadir esa persoa. Comproba que o correo é o dunha conta docente.",
             "already_teacher": "Esa persoa xa forma parte do profesorado desta clase.",
-            "owner_locked": "Ao propietario non se lle pode cambiar nin quitar: antes ten que pasar a propiedade.",
-            "owner_cannot_leave": "Es o propietario: para saír, pasa antes a propiedade a alguén con administración.",
+            "owner_locked": "A quen ten a propiedade non se lle pode cambiar nin quitar: antes ten que pasala.",
+            "owner_cannot_leave": "A clase é túa: para saír, pasa antes a propiedade a alguén con administración.",
             "transfer_not_admin": "A propiedade só se pode pasar a alguén con acceso de administración.",
-            "already_owner": "Esa persoa xa é a propietaria da clase.",
+            "already_owner": "A propiedade da clase xa é desa persoa.",
             "too_many": "Fixeches demasiados intentos. Agarda un pouco e téntao de novo.",
             "forbidden": "O teu acceso a esta clase non permite facer isto.",
             "not_found": "Isto xa non está dispoñible. Recarga a páxina para ver a clase tal como está agora.",
@@ -589,7 +594,7 @@
           "empty_title": "Aínda non hai nada no historial",
           "empty_description": "Aquí aparecerá o que faga o profesorado na clase: misións, entregas, alumnado, axustes…",
           "no_results_title": "Nada con estes filtros",
-          "no_results_description": "Proba con outro docente ou con outro tipo.",
+          "no_results_description": "Proba con outra persoa do profesorado ou con outro tipo.",
           "error_title": "Non se puido cargar o historial",
           "error_description": "Comproba a conexión e téntao de novo.",
           "retry": "Tentar de novo",
@@ -618,7 +623,9 @@
               "template_unpublished": "retirou a clase dos modelos",
               "duplicated": "duplicou a clase",
               "ownership_transferred": "pasoulle a propiedade da clase a {target}",
-              "ownership_inherited": "a clase pasou a {target} ao eliminarse a conta do seu propietario"
+              "ownership_inherited": "a clase pasou a {target} ao eliminarse a conta que tiña a súa propiedade",
+              "trashed": "enviou a clase á papeleira",
+              "restored": "sacou a clase da papeleira"
             },
             "teacher": {
               "added": "engadiu a {target} ao profesorado ({profile}, {access})",
@@ -640,7 +647,9 @@
               "blocked": "bloqueou a misión «{title}»",
               "unblocked": "desbloqueou a misión «{title}»",
               "moved": "cambiou de clase a misión «{title}»",
-              "rewards_changed": "cambiou a recompensa da misión «{title}»"
+              "rewards_changed": "cambiou a recompensa da misión «{title}»",
+              "imported": "importou a misión «{title}»",
+              "exported": "copiou a misión «{title}» noutra clase"
             },
             "enigma": {
               "created": "engadiu o enigma «{title}»",
@@ -670,37 +679,78 @@
           },
           "anonymous": {
             "student": {
-              "account_created": "creou a conta dun alumno que xa non está na clase",
-              "password_reset": "restableceu o contrasinal dun alumno que xa non está na clase",
-              "nickname_changed": "cambiou o alcume dun alumno que xa non está na clase",
-              "removed": "quitou a un alumno da clase",
-              "removed_unused": "quitou da clase a un alumno que non entrara nunca e borrou a súa conta",
-              "avatar_generated": "xerou un avatar novo para un alumno que xa non está na clase"
+              "account_created": "creou a conta de alguén que xa non está na clase",
+              "password_reset": "restableceu o contrasinal de alguén que xa non está na clase",
+              "nickname_changed": "cambiou o alcume de alguén que xa non está na clase",
+              "removed": "quitou a alguén da clase",
+              "removed_unused": "quitou da clase a alguén que non entrara nunca e borrou a súa conta",
+              "avatar_generated": "xerou un avatar novo para alguén que xa non está na clase"
             },
             "submission": {
-              "approved": "aprobou en «{title}» a entrega dun alumno que xa non está na clase, cun {percentage} %"
+              "approved": "aprobou en «{title}» a entrega de alguén que xa non está na clase, cun {percentage} %"
             },
             "behavior": {
-              "applied": "aplicoulle «{title}» a un alumno que xa non está na clase"
+              "applied": "aplicoulle «{title}» a alguén que xa non está na clase"
             }
           }
+        },
+        "in_trash": {
+          "title": "«{name}» está na papeleira",
+          "description": "Enviouse á papeleira o {date}. Se ninguén a restaura, borrarase para sempre o {purge}.",
+          "owner_hint": "Restáuraa para volver abrila. Volve arquivada: o alumnado non poderá entrar ata que a desarquives.",
+          "not_owner": "Só quen ten a propiedade da clase pode restaurala. Se a necesitas, pídello antes desa data.",
+          "go_trash": "Ver a papeleira"
+        }
+      },
+      "trash": {
+        "meta": {
+          "title": "Papeleira | ITAKAI Docente",
+          "description": "As clases que enviaches á papeleira, para restauralas antes de que se borren para sempre."
+        },
+        "title": "Papeleira",
+        "subtitle": "As clases que envías á papeleira bórranse para sempre aos {days} días. Ata entón, podes restauralas.",
+        "link": "Papeleira ({count})",
+        "restore_note": "Ao restaurar unha clase, volve a «As miñas clases» arquivada: o alumnado non poderá entrar ata que a desarquives.",
+        "sent_by_me": "Enviáchela o {date}",
+        "sent_by": "Enviouna {name} o {date}",
+        "sent_on": "Enviada á papeleira o {date}",
+        "purge_on": "Borrarase para sempre o {date}",
+        "days_left": "Queda {count} día | Quedan {count} días",
+        "purge_today": "Bórrase hoxe",
+        "restore": "Restaurar",
+        "restored": "«{name}» volveu a «As miñas clases», en Arquivadas. Desarquívaa cando queiras volver usala.",
+        "restore_error": "Non se puido restaurar a clase. Téntao de novo.",
+        "empty_title": "A papeleira está baleira",
+        "empty_description": "Se eliminas unha clase, estará aquí {days} días antes de borrarse para sempre.",
+        "error_title": "Non se puido cargar a papeleira",
+        "error_description": "Comproba a conexión e téntao de novo.",
+        "retry": "Tentar de novo",
+        "purge": {
+          "cta": "Borrar xa",
+          "modal_title": "Borrar a clase para sempre",
+          "message": "«{name}» borrarase agora, sen agardar a que remate o seu prazo na papeleira. Non se pode desfacer: ninguén poderá recuperala.",
+          "loses": "Borrarase agora e para sempre:",
+          "understood": "Entendo que se borra para sempre e que non se pode recuperar.",
+          "confirm": "Borrar para sempre",
+          "done": "«{name}» borrouse para sempre.",
+          "error": "Non se puido borrar a clase. Téntao de novo."
         }
       }
     },
     "missions": {
       "index": {
         "meta": {
-          "title": "As miñas misións | ITAKAI Profesor",
-          "description": "Xestiona todas as túas misións creadas, edítaas ou crea novas para os teus estudantes."
+          "title": "As miñas misións | ITAKAI Docente",
+          "description": "Xestiona todas as túas misións creadas, edítaas ou crea novas para o teu alumnado."
         },
         "subtitle": "Xestiona as misións das túas clases"
       },
       "create": {
         "meta": {
-          "title": "Crear misión | ITAKAI Profesor"
+          "title": "Crear misión | ITAKAI Docente"
         },
         "pick_class": "Selecciona unha clase",
-        "idea_placeholder": "Ex.: Quero unha misión sobre cinemática onde os alumnos calculen traxectorias de vasoiras voadoras...",
+        "idea_placeholder": "Ex.: Quero unha misión sobre cinemática na que o alumnado calcule traxectorias de vasoiras voadoras...",
         "narrative_error": "Non puiden crear a narrativa",
         "ai_unavailable": "O servizo de IA non está dispoñible agora mesmo. Téntao de novo nuns minutos.",
         "no_editable_classes": "Non tes ningunha clase na que poidas crear misións: fai falta acceso de edición.",
@@ -709,11 +759,11 @@
       "detail": {
         "delete_confirm_btn": "Eliminar",
         "toast": {
-          "enigma_has_submissions": "Non se pode eliminar un enigma que xa ten entregas de alumnos"
+          "enigma_has_submissions": "Non se pode eliminar un enigma que xa ten entregas"
         },
         "meta": {
-          "title": "Detalle de misión | ITAKAI Profesor",
-          "title_loading": "Cargando misión... | ITAKAI Profesor",
+          "title": "Detalle de misión | ITAKAI Docente",
+          "title_loading": "Cargando misión... | ITAKAI Docente",
           "description_fallback": "Detalle de misión en ITAKAI"
         },
         "tabs": {
@@ -726,7 +776,7 @@
           "deadline_label": "Data límite",
           "deadline_hint": "Déixaa baleira para que a misión non caduque.",
           "rarity_label": "Rareza",
-          "rarity_locked_hint": "Non podes cambiar a rareza: algún alumno xa completou a misión.",
+          "rarity_locked_hint": "Non podes cambiar a rareza: alguén da clase xa completou a misión.",
           "rarity": {
             "comun": "Común",
             "rara": "Rara",
@@ -736,7 +786,7 @@
           "status_label": "Estado",
           "status_active": "Activa",
           "status_blocked": "Bloqueada",
-          "status_hint": "Bloqueada: o alumnado vea con cadeado e non pode entrar.",
+          "status_hint": "Bloqueada: o alumnado véa con cadeado e non pode entrar.",
           "background_label": "Imaxe da misión",
           "background_generate": "Xerar con IA",
           "background_regenerate": "Rexerar con IA",
@@ -750,15 +800,61 @@
           "toast_saved": "Datos gardados",
           "toast_error": "Non se puideron gardar os datos"
         }
+      },
+      "import": {
+        "button": "Importar misión",
+        "button_in_class": "Importar doutra clase",
+        "copy_button": "Copiar noutra clase",
+        "title": "Importar unha misión",
+        "copy_title": "Copiar a misión",
+        "subtitle": "Copia en «{name}» unha misión doutra das túas clases. A orixinal non cambia.",
+        "subtitle_free": "Copia unha misión dunha das túas clases noutra. A orixinal non cambia.",
+        "copy_subtitle": "Copia «{title}» nunha das túas clases. A orixinal non cambia.",
+        "target_label": "Clase de destino",
+        "target_same": "A desta misión: duplicarase",
+        "no_targets": "Non podes editar misións en ningunha das túas clases.",
+        "source_label": "Clase de orixe",
+        "class_placeholder": "Escolle unha clase",
+        "class_search": "Buscar unha clase…",
+        "no_class_matches": "Ningunha clase coincide.",
+        "class_missions": "Sen misións | 1 misión | {count} misións",
+        "class_shared": "De {name}",
+        "class_archived": "Arquivada",
+        "no_classes": "Non tes outras clases das que importar unha misión.",
+        "show_archived": "Amosar tamén as clases arquivadas",
+        "mission_label": "Misión",
+        "mission_search": "Buscar unha misión…",
+        "no_missions": "Esta clase aínda non ten misións.",
+        "no_matches": "Ningunha misión coincide con «{query}».",
+        "enigmas": "Sen enigmas | 1 enigma | {count} enigmas",
+        "documents": "Sen documentos | 1 documento | {count} documentos",
+        "badges": "Sen insignia | 1 insignia | {count} insignias",
+        "will_copy": "Copiarase",
+        "copied": "Copiouse",
+        "copy_badge": "Copiar tamén a súa insignia «{name}»",
+        "copy_badge_hint": "Será unha insignia nova túa, coa mesma imaxe.",
+        "locked_note": "A copia chega bloqueada e sen data límite, para que a revises antes de abrila ao teu alumnado.",
+        "load_error": "Non se puido cargar. Comproba a conexión e téntao de novo.",
+        "retry": "Tentar de novo",
+        "confirm": "Importar",
+        "copy_confirm": "Copiar",
+        "duplicate_confirm": "Duplicar",
+        "error": "Non se puido importar a misión.",
+        "copy_error": "Non se puido copiar a misión.",
+        "success_title": "Misión importada",
+        "copy_success_title": "Misión copiada",
+        "duplicate_success_title": "Misión duplicada",
+        "success_description": "A copia de «{title}» xa está en «{name}», bloqueada e sen data límite. Revísaa e desbloquéaa cando queiras que a vexa o teu alumnado.",
+        "open_mission": "Abrir a misión"
       }
     },
     "badges": {
       "title": "As miñas insignias",
-      "subtitle": "Crea e xestiona insignias personalizadas para recompensar os logros dos teus estudantes",
+      "subtitle": "Crea e xestiona insignias personalizadas para recompensar os logros do teu alumnado",
       "new_badge": "Nova insignia",
       "btn_delete": "Eliminar",
       "no_badges_title": "Sen insignias",
-      "no_badges_description": "Crea a túa primeira insignia para recompensar os teus estudantes",
+      "no_badges_description": "Crea a túa primeira insignia para recompensar o teu alumnado",
       "create_first": "Crear primeira insignia",
       "form": {
         "edit_title": "Editar insignia",
@@ -767,7 +863,7 @@
         "label_description": "Descrición",
         "label_image": "Imaxe",
         "image_optional": "(opcional)",
-        "placeholder_name": "Ex: Mestre de ecuacións",
+        "placeholder_name": "Ex: Mestría en ecuacións",
         "placeholder_description": "Describe que logro representa esta insignia...",
         "btn_remove_image": "Quitar imaxe",
         "preview_label": "Vista previa:",
@@ -782,7 +878,7 @@
         "btn_close": "Pechar"
       },
       "delete_title": "Eliminar insignia",
-      "delete_confirm": "Estás seguro de que desexas eliminar a insignia '{name}'? Esta acción non se pode desfacer.",
+      "delete_confirm": "Seguro que queres eliminar a insignia '{name}'? Esta acción non se pode desfacer.",
       "validation": {
         "name_required": "O nome é obrigatorio",
         "name_min_length": "O nome debe ter polo menos 3 caracteres",
@@ -790,8 +886,8 @@
         "image_type": "Só se permiten ficheiros PNG, JPG, SVG ou WebP"
       },
       "meta": {
-        "title": "As miñas insignias | ITAKAI Profesor",
-        "description": "Crea, edita e xestiona insignias personalizadas para premiar os logros dos teus estudantes."
+        "title": "As miñas insignias | ITAKAI Docente",
+        "description": "Crea, edita e xestiona insignias personalizadas para premiar os logros do teu alumnado."
       },
       "filter_system": "Do sistema",
       "generate_error": "Non se puido xerar a insignia.",
@@ -800,8 +896,8 @@
     },
     "students": {
       "index": {
-        "title": "Os meus estudantes",
-        "subtitle": "Xestiona e visualiza o progreso dos teus estudantes",
+        "title": "O meu alumnado",
+        "subtitle": "Xestiona e visualiza o progreso do teu alumnado",
         "search_placeholder": "Buscar por nome, correo ou usuario...",
         "filter_all_classes": "Todas as clases",
         "filter_all_progress": "Todo progreso",
@@ -814,40 +910,40 @@
         "sort_progress_desc": "Maior progreso",
         "sort_progress_asc": "Menor progreso",
         "sort_missions_desc": "Máis misións",
-        "tab_active": "Activos",
-        "tab_archived": "Arquivados",
+        "tab_active": "En clases activas",
+        "tab_archived": "En clases arquivadas",
         "no_students_title": "Sen estudantes",
-        "no_students_filtered": "Non se atoparon estudantes con estes filtros",
+        "no_students_filtered": "Ningún resultado con estes filtros",
         "no_students_default": "Non hai estudantes nas túas clases",
-        "no_archived_students_title": "Sen estudantes arquivados",
+        "no_archived_students_title": "Ninguén en clases arquivadas",
         "no_archived_students_default": "Non hai estudantes nas túas clases arquivadas",
         "btn_view": "Ver",
         "stat_missions": "Misións",
         "meta": {
-          "title": "Os meus estudantes | ITAKAI Profesor",
-          "description": "Xestiona todos os teus estudantes, revisa o seu progreso e estatísticas de rendemento académico."
+          "title": "O meu alumnado | ITAKAI Docente",
+          "description": "Xestiona o teu alumnado, revisa o seu progreso e estatísticas de rendemento académico."
         },
         "stat_badges": "Insignias"
       },
       "detail": {
-        "breadcrumb_students": "Estudantes",
+        "breadcrumb_students": "Alumnado",
         "loading": "Cargando...",
-        "error_title": "Erro ao cargar estudante",
-        "error_default": "Erro ao cargar os datos do estudante",
+        "error_title": "Erro ao cargar a ficha de estudante",
+        "error_default": "Erro ao cargar os datos da ficha",
         "btn_retry": "Reintentar",
         "stat_classes": "Clases",
         "stat_missions": "Misións",
         "stat_completed": "Completado",
         "enrolled_classes_title": "Clases inscritas",
         "enrolled_classes_count": "{count} clases",
-        "not_enrolled": "Non está inscrito en ningunha das túas clases",
+        "not_enrolled": "Non está en ningunha das túas clases",
         "label_progress": "Completado",
         "stat_mana": "Maná",
         "stat_lives": "Puntos de vida",
         "no_activity": "Sen actividade recente",
         "meta": {
-          "title": "Perfil de estudante | ITAKAI Profesor",
-          "description": "Perfil detallado do estudante con estatísticas de rendemento, progreso en misións e actividade recente."
+          "title": "Perfil de estudante | ITAKAI Docente",
+          "description": "Perfil detallado de cada estudante con estatísticas de rendemento, progreso en misións e actividade recente."
         }
       },
       "actions": {
@@ -881,13 +977,13 @@
         "remove_unused_confirm": "Quitar e borrar a conta",
         "removed": "{name} xa non está na clase",
         "removed_account_deleted": "{name} xa non está na clase e a súa conta sen usar borrouse",
-        "remove_error": "Non se puido quitar o alumno da clase."
+        "remove_error": "Non se puido quitar da clase."
       }
     },
     "ai_assistant": {
       "meta": {
-        "title": "Asistente IA profesor | ITAKAI",
-        "description": "Asistente de IA especializado para profesores. Obtén axuda sobre xestión de clases e misións."
+        "title": "Asistente IA docente | ITAKAI",
+        "description": "Asistente de IA especializado para o profesorado. Obtén axuda sobre xestión de clases e misións."
       }
     },
     "profile": {
@@ -918,7 +1014,7 @@
         "language_updated": "Idioma actualizado",
         "theme_updated": "Tema actualizado",
         "danger_zone_title": "Zona perigosa",
-        "danger_zone_description": "Unha vez eliminada a túa conta, non hai volta atrás. Por favor, asegúrate de estar seguro.",
+        "danger_zone_description": "Unha vez eliminada a túa conta, non hai volta atrás. Pénsao ben antes de seguir.",
         "btn_delete_account": "Eliminar conta",
         "delete_modal_title": "Eliminar conta",
         "delete_modal_confirm_prompt": "Para confirmar, introduce o teu contrasinal:",
@@ -941,7 +1037,7 @@
       },
       "meta": {
         "title": "O meu perfil | ITAKAI",
-        "description": "Xestiona o teu perfil de profesor, configura a seguridade e personaliza a túa experiencia."
+        "description": "Xestiona o teu perfil docente, configura a seguridade e personaliza a túa experiencia."
       }
     },
     "components": {
@@ -952,9 +1048,9 @@
         "placeholder_title": "Ex: O espertar das máquinas",
         "label_xp": "XP",
         "label_rewards": "Recompensas ao completar",
-        "rewards_locked_hint": "Só podes aumentar as recompensas: algún alumno xa as gañou.",
+        "rewards_locked_hint": "Só podes aumentar as recompensas: alguén da clase xa as gañou.",
         "label_description": "Descrición",
-        "placeholder_description": "Describe que debe facer o estudante...",
+        "placeholder_description": "Describe que hai que facer...",
         "label_objectives": "Obxectivos",
         "label_objectives_optional": "(opcional)",
         "placeholder_objective": "Escribe un obxectivo...",
@@ -1060,7 +1156,7 @@
         "label_description": "Descrición",
         "label_image": "Imaxe",
         "image_optional": "(opcional)",
-        "placeholder_name": "Ex: Mestre de ecuacións",
+        "placeholder_name": "Ex: Mestría en ecuacións",
         "placeholder_description": "Describe que logro representa esta insignia...",
         "image_selected": "Imaxe seleccionada",
         "btn_remove_image": "Quitar imaxe",
@@ -1141,36 +1237,44 @@
       }
     },
     "templates": {
-      "page_title": "Modelos de clases",
-      "page_subtitle": "Explora clases que outros profesores publicaron e impórtaas ás túas.",
+      "page_title": "Modelos de clase",
+      "page_subtitle": "Explora clases que publicou o profesorado e impórtaas ás túas.",
       "search": "Buscar modelos…",
       "own": "Túa",
       "import": "Importar",
       "import_success": "«{name}» importada. Personalízaa ao teu gusto!",
+      "import_success_missions": "«{name}» importada coa súa misión. Personalízaa ao teu gusto! | «{name}» importada coas súas {count} misións. Personalízaa ao teu gusto!",
       "import_error": "Non se puido importar o modelo",
       "load_error": "Non se puideron cargar os modelos",
       "empty_title": "Aínda non hai modelos",
-      "empty_description": "Cando algún profesor publique unha clase como modelo, aparecerá aquí.",
+      "empty_description": "Cando alguén do profesorado publique unha clase como modelo, aparecerá aquí.",
       "no_results_title": "Sen resultados",
       "no_results_description": "Non hai modelos que coincidan cos filtros.",
       "preview_action": "Previsualizar",
       "preview": {
-        "loading": "Cargando plantilla…",
+        "loading": "Cargando modelo…",
         "by": "Por {name}",
         "active": "Activada",
         "inactive": "Desactivada",
-        "load_error": "Non se puido cargar a plantilla",
-        "error": "Non se atopou a plantilla.",
+        "load_error": "Non se puido cargar o modelo",
+        "error": "Non se atopou o modelo.",
+        "tabs_label": "Contido do modelo",
         "tab_narrative": "Historia",
         "tab_features": "Funcionalidades",
+        "tab_missions": "Misións ({n})",
         "tab_shop": "Tenda ({n})",
         "tab_behaviors": "Comportamentos ({n})",
         "no_narrative_title": "Sen historia",
-        "no_narrative_description": "Esta plantilla non ten historia definida.",
+        "no_narrative_description": "Este modelo non ten historia definida.",
+        "no_missions_title": "Sen misións",
+        "no_missions_description": "Este modelo non trae misións. Poderás crealas ti.",
         "no_shop_title": "Sen tenda",
-        "no_shop_description": "Esta plantilla non trae artigos de tenda. Poderás engadilos ti.",
+        "no_shop_description": "Este modelo non trae artigos de tenda. Poderás engadilos ti.",
+        "hidden": "Oculto ao alumnado",
+        "shop_off": "Este modelo ten a tenda desactivada. Os seus artigos cópianse igual e poderás activala na túa clase cando queiras.",
         "no_behaviors_title": "Sen comportamentos",
-        "no_behaviors_description": "Esta plantilla non trae comportamentos. Poderás definilos ti."
+        "no_behaviors_description": "Este modelo non trae comportamentos. Poderás definilos ti.",
+        "behaviors_off": "Este modelo ten os comportamentos desactivados. Cópianse igual e poderás activalos na túa clase cando queiras."
       },
       "filter_all": {
         "subject": "Todas as materias",

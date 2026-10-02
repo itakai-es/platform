@@ -4,11 +4,14 @@ import type { ManagedCredentials } from '~/types/auth.types'
 import type {
   ClassAccess,
   ClassAccessLevel,
+  ClassDeletionImpact,
   ClassHistoryResponse,
   ClassHistoryType,
   ClassTeacherMember,
   ClassTeacherProfile,
   ClassTeachersResponse,
+  ClassTrashResponse,
+  TrashedClass,
 } from '~/types/class.types'
 import type {
   Class,
@@ -19,6 +22,7 @@ import type {
   UpdateClassData,
   ManagedRowInput,
   ManagedRowReview,
+  MissionImportResult,
   StudentListQuery,
   StudentListResponse,
 } from '~/types/teacher.types'
@@ -536,6 +540,56 @@ export const useTeacherStore = defineStore('teacher', () => {
     }
   }
 
+  // ==========================================
+  // PAPELERA DE CLASES
+  // ==========================================
+
+  /** Lo que se perdería al borrar la clase: los números del aviso antes de enviarla a la papelera. */
+  async function fetchClassDeletionImpact(classId: string) {
+    return await $fetch<ClassDeletionImpact>(`${classTeachersUrl(classId)}/deletion-impact`)
+  }
+
+  /**
+   * Envía la clase a la papelera. Desde ese momento no sale en ningún listado:
+   * se olvida todo lo guardado de ella para que se vuelva a pedir.
+   */
+  async function trashClass(classId: string) {
+    const response = await $fetch<{ class: TrashedClass }>(classTeachersUrl(classId), {
+      method: 'DELETE',
+    })
+    forgetClass(classId)
+    return response.class
+  }
+
+  /** Saca la clase de la papelera; vuelve archivada, así que los listados se vuelven a pedir. */
+  async function restoreClass(classId: string) {
+    const response = await $fetch<{ class: { id: string; name: string; archived: boolean } }>(
+      `${classTeachersUrl(classId)}/restore`,
+      { method: 'POST' }
+    )
+    forgetClass(classId)
+    return response.class
+  }
+
+  /**
+   * Borra ya, para siempre, una clase de la papelera, sin esperar a la purga.
+   * Ya no existe: se olvida todo lo guardado de ella.
+   */
+  async function purgeClass(classId: string) {
+    const response = await $fetch<{ purged: true; classId: string }>(
+      `${classTeachersUrl(classId)}/purge`,
+      { method: 'POST' }
+    )
+    forgetClass(classId)
+    return response
+  }
+
+  /** Las clases propias en la papelera. Sin caché: cambia poco y se mira poco. */
+  async function fetchClassTrash() {
+    const config = useRuntimeConfig()
+    return await $fetch<ClassTrashResponse>(`${config.public.apiBase}/teacher/classes/trash`)
+  }
+
   /**
    * Duplica una clase propia (crea una copia independiente). `options` elige qué
    * partes copiar (narrativa, funcionalidades, tienda, comportamientos, misiones).
@@ -601,6 +655,30 @@ export const useTeacherStore = defineStore('teacher', () => {
       console.error('Error fetching class missions:', error)
       throw error
     }
+  }
+
+  /**
+   * Importa una misión de otra clase en `targetClassId`: una copia independiente
+   * con sus enigmas, sus documentos y, si `copyBadge`, su insignia (como insignia
+   * nueva de quien importa). Llega bloqueada y sin fecha límite; la original no
+   * cambia. Se vuelven a pedir en la próxima visita las misiones de la clase de
+   * destino (su pestaña Misiones, aunque ya se hubiera abierto, las pide al
+   * volver), el listado general y las clases, que dicen cuántas misiones tienen
+   * (Inicio y «Mis clases»). Lo que esté a la vista lo refresca quien llama.
+   */
+  async function importMission(missionId: string, targetClassId: string, copyBadge: boolean) {
+    const config = useRuntimeConfig()
+    const response = await $fetch<MissionImportResult>(
+      `${config.public.apiBase}/teacher/missions/${missionId}/import`,
+      { method: 'POST', body: { targetClassId, copyBadge } }
+    )
+    loadedClassMissions.value.delete(targetClassId)
+    hasLoadedMissions.value = false
+    hasLoadedClasses.value = false
+    useClassesStore().hasLoadedClasses = false
+    // La insignia copiada es nueva y de quien importa: que salga en «Insignias».
+    if (response.copied.badges.length > 0) useBadgeStore().invalidate()
+    return response
   }
 
   /**
@@ -820,7 +898,9 @@ export const useTeacherStore = defineStore('teacher', () => {
       return { classes: archivedClasses.value, total: archivedClasses.value.length }
     } catch (error) {
       console.error('Error fetching archived classes:', error)
-      archivedClasses.value = []
+      // Lo que ya se tenía se queda, pero no se da por cargado: la próxima
+      // visita lo vuelve a pedir en vez de quedarse con una lista vacía.
+      hasLoadedArchivedClasses.value = false
       throw error
     } finally {
       isLoadingArchivedClasses.value = false
@@ -1067,9 +1147,15 @@ export const useTeacherStore = defineStore('teacher', () => {
     updateClass,
     publishTemplate,
     setClassArchived,
+    fetchClassDeletionImpact,
+    trashClass,
+    restoreClass,
+    purgeClass,
+    fetchClassTrash,
     duplicateClass,
     getInvitationCode,
     fetchClassMissions,
+    importMission,
     fetchClassGuide,
     updateClassGuideCache,
     fetchClassRanking,

@@ -3,10 +3,10 @@
     "dashboard": {
       "meta": {
         "title": "El meu inici | ITAKAI",
-        "description": "Inici principal de l'alumne. Revisa el teu progrés, les últimes missions i les estadístiques de XP."
+        "description": "El teu inici d'estudiant. Revisa el teu progrés, les últimes missions i les estadístiques de XP."
       },
-      "welcome": "Benvingut, {name}!",
-      "welcome_fallback_name": "Alumne",
+      "welcome": "Hola, {name}!",
+      "welcome_fallback_name": "Estudiant",
       "subtitle": "Continua el teu viatge d'aprenentatge i completa noves missions",
       "stats": {
         "classes_enrolled": "Classes inscrites",
@@ -16,7 +16,7 @@
       "my_classes": {
         "title": "Les meues classes",
         "view_all": "Veure-les totes",
-        "empty": "Encara no estàs inscrit en cap classe"
+        "empty": "Encara no eres en cap classe"
       },
       "latest_missions": {
         "title": "Últimes missions",
@@ -25,7 +25,7 @@
       },
       "ai_assistant": {
         "name": "Atenea",
-        "message_new_user": "Hola {name}! Benvingut a ITAKAI. Completa la teua primera missió per a començar a guanyar XP!",
+        "message_new_user": "Hola {name}! Et donem la benvinguda a ITAKAI. Completa la teua primera missió per a començar a guanyar XP!",
         "message_returning_user": "Hola {name}! Has completat {missions_completed} missions en {classes_enrolled} classes. Continua així!"
       },
       "class_fallback_name": "Classe",
@@ -77,13 +77,13 @@
         "action_play_video": "Reproduir vídeo"
       },
       "atenea": {
-        "message": "Hola! Estic ací per a ajudar-te amb \"{mission_title}\". Preparat per a començar esta aventura?"
+        "message": "Hola! Estic ací per a ajudar-te amb \"{mission_title}\". Comencem esta aventura?"
       },
       "rewards": {
         "unlock_badge_hint": "Completa tots els enigmes d'esta missió per a desbloquejar esta insígnia."
       },
       "submission": {
-        "success": "Entrega enviada correctament. El professor la revisarà prompte.",
+        "success": "Entrega enviada correctament. El teu docent la revisarà prompte.",
         "error": "Error en enviar l'entrega. Torna-ho a intentar.",
         "expired_error": "Esta missió ha caducat. Ja no pots entregar enigmes.",
         "downloading": "Descarregant"
@@ -95,17 +95,17 @@
         "description": "Accedix a les teues classes inscrites, revisa el progrés i descobrix noves missions assignades."
       },
       "page_title": "Les meues classes",
-      "page_subtitle": "Classes en què estàs inscrit",
+      "page_subtitle": "Les classes on eres",
       "join_class_button": "Unir-se a una classe",
       "empty": {
         "title": "No tens classes",
-        "description": "Encara no estàs inscrit en cap classe. Demana el codi al teu professor per a unir-te."
+        "description": "Encara no eres en cap classe. Demana el codi al teu docent per a unir-t'hi."
       },
       "detail": {
         "error_title": "Error en carregar la classe",
         "back_to_classes": "Tornar a les meues classes",
         "breadcrumb_classes": "Les meues classes",
-        "teacher_fallback": "Professor",
+        "teacher_fallback": "Docent",
         "tabs": {
           "resumen": "Resum",
           "historia": "Història",
@@ -136,9 +136,9 @@
           "choose_guide": "Tria la teua guia per a esta classe",
           "describe_avatar": "Descriu com vols que siga el teu avatar:",
           "example_label": "Exemple:",
-          "example_text": "Un guerrer jove amb armadura daurada, cabell fosc i ulls brillants, sostenint un escut amb el símbol d'Atenea. Estil èpic i heroic, inspirat en la mitologia grega ...",
+          "example_text": "Un personatge jove amb armadura daurada, cabell fosc i ulls brillants, sostenint un escut amb el símbol d'Atenea. Estil èpic i heroic, inspirat en la mitologia grega ...",
           "placeholder": "Descriu ací el teu avatar...",
-          "tip": "Consell: sigues específic amb colors, vestimenta, accessoris i estil. La IA crearà el teu avatar basant-se en el personatge que hages seleccionat.",
+          "tip": "Consell: dona detalls de colors, vestimenta, accessoris i estil. La IA crearà el teu avatar basant-se en el personatge que hages seleccionat.",
           "generate_button": "Genera l'avatar",
           "generating": "Generant el teu avatar...",
           "generated_trait": "Generat amb IA",
@@ -157,7 +157,7 @@
           "tab_rewards": "Recompenses",
           "tab_purchases": "Els meus canvis",
           "empty_title": "La botiga està buida",
-          "empty_description": "El teu professor encara no ha afegit recompenses. Torna més tard.",
+          "empty_description": "El teu docent encara no ha afegit recompenses. Torna més tard.",
           "purchases_empty_title": "Encara no has canviat res",
           "purchases_empty_description": "Gasta les teues {coins} en les recompenses i ací veuràs el teu historial.",
           "view_rewards": "Veure les recompenses",
@@ -193,7 +193,7 @@
           "usage_single": "Un ús",
           "usage_unlimited": "Il·limitada",
           "powers_empty_title": "No hi ha poders",
-          "powers_empty_description": "El teu professor encara no ha afegit poders. Torna més tard.",
+          "powers_empty_description": "El teu docent encara no ha afegit poders. Torna més tard.",
           "confirm_buy_title": "Comprar \"{name}\"?",
           "confirm_use_title": "Usar \"{name}\"?",
           "bought_toast": "Has comprat \"{name}\"!",
@@ -259,7 +259,7 @@
     "profile": {
       "meta": {
         "title": "El meu perfil | ITAKAI",
-        "description": "Gestiona el teu perfil d'alumne, configura la seguretat i personalitza la teua experiència."
+        "description": "Gestiona el teu perfil d'estudiant, configura la seguretat i personalitza la teua experiència."
       },
       "breadcrumb_home": "Inici",
       "breadcrumb_profile": "El meu perfil",
@@ -290,7 +290,7 @@
         "language_updated": "Idioma actualitzat",
         "theme_updated": "Tema actualitzat",
         "danger_zone_title": "Zona perillosa",
-        "danger_zone_description": "Una vegada eliminat el teu compte, no hi ha marxa arrere. Assegura't que n'estàs segur.",
+        "danger_zone_description": "Una vegada eliminat el teu compte, no hi ha marxa arrere. Pensa-t'ho bé abans de continuar.",
         "delete_account_button": "Eliminar el compte"
       },
       "delete_modal": {
@@ -322,7 +322,7 @@
       "recent_activity_card": {
         "title": "Activitat recent",
         "empty": "No hi ha activitat recent",
-        "user_fallback": "Usuari",
+        "user_fallback": "Algú",
         "by_actor": "Per {name}"
       },
       "submission_modal": {
@@ -342,7 +342,7 @@
       },
       "class_guide_markdown": {
         "empty_title": "Sense contingut",
-        "empty_student": "El professor encara no ha afegit la guia d'esta classe.",
+        "empty_student": "El teu docent encara no ha afegit la guia d'esta classe.",
         "empty_teacher": "Encara no has afegit la guia d'esta classe.",
         "add_guide_button": "Afegir guia",
         "last_updated": "Última actualització: {date}"
@@ -354,7 +354,7 @@
         "legendaria": "Llegendària"
       },
       "class_ranking_section": {
-        "podium_title": "Podi de campions",
+        "podium_title": "Podi de la classe",
         "stats_title": "Estadístiques",
         "rest_title": "Resta de la classificació",
         "level_abbr": "Nv.",

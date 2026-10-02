@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import type { AIProvider } from '../providers/provider.interface.js'
 import { ENIGMA_XP_PRESETS } from '../../../utils/xp-calculator.js'
+import { INCLUSIVE_LANGUAGE_ES } from '../prompts/index.js'
 
 export interface QuizGenerationRequest {
   prompt: string
@@ -48,7 +49,7 @@ export async function generateQuiz(provider: AIProvider, request: QuizGeneration
   const locale = request.locale.toLowerCase().startsWith('en') ? 'en' : 'es'
   const systemPrompt = locale === 'en'
     ? 'You are Atenea. Create concise educational enigma proposals for teachers.'
-    : 'Eres Atenea. Crea propuestas concisas de enigmas educativos para profesorado.'
+    : `Eres Atenea. Crea propuestas concisas de enigmas educativos para profesorado. ${INCLUSIVE_LANGUAGE_ES}`
 
   const prompt = locale === 'en'
     ? `Generate ${request.count} educational enigma ideas about: ${request.prompt}`

@@ -1,31 +1,12 @@
 {
   "teacher": {
-    "about": {
-      "title": "Sobre o ITAKAI",
-      "subtitle": "Novidades e registo de versões",
-      "breadcrumb": "Sobre",
-      "breadcrumb_home": "Início",
-      "current_version": "Versão atual",
-      "latest": "Última versão",
-      "versions_index": "Versões",
-      "footer_note": "Sentes falta de alguma coisa ou encontraste um erro? Diz-nos e teremos isso em conta nas próximas versões.",
-      "groups": {
-        "new": "Novidades",
-        "improved": "Melhorias",
-        "fixed": "Correções"
-      },
-      "meta": {
-        "title": "Sobre | ITAKAI",
-        "description": "Novidades, melhorias e correções de cada versão do ITAKAI."
-      }
-    },
     "dashboard": {
-      "title": "Início do professor",
-      "subtitle": "Bem-vindo, {name}!",
+      "title": "Início docente",
+      "subtitle": "Olá, {name}!",
       "new_class": "Nova turma",
       "new_mission": "Nova missão",
       "stats": {
-        "total_students": "Total de alunos",
+        "total_students": "Estudantes no total",
         "active_classes": "Turmas ativas",
         "active_missions": "Missões ativas"
       },
@@ -33,22 +14,22 @@
       "view_all": "Ver todas",
       "no_classes_yet": "Ainda não tens turmas",
       "recent_missions": "Últimas missões",
-      "no_missions_description": "Cria a tua primeira missão para os teus alunos",
+      "no_missions_description": "Cria a primeira missão para a tua turma",
       "meta": {
-        "title": "Início professor | ITAKAI",
-        "description": "Página inicial do professor. Faz a gestão das tuas turmas e missões e acompanha o progresso dos teus alunos."
+        "title": "Início docente | ITAKAI",
+        "description": "O teu início como docente. Faz a gestão das tuas turmas e missões e acompanha o progresso de cada estudante."
       }
     },
     "classes": {
       "index": {
         "title": "As minhas turmas",
-        "subtitle": "Faz a gestão das tuas turmas e acompanha o progresso dos teus alunos",
+        "subtitle": "Faz a gestão das tuas turmas e acompanha o progresso de cada estudante",
         "new_class": "Nova turma",
         "create_first": "Criar a primeira turma",
         "no_classes_description": "Ainda não criaste nenhuma turma",
         "meta": {
-          "title": "As minhas turmas | ITAKAI Professor",
-          "description": "Faz a gestão de todas as tuas turmas, alunos inscritos e missões atribuídas."
+          "title": "As minhas turmas | ITAKAI Docente",
+          "description": "Faz a gestão de todas as tuas turmas, de quem nelas estuda e das missões atribuídas."
         },
         "templates": "Modelos",
         "duplicate_success": "Turma duplicada como \"{name}\"",
@@ -90,7 +71,7 @@
         "success_title": "Turma criada!",
         "success_message": "A tua turma \"{name}\" está pronta.",
         "invite_code_label": "Código de convite",
-        "invite_code_hint": "Partilha este código com os teus alunos",
+        "invite_code_hint": "Partilha este código com a tua turma",
         "btn_view_classes": "Ver turmas",
         "btn_copied": "Copiado!",
         "btn_copy_code": "Copiar código",
@@ -104,7 +85,7 @@
           "ask_idea": "Olá {name}! Sou o {god}. Diz-me, que mundo ou temática queres para a tua turma?",
           "review_approach": "Foi isto que preparei para ti, gostas?",
           "pick_title": "Que título damos à tua turma?",
-          "placeholder_idea": "Ex.: Uma escola de magia com 4 casas que competem por pontos, alunos-magos e desafios tipo masmorra…",
+          "placeholder_idea": "Ex.: Uma escola de magia com 4 casas que competem por pontos, aprendizes de magia e desafios tipo masmorra…",
           "generating_approach": "Estou a criar a narrativa da tua turma...",
           "narrative_feedback_placeholder": "Ex.: Quero mais referências às casas de Hogwarts...",
           "btn_change_something": "Quero mudar uma coisa",
@@ -129,10 +110,10 @@
           "attach_error_size": "«{name}» tem {size} MB. O máximo são {max} MB por ficheiro.",
           "attach_error_too_large": "Os materiais são demasiado pesados no conjunto. Carrega-os um a um (máx. {max} MB por ficheiro).",
           "attach_hint": "Máx. {max} MB por ficheiro",
-          "guide_question": "Preparei um guia para os teus alunos"
+          "guide_question": "Preparei um guia para a tua turma"
         },
         "meta": {
-          "title": "Criar nova turma | ITAKAI Professor"
+          "title": "Criar nova turma | ITAKAI Docente"
         },
         "narrative_error": "Não consegui criar a narrativa",
         "summary": {
@@ -154,18 +135,18 @@
           "narrative": "História",
           "guide": "Guia",
           "missions": "Missões",
-          "students": "Alunos",
+          "students": "Estudantes",
           "tienda": "Loja",
           "behaviors": "Comportamentos",
           "settings": "Definições",
           "history": "Histórico"
         },
         "students": {
-          "empty_title": "Ainda não há alunos",
-          "empty_description": "Quando os alunos entrarem na turma, vão aparecer aqui com as suas estatísticas.",
-          "col_student": "Aluno",
+          "empty_title": "Ainda não há estudantes",
+          "empty_description": "Quando houver estudantes na turma, vão aparecer aqui com as suas estatísticas.",
+          "col_student": "Estudante",
           "col_level": "Nível",
-          "search_placeholder": "Procurar aluno...",
+          "search_placeholder": "Procurar estudante...",
           "sort_name_asc": "Nome A-Z",
           "sort_name_desc": "Nome Z-A",
           "sort_xp_asc": "XP ↑",
@@ -179,7 +160,7 @@
           "sort_lives_asc": "Vida ↑",
           "sort_lives_desc": "Vida ↓",
           "no_results_title": "Sem resultados",
-          "no_results_description": "Não há alunos que correspondam à pesquisa.",
+          "no_results_description": "Nenhum estudante corresponde à pesquisa.",
           "col_behaviors": "Comportamentos",
           "view_list": "Lista",
           "view_ranking": "Ranking",
@@ -194,8 +175,8 @@
           "toast_error": "Erro ao guardar o guia"
         },
         "ranking": {
-          "no_students_title": "Não há alunos",
-          "no_students_description": "Ainda não há alunos nesta turma"
+          "no_students_title": "Não há estudantes",
+          "no_students_description": "Ainda não há estudantes nesta turma"
         },
         "missions_tab": {
           "no_missions_title": "Não há missões",
@@ -209,8 +190,8 @@
           "empty_default": "Não há missões nesta turma"
         },
         "meta": {
-          "title": "Detalhe da turma | ITAKAI Professor",
-          "description": "Faz a gestão da turma. Consulta alunos, missões atribuídas e progresso geral."
+          "title": "Detalhe da turma | ITAKAI Docente",
+          "description": "Faz a gestão da turma. Consulta estudantes, missões atribuídas e progresso geral."
         },
         "behaviors": {
           "new_button": "Novo comportamento",
@@ -226,9 +207,9 @@
           "section_negatives": "Negativos",
           "filter_all": "Todos",
           "apply_title": "Aplicar \"{name}\"",
-          "pick_student": "Seleciona o aluno a quem o vais aplicar.",
+          "pick_student": "Escolhe a que estudante o vais aplicar.",
           "applied_toast": "{behavior} aplicado a {student}",
-          "empty_students": "Ainda não há alunos nesta turma.",
+          "empty_students": "Ainda não há estudantes nesta turma.",
           "form_new_title": "Novo comportamento",
           "form_edit_title": "Editar comportamento",
           "form_type": "Tipo",
@@ -265,7 +246,7 @@
           "library_subtitle": "Adiciona artigos sugeridos com um toque. Depois podes editá-los ou apagá-los.",
           "library_add": "Adicionar",
           "empty_title": "Ainda não há artigos",
-          "empty_description": "Cria a primeira recompensa que os teus alunos vão poder trocar.",
+          "empty_description": "Cria a primeira recompensa que a tua turma vai poder trocar.",
           "hidden": "Oculto",
           "purchases_empty_title": "Ainda sem trocas",
           "form_edit_title": "Editar artigo",
@@ -273,15 +254,15 @@
           "form_name": "Nome",
           "form_name_placeholder": "Ex.: Saltar um trabalho",
           "form_description": "Descrição",
-          "form_description_placeholder": "O que ganha o aluno ao trocá-lo?",
+          "form_description_placeholder": "O que se ganha ao trocá-lo?",
           "form_price": "Preço",
-          "form_visible": "Visível para os alunos",
+          "form_visible": "Visível para a turma",
           "form_cancel": "Cancelar",
           "form_delete": "Eliminar",
           "form_save": "Guardar",
           "form_create": "Criar",
           "delete_title": "Eliminar \"{name}\"?",
-          "delete_description": "Os alunos deixarão de o ver na loja. Esta ação não pode ser anulada.",
+          "delete_description": "A turma deixará de o ver na loja. Esta ação não pode ser anulada.",
           "toast_created": "Artigo criado",
           "toast_updated": "Artigo atualizado",
           "toast_deleted": "Artigo eliminado",
@@ -298,7 +279,7 @@
           "form_life_restore_hint": "Pontos de vida somados ao trocar (recompensas) ou ao usar (poderes). 0 = não recupera vida.",
           "tab_history": "Histórico",
           "history_purchases": "Compras",
-          "view_student_profile": "Ver aluno",
+          "view_student_profile": "Ver estudante",
           "mana_disabled_chip": "Mana desativado",
           "empty_description_readonly": "Quando forem adicionados artigos à loja desta turma, vão aparecer aqui."
         },
@@ -341,7 +322,7 @@
           "items": {
             "shop": {
               "label": "Loja",
-              "desc": "Recompensas e poderes que os alunos trocam."
+              "desc": "Recompensas e poderes que a turma troca."
             },
             "coins": {
               "label": "{coins}",
@@ -353,7 +334,7 @@
             },
             "rankings": {
               "label": "Ranking",
-              "desc": "Classificação dos alunos da turma."
+              "desc": "Classificação de estudantes da turma."
             },
             "xp": {
               "label": "Experiência (XP)",
@@ -389,9 +370,9 @@
             "province_label": "Província",
             "metadata_none": "Por especificar",
             "metadata_search": "Procurar...",
-            "subject_needs_level": "Escolhe primeiro o nível",
+            "subject_needs_level": "Escolhe antes o nível",
             "publish_title": "Publicar como modelo",
-            "publish_hint": "Partilha-a no marketplace para que outros professores a importem.",
+            "publish_hint": "Vai aparecer no catálogo público de modelos: qualquer pessoa, mesmo sem conta, poderá ver o nome, a história, a capa, as missões, a loja e os comportamentos da turma, e o resto do corpo docente poderá importá-la com tudo isso. Os prazos, os documentos e os emblemas das missões não são partilhados.",
             "publish_missing_metadata": "Guarda a disciplina, o nível e o idioma antes de publicar.",
             "publish_on": "Turma publicada como modelo",
             "publish_off": "Modelo retirado do marketplace",
@@ -423,32 +404,56 @@
           },
           "management": {
             "title": "Gestão",
-            "hint": "Publica-a como modelo para que outros professores a importem, ou faz uma cópia."
+            "hint": "Publica-a como modelo para que o resto do corpo docente a importe, ou faz uma cópia.",
+            "trash": {
+              "title": "Eliminar turma",
+              "hint": "Vai para o lixo: podes restaurá-la durante {days} dias e depois é apagada para sempre.",
+              "cta": "Eliminar",
+              "modal_title": "Eliminar a turma",
+              "message": "«{name}» vai para o lixo. Poderás restaurá-la durante {days} dias; depois será apagada para sempre.",
+              "impact_loading": "A calcular o que se perderia…",
+              "impact_error": "Não foi possível calcular o que se perderia. Tenta novamente.",
+              "retry": "Tentar novamente",
+              "loses": "Passados os {days} dias, será apagado:",
+              "loses_class": "a turma, com a sua história, o guia, a loja e os comportamentos",
+              "loses_missions": "{count} missão, com os seus enigmas e documentos | {count} missões, com os seus enigmas e documentos",
+              "loses_students": "o progresso de {count} estudante na turma | o progresso de {count} estudantes na turma",
+              "loses_submissions": "{count} entrega com ficheiro | {count} entregas com ficheiro",
+              "loses_purchases": "{count} compra na loja | {count} compras na loja",
+              "loses_accounts": "{count} conta sem e-mail que nunca foi usada, por completo | {count} contas sem e-mail que nunca foram usadas, por completo",
+              "while_trashed": "Enquanto estiver no lixo, os estudantes não poderão entrar nela nem entregar nada.",
+              "while_trashed_teachers": "Enquanto estiver no lixo, os estudantes não poderão entrar nela nem entregar nada, e também não a verá mais {count} docente da turma. | Enquanto estiver no lixo, os estudantes não poderão entrar nela nem entregar nada, e também não a verão mais {count} docentes da turma.",
+              "unmanaged_accounts": "Ao ser apagada, {count} conta sem e-mail criada nesta turma ficará sem turma de origem: só a administração da plataforma poderá repor a palavra-passe. | Ao ser apagada, {count} contas sem e-mail criadas nesta turma ficarão sem turma de origem: só a administração da plataforma poderá repor as palavras-passe.",
+              "template": "Está publicada como modelo: é retirada já do catálogo e não volta a ser publicada sozinha se a restaurares.",
+              "confirm": "Enviar para o lixo",
+              "done": "«{name}» está no lixo. Podes restaurá-la durante {days} dias.",
+              "error": "Não foi possível enviar a turma para o lixo. Tenta novamente."
+            }
           },
           "edit_level_note": "Podes alterar o nome, o horário e a capa. A classificação, as funcionalidades e os níveis são alterados por quem administra a turma."
         },
         "badges_empty": "Não há emblemas nesta turma",
-        "archived_notice": "Esta turma está arquivada: pode ser consultada, mas não aceita novos alunos.",
+        "archived_notice": "Esta turma está arquivada: pode ser consultada, mas não aceita mais estudantes.",
         "accounts": {
-          "intro": "Para alunos sem e-mail. Cada conta entra com o seu utilizador e uma palavra-passe temporária, que se muda na primeira vez. No fim verás a folha de credenciais, para as copiar, transferir ou imprimir.",
+          "intro": "Para estudantes sem e-mail. Cada conta entra com o seu nome de utilizador e uma palavra-passe temporária, que se muda na primeira vez. No fim verás a folha de credenciais, para as copiar, transferir ou imprimir.",
           "lead": "Podes criar até {max} contas de uma vez, escrevendo os nomes ou colando uma lista.",
           "mode_label": "Como criar as contas",
           "mode_rows": "Escrever os nomes",
           "mode_import": "Colar ou carregar uma lista",
-          "mode_rows_hint": "Uma linha por aluno",
+          "mode_rows_hint": "Uma linha por estudante",
           "mode_import_hint": "A partir de uma folha de cálculo ou de um CSV",
-          "rows_intro": "Escreve o nome de cada aluno: o utilizador é proposto automaticamente e podes alterá-lo.",
-          "row_legend": "Aluno {n}",
+          "rows_intro": "Escreve o nome de cada estudante: o nome de utilizador é proposto automaticamente e podes alterá-lo.",
+          "row_legend": "Estudante {n}",
           "name_label": "Nome",
           "name_placeholder": "Nome e apelido",
           "username_label": "Utilizador",
           "username_hint": "Proposto a partir do nome. Podes alterá-lo.",
           "username_proposing": "A procurar um utilizador livre…",
-          "row_remove": "Remover o aluno {n}",
-          "row_add": "Adicionar outro aluno",
+          "row_remove": "Remover a linha {n}",
+          "row_add": "Adicionar outra linha",
           "creating": "A criar contas…",
           "create_count": "Criar contas | Criar 1 conta | Criar {count} contas",
-          "max_rows": "No máximo {max} alunos de cada vez.",
+          "max_rows": "No máximo {max} contas de cada vez.",
           "create_error": "Não foi possível criar as contas. Tenta de novo.",
           "status": {
             "ok": "Pronta para criar",
@@ -458,19 +463,19 @@
             "invalid_name": "O nome deve ter entre 2 e 120 caracteres",
             "invalid_username": "Utilizador inválido: só letras sem acento, números e . _ - (de 3 a 30)"
           },
-          "import_label": "Lista de alunos",
-          "import_hint": "Um por linha. Podes colar uma coluna copiada de uma folha de cálculo; se quiseres escolher o utilizador, põe-no numa segunda coluna.",
+          "import_label": "Lista de estudantes",
+          "import_hint": "Um nome por linha. Podes colar uma coluna copiada de uma folha de cálculo; se quiseres escolher o nome de utilizador, põe-no numa segunda coluna.",
           "import_placeholder": "Ana Silva\nLuís Santos\nMarta Costa",
           "import_upload": "Carregar um CSV",
           "import_template": "Transferir modelo CSV",
           "import_file_read": "Lido «{file}».",
-          "import_count": "A lista está vazia. | 1 aluno na lista. | {count} alunos na lista.",
+          "import_count": "A lista está vazia. | 1 estudante na lista. | {count} estudantes na lista.",
           "import_review": "Rever a lista",
           "import_only_csv": "Só são aceites ficheiros CSV. Na folha de cálculo, usa «Guardar como» e escolhe CSV.",
           "import_file_too_big": "O ficheiro é demasiado grande para ser uma lista de turma.",
           "import_file_error": "Não foi possível ler o ficheiro.",
           "import_empty": "Cola pelo menos um nome ou carrega um CSV.",
-          "import_too_many": "No máximo {max} alunos de cada vez: divide a lista.",
+          "import_too_many": "No máximo {max} contas de cada vez: divide a lista.",
           "review_title": "Revisão da lista",
           "review_ok": "Nenhuma linha pode ser criada | 1 linha pronta para criar | {count} linhas prontas para criar",
           "review_errors": "sem erros | 1 linha com erros | {count} linhas com erros",
@@ -488,13 +493,13 @@
           "template_example_one": "Ana Silva",
           "template_example_two": "Luís Santos",
           "template_example_two_username": "luis.s",
-          "template_file": "modelo-alunos"
+          "template_file": "modelo-estudantes"
         },
         "credentials": {
           "meta_title": "Folha de credenciais | ITAKAI",
           "title": "Folha de credenciais",
           "count": "Sem contas | 1 conta | {count} contas",
-          "back": "Voltar a Alunos",
+          "back": "Voltar a Estudantes",
           "print": "Imprimir / guardar como PDF",
           "copy_all": "Copiar todas",
           "download_csv": "Transferir lista (CSV)",
@@ -508,9 +513,9 @@
           "field_name": "Nome",
           "field_class": "Turma",
           "field_login_url": "Endereço de entrada",
-          "once_note": "As palavras-passe temporárias só se veem agora: não ficam guardadas em lado nenhum. Copia-as, transfere a lista ou imprime a folha antes de recarregar a página ou terminar a sessão, e entrega a cada aluno as suas.",
+          "once_note": "As palavras-passe temporárias só se veem agora: não ficam guardadas em lado nenhum. Copia-as, transfere a lista ou imprime a folha antes de recarregar a página ou terminar a sessão, e entrega a cada estudante as suas.",
           "gone_title": "As palavras-passe já não podem ser mostradas",
-          "gone_description": "Por segurança, as palavras-passe temporárias só se veem logo depois de serem criadas ou repostas, e não ficam guardadas em lado nenhum. Se perdeste a folha, repõe a palavra-passe no separador Alunos, no menu de cada aluno: é gerada uma nova.",
+          "gone_description": "Por segurança, as palavras-passe temporárias só se veem logo depois de serem criadas ou repostas, e não ficam guardadas em lado nenhum. Se perdeste a folha, repõe a palavra-passe no separador Estudantes, no menu de cada estudante: é gerada uma nova.",
           "card_username": "Utilizador",
           "card_password": "Palavra-passe",
           "card_login_url": "Entra em",
@@ -519,56 +524,56 @@
         },
         "read_only_notice": "O teu acesso a esta turma permite-te ver isto, mas não alterá-lo.",
         "teachers": {
-          "title": "Professores",
+          "title": "Corpo docente",
           "description": "Quem dá esta turma, com que perfil e o que pode fazer nela.",
-          "add": "Adicionar professor",
-          "add_title": "Adicionar professor",
+          "add": "Adicionar docente",
+          "add_title": "Adicionar docente",
           "add_confirm": "Adicionar",
-          "load_error": "Não foi possível carregar os professores.",
+          "load_error": "Não foi possível carregar o corpo docente.",
           "retry": "Tentar novamente",
           "you": "Tu",
           "access_line": "Acesso: {access}",
           "menu_label": "Ações para {name}",
-          "owner_note": "És o proprietário desta turma. Para saíres dela, passa primeiro a propriedade a alguém com administração.",
+          "owner_note": "Esta turma é tua. Para saíres dela, passa primeiro a propriedade a alguém com administração.",
           "leave_title": "Sair da turma",
           "leave_confirm": "Sair",
           "leave_hint": "Deixarás de ver esta turma. Para voltares, alguém com administração terá de te adicionar de novo.",
           "leave_message": "Sair de {class}? Deixarás de a ver e, para voltares, alguém com administração terá de te adicionar de novo.",
           "field_email": "Email",
-          "field_email_hint": "O email exato da conta de professor na aplicação.",
+          "field_email_hint": "O email exato da conta docente na aplicação.",
           "add_note": "Entra na turma de imediato e recebe um aviso. Não tem de aceitar nada.",
           "field_profile": "Perfil",
           "field_access": "Nível de acesso",
           "access_hint": {
-            "read": "Vê a turma, as missões, os alunos e as entregas, sem alterar nada.",
+            "read": "Vê a turma, as missões, estudantes e entregas, sem alterar nada.",
             "edit": "Além disso, altera o conteúdo, a loja e os comportamentos, e aprova entregas.",
-            "admin": "Além disso, altera as definições, gere os alunos e os professores e arquiva a turma."
+            "admin": "Além disso, altera as definições, gere estudantes e corpo docente e arquiva a turma."
           },
           "edit": "Alterar perfil ou nível",
           "edit_title": "Perfil e nível de {name}",
           "edit_self_note": "Estás a alterar o teu próprio acesso: se o baixares, talvez não o possas voltar a subir.",
           "remove": "Remover da turma",
-          "remove_title": "Remover dos professores",
+          "remove_title": "Remover do corpo docente",
           "remove_confirm": "Remover",
-          "remove_message": "Remover {name} dos professores de {class}? Deixará de ver a turma e receberá um aviso. O que já fez nela fica.",
+          "remove_message": "Remover {name} do corpo docente de {class}? Deixará de ver a turma e receberá um aviso. O que já fez nela fica.",
           "transfer": "Passar a propriedade",
           "transfer_confirm": "Passar a propriedade",
           "transfer_title": "Passar a propriedade da turma",
           "transfer_message": "Passar a propriedade de {class} para {name}? Não poderás desfazê-lo a partir da tua conta: só {name} ta poderia devolver.",
           "transfer_keeps": "Continuas na turma com acesso de administração.",
           "transfer_loses": "Deixas de poder publicá-la como modelo e de passar a sua propriedade.",
-          "added": "{name} já faz parte dos professores",
+          "added": "{name} já faz parte do corpo docente",
           "changed": "Acesso de {name} atualizado",
-          "removed": "{name} já não faz parte dos professores",
+          "removed": "{name} já não faz parte do corpo docente",
           "transferred": "A turma é agora de {name}",
           "left": "Saíste de {class}",
           "errors": {
-            "not_addable": "Não é possível adicionar essa pessoa. Confirma que o email é de uma conta de professor.",
-            "already_teacher": "Essa pessoa já faz parte dos professores desta turma.",
-            "owner_locked": "O proprietário não pode ser alterado nem removido: primeiro tem de passar a propriedade.",
-            "owner_cannot_leave": "És o proprietário: para saíres, passa primeiro a propriedade a alguém com administração.",
+            "not_addable": "Não é possível adicionar essa pessoa. Confirma que o email é de uma conta docente.",
+            "already_teacher": "Essa pessoa já faz parte do corpo docente desta turma.",
+            "owner_locked": "A quem tem a propriedade não se pode alterar nem remover: primeiro tem de a passar.",
+            "owner_cannot_leave": "A turma é tua: para saíres, passa primeiro a propriedade a alguém com administração.",
             "transfer_not_admin": "A propriedade só pode passar para alguém com acesso de administração.",
-            "already_owner": "Essa pessoa já é a proprietária da turma.",
+            "already_owner": "A propriedade da turma já é dessa pessoa.",
             "too_many": "Fizeste demasiadas tentativas. Espera um pouco e tenta novamente.",
             "forbidden": "O teu acesso a esta turma não permite fazer isto.",
             "not_found": "Isto já não está disponível. Recarrega a página para veres a turma como está agora.",
@@ -581,15 +586,15 @@
           }
         },
         "history": {
-          "filter_actor": "Professor",
+          "filter_actor": "Docente",
           "filter_type": "Tipo",
-          "filter_search": "Procurar professor…",
-          "all_actors": "Todos os professores",
+          "filter_search": "Procurar docente…",
+          "all_actors": "Todo o corpo docente",
           "all_types": "Todos os tipos",
           "empty_title": "Ainda não há nada no histórico",
-          "empty_description": "Aqui vai aparecer o que os professores fazem na turma: missões, entregas, alunos, definições…",
+          "empty_description": "Aqui vai aparecer o que o corpo docente faz na turma: missões, entregas, estudantes, definições…",
           "no_results_title": "Nada com estes filtros",
-          "no_results_description": "Experimenta outro professor ou outro tipo.",
+          "no_results_description": "Experimenta outra pessoa do corpo docente ou outro tipo.",
           "error_title": "Não foi possível carregar o histórico",
           "error_description": "Verifica a ligação e tenta novamente.",
           "retry": "Tentar novamente",
@@ -598,8 +603,8 @@
           "unknown_action": "fez uma alteração na turma",
           "types": {
             "class": "Turma",
-            "teacher": "Professores",
-            "student": "Alunos",
+            "teacher": "Corpo docente",
+            "student": "Estudantes",
             "mission": "Missões",
             "enigma": "Enigmas",
             "document": "Documentos",
@@ -618,12 +623,14 @@
               "template_unpublished": "retirou a turma dos modelos",
               "duplicated": "duplicou a turma",
               "ownership_transferred": "passou a propriedade da turma para {target}",
-              "ownership_inherited": "a turma passou para {target} quando a conta do proprietário foi eliminada"
+              "ownership_inherited": "a turma passou para {target} quando a conta que tinha a propriedade foi eliminada",
+              "trashed": "enviou a turma para o lixo",
+              "restored": "tirou a turma do lixo"
             },
             "teacher": {
-              "added": "adicionou {target} aos professores ({profile}, {access})",
+              "added": "adicionou {target} ao corpo docente ({profile}, {access})",
               "changed": "alterou o acesso de {target}: {profile}, {access}",
-              "removed": "removeu {target} dos professores",
+              "removed": "removeu {target} do corpo docente",
               "left": "saiu da turma"
             },
             "student": {
@@ -640,7 +647,9 @@
               "blocked": "bloqueou a missão «{title}»",
               "unblocked": "desbloqueou a missão «{title}»",
               "moved": "mudou de turma a missão «{title}»",
-              "rewards_changed": "alterou a recompensa da missão «{title}»"
+              "rewards_changed": "alterou a recompensa da missão «{title}»",
+              "imported": "importou a missão «{title}»",
+              "exported": "copiou a missão «{title}» para outra turma"
             },
             "enigma": {
               "created": "adicionou o enigma «{title}»",
@@ -670,37 +679,78 @@
           },
           "anonymous": {
             "student": {
-              "account_created": "criou a conta de um aluno que já não está na turma",
-              "password_reset": "repôs a palavra-passe de um aluno que já não está na turma",
-              "nickname_changed": "mudou a alcunha de um aluno que já não está na turma",
-              "removed": "removeu um aluno da turma",
-              "removed_unused": "removeu da turma um aluno que nunca tinha entrado e apagou a sua conta",
-              "avatar_generated": "gerou um novo avatar para um aluno que já não está na turma"
+              "account_created": "criou a conta de alguém que já não está na turma",
+              "password_reset": "repôs a palavra-passe de alguém que já não está na turma",
+              "nickname_changed": "mudou a alcunha de alguém que já não está na turma",
+              "removed": "removeu alguém da turma",
+              "removed_unused": "removeu da turma alguém que nunca tinha entrado e apagou a sua conta",
+              "avatar_generated": "gerou um novo avatar para alguém que já não está na turma"
             },
             "submission": {
-              "approved": "aprovou em «{title}» a entrega de um aluno que já não está na turma, com {percentage} %"
+              "approved": "aprovou em «{title}» a entrega de alguém que já não está na turma, com {percentage} %"
             },
             "behavior": {
-              "applied": "aplicou «{title}» a um aluno que já não está na turma"
+              "applied": "aplicou «{title}» a alguém que já não está na turma"
             }
           }
+        },
+        "in_trash": {
+          "title": "«{name}» está no lixo",
+          "description": "Foi enviada para o lixo a {date}. Se ninguém a restaurar, será apagada para sempre a {purge}.",
+          "owner_hint": "Restaura-a para a voltares a abrir. Volta arquivada: os estudantes não poderão entrar até a desarquivares.",
+          "not_owner": "Só quem tem a propriedade da turma a pode restaurar. Se precisares dela, pede-o antes dessa data.",
+          "go_trash": "Ver o lixo"
+        }
+      },
+      "trash": {
+        "meta": {
+          "title": "Lixo | ITAKAI Docente",
+          "description": "As turmas que enviaste para o lixo, para as restaurares antes de serem apagadas para sempre."
+        },
+        "title": "Lixo",
+        "subtitle": "As turmas que envias para o lixo são apagadas para sempre ao fim de {days} dias. Até lá, podes restaurá-las.",
+        "link": "Lixo ({count})",
+        "restore_note": "Ao restaurar uma turma, ela volta a «As minhas turmas» arquivada: os estudantes não poderão entrar até a desarquivares.",
+        "sent_by_me": "Enviaste-a a {date}",
+        "sent_by": "{name} enviou-a a {date}",
+        "sent_on": "Enviada para o lixo a {date}",
+        "purge_on": "Será apagada para sempre a {date}",
+        "days_left": "Falta {count} dia | Faltam {count} dias",
+        "purge_today": "É apagada hoje",
+        "restore": "Restaurar",
+        "restored": "«{name}» voltou a «As minhas turmas», em Arquivadas. Desarquiva-a quando quiseres voltar a usá-la.",
+        "restore_error": "Não foi possível restaurar a turma. Tenta novamente.",
+        "empty_title": "O lixo está vazio",
+        "empty_description": "Se eliminares uma turma, ficará aqui {days} dias antes de ser apagada para sempre.",
+        "error_title": "Não foi possível carregar o lixo",
+        "error_description": "Verifica a ligação e tenta novamente.",
+        "retry": "Tentar novamente",
+        "purge": {
+          "cta": "Apagar já",
+          "modal_title": "Apagar a turma para sempre",
+          "message": "«{name}» será apagada agora, sem esperar que termine o seu prazo no lixo. Não se pode desfazer: ninguém a poderá recuperar.",
+          "loses": "Será apagado agora e para sempre:",
+          "understood": "Compreendo que é apagada para sempre e que não se pode recuperar.",
+          "confirm": "Apagar para sempre",
+          "done": "«{name}» foi apagada para sempre.",
+          "error": "Não foi possível apagar a turma. Tenta novamente."
         }
       }
     },
     "missions": {
       "index": {
         "meta": {
-          "title": "As minhas missões | ITAKAI Professor",
-          "description": "Faz a gestão de todas as missões que criaste, edita-as ou cria novas para os teus alunos."
+          "title": "As minhas missões | ITAKAI Docente",
+          "description": "Faz a gestão de todas as missões que criaste, edita-as ou cria novas para a tua turma."
         },
         "subtitle": "Faz a gestão das missões das tuas turmas"
       },
       "create": {
         "meta": {
-          "title": "Criar missão | ITAKAI Professor"
+          "title": "Criar missão | ITAKAI Docente"
         },
         "pick_class": "Seleciona uma turma",
-        "idea_placeholder": "Ex.: Quero uma missão sobre cinemática em que os alunos calculem trajetórias de vassouras voadoras...",
+        "idea_placeholder": "Ex.: Quero uma missão sobre cinemática em que a turma calcule trajetórias de vassouras voadoras...",
         "narrative_error": "Não consegui criar a narrativa",
         "ai_unavailable": "O serviço de IA não está disponível neste momento. Tenta novamente daqui a uns minutos.",
         "no_editable_classes": "Não tens nenhuma turma onde possas criar missões: é preciso acesso de edição.",
@@ -709,11 +759,11 @@
       "detail": {
         "delete_confirm_btn": "Eliminar",
         "toast": {
-          "enigma_has_submissions": "Não é possível eliminar um enigma que já tem entregas de alunos"
+          "enigma_has_submissions": "Não é possível eliminar um enigma que já tem entregas"
         },
         "meta": {
-          "title": "Detalhe da missão | ITAKAI Professor",
-          "title_loading": "A carregar a missão... | ITAKAI Professor",
+          "title": "Detalhe da missão | ITAKAI Docente",
+          "title_loading": "A carregar a missão... | ITAKAI Docente",
           "description_fallback": "Detalhe de missão no ITAKAI"
         },
         "tabs": {
@@ -726,7 +776,7 @@
           "deadline_label": "Prazo",
           "deadline_hint": "Deixa vazio para que a missão não expire.",
           "rarity_label": "Raridade",
-          "rarity_locked_hint": "Não podes mudar a raridade: algum aluno já concluiu a missão.",
+          "rarity_locked_hint": "Não podes mudar a raridade: alguém da turma já concluiu a missão.",
           "rarity": {
             "comun": "Comum",
             "rara": "Rara",
@@ -736,7 +786,7 @@
           "status_label": "Estado",
           "status_active": "Ativa",
           "status_blocked": "Bloqueada",
-          "status_hint": "Bloqueada: os alunos veem-na com cadeado e não conseguem entrar.",
+          "status_hint": "Bloqueada: a turma vê-a com cadeado e não consegue entrar.",
           "background_label": "Imagem da missão",
           "background_generate": "Gerar com IA",
           "background_regenerate": "Gerar de novo com IA",
@@ -750,15 +800,61 @@
           "toast_saved": "Dados guardados",
           "toast_error": "Não foi possível guardar os dados"
         }
+      },
+      "import": {
+        "button": "Importar missão",
+        "button_in_class": "Importar de outra turma",
+        "copy_button": "Copiar para outra turma",
+        "title": "Importar uma missão",
+        "copy_title": "Copiar a missão",
+        "subtitle": "Copia para «{name}» uma missão de outra das tuas turmas. A original não muda.",
+        "subtitle_free": "Copia uma missão de uma das tuas turmas para outra. A original não muda.",
+        "copy_subtitle": "Copia «{title}» para uma das tuas turmas. A original não muda.",
+        "target_label": "Turma de destino",
+        "target_same": "A desta missão: será duplicada",
+        "no_targets": "Não podes editar missões em nenhuma das tuas turmas.",
+        "source_label": "Turma de origem",
+        "class_placeholder": "Escolhe uma turma",
+        "class_search": "Procurar uma turma…",
+        "no_class_matches": "Nenhuma turma corresponde.",
+        "class_missions": "Sem missões | 1 missão | {count} missões",
+        "class_shared": "De {name}",
+        "class_archived": "Arquivada",
+        "no_classes": "Não tens outras turmas de onde importar uma missão.",
+        "show_archived": "Mostrar também as turmas arquivadas",
+        "mission_label": "Missão",
+        "mission_search": "Procurar uma missão…",
+        "no_missions": "Esta turma ainda não tem missões.",
+        "no_matches": "Nenhuma missão corresponde a «{query}».",
+        "enigmas": "Sem enigmas | 1 enigma | {count} enigmas",
+        "documents": "Sem documentos | 1 documento | {count} documentos",
+        "badges": "Sem emblema | 1 emblema | {count} emblemas",
+        "will_copy": "Vai ser copiado",
+        "copied": "Foi copiado",
+        "copy_badge": "Copiar também o seu emblema «{name}»",
+        "copy_badge_hint": "Será um emblema novo teu, com a mesma imagem.",
+        "locked_note": "A cópia chega bloqueada e sem prazo, para que a revejas antes de a abrires à tua turma.",
+        "load_error": "Não foi possível carregar. Verifica a ligação e tenta novamente.",
+        "retry": "Tentar novamente",
+        "confirm": "Importar",
+        "copy_confirm": "Copiar",
+        "duplicate_confirm": "Duplicar",
+        "error": "Não foi possível importar a missão.",
+        "copy_error": "Não foi possível copiar a missão.",
+        "success_title": "Missão importada",
+        "copy_success_title": "Missão copiada",
+        "duplicate_success_title": "Missão duplicada",
+        "success_description": "A cópia de «{title}» já está em «{name}», bloqueada e sem prazo. Revê-a e desbloqueia-a quando quiseres que a tua turma a veja.",
+        "open_mission": "Abrir a missão"
       }
     },
     "badges": {
       "title": "Os meus emblemas",
-      "subtitle": "Cria e faz a gestão de emblemas personalizados para recompensar as conquistas dos teus alunos",
+      "subtitle": "Cria e faz a gestão de emblemas personalizados para recompensar as conquistas da tua turma",
       "new_badge": "Novo emblema",
       "btn_delete": "Eliminar",
       "no_badges_title": "Sem emblemas",
-      "no_badges_description": "Cria o teu primeiro emblema para recompensar os teus alunos",
+      "no_badges_description": "Cria o teu primeiro emblema para recompensar a tua turma",
       "create_first": "Criar o primeiro emblema",
       "form": {
         "edit_title": "Editar emblema",
@@ -767,7 +863,7 @@
         "label_description": "Descrição",
         "label_image": "Imagem",
         "image_optional": "(opcional)",
-        "placeholder_name": "Ex.: Mestre das equações",
+        "placeholder_name": "Ex.: Mestria em equações",
         "placeholder_description": "Descreve que conquista representa este emblema...",
         "btn_remove_image": "Remover imagem",
         "preview_label": "Pré-visualização:",
@@ -790,8 +886,8 @@
         "image_type": "Só são aceites ficheiros PNG, JPG, SVG ou WebP"
       },
       "meta": {
-        "title": "Os meus emblemas | ITAKAI Professor",
-        "description": "Cria, edita e faz a gestão de emblemas personalizados para premiar as conquistas dos teus alunos."
+        "title": "Os meus emblemas | ITAKAI Docente",
+        "description": "Cria, edita e faz a gestão de emblemas personalizados para premiar as conquistas da tua turma."
       },
       "filter_system": "Do sistema",
       "generate_error": "Não foi possível gerar o emblema.",
@@ -800,8 +896,8 @@
     },
     "students": {
       "index": {
-        "title": "Os meus alunos",
-        "subtitle": "Faz a gestão e acompanha o progresso dos teus alunos",
+        "title": "Os meus estudantes",
+        "subtitle": "Faz a gestão e acompanha o progresso de cada estudante",
         "search_placeholder": "Procurar por nome, e-mail ou utilizador...",
         "filter_all_classes": "Todas as turmas",
         "filter_all_progress": "Todo o progresso",
@@ -814,40 +910,40 @@
         "sort_progress_desc": "Maior progresso",
         "sort_progress_asc": "Menor progresso",
         "sort_missions_desc": "Mais missões",
-        "tab_active": "Ativos",
-        "tab_archived": "Arquivados",
-        "no_students_title": "Sem alunos",
-        "no_students_filtered": "Não foram encontrados alunos com estes filtros",
-        "no_students_default": "Não há alunos nas tuas turmas",
-        "no_archived_students_title": "Sem alunos arquivados",
-        "no_archived_students_default": "Não há alunos nas tuas turmas arquivadas",
+        "tab_active": "Em turmas ativas",
+        "tab_archived": "Em turmas arquivadas",
+        "no_students_title": "Sem estudantes",
+        "no_students_filtered": "Nenhum resultado com estes filtros",
+        "no_students_default": "Não há estudantes nas tuas turmas",
+        "no_archived_students_title": "Ninguém em turmas arquivadas",
+        "no_archived_students_default": "Não há estudantes nas tuas turmas arquivadas",
         "btn_view": "Ver",
         "stat_missions": "Missões",
         "meta": {
-          "title": "Os meus alunos | ITAKAI Professor",
-          "description": "Faz a gestão de todos os teus alunos e consulta o seu progresso e as estatísticas de desempenho académico."
+          "title": "Os meus estudantes | ITAKAI Docente",
+          "description": "Faz a gestão de quem estuda nas tuas turmas e consulta o seu progresso e as estatísticas de desempenho académico."
         },
         "stat_badges": "Emblemas"
       },
       "detail": {
-        "breadcrumb_students": "Alunos",
+        "breadcrumb_students": "Estudantes",
         "loading": "A carregar...",
-        "error_title": "Erro ao carregar o aluno",
-        "error_default": "Erro ao carregar os dados do aluno",
+        "error_title": "Erro ao carregar a ficha de estudante",
+        "error_default": "Erro ao carregar os dados da ficha",
         "btn_retry": "Tentar de novo",
         "stat_classes": "Turmas",
         "stat_missions": "Missões",
         "stat_completed": "Concluído",
         "enrolled_classes_title": "Turmas inscritas",
         "enrolled_classes_count": "{count} turmas",
-        "not_enrolled": "Não está inscrito em nenhuma das tuas turmas",
+        "not_enrolled": "Não está em nenhuma das tuas turmas",
         "label_progress": "Concluído",
         "stat_mana": "Mana",
         "stat_lives": "Pontos de vida",
         "no_activity": "Sem atividade recente",
         "meta": {
-          "title": "Perfil de aluno | ITAKAI Professor",
-          "description": "Perfil detalhado do aluno com estatísticas de desempenho, progresso nas missões e atividade recente."
+          "title": "Perfil de estudante | ITAKAI Docente",
+          "description": "Perfil detalhado de cada estudante com estatísticas de desempenho, progresso nas missões e atividade recente."
         }
       },
       "actions": {
@@ -856,7 +952,7 @@
         "reset_title": "Repor a palavra-passe",
         "reset_message": "Vai ser gerada uma nova palavra-passe temporária para {name} e as sessões abertas serão terminadas. A atual deixará de funcionar.",
         "reset_confirm": "Repor",
-        "reset_not_home": "A palavra-passe de {name} é reposta pelos professores que administram a turma onde a conta foi criada, ou pela administração da plataforma.",
+        "reset_not_home": "A palavra-passe de {name} é reposta pelo corpo docente com administração na turma onde a conta foi criada, ou pela administração da plataforma.",
         "reset_has_email": "{name} entra com o seu e-mail. Se se esqueceu da palavra-passe, pode recuperá-la com «Esqueceste-te da palavra-passe?», no ecrã de entrada.",
         "reset_error": "Não foi possível repor a palavra-passe.",
         "nickname": "Mudar a alcunha",
@@ -881,13 +977,13 @@
         "remove_unused_confirm": "Remover e apagar a conta",
         "removed": "{name} já não está na turma",
         "removed_account_deleted": "{name} já não está na turma e a sua conta por usar foi apagada",
-        "remove_error": "Não foi possível remover o aluno da turma."
+        "remove_error": "Não foi possível remover da turma."
       }
     },
     "ai_assistant": {
       "meta": {
-        "title": "Assistente IA professor | ITAKAI",
-        "description": "Assistente de IA especializado para professores. Obtém ajuda sobre gestão de turmas e missões."
+        "title": "Assistente IA docente | ITAKAI",
+        "description": "Assistente de IA especializado para o corpo docente. Obtém ajuda sobre gestão de turmas e missões."
       }
     },
     "profile": {
@@ -941,7 +1037,7 @@
       },
       "meta": {
         "title": "O meu perfil | ITAKAI",
-        "description": "Faz a gestão do teu perfil de professor, configura a segurança e personaliza a tua experiência."
+        "description": "Faz a gestão do teu perfil docente, configura a segurança e personaliza a tua experiência."
       }
     },
     "components": {
@@ -952,9 +1048,9 @@
         "placeholder_title": "Ex.: O despertar das máquinas",
         "label_xp": "XP",
         "label_rewards": "Recompensas ao concluir",
-        "rewards_locked_hint": "Só podes aumentar as recompensas: algum aluno já as ganhou.",
+        "rewards_locked_hint": "Só podes aumentar as recompensas: alguém da turma já as ganhou.",
         "label_description": "Descrição",
-        "placeholder_description": "Descreve o que o aluno tem de fazer...",
+        "placeholder_description": "Descreve o que é preciso fazer...",
         "label_objectives": "Objetivos",
         "label_objectives_optional": "(opcional)",
         "placeholder_objective": "Escreve um objetivo...",
@@ -1005,8 +1101,8 @@
         "sort": {
           "name_asc": "Nome A-Z",
           "name_desc": "Nome Z-A",
-          "most_students": "Mais alunos",
-          "least_students": "Menos alunos",
+          "most_students": "Mais estudantes",
+          "least_students": "Menos estudantes",
           "most_missions": "Mais missões",
           "least_missions": "Menos missões"
         }
@@ -1060,7 +1156,7 @@
         "label_description": "Descrição",
         "label_image": "Imagem",
         "image_optional": "(opcional)",
-        "placeholder_name": "Ex.: Mestre das equações",
+        "placeholder_name": "Ex.: Mestria em equações",
         "placeholder_description": "Descreve que conquista representa este emblema...",
         "image_selected": "Imagem selecionada",
         "btn_remove_image": "Remover imagem",
@@ -1141,16 +1237,17 @@
       }
     },
     "templates": {
-      "page_title": "Modelos de turmas",
-      "page_subtitle": "Explora turmas que outros professores publicaram e importa-as para as tuas.",
+      "page_title": "Modelos de turma",
+      "page_subtitle": "Explora turmas publicadas pelo corpo docente e importa-as para as tuas.",
       "search": "Procurar modelos…",
       "own": "Tua",
       "import": "Importar",
       "import_success": "«{name}» importada. Edita-a como quiseres!",
+      "import_success_missions": "«{name}» importada com a sua missão. Edita-a como quiseres! | «{name}» importada com as suas {count} missões. Edita-a como quiseres!",
       "import_error": "Não foi possível importar o modelo",
       "load_error": "Não foi possível carregar os modelos",
       "empty_title": "Ainda não há modelos",
-      "empty_description": "Quando algum professor publicar uma turma como modelo, ela aparecerá aqui.",
+      "empty_description": "Quando alguém do corpo docente publicar uma turma como modelo, ela aparecerá aqui.",
       "no_results_title": "Sem resultados",
       "no_results_description": "Não há modelos que correspondam aos filtros.",
       "preview_action": "Pré-visualizar",
@@ -1161,16 +1258,23 @@
         "inactive": "Desativada",
         "load_error": "Não foi possível carregar o modelo",
         "error": "O modelo não foi encontrado.",
+        "tabs_label": "Conteúdo do modelo",
         "tab_narrative": "História",
         "tab_features": "Funcionalidades",
+        "tab_missions": "Missões ({n})",
         "tab_shop": "Loja ({n})",
         "tab_behaviors": "Comportamentos ({n})",
         "no_narrative_title": "Sem história",
         "no_narrative_description": "Este modelo não tem história definida.",
+        "no_missions_title": "Sem missões",
+        "no_missions_description": "Este modelo não traz missões. Poderás criá-las tu.",
         "no_shop_title": "Sem loja",
         "no_shop_description": "Este modelo não traz artigos de loja. Poderás adicioná-los tu.",
+        "hidden": "Oculto à turma",
+        "shop_off": "Este modelo tem a loja desativada. Os seus artigos são copiados na mesma e poderás ativá-la na tua turma quando quiseres.",
         "no_behaviors_title": "Sem comportamentos",
-        "no_behaviors_description": "Este modelo não traz comportamentos. Poderás defini-los tu."
+        "no_behaviors_description": "Este modelo não traz comportamentos. Poderás defini-los tu.",
+        "behaviors_off": "Este modelo tem os comportamentos desativados. São copiados na mesma e poderás ativá-los na tua turma quando quiseres."
       },
       "filter_all": {
         "subject": "Todas as disciplinas",

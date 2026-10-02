@@ -1,4 +1,5 @@
 import { prisma } from '../../config/database.js'
+import type { Prisma } from '../../generated/prisma/client.js'
 import type { SystemLogLevel, SystemLogCategory } from '../../generated/prisma/enums.js'
 
 interface CreateSystemLogParams {
@@ -22,8 +23,12 @@ interface SystemLogFilters {
 // In-memory cache of last known service statuses to detect transitions
 const lastServiceStatus = new Map<string, string>()
 
-export async function createSystemLog(params: CreateSystemLogParams) {
-  return prisma.systemLog.create({
+/** Apunta una entrada. Con `db`, dentro de esa transacción: se queda solo si se confirma. */
+export async function createSystemLog(
+  params: CreateSystemLogParams,
+  db: Prisma.TransactionClient = prisma
+) {
+  return db.systemLog.create({
     data: {
       level: params.level,
       category: params.category,

@@ -15,7 +15,7 @@
       @click="auth.exitStudentPreview()"
     >
       <ArrowUturnLeftIcon class="h-3.5 w-3.5" />
-      Volver a profesor
+      Volver a la vista docente
     </button>
   </div>
 </template>

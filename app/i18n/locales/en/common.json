@@ -13,6 +13,7 @@
       "logs": "Logs",
       "features": "Features",
       "blog": "Blog",
+      "templates": "Templates",
       "help": "Help",
       "section_management": "Management",
       "section_content": "Content",
@@ -95,7 +96,9 @@
       "action_error": "That didn't work. Please try again."
     },
     "errors": {
-      "generic": "An error occurred. Please try again."
+      "generic": "An error occurred. Please try again.",
+      "rate_limited_title": "Too many requests in a row",
+      "rate_limited": "Your connection has made a lot of requests in a short time. Wait a couple of minutes and try again."
     },
     "roles": {
       "student": "Student",
@@ -182,6 +185,7 @@
       "system_access": "System access",
       "teacher_panel": "Teacher panel",
       "student_panel": "Student panel",
+      "templates": "Class templates",
       "help_center": "Help center"
     },
     "level_up": {
@@ -277,7 +281,30 @@
         "alumno": "Students",
         "ambos": "Teachers and students"
       },
-      "back_to_app": "Back to the app"
+      "back_to_app": "Back to the app",
+      "published_on": "Published on {date}",
+      "by_author": "By {name}",
+      "load_error": "The content couldn't be loaded",
+      "retry": "Try again"
+    },
+    "about": {
+      "title": "About ITAKAI",
+      "subtitle": "What's new and version history",
+      "breadcrumb": "About",
+      "breadcrumb_home": "Home",
+      "current_version": "Current version",
+      "latest": "Latest version",
+      "versions_index": "Versions",
+      "footer_note": "Missing something or found a bug? Let us know and we'll consider it for upcoming versions.",
+      "groups": {
+        "new": "New",
+        "improved": "Improvements",
+        "fixed": "Fixes"
+      },
+      "meta": {
+        "title": "About | ITAKAI",
+        "description": "What's new, improvements and fixes in each version of ITAKAI."
+      }
     },
     "meta": {
       "site_title": "ITAKAI - The adventure of learning | Gamified educational platform",
@@ -409,7 +436,9 @@
       "blocked_admin": "This account can't be deleted yet: it owns these classes and nobody else has admin access in them. Ownership has to be handed over to another teacher first.",
       "transfers_self": "Your classes will pass to another teacher with admin access in them:",
       "transfers_admin": "Their classes will pass to another teacher with admin access in them:",
-      "transfer_item": "{class}, to {name}"
+      "transfer_item": "{class}, to {name}",
+      "trashed_self": "The class you have in the trash will also be deleted for good: | The {count} classes you have in the trash will also be deleted for good:",
+      "trashed_admin": "The class this account has in the trash will also be deleted for good: | The {count} classes this account has in the trash will also be deleted for good:"
     },
     "copy": {
       "label": "Copy: {what}",
@@ -439,6 +468,67 @@
       "filters": "Filters",
       "filters_count": "Filters ({count})",
       "clear": "Clear filters"
+    },
+    "blog": {
+      "hero_title": "The ITAKAI blog",
+      "hero_subtitle": "Platform news, ideas for gamifying your classroom and stories from other teachers.",
+      "search_placeholder": "Search the blog…",
+      "search_empty_hint": "Try other words, or clear the search to see every post.",
+      "all_posts": "All",
+      "categories_label": "Blog categories",
+      "featured": "Featured",
+      "latest": "Latest posts",
+      "empty_title": "No posts yet",
+      "empty_description": "The first published post will show up here.",
+      "post_count": "No posts | 1 post | {count} posts",
+      "not_found_description": "The post may have moved or may not be published yet.",
+      "post_pagination": "Previous and next post",
+      "meta": {
+        "title": "Blog · ITAKAI",
+        "description": "News, ideas and classroom stories from ITAKAI, the gamified learning platform."
+      }
+    },
+    "templates": {
+      "hero_title": "Class templates",
+      "hero_subtitle": "Gamified classes other teachers have published so you don't have to start from scratch: story, missions, shop and behaviors ready to use.",
+      "view": "View template",
+      "copy_link": "Copy link",
+      "result_count": "No templates | 1 template | {count} templates",
+      "back_to_catalog": "Browse the catalog",
+      "contents_title": "What this template includes",
+      "counts": {
+        "missions": "No missions | 1 mission | {count} missions",
+        "shop_items": "No shop items | 1 shop item | {count} shop items",
+        "behaviors": "No behaviors | 1 behavior | {count} behaviors"
+      },
+      "use": {
+        "title": "Use this template",
+        "what_you_get": "Importing it creates a new class of your own with the template's story, cover, features, shop and behaviors.",
+        "what_you_get_missions": "Importing it creates a new class of your own with the template's story, cover, features, shop and behaviors and, if you want, its missions.",
+        "import_missions": "Also import its mission | Also import its {count} missions",
+        "import_missions_hint": "They arrive without deadlines, documents or badges.",
+        "login_note": "To import it, sign in with a teacher account.",
+        "teacher_only": "You need a teacher account to import it."
+      },
+      "gone": {
+        "title": "This template is no longer available",
+        "description": "The teacher who published it has taken it out of the catalog. Have a look at the rest: you may find a similar one."
+      },
+      "not_found": {
+        "title": "This template doesn't exist",
+        "description": "The link may be incomplete or copied wrong. Every published template is in the catalog."
+      },
+      "meta": {
+        "title": "Class templates · ITAKAI",
+        "description": "Gamified classes that teachers have published on ITAKAI for other teachers to build on."
+      }
+    },
+    "class_list": {
+      "tab_active": "Active",
+      "tab_archived": "Archived",
+      "empty_title": "No classes",
+      "empty_archived_title": "No archived classes",
+      "no_results": "No classes match “{query}”"
     }
   }
 }

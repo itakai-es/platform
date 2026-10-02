@@ -298,7 +298,7 @@ export const useAdminStore = defineStore('admin', () => {
     loading: isLoadingUsers,
     loaded: hasLoadedUsers,
     pick: response => response.users,
-    errorMessage: 'Error al cargar los usuarios',
+    errorMessage: 'Error al cargar las cuentas',
   })
   const fetchUsers = usersList.fetch
   const ensureUsers = usersList.ensure
@@ -329,7 +329,7 @@ export const useAdminStore = defineStore('admin', () => {
       await refreshUsers()
       return response
     } catch (err: unknown) {
-      error.value = (err as Error).message || 'Error al suspender el usuario'
+      error.value = (err as Error).message || 'Error al suspender la cuenta'
       console.error('Error suspending user:', err)
       throw err
     } finally {
@@ -350,7 +350,7 @@ export const useAdminStore = defineStore('admin', () => {
       await refreshUsers()
       return response
     } catch (err: unknown) {
-      error.value = (err as Error).message || 'Error al activar el usuario'
+      error.value = (err as Error).message || 'Error al activar la cuenta'
       console.error('Error activating user:', err)
       throw err
     } finally {
@@ -466,7 +466,7 @@ export const useAdminStore = defineStore('admin', () => {
       await refreshUsers()
       return response
     } catch (err: unknown) {
-      error.value = (err as Error).message || 'Error al eliminar el usuario'
+      error.value = (err as Error).message || 'Error al eliminar la cuenta'
       console.error('Error deleting user:', err)
       throw err
     } finally {

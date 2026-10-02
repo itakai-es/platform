@@ -3,9 +3,9 @@
     "dashboard": {
       "meta": {
         "title": "Mi inicio | ITAKAI",
-        "description": "Inicio principal del estudiante. Revisa tu progreso, últimas misiones y estadísticas de XP."
+        "description": "Tu inicio de estudiante. Revisa tu progreso, últimas misiones y estadísticas de XP."
       },
-      "welcome": "¡Bienvenido, {name}!",
+      "welcome": "¡Hola, {name}!",
       "welcome_fallback_name": "Estudiante",
       "subtitle": "Continúa tu viaje de aprendizaje y completa nuevas misiones",
       "stats": {
@@ -16,7 +16,7 @@
       "my_classes": {
         "title": "Mis clases",
         "view_all": "Ver todas",
-        "empty": "No estás inscrito en ninguna clase todavía"
+        "empty": "Todavía no estás en ninguna clase"
       },
       "latest_missions": {
         "title": "Últimas misiones",
@@ -25,7 +25,7 @@
       },
       "ai_assistant": {
         "name": "Atenea",
-        "message_new_user": "¡Hola {name}! Bienvenido a ITAKAI. ¡Completa tu primera misión para empezar a ganar XP!",
+        "message_new_user": "¡Hola {name}! Te damos la bienvenida a ITAKAI. ¡Completa tu primera misión para empezar a ganar XP!",
         "message_returning_user": "¡Hola {name}! Has completado {missions_completed} misiones en {classes_enrolled} clases. ¡Sigue así!"
       },
       "class_fallback_name": "Clase",
@@ -77,13 +77,13 @@
         "action_play_video": "Reproducir video"
       },
       "atenea": {
-        "message": "¡Hola! Estoy aquí para ayudarte con \"{mission_title}\". ¿Listo para comenzar esta aventura?"
+        "message": "¡Hola! Estoy aquí para ayudarte con \"{mission_title}\". ¿Empezamos esta aventura?"
       },
       "rewards": {
         "unlock_badge_hint": "Completa todos los enigmas de esta misión para desbloquear esta insignia."
       },
       "submission": {
-        "success": "Entrega enviada correctamente. El profesor la revisará pronto.",
+        "success": "Entrega enviada correctamente. Tu docente la revisará pronto.",
         "error": "Error al enviar la entrega. Inténtalo de nuevo.",
         "expired_error": "Esta misión ha expirado. Ya no puedes entregar enigmas.",
         "downloading": "Descargando"
@@ -95,17 +95,17 @@
         "description": "Accede a tus clases inscritas, revisa el progreso y descubre nuevas misiones asignadas."
       },
       "page_title": "Mis clases",
-      "page_subtitle": "Clases en las que estás inscrito",
+      "page_subtitle": "Las clases en las que estás",
       "join_class_button": "Unirse a clase",
       "empty": {
         "title": "No tienes clases",
-        "description": "No estás inscrito en ninguna clase todavía. Pide el código a tu profesor para unirte."
+        "description": "Todavía no estás en ninguna clase. Pide el código a tu docente para unirte."
       },
       "detail": {
         "error_title": "Error al cargar la clase",
         "back_to_classes": "Volver a mis clases",
         "breadcrumb_classes": "Mis clases",
-        "teacher_fallback": "Profesor",
+        "teacher_fallback": "Docente",
         "tabs": {
           "resumen": "Resumen",
           "historia": "Historia",
@@ -136,9 +136,9 @@
           "choose_guide": "Elige a tu guía para esta clase",
           "describe_avatar": "Describe cómo quieres que sea tu avatar:",
           "example_label": "Ejemplo:",
-          "example_text": "Un guerrero joven con armadura dorada, cabello oscuro y ojos brillantes, sosteniendo un escudo con el símbolo de Atenea. Estilo épico y heroico, inspirado en la mitología griega ...",
+          "example_text": "Un personaje joven con armadura dorada, cabello oscuro y ojos brillantes, sosteniendo un escudo con el símbolo de Atenea. Estilo épico y heroico, inspirado en la mitología griega ...",
           "placeholder": "Describe tu avatar aquí...",
-          "tip": "Tip: Sé específico con colores, vestimenta, accesorios y estilo. La IA creará tu avatar basándose en el personaje que hayas seleccionado.",
+          "tip": "Tip: Da detalles de colores, vestimenta, accesorios y estilo. La IA creará tu avatar basándose en el personaje que hayas seleccionado.",
           "generate_button": "Genera avatar",
           "generating": "Generando tu avatar...",
           "generated_trait": "Generado con IA",
@@ -157,7 +157,7 @@
           "tab_rewards": "Recompensas",
           "tab_purchases": "Mis canjes",
           "empty_title": "La tienda está vacía",
-          "empty_description": "Tu profesor aún no ha añadido recompensas. Vuelve más tarde.",
+          "empty_description": "Tu docente aún no ha añadido recompensas. Vuelve más tarde.",
           "purchases_empty_title": "Aún no has canjeado nada",
           "purchases_empty_description": "Gasta tus {coins} en las recompensas y aquí verás tu historial.",
           "view_rewards": "Ver recompensas",
@@ -193,7 +193,7 @@
           "usage_single": "Un uso",
           "usage_unlimited": "Ilimitada",
           "powers_empty_title": "No hay poderes",
-          "powers_empty_description": "Tu profesor aún no ha añadido poderes. Vuelve más tarde.",
+          "powers_empty_description": "Tu docente aún no ha añadido poderes. Vuelve más tarde.",
           "confirm_buy_title": "¿Comprar \"{name}\"?",
           "confirm_use_title": "¿Usar \"{name}\"?",
           "bought_toast": "¡Has comprado \"{name}\"!",
@@ -290,7 +290,7 @@
         "language_updated": "Idioma actualizado",
         "theme_updated": "Tema actualizado",
         "danger_zone_title": "Zona peligrosa",
-        "danger_zone_description": "Una vez eliminada tu cuenta, no hay vuelta atrás. Por favor, asegúrate de estar seguro.",
+        "danger_zone_description": "Una vez eliminada tu cuenta, no hay vuelta atrás. Piénsalo bien antes de seguir.",
         "delete_account_button": "Eliminar cuenta"
       },
       "delete_modal": {
@@ -322,7 +322,7 @@
       "recent_activity_card": {
         "title": "Actividad reciente",
         "empty": "No hay actividad reciente",
-        "user_fallback": "Usuario",
+        "user_fallback": "Alguien",
         "by_actor": "Por {name}"
       },
       "submission_modal": {
@@ -342,7 +342,7 @@
       },
       "class_guide_markdown": {
         "empty_title": "Sin contenido",
-        "empty_student": "El profesor aún no ha añadido la guía de esta clase.",
+        "empty_student": "Tu docente aún no ha añadido la guía de esta clase.",
         "empty_teacher": "Aún no has añadido la guía de esta clase.",
         "add_guide_button": "Añadir guía",
         "last_updated": "Última actualización: {date}"
@@ -354,7 +354,7 @@
         "legendaria": "Legendaria"
       },
       "class_ranking_section": {
-        "podium_title": "Podio de campeones",
+        "podium_title": "Podio de la clase",
         "stats_title": "Estadísticas",
         "rest_title": "Resto del ranking",
         "level_abbr": "Nv.",

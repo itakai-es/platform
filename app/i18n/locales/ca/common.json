@@ -5,14 +5,15 @@
       "my_classes": "Les meves classes",
       "missions": "Missions",
       "badges": "Insígnies",
-      "students": "Estudiants",
+      "students": "Alumnat",
       "about": "Sobre",
-      "users": "Usuaris",
+      "users": "Comptes",
       "classes": "Classes",
       "analytics": "Analítiques",
       "logs": "Logs",
       "features": "Característiques",
       "blog": "Blog",
+      "templates": "Plantilles",
       "help": "Ajuda",
       "section_management": "Gestió",
       "section_content": "Continguts",
@@ -95,13 +96,15 @@
       "action_error": "No s'ha pogut completar l'acció. Torna-ho a provar."
     },
     "errors": {
-      "generic": "S'ha produït un error. Si us plau, torna-ho a provar."
+      "generic": "S'ha produït un error. Si us plau, torna-ho a provar.",
+      "rate_limited_title": "Massa consultes seguides",
+      "rate_limited": "Des de la teva connexió s'han fet moltes consultes en poc temps. Espera un parell de minuts i torna-ho a provar."
     },
     "roles": {
       "student": "Estudiant",
-      "teacher": "Professor",
-      "admin": "Administrador",
-      "admin_system": "Administrador del sistema"
+      "teacher": "Docent",
+      "admin": "Administració",
+      "admin_system": "Administració del sistema"
     },
     "sidebar": {
       "new_conversation": "Nova conversa",
@@ -116,7 +119,7 @@
     },
     "landing": {
       "hero_title": "L'aventura d'aprendre",
-      "hero_subtitle": "Sistema de gestió educativa amb elements de gamificació per a estudiants i professors",
+      "hero_subtitle": "Sistema de gestió educativa amb elements de gamificació per a estudiants i professorat",
       "cta_start": "Començar",
       "features_title": "Què pots fer amb ITAKAI?",
       "features_subtitle": "Descobreix totes les eines i funcionalitats que transformen l'educació en una experiència única",
@@ -137,13 +140,13 @@
       "about_description_1": "ITAKAI és l'evolució de <strong>MyClassGame</strong>, potenciada amb <strong>intel·ligència artificial</strong>. Una plataforma educativa gamificada que transforma la formació professional en una experiència immersiva.",
       "about_description_2": "Generació automàtica de continguts, assistents IA personalitzats per a cada estudiant, i anàlisi predictiva del rendiment. Tot integrat en un ecosistema on aprendre és una aventura.",
       "stat_students": "Estudiants",
-      "stat_teachers": "Professors",
+      "stat_teachers": "Docents",
       "stat_centers": "Centres",
       "partners_title": "Qui som?",
       "developed_by": "Desenvolupat per",
-      "gods_title": "Els teus mentors olímpics",
-      "gods_subtitle": "5 assistents IA inspirats en déus grecs, cadascun expert en el seu domini",
-      "cta_final_title": "Preparat per a la teva aventura èpica?",
+      "gods_title": "Les teves guies de l'Olimp",
+      "gods_subtitle": "5 assistents IA inspirats en la mitologia grega, cadascun amb la seva especialitat",
+      "cta_final_title": "T'hi llances, a la teva aventura èpica?",
       "cta_final_subtitle": "Uneix-te a milers d'estudiants que ja estan transformant el seu aprenentatge amb ITAKAI",
       "cta_final_button": "Començar gratis ara",
       "footer_copyright_alt": "© {year} ITAKAI. Sistema educatiu gamificat",
@@ -180,8 +183,9 @@
       "cookies": "Cookies",
       "licenses": "Llicències",
       "system_access": "Accés al sistema",
-      "teacher_panel": "Panell del professor",
-      "student_panel": "Panell de l'estudiant",
+      "teacher_panel": "Panell docent",
+      "student_panel": "Panell d'estudiant",
+      "templates": "Plantilles de classe",
       "help_center": "Centre d'ajuda"
     },
     "level_up": {
@@ -193,7 +197,7 @@
     },
     "join_class_modal": {
       "title": "Unir-se a una classe",
-      "description": "Introdueix el codi de classe que t'ha proporcionat el teu professor",
+      "description": "Introdueix el codi de classe que t'ha donat el teu docent",
       "placeholder": "ABC123",
       "joining": "Unint-se...",
       "join_button": "Unir-se a la classe",
@@ -201,14 +205,14 @@
       "error_min_length": "El codi ha de tenir almenys 4 caràcters",
       "error_not_found": "No s'ha trobat una classe amb aquest codi",
       "error_invalid_code": "Codi de classe no vàlid",
-      "error_already_enrolled": "Ja estàs inscrit en aquesta classe",
+      "error_already_enrolled": "Ja ets en aquesta classe",
       "error_generic": "Error en unir-se a la classe. Torna-ho a provar.",
       "error_generic_short": "Error en unir-se a la classe",
       "success": "T'has unit a {className}"
     },
     "invite_students_modal": {
-      "title": "Convidar estudiants",
-      "description": "Comparteix aquest codi amb els teus estudiants perquè s'uneixin a la classe:",
+      "title": "Convidar l'alumnat",
+      "description": "Comparteix aquest codi amb el teu alumnat perquè s'uneixi a la classe:",
       "copy_code": "Copiar codi",
       "code_copied": "Codi copiat al porta-retalls",
       "copy_error": "Error en copiar el codi",
@@ -228,7 +232,7 @@
         },
         "profesor": {
           "title": "Ajuda per al professorat",
-          "subtitle": "Guies pas a pas per crear classes, missions i recompenses. Escrites per a docents, no per a informàtics."
+          "subtitle": "Guies pas a pas per crear classes, missions i recompenses. Escrites per a docents, sense argot tècnic."
         },
         "alumno": {
           "title": "Ajuda per a l'alumnat",
@@ -277,11 +281,34 @@
         "alumno": "Alumnat",
         "ambos": "Professorat i alumnat"
       },
-      "back_to_app": "Tornar a l'app"
+      "back_to_app": "Tornar a l'app",
+      "published_on": "Publicat el {date}",
+      "by_author": "Per {name}",
+      "load_error": "No s'ha pogut carregar el contingut",
+      "retry": "Torna-ho a provar"
+    },
+    "about": {
+      "title": "Sobre ITAKAI",
+      "subtitle": "Novetats i registre de versions",
+      "breadcrumb": "Sobre",
+      "breadcrumb_home": "Inici",
+      "current_version": "Versió actual",
+      "latest": "Última versió",
+      "versions_index": "Versions",
+      "footer_note": "Trobes a faltar alguna cosa o has trobat un error? Digues-nos-ho i ho tindrem en compte per a properes versions.",
+      "groups": {
+        "new": "Novetats",
+        "improved": "Millores",
+        "fixed": "Correccions"
+      },
+      "meta": {
+        "title": "Sobre | ITAKAI",
+        "description": "Novetats, millores i correccions de cada versió d'ITAKAI."
+      }
     },
     "meta": {
       "site_title": "ITAKAI - L'aventura d'aprendre | Plataforma educativa gamificada",
-      "site_description": "Transforma l'educació amb ITAKAI, la plataforma gamificada que inspira, motiva i connecta estudiants, professors i famílies. Uneix-te a més de 50.000 estudiants.",
+      "site_description": "Transforma l'educació amb ITAKAI, la plataforma gamificada que inspira, motiva i connecta estudiants, professorat i famílies. Uneix-te a més de 50.000 estudiants.",
       "og_title": "ITAKAI - L'aventura d'aprendre",
       "og_description": "Plataforma educativa gamificada amb IA, narratives immersives i anàlisi intel·ligent."
     },
@@ -294,7 +321,7 @@
     "maintenance": {
       "title": "En manteniment",
       "message": "Estem fent millores. Torna d'aquí a uns minuts.",
-      "admin_notice": "Mode manteniment actiu — només els administradors poden accedir."
+      "admin_notice": "Mode manteniment actiu — només hi pot entrar l'equip d'administració."
     },
     "menu_display": {
       "title": "Menú superior",
@@ -361,7 +388,7 @@
       "send_to_ai": "Envia a la IA"
     },
     "student_preview": {
-      "banner": "Estàs veient la plataforma com un alumne (demo)"
+      "banner": "Estàs veient la plataforma com a estudiant (demo)"
     },
     "change_email": {
       "title": "Correu electrònic",
@@ -386,10 +413,10 @@
       "message": "L'enllaç per obrir aquest fitxer ha caducat. Torna a la missió i obre'l una altra vegada."
     },
     "class_teachers": {
-      "owner": "Propietari",
+      "owner": "Propietat",
       "profiles": {
         "titular": "Titular",
-        "sustituto": "Substitut",
+        "sustituto": "Substitució",
         "practicas": "Pràctiques"
       },
       "access": {
@@ -405,11 +432,13 @@
       "next": "Següent"
     },
     "account_deletion": {
-      "blocked_self": "Encara no pots esborrar el teu compte: ets el propietari d'aquestes classes i no hi ha ningú més amb administració. Dona administració a un altre professor o passa-li la propietat, i torna aquí.",
-      "blocked_admin": "Aquest compte encara no es pot esborrar: és el propietari d'aquestes classes i no hi ha ningú més amb administració. Abans cal passar-ne la propietat a un altre professor.",
-      "transfers_self": "Les teves classes passaran a un altre professor amb administració:",
-      "transfers_admin": "Les seves classes passaran a un altre professor amb administració:",
-      "transfer_item": "{class}, a {name}"
+      "blocked_self": "Encara no pots esborrar el teu compte: la propietat d'aquestes classes és teva i no hi ha ningú més amb administració. Dona administració a algú més del professorat o passa-li la propietat, i torna aquí.",
+      "blocked_admin": "Aquest compte encara no es pot esborrar: és el propietari d'aquestes classes i no hi ha ningú més amb administració. Abans cal passar-ne la propietat a un altre compte docent.",
+      "transfers_self": "Les teves classes passaran a algú del professorat amb administració:",
+      "transfers_admin": "Les seves classes passaran a algú del professorat amb administració:",
+      "transfer_item": "{class}, a {name}",
+      "trashed_self": "També s'esborrarà per sempre la classe que tens a la paperera: | També s'esborraran per sempre les {count} classes que tens a la paperera:",
+      "trashed_admin": "També s'esborrarà per sempre la classe que té a la paperera: | També s'esborraran per sempre les {count} classes que té a la paperera:"
     },
     "copy": {
       "label": "Copiar: {what}",
@@ -439,6 +468,67 @@
       "filters": "Filtres",
       "filters_count": "Filtres ({count})",
       "clear": "Neteja els filtres"
+    },
+    "blog": {
+      "hero_title": "El blog d'ITAKAI",
+      "hero_subtitle": "Novetats de la plataforma, idees per gamificar l'aula i experiències d'altres aules.",
+      "search_placeholder": "Cercar al blog…",
+      "search_empty_hint": "Prova amb altres paraules o esborra la cerca per veure totes les entrades.",
+      "all_posts": "Totes",
+      "categories_label": "Categories del blog",
+      "featured": "Destacades",
+      "latest": "Últimes entrades",
+      "empty_title": "Encara no hi ha entrades",
+      "empty_description": "Quan es publiqui la primera entrada apareixerà aquí.",
+      "post_count": "Cap entrada | 1 entrada | {count} entrades",
+      "not_found_description": "Potser l'entrada s'ha mogut o encara no està publicada.",
+      "post_pagination": "Entrada anterior i següent",
+      "meta": {
+        "title": "Blog · ITAKAI",
+        "description": "Novetats, idees i experiències d'aula d'ITAKAI, la plataforma educativa gamificada."
+      }
+    },
+    "templates": {
+      "hero_title": "Plantilles de classe",
+      "hero_subtitle": "Classes gamificades que ha publicat el professorat perquè no comencis de zero: amb la seva història, les seves missions, la seva botiga i els seus comportaments a punt per fer servir.",
+      "view": "Veure la plantilla",
+      "copy_link": "Copiar l'enllaç",
+      "result_count": "Cap plantilla | 1 plantilla | {count} plantilles",
+      "back_to_catalog": "Veure el catàleg",
+      "contents_title": "Què porta aquesta plantilla",
+      "counts": {
+        "missions": "Cap missió | 1 missió | {count} missions",
+        "shop_items": "Cap article a la botiga | 1 article a la botiga | {count} articles a la botiga",
+        "behaviors": "Cap comportament | 1 comportament | {count} comportaments"
+      },
+      "use": {
+        "title": "Fer servir aquesta plantilla",
+        "what_you_get": "Importar-la crea una classe nova i teva amb la història, la portada, les funcionalitats, la botiga i els comportaments de la plantilla.",
+        "what_you_get_missions": "Importar-la crea una classe nova i teva amb la història, la portada, les funcionalitats, la botiga i els comportaments de la plantilla i, si vols, amb les seves missions.",
+        "import_missions": "Importar també la seva missió | Importar també les seves {count} missions",
+        "import_missions_hint": "Arriben sense data límit, sense documents i sense insígnies.",
+        "login_note": "Per importar-la cal entrar amb un compte docent.",
+        "teacher_only": "Per importar-la cal un compte docent."
+      },
+      "gone": {
+        "title": "Aquesta plantilla ja no està disponible",
+        "description": "Qui la va publicar l'ha retirada del catàleg. Fes un cop d'ull a la resta: potser en trobes una de semblant."
+      },
+      "not_found": {
+        "title": "Aquesta plantilla no existeix",
+        "description": "Potser l'enllaç està incomplet o mal copiat. Al catàleg hi ha totes les que s'han publicat."
+      },
+      "meta": {
+        "title": "Plantilles de classe · ITAKAI",
+        "description": "Classes gamificades que el professorat ha publicat a ITAKAI perquè qualsevol docent en parteixi."
+      }
+    },
+    "class_list": {
+      "tab_active": "Actives",
+      "tab_archived": "Arxivades",
+      "empty_title": "Sense classes",
+      "empty_archived_title": "Sense classes arxivades",
+      "no_results": "No hi ha cap classe que coincideixi amb «{query}»"
     }
   }
 }

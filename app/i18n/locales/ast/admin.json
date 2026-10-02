@@ -1,7 +1,7 @@
 {
   "admin": {
     "dashboard": {
-      "title": "Aniciu d'alministrador",
+      "title": "Aniciu d'alministración",
       "subtitle": "Panel de control del sistema ITAKAI",
       "activity": {
         "title": "Actividá del sistema",
@@ -10,7 +10,7 @@
         "period_month": "Últimu mes"
       },
       "quick_actions": {
-        "manage_users": "Xestionar usuarios"
+        "manage_users": "Xestionar cuentes"
       },
       "system_status": {
         "title": "Estáu del sistema",
@@ -22,22 +22,22 @@
       },
       "meta": {
         "title": "Aniciu admin | ITAKAI",
-        "description": "Panel de control del sistema ITAKAI. Xestiona usuarios, instituciones y supervisa l'estáu de la plataforma."
+        "description": "Panel de control del sistema ITAKAI. Xestiona cuentes, instituciones y supervisa l'estáu de la plataforma."
       }
     },
     "users": {
-      "title": "Xestión d'usuarios",
-      "subtitle": "Alministra tolos usuarios de la plataforma",
+      "title": "Xestión de cuentes",
+      "subtitle": "Alministra toles cuentes de la plataforma",
       "filters": {
         "search_placeholder": "Buscar por nome, corréu o usuariu...",
         "all_roles": "Tolos roles",
-        "students": "Alumnos",
-        "teachers": "Profesores",
-        "admins": "Alministradores",
+        "students": "Estudiantes",
+        "teachers": "Docentes",
+        "admins": "Alministración",
         "all_statuses": "Tolos estaos",
-        "active": "Activu",
-        "suspended": "Suspendíu",
-        "inactive": "Inactivu",
+        "active": "Activa",
+        "suspended": "Suspendida",
+        "inactive": "Inactiva",
         "clear": "Llimpiar filtros",
         "all_account_types": "Toles cuentes",
         "self_accounts": "Con corréu",
@@ -45,8 +45,8 @@
         "orphan_accounts": "Ensin corréu nin clase"
       },
       "roles": {
-        "student": "Alumnu",
-        "teacher": "Profesor",
+        "student": "Estudiante",
+        "teacher": "Docente",
         "admin": "Admin"
       },
       "card": {
@@ -58,8 +58,8 @@
         "no_home_class": "Ensin clase d'orixe"
       },
       "empty": {
-        "title": "Nun s'atoparon usuarios",
-        "description": "Nun hai usuarios que concasen colos filtros escoyíos."
+        "title": "Nun s'atoparon cuentes",
+        "description": "Nun hai cuentes que concasen colos filtros escoyíos."
       },
       "create": {
         "button": "Cuenta nueva ensin corréu",
@@ -69,7 +69,7 @@
         "name_placeholder": "Nome y apellíu",
         "home_class": "Clase d'orixe",
         "home_class_placeholder": "Escueyi una clase",
-        "home_class_hint": "L'alumnu queda matriculáu nella y el so profesoráu lleva la cuenta.",
+        "home_class_hint": "La cuenta entra nesa clase y el so profesoráu llévala.",
         "username": "Usuariu (opcional)",
         "username_placeholder": "Propónlu el sistema",
         "username_hint": "En blancu, el sistema propón unu. Si'l que escribes yá ta cogíu, añádese-y un sufixu.",
@@ -81,17 +81,17 @@
         "error": "Nun se pudo crear la cuenta."
       },
       "class_search": {
-        "placeholder": "Busca por clase, profesor o códigu",
+        "placeholder": "Busca por clase, docente o códigu",
         "searching": "Buscando…",
         "no_results": "Nenguna clase coincide",
         "more": "Hai más clases: escribi más p'afinar",
-        "option_hint": "{teacher} · ensin alumnos | {teacher} · 1 alumnu | {teacher} · {count} alumnos"
+        "option_hint": "{teacher} · ensin estudiantes | {teacher} · 1 estudiante | {teacher} · {count} estudiantes"
       },
       "actions": {
-        "suspend_title": "Suspender usuariu",
+        "suspend_title": "Suspender cuenta",
         "suspend_message": "¿De xuru que quies suspender a {name}? Nun va poder acceder a la plataforma.",
         "suspend_confirm": "Suspender",
-        "delete_title": "Desaniciar usuariu",
+        "delete_title": "Desaniciar cuenta",
         "delete_message": "¿De xuru que quies desaniciar a {name}? Esta aición nun se pue desfacer.",
         "delete_confirm": "Desaniciar",
         "menu_label": "Aiciones de {name}",
@@ -108,7 +108,7 @@
         "credentials_password": "Contraseña temporal",
         "home_class": "Camudar clase d'orixe",
         "home_class_title": "Clase d'orixe",
-        "home_class_note": "Ye la clase dende la que'l profesoráu lleva esta cuenta; al camudala, l'alumnu queda matriculáu na nueva. Ensin clase, namás l'atiende l'alministración.",
+        "home_class_note": "Ye la clase dende la que'l profesoráu lleva esta cuenta; al camudala, la cuenta pasa a tar na nueva. Ensin clase, namás l'atiende l'alministración.",
         "home_class_none": "Ensin clase d'orixe",
         "suspend_error": "Nun se pudo suspender la cuenta.",
         "activate_error": "Nun se pudo activar la cuenta.",
@@ -117,8 +117,8 @@
         "delete_error": "Nun se pudo desaniciar la cuenta."
       },
       "meta": {
-        "title": "Xestión d'usuarios | ITAKAI Admin",
-        "description": "Alministra tolos usuarios del sistema, crea perfiles nuevos, edita roles y supervisa l'actividá."
+        "title": "Xestión de cuentes | ITAKAI Admin",
+        "description": "Alministra toles cuentes del sistema, crea perfiles nuevos, edita roles y supervisa l'actividá."
       },
       "sort": {
         "recent": "Más recientes"
@@ -138,7 +138,7 @@
         "title": "Xestión de clases | ITAKAI Admin"
       },
       "sort": {
-        "students_desc": "Más alumnos",
+        "students_desc": "Más estudiantes",
         "missions_desc": "Más misiones"
       }
     },
@@ -177,8 +177,8 @@
         "uptime": "Disponibilidá"
       },
       "overview": {
-        "total_users": "Usuarios totales",
-        "active_today": "Activos güei",
+        "total_users": "Cuentes totales",
+        "active_today": "Actives güei",
         "missions_completed": "Misiones completaes",
         "completion_rate": "Tasa de completáu"
       },
@@ -186,19 +186,19 @@
         "system_resources": "Recursos del sistema",
         "service_health": "Estáu de los servicios",
         "response_time": "Tiempu de rempuesta",
-        "active_users": "Usuarios activos",
+        "active_users": "Cuentes actives",
         "requests": "Peticiones",
         "tokens_over_time": "Tokens consumíos",
-        "users_by_role": "Usuarios por rol",
+        "users_by_role": "Cuentes por rol",
         "missions_by_status": "Misiones por estáu",
         "missions_by_rarity": "Misiones por rareza",
         "ai_usage": "Usu d'IA (asistentes)"
       },
       "ai": {
         "total_tokens": "Tokens totales",
-        "avg_tokens_user": "Media por usuariu",
+        "avg_tokens_user": "Media por cuenta",
         "total_conversations": "Conversaciones",
-        "avg_conversations_user": "Conv. por usuariu"
+        "avg_conversations_user": "Conv. por cuenta"
       },
       "system": {
         "memory": "Memoria",
@@ -237,11 +237,11 @@
         "success": "Correutu",
         "all_types": "Tolos tipos",
         "new_school": "Institución nueva",
-        "new_users": "Usuarios nuevos",
+        "new_users": "Cuentes nueves",
         "alert": "Alerta",
         "system_update": "Anovamientu",
         "missions_completed": "Misiones completaes",
-        "user_action": "Aición d'usuariu"
+        "user_action": "Aición d'una cuenta"
       },
       "empty": {
         "title": "Nun s'atoparon rexistros",
@@ -249,7 +249,7 @@
       },
       "meta": {
         "title": "Rexistros del sistema | ITAKAI Admin",
-        "description": "Revisa los rexistros d'actividá del sistema, audita aiciones d'usuarios y diagnostica problemes téunicos."
+        "description": "Revisa los rexistros d'actividá del sistema, audita l'actividá de les cuentes y diagnostica problemes téunicos."
       }
     },
     "system_logs": {
@@ -327,9 +327,9 @@
         "contact_email": "Corréu de contautu",
         "default_language": "Llingua por defeutu",
         "registration_open": "Rexistru abiertu",
-        "registration_hint": "Permite que se rexistren usuarios nuevos.",
+        "registration_hint": "Permite crear cuentes nueves dende'l rexistru.",
         "maintenance_mode": "Mou mantenimientu",
-        "maintenance_hint": "Amuesa un avisu de mantenimientu a los usuarios."
+        "maintenance_hint": "Amuesa un avisu de mantenimientu a quien entre."
       }
     },
     "help": {
@@ -435,7 +435,7 @@
         "alumnado": "Alumnáu",
         "ia-y-configuracion": "IA y configuración",
         "tu-cuenta": "La to cuenta",
-        "si-eres-alumno": "Si yes alumnu",
+        "si-eres-alumno": "Si yes estudiante",
         "cuando-algo-falla": "Cuando daqué falla",
         "configuracion": "Configuración"
       }
@@ -447,11 +447,17 @@
       "edit_article": "Editar entrada",
       "empty_title": "Entá nun hai entraes",
       "empty_description": "Crea la primer entrada dende equí.",
-      "reorder_disabled_filtered": "Quita'l filtru d'estáu y la gueta pa camudar l'orde.",
       "placeholder_title": "Cinco idees pa gamificar la to aula",
       "ai_placeholder": "Espon-y a Atenea qué quies contar…",
       "delete_message": "Va desaniciase «{title}» y va dexar de vese nel blog. Nun se pue desfacer.",
-      "public_notice": "Les entraes publicaes van salir nel blog públicu cuando tea disponible."
+      "field_author": "Autoría",
+      "author_hint": "Opcional. Sal xunto a la data na entrada publicada: una persona o un equipu.",
+      "placeholder_author": "Equipu ITAKAI",
+      "field_published_at": "Data de publicación",
+      "published_at_hint": "Por defeutu, el día de la primer publicación. Cámbiala pa trayer una entrada vieya cola so data real.",
+      "published_at_draft_hint": "Ponse sola al publicar la entrada per primer vegada.",
+      "published_at_invalid": "Escueyi una data ente'l 1 de xineru de 2000 y güei.",
+      "view_public": "Ver el blog"
     }
   }
 }

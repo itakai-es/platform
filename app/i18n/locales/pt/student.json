@@ -3,10 +3,10 @@
     "dashboard": {
       "meta": {
         "title": "O meu início | ITAKAI",
-        "description": "Página inicial do aluno. Consulta o teu progresso, as últimas missões e as estatísticas de XP."
+        "description": "O teu início de estudante. Consulta o teu progresso, as últimas missões e as estatísticas de XP."
       },
-      "welcome": "Bem-vindo, {name}!",
-      "welcome_fallback_name": "Aluno",
+      "welcome": "Olá, {name}!",
+      "welcome_fallback_name": "Estudante",
       "subtitle": "Continua a tua viagem de aprendizagem e conclui novas missões",
       "stats": {
         "classes_enrolled": "Turmas inscritas",
@@ -16,7 +16,7 @@
       "my_classes": {
         "title": "As minhas turmas",
         "view_all": "Ver todas",
-        "empty": "Ainda não estás inscrito em nenhuma turma"
+        "empty": "Ainda não estás em nenhuma turma"
       },
       "latest_missions": {
         "title": "Últimas missões",
@@ -25,7 +25,7 @@
       },
       "ai_assistant": {
         "name": "Atena",
-        "message_new_user": "Olá {name}! Bem-vindo ao ITAKAI. Conclui a tua primeira missão para começares a ganhar XP!",
+        "message_new_user": "Olá {name}! Damos-te as boas-vindas ao ITAKAI. Conclui a tua primeira missão para começares a ganhar XP!",
         "message_returning_user": "Olá {name}! Concluíste {missions_completed} missões em {classes_enrolled} turmas. Continua assim!"
       },
       "class_fallback_name": "Turma",
@@ -77,13 +77,13 @@
         "action_play_video": "Reproduzir vídeo"
       },
       "atenea": {
-        "message": "Olá! Estou aqui para te ajudar com \"{mission_title}\". Pronto para começar esta aventura?"
+        "message": "Olá! Estou aqui para te ajudar com \"{mission_title}\". Começamos esta aventura?"
       },
       "rewards": {
         "unlock_badge_hint": "Conclui todos os enigmas desta missão para desbloqueares este emblema."
       },
       "submission": {
-        "success": "Entrega enviada com sucesso. O professor vai revê-la em breve.",
+        "success": "Entrega enviada com sucesso. Quem te dá aulas vai revê-la em breve.",
         "error": "Erro ao enviar a entrega. Tenta novamente.",
         "expired_error": "Esta missão expirou. Já não podes entregar enigmas.",
         "downloading": "A descarregar"
@@ -92,20 +92,20 @@
     "classes": {
       "meta": {
         "title": "As minhas turmas | ITAKAI",
-        "description": "Acede às turmas em que estás inscrito, consulta o progresso e descobre novas missões atribuídas."
+        "description": "Acede às tuas turmas, consulta o progresso e descobre novas missões atribuídas."
       },
       "page_title": "As minhas turmas",
-      "page_subtitle": "Turmas em que estás inscrito",
+      "page_subtitle": "As turmas em que estás",
       "join_class_button": "Juntar-se a uma turma",
       "empty": {
         "title": "Não tens turmas",
-        "description": "Ainda não estás inscrito em nenhuma turma. Pede o código ao teu professor para te juntares."
+        "description": "Ainda não estás em nenhuma turma. Pede o código a quem te dá aulas para te juntares."
       },
       "detail": {
         "error_title": "Erro ao carregar a turma",
         "back_to_classes": "Voltar às minhas turmas",
         "breadcrumb_classes": "As minhas turmas",
-        "teacher_fallback": "Professor",
+        "teacher_fallback": "Docente",
         "tabs": {
           "resumen": "Resumo",
           "historia": "História",
@@ -136,9 +136,9 @@
           "choose_guide": "Escolhe o teu guia para esta turma",
           "describe_avatar": "Descreve como queres que seja o teu avatar:",
           "example_label": "Exemplo:",
-          "example_text": "Um guerreiro jovem com armadura dourada, cabelo escuro e olhos brilhantes, segurando um escudo com o símbolo de Atena. Estilo épico e heroico, inspirado na mitologia grega ...",
+          "example_text": "Uma personagem jovem com armadura dourada, cabelo escuro e olhos brilhantes, segurando um escudo com o símbolo de Atena. Estilo épico e heroico, inspirado na mitologia grega ...",
           "placeholder": "Descreve aqui o teu avatar...",
-          "tip": "Dica: sê específico com as cores, o vestuário, os acessórios e o estilo. A IA vai criar o teu avatar com base na personagem que escolheste.",
+          "tip": "Dica: dá pormenores sobre as cores, o vestuário, os acessórios e o estilo. A IA vai criar o teu avatar com base na personagem que escolheste.",
           "generate_button": "Gerar avatar",
           "generating": "A gerar o teu avatar...",
           "generated_trait": "Gerado com IA",
@@ -157,7 +157,7 @@
           "tab_rewards": "Recompensas",
           "tab_purchases": "As minhas trocas",
           "empty_title": "A loja está vazia",
-          "empty_description": "O teu professor ainda não adicionou recompensas. Volta mais tarde.",
+          "empty_description": "Quem te dá aulas ainda não adicionou recompensas. Volta mais tarde.",
           "purchases_empty_title": "Ainda não trocaste nada",
           "purchases_empty_description": "Gasta as tuas {coins} nas recompensas e aqui verás o teu histórico.",
           "view_rewards": "Ver recompensas",
@@ -193,7 +193,7 @@
           "usage_single": "Uma utilização",
           "usage_unlimited": "Ilimitada",
           "powers_empty_title": "Não há poderes",
-          "powers_empty_description": "O teu professor ainda não adicionou poderes. Volta mais tarde.",
+          "powers_empty_description": "Quem te dá aulas ainda não adicionou poderes. Volta mais tarde.",
           "confirm_buy_title": "Comprar \"{name}\"?",
           "confirm_use_title": "Usar \"{name}\"?",
           "bought_toast": "Compraste \"{name}\"!",
@@ -201,8 +201,8 @@
           "mana_after": "Mana depois da utilização"
         },
         "teachers": {
-          "title": "Professores",
-          "empty": "Esta turma ainda não tem professores."
+          "title": "Corpo docente",
+          "empty": "Esta turma ainda não tem corpo docente."
         }
       }
     },
@@ -259,7 +259,7 @@
     "profile": {
       "meta": {
         "title": "O meu perfil | ITAKAI",
-        "description": "Faz a gestão do teu perfil de aluno, configura a segurança e personaliza a tua experiência."
+        "description": "Faz a gestão do teu perfil de estudante, configura a segurança e personaliza a tua experiência."
       },
       "breadcrumb_home": "Início",
       "breadcrumb_profile": "O meu perfil",
@@ -271,7 +271,7 @@
       "account": {
         "title": "A tua conta",
         "username": "Utilizador",
-        "managed_note": "A tua conta é gerida pelos professores: entras com o teu utilizador, não tem e-mail e não pode ser eliminada aqui. Se precisares de alguma alteração, pede-lhes."
+        "managed_note": "A tua conta é gerida pelo corpo docente: entras com o teu nome de utilizador, não tem e-mail e não pode ser eliminada aqui. Se precisares de alguma alteração, pede-a ao corpo docente."
       },
       "security": {
         "sessions_title": "Sessões",
@@ -322,7 +322,7 @@
       "recent_activity_card": {
         "title": "Atividade recente",
         "empty": "Não há atividade recente",
-        "user_fallback": "Utilizador",
+        "user_fallback": "Alguém",
         "by_actor": "Por {name}"
       },
       "submission_modal": {
@@ -342,7 +342,7 @@
       },
       "class_guide_markdown": {
         "empty_title": "Sem conteúdo",
-        "empty_student": "O professor ainda não adicionou o guia desta turma.",
+        "empty_student": "Quem te dá aulas ainda não adicionou o guia desta turma.",
         "empty_teacher": "Ainda não adicionaste o guia desta turma.",
         "add_guide_button": "Adicionar guia",
         "last_updated": "Última atualização: {date}"
@@ -354,7 +354,7 @@
         "legendaria": "Lendário"
       },
       "class_ranking_section": {
-        "podium_title": "Pódio de campeões",
+        "podium_title": "Pódio da turma",
         "stats_title": "Estatísticas",
         "rest_title": "Resto do ranking",
         "level_abbr": "Nv.",

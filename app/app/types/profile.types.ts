@@ -87,10 +87,12 @@ export interface ProfileActionResponse {
 /**
  * Qué pasaría con las clases de una cuenta si se borrase: cada clase de la que
  * es propietaria pasa a otra persona con administración; si en alguna no hay
- * nadie, la cuenta no se puede borrar.
+ * nadie, la cuenta no se puede borrar. Las que tiene en la papelera no pasan a
+ * nadie ni lo impiden: se borran para siempre con la cuenta.
  */
 export interface AccountDeletionCheck {
   canDelete: boolean
   blockingClasses: { id: string; name: string }[]
   transfers: { classId: string; className: string; toUser: { id: string; name: string } }[]
+  trashedClasses: { id: string; name: string }[]
 }

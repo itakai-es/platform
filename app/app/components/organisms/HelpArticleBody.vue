@@ -9,8 +9,10 @@
         {{ t(`common.help.kind.${article.kind}`) }}
       </Badge>
 
+      <!-- La ayuda dice cuándo se actualizó; el blog, cuándo se publicó y quién firma. -->
       <p class="mb-6 text-xs text-navy-700/70">
-        {{ t('common.help.updated_on', { date: formattedDate }) }}
+        <time :datetime="shownDate.iso">{{ shownDate.label }}</time>
+        <template v-if="byline"> · {{ byline }}</template>
       </p>
 
       <HelpVideoEmbed
@@ -29,13 +31,18 @@
 <script setup lang="ts">
 import { helpCardType } from '~/utils/help-accents'
 import { helpDocument } from '~/utils/help-headings'
+import { pointUploadsToApi } from '~/utils/help-images'
 import { renderHelpMarkdown } from '~/utils/markdown'
-import type { HelpArticle } from '~/types/help.types'
+import type { HelpArea, HelpArticle } from '~/types/help.types'
 
 /**
  * El cuerpo de un artículo del centro de ayuda: portada, tipo, fecha, vídeo y
  * texto. Es la misma pieza en la página pública y en la previsualización del
  * panel, así que lo que se revisa es exactamente lo que se publica.
+ *
+ * En el blog (`area="blog"`) la fecha es la de publicación y, si la entrada
+ * va firmada, sale también la firma. Un borrador que aún no se ha publicado
+ * no tiene fecha de publicación y enseña la de actualización, como la ayuda.
  *
  * El texto es markdown y se pinta con el mismo `.md-rendered` que la guía de
  * clase y el detalle de misión, para que la documentación se lea igual que el
@@ -44,16 +51,29 @@ import type { HelpArticle } from '~/types/help.types'
 
 const props = withDefaults(
   defineProps<{
-    article: Pick<HelpArticle, 'title' | 'body' | 'coverImage' | 'updatedAt' | 'kind' | 'videoUrl'>
+    article: Pick<
+      HelpArticle,
+      | 'title'
+      | 'body'
+      | 'coverImage'
+      | 'updatedAt'
+      | 'kind'
+      | 'videoUrl'
+      | 'publishedAt'
+      | 'authorName'
+    >
     /** El color de la categoría (tipo de `Card`), para apartados y citas. */
     accent?: string
+    /** Del área sale la fecha que se enseña y si va la firma. */
+    area?: HelpArea
   }>(),
-  { accent: undefined }
+  { accent: undefined, area: 'ayuda' }
 )
 
-const { t, locale } = useI18n()
+const { t } = useI18n()
 const config = useRuntimeConfig()
 const { getImageUrl } = useImageUrl()
+const { formatDate, authorLine } = useBlogByline()
 
 /** El color de la categoría, para los detalles del cuerpo del artículo. */
 const accentStyle = computed(() => ({
@@ -65,9 +85,9 @@ const coverUrl = computed(() => getImageUrl(props.article.coverImage))
 /**
  * El cuerpo, ya en HTML, con dos retoques.
  *
- * Uno: las imágenes que se suben desde el panel se guardan en `/uploads`, que
- * sirve la API, así que hay que apuntarlas a su origen —el markdown se pinta en
- * el frontend—; las que ya son absolutas, como las de R2, se quedan igual.
+ * Uno: las imágenes que se suben desde el panel se apuntan a la API, que es
+ * quien sirve `/uploads` (`pointUploadsToApi`, el mismo que usa la vista
+ * previa del editor del panel).
  *
  * Y dos: se numeran los `<h2>` con el mismo identificador que el índice, para
  * poder enlazar a un apartado concreto. El saneado descarta los `id`, así que
@@ -84,22 +104,27 @@ const renderedBody = computed(() => {
   // ya ha escapado todo el texto y no hay nada que retocar.
   if (!doc) return renderHelpMarkdown(props.article.body)
 
-  doc.content.querySelectorAll('img[src^="/uploads/"]').forEach(img => {
-    img.setAttribute('src', `${config.public.apiBase}${img.getAttribute('src')}`)
-  })
+  pointUploadsToApi(doc.content, config.public.apiBase)
 
   const holder = document.createElement('div')
   holder.append(doc.content)
   return holder.innerHTML
 })
 
-const formattedDate = computed(() =>
-  new Date(props.article.updatedAt).toLocaleDateString(locale.value, {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  })
-)
+const isBlog = computed(() => props.area === 'blog')
+
+const shownDate = computed(() => {
+  const published = isBlog.value ? props.article.publishedAt : null
+  if (published) {
+    const date = formatDate(published, 'long')
+    return { iso: published, label: t('common.help.published_on', { date }) }
+  }
+  const updated = props.article.updatedAt
+  return { iso: updated, label: t('common.help.updated_on', { date: formatDate(updated, 'long') }) }
+})
+
+/** La firma, solo en el blog y si la hay. */
+const byline = computed(() => (isBlog.value ? authorLine(props.article.authorName) : ''))
 </script>
 
 <style scoped>
@@ -117,13 +142,6 @@ const formattedDate = computed(() =>
   border-left: 4px solid var(--help-accent);
   /* Al llegar desde el índice, que el apartado no quede debajo de la barra. */
   scroll-margin-top: 6rem;
-}
-
-/* Los diagramas se leen como figura, no como parte del texto. */
-.help-body :deep(.md-rendered img) {
-  border: 1px solid var(--color-border-primary);
-  border-radius: 0.75rem;
-  margin: 1.5rem 0;
 }
 
 .help-body :deep(.md-rendered blockquote) {

@@ -10,7 +10,7 @@
         "period_month": "Ultima lună"
       },
       "quick_actions": {
-        "manage_users": "Gestionează utilizatorii"
+        "manage_users": "Gestionează conturile"
       },
       "system_status": {
         "title": "Starea sistemului",
@@ -22,18 +22,18 @@
       },
       "meta": {
         "title": "Administrare | ITAKAI",
-        "description": "Panoul de control al sistemului ITAKAI. Gestionează utilizatori și instituții și urmărește starea platformei."
+        "description": "Panoul de control al sistemului ITAKAI. Gestionează conturi și instituții și urmărește starea platformei."
       }
     },
     "users": {
-      "title": "Gestionarea utilizatorilor",
-      "subtitle": "Administrează toți utilizatorii platformei",
+      "title": "Gestionarea conturilor",
+      "subtitle": "Administrează toate conturile platformei",
       "filters": {
         "search_placeholder": "Caută după nume, e-mail sau utilizator...",
         "all_roles": "Toate rolurile",
         "students": "Elevi",
-        "teachers": "Profesori",
-        "admins": "Administratori",
+        "teachers": "Cadre didactice",
+        "admins": "Administrație",
         "all_statuses": "Toate stările",
         "active": "Activ",
         "suspended": "Suspendat",
@@ -46,7 +46,7 @@
       },
       "roles": {
         "student": "Elev",
-        "teacher": "Profesor",
+        "teacher": "Cadru didactic",
         "admin": "Admin"
       },
       "card": {
@@ -58,8 +58,8 @@
         "no_home_class": "Fără clasă de origine"
       },
       "empty": {
-        "title": "Nu s-au găsit utilizatori",
-        "description": "Nu există utilizatori care să corespundă filtrelor selectate."
+        "title": "Nu s-au găsit conturi",
+        "description": "Nu există conturi care să corespundă filtrelor selectate."
       },
       "create": {
         "button": "Cont nou fără e-mail",
@@ -69,7 +69,7 @@
         "name_placeholder": "Nume și prenume",
         "home_class": "Clasă de origine",
         "home_class_placeholder": "Alege o clasă",
-        "home_class_hint": "Elevul este înscris în ea, iar profesorii ei gestionează contul.",
+        "home_class_hint": "Contul intră în această clasă, iar cadrele didactice ale clasei îl gestionează.",
         "username": "Utilizator (opțional)",
         "username_placeholder": "Îl propune sistemul",
         "username_hint": "Lăsat gol, sistemul propune unul. Dacă cel scris este luat, i se adaugă un sufix.",
@@ -81,18 +81,18 @@
         "error": "Contul nu a putut fi creat."
       },
       "class_search": {
-        "placeholder": "Caută după clasă, profesor sau cod",
+        "placeholder": "Caută după clasă, cadru didactic sau cod",
         "searching": "Se caută…",
         "no_results": "Nicio clasă nu corespunde",
         "more": "Mai sunt clase: scrie mai mult pentru a restrânge",
         "option_hint": "{teacher} · fără elevi | {teacher} · 1 elev | {teacher} · {count} elevi"
       },
       "actions": {
-        "suspend_title": "Suspendă utilizatorul",
-        "suspend_message": "Sigur vrei să îl suspenzi pe {name}? Nu va mai putea intra în platformă.",
+        "suspend_title": "Suspendă contul",
+        "suspend_message": "Sigur vrei să suspenzi contul „{name}”? Nu va mai putea intra în platformă.",
         "suspend_confirm": "Suspendă",
-        "delete_title": "Șterge utilizatorul",
-        "delete_message": "Sigur vrei să îl ștergi pe {name}? Această acțiune nu poate fi anulată.",
+        "delete_title": "Șterge contul",
+        "delete_message": "Sigur vrei să ștergi contul „{name}”? Această acțiune nu poate fi anulată.",
         "delete_confirm": "Șterge",
         "menu_label": "Acțiuni pentru {name}",
         "suspend": "Suspendă",
@@ -108,7 +108,7 @@
         "credentials_password": "Parolă temporară",
         "home_class": "Schimbă clasa de origine",
         "home_class_title": "Clasă de origine",
-        "home_class_note": "Este clasa din care profesorii gestionează acest cont; la schimbare, elevul este înscris în cea nouă. Fără clasă, îl poate gestiona doar administrarea.",
+        "home_class_note": "Este clasa din care cadrele didactice gestionează acest cont; la schimbare, contul trece în cea nouă. Fără clasă, îl poate gestiona doar administrația.",
         "home_class_none": "Fără clasă de origine",
         "suspend_error": "Contul nu a putut fi suspendat.",
         "activate_error": "Contul nu a putut fi activat.",
@@ -117,8 +117,8 @@
         "delete_error": "Contul nu a putut fi șters."
       },
       "meta": {
-        "title": "Gestionarea utilizatorilor | ITAKAI Admin",
-        "description": "Administrează toți utilizatorii sistemului, creează profiluri noi, modifică roluri și urmărește activitatea."
+        "title": "Gestionarea conturilor | ITAKAI Admin",
+        "description": "Administrează toate conturile sistemului, creează profiluri noi, modifică roluri și urmărește activitatea."
       },
       "sort": {
         "recent": "Cele mai recente"
@@ -177,8 +177,8 @@
         "uptime": "Disponibilitate"
       },
       "overview": {
-        "total_users": "Utilizatori în total",
-        "active_today": "Activi azi",
+        "total_users": "Conturi în total",
+        "active_today": "Active azi",
         "missions_completed": "Misiuni finalizate",
         "completion_rate": "Rată de finalizare"
       },
@@ -186,19 +186,19 @@
         "system_resources": "Resursele sistemului",
         "service_health": "Starea serviciilor",
         "response_time": "Timp de răspuns",
-        "active_users": "Utilizatori activi",
+        "active_users": "Conturi active",
         "requests": "Cereri",
         "tokens_over_time": "Tokenuri consumate",
-        "users_by_role": "Utilizatori după rol",
+        "users_by_role": "Conturi după rol",
         "missions_by_status": "Misiuni după stare",
         "missions_by_rarity": "Misiuni după raritate",
         "ai_usage": "Utilizarea IA (asistenți)"
       },
       "ai": {
         "total_tokens": "Total tokenuri",
-        "avg_tokens_user": "Medie pe utilizator",
+        "avg_tokens_user": "Medie pe cont",
         "total_conversations": "Conversații",
-        "avg_conversations_user": "Conv. pe utilizator"
+        "avg_conversations_user": "Conv. pe cont"
       },
       "system": {
         "memory": "Memorie",
@@ -237,11 +237,11 @@
         "success": "Succes",
         "all_types": "Toate tipurile",
         "new_school": "Instituție nouă",
-        "new_users": "Utilizatori noi",
+        "new_users": "Conturi noi",
         "alert": "Alertă",
         "system_update": "Actualizare",
         "missions_completed": "Misiuni finalizate",
-        "user_action": "Acțiune de utilizator"
+        "user_action": "Acțiune a unui cont"
       },
       "empty": {
         "title": "Nu s-au găsit jurnale",
@@ -249,7 +249,7 @@
       },
       "meta": {
         "title": "Jurnalele sistemului | ITAKAI Admin",
-        "description": "Consultă jurnalele de activitate ale sistemului, auditează acțiunile utilizatorilor și diagnostichează probleme tehnice."
+        "description": "Consultă jurnalele de activitate ale sistemului, auditează activitatea conturilor și diagnostichează probleme tehnice."
       }
     },
     "system_logs": {
@@ -327,14 +327,14 @@
         "contact_email": "E-mail de contact",
         "default_language": "Limba implicită",
         "registration_open": "Înregistrare deschisă",
-        "registration_hint": "Permite înregistrarea de utilizatori noi.",
+        "registration_hint": "Permite crearea de conturi noi prin înregistrare.",
         "maintenance_mode": "Mod mentenanță",
-        "maintenance_hint": "Afișează utilizatorilor un mesaj de mentenanță."
+        "maintenance_hint": "Afișează un mesaj de mentenanță celor care intră."
       }
     },
     "help": {
       "title": "Centru de ajutor",
-      "subtitle": "Ghiduri, tutoriale, întrebări frecvente și videoclipuri pentru profesori și elevi.",
+      "subtitle": "Ghiduri, tutoriale, întrebări frecvente și videoclipuri pentru cadre didactice și elevi.",
       "new_article": "Articol nou",
       "edit_article": "Editează articolul",
       "search_placeholder": "Caută după titlu",
@@ -388,7 +388,7 @@
       "filter_all_audiences": "Toate publicurile",
       "filter_all_kinds": "Toate tipurile",
       "field_audience": "Public",
-      "audience_hint": "Stabilește pe ce pagină de start apare: profesori, elevi sau ambele.",
+      "audience_hint": "Stabilește pe ce pagină de start apare: cadre didactice, elevi sau ambele.",
       "field_kind": "Tip",
       "field_video_url": "URL-ul videoclipului",
       "video_url_hint": "Link https de pe YouTube, Vimeo sau către un fișier .mp4/.webm găzduit deja. Aici nu se încarcă videoclipuri.",
@@ -447,11 +447,17 @@
       "edit_article": "Editează postarea",
       "empty_title": "Încă nu există postări",
       "empty_description": "Creează prima postare de aici.",
-      "reorder_disabled_filtered": "Elimină filtrul de stare și căutarea pentru a schimba ordinea.",
       "placeholder_title": "Cinci idei pentru a-ți gamifica clasa",
       "ai_placeholder": "Spune-i Atenei despre ce vrei să scrii…",
       "delete_message": "„{title}” va fi ștearsă și nu va mai apărea pe blog. Nu se poate anula.",
-      "public_notice": "Postările publicate vor apărea pe blogul public când va fi disponibil."
+      "field_author": "Autor",
+      "author_hint": "Opțional. Apare lângă dată în postarea publicată: o persoană sau o echipă.",
+      "placeholder_author": "Echipa ITAKAI",
+      "field_published_at": "Data publicării",
+      "published_at_hint": "Implicit, ziua primei publicări. Schimb-o ca să aduci o postare veche cu data ei reală.",
+      "published_at_draft_hint": "Se completează automat când postarea este publicată prima dată.",
+      "published_at_invalid": "Alege o dată între 1 ianuarie 2000 și azi.",
+      "view_public": "Vezi blogul"
     }
   }
 }

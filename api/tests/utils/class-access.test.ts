@@ -33,8 +33,10 @@ import {
   classTeacherRecipients,
   getClassAccess,
   hasClassLevel,
+  listedClassesWhere,
   recordClassAction,
   requireClassAccess,
+  studentEnrollmentsWhere,
   summarizeClassTeachers,
   type ClassAction,
 } from '../../src/utils/class-access.js'
@@ -85,6 +87,9 @@ describe('tabla de acciones', () => {
       'class.inviteCode': 'admin',
       'class.publishTemplate': 'owner',
       'class.transfer': 'owner',
+      'class.delete': 'owner',
+      'class.restore': 'owner',
+      'class.purge': 'owner',
       'mission.view': 'read',
       'mission.edit': 'edit',
       'shop.view': 'read',
@@ -105,11 +110,17 @@ describe('tabla de acciones', () => {
     })
   })
 
-  it('solo el propietario publica la plantilla y traspasa la clase', () => {
+  it('solo el propietario publica la plantilla, traspasa la clase, la envía a la papelera, la saca o la borra para siempre', () => {
     const ownerOnly = Object.entries(CLASS_ACTION_LEVEL)
       .filter(([, level]) => level === 'owner')
       .map(([action]) => action)
-    expect(ownerOnly.sort()).toEqual(['class.publishTemplate', 'class.transfer'])
+    expect(ownerOnly.sort()).toEqual([
+      'class.delete',
+      'class.publishTemplate',
+      'class.purge',
+      'class.restore',
+      'class.transfer',
+    ])
   })
 })
 
@@ -334,6 +345,28 @@ describe('accessibleClassesWhere', () => {
     expect((accessibleClassesWhere(USER) as any).teachers.some.AND[1].OR[1].access.in).toHaveLength(
       3
     )
+  })
+})
+
+describe('listados sin la papelera', () => {
+  it('listedClassesWhere es el acceso de accessibleClassesWhere sin las clases de la papelera', () => {
+    const where = listedClassesWhere(USER, 'admin') as any
+    expect(where.deletedAt).toBeNull()
+    expect(where.teachers.some.userId).toBe(USER)
+    expect(where.teachers.some.AND[1]).toEqual({
+      OR: [{ isOwner: true }, { access: { in: ['admin'] } }],
+    })
+  })
+
+  it('studentEnrollmentsWhere deja fuera las matrículas de clases en la papelera, también en la vista previa', () => {
+    expect(studentEnrollmentsWhere({ id: USER, role: 'student' })).toEqual({
+      studentId: USER,
+      isPreview: false,
+      class: { deletedAt: null },
+    })
+    expect(
+      (studentEnrollmentsWhere({ id: USER, role: 'teacher' }) as any).class.deletedAt
+    ).toBeNull()
   })
 })
 

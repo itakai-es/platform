@@ -6,6 +6,9 @@ export const ROUTE_NAMES = {
   COOKIES: '/cookies',
   LICENSES: '/licenses',
   DOCS: '/ayuda',
+  BLOG: '/blog',
+  // Catálogo público de plantillas; la ficha de cada una cuelga de aquí.
+  TEMPLATES: '/plantillas',
 
   // Auth
   LOGIN: '/auth/login',
@@ -33,6 +36,7 @@ export const ROUTE_NAMES = {
   TEACHER_BADGES: '/profesor/insignias',
   TEACHER_AI_ASSISTANT: '/profesor/asistente',
   TEACHER_NOTIFICATIONS: '/profesor/avisos',
+  TEACHER_ABOUT: '/profesor/acerca-de',
 
   // Admin
   ADMIN_DASHBOARD: '/admin/inicio',
@@ -44,6 +48,7 @@ export const ROUTE_NAMES = {
   ADMIN_HELP: '/admin/ayuda',
   ADMIN_BLOG: '/admin/blog',
   ADMIN_SETTINGS: '/admin/configuracion',
+  ADMIN_ABOUT: '/admin/acerca-de',
 } as const
 
 export const getDashboardByRole = (role: string): string => {
@@ -92,6 +97,8 @@ export const isPublicRoute = (path: string): boolean => {
     ROUTE_NAMES.COOKIES,
     ROUTE_NAMES.LICENSES,
     ROUTE_NAMES.DOCS,
+    ROUTE_NAMES.BLOG,
+    ROUTE_NAMES.TEMPLATES,
     ROUTE_NAMES.LOGIN,
     ROUTE_NAMES.SIGNUP,
     ROUTE_NAMES.FORGOT_PASSWORD,

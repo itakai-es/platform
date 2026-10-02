@@ -134,7 +134,7 @@ export function isValidUsername(username: string): boolean {
  */
 export function buildUsernameProposal(name: string): string {
   const parts = name.split(/\s+/).map(slugPart).filter(Boolean)
-  const first = parts[0] || 'alumno'
+  const first = parts[0] || 'estudiante'
   const initial = parts[1]?.slice(0, 1)
   const stem = [first, initial].filter(Boolean).join('.')
   // El tronco se recorta para que el sufijo quepa siempre.

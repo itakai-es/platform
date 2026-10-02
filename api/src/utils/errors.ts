@@ -51,6 +51,14 @@ export class ConflictError extends HttpError {
   }
 }
 
+/** Lo que existió y ya no está: distinto de un 404, para poder decir «ya no está disponible». */
+export class GoneError extends HttpError {
+  constructor(message = 'Ya no está disponible', code = 'GONE') {
+    super(410, message, code)
+    this.name = 'GoneError'
+  }
+}
+
 export class RateLimitError extends HttpError {
   constructor(message = 'Demasiadas peticiones. Inténtalo más tarde.', code = 'RATE_LIMITED') {
     super(429, message, code)

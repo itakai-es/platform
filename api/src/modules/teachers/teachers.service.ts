@@ -8,6 +8,7 @@ import { randomUUID } from 'crypto'
 import { generateFireRedAvatar } from '../ai/generators/avatar-firered.js'
 import {
   AvatarServiceUnavailableError,
+  ConflictError,
   NotFoundError,
   ValidationError,
 } from '../../utils/errors.js'
@@ -19,15 +20,15 @@ import {
   type ClassSettings,
 } from '../../utils/class-settings.js'
 import { resolveLevelConfig, tierForLevel, type LevelConfig } from '../../utils/level-config.js'
-import { saveUpload } from '../storage/storage.service.js'
+import { publicUploadResolver, saveUpload } from '../storage/storage.service.js'
 import { createClassWithOwner } from '../../utils/class-owner.js'
 import {
-  accessibleClassesWhere,
   assertClassAccess,
   assertMissionAccess,
   CLASS_ACTION_LEVEL,
   classTeachersInclude,
   hasClassLevel,
+  listedClassesWhere,
   recordClassAction,
   summarizeClassTeachers,
   type ClassAccess,
@@ -41,6 +42,20 @@ import {
   UNUSED_ACCOUNT_SELECT,
   unusedAccountHomeClass,
 } from './class-students.service.js'
+import {
+  copyMissionInto,
+  lockSourceClass,
+  readMissionForCopy,
+  type MissionCopyOptions,
+} from './mission-copy.js'
+import {
+  findTemplate,
+  findTemplates,
+  isTemplateId,
+  TEMPLATE_METADATA_MAX_LENGTH,
+  type TemplateFilters,
+} from '../templates/templates.service.js'
+import { missionRewards } from '../../utils/mission-formatter.js'
 
 const BADGES_DIR = join(process.cwd(), 'uploads', 'badges')
 const COVERS_DIR = join(process.cwd(), 'uploads', 'covers')
@@ -72,6 +87,75 @@ const CLASS_UPDATE_FIELDS = [
 /** Metadatos de la clase: cambiarlos es un ajuste, no contenido. */
 const CLASS_METADATA_FIELDS = ['subject', 'language', 'educationLevel', 'province'] as const
 
+/**
+ * Largo máximo, en caracteres, de lo que se escribe en una clase y sale en
+ * abierto en la ficha pública de una plantilla, con cómo se nombra en el
+ * mensaje de error. Muy por encima de lo que hay guardado (en desarrollo, el
+ * nombre más largo es de 86 y la historia más larga, de unos 6.500): no
+ * estorban a nadie y cortan lo que no es una clase. El nombre, como al crearla
+ * desde el asistente; la historia, unas 25 páginas de texto, cuando las que
+ * escribe la IA rondan las 2 o 3; los metadatos, los de las listas cerradas del
+ * frontend (ver `TEMPLATE_METADATA_MAX_LENGTH`).
+ */
+export const CLASS_TEXT_LIMITS = {
+  name: { max: 200, label: 'El nombre de la clase' },
+  narrative: { max: 50_000, label: 'La historia de la clase' },
+  subject: { max: TEMPLATE_METADATA_MAX_LENGTH, label: 'La asignatura' },
+  language: { max: TEMPLATE_METADATA_MAX_LENGTH, label: 'El idioma' },
+  educationLevel: { max: TEMPLATE_METADATA_MAX_LENGTH, label: 'El nivel educativo' },
+  province: { max: TEMPLATE_METADATA_MAX_LENGTH, label: 'La provincia' },
+} as const
+
+/** Lo que se añade al nombre de una clase al duplicarla o importarla. */
+const COPY_SUFFIX = ' (copia)'
+
+/**
+ * Los topes cuentan caracteres de verdad: un emoji es uno, aunque en JavaScript
+ * ocupe dos unidades (un par sustituto). Y al recortar no se parte ningún par,
+ * que se guardaría como «�».
+ */
+const charLength = (value: string) => Array.from(value).length
+const clipChars = (value: string, max: number) =>
+  value.length <= max ? value : Array.from(value).slice(0, max).join('')
+
+type ClassTextField = keyof typeof CLASS_TEXT_LIMITS
+
+/**
+ * Comprueba los textos y la portada que llegan para guardar en una clase, antes
+ * de tocar nada. Lo que llega igual que lo guardado (`current`) pasa siempre:
+ * el formulario de ajustes manda el nombre y la portada aunque no se toquen, y
+ * una clase de antes de los topes, o con una portada de cuando el
+ * almacenamiento era otro, no puede quedarse sin poder editar lo demás.
+ *
+ * La portada nueva tiene que ser una imagen subida en ese momento (una data URL,
+ * que se guarda en /uploads) o un fichero público de la plataforma, como los que
+ * devuelven la subida y la portada de la IA: la ficha pública no enseña otra
+ * (ver `publicUploadFromUrl`), y una de fuera la pediría el navegador de cada
+ * alumno. Vacía, la quita.
+ */
+async function assertClassFields(
+  data: Partial<Record<ClassTextField | 'backgroundImage', string>>,
+  current?: Partial<Record<ClassTextField | 'backgroundImage', string | null>>
+) {
+  for (const field of Object.keys(CLASS_TEXT_LIMITS) as ClassTextField[]) {
+    const value = data[field]
+    if (value === undefined || value === current?.[field]) continue
+    const { max, label } = CLASS_TEXT_LIMITS[field]
+    // Con menos unidades que el tope ya cabe: solo se cuentan los largos.
+    if (value.length > max && charLength(value) > max) {
+      throw new ValidationError(
+        `${label} no puede pasar de ${max.toLocaleString('es-ES')} caracteres.`
+      )
+    }
+  }
+
+  const cover = data.backgroundImage
+  if (!cover || cover === current?.backgroundImage || cover.startsWith('data:image/')) return
+  if (!(await publicUploadResolver())(cover)) {
+    throw new ValidationError('La portada tiene que ser una imagen subida a la plataforma.')
+  }
+}
+
 /** El código de invitación solo lo recibe quien puede invitar alumnos a la clase. */
 function visibleInvitationCode(access: ClassAccess | null, code: string) {
   return access && hasClassLevel(access, CLASS_ACTION_LEVEL['class.inviteCode']) ? code : null
@@ -102,18 +186,42 @@ async function saveBase64Image(base64Data: string, subdir: 'badges' | 'covers' =
   return saveUpload(`${subdir}/${filename}`, buffer, `image/${matches[1]}`)
 }
 
+const TEMPLATE_IN_TRASH = 'Restaura la clase antes de publicarla o retirarla como plantilla'
+const ARCHIVE_IN_TRASH = 'Restaura la clase antes de archivarla o desarchivarla'
+
+/** 409 si la clase está en la papelera: lo que pide hay que hacerlo después de restaurarla. */
+function assertNotInTrash(cls: { deletedAt: Date | null }, message: string) {
+  if (cls.deletedAt) throw new ConflictError(message, 'CLASS_IN_TRASH')
+}
+
+/**
+ * Escribe en la clase solo si sigue fuera de la papelera; si no, 409. La
+ * comprobación de antes no basta: la papelera puede llegar entre medias, y el
+ * UPDATE condicionado espera a su bloqueo de fila y vuelve a mirar `deletedAt`.
+ */
+async function updateOutsideTrash(
+  tx: Prisma.TransactionClient,
+  classId: string,
+  data: Prisma.ClassUpdateManyMutationInput,
+  message: string
+) {
+  const { count } = await tx.class.updateMany({ where: { id: classId, deletedAt: null }, data })
+  if (count === 0) throw new ConflictError(message, 'CLASS_IN_TRASH')
+}
+
 export class TeachersService {
-  /** Clases a las que el profesor tiene acceso, con cualquier nivel, según su estado de archivo. */
+  /** Clases a las que el profesor tiene acceso, con cualquier nivel, según su
+   *  estado de archivo. Las de la papelera no salen en ninguno: tienen su listado. */
   private buildArchivedWhere(
     userId: string,
     archived: 'active' | 'archived' | 'all' = 'active'
   ): Prisma.ClassWhereInput {
     if (archived === 'all') {
-      return accessibleClassesWhere(userId)
+      return listedClassesWhere(userId)
     }
 
     return {
-      ...accessibleClassesWhere(userId),
+      ...listedClassesWhere(userId),
       archived: archived === 'archived',
     }
   }
@@ -226,6 +334,8 @@ export class TeachersService {
       educationLevel: cls.educationLevel,
       province: cls.province,
       isTemplate: cls.isTemplate,
+      // En la papelera desde esta fecha; null si no lo está.
+      deletedAt: cls.deletedAt,
       settings: resolveClassSettings(cls.settings),
       levelConfig: resolveLevelConfig(cls.levelConfig),
       scheduleConfig: cls.scheduleConfig,
@@ -242,6 +352,7 @@ export class TeachersService {
   }
 
   async createClass(userId: string, data: { name: string; narrative?: string; schedule?: string; backgroundImage?: string; subject?: string; language?: string; educationLevel?: string; province?: string }) {
+    await assertClassFields(data)
     const invitationCode = nanoid(6).toUpperCase()
 
     // If the teacher uploaded their own cover it arrives as a base64 data URL;
@@ -295,6 +406,8 @@ export class TeachersService {
         field => data[field] !== undefined && (data[field] || null) !== (cls[field] || null)
       )
     if (touchesSettings) access = await assertClassAccess(classId, userId, 'class.editSettings')
+
+    await assertClassFields(data, cls)
 
     // Invariante del marketplace: una plantilla publicada no puede quedarse sin
     // los metadatos que exige el filtro (asignatura, nivel, idioma). Se comprueba
@@ -409,6 +522,8 @@ export class TeachersService {
     await assertClassAccess(classId, userId, 'class.publishTemplate')
     const cls = await prisma.class.findUnique({ where: { id: classId } })
     if (!cls) throw new NotFoundError('Clase no encontrada')
+    // En la papelera ya está retirada; se publica, si acaso, después de restaurarla.
+    assertNotInTrash(cls, TEMPLATE_IN_TRASH)
 
     if (publish) {
       const missing: string[] = []
@@ -416,12 +531,14 @@ export class TeachersService {
       if (!cls.educationLevel) missing.push('educationLevel')
       if (!cls.language) missing.push('language')
       if (missing.length > 0) {
-        throw new Error('Completa los metadatos de la clase (asignatura, nivel e idioma) antes de publicarla como plantilla.')
+        throw new ValidationError('Completa los metadatos de la clase (asignatura, nivel e idioma) antes de publicarla como plantilla.')
       }
     }
 
     await prisma.$transaction(async tx => {
-      await tx.class.update({ where: { id: classId }, data: { isTemplate: publish } })
+      // Condicionado a que siga fuera de la papelera: si la envían a la vez, gana
+      // la papelera y no queda publicada dentro de ella.
+      await updateOutsideTrash(tx, classId, { isTemplate: publish }, TEMPLATE_IN_TRASH)
       await recordClassAction(tx, {
         classId,
         actorId: userId,
@@ -433,90 +550,50 @@ export class TeachersService {
     return { isTemplate: publish }
   }
 
-  /** Lista las plantillas públicas del marketplace, con filtros opcionales. */
-  async listTemplates(
-    userId: string,
-    filters: { subject?: string; educationLevel?: string; language?: string; province?: string; q?: string } = {}
-  ) {
-    const where: Prisma.ClassWhereInput = {
-      isTemplate: true,
-      archived: false,
-      ...(filters.subject ? { subject: filters.subject } : {}),
-      ...(filters.educationLevel ? { educationLevel: filters.educationLevel } : {}),
-      ...(filters.language ? { language: filters.language } : {}),
-      ...(filters.province ? { province: filters.province } : {}),
-      ...(filters.q
-        ? {
-            OR: [
-              { name: { contains: filters.q, mode: 'insensitive' } },
-              { narrative: { contains: filters.q, mode: 'insensitive' } },
-            ],
-          }
-        : {}),
-    }
-
-    const classes = await prisma.class.findMany({
-      where,
-      include: { teacher: { select: { name: true } }, _count: { select: { missions: true } } },
-      orderBy: { updatedAt: 'desc' },
-      take: 100,
-    })
+  /** Lista las plantillas públicas del marketplace, con filtros opcionales. La
+   *  consulta y la lectura de los filtros viven con las del catálogo público
+   *  (ver modules/templates); aquí, sin paginar: hasta 100. */
+  async listTemplates(userId: string, filters: TemplateFilters = {}) {
+    const templates = await findTemplates(filters, 100, userId)
 
     return {
-      templates: classes.map((c) => ({
-        id: c.id,
-        name: c.name,
-        narrative: c.narrative,
-        subject: c.subject,
-        language: c.language,
-        educationLevel: c.educationLevel,
-        province: c.province,
-        backgroundImage: c.backgroundImage,
-        teacherName: c.teacher.name,
-        missionCount: c._count.missions,
-        isOwn: c.teacherId === userId,
+      templates: templates.map(t => ({
+        id: t.id,
+        name: t.name,
+        narrative: t.narrative,
+        subject: t.subject,
+        language: t.language,
+        educationLevel: t.educationLevel,
+        province: t.province,
+        backgroundImage: t.backgroundImage,
+        teacherName: t.teacherName,
+        missionCount: t._count.missions,
+        isOwn: t.isOwn,
       })),
-      total: classes.length,
+      total: templates.length,
     }
   }
 
   /** Detalle de una plantilla del marketplace. Devuelve exactamente lo que el
    *  importe copia (portada, historia, funcionalidades, tienda, comportamientos)
-   *  para que el modal de previsualización enseñe qué te llevas al importar. */
+   *  y sus misiones, que se copian si se pide, resumidas como en la ficha
+   *  pública: para que el modal de previsualización enseñe qué te llevas al importar.
+   *  Una plantilla cuya clase está archivada deja de estar disponible, como en el listado. */
   async getTemplateDetail(userId: string, templateClassId: string) {
-    const tpl = await prisma.class.findFirst({
-      // Una plantilla cuya clase está archivada deja de estar disponible, como en el listado.
-      where: { id: templateClassId, isTemplate: true, archived: false },
-      select: {
-        id: true,
-        name: true,
-        narrative: true,
-        backgroundImage: true,
-        settings: true,
-        teacherId: true,
-        teacher: { select: { name: true } },
-        shopItems: {
-          select: { id: true, name: true, description: true, price: true, kind: true, manaCost: true, usage: true, lifeRestore: true },
-          orderBy: { price: 'asc' },
-        },
-        behaviorTemplates: {
-          select: { id: true, kind: true, name: true, description: true, xpDelta: true, coinDelta: true, lifeDelta: true },
-          orderBy: [{ kind: 'asc' }, { name: 'asc' }],
-        },
-      },
-    })
-    if (!tpl) throw new Error('Plantilla no encontrada')
+    const tpl = await findTemplate(templateClassId, userId)
+    if (!tpl) throw new NotFoundError('Plantilla no encontrada')
 
     return {
       id: tpl.id,
       name: tpl.name,
       narrative: tpl.narrative,
       backgroundImage: tpl.backgroundImage,
-      teacherName: tpl.teacher.name,
-      isOwn: tpl.teacherId === userId,
+      teacherName: tpl.teacherName,
+      isOwn: tpl.isOwn,
       settings: tpl.settings,
       shopItems: tpl.shopItems,
       behaviorTemplates: tpl.behaviorTemplates,
+      missions: tpl.missions,
     }
   }
 
@@ -526,7 +603,7 @@ export class TeachersService {
    *   · features  → settings (funcionalidades); si no, defaults
    *   · shop      → items de la tienda
    *   · behaviors → plantillas de comportamiento
-   *   · missions  → misiones + sus enigmas
+   *   · missions  → misiones + sus enigmas, en el orden de `source.missions`
    *  Siempre deja fuera lo específico del origen: guía, metadatos de filtro,
    *  alumnos y progreso. Lo comparten importar-plantilla y duplicar-clase. */
   private async copyClass(
@@ -535,19 +612,30 @@ export class TeachersService {
     },
     userId: string,
     options: ClassCopyOptions,
-    /** Lo que va en la misma transacción que la copia, con la clase nueva ya creada. */
-    afterCopy?: (tx: Prisma.TransactionClient, created: { id: string }) => Promise<unknown>
+    {
+      missionCopy,
+      afterCopy,
+    }: {
+      /** Cómo se copia cada misión (ver `copyMissionInto`). Sin él, tal cual. */
+      missionCopy?: MissionCopyOptions
+      /** Lo que va en la misma transacción que la copia, con la clase nueva ya creada. */
+      afterCopy?: (tx: Prisma.TransactionClient, created: { id: string }) => Promise<unknown>
+    } = {}
   ) {
     const invitationCode = nanoid(6).toUpperCase()
 
     return prisma.$transaction(
       async (tx) => {
+        // El origen, bloqueado hasta confirmar: la purga de la papelera espera
+        // y ve la copia antes de borrar los ficheros que comparten.
+        if (!(await lockSourceClass(tx, source.id))) throw new NotFoundError('Clase no encontrada')
         // La copia es de quien la hace: propietario único, sin el resto del
         // profesorado de la clase de origen.
         const newClass = await createClassWithOwner(
           tx,
           {
-            name: `${source.name} (copia)`,
+            // Recortado para que la copia quepa en el tope del nombre.
+            name: `${clipChars(source.name, CLASS_TEXT_LIMITS.name.max - COPY_SUFFIX.length)}${COPY_SUFFIX}`,
             narrative: options.narrative ? source.narrative : null,
             backgroundImage: options.narrative ? source.backgroundImage : null,
             settings: (options.features
@@ -594,38 +682,13 @@ export class TeachersService {
           })
         }
 
-        // Misiones + enigmas: mission-por-mission (createMany no anida relaciones),
-        // preservando el orden de los enigmas (orderIndex). Nunca se copia el
-        // progreso de alumnos ni las entregas.
+        // Misiones + enigmas: misión a misión (createMany no anida relaciones),
+        // como diga `missionCopy`; sin él, tal cual (estado y fecha límite
+        // incluidos) y sin documentos ni insignia. Nunca se copia el progreso
+        // de alumnos ni las entregas.
         if (options.missions && source.missions && source.missions.length > 0) {
           for (const m of source.missions) {
-            const newMission = await tx.mission.create({
-              data: {
-                classId: newClass.id,
-                title: m.title,
-                description: m.description,
-                status: m.status,
-                rarity: m.rarity,
-                deadline: m.deadline,
-                backgroundImage: m.backgroundImage,
-              },
-            })
-
-            if (m.enigmas.length > 0) {
-              await tx.missionEnigma.createMany({
-                data: m.enigmas.map((e) => ({
-                  missionId: newMission.id,
-                  title: e.title,
-                  description: e.description,
-                  objectives: e.objectives,
-                  isOptional: e.isOptional,
-                  xpReward: e.xpReward,
-                  coinReward: e.coinReward,
-                  manaReward: e.manaReward,
-                  orderIndex: e.orderIndex,
-                })),
-              })
-            }
+            await copyMissionInto(tx, m, newClass.id, missionCopy)
           }
         }
 
@@ -637,28 +700,70 @@ export class TeachersService {
   }
 
   /** Importa una plantilla: crea una clase NUEVA del profesor copiando el chasis
-   *  reutilizable (narrativa, funcionalidades, tienda, comportamientos). Las
-   *  misiones se dejan fuera a propósito (cada profe monta las suyas). */
-  async importTemplate(userId: string, templateClassId: string) {
+   *  reutilizable (narrativa, funcionalidades, tienda, comportamientos) y, solo
+   *  si lo pide (`options.missions`), sus misiones con sus enigmas. Cada misión
+   *  llega en el estado que tiene en la plantilla (activa o bloqueada), sin
+   *  fecha límite (era del calendario de quien la publicó), sin documentos (son
+   *  ficheros privados suyos) y sin insignia. Todo en la misma transacción: si
+   *  algo falla, no queda una clase a medias.
+   *
+   *  Las portadas (la de la clase y las de sus misiones) solo llegan si son
+   *  ficheros públicos de la plataforma, como en la ficha pública (ver
+   *  `publicUploadFromUrl`): la URL la escribe quien publica, y una de fuera la
+   *  pedirían los navegadores del alumnado de quien importa cada vez que las
+   *  vieran. Devuelve, además, cuántas misiones ha copiado. */
+  async importTemplate(
+    userId: string,
+    templateClassId: string,
+    options: { missions: boolean } = { missions: false }
+  ) {
+    if (!isTemplateId(templateClassId)) throw new NotFoundError('Plantilla no encontrada')
     const tpl = await prisma.class.findFirst({
-      // Una plantilla cuya clase está archivada deja de estar disponible, como en el listado.
-      where: { id: templateClassId, isTemplate: true, archived: false },
+      // Una plantilla cuya clase está archivada (o en la papelera) deja de estar
+      // disponible, como en el listado.
+      where: { id: templateClassId, isTemplate: true, archived: false, deletedAt: null },
       include: {
         shopItems: true,
         behaviorTemplates: true,
       },
     })
-    if (!tpl) throw new Error('Plantilla no encontrada')
+    if (!tpl) throw new NotFoundError('Plantilla no encontrada')
 
-    const created = await this.copyClass(tpl, userId, {
-      narrative: true,
-      features: true,
-      shop: true,
-      behaviors: true,
-      missions: false,
-    })
+    // De la más antigua a la más reciente: las copias se crean en ese orden y la
+    // clase nueva las enseña en el mismo que la plantilla.
+    const [missions, publicCover] = await Promise.all([
+      options.missions
+        ? prisma.mission.findMany({
+            where: { classId: tpl.id },
+            include: { enigmas: true },
+            orderBy: [{ createdAt: 'asc' }, { id: 'asc' }],
+          })
+        : [],
+      publicUploadResolver(),
+    ])
 
-    return { class: { id: created.id, name: created.name }, message: 'Plantilla importada como nueva clase' }
+    const created = await this.copyClass(
+      {
+        ...tpl,
+        backgroundImage: publicCover(tpl.backgroundImage),
+        missions: missions.map(m => ({ ...m, backgroundImage: publicCover(m.backgroundImage) })),
+      },
+      userId,
+      {
+        narrative: true,
+        features: true,
+        shop: true,
+        behaviors: true,
+        missions: options.missions,
+      },
+      { missionCopy: { deadline: null } }
+    )
+
+    return {
+      class: { id: created.id, name: created.name },
+      missions: missions.length,
+      message: 'Plantilla importada como nueva clase',
+    }
   }
 
   /** Duplica una clase a la que el profesor tiene acceso (basta con lectura) en
@@ -679,18 +784,107 @@ export class TeachersService {
     if (!source) throw new NotFoundError('Clase no encontrada')
 
     // En la clase de origen queda quién sacó una copia; la copia ya es de otra persona.
-    const created = await this.copyClass(source, userId, options, (tx, copy) =>
-      recordClassAction(tx, {
-        classId,
-        actorId: userId,
-        action: 'class.duplicated',
-        entityType: 'class',
-        entityId: copy.id,
-        metadata: { ...options },
-      })
-    )
+    const created = await this.copyClass(source, userId, options, {
+      afterCopy: (tx, copy) =>
+        recordClassAction(tx, {
+          classId,
+          actorId: userId,
+          action: 'class.duplicated',
+          entityType: 'class',
+          entityId: copy.id,
+          metadata: { ...options },
+        }),
+    })
 
     return { class: { id: created.id, name: created.name }, message: 'Clase duplicada' }
+  }
+
+  /** Importa una misión de una clase a otra: una copia independiente con sus
+   *  enigmas, sus documentos (compartiendo fichero con el origen) y, salvo que
+   *  se pida lo contrario, su insignia, copiada como insignia nueva de quien
+   *  importa. Basta con poder ver la misión de origen y editar las misiones de
+   *  la clase de destino. La copia llega bloqueada y sin fecha límite, para
+   *  revisarla antes de abrirla al alumnado; el origen no cambia. Queda en el
+   *  registro de las dos clases: en el destino, de dónde vino; en el origen,
+   *  quién se llevó una copia y adónde. */
+  async importMission(
+    userId: string,
+    missionId: string,
+    options: { targetClassId: string; copyBadge: boolean }
+  ) {
+    const { classId: fromClassId } = await assertMissionAccess(missionId, userId, 'mission.view')
+    await assertClassAccess(options.targetClassId, userId, 'mission.edit')
+
+    const copy = await prisma.$transaction(
+      async tx => {
+        // La clase de origen, bloqueada hasta confirmar (ver `lockSourceClass`).
+        if (!(await lockSourceClass(tx, fromClassId))) {
+          throw new NotFoundError('Misión no encontrada')
+        }
+        const source = await readMissionForCopy(tx, missionId)
+        // Si entretanto ha pasado a otra clase, el permiso comprobado ya no vale.
+        if (!source || source.classId !== fromClassId) {
+          throw new NotFoundError('Misión no encontrada')
+        }
+        const result = await copyMissionInto(tx, source, options.targetClassId, {
+          status: 'bloqueada',
+          deadline: null,
+          documents: true,
+          badgeAuthorId: options.copyBadge ? userId : undefined,
+        })
+        const copied = {
+          enigmas: result.enigmas,
+          documents: result.documents,
+          badges: result.badges.length,
+        }
+        await recordClassAction(tx, {
+          classId: options.targetClassId,
+          actorId: userId,
+          action: 'mission.imported',
+          entityType: 'mission',
+          entityId: result.mission.id,
+          metadata: {
+            title: result.mission.title,
+            fromClassId,
+            fromMissionId: missionId,
+            ...copied,
+          },
+        })
+        // Como al duplicar una clase, en el origen queda quién se llevó una copia
+        // (con sus documentos) y adónde. Importada en la misma clase, basta una entrada.
+        if (fromClassId !== options.targetClassId) {
+          await recordClassAction(tx, {
+            classId: fromClassId,
+            actorId: userId,
+            action: 'mission.exported',
+            entityType: 'mission',
+            entityId: missionId,
+            metadata: {
+              title: source.title,
+              toClassId: options.targetClassId,
+              toMissionId: result.mission.id,
+              ...copied,
+            },
+          })
+        }
+        return result
+      },
+      { timeout: 30000 }
+    )
+
+    return {
+      mission: {
+        id: copy.mission.id,
+        classId: copy.mission.classId,
+        title: copy.mission.title,
+        status: copy.mission.status,
+        rarity: copy.mission.rarity,
+        deadline: copy.mission.deadline,
+        backgroundImage: copy.mission.backgroundImage,
+      },
+      copied: { enigmas: copy.enigmas, documents: copy.documents, badges: copy.badges },
+      message: 'Misión importada',
+    }
   }
 
   async setClassArchived(userId: string, classId: string, archived: boolean) {
@@ -698,6 +892,8 @@ export class TeachersService {
     const cls = await prisma.class.findUnique({ where: { id: classId } })
 
     if (!cls) throw new NotFoundError('Clase no encontrada')
+    // En la papelera sigue archivada hasta que se restaura.
+    assertNotInTrash(cls, ARCHIVE_IN_TRASH)
     if (cls.archived && !archived) {
       const updated = await this.saveArchived(userId, classId, false)
 
@@ -751,7 +947,10 @@ export class TeachersService {
   /** Archiva o desarchiva la clase y lo apunta en su registro. */
   private saveArchived(userId: string, classId: string, archived: boolean) {
     return prisma.$transaction(async tx => {
-      const updated = await tx.class.update({ where: { id: classId }, data: { archived } })
+      // Condicionado a que siga fuera de la papelera: desarchivar a la vez que se
+      // envía no puede dejarla en la papelera y sin archivar.
+      await updateOutsideTrash(tx, classId, { archived }, ARCHIVE_IN_TRASH)
+      const updated = await tx.class.findUniqueOrThrow({ where: { id: classId } })
       await recordClassAction(tx, {
         classId,
         actorId: userId,
@@ -797,9 +996,7 @@ export class TeachersService {
         deadline: m.deadline,
         backgroundImage: m.backgroundImage,
         enigmasCount: m.enigmas.length,
-        xpReward: calculateMissionTotalXP(m.rarity, m.enigmas.map(e => e.xpReward)),
-        coinReward: m.enigmas.reduce((sum, e) => sum + (e.coinReward || 0), 0),
-        manaReward: m.enigmas.reduce((sum, e) => sum + (e.manaReward || 0), 0),
+        ...missionRewards(m),
         completedCount: m.progress.filter((p) => p.completedAt).length,
         totalStudents,
       })),
@@ -970,7 +1167,7 @@ export class TeachersService {
     const enrollment = await prisma.classEnrollment.findUnique({
       where: { studentId_classId: { studentId, classId } },
     })
-    if (!enrollment) throw new Error('El estudiante no está inscrito en esta clase')
+    if (!enrollment) throw new Error('Esa cuenta de estudiante no está en esta clase')
 
     let fileUrl: string
     try {
@@ -1005,7 +1202,7 @@ export class TeachersService {
     // Solo las clases a las que se tiene acceso y en las que está el alumno.
     const classes = await prisma.class.findMany({
       where: {
-        ...accessibleClassesWhere(userId),
+        ...listedClassesWhere(userId),
         enrollments: { some: { studentId, isPreview: false } },
       },
       include: {
@@ -1027,7 +1224,7 @@ export class TeachersService {
 
     const enrolledClasses = classes.filter((c) => c.enrollments.length > 0)
     if (enrolledClasses.length === 0) {
-      throw new NotFoundError('Estudiante no encontrado en tus clases')
+      throw new NotFoundError('No se ha encontrado esa cuenta de estudiante en tus clases')
     }
 
     const student = enrolledClasses[0].enrollments[0].student
@@ -1254,9 +1451,7 @@ export class TeachersService {
           deadline: m.deadline,
           backgroundImage: m.backgroundImage,
           enigmasCount: m.enigmas.length,
-          xpReward: s.xp ? calculateMissionTotalXP(m.rarity, m.enigmas.map(e => e.xpReward)) : 0,
-          coinReward: s.coins ? m.enigmas.reduce((sum, e) => sum + (e.coinReward || 0), 0) : 0,
-          manaReward: s.mana ? m.enigmas.reduce((sum, e) => sum + (e.manaReward || 0), 0) : 0,
+          ...missionRewards(m, s),
           completedCount: m.progress.filter((p) => p.completedAt).length,
           totalStudents: m.class.enrollments.length,
           createdAt: m.createdAt,
@@ -1270,7 +1465,7 @@ export class TeachersService {
 
   async getActivities(userId: string, limit = 10) {
     const classes = await prisma.class.findMany({
-      where: accessibleClassesWhere(userId),
+      where: listedClassesWhere(userId),
       select: { id: true, name: true },
     })
 

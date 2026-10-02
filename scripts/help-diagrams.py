@@ -102,7 +102,7 @@ def flujo_mision():
     body = ''
     pasos = [
         (PURPLE, 'Creas la misión', ['Título, rareza,', 'fecha y enigmas']),
-        (MINT, 'El alumno la ve', ['Aparece en su', 'lista de misiones']),
+        (MINT, 'La ve tu clase', ['Aparece en su', 'lista de misiones']),
         (SKY, 'Entrega', ['Texto, archivo', 'o enlace']),
         (YELLOW, 'Revisas', ['Pones el porcentaje', 'de la entrega']),
         (PINK, 'Cobra', ['XP, monedas y maná', 'según ese porcentaje']),
@@ -121,8 +121,8 @@ def estados_entrega():
     H = 320
     body = text(600, 34, 'Cada entrega pasa por estos tres estados', 20, 600, tint(NAVY, 0.6))
     estados = [
-        (GREY, 'Pendiente', 'El alumno todavía no ha entregado', 'Le avisa el recordatorio'),
-        (SKY, 'Entregada', 'Está en tu bandeja de revisión', 'El alumno ya no puede cambiarla'),
+        (GREY, 'Pendiente', 'Todavía no se ha entregado', 'Le avisa el recordatorio'),
+        (SKY, 'Entregada', 'Está en tu bandeja de revisión', 'Ya no se puede cambiar'),
         (MINT, 'Revisada', 'Le has puesto un porcentaje', 'Se reparten las recompensas'),
     ]
     w, gap = 340, 40
@@ -135,7 +135,7 @@ def estados_entrega():
         body += text(x + w / 2, 234, l2, 17, 500, tint(NAVY, 0.65))
         if i < 2:
             body += arrow(x + w + 8, 170, x + w + gap - 8, tint(NAVY, 0.35), 4)
-    body += text(200, 296, 'lo mueve el alumno', 16, 600, tint(NAVY, 0.5))
+    body += text(200, 296, 'lo mueve el alumnado', 16, 600, tint(NAVY, 0.5))
     body += text(920, 296, 'lo mueves tú', 16, 600, tint(NAVY, 0.5))
     return svg('estados-entrega', H, body)
 
@@ -214,7 +214,7 @@ def anatomia_mision():
     lista = [
         (MINT, 'Portada', 'La imagen que la identifica en la lista'),
         (PURPLE, 'Rareza', 'Cuánto pesa: de común a legendaria'),
-        (PINK, 'Fecha de entrega', 'Dispara el recordatorio del alumno'),
+        (PINK, 'Fecha de entrega', 'Dispara el recordatorio al alumnado'),
         (SKY, 'Enigmas', 'Los pasos que hay que completar'),
     ]
     for i, (color, titulo, detalle) in enumerate(lista):
@@ -240,7 +240,7 @@ def xp_nivel():
         body += text(cx, 200, nombre, 18, 700 if alcanzado else 500,
                      NAVY if alcanzado else tint(NAVY, 0.45))
     body += text(600, 250, 'Al llegar a cierto nivel cambia el rango, que es el nombre '
-                 'que acompaña al alumno', 18, 500, tint(NAVY, 0.6))
+                 'que acompaña a cada estudiante', 18, 500, tint(NAVY, 0.6))
     body += text(600, 278, 'Los niveles y lo que cuesta cada uno se configuran por clase',
                  18, 500, tint(NAVY, 0.6))
     return svg('xp-nivel', H, body)
@@ -252,7 +252,7 @@ def vidas():
     body = text(600, 36, 'Los comportamientos mueven los puntos de vida', 20, 600, tint(NAVY, 0.6))
     body += rect(60, 70, 500, 220, tint(MINT, 0.16), 22)
     body += text(310, 108, 'Suman', 24, 700)
-    for i, item in enumerate(['Ayudar a un compañero', 'Entregar antes de tiempo',
+    for i, item in enumerate(['Ayudar a quien lo necesita', 'Entregar antes de tiempo',
                               'Participar en clase']):
         y = 152 + i * 44
         body += circle(120, y, 13, MINT)
@@ -266,7 +266,7 @@ def vidas():
         body += circle(700, y, 13, CORAL)
         body += text(728, y, item, 18, 500, NAVY, 'start')
 
-    body += text(600, 312, 'Sin vidas, el alumno no pierde el curso: pierde acceso a la '
+    body += text(600, 312, 'Sin vidas no se pierde el curso: se pierde el acceso a la '
                  'tienda hasta recuperarlas', 18, 600, tint(NAVY, 0.6))
     return svg('vidas', H, body)
 
@@ -277,7 +277,7 @@ def flujo_plantillas():
     body = ''
     pasos = [
         (PURPLE, 'Tu clase', ['Con su narrativa,', 'misiones y tienda']),
-        (MINT, 'La publicas', ['Se copia sin alumnos', 'ni notas']),
+        (MINT, 'La publicas', ['Se copia sin alumnado', 'ni notas']),
         (SKY, 'Catálogo', ['La ve el resto del', 'profesorado']),
         (YELLOW, 'Alguien la importa', ['Empieza con todo', 'montado']),
     ]
@@ -318,11 +318,11 @@ def vista_roles():
     H = 360
     body = ''
     for i, (color, quien, items) in enumerate([
-        (YELLOW, 'Lo que ves tú', ['Todas las clases y sus alumnos',
+        (YELLOW, 'Lo que ves tú', ['Todas las clases y su alumnado',
                                    'La bandeja de entregas por revisar',
                                    'La configuración y la tienda',
                                    'Las estadísticas de la clase']),
-        (MINT, 'Lo que ve el alumno', ['Solo las clases en las que está',
+        (MINT, 'Lo que ve tu alumnado', ['Solo las clases en las que está',
                                        'Sus misiones y sus entregas',
                                        'Su avatar, su nivel y sus insignias',
                                        'La clasificación, si la activas']),
@@ -335,7 +335,7 @@ def vista_roles():
             y = 150 + j * 42
             body += circle(x + 50, y, 7, tint(NAVY, 0.3))
             body += text(x + 72, y, item, 18, 500, NAVY, 'start')
-    body += text(600, 344, 'Un alumno nunca ve la nota ni la entrega de otro', 19, 600,
+    body += text(600, 344, 'Cada estudiante solo ve sus propias notas y entregas', 19, 600,
                  tint(NAVY, 0.65))
     return svg('vista-roles', H, body)
 

@@ -30,6 +30,13 @@
       </div>
     </template>
 
+    <!-- La papelera, solo cuando hay algo en ella -->
+    <template v-if="trashCount > 0" #tabs-extra>
+      <Button variant="ghost" size="sm" to="/profesor/clases/papelera" :icon-left="TrashIcon">
+        {{ t('teacher.classes.trash.link', { count: trashCount }) }}
+      </Button>
+    </template>
+
     <template #empty-action>
       <NuxtLink to="/profesor/clases/crear">
         <Button variant="primary">
@@ -38,12 +45,11 @@
         </Button>
       </NuxtLink>
     </template>
-
   </ClassListTemplate>
 </template>
 
 <script setup lang="ts">
-import { PlusIcon, RectangleStackIcon } from '@heroicons/vue/24/outline'
+import { PlusIcon, RectangleStackIcon, TrashIcon } from '@heroicons/vue/24/outline'
 
 const { t } = useI18n()
 
@@ -67,6 +73,17 @@ const isLoading = computed(
   () => classesStore.isLoadingClasses || teacherStore.isLoadingArchivedClasses
 )
 const archiveLoadingId = ref('')
+
+// Cuántas clases propias hay en la papelera, para el enlace junto a las pestañas.
+// Si no se puede saber, el enlace no sale: la papelera sigue en su dirección.
+const trashCount = ref(0)
+async function loadTrashCount() {
+  try {
+    trashCount.value = (await teacherStore.fetchClassTrash()).total
+  } catch {
+    trashCount.value = 0
+  }
+}
 
 const navigateToClass = (classId: string) => {
   router.push(`/profesor/clases/${classId}`)
@@ -93,6 +110,10 @@ const archiveClass = (classId: string) => setArchived(classId, true)
 const unarchiveClass = (classId: string) => setArchived(classId, false)
 
 onMounted(async () => {
-  await Promise.all([classesStore.ensureTeacherClasses(), teacherStore.ensureArchivedClasses()])
+  await Promise.all([
+    classesStore.ensureTeacherClasses(),
+    teacherStore.ensureArchivedClasses(),
+    loadTrashCount(),
+  ])
 })
 </script>

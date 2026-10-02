@@ -3,20 +3,20 @@
     "dashboard": {
       "meta": {
         "title": "Pagina mea | ITAKAI",
-        "description": "Pagina principală a elevului. Vezi-ți progresul, ultimele misiuni și statisticile de XP."
+        "description": "Pagina ta principală. Vezi-ți progresul, ultimele misiuni și statisticile de XP."
       },
       "welcome": "Bine ai venit, {name}!",
       "welcome_fallback_name": "Elev",
       "subtitle": "Continuă-ți călătoria de învățare și finalizează misiuni noi",
       "stats": {
-        "classes_enrolled": "Clase la care ești înscris",
+        "classes_enrolled": "Clase din care faci parte",
         "missions_completed": "Misiuni finalizate",
         "badges_earned": "Insigne obținute"
       },
       "my_classes": {
         "title": "Clasele mele",
         "view_all": "Vezi toate",
-        "empty": "Încă nu ești înscris la nicio clasă"
+        "empty": "Încă nu ești în nicio clasă"
       },
       "latest_missions": {
         "title": "Ultimele misiuni",
@@ -83,7 +83,7 @@
         "unlock_badge_hint": "Rezolvă toate enigmele acestei misiuni ca să deblochezi insigna."
       },
       "submission": {
-        "success": "Lucrarea a fost trimisă. Profesorul o va verifica în curând.",
+        "success": "Lucrarea a fost trimisă. Cadrul didactic o va verifica în curând.",
         "error": "Eroare la trimiterea lucrării. Încearcă din nou.",
         "expired_error": "Această misiune a expirat. Nu mai poți trimite enigme.",
         "downloading": "Se descarcă"
@@ -92,20 +92,20 @@
     "classes": {
       "meta": {
         "title": "Clasele mele | ITAKAI",
-        "description": "Intră în clasele la care ești înscris, vezi progresul și descoperă misiunile noi atribuite."
+        "description": "Intră în clasele din care faci parte, vezi progresul și descoperă misiunile noi atribuite."
       },
       "page_title": "Clasele mele",
-      "page_subtitle": "Clase la care ești înscris",
+      "page_subtitle": "Clasele din care faci parte",
       "join_class_button": "Alătură-te unei clase",
       "empty": {
         "title": "Nu ai clase",
-        "description": "Încă nu ești înscris la nicio clasă. Cere-i codul profesorului tău ca să te alături."
+        "description": "Încă nu ești în nicio clasă. Cere codul cadrului didactic ca să te alături."
       },
       "detail": {
         "error_title": "Eroare la încărcarea clasei",
         "back_to_classes": "Înapoi la clasele mele",
         "breadcrumb_classes": "Clasele mele",
-        "teacher_fallback": "Profesor",
+        "teacher_fallback": "Cadru didactic",
         "tabs": {
           "resumen": "Rezumat",
           "historia": "Poveste",
@@ -136,9 +136,9 @@
           "choose_guide": "Alege-ți ghidul pentru această clasă",
           "describe_avatar": "Descrie cum vrei să arate avatarul tău:",
           "example_label": "Exemplu:",
-          "example_text": "Un războinic tânăr cu armură aurie, păr închis la culoare și ochi strălucitori, ținând un scut cu simbolul Atenei. Stil epic și eroic, inspirat din mitologia greacă ...",
+          "example_text": "Un personaj tânăr cu armură aurie, păr închis la culoare și ochi strălucitori, ținând un scut cu simbolul Atenei. Stil epic și eroic, inspirat din mitologia greacă ...",
           "placeholder": "Descrie aici avatarul tău...",
-          "tip": "Sfat: fii precis cu culorile, ținuta, accesoriile și stilul. IA îți va crea avatarul pornind de la personajul pe care l-ai ales.",
+          "tip": "Sfat: dă detalii despre culori, ținută, accesorii și stil. IA îți va crea avatarul pornind de la personajul pe care l-ai ales.",
           "generate_button": "Generează avatarul",
           "generating": "Se generează avatarul tău...",
           "generated_trait": "Generat cu IA",
@@ -157,7 +157,7 @@
           "tab_rewards": "Recompense",
           "tab_purchases": "Schimburile mele",
           "empty_title": "Magazinul este gol",
-          "empty_description": "Profesorul tău nu a adăugat încă recompense. Revino mai târziu.",
+          "empty_description": "Cadrul didactic nu a adăugat încă recompense. Revino mai târziu.",
           "purchases_empty_title": "Încă nu ai schimbat nimic",
           "purchases_empty_description": "Cheltuiește-ți {coins} pe recompense și aici îți vei vedea istoricul.",
           "view_rewards": "Vezi recompensele",
@@ -193,7 +193,7 @@
           "usage_single": "O utilizare",
           "usage_unlimited": "Nelimitată",
           "powers_empty_title": "Nu există puteri",
-          "powers_empty_description": "Profesorul tău nu a adăugat încă puteri. Revino mai târziu.",
+          "powers_empty_description": "Cadrul didactic nu a adăugat încă puteri. Revino mai târziu.",
           "confirm_buy_title": "Cumperi „{name}”?",
           "confirm_use_title": "Folosești „{name}”?",
           "bought_toast": "Ai cumpărat „{name}”!",
@@ -201,8 +201,8 @@
           "mana_after": "Mana după utilizare"
         },
         "teachers": {
-          "title": "Profesori",
-          "empty": "Această clasă nu are încă profesori."
+          "title": "Cadre didactice",
+          "empty": "Această clasă nu are încă cadre didactice."
         }
       }
     },
@@ -271,7 +271,7 @@
       "account": {
         "title": "Contul tău",
         "username": "Utilizator",
-        "managed_note": "Contul tău este gestionat de profesori: te autentifici cu utilizatorul tău, nu are e-mail și nu poate fi șters de aici. Dacă ai nevoie de o modificare, cere-le-o."
+        "managed_note": "Contul tău este gestionat de cadrele didactice: te autentifici cu utilizatorul tău, nu are e-mail și nu poate fi șters de aici. Dacă ai nevoie de o modificare, cere-le-o."
       },
       "security": {
         "sessions_title": "Sesiuni",
@@ -322,7 +322,7 @@
       "recent_activity_card": {
         "title": "Activitate recentă",
         "empty": "Nu există activitate recentă",
-        "user_fallback": "Utilizator",
+        "user_fallback": "Cineva",
         "by_actor": "De {name}"
       },
       "submission_modal": {
@@ -342,7 +342,7 @@
       },
       "class_guide_markdown": {
         "empty_title": "Fără conținut",
-        "empty_student": "Profesorul nu a adăugat încă ghidul acestei clase.",
+        "empty_student": "Cadrul didactic nu a adăugat încă ghidul acestei clase.",
         "empty_teacher": "Încă nu ai adăugat ghidul acestei clase.",
         "add_guide_button": "Adaugă ghid",
         "last_updated": "Ultima actualizare: {date}"
@@ -354,7 +354,7 @@
         "legendaria": "Legendară"
       },
       "class_ranking_section": {
-        "podium_title": "Podiumul campionilor",
+        "podium_title": "Podiumul clasei",
         "stats_title": "Statistici",
         "rest_title": "Restul clasamentului",
         "level_abbr": "Niv.",

@@ -177,7 +177,7 @@ export class AuthService {
 
     const { registrationOpen } = await getGeneralSettings()
     if (!registrationOpen) {
-      throw new Error('El registro de nuevos usuarios está deshabilitado en esta instancia')
+      throw new Error('El registro de cuentas nuevas está deshabilitado en esta instancia')
     }
 
     return prisma.user.create({
@@ -196,14 +196,14 @@ export class AuthService {
   async signup(input: SignupInput, context?: RequestContext): Promise<LoginResult> {
     const { registrationOpen } = await getGeneralSettings()
     if (!registrationOpen) {
-      throw new Error('El registro de nuevos usuarios está deshabilitado en esta instancia')
+      throw new Error('El registro de cuentas nuevas está deshabilitado en esta instancia')
     }
 
     const email = normalizeEmail(input.email)
     const existingUser = await prisma.user.findUnique({ where: { email } })
 
     if (existingUser) {
-      throw new Error('El email ya está registrado')
+      throw new Error('Ya hay una cuenta con ese email')
     }
 
     const passwordHash = await hashPassword(input.password)
@@ -371,7 +371,7 @@ export class AuthService {
     })
 
     if (!user) {
-      throw new Error('Usuario no encontrado')
+      throw new Error('Cuenta no encontrada')
     }
 
     return this.sanitizeUser(user)

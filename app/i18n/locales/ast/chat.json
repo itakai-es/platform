@@ -28,14 +28,14 @@
       "teacher_suggestions": [
         "¿Cómo creo una misión nueva?",
         "¿Cómo xestiono la mio clase?",
-        "¿Cómo reviso'l progresu del alumnáu?",
+        "¿Cómo reviso'l progresu del mio alumnáu?",
         "¿Cómo asigno puntos extra?"
       ]
     },
     "god_messages": {
       "student": [
         "¿Necesites ayuda cola to misión?",
-        "¡Vamos deprender xuntos!",
+        "¡Vamos deprender en equipu!",
         "¿Dudes cola xera?",
         "¡Entrúgame lo que quieras!",
         "Toi equí p'ayudate",
@@ -48,7 +48,7 @@
         "¿Necesites crear una misión?",
         "¿Dudes tocante al to alumnáu?",
         "Toi equí p'ayudate",
-        "¿Revisamos daqué xuntos?",
+        "¿Revisamos daqué en equipu?",
         "¿Idees pa la to clase?",
         "¡Planifiquemos la lleición!",
         "¿En qué t'ayudo güei?"
@@ -56,8 +56,8 @@
       "admin": ["¿Necesites ayuda?", "Al to serviciu", "¿En qué t'ayudo?", "¡Toi equí!"]
     },
     "user_subtitles": {
-      "teacher": "Profesor",
-      "default": "Usuariu"
+      "teacher": "Docente",
+      "default": "La to cuenta"
     },
     "mission_actions": {
       "fallback_title": "esta misión",
@@ -71,7 +71,7 @@
       },
       "m3": {
         "label": "¡Vamos entamar!",
-        "message": "¡Hola {god}! Toi llistu pa entamar la misión \"{title}\". ¿Per ónde entamo?"
+        "message": "¡Hola {god}! Tengo ganes d'entamar la misión \"{title}\". ¿Per ónde entamo?"
       },
       "m4": {
         "label": "Explícame los enigmes",
@@ -79,7 +79,7 @@
       },
       "m5": {
         "label": "Dame pistes ensin spoilers",
-        "message": "¡Hola {god}! Toi atascáu na misión \"{title}\". ¿Pues dame dalguna pista ensin spoilers?"
+        "message": "¡Hola {god}! Atasquéme na misión \"{title}\". ¿Pues dame dalguna pista ensin spoilers?"
       },
       "m6": {
         "label": "¿Cómo ameyoro la mio entrega?",
@@ -110,15 +110,15 @@
         },
         "t4": {
           "label": "Diseña criterios d'evaluación",
-          "message": "Ayúdame a diseñar criterios d'evaluación xustos y motivadores pa los mios alumnos."
+          "message": "Ayúdame a diseñar criterios d'evaluación xustos y motivadores pal mio alumnáu."
         },
         "t5": {
           "label": "Suxier una insinia temática",
-          "message": "Necesito idees pa crear una insinia que motive a los mios alumnos. ¿Qué suxieres?"
+          "message": "Necesito idees pa crear una insinia que motive al mio alumnáu. ¿Qué suxieres?"
         },
         "t6": {
-          "label": "Ameyora la mio guía del alumnu",
-          "message": "Quiero ameyorar la guía que-yos doi a los mios alumnos. ¿Cómo puedo facela más útil?"
+          "label": "Ameyora la mio guía de la clase",
+          "message": "Quiero ameyorar la guía que-y doi al mio alumnáu. ¿Cómo puedo facela más útil?"
         },
         "t7": {
           "label": "Idees pa gamificar un tema",
@@ -126,19 +126,19 @@
         },
         "t8": {
           "label": "Crea un retu selmanal",
-          "message": "Quiero llanzar un retu selmanal pa motivar a los mios alumnos. ¿Qué idees tienes?"
+          "message": "Quiero llanzar un retu selmanal pa motivar al mio alumnáu. ¿Qué idees tienes?"
         },
         "t9": {
           "label": "Estratexes pa motivar",
-          "message": "Dellos alumnos tán desmotivaos. ¿Qué estratexes de gamificación me recomiendes?"
+          "message": "Parte del mio alumnáu perdió la motivación. ¿Qué estratexes de gamificación me recomiendes?"
         },
         "t10": {
           "label": "Adapta una actividá a niveles",
-          "message": "Tengo alumnos de niveles distintos. ¿Cómo puedo adaptar una actividá pa toos?"
+          "message": "Tengo estudiantes de niveles distintos. ¿Cómo puedo adaptar una actividá pa tola clase?"
         },
         "t11": {
           "label": "Redauta una guía de misión",
-          "message": "Necesito redautar una guía pa presentar una misión a los mios alumnos. ¿Écheme una mano?"
+          "message": "Necesito redautar una guía pa presentar una misión al mio alumnáu. ¿Échesme una mano?"
         },
         "t12": {
           "label": "Planifica una secuencia didáutica",
@@ -152,7 +152,7 @@
         },
         "s2": {
           "label": "Dame pistes pa un enigma",
-          "message": "Toi atascáu nun enigma. ¿Pues dame dalguna pista ensin spoilers?"
+          "message": "Atasquéme nun enigma. ¿Pues dame dalguna pista ensin spoilers?"
         },
         "s3": {
           "label": "Conseyos pa xubir de nivel",
@@ -176,7 +176,7 @@
         },
         "s8": {
           "label": "Motívame pa siguir",
-          "message": "Toi un poco desanimáu. ¿Pues motivame pa siguir avanzando?"
+          "message": "Fáltame un poco d'ánimu. ¿Pues motivame pa siguir avanzando?"
         },
         "s9": {
           "label": "Explícame con un exemplu",

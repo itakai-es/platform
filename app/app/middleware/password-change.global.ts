@@ -7,8 +7,9 @@ import { ROUTE_NAMES } from '~/utils/navigation'
  * aplicación, no a una lista de páginas.
  *
  * Sí se sigue llegando a la pantalla del cambio y a las páginas públicas de solo
- * leer: los textos legales y la ayuda no piden sesión y son justo lo que alguien
- * puede querer consultar antes de elegir una contraseña.
+ * leer: los textos legales, la ayuda, el blog y el catálogo de plantillas no
+ * piden sesión y son justo lo que alguien puede querer consultar antes de
+ * elegir una contraseña.
  */
 const OPEN_PATHS: string[] = [
   ROUTE_NAMES.CHANGE_PASSWORD,
@@ -19,8 +20,13 @@ const OPEN_PATHS: string[] = [
   ROUTE_NAMES.LICENSES,
 ]
 
-/** La ayuda y la entrada llevan subrutas. */
-const OPEN_PREFIXES: string[] = [ROUTE_NAMES.DOCS, '/auth/']
+/** La ayuda, el blog, las plantillas y la entrada llevan subrutas. */
+const OPEN_PREFIXES: string[] = [
+  ROUTE_NAMES.DOCS,
+  ROUTE_NAMES.BLOG,
+  ROUTE_NAMES.TEMPLATES,
+  '/auth/',
+]
 
 export default defineNuxtRouteMiddleware(to => {
   const authStore = useAuthStore()

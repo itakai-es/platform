@@ -148,7 +148,7 @@ describe('applyXpDelta — validation', () => {
 
     await expect(
       applyXpDelta({ studentId: STUDENT, classId: CLASS, delta: 50 }),
-    ).rejects.toThrow(/No estás inscrito/)
+    ).rejects.toThrow(/No estás en esta clase/)
   })
 })
 

@@ -3,10 +3,10 @@
     "dashboard": {
       "meta": {
         "title": "El mio aniciu | ITAKAI",
-        "description": "Aniciu principal del alumnu. Revisa'l to progresu, les últimes misiones y les estadístiques de XP."
+        "description": "El to aniciu d'estudiante. Revisa'l to progresu, les últimes misiones y les estadístiques de XP."
       },
-      "welcome": "¡Bienveníu, {name}!",
-      "welcome_fallback_name": "Alumnu",
+      "welcome": "¡Hola, {name}!",
+      "welcome_fallback_name": "Estudiante",
       "subtitle": "Sigui col to viaxe d'aprendizaxe y completa misiones nueves",
       "stats": {
         "classes_enrolled": "Clases inscrites",
@@ -16,7 +16,7 @@
       "my_classes": {
         "title": "Les mios clases",
         "view_all": "Veles toes",
-        "empty": "Entá nun tas inscritu en nenguna clase"
+        "empty": "Entá nun tas en nenguna clase"
       },
       "latest_missions": {
         "title": "Últimes misiones",
@@ -25,7 +25,7 @@
       },
       "ai_assistant": {
         "name": "Atenea",
-        "message_new_user": "¡Hola {name}! Bienveníu a ITAKAI. ¡Completa la to primer misión pa entamar a ganar XP!",
+        "message_new_user": "¡Hola {name}! Dámoste la bienvenida a ITAKAI. ¡Completa la to primer misión pa entamar a ganar XP!",
         "message_returning_user": "¡Hola {name}! Completasti {missions_completed} misiones en {classes_enrolled} clases. ¡Sigui asina!"
       },
       "class_fallback_name": "Clase",
@@ -77,13 +77,13 @@
         "action_play_video": "Reproducir videu"
       },
       "atenea": {
-        "message": "¡Hola! Toi equí p'ayudate con \"{mission_title}\". ¿Preparáu pa entamar esta aventura?"
+        "message": "¡Hola! Toi equí p'ayudate con \"{mission_title}\". ¿Entamamos esta aventura?"
       },
       "rewards": {
         "unlock_badge_hint": "Completa tolos enigmes d'esta misión pa desbloquiar esta insinia."
       },
       "submission": {
-        "success": "Entrega unviada correutamente. El profesor va revisala ceo.",
+        "success": "Entrega unviada correutamente. El to docente va revisala ceo.",
         "error": "Fallu al unviar la entrega. Inténtalo otra vuelta.",
         "expired_error": "Esta misión caducó. Yá nun pues entregar enigmes.",
         "downloading": "Baxando"
@@ -95,17 +95,17 @@
         "description": "Accedi a les tos clases inscrites, revisa'l progresu y descubri misiones nueves asignaes."
       },
       "page_title": "Les mios clases",
-      "page_subtitle": "Clases nes que tas inscritu",
+      "page_subtitle": "Les clases nes que tas",
       "join_class_button": "Xunise a una clase",
       "empty": {
         "title": "Nun tienes clases",
-        "description": "Entá nun tas inscritu en nenguna clase. Pidi'l códigu al to profesor pa xunite."
+        "description": "Entá nun tas en nenguna clase. Pidi'l códigu al to docente pa xunite."
       },
       "detail": {
         "error_title": "Fallu al cargar la clase",
         "back_to_classes": "Volver a les mios clases",
         "breadcrumb_classes": "Les mios clases",
-        "teacher_fallback": "Profesor",
+        "teacher_fallback": "Docente",
         "tabs": {
           "resumen": "Resume",
           "historia": "Hestoria",
@@ -136,9 +136,9 @@
           "choose_guide": "Escueyi la to guía pa esta clase",
           "describe_avatar": "Describi cómo quies que seya'l to avatar:",
           "example_label": "Exemplu:",
-          "example_text": "Un guerreru mozu con armadura dorada, pelo escuru y güeyos rellumantes, sosteniendo un escudu col símbolu d'Atenea. Estilu épicu y heroicu, inspiráu na mitoloxía griega ...",
+          "example_text": "Un personaxe mozu con armadura dorada, pelo escuru y güeyos rellumantes, sosteniendo un escudu col símbolu d'Atenea. Estilu épicu y heroicu, inspiráu na mitoloxía griega ...",
           "placeholder": "Describi equí'l to avatar...",
-          "tip": "Conseyu: sé específicu colos colores, la ropa, los accesorios y l'estilu. La IA va crear el to avatar en base al personaxe qu'escoyeres.",
+          "tip": "Conseyu: da detalles de colores, ropa, accesorios y estilu. La IA va crear el to avatar en base al personaxe qu'escoyeres.",
           "generate_button": "Xenera l'avatar",
           "generating": "Xenerando'l to avatar...",
           "generated_trait": "Xeneráu con IA",
@@ -157,7 +157,7 @@
           "tab_rewards": "Recompenses",
           "tab_purchases": "Los mios cambeos",
           "empty_title": "La tienda ta balera",
-          "empty_description": "El to profesor entá nun amestó recompenses. Vuelvi más sero.",
+          "empty_description": "El to docente entá nun amestó recompenses. Vuelvi más sero.",
           "purchases_empty_title": "Entá nun cambiesti nada",
           "purchases_empty_description": "Gasta les tos {coins} nes recompenses y equí vas ver el to historial.",
           "view_rewards": "Ver les recompenses",
@@ -193,7 +193,7 @@
           "usage_single": "Un usu",
           "usage_unlimited": "Illimitada",
           "powers_empty_title": "Nun hai poderes",
-          "powers_empty_description": "El to profesor entá nun amestó poderes. Vuelvi más sero.",
+          "powers_empty_description": "El to docente entá nun amestó poderes. Vuelvi más sero.",
           "confirm_buy_title": "¿Mercar \"{name}\"?",
           "confirm_use_title": "¿Usar \"{name}\"?",
           "bought_toast": "¡Mercasti \"{name}\"!",
@@ -259,7 +259,7 @@
     "profile": {
       "meta": {
         "title": "El mio perfil | ITAKAI",
-        "description": "Xestiona'l to perfil d'alumnu, configura la seguridá y personaliza la to esperiencia."
+        "description": "Xestiona'l to perfil d'estudiante, configura la seguridá y personaliza la to esperiencia."
       },
       "breadcrumb_home": "Aniciu",
       "breadcrumb_profile": "El mio perfil",
@@ -290,7 +290,7 @@
         "language_updated": "Llingua anovada",
         "theme_updated": "Tema anováu",
         "danger_zone_title": "Zona peligrosa",
-        "danger_zone_description": "Una vegada desaniciada la to cuenta, nun hai vuelta atrás. Asegúrate de tar seguru.",
+        "danger_zone_description": "Una vegada desaniciada la to cuenta, nun hai vuelta atrás. Piénsalo bien enantes de siguir.",
         "delete_account_button": "Desaniciar la cuenta"
       },
       "delete_modal": {
@@ -322,7 +322,7 @@
       "recent_activity_card": {
         "title": "Actividá reciente",
         "empty": "Nun hai actividá reciente",
-        "user_fallback": "Usuariu",
+        "user_fallback": "Daquién",
         "by_actor": "Por {name}"
       },
       "submission_modal": {
@@ -342,7 +342,7 @@
       },
       "class_guide_markdown": {
         "empty_title": "Ensin conteníu",
-        "empty_student": "El profesor entá nun amestó la guía d'esta clase.",
+        "empty_student": "El to docente entá nun amestó la guía d'esta clase.",
         "empty_teacher": "Entá nun amestasti la guía d'esta clase.",
         "add_guide_button": "Amestar guía",
         "last_updated": "Últimu anovamientu: {date}"
@@ -354,7 +354,7 @@
         "legendaria": "Llexendaria"
       },
       "class_ranking_section": {
-        "podium_title": "Podiu de campeones",
+        "podium_title": "Podiu de la clase",
         "stats_title": "Estadístiques",
         "rest_title": "Restu de la clasificación",
         "level_abbr": "Nv.",

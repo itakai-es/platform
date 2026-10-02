@@ -2,8 +2,8 @@
  * Planificador de tareas periódicas (Fase 3, punto 3).
  *
  * Infraestructura compartida, no un apaño para los recordatorios: la usan los
- * avisos de entrega, la limpieza de notificaciones y, cuando existan, la purga
- * a 30 días de la papelera de clases y los avisos de asistencia. Por eso vive
+ * avisos de entrega, la limpieza de notificaciones, la purga a 30 días de la
+ * papelera de clases y, cuando existan, los avisos de asistencia. Por eso vive
  * en `utils/` y no dentro del módulo de notificaciones.
  *
  * Decisiones:

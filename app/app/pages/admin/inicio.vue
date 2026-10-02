@@ -16,7 +16,7 @@
 
     <template #stats>
       <Card type="stats">
-        <StatDisplay :value="stats?.activeUsersToday ?? 0" label="Usuarios activos hoy" />
+        <StatDisplay :value="stats?.activeUsersToday ?? 0" label="Cuentas activas hoy" />
       </Card>
       <Card type="stats">
         <StatDisplay :value="stats?.pendingSubmissions ?? 0" label="Entregas sin corregir" />

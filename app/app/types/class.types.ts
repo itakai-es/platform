@@ -152,6 +152,46 @@ export interface Class {
   /** Acceso propio y profesorado: los devuelve la API de profesor en el listado y en el detalle. */
   myAccess?: ClassAccess | null
   teachers?: ClassTeacher[]
+  /** Cuándo se envió a la papelera; nulo si no está en ella. Lo trae el detalle del profesor. */
+  deletedAt?: string | null
+}
+
+/** Una clase en la papelera, tal como la lista `GET /teacher/classes/trash`. */
+export interface TrashedClass {
+  id: string
+  name: string
+  backgroundImage?: string | null
+  deletedAt: string
+  /** Cuándo la borra la purga. */
+  purgeAt: string
+  /** Días que le quedan, redondeando hacia arriba; 0 si ya le toca. */
+  daysLeft: number
+  /** Quién la envió; nulo si su cuenta ya no existe. */
+  deletedBy: { isMe: boolean; name: string | null } | null
+}
+
+export interface ClassTrashResponse {
+  classes: TrashedClass[]
+  total: number
+  /** Días que pasa una clase en la papelera. */
+  purgeDays: number
+}
+
+/** Lo que se perdería al borrar la clase, para el aviso antes de enviarla a la papelera. */
+export interface ClassDeletionImpact {
+  classId: string
+  name: string
+  inTrash: boolean
+  isTemplate: boolean
+  students: number
+  submissionsWithFile: number
+  missions: number
+  shopPurchases: number
+  /** Profesorado que no es propietario y deja de tener la clase. */
+  otherTeachers: number
+  /** Cuentas sin correo nacidas en la clase: las nunca usadas se borran; el resto queda para la administración. */
+  managedAccounts: { deleted: number; unmanaged: number }
+  purgeDays: number
 }
 
 /**

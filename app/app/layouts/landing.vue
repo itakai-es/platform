@@ -22,34 +22,42 @@
               />
             </NuxtLink>
 
-            <!-- Desktop Navigation + CTA Buttons -->
-            <div class="hidden lg:flex items-center gap-6">
+            <!-- Desktop Navigation + CTA Buttons. Con cuatro enlaces no sobra
+                 sitio en los 1050 px: enlaces a 14 px y huecos justos para que el
+                 botón de crear cuenta no se parta en dos líneas y el menú no se
+                 pegue al logo (a 1024 px va al límite). Vale para todos los
+                 idiomas menos el griego, cuyo botón ya se partía antes. -->
+            <div class="hidden lg:flex items-center gap-4">
               <!-- Navigation Links -->
-              <nav class="flex items-center gap-6">
+              <nav class="flex items-center gap-4">
                 <NuxtLink
                   to="/#features"
-                  class="text-base font-medium transition-colors text-white hover:text-navy-700"
+                  class="text-sm font-medium transition-colors text-white hover:text-navy-700"
                 >
                   {{ $t('common.nav.features') }}
                 </NuxtLink>
-                <a
-                  href="https://gamifp.es/blog/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="text-base font-medium transition-colors text-white hover:text-navy-700"
+                <NuxtLink
+                  to="/plantillas"
+                  class="text-sm font-medium transition-colors text-white hover:text-navy-700"
+                >
+                  {{ $t('common.nav.templates') }}
+                </NuxtLink>
+                <NuxtLink
+                  to="/blog"
+                  class="text-sm font-medium transition-colors text-white hover:text-navy-700"
                 >
                   {{ $t('common.nav.blog') }}
-                </a>
+                </NuxtLink>
                 <NuxtLink
                   to="/ayuda"
-                  class="text-base font-medium transition-colors text-white hover:text-navy-700 whitespace-nowrap"
+                  class="text-sm font-medium transition-colors text-white hover:text-navy-700 whitespace-nowrap"
                 >
                   {{ $t('common.nav.help') }}
                 </NuxtLink>
               </nav>
 
               <!-- CTA Buttons + Language -->
-              <div class="flex items-center gap-3">
+              <div class="flex items-center gap-2">
                 <AccessibilityMenu variant="light" />
                 <LanguageSwitcher variant="light" />
                 <Button
@@ -121,34 +129,42 @@
               />
             </NuxtLink>
 
-            <!-- Desktop Navigation + CTA Buttons -->
-            <div class="hidden lg:flex items-center gap-6">
+            <!-- Desktop Navigation + CTA Buttons. Con cuatro enlaces no sobra
+                 sitio en los 1050 px: enlaces a 14 px y huecos justos para que el
+                 botón de crear cuenta no se parta en dos líneas y el menú no se
+                 pegue al logo (a 1024 px va al límite). Vale para todos los
+                 idiomas menos el griego, cuyo botón ya se partía antes. -->
+            <div class="hidden lg:flex items-center gap-4">
               <!-- Navigation Links -->
-              <nav class="flex items-center gap-6">
+              <nav class="flex items-center gap-4">
                 <NuxtLink
                   to="/#features"
-                  class="text-base font-medium transition-colors text-white hover:text-navy-700"
+                  class="text-sm font-medium transition-colors text-white hover:text-navy-700"
                 >
                   {{ $t('common.nav.features') }}
                 </NuxtLink>
-                <a
-                  href="https://gamifp.es/blog/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="text-base font-medium transition-colors text-white hover:text-navy-700"
+                <NuxtLink
+                  to="/plantillas"
+                  class="text-sm font-medium transition-colors text-white hover:text-navy-700"
+                >
+                  {{ $t('common.nav.templates') }}
+                </NuxtLink>
+                <NuxtLink
+                  to="/blog"
+                  class="text-sm font-medium transition-colors text-white hover:text-navy-700"
                 >
                   {{ $t('common.nav.blog') }}
-                </a>
+                </NuxtLink>
                 <NuxtLink
                   to="/ayuda"
-                  class="text-base font-medium transition-colors text-white hover:text-navy-700 whitespace-nowrap"
+                  class="text-sm font-medium transition-colors text-white hover:text-navy-700 whitespace-nowrap"
                 >
                   {{ $t('common.nav.help') }}
                 </NuxtLink>
               </nav>
 
               <!-- CTA Buttons + Language -->
-              <div class="flex items-center gap-3">
+              <div class="flex items-center gap-2">
                 <AccessibilityMenu variant="light" />
                 <LanguageSwitcher variant="light" />
                 <Button

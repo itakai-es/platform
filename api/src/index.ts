@@ -22,9 +22,11 @@ import { submissionsRoutes } from './modules/submissions/submissions.routes.js'
 import { gamificationRoutes } from './modules/gamification/gamification.routes.js'
 import { profileRoutes } from './modules/profile/profile.routes.js'
 import { publicHelpRoutes, adminHelpRoutes } from './modules/help/help.routes.js'
+import { publicTemplateRoutes } from './modules/templates/templates.routes.js'
 import { filesRoutes } from './modules/files/files.routes.js'
 import { isPublicUploadPath } from './modules/storage/storage.service.js'
 import { registerNotificationJobs } from './modules/notifications/notifications.jobs.js'
+import { registerClassTrashJobs } from './modules/teachers/class-trash.jobs.js'
 import { startScheduler, stopScheduler } from './utils/scheduler.js'
 import { HttpError } from './utils/errors.js'
 import { authenticate, sessionGate } from './utils/session-gate.js'
@@ -273,6 +275,10 @@ async function buildServer() {
   // Centro de ayuda: la parte pública no pide sesión (cuelga de la landing).
   await fastify.register(publicHelpRoutes, { prefix: '/public/help' })
   await fastify.register(adminHelpRoutes, { prefix: '/admin/help' })
+  // Catálogo de plantillas sin sesión, para abrir sin cuenta el enlace a una
+  // plantilla. Bajo `/public` a propósito: como la ayuda, se sigue viendo con la
+  // plataforma en mantenimiento.
+  await fastify.register(publicTemplateRoutes, { prefix: '/public/templates' })
 
   return fastify
 }
@@ -281,12 +287,13 @@ async function start() {
   try {
     const server = await buildServer()
 
-    // Tareas periódicas (recordatorios de entrega, limpieza de avisos). Se
-    // pueden desactivar con SCHEDULER_ENABLED=false (útil si algún día hay más
-    // de una instancia y solo una debe ejecutarlas). El hook de apagado se
+    // Tareas periódicas (recordatorios de entrega, limpieza de avisos, purga de
+    // la papelera de clases). Se pueden desactivar con SCHEDULER_ENABLED=false
+    // (útil si algún día hay más de una instancia y solo una debe ejecutarlas). El hook de apagado se
     // registra antes de escuchar: Fastify no admite `addHook` una vez arrancado.
     if (env.SCHEDULER_ENABLED) {
       registerNotificationJobs()
+      registerClassTrashJobs()
       server.addHook('onClose', async () => stopScheduler())
     }
 

@@ -1,7 +1,7 @@
 {
   "admin": {
     "dashboard": {
-      "title": "Inici d'administrador",
+      "title": "Inici d'administració",
       "subtitle": "Panell de control del sistema ITAKAI",
       "activity": {
         "title": "Activitat del sistema",
@@ -10,7 +10,7 @@
         "period_month": "Últim mes"
       },
       "quick_actions": {
-        "manage_users": "Gestionar usuaris"
+        "manage_users": "Gestionar comptes"
       },
       "system_status": {
         "title": "Estat del sistema",
@@ -22,18 +22,18 @@
       },
       "meta": {
         "title": "Inici admin | ITAKAI",
-        "description": "Panell de control del sistema ITAKAI. Gestiona usuaris, institucions i supervisa l'estat de la plataforma."
+        "description": "Panell de control del sistema ITAKAI. Gestiona comptes, institucions i supervisa l'estat de la plataforma."
       }
     },
     "users": {
-      "title": "Gestió d'usuaris",
-      "subtitle": "Administra tots els usuaris de la plataforma",
+      "title": "Gestió de comptes",
+      "subtitle": "Administra tots els comptes de la plataforma",
       "filters": {
         "search_placeholder": "Busca per nom, correu o usuari...",
         "all_roles": "Tots els rols",
-        "students": "Alumnes",
-        "teachers": "Professors",
-        "admins": "Administradors",
+        "students": "Estudiants",
+        "teachers": "Docents",
+        "admins": "Administració",
         "all_statuses": "Tots els estats",
         "active": "Actiu",
         "suspended": "Suspés",
@@ -45,8 +45,8 @@
         "orphan_accounts": "Sense correu ni classe"
       },
       "roles": {
-        "student": "Alumne",
-        "teacher": "Professor",
+        "student": "Estudiant",
+        "teacher": "Docent",
         "admin": "Admin"
       },
       "card": {
@@ -58,8 +58,8 @@
         "no_home_class": "Sense classe d'origen"
       },
       "empty": {
-        "title": "No s'han trobat usuaris",
-        "description": "No hi ha usuaris que coincidisquen amb els filtres seleccionats."
+        "title": "No s'han trobat comptes",
+        "description": "No hi ha comptes que coincidisquen amb els filtres seleccionats."
       },
       "create": {
         "button": "Nou compte sense correu",
@@ -69,7 +69,7 @@
         "name_placeholder": "Nom i cognom",
         "home_class": "Classe d'origen",
         "home_class_placeholder": "Tria una classe",
-        "home_class_hint": "L'alumne queda matriculat en ella i el seu professorat porta el compte.",
+        "home_class_hint": "El compte entra en esta classe i el seu professorat el porta.",
         "username": "Usuari (opcional)",
         "username_placeholder": "El proposa el sistema",
         "username_hint": "En blanc, el proposa el sistema. Si el que escrius ja està agafat, se li afig un sufix.",
@@ -81,17 +81,17 @@
         "error": "No s'ha pogut crear el compte."
       },
       "class_search": {
-        "placeholder": "Busca per classe, professor o codi",
+        "placeholder": "Busca per classe, docent o codi",
         "searching": "S'està buscant…",
         "no_results": "Cap classe no coincidix",
         "more": "Hi ha més classes: escriu més per a afinar",
-        "option_hint": "{teacher} · sense alumnes | {teacher} · 1 alumne | {teacher} · {count} alumnes"
+        "option_hint": "{teacher} · sense estudiants | {teacher} · 1 estudiant | {teacher} · {count} estudiants"
       },
       "actions": {
-        "suspend_title": "Suspendre usuari",
+        "suspend_title": "Suspendre compte",
         "suspend_message": "Segur que vols suspendre {name}? No podrà accedir a la plataforma.",
         "suspend_confirm": "Suspendre",
-        "delete_title": "Eliminar usuari",
+        "delete_title": "Eliminar compte",
         "delete_message": "Segur que vols eliminar {name}? Esta acció no es pot desfer.",
         "delete_confirm": "Eliminar",
         "menu_label": "Accions de {name}",
@@ -108,7 +108,7 @@
         "credentials_password": "Contrasenya temporal",
         "home_class": "Canviar classe d'origen",
         "home_class_title": "Classe d'origen",
-        "home_class_note": "És la classe des de la qual el professorat porta este compte; en canviar-la, l'alumne queda matriculat en la nova. Sense classe, només l'atén l'administració.",
+        "home_class_note": "És la classe des de la qual el professorat porta este compte; en canviar-la, el compte passa a la nova. Sense classe, només l'atén l'administració.",
         "home_class_none": "Sense classe d'origen",
         "suspend_error": "No s'ha pogut suspendre el compte.",
         "activate_error": "No s'ha pogut activar el compte.",
@@ -117,8 +117,8 @@
         "delete_error": "No s'ha pogut eliminar el compte."
       },
       "meta": {
-        "title": "Gestió d'usuaris | ITAKAI Admin",
-        "description": "Administra tots els usuaris del sistema, crea nous perfils, edita rols i supervisa l'activitat."
+        "title": "Gestió de comptes | ITAKAI Admin",
+        "description": "Administra tots els comptes del sistema, crea perfils nous, edita rols i supervisa l'activitat."
       },
       "sort": {
         "recent": "Més recents"
@@ -138,7 +138,7 @@
         "title": "Gestió de classes | ITAKAI Admin"
       },
       "sort": {
-        "students_desc": "Més alumnes",
+        "students_desc": "Més estudiants",
         "missions_desc": "Més missions"
       }
     },
@@ -177,7 +177,7 @@
         "uptime": "Disponibilitat"
       },
       "overview": {
-        "total_users": "Usuaris totals",
+        "total_users": "Comptes totals",
         "active_today": "Actius hui",
         "missions_completed": "Missions completades",
         "completion_rate": "Taxa de compleció"
@@ -186,19 +186,19 @@
         "system_resources": "Recursos del sistema",
         "service_health": "Estat dels servicis",
         "response_time": "Temps de resposta",
-        "active_users": "Usuaris actius",
+        "active_users": "Comptes actius",
         "requests": "Peticions",
         "tokens_over_time": "Tokens consumits",
-        "users_by_role": "Usuaris per rol",
+        "users_by_role": "Comptes per rol",
         "missions_by_status": "Missions per estat",
         "missions_by_rarity": "Missions per raresa",
         "ai_usage": "Ús d'IA (assistents)"
       },
       "ai": {
         "total_tokens": "Tokens totals",
-        "avg_tokens_user": "Mitjana per usuari",
+        "avg_tokens_user": "Mitjana per compte",
         "total_conversations": "Converses",
-        "avg_conversations_user": "Conv. per usuari"
+        "avg_conversations_user": "Conv. per compte"
       },
       "system": {
         "memory": "Memòria",
@@ -237,11 +237,11 @@
         "success": "Correcte",
         "all_types": "Tots els tipus",
         "new_school": "Nova institució",
-        "new_users": "Nous usuaris",
+        "new_users": "Comptes nous",
         "alert": "Alerta",
         "system_update": "Actualització",
         "missions_completed": "Missions completades",
-        "user_action": "Acció d'usuari"
+        "user_action": "Acció d'un compte"
       },
       "empty": {
         "title": "No s'han trobat registres",
@@ -249,7 +249,7 @@
       },
       "meta": {
         "title": "Registres del sistema | ITAKAI Admin",
-        "description": "Revisa els registres d'activitat del sistema, audita accions d'usuaris i diagnostica problemes tècnics."
+        "description": "Revisa els registres d'activitat del sistema, audita l'activitat dels comptes i diagnostica problemes tècnics."
       }
     },
     "system_logs": {
@@ -327,9 +327,9 @@
         "contact_email": "Correu de contacte",
         "default_language": "Idioma per defecte",
         "registration_open": "Registre obert",
-        "registration_hint": "Permet que es registren nous usuaris.",
+        "registration_hint": "Permet crear comptes nous des del registre.",
         "maintenance_mode": "Mode manteniment",
-        "maintenance_hint": "Mostra un avís de manteniment als usuaris."
+        "maintenance_hint": "Mostra un avís de manteniment a qui hi entre."
       }
     },
     "help": {
@@ -435,7 +435,7 @@
         "alumnado": "Alumnat",
         "ia-y-configuracion": "IA i configuració",
         "tu-cuenta": "El teu compte",
-        "si-eres-alumno": "Si eres alumne",
+        "si-eres-alumno": "Si eres estudiant",
         "cuando-algo-falla": "Quan alguna cosa falla",
         "configuracion": "Configuració"
       }
@@ -447,11 +447,17 @@
       "edit_article": "Editar entrada",
       "empty_title": "Encara no hi ha entrades",
       "empty_description": "Crea la primera entrada des d'ací.",
-      "reorder_disabled_filtered": "Lleva el filtre d'estat i la busca per a canviar l'orde.",
       "placeholder_title": "Cinc idees per a gamificar la teua aula",
       "ai_placeholder": "Explica-li a Atenea què vols contar…",
       "delete_message": "S'eliminarà «{title}» i deixarà de veure's en el blog. No es pot desfer.",
-      "public_notice": "Les entrades publicades eixiran en el blog públic quan estiga disponible."
+      "field_author": "Autoria",
+      "author_hint": "Opcional. Ix al costat de la data en l'entrada publicada: una persona o un equip.",
+      "placeholder_author": "Equip ITAKAI",
+      "field_published_at": "Data de publicació",
+      "published_at_hint": "Per defecte, el dia de la primera publicació. Canvia-la per a portar una entrada antiga amb la seua data real.",
+      "published_at_draft_hint": "Es posa sola en publicar l'entrada per primera vegada.",
+      "published_at_invalid": "Tria una data entre l'1 de gener de 2000 i hui.",
+      "view_public": "Veure el blog"
     }
   }
 }

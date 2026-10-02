@@ -26,7 +26,7 @@ const DATE_LOCALES: Record<AppLanguage, string[]> = {
 const resolvedLocales = new Map<string, string>()
 
 /** La primera etiqueta del idioma que el navegador soporta de verdad. */
-const resolveDateLocale = (code: string): string => {
+export const resolveDateLocale = (code: string): string => {
   const cached = resolvedLocales.get(code)
   if (cached) return cached
   const candidates = DATE_LOCALES[code as AppLanguage] ?? [code]

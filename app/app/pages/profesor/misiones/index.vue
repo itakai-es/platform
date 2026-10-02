@@ -3,6 +3,10 @@
     <!-- Page Header -->
     <PageHeader title="Mis Misiones" :subtitle="t('teacher.missions.index.subtitle')">
       <template v-if="canCreate" #actions>
+        <Button v-if="canImport" :id="importButtonId" variant="outline" @click="openImport">
+          <ArrowDownTrayIcon class="w-4 h-4 mr-2" />
+          {{ t('teacher.missions.import.button') }}
+        </Button>
         <NuxtLink to="/profesor/misiones/crear">
           <Button variant="primary">
             <PlusIcon class="w-4 h-4 mr-2" />
@@ -45,15 +49,21 @@
       :description="getEmptyStateMessage()"
     >
       <template v-if="!searchQuery && canCreate" #action>
-        <NuxtLink
-          :to="
-            selectedClassIds?.length === 1
-              ? `/profesor/misiones/crear?classId=${selectedClassIds[0]}`
-              : '/profesor/misiones/crear'
-          "
-        >
-          <Button variant="primary"> Crear Primera Misión </Button>
-        </NuxtLink>
+        <div class="flex flex-wrap justify-center gap-3">
+          <NuxtLink
+            :to="
+              selectedClassIds?.length === 1
+                ? `/profesor/misiones/crear?classId=${selectedClassIds[0]}`
+                : '/profesor/misiones/crear'
+            "
+          >
+            <Button variant="primary"> Crear Primera Misión </Button>
+          </NuxtLink>
+          <Button v-if="canImport" variant="outline" @click="openImport">
+            <ArrowDownTrayIcon class="w-4 h-4 mr-2" />
+            {{ t('teacher.missions.import.button') }}
+          </Button>
+        </div>
       </template>
     </EmptyState>
 
@@ -80,12 +90,22 @@
         @click="navigateToMission(mission)"
       />
     </CardCollection>
+
+    <!-- Importar una misión de una clase en otra: una copia que llega bloqueada -->
+    <ImportMissionModal
+      v-if="canImport"
+      v-model="importOpen"
+      :initial-target-id="selectedClassIds?.length === 1 ? selectedClassIds[0] : undefined"
+      :return-focus="headerImportButton"
+      @imported="refreshMissions"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { PlusIcon, RocketLaunchIcon } from '@heroicons/vue/24/outline'
+import { PlusIcon, RocketLaunchIcon, ArrowDownTrayIcon } from '@heroicons/vue/24/outline'
 import type { MissionStatus, MissionRarity } from '~/types/mission.types'
+import { canInClass } from '~/utils/class-access'
 
 type TeacherStatus = 'activa' | 'completada' | 'bloqueada'
 
@@ -130,6 +150,11 @@ const teacherStore = useTeacherStore()
 
 // Crear misiones pide edición en alguna clase (lo decide el almacén, igual que en Inicio).
 const canCreate = computed(() => teacherStore.canCreateMissions)
+// Importar pide un destino: una clase activa en la que editar misiones, como las que
+// ofrece «Nueva misión» (las del almacén son las activas). Sin clases no hay nada que importar.
+const canImport = computed(() =>
+  teacherStore.classes.some(c => canInClass(c.myAccess, 'mission.edit'))
+)
 
 // State
 const activeFilters = ref<string[]>([])
@@ -141,7 +166,14 @@ const sortBy = ref('deadline-asc')
 // Use store data
 const missions = computed(() => teacherStore.recentMissions)
 const classes = computed(() => teacherStore.classes.map(c => ({ id: c.id, name: c.name })))
-const loading = computed(() => teacherStore.isLoadingMissions || teacherStore.isLoadingClasses)
+// Esqueleto solo mientras no hay nada que enseñar: al volver a pedir (la ventana de
+// importar pide las clases al día y, al acabar, se piden las misiones) la lista se
+// queda a la vista y se actualiza al llegar.
+const loading = computed(
+  () =>
+    (teacherStore.isLoadingMissions && missions.value.length === 0) ||
+    (teacherStore.isLoadingClasses && teacherStore.classes.length === 0)
+)
 
 // Computed
 const classOptions = computed(() => {
@@ -276,6 +308,27 @@ const getEmptyStateMessage = () => {
 
 const navigateToMission = (mission: TeacherMission) => {
   navigateTo(`/profesor/clases/${mission.classId}/misiones/${mission.id}`)
+}
+
+// Importar una misión de una clase en otra. Si la lista está filtrada por una
+// sola clase, se propone esa como destino. La copia llega bloqueada: el listado
+// se vuelve a pedir para que aparezca ya, mientras la ventana dice qué ha llegado.
+const importOpen = ref(false)
+// El botón de importar de la cabecera: si se importa desde el estado vacío, ese
+// botón se va con la primera misión y, al cerrar, el foco viene a este.
+const importButtonId = useId()
+const headerImportButton = () => document.getElementById(importButtonId)
+
+function openImport() {
+  importOpen.value = true
+}
+
+async function refreshMissions() {
+  try {
+    await teacherStore.ensureRecentMissions(true)
+  } catch (error) {
+    console.error('Error refreshing missions:', error)
+  }
 }
 
 // Load data on mount (use store with cache)

@@ -95,6 +95,12 @@ interface Props {
    * ventana entera cuando el contenido crece).
    */
   stickyChrome?: boolean
+  /**
+   * Con `stickyChrome`, la ventana crece con su contenido hasta el mismo tope
+   * en lugar de ocuparlo siempre entero: para las que se van rellenando a
+   * medida que se elige algo, y no cambian de pestaña.
+   */
+  fitContent?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -103,6 +109,7 @@ const props = withDefaults(defineProps<Props>(), {
   closable: true,
   persistent: false,
   stickyChrome: false,
+  fitContent: false,
   closeOnEsc: null,
 })
 
@@ -207,9 +214,12 @@ const modalClasses = computed(() => {
   }
 
   // Con stickyChrome forzamos altura fija ~92vh para que la ventana no "salte"
-  // según el contenido — siempre ocupa el mismo espacio en pantalla.
+  // según el contenido — siempre ocupa el mismo espacio en pantalla. Con
+  // fitContent, ese alto es solo el tope.
   const layout = props.stickyChrome
-    ? 'flex flex-col h-[92vh] max-h-[92vh]'
+    ? props.fitContent
+      ? 'flex flex-col max-h-[92vh]'
+      : 'flex flex-col h-[92vh] max-h-[92vh]'
     : ''
 
   return `relative w-full ${sizes[props.size]} ${themes[props.theme]} rounded-2xl shadow-xl transition-all overflow-hidden focus:outline-none ${layout}`

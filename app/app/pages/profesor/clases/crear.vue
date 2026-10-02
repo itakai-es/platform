@@ -207,7 +207,7 @@
                   ai-placeholder="Ej: Añade un giro en la trama, una casa nueva..."
                   context-label="Editando la historia de la clase"
                   ai-modal-hint="Dile a la IA qué quieres añadir o cambiar de la historia."
-                  ai-system-context="El profesor está editando la NARRATIVA/HISTORIA de su clase gamificada. Es la historia que envuelve toda la clase y motiva a los alumnos. Genera contenido narrativo, inmersivo y creativo que encaje con la temática de la clase."
+                  ai-system-context="Quien imparte la clase está editando la NARRATIVA/HISTORIA de su clase gamificada. Es la historia que envuelve toda la clase y motiva al alumnado. Genera contenido narrativo, inmersivo y creativo que encaje con la temática de la clase."
                 >
                   <template #default="{ edit }">
                     <div class="flex-1 onb-result-box overflow-y-auto min-h-0">
@@ -535,15 +535,15 @@
                   :god-name="god.name"
                   :god-avatar="god.avatar"
                   ai-placeholder="Ej: Añade criterios de evaluación, cambia el tono..."
-                  context-label="Editando la guía del alumno"
+                  context-label="Editando la guía del alumnado"
                   ai-modal-hint="Dile a la IA qué quieres añadir o cambiar de la guía."
-                  ai-system-context="El profesor está editando la GUÍA del alumno de su clase gamificada. Es el documento que explica a los alumnos cómo funciona la clase, sus normas y cómo progresar. Genera contenido claro, útil y bien estructurado."
+                  ai-system-context="Quien imparte la clase está editando la GUÍA del alumnado de su clase gamificada. Es el documento que explica al alumnado cómo funciona la clase, sus normas y cómo progresar. Genera contenido claro, útil y bien estructurado."
                 >
                   <template #default="{ edit }">
                     <div class="flex-1 onb-result-box overflow-y-auto min-h-0">
                       <OnboardingLoading
                         v-if="(waitingForFirstChunk || isGeneratingGuide) && !guideContent"
-                        text="Generando guía del alumno..."
+                        text="Generando la guía del alumnado..."
                         :show-bar="generationProgress > 0 || isOvertime"
                         :progress="generationProgress"
                         :is-overtime="isOvertime"
@@ -1022,7 +1022,7 @@ async function handleMaterialsUpload(event: Event) {
 // La idea que se manda a la IA incluye los materiales del profe como contexto.
 function ideaWithMaterials() {
   if (!docsContext.value) return idea.value
-  return `${idea.value}\n\nMateriales de referencia del profesor:\n${docsContext.value.slice(0, 4000)}`
+  return `${idea.value}\n\nMateriales de referencia de quien imparte la clase:\n${docsContext.value.slice(0, 4000)}`
 }
 
 // Huella de todo lo que alimenta la narrativa, para saber si hay que regenerarla al
@@ -1076,7 +1076,7 @@ function buildContext() {
   if (metaContextLine.value) parts.push(metaContextLine.value)
   if (plan.value) parts.push(`Narrativa: ${plan.value.slice(0, 500)}`)
   if (chosenTitle.value) parts.push(`Titulo: ${chosenTitle.value.slice(0, 100)}`)
-  if (docsContext.value) parts.push(`Materiales del profesor:\n${docsContext.value.slice(0, 600)}`)
+  if (docsContext.value) parts.push(`Materiales de quien imparte la clase:\n${docsContext.value.slice(0, 600)}`)
   // Tope de seguridad: la ruta de títulos acepta como mucho 2000 caracteres.
   return parts.join('\n').slice(0, 2000)
 }
@@ -1389,7 +1389,7 @@ async function generateGuide(extraPrompt?: string) {
     // extraPrompt es el "quiero cambiar algo" del profesor: llegaba hasta aquí y se
     // quedaba sin usar, así que regenerar la guía devolvía otra vez lo mismo.
     const ctx = `Clase: ${chosenTitle.value}\nNarrativa: ${plan.value.slice(0, 600)}\nHorario: ${schedule.value || 'No especificado'}${
-      extraPrompt ? `\nEl profesor pide sobre la guía: ${extraPrompt}` : ''
+      extraPrompt ? `\nQuien imparte la clase pide sobre la guía: ${extraPrompt}` : ''
     }`
     isGeneratingGuide.value = false
     isStreaming.value = true

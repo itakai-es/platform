@@ -1,6 +1,7 @@
 import { prisma } from '../../../config/database.js'
 import { BaseAgent, type AgentRequestContext } from './base-agent.js'
 import { getPlatformContext, getSkinName } from '../platform-context.js'
+import { INCLUSIVE_LANGUAGE_ES } from '../prompts/index.js'
 import { calculateMissionTotalXP } from '../../../utils/xp-calculator.js'
 import {
   assertMissionMember,
@@ -15,7 +16,7 @@ export class StudentAgent extends BaseAgent {
 
     const rules = context.locale.startsWith('en')
       ? `You are ${skinName}, student mentor in ITAKAI. When the student asks for help with content, explanations, or study tips: HELP THEM directly with useful information. When they ask how to do something in the platform: give the navigation path. Never give direct answers to exercises — guide with hints. Be BRIEF but USEFUL: max 4-5 sentences. Use data from context (class names, missions, XP, level). Friendly tone, markdown OK.`
-      : `Eres ${skinName}, mentor del alumno en ITAKAI. Cuando el alumno pida ayuda con contenido, explicaciones o consejos de estudio: AYUDALE directamente con informacion util. Cuando pregunte como hacer algo en la plataforma: da la ruta de navegacion. Nunca des respuestas directas a ejercicios — guia con pistas. Se BREVE pero UTIL: maximo 4-5 frases. Usa datos del contexto (nombres de clases, misiones, XP, nivel). Tono amigable, markdown OK.`
+      : `Eres ${skinName} y acompanas a cada estudiante en ITAKAI. Cuando te pida ayuda con contenido, explicaciones o consejos de estudio: AYUDALE directamente con informacion util. Cuando pregunte como hacer algo en la plataforma: da la ruta de navegacion. Nunca des respuestas directas a ejercicios — guia con pistas. Se BREVE pero UTIL: maximo 4-5 frases. Usa datos del contexto (nombres de clases, misiones, XP, nivel). Tono amigable, markdown OK. ${INCLUSIVE_LANGUAGE_ES}`
 
     return `${platform}\n\n${rules}`
   }
@@ -95,8 +96,8 @@ export class StudentAgent extends BaseAgent {
     const studentName = student?.name?.split(' ')[0] || ''
 
     const parts = [
-      `Rol del usuario: alumno`,
-      studentName ? `Nombre del alumno: ${studentName}` : '',
+      `Rol de quien escribe: estudiante`,
+      studentName ? `Nombre: ${studentName}` : '',
       `Skin visual: ${getSkinName(context.assistantId)}`,
       `Clases: ${enrollmentsSummary}`,
       `Misiones en progreso: ${missionSummary}`,
@@ -111,13 +112,13 @@ export class StudentAgent extends BaseAgent {
     // Include conversation history for multi-turn context
     if (context.history && context.history.length > 0) {
       const historyBlock = context.history
-        .map(m => `${m.role === 'user' ? 'Alumno' : getSkinName(context.assistantId)}: ${m.content}`)
+        .map(m => `${m.role === 'user' ? 'Estudiante' : getSkinName(context.assistantId)}: ${m.content}`)
         .join('\n')
       parts.push(`\nHistorial reciente de la conversacion:\n${historyBlock}`)
     }
 
     parts.push(
-      `\nConsulta del alumno: ${context.message}`,
+      `\nConsulta de estudiante: ${context.message}`,
       context.locale.startsWith('en')
         ? 'Be brief. Max 3-4 sentences. Guide with specific data, no filler.'
         : 'Se breve. Maximo 3-4 frases. Guia con datos concretos, sin relleno.',

@@ -5,6 +5,7 @@ import { shopService } from '../shop/shop.service.js'
 import { behaviorsService } from '../behaviors/behaviors.service.js'
 import { z, ZodError } from 'zod'
 import { scheduleConfigSchema } from './schedule-config.schema.js'
+import { templateFiltersOf, type TemplateFiltersQuery } from '../templates/templates.routes.js'
 import { ServiceUnavailableError, rethrowHttpError } from '../../utils/errors.js'
 import { consumeRateLimit, releaseRateLimit } from '../../utils/rate-limit.js'
 import { USERNAME_MAX_LENGTH, USERNAME_MIN_LENGTH } from '../../utils/identity.js'
@@ -35,6 +36,13 @@ import {
   getClassHistory,
 } from './class-history.service.js'
 import {
+  classDeletionImpact,
+  listClassTrash,
+  restoreClass,
+  trashClass,
+} from './class-trash.service.js'
+import { purgeClassNow } from './class-purge.service.js'
+import {
   listTeacherStudents,
   STUDENT_LIST_MAX_LIMIT,
   STUDENT_LIST_MAX_PAGE,
@@ -64,7 +72,7 @@ const managedBatchSchema = z.object({
       })
     )
     .min(1, 'La lista está vacía')
-    .max(MANAGED_BATCH_MAX, `Como mucho ${MANAGED_BATCH_MAX} alumnos de una vez`),
+    .max(MANAGED_BATCH_MAX, `Como mucho ${MANAGED_BATCH_MAX} estudiantes de una vez`),
 })
 
 const batchQuerySchema = z.object({
@@ -83,7 +91,7 @@ const studentNicknameSchema = z.object({
 const MANAGED_REVIEW_LIMIT = { max: 30, windowMs: 60 * 60 * 1000 }
 
 const usernameProposalSchema = z.object({
-  name: z.string().min(1, 'Escribe el nombre del alumno').max(120),
+  name: z.string().min(1, 'Escribe el nombre de quien va a usar la cuenta').max(120),
 })
 
 /**
@@ -222,6 +230,25 @@ const duplicateClassSchema = z.object({
   missions: z.boolean().default(true),
 })
 
+// Importar una misión a otra clase. Los documentos van siempre; la insignia
+// vinculada, salvo que se diga que no. Estricto: una opción con otro nombre
+// (`withBadge`…) no se descarta en silencio, da 400.
+const importMissionSchema = z
+  .object({
+    targetClassId: z.string().uuid(),
+    copyBadge: z.boolean().default(true),
+  })
+  .strict()
+
+// Importar una plantilla. Sus misiones van solo si se piden: sin cuerpo, como
+// siempre, sin ellas. Estricto, como importar una misión: una opción con otro
+// nombre (`withMissions`…) no se descarta en silencio, da 400.
+const importTemplateSchema = z
+  .object({
+    missions: z.boolean().default(false),
+  })
+  .strict()
+
 const shopItemSchema = z.object({
   name: z.string().min(1).max(60),
   description: z.string().max(200).optional(),
@@ -264,7 +291,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
 
     const user = request.user as { role: string | null }
     if (user.role !== 'teacher') {
-      reply.status(403).send({ message: 'Acceso denegado. Solo profesores.' })
+      reply.status(403).send({ message: 'Acceso denegado. Solo para el profesorado.' })
     }
   })
 
@@ -319,6 +346,8 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
+      // Un texto que no cabe o una portada que no vale (400) llegan con su mensaje.
+      rethrowHttpError(error)
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
@@ -487,11 +516,11 @@ export async function teacherRoutes(fastify: FastifyInstance) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
       // El acceso (404/403) y las validaciones, como la de una plantilla publicada
-      // sin metadatos (400), llegan con su estado.
+      // sin metadatos o la del largo de la historia (400), llegan con su estado;
+      // cualquier otro fallo, un 500 sin el detalle interno (el editor de la
+      // historia enseña el mensaje que llega).
       rethrowHttpError(error)
-      if (error instanceof Error) {
-        return reply.status(404).send({ message: error.message })
-      }
+      request.log.error(error, 'Error al guardar la clase')
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
@@ -507,23 +536,24 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
+      // El acceso (404/403) y los metadatos que faltan (400) llegan con su
+      // estado; cualquier otro fallo, como un 500 sin el detalle interno.
       rethrowHttpError(error)
-      if (error instanceof Error) {
-        return reply.status(400).send({ message: error.message })
-      }
+      request.log.error(error, 'Error al publicar o retirar una plantilla')
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
 
-  fastify.get('/templates', async (request: FastifyRequest<{ Querystring: { subject?: string; educationLevel?: string; language?: string; province?: string; q?: string } }>, reply: FastifyReply) => {
+  // El catálogo lee los filtros como el público: lo que no tiene la forma
+  // esperada (la clave repetida, un byte nulo…) se ignora en vez de llegar a la
+  // base. Ante un fallo interno, el detalle va al registro y no a la respuesta.
+  fastify.get('/templates', async (request: FastifyRequest<{ Querystring: TemplateFiltersQuery }>, reply: FastifyReply) => {
     try {
       const { id } = request.user as { id: string }
-      const result = await teachersService.listTemplates(id, request.query)
+      const result = await teachersService.listTemplates(id, templateFiltersOf(request.query))
       return result
     } catch (error) {
-      if (error instanceof Error) {
-        return reply.status(500).send({ message: error.message })
-      }
+      request.log.error(error, 'Error al listar las plantillas')
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
@@ -534,9 +564,9 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       const result = await teachersService.getTemplateDetail(id, request.params.classId)
       return result
     } catch (error) {
-      if (error instanceof Error) {
-        return reply.status(404).send({ message: error.message })
-      }
+      // La plantilla que no está da su 404; cualquier otro fallo, un 500 sin el detalle.
+      rethrowHttpError(error)
+      request.log.error(error, 'Error al leer una plantilla')
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
@@ -544,12 +574,17 @@ export async function teacherRoutes(fastify: FastifyInstance) {
   fastify.post('/templates/:classId/import', async (request: FastifyRequest<{ Params: { classId: string } }>, reply: FastifyReply) => {
     try {
       const { id } = request.user as { id: string }
-      const result = await teachersService.importTemplate(id, request.params.classId)
+      const options = importTemplateSchema.parse(request.body ?? {})
+      const result = await teachersService.importTemplate(id, request.params.classId, options)
       return result
     } catch (error) {
-      if (error instanceof Error) {
-        return reply.status(404).send({ message: error.message })
+      if (error instanceof ZodError) {
+        return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
+      // La plantilla que no está da su 404; cualquier otro fallo de la copia,
+      // un 500 sin el detalle interno.
+      rethrowHttpError(error)
+      request.log.error(error, 'Error al importar una plantilla')
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
@@ -572,6 +607,48 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
+
+  // ── Papelera ──
+  // Sin try/catch propio: el acceso (404/403) y el estado (409, ya en la
+  // papelera o fuera de ella) los resuelve el manejador global con su estado.
+
+  // Las clases de la papelera de quien pregunta, como propietario.
+  fastify.get('/classes/trash', async (request: FastifyRequest) => {
+    return listClassTrash((request.user as RequestUser).id)
+  })
+
+  // Lo que se perdería al purgarla, para el aviso antes de confirmar. No borra nada.
+  fastify.get(
+    '/classes/:classId/deletion-impact',
+    async (request: FastifyRequest<{ Params: { classId: string } }>) => {
+      return classDeletionImpact(request.user as RequestUser, request.params.classId)
+    }
+  )
+
+  // A la papelera: se archiva, se retira del marketplace y a los 30 días se purga.
+  fastify.delete(
+    '/classes/:classId',
+    async (request: FastifyRequest<{ Params: { classId: string } }>) => {
+      return trashClass(request.user as RequestUser, request.params.classId)
+    }
+  )
+
+  // Fuera de la papelera: vuelve archivada.
+  fastify.post(
+    '/classes/:classId/restore',
+    async (request: FastifyRequest<{ Params: { classId: string } }>) => {
+      return restoreClass(request.user as RequestUser, request.params.classId)
+    }
+  )
+
+  // Borrar ya, para siempre, una clase de la papelera, sin esperar a la purga.
+  // Solo quien es propietario; fuera de la papelera, 409.
+  fastify.post(
+    '/classes/:classId/purge',
+    async (request: FastifyRequest<{ Params: { classId: string } }>) => {
+      return purgeClassNow(request.user as RequestUser, request.params.classId)
+    }
+  )
 
   fastify.post('/classes/:classId/duplicate', async (request: FastifyRequest<{ Params: { classId: string } }>, reply: FastifyReply) => {
     try {
@@ -1028,6 +1105,29 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
+
+  // Copia la misión en otra clase: hace falta verla en su clase y editar las
+  // misiones de la de destino (ver teachersService.importMission).
+  fastify.post(
+    '/missions/:missionId/import',
+    async (request: FastifyRequest<{ Params: { missionId: string } }>, reply: FastifyReply) => {
+      try {
+        const { id } = request.user as { id: string }
+        const options = importMissionSchema.parse(request.body ?? {})
+        const result = await teachersService.importMission(id, request.params.missionId, options)
+        return reply.status(201).send(result)
+      } catch (error) {
+        if (error instanceof ZodError) {
+          return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
+        }
+        rethrowHttpError(error)
+        if (error instanceof Error) {
+          return reply.status(400).send({ message: error.message })
+        }
+        return reply.status(500).send({ message: 'Error interno' })
+      }
+    }
+  )
 
   // ==================== ACTIVITIES ====================
 

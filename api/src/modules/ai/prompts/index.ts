@@ -28,6 +28,14 @@ export function outputLanguageDirective(rawLocale?: string): string {
   return `\n\nIMPORTANT: Write your ENTIRE response in ${name}, regardless of the language of these instructions. Translate all natural-language text (titles, descriptions, narrative, headings) into ${name}, while keeping any JSON structure/keys and markdown formatting exactly as specified.`
 }
 
+/**
+ * Instrucción de lenguaje inclusivo para los prompts en castellano que generan
+ * texto que leen alumnado o profesorado. Va también cuando la salida se fuerza a
+ * catalán, gallego o euskera: el modelo la aplica en ese idioma.
+ */
+export const INCLUSIVE_LANGUAGE_ES =
+  'LENGUAJE INCLUSIVO: escribe para que valga igual para mujeres y hombres. Di "docente" o "profesorado" (no "el profesor"), "estudiante" o "alumnado" (no "el alumno" ni "los alumnos") y evita el masculino genérico: reformula en vez de usar "todos", "bienvenido", "preparado" o "nuevo" para referirte a personas.'
+
 // ============================================================
 // BRIEF DEL PROFESOR (compartido por todos los pasos del asistente)
 // ============================================================
@@ -57,10 +65,10 @@ number of sessions or duration, age or school year, deliverable format, material
 assessment — and neither change them nor add the opposite on your own initiative.`
   }
 
-  return `\n\n--- LO QUE HA PEDIDO EL PROFESOR (manda sobre todo lo demás) ---
-${metaLine ? `${metaLine}\n` : ''}${words ? `Palabras textuales del profesor:\n"""\n${words}\n"""\n` : ''}
+  return `\n\n--- LO QUE HA PEDIDO SU DOCENTE (manda sobre todo lo demás) ---
+${metaLine ? `${metaLine}\n` : ''}${words ? `Palabras textuales de quien imparte la clase:\n"""\n${words}\n"""\n` : ''}
 Respeta esto por encima de cualquier otra parte de estas instrucciones y por encima de
-la narrativa o el contexto que te pasen: si algo lo contradice, gana el profesor. Fíjate
+la narrativa o el contexto que te pasen: si algo lo contradice, gana su docente. Fíjate
 especialmente en las decisiones que ya ha tomado — trabajo individual, por parejas o en
 equipo, número de sesiones o duración, edad o curso, formato de entrega, materiales y
 evaluación — y ni las cambies ni añadas lo contrario por tu cuenta.`
@@ -81,19 +89,21 @@ CRITICAL RULE: NEVER mention the school subject or any specific curriculum conte
 Write freely, with your own structure. Use markdown: **bold** for key concepts, ## for sections if needed. Paint a vivid world, give students a role, the atmosphere, the mechanics as story (missions, trials, ascension), and where students progress towards. Only describe factions, houses or teams if the teacher's brief is compatible with group work — if they asked for individual work, frame the world around a solo journey instead. The teacher should read this and think "I NEED to build this world for my classroom".
 
 Do NOT introduce yourself. Start directly with the narrative.`
-    : `Un profesor dice: "${idea}".
+    : `Quien imparte una clase dice: "${idea}".
 
-Crea el worldbuilding gamificado de su clase. Esto es un *mundo de juego*, no una adaptacion del temario: ambientacion, rol del alumno, facciones o casas, atmosfera, rituales, y como los retos se enmarcan como narrativa. Usa la tematica EXACTA que ha pedido. Se creativo e inspirador — que al profesor le entren ganas de crear esta clase.
+Crea el worldbuilding gamificado de su clase. Esto es un *mundo de juego*, no una adaptacion del temario: ambientacion, rol del alumnado, facciones o casas, atmosfera, rituales, y como los retos se enmarcan como narrativa. Usa la tematica EXACTA que ha pedido. Echale creatividad e inspiracion — que a quien imparte la clase le entren ganas de crearla.
 
-REGLA CRITICA: NO menciones NUNCA la asignatura ni ningun contenido curricular concreto (matematicas, ecuaciones, gramatica, verbos, hechos historicos, celulas, tabla periodica, etc.). La narrativa tiene que funcionar independientemente de la asignatura que ensene el profesor, de forma que cualquier profesor — sea de la asignatura que sea — pueda adoptar este mundo y poner encima su propio contenido. Habla del mundo del juego, roles, facciones, atmosfera, progresion y stakes. NO hables del contenido de la asignatura.
+REGLA CRITICA: NO menciones NUNCA la asignatura ni ningun contenido curricular concreto (matematicas, ecuaciones, gramatica, verbos, hechos historicos, celulas, tabla periodica, etc.). La narrativa tiene que funcionar independientemente de la asignatura que se ensene, de forma que cualquier docente — sea de la asignatura que sea — pueda adoptar este mundo y poner encima su propio contenido. Habla del mundo del juego, roles, facciones, atmosfera, progresion y stakes. NO hables del contenido de la asignatura.
 
-Escribe libremente, con la estructura que tu quieras. Usa markdown: **negrita** para conceptos clave, ## para secciones si lo necesitas. Pinta un mundo vivido, dale a los alumnos un rol, la atmosfera, las mecanicas como historia (misiones, pruebas, ascenso), y hacia donde progresan los alumnos. Describe facciones, casas o equipos SOLO si encaja con lo que ha pedido el profesor — si ha pedido trabajo individual, monta el mundo como un viaje en solitario. El profesor tiene que leer esto y pensar "NECESITO construir este mundo en mi aula".
+Escribe libremente, con la estructura que tu quieras. Usa markdown: **negrita** para conceptos clave, ## para secciones si lo necesitas. Pinta un mundo vivido, dale al alumnado un rol, la atmosfera, las mecanicas como historia (misiones, pruebas, ascenso), y hacia donde progresa el alumnado. Describe facciones, casas o equipos SOLO si encaja con lo que ha pedido su docente — si ha pedido trabajo individual, monta el mundo como un viaje en solitario. Quien imparte la clase tiene que leer esto y pensar "NECESITO construir este mundo en mi aula".
+
+${INCLUSIVE_LANGUAGE_ES}
 
 NO te presentes. Empieza directamente con la narrativa.`,
 
   modify: (idea: string, current: string, feedback: string, locale: string) => locale === 'en'
     ? `A teacher is creating a gamified class world. Original idea: "${idea}". Current narrative: "${current}". Teacher says: "${feedback}". Modify the narrative based on their feedback. Keep what works, change what they asked. Preserve the worldbuilding (setting, roles, factions, atmosphere, mechanics as story). CRITICAL: never mention the school subject or specific curriculum content — the world must remain subject-agnostic so any teacher can reuse it. Markdown OK. Start directly.`
-    : `Un profesor esta creando el mundo de su clase gamificada. Idea original: "${idea}". Narrativa actual: "${current}". El profesor dice: "${feedback}". Modifica la narrativa segun su feedback. Mantén lo que funciona, cambia lo que ha pedido. Preserva el worldbuilding (ambientacion, roles, facciones, atmosfera, mecanicas como historia). CRITICO: nunca menciones la asignatura ni contenido curricular concreto — el mundo tiene que seguir siendo agnostico a la asignatura para que cualquier profesor pueda reutilizarlo. Markdown OK. Empieza directamente.`,
+    : `Quien imparte una clase esta creando su mundo gamificado. Idea original: "${idea}". Narrativa actual: "${current}". Su docente dice: "${feedback}". Modifica la narrativa segun su feedback. Mantén lo que funciona, cambia lo que ha pedido. Preserva el worldbuilding (ambientacion, roles, facciones, atmosfera, mecanicas como historia). CRITICO: nunca menciones la asignatura ni contenido curricular concreto — el mundo tiene que seguir siendo agnostico a la asignatura para que cualquier docente pueda reutilizarlo. ${INCLUSIVE_LANGUAGE_ES} Markdown OK. Empieza directamente.`,
 }
 
 export const CLASS_TITLES = {
@@ -103,7 +113,7 @@ export const CLASS_TITLES = {
 
   regenerate: (context: string, feedback: string, locale: string) => locale === 'en'
     ? `Generate 6 DIFFERENT class title options. Context: ${context}\nTeacher feedback: "${feedback}"\nReturn ONLY a JSON array of strings.`
-    : `Genera 6 opciones de titulo DIFERENTES. Contexto: ${context}\nFeedback del profesor: "${feedback}"\nDevuelve SOLO un JSON array de strings.`,
+    : `Genera 6 opciones de titulo DIFERENTES. Contexto: ${context}\nFeedback de su docente: "${feedback}"\nDevuelve SOLO un JSON array de strings.`,
 }
 
 // ============================================================
@@ -115,13 +125,13 @@ export const MISSION_NARRATIVE = {
     ? `A teacher wants to create a mission for their class "${className}". They say: "${idea}".
 
 Create the narrative for this gamified mission. Be creative and inspiring — make the teacher excited. Write freely with your own structure. Use markdown: **bold** for key concepts, ## for sections if needed. Paint a vivid scenario, give students a challenge, show how the subject becomes an adventure. Do NOT introduce yourself. Start directly.`
-    : `Un profesor quiere crear una misión para su clase "${className}". Dice: "${idea}".
+    : `Quien imparte la clase "${className}" quiere crear una misión. Dice: "${idea}".
 
-Crea la narrativa para esta misión gamificada. Se creativo e inspirador — que al profesor le entren ganas. Escribe libremente con la estructura que quieras. Usa markdown: **negrita** para conceptos clave, ## para secciones si lo necesitas. Pinta un escenario vivido, dale a los alumnos un reto, muestra como la asignatura se convierte en una aventura. NO te presentes. Empieza directamente.`,
+Crea la narrativa para esta misión gamificada. Échale creatividad e inspiración — que a quien imparte la clase le entren ganas. Escribe libremente con la estructura que quieras. Usa markdown: **negrita** para conceptos clave, ## para secciones si lo necesitas. Pinta un escenario vivido, dale al alumnado un reto, muestra como la asignatura se convierte en una aventura. ${INCLUSIVE_LANGUAGE_ES} NO te presentes. Empieza directamente.`,
 
   modify: (idea: string, current: string, feedback: string, locale: string) => locale === 'en'
     ? `A teacher is creating a mission. Idea: "${idea}". Current narrative: "${current}". Teacher says: "${feedback}". Modify the narrative based on feedback. Keep what works, change what they asked. Be creative and inspiring. Markdown OK. Start directly.`
-    : `Un profesor está creando una misión. Idea: "${idea}". Narrativa actual: "${current}". El profesor dice: "${feedback}". Modifica la narrativa según su feedback. Mantén lo que funciona, cambia lo que ha pedido. Se creativo e inspirador. Markdown OK. Empieza directamente.`,
+    : `Quien imparte una clase está creando una misión. Idea: "${idea}". Narrativa actual: "${current}". Su docente dice: "${feedback}". Modifica la narrativa según su feedback. Mantén lo que funciona, cambia lo que ha pedido. Échale creatividad e inspiración. ${INCLUSIVE_LANGUAGE_ES} Markdown OK. Empieza directamente.`,
 }
 
 export const MISSION_TITLES = {
@@ -131,7 +141,7 @@ export const MISSION_TITLES = {
 
   regenerate: (context: string, feedback: string, locale: string) => locale === 'en'
     ? `Generate 6 DIFFERENT titles for an educational mission. No class name. Short and creative.\n\nContext: ${context}\nTeacher feedback: "${feedback}"\n\nReturn ONLY a JSON array of strings.`
-    : `Genera 6 títulos DIFERENTES para una misión educativa. Sin nombre de clase. Cortos y creativos.\n\nContexto: ${context}\nFeedback del profesor: "${feedback}"\n\nDevuelve SOLO un JSON array de strings.`,
+    : `Genera 6 títulos DIFERENTES para una misión educativa. Sin nombre de clase. Cortos y creativos.\n\nContexto: ${context}\nFeedback de su docente: "${feedback}"\n\nDevuelve SOLO un JSON array de strings.`,
 }
 
 /** Qué recursos otorga un enigma (según los que la clase tenga activados). */
@@ -167,7 +177,7 @@ function enigmaRewardSpec(res: EnigmaResources, en: boolean): string {
 function enigmaJsonShape(res: EnigmaResources, en: boolean): string {
   const desc = en
     ? '"title":"Enigma name","description":"What the student has to do (2-3 sentences)","xp":20'
-    : '"title":"Nombre del enigma","description":"Qué tiene que hacer el alumno (2-3 frases)","xp":20'
+    : '"title":"Nombre del enigma","description":"Qué tiene que hacer cada estudiante (2-3 frases)","xp":20'
   const fields = [desc]
   if (res.coins) fields.push('"coins":20')
   if (res.mana) fields.push('"mana":10')
@@ -194,13 +204,13 @@ Return ONLY a JSON array:
 ${enigmaJsonShape(res, true)}
 
 ONLY the JSON, nothing else.`
-    : `Eres un diseñador de actividades educativas. El profesor tiene esta misión para la clase "${className}":
+    : `Diseñas actividades educativas. Su docente tiene esta misión para la clase "${className}":
 
 Idea: ${idea}
 Narrativa: ${narrative.slice(0, 600)}
 Título: ${title}
 
-Genera exactamente 4 ENIGMAS (actividades/tareas reales que los alumnos deben completar). Cada enigma es una actividad concreta y práctica.
+Genera exactamente 4 ENIGMAS (actividades/tareas reales que el alumnado debe completar). Cada enigma es una actividad concreta y práctica. ${INCLUSIVE_LANGUAGE_ES}
 
 Cada enigma otorga estas recompensas (escálalas según la dificultad del enigma):
 ${enigmaRewardSpec(res, false)}
@@ -214,7 +224,7 @@ SOLO el JSON, nada más.`,
 
   regenerate: (context: string, currentEnigmas: string, feedback: string, className: string, locale: string, res: EnigmaResources = {}) => locale === 'en'
     ? `Mission for class "${className}": ${context}.\n\nCurrent enigmas: ${currentEnigmas}\n\nTeacher says: "${feedback}".\n\nModify the enigmas based on feedback. Rewards per enigma:\n${enigmaRewardSpec(res, true)}\n\nReturn ONLY a JSON array:\n${enigmaJsonShape(res, true)}\nONLY the JSON.`
-    : `Misión para la clase "${className}": ${context}.\n\nEnigmas actuales: ${currentEnigmas}\n\nEl profesor dice: "${feedback}".\n\nMODIFICA los enigmas según su feedback. Recompensas por enigma:\n${enigmaRewardSpec(res, false)}\n\nResponde SOLO con un JSON array:\n${enigmaJsonShape(res, false)}\nSOLO el JSON.`,
+    : `Misión para la clase "${className}": ${context}.\n\nEnigmas actuales: ${currentEnigmas}\n\nSu docente dice: "${feedback}".\n\nMODIFICA los enigmas según su feedback. ${INCLUSIVE_LANGUAGE_ES} Recompensas por enigma:\n${enigmaRewardSpec(res, false)}\n\nResponde SOLO con un JSON array:\n${enigmaJsonShape(res, false)}\nSOLO el JSON.`,
 }
 
 // ============================================================
@@ -224,7 +234,7 @@ SOLO el JSON, nada más.`,
 export const CLASS_GUIDE = {
   generate: (title: string, context: string, locale: string) => locale === 'en'
     ? `Create a student guide for the class "${title}". Context: ${context}.\n\nInclude: ## Welcome, ## Schedule, ## Evaluation Criteria (percentages), ## Rules, ## How this class works (gamification). Keep it SHORT (max 400 words). Markdown format. Motivating tone. Start directly.`
-    : `Crea una guía del alumno para la clase "${title}". Contexto: ${context}.\n\nIncluye: ## Bienvenida, ## Horario, ## Criterios de evaluación (porcentajes), ## Normas, ## Cómo funciona esta clase (gamificación). Que sea BREVE (máx 400 palabras). Formato Markdown. Tono motivador. Empieza directamente.`,
+    : `Crea una guía para el alumnado de la clase "${title}". Contexto: ${context}.\n\nIncluye: ## Bienvenida, ## Horario, ## Criterios de evaluación (porcentajes), ## Normas, ## Cómo funciona esta clase (gamificación). Que sea BREVE (máx 400 palabras). Formato Markdown. Tono motivador. ${INCLUSIVE_LANGUAGE_ES} Empieza directamente.`,
 }
 
 // ============================================================
@@ -234,7 +244,7 @@ export const CLASS_GUIDE = {
 export const MISSION_GUIDE = {
   generate: (title: string, narrative: string, enigmasSummary: string, totalXp: number, locale: string) => locale === 'en'
     ? `Create a student briefing for the mission "${title}". Narrative: ${narrative.slice(0, 400)}. Enigmas: ${enigmasSummary}.\n\nInclude: ## Your Mission (epic summary), ## Enigmas (brief description without spoilers), ## Rewards (Total XP: ${totalXp}), ## Tips (2-3 tips). SHORT (max 300 words). Epic and motivating tone. Markdown. Start directly.`
-    : `Crea un briefing para los alumnos de la misión "${title}". Narrativa: ${narrative.slice(0, 400)}. Enigmas: ${enigmasSummary}.\n\nIncluye: ## Tu Misión (resumen épico de lo que van a hacer), ## Enigmas (breve descripción de cada reto sin spoilers), ## Recompensas (XP total: ${totalXp}), ## Consejos (2-3 tips). BREVE (máx 300 palabras). Tono épico y motivador. Markdown. Empieza directamente.`,
+    : `Crea un briefing para el alumnado de la misión "${title}". Narrativa: ${narrative.slice(0, 400)}. Enigmas: ${enigmasSummary}.\n\nIncluye: ## Tu Misión (resumen épico de lo que van a hacer), ## Enigmas (breve descripción de cada reto sin spoilers), ## Recompensas (XP total: ${totalXp}), ## Consejos (2-3 tips). BREVE (máx 300 palabras). Tono épico y motivador. ${INCLUSIVE_LANGUAGE_ES} Markdown. Empieza directamente.`,
 }
 
 // ============================================================
@@ -244,7 +254,7 @@ export const MISSION_GUIDE = {
 export const BADGE_GENERATE = {
   nameAndDescription: (context: string, locale: string) => locale === 'en'
     ? `Generate a creative name and description for an educational badge/achievement.\n- Name: 3-5 epic, creative words\n- Description: 1 short sentence (max 12 words), describes the achievement that unlocks the badge\n${context ? `\nContext: ${context}` : ''}\n\nReturn ONLY a JSON: {"name":"...","description":"..."}\nONLY the JSON.`
-    : `Genera un nombre y descripción creativos para una insignia/logro educativo.\n- Nombre: 3-5 palabras épicas y creativas\n- Descripción: 1 frase corta (máx 12 palabras), describe el logro que desbloquea la insignia\n${context ? `\nContexto: ${context}` : ''}\n\nResponde SOLO con un JSON: {"name":"...","description":"..."}\nSOLO el JSON.`,
+    : `Genera un nombre y descripción creativos para una insignia/logro educativo.\n- Nombre: 3-5 palabras épicas y creativas\n- Descripción: 1 frase corta (máx 12 palabras), describe el logro que desbloquea la insignia\n- ${INCLUSIVE_LANGUAGE_ES}\n${context ? `\nContexto: ${context}` : ''}\n\nResponde SOLO con un JSON: {"name":"...","description":"..."}\nSOLO el JSON.`,
 }
 
 // ============================================================
@@ -254,7 +264,7 @@ export const BADGE_GENERATE = {
 export const EDITOR_ASSIST = {
   generate: (content: string, request: string, systemContext: string, locale: string) => locale === 'en'
     ? `${systemContext}\nCurrent text:\n"""\n${content.slice(0, 1500)}\n"""\nThe teacher asks: "${request}"\nGenerate ONLY the new/modified content in markdown. Use **bold**, *italic*, ## headings, - lists. No explanations, no quotes. Start directly.`
-    : `${systemContext}\nTexto actual:\n"""\n${content.slice(0, 1500)}\n"""\nEl profesor pide: "${request}"\nGenera SOLO el contenido nuevo/modificado en markdown. Usa **negrita**, *cursiva*, ## titulos, - listas. Sin explicaciones, sin comillas. Empieza directamente.`,
+    : `${systemContext}\nTexto actual:\n"""\n${content.slice(0, 1500)}\n"""\nSu docente pide: "${request}"\nGenera SOLO el contenido nuevo/modificado en markdown. ${INCLUSIVE_LANGUAGE_ES} Usa **negrita**, *cursiva*, ## titulos, - listas. Sin explicaciones, sin comillas. Empieza directamente.`,
 }
 
 // ============================================================
@@ -507,5 +517,5 @@ export const FALLBACK_IMAGE = {
 export const ENIGMA_ASSIST = {
   modify: (currentEnigma: string, missionContext: string, request: string, locale: string) => locale === 'en'
     ? `I'm editing an enigma (activity/challenge) of an educational mission.${missionContext ? `\nMission context: ${missionContext}` : ''}\n\nCurrent enigma: ${currentEnigma}\n\nTeacher says: "${request}"\n\nModify the enigma based on their request. XP can ONLY be: 20 (easy), 40 (medium), 60 (research), 80 (complex), 100 (final project). Return ONLY a JSON: {"title":"...","description":"...","xp":40,"objectives":["...","..."]}. ONLY the JSON.`
-    : `Estoy editando un enigma (actividad/reto) de una misión educativa.${missionContext ? `\nContexto de la misión: ${missionContext}` : ''}\n\nEnigma actual: ${currentEnigma}\n\nEl profesor dice: "${request}"\n\nModifica el enigma según su petición. XP SOLO puede ser: 20 (fácil), 40 (medio), 60 (investigación), 80 (complejo), 100 (proyecto final). Devuelve SOLO un JSON: {"title":"...","description":"...","xp":40,"objectives":["...","..."]}. SOLO el JSON.`,
+    : `Estoy editando un enigma (actividad/reto) de una misión educativa.${missionContext ? `\nContexto de la misión: ${missionContext}` : ''}\n\nEnigma actual: ${currentEnigma}\n\nSu docente dice: "${request}"\n\nModifica el enigma según su petición. ${INCLUSIVE_LANGUAGE_ES} XP SOLO puede ser: 20 (fácil), 40 (medio), 60 (investigación), 80 (complejo), 100 (proyecto final). Devuelve SOLO un JSON: {"title":"...","description":"...","xp":40,"objectives":["...","..."]}. SOLO el JSON.`,
 }

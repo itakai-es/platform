@@ -1,6 +1,6 @@
 import { prisma } from '../../config/database.js'
 import type { Prisma } from '../../generated/prisma/client.js'
-import { accessibleClassesWhere, assertClassAccess } from '../../utils/class-access.js'
+import { assertClassAccess, listedClassesWhere } from '../../utils/class-access.js'
 import { accountHandle } from '../../utils/identity.js'
 
 /**
@@ -70,7 +70,8 @@ export async function listTeacherStudents(userId: string, query: StudentListQuer
   const archived = query.archived ?? (classId ? 'all' : 'active')
   if (classId) await assertClassAccess(classId, userId, 'student.view')
 
-  const accessible = accessibleClassesWhere(userId)
+  // Las clases de la papelera no cuentan: ni su alumnado sale por ellas ni suman.
+  const accessible = listedClassesWhere(userId)
   const liveClass: Prisma.ClassWhereInput = { ...accessible, archived: false }
   const enrolledIn = (cls: Prisma.ClassWhereInput): Prisma.UserWhereInput => ({
     enrollments: { some: { isPreview: false, class: cls } },

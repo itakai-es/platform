@@ -10,9 +10,9 @@ import { AvatarServiceUnavailableError } from '../../utils/errors.js'
 import { resolveClassSettings } from '../../utils/class-settings.js'
 import { ForbiddenError, ValidationError } from '../../utils/errors.js'
 import {
-  accessibleClassesWhere,
   classTeachersInclude,
   getClassMembership,
+  listedClassesWhere,
   studentEnrollmentsWhere,
   type ClassUser,
 } from '../../utils/class-access.js'
@@ -77,7 +77,7 @@ export class StudentsService {
       },
     })
 
-    if (!user) throw new Error('Usuario no encontrado')
+    if (!user) throw new Error('Cuenta no encontrada')
 
     // Aggregate XP across all classes for profile display
     const totalXp = user.enrollments.reduce((sum, e) => sum + e.xp, 0)
@@ -215,7 +215,7 @@ export class StudentsService {
       },
     })
 
-    if (!enrollment) throw new Error('No estás inscrito en esta clase')
+    if (!enrollment) throw new Error('No estás en esta clase')
     // Clase archivada: el alumno pierde el acceso aunque conserve el link.
     if (enrollment.class.archived) throw new Error('Esta clase está archivada y ya no está disponible')
 
@@ -306,7 +306,7 @@ export class StudentsService {
     const enrollment = await prisma.classEnrollment.findUnique({
       where: { studentId_classId: { studentId: userId, classId } },
     })
-    if (!enrollment) throw new Error('No estás inscrito en esta clase')
+    if (!enrollment) throw new Error('No estás en esta clase')
 
     const missions = await prisma.mission.findMany({
       // Si la clase está archivada, sus misiones no se listan para el alumno.
@@ -363,7 +363,7 @@ export class StudentsService {
       },
     })
 
-    if (!enrollment) throw new Error('No estás inscrito en esta clase')
+    if (!enrollment) throw new Error('No estás en esta clase')
 
     // Get mission progress to calculate completed enigmas (consistent with mission cards)
     const missionProgress = await prisma.studentMissionProgress.findMany({
@@ -519,7 +519,7 @@ export class StudentsService {
       where: { studentId_classId: { studentId: userId, classId } },
     })
 
-    if (!enrollment) throw new Error('No estás inscrito en esta clase')
+    if (!enrollment) throw new Error('No estás en esta clase')
 
     // Update the enrollment with new profile data (nickname and avatarUrl which can be preset or AI-generated)
     const updated = await prisma.classEnrollment.update({
@@ -555,7 +555,7 @@ export class StudentsService {
       }),
     ])
 
-    if (!enrollment) throw new Error('No estás inscrito en esta clase')
+    if (!enrollment) throw new Error('No estás en esta clase')
 
     let wardrobe_prompt = data.wardrobe_prompt ?? ''
     let background_prompt = data.background_prompt ?? ''
@@ -610,7 +610,7 @@ export class StudentsService {
       where: { studentId_classId: { studentId: userId, classId } },
     })
 
-    if (!enrollment) throw new Error('No estás inscrito en esta clase')
+    if (!enrollment) throw new Error('No estás en esta clase')
 
     // Get badges associated with missions in this class
     const classBadges = await prisma.badge.findMany({
@@ -656,7 +656,7 @@ export class StudentsService {
       where: { studentId_classId: { studentId: userId, classId } },
     })
 
-    if (!enrollment) throw new Error('No estás inscrito en esta clase')
+    if (!enrollment) throw new Error('No estás en esta clase')
 
     // Get activities related to this class (filter by classId field)
     const activities = await prisma.activity.findMany({
@@ -710,8 +710,9 @@ export class StudentsService {
   async ensurePreviewEnrollments(userId: string) {
     // Solo se crean las que faltan: una matrícula que ya existía se deja como
     // está, porque es la que cuenta en el ranking y en los listados de la clase.
+    // Las de la papelera, no: tampoco se listan como alumno (`studentEnrollmentsWhere`).
     const toCreate = await prisma.class.findMany({
-      where: { ...accessibleClassesWhere(userId), enrollments: { none: { studentId: userId } } },
+      where: { ...listedClassesWhere(userId), enrollments: { none: { studentId: userId } } },
       select: { id: true },
     })
 
@@ -740,13 +741,13 @@ export class StudentsService {
     })
 
     if (!cls) throw new Error('Código de clase inválido')
-    if (cls.archived) throw new Error('Esta clase está archivada y no admite nuevos alumnos')
+    if (cls.archived) throw new Error('Esta clase está archivada y no admite más estudiantes')
 
     const existingEnrollment = await prisma.classEnrollment.findUnique({
       where: { studentId_classId: { studentId: userId, classId: cls.id } },
     })
 
-    if (existingEnrollment) throw new Error('Ya estás inscrito en esta clase')
+    if (existingEnrollment) throw new Error('Ya estás en esta clase')
 
     await enrollStudentNow({ studentId: userId, classId: cls.id, className: cls.name })
 

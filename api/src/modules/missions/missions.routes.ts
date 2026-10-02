@@ -165,7 +165,7 @@ export async function missionsRoutes(fastify: FastifyInstance) {
     try {
       const { id, role } = request.user as { id: string; role: string }
       if (role !== 'teacher') {
-        return reply.status(403).send({ message: 'Solo profesores pueden crear misiones' })
+        return reply.status(403).send({ message: 'Solo el profesorado puede crear misiones' })
       }
       const data = createMissionSchema.parse(request.body)
       const result = await missionsService.createMission(id, data)
@@ -192,7 +192,7 @@ export async function missionsRoutes(fastify: FastifyInstance) {
       try {
         const { id, role } = request.user as { id: string; role: string }
         if (role !== 'teacher') {
-          return reply.status(403).send({ message: 'Solo profesores pueden modificar misiones' })
+          return reply.status(403).send({ message: 'Solo el profesorado puede modificar misiones' })
         }
         const { missionId } = request.params
         const data = updateMissionSchema.parse(request.body)
@@ -237,7 +237,7 @@ export async function missionsRoutes(fastify: FastifyInstance) {
       try {
         const { id, role } = request.user as { id: string; role: string }
         if (role !== 'teacher') {
-          return reply.status(403).send({ message: 'Solo profesores pueden subir documentos' })
+          return reply.status(403).send({ message: 'Solo el profesorado puede subir documentos' })
         }
         const { missionId } = request.params
 
@@ -311,7 +311,7 @@ export async function missionsRoutes(fastify: FastifyInstance) {
       try {
         const { id, role } = request.user as { id: string; role: string }
         if (role !== 'teacher') {
-          return reply.status(403).send({ message: 'Solo profesores pueden editar documentos' })
+          return reply.status(403).send({ message: 'Solo el profesorado puede editar documentos' })
         }
         const { documentId } = request.params
         const body = request.body as { title?: string; name?: string; description?: string; tags?: string[] }
@@ -342,7 +342,7 @@ export async function missionsRoutes(fastify: FastifyInstance) {
       try {
         const { id, role } = request.user as { id: string; role: string }
         if (role !== 'teacher') {
-          return reply.status(403).send({ message: 'Solo profesores pueden eliminar documentos' })
+          return reply.status(403).send({ message: 'Solo el profesorado puede eliminar documentos' })
         }
         const { documentId } = request.params
         const result = await missionsService.deleteMissionDocument(id, documentId)
@@ -367,7 +367,7 @@ export async function missionsRoutes(fastify: FastifyInstance) {
       try {
         const { id, role } = request.user as { id: string; role: string }
         if (role !== 'teacher') {
-          return reply.status(403).send({ message: 'Solo profesores pueden crear enigmas' })
+          return reply.status(403).send({ message: 'Solo el profesorado puede crear enigmas' })
         }
         const { missionId } = request.params
         const data = enigmaSchema.parse(request.body)
@@ -396,7 +396,7 @@ export async function missionsRoutes(fastify: FastifyInstance) {
       try {
         const { id, role } = request.user as { id: string; role: string }
         if (role !== 'teacher') {
-          return reply.status(403).send({ message: 'Solo profesores pueden reordenar enigmas' })
+          return reply.status(403).send({ message: 'Solo el profesorado puede reordenar enigmas' })
         }
         const { missionId } = request.params
         const { ids } = reorderSchema.parse(request.body)
@@ -425,7 +425,7 @@ export async function missionsRoutes(fastify: FastifyInstance) {
       try {
         const { id, role } = request.user as { id: string; role: string }
         if (role !== 'teacher') {
-          return reply.status(403).send({ message: 'Solo profesores pueden editar enigmas' })
+          return reply.status(403).send({ message: 'Solo el profesorado puede editar enigmas' })
         }
         const { enigmaId } = request.params
         const data = enigmaSchema.parse(request.body)
@@ -454,7 +454,7 @@ export async function missionsRoutes(fastify: FastifyInstance) {
       try {
         const { id, role } = request.user as { id: string; role: string }
         if (role !== 'teacher') {
-          return reply.status(403).send({ message: 'Solo profesores pueden eliminar enigmas' })
+          return reply.status(403).send({ message: 'Solo el profesorado puede eliminar enigmas' })
         }
         const { enigmaId } = request.params
         const result = await missionsService.deleteEnigma(id, enigmaId)
@@ -482,7 +482,7 @@ export async function missionsRoutes(fastify: FastifyInstance) {
       try {
         const { id, role } = request.user as { id: string; role: string }
         if (role !== 'teacher') {
-          return reply.status(403).send({ message: 'Solo profesores pueden reordenar documentos' })
+          return reply.status(403).send({ message: 'Solo el profesorado puede reordenar documentos' })
         }
         const { missionId } = request.params
         const { ids } = reorderSchema.parse(request.body)
@@ -511,7 +511,7 @@ export async function missionsRoutes(fastify: FastifyInstance) {
       try {
         const { id, role } = request.user as { id: string; role: string }
         if (role !== 'teacher') {
-          return reply.status(403).send({ message: 'Solo profesores pueden modificar recompensas' })
+          return reply.status(403).send({ message: 'Solo el profesorado puede modificar recompensas' })
         }
         const { missionId } = request.params
         const { badgeId } = request.body as { badgeId: string | null }

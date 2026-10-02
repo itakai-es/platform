@@ -37,6 +37,10 @@ export const CLASS_ACTION_LEVEL = {
   'class.inviteCode': 'admin',
   'class.publishTemplate': 'owner',
   'class.transfer': 'owner',
+  'class.delete': 'owner',
+  'class.restore': 'owner',
+  // Borrar para siempre, sin esperar a la purga, una clase que ya está en la papelera.
+  'class.purge': 'owner',
   'mission.view': 'read',
   'mission.edit': 'edit',
   'shop.view': 'read',

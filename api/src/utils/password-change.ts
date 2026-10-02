@@ -41,7 +41,7 @@ export async function setUserPassword(
     where: { id: userId },
     select: { id: true, email: true },
   })
-  if (!user) throw new NotFoundError('Usuario no encontrado')
+  if (!user) throw new NotFoundError('Cuenta no encontrada')
 
   const passwordHash = await hashPassword(newPassword)
 
@@ -88,7 +88,7 @@ export async function changeOwnPassword(
     where: { id: userId },
     select: { id: true, passwordHash: true },
   })
-  if (!user) throw new NotFoundError('Usuario no encontrado')
+  if (!user) throw new NotFoundError('Cuenta no encontrada')
 
   if (!user.passwordHash) {
     throw new ValidationError(

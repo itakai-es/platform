@@ -193,7 +193,7 @@ describeWithDatabase('profesorado de una clase y autoría', () => {
       )
       expect(notice.metadata).toMatchObject({ classId: f.classId })
       expect(notice.actionUrl).toBe(`/profesor/clases/${f.classId}`)
-      expect(notice.message).toContain('«Sustituto»')
+      expect(notice.message).toContain('«Sustitución»')
       expect(notice.message).toContain('edición')
     })
 
@@ -566,6 +566,7 @@ describeWithDatabase('profesorado de una clase y autoría', () => {
             toUser: { id: oldestAdmin.id, name: oldestAdmin.name },
           },
         ],
+        trashedClasses: [],
       })
 
       const deleted = await send('DELETE', '/profile/delete-account', leaving, {
@@ -694,6 +695,7 @@ describeWithDatabase('profesorado de una clase y autoría', () => {
         canDelete: false,
         blockingClasses: [{ id: cls.id, name: cls.name }],
         transfers: [],
+        trashedClasses: [],
       }
       expect((await send('GET', '/profile/delete-account/check', blocked)).json()).toEqual(expected)
       expect(

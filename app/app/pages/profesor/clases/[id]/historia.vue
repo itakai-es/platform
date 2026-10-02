@@ -24,7 +24,7 @@
       ai-placeholder="Ej: Añade una sección sobre las casas de Hogwarts..."
       context-label="Editando la historia de la clase"
       ai-modal-hint="Dile a la IA qué quieres añadir o cambiar de la historia. Tiene acceso al contenido actual."
-      ai-system-context="El profesor esta editando la NARRATIVA/HISTORIA de su clase gamificada. Es la historia que envuelve toda la clase y motiva a los alumnos. Genera contenido narrativo, inmersivo y creativo que encaje con la tematica de la clase."
+      ai-system-context="Quien imparte la clase está editando la NARRATIVA/HISTORIA de su clase gamificada. Es la historia que envuelve toda la clase y motiva al alumnado. Genera contenido narrativo, inmersivo y creativo que encaje con la tematica de la clase."
       @cancel="isEditing = false"
       @save="save"
     />
@@ -71,8 +71,12 @@ async function save(content: string) {
     setClassData({ narrative: content })
     isEditing.value = false
     toast.success(t('teacher.classes.detail.guide_editor.toast_saved'))
-  } catch {
-    toast.error(t('teacher.classes.detail.guide_editor.toast_error'))
+  } catch (err: unknown) {
+    // El mensaje del backend cuando rechaza lo escrito (un 4xx, p. ej. una
+    // historia que pasa del tope de largo); ante un fallo suyo, el genérico.
+    const { statusCode, data } = (err ?? {}) as { statusCode?: number; data?: { message?: string } }
+    const rejected = statusCode !== undefined && statusCode < 500 ? data?.message : undefined
+    toast.error(rejected || t('teacher.classes.detail.guide_editor.toast_error'))
   }
 }
 </script>

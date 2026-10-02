@@ -1,10 +1,12 @@
 <template>
-  <!-- Con `href` es un <a> con el mismo aspecto: un solo elemento interactivo,
-       sin anidar un botón dentro de un enlace. -->
+  <!-- Con `href` es un <a> con el mismo aspecto, y con `to`, un enlace de la
+       propia app: un solo elemento interactivo, sin anidar un botón dentro de
+       un enlace. -->
   <component
-    :is="href ? 'a' : 'button'"
-    :type="href ? undefined : type"
-    :disabled="href ? undefined : disabled || loading"
+    :is="to ? NuxtLink : href ? 'a' : 'button'"
+    :type="isLink ? undefined : type"
+    :disabled="isLink ? undefined : disabled || loading"
+    :to="to"
     :href="href"
     :target="href ? target : undefined"
     :rel="href ? linkRel : undefined"
@@ -41,6 +43,11 @@ interface Props {
   align?: 'center' | 'left'
   /** Si se indica, el botón es un enlace `<a>` a esa URL. */
   href?: string
+  /**
+   * Si se indica, el botón es un enlace a esa página de la app (`NuxtLink`):
+   * cambia de página sin recargar y se puede abrir en otra pestaña.
+   */
+  to?: string
   target?: string
   rel?: string
 }
@@ -58,6 +65,11 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits<{
   click: [event: MouseEvent]
 }>()
+
+const NuxtLink = resolveComponent('NuxtLink')
+
+/** Un enlace no lleva `type` ni se desactiva: eso es de los botones. */
+const isLink = computed(() => !!(props.to || props.href))
 
 // Un enlace a pestaña nueva no debe dar acceso a la ventana de origen.
 const linkRel = computed(

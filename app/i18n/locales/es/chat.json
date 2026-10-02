@@ -28,14 +28,14 @@
       "teacher_suggestions": [
         "¿Cómo creo una nueva misión?",
         "¿Cómo gestiono mi clase?",
-        "¿Cómo reviso el progreso de los alumnos?",
+        "¿Cómo reviso el progreso de mi alumnado?",
         "¿Cómo asigno puntos extra?"
       ]
     },
     "god_messages": {
       "student": [
         "¿Necesitas ayuda con tu misión?",
-        "¡Vamos a aprender juntos!",
+        "¡Vamos a aprender en equipo!",
         "¿Dudas con la tarea?",
         "¡Pregúntame lo que quieras!",
         "Estoy aquí para ayudarte",
@@ -46,9 +46,9 @@
       "teacher": [
         "¿Cómo van tus clases?",
         "¿Necesitas crear una misión?",
-        "¿Dudas sobre tus alumnos?",
+        "¿Dudas sobre tu alumnado?",
         "Estoy para asistirte",
-        "¿Revisamos algo juntos?",
+        "¿Revisamos algo en equipo?",
         "¿Ideas para tu clase?",
         "¡Planifiquemos la lección!",
         "¿Cómo te ayudo hoy?"
@@ -56,8 +56,8 @@
       "admin": ["¿Necesitas ayuda?", "A tu servicio", "¿En qué te ayudo?", "¡Estoy aquí!"]
     },
     "user_subtitles": {
-      "teacher": "Profesor",
-      "default": "Usuario"
+      "teacher": "Docente",
+      "default": "Tu cuenta"
     },
     "ai_actions": {
       "student": {
@@ -79,7 +79,7 @@
         },
         "s2": {
           "label": "Dame pistas para un enigma",
-          "message": "Estoy atascado en un enigma. ¿Puedes darme alguna pista sin spoilers?"
+          "message": "Me he atascado en un enigma. ¿Puedes darme alguna pista sin spoilers?"
         },
         "s3": {
           "label": "Consejos para subir de nivel",
@@ -103,7 +103,7 @@
         },
         "s8": {
           "label": "Motívame para seguir",
-          "message": "Estoy un poco desanimado. ¿Puedes motivarme para seguir avanzando?"
+          "message": "Me falta un poco de ánimo. ¿Puedes motivarme para seguir avanzando?"
         },
         "s9": {
           "label": "Explícame con un ejemplo",
@@ -117,11 +117,11 @@
         },
         "t10": {
           "label": "Adapta una actividad a niveles",
-          "message": "Tengo alumnos de distintos niveles. ¿Cómo puedo adaptar una actividad para todos?"
+          "message": "Tengo estudiantes de distintos niveles. ¿Cómo puedo adaptar una actividad para toda la clase?"
         },
         "t11": {
           "label": "Redacta una guía de misión",
-          "message": "Necesito redactar una guía para presentar una misión a mis alumnos. ¿Me echas una mano?"
+          "message": "Necesito redactar una guía para presentar una misión a mi alumnado. ¿Me echas una mano?"
         },
         "t12": {
           "label": "Planifica una secuencia didáctica",
@@ -137,15 +137,15 @@
         },
         "t4": {
           "label": "Diseña criterios de evaluación",
-          "message": "Ayúdame a diseñar criterios de evaluación justos y motivadores para mis alumnos."
+          "message": "Ayúdame a diseñar criterios de evaluación justos y motivadores para mi alumnado."
         },
         "t5": {
           "label": "Sugiere una insignia temática",
-          "message": "Necesito ideas para crear una insignia que motive a mis alumnos. ¿Qué sugieres?"
+          "message": "Necesito ideas para crear una insignia que motive a mi alumnado. ¿Qué sugieres?"
         },
         "t6": {
-          "label": "Mejora mi guía del alumno",
-          "message": "Quiero mejorar la guía que les doy a mis alumnos. ¿Cómo puedo hacerla más útil?"
+          "label": "Mejora mi guía de la clase",
+          "message": "Quiero mejorar la guía que le doy a mi alumnado. ¿Cómo puedo hacerla más útil?"
         },
         "t7": {
           "label": "Ideas para gamificar un tema",
@@ -153,11 +153,11 @@
         },
         "t8": {
           "label": "Crea un reto semanal",
-          "message": "Quiero lanzar un reto semanal para motivar a mis alumnos. ¿Qué ideas tienes?"
+          "message": "Quiero lanzar un reto semanal para motivar a mi alumnado. ¿Qué ideas tienes?"
         },
         "t9": {
           "label": "Estrategias para motivar",
-          "message": "Algunos alumnos están desmotivados. ¿Qué estrategias de gamificación me recomiendas?"
+          "message": "Parte de mi alumnado ha perdido la motivación. ¿Qué estrategias de gamificación me recomiendas?"
         }
       }
     },
@@ -173,7 +173,7 @@
       },
       "m3": {
         "label": "¡Vamos a empezar!",
-        "message": "Hola {god}, estoy listo para empezar la misión \"{title}\". ¿Por dónde empiezo?"
+        "message": "Hola {god}, tengo ganas de empezar la misión \"{title}\". ¿Por dónde empiezo?"
       },
       "m4": {
         "label": "Explícame los enigmas",
@@ -181,7 +181,7 @@
       },
       "m5": {
         "label": "Dame pistas sin spoilers",
-        "message": "Hola {god}, estoy atascado en la misión \"{title}\". ¿Puedes darme alguna pista sin spoilers?"
+        "message": "Hola {god}, me he atascado en la misión \"{title}\". ¿Puedes darme alguna pista sin spoilers?"
       },
       "m6": {
         "label": "¿Cómo mejorar mi entrega?",

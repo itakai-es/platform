@@ -67,8 +67,16 @@ export function useStudentClassDetail(classIdRef: Ref<string> | ComputedRef<stri
   // Loaders compartidos
   const ACTIVITIES_LIMIT = 10
   async function loadAll(force = false) {
-    void shopStore.fetchStudentShop(classId.value)
-    await classesStore.fetchStudentClassById(classId.value, true)
+    // Sin acceso a la clase (ya no está en ella, o la clase está archivada o en
+    // la papelera) la API responde 404: la página enseña el error que deja el
+    // store y no se pide nada más. La tienda va en paralelo y, si falla, el
+    // saldo no sale; ninguno de los dos fallos queda como promesa sin atender.
+    void shopStore.fetchStudentShop(classId.value).catch(() => {})
+    try {
+      await classesStore.fetchStudentClassById(classId.value, true)
+    } catch {
+      return
+    }
     await Promise.all([
       classesStore.fetchClassMissions(classId.value),
       classesStore.fetchClassGuide(classId.value),

@@ -1,24 +1,5 @@
 {
   "teacher": {
-    "about": {
-      "title": "ITAKAIri buruz",
-      "subtitle": "Berritasunak eta bertsioen erregistroa",
-      "breadcrumb": "Honi buruz",
-      "breadcrumb_home": "Hasiera",
-      "current_version": "Uneko bertsioa",
-      "latest": "Azken bertsioa",
-      "versions_index": "Bertsioak",
-      "footer_note": "Zerbait falta duzu edo akatsen bat aurkitu duzu? Esaguzu eta hurrengo bertsioetarako kontuan hartuko dugu.",
-      "groups": {
-        "new": "Berritasunak",
-        "improved": "Hobekuntzak",
-        "fixed": "Konponketak"
-      },
-      "meta": {
-        "title": "Honi buruz | ITAKAI",
-        "description": "ITAKAIren bertsio bakoitzeko berritasunak, hobekuntzak eta konponketak."
-      }
-    },
     "dashboard": {
       "title": "Irakaslearen dashboarda",
       "subtitle": "Ongi etorri, {name}!",
@@ -389,9 +370,9 @@
             "province_label": "Probintzia",
             "metadata_none": "Zehaztu gabe",
             "metadata_search": "Bilatu...",
-            "subject_needs_level": "Aukeratu maila lehenik",
+            "subject_needs_level": "Aukeratu maila bat",
             "publish_title": "Argitaratu txantiloi gisa",
-            "publish_hint": "Partekatu marketplacean beste irakasle batzuek inporta dezaten.",
+            "publish_hint": "Txantiloien katalogo publikoan agertuko da: edonork, konturik ez badu ere, ikusi ahal izango ditu haren izena, ipuina, azala, misioak, denda eta portaerak, eta beste irakasle batzuek horrekin guztiarekin inportatu ahal izango dute. Misioen epemugak, dokumentuak eta insigniak ez dira partekatzen.",
             "publish_missing_metadata": "Gorde gaia, maila eta hizkuntza argitaratu aurretik.",
             "publish_on": "Klasea txantiloi gisa argitaratu da",
             "publish_off": "Txantiloia marketplacetik kendu da",
@@ -423,7 +404,31 @@
           },
           "management": {
             "title": "Kudeaketa",
-            "hint": "Argitaratu txantiloi gisa beste irakasle batzuek inporta dezaten, edo egin kopia bat."
+            "hint": "Argitaratu txantiloi gisa beste irakasle batzuek inporta dezaten, edo egin kopia bat.",
+            "trash": {
+              "title": "Klasea ezabatu",
+              "hint": "Zakarrontzira doa: {days} egunez leheneratu dezakezu, eta gero betiko ezabatzen da.",
+              "cta": "Ezabatu",
+              "modal_title": "Klasea ezabatu",
+              "message": "«{name}» zakarrontzira joango da. {days} egunez leheneratu ahal izango duzu; gero betiko ezabatuko da.",
+              "impact_loading": "Zer galduko litzatekeen kalkulatzen…",
+              "impact_error": "Ezin izan da kalkulatu zer galduko litzatekeen. Saiatu berriro.",
+              "retry": "Saiatu berriro",
+              "loses": "{days} egunak igarotakoan, hau ezabatuko da:",
+              "loses_class": "klasea, bere ipuin, gida, denda eta portaerekin",
+              "loses_missions": "misio bat, bere enigma eta dokumentuekin | {count} misio, beren enigma eta dokumentuekin",
+              "loses_students": "ikasle baten aurrerapena klasean | {count} ikasleren aurrerapena klasean",
+              "loses_submissions": "fitxategidun entrega bat | fitxategidun {count} entrega",
+              "loses_purchases": "dendako erosketa bat | dendako {count} erosketa",
+              "loses_accounts": "inoiz erabili ez den posta gabeko kontu bat, osorik | inoiz erabili ez diren posta gabeko {count} kontu, osorik",
+              "while_trashed": "Zakarrontzian dagoen bitartean, ikasleek ezingo dute bertan sartu ezta ezer entregatu ere.",
+              "while_trashed_teachers": "Zakarrontzian dagoen bitartean, ikasleek ezingo dute bertan sartu ezta ezer entregatu ere, eta klaseko beste irakasle batek ere ez du ikusiko. | Zakarrontzian dagoen bitartean, ikasleek ezingo dute bertan sartu ezta ezer entregatu ere, eta klaseko beste {count} irakaslek ere ez dute ikusiko.",
+              "unmanaged_accounts": "Ezabatzean, klase honetan sortutako posta gabeko kontu bat jatorrizko klaserik gabe geratuko da: plataformaren administrazioak bakarrik berrezarri ahal izango du pasahitza. | Ezabatzean, klase honetan sortutako posta gabeko {count} kontu jatorrizko klaserik gabe geratuko dira: plataformaren administrazioak bakarrik berrezarri ahal izango ditu pasahitzak.",
+              "template": "Txantiloi gisa argitaratuta dago: orain katalogotik kentzen da, eta leheneratzen baduzu ez da berez berriro argitaratuko.",
+              "confirm": "Zakarrontzira bidali",
+              "done": "«{name}» zakarrontzian dago. {days} egunez leheneratu dezakezu.",
+              "error": "Ezin izan da klasea zakarrontzira bidali. Saiatu berriro."
+            }
           },
           "edit_level_note": "Izena, ordutegia eta azala alda ditzakezu. Sailkapena, funtzionalitateak eta mailak klasea administratzen duenak aldatzen ditu."
         },
@@ -618,7 +623,9 @@
               "template_unpublished": "klasea txantiloietatik kendu du",
               "duplicated": "klasea bikoiztu du",
               "ownership_transferred": "klasearen jabetza {target} irakasleari eman dio",
-              "ownership_inherited": "klasea {target} irakaslearena da orain, jabearen kontua ezabatu delako"
+              "ownership_inherited": "klasea {target} irakaslearena da orain, jabearen kontua ezabatu delako",
+              "trashed": "klasea zakarrontzira bidali du",
+              "restored": "klasea zakarrontzitik atera du"
             },
             "teacher": {
               "added": "{target} irakasleen artean gehitu du ({profile}, {access})",
@@ -640,7 +647,9 @@
               "blocked": "«{title}» misioa blokeatu du",
               "unblocked": "«{title}» misioa desblokeatu du",
               "moved": "«{title}» misioaren klasea aldatu du",
-              "rewards_changed": "«{title}» misioaren saria aldatu du"
+              "rewards_changed": "«{title}» misioaren saria aldatu du",
+              "imported": "«{title}» misioa inportatu du",
+              "exported": "«{title}» misioa beste klase batera kopiatu du"
             },
             "enigma": {
               "created": "«{title}» enigma gehitu du",
@@ -684,6 +693,47 @@
               "applied": "«{title}» aplikatu dio klasean jada ez dagoen ikasle bati"
             }
           }
+        },
+        "in_trash": {
+          "title": "«{name}» zakarrontzian dago",
+          "description": "Zakarrontzira bidali zen: {date}. Inork leheneratzen ez badu, betiko ezabatuko da: {purge}.",
+          "owner_hint": "Leheneratu berriro irekitzeko. Artxibatuta itzultzen da: ikasleek ezingo dute sartu desartxibatzen duzun arte.",
+          "not_owner": "Klasearen jabetza duenak bakarrik leheneratu dezake. Behar baduzu, eskatu data hori baino lehen.",
+          "go_trash": "Ikusi zakarrontzia"
+        }
+      },
+      "trash": {
+        "meta": {
+          "title": "Zakarrontzia | ITAKAI Irakaslea",
+          "description": "Zakarrontzira bidali dituzun klaseak, betiko ezabatu aurretik leheneratzeko."
+        },
+        "title": "Zakarrontzia",
+        "subtitle": "Zakarrontzira bidaltzen dituzun klaseak betiko ezabatzen dira {days} egunen buruan. Ordura arte, leheneratu ditzakezu.",
+        "link": "Zakarrontzia ({count})",
+        "restore_note": "Klase bat leheneratzean, «Nire klaseak» atalera itzultzen da artxibatuta: ikasleek ezingo dute sartu desartxibatzen duzun arte.",
+        "sent_by_me": "Zuk bidali zenuen, {date}",
+        "sent_by": "{name}(e)k bidali zuen, {date}",
+        "sent_on": "Zakarrontzira bidalia: {date}",
+        "purge_on": "Betiko ezabatuko da: {date}",
+        "days_left": "Egun bat geratzen da | {count} egun geratzen dira",
+        "purge_today": "Gaur ezabatuko da",
+        "restore": "Leheneratu",
+        "restored": "«{name}» «Nire klaseak» atalera itzuli da, Artxibatuak fitxan. Desartxibatu berriro erabili nahi duzunean.",
+        "restore_error": "Ezin izan da klasea leheneratu. Saiatu berriro.",
+        "empty_title": "Zakarrontzia hutsik dago",
+        "empty_description": "Klase bat ezabatzen baduzu, {days} egunez egongo da hemen betiko ezabatu aurretik.",
+        "error_title": "Ezin izan da zakarrontzia kargatu",
+        "error_description": "Egiaztatu konexioa eta saiatu berriro.",
+        "retry": "Saiatu berriro",
+        "purge": {
+          "cta": "Ezabatu orain",
+          "modal_title": "Klasea betiko ezabatu",
+          "message": "«{name}» orain ezabatuko da, zakarrontziko epea amaitu arte itxaron gabe. Ezin da desegin: inork ezin izango du berreskuratu.",
+          "loses": "Orain eta betiko ezabatuko da:",
+          "understood": "Ulertzen dut betiko ezabatzen dela eta ezin dela berreskuratu.",
+          "confirm": "Betiko ezabatu",
+          "done": "«{name}» betiko ezabatu da.",
+          "error": "Ezin izan da klasea ezabatu. Saiatu berriro."
         }
       }
     },
@@ -750,6 +800,52 @@
           "toast_saved": "Datuak gorde dira",
           "toast_error": "Ezin izan dira datuak gorde"
         }
+      },
+      "import": {
+        "button": "Inportatu misioa",
+        "button_in_class": "Inportatu beste klase batetik",
+        "copy_button": "Kopiatu beste klase batera",
+        "title": "Inportatu misio bat",
+        "copy_title": "Kopiatu misioa",
+        "subtitle": "Kopiatu «{name}» klasera zure beste klase bateko misio bat. Jatorrizkoa ez da aldatzen.",
+        "subtitle_free": "Kopiatu zure klase bateko misio bat beste batera. Jatorrizkoa ez da aldatzen.",
+        "copy_subtitle": "Kopiatu «{title}» zure klaseetako batera. Jatorrizkoa ez da aldatzen.",
+        "target_label": "Helburuko klasea",
+        "target_same": "Misio honen klasea: bikoiztu egingo da",
+        "no_targets": "Ezin duzu misiorik editatu zure klaseetako batean ere.",
+        "source_label": "Jatorrizko klasea",
+        "class_placeholder": "Aukeratu klase bat",
+        "class_search": "Bilatu klase bat…",
+        "no_class_matches": "Ez dago bat datorren klaserik.",
+        "class_missions": "Misiorik ez | Misio 1 | {count} misio",
+        "class_shared": "Jabea: {name}",
+        "class_archived": "Artxibatuta",
+        "no_classes": "Ez duzu misio bat inportatzeko beste klaserik.",
+        "show_archived": "Erakutsi artxibatutako klaseak ere",
+        "mission_label": "Misioa",
+        "mission_search": "Bilatu misio bat…",
+        "no_missions": "Klase honek oraindik ez du misiorik.",
+        "no_matches": "Ez dago «{query}» bilaketarekin bat datorren misiorik.",
+        "enigmas": "Enigmarik ez | Enigma 1 | {count} enigma",
+        "documents": "Dokumenturik ez | Dokumentu 1 | {count} dokumentu",
+        "badges": "Insigniarik ez | Insignia 1 | {count} insignia",
+        "will_copy": "Hau kopiatuko da",
+        "copied": "Hau kopiatu da",
+        "copy_badge": "Kopiatu haren «{name}» insignia ere",
+        "copy_badge_hint": "Zure insignia berria izango da, irudi berarekin.",
+        "locked_note": "Kopia blokeatuta eta epemugarik gabe iristen da, zure ikasleei ireki aurretik berrikus dezazun.",
+        "load_error": "Ezin izan da kargatu. Egiaztatu konexioa eta saiatu berriro.",
+        "retry": "Saiatu berriro",
+        "confirm": "Inportatu",
+        "copy_confirm": "Kopiatu",
+        "duplicate_confirm": "Bikoiztu",
+        "error": "Ezin izan da misioa inportatu.",
+        "copy_error": "Ezin izan da misioa kopiatu.",
+        "success_title": "Misioa inportatu da",
+        "copy_success_title": "Misioa kopiatu da",
+        "duplicate_success_title": "Misioa bikoiztu da",
+        "success_description": "«{title}» misioaren kopia «{name}» klasean dago dagoeneko, blokeatuta eta epemugarik gabe. Berrikusi eta desblokeatu zure ikasleek ikustea nahi duzunean.",
+        "open_mission": "Ireki misioa"
       }
     },
     "badges": {
@@ -1147,6 +1243,7 @@
       "own": "Zurea",
       "import": "Inportatu",
       "import_success": "«{name}» inportatu da. Egokitu zure gustura!",
+      "import_success_missions": "«{name}» inportatu da, bere misioarekin. Egokitu zure gustura! | «{name}» inportatu da, bere {count} misioekin. Egokitu zure gustura!",
       "import_error": "Ezin izan da txantiloia inportatu",
       "load_error": "Ezin izan dira txantiloiak kargatu",
       "empty_title": "Oraindik ez dago txantiloirik",
@@ -1161,16 +1258,23 @@
         "inactive": "Ez aktibo",
         "load_error": "Ezin izan da txantiloia kargatu",
         "error": "Ez da txantiloia aurkitu.",
+        "tabs_label": "Txantiloiaren edukia",
         "tab_narrative": "Ipuina",
         "tab_features": "Funtzionalitateak",
+        "tab_missions": "Misioak ({n})",
         "tab_shop": "Denda ({n})",
         "tab_behaviors": "Portaerak ({n})",
         "no_narrative_title": "Ipuinik gabe",
         "no_narrative_description": "Txantiloi honek ez du ipuinik definitua.",
+        "no_missions_title": "Misiorik gabe",
+        "no_missions_description": "Txantiloi honek ez du misiorik. Zuk sortu ahal izango dituzu.",
         "no_shop_title": "Dendarik gabe",
         "no_shop_description": "Txantiloi honek ez du denda-artikulurik. Zuk gehitu ahal izango dituzu.",
+        "hidden": "Ikasleentzat ezkutatua",
+        "shop_off": "Txantiloi honek denda desaktibatuta du. Haren objektuak kopiatu egiten dira hala ere, eta zure klasean aktibatu ahal izango duzu nahi duzunean.",
         "no_behaviors_title": "Portaerarik gabe",
-        "no_behaviors_description": "Txantiloi honek ez du portaerarik. Zuk defini ditzakezu."
+        "no_behaviors_description": "Txantiloi honek ez du portaerarik. Zuk defini ditzakezu.",
+        "behaviors_off": "Txantiloi honek portaerak desaktibatuta ditu. Kopiatu egiten dira hala ere, eta zure klasean aktibatu ahal izango dituzu nahi duzunean."
       },
       "filter_all": {
         "subject": "Ikasgai guztiak",
