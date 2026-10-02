@@ -46,7 +46,8 @@ const LEVEL_RANK: Record<ClassRequiredLevel, number> = { read: 1, edit: 2, admin
  * Nivel mínimo de cada acción. Lectura ve; edición toca el contenido, la tienda,
  * los comportamientos y las entregas; administración lleva los ajustes, el
  * alumnado, el archivo y el profesorado. Publicar la plantilla, traspasar la
- * clase y enviarla a la papelera (o sacarla de ella) son solo del propietario.
+ * clase, enviarla a la papelera (o sacarla de ella) y borrarla para siempre son
+ * solo del propietario.
  */
 export const CLASS_ACTION_LEVEL = {
   'class.view': 'read',
@@ -59,6 +60,8 @@ export const CLASS_ACTION_LEVEL = {
   'class.transfer': 'owner',
   'class.delete': 'owner',
   'class.restore': 'owner',
+  // Borrar para siempre, sin esperar a la purga, una clase que ya está en la papelera.
+  'class.purge': 'owner',
   'mission.view': 'read',
   'mission.edit': 'edit',
   'shop.view': 'read',

@@ -42,6 +42,25 @@ export interface MissionCopyResult {
 }
 
 /**
+ * Bloquea la clase de origen de una copia hasta que se confirme (`FOR KEY
+ * SHARE`: no impide cambiarla, solo borrarla), o false si ya no existe. La
+ * copia comparte con el origen la portada de la clase, las de sus misiones y
+ * los documentos, y la purga de la papelera bloquea la clase `FOR UPDATE` antes
+ * de borrarla: si llega a la vez, espera a que la copia esté confirmada y, al
+ * mirar quién usa aún esos ficheros, ya la ve; si iba antes, la copia ya no
+ * encuentra el origen y no se hace. Sin esto, la copia podría quedarse
+ * apuntando a una portada recién borrada.
+ */
+export async function lockSourceClass(
+  tx: Prisma.TransactionClient,
+  classId: string
+): Promise<boolean> {
+  const rows = await tx.$queryRaw<{ id: string }[]>`
+    SELECT id FROM classes WHERE id = ${classId} FOR KEY SHARE`
+  return rows.length > 0
+}
+
+/**
  * La misión `missionId` entera (enigmas, documentos e insignias), leída dentro
  * de la transacción `tx` de la copia y con sus documentos bloqueados hasta que
  * se confirme. Un borrado de uno de ellos a la vez espera a que la copia esté

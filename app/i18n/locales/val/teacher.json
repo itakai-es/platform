@@ -724,7 +724,17 @@
         "empty_description": "Si elimines una classe, estarà ací {days} dies abans d'esborrar-se per sempre.",
         "error_title": "No s'ha pogut carregar la paperera",
         "error_description": "Comprova la connexió i torna-ho a intentar.",
-        "retry": "Torna-ho a intentar"
+        "retry": "Torna-ho a intentar",
+        "purge": {
+          "cta": "Esborrar ara",
+          "modal_title": "Esborrar la classe per sempre",
+          "message": "«{name}» s'esborrarà ara, sense esperar que acabe el seu termini en la paperera. No es pot desfer: ningú no la podrà recuperar.",
+          "loses": "S'esborrarà ara i per sempre:",
+          "understood": "Entenc que s'esborra per sempre i que no es pot recuperar.",
+          "confirm": "Esborrar per sempre",
+          "done": "«{name}» s'ha esborrat per sempre.",
+          "error": "No s'ha pogut esborrar la classe. Torna-ho a intentar."
+        }
       }
     },
     "missions": {

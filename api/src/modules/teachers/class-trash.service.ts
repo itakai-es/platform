@@ -16,7 +16,8 @@ import { UNUSED_ACCOUNT_SELECT, unusedAccountHomeClass } from './class-students.
  * y la retira del marketplace. El alumnado deja de verla y de abrirla, ranking,
  * guía y tienda incluidos (ver `getClassMembership`). Desde ese momento
  * solo sale en el listado de la papelera; a los 30 días la purga la borra de
- * verdad. Restaurarla la saca de la papelera y la deja archivada: quien la
+ * verdad (o antes, si quien es propietario la borra ya: ver
+ * `class-purge.service.ts`). Restaurarla la saca de la papelera y la deja archivada: quien la
  * restaura decide si la desarchiva, y la plantilla no se vuelve a publicar
  * sola.
  *

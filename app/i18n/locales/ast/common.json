@@ -436,7 +436,9 @@
       "blocked_admin": "Esta cuenta entá nun se pue borrar: ye la propietaria d'estes clases y nelles nun hai naide más con alministración. Primero hai que pasar la so propiedá a otra cuenta docente.",
       "transfers_self": "Les tos clases van pasar a daquién del profesoráu con alministración nelles:",
       "transfers_admin": "Les sos clases van pasar a daquién del profesoráu con alministración nelles:",
-      "transfer_item": "{class}, a {name}"
+      "transfer_item": "{class}, a {name}",
+      "trashed_self": "Tamién va borrase pa siempre la clase que tienes na papelera: | Tamién van borrase pa siempre les {count} clases que tienes na papelera:",
+      "trashed_admin": "Tamién va borrase pa siempre la clase que tien na papelera: | Tamién van borrase pa siempre les {count} clases que tien na papelera:"
     },
     "copy": {
       "label": "Copiar: {what}",

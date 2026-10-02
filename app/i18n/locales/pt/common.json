@@ -436,7 +436,9 @@
       "blocked_admin": "Esta conta ainda não pode ser apagada: é a proprietária destas turmas e nelas não há mais ninguém com administração. Primeiro é preciso passar a sua propriedade a outra conta docente.",
       "transfers_self": "As tuas turmas vão passar para outra pessoa do corpo docente com administração nelas:",
       "transfers_admin": "As suas turmas vão passar para outra pessoa do corpo docente com administração nelas:",
-      "transfer_item": "{class}, para {name}"
+      "transfer_item": "{class}, para {name}",
+      "trashed_self": "Também será apagada para sempre a turma que tens no lixo: | Também serão apagadas para sempre as {count} turmas que tens no lixo:",
+      "trashed_admin": "Também será apagada para sempre a turma que tem no lixo: | Também serão apagadas para sempre as {count} turmas que tem no lixo:"
     },
     "copy": {
       "label": "Copiar: {what}",

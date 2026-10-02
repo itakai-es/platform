@@ -238,6 +238,17 @@ const TEACHER_CLASS: RouteCase[] = [
     levels: { read: 403, edit: 403, admin: 403 },
   },
   {
+    // Borrar ya, para siempre: solo el propietario y solo desde la papelera.
+    // Esta clase no está en ella: el propietario pasa el acceso y se queda en
+    // el 409. La purga de verdad está en tests/routes/class-purge.db.test.ts.
+    route: 'POST /teacher/classes/:classId/purge',
+    request: f => ({ method: 'POST', url: `${c(f)}/purge` }),
+    owner: 409,
+    other: 404,
+    student: 403,
+    levels: { read: 403, edit: 403, admin: 403 },
+  },
+  {
     route: 'GET /teacher/classes/:classId/deletion-impact',
     request: f => ({ method: 'GET', url: `${c(f)}/deletion-impact` }),
     owner: 200,

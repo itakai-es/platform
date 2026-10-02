@@ -89,6 +89,7 @@ describe('tabla de acciones', () => {
       'class.transfer': 'owner',
       'class.delete': 'owner',
       'class.restore': 'owner',
+      'class.purge': 'owner',
       'mission.view': 'read',
       'mission.edit': 'edit',
       'shop.view': 'read',
@@ -109,13 +110,14 @@ describe('tabla de acciones', () => {
     })
   })
 
-  it('solo el propietario publica la plantilla, traspasa la clase y la envía a la papelera o la saca', () => {
+  it('solo el propietario publica la plantilla, traspasa la clase, la envía a la papelera, la saca o la borra para siempre', () => {
     const ownerOnly = Object.entries(CLASS_ACTION_LEVEL)
       .filter(([, level]) => level === 'owner')
       .map(([action]) => action)
     expect(ownerOnly.sort()).toEqual([
       'class.delete',
       'class.publishTemplate',
+      'class.purge',
       'class.restore',
       'class.transfer',
     ])

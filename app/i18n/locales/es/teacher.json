@@ -724,7 +724,17 @@
         "empty_description": "Si eliminas una clase, estará aquí {days} días antes de borrarse para siempre.",
         "error_title": "No se ha podido cargar la papelera",
         "error_description": "Comprueba la conexión e inténtalo de nuevo.",
-        "retry": "Reintentar"
+        "retry": "Reintentar",
+        "purge": {
+          "cta": "Borrar ya",
+          "modal_title": "Borrar la clase para siempre",
+          "message": "«{name}» se borrará ahora, sin esperar a que acabe su plazo en la papelera. No se puede deshacer: nadie podrá recuperarla.",
+          "loses": "Se borrará ahora y para siempre:",
+          "understood": "Entiendo que se borra para siempre y que no se puede recuperar.",
+          "confirm": "Borrar para siempre",
+          "done": "«{name}» se ha borrado para siempre.",
+          "error": "No se ha podido borrar la clase. Inténtalo de nuevo."
+        }
       }
     },
     "missions": {

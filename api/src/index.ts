@@ -26,6 +26,7 @@ import { publicTemplateRoutes } from './modules/templates/templates.routes.js'
 import { filesRoutes } from './modules/files/files.routes.js'
 import { isPublicUploadPath } from './modules/storage/storage.service.js'
 import { registerNotificationJobs } from './modules/notifications/notifications.jobs.js'
+import { registerClassTrashJobs } from './modules/teachers/class-trash.jobs.js'
 import { startScheduler, stopScheduler } from './utils/scheduler.js'
 import { HttpError } from './utils/errors.js'
 import { authenticate, sessionGate } from './utils/session-gate.js'
@@ -286,12 +287,13 @@ async function start() {
   try {
     const server = await buildServer()
 
-    // Tareas periódicas (recordatorios de entrega, limpieza de avisos). Se
-    // pueden desactivar con SCHEDULER_ENABLED=false (útil si algún día hay más
-    // de una instancia y solo una debe ejecutarlas). El hook de apagado se
+    // Tareas periódicas (recordatorios de entrega, limpieza de avisos, purga de
+    // la papelera de clases). Se pueden desactivar con SCHEDULER_ENABLED=false
+    // (útil si algún día hay más de una instancia y solo una debe ejecutarlas). El hook de apagado se
     // registra antes de escuchar: Fastify no admite `addHook` una vez arrancado.
     if (env.SCHEDULER_ENABLED) {
       registerNotificationJobs()
+      registerClassTrashJobs()
       server.addHook('onClose', async () => stopScheduler())
     }
 

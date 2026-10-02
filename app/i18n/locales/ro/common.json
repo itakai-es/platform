@@ -436,7 +436,9 @@
       "blocked_admin": "Acest cont nu poate fi șters încă: îi aparțin aceste clase și în ele nu mai are nimeni altcineva acces de administrare. Mai întâi trebuie transferată proprietatea lor altui cont de cadru didactic.",
       "transfers_self": "Clasele tale vor trece la alt cadru didactic cu acces de administrare în ele:",
       "transfers_admin": "Clasele sale vor trece la alt cadru didactic cu acces de administrare în ele:",
-      "transfer_item": "{class}, la {name}"
+      "transfer_item": "{class}, la {name}",
+      "trashed_self": "Se va șterge definitiv și clasa pe care o ai în coșul de gunoi: | Se vor șterge definitiv și clasele pe care le ai în coșul de gunoi ({count}):",
+      "trashed_admin": "Se va șterge definitiv și clasa pe care o are în coșul de gunoi: | Se vor șterge definitiv și clasele pe care le are în coșul de gunoi ({count}):"
     },
     "copy": {
       "label": "Copiază: {what}",

@@ -724,7 +724,17 @@
         "empty_description": "Klase bat ezabatzen baduzu, {days} egunez egongo da hemen betiko ezabatu aurretik.",
         "error_title": "Ezin izan da zakarrontzia kargatu",
         "error_description": "Egiaztatu konexioa eta saiatu berriro.",
-        "retry": "Saiatu berriro"
+        "retry": "Saiatu berriro",
+        "purge": {
+          "cta": "Ezabatu orain",
+          "modal_title": "Klasea betiko ezabatu",
+          "message": "«{name}» orain ezabatuko da, zakarrontziko epea amaitu arte itxaron gabe. Ezin da desegin: inork ezin izango du berreskuratu.",
+          "loses": "Orain eta betiko ezabatuko da:",
+          "understood": "Ulertzen dut betiko ezabatzen dela eta ezin dela berreskuratu.",
+          "confirm": "Betiko ezabatu",
+          "done": "«{name}» betiko ezabatu da.",
+          "error": "Ezin izan da klasea ezabatu. Saiatu berriro."
+        }
       }
     },
     "missions": {

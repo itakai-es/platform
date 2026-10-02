@@ -42,7 +42,12 @@ import {
   UNUSED_ACCOUNT_SELECT,
   unusedAccountHomeClass,
 } from './class-students.service.js'
-import { copyMissionInto, readMissionForCopy, type MissionCopyOptions } from './mission-copy.js'
+import {
+  copyMissionInto,
+  lockSourceClass,
+  readMissionForCopy,
+  type MissionCopyOptions,
+} from './mission-copy.js'
 import {
   findTemplate,
   findTemplates,
@@ -621,6 +626,9 @@ export class TeachersService {
 
     return prisma.$transaction(
       async (tx) => {
+        // El origen, bloqueado hasta confirmar: la purga de la papelera espera
+        // y ve la copia antes de borrar los ficheros que comparten.
+        if (!(await lockSourceClass(tx, source.id))) throw new NotFoundError('Clase no encontrada')
         // La copia es de quien la hace: propietario único, sin el resto del
         // profesorado de la clase de origen.
         const newClass = await createClassWithOwner(
@@ -809,6 +817,10 @@ export class TeachersService {
 
     const copy = await prisma.$transaction(
       async tx => {
+        // La clase de origen, bloqueada hasta confirmar (ver `lockSourceClass`).
+        if (!(await lockSourceClass(tx, fromClassId))) {
+          throw new NotFoundError('Misión no encontrada')
+        }
         const source = await readMissionForCopy(tx, missionId)
         // Si entretanto ha pasado a otra clase, el permiso comprobado ya no vale.
         if (!source || source.classId !== fromClassId) {

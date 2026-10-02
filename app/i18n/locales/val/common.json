@@ -436,7 +436,9 @@
       "blocked_admin": "Este compte encara no es pot esborrar: és el propietari d'estes classes i no hi ha ningú més amb administració. Abans cal passar-ne la propietat a un altre compte docent.",
       "transfers_self": "Les teues classes passaran a algú del professorat amb administració:",
       "transfers_admin": "Les seues classes passaran a algú del professorat amb administració:",
-      "transfer_item": "{class}, a {name}"
+      "transfer_item": "{class}, a {name}",
+      "trashed_self": "També s'esborrarà per sempre la classe que tens en la paperera: | També s'esborraran per sempre les {count} classes que tens en la paperera:",
+      "trashed_admin": "També s'esborrarà per sempre la classe que té en la paperera: | També s'esborraran per sempre les {count} classes que té en la paperera:"
     },
     "copy": {
       "label": "Copiar: {what}",

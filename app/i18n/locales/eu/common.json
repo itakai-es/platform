@@ -436,7 +436,9 @@
       "blocked_admin": "Kontu hau oraindik ezin da ezabatu: klase hauen jabea da, eta haietan ez dago administrazioa duen beste inor. Lehenago, haien jabetza beste irakasle bati eman behar zaio.",
       "transfers_self": "Zure klaseak haietan administrazioa duen beste irakasle batenak izango dira:",
       "transfers_admin": "Bere klaseak haietan administrazioa duen beste irakasle batenak izango dira:",
-      "transfer_item": "{class}: {name}"
+      "transfer_item": "{class}: {name}",
+      "trashed_self": "Zakarrontzian duzun klasea ere betiko ezabatuko da: | Zakarrontzian dituzun {count} klaseak ere betiko ezabatuko dira:",
+      "trashed_admin": "Zakarrontzian duen klasea ere betiko ezabatuko da: | Zakarrontzian dituen {count} klaseak ere betiko ezabatuko dira:"
     },
     "copy": {
       "label": "Kopiatu: {what}",

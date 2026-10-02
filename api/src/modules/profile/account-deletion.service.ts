@@ -1,9 +1,19 @@
 import { prisma } from '../../config/database.js'
 import type { Prisma } from '../../generated/prisma/client.js'
-import { activeTeacherWhere, recordClassAction } from '../../utils/class-access.js'
+import {
+  LIVE_CLASS_WHERE,
+  activeTeacherWhere,
+  recordClassAction,
+} from '../../utils/class-access.js'
 import { transferClassOwnership } from '../../utils/class-owner.js'
 import { ConflictError } from '../../utils/errors.js'
 import { notifyOwnershipReceived } from '../teachers/class-teachers.service.js'
+import {
+  PURGE_TRANSACTION_TIMEOUT_MS,
+  finishClassPurge,
+  purgeClassInTx,
+  type PurgedClass,
+} from '../teachers/class-purge.service.js'
 
 /**
  * Borrar una cuenta que imparte clases. Una clase no se queda sin propietario:
@@ -19,6 +29,10 @@ import { notifyOwnershipReceived } from '../teachers/class-teachers.service.js'
  * la pierda; las demás, que eran solo suyas, se borran. La base lo respalda: no
  * deja borrar al autor de una insignia.
  *
+ * Las clases que tiene en la papelera como propietario no se traspasan ni
+ * impiden nada: se borran para siempre con la cuenta, con la misma purga que
+ * las vencidas (`purgeClassInTx`), y el aviso previo las nombra.
+ *
  * Lo demás que hizo como profesor se conserva sin su cuenta: el registro de la
  * clase guarda su nombre copiado, y las entregas que aprobó, las entradas del
  * feed y los comportamientos que aplicó se quedan sin autor.
@@ -33,13 +47,16 @@ export interface OwnedClassSuccession {
   successor: { id: string; name: string } | null
 }
 
-/** Qué pasaría con cada clase de la que es propietario si se borrase su cuenta. */
+/**
+ * Qué pasaría con cada clase de la que es propietario si se borrase su cuenta.
+ * Las de la papelera no cuentan: se borran con ella (`ownedTrashedClasses`).
+ */
 export async function ownedClassesSuccession(
   userId: string,
   tx: Db = prisma
 ): Promise<OwnedClassSuccession[]> {
   const owned = await tx.classTeacher.findMany({
-    where: { userId, isOwner: true },
+    where: { userId, isOwner: true, class: LIVE_CLASS_WHERE },
     select: { classId: true, class: { select: { name: true } } },
     orderBy: { createdAt: 'asc' },
   })
@@ -64,6 +81,19 @@ export async function ownedClassesSuccession(
     })
   }
   return succession
+}
+
+/** Las clases que tiene en la papelera como propietario: se borran para siempre con la cuenta. */
+export async function ownedTrashedClasses(
+  userId: string,
+  tx: Db = prisma
+): Promise<{ id: string; name: string }[]> {
+  const rows = await tx.classTeacher.findMany({
+    where: { userId, isOwner: true, class: { deletedAt: { not: null } } },
+    select: { class: { select: { id: true, name: true } } },
+    orderBy: { class: { deletedAt: 'desc' } },
+  })
+  return rows.map(r => r.class)
 }
 
 /** La cuenta no se puede borrar: es propietaria de clases en las que no queda nadie con administración. */
@@ -92,50 +122,73 @@ export async function accountDeletionCheck(userId: string) {
     transfers: succession
       .filter(s => s.successor)
       .map(s => ({ classId: s.classId, className: s.className, toUser: s.successor! })),
+    trashedClasses: await ownedTrashedClasses(userId),
   }
 }
 
 /**
- * Borra la cuenta y, en la misma transacción, antes de borrarla, traspasa sus
- * clases y reparte sus insignias. `actorId` es quien la borra (ella misma o
- * quien administra la instancia): figura en el registro de cada clase traspasada.
+ * Borra la cuenta y, en la misma transacción, antes de borrarla, purga las
+ * clases que tiene en la papelera, traspasa las demás y reparte sus insignias.
+ * Todo o nada: si una clase lo impide, tampoco se purga ninguna. Los ficheros
+ * de las purgadas se borran después. `actorId` es quien la borra (ella misma o
+ * quien administra la instancia): figura en el registro de cada clase
+ * traspasada y en el del sistema por cada purgada.
  */
 export async function deleteUserAccount(
   userId: string,
   { actorId, bySelf }: { actorId: string; bySelf: boolean }
-): Promise<{ transferred: OwnedClassSuccession[] }> {
-  const transferred = await prisma.$transaction(async tx => {
-    const succession = await ownedClassesSuccession(userId, tx)
-    const blocked = succession.filter(s => !s.successor)
-    if (blocked.length > 0) {
-      throw new AccountDeletionBlockedError(
-        blocked.map(s => ({ id: s.classId, name: s.className })),
-        BLOCKED_MESSAGE[bySelf ? 'self' : 'admin']
-      )
-    }
+): Promise<{ transferred: OwnedClassSuccession[]; purged: number }> {
+  // Cada purga lleva su margen, como la de la tarea programada.
+  const inTrash = (await ownedTrashedClasses(userId)).length
+  const { succession: transferred, purged } = await prisma.$transaction(
+    async tx => {
+      const succession = await ownedClassesSuccession(userId, tx)
+      const blocked = succession.filter(s => !s.successor)
+      if (blocked.length > 0) {
+        throw new AccountDeletionBlockedError(
+          blocked.map(s => ({ id: s.classId, name: s.className })),
+          BLOCKED_MESSAGE[bySelf ? 'self' : 'admin']
+        )
+      }
 
-    for (const { classId, successor } of succession) {
-      await transferClassOwnership(tx, classId, successor!.id)
-      await recordClassAction(tx, {
-        classId,
-        actorId,
-        action: 'class.ownership_transferred',
-        entityType: 'user',
-        entityId: successor!.id,
-        targetUserId: successor!.id,
-        metadata: { fromUserId: userId, reason: 'account_deleted' },
-      })
-    }
+      // Antes que las insignias: las de sus misiones se van con ellas.
+      const purged: PurgedClass[] = []
+      for (const cls of await ownedTrashedClasses(userId, tx)) {
+        const result = await purgeClassInTx(tx, cls.id, {
+          reason: 'account_deleted',
+          actorId,
+          ownerId: userId,
+        })
+        if (result) purged.push(result)
+      }
 
-    await reassignBadges(tx, userId)
-    await tx.user.delete({ where: { id: userId } })
-    return succession
-  })
+      for (const { classId, successor } of succession) {
+        await transferClassOwnership(tx, classId, successor!.id)
+        await recordClassAction(tx, {
+          classId,
+          actorId,
+          action: 'class.ownership_transferred',
+          entityType: 'user',
+          entityId: successor!.id,
+          targetUserId: successor!.id,
+          metadata: { fromUserId: userId, reason: 'account_deleted' },
+        })
+      }
+
+      await reassignBadges(tx, userId)
+      await tx.user.delete({ where: { id: userId } })
+      return { succession, purged }
+    },
+    { timeout: 5_000 + inTrash * PURGE_TRANSACTION_TIMEOUT_MS }
+  )
 
   for (const { classId, className, successor } of transferred) {
     notifyOwnershipReceived(successor!.id, classId, className)
   }
-  return { transferred }
+  // Los ficheros de las purgadas, ya confirmado el borrado. No lanza: lo que no
+  // se pueda borrar queda en el registro del sistema.
+  for (const cls of purged) await finishClassPurge(cls)
+  return { transferred, purged: purged.length }
 }
 
 /**

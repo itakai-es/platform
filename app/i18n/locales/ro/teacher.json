@@ -724,7 +724,17 @@
         "empty_description": "Dacă ștergi o clasă, va sta aici {days} zile înainte să se șteargă definitiv.",
         "error_title": "Coșul de gunoi nu a putut fi încărcat",
         "error_description": "Verifică conexiunea și încearcă din nou.",
-        "retry": "Încearcă din nou"
+        "retry": "Încearcă din nou",
+        "purge": {
+          "cta": "Șterge acum",
+          "modal_title": "Ștergerea definitivă a clasei",
+          "message": "„{name}” se va șterge acum, fără să mai aștepte să expire termenul din coșul de gunoi. Acțiunea nu poate fi anulată: nimeni nu o va mai putea recupera.",
+          "loses": "Se va șterge acum, definitiv:",
+          "understood": "Înțeleg că se șterge definitiv și că nu mai poate fi recuperată.",
+          "confirm": "Șterge definitiv",
+          "done": "„{name}” a fost ștearsă definitiv.",
+          "error": "Clasa nu a putut fi ștearsă. Încearcă din nou."
+        }
       }
     },
     "missions": {

@@ -571,6 +571,19 @@ export const useTeacherStore = defineStore('teacher', () => {
     return response.class
   }
 
+  /**
+   * Borra ya, para siempre, una clase de la papelera, sin esperar a la purga.
+   * Ya no existe: se olvida todo lo guardado de ella.
+   */
+  async function purgeClass(classId: string) {
+    const response = await $fetch<{ purged: true; classId: string }>(
+      `${classTeachersUrl(classId)}/purge`,
+      { method: 'POST' }
+    )
+    forgetClass(classId)
+    return response
+  }
+
   /** Las clases propias en la papelera. Sin caché: cambia poco y se mira poco. */
   async function fetchClassTrash() {
     const config = useRuntimeConfig()
@@ -1137,6 +1150,7 @@ export const useTeacherStore = defineStore('teacher', () => {
     fetchClassDeletionImpact,
     trashClass,
     restoreClass,
+    purgeClass,
     fetchClassTrash,
     duplicateClass,
     getInvitationCode,

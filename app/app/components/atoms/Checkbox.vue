@@ -1,5 +1,7 @@
 <template>
-  <div class="flex items-center">
+  <!-- Arriba y sin encogerse: con una etiqueta de varias líneas, la casilla sigue
+       siendo un cuadrado a la altura de la primera. -->
+  <div class="flex items-start">
     <input
       :id="id"
       type="checkbox"
@@ -7,7 +9,8 @@
       :disabled="disabled"
       :required="required"
       :aria-describedby="describedBy"
-      class="w-4 h-4 border border-border-primary rounded bg-white checked:bg-navy-700 checked:border-navy-700 focus:ring-2 focus:ring-navy-700 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
+      :class="{ 'mt-0.5': label }"
+      class="w-4 h-4 shrink-0 border border-border-primary rounded bg-white checked:bg-navy-700 checked:border-navy-700 focus:ring-2 focus:ring-navy-700 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
       @change="emit('update:modelValue', ($event.target as HTMLInputElement).checked)"
     />
     <label

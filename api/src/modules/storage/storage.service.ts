@@ -342,26 +342,44 @@ export async function saveUpload(
  * Acepta la URL almacenada (relativa `/uploads/...` o absoluta del
  * almacenamiento externo), y solo borra dentro de la carpeta de subidas: una URL
  * que apunte a cualquier otro sitio no borra nada.
+ *
+ * Devuelve false si el fichero estaba y no se ha podido borrar (el
+ * almacenamiento externo falla o ya no está configurado), para quien quiera
+ * contarlo; sin nada que borrar, true.
  */
-export async function deleteUpload(fileUrl: string | null | undefined): Promise<void> {
-  if (!fileUrl) return
+export async function deleteUpload(fileUrl: string | null | undefined): Promise<boolean> {
+  if (!fileUrl) return true
   try {
     const storage = await getStorageSettings()
     const found = locateUpload(fileUrl, storage.s3)
     // Solo se borra lo que es un fichero de `uploads/`: la URL puede venir de un
     // documento de tipo enlace, que la escribe quien crea el documento.
-    if (!found) return
+    if (!found) return true
 
     if (found.origin === 'local') {
       const abs = localPath(found.key)
       if (abs && existsSync(abs)) await unlink(abs)
-      return
+      return true
     }
 
-    if (!storage.s3.bucket) return
+    if (!storage.s3.bucket) return false
     const client = getS3Client(storage.s3)
     await client.send(new DeleteObjectCommand({ Bucket: storage.s3.bucket, Key: found.key }))
+    return true
   } catch {
     /* best-effort: no rompemos la operación principal por un borrado fallido */
+    return false
   }
+}
+
+/**
+ * Clave y almacenamiento del fichero de la plataforma al que apunta una URL
+ * guardada, sea pública o privada, o null si no apunta a ninguno; ya resuelto
+ * con la configuración actual, como `privateUploadResolver`.
+ */
+export async function uploadResolver(): Promise<
+  (fileUrl: string | null | undefined) => StoredUpload | null
+> {
+  const { s3 } = await getStorageSettings()
+  return fileUrl => (fileUrl ? locateUpload(fileUrl, s3) : null)
 }

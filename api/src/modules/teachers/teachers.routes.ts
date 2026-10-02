@@ -41,6 +41,7 @@ import {
   restoreClass,
   trashClass,
 } from './class-trash.service.js'
+import { purgeClassNow } from './class-purge.service.js'
 import {
   listTeacherStudents,
   STUDENT_LIST_MAX_LIMIT,
@@ -637,6 +638,15 @@ export async function teacherRoutes(fastify: FastifyInstance) {
     '/classes/:classId/restore',
     async (request: FastifyRequest<{ Params: { classId: string } }>) => {
       return restoreClass(request.user as RequestUser, request.params.classId)
+    }
+  )
+
+  // Borrar ya, para siempre, una clase de la papelera, sin esperar a la purga.
+  // Solo quien es propietario; fuera de la papelera, 409.
+  fastify.post(
+    '/classes/:classId/purge',
+    async (request: FastifyRequest<{ Params: { classId: string } }>) => {
+      return purgeClassNow(request.user as RequestUser, request.params.classId)
     }
   )
 

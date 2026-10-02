@@ -74,27 +74,43 @@
             </div>
           </div>
 
-          <div class="flex items-center justify-between gap-3 sm:justify-end">
+          <div class="flex flex-wrap items-center justify-between gap-3 sm:justify-end">
             <!-- Cuenta atrás: se destaca cuando quedan pocos días -->
             <Badge :variant="isFew(cls) ? 'danger' : 'default'" size="sm">
               <ClockIcon class="mr-1 h-3.5 w-3.5" aria-hidden="true" />
               {{ countdown(cls) }}
             </Badge>
-            <Button
-              variant="outline"
-              size="md"
-              :icon-left="ArrowUturnLeftIcon"
-              :loading="restoringId === cls.id"
-              :disabled="!!restoringId"
-              :aria-describedby="`trash-${cls.id}`"
-              @click="restore(cls)"
-            >
-              {{ t('teacher.classes.trash.restore') }}
-            </Button>
+            <div class="flex flex-wrap items-center gap-2">
+              <Button
+                variant="outline"
+                size="md"
+                :icon-left="ArrowUturnLeftIcon"
+                :loading="restoringId === cls.id"
+                :disabled="!!restoringId"
+                :aria-describedby="`trash-${cls.id}`"
+                @click="restore(cls)"
+              >
+                {{ t('teacher.classes.trash.restore') }}
+              </Button>
+              <!-- Sin esperar a los días: con aviso y confirmación reforzada -->
+              <Button
+                variant="outline"
+                size="md"
+                :icon-left="TrashIcon"
+                :disabled="!!restoringId"
+                :aria-describedby="`trash-${cls.id}`"
+                data-purge
+                @click="askPurge(cls)"
+              >
+                {{ t('teacher.classes.trash.purge.cta') }}
+              </Button>
+            </div>
           </div>
         </li>
       </ul>
     </template>
+
+    <ClassPurgeConfirm v-model="showPurge" :target="purgeTarget" @purged="onPurged" />
   </div>
 </template>
 
@@ -112,8 +128,9 @@ import { CLASS_TRASH_DAYS, CLASS_TRASH_FEW_DAYS, formatTrashDate } from '~/utils
  * La papelera: las clases propias enviadas a ella, con cuándo se enviaron y
  * cuántos días les quedan antes de borrarse para siempre. Restaurar no pide
  * confirmación: no pierde nada y la clase vuelve archivada, sin alumnado
- * dentro hasta que se desarchiva. Es una página aparte de «Mis clases» (no una
- * tercera pestaña) para no estorbar a quien no borra nunca.
+ * dentro hasta que se desarchiva. Borrar ya sí (`ClassPurgeConfirm`): no hay
+ * vuelta atrás. Es una página aparte de «Mis clases» (no una tercera pestaña)
+ * para no estorbar a quien no borra nunca.
  */
 definePageMeta({
   layout: 'teacher',
@@ -136,6 +153,8 @@ const purgeDays = ref(CLASS_TRASH_DAYS)
 const loading = ref(true)
 const loadError = ref(false)
 const restoringId = ref('')
+const showPurge = ref(false)
+const purgeTarget = ref<TrashedClass | null>(null)
 const rootRef = ref<HTMLElement | null>(null)
 const listRef = ref<HTMLElement | null>(null)
 
@@ -176,9 +195,10 @@ function countdown(cls: TrashedClass) {
 }
 
 /**
- * Tras quitar una fila, el foco va al «Restaurar» de la que ocupa su sitio (o
- * de la anterior si era la última) y, si ya no queda ninguna, al título de la
- * página: quien usa el teclado no vuelve al principio del documento.
+ * Tras quitar una fila (restaurada o borrada), el foco va al «Restaurar» de la
+ * que ocupa su sitio (o de la anterior si era la última) y, si ya no queda
+ * ninguna, al título de la página: quien usa el teclado no vuelve al principio
+ * del documento.
  */
 async function focusAfterRemoval(index: number) {
   await nextTick()
@@ -207,6 +227,18 @@ async function restore(cls: TrashedClass) {
   } finally {
     restoringId.value = ''
   }
+}
+
+function askPurge(cls: TrashedClass) {
+  purgeTarget.value = cls
+  showPurge.value = true
+}
+
+/** Borrada ya: fuera de la lista, como al restaurarla. */
+function onPurged(purged: Pick<TrashedClass, 'id'>) {
+  const index = classes.value.findIndex(c => c.id === purged.id)
+  classes.value = classes.value.filter(c => c.id !== purged.id)
+  void focusAfterRemoval(index)
 }
 
 onMounted(load)

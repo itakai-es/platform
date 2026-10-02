@@ -724,7 +724,17 @@
         "empty_description": "If you delete a class, it will stay here for {days} days before being deleted for good.",
         "error_title": "The trash couldn't be loaded",
         "error_description": "Check your connection and try again.",
-        "retry": "Try again"
+        "retry": "Try again",
+        "purge": {
+          "cta": "Delete now",
+          "modal_title": "Delete the class for good",
+          "message": "“{name}” will be deleted now, without waiting for its time in the trash to run out. This can’t be undone: nobody will be able to recover it.",
+          "loses": "This will be deleted now, for good:",
+          "understood": "I understand it will be deleted for good and can’t be recovered.",
+          "confirm": "Delete for good",
+          "done": "“{name}” has been deleted for good.",
+          "error": "The class couldn’t be deleted. Please try again."
+        }
       }
     },
     "missions": {

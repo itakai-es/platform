@@ -724,7 +724,17 @@
         "empty_description": "Si desanicies una clase, va tar equí {days} díes enantes de borrase pa siempre.",
         "error_title": "Nun se pudo cargar la papelera",
         "error_description": "Comprueba la conexón y tórnalo a intentar.",
-        "retry": "Tornar a intentalo"
+        "retry": "Tornar a intentalo",
+        "purge": {
+          "cta": "Borrar yá",
+          "modal_title": "Borrar la clase pa siempre",
+          "message": "«{name}» va borrase agora, ensin esperar a que remate'l so plazu na papelera. Nun se pue desfacer: naide va poder recuperala.",
+          "loses": "Va borrase agora y pa siempre:",
+          "understood": "Entiendo que se borra pa siempre y que nun se pue recuperar.",
+          "confirm": "Borrar pa siempre",
+          "done": "«{name}» borróse pa siempre.",
+          "error": "Nun se pudo borrar la clase. Tórnalo a intentar."
+        }
       }
     },
     "missions": {

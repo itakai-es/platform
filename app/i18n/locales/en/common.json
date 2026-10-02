@@ -436,7 +436,9 @@
       "blocked_admin": "This account can't be deleted yet: it owns these classes and nobody else has admin access in them. Ownership has to be handed over to another teacher first.",
       "transfers_self": "Your classes will pass to another teacher with admin access in them:",
       "transfers_admin": "Their classes will pass to another teacher with admin access in them:",
-      "transfer_item": "{class}, to {name}"
+      "transfer_item": "{class}, to {name}",
+      "trashed_self": "The class you have in the trash will also be deleted for good: | The {count} classes you have in the trash will also be deleted for good:",
+      "trashed_admin": "The class this account has in the trash will also be deleted for good: | The {count} classes this account has in the trash will also be deleted for good:"
     },
     "copy": {
       "label": "Copy: {what}",

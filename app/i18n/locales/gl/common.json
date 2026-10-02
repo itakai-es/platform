@@ -436,7 +436,9 @@
       "blocked_admin": "Esta conta aínda non se pode borrar: é a propietaria destas clases e nelas non hai ninguén máis con administración. Antes hai que pasar a súa propiedade a outra conta docente.",
       "transfers_self": "As túas clases pasarán a alguén do profesorado con administración nelas:",
       "transfers_admin": "As súas clases pasarán a alguén do profesorado con administración nelas:",
-      "transfer_item": "{class}, a {name}"
+      "transfer_item": "{class}, a {name}",
+      "trashed_self": "Tamén se borrará para sempre a clase que tes na papeleira: | Tamén se borrarán para sempre as {count} clases que tes na papeleira:",
+      "trashed_admin": "Tamén se borrará para sempre a clase que ten na papeleira: | Tamén se borrarán para sempre as {count} clases que ten na papeleira:"
     },
     "copy": {
       "label": "Copiar: {what}",

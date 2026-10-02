@@ -724,7 +724,17 @@
         "empty_description": "Se eliminares uma turma, ficará aqui {days} dias antes de ser apagada para sempre.",
         "error_title": "Não foi possível carregar o lixo",
         "error_description": "Verifica a ligação e tenta novamente.",
-        "retry": "Tentar novamente"
+        "retry": "Tentar novamente",
+        "purge": {
+          "cta": "Apagar já",
+          "modal_title": "Apagar a turma para sempre",
+          "message": "«{name}» será apagada agora, sem esperar que termine o seu prazo no lixo. Não se pode desfazer: ninguém a poderá recuperar.",
+          "loses": "Será apagado agora e para sempre:",
+          "understood": "Compreendo que é apagada para sempre e que não se pode recuperar.",
+          "confirm": "Apagar para sempre",
+          "done": "«{name}» foi apagada para sempre.",
+          "error": "Não foi possível apagar a turma. Tenta novamente."
+        }
       }
     },
     "missions": {
