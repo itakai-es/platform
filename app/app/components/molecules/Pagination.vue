@@ -4,7 +4,8 @@
     class="flex flex-wrap items-center justify-between gap-2 pt-4"
     :aria-label="t('common.pagination.label')"
   >
-    <div class="text-sm text-text-secondary">
+    <!-- Gris de texto sacado del navy: `text-text-secondary` no llega a 4,5:1 sobre blanco -->
+    <div class="text-sm text-text-primary/70">
       {{ t('common.pagination.page_of', { page: currentPage, total: totalPages }) }}
     </div>
 
@@ -20,9 +21,10 @@
       </button>
 
       <!-- Page Numbers -->
-      <!-- Cada número con su propia clave: el botón pulsado no se rehace y conserva el foco -->
+      <!-- Cada número con su propia clave: el botón pulsado no se rehace y conserva el foco.
+           La página actual va en el lila de pulsado: con el de marca, el blanco no llega a 4,5:1 -->
       <template v-for="(page, index) in visiblePages" :key="page === '...' ? `gap-${index}` : page">
-        <span v-if="page === '...'" class="px-2 py-1.5 text-sm text-text-secondary"> ... </span>
+        <span v-if="page === '...'" class="px-2 py-1.5 text-sm text-text-primary/70"> ... </span>
         <button
           v-else
           type="button"
@@ -30,7 +32,7 @@
           :class="[
             'px-3 py-1.5 text-sm rounded-lg transition-colors',
             page === currentPage
-              ? 'bg-purple text-white font-semibold'
+              ? 'bg-purple-active text-white font-semibold'
               : 'border border-border-primary text-text-primary hover:bg-surface-hover',
           ]"
           @click="$emit('pageChange', page as number)"

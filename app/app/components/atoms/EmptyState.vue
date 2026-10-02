@@ -4,7 +4,7 @@
     <component :is="`h${headingLevel}`" class="text-lg font-semibold text-navy-700 mb-2">{{
       title
     }}</component>
-    <p class="text-text-secondary">{{ description }}</p>
+    <p class="text-text-primary/70">{{ description }}</p>
     <div v-if="$slots.action" class="mt-6">
       <slot name="action" />
     </div>
