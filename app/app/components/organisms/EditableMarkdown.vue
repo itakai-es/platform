@@ -29,16 +29,21 @@
  * Cancelar descarta el borrador. Pensado para editar historia/guía dentro del
  * asistente sin persistir nada hasta el final del flujo.
  */
-const props = defineProps<{
-  modelValue: string
-  godName: string
-  godAvatar: string
-  aiPlaceholder?: string
-  contextLabel?: string
-  aiModalHint?: string
-  aiSystemContext?: string
-  aiEnabled?: boolean
-}>()
+// El botón de la IA sale por defecto, como en el editor: sin `withDefaults`,
+// la prop ausente valdría `false` y se lo pasaría apagado.
+const props = withDefaults(
+  defineProps<{
+    modelValue: string
+    godName: string
+    godAvatar: string
+    aiPlaceholder?: string
+    contextLabel?: string
+    aiModalHint?: string
+    aiSystemContext?: string
+    aiEnabled?: boolean
+  }>(),
+  { aiEnabled: true }
+)
 
 const emit = defineEmits<{ 'update:modelValue': [value: string] }>()
 

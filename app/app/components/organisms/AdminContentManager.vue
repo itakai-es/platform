@@ -422,6 +422,7 @@
               class="h-[70vh] min-h-[28rem]"
               :labelledby="labelId"
               allow-images
+              :show-actions="false"
               god-name="Atenea"
               god-avatar="/app/avatars/atenea.svg"
               :ai-placeholder="text.aiPlaceholder"

@@ -69,10 +69,10 @@
         >
           <ListBulletIcon class="w-4 h-4 sm:w-5 sm:h-5" />
         </button>
-        <div v-if="aiEnabled !== false" class="w-px h-5 bg-gray-300 mx-0.5 sm:mx-1" />
+        <div v-if="aiEnabled" class="w-px h-5 bg-gray-300 mx-0.5 sm:mx-1" />
         <!-- AI Button -->
         <button
-          v-if="aiEnabled !== false"
+          v-if="aiEnabled"
           type="button"
           class="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors bg-yellow hover:bg-[#FFD166] text-navy-700"
           @click="openAiModal"
@@ -81,7 +81,7 @@
           <span class="hidden sm:inline">{{ godName }}</span>
         </button>
       </div>
-      <div class="flex items-center gap-2">
+      <div v-if="showActions" class="flex items-center gap-2">
         <Button variant="ghost" size="sm" @click="$emit('cancel')">Cancelar</Button>
         <Button variant="primary" size="sm" @click="$emit('save', content)">Guardar</Button>
       </div>
@@ -167,7 +167,7 @@
           <img :src="godAvatar" alt="" class="w-10 h-10 rounded-full" />
           <div>
             <h3 :id="titleId" class="font-bold text-navy-700">{{ godName }}</h3>
-            <p class="text-xs text-text-secondary">{{ contextLabel }}</p>
+            <p v-if="contextLabel" class="text-xs text-text-secondary">{{ contextLabel }}</p>
           </div>
         </div>
       </template>
@@ -190,18 +190,30 @@
           <span>{{ t('common.markdown.generating') }}</span>
         </div>
 
-        <!-- Empty state -->
-        <div v-if="!aiSuggestion && !aiLoading" class="text-center py-8">
+        <!-- Fallo: la IA no ha respondido (tras los reintentos del composable) -->
+        <p
+          v-if="aiFailed && !aiSuggestion && !aiLoading"
+          role="alert"
+          class="flex items-start justify-center gap-1.5 text-sm text-navy-700 py-8"
+        >
+          <ExclamationCircleIcon class="mt-0.5 h-4 w-4 shrink-0 text-error" aria-hidden="true" />
+          <span>{{ t('common.errors.generic') }}</span>
+        </p>
+
+        <!-- Empty state (sin pista, nada: si no, queda un hueco en blanco) -->
+        <div v-else-if="!aiSuggestion && !aiLoading && aiModalHint" class="text-center py-8">
           <p class="text-text-secondary text-sm">{{ aiModalHint }}</p>
         </div>
       </div>
 
       <template v-if="!aiLoading" #footer>
         <!-- Accept/Reject (when suggestion ready) -->
-        <div v-if="aiSuggestion" class="w-full flex items-center justify-between gap-2">
-          <Button variant="outline" size="sm" @click="aiSuggestion = ''"
-            >Quiero cambiar algo</Button
-          >
+        <div
+          v-if="aiSuggestion"
+          ref="aiActionsRef"
+          class="w-full flex items-center justify-between gap-2"
+        >
+          <Button variant="outline" size="sm" @click="askForChanges">Quiero cambiar algo</Button>
           <div class="flex gap-2">
             <Button variant="ghost" size="sm" @click="closeAiModal">Descartar</Button>
             <Button variant="outline" size="sm" @click="replaceAllWithSuggestion"
@@ -243,6 +255,7 @@
 import {
   ArrowUturnLeftIcon,
   ArrowUturnRightIcon,
+  ExclamationCircleIcon,
   ListBulletIcon,
   PaperAirplaneIcon,
   SparklesIcon,
@@ -250,29 +263,42 @@ import {
 import { renderHelpMarkdownWithUploads } from '~/utils/help-images'
 import { renderPageMarkdown } from '~/utils/markdown'
 
-const props = defineProps<{
-  modelValue: string
-  godName: string
-  godAvatar: string
-  aiPlaceholder?: string
-  /** Label shown under god name in modal */
-  contextLabel?: string
-  /** Hint shown in modal empty state */
-  aiModalHint?: string
-  /** System context injected into AI prompt so it knows what kind of content it's editing */
-  aiSystemContext?: string
-  /** When false, hides the AI assistant button (class has content generation disabled) */
-  aiEnabled?: boolean
-  /** El `id` de la etiqueta externa que da nombre al área de texto. */
-  labelledby?: string
-  /**
-   * La vista previa enseña las imágenes, como el centro de ayuda y el blog,
-   * con las subidas desde el panel apuntadas a la API. Solo para lo que
-   * escriben administradores: en la historia, la guía y las misiones no se
-   * admiten imágenes y se quedan fuera.
-   */
-  allowImages?: boolean
-}>()
+const props = withDefaults(
+  defineProps<{
+    modelValue: string
+    godName: string
+    godAvatar: string
+    aiPlaceholder?: string
+    /** Label shown under god name in modal */
+    contextLabel?: string
+    /** Hint shown in modal empty state */
+    aiModalHint?: string
+    /** System context injected into AI prompt so it knows what kind of content it's editing */
+    aiSystemContext?: string
+    /**
+     * El botón de la IA sale salvo que se pase `false`. Con `withDefaults`:
+     * una prop booleana que no se pasa vale `false`, no `undefined`, y el botón
+     * no salía en ningún sitio.
+     */
+    aiEnabled?: boolean
+    /**
+     * Los botones Cancelar y Guardar de la barra, para quien escucha `cancel` y
+     * `save`. Fuera cuando el editor va dentro de un formulario que ya tiene
+     * los suyos, como el panel de contenidos.
+     */
+    showActions?: boolean
+    /** El `id` de la etiqueta externa que da nombre al área de texto. */
+    labelledby?: string
+    /**
+     * La vista previa enseña las imágenes, como el centro de ayuda y el blog,
+     * con las subidas desde el panel apuntadas a la API. Solo para lo que
+     * escriben administradores: en la historia, la guía y las misiones no se
+     * admiten imágenes y se quedan fuera.
+     */
+    allowImages?: boolean
+  }>(),
+  { aiEnabled: true, showActions: true }
+)
 
 const emit = defineEmits<{
   'update:modelValue': [value: string]
@@ -283,6 +309,9 @@ const emit = defineEmits<{
 const config = useRuntimeConfig()
 const authStore = useAuthStore()
 const { t, locale } = useI18n()
+// En lo alto de `setup`: el composable llama a `useI18n()`, que fuera de aquí
+// (por ejemplo, dentro del clic) lanza y la petición no llegaba a salir.
+const { streamPrompt: streamAIPrompt } = useAIPrompt()
 
 const content = ref(props.modelValue)
 const editorRef = ref<HTMLTextAreaElement>()
@@ -295,8 +324,11 @@ const redoStack = ref<string[]>([])
 const showAiModal = ref(false)
 const aiInput = ref('')
 const aiInputRef = ref<HTMLInputElement>()
+const aiActionsRef = ref<HTMLDivElement>()
 const aiLoading = ref(false)
 const aiSuggestion = ref('')
+/** La última petición a la IA falló: sin esto, el diálogo volvía en silencio al principio. */
+const aiFailed = ref(false)
 let aiAbortController: AbortController | null = null
 
 const canUndo = computed(() => undoStack.value.length > 0)
@@ -419,6 +451,7 @@ function cycleHeading() {
 function openAiModal() {
   showAiModal.value = true
   aiSuggestion.value = ''
+  aiFailed.value = false
   aiInput.value = ''
   // Doble `nextTick`: el Modal enfoca el diálogo tras el primero; el campo
   // debe recibir el foco después.
@@ -428,6 +461,7 @@ function openAiModal() {
 function closeAiModal() {
   showAiModal.value = false
   aiSuggestion.value = ''
+  aiFailed.value = false
   aiInput.value = ''
 }
 
@@ -436,6 +470,10 @@ async function sendAi() {
   const prompt = aiInput.value.trim()
   aiInput.value = ''
   aiSuggestion.value = ''
+  aiFailed.value = false
+  // Mientras carga, el pie (con el campo) se desmonta: el foco pasa al diálogo
+  // para no caer en el body, donde se pierden la trampa de foco y Escape.
+  aiInputRef.value?.closest<HTMLElement>('[role="dialog"]')?.focus()
   aiLoading.value = true
 
   try {
@@ -443,8 +481,7 @@ async function sendAi() {
       props.aiSystemContext ||
       (locale.value === 'en'
         ? 'The teacher is editing content.'
-        : 'El profesor esta editando contenido.')
-    const { streamPrompt: streamAIPrompt } = useAIPrompt()
+        : 'Quien imparte la clase está editando contenido.')
     const aiTarget = ref('')
     await streamAIPrompt(
       'editor.assist',
@@ -460,10 +497,23 @@ async function sendAi() {
   } catch {
     if (aiAbortController?.signal.aborted) return
     aiSuggestion.value = ''
+    aiFailed.value = true
   } finally {
     aiAbortController = null
     aiLoading.value = false
+    // Al volver el pie, el foco va a sus acciones (sugerencia) o al campo (fallo).
+    if (showAiModal.value) nextTick(focusAiFooter)
   }
+}
+
+function focusAiFooter() {
+  if (aiSuggestion.value) aiActionsRef.value?.querySelector('button')?.focus()
+  else aiInputRef.value?.focus()
+}
+
+function askForChanges() {
+  aiSuggestion.value = ''
+  nextTick(focusAiFooter)
 }
 
 onBeforeUnmount(() => {
