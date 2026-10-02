@@ -40,7 +40,10 @@
 .md-rendered table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
 .md-rendered th, .md-rendered td { border: 1px solid #e5e7eb; padding: 0.5rem 0.75rem; text-align: left; }
 .md-rendered th { background: #f9fafb; font-weight: 600; }
-.md-rendered img { max-width: 100%; border-radius: 0.5rem; margin: 1rem 0; }
+/* Solo el markdown del centro de ayuda y del blog admite imágenes (diagramas y
+   capturas), y se leen como figura, no como parte del texto: así salen en la
+   página pública y en la vista previa del editor del panel. */
+.md-rendered img { max-width: 100%; border: 1px solid var(--color-border-primary); border-radius: 0.75rem; margin: 1.5rem 0; }
 .md-rendered del { text-decoration: line-through; opacity: 0.7; }
 
 /**

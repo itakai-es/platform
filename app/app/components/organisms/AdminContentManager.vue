@@ -378,7 +378,7 @@
             >
               <img
                 v-if="form.coverImage"
-                :src="form.coverImage"
+                :src="getImageUrl(form.coverImage)"
                 alt=""
                 class="h-full w-full object-cover"
               />
@@ -413,9 +413,15 @@
             </Button>
           </template>
           <template #default="{ labelId }">
+            <!-- Alto acotado, como en el editor de misiones: con imágenes, la
+                 vista previa mide mucho más que el texto, y sin tope estiraría
+                 el área de texto con una cola en blanco. Así cada columna
+                 tiene su propio scroll y se mueven juntas. -->
             <MarkdownEditor
               v-model="form.body"
+              class="h-[70vh] min-h-[28rem]"
               :labelledby="labelId"
+              allow-images
               god-name="Atenea"
               god-avatar="/app/avatars/atenea.svg"
               :ai-placeholder="text.aiPlaceholder"
@@ -539,6 +545,8 @@ const props = defineProps<{
 const { t } = useI18n()
 const toast = useToast()
 const { shortByline } = useBlogByline()
+// La portada subida desde el panel vive en `/uploads`, que sirve la API.
+const { getImageUrl } = useImageUrl()
 const {
   categories,
   loading,

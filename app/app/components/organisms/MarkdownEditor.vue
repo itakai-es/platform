@@ -177,7 +177,7 @@
         <div
           v-if="aiSuggestion"
           class="bg-gray-50 rounded-xl p-6 md-rendered"
-          v-html="renderPageMarkdown(aiSuggestion)"
+          v-html="renderedSuggestion"
         />
 
         <!-- Loading -->
@@ -247,6 +247,7 @@ import {
   PaperAirplaneIcon,
   SparklesIcon,
 } from '@heroicons/vue/24/outline'
+import { renderHelpMarkdownWithUploads } from '~/utils/help-images'
 import { renderPageMarkdown } from '~/utils/markdown'
 
 const props = defineProps<{
@@ -264,6 +265,13 @@ const props = defineProps<{
   aiEnabled?: boolean
   /** El `id` de la etiqueta externa que da nombre al área de texto. */
   labelledby?: string
+  /**
+   * La vista previa enseña las imágenes, como el centro de ayuda y el blog,
+   * con las subidas desde el panel apuntadas a la API. Solo para lo que
+   * escriben administradores: en la historia, la guía y las misiones no se
+   * admiten imágenes y se quedan fuera.
+   */
+  allowImages?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -293,7 +301,15 @@ let aiAbortController: AbortController | null = null
 
 const canUndo = computed(() => undoStack.value.length > 0)
 const canRedo = computed(() => redoStack.value.length > 0)
-const rendered = computed(() => renderPageMarkdown(content.value))
+const rendered = computed(() => renderPreview(content.value))
+const renderedSuggestion = computed(() => renderPreview(aiSuggestion.value))
+
+/** El markdown tal y como saldrá: con imágenes solo si el editor las admite. */
+function renderPreview(raw: string) {
+  return props.allowImages
+    ? renderHelpMarkdownWithUploads(raw, config.public.apiBase)
+    : renderPageMarkdown(raw)
+}
 
 watch(content, v => emit('update:modelValue', v))
 watch(
@@ -303,32 +319,41 @@ watch(
   }
 )
 
-let scrollingFrom = ''
+/**
+ * Las dos columnas se mueven juntas. Mover una por código dispara su propio
+ * evento de scroll, el eco, que no hay que devolver: cada columna recuerda
+ * dónde la dejó la otra y lo ignora. Una marca que se borrase en el siguiente
+ * `requestAnimationFrame` no basta: Safari entrega el eco un fotograma
+ * después, ya sin marca, y las columnas se lo devolvían sin parar, corriéndose
+ * un píxel cada vez.
+ */
+let editorEcho: number | null = null
+let previewEcho: number | null = null
+
+/** Pone `to` en la misma proporción que `from`; devuelve dónde queda, si se ha movido. */
+function follow(from: HTMLElement, to: HTMLElement) {
+  const pct = from.scrollTop / (from.scrollHeight - from.clientHeight || 1)
+  const before = to.scrollTop
+  to.scrollTop = pct * (to.scrollHeight - to.clientHeight)
+  return to.scrollTop === before ? null : to.scrollTop
+}
 
 function syncScroll() {
-  if (scrollingFrom === 'preview') return
-  scrollingFrom = 'editor'
   const editor = editorRef.value
   const preview = previewRef.value
   if (!editor || !preview) return
-  const pct = editor.scrollTop / (editor.scrollHeight - editor.clientHeight || 1)
-  preview.scrollTop = pct * (preview.scrollHeight - preview.clientHeight)
-  requestAnimationFrame(() => {
-    scrollingFrom = ''
-  })
+  const echo = editor.scrollTop === editorEcho
+  editorEcho = null
+  if (!echo) previewEcho = follow(editor, preview)
 }
 
 function syncScrollFromPreview() {
-  if (scrollingFrom === 'editor') return
-  scrollingFrom = 'preview'
   const editor = editorRef.value
   const preview = previewRef.value
   if (!editor || !preview) return
-  const pct = preview.scrollTop / (preview.scrollHeight - preview.clientHeight || 1)
-  editor.scrollTop = pct * (editor.scrollHeight - editor.clientHeight)
-  requestAnimationFrame(() => {
-    scrollingFrom = ''
-  })
+  const echo = preview.scrollTop === previewEcho
+  previewEcho = null
+  if (!echo) editorEcho = follow(preview, editor)
 }
 
 function pushUndo() {
@@ -477,4 +502,3 @@ function acceptAiSuggestion() {
   nextTick(() => editorRef.value?.focus())
 }
 </script>
-

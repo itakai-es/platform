@@ -31,6 +31,7 @@
 <script setup lang="ts">
 import { helpCardType } from '~/utils/help-accents'
 import { helpDocument } from '~/utils/help-headings'
+import { pointUploadsToApi } from '~/utils/help-images'
 import { renderHelpMarkdown } from '~/utils/markdown'
 import type { HelpArea, HelpArticle } from '~/types/help.types'
 
@@ -84,9 +85,9 @@ const coverUrl = computed(() => getImageUrl(props.article.coverImage))
 /**
  * El cuerpo, ya en HTML, con dos retoques.
  *
- * Uno: las imágenes que se suben desde el panel se guardan en `/uploads`, que
- * sirve la API, así que hay que apuntarlas a su origen —el markdown se pinta en
- * el frontend—; las que ya son absolutas, como las de R2, se quedan igual.
+ * Uno: las imágenes que se suben desde el panel se apuntan a la API, que es
+ * quien sirve `/uploads` (`pointUploadsToApi`, el mismo que usa la vista
+ * previa del editor del panel).
  *
  * Y dos: se numeran los `<h2>` con el mismo identificador que el índice, para
  * poder enlazar a un apartado concreto. El saneado descarta los `id`, así que
@@ -103,9 +104,7 @@ const renderedBody = computed(() => {
   // ya ha escapado todo el texto y no hay nada que retocar.
   if (!doc) return renderHelpMarkdown(props.article.body)
 
-  doc.content.querySelectorAll('img[src^="/uploads/"]').forEach(img => {
-    img.setAttribute('src', `${config.public.apiBase}${img.getAttribute('src')}`)
-  })
+  pointUploadsToApi(doc.content, config.public.apiBase)
 
   const holder = document.createElement('div')
   holder.append(doc.content)
@@ -143,13 +142,6 @@ const byline = computed(() => (isBlog.value ? authorLine(props.article.authorNam
   border-left: 4px solid var(--help-accent);
   /* Al llegar desde el índice, que el apartado no quede debajo de la barra. */
   scroll-margin-top: 6rem;
-}
-
-/* Los diagramas se leen como figura, no como parte del texto. */
-.help-body :deep(.md-rendered img) {
-  border: 1px solid var(--color-border-primary);
-  border-radius: 0.75rem;
-  margin: 1.5rem 0;
 }
 
 .help-body :deep(.md-rendered blockquote) {
