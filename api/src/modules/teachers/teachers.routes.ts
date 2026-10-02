@@ -232,6 +232,15 @@ const importMissionSchema = z
   })
   .strict()
 
+// Importar una plantilla. Sus misiones van solo si se piden: sin cuerpo, como
+// siempre, sin ellas. Estricto, como importar una misión: una opción con otro
+// nombre (`withMissions`…) no se descarta en silencio, da 400.
+const importTemplateSchema = z
+  .object({
+    missions: z.boolean().default(false),
+  })
+  .strict()
+
 const shopItemSchema = z.object({
   name: z.string().min(1).max(60),
   description: z.string().max(200).optional(),
@@ -554,12 +563,17 @@ export async function teacherRoutes(fastify: FastifyInstance) {
   fastify.post('/templates/:classId/import', async (request: FastifyRequest<{ Params: { classId: string } }>, reply: FastifyReply) => {
     try {
       const { id } = request.user as { id: string }
-      const result = await teachersService.importTemplate(id, request.params.classId)
+      const options = importTemplateSchema.parse(request.body ?? {})
+      const result = await teachersService.importTemplate(id, request.params.classId, options)
       return result
     } catch (error) {
-      if (error instanceof Error) {
-        return reply.status(404).send({ message: error.message })
+      if (error instanceof ZodError) {
+        return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
+      // La plantilla que no está da su 404; cualquier otro fallo de la copia,
+      // un 500 sin el detalle interno.
+      rethrowHttpError(error)
+      request.log.error(error, 'Error al importar una plantilla')
       return reply.status(500).send({ message: 'Error interno' })
     }
   })

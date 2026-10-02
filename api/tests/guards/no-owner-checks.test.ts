@@ -76,9 +76,14 @@ const ALLOWED_TEACHER_ID: Record<string, Allowed> = {
       'exportación de datos del usuario: el propietario de cada clase en la que está matriculado',
   },
   'modules/teachers/teachers.service.ts': {
-    count: 7,
+    count: 4,
     reason:
-      'plantillas publicadas (isOwn marca las del propietario, 3), insignias del sistema en la biblioteca (2), autor de una insignia en el listado (isMine, 1) y autor de una insignia nueva (1)',
+      'insignias del sistema en la biblioteca (2), autor de una insignia en el listado (isMine, 1) y autor de una insignia nueva (1)',
+  },
+  'modules/templates/templates.service.ts': {
+    count: 3,
+    reason:
+      'catálogo de plantillas del profesorado: isOwn marca las que publicó quien mira (mostrar, no autorizar); el catálogo público no lo lee',
   },
   'modules/teachers/mission-copy.ts': {
     count: 1,

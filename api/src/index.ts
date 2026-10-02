@@ -22,6 +22,7 @@ import { submissionsRoutes } from './modules/submissions/submissions.routes.js'
 import { gamificationRoutes } from './modules/gamification/gamification.routes.js'
 import { profileRoutes } from './modules/profile/profile.routes.js'
 import { publicHelpRoutes, adminHelpRoutes } from './modules/help/help.routes.js'
+import { publicTemplateRoutes } from './modules/templates/templates.routes.js'
 import { filesRoutes } from './modules/files/files.routes.js'
 import { isPublicUploadPath } from './modules/storage/storage.service.js'
 import { registerNotificationJobs } from './modules/notifications/notifications.jobs.js'
@@ -273,6 +274,10 @@ async function buildServer() {
   // Centro de ayuda: la parte pública no pide sesión (cuelga de la landing).
   await fastify.register(publicHelpRoutes, { prefix: '/public/help' })
   await fastify.register(adminHelpRoutes, { prefix: '/admin/help' })
+  // Catálogo de plantillas sin sesión, para abrir sin cuenta el enlace a una
+  // plantilla. Bajo `/public` a propósito: como la ayuda, se sigue viendo con la
+  // plataforma en mantenimiento.
+  await fastify.register(publicTemplateRoutes, { prefix: '/public/templates' })
 
   return fastify
 }

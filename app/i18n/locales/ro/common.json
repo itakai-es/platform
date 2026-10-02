@@ -13,6 +13,7 @@
       "logs": "Jurnale",
       "features": "Funcționalități",
       "blog": "Blog",
+      "templates": "Șabloane",
       "help": "Ajutor",
       "section_management": "Administrare",
       "section_content": "Conținut",
@@ -95,7 +96,9 @@
       "action_error": "Acțiunea nu a putut fi finalizată. Încearcă din nou."
     },
     "errors": {
-      "generic": "A apărut o eroare. Încearcă din nou."
+      "generic": "A apărut o eroare. Încearcă din nou.",
+      "rate_limited_title": "Prea multe solicitări la rând",
+      "rate_limited": "De la conexiunea ta s-au făcut multe solicitări într-un timp scurt. Așteaptă câteva minute și încearcă din nou."
     },
     "roles": {
       "student": "Elev",
@@ -182,6 +185,7 @@
       "system_access": "Acces la sistem",
       "teacher_panel": "Panoul profesorului",
       "student_panel": "Panoul elevului",
+      "templates": "Șabloane de clase",
       "help_center": "Centru de ajutor"
     },
     "level_up": {
@@ -461,6 +465,41 @@
       "meta": {
         "title": "Blog · ITAKAI",
         "description": "Noutăți, idei și experiențe de la clasă de la ITAKAI, platforma educațională gamificată."
+      }
+    },
+    "templates": {
+      "hero_title": "Șabloane de clase",
+      "hero_subtitle": "Clase gamificate publicate de alți profesori, ca să nu începi de la zero: cu povestea, misiunile, magazinul și comportamentele gata de folosit.",
+      "view": "Vezi șablonul",
+      "copy_link": "Copiază linkul",
+      "result_count": "Niciun șablon | 1 șablon | Șabloane: {count}",
+      "back_to_catalog": "Vezi catalogul",
+      "contents_title": "Ce aduce acest șablon",
+      "counts": {
+        "missions": "Nicio misiune | 1 misiune | Misiuni: {count}",
+        "shop_items": "Niciun articol în magazin | 1 articol în magazin | Articole în magazin: {count}",
+        "behaviors": "Niciun comportament | 1 comportament | Comportamente: {count}"
+      },
+      "use": {
+        "title": "Folosește acest șablon",
+        "what_you_get": "Importul creează o clasă nouă, a ta, cu povestea, coperta, funcționalitățile, magazinul și comportamentele șablonului.",
+        "what_you_get_missions": "Importul creează o clasă nouă, a ta, cu povestea, coperta, funcționalitățile, magazinul și comportamentele șablonului și, dacă vrei, cu misiunile lui.",
+        "import_missions": "Importă și misiunea șablonului | Importă și misiunile șablonului ({count})",
+        "import_missions_hint": "Ajung fără termen-limită, fără documente și fără insigne.",
+        "login_note": "Ca să-l imporți, intră cu un cont de profesor.",
+        "teacher_only": "Ca să-l imporți, ai nevoie de un cont de profesor."
+      },
+      "gone": {
+        "title": "Acest șablon nu mai este disponibil",
+        "description": "Cine l-a publicat l-a retras din catalog. Aruncă o privire la celelalte: poate găsești unul asemănător."
+      },
+      "not_found": {
+        "title": "Acest șablon nu există",
+        "description": "Poate că linkul este incomplet sau copiat greșit. În catalog găsești toate șabloanele publicate."
+      },
+      "meta": {
+        "title": "Șabloane de clase · ITAKAI",
+        "description": "Clase gamificate publicate de profesori pe ITAKAI, de la care pot porni alți profesori."
       }
     }
   }

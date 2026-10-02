@@ -1,17 +1,8 @@
 <template>
-  <EmptyState
-    :icon="ExclamationTriangleIcon"
-    :title="t('common.help.load_error')"
-    :description="t('common.errors.generic')"
-  >
-    <template #action>
-      <Button variant="outline" @click="ensureIndex">{{ t('common.help.retry') }}</Button>
-    </template>
-  </EmptyState>
+  <LoadError @retry="ensureIndex" />
 </template>
 
 <script setup lang="ts">
-import { ExclamationTriangleIcon } from '@heroicons/vue/24/outline'
 import type { HelpArea } from '~/types/help.types'
 
 /**
@@ -23,6 +14,5 @@ import type { HelpArea } from '~/types/help.types'
 
 const props = withDefaults(defineProps<{ area?: HelpArea }>(), { area: 'ayuda' })
 
-const { t } = useI18n()
 const { ensureIndex } = useHelp(props.area)
 </script>

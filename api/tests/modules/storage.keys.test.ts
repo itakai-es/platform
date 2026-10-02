@@ -33,8 +33,14 @@ vi.mock('../../src/modules/settings/settings.service.js', () => ({
   getStorageSettings: vi.fn(async () => settings),
 }))
 
-const { deleteUpload, isPrivateKey, isPublicUploadPath, privateUploadFromUrl, uploadExtension } =
-  await import('../../src/modules/storage/storage.service.js')
+const {
+  deleteUpload,
+  isPrivateKey,
+  isPublicUploadPath,
+  privateUploadFromUrl,
+  publicUploadFromUrl,
+  uploadExtension,
+} = await import('../../src/modules/storage/storage.service.js')
 
 const UPLOADS_ROOT = join(process.cwd(), 'uploads')
 const s3 = settings.s3
@@ -100,6 +106,38 @@ describe('de qué fichero habla una dirección guardada', () => {
     expect(privateUploadFromUrl('/uploads/covers/portada.png', s3)).toBeNull()
     expect(privateUploadFromUrl('/uploads/../../etc/passwd', s3)).toBeNull()
     expect(privateUploadFromUrl(null, s3)).toBeNull()
+  })
+})
+
+describe('qué dirección se enseña sin sesión', () => {
+  it('la de un fichero público de los nuestros, en disco o en el almacenamiento externo', () => {
+    for (const url of [
+      '/uploads/covers/portada.png',
+      '/uploads/ai-generated/covers/covers-1234.png',
+      'https://ficheros.ejemplo.es/covers/portada.png',
+      'https://ejemplo.r2.cloudflarestorage.com/itakai/covers/portada.png',
+    ]) {
+      expect(publicUploadFromUrl(url, s3), url).toBe(url)
+    }
+  })
+
+  it('ni una de fuera, ni una privada, ni una que se salga del url(…) de CSS', () => {
+    for (const url of [
+      'https://rastreador.invalid/pixel.gif',
+      '//rastreador.invalid/pixel.gif',
+      'data:image/png;base64,AAAA',
+      '/uploads/submissions/1234.pdf',
+      '/uploads/covers/../documents/a.pdf',
+      '/uploads/../../etc/passwd',
+      '/uploads/covers/x.png), url(https://rastreador.invalid/pixel.gif',
+      '/uploads/covers/mi portada.png',
+      '/uploads/covers/"portada".png',
+      'https://ficheros.ejemplo.es.rastreador.invalid/covers/portada.png',
+    ]) {
+      expect(publicUploadFromUrl(url, s3), url).toBeNull()
+    }
+    expect(publicUploadFromUrl(null, s3)).toBeNull()
+    expect(publicUploadFromUrl('', s3)).toBeNull()
   })
 })
 

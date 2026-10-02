@@ -13,6 +13,7 @@
       "logs": "Rexistros",
       "features": "Carauterístiques",
       "blog": "Blog",
+      "templates": "Plantíes",
       "help": "Ayuda",
       "section_management": "Xestión",
       "section_content": "Conteníos",
@@ -95,7 +96,9 @@
       "action_error": "Nun se pudo completar l'aición. Inténtalo otra vuelta."
     },
     "errors": {
-      "generic": "Hebo un fallu. Inténtalo otra vuelta."
+      "generic": "Hebo un fallu. Inténtalo otra vuelta.",
+      "rate_limited_title": "Demasiaes consultes siguíes",
+      "rate_limited": "Dende la to conexón fixéronse munches consultes en pocu tiempu. Espera un par de minutos y vuelvi tentalo."
     },
     "roles": {
       "student": "Alumnu",
@@ -182,6 +185,7 @@
       "system_access": "Accesu al sistema",
       "teacher_panel": "Panel del profesor",
       "student_panel": "Panel del alumnu",
+      "templates": "Plantíes de clase",
       "help_center": "Centru d'ayuda"
     },
     "level_up": {
@@ -461,6 +465,41 @@
       "meta": {
         "title": "Blog · ITAKAI",
         "description": "Noveaes, idees y esperiencies d'aula d'ITAKAI, la plataforma educativa gamificada."
+      }
+    },
+    "templates": {
+      "hero_title": "Plantíes de clase",
+      "hero_subtitle": "Clases gamificaes qu'otros docentes publicaron pa que nun entames de cero: cola so hestoria, les sos misiones, la so tienda y los sos comportamientos llistos pa usar.",
+      "view": "Ver la plantía",
+      "copy_link": "Copiar l'enllaz",
+      "result_count": "Nenguna plantía | 1 plantía | {count} plantíes",
+      "back_to_catalog": "Ver el catálogu",
+      "contents_title": "Qué trai esta plantía",
+      "counts": {
+        "missions": "Ensin misiones | 1 misión | {count} misiones",
+        "shop_items": "Ensin artículos na tienda | 1 artículu na tienda | {count} artículos na tienda",
+        "behaviors": "Ensin comportamientos | 1 comportamientu | {count} comportamientos"
+      },
+      "use": {
+        "title": "Usar esta plantía",
+        "what_you_get": "Importala crea una clase nueva y tuya cola hestoria, la portada, les funcionalidaes, la tienda y los comportamientos de la plantía.",
+        "what_you_get_missions": "Importala crea una clase nueva y tuya cola hestoria, la portada, les funcionalidaes, la tienda y los comportamientos de la plantía y, si quies, coles sos misiones.",
+        "import_missions": "Importar tamién la so misión | Importar tamién les sos {count} misiones",
+        "import_missions_hint": "Lleguen ensin data llende, ensin documentos y ensin insinies.",
+        "login_note": "Pa importala tienes d'entrar con una cuenta de profesor.",
+        "teacher_only": "Pa importala fai falta una cuenta de profesor."
+      },
+      "gone": {
+        "title": "Esta plantía yá nun ta disponible",
+        "description": "Quien la publicó retirola del catálogu. Bota un güeyu al restu: igual atopes otra paecida."
+      },
+      "not_found": {
+        "title": "Esta plantía nun esiste",
+        "description": "Pue que l'enllaz tea incompletu o mal copiáu. Nel catálogu tán toles que se publicaron."
+      },
+      "meta": {
+        "title": "Plantíes de clase · ITAKAI",
+        "description": "Clases gamificaes que'l profesoráu publicó n'ITAKAI pa qu'otros docentes partan d'elles."
       }
     }
   }

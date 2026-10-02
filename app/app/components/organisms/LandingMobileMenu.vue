@@ -55,6 +55,15 @@
           </li>
           <li>
             <NuxtLink
+              to="/plantillas"
+              class="block px-4 py-3 rounded-lg text-navy-700 font-medium hover:bg-gray-100 transition-colors"
+              @click="emit('close')"
+            >
+              {{ t('common.nav.templates') }}
+            </NuxtLink>
+          </li>
+          <li>
+            <NuxtLink
               to="/blog"
               class="block px-4 py-3 rounded-lg text-navy-700 font-medium hover:bg-gray-100 transition-colors"
               @click="emit('close')"

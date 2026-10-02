@@ -6,6 +6,7 @@
       :checked="modelValue"
       :disabled="disabled"
       :required="required"
+      :aria-describedby="describedBy"
       class="w-4 h-4 border border-border-primary rounded bg-white checked:bg-navy-700 checked:border-navy-700 focus:ring-2 focus:ring-navy-700 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
       @change="emit('update:modelValue', ($event.target as HTMLInputElement).checked)"
     />
@@ -38,6 +39,8 @@ interface Props {
   label?: string
   disabled?: boolean
   required?: boolean
+  /** Id del texto que explica la casilla: el lector de pantalla lo lee con ella. */
+  describedBy?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -45,6 +48,7 @@ const props = withDefaults(defineProps<Props>(), {
   label: undefined,
   disabled: false,
   required: false,
+  describedBy: undefined,
 })
 
 const emit = defineEmits<{

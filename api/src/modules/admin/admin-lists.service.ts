@@ -2,6 +2,7 @@ import { z } from 'zod'
 import { prisma } from '../../config/database.js'
 import { Prisma } from '../../generated/prisma/client.js'
 import { activeTeacherWhere } from '../../utils/class-access.js'
+import { containsPattern } from '../../utils/like-pattern.js'
 import { calculateMissionTotalXP, MISSION_COMPLETION_BONUS } from '../../utils/xp-calculator.js'
 
 /**
@@ -80,11 +81,6 @@ function pageOf(query: { page?: string; limit?: string }) {
 
 function pageInfo(total: number, page: number, limit: number) {
   return { total, page, limit, totalPages: Math.ceil(total / limit) }
-}
-
-/** Texto de búsqueda para ILIKE: los comodines que escriba alguien se buscan tal cual. */
-function containsPattern(term: string) {
-  return `%${term.replace(/[\\%_]/g, '\\$&')}%`
 }
 
 /** Reordena las filas de Prisma según la página de ids que ha dado SQL. */

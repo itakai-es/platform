@@ -123,29 +123,12 @@
                       <span class="block break-words font-semibold text-navy-700">{{
                         mission.title
                       }}</span>
-                      <span
-                        class="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm font-semibold text-navy-700"
-                      >
-                        <RarityBadge :rarity="mission.rarity" />
-                        <span class="text-xs font-normal text-navy-700/70">
-                          {{
-                            t(
-                              'teacher.missions.import.enigmas',
-                              { count: mission.enigmasCount },
-                              mission.enigmasCount
-                            )
-                          }}
-                        </span>
-                        <span
-                          v-for="reward in rewardsOf(mission)"
-                          :key="reward.key"
-                          class="inline-flex items-center gap-1"
-                        >
-                          <component :is="reward.icon" class="h-4 w-4" aria-hidden="true" />
-                          <span class="sr-only">{{ reward.label }}</span>
-                          {{ reward.amount.toLocaleString('es-ES') }}
-                        </span>
-                      </span>
+                      <MissionSummaryMeta
+                        class="mt-1"
+                        :rarity="mission.rarity"
+                        :enigmas-count="mission.enigmasCount"
+                        v-bind="rewardsOf(mission)"
+                      />
                     </span>
                     <CheckCircleIcon
                       v-if="mission.id === selectedMissionId"
@@ -202,8 +185,9 @@
               v-model="copyBadge"
               :disabled="importing"
               :label="t('teacher.missions.import.copy_badge', { name: detail.badge.name })"
+              :described-by="badgeHintId"
             />
-            <p class="ml-6 mt-0.5 text-xs text-navy-700/70">
+            <p :id="badgeHintId" class="ml-6 mt-0.5 text-xs text-navy-700/70">
               {{ t('teacher.missions.import.copy_badge_hint') }}
             </p>
           </div>
@@ -264,9 +248,6 @@ import { resolveClassSettings } from '~/utils/class-settings'
 import { canInClass } from '~/utils/class-access'
 import type { Class, MissionImportResult } from '~/types/teacher.types'
 import type { MissionRarity } from '~/types/mission.types'
-import XpIcon from '~/components/atoms/XpIcon.vue'
-import CoinIcon from '~/components/atoms/CoinIcon.vue'
-import ManaIcon from '~/components/atoms/ManaIcon.vue'
 
 /**
  * Copiar una misión en una clase. Se llega desde tres sitios:
@@ -338,6 +319,7 @@ const teacherStore = useTeacherStore()
 const missionStore = useMissionStore()
 const { getImageUrl } = useImageUrl()
 const badgeCheckboxId = useId()
+const badgeHintId = useId()
 const archivedCheckboxId = useId()
 const copiedId = useId()
 const confirmId = useId()
@@ -498,29 +480,14 @@ function coverUrl(mission: SourceMission): string | undefined {
   return url.startsWith('/app/') ? url : getImageUrl(url)
 }
 
-/** Recompensas de la misión como icono y número; las de recursos apagados en su clase no se enseñan. */
+/** Recompensas de la misión; las de recursos apagados en su clase van a 0 y no se enseñan. */
 function rewardsOf(mission: SourceMission) {
   const s = sourceSettings.value
-  return [
-    {
-      key: 'xp',
-      icon: XpIcon,
-      label: t('common.resources.xp'),
-      amount: s.xp ? mission.xpReward : 0,
-    },
-    {
-      key: 'coins',
-      icon: CoinIcon,
-      label: t('common.resources.coins'),
-      amount: s.coins ? mission.coinReward : 0,
-    },
-    {
-      key: 'mana',
-      icon: ManaIcon,
-      label: t('common.resources.mana'),
-      amount: s.mana ? mission.manaReward : 0,
-    },
-  ].filter(r => r.amount > 0)
+  return {
+    xp: s.xp ? mission.xpReward : 0,
+    coins: s.coins ? mission.coinReward : 0,
+    mana: s.mana ? mission.manaReward : 0,
+  }
 }
 
 /**

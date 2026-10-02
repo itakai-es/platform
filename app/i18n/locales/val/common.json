@@ -13,6 +13,7 @@
       "logs": "Registres",
       "features": "Característiques",
       "blog": "Blog",
+      "templates": "Plantilles",
       "help": "Ajuda",
       "section_management": "Gestió",
       "section_content": "Continguts",
@@ -95,7 +96,9 @@
       "action_error": "No s'ha pogut completar l'acció. Torna-ho a intentar."
     },
     "errors": {
-      "generic": "S'ha produït un error. Torna-ho a intentar."
+      "generic": "S'ha produït un error. Torna-ho a intentar.",
+      "rate_limited_title": "Massa consultes seguides",
+      "rate_limited": "Des de la teua connexió s'han fet moltes consultes en poc de temps. Espera un parell de minuts i torna-ho a intentar."
     },
     "roles": {
       "student": "Alumne",
@@ -182,6 +185,7 @@
       "system_access": "Accés al sistema",
       "teacher_panel": "Panell del professor",
       "student_panel": "Panell de l'alumne",
+      "templates": "Plantilles de classe",
       "help_center": "Centre d'ajuda"
     },
     "level_up": {
@@ -461,6 +465,41 @@
       "meta": {
         "title": "Blog · ITAKAI",
         "description": "Novetats, idees i experiències d'aula d'ITAKAI, la plataforma educativa gamificada."
+      }
+    },
+    "templates": {
+      "hero_title": "Plantilles de classe",
+      "hero_subtitle": "Classes gamificades que altres docents han publicat perquè no comences de zero: amb la seua història, les seues missions, la seua botiga i els seus comportaments a punt per a usar.",
+      "view": "Vore la plantilla",
+      "copy_link": "Copiar l'enllaç",
+      "result_count": "Cap plantilla | 1 plantilla | {count} plantilles",
+      "back_to_catalog": "Vore el catàleg",
+      "contents_title": "Què porta esta plantilla",
+      "counts": {
+        "missions": "Cap missió | 1 missió | {count} missions",
+        "shop_items": "Cap article en la botiga | 1 article en la botiga | {count} articles en la botiga",
+        "behaviors": "Cap comportament | 1 comportament | {count} comportaments"
+      },
+      "use": {
+        "title": "Usar esta plantilla",
+        "what_you_get": "Importar-la crea una classe nova i teua amb la història, la portada, les funcionalitats, la botiga i els comportaments de la plantilla.",
+        "what_you_get_missions": "Importar-la crea una classe nova i teua amb la història, la portada, les funcionalitats, la botiga i els comportaments de la plantilla i, si vols, amb les seues missions.",
+        "import_missions": "Importar també la seua missió | Importar també les seues {count} missions",
+        "import_missions_hint": "Arriben sense data límit, sense documents i sense insígnies.",
+        "login_note": "Per a importar-la cal entrar amb un compte de professor.",
+        "teacher_only": "Per a importar-la cal un compte de professor."
+      },
+      "gone": {
+        "title": "Esta plantilla ja no està disponible",
+        "description": "Qui la va publicar l'ha retirada del catàleg. Fes una ullada a la resta: potser en trobes una de pareguda."
+      },
+      "not_found": {
+        "title": "Esta plantilla no existix",
+        "description": "Potser l'enllaç està incomplet o mal copiat. En el catàleg hi ha totes les que s'han publicat."
+      },
+      "meta": {
+        "title": "Plantilles de classe · ITAKAI",
+        "description": "Classes gamificades que el professorat ha publicat en ITAKAI perquè altres docents en partisquen."
       }
     }
   }

@@ -13,6 +13,7 @@
       "logs": "Logak",
       "features": "Ezaugarriak",
       "blog": "Bloga",
+      "templates": "Txantiloiak",
       "help": "Laguntza",
       "section_management": "Kudeaketa",
       "section_content": "Edukiak",
@@ -95,7 +96,9 @@
       "action_error": "Ezin izan da ekintza osatu. Saiatu berriro."
     },
     "errors": {
-      "generic": "Errore bat gertatu da. Mesedez, saiatu berriro."
+      "generic": "Errore bat gertatu da. Mesedez, saiatu berriro.",
+      "rate_limited_title": "Kontsulta gehiegi jarraian",
+      "rate_limited": "Zure konexiotik kontsulta asko egin dira denbora gutxian. Itxaron minutu pare bat eta saiatu berriro."
     },
     "roles": {
       "student": "Ikaslea",
@@ -182,6 +185,7 @@
       "system_access": "Sistemarako sarbidea",
       "teacher_panel": "Irakaslearen panela",
       "student_panel": "Ikaslearen panela",
+      "templates": "Klase-txantiloiak",
       "help_center": "Laguntza zentroa"
     },
     "level_up": {
@@ -461,6 +465,41 @@
       "meta": {
         "title": "Bloga · ITAKAI",
         "description": "ITAKAIren berriak, ideiak eta ikasgelako esperientziak, hezkuntza-plataforma gamifikatua."
+      }
+    },
+    "templates": {
+      "hero_title": "Klase-txantiloiak",
+      "hero_subtitle": "Beste irakasle batzuek argitaratutako klase gamifikatuak, hutsetik hasi behar ez izateko: ipuina, misioak, denda eta portaerak erabiltzeko prest.",
+      "view": "Ikusi txantiloia",
+      "copy_link": "Kopiatu esteka",
+      "result_count": "Txantiloirik ez | Txantiloi 1 | {count} txantiloi",
+      "back_to_catalog": "Ikusi katalogoa",
+      "contents_title": "Zer dakar txantiloi honek",
+      "counts": {
+        "missions": "Misiorik ez | Misio 1 | {count} misio",
+        "shop_items": "Denda-artikulurik ez | Denda-artikulu 1 | {count} denda-artikulu",
+        "behaviors": "Portaerarik ez | Portaera 1 | {count} portaera"
+      },
+      "use": {
+        "title": "Erabili txantiloi hau",
+        "what_you_get": "Inportatzean, klase berri bat sortzen da zuretzat, txantiloiaren ipuina, azala, funtzionalitateak, denda eta portaerak dituena.",
+        "what_you_get_missions": "Inportatzean, klase berri bat sortzen da zuretzat, txantiloiaren ipuina, azala, funtzionalitateak, denda eta portaerak dituena, eta, nahi baduzu, haren misioak ere bai.",
+        "import_missions": "Haren misioa ere inportatu | Haren {count} misioak ere inportatu",
+        "import_missions_hint": "Epemugarik, dokumenturik eta insigniarik gabe iristen dira.",
+        "login_note": "Inportatzeko, irakasle-kontu batekin sartu behar duzu.",
+        "teacher_only": "Inportatzeko, irakasle-kontu bat behar da."
+      },
+      "gone": {
+        "title": "Txantiloi hau jada ez dago eskuragarri",
+        "description": "Argitaratu zuenak katalogotik kendu du. Begiratu gainerakoei: agian antzeko bat aurkituko duzu."
+      },
+      "not_found": {
+        "title": "Txantiloi hau ez da existitzen",
+        "description": "Baliteke esteka osatu gabe edo gaizki kopiatuta egotea. Argitaratutako guztiak katalogoan daude."
+      },
+      "meta": {
+        "title": "Klase-txantiloiak · ITAKAI",
+        "description": "Irakasleek ITAKAIn argitaratutako klase gamifikatuak, beste irakasle batzuek haietatik abiatzeko."
       }
     }
   }

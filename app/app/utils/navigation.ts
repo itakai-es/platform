@@ -7,6 +7,8 @@ export const ROUTE_NAMES = {
   LICENSES: '/licenses',
   DOCS: '/ayuda',
   BLOG: '/blog',
+  // Catálogo público de plantillas; la ficha de cada una cuelga de aquí.
+  TEMPLATES: '/plantillas',
 
   // Auth
   LOGIN: '/auth/login',
@@ -94,6 +96,7 @@ export const isPublicRoute = (path: string): boolean => {
     ROUTE_NAMES.LICENSES,
     ROUTE_NAMES.DOCS,
     ROUTE_NAMES.BLOG,
+    ROUTE_NAMES.TEMPLATES,
     ROUTE_NAMES.LOGIN,
     ROUTE_NAMES.SIGNUP,
     ROUTE_NAMES.FORGOT_PASSWORD,

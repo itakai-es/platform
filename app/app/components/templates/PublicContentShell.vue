@@ -71,8 +71,8 @@
 import { getDashboardByRole } from '~/utils/navigation'
 
 /**
- * El armazón de las páginas públicas de contenido: el centro de ayuda y el
- * blog.
+ * El armazón de las páginas públicas de contenido: el centro de ayuda, el blog
+ * y el catálogo de plantillas.
  *
  * Barra propia y sobria —logo, acceso a la sección, accesibilidad, idioma y
  * entrar o volver a la app—, que no flota sobre el contenido, así que las

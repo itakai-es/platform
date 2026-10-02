@@ -13,6 +13,7 @@
       "logs": "Registros",
       "features": "Características",
       "blog": "Blog",
+      "templates": "Plantillas",
       "help": "Ayuda",
       "section_management": "Gestión",
       "section_content": "Contenidos",
@@ -95,7 +96,9 @@
       "action_error": "No se ha podido completar la acción. Inténtalo de nuevo."
     },
     "errors": {
-      "generic": "Ha ocurrido un error. Por favor intenta de nuevo."
+      "generic": "Ha ocurrido un error. Por favor intenta de nuevo.",
+      "rate_limited_title": "Demasiadas consultas seguidas",
+      "rate_limited": "Desde tu conexión se han hecho muchas consultas en poco tiempo. Espera un par de minutos y vuelve a intentarlo."
     },
     "roles": {
       "student": "Estudiante",
@@ -182,6 +185,7 @@
       "system_access": "Acceso al sistema",
       "teacher_panel": "Panel del profesor",
       "student_panel": "Panel del estudiante",
+      "templates": "Plantillas de clase",
       "help_center": "Centro de ayuda"
     },
     "level_up": {
@@ -461,6 +465,41 @@
       "meta": {
         "title": "Blog · ITAKAI",
         "description": "Novedades, ideas y experiencias de aula de ITAKAI, la plataforma educativa gamificada."
+      }
+    },
+    "templates": {
+      "hero_title": "Plantillas de clase",
+      "hero_subtitle": "Clases gamificadas que otros docentes han publicado para que no empieces de cero: con su historia, sus misiones, su tienda y sus comportamientos listos para usar.",
+      "view": "Ver plantilla",
+      "copy_link": "Copiar enlace",
+      "result_count": "Ninguna plantilla | 1 plantilla | {count} plantillas",
+      "back_to_catalog": "Ver el catálogo",
+      "contents_title": "Qué trae esta plantilla",
+      "counts": {
+        "missions": "Sin misiones | 1 misión | {count} misiones",
+        "shop_items": "Sin objetos en la tienda | 1 objeto en la tienda | {count} objetos en la tienda",
+        "behaviors": "Sin comportamientos | 1 comportamiento | {count} comportamientos"
+      },
+      "use": {
+        "title": "Usar esta plantilla",
+        "what_you_get": "Importarla crea una clase nueva y tuya con la historia, la portada, las funcionalidades, la tienda y los comportamientos de la plantilla.",
+        "what_you_get_missions": "Importarla crea una clase nueva y tuya con la historia, la portada, las funcionalidades, la tienda y los comportamientos de la plantilla y, si quieres, con sus misiones.",
+        "import_missions": "Importar también su misión | Importar también sus {count} misiones",
+        "import_missions_hint": "Llegan sin fecha límite, sin documentos y sin insignias.",
+        "login_note": "Para importarla hace falta entrar con una cuenta de profesor.",
+        "teacher_only": "Para importarla hace falta una cuenta de profesor."
+      },
+      "gone": {
+        "title": "Esta plantilla ya no está disponible",
+        "description": "Quien la publicó la ha retirado del catálogo. Echa un vistazo al resto: puede que encuentres otra parecida."
+      },
+      "not_found": {
+        "title": "Esta plantilla no existe",
+        "description": "Puede que el enlace esté incompleto o mal copiado. En el catálogo están todas las que se han publicado."
+      },
+      "meta": {
+        "title": "Plantillas de clase · ITAKAI",
+        "description": "Clases gamificadas que el profesorado ha publicado en ITAKAI para que otros docentes partan de ellas."
       }
     }
   }

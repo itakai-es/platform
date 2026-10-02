@@ -1,6 +1,7 @@
 /**
  * Shared mission formatting utilities
- * Used by missions.service.ts and students.service.ts
+ * Used by missions.service.ts and students.service.ts; `missionRewards`, also by
+ * the teachers' mission lists and the template detail.
  */
 import { calculateMissionTotalXP } from './xp-calculator.js'
 import type { ClassSettings } from './class-settings.js'
@@ -54,6 +55,34 @@ export interface FormattedMission {
   }
 }
 
+/** Lo que se lee de cada enigma para sumar lo que da su misión. */
+export interface EnigmaRewards {
+  xpReward: number
+  coinReward?: number | null
+  manaReward?: number | null
+}
+
+/**
+ * Lo que da una misión entera: la XP de sus enigmas más la de completarla,
+ * según su rareza, y las monedas y el maná de sus enigmas. Con `settings`, lo
+ * de un recurso que la clase tiene apagado es 0 (las tarjetas no pintan un 0).
+ * Es la cuenta de todos los listados de misiones, y de la ficha de una
+ * plantilla: vive aquí para que no cambie en uno sí y en otro no.
+ */
+export function missionRewards(
+  mission: { rarity: string; enigmas?: EnigmaRewards[] },
+  settings?: Pick<ClassSettings, 'xp' | 'coins' | 'mana'>
+): { xpReward: number; coinReward: number; manaReward: number } {
+  const enigmas = mission.enigmas ?? []
+  const shows = (resource: 'xp' | 'coins' | 'mana') => !settings || settings[resource]
+  const enigmaXps = enigmas.map(e => e.xpReward)
+  return {
+    xpReward: shows('xp') ? calculateMissionTotalXP(mission.rarity, enigmaXps) : 0,
+    coinReward: shows('coins') ? enigmas.reduce((sum, e) => sum + (e.coinReward || 0), 0) : 0,
+    manaReward: shows('mana') ? enigmas.reduce((sum, e) => sum + (e.manaReward || 0), 0) : 0,
+  }
+}
+
 export function formatMission(
   mission: MissionFormatInput,
   includeClassName = false,
@@ -68,10 +97,11 @@ export function formatMission(
   const progressRecord = mission.progress?.[0]
   const totalEnigmas = mission.enigmas?.length || 0
   const completedEnigmas = progressRecord?.enigmasCompleted || 0
-  const enigmaXPs = mission.enigmas?.map(e => e.xpReward) || []
-  const totalXp = showXp ? calculateMissionTotalXP(mission.rarity, enigmaXPs) : 0
-  const totalCoins = showCoins ? mission.enigmas?.reduce((sum, e) => sum + (e.coinReward || 0), 0) || 0 : 0
-  const totalMana = showMana ? mission.enigmas?.reduce((sum, e) => sum + (e.manaReward || 0), 0) || 0 : 0
+  const {
+    xpReward: totalXp,
+    coinReward: totalCoins,
+    manaReward: totalMana,
+  } = missionRewards(mission, settings)
   const progressPercent = totalEnigmas > 0 ? Math.round((completedEnigmas / totalEnigmas) * 100) : 0
 
   // Only compute earned totals when the caller included per-student enigma progress.

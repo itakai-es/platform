@@ -105,6 +105,18 @@ describe('público', () => {
     expect(vi.mocked(help.getPublicArticle).mock.calls[0][2]).toMatchObject({ locale: undefined })
   })
 
+  it('un parámetro de texto con un byte nulo llega al servicio como ausente: Postgres no lo admite', async () => {
+    const app = await buildApp()
+
+    const index = await app.inject({ method: 'GET', url: '/public/help/?locale=%00' })
+    expect(index.statusCode).toBe(200)
+    expect(vi.mocked(help.getPublicIndex).mock.calls[0][0]).toMatchObject({ locale: undefined })
+
+    const search = await app.inject({ method: 'GET', url: '/public/help/buscar?q=ab%00cd' })
+    expect(search.statusCode).toBe(200)
+    expect(vi.mocked(help.searchArticles).mock.calls[0][0]).toBe('')
+  })
+
   it('GET / acepta audience y area y descarta valores desconocidos', async () => {
     const app = await buildApp()
 

@@ -8,57 +8,19 @@
       <p class="mt-1 text-text-secondary">{{ t('teacher.templates.page_subtitle') }}</p>
     </div>
 
-    <!-- Filtros (mismo componente que las misiones) -->
-    <FilterBar
-      :search="search"
-      :sort="sort"
+    <!-- Filtros (los mismos que el catálogo público) -->
+    <TemplateFilterBar
+      v-model:search="search"
+      v-model:sort="sort"
+      v-model:levels="fLevels"
+      v-model:subjects="fSubjects"
+      v-model:languages="fLanguages"
+      v-model:provinces="fProvinces"
       :results-count="filtered.length"
-      :search-placeholder="t('teacher.templates.search')"
-      :sort-options="sortOptions"
-      :has-active-filters="hasActiveFilters"
-      :active-filter-count="activeFilterCount"
-      variant="red"
-      @update:search="search = $event"
-      @update:sort="sort = $event"
-      @reset="resetFilters"
-    >
-      <template #filters>
-        <MultiSelectDropdown
-          :model-value="fLevels"
-          :options="CLASS_EDUCATION_LEVELS"
-          :all-label="t('teacher.templates.filter_all.level')"
-          :plural-label="t('teacher.templates.plural.levels')"
-          @update:model-value="fLevels = $event"
-        />
-        <MultiSelectDropdown
-          :model-value="fSubjects"
-          :disabled="!fLevels.length"
-          :options="subjectFilterOptions"
-          :all-label="t('teacher.templates.filter_all.subject')"
-          :plural-label="t('teacher.templates.plural.subjects')"
-          @update:model-value="fSubjects = $event"
-        />
-        <MultiSelectDropdown
-          :model-value="fLanguages"
-          :options="CLASS_LANGUAGES"
-          :all-label="t('teacher.templates.filter_all.language')"
-          :plural-label="t('teacher.templates.plural.languages')"
-          @update:model-value="fLanguages = $event"
-        />
-        <MultiSelectDropdown
-          :model-value="fProvinces"
-          :options="SPANISH_PROVINCES"
-          :all-label="t('teacher.templates.filter_all.province')"
-          :plural-label="t('teacher.templates.plural.provinces')"
-          @update:model-value="fProvinces = $event"
-        />
-      </template>
-    </FilterBar>
+    />
 
     <!-- Cargando -->
-    <div v-if="loading" class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 md:gap-6">
-      <MissionCardSkeleton v-for="n in 6" :key="n" />
-    </div>
+    <TemplateCardGrid v-if="loading" :skeleton="6" />
 
     <!-- Vacío -->
     <EmptyState
@@ -77,70 +39,40 @@
     />
 
     <!-- Grid de plantillas -->
-    <div v-else class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 md:gap-6">
-      <article
-        v-for="tpl in filtered"
-        :key="tpl.id"
-        class="flex flex-col overflow-hidden rounded-2xl bg-white shadow-lg transition-shadow duration-200 hover:shadow-xl"
-      >
-        <!-- Portada -->
-        <div class="relative h-40 flex-shrink-0">
-          <div
-            v-if="tpl.backgroundImage"
-            class="absolute inset-0 bg-cover bg-center"
-            :style="{ backgroundImage: `url(${getImageUrl(tpl.backgroundImage) || ''})` }"
-          />
-          <div v-else class="absolute inset-0 bg-gray-100" />
+    <TemplateCardGrid v-else>
+      <TemplateCard v-for="tpl in filtered" :key="tpl.id" :template="tpl">
+        <template #badge>
           <StatusBadge v-if="tpl.isOwn" variant="activa" class="absolute right-3 top-3">
             {{ t('teacher.templates.own') }}
           </StatusBadge>
-        </div>
+        </template>
 
-        <!-- Contenido -->
-        <div class="flex flex-1 flex-col p-6">
-          <h3 class="text-lg font-bold leading-tight text-navy-700 md:text-xl">
-            {{ tpl.name }}
-          </h3>
+        <template #description>{{ tpl.teacherName }}</template>
 
-          <div class="mt-3 flex flex-wrap gap-1.5">
-            <Badge v-if="tpl.educationLevel" variant="info" size="sm" class="gap-1">
-              <AcademicCapIcon class="h-3.5 w-3.5" />{{ tpl.educationLevel }}
-            </Badge>
-            <Badge v-if="tpl.subject" variant="info" size="sm" class="gap-1">
-              <BookOpenIcon class="h-3.5 w-3.5" />{{ tpl.subject }}
-            </Badge>
-            <Badge v-if="tpl.language" variant="info" size="sm" class="gap-1">
-              <LanguageIcon class="h-3.5 w-3.5" />{{ tpl.language }}
-            </Badge>
-          </div>
-
-          <p class="mt-3 flex-1 text-sm text-text-secondary">{{ tpl.teacherName }}</p>
-
-          <div class="mt-4 flex gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              class="flex-1"
-              :disabled="importingId !== null"
-              @click="previewTemplate(tpl)"
-            >
-              {{ t('teacher.templates.preview_action') }}
-            </Button>
-            <Button
-              v-if="!tpl.isOwn"
-              variant="primary"
-              size="sm"
-              class="flex-1"
-              :loading="importingId === tpl.id"
-              :disabled="importingId !== null"
-              @click="importTemplate(tpl)"
-            >
-              {{ t('teacher.templates.import') }}
-            </Button>
-          </div>
-        </div>
-      </article>
-    </div>
+        <template #actions>
+          <Button
+            variant="outline"
+            size="sm"
+            class="flex-1"
+            :disabled="importingId !== null"
+            @click="previewTemplate(tpl)"
+          >
+            {{ t('teacher.templates.preview_action') }}
+          </Button>
+          <Button
+            v-if="!tpl.isOwn"
+            variant="primary"
+            size="sm"
+            class="flex-1"
+            :loading="importingId === tpl.id"
+            :disabled="importingId !== null"
+            @click="importFromCard(tpl)"
+          >
+            {{ t('teacher.templates.import') }}
+          </Button>
+        </template>
+      </TemplateCard>
+    </TemplateCardGrid>
 
     <!-- Modal de previsualización -->
     <TemplatePreviewModal v-model="previewOpen" :template-id="previewId" @imported="onImported" />
@@ -148,36 +80,19 @@
 </template>
 
 <script setup lang="ts">
-import {
-  RectangleStackIcon,
-  BookOpenIcon,
-  AcademicCapIcon,
-  LanguageIcon,
-} from '@heroicons/vue/24/outline'
-import {
-  subjectsForLevels,
-  CLASS_EDUCATION_LEVELS,
-  CLASS_LANGUAGES,
-  SPANISH_PROVINCES,
-} from '~/utils/class-metadata'
+import { RectangleStackIcon } from '@heroicons/vue/24/outline'
+import type { TemplateCardData } from '~/types/template.types'
 
-interface Template {
-  id: string
-  name: string
-  subject: string | null
-  language: string | null
-  educationLevel: string | null
-  province: string | null
-  backgroundImage: string | null
+interface Template extends TemplateCardData {
   teacherName: string
   isOwn: boolean
+  missionCount: number
 }
 
 const { t } = useI18n()
 const config = useRuntimeConfig()
 const toast = useToast()
-const { getImageUrl } = useImageUrl()
-const classesStore = useClassesStore()
+const { importingId, importTemplate } = useTemplateImport()
 
 useHead({ title: () => t('teacher.templates.page_title') })
 
@@ -188,7 +103,6 @@ definePageMeta({
 
 const templates = ref<Template[]>([])
 const loading = ref(true)
-const importingId = ref<string | null>(null)
 const previewOpen = ref(false)
 const previewId = ref<string | null>(null)
 
@@ -198,32 +112,17 @@ function previewTemplate(tpl: Template) {
 }
 
 function onImported(payload: { id: string; name: string }) {
-  classesStore.hasLoadedClasses = false
   navigateTo(`/profesor/clases/${payload.id}`)
 }
 
-// Filtros (cliente, multi-select): array vacío = sin filtro.
+// Filtros (cliente, multi-select): array vacío = sin filtro. La barra los
+// recoge y los limpia; aquí se aplican.
 const search = ref('')
 const fSubjects = ref<string[]>([])
 const fLevels = ref<string[]>([])
 const fLanguages = ref<string[]>([])
 const fProvinces = ref<string[]>([])
 const sort = ref('recent')
-
-// El filtro de asignaturas funciona como en el wizard: bloqueado hasta marcar
-// algún nivel, y estrechado al catálogo de los niveles marcados. Las
-// asignaturas marcadas que queden fuera al cambiar de nivel se sueltan solas.
-const subjectFilterOptions = computed(() => subjectsForLevels(fLevels.value))
-watch(fLevels, () => {
-  const valid = new Set(subjectFilterOptions.value.map(o => o.value))
-  fSubjects.value = fSubjects.value.filter(s => valid.has(s))
-})
-
-const sortOptions = computed(() => [
-  { value: 'recent', label: t('teacher.templates.sort.recent') },
-  { value: 'name-asc', label: t('teacher.templates.sort.name_asc') },
-  { value: 'name-desc', label: t('teacher.templates.sort.name_desc') },
-])
 
 const normalize = (s: string) =>
   s
@@ -266,24 +165,6 @@ const filtered = computed(() => {
   return list
 })
 
-const activeFilterCount = computed(
-  () =>
-    fSubjects.value.length +
-    fLevels.value.length +
-    fLanguages.value.length +
-    fProvinces.value.length
-)
-const hasActiveFilters = computed(() => activeFilterCount.value > 0)
-
-function resetFilters() {
-  search.value = ''
-  fSubjects.value = []
-  fLevels.value = []
-  fLanguages.value = []
-  fProvinces.value = []
-  sort.value = 'recent'
-}
-
 async function loadTemplates() {
   loading.value = true
   try {
@@ -298,23 +179,16 @@ async function loadTemplates() {
   }
 }
 
-async function importTemplate(tpl: Template) {
-  if (importingId.value) return
-  importingId.value = tpl.id
-  try {
-    const res = await $fetch<{ class: { id: string; name: string } }>(
-      `${config.public.apiBase}/teacher/templates/${tpl.id}/import`,
-      { method: 'POST' }
-    )
-    // Invalida la caché de clases para que la nueva aparezca al volver al listado.
-    classesStore.hasLoadedClasses = false
-    toast.success(t('teacher.templates.import_success', { name: res.class.name }))
-    navigateTo(`/profesor/clases/${res.class.id}`)
-  } catch {
-    toast.error(t('teacher.templates.import_error'))
-  } finally {
-    importingId.value = null
+// Si la plantilla trae misiones, «Importar» abre su previsualización: allí, junto
+// a su botón, se elige si vienen y se dice cómo llegan. Sin misiones no hay
+// nada que elegir, y se importa directamente.
+async function importFromCard(tpl: Template) {
+  if (tpl.missionCount > 0) {
+    previewTemplate(tpl)
+    return
   }
+  const created = await importTemplate(tpl.id)
+  if (created) navigateTo(`/profesor/clases/${created.id}`)
 }
 
 onMounted(loadTemplates)

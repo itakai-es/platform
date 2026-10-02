@@ -14,11 +14,12 @@ try {
     typeof dp === 'function'
       ? (dp as (win: Window) => typeof purifyInstance)(window)
       : (dp as unknown as typeof purifyInstance)
-  // Cualquier enlace que abra otra pestaña va sin `opener`, también los que se
-  // escriben como HTML: un `rel="opener"` dejaría a la página enlazada cambiar
-  // la dirección de esta.
+  // Todo enlace abre otra pestaña y va sin `opener`, también los que se
+  // escriben como HTML: así se portan como los de Markdown (ver `link` más
+  // abajo), uno sin `target` no se lleva a quien lee fuera de la página, y un
+  // `rel="opener"` no deja a la página enlazada cambiar la dirección de esta.
   purifyInstance?.addHook('afterSanitizeAttributes', node => {
-    if (node.tagName === 'A' && node.hasAttribute('target')) {
+    if (node.tagName === 'A') {
       node.setAttribute('target', '_blank')
       node.setAttribute('rel', 'noopener noreferrer')
     }
@@ -58,7 +59,16 @@ const ALLOWED_TAGS = [
   'td',
 ]
 
-const ALLOWED_ATTR = ['href', 'target', 'rel', 'class']
+/**
+ * Ni `class` ni `style`, ni tampoco `data-*`, que DOMPurify deja pasar si no
+ * se le dice (`ALLOW_DATA_ATTR`). Este Markdown lo escribe cualquiera, y la
+ * historia de una plantilla se lee sin cuenta en su enlace público: con los
+ * estilos de la propia app, un enlace escrito como HTML podría tapar la página
+ * entera o hacerse pasar por uno de sus botones. Nada de lo que se pinta
+ * depende de ellos: las clases `language-*` que pone marked en los bloques de
+ * código no las usa ningún estilo.
+ */
+const ALLOWED_ATTR = ['href', 'target', 'rel']
 
 /**
  * Solo el centro de ayuda admite imágenes: los diagramas y las capturas que
@@ -73,12 +83,14 @@ const HELP_ALLOWED_ATTR = [...ALLOWED_ATTR, 'src', 'alt', 'title']
 interface SanitizeConfig {
   ALLOWED_TAGS: string[]
   ALLOWED_ATTR: string[]
+  ALLOW_DATA_ATTR: boolean
 }
 
-const TEXT_CONFIG: SanitizeConfig = { ALLOWED_TAGS, ALLOWED_ATTR }
+const TEXT_CONFIG: SanitizeConfig = { ALLOWED_TAGS, ALLOWED_ATTR, ALLOW_DATA_ATTR: false }
 const HELP_CONFIG: SanitizeConfig = {
   ALLOWED_TAGS: HELP_ALLOWED_TAGS,
   ALLOWED_ATTR: HELP_ALLOWED_ATTR,
+  ALLOW_DATA_ATTR: false,
 }
 
 const DANGEROUS_PROTOCOLS = /^(javascript|data|vbscript):/i

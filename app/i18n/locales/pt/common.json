@@ -13,6 +13,7 @@
       "logs": "Registos",
       "features": "Funcionalidades",
       "blog": "Blogue",
+      "templates": "Modelos",
       "help": "Ajuda",
       "section_management": "Gestão",
       "section_content": "Conteúdos",
@@ -95,7 +96,9 @@
       "action_error": "Não foi possível concluir a ação. Tenta novamente."
     },
     "errors": {
-      "generic": "Ocorreu um erro. Tenta novamente."
+      "generic": "Ocorreu um erro. Tenta novamente.",
+      "rate_limited_title": "Demasiados pedidos seguidos",
+      "rate_limited": "A partir da tua ligação foram feitos muitos pedidos em pouco tempo. Espera um par de minutos e tenta novamente."
     },
     "roles": {
       "student": "Aluno",
@@ -182,6 +185,7 @@
       "system_access": "Acesso ao sistema",
       "teacher_panel": "Painel do professor",
       "student_panel": "Painel do aluno",
+      "templates": "Modelos de turma",
       "help_center": "Centro de ajuda"
     },
     "level_up": {
@@ -461,6 +465,41 @@
       "meta": {
         "title": "Blogue · ITAKAI",
         "description": "Novidades, ideias e experiências de sala de aula do ITAKAI, a plataforma educativa gamificada."
+      }
+    },
+    "templates": {
+      "hero_title": "Modelos de turma",
+      "hero_subtitle": "Turmas gamificadas que outros professores publicaram para não começares do zero: com a sua história, as suas missões, a sua loja e os seus comportamentos prontos a usar.",
+      "view": "Ver modelo",
+      "copy_link": "Copiar link",
+      "result_count": "Nenhum modelo | 1 modelo | {count} modelos",
+      "back_to_catalog": "Ver o catálogo",
+      "contents_title": "O que traz este modelo",
+      "counts": {
+        "missions": "Sem missões | 1 missão | {count} missões",
+        "shop_items": "Sem artigos na loja | 1 artigo na loja | {count} artigos na loja",
+        "behaviors": "Sem comportamentos | 1 comportamento | {count} comportamentos"
+      },
+      "use": {
+        "title": "Usar este modelo",
+        "what_you_get": "Importá-lo cria uma turma nova e tua com a história, a capa, as funcionalidades, a loja e os comportamentos do modelo.",
+        "what_you_get_missions": "Importá-lo cria uma turma nova e tua com a história, a capa, as funcionalidades, a loja e os comportamentos do modelo e, se quiseres, com as suas missões.",
+        "import_missions": "Importar também a sua missão | Importar também as suas {count} missões",
+        "import_missions_hint": "Chegam sem prazo, sem documentos e sem emblemas.",
+        "login_note": "Para o importar, tens de entrar com uma conta de professor.",
+        "teacher_only": "Para o importar, é preciso uma conta de professor."
+      },
+      "gone": {
+        "title": "Este modelo já não está disponível",
+        "description": "Quem o publicou retirou-o do catálogo. Dá uma vista de olhos aos restantes: talvez encontres um parecido."
+      },
+      "not_found": {
+        "title": "Este modelo não existe",
+        "description": "O link pode estar incompleto ou mal copiado. No catálogo estão todos os que foram publicados."
+      },
+      "meta": {
+        "title": "Modelos de turma · ITAKAI",
+        "description": "Turmas gamificadas que os professores publicaram no ITAKAI para que outros docentes partam delas."
       }
     }
   }

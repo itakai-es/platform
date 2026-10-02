@@ -1,5 +1,11 @@
 import { describe, it, expect, vi, afterEach } from 'vitest'
-import { formatMission, getMissionStatus, type MissionFormatInput } from '../../src/utils/mission-formatter.js'
+import {
+  formatMission,
+  getMissionStatus,
+  missionRewards,
+  type MissionFormatInput,
+} from '../../src/utils/mission-formatter.js'
+import { DEFAULT_CLASS_SETTINGS } from '../../src/utils/class-settings.js'
 
 const baseMission: MissionFormatInput = {
   id: 'mission-1',
@@ -150,5 +156,50 @@ describe('getMissionStatus', () => {
       { completedAt: new Date() }
     )
     expect(status).toBe('completada')
+  })
+})
+
+describe('missionRewards', () => {
+  const mission = {
+    rarity: 'epica',
+    enigmas: [
+      { xpReward: 20, coinReward: 3, manaReward: 2 },
+      { xpReward: 40, coinReward: 4 },
+    ],
+  }
+
+  it('suma la XP de los enigmas y la de la rareza, y sus monedas y su maná', () => {
+    // épica (200) + enigmas (20 + 40)
+    expect(missionRewards(mission)).toEqual({ xpReward: 260, coinReward: 7, manaReward: 2 })
+    // Sin enigmas, la de completarla.
+    expect(missionRewards({ rarity: 'comun' })).toEqual({
+      xpReward: 50,
+      coinReward: 0,
+      manaReward: 0,
+    })
+  })
+
+  it('da 0 en los recursos que la clase tiene apagados', () => {
+    expect(missionRewards(mission, { xp: true, coins: true, mana: false })).toEqual({
+      xpReward: 260,
+      coinReward: 7,
+      manaReward: 0,
+    })
+    expect(missionRewards(mission, { xp: false, coins: false, mana: true })).toEqual({
+      xpReward: 0,
+      coinReward: 0,
+      manaReward: 2,
+    })
+  })
+
+  it('es la misma cuenta que la tarjeta de formatMission', () => {
+    const input: MissionFormatInput = { ...baseMission, ...mission }
+    const settings = { ...DEFAULT_CLASS_SETTINGS, coins: false }
+    const card = formatMission(input, false, settings)
+    expect(missionRewards(input, settings)).toEqual({
+      xpReward: card.xpReward,
+      coinReward: card.coinReward,
+      manaReward: card.manaReward,
+    })
   })
 })

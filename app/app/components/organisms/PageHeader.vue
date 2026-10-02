@@ -12,6 +12,10 @@
         <p v-if="subtitle" class="text-base text-navy-700/80">
           {{ subtitle }}
         </p>
+        <!-- Lo que acompaña al título, como las etiquetas de una ficha -->
+        <div v-if="$slots.meta" class="mt-3">
+          <slot name="meta" />
+        </div>
       </div>
 
       <!-- Action Buttons Slot -->

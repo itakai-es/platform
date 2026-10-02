@@ -13,6 +13,7 @@
       "logs": "Logs",
       "features": "Características",
       "blog": "Blog",
+      "templates": "Modelos",
       "help": "Axuda",
       "section_management": "Xestión",
       "section_content": "Contidos",
@@ -95,7 +96,9 @@
       "action_error": "Non se puido completar a acción. Téntao de novo."
     },
     "errors": {
-      "generic": "Ocorreu un erro. Por favor, téntao de novo."
+      "generic": "Ocorreu un erro. Por favor, téntao de novo.",
+      "rate_limited_title": "Demasiadas consultas seguidas",
+      "rate_limited": "Desde a túa conexión fixéronse moitas consultas en pouco tempo. Agarda un par de minutos e téntao de novo."
     },
     "roles": {
       "student": "Estudante",
@@ -182,6 +185,7 @@
       "system_access": "Acceso ao sistema",
       "teacher_panel": "Panel do profesor",
       "student_panel": "Panel do estudante",
+      "templates": "Modelos de clase",
       "help_center": "Centro de axuda"
     },
     "level_up": {
@@ -461,6 +465,41 @@
       "meta": {
         "title": "Blog · ITAKAI",
         "description": "Novidades, ideas e experiencias de aula de ITAKAI, a plataforma educativa gamificada."
+      }
+    },
+    "templates": {
+      "hero_title": "Modelos de clase",
+      "hero_subtitle": "Clases gamificadas que outros docentes publicaron para que non comeces de cero: coa súa historia, as súas misións, a súa tenda e os seus comportamentos listos para usar.",
+      "view": "Ver o modelo",
+      "copy_link": "Copiar a ligazón",
+      "result_count": "Ningún modelo | 1 modelo | {count} modelos",
+      "back_to_catalog": "Ver o catálogo",
+      "contents_title": "Que trae este modelo",
+      "counts": {
+        "missions": "Sen misións | 1 misión | {count} misións",
+        "shop_items": "Sen artigos na tenda | 1 artigo na tenda | {count} artigos na tenda",
+        "behaviors": "Sen comportamentos | 1 comportamento | {count} comportamentos"
+      },
+      "use": {
+        "title": "Usar este modelo",
+        "what_you_get": "Importalo crea unha clase nova e túa coa historia, a portada, as funcionalidades, a tenda e os comportamentos do modelo.",
+        "what_you_get_missions": "Importalo crea unha clase nova e túa coa historia, a portada, as funcionalidades, a tenda e os comportamentos do modelo e, se queres, coas súas misións.",
+        "import_missions": "Importar tamén a súa misión | Importar tamén as súas {count} misións",
+        "import_missions_hint": "Chegan sen data límite, sen documentos e sen insignias.",
+        "login_note": "Para importalo cómpre entrar cunha conta de profesor.",
+        "teacher_only": "Para importalo cómpre unha conta de profesor."
+      },
+      "gone": {
+        "title": "Este modelo xa non está dispoñible",
+        "description": "Quen o publicou retirouno do catálogo. Bótalle unha ollada ao resto: pode que atopes outro parecido."
+      },
+      "not_found": {
+        "title": "Este modelo non existe",
+        "description": "Pode que a ligazón estea incompleta ou mal copiada. No catálogo están todos os que se publicaron."
+      },
+      "meta": {
+        "title": "Modelos de clase · ITAKAI",
+        "description": "Clases gamificadas que o profesorado publicou en ITAKAI para que outros docentes partan delas."
       }
     }
   }
