@@ -854,6 +854,7 @@ import { renderPageMarkdown } from '~/utils/markdown'
 import { MISSION_COMPLETION_BONUS, type MissionRarity } from '~/utils/gamification-config'
 import { resolveClassSettings } from '~/utils/class-settings'
 import { classMetaLine } from '~/utils/class-metadata'
+import { parseEnigmasJson as parseAiEnigmas } from '~/utils/ai-enigmas'
 import { canInClass } from '~/utils/class-access'
 import type { ClassSettings } from '~/types/class.types'
 import CoinIcon from '~/components/atoms/CoinIcon.vue'
@@ -1296,40 +1297,10 @@ async function regenerateTitles() {
   }
 }
 
-// Entero ≥ suelo, o el suelo si no es un número válido.
-function clampInt(v: unknown, floor = 0): number {
-  const n = Math.floor(Number(v))
-  return Number.isFinite(n) ? Math.max(floor, n) : floor
-}
-
-// Parsea el JSON de enigmas que devuelve la IA. XP/monedas/maná se normalizan a
-// enteros ≥ 0; coins/mana se ponen a 0 si la clase no usa ese recurso.
+// Parsea el JSON de enigmas que devuelve la IA (utils/ai-enigmas): coins/mana a
+// 0 si la clase no usa ese recurso.
 function parseEnigmasJson(rawText: string): typeof enigmas.value {
-  const cleaned = rawText
-    .replace(/```(?:json)?\s*/gi, '')
-    .replace(/```/g, '')
-    .trim()
-  const match = cleaned.match(/\[[\s\S]*\]/)
-  if (!match) return []
-  try {
-    const parsed = JSON.parse(match[0])
-    if (!Array.isArray(parsed)) return []
-    const useCoins = enigmaResources.value.coins
-    const useMana = enigmaResources.value.mana
-    return parsed.map((e: any) => ({
-      title: String(e.title || '').slice(0, 100),
-      description: String(e.description || '').slice(0, 300),
-      xp: clampInt(e.xp ?? 20, 0),
-      coins: useCoins ? clampInt(e.coins ?? 0, 0) : 0,
-      mana: useMana ? clampInt(e.mana ?? 0, 0) : 0,
-      objectives: Array.isArray(e.objectives)
-        ? e.objectives.map((o: any) => String(o).slice(0, 200))
-        : [],
-    }))
-  } catch {
-    console.error('Failed to parse enigmas JSON from AI')
-    return []
-  }
+  return parseAiEnigmas(rawText, enigmaResources.value)
 }
 
 // Step 2 → 3: Generate enigmas

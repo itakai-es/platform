@@ -228,6 +228,132 @@ SOLO el JSON, nada más.`,
 }
 
 // ============================================================
+// MISSION ADAPT (adaptar una misión ya guardada a su clase)
+// ============================================================
+
+/** Un enigma de la misión tal y como está guardado, con lo que no se puede tocar. */
+export interface MissionAdaptEnigma {
+  title: string
+  description: string
+  objectives: string[]
+  xp: number
+  coins: number
+  mana: number
+  /** Tiene entregas: no se puede borrar, se queda en su sitio. */
+  hasSubmissions: boolean
+  /** Alguien lo ha completado: sus recompensas no pueden bajar. */
+  rewardsLocked: boolean
+}
+
+export interface MissionAdaptInput {
+  className: string
+  /** Asignatura y nivel, en una línea («Asignatura: … | Nivel educativo: …»). */
+  classMeta: string
+  /** Idioma vehicular de la clase tal y como se guarda («Castellano», «Català»…). */
+  classLanguage: string
+  classNarrative: string
+  title: string
+  description: string
+  enigmas: MissionAdaptEnigma[]
+  resources: EnigmaResources
+  /** Al pedir otro cambio: la propuesta anterior (JSON) y lo que dice su docente. */
+  previousProposal?: string
+  feedback?: string
+}
+
+/** El JSON de la misión actual para el prompt: solo los recursos activos y lo bloqueado. */
+function adaptCurrentJson(input: MissionAdaptInput, en: boolean): string {
+  const enigmas = input.enigmas.map((e, index) => {
+    const item: Record<string, unknown> = {
+      n: index + 1,
+      title: e.title.slice(0, 150),
+      description: e.description.slice(0, 500),
+      objectives: e.objectives.slice(0, 6).map(o => o.slice(0, 200)),
+      xp: e.xp,
+    }
+    if (input.resources.coins) item.coins = e.coins
+    if (input.resources.mana) item.mana = e.mana
+    if (e.hasSubmissions) item[en ? 'hasSubmissions' : 'tieneEntregas'] = true
+    if (e.rewardsLocked) item[en ? 'rewardsCannotGoDown' : 'recompensasNoPuedenBajar'] = true
+    return item
+  })
+  return JSON.stringify(
+    { title: input.title.slice(0, 200), description: input.description.slice(0, 2500), enigmas },
+    null,
+    1
+  )
+}
+
+/** La forma del JSON que se pide de vuelta. */
+function adaptJsonShape(res: EnigmaResources, en: boolean): string {
+  return `{"title":"${en ? 'Mission title' : 'Título de la misión'}","description":"${
+    en ? 'The mission story, in markdown' : 'La historia de la misión, en markdown'
+  }","enigmas":${enigmaJsonShape(res, en)}}`
+}
+
+export const MISSION_ADAPT = {
+  adapt: (input: MissionAdaptInput, locale: string) => {
+    const en = locale === 'en'
+    const context = [
+      input.classMeta,
+      input.classLanguage
+        ? en
+          ? `Language of instruction: ${input.classLanguage}`
+          : `Idioma vehicular: ${input.classLanguage}`
+        : '',
+      input.classNarrative
+        ? en
+          ? `World of the class (the mission happens here): ${input.classNarrative.slice(0, 600)}`
+          : `Mundo de la clase (la misión ocurre aquí): ${input.classNarrative.slice(0, 600)}`
+        : '',
+    ]
+      .filter(Boolean)
+      .join('\n')
+    const again = input.previousProposal && input.feedback
+    const lockedCount = input.enigmas.filter(e => e.hasSubmissions).length
+
+    if (en) {
+      return `You adapt educational missions. A teacher has brought this mission into the class "${input.className}" and wants it to fit that class.
+
+CLASS:
+${context || '(no extra data)'}
+
+CURRENT MISSION (JSON):
+${adaptCurrentJson(input, true)}
+${again ? `\nYOUR PREVIOUS PROPOSAL:\n${input.previousProposal!.slice(0, 4000)}\n\nThe teacher says about it: "${input.feedback!.slice(0, 600)}". Change what they ask and keep the rest of your previous proposal.\n` : ''}
+Adapt the title, the story and the enigmas to the level, subject and world of the class, keeping what students learn. Keep the same number of enigmas and their order unless the teacher asks otherwise.${lockedCount ? ' Enigmas with "hasSubmissions" already have students\' work: keep them in the same position (you may rewrite their text, never remove them).' : ''} If an enigma has "rewardsCannotGoDown", its xp${input.resources.coins ? ', coins' : ''}${input.resources.mana ? ' and mana' : ''} must be equal to or higher than now.
+${input.classLanguage ? `Write all the text in ${input.classLanguage}.` : ''}
+
+Rewards per enigma:
+${enigmaRewardSpec(input.resources, true)}
+
+Return ONLY a JSON object:
+${adaptJsonShape(input.resources, true)}
+ONLY the JSON.`
+    }
+
+    return `Adaptas misiones educativas. Su docente ha traído esta misión a la clase "${input.className}" y quiere que encaje en ella.
+
+CLASE:
+${context || '(sin más datos)'}
+
+MISIÓN ACTUAL (JSON):
+${adaptCurrentJson(input, false)}
+${again ? `\nTU PROPUESTA ANTERIOR:\n${input.previousProposal!.slice(0, 4000)}\n\nSu docente dice de ella: "${input.feedback!.slice(0, 600)}". Cambia lo que pide y conserva el resto de tu propuesta anterior.\n` : ''}
+Adapta el título, la historia y los enigmas al nivel, a la asignatura y al mundo de la clase, sin perder lo que aprende el alumnado. Mantén el mismo número de enigmas y su orden salvo que su docente pida otra cosa.${lockedCount ? ' Los enigmas con "tieneEntregas" ya tienen trabajos del alumnado: déjalos en la misma posición (puedes reescribir su texto, nunca quitarlos).' : ''} Si un enigma tiene "recompensasNoPuedenBajar", su xp${input.resources.coins ? ', sus coins' : ''}${input.resources.mana ? ' y su mana' : ''} tienen que ser iguales o mayores que ahora.
+${input.classLanguage ? `Escribe todo el texto en ${input.classLanguage}.` : ''}
+${INCLUSIVE_LANGUAGE_ES}
+
+Recompensas por enigma:
+${enigmaRewardSpec(input.resources, false)}
+
+Responde SOLO con un objeto JSON:
+${adaptJsonShape(input.resources, false)}
+SOLO el JSON.`
+  },
+}
+
+// ============================================================
 // CLASS GUIDE
 // ============================================================
 

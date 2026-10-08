@@ -33,6 +33,14 @@
           })
         }}
       </p>
+      <!-- Acceso directo: adaptarla con IA a la clase de destino, ya en la misión -->
+      <div class="mt-4 rounded-2xl bg-navy-700/5 p-4">
+        <p class="text-sm">{{ t('teacher.missions.adapt.after_import_hint') }}</p>
+        <Button variant="secondary" size="sm" class="mt-3" @click="adaptImported">
+          <SparklesIcon class="mr-1.5 h-4 w-4" aria-hidden="true" />
+          {{ t('teacher.missions.adapt.button') }}
+        </Button>
+      </div>
     </div>
 
     <!-- Elegir: el destino si no es fijo, la clase de origen y la misión si no vienen dadas -->
@@ -243,7 +251,7 @@
 <script setup lang="ts">
 import type { Component } from 'vue'
 import { CheckCircleIcon, FlagIcon, TrophyIcon } from '@heroicons/vue/24/solid'
-import { DocumentTextIcon, PuzzlePieceIcon } from '@heroicons/vue/24/outline'
+import { DocumentTextIcon, PuzzlePieceIcon, SparklesIcon } from '@heroicons/vue/24/outline'
 import { resolveClassSettings } from '~/utils/class-settings'
 import { canInClass } from '~/utils/class-access'
 import type { Class, MissionImportResult } from '~/types/teacher.types'
@@ -699,6 +707,18 @@ function openImported() {
   const mission = result.value?.mission
   close()
   if (mission) navigateTo(`/profesor/clases/${mission.classId}/misiones/${mission.id}`)
+}
+
+/** A la misión nueva, con la ventana de adaptarla con IA abierta. */
+function adaptImported() {
+  const mission = result.value?.mission
+  close()
+  if (mission) {
+    navigateTo({
+      path: `/profesor/clases/${mission.classId}/misiones/${mission.id}`,
+      query: { adaptar: '1' },
+    })
+  }
 }
 
 function close() {
