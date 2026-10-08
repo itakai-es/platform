@@ -3,6 +3,7 @@ import type { Prisma } from '../../generated/prisma/client.js'
 import {
   CLASS_ACTION_LEVEL,
   assertClassAccess,
+  assertClassAccessOrPlatformAdmin,
   getClassAccess,
   hasClassLevel,
   type ClassUser,
@@ -18,10 +19,11 @@ import {
 
 /**
  * Purga de una clase de la papelera: la borra de verdad, con todo lo que
- * cuelga de ella. Es una sola rutina para los tres caminos que llegan aquí: la
+ * cuelga de ella. Es una sola rutina para todos los caminos que llegan aquí: la
  * tarea que barre la papelera pasados los días (`class-trash.jobs.ts`), «Borrar
- * ya» de quien es propietario y el borrado de su cuenta, que se lleva las
- * clases que tenía en la papelera en vez de traspasarlas.
+ * ya» de quien es propietario (o de la administración de la instancia, de
+ * respaldo) y el borrado de su cuenta, que se lleva las clases que tenía en la
+ * papelera en vez de traspasarlas.
  *
  * Qué se lleva el `class.delete` de Prisma (borrado en cascada, con clave
  * ajena): el profesorado y el registro de la clase, las matrículas, la guía, la
@@ -60,8 +62,11 @@ import {
 /** Tiempo para la transacción de cada clase: el mismo margen que la copia de una clase. */
 export const PURGE_TRANSACTION_TIMEOUT_MS = 30_000
 
-/** Por qué se purga: pasaron los días, lo pidió quien es propietario o se borra su cuenta. */
-export type PurgeReason = 'expired' | 'owner' | 'account_deleted'
+/**
+ * Por qué se purga: pasaron los días, lo pidió quien es propietario o la
+ * administración de la instancia, o se borra la cuenta de quien la tenía.
+ */
+export type PurgeReason = 'expired' | 'owner' | 'admin' | 'account_deleted'
 
 export interface PurgeOptions {
   reason: PurgeReason
@@ -112,6 +117,7 @@ export interface ClassPurgeOutcome extends PurgedClass {
 const MESSAGE: Record<PurgeReason, string> = {
   expired: 'Pasaron los días en la papelera.',
   owner: 'La persona propietaria la ha borrado ya desde la papelera.',
+  admin: 'La administración de la instancia la ha borrado ya desde la papelera.',
   account_deleted:
     'Se ha borrado la cuenta de la persona propietaria, que la tenía en la papelera.',
 }
@@ -228,6 +234,7 @@ export async function purgeClassInTx(
         classId,
         reason: options.reason,
         ...(options.actorId ? { actorId: options.actorId } : {}),
+        ...(options.reason === 'admin' ? { byPlatformAdmin: true } : {}),
         trashedAt: cls.deletedAt.toISOString(),
         ...summary,
       },
@@ -430,18 +437,24 @@ export async function purgeTrashedClass(
 
 /**
  * «Borrar ya»: quien es propietario borra para siempre una clase de su
- * papelera, sin esperar a la purga. Fuera de la papelera, 409.
+ * papelera, sin esperar a la purga. Fuera de la papelera, 409. La
+ * administración de la instancia puede hacerlo también, de respaldo, con
+ * cualquier clase de la papelera: el registro del sistema lo apunta con su
+ * motivo y quién fue.
  */
 export async function purgeClassNow(actor: ClassUser, classId: string) {
-  await assertClassAccess(classId, actor.id, 'class.purge')
+  const access = await assertClassAccessOrPlatformAdmin(classId, actor, 'class.purge')
+  const byPlatformAdmin = !access || !hasClassLevel(access, CLASS_ACTION_LEVEL['class.purge'])
 
   const purged = await prisma.$transaction(
     async tx => {
-      const result = await purgeClassInTx(tx, classId, {
-        reason: 'owner',
-        actorId: actor.id,
-        ownerId: actor.id,
-      })
+      const result = await purgeClassInTx(
+        tx,
+        classId,
+        byPlatformAdmin
+          ? { reason: 'admin', actorId: actor.id }
+          : { reason: 'owner', actorId: actor.id, ownerId: actor.id }
+      )
       if (result) return result
       // No se ha purgado: se dice por qué, con lo que hay ahora.
       const cls = await tx.class.findUnique({
@@ -453,7 +466,7 @@ export async function purgeClassNow(actor: ClassUser, classId: string) {
         throw new ConflictError('La clase no está en la papelera', 'CLASS_NOT_IN_TRASH')
       }
       // Ha dejado de ser suya entre la comprobación y el bloqueo.
-      await assertClassAccess(classId, actor.id, 'class.purge', tx)
+      if (!byPlatformAdmin) await assertClassAccess(classId, actor.id, 'class.purge', tx)
       throw new ConflictError('La clase no se ha podido borrar', 'CLASS_NOT_PURGED')
     },
     { timeout: PURGE_TRANSACTION_TIMEOUT_MS }

@@ -140,6 +140,25 @@
       "sort": {
         "students_desc": "Mai mulți elevi",
         "missions_desc": "Mai multe misiuni"
+      },
+      "tabs": {
+        "classes": "Clase",
+        "trash": "Coș de gunoi",
+        "label": "Vizualizări ale claselor"
+      },
+      "trash": {
+        "note": "Clasele șterse de cadrele didactice stau {days} zile în coșul de gunoi înainte de a fi șterse definitiv. Aici sunt cele din toată platforma, ca să le restaurezi sau să le ștergi imediat pe cele pe care persoana care le deține nu le poate gestiona: de exemplu, dacă are contul suspendat. O clasă restaurată revine, arhivată, printre clasele persoanei care o deține.",
+        "search_placeholder": "Caută după clasă, proprietar sau cod...",
+        "empty_title": "Nu există clase în coșul de gunoi",
+        "empty_description": "Când un cadru didactic șterge o clasă, aceasta stă aici {days} zile înainte de a fi ștearsă definitiv.",
+        "owner": "Deținută de {name}",
+        "no_owner": "Fără nicio persoană proprietară",
+        "owner_unavailable": "Cont proprietar fără acces",
+        "sent_by": "Trimisă de {name} pe {date}",
+        "sent_on": "Trimisă în coșul de gunoi pe {date}",
+        "warned": "Aviz de ștergere trimis pe {date}",
+        "restored": "«{name}» a ieșit din coșul de gunoi. Revine arhivată printre clasele persoanei care o deține.",
+        "restore_error": "Clasa nu a putut fi restaurată. Încearcă din nou."
       }
     },
     "missions": {
@@ -458,6 +477,29 @@
       "published_at_draft_hint": "Se completează automat când postarea este publicată prima dată.",
       "published_at_invalid": "Alege o dată între 1 ianuarie 2000 și azi.",
       "view_public": "Vezi blogul"
+    },
+    "templates": {
+      "title": "Șabloane",
+      "subtitle": "Recomandă șabloanele pe care vrei să le evidențiezi: apar primele în cataloage, cu insigna lor.",
+      "meta": {
+        "title": "Șabloane | ITAKAI Admin"
+      },
+      "view_public": "Vezi catalogul",
+      "search_placeholder": "Caută după șablon sau după cine l-a publicat…",
+      "filter_label": "Recomandare",
+      "filter_all": "Toate",
+      "filter_recommended": "Recomandate",
+      "filter_not_recommended": "Nerecomandate",
+      "empty_title": "Încă nu există șabloane publicate",
+      "empty_description": "Când un cadru didactic publică o clasă drept șablon, va apărea aici ca s-o poți recomanda.",
+      "empty_filtered_title": "Niciun șablon cu aceste filtre",
+      "empty_filtered_description": "Încearcă altă căutare sau scoate filtrul.",
+      "published_by": "Publicat de {name}",
+      "recommend": "Recomandat",
+      "recommend_named": "Recomandă „{name}”",
+      "recommended_on": "„{name}” apare acum ca recomandat",
+      "recommended_off": "„{name}” nu mai apare ca recomandat",
+      "save_error": "Nu s-a putut salva. Încearcă din nou."
     }
   }
 }

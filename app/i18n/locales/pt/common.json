@@ -507,8 +507,12 @@
         "what_you_get_missions": "Importá-lo cria uma turma nova e tua com a história, a capa, as funcionalidades, a loja e os comportamentos do modelo e, se quiseres, com as suas missões.",
         "import_missions": "Importar também a sua missão | Importar também as suas {count} missões",
         "import_missions_hint": "Chegam sem prazo, sem documentos e sem emblemas.",
-        "login_note": "Para o importar, tens de entrar com uma conta docente.",
-        "teacher_only": "Para o importar, é preciso uma conta docente."
+        "login_note": "Entra ou cria a tua conta docente: no fim, voltas aqui para o importar.",
+        "teacher_only": "Para o importar, é preciso uma conta docente.",
+        "ready_note": "Já entraste. Revê o que traz e carrega em «Importar» para teres a tua própria cópia.",
+        "pending_login": "Vens de um modelo: quando entrares com a tua conta docente, levamos-te de volta para o importares.",
+        "pending_signup": "Vens de um modelo: quando criares a tua conta e escolheres o perfil docente, levamos-te de volta para o importares.",
+        "not_for_role": "Os modelos só podem ser usados com uma conta docente, por isso não te levámos ao que escolheste."
       },
       "gone": {
         "title": "Este modelo já não está disponível",
@@ -521,7 +525,9 @@
       "meta": {
         "title": "Modelos de turma · ITAKAI",
         "description": "Turmas gamificadas que o corpo docente publicou no ITAKAI para que qualquer docente parta delas."
-      }
+      },
+      "recommended": "Recomendado",
+      "copy_link_named": "Copiar o link de «{name}»"
     },
     "class_list": {
       "tab_active": "Ativas",

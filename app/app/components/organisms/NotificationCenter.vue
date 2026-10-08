@@ -182,6 +182,7 @@
 <script setup lang="ts">
 import type { Component } from 'vue'
 import {
+  ArchiveBoxXMarkIcon,
   ArrowTrendingUpIcon,
   BellIcon,
   ChatBubbleLeftRightIcon,
@@ -259,6 +260,7 @@ const TYPE_ICONS: Partial<Record<NotificationType, { icon: Component; tone: stri
   class_teacher_changed: { icon: UserGroupIcon, tone: 'bg-sky-light' },
   class_teacher_removed: { icon: UserMinusIcon, tone: 'bg-red-light' },
   class_ownership_received: { icon: KeyIcon, tone: 'bg-yellow-light' },
+  class_purge_soon: { icon: ArchiveBoxXMarkIcon, tone: 'bg-red-light' },
 }
 
 const iconFor = (type: NotificationType) =>

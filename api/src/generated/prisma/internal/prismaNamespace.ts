@@ -2852,6 +2852,9 @@ export const ClassScalarFieldEnum = {
   teacherId: 'teacherId',
   deletedAt: 'deletedAt',
   deletedById: 'deletedById',
+  trashWarnedAt: 'trashWarnedAt',
+  recommendedAt: 'recommendedAt',
+  recommendedById: 'recommendedById',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

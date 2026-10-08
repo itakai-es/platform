@@ -625,7 +625,9 @@
               "ownership_transferred": "pasó-y la propiedá de la clase a {target}",
               "ownership_inherited": "la clase pasó a {target} al desaniciase la cuenta que tenía la so propiedá",
               "trashed": "unvió la clase a la papelera",
-              "restored": "sacó la clase de la papelera"
+              "restored": "sacó la clase de la papelera",
+              "template_recommended": "recomendó la plantía nos catálogos",
+              "template_unrecommended": "quitó la recomendación de la plantía"
             },
             "teacher": {
               "added": "amestó a {target} al profesoráu ({profile}, {access})",
@@ -1283,6 +1285,7 @@
         "province": "Toles provincies"
       },
       "sort": {
+        "recommended": "Recomendaes primero",
         "recent": "Más recientes",
         "name_asc": "Nome A-Z",
         "name_desc": "Nome Z-A"

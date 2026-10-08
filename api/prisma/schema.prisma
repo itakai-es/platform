@@ -60,6 +60,7 @@ model User {
   refreshTokens     RefreshToken[]
   teacherClasses    Class[]             @relation("TeacherClasses")
   trashedClasses    Class[]             @relation("TrashedClasses")
+  recommendedTemplates Class[]          @relation("RecommendedTemplates")
   enrollments       ClassEnrollment[]
   createdBadges     Badge[]             @relation("CreatedBadges")
   earnedBadges      StudentBadge[]
@@ -181,12 +182,22 @@ model Class {
   // envió, y se queda en null si se borra esa cuenta.
   deletedAt       DateTime? @map("deleted_at")
   deletedById     String?   @map("deleted_by_id")
+  // Cuándo se avisó a quien tiene la propiedad de que la purga se acerca (ver
+  // class-trash.jobs.ts). Restaurarla o volver a enviarla lo deja en null.
+  trashWarnedAt   DateTime? @map("trash_warned_at")
+  // Plantilla recomendada por la administración de la instancia: con fecha,
+  // sale primero en los catálogos con su distintivo. Retirarla o enviarla a la
+  // papelera le quita la marca, que no vuelve sola al publicarla otra vez.
+  // `recommendedById` es quién la marcó, y se queda en null si se borra esa cuenta.
+  recommendedAt   DateTime? @map("recommended_at")
+  recommendedById String?   @map("recommended_by_id")
   createdAt       DateTime  @default(now()) @map("created_at")
   updatedAt       DateTime  @updatedAt @map("updated_at")
 
   // Relations
   teacher       User              @relation("TeacherClasses", fields: [teacherId], references: [id])
   deletedBy     User?             @relation("TrashedClasses", fields: [deletedById], references: [id], onDelete: SetNull)
+  recommendedBy User?             @relation("RecommendedTemplates", fields: [recommendedById], references: [id], onDelete: SetNull)
   enrollments   ClassEnrollment[]
   missions      Mission[]
   guide         ClassGuide?
@@ -629,6 +640,8 @@ enum NotificationType {
   class_teacher_changed
   class_teacher_removed
   class_ownership_received
+  // Papelera de clases: a quien tiene la propiedad, unos días antes de la purga.
+  class_purge_soon
 }
 
 enum NotificationPriority {

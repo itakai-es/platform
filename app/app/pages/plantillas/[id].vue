@@ -57,7 +57,12 @@
         <!-- Nivel, asignatura, idioma y provincia, enteros: a lo ancho, bajo el
              título, como las etiquetas de la cabecera de una clase -->
         <template #meta>
-          <TemplateMetaBadges :template="tpl" with-province wrap />
+          <!-- Recomendada, delante, en la misma fila: las etiquetas de los
+               metadatos se reparten en ella como si fueran suyas -->
+          <div class="flex flex-wrap gap-1.5">
+            <TemplateRecommendedBadge v-if="tpl.recommended" />
+            <TemplateMetaBadges :template="tpl" with-province wrap class="contents" />
+          </div>
         </template>
         <!-- En una línea: junto a un nombre largo, lo que se estrecha es el
              título, no el botón -->
@@ -67,7 +72,7 @@
             size="sm"
             :icon-left="LinkIcon"
             class="whitespace-nowrap"
-            @click="copyLink"
+            @click="copyTemplateLink(tpl.id)"
           >
             {{ t('common.templates.copy_link') }}
           </Button>
@@ -100,7 +105,7 @@
               </li>
             </ul>
 
-            <div class="mt-5 border-t border-border-primary pt-5">
+            <div ref="useSection" class="mt-5 border-t border-border-primary pt-5">
               <h2 class="text-lg font-bold text-navy-700">{{ t('common.templates.use.title') }}</h2>
               <p class="mt-1 text-sm text-navy-700/70">
                 {{
@@ -113,6 +118,11 @@
               <!-- Con sesión de profesor, el mismo importar que en su catálogo,
                    con la misma casilla para traer sus misiones -->
               <template v-if="canImport">
+                <!-- Recién llegado de «Usar esta plantilla» tras entrar o
+                     registrarse: se dice que ya puede importarla -->
+                <InfoNote v-if="arrivedToUse" class="mt-4" role="status">
+                  {{ t('common.templates.use.ready_note') }}
+                </InfoNote>
                 <TemplateImportMissionsOption
                   v-if="tpl.missionCount > 0"
                   v-model="withMissions"
@@ -121,6 +131,7 @@
                   class="mt-4"
                 />
                 <Button
+                  data-template-import
                   variant="primary"
                   full-width
                   class="mt-4"
@@ -132,11 +143,13 @@
                 </Button>
               </template>
 
-              <!-- Sin sesión, a entrar; con otro rol, nada que vaya a fallar -->
+              <!-- Sin sesión, se apunta la plantilla y se va a entrar (o a crear
+                   la cuenta): al llegar al panel docente se vuelve aquí. Con
+                   otro rol, nada que vaya a fallar. -->
               <template v-else-if="!authStore.isAuthenticated">
                 <InfoNote class="mt-4">{{ t('common.templates.use.login_note') }}</InfoNote>
-                <Button variant="primary" full-width class="mt-3" :to="ROUTE_NAMES.LOGIN">
-                  {{ t('common.actions.enter') }}
+                <Button variant="primary" full-width class="mt-3" @click="useWithoutSession">
+                  {{ t('common.templates.use.title') }}
                 </Button>
               </template>
               <InfoNote v-else class="mt-4">{{ t('common.templates.use.teacher_only') }}</InfoNote>
@@ -168,8 +181,8 @@ import {
   RocketLaunchIcon,
   ShoppingBagIcon,
 } from '@heroicons/vue/24/outline'
-import { copyText } from '~/utils/clipboard'
 import { ROUTE_NAMES } from '~/utils/navigation'
+import { savePendingTemplate } from '~/utils/pending-template'
 import type { PublicTemplateDetail, TemplateFailure } from '~/types/template.types'
 
 /**
@@ -183,15 +196,19 @@ import type { PublicTemplateDetail, TemplateFailure } from '~/types/template.typ
  * pestañas que la previsualización del profesorado.
  *
  * Con sesión de profesor se importa aquí mismo, como desde su catálogo, y si
- * trae misiones se elige si vienen (marcado de entrada). Sin sesión se explica
- * que hace falta entrar con una cuenta de profesor; con otro rol, que hace
- * falta una (llevarle a entrar no serviría: ya ha entrado).
+ * trae misiones se elige si vienen (marcado de entrada). Sin sesión, «Usar
+ * esta plantilla» la apunta (ver `utils/pending-template.ts`) y lleva a entrar
+ * o a crear la cuenta; al llegar al panel docente se vuelve aquí con `?usar=1`
+ * y todo listo para importar, sin importar nada solo. Con otro rol se explica
+ * que hace falta una cuenta docente (llevarle a entrar no serviría: ya ha
+ * entrado).
  */
 
 const { t } = useI18n()
 const route = useRoute()
-const toast = useToast()
+const router = useRouter()
 const authStore = useAuthStore()
+const { copyTemplateLink } = useTemplateLink()
 const { fetchTemplate } = usePublicTemplates()
 const { importingId, importTemplate } = useTemplateImport()
 
@@ -202,6 +219,9 @@ const loading = ref(true)
 const failure = ref<TemplateFailure | null>(null)
 /** Importar también sus misiones, si trae: marcado de entrada. */
 const withMissions = ref(true)
+/** Viene de «Usar esta plantilla», ya con sesión (ver `middleware/pending-template.global.ts`). */
+const arrivedToUse = ref(route.query.usar === '1')
+const useSection = ref<HTMLElement | null>(null)
 
 /**
  * Número de la carga vigente: si se reintenta antes de que conteste la
@@ -226,8 +246,20 @@ async function load() {
 }
 
 // Cada ficha es su propia página (Nuxt la rehace al cambiar de id): basta con
-// pedirla al montarse.
-onMounted(load)
+// pedirla al montarse. Si se llega para usarla, se quita la marca de la
+// dirección (el enlace que se ve es el de siempre) y, cuando llega la ficha,
+// el foco va al botón de importar, que es lo siguiente que hacer.
+onMounted(async () => {
+  if (arrivedToUse.value) {
+    const { usar: _usar, ...query } = route.query
+    router.replace({ query })
+  }
+  await load()
+  if (arrivedToUse.value && canImport.value) {
+    await nextTick()
+    useSection.value?.querySelector<HTMLElement>('[data-template-import]')?.focus()
+  }
+})
 
 /** Retirada (o con la clase archivada) o inexistente: lo que se cuenta en cada caso. */
 const deadLink = computed(() => {
@@ -294,15 +326,14 @@ async function onImport() {
   if (created) navigateTo(`/profesor/clases/${created.id}`)
 }
 
-/** El enlace de la ficha, sin nada más: es el que se comparte. */
-async function copyLink() {
+/**
+ * Sin sesión: se apunta la plantilla y se va a entrar. Desde ahí se puede ir a
+ * crear la cuenta sin perderla.
+ */
+function useWithoutSession() {
   if (!tpl.value) return
-  try {
-    await copyText(`${window.location.origin}${ROUTE_NAMES.TEMPLATES}/${tpl.value.id}`)
-    toast.success(t('common.copy.copied'))
-  } catch {
-    toast.error(t('common.copy.error'))
-  }
+  savePendingTemplate(tpl.value.id)
+  navigateTo(ROUTE_NAMES.LOGIN)
 }
 
 // En la pestaña, el nombre de la plantilla o, si el enlace está muerto, lo que

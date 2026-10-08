@@ -140,6 +140,25 @@
       "sort": {
         "students_desc": "Més estudiants",
         "missions_desc": "Més missions"
+      },
+      "tabs": {
+        "classes": "Classes",
+        "trash": "Paperera",
+        "label": "Vistes de classes"
+      },
+      "trash": {
+        "note": "Les classes que elimina el professorat passen {days} dies en la paperera abans d'esborrar-se per sempre. Ací estan les de tota la plataforma, per a restaurar o esborrar ja les que qui en té la propietat no pot: per exemple, si el seu compte està suspés. Una classe restaurada torna, arxivada, a les classes de qui en té la propietat.",
+        "search_placeholder": "Busca per classe, propietat o codi...",
+        "empty_title": "No hi ha classes en la paperera",
+        "empty_description": "Quan algú del professorat elimina una classe, passa ací {days} dies abans d'esborrar-se per sempre.",
+        "owner": "Propietat: {name}",
+        "no_owner": "Sense ningú amb la propietat",
+        "owner_unavailable": "Compte propietari sense accés",
+        "sent_by": "La va enviar {name} el {date}",
+        "sent_on": "Enviada a la paperera el {date}",
+        "warned": "Avís d'esborrament enviat el {date}",
+        "restored": "«{name}» ha eixit de la paperera. Torna arxivada a les classes de qui en té la propietat.",
+        "restore_error": "No s'ha pogut restaurar la classe. Torna-ho a provar."
       }
     },
     "missions": {
@@ -458,6 +477,29 @@
       "published_at_draft_hint": "Es posa sola en publicar l'entrada per primera vegada.",
       "published_at_invalid": "Tria una data entre l'1 de gener de 2000 i hui.",
       "view_public": "Veure el blog"
+    },
+    "templates": {
+      "title": "Plantilles",
+      "subtitle": "Recomana les plantilles que vulgues destacar: ixen primer als catàlegs, amb el seu distintiu.",
+      "meta": {
+        "title": "Plantilles | ITAKAI Admin"
+      },
+      "view_public": "Veure el catàleg",
+      "search_placeholder": "Busca per plantilla o per qui la va publicar…",
+      "filter_label": "Recomanació",
+      "filter_all": "Totes",
+      "filter_recommended": "Recomanades",
+      "filter_not_recommended": "Sense recomanar",
+      "empty_title": "Encara no hi ha plantilles publicades",
+      "empty_description": "Quan el professorat publique una classe com a plantilla, apareixerà ací perquè la pugues recomanar.",
+      "empty_filtered_title": "Cap plantilla amb estos filtres",
+      "empty_filtered_description": "Prova una altra busca o lleva el filtre.",
+      "published_by": "Publicada per {name}",
+      "recommend": "Recomanada",
+      "recommend_named": "Recomanar «{name}»",
+      "recommended_on": "«{name}» ja ix com a recomanada",
+      "recommended_off": "«{name}» ja no ix com a recomanada",
+      "save_error": "No s'ha pogut guardar. Torna-ho a provar."
     }
   }
 }

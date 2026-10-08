@@ -87,6 +87,9 @@ interface Template extends TemplateCardData {
   teacherName: string
   isOwn: boolean
   missionCount: number
+  recommended: boolean
+  /** Cuándo se tocó por última vez: ordena «Más recientes». */
+  updatedAt: string
 }
 
 const { t } = useI18n()
@@ -122,7 +125,7 @@ const fSubjects = ref<string[]>([])
 const fLevels = ref<string[]>([])
 const fLanguages = ref<string[]>([])
 const fProvinces = ref<string[]>([])
-const sort = ref('recent')
+const sort = ref('recommended')
 
 const normalize = (s: string) =>
   s
@@ -151,7 +154,11 @@ const filtered = computed(() => {
     return true
   })
 
-  // Sort in-memory. 'recent' preserva el orden del backend (updatedAt desc).
+  // Se ordena aquí. «Recomendadas primero», el de serie, es el orden en que
+  // llegan; «Más recientes», por la última vez que se tocó cada una.
+  if (sort.value === 'recent') {
+    return [...list].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
+  }
   if (sort.value === 'name-asc') {
     return [...list].sort((a, b) =>
       a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })

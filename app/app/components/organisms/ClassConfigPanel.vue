@@ -286,12 +286,26 @@
         :title="t('teacher.classes.detail.settings.general.publish_title')"
         :hint="t('teacher.classes.detail.settings.general.publish_hint')"
       >
+        <!-- Publicada, junto al interruptor, el enlace de su ficha pública: el
+             que se comparte para que la vean sin cuenta. -->
         <template #action>
-          <Toggle
-            :model-value="isTemplate"
-            :disabled="publishing"
-            @update:model-value="togglePublish"
-          />
+          <div class="flex items-center gap-3">
+            <Button
+              v-if="isTemplate"
+              type="button"
+              variant="outline"
+              size="sm"
+              :icon-left="LinkIcon"
+              @click="copyTemplateLink(classId)"
+            >
+              {{ t('common.templates.copy_link') }}
+            </Button>
+            <Toggle
+              :model-value="isTemplate"
+              :disabled="publishing"
+              @update:model-value="togglePublish"
+            />
+          </div>
         </template>
       </SettingsActionRow>
 
@@ -354,6 +368,7 @@ import {
   ArrowUpTrayIcon,
   SpeakerWaveIcon,
   DocumentDuplicateIcon,
+  LinkIcon,
 } from '@heroicons/vue/24/outline'
 import type { DuplicateOptions } from '~/components/organisms/DuplicateClassModal.vue'
 import CoinIcon from '~/components/atoms/CoinIcon.vue'
@@ -426,6 +441,7 @@ const router = useRouter()
 const teacherStore = useTeacherStore()
 const classesStore = useClassesStore()
 const toast = useToast()
+const { copyTemplateLink } = useTemplateLink()
 const config = useRuntimeConfig()
 const { getImageUrl } = useImageUrl()
 

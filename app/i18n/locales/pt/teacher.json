@@ -625,7 +625,9 @@
               "ownership_transferred": "passou a propriedade da turma para {target}",
               "ownership_inherited": "a turma passou para {target} quando a conta que tinha a propriedade foi eliminada",
               "trashed": "enviou a turma para o lixo",
-              "restored": "tirou a turma do lixo"
+              "restored": "tirou a turma do lixo",
+              "template_recommended": "recomendou o modelo nos catálogos",
+              "template_unrecommended": "retirou a recomendação do modelo"
             },
             "teacher": {
               "added": "adicionou {target} ao corpo docente ({profile}, {access})",
@@ -1283,6 +1285,7 @@
         "province": "Todas as províncias"
       },
       "sort": {
+        "recommended": "Recomendados primeiro",
         "recent": "Mais recentes",
         "name_asc": "Nome A-Z",
         "name_desc": "Nome Z-A"

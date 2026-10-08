@@ -47,6 +47,7 @@ export const ROUTE_NAMES = {
   ADMIN_LOGS: '/admin/registros',
   ADMIN_HELP: '/admin/ayuda',
   ADMIN_BLOG: '/admin/blog',
+  ADMIN_TEMPLATES: '/admin/plantillas',
   ADMIN_SETTINGS: '/admin/configuracion',
   ADMIN_ABOUT: '/admin/acerca-de',
 } as const

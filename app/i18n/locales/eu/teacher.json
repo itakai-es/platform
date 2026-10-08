@@ -625,7 +625,9 @@
               "ownership_transferred": "klasearen jabetza {target} irakasleari eman dio",
               "ownership_inherited": "klasea {target} irakaslearena da orain, jabearen kontua ezabatu delako",
               "trashed": "klasea zakarrontzira bidali du",
-              "restored": "klasea zakarrontzitik atera du"
+              "restored": "klasea zakarrontzitik atera du",
+              "template_recommended": "txantiloia gomendatu du katalogoetan",
+              "template_unrecommended": "txantiloiaren gomendioa kendu du"
             },
             "teacher": {
               "added": "{target} irakasleen artean gehitu du ({profile}, {access})",
@@ -1283,6 +1285,7 @@
         "province": "Probintzia guztiak"
       },
       "sort": {
+        "recommended": "Gomendatuak lehenik",
         "recent": "Berrienak",
         "name_asc": "Izena A-Z",
         "name_desc": "Izena Z-A"

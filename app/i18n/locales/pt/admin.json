@@ -140,6 +140,25 @@
       "sort": {
         "students_desc": "Mais estudantes",
         "missions_desc": "Mais missões"
+      },
+      "tabs": {
+        "classes": "Turmas",
+        "trash": "Lixo",
+        "label": "Vistas de turmas"
+      },
+      "trash": {
+        "note": "As turmas que o corpo docente elimina ficam {days} dias no lixo antes de serem apagadas para sempre. Aqui estão as de toda a plataforma, para restaurar ou apagar já as que quem tem a sua propriedade não pode: por exemplo, se a sua conta estiver suspensa. Uma turma restaurada volta, arquivada, às turmas de quem tem a sua propriedade.",
+        "search_placeholder": "Procurar por turma, propriedade ou código...",
+        "empty_title": "Não há turmas no lixo",
+        "empty_description": "Quando alguém do corpo docente elimina uma turma, fica aqui {days} dias antes de ser apagada para sempre.",
+        "owner": "Propriedade: {name}",
+        "no_owner": "Sem ninguém com a sua propriedade",
+        "owner_unavailable": "Conta proprietária sem acesso",
+        "sent_by": "Enviada por {name} a {date}",
+        "sent_on": "Enviada para o lixo a {date}",
+        "warned": "Aviso de eliminação enviado a {date}",
+        "restored": "«{name}» saiu do lixo. Volta arquivada às turmas de quem tem a sua propriedade.",
+        "restore_error": "Não foi possível restaurar a turma. Tenta novamente."
       }
     },
     "missions": {
@@ -458,6 +477,29 @@
       "published_at_draft_hint": "Fica definida automaticamente quando publicares pela primeira vez.",
       "published_at_invalid": "Escolhe uma data entre 1 de janeiro de 2000 e hoje.",
       "view_public": "Ver o blogue"
+    },
+    "templates": {
+      "title": "Modelos",
+      "subtitle": "Recomenda os modelos que queiras destacar: aparecem primeiro nos catálogos, com o seu distintivo.",
+      "meta": {
+        "title": "Modelos | ITAKAI Admin"
+      },
+      "view_public": "Ver o catálogo",
+      "search_placeholder": "Pesquisar por modelo ou por quem o publicou…",
+      "filter_label": "Recomendação",
+      "filter_all": "Todos",
+      "filter_recommended": "Recomendados",
+      "filter_not_recommended": "Sem recomendação",
+      "empty_title": "Ainda não há modelos publicados",
+      "empty_description": "Quando o corpo docente publicar uma turma como modelo, aparecerá aqui para que o possas recomendar.",
+      "empty_filtered_title": "Nenhum modelo com estes filtros",
+      "empty_filtered_description": "Experimenta outra pesquisa ou retira o filtro.",
+      "published_by": "Publicado por {name}",
+      "recommend": "Recomendado",
+      "recommend_named": "Recomendar «{name}»",
+      "recommended_on": "«{name}» já aparece como recomendado",
+      "recommended_off": "«{name}» já não aparece como recomendado",
+      "save_error": "Não foi possível guardar. Tenta outra vez."
     }
   }
 }

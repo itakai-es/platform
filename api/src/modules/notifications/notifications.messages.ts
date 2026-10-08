@@ -207,6 +207,33 @@ export const NOTIFICATION_COPY = {
       ro: 'Clasa {class} este acum a ta.',
     },
   },
+  // Papelera de clases: a quien tiene la propiedad, unos días antes de la purga.
+  class_purge_soon: {
+    title: {
+      es: 'Una clase de tu papelera se borrará pronto',
+      en: 'A class in your trash will be deleted soon',
+      ca: 'Una classe de la teva paperera s\'esborrarà aviat',
+      val: 'Una classe de la teua paperera s\'esborrarà prompte',
+      eu: 'Zure zakarrontziko klase bat laster ezabatuko da',
+      gl: 'Unha clase da túa papeleira borrarase pronto',
+      ast: 'Una clase de la to papelera va borrase aína',
+      pt: 'Uma turma do teu lixo vai ser apagada em breve',
+      el: 'Μια τάξη στον κάδο σου θα διαγραφεί σύντομα',
+      ro: 'O clasă din coșul tău de gunoi se va șterge curând',
+    },
+    message: {
+      es: 'La clase «{class}» está en tu papelera y se borrará para siempre el {date}. Si quieres conservarla, restáurala antes desde la papelera.',
+      en: 'The class "{class}" is in your trash and will be deleted for good on {date}. If you want to keep it, restore it from the trash before then.',
+      ca: 'La classe «{class}» és a la teva paperera i s\'esborrarà per sempre el {date}. Si la vols conservar, restaura-la abans des de la paperera.',
+      val: 'La classe «{class}» està en la teua paperera i s\'esborrarà per sempre el {date}. Si la vols conservar, restaura-la abans des de la paperera.',
+      eu: '«{class}» klasea zure zakarrontzian dago, eta betiko ezabatuko da data honetan: {date}. Gorde nahi baduzu, leheneratu zakarrontzitik lehenago.',
+      gl: 'A clase «{class}» está na túa papeleira e borrarase para sempre o {date}. Se a queres conservar, restáuraa antes desde a papeleira.',
+      ast: 'La clase «{class}» ta na to papelera y va borrase pa siempre el {date}. Si la quies caltener, restáurala enantes dende la papelera.',
+      pt: 'A turma «{class}» está no teu lixo e será apagada para sempre a {date}. Se a quiseres manter, restaura-a antes a partir do lixo.',
+      el: 'Η τάξη «{class}» βρίσκεται στον κάδο σου και θα διαγραφεί οριστικά στις {date}. Αν θέλεις να την κρατήσεις, κάνε επαναφορά από τον κάδο πριν από τότε.',
+      ro: 'Clasa «{class}» este în coșul tău de gunoi și se va șterge definitiv pe {date}. Dacă vrei s-o păstrezi, restaureaz-o din coșul de gunoi înainte de această dată.',
+    },
+  },
 } as const satisfies Record<string, NotificationCopy>
 
 export type NotificationCopyKey = keyof typeof NOTIFICATION_COPY
@@ -319,6 +346,18 @@ export const EMAIL_ACTION_LABELS = {
     el: 'Άνοιγμα στο ITAKAI',
     ro: 'Deschide în ITAKAI',
   },
+  open_trash: {
+    es: 'Ver la papelera',
+    en: 'View the trash',
+    ca: 'Mostra la paperera',
+    val: 'Vore la paperera',
+    eu: 'Ikusi zakarrontzia',
+    gl: 'Ver a papeleira',
+    ast: 'Ver la papelera',
+    pt: 'Ver o lixo',
+    el: 'Προβολή του κάδου',
+    ro: 'Vezi coșul de gunoi',
+  },
 } as const satisfies Record<string, Translations>
 
 export type EmailActionKey = keyof typeof EMAIL_ACTION_LABELS
@@ -348,6 +387,36 @@ export const DEFAULT_LANGUAGE: AppLanguage = 'es'
  * de la propia aplicación, con su traducción a cada idioma.
  */
 export type NotificationParam = string | number | Translations
+
+/** Con qué convenciones se escribe una fecha en cada idioma de la aplicación. */
+const DATE_LOCALES: Record<AppLanguage, string> = {
+  es: 'es-ES',
+  en: 'en-GB',
+  ca: 'ca-ES',
+  val: 'ca-ES-valencia',
+  eu: 'eu-ES',
+  gl: 'gl-ES',
+  ast: 'ast-ES',
+  pt: 'pt-PT',
+  el: 'el-GR',
+  ro: 'ro-RO',
+}
+
+/**
+ * Una fecha como parámetro de un aviso, ya escrita en cada idioma («15 de
+ * octubre de 2026»). En hora de Madrid, como los demás correos: la plataforma
+ * es de centros de España.
+ */
+export function localizedDate(date: Date): Translations {
+  return Object.fromEntries(
+    Object.entries(DATE_LOCALES).map(([language, locale]) => [
+      language,
+      new Intl.DateTimeFormat(locale, { dateStyle: 'long', timeZone: 'Europe/Madrid' }).format(
+        date
+      ),
+    ])
+  ) as Translations
+}
 
 /** Sustituye `{parametro}` por su valor. Lo que no venga se deja tal cual. */
 export function interpolate(template: string, params: Record<string, string | number> = {}) {

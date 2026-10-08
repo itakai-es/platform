@@ -507,8 +507,12 @@
         "what_you_get_missions": "Importarla crea una clase nueva y tuya con la historia, la portada, las funcionalidades, la tienda y los comportamientos de la plantilla y, si quieres, con sus misiones.",
         "import_missions": "Importar también su misión | Importar también sus {count} misiones",
         "import_missions_hint": "Llegan sin fecha límite, sin documentos y sin insignias.",
-        "login_note": "Para importarla hace falta entrar con una cuenta docente.",
-        "teacher_only": "Para importarla hace falta una cuenta docente."
+        "login_note": "Entra o crea tu cuenta docente: al terminar, volverás aquí para importarla.",
+        "teacher_only": "Para importarla hace falta una cuenta docente.",
+        "ready_note": "Ya has entrado. Revisa lo que trae y pulsa «Importar» para tener tu propia copia.",
+        "pending_login": "Vienes de una plantilla: cuando entres con tu cuenta docente, te llevamos de vuelta para que la importes.",
+        "pending_signup": "Vienes de una plantilla: cuando crees tu cuenta y elijas el perfil docente, te llevamos de vuelta para que la importes.",
+        "not_for_role": "Las plantillas solo se pueden usar con una cuenta docente, así que no te hemos llevado a la que elegiste."
       },
       "gone": {
         "title": "Esta plantilla ya no está disponible",
@@ -521,7 +525,9 @@
       "meta": {
         "title": "Plantillas de clase · ITAKAI",
         "description": "Clases gamificadas que el profesorado ha publicado en ITAKAI para que cualquier docente parta de ellas."
-      }
+      },
+      "recommended": "Recomendada",
+      "copy_link_named": "Copiar el enlace de «{name}»"
     },
     "class_list": {
       "tab_active": "Activas",

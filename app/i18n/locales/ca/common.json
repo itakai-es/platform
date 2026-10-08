@@ -507,8 +507,12 @@
         "what_you_get_missions": "Importar-la crea una classe nova i teva amb la història, la portada, les funcionalitats, la botiga i els comportaments de la plantilla i, si vols, amb les seves missions.",
         "import_missions": "Importar també la seva missió | Importar també les seves {count} missions",
         "import_missions_hint": "Arriben sense data límit, sense documents i sense insígnies.",
-        "login_note": "Per importar-la cal entrar amb un compte docent.",
-        "teacher_only": "Per importar-la cal un compte docent."
+        "login_note": "Entra o crea el teu compte docent: quan acabis, tornaràs aquí per importar-la.",
+        "teacher_only": "Per importar-la cal un compte docent.",
+        "ready_note": "Ja has entrat. Revisa què porta i prem «Importa» per tenir-ne la teva pròpia còpia.",
+        "pending_login": "Véns d'una plantilla: quan entris amb el teu compte docent, et tornarem a portar-hi perquè la importis.",
+        "pending_signup": "Véns d'una plantilla: quan creïs el teu compte i triïs el perfil docent, et tornarem a portar-hi perquè la importis.",
+        "not_for_role": "Les plantilles només es poden fer servir amb un compte docent, així que no t'hem portat a la que vas triar."
       },
       "gone": {
         "title": "Aquesta plantilla ja no està disponible",
@@ -521,7 +525,9 @@
       "meta": {
         "title": "Plantilles de classe · ITAKAI",
         "description": "Classes gamificades que el professorat ha publicat a ITAKAI perquè qualsevol docent en parteixi."
-      }
+      },
+      "recommended": "Recomanada",
+      "copy_link_named": "Copia l'enllaç de «{name}»"
     },
     "class_list": {
       "tab_active": "Actives",

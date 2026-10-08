@@ -625,7 +625,9 @@
               "ownership_transferred": "pasó la propiedad de la clase a {target}",
               "ownership_inherited": "la clase pasó a {target} al eliminarse la cuenta que tenía su propiedad",
               "trashed": "envió la clase a la papelera",
-              "restored": "sacó la clase de la papelera"
+              "restored": "sacó la clase de la papelera",
+              "template_recommended": "recomendó la plantilla en los catálogos",
+              "template_unrecommended": "quitó la recomendación de la plantilla"
             },
             "teacher": {
               "added": "añadió a {target} al profesorado ({profile}, {access})",
@@ -1283,6 +1285,7 @@
         "province": "Todas las provincias"
       },
       "sort": {
+        "recommended": "Recomendadas primero",
         "recent": "Más recientes",
         "name_asc": "Nombre A-Z",
         "name_desc": "Nombre Z-A"

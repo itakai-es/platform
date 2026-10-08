@@ -625,7 +625,9 @@
               "ownership_transferred": "handed over the class to {target}",
               "ownership_inherited": "the class passed to {target} when its owner's account was deleted",
               "trashed": "moved the class to the trash",
-              "restored": "restored the class from the trash"
+              "restored": "restored the class from the trash",
+              "template_recommended": "recommended the template in the catalogues",
+              "template_unrecommended": "removed the template’s recommendation"
             },
             "teacher": {
               "added": "added {target} to the teachers ({profile}, {access})",
@@ -1283,6 +1285,7 @@
         "province": "All provinces"
       },
       "sort": {
+        "recommended": "Recommended first",
         "recent": "Most recent",
         "name_asc": "Name A-Z",
         "name_desc": "Name Z-A"

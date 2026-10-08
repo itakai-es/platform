@@ -15,6 +15,9 @@ import {
   resetManagedStudentPassword,
 } from '../teachers/managed-students.service.js'
 import { listClassTeachers, transferClass } from '../teachers/class-teachers.service.js'
+import { classDeletionImpact, restoreClass } from '../teachers/class-trash.service.js'
+import { purgeClassNow } from '../teachers/class-purge.service.js'
+import { setTemplateRecommended } from '../templates/templates.service.js'
 import {
   AccountDeletionBlockedError,
   accountDeletionCheck,
@@ -23,10 +26,14 @@ import {
 import {
   adminUserCard,
   classListQuerySchema,
+  classTrashListQuerySchema,
+  listAdminClassTrash,
   listAdminClasses,
   listAdminMissions,
   listAdminUsers,
+  listAdminTemplates,
   missionListQuerySchema,
+  templateListQuerySchema,
   userListQuerySchema,
 } from './admin-lists.service.js'
 
@@ -44,6 +51,8 @@ const createManagedUserSchema = z.object({
 const transferClassSchema = z.object({
   userId: z.string().min(1, 'Elige a quién pasar la clase'),
 })
+
+const recommendTemplateSchema = z.object({ recommended: z.boolean() })
 
 type ServiceStatus = 'operational' | 'degraded' | 'down'
 
@@ -657,6 +666,55 @@ export async function adminRoutes(fastify: FastifyInstance) {
       const admin = request.user as { id: string; role: string }
       const { userId } = transferClassSchema.parse(request.body)
       return transferClass(admin, request.params.classId, userId)
+    }
+  )
+
+  // Papelera de clases de toda la instancia, de respaldo: lo que quien tiene la
+  // propiedad no puede (o ya no puede) hacer. Restaurar y borrar ya son las
+  // mismas rutinas que las del profesorado; quedan apuntadas en el registro
+  // de la clase y en el del sistema como hechas por la administración.
+  fastify.get('/classes/trash', async (request: FastifyRequest<{ Querystring: Record<string, string> }>) =>
+    listAdminClassTrash(classTrashListQuerySchema.parse(request.query))
+  )
+
+  fastify.get(
+    '/classes/:classId/deletion-impact',
+    async (request: FastifyRequest<{ Params: { classId: string } }>) => {
+      const admin = request.user as { id: string; role: string }
+      return classDeletionImpact(admin, request.params.classId)
+    }
+  )
+
+  fastify.post(
+    '/classes/:classId/restore',
+    async (request: FastifyRequest<{ Params: { classId: string } }>) => {
+      const admin = request.user as { id: string; role: string }
+      return restoreClass(admin, request.params.classId)
+    }
+  )
+
+  fastify.post(
+    '/classes/:classId/purge',
+    async (request: FastifyRequest<{ Params: { classId: string } }>) => {
+      const admin = request.user as { id: string; role: string }
+      return purgeClassNow(admin, request.params.classId)
+    }
+  )
+
+  // Plantillas del catálogo, una página cada vez, para recomendarlas (ver
+  // admin-lists.service.ts). Es lo único del panel que dice quién publicó cada una.
+  fastify.get('/templates', async (request: FastifyRequest<{ Querystring: Record<string, string> }>) =>
+    listAdminTemplates(templateListQuerySchema.parse(request.query))
+  )
+
+  // Marca una plantilla como recomendada o le quita la marca. Sale primero en
+  // los catálogos con su distintivo (ver templates.service.ts).
+  fastify.patch(
+    '/templates/:classId/recommend',
+    async (request: FastifyRequest<{ Params: { classId: string } }>) => {
+      const admin = request.user as { id: string }
+      const { recommended } = recommendTemplateSchema.parse(request.body)
+      return setTemplateRecommended(admin.id, request.params.classId, recommended)
     }
   )
 

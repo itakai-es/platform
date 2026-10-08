@@ -140,6 +140,25 @@
       "sort": {
         "students_desc": "Más estudiantes",
         "missions_desc": "Más misiones"
+      },
+      "tabs": {
+        "classes": "Clases",
+        "trash": "Papelera",
+        "label": "Vistes de clases"
+      },
+      "trash": {
+        "note": "Les clases que desanicia'l profesoráu pasen {days} díes na papelera enantes de borrase pa siempre. Equí tán les de tola plataforma, pa restaurar o borrar yá les que quien tien la so propiedá nun pue: por exemplu, si la so cuenta ta suspendida. Una clase restaurada vuelve, archivada, a les clases de quien tien la so propiedá.",
+        "search_placeholder": "Guetar per clase, propiedá o códigu...",
+        "empty_title": "Nun hai clases na papelera",
+        "empty_description": "Cuando daquién del profesoráu desanicia una clase, pasa equí {days} díes enantes de borrase pa siempre.",
+        "owner": "Propiedá: {name}",
+        "no_owner": "Ensin naide cola so propiedá",
+        "owner_unavailable": "Cuenta propietaria ensin accesu",
+        "sent_by": "Unviola {name} el {date}",
+        "sent_on": "Unviada a la papelera el {date}",
+        "warned": "Avisu de borráu unviáu el {date}",
+        "restored": "«{name}» salió de la papelera. Vuelve archivada a les clases de quien tien la so propiedá.",
+        "restore_error": "Nun se pudo restaurar la clase. Vuelvi tentalo."
       }
     },
     "missions": {
@@ -458,6 +477,29 @@
       "published_at_draft_hint": "Ponse sola al publicar la entrada per primer vegada.",
       "published_at_invalid": "Escueyi una data ente'l 1 de xineru de 2000 y güei.",
       "view_public": "Ver el blog"
+    },
+    "templates": {
+      "title": "Plantíes",
+      "subtitle": "Recomienda les plantíes que quieras destacar: salen primero nos catálogos, col so distintivu.",
+      "meta": {
+        "title": "Plantíes | ITAKAI Admin"
+      },
+      "view_public": "Ver el catálogu",
+      "search_placeholder": "Buscar por plantía o por quien la publicó…",
+      "filter_label": "Recomendación",
+      "filter_all": "Toes",
+      "filter_recommended": "Recomendaes",
+      "filter_not_recommended": "Ensin recomendar",
+      "empty_title": "Entá nun hai plantíes publicaes",
+      "empty_description": "Cuando el profesoráu publique una clase como plantía, va apaecer equí pa que la puedas recomendar.",
+      "empty_filtered_title": "Nenguna plantía con estos filtros",
+      "empty_filtered_description": "Prueba con otra busca o quita'l filtru.",
+      "published_by": "Publicada por {name}",
+      "recommend": "Recomendada",
+      "recommend_named": "Recomendar «{name}»",
+      "recommended_on": "«{name}» yá sal como recomendada",
+      "recommended_off": "«{name}» yá nun sal como recomendada",
+      "save_error": "Nun se pudo guardar. Inténtalo otra vegada."
     }
   }
 }

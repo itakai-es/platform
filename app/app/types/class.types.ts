@@ -157,7 +157,8 @@ export interface Class {
 }
 
 /** Una clase en la papelera, tal como la lista `GET /teacher/classes/trash`. */
-export interface TrashedClass {
+/** Lo que pinta una fila de la papelera (`ClassTrashList`), sea propia o de toda la instancia. */
+export interface ClassTrashListItem {
   id: string
   name: string
   backgroundImage?: string | null
@@ -166,6 +167,9 @@ export interface TrashedClass {
   purgeAt: string
   /** Días que le quedan, redondeando hacia arriba; 0 si ya le toca. */
   daysLeft: number
+}
+
+export interface TrashedClass extends ClassTrashListItem {
   /** Quién la envió; nulo si su cuenta ya no existe. */
   deletedBy: { isMe: boolean; name: string | null } | null
 }

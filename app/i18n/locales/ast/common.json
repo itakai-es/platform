@@ -507,8 +507,12 @@
         "what_you_get_missions": "Importala crea una clase nueva y tuya cola hestoria, la portada, les funcionalidaes, la tienda y los comportamientos de la plantía y, si quies, coles sos misiones.",
         "import_missions": "Importar tamién la so misión | Importar tamién les sos {count} misiones",
         "import_missions_hint": "Lleguen ensin data llende, ensin documentos y ensin insinies.",
-        "login_note": "Pa importala tienes d'entrar con una cuenta docente.",
-        "teacher_only": "Pa importala fai falta una cuenta docente."
+        "login_note": "Entra o crea la to cuenta docente: al acabar, vas volver equí pa importala.",
+        "teacher_only": "Pa importala fai falta una cuenta docente.",
+        "ready_note": "Yá entrasti. Revisa lo que trai y primi «Importar» pa tener la to propia copia.",
+        "pending_login": "Vienes d'una plantía: cuando entres cola to cuenta docente, llevámoste de vuelta pa que la importes.",
+        "pending_signup": "Vienes d'una plantía: cuando crees la to cuenta y escueyas el perfil docente, llevámoste de vuelta pa que la importes.",
+        "not_for_role": "Les plantíes namás se puen usar con una cuenta docente, asina que nun te llevamos a la qu'escoyisti."
       },
       "gone": {
         "title": "Esta plantía yá nun ta disponible",
@@ -521,7 +525,9 @@
       "meta": {
         "title": "Plantíes de clase · ITAKAI",
         "description": "Clases gamificaes que'l profesoráu publicó n'ITAKAI pa que cualquier docente parta d'elles."
-      }
+      },
+      "recommended": "Recomendada",
+      "copy_link_named": "Copiar l'enllaz de «{name}»"
     },
     "class_list": {
       "tab_active": "Actives",

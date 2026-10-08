@@ -625,7 +625,9 @@
               "ownership_transferred": "va passar la propietat de la classe a {target}",
               "ownership_inherited": "la classe va passar a {target} en eliminar-se el compte que en tenia la propietat",
               "trashed": "va enviar la classe a la paperera",
-              "restored": "va treure la classe de la paperera"
+              "restored": "va treure la classe de la paperera",
+              "template_recommended": "va recomanar la plantilla als catàlegs",
+              "template_unrecommended": "va treure la recomanació de la plantilla"
             },
             "teacher": {
               "added": "va afegir {target} al professorat ({profile}, {access})",
@@ -1283,6 +1285,7 @@
         "province": "Totes les províncies"
       },
       "sort": {
+        "recommended": "Recomanades primer",
         "recent": "Més recents",
         "name_asc": "Nom A-Z",
         "name_desc": "Nom Z-A"

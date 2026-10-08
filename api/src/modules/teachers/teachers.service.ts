@@ -202,7 +202,7 @@ function assertNotInTrash(cls: { deletedAt: Date | null }, message: string) {
 async function updateOutsideTrash(
   tx: Prisma.TransactionClient,
   classId: string,
-  data: Prisma.ClassUpdateManyMutationInput,
+  data: Prisma.ClassUncheckedUpdateManyInput,
   message: string
 ) {
   const { count } = await tx.class.updateMany({ where: { id: classId, deletedAt: null }, data })
@@ -537,8 +537,16 @@ export class TeachersService {
 
     await prisma.$transaction(async tx => {
       // Condicionado a que siga fuera de la papelera: si la envían a la vez, gana
-      // la papelera y no queda publicada dentro de ella.
-      await updateOutsideTrash(tx, classId, { isTemplate: publish }, TEMPLATE_IN_TRASH)
+      // la papelera y no queda publicada dentro de ella. Retirarla le quita la
+      // recomendación, que no vuelve sola al publicarla otra vez.
+      await updateOutsideTrash(
+        tx,
+        classId,
+        publish
+          ? { isTemplate: true }
+          : { isTemplate: false, recommendedAt: null, recommendedById: null },
+        TEMPLATE_IN_TRASH
+      )
       await recordClassAction(tx, {
         classId,
         actorId: userId,
@@ -552,7 +560,8 @@ export class TeachersService {
 
   /** Lista las plantillas públicas del marketplace, con filtros opcionales. La
    *  consulta y la lectura de los filtros viven con las del catálogo público
-   *  (ver modules/templates); aquí, sin paginar: hasta 100. */
+   *  (ver modules/templates); aquí, sin paginar: hasta 100, las recomendadas
+   *  primero. Los otros órdenes los aplica la pantalla, con `updatedAt`. */
   async listTemplates(userId: string, filters: TemplateFilters = {}) {
     const templates = await findTemplates(filters, 100, userId)
 
@@ -569,6 +578,8 @@ export class TeachersService {
         teacherName: t.teacherName,
         missionCount: t._count.missions,
         isOwn: t.isOwn,
+        recommended: t.recommendedAt !== null,
+        updatedAt: t.updatedAt,
       })),
       total: templates.length,
     }
@@ -590,6 +601,7 @@ export class TeachersService {
       backgroundImage: tpl.backgroundImage,
       teacherName: tpl.teacherName,
       isOwn: tpl.isOwn,
+      recommended: tpl.recommendedAt !== null,
       settings: tpl.settings,
       shopItems: tpl.shopItems,
       behaviorTemplates: tpl.behaviorTemplates,

@@ -16,14 +16,20 @@ import type {
   AdminClass,
   AdminClassFilters,
   PaginatedClassesResponse,
+  AdminTrashedClass,
+  PaginatedClassTrashResponse,
   AdminMission,
   AdminMissionFilters,
   PaginatedMissionsResponse,
+  AdminTemplate,
+  AdminTemplateFilters,
+  PaginatedTemplatesResponse,
   AdminListQuery,
   AnalyticsData,
 } from '~/types/admin.types'
 import type { AccountDeletionCheck } from '~/types/profile.types'
 import type { ManagedCredentials } from '~/types/auth.types'
+import type { ClassDeletionImpact } from '~/types/class.types'
 
 /** Lo que comparten las respuestas de los listados que pagina el servidor. */
 interface PaginatedResponse {
@@ -64,12 +70,28 @@ export const useAdminStore = defineStore('admin', () => {
   const classesTotalPages = ref(1)
   const isLoadingClasses = ref(true)
 
+  // Papelera de clases de toda la instancia
+  const trashedClasses = ref<AdminTrashedClass[]>([])
+  const totalTrashedClasses = ref(0)
+  const trashedClassesPage = ref(1)
+  const trashedClassesTotalPages = ref(1)
+  const isLoadingTrashedClasses = ref(true)
+  const hasLoadedTrashedClasses = ref(false)
+
   // Missions state
   const missions = ref<AdminMission[]>([])
   const totalMissions = ref(0)
   const missionsPage = ref(1)
   const missionsTotalPages = ref(1)
   const isLoadingMissions = ref(true)
+
+  // Templates state (las del catálogo, para recomendarlas)
+  const templates = ref<AdminTemplate[]>([])
+  const totalTemplates = ref(0)
+  const templatesPage = ref(1)
+  const templatesTotalPages = ref(1)
+  const isLoadingTemplates = ref(true)
+  const hasLoadedTemplates = ref(false)
 
   // Settings state
   const settings = ref<SystemSettings | null>(null)
@@ -685,6 +707,71 @@ export const useAdminStore = defineStore('admin', () => {
   }
 
   // =========================================================================
+  // Papelera de clases (respaldo de la administración)
+  // =========================================================================
+
+  const trashedClassesList = pagedList<
+    AdminTrashedClass,
+    AdminListQuery,
+    PaginatedClassTrashResponse
+  >({
+    path: '/admin/classes/trash',
+    items: trashedClasses,
+    total: totalTrashedClasses,
+    page: trashedClassesPage,
+    totalPages: trashedClassesTotalPages,
+    loading: isLoadingTrashedClasses,
+    loaded: hasLoadedTrashedClasses,
+    pick: response => response.classes,
+    errorMessage: 'Error al cargar la papelera',
+  })
+  const ensureTrashedClasses = trashedClassesList.ensure
+
+  /** Lo que se perdería al borrar ya una clase de la papelera, para el aviso. */
+  async function fetchClassDeletionImpact(classId: string) {
+    const config = useRuntimeConfig()
+    return await $fetch<ClassDeletionImpact>(
+      `${config.public.apiBase}/admin/classes/${classId}/deletion-impact`
+    )
+  }
+
+  /**
+   * Quita de la página de la papelera una clase que ya no está en ella y pide
+   * otra vez esa página (la siguiente sube a ocupar su sitio).
+   */
+  function dropTrashedClass(classId: string) {
+    trashedClasses.value = trashedClasses.value.filter(c => c.id !== classId)
+    totalTrashedClasses.value = Math.max(0, totalTrashedClasses.value - 1)
+    void trashedClassesList.refresh()
+  }
+
+  /**
+   * Saca de la papelera una clase de cualquiera: vuelve archivada. Se pide
+   * otra vez también la página de clases, donde reaparece.
+   */
+  async function restoreTrashedClass(classId: string) {
+    const config = useRuntimeConfig()
+    const response = await $fetch<{ class: { id: string; name: string; archived: boolean } }>(
+      `${config.public.apiBase}/admin/classes/${classId}/restore`,
+      { method: 'POST' }
+    )
+    dropTrashedClass(classId)
+    void classesList.refresh()
+    return response.class
+  }
+
+  /** Borra ya, para siempre, una clase de la papelera de cualquiera. */
+  async function purgeTrashedClass(classId: string) {
+    const config = useRuntimeConfig()
+    const response = await $fetch<{ purged: true; classId: string }>(
+      `${config.public.apiBase}/admin/classes/${classId}/purge`,
+      { method: 'POST' }
+    )
+    dropTrashedClass(classId)
+    return response
+  }
+
+  // =========================================================================
   // Missions Actions
   // =========================================================================
 
@@ -701,6 +788,38 @@ export const useAdminStore = defineStore('admin', () => {
   })
   const fetchAllMissions = missionsList.fetch
   const ensureAllMissions = missionsList.ensure
+
+  // =========================================================================
+  // Templates Actions
+  // =========================================================================
+
+  const templatesList = pagedList<AdminTemplate, AdminTemplateFilters, PaginatedTemplatesResponse>({
+    path: '/admin/templates',
+    items: templates,
+    total: totalTemplates,
+    page: templatesPage,
+    totalPages: templatesTotalPages,
+    loading: isLoadingTemplates,
+    loaded: hasLoadedTemplates,
+    pick: response => response.templates,
+    errorMessage: 'Error al cargar las plantillas',
+  })
+  const ensureTemplates = templatesList.ensure
+
+  /**
+   * Marca la plantilla `id` como recomendada o le quita la marca, y la deja así
+   * en el listado. Si falla, lanza: quien la cambia avisa y la deja como estaba.
+   */
+  async function setTemplateRecommended(id: string, recommended: boolean) {
+    const config = useRuntimeConfig()
+    const response = await $fetch<{ recommended: boolean; recommendedAt: string | null }>(
+      `${config.public.apiBase}/admin/templates/${id}/recommend`,
+      { method: 'PATCH', body: { recommended } }
+    )
+    const row = templates.value.find(tpl => tpl.id === id)
+    if (row) Object.assign(row, response)
+    return response
+  }
 
   // =========================================================================
   // Analytics Actions
@@ -747,7 +866,19 @@ export const useAdminStore = defineStore('admin', () => {
     activities.value = []
     services.value = []
     classes.value = []
+    trashedClasses.value = []
+    totalTrashedClasses.value = 0
+    trashedClassesPage.value = 1
+    trashedClassesTotalPages.value = 1
+    isLoadingTrashedClasses.value = false
+    hasLoadedTrashedClasses.value = false
     missions.value = []
+    templates.value = []
+    totalTemplates.value = 0
+    templatesPage.value = 1
+    templatesTotalPages.value = 1
+    isLoadingTemplates.value = false
+    hasLoadedTemplates.value = false
     settings.value = null
     analytics.value = null
     selectedUser.value = null
@@ -820,9 +951,17 @@ export const useAdminStore = defineStore('admin', () => {
     totalClasses,
     classesPage,
     classesTotalPages,
+    trashedClasses,
+    totalTrashedClasses,
+    trashedClassesTotalPages,
+    isLoadingTrashedClasses,
     totalMissions,
     missionsPage,
     missionsTotalPages,
+    templates,
+    totalTemplates,
+    templatesTotalPages,
+    isLoadingTemplates,
     // Loading
     isLoadingStats,
     isLoadingUsers,
@@ -868,6 +1007,9 @@ export const useAdminStore = defineStore('admin', () => {
     updateSettings,
     fetchAllClasses,
     searchClasses,
+    fetchClassDeletionImpact,
+    restoreTrashedClass,
+    purgeTrashedClass,
     fetchAllMissions,
     fetchAnalytics,
     // Actions (ensureX - patron canonico con cache)
@@ -879,7 +1021,10 @@ export const useAdminStore = defineStore('admin', () => {
     ensureSystemLogs,
     ensureSettings,
     ensureAllClasses,
+    ensureTrashedClasses,
     ensureAllMissions,
+    ensureTemplates,
+    setTemplateRecommended,
     ensureAnalytics,
     ensureServices,
     clearError,

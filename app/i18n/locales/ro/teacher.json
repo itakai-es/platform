@@ -625,7 +625,9 @@
               "ownership_transferred": "a transferat proprietatea clasei către {target}",
               "ownership_inherited": "clasa a trecut la {target} când a fost șters contul care o deținea",
               "trashed": "a mutat clasa în coșul de gunoi",
-              "restored": "a scos clasa din coșul de gunoi"
+              "restored": "a scos clasa din coșul de gunoi",
+              "template_recommended": "a recomandat șablonul în cataloage",
+              "template_unrecommended": "a retras recomandarea șablonului"
             },
             "teacher": {
               "added": "a adăugat {target} în echipa didactică ({profile}, {access})",
@@ -1283,6 +1285,7 @@
         "province": "Toate provinciile"
       },
       "sort": {
+        "recommended": "Întâi cele recomandate",
         "recent": "Cele mai recente",
         "name_asc": "Nume A-Z",
         "name_desc": "Nume Z-A"

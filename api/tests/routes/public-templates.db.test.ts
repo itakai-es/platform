@@ -59,6 +59,7 @@ const CARD_KEYS = [
   'missionCount',
   'name',
   'province',
+  'recommended',
   'shopItemCount',
   'subject',
 ]
@@ -76,6 +77,7 @@ const DETAIL_KEYS = [
   'name',
   'narrative',
   'province',
+  'recommended',
   'shopItemCount',
   'shopItems',
   'subject',
@@ -96,7 +98,10 @@ const BEHAVIOR_KEYS = ['coinDelta', 'description', 'kind', 'lifeDelta', 'name', 
 /** Lo que no puede salir nunca en público. */
 const PRIVATE_KEYS = ['isOwn', 'teacherName', 'teacherId', 'teacher', 'settings']
 
-/** Lo que devuelve el catálogo del profesorado, como antes del catálogo público. */
+/**
+ * Lo que devuelve el catálogo del profesorado, como antes del catálogo público,
+ * más si está recomendada y cuándo se tocó (para ordenar en la pantalla).
+ */
 const TEACHER_CARD_KEYS = [
   'backgroundImage',
   'educationLevel',
@@ -107,8 +112,10 @@ const TEACHER_CARD_KEYS = [
   'name',
   'narrative',
   'province',
+  'recommended',
   'subject',
   'teacherName',
+  'updatedAt',
 ]
 const TEACHER_DETAIL_KEYS = [
   'backgroundImage',
@@ -118,6 +125,7 @@ const TEACHER_DETAIL_KEYS = [
   'missions',
   'name',
   'narrative',
+  'recommended',
   'settings',
   'shopItems',
   'teacherName',
@@ -655,6 +663,8 @@ describeWithDatabase('catálogo público de plantillas', () => {
     expect(await order('name-asc')).toEqual(byName)
     expect(await order('name-desc')).toEqual([...byName].reverse())
 
+    // Sin ninguna recomendada, el de por defecto (recomendadas primero) es el de
+    // las últimas tocadas (ver template-recommended.db.test.ts).
     const recent = await order()
     expect(recent).toHaveLength(5)
     expect(await order('recent')).toEqual(recent)
@@ -716,6 +726,7 @@ describeWithDatabase('catálogo público de plantillas', () => {
       educationLevel: 'Educación Secundaria (ESO)',
       language: 'Castellano',
       province: 'Valencia',
+      recommended: false,
       features: {
         shop: true,
         coins: true,
@@ -998,6 +1009,8 @@ describeWithDatabase('catálogo público de plantillas', () => {
       teacherName: ownerName,
       missionCount: 2,
       isOwn: false,
+      recommended: false,
+      updatedAt: expect.any(String),
     })
 
     const asOwner = (await get(`/teacher/templates?q=${tag}`, { actor: 'owner' })).json()

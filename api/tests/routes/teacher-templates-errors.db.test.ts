@@ -155,6 +155,7 @@ describeWithDatabase('catálogo de plantillas del profesorado: consulta laxa y e
     const body = (await list({})).json()
     expect(Object.keys(body).sort()).toEqual(['templates', 'total'])
     const card = body.templates.find((tpl: { id: string }) => tpl.id === ids.maths)
+    // Las de siempre, más si está recomendada y cuándo se tocó (con eso ordena la pantalla).
     expect(Object.keys(card).sort()).toEqual(
       [
         'backgroundImage',
@@ -166,8 +167,10 @@ describeWithDatabase('catálogo de plantillas del profesorado: consulta laxa y e
         'name',
         'narrative',
         'province',
+        'recommended',
         'subject',
         'teacherName',
+        'updatedAt',
       ].sort()
     )
   })

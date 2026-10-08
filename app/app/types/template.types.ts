@@ -12,8 +12,11 @@ import type { ClassSettings } from './class.types'
 import type { MissionRarity } from './mission.types'
 import type { ShopItemKind, ShopItemUsage } from '~/stores/shop'
 
-/** Los órdenes del catálogo; los dos catálogos ofrecen los mismos. */
-export type TemplateSort = 'recent' | 'name-asc' | 'name-desc'
+/**
+ * Los órdenes del catálogo; los dos catálogos ofrecen los mismos. El de serie,
+ * `recommended`: las recomendadas primero y después las demás, como en `recent`.
+ */
+export type TemplateSort = 'recommended' | 'recent' | 'name-asc' | 'name-desc'
 
 /** Los metadatos educativos por los que se filtra y que enseñan tarjeta y ficha. */
 export interface TemplateMeta {
@@ -28,6 +31,8 @@ export interface TemplateCardData extends TemplateMeta {
   id: string
   name: string
   backgroundImage: string | null
+  /** La ha recomendado la administración: lleva el distintivo. Ni quién ni cuándo. */
+  recommended?: boolean
 }
 
 /** Lo que pinta la historia de una plantilla: su portada y su narrativa. */
@@ -132,6 +137,8 @@ export interface TeacherTemplateDetail extends TemplateStory, TemplateContents {
   teacherName: string
   /** La publicó quien mira: no la importa, ya es suya. */
   isOwn: boolean
+  /** La ha recomendado la administración. */
+  recommended: boolean
   settings: Partial<ClassSettings> | null
   shopItems: (TemplateShopItem & { id: string })[]
   behaviorTemplates: (TemplateBehavior & { id: string })[]

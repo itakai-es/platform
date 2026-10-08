@@ -625,7 +625,9 @@
               "ownership_transferred": "pasoulle a propiedade da clase a {target}",
               "ownership_inherited": "a clase pasou a {target} ao eliminarse a conta que tiña a súa propiedade",
               "trashed": "enviou a clase á papeleira",
-              "restored": "sacou a clase da papeleira"
+              "restored": "sacou a clase da papeleira",
+              "template_recommended": "recomendou o modelo nos catálogos",
+              "template_unrecommended": "quitou a recomendación do modelo"
             },
             "teacher": {
               "added": "engadiu a {target} ao profesorado ({profile}, {access})",
@@ -1283,6 +1285,7 @@
         "province": "Todas as provincias"
       },
       "sort": {
+        "recommended": "Recomendados primeiro",
         "recent": "Máis recentes",
         "name_asc": "Nome A-Z",
         "name_desc": "Nome Z-A"

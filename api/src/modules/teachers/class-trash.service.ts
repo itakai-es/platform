@@ -7,6 +7,7 @@ import {
   type ClassUser,
 } from '../../utils/class-access.js'
 import { ConflictError, NotFoundError } from '../../utils/errors.js'
+import { createSystemLog } from '../admin/system-log.service.js'
 import { UNUSED_ACCOUNT_SELECT, unusedAccountHomeClass } from './class-students.service.js'
 
 /**
@@ -40,14 +41,14 @@ export function trashDaysLeft(deletedAt: Date, now = new Date()): number {
   return Math.max(0, Math.ceil((trashPurgeAt(deletedAt).getTime() - now.getTime()) / DAY_MS))
 }
 
-/** Lo que se cuenta de una clase en la papelera. */
-function trashEntry(cls: { id: string; name: string; deletedAt: Date }) {
+/** Lo que se cuenta de una clase en la papelera (también en la de administración). */
+export function trashEntry(cls: { id: string; name: string; deletedAt: Date }, now = new Date()) {
   return {
     id: cls.id,
     name: cls.name,
     deletedAt: cls.deletedAt,
     purgeAt: trashPurgeAt(cls.deletedAt),
-    daysLeft: trashDaysLeft(cls.deletedAt),
+    daysLeft: trashDaysLeft(cls.deletedAt, now),
   }
 }
 
@@ -68,7 +69,17 @@ export async function trashClass(actor: ClassUser, classId: string) {
     // Condicionado a que no esté ya en la papelera: dos envíos a la vez dejan uno.
     const { count } = await tx.class.updateMany({
       where: { id: classId, deletedAt: null },
-      data: { deletedAt, deletedById: actor.id, archived: true, isTemplate: false },
+      // Retirada del marketplace, también sin la recomendación: no vuelve sola.
+      data: {
+        deletedAt,
+        deletedById: actor.id,
+        archived: true,
+        isTemplate: false,
+        recommendedAt: null,
+        recommendedById: null,
+        // Un envío nuevo, un aviso nuevo antes de la purga (ver class-trash.jobs.ts).
+        trashWarnedAt: null,
+      },
     })
     if (count === 0) {
       throw new ConflictError('La clase ya está en la papelera', 'CLASS_IN_TRASH')
@@ -104,19 +115,46 @@ export async function restoreClass(actor: ClassUser, classId: string) {
       where: { id: classId, deletedAt: { not: null } },
       // También sin publicar: si una publicación se coló a la vez que el envío, no
       // vuelve al marketplace al desarchivarla.
-      data: { deletedAt: null, deletedById: null, archived: true, isTemplate: false },
+      data: {
+        deletedAt: null,
+        deletedById: null,
+        archived: true,
+        isTemplate: false,
+        trashWarnedAt: null,
+      },
     })
     if (count === 0) {
       throw new ConflictError('La clase no está en la papelera', 'CLASS_NOT_IN_TRASH')
     }
+    // El aviso de que se borraba pronto ya no es verdad. Quitarlo deja además
+    // libre su clave: si vuelve a la papelera, se avisa de nuevo.
+    await tx.notification.deleteMany({
+      where: { type: 'class_purge_soon', metadata: { path: ['classId'], equals: classId } },
+    })
+    const byPlatformAdmin = !access?.isOwner
     await recordClassAction(tx, {
       classId,
       actorId: actor.id,
       action: 'class.restored',
       entityType: 'class',
       entityId: classId,
-      ...(access?.isOwner ? {} : { metadata: { byPlatformAdmin: true } }),
+      ...(byPlatformAdmin ? { metadata: { byPlatformAdmin: true } } : {}),
     })
+    // Lo que hace la administración en una clase ajena queda también en el
+    // registro del sistema, que no se va con la clase si un día se purga.
+    if (byPlatformAdmin) {
+      await createSystemLog(
+        {
+          level: 'info',
+          category: 'maintenance',
+          title: 'Clase restaurada desde administración',
+          message: 'La administración de la instancia ha sacado una clase de la papelera.',
+          service: 'class-trash',
+          metadata: { classId, actorId: actor.id },
+        },
+        tx
+      )
+    }
     return tx.class.findUniqueOrThrow({
       where: { id: classId },
       select: { id: true, name: true, archived: true, isTemplate: true },
