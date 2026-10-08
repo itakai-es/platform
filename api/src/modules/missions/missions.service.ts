@@ -316,6 +316,20 @@ export class MissionsService {
       }
     }
 
+    // Si llegó importada de otra clase (copiarla en la suya es duplicarla, no
+    // importarla): solo entonces se ofrece adaptarla con IA a esta clase.
+    const importedFromOtherClass = canEdit
+      ? (
+          await prisma.classActionLog.findMany({
+            where: { classId: mission.classId, action: 'mission.imported', entityId: missionId },
+            select: { metadata: true },
+          })
+        ).some(row => {
+          const from = (row.metadata as { fromClassId?: unknown } | null)?.fromClassId
+          return typeof from === 'string' && from !== mission.classId
+        })
+      : false
+
     // For students, get their submissions separately to ensure we have them
     let studentSubmissionsMap = new Map<string, { status: string }>()
     if (!isTeacher) {
@@ -354,6 +368,8 @@ export class MissionsService {
         isTeacher,
         // Si quien la mira como profesor puede cambiarla (con lectura, solo la ve).
         canEdit,
+        // Llegó importada de otra clase (ver arriba).
+        importedFromOtherClass,
         progress: {
           done: progress?.enigmasCompleted || 0,
           total: mission.enigmas.length,

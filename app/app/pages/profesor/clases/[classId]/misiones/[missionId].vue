@@ -288,10 +288,15 @@ const toast = useToast()
 const { t } = useI18n()
 
 // --------- Adaptarla con IA a su clase ---------
-// Para quien puede editarla. `?adaptar=1` la abre al llegar (el acceso directo
+// Solo en una misión importada de otra clase y para quien puede editarla: es
+// el paso que sigue a importarla. `?adaptar=1` la abre al llegar (el acceso directo
 // de «Misión importada»), ya con esta misión cargada; el parámetro se quita al abrirla.
 const adaptOpen = ref(false)
-const canAdapt = computed(() => can('mission.edit'))
+const canAdapt = computed(
+  () =>
+    can('mission.edit') &&
+    !!(mission.value as { importedFromOtherClass?: boolean } | null)?.importedFromOtherClass
+)
 watch(
   () =>
     [
