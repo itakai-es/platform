@@ -535,6 +535,20 @@
       "empty_title": "Sin clases",
       "empty_archived_title": "Sin clases archivadas",
       "no_results": "No hay clases que coincidan con «{query}»"
+    },
+    "effects": {},
+    "calendar": {
+      "prev_month": "Mes anterior",
+      "next_month": "Mes siguiente"
+    },
+    "teams": {
+      "standings_title": "Clasificación de equipos · {title}",
+      "position": "Puesto",
+      "points": "{count} punto | {count} puntos",
+      "kind": {
+        "base": "De base",
+        "temporal": "Temporal"
+      }
     }
   }
 }

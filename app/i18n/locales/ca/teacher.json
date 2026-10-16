@@ -166,7 +166,9 @@
           "view_ranking": "Ranquing",
           "col_actions": "Accions",
           "managed_badge": "Sense correu",
-          "pending_sign_in_badge": "Pendent d'entrar"
+          "pending_sign_in_badge": "Pendent d'entrar",
+          "view_attendance": "Assistència",
+          "view_teams": "Equips"
         },
         "stats_title": "Estadístiques de la classe",
         "pending_reviews": "Lliuraments per revisar",
@@ -207,9 +209,6 @@
           "section_negatives": "Negatius",
           "filter_all": "Tots",
           "apply_title": "Aplicar \"{name}\"",
-          "pick_student": "Tria a quin estudiant ho aplicaràs.",
-          "applied_toast": "{behavior} aplicat a {student}",
-          "empty_students": "Encara no hi ha estudiants en aquesta classe.",
           "form_new_title": "Nou comportament",
           "form_edit_title": "Edita el comportament",
           "form_type": "Tipus",
@@ -233,7 +232,6 @@
           "toast_save_error": "No s'ha pogut desar el comportament.",
           "toast_delete_error": "No s'ha pogut eliminar el comportament.",
           "fetch_error": "No s'han pogut carregar els comportaments.",
-          "apply_error": "No s'ha pogut aplicar el comportament.",
           "empty_description_readonly": "Quan s'afegeixin comportaments a aquesta classe, apareixeran aquí."
         },
         "shop": {
@@ -610,7 +608,10 @@
             "document": "Documents",
             "submission": "Lliuraments",
             "behavior": "Comportaments",
-            "shop": "Botiga"
+            "shop": "Botiga",
+            "reward": "Recompenses",
+            "attendance": "Assistència",
+            "team": "Equips"
           },
           "actions": {
             "class": {
@@ -671,12 +672,36 @@
               "applied": "va aplicar «{title}» a {target}",
               "created": "va crear el comportament «{title}»",
               "updated": "va editar el comportament «{title}»",
-              "deleted": "va esborrar el comportament «{title}»"
+              "deleted": "va esborrar el comportament «{title}»",
+              "applied_batch": "va aplicar «{title}» a {count} estudiants"
             },
             "shop": {
               "item_created": "va afegir «{title}» a la botiga",
               "item_updated": "va editar «{title}» a la botiga",
               "item_deleted": "va treure «{title}» de la botiga"
+            },
+            "reward": {
+              "granted": "va donar a {target} una recompensa: «{title}»",
+              "granted_batch": "va donar una recompensa a {count} estudiants: «{title}»",
+              "taken": "va treure recursos a {target}: «{title}»",
+              "taken_batch": "va treure recursos a {count} estudiants: «{title}»"
+            },
+            "attendance": {
+              "taken": "va passar llista del {date}: {present} a classe, {absent} sense venir",
+              "updated": "va corregir la llista del {date}: {present} a classe, {absent} sense venir",
+              "deleted": "va esborrar la llista del {date}"
+            },
+            "team": {
+              "set_created": "va crear l’agrupació d’equips «{title}»",
+              "set_updated": "va editar l’agrupació d’equips «{title}»",
+              "set_archived": "va arxivar l’agrupació d’equips «{title}»",
+              "set_unarchived": "va treure de l’arxiu l’agrupació d’equips «{title}»",
+              "set_deleted": "va esborrar l’agrupació d’equips «{title}»",
+              "members_changed": "va canviar els equips de «{title}»",
+              "awarded": "va donar {points} punt a l’equip «{title}»: «{label}» | va donar {points} punts a l’equip «{title}»: «{label}»",
+              "awarded_batch": "va donar {points} punt a l’equip «{title}» i va repartir «{label}» a cada integrant | va donar {points} punts a l’equip «{title}» i va repartir «{label}» a cada integrant",
+              "distributed": "va repartir «{label}» a l’equip «{title}»",
+              "distributed_batch": "va repartir «{label}» a l’única persona de l’equip «{title}» | va repartir «{label}» a les {count} persones de l’equip «{title}»"
             }
           },
           "anonymous": {
@@ -693,8 +718,13 @@
             },
             "behavior": {
               "applied": "va aplicar «{title}» a algú que ja no és a la classe"
+            },
+            "reward": {
+              "granted": "va donar una recompensa a algú que ja no és a la classe: «{title}»",
+              "taken": "va treure recursos a algú que ja no és a la classe: «{title}»"
             }
-          }
+          },
+          "batch_who": "Mostra a qui ({count})"
         },
         "in_trash": {
           "title": "«{name}» és a la paperera",
@@ -800,7 +830,10 @@
           "save": "Desar canvis",
           "discard": "Descartar",
           "toast_saved": "Dades desades",
-          "toast_error": "No s'han pogut desar les dades"
+          "toast_error": "No s'han pogut desar les dades",
+          "team_set_label": "Per equips",
+          "team_set_none": "Individual (sense equips)",
+          "team_set_hint": "Només informatiu: l’alumnat veu amb quins equips es fa i pots aprovar tot un equip de cop. Cada estudiant continua lliurant el seu."
         }
       },
       "import": {
@@ -1270,7 +1303,10 @@
         "pct_custom": "Un altre percentatge",
         "will_receive": "Rebrà",
         "approve": "Aprova {pct}%",
-        "approve_error": "No s'ha pogut aprovar el lliurament"
+        "approve_error": "No s'ha pogut aprovar el lliurament",
+        "approve_team": "Aprovar l’equip ({count}) amb un {pct} %",
+        "team_approved": "{team}: {count} lliurament aprovat amb un {pct} % | {team}: {count} lliuraments aprovats amb un {pct} %",
+        "team_note": "Missió per equips («{set}»): en revisar un lliurament pots aprovar amb el mateix percentatge tot el seu equip que hagi lliurat."
       }
     },
     "templates": {
@@ -1369,6 +1405,230 @@
       "done": "Fet",
       "wizard_question_schedule": "Posa-li un horari a la teva classe",
       "wizard_question_cover": "Ara, una portada per a la teva classe"
+    },
+    "classroom": {
+      "picker": {
+        "legend": "Estudiants",
+        "search": "Cerca un estudiant…",
+        "all": "Tothom",
+        "none": "Ningú",
+        "empty": "Encara no hi ha estudiants en aquesta classe.",
+        "no_results": "Ningú no coincideix amb la cerca.",
+        "count": "Triats: {count} de {total}",
+        "only_present": "Només els presents avui",
+        "only_absent": "Només els absents avui"
+      },
+      "modal_title": "Aplicar a diversos estudiants",
+      "mode_label": "Què vols aplicar",
+      "mode_behavior": "Comportament",
+      "mode_reward": "Recompensa lliure",
+      "behavior_legend": "Comportament",
+      "no_behaviors": "Aquesta classe encara no té comportaments. Crea’ls a la pestanya Comportaments o dona una recompensa lliure.",
+      "reward": {
+        "legend": "Recompensa",
+        "direction_label": "Donar o treure",
+        "give": "Donar",
+        "take": "Treure",
+        "no_resources": "Aquesta classe no té cap recurs activat (XP, monedes, mana o vides).",
+        "reason": "Motiu",
+        "reason_placeholder": "P. ex.: Ha ajudat a preparar el laboratori",
+        "reason_too_long": "El motiu pot tenir fins a 80 caràcters."
+      },
+      "continue": "Continua",
+      "confirm_title": "Confirma",
+      "confirm_button": "Aplica",
+      "back": "Torna",
+      "confirm_who": "Mostra a qui ({count})",
+      "confirm_behavior": "Aplicar «{title}» a {count} estudiant. | Aplicar «{title}» a {count} estudiants.",
+      "confirm_reward": "Recompensa «{title}» a {count} estudiant. | Recompensa «{title}» a {count} estudiants.",
+      "confirm_effect": "Per estudiant: {effect}.",
+      "confirm_no_effect": "No mou cap recurs actiu en aquesta classe; només queda anotat.",
+      "applied_toast": "«{title}» aplicat a {count} estudiant | «{title}» aplicat a {count} estudiants",
+      "apply_error": "No s’ha pogut aplicar. No ha canviat res.",
+      "archived_notice": "La classe està arxivada: pots veure i editar el catàleg, però no aplicar-lo a ningú.",
+      "select_all_visible": "Tria tothom de la llista",
+      "select_student": "Tria {name}",
+      "selected_count": "{count} estudiant triat | {count} estudiants triats",
+      "apply_behavior": "Aplica un comportament",
+      "give_reward": "Dona una recompensa",
+      "clear_selection": "Treu la selecció",
+      "applied_announcement": "Aplicat a {count} estudiant. Saldos actualitzats. | Aplicat a {count} estudiants. Saldos actualitzats.",
+      "target_label": "A qui",
+      "target_students": "A estudiants",
+      "target_team": "A un equip",
+      "team": {
+        "legend": "Equip",
+        "points": "Punts per al marcador",
+        "points_hint": "Sumen a la classificació d’equips (o resten, si en treus). Posa 0 si només reparteixes.",
+        "distribute": "Repartir-ho també a cada integrant",
+        "distribute_hint": "Cada integrant rep el comportament o la recompensa, com si l’hi apliquessis per separat.",
+        "confirm_points": "Equip «{team}»: {points} punt al marcador. | Equip «{team}»: {points} punts al marcador.",
+        "confirm_no_points": "Equip «{team}»: sense punts al marcador.",
+        "confirm_distribute": "I «{title}» a la persona que l’integra. | I «{title}» a les {count} persones que l’integren.",
+        "confirm_no_distribute": "No es reparteix res a qui l’integra.",
+        "awarded_toast": "Equip «{team}» premiat",
+        "modal_title": "Premiar un equip"
+      },
+      "fixed_to": "Per a: {names}"
+    },
+    "attendance": {
+      "tabs_label": "Assistència",
+      "tab_take": "Passar llista",
+      "tab_history": "Històric",
+      "date": "Data",
+      "session": "Sessió",
+      "no_schedule": "Sessió sense horari",
+      "saved_by": "Llista desada per {name} ({time}).",
+      "someone": "algú del professorat",
+      "not_saved": "Encara no s’ha passat llista en aquesta sessió. Tot l’alumnat surt present: marca només qui falta.",
+      "unsaved": "Canvis sense desar",
+      "read_only": "Pots veure l’assistència, però passar llista és de qui edita a la classe.",
+      "count": {
+        "present": "{count} present | {count} presents",
+        "absent": "{count} absent | {count} absents",
+        "late": "{count} retard | {count} retards",
+        "excused": "{count} justificada | {count} justificades"
+      },
+      "all_present": "Tothom present",
+      "status_of": "Assistència de {name}",
+      "status": {
+        "present": "Present",
+        "absent": "Absent",
+        "late": "Retard",
+        "excused": "Justificada"
+      },
+      "save": "Desa la llista",
+      "delete": "Esborra aquesta llista",
+      "delete_title": "Vols esborrar aquesta llista?",
+      "delete_message": "S’esborra la sessió amb l’estat de tot l’alumnat. Fes-ho servir si vas passar llista per error.",
+      "apply_present": "Aplica als presents…",
+      "apply_absent": "Aplica als absents…",
+      "no_auto_xp": "Passar llista mai no treu ni dona res per si sol: premiar o penalitzar és sempre una acció a part, amb confirmació.",
+      "load_error": "No s’ha pogut carregar l’assistència.",
+      "saved_announcement": "Llista desada: {present} a classe, {absent} sense venir.",
+      "save_error": "No s’ha pogut desar la llista.",
+      "deleted": "Llista esborrada.",
+      "delete_error": "No s’ha pogut esborrar la llista.",
+      "history": {
+        "download_csv": "Baixa el CSV",
+        "empty_title": "No hi ha llistes aquest mes",
+        "empty_description": "Quan passis llista, aquí veuràs l’assistència de cada estudiant.",
+        "calendar_hint": "Els dies marcats tenen llista. Prem un dia per passar-la o corregir-la.",
+        "table_caption": "Assistència per estudiant el {month}",
+        "no_record": "Sense registre",
+        "day_with_list": "hi ha llista",
+        "csv_sessions": "Sessions",
+        "csv_file": "assistencia",
+        "export_error": "No s’ha pogut baixar el CSV."
+      },
+      "profile": {
+        "rate": "Assistència: {rate} %",
+        "sessions": "{count} sessió aquest curs | {count} sessions aquest curs"
+      }
+    },
+    "teams": {
+      "empty_title": "Encara no hi ha equips",
+      "empty_description": "Forma equips a mà o a l’atzar. Pots tenir equips de base, fixos, que puntuen a la classificació, i temporals per a una missió o una dinàmica.",
+      "empty_description_readonly": "Quan el professorat amb edició formi equips, els veuràs aquí.",
+      "new_set": "Formar equips",
+      "set_label": "Agrupació",
+      "kind": {
+        "base": "De base",
+        "temporal": "Temporal"
+      },
+      "archived_badge": "Arxivada",
+      "edit": "Editar",
+      "move_members": "Moure integrants…",
+      "archive": "Arxivar",
+      "unarchive": "Treure de l’arxiu",
+      "delete": "Esborrar",
+      "delete_title": "Esborrar l’agrupació",
+      "delete_message": "S’esborrarà «{title}» amb els seus equips i els seus punts. El que ja s’ha repartit a cada integrant es queda. No es pot desfer.",
+      "drag_hint": "Arrossega una persona a un altre equip, o fes servir «Moure integrants…» per fer-ho amb el teclat.",
+      "points": "{count} punt | {count} punts",
+      "members_count": "Sense integrants | {count} integrant | {count} integrants",
+      "empty_team": "Encara no hi ha ningú en aquest equip",
+      "no_team": "Sense equip",
+      "unknown_student": "Estudiant",
+      "award": "Premiar",
+      "read_only": "Amb el teu nivell d’accés veus els equips, però no els formes ni els premies.",
+      "archived_class": "La classe està arxivada: veus els equips, però no es canvien ni es premien.",
+      "saved_toast": "Equips de «{title}» desats",
+      "error": "No s’ha pogut desar. No ha canviat res.",
+      "stale": "Algú ha canviat aquesta agrupació mentre l’editaves (una altra persona o una altra pestanya). No s’ha desat res: ja veus com està ara.",
+      "moved": "{count} persona moguda a {name} | {count} persones mogudes a {name}",
+      "archived_announcement": "«{title}» arxivada",
+      "unarchived_announcement": "«{title}» ha sortit de l’arxiu",
+      "deleted_announcement": "«{title}» esborrada",
+      "default_team": "Equip {n}",
+      "colors": {
+        "purple": "Morat",
+        "yellow": "Groc",
+        "mint": "Verd menta",
+        "sky": "Blau cel",
+        "red": "Vermell",
+        "peach": "Préssec"
+      },
+      "emblems": {
+        "star": "Estrella",
+        "bolt": "Llamp",
+        "fire": "Foc",
+        "shield": "Escut",
+        "rocket": "Coet",
+        "heart": "Cor",
+        "sun": "Sol",
+        "moon": "Lluna",
+        "sparkles": "Espurnes",
+        "globe": "Món",
+        "puzzle": "Trencaclosques",
+        "trophy": "Trofeu"
+      },
+      "form": {
+        "new_title": "Formar equips",
+        "edit_title": "Editar l’agrupació",
+        "title": "Nom de l’agrupació",
+        "title_placeholder": "Ex.: Cases",
+        "title_required": "Posa-li un nom.",
+        "title_too_long": "El nom pot tenir fins a 60 caràcters.",
+        "kind": "Tipus",
+        "kind_hint": {
+          "base": "Fixa durant el curs. Els seus punts compten a la classificació d’equips.",
+          "temporal": "Per a una missió o una dinàmica. No puntua a la classificació; arxiva-la en acabar."
+        },
+        "method": "Com",
+        "method_random": "A l’atzar",
+        "method_manual": "A mà",
+        "size": "Mida",
+        "size_teams": "Nombre d’equips",
+        "size_perTeam": "Persones per equip",
+        "size_result": "Sortirà {count} equip. | Sortiran {count} equips.",
+        "balance": "Equilibrar per nivell",
+        "absent_note": "Avui no falta ningú a la llista: hi entra tot l’alumnat. | Avui falta {count} persona a la llista i queda fora del repartiment. | Avui falten {count} persones a la llista i queden fora del repartiment.",
+        "no_list_note": "Avui encara no s’ha passat llista: hi entra tot l’alumnat.",
+        "preview_title": "Proposta",
+        "preview_announcement": "Proposta llesta: {count} equip. | Proposta llesta: {count} equips.",
+        "excluded": "Fora per faltar avui: {names}.",
+        "shuffle": "Repartir",
+        "again": "Una altra vegada",
+        "save_teams": "Desar els equips",
+        "create": "Crear els equips",
+        "save": "Desar",
+        "teams_legend": "Equips",
+        "team_name": "Nom de l’equip {n}",
+        "remove_team": "Treure l’equip {name}",
+        "color": "Color",
+        "emblem": "Emblema",
+        "automatic": "Automàtic",
+        "add_team": "Afegir un equip",
+        "removed_points_note": "En desar, els equips que has tret s’esborren amb els seus punts."
+      },
+      "move": {
+        "title": "Moure integrants · {title}",
+        "who": "A qui mous",
+        "from_team": "Les persones de {name}",
+        "to": "A quin equip",
+        "confirm": "Moure | Moure {count} persona | Moure {count} persones"
+      }
     }
   }
 }

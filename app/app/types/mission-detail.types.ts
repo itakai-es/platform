@@ -73,6 +73,8 @@ export interface MissionDetail {
   rarity: string
   deadline?: string | Date | null
   backgroundImage?: string | null
+  /** Se hace por equipos de esta agrupación (solo informativo; cada cual entrega lo suyo). */
+  teamSet?: { id: string; title: string; archived: boolean } | null
   isTeacher?: boolean
   progress:
     | number

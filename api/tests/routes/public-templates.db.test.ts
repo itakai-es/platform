@@ -94,7 +94,7 @@ const SHOP_ITEM_KEYS = [
   'price',
   'usage',
 ]
-const BEHAVIOR_KEYS = ['coinDelta', 'description', 'kind', 'lifeDelta', 'name', 'xpDelta']
+const BEHAVIOR_KEYS = ['coinDelta', 'description', 'kind', 'lifeDelta', 'manaDelta', 'name', 'xpDelta']
 /** Lo que no puede salir nunca en público. */
 const PRIVATE_KEYS = ['isOwn', 'teacherName', 'teacherId', 'teacher', 'settings']
 
@@ -802,6 +802,7 @@ describeWithDatabase('catálogo público de plantillas', () => {
           xpDelta: 5,
           coinDelta: 0,
           lifeDelta: 1,
+          manaDelta: 0,
         },
         {
           kind: 'positive',
@@ -810,6 +811,7 @@ describeWithDatabase('catálogo público de plantillas', () => {
           xpDelta: 5,
           coinDelta: 2,
           lifeDelta: 0,
+          manaDelta: 0,
         },
       ],
     })

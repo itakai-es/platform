@@ -2,6 +2,7 @@
 import { ArrowDownTrayIcon } from '@heroicons/vue/24/outline'
 import { CheckCircleIcon } from '@heroicons/vue/24/solid'
 import { formatNotificationDate, formatNotificationTime } from '~/utils/notifications'
+import type { TeamColor, TeamEmblem } from '~/types/team.types'
 
 interface Enigma {
   id: string
@@ -21,6 +22,8 @@ interface Submission {
     avatar?: string
   }
   status: 'pendiente' | 'aprobada'
+  /** En una misión por equipos, el equipo de quien entregó. */
+  team?: { id: string; title: string; color: TeamColor | null; emblem: TeamEmblem | null } | null
   fileName?: string
   hasFile?: boolean
   fileSize?: number
@@ -68,6 +71,9 @@ const error = ref<string | null>(null)
 const editingSubmissionId = ref<string | null>(null)
 const selectedPct = ref<number>(100)
 const approvedIds = ref<Set<string>>(new Set())
+/** Misión por equipos: la agrupación con la que se hace. */
+const teamSet = ref<{ id: string; title: string } | null>(null)
+const approvingTeam = ref(false)
 
 // Fetch submissions when enigma changes
 watch(
@@ -87,10 +93,14 @@ const fetchSubmissions = async (enigmaId: string) => {
   loading.value = true
   error.value = null
   try {
-    const response = await $fetch<{ submissions: Submission[]; total: number; pending: number }>(
-      `${config.public.apiBase}/submissions/teacher/enigmas/${enigmaId}`
-    )
+    const response = await $fetch<{
+      enigma?: { teamSet?: { id: string; title: string } | null }
+      submissions: Submission[]
+      total: number
+      pending: number
+    }>(`${config.public.apiBase}/submissions/teacher/enigmas/${enigmaId}`)
     submissions.value = response.submissions || []
+    teamSet.value = response.enigma?.teamSet ?? null
   } catch (err: any) {
     console.error('Error fetching submissions:', err)
     error.value = err.data?.message || t('teacher.components.enigma_submissions_modal.load_error')
@@ -195,6 +205,42 @@ const handleApprove = async (submission: Submission) => {
   }
 }
 
+/** Entregas pendientes del mismo equipo que esta (ella incluida). */
+const teamPending = (submission: Submission) =>
+  submission.team ? pendingSubmissions.value.filter(s => s.team?.id === submission.team!.id) : []
+
+// Misiones por equipos: el mismo % a la entrega pendiente de cada integrante del
+// equipo. Cada aprobación es la de siempre (recompensas, avisos e historial).
+const handleApproveTeam = async (submission: Submission) => {
+  if (!props.enigma || !submission.team || approvingTeam.value) return
+  const pct = selectedPct.value
+  approvingTeam.value = true
+  try {
+    const result = await $fetch<{ approved: { submissionId: string }[] }>(
+      `${config.public.apiBase}/submissions/${submission.id}/approve-team`,
+      { method: 'POST', body: { percentage: pct } }
+    )
+    for (const a of result.approved) approvedIds.value.add(a.submissionId)
+    cancelEditing()
+    emit('refresh')
+    toast.success(
+      t(
+        'teacher.components.enigma_submissions_modal.team_approved',
+        { team: submission.team.title, count: result.approved.length, pct },
+        result.approved.length
+      )
+    )
+    effects.play('enigma_approved')
+  } catch (err) {
+    const message = (err as { data?: { message?: string } }).data?.message
+    toast.error(message || t('teacher.components.enigma_submissions_modal.approve_error'))
+    // Alguna pudo aprobarse antes del fallo: se vuelve a leer la lista.
+    if (props.enigma) await fetchSubmissions(props.enigma.id)
+  } finally {
+    approvingTeam.value = false
+  }
+}
+
 // «hace 2 horas» en el idioma de la interfaz; la fecha completa, al pasar por encima.
 const formatDate = (dateStr: string) => formatNotificationTime(dateStr, locale.value)
 const formatFullDate = (dateStr: string) => formatNotificationDate(dateStr, locale.value)
@@ -263,6 +309,9 @@ watch(
     </template>
 
     <div class="flex flex-col min-h-[500px]">
+      <InfoNote v-if="teamSet && canApprove" class="mb-4">
+        {{ t('teacher.components.enigma_submissions_modal.team_note', { set: teamSet.title }) }}
+      </InfoNote>
       <!-- Loading -->
       <div v-if="loading" class="flex items-center justify-center py-8">
         <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
@@ -321,6 +370,14 @@ watch(
             <!-- Info -->
             <div class="flex-1 min-w-0">
               <p class="font-bold text-navy-700 text-base">{{ submission.student.name }}</p>
+              <TeamBadge
+                v-if="submission.team"
+                :title="submission.team.title"
+                :color="submission.team.color"
+                :emblem="submission.team.emblem"
+                size="sm"
+                class="mt-0.5 text-xs"
+              />
               <time
                 class="text-xs text-navy-700/70 block"
                 :datetime="submission.submittedAt"
@@ -422,16 +479,35 @@ watch(
                       <ManaIcon class="w-4 h-4" />{{ awarded.mana }}
                     </span>
                   </div>
-                  <Button
-                    variant="primary"
-                    size="sm"
-                    :disabled="!selectedPct || selectedPct <= 0"
-                    @click="handleApprove(submission)"
-                  >
-                    {{
-                      t('teacher.components.enigma_submissions_modal.approve', { pct: selectedPct })
-                    }}
-                  </Button>
+                  <div class="flex flex-wrap items-center gap-2">
+                    <Button
+                      v-if="teamPending(submission).length > 1"
+                      variant="outline"
+                      size="sm"
+                      :loading="approvingTeam"
+                      :disabled="!selectedPct || selectedPct <= 0"
+                      @click="handleApproveTeam(submission)"
+                    >
+                      {{
+                        t('teacher.components.enigma_submissions_modal.approve_team', {
+                          count: teamPending(submission).length,
+                          pct: selectedPct,
+                        })
+                      }}
+                    </Button>
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      :disabled="!selectedPct || selectedPct <= 0"
+                      @click="handleApprove(submission)"
+                    >
+                      {{
+                        t('teacher.components.enigma_submissions_modal.approve', {
+                          pct: selectedPct,
+                        })
+                      }}
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>

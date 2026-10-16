@@ -365,6 +365,14 @@
         "avg_missions": "Missões em média",
         "total_xp": "XP total da turma"
       }
+    },
+    "teams": {
+      "my_team_title": "A minha equipa",
+      "members_label": "Pessoas de {name}",
+      "you": "Tu",
+      "mission_team": "Esta missão faz-se por equipas («{set}»). A tua equipa é {team}, com {names}. Cada pessoa entrega a sua parte.",
+      "mission_team_alone": "Esta missão faz-se por equipas («{set}»). A tua equipa é {team}. Cada pessoa entrega a sua parte.",
+      "mission_no_team": "Esta missão faz-se por equipas («{set}»), mas ainda não estás em nenhuma. Pergunta na aula."
     }
   }
 }

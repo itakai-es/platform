@@ -43,6 +43,9 @@
     </div>
 
     <InfoNote v-if="props.readonly">{{ t('teacher.classes.detail.read_only_notice') }}</InfoNote>
+    <InfoNote v-else-if="props.archived">
+      {{ t('teacher.classroom.archived_notice') }}
+    </InfoNote>
 
     <!-- Skeletons de carga inicial -->
     <div v-if="loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
@@ -74,68 +77,38 @@
         :behavior="b"
         :xp-enabled="cfg.xp"
         :coins-enabled="cfg.coins"
+        :mana-enabled="cfg.mana"
         :lives-enabled="cfg.lives"
         :readonly="props.readonly"
+        :can-apply="canApply"
         @click="openApply(b)"
         @edit="openEdit(b)"
       />
     </div>
 
-    <!-- Modal: aplicar a un alumno -->
-    <Teleport to="body">
-      <Transition name="modal">
-        <div
-          v-if="pendingBehavior"
-          class="fixed inset-0 z-50 flex items-center justify-center p-4"
-          @click.self="pendingBehavior = null"
-        >
-          <div class="absolute inset-0 bg-black/50" @click="pendingBehavior = null" />
-          <div
-            class="relative flex max-h-[85vh] w-full max-w-md flex-col overflow-hidden rounded-2xl bg-white shadow-xl"
-          >
-            <div class="flex items-start justify-between gap-3 p-6 pb-3">
-              <div>
-                <h3 class="text-lg font-bold text-navy-700">
-                  {{
-                    t('teacher.classes.detail.behaviors.apply_title', {
-                      name: pendingBehavior.name,
-                    })
-                  }}
-                </h3>
-                <p class="mt-1 text-sm text-text-secondary">
-                  {{ t('teacher.classes.detail.behaviors.pick_student') }}
-                </p>
-              </div>
-              <button
-                class="-mr-1 -mt-1 flex-shrink-0 rounded-full p-1.5 text-navy-700/70 hover:bg-gray-100"
-                @click="pendingBehavior = null"
-              >
-                <XMarkIcon class="w-5 h-5" />
-              </button>
-            </div>
-
-            <div class="flex-1 overflow-y-auto px-6 pb-6">
-              <p v-if="!students.length" class="text-sm text-text-secondary">
-                {{ t('teacher.classes.detail.behaviors.empty_students') }}
-              </p>
-              <ul v-else class="space-y-2">
-                <li
-                  v-for="s in students"
-                  :key="s.id"
-                  class="flex cursor-pointer items-center gap-3 rounded-xl border border-border-primary bg-surface px-4 py-3 transition-colors hover:border-navy-700/40"
-                  @click="apply(s)"
-                >
-                  <Avatar :src="s.avatar" :username="displayName(s)" size="md" />
-                  <span class="min-w-0 flex-1 truncate font-medium text-navy-700">
-                    {{ displayName(s) }}
-                  </span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </Transition>
-    </Teleport>
+    <!-- Aplicar a uno o a varios, siempre con confirmación -->
+    <ClassroomActionModal
+      v-model="applyOpen"
+      :class-id="classId"
+      :students="pickerStudents"
+      :settings="cfg"
+      :behavior="pendingBehavior"
+      :can-reward="false"
+      :can-team="!!props.canTeam && canApply"
+      :title="
+        pendingBehavior
+          ? t('teacher.classes.detail.behaviors.apply_title', { name: pendingBehavior.name })
+          : undefined
+      "
+    >
+      <template #filters="{ select }">
+        <AttendanceQuickFilters
+          :class-id="classId"
+          :student-ids="pickerStudents.map(s => s.id)"
+          :select="select"
+        />
+      </template>
+    </ClassroomActionModal>
 
     <!-- Modal: crear/editar comportamiento -->
     <Teleport to="body">
@@ -247,6 +220,17 @@
                       type="number"
                       min="0"
                       :placeholder="t('common.resources.coins')"
+                      class="w-full rounded-xl border border-border-primary pl-9 pr-3 py-2.5 text-navy-700 focus:outline-none focus:ring-2 focus:ring-navy-700/20"
+                    />
+                  </div>
+                  <div v-if="cfg.mana" class="relative flex-1 min-w-[120px]">
+                    <ManaIcon class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2" />
+                    <input
+                      v-model.number="form.mana"
+                      type="number"
+                      min="0"
+                      :placeholder="t('common.resources.mana')"
+                      :aria-label="t('common.resources.mana')"
                       class="w-full rounded-xl border border-border-primary pl-9 pr-3 py-2.5 text-navy-700 focus:outline-none focus:ring-2 focus:ring-navy-700/20"
                     />
                   </div>
@@ -379,6 +363,10 @@
                       <CoinIcon class="h-3 w-3" />
                       <span :class="signClass(s)">{{ sign(s) }}{{ s.coins }}</span>
                     </span>
+                    <span v-if="s.mana && cfg.mana" class="inline-flex items-center gap-0.5">
+                      <ManaIcon class="h-3 w-3" />
+                      <span :class="signClass(s)">{{ sign(s) }}{{ s.mana }}</span>
+                    </span>
                     <span v-if="s.lives && cfg.lives" class="inline-flex items-center gap-0.5">
                       <LifeIcon class="h-3 w-3" />
                       <span :class="signClass(s)">{{ sign(s) }}{{ s.lives }}</span>
@@ -435,20 +423,30 @@ const props = defineProps<{
   settings?: Partial<ClassSettings> | null
   /** Solo ver las plantillas: sin aplicarlas, crearlas ni cambiarlas. */
   readonly?: boolean
+  /** Clase archivada: el catálogo se edita, pero no se aplica a nadie. */
+  archived?: boolean
+  /** Puede premiar a un equipo con el comportamiento (además de aplicarlo a estudiantes). */
+  canTeam?: boolean
 }>()
 
-// Per-class flags: hide resource impacts (XP/coins/lives) that the class has disabled.
+// Per-class flags: hide resource impacts (XP/coins/mana/lives) that the class has disabled.
 const cfg = computed(() => resolveClassSettings(props.settings))
-const hasImpactFields = computed(() => cfg.value.xp || cfg.value.coins || cfg.value.lives)
+const hasImpactFields = computed(
+  () => cfg.value.xp || cfg.value.coins || cfg.value.mana || cfg.value.lives
+)
+const canApply = computed(() => !props.readonly && !props.archived)
 
 function displayName(s: StudentLike): string {
   return s.username || s.name
 }
 
+const pickerStudents = computed(() =>
+  props.students.map(s => ({ id: s.id, name: displayName(s), avatar: s.avatar }))
+)
+
 const { t } = useI18n()
 const toast = useToast()
 const store = useBehaviorsStore()
-const effects = useEffects()
 
 const behaviors = computed(() => store.getBehaviors(props.classId))
 // Loading local por instancia (no el flag compartido del store): skeletons solo
@@ -498,37 +496,13 @@ watch(
   { immediate: true }
 )
 
-// --- Apply ---
+// --- Aplicar: elegir a quién y confirmar (ClassroomActionModal) ---
 const pendingBehavior = ref<Behavior | null>(null)
-const applying = ref(false)
+const applyOpen = ref(false)
 function openApply(b: Behavior) {
-  if (props.readonly) return
+  if (!canApply.value) return
   pendingBehavior.value = b
-}
-async function apply(student: StudentLike) {
-  const b = pendingBehavior.value
-  if (!b || applying.value) return
-  applying.value = true
-  try {
-    await store.apply(props.classId, b.id, student.id)
-    toast.success(
-      t('teacher.classes.detail.behaviors.applied_toast', {
-        behavior: b.name,
-        student: displayName(student),
-      })
-    )
-    // Feedback al profe: sparkle + sonido positivo, o sonido fail si es negativo.
-    // El cliente del profe no muestra floaters de delta porque son varios recursos
-    // a la vez y quedaría ruidoso; el toast ya comunica el resultado.
-    effects.play(b.kind === 'positive' ? 'behavior_positive' : 'behavior_negative', {
-      settings: cfg.value,
-    })
-    pendingBehavior.value = null
-  } catch {
-    toast.error(t('teacher.classes.detail.behaviors.apply_error'))
-  } finally {
-    applying.value = false
-  }
+  applyOpen.value = true
 }
 
 // --- CRUD ---
@@ -540,6 +514,7 @@ const form = reactive({
   kind: 'positive' as BehaviorKind,
   xp: undefined as number | undefined,
   coins: undefined as number | undefined,
+  mana: undefined as number | undefined,
   lives: undefined as number | undefined,
 })
 
@@ -550,6 +525,7 @@ function resetForm(seed?: Behavior) {
     form.kind = seed.kind
     form.xp = seed.xp
     form.coins = seed.coins
+    form.mana = seed.mana
     form.lives = seed.lives
   } else {
     form.name = ''
@@ -557,6 +533,7 @@ function resetForm(seed?: Behavior) {
     form.kind = 'positive'
     form.xp = undefined
     form.coins = undefined
+    form.mana = undefined
     form.lives = undefined
   }
 }
@@ -586,6 +563,7 @@ async function save() {
     kind: form.kind,
     xp: normalize(form.xp),
     coins: normalize(form.coins),
+    mana: normalize(form.mana),
     lives: normalize(form.lives),
   }
   try {
@@ -662,11 +640,7 @@ async function addSuggestion(s: BehaviorSuggestion) {
 // --- Scroll lock para todos los modales ---
 const { lock, unlock } = useBodyScrollLock()
 watch(
-  () =>
-    pendingBehavior.value !== null ||
-    showForm.value ||
-    pendingDelete.value !== null ||
-    showLibrary.value,
+  () => showForm.value || pendingDelete.value !== null || showLibrary.value,
   open => (open ? lock() : unlock())
 )
 onUnmounted(unlock)

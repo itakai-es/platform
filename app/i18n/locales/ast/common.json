@@ -535,6 +535,20 @@
       "empty_title": "Ensin clases",
       "empty_archived_title": "Ensin clases archivaes",
       "no_results": "Nun hai clases que coincidan con «{query}»"
+    },
+    "effects": {},
+    "calendar": {
+      "prev_month": "Mes anterior",
+      "next_month": "Mes siguiente"
+    },
+    "teams": {
+      "standings_title": "Clasificación d’equipos · {title}",
+      "position": "Puestu",
+      "points": "{count} puntu | {count} puntos",
+      "kind": {
+        "base": "De base",
+        "temporal": "Temporal"
+      }
     }
   }
 }

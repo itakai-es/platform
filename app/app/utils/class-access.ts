@@ -48,6 +48,7 @@ export const CLASS_ACTION_LEVEL = {
   'behavior.view': 'read',
   'behavior.edit': 'edit',
   'behavior.apply': 'edit',
+  'reward.grant': 'edit',
   'submission.view': 'read',
   'submission.approve': 'edit',
   'student.view': 'read',
@@ -58,6 +59,11 @@ export const CLASS_ACTION_LEVEL = {
   'teachers.manage': 'admin',
   'teachers.leave': 'read',
   'class.history': 'read',
+  'attendance.view': 'read',
+  'attendance.take': 'edit',
+  'attendance.export': 'edit',
+  'team.manage': 'edit',
+  'team.award': 'edit',
 } as const satisfies Record<string, ClassRequiredLevel>
 
 export type ClassAction = keyof typeof CLASS_ACTION_LEVEL

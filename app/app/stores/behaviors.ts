@@ -4,7 +4,8 @@ import type { BehaviorKind, BehaviorSuggestion } from '~/utils/behavior-suggesti
 /**
  * Store de comportamientos por clase, conectado al backend. El catálogo lo
  * mantiene el servidor (BehaviorTemplate) y las aplicaciones modifican XP,
- * monedas y puntos de vida del alumno en una transacción.
+ * monedas, maná y puntos de vida del estudiante en una transacción, a uno o a
+ * varios a la vez. Las recompensas libres (sin plantilla) van por aquí también.
  */
 export interface Behavior {
   id: string
@@ -14,6 +15,7 @@ export interface Behavior {
   description: string
   xp?: number
   coins?: number
+  mana?: number
   lives?: number
   createdAt: string
   updatedAt: string
@@ -24,21 +26,47 @@ export interface BehaviorApplyResult {
     id: string
     behaviorId: string | null
     studentId: string
-    kind: BehaviorKind
+    kind: BehaviorKind | 'reward'
     name: string
     xpDelta: number
     coinDelta: number
+    manaDelta: number
     lifeDelta: number
     createdAt: string
   }
-  enrollment: {
-    studentId: string
-    classId: string
-    xp: number
-    coins: number
-    lives: number
-    level: number
-  }
+  enrollment: StudentBalances & { classId: string }
+}
+
+/** Saldos de un estudiante en la clase tras aplicarle algo. */
+export interface StudentBalances {
+  studentId: string
+  xp: number
+  coins: number
+  mana: number
+  lives: number
+  level: number
+}
+
+/** Lo que se reparte, ya con signo (igual para todo el lote). */
+export interface ResourceDeltas {
+  xp: number
+  coins: number
+  mana: number
+  lives: number
+}
+
+/** Resultado de aplicar a varios a la vez (comportamiento o recompensa libre). */
+export interface BatchResult {
+  batchId: string
+  kind: BehaviorKind | 'reward'
+  count: number
+  deltas: ResourceDeltas
+  students: StudentBalances[]
+}
+
+export interface RewardInput extends Partial<ResourceDeltas> {
+  studentIds: string[]
+  reason: string
 }
 
 interface BehaviorInput {
@@ -47,6 +75,7 @@ interface BehaviorInput {
   description: string
   xp?: number
   coins?: number
+  mana?: number
   lives?: number
 }
 
@@ -186,6 +215,28 @@ export const useBehaviorsStore = defineStore('behaviors', () => {
     return result
   }
 
+  /** Aplica un comportamiento a varios estudiantes de una vez (todo o nada). */
+  async function applyMany(
+    classId: string,
+    behaviorId: string,
+    studentIds: string[]
+  ): Promise<BatchResult> {
+    const result = await $fetch<BatchResult>(
+      `${apiBase()}/teacher/classes/${classId}/behaviors/${behaviorId}/apply-many`,
+      { method: 'POST', body: { studentIds } }
+    )
+    invalidate(classId)
+    return result
+  }
+
+  /** Recompensa libre (dar o quitar recursos con un motivo) a uno o a varios. */
+  async function grantRewards(classId: string, input: RewardInput): Promise<BatchResult> {
+    return $fetch<BatchResult>(`${apiBase()}/teacher/classes/${classId}/rewards`, {
+      method: 'POST',
+      body: input,
+    })
+  }
+
   async function addFromSuggestion(classId: string, s: BehaviorSuggestion): Promise<Behavior> {
     return add(classId, {
       kind: s.kind,
@@ -193,6 +244,7 @@ export const useBehaviorsStore = defineStore('behaviors', () => {
       description: s.description,
       xp: s.xp,
       coins: s.coins,
+      mana: s.mana,
       lives: s.lives,
     })
   }
@@ -208,6 +260,8 @@ export const useBehaviorsStore = defineStore('behaviors', () => {
     update,
     remove,
     apply,
+    applyMany,
+    grantRewards,
     addFromSuggestion,
   }
 })

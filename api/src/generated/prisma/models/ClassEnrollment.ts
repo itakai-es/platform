@@ -290,6 +290,8 @@ export type ClassEnrollmentWhereInput = {
   enrolledAt?: Prisma.DateTimeFilter<"ClassEnrollment"> | Date | string
   student?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   class?: Prisma.XOR<Prisma.ClassScalarRelationFilter, Prisma.ClassWhereInput>
+  attendanceRecords?: Prisma.AttendanceRecordListRelationFilter
+  teamMemberships?: Prisma.TeamMemberListRelationFilter
 }
 
 export type ClassEnrollmentOrderByWithRelationInput = {
@@ -307,6 +309,8 @@ export type ClassEnrollmentOrderByWithRelationInput = {
   enrolledAt?: Prisma.SortOrder
   student?: Prisma.UserOrderByWithRelationInput
   class?: Prisma.ClassOrderByWithRelationInput
+  attendanceRecords?: Prisma.AttendanceRecordOrderByRelationAggregateInput
+  teamMemberships?: Prisma.TeamMemberOrderByRelationAggregateInput
 }
 
 export type ClassEnrollmentWhereUniqueInput = Prisma.AtLeast<{
@@ -328,6 +332,8 @@ export type ClassEnrollmentWhereUniqueInput = Prisma.AtLeast<{
   enrolledAt?: Prisma.DateTimeFilter<"ClassEnrollment"> | Date | string
   student?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   class?: Prisma.XOR<Prisma.ClassScalarRelationFilter, Prisma.ClassWhereInput>
+  attendanceRecords?: Prisma.AttendanceRecordListRelationFilter
+  teamMemberships?: Prisma.TeamMemberListRelationFilter
 }, "id" | "studentId_classId">
 
 export type ClassEnrollmentOrderByWithAggregationInput = {
@@ -381,6 +387,8 @@ export type ClassEnrollmentCreateInput = {
   enrolledAt?: Date | string
   student: Prisma.UserCreateNestedOneWithoutEnrollmentsInput
   class: Prisma.ClassCreateNestedOneWithoutEnrollmentsInput
+  attendanceRecords?: Prisma.AttendanceRecordCreateNestedManyWithoutEnrollmentInput
+  teamMemberships?: Prisma.TeamMemberCreateNestedManyWithoutEnrollmentInput
 }
 
 export type ClassEnrollmentUncheckedCreateInput = {
@@ -396,6 +404,8 @@ export type ClassEnrollmentUncheckedCreateInput = {
   avatarUrl?: string | null
   isPreview?: boolean
   enrolledAt?: Date | string
+  attendanceRecords?: Prisma.AttendanceRecordUncheckedCreateNestedManyWithoutEnrollmentInput
+  teamMemberships?: Prisma.TeamMemberUncheckedCreateNestedManyWithoutEnrollmentInput
 }
 
 export type ClassEnrollmentUpdateInput = {
@@ -411,6 +421,8 @@ export type ClassEnrollmentUpdateInput = {
   enrolledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   student?: Prisma.UserUpdateOneRequiredWithoutEnrollmentsNestedInput
   class?: Prisma.ClassUpdateOneRequiredWithoutEnrollmentsNestedInput
+  attendanceRecords?: Prisma.AttendanceRecordUpdateManyWithoutEnrollmentNestedInput
+  teamMemberships?: Prisma.TeamMemberUpdateManyWithoutEnrollmentNestedInput
 }
 
 export type ClassEnrollmentUncheckedUpdateInput = {
@@ -426,6 +438,8 @@ export type ClassEnrollmentUncheckedUpdateInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPreview?: Prisma.BoolFieldUpdateOperationsInput | boolean
   enrolledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  attendanceRecords?: Prisma.AttendanceRecordUncheckedUpdateManyWithoutEnrollmentNestedInput
+  teamMemberships?: Prisma.TeamMemberUncheckedUpdateManyWithoutEnrollmentNestedInput
 }
 
 export type ClassEnrollmentCreateManyInput = {
@@ -547,6 +561,11 @@ export type ClassEnrollmentSumOrderByAggregateInput = {
   level?: Prisma.SortOrder
 }
 
+export type ClassEnrollmentScalarRelationFilter = {
+  is?: Prisma.ClassEnrollmentWhereInput
+  isNot?: Prisma.ClassEnrollmentWhereInput
+}
+
 export type ClassEnrollmentCreateNestedManyWithoutStudentInput = {
   create?: Prisma.XOR<Prisma.ClassEnrollmentCreateWithoutStudentInput, Prisma.ClassEnrollmentUncheckedCreateWithoutStudentInput> | Prisma.ClassEnrollmentCreateWithoutStudentInput[] | Prisma.ClassEnrollmentUncheckedCreateWithoutStudentInput[]
   connectOrCreate?: Prisma.ClassEnrollmentCreateOrConnectWithoutStudentInput | Prisma.ClassEnrollmentCreateOrConnectWithoutStudentInput[]
@@ -639,6 +658,34 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type ClassEnrollmentCreateNestedOneWithoutAttendanceRecordsInput = {
+  create?: Prisma.XOR<Prisma.ClassEnrollmentCreateWithoutAttendanceRecordsInput, Prisma.ClassEnrollmentUncheckedCreateWithoutAttendanceRecordsInput>
+  connectOrCreate?: Prisma.ClassEnrollmentCreateOrConnectWithoutAttendanceRecordsInput
+  connect?: Prisma.ClassEnrollmentWhereUniqueInput
+}
+
+export type ClassEnrollmentUpdateOneRequiredWithoutAttendanceRecordsNestedInput = {
+  create?: Prisma.XOR<Prisma.ClassEnrollmentCreateWithoutAttendanceRecordsInput, Prisma.ClassEnrollmentUncheckedCreateWithoutAttendanceRecordsInput>
+  connectOrCreate?: Prisma.ClassEnrollmentCreateOrConnectWithoutAttendanceRecordsInput
+  upsert?: Prisma.ClassEnrollmentUpsertWithoutAttendanceRecordsInput
+  connect?: Prisma.ClassEnrollmentWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ClassEnrollmentUpdateToOneWithWhereWithoutAttendanceRecordsInput, Prisma.ClassEnrollmentUpdateWithoutAttendanceRecordsInput>, Prisma.ClassEnrollmentUncheckedUpdateWithoutAttendanceRecordsInput>
+}
+
+export type ClassEnrollmentCreateNestedOneWithoutTeamMembershipsInput = {
+  create?: Prisma.XOR<Prisma.ClassEnrollmentCreateWithoutTeamMembershipsInput, Prisma.ClassEnrollmentUncheckedCreateWithoutTeamMembershipsInput>
+  connectOrCreate?: Prisma.ClassEnrollmentCreateOrConnectWithoutTeamMembershipsInput
+  connect?: Prisma.ClassEnrollmentWhereUniqueInput
+}
+
+export type ClassEnrollmentUpdateOneRequiredWithoutTeamMembershipsNestedInput = {
+  create?: Prisma.XOR<Prisma.ClassEnrollmentCreateWithoutTeamMembershipsInput, Prisma.ClassEnrollmentUncheckedCreateWithoutTeamMembershipsInput>
+  connectOrCreate?: Prisma.ClassEnrollmentCreateOrConnectWithoutTeamMembershipsInput
+  upsert?: Prisma.ClassEnrollmentUpsertWithoutTeamMembershipsInput
+  connect?: Prisma.ClassEnrollmentWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ClassEnrollmentUpdateToOneWithWhereWithoutTeamMembershipsInput, Prisma.ClassEnrollmentUpdateWithoutTeamMembershipsInput>, Prisma.ClassEnrollmentUncheckedUpdateWithoutTeamMembershipsInput>
+}
+
 export type ClassEnrollmentCreateWithoutStudentInput = {
   id?: string
   xp?: number
@@ -651,6 +698,8 @@ export type ClassEnrollmentCreateWithoutStudentInput = {
   isPreview?: boolean
   enrolledAt?: Date | string
   class: Prisma.ClassCreateNestedOneWithoutEnrollmentsInput
+  attendanceRecords?: Prisma.AttendanceRecordCreateNestedManyWithoutEnrollmentInput
+  teamMemberships?: Prisma.TeamMemberCreateNestedManyWithoutEnrollmentInput
 }
 
 export type ClassEnrollmentUncheckedCreateWithoutStudentInput = {
@@ -665,6 +714,8 @@ export type ClassEnrollmentUncheckedCreateWithoutStudentInput = {
   avatarUrl?: string | null
   isPreview?: boolean
   enrolledAt?: Date | string
+  attendanceRecords?: Prisma.AttendanceRecordUncheckedCreateNestedManyWithoutEnrollmentInput
+  teamMemberships?: Prisma.TeamMemberUncheckedCreateNestedManyWithoutEnrollmentInput
 }
 
 export type ClassEnrollmentCreateOrConnectWithoutStudentInput = {
@@ -723,6 +774,8 @@ export type ClassEnrollmentCreateWithoutClassInput = {
   isPreview?: boolean
   enrolledAt?: Date | string
   student: Prisma.UserCreateNestedOneWithoutEnrollmentsInput
+  attendanceRecords?: Prisma.AttendanceRecordCreateNestedManyWithoutEnrollmentInput
+  teamMemberships?: Prisma.TeamMemberCreateNestedManyWithoutEnrollmentInput
 }
 
 export type ClassEnrollmentUncheckedCreateWithoutClassInput = {
@@ -737,6 +790,8 @@ export type ClassEnrollmentUncheckedCreateWithoutClassInput = {
   avatarUrl?: string | null
   isPreview?: boolean
   enrolledAt?: Date | string
+  attendanceRecords?: Prisma.AttendanceRecordUncheckedCreateNestedManyWithoutEnrollmentInput
+  teamMemberships?: Prisma.TeamMemberUncheckedCreateNestedManyWithoutEnrollmentInput
 }
 
 export type ClassEnrollmentCreateOrConnectWithoutClassInput = {
@@ -765,6 +820,166 @@ export type ClassEnrollmentUpdateManyWithWhereWithoutClassInput = {
   data: Prisma.XOR<Prisma.ClassEnrollmentUpdateManyMutationInput, Prisma.ClassEnrollmentUncheckedUpdateManyWithoutClassInput>
 }
 
+export type ClassEnrollmentCreateWithoutAttendanceRecordsInput = {
+  id?: string
+  xp?: number
+  coins?: number
+  mana?: number
+  lives?: number
+  level?: number
+  nickname?: string | null
+  avatarUrl?: string | null
+  isPreview?: boolean
+  enrolledAt?: Date | string
+  student: Prisma.UserCreateNestedOneWithoutEnrollmentsInput
+  class: Prisma.ClassCreateNestedOneWithoutEnrollmentsInput
+  teamMemberships?: Prisma.TeamMemberCreateNestedManyWithoutEnrollmentInput
+}
+
+export type ClassEnrollmentUncheckedCreateWithoutAttendanceRecordsInput = {
+  id?: string
+  studentId: string
+  classId: string
+  xp?: number
+  coins?: number
+  mana?: number
+  lives?: number
+  level?: number
+  nickname?: string | null
+  avatarUrl?: string | null
+  isPreview?: boolean
+  enrolledAt?: Date | string
+  teamMemberships?: Prisma.TeamMemberUncheckedCreateNestedManyWithoutEnrollmentInput
+}
+
+export type ClassEnrollmentCreateOrConnectWithoutAttendanceRecordsInput = {
+  where: Prisma.ClassEnrollmentWhereUniqueInput
+  create: Prisma.XOR<Prisma.ClassEnrollmentCreateWithoutAttendanceRecordsInput, Prisma.ClassEnrollmentUncheckedCreateWithoutAttendanceRecordsInput>
+}
+
+export type ClassEnrollmentUpsertWithoutAttendanceRecordsInput = {
+  update: Prisma.XOR<Prisma.ClassEnrollmentUpdateWithoutAttendanceRecordsInput, Prisma.ClassEnrollmentUncheckedUpdateWithoutAttendanceRecordsInput>
+  create: Prisma.XOR<Prisma.ClassEnrollmentCreateWithoutAttendanceRecordsInput, Prisma.ClassEnrollmentUncheckedCreateWithoutAttendanceRecordsInput>
+  where?: Prisma.ClassEnrollmentWhereInput
+}
+
+export type ClassEnrollmentUpdateToOneWithWhereWithoutAttendanceRecordsInput = {
+  where?: Prisma.ClassEnrollmentWhereInput
+  data: Prisma.XOR<Prisma.ClassEnrollmentUpdateWithoutAttendanceRecordsInput, Prisma.ClassEnrollmentUncheckedUpdateWithoutAttendanceRecordsInput>
+}
+
+export type ClassEnrollmentUpdateWithoutAttendanceRecordsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  mana?: Prisma.IntFieldUpdateOperationsInput | number
+  lives?: Prisma.IntFieldUpdateOperationsInput | number
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  nickname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPreview?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  enrolledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  student?: Prisma.UserUpdateOneRequiredWithoutEnrollmentsNestedInput
+  class?: Prisma.ClassUpdateOneRequiredWithoutEnrollmentsNestedInput
+  teamMemberships?: Prisma.TeamMemberUpdateManyWithoutEnrollmentNestedInput
+}
+
+export type ClassEnrollmentUncheckedUpdateWithoutAttendanceRecordsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  studentId?: Prisma.StringFieldUpdateOperationsInput | string
+  classId?: Prisma.StringFieldUpdateOperationsInput | string
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  mana?: Prisma.IntFieldUpdateOperationsInput | number
+  lives?: Prisma.IntFieldUpdateOperationsInput | number
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  nickname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPreview?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  enrolledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  teamMemberships?: Prisma.TeamMemberUncheckedUpdateManyWithoutEnrollmentNestedInput
+}
+
+export type ClassEnrollmentCreateWithoutTeamMembershipsInput = {
+  id?: string
+  xp?: number
+  coins?: number
+  mana?: number
+  lives?: number
+  level?: number
+  nickname?: string | null
+  avatarUrl?: string | null
+  isPreview?: boolean
+  enrolledAt?: Date | string
+  student: Prisma.UserCreateNestedOneWithoutEnrollmentsInput
+  class: Prisma.ClassCreateNestedOneWithoutEnrollmentsInput
+  attendanceRecords?: Prisma.AttendanceRecordCreateNestedManyWithoutEnrollmentInput
+}
+
+export type ClassEnrollmentUncheckedCreateWithoutTeamMembershipsInput = {
+  id?: string
+  studentId: string
+  classId: string
+  xp?: number
+  coins?: number
+  mana?: number
+  lives?: number
+  level?: number
+  nickname?: string | null
+  avatarUrl?: string | null
+  isPreview?: boolean
+  enrolledAt?: Date | string
+  attendanceRecords?: Prisma.AttendanceRecordUncheckedCreateNestedManyWithoutEnrollmentInput
+}
+
+export type ClassEnrollmentCreateOrConnectWithoutTeamMembershipsInput = {
+  where: Prisma.ClassEnrollmentWhereUniqueInput
+  create: Prisma.XOR<Prisma.ClassEnrollmentCreateWithoutTeamMembershipsInput, Prisma.ClassEnrollmentUncheckedCreateWithoutTeamMembershipsInput>
+}
+
+export type ClassEnrollmentUpsertWithoutTeamMembershipsInput = {
+  update: Prisma.XOR<Prisma.ClassEnrollmentUpdateWithoutTeamMembershipsInput, Prisma.ClassEnrollmentUncheckedUpdateWithoutTeamMembershipsInput>
+  create: Prisma.XOR<Prisma.ClassEnrollmentCreateWithoutTeamMembershipsInput, Prisma.ClassEnrollmentUncheckedCreateWithoutTeamMembershipsInput>
+  where?: Prisma.ClassEnrollmentWhereInput
+}
+
+export type ClassEnrollmentUpdateToOneWithWhereWithoutTeamMembershipsInput = {
+  where?: Prisma.ClassEnrollmentWhereInput
+  data: Prisma.XOR<Prisma.ClassEnrollmentUpdateWithoutTeamMembershipsInput, Prisma.ClassEnrollmentUncheckedUpdateWithoutTeamMembershipsInput>
+}
+
+export type ClassEnrollmentUpdateWithoutTeamMembershipsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  mana?: Prisma.IntFieldUpdateOperationsInput | number
+  lives?: Prisma.IntFieldUpdateOperationsInput | number
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  nickname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPreview?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  enrolledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  student?: Prisma.UserUpdateOneRequiredWithoutEnrollmentsNestedInput
+  class?: Prisma.ClassUpdateOneRequiredWithoutEnrollmentsNestedInput
+  attendanceRecords?: Prisma.AttendanceRecordUpdateManyWithoutEnrollmentNestedInput
+}
+
+export type ClassEnrollmentUncheckedUpdateWithoutTeamMembershipsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  studentId?: Prisma.StringFieldUpdateOperationsInput | string
+  classId?: Prisma.StringFieldUpdateOperationsInput | string
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  mana?: Prisma.IntFieldUpdateOperationsInput | number
+  lives?: Prisma.IntFieldUpdateOperationsInput | number
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  nickname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPreview?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  enrolledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  attendanceRecords?: Prisma.AttendanceRecordUncheckedUpdateManyWithoutEnrollmentNestedInput
+}
+
 export type ClassEnrollmentCreateManyStudentInput = {
   id?: string
   classId: string
@@ -791,6 +1006,8 @@ export type ClassEnrollmentUpdateWithoutStudentInput = {
   isPreview?: Prisma.BoolFieldUpdateOperationsInput | boolean
   enrolledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   class?: Prisma.ClassUpdateOneRequiredWithoutEnrollmentsNestedInput
+  attendanceRecords?: Prisma.AttendanceRecordUpdateManyWithoutEnrollmentNestedInput
+  teamMemberships?: Prisma.TeamMemberUpdateManyWithoutEnrollmentNestedInput
 }
 
 export type ClassEnrollmentUncheckedUpdateWithoutStudentInput = {
@@ -805,6 +1022,8 @@ export type ClassEnrollmentUncheckedUpdateWithoutStudentInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPreview?: Prisma.BoolFieldUpdateOperationsInput | boolean
   enrolledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  attendanceRecords?: Prisma.AttendanceRecordUncheckedUpdateManyWithoutEnrollmentNestedInput
+  teamMemberships?: Prisma.TeamMemberUncheckedUpdateManyWithoutEnrollmentNestedInput
 }
 
 export type ClassEnrollmentUncheckedUpdateManyWithoutStudentInput = {
@@ -847,6 +1066,8 @@ export type ClassEnrollmentUpdateWithoutClassInput = {
   isPreview?: Prisma.BoolFieldUpdateOperationsInput | boolean
   enrolledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   student?: Prisma.UserUpdateOneRequiredWithoutEnrollmentsNestedInput
+  attendanceRecords?: Prisma.AttendanceRecordUpdateManyWithoutEnrollmentNestedInput
+  teamMemberships?: Prisma.TeamMemberUpdateManyWithoutEnrollmentNestedInput
 }
 
 export type ClassEnrollmentUncheckedUpdateWithoutClassInput = {
@@ -861,6 +1082,8 @@ export type ClassEnrollmentUncheckedUpdateWithoutClassInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPreview?: Prisma.BoolFieldUpdateOperationsInput | boolean
   enrolledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  attendanceRecords?: Prisma.AttendanceRecordUncheckedUpdateManyWithoutEnrollmentNestedInput
+  teamMemberships?: Prisma.TeamMemberUncheckedUpdateManyWithoutEnrollmentNestedInput
 }
 
 export type ClassEnrollmentUncheckedUpdateManyWithoutClassInput = {
@@ -878,6 +1101,44 @@ export type ClassEnrollmentUncheckedUpdateManyWithoutClassInput = {
 }
 
 
+/**
+ * Count Type ClassEnrollmentCountOutputType
+ */
+
+export type ClassEnrollmentCountOutputType = {
+  attendanceRecords: number
+  teamMemberships: number
+}
+
+export type ClassEnrollmentCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  attendanceRecords?: boolean | ClassEnrollmentCountOutputTypeCountAttendanceRecordsArgs
+  teamMemberships?: boolean | ClassEnrollmentCountOutputTypeCountTeamMembershipsArgs
+}
+
+/**
+ * ClassEnrollmentCountOutputType without action
+ */
+export type ClassEnrollmentCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ClassEnrollmentCountOutputType
+   */
+  select?: Prisma.ClassEnrollmentCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * ClassEnrollmentCountOutputType without action
+ */
+export type ClassEnrollmentCountOutputTypeCountAttendanceRecordsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AttendanceRecordWhereInput
+}
+
+/**
+ * ClassEnrollmentCountOutputType without action
+ */
+export type ClassEnrollmentCountOutputTypeCountTeamMembershipsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TeamMemberWhereInput
+}
+
 
 export type ClassEnrollmentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -894,6 +1155,9 @@ export type ClassEnrollmentSelect<ExtArgs extends runtime.Types.Extensions.Inter
   enrolledAt?: boolean
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   class?: boolean | Prisma.ClassDefaultArgs<ExtArgs>
+  attendanceRecords?: boolean | Prisma.ClassEnrollment$attendanceRecordsArgs<ExtArgs>
+  teamMemberships?: boolean | Prisma.ClassEnrollment$teamMembershipsArgs<ExtArgs>
+  _count?: boolean | Prisma.ClassEnrollmentCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["classEnrollment"]>
 
 export type ClassEnrollmentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -949,6 +1213,9 @@ export type ClassEnrollmentOmit<ExtArgs extends runtime.Types.Extensions.Interna
 export type ClassEnrollmentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   class?: boolean | Prisma.ClassDefaultArgs<ExtArgs>
+  attendanceRecords?: boolean | Prisma.ClassEnrollment$attendanceRecordsArgs<ExtArgs>
+  teamMemberships?: boolean | Prisma.ClassEnrollment$teamMembershipsArgs<ExtArgs>
+  _count?: boolean | Prisma.ClassEnrollmentCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ClassEnrollmentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -964,6 +1231,8 @@ export type $ClassEnrollmentPayload<ExtArgs extends runtime.Types.Extensions.Int
   objects: {
     student: Prisma.$UserPayload<ExtArgs>
     class: Prisma.$ClassPayload<ExtArgs>
+    attendanceRecords: Prisma.$AttendanceRecordPayload<ExtArgs>[]
+    teamMemberships: Prisma.$TeamMemberPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1374,6 +1643,8 @@ export interface Prisma__ClassEnrollmentClient<T, Null = never, ExtArgs extends 
   readonly [Symbol.toStringTag]: "PrismaPromise"
   student<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   class<T extends Prisma.ClassDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ClassDefaultArgs<ExtArgs>>): Prisma.Prisma__ClassClient<runtime.Types.Result.GetResult<Prisma.$ClassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  attendanceRecords<T extends Prisma.ClassEnrollment$attendanceRecordsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ClassEnrollment$attendanceRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AttendanceRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  teamMemberships<T extends Prisma.ClassEnrollment$teamMembershipsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ClassEnrollment$teamMembershipsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TeamMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1813,6 +2084,54 @@ export type ClassEnrollmentDeleteManyArgs<ExtArgs extends runtime.Types.Extensio
    * Limit how many ClassEnrollments to delete.
    */
   limit?: number
+}
+
+/**
+ * ClassEnrollment.attendanceRecords
+ */
+export type ClassEnrollment$attendanceRecordsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AttendanceRecord
+   */
+  select?: Prisma.AttendanceRecordSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AttendanceRecord
+   */
+  omit?: Prisma.AttendanceRecordOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AttendanceRecordInclude<ExtArgs> | null
+  where?: Prisma.AttendanceRecordWhereInput
+  orderBy?: Prisma.AttendanceRecordOrderByWithRelationInput | Prisma.AttendanceRecordOrderByWithRelationInput[]
+  cursor?: Prisma.AttendanceRecordWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AttendanceRecordScalarFieldEnum | Prisma.AttendanceRecordScalarFieldEnum[]
+}
+
+/**
+ * ClassEnrollment.teamMemberships
+ */
+export type ClassEnrollment$teamMembershipsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TeamMember
+   */
+  select?: Prisma.TeamMemberSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TeamMember
+   */
+  omit?: Prisma.TeamMemberOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TeamMemberInclude<ExtArgs> | null
+  where?: Prisma.TeamMemberWhereInput
+  orderBy?: Prisma.TeamMemberOrderByWithRelationInput | Prisma.TeamMemberOrderByWithRelationInput[]
+  cursor?: Prisma.TeamMemberWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TeamMemberScalarFieldEnum | Prisma.TeamMemberScalarFieldEnum[]
 }
 
 /**

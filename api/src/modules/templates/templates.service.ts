@@ -100,6 +100,7 @@ const TEMPLATE_BEHAVIOR = {
   description: true,
   xpDelta: true,
   coinDelta: true,
+  manaDelta: true,
   lifeDelta: true,
 } satisfies Prisma.BehaviorTemplateSelect
 

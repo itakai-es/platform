@@ -80,6 +80,12 @@ export const ModelName = {
   ChatMessage: 'ChatMessage',
   BehaviorTemplate: 'BehaviorTemplate',
   BehaviorApplication: 'BehaviorApplication',
+  AttendanceSession: 'AttendanceSession',
+  AttendanceRecord: 'AttendanceRecord',
+  TeamSet: 'TeamSet',
+  Team: 'Team',
+  TeamMember: 'TeamMember',
+  TeamAward: 'TeamAward',
   HelpCategory: 'HelpCategory',
   HelpArticle: 'HelpArticle'
 } as const
@@ -309,6 +315,7 @@ export const MissionScalarFieldEnum = {
   rarity: 'rarity',
   backgroundImage: 'backgroundImage',
   deadline: 'deadline',
+  teamSetId: 'teamSetId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -547,6 +554,7 @@ export const BehaviorTemplateScalarFieldEnum = {
   xpDelta: 'xpDelta',
   coinDelta: 'coinDelta',
   lifeDelta: 'lifeDelta',
+  manaDelta: 'manaDelta',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -565,10 +573,93 @@ export const BehaviorApplicationScalarFieldEnum = {
   xpDelta: 'xpDelta',
   coinDelta: 'coinDelta',
   lifeDelta: 'lifeDelta',
+  manaDelta: 'manaDelta',
+  teamAwardId: 'teamAwardId',
   createdAt: 'createdAt'
 } as const
 
 export type BehaviorApplicationScalarFieldEnum = (typeof BehaviorApplicationScalarFieldEnum)[keyof typeof BehaviorApplicationScalarFieldEnum]
+
+
+export const AttendanceSessionScalarFieldEnum = {
+  id: 'id',
+  classId: 'classId',
+  date: 'date',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  source: 'source',
+  takenById: 'takenById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AttendanceSessionScalarFieldEnum = (typeof AttendanceSessionScalarFieldEnum)[keyof typeof AttendanceSessionScalarFieldEnum]
+
+
+export const AttendanceRecordScalarFieldEnum = {
+  id: 'id',
+  sessionId: 'sessionId',
+  enrollmentId: 'enrollmentId',
+  status: 'status',
+  note: 'note',
+  updatedById: 'updatedById',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AttendanceRecordScalarFieldEnum = (typeof AttendanceRecordScalarFieldEnum)[keyof typeof AttendanceRecordScalarFieldEnum]
+
+
+export const TeamSetScalarFieldEnum = {
+  id: 'id',
+  classId: 'classId',
+  title: 'title',
+  kind: 'kind',
+  archivedAt: 'archivedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TeamSetScalarFieldEnum = (typeof TeamSetScalarFieldEnum)[keyof typeof TeamSetScalarFieldEnum]
+
+
+export const TeamScalarFieldEnum = {
+  id: 'id',
+  setId: 'setId',
+  title: 'title',
+  color: 'color',
+  emblem: 'emblem',
+  orderIndex: 'orderIndex'
+} as const
+
+export type TeamScalarFieldEnum = (typeof TeamScalarFieldEnum)[keyof typeof TeamScalarFieldEnum]
+
+
+export const TeamMemberScalarFieldEnum = {
+  id: 'id',
+  teamId: 'teamId',
+  setId: 'setId',
+  enrollmentId: 'enrollmentId'
+} as const
+
+export type TeamMemberScalarFieldEnum = (typeof TeamMemberScalarFieldEnum)[keyof typeof TeamMemberScalarFieldEnum]
+
+
+export const TeamAwardScalarFieldEnum = {
+  id: 'id',
+  teamId: 'teamId',
+  teacherId: 'teacherId',
+  behaviorId: 'behaviorId',
+  title: 'title',
+  points: 'points',
+  xpDelta: 'xpDelta',
+  coinDelta: 'coinDelta',
+  manaDelta: 'manaDelta',
+  lifeDelta: 'lifeDelta',
+  memberCount: 'memberCount',
+  createdAt: 'createdAt'
+} as const
+
+export type TeamAwardScalarFieldEnum = (typeof TeamAwardScalarFieldEnum)[keyof typeof TeamAwardScalarFieldEnum]
 
 
 export const HelpCategoryScalarFieldEnum = {

@@ -535,6 +535,20 @@
       "empty_title": "Sense classes",
       "empty_archived_title": "Sense classes arxivades",
       "no_results": "No hi ha cap classe que coincideixi amb «{query}»"
+    },
+    "effects": {},
+    "calendar": {
+      "prev_month": "Mes anterior",
+      "next_month": "Mes següent"
+    },
+    "teams": {
+      "standings_title": "Classificació d’equips · {title}",
+      "position": "Posició",
+      "points": "{count} punt | {count} punts",
+      "kind": {
+        "base": "De base",
+        "temporal": "Temporal"
+      }
     }
   }
 }

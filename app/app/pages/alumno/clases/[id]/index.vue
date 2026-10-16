@@ -81,6 +81,7 @@
         avatar-path="/guides/atenea.webp"
         :class-id="classId"
       />
+      <MyTeamCard :class-id="classId" />
       <ClassTeachersCard v-if="classTeachers" :teachers="classTeachers" />
       <RecentActivityCard
         :activities="formattedActivities"

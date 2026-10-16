@@ -7,6 +7,7 @@ import { requireStudentEnrollment } from '../../utils/class-access.js'
 import { PASSWORD_MIN_LENGTH } from '../../utils/password.js'
 import { currentTokenFamily } from '../../utils/session-cookie.js'
 import { NICKNAME_MAX_LENGTH } from '../../utils/enrollment.js'
+import { studentTeamsRoutes } from '../teams/teams.routes.js'
 
 type RequestUser = { id: string; role: string | null }
 
@@ -216,12 +217,11 @@ export async function studentsRoutes(fastify: FastifyInstance) {
     }
   })
 
-  fastify.get('/classes/:classId/ranking', async (request: FastifyRequest<{ Params: { classId: string }; Querystring: { filter?: string } }>, reply: FastifyReply) => {
+  fastify.get('/classes/:classId/ranking', async (request: FastifyRequest<{ Params: { classId: string } }>, reply: FastifyReply) => {
     try {
       const { id } = request.user as { id: string }
       const { classId } = request.params
-      const { filter } = request.query
-      const result = await studentsService.getClassRanking(id, classId, filter)
+      const result = await studentsService.getClassRanking(id, classId)
       return result
     } catch (error) {
       if (error instanceof Error) {
@@ -432,4 +432,7 @@ export async function studentsRoutes(fastify: FastifyInstance) {
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
+
+  // Mi equipo y la clasificación de equipos: en su módulo, detrás de la misma matrícula.
+  await fastify.register(studentTeamsRoutes)
 }

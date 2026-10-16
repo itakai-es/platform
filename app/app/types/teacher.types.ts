@@ -44,6 +44,8 @@ export interface Student {
   id: string
   name: string // Nombre real para identificación del profesor
   username: string // Nombre público para rankings (gamificación)
+  /** Alias en la clase, si lo tiene. `username` cae al usuario o al correo cuando no hay. */
+  nickname?: string | null
   /** Nulo en una cuenta que entra con usuario: no tiene correo. */
   email: string | null
   /** Usuario de la cuenta, con el que entra si no tiene correo. */

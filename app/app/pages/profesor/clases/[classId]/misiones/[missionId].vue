@@ -67,6 +67,7 @@
         <MissionConfigPanel
           v-if="current === 'ajustes'"
           :mission-id="missionId"
+          :class-id="classId"
           :mission="mission"
           @update="onSettingsUpdate"
         />

@@ -56,6 +56,7 @@ import {
   type TemplateFilters,
 } from '../templates/templates.service.js'
 import { missionRewards } from '../../utils/mission-formatter.js'
+import { completedMissionsByStudent } from '../../utils/ranking.js'
 
 const BADGES_DIR = join(process.cwd(), 'uploads', 'badges')
 const COVERS_DIR = join(process.cwd(), 'uploads', 'covers')
@@ -689,6 +690,7 @@ export class TeachersService {
               description: b.description,
               xpDelta: b.xpDelta,
               coinDelta: b.coinDelta,
+              manaDelta: b.manaDelta,
               lifeDelta: b.lifeDelta,
             })),
           })
@@ -1031,17 +1033,9 @@ export class TeachersService {
 
     if (!cls) throw new NotFoundError('Clase no encontrada')
 
-    // Get per-student mission progress
-    const totalMissionsInClass = await prisma.mission.count({ where: { classId } })
-    const studentProgress = await prisma.studentMissionProgress.groupBy({
-      by: ['studentId'],
-      where: {
-        mission: { classId },
-        progress: 100,
-      },
-      _count: true,
-    })
-    const completedByStudent = new Map(studentProgress.map(sp => [sp.studentId, sp._count]))
+    // Misiones completadas por alumno: el mismo recuento que el ranking del alumnado.
+    const { total: totalMissionsInClass, byStudent: completedByStudent } =
+      await completedMissionsByStudent(classId)
     const levelCfg = resolveLevelConfig(cls.levelConfig)
 
     const sorted = cls.enrollments
@@ -1105,9 +1099,10 @@ export class TeachersService {
     if (!cls) throw new NotFoundError('Clase no encontrada')
 
     // Recuento de comportamientos por alumno (positivos / negativos) en esta clase.
+    // Las recompensas libres van en la misma tabla, pero no son comportamientos.
     const behaviorCounts = await prisma.behaviorApplication.groupBy({
       by: ['studentId', 'kind'],
-      where: { classId },
+      where: { classId, kind: { not: 'reward' } },
       _count: { _all: true },
     })
     const positive = new Map<string, number>()

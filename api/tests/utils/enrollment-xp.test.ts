@@ -36,6 +36,7 @@ vi.mock('../../src/config/database.js', () => ({
 const { updateMock, findUniqueMock } = mocks
 
 import { applyXpDelta, syncEnrollmentLevel } from '../../src/utils/enrollment-xp.js'
+import { Prisma } from '../../src/generated/prisma/client.js'
 import { getLevelFromXP, getTotalXPForLevel } from '../../src/utils/xp-calculator.js'
 
 const STUDENT = 'student-1'
@@ -144,11 +145,26 @@ describe('applyXpDelta — validation', () => {
   })
 
   it('rethrows as a friendly message when the enrollment does not exist', async () => {
-    updateMock.mockRejectedValueOnce(new Error('Record to update not found'))
+    updateMock.mockRejectedValueOnce(
+      new Prisma.PrismaClientKnownRequestError('Record to update not found', {
+        code: 'P2025',
+        clientVersion: 'test',
+      }),
+    )
 
     await expect(
       applyXpDelta({ studentId: STUDENT, classId: CLASS, delta: 50 }),
     ).rejects.toThrow(/No estás en esta clase/)
+  })
+
+  it('no disfraza otros errores de la base (p. ej. un bloqueo mutuo)', async () => {
+    const deadlock = new Prisma.PrismaClientKnownRequestError('deadlock detected', {
+      code: 'P2034',
+      clientVersion: 'test',
+    })
+    updateMock.mockRejectedValueOnce(deadlock)
+
+    await expect(applyXpDelta({ studentId: STUDENT, classId: CLASS, delta: 50 })).rejects.toBe(deadlock)
   })
 })
 
@@ -178,5 +194,46 @@ describe('syncEnrollmentLevel', () => {
 
     await expect(syncEnrollmentLevel(STUDENT, CLASS)).resolves.toBeUndefined()
     expect(updateMock).not.toHaveBeenCalled()
+  })
+})
+
+describe('applyXpDelta — monedas, maná y vidas con signo (comportamientos y recompensas)', () => {
+  it('sin allowNegativeBalances, un delta negativo de monedas o maná se ignora (entregas)', async () => {
+    updateMock.mockResolvedValueOnce({ xp: 10, level: 1, coins: 4, mana: 4, lives: 100 })
+    await applyXpDelta({ studentId: STUDENT, classId: CLASS, delta: 0, coinsDelta: -3, manaDelta: -3 })
+    expect(updateMock).toHaveBeenNthCalledWith(1, {
+      where: { studentId_classId: { studentId: STUDENT, classId: CLASS } },
+      data: { xp: { increment: 0 } },
+    })
+  })
+
+  it('con allowNegativeBalances resta con incremento atómico y corrige a 0 lo que queda negativo', async () => {
+    updateMock
+      .mockResolvedValueOnce({ xp: 5, level: 1, coins: -2, mana: 3, lives: -1 })
+      .mockResolvedValueOnce({ xp: 5, level: 1, coins: 0, mana: 3, lives: 0 })
+    const result = await applyXpDelta({
+      studentId: STUDENT,
+      classId: CLASS,
+      delta: 0,
+      coinsDelta: -5,
+      manaDelta: -1,
+      livesDelta: -10,
+      allowNegativeBalances: true,
+      levelConfig: undefined,
+    })
+    expect(updateMock).toHaveBeenNthCalledWith(1, {
+      where: { studentId_classId: { studentId: STUDENT, classId: CLASS } },
+      data: {
+        xp: { increment: 0 },
+        coins: { increment: -5 },
+        mana: { increment: -1 },
+        lives: { increment: -10 },
+      },
+    })
+    expect(updateMock).toHaveBeenNthCalledWith(2, {
+      where: { studentId_classId: { studentId: STUDENT, classId: CLASS } },
+      data: { coins: 0, lives: 0 },
+    })
+    expect(result.balances).toMatchObject({ coins: 0, mana: 3, lives: 0 })
   })
 })

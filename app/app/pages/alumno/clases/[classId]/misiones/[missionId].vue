@@ -1,5 +1,8 @@
 <template>
   <div>
+    <!-- Misión por equipos: con qué agrupación se hace y quién va contigo -->
+    <InfoNote v-if="teamNote" class="mb-4">{{ teamNote }}</InfoNote>
+
     <MissionDetailTemplate
       mode="student"
       :class-id="classId"
@@ -100,6 +103,32 @@ const fetchMission = async () => {
     loading.value = false
   }
 }
+
+// Misión por equipos: el equipo propio en esa agrupación, con quién está.
+const studentTeams = useStudentTeams(classId)
+watch(
+  () => mission.value?.teamSet,
+  teamSet => {
+    if (teamSet) void studentTeams.ensure()
+  }
+)
+const teamNote = computed(() => {
+  const teamSet = mission.value?.teamSet
+  if (!teamSet || !studentTeams.loaded.value) return ''
+  const mine = studentTeams.data.value?.myTeams.find(entry => entry.set.id === teamSet.id)
+  // Archivada y sin equipo propio, no hay nada cierto que decir («aún no estás» ya no vale).
+  if (!mine) {
+    return teamSet.archived ? '' : t('student.teams.mission_no_team', { set: teamSet.title })
+  }
+  const others = mine.members.filter(m => !m.isMe).map(m => m.name)
+  return others.length
+    ? t('student.teams.mission_team', {
+        set: teamSet.title,
+        team: mine.team.title,
+        names: others.join(', '),
+      })
+    : t('student.teams.mission_team_alone', { set: teamSet.title, team: mine.team.title })
+})
 
 // Support documents
 const supportDocuments = computed(() => mission.value?.documents || [])

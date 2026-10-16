@@ -535,6 +535,20 @@
       "empty_title": "No classes",
       "empty_archived_title": "No archived classes",
       "no_results": "No classes match “{query}”"
+    },
+    "effects": {},
+    "calendar": {
+      "prev_month": "Previous month",
+      "next_month": "Next month"
+    },
+    "teams": {
+      "standings_title": "Team standings · {title}",
+      "position": "Position",
+      "points": "{count} point | {count} points",
+      "kind": {
+        "base": "Base",
+        "temporal": "Temporary"
+      }
     }
   }
 }

@@ -166,7 +166,9 @@
           "view_ranking": "Ranking",
           "col_actions": "Acciones",
           "managed_badge": "Sin correo",
-          "pending_sign_in_badge": "Pendiente de entrar"
+          "pending_sign_in_badge": "Pendiente de entrar",
+          "view_attendance": "Asistencia",
+          "view_teams": "Equipos"
         },
         "stats_title": "Estadísticas de la clase",
         "pending_reviews": "Entregas por revisar",
@@ -207,9 +209,6 @@
           "section_negatives": "Negativos",
           "filter_all": "Todos",
           "apply_title": "Aplicar \"{name}\"",
-          "pick_student": "Elige a qué estudiante se lo vas a aplicar.",
-          "applied_toast": "{behavior} aplicado a {student}",
-          "empty_students": "Aún no hay estudiantes en esta clase.",
           "form_new_title": "Nuevo comportamiento",
           "form_edit_title": "Editar comportamiento",
           "form_type": "Tipo",
@@ -233,7 +232,6 @@
           "toast_save_error": "No se pudo guardar el comportamiento.",
           "toast_delete_error": "No se pudo eliminar el comportamiento.",
           "fetch_error": "No se pudieron cargar los comportamientos.",
-          "apply_error": "No se pudo aplicar el comportamiento.",
           "empty_description_readonly": "Cuando se añadan comportamientos a esta clase, aparecerán aquí."
         },
         "shop": {
@@ -610,7 +608,10 @@
             "document": "Documentos",
             "submission": "Entregas",
             "behavior": "Comportamientos",
-            "shop": "Tienda"
+            "shop": "Tienda",
+            "reward": "Recompensas",
+            "attendance": "Asistencia",
+            "team": "Equipos"
           },
           "actions": {
             "class": {
@@ -671,12 +672,36 @@
               "applied": "aplicó «{title}» a {target}",
               "created": "creó el comportamiento «{title}»",
               "updated": "editó el comportamiento «{title}»",
-              "deleted": "borró el comportamiento «{title}»"
+              "deleted": "borró el comportamiento «{title}»",
+              "applied_batch": "aplicó «{title}» a {count} estudiantes"
             },
             "shop": {
               "item_created": "añadió «{title}» a la tienda",
               "item_updated": "editó «{title}» en la tienda",
               "item_deleted": "quitó «{title}» de la tienda"
+            },
+            "reward": {
+              "granted": "dio a {target} una recompensa: «{title}»",
+              "granted_batch": "dio una recompensa a {count} estudiantes: «{title}»",
+              "taken": "quitó recursos a {target}: «{title}»",
+              "taken_batch": "quitó recursos a {count} estudiantes: «{title}»"
+            },
+            "attendance": {
+              "taken": "pasó lista del {date}: {present} en clase, {absent} sin venir",
+              "updated": "corrigió la lista del {date}: {present} en clase, {absent} sin venir",
+              "deleted": "borró la lista del {date}"
+            },
+            "team": {
+              "set_created": "creó la agrupación de equipos «{title}»",
+              "set_updated": "editó la agrupación de equipos «{title}»",
+              "set_archived": "archivó la agrupación de equipos «{title}»",
+              "set_unarchived": "sacó del archivo la agrupación de equipos «{title}»",
+              "set_deleted": "borró la agrupación de equipos «{title}»",
+              "members_changed": "cambió los equipos de «{title}»",
+              "awarded": "dio {points} punto al equipo «{title}»: «{label}» | dio {points} puntos al equipo «{title}»: «{label}»",
+              "awarded_batch": "dio {points} punto al equipo «{title}» y repartió «{label}» a cada integrante | dio {points} puntos al equipo «{title}» y repartió «{label}» a cada integrante",
+              "distributed": "repartió «{label}» al equipo «{title}»",
+              "distributed_batch": "repartió «{label}» a la única persona del equipo «{title}» | repartió «{label}» a las {count} personas del equipo «{title}»"
             }
           },
           "anonymous": {
@@ -693,8 +718,13 @@
             },
             "behavior": {
               "applied": "aplicó «{title}» a alguien que ya no está en la clase"
+            },
+            "reward": {
+              "granted": "dio una recompensa a alguien que ya no está en la clase: «{title}»",
+              "taken": "quitó recursos a alguien que ya no está en la clase: «{title}»"
             }
-          }
+          },
+          "batch_who": "Ver a quién ({count})"
         },
         "in_trash": {
           "title": "«{name}» está en la papelera",
@@ -800,7 +830,10 @@
           "save": "Guardar cambios",
           "discard": "Descartar",
           "toast_saved": "Datos guardados",
-          "toast_error": "No se pudieron guardar los datos"
+          "toast_error": "No se pudieron guardar los datos",
+          "team_set_label": "Por equipos",
+          "team_set_none": "Individual (sin equipos)",
+          "team_set_hint": "Solo informativo: el alumnado ve con qué equipos se hace y puedes aprobar a todo un equipo de una vez. Cada estudiante sigue entregando lo suyo."
         }
       },
       "import": {
@@ -1270,7 +1303,10 @@
         "pct_custom": "Otro porcentaje",
         "will_receive": "Recibirá",
         "approve": "Aprobar {pct}%",
-        "approve_error": "No se pudo aprobar la entrega"
+        "approve_error": "No se pudo aprobar la entrega",
+        "approve_team": "Aprobar al equipo ({count}) con un {pct} %",
+        "team_approved": "{team}: aprobada {count} entrega con un {pct} % | {team}: aprobadas {count} entregas con un {pct} %",
+        "team_note": "Misión por equipos («{set}»): al revisar una entrega puedes aprobar con el mismo porcentaje a todo su equipo que haya entregado."
       }
     },
     "templates": {
@@ -1369,6 +1405,230 @@
       "done": "Hecho",
       "wizard_question_schedule": "Ponle un horario a tu clase",
       "wizard_question_cover": "Ahora, una portada para tu clase"
+    },
+    "classroom": {
+      "picker": {
+        "legend": "Estudiantes",
+        "search": "Buscar estudiante…",
+        "all": "Todo el alumnado",
+        "none": "Nadie",
+        "empty": "Aún no hay estudiantes en esta clase.",
+        "no_results": "Nadie coincide con la búsqueda.",
+        "count": "Elegidos: {count} de {total}",
+        "only_present": "Solo presentes hoy",
+        "only_absent": "Solo ausentes hoy"
+      },
+      "modal_title": "Aplicar a varios estudiantes",
+      "mode_label": "Qué quieres aplicar",
+      "mode_behavior": "Comportamiento",
+      "mode_reward": "Recompensa libre",
+      "behavior_legend": "Comportamiento",
+      "no_behaviors": "Esta clase aún no tiene comportamientos. Créalos en la pestaña Comportamientos o da una recompensa libre.",
+      "reward": {
+        "legend": "Recompensa",
+        "direction_label": "Dar o quitar",
+        "give": "Dar",
+        "take": "Quitar",
+        "no_resources": "Esta clase no tiene ningún recurso activado (XP, monedas, maná o vidas).",
+        "reason": "Motivo",
+        "reason_placeholder": "Ej: Ha ayudado a preparar el laboratorio",
+        "reason_too_long": "El motivo puede tener hasta 80 caracteres."
+      },
+      "continue": "Continuar",
+      "confirm_title": "Confirmar",
+      "confirm_button": "Aplicar",
+      "back": "Volver",
+      "confirm_who": "Ver a quién ({count})",
+      "confirm_behavior": "Aplicar «{title}» a {count} estudiante. | Aplicar «{title}» a {count} estudiantes.",
+      "confirm_reward": "Recompensa «{title}» a {count} estudiante. | Recompensa «{title}» a {count} estudiantes.",
+      "confirm_effect": "Por estudiante: {effect}.",
+      "confirm_no_effect": "No mueve ningún recurso activo en esta clase; solo queda anotado.",
+      "applied_toast": "«{title}» aplicado a {count} estudiante | «{title}» aplicado a {count} estudiantes",
+      "apply_error": "No se pudo aplicar. No ha cambiado nada.",
+      "archived_notice": "La clase está archivada: puedes ver y editar el catálogo, pero no aplicarlo a nadie.",
+      "select_all_visible": "Elegir a todo el alumnado de la lista",
+      "select_student": "Elegir a {name}",
+      "selected_count": "{count} estudiante elegido | {count} estudiantes elegidos",
+      "apply_behavior": "Aplicar comportamiento",
+      "give_reward": "Dar recompensa",
+      "clear_selection": "Quitar selección",
+      "applied_announcement": "Aplicado a {count} estudiante. Saldos actualizados. | Aplicado a {count} estudiantes. Saldos actualizados.",
+      "target_label": "A quién",
+      "target_students": "A estudiantes",
+      "target_team": "A un equipo",
+      "team": {
+        "legend": "Equipo",
+        "points": "Puntos para el marcador",
+        "points_hint": "Suman en la clasificación de equipos (o restan, si quitas). Pon 0 si solo repartes.",
+        "distribute": "Repartir también a cada integrante",
+        "distribute_hint": "Cada integrante recibe el comportamiento o la recompensa, como si se lo aplicaras por separado.",
+        "confirm_points": "Equipo «{team}»: {points} punto en el marcador. | Equipo «{team}»: {points} puntos en el marcador.",
+        "confirm_no_points": "Equipo «{team}»: sin puntos en el marcador.",
+        "confirm_distribute": "Y «{title}» a su integrante. | Y «{title}» a sus {count} integrantes.",
+        "confirm_no_distribute": "No se reparte nada a sus integrantes.",
+        "awarded_toast": "Equipo «{team}» premiado",
+        "modal_title": "Premiar a un equipo"
+      },
+      "fixed_to": "Para: {names}"
+    },
+    "attendance": {
+      "tabs_label": "Asistencia",
+      "tab_take": "Pasar lista",
+      "tab_history": "Histórico",
+      "date": "Fecha",
+      "session": "Sesión",
+      "no_schedule": "Sesión sin horario",
+      "saved_by": "Lista guardada por {name} ({time}).",
+      "someone": "alguien del profesorado",
+      "not_saved": "Aún no se ha pasado lista en esta sesión. Todo el alumnado sale presente: marca solo a quien falta.",
+      "unsaved": "Cambios sin guardar",
+      "read_only": "Puedes ver la asistencia, pero pasar lista es de quien edita en la clase.",
+      "count": {
+        "present": "{count} presente | {count} presentes",
+        "absent": "{count} ausente | {count} ausentes",
+        "late": "{count} retraso | {count} retrasos",
+        "excused": "{count} justificada | {count} justificadas"
+      },
+      "all_present": "Todo el alumnado presente",
+      "status_of": "Asistencia de {name}",
+      "status": {
+        "present": "Presente",
+        "absent": "Ausente",
+        "late": "Retraso",
+        "excused": "Justificada"
+      },
+      "save": "Guardar lista",
+      "delete": "Borrar esta lista",
+      "delete_title": "¿Borrar esta lista?",
+      "delete_message": "Se borra la sesión con el estado de todo el alumnado. Úsalo si pasaste lista por error.",
+      "apply_present": "Aplicar a los presentes…",
+      "apply_absent": "Aplicar a los ausentes…",
+      "no_auto_xp": "Pasar lista nunca quita ni da nada por sí solo: premiar o penalizar es siempre una acción aparte, con confirmación.",
+      "load_error": "No se pudo cargar la asistencia.",
+      "saved_announcement": "Lista guardada: {present} en clase, {absent} sin venir.",
+      "save_error": "No se pudo guardar la lista.",
+      "deleted": "Lista borrada.",
+      "delete_error": "No se pudo borrar la lista.",
+      "history": {
+        "download_csv": "Descargar CSV",
+        "empty_title": "No hay listas este mes",
+        "empty_description": "Cuando pases lista, aquí verás la asistencia de cada estudiante.",
+        "calendar_hint": "Los días marcados tienen lista. Pulsa un día para pasarla o corregirla.",
+        "table_caption": "Asistencia por estudiante en {month}",
+        "no_record": "Sin registro",
+        "day_with_list": "hay lista",
+        "csv_sessions": "Sesiones",
+        "csv_file": "asistencia",
+        "export_error": "No se pudo descargar el CSV."
+      },
+      "profile": {
+        "rate": "Asistencia: {rate} %",
+        "sessions": "{count} sesión este curso | {count} sesiones este curso"
+      }
+    },
+    "teams": {
+      "empty_title": "Aún no hay equipos",
+      "empty_description": "Forma equipos a mano o al azar. Puedes tener equipos de base, fijos, que puntúan en la clasificación, y temporales para una misión o una dinámica.",
+      "empty_description_readonly": "Cuando el profesorado con edición forme equipos, los verás aquí.",
+      "new_set": "Formar equipos",
+      "set_label": "Agrupación",
+      "kind": {
+        "base": "De base",
+        "temporal": "Temporal"
+      },
+      "archived_badge": "Archivada",
+      "edit": "Editar",
+      "move_members": "Mover integrantes…",
+      "archive": "Archivar",
+      "unarchive": "Sacar del archivo",
+      "delete": "Borrar",
+      "delete_title": "Borrar la agrupación",
+      "delete_message": "Se borrará «{title}» con sus equipos y sus puntos. Lo que ya se repartió a cada integrante se queda. No se puede deshacer.",
+      "drag_hint": "Arrastra a una persona a otro equipo, o usa «Mover integrantes…» para hacerlo con el teclado.",
+      "points": "{count} punto | {count} puntos",
+      "members_count": "Sin integrantes | {count} integrante | {count} integrantes",
+      "empty_team": "Nadie en este equipo todavía",
+      "no_team": "Sin equipo",
+      "unknown_student": "Estudiante",
+      "award": "Premiar",
+      "read_only": "Con tu nivel de acceso ves los equipos, pero no los formas ni los premias.",
+      "archived_class": "La clase está archivada: ves los equipos, pero no se cambian ni se premian.",
+      "saved_toast": "Equipos de «{title}» guardados",
+      "error": "No se pudo guardar. No ha cambiado nada.",
+      "stale": "Alguien ha cambiado esta agrupación mientras la editabas (otra persona u otra pestaña). No se ha guardado nada: ya ves cómo está ahora.",
+      "moved": "{count} persona movida a {name} | {count} personas movidas a {name}",
+      "archived_announcement": "«{title}» archivada",
+      "unarchived_announcement": "«{title}» ha salido del archivo",
+      "deleted_announcement": "«{title}» borrada",
+      "default_team": "Equipo {n}",
+      "colors": {
+        "purple": "Morado",
+        "yellow": "Amarillo",
+        "mint": "Verde menta",
+        "sky": "Azul cielo",
+        "red": "Rojo",
+        "peach": "Melocotón"
+      },
+      "emblems": {
+        "star": "Estrella",
+        "bolt": "Rayo",
+        "fire": "Fuego",
+        "shield": "Escudo",
+        "rocket": "Cohete",
+        "heart": "Corazón",
+        "sun": "Sol",
+        "moon": "Luna",
+        "sparkles": "Destellos",
+        "globe": "Mundo",
+        "puzzle": "Puzle",
+        "trophy": "Trofeo"
+      },
+      "form": {
+        "new_title": "Formar equipos",
+        "edit_title": "Editar la agrupación",
+        "title": "Nombre de la agrupación",
+        "title_placeholder": "Ej: Casas",
+        "title_required": "Ponle un nombre.",
+        "title_too_long": "El nombre puede tener hasta 60 caracteres.",
+        "kind": "Tipo",
+        "kind_hint": {
+          "base": "Fija durante el curso. Sus puntos cuentan en la clasificación de equipos.",
+          "temporal": "Para una misión o una dinámica. No puntúa en la clasificación; archívala al acabar."
+        },
+        "method": "Cómo",
+        "method_random": "Al azar",
+        "method_manual": "A mano",
+        "size": "Tamaño",
+        "size_teams": "Número de equipos",
+        "size_perTeam": "Personas por equipo",
+        "size_result": "Saldrá {count} equipo. | Saldrán {count} equipos.",
+        "balance": "Equilibrar por nivel",
+        "absent_note": "Hoy no falta nadie en la lista: entra todo el alumnado. | Hoy falta {count} persona en la lista y queda fuera del reparto. | Hoy faltan {count} personas en la lista y quedan fuera del reparto.",
+        "no_list_note": "Hoy aún no se ha pasado lista: entra todo el alumnado.",
+        "preview_title": "Propuesta",
+        "preview_announcement": "Propuesta lista: {count} equipo. | Propuesta lista: {count} equipos.",
+        "excluded": "Fuera por faltar hoy: {names}.",
+        "shuffle": "Repartir",
+        "again": "Otra vez",
+        "save_teams": "Guardar equipos",
+        "create": "Crear equipos",
+        "save": "Guardar",
+        "teams_legend": "Equipos",
+        "team_name": "Nombre del equipo {n}",
+        "remove_team": "Quitar el equipo {name}",
+        "color": "Color",
+        "emblem": "Emblema",
+        "automatic": "Automático",
+        "add_team": "Añadir equipo",
+        "removed_points_note": "Al guardar, los equipos que has quitado se borran con sus puntos."
+      },
+      "move": {
+        "title": "Mover integrantes · {title}",
+        "who": "A quién mueves",
+        "from_team": "Las personas de {name}",
+        "to": "A qué equipo",
+        "confirm": "Mover | Mover a {count} persona | Mover a {count} personas"
+      }
     }
   }
 }

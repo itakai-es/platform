@@ -80,6 +80,9 @@ model User {
   submissionsReviewed EnigmaSubmission[] @relation("SubmissionReviewer")
   activitiesActed   Activity[]          @relation("ActivityActor")
   behaviorsReceived BehaviorApplication[] @relation("BehaviorStudent")
+  attendanceTaken      AttendanceSession[]      @relation("AttendanceTakenBy")
+  attendanceUpdated    AttendanceRecord[]       @relation("AttendanceUpdatedBy")
+  teamAwardsGiven      TeamAward[]              @relation("TeamAwardTeacher")
   classTeachers      ClassTeacher[]   @relation("ClassTeacherUser")
   classTeachersAdded ClassTeacher[]   @relation("ClassTeacherAddedBy")
   classActions       ClassActionLog[] @relation("ClassActionActor")
@@ -208,6 +211,8 @@ model Class {
   shopItemUses  ShopItemUse[]
   behaviorTemplates    BehaviorTemplate[]
   behaviorApplications BehaviorApplication[]
+  attendanceSessions   AttendanceSession[]
+  teamSets             TeamSet[]
   teachers      ClassTeacher[]
   actionLog     ClassActionLog[]
   // Cuentas de alumnado creadas en esta clase: es la clase desde la que se gestionan.
@@ -305,6 +310,8 @@ model ClassEnrollment {
 
   student User  @relation(fields: [studentId], references: [id], onDelete: Cascade)
   class   Class @relation(fields: [classId], references: [id], onDelete: Cascade)
+  attendanceRecords AttendanceRecord[]
+  teamMemberships   TeamMember[]
 
   @@unique([studentId, classId])
   @@index([classId, isPreview])
@@ -406,10 +413,15 @@ model Mission {
   rarity          MissionRarity     @default(comun)
   backgroundImage String?           @map("background_image")
   deadline        DateTime?
+  // Se hace por equipos de esta agrupación: solo informativo (el alumnado lo ve
+  // y el profesorado puede aprobar a todo un equipo de una vez); cada estudiante
+  // sigue entregando lo suyo. No se copia entre clases: son estudiantes concretos.
+  teamSetId       String?       @map("team_set_id")
   createdAt       DateTime          @default(now()) @map("created_at")
   updatedAt       DateTime          @updatedAt @map("updated_at")
 
   class     Class                    @relation(fields: [classId], references: [id], onDelete: Cascade)
+  teamSet   TeamSet?                 @relation(fields: [teamSetId], references: [id], onDelete: SetNull)
   enigmas   MissionEnigma[]
   badges    Badge[]
   progress  StudentMissionProgress[]
@@ -561,7 +573,6 @@ model StudentBadge {
   @@unique([studentId, badgeId])
   @@map("student_badges")
 }
-
 
 // ==================== ENROLLMENTS ====================
 
@@ -824,11 +835,13 @@ model BehaviorTemplate {
   xpDelta     Int      @default(0) @map("xp_delta")
   coinDelta   Int      @default(0) @map("coin_delta")
   lifeDelta   Int      @default(0) @map("life_delta")
+  manaDelta   Int      @default(0) @map("mana_delta")
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
   class        Class                 @relation(fields: [classId], references: [id], onDelete: Cascade)
   applications BehaviorApplication[]
+  teamAwards   TeamAward[]
 
   @@index([classId])
   @@map("behavior_templates")
@@ -841,21 +854,171 @@ model BehaviorApplication {
   // Quién lo aplicó. Si esa cuenta se borra, la aplicación se conserva sin autor.
   teacherId  String?  @map("teacher_id")
   studentId  String   @map("student_id")
-  kind       String   // "positive" | "negative" — snapshotted from the template
-  name       String   // Snapshotted from the template
+  // "positive" | "negative", copiado de la plantilla; "reward" para una
+  // recompensa libre (sin plantilla: behaviorId nulo y el motivo en `name`).
+  kind        String
+  name        String // Copia del nombre de la plantilla, o el motivo de la recompensa
   xpDelta    Int      @map("xp_delta")
   coinDelta  Int      @map("coin_delta")
   lifeDelta  Int      @map("life_delta")
+  manaDelta   Int      @default(0) @map("mana_delta")
+  // Vino del reparto de un premio de equipo. Si el premio se borra (con su
+  // equipo), la aplicación se conserva suelta.
+  teamAwardId String?  @map("team_award_id")
   createdAt  DateTime @default(now()) @map("created_at")
 
   class    Class             @relation(fields: [classId], references: [id], onDelete: Cascade)
   behavior BehaviorTemplate? @relation(fields: [behaviorId], references: [id], onDelete: SetNull)
   teacher  User?             @relation("BehaviorTeacher", fields: [teacherId], references: [id], onDelete: SetNull)
   student  User              @relation("BehaviorStudent", fields: [studentId], references: [id], onDelete: Cascade)
+  teamAward TeamAward?        @relation(fields: [teamAwardId], references: [id], onDelete: SetNull)
 
   @@index([classId])
   @@index([studentId, classId])
+  @@index([teamAwardId])
   @@map("behavior_applications")
+}
+
+// ==================== ASISTENCIA (Fase 3, bloque 4, D1) ====================
+
+// Una sesión es cada vez que se da la clase: clase + fecha + tramo. Se crea al
+// guardar la lista, nunca por adelantado; el horario solo la propone. La fecha
+// la manda el navegador (día local), no se deriva del reloj del servidor.
+// `startTime` es "" en la sesión sin horario, a propósito: con un nulo, el
+// único no impediría dos «Sesión de hoy» el mismo día.
+enum AttendanceStatus {
+  present
+  absent
+  late
+  excused
+}
+
+model AttendanceSession {
+  id        String   @id @default(uuid())
+  classId   String   @map("class_id")
+  date      DateTime @db.Date
+  startTime String   @default("") @map("start_time") // "HH:MM" del tramo; "" = sin horario
+  endTime   String?  @map("end_time")
+  source    String   @default("manual") // "schedule" | "manual"
+  // Quién pasó lista por última vez. Si esa cuenta se borra, la sesión se conserva.
+  takenById String?  @map("taken_by_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  class   Class              @relation(fields: [classId], references: [id], onDelete: Cascade)
+  takenBy User?              @relation("AttendanceTakenBy", fields: [takenById], references: [id], onDelete: SetNull)
+  records AttendanceRecord[]
+
+  @@unique([classId, date, startTime])
+  @@map("attendance_sessions")
+}
+
+// El estado de una persona en una sesión. Cuelga de la matrícula: sacar a
+// alguien de la clase borra su asistencia (es un dato personal de menores).
+model AttendanceRecord {
+  id           String           @id @default(uuid())
+  sessionId    String           @map("session_id")
+  enrollmentId String           @map("enrollment_id")
+  status       AttendanceStatus @default(present)
+  note         String?
+  updatedById  String?          @map("updated_by_id")
+  updatedAt    DateTime         @updatedAt @map("updated_at")
+
+  session    AttendanceSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  enrollment ClassEnrollment   @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  updatedBy  User?             @relation("AttendanceUpdatedBy", fields: [updatedById], references: [id], onDelete: SetNull)
+
+  @@unique([sessionId, enrollmentId])
+  @@index([enrollmentId])
+  @@map("attendance_records")
+}
+
+// ---- Equipos (bloque 4, D2) ----
+
+/// Una forma de repartir la clase en equipos. Puede haber varias a la vez: las
+/// de base (fijas; las únicas que puntúan en la clasificación) y temporales,
+/// para una misión o una dinámica, que se archivan al acabar.
+model TeamSet {
+  id         String    @id @default(uuid())
+  classId    String    @map("class_id")
+  title      String
+  kind       String    @default("base") // "base" | "temporal"
+  archivedAt DateTime? @map("archived_at")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
+
+  class    Class     @relation(fields: [classId], references: [id], onDelete: Cascade)
+  teams    Team[]
+  missions Mission[]
+
+  @@index([classId])
+  @@map("team_sets")
+}
+
+/// Un equipo de una agrupación. El color y el emblema son claves de una lista
+/// cerrada (la paleta de tokens y los emblemas predefinidos), nunca un valor
+/// libre: así responden a los modos de daltonismo y alto contraste.
+model Team {
+  id         String  @id @default(uuid())
+  setId      String  @map("set_id")
+  title      String
+  color      String?
+  emblem     String?
+  orderIndex Int     @default(0) @map("order_index")
+
+  set     TeamSet      @relation(fields: [setId], references: [id], onDelete: Cascade)
+  members TeamMember[]
+  awards  TeamAward[]
+
+  // La pertenencia apunta a la pareja equipo + agrupación: así la base de datos
+  // impide que la agrupación de la pertenencia no sea la de su equipo.
+  @@unique([id, setId])
+  @@index([setId])
+  @@map("teams")
+}
+
+/// Pertenencia a un equipo. Cuelga de la matrícula: sacar a alguien de la clase
+/// la borra sola. Nadie está en dos equipos de la misma agrupación.
+model TeamMember {
+  id           String @id @default(uuid())
+  teamId       String @map("team_id")
+  setId        String @map("set_id")
+  enrollmentId String @map("enrollment_id")
+
+  team       Team            @relation(fields: [teamId, setId], references: [id, setId], onDelete: Cascade)
+  enrollment ClassEnrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+
+  @@unique([setId, enrollmentId])
+  @@index([teamId])
+  @@index([enrollmentId])
+  @@map("team_members")
+}
+
+/// Premio a un equipo: el marcador es la suma de `points` (un libro, no un
+/// contador, para que no se descuadre al mover a alguien). Los deltas son lo
+/// repartido a cada integrante, o 0 si solo puntuó; `memberCount`, a cuántos.
+model TeamAward {
+  id          String   @id @default(uuid())
+  teamId      String   @map("team_id")
+  // Quién premió. Si esa cuenta se borra, el premio se conserva sin autor.
+  teacherId   String?  @map("teacher_id")
+  behaviorId  String?  @map("behavior_id")
+  title       String // nombre del comportamiento o motivo, copiado
+  points      Int      @default(0)
+  xpDelta     Int      @default(0) @map("xp_delta")
+  coinDelta   Int      @default(0) @map("coin_delta")
+  manaDelta   Int      @default(0) @map("mana_delta")
+  lifeDelta   Int      @default(0) @map("life_delta")
+  memberCount Int      @default(0) @map("member_count")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  team         Team                  @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  teacher      User?                 @relation("TeamAwardTeacher", fields: [teacherId], references: [id], onDelete: SetNull)
+  behavior     BehaviorTemplate?     @relation(fields: [behaviorId], references: [id], onDelete: SetNull)
+  applications BehaviorApplication[]
+
+  @@index([teamId])
+  @@map("team_awards")
 }
 
 // ==================== CENTRO DE AYUDA (Fase 3, punto 17) ====================

@@ -1,20 +1,20 @@
 <template>
   <div class="select-none">
-    <!-- Cabecera: mes + navegación -->
-    <div class="mb-2 flex items-center justify-between">
+    <!-- Cabecera: mes + navegación (quien lo usa puede llevarla fuera) -->
+    <div v-if="navigation" class="mb-2 flex items-center justify-between">
       <button
         type="button"
         class="rounded-lg p-1.5 text-navy-700 hover:bg-gray-100"
-        aria-label="Mes anterior"
+        :aria-label="t('common.calendar.prev_month')"
         @click="prev"
       >
         <ChevronLeftIcon class="h-4 w-4" />
       </button>
-      <span class="text-sm font-semibold capitalize text-navy-700">{{ monthLabel }}</span>
+      <span class="text-sm font-semibold text-navy-700">{{ monthLabel }}</span>
       <button
         type="button"
         class="rounded-lg p-1.5 text-navy-700 hover:bg-gray-100"
-        aria-label="Mes siguiente"
+        :aria-label="t('common.calendar.next_month')"
         @click="next"
       >
         <ChevronRightIcon class="h-4 w-4" />
@@ -22,8 +22,11 @@
     </div>
 
     <!-- Cabecera de días -->
-    <div class="grid grid-cols-7 gap-1 text-center text-xs font-medium text-text-secondary">
-      <span v-for="d in WEEKDAYS" :key="d">{{ d }}</span>
+    <div
+      class="grid grid-cols-7 gap-1 text-center text-xs font-medium text-text-secondary"
+      aria-hidden="true"
+    >
+      <span v-for="(d, i) in weekdays" :key="i">{{ d }}</span>
     </div>
 
     <!-- Rejilla -->
@@ -33,11 +36,19 @@
         v-for="day in days"
         :key="day.key"
         :type="interactive ? 'button' : undefined"
-        class="flex aspect-square items-center justify-center rounded-lg text-sm transition-colors"
+        class="relative flex aspect-square items-center justify-center rounded-lg text-sm transition-colors"
         :class="cellClass(day)"
+        :aria-label="labelOf ? labelOf(day.date) : undefined"
+        :aria-current="day.key === todayKey ? 'date' : undefined"
         @click="interactive && $emit('day-click', day.date)"
       >
         {{ day.date.getDate() }}
+        <!-- Además del color: un punto en los días con clase. -->
+        <span
+          v-if="statusOf(day.date) === 'class'"
+          class="absolute bottom-1 h-1 w-1 rounded-full bg-navy-700"
+          aria-hidden="true"
+        />
       </component>
     </div>
   </div>
@@ -53,13 +64,24 @@ const props = withDefaults(
     /** Mes inicial "YYYY-MM-DD"; por defecto el mes actual. */
     initialMonth?: string
     interactive?: boolean
+    /** Nombre accesible de cada día (la fecha y lo que pasa en ella). */
+    labelOf?: (date: Date) => string
+    /** Botones de mes anterior y siguiente. */
+    navigation?: boolean
   }>(),
-  { initialMonth: '', interactive: true }
+  { initialMonth: '', interactive: true, labelOf: undefined, navigation: true }
 )
 
 defineEmits<{ 'day-click': [date: Date] }>()
 
-const WEEKDAYS = ['L', 'M', 'X', 'J', 'V', 'S', 'D']
+const { t, locale } = useI18n()
+
+// Iniciales de lunes a domingo en el idioma activo (el 5 de enero de 2026 es lunes).
+const weekdays = computed(() =>
+  Array.from({ length: 7 }, (_, i) =>
+    new Date(2026, 0, 5 + i).toLocaleDateString(locale.value, { weekday: 'narrow' })
+  )
+)
 
 function firstOfMonth(): Date {
   if (props.initialMonth) {
@@ -73,9 +95,11 @@ function firstOfMonth(): Date {
 const cursor = ref<Date>(firstOfMonth())
 const todayKey = dateKey(new Date())
 
-const monthLabel = computed(() =>
-  cursor.value.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })
-)
+// Solo la primera letra en mayúscula: con `capitalize` saldría «Octubre De 2026».
+const monthLabel = computed(() => {
+  const label = cursor.value.toLocaleDateString(locale.value, { month: 'long', year: 'numeric' })
+  return label.charAt(0).toLocaleUpperCase(locale.value) + label.slice(1)
+})
 
 // 6 semanas (42 celdas) empezando en lunes.
 const days = computed(() => {

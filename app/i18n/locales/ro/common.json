@@ -535,6 +535,20 @@
       "empty_title": "Nicio clasă",
       "empty_archived_title": "Nicio clasă arhivată",
       "no_results": "Nicio clasă nu corespunde cu „{query}”"
+    },
+    "effects": {},
+    "calendar": {
+      "prev_month": "Luna anterioară",
+      "next_month": "Luna următoare"
+    },
+    "teams": {
+      "standings_title": "Clasamentul echipelor · {title}",
+      "position": "Locul",
+      "points": "{count} punct | {count} puncte",
+      "kind": {
+        "base": "De bază",
+        "temporal": "Temporară"
+      }
     }
   }
 }

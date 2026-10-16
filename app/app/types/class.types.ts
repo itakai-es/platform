@@ -91,6 +91,9 @@ export type ClassHistoryType =
   | 'document'
   | 'submission'
   | 'behavior'
+  | 'reward'
+  | 'attendance'
+  | 'team'
   | 'shop'
 
 /** Una entrada del historial de la clase. El texto lo compone la pantalla con `action` y `params`. */
@@ -108,6 +111,14 @@ export interface ClassHistoryEntry {
   target: { id: string | null; name: string | null; role: string | null } | null
   entity: { type: string; id: string | null } | null
   params: Record<string, unknown>
+  /**
+   * Aplicado a varios estudiantes a la vez: la entrada es la primera del lote y
+   * trae a todas las personas (sin nombre quien ya no está en la clase).
+   */
+  batch?: {
+    size: number
+    targets: { id: string | null; name: string | null; role: string | null }[]
+  } | null
 }
 
 export interface ClassHistoryResponse {

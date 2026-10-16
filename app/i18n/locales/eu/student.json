@@ -365,6 +365,14 @@
         "avg_missions": "Batez besteko misioak",
         "total_xp": "Klaseko guztirako XP"
       }
+    },
+    "teams": {
+      "my_team_title": "Nire taldea",
+      "members_label": "{name} taldeko kideak",
+      "you": "Zu",
+      "mission_team": "Misio hau taldeka egiten da («{set}»). Zure taldea {team} da, {names}-ekin. Kide bakoitzak bere zatia entregatzen du.",
+      "mission_team_alone": "Misio hau taldeka egiten da («{set}»). Zure taldea {team} da. Kide bakoitzak bere zatia entregatzen du.",
+      "mission_no_team": "Misio hau taldeka egiten da («{set}»), baina oraindik ez zaude inongo taldetan. Galdetu klasean."
     }
   }
 }

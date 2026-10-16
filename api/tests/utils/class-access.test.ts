@@ -97,6 +97,7 @@ describe('tabla de acciones', () => {
       'behavior.view': 'read',
       'behavior.edit': 'edit',
       'behavior.apply': 'edit',
+      'reward.grant': 'edit',
       'submission.view': 'read',
       'submission.approve': 'edit',
       'student.view': 'read',
@@ -107,6 +108,11 @@ describe('tabla de acciones', () => {
       'teachers.manage': 'admin',
       'teachers.leave': 'read',
       'class.history': 'read',
+      'attendance.view': 'read',
+      'attendance.take': 'edit',
+      'attendance.export': 'edit',
+      'team.manage': 'edit',
+      'team.award': 'edit',
     })
   })
 

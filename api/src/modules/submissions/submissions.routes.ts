@@ -1,6 +1,7 @@
 import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
 import { submissionsService } from './submissions.service.js'
 import { rethrowHttpError } from '../../utils/errors.js'
+import { z } from 'zod'
 
 export async function submissionsRoutes(fastify: FastifyInstance) {
   // All routes require authentication
@@ -119,6 +120,22 @@ export async function submissionsRoutes(fastify: FastifyInstance) {
         }
         return reply.status(500).send({ message: 'Error interno' })
       }
+    }
+  )
+
+  // Teacher: aprobar con el mismo % la entrega pendiente de cada integrante del
+  // equipo (misiones por equipos). Los errores los traduce el manejador global.
+  fastify.post(
+    '/:submissionId/approve-team',
+    async (request: FastifyRequest<{ Params: { submissionId: string } }>, reply: FastifyReply) => {
+      const { id, role } = request.user as { id: string; role: string }
+      if (role !== 'teacher') {
+        return reply.status(403).send({ message: 'Solo el profesorado puede aprobar entregas' })
+      }
+      const { percentage } = z
+        .object({ percentage: z.number().int().min(1).max(100) })
+        .parse(request.body)
+      return submissionsService.approveTeamSubmissions(id, request.params.submissionId, percentage)
     }
   )
 

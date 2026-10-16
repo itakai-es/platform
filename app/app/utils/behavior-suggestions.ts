@@ -1,9 +1,7 @@
 /**
- * Catálogo sembrado de comportamientos (positivos y negativos) que el profesor
- * puede aplicar sobre los alumnos. De momento es contenido visual: las cantidades
- * NO se aplican aún a los saldos (XP/monedas/vidas viven en backends distintos y
- * algunos no existen todavía). Cuando haya backend de comportamientos, se
- * persistirán como plantillas por clase y se registrará cada aplicación.
+ * Biblioteca de comportamientos sugeridos (positivos y negativos). Al añadir uno
+ * se guarda como plantilla de la clase, con sus cantidades; los recursos que la
+ * clase tenga apagados (el maná, por ejemplo) no se aplican.
  */
 export type BehaviorKind = 'positive' | 'negative'
 
@@ -14,6 +12,8 @@ export interface BehaviorSuggestion {
   /** Cantidad absoluta; el signo lo da el tipo (positive → +, negative → −). */
   xp?: number
   coins?: number
+  /** Solo cuenta en las clases con maná. */
+  mana?: number
   lives?: number
 }
 
@@ -47,6 +47,7 @@ export const BEHAVIOR_SUGGESTIONS: BehaviorSuggestion[] = [
     kind: 'positive',
     xp: 15,
     coins: 10,
+    mana: 5,
   },
   {
     name: 'Aprende y mejora',

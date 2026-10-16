@@ -69,6 +69,8 @@ export const CLASS_ACTION_LEVEL = {
   'behavior.view': 'read',
   'behavior.edit': 'edit',
   'behavior.apply': 'edit',
+  // Dar o quitar XP, monedas, maná o vidas a mano, con un motivo (sin plantilla).
+  'reward.grant': 'edit',
   'submission.view': 'read',
   'submission.approve': 'edit',
   'student.view': 'read',
@@ -81,6 +83,15 @@ export const CLASS_ACTION_LEVEL = {
   // Salir de la clase: cualquiera del profesorado menos el propietario, que antes la traspasa.
   'teachers.leave': 'read',
   'class.history': 'read',
+  // Asistencia: prácticas la ve; pasar lista y descargar el CSV (datos de
+  // menores) es de quien edita.
+  'attendance.view': 'read',
+  'attendance.take': 'edit',
+  'attendance.export': 'edit',
+  // Equipos: los ve todo el profesorado de la clase (con `student.view`);
+  // formarlos, cambiarlos y premiarlos es de quien edita.
+  'team.manage': 'edit',
+  'team.award': 'edit',
 } as const satisfies Record<string, ClassRequiredLevel>
 
 export type ClassAction = keyof typeof CLASS_ACTION_LEVEL

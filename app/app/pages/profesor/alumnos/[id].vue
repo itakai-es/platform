@@ -215,6 +215,14 @@
                   />
                 </div>
 
+                <!-- Asistencia en esta clase (solo profesorado que la ve) -->
+                <StudentAttendanceSummary
+                  v-if="canInClass(classItem.myAccess, 'attendance.view')"
+                  class="mb-3"
+                  :class-id="classItem.id"
+                  :student-id="student.id"
+                />
+
                 <!-- Stats Row: Missions, XP, Badges (XP solo si está activado) -->
                 <div
                   class="grid gap-2 mb-3"
@@ -351,6 +359,7 @@ import {
 import type { ClassAccess, ClassSettings } from '~/types/class.types'
 import type { AccountType, ManageableStudent } from '~/types/teacher.types'
 import { resolveClassSettings } from '~/utils/class-settings'
+import { canInClass } from '~/utils/class-access'
 import { accountIdentifier } from '~/utils/identity'
 
 interface StudentClass {

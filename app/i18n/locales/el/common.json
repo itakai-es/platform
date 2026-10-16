@@ -535,6 +535,20 @@
       "empty_title": "Καμία τάξη",
       "empty_archived_title": "Καμία αρχειοθετημένη τάξη",
       "no_results": "Καμία τάξη δεν ταιριάζει με «{query}»"
+    },
+    "effects": {},
+    "calendar": {
+      "prev_month": "Προηγούμενος μήνας",
+      "next_month": "Επόμενος μήνας"
+    },
+    "teams": {
+      "standings_title": "Κατάταξη ομάδων · {title}",
+      "position": "Θέση",
+      "points": "{count} πόντος | {count} πόντοι",
+      "kind": {
+        "base": "Βασική",
+        "temporal": "Προσωρινή"
+      }
     }
   }
 }

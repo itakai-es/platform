@@ -535,6 +535,20 @@
       "empty_title": "Sem turmas",
       "empty_archived_title": "Sem turmas arquivadas",
       "no_results": "Não há turmas que correspondam a «{query}»"
+    },
+    "effects": {},
+    "calendar": {
+      "prev_month": "Mês anterior",
+      "next_month": "Mês seguinte"
+    },
+    "teams": {
+      "standings_title": "Classificação de equipas · {title}",
+      "position": "Posição",
+      "points": "{count} ponto | {count} pontos",
+      "kind": {
+        "base": "De base",
+        "temporal": "Temporária"
+      }
     }
   }
 }

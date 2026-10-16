@@ -30,12 +30,14 @@ export type BehaviorTemplateAvgAggregateOutputType = {
   xpDelta: number | null
   coinDelta: number | null
   lifeDelta: number | null
+  manaDelta: number | null
 }
 
 export type BehaviorTemplateSumAggregateOutputType = {
   xpDelta: number | null
   coinDelta: number | null
   lifeDelta: number | null
+  manaDelta: number | null
 }
 
 export type BehaviorTemplateMinAggregateOutputType = {
@@ -47,6 +49,7 @@ export type BehaviorTemplateMinAggregateOutputType = {
   xpDelta: number | null
   coinDelta: number | null
   lifeDelta: number | null
+  manaDelta: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -60,6 +63,7 @@ export type BehaviorTemplateMaxAggregateOutputType = {
   xpDelta: number | null
   coinDelta: number | null
   lifeDelta: number | null
+  manaDelta: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -73,6 +77,7 @@ export type BehaviorTemplateCountAggregateOutputType = {
   xpDelta: number
   coinDelta: number
   lifeDelta: number
+  manaDelta: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -83,12 +88,14 @@ export type BehaviorTemplateAvgAggregateInputType = {
   xpDelta?: true
   coinDelta?: true
   lifeDelta?: true
+  manaDelta?: true
 }
 
 export type BehaviorTemplateSumAggregateInputType = {
   xpDelta?: true
   coinDelta?: true
   lifeDelta?: true
+  manaDelta?: true
 }
 
 export type BehaviorTemplateMinAggregateInputType = {
@@ -100,6 +107,7 @@ export type BehaviorTemplateMinAggregateInputType = {
   xpDelta?: true
   coinDelta?: true
   lifeDelta?: true
+  manaDelta?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -113,6 +121,7 @@ export type BehaviorTemplateMaxAggregateInputType = {
   xpDelta?: true
   coinDelta?: true
   lifeDelta?: true
+  manaDelta?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -126,6 +135,7 @@ export type BehaviorTemplateCountAggregateInputType = {
   xpDelta?: true
   coinDelta?: true
   lifeDelta?: true
+  manaDelta?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -226,6 +236,7 @@ export type BehaviorTemplateGroupByOutputType = {
   xpDelta: number
   coinDelta: number
   lifeDelta: number
+  manaDelta: number
   createdAt: Date
   updatedAt: Date
   _count: BehaviorTemplateCountAggregateOutputType | null
@@ -262,10 +273,12 @@ export type BehaviorTemplateWhereInput = {
   xpDelta?: Prisma.IntFilter<"BehaviorTemplate"> | number
   coinDelta?: Prisma.IntFilter<"BehaviorTemplate"> | number
   lifeDelta?: Prisma.IntFilter<"BehaviorTemplate"> | number
+  manaDelta?: Prisma.IntFilter<"BehaviorTemplate"> | number
   createdAt?: Prisma.DateTimeFilter<"BehaviorTemplate"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"BehaviorTemplate"> | Date | string
   class?: Prisma.XOR<Prisma.ClassScalarRelationFilter, Prisma.ClassWhereInput>
   applications?: Prisma.BehaviorApplicationListRelationFilter
+  teamAwards?: Prisma.TeamAwardListRelationFilter
 }
 
 export type BehaviorTemplateOrderByWithRelationInput = {
@@ -277,10 +290,12 @@ export type BehaviorTemplateOrderByWithRelationInput = {
   xpDelta?: Prisma.SortOrder
   coinDelta?: Prisma.SortOrder
   lifeDelta?: Prisma.SortOrder
+  manaDelta?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   class?: Prisma.ClassOrderByWithRelationInput
   applications?: Prisma.BehaviorApplicationOrderByRelationAggregateInput
+  teamAwards?: Prisma.TeamAwardOrderByRelationAggregateInput
 }
 
 export type BehaviorTemplateWhereUniqueInput = Prisma.AtLeast<{
@@ -295,10 +310,12 @@ export type BehaviorTemplateWhereUniqueInput = Prisma.AtLeast<{
   xpDelta?: Prisma.IntFilter<"BehaviorTemplate"> | number
   coinDelta?: Prisma.IntFilter<"BehaviorTemplate"> | number
   lifeDelta?: Prisma.IntFilter<"BehaviorTemplate"> | number
+  manaDelta?: Prisma.IntFilter<"BehaviorTemplate"> | number
   createdAt?: Prisma.DateTimeFilter<"BehaviorTemplate"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"BehaviorTemplate"> | Date | string
   class?: Prisma.XOR<Prisma.ClassScalarRelationFilter, Prisma.ClassWhereInput>
   applications?: Prisma.BehaviorApplicationListRelationFilter
+  teamAwards?: Prisma.TeamAwardListRelationFilter
 }, "id">
 
 export type BehaviorTemplateOrderByWithAggregationInput = {
@@ -310,6 +327,7 @@ export type BehaviorTemplateOrderByWithAggregationInput = {
   xpDelta?: Prisma.SortOrder
   coinDelta?: Prisma.SortOrder
   lifeDelta?: Prisma.SortOrder
+  manaDelta?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.BehaviorTemplateCountOrderByAggregateInput
@@ -331,6 +349,7 @@ export type BehaviorTemplateScalarWhereWithAggregatesInput = {
   xpDelta?: Prisma.IntWithAggregatesFilter<"BehaviorTemplate"> | number
   coinDelta?: Prisma.IntWithAggregatesFilter<"BehaviorTemplate"> | number
   lifeDelta?: Prisma.IntWithAggregatesFilter<"BehaviorTemplate"> | number
+  manaDelta?: Prisma.IntWithAggregatesFilter<"BehaviorTemplate"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"BehaviorTemplate"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"BehaviorTemplate"> | Date | string
 }
@@ -343,10 +362,12 @@ export type BehaviorTemplateCreateInput = {
   xpDelta?: number
   coinDelta?: number
   lifeDelta?: number
+  manaDelta?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   class: Prisma.ClassCreateNestedOneWithoutBehaviorTemplatesInput
   applications?: Prisma.BehaviorApplicationCreateNestedManyWithoutBehaviorInput
+  teamAwards?: Prisma.TeamAwardCreateNestedManyWithoutBehaviorInput
 }
 
 export type BehaviorTemplateUncheckedCreateInput = {
@@ -358,9 +379,11 @@ export type BehaviorTemplateUncheckedCreateInput = {
   xpDelta?: number
   coinDelta?: number
   lifeDelta?: number
+  manaDelta?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   applications?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutBehaviorInput
+  teamAwards?: Prisma.TeamAwardUncheckedCreateNestedManyWithoutBehaviorInput
 }
 
 export type BehaviorTemplateUpdateInput = {
@@ -371,10 +394,12 @@ export type BehaviorTemplateUpdateInput = {
   xpDelta?: Prisma.IntFieldUpdateOperationsInput | number
   coinDelta?: Prisma.IntFieldUpdateOperationsInput | number
   lifeDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  manaDelta?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   class?: Prisma.ClassUpdateOneRequiredWithoutBehaviorTemplatesNestedInput
   applications?: Prisma.BehaviorApplicationUpdateManyWithoutBehaviorNestedInput
+  teamAwards?: Prisma.TeamAwardUpdateManyWithoutBehaviorNestedInput
 }
 
 export type BehaviorTemplateUncheckedUpdateInput = {
@@ -386,9 +411,11 @@ export type BehaviorTemplateUncheckedUpdateInput = {
   xpDelta?: Prisma.IntFieldUpdateOperationsInput | number
   coinDelta?: Prisma.IntFieldUpdateOperationsInput | number
   lifeDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  manaDelta?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   applications?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutBehaviorNestedInput
+  teamAwards?: Prisma.TeamAwardUncheckedUpdateManyWithoutBehaviorNestedInput
 }
 
 export type BehaviorTemplateCreateManyInput = {
@@ -400,6 +427,7 @@ export type BehaviorTemplateCreateManyInput = {
   xpDelta?: number
   coinDelta?: number
   lifeDelta?: number
+  manaDelta?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -412,6 +440,7 @@ export type BehaviorTemplateUpdateManyMutationInput = {
   xpDelta?: Prisma.IntFieldUpdateOperationsInput | number
   coinDelta?: Prisma.IntFieldUpdateOperationsInput | number
   lifeDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  manaDelta?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -425,6 +454,7 @@ export type BehaviorTemplateUncheckedUpdateManyInput = {
   xpDelta?: Prisma.IntFieldUpdateOperationsInput | number
   coinDelta?: Prisma.IntFieldUpdateOperationsInput | number
   lifeDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  manaDelta?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -448,6 +478,7 @@ export type BehaviorTemplateCountOrderByAggregateInput = {
   xpDelta?: Prisma.SortOrder
   coinDelta?: Prisma.SortOrder
   lifeDelta?: Prisma.SortOrder
+  manaDelta?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -456,6 +487,7 @@ export type BehaviorTemplateAvgOrderByAggregateInput = {
   xpDelta?: Prisma.SortOrder
   coinDelta?: Prisma.SortOrder
   lifeDelta?: Prisma.SortOrder
+  manaDelta?: Prisma.SortOrder
 }
 
 export type BehaviorTemplateMaxOrderByAggregateInput = {
@@ -467,6 +499,7 @@ export type BehaviorTemplateMaxOrderByAggregateInput = {
   xpDelta?: Prisma.SortOrder
   coinDelta?: Prisma.SortOrder
   lifeDelta?: Prisma.SortOrder
+  manaDelta?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -480,6 +513,7 @@ export type BehaviorTemplateMinOrderByAggregateInput = {
   xpDelta?: Prisma.SortOrder
   coinDelta?: Prisma.SortOrder
   lifeDelta?: Prisma.SortOrder
+  manaDelta?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -488,6 +522,7 @@ export type BehaviorTemplateSumOrderByAggregateInput = {
   xpDelta?: Prisma.SortOrder
   coinDelta?: Prisma.SortOrder
   lifeDelta?: Prisma.SortOrder
+  manaDelta?: Prisma.SortOrder
 }
 
 export type BehaviorTemplateNullableScalarRelationFilter = {
@@ -553,6 +588,22 @@ export type BehaviorTemplateUpdateOneWithoutApplicationsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.BehaviorTemplateUpdateToOneWithWhereWithoutApplicationsInput, Prisma.BehaviorTemplateUpdateWithoutApplicationsInput>, Prisma.BehaviorTemplateUncheckedUpdateWithoutApplicationsInput>
 }
 
+export type BehaviorTemplateCreateNestedOneWithoutTeamAwardsInput = {
+  create?: Prisma.XOR<Prisma.BehaviorTemplateCreateWithoutTeamAwardsInput, Prisma.BehaviorTemplateUncheckedCreateWithoutTeamAwardsInput>
+  connectOrCreate?: Prisma.BehaviorTemplateCreateOrConnectWithoutTeamAwardsInput
+  connect?: Prisma.BehaviorTemplateWhereUniqueInput
+}
+
+export type BehaviorTemplateUpdateOneWithoutTeamAwardsNestedInput = {
+  create?: Prisma.XOR<Prisma.BehaviorTemplateCreateWithoutTeamAwardsInput, Prisma.BehaviorTemplateUncheckedCreateWithoutTeamAwardsInput>
+  connectOrCreate?: Prisma.BehaviorTemplateCreateOrConnectWithoutTeamAwardsInput
+  upsert?: Prisma.BehaviorTemplateUpsertWithoutTeamAwardsInput
+  disconnect?: Prisma.BehaviorTemplateWhereInput | boolean
+  delete?: Prisma.BehaviorTemplateWhereInput | boolean
+  connect?: Prisma.BehaviorTemplateWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BehaviorTemplateUpdateToOneWithWhereWithoutTeamAwardsInput, Prisma.BehaviorTemplateUpdateWithoutTeamAwardsInput>, Prisma.BehaviorTemplateUncheckedUpdateWithoutTeamAwardsInput>
+}
+
 export type BehaviorTemplateCreateWithoutClassInput = {
   id?: string
   kind: string
@@ -561,9 +612,11 @@ export type BehaviorTemplateCreateWithoutClassInput = {
   xpDelta?: number
   coinDelta?: number
   lifeDelta?: number
+  manaDelta?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   applications?: Prisma.BehaviorApplicationCreateNestedManyWithoutBehaviorInput
+  teamAwards?: Prisma.TeamAwardCreateNestedManyWithoutBehaviorInput
 }
 
 export type BehaviorTemplateUncheckedCreateWithoutClassInput = {
@@ -574,9 +627,11 @@ export type BehaviorTemplateUncheckedCreateWithoutClassInput = {
   xpDelta?: number
   coinDelta?: number
   lifeDelta?: number
+  manaDelta?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   applications?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutBehaviorInput
+  teamAwards?: Prisma.TeamAwardUncheckedCreateNestedManyWithoutBehaviorInput
 }
 
 export type BehaviorTemplateCreateOrConnectWithoutClassInput = {
@@ -617,6 +672,7 @@ export type BehaviorTemplateScalarWhereInput = {
   xpDelta?: Prisma.IntFilter<"BehaviorTemplate"> | number
   coinDelta?: Prisma.IntFilter<"BehaviorTemplate"> | number
   lifeDelta?: Prisma.IntFilter<"BehaviorTemplate"> | number
+  manaDelta?: Prisma.IntFilter<"BehaviorTemplate"> | number
   createdAt?: Prisma.DateTimeFilter<"BehaviorTemplate"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"BehaviorTemplate"> | Date | string
 }
@@ -629,9 +685,11 @@ export type BehaviorTemplateCreateWithoutApplicationsInput = {
   xpDelta?: number
   coinDelta?: number
   lifeDelta?: number
+  manaDelta?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   class: Prisma.ClassCreateNestedOneWithoutBehaviorTemplatesInput
+  teamAwards?: Prisma.TeamAwardCreateNestedManyWithoutBehaviorInput
 }
 
 export type BehaviorTemplateUncheckedCreateWithoutApplicationsInput = {
@@ -643,8 +701,10 @@ export type BehaviorTemplateUncheckedCreateWithoutApplicationsInput = {
   xpDelta?: number
   coinDelta?: number
   lifeDelta?: number
+  manaDelta?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  teamAwards?: Prisma.TeamAwardUncheckedCreateNestedManyWithoutBehaviorInput
 }
 
 export type BehaviorTemplateCreateOrConnectWithoutApplicationsInput = {
@@ -671,9 +731,11 @@ export type BehaviorTemplateUpdateWithoutApplicationsInput = {
   xpDelta?: Prisma.IntFieldUpdateOperationsInput | number
   coinDelta?: Prisma.IntFieldUpdateOperationsInput | number
   lifeDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  manaDelta?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   class?: Prisma.ClassUpdateOneRequiredWithoutBehaviorTemplatesNestedInput
+  teamAwards?: Prisma.TeamAwardUpdateManyWithoutBehaviorNestedInput
 }
 
 export type BehaviorTemplateUncheckedUpdateWithoutApplicationsInput = {
@@ -685,8 +747,86 @@ export type BehaviorTemplateUncheckedUpdateWithoutApplicationsInput = {
   xpDelta?: Prisma.IntFieldUpdateOperationsInput | number
   coinDelta?: Prisma.IntFieldUpdateOperationsInput | number
   lifeDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  manaDelta?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  teamAwards?: Prisma.TeamAwardUncheckedUpdateManyWithoutBehaviorNestedInput
+}
+
+export type BehaviorTemplateCreateWithoutTeamAwardsInput = {
+  id?: string
+  kind: string
+  name: string
+  description?: string
+  xpDelta?: number
+  coinDelta?: number
+  lifeDelta?: number
+  manaDelta?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  class: Prisma.ClassCreateNestedOneWithoutBehaviorTemplatesInput
+  applications?: Prisma.BehaviorApplicationCreateNestedManyWithoutBehaviorInput
+}
+
+export type BehaviorTemplateUncheckedCreateWithoutTeamAwardsInput = {
+  id?: string
+  classId: string
+  kind: string
+  name: string
+  description?: string
+  xpDelta?: number
+  coinDelta?: number
+  lifeDelta?: number
+  manaDelta?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  applications?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutBehaviorInput
+}
+
+export type BehaviorTemplateCreateOrConnectWithoutTeamAwardsInput = {
+  where: Prisma.BehaviorTemplateWhereUniqueInput
+  create: Prisma.XOR<Prisma.BehaviorTemplateCreateWithoutTeamAwardsInput, Prisma.BehaviorTemplateUncheckedCreateWithoutTeamAwardsInput>
+}
+
+export type BehaviorTemplateUpsertWithoutTeamAwardsInput = {
+  update: Prisma.XOR<Prisma.BehaviorTemplateUpdateWithoutTeamAwardsInput, Prisma.BehaviorTemplateUncheckedUpdateWithoutTeamAwardsInput>
+  create: Prisma.XOR<Prisma.BehaviorTemplateCreateWithoutTeamAwardsInput, Prisma.BehaviorTemplateUncheckedCreateWithoutTeamAwardsInput>
+  where?: Prisma.BehaviorTemplateWhereInput
+}
+
+export type BehaviorTemplateUpdateToOneWithWhereWithoutTeamAwardsInput = {
+  where?: Prisma.BehaviorTemplateWhereInput
+  data: Prisma.XOR<Prisma.BehaviorTemplateUpdateWithoutTeamAwardsInput, Prisma.BehaviorTemplateUncheckedUpdateWithoutTeamAwardsInput>
+}
+
+export type BehaviorTemplateUpdateWithoutTeamAwardsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  xpDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  coinDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  lifeDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  manaDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  class?: Prisma.ClassUpdateOneRequiredWithoutBehaviorTemplatesNestedInput
+  applications?: Prisma.BehaviorApplicationUpdateManyWithoutBehaviorNestedInput
+}
+
+export type BehaviorTemplateUncheckedUpdateWithoutTeamAwardsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  classId?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  xpDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  coinDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  lifeDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  manaDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  applications?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutBehaviorNestedInput
 }
 
 export type BehaviorTemplateCreateManyClassInput = {
@@ -697,6 +837,7 @@ export type BehaviorTemplateCreateManyClassInput = {
   xpDelta?: number
   coinDelta?: number
   lifeDelta?: number
+  manaDelta?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -709,9 +850,11 @@ export type BehaviorTemplateUpdateWithoutClassInput = {
   xpDelta?: Prisma.IntFieldUpdateOperationsInput | number
   coinDelta?: Prisma.IntFieldUpdateOperationsInput | number
   lifeDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  manaDelta?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   applications?: Prisma.BehaviorApplicationUpdateManyWithoutBehaviorNestedInput
+  teamAwards?: Prisma.TeamAwardUpdateManyWithoutBehaviorNestedInput
 }
 
 export type BehaviorTemplateUncheckedUpdateWithoutClassInput = {
@@ -722,9 +865,11 @@ export type BehaviorTemplateUncheckedUpdateWithoutClassInput = {
   xpDelta?: Prisma.IntFieldUpdateOperationsInput | number
   coinDelta?: Prisma.IntFieldUpdateOperationsInput | number
   lifeDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  manaDelta?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   applications?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutBehaviorNestedInput
+  teamAwards?: Prisma.TeamAwardUncheckedUpdateManyWithoutBehaviorNestedInput
 }
 
 export type BehaviorTemplateUncheckedUpdateManyWithoutClassInput = {
@@ -735,6 +880,7 @@ export type BehaviorTemplateUncheckedUpdateManyWithoutClassInput = {
   xpDelta?: Prisma.IntFieldUpdateOperationsInput | number
   coinDelta?: Prisma.IntFieldUpdateOperationsInput | number
   lifeDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  manaDelta?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -746,10 +892,12 @@ export type BehaviorTemplateUncheckedUpdateManyWithoutClassInput = {
 
 export type BehaviorTemplateCountOutputType = {
   applications: number
+  teamAwards: number
 }
 
 export type BehaviorTemplateCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   applications?: boolean | BehaviorTemplateCountOutputTypeCountApplicationsArgs
+  teamAwards?: boolean | BehaviorTemplateCountOutputTypeCountTeamAwardsArgs
 }
 
 /**
@@ -769,6 +917,13 @@ export type BehaviorTemplateCountOutputTypeCountApplicationsArgs<ExtArgs extends
   where?: Prisma.BehaviorApplicationWhereInput
 }
 
+/**
+ * BehaviorTemplateCountOutputType without action
+ */
+export type BehaviorTemplateCountOutputTypeCountTeamAwardsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TeamAwardWhereInput
+}
+
 
 export type BehaviorTemplateSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -779,10 +934,12 @@ export type BehaviorTemplateSelect<ExtArgs extends runtime.Types.Extensions.Inte
   xpDelta?: boolean
   coinDelta?: boolean
   lifeDelta?: boolean
+  manaDelta?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   class?: boolean | Prisma.ClassDefaultArgs<ExtArgs>
   applications?: boolean | Prisma.BehaviorTemplate$applicationsArgs<ExtArgs>
+  teamAwards?: boolean | Prisma.BehaviorTemplate$teamAwardsArgs<ExtArgs>
   _count?: boolean | Prisma.BehaviorTemplateCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["behaviorTemplate"]>
 
@@ -795,6 +952,7 @@ export type BehaviorTemplateSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   xpDelta?: boolean
   coinDelta?: boolean
   lifeDelta?: boolean
+  manaDelta?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   class?: boolean | Prisma.ClassDefaultArgs<ExtArgs>
@@ -809,6 +967,7 @@ export type BehaviorTemplateSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   xpDelta?: boolean
   coinDelta?: boolean
   lifeDelta?: boolean
+  manaDelta?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   class?: boolean | Prisma.ClassDefaultArgs<ExtArgs>
@@ -823,14 +982,16 @@ export type BehaviorTemplateSelectScalar = {
   xpDelta?: boolean
   coinDelta?: boolean
   lifeDelta?: boolean
+  manaDelta?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type BehaviorTemplateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "classId" | "kind" | "name" | "description" | "xpDelta" | "coinDelta" | "lifeDelta" | "createdAt" | "updatedAt", ExtArgs["result"]["behaviorTemplate"]>
+export type BehaviorTemplateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "classId" | "kind" | "name" | "description" | "xpDelta" | "coinDelta" | "lifeDelta" | "manaDelta" | "createdAt" | "updatedAt", ExtArgs["result"]["behaviorTemplate"]>
 export type BehaviorTemplateInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   class?: boolean | Prisma.ClassDefaultArgs<ExtArgs>
   applications?: boolean | Prisma.BehaviorTemplate$applicationsArgs<ExtArgs>
+  teamAwards?: boolean | Prisma.BehaviorTemplate$teamAwardsArgs<ExtArgs>
   _count?: boolean | Prisma.BehaviorTemplateCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type BehaviorTemplateIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -845,6 +1006,7 @@ export type $BehaviorTemplatePayload<ExtArgs extends runtime.Types.Extensions.In
   objects: {
     class: Prisma.$ClassPayload<ExtArgs>
     applications: Prisma.$BehaviorApplicationPayload<ExtArgs>[]
+    teamAwards: Prisma.$TeamAwardPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -855,6 +1017,7 @@ export type $BehaviorTemplatePayload<ExtArgs extends runtime.Types.Extensions.In
     xpDelta: number
     coinDelta: number
     lifeDelta: number
+    manaDelta: number
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["behaviorTemplate"]>
@@ -1253,6 +1416,7 @@ export interface Prisma__BehaviorTemplateClient<T, Null = never, ExtArgs extends
   readonly [Symbol.toStringTag]: "PrismaPromise"
   class<T extends Prisma.ClassDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ClassDefaultArgs<ExtArgs>>): Prisma.Prisma__ClassClient<runtime.Types.Result.GetResult<Prisma.$ClassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   applications<T extends Prisma.BehaviorTemplate$applicationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BehaviorTemplate$applicationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BehaviorApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  teamAwards<T extends Prisma.BehaviorTemplate$teamAwardsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BehaviorTemplate$teamAwardsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TeamAwardPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1290,6 +1454,7 @@ export interface BehaviorTemplateFieldRefs {
   readonly xpDelta: Prisma.FieldRef<"BehaviorTemplate", 'Int'>
   readonly coinDelta: Prisma.FieldRef<"BehaviorTemplate", 'Int'>
   readonly lifeDelta: Prisma.FieldRef<"BehaviorTemplate", 'Int'>
+  readonly manaDelta: Prisma.FieldRef<"BehaviorTemplate", 'Int'>
   readonly createdAt: Prisma.FieldRef<"BehaviorTemplate", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"BehaviorTemplate", 'DateTime'>
 }
@@ -1714,6 +1879,30 @@ export type BehaviorTemplate$applicationsArgs<ExtArgs extends runtime.Types.Exte
   take?: number
   skip?: number
   distinct?: Prisma.BehaviorApplicationScalarFieldEnum | Prisma.BehaviorApplicationScalarFieldEnum[]
+}
+
+/**
+ * BehaviorTemplate.teamAwards
+ */
+export type BehaviorTemplate$teamAwardsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TeamAward
+   */
+  select?: Prisma.TeamAwardSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TeamAward
+   */
+  omit?: Prisma.TeamAwardOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TeamAwardInclude<ExtArgs> | null
+  where?: Prisma.TeamAwardWhereInput
+  orderBy?: Prisma.TeamAwardOrderByWithRelationInput | Prisma.TeamAwardOrderByWithRelationInput[]
+  cursor?: Prisma.TeamAwardWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TeamAwardScalarFieldEnum | Prisma.TeamAwardScalarFieldEnum[]
 }
 
 /**

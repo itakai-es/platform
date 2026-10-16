@@ -535,6 +535,20 @@
       "empty_title": "Klaserik ez",
       "empty_archived_title": "Ez dago artxibatutako klaserik",
       "no_results": "Ez dago «{query}» bilaketarekin bat datorren klaserik"
+    },
+    "effects": {},
+    "calendar": {
+      "prev_month": "Aurreko hilabetea",
+      "next_month": "Hurrengo hilabetea"
+    },
+    "teams": {
+      "standings_title": "Taldeen sailkapena · {title}",
+      "position": "Postua",
+      "points": "{count} puntu | {count} puntu",
+      "kind": {
+        "base": "Oinarrizkoa",
+        "temporal": "Behin-behinekoa"
+      }
     }
   }
 }

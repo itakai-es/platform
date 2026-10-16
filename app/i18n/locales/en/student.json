@@ -365,6 +365,14 @@
         "avg_missions": "Average missions",
         "total_xp": "Total class XP"
       }
+    },
+    "teams": {
+      "my_team_title": "My team",
+      "members_label": "Members of {name}",
+      "you": "You",
+      "mission_team": "This mission is done in teams (“{set}”). Your team is {team}, with {names}. Each member submits their part.",
+      "mission_team_alone": "This mission is done in teams (“{set}”). Your team is {team}. Each member submits their part.",
+      "mission_no_team": "This mission is done in teams (“{set}”), but you are not in one yet. Ask in class."
     }
   }
 }

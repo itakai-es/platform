@@ -700,6 +700,211 @@ const BEHAVIORS: RouteCase[] = [
     student: 403,
     levels: levels('edit', 200),
   },
+  {
+    route: 'POST /teacher/classes/:classId/behaviors/:behaviorId/apply-many',
+    request: async f => ({
+      method: 'POST',
+      url: `${c(f)}/behaviors/${await f.newBehavior()}/apply-many`,
+      payload: { studentIds: [f.users.student.id] },
+    }),
+    owner: 200,
+    other: 404,
+    student: 403,
+    levels: levels('edit', 200),
+  },
+  {
+    route: 'POST /teacher/classes/:classId/rewards',
+    request: f => ({
+      method: 'POST',
+      url: `${c(f)}/rewards`,
+      payload: { studentIds: [f.users.student.id], xp: 1, reason: 'Ayuda' },
+    }),
+    owner: 200,
+    other: 404,
+    student: 403,
+    levels: levels('edit', 200),
+  },
+]
+
+// ---------------------------------------------------------------- asistencia
+
+const ATTENDANCE: RouteCase[] = [
+  {
+    route: 'GET /teacher/classes/:classId/attendance',
+    request: f => ({ method: 'GET', url: `${c(f)}/attendance?date=2026-10-05` }),
+    owner: 200,
+    other: 404,
+    student: 403,
+    levels: levels('read', 200),
+  },
+  {
+    route: 'GET /teacher/classes/:classId/attendance/current',
+    request: f => ({ method: 'GET', url: `${c(f)}/attendance/current?date=2026-10-05` }),
+    owner: 200,
+    other: 404,
+    student: 403,
+    levels: levels('read', 200),
+  },
+  {
+    route: 'GET /teacher/classes/:classId/attendance/summary',
+    request: f => ({
+      method: 'GET',
+      url: `${c(f)}/attendance/summary?from=2026-10-01&to=2026-10-31`,
+    }),
+    owner: 200,
+    other: 404,
+    student: 403,
+    levels: levels('read', 200),
+  },
+  {
+    route: 'GET /teacher/classes/:classId/attendance/export',
+    request: f => ({
+      method: 'GET',
+      url: `${c(f)}/attendance/export?from=2026-10-01&to=2026-10-31`,
+    }),
+    owner: 200,
+    other: 404,
+    student: 403,
+    levels: levels('edit', 200),
+  },
+  {
+    route: 'PUT /teacher/classes/:classId/attendance/sessions',
+    request: f => ({
+      method: 'PUT',
+      url: `${c(f)}/attendance/sessions`,
+      payload: {
+        date: '2026-10-05',
+        startTime: '',
+        records: [{ studentId: f.users.student.id, status: 'absent' }],
+      },
+    }),
+    owner: 200,
+    other: 404,
+    student: 403,
+    levels: levels('edit', 200),
+  },
+  {
+    route: 'DELETE /teacher/classes/:classId/attendance/sessions/:sessionId',
+    request: async f => ({
+      method: 'DELETE',
+      url: `${c(f)}/attendance/sessions/${
+        (
+          await prisma.attendanceSession.create({
+            data: { classId: f.classId, date: new Date('2026-10-06'), startTime: randomUUID().slice(0, 5) },
+          })
+        ).id
+      }`,
+    }),
+    owner: 200,
+    other: 404,
+    student: 403,
+    levels: levels('edit', 200),
+  },
+]
+
+// ---------------------------------------------------------------- equipos
+
+/** Una agrupación de la clase con un equipo vacío, para las rutas que la necesitan. */
+const newTeamSet = (f: ClassFixture) =>
+  prisma.teamSet.create({
+    data: { classId: f.classId, title: `Casas ${randomUUID().slice(0, 4)}`, teams: { create: [{ title: 'Uno' }] } },
+    include: { teams: true },
+  })
+
+const TEAMS: RouteCase[] = [
+  {
+    route: 'GET /teacher/classes/:classId/team-sets',
+    request: f => ({ method: 'GET', url: `${c(f)}/team-sets` }),
+    owner: 200,
+    other: 404,
+    student: 403,
+    levels: levels('read', 200),
+  },
+  {
+    route: 'POST /teacher/classes/:classId/team-sets',
+    request: f => ({
+      method: 'POST',
+      url: `${c(f)}/team-sets`,
+      payload: { title: 'Casas', teams: [{ title: 'Uno', studentIds: [f.users.student.id] }] },
+    }),
+    owner: 200,
+    other: 404,
+    student: 403,
+    levels: levels('edit', 200),
+  },
+  {
+    route: 'POST /teacher/classes/:classId/team-sets/shuffle',
+    request: f => ({ method: 'POST', url: `${c(f)}/team-sets/shuffle`, payload: { teams: 2 } }),
+    owner: 200,
+    other: 404,
+    student: 403,
+    levels: levels('edit', 200),
+  },
+  {
+    route: 'PATCH /teacher/classes/:classId/team-sets/:setId',
+    request: async f => ({
+      method: 'PATCH',
+      url: `${c(f)}/team-sets/${(await newTeamSet(f)).id}`,
+      payload: { title: 'Casas bis' },
+    }),
+    owner: 200,
+    other: 404,
+    student: 403,
+    levels: levels('edit', 200),
+  },
+  {
+    route: 'DELETE /teacher/classes/:classId/team-sets/:setId',
+    request: async f => ({ method: 'DELETE', url: `${c(f)}/team-sets/${(await newTeamSet(f)).id}` }),
+    owner: 200,
+    other: 404,
+    student: 403,
+    levels: levels('edit', 200),
+  },
+  {
+    route: 'PUT /teacher/classes/:classId/team-sets/:setId/members',
+    request: async f => {
+      const set = await newTeamSet(f)
+      return {
+        method: 'PUT',
+        url: `${c(f)}/team-sets/${set.id}/members`,
+        payload: {
+          teams: [{ id: set.teams[0]!.id, title: 'Uno', studentIds: [f.users.student.id] }],
+          updatedAt: set.updatedAt.toISOString(),
+        },
+      }
+    },
+    owner: 200,
+    other: 404,
+    student: 403,
+    levels: levels('edit', 200),
+  },
+  {
+    route: 'POST /teacher/classes/:classId/team-sets/:setId/moves',
+    request: async f => {
+      const set = await newTeamSet(f)
+      return {
+        method: 'POST',
+        url: `${c(f)}/team-sets/${set.id}/moves`,
+        payload: { studentIds: [f.users.student.id], teamId: set.teams[0]!.id },
+      }
+    },
+    owner: 200,
+    other: 404,
+    student: 403,
+    levels: levels('edit', 200),
+  },
+  {
+    route: 'POST /teacher/classes/:classId/teams/:teamId/awards',
+    request: async f => ({
+      method: 'POST',
+      url: `${c(f)}/teams/${(await newTeamSet(f)).teams[0]!.id}/awards`,
+      payload: { title: 'Orden', points: 3, distribute: false },
+    }),
+    owner: 200,
+    other: 404,
+    student: 403,
+    levels: levels('edit', 200),
+  },
 ]
 
 // ---------------------------------------------------------------- /missions
@@ -933,6 +1138,8 @@ const groups: [string, RouteCase[]][] = [
   ['clase', TEACHER_CLASS],
   ['tienda', SHOP],
   ['comportamientos', BEHAVIORS],
+  ['asistencia', ATTENDANCE],
+  ['equipos', TEAMS],
   ['misiones, enigmas y documentos', MISSIONS],
   ['entregas', SUBMISSIONS],
 ]

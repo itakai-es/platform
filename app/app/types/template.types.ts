@@ -79,6 +79,7 @@ export interface TemplateBehavior {
   description: string | null
   xpDelta: number
   coinDelta: number
+  manaDelta: number
   lifeDelta: number
 }
 

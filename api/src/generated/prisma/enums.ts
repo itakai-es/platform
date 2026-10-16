@@ -203,6 +203,16 @@ export const MessageRole = {
 export type MessageRole = (typeof MessageRole)[keyof typeof MessageRole]
 
 
+export const AttendanceStatus = {
+  present: 'present',
+  absent: 'absent',
+  late: 'late',
+  excused: 'excused'
+} as const
+
+export type AttendanceStatus = (typeof AttendanceStatus)[keyof typeof AttendanceStatus]
+
+
 export const HelpArticleStatus = {
   borrador: 'borrador',
   publicado: 'publicado'

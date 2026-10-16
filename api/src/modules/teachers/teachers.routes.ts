@@ -3,6 +3,9 @@ import { teachersService } from './teachers.service.js'
 import { missionsService } from '../missions/missions.service.js'
 import { shopService } from '../shop/shop.service.js'
 import { behaviorsService } from '../behaviors/behaviors.service.js'
+import { classroomRoutes } from '../behaviors/classroom.routes.js'
+import { attendanceRoutes } from '../attendance/attendance.routes.js'
+import { teamsRoutes } from '../teams/teams.routes.js'
 import { z, ZodError } from 'zod'
 import { scheduleConfigSchema } from './schedule-config.schema.js'
 import { templateFiltersOf, type TemplateFiltersQuery } from '../templates/templates.routes.js'
@@ -268,6 +271,7 @@ const behaviorSchema = z.object({
   description: z.string().max(200).optional(),
   xp: z.number().int().min(0).optional(),
   coins: z.number().int().min(0).optional(),
+  mana: z.number().int().min(0).optional(),
   lives: z.number().int().min(0).optional(),
 })
 
@@ -414,6 +418,12 @@ export async function teacherRoutes(fastify: FastifyInstance) {
   })
 
   // ==================== BEHAVIORS (teacher) ====================
+
+  // Aplicar en lote, recompensas libres, asistencia y equipos: en sus propios
+  // módulos, detrás de la misma comprobación de sesión y papel.
+  await fastify.register(classroomRoutes)
+  await fastify.register(attendanceRoutes)
+  await fastify.register(teamsRoutes)
 
   fastify.get('/classes/:classId/behaviors', async (request: FastifyRequest<{ Params: { classId: string } }>, reply: FastifyReply) => {
     try {

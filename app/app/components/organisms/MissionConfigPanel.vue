@@ -84,6 +84,24 @@
             {{ t('teacher.missions.detail.settings.status_hint') }}
           </p>
         </div>
+
+        <!-- Por equipos: solo informativo; cada estudiante entrega lo suyo -->
+        <div>
+          <span :id="`${uid}-team-set`" class="text-sm font-medium text-text-primary mb-2 block">
+            {{ t('teacher.missions.detail.settings.team_set_label') }}
+          </span>
+          <SelectDropdown
+            :model-value="form.teamSetId"
+            :options="teamSetOptions"
+            :labelledby="`${uid}-team-set`"
+            :describedby="`${uid}-team-set-hint`"
+            class="sm:max-w-sm"
+            @update:model-value="form.teamSetId = String($event)"
+          />
+          <p :id="`${uid}-team-set-hint`" class="mt-1 text-sm text-text-muted">
+            {{ t('teacher.missions.detail.settings.team_set_hint') }}
+          </p>
+        </div>
       </div>
 
       <!-- Imagen de la misión -->
@@ -198,10 +216,14 @@ interface MissionSettings {
   backgroundImage: string
   rarity: MissionRarity
   blocked: boolean
+  /** Agrupación de equipos con la que se hace; '' = individual. */
+  teamSetId: string
 }
 
 const props = defineProps<{
   missionId: string
+  /** La clase de la misión: de ella salen las agrupaciones de equipos. */
+  classId?: string
   mission: {
     title?: string
     description?: string | null
@@ -210,6 +232,7 @@ const props = defineProps<{
     rarity?: string | null
     blocked?: boolean
     rarityLocked?: boolean
+    teamSet?: { id: string; title: string; archived: boolean } | null
   } | null
 }>()
 
@@ -230,6 +253,21 @@ const emit = defineEmits<{
 }>()
 
 const { t, locale } = useI18n()
+const uid = `mission-cfg-${useId()}`.replace(/[^\w-]/g, '-')
+
+// Agrupaciones de la clase para «por equipos»; la que ya tiene sale aunque esté archivada.
+const classTeams = useClassTeams(() => props.classId ?? '')
+onMounted(() => {
+  if (props.classId) void classTeams.ensure()
+})
+const teamSetOptions = computed(() => {
+  const current = props.mission?.teamSet
+  const sets = classTeams.activeSets.value.map(s => ({ value: s.id, label: s.title }))
+  if (current && !sets.some(s => s.value === current.id)) {
+    sets.push({ value: current.id, label: current.title })
+  }
+  return [{ value: '', label: t('teacher.missions.detail.settings.team_set_none') }, ...sets]
+})
 
 const rarities = computed<{ value: MissionRarity; label: string }[]>(() => [
   { value: 'comun', label: t('teacher.missions.detail.settings.rarity.comun') },
@@ -260,6 +298,7 @@ const buildForm = (): MissionSettings => ({
   backgroundImage: props.mission?.backgroundImage ?? '',
   rarity: coerceRarity(props.mission?.rarity),
   blocked: props.mission?.blocked ?? false,
+  teamSetId: props.mission?.teamSet?.id ?? '',
 })
 
 const form = ref<MissionSettings>(buildForm())
@@ -274,7 +313,8 @@ const dirty = computed(() => {
     a.deadline !== b.deadline ||
     a.backgroundImage !== b.backgroundImage ||
     a.rarity !== b.rarity ||
-    a.blocked !== b.blocked
+    a.blocked !== b.blocked ||
+    a.teamSetId !== b.teamSetId
   )
 })
 
@@ -286,6 +326,7 @@ watch(
     props.mission?.backgroundImage,
     props.mission?.rarity,
     props.mission?.blocked,
+    props.mission?.teamSet?.id,
   ],
   () => {
     if (!dirty.value) {
@@ -364,6 +405,7 @@ async function save() {
     backgroundImage: form.value.backgroundImage.trim(),
     rarity: form.value.rarity,
     status: form.value.blocked ? ('bloqueada' as const) : ('activa' as const),
+    teamSetId: form.value.teamSetId || null,
   }
 
   try {
@@ -379,6 +421,7 @@ async function save() {
       backgroundImage: storedImage ?? '',
       rarity: payload.rarity,
       blocked: form.value.blocked,
+      teamSetId: form.value.teamSetId,
     }
     snapshot.value = { ...saved }
     form.value = { ...saved }

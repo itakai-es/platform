@@ -30,12 +30,14 @@ export type BehaviorApplicationAvgAggregateOutputType = {
   xpDelta: number | null
   coinDelta: number | null
   lifeDelta: number | null
+  manaDelta: number | null
 }
 
 export type BehaviorApplicationSumAggregateOutputType = {
   xpDelta: number | null
   coinDelta: number | null
   lifeDelta: number | null
+  manaDelta: number | null
 }
 
 export type BehaviorApplicationMinAggregateOutputType = {
@@ -49,6 +51,8 @@ export type BehaviorApplicationMinAggregateOutputType = {
   xpDelta: number | null
   coinDelta: number | null
   lifeDelta: number | null
+  manaDelta: number | null
+  teamAwardId: string | null
   createdAt: Date | null
 }
 
@@ -63,6 +67,8 @@ export type BehaviorApplicationMaxAggregateOutputType = {
   xpDelta: number | null
   coinDelta: number | null
   lifeDelta: number | null
+  manaDelta: number | null
+  teamAwardId: string | null
   createdAt: Date | null
 }
 
@@ -77,6 +83,8 @@ export type BehaviorApplicationCountAggregateOutputType = {
   xpDelta: number
   coinDelta: number
   lifeDelta: number
+  manaDelta: number
+  teamAwardId: number
   createdAt: number
   _all: number
 }
@@ -86,12 +94,14 @@ export type BehaviorApplicationAvgAggregateInputType = {
   xpDelta?: true
   coinDelta?: true
   lifeDelta?: true
+  manaDelta?: true
 }
 
 export type BehaviorApplicationSumAggregateInputType = {
   xpDelta?: true
   coinDelta?: true
   lifeDelta?: true
+  manaDelta?: true
 }
 
 export type BehaviorApplicationMinAggregateInputType = {
@@ -105,6 +115,8 @@ export type BehaviorApplicationMinAggregateInputType = {
   xpDelta?: true
   coinDelta?: true
   lifeDelta?: true
+  manaDelta?: true
+  teamAwardId?: true
   createdAt?: true
 }
 
@@ -119,6 +131,8 @@ export type BehaviorApplicationMaxAggregateInputType = {
   xpDelta?: true
   coinDelta?: true
   lifeDelta?: true
+  manaDelta?: true
+  teamAwardId?: true
   createdAt?: true
 }
 
@@ -133,6 +147,8 @@ export type BehaviorApplicationCountAggregateInputType = {
   xpDelta?: true
   coinDelta?: true
   lifeDelta?: true
+  manaDelta?: true
+  teamAwardId?: true
   createdAt?: true
   _all?: true
 }
@@ -234,6 +250,8 @@ export type BehaviorApplicationGroupByOutputType = {
   xpDelta: number
   coinDelta: number
   lifeDelta: number
+  manaDelta: number
+  teamAwardId: string | null
   createdAt: Date
   _count: BehaviorApplicationCountAggregateOutputType | null
   _avg: BehaviorApplicationAvgAggregateOutputType | null
@@ -271,11 +289,14 @@ export type BehaviorApplicationWhereInput = {
   xpDelta?: Prisma.IntFilter<"BehaviorApplication"> | number
   coinDelta?: Prisma.IntFilter<"BehaviorApplication"> | number
   lifeDelta?: Prisma.IntFilter<"BehaviorApplication"> | number
+  manaDelta?: Prisma.IntFilter<"BehaviorApplication"> | number
+  teamAwardId?: Prisma.StringNullableFilter<"BehaviorApplication"> | string | null
   createdAt?: Prisma.DateTimeFilter<"BehaviorApplication"> | Date | string
   class?: Prisma.XOR<Prisma.ClassScalarRelationFilter, Prisma.ClassWhereInput>
   behavior?: Prisma.XOR<Prisma.BehaviorTemplateNullableScalarRelationFilter, Prisma.BehaviorTemplateWhereInput> | null
   teacher?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   student?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  teamAward?: Prisma.XOR<Prisma.TeamAwardNullableScalarRelationFilter, Prisma.TeamAwardWhereInput> | null
 }
 
 export type BehaviorApplicationOrderByWithRelationInput = {
@@ -289,11 +310,14 @@ export type BehaviorApplicationOrderByWithRelationInput = {
   xpDelta?: Prisma.SortOrder
   coinDelta?: Prisma.SortOrder
   lifeDelta?: Prisma.SortOrder
+  manaDelta?: Prisma.SortOrder
+  teamAwardId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   class?: Prisma.ClassOrderByWithRelationInput
   behavior?: Prisma.BehaviorTemplateOrderByWithRelationInput
   teacher?: Prisma.UserOrderByWithRelationInput
   student?: Prisma.UserOrderByWithRelationInput
+  teamAward?: Prisma.TeamAwardOrderByWithRelationInput
 }
 
 export type BehaviorApplicationWhereUniqueInput = Prisma.AtLeast<{
@@ -310,11 +334,14 @@ export type BehaviorApplicationWhereUniqueInput = Prisma.AtLeast<{
   xpDelta?: Prisma.IntFilter<"BehaviorApplication"> | number
   coinDelta?: Prisma.IntFilter<"BehaviorApplication"> | number
   lifeDelta?: Prisma.IntFilter<"BehaviorApplication"> | number
+  manaDelta?: Prisma.IntFilter<"BehaviorApplication"> | number
+  teamAwardId?: Prisma.StringNullableFilter<"BehaviorApplication"> | string | null
   createdAt?: Prisma.DateTimeFilter<"BehaviorApplication"> | Date | string
   class?: Prisma.XOR<Prisma.ClassScalarRelationFilter, Prisma.ClassWhereInput>
   behavior?: Prisma.XOR<Prisma.BehaviorTemplateNullableScalarRelationFilter, Prisma.BehaviorTemplateWhereInput> | null
   teacher?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   student?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  teamAward?: Prisma.XOR<Prisma.TeamAwardNullableScalarRelationFilter, Prisma.TeamAwardWhereInput> | null
 }, "id">
 
 export type BehaviorApplicationOrderByWithAggregationInput = {
@@ -328,6 +355,8 @@ export type BehaviorApplicationOrderByWithAggregationInput = {
   xpDelta?: Prisma.SortOrder
   coinDelta?: Prisma.SortOrder
   lifeDelta?: Prisma.SortOrder
+  manaDelta?: Prisma.SortOrder
+  teamAwardId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.BehaviorApplicationCountOrderByAggregateInput
   _avg?: Prisma.BehaviorApplicationAvgOrderByAggregateInput
@@ -350,6 +379,8 @@ export type BehaviorApplicationScalarWhereWithAggregatesInput = {
   xpDelta?: Prisma.IntWithAggregatesFilter<"BehaviorApplication"> | number
   coinDelta?: Prisma.IntWithAggregatesFilter<"BehaviorApplication"> | number
   lifeDelta?: Prisma.IntWithAggregatesFilter<"BehaviorApplication"> | number
+  manaDelta?: Prisma.IntWithAggregatesFilter<"BehaviorApplication"> | number
+  teamAwardId?: Prisma.StringNullableWithAggregatesFilter<"BehaviorApplication"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"BehaviorApplication"> | Date | string
 }
 
@@ -360,11 +391,13 @@ export type BehaviorApplicationCreateInput = {
   xpDelta: number
   coinDelta: number
   lifeDelta: number
+  manaDelta?: number
   createdAt?: Date | string
   class: Prisma.ClassCreateNestedOneWithoutBehaviorApplicationsInput
   behavior?: Prisma.BehaviorTemplateCreateNestedOneWithoutApplicationsInput
   teacher?: Prisma.UserCreateNestedOneWithoutBehaviorsAppliedInput
   student: Prisma.UserCreateNestedOneWithoutBehaviorsReceivedInput
+  teamAward?: Prisma.TeamAwardCreateNestedOneWithoutApplicationsInput
 }
 
 export type BehaviorApplicationUncheckedCreateInput = {
@@ -378,6 +411,8 @@ export type BehaviorApplicationUncheckedCreateInput = {
   xpDelta: number
   coinDelta: number
   lifeDelta: number
+  manaDelta?: number
+  teamAwardId?: string | null
   createdAt?: Date | string
 }
 
@@ -388,11 +423,13 @@ export type BehaviorApplicationUpdateInput = {
   xpDelta?: Prisma.IntFieldUpdateOperationsInput | number
   coinDelta?: Prisma.IntFieldUpdateOperationsInput | number
   lifeDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  manaDelta?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   class?: Prisma.ClassUpdateOneRequiredWithoutBehaviorApplicationsNestedInput
   behavior?: Prisma.BehaviorTemplateUpdateOneWithoutApplicationsNestedInput
   teacher?: Prisma.UserUpdateOneWithoutBehaviorsAppliedNestedInput
   student?: Prisma.UserUpdateOneRequiredWithoutBehaviorsReceivedNestedInput
+  teamAward?: Prisma.TeamAwardUpdateOneWithoutApplicationsNestedInput
 }
 
 export type BehaviorApplicationUncheckedUpdateInput = {
@@ -406,6 +443,8 @@ export type BehaviorApplicationUncheckedUpdateInput = {
   xpDelta?: Prisma.IntFieldUpdateOperationsInput | number
   coinDelta?: Prisma.IntFieldUpdateOperationsInput | number
   lifeDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  manaDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  teamAwardId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -420,6 +459,8 @@ export type BehaviorApplicationCreateManyInput = {
   xpDelta: number
   coinDelta: number
   lifeDelta: number
+  manaDelta?: number
+  teamAwardId?: string | null
   createdAt?: Date | string
 }
 
@@ -430,6 +471,7 @@ export type BehaviorApplicationUpdateManyMutationInput = {
   xpDelta?: Prisma.IntFieldUpdateOperationsInput | number
   coinDelta?: Prisma.IntFieldUpdateOperationsInput | number
   lifeDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  manaDelta?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -444,6 +486,8 @@ export type BehaviorApplicationUncheckedUpdateManyInput = {
   xpDelta?: Prisma.IntFieldUpdateOperationsInput | number
   coinDelta?: Prisma.IntFieldUpdateOperationsInput | number
   lifeDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  manaDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  teamAwardId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -468,6 +512,8 @@ export type BehaviorApplicationCountOrderByAggregateInput = {
   xpDelta?: Prisma.SortOrder
   coinDelta?: Prisma.SortOrder
   lifeDelta?: Prisma.SortOrder
+  manaDelta?: Prisma.SortOrder
+  teamAwardId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -475,6 +521,7 @@ export type BehaviorApplicationAvgOrderByAggregateInput = {
   xpDelta?: Prisma.SortOrder
   coinDelta?: Prisma.SortOrder
   lifeDelta?: Prisma.SortOrder
+  manaDelta?: Prisma.SortOrder
 }
 
 export type BehaviorApplicationMaxOrderByAggregateInput = {
@@ -488,6 +535,8 @@ export type BehaviorApplicationMaxOrderByAggregateInput = {
   xpDelta?: Prisma.SortOrder
   coinDelta?: Prisma.SortOrder
   lifeDelta?: Prisma.SortOrder
+  manaDelta?: Prisma.SortOrder
+  teamAwardId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -502,6 +551,8 @@ export type BehaviorApplicationMinOrderByAggregateInput = {
   xpDelta?: Prisma.SortOrder
   coinDelta?: Prisma.SortOrder
   lifeDelta?: Prisma.SortOrder
+  manaDelta?: Prisma.SortOrder
+  teamAwardId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -509,6 +560,7 @@ export type BehaviorApplicationSumOrderByAggregateInput = {
   xpDelta?: Prisma.SortOrder
   coinDelta?: Prisma.SortOrder
   lifeDelta?: Prisma.SortOrder
+  manaDelta?: Prisma.SortOrder
 }
 
 export type BehaviorApplicationCreateNestedManyWithoutTeacherInput = {
@@ -679,6 +731,48 @@ export type BehaviorApplicationUncheckedUpdateManyWithoutBehaviorNestedInput = {
   deleteMany?: Prisma.BehaviorApplicationScalarWhereInput | Prisma.BehaviorApplicationScalarWhereInput[]
 }
 
+export type BehaviorApplicationCreateNestedManyWithoutTeamAwardInput = {
+  create?: Prisma.XOR<Prisma.BehaviorApplicationCreateWithoutTeamAwardInput, Prisma.BehaviorApplicationUncheckedCreateWithoutTeamAwardInput> | Prisma.BehaviorApplicationCreateWithoutTeamAwardInput[] | Prisma.BehaviorApplicationUncheckedCreateWithoutTeamAwardInput[]
+  connectOrCreate?: Prisma.BehaviorApplicationCreateOrConnectWithoutTeamAwardInput | Prisma.BehaviorApplicationCreateOrConnectWithoutTeamAwardInput[]
+  createMany?: Prisma.BehaviorApplicationCreateManyTeamAwardInputEnvelope
+  connect?: Prisma.BehaviorApplicationWhereUniqueInput | Prisma.BehaviorApplicationWhereUniqueInput[]
+}
+
+export type BehaviorApplicationUncheckedCreateNestedManyWithoutTeamAwardInput = {
+  create?: Prisma.XOR<Prisma.BehaviorApplicationCreateWithoutTeamAwardInput, Prisma.BehaviorApplicationUncheckedCreateWithoutTeamAwardInput> | Prisma.BehaviorApplicationCreateWithoutTeamAwardInput[] | Prisma.BehaviorApplicationUncheckedCreateWithoutTeamAwardInput[]
+  connectOrCreate?: Prisma.BehaviorApplicationCreateOrConnectWithoutTeamAwardInput | Prisma.BehaviorApplicationCreateOrConnectWithoutTeamAwardInput[]
+  createMany?: Prisma.BehaviorApplicationCreateManyTeamAwardInputEnvelope
+  connect?: Prisma.BehaviorApplicationWhereUniqueInput | Prisma.BehaviorApplicationWhereUniqueInput[]
+}
+
+export type BehaviorApplicationUpdateManyWithoutTeamAwardNestedInput = {
+  create?: Prisma.XOR<Prisma.BehaviorApplicationCreateWithoutTeamAwardInput, Prisma.BehaviorApplicationUncheckedCreateWithoutTeamAwardInput> | Prisma.BehaviorApplicationCreateWithoutTeamAwardInput[] | Prisma.BehaviorApplicationUncheckedCreateWithoutTeamAwardInput[]
+  connectOrCreate?: Prisma.BehaviorApplicationCreateOrConnectWithoutTeamAwardInput | Prisma.BehaviorApplicationCreateOrConnectWithoutTeamAwardInput[]
+  upsert?: Prisma.BehaviorApplicationUpsertWithWhereUniqueWithoutTeamAwardInput | Prisma.BehaviorApplicationUpsertWithWhereUniqueWithoutTeamAwardInput[]
+  createMany?: Prisma.BehaviorApplicationCreateManyTeamAwardInputEnvelope
+  set?: Prisma.BehaviorApplicationWhereUniqueInput | Prisma.BehaviorApplicationWhereUniqueInput[]
+  disconnect?: Prisma.BehaviorApplicationWhereUniqueInput | Prisma.BehaviorApplicationWhereUniqueInput[]
+  delete?: Prisma.BehaviorApplicationWhereUniqueInput | Prisma.BehaviorApplicationWhereUniqueInput[]
+  connect?: Prisma.BehaviorApplicationWhereUniqueInput | Prisma.BehaviorApplicationWhereUniqueInput[]
+  update?: Prisma.BehaviorApplicationUpdateWithWhereUniqueWithoutTeamAwardInput | Prisma.BehaviorApplicationUpdateWithWhereUniqueWithoutTeamAwardInput[]
+  updateMany?: Prisma.BehaviorApplicationUpdateManyWithWhereWithoutTeamAwardInput | Prisma.BehaviorApplicationUpdateManyWithWhereWithoutTeamAwardInput[]
+  deleteMany?: Prisma.BehaviorApplicationScalarWhereInput | Prisma.BehaviorApplicationScalarWhereInput[]
+}
+
+export type BehaviorApplicationUncheckedUpdateManyWithoutTeamAwardNestedInput = {
+  create?: Prisma.XOR<Prisma.BehaviorApplicationCreateWithoutTeamAwardInput, Prisma.BehaviorApplicationUncheckedCreateWithoutTeamAwardInput> | Prisma.BehaviorApplicationCreateWithoutTeamAwardInput[] | Prisma.BehaviorApplicationUncheckedCreateWithoutTeamAwardInput[]
+  connectOrCreate?: Prisma.BehaviorApplicationCreateOrConnectWithoutTeamAwardInput | Prisma.BehaviorApplicationCreateOrConnectWithoutTeamAwardInput[]
+  upsert?: Prisma.BehaviorApplicationUpsertWithWhereUniqueWithoutTeamAwardInput | Prisma.BehaviorApplicationUpsertWithWhereUniqueWithoutTeamAwardInput[]
+  createMany?: Prisma.BehaviorApplicationCreateManyTeamAwardInputEnvelope
+  set?: Prisma.BehaviorApplicationWhereUniqueInput | Prisma.BehaviorApplicationWhereUniqueInput[]
+  disconnect?: Prisma.BehaviorApplicationWhereUniqueInput | Prisma.BehaviorApplicationWhereUniqueInput[]
+  delete?: Prisma.BehaviorApplicationWhereUniqueInput | Prisma.BehaviorApplicationWhereUniqueInput[]
+  connect?: Prisma.BehaviorApplicationWhereUniqueInput | Prisma.BehaviorApplicationWhereUniqueInput[]
+  update?: Prisma.BehaviorApplicationUpdateWithWhereUniqueWithoutTeamAwardInput | Prisma.BehaviorApplicationUpdateWithWhereUniqueWithoutTeamAwardInput[]
+  updateMany?: Prisma.BehaviorApplicationUpdateManyWithWhereWithoutTeamAwardInput | Prisma.BehaviorApplicationUpdateManyWithWhereWithoutTeamAwardInput[]
+  deleteMany?: Prisma.BehaviorApplicationScalarWhereInput | Prisma.BehaviorApplicationScalarWhereInput[]
+}
+
 export type BehaviorApplicationCreateWithoutTeacherInput = {
   id?: string
   kind: string
@@ -686,10 +780,12 @@ export type BehaviorApplicationCreateWithoutTeacherInput = {
   xpDelta: number
   coinDelta: number
   lifeDelta: number
+  manaDelta?: number
   createdAt?: Date | string
   class: Prisma.ClassCreateNestedOneWithoutBehaviorApplicationsInput
   behavior?: Prisma.BehaviorTemplateCreateNestedOneWithoutApplicationsInput
   student: Prisma.UserCreateNestedOneWithoutBehaviorsReceivedInput
+  teamAward?: Prisma.TeamAwardCreateNestedOneWithoutApplicationsInput
 }
 
 export type BehaviorApplicationUncheckedCreateWithoutTeacherInput = {
@@ -702,6 +798,8 @@ export type BehaviorApplicationUncheckedCreateWithoutTeacherInput = {
   xpDelta: number
   coinDelta: number
   lifeDelta: number
+  manaDelta?: number
+  teamAwardId?: string | null
   createdAt?: Date | string
 }
 
@@ -722,10 +820,12 @@ export type BehaviorApplicationCreateWithoutStudentInput = {
   xpDelta: number
   coinDelta: number
   lifeDelta: number
+  manaDelta?: number
   createdAt?: Date | string
   class: Prisma.ClassCreateNestedOneWithoutBehaviorApplicationsInput
   behavior?: Prisma.BehaviorTemplateCreateNestedOneWithoutApplicationsInput
   teacher?: Prisma.UserCreateNestedOneWithoutBehaviorsAppliedInput
+  teamAward?: Prisma.TeamAwardCreateNestedOneWithoutApplicationsInput
 }
 
 export type BehaviorApplicationUncheckedCreateWithoutStudentInput = {
@@ -738,6 +838,8 @@ export type BehaviorApplicationUncheckedCreateWithoutStudentInput = {
   xpDelta: number
   coinDelta: number
   lifeDelta: number
+  manaDelta?: number
+  teamAwardId?: string | null
   createdAt?: Date | string
 }
 
@@ -781,6 +883,8 @@ export type BehaviorApplicationScalarWhereInput = {
   xpDelta?: Prisma.IntFilter<"BehaviorApplication"> | number
   coinDelta?: Prisma.IntFilter<"BehaviorApplication"> | number
   lifeDelta?: Prisma.IntFilter<"BehaviorApplication"> | number
+  manaDelta?: Prisma.IntFilter<"BehaviorApplication"> | number
+  teamAwardId?: Prisma.StringNullableFilter<"BehaviorApplication"> | string | null
   createdAt?: Prisma.DateTimeFilter<"BehaviorApplication"> | Date | string
 }
 
@@ -807,10 +911,12 @@ export type BehaviorApplicationCreateWithoutClassInput = {
   xpDelta: number
   coinDelta: number
   lifeDelta: number
+  manaDelta?: number
   createdAt?: Date | string
   behavior?: Prisma.BehaviorTemplateCreateNestedOneWithoutApplicationsInput
   teacher?: Prisma.UserCreateNestedOneWithoutBehaviorsAppliedInput
   student: Prisma.UserCreateNestedOneWithoutBehaviorsReceivedInput
+  teamAward?: Prisma.TeamAwardCreateNestedOneWithoutApplicationsInput
 }
 
 export type BehaviorApplicationUncheckedCreateWithoutClassInput = {
@@ -823,6 +929,8 @@ export type BehaviorApplicationUncheckedCreateWithoutClassInput = {
   xpDelta: number
   coinDelta: number
   lifeDelta: number
+  manaDelta?: number
+  teamAwardId?: string | null
   createdAt?: Date | string
 }
 
@@ -859,10 +967,12 @@ export type BehaviorApplicationCreateWithoutBehaviorInput = {
   xpDelta: number
   coinDelta: number
   lifeDelta: number
+  manaDelta?: number
   createdAt?: Date | string
   class: Prisma.ClassCreateNestedOneWithoutBehaviorApplicationsInput
   teacher?: Prisma.UserCreateNestedOneWithoutBehaviorsAppliedInput
   student: Prisma.UserCreateNestedOneWithoutBehaviorsReceivedInput
+  teamAward?: Prisma.TeamAwardCreateNestedOneWithoutApplicationsInput
 }
 
 export type BehaviorApplicationUncheckedCreateWithoutBehaviorInput = {
@@ -875,6 +985,8 @@ export type BehaviorApplicationUncheckedCreateWithoutBehaviorInput = {
   xpDelta: number
   coinDelta: number
   lifeDelta: number
+  manaDelta?: number
+  teamAwardId?: string | null
   createdAt?: Date | string
 }
 
@@ -904,6 +1016,62 @@ export type BehaviorApplicationUpdateManyWithWhereWithoutBehaviorInput = {
   data: Prisma.XOR<Prisma.BehaviorApplicationUpdateManyMutationInput, Prisma.BehaviorApplicationUncheckedUpdateManyWithoutBehaviorInput>
 }
 
+export type BehaviorApplicationCreateWithoutTeamAwardInput = {
+  id?: string
+  kind: string
+  name: string
+  xpDelta: number
+  coinDelta: number
+  lifeDelta: number
+  manaDelta?: number
+  createdAt?: Date | string
+  class: Prisma.ClassCreateNestedOneWithoutBehaviorApplicationsInput
+  behavior?: Prisma.BehaviorTemplateCreateNestedOneWithoutApplicationsInput
+  teacher?: Prisma.UserCreateNestedOneWithoutBehaviorsAppliedInput
+  student: Prisma.UserCreateNestedOneWithoutBehaviorsReceivedInput
+}
+
+export type BehaviorApplicationUncheckedCreateWithoutTeamAwardInput = {
+  id?: string
+  classId: string
+  behaviorId?: string | null
+  teacherId?: string | null
+  studentId: string
+  kind: string
+  name: string
+  xpDelta: number
+  coinDelta: number
+  lifeDelta: number
+  manaDelta?: number
+  createdAt?: Date | string
+}
+
+export type BehaviorApplicationCreateOrConnectWithoutTeamAwardInput = {
+  where: Prisma.BehaviorApplicationWhereUniqueInput
+  create: Prisma.XOR<Prisma.BehaviorApplicationCreateWithoutTeamAwardInput, Prisma.BehaviorApplicationUncheckedCreateWithoutTeamAwardInput>
+}
+
+export type BehaviorApplicationCreateManyTeamAwardInputEnvelope = {
+  data: Prisma.BehaviorApplicationCreateManyTeamAwardInput | Prisma.BehaviorApplicationCreateManyTeamAwardInput[]
+  skipDuplicates?: boolean
+}
+
+export type BehaviorApplicationUpsertWithWhereUniqueWithoutTeamAwardInput = {
+  where: Prisma.BehaviorApplicationWhereUniqueInput
+  update: Prisma.XOR<Prisma.BehaviorApplicationUpdateWithoutTeamAwardInput, Prisma.BehaviorApplicationUncheckedUpdateWithoutTeamAwardInput>
+  create: Prisma.XOR<Prisma.BehaviorApplicationCreateWithoutTeamAwardInput, Prisma.BehaviorApplicationUncheckedCreateWithoutTeamAwardInput>
+}
+
+export type BehaviorApplicationUpdateWithWhereUniqueWithoutTeamAwardInput = {
+  where: Prisma.BehaviorApplicationWhereUniqueInput
+  data: Prisma.XOR<Prisma.BehaviorApplicationUpdateWithoutTeamAwardInput, Prisma.BehaviorApplicationUncheckedUpdateWithoutTeamAwardInput>
+}
+
+export type BehaviorApplicationUpdateManyWithWhereWithoutTeamAwardInput = {
+  where: Prisma.BehaviorApplicationScalarWhereInput
+  data: Prisma.XOR<Prisma.BehaviorApplicationUpdateManyMutationInput, Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeamAwardInput>
+}
+
 export type BehaviorApplicationCreateManyTeacherInput = {
   id?: string
   classId: string
@@ -914,6 +1082,8 @@ export type BehaviorApplicationCreateManyTeacherInput = {
   xpDelta: number
   coinDelta: number
   lifeDelta: number
+  manaDelta?: number
+  teamAwardId?: string | null
   createdAt?: Date | string
 }
 
@@ -927,6 +1097,8 @@ export type BehaviorApplicationCreateManyStudentInput = {
   xpDelta: number
   coinDelta: number
   lifeDelta: number
+  manaDelta?: number
+  teamAwardId?: string | null
   createdAt?: Date | string
 }
 
@@ -937,10 +1109,12 @@ export type BehaviorApplicationUpdateWithoutTeacherInput = {
   xpDelta?: Prisma.IntFieldUpdateOperationsInput | number
   coinDelta?: Prisma.IntFieldUpdateOperationsInput | number
   lifeDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  manaDelta?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   class?: Prisma.ClassUpdateOneRequiredWithoutBehaviorApplicationsNestedInput
   behavior?: Prisma.BehaviorTemplateUpdateOneWithoutApplicationsNestedInput
   student?: Prisma.UserUpdateOneRequiredWithoutBehaviorsReceivedNestedInput
+  teamAward?: Prisma.TeamAwardUpdateOneWithoutApplicationsNestedInput
 }
 
 export type BehaviorApplicationUncheckedUpdateWithoutTeacherInput = {
@@ -953,6 +1127,8 @@ export type BehaviorApplicationUncheckedUpdateWithoutTeacherInput = {
   xpDelta?: Prisma.IntFieldUpdateOperationsInput | number
   coinDelta?: Prisma.IntFieldUpdateOperationsInput | number
   lifeDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  manaDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  teamAwardId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -966,6 +1142,8 @@ export type BehaviorApplicationUncheckedUpdateManyWithoutTeacherInput = {
   xpDelta?: Prisma.IntFieldUpdateOperationsInput | number
   coinDelta?: Prisma.IntFieldUpdateOperationsInput | number
   lifeDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  manaDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  teamAwardId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -976,10 +1154,12 @@ export type BehaviorApplicationUpdateWithoutStudentInput = {
   xpDelta?: Prisma.IntFieldUpdateOperationsInput | number
   coinDelta?: Prisma.IntFieldUpdateOperationsInput | number
   lifeDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  manaDelta?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   class?: Prisma.ClassUpdateOneRequiredWithoutBehaviorApplicationsNestedInput
   behavior?: Prisma.BehaviorTemplateUpdateOneWithoutApplicationsNestedInput
   teacher?: Prisma.UserUpdateOneWithoutBehaviorsAppliedNestedInput
+  teamAward?: Prisma.TeamAwardUpdateOneWithoutApplicationsNestedInput
 }
 
 export type BehaviorApplicationUncheckedUpdateWithoutStudentInput = {
@@ -992,6 +1172,8 @@ export type BehaviorApplicationUncheckedUpdateWithoutStudentInput = {
   xpDelta?: Prisma.IntFieldUpdateOperationsInput | number
   coinDelta?: Prisma.IntFieldUpdateOperationsInput | number
   lifeDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  manaDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  teamAwardId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -1005,6 +1187,8 @@ export type BehaviorApplicationUncheckedUpdateManyWithoutStudentInput = {
   xpDelta?: Prisma.IntFieldUpdateOperationsInput | number
   coinDelta?: Prisma.IntFieldUpdateOperationsInput | number
   lifeDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  manaDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  teamAwardId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -1018,6 +1202,8 @@ export type BehaviorApplicationCreateManyClassInput = {
   xpDelta: number
   coinDelta: number
   lifeDelta: number
+  manaDelta?: number
+  teamAwardId?: string | null
   createdAt?: Date | string
 }
 
@@ -1028,10 +1214,12 @@ export type BehaviorApplicationUpdateWithoutClassInput = {
   xpDelta?: Prisma.IntFieldUpdateOperationsInput | number
   coinDelta?: Prisma.IntFieldUpdateOperationsInput | number
   lifeDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  manaDelta?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   behavior?: Prisma.BehaviorTemplateUpdateOneWithoutApplicationsNestedInput
   teacher?: Prisma.UserUpdateOneWithoutBehaviorsAppliedNestedInput
   student?: Prisma.UserUpdateOneRequiredWithoutBehaviorsReceivedNestedInput
+  teamAward?: Prisma.TeamAwardUpdateOneWithoutApplicationsNestedInput
 }
 
 export type BehaviorApplicationUncheckedUpdateWithoutClassInput = {
@@ -1044,6 +1232,8 @@ export type BehaviorApplicationUncheckedUpdateWithoutClassInput = {
   xpDelta?: Prisma.IntFieldUpdateOperationsInput | number
   coinDelta?: Prisma.IntFieldUpdateOperationsInput | number
   lifeDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  manaDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  teamAwardId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -1057,6 +1247,8 @@ export type BehaviorApplicationUncheckedUpdateManyWithoutClassInput = {
   xpDelta?: Prisma.IntFieldUpdateOperationsInput | number
   coinDelta?: Prisma.IntFieldUpdateOperationsInput | number
   lifeDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  manaDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  teamAwardId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -1070,6 +1262,8 @@ export type BehaviorApplicationCreateManyBehaviorInput = {
   xpDelta: number
   coinDelta: number
   lifeDelta: number
+  manaDelta?: number
+  teamAwardId?: string | null
   createdAt?: Date | string
 }
 
@@ -1080,10 +1274,12 @@ export type BehaviorApplicationUpdateWithoutBehaviorInput = {
   xpDelta?: Prisma.IntFieldUpdateOperationsInput | number
   coinDelta?: Prisma.IntFieldUpdateOperationsInput | number
   lifeDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  manaDelta?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   class?: Prisma.ClassUpdateOneRequiredWithoutBehaviorApplicationsNestedInput
   teacher?: Prisma.UserUpdateOneWithoutBehaviorsAppliedNestedInput
   student?: Prisma.UserUpdateOneRequiredWithoutBehaviorsReceivedNestedInput
+  teamAward?: Prisma.TeamAwardUpdateOneWithoutApplicationsNestedInput
 }
 
 export type BehaviorApplicationUncheckedUpdateWithoutBehaviorInput = {
@@ -1096,6 +1292,8 @@ export type BehaviorApplicationUncheckedUpdateWithoutBehaviorInput = {
   xpDelta?: Prisma.IntFieldUpdateOperationsInput | number
   coinDelta?: Prisma.IntFieldUpdateOperationsInput | number
   lifeDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  manaDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  teamAwardId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -1109,6 +1307,68 @@ export type BehaviorApplicationUncheckedUpdateManyWithoutBehaviorInput = {
   xpDelta?: Prisma.IntFieldUpdateOperationsInput | number
   coinDelta?: Prisma.IntFieldUpdateOperationsInput | number
   lifeDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  manaDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  teamAwardId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type BehaviorApplicationCreateManyTeamAwardInput = {
+  id?: string
+  classId: string
+  behaviorId?: string | null
+  teacherId?: string | null
+  studentId: string
+  kind: string
+  name: string
+  xpDelta: number
+  coinDelta: number
+  lifeDelta: number
+  manaDelta?: number
+  createdAt?: Date | string
+}
+
+export type BehaviorApplicationUpdateWithoutTeamAwardInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  xpDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  coinDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  lifeDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  manaDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  class?: Prisma.ClassUpdateOneRequiredWithoutBehaviorApplicationsNestedInput
+  behavior?: Prisma.BehaviorTemplateUpdateOneWithoutApplicationsNestedInput
+  teacher?: Prisma.UserUpdateOneWithoutBehaviorsAppliedNestedInput
+  student?: Prisma.UserUpdateOneRequiredWithoutBehaviorsReceivedNestedInput
+}
+
+export type BehaviorApplicationUncheckedUpdateWithoutTeamAwardInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  classId?: Prisma.StringFieldUpdateOperationsInput | string
+  behaviorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  teacherId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  studentId?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  xpDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  coinDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  lifeDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  manaDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type BehaviorApplicationUncheckedUpdateManyWithoutTeamAwardInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  classId?: Prisma.StringFieldUpdateOperationsInput | string
+  behaviorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  teacherId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  studentId?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  xpDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  coinDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  lifeDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  manaDelta?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -1125,11 +1385,14 @@ export type BehaviorApplicationSelect<ExtArgs extends runtime.Types.Extensions.I
   xpDelta?: boolean
   coinDelta?: boolean
   lifeDelta?: boolean
+  manaDelta?: boolean
+  teamAwardId?: boolean
   createdAt?: boolean
   class?: boolean | Prisma.ClassDefaultArgs<ExtArgs>
   behavior?: boolean | Prisma.BehaviorApplication$behaviorArgs<ExtArgs>
   teacher?: boolean | Prisma.BehaviorApplication$teacherArgs<ExtArgs>
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  teamAward?: boolean | Prisma.BehaviorApplication$teamAwardArgs<ExtArgs>
 }, ExtArgs["result"]["behaviorApplication"]>
 
 export type BehaviorApplicationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1143,11 +1406,14 @@ export type BehaviorApplicationSelectCreateManyAndReturn<ExtArgs extends runtime
   xpDelta?: boolean
   coinDelta?: boolean
   lifeDelta?: boolean
+  manaDelta?: boolean
+  teamAwardId?: boolean
   createdAt?: boolean
   class?: boolean | Prisma.ClassDefaultArgs<ExtArgs>
   behavior?: boolean | Prisma.BehaviorApplication$behaviorArgs<ExtArgs>
   teacher?: boolean | Prisma.BehaviorApplication$teacherArgs<ExtArgs>
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  teamAward?: boolean | Prisma.BehaviorApplication$teamAwardArgs<ExtArgs>
 }, ExtArgs["result"]["behaviorApplication"]>
 
 export type BehaviorApplicationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1161,11 +1427,14 @@ export type BehaviorApplicationSelectUpdateManyAndReturn<ExtArgs extends runtime
   xpDelta?: boolean
   coinDelta?: boolean
   lifeDelta?: boolean
+  manaDelta?: boolean
+  teamAwardId?: boolean
   createdAt?: boolean
   class?: boolean | Prisma.ClassDefaultArgs<ExtArgs>
   behavior?: boolean | Prisma.BehaviorApplication$behaviorArgs<ExtArgs>
   teacher?: boolean | Prisma.BehaviorApplication$teacherArgs<ExtArgs>
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  teamAward?: boolean | Prisma.BehaviorApplication$teamAwardArgs<ExtArgs>
 }, ExtArgs["result"]["behaviorApplication"]>
 
 export type BehaviorApplicationSelectScalar = {
@@ -1179,27 +1448,32 @@ export type BehaviorApplicationSelectScalar = {
   xpDelta?: boolean
   coinDelta?: boolean
   lifeDelta?: boolean
+  manaDelta?: boolean
+  teamAwardId?: boolean
   createdAt?: boolean
 }
 
-export type BehaviorApplicationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "classId" | "behaviorId" | "teacherId" | "studentId" | "kind" | "name" | "xpDelta" | "coinDelta" | "lifeDelta" | "createdAt", ExtArgs["result"]["behaviorApplication"]>
+export type BehaviorApplicationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "classId" | "behaviorId" | "teacherId" | "studentId" | "kind" | "name" | "xpDelta" | "coinDelta" | "lifeDelta" | "manaDelta" | "teamAwardId" | "createdAt", ExtArgs["result"]["behaviorApplication"]>
 export type BehaviorApplicationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   class?: boolean | Prisma.ClassDefaultArgs<ExtArgs>
   behavior?: boolean | Prisma.BehaviorApplication$behaviorArgs<ExtArgs>
   teacher?: boolean | Prisma.BehaviorApplication$teacherArgs<ExtArgs>
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  teamAward?: boolean | Prisma.BehaviorApplication$teamAwardArgs<ExtArgs>
 }
 export type BehaviorApplicationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   class?: boolean | Prisma.ClassDefaultArgs<ExtArgs>
   behavior?: boolean | Prisma.BehaviorApplication$behaviorArgs<ExtArgs>
   teacher?: boolean | Prisma.BehaviorApplication$teacherArgs<ExtArgs>
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  teamAward?: boolean | Prisma.BehaviorApplication$teamAwardArgs<ExtArgs>
 }
 export type BehaviorApplicationIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   class?: boolean | Prisma.ClassDefaultArgs<ExtArgs>
   behavior?: boolean | Prisma.BehaviorApplication$behaviorArgs<ExtArgs>
   teacher?: boolean | Prisma.BehaviorApplication$teacherArgs<ExtArgs>
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  teamAward?: boolean | Prisma.BehaviorApplication$teamAwardArgs<ExtArgs>
 }
 
 export type $BehaviorApplicationPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1209,6 +1483,7 @@ export type $BehaviorApplicationPayload<ExtArgs extends runtime.Types.Extensions
     behavior: Prisma.$BehaviorTemplatePayload<ExtArgs> | null
     teacher: Prisma.$UserPayload<ExtArgs> | null
     student: Prisma.$UserPayload<ExtArgs>
+    teamAward: Prisma.$TeamAwardPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1221,6 +1496,8 @@ export type $BehaviorApplicationPayload<ExtArgs extends runtime.Types.Extensions
     xpDelta: number
     coinDelta: number
     lifeDelta: number
+    manaDelta: number
+    teamAwardId: string | null
     createdAt: Date
   }, ExtArgs["result"]["behaviorApplication"]>
   composites: {}
@@ -1620,6 +1897,7 @@ export interface Prisma__BehaviorApplicationClient<T, Null = never, ExtArgs exte
   behavior<T extends Prisma.BehaviorApplication$behaviorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BehaviorApplication$behaviorArgs<ExtArgs>>): Prisma.Prisma__BehaviorTemplateClient<runtime.Types.Result.GetResult<Prisma.$BehaviorTemplatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   teacher<T extends Prisma.BehaviorApplication$teacherArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BehaviorApplication$teacherArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   student<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  teamAward<T extends Prisma.BehaviorApplication$teamAwardArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BehaviorApplication$teamAwardArgs<ExtArgs>>): Prisma.Prisma__TeamAwardClient<runtime.Types.Result.GetResult<Prisma.$TeamAwardPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1659,6 +1937,8 @@ export interface BehaviorApplicationFieldRefs {
   readonly xpDelta: Prisma.FieldRef<"BehaviorApplication", 'Int'>
   readonly coinDelta: Prisma.FieldRef<"BehaviorApplication", 'Int'>
   readonly lifeDelta: Prisma.FieldRef<"BehaviorApplication", 'Int'>
+  readonly manaDelta: Prisma.FieldRef<"BehaviorApplication", 'Int'>
+  readonly teamAwardId: Prisma.FieldRef<"BehaviorApplication", 'String'>
   readonly createdAt: Prisma.FieldRef<"BehaviorApplication", 'DateTime'>
 }
     
@@ -2096,6 +2376,25 @@ export type BehaviorApplication$teacherArgs<ExtArgs extends runtime.Types.Extens
    */
   include?: Prisma.UserInclude<ExtArgs> | null
   where?: Prisma.UserWhereInput
+}
+
+/**
+ * BehaviorApplication.teamAward
+ */
+export type BehaviorApplication$teamAwardArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TeamAward
+   */
+  select?: Prisma.TeamAwardSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TeamAward
+   */
+  omit?: Prisma.TeamAwardOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TeamAwardInclude<ExtArgs> | null
+  where?: Prisma.TeamAwardWhereInput
 }
 
 /**

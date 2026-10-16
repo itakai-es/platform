@@ -1,5 +1,6 @@
 import type { ActivityType } from '~/types/activity.types'
 import { normalizeLegacyActivityType, validateActivityType } from '~/types/activity.types'
+import { rewardTakesOnly } from '~/utils/reward-sign'
 
 interface Activity {
   id: string
@@ -207,18 +208,32 @@ export function useActivityFormatter(perspective: 'student' | 'teacher' = 'stude
 
           case 'behavior_applied': {
             const meta = (activity.metadata || {}) as {
-              kind?: 'positive' | 'negative'
+              kind?: 'positive' | 'negative' | 'reward'
               xpDelta?: number
               coinDelta?: number
+              manaDelta?: number
               lifeDelta?: number
             }
             const name = activity.source || 'un comportamiento'
-            description = isTeacher
-              ? `Recibió el comportamiento <strong>"${esc(name)}"</strong>`
-              : `Recibiste el comportamiento <strong>"${esc(name)}"</strong>`
+            // Una recompensa libre (con su motivo) va por el mismo camino que un comportamiento.
+            const takesOnly = meta.kind === 'reward' && rewardTakesOnly(meta)
+            if (takesOnly) {
+              description = isTeacher
+                ? `Se le quitaron recursos: <strong>"${esc(name)}"</strong>`
+                : `Se te quitaron recursos: <strong>"${esc(name)}"</strong>`
+            } else if (meta.kind === 'reward') {
+              description = isTeacher
+                ? `Recibió una recompensa: <strong>"${esc(name)}"</strong>`
+                : `Recibiste una recompensa: <strong>"${esc(name)}"</strong>`
+            } else {
+              description = isTeacher
+                ? `Recibió el comportamiento <strong>"${esc(name)}"</strong>`
+                : `Recibiste el comportamiento <strong>"${esc(name)}"</strong>`
+            }
             resources = [
               makeDelta('xp', meta.xpDelta),
               makeDelta('coin', meta.coinDelta),
+              makeDelta('mana', meta.manaDelta),
               makeDelta('life', meta.lifeDelta),
             ].filter((r): r is ResourceDelta => r !== null)
             actorName = activity.actor?.name || undefined
@@ -227,7 +242,8 @@ export function useActivityFormatter(perspective: 'student' | 'teacher' = 'stude
             badge = {
               type: 'behavior',
               text: name,
-              positive: meta.kind !== 'negative',
+              // Una recompensa que solo quita cuenta como negativa.
+              positive: meta.kind === 'reward' ? !takesOnly : meta.kind !== 'negative',
             }
             break
           }

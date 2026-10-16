@@ -166,7 +166,9 @@
           "view_ranking": "Rankinga",
           "col_actions": "Ekintzak",
           "managed_badge": "Posta gabe",
-          "pending_sign_in_badge": "Sartzeko zain"
+          "pending_sign_in_badge": "Sartzeko zain",
+          "view_attendance": "Asistentzia",
+          "view_teams": "Taldeak"
         },
         "stats_title": "Klasearen estatistikak",
         "pending_reviews": "Berrikusteko entregak",
@@ -207,9 +209,6 @@
           "section_negatives": "Negatiboak",
           "filter_all": "Denak",
           "apply_title": "\"{name}\" aplikatu",
-          "pick_student": "Aukeratu zein ikasleri aplikatuko diozun.",
-          "applied_toast": "{behavior} aplikatu zaio {student}-(r)i",
-          "empty_students": "Oraindik ez dago ikaslerik klase honetan.",
           "form_new_title": "Jokabide berria",
           "form_edit_title": "Editatu jokabidea",
           "form_type": "Mota",
@@ -233,7 +232,6 @@
           "toast_save_error": "Ezin izan da jokabidea gorde.",
           "toast_delete_error": "Ezin izan da jokabidea ezabatu.",
           "fetch_error": "Ezin izan dira jokabideak kargatu.",
-          "apply_error": "Ezin izan da jokabidea aplikatu.",
           "empty_description_readonly": "Klase honi jokabideak gehitzen zaizkionean, hemen agertuko dira."
         },
         "shop": {
@@ -610,7 +608,10 @@
             "document": "Dokumentuak",
             "submission": "Entregak",
             "behavior": "Jokabideak",
-            "shop": "Denda"
+            "shop": "Denda",
+            "reward": "Sariak",
+            "attendance": "Asistentzia",
+            "team": "Taldeak"
           },
           "actions": {
             "class": {
@@ -671,12 +672,36 @@
               "applied": "«{title}» aplikatu dio {target} ikasleari",
               "created": "«{title}» jokabidea sortu du",
               "updated": "«{title}» jokabidea editatu du",
-              "deleted": "«{title}» jokabidea ezabatu du"
+              "deleted": "«{title}» jokabidea ezabatu du",
+              "applied_batch": "«{title}» aplikatu die {count} ikasleri"
             },
             "shop": {
               "item_created": "«{title}» dendan gehitu du",
               "item_updated": "«{title}» dendan editatu du",
               "item_deleted": "«{title}» dendatik kendu du"
+            },
+            "reward": {
+              "granted": "sari bat eman dio {target} ikasleari: «{title}»",
+              "granted_batch": "sari bat eman die {count} ikasleri: «{title}»",
+              "taken": "baliabideak kendu dizkio {target} ikasleari: «{title}»",
+              "taken_batch": "baliabideak kendu dizkie {count} ikasleri: «{title}»"
+            },
+            "attendance": {
+              "taken": "{date}(e)ko zerrenda pasatu du: {present} klasean, {absent} etorri gabe",
+              "updated": "{date}(e)ko zerrenda zuzendu du: {present} klasean, {absent} etorri gabe",
+              "deleted": "{date}(e)ko zerrenda ezabatu du"
+            },
+            "team": {
+              "set_created": "«{title}» talde-multzoa sortu du",
+              "set_updated": "«{title}» talde-multzoa editatu du",
+              "set_archived": "«{title}» talde-multzoa artxibatu du",
+              "set_unarchived": "«{title}» talde-multzoa artxibotik atera du",
+              "set_deleted": "«{title}» talde-multzoa ezabatu du",
+              "members_changed": "«{title}» multzoko taldeak aldatu ditu",
+              "awarded": "{points} puntu eman dio «{title}» taldeari: «{label}» | {points} puntu eman dizkio «{title}» taldeari: «{label}»",
+              "awarded_batch": "{points} puntu eman dio «{title}» taldeari, eta «{label}» banatu dio kide bakoitzari | {points} puntu eman dizkio «{title}» taldeari, eta «{label}» banatu dio kide bakoitzari",
+              "distributed": "«{label}» banatu dio «{title}» taldeari",
+              "distributed_batch": "«{label}» banatu dio «{title}» taldeko kide bakarrari | «{label}» banatu die «{title}» taldeko {count} kideei"
             }
           },
           "anonymous": {
@@ -693,8 +718,13 @@
             },
             "behavior": {
               "applied": "«{title}» aplikatu dio klasean jada ez dagoen ikasle bati"
+            },
+            "reward": {
+              "granted": "sari bat eman dio klasean jada ez dagoen ikasle bati: «{title}»",
+              "taken": "baliabideak kendu dizkio klasean jada ez dagoen ikasle bati: «{title}»"
             }
-          }
+          },
+          "batch_who": "Ikusi nori ({count})"
         },
         "in_trash": {
           "title": "«{name}» zakarrontzian dago",
@@ -800,7 +830,10 @@
           "save": "Gorde aldaketak",
           "discard": "Baztertu",
           "toast_saved": "Datuak gorde dira",
-          "toast_error": "Ezin izan dira datuak gorde"
+          "toast_error": "Ezin izan dira datuak gorde",
+          "team_set_label": "Taldeka",
+          "team_set_none": "Banakakoa (talderik gabe)",
+          "team_set_hint": "Informazio hutsa: ikasleek ikusten dute zein taldetan egiten den, eta talde oso bat batera onar dezakezu. Ikasle bakoitzak berea entregatzen jarraitzen du."
         }
       },
       "import": {
@@ -1270,7 +1303,10 @@
         "pct_custom": "Beste ehuneko bat",
         "will_receive": "Jasoko du",
         "approve": "Onartu %{pct}",
-        "approve_error": "Ezin izan da entrega onartu"
+        "approve_error": "Ezin izan da entrega onartu",
+        "approve_team": "Taldea onartu ({count}) % {pct}-ekin",
+        "team_approved": "{team}: {count} entrega onartuta % {pct}-ekin | {team}: {count} entrega onartuta % {pct}-ekin",
+        "team_note": "Talde-misioa («{set}»): entrega bat berrikustean, ehuneko berarekin onar dezakezu entregatu duen talde osoa."
       }
     },
     "templates": {
@@ -1369,6 +1405,230 @@
       "done": "Eginda",
       "wizard_question_schedule": "Jarri ordutegi bat zure klaseari",
       "wizard_question_cover": "Orain, azal bat zure klaserako"
+    },
+    "classroom": {
+      "picker": {
+        "legend": "Ikasleak",
+        "search": "Bilatu ikaslea…",
+        "all": "Denak",
+        "none": "Bat ere ez",
+        "empty": "Oraindik ez dago ikaslerik klase honetan.",
+        "no_results": "Inor ez dator bat bilaketarekin.",
+        "count": "Aukeratuak: {count} / {total}",
+        "only_present": "Gaur daudenak bakarrik",
+        "only_absent": "Gaur falta direnak bakarrik"
+      },
+      "modal_title": "Hainbat ikasleri aplikatu",
+      "mode_label": "Zer aplikatu nahi duzu",
+      "mode_behavior": "Portaera",
+      "mode_reward": "Sari librea",
+      "behavior_legend": "Portaera",
+      "no_behaviors": "Klase honek oraindik ez du portaerarik. Sortu Portaerak fitxan edo eman sari libre bat.",
+      "reward": {
+        "legend": "Saria",
+        "direction_label": "Eman edo kendu",
+        "give": "Eman",
+        "take": "Kendu",
+        "no_resources": "Klase honek ez du baliabiderik aktibatuta (XP, txanponak, mana edo bizitzak).",
+        "reason": "Arrazoia",
+        "reason_placeholder": "Adib.: Laborategia prestatzen lagundu du",
+        "reason_too_long": "Arrazoiak gehienez 80 karaktere izan ditzake."
+      },
+      "continue": "Jarraitu",
+      "confirm_title": "Berretsi",
+      "confirm_button": "Aplikatu",
+      "back": "Itzuli",
+      "confirm_who": "Ikusi nori ({count})",
+      "confirm_behavior": "«{title}» {count} ikasleri aplikatu. | «{title}» {count} ikasleri aplikatu.",
+      "confirm_reward": "«{title}» saria {count} ikasleri. | «{title}» saria {count} ikasleri.",
+      "confirm_effect": "Bakoitzari: {effect}.",
+      "confirm_no_effect": "Ez du klase honetako baliabide aktiborik mugitzen; idatzita geratzen da soilik.",
+      "applied_toast": "«{title}» {count} ikasleri aplikatu zaio | «{title}» {count} ikasleri aplikatu zaie",
+      "apply_error": "Ezin izan da aplikatu. Ez da ezer aldatu.",
+      "archived_notice": "Klasea artxibatuta dago: katalogoa ikusi eta edita dezakezu, baina ez inori aplikatu.",
+      "select_all_visible": "Aukeratu zerrendako guztiak",
+      "select_student": "Aukeratu {name}",
+      "selected_count": "{count} ikasle aukeratuta | {count} ikasle aukeratuta",
+      "apply_behavior": "Aplikatu portaera",
+      "give_reward": "Eman saria",
+      "clear_selection": "Kendu hautapena",
+      "applied_announcement": "{count} ikasleri aplikatua. Saldoak eguneratuta. | {count} ikasleri aplikatua. Saldoak eguneratuta.",
+      "target_label": "Nori",
+      "target_students": "Ikasleei",
+      "target_team": "Talde bati",
+      "team": {
+        "legend": "Taldea",
+        "points": "Markagailurako puntuak",
+        "points_hint": "Taldeen sailkapenean batzen dira (edo kentzen, kentzen baduzu). Jarri 0 banatu baino ez baduzu egiten.",
+        "distribute": "Kide bakoitzari ere banatu",
+        "distribute_hint": "Kide bakoitzak jokabidea edo saria jasotzen du, banan-banan aplikatuko bazenu bezala.",
+        "confirm_points": "«{team}» taldea: {points} puntu markagailuan. | «{team}» taldea: {points} puntu markagailuan.",
+        "confirm_no_points": "«{team}» taldea: punturik ez markagailuan.",
+        "confirm_distribute": "Eta «{title}» bere kideari. | Eta «{title}» bere {count} kideei.",
+        "confirm_no_distribute": "Kideei ez zaie ezer banatzen.",
+        "awarded_toast": "«{team}» taldea saritu da",
+        "modal_title": "Talde bat saritu"
+      },
+      "fixed_to": "Norentzat: {names}"
+    },
+    "attendance": {
+      "tabs_label": "Asistentzia",
+      "tab_take": "Zerrenda pasatu",
+      "tab_history": "Historia",
+      "date": "Data",
+      "session": "Saioa",
+      "no_schedule": "Ordutegirik gabeko saioa",
+      "saved_by": "{name}(e)k gordetako zerrenda ({time}).",
+      "someone": "irakasleren bat",
+      "not_saved": "Oraindik ez da zerrendarik pasatu saio honetan. Ikasle guztiak daude bertan: markatu falta direnak bakarrik.",
+      "unsaved": "Gorde gabeko aldaketak",
+      "read_only": "Asistentzia ikus dezakezu, baina zerrenda pasatzea klasean editatzen dutenena da.",
+      "count": {
+        "present": "{count} bertan | {count} bertan",
+        "absent": "{count} falta | {count} falta",
+        "late": "{count} berandu | {count} berandu",
+        "excused": "{count} justifikatua | {count} justifikatuak"
+      },
+      "all_present": "Denak bertan",
+      "status_of": "{name}(r)en asistentzia",
+      "status": {
+        "present": "Bertan",
+        "absent": "Falta",
+        "late": "Berandu",
+        "excused": "Justifikatua"
+      },
+      "save": "Gorde zerrenda",
+      "delete": "Ezabatu zerrenda hau",
+      "delete_title": "Zerrenda hau ezabatu?",
+      "delete_message": "Saioa ezabatzen da ikasle guztien egoerarekin. Erabili zerrenda nahi gabe pasatu baduzu.",
+      "apply_present": "Aplikatu bertan daudenei…",
+      "apply_absent": "Aplikatu falta direnei…",
+      "no_auto_xp": "Zerrenda pasatzeak ez du ezer kentzen edo ematen berez: saritzea edo zigortzea beti beste ekintza bat da, berretsita.",
+      "load_error": "Ezin izan da asistentzia kargatu.",
+      "saved_announcement": "Zerrenda gordeta: {present} klasean, {absent} etorri gabe.",
+      "save_error": "Ezin izan da zerrenda gorde.",
+      "deleted": "Zerrenda ezabatuta.",
+      "delete_error": "Ezin izan da zerrenda ezabatu.",
+      "history": {
+        "download_csv": "Deskargatu CSVa",
+        "empty_title": "Ez dago zerrendarik hilabete honetan",
+        "empty_description": "Zerrenda pasatzen duzunean, ikasle bakoitzaren asistentzia ikusiko duzu hemen.",
+        "calendar_hint": "Markatutako egunek zerrenda dute. Sakatu egun bat pasatzeko edo zuzentzeko.",
+        "table_caption": "Asistentzia ikasleka: {month}",
+        "no_record": "Erregistrorik ez",
+        "day_with_list": "zerrenda dago",
+        "csv_sessions": "Saioak",
+        "csv_file": "asistentzia",
+        "export_error": "Ezin izan da CSVa deskargatu."
+      },
+      "profile": {
+        "rate": "Asistentzia: % {rate}",
+        "sessions": "{count} saio ikasturte honetan | {count} saio ikasturte honetan"
+      }
+    },
+    "teams": {
+      "empty_title": "Oraindik ez dago talderik",
+      "empty_description": "Osatu taldeak eskuz edo ausaz. Oinarrizko talde finkoak izan ditzakezu, sailkapenean puntuatzen dutenak, eta behin-behinekoak misio edo dinamika baterako.",
+      "empty_description_readonly": "Edizio-baimena duen irakasleriak taldeak osatzen dituenean, hemen ikusiko dituzu.",
+      "new_set": "Taldeak osatu",
+      "set_label": "Talde-multzoa",
+      "kind": {
+        "base": "Oinarrizkoa",
+        "temporal": "Behin-behinekoa"
+      },
+      "archived_badge": "Artxibatuta",
+      "edit": "Editatu",
+      "move_members": "Kideak mugitu…",
+      "archive": "Artxibatu",
+      "unarchive": "Artxibotik atera",
+      "delete": "Ezabatu",
+      "delete_title": "Talde-multzoa ezabatu",
+      "delete_message": "«{title}» ezabatuko da, bere talde eta puntuekin. Kide bakoitzari banatutakoa geratu egiten da. Ezin da desegin.",
+      "drag_hint": "Arrastatu pertsona bat beste talde batera, edo erabili «Kideak mugitu…» teklatuarekin egiteko.",
+      "points": "{count} puntu | {count} puntu",
+      "members_count": "Kiderik ez | {count} kide | {count} kide",
+      "empty_team": "Oraindik ez dago inor talde honetan",
+      "no_team": "Talderik gabe",
+      "unknown_student": "Ikaslea",
+      "award": "Saritu",
+      "read_only": "Zure sarbide-mailarekin taldeak ikusten dituzu, baina ezin dituzu osatu ez saritu.",
+      "archived_class": "Klasea artxibatuta dago: taldeak ikusten dituzu, baina ezin dira aldatu ez saritu.",
+      "saved_toast": "«{title}» multzoko taldeak gordeta",
+      "error": "Ezin izan da gorde. Ez da ezer aldatu.",
+      "stale": "Norbaitek talde-multzo hau aldatu du editatzen ari zinen bitartean (beste pertsona batek edo beste fitxa batean). Ez da ezer gorde: orain nola dagoen ikusten duzu.",
+      "moved": "{count} pertsona {name} taldera mugitu da | {count} pertsona {name} taldera mugitu dira",
+      "archived_announcement": "«{title}» artxibatuta",
+      "unarchived_announcement": "«{title}» artxibotik atera da",
+      "deleted_announcement": "«{title}» ezabatuta",
+      "default_team": "{n}. taldea",
+      "colors": {
+        "purple": "Morea",
+        "yellow": "Horia",
+        "mint": "Menda-berdea",
+        "sky": "Zeru-urdina",
+        "red": "Gorria",
+        "peach": "Mertxika"
+      },
+      "emblems": {
+        "star": "Izarra",
+        "bolt": "Tximista",
+        "fire": "Sua",
+        "shield": "Ezkutua",
+        "rocket": "Suziria",
+        "heart": "Bihotza",
+        "sun": "Eguzkia",
+        "moon": "Ilargia",
+        "sparkles": "Distirak",
+        "globe": "Mundua",
+        "puzzle": "Puzzlea",
+        "trophy": "Garaikurra"
+      },
+      "form": {
+        "new_title": "Taldeak osatu",
+        "edit_title": "Talde-multzoa editatu",
+        "title": "Multzoaren izena",
+        "title_placeholder": "Adib.: Etxeak",
+        "title_required": "Jarri izen bat.",
+        "title_too_long": "Izenak 60 karaktere izan ditzake gehienez.",
+        "kind": "Mota",
+        "kind_hint": {
+          "base": "Finkoa ikasturte osoan. Bere puntuak taldeen sailkapenean zenbatzen dira.",
+          "temporal": "Misio edo dinamika baterako. Ez du sailkapenean puntuatzen; artxibatu amaitzean."
+        },
+        "method": "Nola",
+        "method_random": "Ausaz",
+        "method_manual": "Eskuz",
+        "size": "Tamaina",
+        "size_teams": "Talde kopurua",
+        "size_perTeam": "Pertsonak taldeko",
+        "size_result": "{count} talde aterako da. | {count} talde aterako dira.",
+        "balance": "Mailaren arabera orekatu",
+        "absent_note": "Gaur ez da inor falta zerrendan: ikasle guztiak sartzen dira. | Gaur {count} pertsona falta da zerrendan, eta banaketatik kanpo geratzen da. | Gaur {count} pertsona falta dira zerrendan, eta banaketatik kanpo geratzen dira.",
+        "no_list_note": "Gaur oraindik ez da zerrenda pasatu: ikasle guztiak sartzen dira.",
+        "preview_title": "Proposamena",
+        "preview_announcement": "Proposamena prest: {count} talde. | Proposamena prest: {count} talde.",
+        "excluded": "Gaur falta direlako kanpoan: {names}.",
+        "shuffle": "Banatu",
+        "again": "Berriro",
+        "save_teams": "Taldeak gorde",
+        "create": "Taldeak sortu",
+        "save": "Gorde",
+        "teams_legend": "Taldeak",
+        "team_name": "{n}. taldearen izena",
+        "remove_team": "Kendu {name} taldea",
+        "color": "Kolorea",
+        "emblem": "Ikurra",
+        "automatic": "Automatikoa",
+        "add_team": "Gehitu talde bat",
+        "removed_points_note": "Gordetzean, kendu dituzun taldeak beren puntuekin ezabatzen dira."
+      },
+      "move": {
+        "title": "Kideak mugitu · {title}",
+        "who": "Nor mugitzen duzun",
+        "from_team": "{name} taldekoak",
+        "to": "Zein taldetara",
+        "confirm": "Mugitu | Mugitu {count} pertsona | Mugitu {count} pertsona"
+      }
     }
   }
 }

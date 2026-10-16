@@ -16,7 +16,7 @@ import {
   recordClassAction,
   type ClassUser,
 } from '../../utils/class-access.js'
-import { NotFoundError } from '../../utils/errors.js'
+import { NotFoundError, ValidationError } from '../../utils/errors.js'
 
 const UPLOADS_DIR = join(process.cwd(), 'uploads', 'submissions')
 
@@ -269,10 +269,12 @@ export class SubmissionsService {
     await assertEnigmaAccess(enigmaId, userId, 'submission.view')
     const enigma = await prisma.missionEnigma.findUnique({
       where: { id: enigmaId },
-      include: { mission: true },
+      include: { mission: { include: { teamSet: { select: { id: true, title: true } } } } },
     })
 
     if (!enigma) throw new NotFoundError('Enigma no encontrado')
+    // Misión por equipos: cada entrega lleva el equipo de quien la hizo.
+    const teamSetId = enigma.mission.teamSetId
 
     const where: any = { enigmaId }
     if (status) where.status = status
@@ -286,7 +288,14 @@ export class SubmissionsService {
             name: true,
             enrollments: {
               where: { classId: enigma.mission.classId },
-              select: { nickname: true, avatarUrl: true },
+              select: {
+                nickname: true,
+                avatarUrl: true,
+                teamMemberships: {
+                  where: { setId: teamSetId ?? '' },
+                  select: { team: { select: { id: true, title: true, color: true, emblem: true } } },
+                },
+              },
             },
           },
         },
@@ -302,6 +311,7 @@ export class SubmissionsService {
         xpReward: enigma.xpReward,
         missionTitle: enigma.mission.title,
         missionId: enigma.missionId,
+        teamSet: enigma.mission.teamSet,
       },
       submissions: submissions.map((s) => {
         const enrollment = s.student.enrollments[0]
@@ -312,6 +322,7 @@ export class SubmissionsService {
             name: enrollment?.nickname || s.student.name,
             avatar: enrollment?.avatarUrl || null,
           },
+          team: enrollment?.teamMemberships[0]?.team ?? null,
           status: s.status,
           fileName: s.fileName,
           hasFile: !!s.fileUrl,
@@ -369,6 +380,64 @@ export class SubmissionsService {
    * under concurrent approvals by requiring `completedAt: null` in the atomic
    * `updateMany` that marks the mission as complete.
    */
+  /**
+   * Misiones por equipos: aprueba con el mismo porcentaje la entrega pendiente
+   * de cada integrante del equipo de quien hizo esta, en ese enigma. Es
+   * `approveSubmission` una vez por entrega, sin tocar el circuito: cada una
+   * comprueba su acceso, da sus recompensas y avisa como siempre. Quien ya
+   * tiene ese enigma aprobado se salta y se cuenta aparte; si una aprobación
+   * falla, las anteriores se quedan hechas (cada una es completa por sí sola).
+   */
+  async approveTeamSubmissions(userId: string, submissionId: string, percentage: number) {
+    await assertSubmissionAccess(submissionId, userId, 'submission.approve')
+    const submission = await prisma.enigmaSubmission.findUnique({
+      where: { id: submissionId },
+      select: {
+        enigmaId: true,
+        studentId: true,
+        enigma: { select: { mission: { select: { classId: true, teamSetId: true } } } },
+      },
+    })
+    if (!submission) throw new NotFoundError('Entrega no encontrada')
+    const { classId, teamSetId } = submission.enigma.mission
+    if (!teamSetId) throw new ValidationError('Esta misión no se hace por equipos')
+
+    const membership = await prisma.teamMember.findFirst({
+      where: { setId: teamSetId, enrollment: { classId, studentId: submission.studentId } },
+      select: { team: { select: { id: true, title: true, members: { select: { enrollment: { select: { studentId: true } } } } } } },
+    })
+    if (!membership) throw new ValidationError('Quien hizo esta entrega no está en ningún equipo')
+    const studentIds = membership.team.members.map(m => m.enrollment.studentId)
+
+    // La pendiente más reciente de cada integrante; la de quien se eligió, siempre.
+    const pending = await prisma.enigmaSubmission.findMany({
+      where: { enigmaId: submission.enigmaId, studentId: { in: studentIds }, status: 'pendiente' },
+      orderBy: { submittedAt: 'desc' },
+      select: { id: true, studentId: true },
+    })
+    const latest = new Map<string, string>()
+    for (const p of pending) if (!latest.has(p.studentId)) latest.set(p.studentId, p.id)
+    const done = await prisma.studentEnigmaProgress.findMany({
+      where: { enigmaId: submission.enigmaId, studentId: { in: [...latest.keys()] } },
+      select: { studentId: true },
+    })
+    const alreadyApproved = new Set(done.map(d => d.studentId))
+
+    const approved: { submissionId: string; studentId: string }[] = []
+    for (const [studentId, id] of latest) {
+      if (alreadyApproved.has(studentId)) continue
+      await this.approveSubmission(userId, id, { percentage })
+      approved.push({ submissionId: id, studentId })
+    }
+    const skipped = alreadyApproved.size
+    return {
+      team: { id: membership.team.id, title: membership.team.title },
+      approved,
+      skipped,
+      withoutSubmission: studentIds.length - latest.size,
+    }
+  }
+
   async approveSubmission(
     userId: string,
     submissionId: string,
