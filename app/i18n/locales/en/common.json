@@ -536,7 +536,12 @@
       "empty_archived_title": "No archived classes",
       "no_results": "No classes match “{query}”"
     },
-    "effects": {},
+    "effects": {
+      "floater": {
+        "xp": "XP",
+        "lives": "Lives"
+      }
+    },
     "calendar": {
       "prev_month": "Previous month",
       "next_month": "Next month"

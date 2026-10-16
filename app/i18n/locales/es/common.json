@@ -536,7 +536,12 @@
       "empty_archived_title": "Sin clases archivadas",
       "no_results": "No hay clases que coincidan con «{query}»"
     },
-    "effects": {},
+    "effects": {
+      "floater": {
+        "xp": "XP",
+        "lives": "Vidas"
+      }
+    },
     "calendar": {
       "prev_month": "Mes anterior",
       "next_month": "Mes siguiente"

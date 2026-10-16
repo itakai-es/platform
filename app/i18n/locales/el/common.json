@@ -536,7 +536,12 @@
       "empty_archived_title": "Καμία αρχειοθετημένη τάξη",
       "no_results": "Καμία τάξη δεν ταιριάζει με «{query}»"
     },
-    "effects": {},
+    "effects": {
+      "floater": {
+        "xp": "XP",
+        "lives": "Ζωές"
+      }
+    },
     "calendar": {
       "prev_month": "Προηγούμενος μήνας",
       "next_month": "Επόμενος μήνας"

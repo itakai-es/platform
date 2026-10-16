@@ -536,7 +536,12 @@
       "empty_archived_title": "Sem turmas arquivadas",
       "no_results": "Não há turmas que correspondam a «{query}»"
     },
-    "effects": {},
+    "effects": {
+      "floater": {
+        "xp": "XP",
+        "lives": "Vidas"
+      }
+    },
     "calendar": {
       "prev_month": "Mês anterior",
       "next_month": "Mês seguinte"

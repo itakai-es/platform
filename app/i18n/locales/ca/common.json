@@ -536,7 +536,12 @@
       "empty_archived_title": "Sense classes arxivades",
       "no_results": "No hi ha cap classe que coincideixi amb «{query}»"
     },
-    "effects": {},
+    "effects": {
+      "floater": {
+        "xp": "XP",
+        "lives": "Vides"
+      }
+    },
     "calendar": {
       "prev_month": "Mes anterior",
       "next_month": "Mes següent"

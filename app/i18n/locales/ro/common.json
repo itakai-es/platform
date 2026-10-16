@@ -536,7 +536,12 @@
       "empty_archived_title": "Nicio clasă arhivată",
       "no_results": "Nicio clasă nu corespunde cu „{query}”"
     },
-    "effects": {},
+    "effects": {
+      "floater": {
+        "xp": "XP",
+        "lives": "Vieți"
+      }
+    },
     "calendar": {
       "prev_month": "Luna anterioară",
       "next_month": "Luna următoare"

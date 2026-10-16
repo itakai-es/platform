@@ -11,7 +11,14 @@
  */
 import type { ClassSettings } from '~/types/class.types'
 import { confettiBurst, confettiSparkle, showFloater } from '~/utils/effects/visual'
-import { playSfx, setSoundMuted, isSoundMuted, type SfxName } from '~/utils/effects/sounds'
+import {
+  playSfx,
+  playTicks,
+  stopTicks,
+  setSoundMuted,
+  isSoundMuted,
+  type SfxName,
+} from '~/utils/effects/sounds'
 
 export type EffectEvent =
   | 'mission_completed'
@@ -26,6 +33,8 @@ export type EffectEvent =
   | 'shop_purchase'
   | 'shop_redeem'
   | 'shop_use_power'
+  | 'roulette_spin'
+  | 'roulette_pick'
   | 'click'
 
 export type Resource = 'xp' | 'coins' | 'mana' | 'lives'
@@ -40,13 +49,8 @@ export interface PlayOptions {
   amount?: number
   /** Tipo de recurso para etiquetar el floater. */
   resource?: Resource
-}
-
-const RESOURCE_LABEL: Record<Resource, string> = {
-  xp: 'XP',
-  coins: 'Monedas',
-  mana: 'Maná',
-  lives: 'Vidas',
+  /** Giro de la ruleta: segundos, desde ahora, en que suena cada «tic». */
+  ticks?: number[]
 }
 
 const RESOURCE_COLOR: Record<Resource, string> = {
@@ -67,15 +71,26 @@ function sfx(name: SfxName, settings?: ClassSettings | null): void {
   if (soundsOn(settings)) playSfx(name)
 }
 
-function floater(opts: PlayOptions): void {
-  if (!visualsOn(opts.settings)) return
-  if (opts.amount === undefined || !opts.resource) return
-  const sign = opts.amount >= 0 ? '+' : '−'
-  const text = `${sign}${Math.abs(opts.amount)} ${RESOURCE_LABEL[opts.resource]}`
-  showFloater(text, { x: opts.x, y: opts.y, color: RESOURCE_COLOR[opts.resource] })
-}
-
 export function useEffects() {
+  const { t } = useI18n()
+
+  // Etiqueta del floater por recurso, en el idioma de la interfaz. La moneda sale
+  // siempre de `common.resources.coins` (su nombre es configurable, ver useCoinLabel).
+  const RESOURCE_LABEL: Record<Resource, () => string> = {
+    xp: () => t('common.effects.floater.xp'),
+    coins: () => t('common.resources.coins'),
+    mana: () => t('common.resources.mana'),
+    lives: () => t('common.effects.floater.lives'),
+  }
+
+  function floater(opts: PlayOptions): void {
+    if (!visualsOn(opts.settings)) return
+    if (opts.amount === undefined || !opts.resource) return
+    const sign = opts.amount >= 0 ? '+' : '−'
+    const text = `${sign}${Math.abs(opts.amount)} ${RESOURCE_LABEL[opts.resource]()}`
+    showFloater(text, { x: opts.x, y: opts.y, color: RESOURCE_COLOR[opts.resource] })
+  }
+
   function play(event: EffectEvent, opts: PlayOptions = {}): void {
     switch (event) {
       case 'mission_completed':
@@ -113,13 +128,21 @@ export function useEffects() {
       case 'shop_use_power':
         sfx('success', opts.settings)
         return
+      // La rueda es el juego, no un efecto: aquí solo van sus tics y la celebración.
+      case 'roulette_spin':
+        if (soundsOn(opts.settings)) playTicks(opts.ticks ?? [])
+        return
+      case 'roulette_pick':
+        if (visualsOn(opts.settings)) confettiBurst({ origin: originFrom(opts) })
+        sfx('pick', opts.settings)
+        return
       case 'click':
         sfx('click', opts.settings)
         return
     }
   }
 
-  return { play, setSoundMuted, isSoundMuted }
+  return { play, stopTicks, setSoundMuted, isSoundMuted }
 }
 
 /** Convierte coords (px, viewport) a origen 0–1 que pide canvas-confetti. */

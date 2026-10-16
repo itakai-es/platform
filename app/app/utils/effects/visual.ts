@@ -8,9 +8,12 @@
  *   se desvanece — útil para "+50 XP" cerca del badge que cambia.
  *
  * Los gates (ajustes de la clase) se aplican en `useEffects`; aquí solo dibujamos.
+ * El de menos movimiento (del usuario o del sistema) sí se mira aquí, para que
+ * ningún confeti se lo salte venga de donde venga.
  */
 
 import confetti from 'canvas-confetti'
+import { prefersReducedMotion } from '~/utils/reduced-motion'
 
 const BRAND_COLORS = ['#23245d', '#ac74fd', '#ffc338', '#00aafc', '#6cf3af']
 
@@ -21,6 +24,7 @@ interface BurstOptions {
 
 /** Estallido grande: misión completada, subida de nivel. */
 export function confettiBurst(opts: BurstOptions = {}): void {
+  if (prefersReducedMotion()) return
   confetti({
     particleCount: 120,
     spread: 80,
@@ -45,6 +49,7 @@ export function confettiBurst(opts: BurstOptions = {}): void {
 
 /** Estallido pequeño: enigma aprobado, recompensa canjeada. */
 export function confettiSparkle(opts: BurstOptions = {}): void {
+  if (prefersReducedMotion()) return
   confetti({
     particleCount: 30,
     spread: 50,
@@ -91,9 +96,10 @@ export function showFloater(text: string, opts: FloaterOptions = {}): void {
     willChange: 'transform, opacity',
   } as CSSStyleDeclaration)
   document.body.appendChild(el)
-  // siguiente frame: anima hacia arriba y desvanece
+  // siguiente frame: anima hacia arriba y desvanece (con menos movimiento, solo se desvanece)
+  const rise = !prefersReducedMotion()
   requestAnimationFrame(() => {
-    el.style.transform = 'translate(-50%, calc(-50% - 60px))'
+    if (rise) el.style.transform = 'translate(-50%, calc(-50% - 60px))'
     el.style.opacity = '0'
   })
   window.setTimeout(() => el.remove(), duration + 50)

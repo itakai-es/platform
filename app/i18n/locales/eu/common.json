@@ -536,7 +536,12 @@
       "empty_archived_title": "Ez dago artxibatutako klaserik",
       "no_results": "Ez dago «{query}» bilaketarekin bat datorren klaserik"
     },
-    "effects": {},
+    "effects": {
+      "floater": {
+        "xp": "XP",
+        "lives": "Bizitzak"
+      }
+    },
     "calendar": {
       "prev_month": "Aurreko hilabetea",
       "next_month": "Hurrengo hilabetea"

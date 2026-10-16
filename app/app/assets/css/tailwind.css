@@ -645,6 +645,23 @@
     color: #FFFFFF;
   }
 
+  /* Ruleta (pantalla sobre fondo navy): en university el amarillo también es navy,
+     así que la aguja, el aro del buje y los botones amarillos pasan a blanco */
+  [data-theme="university"] .roulette-wheel {
+    --roulette-accent-rgb: 255 255 255;
+  }
+  [data-theme="university"] .roulette-stage .bg-yellow {
+    background-color: #FFFFFF;
+    color: rgb(var(--color-navy-700-rgb));
+  }
+  [data-theme="university"] .roulette-stage .bg-yellow:hover {
+    background-color: rgb(var(--color-yellow-light-rgb));
+  }
+  [data-theme="university"] .roulette-stage .bg-yellow:focus {
+    --tw-ring-color: #FFFFFF;
+    --tw-ring-offset-color: rgb(var(--color-navy-700-rgb));
+  }
+
   /* ============================================
      BASE STYLES
      ============================================ */
