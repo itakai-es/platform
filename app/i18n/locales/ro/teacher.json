@@ -1528,7 +1528,17 @@
         "awarded_toast": "Echipa «{team}» a fost premiată",
         "modal_title": "Premiază o echipă"
       },
-      "fixed_to": "Pentru: {names}"
+      "fixed_to": "Pentru: {names}",
+      "missing": {
+        "team": "Alege o echipă.",
+        "students": "Alege cel puțin un elev.",
+        "behavior": "Alege un comportament.",
+        "no_behaviors": "Această clasă nu are comportamente: dă o recompensă liberă.",
+        "reason": "Scrie motivul.",
+        "points": "Pune punctele pentru clasament sau bifează «{label}».",
+        "empty_team": "Echipa aceea nu are membri: alege alta sau debifează «{label}».",
+        "amount": "Pune cât dai sau iei."
+      }
     },
     "attendance": {
       "tabs_label": "Prezență",

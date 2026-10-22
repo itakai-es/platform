@@ -1528,7 +1528,17 @@
         "awarded_toast": "Equip «{team}» premiat",
         "modal_title": "Premiar un equip"
       },
-      "fixed_to": "Per a: {names}"
+      "fixed_to": "Per a: {names}",
+      "missing": {
+        "team": "Tria un equip.",
+        "students": "Tria almenys un estudiant.",
+        "behavior": "Tria un comportament.",
+        "no_behaviors": "Esta classe no té comportaments: dona una recompensa lliure.",
+        "reason": "Escriu el motiu.",
+        "points": "Posa els punts per al marcador o marca «{label}».",
+        "empty_team": "Eixe equip no té integrants: tria'n un altre o desmarca «{label}».",
+        "amount": "Posa quant dones o lleves."
+      }
     },
     "attendance": {
       "tabs_label": "Assistència",

@@ -1528,7 +1528,17 @@
         "awarded_toast": "Equipu «{team}» premiáu",
         "modal_title": "Premiar a un equipu"
       },
-      "fixed_to": "Pa: {names}"
+      "fixed_to": "Pa: {names}",
+      "missing": {
+        "team": "Escueyi un equipu.",
+        "students": "Escueyi polo menos un estudiante.",
+        "behavior": "Escueyi un comportamientu.",
+        "no_behaviors": "Esta clase nun tien comportamientos: da una recompensa llibre.",
+        "reason": "Escribi'l motivu.",
+        "points": "Pon los puntos pal marcador o marca «{label}».",
+        "empty_team": "Esi equipu nun tien integrantes: escueyi otru o desmarca «{label}».",
+        "amount": "Pon cuánto das o quites."
+      }
     },
     "attendance": {
       "tabs_label": "Asistencia",

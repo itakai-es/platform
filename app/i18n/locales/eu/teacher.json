@@ -1528,7 +1528,17 @@
         "awarded_toast": "«{team}» taldea saritu da",
         "modal_title": "Talde bat saritu"
       },
-      "fixed_to": "Norentzat: {names}"
+      "fixed_to": "Norentzat: {names}",
+      "missing": {
+        "team": "Aukeratu talde bat.",
+        "students": "Aukeratu ikasle bat gutxienez.",
+        "behavior": "Aukeratu jokabide bat.",
+        "no_behaviors": "Klase honek ez du jokabiderik: eman sari libre bat.",
+        "reason": "Idatzi arrazoia.",
+        "points": "Jarri markagailurako puntuak edo markatu «{label}».",
+        "empty_team": "Talde horrek ez du kiderik: aukeratu beste bat edo kendu «{label}».",
+        "amount": "Jarri zenbat ematen edo kentzen duzun."
+      }
     },
     "attendance": {
       "tabs_label": "Asistentzia",

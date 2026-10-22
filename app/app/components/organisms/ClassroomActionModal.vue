@@ -8,166 +8,186 @@
         ? t('teacher.classroom.team.modal_title')
         : t('teacher.classroom.modal_title'))
     "
-    size="md"
+    size="lg"
     sticky-chrome
     fit-content
     @update:model-value="close"
   >
-    <div class="space-y-6">
-      <OptionPillGroup
-        v-if="!behavior && canBehavior && canReward"
-        v-model="mode"
-        :options="modeOptions"
-        :aria-label="t('teacher.classroom.mode_label')"
-      />
-
-      <!-- Comportamiento del catálogo -->
-      <fieldset v-if="mode === 'behavior' && !behavior" class="min-w-0">
-        <legend class="mb-2 text-sm font-medium text-navy-700">
-          {{ t('teacher.classroom.behavior_legend') }}
-        </legend>
-        <p v-if="!behaviors.length" class="text-sm text-text-secondary">
-          {{ t('teacher.classroom.no_behaviors') }}
-        </p>
-        <div v-else class="max-h-56 space-y-1 overflow-y-auto scrollbar-subtle pr-1">
-          <label
-            v-for="b in behaviors"
-            :key="b.id"
-            class="flex cursor-pointer items-center gap-3 rounded-xl border px-3 py-2 transition-colors"
-            :class="
-              behaviorId === b.id ? 'border-navy-700/40 bg-navy-700/5' : 'border-border-primary'
-            "
-          >
-            <input
-              v-model="behaviorId"
-              type="radio"
-              :name="`${uid}-behavior`"
-              :value="b.id"
-              class="h-4 w-4 flex-shrink-0 accent-navy-700"
-            />
-            <component
-              :is="b.kind === 'positive' ? HandThumbUpIcon : HandThumbDownIcon"
-              class="h-4 w-4 flex-shrink-0"
-              :class="b.kind === 'positive' ? 'text-navy-700' : 'text-red'"
-              aria-hidden="true"
-            />
-            <!-- En el móvil, lo que mueve debajo: así no se corta el nombre -->
-            <span class="flex min-w-0 flex-1 flex-col sm:flex-row sm:items-center sm:gap-3">
-              <span class="min-w-0 truncate font-medium text-navy-700 sm:flex-1">{{ b.name }}</span>
-              <span class="text-xs text-navy-700/70 sm:flex-shrink-0">{{
-                deltasText(signedOf(b))
-              }}</span>
-            </span>
-          </label>
-        </div>
-      </fieldset>
-
-      <!-- Recompensa libre: dar o quitar, cuánto y por qué -->
-      <fieldset v-if="mode === 'reward'" class="min-w-0 space-y-3">
-        <legend class="mb-2 text-sm font-medium text-navy-700">
-          {{ t('teacher.classroom.reward.legend') }}
-        </legend>
+    <!-- Primero a quién, después qué; al premiar a un equipo, al final sus puntos -->
+    <div class="space-y-8">
+      <section class="space-y-3" :aria-labelledby="`${uid}-who`">
+        <h3 :id="`${uid}-who`" class="text-base font-bold text-navy-700">
+          {{ t('teacher.classroom.target_label') }}
+        </h3>
+        <!-- A quién: a estudiantes o, si la clase tiene equipos, a un equipo -->
         <OptionPillGroup
-          v-model="reward.direction"
-          :options="directionOptions"
-          :aria-label="t('teacher.classroom.reward.direction_label')"
+          v-if="teamOptions.length && !fixedRecipients"
+          v-model="target"
+          :options="targetOptions"
+          :aria-label="t('teacher.classroom.target_label')"
         />
-        <div v-if="resourceFields.length && rewardMoves" class="grid grid-cols-2 gap-2">
-          <label v-for="field in resourceFields" :key="field.key" class="relative block">
-            <span class="sr-only">{{ field.label }}</span>
-            <component
-              :is="field.icon"
-              class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2"
-              aria-hidden="true"
-            />
-            <input
-              v-model.number="reward.amounts[field.key]"
-              type="number"
-              min="0"
-              max="10000"
-              inputmode="numeric"
-              :placeholder="field.label"
-              class="w-full rounded-xl border border-border-primary py-2.5 pl-9 pr-3 text-navy-700 focus:outline-none focus:ring-2 focus:ring-navy-700/20"
-            />
-          </label>
-        </div>
-        <p v-else-if="!resourceFields.length" class="text-sm text-text-secondary">
-          {{ t('teacher.classroom.reward.no_resources') }}
+
+        <!-- Con destino fijado (la ruleta), solo a quién va -->
+        <p v-if="target === 'students' && fixedRecipients" class="text-sm text-navy-700">
+          {{ t('teacher.classroom.fixed_to', { names: chosen.map(s => s.name).join(', ') }) }}
         </p>
-        <FormField
-          :id="`${uid}-reason`"
-          v-model="reward.reason"
-          :label="t('teacher.classroom.reward.reason')"
-          :placeholder="t('teacher.classroom.reward.reason_placeholder')"
-          :error-message="reasonTooLong ? t('teacher.classroom.reward.reason_too_long') : undefined"
-          required
-        />
-      </fieldset>
+        <StudentPicker v-else-if="target === 'students'" v-model="selection" :students="students">
+          <template #filters="{ select }">
+            <slot name="filters" :select="select" />
+          </template>
+        </StudentPicker>
 
-      <!-- A quién: a estudiantes o, si la clase tiene equipos, a un equipo -->
-      <OptionPillGroup
-        v-if="teamOptions.length && !fixedRecipients"
-        v-model="target"
-        :options="targetOptions"
-        :aria-label="t('teacher.classroom.target_label')"
-      />
-
-      <!-- Con destino fijado (la ruleta), solo a quién va -->
-      <p v-if="target === 'students' && fixedRecipients" class="text-sm text-navy-700">
-        {{ t('teacher.classroom.fixed_to', { names: chosen.map(s => s.name).join(', ') }) }}
-      </p>
-      <StudentPicker v-else-if="target === 'students'" v-model="selection" :students="students">
-        <template #filters="{ select }">
-          <slot name="filters" :select="select" />
+        <!-- A un equipo: cuál -->
+        <template v-else>
+          <fieldset class="min-w-0">
+            <legend class="mb-2 text-sm font-medium text-navy-700">
+              {{ t('teacher.classroom.team.legend') }}
+            </legend>
+            <div class="max-h-56 space-y-1 overflow-y-auto scrollbar-subtle pr-1">
+              <label
+                v-for="team in listedTeams"
+                :key="team.id"
+                class="flex cursor-pointer items-center gap-3 rounded-xl border px-3 py-2 transition-colors"
+                :class="
+                  teamId === team.id ? 'border-navy-700/40 bg-navy-700/5' : 'border-border-primary'
+                "
+              >
+                <input
+                  v-model="teamId"
+                  type="radio"
+                  :name="`${uid}-team`"
+                  :value="team.id"
+                  class="h-4 w-4 flex-shrink-0 accent-navy-700"
+                />
+                <!-- En el móvil, la agrupación debajo: así no se corta el nombre del equipo -->
+                <span class="flex min-w-0 flex-1 flex-col sm:flex-row sm:items-center sm:gap-3">
+                  <TeamBadge
+                    :title="team.title"
+                    :color="team.color"
+                    :emblem="team.emblem"
+                    :index="team.index"
+                    size="sm"
+                    class="min-w-0 sm:flex-1"
+                  />
+                  <span class="text-xs text-navy-700/70 sm:flex-shrink-0">
+                    {{ team.setTitle }} ·
+                    {{
+                      t(
+                        'teacher.teams.members_count',
+                        { count: team.studentIds.length },
+                        team.studentIds.length
+                      )
+                    }}
+                  </span>
+                </span>
+              </label>
+            </div>
+          </fieldset>
         </template>
-      </StudentPicker>
+      </section>
 
-      <!-- Premiar a un equipo: puntos para su marcador y, si se quiere, el reparto -->
-      <template v-else>
-        <fieldset class="min-w-0">
+      <!-- Qué: un comportamiento o una recompensa libre (salvo que venga dado) -->
+      <section v-if="!behavior" class="space-y-3" :aria-labelledby="`${uid}-what`">
+        <h3 :id="`${uid}-what`" class="text-base font-bold text-navy-700">
+          {{ t('teacher.classroom.mode_label') }}
+        </h3>
+        <OptionPillGroup
+          v-if="!behavior && canBehavior && canReward"
+          v-model="mode"
+          :options="modeOptions"
+          :aria-label="t('teacher.classroom.mode_label')"
+        />
+
+        <!-- Comportamiento del catálogo -->
+        <fieldset v-if="mode === 'behavior' && !behavior" class="min-w-0">
           <legend class="mb-2 text-sm font-medium text-navy-700">
-            {{ t('teacher.classroom.team.legend') }}
+            {{ t('teacher.classroom.behavior_legend') }}
           </legend>
-          <div class="max-h-56 space-y-1 overflow-y-auto scrollbar-subtle pr-1">
+          <p v-if="!behaviors.length" class="text-sm text-text-secondary">
+            {{ t('teacher.classroom.no_behaviors') }}
+          </p>
+          <div v-else class="max-h-56 space-y-1 overflow-y-auto scrollbar-subtle pr-1">
             <label
-              v-for="team in listedTeams"
-              :key="team.id"
+              v-for="b in behaviors"
+              :key="b.id"
               class="flex cursor-pointer items-center gap-3 rounded-xl border px-3 py-2 transition-colors"
               :class="
-                teamId === team.id ? 'border-navy-700/40 bg-navy-700/5' : 'border-border-primary'
+                behaviorId === b.id ? 'border-navy-700/40 bg-navy-700/5' : 'border-border-primary'
               "
             >
               <input
-                v-model="teamId"
+                v-model="behaviorId"
                 type="radio"
-                :name="`${uid}-team`"
-                :value="team.id"
+                :name="`${uid}-behavior`"
+                :value="b.id"
                 class="h-4 w-4 flex-shrink-0 accent-navy-700"
               />
-              <!-- En el móvil, la agrupación debajo: así no se corta el nombre del equipo -->
+              <component
+                :is="b.kind === 'positive' ? HandThumbUpIcon : HandThumbDownIcon"
+                class="h-4 w-4 flex-shrink-0"
+                :class="b.kind === 'positive' ? 'text-navy-700' : 'text-red'"
+                aria-hidden="true"
+              />
+              <!-- En el móvil, lo que mueve debajo: así no se corta el nombre -->
               <span class="flex min-w-0 flex-1 flex-col sm:flex-row sm:items-center sm:gap-3">
-                <TeamBadge
-                  :title="team.title"
-                  :color="team.color"
-                  :emblem="team.emblem"
-                  :index="team.index"
-                  size="sm"
-                  class="min-w-0 sm:flex-1"
-                />
-                <span class="text-xs text-navy-700/70 sm:flex-shrink-0">
-                  {{ team.setTitle }} ·
-                  {{
-                    t(
-                      'teacher.teams.members_count',
-                      { count: team.studentIds.length },
-                      team.studentIds.length
-                    )
-                  }}
-                </span>
+                <span class="min-w-0 truncate font-medium text-navy-700 sm:flex-1">{{
+                  b.name
+                }}</span>
+                <span class="text-xs text-navy-700/70 sm:flex-shrink-0">{{
+                  deltasText(signedOf(b))
+                }}</span>
               </span>
             </label>
           </div>
         </fieldset>
+
+        <!-- Recompensa libre: dar o quitar, cuánto y por qué -->
+        <fieldset v-if="mode === 'reward'" class="min-w-0 space-y-3">
+          <legend class="mb-2 text-sm font-medium text-navy-700">
+            {{ t('teacher.classroom.reward.legend') }}
+          </legend>
+          <OptionPillGroup
+            v-model="reward.direction"
+            :options="directionOptions"
+            :aria-label="t('teacher.classroom.reward.direction_label')"
+          />
+          <div v-if="resourceFields.length && rewardMoves" class="grid grid-cols-2 gap-2">
+            <label v-for="field in resourceFields" :key="field.key" class="relative block">
+              <span class="sr-only">{{ field.label }}</span>
+              <component
+                :is="field.icon"
+                class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2"
+                aria-hidden="true"
+              />
+              <input
+                v-model.number="reward.amounts[field.key]"
+                type="number"
+                min="0"
+                max="10000"
+                inputmode="numeric"
+                :placeholder="field.label"
+                class="w-full rounded-xl border border-border-primary py-2.5 pl-9 pr-3 text-navy-700 focus:outline-none focus:ring-2 focus:ring-navy-700/20"
+              />
+            </label>
+          </div>
+          <p v-else-if="!resourceFields.length" class="text-sm text-text-secondary">
+            {{ t('teacher.classroom.reward.no_resources') }}
+          </p>
+          <FormField
+            :id="`${uid}-reason`"
+            v-model="reward.reason"
+            :label="t('teacher.classroom.reward.reason')"
+            :placeholder="t('teacher.classroom.reward.reason_placeholder')"
+            :error-message="
+              reasonTooLong ? t('teacher.classroom.reward.reason_too_long') : undefined
+            "
+            required
+          />
+        </fieldset>
+      </section>
+
+      <!-- Premiar a un equipo: puntos para su marcador y, si se quiere, el reparto -->
+      <section v-if="target === 'team'" class="space-y-4">
         <FormField
           :id="`${uid}-points`"
           v-model="teamAward.points"
@@ -187,14 +207,24 @@
             {{ t('teacher.classroom.team.distribute_hint') }}
           </p>
         </div>
-      </template>
+      </section>
     </div>
 
     <template #footer>
-      <Button variant="outline" @click="close">{{ t('common.actions.cancel') }}</Button>
-      <Button variant="primary" :disabled="!canContinue" @click="step = 'confirm'">
-        {{ t('teacher.classroom.continue') }}
-      </Button>
+      <div class="flex w-full flex-wrap items-center justify-end gap-3">
+        <!-- Si aún no se puede seguir, qué falta -->
+        <p
+          v-if="missingHint"
+          class="w-full min-w-0 text-sm text-navy-700/80 sm:mr-auto sm:w-auto"
+          aria-live="polite"
+        >
+          {{ missingHint }}
+        </p>
+        <Button variant="outline" @click="close">{{ t('common.actions.cancel') }}</Button>
+        <Button variant="primary" :disabled="!canContinue" @click="step = 'confirm'">
+          {{ t('teacher.classroom.continue') }}
+        </Button>
+      </div>
     </template>
   </Modal>
 
@@ -359,7 +389,14 @@ watch(
     teamId.value = props.initialTeamId
     teamAward.points = 10
     teamAward.distribute = true
-    if (!props.behavior && props.settings.behaviors) void store.ensureBehaviors(props.classId)
+    // Sin comportamientos en la clase, se abre ya en «Recompensa libre».
+    if (!props.behavior && props.settings.behaviors) {
+      void store.ensureBehaviors(props.classId).then(() => {
+        if (mode.value === 'behavior' && !behaviors.value.length && props.canReward) {
+          mode.value = 'reward'
+        }
+      })
+    }
     if (props.canTeam) void teams.ensure()
   },
   { immediate: true }
@@ -450,6 +487,28 @@ const rewardMoves = computed(() => target.value === 'students' || teamAward.dist
 const teamPoints = computed(() => {
   const value = Math.min(1000, Math.max(0, Math.round(Number(teamAward.points) || 0)))
   return isPositive.value ? value : -value
+})
+
+/** Por qué aún no se puede seguir, en el mismo orden en que se comprueba. */
+const missingHint = computed(() => {
+  if (canContinue.value) return ''
+  const m = (key: string) => t(`teacher.classroom.missing.${key}`)
+  const distributeLabel = t('teacher.classroom.team.distribute')
+  if (target.value === 'team' ? !chosenTeam.value : !selection.value.length) {
+    return m(target.value === 'team' ? 'team' : 'students')
+  }
+  if (mode.value === 'behavior' && !chosenBehavior.value) {
+    return m(behaviors.value.length ? 'behavior' : 'no_behaviors')
+  }
+  if (mode.value === 'reward' && !reasonText.value) return m('reason')
+  if (reasonTooLong.value) return t('teacher.classroom.reward.reason_too_long')
+  if (target.value === 'team' && !teamAward.distribute) {
+    return t('teacher.classroom.missing.points', { label: distributeLabel })
+  }
+  if (target.value === 'team' && !chosen.value.length) {
+    return t('teacher.classroom.missing.empty_team', { label: distributeLabel })
+  }
+  return m('amount')
 })
 
 const canContinue = computed(() => {

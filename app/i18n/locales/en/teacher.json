@@ -1528,7 +1528,17 @@
         "awarded_toast": "Team “{team}” rewarded",
         "modal_title": "Reward a team"
       },
-      "fixed_to": "To: {names}"
+      "fixed_to": "To: {names}",
+      "missing": {
+        "team": "Choose a team.",
+        "students": "Choose at least one student.",
+        "behavior": "Choose a behaviour.",
+        "no_behaviors": "This class has no behaviours: give a free reward.",
+        "reason": "Write the reason.",
+        "points": "Enter the points for the scoreboard or tick “{label}”.",
+        "empty_team": "That team has no members: choose another or untick “{label}”.",
+        "amount": "Enter how much you give or take."
+      }
     },
     "attendance": {
       "tabs_label": "Attendance",

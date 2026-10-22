@@ -1528,7 +1528,17 @@
         "awarded_toast": "Equipo «{team}» premiado",
         "modal_title": "Premiar un equipo"
       },
-      "fixed_to": "Para: {names}"
+      "fixed_to": "Para: {names}",
+      "missing": {
+        "team": "Escolle un equipo.",
+        "students": "Escolle polo menos un estudante.",
+        "behavior": "Escolle un comportamento.",
+        "no_behaviors": "Esta clase non ten comportamentos: dá unha recompensa libre.",
+        "reason": "Escribe o motivo.",
+        "points": "Pon os puntos para o marcador ou marca «{label}».",
+        "empty_team": "Ese equipo non ten integrantes: escolle outro ou desmarca «{label}».",
+        "amount": "Pon canto dás ou quitas."
+      }
     },
     "attendance": {
       "tabs_label": "Asistencia",
