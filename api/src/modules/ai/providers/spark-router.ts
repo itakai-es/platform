@@ -174,24 +174,49 @@ async function fetchJson<T>(
 }
 
 // Cuerpo de una petición de chat. `reasoning_effort: 'low'` hace que los modelos
-// que razonan (GLM 5.x, o-series…) empiecen a escribir en un par de segundos en
-// vez de en decenas; si un endpoint no admite el parámetro y contesta 400, se
-// recuerda y no se vuelve a mandar a ese endpoint.
-const rejectsReasoningEffort = new Set<string>()
+// que razonan (GLM 5.x, GPT de OpenAI…) empiecen a escribir en un par de
+// segundos en vez de en decenas. Hay endpoints que no admiten alguno de los dos
+// parámetros opcionales: los GPT de OpenAI rechazan `temperature` con el
+// razonamiento activo, y otros no conocen `reasoning_effort`. Si contestan 400,
+// se deja de mandar el parámetro que nombra el error (o, si no nombra ninguno,
+// el razonamiento) y se recuerda para ese endpoint y modelo.
+type OptionalParam = 'temperature' | 'reasoning_effort'
+const rejectedParams = new Map<string, Set<OptionalParam>>()
 
-function chatBody(baseUrl: string, model: string, prompt: string, options: GenerateTextOptions | undefined, stream: boolean) {
+function rejectedFor(baseUrl: string, model: string): Set<OptionalParam> {
+  const key = `${baseUrl}|${model}`
+  let rejected = rejectedParams.get(key)
+  if (!rejected) rejectedParams.set(key, (rejected = new Set()))
+  return rejected
+}
+
+/** Tras un 400: deja de mandar un parámetro opcional. `false` si ya no queda ninguno que quitar. */
+export function learnRejectedParam(baseUrl: string, model: string, detail: string): boolean {
+  const rejected = rejectedFor(baseUrl, model)
+  const named = (['temperature', 'reasoning_effort'] as const).find(
+    param => detail.includes(param) && !rejected.has(param)
+  )
+  const drop = named ?? (rejected.has('reasoning_effort') ? undefined : 'reasoning_effort')
+  if (!drop) return false
+  rejected.add(drop)
+  return true
+}
+
+export function chatBody(baseUrl: string, model: string, prompt: string, options: GenerateTextOptions | undefined, stream: boolean) {
+  const rejected = rejectedFor(baseUrl, model)
   return JSON.stringify({
     model,
     messages: buildMessages(prompt, options),
-    temperature: options?.temperature ?? 0.7,
+    ...(rejected.has('temperature') ? {} : { temperature: options?.temperature ?? 0.7 }),
     ...(stream ? { stream: true } : {}),
-    ...(rejectsReasoningEffort.has(baseUrl) ? {} : { reasoning_effort: 'low' }),
+    ...(rejected.has('reasoning_effort') ? {} : { reasoning_effort: 'low' }),
   })
 }
 
-function isBadRequest(error: unknown) {
-  return error instanceof Error && error.message.startsWith('Spark Router 400')
-}
+const BAD_REQUEST = 'Spark Router 400'
+
+// Hasta dos reintentos: uno por cada parámetro opcional que el endpoint rechace.
+const MAX_PARAM_RETRIES = 2
 
 export class SparkRouterProvider implements AIProvider {
   lastUsedProvider: 'spark' | 'gemini' | 'flux' = 'spark'
@@ -235,13 +260,20 @@ export class SparkRouterProvider implements AIProvider {
         },
         DEFAULT_TEXT_TIMEOUT_MS
       )
-      let payload: SparkChatCompletionResponse
-      try {
-        payload = await request()
-      } catch (error) {
-        if (rejectsReasoningEffort.has(baseUrl) || !isBadRequest(error)) throw error
-        rejectsReasoningEffort.add(baseUrl)
-        payload = await request()
+      let payload: SparkChatCompletionResponse | undefined
+      for (let attempt = 0; !payload; attempt++) {
+        try {
+          payload = await request()
+        } catch (error) {
+          const message = error instanceof Error ? error.message : ''
+          if (
+            attempt >= MAX_PARAM_RETRIES ||
+            !message.startsWith(BAD_REQUEST) ||
+            !learnRejectedParam(baseUrl, model, message)
+          ) {
+            throw error
+          }
+        }
       }
 
       const content = payload.choices?.[0]?.message?.content?.trim()
@@ -297,8 +329,11 @@ export class SparkRouterProvider implements AIProvider {
         signal: controller.signal,
       })
       let response = await request()
-      if (response.status === 400 && !rejectsReasoningEffort.has(baseUrl)) {
-        rejectsReasoningEffort.add(baseUrl)
+      for (let attempt = 0; response.status === 400 && attempt < MAX_PARAM_RETRIES; attempt++) {
+        const detail = await response.text().catch(() => '')
+        if (!learnRejectedParam(baseUrl, model, detail)) {
+          throw new Error(`${BAD_REQUEST}: ${detail || response.statusText}`)
+        }
         response = await request()
       }
 
