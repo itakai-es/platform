@@ -16,10 +16,41 @@ test('nombre visible: alias en la clase o nombre, nunca el usuario ni el correo'
   assert.equal(r.rouletteLabel({ nickname: null, name: 'Iker', username: 'iker.g' }), 'Iker')
 })
 
-test('iniciales de los sectores de una rueda llena', () => {
-  assert.equal(r.rouletteInitials('laura pérez gil'), 'LP')
-  assert.equal(r.rouletteInitials('Íñigo'), 'ÍÑ')
-  assert.equal(r.rouletteInitials(''), '?')
+test('los nombres caben enteros en su sector, en una o dos líneas, y solo se recortan si no hay sitio', () => {
+  const measure = text => Array.from(text).length * 0.6
+  const opts = count => ({
+    count,
+    outer: 88,
+    inner: 15.5,
+    maxFont: 12,
+    minFont: count > 24 ? 5 : 6,
+  })
+  const fits = (fit, count) => {
+    const s = Math.sin(Math.PI / count)
+    const width = Math.max(...fit.lines.map(measure)) * fit.fontSize
+    const thickness = (0.9 + (fit.lines.length - 1) * 1.15) * fit.fontSize
+    return width <= 72.5 + 1e-9 && thickness <= 2 * (88 - width) * s - 1 + 1e-9
+  }
+
+  // Cinco en la rueda: nada se recorta.
+  for (const name of ['Titan Novato', 'Portador de la Llama', 'Viajero Intrépido', 'Ana']) {
+    const fit = r.fitRouletteLabel(name, measure, opts(5))
+    assert.equal(fit.lines.join(' '), name)
+    assert.ok(fits(fit, 5), name)
+  }
+  // Un nombre largo de varias palabras va en dos líneas, más grande que en una.
+  const two = r.fitRouletteLabel('Portador de la Llama', measure, opts(5))
+  assert.equal(two.lines.length, 2)
+  assert.ok(two.fontSize >= 6)
+
+  // Treinta: con la letra más pequeña; enteros los que caben, recortados con «…» los que no.
+  const short = r.fitRouletteLabel('Lucía', measure, opts(30))
+  assert.deepEqual(short.lines, ['Lucía'])
+  const long = r.fitRouletteLabel('Bartolomé de las Casas Fernández', measure, opts(30))
+  assert.equal(long.lines.length, 1)
+  assert.ok(long.lines[0].endsWith('…'))
+  assert.equal(long.fontSize, 5)
+  for (const fit of [short, long]) assert.ok(fits(fit, 30))
 })
 
 test('el giro siempre va hacia delante y deja la aguja en el sector elegido', () => {

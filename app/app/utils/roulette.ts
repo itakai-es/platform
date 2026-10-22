@@ -54,9 +54,6 @@ export function rouletteScope(
     .map(team => ({ id: team.id, label: team.title, avatar: null, fill: team.fill }))
 }
 
-/** Con más sectores que estos, el nombre ya no se lee en la rueda: van las iniciales. */
-export const ROULETTE_FULL_LABEL_MAX = 20
-
 /**
  * Nombre visible en lo que ve toda la clase: el alias en la clase y, si no
  * tiene, el nombre (la regla del ranking). El listado trae además un `username`
@@ -66,16 +63,74 @@ export function rouletteLabel(student: { nickname?: string | null; name?: string
   return student.nickname?.trim() || student.name?.trim() || '?'
 }
 
-/** Iniciales para los sectores de una rueda llena: «Laura Pérez» → «LP». */
-export function rouletteInitials(label: string): string {
-  const words = label.trim().split(/\s+/).filter(Boolean)
-  if (words.length === 0) return '?'
-  if (words.length === 1) return Array.from(words[0]!).slice(0, 2).join('').toUpperCase()
-  return words
-    .slice(0, 2)
-    .map(word => Array.from(word)[0])
-    .join('')
-    .toUpperCase()
+/** Cómo va un nombre en su sector: en una o dos líneas, y con qué letra. */
+export interface RouletteLabelFit {
+  lines: string[]
+  fontSize: number
+}
+
+export interface RouletteFitOptions {
+  /** Sectores de la rueda. */
+  count: number
+  /** Radio donde acaba el texto, pegado al borde. */
+  outer: number
+  /** Radio hasta el que puede llegar hacia el centro (el buje). */
+  inner: number
+  maxFont: number
+  minFont: number
+}
+
+// Lo que ocupa a lo ancho una línea, y la distancia entre dos, en proporción a la letra.
+const LINE_THICKNESS = 0.9
+const LINE_GAP = 1.15
+
+/**
+ * Encaja un nombre en su sector con la letra más grande posible, sin recortarlo:
+ * a lo largo, entre el borde y el buje; a lo ancho, en la cuerda del sector donde
+ * acaba el texto, que es lo más estrecho. Si en dos líneas cabe bastante más
+ * grande, va en dos. Solo si no cabe entero ni con la letra más pequeña se
+ * recorta (el nombre completo sale en el resultado).
+ *
+ * `measure(texto)` es el ancho del texto con letra de tamaño 1, en las mismas
+ * unidades que los radios.
+ */
+export function fitRouletteLabel(
+  label: string,
+  measure: (text: string) => number,
+  o: RouletteFitOptions
+): RouletteLabelFit {
+  const s = o.count <= 2 ? 1 : Math.sin(Math.PI / o.count)
+  const room = o.outer - o.inner
+  const chord = 2 * o.outer * s - 1
+  const sizeFor = (width: number, lines: number) => {
+    const thickness = LINE_THICKNESS + (lines - 1) * LINE_GAP
+    return Math.min(o.maxFont, room / width, chord / (thickness + 2 * width * s))
+  }
+  const round = (size: number) => Math.floor(size * 10) / 10
+
+  const text = label.trim() || '?'
+  const one = sizeFor(measure(text), 1)
+  const words = text.split(/\s+/)
+  let two: { lines: string[]; size: number } | null = null
+  for (let i = 1; i < words.length; i++) {
+    const lines = [words.slice(0, i).join(' '), words.slice(i).join(' ')]
+    const size = sizeFor(Math.max(...lines.map(measure)), 2)
+    if (!two || size > two.size) two = { lines, size }
+  }
+
+  if (two && two.size >= o.minFont && (one < o.minFont || two.size > one * 1.15)) {
+    return { lines: two.lines, fontSize: round(two.size) }
+  }
+  if (one >= o.minFont) return { lines: [text], fontSize: round(one) }
+
+  // Ni entero ni en dos líneas: recortado, con la letra más pequeña.
+  const size = o.minFont
+  const maxWidth = Math.min(room, (chord - LINE_THICKNESS * size) / (2 * s)) / size
+  const chars = Array.from(text)
+  let n = chars.length - 1
+  const cut = (k: number) => `${chars.slice(0, k).join('').trimEnd()}…`
+  while (n > 1 && measure(cut(n)) > maxWidth) n--
+  return { lines: [cut(n)], fontSize: size }
 }
 
 /** Índice al azar en [0, n), uniforme (sin el sesgo del módulo) y con el azar del navegador. */

@@ -15,7 +15,7 @@ SELECT gen_random_uuid()::text, c."id", $itakai$usar-la-ruleta-en-clase$itakai$,
 
 ## Girar
 
-Pulsa **Girar**, o la barra espaciadora o Intro. Debajo de la rueda sale quien ha tocado y, para volver a girar, **Girar otra vez**. En la rueda se ve el alias de cada estudiante en la clase o, si no tiene, su nombre; nunca nada sacado de su correo. Con más de 20 personas, la rueda solo lleva las iniciales y el nombre entero sale debajo.
+Pulsa **Girar**, o la barra espaciadora o Intro. Junto a la rueda sale quien ha tocado y, para volver a girar, **Girar otra vez**. En la rueda se ve el alias de cada estudiante en la clase o, si no tiene, su nombre; nunca nada sacado de su correo. Cada nombre se ajusta al hueco de su sector, en una o dos líneas. Con muchas personas, si alguno no cabe entero, en la rueda sale recortado y en el resultado, completo.
 
 **Pantalla completa** quita además los bordes del navegador, y **Salir** te devuelve a la clase. En algunos móviles no hay pantalla completa, pero la ruleta ya ocupa toda la ventana.
 

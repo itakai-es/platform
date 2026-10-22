@@ -104,11 +104,18 @@
 
       <div
         v-else
-        class="mx-auto grid w-full max-w-6xl flex-1 gap-6 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start"
+        class="mx-auto grid w-full max-w-screen-2xl flex-1 gap-6 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start"
       >
-        <!-- Rueda, resultado y botón de girar -->
-        <section class="flex flex-col items-center gap-5" :aria-label="t('teacher.roulette.title')">
-          <div ref="wheelBoxRef" class="w-full max-w-[min(100%,58vh,36rem)]">
+        <!-- Rueda, resultado y botón de girar. En el proyector todo cabe sin bajar:
+             la rueda se ajusta a lo alto de la ventana y, desde xl, el resultado va al lado. -->
+        <section
+          class="flex flex-col items-center gap-5 xl:flex-row xl:justify-center xl:gap-10"
+          :aria-label="t('teacher.roulette.title')"
+        >
+          <div
+            ref="wheelBoxRef"
+            class="w-full max-w-[min(100%,58vh,36rem)] lg:max-w-[min(100%,calc(100dvh-24rem),36rem)] xl:min-w-0 xl:flex-1 xl:max-w-[calc(100dvh-8rem)]"
+          >
             <RouletteWheel
               v-if="wheelEntries.length > 0"
               :entries="wheelEntries"
@@ -130,93 +137,98 @@
             </div>
           </div>
 
-          <!-- Resultado (visible). Para el lector de pantalla se anuncia una sola vez abajo. -->
-          <div class="flex min-h-[5.5rem] w-full max-w-xl items-center justify-center gap-4">
-            <template v-if="winner && !spinning">
-              <TeamBadge
-                v-if="winnerTeam"
-                title=""
-                :color="winnerTeam.color"
-                :emblem="winnerTeam.emblem"
-                :index="winnerTeam.index"
+          <div class="flex w-full flex-col items-center gap-5 xl:w-80 xl:flex-shrink-0">
+            <!-- Resultado (visible). Para el lector de pantalla se anuncia una sola vez abajo. -->
+            <div class="flex min-h-[5.5rem] w-full max-w-xl items-center justify-center gap-4">
+              <template v-if="winner && !spinning">
+                <TeamBadge
+                  v-if="winnerTeam"
+                  title=""
+                  :color="winnerTeam.color"
+                  :emblem="winnerTeam.emblem"
+                  :index="winnerTeam.index"
+                  size="lg"
+                />
+                <Avatar
+                  v-else
+                  :src="winner.avatar || undefined"
+                  :username="winner.label"
+                  size="md"
+                  alt=""
+                />
+                <div class="min-w-0">
+                  <p class="text-sm text-white/70">{{ t('teacher.roulette.picked_label') }}</p>
+                  <p class="break-words text-3xl font-bold leading-tight text-white sm:text-5xl">
+                    {{ winner.label }}
+                  </p>
+                </div>
+              </template>
+              <p v-else-if="spinning && reducedMotion" class="text-2xl font-bold text-white">
+                {{ t('teacher.roulette.choosing') }}
+              </p>
+              <p v-else-if="!spinning && eligible.length > 0" class="text-white/80">
+                {{ t('teacher.roulette.idle_hint') }}
+              </p>
+            </div>
+
+            <div ref="spinBoxRef" class="flex flex-col items-center gap-2">
+              <Button
+                variant="secondary-yellow"
                 size="lg"
-              />
-              <Avatar
-                v-else
-                :src="winner.avatar || undefined"
-                :username="winner.label"
-                size="md"
-                alt=""
-              />
-              <div class="min-w-0">
-                <p class="text-sm text-white/70">{{ t('teacher.roulette.picked_label') }}</p>
-                <p class="break-words text-3xl font-bold leading-tight text-white sm:text-5xl">
-                  {{ winner.label }}
-                </p>
-              </div>
-            </template>
-            <p v-else-if="spinning && reducedMotion" class="text-2xl font-bold text-white">
-              {{ t('teacher.roulette.choosing') }}
-            </p>
-            <p v-else-if="!spinning && eligible.length > 0" class="text-white/80">
-              {{ t('teacher.roulette.idle_hint') }}
-            </p>
-          </div>
+                class="min-w-[14rem] text-lg"
+                :disabled="eligible.length === 0"
+                :aria-disabled="spinning ? 'true' : undefined"
+                @click="spin"
+              >
+                <ArrowPathIcon class="mr-2 h-6 w-6" aria-hidden="true" />{{
+                  winner ? t('teacher.roulette.spin_again') : t('teacher.roulette.spin')
+                }}
+              </Button>
+              <p class="text-xs text-white/70">{{ t('teacher.roulette.keyboard_hint') }}</p>
+            </div>
 
-          <div ref="spinBoxRef" class="flex flex-col items-center gap-2">
-            <Button
-              variant="secondary-yellow"
-              size="lg"
-              class="min-w-[14rem] text-lg"
-              :disabled="eligible.length === 0"
-              :aria-disabled="spinning ? 'true' : undefined"
-              @click="spin"
+            <!-- Con quien ha salido: girar dentro de su equipo, o aplicarle algo (con edición). -->
+            <div
+              v-if="winner && !spinning && (winnerTeam || canApplyWinner)"
+              class="flex flex-wrap items-center justify-center gap-2"
             >
-              <ArrowPathIcon class="mr-2 h-6 w-6" aria-hidden="true" />{{
-                winner ? t('teacher.roulette.spin_again') : t('teacher.roulette.spin')
-              }}
-            </Button>
-            <p class="text-xs text-white/70">{{ t('teacher.roulette.keyboard_hint') }}</p>
-          </div>
+              <Button v-if="winnerTeam" variant="secondary" size="md" @click="spinInsideWinner">
+                <UserGroupIcon class="mr-2 h-5 w-5" aria-hidden="true" />{{
+                  t('teacher.roulette.spin_inside', { team: winner.label })
+                }}
+              </Button>
+              <Button v-if="canApplyWinner" variant="secondary" size="md" @click="openAction">
+                <GiftIcon class="mr-2 h-5 w-5" aria-hidden="true" />{{
+                  winnerTeam
+                    ? t('teacher.roulette.award_team', { team: winner.label })
+                    : t('teacher.roulette.apply_to', { name: winner.label })
+                }}
+              </Button>
+            </div>
 
-          <!-- Con quien ha salido: girar dentro de su equipo, o aplicarle algo (con edición).
-               Debajo de «Girar otra vez», que en el proyector no baje de la pantalla. -->
-          <div
-            v-if="winner && !spinning && (winnerTeam || canApplyWinner)"
-            class="flex flex-wrap items-center justify-center gap-2"
-          >
-            <Button v-if="winnerTeam" variant="secondary" size="md" @click="spinInsideWinner">
-              <UserGroupIcon class="mr-2 h-5 w-5" aria-hidden="true" />{{
-                t('teacher.roulette.spin_inside', { team: winner.label })
-              }}
-            </Button>
-            <Button v-if="canApplyWinner" variant="secondary" size="md" @click="openAction">
-              <GiftIcon class="mr-2 h-5 w-5" aria-hidden="true" />{{
-                winnerTeam
-                  ? t('teacher.roulette.award_team', { team: winner.label })
-                  : t('teacher.roulette.apply_to', { name: winner.label })
-              }}
-            </Button>
-          </div>
-
-          <!-- Tras el último en salir, la rueda se queda como estaba: cómo seguir -->
-          <div
-            v-if="!spinning && eligible.length === 0 && wheelEntries.length > 0"
-            ref="exhaustedBoxRef"
-            class="flex max-w-md flex-col items-center gap-2 text-center"
-          >
-            <p class="font-bold text-white">{{ emptyWheel.title }}</p>
-            <p class="text-sm text-white/80">{{ emptyWheel.description }}</p>
-            <Button v-if="canRestart" variant="secondary" size="md" @click="restart">
-              <ArrowPathIcon class="mr-2 h-5 w-5" aria-hidden="true" />{{
-                t('teacher.roulette.restart')
-              }}
-            </Button>
+            <!-- Tras el último en salir, la rueda se queda como estaba: cómo seguir -->
+            <div
+              v-if="!spinning && eligible.length === 0 && wheelEntries.length > 0"
+              ref="exhaustedBoxRef"
+              class="flex max-w-md flex-col items-center gap-2 text-center"
+            >
+              <p class="font-bold text-white">{{ emptyWheel.title }}</p>
+              <p class="text-sm text-white/80">{{ emptyWheel.description }}</p>
+              <Button v-if="canRestart" variant="secondary" size="md" @click="restart">
+                <ArrowPathIcon class="mr-2 h-5 w-5" aria-hidden="true" />{{
+                  t('teacher.roulette.restart')
+                }}
+              </Button>
+            </div>
           </div>
         </section>
 
         <!-- Quién está en la rueda -->
-        <aside class="rounded-2xl bg-white p-4 text-navy-700" aria-labelledby="roulette-list-title">
+        <!-- Desde lg cabe en la ventana: la lista se desplaza dentro con lo que queda de alto -->
+        <aside
+          class="rounded-2xl bg-white p-4 text-navy-700 lg:flex lg:max-h-[calc(100dvh-7.5rem)] lg:flex-col"
+          aria-labelledby="roulette-list-title"
+        >
           <div class="flex items-baseline justify-between gap-2">
             <h2 id="roulette-list-title" class="text-lg font-bold">
               {{
@@ -298,7 +310,7 @@
           <Button
             variant="outline"
             size="sm"
-            class="mt-3"
+            class="mt-3 self-start"
             :disabled="!canRestart || spinning"
             @click="restart"
           >
@@ -307,7 +319,9 @@
             }}
           </Button>
 
-          <ul class="mt-4 max-h-[50vh] space-y-1 overflow-y-auto pr-1 scrollbar-subtle">
+          <ul
+            class="mt-4 max-h-[50vh] space-y-1 overflow-y-auto pr-1 scrollbar-subtle lg:max-h-none lg:min-h-[8rem] lg:flex-1"
+          >
             <li
               v-for="entry in scope"
               :key="entry.id"
