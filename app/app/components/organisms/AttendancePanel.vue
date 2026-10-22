@@ -135,17 +135,20 @@
           </li>
         </ul>
 
-        <!-- Guardar, borrar y, ya guardada, aplicar a presentes o ausentes -->
+        <!-- Guardar, borrar y, ya guardada, aplicar a presentes o ausentes. Fija abajo,
+             como la barra de la selección en el listado. -->
         <div
           v-if="canTake || (savedSession && canApply)"
-          class="sticky bottom-4 z-20 flex flex-wrap items-center gap-2 rounded-2xl bg-white p-3 shadow-lg"
+          class="sticky bottom-4 z-20 flex flex-wrap items-center gap-2 rounded-2xl bg-navy-700 p-3 text-white shadow-lg"
         >
-          <Button v-if="canTake" variant="primary" :loading="saving" @click="save">
-            {{ t('teacher.attendance.save') }}
-          </Button>
+          <span class="mr-auto px-1 text-sm font-semibold">
+            {{ summary }}<template v-if="dirty"> · {{ t('teacher.attendance.unsaved') }}</template>
+          </span>
           <Button
             v-if="canTake && savedSession"
+            size="sm"
             variant="ghost"
+            class="!text-white"
             :icon-left="TrashIcon"
             @click="confirmDelete = true"
           >
@@ -153,17 +156,25 @@
           </Button>
           <template v-if="savedSession && canApply && !dirty">
             <Button
-              variant="outline"
-              class="sm:ml-auto"
+              size="sm"
+              variant="secondary"
               :disabled="!presentIds.length"
               @click="applyTo('present')"
             >
               {{ t('teacher.attendance.apply_present') }}
             </Button>
-            <Button variant="outline" :disabled="!missingIds.length" @click="applyTo('absent')">
+            <Button
+              size="sm"
+              variant="secondary"
+              :disabled="!missingIds.length"
+              @click="applyTo('absent')"
+            >
               {{ t('teacher.attendance.apply_absent') }}
             </Button>
           </template>
+          <Button v-if="canTake" size="sm" variant="secondary" :loading="saving" @click="save">
+            {{ t('teacher.attendance.save') }}
+          </Button>
         </div>
         <p v-if="savedSession && canApply" class="text-xs text-navy-700/70">
           {{ t('teacher.attendance.no_auto_xp') }}
@@ -355,6 +366,13 @@ const counts = computed(() => {
   for (const s of props.students) c[statuses.value[s.id] ?? 'present'] += 1
   return c
 })
+
+/** Para la barra de abajo: solo los estados que hay, «24 presentes · 2 ausentes». */
+const summary = computed(() =>
+  ATTENDANCE_STATUSES.filter(st => counts.value[st] > 0)
+    .map(st => t(`teacher.attendance.count.${st}`, { count: counts.value[st] }, counts.value[st]))
+    .join(' · ')
+)
 
 async function save() {
   if (saving.value) return
