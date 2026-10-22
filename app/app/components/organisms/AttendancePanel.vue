@@ -27,11 +27,20 @@
             <p :id="`${uid}-slot`" class="mb-1.5 text-sm font-medium text-navy-700">
               {{ t('teacher.attendance.session') }}
             </p>
+            <!-- Una sola sesión ese día: no hay nada que elegir, solo se dice cuál es -->
+            <p
+              v-if="slotOptions.length === 1"
+              class="inline-flex rounded-2xl border border-transparent bg-navy-700/5 px-4 py-2.5 text-sm font-semibold text-navy-700"
+            >
+              {{ slotOptions[0]!.label }}
+            </p>
             <OptionPillGroup
+              v-else
               v-model="slotKey"
               :options="slotOptions"
               :columns="4"
               fluid
+              class="max-w-2xl"
               :aria-label="t('teacher.attendance.session')"
             />
           </div>
