@@ -104,7 +104,7 @@
 
       <div
         v-else
-        class="mx-auto grid w-full max-w-screen-2xl flex-1 gap-6 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start"
+        class="mx-auto grid w-full max-w-screen-2xl flex-1 gap-6 lg:grid-cols-[minmax(0,1fr)_20rem] xl:grid-cols-[minmax(0,1fr)_26rem] lg:items-start"
       >
         <!-- Rueda, resultado y botón de girar. En el proyector todo cabe sin bajar:
              la rueda se ajusta a lo alto de la ventana y, desde xl, el resultado va al lado. -->
@@ -137,7 +137,7 @@
             </div>
           </div>
 
-          <div class="flex w-full flex-col items-center gap-5 xl:w-80 xl:flex-shrink-0">
+          <div class="flex w-full flex-col items-center gap-5 xl:w-72 xl:flex-shrink-0">
             <!-- Resultado (visible). Para el lector de pantalla se anuncia una sola vez abajo. -->
             <div class="flex min-h-[5.5rem] w-full max-w-xl items-center justify-center gap-4">
               <template v-if="winner && !spinning">
@@ -319,6 +319,8 @@
             }}
           </Button>
 
+          <hr class="mt-4 border-border-primary" />
+
           <!-- Con muchos, buscar por alias o por nombre -->
           <SearchInput
             v-if="mode !== 'teams' && scope.length > SEARCH_FROM"
@@ -330,57 +332,45 @@
             {{ t('teacher.classroom.picker.no_results') }}
           </p>
           <ul
-            class="mt-4 max-h-[50vh] space-y-1 overflow-y-auto pr-1 scrollbar-subtle lg:max-h-none lg:min-h-[8rem] lg:flex-1"
+            class="mt-3 max-h-[50vh] space-y-2 overflow-y-auto pr-1 scrollbar-subtle lg:max-h-none lg:min-h-[8rem] lg:flex-1"
           >
-            <li
-              v-for="entry in listed"
-              :key="entry.id"
-              class="flex items-center justify-between gap-2 rounded-xl px-2 py-1.5"
-              :class="isOut(entry.id) ? 'bg-navy-700/5' : ''"
-            >
-              <TeamBadge
-                v-if="mode === 'teams'"
-                title=""
-                :color="teamOf(entry.id)?.color"
-                :emblem="teamOf(entry.id)?.emblem"
-                :index="teamOf(entry.id)?.index"
-                size="sm"
-              />
-              <div class="min-w-0 flex-1">
-                <p
-                  class="truncate font-medium"
-                  :class="isOut(entry.id) ? 'text-navy-700/60 line-through' : ''"
-                >
-                  {{ entry.label }}
-                </p>
-                <!-- El alias es lo que ve la clase; el nombre, para saber quién es -->
-                <p
-                  v-if="realNames.get(entry.id) && realNames.get(entry.id) !== entry.label"
-                  class="truncate text-xs text-navy-700/70"
-                >
-                  {{ realNames.get(entry.id) }}
-                </p>
-                <p v-if="drawn.has(entry.id)" class="text-xs text-navy-700/70">
-                  {{ t('teacher.roulette.status_drawn') }}
-                </p>
-                <p v-else-if="removed.has(entry.id)" class="text-xs text-navy-700/70">
-                  {{ t('teacher.roulette.status_removed') }}
-                </p>
-              </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                class="flex-shrink-0"
-                :disabled="spinning"
-                :aria-label="
-                  isOut(entry.id)
-                    ? t('teacher.roulette.restore_aria', { name: entry.label })
-                    : t('teacher.roulette.remove_aria', { name: entry.label })
-                "
-                @click="toggleOut(entry.id)"
+            <li v-for="entry in listed" :key="entry.id">
+              <!-- El alias es lo que ve la clase; debajo, el nombre, para saber quién es -->
+              <StudentCheckRow
+                :id="`roulette-entry-${entry.id}`"
+                :name="entry.label"
+                :avatar="entry.avatar ?? undefined"
+                :sub="entrySub(entry)"
+                :muted="isOut(entry.id)"
               >
-                {{ isOut(entry.id) ? t('teacher.roulette.restore') : t('teacher.roulette.remove') }}
-              </Button>
+                <template v-if="mode === 'teams'" #leading>
+                  <TeamBadge
+                    title=""
+                    :color="teamOf(entry.id)?.color"
+                    :emblem="teamOf(entry.id)?.emblem"
+                    :index="teamOf(entry.id)?.index"
+                    size="sm"
+                  />
+                </template>
+                <template #action>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    class="flex-shrink-0"
+                    :disabled="spinning"
+                    :aria-label="
+                      isOut(entry.id)
+                        ? t('teacher.roulette.restore_aria', { name: entry.label })
+                        : t('teacher.roulette.remove_aria', { name: entry.label })
+                    "
+                    @click="toggleOut(entry.id)"
+                  >
+                    {{
+                      isOut(entry.id) ? t('teacher.roulette.restore') : t('teacher.roulette.remove')
+                    }}
+                  </Button>
+                </template>
+              </StudentCheckRow>
             </li>
           </ul>
         </aside>
@@ -670,6 +660,17 @@ const listed = computed(() =>
     matchesQuery(listQuery.value, entry.label, realNames.value.get(entry.id))
   )
 )
+
+/** Bajo el alias: el nombre (si es otro) y, si está fuera de la ronda, por qué. */
+function entrySub(entry: RouletteEntry): string | undefined {
+  const name = realNames.value.get(entry.id)
+  const status = drawn.value.has(entry.id)
+    ? t('teacher.roulette.status_drawn')
+    : removed.value.has(entry.id)
+      ? t('teacher.roulette.status_removed')
+      : ''
+  return [name && name !== entry.label ? name : '', status].filter(Boolean).join(' · ') || undefined
+}
 // Solo cuenta lo de la rueda de ahora: empezar de nuevo con un equipo no
 // devuelve a quien salió con todo el alumnado.
 const drawnHere = computed(() => [...drawn.value].filter(id => scopeIds.value.has(id)).length)

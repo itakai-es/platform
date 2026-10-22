@@ -37,7 +37,7 @@ Si la clase tiene [equipos](/ayuda/alumnado/formar-equipos), en el recuadro **Es
 
 ## Después del giro
 
-Girar no da ni quita nada, y no se apunta en el historial. Si quieres premiar a quien ha salido, **Aplicar a…** (o **Premiar a…**, si ha salido un equipo) abre la misma ventana que la de [aplicar a varios estudiantes](/ayuda/gamificacion/aplicar-a-varios-estudiantes), con un comportamiento o una recompensa libre, y siempre con confirmación. Eso sí queda en el historial.
+Girar no da ni quita nada, y no se apunta en el historial. Si quieres premiar a quien ha salido, **Aplicar a…** (o **Premiar a…**, si ha salido un equipo) abre la misma ventana que la de [aplicar a varios estudiantes](/ayuda/gamificacion/aplicar-a-varios-estudiantes), con un comportamiento o una recompensa libre; a quien ha salido se le aplica al pulsar **Aplicar**, sin más pasos. Eso sí queda en el historial.
 
 ## Sonido y movimiento
 

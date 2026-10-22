@@ -52,13 +52,13 @@ ON CONFLICT ("category_id", "slug", "locale") DO NOTHING;
 
 -- gamificacion/aplicar-a-varios-estudiantes
 INSERT INTO "help_articles" ("id", "category_id", "slug", "title", "summary", "cover_image", "body", "locale", "status", "order_index", "featured", "audience", "kind", "published_at", "updated_at")
-SELECT gen_random_uuid()::text, c."id", $itakai$aplicar-a-varios-estudiantes$itakai$, $itakai$Aplicar comportamientos y recompensas a varios estudiantes$itakai$, $itakai$Elegir a varias personas, aplicarles un comportamiento o una recompensa libre con su motivo, y confirmarlo antes.$itakai$, $itakai$/app/ayuda/recompensas.svg$itakai$, $itakai$Puedes aplicar un comportamiento, o dar una recompensa, a varios estudiantes de una vez. **Siempre hay un paso de confirmación**: antes de aplicar nada ves qué se aplica, cuánto mueve de cada recurso y a quién.
+SELECT gen_random_uuid()::text, c."id", $itakai$aplicar-a-varios-estudiantes$itakai$, $itakai$Aplicar comportamientos y recompensas a varios estudiantes$itakai$, $itakai$Elegir a varias personas, aplicarles un comportamiento o una recompensa libre con su motivo, y confirmarlo antes.$itakai$, $itakai$/app/ayuda/recompensas.svg$itakai$, $itakai$Puedes aplicar un comportamiento, o dar una recompensa, a varios estudiantes de una vez. **Si son varias personas, hay un paso de confirmación**: antes de aplicar nada ves qué se aplica, cuánto mueve de cada recurso y a quién. A una sola persona se aplica directamente.
 
 ## Desde la pestaña **Comportamientos**
 
 1. Pulsa la tarjeta del comportamiento.
 2. Marca a quién se lo aplicas: uno, varios, **Todos** o, si ya has pasado lista hoy, **Solo presentes hoy** o **Solo ausentes hoy**. Con muchas personas tienes un buscador.
-3. Pulsa **Continuar**, revisa el resumen —por ejemplo, «Aplicar "Participa" a 12 estudiantes. A cada uno: +10 XP, +5 monedas»— y despliega **Ver a quién** si quieres comprobar la lista.
+3. Pulsa **Continuar** (con una sola persona, el botón ya dice **Aplicar**), revisa el resumen —por ejemplo, «Aplicar "Participa" a 12 estudiantes. A cada uno: +10 XP, +5 monedas»— y despliega **Ver a quién** si quieres comprobar la lista.
 4. Pulsa **Aplicar**, o **Volver** para cambiar algo.
 
 ## Desde la pestaña **Alumnos**
@@ -93,7 +93,7 @@ SET "body" = $itakai$Los comportamientos son la forma de que lo que ocurre en el
 ![Ejemplos de comportamientos que suman puntos de vida y de comportamientos que los restan.](/app/ayuda/diagramas/vidas.svg)
 ## Cómo funcionan
 
-Defines una lista de comportamientos para tu clase. Cada uno tiene un nombre, si es **positivo o negativo**, y cuánto mueve de cada recurso: experiencia, monedas, maná y puntos de vida (de los que la clase tenga activados). Para aplicarlo, pulsa su tarjeta en la pestaña **Comportamientos**, marca a quién —una persona, varias o toda la clase— y confirma: antes de aplicar ves el resumen y la lista de nombres. Crearlos y aplicarlos pide acceso de edición en la clase.
+Defines una lista de comportamientos para tu clase. Cada uno tiene un nombre, si es **positivo o negativo**, y cuánto mueve de cada recurso: experiencia, monedas, maná y puntos de vida (de los que la clase tenga activados). Para aplicarlo, pulsa su tarjeta en la pestaña **Comportamientos**, marca a quién —una persona, varias o toda la clase— y pulsa **Aplicar**; si son varias, antes ves el resumen y la lista de nombres para confirmarlo. Crearlos y aplicarlos pide acceso de edición en la clase.
 
 También puedes elegir estudiantes en la pestaña **Alumnos** y darles una recompensa libre con su motivo, sin pasar por el catálogo: lo tienes en [Aplicar comportamientos y recompensas a varios estudiantes](/ayuda/gamificacion/aplicar-a-varios-estudiantes).
 

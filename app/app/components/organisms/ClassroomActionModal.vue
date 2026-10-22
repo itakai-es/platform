@@ -221,8 +221,17 @@
           {{ missingHint }}
         </p>
         <Button variant="outline" @click="close">{{ t('common.actions.cancel') }}</Button>
-        <Button variant="primary" :disabled="!canContinue" @click="step = 'confirm'">
-          {{ t('teacher.classroom.continue') }}
+        <!-- A una sola persona (o solo los puntos de un equipo) se aplica ya; a
+             varias, antes se confirma -->
+        <Button
+          variant="primary"
+          :disabled="!canContinue"
+          :loading="applying && step === 'pick'"
+          @click="next"
+        >
+          {{
+            needsConfirm ? t('teacher.classroom.continue') : t('teacher.classroom.confirm_button')
+          }}
         </Button>
       </div>
     </template>
@@ -240,25 +249,38 @@
     @confirm="apply"
     @update:model-value="backToPick"
   >
-    <details
-      v-if="target === 'students' || teamAward.distribute"
-      class="rounded-xl border border-border-primary px-3 py-2 text-left"
-    >
-      <summary class="cursor-pointer text-sm font-medium text-navy-700">
+    <div v-if="target === 'students' || teamAward.distribute" class="text-left">
+      <Button
+        size="sm"
+        variant="ghost"
+        :icon-right="showWho ? ChevronUpIcon : ChevronDownIcon"
+        :aria-expanded="showWho"
+        :aria-controls="`${uid}-who-list`"
+        @click="showWho = !showWho"
+      >
         {{ t('teacher.classroom.confirm_who', { count: chosen.length }) }}
-      </summary>
-      <ul class="mt-2 max-h-48 space-y-1 overflow-y-auto text-sm text-navy-700">
-        <li v-for="s in chosen" :key="s.id" class="flex items-center justify-between gap-2">
-          <span class="min-w-0 truncate">{{ s.name }}</span>
-          <span v-if="s.hint" class="flex-shrink-0 text-xs text-navy-700/70">{{ s.hint }}</span>
+      </Button>
+      <ul
+        v-if="showWho"
+        :id="`${uid}-who-list`"
+        class="mt-2 max-h-56 space-y-2 overflow-y-auto scrollbar-subtle pr-1"
+      >
+        <li v-for="s in chosen" :key="s.id">
+          <StudentCheckRow
+            :id="`${uid}-who-${s.id}`"
+            :name="s.name"
+            :avatar="s.avatar"
+            :hint="s.hint"
+          />
         </li>
       </ul>
-    </details>
+    </div>
   </ConfirmModal>
 </template>
 
 <script setup lang="ts">
 import { HandThumbUpIcon, HandThumbDownIcon } from '@heroicons/vue/24/solid'
+import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/24/outline'
 import XpIcon from '~/components/atoms/XpIcon.vue'
 import CoinIcon from '~/components/atoms/CoinIcon.vue'
 import ManaIcon from '~/components/atoms/ManaIcon.vue'
@@ -271,8 +293,9 @@ import type { TeamAwardResult } from '~/types/team.types'
 /**
  * Aplicar algo a varios estudiantes a la vez: un comportamiento del catálogo o
  * una recompensa libre (dar o quitar XP, monedas, maná o vidas con un motivo).
- * Dos pasos: elegir qué y a quién (con `StudentPicker`) y confirmar con el
- * resumen y la lista de nombres. Nunca se aplica sin confirmar.
+ * Elegir qué y a quién (con `StudentPicker`) y aplicar. A varias personas a la
+ * vez, antes se confirma con el resumen y la lista de nombres; a una sola (la
+ * que sale en la ruleta) o solo puntos al marcador de un equipo, se aplica ya.
  *
  * Lo usan la pestaña de comportamientos (con el comportamiento ya elegido), la
  * selección del listado de estudiantes y «Aplicar a los presentes/ausentes» de
@@ -574,6 +597,20 @@ const teamConfirmMessage = computed(() => {
 function close() {
   if (applying.value) return
   emit('update:modelValue', false)
+}
+
+/** A varias personas a la vez se confirma antes; a una sola, no hace falta. */
+const needsConfirm = computed(() =>
+  target.value === 'team'
+    ? teamAward.distribute && chosen.value.length > 1
+    : selection.value.length > 1
+)
+const showWho = ref(false)
+function next() {
+  if (!canContinue.value) return
+  if (!needsConfirm.value) return void apply()
+  showWho.value = false
+  step.value = 'confirm'
 }
 
 // «Volver», Escape y la X de la confirmación llevan al paso 1 con la selección
