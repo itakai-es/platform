@@ -1680,7 +1680,7 @@
         "add_team": "Gehitu talde bat",
         "removed_points_note": "Gordetzean, kendu dituzun taldeak beren puntuekin ezabatzen dira."
       },
-      "tap_hint": "Ukitu pertsona bat edo gehiago, eta gero «Jarri hemen» haien taldean. Saguarekin arrastatu ere egin ditzakezu.",
+      "tap_hint": "Markatu pertsona bat edo gehiago eta aukeratu haien taldea beheko barran edo «Jarri hemen» botoiarekin. Saguarekin arrastatu ere egin ditzakezu.",
       "picked_count": "{count} pertsona aukeratuta | {count} pertsona aukeratuta",
       "put_here": "Jarri hemen",
       "put_here_aria": "Jarri aukeratutako pertsonak {team} taldean",

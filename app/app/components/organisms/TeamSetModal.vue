@@ -95,8 +95,7 @@
               <li
                 v-for="(team, i) in previewDrafts"
                 :key="i"
-                class="rounded-xl border border-l-4 border-border-primary p-3"
-                :class="teamColorOf(team.color, i).border"
+                class="rounded-xl border border-border-primary p-3"
               >
                 <TeamBadge :title="team.title" :color="team.color" :emblem="team.emblem" size="sm">
                   <span class="text-xs text-navy-700/70">
@@ -130,8 +129,7 @@
         <div
           v-for="(team, i) in drafts"
           :key="team.key"
-          class="space-y-3 rounded-xl border border-l-4 border-border-primary p-3"
-          :class="teamColorOf(team.color, i).border"
+          class="space-y-3 rounded-xl border border-border-primary p-3"
         >
           <div class="flex items-start gap-2">
             <FormField
@@ -266,7 +264,7 @@ import type {
 } from '~/types/team.types'
 import { toDateKey } from '~/utils/schedule-occurrences'
 import { isStale } from '~/composables/useClassTeams'
-import { TEAM_COLOR_KEYS, TEAM_EMBLEM_KEYS, defaultTeamLook, teamColorOf } from '~/utils/team-style'
+import { TEAM_COLOR_KEYS, TEAM_EMBLEM_KEYS, defaultTeamLook } from '~/utils/team-style'
 
 /**
  * Crear una agrupación de equipos (al azar o a mano) o editar una: nombre, tipo

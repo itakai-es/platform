@@ -1680,7 +1680,7 @@
         "add_team": "Amestar un equipu",
         "removed_points_note": "Al guardar, los equipos que quitesti desaníciense colos sos puntos."
       },
-      "tap_hint": "Toca una o delles persones y depués «Poner equí» nel so equipu. Col mur tamién pues arrastrales.",
+      "tap_hint": "Marca una o delles persones y escueyi'l so equipu na barra d'abaxo o con «Poner equí». Col mur tamién pues arrastrales.",
       "picked_count": "{count} persona escoyida | {count} persones escoyíes",
       "put_here": "Poner equí",
       "put_here_aria": "Poner les persones escoyíes en {team}",

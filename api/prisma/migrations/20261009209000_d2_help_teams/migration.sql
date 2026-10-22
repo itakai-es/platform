@@ -36,7 +36,7 @@ Elige **A mano** y cuántos equipos quieres: se crean vacíos, con todo el alumn
 
 ## Mover a alguien de equipo
 
-- **Tocando**: toca a una o varias personas (quedan marcadas) y elige su equipo en la barra que sale abajo, o pulsa **Poner aquí** en ese equipo. Sirve con el ratón, en la tableta y con el teclado.
+- **Marcando**: marca la casilla de una o varias personas y elige su equipo en la barra que sale abajo, o pulsa **Poner aquí** en ese equipo. Sirve con el ratón, en la tableta y con el teclado.
 - **Arrastrando**: con el ratón, arrastra el nombre de una persona hasta otro equipo, o a **Sin equipo**.
 - **Al azar**: **Repartir al azar** reparte entre los equipos a quien está en **Sin equipo**, llenando primero los más pequeños. En una agrupación temporal, quien falta hoy se queda fuera.
 

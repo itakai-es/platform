@@ -30,26 +30,17 @@
         {{ t('teacher.classroom.picker.no_results') }}
       </p>
       <ul v-else class="max-h-72 space-y-1 overflow-y-auto scrollbar-subtle pr-1">
-        <li
-          v-for="s in visible"
-          :key="s.id"
-          class="flex items-center gap-3 rounded-xl border px-3 py-2 transition-colors"
-          :class="selected.has(s.id) ? 'border-navy-700/40 bg-navy-700/5' : 'border-border-primary'"
-        >
-          <Checkbox
+        <li v-for="s in visible" :key="s.id">
+          <StudentCheckRow
             :id="`${uid}-${s.id}`"
-            :model-value="selected.has(s.id)"
+            :name="s.name"
+            :avatar="s.avatar"
+            :hint="s.hint"
+            :checked="selected.has(s.id)"
             :disabled="disabled"
-            @update:model-value="toggle(s.id, $event)"
+            selectable
+            @update:checked="toggle(s.id, $event)"
           />
-          <label
-            :for="`${uid}-${s.id}`"
-            class="flex min-w-0 flex-1 cursor-pointer items-center gap-3"
-          >
-            <Avatar :src="s.avatar" :username="s.name" size="xs" alt="" class="flex-shrink-0" />
-            <span class="min-w-0 flex-1 truncate font-medium text-navy-700">{{ s.name }}</span>
-            <span v-if="s.hint" class="flex-shrink-0 text-xs text-navy-700/70">{{ s.hint }}</span>
-          </label>
         </li>
       </ul>
 

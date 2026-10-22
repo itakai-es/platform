@@ -1680,7 +1680,7 @@
         "add_team": "Adaugă o echipă",
         "removed_points_note": "La salvare, echipele eliminate se șterg cu punctele lor."
       },
-      "tap_hint": "Atinge una sau mai multe persoane, apoi «Pune aici» la echipa lor. Cu mouse-ul le poți și trage.",
+      "tap_hint": "Bifează una sau mai multe persoane și alege-le echipa în bara de jos sau cu «Pune aici». Cu mouse-ul le poți și trage.",
       "picked_count": "{count} persoană aleasă | {count} persoane alese",
       "put_here": "Pune aici",
       "put_here_aria": "Pune persoanele alese în {team}",

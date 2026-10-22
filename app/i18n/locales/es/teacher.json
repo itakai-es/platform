@@ -1680,7 +1680,7 @@
         "add_team": "Añadir equipo",
         "removed_points_note": "Al guardar, los equipos que has quitado se borran con sus puntos."
       },
-      "tap_hint": "Toca a una o varias personas y después «Poner aquí» en su equipo. Con el ratón también puedes arrastrarlas.",
+      "tap_hint": "Marca a una o varias personas y elige su equipo en la barra de abajo o con «Poner aquí». Con el ratón también puedes arrastrarlas.",
       "picked_count": "{count} persona elegida | {count} personas elegidas",
       "put_here": "Poner aquí",
       "put_here_aria": "Poner a las personas elegidas en {team}",

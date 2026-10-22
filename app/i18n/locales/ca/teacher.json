@@ -1680,7 +1680,7 @@
         "add_team": "Afegir un equip",
         "removed_points_note": "En desar, els equips que has tret s’esborren amb els seus punts."
       },
-      "tap_hint": "Toca una o diverses persones i després «Posa aquí» al seu equip. Amb el ratolí també les pots arrossegar.",
+      "tap_hint": "Marca una o diverses persones i tria el seu equip a la barra de baix o amb «Posa aquí». Amb el ratolí també les pots arrossegar.",
       "picked_count": "{count} persona triada | {count} persones triades",
       "put_here": "Posa aquí",
       "put_here_aria": "Posa les persones triades a {team}",

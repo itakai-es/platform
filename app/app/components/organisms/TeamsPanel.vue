@@ -45,66 +45,66 @@
         </Button>
       </div>
 
-      <section
-        v-if="selected"
-        class="space-y-4 rounded-2xl bg-white p-4 shadow-lg sm:p-6"
-        :aria-labelledby="`${uid}-set-title`"
-      >
-        <div class="flex flex-wrap items-center gap-2">
-          <h2 :id="`${uid}-set-title`" class="mr-1 text-lg font-bold text-navy-700">
-            {{ selected.title }}
-          </h2>
-          <Badge :variant="selected.kind === 'base' ? 'info' : 'default'" size="sm">
-            {{ t(`teacher.teams.kind.${selected.kind}`) }}
-          </Badge>
-          <Badge v-if="selected.archived" variant="warning" size="sm">
-            {{ t('teacher.teams.archived_badge') }}
-          </Badge>
-        </div>
+      <!-- Como el resto de la app: tarjetas blancas con sombra sobre el fondo; el
+           color de cada equipo va en su emblema. -->
+      <section v-if="selected" class="space-y-4" :aria-labelledby="`${uid}-set-title`">
+        <div class="space-y-3 rounded-2xl bg-white p-4 shadow-lg sm:p-6">
+          <div class="flex flex-wrap items-center gap-2">
+            <h2 :id="`${uid}-set-title`" class="mr-1 text-lg font-bold text-navy-700">
+              {{ selected.title }}
+            </h2>
+            <Badge :variant="selected.kind === 'base' ? 'info' : 'default'" size="sm">
+              {{ t(`teacher.teams.kind.${selected.kind}`) }}
+            </Badge>
+            <Badge v-if="selected.archived" variant="warning" size="sm">
+              {{ t('teacher.teams.archived_badge') }}
+            </Badge>
+          </div>
 
-        <div v-if="canEdit" class="flex flex-wrap gap-2">
-          <Button
-            v-if="!selected.archived"
-            size="sm"
-            variant="outline"
-            :icon-left="PencilSquareIcon"
-            @click="openEdit"
-          >
-            {{ t('teacher.teams.edit') }}
-          </Button>
-          <Button
-            size="sm"
-            variant="outline"
-            :icon-left="ArchiveBoxIcon"
-            :loading="archiving"
-            @click="toggleArchived"
-          >
-            {{ selected.archived ? t('teacher.teams.unarchive') : t('teacher.teams.archive') }}
-          </Button>
-          <Button size="sm" variant="ghost" :icon-left="TrashIcon" @click="deleteOpen = true">
-            {{ t('teacher.teams.delete') }}
-          </Button>
-        </div>
+          <div v-if="canEdit" class="flex flex-wrap gap-2">
+            <Button
+              v-if="!selected.archived"
+              size="sm"
+              variant="outline"
+              :icon-left="PencilSquareIcon"
+              @click="openEdit"
+            >
+              {{ t('teacher.teams.edit') }}
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              :icon-left="ArchiveBoxIcon"
+              :loading="archiving"
+              @click="toggleArchived"
+            >
+              {{ selected.archived ? t('teacher.teams.unarchive') : t('teacher.teams.archive') }}
+            </Button>
+            <Button size="sm" variant="ghost" :icon-left="TrashIcon" @click="deleteOpen = true">
+              {{ t('teacher.teams.delete') }}
+            </Button>
+          </div>
 
-        <!-- Mover: tocar a una o varias personas y luego su equipo (con ratón, dedo o
-             teclado); con ratón, también arrastrando. -->
-        <p v-if="draggable" class="text-sm text-navy-700/80">
-          {{ t('teacher.teams.tap_hint') }}
-        </p>
+          <!-- Mover: marcar a una o varias personas y elegir su equipo (ratón, dedo o
+               teclado); con ratón, también arrastrando. -->
+          <p v-if="draggable" class="text-sm text-navy-700/80">
+            {{ t('teacher.teams.tap_hint') }}
+          </p>
+        </div>
 
         <!-- Sin equipo, primero y a lo ancho: de aquí sale la gente hacia los equipos -->
         <div
           v-if="!selected.archived && (unassigned.length || pickedInTeams || dragging)"
-          class="rounded-2xl border border-dashed border-border-primary p-4 transition-colors"
-          :class="dropTarget === NO_TEAM ? 'bg-navy-700/5 ring-2 ring-navy-700/30' : 'bg-surface'"
+          class="rounded-2xl bg-white p-4 shadow-lg transition-shadow sm:p-6"
+          :class="dropTarget === NO_TEAM ? 'ring-2 ring-navy-700/30' : ''"
           @dragover.prevent="onDragOver(NO_TEAM)"
           @dragleave="onDragLeave(NO_TEAM)"
           @drop.prevent="onDrop(null)"
         >
           <div class="flex flex-wrap items-center gap-2">
-            <h3 :id="`${uid}-team-none`" class="mr-auto font-semibold text-navy-700">
+            <h3 :id="`${uid}-team-none`" class="mr-auto font-bold text-navy-700">
               {{ t('teacher.teams.no_team') }}
-              <span class="text-xs font-normal text-navy-700/70"> ({{ unassigned.length }}) </span>
+              <span class="text-sm font-normal text-navy-700/70"> ({{ unassigned.length }}) </span>
             </h3>
             <Button
               v-if="draggable && pickedInTeams"
@@ -129,18 +129,24 @@
           </div>
           <ul
             v-if="unassigned.length"
-            class="mt-3 flex flex-wrap gap-2"
+            class="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-3"
             :aria-labelledby="`${uid}-team-none`"
           >
-            <li v-for="s in unassigned" :key="s.id" class="max-w-full">
-              <TeamMemberChip
+            <li
+              v-for="s in unassigned"
+              :key="s.id"
+              :draggable="draggable"
+              :class="draggable ? 'cursor-grab' : ''"
+              @dragstart="onDragStart(s.id, $event)"
+              @dragend="onDragEnd"
+            >
+              <StudentCheckRow
+                :id="`${uid}-pick-${s.id}`"
                 :name="s.name"
                 :avatar="s.avatar"
-                :interactive="draggable"
-                :pressed="picked.includes(s.id)"
-                @toggle="togglePick(s.id)"
-                @dragstart="onDragStart(s.id, $event)"
-                @dragend="onDragEnd"
+                :selectable="draggable"
+                :checked="picked.includes(s.id)"
+                @update:checked="togglePick(s.id)"
               />
             </li>
           </ul>
@@ -150,11 +156,8 @@
           <li
             v-for="(team, i) in selected.teams"
             :key="team.id"
-            class="min-w-0 rounded-2xl border border-l-4 border-border-primary p-4 transition-colors"
-            :class="[
-              teamColorOf(team.color, i).border,
-              dropTarget === team.id ? 'bg-navy-700/5 ring-2 ring-navy-700/30' : 'bg-surface',
-            ]"
+            class="min-w-0 rounded-2xl bg-white p-4 shadow-lg transition-shadow sm:p-5"
+            :class="dropTarget === team.id ? 'ring-2 ring-navy-700/30' : ''"
             @dragover.prevent="onDragOver(team.id)"
             @dragleave="onDragLeave(team.id)"
             @drop.prevent="onDrop(team.id)"
@@ -186,18 +189,24 @@
             </p>
             <ul
               v-if="team.studentIds.length"
-              class="mt-3 flex flex-wrap gap-2"
+              class="mt-3 space-y-2"
               :aria-labelledby="`${uid}-team-${team.id}`"
             >
-              <li v-for="id in team.studentIds" :key="id" class="max-w-full">
-                <TeamMemberChip
+              <li
+                v-for="id in team.studentIds"
+                :key="id"
+                :draggable="draggable"
+                :class="draggable ? 'cursor-grab' : ''"
+                @dragstart="onDragStart(id, $event)"
+                @dragend="onDragEnd"
+              >
+                <StudentCheckRow
+                  :id="`${uid}-pick-${id}`"
                   :name="nameOf(id)"
                   :avatar="studentById.get(id)?.avatar"
-                  :interactive="draggable"
-                  :pressed="picked.includes(id)"
-                  @toggle="togglePick(id)"
-                  @dragstart="onDragStart(id, $event)"
-                  @dragend="onDragEnd"
+                  :selectable="draggable"
+                  :checked="picked.includes(id)"
+                  @update:checked="togglePick(id)"
                 />
               </li>
             </ul>
@@ -303,7 +312,6 @@ import {
   UserGroupIcon,
 } from '@heroicons/vue/24/outline'
 import type { TeamSet } from '~/types/team.types'
-import { teamColorOf } from '~/utils/team-style'
 import { shuffled } from '~/utils/shuffle'
 import { randomIndex } from '~/utils/roulette'
 

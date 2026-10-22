@@ -1680,7 +1680,7 @@
         "add_team": "Engadir un equipo",
         "removed_points_note": "Ao gardar, os equipos que quitaches bórranse cos seus puntos."
       },
-      "tap_hint": "Toca unha ou varias persoas e despois «Poñer aquí» no seu equipo. Co rato tamén podes arrastralas.",
+      "tap_hint": "Marca unha ou varias persoas e escolle o seu equipo na barra de abaixo ou con «Poñer aquí». Co rato tamén podes arrastralas.",
       "picked_count": "{count} persoa escollida | {count} persoas escollidas",
       "put_here": "Poñer aquí",
       "put_here_aria": "Poñer as persoas escollidas en {team}",

@@ -1680,7 +1680,7 @@
         "add_team": "Add team",
         "removed_points_note": "When you save, the teams you removed are deleted with their points."
       },
-      "tap_hint": "Tap one or more people, then “Put here” on their team. With a mouse you can also drag them.",
+      "tap_hint": "Tick one or more people and choose their team in the bar below or with “Put here”. With a mouse you can also drag them.",
       "picked_count": "{count} person selected | {count} people selected",
       "put_here": "Put here",
       "put_here_aria": "Put the selected people in {team}",
