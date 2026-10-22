@@ -1598,13 +1598,11 @@
       },
       "archived_badge": "Arhivată",
       "edit": "Editează",
-      "move_members": "Mută membri…",
       "archive": "Arhivează",
       "unarchive": "Scoate din arhivă",
       "delete": "Șterge",
       "delete_title": "Șterge gruparea",
       "delete_message": "«{title}» va fi ștearsă cu echipele și punctele ei. Ce s-a împărțit deja fiecărui membru rămâne. Nu se poate anula.",
-      "drag_hint": "Trage o persoană în altă echipă sau folosește «Mută membri…» ca să o faci de la tastatură.",
       "points": "{count} punct | {count} puncte",
       "members_count": "Fără membri | {count} membru | {count} membri",
       "empty_team": "Încă nu e nimeni în această echipă",
@@ -1682,13 +1680,14 @@
         "add_team": "Adaugă o echipă",
         "removed_points_note": "La salvare, echipele eliminate se șterg cu punctele lor."
       },
-      "move": {
-        "title": "Mută membri · {title}",
-        "who": "Pe cine muți",
-        "from_team": "Persoanele din {name}",
-        "to": "În ce echipă",
-        "confirm": "Mută | Mută {count} persoană | Mută {count} persoane"
-      }
+      "tap_hint": "Atinge una sau mai multe persoane, apoi «Pune aici» la echipa lor. Cu mouse-ul le poți și trage.",
+      "picked_count": "{count} persoană aleasă | {count} persoane alese",
+      "put_here": "Pune aici",
+      "put_here_aria": "Pune persoanele alese în {team}",
+      "distribute": "Împarte la întâmplare",
+      "distributed": "{count} persoană împărțită între echipe. | {count} persoane împărțite între echipe.",
+      "distribute_skipped": "{count} persoană care lipsește azi rămâne fără echipă. | {count} persoane care lipsesc azi rămân fără echipă.",
+      "put_in": "Pune în:"
     }
   }
 }

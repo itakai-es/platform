@@ -1598,13 +1598,11 @@
       },
       "archived_badge": "Archivada",
       "edit": "Editar",
-      "move_members": "Mover integrantes…",
       "archive": "Archivar",
       "unarchive": "Sacar del archivu",
       "delete": "Desaniciar",
       "delete_title": "Desaniciar l’agrupación",
       "delete_message": "Va desaniciase «{title}» colos sos equipos y los sos puntos. Lo que yá se repartió a cada integrante queda. Nun se pue desfacer.",
-      "drag_hint": "Arrastra a una persona a otru equipu, o usa «Mover integrantes…» pa facelo col tecláu.",
       "points": "{count} puntu | {count} puntos",
       "members_count": "Ensin integrantes | {count} integrante | {count} integrantes",
       "empty_team": "Entá nun hai naide nesti equipu",
@@ -1682,13 +1680,14 @@
         "add_team": "Amestar un equipu",
         "removed_points_note": "Al guardar, los equipos que quitesti desaníciense colos sos puntos."
       },
-      "move": {
-        "title": "Mover integrantes · {title}",
-        "who": "A quién mueves",
-        "from_team": "Les persones de {name}",
-        "to": "A qué equipu",
-        "confirm": "Mover | Mover {count} persona | Mover {count} persones"
-      }
+      "tap_hint": "Toca una o delles persones y depués «Poner equí» nel so equipu. Col mur tamién pues arrastrales.",
+      "picked_count": "{count} persona escoyida | {count} persones escoyíes",
+      "put_here": "Poner equí",
+      "put_here_aria": "Poner les persones escoyíes en {team}",
+      "distribute": "Repartir al debalu",
+      "distributed": "{count} persona repartida ente los equipos. | {count} persones repartíes ente los equipos.",
+      "distribute_skipped": "{count} que falta güei queda ensin equipu. | {count} que falten güei queden ensin equipu.",
+      "put_in": "Poner en:"
     }
   }
 }

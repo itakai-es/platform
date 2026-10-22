@@ -29,14 +29,17 @@
 
     <template v-else>
       <div class="flex flex-wrap items-end gap-3">
-        <label class="block min-w-0 flex-1 text-sm text-navy-700 sm:max-w-sm">
-          <span class="mb-1 block font-medium">{{ t('teacher.teams.set_label') }}</span>
-          <Select
+        <div class="min-w-0 flex-1 sm:max-w-sm">
+          <p :id="`${uid}-set-label`" class="mb-1 text-sm font-medium text-navy-700">
+            {{ t('teacher.teams.set_label') }}
+          </p>
+          <SelectDropdown
             :model-value="selected?.id ?? ''"
             :options="setOptions"
+            :labelledby="`${uid}-set-label`"
             @update:model-value="selectedId = String($event)"
           />
-        </label>
+        </div>
         <Button v-if="canEdit" variant="primary" :icon-left="PlusIcon" @click="openNew">
           {{ t('teacher.teams.new_set') }}
         </Button>
@@ -70,15 +73,6 @@
             {{ t('teacher.teams.edit') }}
           </Button>
           <Button
-            v-if="!selected.archived"
-            size="sm"
-            variant="outline"
-            :icon-left="ArrowsRightLeftIcon"
-            @click="moveOpen = true"
-          >
-            {{ t('teacher.teams.move_members') }}
-          </Button>
-          <Button
             size="sm"
             variant="outline"
             :icon-left="ArchiveBoxIcon"
@@ -92,15 +86,71 @@
           </Button>
         </div>
 
-        <p v-if="canEdit && !selected.archived" class="text-sm text-navy-700/80">
-          {{ t('teacher.teams.drag_hint') }}
+        <!-- Mover: tocar a una o varias personas y luego su equipo (con ratón, dedo o
+             teclado); con ratón, también arrastrando. -->
+        <p v-if="draggable" class="text-sm text-navy-700/80">
+          {{ t('teacher.teams.tap_hint') }}
         </p>
 
-        <ul class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        <!-- Sin equipo, primero y a lo ancho: de aquí sale la gente hacia los equipos -->
+        <div
+          v-if="!selected.archived && (unassigned.length || pickedInTeams || dragging)"
+          class="rounded-2xl border border-dashed border-border-primary p-4 transition-colors"
+          :class="dropTarget === NO_TEAM ? 'bg-navy-700/5 ring-2 ring-navy-700/30' : 'bg-surface'"
+          @dragover.prevent="onDragOver(NO_TEAM)"
+          @dragleave="onDragLeave(NO_TEAM)"
+          @drop.prevent="onDrop(null)"
+        >
+          <div class="flex flex-wrap items-center gap-2">
+            <h3 :id="`${uid}-team-none`" class="mr-auto font-semibold text-navy-700">
+              {{ t('teacher.teams.no_team') }}
+              <span class="text-xs font-normal text-navy-700/70"> ({{ unassigned.length }}) </span>
+            </h3>
+            <Button
+              v-if="draggable && pickedInTeams"
+              size="sm"
+              variant="secondary"
+              :loading="moving"
+              :aria-label="t('teacher.teams.put_here_aria', { team: t('teacher.teams.no_team') })"
+              @click="putPicked(null)"
+            >
+              {{ t('teacher.teams.put_here') }}
+            </Button>
+            <Button
+              v-if="draggable && unassigned.length && selected.teams.length"
+              size="sm"
+              variant="outline"
+              :icon-left="ArrowsRightLeftIcon"
+              :loading="distributing"
+              @click="distribute"
+            >
+              {{ t('teacher.teams.distribute') }}
+            </Button>
+          </div>
+          <ul
+            v-if="unassigned.length"
+            class="mt-3 flex flex-wrap gap-2"
+            :aria-labelledby="`${uid}-team-none`"
+          >
+            <li v-for="s in unassigned" :key="s.id" class="max-w-full">
+              <TeamMemberChip
+                :name="s.name"
+                :avatar="s.avatar"
+                :interactive="draggable"
+                :pressed="picked.includes(s.id)"
+                @toggle="togglePick(s.id)"
+                @dragstart="onDragStart(s.id, $event)"
+                @dragend="onDragEnd"
+              />
+            </li>
+          </ul>
+        </div>
+
+        <ul class="grid grid-cols-1 items-start gap-4 sm:grid-cols-2 xl:grid-cols-3">
           <li
             v-for="(team, i) in selected.teams"
             :key="team.id"
-            class="flex flex-col rounded-2xl border border-l-4 border-border-primary p-4 transition-colors"
+            class="min-w-0 rounded-2xl border border-l-4 border-border-primary p-4 transition-colors"
             :class="[
               teamColorOf(team.color, i).border,
               dropTarget === team.id ? 'bg-navy-700/5 ring-2 ring-navy-700/30' : 'bg-surface',
@@ -134,69 +184,88 @@
                 )
               }}
             </p>
-            <ul class="mt-3 flex-1 space-y-1" :aria-labelledby="`${uid}-team-${team.id}`">
-              <li
-                v-for="id in team.studentIds"
-                :key="id"
-                :draggable="draggable"
-                class="flex items-center gap-2 rounded-xl px-2 py-1.5"
-                :class="draggable ? 'cursor-grab hover:bg-navy-700/5' : ''"
-                @dragstart="onDragStart(id, $event)"
-                @dragend="onDragEnd"
-              >
-                <Avatar
-                  :src="studentById.get(id)?.avatar"
-                  :username="nameOf(id)"
-                  size="xs"
-                  class="flex-shrink-0"
-                />
-                <span class="min-w-0 truncate text-sm text-navy-700">{{ nameOf(id) }}</span>
-              </li>
-              <li v-if="!team.studentIds.length" class="px-2 text-sm text-text-secondary">
-                {{ t('teacher.teams.empty_team') }}
-              </li>
-            </ul>
-            <Button
-              v-if="canPrize"
-              size="sm"
-              variant="secondary"
-              :icon-left="TrophyIcon"
-              class="mt-3 self-start"
-              @click="emit('award', team.id)"
+            <ul
+              v-if="team.studentIds.length"
+              class="mt-3 flex flex-wrap gap-2"
+              :aria-labelledby="`${uid}-team-${team.id}`"
             >
-              {{ t('teacher.teams.award') }}
-            </Button>
-          </li>
-
-          <!-- Sin equipo: también se puede soltar aquí -->
-          <li
-            v-if="!selected.archived && (unassigned.length || dragging)"
-            class="flex flex-col rounded-2xl border border-dashed border-border-primary p-4 transition-colors"
-            :class="dropTarget === NO_TEAM ? 'bg-navy-700/5 ring-2 ring-navy-700/30' : 'bg-surface'"
-            @dragover.prevent="onDragOver(NO_TEAM)"
-            @dragleave="onDragLeave(NO_TEAM)"
-            @drop.prevent="onDrop(null)"
-          >
-            <h3 :id="`${uid}-team-none`" class="font-semibold text-navy-700">
-              {{ t('teacher.teams.no_team') }}
-              <span class="text-xs font-normal text-navy-700/70"> ({{ unassigned.length }}) </span>
-            </h3>
-            <ul class="mt-3 space-y-1" :aria-labelledby="`${uid}-team-none`">
-              <li
-                v-for="s in unassigned"
-                :key="s.id"
-                :draggable="draggable"
-                class="flex items-center gap-2 rounded-xl px-2 py-1.5"
-                :class="draggable ? 'cursor-grab hover:bg-navy-700/5' : ''"
-                @dragstart="onDragStart(s.id, $event)"
-                @dragend="onDragEnd"
-              >
-                <Avatar :src="s.avatar" :username="s.name" size="xs" class="flex-shrink-0" />
-                <span class="min-w-0 truncate text-sm text-navy-700">{{ s.name }}</span>
+              <li v-for="id in team.studentIds" :key="id" class="max-w-full">
+                <TeamMemberChip
+                  :name="nameOf(id)"
+                  :avatar="studentById.get(id)?.avatar"
+                  :interactive="draggable"
+                  :pressed="picked.includes(id)"
+                  @toggle="togglePick(id)"
+                  @dragstart="onDragStart(id, $event)"
+                  @dragend="onDragEnd"
+                />
               </li>
             </ul>
+            <p v-else class="mt-3 text-sm text-text-secondary">
+              {{ t('teacher.teams.empty_team') }}
+            </p>
+            <div
+              v-if="(draggable && canPutIn(team.id)) || canPrize"
+              class="mt-3 flex flex-wrap gap-2"
+            >
+              <Button
+                v-if="draggable && canPutIn(team.id)"
+                size="sm"
+                variant="primary"
+                :loading="moving"
+                :aria-label="t('teacher.teams.put_here_aria', { team: team.title })"
+                @click="putPicked(team.id)"
+              >
+                {{ t('teacher.teams.put_here') }}
+              </Button>
+              <Button
+                v-if="canPrize"
+                size="sm"
+                variant="secondary"
+                :icon-left="TrophyIcon"
+                @click="emit('award', team.id)"
+              >
+                {{ t('teacher.teams.award') }}
+              </Button>
+            </div>
           </li>
         </ul>
+
+        <!-- Con alguien elegido: a dónde va, fijo abajo como la barra de la selección -->
+        <div
+          v-if="draggable && picked.length"
+          class="sticky bottom-4 z-20 flex flex-wrap items-center gap-2 rounded-2xl bg-navy-700 p-3 text-white shadow-lg"
+        >
+          <span class="px-1 text-sm font-semibold">
+            {{ t('teacher.teams.picked_count', { count: picked.length }, picked.length) }}
+          </span>
+          <span class="text-sm text-white/80">{{ t('teacher.teams.put_in') }}</span>
+          <template v-for="team in selected.teams" :key="team.id">
+            <Button
+              v-if="canPutIn(team.id)"
+              size="sm"
+              variant="secondary"
+              :disabled="moving"
+              :aria-label="t('teacher.teams.put_here_aria', { team: team.title })"
+              @click="putPicked(team.id)"
+            >
+              {{ team.title }}
+            </Button>
+          </template>
+          <Button
+            v-if="pickedInTeams"
+            size="sm"
+            variant="secondary"
+            :disabled="moving"
+            :aria-label="t('teacher.teams.put_here_aria', { team: t('teacher.teams.no_team') })"
+            @click="putPicked(null)"
+          >
+            {{ t('teacher.teams.no_team') }}
+          </Button>
+          <Button size="sm" variant="ghost" class="ml-auto !text-white" @click="picked = []">
+            {{ t('common.actions.cancel') }}
+          </Button>
+        </div>
       </section>
     </template>
 
@@ -206,14 +275,6 @@
       :students="pickerStudents"
       :set="editing"
       @saved="onSaved"
-    />
-
-    <TeamMoveModal
-      v-model="moveOpen"
-      :set="selected"
-      :students="pickerStudents"
-      :saving="moving"
-      @move="onMove"
     />
 
     <ConfirmModal
@@ -243,13 +304,17 @@ import {
 } from '@heroicons/vue/24/outline'
 import type { TeamSet } from '~/types/team.types'
 import { teamColorOf } from '~/utils/team-style'
+import { shuffled } from '~/utils/shuffle'
+import { randomIndex } from '~/utils/roulette'
 
 /**
  * La sub-vista «Equipos» de Alumnos: las agrupaciones de la clase (de base y
  * temporales), cada una con sus equipos, sus integrantes y su marcador. Quien
  * edita crea agrupaciones (al azar o a mano), las renombra, las archiva y mueve
- * a la gente: arrastrando o, con teclado, con «Mover integrantes…». Cada cambio
- * se guarda en el acto y se anuncia al lector de pantalla.
+ * a la gente: tocando a una o varias personas y luego «Poner aquí» en su equipo
+ * (sirve con ratón, dedo y teclado), arrastrando, o repartiendo al azar a quien
+ * está sin equipo. Cada cambio se guarda en el acto y se anuncia al lector de
+ * pantalla.
  *
  * Premiar a un equipo abre la ventana común de aplicar (la emite `award`).
  */
@@ -331,9 +396,8 @@ function onSaved(set: TeamSet) {
   announcement.value = t('teacher.teams.saved_toast', { title: set.title })
 }
 
-// --- Mover integrantes (arrastre y teclado guardan igual) ---
+// --- Mover integrantes: tocar y «Poner aquí», o arrastrar; se guarda igual ---
 const moving = ref(false)
-const moveOpen = ref(false)
 
 async function moveTo(studentIds: string[], teamId: string | null) {
   const set = selected.value
@@ -348,7 +412,7 @@ async function moveTo(studentIds: string[], teamId: string | null) {
       { count: studentIds.length, name: target },
       studentIds.length
     )
-    moveOpen.value = false
+    picked.value = picked.value.filter(id => !studentIds.includes(id))
   } catch {
     // Quizá el equipo ya no existe: se vuelve a leer cómo está la agrupación.
     toast.error(t('teacher.teams.error'))
@@ -358,8 +422,75 @@ async function moveTo(studentIds: string[], teamId: string | null) {
   }
 }
 
-function onMove(payload: { studentIds: string[]; teamId: string | null }) {
-  void moveTo(payload.studentIds, payload.teamId)
+// Personas elegidas para mover: se tocan y luego «Poner aquí» en su equipo.
+const picked = ref<string[]>([])
+watch(
+  () => selected.value?.id,
+  () => (picked.value = [])
+)
+function togglePick(id: string) {
+  picked.value = picked.value.includes(id)
+    ? picked.value.filter(p => p !== id)
+    : [...picked.value, id]
+}
+const teamOfStudent = computed(() => {
+  const map = new Map<string, string>()
+  for (const team of selected.value?.teams ?? [])
+    for (const id of team.studentIds) map.set(id, team.id)
+  return map
+})
+const pickedInTeams = computed(() => picked.value.some(id => teamOfStudent.value.has(id)))
+/** Hay alguien elegido que aún no está en ese equipo. */
+function canPutIn(teamId: string) {
+  return picked.value.some(id => teamOfStudent.value.get(id) !== teamId)
+}
+function putPicked(teamId: string | null) {
+  const ids = picked.value.filter(id => (teamOfStudent.value.get(id) ?? null) !== teamId)
+  void moveTo(ids, teamId)
+}
+
+// Repartir al azar a quien está sin equipo, llenando primero los equipos más
+// pequeños. En una agrupación temporal, quien falta hoy se queda fuera.
+const { absentIds, ensure: ensureAttendance } = useClassAttendance(() => props.classId)
+onMounted(() => void ensureAttendance().catch(() => {}))
+const distributing = ref(false)
+async function distribute() {
+  const set = selected.value
+  if (!set || distributing.value || !set.teams.length) return
+  const skip = set.kind === 'temporal' ? absentIds.value : new Set<string>()
+  const pool = shuffled(unassigned.value.filter(s => !skip.has(s.id)).map(s => s.id))
+  const skipped = unassigned.value.length - pool.length
+  const targets = set.teams.map(team => ({
+    id: team.id,
+    size: team.studentIds.length,
+    add: [] as string[],
+  }))
+  for (const id of pool) {
+    const min = Math.min(...targets.map(target => target.size))
+    const smallest = targets.filter(target => target.size === min)
+    const target = smallest[randomIndex(smallest.length)]!
+    target.add.push(id)
+    target.size += 1
+  }
+  distributing.value = true
+  try {
+    for (const target of targets) {
+      if (target.add.length)
+        await teams.moveMembers(set.id, { studentIds: target.add, teamId: target.id })
+    }
+    picked.value = []
+    const message = [
+      t('teacher.teams.distributed', { count: pool.length }, pool.length),
+      ...(skipped ? [t('teacher.teams.distribute_skipped', { count: skipped }, skipped)] : []),
+    ].join(' ')
+    announcement.value = message
+    toast.success(message)
+  } catch {
+    toast.error(t('teacher.teams.error'))
+    void teams.refresh()
+  } finally {
+    distributing.value = false
+  }
 }
 
 const dragging = ref<string | null>(null)

@@ -151,22 +151,28 @@
             />
           </div>
           <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <label class="block text-sm text-navy-700">
-              <span class="mb-1 block font-medium">{{ t('teacher.teams.form.color') }}</span>
-              <Select
+            <div>
+              <p :id="`${uid}-color-${i}`" class="mb-1 text-sm font-medium text-navy-700">
+                {{ t('teacher.teams.form.color') }}
+              </p>
+              <SelectDropdown
                 :model-value="team.color ?? ''"
                 :options="colorOptions"
+                :labelledby="`${uid}-color-${i}`"
                 @update:model-value="team.color = ($event as TeamColor) || null"
               />
-            </label>
-            <label class="block text-sm text-navy-700">
-              <span class="mb-1 block font-medium">{{ t('teacher.teams.form.emblem') }}</span>
-              <Select
+            </div>
+            <div>
+              <p :id="`${uid}-emblem-${i}`" class="mb-1 text-sm font-medium text-navy-700">
+                {{ t('teacher.teams.form.emblem') }}
+              </p>
+              <SelectDropdown
                 :model-value="team.emblem ?? ''"
                 :options="emblemOptions"
+                :labelledby="`${uid}-emblem-${i}`"
                 @update:model-value="team.emblem = ($event as TeamEmblem) || null"
               />
-            </label>
+            </div>
           </div>
           <p class="text-xs text-navy-700/70">
             {{

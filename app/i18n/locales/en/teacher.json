@@ -1598,13 +1598,11 @@
       },
       "archived_badge": "Archived",
       "edit": "Edit",
-      "move_members": "Move members…",
       "archive": "Archive",
       "unarchive": "Unarchive",
       "delete": "Delete",
       "delete_title": "Delete the grouping",
       "delete_message": "“{title}” will be deleted with its teams and points. What was already given to each member stays. This cannot be undone.",
-      "drag_hint": "Drag a person to another team, or use “Move members…” to do it with the keyboard.",
       "points": "{count} point | {count} points",
       "members_count": "No members | {count} member | {count} members",
       "empty_team": "Nobody in this team yet",
@@ -1682,13 +1680,14 @@
         "add_team": "Add team",
         "removed_points_note": "When you save, the teams you removed are deleted with their points."
       },
-      "move": {
-        "title": "Move members · {title}",
-        "who": "Who you are moving",
-        "from_team": "The people in {name}",
-        "to": "To which team",
-        "confirm": "Move | Move {count} person | Move {count} people"
-      }
+      "tap_hint": "Tap one or more people, then “Put here” on their team. With a mouse you can also drag them.",
+      "picked_count": "{count} person selected | {count} people selected",
+      "put_here": "Put here",
+      "put_here_aria": "Put the selected people in {team}",
+      "distribute": "Share out at random",
+      "distributed": "{count} person shared out among the teams. | {count} people shared out among the teams.",
+      "distribute_skipped": "{count} person absent today stays without a team. | {count} people absent today stay without a team.",
+      "put_in": "Put in:"
     }
   }
 }

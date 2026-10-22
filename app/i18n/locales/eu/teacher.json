@@ -1598,13 +1598,11 @@
       },
       "archived_badge": "Artxibatuta",
       "edit": "Editatu",
-      "move_members": "Kideak mugitu…",
       "archive": "Artxibatu",
       "unarchive": "Artxibotik atera",
       "delete": "Ezabatu",
       "delete_title": "Talde-multzoa ezabatu",
       "delete_message": "«{title}» ezabatuko da, bere talde eta puntuekin. Kide bakoitzari banatutakoa geratu egiten da. Ezin da desegin.",
-      "drag_hint": "Arrastatu pertsona bat beste talde batera, edo erabili «Kideak mugitu…» teklatuarekin egiteko.",
       "points": "{count} puntu | {count} puntu",
       "members_count": "Kiderik ez | {count} kide | {count} kide",
       "empty_team": "Oraindik ez dago inor talde honetan",
@@ -1682,13 +1680,14 @@
         "add_team": "Gehitu talde bat",
         "removed_points_note": "Gordetzean, kendu dituzun taldeak beren puntuekin ezabatzen dira."
       },
-      "move": {
-        "title": "Kideak mugitu · {title}",
-        "who": "Nor mugitzen duzun",
-        "from_team": "{name} taldekoak",
-        "to": "Zein taldetara",
-        "confirm": "Mugitu | Mugitu {count} pertsona | Mugitu {count} pertsona"
-      }
+      "tap_hint": "Ukitu pertsona bat edo gehiago, eta gero «Jarri hemen» haien taldean. Saguarekin arrastatu ere egin ditzakezu.",
+      "picked_count": "{count} pertsona aukeratuta | {count} pertsona aukeratuta",
+      "put_here": "Jarri hemen",
+      "put_here_aria": "Jarri aukeratutako pertsonak {team} taldean",
+      "distribute": "Ausaz banatu",
+      "distributed": "{count} pertsona banatu da taldeen artean. | {count} pertsona banatu dira taldeen artean.",
+      "distribute_skipped": "Gaur falta den {count} pertsona talderik gabe geratzen da. | Gaur falta diren {count} pertsona talderik gabe geratzen dira.",
+      "put_in": "Jarri hemen:"
     }
   }
 }

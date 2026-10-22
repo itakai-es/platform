@@ -1598,13 +1598,11 @@
       },
       "archived_badge": "Arquivada",
       "edit": "Editar",
-      "move_members": "Mover integrantes…",
       "archive": "Arquivar",
       "unarchive": "Sacar do arquivo",
       "delete": "Borrar",
       "delete_title": "Borrar a agrupación",
       "delete_message": "Borrarase «{title}» cos seus equipos e os seus puntos. O que xa se repartiu a cada integrante queda. Non se pode desfacer.",
-      "drag_hint": "Arrastra unha persoa a outro equipo, ou usa «Mover integrantes…» para facelo co teclado.",
       "points": "{count} punto | {count} puntos",
       "members_count": "Sen integrantes | {count} integrante | {count} integrantes",
       "empty_team": "Aínda non hai ninguén neste equipo",
@@ -1682,13 +1680,14 @@
         "add_team": "Engadir un equipo",
         "removed_points_note": "Ao gardar, os equipos que quitaches bórranse cos seus puntos."
       },
-      "move": {
-        "title": "Mover integrantes · {title}",
-        "who": "A quen moves",
-        "from_team": "As persoas de {name}",
-        "to": "A que equipo",
-        "confirm": "Mover | Mover {count} persoa | Mover {count} persoas"
-      }
+      "tap_hint": "Toca unha ou varias persoas e despois «Poñer aquí» no seu equipo. Co rato tamén podes arrastralas.",
+      "picked_count": "{count} persoa escollida | {count} persoas escollidas",
+      "put_here": "Poñer aquí",
+      "put_here_aria": "Poñer as persoas escollidas en {team}",
+      "distribute": "Repartir ao chou",
+      "distributed": "{count} persoa repartida entre os equipos. | {count} persoas repartidas entre os equipos.",
+      "distribute_skipped": "{count} que falta hoxe queda sen equipo. | {count} que faltan hoxe quedan sen equipo.",
+      "put_in": "Poñer en:"
     }
   }
 }

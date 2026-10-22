@@ -306,7 +306,8 @@ describe('migración d2_help_teams', () => {
   it('las guías cuentan lo que se decidió: solo quien ha venido, marcador aparte, cada cual entrega lo suyo', () => {
     const [formar, premiar, miEquipo] = inserts.map(i => i.body)
     expect(formar).toMatch(/Solo entra quien ha venido/)
-    expect(formar).toMatch(/Mover integrantes…/)
+    expect(formar).toMatch(/Poner aquí/)
+    expect(formar).toMatch(/Repartir al azar/)
     expect(premiar).toMatch(/no la XP de sus integrantes/)
     expect(premiar).toMatch(/Aprobar al equipo/)
     expect(miEquipo).toMatch(/cada integrante entrega su parte/)

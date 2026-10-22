@@ -1598,13 +1598,11 @@
       },
       "archived_badge": "Arxivada",
       "edit": "Editar",
-      "move_members": "Moure integrants…",
       "archive": "Arxivar",
       "unarchive": "Treure de l’arxiu",
       "delete": "Esborrar",
       "delete_title": "Esborrar l’agrupació",
       "delete_message": "S’esborrarà «{title}» amb els seus equips i els seus punts. El que ja s’ha repartit a cada integrant es queda. No es pot desfer.",
-      "drag_hint": "Arrossega una persona a un altre equip, o fes servir «Moure integrants…» per fer-ho amb el teclat.",
       "points": "{count} punt | {count} punts",
       "members_count": "Sense integrants | {count} integrant | {count} integrants",
       "empty_team": "Encara no hi ha ningú en aquest equip",
@@ -1682,13 +1680,14 @@
         "add_team": "Afegir un equip",
         "removed_points_note": "En desar, els equips que has tret s’esborren amb els seus punts."
       },
-      "move": {
-        "title": "Moure integrants · {title}",
-        "who": "A qui mous",
-        "from_team": "Les persones de {name}",
-        "to": "A quin equip",
-        "confirm": "Moure | Moure {count} persona | Moure {count} persones"
-      }
+      "tap_hint": "Toca una o diverses persones i després «Posa aquí» al seu equip. Amb el ratolí també les pots arrossegar.",
+      "picked_count": "{count} persona triada | {count} persones triades",
+      "put_here": "Posa aquí",
+      "put_here_aria": "Posa les persones triades a {team}",
+      "distribute": "Reparteix a l'atzar",
+      "distributed": "{count} persona repartida entre els equips. | {count} persones repartides entre els equips.",
+      "distribute_skipped": "{count} que falta avui es queda sense equip. | {count} que falten avui es queden sense equip.",
+      "put_in": "Posa a:"
     }
   }
 }
