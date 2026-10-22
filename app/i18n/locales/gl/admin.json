@@ -314,7 +314,14 @@
         "image_title": "Imaxes",
         "endpoint_url": "URL do endpoint",
         "api_key": "Clave API",
-        "model": "Modelo"
+        "model": "Modelo",
+        "reasoning": "Razoamento",
+        "reasoning_hint": "Máis razoamento dá respostas máis elaboradas, pero tarda e custa máis. Se o provedor non o admite, deixa de enviarse só.",
+        "reasoning_low": "Baixo (recomendado)",
+        "reasoning_medium": "Medio",
+        "reasoning_high": "Alto",
+        "reasoning_none": "Sen razoar",
+        "reasoning_off": "O que decida o provedor"
       },
       "storage": {
         "title": "Almacenamento",

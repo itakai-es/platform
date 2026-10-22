@@ -314,7 +314,14 @@
         "image_title": "Imagini",
         "endpoint_url": "URL-ul endpointului",
         "api_key": "Cheie API",
-        "model": "Model"
+        "model": "Model",
+        "reasoning": "Raționament",
+        "reasoning_hint": "Mai mult raționament dă răspunsuri mai elaborate, dar durează și costă mai mult. Dacă furnizorul nu îl acceptă, nu se mai trimite automat.",
+        "reasoning_low": "Scăzut (recomandat)",
+        "reasoning_medium": "Mediu",
+        "reasoning_high": "Ridicat",
+        "reasoning_none": "Fără raționament",
+        "reasoning_off": "Ce decide furnizorul"
       },
       "storage": {
         "title": "Stocare",

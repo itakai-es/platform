@@ -5,6 +5,7 @@ import {
   APP_LANGUAGES,
   SECRET_PATHS,
   type AiSettings,
+  REASONING_EFFORTS,
   type AppLanguage,
   type DomainSettings,
   type GeneralSettings,
@@ -66,6 +67,7 @@ function aiDefaults(): AiSettings {
       baseUrl,
       apiKey,
       model: process.env.SPARK_ROUTER_MODEL || 'google/gemma-4-26b-a4b-it',
+      reasoningEffort: 'low',
     },
     image: {
       baseUrl,
@@ -196,7 +198,10 @@ const endpointSchema = z
   .partial()
 
 const aiSchema = z
-  .object({ text: endpointSchema, image: endpointSchema })
+  .object({
+    text: endpointSchema.extend({ reasoningEffort: z.enum(REASONING_EFFORTS) }).partial(),
+    image: endpointSchema,
+  })
   .partial()
 
 const storageSchema = z

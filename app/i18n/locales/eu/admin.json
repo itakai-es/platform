@@ -314,7 +314,14 @@
         "image_title": "Irudiak",
         "endpoint_url": "Endpointaren URLa",
         "api_key": "API gakoa",
-        "model": "Eredua"
+        "model": "Eredua",
+        "reasoning": "Arrazoiketa",
+        "reasoning_hint": "Arrazoiketa gehiagok erantzun landuagoak ematen ditu, baina motelagoa eta garestiagoa da. Hornitzaileak onartzen ez badu, bere kabuz uzten zaio bidaltzeari.",
+        "reasoning_low": "Baxua (gomendatua)",
+        "reasoning_medium": "Ertaina",
+        "reasoning_high": "Altua",
+        "reasoning_none": "Arrazoitu gabe",
+        "reasoning_off": "Hornitzaileak erabakitzen duena"
       },
       "storage": {
         "title": "Biltegiratzea",

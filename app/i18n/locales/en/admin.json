@@ -314,7 +314,14 @@
         "image_title": "Images",
         "endpoint_url": "Endpoint URL",
         "api_key": "API key",
-        "model": "Model"
+        "model": "Model",
+        "reasoning": "Reasoning",
+        "reasoning_hint": "More reasoning gives more thorough answers, but it is slower and costs more. If the provider does not support it, it stops being sent automatically.",
+        "reasoning_low": "Low (recommended)",
+        "reasoning_medium": "Medium",
+        "reasoning_high": "High",
+        "reasoning_none": "No reasoning",
+        "reasoning_off": "Provider default"
       },
       "storage": {
         "title": "Storage",

@@ -314,7 +314,14 @@
         "image_title": "Imagens",
         "endpoint_url": "URL do endpoint",
         "api_key": "Chave API",
-        "model": "Modelo"
+        "model": "Modelo",
+        "reasoning": "Raciocínio",
+        "reasoning_hint": "Mais raciocínio dá respostas mais elaboradas, mas demora e custa mais. Se o fornecedor não o suportar, deixa de ser enviado automaticamente.",
+        "reasoning_low": "Baixo (recomendado)",
+        "reasoning_medium": "Médio",
+        "reasoning_high": "Alto",
+        "reasoning_none": "Sem raciocínio",
+        "reasoning_off": "O que o fornecedor decidir"
       },
       "storage": {
         "title": "Armazenamento",

@@ -25,9 +25,21 @@ export interface OpenAiEndpointConfig {
   model: string
 }
 
+/**
+ * Cuánto razona el modelo de texto (`reasoning_effort`). Más razonamiento da
+ * respuestas más elaboradas, pero tarda y cuesta más. Con `off` no se manda y
+ * decide el proveedor. Si un endpoint no admite el parámetro, se deja de mandar.
+ */
+export const REASONING_EFFORTS = ['off', 'none', 'low', 'medium', 'high'] as const
+export type ReasoningEffortSetting = (typeof REASONING_EFFORTS)[number]
+
+export interface TextEndpointConfig extends OpenAiEndpointConfig {
+  reasoningEffort: ReasoningEffortSetting
+}
+
 export interface AiSettings {
   /** Endpoint para generación de texto (chat/completions). */
-  text: OpenAiEndpointConfig
+  text: TextEndpointConfig
   /** Endpoint para generación de imágenes (images/generations). */
   image: OpenAiEndpointConfig
 }
