@@ -63,6 +63,8 @@
 </template>
 
 <script setup lang="ts">
+import { matchesQuery } from '~/utils/text-search'
+
 /**
  * Elegir a varios estudiantes de una clase: casillas de verdad, buscador,
  * «todos / ninguno» y una ranura `filters` para selecciones rápidas propias
@@ -103,8 +105,7 @@ const query = ref('')
 const selected = computed(() => new Set(props.modelValue))
 const allIds = computed(() => props.students.map(s => s.id))
 const visible = computed(() => {
-  const q = query.value.trim().toLowerCase()
-  return q ? props.students.filter(s => s.name.toLowerCase().includes(q)) : props.students
+  return props.students.filter(s => matchesQuery(query.value, s.name))
 })
 
 /** Deja elegidos estos ids (los que sigan en la lista), en el orden de la lista. */

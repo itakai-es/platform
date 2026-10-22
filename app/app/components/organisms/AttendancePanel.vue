@@ -83,9 +83,19 @@
           </Button>
         </div>
 
+        <!-- Con muchos, buscar a alguien por su nombre o su alias -->
+        <SearchInput
+          v-if="students.length > SEARCH_FROM"
+          v-model="query"
+          :placeholder="t('teacher.classroom.picker.search')"
+        />
+        <p v-if="!visibleStudents.length" class="text-sm text-navy-700/70">
+          {{ t('teacher.classroom.picker.no_results') }}
+        </p>
+
         <ul class="space-y-2">
           <li
-            v-for="s in students"
+            v-for="s in visibleStudents"
             :key="s.id"
             class="flex flex-col gap-3 rounded-2xl bg-white p-3 shadow-sm sm:p-4 lg:flex-row lg:items-center"
           >
@@ -209,6 +219,7 @@ import { UsersIcon, TrashIcon } from '@heroicons/vue/24/outline'
 import type { ScheduleConfig } from '~/types/schedule.types'
 import { scheduleOccurrences, toDateKey } from '~/utils/schedule-occurrences'
 import { ATTENDANCE_STATUS_META } from '~/utils/attendance-status'
+import { matchesQuery } from '~/utils/text-search'
 import {
   ATTENDANCE_STATUSES,
   type AttendanceSession,
@@ -229,6 +240,8 @@ import {
 interface AttendanceStudent {
   id: string
   name: string
+  /** Alias en la clase: también se busca por él. */
+  handle?: string
   avatar?: string
   pendingSignIn?: boolean
 }
@@ -355,6 +368,13 @@ function setStatus(studentId: string, status: AttendanceStatus) {
   statuses.value = { ...statuses.value, [studentId]: status }
   dirty.value = true
 }
+
+// La búsqueda solo filtra lo que se ve: el recuento y lo que se guarda son de toda la clase.
+const SEARCH_FROM = 8
+const query = ref('')
+const visibleStudents = computed(() =>
+  props.students.filter(s => matchesQuery(query.value, s.name, s.handle))
+)
 
 function allPresent() {
   statuses.value = Object.fromEntries(props.students.map(s => [s.id, 'present' as const]))

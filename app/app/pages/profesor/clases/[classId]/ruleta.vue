@@ -319,11 +319,21 @@
             }}
           </Button>
 
+          <!-- Con muchos, buscar por alias o por nombre -->
+          <SearchInput
+            v-if="mode !== 'teams' && scope.length > SEARCH_FROM"
+            v-model="listQuery"
+            class="mt-4"
+            :placeholder="t('teacher.classroom.picker.search')"
+          />
+          <p v-if="!listed.length && scope.length" class="mt-3 text-sm text-navy-700/70">
+            {{ t('teacher.classroom.picker.no_results') }}
+          </p>
           <ul
             class="mt-4 max-h-[50vh] space-y-1 overflow-y-auto pr-1 scrollbar-subtle lg:max-h-none lg:min-h-[8rem] lg:flex-1"
           >
             <li
-              v-for="entry in scope"
+              v-for="entry in listed"
               :key="entry.id"
               class="flex items-center justify-between gap-2 rounded-xl px-2 py-1.5"
               :class="isOut(entry.id) ? 'bg-navy-700/5' : ''"
@@ -342,6 +352,13 @@
                   :class="isOut(entry.id) ? 'text-navy-700/60 line-through' : ''"
                 >
                   {{ entry.label }}
+                </p>
+                <!-- El alias es lo que ve la clase; el nombre, para saber quién es -->
+                <p
+                  v-if="realNames.get(entry.id) && realNames.get(entry.id) !== entry.label"
+                  class="truncate text-xs text-navy-700/70"
+                >
+                  {{ realNames.get(entry.id) }}
                 </p>
                 <p v-if="drawn.has(entry.id)" class="text-xs text-navy-700/70">
                   {{ t('teacher.roulette.status_drawn') }}
@@ -415,6 +432,7 @@ import type { Class } from '~/types/class.types'
 import type { TeamOption } from '~/types/team.types'
 import { teamFillOf } from '~/utils/team-style'
 import { resolveClassSettings } from '~/utils/class-settings'
+import { matchesQuery } from '~/utils/text-search'
 import {
   localDay,
   randomIndex,
@@ -462,6 +480,8 @@ const classHref = `/profesor/clases/${classId}`
 const loading = ref(true)
 const classData = ref<Class | null>(null)
 const students = ref<RouletteEntry[]>([])
+// Nombre de cada estudiante, junto a su alias en la lista: para saber quién es y buscarlo.
+const realNames = ref(new Map<string, string>())
 // Quién falta hoy (D1) y los equipos (D2): estado compartido con el resto de la clase.
 const attendance = useClassAttendance(classId)
 const teams = useClassTeams(classId)
@@ -487,6 +507,7 @@ async function load() {
       // Sin equipos (o si fallan), la ruleta sigue con todo el alumnado.
       teams.ensure().catch(() => {}),
     ])
+    realNames.value = new Map((result?.students ?? []).map(s => [s.id, s.name]))
     students.value = (result?.students ?? [])
       .map(s => ({ id: s.id, label: rouletteLabel(s), avatar: s.avatar }))
       .sort((a, b) => a.label.localeCompare(b.label))
@@ -640,6 +661,15 @@ const removed = ref(new Set<string>())
 
 const isOut = (id: string) => drawn.value.has(id) || removed.value.has(id)
 const eligible = computed(() => scope.value.filter(entry => !isOut(entry.id)))
+
+// La búsqueda solo filtra la lista: la rueda sigue con todo el que juega.
+const SEARCH_FROM = 8
+const listQuery = ref('')
+const listed = computed(() =>
+  scope.value.filter(entry =>
+    matchesQuery(listQuery.value, entry.label, realNames.value.get(entry.id))
+  )
+)
 // Solo cuenta lo de la rueda de ahora: empezar de nuevo con un equipo no
 // devuelve a quien salió con todo el alumnado.
 const drawnHere = computed(() => [...drawn.value].filter(id => scopeIds.value.has(id)).length)

@@ -64,88 +64,100 @@
         </div>
 
         <!-- Por estudiante: recuentos, porcentaje y los días en que no estuvo -->
-        <div class="overflow-x-auto rounded-2xl bg-white shadow-lg">
-          <table class="w-full text-sm">
-            <caption class="sr-only">
-              {{
-                t('teacher.attendance.history.table_caption', { month: monthLabel })
-              }}
-            </caption>
-            <thead>
-              <tr class="border-b border-navy-700/10 text-left text-navy-700/70">
-                <th scope="col" class="sticky left-0 bg-white px-4 py-3 font-semibold">
-                  {{ t('teacher.classes.detail.students.col_student') }}
-                </th>
-                <th scope="col" class="px-2 py-3 text-center font-semibold">%</th>
-                <th
-                  v-for="s in ATTENDANCE_STATUSES"
-                  :key="s"
-                  scope="col"
-                  class="px-2 py-3 text-center font-semibold"
+        <div class="min-w-0 space-y-3">
+          <SearchInput
+            v-if="rows.length > SEARCH_FROM"
+            v-model="query"
+            :placeholder="t('teacher.classroom.picker.search')"
+          />
+          <div class="overflow-x-auto rounded-2xl bg-white shadow-lg">
+            <table class="w-full text-sm">
+              <caption class="sr-only">
+                {{
+                  t('teacher.attendance.history.table_caption', { month: monthLabel })
+                }}
+              </caption>
+              <thead>
+                <tr class="border-b border-navy-700/10 text-left text-navy-700/70">
+                  <th scope="col" class="sticky left-0 bg-white px-4 py-3 font-semibold">
+                    {{ t('teacher.classes.detail.students.col_student') }}
+                  </th>
+                  <th scope="col" class="px-2 py-3 text-center font-semibold">%</th>
+                  <th
+                    v-for="s in ATTENDANCE_STATUSES"
+                    :key="s"
+                    scope="col"
+                    class="px-2 py-3 text-center font-semibold"
+                  >
+                    <component
+                      :is="ATTENDANCE_STATUS_META[s].icon"
+                      class="mx-auto h-4 w-4"
+                      :class="ATTENDANCE_STATUS_META[s].color"
+                      aria-hidden="true"
+                    />
+                    <span class="sr-only">{{ t(`teacher.attendance.status.${s}`) }}</span>
+                  </th>
+                  <th scope="col" class="px-4 py-3 font-semibold">
+                    {{ t('teacher.attendance.history.col_incidents') }}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-if="!visibleRows.length">
+                  <td colspan="7" class="px-4 py-3 text-navy-700/70">
+                    {{ t('teacher.classroom.picker.no_results') }}
+                  </td>
+                </tr>
+                <tr
+                  v-for="row in visibleRows"
+                  :key="row.studentId"
+                  class="border-b border-navy-700/10 last:border-0"
                 >
-                  <component
-                    :is="ATTENDANCE_STATUS_META[s].icon"
-                    class="mx-auto h-4 w-4"
-                    :class="ATTENDANCE_STATUS_META[s].color"
-                    aria-hidden="true"
-                  />
-                  <span class="sr-only">{{ t(`teacher.attendance.status.${s}`) }}</span>
-                </th>
-                <th scope="col" class="px-4 py-3 font-semibold">
-                  {{ t('teacher.attendance.history.col_incidents') }}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="row in rows"
-                :key="row.studentId"
-                class="border-b border-navy-700/10 last:border-0"
-              >
-                <th
-                  scope="row"
-                  class="sticky left-0 bg-white px-4 py-2 text-left font-semibold text-navy-700"
-                >
-                  <span class="block max-w-[12rem] truncate">{{ row.name }}</span>
-                </th>
-                <td class="px-2 py-2 text-center font-semibold text-navy-700">
-                  {{ row.rate === null ? '—' : `${row.rate} %` }}
-                </td>
-                <td
-                  v-for="s in ATTENDANCE_STATUSES"
-                  :key="s"
-                  class="px-2 py-2 text-center text-navy-700"
-                >
-                  {{ row[s] }}
-                </td>
-                <!-- Solo los días en que no estuvo: con muchas sesiones, una columna
+                  <th
+                    scope="row"
+                    class="sticky left-0 bg-white px-4 py-2 text-left font-semibold text-navy-700"
+                  >
+                    <span class="block max-w-[12rem] truncate">{{ row.name }}</span>
+                  </th>
+                  <td class="px-2 py-2 text-center font-semibold text-navy-700">
+                    {{ row.rate === null ? '—' : `${row.rate} %` }}
+                  </td>
+                  <td
+                    v-for="s in ATTENDANCE_STATUSES"
+                    :key="s"
+                    class="px-2 py-2 text-center text-navy-700"
+                  >
+                    {{ row[s] }}
+                  </td>
+                  <!-- Solo los días en que no estuvo: con muchas sesiones, una columna
                      por día no cabe. El detalle completo va en el CSV. -->
-                <td class="px-4 py-2">
-                  <div v-if="row.incidents.length" class="flex flex-wrap gap-1">
-                    <button
-                      v-for="incident in row.incidents"
-                      :key="incident.session.id"
-                      type="button"
-                      class="inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-navy-700/5 px-2 py-0.5 text-xs font-medium text-navy-700 hover:bg-navy-700/10 focus:outline-none focus:ring-2 focus:ring-navy-700"
-                      :aria-label="`${t(`teacher.attendance.status.${incident.status}`)}: ${sessionLabel(incident.session)}`"
-                      @click="openDay(incident.session.date)"
-                    >
-                      <component
-                        :is="ATTENDANCE_STATUS_META[incident.status].icon"
-                        class="h-3.5 w-3.5 flex-shrink-0"
-                        :class="ATTENDANCE_STATUS_META[incident.status].color"
-                        aria-hidden="true"
-                      />
-                      {{ sessionLabel(incident.session) }}
-                    </button>
-                  </div>
-                  <span v-else class="text-navy-700/60">
-                    {{ t('teacher.attendance.history.no_incidents') }}
-                  </span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                  <td class="px-4 py-2">
+                    <div v-if="row.incidents.length" class="flex flex-wrap gap-1">
+                      <button
+                        v-for="incident in row.incidents"
+                        :key="incident.session.id"
+                        type="button"
+                        class="inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-navy-700/5 px-2 py-0.5 text-xs font-medium text-navy-700 hover:bg-navy-700/10 focus:outline-none focus:ring-2 focus:ring-navy-700"
+                        :aria-label="`${t(`teacher.attendance.status.${incident.status}`)}: ${sessionLabel(incident.session)}`"
+                        @click="openDay(incident.session.date)"
+                      >
+                        <component
+                          :is="ATTENDANCE_STATUS_META[incident.status].icon"
+                          class="h-3.5 w-3.5 flex-shrink-0"
+                          :class="ATTENDANCE_STATUS_META[incident.status].color"
+                          aria-hidden="true"
+                        />
+                        {{ sessionLabel(incident.session) }}
+                      </button>
+                    </div>
+                    <span v-else class="text-navy-700/60">
+                      {{ t('teacher.attendance.history.no_incidents') }}
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </template>
@@ -162,6 +174,7 @@ import {
 import { ATTENDANCE_STATUSES, type AttendanceSummary } from '~/composables/useClassAttendance'
 import { ATTENDANCE_STATUS_META } from '~/utils/attendance-status'
 import { toDateKey } from '~/utils/schedule-occurrences'
+import { matchesQuery } from '~/utils/text-search'
 import { downloadCsv, toCsv } from '~/utils/csv'
 import type { DayStatus } from '~/composables/useClassCalendar'
 
@@ -238,6 +251,10 @@ const rows = computed(() => {
     }))
     .sort((a, b) => a.name.localeCompare(b.name))
 })
+
+const SEARCH_FROM = 8
+const query = ref('')
+const visibleRows = computed(() => rows.value.filter(row => matchesQuery(query.value, row.name)))
 
 function formatDay(key: string, opts: Intl.DateTimeFormatOptions) {
   const [y, m, d] = key.split('-').map(Number)
