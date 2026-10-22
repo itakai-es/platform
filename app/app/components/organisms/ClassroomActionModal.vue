@@ -1,7 +1,7 @@
 <template>
-  <!-- Paso 1: qué se aplica y a quién -->
+  <!-- Qué se aplica y a quién; abajo, el resumen y «Aplicar» -->
   <Modal
-    :model-value="modelValue && step === 'pick'"
+    :model-value="modelValue"
     :title="
       title ??
       (target === 'team'
@@ -212,75 +212,28 @@
 
     <template #footer>
       <div class="flex w-full flex-wrap items-center justify-end gap-3">
-        <!-- Si aún no se puede seguir, qué falta -->
+        <!-- Junto al botón, lo que va a pasar (la confirmación antes de aplicar) o,
+             si aún no se puede, qué falta -->
         <p
-          v-if="missingHint"
-          class="w-full min-w-0 text-sm text-navy-700/80 sm:mr-auto sm:w-auto"
+          class="w-full min-w-0 text-sm sm:mr-auto sm:w-auto sm:flex-1"
+          :class="canContinue ? 'font-medium text-navy-700' : 'text-navy-700/80'"
           aria-live="polite"
         >
-          {{ missingHint }}
+          {{ canContinue ? confirmMessage : missingHint }}
         </p>
-        <Button variant="outline" @click="close">{{ t('common.actions.cancel') }}</Button>
-        <!-- A una sola persona (o solo los puntos de un equipo) se aplica ya; a
-             varias, antes se confirma -->
-        <Button
-          variant="primary"
-          :disabled="!canContinue"
-          :loading="applying && step === 'pick'"
-          @click="next"
-        >
-          {{
-            needsConfirm ? t('teacher.classroom.continue') : t('teacher.classroom.confirm_button')
-          }}
+        <Button variant="outline" :disabled="applying" @click="close">
+          {{ t('common.actions.cancel') }}
+        </Button>
+        <Button variant="primary" :disabled="!canContinue" :loading="applying" @click="apply">
+          {{ t('teacher.classroom.confirm_button') }}
         </Button>
       </div>
     </template>
   </Modal>
-
-  <!-- Paso 2: confirmación, siempre (requisito de la propuesta) -->
-  <ConfirmModal
-    :model-value="modelValue && step === 'confirm'"
-    :title="t('teacher.classroom.confirm_title')"
-    :message="confirmMessage"
-    :confirm-text="t('teacher.classroom.confirm_button')"
-    :cancel-text="t('teacher.classroom.back')"
-    :variant="isPositive ? 'success' : 'warning'"
-    :loading="applying"
-    @confirm="apply"
-    @update:model-value="backToPick"
-  >
-    <div v-if="target === 'students' || teamAward.distribute" class="text-left">
-      <Button
-        size="sm"
-        variant="ghost"
-        :icon-right="showWho ? ChevronUpIcon : ChevronDownIcon"
-        :aria-expanded="showWho"
-        :aria-controls="`${uid}-who-list`"
-        @click="showWho = !showWho"
-      >
-        {{ t('teacher.classroom.confirm_who', { count: chosen.length }) }}
-      </Button>
-      <ul
-        v-if="showWho"
-        :id="`${uid}-who-list`"
-        class="mt-2 max-h-56 space-y-2 overflow-y-auto scrollbar-subtle pr-1"
-      >
-        <li v-for="s in chosen" :key="s.id">
-          <StudentCheckRow
-            :id="`${uid}-who-${s.id}`"
-            :name="s.name"
-            :avatar="s.avatar"
-            :hint="s.hint"
-          />
-        </li>
-      </ul>
-    </div>
-  </ConfirmModal>
 </template>
 
 <script setup lang="ts">
 import { HandThumbUpIcon, HandThumbDownIcon } from '@heroicons/vue/24/solid'
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/24/outline'
 import XpIcon from '~/components/atoms/XpIcon.vue'
 import CoinIcon from '~/components/atoms/CoinIcon.vue'
 import ManaIcon from '~/components/atoms/ManaIcon.vue'
@@ -293,9 +246,9 @@ import type { TeamAwardResult } from '~/types/team.types'
 /**
  * Aplicar algo a varios estudiantes a la vez: un comportamiento del catálogo o
  * una recompensa libre (dar o quitar XP, monedas, maná o vidas con un motivo).
- * Elegir qué y a quién (con `StudentPicker`) y aplicar. A varias personas a la
- * vez, antes se confirma con el resumen y la lista de nombres; a una sola (la
- * que sale en la ruleta) o solo puntos al marcador de un equipo, se aplica ya.
+ * Elegir qué y a quién (con `StudentPicker`) y aplicar. Antes de pulsar
+ * «Aplicar», junto al botón se ve el resumen (qué, a cuántas personas y cuánto
+ * mueve): esa es la confirmación, sin una segunda ventana.
  *
  * Lo usan la pestaña de comportamientos (con el comportamiento ya elegido), la
  * selección del listado de estudiantes y «Aplicar a los presentes/ausentes» de
@@ -361,7 +314,6 @@ const effects = useEffects()
 const store = useBehaviorsStore()
 const uid = `classroom-${useId()}`.replace(/[^\w-]/g, '-')
 
-const step = ref<'pick' | 'confirm'>('pick')
 const mode = ref<Mode>('behavior')
 const behaviorId = ref<string | null>(null)
 const selection = ref<string[]>([])
@@ -396,7 +348,6 @@ watch(
   () => props.modelValue,
   open => {
     if (!open) return
-    step.value = 'pick'
     mode.value =
       props.behavior || !props.canReward
         ? 'behavior'
@@ -597,26 +548,6 @@ const teamConfirmMessage = computed(() => {
 function close() {
   if (applying.value) return
   emit('update:modelValue', false)
-}
-
-/** A varias personas a la vez se confirma antes; a una sola, no hace falta. */
-const needsConfirm = computed(() =>
-  target.value === 'team'
-    ? teamAward.distribute && chosen.value.length > 1
-    : selection.value.length > 1
-)
-const showWho = ref(false)
-function next() {
-  if (!canContinue.value) return
-  if (!needsConfirm.value) return void apply()
-  showWho.value = false
-  step.value = 'confirm'
-}
-
-// «Volver», Escape y la X de la confirmación llevan al paso 1 con la selección
-// intacta; mientras se aplica, no se mueve nada.
-function backToPick(open: boolean) {
-  if (!open && !applying.value) step.value = 'pick'
 }
 
 async function apply() {

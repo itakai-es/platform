@@ -1493,11 +1493,7 @@
         "reason_placeholder": "Π.χ.: Βοήθησε να ετοιμαστεί το εργαστήριο",
         "reason_too_long": "Η αιτία μπορεί να έχει έως 80 χαρακτήρες."
       },
-      "continue": "Συνέχεια",
-      "confirm_title": "Επιβεβαίωση",
       "confirm_button": "Εφαρμογή",
-      "back": "Πίσω",
-      "confirm_who": "Δες σε ποιους ({count})",
       "confirm_behavior": "Εφαρμογή «{title}» σε {count} μαθητή. | Εφαρμογή «{title}» σε {count} μαθητές.",
       "confirm_reward": "Ανταμοιβή «{title}» σε {count} μαθητή. | Ανταμοιβή «{title}» σε {count} μαθητές.",
       "confirm_effect": "Σε κάθε άτομο: {effect}.",

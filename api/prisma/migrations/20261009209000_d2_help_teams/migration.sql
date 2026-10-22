@@ -54,7 +54,7 @@ ON CONFLICT ("category_id", "slug", "locale") DO NOTHING;
 
 -- gamificacion/premiar-a-un-equipo-y-ver-la-clasificacion
 INSERT INTO "help_articles" ("id", "category_id", "slug", "title", "summary", "cover_image", "body", "locale", "status", "order_index", "featured", "audience", "kind", "published_at", "updated_at")
-SELECT gen_random_uuid()::text, c."id", $itakai$premiar-a-un-equipo-y-ver-la-clasificacion$itakai$, $itakai$Premiar a un equipo y ver la clasificación$itakai$, $itakai$Puntos para el marcador, reparto a cada integrante, la clasificación de equipos y las misiones por equipos.$itakai$, $itakai$/app/ayuda/clasificacion.svg$itakai$, $itakai$Premiar a un equipo hace dos cosas, y eliges cuáles al confirmar: **suma puntos a su marcador** y, si quieres, **reparte a cada integrante** un comportamiento o una recompensa.
+SELECT gen_random_uuid()::text, c."id", $itakai$premiar-a-un-equipo-y-ver-la-clasificacion$itakai$, $itakai$Premiar a un equipo y ver la clasificación$itakai$, $itakai$Puntos para el marcador, reparto a cada integrante, la clasificación de equipos y las misiones por equipos.$itakai$, $itakai$/app/ayuda/clasificacion.svg$itakai$, $itakai$Premiar a un equipo hace dos cosas, y eliges cuáles antes de aplicar: **suma puntos a su marcador** y, si quieres, **reparte a cada integrante** un comportamiento o una recompensa.
 
 ## Premiar
 

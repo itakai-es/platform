@@ -1493,11 +1493,7 @@
         "reason_placeholder": "Adib.: Laborategia prestatzen lagundu du",
         "reason_too_long": "Arrazoiak gehienez 80 karaktere izan ditzake."
       },
-      "continue": "Jarraitu",
-      "confirm_title": "Berretsi",
       "confirm_button": "Aplikatu",
-      "back": "Itzuli",
-      "confirm_who": "Ikusi nori ({count})",
       "confirm_behavior": "«{title}» {count} ikasleri aplikatu. | «{title}» {count} ikasleri aplikatu.",
       "confirm_reward": "«{title}» saria {count} ikasleri. | «{title}» saria {count} ikasleri.",
       "confirm_effect": "Bakoitzari: {effect}.",

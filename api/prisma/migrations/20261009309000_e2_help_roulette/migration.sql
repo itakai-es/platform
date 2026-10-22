@@ -198,7 +198,7 @@ Para pasar lista de otro día, o corregirla, cambia la fecha. Las cuentas sin co
 
 ## Aplicar a los presentes o a los ausentes
 
-Con la lista guardada aparecen **Aplicar a los presentes…** y **Aplicar a los ausentes…**. Abren la misma ventana que la [aplicación a varios estudiantes](/ayuda/gamificacion/aplicar-a-varios-estudiantes), con la selección ya hecha: eliges un comportamiento o una recompensa libre, revisas a quién y confirmas. En **los ausentes** van elegidos solo los de **Ausente**: las faltas **justificadas** salen en la lista con su estado, pero sin marcar.
+Con la lista guardada aparecen **Aplicar a los presentes…** y **Aplicar a los ausentes…**. Abren la misma ventana que la [aplicación a varios estudiantes](/ayuda/gamificacion/aplicar-a-varios-estudiantes), con la selección ya hecha: eliges un comportamiento o una recompensa libre, revisas el resumen y pulsas **Aplicar**. En **los ausentes** van elegidos solo los de **Ausente**: las faltas **justificadas** salen en la lista con su estado, pero sin marcar.
 
 **Pasar lista nunca quita ni da nada por sí solo.** Premiar la asistencia o penalizar una falta es siempre una acción aparte, que decides y confirmas tú.
 
@@ -237,7 +237,7 @@ Para pasar lista de otro día, o corregirla, cambia la fecha. Las cuentas sin co
 
 ## Aplicar a los presentes o a los ausentes
 
-Con la lista guardada aparecen **Aplicar a los presentes…** y **Aplicar a los ausentes…**. Abren la misma ventana que la [aplicación a varios estudiantes](/ayuda/gamificacion/aplicar-a-varios-estudiantes), con la selección ya hecha: eliges un comportamiento o una recompensa libre, revisas a quién y confirmas. En **los ausentes** van elegidos solo los de **Ausente**: las faltas **justificadas** salen en la lista con su estado, pero sin marcar.
+Con la lista guardada aparecen **Aplicar a los presentes…** y **Aplicar a los ausentes…**. Abren la misma ventana que la [aplicación a varios estudiantes](/ayuda/gamificacion/aplicar-a-varios-estudiantes), con la selección ya hecha: eliges un comportamiento o una recompensa libre, revisas el resumen y pulsas **Aplicar**. En **los ausentes** van elegidos solo los de **Ausente**: las faltas **justificadas** salen en la lista con su estado, pero sin marcar.
 
 **Pasar lista nunca quita ni da nada por sí solo.** Premiar la asistencia o penalizar una falta es siempre una acción aparte, que decides y confirmas tú.
 

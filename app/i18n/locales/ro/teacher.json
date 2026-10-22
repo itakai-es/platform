@@ -1493,11 +1493,7 @@
         "reason_placeholder": "Ex.: A ajutat la pregătirea laboratorului",
         "reason_too_long": "Motivul poate avea cel mult 80 de caractere."
       },
-      "continue": "Continuă",
-      "confirm_title": "Confirmă",
       "confirm_button": "Aplică",
-      "back": "Înapoi",
-      "confirm_who": "Vezi cui ({count})",
       "confirm_behavior": "Aplici «{title}» pentru {count} elev. | Aplici «{title}» pentru {count} elevi.",
       "confirm_reward": "Recompensa «{title}» pentru {count} elev. | Recompensa «{title}» pentru {count} elevi.",
       "confirm_effect": "Pentru fiecare persoană: {effect}.",

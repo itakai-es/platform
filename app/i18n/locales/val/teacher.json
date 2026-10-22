@@ -1493,11 +1493,7 @@
         "reason_placeholder": "P. ex.: Ha ajudat a preparar el laboratori",
         "reason_too_long": "El motiu pot tindre fins a 80 caràcters."
       },
-      "continue": "Continua",
-      "confirm_title": "Confirma",
       "confirm_button": "Aplica",
-      "back": "Torna",
-      "confirm_who": "Mostra a qui ({count})",
       "confirm_behavior": "Aplicar «{title}» a {count} estudiant. | Aplicar «{title}» a {count} estudiants.",
       "confirm_reward": "Recompensa «{title}» a {count} estudiant. | Recompensa «{title}» a {count} estudiants.",
       "confirm_effect": "Per estudiant: {effect}.",

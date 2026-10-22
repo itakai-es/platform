@@ -1493,11 +1493,7 @@
         "reason_placeholder": "E.g. Helped set up the lab",
         "reason_too_long": "The reason can be up to 80 characters long."
       },
-      "continue": "Continue",
-      "confirm_title": "Confirm",
       "confirm_button": "Apply",
-      "back": "Back",
-      "confirm_who": "See who ({count})",
       "confirm_behavior": "Apply “{title}” to {count} student. | Apply “{title}” to {count} students.",
       "confirm_reward": "Reward “{title}” for {count} student. | Reward “{title}” for {count} students.",
       "confirm_effect": "Each one gets: {effect}.",

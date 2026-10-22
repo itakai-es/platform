@@ -1493,11 +1493,7 @@
         "reason_placeholder": "Ex.: Axudou a preparar o laboratorio",
         "reason_too_long": "O motivo pode ter ata 80 caracteres."
       },
-      "continue": "Continuar",
-      "confirm_title": "Confirmar",
       "confirm_button": "Aplicar",
-      "back": "Volver",
-      "confirm_who": "Ver a quen ({count})",
       "confirm_behavior": "Aplicar «{title}» a {count} estudante. | Aplicar «{title}» a {count} estudantes.",
       "confirm_reward": "Recompensa «{title}» a {count} estudante. | Recompensa «{title}» a {count} estudantes.",
       "confirm_effect": "Por estudante: {effect}.",

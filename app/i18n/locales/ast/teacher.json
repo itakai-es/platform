@@ -1493,11 +1493,7 @@
         "reason_placeholder": "Ex.: Ayudó a preparar el llaboratoriu",
         "reason_too_long": "El motivu pue tener hasta 80 caráuteres."
       },
-      "continue": "Siguir",
-      "confirm_title": "Confirmar",
       "confirm_button": "Aplicar",
-      "back": "Volver",
-      "confirm_who": "Ver a quién ({count})",
       "confirm_behavior": "Aplicar «{title}» a {count} estudiante. | Aplicar «{title}» a {count} estudiantes.",
       "confirm_reward": "Recompensa «{title}» a {count} estudiante. | Recompensa «{title}» a {count} estudiantes.",
       "confirm_effect": "Por estudiante: {effect}.",
