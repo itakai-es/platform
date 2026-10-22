@@ -14,13 +14,13 @@
       v-for="option in options"
       :key="option.value"
       v-bind="pillAttrs(option)"
-      class="min-w-0 break-words hyphens-auto rounded-xl border px-3 py-2 text-center text-sm font-medium transition-colors"
+      class="min-w-0 break-words hyphens-auto rounded-xl border px-3 py-2 text-center text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50"
       :class="
         modelValue === option.value
           ? 'border-navy-700 bg-navy-700 text-white'
           : 'border-border-primary bg-surface text-navy-700 hover:bg-gray-50'
       "
-      @click="emit('update:modelValue', option.value)"
+      @click="!disabled && emit('update:modelValue', option.value)"
     >
       <slot name="option" :option="option" :selected="modelValue === option.value">
         {{ option.label }}
@@ -61,6 +61,8 @@ interface Props {
   /** Ancho mínimo de cada píldora en modo `fluid`. */
   minItemWidth?: string
   ariaLabel?: string
+  /** Se ve pero no se puede cambiar (solo con conmutadores, no con enlaces). */
+  disabled?: boolean
 }
 
 const props = defineProps<Props>()
@@ -82,7 +84,7 @@ function pillAttrs(option: Option) {
       'aria-current': selected ? (route.path === option.to ? 'page' : 'true') : undefined,
     }
   }
-  return { type: 'button', 'aria-pressed': selected }
+  return { type: 'button', 'aria-pressed': selected, disabled: props.disabled || undefined }
 }
 
 const emit = defineEmits<{

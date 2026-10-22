@@ -834,7 +834,9 @@
           "toast_error": "Não foi possível guardar os dados",
           "team_set_label": "Por equipas",
           "team_set_none": "Individual (sem equipas)",
-          "team_set_hint": "Só informativo: a turma vê com que equipas se faz e podes aprovar uma equipa inteira de uma vez. Cada estudante continua a entregar o seu."
+          "team_set_hint": "Só informativo: a turma vê com que equipas se faz e podes aprovar uma equipa inteira de uma vez. Cada estudante continua a entregar o seu.",
+          "basics_title": "Dados da missão",
+          "play_title": "Dificuldade e visibilidade"
         }
       },
       "import": {
