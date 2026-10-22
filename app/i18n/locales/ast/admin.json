@@ -314,7 +314,14 @@
         "image_title": "Imáxenes",
         "endpoint_url": "URL del endpoint",
         "api_key": "Clave API",
-        "model": "Modelu"
+        "model": "Modelu",
+        "reasoning": "Razonamientu",
+        "reasoning_hint": "Más razonamientu da rempuestes más ellaboraes, pero tarda y cuesta más. Si’l fornidor nun lo almite, déxase de mandar solo.",
+        "reasoning_low": "Baxu (aconseyáu)",
+        "reasoning_medium": "Mediu",
+        "reasoning_high": "Altu",
+        "reasoning_none": "Ensin razonar",
+        "reasoning_off": "Lo que decida’l fornidor"
       },
       "storage": {
         "title": "Almacenamientu",

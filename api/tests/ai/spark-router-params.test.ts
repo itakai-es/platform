@@ -4,10 +4,11 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 // razonamiento está activo, como dice su guía de migración.
 const OPENAI = 'https://api.openai.com/v1'
 let model = 'gpt-6-luna'
+let effort = 'low'
 
 vi.mock('../../src/modules/settings/settings.service.js', () => ({
   getAiSettings: async () => ({
-    text: { baseUrl: OPENAI, apiKey: 'sk-prueba', model },
+    text: { baseUrl: OPENAI, apiKey: 'sk-prueba', model, reasoningEffort: effort },
     image: { baseUrl: OPENAI, apiKey: 'sk-prueba', model: 'sin-imagenes' },
   }),
 }))
@@ -67,22 +68,30 @@ describe('parámetros opcionales que un endpoint rechaza', () => {
 
   it('un endpoint que no conoce reasoning_effort lo deja de recibir y conserva la temperatura', () => {
     const base = 'http://otro-endpoint:8000'
-    expect(learnRejectedParam(base, 'gemma', "Unknown field 'reasoning_effort'")).toBe(true)
-    const body = JSON.parse(chatBody(base, 'gemma', 'Hola', undefined, false))
+    expect(learnRejectedParam(base, 'gemma', 'low', "Unknown field 'reasoning_effort'")).toBe(true)
+    const body = JSON.parse(chatBody(base, 'gemma', 'low', 'Hola', undefined, false))
     expect(body).not.toHaveProperty('reasoning_effort')
     expect(body.temperature).toBe(0.7)
   })
 
   it('un 400 que no nombra ningún parámetro quita el razonamiento, como antes, y después ya no reintenta', () => {
     const base = 'http://antiguo:8000'
-    expect(learnRejectedParam(base, 'glm', 'Bad Request')).toBe(true)
-    expect(learnRejectedParam(base, 'glm', 'Bad Request')).toBe(false)
+    expect(learnRejectedParam(base, 'glm', 'low', 'Bad Request')).toBe(true)
+    expect(learnRejectedParam(base, 'glm', 'low', 'Bad Request')).toBe(false)
   })
 
   it('lo aprendido es por endpoint y modelo: otro modelo del mismo endpoint sigue con todo', () => {
-    learnRejectedParam(OPENAI, 'gpt-6-luna', "'temperature' is not supported")
-    const body = JSON.parse(chatBody(OPENAI, 'otro-modelo', 'Hola', undefined, false))
+    learnRejectedParam(OPENAI, 'gpt-6-luna', 'low', "'temperature' is not supported")
+    const body = JSON.parse(chatBody(OPENAI, 'otro-modelo', 'low', 'Hola', undefined, false))
     expect(body.temperature).toBe(0.7)
     expect(body.reasoning_effort).toBe('low')
+  })
+
+  it('manda el nivel de razonamiento elegido en el panel; con «off» no lo manda', () => {
+    const medium = JSON.parse(chatBody('http://glm:8000', 'glm-5', 'medium', 'Hola', undefined, false))
+    expect(medium.reasoning_effort).toBe('medium')
+    const off = JSON.parse(chatBody('http://glm:8000', 'glm-5', 'off', 'Hola', undefined, false))
+    expect(off).not.toHaveProperty('reasoning_effort')
+    expect(off.temperature).toBe(0.7)
   })
 })

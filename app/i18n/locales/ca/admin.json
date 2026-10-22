@@ -314,7 +314,14 @@
         "image_title": "Imatges",
         "endpoint_url": "URL de l'endpoint",
         "api_key": "Clau API",
-        "model": "Model"
+        "model": "Model",
+        "reasoning": "Raonament",
+        "reasoning_hint": "Més raonament dona respostes més elaborades, però tarda i costa més. Si el proveïdor no l’admet, es deixa d’enviar sol.",
+        "reasoning_low": "Baix (recomanat)",
+        "reasoning_medium": "Mitjà",
+        "reasoning_high": "Alt",
+        "reasoning_none": "Sense raonar",
+        "reasoning_off": "El que decideixi el proveïdor"
       },
       "storage": {
         "title": "Emmagatzematge",

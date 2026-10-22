@@ -176,8 +176,11 @@ export interface AiEndpoint {
   model: string
 }
 
+/** Cuánto razona el modelo de texto; con `off` no se manda y decide el proveedor. */
+export type ReasoningEffort = 'off' | 'none' | 'low' | 'medium' | 'high'
+
 export interface AiSettings {
-  text: AiEndpoint
+  text: AiEndpoint & { reasoningEffort: ReasoningEffort }
   image: AiEndpoint
 }
 

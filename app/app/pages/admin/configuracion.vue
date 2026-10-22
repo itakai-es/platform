@@ -32,6 +32,16 @@
             <FormField v-model="form.ai.text.baseUrl" class="sm:col-span-2" :label="t('admin.settings.ai.endpoint_url')" placeholder="https://api.openai.com" />
             <FormField v-model="form.ai.text.apiKey" :label="t('admin.settings.ai.api_key')" autocomplete="off" placeholder="sk-…" />
             <FormField v-model="form.ai.text.model" :label="t('admin.settings.ai.model')" placeholder="gpt-4o-mini" />
+            <div>
+              <p id="ai-reasoning-label" class="text-sm font-medium text-text-primary mb-2">{{ t('admin.settings.ai.reasoning') }}</p>
+              <SelectDropdown
+                v-model="form.ai.text.reasoningEffort"
+                :options="reasoningOptions"
+                labelledby="ai-reasoning-label"
+                describedby="ai-reasoning-hint"
+              />
+            </div>
+            <p id="ai-reasoning-hint" class="text-sm text-text-muted sm:self-end">{{ t('admin.settings.ai.reasoning_hint') }}</p>
           </div>
         </div>
 
@@ -190,6 +200,13 @@ async function save(section: 'ai' | 'storage' | 'domain' | 'general') {
   }
 }
 
+const reasoningOptions = computed(() => [
+  { value: 'low', label: t('admin.settings.ai.reasoning_low') },
+  { value: 'medium', label: t('admin.settings.ai.reasoning_medium') },
+  { value: 'high', label: t('admin.settings.ai.reasoning_high') },
+  { value: 'none', label: t('admin.settings.ai.reasoning_none') },
+  { value: 'off', label: t('admin.settings.ai.reasoning_off') },
+])
 const storageDriverOptions = computed(() => [
   { value: 'local', label: t('admin.settings.storage.driver_local') },
   { value: 's3', label: t('admin.settings.storage.driver_s3') },
