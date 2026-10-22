@@ -41,6 +41,89 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.6.0',
+    date: '2026-10-22',
+    title: 'Pasar lista, equipos y ruleta',
+    changes: [
+      {
+        type: 'new',
+        text: 'Pasar lista en «Alumnos → Asistencia». Cada sesión empieza con todo el alumnado presente y solo marcas a quien falta, llega tarde o tiene la falta justificada. El alumnado no ve su asistencia, y pasar lista nunca da ni quita nada por sí solo.',
+      },
+      {
+        type: 'new',
+        text: 'Histórico de asistencia mes a mes: el porcentaje y los recuentos de cada estudiante y los días en que no estuvo. Al pulsar un día se abre esa lista para corregirla. Se descarga en CSV y también se ve en la ficha de cada estudiante.',
+      },
+      {
+        type: 'new',
+        text: 'Aplicar a varios estudiantes a la vez. En «Alumnos → Listado», marca a quien quieras y dale un comportamiento o una recompensa. Junto al botón «Aplicar» ves antes qué se aplica, a cuántas personas y cuánto mueve. Con la lista del día guardada, también «Aplicar a los presentes» o «a los ausentes».',
+      },
+      {
+        type: 'new',
+        text: 'Recompensas libres: dar o quitar XP, monedas, maná o vidas con un motivo, sin crear un comportamiento. Quedan en el historial de la clase.',
+      },
+      {
+        type: 'new',
+        text: 'Los comportamientos también pueden dar o quitar maná, si la clase lo tiene activado.',
+      },
+      {
+        type: 'new',
+        text: 'Equipos en «Alumnos → Equipos»: agrupaciones de base o temporales, hechas al azar (quien falta hoy queda fuera) o a mano. Marcas a las personas y eliges su equipo, o repartes al azar a quien está sin equipo.',
+      },
+      {
+        type: 'new',
+        text: 'Premiar a un equipo: puntos para su marcador y, si quieres, lo mismo a cada integrante. Cada estudiante ve «Mi equipo» y la clasificación de equipos en su ranking.',
+      },
+      {
+        type: 'new',
+        text: 'Misiones por equipos: puedes aprobar de una vez las entregas de todo un equipo.',
+      },
+      {
+        type: 'new',
+        text: 'Ruleta de la clase, con el botón «Ruleta» de la cabecera. Elige a alguien al azar a toda pantalla, pensada para el proyector, sin repetir en el día y sin quien falta hoy. Puede girar con toda la clase, dentro de un equipo o entre equipos, y aplicar algo a quien sale.',
+      },
+      {
+        type: 'new',
+        text: 'Plantillas recomendadas. La administración las marca y salen primero, con su distintivo, en los dos catálogos.',
+      },
+      {
+        type: 'new',
+        text: '«Usar esta plantilla» desde la página pública de una plantilla, aunque aún no tengas cuenta. Al entrar o crearla, la plantilla queda lista para importar.',
+      },
+      {
+        type: 'new',
+        text: 'Adaptar con IA una misión importada de otra clase. La IA propone título, historia y enigmas pensados para tu clase, y ves lo propuesto al lado de lo que hay antes de aplicarlo.',
+      },
+      {
+        type: 'new',
+        text: 'Unos días antes de borrar para siempre una clase de la papelera, quien la tiene en propiedad recibe un aviso con un enlace para restaurarla. La administración ve la papelera de toda la instancia.',
+      },
+      {
+        type: 'improved',
+        text: 'En «Comportamientos», al pulsar uno eliges a quién se lo aplicas: una persona, varias o toda la clase. Antes se aplicaba al pulsar un nombre.',
+      },
+      {
+        type: 'improved',
+        text: '«Copiar enlace» también en las tarjetas de los catálogos de plantillas y al publicar una.',
+      },
+      {
+        type: 'improved',
+        text: 'Con «Menos animación» activado, o si tu dispositivo pide menos movimiento, ya no sale confeti al subir de nivel ni con los demás efectos.',
+      },
+      {
+        type: 'improved',
+        text: 'Nuevas guías en el centro de ayuda: pasar lista, aplicar a varios estudiantes, los equipos, la ruleta, las plantillas recomendadas y la papelera.',
+      },
+      {
+        type: 'fixed',
+        text: 'Si se aplicaba un comportamiento justo cuando esa persona compraba en la tienda, uno de los dos cambios de saldo podía perderse.',
+      },
+      {
+        type: 'fixed',
+        text: 'Los textos que aparecen al ganar XP o perder vidas salían siempre en castellano. Ahora salen en el idioma de la app.',
+      },
+    ],
+  },
+  {
     version: '0.5.0',
     date: '2026-10-02',
     title: 'Blog, catálogo público de plantillas e importar misiones',
