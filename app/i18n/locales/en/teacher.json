@@ -1574,11 +1574,12 @@
         "empty_description": "Once you take attendance, you’ll see each student’s attendance here.",
         "calendar_hint": "Marked days have a list. Select a day to take or correct it.",
         "table_caption": "Attendance by student in {month}",
-        "no_record": "No record",
         "day_with_list": "list taken",
         "csv_sessions": "Sessions",
         "csv_file": "attendance",
-        "export_error": "The CSV couldn’t be downloaded."
+        "export_error": "The CSV couldn’t be downloaded.",
+        "col_incidents": "Absences and late arrivals",
+        "no_incidents": "None"
       },
       "profile": {
         "rate": "Attendance: {rate}%",

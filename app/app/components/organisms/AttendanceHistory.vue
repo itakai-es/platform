@@ -63,7 +63,7 @@
           </p>
         </div>
 
-        <!-- Por estudiante: recuentos, porcentaje y su estado en cada sesión -->
+        <!-- Por estudiante: recuentos, porcentaje y los días en que no estuvo -->
         <div class="overflow-x-auto rounded-2xl bg-white shadow-lg">
           <table class="w-full text-sm">
             <caption class="sr-only">
@@ -91,13 +91,8 @@
                   />
                   <span class="sr-only">{{ t(`teacher.attendance.status.${s}`) }}</span>
                 </th>
-                <th
-                  v-for="session in summary.sessions"
-                  :key="session.id"
-                  scope="col"
-                  class="whitespace-nowrap px-2 py-3 text-center text-xs font-semibold"
-                >
-                  {{ sessionLabel(session) }}
+                <th scope="col" class="px-4 py-3 font-semibold">
+                  {{ t('teacher.attendance.history.col_incidents') }}
                 </th>
               </tr>
             </thead>
@@ -123,25 +118,29 @@
                 >
                   {{ row[s] }}
                 </td>
-                <td
-                  v-for="session in summary.sessions"
-                  :key="session.id"
-                  class="px-2 py-2 text-center"
-                >
-                  <template v-if="row.statuses[session.id]">
-                    <component
-                      :is="ATTENDANCE_STATUS_META[row.statuses[session.id]!].icon"
-                      class="mx-auto h-4 w-4"
-                      :class="ATTENDANCE_STATUS_META[row.statuses[session.id]!].color"
-                      aria-hidden="true"
-                    />
-                    <span class="sr-only">{{
-                      t(`teacher.attendance.status.${row.statuses[session.id]}`)
-                    }}</span>
-                  </template>
-                  <span v-else class="text-navy-700/40">
-                    <span aria-hidden="true">·</span>
-                    <span class="sr-only">{{ t('teacher.attendance.history.no_record') }}</span>
+                <!-- Solo los días en que no estuvo: con muchas sesiones, una columna
+                     por día no cabe. El detalle completo va en el CSV. -->
+                <td class="px-4 py-2">
+                  <div v-if="row.incidents.length" class="flex flex-wrap gap-1">
+                    <button
+                      v-for="incident in row.incidents"
+                      :key="incident.session.id"
+                      type="button"
+                      class="inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-navy-700/5 px-2 py-0.5 text-xs font-medium text-navy-700 hover:bg-navy-700/10 focus:outline-none focus:ring-2 focus:ring-navy-700"
+                      :aria-label="`${t(`teacher.attendance.status.${incident.status}`)}: ${sessionLabel(incident.session)}`"
+                      @click="openDay(incident.session.date)"
+                    >
+                      <component
+                        :is="ATTENDANCE_STATUS_META[incident.status].icon"
+                        class="h-3.5 w-3.5 flex-shrink-0"
+                        :class="ATTENDANCE_STATUS_META[incident.status].color"
+                        aria-hidden="true"
+                      />
+                      {{ sessionLabel(incident.session) }}
+                    </button>
+                  </div>
+                  <span v-else class="text-navy-700/60">
+                    {{ t('teacher.attendance.history.no_incidents') }}
                   </span>
                 </td>
               </tr>
@@ -169,7 +168,7 @@ import type { DayStatus } from '~/composables/useClassCalendar'
 /**
  * Histórico de asistencia de una clase, mes a mes: por estudiante, sus
  * recuentos, su porcentaje (presente o con retraso sobre las sesiones en las
- * que consta) y su estado en cada sesión; el calendario marca los días con
+ * que consta) y los días en que no estuvo, que abren esa lista; el calendario marca los días con
  * lista y abre cualquiera para corregirla. El CSV lo descarga quien edita
  * (son datos de menores) y se compone aquí, como el de credenciales.
  */
@@ -221,13 +220,24 @@ function shiftMonth(delta: number) {
 
 const names = computed(() => new Map(props.students.map(s => [s.id, s.name])))
 
-/** Por estudiante, con su nombre; quien ya no sale en la lista de la clase no se enseña. */
-const rows = computed(() =>
-  (summary.value?.students ?? [])
+/**
+ * Por estudiante, con su nombre y las sesiones en que no estuvo presente, por
+ * orden; quien ya no sale en la lista de la clase no se enseña.
+ */
+const rows = computed(() => {
+  const sessions = summary.value?.sessions ?? []
+  return (summary.value?.students ?? [])
     .filter(s => names.value.has(s.studentId))
-    .map(s => ({ ...s, name: names.value.get(s.studentId)! }))
+    .map(s => ({
+      ...s,
+      name: names.value.get(s.studentId)!,
+      incidents: sessions.flatMap(session => {
+        const status = s.statuses[session.id]
+        return status && status !== 'present' ? [{ session, status }] : []
+      }),
+    }))
     .sort((a, b) => a.name.localeCompare(b.name))
-)
+})
 
 function formatDay(key: string, opts: Intl.DateTimeFormatOptions) {
   const [y, m, d] = key.split('-').map(Number)
@@ -257,8 +267,8 @@ function dayLabel(date: Date): string {
     : full
 }
 
-function openDay(date: Date) {
-  const key = toDateKey(date)
+function openDay(date: Date | string) {
+  const key = typeof date === 'string' ? date : toDateKey(date)
   // No se pasa lista de días que aún no han llegado.
   if (key <= toDateKey(new Date())) emit('open-date', key)
 }

@@ -1574,11 +1574,12 @@
         "empty_description": "Quando fizeres a chamada, aqui verás a assiduidade de cada estudante.",
         "calendar_hint": "Os dias marcados têm chamada. Toca num dia para a fazer ou corrigir.",
         "table_caption": "Assiduidade por estudante em {month}",
-        "no_record": "Sem registo",
         "day_with_list": "há chamada",
         "csv_sessions": "Sessões",
         "csv_file": "assiduidade",
-        "export_error": "Não foi possível descarregar o CSV."
+        "export_error": "Não foi possível descarregar o CSV.",
+        "col_incidents": "Faltas e atrasos",
+        "no_incidents": "Nenhuma"
       },
       "profile": {
         "rate": "Assiduidade: {rate} %",

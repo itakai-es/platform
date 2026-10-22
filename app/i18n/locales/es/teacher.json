@@ -1574,11 +1574,12 @@
         "empty_description": "Cuando pases lista, aquí verás la asistencia de cada estudiante.",
         "calendar_hint": "Los días marcados tienen lista. Pulsa un día para pasarla o corregirla.",
         "table_caption": "Asistencia por estudiante en {month}",
-        "no_record": "Sin registro",
         "day_with_list": "hay lista",
         "csv_sessions": "Sesiones",
         "csv_file": "asistencia",
-        "export_error": "No se pudo descargar el CSV."
+        "export_error": "No se pudo descargar el CSV.",
+        "col_incidents": "Faltas y retrasos",
+        "no_incidents": "Ninguna"
       },
       "profile": {
         "rate": "Asistencia: {rate} %",

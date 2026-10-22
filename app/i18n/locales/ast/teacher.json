@@ -1574,11 +1574,12 @@
         "empty_description": "Cuando pases llista, equí vas ver l’asistencia de cada estudiante.",
         "calendar_hint": "Los díes marcaos tienen llista. Primi un día pa pasala o igualala.",
         "table_caption": "Asistencia por estudiante en {month}",
-        "no_record": "Ensin rexistru",
         "day_with_list": "hai llista",
         "csv_sessions": "Sesiones",
         "csv_file": "asistencia",
-        "export_error": "Nun se pudo descargar el CSV."
+        "export_error": "Nun se pudo descargar el CSV.",
+        "col_incidents": "Faltes y retrasos",
+        "no_incidents": "Nenguna"
       },
       "profile": {
         "rate": "Asistencia: {rate} %",

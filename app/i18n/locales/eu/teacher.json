@@ -1574,11 +1574,12 @@
         "empty_description": "Zerrenda pasatzen duzunean, ikasle bakoitzaren asistentzia ikusiko duzu hemen.",
         "calendar_hint": "Markatutako egunek zerrenda dute. Sakatu egun bat pasatzeko edo zuzentzeko.",
         "table_caption": "Asistentzia ikasleka: {month}",
-        "no_record": "Erregistrorik ez",
         "day_with_list": "zerrenda dago",
         "csv_sessions": "Saioak",
         "csv_file": "asistentzia",
-        "export_error": "Ezin izan da CSVa deskargatu."
+        "export_error": "Ezin izan da CSVa deskargatu.",
+        "col_incidents": "Hutsegiteak eta berandutzeak",
+        "no_incidents": "Bat ere ez"
       },
       "profile": {
         "rate": "Asistentzia: % {rate}",
