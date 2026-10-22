@@ -365,6 +365,14 @@
         "avg_missions": "Misiones promedio",
         "total_xp": "XP total clase"
       }
+    },
+    "teams": {
+      "my_team_title": "Mi equipo",
+      "members_label": "Integrantes de {name}",
+      "you": "Tú",
+      "mission_team": "Esta misión se hace por equipos («{set}»). Tu equipo es {team}, con {names}. Cada integrante entrega su parte.",
+      "mission_team_alone": "Esta misión se hace por equipos («{set}»). Tu equipo es {team}. Cada integrante entrega su parte.",
+      "mission_no_team": "Esta misión se hace por equipos («{set}»), pero aún no estás en ninguno. Pregunta en clase."
     }
   }
 }

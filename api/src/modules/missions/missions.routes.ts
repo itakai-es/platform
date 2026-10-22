@@ -33,6 +33,8 @@ const updateMissionSchema = z.object({
   rarity: z.enum(['comun', 'rara', 'epica', 'legendaria']).optional(),
   deadline: z.string().nullable().optional(),
   backgroundImage: z.string().nullable().optional(),
+  // Agrupación de equipos con la que se hace (null = individual).
+  teamSetId: z.string().uuid().nullable().optional(),
 })
 
 const uploadDocumentSchema = z.object({

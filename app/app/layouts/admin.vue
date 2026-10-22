@@ -53,6 +53,7 @@ import {
   ServerIcon,
   BookOpenIcon,
   NewspaperIcon,
+  RectangleStackIcon,
   Cog6ToothIcon,
   InformationCircleIcon,
 } from '@heroicons/vue/24/outline'
@@ -130,6 +131,13 @@ const navItems = computed<AdminNavItem[]>(() => [
     to: ROUTE_NAMES.ADMIN_BLOG,
     label: t('common.nav.blog'),
     icon: NewspaperIcon,
+  },
+  // Las plantillas del catálogo, para recomendarlas: lo que se enseña a
+  // quien llega, como la ayuda y el blog.
+  {
+    to: ROUTE_NAMES.ADMIN_TEMPLATES,
+    label: t('common.nav.templates'),
+    icon: RectangleStackIcon,
   },
   {
     type: 'header',

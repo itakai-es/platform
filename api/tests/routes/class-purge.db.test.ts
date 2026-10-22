@@ -130,6 +130,10 @@ describeWithDatabase('purga de la papelera de clases', () => {
           deletedAt: new Date(Date.now() - trashedDaysAgo * DAY),
           deletedById: ownerId,
           archived: true,
+          // Ya avisada: aquí se prueba la purga, y el aviso (class-trash-remate),
+          // que recorre toda la base, no debe dejar notificaciones en estas si
+          // corre a la vez.
+          trashWarnedAt: new Date(),
         },
       })
     }

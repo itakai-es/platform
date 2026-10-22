@@ -91,6 +91,9 @@ export type ClassHistoryType =
   | 'document'
   | 'submission'
   | 'behavior'
+  | 'reward'
+  | 'attendance'
+  | 'team'
   | 'shop'
 
 /** Una entrada del historial de la clase. El texto lo compone la pantalla con `action` y `params`. */
@@ -108,6 +111,14 @@ export interface ClassHistoryEntry {
   target: { id: string | null; name: string | null; role: string | null } | null
   entity: { type: string; id: string | null } | null
   params: Record<string, unknown>
+  /**
+   * Aplicado a varios estudiantes a la vez: la entrada es la primera del lote y
+   * trae a todas las personas (sin nombre quien ya no está en la clase).
+   */
+  batch?: {
+    size: number
+    targets: { id: string | null; name: string | null; role: string | null }[]
+  } | null
 }
 
 export interface ClassHistoryResponse {
@@ -157,7 +168,8 @@ export interface Class {
 }
 
 /** Una clase en la papelera, tal como la lista `GET /teacher/classes/trash`. */
-export interface TrashedClass {
+/** Lo que pinta una fila de la papelera (`ClassTrashList`), sea propia o de toda la instancia. */
+export interface ClassTrashListItem {
   id: string
   name: string
   backgroundImage?: string | null
@@ -166,6 +178,9 @@ export interface TrashedClass {
   purgeAt: string
   /** Días que le quedan, redondeando hacia arriba; 0 si ya le toca. */
   daysLeft: number
+}
+
+export interface TrashedClass extends ClassTrashListItem {
   /** Quién la envió; nulo si su cuenta ya no existe. */
   deletedBy: { isMe: boolean; name: string | null } | null
 }

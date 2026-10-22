@@ -27,6 +27,7 @@ export type NotificationType =
   | 'class_teacher_changed' // Ha cambiado tu perfil o tu nivel en una clase
   | 'class_teacher_removed' // Te han quitado del profesorado de una clase
   | 'class_ownership_received' // Ahora eres el propietario de una clase
+  | 'class_purge_soon' // Una clase de tu papelera se borra en unos días
 
 export type NotificationPriority = 'low' | 'medium' | 'high' | 'urgent'
 

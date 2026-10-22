@@ -365,6 +365,14 @@
         "avg_missions": "Misiuni în medie",
         "total_xp": "XP total al clasei"
       }
+    },
+    "teams": {
+      "my_team_title": "Echipa mea",
+      "members_label": "Membrii echipei {name}",
+      "you": "Tu",
+      "mission_team": "Această misiune se face pe echipe («{set}»). Echipa ta este {team}, cu {names}. Fiecare membru își predă partea.",
+      "mission_team_alone": "Această misiune se face pe echipe («{set}»). Echipa ta este {team}. Fiecare membru își predă partea.",
+      "mission_no_team": "Această misiune se face pe echipe («{set}»), dar încă nu ești în niciuna. Întreabă la clasă."
     }
   }
 }

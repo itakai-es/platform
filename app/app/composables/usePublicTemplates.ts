@@ -73,7 +73,8 @@ export function usePublicTemplateCatalog() {
   const subjects = useState<string[]>('public-templates-subjects', () => [])
   const languages = useState<string[]>('public-templates-languages', () => [])
   const provinces = useState<string[]>('public-templates-provinces', () => [])
-  const sort = useState('public-templates-sort', () => 'recent')
+  // De serie, las recomendadas primero (ver `TemplateFilterBar`).
+  const sort = useState('public-templates-sort', () => 'recommended')
   const page = useState('public-templates-page', () => 1)
   /** Lo que de verdad se busca: lo escrito, una vez se deja de teclear. */
   const appliedSearch = useState('public-templates-applied-search', () => '')

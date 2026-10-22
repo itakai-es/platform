@@ -19,7 +19,7 @@ import {
   type ClassUser,
 } from '../../utils/class-access.js'
 import { assignableBadgesWhere } from '../../utils/badge-access.js'
-import { NotFoundError } from '../../utils/errors.js'
+import { NotFoundError, ValidationError } from '../../utils/errors.js'
 import { existsSync, mkdirSync } from 'fs'
 import {
   saveUpload,
@@ -88,6 +88,7 @@ const MISSION_FIELDS = [
   'rarity',
   'deadline',
   'backgroundImage',
+  'teamSetId',
 ] as const
 
 type MissionFields = { id: string; classId: string; title: string } & Record<
@@ -272,6 +273,7 @@ export class MissionsService {
         progress: { where: { studentId: userId } },
         class: true,
         badges: true,
+        teamSet: { select: { id: true, title: true, archivedAt: true } },
         documents: {
           orderBy: { orderIndex: 'asc' },
         },
@@ -316,6 +318,20 @@ export class MissionsService {
       }
     }
 
+    // Si llegó importada de otra clase (copiarla en la suya es duplicarla, no
+    // importarla): solo entonces se ofrece adaptarla con IA a esta clase.
+    const importedFromOtherClass = canEdit
+      ? (
+          await prisma.classActionLog.findMany({
+            where: { classId: mission.classId, action: 'mission.imported', entityId: missionId },
+            select: { metadata: true },
+          })
+        ).some(row => {
+          const from = (row.metadata as { fromClassId?: unknown } | null)?.fromClassId
+          return typeof from === 'string' && from !== mission.classId
+        })
+      : false
+
     // For students, get their submissions separately to ensure we have them
     let studentSubmissionsMap = new Map<string, { status: string }>()
     if (!isTeacher) {
@@ -351,9 +367,15 @@ export class MissionsService {
         rarity: mission.rarity,
         deadline: mission.deadline,
         backgroundImage: mission.backgroundImage,
+        // Se hace por equipos de esta agrupación (solo informativo).
+        teamSet: mission.teamSet
+          ? { id: mission.teamSet.id, title: mission.teamSet.title, archived: !!mission.teamSet.archivedAt }
+          : null,
         isTeacher,
         // Si quien la mira como profesor puede cambiarla (con lectura, solo la ve).
         canEdit,
+        // Llegó importada de otra clase (ver arriba).
+        importedFromOtherClass,
         progress: {
           done: progress?.enigmasCompleted || 0,
           total: mission.enigmas.length,
@@ -832,6 +854,21 @@ export class MissionsService {
       }
     }
 
+    // Por equipos de una agrupación de su clase. Al cambiar de clase vuelve a
+    // ser individual: los equipos son de estudiantes concretos.
+    const targetClassId = data.classId ?? mission.classId
+    let teamSetId = targetClassId === mission.classId ? mission.teamSetId : null
+    if (data.teamSetId !== undefined) {
+      if (data.teamSetId) {
+        const set = await prisma.teamSet.findFirst({
+          where: { id: data.teamSetId, classId: targetClassId },
+          select: { id: true },
+        })
+        if (!set) throw new ValidationError('Esa agrupación de equipos no es de la clase')
+      }
+      teamSetId = data.teamSetId
+    }
+
     // Persist an uploaded cover (base64 data URL) to disk before storing.
     let backgroundImage = mission.backgroundImage
     if (data.backgroundImage !== undefined) {
@@ -853,6 +890,7 @@ export class MissionsService {
           rarity: data.rarity ?? mission.rarity,
           deadline: data.deadline !== undefined ? (data.deadline ? new Date(data.deadline) : null) : mission.deadline,
           backgroundImage,
+          teamSetId,
         },
         include: {
           enigmas: true,

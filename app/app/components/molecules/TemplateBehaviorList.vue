@@ -67,10 +67,11 @@ import type { TemplateBehavior } from '~/types/template.types'
 import CoinIcon from '~/components/atoms/CoinIcon.vue'
 import XpIcon from '~/components/atoms/XpIcon.vue'
 import LifeIcon from '~/components/atoms/LifeIcon.vue'
+import ManaIcon from '~/components/atoms/ManaIcon.vue'
 
 /**
  * Los comportamientos de una plantilla: si es positivo o negativo, su nombre,
- * su descripción y lo que da o quita de XP, monedas y vidas. Los efectos se
+ * su descripción y lo que da o quita de XP, monedas, maná y vidas. Los efectos se
  * guardan sin signo y el signo lo pone el tipo, como en la clase; y, como allí,
  * no salen los de los recursos que la plantilla lleva apagados. Es la misma
  * pieza en la previsualización del profesorado y en la ficha pública.
@@ -92,7 +93,7 @@ function kindLabel(behavior: TemplateBehavior) {
 
 /** Cada comportamiento con sus efectos: los de recursos encendidos y distintos de 0. */
 const rows = computed(() => {
-  const { xp, coins, lives } = props.features
+  const { xp, coins, mana, lives } = props.features
   return props.behaviors.map(behavior => ({
     ...behavior,
     effects: [
@@ -107,6 +108,12 @@ const rows = computed(() => {
         icon: CoinIcon,
         label: t('common.resources.coins'),
         amount: coins ? behavior.coinDelta : 0,
+      },
+      {
+        key: 'mana',
+        icon: ManaIcon,
+        label: t('common.resources.mana'),
+        amount: mana ? behavior.manaDelta : 0,
       },
       {
         key: 'lives',

@@ -140,6 +140,25 @@
       "sort": {
         "students_desc": "Most students",
         "missions_desc": "Most missions"
+      },
+      "tabs": {
+        "classes": "Classes",
+        "trash": "Trash",
+        "label": "Class views"
+      },
+      "trash": {
+        "note": "Classes deleted by teachers stay in the trash for {days} days before they are deleted for good. Here are the ones from the whole platform, so you can restore or delete right away those whose owner cannot: for example, if their account is suspended. A restored class goes back, archived, to its owner's classes.",
+        "search_placeholder": "Search by class, owner or code...",
+        "empty_title": "There are no classes in the trash",
+        "empty_description": "When a teacher deletes a class, it stays here for {days} days before it is deleted for good.",
+        "owner": "Owner: {name}",
+        "no_owner": "Nobody owns it",
+        "owner_unavailable": "Owner account without access",
+        "sent_by": "Sent by {name} on {date}",
+        "sent_on": "Sent to the trash on {date}",
+        "warned": "Deletion notice sent on {date}",
+        "restored": "\"{name}\" is out of the trash. It goes back, archived, to its owner's classes.",
+        "restore_error": "The class could not be restored. Please try again."
       }
     },
     "missions": {
@@ -458,6 +477,29 @@
       "published_at_draft_hint": "It is set automatically when the post is first published.",
       "published_at_invalid": "Choose a date between 1 January 2000 and today.",
       "view_public": "View the blog"
+    },
+    "templates": {
+      "title": "Templates",
+      "subtitle": "Recommend the templates you want to highlight: they appear first in the catalogues, with their badge.",
+      "meta": {
+        "title": "Templates | ITAKAI Admin"
+      },
+      "view_public": "View the catalogue",
+      "search_placeholder": "Search by template or by who published it…",
+      "filter_label": "Recommendation",
+      "filter_all": "All",
+      "filter_recommended": "Recommended",
+      "filter_not_recommended": "Not recommended",
+      "empty_title": "No templates have been published yet",
+      "empty_description": "When a teacher publishes a class as a template, it will appear here so you can recommend it.",
+      "empty_filtered_title": "No templates match these filters",
+      "empty_filtered_description": "Try another search or clear the filter.",
+      "published_by": "Published by {name}",
+      "recommend": "Recommended",
+      "recommend_named": "Recommend “{name}”",
+      "recommended_on": "“{name}” now appears as recommended",
+      "recommended_off": "“{name}” no longer appears as recommended",
+      "save_error": "It could not be saved. Please try again."
     }
   }
 }

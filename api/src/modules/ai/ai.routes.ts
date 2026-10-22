@@ -8,6 +8,7 @@ import * as Prompts from './prompts/index.js'
 import { ServiceUnavailableError, rethrowHttpError } from '../../utils/errors.js'
 import { getAiSettings } from '../settings/settings.service.js'
 import { extractContext } from './context-extract.service.js'
+import { loadMissionAdaptContext } from './mission-adapt.js'
 
 const narrativeSchema = z.object({
   prompt: z.string().min(1),
@@ -557,6 +558,8 @@ Return ONLY the raw SVG code. No markdown, no backticks, no explanation.`
 
     // Build prompt from centralized templates
     let prompt: string
+    // Idioma de salida: el de quien llama (ca/eu/gl), salvo que el tipo lo fije.
+    let languageDirective = Prompts.outputLanguageDirective(data.locale)
     switch (data.type) {
       case 'class.narrative.generate':
         prompt = Prompts.CLASS_NARRATIVE.generate(p.idea || '', locale)
@@ -603,6 +606,28 @@ Return ONLY the raw SVG code. No markdown, no backticks, no explanation.`
       case 'enigma.assist':
         prompt = Prompts.ENIGMA_ASSIST.modify(p.currentEnigma || '', p.missionContext || '', p.request || '', locale)
         break
+      case 'mission.adapt': {
+        // La misión y su clase las lee la API (con permiso de edición), no las
+        // manda el navegador: recursos activos, idioma y lo bloqueado son de fiar.
+        if (!p.missionId) {
+          return reply.status(400).send({ message: locale === 'en' ? 'Invalid data' : 'Datos invalidos' })
+        }
+        let ctx: Awaited<ReturnType<typeof loadMissionAdaptContext>>
+        try {
+          ctx = await loadMissionAdaptContext(p.missionId, id)
+        } catch (error) {
+          return handleAiRouteError(error, reply, locale)
+        }
+        prompt = Prompts.MISSION_ADAPT.adapt(
+          { ...ctx, previousProposal: p.previousProposal, feedback: p.feedback },
+          locale
+        )
+        // El brief lleva lo que pide su docente; los metadatos, los de la clase.
+        p.meta = ctx.classMeta
+        // El idioma ya lo fija el prompt: el de la clase, no el de la interfaz.
+        if (ctx.classLanguage) languageDirective = ''
+        break
+      }
       default:
         return reply.status(400).send({ message: `Unknown prompt type: ${data.type}` })
     }
@@ -613,7 +638,7 @@ Return ONLY the raw SVG code. No markdown, no backticks, no explanation.`
     prompt += Prompts.teacherBriefBlock(p.brief || '', p.meta || '', locale)
 
     // Force the OUTPUT language to the class language (ca/eu/gl); no-op for es/en.
-    prompt += Prompts.outputLanguageDirective(data.locale)
+    prompt += languageDirective
 
     // Stream response
     reply.raw.writeHead(200, sseHeaders(request))

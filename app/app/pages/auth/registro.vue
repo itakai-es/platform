@@ -122,6 +122,9 @@
           </div>
 
           <template v-else>
+          <!-- Llega desde «Usar esta plantilla»: se dice que vuelve a ella -->
+          <PendingTemplateNote context="signup" class="mb-4" />
+
           <!-- Formulario -->
           <form class="space-y-3 sm:space-y-4 signup-form" novalidate @submit.prevent="handleSubmit">
             <!-- PASO 1: Información personal -->

@@ -166,7 +166,9 @@
           "view_ranking": "Clasament",
           "col_actions": "Acțiuni",
           "managed_badge": "Fără e-mail",
-          "pending_sign_in_badge": "Încă nu a intrat"
+          "pending_sign_in_badge": "Încă nu a intrat",
+          "view_attendance": "Prezență",
+          "view_teams": "Echipe"
         },
         "stats_title": "Statisticile clasei",
         "pending_reviews": "Lucrări de verificat",
@@ -207,9 +209,6 @@
           "section_negatives": "Negative",
           "filter_all": "Toate",
           "apply_title": "Aplică „{name}”",
-          "pick_student": "Alege din clasă persoana căreia i-l vei aplica.",
-          "applied_toast": "{behavior} aplicat lui {student}",
-          "empty_students": "Încă nu sunt elevi în această clasă.",
           "form_new_title": "Comportament nou",
           "form_edit_title": "Editează comportamentul",
           "form_type": "Tip",
@@ -233,7 +232,6 @@
           "toast_save_error": "Comportamentul nu a putut fi salvat.",
           "toast_delete_error": "Comportamentul nu a putut fi șters.",
           "fetch_error": "Comportamentele nu au putut fi încărcate.",
-          "apply_error": "Comportamentul nu a putut fi aplicat.",
           "empty_description_readonly": "Când se vor adăuga comportamente la această clasă, vor apărea aici."
         },
         "shop": {
@@ -610,7 +608,10 @@
             "document": "Documente",
             "submission": "Lucrări",
             "behavior": "Comportamente",
-            "shop": "Magazin"
+            "shop": "Magazin",
+            "reward": "Recompense",
+            "attendance": "Prezență",
+            "team": "Echipe"
           },
           "actions": {
             "class": {
@@ -625,7 +626,9 @@
               "ownership_transferred": "a transferat proprietatea clasei către {target}",
               "ownership_inherited": "clasa a trecut la {target} când a fost șters contul care o deținea",
               "trashed": "a mutat clasa în coșul de gunoi",
-              "restored": "a scos clasa din coșul de gunoi"
+              "restored": "a scos clasa din coșul de gunoi",
+              "template_recommended": "a recomandat șablonul în cataloage",
+              "template_unrecommended": "a retras recomandarea șablonului"
             },
             "teacher": {
               "added": "a adăugat {target} în echipa didactică ({profile}, {access})",
@@ -669,12 +672,36 @@
               "applied": "a aplicat «{title}» pentru {target}",
               "created": "a creat comportamentul «{title}»",
               "updated": "a editat comportamentul «{title}»",
-              "deleted": "a șters comportamentul «{title}»"
+              "deleted": "a șters comportamentul «{title}»",
+              "applied_batch": "a aplicat «{title}» pentru {count} elevi"
             },
             "shop": {
               "item_created": "a adăugat «{title}» în magazin",
               "item_updated": "a editat «{title}» în magazin",
               "item_deleted": "a scos «{title}» din magazin"
+            },
+            "reward": {
+              "granted": "i-a dat lui {target} o recompensă: «{title}»",
+              "granted_batch": "a dat o recompensă pentru {count} elevi: «{title}»",
+              "taken": "i-a luat resurse lui {target}: «{title}»",
+              "taken_batch": "a luat resurse de la {count} elevi: «{title}»"
+            },
+            "attendance": {
+              "taken": "a făcut prezența pentru {date}: {present} în clasă, {absent} absenți",
+              "updated": "a corectat lista pentru {date}: {present} în clasă, {absent} absenți",
+              "deleted": "a șters lista pentru {date}"
+            },
+            "team": {
+              "set_created": "a creat gruparea de echipe «{title}»",
+              "set_updated": "a editat gruparea de echipe «{title}»",
+              "set_archived": "a arhivat gruparea de echipe «{title}»",
+              "set_unarchived": "a scos din arhivă gruparea de echipe «{title}»",
+              "set_deleted": "a șters gruparea de echipe «{title}»",
+              "members_changed": "a schimbat echipele din «{title}»",
+              "awarded": "a dat {points} punct echipei «{title}»: «{label}» | a dat {points} puncte echipei «{title}»: «{label}»",
+              "awarded_batch": "a dat {points} punct echipei «{title}» și a împărțit «{label}» fiecărei persoane din echipă | a dat {points} puncte echipei «{title}» și a împărțit «{label}» fiecărei persoane din echipă",
+              "distributed": "a împărțit «{label}» echipei «{title}»",
+              "distributed_batch": "a dat «{label}» singurei persoane din echipa «{title}» | a împărțit «{label}» celor {count} membri ai echipei «{title}»"
             }
           },
           "anonymous": {
@@ -691,8 +718,13 @@
             },
             "behavior": {
               "applied": "a aplicat «{title}» unei persoane care nu mai este în clasă"
+            },
+            "reward": {
+              "granted": "a dat o recompensă unei persoane care nu mai este în clasă: «{title}»",
+              "taken": "a luat resurse unei persoane care nu mai este în clasă: «{title}»"
             }
-          }
+          },
+          "batch_who": "Vezi cui ({count})"
         },
         "in_trash": {
           "title": "„{name}” este în coșul de gunoi",
@@ -700,7 +732,8 @@
           "owner_hint": "Restaureaz-o ca să o deschizi din nou. Revine arhivată: elevii nu vor putea intra până nu o dezarhivezi.",
           "not_owner": "Doar cine deține clasa o poate restaura. Dacă ai nevoie de ea, cere-i asta înainte de data respectivă.",
           "go_trash": "Vezi coșul de gunoi"
-        }
+        },
+        "btn_roulette": "Ruletă"
       },
       "trash": {
         "meta": {
@@ -798,7 +831,10 @@
           "save": "Salvează modificările",
           "discard": "Renunță",
           "toast_saved": "Datele au fost salvate",
-          "toast_error": "Datele nu au putut fi salvate"
+          "toast_error": "Datele nu au putut fi salvate",
+          "team_set_label": "Pe echipe",
+          "team_set_none": "Individual (fără echipe)",
+          "team_set_hint": "Doar informativ: clasa vede cu ce echipe se face și poți aproba o echipă întreagă dintr-odată. Fiecare elev continuă să-și predea partea."
         }
       },
       "import": {
@@ -846,6 +882,41 @@
         "duplicate_success_title": "Misiune duplicată",
         "success_description": "Copia misiunii „{title}” este acum în „{name}”, blocată și fără termen-limită. Verific-o și deblocheaz-o când vrei să o vadă elevii tăi.",
         "open_mission": "Deschide misiunea"
+      },
+      "adapt": {
+        "button": "Adaptează cu IA",
+        "title": "Adaptează misiunea cu IA",
+        "intro": "IA îți propune un titlu, o poveste și niște enigme pe măsura clasei „{name}”: nivelul, materia, limba și lumea ei. Misiunea nu se schimbă până nu aplici propunerea.",
+        "request_label": "Ce dorești? (opțional)",
+        "request_hint": "Dacă nu spui nimic, IA o adaptează pur și simplu la clasă.",
+        "request_placeholder": "Ex.: mai simplă, pentru lucru în perechi și cu o enigmă finală de prezentare",
+        "propose": "Propune adaptarea",
+        "generating": "Se pregătește propunerea…",
+        "error": "IA nu a putut pregăti propunerea. Misiunea nu s-a schimbat; încearcă din nou peste câteva minute.",
+        "error_kept": "IA nu a putut face această schimbare. Se păstrează propunerea anterioară.",
+        "current": "Acum",
+        "proposed": "Propunere",
+        "field_title": "Titlu",
+        "field_story": "Poveste",
+        "enigmas_heading": "Enigme",
+        "enigma_n": "Enigma {n}",
+        "objectives": "Obiective",
+        "unchanged": "Fără modificări",
+        "row_create": "Enigmă nouă",
+        "row_delete": "Va fi ștearsă",
+        "row_keep": "Rămâne cum este",
+        "row_keep_hint": "Are lucrări predate de elevi, așa că nu poate fi eliminată.",
+        "rewards_raised": "Cineva a finalizat-o deja: recompensele ei nu pot scădea și se păstrează cele actuale.",
+        "no_changes": "Propunerea nu schimbă nimic în misiune. Cere o altă modificare sau renunță la ea.",
+        "feedback_label": "Vrei o altă modificare?",
+        "feedback_placeholder": "Ex.: mai puțini pirați și enigme mai scurte",
+        "ask_change": "Cere o altă modificare",
+        "discard": "Renunță",
+        "apply": "Aplică",
+        "applied": "Misiune adaptată",
+        "apply_error": "Propunerea nu a putut fi aplicată. Misiunea nu s-a schimbat.",
+        "apply_error_partial": "S-a aplicat doar o parte din propunere. Verifică comparația: arată deja ce s-a salvat.",
+        "after_import_hint": "O vrei pe măsura acestei clase? IA îți propune cum s-o adaptezi, iar tu decizi dacă o aplici."
       }
     },
     "badges": {
@@ -1233,7 +1304,10 @@
         "pct_custom": "Alt procentaj",
         "will_receive": "Va primi",
         "approve": "Aprobă {pct}%",
-        "approve_error": "Lucrarea nu a putut fi aprobată"
+        "approve_error": "Lucrarea nu a putut fi aprobată",
+        "approve_team": "Aprobă echipa ({count}) cu {pct} %",
+        "team_approved": "{team}: {count} lucrare aprobată cu {pct} % | {team}: {count} lucrări aprobate cu {pct} %",
+        "team_note": "Misiune pe echipe («{set}»): când verifici o lucrare, poți aproba cu același procent toată echipa ei care a predat."
       }
     },
     "templates": {
@@ -1283,6 +1357,7 @@
         "province": "Toate provinciile"
       },
       "sort": {
+        "recommended": "Întâi cele recomandate",
         "recent": "Cele mai recente",
         "name_asc": "Nume A-Z",
         "name_desc": "Nume Z-A"
@@ -1331,6 +1406,294 @@
       "done": "Gata",
       "wizard_question_schedule": "Stabilește un orar pentru clasa ta",
       "wizard_question_cover": "Acum, o copertă pentru clasa ta"
+    },
+    "roulette": {
+      "meta": {
+        "title": "Ruletă | ITAKAI Profesor"
+      },
+      "title": "Ruletă",
+      "exit": "Ieșire",
+      "fullscreen_enter": "Ecran complet",
+      "fullscreen_exit": "Ieși din ecranul complet",
+      "sound": "Sunet",
+      "spin": "Învârte",
+      "spin_again": "Învârte din nou",
+      "choosing": "Se alege…",
+      "keyboard_hint": "Și cu bara de spațiu sau Enter.",
+      "idle_hint": "Apasă „Învârte” ca să alegi pe cineva.",
+      "picked_label": "A ieșit",
+      "announce": "A ieșit {name}.",
+      "announce_left": "A ieșit {name}. Mai rămâne {count}. | A ieșit {name}. Mai rămân {count}.",
+      "announce_none_left": "A ieșit {name}. Nu mai rămâne nimeni.",
+      "counter": "Pe roată: {left} din {total}",
+      "list_title": "Elevi și eleve",
+      "no_repeat": "Fără repetare",
+      "no_repeat_hint": "Cine a ieșit deja azi nu mai iese pe acest dispozitiv până nu începi din nou.",
+      "restart": "Începe din nou",
+      "status_drawn": "A ieșit deja",
+      "status_removed": "În afara acestei runde",
+      "remove": "Scoate",
+      "remove_aria": "Scoate din această rundă: {name}",
+      "restore": "Pune înapoi",
+      "restore_aria": "Pune din nou pe roată: {name}",
+      "all_drawn_title": "Au ieșit deja toate persoanele",
+      "all_drawn_description": "Începe din nou ca toată lumea să poată ieși iar.",
+      "none_left_title": "Nu mai e nimeni pe roată",
+      "none_left_description": "Pune înapoi pe cineva din listă sau începe din nou.",
+      "empty_title": "Încă nu există elevi și eleve în această clasă",
+      "empty_description": "Când se alătură, vor apărea aici pe ruletă.",
+      "trash_title": "Această clasă este în coș",
+      "trash_description": "Restaureaz-o din clasă ca să folosești din nou ruleta.",
+      "back_to_class": "Înapoi la clasă",
+      "list_title_teams": "Echipe",
+      "mode_label": "Cine intră pe roată",
+      "mode_students": "Toată clasa",
+      "mode_team": "O echipă",
+      "mode_teams": "Între echipe",
+      "team_label": "Echipă",
+      "set_label": "Grupare",
+      "attendance_not_taken": "Azi încă nu s-a făcut prezența: intră toată clasa.",
+      "attendance_all_here": "Conform prezenței de azi, a venit toată clasa.",
+      "attendance_excluded": "{count} persoană care lipsește azi nu e pe roată. | {count} persoane care lipsesc azi nu sunt pe roată.",
+      "take_attendance": "Fă prezența",
+      "spin_inside": "Învârte în echipa {team}",
+      "award_team": "Premiază {team}",
+      "apply_to": "Aplică pentru {name}",
+      "apply_title": "Aplică pentru {name}",
+      "scope_empty_title": "Nu e nimeni pe roată",
+      "scope_empty_students": "Conform prezenței de azi, nu a venit nimeni.",
+      "scope_empty_team": "În această echipă nu e nimeni care a venit azi.",
+      "scope_empty_teams": "În această grupare nu există nicio echipă cu cineva care a venit azi."
+    },
+    "classroom": {
+      "picker": {
+        "legend": "Elevi",
+        "search": "Caută un elev…",
+        "all": "Toată clasa",
+        "none": "Nimeni",
+        "empty": "Încă nu sunt elevi în această clasă.",
+        "no_results": "Nicio persoană nu corespunde căutării.",
+        "count": "Aleși: {count} din {total}",
+        "only_present": "Doar cei prezenți azi",
+        "only_absent": "Doar cei absenți azi"
+      },
+      "modal_title": "Aplică mai multor elevi",
+      "mode_label": "Ce vrei să aplici",
+      "mode_behavior": "Comportament",
+      "mode_reward": "Recompensă liberă",
+      "behavior_legend": "Comportament",
+      "no_behaviors": "Această clasă nu are încă comportamente. Creează-le în fila Comportamente sau oferă o recompensă liberă.",
+      "reward": {
+        "legend": "Recompensă",
+        "direction_label": "Dai sau iei",
+        "give": "Dai",
+        "take": "Iei",
+        "no_resources": "Această clasă nu are activată nicio resursă (XP, monede, mana sau vieți).",
+        "reason": "Motiv",
+        "reason_placeholder": "Ex.: A ajutat la pregătirea laboratorului",
+        "reason_too_long": "Motivul poate avea cel mult 80 de caractere."
+      },
+      "confirm_button": "Aplică",
+      "confirm_behavior": "Aplici «{title}» pentru {count} elev. | Aplici «{title}» pentru {count} elevi.",
+      "confirm_reward": "Recompensa «{title}» pentru {count} elev. | Recompensa «{title}» pentru {count} elevi.",
+      "confirm_effect": "Pentru fiecare persoană: {effect}.",
+      "confirm_no_effect": "Nu modifică nicio resursă activă în această clasă; doar se notează.",
+      "applied_toast": "«{title}» aplicat pentru {count} elev | «{title}» aplicat pentru {count} elevi",
+      "apply_error": "Nu s-a putut aplica. Nu s-a schimbat nimic.",
+      "archived_notice": "Clasa este arhivată: poți vedea și edita catalogul, dar nu îl poți aplica nimănui.",
+      "select_all_visible": "Alege pe toată lumea din listă",
+      "select_student": "Alege: {name}",
+      "selected_count": "{count} elev ales | {count} elevi aleși",
+      "apply_behavior": "Aplică un comportament",
+      "give_reward": "Oferă o recompensă",
+      "clear_selection": "Golește selecția",
+      "applied_announcement": "Aplicat pentru {count} elev. Solduri actualizate. | Aplicat pentru {count} elevi. Solduri actualizate.",
+      "target_label": "Cui",
+      "target_students": "Unor elevi",
+      "target_team": "Unei echipe",
+      "team": {
+        "legend": "Echipa",
+        "points": "Puncte pentru tabelă",
+        "points_hint": "Se adună în clasamentul echipelor (sau se scad, dacă iei). Pune 0 dacă doar împarți.",
+        "distribute": "Împarte și fiecărui membru",
+        "distribute_hint": "Fiecare membru primește comportamentul sau recompensa, ca și cum l-ai aplica separat.",
+        "confirm_points": "Echipa «{team}»: {points} punct în tabelă. | Echipa «{team}»: {points} puncte în tabelă.",
+        "confirm_no_points": "Echipa «{team}»: fără puncte în tabelă.",
+        "confirm_distribute": "Și «{title}» membrului ei. | Și «{title}» celor {count} membri ai ei.",
+        "confirm_no_distribute": "Membrilor ei nu li se împarte nimic.",
+        "awarded_toast": "Echipa «{team}» a fost premiată",
+        "modal_title": "Premiază o echipă"
+      },
+      "fixed_to": "Pentru: {names}",
+      "missing": {
+        "team": "Alege o echipă.",
+        "students": "Alege cel puțin un elev.",
+        "behavior": "Alege un comportament.",
+        "no_behaviors": "Această clasă nu are comportamente: dă o recompensă liberă.",
+        "reason": "Scrie motivul.",
+        "points": "Pune punctele pentru clasament sau bifează «{label}».",
+        "empty_team": "Echipa aceea nu are membri: alege alta sau debifează «{label}».",
+        "amount": "Pune cât dai sau iei."
+      }
+    },
+    "attendance": {
+      "tabs_label": "Prezență",
+      "tab_take": "Fă prezența",
+      "tab_history": "Istoric",
+      "date": "Data",
+      "session": "Sesiune",
+      "no_schedule": "Sesiune fără orar",
+      "saved_by": "Listă salvată de {name} ({time}).",
+      "someone": "cineva din corpul profesoral",
+      "not_saved": "Încă nu s-a făcut prezența la această sesiune. Toți elevii apar prezenți: marchează doar cine lipsește.",
+      "unsaved": "Modificări nesalvate",
+      "read_only": "Poți vedea prezența, dar prezența o face cine are drept de editare în clasă.",
+      "count": {
+        "present": "{count} prezent | {count} prezenți",
+        "absent": "{count} absent | {count} absenți",
+        "late": "{count} întârziere | {count} întârzieri",
+        "excused": "{count} motivată | {count} motivate"
+      },
+      "all_present": "Toată clasa prezentă",
+      "status_of": "Prezența: {name}",
+      "status": {
+        "present": "Prezent",
+        "absent": "Absent",
+        "late": "Întârziere",
+        "excused": "Motivată"
+      },
+      "save": "Salvează lista",
+      "delete": "Șterge această listă",
+      "delete_title": "Ștergi această listă?",
+      "delete_message": "Se șterge sesiunea cu starea tuturor elevilor. Folosește asta dacă ai făcut prezența din greșeală.",
+      "apply_present": "Aplică celor prezenți…",
+      "apply_absent": "Aplică celor absenți…",
+      "no_auto_xp": "Prezența nu dă și nu ia nimic de la sine: a recompensa sau a penaliza este mereu o acțiune separată, confirmată.",
+      "load_error": "Prezența nu s-a putut încărca.",
+      "saved_announcement": "Listă salvată: {present} în clasă, {absent} absenți.",
+      "save_error": "Lista nu s-a putut salva.",
+      "deleted": "Listă ștearsă.",
+      "delete_error": "Lista nu s-a putut șterge.",
+      "history": {
+        "download_csv": "Descarcă CSV",
+        "empty_title": "Nu există liste luna aceasta",
+        "empty_description": "Când faci prezența, aici vei vedea prezența fiecărui elev.",
+        "calendar_hint": "Zilele marcate au listă. Apasă o zi ca s-o faci sau s-o corectezi.",
+        "table_caption": "Prezența pe elevi în {month}",
+        "day_with_list": "există listă",
+        "csv_sessions": "Sesiuni",
+        "csv_file": "prezenta",
+        "export_error": "CSV-ul nu s-a putut descărca.",
+        "col_incidents": "Absențe și întârzieri",
+        "no_incidents": "Niciuna"
+      },
+      "profile": {
+        "rate": "Prezență: {rate}%",
+        "sessions": "{count} sesiune în acest an școlar | {count} sesiuni în acest an școlar"
+      }
+    },
+    "teams": {
+      "empty_title": "Încă nu există echipe",
+      "empty_description": "Formează echipe manual sau la întâmplare. Poți avea echipe de bază, fixe, care punctează în clasament, și echipe temporare pentru o misiune sau o activitate.",
+      "empty_description_readonly": "Când cadrele didactice cu drept de editare formează echipe, le vei vedea aici.",
+      "new_set": "Formează echipe",
+      "set_label": "Grupare",
+      "kind": {
+        "base": "De bază",
+        "temporal": "Temporară"
+      },
+      "archived_badge": "Arhivată",
+      "edit": "Editează",
+      "archive": "Arhivează",
+      "unarchive": "Scoate din arhivă",
+      "delete": "Șterge",
+      "delete_title": "Șterge gruparea",
+      "delete_message": "«{title}» va fi ștearsă cu echipele și punctele ei. Ce s-a împărțit deja fiecărui membru rămâne. Nu se poate anula.",
+      "points": "{count} punct | {count} puncte",
+      "members_count": "Fără membri | {count} membru | {count} membri",
+      "empty_team": "Încă nu e nimeni în această echipă",
+      "no_team": "Fără echipă",
+      "unknown_student": "Elev",
+      "award": "Premiază",
+      "read_only": "Cu nivelul tău de acces vezi echipele, dar nu le formezi și nu le premiezi.",
+      "archived_class": "Clasa este arhivată: vezi echipele, dar nu se schimbă și nu se premiază.",
+      "saved_toast": "Echipele din «{title}» au fost salvate",
+      "error": "Nu s-a putut salva. Nu s-a schimbat nimic.",
+      "stale": "Cineva a modificat această grupare în timp ce o editai (altă persoană sau altă filă). Nu s-a salvat nimic: acum vezi cum arată.",
+      "moved": "{count} persoană mutată în {name} | {count} persoane mutate în {name}",
+      "archived_announcement": "«{title}» a fost arhivată",
+      "unarchived_announcement": "«{title}» a fost scoasă din arhivă",
+      "deleted_announcement": "«{title}» a fost ștearsă",
+      "default_team": "Echipa {n}",
+      "colors": {
+        "purple": "Mov",
+        "yellow": "Galben",
+        "mint": "Verde mentă",
+        "sky": "Bleu",
+        "red": "Roșu",
+        "peach": "Piersică"
+      },
+      "emblems": {
+        "star": "Stea",
+        "bolt": "Fulger",
+        "fire": "Foc",
+        "shield": "Scut",
+        "rocket": "Rachetă",
+        "heart": "Inimă",
+        "sun": "Soare",
+        "moon": "Lună",
+        "sparkles": "Scântei",
+        "globe": "Lume",
+        "puzzle": "Puzzle",
+        "trophy": "Trofeu"
+      },
+      "form": {
+        "new_title": "Formează echipe",
+        "edit_title": "Editează gruparea",
+        "title": "Numele grupării",
+        "title_placeholder": "Ex.: Case",
+        "title_required": "Dă-i un nume.",
+        "title_too_long": "Numele poate avea cel mult 60 de caractere.",
+        "kind": "Tip",
+        "kind_hint": {
+          "base": "Fixă tot anul școlar. Punctele ei contează în clasamentul echipelor.",
+          "temporal": "Pentru o misiune sau o activitate. Nu punctează în clasament; arhiveaz-o la final."
+        },
+        "method": "Cum",
+        "method_random": "La întâmplare",
+        "method_manual": "Manual",
+        "size": "Mărime",
+        "size_teams": "Număr de echipe",
+        "size_perTeam": "Persoane pe echipă",
+        "size_result": "Va ieși {count} echipă. | Vor ieși {count} echipe.",
+        "balance": "Echilibrează după nivel",
+        "absent_note": "Azi nu lipsește nimeni din catalog: intră toată clasa. | Azi lipsește {count} persoană din catalog și rămâne pe dinafară. | Azi lipsesc {count} persoane din catalog și rămân pe dinafară.",
+        "no_list_note": "Azi încă nu s-a făcut prezența: intră toată clasa.",
+        "preview_title": "Propunere",
+        "preview_announcement": "Propunere gata: {count} echipă. | Propunere gata: {count} echipe.",
+        "excluded": "Pe dinafară pentru că lipsesc azi: {names}.",
+        "shuffle": "Împarte",
+        "again": "Încă o dată",
+        "save_teams": "Salvează echipele",
+        "create": "Creează echipele",
+        "save": "Salvează",
+        "teams_legend": "Echipe",
+        "team_name": "Numele echipei {n}",
+        "remove_team": "Elimină echipa {name}",
+        "color": "Culoare",
+        "emblem": "Emblemă",
+        "automatic": "Automat",
+        "add_team": "Adaugă o echipă",
+        "removed_points_note": "La salvare, echipele eliminate se șterg cu punctele lor."
+      },
+      "tap_hint": "Bifează una sau mai multe persoane și alege-le echipa în bara de jos sau cu «Pune aici». Cu mouse-ul le poți și trage.",
+      "picked_count": "{count} persoană aleasă | {count} persoane alese",
+      "put_here": "Pune aici",
+      "put_here_aria": "Pune persoanele alese în {team}",
+      "distribute": "Împarte la întâmplare",
+      "distributed": "{count} persoană împărțită între echipe. | {count} persoane împărțite între echipe.",
+      "distribute_skipped": "{count} persoană care lipsește azi rămâne fără echipă. | {count} persoane care lipsesc azi rămân fără echipă.",
+      "put_in": "Pune în:"
     }
   }
 }

@@ -166,7 +166,9 @@
           "view_ranking": "Ranking",
           "col_actions": "Actions",
           "managed_badge": "No email",
-          "pending_sign_in_badge": "Not signed in yet"
+          "pending_sign_in_badge": "Not signed in yet",
+          "view_attendance": "Attendance",
+          "view_teams": "Teams"
         },
         "stats_title": "Class statistics",
         "pending_reviews": "Submissions to review",
@@ -207,9 +209,6 @@
           "section_negatives": "Negative",
           "filter_all": "All",
           "apply_title": "Apply \"{name}\"",
-          "pick_student": "Choose the student you'll apply it to.",
-          "applied_toast": "{behavior} applied to {student}",
-          "empty_students": "There are no students in this class yet.",
           "form_new_title": "New behavior",
           "form_edit_title": "Edit behavior",
           "form_type": "Type",
@@ -233,7 +232,6 @@
           "toast_save_error": "The behavior could not be saved.",
           "toast_delete_error": "The behavior could not be deleted.",
           "fetch_error": "Could not load behaviors.",
-          "apply_error": "Could not apply the behavior.",
           "empty_description_readonly": "When behaviors are added to this class, they will appear here."
         },
         "shop": {
@@ -610,7 +608,10 @@
             "document": "Documents",
             "submission": "Submissions",
             "behavior": "Behaviors",
-            "shop": "Shop"
+            "shop": "Shop",
+            "reward": "Rewards",
+            "attendance": "Attendance",
+            "team": "Teams"
           },
           "actions": {
             "class": {
@@ -625,7 +626,9 @@
               "ownership_transferred": "handed over the class to {target}",
               "ownership_inherited": "the class passed to {target} when its owner's account was deleted",
               "trashed": "moved the class to the trash",
-              "restored": "restored the class from the trash"
+              "restored": "restored the class from the trash",
+              "template_recommended": "recommended the template in the catalogues",
+              "template_unrecommended": "removed the template’s recommendation"
             },
             "teacher": {
               "added": "added {target} to the teachers ({profile}, {access})",
@@ -669,12 +672,36 @@
               "applied": "applied “{title}” to {target}",
               "created": "created the behavior “{title}”",
               "updated": "edited the behavior “{title}”",
-              "deleted": "deleted the behavior “{title}”"
+              "deleted": "deleted the behavior “{title}”",
+              "applied_batch": "applied “{title}” to {count} students"
             },
             "shop": {
               "item_created": "added “{title}” to the shop",
               "item_updated": "edited “{title}” in the shop",
               "item_deleted": "removed “{title}” from the shop"
+            },
+            "reward": {
+              "granted": "gave {target} a reward: “{title}”",
+              "granted_batch": "gave {count} students a reward: “{title}”",
+              "taken": "took resources from {target}: “{title}”",
+              "taken_batch": "took resources from {count} students: “{title}”"
+            },
+            "attendance": {
+              "taken": "took attendance for {date}: {present} in class, {absent} missing",
+              "updated": "corrected the list for {date}: {present} in class, {absent} missing",
+              "deleted": "deleted the list for {date}"
+            },
+            "team": {
+              "set_created": "created the team grouping “{title}”",
+              "set_updated": "edited the team grouping “{title}”",
+              "set_archived": "archived the team grouping “{title}”",
+              "set_unarchived": "unarchived the team grouping “{title}”",
+              "set_deleted": "deleted the team grouping “{title}”",
+              "members_changed": "changed the teams in “{title}”",
+              "awarded": "gave {points} point to team “{title}”: “{label}” | gave {points} points to team “{title}”: “{label}”",
+              "awarded_batch": "gave {points} point to team “{title}” and gave “{label}” to each member | gave {points} points to team “{title}” and gave “{label}” to each member",
+              "distributed": "gave “{label}” to team “{title}”",
+              "distributed_batch": "gave “{label}” to the only member of team “{title}” | gave “{label}” to the {count} members of team “{title}”"
             }
           },
           "anonymous": {
@@ -691,8 +718,13 @@
             },
             "behavior": {
               "applied": "applied “{title}” to a student who is no longer in the class"
+            },
+            "reward": {
+              "granted": "gave a reward to a student who is no longer in the class: “{title}”",
+              "taken": "took resources from someone who is no longer in the class: “{title}”"
             }
-          }
+          },
+          "batch_who": "See who ({count})"
         },
         "in_trash": {
           "title": "“{name}” is in the trash",
@@ -700,7 +732,8 @@
           "owner_hint": "Restore it to open it again. It comes back archived: students can't enter it until you unarchive it.",
           "not_owner": "Only the owner of the class can restore it. If you need it, ask them before that date.",
           "go_trash": "View the trash"
-        }
+        },
+        "btn_roulette": "Wheel"
       },
       "trash": {
         "meta": {
@@ -798,7 +831,10 @@
           "save": "Save changes",
           "discard": "Discard",
           "toast_saved": "Details saved",
-          "toast_error": "Could not save details"
+          "toast_error": "Could not save details",
+          "team_set_label": "In teams",
+          "team_set_none": "Individual (no teams)",
+          "team_set_hint": "For information only: students see which teams it is done in, and you can approve a whole team at once. Each student still submits their own work."
         }
       },
       "import": {
@@ -846,6 +882,41 @@
         "duplicate_success_title": "Mission duplicated",
         "success_description": "The copy of “{title}” is now in “{name}”, locked and without a deadline. Review it and unlock it when you want your students to see it.",
         "open_mission": "Open the mission"
+      },
+      "adapt": {
+        "button": "Adapt with AI",
+        "title": "Adapt the mission with AI",
+        "intro": "The AI suggests a title, a story and enigmas tailored to “{name}”: its level, subject, language and world. The mission does not change until you apply the proposal.",
+        "request_label": "What would you like? (optional)",
+        "request_hint": "If you leave it blank, the AI simply adapts it to the class.",
+        "request_placeholder": "E.g.: simpler, for pair work and with a final presentation enigma",
+        "propose": "Suggest adaptation",
+        "generating": "Preparing the proposal…",
+        "error": "The AI could not prepare the proposal. The mission has not changed; try again in a few minutes.",
+        "error_kept": "The AI could not make that change. The previous proposal is kept.",
+        "current": "Now",
+        "proposed": "Proposal",
+        "field_title": "Title",
+        "field_story": "Story",
+        "enigmas_heading": "Enigmas",
+        "enigma_n": "Enigma {n}",
+        "objectives": "Objectives",
+        "unchanged": "No changes",
+        "row_create": "New enigma",
+        "row_delete": "Will be deleted",
+        "row_keep": "Stays as it is",
+        "row_keep_hint": "It has student submissions, so it cannot be removed.",
+        "rewards_raised": "Someone has already completed it: its rewards cannot go down, so the current ones are kept.",
+        "no_changes": "The proposal does not change anything in the mission. Ask for another change or discard it.",
+        "feedback_label": "Want another change?",
+        "feedback_placeholder": "E.g.: fewer pirates and shorter enigmas",
+        "ask_change": "Ask for another change",
+        "discard": "Discard",
+        "apply": "Apply",
+        "applied": "Mission adapted",
+        "apply_error": "The proposal could not be applied. The mission has not changed.",
+        "apply_error_partial": "Only part of the proposal was applied. Check the comparison: it already shows what was saved.",
+        "after_import_hint": "Want it tailored to this class? The AI suggests how to adapt it and you decide whether to apply it."
       }
     },
     "badges": {
@@ -1233,7 +1304,10 @@
         "pct_custom": "Custom percentage",
         "will_receive": "Will receive",
         "approve": "Approve {pct}%",
-        "approve_error": "Couldn't approve the submission"
+        "approve_error": "Couldn't approve the submission",
+        "approve_team": "Approve the team ({count}) at {pct} %",
+        "team_approved": "{team}: {count} submission approved at {pct} % | {team}: {count} submissions approved at {pct} %",
+        "team_note": "Team mission (“{set}”): when reviewing a submission you can approve, at the same percentage, everyone in that team who has submitted."
       }
     },
     "templates": {
@@ -1283,6 +1357,7 @@
         "province": "All provinces"
       },
       "sort": {
+        "recommended": "Recommended first",
         "recent": "Most recent",
         "name_asc": "Name A-Z",
         "name_desc": "Name Z-A"
@@ -1331,6 +1406,294 @@
       "done": "Done",
       "wizard_question_schedule": "Set a schedule for your class",
       "wizard_question_cover": "Now, a cover for your class"
+    },
+    "roulette": {
+      "meta": {
+        "title": "Wheel | ITAKAI Teacher"
+      },
+      "title": "Wheel of names",
+      "exit": "Exit",
+      "fullscreen_enter": "Full screen",
+      "fullscreen_exit": "Exit full screen",
+      "sound": "Sound",
+      "spin": "Spin",
+      "spin_again": "Spin again",
+      "choosing": "Choosing…",
+      "keyboard_hint": "You can also use the space bar or Enter.",
+      "idle_hint": "Press “Spin” to pick someone.",
+      "picked_label": "The wheel picked",
+      "announce": "The wheel picked {name}.",
+      "announce_left": "The wheel picked {name}. {count} left. | The wheel picked {name}. {count} left.",
+      "announce_none_left": "The wheel picked {name}. Nobody else is left.",
+      "counter": "On the wheel: {left} of {total}",
+      "list_title": "Students",
+      "no_repeat": "No repeats",
+      "no_repeat_hint": "Anyone already picked today won't come up again on this device until you start over.",
+      "restart": "Start over",
+      "status_drawn": "Already picked",
+      "status_removed": "Out this round",
+      "remove": "Remove",
+      "remove_aria": "Remove {name} from this round",
+      "restore": "Put back",
+      "restore_aria": "Put {name} back on the wheel",
+      "all_drawn_title": "Everyone has been picked",
+      "all_drawn_description": "Start over so everyone can come up again.",
+      "none_left_title": "Nobody is left on the wheel",
+      "none_left_description": "Put someone from the list back or start over.",
+      "empty_title": "There are no students in this class yet",
+      "empty_description": "Once they join, they'll show up here on the wheel.",
+      "trash_title": "This class is in the trash",
+      "trash_description": "Restore it from the class to use the wheel again.",
+      "back_to_class": "Back to the class",
+      "list_title_teams": "Teams",
+      "mode_label": "Who is on the wheel",
+      "mode_students": "Whole class",
+      "mode_team": "One team",
+      "mode_teams": "Between teams",
+      "team_label": "Team",
+      "set_label": "Grouping",
+      "attendance_not_taken": "Attendance has not been taken today: the whole class is on the wheel.",
+      "attendance_all_here": "According to today's attendance, everyone is here.",
+      "attendance_excluded": "{count} person missing today is not on the wheel. | {count} people missing today are not on the wheel.",
+      "take_attendance": "Take attendance",
+      "spin_inside": "Spin within {team}",
+      "award_team": "Reward {team}",
+      "apply_to": "Apply to {name}",
+      "apply_title": "Apply to {name}",
+      "scope_empty_title": "Nobody is on the wheel",
+      "scope_empty_students": "According to today's attendance, nobody is here.",
+      "scope_empty_team": "Nobody in this team is here today.",
+      "scope_empty_teams": "No team in this grouping has anyone here today."
+    },
+    "classroom": {
+      "picker": {
+        "legend": "Students",
+        "search": "Search for a student…",
+        "all": "All",
+        "none": "None",
+        "empty": "There are no students in this class yet.",
+        "no_results": "No one matches your search.",
+        "count": "Selected: {count} of {total}",
+        "only_present": "Only present today",
+        "only_absent": "Only absent today"
+      },
+      "modal_title": "Apply to several students",
+      "mode_label": "What do you want to apply",
+      "mode_behavior": "Behaviour",
+      "mode_reward": "Custom reward",
+      "behavior_legend": "Behaviour",
+      "no_behaviors": "This class has no behaviours yet. Create them in the Behaviours tab or give a custom reward.",
+      "reward": {
+        "legend": "Reward",
+        "direction_label": "Give or take",
+        "give": "Give",
+        "take": "Take away",
+        "no_resources": "This class has no resources turned on (XP, coins, mana or lives).",
+        "reason": "Reason",
+        "reason_placeholder": "E.g. Helped set up the lab",
+        "reason_too_long": "The reason can be up to 80 characters long."
+      },
+      "confirm_button": "Apply",
+      "confirm_behavior": "Apply “{title}” to {count} student. | Apply “{title}” to {count} students.",
+      "confirm_reward": "Reward “{title}” for {count} student. | Reward “{title}” for {count} students.",
+      "confirm_effect": "Each one gets: {effect}.",
+      "confirm_no_effect": "It doesn’t change any resource active in this class; it is only recorded.",
+      "applied_toast": "“{title}” applied to {count} student | “{title}” applied to {count} students",
+      "apply_error": "It couldn’t be applied. Nothing has changed.",
+      "archived_notice": "The class is archived: you can view and edit the catalogue, but not apply it to anyone.",
+      "select_all_visible": "Select everyone in the list",
+      "select_student": "Select {name}",
+      "selected_count": "{count} student selected | {count} students selected",
+      "apply_behavior": "Apply behaviour",
+      "give_reward": "Give reward",
+      "clear_selection": "Clear selection",
+      "applied_announcement": "Applied to {count} student. Balances updated. | Applied to {count} students. Balances updated.",
+      "target_label": "Who to",
+      "target_students": "To students",
+      "target_team": "To a team",
+      "team": {
+        "legend": "Team",
+        "points": "Points for the scoreboard",
+        "points_hint": "They add up in the team standings (or subtract, if you take away). Enter 0 if you only hand out.",
+        "distribute": "Also give it to each member",
+        "distribute_hint": "Each member gets the behaviour or the reward, as if you applied it one by one.",
+        "confirm_points": "Team “{team}”: {points} point on the scoreboard. | Team “{team}”: {points} points on the scoreboard.",
+        "confirm_no_points": "Team “{team}”: no points on the scoreboard.",
+        "confirm_distribute": "And “{title}” to its member. | And “{title}” to its {count} members.",
+        "confirm_no_distribute": "Nothing is handed out to its members.",
+        "awarded_toast": "Team “{team}” rewarded",
+        "modal_title": "Reward a team"
+      },
+      "fixed_to": "To: {names}",
+      "missing": {
+        "team": "Choose a team.",
+        "students": "Choose at least one student.",
+        "behavior": "Choose a behaviour.",
+        "no_behaviors": "This class has no behaviours: give a free reward.",
+        "reason": "Write the reason.",
+        "points": "Enter the points for the scoreboard or tick “{label}”.",
+        "empty_team": "That team has no members: choose another or untick “{label}”.",
+        "amount": "Enter how much you give or take."
+      }
+    },
+    "attendance": {
+      "tabs_label": "Attendance",
+      "tab_take": "Take attendance",
+      "tab_history": "History",
+      "date": "Date",
+      "session": "Session",
+      "no_schedule": "Session without a timetable",
+      "saved_by": "List saved by {name} ({time}).",
+      "someone": "a teacher",
+      "not_saved": "Attendance hasn’t been taken for this session yet. All students start as present: mark only who is missing.",
+      "unsaved": "Unsaved changes",
+      "read_only": "You can view attendance, but taking it is for teachers with edit access.",
+      "count": {
+        "present": "{count} present | {count} present",
+        "absent": "{count} absent | {count} absent",
+        "late": "{count} late | {count} late",
+        "excused": "{count} excused | {count} excused"
+      },
+      "all_present": "Everyone present",
+      "status_of": "Attendance for {name}",
+      "status": {
+        "present": "Present",
+        "absent": "Absent",
+        "late": "Late",
+        "excused": "Excused"
+      },
+      "save": "Save list",
+      "delete": "Delete this list",
+      "delete_title": "Delete this list?",
+      "delete_message": "The session is deleted with every student’s status. Use it if you took attendance by mistake.",
+      "apply_present": "Apply to those present…",
+      "apply_absent": "Apply to those absent…",
+      "no_auto_xp": "Taking attendance never adds or removes anything on its own: rewarding or penalising is always a separate, confirmed action.",
+      "load_error": "Attendance couldn’t be loaded.",
+      "saved_announcement": "List saved: {present} in class, {absent} missing.",
+      "save_error": "The list couldn’t be saved.",
+      "deleted": "List deleted.",
+      "delete_error": "The list couldn’t be deleted.",
+      "history": {
+        "download_csv": "Download CSV",
+        "empty_title": "No lists this month",
+        "empty_description": "Once you take attendance, you’ll see each student’s attendance here.",
+        "calendar_hint": "Marked days have a list. Select a day to take or correct it.",
+        "table_caption": "Attendance by student in {month}",
+        "day_with_list": "list taken",
+        "csv_sessions": "Sessions",
+        "csv_file": "attendance",
+        "export_error": "The CSV couldn’t be downloaded.",
+        "col_incidents": "Absences and late arrivals",
+        "no_incidents": "None"
+      },
+      "profile": {
+        "rate": "Attendance: {rate}%",
+        "sessions": "{count} session this school year | {count} sessions this school year"
+      }
+    },
+    "teams": {
+      "empty_title": "No teams yet",
+      "empty_description": "Form teams by hand or at random. You can have fixed base teams, which score in the standings, and temporary ones for a mission or an activity.",
+      "empty_description_readonly": "When teachers with edit access form teams, you will see them here.",
+      "new_set": "Form teams",
+      "set_label": "Grouping",
+      "kind": {
+        "base": "Base",
+        "temporal": "Temporary"
+      },
+      "archived_badge": "Archived",
+      "edit": "Edit",
+      "archive": "Archive",
+      "unarchive": "Unarchive",
+      "delete": "Delete",
+      "delete_title": "Delete the grouping",
+      "delete_message": "“{title}” will be deleted with its teams and points. What was already given to each member stays. This cannot be undone.",
+      "points": "{count} point | {count} points",
+      "members_count": "No members | {count} member | {count} members",
+      "empty_team": "Nobody in this team yet",
+      "no_team": "No team",
+      "unknown_student": "Student",
+      "award": "Reward",
+      "read_only": "With your access level you can see the teams, but you cannot form or reward them.",
+      "archived_class": "The class is archived: you can see the teams, but they cannot be changed or rewarded.",
+      "saved_toast": "Teams in “{title}” saved",
+      "error": "Could not save. Nothing has changed.",
+      "stale": "Someone changed this grouping while you were editing it (another person or another tab). Nothing was saved: you can now see how it is.",
+      "moved": "{count} person moved to {name} | {count} people moved to {name}",
+      "archived_announcement": "“{title}” archived",
+      "unarchived_announcement": "“{title}” unarchived",
+      "deleted_announcement": "“{title}” deleted",
+      "default_team": "Team {n}",
+      "colors": {
+        "purple": "Purple",
+        "yellow": "Yellow",
+        "mint": "Mint green",
+        "sky": "Sky blue",
+        "red": "Red",
+        "peach": "Peach"
+      },
+      "emblems": {
+        "star": "Star",
+        "bolt": "Lightning",
+        "fire": "Fire",
+        "shield": "Shield",
+        "rocket": "Rocket",
+        "heart": "Heart",
+        "sun": "Sun",
+        "moon": "Moon",
+        "sparkles": "Sparkles",
+        "globe": "World",
+        "puzzle": "Puzzle",
+        "trophy": "Trophy"
+      },
+      "form": {
+        "new_title": "Form teams",
+        "edit_title": "Edit the grouping",
+        "title": "Grouping name",
+        "title_placeholder": "E.g. Houses",
+        "title_required": "Give it a name.",
+        "title_too_long": "The name can be up to 60 characters.",
+        "kind": "Type",
+        "kind_hint": {
+          "base": "Fixed for the school year. Its points count in the team standings.",
+          "temporal": "For a mission or an activity. It does not score in the standings; archive it when it ends."
+        },
+        "method": "How",
+        "method_random": "At random",
+        "method_manual": "By hand",
+        "size": "Size",
+        "size_teams": "Number of teams",
+        "size_perTeam": "People per team",
+        "size_result": "You will get {count} team. | You will get {count} teams.",
+        "balance": "Balance by level",
+        "absent_note": "Nobody is absent on today’s register: the whole class takes part. | {count} person is absent on today’s register and is left out. | {count} people are absent on today’s register and are left out.",
+        "no_list_note": "The register has not been taken today: the whole class takes part.",
+        "preview_title": "Proposal",
+        "preview_announcement": "Proposal ready: {count} team. | Proposal ready: {count} teams.",
+        "excluded": "Left out for being absent today: {names}.",
+        "shuffle": "Shuffle",
+        "again": "Again",
+        "save_teams": "Save teams",
+        "create": "Create teams",
+        "save": "Save",
+        "teams_legend": "Teams",
+        "team_name": "Name of team {n}",
+        "remove_team": "Remove team {name}",
+        "color": "Colour",
+        "emblem": "Emblem",
+        "automatic": "Automatic",
+        "add_team": "Add team",
+        "removed_points_note": "When you save, the teams you removed are deleted with their points."
+      },
+      "tap_hint": "Tick one or more people and choose their team in the bar below or with “Put here”. With a mouse you can also drag them.",
+      "picked_count": "{count} person selected | {count} people selected",
+      "put_here": "Put here",
+      "put_here_aria": "Put the selected people in {team}",
+      "distribute": "Share out at random",
+      "distributed": "{count} person shared out among the teams. | {count} people shared out among the teams.",
+      "distribute_skipped": "{count} person absent today stays without a team. | {count} people absent today stay without a team.",
+      "put_in": "Put in:"
     }
   }
 }

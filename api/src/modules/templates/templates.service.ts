@@ -3,6 +3,7 @@ import { prisma } from '../../config/database.js'
 import { Prisma } from '../../generated/prisma/client.js'
 import type { MissionRarity } from '../../generated/prisma/enums.js'
 import { resolveClassSettings, type ClassSettings } from '../../utils/class-settings.js'
+import { recordClassAction } from '../../utils/class-access.js'
 import { GoneError, NotFoundError } from '../../utils/errors.js'
 import { containsPattern } from '../../utils/like-pattern.js'
 import { missionRewards } from '../../utils/mission-formatter.js'
@@ -25,6 +26,11 @@ import { publicUploadResolver } from '../storage/storage.service.js'
  * plantilla; de la configuración, solo qué funcionalidades van encendidas, y
  * la portada, solo si es un fichero público de la plataforma (ver
  * `publicUploadFromUrl`).
+ *
+ * La administración de la instancia puede marcar una plantilla como
+ * recomendada (ver `setTemplateRecommended`). Los dos catálogos lo dicen con un
+ * simple sí o no y la sacan primero en su orden de serie; quién la marcó y
+ * cuándo solo lo ve la administración.
  */
 
 // ==================== CONSULTA COMPARTIDA ====================
@@ -42,9 +48,21 @@ const AVAILABLE = {
   deletedAt: null,
 } satisfies Prisma.ClassWhereInput
 
-/** Los órdenes del catálogo, los mismos que ofrece el del profesorado. */
-export const TEMPLATE_SORTS = ['recent', 'name-asc', 'name-desc'] as const
+/**
+ * `AVAILABLE` en SQL, sobre la tabla de clases con el alias `c`: lo usan los
+ * listados que piden su página a SQL (el catálogo público y el de la
+ * administración). Si cambia uno, cambia el otro.
+ */
+export const AVAILABLE_SQL = Prisma.sql`c.is_template AND NOT c.archived AND c.deleted_at IS NULL`
+
+/**
+ * Los órdenes del catálogo, los mismos que ofrece el del profesorado. El de
+ * serie, `recommended`: las recomendadas primero (la última que se marcó, la
+ * primera) y después las demás, como en `recent`.
+ */
+export const TEMPLATE_SORTS = ['recommended', 'recent', 'name-asc', 'name-desc'] as const
 export type TemplateSort = (typeof TEMPLATE_SORTS)[number]
+export const DEFAULT_TEMPLATE_SORT: TemplateSort = 'recommended'
 
 /** Lo que se lee de cada plantilla para su tarjeta, en los dos catálogos. */
 const TEMPLATE_CARD = {
@@ -55,6 +73,8 @@ const TEMPLATE_CARD = {
   educationLevel: true,
   province: true,
   backgroundImage: true,
+  // Solo para decir si está recomendada: la fecha no sale de aquí.
+  recommendedAt: true,
   _count: { select: { missions: true, shopItems: true, behaviorTemplates: true } },
 } satisfies Prisma.ClassSelect
 
@@ -80,6 +100,7 @@ const TEMPLATE_BEHAVIOR = {
   description: true,
   xpDelta: true,
   coinDelta: true,
+  manaDelta: true,
   lifeDelta: true,
 } satisfies Prisma.BehaviorTemplateSelect
 
@@ -99,6 +120,8 @@ const TEMPLATE_DETAIL = {
   educationLevel: true,
   province: true,
   settings: true,
+  // Solo para decir si está recomendada: la fecha no sale de aquí.
+  recommendedAt: true,
   // Con el id de cada uno, que el catálogo del profesorado da desde siempre.
   shopItems: {
     select: { id: true, ...TEMPLATE_SHOP_ITEM },
@@ -219,6 +242,8 @@ export interface TemplateFilters {
   language?: string[]
   province?: string[]
   q?: string
+  /** Solo las recomendadas. */
+  recommended?: boolean
 }
 
 /**
@@ -267,6 +292,7 @@ function templatesWhere(filters: TemplateFilters): Prisma.ClassWhereInput {
     educationLevel: anyOf(filters.educationLevel),
     language: anyOf(filters.language),
     province: anyOf(filters.province),
+    ...(filters.recommended ? { recommendedAt: { not: null } } : {}),
     ...(filters.q
       ? {
           OR: [
@@ -280,17 +306,24 @@ function templatesWhere(filters: TemplateFilters): Prisma.ClassWhereInput {
 
 /**
  * Las plantillas disponibles que casan con `filters`, para el catálogo del
- * profesorado: las `take` últimas tocadas, con la narrativa entera y con quién
- * publicó cada una (su nombre, y si es `userId`, el profesor que mira). `q`
- * busca en el nombre y en la narrativa sin distinguir mayúsculas; los
- * comodines de LIKE que traiga cuentan como tales.
+ * profesorado: hasta `take`, en el orden de serie (las recomendadas primero y
+ * después las últimas tocadas), con la narrativa entera, cuándo se tocó cada
+ * una (los otros órdenes los aplica la pantalla) y con quién la publicó (su
+ * nombre, y si es `userId`, el profesor que mira). `q` busca en el nombre y en
+ * la narrativa sin distinguir mayúsculas; los comodines de LIKE que traiga
+ * cuentan como tales.
  */
 export async function findTemplates(filters: TemplateFilters, take: number, userId: string) {
   const rows = await prisma.class.findMany({
     where: templatesWhere(filters),
-    orderBy: [{ updatedAt: 'desc' }, { id: 'desc' }],
+    // Las recomendadas, primero: con el tope, nunca se quedan fuera.
+    orderBy: [
+      { recommendedAt: { sort: 'desc', nulls: 'last' } },
+      { updatedAt: 'desc' },
+      { id: 'desc' },
+    ],
     take,
-    select: { ...TEMPLATE_CARD, narrative: true, ...TEMPLATE_PUBLISHER },
+    select: { ...TEMPLATE_CARD, narrative: true, updatedAt: true, ...TEMPLATE_PUBLISHER },
   })
   return rows.map(row => withPublisher(row, userId))
 }
@@ -321,6 +354,8 @@ export interface PublicTemplateCard {
   language: string | null
   province: string | null
   backgroundImage: string | null
+  /** La ha recomendado la administración. Ni quién ni cuándo. */
+  recommended: boolean
   /**
    * Qué funcionalidades lleva encendidas, como en la ficha. Dan sentido a los
    * contadores: los objetos de una tienda apagada también se copian.
@@ -347,6 +382,8 @@ export interface PublicTemplateDetail {
   educationLevel: string | null
   language: string | null
   province: string | null
+  /** La ha recomendado la administración. Ni quién ni cuándo. */
+  recommended: boolean
   /** Qué funcionalidades lleva encendidas: las que se lleva quien la importa. */
   features: ClassSettings
   missionCount: number
@@ -358,11 +395,13 @@ export interface PublicTemplateDetail {
 }
 
 /**
- * Los órdenes del listado público. Por nombre, con las reglas del español: la
+ * Los órdenes del listado público, y del de la administración, que pide su
+ * página igual (ver admin-lists.service.ts). Por nombre, con las reglas del español: la
  * colación de la base ordena por bytes y dejaría «Ábaco» y «el bosque» detrás
  * de la «Z». En todos, el id desempata para que las páginas no se solapen.
  */
-const PUBLIC_ORDER: Record<TemplateSort, Prisma.Sql> = {
+export const PUBLIC_ORDER: Record<TemplateSort, Prisma.Sql> = {
+  recommended: Prisma.sql`c.recommended_at DESC NULLS LAST, c.updated_at DESC, c.id DESC`,
   recent: Prisma.sql`c.updated_at DESC, c.id DESC`,
   'name-asc': Prisma.sql`c.name COLLATE "es-x-icu" ASC, c.id ASC`,
   'name-desc': Prisma.sql`c.name COLLATE "es-x-icu" DESC, c.id DESC`,
@@ -373,14 +412,11 @@ const PUBLIC_ORDER: Record<TemplateSort, Prisma.Sql> = {
  * filtros de metadatos que el catálogo del profesorado. `q` busca solo en el
  * nombre, como ese catálogo en pantalla, sin distinguir mayúsculas ni tildes
  * («quimica» encuentra «Química»), y lo escrito se busca tal cual, comodines
- * de LIKE incluidos.
+ * de LIKE incluidos. Con `recommended`, solo las recomendadas.
  */
 function publicTemplatesWhere(filters: TemplateFilters): Prisma.Sql {
-  const conditions = [
-    Prisma.sql`c.is_template`,
-    Prisma.sql`NOT c.archived`,
-    Prisma.sql`c.deleted_at IS NULL`,
-  ]
+  const conditions = [AVAILABLE_SQL]
+  if (filters.recommended) conditions.push(Prisma.sql`c.recommended_at IS NOT NULL`)
   // Sin valores, sin filtro.
   const anyOf = (column: Prisma.Sql, values?: string[]) => {
     if (values?.length) conditions.push(Prisma.sql`${column} IN (${Prisma.join(values)})`)
@@ -409,6 +445,7 @@ function toPublicCard(
     language: tpl.language,
     province: tpl.province,
     backgroundImage,
+    recommended: tpl.recommendedAt !== null,
     features: resolveClassSettings(tpl.settings),
     missionCount: tpl._count.missions,
     shopItemCount: tpl._count.shopItems,
@@ -437,7 +474,7 @@ export async function listPublicTemplates(
       SELECT c.id, left(c.narrative, ${EXCERPT_SOURCE_LENGTH}::int) AS narrative
       FROM classes c
       WHERE ${where}
-      ORDER BY ${PUBLIC_ORDER[sort ?? 'recent']}
+      ORDER BY ${PUBLIC_ORDER[sort ?? DEFAULT_TEMPLATE_SORT]}
       LIMIT ${limit} OFFSET ${(page - 1) * limit}
     `,
     prisma.$queryRaw<{ total: bigint }[]>`SELECT COUNT(*) AS total FROM classes c WHERE ${where}`,
@@ -493,6 +530,7 @@ export async function getPublicTemplate(id: string): Promise<PublicTemplateDetai
     educationLevel: tpl.educationLevel,
     language: tpl.language,
     province: tpl.province,
+    recommended: tpl.recommendedAt !== null,
     features: resolveClassSettings(tpl.settings),
     missionCount: tpl.missions.length,
     shopItemCount: tpl.shopItems.length,
@@ -518,6 +556,74 @@ async function wasPublished(id: string) {
     },
   })
   return Boolean(cls && (cls.isTemplate || cls.actionLog.length > 0))
+}
+
+// ==================== RECOMENDADAS ====================
+
+/**
+ * Marca la plantilla `classId` como recomendada, o le quita la marca. Es cosa
+ * de la administración de la instancia (lo comprueba la ruta, colgada de
+ * `/admin`), y se apunta en el registro de la clase con quien lo hizo: el
+ * profesorado de la clase lo ve en su historial.
+ *
+ * Solo se recomienda una plantilla disponible (si no, 404, como en la ficha):
+ * la marca va con la publicación, y retirarla o enviar la clase a la papelera
+ * la quita. Pedir lo que ya está no cambia nada ni se apunta: volver a marcarla
+ * no mueve su fecha, que es la que ordena las recomendadas.
+ */
+export async function setTemplateRecommended(
+  adminId: string,
+  classId: string,
+  recommended: boolean
+) {
+  if (!isTemplateId(classId)) throw new NotFoundError(TEMPLATE_NOT_FOUND)
+
+  return prisma.$transaction(async tx => {
+    const cls = await tx.class.findUnique({
+      where: { id: classId },
+      select: { recommendedAt: true },
+    })
+    if (!cls) throw new NotFoundError(TEMPLATE_NOT_FOUND)
+
+    // En SQL y no con Prisma, que pondría al día `updated_at`: la marca es de
+    // la administración, no un cambio de la plantilla, y no la mueve en el
+    // orden de las últimas tocadas.
+    if (recommended) {
+      // Condicionado a que siga disponible y sin marcar: si la retiran a la
+      // vez, gana la retirada y no queda recomendada fuera del catálogo.
+      const count = await tx.$executeRaw`
+        UPDATE classes c SET recommended_at = now(), recommended_by_id = ${adminId}
+        WHERE c.id = ${classId} AND c.recommended_at IS NULL AND ${AVAILABLE_SQL}
+      `
+      if (count === 0) {
+        const available = await tx.class.findFirst({
+          where: { ...AVAILABLE, id: classId },
+          select: { recommendedAt: true },
+        })
+        if (!available) throw new NotFoundError(TEMPLATE_NOT_FOUND)
+        return { recommended: true, recommendedAt: available.recommendedAt }
+      }
+    } else {
+      const count = await tx.$executeRaw`
+        UPDATE classes SET recommended_at = NULL, recommended_by_id = NULL
+        WHERE id = ${classId} AND recommended_at IS NOT NULL
+      `
+      if (count === 0) return { recommended: false, recommendedAt: null }
+    }
+
+    await recordClassAction(tx, {
+      classId,
+      actorId: adminId,
+      action: recommended ? 'class.template_recommended' : 'class.template_unrecommended',
+      entityType: 'class',
+      entityId: classId,
+    })
+    const saved = await tx.class.findUniqueOrThrow({
+      where: { id: classId },
+      select: { recommendedAt: true },
+    })
+    return { recommended: saved.recommendedAt !== null, recommendedAt: saved.recommendedAt }
+  })
 }
 
 // ==================== EXTRACTO DE LA NARRATIVA ====================

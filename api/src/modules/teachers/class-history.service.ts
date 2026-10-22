@@ -1,5 +1,5 @@
 import { prisma } from '../../config/database.js'
-import type { Prisma } from '../../generated/prisma/client.js'
+import { Prisma } from '../../generated/prisma/client.js'
 import { assertClassAccess, type ClassUser } from '../../utils/class-access.js'
 
 /**
@@ -24,6 +24,9 @@ export const CLASS_HISTORY_TYPES = [
   'document',
   'submission',
   'behavior',
+  'reward',
+  'attendance',
+  'team',
   'shop',
 ] as const
 
@@ -48,6 +51,8 @@ export async function getClassHistory(actor: ClassUser, classId: string, query: 
     classId,
     ...(query.actorId ? { actorId: query.actorId } : {}),
     ...(query.type ? { action: { startsWith: `${query.type}.` } } : {}),
+    // De un lote solo sale su primera línea; el resto viene dentro de ella.
+    ...NOT_BATCH_MEMBER,
   }
 
   const [rows, total, actors] = await Promise.all([
@@ -79,9 +84,16 @@ export async function getClassHistory(actor: ClassUser, classId: string, query: 
     }),
   ])
 
+  // Lotes de la página: a quién más se aplicó cada uno.
+  const batches = await batchTargets(classId, rows)
+
   // Alumnos sobre los que recae alguna entrada y que siguen en la clase.
   const studentIds = [
-    ...new Set(rows.filter(r => r.targetUser?.role === 'student').map(r => r.targetUser!.id)),
+    ...new Set(
+      [...rows.map(r => r.targetUser), ...[...batches.values()].flat()]
+        .filter(u => u?.role === 'student')
+        .map(u => u!.id)
+    ),
   ]
   const enrolled = new Set(
     studentIds.length === 0
@@ -104,6 +116,7 @@ export async function getClassHistory(actor: ClassUser, classId: string, query: 
       target: resolveTarget(row.targetUser, enrolled),
       entity: row.entityType ? { type: row.entityType, id: row.entityId } : null,
       params: row.metadata ?? {},
+      batch: batchOf(row, batches, enrolled),
     })),
     total,
     page,
@@ -117,6 +130,72 @@ export async function getClassHistory(actor: ClassUser, classId: string, query: 
 }
 
 type TargetUser = { id: string; name: string; role: string | null }
+
+/**
+ * Fuera las líneas de un lote (aplicar a varios estudiantes a la vez) que no
+ * son la primera. Se filtran con la clave en el JSON; las filas sin ella (casi
+ * todas) tienen que seguir saliendo, y en SQL `NOT (nulo = true)` es nulo: de
+ * ahí el `OR` con la clave o la columna vacías.
+ */
+const NOT_BATCH_MEMBER: Prisma.ClassActionLogWhereInput = {
+  OR: [
+    { metadata: { equals: Prisma.AnyNull } },
+    { metadata: { path: ['batchMember'], equals: Prisma.AnyNull } },
+    { NOT: { metadata: { path: ['batchMember'], equals: true } } },
+  ],
+}
+
+type HistoryRow = {
+  id: string
+  action: string
+  metadata: Prisma.JsonValue
+  targetUser: TargetUser | null
+}
+
+/**
+ * El lote de una entrada: de dos personas o más. El reparto de un premio de
+ * equipo cuenta aunque sea a una sola, porque sus líneas nunca salen sueltas
+ * (van todas dentro de la del premio).
+ */
+function batchIdOf(row: { action: string; metadata: Prisma.JsonValue }): string | null {
+  const meta = row.metadata as { batchId?: unknown; batchSize?: unknown } | null
+  const min = row.action === 'team.awarded' ? 1 : 2
+  return meta && typeof meta.batchId === 'string' && Number(meta.batchSize) >= min
+    ? meta.batchId
+    : null
+}
+
+/** Para cada lote de la página, las personas a las que se aplicó, en orden. */
+async function batchTargets(classId: string, rows: HistoryRow[]) {
+  const ids = [...new Set(rows.map(batchIdOf).filter((id): id is string => id !== null))]
+  const targets = new Map<string, TargetUser[]>()
+  if (ids.length === 0) return targets
+  const members = await prisma.classActionLog.findMany({
+    where: {
+      classId,
+      OR: ids.map(id => ({ metadata: { path: ['batchId'], equals: id } })),
+    },
+    orderBy: [{ createdAt: 'asc' }, { id: 'asc' }],
+    select: { metadata: true, targetUser: { select: { id: true, name: true, role: true } } },
+  })
+  for (const m of members) {
+    const id = (m.metadata as { batchId?: string } | null)?.batchId
+    if (!id || !m.targetUser) continue
+    targets.set(id, [...(targets.get(id) ?? []), m.targetUser])
+  }
+  return targets
+}
+
+/** El lote de una entrada, si lo es: cuántas personas y quiénes (sin nombre quien ya no está). */
+function batchOf(row: HistoryRow, batches: Map<string, TargetUser[]>, enrolled: Set<string>) {
+  const id = batchIdOf(row)
+  if (!id) return null
+  const people = batches.get(id) ?? []
+  return {
+    size: Number((row.metadata as { batchSize?: unknown }).batchSize),
+    targets: people.map(p => resolveTarget(p, enrolled)),
+  }
+}
 
 /**
  * La persona sobre la que recae la entrada. Un alumno que ya no está en la clase

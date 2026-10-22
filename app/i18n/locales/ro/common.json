@@ -507,8 +507,12 @@
         "what_you_get_missions": "Importul creează o clasă nouă, a ta, cu povestea, coperta, funcționalitățile, magazinul și comportamentele șablonului și, dacă vrei, cu misiunile lui.",
         "import_missions": "Importă și misiunea șablonului | Importă și misiunile șablonului ({count})",
         "import_missions_hint": "Ajung fără termen-limită, fără documente și fără insigne.",
-        "login_note": "Ca să-l imporți, intră cu un cont de cadru didactic.",
-        "teacher_only": "Ca să-l imporți, ai nevoie de un cont de cadru didactic."
+        "login_note": "Intră sau creează-ți contul de cadru didactic: când termini, revii aici ca să-l imporți.",
+        "teacher_only": "Ca să-l imporți, ai nevoie de un cont de cadru didactic.",
+        "ready_note": "Ai intrat. Verifică ce conține și apasă „Importă” ca să ai propria copie.",
+        "pending_login": "Vii de la un șablon: când intri cu contul de cadru didactic, te ducem înapoi ca să-l imporți.",
+        "pending_signup": "Vii de la un șablon: după ce îți creezi contul și alegi profilul de cadru didactic, te ducem înapoi ca să-l imporți.",
+        "not_for_role": "Șabloanele se pot folosi doar cu un cont de cadru didactic, așa că nu te-am dus la cel pe care l-ai ales."
       },
       "gone": {
         "title": "Acest șablon nu mai este disponibil",
@@ -521,7 +525,9 @@
       "meta": {
         "title": "Șabloane de clase · ITAKAI",
         "description": "Clase gamificate publicate de cadre didactice pe ITAKAI, de la care poate porni orice cadru didactic."
-      }
+      },
+      "recommended": "Recomandat",
+      "copy_link_named": "Copiază linkul pentru „{name}”"
     },
     "class_list": {
       "tab_active": "Active",
@@ -529,6 +535,25 @@
       "empty_title": "Nicio clasă",
       "empty_archived_title": "Nicio clasă arhivată",
       "no_results": "Nicio clasă nu corespunde cu „{query}”"
+    },
+    "effects": {
+      "floater": {
+        "xp": "XP",
+        "lives": "Vieți"
+      }
+    },
+    "calendar": {
+      "prev_month": "Luna anterioară",
+      "next_month": "Luna următoare"
+    },
+    "teams": {
+      "standings_title": "Clasamentul echipelor · {title}",
+      "position": "Locul",
+      "points": "{count} punct | {count} puncte",
+      "kind": {
+        "base": "De bază",
+        "temporal": "Temporară"
+      }
     }
   }
 }

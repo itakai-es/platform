@@ -507,8 +507,12 @@
         "what_you_get_missions": "Inportatzean, klase berri bat sortzen da zuretzat, txantiloiaren ipuina, azala, funtzionalitateak, denda eta portaerak dituena, eta, nahi baduzu, haren misioak ere bai.",
         "import_missions": "Haren misioa ere inportatu | Haren {count} misioak ere inportatu",
         "import_missions_hint": "Epemugarik, dokumenturik eta insigniarik gabe iristen dira.",
-        "login_note": "Inportatzeko, irakasle-kontu batekin sartu behar duzu.",
-        "teacher_only": "Inportatzeko, irakasle-kontu bat behar da."
+        "login_note": "Sartu edo sortu zure irakasle-kontua: amaitzean, hona itzuliko zara inportatzeko.",
+        "teacher_only": "Inportatzeko, irakasle-kontu bat behar da.",
+        "ready_note": "Sartu zara. Begiratu zer dakarren eta sakatu «Inportatu» zure kopia izateko.",
+        "pending_login": "Txantiloi batetik zatoz: zure irakasle-kontuarekin sartzean, hara eramango zaitugu inporta dezazun.",
+        "pending_signup": "Txantiloi batetik zatoz: kontua sortu eta irakasle-profila aukeratzean, hara eramango zaitugu inporta dezazun.",
+        "not_for_role": "Txantiloiak irakasle-kontu batekin bakarrik erabil daitezke; horregatik, ez zaitugu aukeratu zenuenera eraman."
       },
       "gone": {
         "title": "Txantiloi hau jada ez dago eskuragarri",
@@ -521,7 +525,9 @@
       "meta": {
         "title": "Klase-txantiloiak · ITAKAI",
         "description": "Irakasleek ITAKAIn argitaratutako klase gamifikatuak, beste irakasle batzuek haietatik abiatzeko."
-      }
+      },
+      "recommended": "Gomendatua",
+      "copy_link_named": "Kopiatu «{name}» txantiloiaren esteka"
     },
     "class_list": {
       "tab_active": "Aktiboak",
@@ -529,6 +535,25 @@
       "empty_title": "Klaserik ez",
       "empty_archived_title": "Ez dago artxibatutako klaserik",
       "no_results": "Ez dago «{query}» bilaketarekin bat datorren klaserik"
+    },
+    "effects": {
+      "floater": {
+        "xp": "XP",
+        "lives": "Bizitzak"
+      }
+    },
+    "calendar": {
+      "prev_month": "Aurreko hilabetea",
+      "next_month": "Hurrengo hilabetea"
+    },
+    "teams": {
+      "standings_title": "Taldeen sailkapena · {title}",
+      "position": "Postua",
+      "points": "{count} puntu | {count} puntu",
+      "kind": {
+        "base": "Oinarrizkoa",
+        "temporal": "Behin-behinekoa"
+      }
     }
   }
 }

@@ -52,17 +52,32 @@
         :education-level="state.classData.educationLevel"
         :language="state.classData.language"
       >
-        <template v-if="can('class.inviteCode')" #actions>
-          <Button
-            variant="secondary"
-            size="md"
-            :disabled="state.classData.archived"
-            @click="state.showInviteModal = true"
-          >
-            <UserPlusIcon class="w-5 h-5 sm:mr-2" /><span class="hidden sm:inline">{{
-              t('teacher.classes.detail.btn_invite')
-            }}</span>
-          </Button>
+        <template v-if="can('student.view') || can('class.inviteCode')" #actions>
+          <div class="flex items-center gap-2">
+            <!-- La ruleta, a toda la ventana: la usa todo el profesorado, también el de prácticas -->
+            <Button
+              v-if="can('student.view')"
+              variant="secondary"
+              size="md"
+              :to="`/profesor/clases/${classId}/ruleta`"
+            >
+              <LifebuoyIcon class="w-5 h-5 sm:mr-2" aria-hidden="true" /><span
+                class="sr-only sm:not-sr-only"
+                >{{ t('teacher.classes.detail.btn_roulette') }}</span
+              >
+            </Button>
+            <Button
+              v-if="can('class.inviteCode')"
+              variant="secondary"
+              size="md"
+              :disabled="state.classData.archived"
+              @click="state.showInviteModal = true"
+            >
+              <UserPlusIcon class="w-5 h-5 sm:mr-2" /><span class="hidden sm:inline">{{
+                t('teacher.classes.detail.btn_invite')
+              }}</span>
+            </Button>
+          </div>
         </template>
         <template v-if="scheduleSummary" #subtitle>
           <span class="inline-flex items-center gap-1.5">
@@ -126,6 +141,7 @@
 <script setup lang="ts">
 import {
   UserPlusIcon,
+  LifebuoyIcon,
   ExclamationTriangleIcon,
   XMarkIcon,
   CalendarDaysIcon,

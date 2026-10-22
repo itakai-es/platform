@@ -44,13 +44,22 @@
     >
       <!-- Copiarla en otra clase (o en la suya: duplicarla). El texto, solo en
            pantallas anchas: por debajo, junto a las migas, las partiría en dos. -->
-      <template v-if="canCopy" #actions>
-        <Button variant="secondary" size="md" @click="copyOpen = true">
-          <DocumentDuplicateIcon class="w-5 h-5 xl:mr-2" aria-hidden="true" /><span
-            class="sr-only xl:not-sr-only"
-            >{{ t('teacher.missions.import.copy_button') }}</span
-          >
-        </Button>
+      <template v-if="canCopy || canAdapt" #actions>
+        <div class="flex items-center gap-2">
+          <!-- Adaptarla con IA a su clase: propone y no cambia nada hasta aplicar -->
+          <Button v-if="canAdapt" variant="secondary" size="md" @click="adaptOpen = true">
+            <SparklesIcon class="w-5 h-5 xl:mr-2" aria-hidden="true" /><span
+              class="sr-only xl:not-sr-only"
+              >{{ t('teacher.missions.adapt.button') }}</span
+            >
+          </Button>
+          <Button v-if="canCopy" variant="secondary" size="md" @click="copyOpen = true">
+            <DocumentDuplicateIcon class="w-5 h-5 xl:mr-2" aria-hidden="true" /><span
+              class="sr-only xl:not-sr-only"
+              >{{ t('teacher.missions.import.copy_button') }}</span
+            >
+          </Button>
+        </div>
       </template>
 
       <!-- Pestaña Ajustes: título, fecha límite e imagen de la misión -->
@@ -58,6 +67,7 @@
         <MissionConfigPanel
           v-if="current === 'ajustes'"
           :mission-id="missionId"
+          :class-id="classId"
           :mission="mission"
           @update="onSettingsUpdate"
         />
@@ -121,6 +131,17 @@
       v-model="copyOpen"
       :source-mission="copySource"
     />
+
+    <!-- Adaptar la misión con IA a su clase -->
+    <AdaptMissionModal
+      v-if="mission && canAdapt"
+      v-model="adaptOpen"
+      :mission-id="missionId"
+      :class-name="mission.className"
+      :mission="mission"
+      :class-settings="classCfg"
+      @applied="fetchMission(true)"
+    />
   </div>
 </template>
 
@@ -129,7 +150,7 @@ import {
   Squares2X2Icon as Squares2X2IconSolid,
   Cog6ToothIcon as Cog6ToothIconSolid,
 } from '@heroicons/vue/24/solid'
-import { DocumentDuplicateIcon } from '@heroicons/vue/24/outline'
+import { DocumentDuplicateIcon, SparklesIcon } from '@heroicons/vue/24/outline'
 import type {
   MissionDetail,
   MissionEnigmaDetail as MissionEnigma,
@@ -266,6 +287,33 @@ const deleteModalConfig = computed(() => {
 
 const toast = useToast()
 const { t } = useI18n()
+
+// --------- Adaptarla con IA a su clase ---------
+// Solo en una misión importada de otra clase y para quien puede editarla: es
+// el paso que sigue a importarla. `?adaptar=1` la abre al llegar (el acceso directo
+// de «Misión importada»), ya con esta misión cargada; el parámetro se quita al abrirla.
+const adaptOpen = ref(false)
+const canAdapt = computed(
+  () =>
+    can('mission.edit') &&
+    !!(mission.value as { importedFromOtherClass?: boolean } | null)?.importedFromOtherClass
+)
+watch(
+  () =>
+    [
+      route.query.adaptar,
+      canAdapt.value,
+      mission.value?.id === missionId.value,
+      accessKnown.value,
+    ] as const,
+  ([adaptar, allowed, loaded, known]) => {
+    if (!adaptar || !loaded || !known) return
+    if (allowed) adaptOpen.value = true
+    const { adaptar: _removed, ...query } = route.query
+    router.replace({ query })
+  },
+  { immediate: true }
+)
 
 // Dynamic title
 useHead({

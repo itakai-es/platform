@@ -68,7 +68,11 @@ const ALLOWED_TEACHER_ID: Record<string, Allowed> = {
   'modules/behaviors/behaviors.service.ts': {
     count: 1,
     reason:
-      'BehaviorApplication.teacherId guarda quién aplicó el comportamiento (autoría, no acceso)',
+      'BehaviorApplication.teacherId guarda quién aplicó el comportamiento o dio la recompensa (autoría, no acceso), en el núcleo común de uno y de varios',
+  },
+  'modules/teams/teams.service.ts': {
+    count: 1,
+    reason: 'TeamAward.teacherId guarda quién premió al equipo (autoría, no acceso)',
   },
   'modules/profile/profile.service.ts': {
     count: 1,
@@ -141,10 +145,6 @@ const ALLOWED_ENROLLMENT_LOOKUP: Record<string, Allowed> = {
     count: 4,
     reason:
       'monedero del alumno en la tienda, en rutas /students/classes/:classId detrás de requireStudentEnrollment',
-  },
-  'modules/behaviors/behaviors.service.ts': {
-    count: 1,
-    reason: 'alumno al que se aplica el comportamiento, con behavior.apply ya comprobado',
   },
   'modules/teachers/teachers.service.ts': {
     count: 1,

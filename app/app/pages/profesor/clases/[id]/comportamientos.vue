@@ -4,6 +4,8 @@
     :students="state.students"
     :settings="classSettings"
     :readonly="!can('behavior.edit')"
+    :archived="!!state.classData?.archived"
+    :can-team="can('team.award')"
   />
 </template>
 

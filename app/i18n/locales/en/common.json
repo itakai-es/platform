@@ -507,8 +507,12 @@
         "what_you_get_missions": "Importing it creates a new class of your own with the template's story, cover, features, shop and behaviors and, if you want, its missions.",
         "import_missions": "Also import its mission | Also import its {count} missions",
         "import_missions_hint": "They arrive without deadlines, documents or badges.",
-        "login_note": "To import it, sign in with a teacher account.",
-        "teacher_only": "You need a teacher account to import it."
+        "login_note": "Sign in or create your teacher account: when you finish, you will come back here to import it.",
+        "teacher_only": "You need a teacher account to import it.",
+        "ready_note": "You are signed in. Check what it includes and press “Import” to get your own copy.",
+        "pending_login": "You came from a template: when you sign in with your teacher account, we will take you back so you can import it.",
+        "pending_signup": "You came from a template: when you create your account and choose the teacher profile, we will take you back so you can import it.",
+        "not_for_role": "Templates can only be used with a teacher account, so we have not taken you to the one you chose."
       },
       "gone": {
         "title": "This template is no longer available",
@@ -521,7 +525,9 @@
       "meta": {
         "title": "Class templates · ITAKAI",
         "description": "Gamified classes that teachers have published on ITAKAI for other teachers to build on."
-      }
+      },
+      "recommended": "Recommended",
+      "copy_link_named": "Copy the link to “{name}”"
     },
     "class_list": {
       "tab_active": "Active",
@@ -529,6 +535,25 @@
       "empty_title": "No classes",
       "empty_archived_title": "No archived classes",
       "no_results": "No classes match “{query}”"
+    },
+    "effects": {
+      "floater": {
+        "xp": "XP",
+        "lives": "Lives"
+      }
+    },
+    "calendar": {
+      "prev_month": "Previous month",
+      "next_month": "Next month"
+    },
+    "teams": {
+      "standings_title": "Team standings · {title}",
+      "position": "Position",
+      "points": "{count} point | {count} points",
+      "kind": {
+        "base": "Base",
+        "temporal": "Temporary"
+      }
     }
   }
 }

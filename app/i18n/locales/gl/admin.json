@@ -140,6 +140,25 @@
       "sort": {
         "students_desc": "Máis estudantes",
         "missions_desc": "Máis misións"
+      },
+      "tabs": {
+        "classes": "Clases",
+        "trash": "Papeleira",
+        "label": "Vistas de clases"
+      },
+      "trash": {
+        "note": "As clases que elimina o profesorado pasan {days} días na papeleira antes de borrarse para sempre. Aquí están as de toda a plataforma, para restaurar ou borrar xa as que quen ten a súa propiedade non pode: por exemplo, se a súa conta está suspendida. Unha clase restaurada volve, arquivada, ás clases de quen ten a súa propiedade.",
+        "search_placeholder": "Buscar por clase, propiedade ou código...",
+        "empty_title": "Non hai clases na papeleira",
+        "empty_description": "Cando alguén do profesorado elimina unha clase, pasa aquí {days} días antes de borrarse para sempre.",
+        "owner": "Propiedade: {name}",
+        "no_owner": "Sen ninguén coa súa propiedade",
+        "owner_unavailable": "Conta propietaria sen acceso",
+        "sent_by": "Enviouna {name} o {date}",
+        "sent_on": "Enviada á papeleira o {date}",
+        "warned": "Aviso de borrado enviado o {date}",
+        "restored": "«{name}» saíu da papeleira. Volve arquivada ás clases de quen ten a súa propiedade.",
+        "restore_error": "Non se puido restaurar a clase. Téntao de novo."
       }
     },
     "missions": {
@@ -458,6 +477,29 @@
       "published_at_draft_hint": "Ponse soa ao publicar a entrada por primeira vez.",
       "published_at_invalid": "Escolle unha data entre o 1 de xaneiro de 2000 e hoxe.",
       "view_public": "Ver o blog"
+    },
+    "templates": {
+      "title": "Modelos",
+      "subtitle": "Recomenda os modelos que queiras destacar: saen primeiro nos catálogos, co seu distintivo.",
+      "meta": {
+        "title": "Modelos | ITAKAI Admin"
+      },
+      "view_public": "Ver o catálogo",
+      "search_placeholder": "Buscar por modelo ou por quen o publicou…",
+      "filter_label": "Recomendación",
+      "filter_all": "Todos",
+      "filter_recommended": "Recomendados",
+      "filter_not_recommended": "Sen recomendar",
+      "empty_title": "Aínda non hai modelos publicados",
+      "empty_description": "Cando o profesorado publique unha clase como modelo, aparecerá aquí para que poidas recomendalo.",
+      "empty_filtered_title": "Ningún modelo con estes filtros",
+      "empty_filtered_description": "Proba con outra busca ou quita o filtro.",
+      "published_by": "Publicado por {name}",
+      "recommend": "Recomendado",
+      "recommend_named": "Recomendar «{name}»",
+      "recommended_on": "«{name}» xa sae como recomendado",
+      "recommended_off": "«{name}» xa non sae como recomendado",
+      "save_error": "Non se puido gardar. Téntao de novo."
     }
   }
 }

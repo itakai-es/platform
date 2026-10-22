@@ -365,6 +365,14 @@
         "avg_missions": "Misiones medies",
         "total_xp": "XP total de la clase"
       }
+    },
+    "teams": {
+      "my_team_title": "El mio equipu",
+      "members_label": "Integrantes de {name}",
+      "you": "Tu",
+      "mission_team": "Esta misión faise per equipos («{set}»). El to equipu ye {team}, con {names}. Cada integrante entrega la so parte.",
+      "mission_team_alone": "Esta misión faise per equipos («{set}»). El to equipu ye {team}. Cada integrante entrega la so parte.",
+      "mission_no_team": "Esta misión faise per equipos («{set}»), pero entá nun tas en nengún. Entrúga-lo en clase."
     }
   }
 }

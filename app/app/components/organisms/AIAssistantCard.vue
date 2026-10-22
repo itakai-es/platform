@@ -35,6 +35,7 @@
 
 <script setup lang="ts">
 import { computed, ref, onMounted } from 'vue'
+import { shuffled } from '~/utils/shuffle'
 import {
   AcademicCapIcon,
   LightBulbIcon,
@@ -252,11 +253,7 @@ const pickedIndices = ref<number[]>([])
 function pickRandom() {
   const pool = isTeacher.value ? teacherPool.value : studentPool.value
   const indices = Array.from({ length: pool.length }, (_, i) => i)
-  for (let i = indices.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[indices[i], indices[j]] = [indices[j], indices[i]]
-  }
-  pickedIndices.value = indices.slice(0, 5)
+  pickedIndices.value = shuffled(indices).slice(0, 5)
 }
 
 onMounted(pickRandom)

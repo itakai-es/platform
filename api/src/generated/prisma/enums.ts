@@ -125,7 +125,8 @@ export const NotificationType = {
   class_teacher_added: 'class_teacher_added',
   class_teacher_changed: 'class_teacher_changed',
   class_teacher_removed: 'class_teacher_removed',
-  class_ownership_received: 'class_ownership_received'
+  class_ownership_received: 'class_ownership_received',
+  class_purge_soon: 'class_purge_soon'
 } as const
 
 export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
@@ -200,6 +201,16 @@ export const MessageRole = {
 } as const
 
 export type MessageRole = (typeof MessageRole)[keyof typeof MessageRole]
+
+
+export const AttendanceStatus = {
+  present: 'present',
+  absent: 'absent',
+  late: 'late',
+  excused: 'excused'
+} as const
+
+export type AttendanceStatus = (typeof AttendanceStatus)[keyof typeof AttendanceStatus]
 
 
 export const HelpArticleStatus = {

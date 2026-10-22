@@ -26,6 +26,7 @@ import {
 import { activityActor } from '../../utils/activity.js'
 import { assertNotManagedAccount } from '../../utils/identity-db.js'
 import { changeOwnPassword } from '../../utils/password-change.js'
+import { completedMissionsByStudent } from '../../utils/ranking.js'
 
 /** Matricularse en una clase es cosa de alumnos: el profesorado la mira con la vista previa. */
 function assertStudentRole(user: ClassUser) {
@@ -429,8 +430,7 @@ export class StudentsService {
     }
   }
 
-  async getClassRanking(userId: string, classId: string, filter?: string) {
-
+  async getClassRanking(userId: string, classId: string) {
     // Order by enrollment XP (per-class XP)
     const enrollments = await prisma.classEnrollment.findMany({
       where: { classId, isPreview: false, AND: [participatingEnrollmentWhere] },
@@ -442,23 +442,9 @@ export class StudentsService {
     const clsRow = await prisma.class.findUnique({ where: { id: classId }, select: { levelConfig: true } })
     const levelCfg = resolveLevelConfig(clsRow?.levelConfig)
 
-    // Get total missions in this class
-    const missionsCount = await prisma.mission.count({
-      where: { classId },
-    })
-
-    // Get completed missions per student (completedAt is not null means completed)
-    const completedMissionsMap = new Map<string, number>()
-    const missionProgress = await prisma.studentMissionProgress.findMany({
-      where: {
-        mission: { classId },
-        completedAt: { not: null },
-      },
-      select: { studentId: true },
-    })
-    for (const mp of missionProgress) {
-      completedMissionsMap.set(mp.studentId, (completedMissionsMap.get(mp.studentId) || 0) + 1)
-    }
+    // Misiones completadas por alumno: el mismo recuento que el ranking del profesorado.
+    const { total: missionsCount, byStudent: completedMissionsMap } =
+      await completedMissionsByStudent(classId)
 
     const leaderboard = enrollments.map((e, index) => {
       const missionsCompleted = completedMissionsMap.get(e.student.id) || 0

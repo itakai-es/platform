@@ -166,7 +166,9 @@
           "view_ranking": "Clasificación",
           "col_actions": "Aiciones",
           "managed_badge": "Ensin corréu",
-          "pending_sign_in_badge": "Pendiente d'entrar"
+          "pending_sign_in_badge": "Pendiente d'entrar",
+          "view_attendance": "Asistencia",
+          "view_teams": "Equipos"
         },
         "stats_title": "Estadístiques de la clase",
         "pending_reviews": "Entregues por revisar",
@@ -207,9 +209,6 @@
           "section_negatives": "Negativos",
           "filter_all": "Toos",
           "apply_title": "Aplicar \"{name}\"",
-          "pick_student": "Escueyi a qué estudiante-y lo vas aplicar.",
-          "applied_toast": "{behavior} aplicáu a {student}",
-          "empty_students": "Entá nun hai estudiantes nesta clase.",
           "form_new_title": "Comportamientu nuevu",
           "form_edit_title": "Editar comportamientu",
           "form_type": "Triba",
@@ -233,7 +232,6 @@
           "toast_save_error": "Nun se pudo guardar el comportamientu.",
           "toast_delete_error": "Nun se pudo desaniciar el comportamientu.",
           "fetch_error": "Nun se pudieron cargar los comportamientos.",
-          "apply_error": "Nun se pudo aplicar el comportamientu.",
           "empty_description_readonly": "Cuando s'amiesten comportamientos a esta clase, apaecerán equí."
         },
         "shop": {
@@ -610,7 +608,10 @@
             "document": "Documentos",
             "submission": "Entregues",
             "behavior": "Comportamientos",
-            "shop": "Tienda"
+            "shop": "Tienda",
+            "reward": "Recompenses",
+            "attendance": "Asistencia",
+            "team": "Equipos"
           },
           "actions": {
             "class": {
@@ -625,7 +626,9 @@
               "ownership_transferred": "pasó-y la propiedá de la clase a {target}",
               "ownership_inherited": "la clase pasó a {target} al desaniciase la cuenta que tenía la so propiedá",
               "trashed": "unvió la clase a la papelera",
-              "restored": "sacó la clase de la papelera"
+              "restored": "sacó la clase de la papelera",
+              "template_recommended": "recomendó la plantía nos catálogos",
+              "template_unrecommended": "quitó la recomendación de la plantía"
             },
             "teacher": {
               "added": "amestó a {target} al profesoráu ({profile}, {access})",
@@ -669,12 +672,36 @@
               "applied": "aplicó-y «{title}» a {target}",
               "created": "creó'l comportamientu «{title}»",
               "updated": "editó'l comportamientu «{title}»",
-              "deleted": "desanició'l comportamientu «{title}»"
+              "deleted": "desanició'l comportamientu «{title}»",
+              "applied_batch": "aplicó «{title}» a {count} estudiantes"
             },
             "shop": {
               "item_created": "amestó «{title}» a la tienda",
               "item_updated": "editó «{title}» na tienda",
               "item_deleted": "quitó «{title}» de la tienda"
+            },
+            "reward": {
+              "granted": "dio-y a {target} una recompensa: «{title}»",
+              "granted_batch": "dio una recompensa a {count} estudiantes: «{title}»",
+              "taken": "quitó-y recursos a {target}: «{title}»",
+              "taken_batch": "quitó recursos a {count} estudiantes: «{title}»"
+            },
+            "attendance": {
+              "taken": "pasó llista del {date}: {present} en clase, {absent} ensin venir",
+              "updated": "igualó la llista del {date}: {present} en clase, {absent} ensin venir",
+              "deleted": "borró la llista del {date}"
+            },
+            "team": {
+              "set_created": "creó l’agrupación d’equipos «{title}»",
+              "set_updated": "editó l’agrupación d’equipos «{title}»",
+              "set_archived": "archivó l’agrupación d’equipos «{title}»",
+              "set_unarchived": "sacó del archivu l’agrupación d’equipos «{title}»",
+              "set_deleted": "desanició l’agrupación d’equipos «{title}»",
+              "members_changed": "camudó los equipos de «{title}»",
+              "awarded": "dio {points} puntu al equipu «{title}»: «{label}» | dio {points} puntos al equipu «{title}»: «{label}»",
+              "awarded_batch": "dio {points} puntu al equipu «{title}» y repartió «{label}» a cada integrante | dio {points} puntos al equipu «{title}» y repartió «{label}» a cada integrante",
+              "distributed": "repartió «{label}» al equipu «{title}»",
+              "distributed_batch": "repartió «{label}» a la única persona del equipu «{title}» | repartió «{label}» a les {count} persones del equipu «{title}»"
             }
           },
           "anonymous": {
@@ -691,8 +718,13 @@
             },
             "behavior": {
               "applied": "aplicó-y «{title}» a daquién que yá nun ta na clase"
+            },
+            "reward": {
+              "granted": "dio una recompensa a daquién que yá nun ta na clase: «{title}»",
+              "taken": "quitó recursos a daquién que yá nun ta na clase: «{title}»"
             }
-          }
+          },
+          "batch_who": "Ver a quién ({count})"
         },
         "in_trash": {
           "title": "«{name}» ta na papelera",
@@ -700,7 +732,8 @@
           "owner_hint": "Restáurala pa tornar a abrila. Torna archivada: l'alumnáu nun va poder entrar hasta que la desarchives.",
           "not_owner": "Namái quien tien la propiedá de la clase pue restaurala. Si la precises, pídiyelo enantes d'esa data.",
           "go_trash": "Ver la papelera"
-        }
+        },
+        "btn_roulette": "Ruleta"
       },
       "trash": {
         "meta": {
@@ -798,7 +831,10 @@
           "save": "Guardar los cambeos",
           "discard": "Descartar",
           "toast_saved": "Datos guardaos",
-          "toast_error": "Nun se pudieron guardar los datos"
+          "toast_error": "Nun se pudieron guardar los datos",
+          "team_set_label": "Per equipos",
+          "team_set_none": "Individual (ensin equipos)",
+          "team_set_hint": "Namás informativo: l’alumnáu ve con qué equipos se fai y pues aprobar tol equipu d’una vegada. Cada estudiante sigue entregando lo so."
         }
       },
       "import": {
@@ -846,6 +882,41 @@
         "duplicate_success_title": "Misión duplicada",
         "success_description": "La copia de «{title}» yá ta en «{name}», bloquiada y ensin data llende. Revísala y desbloquíala cuando quieras que la vea'l to alumnáu.",
         "open_mission": "Abrir la misión"
+      },
+      "adapt": {
+        "button": "Adaptar con IA",
+        "title": "Adaptar la misión con IA",
+        "intro": "La IA propónte un títulu, una historia y unos enigmes a la midida de «{name}»: el so nivel, la so asignatura, la so llingua y el so mundu. La misión nun camuda hasta que apliques la propuesta.",
+        "request_label": "¿Qué quies? (opcional)",
+        "request_hint": "Si nun dices nada, la IA adáptala a la clase ensin más.",
+        "request_placeholder": "Ex.: más cenciella, pa trabayar per pareyes y con un enigma final d'esposición",
+        "propose": "Proponer adaptación",
+        "generating": "Tresnando la propuesta…",
+        "error": "La IA nun pudo tresnar la propuesta. La misión nun camudó; tórnalo a intentar en dellos minutos.",
+        "error_kept": "La IA nun pudo facer esi cambéu. Caltiénse la propuesta anterior.",
+        "current": "Agora",
+        "proposed": "Propuesta",
+        "field_title": "Títulu",
+        "field_story": "Historia",
+        "enigmas_heading": "Enigmes",
+        "enigma_n": "Enigma {n}",
+        "objectives": "Oxetivos",
+        "unchanged": "Ensin cambeos",
+        "row_create": "Enigma nuevu",
+        "row_delete": "Va desaniciase",
+        "row_keep": "Queda como ta",
+        "row_keep_hint": "Tien entregues del alumnáu, asina que nun se pue quitar.",
+        "rewards_raised": "Daquién yá lu completó: les sos recompenses nun pueden baxar y caltiénense les d'agora.",
+        "no_changes": "La propuesta nun camuda nada de la misión. Pide otru cambéu o descártala.",
+        "feedback_label": "¿Quies otru cambéu?",
+        "feedback_placeholder": "Ex.: menos piratas y enigmes más curtios",
+        "ask_change": "Pidir otru cambéu",
+        "discard": "Descartar",
+        "apply": "Aplicar",
+        "applied": "Misión adaptada",
+        "apply_error": "Nun se pudo aplicar la propuesta. La misión nun camudó.",
+        "apply_error_partial": "Namás s'aplicó una parte de la propuesta. Revisa la comparanza: yá amuesa lo guardao.",
+        "after_import_hint": "¿Quiesla a la midida d'esta clase? La IA propónte cómo adaptala y tu decides si aplicalo."
       }
     },
     "badges": {
@@ -1233,7 +1304,10 @@
         "pct_custom": "Otru porcentaxe",
         "will_receive": "Va recibir",
         "approve": "Aprobar {pct}%",
-        "approve_error": "Nun se pudo aprobar la entrega"
+        "approve_error": "Nun se pudo aprobar la entrega",
+        "approve_team": "Aprobar l’equipu ({count}) con un {pct} %",
+        "team_approved": "{team}: aprobada {count} entrega con un {pct} % | {team}: aprobaes {count} entregues con un {pct} %",
+        "team_note": "Misión per equipos («{set}»): al revisar una entrega pues aprobar col mesmu porcentaxe a tol so equipu que la entregare."
       }
     },
     "templates": {
@@ -1283,6 +1357,7 @@
         "province": "Toles provincies"
       },
       "sort": {
+        "recommended": "Recomendaes primero",
         "recent": "Más recientes",
         "name_asc": "Nome A-Z",
         "name_desc": "Nome Z-A"
@@ -1331,6 +1406,294 @@
       "done": "Fecho",
       "wizard_question_schedule": "Ponle un horariu a la to clase",
       "wizard_question_cover": "Agora, una portada pa la to clase"
+    },
+    "roulette": {
+      "meta": {
+        "title": "Ruleta | ITAKAI Docente"
+      },
+      "title": "Ruleta",
+      "exit": "Colar",
+      "fullscreen_enter": "Pantalla completa",
+      "fullscreen_exit": "Colar de la pantalla completa",
+      "sound": "Soníu",
+      "spin": "Xirar",
+      "spin_again": "Xirar otra vegada",
+      "choosing": "Escoyendo…",
+      "keyboard_hint": "Tamién cola barra espaciadora o Intro.",
+      "idle_hint": "Primi «Xirar» pa escoyer a daquién.",
+      "picked_label": "Salió",
+      "announce": "Salió {name}.",
+      "announce_left": "Salió {name}. Queda {count}. | Salió {name}. Queden {count}.",
+      "announce_none_left": "Salió {name}. Nun queda naide más.",
+      "counter": "Na rueda: {left} de {total}",
+      "list_title": "Estudiantes",
+      "no_repeat": "Ensin repetir",
+      "no_repeat_hint": "Quien yá salió güei nun vuelve salir nesti preséu hasta qu'entames de nuevo.",
+      "restart": "Entamar de nuevo",
+      "status_drawn": "Yá salió",
+      "status_removed": "Fuera nesta ronda",
+      "remove": "Quitar",
+      "remove_aria": "Quitar a {name} d'esta ronda",
+      "restore": "Volver poner",
+      "restore_aria": "Volver poner a {name} na rueda",
+      "all_drawn_title": "Yá salió tol mundu",
+      "all_drawn_description": "Entama de nuevo pa que vuelvan salir toles persones.",
+      "none_left_title": "Nun queda naide na rueda",
+      "none_left_description": "Vuelvi poner a daquién de la llista o entama de nuevo.",
+      "empty_title": "Entá nun hai estudiantes nesta clase",
+      "empty_description": "Cuando s'xunan, van salir equí na ruleta.",
+      "trash_title": "Esta clase ta na papelera",
+      "trash_description": "Restáurala dende la clase pa volver usar la ruleta.",
+      "back_to_class": "Volver a la clase",
+      "list_title_teams": "Equipos",
+      "mode_label": "Quién entra na rueda",
+      "mode_students": "Tola clase",
+      "mode_team": "Un equipu",
+      "mode_teams": "Ente equipos",
+      "team_label": "Equipu",
+      "set_label": "Agrupación",
+      "attendance_not_taken": "Güei entá nun se pasó llista: entra tol alumnáu.",
+      "attendance_all_here": "Según la llista de güei, vino tol alumnáu.",
+      "attendance_excluded": "{count} persona que falta güei nun ta na rueda. | {count} persones que falten güei nun tán na rueda.",
+      "take_attendance": "Pasar llista",
+      "spin_inside": "Xirar dientro de {team}",
+      "award_team": "Premiar a {team}",
+      "apply_to": "Aplicar a {name}",
+      "apply_title": "Aplicar a {name}",
+      "scope_empty_title": "Nun hai naide na rueda",
+      "scope_empty_students": "Según la llista de güei, nun vino naide.",
+      "scope_empty_team": "Nesti equipu nun hai naide que viniere güei.",
+      "scope_empty_teams": "Nesta agrupación nun hai nengún equipu con daquién que viniere güei."
+    },
+    "classroom": {
+      "picker": {
+        "legend": "Estudiantes",
+        "search": "Buscar estudiante…",
+        "all": "Tol alumnáu",
+        "none": "Naide",
+        "empty": "Entá nun hai estudiantes nesta clase.",
+        "no_results": "Naide coincide cola busca.",
+        "count": "Escoyíos: {count} de {total}",
+        "only_present": "Namás los presentes güei",
+        "only_absent": "Namás los ausentes güei"
+      },
+      "modal_title": "Aplicar a dellos estudiantes",
+      "mode_label": "Qué quies aplicar",
+      "mode_behavior": "Comportamientu",
+      "mode_reward": "Recompensa llibre",
+      "behavior_legend": "Comportamientu",
+      "no_behaviors": "Esta clase entá nun tien comportamientos. Créalos na llingüeta Comportamientos o da una recompensa llibre.",
+      "reward": {
+        "legend": "Recompensa",
+        "direction_label": "Dar o quitar",
+        "give": "Dar",
+        "take": "Quitar",
+        "no_resources": "Esta clase nun tien nengún recursu activáu (XP, monedes, maná o vides).",
+        "reason": "Motivu",
+        "reason_placeholder": "Ex.: Ayudó a preparar el llaboratoriu",
+        "reason_too_long": "El motivu pue tener hasta 80 caráuteres."
+      },
+      "confirm_button": "Aplicar",
+      "confirm_behavior": "Aplicar «{title}» a {count} estudiante. | Aplicar «{title}» a {count} estudiantes.",
+      "confirm_reward": "Recompensa «{title}» a {count} estudiante. | Recompensa «{title}» a {count} estudiantes.",
+      "confirm_effect": "Por estudiante: {effect}.",
+      "confirm_no_effect": "Nun mueve nengún recursu activu nesta clase; namás queda anotáu.",
+      "applied_toast": "«{title}» aplicáu a {count} estudiante | «{title}» aplicáu a {count} estudiantes",
+      "apply_error": "Nun se pudo aplicar. Nun camudó nada.",
+      "archived_notice": "La clase ta archivada: pues ver y editar el catálogu, pero non aplicalu a naide.",
+      "select_all_visible": "Escoyer a tol alumnáu de la llista",
+      "select_student": "Escoyer a {name}",
+      "selected_count": "{count} estudiante escoyíu | {count} estudiantes escoyíos",
+      "apply_behavior": "Aplicar comportamientu",
+      "give_reward": "Dar recompensa",
+      "clear_selection": "Quitar la seleición",
+      "applied_announcement": "Aplicáu a {count} estudiante. Saldos anovaos. | Aplicáu a {count} estudiantes. Saldos anovaos.",
+      "target_label": "A quién",
+      "target_students": "A estudiantes",
+      "target_team": "A un equipu",
+      "team": {
+        "legend": "Equipu",
+        "points": "Puntos pal marcador",
+        "points_hint": "Sumen na clasificación d’equipos (o resten, si quites). Pon 0 si namás repartes.",
+        "distribute": "Repartir tamién a cada integrante",
+        "distribute_hint": "Cada integrante recibe’l comportamientu o la recompensa, como si-y lo aplicares per separtao.",
+        "confirm_points": "Equipu «{team}»: {points} puntu nel marcador. | Equipu «{team}»: {points} puntos nel marcador.",
+        "confirm_no_points": "Equipu «{team}»: ensin puntos nel marcador.",
+        "confirm_distribute": "Y «{title}» a la persona que lu integra. | Y «{title}» a les {count} persones que lu integren.",
+        "confirm_no_distribute": "Nun se reparte nada a quien lu integra.",
+        "awarded_toast": "Equipu «{team}» premiáu",
+        "modal_title": "Premiar a un equipu"
+      },
+      "fixed_to": "Pa: {names}",
+      "missing": {
+        "team": "Escueyi un equipu.",
+        "students": "Escueyi polo menos un estudiante.",
+        "behavior": "Escueyi un comportamientu.",
+        "no_behaviors": "Esta clase nun tien comportamientos: da una recompensa llibre.",
+        "reason": "Escribi'l motivu.",
+        "points": "Pon los puntos pal marcador o marca «{label}».",
+        "empty_team": "Esi equipu nun tien integrantes: escueyi otru o desmarca «{label}».",
+        "amount": "Pon cuánto das o quites."
+      }
+    },
+    "attendance": {
+      "tabs_label": "Asistencia",
+      "tab_take": "Pasar llista",
+      "tab_history": "Históricu",
+      "date": "Data",
+      "session": "Sesión",
+      "no_schedule": "Sesión ensin horariu",
+      "saved_by": "Llista guardada por {name} ({time}).",
+      "someone": "daquién del profesoráu",
+      "not_saved": "Entá nun se pasó llista nesta sesión. Tol alumnáu sal presente: marca namás a quien falta.",
+      "unsaved": "Cambeos ensin guardar",
+      "read_only": "Pues ver l’asistencia, pero pasar llista ye de quien edita na clase.",
+      "count": {
+        "present": "{count} presente | {count} presentes",
+        "absent": "{count} ausente | {count} ausentes",
+        "late": "{count} retrasu | {count} retrasos",
+        "excused": "{count} xustificada | {count} xustificaes"
+      },
+      "all_present": "Tol alumnáu presente",
+      "status_of": "Asistencia de {name}",
+      "status": {
+        "present": "Presente",
+        "absent": "Ausente",
+        "late": "Retrasu",
+        "excused": "Xustificada"
+      },
+      "save": "Guardar llista",
+      "delete": "Borrar esta llista",
+      "delete_title": "¿Borrar esta llista?",
+      "delete_message": "Bórrase la sesión col estáu de tol alumnáu. Úsalo si pasesti llista por error.",
+      "apply_present": "Aplicar a los presentes…",
+      "apply_absent": "Aplicar a los ausentes…",
+      "no_auto_xp": "Pasar llista enxamás quita nin da nada per sí sola: premiar o penalizar ye siempre una aición aparte, con confirmación.",
+      "load_error": "Nun se pudo cargar l’asistencia.",
+      "saved_announcement": "Llista guardada: {present} en clase, {absent} ensin venir.",
+      "save_error": "Nun se pudo guardar la llista.",
+      "deleted": "Llista borrada.",
+      "delete_error": "Nun se pudo borrar la llista.",
+      "history": {
+        "download_csv": "Descargar CSV",
+        "empty_title": "Nun hai llistes esti mes",
+        "empty_description": "Cuando pases llista, equí vas ver l’asistencia de cada estudiante.",
+        "calendar_hint": "Los díes marcaos tienen llista. Primi un día pa pasala o igualala.",
+        "table_caption": "Asistencia por estudiante en {month}",
+        "day_with_list": "hai llista",
+        "csv_sessions": "Sesiones",
+        "csv_file": "asistencia",
+        "export_error": "Nun se pudo descargar el CSV.",
+        "col_incidents": "Faltes y retrasos",
+        "no_incidents": "Nenguna"
+      },
+      "profile": {
+        "rate": "Asistencia: {rate} %",
+        "sessions": "{count} sesión esti cursu | {count} sesiones esti cursu"
+      }
+    },
+    "teams": {
+      "empty_title": "Entá nun hai equipos",
+      "empty_description": "Forma equipos a mano o al debalu. Pues tener equipos de base, fixos, que puntúen na clasificación, y temporales pa una misión o una dinámica.",
+      "empty_description_readonly": "Cuando’l profesoráu con edición forme equipos, vas velos equí.",
+      "new_set": "Formar equipos",
+      "set_label": "Agrupación",
+      "kind": {
+        "base": "De base",
+        "temporal": "Temporal"
+      },
+      "archived_badge": "Archivada",
+      "edit": "Editar",
+      "archive": "Archivar",
+      "unarchive": "Sacar del archivu",
+      "delete": "Desaniciar",
+      "delete_title": "Desaniciar l’agrupación",
+      "delete_message": "Va desaniciase «{title}» colos sos equipos y los sos puntos. Lo que yá se repartió a cada integrante queda. Nun se pue desfacer.",
+      "points": "{count} puntu | {count} puntos",
+      "members_count": "Ensin integrantes | {count} integrante | {count} integrantes",
+      "empty_team": "Entá nun hai naide nesti equipu",
+      "no_team": "Ensin equipu",
+      "unknown_student": "Estudiante",
+      "award": "Premiar",
+      "read_only": "Col to nivel d’accesu ves los equipos, pero nun los formes nin los premies.",
+      "archived_class": "La clase ta archivada: ves los equipos, pero nun se camuden nin se premien.",
+      "saved_toast": "Equipos de «{title}» guardaos",
+      "error": "Nun se pudo guardar. Nun camudó nada.",
+      "stale": "Daquién camudó esta agrupación mentanto la editabes (otra persona o otra llingüeta). Nun se guardó nada: yá ves cómo ta agora.",
+      "moved": "{count} persona movida a {name} | {count} persones movíes a {name}",
+      "archived_announcement": "«{title}» archivada",
+      "unarchived_announcement": "«{title}» salió del archivu",
+      "deleted_announcement": "«{title}» desaniciada",
+      "default_team": "Equipu {n}",
+      "colors": {
+        "purple": "Moráu",
+        "yellow": "Mariellu",
+        "mint": "Verde menta",
+        "sky": "Azul cielu",
+        "red": "Bermeyu",
+        "peach": "Piescu"
+      },
+      "emblems": {
+        "star": "Estrella",
+        "bolt": "Rayu",
+        "fire": "Fueu",
+        "shield": "Escudu",
+        "rocket": "Cohete",
+        "heart": "Corazón",
+        "sun": "Sol",
+        "moon": "Lluna",
+        "sparkles": "Chispes",
+        "globe": "Mundu",
+        "puzzle": "Puzle",
+        "trophy": "Troféu"
+      },
+      "form": {
+        "new_title": "Formar equipos",
+        "edit_title": "Editar l’agrupación",
+        "title": "Nome de l’agrupación",
+        "title_placeholder": "Ex.: Cases",
+        "title_required": "Ponse-y un nome.",
+        "title_too_long": "El nome pue tener hasta 60 caráuteres.",
+        "kind": "Tipu",
+        "kind_hint": {
+          "base": "Fixa demientres el cursu. Los sos puntos cuenten na clasificación d’equipos.",
+          "temporal": "Pa una misión o una dinámica. Nun puntúa na clasificación; archívala al acabar."
+        },
+        "method": "Cómo",
+        "method_random": "Al debalu",
+        "method_manual": "A mano",
+        "size": "Tamañu",
+        "size_teams": "Númberu d’equipos",
+        "size_perTeam": "Persones per equipu",
+        "size_result": "Va salir {count} equipu. | Van salir {count} equipos.",
+        "balance": "Equilibrar per nivel",
+        "absent_note": "Güei nun falta naide na llista: entra tol alumnáu. | Güei falta {count} persona na llista y queda fuera del repartu. | Güei falten {count} persones na llista y queden fuera del repartu.",
+        "no_list_note": "Güei entá nun se pasó llista: entra tol alumnáu.",
+        "preview_title": "Propuesta",
+        "preview_announcement": "Propuesta llista: {count} equipu. | Propuesta llista: {count} equipos.",
+        "excluded": "Fuera por faltar güei: {names}.",
+        "shuffle": "Repartir",
+        "again": "Otra vegada",
+        "save_teams": "Guardar los equipos",
+        "create": "Crear los equipos",
+        "save": "Guardar",
+        "teams_legend": "Equipos",
+        "team_name": "Nome del equipu {n}",
+        "remove_team": "Quitar l’equipu {name}",
+        "color": "Color",
+        "emblem": "Emblema",
+        "automatic": "Automáticu",
+        "add_team": "Amestar un equipu",
+        "removed_points_note": "Al guardar, los equipos que quitesti desaníciense colos sos puntos."
+      },
+      "tap_hint": "Marca una o delles persones y escueyi'l so equipu na barra d'abaxo o con «Poner equí». Col mur tamién pues arrastrales.",
+      "picked_count": "{count} persona escoyida | {count} persones escoyíes",
+      "put_here": "Poner equí",
+      "put_here_aria": "Poner les persones escoyíes en {team}",
+      "distribute": "Repartir al debalu",
+      "distributed": "{count} persona repartida ente los equipos. | {count} persones repartíes ente los equipos.",
+      "distribute_skipped": "{count} que falta güei queda ensin equipu. | {count} que falten güei queden ensin equipu.",
+      "put_in": "Poner en:"
     }
   }
 }

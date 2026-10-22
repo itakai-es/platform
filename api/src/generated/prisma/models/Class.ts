@@ -40,6 +40,9 @@ export type ClassMinAggregateOutputType = {
   teacherId: string | null
   deletedAt: Date | null
   deletedById: string | null
+  trashWarnedAt: Date | null
+  recommendedAt: Date | null
+  recommendedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -60,6 +63,9 @@ export type ClassMaxAggregateOutputType = {
   teacherId: string | null
   deletedAt: Date | null
   deletedById: string | null
+  trashWarnedAt: Date | null
+  recommendedAt: Date | null
+  recommendedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -83,6 +89,9 @@ export type ClassCountAggregateOutputType = {
   teacherId: number
   deletedAt: number
   deletedById: number
+  trashWarnedAt: number
+  recommendedAt: number
+  recommendedById: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -105,6 +114,9 @@ export type ClassMinAggregateInputType = {
   teacherId?: true
   deletedAt?: true
   deletedById?: true
+  trashWarnedAt?: true
+  recommendedAt?: true
+  recommendedById?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -125,6 +137,9 @@ export type ClassMaxAggregateInputType = {
   teacherId?: true
   deletedAt?: true
   deletedById?: true
+  trashWarnedAt?: true
+  recommendedAt?: true
+  recommendedById?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -148,6 +163,9 @@ export type ClassCountAggregateInputType = {
   teacherId?: true
   deletedAt?: true
   deletedById?: true
+  trashWarnedAt?: true
+  recommendedAt?: true
+  recommendedById?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -244,6 +262,9 @@ export type ClassGroupByOutputType = {
   teacherId: string
   deletedAt: Date | null
   deletedById: string | null
+  trashWarnedAt: Date | null
+  recommendedAt: Date | null
+  recommendedById: string | null
   createdAt: Date
   updatedAt: Date
   _count: ClassCountAggregateOutputType | null
@@ -288,10 +309,14 @@ export type ClassWhereInput = {
   teacherId?: Prisma.StringFilter<"Class"> | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Class"> | Date | string | null
   deletedById?: Prisma.StringNullableFilter<"Class"> | string | null
+  trashWarnedAt?: Prisma.DateTimeNullableFilter<"Class"> | Date | string | null
+  recommendedAt?: Prisma.DateTimeNullableFilter<"Class"> | Date | string | null
+  recommendedById?: Prisma.StringNullableFilter<"Class"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Class"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Class"> | Date | string
   teacher?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   deletedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  recommendedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   enrollments?: Prisma.ClassEnrollmentListRelationFilter
   missions?: Prisma.MissionListRelationFilter
   guide?: Prisma.XOR<Prisma.ClassGuideNullableScalarRelationFilter, Prisma.ClassGuideWhereInput> | null
@@ -302,6 +327,8 @@ export type ClassWhereInput = {
   shopItemUses?: Prisma.ShopItemUseListRelationFilter
   behaviorTemplates?: Prisma.BehaviorTemplateListRelationFilter
   behaviorApplications?: Prisma.BehaviorApplicationListRelationFilter
+  attendanceSessions?: Prisma.AttendanceSessionListRelationFilter
+  teamSets?: Prisma.TeamSetListRelationFilter
   teachers?: Prisma.ClassTeacherListRelationFilter
   actionLog?: Prisma.ClassActionLogListRelationFilter
   homeStudents?: Prisma.UserListRelationFilter
@@ -326,10 +353,14 @@ export type ClassOrderByWithRelationInput = {
   teacherId?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   deletedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  trashWarnedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  recommendedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  recommendedById?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   teacher?: Prisma.UserOrderByWithRelationInput
   deletedBy?: Prisma.UserOrderByWithRelationInput
+  recommendedBy?: Prisma.UserOrderByWithRelationInput
   enrollments?: Prisma.ClassEnrollmentOrderByRelationAggregateInput
   missions?: Prisma.MissionOrderByRelationAggregateInput
   guide?: Prisma.ClassGuideOrderByWithRelationInput
@@ -340,6 +371,8 @@ export type ClassOrderByWithRelationInput = {
   shopItemUses?: Prisma.ShopItemUseOrderByRelationAggregateInput
   behaviorTemplates?: Prisma.BehaviorTemplateOrderByRelationAggregateInput
   behaviorApplications?: Prisma.BehaviorApplicationOrderByRelationAggregateInput
+  attendanceSessions?: Prisma.AttendanceSessionOrderByRelationAggregateInput
+  teamSets?: Prisma.TeamSetOrderByRelationAggregateInput
   teachers?: Prisma.ClassTeacherOrderByRelationAggregateInput
   actionLog?: Prisma.ClassActionLogOrderByRelationAggregateInput
   homeStudents?: Prisma.UserOrderByRelationAggregateInput
@@ -367,10 +400,14 @@ export type ClassWhereUniqueInput = Prisma.AtLeast<{
   teacherId?: Prisma.StringFilter<"Class"> | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Class"> | Date | string | null
   deletedById?: Prisma.StringNullableFilter<"Class"> | string | null
+  trashWarnedAt?: Prisma.DateTimeNullableFilter<"Class"> | Date | string | null
+  recommendedAt?: Prisma.DateTimeNullableFilter<"Class"> | Date | string | null
+  recommendedById?: Prisma.StringNullableFilter<"Class"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Class"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Class"> | Date | string
   teacher?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   deletedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  recommendedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   enrollments?: Prisma.ClassEnrollmentListRelationFilter
   missions?: Prisma.MissionListRelationFilter
   guide?: Prisma.XOR<Prisma.ClassGuideNullableScalarRelationFilter, Prisma.ClassGuideWhereInput> | null
@@ -381,6 +418,8 @@ export type ClassWhereUniqueInput = Prisma.AtLeast<{
   shopItemUses?: Prisma.ShopItemUseListRelationFilter
   behaviorTemplates?: Prisma.BehaviorTemplateListRelationFilter
   behaviorApplications?: Prisma.BehaviorApplicationListRelationFilter
+  attendanceSessions?: Prisma.AttendanceSessionListRelationFilter
+  teamSets?: Prisma.TeamSetListRelationFilter
   teachers?: Prisma.ClassTeacherListRelationFilter
   actionLog?: Prisma.ClassActionLogListRelationFilter
   homeStudents?: Prisma.UserListRelationFilter
@@ -405,6 +444,9 @@ export type ClassOrderByWithAggregationInput = {
   teacherId?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   deletedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  trashWarnedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  recommendedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  recommendedById?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.ClassCountOrderByAggregateInput
@@ -434,6 +476,9 @@ export type ClassScalarWhereWithAggregatesInput = {
   teacherId?: Prisma.StringWithAggregatesFilter<"Class"> | string
   deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Class"> | Date | string | null
   deletedById?: Prisma.StringNullableWithAggregatesFilter<"Class"> | string | null
+  trashWarnedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Class"> | Date | string | null
+  recommendedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Class"> | Date | string | null
+  recommendedById?: Prisma.StringNullableWithAggregatesFilter<"Class"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Class"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Class"> | Date | string
 }
@@ -455,10 +500,13 @@ export type ClassCreateInput = {
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Date | string | null
+  trashWarnedAt?: Date | string | null
+  recommendedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   teacher: Prisma.UserCreateNestedOneWithoutTeacherClassesInput
   deletedBy?: Prisma.UserCreateNestedOneWithoutTrashedClassesInput
+  recommendedBy?: Prisma.UserCreateNestedOneWithoutRecommendedTemplatesInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutClassInput
   missions?: Prisma.MissionCreateNestedManyWithoutClassInput
   guide?: Prisma.ClassGuideCreateNestedOneWithoutClassInput
@@ -469,6 +517,8 @@ export type ClassCreateInput = {
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationCreateNestedManyWithoutClassInput
+  attendanceSessions?: Prisma.AttendanceSessionCreateNestedManyWithoutClassInput
+  teamSets?: Prisma.TeamSetCreateNestedManyWithoutClassInput
   teachers?: Prisma.ClassTeacherCreateNestedManyWithoutClassInput
   actionLog?: Prisma.ClassActionLogCreateNestedManyWithoutClassInput
   homeStudents?: Prisma.UserCreateNestedManyWithoutHomeClassInput
@@ -493,6 +543,9 @@ export type ClassUncheckedCreateInput = {
   teacherId: string
   deletedAt?: Date | string | null
   deletedById?: string | null
+  trashWarnedAt?: Date | string | null
+  recommendedAt?: Date | string | null
+  recommendedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutClassInput
@@ -505,6 +558,8 @@ export type ClassUncheckedCreateInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutClassInput
+  attendanceSessions?: Prisma.AttendanceSessionUncheckedCreateNestedManyWithoutClassInput
+  teamSets?: Prisma.TeamSetUncheckedCreateNestedManyWithoutClassInput
   teachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutClassInput
   actionLog?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutClassInput
   homeStudents?: Prisma.UserUncheckedCreateNestedManyWithoutHomeClassInput
@@ -527,10 +582,13 @@ export type ClassUpdateInput = {
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   teacher?: Prisma.UserUpdateOneRequiredWithoutTeacherClassesNestedInput
   deletedBy?: Prisma.UserUpdateOneWithoutTrashedClassesNestedInput
+  recommendedBy?: Prisma.UserUpdateOneWithoutRecommendedTemplatesNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutClassNestedInput
   missions?: Prisma.MissionUpdateManyWithoutClassNestedInput
   guide?: Prisma.ClassGuideUpdateOneWithoutClassNestedInput
@@ -541,6 +599,8 @@ export type ClassUpdateInput = {
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUpdateManyWithoutClassNestedInput
+  attendanceSessions?: Prisma.AttendanceSessionUpdateManyWithoutClassNestedInput
+  teamSets?: Prisma.TeamSetUpdateManyWithoutClassNestedInput
   teachers?: Prisma.ClassTeacherUpdateManyWithoutClassNestedInput
   actionLog?: Prisma.ClassActionLogUpdateManyWithoutClassNestedInput
   homeStudents?: Prisma.UserUpdateManyWithoutHomeClassNestedInput
@@ -565,6 +625,9 @@ export type ClassUncheckedUpdateInput = {
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutClassNestedInput
@@ -577,6 +640,8 @@ export type ClassUncheckedUpdateInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutClassNestedInput
+  attendanceSessions?: Prisma.AttendanceSessionUncheckedUpdateManyWithoutClassNestedInput
+  teamSets?: Prisma.TeamSetUncheckedUpdateManyWithoutClassNestedInput
   teachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutClassNestedInput
   actionLog?: Prisma.ClassActionLogUncheckedUpdateManyWithoutClassNestedInput
   homeStudents?: Prisma.UserUncheckedUpdateManyWithoutHomeClassNestedInput
@@ -601,6 +666,9 @@ export type ClassCreateManyInput = {
   teacherId: string
   deletedAt?: Date | string | null
   deletedById?: string | null
+  trashWarnedAt?: Date | string | null
+  recommendedAt?: Date | string | null
+  recommendedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -622,6 +690,8 @@ export type ClassUpdateManyMutationInput = {
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -645,6 +715,9 @@ export type ClassUncheckedUpdateManyInput = {
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -683,6 +756,9 @@ export type ClassCountOrderByAggregateInput = {
   teacherId?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
   deletedById?: Prisma.SortOrder
+  trashWarnedAt?: Prisma.SortOrder
+  recommendedAt?: Prisma.SortOrder
+  recommendedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -703,6 +779,9 @@ export type ClassMaxOrderByAggregateInput = {
   teacherId?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
   deletedById?: Prisma.SortOrder
+  trashWarnedAt?: Prisma.SortOrder
+  recommendedAt?: Prisma.SortOrder
+  recommendedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -723,6 +802,9 @@ export type ClassMinOrderByAggregateInput = {
   teacherId?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
   deletedById?: Prisma.SortOrder
+  trashWarnedAt?: Prisma.SortOrder
+  recommendedAt?: Prisma.SortOrder
+  recommendedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -752,6 +834,13 @@ export type ClassCreateNestedManyWithoutDeletedByInput = {
   connect?: Prisma.ClassWhereUniqueInput | Prisma.ClassWhereUniqueInput[]
 }
 
+export type ClassCreateNestedManyWithoutRecommendedByInput = {
+  create?: Prisma.XOR<Prisma.ClassCreateWithoutRecommendedByInput, Prisma.ClassUncheckedCreateWithoutRecommendedByInput> | Prisma.ClassCreateWithoutRecommendedByInput[] | Prisma.ClassUncheckedCreateWithoutRecommendedByInput[]
+  connectOrCreate?: Prisma.ClassCreateOrConnectWithoutRecommendedByInput | Prisma.ClassCreateOrConnectWithoutRecommendedByInput[]
+  createMany?: Prisma.ClassCreateManyRecommendedByInputEnvelope
+  connect?: Prisma.ClassWhereUniqueInput | Prisma.ClassWhereUniqueInput[]
+}
+
 export type ClassUncheckedCreateNestedManyWithoutTeacherInput = {
   create?: Prisma.XOR<Prisma.ClassCreateWithoutTeacherInput, Prisma.ClassUncheckedCreateWithoutTeacherInput> | Prisma.ClassCreateWithoutTeacherInput[] | Prisma.ClassUncheckedCreateWithoutTeacherInput[]
   connectOrCreate?: Prisma.ClassCreateOrConnectWithoutTeacherInput | Prisma.ClassCreateOrConnectWithoutTeacherInput[]
@@ -763,6 +852,13 @@ export type ClassUncheckedCreateNestedManyWithoutDeletedByInput = {
   create?: Prisma.XOR<Prisma.ClassCreateWithoutDeletedByInput, Prisma.ClassUncheckedCreateWithoutDeletedByInput> | Prisma.ClassCreateWithoutDeletedByInput[] | Prisma.ClassUncheckedCreateWithoutDeletedByInput[]
   connectOrCreate?: Prisma.ClassCreateOrConnectWithoutDeletedByInput | Prisma.ClassCreateOrConnectWithoutDeletedByInput[]
   createMany?: Prisma.ClassCreateManyDeletedByInputEnvelope
+  connect?: Prisma.ClassWhereUniqueInput | Prisma.ClassWhereUniqueInput[]
+}
+
+export type ClassUncheckedCreateNestedManyWithoutRecommendedByInput = {
+  create?: Prisma.XOR<Prisma.ClassCreateWithoutRecommendedByInput, Prisma.ClassUncheckedCreateWithoutRecommendedByInput> | Prisma.ClassCreateWithoutRecommendedByInput[] | Prisma.ClassUncheckedCreateWithoutRecommendedByInput[]
+  connectOrCreate?: Prisma.ClassCreateOrConnectWithoutRecommendedByInput | Prisma.ClassCreateOrConnectWithoutRecommendedByInput[]
+  createMany?: Prisma.ClassCreateManyRecommendedByInputEnvelope
   connect?: Prisma.ClassWhereUniqueInput | Prisma.ClassWhereUniqueInput[]
 }
 
@@ -804,6 +900,20 @@ export type ClassUpdateManyWithoutDeletedByNestedInput = {
   deleteMany?: Prisma.ClassScalarWhereInput | Prisma.ClassScalarWhereInput[]
 }
 
+export type ClassUpdateManyWithoutRecommendedByNestedInput = {
+  create?: Prisma.XOR<Prisma.ClassCreateWithoutRecommendedByInput, Prisma.ClassUncheckedCreateWithoutRecommendedByInput> | Prisma.ClassCreateWithoutRecommendedByInput[] | Prisma.ClassUncheckedCreateWithoutRecommendedByInput[]
+  connectOrCreate?: Prisma.ClassCreateOrConnectWithoutRecommendedByInput | Prisma.ClassCreateOrConnectWithoutRecommendedByInput[]
+  upsert?: Prisma.ClassUpsertWithWhereUniqueWithoutRecommendedByInput | Prisma.ClassUpsertWithWhereUniqueWithoutRecommendedByInput[]
+  createMany?: Prisma.ClassCreateManyRecommendedByInputEnvelope
+  set?: Prisma.ClassWhereUniqueInput | Prisma.ClassWhereUniqueInput[]
+  disconnect?: Prisma.ClassWhereUniqueInput | Prisma.ClassWhereUniqueInput[]
+  delete?: Prisma.ClassWhereUniqueInput | Prisma.ClassWhereUniqueInput[]
+  connect?: Prisma.ClassWhereUniqueInput | Prisma.ClassWhereUniqueInput[]
+  update?: Prisma.ClassUpdateWithWhereUniqueWithoutRecommendedByInput | Prisma.ClassUpdateWithWhereUniqueWithoutRecommendedByInput[]
+  updateMany?: Prisma.ClassUpdateManyWithWhereWithoutRecommendedByInput | Prisma.ClassUpdateManyWithWhereWithoutRecommendedByInput[]
+  deleteMany?: Prisma.ClassScalarWhereInput | Prisma.ClassScalarWhereInput[]
+}
+
 export type ClassUncheckedUpdateManyWithoutTeacherNestedInput = {
   create?: Prisma.XOR<Prisma.ClassCreateWithoutTeacherInput, Prisma.ClassUncheckedCreateWithoutTeacherInput> | Prisma.ClassCreateWithoutTeacherInput[] | Prisma.ClassUncheckedCreateWithoutTeacherInput[]
   connectOrCreate?: Prisma.ClassCreateOrConnectWithoutTeacherInput | Prisma.ClassCreateOrConnectWithoutTeacherInput[]
@@ -829,6 +939,20 @@ export type ClassUncheckedUpdateManyWithoutDeletedByNestedInput = {
   connect?: Prisma.ClassWhereUniqueInput | Prisma.ClassWhereUniqueInput[]
   update?: Prisma.ClassUpdateWithWhereUniqueWithoutDeletedByInput | Prisma.ClassUpdateWithWhereUniqueWithoutDeletedByInput[]
   updateMany?: Prisma.ClassUpdateManyWithWhereWithoutDeletedByInput | Prisma.ClassUpdateManyWithWhereWithoutDeletedByInput[]
+  deleteMany?: Prisma.ClassScalarWhereInput | Prisma.ClassScalarWhereInput[]
+}
+
+export type ClassUncheckedUpdateManyWithoutRecommendedByNestedInput = {
+  create?: Prisma.XOR<Prisma.ClassCreateWithoutRecommendedByInput, Prisma.ClassUncheckedCreateWithoutRecommendedByInput> | Prisma.ClassCreateWithoutRecommendedByInput[] | Prisma.ClassUncheckedCreateWithoutRecommendedByInput[]
+  connectOrCreate?: Prisma.ClassCreateOrConnectWithoutRecommendedByInput | Prisma.ClassCreateOrConnectWithoutRecommendedByInput[]
+  upsert?: Prisma.ClassUpsertWithWhereUniqueWithoutRecommendedByInput | Prisma.ClassUpsertWithWhereUniqueWithoutRecommendedByInput[]
+  createMany?: Prisma.ClassCreateManyRecommendedByInputEnvelope
+  set?: Prisma.ClassWhereUniqueInput | Prisma.ClassWhereUniqueInput[]
+  disconnect?: Prisma.ClassWhereUniqueInput | Prisma.ClassWhereUniqueInput[]
+  delete?: Prisma.ClassWhereUniqueInput | Prisma.ClassWhereUniqueInput[]
+  connect?: Prisma.ClassWhereUniqueInput | Prisma.ClassWhereUniqueInput[]
+  update?: Prisma.ClassUpdateWithWhereUniqueWithoutRecommendedByInput | Prisma.ClassUpdateWithWhereUniqueWithoutRecommendedByInput[]
+  updateMany?: Prisma.ClassUpdateManyWithWhereWithoutRecommendedByInput | Prisma.ClassUpdateManyWithWhereWithoutRecommendedByInput[]
   deleteMany?: Prisma.ClassScalarWhereInput | Prisma.ClassScalarWhereInput[]
 }
 
@@ -1000,6 +1124,34 @@ export type ClassUpdateOneRequiredWithoutBehaviorApplicationsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ClassUpdateToOneWithWhereWithoutBehaviorApplicationsInput, Prisma.ClassUpdateWithoutBehaviorApplicationsInput>, Prisma.ClassUncheckedUpdateWithoutBehaviorApplicationsInput>
 }
 
+export type ClassCreateNestedOneWithoutAttendanceSessionsInput = {
+  create?: Prisma.XOR<Prisma.ClassCreateWithoutAttendanceSessionsInput, Prisma.ClassUncheckedCreateWithoutAttendanceSessionsInput>
+  connectOrCreate?: Prisma.ClassCreateOrConnectWithoutAttendanceSessionsInput
+  connect?: Prisma.ClassWhereUniqueInput
+}
+
+export type ClassUpdateOneRequiredWithoutAttendanceSessionsNestedInput = {
+  create?: Prisma.XOR<Prisma.ClassCreateWithoutAttendanceSessionsInput, Prisma.ClassUncheckedCreateWithoutAttendanceSessionsInput>
+  connectOrCreate?: Prisma.ClassCreateOrConnectWithoutAttendanceSessionsInput
+  upsert?: Prisma.ClassUpsertWithoutAttendanceSessionsInput
+  connect?: Prisma.ClassWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ClassUpdateToOneWithWhereWithoutAttendanceSessionsInput, Prisma.ClassUpdateWithoutAttendanceSessionsInput>, Prisma.ClassUncheckedUpdateWithoutAttendanceSessionsInput>
+}
+
+export type ClassCreateNestedOneWithoutTeamSetsInput = {
+  create?: Prisma.XOR<Prisma.ClassCreateWithoutTeamSetsInput, Prisma.ClassUncheckedCreateWithoutTeamSetsInput>
+  connectOrCreate?: Prisma.ClassCreateOrConnectWithoutTeamSetsInput
+  connect?: Prisma.ClassWhereUniqueInput
+}
+
+export type ClassUpdateOneRequiredWithoutTeamSetsNestedInput = {
+  create?: Prisma.XOR<Prisma.ClassCreateWithoutTeamSetsInput, Prisma.ClassUncheckedCreateWithoutTeamSetsInput>
+  connectOrCreate?: Prisma.ClassCreateOrConnectWithoutTeamSetsInput
+  upsert?: Prisma.ClassUpsertWithoutTeamSetsInput
+  connect?: Prisma.ClassWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ClassUpdateToOneWithWhereWithoutTeamSetsInput, Prisma.ClassUpdateWithoutTeamSetsInput>, Prisma.ClassUncheckedUpdateWithoutTeamSetsInput>
+}
+
 export type ClassCreateWithoutHomeStudentsInput = {
   id?: string
   name: string
@@ -1017,10 +1169,13 @@ export type ClassCreateWithoutHomeStudentsInput = {
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Date | string | null
+  trashWarnedAt?: Date | string | null
+  recommendedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   teacher: Prisma.UserCreateNestedOneWithoutTeacherClassesInput
   deletedBy?: Prisma.UserCreateNestedOneWithoutTrashedClassesInput
+  recommendedBy?: Prisma.UserCreateNestedOneWithoutRecommendedTemplatesInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutClassInput
   missions?: Prisma.MissionCreateNestedManyWithoutClassInput
   guide?: Prisma.ClassGuideCreateNestedOneWithoutClassInput
@@ -1031,6 +1186,8 @@ export type ClassCreateWithoutHomeStudentsInput = {
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationCreateNestedManyWithoutClassInput
+  attendanceSessions?: Prisma.AttendanceSessionCreateNestedManyWithoutClassInput
+  teamSets?: Prisma.TeamSetCreateNestedManyWithoutClassInput
   teachers?: Prisma.ClassTeacherCreateNestedManyWithoutClassInput
   actionLog?: Prisma.ClassActionLogCreateNestedManyWithoutClassInput
 }
@@ -1054,6 +1211,9 @@ export type ClassUncheckedCreateWithoutHomeStudentsInput = {
   teacherId: string
   deletedAt?: Date | string | null
   deletedById?: string | null
+  trashWarnedAt?: Date | string | null
+  recommendedAt?: Date | string | null
+  recommendedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutClassInput
@@ -1066,6 +1226,8 @@ export type ClassUncheckedCreateWithoutHomeStudentsInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutClassInput
+  attendanceSessions?: Prisma.AttendanceSessionUncheckedCreateNestedManyWithoutClassInput
+  teamSets?: Prisma.TeamSetUncheckedCreateNestedManyWithoutClassInput
   teachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutClassInput
   actionLog?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutClassInput
 }
@@ -1092,9 +1254,12 @@ export type ClassCreateWithoutTeacherInput = {
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Date | string | null
+  trashWarnedAt?: Date | string | null
+  recommendedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedBy?: Prisma.UserCreateNestedOneWithoutTrashedClassesInput
+  recommendedBy?: Prisma.UserCreateNestedOneWithoutRecommendedTemplatesInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutClassInput
   missions?: Prisma.MissionCreateNestedManyWithoutClassInput
   guide?: Prisma.ClassGuideCreateNestedOneWithoutClassInput
@@ -1105,6 +1270,8 @@ export type ClassCreateWithoutTeacherInput = {
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationCreateNestedManyWithoutClassInput
+  attendanceSessions?: Prisma.AttendanceSessionCreateNestedManyWithoutClassInput
+  teamSets?: Prisma.TeamSetCreateNestedManyWithoutClassInput
   teachers?: Prisma.ClassTeacherCreateNestedManyWithoutClassInput
   actionLog?: Prisma.ClassActionLogCreateNestedManyWithoutClassInput
   homeStudents?: Prisma.UserCreateNestedManyWithoutHomeClassInput
@@ -1128,6 +1295,9 @@ export type ClassUncheckedCreateWithoutTeacherInput = {
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Date | string | null
   deletedById?: string | null
+  trashWarnedAt?: Date | string | null
+  recommendedAt?: Date | string | null
+  recommendedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutClassInput
@@ -1140,6 +1310,8 @@ export type ClassUncheckedCreateWithoutTeacherInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutClassInput
+  attendanceSessions?: Prisma.AttendanceSessionUncheckedCreateNestedManyWithoutClassInput
+  teamSets?: Prisma.TeamSetUncheckedCreateNestedManyWithoutClassInput
   teachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutClassInput
   actionLog?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutClassInput
   homeStudents?: Prisma.UserUncheckedCreateNestedManyWithoutHomeClassInput
@@ -1172,9 +1344,12 @@ export type ClassCreateWithoutDeletedByInput = {
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Date | string | null
+  trashWarnedAt?: Date | string | null
+  recommendedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   teacher: Prisma.UserCreateNestedOneWithoutTeacherClassesInput
+  recommendedBy?: Prisma.UserCreateNestedOneWithoutRecommendedTemplatesInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutClassInput
   missions?: Prisma.MissionCreateNestedManyWithoutClassInput
   guide?: Prisma.ClassGuideCreateNestedOneWithoutClassInput
@@ -1185,6 +1360,8 @@ export type ClassCreateWithoutDeletedByInput = {
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationCreateNestedManyWithoutClassInput
+  attendanceSessions?: Prisma.AttendanceSessionCreateNestedManyWithoutClassInput
+  teamSets?: Prisma.TeamSetCreateNestedManyWithoutClassInput
   teachers?: Prisma.ClassTeacherCreateNestedManyWithoutClassInput
   actionLog?: Prisma.ClassActionLogCreateNestedManyWithoutClassInput
   homeStudents?: Prisma.UserCreateNestedManyWithoutHomeClassInput
@@ -1208,6 +1385,9 @@ export type ClassUncheckedCreateWithoutDeletedByInput = {
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId: string
   deletedAt?: Date | string | null
+  trashWarnedAt?: Date | string | null
+  recommendedAt?: Date | string | null
+  recommendedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutClassInput
@@ -1220,6 +1400,8 @@ export type ClassUncheckedCreateWithoutDeletedByInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutClassInput
+  attendanceSessions?: Prisma.AttendanceSessionUncheckedCreateNestedManyWithoutClassInput
+  teamSets?: Prisma.TeamSetUncheckedCreateNestedManyWithoutClassInput
   teachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutClassInput
   actionLog?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutClassInput
   homeStudents?: Prisma.UserUncheckedCreateNestedManyWithoutHomeClassInput
@@ -1232,6 +1414,96 @@ export type ClassCreateOrConnectWithoutDeletedByInput = {
 
 export type ClassCreateManyDeletedByInputEnvelope = {
   data: Prisma.ClassCreateManyDeletedByInput | Prisma.ClassCreateManyDeletedByInput[]
+  skipDuplicates?: boolean
+}
+
+export type ClassCreateWithoutRecommendedByInput = {
+  id?: string
+  name: string
+  narrative?: string | null
+  schedule?: string | null
+  archived?: boolean
+  invitationCode: string
+  backgroundImage?: string | null
+  subject?: string | null
+  language?: string | null
+  educationLevel?: string | null
+  province?: string | null
+  isTemplate?: boolean
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  deletedAt?: Date | string | null
+  trashWarnedAt?: Date | string | null
+  recommendedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  teacher: Prisma.UserCreateNestedOneWithoutTeacherClassesInput
+  deletedBy?: Prisma.UserCreateNestedOneWithoutTrashedClassesInput
+  enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutClassInput
+  missions?: Prisma.MissionCreateNestedManyWithoutClassInput
+  guide?: Prisma.ClassGuideCreateNestedOneWithoutClassInput
+  joinRequests?: Prisma.JoinRequestCreateNestedManyWithoutClassInput
+  invitations?: Prisma.InvitationCreateNestedManyWithoutClassInput
+  shopItems?: Prisma.ShopItemCreateNestedManyWithoutClassInput
+  shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutClassInput
+  shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutClassInput
+  behaviorTemplates?: Prisma.BehaviorTemplateCreateNestedManyWithoutClassInput
+  behaviorApplications?: Prisma.BehaviorApplicationCreateNestedManyWithoutClassInput
+  attendanceSessions?: Prisma.AttendanceSessionCreateNestedManyWithoutClassInput
+  teamSets?: Prisma.TeamSetCreateNestedManyWithoutClassInput
+  teachers?: Prisma.ClassTeacherCreateNestedManyWithoutClassInput
+  actionLog?: Prisma.ClassActionLogCreateNestedManyWithoutClassInput
+  homeStudents?: Prisma.UserCreateNestedManyWithoutHomeClassInput
+}
+
+export type ClassUncheckedCreateWithoutRecommendedByInput = {
+  id?: string
+  name: string
+  narrative?: string | null
+  schedule?: string | null
+  archived?: boolean
+  invitationCode: string
+  backgroundImage?: string | null
+  subject?: string | null
+  language?: string | null
+  educationLevel?: string | null
+  province?: string | null
+  isTemplate?: boolean
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  teacherId: string
+  deletedAt?: Date | string | null
+  deletedById?: string | null
+  trashWarnedAt?: Date | string | null
+  recommendedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutClassInput
+  missions?: Prisma.MissionUncheckedCreateNestedManyWithoutClassInput
+  guide?: Prisma.ClassGuideUncheckedCreateNestedOneWithoutClassInput
+  joinRequests?: Prisma.JoinRequestUncheckedCreateNestedManyWithoutClassInput
+  invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutClassInput
+  shopItems?: Prisma.ShopItemUncheckedCreateNestedManyWithoutClassInput
+  shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutClassInput
+  shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutClassInput
+  behaviorTemplates?: Prisma.BehaviorTemplateUncheckedCreateNestedManyWithoutClassInput
+  behaviorApplications?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutClassInput
+  attendanceSessions?: Prisma.AttendanceSessionUncheckedCreateNestedManyWithoutClassInput
+  teamSets?: Prisma.TeamSetUncheckedCreateNestedManyWithoutClassInput
+  teachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutClassInput
+  actionLog?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutClassInput
+  homeStudents?: Prisma.UserUncheckedCreateNestedManyWithoutHomeClassInput
+}
+
+export type ClassCreateOrConnectWithoutRecommendedByInput = {
+  where: Prisma.ClassWhereUniqueInput
+  create: Prisma.XOR<Prisma.ClassCreateWithoutRecommendedByInput, Prisma.ClassUncheckedCreateWithoutRecommendedByInput>
+}
+
+export type ClassCreateManyRecommendedByInputEnvelope = {
+  data: Prisma.ClassCreateManyRecommendedByInput | Prisma.ClassCreateManyRecommendedByInput[]
   skipDuplicates?: boolean
 }
 
@@ -1263,10 +1535,13 @@ export type ClassUpdateWithoutHomeStudentsInput = {
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   teacher?: Prisma.UserUpdateOneRequiredWithoutTeacherClassesNestedInput
   deletedBy?: Prisma.UserUpdateOneWithoutTrashedClassesNestedInput
+  recommendedBy?: Prisma.UserUpdateOneWithoutRecommendedTemplatesNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutClassNestedInput
   missions?: Prisma.MissionUpdateManyWithoutClassNestedInput
   guide?: Prisma.ClassGuideUpdateOneWithoutClassNestedInput
@@ -1277,6 +1552,8 @@ export type ClassUpdateWithoutHomeStudentsInput = {
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUpdateManyWithoutClassNestedInput
+  attendanceSessions?: Prisma.AttendanceSessionUpdateManyWithoutClassNestedInput
+  teamSets?: Prisma.TeamSetUpdateManyWithoutClassNestedInput
   teachers?: Prisma.ClassTeacherUpdateManyWithoutClassNestedInput
   actionLog?: Prisma.ClassActionLogUpdateManyWithoutClassNestedInput
 }
@@ -1300,6 +1577,9 @@ export type ClassUncheckedUpdateWithoutHomeStudentsInput = {
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutClassNestedInput
@@ -1312,6 +1592,8 @@ export type ClassUncheckedUpdateWithoutHomeStudentsInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutClassNestedInput
+  attendanceSessions?: Prisma.AttendanceSessionUncheckedUpdateManyWithoutClassNestedInput
+  teamSets?: Prisma.TeamSetUncheckedUpdateManyWithoutClassNestedInput
   teachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutClassNestedInput
   actionLog?: Prisma.ClassActionLogUncheckedUpdateManyWithoutClassNestedInput
 }
@@ -1354,6 +1636,9 @@ export type ClassScalarWhereInput = {
   teacherId?: Prisma.StringFilter<"Class"> | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Class"> | Date | string | null
   deletedById?: Prisma.StringNullableFilter<"Class"> | string | null
+  trashWarnedAt?: Prisma.DateTimeNullableFilter<"Class"> | Date | string | null
+  recommendedAt?: Prisma.DateTimeNullableFilter<"Class"> | Date | string | null
+  recommendedById?: Prisma.StringNullableFilter<"Class"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Class"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Class"> | Date | string
 }
@@ -1374,6 +1659,22 @@ export type ClassUpdateManyWithWhereWithoutDeletedByInput = {
   data: Prisma.XOR<Prisma.ClassUpdateManyMutationInput, Prisma.ClassUncheckedUpdateManyWithoutDeletedByInput>
 }
 
+export type ClassUpsertWithWhereUniqueWithoutRecommendedByInput = {
+  where: Prisma.ClassWhereUniqueInput
+  update: Prisma.XOR<Prisma.ClassUpdateWithoutRecommendedByInput, Prisma.ClassUncheckedUpdateWithoutRecommendedByInput>
+  create: Prisma.XOR<Prisma.ClassCreateWithoutRecommendedByInput, Prisma.ClassUncheckedCreateWithoutRecommendedByInput>
+}
+
+export type ClassUpdateWithWhereUniqueWithoutRecommendedByInput = {
+  where: Prisma.ClassWhereUniqueInput
+  data: Prisma.XOR<Prisma.ClassUpdateWithoutRecommendedByInput, Prisma.ClassUncheckedUpdateWithoutRecommendedByInput>
+}
+
+export type ClassUpdateManyWithWhereWithoutRecommendedByInput = {
+  where: Prisma.ClassScalarWhereInput
+  data: Prisma.XOR<Prisma.ClassUpdateManyMutationInput, Prisma.ClassUncheckedUpdateManyWithoutRecommendedByInput>
+}
+
 export type ClassCreateWithoutTeachersInput = {
   id?: string
   name: string
@@ -1391,10 +1692,13 @@ export type ClassCreateWithoutTeachersInput = {
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Date | string | null
+  trashWarnedAt?: Date | string | null
+  recommendedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   teacher: Prisma.UserCreateNestedOneWithoutTeacherClassesInput
   deletedBy?: Prisma.UserCreateNestedOneWithoutTrashedClassesInput
+  recommendedBy?: Prisma.UserCreateNestedOneWithoutRecommendedTemplatesInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutClassInput
   missions?: Prisma.MissionCreateNestedManyWithoutClassInput
   guide?: Prisma.ClassGuideCreateNestedOneWithoutClassInput
@@ -1405,6 +1709,8 @@ export type ClassCreateWithoutTeachersInput = {
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationCreateNestedManyWithoutClassInput
+  attendanceSessions?: Prisma.AttendanceSessionCreateNestedManyWithoutClassInput
+  teamSets?: Prisma.TeamSetCreateNestedManyWithoutClassInput
   actionLog?: Prisma.ClassActionLogCreateNestedManyWithoutClassInput
   homeStudents?: Prisma.UserCreateNestedManyWithoutHomeClassInput
 }
@@ -1428,6 +1734,9 @@ export type ClassUncheckedCreateWithoutTeachersInput = {
   teacherId: string
   deletedAt?: Date | string | null
   deletedById?: string | null
+  trashWarnedAt?: Date | string | null
+  recommendedAt?: Date | string | null
+  recommendedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutClassInput
@@ -1440,6 +1749,8 @@ export type ClassUncheckedCreateWithoutTeachersInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutClassInput
+  attendanceSessions?: Prisma.AttendanceSessionUncheckedCreateNestedManyWithoutClassInput
+  teamSets?: Prisma.TeamSetUncheckedCreateNestedManyWithoutClassInput
   actionLog?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutClassInput
   homeStudents?: Prisma.UserUncheckedCreateNestedManyWithoutHomeClassInput
 }
@@ -1477,10 +1788,13 @@ export type ClassUpdateWithoutTeachersInput = {
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   teacher?: Prisma.UserUpdateOneRequiredWithoutTeacherClassesNestedInput
   deletedBy?: Prisma.UserUpdateOneWithoutTrashedClassesNestedInput
+  recommendedBy?: Prisma.UserUpdateOneWithoutRecommendedTemplatesNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutClassNestedInput
   missions?: Prisma.MissionUpdateManyWithoutClassNestedInput
   guide?: Prisma.ClassGuideUpdateOneWithoutClassNestedInput
@@ -1491,6 +1805,8 @@ export type ClassUpdateWithoutTeachersInput = {
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUpdateManyWithoutClassNestedInput
+  attendanceSessions?: Prisma.AttendanceSessionUpdateManyWithoutClassNestedInput
+  teamSets?: Prisma.TeamSetUpdateManyWithoutClassNestedInput
   actionLog?: Prisma.ClassActionLogUpdateManyWithoutClassNestedInput
   homeStudents?: Prisma.UserUpdateManyWithoutHomeClassNestedInput
 }
@@ -1514,6 +1830,9 @@ export type ClassUncheckedUpdateWithoutTeachersInput = {
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutClassNestedInput
@@ -1526,6 +1845,8 @@ export type ClassUncheckedUpdateWithoutTeachersInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutClassNestedInput
+  attendanceSessions?: Prisma.AttendanceSessionUncheckedUpdateManyWithoutClassNestedInput
+  teamSets?: Prisma.TeamSetUncheckedUpdateManyWithoutClassNestedInput
   actionLog?: Prisma.ClassActionLogUncheckedUpdateManyWithoutClassNestedInput
   homeStudents?: Prisma.UserUncheckedUpdateManyWithoutHomeClassNestedInput
 }
@@ -1547,10 +1868,13 @@ export type ClassCreateWithoutActionLogInput = {
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Date | string | null
+  trashWarnedAt?: Date | string | null
+  recommendedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   teacher: Prisma.UserCreateNestedOneWithoutTeacherClassesInput
   deletedBy?: Prisma.UserCreateNestedOneWithoutTrashedClassesInput
+  recommendedBy?: Prisma.UserCreateNestedOneWithoutRecommendedTemplatesInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutClassInput
   missions?: Prisma.MissionCreateNestedManyWithoutClassInput
   guide?: Prisma.ClassGuideCreateNestedOneWithoutClassInput
@@ -1561,6 +1885,8 @@ export type ClassCreateWithoutActionLogInput = {
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationCreateNestedManyWithoutClassInput
+  attendanceSessions?: Prisma.AttendanceSessionCreateNestedManyWithoutClassInput
+  teamSets?: Prisma.TeamSetCreateNestedManyWithoutClassInput
   teachers?: Prisma.ClassTeacherCreateNestedManyWithoutClassInput
   homeStudents?: Prisma.UserCreateNestedManyWithoutHomeClassInput
 }
@@ -1584,6 +1910,9 @@ export type ClassUncheckedCreateWithoutActionLogInput = {
   teacherId: string
   deletedAt?: Date | string | null
   deletedById?: string | null
+  trashWarnedAt?: Date | string | null
+  recommendedAt?: Date | string | null
+  recommendedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutClassInput
@@ -1596,6 +1925,8 @@ export type ClassUncheckedCreateWithoutActionLogInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutClassInput
+  attendanceSessions?: Prisma.AttendanceSessionUncheckedCreateNestedManyWithoutClassInput
+  teamSets?: Prisma.TeamSetUncheckedCreateNestedManyWithoutClassInput
   teachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutClassInput
   homeStudents?: Prisma.UserUncheckedCreateNestedManyWithoutHomeClassInput
 }
@@ -1633,10 +1964,13 @@ export type ClassUpdateWithoutActionLogInput = {
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   teacher?: Prisma.UserUpdateOneRequiredWithoutTeacherClassesNestedInput
   deletedBy?: Prisma.UserUpdateOneWithoutTrashedClassesNestedInput
+  recommendedBy?: Prisma.UserUpdateOneWithoutRecommendedTemplatesNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutClassNestedInput
   missions?: Prisma.MissionUpdateManyWithoutClassNestedInput
   guide?: Prisma.ClassGuideUpdateOneWithoutClassNestedInput
@@ -1647,6 +1981,8 @@ export type ClassUpdateWithoutActionLogInput = {
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUpdateManyWithoutClassNestedInput
+  attendanceSessions?: Prisma.AttendanceSessionUpdateManyWithoutClassNestedInput
+  teamSets?: Prisma.TeamSetUpdateManyWithoutClassNestedInput
   teachers?: Prisma.ClassTeacherUpdateManyWithoutClassNestedInput
   homeStudents?: Prisma.UserUpdateManyWithoutHomeClassNestedInput
 }
@@ -1670,6 +2006,9 @@ export type ClassUncheckedUpdateWithoutActionLogInput = {
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutClassNestedInput
@@ -1682,6 +2021,8 @@ export type ClassUncheckedUpdateWithoutActionLogInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutClassNestedInput
+  attendanceSessions?: Prisma.AttendanceSessionUncheckedUpdateManyWithoutClassNestedInput
+  teamSets?: Prisma.TeamSetUncheckedUpdateManyWithoutClassNestedInput
   teachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutClassNestedInput
   homeStudents?: Prisma.UserUncheckedUpdateManyWithoutHomeClassNestedInput
 }
@@ -1703,10 +2044,13 @@ export type ClassCreateWithoutEnrollmentsInput = {
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Date | string | null
+  trashWarnedAt?: Date | string | null
+  recommendedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   teacher: Prisma.UserCreateNestedOneWithoutTeacherClassesInput
   deletedBy?: Prisma.UserCreateNestedOneWithoutTrashedClassesInput
+  recommendedBy?: Prisma.UserCreateNestedOneWithoutRecommendedTemplatesInput
   missions?: Prisma.MissionCreateNestedManyWithoutClassInput
   guide?: Prisma.ClassGuideCreateNestedOneWithoutClassInput
   joinRequests?: Prisma.JoinRequestCreateNestedManyWithoutClassInput
@@ -1716,6 +2060,8 @@ export type ClassCreateWithoutEnrollmentsInput = {
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationCreateNestedManyWithoutClassInput
+  attendanceSessions?: Prisma.AttendanceSessionCreateNestedManyWithoutClassInput
+  teamSets?: Prisma.TeamSetCreateNestedManyWithoutClassInput
   teachers?: Prisma.ClassTeacherCreateNestedManyWithoutClassInput
   actionLog?: Prisma.ClassActionLogCreateNestedManyWithoutClassInput
   homeStudents?: Prisma.UserCreateNestedManyWithoutHomeClassInput
@@ -1740,6 +2086,9 @@ export type ClassUncheckedCreateWithoutEnrollmentsInput = {
   teacherId: string
   deletedAt?: Date | string | null
   deletedById?: string | null
+  trashWarnedAt?: Date | string | null
+  recommendedAt?: Date | string | null
+  recommendedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   missions?: Prisma.MissionUncheckedCreateNestedManyWithoutClassInput
@@ -1751,6 +2100,8 @@ export type ClassUncheckedCreateWithoutEnrollmentsInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutClassInput
+  attendanceSessions?: Prisma.AttendanceSessionUncheckedCreateNestedManyWithoutClassInput
+  teamSets?: Prisma.TeamSetUncheckedCreateNestedManyWithoutClassInput
   teachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutClassInput
   actionLog?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutClassInput
   homeStudents?: Prisma.UserUncheckedCreateNestedManyWithoutHomeClassInput
@@ -1789,10 +2140,13 @@ export type ClassUpdateWithoutEnrollmentsInput = {
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   teacher?: Prisma.UserUpdateOneRequiredWithoutTeacherClassesNestedInput
   deletedBy?: Prisma.UserUpdateOneWithoutTrashedClassesNestedInput
+  recommendedBy?: Prisma.UserUpdateOneWithoutRecommendedTemplatesNestedInput
   missions?: Prisma.MissionUpdateManyWithoutClassNestedInput
   guide?: Prisma.ClassGuideUpdateOneWithoutClassNestedInput
   joinRequests?: Prisma.JoinRequestUpdateManyWithoutClassNestedInput
@@ -1802,6 +2156,8 @@ export type ClassUpdateWithoutEnrollmentsInput = {
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUpdateManyWithoutClassNestedInput
+  attendanceSessions?: Prisma.AttendanceSessionUpdateManyWithoutClassNestedInput
+  teamSets?: Prisma.TeamSetUpdateManyWithoutClassNestedInput
   teachers?: Prisma.ClassTeacherUpdateManyWithoutClassNestedInput
   actionLog?: Prisma.ClassActionLogUpdateManyWithoutClassNestedInput
   homeStudents?: Prisma.UserUpdateManyWithoutHomeClassNestedInput
@@ -1826,6 +2182,9 @@ export type ClassUncheckedUpdateWithoutEnrollmentsInput = {
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   missions?: Prisma.MissionUncheckedUpdateManyWithoutClassNestedInput
@@ -1837,6 +2196,8 @@ export type ClassUncheckedUpdateWithoutEnrollmentsInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutClassNestedInput
+  attendanceSessions?: Prisma.AttendanceSessionUncheckedUpdateManyWithoutClassNestedInput
+  teamSets?: Prisma.TeamSetUncheckedUpdateManyWithoutClassNestedInput
   teachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutClassNestedInput
   actionLog?: Prisma.ClassActionLogUncheckedUpdateManyWithoutClassNestedInput
   homeStudents?: Prisma.UserUncheckedUpdateManyWithoutHomeClassNestedInput
@@ -1859,10 +2220,13 @@ export type ClassCreateWithoutGuideInput = {
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Date | string | null
+  trashWarnedAt?: Date | string | null
+  recommendedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   teacher: Prisma.UserCreateNestedOneWithoutTeacherClassesInput
   deletedBy?: Prisma.UserCreateNestedOneWithoutTrashedClassesInput
+  recommendedBy?: Prisma.UserCreateNestedOneWithoutRecommendedTemplatesInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutClassInput
   missions?: Prisma.MissionCreateNestedManyWithoutClassInput
   joinRequests?: Prisma.JoinRequestCreateNestedManyWithoutClassInput
@@ -1872,6 +2236,8 @@ export type ClassCreateWithoutGuideInput = {
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationCreateNestedManyWithoutClassInput
+  attendanceSessions?: Prisma.AttendanceSessionCreateNestedManyWithoutClassInput
+  teamSets?: Prisma.TeamSetCreateNestedManyWithoutClassInput
   teachers?: Prisma.ClassTeacherCreateNestedManyWithoutClassInput
   actionLog?: Prisma.ClassActionLogCreateNestedManyWithoutClassInput
   homeStudents?: Prisma.UserCreateNestedManyWithoutHomeClassInput
@@ -1896,6 +2262,9 @@ export type ClassUncheckedCreateWithoutGuideInput = {
   teacherId: string
   deletedAt?: Date | string | null
   deletedById?: string | null
+  trashWarnedAt?: Date | string | null
+  recommendedAt?: Date | string | null
+  recommendedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutClassInput
@@ -1907,6 +2276,8 @@ export type ClassUncheckedCreateWithoutGuideInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutClassInput
+  attendanceSessions?: Prisma.AttendanceSessionUncheckedCreateNestedManyWithoutClassInput
+  teamSets?: Prisma.TeamSetUncheckedCreateNestedManyWithoutClassInput
   teachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutClassInput
   actionLog?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutClassInput
   homeStudents?: Prisma.UserUncheckedCreateNestedManyWithoutHomeClassInput
@@ -1945,10 +2316,13 @@ export type ClassUpdateWithoutGuideInput = {
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   teacher?: Prisma.UserUpdateOneRequiredWithoutTeacherClassesNestedInput
   deletedBy?: Prisma.UserUpdateOneWithoutTrashedClassesNestedInput
+  recommendedBy?: Prisma.UserUpdateOneWithoutRecommendedTemplatesNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutClassNestedInput
   missions?: Prisma.MissionUpdateManyWithoutClassNestedInput
   joinRequests?: Prisma.JoinRequestUpdateManyWithoutClassNestedInput
@@ -1958,6 +2332,8 @@ export type ClassUpdateWithoutGuideInput = {
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUpdateManyWithoutClassNestedInput
+  attendanceSessions?: Prisma.AttendanceSessionUpdateManyWithoutClassNestedInput
+  teamSets?: Prisma.TeamSetUpdateManyWithoutClassNestedInput
   teachers?: Prisma.ClassTeacherUpdateManyWithoutClassNestedInput
   actionLog?: Prisma.ClassActionLogUpdateManyWithoutClassNestedInput
   homeStudents?: Prisma.UserUpdateManyWithoutHomeClassNestedInput
@@ -1982,6 +2358,9 @@ export type ClassUncheckedUpdateWithoutGuideInput = {
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutClassNestedInput
@@ -1993,6 +2372,8 @@ export type ClassUncheckedUpdateWithoutGuideInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutClassNestedInput
+  attendanceSessions?: Prisma.AttendanceSessionUncheckedUpdateManyWithoutClassNestedInput
+  teamSets?: Prisma.TeamSetUncheckedUpdateManyWithoutClassNestedInput
   teachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutClassNestedInput
   actionLog?: Prisma.ClassActionLogUncheckedUpdateManyWithoutClassNestedInput
   homeStudents?: Prisma.UserUncheckedUpdateManyWithoutHomeClassNestedInput
@@ -2015,10 +2396,13 @@ export type ClassCreateWithoutShopItemsInput = {
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Date | string | null
+  trashWarnedAt?: Date | string | null
+  recommendedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   teacher: Prisma.UserCreateNestedOneWithoutTeacherClassesInput
   deletedBy?: Prisma.UserCreateNestedOneWithoutTrashedClassesInput
+  recommendedBy?: Prisma.UserCreateNestedOneWithoutRecommendedTemplatesInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutClassInput
   missions?: Prisma.MissionCreateNestedManyWithoutClassInput
   guide?: Prisma.ClassGuideCreateNestedOneWithoutClassInput
@@ -2028,6 +2412,8 @@ export type ClassCreateWithoutShopItemsInput = {
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationCreateNestedManyWithoutClassInput
+  attendanceSessions?: Prisma.AttendanceSessionCreateNestedManyWithoutClassInput
+  teamSets?: Prisma.TeamSetCreateNestedManyWithoutClassInput
   teachers?: Prisma.ClassTeacherCreateNestedManyWithoutClassInput
   actionLog?: Prisma.ClassActionLogCreateNestedManyWithoutClassInput
   homeStudents?: Prisma.UserCreateNestedManyWithoutHomeClassInput
@@ -2052,6 +2438,9 @@ export type ClassUncheckedCreateWithoutShopItemsInput = {
   teacherId: string
   deletedAt?: Date | string | null
   deletedById?: string | null
+  trashWarnedAt?: Date | string | null
+  recommendedAt?: Date | string | null
+  recommendedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutClassInput
@@ -2063,6 +2452,8 @@ export type ClassUncheckedCreateWithoutShopItemsInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutClassInput
+  attendanceSessions?: Prisma.AttendanceSessionUncheckedCreateNestedManyWithoutClassInput
+  teamSets?: Prisma.TeamSetUncheckedCreateNestedManyWithoutClassInput
   teachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutClassInput
   actionLog?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutClassInput
   homeStudents?: Prisma.UserUncheckedCreateNestedManyWithoutHomeClassInput
@@ -2101,10 +2492,13 @@ export type ClassUpdateWithoutShopItemsInput = {
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   teacher?: Prisma.UserUpdateOneRequiredWithoutTeacherClassesNestedInput
   deletedBy?: Prisma.UserUpdateOneWithoutTrashedClassesNestedInput
+  recommendedBy?: Prisma.UserUpdateOneWithoutRecommendedTemplatesNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutClassNestedInput
   missions?: Prisma.MissionUpdateManyWithoutClassNestedInput
   guide?: Prisma.ClassGuideUpdateOneWithoutClassNestedInput
@@ -2114,6 +2508,8 @@ export type ClassUpdateWithoutShopItemsInput = {
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUpdateManyWithoutClassNestedInput
+  attendanceSessions?: Prisma.AttendanceSessionUpdateManyWithoutClassNestedInput
+  teamSets?: Prisma.TeamSetUpdateManyWithoutClassNestedInput
   teachers?: Prisma.ClassTeacherUpdateManyWithoutClassNestedInput
   actionLog?: Prisma.ClassActionLogUpdateManyWithoutClassNestedInput
   homeStudents?: Prisma.UserUpdateManyWithoutHomeClassNestedInput
@@ -2138,6 +2534,9 @@ export type ClassUncheckedUpdateWithoutShopItemsInput = {
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutClassNestedInput
@@ -2149,6 +2548,8 @@ export type ClassUncheckedUpdateWithoutShopItemsInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutClassNestedInput
+  attendanceSessions?: Prisma.AttendanceSessionUncheckedUpdateManyWithoutClassNestedInput
+  teamSets?: Prisma.TeamSetUncheckedUpdateManyWithoutClassNestedInput
   teachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutClassNestedInput
   actionLog?: Prisma.ClassActionLogUncheckedUpdateManyWithoutClassNestedInput
   homeStudents?: Prisma.UserUncheckedUpdateManyWithoutHomeClassNestedInput
@@ -2171,10 +2572,13 @@ export type ClassCreateWithoutShopPurchasesInput = {
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Date | string | null
+  trashWarnedAt?: Date | string | null
+  recommendedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   teacher: Prisma.UserCreateNestedOneWithoutTeacherClassesInput
   deletedBy?: Prisma.UserCreateNestedOneWithoutTrashedClassesInput
+  recommendedBy?: Prisma.UserCreateNestedOneWithoutRecommendedTemplatesInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutClassInput
   missions?: Prisma.MissionCreateNestedManyWithoutClassInput
   guide?: Prisma.ClassGuideCreateNestedOneWithoutClassInput
@@ -2184,6 +2588,8 @@ export type ClassCreateWithoutShopPurchasesInput = {
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationCreateNestedManyWithoutClassInput
+  attendanceSessions?: Prisma.AttendanceSessionCreateNestedManyWithoutClassInput
+  teamSets?: Prisma.TeamSetCreateNestedManyWithoutClassInput
   teachers?: Prisma.ClassTeacherCreateNestedManyWithoutClassInput
   actionLog?: Prisma.ClassActionLogCreateNestedManyWithoutClassInput
   homeStudents?: Prisma.UserCreateNestedManyWithoutHomeClassInput
@@ -2208,6 +2614,9 @@ export type ClassUncheckedCreateWithoutShopPurchasesInput = {
   teacherId: string
   deletedAt?: Date | string | null
   deletedById?: string | null
+  trashWarnedAt?: Date | string | null
+  recommendedAt?: Date | string | null
+  recommendedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutClassInput
@@ -2219,6 +2628,8 @@ export type ClassUncheckedCreateWithoutShopPurchasesInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutClassInput
+  attendanceSessions?: Prisma.AttendanceSessionUncheckedCreateNestedManyWithoutClassInput
+  teamSets?: Prisma.TeamSetUncheckedCreateNestedManyWithoutClassInput
   teachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutClassInput
   actionLog?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutClassInput
   homeStudents?: Prisma.UserUncheckedCreateNestedManyWithoutHomeClassInput
@@ -2257,10 +2668,13 @@ export type ClassUpdateWithoutShopPurchasesInput = {
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   teacher?: Prisma.UserUpdateOneRequiredWithoutTeacherClassesNestedInput
   deletedBy?: Prisma.UserUpdateOneWithoutTrashedClassesNestedInput
+  recommendedBy?: Prisma.UserUpdateOneWithoutRecommendedTemplatesNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutClassNestedInput
   missions?: Prisma.MissionUpdateManyWithoutClassNestedInput
   guide?: Prisma.ClassGuideUpdateOneWithoutClassNestedInput
@@ -2270,6 +2684,8 @@ export type ClassUpdateWithoutShopPurchasesInput = {
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUpdateManyWithoutClassNestedInput
+  attendanceSessions?: Prisma.AttendanceSessionUpdateManyWithoutClassNestedInput
+  teamSets?: Prisma.TeamSetUpdateManyWithoutClassNestedInput
   teachers?: Prisma.ClassTeacherUpdateManyWithoutClassNestedInput
   actionLog?: Prisma.ClassActionLogUpdateManyWithoutClassNestedInput
   homeStudents?: Prisma.UserUpdateManyWithoutHomeClassNestedInput
@@ -2294,6 +2710,9 @@ export type ClassUncheckedUpdateWithoutShopPurchasesInput = {
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutClassNestedInput
@@ -2305,6 +2724,8 @@ export type ClassUncheckedUpdateWithoutShopPurchasesInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutClassNestedInput
+  attendanceSessions?: Prisma.AttendanceSessionUncheckedUpdateManyWithoutClassNestedInput
+  teamSets?: Prisma.TeamSetUncheckedUpdateManyWithoutClassNestedInput
   teachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutClassNestedInput
   actionLog?: Prisma.ClassActionLogUncheckedUpdateManyWithoutClassNestedInput
   homeStudents?: Prisma.UserUncheckedUpdateManyWithoutHomeClassNestedInput
@@ -2327,10 +2748,13 @@ export type ClassCreateWithoutShopItemUsesInput = {
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Date | string | null
+  trashWarnedAt?: Date | string | null
+  recommendedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   teacher: Prisma.UserCreateNestedOneWithoutTeacherClassesInput
   deletedBy?: Prisma.UserCreateNestedOneWithoutTrashedClassesInput
+  recommendedBy?: Prisma.UserCreateNestedOneWithoutRecommendedTemplatesInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutClassInput
   missions?: Prisma.MissionCreateNestedManyWithoutClassInput
   guide?: Prisma.ClassGuideCreateNestedOneWithoutClassInput
@@ -2340,6 +2764,8 @@ export type ClassCreateWithoutShopItemUsesInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationCreateNestedManyWithoutClassInput
+  attendanceSessions?: Prisma.AttendanceSessionCreateNestedManyWithoutClassInput
+  teamSets?: Prisma.TeamSetCreateNestedManyWithoutClassInput
   teachers?: Prisma.ClassTeacherCreateNestedManyWithoutClassInput
   actionLog?: Prisma.ClassActionLogCreateNestedManyWithoutClassInput
   homeStudents?: Prisma.UserCreateNestedManyWithoutHomeClassInput
@@ -2364,6 +2790,9 @@ export type ClassUncheckedCreateWithoutShopItemUsesInput = {
   teacherId: string
   deletedAt?: Date | string | null
   deletedById?: string | null
+  trashWarnedAt?: Date | string | null
+  recommendedAt?: Date | string | null
+  recommendedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutClassInput
@@ -2375,6 +2804,8 @@ export type ClassUncheckedCreateWithoutShopItemUsesInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutClassInput
+  attendanceSessions?: Prisma.AttendanceSessionUncheckedCreateNestedManyWithoutClassInput
+  teamSets?: Prisma.TeamSetUncheckedCreateNestedManyWithoutClassInput
   teachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutClassInput
   actionLog?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutClassInput
   homeStudents?: Prisma.UserUncheckedCreateNestedManyWithoutHomeClassInput
@@ -2413,10 +2844,13 @@ export type ClassUpdateWithoutShopItemUsesInput = {
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   teacher?: Prisma.UserUpdateOneRequiredWithoutTeacherClassesNestedInput
   deletedBy?: Prisma.UserUpdateOneWithoutTrashedClassesNestedInput
+  recommendedBy?: Prisma.UserUpdateOneWithoutRecommendedTemplatesNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutClassNestedInput
   missions?: Prisma.MissionUpdateManyWithoutClassNestedInput
   guide?: Prisma.ClassGuideUpdateOneWithoutClassNestedInput
@@ -2426,6 +2860,8 @@ export type ClassUpdateWithoutShopItemUsesInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUpdateManyWithoutClassNestedInput
+  attendanceSessions?: Prisma.AttendanceSessionUpdateManyWithoutClassNestedInput
+  teamSets?: Prisma.TeamSetUpdateManyWithoutClassNestedInput
   teachers?: Prisma.ClassTeacherUpdateManyWithoutClassNestedInput
   actionLog?: Prisma.ClassActionLogUpdateManyWithoutClassNestedInput
   homeStudents?: Prisma.UserUpdateManyWithoutHomeClassNestedInput
@@ -2450,6 +2886,9 @@ export type ClassUncheckedUpdateWithoutShopItemUsesInput = {
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutClassNestedInput
@@ -2461,6 +2900,8 @@ export type ClassUncheckedUpdateWithoutShopItemUsesInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutClassNestedInput
+  attendanceSessions?: Prisma.AttendanceSessionUncheckedUpdateManyWithoutClassNestedInput
+  teamSets?: Prisma.TeamSetUncheckedUpdateManyWithoutClassNestedInput
   teachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutClassNestedInput
   actionLog?: Prisma.ClassActionLogUncheckedUpdateManyWithoutClassNestedInput
   homeStudents?: Prisma.UserUncheckedUpdateManyWithoutHomeClassNestedInput
@@ -2483,10 +2924,13 @@ export type ClassCreateWithoutMissionsInput = {
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Date | string | null
+  trashWarnedAt?: Date | string | null
+  recommendedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   teacher: Prisma.UserCreateNestedOneWithoutTeacherClassesInput
   deletedBy?: Prisma.UserCreateNestedOneWithoutTrashedClassesInput
+  recommendedBy?: Prisma.UserCreateNestedOneWithoutRecommendedTemplatesInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutClassInput
   guide?: Prisma.ClassGuideCreateNestedOneWithoutClassInput
   joinRequests?: Prisma.JoinRequestCreateNestedManyWithoutClassInput
@@ -2496,6 +2940,8 @@ export type ClassCreateWithoutMissionsInput = {
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationCreateNestedManyWithoutClassInput
+  attendanceSessions?: Prisma.AttendanceSessionCreateNestedManyWithoutClassInput
+  teamSets?: Prisma.TeamSetCreateNestedManyWithoutClassInput
   teachers?: Prisma.ClassTeacherCreateNestedManyWithoutClassInput
   actionLog?: Prisma.ClassActionLogCreateNestedManyWithoutClassInput
   homeStudents?: Prisma.UserCreateNestedManyWithoutHomeClassInput
@@ -2520,6 +2966,9 @@ export type ClassUncheckedCreateWithoutMissionsInput = {
   teacherId: string
   deletedAt?: Date | string | null
   deletedById?: string | null
+  trashWarnedAt?: Date | string | null
+  recommendedAt?: Date | string | null
+  recommendedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutClassInput
@@ -2531,6 +2980,8 @@ export type ClassUncheckedCreateWithoutMissionsInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutClassInput
+  attendanceSessions?: Prisma.AttendanceSessionUncheckedCreateNestedManyWithoutClassInput
+  teamSets?: Prisma.TeamSetUncheckedCreateNestedManyWithoutClassInput
   teachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutClassInput
   actionLog?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutClassInput
   homeStudents?: Prisma.UserUncheckedCreateNestedManyWithoutHomeClassInput
@@ -2569,10 +3020,13 @@ export type ClassUpdateWithoutMissionsInput = {
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   teacher?: Prisma.UserUpdateOneRequiredWithoutTeacherClassesNestedInput
   deletedBy?: Prisma.UserUpdateOneWithoutTrashedClassesNestedInput
+  recommendedBy?: Prisma.UserUpdateOneWithoutRecommendedTemplatesNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutClassNestedInput
   guide?: Prisma.ClassGuideUpdateOneWithoutClassNestedInput
   joinRequests?: Prisma.JoinRequestUpdateManyWithoutClassNestedInput
@@ -2582,6 +3036,8 @@ export type ClassUpdateWithoutMissionsInput = {
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUpdateManyWithoutClassNestedInput
+  attendanceSessions?: Prisma.AttendanceSessionUpdateManyWithoutClassNestedInput
+  teamSets?: Prisma.TeamSetUpdateManyWithoutClassNestedInput
   teachers?: Prisma.ClassTeacherUpdateManyWithoutClassNestedInput
   actionLog?: Prisma.ClassActionLogUpdateManyWithoutClassNestedInput
   homeStudents?: Prisma.UserUpdateManyWithoutHomeClassNestedInput
@@ -2606,6 +3062,9 @@ export type ClassUncheckedUpdateWithoutMissionsInput = {
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutClassNestedInput
@@ -2617,6 +3076,8 @@ export type ClassUncheckedUpdateWithoutMissionsInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutClassNestedInput
+  attendanceSessions?: Prisma.AttendanceSessionUncheckedUpdateManyWithoutClassNestedInput
+  teamSets?: Prisma.TeamSetUncheckedUpdateManyWithoutClassNestedInput
   teachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutClassNestedInput
   actionLog?: Prisma.ClassActionLogUncheckedUpdateManyWithoutClassNestedInput
   homeStudents?: Prisma.UserUncheckedUpdateManyWithoutHomeClassNestedInput
@@ -2639,10 +3100,13 @@ export type ClassCreateWithoutJoinRequestsInput = {
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Date | string | null
+  trashWarnedAt?: Date | string | null
+  recommendedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   teacher: Prisma.UserCreateNestedOneWithoutTeacherClassesInput
   deletedBy?: Prisma.UserCreateNestedOneWithoutTrashedClassesInput
+  recommendedBy?: Prisma.UserCreateNestedOneWithoutRecommendedTemplatesInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutClassInput
   missions?: Prisma.MissionCreateNestedManyWithoutClassInput
   guide?: Prisma.ClassGuideCreateNestedOneWithoutClassInput
@@ -2652,6 +3116,8 @@ export type ClassCreateWithoutJoinRequestsInput = {
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationCreateNestedManyWithoutClassInput
+  attendanceSessions?: Prisma.AttendanceSessionCreateNestedManyWithoutClassInput
+  teamSets?: Prisma.TeamSetCreateNestedManyWithoutClassInput
   teachers?: Prisma.ClassTeacherCreateNestedManyWithoutClassInput
   actionLog?: Prisma.ClassActionLogCreateNestedManyWithoutClassInput
   homeStudents?: Prisma.UserCreateNestedManyWithoutHomeClassInput
@@ -2676,6 +3142,9 @@ export type ClassUncheckedCreateWithoutJoinRequestsInput = {
   teacherId: string
   deletedAt?: Date | string | null
   deletedById?: string | null
+  trashWarnedAt?: Date | string | null
+  recommendedAt?: Date | string | null
+  recommendedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutClassInput
@@ -2687,6 +3156,8 @@ export type ClassUncheckedCreateWithoutJoinRequestsInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutClassInput
+  attendanceSessions?: Prisma.AttendanceSessionUncheckedCreateNestedManyWithoutClassInput
+  teamSets?: Prisma.TeamSetUncheckedCreateNestedManyWithoutClassInput
   teachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutClassInput
   actionLog?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutClassInput
   homeStudents?: Prisma.UserUncheckedCreateNestedManyWithoutHomeClassInput
@@ -2725,10 +3196,13 @@ export type ClassUpdateWithoutJoinRequestsInput = {
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   teacher?: Prisma.UserUpdateOneRequiredWithoutTeacherClassesNestedInput
   deletedBy?: Prisma.UserUpdateOneWithoutTrashedClassesNestedInput
+  recommendedBy?: Prisma.UserUpdateOneWithoutRecommendedTemplatesNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutClassNestedInput
   missions?: Prisma.MissionUpdateManyWithoutClassNestedInput
   guide?: Prisma.ClassGuideUpdateOneWithoutClassNestedInput
@@ -2738,6 +3212,8 @@ export type ClassUpdateWithoutJoinRequestsInput = {
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUpdateManyWithoutClassNestedInput
+  attendanceSessions?: Prisma.AttendanceSessionUpdateManyWithoutClassNestedInput
+  teamSets?: Prisma.TeamSetUpdateManyWithoutClassNestedInput
   teachers?: Prisma.ClassTeacherUpdateManyWithoutClassNestedInput
   actionLog?: Prisma.ClassActionLogUpdateManyWithoutClassNestedInput
   homeStudents?: Prisma.UserUpdateManyWithoutHomeClassNestedInput
@@ -2762,6 +3238,9 @@ export type ClassUncheckedUpdateWithoutJoinRequestsInput = {
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutClassNestedInput
@@ -2773,6 +3252,8 @@ export type ClassUncheckedUpdateWithoutJoinRequestsInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutClassNestedInput
+  attendanceSessions?: Prisma.AttendanceSessionUncheckedUpdateManyWithoutClassNestedInput
+  teamSets?: Prisma.TeamSetUncheckedUpdateManyWithoutClassNestedInput
   teachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutClassNestedInput
   actionLog?: Prisma.ClassActionLogUncheckedUpdateManyWithoutClassNestedInput
   homeStudents?: Prisma.UserUncheckedUpdateManyWithoutHomeClassNestedInput
@@ -2795,10 +3276,13 @@ export type ClassCreateWithoutInvitationsInput = {
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Date | string | null
+  trashWarnedAt?: Date | string | null
+  recommendedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   teacher: Prisma.UserCreateNestedOneWithoutTeacherClassesInput
   deletedBy?: Prisma.UserCreateNestedOneWithoutTrashedClassesInput
+  recommendedBy?: Prisma.UserCreateNestedOneWithoutRecommendedTemplatesInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutClassInput
   missions?: Prisma.MissionCreateNestedManyWithoutClassInput
   guide?: Prisma.ClassGuideCreateNestedOneWithoutClassInput
@@ -2808,6 +3292,8 @@ export type ClassCreateWithoutInvitationsInput = {
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationCreateNestedManyWithoutClassInput
+  attendanceSessions?: Prisma.AttendanceSessionCreateNestedManyWithoutClassInput
+  teamSets?: Prisma.TeamSetCreateNestedManyWithoutClassInput
   teachers?: Prisma.ClassTeacherCreateNestedManyWithoutClassInput
   actionLog?: Prisma.ClassActionLogCreateNestedManyWithoutClassInput
   homeStudents?: Prisma.UserCreateNestedManyWithoutHomeClassInput
@@ -2832,6 +3318,9 @@ export type ClassUncheckedCreateWithoutInvitationsInput = {
   teacherId: string
   deletedAt?: Date | string | null
   deletedById?: string | null
+  trashWarnedAt?: Date | string | null
+  recommendedAt?: Date | string | null
+  recommendedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutClassInput
@@ -2843,6 +3332,8 @@ export type ClassUncheckedCreateWithoutInvitationsInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutClassInput
+  attendanceSessions?: Prisma.AttendanceSessionUncheckedCreateNestedManyWithoutClassInput
+  teamSets?: Prisma.TeamSetUncheckedCreateNestedManyWithoutClassInput
   teachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutClassInput
   actionLog?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutClassInput
   homeStudents?: Prisma.UserUncheckedCreateNestedManyWithoutHomeClassInput
@@ -2881,10 +3372,13 @@ export type ClassUpdateWithoutInvitationsInput = {
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   teacher?: Prisma.UserUpdateOneRequiredWithoutTeacherClassesNestedInput
   deletedBy?: Prisma.UserUpdateOneWithoutTrashedClassesNestedInput
+  recommendedBy?: Prisma.UserUpdateOneWithoutRecommendedTemplatesNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutClassNestedInput
   missions?: Prisma.MissionUpdateManyWithoutClassNestedInput
   guide?: Prisma.ClassGuideUpdateOneWithoutClassNestedInput
@@ -2894,6 +3388,8 @@ export type ClassUpdateWithoutInvitationsInput = {
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUpdateManyWithoutClassNestedInput
+  attendanceSessions?: Prisma.AttendanceSessionUpdateManyWithoutClassNestedInput
+  teamSets?: Prisma.TeamSetUpdateManyWithoutClassNestedInput
   teachers?: Prisma.ClassTeacherUpdateManyWithoutClassNestedInput
   actionLog?: Prisma.ClassActionLogUpdateManyWithoutClassNestedInput
   homeStudents?: Prisma.UserUpdateManyWithoutHomeClassNestedInput
@@ -2918,6 +3414,9 @@ export type ClassUncheckedUpdateWithoutInvitationsInput = {
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutClassNestedInput
@@ -2929,6 +3428,8 @@ export type ClassUncheckedUpdateWithoutInvitationsInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutClassNestedInput
+  attendanceSessions?: Prisma.AttendanceSessionUncheckedUpdateManyWithoutClassNestedInput
+  teamSets?: Prisma.TeamSetUncheckedUpdateManyWithoutClassNestedInput
   teachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutClassNestedInput
   actionLog?: Prisma.ClassActionLogUncheckedUpdateManyWithoutClassNestedInput
   homeStudents?: Prisma.UserUncheckedUpdateManyWithoutHomeClassNestedInput
@@ -2951,10 +3452,13 @@ export type ClassCreateWithoutBehaviorTemplatesInput = {
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Date | string | null
+  trashWarnedAt?: Date | string | null
+  recommendedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   teacher: Prisma.UserCreateNestedOneWithoutTeacherClassesInput
   deletedBy?: Prisma.UserCreateNestedOneWithoutTrashedClassesInput
+  recommendedBy?: Prisma.UserCreateNestedOneWithoutRecommendedTemplatesInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutClassInput
   missions?: Prisma.MissionCreateNestedManyWithoutClassInput
   guide?: Prisma.ClassGuideCreateNestedOneWithoutClassInput
@@ -2964,6 +3468,8 @@ export type ClassCreateWithoutBehaviorTemplatesInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutClassInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationCreateNestedManyWithoutClassInput
+  attendanceSessions?: Prisma.AttendanceSessionCreateNestedManyWithoutClassInput
+  teamSets?: Prisma.TeamSetCreateNestedManyWithoutClassInput
   teachers?: Prisma.ClassTeacherCreateNestedManyWithoutClassInput
   actionLog?: Prisma.ClassActionLogCreateNestedManyWithoutClassInput
   homeStudents?: Prisma.UserCreateNestedManyWithoutHomeClassInput
@@ -2988,6 +3494,9 @@ export type ClassUncheckedCreateWithoutBehaviorTemplatesInput = {
   teacherId: string
   deletedAt?: Date | string | null
   deletedById?: string | null
+  trashWarnedAt?: Date | string | null
+  recommendedAt?: Date | string | null
+  recommendedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutClassInput
@@ -2999,6 +3508,8 @@ export type ClassUncheckedCreateWithoutBehaviorTemplatesInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutClassInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutClassInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutClassInput
+  attendanceSessions?: Prisma.AttendanceSessionUncheckedCreateNestedManyWithoutClassInput
+  teamSets?: Prisma.TeamSetUncheckedCreateNestedManyWithoutClassInput
   teachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutClassInput
   actionLog?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutClassInput
   homeStudents?: Prisma.UserUncheckedCreateNestedManyWithoutHomeClassInput
@@ -3037,10 +3548,13 @@ export type ClassUpdateWithoutBehaviorTemplatesInput = {
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   teacher?: Prisma.UserUpdateOneRequiredWithoutTeacherClassesNestedInput
   deletedBy?: Prisma.UserUpdateOneWithoutTrashedClassesNestedInput
+  recommendedBy?: Prisma.UserUpdateOneWithoutRecommendedTemplatesNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutClassNestedInput
   missions?: Prisma.MissionUpdateManyWithoutClassNestedInput
   guide?: Prisma.ClassGuideUpdateOneWithoutClassNestedInput
@@ -3050,6 +3564,8 @@ export type ClassUpdateWithoutBehaviorTemplatesInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutClassNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUpdateManyWithoutClassNestedInput
+  attendanceSessions?: Prisma.AttendanceSessionUpdateManyWithoutClassNestedInput
+  teamSets?: Prisma.TeamSetUpdateManyWithoutClassNestedInput
   teachers?: Prisma.ClassTeacherUpdateManyWithoutClassNestedInput
   actionLog?: Prisma.ClassActionLogUpdateManyWithoutClassNestedInput
   homeStudents?: Prisma.UserUpdateManyWithoutHomeClassNestedInput
@@ -3074,6 +3590,9 @@ export type ClassUncheckedUpdateWithoutBehaviorTemplatesInput = {
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutClassNestedInput
@@ -3085,6 +3604,8 @@ export type ClassUncheckedUpdateWithoutBehaviorTemplatesInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutClassNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutClassNestedInput
+  attendanceSessions?: Prisma.AttendanceSessionUncheckedUpdateManyWithoutClassNestedInput
+  teamSets?: Prisma.TeamSetUncheckedUpdateManyWithoutClassNestedInput
   teachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutClassNestedInput
   actionLog?: Prisma.ClassActionLogUncheckedUpdateManyWithoutClassNestedInput
   homeStudents?: Prisma.UserUncheckedUpdateManyWithoutHomeClassNestedInput
@@ -3107,10 +3628,13 @@ export type ClassCreateWithoutBehaviorApplicationsInput = {
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Date | string | null
+  trashWarnedAt?: Date | string | null
+  recommendedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   teacher: Prisma.UserCreateNestedOneWithoutTeacherClassesInput
   deletedBy?: Prisma.UserCreateNestedOneWithoutTrashedClassesInput
+  recommendedBy?: Prisma.UserCreateNestedOneWithoutRecommendedTemplatesInput
   enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutClassInput
   missions?: Prisma.MissionCreateNestedManyWithoutClassInput
   guide?: Prisma.ClassGuideCreateNestedOneWithoutClassInput
@@ -3120,6 +3644,8 @@ export type ClassCreateWithoutBehaviorApplicationsInput = {
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutClassInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateCreateNestedManyWithoutClassInput
+  attendanceSessions?: Prisma.AttendanceSessionCreateNestedManyWithoutClassInput
+  teamSets?: Prisma.TeamSetCreateNestedManyWithoutClassInput
   teachers?: Prisma.ClassTeacherCreateNestedManyWithoutClassInput
   actionLog?: Prisma.ClassActionLogCreateNestedManyWithoutClassInput
   homeStudents?: Prisma.UserCreateNestedManyWithoutHomeClassInput
@@ -3144,6 +3670,9 @@ export type ClassUncheckedCreateWithoutBehaviorApplicationsInput = {
   teacherId: string
   deletedAt?: Date | string | null
   deletedById?: string | null
+  trashWarnedAt?: Date | string | null
+  recommendedAt?: Date | string | null
+  recommendedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutClassInput
@@ -3155,6 +3684,8 @@ export type ClassUncheckedCreateWithoutBehaviorApplicationsInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutClassInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutClassInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedCreateNestedManyWithoutClassInput
+  attendanceSessions?: Prisma.AttendanceSessionUncheckedCreateNestedManyWithoutClassInput
+  teamSets?: Prisma.TeamSetUncheckedCreateNestedManyWithoutClassInput
   teachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutClassInput
   actionLog?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutClassInput
   homeStudents?: Prisma.UserUncheckedCreateNestedManyWithoutHomeClassInput
@@ -3193,10 +3724,13 @@ export type ClassUpdateWithoutBehaviorApplicationsInput = {
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   teacher?: Prisma.UserUpdateOneRequiredWithoutTeacherClassesNestedInput
   deletedBy?: Prisma.UserUpdateOneWithoutTrashedClassesNestedInput
+  recommendedBy?: Prisma.UserUpdateOneWithoutRecommendedTemplatesNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutClassNestedInput
   missions?: Prisma.MissionUpdateManyWithoutClassNestedInput
   guide?: Prisma.ClassGuideUpdateOneWithoutClassNestedInput
@@ -3206,6 +3740,8 @@ export type ClassUpdateWithoutBehaviorApplicationsInput = {
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutClassNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUpdateManyWithoutClassNestedInput
+  attendanceSessions?: Prisma.AttendanceSessionUpdateManyWithoutClassNestedInput
+  teamSets?: Prisma.TeamSetUpdateManyWithoutClassNestedInput
   teachers?: Prisma.ClassTeacherUpdateManyWithoutClassNestedInput
   actionLog?: Prisma.ClassActionLogUpdateManyWithoutClassNestedInput
   homeStudents?: Prisma.UserUpdateManyWithoutHomeClassNestedInput
@@ -3230,6 +3766,9 @@ export type ClassUncheckedUpdateWithoutBehaviorApplicationsInput = {
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutClassNestedInput
@@ -3241,6 +3780,360 @@ export type ClassUncheckedUpdateWithoutBehaviorApplicationsInput = {
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutClassNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedUpdateManyWithoutClassNestedInput
+  attendanceSessions?: Prisma.AttendanceSessionUncheckedUpdateManyWithoutClassNestedInput
+  teamSets?: Prisma.TeamSetUncheckedUpdateManyWithoutClassNestedInput
+  teachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutClassNestedInput
+  actionLog?: Prisma.ClassActionLogUncheckedUpdateManyWithoutClassNestedInput
+  homeStudents?: Prisma.UserUncheckedUpdateManyWithoutHomeClassNestedInput
+}
+
+export type ClassCreateWithoutAttendanceSessionsInput = {
+  id?: string
+  name: string
+  narrative?: string | null
+  schedule?: string | null
+  archived?: boolean
+  invitationCode: string
+  backgroundImage?: string | null
+  subject?: string | null
+  language?: string | null
+  educationLevel?: string | null
+  province?: string | null
+  isTemplate?: boolean
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  deletedAt?: Date | string | null
+  trashWarnedAt?: Date | string | null
+  recommendedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  teacher: Prisma.UserCreateNestedOneWithoutTeacherClassesInput
+  deletedBy?: Prisma.UserCreateNestedOneWithoutTrashedClassesInput
+  recommendedBy?: Prisma.UserCreateNestedOneWithoutRecommendedTemplatesInput
+  enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutClassInput
+  missions?: Prisma.MissionCreateNestedManyWithoutClassInput
+  guide?: Prisma.ClassGuideCreateNestedOneWithoutClassInput
+  joinRequests?: Prisma.JoinRequestCreateNestedManyWithoutClassInput
+  invitations?: Prisma.InvitationCreateNestedManyWithoutClassInput
+  shopItems?: Prisma.ShopItemCreateNestedManyWithoutClassInput
+  shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutClassInput
+  shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutClassInput
+  behaviorTemplates?: Prisma.BehaviorTemplateCreateNestedManyWithoutClassInput
+  behaviorApplications?: Prisma.BehaviorApplicationCreateNestedManyWithoutClassInput
+  teamSets?: Prisma.TeamSetCreateNestedManyWithoutClassInput
+  teachers?: Prisma.ClassTeacherCreateNestedManyWithoutClassInput
+  actionLog?: Prisma.ClassActionLogCreateNestedManyWithoutClassInput
+  homeStudents?: Prisma.UserCreateNestedManyWithoutHomeClassInput
+}
+
+export type ClassUncheckedCreateWithoutAttendanceSessionsInput = {
+  id?: string
+  name: string
+  narrative?: string | null
+  schedule?: string | null
+  archived?: boolean
+  invitationCode: string
+  backgroundImage?: string | null
+  subject?: string | null
+  language?: string | null
+  educationLevel?: string | null
+  province?: string | null
+  isTemplate?: boolean
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  teacherId: string
+  deletedAt?: Date | string | null
+  deletedById?: string | null
+  trashWarnedAt?: Date | string | null
+  recommendedAt?: Date | string | null
+  recommendedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutClassInput
+  missions?: Prisma.MissionUncheckedCreateNestedManyWithoutClassInput
+  guide?: Prisma.ClassGuideUncheckedCreateNestedOneWithoutClassInput
+  joinRequests?: Prisma.JoinRequestUncheckedCreateNestedManyWithoutClassInput
+  invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutClassInput
+  shopItems?: Prisma.ShopItemUncheckedCreateNestedManyWithoutClassInput
+  shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutClassInput
+  shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutClassInput
+  behaviorTemplates?: Prisma.BehaviorTemplateUncheckedCreateNestedManyWithoutClassInput
+  behaviorApplications?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutClassInput
+  teamSets?: Prisma.TeamSetUncheckedCreateNestedManyWithoutClassInput
+  teachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutClassInput
+  actionLog?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutClassInput
+  homeStudents?: Prisma.UserUncheckedCreateNestedManyWithoutHomeClassInput
+}
+
+export type ClassCreateOrConnectWithoutAttendanceSessionsInput = {
+  where: Prisma.ClassWhereUniqueInput
+  create: Prisma.XOR<Prisma.ClassCreateWithoutAttendanceSessionsInput, Prisma.ClassUncheckedCreateWithoutAttendanceSessionsInput>
+}
+
+export type ClassUpsertWithoutAttendanceSessionsInput = {
+  update: Prisma.XOR<Prisma.ClassUpdateWithoutAttendanceSessionsInput, Prisma.ClassUncheckedUpdateWithoutAttendanceSessionsInput>
+  create: Prisma.XOR<Prisma.ClassCreateWithoutAttendanceSessionsInput, Prisma.ClassUncheckedCreateWithoutAttendanceSessionsInput>
+  where?: Prisma.ClassWhereInput
+}
+
+export type ClassUpdateToOneWithWhereWithoutAttendanceSessionsInput = {
+  where?: Prisma.ClassWhereInput
+  data: Prisma.XOR<Prisma.ClassUpdateWithoutAttendanceSessionsInput, Prisma.ClassUncheckedUpdateWithoutAttendanceSessionsInput>
+}
+
+export type ClassUpdateWithoutAttendanceSessionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  narrative?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  schedule?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  invitationCode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  teacher?: Prisma.UserUpdateOneRequiredWithoutTeacherClassesNestedInput
+  deletedBy?: Prisma.UserUpdateOneWithoutTrashedClassesNestedInput
+  recommendedBy?: Prisma.UserUpdateOneWithoutRecommendedTemplatesNestedInput
+  enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutClassNestedInput
+  missions?: Prisma.MissionUpdateManyWithoutClassNestedInput
+  guide?: Prisma.ClassGuideUpdateOneWithoutClassNestedInput
+  joinRequests?: Prisma.JoinRequestUpdateManyWithoutClassNestedInput
+  invitations?: Prisma.InvitationUpdateManyWithoutClassNestedInput
+  shopItems?: Prisma.ShopItemUpdateManyWithoutClassNestedInput
+  shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutClassNestedInput
+  shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutClassNestedInput
+  behaviorTemplates?: Prisma.BehaviorTemplateUpdateManyWithoutClassNestedInput
+  behaviorApplications?: Prisma.BehaviorApplicationUpdateManyWithoutClassNestedInput
+  teamSets?: Prisma.TeamSetUpdateManyWithoutClassNestedInput
+  teachers?: Prisma.ClassTeacherUpdateManyWithoutClassNestedInput
+  actionLog?: Prisma.ClassActionLogUpdateManyWithoutClassNestedInput
+  homeStudents?: Prisma.UserUpdateManyWithoutHomeClassNestedInput
+}
+
+export type ClassUncheckedUpdateWithoutAttendanceSessionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  narrative?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  schedule?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  invitationCode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  teacherId?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutClassNestedInput
+  missions?: Prisma.MissionUncheckedUpdateManyWithoutClassNestedInput
+  guide?: Prisma.ClassGuideUncheckedUpdateOneWithoutClassNestedInput
+  joinRequests?: Prisma.JoinRequestUncheckedUpdateManyWithoutClassNestedInput
+  invitations?: Prisma.InvitationUncheckedUpdateManyWithoutClassNestedInput
+  shopItems?: Prisma.ShopItemUncheckedUpdateManyWithoutClassNestedInput
+  shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutClassNestedInput
+  shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutClassNestedInput
+  behaviorTemplates?: Prisma.BehaviorTemplateUncheckedUpdateManyWithoutClassNestedInput
+  behaviorApplications?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutClassNestedInput
+  teamSets?: Prisma.TeamSetUncheckedUpdateManyWithoutClassNestedInput
+  teachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutClassNestedInput
+  actionLog?: Prisma.ClassActionLogUncheckedUpdateManyWithoutClassNestedInput
+  homeStudents?: Prisma.UserUncheckedUpdateManyWithoutHomeClassNestedInput
+}
+
+export type ClassCreateWithoutTeamSetsInput = {
+  id?: string
+  name: string
+  narrative?: string | null
+  schedule?: string | null
+  archived?: boolean
+  invitationCode: string
+  backgroundImage?: string | null
+  subject?: string | null
+  language?: string | null
+  educationLevel?: string | null
+  province?: string | null
+  isTemplate?: boolean
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  deletedAt?: Date | string | null
+  trashWarnedAt?: Date | string | null
+  recommendedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  teacher: Prisma.UserCreateNestedOneWithoutTeacherClassesInput
+  deletedBy?: Prisma.UserCreateNestedOneWithoutTrashedClassesInput
+  recommendedBy?: Prisma.UserCreateNestedOneWithoutRecommendedTemplatesInput
+  enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutClassInput
+  missions?: Prisma.MissionCreateNestedManyWithoutClassInput
+  guide?: Prisma.ClassGuideCreateNestedOneWithoutClassInput
+  joinRequests?: Prisma.JoinRequestCreateNestedManyWithoutClassInput
+  invitations?: Prisma.InvitationCreateNestedManyWithoutClassInput
+  shopItems?: Prisma.ShopItemCreateNestedManyWithoutClassInput
+  shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutClassInput
+  shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutClassInput
+  behaviorTemplates?: Prisma.BehaviorTemplateCreateNestedManyWithoutClassInput
+  behaviorApplications?: Prisma.BehaviorApplicationCreateNestedManyWithoutClassInput
+  attendanceSessions?: Prisma.AttendanceSessionCreateNestedManyWithoutClassInput
+  teachers?: Prisma.ClassTeacherCreateNestedManyWithoutClassInput
+  actionLog?: Prisma.ClassActionLogCreateNestedManyWithoutClassInput
+  homeStudents?: Prisma.UserCreateNestedManyWithoutHomeClassInput
+}
+
+export type ClassUncheckedCreateWithoutTeamSetsInput = {
+  id?: string
+  name: string
+  narrative?: string | null
+  schedule?: string | null
+  archived?: boolean
+  invitationCode: string
+  backgroundImage?: string | null
+  subject?: string | null
+  language?: string | null
+  educationLevel?: string | null
+  province?: string | null
+  isTemplate?: boolean
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  teacherId: string
+  deletedAt?: Date | string | null
+  deletedById?: string | null
+  trashWarnedAt?: Date | string | null
+  recommendedAt?: Date | string | null
+  recommendedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutClassInput
+  missions?: Prisma.MissionUncheckedCreateNestedManyWithoutClassInput
+  guide?: Prisma.ClassGuideUncheckedCreateNestedOneWithoutClassInput
+  joinRequests?: Prisma.JoinRequestUncheckedCreateNestedManyWithoutClassInput
+  invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutClassInput
+  shopItems?: Prisma.ShopItemUncheckedCreateNestedManyWithoutClassInput
+  shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutClassInput
+  shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutClassInput
+  behaviorTemplates?: Prisma.BehaviorTemplateUncheckedCreateNestedManyWithoutClassInput
+  behaviorApplications?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutClassInput
+  attendanceSessions?: Prisma.AttendanceSessionUncheckedCreateNestedManyWithoutClassInput
+  teachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutClassInput
+  actionLog?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutClassInput
+  homeStudents?: Prisma.UserUncheckedCreateNestedManyWithoutHomeClassInput
+}
+
+export type ClassCreateOrConnectWithoutTeamSetsInput = {
+  where: Prisma.ClassWhereUniqueInput
+  create: Prisma.XOR<Prisma.ClassCreateWithoutTeamSetsInput, Prisma.ClassUncheckedCreateWithoutTeamSetsInput>
+}
+
+export type ClassUpsertWithoutTeamSetsInput = {
+  update: Prisma.XOR<Prisma.ClassUpdateWithoutTeamSetsInput, Prisma.ClassUncheckedUpdateWithoutTeamSetsInput>
+  create: Prisma.XOR<Prisma.ClassCreateWithoutTeamSetsInput, Prisma.ClassUncheckedCreateWithoutTeamSetsInput>
+  where?: Prisma.ClassWhereInput
+}
+
+export type ClassUpdateToOneWithWhereWithoutTeamSetsInput = {
+  where?: Prisma.ClassWhereInput
+  data: Prisma.XOR<Prisma.ClassUpdateWithoutTeamSetsInput, Prisma.ClassUncheckedUpdateWithoutTeamSetsInput>
+}
+
+export type ClassUpdateWithoutTeamSetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  narrative?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  schedule?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  invitationCode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  teacher?: Prisma.UserUpdateOneRequiredWithoutTeacherClassesNestedInput
+  deletedBy?: Prisma.UserUpdateOneWithoutTrashedClassesNestedInput
+  recommendedBy?: Prisma.UserUpdateOneWithoutRecommendedTemplatesNestedInput
+  enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutClassNestedInput
+  missions?: Prisma.MissionUpdateManyWithoutClassNestedInput
+  guide?: Prisma.ClassGuideUpdateOneWithoutClassNestedInput
+  joinRequests?: Prisma.JoinRequestUpdateManyWithoutClassNestedInput
+  invitations?: Prisma.InvitationUpdateManyWithoutClassNestedInput
+  shopItems?: Prisma.ShopItemUpdateManyWithoutClassNestedInput
+  shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutClassNestedInput
+  shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutClassNestedInput
+  behaviorTemplates?: Prisma.BehaviorTemplateUpdateManyWithoutClassNestedInput
+  behaviorApplications?: Prisma.BehaviorApplicationUpdateManyWithoutClassNestedInput
+  attendanceSessions?: Prisma.AttendanceSessionUpdateManyWithoutClassNestedInput
+  teachers?: Prisma.ClassTeacherUpdateManyWithoutClassNestedInput
+  actionLog?: Prisma.ClassActionLogUpdateManyWithoutClassNestedInput
+  homeStudents?: Prisma.UserUpdateManyWithoutHomeClassNestedInput
+}
+
+export type ClassUncheckedUpdateWithoutTeamSetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  narrative?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  schedule?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  invitationCode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  teacherId?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutClassNestedInput
+  missions?: Prisma.MissionUncheckedUpdateManyWithoutClassNestedInput
+  guide?: Prisma.ClassGuideUncheckedUpdateOneWithoutClassNestedInput
+  joinRequests?: Prisma.JoinRequestUncheckedUpdateManyWithoutClassNestedInput
+  invitations?: Prisma.InvitationUncheckedUpdateManyWithoutClassNestedInput
+  shopItems?: Prisma.ShopItemUncheckedUpdateManyWithoutClassNestedInput
+  shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutClassNestedInput
+  shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutClassNestedInput
+  behaviorTemplates?: Prisma.BehaviorTemplateUncheckedUpdateManyWithoutClassNestedInput
+  behaviorApplications?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutClassNestedInput
+  attendanceSessions?: Prisma.AttendanceSessionUncheckedUpdateManyWithoutClassNestedInput
   teachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutClassNestedInput
   actionLog?: Prisma.ClassActionLogUncheckedUpdateManyWithoutClassNestedInput
   homeStudents?: Prisma.UserUncheckedUpdateManyWithoutHomeClassNestedInput
@@ -3264,6 +4157,9 @@ export type ClassCreateManyTeacherInput = {
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Date | string | null
   deletedById?: string | null
+  trashWarnedAt?: Date | string | null
+  recommendedAt?: Date | string | null
+  recommendedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -3286,6 +4182,34 @@ export type ClassCreateManyDeletedByInput = {
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId: string
   deletedAt?: Date | string | null
+  trashWarnedAt?: Date | string | null
+  recommendedAt?: Date | string | null
+  recommendedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type ClassCreateManyRecommendedByInput = {
+  id?: string
+  name: string
+  narrative?: string | null
+  schedule?: string | null
+  archived?: boolean
+  invitationCode: string
+  backgroundImage?: string | null
+  subject?: string | null
+  language?: string | null
+  educationLevel?: string | null
+  province?: string | null
+  isTemplate?: boolean
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  teacherId: string
+  deletedAt?: Date | string | null
+  deletedById?: string | null
+  trashWarnedAt?: Date | string | null
+  recommendedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -3307,9 +4231,12 @@ export type ClassUpdateWithoutTeacherInput = {
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedBy?: Prisma.UserUpdateOneWithoutTrashedClassesNestedInput
+  recommendedBy?: Prisma.UserUpdateOneWithoutRecommendedTemplatesNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutClassNestedInput
   missions?: Prisma.MissionUpdateManyWithoutClassNestedInput
   guide?: Prisma.ClassGuideUpdateOneWithoutClassNestedInput
@@ -3320,6 +4247,8 @@ export type ClassUpdateWithoutTeacherInput = {
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUpdateManyWithoutClassNestedInput
+  attendanceSessions?: Prisma.AttendanceSessionUpdateManyWithoutClassNestedInput
+  teamSets?: Prisma.TeamSetUpdateManyWithoutClassNestedInput
   teachers?: Prisma.ClassTeacherUpdateManyWithoutClassNestedInput
   actionLog?: Prisma.ClassActionLogUpdateManyWithoutClassNestedInput
   homeStudents?: Prisma.UserUpdateManyWithoutHomeClassNestedInput
@@ -3343,6 +4272,9 @@ export type ClassUncheckedUpdateWithoutTeacherInput = {
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutClassNestedInput
@@ -3355,6 +4287,8 @@ export type ClassUncheckedUpdateWithoutTeacherInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutClassNestedInput
+  attendanceSessions?: Prisma.AttendanceSessionUncheckedUpdateManyWithoutClassNestedInput
+  teamSets?: Prisma.TeamSetUncheckedUpdateManyWithoutClassNestedInput
   teachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutClassNestedInput
   actionLog?: Prisma.ClassActionLogUncheckedUpdateManyWithoutClassNestedInput
   homeStudents?: Prisma.UserUncheckedUpdateManyWithoutHomeClassNestedInput
@@ -3378,6 +4312,9 @@ export type ClassUncheckedUpdateManyWithoutTeacherInput = {
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -3399,9 +4336,12 @@ export type ClassUpdateWithoutDeletedByInput = {
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   teacher?: Prisma.UserUpdateOneRequiredWithoutTeacherClassesNestedInput
+  recommendedBy?: Prisma.UserUpdateOneWithoutRecommendedTemplatesNestedInput
   enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutClassNestedInput
   missions?: Prisma.MissionUpdateManyWithoutClassNestedInput
   guide?: Prisma.ClassGuideUpdateOneWithoutClassNestedInput
@@ -3412,6 +4352,8 @@ export type ClassUpdateWithoutDeletedByInput = {
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUpdateManyWithoutClassNestedInput
+  attendanceSessions?: Prisma.AttendanceSessionUpdateManyWithoutClassNestedInput
+  teamSets?: Prisma.TeamSetUpdateManyWithoutClassNestedInput
   teachers?: Prisma.ClassTeacherUpdateManyWithoutClassNestedInput
   actionLog?: Prisma.ClassActionLogUpdateManyWithoutClassNestedInput
   homeStudents?: Prisma.UserUpdateManyWithoutHomeClassNestedInput
@@ -3435,6 +4377,9 @@ export type ClassUncheckedUpdateWithoutDeletedByInput = {
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutClassNestedInput
@@ -3447,6 +4392,8 @@ export type ClassUncheckedUpdateWithoutDeletedByInput = {
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutClassNestedInput
   behaviorTemplates?: Prisma.BehaviorTemplateUncheckedUpdateManyWithoutClassNestedInput
   behaviorApplications?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutClassNestedInput
+  attendanceSessions?: Prisma.AttendanceSessionUncheckedUpdateManyWithoutClassNestedInput
+  teamSets?: Prisma.TeamSetUncheckedUpdateManyWithoutClassNestedInput
   teachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutClassNestedInput
   actionLog?: Prisma.ClassActionLogUncheckedUpdateManyWithoutClassNestedInput
   homeStudents?: Prisma.UserUncheckedUpdateManyWithoutHomeClassNestedInput
@@ -3470,6 +4417,114 @@ export type ClassUncheckedUpdateManyWithoutDeletedByInput = {
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type ClassUpdateWithoutRecommendedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  narrative?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  schedule?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  invitationCode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  teacher?: Prisma.UserUpdateOneRequiredWithoutTeacherClassesNestedInput
+  deletedBy?: Prisma.UserUpdateOneWithoutTrashedClassesNestedInput
+  enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutClassNestedInput
+  missions?: Prisma.MissionUpdateManyWithoutClassNestedInput
+  guide?: Prisma.ClassGuideUpdateOneWithoutClassNestedInput
+  joinRequests?: Prisma.JoinRequestUpdateManyWithoutClassNestedInput
+  invitations?: Prisma.InvitationUpdateManyWithoutClassNestedInput
+  shopItems?: Prisma.ShopItemUpdateManyWithoutClassNestedInput
+  shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutClassNestedInput
+  shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutClassNestedInput
+  behaviorTemplates?: Prisma.BehaviorTemplateUpdateManyWithoutClassNestedInput
+  behaviorApplications?: Prisma.BehaviorApplicationUpdateManyWithoutClassNestedInput
+  attendanceSessions?: Prisma.AttendanceSessionUpdateManyWithoutClassNestedInput
+  teamSets?: Prisma.TeamSetUpdateManyWithoutClassNestedInput
+  teachers?: Prisma.ClassTeacherUpdateManyWithoutClassNestedInput
+  actionLog?: Prisma.ClassActionLogUpdateManyWithoutClassNestedInput
+  homeStudents?: Prisma.UserUpdateManyWithoutHomeClassNestedInput
+}
+
+export type ClassUncheckedUpdateWithoutRecommendedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  narrative?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  schedule?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  invitationCode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  teacherId?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutClassNestedInput
+  missions?: Prisma.MissionUncheckedUpdateManyWithoutClassNestedInput
+  guide?: Prisma.ClassGuideUncheckedUpdateOneWithoutClassNestedInput
+  joinRequests?: Prisma.JoinRequestUncheckedUpdateManyWithoutClassNestedInput
+  invitations?: Prisma.InvitationUncheckedUpdateManyWithoutClassNestedInput
+  shopItems?: Prisma.ShopItemUncheckedUpdateManyWithoutClassNestedInput
+  shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutClassNestedInput
+  shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutClassNestedInput
+  behaviorTemplates?: Prisma.BehaviorTemplateUncheckedUpdateManyWithoutClassNestedInput
+  behaviorApplications?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutClassNestedInput
+  attendanceSessions?: Prisma.AttendanceSessionUncheckedUpdateManyWithoutClassNestedInput
+  teamSets?: Prisma.TeamSetUncheckedUpdateManyWithoutClassNestedInput
+  teachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutClassNestedInput
+  actionLog?: Prisma.ClassActionLogUncheckedUpdateManyWithoutClassNestedInput
+  homeStudents?: Prisma.UserUncheckedUpdateManyWithoutHomeClassNestedInput
+}
+
+export type ClassUncheckedUpdateManyWithoutRecommendedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  narrative?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  schedule?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  invitationCode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  teacherId?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  recommendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -3489,6 +4544,8 @@ export type ClassCountOutputType = {
   shopItemUses: number
   behaviorTemplates: number
   behaviorApplications: number
+  attendanceSessions: number
+  teamSets: number
   teachers: number
   actionLog: number
   homeStudents: number
@@ -3504,6 +4561,8 @@ export type ClassCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.
   shopItemUses?: boolean | ClassCountOutputTypeCountShopItemUsesArgs
   behaviorTemplates?: boolean | ClassCountOutputTypeCountBehaviorTemplatesArgs
   behaviorApplications?: boolean | ClassCountOutputTypeCountBehaviorApplicationsArgs
+  attendanceSessions?: boolean | ClassCountOutputTypeCountAttendanceSessionsArgs
+  teamSets?: boolean | ClassCountOutputTypeCountTeamSetsArgs
   teachers?: boolean | ClassCountOutputTypeCountTeachersArgs
   actionLog?: boolean | ClassCountOutputTypeCountActionLogArgs
   homeStudents?: boolean | ClassCountOutputTypeCountHomeStudentsArgs
@@ -3585,6 +4644,20 @@ export type ClassCountOutputTypeCountBehaviorApplicationsArgs<ExtArgs extends ru
 /**
  * ClassCountOutputType without action
  */
+export type ClassCountOutputTypeCountAttendanceSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AttendanceSessionWhereInput
+}
+
+/**
+ * ClassCountOutputType without action
+ */
+export type ClassCountOutputTypeCountTeamSetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TeamSetWhereInput
+}
+
+/**
+ * ClassCountOutputType without action
+ */
 export type ClassCountOutputTypeCountTeachersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.ClassTeacherWhereInput
 }
@@ -3623,10 +4696,14 @@ export type ClassSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   teacherId?: boolean
   deletedAt?: boolean
   deletedById?: boolean
+  trashWarnedAt?: boolean
+  recommendedAt?: boolean
+  recommendedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   teacher?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   deletedBy?: boolean | Prisma.Class$deletedByArgs<ExtArgs>
+  recommendedBy?: boolean | Prisma.Class$recommendedByArgs<ExtArgs>
   enrollments?: boolean | Prisma.Class$enrollmentsArgs<ExtArgs>
   missions?: boolean | Prisma.Class$missionsArgs<ExtArgs>
   guide?: boolean | Prisma.Class$guideArgs<ExtArgs>
@@ -3637,6 +4714,8 @@ export type ClassSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   shopItemUses?: boolean | Prisma.Class$shopItemUsesArgs<ExtArgs>
   behaviorTemplates?: boolean | Prisma.Class$behaviorTemplatesArgs<ExtArgs>
   behaviorApplications?: boolean | Prisma.Class$behaviorApplicationsArgs<ExtArgs>
+  attendanceSessions?: boolean | Prisma.Class$attendanceSessionsArgs<ExtArgs>
+  teamSets?: boolean | Prisma.Class$teamSetsArgs<ExtArgs>
   teachers?: boolean | Prisma.Class$teachersArgs<ExtArgs>
   actionLog?: boolean | Prisma.Class$actionLogArgs<ExtArgs>
   homeStudents?: boolean | Prisma.Class$homeStudentsArgs<ExtArgs>
@@ -3662,10 +4741,14 @@ export type ClassSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   teacherId?: boolean
   deletedAt?: boolean
   deletedById?: boolean
+  trashWarnedAt?: boolean
+  recommendedAt?: boolean
+  recommendedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   teacher?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   deletedBy?: boolean | Prisma.Class$deletedByArgs<ExtArgs>
+  recommendedBy?: boolean | Prisma.Class$recommendedByArgs<ExtArgs>
 }, ExtArgs["result"]["class"]>
 
 export type ClassSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -3687,10 +4770,14 @@ export type ClassSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   teacherId?: boolean
   deletedAt?: boolean
   deletedById?: boolean
+  trashWarnedAt?: boolean
+  recommendedAt?: boolean
+  recommendedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   teacher?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   deletedBy?: boolean | Prisma.Class$deletedByArgs<ExtArgs>
+  recommendedBy?: boolean | Prisma.Class$recommendedByArgs<ExtArgs>
 }, ExtArgs["result"]["class"]>
 
 export type ClassSelectScalar = {
@@ -3712,14 +4799,18 @@ export type ClassSelectScalar = {
   teacherId?: boolean
   deletedAt?: boolean
   deletedById?: boolean
+  trashWarnedAt?: boolean
+  recommendedAt?: boolean
+  recommendedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ClassOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "narrative" | "schedule" | "archived" | "invitationCode" | "backgroundImage" | "subject" | "language" | "educationLevel" | "province" | "isTemplate" | "settings" | "levelConfig" | "scheduleConfig" | "teacherId" | "deletedAt" | "deletedById" | "createdAt" | "updatedAt", ExtArgs["result"]["class"]>
+export type ClassOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "narrative" | "schedule" | "archived" | "invitationCode" | "backgroundImage" | "subject" | "language" | "educationLevel" | "province" | "isTemplate" | "settings" | "levelConfig" | "scheduleConfig" | "teacherId" | "deletedAt" | "deletedById" | "trashWarnedAt" | "recommendedAt" | "recommendedById" | "createdAt" | "updatedAt", ExtArgs["result"]["class"]>
 export type ClassInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   teacher?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   deletedBy?: boolean | Prisma.Class$deletedByArgs<ExtArgs>
+  recommendedBy?: boolean | Prisma.Class$recommendedByArgs<ExtArgs>
   enrollments?: boolean | Prisma.Class$enrollmentsArgs<ExtArgs>
   missions?: boolean | Prisma.Class$missionsArgs<ExtArgs>
   guide?: boolean | Prisma.Class$guideArgs<ExtArgs>
@@ -3730,6 +4821,8 @@ export type ClassInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   shopItemUses?: boolean | Prisma.Class$shopItemUsesArgs<ExtArgs>
   behaviorTemplates?: boolean | Prisma.Class$behaviorTemplatesArgs<ExtArgs>
   behaviorApplications?: boolean | Prisma.Class$behaviorApplicationsArgs<ExtArgs>
+  attendanceSessions?: boolean | Prisma.Class$attendanceSessionsArgs<ExtArgs>
+  teamSets?: boolean | Prisma.Class$teamSetsArgs<ExtArgs>
   teachers?: boolean | Prisma.Class$teachersArgs<ExtArgs>
   actionLog?: boolean | Prisma.Class$actionLogArgs<ExtArgs>
   homeStudents?: boolean | Prisma.Class$homeStudentsArgs<ExtArgs>
@@ -3738,10 +4831,12 @@ export type ClassInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
 export type ClassIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   teacher?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   deletedBy?: boolean | Prisma.Class$deletedByArgs<ExtArgs>
+  recommendedBy?: boolean | Prisma.Class$recommendedByArgs<ExtArgs>
 }
 export type ClassIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   teacher?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   deletedBy?: boolean | Prisma.Class$deletedByArgs<ExtArgs>
+  recommendedBy?: boolean | Prisma.Class$recommendedByArgs<ExtArgs>
 }
 
 export type $ClassPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3749,6 +4844,7 @@ export type $ClassPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   objects: {
     teacher: Prisma.$UserPayload<ExtArgs>
     deletedBy: Prisma.$UserPayload<ExtArgs> | null
+    recommendedBy: Prisma.$UserPayload<ExtArgs> | null
     enrollments: Prisma.$ClassEnrollmentPayload<ExtArgs>[]
     missions: Prisma.$MissionPayload<ExtArgs>[]
     guide: Prisma.$ClassGuidePayload<ExtArgs> | null
@@ -3759,6 +4855,8 @@ export type $ClassPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     shopItemUses: Prisma.$ShopItemUsePayload<ExtArgs>[]
     behaviorTemplates: Prisma.$BehaviorTemplatePayload<ExtArgs>[]
     behaviorApplications: Prisma.$BehaviorApplicationPayload<ExtArgs>[]
+    attendanceSessions: Prisma.$AttendanceSessionPayload<ExtArgs>[]
+    teamSets: Prisma.$TeamSetPayload<ExtArgs>[]
     teachers: Prisma.$ClassTeacherPayload<ExtArgs>[]
     actionLog: Prisma.$ClassActionLogPayload<ExtArgs>[]
     homeStudents: Prisma.$UserPayload<ExtArgs>[]
@@ -3782,6 +4880,9 @@ export type $ClassPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     teacherId: string
     deletedAt: Date | null
     deletedById: string | null
+    trashWarnedAt: Date | null
+    recommendedAt: Date | null
+    recommendedById: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["class"]>
@@ -4180,6 +5281,7 @@ export interface Prisma__ClassClient<T, Null = never, ExtArgs extends runtime.Ty
   readonly [Symbol.toStringTag]: "PrismaPromise"
   teacher<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   deletedBy<T extends Prisma.Class$deletedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Class$deletedByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  recommendedBy<T extends Prisma.Class$recommendedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Class$recommendedByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   enrollments<T extends Prisma.Class$enrollmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Class$enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClassEnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   missions<T extends Prisma.Class$missionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Class$missionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   guide<T extends Prisma.Class$guideArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Class$guideArgs<ExtArgs>>): Prisma.Prisma__ClassGuideClient<runtime.Types.Result.GetResult<Prisma.$ClassGuidePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -4190,6 +5292,8 @@ export interface Prisma__ClassClient<T, Null = never, ExtArgs extends runtime.Ty
   shopItemUses<T extends Prisma.Class$shopItemUsesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Class$shopItemUsesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ShopItemUsePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   behaviorTemplates<T extends Prisma.Class$behaviorTemplatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Class$behaviorTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BehaviorTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   behaviorApplications<T extends Prisma.Class$behaviorApplicationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Class$behaviorApplicationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BehaviorApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  attendanceSessions<T extends Prisma.Class$attendanceSessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Class$attendanceSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AttendanceSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  teamSets<T extends Prisma.Class$teamSetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Class$teamSetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TeamSetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   teachers<T extends Prisma.Class$teachersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Class$teachersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClassTeacherPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   actionLog<T extends Prisma.Class$actionLogArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Class$actionLogArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClassActionLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   homeStudents<T extends Prisma.Class$homeStudentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Class$homeStudentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -4240,6 +5344,9 @@ export interface ClassFieldRefs {
   readonly teacherId: Prisma.FieldRef<"Class", 'String'>
   readonly deletedAt: Prisma.FieldRef<"Class", 'DateTime'>
   readonly deletedById: Prisma.FieldRef<"Class", 'String'>
+  readonly trashWarnedAt: Prisma.FieldRef<"Class", 'DateTime'>
+  readonly recommendedAt: Prisma.FieldRef<"Class", 'DateTime'>
+  readonly recommendedById: Prisma.FieldRef<"Class", 'String'>
   readonly createdAt: Prisma.FieldRef<"Class", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Class", 'DateTime'>
 }
@@ -4662,6 +5769,25 @@ export type Class$deletedByArgs<ExtArgs extends runtime.Types.Extensions.Interna
 }
 
 /**
+ * Class.recommendedBy
+ */
+export type Class$recommendedByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
+}
+
+/**
  * Class.enrollments
  */
 export type Class$enrollmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -4894,6 +6020,54 @@ export type Class$behaviorApplicationsArgs<ExtArgs extends runtime.Types.Extensi
   take?: number
   skip?: number
   distinct?: Prisma.BehaviorApplicationScalarFieldEnum | Prisma.BehaviorApplicationScalarFieldEnum[]
+}
+
+/**
+ * Class.attendanceSessions
+ */
+export type Class$attendanceSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AttendanceSession
+   */
+  select?: Prisma.AttendanceSessionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AttendanceSession
+   */
+  omit?: Prisma.AttendanceSessionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AttendanceSessionInclude<ExtArgs> | null
+  where?: Prisma.AttendanceSessionWhereInput
+  orderBy?: Prisma.AttendanceSessionOrderByWithRelationInput | Prisma.AttendanceSessionOrderByWithRelationInput[]
+  cursor?: Prisma.AttendanceSessionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AttendanceSessionScalarFieldEnum | Prisma.AttendanceSessionScalarFieldEnum[]
+}
+
+/**
+ * Class.teamSets
+ */
+export type Class$teamSetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TeamSet
+   */
+  select?: Prisma.TeamSetSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TeamSet
+   */
+  omit?: Prisma.TeamSetOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TeamSetInclude<ExtArgs> | null
+  where?: Prisma.TeamSetWhereInput
+  orderBy?: Prisma.TeamSetOrderByWithRelationInput | Prisma.TeamSetOrderByWithRelationInput[]
+  cursor?: Prisma.TeamSetWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TeamSetScalarFieldEnum | Prisma.TeamSetScalarFieldEnum[]
 }
 
 /**

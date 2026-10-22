@@ -163,6 +163,43 @@ export type BehaviorTemplate = Prisma.BehaviorTemplateModel
  */
 export type BehaviorApplication = Prisma.BehaviorApplicationModel
 /**
+ * Model AttendanceSession
+ * 
+ */
+export type AttendanceSession = Prisma.AttendanceSessionModel
+/**
+ * Model AttendanceRecord
+ * 
+ */
+export type AttendanceRecord = Prisma.AttendanceRecordModel
+/**
+ * Model TeamSet
+ * Una forma de repartir la clase en equipos. Puede haber varias a la vez: las
+ * de base (fijas; las únicas que puntúan en la clasificación) y temporales,
+ * para una misión o una dinámica, que se archivan al acabar.
+ */
+export type TeamSet = Prisma.TeamSetModel
+/**
+ * Model Team
+ * Un equipo de una agrupación. El color y el emblema son claves de una lista
+ * cerrada (la paleta de tokens y los emblemas predefinidos), nunca un valor
+ * libre: así responden a los modos de daltonismo y alto contraste.
+ */
+export type Team = Prisma.TeamModel
+/**
+ * Model TeamMember
+ * Pertenencia a un equipo. Cuelga de la matrícula: sacar a alguien de la clase
+ * la borra sola. Nadie está en dos equipos de la misma agrupación.
+ */
+export type TeamMember = Prisma.TeamMemberModel
+/**
+ * Model TeamAward
+ * Premio a un equipo: el marcador es la suma de `points` (un libro, no un
+ * contador, para que no se descuadre al mover a alguien). Los deltas son lo
+ * repartido a cada integrante, o 0 si solo puntuó; `memberCount`, a cuántos.
+ */
+export type TeamAward = Prisma.TeamAwardModel
+/**
  * Model HelpCategory
  * 
  */

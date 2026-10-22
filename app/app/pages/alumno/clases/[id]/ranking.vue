@@ -9,11 +9,10 @@
       <Skeleton height="h-96" />
     </div>
 
-    <ClassRankingSection
-      v-else-if="ui.rankingData"
-      :ranking-data="ui.rankingData"
-      :show-current-user-highlight="true"
-    />
+    <template v-else-if="ui.rankingData">
+      <TeamStandings v-if="teams.data.value" :standings="teams.data.value.standings" />
+      <ClassRankingSection :ranking-data="ui.rankingData" :show-current-user-highlight="true" />
+    </template>
   </div>
 </template>
 
@@ -23,7 +22,9 @@ definePageMeta({ layout: 'student', middleware: ['auth', 'role'] })
 const route = useRoute()
 const classId = computed(() => route.params.id as string)
 const { ui, ensureRanking } = useStudentClassDetail(classId)
+// Clasificación de equipos (solo llega si la clase tiene la clasificación activada).
+const teams = useStudentTeams(classId)
 
 // Si llegamos directo a /ranking, ensureRanking() lo dispara; si ya estaba, no-op.
-onMounted(() => void ensureRanking())
+onMounted(() => void Promise.all([ensureRanking(), teams.ensure()]))
 </script>

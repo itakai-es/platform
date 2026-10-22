@@ -78,7 +78,9 @@ const provinces = defineModel<string[]>('provinces', { required: true })
 
 const { t } = useI18n()
 
+// El de serie, las recomendadas primero; los demás, como siempre.
 const sortOptions = computed(() => [
+  { value: 'recommended', label: t('teacher.templates.sort.recommended') },
   { value: 'recent', label: t('teacher.templates.sort.recent') },
   { value: 'name-asc', label: t('teacher.templates.sort.name_asc') },
   { value: 'name-desc', label: t('teacher.templates.sort.name_desc') },
@@ -116,6 +118,6 @@ function reset() {
   levels.value = []
   languages.value = []
   provinces.value = []
-  sort.value = 'recent'
+  sort.value = 'recommended'
 }
 </script>

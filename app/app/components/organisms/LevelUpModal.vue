@@ -2,6 +2,7 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { XMarkIcon } from '@heroicons/vue/24/outline'
 import Button from '@/components/atoms/Button.vue'
+import { prefersReducedMotion } from '~/utils/reduced-motion'
 
 const { t } = useI18n()
 
@@ -134,7 +135,9 @@ function handleClose() {
 }
 
 onMounted(() => {
-  if (props.show && props.effects) {
+  // Con menos movimiento (del usuario o del sistema), sin confeti: es un dibujo por JS
+  // que la hoja de accesibilidad no frena.
+  if (props.show && props.effects && !prefersReducedMotion()) {
     startConfetti()
   }
 })

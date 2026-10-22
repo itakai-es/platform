@@ -6,8 +6,9 @@
  */
 
 import { prisma as defaultPrisma } from '../config/database.js'
+import { Prisma } from '../generated/prisma/client.js'
 import { getLevelFromXP } from './xp-calculator.js'
-import { resolveLevelConfig } from './level-config.js'
+import { resolveLevelConfig, type LevelConfig } from './level-config.js'
 import { awardSystemBadges } from './system-badges.js'
 
 // The helper must work both with the global prisma client and with the
@@ -27,8 +28,19 @@ interface ApplyXpDeltaOptions {
    * When omitted, legacy behaviour applies: coins follow XP 1:1 on positive deltas.
    */
   coinsDelta?: number
-  /** Explicit mana credit, independent of XP. Only applied when > 0. */
+  /** Explicit mana delta, independent of XP. */
   manaDelta?: number
+  /**
+   * Monedas y maná negativos: solo los comportamientos y las recompensas
+   * libres los quitan, y lo dicen con esta opción. Sin ella, un delta
+   * negativo de monedas o maná se ignora, como siempre (las entregas nunca
+   * los recuperan).
+   */
+  allowNegativeBalances?: boolean
+  /** Vidas firmadas. Suelo 0 y sin techo, como en los comportamientos. */
+  livesDelta?: number
+  /** Configuración de niveles ya leída: el lote la lee una vez por petición. */
+  levelConfig?: LevelConfig
   /** Optional prisma client (use this when inside a $transaction). Defaults to the global client. */
   tx?: Client
 }
@@ -39,6 +51,8 @@ interface ApplyXpDeltaResult {
   previousLevel: number
   newLevel: number
   levelChanged: boolean
+  /** Saldos de la matrícula tras el cambio, ya con el suelo 0 aplicado. */
+  balances: { xp: number; coins: number; mana: number; lives: number; level: number }
 }
 
 /**
@@ -49,7 +63,7 @@ interface ApplyXpDeltaResult {
  * calls never lose updates.
  */
 export async function applyXpDelta(options: ApplyXpDeltaOptions): Promise<ApplyXpDeltaResult> {
-  const { studentId, classId, delta, coinsDelta, manaDelta } = options
+  const { studentId, classId, delta, coinsDelta, manaDelta, livesDelta } = options
   const client: Client = (options.tx ?? defaultPrisma) as Client
 
   if (!Number.isFinite(delta) || !Number.isInteger(delta)) {
@@ -61,13 +75,20 @@ export async function applyXpDelta(options: ApplyXpDeltaOptions): Promise<ApplyX
   if (manaDelta !== undefined && (!Number.isFinite(manaDelta) || !Number.isInteger(manaDelta))) {
     throw new Error('Mana delta must be an integer')
   }
+  if (livesDelta !== undefined && (!Number.isFinite(livesDelta) || !Number.isInteger(livesDelta))) {
+    throw new Error('Lives delta must be an integer')
+  }
 
   // Coins/mana are spendable balances credited independently of XP — only when
   // the caller passes an explicit delta (e.g. enigma rewards, which the teacher
   // configures per enigma). XP gains alone never grant coins/mana, and XP
   // revocations never claw them back (they only decrease on shop purchases).
+  // Los comportamientos y las recompensas libres sí restan, y lo piden aparte.
+  const allowNegative = options.allowNegativeBalances === true
   const coinsIncrement = coinsDelta ?? 0
   const manaIncrement = manaDelta ?? 0
+  const livesIncrement = livesDelta ?? 0
+  const applies = (value: number) => value > 0 || (allowNegative && value < 0)
 
   // Atomic increment — a single UPDATE at the DB level.
   let updated
@@ -76,28 +97,45 @@ export async function applyXpDelta(options: ApplyXpDeltaOptions): Promise<ApplyX
       where: { studentId_classId: { studentId, classId } },
       data: {
         xp: { increment: delta },
-        ...(coinsIncrement > 0 ? { coins: { increment: coinsIncrement } } : {}),
-        ...(manaIncrement > 0 ? { mana: { increment: manaIncrement } } : {}),
+        ...(applies(coinsIncrement) ? { coins: { increment: coinsIncrement } } : {}),
+        ...(applies(manaIncrement) ? { mana: { increment: manaIncrement } } : {}),
+        ...(livesIncrement !== 0 ? { lives: { increment: livesIncrement } } : {}),
       },
     })
-  } catch {
-    throw new Error('No estás en esta clase')
+  } catch (err) {
+    // Solo «no hay matrícula» (P2025) se traduce. Lo demás (un bloqueo mutuo,
+    // la conexión caída) sube tal cual, para no disfrazarlo de otra cosa.
+    if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2025') {
+      throw new Error('No estás en esta clase')
+    }
+    throw err
   }
 
-  // Floor at 0: if a negative delta pushed XP below zero, correct in a
+  // Floor at 0: if a negative delta pushed a balance below zero, correct in a
   // follow-up update (rare path; only taken when the increment went negative).
-  let newXP = updated.xp
-  if (newXP < 0) {
-    const corrected = await client.classEnrollment.update({
-      where: { studentId_classId: { studentId, classId } },
-      data: { xp: 0 },
-    })
-    newXP = corrected.xp
+  // Dentro de una transacción la fila queda bloqueada desde el primer UPDATE,
+  // así que nadie cuela un cambio entre los dos.
+  const floored = {
+    ...(updated.xp < 0 ? { xp: 0 } : {}),
+    ...(updated.coins < 0 ? { coins: 0 } : {}),
+    ...(updated.mana < 0 ? { mana: 0 } : {}),
+    ...(updated.lives < 0 ? { lives: 0 } : {}),
   }
+  if (Object.keys(floored).length > 0) {
+    updated = await client.classEnrollment.update({
+      where: { studentId_classId: { studentId, classId } },
+      data: floored,
+    })
+  }
+  const newXP = updated.xp
 
   // El nivel se recalcula según la configuración de niveles de ESTA clase.
-  const cls = await client.class.findUnique({ where: { id: classId }, select: { levelConfig: true } })
-  const levelCfg = resolveLevelConfig(cls?.levelConfig)
+  const levelCfg =
+    options.levelConfig ??
+    resolveLevelConfig(
+      (await client.class.findUnique({ where: { id: classId }, select: { levelConfig: true } }))
+        ?.levelConfig
+    )
 
   const previousXP = Math.max(0, newXP - delta)
   const previousLevel = updated.level
@@ -120,6 +158,13 @@ export async function applyXpDelta(options: ApplyXpDeltaOptions): Promise<ApplyX
     previousLevel,
     newLevel,
     levelChanged: previousLevel !== newLevel,
+    balances: {
+      xp: newXP,
+      coins: updated.coins,
+      mana: updated.mana,
+      lives: updated.lives,
+      level: newLevel,
+    },
   }
 }
 

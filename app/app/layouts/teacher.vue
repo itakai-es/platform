@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-bg-primary w-full overflow-x-hidden print:bg-white">
+  <div class="min-h-screen bg-bg-primary w-full overflow-x-clip print:bg-white">
     <!-- Menús y cabecera: fuera al imprimir (p. ej. la hoja de credenciales) -->
     <div class="contents print:hidden">
       <!-- Mobile Header (visible only on mobile/tablet) -->
@@ -39,7 +39,7 @@
     <!-- Main Content with left margin for sidebar and top padding for mobile header -->
     <div class="flex-1 flex flex-col lg:ml-80 pt-14 lg:pt-0 print:ml-0 print:pt-0">
       <!-- Page Content -->
-      <main class="flex-1 overflow-y-auto overflow-x-hidden p-4 md:p-6 max-w-full print:p-0">
+      <main class="flex-1 overflow-x-clip p-4 md:p-6 max-w-full print:p-0">
         <slot />
       </main>
     </div>

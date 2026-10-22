@@ -14,6 +14,7 @@
         <p v-if="tpl?.teacherName" class="mt-0.5 text-sm text-text-secondary">
           {{ t('teacher.templates.preview.by', { name: tpl.teacherName }) }}
         </p>
+        <TemplateRecommendedBadge v-if="tpl?.recommended" class="mt-2" />
       </div>
     </template>
 

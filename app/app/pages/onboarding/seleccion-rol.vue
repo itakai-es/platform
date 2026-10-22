@@ -365,10 +365,23 @@
         </div>
       </div>
     </div>
+    <!-- Llega desde «Usar esta plantilla» y elige estudiante: se avisa antes,
+         porque con esa cuenta nunca podrá importarla -->
+    <ConfirmModal
+      v-model="studentWarningOpen"
+      variant="warning"
+      :title="t('auth.role_selection.template_warning.title')"
+      :message="t('auth.role_selection.template_warning.message')"
+      :confirm-text="t('auth.role_selection.template_warning.confirm')"
+      :cancel-text="t('auth.role_selection.template_warning.cancel')"
+      @confirm="confirmStudent"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
+import { clearPendingTemplate, peekPendingTemplate } from '~/utils/pending-template'
+
 const { t } = useI18n()
 
 useHead({
@@ -388,8 +401,27 @@ const authStore = useAuthStore()
 
 const isLoading = ref(false)
 const selectedRole = ref<'student' | 'teacher' | null>(null)
+/** El aviso de que con una cuenta de estudiante no se pueden usar plantillas. */
+const studentWarningOpen = ref(false)
 
 async function selectRole(role: 'student' | 'teacher') {
+  // Con una plantilla pendiente (ver utils/pending-template.ts), estudiante no
+  // podrá usarla nunca: antes de elegirlo, se dice.
+  if (role === 'student' && peekPendingTemplate()) {
+    studentWarningOpen.value = true
+    return
+  }
+  await completeRole(role)
+}
+
+/** Sigue como estudiante a sabiendas: la plantilla pendiente se descarta. */
+async function confirmStudent() {
+  studentWarningOpen.value = false
+  clearPendingTemplate()
+  await completeRole('student')
+}
+
+async function completeRole(role: 'student' | 'teacher') {
   try {
     isLoading.value = true
     selectedRole.value = role
@@ -397,7 +429,8 @@ async function selectRole(role: 'student' | 'teacher') {
     // Completar onboarding con el rol seleccionado
     await authStore.completeOnboarding(role)
 
-    // Redirigir al dashboard del rol seleccionado
+    // Redirigir al dashboard del rol seleccionado. Al del profesorado, con una
+    // plantilla pendiente, lo cambia por su ficha middleware/pending-template.global.ts.
     router.push(getDashboardByRole(role))
   } catch (error) {
     console.error('Error completing onboarding:', error)

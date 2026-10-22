@@ -166,7 +166,9 @@
           "view_ranking": "Ranking",
           "col_actions": "Ações",
           "managed_badge": "Sem e-mail",
-          "pending_sign_in_badge": "Ainda não entrou"
+          "pending_sign_in_badge": "Ainda não entrou",
+          "view_attendance": "Assiduidade",
+          "view_teams": "Equipas"
         },
         "stats_title": "Estatísticas da turma",
         "pending_reviews": "Entregas por rever",
@@ -207,9 +209,6 @@
           "section_negatives": "Negativos",
           "filter_all": "Todos",
           "apply_title": "Aplicar \"{name}\"",
-          "pick_student": "Escolhe a que estudante o vais aplicar.",
-          "applied_toast": "{behavior} aplicado a {student}",
-          "empty_students": "Ainda não há estudantes nesta turma.",
           "form_new_title": "Novo comportamento",
           "form_edit_title": "Editar comportamento",
           "form_type": "Tipo",
@@ -233,7 +232,6 @@
           "toast_save_error": "Não foi possível guardar o comportamento.",
           "toast_delete_error": "Não foi possível eliminar o comportamento.",
           "fetch_error": "Não foi possível carregar os comportamentos.",
-          "apply_error": "Não foi possível aplicar o comportamento.",
           "empty_description_readonly": "Quando forem adicionados comportamentos a esta turma, vão aparecer aqui."
         },
         "shop": {
@@ -610,7 +608,10 @@
             "document": "Documentos",
             "submission": "Entregas",
             "behavior": "Comportamentos",
-            "shop": "Loja"
+            "shop": "Loja",
+            "reward": "Recompensas",
+            "attendance": "Assiduidade",
+            "team": "Equipas"
           },
           "actions": {
             "class": {
@@ -625,7 +626,9 @@
               "ownership_transferred": "passou a propriedade da turma para {target}",
               "ownership_inherited": "a turma passou para {target} quando a conta que tinha a propriedade foi eliminada",
               "trashed": "enviou a turma para o lixo",
-              "restored": "tirou a turma do lixo"
+              "restored": "tirou a turma do lixo",
+              "template_recommended": "recomendou o modelo nos catálogos",
+              "template_unrecommended": "retirou a recomendação do modelo"
             },
             "teacher": {
               "added": "adicionou {target} ao corpo docente ({profile}, {access})",
@@ -669,12 +672,36 @@
               "applied": "aplicou «{title}» a {target}",
               "created": "criou o comportamento «{title}»",
               "updated": "editou o comportamento «{title}»",
-              "deleted": "eliminou o comportamento «{title}»"
+              "deleted": "eliminou o comportamento «{title}»",
+              "applied_batch": "aplicou «{title}» a {count} estudantes"
             },
             "shop": {
               "item_created": "adicionou «{title}» à loja",
               "item_updated": "editou «{title}» na loja",
               "item_deleted": "removeu «{title}» da loja"
+            },
+            "reward": {
+              "granted": "deu a {target} uma recompensa: «{title}»",
+              "granted_batch": "deu uma recompensa a {count} estudantes: «{title}»",
+              "taken": "retirou recursos a {target}: «{title}»",
+              "taken_batch": "retirou recursos a {count} estudantes: «{title}»"
+            },
+            "attendance": {
+              "taken": "fez a chamada de {date}: {present} na aula, {absent} sem vir",
+              "updated": "corrigiu a chamada de {date}: {present} na aula, {absent} sem vir",
+              "deleted": "apagou a chamada de {date}"
+            },
+            "team": {
+              "set_created": "criou o agrupamento de equipas «{title}»",
+              "set_updated": "editou o agrupamento de equipas «{title}»",
+              "set_archived": "arquivou o agrupamento de equipas «{title}»",
+              "set_unarchived": "tirou do arquivo o agrupamento de equipas «{title}»",
+              "set_deleted": "apagou o agrupamento de equipas «{title}»",
+              "members_changed": "mudou as equipas de «{title}»",
+              "awarded": "deu {points} ponto à equipa «{title}»: «{label}» | deu {points} pontos à equipa «{title}»: «{label}»",
+              "awarded_batch": "deu {points} ponto à equipa «{title}» e deu «{label}» a cada integrante | deu {points} pontos à equipa «{title}» e deu «{label}» a cada integrante",
+              "distributed": "distribuiu «{label}» pela equipa «{title}»",
+              "distributed_batch": "deu «{label}» à única pessoa da equipa «{title}» | distribuiu «{label}» pelas {count} pessoas da equipa «{title}»"
             }
           },
           "anonymous": {
@@ -691,8 +718,13 @@
             },
             "behavior": {
               "applied": "aplicou «{title}» a alguém que já não está na turma"
+            },
+            "reward": {
+              "granted": "deu uma recompensa a alguém que já não está na turma: «{title}»",
+              "taken": "retirou recursos a alguém que já não está na turma: «{title}»"
             }
-          }
+          },
+          "batch_who": "Ver a quem ({count})"
         },
         "in_trash": {
           "title": "«{name}» está no lixo",
@@ -700,7 +732,8 @@
           "owner_hint": "Restaura-a para a voltares a abrir. Volta arquivada: os estudantes não poderão entrar até a desarquivares.",
           "not_owner": "Só quem tem a propriedade da turma a pode restaurar. Se precisares dela, pede-o antes dessa data.",
           "go_trash": "Ver o lixo"
-        }
+        },
+        "btn_roulette": "Roleta"
       },
       "trash": {
         "meta": {
@@ -798,7 +831,10 @@
           "save": "Guardar alterações",
           "discard": "Descartar",
           "toast_saved": "Dados guardados",
-          "toast_error": "Não foi possível guardar os dados"
+          "toast_error": "Não foi possível guardar os dados",
+          "team_set_label": "Por equipas",
+          "team_set_none": "Individual (sem equipas)",
+          "team_set_hint": "Só informativo: a turma vê com que equipas se faz e podes aprovar uma equipa inteira de uma vez. Cada estudante continua a entregar o seu."
         }
       },
       "import": {
@@ -846,6 +882,41 @@
         "duplicate_success_title": "Missão duplicada",
         "success_description": "A cópia de «{title}» já está em «{name}», bloqueada e sem prazo. Revê-a e desbloqueia-a quando quiseres que a tua turma a veja.",
         "open_mission": "Abrir a missão"
+      },
+      "adapt": {
+        "button": "Adaptar com IA",
+        "title": "Adaptar a missão com IA",
+        "intro": "A IA propõe-te um título, uma história e uns enigmas à medida de «{name}»: o seu nível, a sua disciplina, a sua língua e o seu mundo. A missão não muda até aplicares a proposta.",
+        "request_label": "O que queres? (opcional)",
+        "request_hint": "Se não disseres nada, a IA adapta-a à turma sem mais.",
+        "request_placeholder": "Ex.: mais simples, para trabalhar a pares e com um enigma final de apresentação",
+        "propose": "Propor adaptação",
+        "generating": "A preparar a proposta…",
+        "error": "A IA não conseguiu preparar a proposta. A missão não mudou; tenta de novo dentro de alguns minutos.",
+        "error_kept": "A IA não conseguiu fazer essa alteração. Mantém-se a proposta anterior.",
+        "current": "Agora",
+        "proposed": "Proposta",
+        "field_title": "Título",
+        "field_story": "História",
+        "enigmas_heading": "Enigmas",
+        "enigma_n": "Enigma {n}",
+        "objectives": "Objetivos",
+        "unchanged": "Sem alterações",
+        "row_create": "Enigma novo",
+        "row_delete": "Será eliminado",
+        "row_keep": "Fica como está",
+        "row_keep_hint": "Tem entregas da turma, por isso não pode ser removido.",
+        "rewards_raised": "Alguém já o concluiu: as suas recompensas não podem descer e mantêm-se as atuais.",
+        "no_changes": "A proposta não altera nada na missão. Pede outra alteração ou descarta-a.",
+        "feedback_label": "Queres outra alteração?",
+        "feedback_placeholder": "Ex.: menos piratas e enigmas mais curtos",
+        "ask_change": "Pedir outra alteração",
+        "discard": "Descartar",
+        "apply": "Aplicar",
+        "applied": "Missão adaptada",
+        "apply_error": "Não foi possível aplicar a proposta. A missão não mudou.",
+        "apply_error_partial": "Só se aplicou uma parte da proposta. Revê a comparação: já mostra o que foi guardado.",
+        "after_import_hint": "Queres a missão à medida desta turma? A IA propõe como adaptá-la e tu decides se a aplicas."
       }
     },
     "badges": {
@@ -1233,7 +1304,10 @@
         "pct_custom": "Outra percentagem",
         "will_receive": "Receberá",
         "approve": "Aprovar {pct}%",
-        "approve_error": "Não foi possível aprovar a entrega"
+        "approve_error": "Não foi possível aprovar a entrega",
+        "approve_team": "Aprovar a equipa ({count}) com {pct} %",
+        "team_approved": "{team}: {count} entrega aprovada com {pct} % | {team}: {count} entregas aprovadas com {pct} %",
+        "team_note": "Missão por equipas («{set}»): ao rever uma entrega podes aprovar com a mesma percentagem toda a sua equipa que tenha entregado."
       }
     },
     "templates": {
@@ -1283,6 +1357,7 @@
         "province": "Todas as províncias"
       },
       "sort": {
+        "recommended": "Recomendados primeiro",
         "recent": "Mais recentes",
         "name_asc": "Nome A-Z",
         "name_desc": "Nome Z-A"
@@ -1331,6 +1406,294 @@
       "done": "Concluído",
       "wizard_question_schedule": "Define um horário para a tua turma",
       "wizard_question_cover": "Agora, uma capa para a tua turma"
+    },
+    "roulette": {
+      "meta": {
+        "title": "Roleta | ITAKAI Docente"
+      },
+      "title": "Roleta",
+      "exit": "Sair",
+      "fullscreen_enter": "Ecrã inteiro",
+      "fullscreen_exit": "Sair do ecrã inteiro",
+      "sound": "Som",
+      "spin": "Girar",
+      "spin_again": "Girar outra vez",
+      "choosing": "A escolher…",
+      "keyboard_hint": "Também com a barra de espaço ou Enter.",
+      "idle_hint": "Prime «Girar» para escolher alguém.",
+      "picked_label": "Saiu",
+      "announce": "Saiu {name}.",
+      "announce_left": "Saiu {name}. Resta {count}. | Saiu {name}. Restam {count}.",
+      "announce_none_left": "Saiu {name}. Não resta mais ninguém.",
+      "counter": "Na roda: {left} de {total}",
+      "list_title": "Estudantes",
+      "no_repeat": "Sem repetir",
+      "no_repeat_hint": "Quem já saiu hoje não volta a sair neste dispositivo até começares de novo.",
+      "restart": "Começar de novo",
+      "status_drawn": "Já saiu",
+      "status_removed": "Fora nesta ronda",
+      "remove": "Retirar",
+      "remove_aria": "Retirar {name} desta ronda",
+      "restore": "Voltar a pôr",
+      "restore_aria": "Voltar a pôr {name} na roda",
+      "all_drawn_title": "Já saíram todas as pessoas",
+      "all_drawn_description": "Começa de novo para que todas as pessoas possam voltar a sair.",
+      "none_left_title": "Não resta ninguém na roda",
+      "none_left_description": "Volta a pôr alguém da lista ou começa de novo.",
+      "empty_title": "Ainda não há estudantes nesta turma",
+      "empty_description": "Quando se juntarem, aparecerão aqui na roleta.",
+      "trash_title": "Esta turma está no lixo",
+      "trash_description": "Restaura-a a partir da turma para voltar a usar a roleta.",
+      "back_to_class": "Voltar à turma",
+      "list_title_teams": "Equipas",
+      "mode_label": "Quem entra na roda",
+      "mode_students": "Toda a turma",
+      "mode_team": "Uma equipa",
+      "mode_teams": "Entre equipas",
+      "team_label": "Equipa",
+      "set_label": "Agrupamento",
+      "attendance_not_taken": "Hoje ainda não se fez a chamada: entra toda a turma.",
+      "attendance_all_here": "Segundo a chamada de hoje, veio toda a turma.",
+      "attendance_excluded": "{count} pessoa que falta hoje não está na roda. | {count} pessoas que faltam hoje não estão na roda.",
+      "take_attendance": "Fazer a chamada",
+      "spin_inside": "Girar dentro de {team}",
+      "award_team": "Premiar {team}",
+      "apply_to": "Aplicar a {name}",
+      "apply_title": "Aplicar a {name}",
+      "scope_empty_title": "Não há ninguém na roda",
+      "scope_empty_students": "Segundo a chamada de hoje, não veio ninguém.",
+      "scope_empty_team": "Nesta equipa não há ninguém que tenha vindo hoje.",
+      "scope_empty_teams": "Neste agrupamento não há nenhuma equipa com alguém que tenha vindo hoje."
+    },
+    "classroom": {
+      "picker": {
+        "legend": "Estudantes",
+        "search": "Procurar estudante…",
+        "all": "Toda a turma",
+        "none": "Ninguém",
+        "empty": "Ainda não há estudantes nesta turma.",
+        "no_results": "Ninguém corresponde à pesquisa.",
+        "count": "Escolhidos: {count} de {total}",
+        "only_present": "Só os presentes hoje",
+        "only_absent": "Só os ausentes hoje"
+      },
+      "modal_title": "Aplicar a vários estudantes",
+      "mode_label": "O que queres aplicar",
+      "mode_behavior": "Comportamento",
+      "mode_reward": "Recompensa livre",
+      "behavior_legend": "Comportamento",
+      "no_behaviors": "Esta turma ainda não tem comportamentos. Cria-os no separador Comportamentos ou dá uma recompensa livre.",
+      "reward": {
+        "legend": "Recompensa",
+        "direction_label": "Dar ou tirar",
+        "give": "Dar",
+        "take": "Tirar",
+        "no_resources": "Esta turma não tem nenhum recurso ativado (XP, moedas, mana ou vidas).",
+        "reason": "Motivo",
+        "reason_placeholder": "Ex.: Ajudou a preparar o laboratório",
+        "reason_too_long": "O motivo pode ter até 80 caracteres."
+      },
+      "confirm_button": "Aplicar",
+      "confirm_behavior": "Aplicar «{title}» a {count} estudante. | Aplicar «{title}» a {count} estudantes.",
+      "confirm_reward": "Recompensa «{title}» a {count} estudante. | Recompensa «{title}» a {count} estudantes.",
+      "confirm_effect": "Por estudante: {effect}.",
+      "confirm_no_effect": "Não mexe em nenhum recurso ativo nesta turma; fica apenas registado.",
+      "applied_toast": "«{title}» aplicado a {count} estudante | «{title}» aplicado a {count} estudantes",
+      "apply_error": "Não foi possível aplicar. Nada mudou.",
+      "archived_notice": "A turma está arquivada: podes ver e editar o catálogo, mas não aplicá-lo a ninguém.",
+      "select_all_visible": "Escolher toda a turma da lista",
+      "select_student": "Escolher {name}",
+      "selected_count": "{count} estudante escolhido | {count} estudantes escolhidos",
+      "apply_behavior": "Aplicar comportamento",
+      "give_reward": "Dar recompensa",
+      "clear_selection": "Limpar seleção",
+      "applied_announcement": "Aplicado a {count} estudante. Saldos atualizados. | Aplicado a {count} estudantes. Saldos atualizados.",
+      "target_label": "A quem",
+      "target_students": "A estudantes",
+      "target_team": "A uma equipa",
+      "team": {
+        "legend": "Equipa",
+        "points": "Pontos para o marcador",
+        "points_hint": "Somam na classificação de equipas (ou subtraem, se retirares). Põe 0 se só distribuis.",
+        "distribute": "Distribuir também por cada pessoa da equipa",
+        "distribute_hint": "Cada pessoa da equipa recebe o comportamento ou a recompensa, como se o aplicasses em separado.",
+        "confirm_points": "Equipa «{team}»: {points} ponto no marcador. | Equipa «{team}»: {points} pontos no marcador.",
+        "confirm_no_points": "Equipa «{team}»: sem pontos no marcador.",
+        "confirm_distribute": "E «{title}» à pessoa que a integra. | E «{title}» às {count} pessoas que a integram.",
+        "confirm_no_distribute": "Não se distribui nada pelas pessoas da equipa.",
+        "awarded_toast": "Equipa «{team}» premiada",
+        "modal_title": "Premiar uma equipa"
+      },
+      "fixed_to": "Para: {names}",
+      "missing": {
+        "team": "Escolhe uma equipa.",
+        "students": "Escolhe pelo menos um estudante.",
+        "behavior": "Escolhe um comportamento.",
+        "no_behaviors": "Esta turma não tem comportamentos: dá uma recompensa livre.",
+        "reason": "Escreve o motivo.",
+        "points": "Indica os pontos para o marcador ou marca «{label}».",
+        "empty_team": "Essa equipa não tem membros: escolhe outra ou desmarca «{label}».",
+        "amount": "Indica quanto dás ou tiras."
+      }
+    },
+    "attendance": {
+      "tabs_label": "Assiduidade",
+      "tab_take": "Fazer a chamada",
+      "tab_history": "Histórico",
+      "date": "Data",
+      "session": "Sessão",
+      "no_schedule": "Sessão sem horário",
+      "saved_by": "Chamada guardada por {name} ({time}).",
+      "someone": "alguém do corpo docente",
+      "not_saved": "Ainda não se fez a chamada nesta sessão. Todos os estudantes aparecem presentes: marca só quem falta.",
+      "unsaved": "Alterações por guardar",
+      "read_only": "Podes ver a assiduidade, mas fazer a chamada é de quem edita na turma.",
+      "count": {
+        "present": "{count} presente | {count} presentes",
+        "absent": "{count} ausente | {count} ausentes",
+        "late": "{count} atraso | {count} atrasos",
+        "excused": "{count} justificada | {count} justificadas"
+      },
+      "all_present": "Toda a turma presente",
+      "status_of": "Assiduidade de {name}",
+      "status": {
+        "present": "Presente",
+        "absent": "Ausente",
+        "late": "Atraso",
+        "excused": "Justificada"
+      },
+      "save": "Guardar chamada",
+      "delete": "Apagar esta chamada",
+      "delete_title": "Apagar esta chamada?",
+      "delete_message": "A sessão é apagada com o estado de todos os estudantes. Usa-o se fizeste a chamada por engano.",
+      "apply_present": "Aplicar aos presentes…",
+      "apply_absent": "Aplicar aos ausentes…",
+      "no_auto_xp": "Fazer a chamada nunca tira nem dá nada por si só: premiar ou penalizar é sempre uma ação à parte, com confirmação.",
+      "load_error": "Não foi possível carregar a assiduidade.",
+      "saved_announcement": "Chamada guardada: {present} na aula, {absent} sem vir.",
+      "save_error": "Não foi possível guardar a chamada.",
+      "deleted": "Chamada apagada.",
+      "delete_error": "Não foi possível apagar a chamada.",
+      "history": {
+        "download_csv": "Descarregar CSV",
+        "empty_title": "Não há chamadas este mês",
+        "empty_description": "Quando fizeres a chamada, aqui verás a assiduidade de cada estudante.",
+        "calendar_hint": "Os dias marcados têm chamada. Toca num dia para a fazer ou corrigir.",
+        "table_caption": "Assiduidade por estudante em {month}",
+        "day_with_list": "há chamada",
+        "csv_sessions": "Sessões",
+        "csv_file": "assiduidade",
+        "export_error": "Não foi possível descarregar o CSV.",
+        "col_incidents": "Faltas e atrasos",
+        "no_incidents": "Nenhuma"
+      },
+      "profile": {
+        "rate": "Assiduidade: {rate} %",
+        "sessions": "{count} sessão este ano letivo | {count} sessões este ano letivo"
+      }
+    },
+    "teams": {
+      "empty_title": "Ainda não há equipas",
+      "empty_description": "Forma equipas à mão ou ao acaso. Podes ter equipas de base, fixas, que pontuam na classificação, e temporárias para uma missão ou uma dinâmica.",
+      "empty_description_readonly": "Quando o corpo docente com edição formar equipas, vais vê-las aqui.",
+      "new_set": "Formar equipas",
+      "set_label": "Agrupamento",
+      "kind": {
+        "base": "De base",
+        "temporal": "Temporária"
+      },
+      "archived_badge": "Arquivado",
+      "edit": "Editar",
+      "archive": "Arquivar",
+      "unarchive": "Tirar do arquivo",
+      "delete": "Apagar",
+      "delete_title": "Apagar o agrupamento",
+      "delete_message": "«{title}» será apagado com as suas equipas e os seus pontos. O que já foi distribuído a cada pessoa fica. Não se pode desfazer.",
+      "points": "{count} ponto | {count} pontos",
+      "members_count": "Sem pessoas | {count} pessoa | {count} pessoas",
+      "empty_team": "Ainda não há ninguém nesta equipa",
+      "no_team": "Sem equipa",
+      "unknown_student": "Estudante",
+      "award": "Premiar",
+      "read_only": "Com o teu nível de acesso vês as equipas, mas não as formas nem as premeias.",
+      "archived_class": "A turma está arquivada: vês as equipas, mas não se mudam nem se premeiam.",
+      "saved_toast": "Equipas de «{title}» guardadas",
+      "error": "Não foi possível guardar. Nada mudou.",
+      "stale": "Alguém alterou este agrupamento enquanto o editavas (outra pessoa ou outro separador). Nada foi guardado: já vês como está agora.",
+      "moved": "{count} pessoa movida para {name} | {count} pessoas movidas para {name}",
+      "archived_announcement": "«{title}» arquivado",
+      "unarchived_announcement": "«{title}» saiu do arquivo",
+      "deleted_announcement": "«{title}» apagado",
+      "default_team": "Equipa {n}",
+      "colors": {
+        "purple": "Roxo",
+        "yellow": "Amarelo",
+        "mint": "Verde-menta",
+        "sky": "Azul-céu",
+        "red": "Vermelho",
+        "peach": "Pêssego"
+      },
+      "emblems": {
+        "star": "Estrela",
+        "bolt": "Raio",
+        "fire": "Fogo",
+        "shield": "Escudo",
+        "rocket": "Foguetão",
+        "heart": "Coração",
+        "sun": "Sol",
+        "moon": "Lua",
+        "sparkles": "Faíscas",
+        "globe": "Mundo",
+        "puzzle": "Puzzle",
+        "trophy": "Troféu"
+      },
+      "form": {
+        "new_title": "Formar equipas",
+        "edit_title": "Editar o agrupamento",
+        "title": "Nome do agrupamento",
+        "title_placeholder": "Ex.: Casas",
+        "title_required": "Dá-lhe um nome.",
+        "title_too_long": "O nome pode ter até 60 caracteres.",
+        "kind": "Tipo",
+        "kind_hint": {
+          "base": "Fixo durante o ano letivo. Os seus pontos contam na classificação de equipas.",
+          "temporal": "Para uma missão ou uma dinâmica. Não pontua na classificação; arquiva-o ao acabar."
+        },
+        "method": "Como",
+        "method_random": "Ao acaso",
+        "method_manual": "À mão",
+        "size": "Tamanho",
+        "size_teams": "Número de equipas",
+        "size_perTeam": "Pessoas por equipa",
+        "size_result": "Vai sair {count} equipa. | Vão sair {count} equipas.",
+        "balance": "Equilibrar por nível",
+        "absent_note": "Hoje não falta ninguém na lista: entra toda a turma. | Hoje falta {count} pessoa na lista e fica fora da distribuição. | Hoje faltam {count} pessoas na lista e ficam fora da distribuição.",
+        "no_list_note": "Hoje ainda não se fez a chamada: entra toda a turma.",
+        "preview_title": "Proposta",
+        "preview_announcement": "Proposta pronta: {count} equipa. | Proposta pronta: {count} equipas.",
+        "excluded": "Fora por faltar hoje: {names}.",
+        "shuffle": "Distribuir",
+        "again": "Outra vez",
+        "save_teams": "Guardar as equipas",
+        "create": "Criar as equipas",
+        "save": "Guardar",
+        "teams_legend": "Equipas",
+        "team_name": "Nome da equipa {n}",
+        "remove_team": "Retirar a equipa {name}",
+        "color": "Cor",
+        "emblem": "Emblema",
+        "automatic": "Automático",
+        "add_team": "Adicionar uma equipa",
+        "removed_points_note": "Ao guardar, as equipas que retiraste são apagadas com os seus pontos."
+      },
+      "tap_hint": "Marca uma ou várias pessoas e escolhe a equipa delas na barra de baixo ou com «Pôr aqui». Com o rato também as podes arrastar.",
+      "picked_count": "{count} pessoa escolhida | {count} pessoas escolhidas",
+      "put_here": "Pôr aqui",
+      "put_here_aria": "Pôr as pessoas escolhidas em {team}",
+      "distribute": "Distribuir ao acaso",
+      "distributed": "{count} pessoa distribuída pelas equipas. | {count} pessoas distribuídas pelas equipas.",
+      "distribute_skipped": "{count} que falta hoje fica sem equipa. | {count} que faltam hoje ficam sem equipa.",
+      "put_in": "Pôr em:"
     }
   }
 }

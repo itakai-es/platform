@@ -507,8 +507,12 @@
         "what_you_get_missions": "Importalo crea unha clase nova e túa coa historia, a portada, as funcionalidades, a tenda e os comportamentos do modelo e, se queres, coas súas misións.",
         "import_missions": "Importar tamén a súa misión | Importar tamén as súas {count} misións",
         "import_missions_hint": "Chegan sen data límite, sen documentos e sen insignias.",
-        "login_note": "Para importalo cómpre entrar cunha conta docente.",
-        "teacher_only": "Para importalo cómpre unha conta docente."
+        "login_note": "Entra ou crea a túa conta docente: ao rematar, volverás aquí para importalo.",
+        "teacher_only": "Para importalo cómpre unha conta docente.",
+        "ready_note": "Xa entraches. Revisa o que trae e preme «Importar» para ter a túa propia copia.",
+        "pending_login": "Vés dun modelo: cando entres coa túa conta docente, levarémoste de volta para que o importes.",
+        "pending_signup": "Vés dun modelo: cando crees a túa conta e elixas o perfil docente, levarémoste de volta para que o importes.",
+        "not_for_role": "Os modelos só se poden usar cunha conta docente, así que non te levamos ao que escolliches."
       },
       "gone": {
         "title": "Este modelo xa non está dispoñible",
@@ -521,7 +525,9 @@
       "meta": {
         "title": "Modelos de clase · ITAKAI",
         "description": "Clases gamificadas que o profesorado publicou en ITAKAI para que calquera docente parta delas."
-      }
+      },
+      "recommended": "Recomendado",
+      "copy_link_named": "Copiar a ligazón de «{name}»"
     },
     "class_list": {
       "tab_active": "Activas",
@@ -529,6 +535,25 @@
       "empty_title": "Sen clases",
       "empty_archived_title": "Sen clases arquivadas",
       "no_results": "Non hai clases que coincidan con «{query}»"
+    },
+    "effects": {
+      "floater": {
+        "xp": "XP",
+        "lives": "Vidas"
+      }
+    },
+    "calendar": {
+      "prev_month": "Mes anterior",
+      "next_month": "Mes seguinte"
+    },
+    "teams": {
+      "standings_title": "Clasificación de equipos · {title}",
+      "position": "Posto",
+      "points": "{count} punto | {count} puntos",
+      "kind": {
+        "base": "De base",
+        "temporal": "Temporal"
+      }
     }
   }
 }

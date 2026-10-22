@@ -1291,6 +1291,7 @@ import type {
   TeacherMissionStats,
 } from '~/types/mission-detail.types'
 import { getMissionCompletionBonus } from '~/utils/xp-calculator'
+import { shuffled } from '~/utils/shuffle'
 import type { MissionRarity } from '~/utils/gamification-config'
 
 const { getImageUrl } = useImageUrl()
@@ -1370,11 +1371,7 @@ const pickedMissionIndices = ref<number[]>([])
 
 function pickMissionActions() {
   const indices = Array.from({ length: missionActionPool.value.length }, (_, i) => i)
-  for (let i = indices.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[indices[i], indices[j]] = [indices[j], indices[i]]
-  }
-  pickedMissionIndices.value = indices.slice(0, 3)
+  pickedMissionIndices.value = shuffled(indices).slice(0, 3)
 }
 
 onMounted(pickMissionActions)

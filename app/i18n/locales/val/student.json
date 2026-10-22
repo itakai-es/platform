@@ -365,6 +365,14 @@
         "avg_missions": "Missions mitjanes",
         "total_xp": "XP total de la classe"
       }
+    },
+    "teams": {
+      "my_team_title": "El meu equip",
+      "members_label": "Integrants de {name}",
+      "you": "Tu",
+      "mission_team": "Esta missió es fa per equips («{set}»). El teu equip és {team}, amb {names}. Cada integrant lliura la seua part.",
+      "mission_team_alone": "Esta missió es fa per equips («{set}»). El teu equip és {team}. Cada integrant lliura la seua part.",
+      "mission_no_team": "Esta missió es fa per equips («{set}»), però encara no estàs en cap. Pregunta-ho en classe."
     }
   }
 }

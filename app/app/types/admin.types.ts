@@ -4,6 +4,8 @@
  */
 import type { AppLanguage } from '~/utils/app-languages'
 import type { AccountType } from '~/types/auth.types'
+import type { ClassTrashListItem } from '~/types/class.types'
+import type { TemplateSort } from '~/types/template.types'
 
 /**
  * User con información completa para admin
@@ -236,6 +238,30 @@ export interface PaginatedClassesResponse {
   totalPages: number
 }
 
+/** Una clase de la papelera de toda la instancia (`GET /admin/classes/trash`). */
+export interface AdminTrashedClass extends ClassTrashListItem {
+  /** Quién tiene su propiedad; nulo si no queda nadie. */
+  ownerName: string | null
+  /** Si quien tiene la propiedad aún puede restaurarla: su cuenta está activa. */
+  ownerCanAct: boolean
+  /** Quién la envió; nulo si su cuenta ya no existe. */
+  deletedBy: { name: string | null } | null
+  /** Cuándo se avisó a quien tiene la propiedad de que se borra pronto. */
+  warnedAt: string | null
+  studentCount: number
+  missionCount: number
+}
+
+export interface PaginatedClassTrashResponse {
+  classes: AdminTrashedClass[]
+  /** Días que pasa una clase en la papelera. */
+  purgeDays: number
+  total: number
+  page: number
+  limit: number
+  totalPages: number
+}
+
 export interface AdminMission {
   id: string
   title: string
@@ -257,6 +283,41 @@ export interface AdminMissionFilters extends AdminListQuery {
 
 export interface PaginatedMissionsResponse {
   missions: AdminMission[]
+  total: number
+  page: number
+  limit: number
+  totalPages: number
+}
+
+// =============================================================================
+// Plantillas
+// =============================================================================
+
+/**
+ * Una plantilla del catálogo en el panel, para recomendarla. Es lo único del
+ * panel que dice quién publicó cada una.
+ */
+export interface AdminTemplate {
+  id: string
+  name: string
+  subject: string | null
+  educationLevel: string | null
+  language: string | null
+  province: string | null
+  teacherName: string
+  missionCount: number
+  recommended: boolean
+  recommendedAt: string | null
+  updatedAt: string
+}
+
+export interface AdminTemplateFilters extends AdminListQuery {
+  recommended?: 'recommended' | 'not-recommended' | 'all'
+  sort?: TemplateSort
+}
+
+export interface PaginatedTemplatesResponse {
+  templates: AdminTemplate[]
   total: number
   page: number
   limit: number

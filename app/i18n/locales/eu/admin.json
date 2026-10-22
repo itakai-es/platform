@@ -140,6 +140,25 @@
       "sort": {
         "students_desc": "Ikasle gehiago",
         "missions_desc": "Misio gehiago"
+      },
+      "tabs": {
+        "classes": "Klaseak",
+        "trash": "Zakarrontzia",
+        "label": "Klaseen ikuspegiak"
+      },
+      "trash": {
+        "note": "Irakasleek ezabatzen dituzten klaseak {days} egun egoten dira zakarrontzian betiko ezabatu aurretik. Hemen daude plataforma osokoak, jabeak ezin dituenak leheneratzeko edo berehala ezabatzeko: adibidez, haren kontua etenda badago. Leheneratutako klasea artxibatuta itzultzen da jabearen klaseetara.",
+        "search_placeholder": "Bilatu klasearen, jabearen edo kodearen arabera...",
+        "empty_title": "Ez dago klaserik zakarrontzian",
+        "empty_description": "Irakasle batek klase bat ezabatzen duenean, {days} egun egoten da hemen betiko ezabatu aurretik.",
+        "owner": "Jabea: {name}",
+        "no_owner": "Ez du jaberik",
+        "owner_unavailable": "Jabearen kontuak ez du sarbiderik",
+        "sent_by": "{name}(e)k bidali zuen ({date})",
+        "sent_on": "Zakarrontzira bidalia: {date}",
+        "warned": "Ezabatze-abisua bidalia: {date}",
+        "restored": "«{name}» zakarrontzitik atera da. Artxibatuta itzultzen da jabearen klaseetara.",
+        "restore_error": "Ezin izan da klasea leheneratu. Saiatu berriro."
       }
     },
     "missions": {
@@ -458,6 +477,29 @@
       "published_at_draft_hint": "Automatikoki jartzen da sarrera lehen aldiz argitaratzean.",
       "published_at_invalid": "Aukeratu 2000ko urtarrilaren 1etik gaur arteko data bat.",
       "view_public": "Ikusi bloga"
+    },
+    "templates": {
+      "title": "Txantiloiak",
+      "subtitle": "Gomendatu nabarmendu nahi dituzun txantiloiak: katalogoetan lehenik agertzen dira, bereizgarriarekin.",
+      "meta": {
+        "title": "Txantiloiak | ITAKAI Admin"
+      },
+      "view_public": "Ikusi katalogoa",
+      "search_placeholder": "Bilatu txantiloiaren edo argitaratu zuenaren arabera…",
+      "filter_label": "Gomendioa",
+      "filter_all": "Guztiak",
+      "filter_recommended": "Gomendatuak",
+      "filter_not_recommended": "Gomendatu gabeak",
+      "empty_title": "Oraindik ez dago argitaratutako txantiloirik",
+      "empty_description": "Irakasleek klase bat txantiloi gisa argitaratzen dutenean, hemen agertuko da gomendatu ahal izateko.",
+      "empty_filtered_title": "Ez dago iragazki hauekin bat datorren txantiloirik",
+      "empty_filtered_description": "Saiatu beste bilaketa batekin edo kendu iragazkia.",
+      "published_by": "Argitaratzailea: {name}",
+      "recommend": "Gomendatua",
+      "recommend_named": "Gomendatu «{name}»",
+      "recommended_on": "«{name}» gomendatu gisa agertzen da orain",
+      "recommended_off": "«{name}» ez da gehiago gomendatu gisa agertzen",
+      "save_error": "Ezin izan da gorde. Saiatu berriro."
     }
   }
 }

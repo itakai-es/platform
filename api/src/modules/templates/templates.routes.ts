@@ -44,6 +44,7 @@ export interface TemplateFiltersQuery {
   language?: unknown
   province?: unknown
   q?: unknown
+  recommended?: unknown
 }
 
 interface PublicTemplatesQuery extends TemplateFiltersQuery {
@@ -72,6 +73,11 @@ function searchTerm(value: unknown) {
   return str(value)?.trim().slice(0, MAX_SEARCH_LENGTH) || undefined
 }
 
+/** Un sí de la consulta (`?recommended=true` o `=1`); cualquier otra cosa es que no. */
+function yes(value: unknown) {
+  return value === 'true' || value === '1'
+}
+
 /**
  * Los filtros de la consulta, leídos sin rechazar nada: lo que no tiene la
  * forma esperada (un valor que no es texto, un byte nulo, uno demasiado largo)
@@ -84,6 +90,7 @@ export function templateFiltersOf(query: TemplateFiltersQuery): templates.Templa
     language: strList(query.language),
     province: strList(query.province),
     q: searchTerm(query.q),
+    recommended: yes(query.recommended) || undefined,
   }
 }
 
