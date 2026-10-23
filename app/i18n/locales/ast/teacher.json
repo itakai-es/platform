@@ -1151,7 +1151,9 @@
         "avatar_preview": "Asina te ven nes tos clases",
         "avatar_auto": "Automáticu",
         "avatar_updated": "Avatar anováu",
-        "avatar_error": "Nun se pudo camudar l'avatar."
+        "avatar_error": "Nun se pudo camudar l'avatar.",
+        "avatar_characters": "Personaxes",
+        "avatar_colors": "Les tos iniciales sobre un color"
       },
       "meta": {
         "title": "El mio perfil | ITAKAI",

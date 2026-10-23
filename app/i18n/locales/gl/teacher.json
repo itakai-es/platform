@@ -1151,7 +1151,9 @@
         "avatar_preview": "Así te ven nas túas clases",
         "avatar_auto": "Automático",
         "avatar_updated": "Avatar actualizado",
-        "avatar_error": "Non se puido cambiar o avatar."
+        "avatar_error": "Non se puido cambiar o avatar.",
+        "avatar_characters": "Personaxes",
+        "avatar_colors": "As túas iniciais sobre unha cor"
       },
       "meta": {
         "title": "O meu perfil | ITAKAI",

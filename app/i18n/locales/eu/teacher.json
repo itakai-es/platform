@@ -1151,7 +1151,9 @@
         "avatar_preview": "Honela ikusten zaituzte zure klaseetan",
         "avatar_auto": "Automatikoa",
         "avatar_updated": "Avatarra eguneratu da",
-        "avatar_error": "Ezin izan da avatarra aldatu."
+        "avatar_error": "Ezin izan da avatarra aldatu.",
+        "avatar_characters": "Pertsonaiak",
+        "avatar_colors": "Zure inizialak kolore baten gainean"
       },
       "meta": {
         "title": "Nire profila | ITAKAI",

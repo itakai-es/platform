@@ -37,9 +37,22 @@ import { authRoutes } from '../../src/modules/auth/auth.routes.js'
 import { isTeacherAvatarKey, TEACHER_AVATAR_KEYS } from '../../src/utils/avatars.js'
 
 describe('catálogo docente', () => {
-  it('son las claves de la paleta de equipos, y nada más', () => {
-    expect([...TEACHER_AVATAR_KEYS]).toEqual(['purple', 'yellow', 'mint', 'sky', 'red', 'peach'])
+  it('son los personajes y las claves de la paleta de equipos, y nada más', () => {
+    expect([...TEACHER_AVATAR_KEYS]).toEqual([
+      'atenea',
+      'odiseo',
+      'penelope',
+      'polifemo',
+      'poseidon',
+      'purple',
+      'yellow',
+      'mint',
+      'sky',
+      'red',
+      'peach',
+    ])
     expect(isTeacherAvatarKey('mint')).toBe(true)
+    expect(isTeacherAvatarKey('poseidon')).toBe(true)
     for (const value of ['', 'gold', '/app/avatars/atenea.svg', 'https://x.invalid/a.png', null, 3]) {
       expect(isTeacherAvatarKey(value)).toBe(false)
     }

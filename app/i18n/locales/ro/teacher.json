@@ -1151,7 +1151,9 @@
         "avatar_preview": "Așa te văd în clasele tale",
         "avatar_auto": "Automat",
         "avatar_updated": "Avatarul a fost actualizat",
-        "avatar_error": "Avatarul nu a putut fi schimbat."
+        "avatar_error": "Avatarul nu a putut fi schimbat.",
+        "avatar_characters": "Personaje",
+        "avatar_colors": "Inițialele tale pe o culoare"
       },
       "meta": {
         "title": "Profilul meu | ITAKAI",

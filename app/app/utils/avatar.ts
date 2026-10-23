@@ -93,15 +93,33 @@ export interface TeacherAvatarEntry {
   portrait?: string
 }
 
+/** Los personajes que puede elegir el profesorado, con el color de su fondo. */
+const TEACHER_CHARACTERS: Record<StudentAvatarKey, TeamColor> = {
+  atenea: 'purple',
+  odiseo: 'sky',
+  penelope: 'peach',
+  polifemo: 'mint',
+  poseidon: 'yellow',
+}
+
 /**
- * Catálogo del avatar del profesorado, por clave. Hoy, uno por color de la
- * paleta (iniciales sobre ese color); para añadir retratos basta con añadir
- * entradas con su `portrait`, y la clave a la lista de la API
- * (`api/src/utils/avatars.ts`).
+ * Catálogo del avatar del profesorado, por clave: los personajes (su retrato
+ * sobre un color) y, para quien prefiera sus iniciales, un color de la paleta.
+ * Para añadir retratos basta con añadir entradas con su `portrait`, y la clave a
+ * la lista de la API (`api/src/utils/avatars.ts`).
  */
-export const TEACHER_AVATARS: Record<string, TeacherAvatarEntry> = Object.fromEntries(
-  TEAM_COLOR_KEYS.map(color => [color, { color }])
-)
+export const TEACHER_AVATARS: Record<string, TeacherAvatarEntry> = {
+  ...Object.fromEntries(
+    STUDENT_AVATAR_KEYS.map(key => [
+      key,
+      { color: TEACHER_CHARACTERS[key], portrait: studentAvatarSrc(key) },
+    ])
+  ),
+  ...Object.fromEntries(TEAM_COLOR_KEYS.map(color => [color, { color }])),
+}
+
+/** Las claves de personaje del catálogo docente (las demás son colores). */
+export const TEACHER_CHARACTER_KEYS: readonly string[] = STUDENT_AVATAR_KEYS
 
 export const TEACHER_AVATAR_KEYS = Object.keys(TEACHER_AVATARS)
 

@@ -1151,7 +1151,9 @@
         "avatar_preview": "Així et veuen a les teves classes",
         "avatar_auto": "Automàtic",
         "avatar_updated": "Avatar actualitzat",
-        "avatar_error": "No s'ha pogut canviar l'avatar."
+        "avatar_error": "No s'ha pogut canviar l'avatar.",
+        "avatar_characters": "Personatges",
+        "avatar_colors": "Les teves inicials sobre un color"
       },
       "meta": {
         "title": "El meu perfil | ITAKAI",

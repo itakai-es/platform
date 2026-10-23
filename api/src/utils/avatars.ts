@@ -34,8 +34,21 @@ export function isAllowedClassAvatar(value: string, current: string | null): boo
   return isStudentCatalogAvatar(value) || value === current
 }
 
-/** Claves del catálogo docente: los colores de la paleta de equipos. */
-export const TEACHER_AVATAR_KEYS = ['purple', 'yellow', 'mint', 'sky', 'red', 'peach'] as const
+/** Claves del catálogo docente: los personajes y los colores de la paleta de equipos. */
+// Los personajes (sus retratos) y, para quien prefiera sus iniciales, los colores.
+export const TEACHER_AVATAR_KEYS = [
+  'atenea',
+  'odiseo',
+  'penelope',
+  'polifemo',
+  'poseidon',
+  'purple',
+  'yellow',
+  'mint',
+  'sky',
+  'red',
+  'peach',
+] as const
 
 export type TeacherAvatarKey = (typeof TEACHER_AVATAR_KEYS)[number]
 

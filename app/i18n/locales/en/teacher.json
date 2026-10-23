@@ -1151,7 +1151,9 @@
         "avatar_preview": "How you appear in your classes",
         "avatar_auto": "Automatic",
         "avatar_updated": "Avatar updated",
-        "avatar_error": "The avatar could not be changed."
+        "avatar_error": "The avatar could not be changed.",
+        "avatar_characters": "Characters",
+        "avatar_colors": "Your initials on a colour"
       },
       "meta": {
         "title": "My profile | ITAKAI",

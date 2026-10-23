@@ -12,18 +12,18 @@
 
 -- tu-cuenta/tu-avatar-de-docente
 INSERT INTO "help_articles" ("id", "category_id", "slug", "title", "summary", "cover_image", "body", "locale", "status", "order_index", "featured", "audience", "kind", "published_at", "updated_at")
-SELECT gen_random_uuid()::text, c."id", $itakai$tu-avatar-de-docente$itakai$, $itakai$Tu avatar de docente$itakai$, $itakai$Elegir el color de tu avatar, con el que te reconocen el alumnado y el resto del profesorado en tus clases.$itakai$, $itakai$/app/ayuda/avatares.svg$itakai$, $itakai$Cada docente tiene un avatar, **uno por cuenta**: el mismo en todas sus clases. Sirve para que se sepa de un vistazo quién ha hecho qué, sobre todo en una [clase compartida](/ayuda/clases/compartir-una-clase-con-otros-profesores).
+SELECT gen_random_uuid()::text, c."id", $itakai$tu-avatar-de-docente$itakai$, $itakai$Tu avatar de docente$itakai$, $itakai$Elegir tu avatar (un personaje o tus iniciales sobre un color), con el que te reconocen el alumnado y el resto del profesorado en tus clases.$itakai$, $itakai$/app/ayuda/avatares.svg$itakai$, $itakai$Cada docente tiene un avatar, **uno por cuenta**: el mismo en todas sus clases. Sirve para que se sepa de un vistazo quién ha hecho qué, sobre todo en una [clase compartida](/ayuda/clases/compartir-una-clase-con-otros-profesores).
 
 ## Cómo es
 
-Son **tus iniciales sobre un color**. Si no eliges ninguno, la plataforma te da uno, siempre el mismo. No hay fotos: no hace falta subir ni guardar imágenes de nadie.
+Puede ser **uno de los personajes** (Atenea, Odiseo, Penélope, Polifemo o Poseidón) o **tus iniciales sobre un color**. Si no eliges nada, salen tus iniciales sobre un color que te da la plataforma, siempre el mismo. No hay fotos: no hace falta subir ni guardar imágenes de nadie.
 
 ## Cambiarlo
 
 1. Abre tu **perfil** y la pestaña **Configuración**.
-2. En **Tu avatar**, pulsa el color que quieras. **Automático** es el que te da la plataforma.
+2. En **Tu avatar**, pulsa un personaje o, en **Tus iniciales sobre un color**, el color que quieras. **Automático** es el que te da la plataforma.
 
-Se aplica al momento. Encima de los colores ves **Así te ven en tus clases**, con tu nombre.
+Se aplica al momento. Encima ves **Así te ven en tus clases**, con tu nombre.
 
 ## Dónde sale
 
