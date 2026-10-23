@@ -17,7 +17,7 @@ type Db = Prisma.TransactionClient
  */
 export const NICKNAME_MAX_LENGTH = 20
 
-/** Avatares por defecto (dioses griegos), uno por matrícula. */
+/** Avatares por defecto (dioses griegos), uno por matrícula. Es el catálogo del alumnado. */
 const DEFAULT_AVATARS = [
   '/app/avatars/atenea.svg',
   '/app/avatars/odiseo.svg',
@@ -218,4 +218,13 @@ export const ENROLL_TX_OPTIONS = {
  */
 export async function enrollStudentNow(input: EnrollStudentInput) {
   return prisma.$transaction(tx => enrollStudent(tx, input), ENROLL_TX_OPTIONS)
+}
+
+/**
+ * Avatar que el alumnado puede ponerse en una clase: uno del catálogo o el que ya
+ * tiene (el generado con IA lo escribe el servidor). Nunca una dirección cualquiera:
+ * la cargarían los navegadores de toda la clase.
+ */
+export function isAllowedClassAvatar(value: string, current: string | null): boolean {
+  return DEFAULT_AVATARS.includes(value) || value === current
 }

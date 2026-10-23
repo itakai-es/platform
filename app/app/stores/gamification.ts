@@ -149,63 +149,6 @@ export const useGamificationStore = defineStore('gamification', () => {
   /**
    * Update user avatar
    */
-  async function updateAvatar(avatar: string) {
-    try {
-      isUpdatingProfile.value = true
-      error.value = null
-
-      const config = useRuntimeConfig()
-      const response = await $fetch<{ profile: Profile }>(
-        `${config.public.apiBase}/students/profile/me`,
-        {
-          method: 'PUT',
-          body: { avatar },
-        }
-      )
-
-      profile.value = response.profile
-      return response.profile
-    } catch (err: any) {
-      error.value = err.message || 'Error al actualizar el avatar'
-      console.error('Error updating avatar:', err)
-      throw err
-    } finally {
-      isUpdatingProfile.value = false
-    }
-  }
-
-  /**
-   * Generate avatar with AI prompt (MVP feature)
-   */
-  async function generateAvatar(prompt: string) {
-    try {
-      isUpdatingProfile.value = true
-      error.value = null
-
-      const config = useRuntimeConfig()
-      const response = await $fetch<{ avatarUrl: string }>(
-        `${config.public.apiBase}/students/profile/me/avatar/generate`,
-        {
-          method: 'POST',
-          body: { prompt },
-        }
-      )
-
-      // Update avatar with generated URL
-      if (profile.value) {
-        profile.value.avatar = response.avatarUrl
-      }
-
-      return response.avatarUrl
-    } catch (err: any) {
-      error.value = err.message || 'Error al generar el avatar'
-      console.error('Error generating avatar:', err)
-      throw err
-    } finally {
-      isUpdatingProfile.value = false
-    }
-  }
-
   /**
    * Change user password
    */
@@ -463,8 +406,6 @@ export const useGamificationStore = defineStore('gamification', () => {
     // Actions
     fetchProfile,
     updateProfile,
-    updateAvatar,
-    generateAvatar,
     changePassword,
     fetchBadges,
     fetchGuides,

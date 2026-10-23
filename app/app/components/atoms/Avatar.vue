@@ -17,7 +17,8 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   size: 'md',
-  alt: 'Avatar',
+  // Casi siempre va junto al nombre: decorativo. Quien lo pone solo pasa `alt`.
+  alt: '',
 })
 
 // El marco es un doble anillo (hueco blanco + color del tramo) con box-shadow,
@@ -27,7 +28,7 @@ const ringStyle = computed(() =>
 )
 
 const avatarClasses = computed(() => {
-  const base = 'rounded-full bg-lila-medium flex items-center justify-center overflow-hidden'
+  const base = 'rounded-full bg-purple-light flex items-center justify-center overflow-hidden'
 
   const sizes = {
     xs: 'w-9 h-9 text-xs', // 36px - listado/hijos

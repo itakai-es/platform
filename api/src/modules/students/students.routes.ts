@@ -23,10 +23,6 @@ const updateAvatarSchema = z.object({
   avatar: z.string(),
 })
 
-const generateAvatarSchema = z.object({
-  prompt: z.string(),
-})
-
 const changePasswordSchema = z.object({
   currentPassword: z.string(),
   newPassword: z.string().min(PASSWORD_MIN_LENGTH),
@@ -100,20 +96,6 @@ export async function studentsRoutes(fastify: FastifyInstance) {
   })
 
   // NOTE: Avatar is per-class, updated via enrollment endpoints
-
-  fastify.post('/profile/me/avatar/generate', async (request: FastifyRequest, reply: FastifyReply) => {
-    try {
-      const { id } = request.user as { id: string }
-      const data = generateAvatarSchema.parse(request.body)
-      const result = await studentsService.generateAvatar(id, data.prompt)
-      return result
-    } catch (error) {
-      if (error instanceof ZodError) {
-        return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
-      }
-      return reply.status(500).send({ message: 'Error interno' })
-    }
-  })
 
   fastify.post('/profile/me/password', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -335,6 +317,7 @@ export async function studentsRoutes(fastify: FastifyInstance) {
       const result = await studentsService.updateClassProfile(id, classId, data)
       return result
     } catch (error) {
+      rethrowHttpError(error)
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
@@ -353,6 +336,7 @@ export async function studentsRoutes(fastify: FastifyInstance) {
       const result = await studentsService.generateClassAvatar(id, classId, data)
       return result
     } catch (error) {
+      rethrowHttpError(error)
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }

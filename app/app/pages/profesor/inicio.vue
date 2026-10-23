@@ -192,23 +192,6 @@ const formatTimeAgo = (timestamp: Date): string => {
   return `Hace ${diffDays} días`
 }
 
-// Generate avatar URL for student (fallback when API doesn't return avatar)
-const getStudentAvatar = (studentId: string | undefined): string => {
-  // Fallback if studentId is not provided
-  if (!studentId) {
-    return '/app/avatars/avatar-1.svg'
-  }
-
-  // Simple hash function to get consistent index from any string (works with UUIDs)
-  let hash = 0
-  for (let i = 0; i < studentId.length; i++) {
-    hash = (hash << 5) - hash + studentId.charCodeAt(i)
-    hash = hash & hash // Convert to 32bit integer
-  }
-  const avatarIndex = (Math.abs(hash) % 5) + 1
-  return `/app/avatars/avatar-${avatarIndex}.svg`
-}
-
 // Format activity description with HTML for important parts
 // Use shared activity formatter for teacher perspective
 const { formatActivities } = useActivityFormatter('teacher')
