@@ -277,6 +277,17 @@ const TEACHER_CLASS: RouteCase[] = [
     levels: levels('read', 200),
   },
   {
+    route: 'PUT /teacher/classes/:classId/missions/order',
+    request: async f => {
+      const ids = [await f.newMission(), await f.newMission()]
+      return { method: 'PUT', url: `${c(f)}/missions/order`, payload: { ids: ids.reverse() } }
+    },
+    owner: 200,
+    other: 404,
+    student: 403,
+    levels: levels('edit', 200),
+  },
+  {
     route: 'GET /teacher/classes/:classId/ranking',
     request: f => ({ method: 'GET', url: `${c(f)}/ranking` }),
     owner: 200,

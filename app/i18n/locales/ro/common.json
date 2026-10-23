@@ -596,6 +596,27 @@
       },
       "custom_name": "Avatarul tău cu IA",
       "custom_trait": "Generat cu IA"
+    },
+    "view_modes": {
+      "grid": "Grilă",
+      "list": "Listă",
+      "map": "Hartă"
+    },
+    "mission_map": {
+      "title": "Harta misiunilor",
+      "beta": "Beta",
+      "beta_note": "Este în testare: aspectul și funcționarea se pot schimba.",
+      "step": "Misiunea {n}",
+      "state": {
+        "completed": "Finalizată",
+        "in_progress": "În curs: {progress} %",
+        "available": "Disponibilă",
+        "urgent": "Urgentă: expiră curând",
+        "expired": "Expirată",
+        "locked": "Închisă deocamdată"
+      },
+      "completed_by": "Nimeni nu a finalizat-o încă: 0 din {total} | {done} din {total} a finalizat-o | {done} din {total} au finalizat-o",
+      "no_students": "Încă nu e nimeni în clasă"
     }
   }
 }

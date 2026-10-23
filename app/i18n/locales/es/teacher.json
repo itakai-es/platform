@@ -189,7 +189,14 @@
           "empty_search": "No se encontraron misiones para \"{query}\"",
           "empty_status": "No hay misiones con los estados seleccionados",
           "empty_rarity": "No hay misiones con las rarezas seleccionadas",
-          "empty_default": "No hay misiones en esta clase"
+          "empty_default": "No hay misiones en esta clase",
+          "order": {
+            "button": "Ordenar",
+            "title": "Orden de la clase",
+            "hint": "El alumnado ve las misiones en este orden. Arrastra cada fila por su asa o, con el teclado, ponte en el asa y usa las flechas arriba y abajo. Cada cambio se guarda al momento.",
+            "done": "Hecho",
+            "error": "No se ha podido guardar el orden. Inténtalo de nuevo."
+          }
         },
         "meta": {
           "title": "Detalle de clase | ITAKAI Docente",
@@ -353,6 +360,10 @@
             "sounds": {
               "label": "Sonidos",
               "desc": "Efectos de sonido al subir de nivel, completar misiones, etc."
+            },
+            "missionMap": {
+              "label": "Mapa de misiones",
+              "desc": "Una vista más en Misiones: el camino de la clase, en el orden que decidas."
             }
           },
           "requires": "Necesita {feature}",
@@ -428,7 +439,11 @@
               "error": "No se ha podido enviar la clase a la papelera. Inténtalo de nuevo."
             }
           },
-          "edit_level_note": "Puedes cambiar el nombre, el horario y la portada. La clasificación, las funcionalidades y los niveles los cambia quien administra la clase."
+          "edit_level_note": "Puedes cambiar el nombre, el horario y la portada. La clasificación, las funcionalidades y los niveles los cambia quien administra la clase.",
+          "beta": {
+            "title": "En pruebas",
+            "hint": "Funcionalidades nuevas que se están probando. Van apagadas de entrada y su aspecto y su funcionamiento se ajustarán con las pruebas."
+          }
         },
         "badges_empty": "No hay insignias en esta clase",
         "archived_notice": "Esta clase está archivada: se puede consultar, pero no admite más estudiantes.",
@@ -654,7 +669,8 @@
               "moved": "cambió de clase la misión «{title}»",
               "rewards_changed": "cambió la recompensa de la misión «{title}»",
               "imported": "importó la misión «{title}»",
-              "exported": "copió la misión «{title}» en otra clase"
+              "exported": "copió la misión «{title}» en otra clase",
+              "reordered": "cambió el orden de las misiones"
             },
             "enigma": {
               "created": "añadió el enigma «{title}»",
@@ -1240,7 +1256,8 @@
           "rarity_desc": "Rareza ↓",
           "rarity_asc": "Rareza ↑",
           "completion_desc": "Completación ↓",
-          "completion_asc": "Completación ↑"
+          "completion_asc": "Completación ↑",
+          "class_order": "Orden de la clase"
         }
       },
       "rewards_form_modal": {

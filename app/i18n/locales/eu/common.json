@@ -596,6 +596,27 @@
       },
       "custom_name": "Zure avatarra AArekin",
       "custom_trait": "AArekin sortua"
+    },
+    "view_modes": {
+      "grid": "Sareta",
+      "list": "Zerrenda",
+      "map": "Mapa"
+    },
+    "mission_map": {
+      "title": "Misioen mapa",
+      "beta": "Beta",
+      "beta_note": "Probetan dago: itxura eta funtzionamendua alda daitezke.",
+      "step": "{n}. misioa",
+      "state": {
+        "completed": "Osatua",
+        "in_progress": "Abian: % {progress}",
+        "available": "Eskuragarri",
+        "urgent": "Urgentea: laster amaitzen da",
+        "expired": "Iraungia",
+        "locked": "Itxita oraingoz"
+      },
+      "completed_by": "Inork ez du osatu oraindik: 0/{total} | Osatu dutenak: {done}/{total} | Osatu dutenak: {done}/{total}",
+      "no_students": "Oraindik ez dago ikaslerik"
     }
   }
 }

@@ -15,6 +15,8 @@ export interface MissionFormatInput {
   rarity: string
   deadline: Date | null
   backgroundImage: string | null
+  /** Posición en el orden de su clase (ver utils/mission-order.ts). */
+  orderIndex?: number
   xpReward?: number
   class?: { name: string } | null
   enigmas?: {
@@ -36,6 +38,8 @@ export interface FormattedMission {
   rarity: string
   deadline: Date | null
   backgroundImage: string | null
+  /** Posición en el orden de su clase: la pantalla la usa al mezclar clases. */
+  orderIndex: number
   progress: number
   xpReward: number
   coinReward: number
@@ -131,6 +135,7 @@ export function formatMission(
     rarity: mission.rarity,
     deadline: mission.deadline,
     backgroundImage: mission.backgroundImage,
+    orderIndex: mission.orderIndex ?? 0,
     progress: progressPercent,
     xpReward: totalXp,
     coinReward: totalCoins,

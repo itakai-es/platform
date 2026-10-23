@@ -44,6 +44,8 @@ export interface MissionCopyOptions {
   documents?: boolean
   /** Quién se queda la insignia copiada. Sin él, la insignia no se copia. */
   badgeAuthorId?: string
+  /** Posición de la copia en el orden de su clase. Sin él, la del origen. */
+  orderIndex?: number
 }
 
 export interface MissionCopyResult {
@@ -128,6 +130,7 @@ export async function copyMissionInto(
       rarity: source.rarity,
       deadline: options.deadline !== undefined ? options.deadline : source.deadline,
       backgroundImage: source.backgroundImage,
+      orderIndex: options.orderIndex ?? source.orderIndex,
     },
   })
 

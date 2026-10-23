@@ -3,6 +3,7 @@ import { BaseAgent, type AgentRequestContext } from './base-agent.js'
 import { getPlatformContext, getSkinName } from '../platform-context.js'
 import { INCLUSIVE_LANGUAGE_ES } from '../prompts/index.js'
 import { calculateMissionTotalXP } from '../../../utils/xp-calculator.js'
+import { sortByClassOrder } from '../../../utils/mission-order.js'
 import {
   listedClassesWhere,
   assertMissionAccess,
@@ -56,6 +57,8 @@ export class TeacherAgent extends BaseAgent {
           class: { select: { name: true } },
           _count: { select: { enigmas: true } },
         },
+        // Las más recientes, que son las del curso; se enseñan en el orden de
+        // la progresión de cada clase, como las ve el alumnado.
         orderBy: { createdAt: 'desc' },
         take: 5,
       }),
@@ -71,7 +74,7 @@ export class TeacherAgent extends BaseAgent {
       ? classes.map(cls => `${cls.name} (${cls._count.enrollments} estudiantes, ${cls._count.missions} misiones)`).join('; ')
       : 'Sin clases creadas'
     const missionsSummary = missions.length > 0
-      ? missions.map(mission => `${mission.title} en ${mission.class.name} (${mission._count.enigmas} enigmas)`).join('; ')
+      ? sortByClassOrder(missions).map(mission => `${mission.title} en ${mission.class.name} (${mission._count.enigmas} enigmas)`).join('; ')
       : 'Sin misiones'
 
     const teacherName = teacher?.name?.split(' ')[0] || ''

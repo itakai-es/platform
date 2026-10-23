@@ -596,6 +596,27 @@
       },
       "custom_name": "El teu avatar amb IA",
       "custom_trait": "Generat amb IA"
+    },
+    "view_modes": {
+      "grid": "Quadrícula",
+      "list": "Llista",
+      "map": "Mapa"
+    },
+    "mission_map": {
+      "title": "Mapa de missions",
+      "beta": "Beta",
+      "beta_note": "Està en proves: l'aspecte i el funcionament poden canviar.",
+      "step": "Missió {n}",
+      "state": {
+        "completed": "Completada",
+        "in_progress": "En curs: {progress} %",
+        "available": "Disponible",
+        "urgent": "Urgent: venç aviat",
+        "expired": "Expirada",
+        "locked": "Tancada de moment"
+      },
+      "completed_by": "Encara no l'ha completada ningú: 0 de {total} | {done} de {total} l'ha completada | {done} de {total} l'han completada",
+      "no_students": "Encara no hi ha alumnat"
     }
   }
 }

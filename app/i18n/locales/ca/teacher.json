@@ -189,7 +189,14 @@
           "empty_search": "No s'han trobat missions per a \"{query}\"",
           "empty_status": "No hi ha missions amb els estats seleccionats",
           "empty_rarity": "No hi ha missions amb les rareses seleccionades",
-          "empty_default": "No hi ha missions en aquesta classe"
+          "empty_default": "No hi ha missions en aquesta classe",
+          "order": {
+            "button": "Ordena",
+            "title": "Ordre de la classe",
+            "hint": "L'alumnat veu les missions en aquest ordre. Arrossega cada fila per la nansa o, amb el teclat, situa't a la nansa i fes servir les fletxes amunt i avall. Cada canvi es desa a l'instant.",
+            "done": "Fet",
+            "error": "No s'ha pogut desar l'ordre. Torna-ho a provar."
+          }
         },
         "meta": {
           "title": "Detall de classe | ITAKAI Docent",
@@ -353,6 +360,10 @@
             "sounds": {
               "label": "Sons",
               "desc": "Efectes de so en pujar de nivell, completar missions, etc."
+            },
+            "missionMap": {
+              "label": "Mapa de missions",
+              "desc": "Una vista més a Missions: el camí de la classe, en l'ordre que decideixis."
             }
           },
           "requires": "Necessita {feature}",
@@ -428,7 +439,11 @@
               "error": "No s'ha pogut enviar la classe a la paperera. Torna-ho a provar."
             }
           },
-          "edit_level_note": "Pots canviar el nom, l'horari i la portada. La classificació, les funcionalitats i els nivells els canvia qui administra la classe."
+          "edit_level_note": "Pots canviar el nom, l'horari i la portada. La classificació, les funcionalitats i els nivells els canvia qui administra la classe.",
+          "beta": {
+            "title": "En proves",
+            "hint": "Funcionalitats noves que s'estan provant. Estan desactivades d'entrada i l'aspecte i el funcionament s'ajustaran amb les proves."
+          }
         },
         "badges_empty": "No hi ha insígnies en aquesta classe",
         "archived_notice": "Aquesta classe està arxivada: es pot consultar, però no admet més estudiants.",
@@ -654,7 +669,8 @@
               "moved": "va canviar de classe la missió «{title}»",
               "rewards_changed": "va canviar la recompensa de la missió «{title}»",
               "imported": "va importar la missió «{title}»",
-              "exported": "va copiar la missió «{title}» a una altra classe"
+              "exported": "va copiar la missió «{title}» a una altra classe",
+              "reordered": "va canviar l'ordre de les missions"
             },
             "enigma": {
               "created": "va afegir l'enigma «{title}»",
@@ -1240,7 +1256,8 @@
           "rarity_desc": "Raresa ↓",
           "rarity_asc": "Raresa ↑",
           "completion_desc": "Completesa ↓",
-          "completion_asc": "Completesa ↑"
+          "completion_asc": "Completesa ↑",
+          "class_order": "Ordre de la classe"
         }
       },
       "rewards_form_modal": {

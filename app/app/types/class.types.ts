@@ -39,7 +39,13 @@ export interface ClassSettings {
   lives: boolean
   visualEffects: boolean
   sounds: boolean
+  /** Mapa de misiones (beta): apagado mientras nadie lo encienda. */
+  missionMap: boolean
 }
+
+/** Las que enseña la ficha de una plantilla: todas menos las que están en pruebas. */
+export type TemplateFeature = Exclude<keyof ClassSettings, 'missionMap'>
+export type TemplateFeatures = Pick<ClassSettings, TemplateFeature>
 
 /** Hasta dónde llega un profesor en una clase. Cada nivel incluye los anteriores. */
 export type ClassAccessLevel = 'read' | 'edit' | 'admin'

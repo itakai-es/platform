@@ -189,7 +189,14 @@
           "empty_search": "Nu s-au găsit misiuni pentru „{query}”",
           "empty_status": "Nu există misiuni cu stările selectate",
           "empty_rarity": "Nu există misiuni cu raritățile selectate",
-          "empty_default": "Nu există misiuni în această clasă"
+          "empty_default": "Nu există misiuni în această clasă",
+          "order": {
+            "button": "Ordonează",
+            "title": "Ordinea clasei",
+            "hint": "Clasa vede misiunile în această ordine. Trage fiecare rând de mânerul lui sau, cu tastatura, mergi pe mâner și folosește săgețile sus și jos. Fiecare schimbare se salvează imediat.",
+            "done": "Gata",
+            "error": "Ordinea nu a putut fi salvată. Încearcă din nou."
+          }
         },
         "meta": {
           "title": "Detaliile clasei | ITAKAI Cadru didactic",
@@ -353,6 +360,10 @@
             "sounds": {
               "label": "Sunete",
               "desc": "Efecte sonore la urcarea de nivel, la finalizarea misiunilor etc."
+            },
+            "missionMap": {
+              "label": "Harta misiunilor",
+              "desc": "Încă o vizualizare în Misiuni: drumul clasei, în ordinea pe care o alegi."
             }
           },
           "requires": "Necesită {feature}",
@@ -428,7 +439,11 @@
               "error": "Clasa nu a putut fi mutată în coșul de gunoi. Încearcă din nou."
             }
           },
-          "edit_level_note": "Poți schimba numele, orarul și coperta. Clasificarea, funcționalitățile și nivelurile le schimbă cine administrează clasa."
+          "edit_level_note": "Poți schimba numele, orarul și coperta. Clasificarea, funcționalitățile și nivelurile le schimbă cine administrează clasa.",
+          "beta": {
+            "title": "În testare",
+            "hint": "Funcționalități noi aflate în testare. Sunt dezactivate la început, iar aspectul și funcționarea lor se vor ajusta în urma testelor."
+          }
         },
         "badges_empty": "Nu există insigne în această clasă",
         "archived_notice": "Această clasă este arhivată: poate fi consultată, dar nu mai primește elevi noi.",
@@ -654,7 +669,8 @@
               "moved": "a schimbat clasa misiunii «{title}»",
               "rewards_changed": "a schimbat recompensa misiunii «{title}»",
               "imported": "a importat misiunea «{title}»",
-              "exported": "a copiat misiunea «{title}» în altă clasă"
+              "exported": "a copiat misiunea «{title}» în altă clasă",
+              "reordered": "a schimbat ordinea misiunilor"
             },
             "enigma": {
               "created": "a adăugat enigma «{title}»",
@@ -1240,7 +1256,8 @@
           "rarity_desc": "Raritate ↓",
           "rarity_asc": "Raritate ↑",
           "completion_desc": "Finalizare ↓",
-          "completion_asc": "Finalizare ↑"
+          "completion_asc": "Finalizare ↑",
+          "class_order": "Ordinea clasei"
         }
       },
       "rewards_form_modal": {

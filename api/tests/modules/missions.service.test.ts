@@ -20,6 +20,8 @@ const mocks = vi.hoisted(() => ({
   assertMissionAccess: vi.fn(),
   assertEnigmaAccess: vi.fn(),
   missionCreate: vi.fn(),
+  missionAggregate: vi.fn(),
+  queryRaw: vi.fn(),
   missionFindUnique: vi.fn(),
   missionUpdate: vi.fn(),
   missionEnigmaCreateMany: vi.fn(),
@@ -100,12 +102,17 @@ beforeEach(() => {
   mocks.assertClassAccess.mockResolvedValue(EDIT_ACCESS)
   mocks.assertMissionAccess.mockResolvedValue(EDIT_ACCESS)
   mocks.assertEnigmaAccess.mockResolvedValue(EDIT_ACCESS)
+  // La posición de una misión nueva: con la clase bloqueada, detrás de la última.
+  mocks.queryRaw.mockResolvedValue([])
+  mocks.missionAggregate.mockResolvedValue({ _max: { orderIndex: 2 } })
   // $transaction default: just run the callback with a tx = prisma stub.
   mocks.$transaction.mockImplementation(async (cb: any) => {
     if (typeof cb === 'function') {
       return cb({
+        $queryRaw: mocks.queryRaw,
         mission: {
           create: mocks.missionCreate,
+          aggregate: mocks.missionAggregate,
           update: mocks.missionUpdate,
           findUnique: mocks.missionFindUnique,
         },
@@ -170,6 +177,11 @@ describe('createMission', () => {
         metadata: expect.objectContaining({ title: 'Test', enigmas: 1 }),
       })
     )
+    // Al final del orden de la clase, con el orden bloqueado antes de mirarlo.
+    expect(mocks.queryRaw).toHaveBeenCalled()
+    expect(mocks.missionCreate).toHaveBeenCalledWith({
+      data: expect.objectContaining({ classId: CLASS, orderIndex: 3 }),
+    })
   })
 
   it('accepts each preset XP value', async () => {

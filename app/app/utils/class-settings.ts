@@ -5,6 +5,9 @@ import type { ClassSettings } from '~/types/class.types'
  * without explicit settings behaves exactly as before. Coherence between flags
  * is enforced by `normalizeClassSettings` (mirror of the backend) and, for the
  * "turn-on" direction, by `coerceClassSettings` used by the settings panel.
+ *
+ * Salvo las que están en pruebas (beta), que van apagadas mientras nadie las
+ * encienda: hoy, el mapa de misiones (`missionMap`). Espejo de la API.
  */
 export const DEFAULT_CLASS_SETTINGS: ClassSettings = {
   shop: true,
@@ -16,6 +19,7 @@ export const DEFAULT_CLASS_SETTINGS: ClassSettings = {
   lives: true,
   visualEffects: true,
   sounds: true,
+  missionMap: false,
 }
 
 /**

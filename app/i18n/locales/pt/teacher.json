@@ -189,7 +189,14 @@
           "empty_search": "Não foram encontradas missões para \"{query}\"",
           "empty_status": "Não há missões com os estados selecionados",
           "empty_rarity": "Não há missões com as raridades selecionadas",
-          "empty_default": "Não há missões nesta turma"
+          "empty_default": "Não há missões nesta turma",
+          "order": {
+            "button": "Ordenar",
+            "title": "Ordem da turma",
+            "hint": "A turma vê as missões por esta ordem. Arrasta cada linha pela sua pega ou, com o teclado, vai até à pega e usa as setas para cima e para baixo. Cada alteração fica guardada no momento.",
+            "done": "Concluído",
+            "error": "Não foi possível guardar a ordem. Tenta de novo."
+          }
         },
         "meta": {
           "title": "Detalhe da turma | ITAKAI Docente",
@@ -353,6 +360,10 @@
             "sounds": {
               "label": "Sons",
               "desc": "Efeitos sonoros ao subir de nível, concluir missões, etc."
+            },
+            "missionMap": {
+              "label": "Mapa de missões",
+              "desc": "Mais uma vista em Missões: o caminho da turma, pela ordem que decidires."
             }
           },
           "requires": "Precisa de {feature}",
@@ -428,7 +439,11 @@
               "error": "Não foi possível enviar a turma para o lixo. Tenta novamente."
             }
           },
-          "edit_level_note": "Podes alterar o nome, o horário e a capa. A classificação, as funcionalidades e os níveis são alterados por quem administra a turma."
+          "edit_level_note": "Podes alterar o nome, o horário e a capa. A classificação, as funcionalidades e os níveis são alterados por quem administra a turma.",
+          "beta": {
+            "title": "Em testes",
+            "hint": "Funcionalidades novas que estão a ser testadas. Vêm desativadas de início e o aspeto e o funcionamento vão ser ajustados com os testes."
+          }
         },
         "badges_empty": "Não há emblemas nesta turma",
         "archived_notice": "Esta turma está arquivada: pode ser consultada, mas não aceita mais estudantes.",
@@ -654,7 +669,8 @@
               "moved": "mudou de turma a missão «{title}»",
               "rewards_changed": "alterou a recompensa da missão «{title}»",
               "imported": "importou a missão «{title}»",
-              "exported": "copiou a missão «{title}» para outra turma"
+              "exported": "copiou a missão «{title}» para outra turma",
+              "reordered": "mudou a ordem das missões"
             },
             "enigma": {
               "created": "adicionou o enigma «{title}»",
@@ -1240,7 +1256,8 @@
           "rarity_desc": "Raridade ↓",
           "rarity_asc": "Raridade ↑",
           "completion_desc": "Conclusão ↓",
-          "completion_asc": "Conclusão ↑"
+          "completion_asc": "Conclusão ↑",
+          "class_order": "Ordem da turma"
         }
       },
       "rewards_form_modal": {

@@ -596,6 +596,27 @@
       },
       "custom_name": "El to avatar con IA",
       "custom_trait": "Xeneráu con IA"
+    },
+    "view_modes": {
+      "grid": "Cuadrícula",
+      "list": "Llista",
+      "map": "Mapa"
+    },
+    "mission_map": {
+      "title": "Mapa de misiones",
+      "beta": "Beta",
+      "beta_note": "Ta en pruebes: l'aspeutu y el funcionamientu puen camudar.",
+      "step": "Misión {n}",
+      "state": {
+        "completed": "Completada",
+        "in_progress": "En cursu: {progress} %",
+        "available": "Disponible",
+        "urgent": "Urxente: vence pronto",
+        "expired": "Caducada",
+        "locked": "Zarrada de momentu"
+      },
+      "completed_by": "Naide la completó entá: 0 de {total} | {done} de {total} completóla | {done} de {total} completáronla",
+      "no_students": "Entá nun hai alumnáu"
     }
   }
 }

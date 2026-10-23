@@ -30,6 +30,7 @@ import { assertNotManagedAccount } from '../../utils/identity-db.js'
 import { changeOwnPassword } from '../../utils/password-change.js'
 import { consumeRateLimit } from '../../utils/rate-limit.js'
 import { completedMissionsByStudent } from '../../utils/ranking.js'
+import { MISSION_ORDER } from '../../utils/mission-order.js'
 
 /** Matricularse en una clase es cosa de alumnos: el profesorado la mira con la vista previa. */
 function assertStudentRole(user: ClassUser) {
@@ -315,7 +316,8 @@ export class StudentsService {
         progress: { where: { studentId: userId } },
         class: true,
       },
-      orderBy: { createdAt: 'desc' },
+      // El orden de la progresión que fija el profesorado.
+      orderBy: MISSION_ORDER,
     })
 
     return {
@@ -778,7 +780,8 @@ export class StudentsService {
         progress: { where: { studentId: userId } },
         class: true,
       },
-      orderBy: { createdAt: 'desc' },
+      // Por clase y, dentro de cada una, en el orden de la progresión.
+      orderBy: [{ class: { name: 'asc' } }, { classId: 'asc' }, ...MISSION_ORDER],
     })
 
     return {

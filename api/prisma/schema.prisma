@@ -422,6 +422,11 @@ model Mission {
   // y el profesorado puede aprobar a todo un equipo de una vez); cada estudiante
   // sigue entregando lo suyo. No se copia entre clases: son estudiantes concretos.
   teamSetId       String?       @map("team_set_id")
+  // Orden de la progresión dentro de su clase (desde 0), el que fija el
+  // profesorado; a igualdad, la más antigua primero. Las nuevas, las importadas
+  // y las que llegan de otra clase van al final; las copias de una clase entera
+  // conservan el orden.
+  orderIndex      Int               @default(0) @map("order_index")
   createdAt       DateTime          @default(now()) @map("created_at")
   updatedAt       DateTime          @updatedAt @map("updated_at")
 
@@ -434,6 +439,7 @@ model Mission {
   hints     MissionHint[]
   hintUses  MissionHintUse[]
 
+  @@index([classId, orderIndex])
   @@map("missions")
 }
 

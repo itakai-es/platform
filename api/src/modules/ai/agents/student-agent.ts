@@ -3,6 +3,7 @@ import { BaseAgent, type AgentRequestContext } from './base-agent.js'
 import { getPlatformContext, getSkinName } from '../platform-context.js'
 import { INCLUSIVE_LANGUAGE_ES } from '../prompts/index.js'
 import { calculateMissionTotalXP } from '../../../utils/xp-calculator.js'
+import { sortByClassOrder } from '../../../utils/mission-order.js'
 import {
   assertMissionMember,
   passesAccessCheck,
@@ -66,12 +67,17 @@ export class StudentAgent extends BaseAgent {
           status: 'activa',
         },
         select: {
+          id: true,
+          classId: true,
+          orderIndex: true,
+          createdAt: true,
           title: true,
           description: true,
           rarity: true,
           class: { select: { name: true } },
           _count: { select: { enigmas: true } },
         },
+        // Las más recientes; se enseñan en el orden de la progresión de cada clase.
         orderBy: { createdAt: 'desc' },
         take: 10,
       }),
@@ -90,7 +96,7 @@ export class StudentAgent extends BaseAgent {
       ? missionProgress.map(item => `${item.mission.title} en ${item.mission.class.name} (${item.progress}%, ${item.mission._count.enigmas} enigmas)`).join('; ')
       : 'Sin misiones en progreso'
     const availableMissionsSummary = availableMissions.length > 0
-      ? availableMissions.map(m => `${m.title} en ${m.class.name} (${m.rarity}, ${m._count.enigmas} enigmas${m.description ? ': ' + m.description.slice(0, 80) : ''})`).join('; ')
+      ? sortByClassOrder(availableMissions).map(m => `${m.title} en ${m.class.name} (${m.rarity}, ${m._count.enigmas} enigmas${m.description ? ': ' + m.description.slice(0, 80) : ''})`).join('; ')
       : 'Sin misiones disponibles'
 
     const studentName = student?.name?.split(' ')[0] || ''

@@ -21,6 +21,12 @@ import {
 import { assignableBadgesWhere } from '../../utils/badge-access.js'
 import { missionHintsFor } from './mission-hints.service.js'
 import { rewardAfterHints } from '../../utils/mission-hints.js'
+import {
+  MISSION_ORDER,
+  lockMissionOrder,
+  mergeMissionOrder,
+  nextMissionOrderIndex,
+} from '../../utils/mission-order.js'
 import { NotFoundError, ValidationError } from '../../utils/errors.js'
 import { existsSync, mkdirSync } from 'fs'
 import {
@@ -240,7 +246,8 @@ export class MissionsService {
         progress: { where: { studentId: userId } },
         class: true,
       },
-      orderBy: { createdAt: 'desc' },
+      // Por clase y, dentro de cada una, en el orden de la progresión.
+      orderBy: [{ class: { name: 'asc' } }, { classId: 'asc' }, ...MISSION_ORDER],
     })
 
     return {
@@ -731,6 +738,8 @@ export class MissionsService {
           rarity: data.rarity || 'comun',
           deadline: data.deadline ? new Date(data.deadline) : null,
           backgroundImage,
+          // La nueva, al final del orden de la clase.
+          orderIndex: await nextMissionOrderIndex(tx, data.classId),
         },
       })
 
@@ -807,9 +816,12 @@ export class MissionsService {
     }
 
     const updated = await prisma.$transaction(async tx => {
+      // La que llega de otra clase va al final del orden de esa clase.
+      const moving = targetClassId !== mission.classId
       const saved = await tx.mission.update({
         where: { id: missionId },
         data: {
+          ...(moving ? { orderIndex: await nextMissionOrderIndex(tx, targetClassId) } : {}),
           classId: data.classId ?? mission.classId,
           title: data.title ?? mission.title,
           description: data.description ?? mission.description,
@@ -833,6 +845,63 @@ export class MissionsService {
       mission: updated,
       message: 'Misión actualizada correctamente',
     }
+  }
+
+  /**
+   * Ordena las misiones de una clase: el orden de la progresión, que siguen
+   * todos los listados. `missionIds` es el orden nuevo; un id de otra clase no
+   * cuenta y las que falten (creadas mientras tanto) quedan detrás, en el orden
+   * que tenían (ver `mergeMissionOrder`). Una sola entrada en el registro por
+   * cambio, sin títulos: el orden entero no cabe en una línea. Si no cambia nada,
+   * no se escribe ni se apunta nada.
+   */
+  async reorderMissions(userId: string, classId: string, missionIds: string[]) {
+    await assertClassAccess(classId, userId, 'mission.edit')
+
+    const order = await prisma.$transaction(async tx => {
+      await lockMissionOrder(tx, classId)
+      const current = await tx.mission.findMany({
+        where: { classId },
+        orderBy: MISSION_ORDER,
+        select: { id: true, orderIndex: true },
+      })
+      const next = mergeMissionOrder(
+        current.map(m => m.id),
+        missionIds
+      )
+      const changed = current.filter((m, index) => m.id !== next[index] || m.orderIndex !== index)
+      if (changed.length === 0) return next
+      // Una fila por misión, de una en una: van todas por la misma conexión.
+      // Se escribe por id y clase: si una misión se va a otra clase mientras
+      // tanto, Postgres vuelve a mirar el WHERE tras esperar su fila y se la
+      // salta, y la misión se queda al final de su clase nueva.
+      const gone = new Set<string>()
+      for (const [index, id] of next.entries()) {
+        const before = current.find(m => m.id === id)
+        if (before?.orderIndex === index) continue
+        const { count } = await tx.mission.updateMany({
+          where: { id, classId },
+          data: { orderIndex: index },
+        })
+        if (count === 0) gone.add(id)
+      }
+      const kept = next.filter(id => !gone.has(id))
+      const previous = current.map(m => m.id).filter(id => !gone.has(id))
+      const moved = kept.filter((id, index) => previous[index] !== id).length
+      if (moved > 0) {
+        await recordClassAction(tx, {
+          classId,
+          actorId: userId,
+          action: 'mission.reordered',
+          entityType: 'class',
+          entityId: classId,
+          metadata: { count: kept.length, moved },
+        })
+      }
+      return kept
+    })
+
+    return { order, message: 'Orden actualizado correctamente' }
   }
 
   // Teacher: Reorder enigmas

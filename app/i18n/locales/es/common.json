@@ -596,6 +596,27 @@
       },
       "custom_name": "Tu avatar con IA",
       "custom_trait": "Generado con IA"
+    },
+    "view_modes": {
+      "grid": "Cuadrícula",
+      "list": "Lista",
+      "map": "Mapa"
+    },
+    "mission_map": {
+      "title": "Mapa de misiones",
+      "beta": "Beta",
+      "beta_note": "Está en pruebas: su aspecto y su funcionamiento pueden cambiar.",
+      "step": "Misión {n}",
+      "state": {
+        "completed": "Completada",
+        "in_progress": "En curso: {progress} %",
+        "available": "Disponible",
+        "urgent": "Urgente: vence pronto",
+        "expired": "Expirada",
+        "locked": "Cerrada por tu docente"
+      },
+      "completed_by": "Nadie la ha completado aún: 0 de {total} | {done} de {total} la ha completado | {done} de {total} la han completado",
+      "no_students": "Aún no hay alumnado"
     }
   }
 }

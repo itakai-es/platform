@@ -303,10 +303,16 @@ describeWithDatabase('catálogo público de plantillas', () => {
     })
 
     // Contenido de la primera (con el maná apagado): dos misiones, tres objetos
-    // y dos comportamientos. La segunda misión, la más reciente, lleva enigmas
-    // con monedas y maná y todo lo que no sale en la ficha.
+    // y dos comportamientos. La segunda misión, la más reciente y la segunda en
+    // el orden de la clase, lleva enigmas con monedas y maná y todo lo que no
+    // sale en la ficha.
     const first = await prisma.mission.create({
-      data: { classId: t.maths, title: 'Primera', createdAt: new Date('2026-01-01T09:00:00Z') },
+      data: {
+        classId: t.maths,
+        title: 'Primera',
+        orderIndex: 0,
+        createdAt: new Date('2026-01-01T09:00:00Z'),
+      },
     })
     const second = await prisma.mission.create({
       data: {
@@ -317,6 +323,7 @@ describeWithDatabase('catálogo público de plantillas', () => {
         rarity: 'epica',
         deadline: hidden.deadline,
         backgroundImage: hidden.missionCover,
+        orderIndex: 1,
         createdAt: new Date('2026-01-02T09:00:00Z'),
       },
     })
@@ -741,22 +748,22 @@ describeWithDatabase('catálogo público de plantillas', () => {
       missionCount: 2,
       shopItemCount: 3,
       behaviorCount: 2,
-      // La más reciente, primero. Del maná no se dice nada: la plantilla lo lleva apagado.
+      // En el orden de la clase. Del maná no se dice nada: la plantilla lo lleva apagado.
       missions: [
-        {
-          title: 'Segunda',
-          rarity: 'epica',
-          enigmasCount: 2,
-          xpReward: MISSION_COMPLETION_BONUS.epica + 20 + 40,
-          coinReward: 3 + 4,
-          manaReward: 0,
-        },
         {
           title: 'Primera',
           rarity: 'comun',
           enigmasCount: 0,
           xpReward: MISSION_COMPLETION_BONUS.comun,
           coinReward: 0,
+          manaReward: 0,
+        },
+        {
+          title: 'Segunda',
+          rarity: 'epica',
+          enigmasCount: 2,
+          xpReward: MISSION_COMPLETION_BONUS.epica + 20 + 40,
+          coinReward: 3 + 4,
           manaReward: 0,
         },
       ],
@@ -826,7 +833,7 @@ describeWithDatabase('catálogo público de plantillas', () => {
     )
 
     const { missions } = (await get(`/public/templates/${t.maths}`)).json()
-    expect(missions.map((m: { title: string }) => m.title)).toEqual(['Segunda', 'Primera'])
+    expect(missions.map((m: { title: string }) => m.title)).toEqual(['Primera', 'Segunda'])
     for (const mission of missions) {
       expect(byTitle.get(mission.title), mission.title).toMatchObject({
         rarity: mission.rarity,
@@ -891,8 +898,8 @@ describeWithDatabase('catálogo público de plantillas', () => {
     }
 
     // Lo que desempata es el id; la ficha del profesorado lo enseña.
-    const byId = <T extends { id: string }>(rows: T[], desc = false) =>
-      [...rows].sort((a, b) => (a.id < b.id ? -1 : 1) * (desc ? -1 : 1)).map(row => row.id)
+    const byId = <T extends { id: string }>(rows: T[]) =>
+      [...rows].sort((a, b) => (a.id < b.id ? -1 : 1)).map(row => row.id)
     const teacher = (await get(`/teacher/templates/${t.percent}`, { actor: 'other' })).json()
     const alfas = items.filter(item => item.name === 'Alfa')
     expect(teacher.shopItems.map((item: { id: string }) => item.id)).toEqual([
@@ -901,10 +908,11 @@ describeWithDatabase('catálogo público de plantillas', () => {
     ])
     expect(teacher.behaviorTemplates.map((b: { id: string }) => b.id)).toEqual(byId(behaviors))
 
-    // Las misiones, de la más reciente a la más antigua: con la misma fecha, por id.
+    // Las misiones, en el orden de la clase: con la misma posición y la misma
+    // fecha, por id.
     const titleOf = new Map(missions.map(m => [m.id, m.title]))
     expect(teacher.missions.map((m: { title: string }) => m.title)).toEqual(
-      byId(missions, true).map(id => titleOf.get(id))
+      byId(missions).map(id => titleOf.get(id))
     )
 
     // La pública, sin ids, sale igual cada vez y en el mismo orden que la del profesorado.

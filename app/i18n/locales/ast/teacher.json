@@ -189,7 +189,14 @@
           "empty_search": "Nun s'atoparon misiones pa \"{query}\"",
           "empty_status": "Nun hai misiones colos estaos escoyíos",
           "empty_rarity": "Nun hai misiones coles rareces escoyíes",
-          "empty_default": "Nun hai misiones nesta clase"
+          "empty_default": "Nun hai misiones nesta clase",
+          "order": {
+            "button": "Ordenar",
+            "title": "Orde de la clase",
+            "hint": "L'alumnáu ve les misiones nesti orde. Arrastra cada filera pela so asa o, col tecláu, ponte na asa y usa les flechas arriba y abaxo. Cada cambéu guárdase al momentu.",
+            "done": "Fecho",
+            "error": "Nun se pudo guardar l'orde. Téntalo de nuevo."
+          }
         },
         "meta": {
           "title": "Detalle de clase | ITAKAI Docente",
@@ -353,6 +360,10 @@
             "sounds": {
               "label": "Sonidos",
               "desc": "Efeutos de soníu al xubir de nivel, completar misiones, etc."
+            },
+            "missionMap": {
+              "label": "Mapa de misiones",
+              "desc": "Una vista más en Misiones: el camín de la clase, nel orde que decidas."
             }
           },
           "requires": "Necesita {feature}",
@@ -428,7 +439,11 @@
               "error": "Nun se pudo unviar la clase a la papelera. Tórnalo a intentar."
             }
           },
-          "edit_level_note": "Pues camudar el nome, l'horariu y la portada. La clasificación, les funcionalidaes y los niveles cámudalos quien alministra la clase."
+          "edit_level_note": "Pues camudar el nome, l'horariu y la portada. La clasificación, les funcionalidaes y los niveles cámudalos quien alministra la clase.",
+          "beta": {
+            "title": "En pruebes",
+            "hint": "Funcionalidaes nueves que se tán probando. Vienen desactivaes d'entrada y l'aspeutu y el funcionamientu van axustase coles pruebes."
+          }
         },
         "badges_empty": "Nun hai insinies nesta clase",
         "archived_notice": "Esta clase ta archivada: pue consultase, pero nun almite más estudiantes.",
@@ -654,7 +669,8 @@
               "moved": "camudó de clase la misión «{title}»",
               "rewards_changed": "camudó la recompensa de la misión «{title}»",
               "imported": "importó la misión «{title}»",
-              "exported": "copió la misión «{title}» n'otra clase"
+              "exported": "copió la misión «{title}» n'otra clase",
+              "reordered": "camudó l'orde de les misiones"
             },
             "enigma": {
               "created": "amestó l'enigma «{title}»",
@@ -1240,7 +1256,8 @@
           "rarity_desc": "Rareza ↓",
           "rarity_asc": "Rareza ↑",
           "completion_desc": "Completáu ↓",
-          "completion_asc": "Completáu ↑"
+          "completion_asc": "Completáu ↑",
+          "class_order": "Orde de la clase"
         }
       },
       "rewards_form_modal": {

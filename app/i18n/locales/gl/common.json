@@ -596,6 +596,27 @@
       },
       "custom_name": "O teu avatar con IA",
       "custom_trait": "Xerado con IA"
+    },
+    "view_modes": {
+      "grid": "Grade",
+      "list": "Lista",
+      "map": "Mapa"
+    },
+    "mission_map": {
+      "title": "Mapa de misións",
+      "beta": "Beta",
+      "beta_note": "Está en probas: o seu aspecto e o seu funcionamento poden cambiar.",
+      "step": "Misión {n}",
+      "state": {
+        "completed": "Completada",
+        "in_progress": "En curso: {progress} %",
+        "available": "Dispoñible",
+        "urgent": "Urxente: vence axiña",
+        "expired": "Expirada",
+        "locked": "Pechada polo de agora"
+      },
+      "completed_by": "Ninguén a completou aínda: 0 de {total} | {done} de {total} completouna | {done} de {total} completárona",
+      "no_students": "Aínda non hai alumnado"
     }
   }
 }

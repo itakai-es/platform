@@ -189,7 +189,14 @@
           "empty_search": "Non se atoparon misións para \"{query}\"",
           "empty_status": "Non hai misións cos estados seleccionados",
           "empty_rarity": "Non hai misións coas rarezas seleccionadas",
-          "empty_default": "Non hai misións nesta clase"
+          "empty_default": "Non hai misións nesta clase",
+          "order": {
+            "button": "Ordenar",
+            "title": "Orde da clase",
+            "hint": "O alumnado ve as misións nesta orde. Arrastra cada fila pola súa asa ou, co teclado, ponte na asa e usa as frechas arriba e abaixo. Cada cambio gárdase ao momento.",
+            "done": "Feito",
+            "error": "Non se puido gardar a orde. Téntao de novo."
+          }
         },
         "meta": {
           "title": "Detalle de clase | ITAKAI Docente",
@@ -353,6 +360,10 @@
             "sounds": {
               "label": "Sons",
               "desc": "Efectos de son ao subir de nivel, completar misións, etc."
+            },
+            "missionMap": {
+              "label": "Mapa de misións",
+              "desc": "Unha vista máis en Misións: o camiño da clase, na orde que decidas."
             }
           },
           "requires": "Necesita {feature}",
@@ -428,7 +439,11 @@
               "error": "Non se puido enviar a clase á papeleira. Téntao de novo."
             }
           },
-          "edit_level_note": "Podes cambiar o nome, o horario e a portada. A clasificación, as funcionalidades e os niveis cámbiaos quen administra a clase."
+          "edit_level_note": "Podes cambiar o nome, o horario e a portada. A clasificación, as funcionalidades e os niveis cámbiaos quen administra a clase.",
+          "beta": {
+            "title": "En probas",
+            "hint": "Funcionalidades novas que se están a probar. Veñen desactivadas de entrada e o seu aspecto e funcionamento axustaranse coas probas."
+          }
         },
         "badges_empty": "Non hai insignias nesta clase",
         "archived_notice": "Esta clase está arquivada: pódese consultar, pero non admite máis estudantes.",
@@ -654,7 +669,8 @@
               "moved": "cambiou de clase a misión «{title}»",
               "rewards_changed": "cambiou a recompensa da misión «{title}»",
               "imported": "importou a misión «{title}»",
-              "exported": "copiou a misión «{title}» noutra clase"
+              "exported": "copiou a misión «{title}» noutra clase",
+              "reordered": "cambiou a orde das misións"
             },
             "enigma": {
               "created": "engadiu o enigma «{title}»",
@@ -1240,7 +1256,8 @@
           "rarity_desc": "Rareza ↓",
           "rarity_asc": "Rareza ↑",
           "completion_desc": "Completación ↓",
-          "completion_asc": "Completación ↑"
+          "completion_asc": "Completación ↑",
+          "class_order": "Orde da clase"
         }
       },
       "rewards_form_modal": {

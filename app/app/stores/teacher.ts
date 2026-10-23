@@ -27,6 +27,7 @@ import type {
   StudentListResponse,
 } from '~/types/teacher.types'
 import { canInClass } from '~/utils/class-access'
+import { orderByIds } from '~/utils/mission-sort'
 
 export const useTeacherStore = defineStore('teacher', () => {
   // State
@@ -682,6 +683,24 @@ export const useTeacherStore = defineStore('teacher', () => {
   }
 
   /**
+   * Ordena las misiones de una clase (el orden de la progresión que ve el
+   * alumnado). `missionIds` es el orden nuevo, de la primera a la última; la API
+   * devuelve el que ha quedado, con todas las de la clase. Se reordena la caché
+   * de sus misiones y el listado general se vuelve a pedir en la próxima visita.
+   */
+  async function reorderClassMissions(classId: string, missionIds: string[]) {
+    const config = useRuntimeConfig()
+    const { order } = await $fetch<{ order: string[] }>(
+      `${config.public.apiBase}/teacher/classes/${classId}/missions/order`,
+      { method: 'PUT', body: { ids: missionIds } }
+    )
+    const cached = classMissions.value.get(classId)
+    if (cached) classMissions.value.set(classId, orderByIds(cached, order))
+    hasLoadedMissions.value = false
+    return order
+  }
+
+  /**
    * Obtiene la guía de una clase
    */
   async function fetchClassGuide(classId: string, force = false) {
@@ -1166,6 +1185,7 @@ export const useTeacherStore = defineStore('teacher', () => {
     duplicateClass,
     getInvitationCode,
     fetchClassMissions,
+    reorderClassMissions,
     importMission,
     fetchClassGuide,
     updateClassGuideCache,

@@ -107,6 +107,7 @@ import { teacherMissionStatus } from '~/utils/mission-teacher-status'
 import { PlusIcon, RocketLaunchIcon, ArrowDownTrayIcon } from '@heroicons/vue/24/outline'
 import type { MissionStatus, MissionRarity } from '~/types/mission.types'
 import { canInClass } from '~/utils/class-access'
+import { DEFAULT_MISSION_SORT, sortMissions } from '~/utils/mission-sort'
 
 interface TeacherMission {
   id: string
@@ -123,6 +124,8 @@ interface TeacherMission {
   totalStudents: number
   deadline: string | null
   backgroundImage: string
+  /** Posición en el orden de su clase (el de la progresión). */
+  orderIndex?: number
 }
 
 interface ClassOption {
@@ -130,7 +133,7 @@ interface ClassOption {
   name: string
 }
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const view = useViewMode('teacher-missions')
 
 useHead({
@@ -159,7 +162,7 @@ const activeFilters = ref<string[]>([])
 const activeRarityFilters = ref<string[]>([])
 const activeStatusFilters = ref<string[]>([])
 const searchQuery = ref('')
-const sortBy = ref('deadline-asc')
+const sortBy = ref(DEFAULT_MISSION_SORT)
 
 // Use store data
 const missions = computed(() => teacherStore.recentMissions)
@@ -227,14 +230,6 @@ const filteredMissions = computed(() => {
   return result
 })
 
-// Rarity order for sorting
-const rarityOrder: Record<string, number> = {
-  comun: 1,
-  rara: 2,
-  epica: 3,
-  legendaria: 4,
-}
-
 const displayedMissions = computed(() => {
   let result = filteredMissions.value
 
@@ -249,40 +244,7 @@ const displayedMissions = computed(() => {
     )
   }
 
-  // Sort
-  const [field, order] = sortBy.value.split('-')
-  const sortedResult = [...result].sort((a, b) => {
-    let comparison = 0
-
-    switch (field) {
-      case 'title':
-        comparison = a.title.localeCompare(b.title, 'es')
-        break
-      case 'xp':
-        comparison = a.xpReward - b.xpReward
-        break
-      case 'deadline':
-        // null deadlines go to the end
-        if (!a.deadline && !b.deadline) comparison = 0
-        else if (!a.deadline) comparison = 1
-        else if (!b.deadline) comparison = -1
-        else comparison = new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
-        break
-      case 'rarity':
-        comparison = rarityOrder[a.rarity] - rarityOrder[b.rarity]
-        break
-      case 'completion':
-        // Sort by completion percentage
-        const aCompletion = a.totalStudents > 0 ? a.completedCount / a.totalStudents : 0
-        const bCompletion = b.totalStudents > 0 ? b.completedCount / b.totalStudents : 0
-        comparison = aCompletion - bCompletion
-        break
-    }
-
-    return order === 'desc' ? -comparison : comparison
-  })
-
-  return sortedResult
+  return sortMissions(result, sortBy.value, locale.value)
 })
 
 // Methods

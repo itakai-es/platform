@@ -41,12 +41,7 @@
             :save="saveOrder"
           >
             <template #leading="{ index }">
-              <span
-                class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-navy-700 text-sm font-bold text-white"
-                aria-hidden="true"
-              >
-                {{ index + 1 }}
-              </span>
+              <OrderNumber :value="index + 1" />
             </template>
 
             <template #main="{ item, index }">

@@ -53,6 +53,7 @@ import {
 } from '../templates/templates.service.js'
 import { missionRewards } from '../../utils/mission-formatter.js'
 import { completedMissionsByStudent } from '../../utils/ranking.js'
+import { MISSION_ORDER, nextMissionOrderIndex } from '../../utils/mission-order.js'
 
 const BADGES_DIR = join(process.cwd(), 'uploads', 'badges')
 const COVERS_DIR = join(process.cwd(), 'uploads', 'covers')
@@ -612,9 +613,14 @@ export class TeachersService {
    *   · features  → settings (funcionalidades); si no, defaults
    *   · shop      → items de la tienda
    *   · behaviors → plantillas de comportamiento
-   *   · missions  → misiones + sus enigmas, en el orden de `source.missions`
+   *   · missions  → misiones + sus enigmas, en el orden de `source.missions`,
+   *                 que pasa a ser el orden de la progresión de la copia
    *  Siempre deja fuera lo específico del origen: guía, metadatos de filtro,
-   *  alumnos y progreso. Lo comparten importar-plantilla y duplicar-clase. */
+   *  alumnos y progreso. Lo comparten importar-plantilla y duplicar-clase.
+   *
+   *  `afterCopy` recibe, además de la clase nueva, qué misión nueva salió de
+   *  cada una del origen (id del origen → id de la copia): lo que haga falta
+   *  rehacer entre misiones, dentro de la misma transacción. */
   private async copyClass(
     source: Prisma.ClassGetPayload<{ include: { shopItems: true; behaviorTemplates: true } }> & {
       missions?: MissionCopySource[]
@@ -628,7 +634,11 @@ export class TeachersService {
       /** Cómo se copia cada misión (ver `copyMissionInto`). Sin él, tal cual. */
       missionCopy?: MissionCopyOptions
       /** Lo que va en la misma transacción que la copia, con la clase nueva ya creada. */
-      afterCopy?: (tx: Prisma.TransactionClient, created: { id: string }) => Promise<unknown>
+      afterCopy?: (
+        tx: Prisma.TransactionClient,
+        created: { id: string },
+        copied: { missionIds: Map<string, string> }
+      ) => Promise<unknown>
     } = {}
   ) {
     const invitationCode = nanoid(6).toUpperCase()
@@ -695,14 +705,20 @@ export class TeachersService {
         // Misiones + enigmas: misión a misión (createMany no anida relaciones),
         // como diga `missionCopy`; sin él, tal cual (estado y fecha límite
         // incluidos) y sin documentos ni insignia. Nunca se copia el progreso
-        // de alumnos ni las entregas.
+        // de alumnos ni las entregas. Llegan en el orden de la progresión del
+        // origen y ese es su orden en la copia, numerado desde 0.
+        const missionIds = new Map<string, string>()
         if (options.missions && source.missions && source.missions.length > 0) {
-          for (const m of source.missions) {
-            await copyMissionInto(tx, m, newClass.id, missionCopy)
+          for (const [position, m] of source.missions.entries()) {
+            const copy = await copyMissionInto(tx, m, newClass.id, {
+              ...missionCopy,
+              orderIndex: position,
+            })
+            missionIds.set(m.id, copy.mission.id)
           }
         }
 
-        await afterCopy?.(tx, newClass)
+        await afterCopy?.(tx, newClass, { missionIds })
         return newClass
       },
       { timeout: 30000 }
@@ -714,8 +730,10 @@ export class TeachersService {
    *  si lo pide (`options.missions`), sus misiones con sus enigmas. Cada misión
    *  llega en el estado que tiene en la plantilla (activa o bloqueada), sin
    *  fecha límite (era del calendario de quien la publicó), sin documentos (son
-   *  ficheros privados suyos) y sin insignia. Todo en la misma transacción: si
-   *  algo falla, no queda una clase a medias.
+   *  ficheros privados suyos) y sin insignia. Las funcionalidades llegan todas
+   *  como estaban, también las que están en pruebas (el mapa de misiones), que la
+   *  ficha no enseña: van con las demás, como al duplicar. Todo en la misma
+   *  transacción: si algo falla, no queda una clase a medias.
    *
    *  Las portadas (la de la clase y las de sus misiones) solo llegan si son
    *  ficheros públicos de la plataforma, como en la ficha pública (ver
@@ -739,14 +757,13 @@ export class TeachersService {
     })
     if (!tpl) throw new NotFoundError('Plantilla no encontrada')
 
-    // De la más antigua a la más reciente: las copias se crean en ese orden y la
-    // clase nueva las enseña en el mismo que la plantilla.
+    // En el orden de la progresión de la plantilla: la clase nueva lo conserva.
     const [missions, publicCover] = await Promise.all([
       options.missions
         ? prisma.mission.findMany({
             where: { classId: tpl.id },
             include: MISSION_COPY_INCLUDE,
-            orderBy: [{ createdAt: 'asc' }, { id: 'asc' }],
+            orderBy: MISSION_ORDER,
           })
         : [],
       publicUploadResolver(),
@@ -788,7 +805,8 @@ export class TeachersService {
       include: {
         shopItems: true,
         behaviorTemplates: true,
-        missions: { include: MISSION_COPY_INCLUDE },
+        // En su orden: la copia conserva el orden de la progresión.
+        missions: { include: MISSION_COPY_INCLUDE, orderBy: MISSION_ORDER },
       },
     })
     if (!source) throw new NotFoundError('Clase no encontrada')
@@ -841,6 +859,8 @@ export class TeachersService {
           deadline: null,
           documents: true,
           badgeAuthorId: options.copyBadge ? userId : undefined,
+          // Al final del orden de la clase que la recibe.
+          orderIndex: await nextMissionOrderIndex(tx, options.targetClassId),
         })
         const copied = {
           enigmas: result.enigmas,
@@ -999,7 +1019,8 @@ export class TeachersService {
     const missions = await prisma.mission.findMany({
       where: { classId },
       include: { enigmas: true, progress: true },
-      orderBy: { createdAt: 'desc' },
+      // El orden de la progresión: el que ve el alumnado.
+      orderBy: MISSION_ORDER,
     })
 
     return {
@@ -1011,6 +1032,7 @@ export class TeachersService {
         rarity: m.rarity,
         deadline: m.deadline,
         backgroundImage: m.backgroundImage,
+        orderIndex: m.orderIndex,
         enigmasCount: m.enigmas.length,
         ...missionRewards(m),
         completedCount: m.progress.filter((p) => p.completedAt).length,
@@ -1404,7 +1426,9 @@ export class TeachersService {
         enigmas: true,
         progress: true,
       },
-      orderBy: { createdAt: 'desc' },
+      // De una clase, en el orden de la progresión. Todas juntas son «las
+      // recientes» (el tope se lleva las más nuevas): la pantalla las ordena.
+      orderBy: classIdFilter ? MISSION_ORDER : { createdAt: 'desc' },
       take: limit,
     })
 
@@ -1422,6 +1446,7 @@ export class TeachersService {
           rarity: m.rarity,
           deadline: m.deadline,
           backgroundImage: m.backgroundImage,
+          orderIndex: m.orderIndex,
           enigmasCount: m.enigmas.length,
           ...missionRewards(m, s),
           completedCount: m.progress.filter((p) => p.completedAt).length,

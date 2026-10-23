@@ -189,7 +189,14 @@
           "empty_search": "Ez da misiorik aurkitu \"{query}\" bilaketarako",
           "empty_status": "Ez dago hautatutako egoeretako misiorik",
           "empty_rarity": "Ez dago hautatutako bitxitasunekin misiorik",
-          "empty_default": "Ez dago misiorik klase honetan"
+          "empty_default": "Ez dago misiorik klase honetan",
+          "order": {
+            "button": "Ordenatu",
+            "title": "Klaseko ordena",
+            "hint": "Ikasleek ordena honetan ikusten dituzte misioak. Arrastatu errenkada bakoitza bere heldulekutik edo, teklatuarekin, joan heldulekura eta erabili gora eta behera geziak. Aldaketa bakoitza berehala gordetzen da.",
+            "done": "Eginda",
+            "error": "Ezin izan da ordena gorde. Saiatu berriro."
+          }
         },
         "meta": {
           "title": "Klasearen xehetasuna | ITAKAI Irakaslea",
@@ -353,6 +360,10 @@
             "sounds": {
               "label": "Soinuak",
               "desc": "Soinu-efektuak maila igotzean, misioak osatzean, etab."
+            },
+            "missionMap": {
+              "label": "Misioen mapa",
+              "desc": "Misioak atalean ikuspegi bat gehiago: klasearen bidea, zuk erabakitako ordenan."
             }
           },
           "requires": "{feature} behar du",
@@ -428,7 +439,11 @@
               "error": "Ezin izan da klasea zakarrontzira bidali. Saiatu berriro."
             }
           },
-          "edit_level_note": "Izena, ordutegia eta azala alda ditzakezu. Sailkapena, funtzionalitateak eta mailak klasea administratzen duenak aldatzen ditu."
+          "edit_level_note": "Izena, ordutegia eta azala alda ditzakezu. Sailkapena, funtzionalitateak eta mailak klasea administratzen duenak aldatzen ditu.",
+          "beta": {
+            "title": "Probetan",
+            "hint": "Probatzen ari diren funtzionalitate berriak. Hasieran desaktibatuta daude, eta itxura eta funtzionamendua proben arabera doituko dira."
+          }
         },
         "badges_empty": "Ez dago domarik klase honetan",
         "archived_notice": "Klase hau artxibatuta dago: kontsulta daiteke, baina ez du ikasle berririk onartzen.",
@@ -654,7 +669,8 @@
               "moved": "«{title}» misioaren klasea aldatu du",
               "rewards_changed": "«{title}» misioaren saria aldatu du",
               "imported": "«{title}» misioa inportatu du",
-              "exported": "«{title}» misioa beste klase batera kopiatu du"
+              "exported": "«{title}» misioa beste klase batera kopiatu du",
+              "reordered": "misioen ordena aldatu du"
             },
             "enigma": {
               "created": "«{title}» enigma gehitu du",
@@ -1240,7 +1256,8 @@
           "rarity_desc": "Bitxitasuna ↓",
           "rarity_asc": "Bitxitasuna ↑",
           "completion_desc": "Osatze-tasa ↓",
-          "completion_asc": "Osatze-tasa ↑"
+          "completion_asc": "Osatze-tasa ↑",
+          "class_order": "Klaseko ordena"
         }
       },
       "rewards_form_modal": {

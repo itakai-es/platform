@@ -596,6 +596,27 @@
       },
       "custom_name": "Your AI avatar",
       "custom_trait": "AI generated"
+    },
+    "view_modes": {
+      "grid": "Grid",
+      "list": "List",
+      "map": "Map"
+    },
+    "mission_map": {
+      "title": "Mission map",
+      "beta": "Beta",
+      "beta_note": "It's being tested: how it looks and works may change.",
+      "step": "Mission {n}",
+      "state": {
+        "completed": "Completed",
+        "in_progress": "In progress: {progress}%",
+        "available": "Available",
+        "urgent": "Urgent: due soon",
+        "expired": "Expired",
+        "locked": "Closed by your teacher"
+      },
+      "completed_by": "Nobody has completed it yet: 0 of {total} | {done} of {total} has completed it | {done} of {total} have completed it",
+      "no_students": "No students yet"
     }
   }
 }

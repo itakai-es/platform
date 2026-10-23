@@ -178,6 +178,8 @@ const classSettingsSchema = z
     lives: z.boolean(),
     visualEffects: z.boolean(),
     sounds: z.boolean(),
+    // En pruebas (beta): apagado de entrada.
+    missionMap: z.boolean(),
   })
   .partial()
 
@@ -287,10 +289,10 @@ const applyBehaviorSchema = z.object({
   studentId: z.string().uuid(),
 })
 
-const generateStudentAvatarSchema = z.object({
-  avatar_id: z.string().min(1),
-  wardrobe_prompt: z.string().min(1).max(500),
-  background_prompt: z.string().min(1).max(500),
+// El orden nuevo de las misiones de la clase: sus ids, de la primera a la última.
+// Lo que no sea de la clase no cuenta (ver missionsService.reorderMissions).
+const missionOrderSchema = z.object({
+  ids: z.array(z.string().max(64)).max(1000),
 })
 
 export async function teacherRoutes(fastify: FastifyInstance) {
@@ -713,6 +715,18 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
+
+  // Ordenar las misiones de la clase (el orden de la progresión): edición.
+  // Sin try/catch propio: el acceso (404/403) y la validación los resuelve el
+  // manejador global.
+  fastify.put(
+    '/classes/:classId/missions/order',
+    async (request: FastifyRequest<{ Params: { classId: string } }>) => {
+      const { id } = request.user as { id: string }
+      const { ids } = missionOrderSchema.parse(request.body)
+      return missionsService.reorderMissions(id, request.params.classId, ids)
+    }
+  )
 
   fastify.get('/classes/:classId/ranking', async (request: FastifyRequest<{ Params: { classId: string } }>, reply: FastifyReply) => {
     try {

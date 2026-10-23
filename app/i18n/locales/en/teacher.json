@@ -189,7 +189,14 @@
           "empty_search": "No missions found for \"{query}\"",
           "empty_status": "There are no missions with the selected statuses",
           "empty_rarity": "There are no missions with the selected rarities",
-          "empty_default": "There are no missions in this class"
+          "empty_default": "There are no missions in this class",
+          "order": {
+            "button": "Reorder",
+            "title": "Class order",
+            "hint": "Students see the missions in this order. Drag each row by its handle or, with the keyboard, move to the handle and use the up and down arrow keys. Each change is saved right away.",
+            "done": "Done",
+            "error": "The order couldn't be saved. Please try again."
+          }
         },
         "meta": {
           "title": "Class detail | ITAKAI Teacher",
@@ -353,6 +360,10 @@
             "sounds": {
               "label": "Sounds",
               "desc": "Sound effects when leveling up, completing missions, etc."
+            },
+            "missionMap": {
+              "label": "Mission map",
+              "desc": "One more view in Missions: the class path, in the order you choose."
             }
           },
           "requires": "Needs {feature}",
@@ -428,7 +439,11 @@
               "error": "The class couldn't be moved to the trash. Please try again."
             }
           },
-          "edit_level_note": "You can change the name, the schedule and the cover. The classification, features and levels are changed by whoever administers the class."
+          "edit_level_note": "You can change the name, the schedule and the cover. The classification, features and levels are changed by whoever administers the class.",
+          "beta": {
+            "title": "In testing",
+            "hint": "New features being tried out. They're off by default, and how they look and work will be adjusted as they're tested."
+          }
         },
         "badges_empty": "No badges in this class",
         "archived_notice": "This class is archived: you can still look through it, but it does not take new students.",
@@ -654,7 +669,8 @@
               "moved": "moved the mission “{title}” between classes",
               "rewards_changed": "changed the reward of the mission “{title}”",
               "imported": "imported the mission “{title}”",
-              "exported": "copied the mission “{title}” to another class"
+              "exported": "copied the mission “{title}” to another class",
+              "reordered": "changed the order of the missions"
             },
             "enigma": {
               "created": "added the enigma “{title}”",
@@ -1240,7 +1256,8 @@
           "rarity_desc": "Rarity ↓",
           "rarity_asc": "Rarity ↑",
           "completion_desc": "Completion ↓",
-          "completion_asc": "Completion ↑"
+          "completion_asc": "Completion ↑",
+          "class_order": "Class order"
         }
       },
       "rewards_form_modal": {

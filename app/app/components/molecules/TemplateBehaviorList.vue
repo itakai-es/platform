@@ -62,7 +62,7 @@
 <script setup lang="ts">
 import { HandRaisedIcon } from '@heroicons/vue/24/outline'
 import { HandThumbUpIcon, HandThumbDownIcon } from '@heroicons/vue/24/solid'
-import type { ClassSettings } from '~/types/class.types'
+import type { TemplateFeatures } from '~/types/class.types'
 import type { TemplateBehavior } from '~/types/template.types'
 import CoinIcon from '~/components/atoms/CoinIcon.vue'
 import XpIcon from '~/components/atoms/XpIcon.vue'
@@ -80,7 +80,7 @@ import ManaIcon from '~/components/atoms/ManaIcon.vue'
 const props = defineProps<{
   behaviors: TemplateBehavior[]
   /** Las funcionalidades de la plantilla, ya resueltas. */
-  features: ClassSettings
+  features: TemplateFeatures
 }>()
 
 const { t } = useI18n()

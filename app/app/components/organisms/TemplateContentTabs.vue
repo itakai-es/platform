@@ -31,7 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ClassSettings } from '~/types/class.types'
+import type { TemplateFeatures } from '~/types/class.types'
 import type { TemplateContents, TemplateStory } from '~/types/template.types'
 import { tabElementId, tabPanelId } from '~/utils/tabs'
 
@@ -51,7 +51,7 @@ type TabId = 'narrative' | 'features' | 'missions' | 'shop' | 'behaviors'
 const props = defineProps<{
   template: TemplateStory & TemplateContents
   /** Las funcionalidades de la plantilla, ya resueltas. */
-  features: ClassSettings
+  features: TemplateFeatures
 }>()
 
 const { t } = useI18n()

@@ -33,6 +33,19 @@
         v-if="can('mission.edit')"
         class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end"
       >
+        <!-- Ordenar: abre debajo la lista ordenable, en lugar de los filtros y las tarjetas. -->
+        <Button
+          v-if="canOrder"
+          :id="orderButtonId"
+          variant="outline"
+          class="w-full sm:w-auto"
+          :aria-expanded="ordering"
+          :aria-controls="orderPanelId"
+          @click="toggleOrdering"
+        >
+          <ArrowsUpDownIcon class="w-4 h-4 mr-2" aria-hidden="true" />
+          {{ t('teacher.classes.detail.missions_tab.order.button') }}
+        </Button>
         <Button :id="importButtonId" variant="outline" class="w-full sm:w-auto" @click="openImport">
           <ArrowDownTrayIcon class="w-4 h-4 mr-2" />
           {{ t('teacher.missions.import.button_in_class') }}
@@ -45,48 +58,95 @@
         </NuxtLink>
       </div>
 
-      <!-- Filtros -->
-      <MissionFilterBar
-        v-model:search="searchQuery"
-        v-model:rarity-filters="rarityFilters"
-        v-model:sort="sortBy"
-        v-model:status-filters="statusFilters"
-        v-model:view="view"
-        :results-count="displayed.length"
-        show-status-filter
-        @reset="resetFilters"
-      />
+      <!-- Ordenar: el orden de la progresión, el que ve el alumnado. Sin filtros:
+           se ordena la clase entera. -->
+      <div v-if="ordering" :id="orderPanelId">
+        <SettingsSection
+          :title="t('teacher.classes.detail.missions_tab.order.title')"
+          :hint="t('teacher.classes.detail.missions_tab.order.hint')"
+        >
+          <template #actions>
+            <Button variant="primary" size="sm" @click="stopOrdering">
+              {{ t('teacher.classes.detail.missions_tab.order.done') }}
+            </Button>
+          </template>
+          <!-- `overflow-hidden` redondea el fondo de las filas, como en las pistas. -->
+          <div class="overflow-hidden rounded-xl border border-border-primary">
+            <AdminSortableList
+              :items="orderedMissions"
+              :item-label="mission => mission.title"
+              :save="saveOrder"
+            >
+              <template #leading="{ index }">
+                <OrderNumber :value="index + 1" />
+              </template>
+              <template #main="{ item }">
+                <p class="break-words font-semibold text-navy-700">{{ item.title }}</p>
+                <p class="text-xs text-navy-700/70">
+                  {{ statusLabel(item) }}
+                </p>
+              </template>
+              <template #meta="{ item }">
+                <RarityBadge v-if="item.rarity" :rarity="item.rarity" />
+              </template>
+            </AdminSortableList>
+          </div>
+        </SettingsSection>
+      </div>
 
-      <!-- Vacío tras filtros -->
-      <EmptyState
-        v-if="displayed.length === 0"
-        :icon="RocketLaunchIcon"
-        :title="t('teacher.classes.detail.missions_tab.no_results')"
-        :description="emptyMessage"
-      />
-
-      <!-- Grid / Lista -->
-      <CardCollection v-else :view="view">
-        <MissionCardEnhanced
-          v-for="mission in displayed"
-          :id="mission.id"
-          :key="mission.id"
-          :title="mission.title"
-          :description="mission.description"
-          :status="mission.status"
-          :rarity="mission.rarity"
-          :completed-count="mission.completedCount"
-          :total-students="mission.totalStudents"
-          :deadline="mission.deadline"
-          :xp-reward="mission.xpReward"
-          :coin-reward="mission.coinReward"
-          :mana-reward="mission.manaReward"
-          :background-image="mission.backgroundImage"
-          :layout="view"
-          compact
-          @click="navigateToMission(mission.id)"
+      <template v-else>
+        <!-- Filtros (en el mapa no hay: va la clase entera, en su orden) -->
+        <MissionFilterBar
+          v-model:search="searchQuery"
+          v-model:rarity-filters="rarityFilters"
+          v-model:sort="sortBy"
+          v-model:status-filters="statusFilters"
+          v-model:view="view"
+          :view-modes="viewModes"
+          :results-count="view === 'map' ? orderedMissions.length : displayed.length"
+          show-status-filter
+          @reset="resetFilters"
         />
-      </CardCollection>
+
+        <!-- Mapa (en pruebas, si la clase lo tiene encendido) -->
+        <MissionMap
+          v-if="view === 'map'"
+          :missions="orderedMissions"
+          mode="teacher"
+          :class-id="classId"
+        />
+
+        <!-- Vacío tras filtros -->
+        <EmptyState
+          v-else-if="displayed.length === 0"
+          :icon="RocketLaunchIcon"
+          :title="t('teacher.classes.detail.missions_tab.no_results')"
+          :description="emptyMessage"
+        />
+
+        <!-- Grid / Lista -->
+        <CardCollection v-else :view="view">
+          <MissionCardEnhanced
+            v-for="mission in displayed"
+            :id="mission.id"
+            :key="mission.id"
+            :title="mission.title"
+            :description="mission.description"
+            :status="mission.status"
+            :rarity="mission.rarity"
+            :completed-count="mission.completedCount"
+            :total-students="mission.totalStudents"
+            :deadline="mission.deadline"
+            :xp-reward="mission.xpReward"
+            :coin-reward="mission.coinReward"
+            :mana-reward="mission.manaReward"
+            :background-image="mission.backgroundImage"
+            :layout="view"
+            compact
+            @click="navigateToMission(mission.id)"
+          />
+        </CardCollection>
+      </template>
     </template>
 
     <!-- Importar una misión de otra clase: una copia que llega bloqueada -->
@@ -103,23 +163,32 @@
 
 <script setup lang="ts">
 import { teacherMissionStatus } from '~/utils/mission-teacher-status'
-import { RocketLaunchIcon, PlusIcon, ArrowDownTrayIcon } from '@heroicons/vue/24/outline'
+import { DEFAULT_MISSION_SORT, orderByIds, sortMissions } from '~/utils/mission-sort'
+import type { ViewMode } from '~/composables/useViewMode'
+import {
+  RocketLaunchIcon,
+  PlusIcon,
+  ArrowDownTrayIcon,
+  ArrowsUpDownIcon,
+} from '@heroicons/vue/24/outline'
 
 definePageMeta({ layout: 'teacher', middleware: ['auth', 'role'] })
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const route = useRoute()
 const classId = computed(() => route.params.id as string)
-const { state, can } = useTeacherClassDetail(classId)
-const view = useViewMode('teacher-class-missions')
+const { state, can, classSettings } = useTeacherClassDetail(classId)
+// El mapa es una vista más, solo en las clases que lo tienen encendido (en pruebas).
+const viewModes = computed<ViewMode[]>(() =>
+  classSettings.value.missionMap ? ['grid', 'list', 'map'] : ['grid', 'list']
+)
+const view = useViewMode('teacher-class-missions', 'grid', viewModes)
 
 // Filtros (estado local de la tab).
 const searchQuery = ref('')
 const rarityFilters = ref<string[]>([])
 const statusFilters = ref<string[]>([])
-const sortBy = ref('deadline-asc')
-
-const rarityOrder: Record<string, number> = { comun: 1, rara: 2, epica: 3, legendaria: 4 }
+const sortBy = ref(DEFAULT_MISSION_SORT)
 
 const displayed = computed(() => {
   let result = [...state.value.missions]
@@ -135,35 +204,7 @@ const displayed = computed(() => {
       m => m.title.toLowerCase().includes(query) || m.description?.toLowerCase().includes(query)
     )
   }
-  const [field, order] = sortBy.value.split('-')
-  result.sort((a, b) => {
-    let comparison = 0
-    switch (field) {
-      case 'title':
-        comparison = a.title.localeCompare(b.title, 'es')
-        break
-      case 'xp':
-        comparison = (a.xpReward || 0) - (b.xpReward || 0)
-        break
-      case 'deadline':
-        if (!a.deadline && !b.deadline) comparison = 0
-        else if (!a.deadline) comparison = 1
-        else if (!b.deadline) comparison = -1
-        else comparison = new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
-        break
-      case 'rarity':
-        comparison = (rarityOrder[a.rarity] || 0) - (rarityOrder[b.rarity] || 0)
-        break
-      case 'completion': {
-        const aC = a.totalStudents > 0 ? a.completedCount / a.totalStudents : 0
-        const bC = b.totalStudents > 0 ? b.completedCount / b.totalStudents : 0
-        comparison = aC - bC
-        break
-      }
-    }
-    return order === 'desc' ? -comparison : comparison
-  })
-  return result
+  return sortMissions(result, sortBy.value, locale.value)
 })
 
 function resetFilters() {
@@ -201,6 +242,51 @@ const headerImportButton = () => document.getElementById(importButtonId)
 function openImport() {
   importOpen.value = true
 }
+
+// ---- Ordenar: el orden de la progresión de la clase ----
+// Se ofrece con edición y a partir de dos misiones. Cada cambio (al soltar una
+// fila o al moverla con las flechas) se guarda al momento, sin botón de guardar:
+// «Hecho» solo cierra la lista.
+const toast = useToast()
+const ordering = ref(false)
+const orderButtonId = useId()
+const orderPanelId = useId()
+const canOrder = computed(() => can('mission.edit') && state.value.missions.length > 1)
+// La clase entera en su orden, sin filtros: es lo que se ordena.
+const orderedMissions = computed(() => sortMissions(state.value.missions, DEFAULT_MISSION_SORT))
+
+function toggleOrdering() {
+  ordering.value = !ordering.value
+}
+
+/** Cierra la lista y devuelve el foco al botón que la abrió. */
+async function stopOrdering() {
+  ordering.value = false
+  await nextTick()
+  document.getElementById(orderButtonId)?.focus()
+}
+
+/** Estado de la misión para el profesorado, como en el filtro. */
+const missionStatusLabel = useMissionStatusLabel()
+function statusLabel(mission: Parameters<typeof teacherMissionStatus>[0]) {
+  return missionStatusLabel(teacherMissionStatus(mission))
+}
+
+async function saveOrder(ids: string[]) {
+  try {
+    const order = await teacherStore.reorderClassMissions(classId.value, ids)
+    state.value.missions = orderByIds(state.value.missions, order)
+    return true
+  } catch {
+    toast.error(t('teacher.classes.detail.missions_tab.order.error'))
+    return false
+  }
+}
+
+// Sin misiones suficientes (o sin edición) no hay nada que ordenar.
+watch(canOrder, value => {
+  if (!value) ordering.value = false
+})
 
 async function refreshMissions() {
   try {

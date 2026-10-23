@@ -49,6 +49,8 @@ export interface StudentMission {
   progress: number
   timeRemaining?: string
   deadline?: string | null
+  /** Posición en el orden de su clase (el de la progresión). */
+  orderIndex?: number
   xpReward: number
   coinReward?: number
   manaReward?: number

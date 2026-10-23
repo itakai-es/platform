@@ -5,6 +5,11 @@
  * so existing classes keep every feature on and adding a new flag never needs
  * a data backfill.
  *
+ * Salvo las que están en pruebas (beta), que van apagadas mientras nadie las
+ * encienda, también en las clases que ya existían: hoy, el mapa de misiones
+ * (`missionMap`). Tampoco necesitan relleno: `resolveClassSettings` parte de
+ * estos valores por defecto.
+ *
  * Dependencies between features are enforced by `normalizeClassSettings` so the
  * stored/returned config can never be incoherent (e.g. shop on without coins).
  */
@@ -18,7 +23,12 @@ export interface ClassSettings {
   lives: boolean
   visualEffects: boolean
   sounds: boolean
+  /** Mapa de misiones (beta): una vista más en Misiones, con el orden de la clase. */
+  missionMap: boolean
 }
+
+/** Las que enseña la ficha de una plantilla: todas menos las que están en pruebas. */
+export type TemplateFeatures = Omit<ClassSettings, 'missionMap'>
 
 export const DEFAULT_CLASS_SETTINGS: ClassSettings = {
   shop: true,
@@ -30,6 +40,7 @@ export const DEFAULT_CLASS_SETTINGS: ClassSettings = {
   lives: true,
   visualEffects: true,
   sounds: true,
+  missionMap: false,
 }
 
 /**
@@ -93,4 +104,13 @@ export function resolveClassSettings(raw: unknown): ClassSettings {
     }
   }
   return normalizeClassSettings(resolved)
+}
+
+/**
+ * Las funcionalidades de una plantilla tal como las enseña su ficha: las de la
+ * clase, ya resueltas, sin las que están en pruebas.
+ */
+export function templateFeatures(raw: unknown): TemplateFeatures {
+  const { missionMap: _beta, ...features } = resolveClassSettings(raw)
+  return features
 }
