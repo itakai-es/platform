@@ -153,6 +153,12 @@ function normalizeItemType(data: { kind?: string; manaCost?: number; usage?: str
   }
 }
 
+
+/** Bloquea la matrícula hasta el final de la transacción (si no existe, no bloquea nada). */
+async function lockEnrollment(tx: Prisma.TransactionClient, studentId: string, classId: string) {
+  await tx.$queryRaw`SELECT id FROM class_enrollments WHERE student_id = ${studentId} AND class_id = ${classId} FOR UPDATE`
+}
+
 export class ShopService {
   // ==================== STUDENT ====================
 
@@ -255,6 +261,9 @@ export class ShopService {
       if (!settings.shop || !settings.mana)
         throw new Error('Los poderes están desactivados en esta clase')
 
+      // Una persona, una operación a la vez: con la matrícula bloqueada, dos compras o
+      // dos usos simultáneos no pueden gastar el mismo saldo ni la misma carga.
+      await lockEnrollment(tx, studentId, classId)
       const enrollment = await tx.classEnrollment.findUnique({
         where: { studentId_classId: { studentId, classId } },
         select: { mana: true, avatarUrl: true, nickname: true },
@@ -326,6 +335,9 @@ export class ShopService {
       const settings = await getClassSettings(classId, tx)
       if (!settings.shop) throw new Error('La tienda está desactivada en esta clase')
 
+      // Una persona, una operación a la vez: con la matrícula bloqueada, dos compras o
+      // dos usos simultáneos no pueden gastar el mismo saldo ni la misma carga.
+      await lockEnrollment(tx, studentId, classId)
       const enrollment = await tx.classEnrollment.findUnique({
         where: { studentId_classId: { studentId, classId } },
         select: { coins: true, avatarUrl: true, nickname: true },
