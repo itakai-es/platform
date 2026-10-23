@@ -203,6 +203,8 @@ export const useAuthStore = defineStore('auth', () => {
       // cortarían el resto.
       useNotificationsStore().reset()
       useCredentialsSheetStore().reset()
+      // El perfil también: si no, quien entre después ve el de la cuenta anterior.
+      useProfileStore().$reset()
 
       // Reset all other stores to avoid data leakage between users
       try {
@@ -236,6 +238,7 @@ export const useAuthStore = defineStore('auth', () => {
       // las contraseñas de la última hoja de credenciales.
       useNotificationsStore().reset()
       useCredentialsSheetStore().reset()
+      useProfileStore().$reset()
     }
   }
 

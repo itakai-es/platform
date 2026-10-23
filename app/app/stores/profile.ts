@@ -81,7 +81,9 @@ export const useProfileStore = defineStore('profile', () => {
    * y si el perfil ya está cargado simplemente sale sin llamar a la API.
    */
   const ensureProfile = async (force = false) => {
-    if (hasLoadedProfile.value && !force) return
+    // Un perfil cargado de otra cuenta (otra sesión en el mismo navegador) no vale.
+    const stale = !!profile.value && profile.value.id !== authStore.user?.id
+    if (hasLoadedProfile.value && !force && !stale) return
     if (loading.value) return
 
     loading.value = true
