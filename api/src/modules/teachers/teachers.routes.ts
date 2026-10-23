@@ -1100,7 +1100,9 @@ export async function teacherRoutes(fastify: FastifyInstance) {
         title: body.title,
         description: body.description,
         classId: body.classId,
-        status: body.status === 'publicada' ? 'activa' : body.status === 'borrador' ? 'bloqueada' : (body.status || 'activa'),
+        // Sin estado en la petición (al guardar solo la historia, por ejemplo) se queda el
+        // que tenía: antes se ponía «activa» y la misión se desbloqueaba sin querer.
+        status: body.status === 'publicada' ? 'activa' : body.status === 'borrador' ? 'bloqueada' : body.status || undefined,
         rarity: body.rarity,
         deadline: body.dueDate || body.deadline,
       }
