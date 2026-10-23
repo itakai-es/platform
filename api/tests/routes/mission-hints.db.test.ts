@@ -6,10 +6,11 @@ import type { FastifyInstance } from 'fastify'
 /**
  * Pistas en las misiones (E1, entregas 1 y 2). El profesorado las escribe, las
  * ordena y les pone un coste en monedas o XP; viajan con la misión al importarla,
- * al duplicar la clase y al importar una plantilla, nunca con sus usos. El
- * alumnado ve cuántas hay y lo que cuestan, el texto solo de las que ha usado, y
- * las usa en orden pagando al momento: el cobro es condicional y va con su
- * matrícula bloqueada, así que no hay carreras ni saldos negativos.
+ * al duplicar la clase y al importar una plantilla, nunca con sus usos, y salen
+ * en su descarga de datos. El alumnado ve cuántas hay y lo que cuestan, el texto
+ * solo de las que ha usado, y las usa en orden pagando al momento: el cobro es
+ * condicional y va con su matrícula bloqueada, así que no hay carreras ni saldos
+ * negativos. Lo que usó sale en su descarga de datos.
  *
  * Usa Fastify, JWT, servicios y Postgres de verdad: necesita TEST_DATABASE_URL
  * (ver tests/helpers/test-db.ts).
@@ -32,6 +33,7 @@ import {
 import { missionsRoutes } from '../../src/modules/missions/missions.routes.js'
 import { teacherRoutes } from '../../src/modules/teachers/teachers.routes.js'
 import { useHint } from '../../src/modules/missions/mission-hints.service.js'
+import { profileService } from '../../src/modules/profile/profile.service.js'
 import { deleteEnrollmentData } from '../../src/modules/teachers/class-students.service.js'
 import { HINT_LIMITS } from '../../src/utils/mission-hints.js'
 import { getLevelFromXP } from '../../src/utils/xp-calculator.js'
@@ -474,6 +476,38 @@ describeWithDatabase('pistas en las misiones', () => {
         ])
         expect(await prisma.missionHintUse.count({ where: { missionId: copy.id } })).toBe(0)
       }
+    })
+  })
+
+  describe('«Descargar mis datos»', () => {
+    it('la del docente lleva las pistas de cada misión en su orden; la del estudiante, las que usó', async () => {
+      const { missionId, hintIds } = await missionWithHints([
+        ['coins', 5],
+        ['xp', 3],
+      ])
+      // La primera que se creó pasa al final: sale el orden que fija el profesorado.
+      await prisma.missionHint.update({ where: { id: hintIds[0] }, data: { orderIndex: 5 } })
+      await prisma.missionHintUse.create({
+        data: { hintId: hintIds[1], missionId, studentId: f.users.student.id, costType: 'xp', cost: 3 },
+      })
+
+      const teacher = await profileService.exportUserData(f.users.owner.id)
+      const mission = teacher.teacherData.classes
+        .flatMap(cls => cls.missions)
+        .find(m => m.id === missionId)
+      expect(mission?.hints.map(h => [h.id, h.costType, h.cost])).toEqual([
+        [hintIds[1], 'xp', 3],
+        [hintIds[0], 'coins', 5],
+      ])
+      expect(mission?.hints[0]?.content).toMatch(/^Pista 2 de /)
+
+      const student = await profileService.exportUserData(f.users.student.id)
+      expect(student.studentData.hintUses).toContainEqual(
+        expect.objectContaining({ hintId: hintIds[1], missionId, costType: 'xp', cost: 3 })
+      )
+      // Lo que no es suyo no sale: ni el texto de las pistas ni los usos de otros.
+      expect(student.teacherData.classes).toEqual([])
+      expect(student.studentData.hintUses.every(u => u.studentId === f.users.student.id)).toBe(true)
     })
   })
 

@@ -323,6 +323,16 @@ export function useActivityFormatter(perspective: 'student' | 'teacher' = 'stude
             break
           }
 
+          // La app ya no empieza las misiones a mano, pero quedan entradas guardadas.
+          case 'mission_started': {
+            const params = { mission: `<strong>"${esc(activity.missionTitle || '')}"</strong>` }
+            description = isTeacher
+              ? t('common.activity_feed.mission_started_teacher', params)
+              : t('common.activity_feed.mission_started_student', params)
+            badge = undefined
+            break
+          }
+
           default:
             console.error(`[ActivityFormatter] Unknown activity type:`, {
               type: activity.type,

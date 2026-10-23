@@ -1,4 +1,5 @@
 import type { MissionStatus, MissionRarity } from '~/types/mission.types'
+import { resolveDateLocale } from '~/utils/notifications'
 
 /**
  * Props compartidas por todas las representaciones de una tarjeta de misión
@@ -37,7 +38,7 @@ export interface MissionCardProps {
  * cálculos de estado, progreso, recompensas o navegación.
  */
 export function useMissionCard(props: MissionCardProps, emit: (e: 'click') => void) {
-  const { t } = useI18n()
+  const { t, locale } = useI18n()
   const toast = useToast()
   const { getImageUrl } = useImageUrl()
 
@@ -78,11 +79,21 @@ export function useMissionCard(props: MissionCardProps, emit: (e: 'click') => vo
       props.earnedMana < props.manaReward
   )
 
+  // En el idioma de la app, no en el del navegador (ver resolveDateLocale).
   const formattedDeadline = computed(() => {
     if (!props.deadline) return null
     const date = new Date(props.deadline)
-    return date.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })
+    return date.toLocaleDateString(resolveDateLocale(locale.value), {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+    })
   })
+  const expiredOnLabel = computed(() =>
+    formattedDeadline.value
+      ? t('student.missions.expired_on', { date: formattedDeadline.value })
+      : null
+  )
 
   // Profesor: misión completada por todos los estudiantes.
   const isFullyCompletedTeacher = computed(() => {
@@ -109,17 +120,10 @@ export function useMissionCard(props: MissionCardProps, emit: (e: 'click') => vo
     return `/alumno/misiones/${props.id}`
   })
 
-  const statusLabel = computed(() => {
-    const labels: Record<MissionStatus, string> = {
-      urgente: 'Urgente',
-      activa: 'Activa',
-      completada: 'Completada',
-      bloqueada: 'Bloqueada',
-      expirada: 'Expirada',
-      pendiente: 'Pendiente',
-    }
-    return labels[props.status]
-  })
+  // El mismo nombre que en el filtro de estado y en el mapa, en el idioma de la
+  // app. La insignia solo sale con urgente, expirada o bloqueada.
+  const missionStatusLabel = useMissionStatusLabel()
+  const statusLabel = computed(() => missionStatusLabel(props.status))
 
   // La insignia de estado solo se muestra para urgente/expirada, o bloqueada en
   // modo profesor, y nunca cuando ya está completada por todos.
@@ -162,6 +166,7 @@ export function useMissionCard(props: MissionCardProps, emit: (e: 'click') => vo
     showEarnedCoins,
     showEarnedMana,
     formattedDeadline,
+    expiredOnLabel,
     isFullyCompletedTeacher,
     progressValue,
     missionLink,

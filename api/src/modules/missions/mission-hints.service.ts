@@ -35,7 +35,7 @@ import { getLevelFromXP } from '../../utils/xp-calculator.js'
 type Db = Prisma.TransactionClient
 
 /** Orden de las pistas: el que fija el profesorado; a igualdad, la más antigua primero. */
-const HINT_ORDER: Prisma.MissionHintOrderByWithRelationInput[] = [
+export const HINT_ORDER: Prisma.MissionHintOrderByWithRelationInput[] = [
   { orderIndex: 'asc' },
   { createdAt: 'asc' },
   { id: 'asc' },

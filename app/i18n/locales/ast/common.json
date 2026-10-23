@@ -569,7 +569,9 @@
       "hint_used_percent_student": "Usesti la pista {position} de {mission}: −{count} % en lo que te quedaba por cobrar",
       "hint_used_percent_teacher": "Usó la pista {position} de {mission}: −{count} % en lo que-y quedaba por cobrar",
       "enigma_approved_student": "Aprobáronte la entrega de {enigma}",
-      "enigma_approved_teacher": "Recibió l'aprobación de la so entrega de {enigma}"
+      "enigma_approved_teacher": "Recibió l'aprobación de la so entrega de {enigma}",
+      "mission_started_student": "Entamesti la misión {mission}",
+      "mission_started_teacher": "Entamó la misión {mission}"
     },
     "avatars": {
       "characters": {

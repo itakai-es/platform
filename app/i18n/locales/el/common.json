@@ -569,7 +569,9 @@
       "hint_used_percent_student": "Χρησιμοποίησες την υπόδειξη {position} της αποστολής {mission}: −{count}% σε όσα σου έμεναν να κερδίσεις",
       "hint_used_percent_teacher": "Χρησιμοποίησε την υπόδειξη {position} της αποστολής {mission}: −{count}% σε όσα του/της έμεναν να κερδίσει",
       "enigma_approved_student": "Η υποβολή σου για {enigma} εγκρίθηκε",
-      "enigma_approved_teacher": "Η υποβολή του/της για {enigma} εγκρίθηκε"
+      "enigma_approved_teacher": "Η υποβολή του/της για {enigma} εγκρίθηκε",
+      "mission_started_student": "Ξεκίνησες την αποστολή {mission}",
+      "mission_started_teacher": "Ξεκίνησε την αποστολή {mission}"
     },
     "avatars": {
       "characters": {

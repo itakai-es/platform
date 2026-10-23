@@ -161,7 +161,7 @@
             class="flex items-center gap-1 text-gray-500"
           >
             <ClockIcon class="w-3.5 h-3.5" />
-            <span>Venció: {{ formattedDeadline }}</span>
+            <span>{{ expiredOnLabel }}</span>
           </div>
         </div>
       </div>
@@ -198,6 +198,7 @@ const {
   showEarnedCoins,
   showEarnedMana,
   formattedDeadline,
+  expiredOnLabel,
   isFullyCompletedTeacher,
   progressValue,
   missionLink,

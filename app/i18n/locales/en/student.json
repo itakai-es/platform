@@ -62,7 +62,8 @@
         "en_progreso": "In progress"
       },
       "locked_toast": "Your teacher has closed this mission for now. You can go in once it is opened.",
-      "locked_aria": "{title}: mission closed for now"
+      "locked_aria": "{title}: mission closed for now",
+      "expired_on": "Expired: {date}"
     },
     "mission_detail": {
       "meta": {

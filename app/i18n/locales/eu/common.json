@@ -569,7 +569,9 @@
       "hint_used_percent_student": "{mission} misioaren {position}. pista erabili duzu: −%{count} kobratzeko zenuenean",
       "hint_used_percent_teacher": "{mission} misioaren {position}. pista erabili du: −%{count} kobratzeko zuenean",
       "enigma_approved_student": "{enigma} entrega onartu dizute",
-      "enigma_approved_teacher": "{enigma} entrega onartu diote"
+      "enigma_approved_teacher": "{enigma} entrega onartu diote",
+      "mission_started_student": "{mission} misioa hasi duzu",
+      "mission_started_teacher": "{mission} misioa hasi du"
     },
     "avatars": {
       "characters": {

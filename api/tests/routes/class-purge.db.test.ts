@@ -11,7 +11,8 @@ import { randomUUID } from 'node:crypto'
  * las cuentas sin correo siguen la regla de quitar a un alumno, que los
  * ficheros compartidos con otra clase se quedan, que la tarea solo toca lo
  * vencido, que una segunda pasada no hace nada y que una clase restaurada a
- * tiempo no se purga.
+ * tiempo no se purga. Los avatares generados con IA de las matrículas se borran
+ * con la clase, y con la cuenta de quien los tenía, si nadie más los usa.
  *
  * Usa Fastify, JWT, servicios y Postgres de verdad: necesita TEST_DATABASE_URL
  * (ver tests/helpers/test-db.ts). El borrado de ficheros se simula: no se toca
@@ -189,6 +190,9 @@ describeWithDatabase('purga de la papelera de clases', () => {
         submission: `/uploads/submissions/${unique()}.pdf`,
         // Una portada que apunta a una imagen de otra carpeta no es de la clase.
         foreignImage: `/uploads/help/${unique()}.png`,
+        // Avatares generados con IA de sus matrículas: públicos en su dirección.
+        ownAvatar: `/uploads/ai-generated/avatars/avatar-${unique()}.png`,
+        sharedAvatar: `/uploads/ai-generated/avatars/avatar-${unique()}.png`,
       }
 
       const expired = await newClass('Vencida', {
@@ -236,14 +240,24 @@ describeWithDatabase('purga de la papelera de clases', () => {
         accountType: 'managed',
         homeClassId: expired,
       })
+      const avatarOf = {
+        [student.id]: files.ownAvatar,
+        [unusedAccount.id]: '/app/avatars/atenea.svg',
+        [usedAccount.id]: files.sharedAvatar,
+      }
       for (const id of [student.id, unusedAccount.id, usedAccount.id]) {
-        await prisma.classEnrollment.create({ data: { classId: expired, studentId: id } })
+        await prisma.classEnrollment.create({
+          data: { classId: expired, studentId: id, avatarUrl: avatarOf[id] },
+        })
       }
       // La usada inició sesión alguna vez y además está en otra clase.
       await prisma.refreshToken.create({
         data: { token: unique(), userId: usedAccount.id, expiresAt: new Date(Date.now() + DAY) },
       })
-      await prisma.classEnrollment.create({ data: { classId: copy, studentId: usedAccount.id } })
+      // En la otra clase lleva el mismo avatar generado: ese fichero se queda.
+      await prisma.classEnrollment.create({
+        data: { classId: copy, studentId: usedAccount.id, avatarUrl: files.sharedAvatar },
+      })
 
       const enigma = await prisma.missionEnigma.create({
         data: { missionId: mission.id, title: 'Enigma', xpReward: 10 },
@@ -338,11 +352,14 @@ describeWithDatabase('purga de la papelera de clases', () => {
           files.ownDocument,
           files.classCover,
           files.missionCover,
+          files.ownAvatar,
         ])
       )
       expect(deleted).not.toContain(files.sharedCover)
       expect(deleted).not.toContain(files.sharedDocument)
       expect(deleted).not.toContain(files.foreignImage)
+      expect(deleted).not.toContain(files.sharedAvatar)
+      expect(deleted).not.toContain('/app/avatars/atenea.svg')
       expect((await prisma.class.findUniqueOrThrow({ where: { id: copy } })).backgroundImage).toBe(
         files.sharedCover
       )
@@ -452,11 +469,15 @@ describeWithDatabase('purga de la papelera de clases', () => {
       await prisma.enigmaSubmission.create({
         data: { enigmaId: enigma.id, studentId: f.users.student.id, fileUrl: submission },
       })
+      const avatar = `/uploads/ai-generated/avatars/avatar-${unique()}.png`
+      await prisma.classEnrollment.create({
+        data: { classId: cls, studentId: f.users.student.id, avatarUrl: avatar },
+      })
       // Falla al leer la configuración, ya confirmada la purga.
       vi.mocked(uploadResolver).mockRejectedValueOnce(new Error('fallo leyendo ajustes'))
 
       const result = await runJobNow('class-trash-purge')
-      expect(result).toMatchObject({ failed: 0, filesFailed: 2 })
+      expect(result).toMatchObject({ failed: 0, filesFailed: 3 })
       expect((result as { purged: number }).purged).toBeGreaterThanOrEqual(1)
       expect(await prisma.class.findUnique({ where: { id: cls } })).toBeNull()
       expect(deleteUpload).not.toHaveBeenCalled()
@@ -465,11 +486,11 @@ describeWithDatabase('purga de la papelera de clases', () => {
       const metadata = logs[1]!.metadata as { failedKeys: string[] }
       expect(metadata).toMatchObject({
         classId: cls,
-        filesFailed: 2,
+        filesFailed: 3,
         error: 'fallo leyendo ajustes',
       })
       expect([...metadata.failedKeys].sort()).toEqual(
-        [submission, cover].map(url => url.replace('/uploads/', '')).sort()
+        [submission, cover, avatar].map(url => url.replace('/uploads/', '')).sort()
       )
     })
   })
@@ -731,6 +752,34 @@ describeWithDatabase('purga de la papelera de clases', () => {
       expect(await prisma.class.findUnique({ where: { id: trashed } })).not.toBeNull()
       expect(await purgeLogs(trashed)).toHaveLength(0)
       expect(deleteUpload).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('borrar la cuenta de un estudiante', () => {
+    it('los avatares generados de sus matrículas se borran con la cuenta, si nadie más los usa', async () => {
+      const leaving = await newUser('estudiante-se-va', 'student')
+      const neighbour = await newUser('vecina', 'student')
+      const first = await newClass('Con avatar propio')
+      const second = await newClass('Con avatar compartido')
+      const own = `/uploads/ai-generated/avatars/avatar-${unique()}.png`
+      const shared = `/uploads/ai-generated/avatars/avatar-${unique()}.png`
+      await prisma.classEnrollment.createMany({
+        data: [
+          { classId: first, studentId: leaving.id, avatarUrl: own },
+          { classId: second, studentId: leaving.id, avatarUrl: shared },
+          { classId: second, studentId: neighbour.id, avatarUrl: shared },
+        ],
+      })
+
+      const deleted = await send('DELETE', '/profile/delete-account', leaving.token, {
+        password: PASSWORD,
+      })
+      expect(deleted.statusCode, deleted.body).toBe(200)
+      expect(await prisma.user.findUnique({ where: { id: leaving.id } })).toBeNull()
+      expect(deletedFiles()).toEqual([own])
+      expect(await prisma.classEnrollment.count({ where: { avatarUrl: shared } })).toBe(1)
+
+      await prisma.class.deleteMany({ where: { id: { in: [first, second] } } })
     })
   })
 })

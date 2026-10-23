@@ -62,7 +62,8 @@
         "en_progreso": "En progrés"
       },
       "locked_toast": "El teu docent ha tancat esta missió de moment. Podràs entrar-hi quan l’òbriga.",
-      "locked_aria": "{title}: missió tancada de moment"
+      "locked_aria": "{title}: missió tancada de moment",
+      "expired_on": "Va caducar: {date}"
     },
     "mission_detail": {
       "meta": {

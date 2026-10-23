@@ -62,7 +62,8 @@
         "en_progreso": "En progreso"
       },
       "locked_toast": "O teu docente pechou esta misión polo de agora. Poderás entrar cando a abra.",
-      "locked_aria": "{title}: misión pechada polo de agora"
+      "locked_aria": "{title}: misión pechada polo de agora",
+      "expired_on": "Venceu: {date}"
     },
     "mission_detail": {
       "meta": {

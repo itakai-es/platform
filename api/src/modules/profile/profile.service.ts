@@ -5,6 +5,7 @@ import { normalizeEmail } from '../../utils/identity.js'
 import { isTeacherAvatarKey } from '../../utils/avatars.js'
 import { changeOwnPassword } from '../../utils/password-change.js'
 import { privateUploadResolver } from '../storage/storage.service.js'
+import { HINT_ORDER } from '../missions/mission-hints.service.js'
 import { deleteUserAccount } from './account-deletion.service.js'
 
 function parseUserAgent(userAgent: string): { browser: string; os: string; device: 'desktop' | 'mobile' | 'tablet' } {
@@ -308,6 +309,8 @@ export class ProfileService {
                 enigmas: true,
                 documents: true,
                 badges: true,
+                // Las pistas, en su orden. Quién las usó va en la exportación de cada estudiante.
+                hints: { orderBy: HINT_ORDER },
               },
             },
             guide: true,
@@ -341,6 +344,7 @@ export class ProfileService {
         },
         missionProgress: true,
         enigmaProgress: true,
+        missionHintUses: { orderBy: { createdAt: 'asc' } },
         notifications: true,
         activities: true,
         joinRequests: true,
@@ -402,6 +406,8 @@ export class ProfileService {
         earnedBadges: user.earnedBadges,
         missionProgress: user.missionProgress,
         enigmaProgress: user.enigmaProgress,
+        // Cada pista que usó, con lo que le costó en ese momento.
+        hintUses: user.missionHintUses,
         submissions: user.submissions.map(s => withFileRoute(s, '/files/submissions')),
         joinRequests: user.joinRequests,
         receivedInvitations: user.receivedInvitations,

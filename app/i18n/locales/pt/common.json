@@ -569,7 +569,9 @@
       "hint_used_percent_student": "Usaste a dica {position} de {mission}: −{count} % no que te faltava receber",
       "hint_used_percent_teacher": "Usou a dica {position} de {mission}: −{count} % no que lhe faltava receber",
       "enigma_approved_student": "A tua entrega de {enigma} foi aprovada",
-      "enigma_approved_teacher": "Viu aprovada a sua entrega de {enigma}"
+      "enigma_approved_teacher": "Viu aprovada a sua entrega de {enigma}",
+      "mission_started_student": "Começaste a missão {mission}",
+      "mission_started_teacher": "Começou a missão {mission}"
     },
     "avatars": {
       "characters": {

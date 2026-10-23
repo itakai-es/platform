@@ -62,7 +62,8 @@
         "en_progreso": "Em curso"
       },
       "locked_toast": "O teu docente fechou esta missão por agora. Vais poder entrar quando a abrir.",
-      "locked_aria": "{title}: missão fechada por agora"
+      "locked_aria": "{title}: missão fechada por agora",
+      "expired_on": "Expirou: {date}"
     },
     "mission_detail": {
       "meta": {
