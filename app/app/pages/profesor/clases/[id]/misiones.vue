@@ -102,6 +102,7 @@
 </template>
 
 <script setup lang="ts">
+import { teacherMissionStatus } from '~/utils/mission-teacher-status'
 import { RocketLaunchIcon, PlusIcon, ArrowDownTrayIcon } from '@heroicons/vue/24/outline'
 
 definePageMeta({ layout: 'teacher', middleware: ['auth', 'role'] })
@@ -126,7 +127,7 @@ const displayed = computed(() => {
     result = result.filter(m => rarityFilters.value.includes(m.rarity))
   }
   if (statusFilters.value.length > 0) {
-    result = result.filter(m => statusFilters.value.includes(m.teacherStatus))
+    result = result.filter(m => statusFilters.value.includes(teacherMissionStatus(m)))
   }
   if (searchQuery.value.trim()) {
     const query = searchQuery.value.toLowerCase().trim()

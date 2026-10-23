@@ -834,7 +834,9 @@
           "toast_error": "Nun se pudieron guardar los datos",
           "team_set_label": "Per equipos",
           "team_set_none": "Individual (ensin equipos)",
-          "team_set_hint": "Namás informativo: l’alumnáu ve con qué equipos se fai y pues aprobar tol equipu d’una vegada. Cada estudiante sigue entregando lo so."
+          "team_set_hint": "Namás informativo: l’alumnáu ve con qué equipos se fai y pues aprobar tol equipu d’una vegada. Cada estudiante sigue entregando lo so.",
+          "basics_title": "Datos de la misión",
+          "play_title": "Dificultá y visibilidá"
         }
       },
       "import": {

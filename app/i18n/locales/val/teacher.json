@@ -834,7 +834,9 @@
           "toast_error": "No s'han pogut guardar les dades",
           "team_set_label": "Per equips",
           "team_set_none": "Individual (sense equips)",
-          "team_set_hint": "Només informatiu: l’alumnat veu amb quins equips es fa i pots aprovar tot un equip de colp. Cada estudiant continua lliurant el seu."
+          "team_set_hint": "Només informatiu: l’alumnat veu amb quins equips es fa i pots aprovar tot un equip de colp. Cada estudiant continua lliurant el seu.",
+          "basics_title": "Dades de la missió",
+          "play_title": "Dificultat i visibilitat"
         }
       },
       "import": {

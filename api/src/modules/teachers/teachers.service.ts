@@ -34,7 +34,7 @@ import {
   type ClassAccess,
 } from '../../utils/class-access.js'
 import { accountHandle } from '../../utils/identity.js'
-import { participatingEnrollmentWhere } from '../../utils/enrollment.js'
+import { DEFAULT_AVATARS, participatingEnrollmentWhere } from '../../utils/enrollment.js'
 import { activityActor } from '../../utils/activity.js'
 import { assignableBadgesWhere, manageableBadgesWhere } from '../../utils/badge-access.js'
 import {
@@ -1347,7 +1347,7 @@ export class TeachersService {
             // Qué puede hacer quien pregunta con el alumno en esta clase.
             myAccess: summarizeClassTeachers(c.teachers, userId).myAccess,
             nickname: enrollment.nickname || student.name,
-            avatar: enrollment.avatarUrl || '/app/avatars/avatar-1.svg',
+            avatar: enrollment.avatarUrl || DEFAULT_AVATARS[0]!,
             level: enrollment.level || 1,
             xp: enrollment.xp || 0,
             totalXp: classTotalXp,
@@ -1389,7 +1389,7 @@ export class TeachersService {
             type: a.type,
             timestamp: a.createdAt.toISOString(),
             // Class-specific profile data (stored in Activity table)
-            avatar: a.avatar || '/app/avatars/avatar-1.svg',
+            avatar: a.avatar || DEFAULT_AVATARS[0]!,
             username: a.username || student.name,
             // Activity fields (some stored directly, some in metadata)
             enigmaTitle: a.enigmaTitle || metadata.enigmaTitle,
@@ -1507,7 +1507,7 @@ export class TeachersService {
           type: a.type,
           timestamp: a.createdAt.toISOString(),
           // Class-specific profile data
-          avatar: a.avatar || '/app/avatars/avatar-1.svg',
+          avatar: a.avatar || DEFAULT_AVATARS[0]!,
           username: a.username || a.user.name,
           // Activity fields (some stored directly, some in metadata)
           enigmaTitle: a.enigmaTitle || metadata.enigmaTitle,
@@ -1570,7 +1570,7 @@ export class TeachersService {
           type: a.type,
           timestamp: a.createdAt.toISOString(),
           // Class-specific profile data
-          avatar: a.avatar || '/app/avatars/avatar-1.svg',
+          avatar: a.avatar || DEFAULT_AVATARS[0]!,
           username: a.username || a.user.name,
           // Activity fields (some stored directly, some in metadata)
           enigmaTitle: a.enigmaTitle || metadata.enigmaTitle,

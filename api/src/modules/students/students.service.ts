@@ -21,11 +21,13 @@ import {
   enrollStudentNow,
   freeNicknamesForPreview,
   getRandomAvatar,
+  isAllowedClassAvatar,
   participatingEnrollmentWhere,
 } from '../../utils/enrollment.js'
 import { activityActor } from '../../utils/activity.js'
 import { assertNotManagedAccount } from '../../utils/identity-db.js'
 import { changeOwnPassword } from '../../utils/password-change.js'
+import { consumeRateLimit } from '../../utils/rate-limit.js'
 import { completedMissionsByStudent } from '../../utils/ranking.js'
 
 /** Matricularse en una clase es cosa de alumnos: el profesorado la mira con la vista previa. */
@@ -65,6 +67,9 @@ function pickAvatarFromPrompt(prompt: string) {
 
   return DEFAULT_AVATARS[hashText(normalizedPrompt) % DEFAULT_AVATARS.length]
 }
+
+/** Avatares generados con IA: cada petición crea una imagen, así que hay tope por estudiante. */
+const AVATAR_GENERATE_LIMIT = { max: 5, windowMs: 60 * 60 * 1000 }
 
 export class StudentsService {
   // ==================== PROFILE ====================
@@ -128,18 +133,6 @@ export class StudentsService {
       name: user.name,
       username: user.username,
     }
-  }
-
-  // Avatar is per-class, updated via enrollment
-  async generateAvatar(_userId: string, prompt: string) {
-    const safePrompt = ensureSafeEducationalPrompt(prompt)
-
-    // Use DiceBear API to generate a unique avatar based on the prompt seed
-    const seed = encodeURIComponent(safePrompt.slice(0, 50))
-    const style = 'adventurer' // Greek/adventure style fits ITAKAI theme
-    const avatarUrl = `https://api.dicebear.com/7.x/${style}/svg?seed=${seed}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf`
-
-    return { avatarUrl, message: 'Avatar generado correctamente' }
   }
 
   /** Cambio de contraseña del alumnado; el camino es el mismo para todos (utils/password-change.ts). */
@@ -506,6 +499,9 @@ export class StudentsService {
     })
 
     if (!enrollment) throw new Error('No estás en esta clase')
+    if (data.avatarUrl && !isAllowedClassAvatar(data.avatarUrl, enrollment.avatarUrl)) {
+      throw new ValidationError('Elige un avatar de la lista', 'AVATAR_NOT_ALLOWED')
+    }
 
     // Update the enrollment with new profile data (nickname and avatarUrl which can be preset or AI-generated)
     const updated = await prisma.classEnrollment.update({
@@ -543,6 +539,13 @@ export class StudentsService {
 
     if (!enrollment) throw new Error('No estás en esta clase')
 
+    // Lo escribe un estudiante menor: el mismo filtro que el resto de la IA y un
+    // tope de peticiones, porque cada una genera una imagen.
+    consumeRateLimit(`avatar-generate:${userId}`, AVATAR_GENERATE_LIMIT)
+    for (const text of [data.prompt, data.wardrobe_prompt, data.background_prompt]) {
+      if (text) ensureSafeEducationalPrompt(text)
+    }
+
     let wardrobe_prompt = data.wardrobe_prompt ?? ''
     let background_prompt = data.background_prompt ?? ''
 
@@ -579,7 +582,8 @@ export class StudentsService {
     } catch (err) {
       const detail = err instanceof Error ? err.message : String(err)
       console.error('[AI] Avatar customization unavailable:', detail)
-      throw new AvatarServiceUnavailableError(detail)
+      // El detalle (del servidor de imágenes) solo al log; al estudiante, el mensaje genérico.
+      throw new AvatarServiceUnavailableError()
     }
 
     const updated = await prisma.classEnrollment.update({

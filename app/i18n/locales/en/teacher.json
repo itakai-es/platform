@@ -834,7 +834,9 @@
           "toast_error": "Could not save details",
           "team_set_label": "In teams",
           "team_set_none": "Individual (no teams)",
-          "team_set_hint": "For information only: students see which teams it is done in, and you can approve a whole team at once. Each student still submits their own work."
+          "team_set_hint": "For information only: students see which teams it is done in, and you can approve a whole team at once. Each student still submits their own work.",
+          "basics_title": "Mission details",
+          "play_title": "Difficulty and visibility"
         }
       },
       "import": {

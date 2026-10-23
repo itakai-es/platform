@@ -60,7 +60,9 @@
         "pendiente": "Zain",
         "expirada": "Iraungia",
         "en_progreso": "Abian"
-      }
+      },
+      "locked_toast": "Zure irakasleak misio hau itxi du oraingoz. Irekitzen duenean sartu ahal izango zara.",
+      "locked_aria": "{title}: misioa itxita dago oraingoz"
     },
     "mission_detail": {
       "meta": {

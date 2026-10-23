@@ -834,7 +834,9 @@
           "toast_error": "Ezin izan dira datuak gorde",
           "team_set_label": "Taldeka",
           "team_set_none": "Banakakoa (talderik gabe)",
-          "team_set_hint": "Informazio hutsa: ikasleek ikusten dute zein taldetan egiten den, eta talde oso bat batera onar dezakezu. Ikasle bakoitzak berea entregatzen jarraitzen du."
+          "team_set_hint": "Informazio hutsa: ikasleek ikusten dute zein taldetan egiten den, eta talde oso bat batera onar dezakezu. Ikasle bakoitzak berea entregatzen jarraitzen du.",
+          "basics_title": "Misioaren datuak",
+          "play_title": "Zailtasuna eta ikusgarritasuna"
         }
       },
       "import": {

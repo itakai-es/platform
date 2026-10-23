@@ -105,80 +105,17 @@
           </SettingsSection>
 
           <SettingsSection :title="t('teacher.classes.detail.settings.general.background_label')">
-            <div class="flex flex-col sm:flex-row sm:items-center gap-4">
-              <!-- Preview -->
-              <div
-                class="relative w-full sm:w-40 h-28 rounded-xl overflow-hidden bg-navy-700/5 flex-shrink-0"
-              >
-                <img
-                  v-if="general.backgroundImage"
-                  :src="getImageUrl(general.backgroundImage)"
-                  alt=""
-                  class="w-full h-full object-cover"
-                />
-                <div
-                  v-else
-                  class="w-full h-full flex items-center justify-center text-text-secondary text-xs"
-                >
-                  <PhotoIcon class="w-8 h-8 opacity-40" />
-                </div>
-                <div
-                  v-if="generatingImage"
-                  class="absolute inset-0 bg-navy-700/60 flex items-center justify-center"
-                >
-                  <Spinner size="sm" class="text-white" />
-                </div>
-              </div>
-
-              <!-- Acciones -->
-              <div class="flex-1 space-y-2">
-                <div class="flex flex-wrap gap-2">
-                  <Button
-                    type="button"
-                    variant="primary"
-                    size="sm"
-                    :icon-left="SparklesIcon"
-                    :loading="generatingImage"
-                    :disabled="generatingImage"
-                    @click="regenerateImage"
-                  >
-                    {{
-                      general.backgroundImage
-                        ? t('teacher.classes.detail.settings.general.background_regenerate')
-                        : t('teacher.classes.detail.settings.general.background_generate')
-                    }}
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    :icon-left="ArrowUpTrayIcon"
-                    :disabled="generatingImage"
-                    @click="coverFileRef?.click()"
-                  >
-                    {{ t('teacher.classes.detail.settings.general.background_upload') }}
-                  </Button>
-                  <Button
-                    v-if="general.backgroundImage"
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    :icon-left="TrashIcon"
-                    :disabled="generatingImage"
-                    @click="clearImage"
-                  >
-                    {{ t('teacher.classes.detail.settings.general.background_clear') }}
-                  </Button>
-                </div>
-                <input
-                  ref="coverFileRef"
-                  type="file"
-                  accept="image/png,image/jpeg,image/webp"
-                  class="hidden"
-                  @change="handleCoverUpload"
-                />
-              </div>
-            </div>
+            <CoverImageField
+              :image="general.backgroundImage"
+              :generating="generatingImage"
+              :generate-label="t('teacher.classes.detail.settings.general.background_generate')"
+              :regenerate-label="t('teacher.classes.detail.settings.general.background_regenerate')"
+              :upload-label="t('teacher.classes.detail.settings.general.background_upload')"
+              :clear-label="t('teacher.classes.detail.settings.general.background_clear')"
+              @generate="regenerateImage"
+              @upload="handleCoverUpload"
+              @clear="clearImage"
+            />
           </SettingsSection>
 
           <!-- Guardar o descartar, debajo de las secciones, como en Niveles -->
@@ -363,9 +300,6 @@ import {
   ChartBarIcon,
   SparklesIcon,
   HandRaisedIcon,
-  PhotoIcon,
-  TrashIcon,
-  ArrowUpTrayIcon,
   SpeakerWaveIcon,
   DocumentDuplicateIcon,
   LinkIcon,
@@ -443,7 +377,6 @@ const classesStore = useClassesStore()
 const toast = useToast()
 const { copyTemplateLink } = useTemplateLink()
 const config = useRuntimeConfig()
-const { getImageUrl } = useImageUrl()
 
 // --------- Permisos ---------
 // El nombre, el horario y la portada son contenido (edición); los metadatos,
@@ -600,7 +533,6 @@ const provinceOptions = computed(() => [noneOption.value, ...SPANISH_PROVINCES])
 
 // --------- Imagen de fondo ---------
 const generatingImage = ref(false)
-const coverFileRef = ref<HTMLInputElement>()
 
 // El profe puede subir su propia portada en vez de generarla con IA. Se lee
 // como data URL y el backend la persiste en /uploads al guardar (updateClass).

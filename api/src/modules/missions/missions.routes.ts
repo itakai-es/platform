@@ -136,32 +136,6 @@ export async function missionsRoutes(fastify: FastifyInstance) {
     }
   })
 
-  // Submit enigma (student submits work for review)
-  fastify.post(
-    '/:missionId/enigmas/:enigmaId/complete',
-    async (
-      request: FastifyRequest<{
-        Params: { missionId: string; enigmaId: string }
-        Body: { fileName?: string; fileSize?: number; submissionType?: string }
-      }>,
-      reply: FastifyReply
-    ) => {
-      try {
-        const { id, role } = request.user as { id: string; role: string | null }
-        const { missionId, enigmaId } = request.params
-        const body = request.body as { fileName?: string; fileSize?: number }
-        const result = await missionsService.submitEnigma({ id, role }, missionId, enigmaId, body)
-        return result
-      } catch (error) {
-        rethrowHttpError(error)
-        if (error instanceof Error) {
-          return reply.status(400).send({ message: error.message })
-        }
-        return reply.status(500).send({ message: 'Error interno' })
-      }
-    }
-  )
-
   // Teacher: Create mission
   fastify.post('/', async (request: FastifyRequest, reply: FastifyReply) => {
     try {

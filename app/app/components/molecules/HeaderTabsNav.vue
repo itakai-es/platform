@@ -36,8 +36,21 @@
             : 'text-white/70 hover:text-white hover:bg-white/10',
         ]"
       >
-        <component :is="tab.icon" v-if="menuDisplay !== 'text'" class="w-5 h-5" />
-        <span v-if="menuDisplay !== 'icon'" :class="menuDisplay === 'both' ? 'hidden sm:inline' : ''"
+        <component
+          :is="tab.icon"
+          v-if="menuDisplay !== 'text'"
+          class="w-5 h-5"
+          aria-hidden="true"
+        />
+        <!-- Solo con el icono a la vista, el nombre sigue ahí para el lector de pantalla -->
+        <span
+          :class="
+            menuDisplay === 'icon'
+              ? 'sr-only'
+              : menuDisplay === 'both'
+                ? 'sr-only sm:not-sr-only'
+                : ''
+          "
           >{{ tab.label }}</span
         >
       </NuxtLink>
@@ -132,10 +145,10 @@ onBeforeUnmount(() => {
 // de menú cambia el ancho total: hay que recalcular tras el repintado.
 watch(
   () => [props.tabs.map(tab => tab.label).join('|'), menuDisplay.value],
-  () => nextTick(sync),
+  () => nextTick(sync)
 )
 watch(
   () => props.activeTab,
-  () => nextTick(scrollActiveIntoView),
+  () => nextTick(scrollActiveIntoView)
 )
 </script>

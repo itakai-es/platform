@@ -149,9 +149,7 @@ export function useMissionCard(props: MissionCardProps, emit: (e: 'click') => vo
       return
     }
     if (props.status === 'bloqueada') {
-      toast.info(
-        'Esta misión estará disponible pronto. ¡Completa las misiones anteriores para desbloquearla!'
-      )
+      toast.info(t('student.missions.locked_toast'))
     }
     // Las misiones expiradas se abren en solo lectura (el enlace navega).
   }

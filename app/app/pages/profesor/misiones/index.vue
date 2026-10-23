@@ -103,11 +103,10 @@
 </template>
 
 <script setup lang="ts">
+import { teacherMissionStatus } from '~/utils/mission-teacher-status'
 import { PlusIcon, RocketLaunchIcon, ArrowDownTrayIcon } from '@heroicons/vue/24/outline'
 import type { MissionStatus, MissionRarity } from '~/types/mission.types'
 import { canInClass } from '~/utils/class-access'
-
-type TeacherStatus = 'activa' | 'completada' | 'bloqueada'
 
 interface TeacherMission {
   id: string
@@ -116,7 +115,6 @@ interface TeacherMission {
   title: string
   description: string
   status: MissionStatus
-  teacherStatus: TeacherStatus // For filtering: completada when all students done
   rarity: MissionRarity
   xpReward: number
   coinReward?: number
@@ -223,7 +221,7 @@ const filteredMissions = computed(() => {
 
   // Filter by status (teacher status)
   if (selectedStatusFilters.value) {
-    result = result.filter(m => selectedStatusFilters.value!.includes(m.teacherStatus))
+    result = result.filter(m => selectedStatusFilters.value!.includes(teacherMissionStatus(m)))
   }
 
   return result

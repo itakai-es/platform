@@ -1,194 +1,96 @@
 <template>
+  <!-- Como los ajustes de la clase: secciones en tarjetas blancas y, debajo,
+       guardar o descartar -->
   <form class="space-y-6" @submit.prevent="save">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-6 items-start">
-      <!-- Datos básicos: título + fecha límite -->
-      <div class="space-y-4">
+    <SettingsSection :title="t('teacher.missions.detail.settings.basics_title')">
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-[minmax(0,1fr)_14rem]">
         <FormField
           id="mission-cfg-title"
           v-model="form.title"
           :label="t('teacher.missions.detail.settings.title_label')"
           required
         />
-
         <FormField
           id="mission-cfg-deadline"
           v-model="form.deadline"
           type="date"
-          class="sm:max-w-[220px]"
           :label="t('teacher.missions.detail.settings.deadline_label')"
           :hint="t('teacher.missions.detail.settings.deadline_hint')"
         />
-
-        <!-- Dificultad / rareza: afecta al XP de bonificación de la misión -->
-        <div>
-          <label class="text-sm font-medium text-text-primary mb-2 block">
-            {{ t('teacher.missions.detail.settings.rarity_label') }}
-          </label>
-          <div class="flex flex-wrap gap-2">
-            <button
-              v-for="r in rarities"
-              :key="r.value"
-              type="button"
-              :disabled="rarityLocked"
-              class="px-4 py-2 rounded-xl text-sm font-medium transition-all disabled:cursor-not-allowed disabled:opacity-50"
-              :class="
-                form.rarity === r.value
-                  ? 'bg-navy-700 text-white'
-                  : [
-                      'bg-surface text-navy-700 border border-border-primary',
-                      rarityLocked ? '' : 'hover:border-navy-700',
-                    ]
-              "
-              @click="form.rarity = r.value"
-            >
-              {{ r.label }}
-            </button>
-          </div>
-          <p v-if="rarityLocked" class="mt-1 text-sm text-text-muted">
-            {{ t('teacher.missions.detail.settings.rarity_locked_hint') }}
-          </p>
-        </div>
-
-        <!-- Estado: activa (visible) o bloqueada (oculta para los alumnos) -->
-        <div>
-          <label class="text-sm font-medium text-text-primary mb-2 block">
-            {{ t('teacher.missions.detail.settings.status_label') }}
-          </label>
-          <div class="flex flex-wrap gap-2">
-            <button
-              type="button"
-              class="px-4 py-2 rounded-xl text-sm font-medium transition-all"
-              :class="
-                !form.blocked
-                  ? 'bg-navy-700 text-white'
-                  : 'bg-surface text-navy-700 border border-border-primary hover:border-navy-700'
-              "
-              @click="form.blocked = false"
-            >
-              {{ t('teacher.missions.detail.settings.status_active') }}
-            </button>
-            <button
-              type="button"
-              class="px-4 py-2 rounded-xl text-sm font-medium transition-all"
-              :class="
-                form.blocked
-                  ? 'bg-navy-700 text-white'
-                  : 'bg-surface text-navy-700 border border-border-primary hover:border-navy-700'
-              "
-              @click="form.blocked = true"
-            >
-              {{ t('teacher.missions.detail.settings.status_blocked') }}
-            </button>
-          </div>
-          <p class="mt-1 text-sm text-text-muted">
-            {{ t('teacher.missions.detail.settings.status_hint') }}
-          </p>
-        </div>
-
-        <!-- Por equipos: solo informativo; cada estudiante entrega lo suyo -->
-        <div>
-          <span :id="`${uid}-team-set`" class="text-sm font-medium text-text-primary mb-2 block">
-            {{ t('teacher.missions.detail.settings.team_set_label') }}
-          </span>
-          <SelectDropdown
-            :model-value="form.teamSetId"
-            :options="teamSetOptions"
-            :labelledby="`${uid}-team-set`"
-            :describedby="`${uid}-team-set-hint`"
-            class="sm:max-w-sm"
-            @update:model-value="form.teamSetId = String($event)"
-          />
-          <p :id="`${uid}-team-set-hint`" class="mt-1 text-sm text-text-muted">
-            {{ t('teacher.missions.detail.settings.team_set_hint') }}
-          </p>
-        </div>
       </div>
+    </SettingsSection>
 
-      <!-- Imagen de la misión -->
+    <SettingsSection :title="t('teacher.missions.detail.settings.play_title')">
+      <!-- Dificultad / rareza: afecta al XP de bonificación de la misión -->
       <div>
-        <label class="text-sm font-medium text-text-primary mb-2 block">
-          {{ t('teacher.missions.detail.settings.background_label') }}
-        </label>
-        <div class="flex flex-col sm:flex-row sm:items-center gap-4">
-          <!-- Preview -->
-          <div
-            class="relative w-full sm:w-40 h-28 rounded-xl overflow-hidden bg-navy-700/5 flex-shrink-0"
-          >
-            <img
-              v-if="form.backgroundImage"
-              :src="getImageUrl(form.backgroundImage)"
-              alt=""
-              class="w-full h-full object-cover"
-            />
-            <div
-              v-else
-              class="w-full h-full flex items-center justify-center text-text-secondary text-xs"
-            >
-              <PhotoIcon class="w-8 h-8 opacity-40" />
-            </div>
-            <div
-              v-if="generatingImage"
-              class="absolute inset-0 bg-navy-700/60 flex items-center justify-center"
-            >
-              <Spinner size="sm" class="text-white" />
-            </div>
-          </div>
-
-          <!-- Acciones -->
-          <div class="flex-1 space-y-2">
-            <div class="flex flex-wrap gap-2">
-              <Button
-                type="button"
-                variant="primary"
-                size="sm"
-                :icon-left="SparklesIcon"
-                :loading="generatingImage"
-                :disabled="generatingImage"
-                @click="regenerateImage"
-              >
-                {{
-                  form.backgroundImage
-                    ? t('teacher.missions.detail.settings.background_regenerate')
-                    : t('teacher.missions.detail.settings.background_generate')
-                }}
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                :icon-left="ArrowUpTrayIcon"
-                :disabled="generatingImage"
-                @click="coverFileRef?.click()"
-              >
-                {{ t('teacher.missions.detail.settings.background_upload') }}
-              </Button>
-              <Button
-                v-if="form.backgroundImage"
-                type="button"
-                variant="ghost"
-                size="sm"
-                :icon-left="TrashIcon"
-                :disabled="generatingImage"
-                @click="clearImage"
-              >
-                {{ t('teacher.missions.detail.settings.background_clear') }}
-              </Button>
-            </div>
-            <input
-              ref="coverFileRef"
-              type="file"
-              accept="image/png,image/jpeg,image/webp"
-              class="hidden"
-              @change="handleCoverUpload"
-            />
-          </div>
-        </div>
+        <p :id="`${uid}-rarity`" class="mb-2 text-sm font-medium text-text-primary">
+          {{ t('teacher.missions.detail.settings.rarity_label') }}
+        </p>
+        <OptionPillGroup
+          v-model="form.rarity"
+          :options="rarities"
+          :aria-label="t('teacher.missions.detail.settings.rarity_label')"
+          :disabled="rarityLocked"
+          fluid
+          min-item-width="6.5rem"
+          class="max-w-xl"
+        />
+        <p v-if="rarityLocked" class="mt-1 text-sm text-text-muted">
+          {{ t('teacher.missions.detail.settings.rarity_locked_hint') }}
+        </p>
       </div>
-    </div>
 
-    <hr class="border-border-primary" />
+      <!-- Estado: activa (visible) o bloqueada (con candado para el alumnado) -->
+      <div>
+        <p class="mb-2 text-sm font-medium text-text-primary">
+          {{ t('teacher.missions.detail.settings.status_label') }}
+        </p>
+        <OptionPillGroup
+          :model-value="form.blocked ? 'blocked' : 'active'"
+          :options="statusOptions"
+          :aria-label="t('teacher.missions.detail.settings.status_label')"
+          class="max-w-xs"
+          @update:model-value="form.blocked = $event === 'blocked'"
+        />
+        <p class="mt-1 text-sm text-text-muted">
+          {{ t('teacher.missions.detail.settings.status_hint') }}
+        </p>
+      </div>
 
-    <div class="flex justify-end gap-2">
+      <!-- Por equipos: solo informativo; cada estudiante entrega lo suyo -->
+      <div>
+        <p :id="`${uid}-team-set`" class="mb-2 text-sm font-medium text-text-primary">
+          {{ t('teacher.missions.detail.settings.team_set_label') }}
+        </p>
+        <SelectDropdown
+          :model-value="form.teamSetId"
+          :options="teamSetOptions"
+          :labelledby="`${uid}-team-set`"
+          :describedby="`${uid}-team-set-hint`"
+          class="sm:max-w-sm"
+          @update:model-value="form.teamSetId = String($event)"
+        />
+        <p :id="`${uid}-team-set-hint`" class="mt-1 text-sm text-text-muted">
+          {{ t('teacher.missions.detail.settings.team_set_hint') }}
+        </p>
+      </div>
+    </SettingsSection>
+
+    <SettingsSection :title="t('teacher.missions.detail.settings.background_label')">
+      <CoverImageField
+        :image="form.backgroundImage"
+        :generating="generatingImage"
+        :generate-label="t('teacher.missions.detail.settings.background_generate')"
+        :regenerate-label="t('teacher.missions.detail.settings.background_regenerate')"
+        :upload-label="t('teacher.missions.detail.settings.background_upload')"
+        :clear-label="t('teacher.missions.detail.settings.background_clear')"
+        @generate="regenerateImage"
+        @upload="handleCoverUpload"
+        @clear="clearImage"
+      />
+    </SettingsSection>
+
+    <div class="flex flex-wrap justify-end gap-2">
       <Button type="button" variant="outline" size="md" :disabled="!dirty || saving" @click="reset">
         {{ t('teacher.missions.detail.settings.discard') }}
       </Button>
@@ -206,8 +108,6 @@
 </template>
 
 <script setup lang="ts">
-import { PhotoIcon, TrashIcon, ArrowUpTrayIcon, SparklesIcon } from '@heroicons/vue/24/outline'
-
 type MissionRarity = 'comun' | 'rara' | 'epica' | 'legendaria'
 
 interface MissionSettings {
@@ -275,9 +175,12 @@ const rarities = computed<{ value: MissionRarity; label: string }[]>(() => [
   { value: 'epica', label: t('teacher.missions.detail.settings.rarity.epica') },
   { value: 'legendaria', label: t('teacher.missions.detail.settings.rarity.legendaria') },
 ])
+const statusOptions = computed(() => [
+  { value: 'active', label: t('teacher.missions.detail.settings.status_active') },
+  { value: 'blocked', label: t('teacher.missions.detail.settings.status_blocked') },
+])
 const toast = useToast()
 const config = useRuntimeConfig()
-const { getImageUrl } = useImageUrl()
 
 // La fecha límite llega como ISO (o Date); el <input type="date"> necesita yyyy-mm-dd.
 function toInputDate(input: string | Date | null | undefined): string {
@@ -342,7 +245,6 @@ function reset() {
 
 // --------- Imagen de la misión ---------
 const generatingImage = ref(false)
-const coverFileRef = ref<HTMLInputElement>()
 
 function handleCoverUpload(event: Event) {
   const input = event.target as HTMLInputElement

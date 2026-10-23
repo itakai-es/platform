@@ -51,7 +51,7 @@ export function useStudentClassDetail(classIdRef: Ref<string> | ComputedRef<stri
   const selectedClass = computed(() => classesStore.selectedClass)
   const classData = computed(() => selectedClass.value as any)
   const classSettings = computed(() => resolveClassSettings(classData.value?.settings))
-  const classMissions = computed(() => classesStore.classMissions)
+  const classMissions = computed(() => classesStore.missionsByClass.get(classId.value) ?? [])
   const classGuide = computed(() => classesStore.classGuides.get(classId.value) || null)
   const currentClassBadges = computed(() => classesStore.classBadges.get(classId.value) || [])
   const recentActivities = computed(() => classesStore.classActivities.get(classId.value) || [])

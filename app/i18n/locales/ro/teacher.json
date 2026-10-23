@@ -834,7 +834,9 @@
           "toast_error": "Datele nu au putut fi salvate",
           "team_set_label": "Pe echipe",
           "team_set_none": "Individual (fără echipe)",
-          "team_set_hint": "Doar informativ: clasa vede cu ce echipe se face și poți aproba o echipă întreagă dintr-odată. Fiecare elev continuă să-și predea partea."
+          "team_set_hint": "Doar informativ: clasa vede cu ce echipe se face și poți aproba o echipă întreagă dintr-odată. Fiecare elev continuă să-și predea partea.",
+          "basics_title": "Datele misiunii",
+          "play_title": "Dificultate și vizibilitate"
         }
       },
       "import": {

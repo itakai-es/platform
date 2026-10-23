@@ -60,7 +60,9 @@
         "pendiente": "Pendente",
         "expirada": "Expirada",
         "en_progreso": "Em curso"
-      }
+      },
+      "locked_toast": "O teu docente fechou esta missão por agora. Vais poder entrar quando a abrir.",
+      "locked_aria": "{title}: missão fechada por agora"
     },
     "mission_detail": {
       "meta": {

@@ -41,6 +41,48 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.6.1',
+    date: '2026-10-23',
+    changes: [
+      {
+        type: 'fixed',
+        text: 'Guardar la historia de una misión bloqueada la desbloqueaba sin querer.',
+      },
+      {
+        type: 'fixed',
+        text: 'La tarjeta de una misión bloqueada prometía que se abriría al completar las anteriores. Ahora dice que la ha cerrado su docente, y se puede alcanzar con el teclado.',
+      },
+      {
+        type: 'fixed',
+        text: 'Al volver a una clase ya visitada, a veces se veían las misiones de otra clase.',
+      },
+      {
+        type: 'fixed',
+        text: 'El filtro por estado de los listados de misiones del profesorado dejaba la lista vacía.',
+      },
+      {
+        type: 'fixed',
+        text: 'El avatar de una clase solo se puede elegir del catálogo, y personalizarlo con IA pasa el filtro de contenido y tiene un límite de peticiones.',
+      },
+      {
+        type: 'fixed',
+        text: 'El círculo de los avatares no tenía color de fondo, y las iniciales no se veían sobre fondos oscuros.',
+      },
+      {
+        type: 'fixed',
+        text: 'Dos compras a la vez en la tienda podían gastar el mismo saldo.',
+      },
+      {
+        type: 'fixed',
+        text: 'Los ajustes de una misión no seguían el diseño del resto de la app.',
+      },
+      {
+        type: 'fixed',
+        text: 'En el móvil, las pestañas de la cabecera de la clase y de la misión no tenían nombre para el lector de pantalla.',
+      },
+    ],
+  },
+  {
     version: '0.6.0',
     date: '2026-10-22',
     title: 'Pasar lista, equipos y ruleta',
