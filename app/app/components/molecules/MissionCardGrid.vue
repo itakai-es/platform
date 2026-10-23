@@ -13,6 +13,13 @@
         :to="missionLink"
         class="absolute inset-0 z-20"
       />
+      <!-- Bloqueada: sin enlace, pero se alcanza con el teclado y dice por qué -->
+      <button
+        v-else-if="!isTeacherMode"
+        type="button"
+        class="absolute inset-0 z-20 cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-navy-700 focus-visible:ring-inset"
+        :aria-label="t('student.missions.locked_aria', { title })"
+      />
 
       <!-- Image area -->
       <div class="relative w-full h-[200px]">
@@ -171,7 +178,13 @@
 </template>
 
 <script setup lang="ts">
-import { ClockIcon, CheckIcon, LockClosedIcon, UsersIcon, XCircleIcon } from '@heroicons/vue/24/solid'
+import {
+  ClockIcon,
+  CheckIcon,
+  LockClosedIcon,
+  UsersIcon,
+  XCircleIcon,
+} from '@heroicons/vue/24/solid'
 import { useMissionCard, type MissionCardProps } from '~/composables/useMissionCard'
 
 const props = defineProps<MissionCardProps>()

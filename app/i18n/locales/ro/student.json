@@ -60,7 +60,9 @@
         "pendiente": "În așteptare",
         "expirada": "Expirată",
         "en_progreso": "În desfășurare"
-      }
+      },
+      "locked_toast": "Misiunea este închisă deocamdată. Vei putea intra când se deschide.",
+      "locked_aria": "{title}: misiune închisă deocamdată"
     },
     "mission_detail": {
       "meta": {

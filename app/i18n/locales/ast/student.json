@@ -60,7 +60,9 @@
         "pendiente": "Pendiente",
         "expirada": "Caducada",
         "en_progreso": "En progresu"
-      }
+      },
+      "locked_toast": "El to docente zarró esta misión de momentu. Vas poder entrar cuando l’abra.",
+      "locked_aria": "{title}: misión zarrada de momentu"
     },
     "mission_detail": {
       "meta": {

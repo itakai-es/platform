@@ -84,6 +84,9 @@ export const useClassesStore = defineStore('classes', () => {
   const classes = ref<ClassWithExtras[]>([])
   const selectedClass = ref<ClassWithExtras | null>(null)
   const classMissions = ref<EnhancedMission[]>([])
+  // Las misiones de cada clase por separado: con una sola lista, al volver a una
+  // clase ya cargada se veían las de la última que se había pedido.
+  const missionsByClass = ref<Map<string, EnhancedMission[]>>(new Map())
   const classGuides = ref<Map<string, ClassGuide>>(new Map())
   const classBadges = ref<Map<string, ClassBadge[]>>(new Map())
   const classActivities = ref<Map<string, ClassActivity[]>>(new Map())
@@ -262,7 +265,7 @@ export const useClassesStore = defineStore('classes', () => {
   async function fetchClassMissions(classId: string, force = false) {
     // Use cached data unless forced
     if (!force && loadedMissions.value.has(classId)) {
-      return classMissions.value
+      return missionsByClass.value.get(classId) ?? []
     }
 
     try {
@@ -275,12 +278,14 @@ export const useClassesStore = defineStore('classes', () => {
       )
 
       classMissions.value = response.missions || []
+      missionsByClass.value.set(classId, classMissions.value)
       loadedMissions.value.add(classId)
       return response.missions
     } catch (err: any) {
       error.value = err.message || 'Error al cargar las misiones de la clase'
       console.error('Error fetching class missions:', err)
       classMissions.value = []
+      missionsByClass.value.delete(classId)
       throw err
     } finally {
       isLoadingClassMissions.value = false
@@ -595,6 +600,7 @@ export const useClassesStore = defineStore('classes', () => {
     classes.value = []
     selectedClass.value = null
     classMissions.value = []
+    missionsByClass.value.clear()
     classGuides.value.clear()
     classBadges.value.clear()
     classActivities.value.clear()
@@ -621,6 +627,7 @@ export const useClassesStore = defineStore('classes', () => {
     classes,
     selectedClass,
     classMissions,
+    missionsByClass,
     classGuides,
     classBadges,
     classActivities,
