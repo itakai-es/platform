@@ -169,7 +169,8 @@ export async function removeStudentFromClass(
 
 /**
  * Borra una matrícula y lo que colgaba de ella en la clase: el progreso y las
- * entregas de sus misiones, las insignias de esas misiones, las compras y usos
+ * entregas de sus misiones, las insignias de esas misiones, las pistas que usó en
+ * ellas, las compras y usos
  * de la tienda, los comportamientos, el historial y los avisos que hablaban de
  * la clase o de esas entregas. Vale también para la matrícula de vista previa
  * de un profesor al que quitan de la clase. Devuelve los ficheros de las
@@ -181,6 +182,11 @@ export async function deleteEnrollmentData(
   userId: string,
   enrollmentId: string
 ): Promise<(string | null)[]> {
+  // Lo primero, la matrícula bloqueada, como hacen la tienda, el uso de una
+  // pista y la aprobación de una entrega: así todos bloquean en el mismo orden
+  // (sin interbloqueos) y lo que esté a medias termina antes de borrar, con lo
+  // que su uso de pista o su compra también se borra aquí.
+  await tx.$queryRaw`SELECT id FROM class_enrollments WHERE id = ${enrollmentId} FOR UPDATE`
   const missionIds = (await tx.mission.findMany({ where: { classId }, select: { id: true } })).map(
     m => m.id
   )
@@ -216,6 +222,9 @@ export async function deleteEnrollmentData(
   })
   await tx.studentBadge.deleteMany({
     where: { studentId: userId, badge: { missionId: { in: missionIds } } },
+  })
+  await tx.missionHintUse.deleteMany({
+    where: { studentId: userId, missionId: { in: missionIds } },
   })
   await tx.shopPurchase.deleteMany({ where: { studentId: userId, classId } })
   await tx.shopItemUse.deleteMany({ where: { studentId: userId, classId } })

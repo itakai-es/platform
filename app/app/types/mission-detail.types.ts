@@ -47,6 +47,38 @@ export interface MissionDocumentDetail {
   uploadedAt?: string | Date
 }
 
+export type MissionHintCostType = 'coins' | 'xp' | 'percent'
+
+/**
+ * Una pista de la misión. El profesorado la recibe siempre con su texto y cuántos
+ * estudiantes la han usado; el alumnado, el texto solo si ya la ha usado.
+ */
+export interface MissionHintDetail {
+  id: string
+  /** Su lugar en el orden de la misión, desde 1. */
+  position: number
+  costType: MissionHintCostType
+  /** Monedas, XP o %. Al alumnado: lo que le costó o lo que cuesta ahora (0 si sale gratis). */
+  cost: number
+  content: string | null
+  /** Profesorado: cuántos la han usado (una usada no se borra). */
+  usedCount?: number
+  /** Alumnado: ya la ha usado. */
+  used?: boolean
+  /** Alumnado: es la siguiente que puede usar. */
+  isNext?: boolean
+}
+
+/** Solo del alumnado: lo que necesita junto a las pistas. */
+export interface MissionHintState {
+  /** % que restan ya sus pistas en lo que la misión le queda por pagar (tope 100). */
+  penalty: number
+  canUse: boolean
+  closedReason: 'completed' | 'expired' | null
+  coins: number
+  xp: number
+}
+
 export interface BadgeRewardDetail {
   id: string
   name: string
@@ -99,6 +131,8 @@ export interface MissionDetail {
   totalEnigmas?: number
   enigmas?: MissionEnigmaDetail[]
   documents?: MissionDocumentDetail[]
+  hints?: MissionHintDetail[]
+  hintState?: MissionHintState | null
   badgeReward?: BadgeRewardDetail | null
   teacherStats?: TeacherMissionStats | null
   /** True si algún alumno ya completó la misión: la rareza queda bloqueada. */

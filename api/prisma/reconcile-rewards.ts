@@ -12,6 +12,10 @@
  * before those columns existed.
  *
  * Run: docker exec itakai-api-dev sh -c "cd /app && npx tsx prisma/reconcile-rewards.ts"
+ *
+ * OBSOLETO, no ejecutar sobre datos reales: rehace los saldos solo con entregas
+ * y tienda, sin comportamientos, recompensas libres, premios de equipo ni lo que
+ * cobran y descuentan las pistas de las misiones. Desharía todo eso.
  */
 import { prisma } from '../src/config/database.js'
 import { getLevelFromXP, getMissionCompletionRewards } from '../src/utils/xp-calculator.js'

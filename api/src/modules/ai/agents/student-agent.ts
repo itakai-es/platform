@@ -166,6 +166,8 @@ export class StudentAgent extends BaseAgent {
               tags: true,
             },
           },
+          // Las pistas no entran: el alumnado las abre pagando, y el asistente
+          // las daría gratis.
         },
       }),
       prisma.studentMissionProgress.findFirst({

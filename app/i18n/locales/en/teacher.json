@@ -611,7 +611,8 @@
             "shop": "Shop",
             "reward": "Rewards",
             "attendance": "Attendance",
-            "team": "Teams"
+            "team": "Teams",
+            "hint": "Hints"
           },
           "actions": {
             "class": {
@@ -666,7 +667,8 @@
               "deleted": "deleted the document “{title}”"
             },
             "submission": {
-              "approved": "approved {target}'s submission for “{title}” at {percentage}%"
+              "approved": "approved {target}'s submission for “{title}” at {percentage}%",
+              "approved_hints": "approved {target}'s submission for “{title}” at {percentage}% (their hints took off {penalty}%)"
             },
             "behavior": {
               "applied": "applied “{title}” to {target}",
@@ -702,6 +704,12 @@
               "awarded_batch": "gave {points} point to team “{title}” and gave “{label}” to each member | gave {points} points to team “{title}” and gave “{label}” to each member",
               "distributed": "gave “{label}” to team “{title}”",
               "distributed_batch": "gave “{label}” to the only member of team “{title}” | gave “{label}” to the {count} members of team “{title}”"
+            },
+            "hint": {
+              "created": "added hint {position} to the mission “{title}”",
+              "updated": "edited hint {position} of the mission “{title}”",
+              "deleted": "deleted hint {position} of the mission “{title}”",
+              "reordered": "changed the order of the hints of the mission “{title}”"
             }
           },
           "anonymous": {
@@ -714,7 +722,8 @@
               "avatar_generated": "generated a new avatar for a student who is no longer in the class"
             },
             "submission": {
-              "approved": "approved a submission for “{title}” at {percentage}% from a student who is no longer in the class"
+              "approved": "approved a submission for “{title}” at {percentage}% from a student who is no longer in the class",
+              "approved_hints": "approved, for “{title}”, the submission of someone who is no longer in the class, at {percentage}% (their hints took off {penalty}%)"
             },
             "behavior": {
               "applied": "applied “{title}” to a student who is no longer in the class"
@@ -883,7 +892,8 @@
         "copy_success_title": "Mission copied",
         "duplicate_success_title": "Mission duplicated",
         "success_description": "The copy of “{title}” is now in “{name}”, locked and without a deadline. Review it and unlock it when you want your students to see it.",
-        "open_mission": "Open the mission"
+        "open_mission": "Open the mission",
+        "hints": "No hints | 1 hint | {count} hints"
       },
       "adapt": {
         "button": "Adapt with AI",
@@ -918,7 +928,8 @@
         "applied": "Mission adapted",
         "apply_error": "The proposal could not be applied. The mission has not changed.",
         "apply_error_partial": "Only part of the proposal was applied. Check the comparison: it already shows what was saved.",
-        "after_import_hint": "Want it tailored to this class? The AI suggests how to adapt it and you decide whether to apply it."
+        "after_import_hint": "Want it tailored to this class? The AI suggests how to adapt it and you decide whether to apply it.",
+        "hints_note": "No hints | The AI doesn't adapt the mission's hint: review it after applying the proposal. | The AI doesn't adapt the mission's {count} hints: review them after applying the proposal."
       }
     },
     "badges": {
@@ -1309,7 +1320,57 @@
         "approve_error": "Couldn't approve the submission",
         "approve_team": "Approve the team ({count}) at {pct} %",
         "team_approved": "{team}: {count} submission approved at {pct} % | {team}: {count} submissions approved at {pct} %",
-        "team_note": "Team mission (“{set}”): when reviewing a submission you can approve, at the same percentage, everyone in that team who has submitted."
+        "team_note": "Team mission (“{set}”): when reviewing a submission you can approve, at the same percentage, everyone in that team who has submitted.",
+        "hint_penalty": "−{count}% for their hints",
+        "penalty_changed": "{name}'s submission approved (+{xp} XP). Their hints now take off {count}%, not what was shown when the window opened.",
+        "team_hints_note": "Someone in this team has used % hints: each person gets their own discount, so not everyone in the team will receive the same.",
+        "team_penalty_changed": "Someone in the team used another % hint while you were reviewing: each person got the discount their hints take off now."
+      },
+      "mission_hints": {
+        "add": "Add",
+        "intro": "Students use them in this order, one at a time, and pay their cost when they use them. They see how many there are and what they cost; the text, only of the ones they have used.",
+        "empty_title": "This mission has no hints yet",
+        "empty_description": "Add hints that go from general to specific. Each one can cost {coins}, XP or a % of the reward.",
+        "empty_description_readonly": "If any are added, students will see them here and use them in order.",
+        "add_first": "Add the first hint",
+        "limit_reached": "This mission already has {max} hints, the maximum.",
+        "used_by": "Not used | Used by 1 student | Used by {count} students",
+        "edit_named": "Edit hint {position}",
+        "free_in_class": "Free in this class",
+        "free_no_coins": "The class doesn't use {coins}: this hint is free.",
+        "free_no_xp": "The class doesn't use XP: this hint is free.",
+        "free_note_list": "Some hints are free because the class doesn't use the resource they are paid with.",
+        "toast_added": "Hint added",
+        "toast_saved": "Hint saved",
+        "toast_deleted": "Hint deleted",
+        "toast_error": "The hint couldn't be saved",
+        "toast_delete_error": "The hint couldn't be deleted",
+        "reorder_error": "The order of the hints couldn't be changed",
+        "form": {
+          "add_title": "New hint",
+          "edit_title": "Hint {position}",
+          "content": "Hint text",
+          "content_hint": "What whoever uses it reads. Up to {max} characters.",
+          "content_placeholder": "E.g.: Look at the dates in the support document.",
+          "content_required": "Write the text of the hint.",
+          "cost_type": "How it's paid",
+          "type_xp": "XP",
+          "type_percent": "% of the reward",
+          "amount_coins": "Price in {coins}",
+          "amount_xp": "Price in XP",
+          "amount_percent": "Percentage it takes off",
+          "amount_hint": "Any whole number. The shortcuts are only suggestions.",
+          "amount_percent_hint": "It comes off what the mission still has to pay whoever uses it, never off what they have already earned. Several % hints add up, to a maximum of 100%.",
+          "presets": "Shortcuts",
+          "used_note": "Not used | 1 student has used it, so it cannot be deleted. What they paid does not change: the new cost applies to whoever uses it from now on. | {count} students have used it, so it cannot be deleted. What they paid does not change: the new cost applies to whoever uses it from now on.",
+          "summary_free": "Whoever uses it will open it for free.",
+          "summary_coins": "Whoever uses it will pay {count} {coins} to open it.",
+          "summary_xp": "Whoever uses it will pay {count} XP to open it (they may go down a level).",
+          "summary_percent": "Whoever uses it will earn {count}% less of what the mission still has to pay them.",
+          "delete": "Delete hint",
+          "delete_summary": "Deleting it removes it straight away: nobody has used it yet.",
+          "add_button": "Add hint"
+        }
       }
     },
     "templates": {

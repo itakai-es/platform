@@ -122,6 +122,16 @@ export type MissionEnigma = Prisma.MissionEnigmaModel
  */
 export type StudentEnigmaProgress = Prisma.StudentEnigmaProgressModel
 /**
+ * Model MissionHint
+ * 
+ */
+export type MissionHint = Prisma.MissionHintModel
+/**
+ * Model MissionHintUse
+ * 
+ */
+export type MissionHintUse = Prisma.MissionHintUseModel
+/**
  * Model EnigmaSubmission
  * 
  */

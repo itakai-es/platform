@@ -611,7 +611,8 @@
             "shop": "Denda",
             "reward": "Sariak",
             "attendance": "Asistentzia",
-            "team": "Taldeak"
+            "team": "Taldeak",
+            "hint": "Pistak"
           },
           "actions": {
             "class": {
@@ -666,7 +667,8 @@
               "deleted": "«{title}» dokumentua ezabatu du"
             },
             "submission": {
-              "approved": "{target} ikaslearen «{title}» entrega onartu du (%{percentage})"
+              "approved": "{target} ikaslearen «{title}» entrega onartu du (%{percentage})",
+              "approved_hints": "{target} ikaslearen «{title}» entrega onartu du (%{percentage}; bere pistek %{penalty} kentzen zuten)"
             },
             "behavior": {
               "applied": "«{title}» aplikatu dio {target} ikasleari",
@@ -702,6 +704,12 @@
               "awarded_batch": "{points} puntu eman dio «{title}» taldeari, eta «{label}» banatu dio kide bakoitzari | {points} puntu eman dizkio «{title}» taldeari, eta «{label}» banatu dio kide bakoitzari",
               "distributed": "«{label}» banatu dio «{title}» taldeari",
               "distributed_batch": "«{label}» banatu dio «{title}» taldeko kide bakarrari | «{label}» banatu die «{title}» taldeko {count} kideei"
+            },
+            "hint": {
+              "created": "«{title}» misioari {position}. pista gehitu dio",
+              "updated": "«{title}» misioaren {position}. pista editatu du",
+              "deleted": "«{title}» misioaren {position}. pista ezabatu du",
+              "reordered": "«{title}» misioaren pisten ordena aldatu du"
             }
           },
           "anonymous": {
@@ -714,7 +722,8 @@
               "avatar_generated": "avatar berri bat sortu du klasean jada ez dagoen ikasle batentzat"
             },
             "submission": {
-              "approved": "klasean jada ez dagoen ikasle baten «{title}» entrega onartu du (%{percentage})"
+              "approved": "klasean jada ez dagoen ikasle baten «{title}» entrega onartu du (%{percentage})",
+              "approved_hints": "Klasean jada ez dagoen norbaiten «{title}» entrega onartu du (%{percentage}; bere pistek %{penalty} kentzen zuten)"
             },
             "behavior": {
               "applied": "«{title}» aplikatu dio klasean jada ez dagoen ikasle bati"
@@ -883,7 +892,8 @@
         "copy_success_title": "Misioa kopiatu da",
         "duplicate_success_title": "Misioa bikoiztu da",
         "success_description": "«{title}» misioaren kopia «{name}» klasean dago dagoeneko, blokeatuta eta epemugarik gabe. Berrikusi eta desblokeatu zure ikasleek ikustea nahi duzunean.",
-        "open_mission": "Ireki misioa"
+        "open_mission": "Ireki misioa",
+        "hints": "Pistarik ez | Pista 1 | {count} pista"
       },
       "adapt": {
         "button": "Egokitu AArekin",
@@ -918,7 +928,8 @@
         "applied": "Misioa egokituta",
         "apply_error": "Ezin izan da proposamena aplikatu. Misioa ez da aldatu.",
         "apply_error_partial": "Proposamenaren zati bat bakarrik aplikatu da. Berrikusi konparazioa: gordetakoa erakusten du jada.",
-        "after_import_hint": "Klase honetarako neurrira nahi duzu? AAk nola egokitu proposatzen dizu, eta zuk erabakitzen duzu aplikatu ala ez."
+        "after_import_hint": "Klase honetarako neurrira nahi duzu? AAk nola egokitu proposatzen dizu, eta zuk erabakitzen duzu aplikatu ala ez.",
+        "hints_note": "Pistarik ez | AAk ez du misioaren pista egokitzen: berrikusi proposamena aplikatu ondoren. | AAk ez ditu misioaren {count} pistak egokitzen: berrikusi proposamena aplikatu ondoren."
       }
     },
     "badges": {
@@ -1309,7 +1320,57 @@
         "approve_error": "Ezin izan da entrega onartu",
         "approve_team": "Taldea onartu ({count}) % {pct}-ekin",
         "team_approved": "{team}: {count} entrega onartuta % {pct}-ekin | {team}: {count} entrega onartuta % {pct}-ekin",
-        "team_note": "Talde-misioa («{set}»): entrega bat berrikustean, ehuneko berarekin onar dezakezu entregatu duen talde osoa."
+        "team_note": "Talde-misioa («{set}»): entrega bat berrikustean, ehuneko berarekin onar dezakezu entregatu duen talde osoa.",
+        "hint_penalty": "−%{count} bere pistengatik",
+        "penalty_changed": "{name}-(r)en entrega onartu da (+{xp} XP). Bere pistek %{count} kentzen dute orain, ez leihoa irekitzean ikusten zena.",
+        "team_hints_note": "Talde honetako norbaitek ehuneko-pistak erabili ditu: bakoitzari bere deskontua aplikatzen zaio; beraz, taldekide guztiek ez dute gauza bera jasoko.",
+        "team_penalty_changed": "Taldeko norbaitek beste ehuneko-pista bat erabili du berrikusten ari zinen bitartean: bakoitzari bere pistek orain kentzen dutena deskontatu zaio."
+      },
+      "mission_hints": {
+        "add": "Gehitu",
+        "intro": "Ikasleek ordena honetan erabiltzen dituzte, banan-banan, eta erabiltzean ordaintzen dute haien kostua. Zenbat dauden eta zenbat balio duten ikusten dute; testua, erabili dituztenena bakarrik.",
+        "empty_title": "Misio honek ez du pistarik oraindik",
+        "empty_description": "Gehitu orokorretik zehatzera doazen pistak. Bakoitzak {coins}, XP edo sariaren ehuneko bat balio dezake.",
+        "empty_description_readonly": "Gehitzen badira, ikasleek hemen ikusiko dituzte eta ordenan erabiliko dituzte.",
+        "add_first": "Gehitu lehen pista",
+        "limit_reached": "Misio honek {max} pista ditu dagoeneko, gehienekoa.",
+        "used_by": "Erabili gabe | Ikasle batek erabili du | {count} ikaslek erabili dute",
+        "edit_named": "Editatu {position}. pista",
+        "free_in_class": "Doan klase honetan",
+        "free_no_coins": "Klaseak ez ditu {coins} erabiltzen: pista hau doan da.",
+        "free_no_xp": "Klaseak ez du XP erabiltzen: pista hau doan da.",
+        "free_note_list": "Pistaren bat doan da, klaseak ez duelako erabiltzen hura ordaintzeko baliabidea.",
+        "toast_added": "Pista gehitu da",
+        "toast_saved": "Pista gorde da",
+        "toast_deleted": "Pista ezabatu da",
+        "toast_error": "Ezin izan da pista gorde",
+        "toast_delete_error": "Ezin izan da pista ezabatu",
+        "reorder_error": "Ezin izan da pisten ordena aldatu",
+        "form": {
+          "add_title": "Pista berria",
+          "edit_title": "{position}. pista",
+          "content": "Pistaren testua",
+          "content_hint": "Erabiltzen duenak irakurtzen duena. Gehienez {max} karaktere.",
+          "content_placeholder": "Adib.: Begiratu laguntza-dokumentuko datei.",
+          "content_required": "Idatzi pistaren testua.",
+          "cost_type": "Nola ordaintzen den",
+          "type_xp": "XP",
+          "type_percent": "Sariaren %",
+          "amount_coins": "Prezioa ({coins})",
+          "amount_xp": "Prezioa (XP)",
+          "amount_percent": "Kentzen duen ehunekoa",
+          "amount_hint": "Edozein zenbaki oso. Lasterbideak iradokizunak baino ez dira.",
+          "amount_percent_hint": "Misioak erabiltzen duenari oraindik ordaindu behar dionetik kentzen da, inoiz ez kobratutakotik. Ehuneko-pistak batu egiten dira, %100 arte.",
+          "presets": "Lasterbideak",
+          "used_note": "Erabili gabe | Ikasle batek erabili du; beraz, ezin da ezabatu. Ordaindu zuena ez da aldatzen: kostu berria hemendik aurrera erabiltzen dutenentzat da. | {count} ikaslek erabili dute; beraz, ezin da ezabatu. Ordaindu zutena ez da aldatzen: kostu berria hemendik aurrera erabiltzen dutenentzat da.",
+          "summary_free": "Erabiltzen duenak doan irekiko du.",
+          "summary_coins": "Erabiltzen duenak {count} {coins} ordainduko ditu irekitzean.",
+          "summary_xp": "Erabiltzen duenak {count} XP ordainduko ditu irekitzean (maila jaitsi dezake).",
+          "summary_percent": "Erabiltzen duenak %{count} gutxiago kobratuko du misioak oraindik ordaindu behar dionetik.",
+          "delete": "Ezabatu pista",
+          "delete_summary": "Ezabatzen baduzu, berehala ezabatuko da: oraindik inork ez du erabili.",
+          "add_button": "Gehitu pista"
+        }
       }
     },
     "templates": {

@@ -1,5 +1,6 @@
 import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
 import { missionsService } from './missions.service.js'
+import { createHint, deleteHint, reorderHints, updateHint, useHint } from './mission-hints.service.js'
 import { z, ZodError } from 'zod'
 import { rethrowHttpError } from '../../utils/errors.js'
 
@@ -55,6 +56,22 @@ const enigmaSchema = z.object({
 const reorderSchema = z.object({
   ids: z.array(z.string()),
 })
+
+// Pistas: el texto es obligatorio al crearla y se recorta a su tope; el coste se
+// acota en el servicio, no aquí: un tipo desconocido pasa a monedas y una
+// cantidad rara (negativa, enorme, en texto) se recoloca, no se rechaza.
+const hintCostFields = {
+  costType: z.string().max(40).nullable().optional(),
+  cost: z.union([z.number(), z.string().max(40)]).nullable().optional(),
+}
+
+const hintSchema = z.object({ content: z.string(), ...hintCostFields })
+
+const hintUpdateSchema = hintSchema.partial()
+
+// Al usar una pista, el coste que se veía junto al botón: si ya no es el de
+// ahora, no se cobra (409) y el alumno ve el nuevo antes de volver a pulsar.
+const hintUseSchema = z.object(hintCostFields).partial()
 
 export async function missionsRoutes(fastify: FastifyInstance) {
   // All routes require authentication
@@ -474,6 +491,75 @@ export async function missionsRoutes(fastify: FastifyInstance) {
         }
         return reply.status(500).send({ message: 'Error interno' })
       }
+    }
+  )
+
+  // ---- Pistas ----
+
+  // Teacher: Create hint
+  fastify.post(
+    '/:missionId/hints',
+    async (request: FastifyRequest<{ Params: { missionId: string } }>, reply: FastifyReply) => {
+      const { id, role } = request.user as { id: string; role: string }
+      if (role !== 'teacher') {
+        return reply.status(403).send({ message: 'Solo el profesorado puede crear pistas' })
+      }
+      const data = hintSchema.parse(request.body)
+      return reply.status(201).send(await createHint(id, request.params.missionId, data))
+    }
+  )
+
+  // Teacher: Reorder hints (antes que las rutas con :hintId)
+  fastify.put(
+    '/:missionId/hints/reorder',
+    async (request: FastifyRequest<{ Params: { missionId: string } }>, reply: FastifyReply) => {
+      const { id, role } = request.user as { id: string; role: string }
+      if (role !== 'teacher') {
+        return reply.status(403).send({ message: 'Solo el profesorado puede reordenar pistas' })
+      }
+      const { ids } = reorderSchema.parse(request.body)
+      return reorderHints(id, request.params.missionId, ids)
+    }
+  )
+
+  // Teacher: Update hint
+  fastify.put(
+    '/:missionId/hints/:hintId',
+    async (
+      request: FastifyRequest<{ Params: { missionId: string; hintId: string } }>,
+      reply: FastifyReply
+    ) => {
+      const { id, role } = request.user as { id: string; role: string }
+      if (role !== 'teacher') {
+        return reply.status(403).send({ message: 'Solo el profesorado puede editar pistas' })
+      }
+      const data = hintUpdateSchema.parse(request.body)
+      return updateHint(id, request.params.missionId, request.params.hintId, data)
+    }
+  )
+
+  // Teacher: Delete hint (una pista usada no se borra: 409)
+  fastify.delete(
+    '/:missionId/hints/:hintId',
+    async (
+      request: FastifyRequest<{ Params: { missionId: string; hintId: string } }>,
+      reply: FastifyReply
+    ) => {
+      const { id, role } = request.user as { id: string; role: string }
+      if (role !== 'teacher') {
+        return reply.status(403).send({ message: 'Solo el profesorado puede eliminar pistas' })
+      }
+      return deleteHint(id, request.params.missionId, request.params.hintId)
+    }
+  )
+
+  // Student: Use the next hint, paying the cost shown next to the button
+  fastify.post(
+    '/:missionId/hints/:hintId/use',
+    async (request: FastifyRequest<{ Params: { missionId: string; hintId: string } }>) => {
+      const user = request.user as { id: string; role: string | null }
+      const seen = hintUseSchema.parse(request.body ?? {})
+      return useHint(user, request.params.missionId, request.params.hintId, seen)
     }
   )
 

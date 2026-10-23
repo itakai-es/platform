@@ -1051,6 +1051,63 @@ const MISSIONS: RouteCase[] = [
     levels: levels('edit', 200),
   },
   {
+    route: 'POST /missions/:missionId/hints',
+    request: async f => ({
+      method: 'POST',
+      url: `/missions/${await f.newMission()}/hints`,
+      payload: { content: 'Empieza por el título', costType: 'coins', cost: 10 },
+    }),
+    owner: 201,
+    other: 404,
+    student: 403,
+    levels: levels('edit', 201),
+  },
+  {
+    route: 'PUT /missions/:missionId/hints/reorder',
+    request: async f => {
+      const missionId = await f.newMission()
+      const ids = [await f.newHint(missionId), await f.newHint(missionId)]
+      return {
+        method: 'PUT',
+        url: `/missions/${missionId}/hints/reorder`,
+        payload: { ids: ids.reverse() },
+      }
+    },
+    owner: 200,
+    other: 404,
+    student: 403,
+    levels: levels('edit', 200),
+  },
+  {
+    route: 'PUT /missions/:missionId/hints/:hintId',
+    request: async f => {
+      const missionId = await f.newMission()
+      return {
+        method: 'PUT',
+        url: `/missions/${missionId}/hints/${await f.newHint(missionId)}`,
+        payload: { content: 'Pista cambiada' },
+      }
+    },
+    owner: 200,
+    other: 404,
+    student: 403,
+    levels: levels('edit', 200),
+  },
+  {
+    route: 'DELETE /missions/:missionId/hints/:hintId',
+    request: async f => {
+      const missionId = await f.newMission()
+      return {
+        method: 'DELETE',
+        url: `/missions/${missionId}/hints/${await f.newHint(missionId)}`,
+      }
+    },
+    owner: 200,
+    other: 404,
+    student: 403,
+    levels: levels('edit', 200),
+  },
+  {
     route: 'PUT /missions/:missionId/rewards',
     request: async f => ({
       method: 'PUT',

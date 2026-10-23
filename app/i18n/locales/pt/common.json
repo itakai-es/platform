@@ -554,6 +554,20 @@
         "base": "De base",
         "temporal": "Temporária"
       }
+    },
+    "mission_hints": {
+      "title": "Dicas",
+      "hint_label": "Dica {position}",
+      "free": "Grátis",
+      "cost_coins": "{count} {coins}",
+      "cost_xp": "{count} XP",
+      "cost_percent": "−{count} % da recompensa"
+    },
+    "activity_feed": {
+      "hint_used_student": "Usaste a dica {position} de {mission}",
+      "hint_used_teacher": "Usou a dica {position} de {mission}",
+      "hint_used_percent_student": "Usaste a dica {position} de {mission}: −{count} % no que te faltava receber",
+      "hint_used_percent_teacher": "Usou a dica {position} de {mission}: −{count} % no que lhe faltava receber"
     }
   }
 }

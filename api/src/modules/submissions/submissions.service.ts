@@ -4,6 +4,7 @@ import { saveUpload, uploadExtension } from '../storage/storage.service.js'
 import { join } from 'path'
 import { randomUUID } from 'crypto'
 import { getMissionCompletionRewards, validateCustomEnigmaXp } from '../../utils/xp-calculator.js'
+import { hintPenaltyFrom, rewardAfterHints } from '../../utils/mission-hints.js'
 import { applyXpDelta } from '../../utils/enrollment-xp.js'
 import { resolveClassSettings } from '../../utils/class-settings.js'
 import { notify, notifyMany } from '../notifications/notifications.service.js'
@@ -303,6 +304,19 @@ export class SubmissionsService {
       orderBy: { submittedAt: 'desc' },
     })
 
+    // Lo que restan las pistas de % de cada estudiante en esta misión: la
+    // ventana enseña «Recibirá» con el descuento, igual que se pagará.
+    const percentUses = await prisma.missionHintUse.findMany({
+      where: {
+        missionId: enigma.missionId,
+        studentId: { in: [...new Set(submissions.map(s => s.studentId))] },
+        costType: 'percent',
+      },
+      select: { studentId: true, costType: true, cost: true },
+    })
+    const hintPenaltyOf = (studentId: string) =>
+      hintPenaltyFrom(percentUses.filter(use => use.studentId === studentId))
+
     return {
       enigma: {
         id: enigma.id,
@@ -323,6 +337,8 @@ export class SubmissionsService {
             avatar: enrollment?.avatarUrl || null,
           },
           team: enrollment?.teamMemberships[0]?.team ?? null,
+          // % que restan sus pistas en lo que le queda por cobrar (0 sin pistas de %).
+          hintPenalty: hintPenaltyOf(s.studentId),
           status: s.status,
           fileName: s.fileName,
           hasFile: !!s.fileUrl,
@@ -423,11 +439,13 @@ export class SubmissionsService {
     })
     const alreadyApproved = new Set(done.map(d => d.studentId))
 
-    const approved: { submissionId: string; studentId: string }[] = []
+    // Con el descuento de pistas con el que se ha aprobado a cada cual: la
+    // ventana lo compara con el que enseñaba y avisa si ha cambiado.
+    const approved: { submissionId: string; studentId: string; hintPenalty: number }[] = []
     for (const [studentId, id] of latest) {
       if (alreadyApproved.has(studentId)) continue
-      await this.approveSubmission(userId, id, { percentage })
-      approved.push({ submissionId: id, studentId })
+      const { hintPenalty } = await this.approveSubmission(userId, id, { percentage })
+      approved.push({ submissionId: id, studentId, hintPenalty })
     }
     const skipped = alreadyApproved.size
     return {
@@ -504,14 +522,12 @@ export class SubmissionsService {
     // (keeps balances consistent with what's shown).
     const classSettings = resolveClassSettings(classInfo?.settings)
 
-    // Validate + resolve XP to award (integer, 0..xpReward).
-    const xpToAward = classSettings.xp
-      ? validateCustomEnigmaXp(Math.round((xpReward * pct) / 100), xpReward)
-      : 0
-    const coinsToAward = classSettings.coins ? Math.round(((coinReward ?? 0) * pct) / 100) : 0
-    const manaToAward = classSettings.mana ? Math.round(((manaReward ?? 0) * pct) / 100) : 0
-
     const result = await prisma.$transaction(async (tx) => {
+      // La matrícula del estudiante, bloqueada hasta confirmar: usar una pista o
+      // comprar en la tienda esperan, y lo que ya hayan hecho se ve aquí. Así un
+      // uso de pista a la vez que esta aprobación cuenta entero o no cuenta.
+      await tx.$queryRaw`SELECT id FROM class_enrollments WHERE student_id = ${studentId} AND class_id = ${classId} FOR UPDATE`
+
       // Re-check status inside the tx to close the race window between
       // the pre-check above and this write.
       const locked = await tx.enigmaSubmission.findUnique({
@@ -521,6 +537,28 @@ export class SubmissionsService {
       if (!locked || locked.status !== 'pendiente') {
         throw new Error('Esta entrega ya fue revisada')
       }
+
+      // Lo que restan las pistas de % que ha usado en esta misión (suma, tope
+      // 100): se multiplica con el % de aprobación y solo toca lo que aún no ha
+      // cobrado. Se guarda en el progreso del enigma para que subir después su
+      // recompensa no devuelva el descuento.
+      const hintPenalty = hintPenaltyFrom(
+        await tx.missionHintUse.findMany({
+          where: { missionId, studentId },
+          select: { costType: true, cost: true },
+        })
+      )
+
+      // Validate + resolve XP to award (integer, 0..xpReward).
+      const xpToAward = classSettings.xp
+        ? validateCustomEnigmaXp(rewardAfterHints(xpReward, pct, hintPenalty), xpReward)
+        : 0
+      const coinsToAward = classSettings.coins
+        ? rewardAfterHints(coinReward ?? 0, pct, hintPenalty)
+        : 0
+      const manaToAward = classSettings.mana
+        ? rewardAfterHints(manaReward ?? 0, pct, hintPenalty)
+        : 0
 
       // Mark the submission as approved.
       const updated = await tx.enigmaSubmission.update({
@@ -545,6 +583,7 @@ export class SubmissionsService {
           coinsEarned: coinsToAward,
           manaEarned: manaToAward,
           percentage: roundedPct,
+          hintPenalty,
         },
         create: {
           studentId,
@@ -553,6 +592,7 @@ export class SubmissionsService {
           coinsEarned: coinsToAward,
           manaEarned: manaToAward,
           percentage: roundedPct,
+          hintPenalty,
         },
       })
 
@@ -647,14 +687,20 @@ export class SubmissionsService {
           }).catch(() => {}) // Unique constraint catches repeats.
         }
 
-        const bonusRewards = getMissionCompletionRewards(submission.enigma.mission.rarity)
+        // El bonus de rareza también es «lo que la misión aún tiene que pagar»:
+        // lleva el descuento de las pistas (no el % de aprobación, como siempre).
+        const bonusXp = rewardAfterHints(
+          getMissionCompletionRewards(submission.enigma.mission.rarity).xp,
+          100,
+          hintPenalty
+        )
 
         // Skip the completion XP bonus if XP is disabled for the class.
         if (classSettings.xp) {
           await applyXpDelta({
             studentId,
             classId,
-            delta: bonusRewards.xp,
+            delta: bonusXp,
             tx,
           })
         }
@@ -669,7 +715,7 @@ export class SubmissionsService {
             classId,
             className: classInfo?.name,
             missionTitle: submission.enigma.mission.title,
-            missionXp: bonusRewards.xp,
+            missionXp: bonusXp,
             metadata: { missionId },
           },
         })
@@ -690,13 +736,22 @@ export class SubmissionsService {
           xpAwarded: xpToAward,
           coinsAwarded: coinsToAward,
           manaAwarded: manaToAward,
+          // El % que restaban sus pistas: «con un 80 %» no cuenta todo si no.
+          hintPenalty,
         },
       })
 
-      return { updated, enigmaXpResult }
+      return {
+        updated,
+        enigmaXpResult,
+        xpToAward,
+        coinsToAward,
+        manaToAward,
+        hintPenalty,
+      }
     })
 
-    const updated = result.updated
+    const { updated, xpToAward, coinsToAward, manaToAward, hintPenalty } = result
 
     // La entrega ya está revisada: su aviso deja de estar pendiente para todo el
     // profesorado que lo recibió. Se busca solo entre los avisos del profesorado
@@ -745,6 +800,7 @@ export class SubmissionsService {
       coinsAwarded: coinsToAward,
       manaAwarded: manaToAward,
       percentage: Math.round(pct),
+      hintPenalty,
       message: 'Entrega aprobada',
     }
   }

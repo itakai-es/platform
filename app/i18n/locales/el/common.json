@@ -554,6 +554,20 @@
         "base": "Βασική",
         "temporal": "Προσωρινή"
       }
+    },
+    "mission_hints": {
+      "title": "Υποδείξεις",
+      "hint_label": "Υπόδειξη {position}",
+      "free": "Δωρεάν",
+      "cost_coins": "{count} {coins}",
+      "cost_xp": "{count} XP",
+      "cost_percent": "−{count}% της ανταμοιβής"
+    },
+    "activity_feed": {
+      "hint_used_student": "Χρησιμοποίησες την υπόδειξη {position} της αποστολής {mission}",
+      "hint_used_teacher": "Χρησιμοποίησε την υπόδειξη {position} της αποστολής {mission}",
+      "hint_used_percent_student": "Χρησιμοποίησες την υπόδειξη {position} της αποστολής {mission}: −{count}% σε όσα σου έμεναν να κερδίσεις",
+      "hint_used_percent_teacher": "Χρησιμοποίησε την υπόδειξη {position} της αποστολής {mission}: −{count}% σε όσα του/της έμεναν να κερδίσει"
     }
   }
 }

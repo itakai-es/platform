@@ -611,7 +611,8 @@
             "shop": "Tienda",
             "reward": "Recompenses",
             "attendance": "Asistencia",
-            "team": "Equipos"
+            "team": "Equipos",
+            "hint": "Pistes"
           },
           "actions": {
             "class": {
@@ -666,7 +667,8 @@
               "deleted": "desanició'l documentu «{title}»"
             },
             "submission": {
-              "approved": "aprobó la entrega de {target} en «{title}» con un {percentage} %"
+              "approved": "aprobó la entrega de {target} en «{title}» con un {percentage} %",
+              "approved_hints": "aprobó la entrega de {target} en «{title}» con un {percentage} % (les sos pistes restaben un {penalty} %)"
             },
             "behavior": {
               "applied": "aplicó-y «{title}» a {target}",
@@ -702,6 +704,12 @@
               "awarded_batch": "dio {points} puntu al equipu «{title}» y repartió «{label}» a cada integrante | dio {points} puntos al equipu «{title}» y repartió «{label}» a cada integrante",
               "distributed": "repartió «{label}» al equipu «{title}»",
               "distributed_batch": "repartió «{label}» a la única persona del equipu «{title}» | repartió «{label}» a les {count} persones del equipu «{title}»"
+            },
+            "hint": {
+              "created": "amestó la pista {position} a la misión «{title}»",
+              "updated": "editó la pista {position} de la misión «{title}»",
+              "deleted": "desanició la pista {position} de la misión «{title}»",
+              "reordered": "camudó l'orde de les pistes de la misión «{title}»"
             }
           },
           "anonymous": {
@@ -714,7 +722,8 @@
               "avatar_generated": "xeneró un avatar nuevu pa daquién que yá nun ta na clase"
             },
             "submission": {
-              "approved": "aprobó en «{title}» la entrega de daquién que yá nun ta na clase, con un {percentage} %"
+              "approved": "aprobó en «{title}» la entrega de daquién que yá nun ta na clase, con un {percentage} %",
+              "approved_hints": "aprobó en «{title}» la entrega de daquién que yá nun ta na clase, con un {percentage} % (les sos pistes restaben un {penalty} %)"
             },
             "behavior": {
               "applied": "aplicó-y «{title}» a daquién que yá nun ta na clase"
@@ -883,7 +892,8 @@
         "copy_success_title": "Misión copiada",
         "duplicate_success_title": "Misión duplicada",
         "success_description": "La copia de «{title}» yá ta en «{name}», bloquiada y ensin data llende. Revísala y desbloquíala cuando quieras que la vea'l to alumnáu.",
-        "open_mission": "Abrir la misión"
+        "open_mission": "Abrir la misión",
+        "hints": "Ensin pistes | 1 pista | {count} pistes"
       },
       "adapt": {
         "button": "Adaptar con IA",
@@ -918,7 +928,8 @@
         "applied": "Misión adaptada",
         "apply_error": "Nun se pudo aplicar la propuesta. La misión nun camudó.",
         "apply_error_partial": "Namás s'aplicó una parte de la propuesta. Revisa la comparanza: yá amuesa lo guardao.",
-        "after_import_hint": "¿Quiesla a la midida d'esta clase? La IA propónte cómo adaptala y tu decides si aplicalo."
+        "after_import_hint": "¿Quiesla a la midida d'esta clase? La IA propónte cómo adaptala y tu decides si aplicalo.",
+        "hints_note": "Ensin pistes | La IA nun adapta la pista de la misión: revísala depués d'aplicar la propuesta. | La IA nun adapta les {count} pistes de la misión: revísales depués d'aplicar la propuesta."
       }
     },
     "badges": {
@@ -1309,7 +1320,57 @@
         "approve_error": "Nun se pudo aprobar la entrega",
         "approve_team": "Aprobar l’equipu ({count}) con un {pct} %",
         "team_approved": "{team}: aprobada {count} entrega con un {pct} % | {team}: aprobaes {count} entregues con un {pct} %",
-        "team_note": "Misión per equipos («{set}»): al revisar una entrega pues aprobar col mesmu porcentaxe a tol so equipu que la entregare."
+        "team_note": "Misión per equipos («{set}»): al revisar una entrega pues aprobar col mesmu porcentaxe a tol so equipu que la entregare.",
+        "hint_penalty": "−{count} % poles sos pistes",
+        "penalty_changed": "Entrega de {name} aprobada (+{xp} XP). Les sos pistes resten agora un {count} %, non lo que se vía al abrir la ventana.",
+        "team_hints_note": "Daquién d'esti equipu usó pistes de %: a cada quien aplícase-y el so propiu descuentu, asina que nun tol equipu va recibir lo mesmo.",
+        "team_penalty_changed": "Daquién del equipu usó otra pista de % mentanto revisabes: a cada quien descontóse-y lo que resten agora les sos pistes."
+      },
+      "mission_hints": {
+        "add": "Amestar",
+        "intro": "L'alumnáu úsales nesti orde, d'una en una, y paga'l so costu al usales. Ve cuántes hai y cuánto cuesten; el testu, namás de les que yá usó.",
+        "empty_title": "Esta misión entá nun tien pistes",
+        "empty_description": "Amiesta pistes que vaigan de lo xeneral a lo concreto. Cada una pue costar {coins}, XP o un % de la recompensa.",
+        "empty_description_readonly": "Si s'amiesten, l'alumnáu va veles equí y va usales n'orde.",
+        "add_first": "Amestar la primer pista",
+        "limit_reached": "Esta misión yá tien {max} pistes, el máximu.",
+        "used_by": "Ensin usar | Usóla 1 estudiante | Usáronla {count} estudiantes",
+        "edit_named": "Editar la pista {position}",
+        "free_in_class": "De baldre nesta clase",
+        "free_no_coins": "La clase nun usa {coins}: esta pista sal de baldre.",
+        "free_no_xp": "La clase nun usa XP: esta pista sal de baldre.",
+        "free_note_list": "Dalguna pista sal de baldre porque la clase nun usa'l recursu col que se paga.",
+        "toast_added": "Pista amestada",
+        "toast_saved": "Pista guardada",
+        "toast_deleted": "Pista desaniciada",
+        "toast_error": "Nun se pudo guardar la pista",
+        "toast_delete_error": "Nun se pudo desaniciar la pista",
+        "reorder_error": "Nun se pudo camudar l'orde de les pistes",
+        "form": {
+          "add_title": "Pista nueva",
+          "edit_title": "Pista {position}",
+          "content": "Testu de la pista",
+          "content_hint": "Lo que llee quien la usa. Hasta {max} caráuteres.",
+          "content_placeholder": "Ex.: Fíxate nes feches del documentu d’apoyu.",
+          "content_required": "Escribi’l testu de la pista.",
+          "cost_type": "Cómo se paga",
+          "type_xp": "XP",
+          "type_percent": "% de la recompensa",
+          "amount_coins": "Preciu en {coins}",
+          "amount_xp": "Preciu en XP",
+          "amount_percent": "Porcentaxe que resta",
+          "amount_hint": "Cualquier númberu enteru. Los atayos son namás suxerencies.",
+          "amount_percent_hint": "Réstase de lo que la misión entá tien que pagar a quien la use, enxamás de lo yá cobrao. Delles pistes de % súmense, hasta'l 100 %.",
+          "presets": "Atayos",
+          "used_note": "Ensin usar | Usóla 1 estudiante, asina que nun se pue desaniciar. Lo que pagó nun camuda: el costu nuevu val pa quien la use d'equí p'alantre. | Usáronla {count} estudiantes, asina que nun se pue desaniciar. Lo que pagaron nun camuda: el costu nuevu val pa quien la use d'equí p'alantre.",
+          "summary_free": "Quien la use va abrila de baldre.",
+          "summary_coins": "Quien la use va pagar {count} {coins} al abrila.",
+          "summary_xp": "Quien la use va pagar {count} XP al abrila (pue baxar de nivel).",
+          "summary_percent": "Quien la use va cobrar un {count} % menos de lo que la misión entá-y tenga que pagar.",
+          "delete": "Desaniciar la pista",
+          "delete_summary": "Si la desanicies, desaníciase nel momentu: naide la usó entá.",
+          "add_button": "Amestar la pista"
+        }
       }
     },
     "templates": {

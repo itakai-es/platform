@@ -89,6 +89,26 @@
         "error": "Erro ao enviar a entrega. Téntao de novo.",
         "expired_error": "Esta misión expirou. Xa non podes entregar enigmas.",
         "downloading": "Descargando"
+      },
+      "hints": {
+        "intro": "Atascácheste? Usa unha pista. Ábrense en orde, dunha en unha, e cada unha ten o seu custo.",
+        "locked": "Ábrese despois da pista {position}.",
+        "not_used": "Sen usar.",
+        "use_button": "Usar a pista {position}",
+        "summary_coins": "Custa {count} {coins}. Tes {balance}.",
+        "summary_xp": "Custa {count} XP. Tes {balance}. Pagar con XP pode baixarte de nivel.",
+        "summary_percent": "Resta un {count} % ao que esta misión aínda che ten que dar: os enigmas sen aprobar (tamén os que están en revisión) e o bonus da misión. O que xa cobraches non cambia.",
+        "summary_free": "É gratis.",
+        "short_coins": "Fáltanche {count} {coins}.",
+        "short_xp": "Fáltanche {count} XP.",
+        "used": "Usada",
+        "penalty_note": "As túas pistas restan un {count} % ao que che queda por cobrar nesta misión.",
+        "closed_completed": "Completaches a misión: xa non fai falta usar máis pistas.",
+        "closed_expired": "A misión caducou: xa non se poden usar as súas pistas.",
+        "preview_note": "Vista previa: ves todas as pistas abertas. O alumnado ábreas dunha en unha, nesta orde, pagando o seu custo.",
+        "used_announcement": "Usaches a pista {position}.",
+        "use_error": "Non se puido usar a pista.",
+        "bonus_penalty": "−{count} % polas túas pistas"
       }
     },
     "classes": {

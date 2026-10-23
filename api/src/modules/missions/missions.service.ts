@@ -19,6 +19,8 @@ import {
   type ClassUser,
 } from '../../utils/class-access.js'
 import { assignableBadgesWhere } from '../../utils/badge-access.js'
+import { missionHintsFor } from './mission-hints.service.js'
+import { rewardAfterHints } from '../../utils/mission-hints.js'
 import { NotFoundError, ValidationError } from '../../utils/errors.js'
 import { existsSync, mkdirSync } from 'fs'
 import {
@@ -352,6 +354,18 @@ export class MissionsService {
 
     const privateUploadOf = await privateUploadResolver()
 
+    // Pistas: el profesorado las ve enteras; el alumnado, el texto solo de las
+    // que ya ha usado, con lo que cuesta la siguiente y su saldo.
+    const { hints, hintState } = await missionHintsFor({
+      isTeacher,
+      missionId,
+      classId: mission.classId,
+      deadline: mission.deadline,
+      studentId: userId,
+      enrollmentId: membership.enrollment?.id ?? null,
+      settings: mission.class.settings,
+    })
+
     return {
       mission: {
         id: mission.id,
@@ -426,6 +440,9 @@ export class MissionsService {
           }
         }),
         documents: mission.documents.map(d => formatDocumentForFrontend(d, privateUploadOf)),
+        hints,
+        // Solo del alumno: el descuento que llevan sus pistas y si puede usar más.
+        hintState,
         badgeReward: mission.badges[0]
           ? {
               id: mission.badges[0].id,
@@ -999,14 +1016,17 @@ export class MissionsService {
         const levelCfg = resolveLevelConfig(clsRow?.levelConfig)
         const progresses = await tx.studentEnigmaProgress.findMany({ where: { enigmaId } })
         for (const p of progresses) {
-          const f = Math.min(100, Math.max(0, p.percentage)) / 100
+          // Lo que le toca con la recompensa nueva: su % de aprobación y el
+          // descuento de sus pistas al aprobarlo, el mismo de entonces. Sin él,
+          // subir la recompensa le devolvería lo que restaron sus pistas.
+          const owed = (reward: number) => rewardAfterHints(reward, p.percentage, p.hintPenalty)
           // Rewards can only increase after completion (guarded above), so every
           // delta is ≥ 0 — we only ever top up, never claw back. The student keeps
           // whatever they already earned/spent.
           // Don't top up resources the class has disabled.
-          const addXp = classSettings.xp ? Math.max(0, Math.round(newXpReward * f) - p.xpEarned) : 0
-          const addCoin = classSettings.coins ? Math.max(0, Math.round(newCoinReward * f) - p.coinsEarned) : 0
-          const addMana = classSettings.mana ? Math.max(0, Math.round(newManaReward * f) - p.manaEarned) : 0
+          const addXp = classSettings.xp ? Math.max(0, owed(newXpReward) - p.xpEarned) : 0
+          const addCoin = classSettings.coins ? Math.max(0, owed(newCoinReward) - p.coinsEarned) : 0
+          const addMana = classSettings.mana ? Math.max(0, owed(newManaReward) - p.manaEarned) : 0
           if (addXp === 0 && addCoin === 0 && addMana === 0) continue
           affectedCount += 1
 

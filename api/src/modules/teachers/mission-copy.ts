@@ -3,9 +3,10 @@ import type { MissionStatus } from '../../generated/prisma/enums.js'
 
 /**
  * Copia de una misión dentro de otra clase: la usan duplicar una clase (todas
- * sus misiones) e importar una misión suelta de otra clase. La copia es
- * independiente del origen: fila nueva de misión, de cada enigma y de cada
- * documento, y nunca arrastra progreso de alumnos ni entregas.
+ * sus misiones), importar una plantilla e importar una misión suelta de otra
+ * clase. La copia es independiente del origen: fila nueva de misión, de cada
+ * enigma, de cada pista y de cada documento, y nunca arrastra progreso de
+ * alumnos, entregas ni usos de pistas.
  *
  * Los documentos copiados apuntan al mismo fichero que los del origen (misma
  * `fileUrl`): borrar un documento solo borra el fichero cuando ninguna otra fila
@@ -19,9 +20,20 @@ import type { MissionStatus } from '../../generated/prisma/enums.js'
  * hace la copia, con la misma imagen (borrar una insignia no borra su imagen).
  */
 
-/** Misión de origen: con sus enigmas siempre; documentos e insignias, si se copian. */
-export type MissionCopySource = Prisma.MissionGetPayload<{ include: { enigmas: true } }> &
+/**
+ * Misión de origen: con sus enigmas y sus pistas siempre (el tipo obliga a
+ * leerlas en cada vía de copia); documentos e insignias, si se copian.
+ */
+export type MissionCopySource = Prisma.MissionGetPayload<{
+  include: { enigmas: true; hints: true }
+}> &
   Partial<Prisma.MissionGetPayload<{ include: { documents: true; badges: true } }>>
+
+/** `include` de una misión que se va a copiar: sus enigmas y sus pistas, en su orden. */
+export const MISSION_COPY_INCLUDE = {
+  enigmas: true,
+  hints: { orderBy: [{ orderIndex: 'asc' }, { createdAt: 'asc' }, { id: 'asc' }] },
+} satisfies Prisma.MissionInclude
 
 export interface MissionCopyOptions {
   /** Estado de la copia. Sin él, el del origen. */
@@ -37,6 +49,7 @@ export interface MissionCopyOptions {
 export interface MissionCopyResult {
   mission: Mission
   enigmas: number
+  hints: number
   documents: number
   badges: { id: string; name: string }[]
 }
@@ -61,7 +74,7 @@ export async function lockSourceClass(
 }
 
 /**
- * La misión `missionId` entera (enigmas, documentos e insignias), leída dentro
+ * La misión `missionId` entera (enigmas, pistas, documentos e insignias), leída dentro
  * de la transacción `tx` de la copia y con sus documentos bloqueados hasta que
  * se confirme. Un borrado de uno de ellos a la vez espera a que la copia esté
  * confirmada, y entonces ve que el fichero sigue en uso; si el borrado iba
@@ -82,12 +95,16 @@ export async function readMissionForCopy(
     where: { missionId },
     orderBy: { orderIndex: 'asc' },
   })
+  const hints = await tx.missionHint.findMany({
+    where: { missionId },
+    orderBy: MISSION_COPY_INCLUDE.hints.orderBy,
+  })
   const documents = await tx.missionDocument.findMany({
     where: { missionId },
     orderBy: [{ orderIndex: 'asc' }, { uploadedAt: 'asc' }],
   })
   const badges = await tx.badge.findMany({ where: { missionId }, orderBy: { createdAt: 'asc' } })
-  return { ...mission, enigmas, documents, badges }
+  return { ...mission, enigmas, hints, documents, badges }
 }
 
 /**
@@ -131,6 +148,20 @@ export async function copyMissionInto(
     })
   }
 
+  // Las pistas, con su texto, su orden y su coste. Los usos son del alumnado de
+  // la clase de origen: no viajan.
+  if (source.hints.length > 0) {
+    await tx.missionHint.createMany({
+      data: source.hints.map(h => ({
+        missionId: mission.id,
+        content: h.content,
+        orderIndex: h.orderIndex,
+        costType: h.costType,
+        cost: h.cost,
+      })),
+    })
+  }
+
   const documents = options.documents ? (source.documents ?? []) : []
   if (documents.length > 0) {
     await tx.missionDocument.createMany({
@@ -170,5 +201,11 @@ export async function copyMissionInto(
     }
   }
 
-  return { mission, enigmas: source.enigmas.length, documents: documents.length, badges }
+  return {
+    mission,
+    enigmas: source.enigmas.length,
+    hints: source.hints.length,
+    documents: documents.length,
+    badges,
+  }
 }

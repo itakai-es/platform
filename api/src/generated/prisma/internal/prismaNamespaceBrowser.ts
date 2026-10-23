@@ -67,6 +67,8 @@ export const ModelName = {
   MissionDocument: 'MissionDocument',
   MissionEnigma: 'MissionEnigma',
   StudentEnigmaProgress: 'StudentEnigmaProgress',
+  MissionHint: 'MissionHint',
+  MissionHintUse: 'MissionHintUse',
   EnigmaSubmission: 'EnigmaSubmission',
   StudentMissionProgress: 'StudentMissionProgress',
   Badge: 'Badge',
@@ -364,10 +366,38 @@ export const StudentEnigmaProgressScalarFieldEnum = {
   xpEarned: 'xpEarned',
   coinsEarned: 'coinsEarned',
   manaEarned: 'manaEarned',
-  percentage: 'percentage'
+  percentage: 'percentage',
+  hintPenalty: 'hintPenalty'
 } as const
 
 export type StudentEnigmaProgressScalarFieldEnum = (typeof StudentEnigmaProgressScalarFieldEnum)[keyof typeof StudentEnigmaProgressScalarFieldEnum]
+
+
+export const MissionHintScalarFieldEnum = {
+  id: 'id',
+  missionId: 'missionId',
+  content: 'content',
+  orderIndex: 'orderIndex',
+  costType: 'costType',
+  cost: 'cost',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MissionHintScalarFieldEnum = (typeof MissionHintScalarFieldEnum)[keyof typeof MissionHintScalarFieldEnum]
+
+
+export const MissionHintUseScalarFieldEnum = {
+  id: 'id',
+  hintId: 'hintId',
+  missionId: 'missionId',
+  studentId: 'studentId',
+  costType: 'costType',
+  cost: 'cost',
+  createdAt: 'createdAt'
+} as const
+
+export type MissionHintUseScalarFieldEnum = (typeof MissionHintUseScalarFieldEnum)[keyof typeof MissionHintUseScalarFieldEnum]
 
 
 export const EnigmaSubmissionScalarFieldEnum = {

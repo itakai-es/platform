@@ -10,6 +10,11 @@
     @update:model-value="close"
   >
     <div class="space-y-5">
+      <!-- La IA no ve las pistas: tras adaptar, pueden hablar de algo que ya no está -->
+      <InfoNote v-if="hintCount > 0">
+        {{ t('teacher.missions.adapt.hints_note', { count: hintCount }, hintCount) }}
+      </InfoNote>
+
       <!-- 1. Qué quiere su docente (opcional) -->
       <template v-if="!proposal">
         <p class="text-sm">{{ t('teacher.missions.adapt.intro', { name: className }) }}</p>
@@ -200,9 +205,17 @@ const props = defineProps<{
   modelValue: boolean
   missionId: string
   className: string
-  mission: { title: string; description?: string; enigmas?: MissionEnigmaDetail[] }
+  mission: {
+    title: string
+    description?: string
+    enigmas?: MissionEnigmaDetail[]
+    hints?: unknown[]
+  }
   classSettings: ClassSettings
 }>()
+
+/** Pistas de la misión: la IA no las ve ni las cambia, así que se avisa. */
+const hintCount = computed(() => props.mission.hints?.length ?? 0)
 
 const emit = defineEmits<{
   'update:modelValue': [value: boolean]

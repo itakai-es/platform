@@ -554,6 +554,20 @@
         "base": "De bază",
         "temporal": "Temporară"
       }
+    },
+    "mission_hints": {
+      "title": "Indicii",
+      "hint_label": "Indiciul {position}",
+      "free": "Gratuit",
+      "cost_coins": "{count} {coins}",
+      "cost_xp": "{count} XP",
+      "cost_percent": "−{count} % din recompensă"
+    },
+    "activity_feed": {
+      "hint_used_student": "Ai folosit indiciul {position} din {mission}",
+      "hint_used_teacher": "A folosit indiciul {position} din {mission}",
+      "hint_used_percent_student": "Ai folosit indiciul {position} din {mission}: −{count} % din ce mai aveai de primit",
+      "hint_used_percent_teacher": "A folosit indiciul {position} din {mission}: −{count} % din ce mai avea de primit"
     }
   }
 }

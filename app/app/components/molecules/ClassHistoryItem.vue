@@ -113,6 +113,10 @@ function textKey(entry: ClassHistoryEntry): string {
     return 'class.ownership_inherited'
   }
   if (action === 'student.removed' && params.accountDeleted) return 'student.removed_unused'
+  // Aprobada con el descuento de sus pistas de %: «con un 80 %» no lo cuenta todo.
+  if (action === 'submission.approved' && Number(params.hintPenalty ?? 0) > 0) {
+    return 'submission.approved_hints'
+  }
   if (action === 'team.set_updated' && typeof params.archived === 'boolean') {
     return params.archived ? 'team.set_archived' : 'team.set_unarchived'
   }
@@ -144,6 +148,8 @@ const text = computed(() => {
     title: param('title'),
     target: entry.target?.name || t('teacher.classes.detail.history.unknown_target'),
     percentage: param('percentage'),
+    position: param('position'),
+    penalty: param('hintPenalty'),
     // El plural: de los puntos en un premio de equipo; si no, de las personas del lote.
     count:
       action === 'team.awarded' || action === 'team.awarded_batch'

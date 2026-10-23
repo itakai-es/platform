@@ -554,6 +554,20 @@
         "base": "Base",
         "temporal": "Temporary"
       }
+    },
+    "mission_hints": {
+      "title": "Hints",
+      "hint_label": "Hint {position}",
+      "free": "Free",
+      "cost_coins": "{count} {coins}",
+      "cost_xp": "{count} XP",
+      "cost_percent": "−{count}% of the reward"
+    },
+    "activity_feed": {
+      "hint_used_student": "You used hint {position} of {mission}",
+      "hint_used_teacher": "Used hint {position} of {mission}",
+      "hint_used_percent_student": "You used hint {position} of {mission}: −{count}% on what you still had to earn",
+      "hint_used_percent_teacher": "Used hint {position} of {mission}: −{count}% on what they still had to earn"
     }
   }
 }

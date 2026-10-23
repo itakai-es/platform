@@ -91,6 +91,9 @@ const baseSubmission = (overrides: any = {}) => ({
 const setupTxMock = (overrides: Record<string, any> = {}) => {
   mocks.$transaction.mockImplementation(async (cb: any) => {
     const tx = {
+      // La matrícula se bloquea al empezar y se leen sus pistas de %.
+      $queryRaw: vi.fn(async () => []),
+      missionHintUse: { findMany: vi.fn(async () => []) },
       enigmaSubmission: {
         findUnique: mocks.enigmaSubmissionFindUniqueTx,
         update: mocks.enigmaSubmissionUpdate,

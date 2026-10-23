@@ -76,6 +76,7 @@ model User {
   settings          UserSettings?
   shopPurchases     ShopPurchase[]
   shopItemUses      ShopItemUse[]
+  missionHintUses   MissionHintUse[]
   behaviorsApplied  BehaviorApplication[] @relation("BehaviorTeacher")
   submissionsReviewed EnigmaSubmission[] @relation("SubmissionReviewer")
   activitiesActed   Activity[]          @relation("ActivityActor")
@@ -426,6 +427,8 @@ model Mission {
   badges    Badge[]
   progress  StudentMissionProgress[]
   documents MissionDocument[]
+  hints     MissionHint[]
+  hintUses  MissionHintUse[]
 
   @@map("missions")
 }
@@ -482,12 +485,57 @@ model StudentEnigmaProgress {
   coinsEarned Int       @default(0) @map("coins_earned")
   manaEarned  Int       @default(0) @map("mana_earned")
   percentage  Int       @default(100) // Completion % the teacher graded (0-100); scales every reward
+  // % que restaban las pistas de % de la misión al aprobarlo (suma con tope 100).
+  // Se guarda para que subir después la recompensa del enigma no devuelva el descuento.
+  hintPenalty Int       @default(0) @map("hint_penalty")
 
   student User          @relation(fields: [studentId], references: [id], onDelete: Cascade)
   enigma  MissionEnigma @relation(fields: [enigmaId], references: [id], onDelete: Cascade)
 
   @@unique([studentId, enigmaId])
   @@map("student_enigma_progress")
+}
+
+// Pistas de una misión, en el orden que fija el profesorado. Cada una cuesta
+// monedas, XP o un % de lo que la misión aún tiene que pagar a quien la usa.
+model MissionHint {
+  id         String   @id @default(uuid())
+  missionId  String   @map("mission_id")
+  content    String
+  orderIndex Int      @default(0) @map("order_index")
+  costType   String   @default("coins") @map("cost_type") // "coins" | "xp" | "percent"
+  cost       Int      @default(0) // monedas o XP; con "percent", de 0 a 100
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  mission Mission          @relation(fields: [missionId], references: [id], onDelete: Cascade)
+  uses    MissionHintUse[]
+
+  @@index([missionId, orderIndex])
+  @@map("mission_hints")
+}
+
+// Cada pista que ha usado un estudiante, con lo que costó en ese momento: lo
+// cobrado (monedas o XP) o el % aplicado. Una pista usada no se borra.
+model MissionHintUse {
+  id        String   @id @default(uuid())
+  hintId    String   @map("hint_id")
+  missionId String   @map("mission_id")
+  studentId String   @map("student_id")
+  costType  String   @map("cost_type")
+  cost      Int
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Sin cascada desde la pista: la base no deja borrar una pista usada, ni
+  // aunque el borrado llegue a la vez que el uso. Al borrar la misión o la clase
+  // los usos se van con ella (la comprobación es al final de la sentencia).
+  hint    MissionHint @relation(fields: [hintId], references: [id], onDelete: NoAction)
+  mission Mission     @relation(fields: [missionId], references: [id], onDelete: Cascade)
+  student User        @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@unique([hintId, studentId])
+  @@index([missionId, studentId])
+  @@map("mission_hint_uses")
 }
 
 enum SubmissionStatus {
@@ -700,6 +748,7 @@ enum ActivityType {
   behavior_applied
   shop_purchased
   shop_item_used
+  hint_used
 }
 
 model Activity {

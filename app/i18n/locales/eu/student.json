@@ -89,6 +89,26 @@
         "error": "Errorea entrega bidaltzean. Saiatu berriro.",
         "expired_error": "Misio hau iraungita dago. Dagoeneko ezin duzu enigmarik entregatu.",
         "downloading": "Deskargatzen"
+      },
+      "hints": {
+        "intro": "Trabatu zara? Erabili pista bat. Ordenan irekitzen dira, banan-banan, eta bakoitzak bere kostua du.",
+        "locked": "{position}. pistaren ondoren irekitzen da.",
+        "not_used": "Erabili gabe.",
+        "use_button": "Erabili {position}. pista",
+        "summary_coins": "{count} {coins} balio du. {balance} dituzu.",
+        "summary_xp": "{count} XP balio du. {balance} dituzu. XParekin ordaintzeak maila jaitsi diezazuke.",
+        "summary_percent": "Misio honek oraindik eman behar dizunari %{count} kentzen dio: onartu gabeko enigmei (berrikusten ari direnei ere bai) eta misioaren bonusari. Kobratu duzuna ez da aldatzen.",
+        "summary_free": "Doan da.",
+        "short_coins": "{count} {coins} falta zaizkizu.",
+        "short_xp": "{count} XP falta zaizkizu.",
+        "used": "Erabilita",
+        "penalty_note": "Zure pistek %{count} kentzen diote misio honetan kobratzeko geratzen zaizunari.",
+        "closed_completed": "Misioa osatu duzu: ez duzu pista gehiagorik behar.",
+        "closed_expired": "Misioa iraungi da: ezin dira haren pistak erabili.",
+        "preview_note": "Aurrebista: pista guztiak irekita ikusten dituzu. Ikasleek banan-banan irekitzen dituzte, ordena honetan, haien kostua ordainduta.",
+        "used_announcement": "{position}. pista erabili duzu.",
+        "use_error": "Ezin izan da pista erabili.",
+        "bonus_penalty": "−%{count} zure pistengatik"
       }
     },
     "classes": {

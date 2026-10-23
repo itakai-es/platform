@@ -186,6 +186,7 @@ export interface ManagedRowReview {
  */
 export interface MissionImportCopied {
   enigmas: number
+  hints: number
   documents: number
   badges: { id: string; name: string }[]
 }

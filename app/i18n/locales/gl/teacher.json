@@ -611,7 +611,8 @@
             "shop": "Tenda",
             "reward": "Recompensas",
             "attendance": "Asistencia",
-            "team": "Equipos"
+            "team": "Equipos",
+            "hint": "Pistas"
           },
           "actions": {
             "class": {
@@ -666,7 +667,8 @@
               "deleted": "eliminou o documento «{title}»"
             },
             "submission": {
-              "approved": "aprobou a entrega de {target} en «{title}» cun {percentage} %"
+              "approved": "aprobou a entrega de {target} en «{title}» cun {percentage} %",
+              "approved_hints": "aprobou a entrega de {target} en «{title}» cun {percentage} % (as súas pistas restaban un {penalty} %)"
             },
             "behavior": {
               "applied": "aplicoulle «{title}» a {target}",
@@ -702,6 +704,12 @@
               "awarded_batch": "deu {points} punto ao equipo «{title}» e repartiu «{label}» a cada integrante | deu {points} puntos ao equipo «{title}» e repartiu «{label}» a cada integrante",
               "distributed": "repartiu «{label}» ao equipo «{title}»",
               "distributed_batch": "repartiu «{label}» á única persoa do equipo «{title}» | repartiu «{label}» ás {count} persoas do equipo «{title}»"
+            },
+            "hint": {
+              "created": "engadiu a pista {position} á misión «{title}»",
+              "updated": "editou a pista {position} da misión «{title}»",
+              "deleted": "eliminou a pista {position} da misión «{title}»",
+              "reordered": "cambiou a orde das pistas da misión «{title}»"
             }
           },
           "anonymous": {
@@ -714,7 +722,8 @@
               "avatar_generated": "xerou un avatar novo para alguén que xa non está na clase"
             },
             "submission": {
-              "approved": "aprobou en «{title}» a entrega de alguén que xa non está na clase, cun {percentage} %"
+              "approved": "aprobou en «{title}» a entrega de alguén que xa non está na clase, cun {percentage} %",
+              "approved_hints": "aprobou en «{title}» a entrega de alguén que xa non está na clase, cun {percentage} % (as súas pistas restaban un {penalty} %)"
             },
             "behavior": {
               "applied": "aplicoulle «{title}» a alguén que xa non está na clase"
@@ -883,7 +892,8 @@
         "copy_success_title": "Misión copiada",
         "duplicate_success_title": "Misión duplicada",
         "success_description": "A copia de «{title}» xa está en «{name}», bloqueada e sen data límite. Revísaa e desbloquéaa cando queiras que a vexa o teu alumnado.",
-        "open_mission": "Abrir a misión"
+        "open_mission": "Abrir a misión",
+        "hints": "Sen pistas | 1 pista | {count} pistas"
       },
       "adapt": {
         "button": "Adaptar con IA",
@@ -918,7 +928,8 @@
         "applied": "Misión adaptada",
         "apply_error": "Non se puido aplicar a proposta. A misión non cambiou.",
         "apply_error_partial": "Só se aplicou unha parte da proposta. Revisa a comparación: xa amosa o gardado.",
-        "after_import_hint": "Quérela á medida desta clase? A IA proponche como adaptala e ti decides se aplicalo."
+        "after_import_hint": "Quérela á medida desta clase? A IA proponche como adaptala e ti decides se aplicalo.",
+        "hints_note": "Sen pistas | A IA non adapta a pista da misión: revísaa despois de aplicar a proposta. | A IA non adapta as {count} pistas da misión: revísaas despois de aplicar a proposta."
       }
     },
     "badges": {
@@ -1309,7 +1320,57 @@
         "approve_error": "Non se puido aprobar a entrega",
         "approve_team": "Aprobar o equipo ({count}) cun {pct} %",
         "team_approved": "{team}: aprobada {count} entrega cun {pct} % | {team}: aprobadas {count} entregas cun {pct} %",
-        "team_note": "Misión por equipos («{set}»): ao revisar unha entrega podes aprobar co mesmo porcentaxe todo o seu equipo que entregase."
+        "team_note": "Misión por equipos («{set}»): ao revisar unha entrega podes aprobar co mesmo porcentaxe todo o seu equipo que entregase.",
+        "hint_penalty": "−{count} % polas súas pistas",
+        "penalty_changed": "Entrega de {name} aprobada (+{xp} XP). As súas pistas restan agora un {count} %, non o que se vía ao abrir a xanela.",
+        "team_hints_note": "Alguén deste equipo usou pistas de %: a cada quen aplícaselle o seu propio desconto, así que non todo o equipo recibirá o mesmo.",
+        "team_penalty_changed": "Alguén do equipo usou outra pista de % mentres revisabas: a cada quen descontóuselle o que restan agora as súas pistas."
+      },
+      "mission_hints": {
+        "add": "Engadir",
+        "intro": "O alumnado úsaas nesta orde, dunha en unha, e paga o seu custo ao usalas. Ve cantas hai e canto custan; o texto, só das que xa usou.",
+        "empty_title": "Esta misión aínda non ten pistas",
+        "empty_description": "Engade pistas que vaian do xeral ao concreto. Cada unha pode custar {coins}, XP ou unha % da recompensa.",
+        "empty_description_readonly": "Se se engaden, o alumnado veraas aquí e usaraas en orde.",
+        "add_first": "Engadir a primeira pista",
+        "limit_reached": "Esta misión xa ten {max} pistas, o máximo.",
+        "used_by": "Sen usar | Usouna 1 estudante | Usárona {count} estudantes",
+        "edit_named": "Editar a pista {position}",
+        "free_in_class": "Gratis nesta clase",
+        "free_no_coins": "A clase non usa {coins}: esta pista sae gratis.",
+        "free_no_xp": "A clase non usa XP: esta pista sae gratis.",
+        "free_note_list": "Algunha pista sae gratis porque a clase non usa o recurso co que se paga.",
+        "toast_added": "Pista engadida",
+        "toast_saved": "Pista gardada",
+        "toast_deleted": "Pista eliminada",
+        "toast_error": "Non se puido gardar a pista",
+        "toast_delete_error": "Non se puido eliminar a pista",
+        "reorder_error": "Non se puido cambiar a orde das pistas",
+        "form": {
+          "add_title": "Nova pista",
+          "edit_title": "Pista {position}",
+          "content": "Texto da pista",
+          "content_hint": "O que le quen a usa. Ata {max} caracteres.",
+          "content_placeholder": "Ex.: Fíxate nas datas do documento de apoio.",
+          "content_required": "Escribe o texto da pista.",
+          "cost_type": "Como se paga",
+          "type_xp": "XP",
+          "type_percent": "% da recompensa",
+          "amount_coins": "Prezo en {coins}",
+          "amount_xp": "Prezo en XP",
+          "amount_percent": "Porcentaxe que resta",
+          "amount_hint": "Calquera número enteiro. Os atallos só son suxestións.",
+          "amount_percent_hint": "Réstase do que a misión aínda ten que pagar a quen a use, nunca do xa cobrado. Varias pistas de % súmanse, ata o 100 %.",
+          "presets": "Atallos",
+          "used_note": "Sen usar | Usouna 1 estudante, así que non se pode borrar. O que pagou non cambia: o custo novo vale para quen a use a partir de agora. | Usárona {count} estudantes, así que non se pode borrar. O que pagaron non cambia: o custo novo vale para quen a use a partir de agora.",
+          "summary_free": "Quen a use abrirana gratis.",
+          "summary_coins": "Quen a use pagará {count} {coins} ao abrila.",
+          "summary_xp": "Quen a use pagará {count} XP ao abrila (pode baixar de nivel).",
+          "summary_percent": "Quen a use cobrará un {count} % menos do que a misión aínda lle teña que pagar.",
+          "delete": "Eliminar a pista",
+          "delete_summary": "Se a eliminas, bórrase no momento: aínda non a usou ninguén.",
+          "add_button": "Engadir a pista"
+        }
       }
     },
     "templates": {

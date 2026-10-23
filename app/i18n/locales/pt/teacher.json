@@ -611,7 +611,8 @@
             "shop": "Loja",
             "reward": "Recompensas",
             "attendance": "Assiduidade",
-            "team": "Equipas"
+            "team": "Equipas",
+            "hint": "Dicas"
           },
           "actions": {
             "class": {
@@ -666,7 +667,8 @@
               "deleted": "eliminou o documento «{title}»"
             },
             "submission": {
-              "approved": "aprovou a entrega de {target} em «{title}» com {percentage} %"
+              "approved": "aprovou a entrega de {target} em «{title}» com {percentage} %",
+              "approved_hints": "aprovou a entrega de {target} em «{title}» com {percentage} % (as suas dicas retiravam {penalty} %)"
             },
             "behavior": {
               "applied": "aplicou «{title}» a {target}",
@@ -702,6 +704,12 @@
               "awarded_batch": "deu {points} ponto à equipa «{title}» e deu «{label}» a cada integrante | deu {points} pontos à equipa «{title}» e deu «{label}» a cada integrante",
               "distributed": "distribuiu «{label}» pela equipa «{title}»",
               "distributed_batch": "deu «{label}» à única pessoa da equipa «{title}» | distribuiu «{label}» pelas {count} pessoas da equipa «{title}»"
+            },
+            "hint": {
+              "created": "adicionou a dica {position} à missão «{title}»",
+              "updated": "editou a dica {position} da missão «{title}»",
+              "deleted": "eliminou a dica {position} da missão «{title}»",
+              "reordered": "mudou a ordem das dicas da missão «{title}»"
             }
           },
           "anonymous": {
@@ -714,7 +722,8 @@
               "avatar_generated": "gerou um novo avatar para alguém que já não está na turma"
             },
             "submission": {
-              "approved": "aprovou em «{title}» a entrega de alguém que já não está na turma, com {percentage} %"
+              "approved": "aprovou em «{title}» a entrega de alguém que já não está na turma, com {percentage} %",
+              "approved_hints": "aprovou em «{title}» a entrega de alguém que já não está na turma, com {percentage} % (as suas dicas retiravam {penalty} %)"
             },
             "behavior": {
               "applied": "aplicou «{title}» a alguém que já não está na turma"
@@ -883,7 +892,8 @@
         "copy_success_title": "Missão copiada",
         "duplicate_success_title": "Missão duplicada",
         "success_description": "A cópia de «{title}» já está em «{name}», bloqueada e sem prazo. Revê-a e desbloqueia-a quando quiseres que a tua turma a veja.",
-        "open_mission": "Abrir a missão"
+        "open_mission": "Abrir a missão",
+        "hints": "Sem dicas | 1 dica | {count} dicas"
       },
       "adapt": {
         "button": "Adaptar com IA",
@@ -918,7 +928,8 @@
         "applied": "Missão adaptada",
         "apply_error": "Não foi possível aplicar a proposta. A missão não mudou.",
         "apply_error_partial": "Só se aplicou uma parte da proposta. Revê a comparação: já mostra o que foi guardado.",
-        "after_import_hint": "Queres a missão à medida desta turma? A IA propõe como adaptá-la e tu decides se a aplicas."
+        "after_import_hint": "Queres a missão à medida desta turma? A IA propõe como adaptá-la e tu decides se a aplicas.",
+        "hints_note": "Sem dicas | A IA não adapta a dica da missão: revê-a depois de aplicares a proposta. | A IA não adapta as {count} dicas da missão: revê-as depois de aplicares a proposta."
       }
     },
     "badges": {
@@ -1309,7 +1320,57 @@
         "approve_error": "Não foi possível aprovar a entrega",
         "approve_team": "Aprovar a equipa ({count}) com {pct} %",
         "team_approved": "{team}: {count} entrega aprovada com {pct} % | {team}: {count} entregas aprovadas com {pct} %",
-        "team_note": "Missão por equipas («{set}»): ao rever uma entrega podes aprovar com a mesma percentagem toda a sua equipa que tenha entregado."
+        "team_note": "Missão por equipas («{set}»): ao rever uma entrega podes aprovar com a mesma percentagem toda a sua equipa que tenha entregado.",
+        "hint_penalty": "−{count} % pelas suas dicas",
+        "penalty_changed": "Entrega de {name} aprovada (+{xp} XP). As suas dicas descontam agora {count} %, não o que se via ao abrir a janela.",
+        "team_hints_note": "Alguém desta equipa usou dicas de %: a cada pessoa aplica-se o seu próprio desconto, por isso nem toda a equipa vai receber o mesmo.",
+        "team_penalty_changed": "Alguém da equipa usou outra dica de % enquanto revias: a cada pessoa aplicou-se o desconto que as suas dicas têm agora."
+      },
+      "mission_hints": {
+        "add": "Adicionar",
+        "intro": "Os estudantes usam-nas por esta ordem, uma de cada vez, e pagam o seu custo ao usá-las. Veem quantas há e quanto custam; o texto, só das que já usaram.",
+        "empty_title": "Esta missão ainda não tem dicas",
+        "empty_description": "Adiciona dicas que vão do geral para o concreto. Cada uma pode custar {coins}, XP ou uma % da recompensa.",
+        "empty_description_readonly": "Se forem adicionadas, os estudantes vão vê-las aqui e usá-las por ordem.",
+        "add_first": "Adicionar a primeira dica",
+        "limit_reached": "Esta missão já tem {max} dicas, o máximo.",
+        "used_by": "Por usar | Usada por 1 estudante | Usada por {count} estudantes",
+        "edit_named": "Editar a dica {position}",
+        "free_in_class": "Grátis nesta turma",
+        "free_no_coins": "A turma não usa {coins}: esta dica sai grátis.",
+        "free_no_xp": "A turma não usa XP: esta dica sai grátis.",
+        "free_note_list": "Alguma dica sai grátis porque a turma não usa o recurso com que se paga.",
+        "toast_added": "Dica adicionada",
+        "toast_saved": "Dica guardada",
+        "toast_deleted": "Dica eliminada",
+        "toast_error": "Não foi possível guardar a dica",
+        "toast_delete_error": "Não foi possível eliminar a dica",
+        "reorder_error": "Não foi possível mudar a ordem das dicas",
+        "form": {
+          "add_title": "Nova dica",
+          "edit_title": "Dica {position}",
+          "content": "Texto da dica",
+          "content_hint": "O que lê quem a usa. Até {max} caracteres.",
+          "content_placeholder": "Ex.: Repara nas datas do documento de apoio.",
+          "content_required": "Escreve o texto da dica.",
+          "cost_type": "Como se paga",
+          "type_xp": "XP",
+          "type_percent": "% da recompensa",
+          "amount_coins": "Preço em {coins}",
+          "amount_xp": "Preço em XP",
+          "amount_percent": "Percentagem que retira",
+          "amount_hint": "Qualquer número inteiro. Os atalhos são só sugestões.",
+          "amount_percent_hint": "Retira-se do que a missão ainda tem de pagar a quem a usar, nunca do que já recebeu. Várias dicas de % somam-se, até aos 100 %.",
+          "presets": "Atalhos",
+          "used_note": "Por usar | Já foi usada por 1 estudante, por isso não se pode eliminar. O que pagou não muda: o novo custo vale para quem a usar a partir de agora. | Já foi usada por {count} estudantes, por isso não se pode eliminar. O que pagaram não muda: o novo custo vale para quem a usar a partir de agora.",
+          "summary_free": "Quem a usar abre-a grátis.",
+          "summary_coins": "Quem a usar paga {count} {coins} ao abri-la.",
+          "summary_xp": "Quem a usar paga {count} XP ao abri-la (pode descer de nível).",
+          "summary_percent": "Quem a usar recebe menos {count} % do que a missão ainda lhe tiver de pagar.",
+          "delete": "Eliminar a dica",
+          "delete_summary": "Se a eliminares, é apagada logo: ainda ninguém a usou.",
+          "add_button": "Adicionar a dica"
+        }
       }
     },
     "templates": {

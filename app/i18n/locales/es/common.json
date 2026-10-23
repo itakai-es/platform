@@ -554,6 +554,20 @@
         "base": "De base",
         "temporal": "Temporal"
       }
+    },
+    "mission_hints": {
+      "title": "Pistas",
+      "hint_label": "Pista {position}",
+      "free": "Gratis",
+      "cost_coins": "{count} {coins}",
+      "cost_xp": "{count} XP",
+      "cost_percent": "−{count} % de la recompensa"
+    },
+    "activity_feed": {
+      "hint_used_student": "Usaste la pista {position} de {mission}",
+      "hint_used_teacher": "Usó la pista {position} de {mission}",
+      "hint_used_percent_student": "Usaste la pista {position} de {mission}: −{count} % en lo que te quedaba por cobrar",
+      "hint_used_percent_teacher": "Usó la pista {position} de {mission}: −{count} % en lo que le quedaba por cobrar"
     }
   }
 }

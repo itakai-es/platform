@@ -554,6 +554,20 @@
         "base": "Oinarrizkoa",
         "temporal": "Behin-behinekoa"
       }
+    },
+    "mission_hints": {
+      "title": "Pistak",
+      "hint_label": "{position}. pista",
+      "free": "Doan",
+      "cost_coins": "{count} {coins}",
+      "cost_xp": "{count} XP",
+      "cost_percent": "Sariaren −%{count}"
+    },
+    "activity_feed": {
+      "hint_used_student": "{mission} misioaren {position}. pista erabili duzu",
+      "hint_used_teacher": "{mission} misioaren {position}. pista erabili du",
+      "hint_used_percent_student": "{mission} misioaren {position}. pista erabili duzu: −%{count} kobratzeko zenuenean",
+      "hint_used_percent_teacher": "{mission} misioaren {position}. pista erabili du: −%{count} kobratzeko zuenean"
     }
   }
 }

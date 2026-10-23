@@ -21,6 +21,7 @@ export const CLASS_HISTORY_TYPES = [
   'student',
   'mission',
   'enigma',
+  'hint',
   'document',
   'submission',
   'behavior',

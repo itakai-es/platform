@@ -89,6 +89,26 @@
         "error": "Fallu al unviar la entrega. Inténtalo otra vuelta.",
         "expired_error": "Esta misión caducó. Yá nun pues entregar enigmes.",
         "downloading": "Baxando"
+      },
+      "hints": {
+        "intro": "¿Atascástite? Usa una pista. Ábrense n'orde, d'una en una, y cada una tien el so costu.",
+        "locked": "Ábrese depués de la pista {position}.",
+        "not_used": "Ensin usar.",
+        "use_button": "Usar la pista {position}",
+        "summary_coins": "Cuesta {count} {coins}. Tienes {balance}.",
+        "summary_xp": "Cuesta {count} XP. Tienes {balance}. Pagar con XP pue baxate de nivel.",
+        "summary_percent": "Resta un {count} % a lo qu'esta misión entá te tien que dar: los enigmes ensin aprobar (tamién los que tán en revisión) y el bonus de la misión. Lo que yá cobresti nun camuda.",
+        "summary_free": "Ye de baldre.",
+        "short_coins": "Fálten-te {count} {coins}.",
+        "short_xp": "Fálten-te {count} XP.",
+        "used": "Usada",
+        "penalty_note": "Les tos pistes resten un {count} % a lo que te queda por cobrar nesta misión.",
+        "closed_completed": "Completesti la misión: yá nun fai falta usar más pistes.",
+        "closed_expired": "La misión caducó: yá nun se puen usar les sos pistes.",
+        "preview_note": "Vista previa: ves toles pistes abiertes. L'alumnáu ábreles d'una en una, nesti orde, pagando'l so costu.",
+        "used_announcement": "Usesti la pista {position}.",
+        "use_error": "Nun se pudo usar la pista.",
+        "bonus_penalty": "−{count} % poles tos pistes"
       }
     },
     "classes": {

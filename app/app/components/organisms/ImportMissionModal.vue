@@ -251,7 +251,12 @@
 <script setup lang="ts">
 import type { Component } from 'vue'
 import { CheckCircleIcon, FlagIcon, TrophyIcon } from '@heroicons/vue/24/solid'
-import { DocumentTextIcon, PuzzlePieceIcon, SparklesIcon } from '@heroicons/vue/24/outline'
+import {
+  DocumentTextIcon,
+  LightBulbIcon,
+  PuzzlePieceIcon,
+  SparklesIcon,
+} from '@heroicons/vue/24/outline'
 import { resolveClassSettings } from '~/utils/class-settings'
 import { canInClass } from '~/utils/class-access'
 import type { Class, MissionImportResult } from '~/types/teacher.types'
@@ -312,9 +317,10 @@ interface SourceMission {
   manaReward: number
 }
 
-/** Lo que se copia de la misión elegida: enigmas, documentos e insignia. */
+/** Lo que se copia de la misión elegida: enigmas, pistas, documentos e insignia. */
 interface MissionExtras {
   enigmas: number
+  hints: number
   documents: number
   badge: { name: string; imageUrl?: string | null } | null
 }
@@ -506,7 +512,12 @@ const copyItems = computed(() => {
   const counts = result.value
     ? { ...result.value.copied, badges: result.value.copied.badges.length }
     : detail.value
-      ? { enigmas: detail.value.enigmas, documents: detail.value.documents, badges: 0 }
+      ? {
+          enigmas: detail.value.enigmas,
+          hints: detail.value.hints,
+          documents: detail.value.documents,
+          badges: 0,
+        }
       : null
   if (!counts) return []
   const items: { key: string; icon: Component; label: string }[] = [
@@ -516,6 +527,14 @@ const copyItems = computed(() => {
       label: t('teacher.missions.import.enigmas', { count: counts.enigmas }, counts.enigmas),
     },
   ]
+  // Las pistas viajan con la misión; quién las usó, no.
+  if (counts.hints > 0) {
+    items.push({
+      key: 'hints',
+      icon: LightBulbIcon,
+      label: t('teacher.missions.import.hints', { count: counts.hints }, counts.hints),
+    })
+  }
   if (counts.documents > 0) {
     items.push({
       key: 'documents',
@@ -614,12 +633,14 @@ async function loadDetail() {
   try {
     const mission = (await missionStore.fetchTeacherMissionById(id, true)) as unknown as {
       enigmas?: unknown[]
+      hints?: unknown[]
       documents?: unknown[]
       badgeReward?: MissionExtras['badge']
     }
     if (seq === detailSeq) {
       detail.value = {
         enigmas: mission.enigmas?.length ?? 0,
+        hints: mission.hints?.length ?? 0,
         documents: mission.documents?.length ?? 0,
         badge: mission.badgeReward ?? null,
       }

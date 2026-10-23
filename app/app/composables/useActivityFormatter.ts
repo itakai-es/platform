@@ -79,6 +79,7 @@ function makeDelta(kind: ResourceKind, value: number | undefined | null): Resour
  * @param perspective - 'student' for 2nd person (Tu...), 'teacher' for 3rd person (El estudiante...)
  */
 export function useActivityFormatter(perspective: 'student' | 'teacher' = 'student') {
+  const { t } = useI18n()
   const formatTimeAgo = (timestamp: Date | string): string => {
     const now = new Date()
     const activityDate = new Date(timestamp)
@@ -272,6 +273,38 @@ export function useActivityFormatter(perspective: 'student' | 'teacher' = 'stude
               // El maná se gasta (negativo), las vidas se recuperan (positivo).
               makeDelta('mana', meta.manaCost ? -meta.manaCost : 0),
               makeDelta('life', meta.lifeRestore),
+            ].filter((r): r is ResourceDelta => r !== null)
+            badge = undefined
+            break
+          }
+
+          case 'hint_used': {
+            const meta = (activity.metadata || {}) as {
+              position?: number
+              costType?: string
+              cost?: number
+            }
+            const params = {
+              position: meta.position ?? 1,
+              mission: `<strong>"${esc(activity.missionTitle || '')}"</strong>`,
+              count: meta.cost ?? 0,
+            }
+            // Una pista de % no mueve saldo: lo dice la frase. Las de monedas o XP,
+            // con su chip en negativo, como una compra.
+            if (meta.costType === 'percent' && params.count > 0) {
+              description = isTeacher
+                ? t('common.activity_feed.hint_used_percent_teacher', params)
+                : t('common.activity_feed.hint_used_percent_student', params)
+            } else {
+              description = isTeacher
+                ? t('common.activity_feed.hint_used_teacher', params)
+                : t('common.activity_feed.hint_used_student', params)
+            }
+            resources = [
+              makeDelta(
+                meta.costType === 'xp' ? 'xp' : 'coin',
+                meta.costType === 'percent' ? 0 : -(meta.cost ?? 0)
+              ),
             ].filter((r): r is ResourceDelta => r !== null)
             badge = undefined
             break

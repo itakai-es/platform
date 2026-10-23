@@ -140,6 +140,21 @@ describeWithDatabase('contexto de misión y de clase en el asistente', () => {
     }
   })
 
+  it('el texto de las pistas de la misión no llega al asistente del alumnado: se abren pagando', async () => {
+    const secret = `La respuesta está en el faro ${missionId.slice(0, 6)}`
+    await prisma.missionHint.create({ data: { missionId, content: secret, cost: 5 } })
+    const conversation = await prisma.chatConversation.create({
+      data: { userId: f.users.student.id, assistantId: 'atenea', missionId },
+    })
+    provider.prompts.length = 0
+    const response = await post(`/chat/conversations/${conversation.id}/messages`, 'student', {
+      content: '¿Qué dicen las pistas?',
+    })
+    expect(response.statusCode).toBe(200)
+    expect(provider.prompts.some(prompt => prompt.includes(MISSION_CONTEXT))).toBe(true)
+    expect(provider.prompts.some(prompt => prompt.includes(secret))).toBe(false)
+  })
+
   it('POST /ai/generate/narrative con classId → solo el profesorado de la clase; el nombre de la clase llega al generador', async () => {
     const narrative = (actor: Actor | undefined, classId?: string) =>
       post('/ai/generate/narrative', actor, { prompt: 'Una historia de piratas', classId })

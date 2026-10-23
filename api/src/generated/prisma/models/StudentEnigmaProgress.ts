@@ -31,6 +31,7 @@ export type StudentEnigmaProgressAvgAggregateOutputType = {
   coinsEarned: number | null
   manaEarned: number | null
   percentage: number | null
+  hintPenalty: number | null
 }
 
 export type StudentEnigmaProgressSumAggregateOutputType = {
@@ -38,6 +39,7 @@ export type StudentEnigmaProgressSumAggregateOutputType = {
   coinsEarned: number | null
   manaEarned: number | null
   percentage: number | null
+  hintPenalty: number | null
 }
 
 export type StudentEnigmaProgressMinAggregateOutputType = {
@@ -49,6 +51,7 @@ export type StudentEnigmaProgressMinAggregateOutputType = {
   coinsEarned: number | null
   manaEarned: number | null
   percentage: number | null
+  hintPenalty: number | null
 }
 
 export type StudentEnigmaProgressMaxAggregateOutputType = {
@@ -60,6 +63,7 @@ export type StudentEnigmaProgressMaxAggregateOutputType = {
   coinsEarned: number | null
   manaEarned: number | null
   percentage: number | null
+  hintPenalty: number | null
 }
 
 export type StudentEnigmaProgressCountAggregateOutputType = {
@@ -71,6 +75,7 @@ export type StudentEnigmaProgressCountAggregateOutputType = {
   coinsEarned: number
   manaEarned: number
   percentage: number
+  hintPenalty: number
   _all: number
 }
 
@@ -80,6 +85,7 @@ export type StudentEnigmaProgressAvgAggregateInputType = {
   coinsEarned?: true
   manaEarned?: true
   percentage?: true
+  hintPenalty?: true
 }
 
 export type StudentEnigmaProgressSumAggregateInputType = {
@@ -87,6 +93,7 @@ export type StudentEnigmaProgressSumAggregateInputType = {
   coinsEarned?: true
   manaEarned?: true
   percentage?: true
+  hintPenalty?: true
 }
 
 export type StudentEnigmaProgressMinAggregateInputType = {
@@ -98,6 +105,7 @@ export type StudentEnigmaProgressMinAggregateInputType = {
   coinsEarned?: true
   manaEarned?: true
   percentage?: true
+  hintPenalty?: true
 }
 
 export type StudentEnigmaProgressMaxAggregateInputType = {
@@ -109,6 +117,7 @@ export type StudentEnigmaProgressMaxAggregateInputType = {
   coinsEarned?: true
   manaEarned?: true
   percentage?: true
+  hintPenalty?: true
 }
 
 export type StudentEnigmaProgressCountAggregateInputType = {
@@ -120,6 +129,7 @@ export type StudentEnigmaProgressCountAggregateInputType = {
   coinsEarned?: true
   manaEarned?: true
   percentage?: true
+  hintPenalty?: true
   _all?: true
 }
 
@@ -218,6 +228,7 @@ export type StudentEnigmaProgressGroupByOutputType = {
   coinsEarned: number
   manaEarned: number
   percentage: number
+  hintPenalty: number
   _count: StudentEnigmaProgressCountAggregateOutputType | null
   _avg: StudentEnigmaProgressAvgAggregateOutputType | null
   _sum: StudentEnigmaProgressSumAggregateOutputType | null
@@ -252,6 +263,7 @@ export type StudentEnigmaProgressWhereInput = {
   coinsEarned?: Prisma.IntFilter<"StudentEnigmaProgress"> | number
   manaEarned?: Prisma.IntFilter<"StudentEnigmaProgress"> | number
   percentage?: Prisma.IntFilter<"StudentEnigmaProgress"> | number
+  hintPenalty?: Prisma.IntFilter<"StudentEnigmaProgress"> | number
   student?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   enigma?: Prisma.XOR<Prisma.MissionEnigmaScalarRelationFilter, Prisma.MissionEnigmaWhereInput>
 }
@@ -265,6 +277,7 @@ export type StudentEnigmaProgressOrderByWithRelationInput = {
   coinsEarned?: Prisma.SortOrder
   manaEarned?: Prisma.SortOrder
   percentage?: Prisma.SortOrder
+  hintPenalty?: Prisma.SortOrder
   student?: Prisma.UserOrderByWithRelationInput
   enigma?: Prisma.MissionEnigmaOrderByWithRelationInput
 }
@@ -282,6 +295,7 @@ export type StudentEnigmaProgressWhereUniqueInput = Prisma.AtLeast<{
   coinsEarned?: Prisma.IntFilter<"StudentEnigmaProgress"> | number
   manaEarned?: Prisma.IntFilter<"StudentEnigmaProgress"> | number
   percentage?: Prisma.IntFilter<"StudentEnigmaProgress"> | number
+  hintPenalty?: Prisma.IntFilter<"StudentEnigmaProgress"> | number
   student?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   enigma?: Prisma.XOR<Prisma.MissionEnigmaScalarRelationFilter, Prisma.MissionEnigmaWhereInput>
 }, "id" | "studentId_enigmaId">
@@ -295,6 +309,7 @@ export type StudentEnigmaProgressOrderByWithAggregationInput = {
   coinsEarned?: Prisma.SortOrder
   manaEarned?: Prisma.SortOrder
   percentage?: Prisma.SortOrder
+  hintPenalty?: Prisma.SortOrder
   _count?: Prisma.StudentEnigmaProgressCountOrderByAggregateInput
   _avg?: Prisma.StudentEnigmaProgressAvgOrderByAggregateInput
   _max?: Prisma.StudentEnigmaProgressMaxOrderByAggregateInput
@@ -314,6 +329,7 @@ export type StudentEnigmaProgressScalarWhereWithAggregatesInput = {
   coinsEarned?: Prisma.IntWithAggregatesFilter<"StudentEnigmaProgress"> | number
   manaEarned?: Prisma.IntWithAggregatesFilter<"StudentEnigmaProgress"> | number
   percentage?: Prisma.IntWithAggregatesFilter<"StudentEnigmaProgress"> | number
+  hintPenalty?: Prisma.IntWithAggregatesFilter<"StudentEnigmaProgress"> | number
 }
 
 export type StudentEnigmaProgressCreateInput = {
@@ -323,6 +339,7 @@ export type StudentEnigmaProgressCreateInput = {
   coinsEarned?: number
   manaEarned?: number
   percentage?: number
+  hintPenalty?: number
   student: Prisma.UserCreateNestedOneWithoutEnigmaProgressInput
   enigma: Prisma.MissionEnigmaCreateNestedOneWithoutProgressInput
 }
@@ -336,6 +353,7 @@ export type StudentEnigmaProgressUncheckedCreateInput = {
   coinsEarned?: number
   manaEarned?: number
   percentage?: number
+  hintPenalty?: number
 }
 
 export type StudentEnigmaProgressUpdateInput = {
@@ -345,6 +363,7 @@ export type StudentEnigmaProgressUpdateInput = {
   coinsEarned?: Prisma.IntFieldUpdateOperationsInput | number
   manaEarned?: Prisma.IntFieldUpdateOperationsInput | number
   percentage?: Prisma.IntFieldUpdateOperationsInput | number
+  hintPenalty?: Prisma.IntFieldUpdateOperationsInput | number
   student?: Prisma.UserUpdateOneRequiredWithoutEnigmaProgressNestedInput
   enigma?: Prisma.MissionEnigmaUpdateOneRequiredWithoutProgressNestedInput
 }
@@ -358,6 +377,7 @@ export type StudentEnigmaProgressUncheckedUpdateInput = {
   coinsEarned?: Prisma.IntFieldUpdateOperationsInput | number
   manaEarned?: Prisma.IntFieldUpdateOperationsInput | number
   percentage?: Prisma.IntFieldUpdateOperationsInput | number
+  hintPenalty?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type StudentEnigmaProgressCreateManyInput = {
@@ -369,6 +389,7 @@ export type StudentEnigmaProgressCreateManyInput = {
   coinsEarned?: number
   manaEarned?: number
   percentage?: number
+  hintPenalty?: number
 }
 
 export type StudentEnigmaProgressUpdateManyMutationInput = {
@@ -378,6 +399,7 @@ export type StudentEnigmaProgressUpdateManyMutationInput = {
   coinsEarned?: Prisma.IntFieldUpdateOperationsInput | number
   manaEarned?: Prisma.IntFieldUpdateOperationsInput | number
   percentage?: Prisma.IntFieldUpdateOperationsInput | number
+  hintPenalty?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type StudentEnigmaProgressUncheckedUpdateManyInput = {
@@ -389,6 +411,7 @@ export type StudentEnigmaProgressUncheckedUpdateManyInput = {
   coinsEarned?: Prisma.IntFieldUpdateOperationsInput | number
   manaEarned?: Prisma.IntFieldUpdateOperationsInput | number
   percentage?: Prisma.IntFieldUpdateOperationsInput | number
+  hintPenalty?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type StudentEnigmaProgressListRelationFilter = {
@@ -415,6 +438,7 @@ export type StudentEnigmaProgressCountOrderByAggregateInput = {
   coinsEarned?: Prisma.SortOrder
   manaEarned?: Prisma.SortOrder
   percentage?: Prisma.SortOrder
+  hintPenalty?: Prisma.SortOrder
 }
 
 export type StudentEnigmaProgressAvgOrderByAggregateInput = {
@@ -422,6 +446,7 @@ export type StudentEnigmaProgressAvgOrderByAggregateInput = {
   coinsEarned?: Prisma.SortOrder
   manaEarned?: Prisma.SortOrder
   percentage?: Prisma.SortOrder
+  hintPenalty?: Prisma.SortOrder
 }
 
 export type StudentEnigmaProgressMaxOrderByAggregateInput = {
@@ -433,6 +458,7 @@ export type StudentEnigmaProgressMaxOrderByAggregateInput = {
   coinsEarned?: Prisma.SortOrder
   manaEarned?: Prisma.SortOrder
   percentage?: Prisma.SortOrder
+  hintPenalty?: Prisma.SortOrder
 }
 
 export type StudentEnigmaProgressMinOrderByAggregateInput = {
@@ -444,6 +470,7 @@ export type StudentEnigmaProgressMinOrderByAggregateInput = {
   coinsEarned?: Prisma.SortOrder
   manaEarned?: Prisma.SortOrder
   percentage?: Prisma.SortOrder
+  hintPenalty?: Prisma.SortOrder
 }
 
 export type StudentEnigmaProgressSumOrderByAggregateInput = {
@@ -451,6 +478,7 @@ export type StudentEnigmaProgressSumOrderByAggregateInput = {
   coinsEarned?: Prisma.SortOrder
   manaEarned?: Prisma.SortOrder
   percentage?: Prisma.SortOrder
+  hintPenalty?: Prisma.SortOrder
 }
 
 export type StudentEnigmaProgressCreateNestedManyWithoutStudentInput = {
@@ -544,6 +572,7 @@ export type StudentEnigmaProgressCreateWithoutStudentInput = {
   coinsEarned?: number
   manaEarned?: number
   percentage?: number
+  hintPenalty?: number
   enigma: Prisma.MissionEnigmaCreateNestedOneWithoutProgressInput
 }
 
@@ -555,6 +584,7 @@ export type StudentEnigmaProgressUncheckedCreateWithoutStudentInput = {
   coinsEarned?: number
   manaEarned?: number
   percentage?: number
+  hintPenalty?: number
 }
 
 export type StudentEnigmaProgressCreateOrConnectWithoutStudentInput = {
@@ -595,6 +625,7 @@ export type StudentEnigmaProgressScalarWhereInput = {
   coinsEarned?: Prisma.IntFilter<"StudentEnigmaProgress"> | number
   manaEarned?: Prisma.IntFilter<"StudentEnigmaProgress"> | number
   percentage?: Prisma.IntFilter<"StudentEnigmaProgress"> | number
+  hintPenalty?: Prisma.IntFilter<"StudentEnigmaProgress"> | number
 }
 
 export type StudentEnigmaProgressCreateWithoutEnigmaInput = {
@@ -604,6 +635,7 @@ export type StudentEnigmaProgressCreateWithoutEnigmaInput = {
   coinsEarned?: number
   manaEarned?: number
   percentage?: number
+  hintPenalty?: number
   student: Prisma.UserCreateNestedOneWithoutEnigmaProgressInput
 }
 
@@ -615,6 +647,7 @@ export type StudentEnigmaProgressUncheckedCreateWithoutEnigmaInput = {
   coinsEarned?: number
   manaEarned?: number
   percentage?: number
+  hintPenalty?: number
 }
 
 export type StudentEnigmaProgressCreateOrConnectWithoutEnigmaInput = {
@@ -651,6 +684,7 @@ export type StudentEnigmaProgressCreateManyStudentInput = {
   coinsEarned?: number
   manaEarned?: number
   percentage?: number
+  hintPenalty?: number
 }
 
 export type StudentEnigmaProgressUpdateWithoutStudentInput = {
@@ -660,6 +694,7 @@ export type StudentEnigmaProgressUpdateWithoutStudentInput = {
   coinsEarned?: Prisma.IntFieldUpdateOperationsInput | number
   manaEarned?: Prisma.IntFieldUpdateOperationsInput | number
   percentage?: Prisma.IntFieldUpdateOperationsInput | number
+  hintPenalty?: Prisma.IntFieldUpdateOperationsInput | number
   enigma?: Prisma.MissionEnigmaUpdateOneRequiredWithoutProgressNestedInput
 }
 
@@ -671,6 +706,7 @@ export type StudentEnigmaProgressUncheckedUpdateWithoutStudentInput = {
   coinsEarned?: Prisma.IntFieldUpdateOperationsInput | number
   manaEarned?: Prisma.IntFieldUpdateOperationsInput | number
   percentage?: Prisma.IntFieldUpdateOperationsInput | number
+  hintPenalty?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type StudentEnigmaProgressUncheckedUpdateManyWithoutStudentInput = {
@@ -681,6 +717,7 @@ export type StudentEnigmaProgressUncheckedUpdateManyWithoutStudentInput = {
   coinsEarned?: Prisma.IntFieldUpdateOperationsInput | number
   manaEarned?: Prisma.IntFieldUpdateOperationsInput | number
   percentage?: Prisma.IntFieldUpdateOperationsInput | number
+  hintPenalty?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type StudentEnigmaProgressCreateManyEnigmaInput = {
@@ -691,6 +728,7 @@ export type StudentEnigmaProgressCreateManyEnigmaInput = {
   coinsEarned?: number
   manaEarned?: number
   percentage?: number
+  hintPenalty?: number
 }
 
 export type StudentEnigmaProgressUpdateWithoutEnigmaInput = {
@@ -700,6 +738,7 @@ export type StudentEnigmaProgressUpdateWithoutEnigmaInput = {
   coinsEarned?: Prisma.IntFieldUpdateOperationsInput | number
   manaEarned?: Prisma.IntFieldUpdateOperationsInput | number
   percentage?: Prisma.IntFieldUpdateOperationsInput | number
+  hintPenalty?: Prisma.IntFieldUpdateOperationsInput | number
   student?: Prisma.UserUpdateOneRequiredWithoutEnigmaProgressNestedInput
 }
 
@@ -711,6 +750,7 @@ export type StudentEnigmaProgressUncheckedUpdateWithoutEnigmaInput = {
   coinsEarned?: Prisma.IntFieldUpdateOperationsInput | number
   manaEarned?: Prisma.IntFieldUpdateOperationsInput | number
   percentage?: Prisma.IntFieldUpdateOperationsInput | number
+  hintPenalty?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type StudentEnigmaProgressUncheckedUpdateManyWithoutEnigmaInput = {
@@ -721,6 +761,7 @@ export type StudentEnigmaProgressUncheckedUpdateManyWithoutEnigmaInput = {
   coinsEarned?: Prisma.IntFieldUpdateOperationsInput | number
   manaEarned?: Prisma.IntFieldUpdateOperationsInput | number
   percentage?: Prisma.IntFieldUpdateOperationsInput | number
+  hintPenalty?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 
@@ -734,6 +775,7 @@ export type StudentEnigmaProgressSelect<ExtArgs extends runtime.Types.Extensions
   coinsEarned?: boolean
   manaEarned?: boolean
   percentage?: boolean
+  hintPenalty?: boolean
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   enigma?: boolean | Prisma.MissionEnigmaDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["studentEnigmaProgress"]>
@@ -747,6 +789,7 @@ export type StudentEnigmaProgressSelectCreateManyAndReturn<ExtArgs extends runti
   coinsEarned?: boolean
   manaEarned?: boolean
   percentage?: boolean
+  hintPenalty?: boolean
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   enigma?: boolean | Prisma.MissionEnigmaDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["studentEnigmaProgress"]>
@@ -760,6 +803,7 @@ export type StudentEnigmaProgressSelectUpdateManyAndReturn<ExtArgs extends runti
   coinsEarned?: boolean
   manaEarned?: boolean
   percentage?: boolean
+  hintPenalty?: boolean
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   enigma?: boolean | Prisma.MissionEnigmaDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["studentEnigmaProgress"]>
@@ -773,9 +817,10 @@ export type StudentEnigmaProgressSelectScalar = {
   coinsEarned?: boolean
   manaEarned?: boolean
   percentage?: boolean
+  hintPenalty?: boolean
 }
 
-export type StudentEnigmaProgressOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "studentId" | "enigmaId" | "completedAt" | "xpEarned" | "coinsEarned" | "manaEarned" | "percentage", ExtArgs["result"]["studentEnigmaProgress"]>
+export type StudentEnigmaProgressOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "studentId" | "enigmaId" | "completedAt" | "xpEarned" | "coinsEarned" | "manaEarned" | "percentage" | "hintPenalty", ExtArgs["result"]["studentEnigmaProgress"]>
 export type StudentEnigmaProgressInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   enigma?: boolean | Prisma.MissionEnigmaDefaultArgs<ExtArgs>
@@ -804,6 +849,7 @@ export type $StudentEnigmaProgressPayload<ExtArgs extends runtime.Types.Extensio
     coinsEarned: number
     manaEarned: number
     percentage: number
+    hintPenalty: number
   }, ExtArgs["result"]["studentEnigmaProgress"]>
   composites: {}
 }
@@ -1237,6 +1283,7 @@ export interface StudentEnigmaProgressFieldRefs {
   readonly coinsEarned: Prisma.FieldRef<"StudentEnigmaProgress", 'Int'>
   readonly manaEarned: Prisma.FieldRef<"StudentEnigmaProgress", 'Int'>
   readonly percentage: Prisma.FieldRef<"StudentEnigmaProgress", 'Int'>
+  readonly hintPenalty: Prisma.FieldRef<"StudentEnigmaProgress", 'Int'>
 }
     
 

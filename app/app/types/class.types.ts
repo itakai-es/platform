@@ -88,6 +88,7 @@ export type ClassHistoryType =
   | 'student'
   | 'mission'
   | 'enigma'
+  | 'hint'
   | 'document'
   | 'submission'
   | 'behavior'

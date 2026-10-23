@@ -89,6 +89,26 @@
         "error": "Error en enviar el lliurament. Torna-ho a provar.",
         "expired_error": "Aquesta missió ha expirat. Ja no pots lliurar enigmes.",
         "downloading": "Descarregant"
+      },
+      "hints": {
+        "intro": "T'has encallat? Fes servir una pista. S'obren en ordre, d'una en una, i cadascuna té el seu cost.",
+        "locked": "S'obre després de la pista {position}.",
+        "not_used": "Sense fer servir.",
+        "use_button": "Fer servir la pista {position}",
+        "summary_coins": "Costa {count} {coins}. Tens {balance}.",
+        "summary_xp": "Costa {count} XP. Tens {balance}. Pagar amb XP et pot fer baixar de nivell.",
+        "summary_percent": "Resta un {count} % al que aquesta missió encara t'ha de donar: els enigmes sense aprovar (també els que estan en revisió) i el bonus de la missió. El que ja has cobrat no canvia.",
+        "summary_free": "És gratis.",
+        "short_coins": "Et falten {count} {coins}.",
+        "short_xp": "Et falten {count} XP.",
+        "used": "Feta servir",
+        "penalty_note": "Les teves pistes resten un {count} % al que et queda per cobrar en aquesta missió.",
+        "closed_completed": "Has completat la missió: ja no cal fer servir més pistes.",
+        "closed_expired": "La missió ha caducat: ja no se'n poden fer servir les pistes.",
+        "preview_note": "Vista prèvia: veus totes les pistes obertes. L'alumnat les obre d'una en una, en aquest ordre, pagant-ne el cost.",
+        "used_announcement": "Has fet servir la pista {position}.",
+        "use_error": "No s'ha pogut fer servir la pista.",
+        "bonus_penalty": "−{count} % per les teves pistes"
       }
     },
     "classes": {

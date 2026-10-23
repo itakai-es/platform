@@ -236,6 +236,8 @@ export type MissionWhereInput = {
   badges?: Prisma.BadgeListRelationFilter
   progress?: Prisma.StudentMissionProgressListRelationFilter
   documents?: Prisma.MissionDocumentListRelationFilter
+  hints?: Prisma.MissionHintListRelationFilter
+  hintUses?: Prisma.MissionHintUseListRelationFilter
 }
 
 export type MissionOrderByWithRelationInput = {
@@ -256,6 +258,8 @@ export type MissionOrderByWithRelationInput = {
   badges?: Prisma.BadgeOrderByRelationAggregateInput
   progress?: Prisma.StudentMissionProgressOrderByRelationAggregateInput
   documents?: Prisma.MissionDocumentOrderByRelationAggregateInput
+  hints?: Prisma.MissionHintOrderByRelationAggregateInput
+  hintUses?: Prisma.MissionHintUseOrderByRelationAggregateInput
 }
 
 export type MissionWhereUniqueInput = Prisma.AtLeast<{
@@ -279,6 +283,8 @@ export type MissionWhereUniqueInput = Prisma.AtLeast<{
   badges?: Prisma.BadgeListRelationFilter
   progress?: Prisma.StudentMissionProgressListRelationFilter
   documents?: Prisma.MissionDocumentListRelationFilter
+  hints?: Prisma.MissionHintListRelationFilter
+  hintUses?: Prisma.MissionHintUseListRelationFilter
 }, "id">
 
 export type MissionOrderByWithAggregationInput = {
@@ -331,6 +337,8 @@ export type MissionCreateInput = {
   badges?: Prisma.BadgeCreateNestedManyWithoutMissionInput
   progress?: Prisma.StudentMissionProgressCreateNestedManyWithoutMissionInput
   documents?: Prisma.MissionDocumentCreateNestedManyWithoutMissionInput
+  hints?: Prisma.MissionHintCreateNestedManyWithoutMissionInput
+  hintUses?: Prisma.MissionHintUseCreateNestedManyWithoutMissionInput
 }
 
 export type MissionUncheckedCreateInput = {
@@ -349,6 +357,8 @@ export type MissionUncheckedCreateInput = {
   badges?: Prisma.BadgeUncheckedCreateNestedManyWithoutMissionInput
   progress?: Prisma.StudentMissionProgressUncheckedCreateNestedManyWithoutMissionInput
   documents?: Prisma.MissionDocumentUncheckedCreateNestedManyWithoutMissionInput
+  hints?: Prisma.MissionHintUncheckedCreateNestedManyWithoutMissionInput
+  hintUses?: Prisma.MissionHintUseUncheckedCreateNestedManyWithoutMissionInput
 }
 
 export type MissionUpdateInput = {
@@ -367,6 +377,8 @@ export type MissionUpdateInput = {
   badges?: Prisma.BadgeUpdateManyWithoutMissionNestedInput
   progress?: Prisma.StudentMissionProgressUpdateManyWithoutMissionNestedInput
   documents?: Prisma.MissionDocumentUpdateManyWithoutMissionNestedInput
+  hints?: Prisma.MissionHintUpdateManyWithoutMissionNestedInput
+  hintUses?: Prisma.MissionHintUseUpdateManyWithoutMissionNestedInput
 }
 
 export type MissionUncheckedUpdateInput = {
@@ -385,6 +397,8 @@ export type MissionUncheckedUpdateInput = {
   badges?: Prisma.BadgeUncheckedUpdateManyWithoutMissionNestedInput
   progress?: Prisma.StudentMissionProgressUncheckedUpdateManyWithoutMissionNestedInput
   documents?: Prisma.MissionDocumentUncheckedUpdateManyWithoutMissionNestedInput
+  hints?: Prisma.MissionHintUncheckedUpdateManyWithoutMissionNestedInput
+  hintUses?: Prisma.MissionHintUseUncheckedUpdateManyWithoutMissionNestedInput
 }
 
 export type MissionCreateManyInput = {
@@ -567,6 +581,34 @@ export type MissionUpdateOneRequiredWithoutEnigmasNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.MissionUpdateToOneWithWhereWithoutEnigmasInput, Prisma.MissionUpdateWithoutEnigmasInput>, Prisma.MissionUncheckedUpdateWithoutEnigmasInput>
 }
 
+export type MissionCreateNestedOneWithoutHintsInput = {
+  create?: Prisma.XOR<Prisma.MissionCreateWithoutHintsInput, Prisma.MissionUncheckedCreateWithoutHintsInput>
+  connectOrCreate?: Prisma.MissionCreateOrConnectWithoutHintsInput
+  connect?: Prisma.MissionWhereUniqueInput
+}
+
+export type MissionUpdateOneRequiredWithoutHintsNestedInput = {
+  create?: Prisma.XOR<Prisma.MissionCreateWithoutHintsInput, Prisma.MissionUncheckedCreateWithoutHintsInput>
+  connectOrCreate?: Prisma.MissionCreateOrConnectWithoutHintsInput
+  upsert?: Prisma.MissionUpsertWithoutHintsInput
+  connect?: Prisma.MissionWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MissionUpdateToOneWithWhereWithoutHintsInput, Prisma.MissionUpdateWithoutHintsInput>, Prisma.MissionUncheckedUpdateWithoutHintsInput>
+}
+
+export type MissionCreateNestedOneWithoutHintUsesInput = {
+  create?: Prisma.XOR<Prisma.MissionCreateWithoutHintUsesInput, Prisma.MissionUncheckedCreateWithoutHintUsesInput>
+  connectOrCreate?: Prisma.MissionCreateOrConnectWithoutHintUsesInput
+  connect?: Prisma.MissionWhereUniqueInput
+}
+
+export type MissionUpdateOneRequiredWithoutHintUsesNestedInput = {
+  create?: Prisma.XOR<Prisma.MissionCreateWithoutHintUsesInput, Prisma.MissionUncheckedCreateWithoutHintUsesInput>
+  connectOrCreate?: Prisma.MissionCreateOrConnectWithoutHintUsesInput
+  upsert?: Prisma.MissionUpsertWithoutHintUsesInput
+  connect?: Prisma.MissionWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MissionUpdateToOneWithWhereWithoutHintUsesInput, Prisma.MissionUpdateWithoutHintUsesInput>, Prisma.MissionUncheckedUpdateWithoutHintUsesInput>
+}
+
 export type MissionCreateNestedOneWithoutProgressInput = {
   create?: Prisma.XOR<Prisma.MissionCreateWithoutProgressInput, Prisma.MissionUncheckedCreateWithoutProgressInput>
   connectOrCreate?: Prisma.MissionCreateOrConnectWithoutProgressInput
@@ -654,6 +696,8 @@ export type MissionCreateWithoutClassInput = {
   badges?: Prisma.BadgeCreateNestedManyWithoutMissionInput
   progress?: Prisma.StudentMissionProgressCreateNestedManyWithoutMissionInput
   documents?: Prisma.MissionDocumentCreateNestedManyWithoutMissionInput
+  hints?: Prisma.MissionHintCreateNestedManyWithoutMissionInput
+  hintUses?: Prisma.MissionHintUseCreateNestedManyWithoutMissionInput
 }
 
 export type MissionUncheckedCreateWithoutClassInput = {
@@ -671,6 +715,8 @@ export type MissionUncheckedCreateWithoutClassInput = {
   badges?: Prisma.BadgeUncheckedCreateNestedManyWithoutMissionInput
   progress?: Prisma.StudentMissionProgressUncheckedCreateNestedManyWithoutMissionInput
   documents?: Prisma.MissionDocumentUncheckedCreateNestedManyWithoutMissionInput
+  hints?: Prisma.MissionHintUncheckedCreateNestedManyWithoutMissionInput
+  hintUses?: Prisma.MissionHintUseUncheckedCreateNestedManyWithoutMissionInput
 }
 
 export type MissionCreateOrConnectWithoutClassInput = {
@@ -731,6 +777,8 @@ export type MissionCreateWithoutDocumentsInput = {
   enigmas?: Prisma.MissionEnigmaCreateNestedManyWithoutMissionInput
   badges?: Prisma.BadgeCreateNestedManyWithoutMissionInput
   progress?: Prisma.StudentMissionProgressCreateNestedManyWithoutMissionInput
+  hints?: Prisma.MissionHintCreateNestedManyWithoutMissionInput
+  hintUses?: Prisma.MissionHintUseCreateNestedManyWithoutMissionInput
 }
 
 export type MissionUncheckedCreateWithoutDocumentsInput = {
@@ -748,6 +796,8 @@ export type MissionUncheckedCreateWithoutDocumentsInput = {
   enigmas?: Prisma.MissionEnigmaUncheckedCreateNestedManyWithoutMissionInput
   badges?: Prisma.BadgeUncheckedCreateNestedManyWithoutMissionInput
   progress?: Prisma.StudentMissionProgressUncheckedCreateNestedManyWithoutMissionInput
+  hints?: Prisma.MissionHintUncheckedCreateNestedManyWithoutMissionInput
+  hintUses?: Prisma.MissionHintUseUncheckedCreateNestedManyWithoutMissionInput
 }
 
 export type MissionCreateOrConnectWithoutDocumentsInput = {
@@ -781,6 +831,8 @@ export type MissionUpdateWithoutDocumentsInput = {
   enigmas?: Prisma.MissionEnigmaUpdateManyWithoutMissionNestedInput
   badges?: Prisma.BadgeUpdateManyWithoutMissionNestedInput
   progress?: Prisma.StudentMissionProgressUpdateManyWithoutMissionNestedInput
+  hints?: Prisma.MissionHintUpdateManyWithoutMissionNestedInput
+  hintUses?: Prisma.MissionHintUseUpdateManyWithoutMissionNestedInput
 }
 
 export type MissionUncheckedUpdateWithoutDocumentsInput = {
@@ -798,6 +850,8 @@ export type MissionUncheckedUpdateWithoutDocumentsInput = {
   enigmas?: Prisma.MissionEnigmaUncheckedUpdateManyWithoutMissionNestedInput
   badges?: Prisma.BadgeUncheckedUpdateManyWithoutMissionNestedInput
   progress?: Prisma.StudentMissionProgressUncheckedUpdateManyWithoutMissionNestedInput
+  hints?: Prisma.MissionHintUncheckedUpdateManyWithoutMissionNestedInput
+  hintUses?: Prisma.MissionHintUseUncheckedUpdateManyWithoutMissionNestedInput
 }
 
 export type MissionCreateWithoutEnigmasInput = {
@@ -815,6 +869,8 @@ export type MissionCreateWithoutEnigmasInput = {
   badges?: Prisma.BadgeCreateNestedManyWithoutMissionInput
   progress?: Prisma.StudentMissionProgressCreateNestedManyWithoutMissionInput
   documents?: Prisma.MissionDocumentCreateNestedManyWithoutMissionInput
+  hints?: Prisma.MissionHintCreateNestedManyWithoutMissionInput
+  hintUses?: Prisma.MissionHintUseCreateNestedManyWithoutMissionInput
 }
 
 export type MissionUncheckedCreateWithoutEnigmasInput = {
@@ -832,6 +888,8 @@ export type MissionUncheckedCreateWithoutEnigmasInput = {
   badges?: Prisma.BadgeUncheckedCreateNestedManyWithoutMissionInput
   progress?: Prisma.StudentMissionProgressUncheckedCreateNestedManyWithoutMissionInput
   documents?: Prisma.MissionDocumentUncheckedCreateNestedManyWithoutMissionInput
+  hints?: Prisma.MissionHintUncheckedCreateNestedManyWithoutMissionInput
+  hintUses?: Prisma.MissionHintUseUncheckedCreateNestedManyWithoutMissionInput
 }
 
 export type MissionCreateOrConnectWithoutEnigmasInput = {
@@ -865,6 +923,8 @@ export type MissionUpdateWithoutEnigmasInput = {
   badges?: Prisma.BadgeUpdateManyWithoutMissionNestedInput
   progress?: Prisma.StudentMissionProgressUpdateManyWithoutMissionNestedInput
   documents?: Prisma.MissionDocumentUpdateManyWithoutMissionNestedInput
+  hints?: Prisma.MissionHintUpdateManyWithoutMissionNestedInput
+  hintUses?: Prisma.MissionHintUseUpdateManyWithoutMissionNestedInput
 }
 
 export type MissionUncheckedUpdateWithoutEnigmasInput = {
@@ -882,6 +942,192 @@ export type MissionUncheckedUpdateWithoutEnigmasInput = {
   badges?: Prisma.BadgeUncheckedUpdateManyWithoutMissionNestedInput
   progress?: Prisma.StudentMissionProgressUncheckedUpdateManyWithoutMissionNestedInput
   documents?: Prisma.MissionDocumentUncheckedUpdateManyWithoutMissionNestedInput
+  hints?: Prisma.MissionHintUncheckedUpdateManyWithoutMissionNestedInput
+  hintUses?: Prisma.MissionHintUseUncheckedUpdateManyWithoutMissionNestedInput
+}
+
+export type MissionCreateWithoutHintsInput = {
+  id?: string
+  title: string
+  description?: string | null
+  status?: $Enums.MissionStatus
+  rarity?: $Enums.MissionRarity
+  backgroundImage?: string | null
+  deadline?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  class: Prisma.ClassCreateNestedOneWithoutMissionsInput
+  teamSet?: Prisma.TeamSetCreateNestedOneWithoutMissionsInput
+  enigmas?: Prisma.MissionEnigmaCreateNestedManyWithoutMissionInput
+  badges?: Prisma.BadgeCreateNestedManyWithoutMissionInput
+  progress?: Prisma.StudentMissionProgressCreateNestedManyWithoutMissionInput
+  documents?: Prisma.MissionDocumentCreateNestedManyWithoutMissionInput
+  hintUses?: Prisma.MissionHintUseCreateNestedManyWithoutMissionInput
+}
+
+export type MissionUncheckedCreateWithoutHintsInput = {
+  id?: string
+  classId: string
+  title: string
+  description?: string | null
+  status?: $Enums.MissionStatus
+  rarity?: $Enums.MissionRarity
+  backgroundImage?: string | null
+  deadline?: Date | string | null
+  teamSetId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  enigmas?: Prisma.MissionEnigmaUncheckedCreateNestedManyWithoutMissionInput
+  badges?: Prisma.BadgeUncheckedCreateNestedManyWithoutMissionInput
+  progress?: Prisma.StudentMissionProgressUncheckedCreateNestedManyWithoutMissionInput
+  documents?: Prisma.MissionDocumentUncheckedCreateNestedManyWithoutMissionInput
+  hintUses?: Prisma.MissionHintUseUncheckedCreateNestedManyWithoutMissionInput
+}
+
+export type MissionCreateOrConnectWithoutHintsInput = {
+  where: Prisma.MissionWhereUniqueInput
+  create: Prisma.XOR<Prisma.MissionCreateWithoutHintsInput, Prisma.MissionUncheckedCreateWithoutHintsInput>
+}
+
+export type MissionUpsertWithoutHintsInput = {
+  update: Prisma.XOR<Prisma.MissionUpdateWithoutHintsInput, Prisma.MissionUncheckedUpdateWithoutHintsInput>
+  create: Prisma.XOR<Prisma.MissionCreateWithoutHintsInput, Prisma.MissionUncheckedCreateWithoutHintsInput>
+  where?: Prisma.MissionWhereInput
+}
+
+export type MissionUpdateToOneWithWhereWithoutHintsInput = {
+  where?: Prisma.MissionWhereInput
+  data: Prisma.XOR<Prisma.MissionUpdateWithoutHintsInput, Prisma.MissionUncheckedUpdateWithoutHintsInput>
+}
+
+export type MissionUpdateWithoutHintsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMissionStatusFieldUpdateOperationsInput | $Enums.MissionStatus
+  rarity?: Prisma.EnumMissionRarityFieldUpdateOperationsInput | $Enums.MissionRarity
+  backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  class?: Prisma.ClassUpdateOneRequiredWithoutMissionsNestedInput
+  teamSet?: Prisma.TeamSetUpdateOneWithoutMissionsNestedInput
+  enigmas?: Prisma.MissionEnigmaUpdateManyWithoutMissionNestedInput
+  badges?: Prisma.BadgeUpdateManyWithoutMissionNestedInput
+  progress?: Prisma.StudentMissionProgressUpdateManyWithoutMissionNestedInput
+  documents?: Prisma.MissionDocumentUpdateManyWithoutMissionNestedInput
+  hintUses?: Prisma.MissionHintUseUpdateManyWithoutMissionNestedInput
+}
+
+export type MissionUncheckedUpdateWithoutHintsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  classId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMissionStatusFieldUpdateOperationsInput | $Enums.MissionStatus
+  rarity?: Prisma.EnumMissionRarityFieldUpdateOperationsInput | $Enums.MissionRarity
+  backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  teamSetId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  enigmas?: Prisma.MissionEnigmaUncheckedUpdateManyWithoutMissionNestedInput
+  badges?: Prisma.BadgeUncheckedUpdateManyWithoutMissionNestedInput
+  progress?: Prisma.StudentMissionProgressUncheckedUpdateManyWithoutMissionNestedInput
+  documents?: Prisma.MissionDocumentUncheckedUpdateManyWithoutMissionNestedInput
+  hintUses?: Prisma.MissionHintUseUncheckedUpdateManyWithoutMissionNestedInput
+}
+
+export type MissionCreateWithoutHintUsesInput = {
+  id?: string
+  title: string
+  description?: string | null
+  status?: $Enums.MissionStatus
+  rarity?: $Enums.MissionRarity
+  backgroundImage?: string | null
+  deadline?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  class: Prisma.ClassCreateNestedOneWithoutMissionsInput
+  teamSet?: Prisma.TeamSetCreateNestedOneWithoutMissionsInput
+  enigmas?: Prisma.MissionEnigmaCreateNestedManyWithoutMissionInput
+  badges?: Prisma.BadgeCreateNestedManyWithoutMissionInput
+  progress?: Prisma.StudentMissionProgressCreateNestedManyWithoutMissionInput
+  documents?: Prisma.MissionDocumentCreateNestedManyWithoutMissionInput
+  hints?: Prisma.MissionHintCreateNestedManyWithoutMissionInput
+}
+
+export type MissionUncheckedCreateWithoutHintUsesInput = {
+  id?: string
+  classId: string
+  title: string
+  description?: string | null
+  status?: $Enums.MissionStatus
+  rarity?: $Enums.MissionRarity
+  backgroundImage?: string | null
+  deadline?: Date | string | null
+  teamSetId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  enigmas?: Prisma.MissionEnigmaUncheckedCreateNestedManyWithoutMissionInput
+  badges?: Prisma.BadgeUncheckedCreateNestedManyWithoutMissionInput
+  progress?: Prisma.StudentMissionProgressUncheckedCreateNestedManyWithoutMissionInput
+  documents?: Prisma.MissionDocumentUncheckedCreateNestedManyWithoutMissionInput
+  hints?: Prisma.MissionHintUncheckedCreateNestedManyWithoutMissionInput
+}
+
+export type MissionCreateOrConnectWithoutHintUsesInput = {
+  where: Prisma.MissionWhereUniqueInput
+  create: Prisma.XOR<Prisma.MissionCreateWithoutHintUsesInput, Prisma.MissionUncheckedCreateWithoutHintUsesInput>
+}
+
+export type MissionUpsertWithoutHintUsesInput = {
+  update: Prisma.XOR<Prisma.MissionUpdateWithoutHintUsesInput, Prisma.MissionUncheckedUpdateWithoutHintUsesInput>
+  create: Prisma.XOR<Prisma.MissionCreateWithoutHintUsesInput, Prisma.MissionUncheckedCreateWithoutHintUsesInput>
+  where?: Prisma.MissionWhereInput
+}
+
+export type MissionUpdateToOneWithWhereWithoutHintUsesInput = {
+  where?: Prisma.MissionWhereInput
+  data: Prisma.XOR<Prisma.MissionUpdateWithoutHintUsesInput, Prisma.MissionUncheckedUpdateWithoutHintUsesInput>
+}
+
+export type MissionUpdateWithoutHintUsesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMissionStatusFieldUpdateOperationsInput | $Enums.MissionStatus
+  rarity?: Prisma.EnumMissionRarityFieldUpdateOperationsInput | $Enums.MissionRarity
+  backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  class?: Prisma.ClassUpdateOneRequiredWithoutMissionsNestedInput
+  teamSet?: Prisma.TeamSetUpdateOneWithoutMissionsNestedInput
+  enigmas?: Prisma.MissionEnigmaUpdateManyWithoutMissionNestedInput
+  badges?: Prisma.BadgeUpdateManyWithoutMissionNestedInput
+  progress?: Prisma.StudentMissionProgressUpdateManyWithoutMissionNestedInput
+  documents?: Prisma.MissionDocumentUpdateManyWithoutMissionNestedInput
+  hints?: Prisma.MissionHintUpdateManyWithoutMissionNestedInput
+}
+
+export type MissionUncheckedUpdateWithoutHintUsesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  classId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMissionStatusFieldUpdateOperationsInput | $Enums.MissionStatus
+  rarity?: Prisma.EnumMissionRarityFieldUpdateOperationsInput | $Enums.MissionRarity
+  backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  teamSetId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  enigmas?: Prisma.MissionEnigmaUncheckedUpdateManyWithoutMissionNestedInput
+  badges?: Prisma.BadgeUncheckedUpdateManyWithoutMissionNestedInput
+  progress?: Prisma.StudentMissionProgressUncheckedUpdateManyWithoutMissionNestedInput
+  documents?: Prisma.MissionDocumentUncheckedUpdateManyWithoutMissionNestedInput
+  hints?: Prisma.MissionHintUncheckedUpdateManyWithoutMissionNestedInput
 }
 
 export type MissionCreateWithoutProgressInput = {
@@ -899,6 +1145,8 @@ export type MissionCreateWithoutProgressInput = {
   enigmas?: Prisma.MissionEnigmaCreateNestedManyWithoutMissionInput
   badges?: Prisma.BadgeCreateNestedManyWithoutMissionInput
   documents?: Prisma.MissionDocumentCreateNestedManyWithoutMissionInput
+  hints?: Prisma.MissionHintCreateNestedManyWithoutMissionInput
+  hintUses?: Prisma.MissionHintUseCreateNestedManyWithoutMissionInput
 }
 
 export type MissionUncheckedCreateWithoutProgressInput = {
@@ -916,6 +1164,8 @@ export type MissionUncheckedCreateWithoutProgressInput = {
   enigmas?: Prisma.MissionEnigmaUncheckedCreateNestedManyWithoutMissionInput
   badges?: Prisma.BadgeUncheckedCreateNestedManyWithoutMissionInput
   documents?: Prisma.MissionDocumentUncheckedCreateNestedManyWithoutMissionInput
+  hints?: Prisma.MissionHintUncheckedCreateNestedManyWithoutMissionInput
+  hintUses?: Prisma.MissionHintUseUncheckedCreateNestedManyWithoutMissionInput
 }
 
 export type MissionCreateOrConnectWithoutProgressInput = {
@@ -949,6 +1199,8 @@ export type MissionUpdateWithoutProgressInput = {
   enigmas?: Prisma.MissionEnigmaUpdateManyWithoutMissionNestedInput
   badges?: Prisma.BadgeUpdateManyWithoutMissionNestedInput
   documents?: Prisma.MissionDocumentUpdateManyWithoutMissionNestedInput
+  hints?: Prisma.MissionHintUpdateManyWithoutMissionNestedInput
+  hintUses?: Prisma.MissionHintUseUpdateManyWithoutMissionNestedInput
 }
 
 export type MissionUncheckedUpdateWithoutProgressInput = {
@@ -966,6 +1218,8 @@ export type MissionUncheckedUpdateWithoutProgressInput = {
   enigmas?: Prisma.MissionEnigmaUncheckedUpdateManyWithoutMissionNestedInput
   badges?: Prisma.BadgeUncheckedUpdateManyWithoutMissionNestedInput
   documents?: Prisma.MissionDocumentUncheckedUpdateManyWithoutMissionNestedInput
+  hints?: Prisma.MissionHintUncheckedUpdateManyWithoutMissionNestedInput
+  hintUses?: Prisma.MissionHintUseUncheckedUpdateManyWithoutMissionNestedInput
 }
 
 export type MissionCreateWithoutBadgesInput = {
@@ -983,6 +1237,8 @@ export type MissionCreateWithoutBadgesInput = {
   enigmas?: Prisma.MissionEnigmaCreateNestedManyWithoutMissionInput
   progress?: Prisma.StudentMissionProgressCreateNestedManyWithoutMissionInput
   documents?: Prisma.MissionDocumentCreateNestedManyWithoutMissionInput
+  hints?: Prisma.MissionHintCreateNestedManyWithoutMissionInput
+  hintUses?: Prisma.MissionHintUseCreateNestedManyWithoutMissionInput
 }
 
 export type MissionUncheckedCreateWithoutBadgesInput = {
@@ -1000,6 +1256,8 @@ export type MissionUncheckedCreateWithoutBadgesInput = {
   enigmas?: Prisma.MissionEnigmaUncheckedCreateNestedManyWithoutMissionInput
   progress?: Prisma.StudentMissionProgressUncheckedCreateNestedManyWithoutMissionInput
   documents?: Prisma.MissionDocumentUncheckedCreateNestedManyWithoutMissionInput
+  hints?: Prisma.MissionHintUncheckedCreateNestedManyWithoutMissionInput
+  hintUses?: Prisma.MissionHintUseUncheckedCreateNestedManyWithoutMissionInput
 }
 
 export type MissionCreateOrConnectWithoutBadgesInput = {
@@ -1033,6 +1291,8 @@ export type MissionUpdateWithoutBadgesInput = {
   enigmas?: Prisma.MissionEnigmaUpdateManyWithoutMissionNestedInput
   progress?: Prisma.StudentMissionProgressUpdateManyWithoutMissionNestedInput
   documents?: Prisma.MissionDocumentUpdateManyWithoutMissionNestedInput
+  hints?: Prisma.MissionHintUpdateManyWithoutMissionNestedInput
+  hintUses?: Prisma.MissionHintUseUpdateManyWithoutMissionNestedInput
 }
 
 export type MissionUncheckedUpdateWithoutBadgesInput = {
@@ -1050,6 +1310,8 @@ export type MissionUncheckedUpdateWithoutBadgesInput = {
   enigmas?: Prisma.MissionEnigmaUncheckedUpdateManyWithoutMissionNestedInput
   progress?: Prisma.StudentMissionProgressUncheckedUpdateManyWithoutMissionNestedInput
   documents?: Prisma.MissionDocumentUncheckedUpdateManyWithoutMissionNestedInput
+  hints?: Prisma.MissionHintUncheckedUpdateManyWithoutMissionNestedInput
+  hintUses?: Prisma.MissionHintUseUncheckedUpdateManyWithoutMissionNestedInput
 }
 
 export type MissionCreateWithoutTeamSetInput = {
@@ -1067,6 +1329,8 @@ export type MissionCreateWithoutTeamSetInput = {
   badges?: Prisma.BadgeCreateNestedManyWithoutMissionInput
   progress?: Prisma.StudentMissionProgressCreateNestedManyWithoutMissionInput
   documents?: Prisma.MissionDocumentCreateNestedManyWithoutMissionInput
+  hints?: Prisma.MissionHintCreateNestedManyWithoutMissionInput
+  hintUses?: Prisma.MissionHintUseCreateNestedManyWithoutMissionInput
 }
 
 export type MissionUncheckedCreateWithoutTeamSetInput = {
@@ -1084,6 +1348,8 @@ export type MissionUncheckedCreateWithoutTeamSetInput = {
   badges?: Prisma.BadgeUncheckedCreateNestedManyWithoutMissionInput
   progress?: Prisma.StudentMissionProgressUncheckedCreateNestedManyWithoutMissionInput
   documents?: Prisma.MissionDocumentUncheckedCreateNestedManyWithoutMissionInput
+  hints?: Prisma.MissionHintUncheckedCreateNestedManyWithoutMissionInput
+  hintUses?: Prisma.MissionHintUseUncheckedCreateNestedManyWithoutMissionInput
 }
 
 export type MissionCreateOrConnectWithoutTeamSetInput = {
@@ -1140,6 +1406,8 @@ export type MissionUpdateWithoutClassInput = {
   badges?: Prisma.BadgeUpdateManyWithoutMissionNestedInput
   progress?: Prisma.StudentMissionProgressUpdateManyWithoutMissionNestedInput
   documents?: Prisma.MissionDocumentUpdateManyWithoutMissionNestedInput
+  hints?: Prisma.MissionHintUpdateManyWithoutMissionNestedInput
+  hintUses?: Prisma.MissionHintUseUpdateManyWithoutMissionNestedInput
 }
 
 export type MissionUncheckedUpdateWithoutClassInput = {
@@ -1157,6 +1425,8 @@ export type MissionUncheckedUpdateWithoutClassInput = {
   badges?: Prisma.BadgeUncheckedUpdateManyWithoutMissionNestedInput
   progress?: Prisma.StudentMissionProgressUncheckedUpdateManyWithoutMissionNestedInput
   documents?: Prisma.MissionDocumentUncheckedUpdateManyWithoutMissionNestedInput
+  hints?: Prisma.MissionHintUncheckedUpdateManyWithoutMissionNestedInput
+  hintUses?: Prisma.MissionHintUseUncheckedUpdateManyWithoutMissionNestedInput
 }
 
 export type MissionUncheckedUpdateManyWithoutClassInput = {
@@ -1200,6 +1470,8 @@ export type MissionUpdateWithoutTeamSetInput = {
   badges?: Prisma.BadgeUpdateManyWithoutMissionNestedInput
   progress?: Prisma.StudentMissionProgressUpdateManyWithoutMissionNestedInput
   documents?: Prisma.MissionDocumentUpdateManyWithoutMissionNestedInput
+  hints?: Prisma.MissionHintUpdateManyWithoutMissionNestedInput
+  hintUses?: Prisma.MissionHintUseUpdateManyWithoutMissionNestedInput
 }
 
 export type MissionUncheckedUpdateWithoutTeamSetInput = {
@@ -1217,6 +1489,8 @@ export type MissionUncheckedUpdateWithoutTeamSetInput = {
   badges?: Prisma.BadgeUncheckedUpdateManyWithoutMissionNestedInput
   progress?: Prisma.StudentMissionProgressUncheckedUpdateManyWithoutMissionNestedInput
   documents?: Prisma.MissionDocumentUncheckedUpdateManyWithoutMissionNestedInput
+  hints?: Prisma.MissionHintUncheckedUpdateManyWithoutMissionNestedInput
+  hintUses?: Prisma.MissionHintUseUncheckedUpdateManyWithoutMissionNestedInput
 }
 
 export type MissionUncheckedUpdateManyWithoutTeamSetInput = {
@@ -1242,6 +1516,8 @@ export type MissionCountOutputType = {
   badges: number
   progress: number
   documents: number
+  hints: number
+  hintUses: number
 }
 
 export type MissionCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1249,6 +1525,8 @@ export type MissionCountOutputTypeSelect<ExtArgs extends runtime.Types.Extension
   badges?: boolean | MissionCountOutputTypeCountBadgesArgs
   progress?: boolean | MissionCountOutputTypeCountProgressArgs
   documents?: boolean | MissionCountOutputTypeCountDocumentsArgs
+  hints?: boolean | MissionCountOutputTypeCountHintsArgs
+  hintUses?: boolean | MissionCountOutputTypeCountHintUsesArgs
 }
 
 /**
@@ -1289,6 +1567,20 @@ export type MissionCountOutputTypeCountDocumentsArgs<ExtArgs extends runtime.Typ
   where?: Prisma.MissionDocumentWhereInput
 }
 
+/**
+ * MissionCountOutputType without action
+ */
+export type MissionCountOutputTypeCountHintsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MissionHintWhereInput
+}
+
+/**
+ * MissionCountOutputType without action
+ */
+export type MissionCountOutputTypeCountHintUsesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MissionHintUseWhereInput
+}
+
 
 export type MissionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1308,6 +1600,8 @@ export type MissionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   badges?: boolean | Prisma.Mission$badgesArgs<ExtArgs>
   progress?: boolean | Prisma.Mission$progressArgs<ExtArgs>
   documents?: boolean | Prisma.Mission$documentsArgs<ExtArgs>
+  hints?: boolean | Prisma.Mission$hintsArgs<ExtArgs>
+  hintUses?: boolean | Prisma.Mission$hintUsesArgs<ExtArgs>
   _count?: boolean | Prisma.MissionCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["mission"]>
 
@@ -1365,6 +1659,8 @@ export type MissionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   badges?: boolean | Prisma.Mission$badgesArgs<ExtArgs>
   progress?: boolean | Prisma.Mission$progressArgs<ExtArgs>
   documents?: boolean | Prisma.Mission$documentsArgs<ExtArgs>
+  hints?: boolean | Prisma.Mission$hintsArgs<ExtArgs>
+  hintUses?: boolean | Prisma.Mission$hintUsesArgs<ExtArgs>
   _count?: boolean | Prisma.MissionCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type MissionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1385,6 +1681,8 @@ export type $MissionPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     badges: Prisma.$BadgePayload<ExtArgs>[]
     progress: Prisma.$StudentMissionProgressPayload<ExtArgs>[]
     documents: Prisma.$MissionDocumentPayload<ExtArgs>[]
+    hints: Prisma.$MissionHintPayload<ExtArgs>[]
+    hintUses: Prisma.$MissionHintUsePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1798,6 +2096,8 @@ export interface Prisma__MissionClient<T, Null = never, ExtArgs extends runtime.
   badges<T extends Prisma.Mission$badgesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Mission$badgesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BadgePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   progress<T extends Prisma.Mission$progressArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Mission$progressArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StudentMissionProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   documents<T extends Prisma.Mission$documentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Mission$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MissionDocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  hints<T extends Prisma.Mission$hintsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Mission$hintsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MissionHintPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  hintUses<T extends Prisma.Mission$hintUsesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Mission$hintUsesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MissionHintUsePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2351,6 +2651,54 @@ export type Mission$documentsArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.MissionDocumentScalarFieldEnum | Prisma.MissionDocumentScalarFieldEnum[]
+}
+
+/**
+ * Mission.hints
+ */
+export type Mission$hintsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MissionHint
+   */
+  select?: Prisma.MissionHintSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MissionHint
+   */
+  omit?: Prisma.MissionHintOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MissionHintInclude<ExtArgs> | null
+  where?: Prisma.MissionHintWhereInput
+  orderBy?: Prisma.MissionHintOrderByWithRelationInput | Prisma.MissionHintOrderByWithRelationInput[]
+  cursor?: Prisma.MissionHintWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MissionHintScalarFieldEnum | Prisma.MissionHintScalarFieldEnum[]
+}
+
+/**
+ * Mission.hintUses
+ */
+export type Mission$hintUsesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MissionHintUse
+   */
+  select?: Prisma.MissionHintUseSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MissionHintUse
+   */
+  omit?: Prisma.MissionHintUseOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MissionHintUseInclude<ExtArgs> | null
+  where?: Prisma.MissionHintUseWhereInput
+  orderBy?: Prisma.MissionHintUseOrderByWithRelationInput | Prisma.MissionHintUseOrderByWithRelationInput[]
+  cursor?: Prisma.MissionHintUseWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MissionHintUseScalarFieldEnum | Prisma.MissionHintUseScalarFieldEnum[]
 }
 
 /**

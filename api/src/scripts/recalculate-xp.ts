@@ -1,6 +1,10 @@
 /**
  * Script to recalculate XP for all students in all classes
  * This fixes the missing mission completion bonuses in existing data
+ *
+ * OBSOLETO, no ejecutar sobre datos reales: rehace la XP solo con las entregas,
+ * sin comportamientos, recompensas libres, premios de equipo ni lo que cobran y
+ * descuentan las pistas de las misiones. Desharía todo eso.
  */
 
 import { prisma } from '../config/database.js'

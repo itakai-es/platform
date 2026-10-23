@@ -19,6 +19,7 @@ export type ActivityType =
   | 'behavior_applied'
   | 'shop_purchased'
   | 'shop_item_used'
+  | 'hint_used'
 
 export interface RecentActivity {
   id: string
@@ -129,6 +130,12 @@ export const ACTIVITY_CONFIG: Record<ActivityType, ActivityDisplayConfig> = {
     bgColor: 'bg-purple-light/40',
     textColor: 'text-purple',
     label: 'Uso de poder',
+  },
+  hint_used: {
+    icon: 'light-bulb',
+    bgColor: 'bg-yellow/20',
+    textColor: 'text-yellow-dark',
+    label: 'Pista usada',
   },
 }
 

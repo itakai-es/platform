@@ -89,6 +89,26 @@
         "error": "Error submitting. Please try again.",
         "expired_error": "This mission has expired. You can no longer submit enigmas.",
         "downloading": "Downloading"
+      },
+      "hints": {
+        "intro": "Stuck? Use a hint. They open in order, one at a time, and each one has its cost.",
+        "locked": "It opens after hint {position}.",
+        "not_used": "Not used.",
+        "use_button": "Use hint {position}",
+        "summary_coins": "It costs {count} {coins}. You have {balance}.",
+        "summary_xp": "It costs {count} XP. You have {balance}. Paying with XP may take you down a level.",
+        "summary_percent": "It takes {count}% off what this mission still has to give you: the enigmas not yet approved (including those under review) and the mission bonus. What you have already earned does not change.",
+        "summary_free": "It's free.",
+        "short_coins": "You need {count} more {coins}.",
+        "short_xp": "You need {count} more XP.",
+        "used": "Used",
+        "penalty_note": "Your hints take {count}% off what you still have to earn in this mission.",
+        "closed_completed": "You have completed the mission: you no longer need hints.",
+        "closed_expired": "The mission has expired: its hints can no longer be used.",
+        "preview_note": "Preview: you see all the hints open. Students open them one at a time, in this order, paying their cost.",
+        "used_announcement": "You have used hint {position}.",
+        "use_error": "The hint couldn't be used.",
+        "bonus_penalty": "−{count}% for your hints"
       }
     },
     "classes": {

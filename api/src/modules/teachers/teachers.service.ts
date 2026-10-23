@@ -43,10 +43,12 @@ import {
   unusedAccountHomeClass,
 } from './class-students.service.js'
 import {
+  MISSION_COPY_INCLUDE,
   copyMissionInto,
   lockSourceClass,
   readMissionForCopy,
   type MissionCopyOptions,
+  type MissionCopySource,
 } from './mission-copy.js'
 import {
   findTemplate,
@@ -621,7 +623,7 @@ export class TeachersService {
    *  alumnos y progreso. Lo comparten importar-plantilla y duplicar-clase. */
   private async copyClass(
     source: Prisma.ClassGetPayload<{ include: { shopItems: true; behaviorTemplates: true } }> & {
-      missions?: Prisma.MissionGetPayload<{ include: { enigmas: true } }>[]
+      missions?: MissionCopySource[]
     },
     userId: string,
     options: ClassCopyOptions,
@@ -749,7 +751,7 @@ export class TeachersService {
       options.missions
         ? prisma.mission.findMany({
             where: { classId: tpl.id },
-            include: { enigmas: true },
+            include: MISSION_COPY_INCLUDE,
             orderBy: [{ createdAt: 'asc' }, { id: 'asc' }],
           })
         : [],
@@ -792,7 +794,7 @@ export class TeachersService {
       include: {
         shopItems: true,
         behaviorTemplates: true,
-        missions: { include: { enigmas: true } },
+        missions: { include: MISSION_COPY_INCLUDE },
       },
     })
     if (!source) throw new NotFoundError('Clase no encontrada')
@@ -848,6 +850,7 @@ export class TeachersService {
         })
         const copied = {
           enigmas: result.enigmas,
+          hints: result.hints,
           documents: result.documents,
           badges: result.badges.length,
         }
@@ -896,7 +899,12 @@ export class TeachersService {
         deadline: copy.mission.deadline,
         backgroundImage: copy.mission.backgroundImage,
       },
-      copied: { enigmas: copy.enigmas, documents: copy.documents, badges: copy.badges },
+      copied: {
+        enigmas: copy.enigmas,
+        hints: copy.hints,
+        documents: copy.documents,
+        badges: copy.badges,
+      },
       message: 'Misión importada',
     }
   }
