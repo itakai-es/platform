@@ -643,7 +643,8 @@
               "nickname_changed": "a schimbat porecla pentru {target}",
               "removed": "a scos {target} din clasă",
               "removed_unused": "a scos {target} din clasă și i-a șters contul, care nu fusese folosit",
-              "avatar_generated": "a generat un avatar nou pentru {target}"
+              "avatar_generated": "a generat un avatar nou pentru {target}",
+              "avatar_changed": "a înlocuit avatarul lui {target} cu unul din catalog"
             },
             "mission": {
               "created": "a creat misiunea «{title}»",
@@ -719,7 +720,8 @@
               "nickname_changed": "a schimbat porecla unei persoane care nu mai este în clasă",
               "removed": "a scos pe cineva din clasă",
               "removed_unused": "a scos din clasă o persoană care nu intrase niciodată și i-a șters contul",
-              "avatar_generated": "a generat un avatar nou pentru o persoană care nu mai este în clasă"
+              "avatar_generated": "a generat un avatar nou pentru o persoană care nu mai este în clasă",
+              "avatar_changed": "a înlocuit cu unul din catalog avatarul unei persoane care nu mai este în clasă"
             },
             "submission": {
               "approved": "a aprobat lucrarea pentru «{title}» a unei persoane care nu mai este în clasă, cu {percentage} %",
@@ -1061,7 +1063,17 @@
         "remove_unused_confirm": "Elimină și șterge contul",
         "removed": "{name} nu mai este în clasă",
         "removed_account_deleted": "{name} nu mai este în clasă, iar contul său nefolosit a fost șters",
-        "remove_error": "Eliminarea din clasă nu a reușit."
+        "remove_error": "Eliminarea din clasă nu a reușit.",
+        "avatar": "Schimbă avatarul",
+        "avatar_title": "Avatarul în clasă",
+        "avatar_intro": "Dacă avatarul lui {name} în această clasă nu este potrivit, înlocuiește-l cu un personaj din catalog. Se schimbă doar în această clasă, iar {name} își poate alege alt avatar din fila Avatar.",
+        "avatar_now": "Acum apare așa",
+        "avatar_choose": "Personaje din catalog",
+        "avatar_pick": "Alege personajul pe care îl va avea {name} în această clasă.",
+        "avatar_summary": "La salvare, {name} va apărea ca {avatar} în această clasă.",
+        "avatar_summary_generated": "La salvare, {name} va apărea ca {avatar} în această clasă, iar imaginea generată cu IA se șterge.",
+        "avatar_saved": "Avatarul a fost schimbat",
+        "avatar_error": "Avatarul nu a putut fi schimbat."
       }
     },
     "ai_assistant": {
@@ -1117,7 +1129,13 @@
           "el": "Greacă",
           "ro": "Română"
         },
-        "delete_modal_blocked": "Există clase care depind de contul tău."
+        "delete_modal_blocked": "Există clase care depind de contul tău.",
+        "avatar_title": "Avatarul tău",
+        "avatar_description": "După el te recunosc elevii și celelalte cadre didactice: apare lângă numele tău în istoric, în lista cadrelor didactice ale fiecărei clase, în activitate și la prezență. Este același în toate clasele tale.",
+        "avatar_preview": "Așa te văd în clasele tale",
+        "avatar_auto": "Automat",
+        "avatar_updated": "Avatarul a fost actualizat",
+        "avatar_error": "Avatarul nu a putut fi schimbat."
       },
       "meta": {
         "title": "Profilul meu | ITAKAI",

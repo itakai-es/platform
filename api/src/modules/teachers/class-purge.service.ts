@@ -11,6 +11,7 @@ import {
 import { ConflictError, NotFoundError } from '../../utils/errors.js'
 import { createSystemLog } from '../admin/system-log.service.js'
 import { uploadResolver, type StoredUpload } from '../storage/storage.service.js'
+import { generatedAvatarUpload, uploadInUse } from '../storage/upload-usage.js'
 import {
   UNUSED_ACCOUNT_SELECT,
   deleteUploads,
@@ -44,11 +45,13 @@ import {
  *    administra la instancia.
  *
  * Los ficheros, al final y fuera de la transacción, que nunca se deshace por
- * ellos: las entregas (cada una es de una sola fila) y los documentos y las
- * portadas que ya no usa nadie más. Duplicar una clase, importar una plantilla
- * o una misión comparten la portada y los documentos con el origen (misma
- * URL), así que antes de borrar uno se busca quién más lo apunta, ya con la
- * purga confirmada, como `deleteMissionDocument`. Las imágenes de las
+ * ellos: las entregas (cada una es de una sola fila) y los documentos, las
+ * portadas y los avatares generados con IA de sus matrículas que ya no usa
+ * nadie más (los avatares son públicos en su dirección, como las portadas).
+ * Duplicar una clase, importar una plantilla o una misión comparten la portada
+ * y los documentos con el origen (misma URL), así que antes de borrar uno se
+ * busca quién más lo apunta, ya con la purga confirmada, como
+ * `deleteMissionDocument`. Las imágenes de las
  * insignias no se tocan: borrar una insignia nunca ha borrado su imagen, que
  * comparten las copias. Lo que no se pueda borrar queda, con sus claves, en el
  * registro del sistema: con la clase ya borrada, nada vuelve a por ello. Para
@@ -99,6 +102,8 @@ interface PurgeFiles {
   submissions: string[]
   documents: string[]
   covers: string[]
+  /** Los avatares de sus matrículas; de ellos, solo cuentan los generados con IA. */
+  avatars: string[]
 }
 
 export interface PurgedClass {
@@ -110,7 +115,7 @@ export interface PurgedClass {
 export interface ClassPurgeOutcome extends PurgedClass {
   filesDeleted: number
   filesFailed: number
-  /** Documentos y portadas que se quedan porque otra clase los usa. */
+  /** Documentos, portadas y avatares que se quedan porque otra fila los usa. */
   filesShared: number
 }
 
@@ -163,6 +168,10 @@ export async function purgeClassInTx(
   const submissionIds = submissions.map(s => s.id)
   const students = await tx.classEnrollment.count({
     where: { classId, isPreview: false },
+  })
+  const avatars = await tx.classEnrollment.findMany({
+    where: { classId, avatarUrl: { not: null } },
+    select: { avatarUrl: true },
   })
   const shopPurchases = await tx.shopPurchase.count({ where: { classId } })
 
@@ -252,6 +261,7 @@ export async function purgeClassInTx(
       submissions: submissions.map(s => s.fileUrl).filter(present),
       documents: documents.map(d => d.fileUrl),
       covers: [cls.backgroundImage, ...missions.map(m => m.backgroundImage)].filter(present),
+      avatars: avatars.map(e => e.avatarUrl).filter(present),
     },
   }
 }
@@ -260,84 +270,40 @@ export async function purgeClassInTx(
 const SUBMISSION_PREFIXES = ['submissions/']
 const DOCUMENT_PREFIXES = ['documents/']
 const COVER_PREFIXES = ['covers/', 'ai-generated/covers/']
-
-type Resolve = (fileUrl: string | null | undefined) => StoredUpload | null
-
-/**
- * ¿Lo apunta alguna fila? Se busca por el nombre del fichero y se compara la
- * clave ya normalizada: dos URL escritas distinto pueden ser el mismo fichero.
- * Mira todas las columnas donde puede acabar la URL de una imagen o un
- * documento de la plataforma, no solo la de su tipo: una portada puede ser la
- * de otra clase, de una misión o el enlace de un documento.
- */
-async function uploadInUse(stored: StoredUpload, resolve: Resolve): Promise<boolean> {
-  const name = stored.key.slice(stored.key.lastIndexOf('/') + 1)
-  const like = { contains: name }
-  const [classes, missions, documents, badges, enrollments, articles] = await Promise.all([
-    prisma.class.findMany({
-      where: { backgroundImage: like },
-      select: { backgroundImage: true },
-    }),
-    prisma.mission.findMany({
-      where: { backgroundImage: like },
-      select: { backgroundImage: true },
-    }),
-    prisma.missionDocument.findMany({
-      where: { fileUrl: like },
-      select: { fileUrl: true },
-    }),
-    prisma.badge.findMany({
-      where: { imageUrl: like },
-      select: { imageUrl: true },
-    }),
-    prisma.classEnrollment.findMany({
-      where: { avatarUrl: like },
-      select: { avatarUrl: true },
-    }),
-    prisma.helpArticle.findMany({
-      where: { coverImage: like },
-      select: { coverImage: true },
-    }),
-  ])
-  const urls = [
-    ...classes.map(r => r.backgroundImage),
-    ...missions.map(r => r.backgroundImage),
-    ...documents.map(r => r.fileUrl),
-    ...badges.map(r => r.imageUrl),
-    ...enrollments.map(r => r.avatarUrl),
-    ...articles.map(r => r.coverImage),
-  ]
-  return urls.some(url => {
-    const other = resolve(url)
-    return other?.key === stored.key && other.origin === stored.origin
-  })
-}
+const AVATAR_PREFIXES = ['ai-generated/avatars/']
 
 /**
  * Borra los ficheros de una clase ya purgada. Las entregas, sin más (nunca se
- * copian); los documentos y las portadas, solo si ninguna fila los apunta ya.
- * Cada tipo solo dentro de su carpeta: una portada puede apuntar a cualquier
- * imagen pública de la plataforma, y no por eso es de la clase. Devuelve las
- * claves de los que no se han podido borrar.
+ * copian); los documentos, las portadas y los avatares generados, solo si
+ * ninguna fila los apunta ya. Cada tipo solo dentro de su carpeta: una portada
+ * puede apuntar a cualquier imagen pública de la plataforma, y no por eso es de
+ * la clase; un avatar, como al dejarlo (`releaseGeneratedAvatar`), solo si es un
+ * fichero suelto de la de los generados. Devuelve las claves de los que no se
+ * han podido borrar.
  */
 async function deletePurgedFiles(files: PurgeFiles) {
   const resolve = await uploadResolver()
   // Por clave: la misma portada en la clase y en sus misiones se mira una vez.
-  const pick = (urls: string[], prefixes: string[]) => {
+  const pickBy = (urls: string[], upload: (url: string) => StoredUpload | null) => {
     const found = new Map<string, { url: string; stored: StoredUpload }>()
     for (const url of urls) {
-      const stored = resolve(url)
-      if (!stored || !prefixes.some(p => stored.key.startsWith(p))) continue
-      found.set(`${stored.origin}:${stored.key}`, { url, stored })
+      const stored = upload(url)
+      if (stored) found.set(`${stored.origin}:${stored.key}`, { url, stored })
     }
     return [...found.values()]
   }
+  const pick = (urls: string[], prefixes: string[]) =>
+    pickBy(urls, url => {
+      const stored = resolve(url)
+      return stored && prefixes.some(p => stored.key.startsWith(p)) ? stored : null
+    })
 
   const toDelete = pick(files.submissions, SUBMISSION_PREFIXES)
   let shared = 0
   for (const file of [
     ...pick(files.documents, DOCUMENT_PREFIXES),
     ...pick(files.covers, COVER_PREFIXES),
+    ...pickBy(files.avatars, url => generatedAvatarUpload(url, resolve)),
   ]) {
     if (await uploadInUse(file.stored, resolve)) shared++
     else toDelete.push(file)
@@ -373,6 +339,7 @@ function pendingKeys(files: PurgeFiles): string[] {
   collect(files.submissions, SUBMISSION_PREFIXES)
   collect(files.documents, DOCUMENT_PREFIXES)
   collect(files.covers, COVER_PREFIXES)
+  collect(files.avatars, AVATAR_PREFIXES)
   return [...keys]
 }
 

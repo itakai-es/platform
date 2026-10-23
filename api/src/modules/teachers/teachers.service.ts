@@ -5,13 +5,7 @@ import { getLevelInfo, getLevelFromXP, calculateMissionTotalXP } from '../../uti
 import { existsSync, mkdirSync } from 'fs'
 import { join } from 'path'
 import { randomUUID } from 'crypto'
-import { generateFireRedAvatar } from '../ai/generators/avatar-firered.js'
-import {
-  AvatarServiceUnavailableError,
-  ConflictError,
-  NotFoundError,
-  ValidationError,
-} from '../../utils/errors.js'
+import { ConflictError, NotFoundError, ValidationError } from '../../utils/errors.js'
 import { seedDefaultShopItems } from '../shop/shop.service.js'
 import {
   resolveClassSettings,
@@ -35,7 +29,7 @@ import {
 } from '../../utils/class-access.js'
 import { accountHandle } from '../../utils/identity.js'
 import { DEFAULT_AVATARS, participatingEnrollmentWhere } from '../../utils/enrollment.js'
-import { activityActor } from '../../utils/activity.js'
+import { ACTIVITY_ACTOR_INCLUDE, activityActor } from '../../utils/activity.js'
 import { assignableBadgesWhere, manageableBadgesWhere } from '../../utils/badge-access.js'
 import {
   manageableHomeClasses,
@@ -1171,46 +1165,6 @@ export class TeachersService {
     }
   }
 
-  async generateStudentAvatar(
-    userId: string,
-    classId: string,
-    studentId: string,
-    data: { avatar_id: string; wardrobe_prompt: string; background_prompt: string }
-  ) {
-    await assertClassAccess(classId, userId, 'student.avatar')
-
-    const enrollment = await prisma.classEnrollment.findUnique({
-      where: { studentId_classId: { studentId, classId } },
-    })
-    if (!enrollment) throw new Error('Esa cuenta de estudiante no está en esta clase')
-
-    let fileUrl: string
-    try {
-      ({ fileUrl } = await generateFireRedAvatar(data))
-    } catch (err) {
-      console.error('[AI] Avatar customization unavailable:', err instanceof Error ? err.message : err)
-      throw new AvatarServiceUnavailableError()
-    }
-
-    const updated = await prisma.$transaction(async tx => {
-      const saved = await tx.classEnrollment.update({
-        where: { studentId_classId: { studentId, classId } },
-        data: { avatarUrl: fileUrl },
-      })
-      await recordClassAction(tx, {
-        classId,
-        actorId: userId,
-        action: 'student.avatar_generated',
-        entityType: 'enrollment',
-        entityId: saved.id,
-        targetUserId: studentId,
-      })
-      return saved
-    })
-
-    return { avatarUrl: updated.avatarUrl, message: 'Avatar del estudiante actualizado correctamente' }
-  }
-
   // ==================== STUDENTS ====================
 
   async getStudentById(userId: string, studentId: string) {
@@ -1279,6 +1233,7 @@ export class TeachersService {
           { classId: null }, // Include global activities (level_up, badge_unlocked, etc.)
         ],
       },
+      include: ACTIVITY_ACTOR_INCLUDE,
       orderBy: { createdAt: 'desc' },
       take: 10,
     })
@@ -1416,6 +1371,8 @@ export class TeachersService {
             teacherName: a.teacherName ?? metadata.teacherName,
             metadata: a.metadata,
             studentId: a.userId,
+            // La clase de la entrada: con el alumno, da el color de su avatar.
+            classId: a.classId,
             // Quién lo hizo (aprobó, aplicó…), para el «Por …» de la tarjeta.
             actor: activityActor(a),
           }
@@ -1501,7 +1458,7 @@ export class TeachersService {
         userId: { in: studentIds },
         OR: [{ classId: { in: classIds } }, { classId: null }],
       },
-      include: { user: true },
+      include: { user: true, ...ACTIVITY_ACTOR_INCLUDE },
       orderBy: { createdAt: 'desc' },
       take: limit,
     })
@@ -1534,6 +1491,8 @@ export class TeachersService {
           teacherName: a.teacherName ?? metadata.teacherName,
           metadata: a.metadata,
           studentId: a.userId,
+          // La clase de la entrada: con el alumno, da el color de su avatar.
+          classId: a.classId,
           // Quién lo hizo (aprobó, aplicó…), para el «Por …» de la tarjeta.
           actor: activityActor(a),
         }
@@ -1564,7 +1523,7 @@ export class TeachersService {
         userId: { in: studentIds },
         classId: classId, // Filter by class
       },
-      include: { user: true },
+      include: { user: true, ...ACTIVITY_ACTOR_INCLUDE },
       orderBy: { createdAt: 'desc' },
       take: limit,
     })
@@ -1597,6 +1556,8 @@ export class TeachersService {
           teacherName: a.teacherName ?? metadata.teacherName,
           metadata: a.metadata,
           studentId: a.userId,
+          // La clase de la entrada: con el alumno, da el color de su avatar.
+          classId: a.classId,
           // Quién lo hizo (aprobó, aplicó…), para el «Por …» de la tarjeta.
           actor: activityActor(a),
         }

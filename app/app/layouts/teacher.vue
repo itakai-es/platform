@@ -29,6 +29,8 @@
         home-route="/profesor/inicio"
         role="teacher"
         :user-name="user?.name"
+        :user-id="user?.id || 'teacher'"
+        :avatar="user?.avatar"
         :current-god="currentGod"
         show-account
         @close="mobileMenuOpen = false"

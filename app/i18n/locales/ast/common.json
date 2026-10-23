@@ -567,7 +567,35 @@
       "hint_used_student": "Usesti la pista {position} de {mission}",
       "hint_used_teacher": "Usó la pista {position} de {mission}",
       "hint_used_percent_student": "Usesti la pista {position} de {mission}: −{count} % en lo que te quedaba por cobrar",
-      "hint_used_percent_teacher": "Usó la pista {position} de {mission}: −{count} % en lo que-y quedaba por cobrar"
+      "hint_used_percent_teacher": "Usó la pista {position} de {mission}: −{count} % en lo que-y quedaba por cobrar",
+      "enigma_approved_student": "Aprobáronte la entrega de {enigma}",
+      "enigma_approved_teacher": "Recibió l'aprobación de la so entrega de {enigma}"
+    },
+    "avatars": {
+      "characters": {
+        "atenea": {
+          "name": "Atenea",
+          "trait": "Sabiduría y estratexa"
+        },
+        "odiseo": {
+          "name": "Odiseo",
+          "trait": "Astucia y valentía"
+        },
+        "penelope": {
+          "name": "Penélope",
+          "trait": "Llealtá y paciencia"
+        },
+        "polifemo": {
+          "name": "Polifemo",
+          "trait": "Fuercia y determinación"
+        },
+        "poseidon": {
+          "name": "Poseidón",
+          "trait": "Poder y dominiu"
+        }
+      },
+      "custom_name": "El to avatar con IA",
+      "custom_trait": "Xeneráu con IA"
     }
   }
 }

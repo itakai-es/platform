@@ -163,14 +163,14 @@
           "tip": "Conseyu: da detalles de colores, ropa, accesorios y estilu. La IA va crear el to avatar en base al personaxe qu'escoyeres.",
           "generate_button": "Xenera l'avatar",
           "generating": "Xenerando'l to avatar...",
-          "generated_trait": "Xeneráu con IA",
           "nickname_placeholder": "El to nomatu...",
           "save_changes": "Guardar los cambeos",
           "no_guide_hint": "Escueyi la to guía pa ver el to avatar",
           "save_success": "Perfil guardáu correutamente",
           "save_error": "Fallu al guardar el perfil",
           "generate_error": "Nun se pudo xenerar l'avatar. Inténtalo otra vuelta en dellos segundos.",
-          "generate_error_with_detail": "Nun se pudo xenerar l'avatar: {detail}"
+          "generate_error_with_detail": "Nun se pudo xenerar l'avatar: {detail}",
+          "how_others_see": "Asina te ven nesta clase"
         },
         "mission_no_description": "Ensin descripción",
         "shop": {
@@ -344,7 +344,6 @@
       "recent_activity_card": {
         "title": "Actividá reciente",
         "empty": "Nun hai actividá reciente",
-        "user_fallback": "Daquién",
         "by_actor": "Por {name}"
       },
       "submission_modal": {

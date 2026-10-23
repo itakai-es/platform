@@ -108,7 +108,16 @@
       <div v-else-if="roleInfo" class="mobile-sidebar-footer">
         <div class="role-badge-card" :class="roleInfo.cardClass">
           <div class="flex items-center gap-3">
+            <!-- El avatar de docente, como en el menú de escritorio: con él lo reconocen en sus clases -->
+            <Avatar
+              v-if="role === 'teacher'"
+              :avatar-key="avatar"
+              :seed="userId"
+              :name="userName"
+              size="xs"
+            />
             <div
+              v-else
               class="w-10 h-10 rounded-full flex items-center justify-center"
               :class="roleInfo.iconBgClass"
             >
@@ -180,6 +189,9 @@ interface Props {
   // For role badge
   role?: 'student' | 'teacher' | 'admin'
   userName?: string
+  /** Del profesorado: su id (da el color automático) y la clave de su avatar. */
+  userId?: string
+  avatar?: string | null
 
   // For AI chat
   currentGod?: God | null

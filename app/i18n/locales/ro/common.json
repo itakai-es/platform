@@ -567,7 +567,35 @@
       "hint_used_student": "Ai folosit indiciul {position} din {mission}",
       "hint_used_teacher": "A folosit indiciul {position} din {mission}",
       "hint_used_percent_student": "Ai folosit indiciul {position} din {mission}: −{count} % din ce mai aveai de primit",
-      "hint_used_percent_teacher": "A folosit indiciul {position} din {mission}: −{count} % din ce mai avea de primit"
+      "hint_used_percent_teacher": "A folosit indiciul {position} din {mission}: −{count} % din ce mai avea de primit",
+      "enigma_approved_student": "Lucrarea ta pentru {enigma} a fost aprobată",
+      "enigma_approved_teacher": "Lucrarea pentru {enigma} i-a fost aprobată"
+    },
+    "avatars": {
+      "characters": {
+        "atenea": {
+          "name": "Atena",
+          "trait": "Înțelepciune și strategie"
+        },
+        "odiseo": {
+          "name": "Odiseu",
+          "trait": "Istețime și curaj"
+        },
+        "penelope": {
+          "name": "Penelopa",
+          "trait": "Loialitate și răbdare"
+        },
+        "polifemo": {
+          "name": "Polifem",
+          "trait": "Forță și hotărâre"
+        },
+        "poseidon": {
+          "name": "Poseidon",
+          "trait": "Putere și stăpânire"
+        }
+      },
+      "custom_name": "Avatarul tău cu IA",
+      "custom_trait": "Generat cu IA"
     }
   }
 }

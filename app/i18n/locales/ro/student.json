@@ -163,14 +163,14 @@
           "tip": "Sfat: dă detalii despre culori, ținută, accesorii și stil. IA îți va crea avatarul pornind de la personajul pe care l-ai ales.",
           "generate_button": "Generează avatarul",
           "generating": "Se generează avatarul tău...",
-          "generated_trait": "Generat cu IA",
           "nickname_placeholder": "Porecla ta...",
           "save_changes": "Salvează modificările",
           "no_guide_hint": "Alege-ți ghidul ca să îți vezi avatarul",
           "save_success": "Profilul a fost salvat",
           "save_error": "Eroare la salvarea profilului",
           "generate_error": "Avatarul nu a putut fi generat. Încearcă din nou peste câteva secunde.",
-          "generate_error_with_detail": "Avatarul nu a putut fi generat: {detail}"
+          "generate_error_with_detail": "Avatarul nu a putut fi generat: {detail}",
+          "how_others_see": "Așa te văd ceilalți în această clasă"
         },
         "mission_no_description": "Fără descriere",
         "shop": {
@@ -344,7 +344,6 @@
       "recent_activity_card": {
         "title": "Activitate recentă",
         "empty": "Nu există activitate recentă",
-        "user_fallback": "Cineva",
         "by_actor": "De {name}"
       },
       "submission_modal": {

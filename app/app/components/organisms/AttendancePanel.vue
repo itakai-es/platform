@@ -46,19 +46,28 @@
           </div>
         </div>
 
-        <p class="text-sm text-navy-700/80">
-          <template v-if="savedSession">
-            {{
+        <p class="flex items-start gap-1.5 text-sm text-navy-700/80">
+          <!-- Quién la guardó, con su avatar -->
+          <Avatar
+            v-if="savedSession?.takenBy"
+            :avatar-key="savedSession.takenBy.avatar"
+            :seed="savedSession.takenBy.id"
+            :name="savedSession.takenBy.name"
+            size="xxs"
+            class="mt-px"
+          />
+          <span class="min-w-0">
+            <template v-if="savedSession">{{
               t('teacher.attendance.saved_by', {
-                name: savedSession.takenBy ?? t('teacher.attendance.someone'),
+                name: savedSession.takenBy?.name ?? t('teacher.attendance.someone'),
                 time: formatTime(savedSession.updatedAt),
               })
-            }}
-          </template>
-          <template v-else>{{ t('teacher.attendance.not_saved') }}</template>
-          <span v-if="dirty" class="ml-1 font-semibold"
-            >· {{ t('teacher.attendance.unsaved') }}</span
-          >
+            }}</template>
+            <template v-else>{{ t('teacher.attendance.not_saved') }}</template>
+            <span v-if="dirty" class="ml-1 font-semibold"
+              >· {{ t('teacher.attendance.unsaved') }}</span
+            >
+          </span>
         </p>
       </div>
 
@@ -109,7 +118,12 @@
             class="flex flex-col gap-3 rounded-2xl bg-white p-3 shadow-sm sm:p-4 lg:flex-row lg:items-center"
           >
             <div class="flex min-w-0 flex-1 items-center gap-3">
-              <Avatar :src="s.avatar" :username="s.name" size="md" class="flex-shrink-0" />
+              <Avatar
+                :src="s.avatar"
+                :name="s.name"
+                :seed="studentAvatarSeed(classId, s.id)"
+                size="md"
+              />
               <div class="min-w-0">
                 <p :id="`${uid}-name-${s.id}`" class="truncate font-semibold text-navy-700">
                   {{ s.name }}
@@ -229,6 +243,7 @@ import type { ScheduleConfig } from '~/types/schedule.types'
 import { scheduleOccurrences, toDateKey } from '~/utils/schedule-occurrences'
 import { ATTENDANCE_STATUS_META } from '~/utils/attendance-status'
 import { matchesQuery } from '~/utils/text-search'
+import { studentAvatarSeed } from '~/utils/avatar'
 import {
   ATTENDANCE_STATUSES,
   type AttendanceSession,

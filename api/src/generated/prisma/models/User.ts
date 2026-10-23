@@ -38,6 +38,7 @@ export type UserMinAggregateOutputType = {
   homeClassId: string | null
   mustChangePassword: boolean | null
   passwordChangedAt: Date | null
+  avatar: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -56,6 +57,7 @@ export type UserMaxAggregateOutputType = {
   homeClassId: string | null
   mustChangePassword: boolean | null
   passwordChangedAt: Date | null
+  avatar: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -74,6 +76,7 @@ export type UserCountAggregateOutputType = {
   homeClassId: number
   mustChangePassword: number
   passwordChangedAt: number
+  avatar: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -94,6 +97,7 @@ export type UserMinAggregateInputType = {
   homeClassId?: true
   mustChangePassword?: true
   passwordChangedAt?: true
+  avatar?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -112,6 +116,7 @@ export type UserMaxAggregateInputType = {
   homeClassId?: true
   mustChangePassword?: true
   passwordChangedAt?: true
+  avatar?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -130,6 +135,7 @@ export type UserCountAggregateInputType = {
   homeClassId?: true
   mustChangePassword?: true
   passwordChangedAt?: true
+  avatar?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -221,6 +227,7 @@ export type UserGroupByOutputType = {
   homeClassId: string | null
   mustChangePassword: boolean
   passwordChangedAt: Date | null
+  avatar: string | null
   createdAt: Date
   updatedAt: Date
   _count: UserCountAggregateOutputType | null
@@ -260,6 +267,7 @@ export type UserWhereInput = {
   homeClassId?: Prisma.StringNullableFilter<"User"> | string | null
   mustChangePassword?: Prisma.BoolFilter<"User"> | boolean
   passwordChangedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  avatar?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   createdBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
@@ -312,6 +320,7 @@ export type UserOrderByWithRelationInput = {
   homeClassId?: Prisma.SortOrderInput | Prisma.SortOrder
   mustChangePassword?: Prisma.SortOrder
   passwordChangedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  avatar?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   createdBy?: Prisma.UserOrderByWithRelationInput
@@ -367,6 +376,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   homeClassId?: Prisma.StringNullableFilter<"User"> | string | null
   mustChangePassword?: Prisma.BoolFilter<"User"> | boolean
   passwordChangedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  avatar?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   createdBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
@@ -419,6 +429,7 @@ export type UserOrderByWithAggregationInput = {
   homeClassId?: Prisma.SortOrderInput | Prisma.SortOrder
   mustChangePassword?: Prisma.SortOrder
   passwordChangedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  avatar?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
@@ -443,6 +454,7 @@ export type UserScalarWhereWithAggregatesInput = {
   homeClassId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   mustChangePassword?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   passwordChangedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+  avatar?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
@@ -459,6 +471,7 @@ export type UserCreateInput = {
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
@@ -511,6 +524,7 @@ export type UserUncheckedCreateInput = {
   homeClassId?: string | null
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
@@ -559,6 +573,7 @@ export type UserUpdateInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
@@ -611,6 +626,7 @@ export type UserUncheckedUpdateInput = {
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -661,6 +677,7 @@ export type UserCreateManyInput = {
   homeClassId?: string | null
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -677,6 +694,7 @@ export type UserUpdateManyMutationInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -695,6 +713,7 @@ export type UserUncheckedUpdateManyInput = {
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -728,6 +747,7 @@ export type UserCountOrderByAggregateInput = {
   homeClassId?: Prisma.SortOrder
   mustChangePassword?: Prisma.SortOrder
   passwordChangedAt?: Prisma.SortOrder
+  avatar?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -746,6 +766,7 @@ export type UserMaxOrderByAggregateInput = {
   homeClassId?: Prisma.SortOrder
   mustChangePassword?: Prisma.SortOrder
   passwordChangedAt?: Prisma.SortOrder
+  avatar?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -764,6 +785,7 @@ export type UserMinOrderByAggregateInput = {
   homeClassId?: Prisma.SortOrder
   mustChangePassword?: Prisma.SortOrder
   passwordChangedAt?: Prisma.SortOrder
+  avatar?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -1375,6 +1397,7 @@ export type UserCreateWithoutCreatedUsersInput = {
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
@@ -1426,6 +1449,7 @@ export type UserUncheckedCreateWithoutCreatedUsersInput = {
   homeClassId?: string | null
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
@@ -1478,6 +1502,7 @@ export type UserCreateWithoutCreatedByInput = {
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdUsers?: Prisma.UserCreateNestedManyWithoutCreatedByInput
@@ -1528,6 +1553,7 @@ export type UserUncheckedCreateWithoutCreatedByInput = {
   homeClassId?: string | null
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
@@ -1597,6 +1623,7 @@ export type UserUpdateWithoutCreatedUsersInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
@@ -1648,6 +1675,7 @@ export type UserUncheckedUpdateWithoutCreatedUsersInput = {
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
@@ -1716,6 +1744,7 @@ export type UserScalarWhereInput = {
   homeClassId?: Prisma.StringNullableFilter<"User"> | string | null
   mustChangePassword?: Prisma.BoolFilter<"User"> | boolean
   passwordChangedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  avatar?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
 }
@@ -1732,6 +1761,7 @@ export type UserCreateWithoutSettingsInput = {
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
@@ -1783,6 +1813,7 @@ export type UserUncheckedCreateWithoutSettingsInput = {
   homeClassId?: string | null
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
@@ -1846,6 +1877,7 @@ export type UserUpdateWithoutSettingsInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
@@ -1897,6 +1929,7 @@ export type UserUncheckedUpdateWithoutSettingsInput = {
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -1944,6 +1977,7 @@ export type UserCreateWithoutRefreshTokensInput = {
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
@@ -1995,6 +2029,7 @@ export type UserUncheckedCreateWithoutRefreshTokensInput = {
   homeClassId?: string | null
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
@@ -2058,6 +2093,7 @@ export type UserUpdateWithoutRefreshTokensInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
@@ -2109,6 +2145,7 @@ export type UserUncheckedUpdateWithoutRefreshTokensInput = {
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -2156,6 +2193,7 @@ export type UserCreateWithoutTeacherClassesInput = {
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
@@ -2207,6 +2245,7 @@ export type UserUncheckedCreateWithoutTeacherClassesInput = {
   homeClassId?: string | null
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
@@ -2259,6 +2298,7 @@ export type UserCreateWithoutTrashedClassesInput = {
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
@@ -2310,6 +2350,7 @@ export type UserUncheckedCreateWithoutTrashedClassesInput = {
   homeClassId?: string | null
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
@@ -2362,6 +2403,7 @@ export type UserCreateWithoutRecommendedTemplatesInput = {
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
@@ -2413,6 +2455,7 @@ export type UserUncheckedCreateWithoutRecommendedTemplatesInput = {
   homeClassId?: string | null
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
@@ -2465,6 +2508,7 @@ export type UserCreateWithoutHomeClassInput = {
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
@@ -2515,6 +2559,7 @@ export type UserUncheckedCreateWithoutHomeClassInput = {
   createdById?: string | null
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
@@ -2584,6 +2629,7 @@ export type UserUpdateWithoutTeacherClassesInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
@@ -2635,6 +2681,7 @@ export type UserUncheckedUpdateWithoutTeacherClassesInput = {
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -2693,6 +2740,7 @@ export type UserUpdateWithoutTrashedClassesInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
@@ -2744,6 +2792,7 @@ export type UserUncheckedUpdateWithoutTrashedClassesInput = {
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -2802,6 +2851,7 @@ export type UserUpdateWithoutRecommendedTemplatesInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
@@ -2853,6 +2903,7 @@ export type UserUncheckedUpdateWithoutRecommendedTemplatesInput = {
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -2916,6 +2967,7 @@ export type UserCreateWithoutClassTeachersInput = {
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
@@ -2967,6 +3019,7 @@ export type UserUncheckedCreateWithoutClassTeachersInput = {
   homeClassId?: string | null
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
@@ -3019,6 +3072,7 @@ export type UserCreateWithoutClassTeachersAddedInput = {
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
@@ -3070,6 +3124,7 @@ export type UserUncheckedCreateWithoutClassTeachersAddedInput = {
   homeClassId?: string | null
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
@@ -3133,6 +3188,7 @@ export type UserUpdateWithoutClassTeachersInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
@@ -3184,6 +3240,7 @@ export type UserUncheckedUpdateWithoutClassTeachersInput = {
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -3242,6 +3299,7 @@ export type UserUpdateWithoutClassTeachersAddedInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
@@ -3293,6 +3351,7 @@ export type UserUncheckedUpdateWithoutClassTeachersAddedInput = {
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -3340,6 +3399,7 @@ export type UserCreateWithoutClassActionsInput = {
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
@@ -3391,6 +3451,7 @@ export type UserUncheckedCreateWithoutClassActionsInput = {
   homeClassId?: string | null
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
@@ -3443,6 +3504,7 @@ export type UserCreateWithoutClassActionsTargetInput = {
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
@@ -3494,6 +3556,7 @@ export type UserUncheckedCreateWithoutClassActionsTargetInput = {
   homeClassId?: string | null
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
@@ -3557,6 +3620,7 @@ export type UserUpdateWithoutClassActionsInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
@@ -3608,6 +3672,7 @@ export type UserUncheckedUpdateWithoutClassActionsInput = {
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -3666,6 +3731,7 @@ export type UserUpdateWithoutClassActionsTargetInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
@@ -3717,6 +3783,7 @@ export type UserUncheckedUpdateWithoutClassActionsTargetInput = {
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -3764,6 +3831,7 @@ export type UserCreateWithoutEnrollmentsInput = {
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
@@ -3815,6 +3883,7 @@ export type UserUncheckedCreateWithoutEnrollmentsInput = {
   homeClassId?: string | null
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
@@ -3878,6 +3947,7 @@ export type UserUpdateWithoutEnrollmentsInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
@@ -3929,6 +3999,7 @@ export type UserUncheckedUpdateWithoutEnrollmentsInput = {
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -3976,6 +4047,7 @@ export type UserCreateWithoutShopPurchasesInput = {
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
@@ -4027,6 +4099,7 @@ export type UserUncheckedCreateWithoutShopPurchasesInput = {
   homeClassId?: string | null
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
@@ -4090,6 +4163,7 @@ export type UserUpdateWithoutShopPurchasesInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
@@ -4141,6 +4215,7 @@ export type UserUncheckedUpdateWithoutShopPurchasesInput = {
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -4188,6 +4263,7 @@ export type UserCreateWithoutShopItemUsesInput = {
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
@@ -4239,6 +4315,7 @@ export type UserUncheckedCreateWithoutShopItemUsesInput = {
   homeClassId?: string | null
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
@@ -4302,6 +4379,7 @@ export type UserUpdateWithoutShopItemUsesInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
@@ -4353,6 +4431,7 @@ export type UserUncheckedUpdateWithoutShopItemUsesInput = {
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -4400,6 +4479,7 @@ export type UserCreateWithoutEnigmaProgressInput = {
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
@@ -4451,6 +4531,7 @@ export type UserUncheckedCreateWithoutEnigmaProgressInput = {
   homeClassId?: string | null
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
@@ -4514,6 +4595,7 @@ export type UserUpdateWithoutEnigmaProgressInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
@@ -4565,6 +4647,7 @@ export type UserUncheckedUpdateWithoutEnigmaProgressInput = {
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -4612,6 +4695,7 @@ export type UserCreateWithoutMissionHintUsesInput = {
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
@@ -4663,6 +4747,7 @@ export type UserUncheckedCreateWithoutMissionHintUsesInput = {
   homeClassId?: string | null
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
@@ -4726,6 +4811,7 @@ export type UserUpdateWithoutMissionHintUsesInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
@@ -4777,6 +4863,7 @@ export type UserUncheckedUpdateWithoutMissionHintUsesInput = {
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -4824,6 +4911,7 @@ export type UserCreateWithoutSubmissionsInput = {
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
@@ -4875,6 +4963,7 @@ export type UserUncheckedCreateWithoutSubmissionsInput = {
   homeClassId?: string | null
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
@@ -4927,6 +5016,7 @@ export type UserCreateWithoutSubmissionsReviewedInput = {
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
@@ -4978,6 +5068,7 @@ export type UserUncheckedCreateWithoutSubmissionsReviewedInput = {
   homeClassId?: string | null
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
@@ -5041,6 +5132,7 @@ export type UserUpdateWithoutSubmissionsInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
@@ -5092,6 +5184,7 @@ export type UserUncheckedUpdateWithoutSubmissionsInput = {
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -5150,6 +5243,7 @@ export type UserUpdateWithoutSubmissionsReviewedInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
@@ -5201,6 +5295,7 @@ export type UserUncheckedUpdateWithoutSubmissionsReviewedInput = {
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -5248,6 +5343,7 @@ export type UserCreateWithoutMissionProgressInput = {
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
@@ -5299,6 +5395,7 @@ export type UserUncheckedCreateWithoutMissionProgressInput = {
   homeClassId?: string | null
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
@@ -5362,6 +5459,7 @@ export type UserUpdateWithoutMissionProgressInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
@@ -5413,6 +5511,7 @@ export type UserUncheckedUpdateWithoutMissionProgressInput = {
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -5460,6 +5559,7 @@ export type UserCreateWithoutCreatedBadgesInput = {
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
@@ -5511,6 +5611,7 @@ export type UserUncheckedCreateWithoutCreatedBadgesInput = {
   homeClassId?: string | null
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
@@ -5574,6 +5675,7 @@ export type UserUpdateWithoutCreatedBadgesInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
@@ -5625,6 +5727,7 @@ export type UserUncheckedUpdateWithoutCreatedBadgesInput = {
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -5672,6 +5775,7 @@ export type UserCreateWithoutEarnedBadgesInput = {
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
@@ -5723,6 +5827,7 @@ export type UserUncheckedCreateWithoutEarnedBadgesInput = {
   homeClassId?: string | null
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
@@ -5786,6 +5891,7 @@ export type UserUpdateWithoutEarnedBadgesInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
@@ -5837,6 +5943,7 @@ export type UserUncheckedUpdateWithoutEarnedBadgesInput = {
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -5884,6 +5991,7 @@ export type UserCreateWithoutJoinRequestsInput = {
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
@@ -5935,6 +6043,7 @@ export type UserUncheckedCreateWithoutJoinRequestsInput = {
   homeClassId?: string | null
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
@@ -5998,6 +6107,7 @@ export type UserUpdateWithoutJoinRequestsInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
@@ -6049,6 +6159,7 @@ export type UserUncheckedUpdateWithoutJoinRequestsInput = {
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -6096,6 +6207,7 @@ export type UserCreateWithoutSentInvitationsInput = {
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
@@ -6147,6 +6259,7 @@ export type UserUncheckedCreateWithoutSentInvitationsInput = {
   homeClassId?: string | null
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
@@ -6199,6 +6312,7 @@ export type UserCreateWithoutReceivedInvitationsInput = {
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
@@ -6250,6 +6364,7 @@ export type UserUncheckedCreateWithoutReceivedInvitationsInput = {
   homeClassId?: string | null
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
@@ -6313,6 +6428,7 @@ export type UserUpdateWithoutSentInvitationsInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
@@ -6364,6 +6480,7 @@ export type UserUncheckedUpdateWithoutSentInvitationsInput = {
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -6422,6 +6539,7 @@ export type UserUpdateWithoutReceivedInvitationsInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
@@ -6473,6 +6591,7 @@ export type UserUncheckedUpdateWithoutReceivedInvitationsInput = {
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -6520,6 +6639,7 @@ export type UserCreateWithoutNotificationsInput = {
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
@@ -6571,6 +6691,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   homeClassId?: string | null
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
@@ -6634,6 +6755,7 @@ export type UserUpdateWithoutNotificationsInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
@@ -6685,6 +6807,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -6732,6 +6855,7 @@ export type UserCreateWithoutActivitiesInput = {
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
@@ -6783,6 +6907,7 @@ export type UserUncheckedCreateWithoutActivitiesInput = {
   homeClassId?: string | null
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
@@ -6835,6 +6960,7 @@ export type UserCreateWithoutActivitiesActedInput = {
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
@@ -6886,6 +7012,7 @@ export type UserUncheckedCreateWithoutActivitiesActedInput = {
   homeClassId?: string | null
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
@@ -6949,6 +7076,7 @@ export type UserUpdateWithoutActivitiesInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
@@ -7000,6 +7128,7 @@ export type UserUncheckedUpdateWithoutActivitiesInput = {
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -7058,6 +7187,7 @@ export type UserUpdateWithoutActivitiesActedInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
@@ -7109,6 +7239,7 @@ export type UserUncheckedUpdateWithoutActivitiesActedInput = {
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -7156,6 +7287,7 @@ export type UserCreateWithoutConversationsInput = {
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
@@ -7207,6 +7339,7 @@ export type UserUncheckedCreateWithoutConversationsInput = {
   homeClassId?: string | null
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
@@ -7270,6 +7403,7 @@ export type UserUpdateWithoutConversationsInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
@@ -7321,6 +7455,7 @@ export type UserUncheckedUpdateWithoutConversationsInput = {
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -7368,6 +7503,7 @@ export type UserCreateWithoutBehaviorsAppliedInput = {
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
@@ -7419,6 +7555,7 @@ export type UserUncheckedCreateWithoutBehaviorsAppliedInput = {
   homeClassId?: string | null
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
@@ -7471,6 +7608,7 @@ export type UserCreateWithoutBehaviorsReceivedInput = {
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
@@ -7522,6 +7660,7 @@ export type UserUncheckedCreateWithoutBehaviorsReceivedInput = {
   homeClassId?: string | null
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
@@ -7585,6 +7724,7 @@ export type UserUpdateWithoutBehaviorsAppliedInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
@@ -7636,6 +7776,7 @@ export type UserUncheckedUpdateWithoutBehaviorsAppliedInput = {
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -7694,6 +7835,7 @@ export type UserUpdateWithoutBehaviorsReceivedInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
@@ -7745,6 +7887,7 @@ export type UserUncheckedUpdateWithoutBehaviorsReceivedInput = {
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -7792,6 +7935,7 @@ export type UserCreateWithoutAttendanceTakenInput = {
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
@@ -7843,6 +7987,7 @@ export type UserUncheckedCreateWithoutAttendanceTakenInput = {
   homeClassId?: string | null
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
@@ -7906,6 +8051,7 @@ export type UserUpdateWithoutAttendanceTakenInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
@@ -7957,6 +8103,7 @@ export type UserUncheckedUpdateWithoutAttendanceTakenInput = {
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -8004,6 +8151,7 @@ export type UserCreateWithoutAttendanceUpdatedInput = {
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
@@ -8055,6 +8203,7 @@ export type UserUncheckedCreateWithoutAttendanceUpdatedInput = {
   homeClassId?: string | null
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
@@ -8118,6 +8267,7 @@ export type UserUpdateWithoutAttendanceUpdatedInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
@@ -8169,6 +8319,7 @@ export type UserUncheckedUpdateWithoutAttendanceUpdatedInput = {
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -8216,6 +8367,7 @@ export type UserCreateWithoutTeamAwardsGivenInput = {
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
@@ -8267,6 +8419,7 @@ export type UserUncheckedCreateWithoutTeamAwardsGivenInput = {
   homeClassId?: string | null
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
@@ -8330,6 +8483,7 @@ export type UserUpdateWithoutTeamAwardsGivenInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
@@ -8381,6 +8535,7 @@ export type UserUncheckedUpdateWithoutTeamAwardsGivenInput = {
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -8429,6 +8584,7 @@ export type UserCreateManyCreatedByInput = {
   homeClassId?: string | null
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -8445,6 +8601,7 @@ export type UserUpdateWithoutCreatedByInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdUsers?: Prisma.UserUpdateManyWithoutCreatedByNestedInput
@@ -8495,6 +8652,7 @@ export type UserUncheckedUpdateWithoutCreatedByInput = {
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -8544,6 +8702,7 @@ export type UserUncheckedUpdateManyWithoutCreatedByInput = {
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -8561,6 +8720,7 @@ export type UserCreateManyHomeClassInput = {
   createdById?: string | null
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
+  avatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -8577,6 +8737,7 @@ export type UserUpdateWithoutHomeClassInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
@@ -8627,6 +8788,7 @@ export type UserUncheckedUpdateWithoutHomeClassInput = {
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -8676,6 +8838,7 @@ export type UserUncheckedUpdateManyWithoutHomeClassInput = {
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -8995,6 +9158,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   homeClassId?: boolean
   mustChangePassword?: boolean
   passwordChangedAt?: boolean
+  avatar?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   createdBy?: boolean | Prisma.User$createdByArgs<ExtArgs>
@@ -9048,6 +9212,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   homeClassId?: boolean
   mustChangePassword?: boolean
   passwordChangedAt?: boolean
+  avatar?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   createdBy?: boolean | Prisma.User$createdByArgs<ExtArgs>
@@ -9068,6 +9233,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   homeClassId?: boolean
   mustChangePassword?: boolean
   passwordChangedAt?: boolean
+  avatar?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   createdBy?: boolean | Prisma.User$createdByArgs<ExtArgs>
@@ -9088,11 +9254,12 @@ export type UserSelectScalar = {
   homeClassId?: boolean
   mustChangePassword?: boolean
   passwordChangedAt?: boolean
+  avatar?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "username" | "passwordHash" | "name" | "role" | "accountType" | "isOnboarded" | "status" | "createdById" | "homeClassId" | "mustChangePassword" | "passwordChangedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "username" | "passwordHash" | "name" | "role" | "accountType" | "isOnboarded" | "status" | "createdById" | "homeClassId" | "mustChangePassword" | "passwordChangedAt" | "avatar" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   createdBy?: boolean | Prisma.User$createdByArgs<ExtArgs>
   createdUsers?: boolean | Prisma.User$createdUsersArgs<ExtArgs>
@@ -9191,6 +9358,12 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     homeClassId: string | null
     mustChangePassword: boolean
     passwordChangedAt: Date | null
+    /**
+     * Avatar del profesorado: clave del catálogo docente (hoy, un color de la
+     * paleta: «purple», «mint»…), nunca una ruta ni una URL. Nulo = sin elegir:
+     * iniciales sobre un color derivado del id. Lo valida la API (utils/avatars.ts).
+     */
+    avatar: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["user"]>
@@ -9663,6 +9836,7 @@ export interface UserFieldRefs {
   readonly homeClassId: Prisma.FieldRef<"User", 'String'>
   readonly mustChangePassword: Prisma.FieldRef<"User", 'Boolean'>
   readonly passwordChangedAt: Prisma.FieldRef<"User", 'DateTime'>
+  readonly avatar: Prisma.FieldRef<"User", 'String'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
 }

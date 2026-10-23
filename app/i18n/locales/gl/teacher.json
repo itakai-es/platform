@@ -643,7 +643,8 @@
               "nickname_changed": "cambiou o alcume de {target}",
               "removed": "quitou a {target} da clase",
               "removed_unused": "quitou a {target} da clase e borrou a súa conta, que non se usara",
-              "avatar_generated": "xerou un avatar novo para {target}"
+              "avatar_generated": "xerou un avatar novo para {target}",
+              "avatar_changed": "cambiou o avatar de {target} por un do catálogo"
             },
             "mission": {
               "created": "creou a misión «{title}»",
@@ -719,7 +720,8 @@
               "nickname_changed": "cambiou o alcume de alguén que xa non está na clase",
               "removed": "quitou a alguén da clase",
               "removed_unused": "quitou da clase a alguén que non entrara nunca e borrou a súa conta",
-              "avatar_generated": "xerou un avatar novo para alguén que xa non está na clase"
+              "avatar_generated": "xerou un avatar novo para alguén que xa non está na clase",
+              "avatar_changed": "cambiou por un do catálogo o avatar de alguén que xa non está na clase"
             },
             "submission": {
               "approved": "aprobou en «{title}» a entrega de alguén que xa non está na clase, cun {percentage} %",
@@ -1061,7 +1063,17 @@
         "remove_unused_confirm": "Quitar e borrar a conta",
         "removed": "{name} xa non está na clase",
         "removed_account_deleted": "{name} xa non está na clase e a súa conta sen usar borrouse",
-        "remove_error": "Non se puido quitar da clase."
+        "remove_error": "Non se puido quitar da clase.",
+        "avatar": "Cambiar o avatar",
+        "avatar_title": "Avatar na clase",
+        "avatar_intro": "Se o avatar de {name} nesta clase non é axeitado, cámbiao por unha personaxe do catálogo. Só cambia nesta clase, e {name} pode escoller outro desde a súa lapela Avatar.",
+        "avatar_now": "Agora sae así",
+        "avatar_choose": "Personaxes do catálogo",
+        "avatar_pick": "Escolle a personaxe que levará {name} nesta clase.",
+        "avatar_summary": "Ao gardar, {name} pasa a levar a {avatar} nesta clase.",
+        "avatar_summary_generated": "Ao gardar, {name} pasa a levar a {avatar} nesta clase, e a imaxe que xerou con IA bórrase.",
+        "avatar_saved": "Avatar cambiado",
+        "avatar_error": "Non se puido cambiar o avatar."
       }
     },
     "ai_assistant": {
@@ -1117,7 +1129,13 @@
           "el": "Grego",
           "ro": "Romanés"
         },
-        "delete_modal_blocked": "Hai clases que dependen da túa conta."
+        "delete_modal_blocked": "Hai clases que dependen da túa conta.",
+        "avatar_title": "O teu avatar",
+        "avatar_description": "Con el recoñécente o teu alumnado e o resto do profesorado: sae xunto ao teu nome no historial, no profesorado de cada clase, na actividade e na asistencia. É o mesmo en todas as túas clases.",
+        "avatar_preview": "Así te ven nas túas clases",
+        "avatar_auto": "Automático",
+        "avatar_updated": "Avatar actualizado",
+        "avatar_error": "Non se puido cambiar o avatar."
       },
       "meta": {
         "title": "O meu perfil | ITAKAI",

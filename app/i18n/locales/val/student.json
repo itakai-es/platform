@@ -163,14 +163,14 @@
           "tip": "Consell: dona detalls de colors, vestimenta, accessoris i estil. La IA crearà el teu avatar basant-se en el personatge que hages seleccionat.",
           "generate_button": "Genera l'avatar",
           "generating": "Generant el teu avatar...",
-          "generated_trait": "Generat amb IA",
           "nickname_placeholder": "El teu sobrenom...",
           "save_changes": "Guardar els canvis",
           "no_guide_hint": "Tria la teua guia per a veure el teu avatar",
           "save_success": "Perfil guardat correctament",
           "save_error": "Error en guardar el perfil",
           "generate_error": "No s'ha pogut generar l'avatar. Torna-ho a intentar d'ací a uns segons.",
-          "generate_error_with_detail": "No s'ha pogut generar l'avatar: {detail}"
+          "generate_error_with_detail": "No s'ha pogut generar l'avatar: {detail}",
+          "how_others_see": "Així et veuen en esta classe"
         },
         "mission_no_description": "Sense descripció",
         "shop": {
@@ -344,7 +344,6 @@
       "recent_activity_card": {
         "title": "Activitat recent",
         "empty": "No hi ha activitat recent",
-        "user_fallback": "Algú",
         "by_actor": "Per {name}"
       },
       "submission_modal": {

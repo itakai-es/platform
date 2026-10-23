@@ -6,9 +6,8 @@
  * misiones, guía, badges, actividades) y los fetches que las disparan, para
  * que cada subruta no tenga que repetir loaders ni reinventar fetches.
  *
- * Las tabs específicas (Ranking, Avatar) disparan sus propios fetches
- * diferidos a través de `loadRanking()` / `loadAvatarGuides()` en su
- * onMounted; las demás aprovechan la carga inicial de `loadAll()`.
+ * La pestaña Ranking dispara su propio fetch diferido con `ensureRanking()`
+ * en su onMounted; las demás aprovechan la carga inicial de `loadAll()`.
  */
 import { resolveClassSettings } from '~/utils/class-settings'
 
@@ -40,7 +39,6 @@ export function useStudentClassDetail(classIdRef: Ref<string> | ComputedRef<stri
 
   const classesStore = useClassesStore()
   const classGamificationStore = useClassGamificationStore()
-  const gamificationStore = useGamificationStore()
   const shopStore = useShopStore()
 
   // Estado de UI local del detalle (ranking lazy + nickname editable + filtros).
@@ -83,7 +81,6 @@ export function useStudentClassDetail(classIdRef: Ref<string> | ComputedRef<stri
       classesStore.fetchClassBadges(classId.value),
       classesStore.fetchClassActivities(classId.value, 0, ACTIVITIES_LIMIT),
       classGamificationStore.fetchClassXp(classId.value, force),
-      gamificationStore.fetchGuides(),
     ])
   }
 
@@ -103,13 +100,6 @@ export function useStudentClassDetail(classIdRef: Ref<string> | ComputedRef<stri
       console.error('Error fetching ranking:', err)
     } finally {
       ui.value.isLoadingRanking = false
-    }
-  }
-
-  /** Idempotente: la propia store cachea, así que solo llamamos si está vacío. */
-  async function ensureAvatarGuides() {
-    if (gamificationStore.guides.length === 0) {
-      await gamificationStore.fetchGuides()
     }
   }
 
@@ -140,6 +130,5 @@ export function useStudentClassDetail(classIdRef: Ref<string> | ComputedRef<stri
     // Loaders
     loadAll,
     ensureRanking,
-    ensureAvatarGuides,
   }
 }

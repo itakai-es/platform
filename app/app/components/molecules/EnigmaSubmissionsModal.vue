@@ -4,6 +4,7 @@ import { CheckCircleIcon } from '@heroicons/vue/24/solid'
 import { formatNotificationDate, formatNotificationTime } from '~/utils/notifications'
 import type { TeamColor, TeamEmblem } from '~/types/team.types'
 import { rewardAfterHints } from '~/utils/mission-hints'
+import { studentAvatarSeed } from '~/utils/avatar'
 
 interface Enigma {
   id: string
@@ -271,15 +272,6 @@ const handleApproveTeam = async (submission: Submission) => {
 const formatDate = (dateStr: string) => formatNotificationTime(dateStr, locale.value)
 const formatFullDate = (dateStr: string) => formatNotificationDate(dateStr, locale.value)
 
-const getInitials = (name: string) => {
-  return name
-    .split(' ')
-    .map(n => n[0])
-    .slice(0, 2)
-    .join('')
-    .toUpperCase()
-}
-
 // Modal open state
 const isOpen = computed(() => !!props.enigma)
 
@@ -380,18 +372,12 @@ watch(
           <!-- Student row: en una ventana estrecha, las acciones bajan a su línea -->
           <div class="p-4 flex flex-wrap items-center gap-x-4 gap-y-3">
             <!-- Avatar -->
-            <img
-              v-if="submission.student.avatar"
+            <Avatar
               :src="submission.student.avatar"
-              :alt="submission.student.name"
-              class="w-12 h-12 rounded-full object-contain flex-shrink-0 bg-gray-100"
+              :name="submission.student.name"
+              :seed="studentAvatarSeed(classId, submission.student.id)"
+              size="sm"
             />
-            <div
-              v-else
-              class="w-12 h-12 rounded-full flex items-center justify-center bg-purple/20 text-purple font-bold text-base flex-shrink-0"
-            >
-              {{ getInitials(submission.student.name) }}
-            </div>
 
             <!-- Info -->
             <div class="flex-1 min-w-[9rem]">

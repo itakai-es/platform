@@ -567,7 +567,35 @@
       "hint_used_student": "You used hint {position} of {mission}",
       "hint_used_teacher": "Used hint {position} of {mission}",
       "hint_used_percent_student": "You used hint {position} of {mission}: −{count}% on what you still had to earn",
-      "hint_used_percent_teacher": "Used hint {position} of {mission}: −{count}% on what they still had to earn"
+      "hint_used_percent_teacher": "Used hint {position} of {mission}: −{count}% on what they still had to earn",
+      "enigma_approved_student": "Your submission for {enigma} was approved",
+      "enigma_approved_teacher": "Had their submission for {enigma} approved"
+    },
+    "avatars": {
+      "characters": {
+        "atenea": {
+          "name": "Athena",
+          "trait": "Wisdom and strategy"
+        },
+        "odiseo": {
+          "name": "Odysseus",
+          "trait": "Cunning and courage"
+        },
+        "penelope": {
+          "name": "Penelope",
+          "trait": "Loyalty and patience"
+        },
+        "polifemo": {
+          "name": "Polyphemus",
+          "trait": "Strength and determination"
+        },
+        "poseidon": {
+          "name": "Poseidon",
+          "trait": "Power and command"
+        }
+      },
+      "custom_name": "Your AI avatar",
+      "custom_trait": "AI generated"
     }
   }
 }

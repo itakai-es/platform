@@ -643,7 +643,8 @@
               "nickname_changed": "changed {target}'s nickname",
               "removed": "removed {target} from the class",
               "removed_unused": "removed {target} from the class and deleted their unused account",
-              "avatar_generated": "generated a new avatar for {target}"
+              "avatar_generated": "generated a new avatar for {target}",
+              "avatar_changed": "replaced {target}'s avatar with one from the catalogue"
             },
             "mission": {
               "created": "created the mission “{title}”",
@@ -719,7 +720,8 @@
               "nickname_changed": "changed the nickname of a student who is no longer in the class",
               "removed": "removed a student from the class",
               "removed_unused": "removed a student who had never signed in from the class and deleted their account",
-              "avatar_generated": "generated a new avatar for a student who is no longer in the class"
+              "avatar_generated": "generated a new avatar for a student who is no longer in the class",
+              "avatar_changed": "replaced the avatar of someone who is no longer in the class with one from the catalogue"
             },
             "submission": {
               "approved": "approved a submission for “{title}” at {percentage}% from a student who is no longer in the class",
@@ -1061,7 +1063,17 @@
         "remove_unused_confirm": "Remove and delete account",
         "removed": "{name} is no longer in the class",
         "removed_account_deleted": "{name} is no longer in the class and their unused account has been deleted",
-        "remove_error": "The student could not be removed from the class."
+        "remove_error": "The student could not be removed from the class.",
+        "avatar": "Change avatar",
+        "avatar_title": "Avatar in the class",
+        "avatar_intro": "If {name}'s avatar in this class isn't suitable, replace it with a character from the catalogue. It only changes in this class, and {name} can choose a different one from their Avatar tab.",
+        "avatar_now": "How they appear now",
+        "avatar_choose": "Catalogue characters",
+        "avatar_pick": "Choose the character {name} will have in this class.",
+        "avatar_summary": "When you save, {name} will appear as {avatar} in this class.",
+        "avatar_summary_generated": "When you save, {name} will appear as {avatar} in this class, and the image they generated with AI will be deleted.",
+        "avatar_saved": "Avatar changed",
+        "avatar_error": "The avatar could not be changed."
       }
     },
     "ai_assistant": {
@@ -1117,7 +1129,13 @@
           "el": "Ελληνικά",
           "ro": "Română"
         },
-        "delete_modal_blocked": "Some classes depend on your account."
+        "delete_modal_blocked": "Some classes depend on your account.",
+        "avatar_title": "Your avatar",
+        "avatar_description": "It's how your students and the other teachers recognise you: it appears next to your name in the history, in each class's teachers, in the activity feed and in attendance. It's the same in all your classes.",
+        "avatar_preview": "How you appear in your classes",
+        "avatar_auto": "Automatic",
+        "avatar_updated": "Avatar updated",
+        "avatar_error": "The avatar could not be changed."
       },
       "meta": {
         "title": "My profile | ITAKAI",

@@ -643,7 +643,8 @@
               "nickname_changed": "mudou a alcunha de {target}",
               "removed": "removeu {target} da turma",
               "removed_unused": "removeu {target} da turma e apagou a sua conta, que nunca tinha sido usada",
-              "avatar_generated": "gerou um novo avatar para {target}"
+              "avatar_generated": "gerou um novo avatar para {target}",
+              "avatar_changed": "trocou o avatar de {target} por um do catálogo"
             },
             "mission": {
               "created": "criou a missão «{title}»",
@@ -719,7 +720,8 @@
               "nickname_changed": "mudou a alcunha de alguém que já não está na turma",
               "removed": "removeu alguém da turma",
               "removed_unused": "removeu da turma alguém que nunca tinha entrado e apagou a sua conta",
-              "avatar_generated": "gerou um novo avatar para alguém que já não está na turma"
+              "avatar_generated": "gerou um novo avatar para alguém que já não está na turma",
+              "avatar_changed": "trocou por um do catálogo o avatar de alguém que já não está na turma"
             },
             "submission": {
               "approved": "aprovou em «{title}» a entrega de alguém que já não está na turma, com {percentage} %",
@@ -1061,7 +1063,17 @@
         "remove_unused_confirm": "Remover e apagar a conta",
         "removed": "{name} já não está na turma",
         "removed_account_deleted": "{name} já não está na turma e a sua conta por usar foi apagada",
-        "remove_error": "Não foi possível remover da turma."
+        "remove_error": "Não foi possível remover da turma.",
+        "avatar": "Mudar o avatar",
+        "avatar_title": "Avatar na turma",
+        "avatar_intro": "Se o avatar de {name} nesta turma não for adequado, troca-o por uma personagem do catálogo. Só muda nesta turma, e {name} pode escolher outro no separador Avatar.",
+        "avatar_now": "Agora aparece assim",
+        "avatar_choose": "Personagens do catálogo",
+        "avatar_pick": "Escolhe a personagem que {name} vai ter nesta turma.",
+        "avatar_summary": "Ao guardar, {name} passa a ter {avatar} nesta turma.",
+        "avatar_summary_generated": "Ao guardar, {name} passa a ter {avatar} nesta turma, e a imagem que gerou com IA é apagada.",
+        "avatar_saved": "Avatar alterado",
+        "avatar_error": "Não foi possível mudar o avatar."
       }
     },
     "ai_assistant": {
@@ -1117,7 +1129,13 @@
           "el": "Grego",
           "ro": "Romeno"
         },
-        "delete_modal_blocked": "Há turmas que dependem da tua conta."
+        "delete_modal_blocked": "Há turmas que dependem da tua conta.",
+        "avatar_title": "O teu avatar",
+        "avatar_description": "É com ele que os teus estudantes e o resto do corpo docente te reconhecem: aparece junto ao teu nome no histórico, nos docentes de cada turma, na atividade e nas presenças. É o mesmo em todas as tuas turmas.",
+        "avatar_preview": "É assim que te veem nas tuas turmas",
+        "avatar_auto": "Automático",
+        "avatar_updated": "Avatar atualizado",
+        "avatar_error": "Não foi possível mudar o avatar."
       },
       "meta": {
         "title": "O meu perfil | ITAKAI",

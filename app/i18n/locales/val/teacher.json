@@ -643,7 +643,8 @@
               "nickname_changed": "va canviar el sobrenom de {target}",
               "removed": "va llevar {target} de la classe",
               "removed_unused": "va llevar {target} de la classe i va esborrar el seu compte, que no s'havia utilitzat",
-              "avatar_generated": "va generar un avatar nou per a {target}"
+              "avatar_generated": "va generar un avatar nou per a {target}",
+              "avatar_changed": "va canviar l'avatar de {target} per un del catàleg"
             },
             "mission": {
               "created": "va crear la missió «{title}»",
@@ -719,7 +720,8 @@
               "nickname_changed": "va canviar el sobrenom d'algú que ja no està en la classe",
               "removed": "va llevar algú de la classe",
               "removed_unused": "va llevar de la classe algú que no havia entrat mai i va esborrar el seu compte",
-              "avatar_generated": "va generar un avatar nou per a algú que ja no està en la classe"
+              "avatar_generated": "va generar un avatar nou per a algú que ja no està en la classe",
+              "avatar_changed": "va canviar per un del catàleg l'avatar d'algú que ja no està en la classe"
             },
             "submission": {
               "approved": "va aprovar en «{title}» l'entrega d'algú que ja no està en la classe, amb un {percentage} %",
@@ -1061,7 +1063,17 @@
         "remove_unused_confirm": "Llevar i esborrar el compte",
         "removed": "{name} ja no està en la classe",
         "removed_account_deleted": "{name} ja no està en la classe i el seu compte sense ús s'ha esborrat",
-        "remove_error": "No s'ha pogut llevar de la classe."
+        "remove_error": "No s'ha pogut llevar de la classe.",
+        "avatar": "Canviar l'avatar",
+        "avatar_title": "Avatar en la classe",
+        "avatar_intro": "Si l'avatar de {name} en esta classe no és adequat, canvia'l per un personatge del catàleg. Només canvia en esta classe, i {name} en pot triar un altre des de la pestanya Avatar.",
+        "avatar_now": "Ara ix així",
+        "avatar_choose": "Personatges del catàleg",
+        "avatar_pick": "Tria el personatge que portarà {name} en esta classe.",
+        "avatar_summary": "En guardar, {name} passa a portar {avatar} en esta classe.",
+        "avatar_summary_generated": "En guardar, {name} passa a portar {avatar} en esta classe, i la imatge que va generar amb IA s'esborra.",
+        "avatar_saved": "Avatar canviat",
+        "avatar_error": "No s'ha pogut canviar l'avatar."
       }
     },
     "ai_assistant": {
@@ -1117,7 +1129,13 @@
           "el": "Grec",
           "ro": "Romanés"
         },
-        "delete_modal_blocked": "Hi ha classes que depenen del teu compte."
+        "delete_modal_blocked": "Hi ha classes que depenen del teu compte.",
+        "avatar_title": "El teu avatar",
+        "avatar_description": "Amb ell et reconeixen el teu alumnat i la resta del professorat: ix al costat del teu nom en l'historial, en el professorat de cada classe, en l'activitat i en l'assistència. És el mateix en totes les teues classes.",
+        "avatar_preview": "Així et veuen en les teues classes",
+        "avatar_auto": "Automàtic",
+        "avatar_updated": "Avatar actualitzat",
+        "avatar_error": "No s'ha pogut canviar l'avatar."
       },
       "meta": {
         "title": "El meu perfil | ITAKAI",

@@ -833,6 +833,17 @@ export const useTeacherStore = defineStore('teacher', () => {
     return response.nickname
   }
 
+  /** Devuelve el avatar del alumno en la clase a uno del catálogo. */
+  async function updateStudentAvatar(classId: string, studentId: string, avatar: string) {
+    const config = useRuntimeConfig()
+    const response = await $fetch<{ avatarUrl: string }>(
+      `${config.public.apiBase}/teacher/classes/${classId}/students/${studentId}/avatar`,
+      { method: 'PUT', body: { avatar } }
+    )
+    forgetStudent(studentId, classId)
+    return response.avatarUrl
+  }
+
   /** Quita al alumno de la clase, con todo lo que tenía en ella. */
   async function removeStudentFromClass(classId: string, studentId: string) {
     const config = useRuntimeConfig()
@@ -1194,6 +1205,7 @@ export const useTeacherStore = defineStore('teacher', () => {
     createManagedStudents,
     resetStudentPassword,
     updateStudentNickname,
+    updateStudentAvatar,
     removeStudentFromClass,
     forgetStudent,
     $reset,

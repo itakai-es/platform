@@ -57,6 +57,66 @@
       </template>
     </Modal>
 
+    <!-- Avatar en la clase: devolverlo a uno del catálogo -->
+    <Modal
+      v-model="showAvatar"
+      :title="t('teacher.students.actions.avatar_title')"
+      size="lg"
+      persistent
+    >
+      <div class="space-y-4">
+        <p class="text-sm text-navy-700/80">
+          {{ t('teacher.students.actions.avatar_intro', { name: student.name }) }}
+        </p>
+        <div class="flex items-center gap-3 rounded-xl bg-navy-700/5 p-3">
+          <Avatar
+            :src="student.avatar"
+            :name="student.nickname || student.name"
+            :seed="studentAvatarSeed(classId, student.id)"
+            size="sm"
+          />
+          <div class="min-w-0">
+            <p class="text-xs text-navy-700/70">{{ t('teacher.students.actions.avatar_now') }}</p>
+            <p class="truncate font-semibold text-navy-700">
+              {{ student.nickname || student.name }}
+            </p>
+          </div>
+        </div>
+        <AvatarCatalogGrid
+          v-model="avatarChoice"
+          :options="catalog"
+          :label="t('teacher.students.actions.avatar_choose')"
+          card-bg="bg-purple-light"
+          class="grid-cols-2 xs:grid-cols-3 md:grid-cols-5"
+        />
+      </div>
+      <template #footer>
+        <div class="flex w-full flex-wrap items-center justify-end gap-3">
+          <!-- Junto a los botones, lo que va a pasar al guardar: se aplica al pulsar. -->
+          <p
+            :id="avatarSummaryId"
+            class="w-full min-w-0 text-sm font-medium text-navy-700 sm:mr-auto sm:w-auto sm:flex-1"
+            aria-live="polite"
+          >
+            {{ avatarSummary }}
+          </p>
+          <Button variant="outline" size="md" :disabled="busy" @click="showAvatar = false">
+            {{ t('common.actions.cancel') }}
+          </Button>
+          <Button
+            variant="primary"
+            size="md"
+            :loading="busy"
+            :disabled="!avatarChanged"
+            :aria-describedby="avatarSummaryId"
+            @click="saveAvatar"
+          >
+            {{ t('common.actions.save') }}
+          </Button>
+        </div>
+      </template>
+    </Modal>
+
     <!-- Quitar de la clase: qué se pierde en ella -->
     <ConfirmModal
       v-model="showRemove"
@@ -96,18 +156,21 @@
 </template>
 
 <script setup lang="ts">
-import { KeyIcon, PencilSquareIcon, UserMinusIcon } from '@heroicons/vue/24/outline'
+import { FaceSmileIcon, KeyIcon, PencilSquareIcon, UserMinusIcon } from '@heroicons/vue/24/outline'
 import type { ActionMenuItem } from '~/types/action-menu.types'
 import type { ClassAccess } from '~/types/class.types'
 import type { ManageableStudent } from '~/types/teacher.types'
+import { catalogKeyOf, studentAvatarSeed } from '~/utils/avatar'
 
 /**
  * El menú «⋮» de un alumno en una clase: restablecer su contraseña, cambiar su
- * alias en la clase y quitarlo de ella. Lo usan la pestaña Alumnos de la clase
- * y la ficha del alumno, con las mismas ventanas.
+ * alias o su avatar en la clase y quitarlo de ella. Lo usan la pestaña Alumnos
+ * de la clase y la ficha del alumno, con las mismas ventanas.
  *
  * Qué opciones aparecen lo decide el acceso propio en la clase (`access`): el
- * alias y quitar piden administración. Restablecer depende de la cuenta, no de
+ * alias y quitar piden administración; devolver el avatar a uno del catálogo,
+ * edición (quien sustituye tiene que poder retirar una imagen al momento).
+ * Restablecer depende de la cuenta, no de
  * la clase: la de una cuenta sin correo la restablece quien administra su clase
  * de origen (lo dice `canResetPassword`, que calcula la API); a quien no puede,
  * la opción le explica qué hacer en lugar de fallar.
@@ -123,6 +186,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   renamed: [nickname: string]
+  avatarChanged: [avatar: string]
   removed: []
 }>()
 
@@ -151,6 +215,13 @@ const items = computed<ActionMenuItem[]>(() => {
       icon: PencilSquareIcon,
     })
   }
+  if (can('student.avatar')) {
+    list.push({
+      id: 'avatar',
+      label: t('teacher.students.actions.avatar'),
+      icon: FaceSmileIcon,
+    })
+  }
   if (can('student.manage')) {
     list.push(
       { divider: true },
@@ -170,10 +241,28 @@ const showResetConfirm = ref(false)
 const showResetInfo = ref(false)
 const showNickname = ref(false)
 const showRemove = ref(false)
+const showAvatar = ref(false)
 
 const nicknameFormId = `nickname-${useId()}`.replace(/[^\w-]/g, '-')
 const nickname = ref('')
 const nicknameError = ref('')
+
+const { catalog } = useStudentAvatarCatalog()
+const avatarSummaryId = `avatar-summary-${useId()}`.replace(/[^\w-]/g, '-')
+/** El personaje elegido (su ruta); al abrir, el que tiene si es del catálogo. */
+const avatarChoice = ref<string | null>(null)
+const avatarChanged = computed(
+  () => avatarChoice.value !== null && avatarChoice.value !== props.student.avatar
+)
+const avatarSummary = computed(() => {
+  const name = props.student.name
+  const chosen = catalog.value.find(option => option.src === avatarChoice.value)
+  if (!chosen || !avatarChanged.value) return t('teacher.students.actions.avatar_pick', { name })
+  // Si tenía uno generado con IA, la imagen se borra.
+  return props.student.avatar && !catalogKeyOf(props.student.avatar)
+    ? t('teacher.students.actions.avatar_summary_generated', { name, avatar: chosen.name })
+    : t('teacher.students.actions.avatar_summary', { name, avatar: chosen.name })
+})
 
 /** Por qué no se puede restablecer desde aquí. */
 const resetInfoText = computed(() =>
@@ -185,6 +274,7 @@ const resetInfoText = computed(() =>
 function onSelect(id: string) {
   if (id === 'reset') openReset()
   else if (id === 'nickname') openNickname()
+  else if (id === 'avatar') openAvatar()
   else if (id === 'remove') showRemove.value = true
 }
 
@@ -197,6 +287,11 @@ function openNickname() {
   nickname.value = props.student.nickname ?? ''
   nicknameError.value = ''
   showNickname.value = true
+}
+
+function openAvatar() {
+  avatarChoice.value = catalogKeyOf(props.student.avatar) ? (props.student.avatar ?? null) : null
+  showAvatar.value = true
 }
 
 function onNicknameInput(value: string | number) {
@@ -238,6 +333,25 @@ async function saveNickname() {
     emit('renamed', saved)
   } catch (error) {
     nicknameError.value = apiMessage(error, t('teacher.students.actions.nickname_error'))
+  } finally {
+    busy.value = false
+  }
+}
+
+async function saveAvatar() {
+  if (!avatarChoice.value || !avatarChanged.value) return
+  busy.value = true
+  try {
+    const saved = await teacherStore.updateStudentAvatar(
+      props.classId,
+      props.student.id,
+      avatarChoice.value
+    )
+    showAvatar.value = false
+    toast.success(t('teacher.students.actions.avatar_saved'))
+    emit('avatarChanged', saved)
+  } catch (error) {
+    toast.error(apiMessage(error, t('teacher.students.actions.avatar_error')))
   } finally {
     busy.value = false
   }

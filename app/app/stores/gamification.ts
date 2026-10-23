@@ -2,7 +2,6 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { SYSTEM_BADGES, type SystemBadge } from '~/utils/gamification-config'
 import type { StudentBadge } from '~/types/student.types'
-import type { Guide, GuidesResponse } from '~/types/gamification.types'
 
 // Types - Gamification System
 export interface ProfileStats {
@@ -63,10 +62,8 @@ export const useGamificationStore = defineStore('gamification', () => {
     recentBadges: [],
   })
   const badgeCategories = ref<BadgeCategoryStats[]>([])
-  const guides = ref<Guide[]>([]) // Personajes guía disponibles
   const isLoadingProfile = ref(false)
   const isLoadingBadges = ref(false)
-  const isLoadingGuides = ref(false)
   const isUpdatingProfile = ref(false)
   const isChangingPassword = ref(false)
   const error = ref<string | null>(null)
@@ -74,7 +71,6 @@ export const useGamificationStore = defineStore('gamification', () => {
   // Cache flags (persist during session)
   const hasLoadedProfile = ref(false)
   const hasLoadedBadges = ref(false)
-  const hasLoadedGuides = ref(false)
 
   // Badge notification state
   const showBadgeModal = ref(false)
@@ -215,34 +211,6 @@ export const useGamificationStore = defineStore('gamification', () => {
   }
 
   /**
-   * Fetch available guides (mythological characters for student selection)
-   * Uses cache by default - only fetches if guides are not already loaded
-   */
-  async function fetchGuides(forceRefresh = false) {
-    // Return cached guides if already loaded (unless force refresh)
-    if (guides.value.length > 0 && !forceRefresh) {
-      return guides.value
-    }
-
-    try {
-      isLoadingGuides.value = true
-      error.value = null
-
-      const config = useRuntimeConfig()
-      const response = await $fetch<GuidesResponse>(`${config.public.apiBase}/gamification/guides`)
-
-      guides.value = response.guides
-      return response.guides
-    } catch (err: any) {
-      error.value = err.message || 'Error al cargar los guías'
-      console.error('Error fetching guides:', err)
-      throw err
-    } finally {
-      isLoadingGuides.value = false
-    }
-  }
-
-  /**
    * Ensure-style wrapper sobre `fetchProfile`.
    *
    * Sigue el patrón canónico de los composables de detalle (useTeacherClassDetail,
@@ -277,18 +245,6 @@ export const useGamificationStore = defineStore('gamification', () => {
       }
     }
     return await fetchBadges(force)
-  }
-
-  /**
-   * Ensure-style wrapper sobre `fetchGuides`. Marca `hasLoadedGuides` tras un
-   * fetch exitoso para que sucesivas llamadas no disparen tráfico extra.
-   */
-  async function ensureGuides(force = false) {
-    if (hasLoadedGuides.value && !force) return guides.value
-    if (isLoadingGuides.value) return guides.value
-    const result = await fetchGuides(force)
-    hasLoadedGuides.value = true
-    return result
   }
 
   /**
@@ -362,10 +318,8 @@ export const useGamificationStore = defineStore('gamification', () => {
       recentBadges: [],
     }
     badgeCategories.value = []
-    guides.value = []
     isLoadingProfile.value = false
     isLoadingBadges.value = false
-    isLoadingGuides.value = false
     isUpdatingProfile.value = false
     isChangingPassword.value = false
     error.value = null
@@ -375,7 +329,6 @@ export const useGamificationStore = defineStore('gamification', () => {
     // Cache flags
     hasLoadedProfile.value = false
     hasLoadedBadges.value = false
-    hasLoadedGuides.value = false
   }
 
   return {
@@ -384,10 +337,8 @@ export const useGamificationStore = defineStore('gamification', () => {
     badges,
     badgeStats,
     badgeCategories,
-    guides,
     isLoadingProfile,
     isLoadingBadges,
-    isLoadingGuides,
     isUpdatingProfile,
     isChangingPassword,
     error,
@@ -401,17 +352,14 @@ export const useGamificationStore = defineStore('gamification', () => {
     // Cache flags
     hasLoadedProfile,
     hasLoadedBadges,
-    hasLoadedGuides,
 
     // Actions
     fetchProfile,
     updateProfile,
     changePassword,
     fetchBadges,
-    fetchGuides,
     ensureProfile,
     ensureBadges,
-    ensureGuides,
     incrementMissionsCompleted,
     checkBadgeTriggers,
     closeBadgeModal,

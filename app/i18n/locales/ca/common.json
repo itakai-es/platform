@@ -567,7 +567,35 @@
       "hint_used_student": "Vas fer servir la pista {position} de {mission}",
       "hint_used_teacher": "Va fer servir la pista {position} de {mission}",
       "hint_used_percent_student": "Vas fer servir la pista {position} de {mission}: −{count} % en el que et quedava per cobrar",
-      "hint_used_percent_teacher": "Va fer servir la pista {position} de {mission}: −{count} % en el que li quedava per cobrar"
+      "hint_used_percent_teacher": "Va fer servir la pista {position} de {mission}: −{count} % en el que li quedava per cobrar",
+      "enigma_approved_student": "Et van aprovar el lliurament de {enigma}",
+      "enigma_approved_teacher": "Va rebre l'aprovació del seu lliurament de {enigma}"
+    },
+    "avatars": {
+      "characters": {
+        "atenea": {
+          "name": "Atena",
+          "trait": "Saviesa i estratègia"
+        },
+        "odiseo": {
+          "name": "Odisseu",
+          "trait": "Astúcia i valentia"
+        },
+        "penelope": {
+          "name": "Penèlope",
+          "trait": "Lleialtat i paciència"
+        },
+        "polifemo": {
+          "name": "Polifem",
+          "trait": "Força i determinació"
+        },
+        "poseidon": {
+          "name": "Posidó",
+          "trait": "Poder i domini"
+        }
+      },
+      "custom_name": "El teu avatar amb IA",
+      "custom_trait": "Generat amb IA"
     }
   }
 }

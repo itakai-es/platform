@@ -146,13 +146,10 @@ const ALLOWED_ENROLLMENT_LOOKUP: Record<string, Allowed> = {
     reason:
       'monedero del alumno en la tienda, en rutas /students/classes/:classId detrás de requireStudentEnrollment',
   },
-  'modules/teachers/teachers.service.ts': {
-    count: 1,
-    reason: 'alumno cuyo avatar se genera, con student.avatar ya comprobado',
-  },
   'modules/teachers/class-students.service.ts': {
     count: 1,
-    reason: 'alumno de la clase sobre el que actúa la administración, con el acceso ya comprobado',
+    reason:
+      'alumno de la clase sobre el que actúa el profesorado (alias, avatar o baja), con el acceso ya comprobado',
   },
   'modules/submissions/submissions.service.ts': {
     count: 1,

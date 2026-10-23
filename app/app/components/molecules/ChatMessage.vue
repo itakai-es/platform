@@ -4,6 +4,7 @@
     <Avatar
       v-if="message.role === 'assistant' && assistantAvatar"
       :src="assistantAvatar"
+      color="purple"
       size="xs"
       class="mr-2 sm:mr-3 mt-1 flex-shrink-0"
     />

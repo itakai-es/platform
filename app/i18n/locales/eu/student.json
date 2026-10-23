@@ -163,14 +163,14 @@
           "tip": "Aholkua: Izan zehatz koloreekin, janzkerarekin, osagarriekin eta estiloarekin. AA-k zure avatarra sortuko du hautatutako pertsonaian oinarrituz.",
           "generate_button": "Avatarra sortu",
           "generating": "Zure avatarra sortzen...",
-          "generated_trait": "AArekin sortua",
           "nickname_placeholder": "Zure ezizena...",
           "save_changes": "Aldaketak gorde",
           "no_guide_hint": "Aukeratu zure gida zure avatarra ikusteko",
           "save_success": "Profila behar bezala gorde da",
           "save_error": "Errorea profila gordetzean",
           "generate_error": "Ezin izan da avatarra sortu. Saiatu berriro segundo batzuetan.",
-          "generate_error_with_detail": "Ezin izan da avatarra sortu: {detail}"
+          "generate_error_with_detail": "Ezin izan da avatarra sortu: {detail}",
+          "how_others_see": "Honela ikusten zaituzte klase honetan"
         },
         "mission_no_description": "Deskribapenik gabe",
         "shop": {
@@ -344,7 +344,6 @@
       "recent_activity_card": {
         "title": "Azken jarduera",
         "empty": "Ez dago azken jarduerarik",
-        "user_fallback": "Erabiltzailea",
         "by_actor": "Egilea: {name}"
       },
       "submission_modal": {

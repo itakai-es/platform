@@ -89,6 +89,8 @@ export const useProfileStore = defineStore('profile', () => {
 
     try {
       profile.value = await requestProfile()
+      // El avatar de docente de la sesión puede ser de antes (de otro equipo).
+      if (profile.value?.role === 'teacher') authStore.setUserAvatar(profile.value.avatar ?? null)
       // localStorage es la fuente de verdad para el tema
       if (import.meta.client && profile.value?.preferences) {
         const storedTheme = localStorage.getItem('itakai_theme') as 'college' | 'university' | null
@@ -315,6 +317,31 @@ export const useProfileStore = defineStore('profile', () => {
     }
   }
 
+  /**
+   * Avatar de docente: una clave del catálogo, o null para volver al de siempre
+   * (iniciales sobre el color que le toca a la cuenta). Se aplica al momento.
+   */
+  const updateAvatar = async (avatar: string | null): Promise<boolean> => {
+    try {
+      const response = await $fetch<{ avatar: string | null }>(
+        `${config.public.apiBase}/profile/avatar`,
+        {
+          method: 'PUT',
+          body: { avatar },
+          headers: {
+            Authorization: `Bearer ${authStore.tokens?.accessToken}`,
+          },
+        }
+      )
+      if (profile.value) profile.value.avatar = response.avatar
+      authStore.setUserAvatar(response.avatar)
+      return true
+    } catch (err) {
+      console.error('Error updating avatar:', err)
+      return false
+    }
+  }
+
   const exportMyData = async (): Promise<ProfileActionResponse & { filename?: string }> => {
     try {
       const response = await fetch(`${config.public.apiBase}/profile/export`, {
@@ -438,6 +465,7 @@ export const useProfileStore = defineStore('profile', () => {
     closeSession,
     closeAllSessions,
     updatePreferences,
+    updateAvatar,
     exportMyData,
     checkAccountDeletion,
     deleteAccount,

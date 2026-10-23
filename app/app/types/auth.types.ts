@@ -10,7 +10,8 @@ export interface User {
   username: string | null
   role: 'teacher' | 'student' | 'admin' | null
   accountType?: AccountType
-  avatar?: string
+  /** Avatar de docente: clave del catálogo (`utils/avatar.ts`); null sin elegir. */
+  avatar?: string | null
   isOnboarded: boolean
   /** Contraseña temporal pendiente de cambiar: hasta que se cambie, no se puede hacer nada más. */
   mustChangePassword?: boolean

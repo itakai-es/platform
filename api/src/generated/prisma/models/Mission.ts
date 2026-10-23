@@ -20,8 +20,18 @@ export type MissionModel = runtime.Types.Result.DefaultSelection<Prisma.$Mission
 
 export type AggregateMission = {
   _count: MissionCountAggregateOutputType | null
+  _avg: MissionAvgAggregateOutputType | null
+  _sum: MissionSumAggregateOutputType | null
   _min: MissionMinAggregateOutputType | null
   _max: MissionMaxAggregateOutputType | null
+}
+
+export type MissionAvgAggregateOutputType = {
+  orderIndex: number | null
+}
+
+export type MissionSumAggregateOutputType = {
+  orderIndex: number | null
 }
 
 export type MissionMinAggregateOutputType = {
@@ -34,6 +44,7 @@ export type MissionMinAggregateOutputType = {
   backgroundImage: string | null
   deadline: Date | null
   teamSetId: string | null
+  orderIndex: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -48,6 +59,7 @@ export type MissionMaxAggregateOutputType = {
   backgroundImage: string | null
   deadline: Date | null
   teamSetId: string | null
+  orderIndex: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -62,11 +74,20 @@ export type MissionCountAggregateOutputType = {
   backgroundImage: number
   deadline: number
   teamSetId: number
+  orderIndex: number
   createdAt: number
   updatedAt: number
   _all: number
 }
 
+
+export type MissionAvgAggregateInputType = {
+  orderIndex?: true
+}
+
+export type MissionSumAggregateInputType = {
+  orderIndex?: true
+}
 
 export type MissionMinAggregateInputType = {
   id?: true
@@ -78,6 +99,7 @@ export type MissionMinAggregateInputType = {
   backgroundImage?: true
   deadline?: true
   teamSetId?: true
+  orderIndex?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -92,6 +114,7 @@ export type MissionMaxAggregateInputType = {
   backgroundImage?: true
   deadline?: true
   teamSetId?: true
+  orderIndex?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -106,6 +129,7 @@ export type MissionCountAggregateInputType = {
   backgroundImage?: true
   deadline?: true
   teamSetId?: true
+  orderIndex?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -149,6 +173,18 @@ export type MissionAggregateArgs<ExtArgs extends runtime.Types.Extensions.Intern
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: MissionAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: MissionSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: MissionMinAggregateInputType
@@ -179,6 +215,8 @@ export type MissionGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   _count?: MissionCountAggregateInputType | true
+  _avg?: MissionAvgAggregateInputType
+  _sum?: MissionSumAggregateInputType
   _min?: MissionMinAggregateInputType
   _max?: MissionMaxAggregateInputType
 }
@@ -193,9 +231,12 @@ export type MissionGroupByOutputType = {
   backgroundImage: string | null
   deadline: Date | null
   teamSetId: string | null
+  orderIndex: number
   createdAt: Date
   updatedAt: Date
   _count: MissionCountAggregateOutputType | null
+  _avg: MissionAvgAggregateOutputType | null
+  _sum: MissionSumAggregateOutputType | null
   _min: MissionMinAggregateOutputType | null
   _max: MissionMaxAggregateOutputType | null
 }
@@ -228,6 +269,7 @@ export type MissionWhereInput = {
   backgroundImage?: Prisma.StringNullableFilter<"Mission"> | string | null
   deadline?: Prisma.DateTimeNullableFilter<"Mission"> | Date | string | null
   teamSetId?: Prisma.StringNullableFilter<"Mission"> | string | null
+  orderIndex?: Prisma.IntFilter<"Mission"> | number
   createdAt?: Prisma.DateTimeFilter<"Mission"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Mission"> | Date | string
   class?: Prisma.XOR<Prisma.ClassScalarRelationFilter, Prisma.ClassWhereInput>
@@ -250,6 +292,7 @@ export type MissionOrderByWithRelationInput = {
   backgroundImage?: Prisma.SortOrderInput | Prisma.SortOrder
   deadline?: Prisma.SortOrderInput | Prisma.SortOrder
   teamSetId?: Prisma.SortOrderInput | Prisma.SortOrder
+  orderIndex?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   class?: Prisma.ClassOrderByWithRelationInput
@@ -275,6 +318,7 @@ export type MissionWhereUniqueInput = Prisma.AtLeast<{
   backgroundImage?: Prisma.StringNullableFilter<"Mission"> | string | null
   deadline?: Prisma.DateTimeNullableFilter<"Mission"> | Date | string | null
   teamSetId?: Prisma.StringNullableFilter<"Mission"> | string | null
+  orderIndex?: Prisma.IntFilter<"Mission"> | number
   createdAt?: Prisma.DateTimeFilter<"Mission"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Mission"> | Date | string
   class?: Prisma.XOR<Prisma.ClassScalarRelationFilter, Prisma.ClassWhereInput>
@@ -297,11 +341,14 @@ export type MissionOrderByWithAggregationInput = {
   backgroundImage?: Prisma.SortOrderInput | Prisma.SortOrder
   deadline?: Prisma.SortOrderInput | Prisma.SortOrder
   teamSetId?: Prisma.SortOrderInput | Prisma.SortOrder
+  orderIndex?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.MissionCountOrderByAggregateInput
+  _avg?: Prisma.MissionAvgOrderByAggregateInput
   _max?: Prisma.MissionMaxOrderByAggregateInput
   _min?: Prisma.MissionMinOrderByAggregateInput
+  _sum?: Prisma.MissionSumOrderByAggregateInput
 }
 
 export type MissionScalarWhereWithAggregatesInput = {
@@ -317,6 +364,7 @@ export type MissionScalarWhereWithAggregatesInput = {
   backgroundImage?: Prisma.StringNullableWithAggregatesFilter<"Mission"> | string | null
   deadline?: Prisma.DateTimeNullableWithAggregatesFilter<"Mission"> | Date | string | null
   teamSetId?: Prisma.StringNullableWithAggregatesFilter<"Mission"> | string | null
+  orderIndex?: Prisma.IntWithAggregatesFilter<"Mission"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Mission"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Mission"> | Date | string
 }
@@ -329,6 +377,7 @@ export type MissionCreateInput = {
   rarity?: $Enums.MissionRarity
   backgroundImage?: string | null
   deadline?: Date | string | null
+  orderIndex?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   class: Prisma.ClassCreateNestedOneWithoutMissionsInput
@@ -351,6 +400,7 @@ export type MissionUncheckedCreateInput = {
   backgroundImage?: string | null
   deadline?: Date | string | null
   teamSetId?: string | null
+  orderIndex?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   enigmas?: Prisma.MissionEnigmaUncheckedCreateNestedManyWithoutMissionInput
@@ -369,6 +419,7 @@ export type MissionUpdateInput = {
   rarity?: Prisma.EnumMissionRarityFieldUpdateOperationsInput | $Enums.MissionRarity
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   class?: Prisma.ClassUpdateOneRequiredWithoutMissionsNestedInput
@@ -391,6 +442,7 @@ export type MissionUncheckedUpdateInput = {
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   teamSetId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   enigmas?: Prisma.MissionEnigmaUncheckedUpdateManyWithoutMissionNestedInput
@@ -411,6 +463,7 @@ export type MissionCreateManyInput = {
   backgroundImage?: string | null
   deadline?: Date | string | null
   teamSetId?: string | null
+  orderIndex?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -423,6 +476,7 @@ export type MissionUpdateManyMutationInput = {
   rarity?: Prisma.EnumMissionRarityFieldUpdateOperationsInput | $Enums.MissionRarity
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -437,6 +491,7 @@ export type MissionUncheckedUpdateManyInput = {
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   teamSetId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -461,8 +516,13 @@ export type MissionCountOrderByAggregateInput = {
   backgroundImage?: Prisma.SortOrder
   deadline?: Prisma.SortOrder
   teamSetId?: Prisma.SortOrder
+  orderIndex?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type MissionAvgOrderByAggregateInput = {
+  orderIndex?: Prisma.SortOrder
 }
 
 export type MissionMaxOrderByAggregateInput = {
@@ -475,6 +535,7 @@ export type MissionMaxOrderByAggregateInput = {
   backgroundImage?: Prisma.SortOrder
   deadline?: Prisma.SortOrder
   teamSetId?: Prisma.SortOrder
+  orderIndex?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -489,8 +550,13 @@ export type MissionMinOrderByAggregateInput = {
   backgroundImage?: Prisma.SortOrder
   deadline?: Prisma.SortOrder
   teamSetId?: Prisma.SortOrder
+  orderIndex?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type MissionSumOrderByAggregateInput = {
+  orderIndex?: Prisma.SortOrder
 }
 
 export type MissionScalarRelationFilter = {
@@ -689,6 +755,7 @@ export type MissionCreateWithoutClassInput = {
   rarity?: $Enums.MissionRarity
   backgroundImage?: string | null
   deadline?: Date | string | null
+  orderIndex?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   teamSet?: Prisma.TeamSetCreateNestedOneWithoutMissionsInput
@@ -709,6 +776,7 @@ export type MissionUncheckedCreateWithoutClassInput = {
   backgroundImage?: string | null
   deadline?: Date | string | null
   teamSetId?: string | null
+  orderIndex?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   enigmas?: Prisma.MissionEnigmaUncheckedCreateNestedManyWithoutMissionInput
@@ -758,6 +826,7 @@ export type MissionScalarWhereInput = {
   backgroundImage?: Prisma.StringNullableFilter<"Mission"> | string | null
   deadline?: Prisma.DateTimeNullableFilter<"Mission"> | Date | string | null
   teamSetId?: Prisma.StringNullableFilter<"Mission"> | string | null
+  orderIndex?: Prisma.IntFilter<"Mission"> | number
   createdAt?: Prisma.DateTimeFilter<"Mission"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Mission"> | Date | string
 }
@@ -770,6 +839,7 @@ export type MissionCreateWithoutDocumentsInput = {
   rarity?: $Enums.MissionRarity
   backgroundImage?: string | null
   deadline?: Date | string | null
+  orderIndex?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   class: Prisma.ClassCreateNestedOneWithoutMissionsInput
@@ -791,6 +861,7 @@ export type MissionUncheckedCreateWithoutDocumentsInput = {
   backgroundImage?: string | null
   deadline?: Date | string | null
   teamSetId?: string | null
+  orderIndex?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   enigmas?: Prisma.MissionEnigmaUncheckedCreateNestedManyWithoutMissionInput
@@ -824,6 +895,7 @@ export type MissionUpdateWithoutDocumentsInput = {
   rarity?: Prisma.EnumMissionRarityFieldUpdateOperationsInput | $Enums.MissionRarity
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   class?: Prisma.ClassUpdateOneRequiredWithoutMissionsNestedInput
@@ -845,6 +917,7 @@ export type MissionUncheckedUpdateWithoutDocumentsInput = {
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   teamSetId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   enigmas?: Prisma.MissionEnigmaUncheckedUpdateManyWithoutMissionNestedInput
@@ -862,6 +935,7 @@ export type MissionCreateWithoutEnigmasInput = {
   rarity?: $Enums.MissionRarity
   backgroundImage?: string | null
   deadline?: Date | string | null
+  orderIndex?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   class: Prisma.ClassCreateNestedOneWithoutMissionsInput
@@ -883,6 +957,7 @@ export type MissionUncheckedCreateWithoutEnigmasInput = {
   backgroundImage?: string | null
   deadline?: Date | string | null
   teamSetId?: string | null
+  orderIndex?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   badges?: Prisma.BadgeUncheckedCreateNestedManyWithoutMissionInput
@@ -916,6 +991,7 @@ export type MissionUpdateWithoutEnigmasInput = {
   rarity?: Prisma.EnumMissionRarityFieldUpdateOperationsInput | $Enums.MissionRarity
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   class?: Prisma.ClassUpdateOneRequiredWithoutMissionsNestedInput
@@ -937,6 +1013,7 @@ export type MissionUncheckedUpdateWithoutEnigmasInput = {
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   teamSetId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   badges?: Prisma.BadgeUncheckedUpdateManyWithoutMissionNestedInput
@@ -954,6 +1031,7 @@ export type MissionCreateWithoutHintsInput = {
   rarity?: $Enums.MissionRarity
   backgroundImage?: string | null
   deadline?: Date | string | null
+  orderIndex?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   class: Prisma.ClassCreateNestedOneWithoutMissionsInput
@@ -975,6 +1053,7 @@ export type MissionUncheckedCreateWithoutHintsInput = {
   backgroundImage?: string | null
   deadline?: Date | string | null
   teamSetId?: string | null
+  orderIndex?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   enigmas?: Prisma.MissionEnigmaUncheckedCreateNestedManyWithoutMissionInput
@@ -1008,6 +1087,7 @@ export type MissionUpdateWithoutHintsInput = {
   rarity?: Prisma.EnumMissionRarityFieldUpdateOperationsInput | $Enums.MissionRarity
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   class?: Prisma.ClassUpdateOneRequiredWithoutMissionsNestedInput
@@ -1029,6 +1109,7 @@ export type MissionUncheckedUpdateWithoutHintsInput = {
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   teamSetId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   enigmas?: Prisma.MissionEnigmaUncheckedUpdateManyWithoutMissionNestedInput
@@ -1046,6 +1127,7 @@ export type MissionCreateWithoutHintUsesInput = {
   rarity?: $Enums.MissionRarity
   backgroundImage?: string | null
   deadline?: Date | string | null
+  orderIndex?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   class: Prisma.ClassCreateNestedOneWithoutMissionsInput
@@ -1067,6 +1149,7 @@ export type MissionUncheckedCreateWithoutHintUsesInput = {
   backgroundImage?: string | null
   deadline?: Date | string | null
   teamSetId?: string | null
+  orderIndex?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   enigmas?: Prisma.MissionEnigmaUncheckedCreateNestedManyWithoutMissionInput
@@ -1100,6 +1183,7 @@ export type MissionUpdateWithoutHintUsesInput = {
   rarity?: Prisma.EnumMissionRarityFieldUpdateOperationsInput | $Enums.MissionRarity
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   class?: Prisma.ClassUpdateOneRequiredWithoutMissionsNestedInput
@@ -1121,6 +1205,7 @@ export type MissionUncheckedUpdateWithoutHintUsesInput = {
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   teamSetId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   enigmas?: Prisma.MissionEnigmaUncheckedUpdateManyWithoutMissionNestedInput
@@ -1138,6 +1223,7 @@ export type MissionCreateWithoutProgressInput = {
   rarity?: $Enums.MissionRarity
   backgroundImage?: string | null
   deadline?: Date | string | null
+  orderIndex?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   class: Prisma.ClassCreateNestedOneWithoutMissionsInput
@@ -1159,6 +1245,7 @@ export type MissionUncheckedCreateWithoutProgressInput = {
   backgroundImage?: string | null
   deadline?: Date | string | null
   teamSetId?: string | null
+  orderIndex?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   enigmas?: Prisma.MissionEnigmaUncheckedCreateNestedManyWithoutMissionInput
@@ -1192,6 +1279,7 @@ export type MissionUpdateWithoutProgressInput = {
   rarity?: Prisma.EnumMissionRarityFieldUpdateOperationsInput | $Enums.MissionRarity
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   class?: Prisma.ClassUpdateOneRequiredWithoutMissionsNestedInput
@@ -1213,6 +1301,7 @@ export type MissionUncheckedUpdateWithoutProgressInput = {
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   teamSetId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   enigmas?: Prisma.MissionEnigmaUncheckedUpdateManyWithoutMissionNestedInput
@@ -1230,6 +1319,7 @@ export type MissionCreateWithoutBadgesInput = {
   rarity?: $Enums.MissionRarity
   backgroundImage?: string | null
   deadline?: Date | string | null
+  orderIndex?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   class: Prisma.ClassCreateNestedOneWithoutMissionsInput
@@ -1251,6 +1341,7 @@ export type MissionUncheckedCreateWithoutBadgesInput = {
   backgroundImage?: string | null
   deadline?: Date | string | null
   teamSetId?: string | null
+  orderIndex?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   enigmas?: Prisma.MissionEnigmaUncheckedCreateNestedManyWithoutMissionInput
@@ -1284,6 +1375,7 @@ export type MissionUpdateWithoutBadgesInput = {
   rarity?: Prisma.EnumMissionRarityFieldUpdateOperationsInput | $Enums.MissionRarity
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   class?: Prisma.ClassUpdateOneRequiredWithoutMissionsNestedInput
@@ -1305,6 +1397,7 @@ export type MissionUncheckedUpdateWithoutBadgesInput = {
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   teamSetId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   enigmas?: Prisma.MissionEnigmaUncheckedUpdateManyWithoutMissionNestedInput
@@ -1322,6 +1415,7 @@ export type MissionCreateWithoutTeamSetInput = {
   rarity?: $Enums.MissionRarity
   backgroundImage?: string | null
   deadline?: Date | string | null
+  orderIndex?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   class: Prisma.ClassCreateNestedOneWithoutMissionsInput
@@ -1342,6 +1436,7 @@ export type MissionUncheckedCreateWithoutTeamSetInput = {
   rarity?: $Enums.MissionRarity
   backgroundImage?: string | null
   deadline?: Date | string | null
+  orderIndex?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   enigmas?: Prisma.MissionEnigmaUncheckedCreateNestedManyWithoutMissionInput
@@ -1387,6 +1482,7 @@ export type MissionCreateManyClassInput = {
   backgroundImage?: string | null
   deadline?: Date | string | null
   teamSetId?: string | null
+  orderIndex?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1399,6 +1495,7 @@ export type MissionUpdateWithoutClassInput = {
   rarity?: Prisma.EnumMissionRarityFieldUpdateOperationsInput | $Enums.MissionRarity
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   teamSet?: Prisma.TeamSetUpdateOneWithoutMissionsNestedInput
@@ -1419,6 +1516,7 @@ export type MissionUncheckedUpdateWithoutClassInput = {
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   teamSetId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   enigmas?: Prisma.MissionEnigmaUncheckedUpdateManyWithoutMissionNestedInput
@@ -1438,6 +1536,7 @@ export type MissionUncheckedUpdateManyWithoutClassInput = {
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   teamSetId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1451,6 +1550,7 @@ export type MissionCreateManyTeamSetInput = {
   rarity?: $Enums.MissionRarity
   backgroundImage?: string | null
   deadline?: Date | string | null
+  orderIndex?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1463,6 +1563,7 @@ export type MissionUpdateWithoutTeamSetInput = {
   rarity?: Prisma.EnumMissionRarityFieldUpdateOperationsInput | $Enums.MissionRarity
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   class?: Prisma.ClassUpdateOneRequiredWithoutMissionsNestedInput
@@ -1483,6 +1584,7 @@ export type MissionUncheckedUpdateWithoutTeamSetInput = {
   rarity?: Prisma.EnumMissionRarityFieldUpdateOperationsInput | $Enums.MissionRarity
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   enigmas?: Prisma.MissionEnigmaUncheckedUpdateManyWithoutMissionNestedInput
@@ -1502,6 +1604,7 @@ export type MissionUncheckedUpdateManyWithoutTeamSetInput = {
   rarity?: Prisma.EnumMissionRarityFieldUpdateOperationsInput | $Enums.MissionRarity
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1592,6 +1695,7 @@ export type MissionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   backgroundImage?: boolean
   deadline?: boolean
   teamSetId?: boolean
+  orderIndex?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   class?: boolean | Prisma.ClassDefaultArgs<ExtArgs>
@@ -1615,6 +1719,7 @@ export type MissionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   backgroundImage?: boolean
   deadline?: boolean
   teamSetId?: boolean
+  orderIndex?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   class?: boolean | Prisma.ClassDefaultArgs<ExtArgs>
@@ -1631,6 +1736,7 @@ export type MissionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   backgroundImage?: boolean
   deadline?: boolean
   teamSetId?: boolean
+  orderIndex?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   class?: boolean | Prisma.ClassDefaultArgs<ExtArgs>
@@ -1647,11 +1753,12 @@ export type MissionSelectScalar = {
   backgroundImage?: boolean
   deadline?: boolean
   teamSetId?: boolean
+  orderIndex?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type MissionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "classId" | "title" | "description" | "status" | "rarity" | "backgroundImage" | "deadline" | "teamSetId" | "createdAt" | "updatedAt", ExtArgs["result"]["mission"]>
+export type MissionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "classId" | "title" | "description" | "status" | "rarity" | "backgroundImage" | "deadline" | "teamSetId" | "orderIndex" | "createdAt" | "updatedAt", ExtArgs["result"]["mission"]>
 export type MissionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   class?: boolean | Prisma.ClassDefaultArgs<ExtArgs>
   teamSet?: boolean | Prisma.Mission$teamSetArgs<ExtArgs>
@@ -1694,6 +1801,7 @@ export type $MissionPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     backgroundImage: string | null
     deadline: Date | null
     teamSetId: string | null
+    orderIndex: number
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["mission"]>
@@ -2136,6 +2244,7 @@ export interface MissionFieldRefs {
   readonly backgroundImage: Prisma.FieldRef<"Mission", 'String'>
   readonly deadline: Prisma.FieldRef<"Mission", 'DateTime'>
   readonly teamSetId: Prisma.FieldRef<"Mission", 'String'>
+  readonly orderIndex: Prisma.FieldRef<"Mission", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Mission", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Mission", 'DateTime'>
 }

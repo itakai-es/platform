@@ -5,6 +5,7 @@
     type="button"
     :class="circularContainerClasses"
     :aria-pressed="selected"
+    :disabled="disabled"
     @click="emit('click')"
   >
     <div
@@ -13,7 +14,8 @@
         bgColor,
       ]"
     >
-      <img v-if="image" :src="image" :alt="title" class="w-full h-full object-contain" />
+      <!-- Sin alt: el título va al lado, dentro del mismo botón, y se leería dos veces -->
+      <img v-if="image" :src="image" alt="" class="w-full h-full object-contain" />
       <component
         :is="icon"
         v-else-if="icon"
@@ -35,10 +37,11 @@
     type="button"
     :class="squareContainerClasses"
     :aria-pressed="selected"
+    :disabled="disabled"
     @click="emit('click')"
   >
     <component :is="icon" v-if="icon" class="w-8 h-8 text-navy-700 mx-auto mb-2" />
-    <img v-else-if="image" :src="image" :alt="title" class="w-8 h-8 mx-auto mb-2 object-contain" />
+    <img v-else-if="image" :src="image" alt="" class="w-8 h-8 mx-auto mb-2 object-contain" />
     <p class="font-medium text-navy-700">{{ title }}</p>
     <p v-if="subtitle" class="text-xs text-navy-700/70">{{ subtitle }}</p>
   </button>
@@ -55,11 +58,13 @@ interface Props {
   selected: boolean
   bgColor?: string
   variant?: 'circular' | 'square'
+  disabled?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   variant: 'circular',
   bgColor: 'bg-white',
+  disabled: false,
 })
 
 const emit = defineEmits<{
@@ -68,7 +73,7 @@ const emit = defineEmits<{
 
 const circularContainerClasses = computed(() => {
   const base =
-    'flex flex-col items-center p-2 sm:p-3 rounded-xl sm:rounded-2xl transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-navy-700 focus-visible:ring-offset-1'
+    'flex flex-col items-center p-2 sm:p-3 rounded-xl sm:rounded-2xl transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-navy-700 focus-visible:ring-offset-1 disabled:cursor-not-allowed'
 
   const selectedClasses = props.selected
     ? 'bg-white/50 ring-2 sm:ring-4 ring-navy-700/30'
@@ -79,7 +84,7 @@ const circularContainerClasses = computed(() => {
 
 const squareContainerClasses = computed(() => {
   const base =
-    'p-4 rounded-xl border-2 transition-all text-center focus:outline-none focus-visible:ring-2 focus-visible:ring-navy-700 focus-visible:ring-offset-1'
+    'p-4 rounded-xl border-2 transition-all text-center focus:outline-none focus-visible:ring-2 focus-visible:ring-navy-700 focus-visible:ring-offset-1 disabled:cursor-not-allowed'
 
   const selectedClasses = props.selected
     ? 'border-navy-700 bg-navy-700/5'

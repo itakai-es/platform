@@ -1,12 +1,6 @@
 <template>
   <li class="flex items-start gap-3 py-3">
-    <Avatar
-      :src="entry.actor.avatar ?? undefined"
-      :username="actorName"
-      size="xs"
-      class="flex-shrink-0"
-      aria-hidden="true"
-    />
+    <Avatar :avatar-key="entry.actor.avatar" :seed="entry.actor.id" :name="actorName" size="xs" />
     <div class="min-w-0 flex-1">
       <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-0.5">
         <p class="min-w-0 truncate font-semibold text-navy-700">{{ actorName }}</p>

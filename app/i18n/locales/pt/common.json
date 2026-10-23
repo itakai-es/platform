@@ -567,7 +567,35 @@
       "hint_used_student": "Usaste a dica {position} de {mission}",
       "hint_used_teacher": "Usou a dica {position} de {mission}",
       "hint_used_percent_student": "Usaste a dica {position} de {mission}: −{count} % no que te faltava receber",
-      "hint_used_percent_teacher": "Usou a dica {position} de {mission}: −{count} % no que lhe faltava receber"
+      "hint_used_percent_teacher": "Usou a dica {position} de {mission}: −{count} % no que lhe faltava receber",
+      "enigma_approved_student": "A tua entrega de {enigma} foi aprovada",
+      "enigma_approved_teacher": "Viu aprovada a sua entrega de {enigma}"
+    },
+    "avatars": {
+      "characters": {
+        "atenea": {
+          "name": "Atena",
+          "trait": "Sabedoria e estratégia"
+        },
+        "odiseo": {
+          "name": "Odisseu",
+          "trait": "Astúcia e coragem"
+        },
+        "penelope": {
+          "name": "Penélope",
+          "trait": "Lealdade e paciência"
+        },
+        "polifemo": {
+          "name": "Polifemo",
+          "trait": "Força e determinação"
+        },
+        "poseidon": {
+          "name": "Poseidon",
+          "trait": "Poder e domínio"
+        }
+      },
+      "custom_name": "O teu avatar com IA",
+      "custom_trait": "Gerado com IA"
     }
   }
 }

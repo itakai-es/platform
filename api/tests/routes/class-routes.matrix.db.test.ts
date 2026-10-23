@@ -22,7 +22,7 @@ import { randomUUID } from 'node:crypto'
  *
  * Usa Fastify, JWT, servicios y Postgres de verdad: necesita TEST_DATABASE_URL
  * (ver tests/helpers/test-db.ts). Solo se simula lo que sale de la máquina:
- * correo, almacenamiento de ficheros y el generador de avatares.
+ * correo y almacenamiento de ficheros.
  */
 
 vi.mock('../../src/utils/email.js', () => ({
@@ -37,10 +37,6 @@ vi.mock('../../src/modules/storage/storage.service.js', async importOriginal => 
   ...(await importOriginal<typeof import('../../src/modules/storage/storage.service.js')>()),
   saveUpload: vi.fn(async (path: string) => `/uploads/${path}`),
   deleteUpload: vi.fn(),
-}))
-
-vi.mock('../../src/modules/ai/generators/avatar-firered.js', () => ({
-  generateFireRedAvatar: vi.fn(async () => ({ fileUrl: '/uploads/avatars/test.png' })),
 }))
 
 import {
@@ -514,11 +510,12 @@ const TEACHER_CLASS: RouteCase[] = [
     levels: levels('edit', 200),
   },
   {
-    route: 'POST /teacher/classes/:classId/students/:studentId/avatar/generate',
+    // Devolver el avatar de un estudiante al catálogo: pide edición.
+    route: 'PUT /teacher/classes/:classId/students/:studentId/avatar',
     request: f => ({
-      method: 'POST',
-      url: `${c(f)}/students/${f.users.student.id}/avatar/generate`,
-      payload: { avatar_id: 'avatar-1', wardrobe_prompt: 'capa', background_prompt: 'bosque' },
+      method: 'PUT',
+      url: `${c(f)}/students/${f.users.student.id}/avatar`,
+      payload: { avatar: '/app/avatars/atenea.svg' },
     }),
     owner: 200,
     other: 404,

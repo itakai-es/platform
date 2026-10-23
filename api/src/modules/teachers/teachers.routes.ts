@@ -9,7 +9,7 @@ import { teamsRoutes } from '../teams/teams.routes.js'
 import { z, ZodError } from 'zod'
 import { scheduleConfigSchema } from './schedule-config.schema.js'
 import { templateFiltersOf, type TemplateFiltersQuery } from '../templates/templates.routes.js'
-import { ServiceUnavailableError, rethrowHttpError } from '../../utils/errors.js'
+import { rethrowHttpError } from '../../utils/errors.js'
 import { consumeRateLimit, releaseRateLimit } from '../../utils/rate-limit.js'
 import { USERNAME_MAX_LENGTH, USERNAME_MIN_LENGTH } from '../../utils/identity.js'
 import {
@@ -23,6 +23,7 @@ import {
 import {
   NICKNAME_MAX_LENGTH,
   removeStudentFromClass,
+  updateStudentAvatar,
   updateStudentNickname,
 } from './class-students.service.js'
 import {
@@ -84,6 +85,11 @@ const batchQuerySchema = z.object({
 
 const studentNicknameSchema = z.object({
   nickname: z.string().max(NICKNAME_MAX_LENGTH * 2),
+})
+
+// La ruta del personaje; que sea del catálogo lo comprueba el servicio.
+const studentAvatarSchema = z.object({
+  avatar: z.string().max(200),
 })
 
 /**
@@ -877,6 +883,28 @@ export async function teacherRoutes(fastify: FastifyInstance) {
     }
   )
 
+  // Avatar del alumno en esta clase: devolverlo a uno del catálogo.
+  fastify.put(
+    '/classes/:classId/students/:studentId/avatar',
+    async (
+      request: FastifyRequest<{ Params: { classId: string; studentId: string } }>,
+      reply: FastifyReply
+    ) => {
+      try {
+        const actor = request.user as RequestUser
+        const { classId, studentId } = request.params
+        const { avatar } = studentAvatarSchema.parse(request.body)
+        return await updateStudentAvatar(actor, classId, studentId, avatar)
+      } catch (error) {
+        if (error instanceof ZodError) {
+          return reply.status(400).send({ message: error.errors[0]?.message || 'Datos inválidos' })
+        }
+        rethrowHttpError(error)
+        return reply.status(500).send({ message: 'Error interno' })
+      }
+    }
+  )
+
   // Quitar al alumno de esta clase: su matrícula y lo que tenía en ella.
   fastify.delete(
     '/classes/:classId/students/:studentId',
@@ -993,28 +1021,6 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(404).send({ message: error.message })
-      }
-      return reply.status(500).send({ message: 'Error interno' })
-    }
-  })
-
-  fastify.post('/classes/:classId/students/:studentId/avatar/generate', async (request: FastifyRequest<{ Params: { classId: string; studentId: string } }>, reply: FastifyReply) => {
-    try {
-      const { id } = request.user as { id: string }
-      const { classId, studentId } = request.params
-      const data = generateStudentAvatarSchema.parse(request.body)
-      const result = await teachersService.generateStudentAvatar(id, classId, studentId, data)
-      return result
-    } catch (error) {
-      if (error instanceof ZodError) {
-        return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
-      }
-      if (error instanceof ServiceUnavailableError) {
-        return reply.status(503).send({ message: error.message, code: error.code })
-      }
-      rethrowHttpError(error)
-      if (error instanceof Error) {
-        return reply.status(400).send({ message: error.message })
       }
       return reply.status(500).send({ message: 'Error interno' })
     }

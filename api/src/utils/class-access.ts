@@ -449,6 +449,8 @@ export async function passesAccessCheck(check: Promise<unknown>): Promise<boolea
 export interface ClassTeacherSummary {
   id: string
   name: string
+  /** Clave de su avatar de docente; null sin elegir. */
+  avatar: string | null
   profile: ClassTeacherProfile
   access: ClassAccessLevel
   isOwner: boolean
@@ -463,7 +465,7 @@ export function classTeachersInclude(now = new Date()) {
       access: true,
       profile: true,
       isOwner: true,
-      user: { select: { name: true } },
+      user: { select: { name: true, avatar: true } },
     },
     orderBy: [{ isOwner: 'desc' }, { createdAt: 'asc' }],
   } satisfies Prisma.Class$teachersArgs
@@ -484,6 +486,7 @@ export function summarizeClassTeachers(
   const teachers = rows.map(r => ({
     id: r.userId,
     name: r.user.name,
+    avatar: r.user.avatar,
     profile: r.profile,
     access: r.access,
     isOwner: r.isOwner,
@@ -538,8 +541,6 @@ export async function classTeacherRecipients(
 export interface ClassActionInput {
   classId: string
   actorId: string
-  /** Avatar de quien actúa, si tiene. Se guarda copiado, como el nombre. */
-  actorAvatar?: string | null
   /** Clave `dominio.verbo`: `submission.approved`, `teacher.added`… */
   action: string
   entityType?: string
@@ -601,7 +602,8 @@ function metadataWithoutNames(
 /**
  * Apunta una acción en el registro de la clase. Va siempre dentro de la
  * transacción de la acción que registra: o quedan las dos o ninguna. Copia el
- * nombre de quien actúa para que la entrada se siga leyendo sin su cuenta.
+ * nombre y el avatar de quien actúa para que la entrada se siga leyendo, y se
+ * reconozca, sin su cuenta.
  */
 export async function recordClassAction(tx: Db, input: ClassActionInput) {
   if (!ACTION_KEY.test(input.action)) {
@@ -609,13 +611,16 @@ export async function recordClassAction(tx: Db, input: ClassActionInput) {
   }
   const metadata = metadataWithoutNames(input.metadata)
 
-  const actor = await tx.user.findUnique({ where: { id: input.actorId }, select: { name: true } })
+  const actor = await tx.user.findUnique({
+    where: { id: input.actorId },
+    select: { name: true, avatar: true },
+  })
   return tx.classActionLog.create({
     data: {
       classId: input.classId,
       actorId: input.actorId,
       actorName: actor?.name ?? '',
-      actorAvatar: input.actorAvatar ?? null,
+      actorAvatar: actor?.avatar ?? null,
       action: input.action,
       entityType: input.entityType,
       entityId: input.entityId,

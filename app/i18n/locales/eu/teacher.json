@@ -643,7 +643,8 @@
               "nickname_changed": "{target} ikaslearen ezizena aldatu du",
               "removed": "{target} klasetik kendu du",
               "removed_unused": "{target} klasetik kendu du eta erabili gabeko bere kontua ezabatu du",
-              "avatar_generated": "avatar berri bat sortu du {target} ikaslearentzat"
+              "avatar_generated": "avatar berri bat sortu du {target} ikaslearentzat",
+              "avatar_changed": "{target} ikaslearen avatarra katalogoko batengatik aldatu du"
             },
             "mission": {
               "created": "«{title}» misioa sortu du",
@@ -719,7 +720,8 @@
               "nickname_changed": "klasean jada ez dagoen ikasle baten ezizena aldatu du",
               "removed": "ikasle bat klasetik kendu du",
               "removed_unused": "inoiz sartu ez den ikasle bat klasetik kendu du eta bere kontua ezabatu du",
-              "avatar_generated": "avatar berri bat sortu du klasean jada ez dagoen ikasle batentzat"
+              "avatar_generated": "avatar berri bat sortu du klasean jada ez dagoen ikasle batentzat",
+              "avatar_changed": "klasean jada ez dagoen ikasle baten avatarra katalogoko batengatik aldatu du"
             },
             "submission": {
               "approved": "klasean jada ez dagoen ikasle baten «{title}» entrega onartu du (%{percentage})",
@@ -1061,7 +1063,17 @@
         "remove_unused_confirm": "Kendu eta kontua ezabatu",
         "removed": "{name} ez dago jada klasean",
         "removed_account_deleted": "{name} ez dago jada klasean, eta erabili gabeko bere kontua ezabatu da",
-        "remove_error": "Ezin izan da ikaslea klasetik kendu."
+        "remove_error": "Ezin izan da ikaslea klasetik kendu.",
+        "avatar": "Avatarra aldatu",
+        "avatar_title": "Klaseko avatarra",
+        "avatar_intro": "{name}(r)en avatarra klase honetan egokia ez bada, aldatu katalogoko pertsonaia batengatik. Klase honetan bakarrik aldatzen da, eta {name}(e)k beste bat aukera dezake bere Avatar fitxan.",
+        "avatar_now": "Orain honela ageri da",
+        "avatar_choose": "Katalogoko pertsonaiak",
+        "avatar_pick": "Aukeratu {name}(e)k klase honetan izango duen pertsonaia.",
+        "avatar_summary": "Gordetzean, {name}(e)k {avatar} izango du klase honetan.",
+        "avatar_summary_generated": "Gordetzean, {name}(e)k {avatar} izango du klase honetan, eta AArekin sortutako irudia ezabatu egingo da.",
+        "avatar_saved": "Avatarra aldatu da",
+        "avatar_error": "Ezin izan da avatarra aldatu."
       }
     },
     "ai_assistant": {
@@ -1117,7 +1129,13 @@
           "el": "Greziera",
           "ro": "Errumaniera"
         },
-        "delete_modal_blocked": "Badaude zure kontuaren mende dauden klaseak."
+        "delete_modal_blocked": "Badaude zure kontuaren mende dauden klaseak.",
+        "avatar_title": "Zure avatarra",
+        "avatar_description": "Horri esker ezagutzen zaituzte zure ikasleek eta gainerako irakasleek: zure izenaren ondoan agertzen da historian, klase bakoitzeko irakasleen artean, jardueran eta bertaratzean. Berdina da zure klase guztietan.",
+        "avatar_preview": "Honela ikusten zaituzte zure klaseetan",
+        "avatar_auto": "Automatikoa",
+        "avatar_updated": "Avatarra eguneratu da",
+        "avatar_error": "Ezin izan da avatarra aldatu."
       },
       "meta": {
         "title": "Nire profila | ITAKAI",

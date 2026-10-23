@@ -17,24 +17,6 @@ export type {
 } from '~/utils/gamification-config'
 
 // ============================================
-// GUIDES
-// ============================================
-
-export interface Guide {
-  id: string
-  name: string
-  trait: string
-  avatar: string
-  bgColor: string
-  description?: string
-}
-
-export interface GuidesResponse {
-  guides: Guide[]
-  total: number
-}
-
-// ============================================
 // BADGE TRIGGERS
 // ============================================
 

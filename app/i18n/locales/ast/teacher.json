@@ -643,7 +643,8 @@
               "nickname_changed": "camudó'l nomatu de {target}",
               "removed": "quitó a {target} de la clase",
               "removed_unused": "quitó a {target} de la clase y borró la so cuenta, que nun se usara",
-              "avatar_generated": "xeneró un avatar nuevu pa {target}"
+              "avatar_generated": "xeneró un avatar nuevu pa {target}",
+              "avatar_changed": "camudó l'avatar de {target} por ún del catálogu"
             },
             "mission": {
               "created": "creó la misión «{title}»",
@@ -719,7 +720,8 @@
               "nickname_changed": "camudó'l nomatu de daquién que yá nun ta na clase",
               "removed": "quitó a daquién de la clase",
               "removed_unused": "quitó de la clase a daquién que nun entrara enxamás y borró la so cuenta",
-              "avatar_generated": "xeneró un avatar nuevu pa daquién que yá nun ta na clase"
+              "avatar_generated": "xeneró un avatar nuevu pa daquién que yá nun ta na clase",
+              "avatar_changed": "camudó por ún del catálogu l'avatar de daquién que yá nun ta na clase"
             },
             "submission": {
               "approved": "aprobó en «{title}» la entrega de daquién que yá nun ta na clase, con un {percentage} %",
@@ -1061,7 +1063,17 @@
         "remove_unused_confirm": "Quitar y borrar la cuenta",
         "removed": "{name} yá nun ta na clase",
         "removed_account_deleted": "{name} yá nun ta na clase y la so cuenta ensin usar borróse",
-        "remove_error": "Nun se pudo quitar de la clase."
+        "remove_error": "Nun se pudo quitar de la clase.",
+        "avatar": "Camudar l'avatar",
+        "avatar_title": "Avatar na clase",
+        "avatar_intro": "Si l'avatar de {name} nesta clase nun ye afayadizu, cámbialu por un personaxe del catálogu. Namás camuda nesta clase, y {name} pue escoyer otru dende la so llingüeta Avatar.",
+        "avatar_now": "Agora sal asina",
+        "avatar_choose": "Personaxes del catálogu",
+        "avatar_pick": "Escueyi'l personaxe que llevará {name} nesta clase.",
+        "avatar_summary": "Al guardar, {name} pasa a llevar a {avatar} nesta clase.",
+        "avatar_summary_generated": "Al guardar, {name} pasa a llevar a {avatar} nesta clase, y la imaxe que xeneró con IA bórrase.",
+        "avatar_saved": "Avatar camudáu",
+        "avatar_error": "Nun se pudo camudar l'avatar."
       }
     },
     "ai_assistant": {
@@ -1117,7 +1129,13 @@
           "el": "Griegu",
           "ro": "Rumanu"
         },
-        "delete_modal_blocked": "Hai clases que dependen de la to cuenta."
+        "delete_modal_blocked": "Hai clases que dependen de la to cuenta.",
+        "avatar_title": "El to avatar",
+        "avatar_description": "Con él reconócente el to alumnáu y el restu del profesoráu: sal xunto al to nome nel historial, nel profesoráu de cada clase, na actividá y na asistencia. Ye'l mesmu en toles tos clases.",
+        "avatar_preview": "Asina te ven nes tos clases",
+        "avatar_auto": "Automáticu",
+        "avatar_updated": "Avatar anováu",
+        "avatar_error": "Nun se pudo camudar l'avatar."
       },
       "meta": {
         "title": "El mio perfil | ITAKAI",

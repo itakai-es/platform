@@ -144,6 +144,7 @@
                 :id="`${uid}-pick-${s.id}`"
                 :name="s.name"
                 :avatar="s.avatar"
+                :avatar-seed="studentAvatarSeed(classId, s.id)"
                 :selectable="draggable"
                 :checked="picked.includes(s.id)"
                 @update:checked="togglePick(s.id)"
@@ -204,6 +205,7 @@
                   :id="`${uid}-pick-${id}`"
                   :name="nameOf(id)"
                   :avatar="studentById.get(id)?.avatar"
+                  :avatar-seed="studentAvatarSeed(classId, id)"
                   :selectable="draggable"
                   :checked="picked.includes(id)"
                   @update:checked="togglePick(id)"
@@ -314,6 +316,7 @@ import {
 import type { TeamSet } from '~/types/team.types'
 import { shuffled } from '~/utils/shuffle'
 import { randomIndex } from '~/utils/roulette'
+import { studentAvatarSeed } from '~/utils/avatar'
 
 /**
  * La sub-vista «Equipos» de Alumnos: las agrupaciones de la clase (de base y

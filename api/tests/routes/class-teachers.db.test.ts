@@ -997,7 +997,9 @@ describeWithDatabase('profesorado de una clase y autoría', () => {
       const cls = created.json().class
       const ownerAccess = { access: 'admin', profile: 'titular', isOwner: true }
       expect(cls.myAccess).toEqual(ownerAccess)
-      expect(cls.teachers).toEqual([{ id: creator.id, name: creator.name, ...ownerAccess }])
+      expect(cls.teachers).toEqual([
+        { id: creator.id, name: creator.name, avatar: null, ...ownerAccess },
+      ])
 
       const editor = await newUser('teacher', 'edita-clase')
       await join(editor.id, 'edit', { classId: cls.id })
@@ -1031,7 +1033,7 @@ describeWithDatabase('profesorado de una clase y autoría', () => {
   // ==================== LO QUE VE EL ALUMNO ====================
 
   describe('lo que ve el alumno', () => {
-    it('la clase trae su profesorado, también quien está en prácticas, con nombre y perfil', async () => {
+    it('la clase trae su profesorado, también quien está en prácticas, con nombre, perfil y avatar', async () => {
       const trainee = await newUser('teacher', 'en-practicas')
       await join(trainee.id, 'read', { profile: 'practicas' })
 
@@ -1039,14 +1041,22 @@ describeWithDatabase('profesorado de una clase y autoría', () => {
       expect(response.statusCode).toBe(200)
       const teachers = response.json().class.teachers
       expect(teachers[0]).toEqual({
+        id: f.users.owner.id,
         name: expect.stringContaining('owner'),
+        avatar: null,
         profile: 'titular',
         isOwner: true,
       })
-      expect(teachers).toContainEqual({ name: trainee.name, profile: 'practicas', isOwner: false })
-      // Ni correos ni niveles de acceso.
+      expect(teachers).toContainEqual({
+        id: trainee.id,
+        name: trainee.name,
+        avatar: null,
+        profile: 'practicas',
+        isOwner: false,
+      })
+      // Ni correos ni niveles de acceso. El id, para el color de su avatar (E4).
       for (const teacher of teachers)
-        expect(Object.keys(teacher).sort()).toEqual(['isOwner', 'name', 'profile'])
+        expect(Object.keys(teacher).sort()).toEqual(['avatar', 'id', 'isOwner', 'name', 'profile'])
     })
   })
 })

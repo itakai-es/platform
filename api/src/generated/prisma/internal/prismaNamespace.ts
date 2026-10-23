@@ -3381,6 +3381,7 @@ export const UserScalarFieldEnum = {
   homeClassId: 'homeClassId',
   mustChangePassword: 'mustChangePassword',
   passwordChangedAt: 'passwordChangedAt',
+  avatar: 'avatar',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -3577,6 +3578,7 @@ export const MissionScalarFieldEnum = {
   backgroundImage: 'backgroundImage',
   deadline: 'deadline',
   teamSetId: 'teamSetId',
+  orderIndex: 'orderIndex',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

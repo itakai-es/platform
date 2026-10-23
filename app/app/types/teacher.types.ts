@@ -142,6 +142,8 @@ export interface ManageableStudent {
   name: string
   /** Alias en la clase; vacío si no tiene. */
   nickname?: string | null
+  /** Avatar en la clase: un personaje del catálogo o uno generado con IA. */
+  avatar?: string | null
   accountType: AccountType
   canResetPassword: boolean
   /** La clase donde se está actuando es la de origen de la cuenta. */

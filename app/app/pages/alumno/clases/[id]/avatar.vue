@@ -27,8 +27,8 @@
                   </div>
                 </div>
                 <img
-                  v-else-if="selectedGuide?.avatar || classGamification?.avatar"
-                  :src="selectedGuide?.avatar || classGamification?.avatar"
+                  v-else-if="selectedSrc"
+                  :src="getImageUrl(selectedSrc)"
                   :alt="classGamification?.username"
                   class="w-full h-full object-contain"
                 />
@@ -38,6 +38,26 @@
                     {{ t('student.classes.detail.avatar_tab.no_guide_hint') }}
                   </p>
                 </div>
+              </div>
+            </div>
+
+            <!-- Cómo sale en el resto de la clase: retrato pequeño sobre su color -->
+            <div
+              class="mb-4 flex w-full max-w-sm items-center gap-3 rounded-xl bg-white p-3 text-left"
+            >
+              <Avatar
+                :src="selectedSrc"
+                :name="nickname || classGamification?.username"
+                :seed="avatarSeed"
+                size="sm"
+              />
+              <div class="min-w-0">
+                <p class="text-xs text-navy-700/70">
+                  {{ t('student.classes.detail.avatar_tab.how_others_see') }}
+                </p>
+                <p class="truncate font-semibold text-navy-700">
+                  {{ nickname || classGamification?.username }}
+                </p>
               </div>
             </div>
 
@@ -88,20 +108,13 @@
               {{ t('student.classes.detail.avatar_tab.choose_guide') }}
             </h3>
           </div>
-          <div
-            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-3 2xl:grid-cols-5 gap-2 sm:gap-4 justify-items-center transition-opacity"
-            :class="generatingAvatar ? 'opacity-50 pointer-events-none' : ''"
-          >
-            <SelectionCard
-              v-for="guide in allGuides"
-              :key="guide.id"
-              :image="guide.avatar"
-              :title="guide.name"
-              :subtitle="guide.trait"
-              :selected="selectedGuideId === guide.id"
-              @click="selectGuide(guide.id)"
-            />
-          </div>
+          <AvatarCatalogGrid
+            v-model="selectedSrc"
+            :options="options"
+            :label="t('student.classes.detail.avatar_tab.choose_guide')"
+            :disabled="generatingAvatar"
+            class="grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-3 2xl:grid-cols-5"
+          />
         </div>
 
         <!-- Generador -->
@@ -164,14 +177,7 @@ import {
   LightBulbIcon,
   CheckCircleIcon,
 } from '@heroicons/vue/24/outline'
-
-interface Guide {
-  id: string
-  name: string
-  avatar: string
-  trait: string
-  bgColor: string
-}
+import { catalogKeyOf, studentAvatarSeed } from '~/utils/avatar'
 
 definePageMeta({ layout: 'student', middleware: ['auth', 'role'] })
 
@@ -179,11 +185,13 @@ const { t } = useI18n()
 const toast = useToast()
 const route = useRoute()
 const config = useRuntimeConfig()
-const gamificationStore = useGamificationStore()
+const authStore = useAuthStore()
 const classGamificationStore = useClassGamificationStore()
 
 const classId = computed(() => route.params.id as string)
-const { ui, classGamification, ensureAvatarGuides } = useStudentClassDetail(classId)
+const { ui, classGamification } = useStudentClassDetail(classId)
+const { catalog, customOption } = useStudentAvatarCatalog()
+const { getImageUrl } = useImageUrl()
 
 // Progreso de la generación con la IA (estima tiempo y muestra barra).
 const {
@@ -195,43 +203,42 @@ const {
   remainingTimeLabel,
 } = useAIPrompt()
 
-// Estado local: nickname editable, selección de guide, generación.
+// Estado local: alias editable, avatar elegido (su ruta) y generación.
 const nickname = ref('')
 const originalNickname = ref('')
-const selectedGuideId = ref('')
-const originalGuideId = ref('')
+const selectedSrc = ref<string | null>(null)
+const originalSrc = ref<string | null>(null)
+/** El avatar generado con IA de esta matrícula, si lo tiene: sale como una opción más. */
+const customSrc = ref<string | null>(null)
 const description = ref('')
 const generatingAvatar = ref(false)
-const generatedGuide = ref<Guide | null>(null)
 
-const avatarGuides = computed(() => gamificationStore.guides as Guide[])
-const allGuides = computed(() =>
-  generatedGuide.value ? [generatedGuide.value, ...avatarGuides.value] : avatarGuides.value
+const options = computed(() =>
+  customSrc.value ? [customOption(customSrc.value), ...catalog.value] : catalog.value
 )
-const selectedGuide = computed(() =>
-  allGuides.value.find(g => g.id === selectedGuideId.value)
-)
+
+/** El color del avatar sale de la matrícula: la clase y quien la tiene. */
+const avatarSeed = computed(() => studentAvatarSeed(classId.value, authStore.user?.id ?? ''))
+
 const hasProfileChanges = computed(
-  () =>
-    selectedGuideId.value !== originalGuideId.value ||
-    nickname.value !== originalNickname.value
+  () => selectedSrc.value !== originalSrc.value || nickname.value !== originalNickname.value
 )
-
-function selectGuide(id: string) {
-  selectedGuideId.value = id
-}
 
 async function saveProfile() {
   if (!hasProfileChanges.value) return
   try {
-    const guide = allGuides.value.find(g => g.id === selectedGuideId.value)
-    const avatarUrl = guide?.avatar || undefined
     await $fetch(`${config.public.apiBase}/students/classes/${classId.value}/profile`, {
       method: 'PUT',
-      body: { nickname: nickname.value.trim() || undefined, avatarUrl },
+      body: {
+        nickname: nickname.value.trim() || undefined,
+        avatarUrl: selectedSrc.value || undefined,
+      },
     })
     originalNickname.value = nickname.value.trim()
-    originalGuideId.value = selectedGuideId.value
+    originalSrc.value = selectedSrc.value
+    // Al dejar el generado con IA por un personaje, la imagen se borra y ya no se
+    // puede volver a ella: deja de ofrecerse.
+    if (catalogKeyOf(selectedSrc.value)) customSrc.value = null
     await classGamificationStore.fetchClassXp(classId.value, true)
     // Invalida el ranking cacheado para que se vuelva a fetchear con el avatar nuevo.
     ui.value.rankingData = null
@@ -242,33 +249,23 @@ async function saveProfile() {
   }
 }
 
-function guideToAvatarId(avatarPath: string): string {
-  const match = avatarPath.match(/\/([^/]+)\.svg$/)
-  return match?.[1] ?? 'polifemo'
-}
-
 async function generate() {
   if (!description.value.trim()) return
   try {
     generatingAvatar.value = true
     const avgSeconds = await fetchEstimate('avatar')
     startProgress(avgSeconds)
-    const avatarPath = selectedGuide.value?.avatar ?? '/app/avatars/polifemo.svg'
-    const avatar_id = guideToAvatarId(avatarPath)
+    // La IA parte del personaje elegido; con el generado elegido, del de siempre.
+    const avatar_id = catalogKeyOf(selectedSrc.value) ?? 'polifemo'
     const response = await $fetch<{ avatarUrl: string; message: string }>(
       `${config.public.apiBase}/students/classes/${classId.value}/avatar/generate`,
       { method: 'POST', body: { avatar_id, prompt: description.value.trim() } }
     )
     stopProgress()
-    generatedGuide.value = {
-      id: 'generated-avatar',
-      name: 'Avatar IA',
-      avatar: response.avatarUrl,
-      trait: t('student.classes.detail.avatar_tab.generated_trait'),
-      bgColor: 'bg-violet-200',
-    }
-    selectedGuideId.value = generatedGuide.value.id
-    originalGuideId.value = selectedGuideId.value
+    // El servidor ya lo ha guardado en la matrícula.
+    customSrc.value = response.avatarUrl
+    selectedSrc.value = response.avatarUrl
+    originalSrc.value = response.avatarUrl
     await classGamificationStore.fetchClassXp(classId.value, true)
     toast.success(response.message || t('student.classes.detail.avatar_tab.save_success'))
   } catch (err) {
@@ -288,7 +285,10 @@ async function generate() {
   }
 }
 
-// Inicializar nickname y selectedGuideId a partir de classGamification y guides.
+// Alias y avatar de partida, de la matrícula. Un avatar que no es del catálogo
+// es el generado con IA: se ofrece para poder quedárselo. Si cambia fuera (su
+// docente lo devuelve al catálogo) y aquí no hay nada sin guardar, se sigue al de
+// la matrícula: el generado que se retiró ya no está.
 watch(
   () => classGamification.value,
   data => {
@@ -297,30 +297,16 @@ watch(
       nickname.value = data.username
       originalNickname.value = data.username
     }
-    if (data.avatar && avatarGuides.value.length > 0) {
-      const match = avatarGuides.value.find(g => g.avatar === data.avatar)
-      if (match) {
-        selectedGuideId.value = match.id
-        originalGuideId.value = match.id
-      }
+    const untouched = selectedSrc.value === originalSrc.value
+    if (
+      data.avatar &&
+      (originalSrc.value === null || (untouched && data.avatar !== originalSrc.value))
+    ) {
+      customSrc.value = catalogKeyOf(data.avatar) ? null : data.avatar
+      selectedSrc.value = data.avatar
+      originalSrc.value = data.avatar
     }
   },
   { immediate: true }
 )
-watch(
-  () => avatarGuides.value,
-  guides => {
-    if (guides.length > 0 && classGamification.value?.avatar && !selectedGuideId.value) {
-      const match = guides.find(g => g.avatar === classGamification.value?.avatar)
-      if (match) {
-        selectedGuideId.value = match.id
-        originalGuideId.value = match.id
-      }
-    }
-  },
-  { immediate: true }
-)
-
-// Al entrar a /avatar, asegurar que las guides están cargadas (no-op si ya lo están).
-onMounted(() => void ensureAvatarGuides())
 </script>

@@ -284,6 +284,18 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  /**
+   * El avatar de docente ha cambiado, o llega con el perfil: el menú lo enseña
+   * al momento y se queda guardado con la sesión.
+   */
+  const setUserAvatar = (avatar: string | null) => {
+    if (!user.value || (user.value.avatar ?? null) === avatar) return
+    user.value = { ...user.value, avatar }
+    if (import.meta.client) {
+      localStorage.setItem('auth_user', JSON.stringify(user.value))
+    }
+  }
+
   const resetPassword = async (token: string, password: string) => {
     try {
       const config = useRuntimeConfig()
@@ -436,6 +448,7 @@ export const useAuthStore = defineStore('auth', () => {
     loadUserFromStorage,
     completeOnboarding,
     markPasswordChanged,
+    setUserAvatar,
     resetPassword,
     requestPasswordReset,
   }

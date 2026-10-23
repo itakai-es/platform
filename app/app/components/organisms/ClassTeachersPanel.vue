@@ -32,7 +32,9 @@
       <ul v-else class="divide-y divide-border-primary">
         <li v-for="teacher in teachers" :key="teacher.id" class="py-3">
           <ClassTeacherItem
+            :id="teacher.id"
             :name="teacher.name"
+            :avatar="teacher.avatar"
             :profile="teacher.profile"
             :is-owner="teacher.isOwner"
           >

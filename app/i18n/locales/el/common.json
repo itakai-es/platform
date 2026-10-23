@@ -567,7 +567,35 @@
       "hint_used_student": "Χρησιμοποίησες την υπόδειξη {position} της αποστολής {mission}",
       "hint_used_teacher": "Χρησιμοποίησε την υπόδειξη {position} της αποστολής {mission}",
       "hint_used_percent_student": "Χρησιμοποίησες την υπόδειξη {position} της αποστολής {mission}: −{count}% σε όσα σου έμεναν να κερδίσεις",
-      "hint_used_percent_teacher": "Χρησιμοποίησε την υπόδειξη {position} της αποστολής {mission}: −{count}% σε όσα του/της έμεναν να κερδίσει"
+      "hint_used_percent_teacher": "Χρησιμοποίησε την υπόδειξη {position} της αποστολής {mission}: −{count}% σε όσα του/της έμεναν να κερδίσει",
+      "enigma_approved_student": "Η υποβολή σου για {enigma} εγκρίθηκε",
+      "enigma_approved_teacher": "Η υποβολή του/της για {enigma} εγκρίθηκε"
+    },
+    "avatars": {
+      "characters": {
+        "atenea": {
+          "name": "Αθηνά",
+          "trait": "Σοφία και στρατηγική"
+        },
+        "odiseo": {
+          "name": "Οδυσσέας",
+          "trait": "Εξυπνάδα και θάρρος"
+        },
+        "penelope": {
+          "name": "Πηνελόπη",
+          "trait": "Πίστη και υπομονή"
+        },
+        "polifemo": {
+          "name": "Πολύφημος",
+          "trait": "Δύναμη και αποφασιστικότητα"
+        },
+        "poseidon": {
+          "name": "Ποσειδώνας",
+          "trait": "Ισχύς και κυριαρχία"
+        }
+      },
+      "custom_name": "Το άβαταρ σου με ΤΝ",
+      "custom_trait": "Δημιουργήθηκε με ΤΝ"
     }
   }
 }

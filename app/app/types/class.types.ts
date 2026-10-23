@@ -58,6 +58,8 @@ export interface ClassAccess {
 export interface ClassTeacher extends ClassAccess {
   id: string
   name: string
+  /** Clave de su avatar de docente; null sin elegir (iniciales sobre un color derivado del id). */
+  avatar?: string | null
 }
 
 /** Un profesor en la sección de profesorado de los ajustes (`GET …/teachers`). */
@@ -76,7 +78,10 @@ export interface ClassTeachersResponse {
 
 /** Lo que el alumnado ve de quien imparte su clase: sin correo ni nivel. */
 export interface ClassTeacherPublic {
+  id: string
   name: string
+  /** Clave de su avatar de docente. */
+  avatar: string | null
   profile: ClassTeacherProfile
   isOwner: boolean
 }

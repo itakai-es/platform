@@ -26,7 +26,7 @@
       :class="selectable ? 'cursor-pointer' : ''"
     >
       <slot name="leading">
-        <Avatar :src="avatar" :username="name" size="xs" alt="" class="flex-shrink-0" />
+        <Avatar :src="avatar" :name="name" :seed="avatarSeed" size="xs" />
       </slot>
       <span class="min-w-0 flex-1">
         <span
@@ -48,6 +48,8 @@ defineProps<{
   id: string
   name: string
   avatar?: string
+  /** De dónde sale el color del avatar: `studentAvatarSeed(clase, estudiante)`. */
+  avatarSeed?: string
   /** Segunda línea, más pequeña (el nombre bajo el alias, un estado…). */
   sub?: string
   hint?: string

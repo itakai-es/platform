@@ -50,6 +50,10 @@ model User {
   homeClassId        String?         @map("home_class_id")
   mustChangePassword Boolean         @default(false) @map("must_change_password")
   passwordChangedAt  DateTime?       @map("password_changed_at")
+  /// Avatar del profesorado: clave del catálogo docente (hoy, un color de la
+  /// paleta: «purple», «mint»…), nunca una ruta ni una URL. Nulo = sin elegir:
+  /// iniciales sobre un color derivado del id. Lo valida la API (utils/avatars.ts).
+  avatar             String?
   createdAt          DateTime        @default(now()) @map("created_at")
   updatedAt          DateTime        @updatedAt @map("updated_at")
 

@@ -163,14 +163,14 @@
           "tip": "Consello: Dá detalles de cores, vestimenta, accesorios e estilo. A IA creará o teu avatar baseándose no personaxe que seleccionases.",
           "generate_button": "Xerar avatar",
           "generating": "Xerando o teu avatar...",
-          "generated_trait": "Xerado con IA",
           "nickname_placeholder": "O teu alcume...",
           "save_changes": "Gardar cambios",
           "no_guide_hint": "Elixe a túa guía para ver o teu avatar",
           "save_success": "Perfil gardado correctamente",
           "save_error": "Erro ao gardar o perfil",
           "generate_error": "Non se puido xerar o avatar. Téntao de novo nuns segundos.",
-          "generate_error_with_detail": "Non se puido xerar o avatar: {detail}"
+          "generate_error_with_detail": "Non se puido xerar o avatar: {detail}",
+          "how_others_see": "Así te ven nesta clase"
         },
         "mission_no_description": "Sen descrición",
         "shop": {
@@ -344,7 +344,6 @@
       "recent_activity_card": {
         "title": "Actividade recente",
         "empty": "Non hai actividade recente",
-        "user_fallback": "Alguén",
         "by_actor": "Por {name}"
       },
       "submission_modal": {

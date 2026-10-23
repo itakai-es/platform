@@ -35,6 +35,11 @@ const updatePreferencesSchema = z.object({
   reduceMotion: z.boolean().optional(),
 })
 
+// La clave se valida contra el catálogo en el servicio; aquí solo se acota.
+const updateAvatarSchema = z.object({
+  avatar: z.string().max(40).nullable(),
+})
+
 const deleteAccountSchema = z.object({
   password: z.string().min(1),
 })
@@ -150,6 +155,21 @@ export async function profileRoutes(fastify: FastifyInstance) {
       if (error instanceof ZodError) {
         return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
       }
+      return reply.status(500).send({ message: 'Error interno' })
+    }
+  })
+
+  // PUT /profile/avatar — avatar de docente (clave del catálogo, o null)
+  fastify.put('/avatar', async (request: FastifyRequest, reply: FastifyReply) => {
+    try {
+      const { id } = request.user as { id: string }
+      const { avatar } = updateAvatarSchema.parse(request.body)
+      return await profileService.updateTeacherAvatar(id, avatar)
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return reply.status(400).send({ message: 'Datos inválidos', errors: error.errors })
+      }
+      rethrowHttpError(error)
       return reply.status(500).send({ message: 'Error interno' })
     }
   })

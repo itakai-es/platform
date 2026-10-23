@@ -163,14 +163,14 @@
           "tip": "Tip: Da detalles de colores, vestimenta, accesorios y estilo. La IA creará tu avatar basándose en el personaje que hayas seleccionado.",
           "generate_button": "Genera avatar",
           "generating": "Generando tu avatar...",
-          "generated_trait": "Generado con IA",
           "nickname_placeholder": "Tu nickname...",
           "save_changes": "Guardar cambios",
           "no_guide_hint": "Elige tu guía para ver tu avatar",
           "save_success": "Perfil guardado correctamente",
           "save_error": "Error al guardar el perfil",
           "generate_error": "No se pudo generar el avatar. Inténtalo de nuevo en unos segundos.",
-          "generate_error_with_detail": "No se pudo generar el avatar: {detail}"
+          "generate_error_with_detail": "No se pudo generar el avatar: {detail}",
+          "how_others_see": "Así te ven en esta clase"
         },
         "mission_no_description": "Sin descripción",
         "shop": {
@@ -344,7 +344,6 @@
       "recent_activity_card": {
         "title": "Actividad reciente",
         "empty": "No hay actividad reciente",
-        "user_fallback": "Alguien",
         "by_actor": "Por {name}"
       },
       "submission_modal": {

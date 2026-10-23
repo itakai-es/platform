@@ -2,6 +2,7 @@ import { prisma } from '../../config/database.js'
 import { verifyPassword } from '../../utils/password.js'
 import { ForbiddenError, NotFoundError, ValidationError } from '../../utils/errors.js'
 import { normalizeEmail } from '../../utils/identity.js'
+import { isTeacherAvatarKey } from '../../utils/avatars.js'
 import { changeOwnPassword } from '../../utils/password-change.js'
 import { privateUploadResolver } from '../storage/storage.service.js'
 import { deleteUserAccount } from './account-deletion.service.js'
@@ -88,6 +89,8 @@ export class ProfileService {
         accountType: user.accountType,
         name: user.name,
         role: user.role,
+        // Avatar de docente: clave del catálogo, o null sin elegir.
+        avatar: user.avatar,
         security: {
           twoFactorEnabled: settings.twoFactorEnabled,
           sessions,
@@ -217,6 +220,29 @@ export class ProfileService {
     })
 
     return { success: true, message: 'Todas las sesiones cerradas correctamente' }
+  }
+
+  /**
+   * Avatar del profesorado: una clave del catálogo docente, o null para volver
+   * a las iniciales sobre el color de siempre. Es de la cuenta, no de cada clase:
+   * con él lo reconocen el alumnado y el resto del profesorado en todas sus
+   * clases. El alumnado lleva su avatar en cada clase, por otro camino.
+   */
+  async updateTeacherAvatar(userId: string, avatar: string | null) {
+    const user = await prisma.user.findUnique({ where: { id: userId }, select: { role: true } })
+    if (!user) throw new NotFoundError('Cuenta no encontrada')
+    if (user.role !== 'teacher') {
+      throw new ForbiddenError('Solo el profesorado elige aquí su avatar', 'NOT_TEACHER')
+    }
+    if (avatar !== null && !isTeacherAvatarKey(avatar)) {
+      throw new ValidationError('Elige un avatar de la lista', 'AVATAR_NOT_ALLOWED')
+    }
+    const updated = await prisma.user.update({
+      where: { id: userId },
+      data: { avatar },
+      select: { avatar: true },
+    })
+    return { avatar: updated.avatar }
   }
 
   /**
@@ -352,6 +378,7 @@ export class ProfileService {
         accountType: user.accountType,
         name: user.name,
         role: user.role,
+        avatar: user.avatar,
         isOnboarded: user.isOnboarded,
         status: user.status,
         createdAt: user.createdAt,

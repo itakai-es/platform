@@ -31,7 +31,12 @@
         <p v-if="target === 'students' && fixedRecipients" class="text-sm text-navy-700">
           {{ t('teacher.classroom.fixed_to', { names: chosen.map(s => s.name).join(', ') }) }}
         </p>
-        <StudentPicker v-else-if="target === 'students'" v-model="selection" :students="students">
+        <StudentPicker
+          v-else-if="target === 'students'"
+          v-model="selection"
+          :students="students"
+          :class-id="classId"
+        >
           <template #filters="{ select }">
             <slot name="filters" :select="select" />
           </template>

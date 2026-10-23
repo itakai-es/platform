@@ -29,7 +29,8 @@ export interface AttendanceSession {
   startTime: string
   endTime: string | null
   source: 'schedule' | 'manual'
-  takenBy: string | null
+  /** Quién la guardó la última vez, con la clave de su avatar; null si su cuenta ya no está. */
+  takenBy: { id: string; name: string; avatar: string | null } | null
   updatedAt: string
   counts: AttendanceCounts
   records: { studentId: string; status: AttendanceStatus; note: string | null }[]

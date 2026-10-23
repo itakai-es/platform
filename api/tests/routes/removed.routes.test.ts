@@ -41,6 +41,14 @@ describe('rutas retiradas', () => {
     }
   })
 
+  it('el profesorado no genera avatares con IA para su alumnado, y el catálogo no sale de la API', () => {
+    // Para moderar, el avatar se devuelve a uno del catálogo (E4, decisión 11).
+    expect(read('teachers/teachers.routes.ts')).not.toMatch(/avatar\/generate/)
+    expect(read('teachers/teachers.service.ts')).not.toMatch(/generateStudentAvatar|generateFireRedAvatar/)
+    // Los nombres de los personajes van traducidos en la aplicación.
+    expect(() => read('gamification/gamification.routes.ts')).toThrow()
+  })
+
   it('no existe la búsqueda de alumnos de toda la plataforma', () => {
     expect(read('teachers/teachers.routes.ts')).not.toMatch(/students\/search/)
     expect(read('teachers/teachers.service.ts')).not.toMatch(/searchStudents/)
