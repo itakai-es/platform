@@ -1100,7 +1100,7 @@
               />
             </div>
             <!-- Lo que aún le queda por cobrar llega con el descuento de sus pistas -->
-            <InfoNote v-if="hintPenalty > 0 && !isMissionComplete" class="mt-4">
+            <InfoNote v-if="hintPenalty > 0 && !isMissionComplete" class="mt-4" on-color>
               {{ t('student.mission_detail.hints.penalty_note', { count: hintPenalty }) }}
             </InfoNote>
           </Card>

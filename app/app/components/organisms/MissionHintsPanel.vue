@@ -21,13 +21,17 @@
     <!-- ============ Profesorado ============ -->
     <div v-if="mode === 'teacher'" ref="teacherRef">
       <template v-if="hints.length">
-        <InfoNote class="mb-3">{{ t('teacher.components.mission_hints.intro') }}</InfoNote>
-        <InfoNote v-if="anyFree" class="mb-3">
-          {{ t('teacher.components.mission_hints.free_note_list') }}
-        </InfoNote>
-        <p v-if="atLimit && canEdit" :id="limitId" class="mb-3 text-sm text-navy-700/80">
-          {{ t('teacher.components.mission_hints.limit_reached', { max: HINT_LIMITS.perMission }) }}
-        </p>
+        <div class="mb-3 space-y-2">
+          <InfoNote on-color>{{ t('teacher.components.mission_hints.intro') }}</InfoNote>
+          <InfoNote v-if="anyFree" on-color>
+            {{ t('teacher.components.mission_hints.free_note_list') }}
+          </InfoNote>
+          <p v-if="atLimit && canEdit" :id="limitId" class="text-sm text-navy-700">
+            {{
+              t('teacher.components.mission_hints.limit_reached', { max: HINT_LIMITS.perMission })
+            }}
+          </p>
+        </div>
         <!-- `overflow-hidden` redondea el fondo de las filas, como en el panel. -->
         <div class="overflow-hidden rounded-xl bg-white" :aria-busy="busy">
           <AdminSortableList
@@ -123,16 +127,18 @@
 
     <!-- ============ Alumnado ============ -->
     <template v-else>
-      <InfoNote v-if="isPreview" class="mb-3">
+      <InfoNote v-if="isPreview" class="mb-3" on-color>
         {{ t('student.mission_detail.hints.preview_note') }}
       </InfoNote>
-      <InfoNote v-else-if="state?.closedReason === 'completed'" class="mb-3">
+      <InfoNote v-else-if="state?.closedReason === 'completed'" class="mb-3" on-color>
         {{ t('student.mission_detail.hints.closed_completed') }}
       </InfoNote>
-      <InfoNote v-else-if="state?.closedReason === 'expired'" class="mb-3">
+      <InfoNote v-else-if="state?.closedReason === 'expired'" class="mb-3" on-color>
         {{ t('student.mission_detail.hints.closed_expired') }}
       </InfoNote>
-      <InfoNote v-else class="mb-3">{{ t('student.mission_detail.hints.intro') }}</InfoNote>
+      <InfoNote v-else class="mb-3" on-color>{{
+        t('student.mission_detail.hints.intro')
+      }}</InfoNote>
 
       <ol class="space-y-3">
         <li v-for="hint in hints" :key="hint.id" class="rounded-xl bg-white p-4">
