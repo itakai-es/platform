@@ -94,7 +94,7 @@
         "path_locked": "This mission isn’t open yet: you need to complete another one first."
       },
       "hints": {
-        "intro": "Stuck? Use a hint. They open in order, one at a time, and each one has its cost.",
+        "intro": "Stuck? Use a hint. They open in order, one at a time, and each one has its own cost.",
         "locked": "It opens after hint {position}.",
         "not_used": "Not used.",
         "use_button": "Use hint {position}",

@@ -1432,7 +1432,7 @@
           "amount_percent_hint": "Réstase do que a misión aínda ten que pagar a quen a use, nunca do xa cobrado. Varias pistas de % súmanse, ata o 100 %.",
           "presets": "Atallos",
           "used_note": "Sen usar | Usouna 1 estudante, así que non se pode borrar. O que pagou non cambia: o custo novo vale para quen a use a partir de agora. | Usárona {count} estudantes, así que non se pode borrar. O que pagaron non cambia: o custo novo vale para quen a use a partir de agora.",
-          "summary_free": "Quen a use abrirana gratis.",
+          "summary_free": "Quen a use poderá abrila gratis.",
           "summary_coins": "Quen a use pagará {count} {coins} ao abrila.",
           "summary_xp": "Quen a use pagará {count} XP ao abrila (pode baixar de nivel).",
           "summary_percent": "Quen a use cobrará un {count} % menos do que a misión aínda lle teña que pagar.",

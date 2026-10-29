@@ -100,7 +100,7 @@
         "use_button": "Erabili {position}. pista",
         "summary_coins": "{count} {coins} balio du. {balance} dituzu.",
         "summary_xp": "{count} XP balio du. {balance} dituzu. XParekin ordaintzeak maila jaitsi diezazuke.",
-        "summary_percent": "Misio honek oraindik eman behar dizunari %{count} kentzen dio: onartu gabeko enigmei (berrikusten ari direnei ere bai) eta misioaren bonusari. Kobratu duzuna ez da aldatzen.",
+        "summary_percent": "Misio honek oraindik eman behar dizunari %{count} kentzen dio: onartu gabeko enigmei (berrikuspenean daudenei ere bai) eta misioaren bonusari. Dagoeneko kobratu duzuna ez da aldatzen.",
         "summary_free": "Doan da.",
         "short_coins": "{count} {coins} falta zaizkizu.",
         "short_xp": "{count} XP falta zaizkizu.",
@@ -115,7 +115,7 @@
       },
       "path_locked": {
         "title": "Oraindik ezin duzu misio hau hasi",
-        "description": "{missions} osatzean irekitzen da. Orduan ikusiko dituzu bere istorioa, enigmak eta dokumentuak.",
+        "description": "{missions} osatzean irekitzen da. Orduan ikusiko dituzu haren istorioa, enigmak eta dokumentuak.",
         "go_to": "Joan «{title}» misiora",
         "back": "Itzuli misioetara"
       }

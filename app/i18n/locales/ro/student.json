@@ -116,7 +116,7 @@
       "path_locked": {
         "title": "Încă nu poți începe această misiune",
         "description": "Se deschide după ce finalizezi {missions}. Atunci îi vei vedea povestea, enigmele și documentele.",
-        "go_to": "Mergi la «{title}»",
+        "go_to": "Mergi la „{title}”",
         "back": "Înapoi la misiuni"
       }
     },

@@ -64,7 +64,7 @@
       "locked_toast": "O teu docente fechou esta missão por agora. Vais poder entrar quando a abrir.",
       "locked_aria": "{title}: missão bloqueada por agora",
       "expired_on": "Expirou: {date}",
-      "locked_path_aria": "{title}: abre ao completar {missions}"
+      "locked_path_aria": "{title}: abre ao concluir {missions}"
     },
     "mission_detail": {
       "meta": {
@@ -91,13 +91,13 @@
         "error": "Erro ao enviar a entrega. Tenta novamente.",
         "expired_error": "Esta missão expirou. Já não podes entregar enigmas.",
         "downloading": "A descarregar",
-        "path_locked": "Esta missão ainda não está aberta: antes tens de completar outra."
+        "path_locked": "Esta missão ainda não está aberta: antes tens de concluir outra."
       },
       "hints": {
-        "intro": "Estás encravado? Usa uma dica. Abrem-se por ordem, uma de cada vez, e cada uma tem o seu custo.",
-        "locked": "Abre-se depois da dica {position}.",
+        "intro": "Não consegues avançar? Usa uma pista. Abrem-se por ordem, uma de cada vez, e cada uma tem o seu custo.",
+        "locked": "Abre-se depois da pista {position}.",
         "not_used": "Não usada.",
-        "use_button": "Usar a dica {position}",
+        "use_button": "Usar a pista {position}",
         "summary_coins": "Custa {count} {coins}. Tens {balance}.",
         "summary_xp": "Custa {count} XP. Tens {balance}. Pagar com XP pode fazer-te descer de nível.",
         "summary_percent": "Retira {count} % ao que esta missão ainda te tem de dar: os enigmas por aprovar (também os que estão em revisão) e o bónus da missão. O que já recebeste não muda.",
@@ -105,17 +105,17 @@
         "short_coins": "Faltam-te {count} {coins}.",
         "short_xp": "Faltam-te {count} XP.",
         "used": "Usada",
-        "penalty_note": "As tuas dicas retiram {count} % ao que te falta receber nesta missão.",
-        "closed_completed": "Completaste a missão: já não precisas de usar mais dicas.",
-        "closed_expired": "A missão expirou: já não se podem usar as suas dicas.",
-        "preview_note": "Pré-visualização: vês todas as dicas abertas. Os estudantes abrem-nas uma de cada vez, por esta ordem, pagando o seu custo.",
-        "used_announcement": "Usaste a dica {position}.",
-        "use_error": "Não foi possível usar a dica.",
-        "bonus_penalty": "−{count} % pelas tuas dicas"
+        "penalty_note": "As tuas pistas retiram {count} % ao que te falta receber nesta missão.",
+        "closed_completed": "Concluíste a missão: já não precisas de usar mais pistas.",
+        "closed_expired": "A missão expirou: já não se podem usar as suas pistas.",
+        "preview_note": "Pré-visualização: vês todas as pistas abertas. Os estudantes abrem-nas uma de cada vez, por esta ordem, pagando o seu custo.",
+        "used_announcement": "Usaste a pista {position}.",
+        "use_error": "Não foi possível usar a pista.",
+        "bonus_penalty": "−{count} % pelas tuas pistas"
       },
       "path_locked": {
         "title": "Ainda não podes começar esta missão",
-        "description": "Abre ao completar {missions}. Depois vais ver a sua história, os seus enigmas e os seus documentos.",
+        "description": "Abre ao concluir {missions}. Depois vais ver a sua história, os seus enigmas e os seus documentos.",
         "go_to": "Ir para «{title}»",
         "back": "Voltar às missões"
       }

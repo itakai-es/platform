@@ -566,10 +566,10 @@
     "activity_feed": {
       "hint_used_student": "Vas fer servir la pista {position} de {mission}",
       "hint_used_teacher": "Va fer servir la pista {position} de {mission}",
-      "hint_used_percent_student": "Vas fer servir la pista {position} de {mission}: −{count} % en el que et quedava per cobrar",
-      "hint_used_percent_teacher": "Va fer servir la pista {position} de {mission}: −{count} % en el que li quedava per cobrar",
+      "hint_used_percent_student": "Vas fer servir la pista {position} de {mission}: −{count} % del que et quedava per cobrar",
+      "hint_used_percent_teacher": "Va fer servir la pista {position} de {mission}: −{count} % del que li quedava per cobrar",
       "enigma_approved_student": "Et van aprovar el lliurament de {enigma}",
-      "enigma_approved_teacher": "Va rebre l'aprovació del seu lliurament de {enigma}",
+      "enigma_approved_teacher": "Li van aprovar el lliurament de {enigma}",
       "mission_started_student": "Vas començar la missió {mission}",
       "mission_started_teacher": "Va començar la missió {mission}"
     },
@@ -636,11 +636,11 @@
       "start": "Sortida",
       "goal": "Meta",
       "you_are_here": "Ets aquí",
-      "go_to_mine": "Ves a la meva missió",
+      "go_to_mine": "Anar a la meva missió",
       "keys_hint": "Amb el teclat, les fletxes passen d'una missió a una altra; Inici i Fi porten a la primera i a l'última.",
       "your_progress": "Has completat {done} de {total} missió | Has completat {done} de {total} missions",
       "all_done": "Mapa completat!",
-      "class_progress": "La classe porta el {percent} % del recorregut",
+      "class_progress": "La classe ha fet el {percent} % del recorregut",
       "class_done_by_all": "Completades per tota la classe: {done} de {total}",
       "legend": {
         "title": "Llegenda",

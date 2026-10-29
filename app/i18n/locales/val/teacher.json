@@ -201,7 +201,7 @@
           },
           "path": {
             "title": "Camí del mapa",
-            "hint": "Un camí senzill en un pas. Per a triar què demana cada missió, obri-la i ves a Ajustos, Camí.",
+            "hint": "Un camí senzill en un pas. Per a triar què demana cada missió, obri-la i entra en Ajustos, Camí.",
             "chain": "Encadena en orde",
             "chain_summary": "Cada missió demanarà completar l’anterior per a obrir-se: {count} requisit. | Cada missió demanarà completar l’anterior per a obrir-se: {count} requisits.",
             "chain_replaces": "Substituïx el que hi ha ara. | Substituïx els {count} que hi ha ara.",

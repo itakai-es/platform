@@ -94,7 +94,7 @@
         "path_locked": "Esta misión aínda non está aberta: antes tes que completar outra."
       },
       "hints": {
-        "intro": "Atascácheste? Usa unha pista. Ábrense en orde, dunha en unha, e cada unha ten o seu custo.",
+        "intro": "Atrancácheste? Usa unha pista. Ábrense en orde, dunha en unha, e cada unha ten o seu custo.",
         "locked": "Ábrese despois da pista {position}.",
         "not_used": "Sen usar.",
         "use_button": "Usar a pista {position}",

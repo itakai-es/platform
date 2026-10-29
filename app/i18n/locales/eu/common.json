@@ -566,8 +566,8 @@
     "activity_feed": {
       "hint_used_student": "{mission} misioaren {position}. pista erabili duzu",
       "hint_used_teacher": "{mission} misioaren {position}. pista erabili du",
-      "hint_used_percent_student": "{mission} misioaren {position}. pista erabili duzu: −%{count} kobratzeko zenuenean",
-      "hint_used_percent_teacher": "{mission} misioaren {position}. pista erabili du: −%{count} kobratzeko zuenean",
+      "hint_used_percent_student": "{mission} misioaren {position}. pista erabili duzu: −%{count} kobratzeko geratzen zitzaizunetik",
+      "hint_used_percent_teacher": "{mission} misioaren {position}. pista erabili du: −%{count} kobratzeko geratzen zitzaionetik",
       "enigma_approved_student": "{enigma} entrega onartu dizute",
       "enigma_approved_teacher": "{enigma} entrega onartu diote",
       "mission_started_student": "{mission} misioa hasi duzu",
@@ -596,7 +596,7 @@
           "trait": "Boterea eta nagusitasuna"
         }
       },
-      "custom_name": "Zure avatarra AArekin",
+      "custom_name": "AArekin sortutako zure avatarra",
       "custom_trait": "AArekin sortua"
     },
     "view_modes": {
@@ -611,9 +611,9 @@
       "step": "{n}. misioa",
       "state": {
         "completed": "Osatua",
-        "in_progress": "Abian: % {progress}",
+        "in_progress": "Abian: %{progress}",
         "available": "Eskuragarri",
-        "urgent": "Urgentea: laster amaitzen da",
+        "urgent": "Urgentea: laster iraungiko da",
         "expired": "Iraungia",
         "locked": "Blokeatua: zure irakasleak itxita oraingoz",
         "locked_path": "Blokeatua: {missions} osatzean irekitzen da"
@@ -638,9 +638,9 @@
       "you_are_here": "Hemen zaude",
       "go_to_mine": "Joan nire misiora",
       "keys_hint": "Teklatuarekin, geziek misio batetik bestera eramaten dute; Hasiera eta Amaiera teklek lehenengora eta azkenera.",
-      "your_progress": "{total} misiotik {done} osatu dituzu | {total} misiotik {done} osatu dituzu",
+      "your_progress": "Osatutako misioak: {done}/{total} | Osatutako misioak: {done}/{total}",
       "all_done": "Mapa osatuta!",
-      "class_progress": "Klaseak ibilbidearen % {percent} egin du",
+      "class_progress": "Klaseak ibilbidearen %{percent} egin du",
       "class_done_by_all": "Klase osoak osatuak: {done}/{total}",
       "legend": {
         "title": "Legenda",
@@ -657,7 +657,7 @@
         "deadline": "Epemuga: {date}",
         "requires": "Irekitzeko, osatu lehenago:",
         "requires_teacher": "Irekitzeko, hau osatu behar da lehenago:",
-        "unlocks": "Osatzean, bidea irekitzen dio:",
+        "unlocks": "Osatzean, hauetarako bidea irekitzen du:",
         "start": "Hasi",
         "continue": "Jarraitu",
         "view": "Ikusi misioa",

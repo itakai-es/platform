@@ -193,15 +193,15 @@
           "order": {
             "button": "Ordenatu",
             "title": "Klaseko ordena",
-            "hint": "Ikasleek ordena honetan ikusten dituzte misioak. Arrastatu errenkada bakoitza bere heldulekutik edo, teklatuarekin, joan heldulekura eta erabili gora eta behera geziak. Aldaketa bakoitza berehala gordetzen da.",
-            "hint_path": "Misio bat ezin da eskatzen duenaren aurretik joan: mugitzeko, lehenago kendu eskatzen duena bere Ezarpenak › Bidea atalean, edo erabili «Kendu baldintzak».",
+            "hint": "Ikasleek ordena honetan ikusten dituzte misioak. Arrastatu errenkada bakoitza heldulekutik edo, teklatuarekin, joan heldulekura eta erabili gora eta behera geziak. Aldaketa bakoitza berehala gordetzen da.",
+            "hint_path": "Misio bat ezin da eskatzen duenaren aurretik joan: mugitzeko, lehenago kendu eskatzen duena misioaren Ezarpenak › Bidea atalean, edo erabili «Kendu baldintzak».",
             "done": "Eginda",
             "error": "Ezin izan da ordena gorde. Saiatu berriro.",
-            "breaks_path": "«{mission}» «{required}» osatzean irekitzen da: haren atzean joan behar du. Lehenago, kendu eskatzen duena bere Ezarpenak › Bidea atalean, edo erabili «Kendu baldintzak»."
+            "breaks_path": "«{mission}» «{required}» osatzean irekitzen da: haren ondoren joan behar du. Lehenago, kendu eskatzen duena misioaren Ezarpenak › Bidea atalean, edo erabili «Kendu baldintzak»."
           },
           "path": {
             "title": "Maparen bidea",
-            "hint": "Bide sinple bat urrats bakarrean. Misio bakoitzak zer eskatzen duen aukeratzeko, ireki eta joan Ezarpenak, Bidea atalera.",
+            "hint": "Bide sinple bat urrats bakarrean. Misio bakoitzak zer eskatzen duen aukeratzeko, ireki misioa eta joan Ezarpenak, Bidea atalera.",
             "chain": "Kateatu ordenan",
             "chain_summary": "Misio bakoitzak aurrekoa osatzea eskatuko du irekitzeko: baldintza {count}. | Misio bakoitzak aurrekoa osatzea eskatuko du irekitzeko: {count} baldintza.",
             "chain_replaces": "Orain dagoena ordezkatzen du. | Orain dauden {count} baldintzak ordezkatzen ditu.",
@@ -675,7 +675,7 @@
               "removed": "{target} klasetik kendu du",
               "removed_unused": "{target} klasetik kendu du eta erabili gabeko bere kontua ezabatu du",
               "avatar_generated": "avatar berri bat sortu du {target} ikaslearentzat",
-              "avatar_changed": "{target} ikaslearen avatarra katalogoko batengatik aldatu du"
+              "avatar_changed": "{target} ikaslearen avatarra katalogoko beste batekin ordezkatu du"
             },
             "mission": {
               "created": "«{title}» misioa sortu du",
@@ -704,7 +704,7 @@
             },
             "submission": {
               "approved": "{target} ikaslearen «{title}» entrega onartu du (%{percentage})",
-              "approved_hints": "{target} ikaslearen «{title}» entrega onartu du (%{percentage}; bere pistek %{penalty} kentzen zuten)"
+              "approved_hints": "{target} ikaslearen «{title}» entrega onartu du (%{percentage}; haren pistek %{penalty} kentzen zuten)"
             },
             "behavior": {
               "applied": "«{title}» aplikatu dio {target} ikasleari",
@@ -756,11 +756,11 @@
               "removed": "ikasle bat klasetik kendu du",
               "removed_unused": "inoiz sartu ez den ikasle bat klasetik kendu du eta bere kontua ezabatu du",
               "avatar_generated": "avatar berri bat sortu du klasean jada ez dagoen ikasle batentzat",
-              "avatar_changed": "klasean jada ez dagoen ikasle baten avatarra katalogoko batengatik aldatu du"
+              "avatar_changed": "klasean jada ez dagoen ikasle baten avatarra katalogoko beste batekin ordezkatu du"
             },
             "submission": {
               "approved": "klasean jada ez dagoen ikasle baten «{title}» entrega onartu du (%{percentage})",
-              "approved_hints": "Klasean jada ez dagoen norbaiten «{title}» entrega onartu du (%{percentage}; bere pistek %{penalty} kentzen zuten)"
+              "approved_hints": "klasean jada ez dagoen ikasle baten «{title}» entrega onartu du (%{percentage}; haren pistek %{penalty} kentzen zuten)"
             },
             "behavior": {
               "applied": "«{title}» aplikatu dio klasean jada ez dagoen ikasle bati"
@@ -888,9 +888,9 @@
           "path_legend": "Irekitzeko, lehenago osatu",
           "path_map_off": "Baldintzek mapa piztuta dagoenean bakarrik ixten dituzte misioak (Klasearen ezarpenak › Funtzionalitateak).",
           "path_empty": "Ez dago beste misiorik klasean.",
-          "path_cycle_note": "Itzalita daudenak dagoeneko misio honen menpe daude: eskatuko balitu, bat ere ez litzateke irekiko.",
+          "path_cycle_note": "Lausotuta ageri direnak dagoeneko misio honen menpe daude: eskatuko balitu, bat ere ez litzateke irekiko.",
           "path_limit": "Gehienez {max}. Beste bat aukeratzeko, kendu marka bati.",
-          "path_moved": "Gordeta. Misioa eskatzen duenaren atzera pasatu da klaseko ordenan.",
+          "path_moved": "Gordeta. Klaseko ordenan, misioa eskatzen duenaren ondoren jarri da.",
           "path_error_cycle": "Markatutako bat dagoeneko misio honen menpe dago: eskatuko balu, bat ere ez litzateke irekiko. Berrikusi bidea eta gorde berriro.",
           "path_error_invalid": "Markatutako bat ez dago jada klase honetan. Berrikusi bidea eta gorde berriro.",
           "path_load_error": "Ezin izan dira klaseko misioak kargatu.",
@@ -978,7 +978,7 @@
         "apply_error": "Ezin izan da proposamena aplikatu. Misioa ez da aldatu.",
         "apply_error_partial": "Proposamenaren zati bat bakarrik aplikatu da. Berrikusi konparazioa: gordetakoa erakusten du jada.",
         "after_import_hint": "Klase honetarako neurrira nahi duzu? AAk nola egokitu proposatzen dizu, eta zuk erabakitzen duzu aplikatu ala ez.",
-        "hints_note": "Pistarik ez | AAk ez du misioaren pista egokitzen: berrikusi proposamena aplikatu ondoren. | AAk ez ditu misioaren {count} pistak egokitzen: berrikusi proposamena aplikatu ondoren."
+        "hints_note": "Pistarik ez | AAk ez du misioaren pista egokitzen: berrikusi pista proposamena aplikatu ondoren. | AAk ez ditu misioaren {count} pistak egokitzen: berrikusi pistak proposamena aplikatu ondoren."
       }
     },
     "badges": {
@@ -1113,7 +1113,7 @@
         "remove_error": "Ezin izan da ikaslea klasetik kendu.",
         "avatar": "Avatarra aldatu",
         "avatar_title": "Klaseko avatarra",
-        "avatar_intro": "{name}(r)en avatarra klase honetan egokia ez bada, aldatu katalogoko pertsonaia batengatik. Klase honetan bakarrik aldatzen da, eta {name}(e)k beste bat aukera dezake bere Avatar fitxan.",
+        "avatar_intro": "{name}(r)en avatarra klase honetan egokia ez bada, ordezkatu katalogoko pertsonaia batekin. Klase honetan bakarrik aldatzen da, eta {name}(e)k beste bat aukera dezake bere Avatarra fitxan.",
         "avatar_now": "Orain honela ageri da",
         "avatar_choose": "Katalogoko pertsonaiak",
         "avatar_pick": "Aukeratu {name}(e)k klase honetan izango duen pertsonaia.",
@@ -1178,7 +1178,7 @@
         },
         "delete_modal_blocked": "Badaude zure kontuaren mende dauden klaseak.",
         "avatar_title": "Zure avatarra",
-        "avatar_description": "Horri esker ezagutzen zaituzte zure ikasleek eta gainerako irakasleek: zure izenaren ondoan agertzen da historian, klase bakoitzeko irakasleen artean, jardueran eta bertaratzean. Berdina da zure klase guztietan.",
+        "avatar_description": "Horri esker ezagutzen zaituzte zure ikasleek eta gainerako irakasleek: zure izenaren ondoan agertzen da historian, klase bakoitzeko irakasleen artean, jardueran eta asistentzian. Berdina da zure klase guztietan.",
         "avatar_preview": "Honela ikusten zaituzte zure klaseetan",
         "avatar_auto": "Automatikoa",
         "avatar_updated": "Avatarra eguneratu da",
@@ -1390,14 +1390,14 @@
         "approve_team": "Taldea onartu ({count}) % {pct}-ekin",
         "team_approved": "{team}: {count} entrega onartuta % {pct}-ekin | {team}: {count} entrega onartuta % {pct}-ekin",
         "team_note": "Talde-misioa («{set}»): entrega bat berrikustean, ehuneko berarekin onar dezakezu entregatu duen talde osoa.",
-        "hint_penalty": "−%{count} bere pistengatik",
-        "penalty_changed": "{name}-(r)en entrega onartu da (+{xp} XP). Bere pistek %{count} kentzen dute orain, ez leihoa irekitzean ikusten zena.",
+        "hint_penalty": "−%{count} haren pistengatik",
+        "penalty_changed": "{name}(r)en entrega onartu da (+{xp} XP). Haren pistek %{count} kentzen dute orain, ez leihoa irekitzean ikusten zena.",
         "team_hints_note": "Talde honetako norbaitek ehuneko-pistak erabili ditu: bakoitzari bere deskontua aplikatzen zaio; beraz, taldekide guztiek ez dute gauza bera jasoko.",
         "team_penalty_changed": "Taldeko norbaitek beste ehuneko-pista bat erabili du berrikusten ari zinen bitartean: bakoitzari bere pistek orain kentzen dutena deskontatu zaio."
       },
       "mission_hints": {
         "add": "Gehitu",
-        "intro": "Ikasleek ordena honetan erabiltzen dituzte, banan-banan, eta erabiltzean ordaintzen dute haien kostua. Zenbat dauden eta zenbat balio duten ikusten dute; testua, erabili dituztenena bakarrik.",
+        "intro": "Ikasleek ordena honetan erabiltzen dituzte, banan-banan, eta erabiltzean ordaintzen dute haien kostua. Zenbat dauden eta zenbat balio duten ikusten dute, baina erabili dituztenen testua bakarrik irakur dezakete.",
         "empty_title": "Misio honek ez du pistarik oraindik",
         "empty_description": "Gehitu orokorretik zehatzera doazen pistak. Bakoitzak {coins}, XP edo sariaren ehuneko bat balio dezake.",
         "empty_description_readonly": "Gehitzen badira, ikasleek hemen ikusiko dituzte eta ordenan erabiliko dituzte.",

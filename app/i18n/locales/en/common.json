@@ -597,7 +597,7 @@
         }
       },
       "custom_name": "Your AI avatar",
-      "custom_trait": "AI generated"
+      "custom_trait": "AI-generated"
     },
     "view_modes": {
       "grid": "Grid",
@@ -644,11 +644,11 @@
       "class_done_by_all": "Completed by the whole class: {done} of {total}",
       "legend": {
         "title": "Legend",
-        "hint": "Press a status to highlight its missions on the map."
+        "hint": "Select a status to highlight its missions on the map."
       },
       "detail": {
         "label": "Mission details",
-        "empty": "Press a mission on the map to see its details here.",
+        "empty": "Select a mission on the map to see its details here.",
         "your_progress": "Your progress",
         "enigmas_done": "{done} of {total} enigma | {done} of {total} enigmas",
         "completed_list": "Who has completed it",

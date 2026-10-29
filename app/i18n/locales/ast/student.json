@@ -100,10 +100,10 @@
         "use_button": "Usar la pista {position}",
         "summary_coins": "Cuesta {count} {coins}. Tienes {balance}.",
         "summary_xp": "Cuesta {count} XP. Tienes {balance}. Pagar con XP pue baxate de nivel.",
-        "summary_percent": "Resta un {count} % a lo qu'esta misión entá te tien que dar: los enigmes ensin aprobar (tamién los que tán en revisión) y el bonus de la misión. Lo que yá cobresti nun camuda.",
+        "summary_percent": "Resta un {count} % a lo qu'esta misión entá te tien de dar: los enigmes ensin aprobar (tamién los que tán en revisión) y el bonus de la misión. Lo que yá cobresti nun camuda.",
         "summary_free": "Ye de baldre.",
-        "short_coins": "Fálten-te {count} {coins}.",
-        "short_xp": "Fálten-te {count} XP.",
+        "short_coins": "Fáltente {count} {coins}.",
+        "short_xp": "Fáltente {count} XP.",
         "used": "Usada",
         "penalty_note": "Les tos pistes resten un {count} % a lo que te queda por cobrar nesta misión.",
         "closed_completed": "Completesti la misión: yá nun fai falta usar más pistes.",
@@ -115,7 +115,7 @@
       },
       "path_locked": {
         "title": "Entá nun pues entamar esta misión",
-        "description": "Ábrese al completar {missions}. Entós vas ver la so historia, los sos enigmes y los sos documentos.",
+        "description": "Ábrese al completar {missions}. Entós vas ver la so hestoria, los sos enigmes y los sos documentos.",
         "go_to": "Dir a «{title}»",
         "back": "Volver a les misiones"
       }

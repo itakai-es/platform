@@ -689,7 +689,7 @@
               "reordered": "changed the order of the missions",
               "prerequisites_changed": "changed what has to be completed to open the mission “{title}”",
               "chained": "chained the missions in order: each one requires the previous one",
-              "prerequisites_cleared": "removed the requirements of the missions path"
+              "prerequisites_cleared": "removed the requirements from the mission path"
             },
             "enigma": {
               "created": "added the enigma “{title}”",
@@ -743,9 +743,9 @@
             },
             "hint": {
               "created": "added hint {position} to the mission “{title}”",
-              "updated": "edited hint {position} of the mission “{title}”",
-              "deleted": "deleted hint {position} of the mission “{title}”",
-              "reordered": "changed the order of the hints of the mission “{title}”"
+              "updated": "edited hint {position} in the mission “{title}”",
+              "deleted": "deleted hint {position} from the mission “{title}”",
+              "reordered": "changed the order of the hints in the mission “{title}”"
             }
           },
           "anonymous": {
@@ -890,7 +890,7 @@
           "path_empty": "There are no other missions in the class.",
           "path_cycle_note": "The greyed-out ones already depend on this mission: if it required them, none of them would ever open.",
           "path_limit": "{max} at most. To choose another, untick one.",
-          "path_moved": "Saved. The mission has moved behind what it requires in the class order.",
+          "path_moved": "Saved. In the class order, the mission has moved after the ones it requires.",
           "path_error_cycle": "One of the ticked missions already depends on this one: if it required it, neither would ever open. Check the path and save again.",
           "path_error_invalid": "One of the ticked missions is no longer in this class. Check the path and save again.",
           "path_load_error": "The class missions could not be loaded.",
@@ -1397,7 +1397,7 @@
       },
       "mission_hints": {
         "add": "Add",
-        "intro": "Students use them in this order, one at a time, and pay their cost when they use them. They see how many there are and what they cost; the text, only of the ones they have used.",
+        "intro": "Students use them in this order, one at a time, and pay their cost when they use them. They can see how many there are and what each one costs, but can only read the ones they have used.",
         "empty_title": "This mission has no hints yet",
         "empty_description": "Add hints that go from general to specific. Each one can cost {coins}, XP or a % of the reward.",
         "empty_description_readonly": "If any are added, students will see them here and use them in order.",
@@ -1419,7 +1419,7 @@
           "add_title": "New hint",
           "edit_title": "Hint {position}",
           "content": "Hint text",
-          "content_hint": "What whoever uses it reads. Up to {max} characters.",
+          "content_hint": "The text shown to whoever uses it. Up to {max} characters.",
           "content_placeholder": "E.g.: Look at the dates in the support document.",
           "content_required": "Write the text of the hint.",
           "cost_type": "How it's paid",

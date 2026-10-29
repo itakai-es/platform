@@ -100,12 +100,12 @@
         "use_button": "Utilitzar la pista {position}",
         "summary_coins": "Costa {count} {coins}. Tens {balance}.",
         "summary_xp": "Costa {count} XP. Tens {balance}. Pagar amb XP et pot fer baixar de nivell.",
-        "summary_percent": "Resta un {count} % al que esta missió encara t'ha de donar: els enigmes sense aprovar (també els que estan en revisió) i el bonus de la missió. El que ja has cobrat no canvia.",
+        "summary_percent": "Resta un {count} % del que esta missió encara t'ha de donar: els enigmes sense aprovar (també els que estan en revisió) i el bonus de la missió. El que ja has cobrat no canvia.",
         "summary_free": "És gratis.",
         "short_coins": "Et falten {count} {coins}.",
         "short_xp": "Et falten {count} XP.",
         "used": "Utilitzada",
-        "penalty_note": "Les teues pistes resten un {count} % al que et queda per cobrar en esta missió.",
+        "penalty_note": "Les teues pistes resten un {count} % del que et queda per cobrar en esta missió.",
         "closed_completed": "Has completat la missió: ja no cal utilitzar més pistes.",
         "closed_expired": "La missió ha caducat: ja no se'n poden utilitzar les pistes.",
         "preview_note": "Vista prèvia: veus totes les pistes obertes. L'alumnat les obri d'una en una, en este orde, pagant-ne el cost.",
@@ -116,8 +116,8 @@
       "path_locked": {
         "title": "Encara no pots començar esta missió",
         "description": "S’obri en completar {missions}. Aleshores en voràs la història, els enigmes i els documents.",
-        "go_to": "Ves a «{title}»",
-        "back": "Torna a les missions"
+        "go_to": "Anar a «{title}»",
+        "back": "Tornar a les missions"
       }
     },
     "classes": {

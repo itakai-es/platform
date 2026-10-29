@@ -193,10 +193,10 @@
           "order": {
             "button": "Ordenar",
             "title": "Orde de la clase",
-            "hint": "L'alumnáu ve les misiones nesti orde. Arrastra cada filera pela so asa o, col tecláu, ponte na asa y usa les flechas arriba y abaxo. Cada cambéu guárdase al momentu.",
+            "hint": "L'alumnáu ve les misiones nesti orde. Arrastra cada fila pela so asa o, col tecláu, ponte na asa y usa les flechas arriba y abaxo. Cada cambéu guárdase al momentu.",
             "hint_path": "Una misión nun pue dir delantre de lo que pide: pa movela, quita enantes lo que pide nos sos Axustes › Camín, o usa «Quitar los requisitos».",
             "done": "Fecho",
-            "error": "Nun se pudo guardar l'orde. Téntalo de nuevo.",
+            "error": "Nun se pudo guardar l'orde. Inténtalo de nuevo.",
             "breaks_path": "«{mission}» ábrese al completar «{required}»: tien de dir detrás. Quita enantes lo que pide nos sos Axustes › Camín, o usa «Quitar los requisitos»."
           },
           "path": {
@@ -211,7 +211,7 @@
             "clear": "Quitar los requisitos",
             "clear_summary": "Quita’l requisitu que hai: toles misiones s’abren dende’l principiu. | Quita los {count} requisitos que hai: toles misiones s’abren dende’l principiu.",
             "clear_done": "Requisitos quitaos",
-            "error": "Nun se pudo camudar el camín. Inténtalo de nueves."
+            "error": "Nun se pudo camudar el camín. Inténtalo de nuevo."
           }
         },
         "meta": {
@@ -1113,7 +1113,7 @@
         "remove_error": "Nun se pudo quitar de la clase.",
         "avatar": "Camudar l'avatar",
         "avatar_title": "Avatar na clase",
-        "avatar_intro": "Si l'avatar de {name} nesta clase nun ye afayadizu, cámbialu por un personaxe del catálogu. Namás camuda nesta clase, y {name} pue escoyer otru dende la so llingüeta Avatar.",
+        "avatar_intro": "Si l'avatar de {name} nesta clase nun ye afayadizu, camúdalu por un personaxe del catálogu. Namás camuda nesta clase, y {name} pue escoyer otru dende la so llingüeta Avatar.",
         "avatar_now": "Agora sal asina",
         "avatar_choose": "Personaxes del catálogu",
         "avatar_pick": "Escueyi'l personaxe que llevará {name} nesta clase.",
@@ -1392,8 +1392,8 @@
         "team_note": "Misión per equipos («{set}»): al revisar una entrega pues aprobar col mesmu porcentaxe a tol so equipu que la entregare.",
         "hint_penalty": "−{count} % poles sos pistes",
         "penalty_changed": "Entrega de {name} aprobada (+{xp} XP). Les sos pistes resten agora un {count} %, non lo que se vía al abrir la ventana.",
-        "team_hints_note": "Daquién d'esti equipu usó pistes de %: a cada quien aplícase-y el so propiu descuentu, asina que nun tol equipu va recibir lo mesmo.",
-        "team_penalty_changed": "Daquién del equipu usó otra pista de % mentanto revisabes: a cada quien descontóse-y lo que resten agora les sos pistes."
+        "team_hints_note": "Daquién d'esti equipu usó pistes de %: a cada quien aplícase-y el so propiu descuentu, asina que non tol equipu va recibir lo mesmo.",
+        "team_penalty_changed": "Daquién del equipu usó otra pista de % mientres revisabes: a cada quien descontóse-y lo que resten agora les sos pistes."
       },
       "mission_hints": {
         "add": "Amestar",
@@ -1429,13 +1429,13 @@
           "amount_xp": "Preciu en XP",
           "amount_percent": "Porcentaxe que resta",
           "amount_hint": "Cualquier númberu enteru. Los atayos son namás suxerencies.",
-          "amount_percent_hint": "Réstase de lo que la misión entá tien que pagar a quien la use, enxamás de lo yá cobrao. Delles pistes de % súmense, hasta'l 100 %.",
+          "amount_percent_hint": "Réstase de lo que la misión entá tien de pagar a quien la use, enxamás de lo yá cobrao. Delles pistes de % súmense, hasta'l 100 %.",
           "presets": "Atayos",
           "used_note": "Ensin usar | Usóla 1 estudiante, asina que nun se pue desaniciar. Lo que pagó nun camuda: el costu nuevu val pa quien la use d'equí p'alantre. | Usáronla {count} estudiantes, asina que nun se pue desaniciar. Lo que pagaron nun camuda: el costu nuevu val pa quien la use d'equí p'alantre.",
           "summary_free": "Quien la use va abrila de baldre.",
           "summary_coins": "Quien la use va pagar {count} {coins} al abrila.",
           "summary_xp": "Quien la use va pagar {count} XP al abrila (pue baxar de nivel).",
-          "summary_percent": "Quien la use va cobrar un {count} % menos de lo que la misión entá-y tenga que pagar.",
+          "summary_percent": "Quien la use va cobrar un {count} % menos de lo que la misión entá-y tenga de pagar.",
           "delete": "Desaniciar la pista",
           "delete_summary": "Si la desanicies, desaníciase nel momentu: naide la usó entá.",
           "add_button": "Amestar la pista"
