@@ -636,7 +636,9 @@
       "goal": "Helmuga",
       "you_are_here": "Hemen zaude",
       "go_to_mine": "Joan nire misiora",
+      "keys_hint": "Teklatuarekin, geziek misio batetik bestera eramaten dute; Hasiera eta Amaiera teklek lehenengora eta azkenera.",
       "your_progress": "{total} misiotik {done} osatu dituzu | {total} misiotik {done} osatu dituzu",
+      "all_done": "Mapa osatuta!",
       "class_progress": "Klaseak ibilbidearen % {percent} egin du",
       "class_done_by_all": "Klase osoak osatuak: {done}/{total}",
       "legend": {

@@ -110,7 +110,10 @@ interface Props {
   fitContent?: boolean
   /**
    * En el móvil (por debajo de `sm`) sale de abajo, pegada al borde y a todo
-   * lo ancho, como una hoja inferior; desde `sm`, centrada como siempre.
+   * lo ancho, como una hoja inferior; desde `sm`, centrada como siempre. Su
+   * tope es el alto que se ve de verdad (`dvh`, sin las barras del
+   * navegador) y deja libre la zona del gesto de inicio, para que el pie
+   * (p. ej. el botón principal) se vea siempre.
    */
   sheet?: boolean
 }
@@ -227,14 +230,20 @@ const modalClasses = computed(() => {
 
   // Con stickyChrome forzamos altura fija ~92vh para que la ventana no "salte"
   // según el contenido — siempre ocupa el mismo espacio en pantalla. Con
-  // fitContent, ese alto es solo el tope.
-  const layout = props.stickyChrome
+  // fitContent, ese alto es solo el tope. La hoja inferior cuenta con el alto
+  // visible (`dvh`).
+  const height = props.sheet
     ? props.fitContent
-      ? 'flex flex-col max-h-[92vh]'
-      : 'flex flex-col h-[92vh] max-h-[92vh]'
-    : ''
+      ? 'max-h-[92dvh]'
+      : 'h-[92dvh] max-h-[92dvh]'
+    : props.fitContent
+      ? 'max-h-[92vh]'
+      : 'h-[92vh] max-h-[92vh]'
+  const layout = props.stickyChrome ? `flex flex-col ${height}` : ''
 
-  const shape = props.sheet ? 'modal-sheet rounded-t-2xl sm:rounded-2xl' : 'rounded-2xl'
+  const shape = props.sheet
+    ? 'modal-sheet rounded-t-2xl sm:rounded-2xl pb-[env(safe-area-inset-bottom)]'
+    : 'rounded-2xl'
 
   return `relative w-full ${sizes[props.size]} ${themes[props.theme]} ${shape} shadow-xl transition-all overflow-hidden focus:outline-none ${layout}`
 })
@@ -253,7 +262,8 @@ const titleClasses = computed(() => {
     light: 'text-navy-700',
     dark: 'text-text-primary',
   }
-  return `text-xl font-bold ${themes[props.theme]}`
+  // Un título largo sin espacios se parte en vez de empujar la X fuera.
+  return `min-w-0 text-xl font-bold [overflow-wrap:anywhere] ${themes[props.theme]}`
 })
 
 const closeButtonClasses = computed(() => {
@@ -261,7 +271,7 @@ const closeButtonClasses = computed(() => {
     light: 'p-2 hover:bg-gray-100 rounded-lg transition-colors text-gray-500',
     dark: 'text-text-secondary hover:text-text-primary transition-colors',
   }
-  return themes[props.theme]
+  return `flex-shrink-0 ${themes[props.theme]}`
 })
 
 const bodyClasses = computed(() => {
@@ -341,10 +351,12 @@ onUnmounted(unlockScroll)
   opacity: 0;
 }
 
-/* La hoja inferior sube desde el borde (solo en el móvil y con animaciones). */
+/* La hoja inferior sube desde el borde (solo en el móvil y con animaciones),
+   en lo mismo que dura la transición: si durase más, se cortaría al quitarse
+   `modal-enter-active`. */
 @media (max-width: 639px) and (prefers-reduced-motion: no-preference) {
   .modal-enter-active .modal-sheet {
-    animation: modal-sheet-up 0.25s ease-out;
+    animation: modal-sheet-up 0.2s ease-out;
   }
 }
 

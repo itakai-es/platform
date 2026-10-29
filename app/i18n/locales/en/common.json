@@ -636,7 +636,9 @@
       "goal": "Finish",
       "you_are_here": "You are here",
       "go_to_mine": "Go to my mission",
+      "keys_hint": "With the keyboard, the arrow keys move from one mission to another; Home and End go to the first and the last.",
       "your_progress": "You have completed {done} of {total} mission | You have completed {done} of {total} missions",
+      "all_done": "Map completed!",
       "class_progress": "The class has covered {percent}% of the path",
       "class_done_by_all": "Completed by the whole class: {done} of {total}",
       "legend": {

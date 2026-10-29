@@ -31,7 +31,7 @@
         v-if="!hideTitle"
         :id="titleId"
         tabindex="-1"
-        class="text-xl font-bold leading-tight focus:outline-none"
+        class="text-xl font-bold leading-tight [overflow-wrap:anywhere] focus:outline-none"
       >
         {{ item.title }}
       </h3>
@@ -102,20 +102,12 @@
     <!-- Cerrada por su docente: el motivo, sin botón. -->
     <InfoNote v-if="item.lockedNote">{{ item.lockedNote }}</InfoNote>
 
-    <Button
-      v-if="item.href && item.actionLabel"
-      :to="item.href"
-      variant="primary"
-      full-width
-      :icon-right="ArrowRightIcon"
-    >
-      {{ item.actionLabel }}
-    </Button>
+    <MissionMapDetailAction v-if="!hideAction" :item="item" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ArrowRightIcon, CalendarDaysIcon, UsersIcon } from '@heroicons/vue/24/outline'
+import { CalendarDaysIcon, UsersIcon } from '@heroicons/vue/24/outline'
 import { RocketLaunchIcon } from '@heroicons/vue/24/solid'
 import type { MissionMapItem } from '~/utils/mission-map'
 
@@ -126,13 +118,16 @@ import type { MissionMapItem } from '~/utils/mission-map'
  * tiene botón: en su lugar va el motivo (su docente o lo que falta completar).
  *
  * Lo usa MissionMap.vue dentro del panel de al lado y de la hoja inferior del
- * móvil; en la hoja el título va en la cabecera de la ventana (`hideTitle`).
+ * móvil; en la hoja el título va en la cabecera de la ventana (`hideTitle`) y
+ * el botón, en su pie (`hideAction`), para que se vea siempre.
  */
 const props = defineProps<{
   item: MissionMapItem
   mode: 'student' | 'teacher'
   /** El título ya está fuera (la cabecera de la ventana). */
   hideTitle?: boolean
+  /** El botón para entrar ya está fuera (el pie de la ventana). */
+  hideAction?: boolean
   /** Id del título, para nombrar el panel. */
   titleId?: string
 }>()

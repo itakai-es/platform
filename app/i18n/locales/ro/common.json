@@ -636,7 +636,9 @@
       "goal": "Sosire",
       "you_are_here": "Ești aici",
       "go_to_mine": "Mergi la misiunea mea",
+      "keys_hint": "Cu tastatura, săgețile trec de la o misiune la alta; Home și End duc la prima și la ultima.",
       "your_progress": "Ai finalizat {done} din {total} misiune | Ai finalizat {done} din {total} misiuni",
+      "all_done": "Hartă finalizată!",
       "class_progress": "Clasa a parcurs {percent} % din traseu",
       "class_done_by_all": "Finalizate de toată clasa: {done} din {total}",
       "legend": {

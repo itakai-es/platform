@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-bg-primary w-full overflow-x-hidden">
+  <div class="min-h-screen bg-bg-primary w-full overflow-x-clip">
     <!-- Mobile Header (visible only on mobile/tablet) -->
     <MobileHeader
       title="ITAKAI"
@@ -39,8 +39,12 @@
     <div class="flex-1 flex flex-col lg:ml-80 pt-14 lg:pt-0">
       <!-- Aviso "Ver como alumno" (solo en preview del profesor) -->
       <StudentPreviewBanner />
-      <!-- Page Content -->
-      <main class="flex-1 overflow-y-auto overflow-x-hidden p-4 md:p-6">
+      <!-- Page Content. `overflow-x-clip` (no `hidden`), aquí y en el
+           contenedor de todo: recorta lo que se salga de lado sin hacer de
+           ellos un contenedor de scroll, para que lo pegado (`sticky`, p. ej.
+           el panel del mapa de misiones) siga a la ventana. Como en el
+           layout del profesorado. -->
+      <main class="flex-1 overflow-x-clip p-4 md:p-6">
         <slot />
       </main>
     </div>

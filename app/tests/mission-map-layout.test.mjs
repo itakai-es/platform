@@ -23,10 +23,10 @@ test('sin requisitos, el camino es el orden de la clase: una capa por misión y 
   assert.equal(layout.branched, false)
   assert.deepEqual(layout.layers, [['a'], ['b'], ['c']])
   assert.deepEqual(
-    layout.edges.map(e => [e.from, e.to, e.kind]),
+    layout.edges.map(e => [e.key, e.from, e.to]),
     [
-      ['a', 'b', 'order'],
-      ['b', 'c', 'order'],
+      ['a>b', 'a', 'b'],
+      ['b>c', 'b', 'c'],
     ]
   )
 })
@@ -44,15 +44,16 @@ test('con requisitos: capa = camino más largo; dentro, el orden de la clase; un
   const layout = layoutMissionMap(missions, 'teacher')
   assert.equal(layout.branched, true)
   assert.deepEqual(layout.layers, [['m1', 'm6'], ['m2'], ['m3', 'm4'], ['m5']])
+  // El recorrido, capa a capa y, dentro, en el orden de la clase.
   assert.deepEqual(
-    layout.nodes.map(n => [n.id, n.layer, n.slot, n.step]),
+    layout.nodes.map(n => [n.id, n.step]),
     [
-      ['m1', 0, 0, 1],
-      ['m6', 0, 1, 2],
-      ['m2', 1, 0, 3],
-      ['m3', 2, 0, 4],
-      ['m4', 2, 1, 5],
-      ['m5', 3, 0, 6],
+      ['m1', 1],
+      ['m6', 2],
+      ['m2', 3],
+      ['m3', 4],
+      ['m4', 5],
+      ['m5', 6],
     ]
   )
   assert.deepEqual(
@@ -68,7 +69,7 @@ test('con requisitos: capa = camino más largo; dentro, el orden de la clase; un
   assert.equal(m5.lockReason, null)
 })
 
-test('al alumnado: cerrada por el camino con lo que le falta, o por su docente; las líneas hechas', () => {
+test('al alumnado: cerrada por el camino con lo que le falta, o por su docente', () => {
   const missions = [
     m('a', [], { status: 'completada', progress: 100 }),
     m('b', ['a'], { progress: 0 }),
@@ -91,11 +92,8 @@ test('al alumnado: cerrada por el camino con lo que le falta, o por su docente; 
   assert.equal(byId.d.lockReason, 'teacher')
   assert.deepEqual(byId.d.opensAfter, [])
   assert.deepEqual(
-    layout.edges.map(e => [e.key, e.done]),
-    [
-      ['a>b', true],
-      ['b>c', false],
-    ]
+    layout.edges.map(e => e.key),
+    ['a>b', 'b>c']
   )
 })
 

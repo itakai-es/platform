@@ -636,7 +636,9 @@
       "goal": "Meta",
       "you_are_here": "Ets aquí",
       "go_to_mine": "Ves a la meva missió",
+      "keys_hint": "Amb el teclat, les fletxes passen d'una missió a una altra; Inici i Fi porten a la primera i a l'última.",
       "your_progress": "Has completat {done} de {total} missió | Has completat {done} de {total} missions",
+      "all_done": "Mapa completat!",
       "class_progress": "La classe porta el {percent} % del recorregut",
       "class_done_by_all": "Completades per tota la classe: {done} de {total}",
       "legend": {

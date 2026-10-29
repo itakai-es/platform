@@ -636,7 +636,9 @@
       "goal": "Meta",
       "you_are_here": "Tas equí",
       "go_to_mine": "Dir a la mio misión",
+      "keys_hint": "Col tecláu, les flechas pasen d'una misión a otra; Aniciu y Fin lleven a la primera y a la última.",
       "your_progress": "Completesti {done} de {total} misión | Completesti {done} de {total} misiones",
+      "all_done": "¡Mapa completáu!",
       "class_progress": "La clase lleva el {percent} % del percorríu",
       "class_done_by_all": "Completaes por tola clase: {done} de {total}",
       "legend": {

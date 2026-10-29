@@ -1,11 +1,13 @@
 <template>
   <!-- Mapa de misiones (en pruebas): la clase entera como un tablero de
        aventura. Los medallones son una lista ordenada de botones en el orden
-       del recorrido (el del tabulador y el de las flechas); al pulsar uno se
-       abre su detalle: un panel al lado en pantallas anchas y una hoja
-       inferior en el móvil. La carretera, la salida, la meta y el fondo son
-       solo dibujo y van ocultos al lector de pantalla: el estado de cada
-       misión y lo que la abre van siempre en texto. -->
+       del recorrido, con una sola parada del tabulador (la misión elegida, la
+       actual o la última que se miró) y las flechas, Inicio y Fin para pasar
+       de una a otra; al pulsar una se abre su detalle: un panel al lado en
+       pantallas anchas y una hoja inferior en el móvil. La carretera, la
+       salida, la meta y el fondo son solo dibujo y van ocultos al lector de
+       pantalla: el estado de cada misión y lo que la abre van siempre en
+       texto. -->
   <section
     data-mission-map
     class="rounded-2xl bg-white p-4 shadow-lg sm:p-6"
@@ -28,21 +30,27 @@
         v-if="mode === 'student'"
         class="flex w-full flex-wrap items-end gap-x-4 gap-y-3 sm:w-auto"
       >
-        <div class="min-w-[14rem] flex-1">
-          <p class="mb-1.5 text-sm font-semibold text-navy-700">
-            {{
-              t(
-                'common.mission_map.your_progress',
-                { done: progress.done, total: progress.total },
-                progress.total
-              )
-            }}
-          </p>
+        <!-- Todo completado: la copa en vez de la barra al 100 %. -->
+        <div v-if="finished" class="flex min-w-[14rem] flex-1 items-center gap-3">
+          <span
+            class="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-badge-legendaria text-white shadow-md"
+          >
+            <TrophyIcon class="h-6 w-6" aria-hidden="true" />
+          </span>
+          <div class="min-w-0">
+            <p class="text-base font-bold text-navy-700">
+              {{ t('common.mission_map.all_done') }}
+            </p>
+            <p class="text-sm text-navy-700/80">{{ progressText }}</p>
+          </div>
+        </div>
+        <div v-else class="min-w-[14rem] flex-1">
+          <p class="mb-1.5 text-sm font-semibold text-navy-700">{{ progressText }}</p>
           <ProgressBar :percentage="progress.percent" :label="`${progress.percent} %`" />
         </div>
         <Button
           v-if="currentId"
-          variant="secondary"
+          variant="secondary-lilac"
           size="sm"
           :icon-left="MapPinIcon"
           @click="goToCurrent()"
@@ -72,15 +80,17 @@
     </header>
 
     <div ref="rootRef" class="flex items-start gap-5">
-      <!-- El tablero -->
+      <!-- El tablero. `isolate`: sus capas (el velo y lo que va por encima)
+           se quedan dentro y no tapan menús ni cabeceras de la página. -->
       <div
         ref="boardRef"
-        class="relative min-w-0 flex-1 overflow-hidden rounded-2xl bg-navy-base"
+        class="relative isolate min-w-0 flex-1 overflow-hidden rounded-2xl bg-navy-base"
         :class="entering ? 'map-enter' : ''"
         :style="{ height: `${geo.height}px`, '--map-draw': `${drawSeconds}s` }"
       >
         <!-- Fondo: islas de color y estrellitas. -->
         <svg
+          v-memo="[islands, sparkles]"
           class="pointer-events-none absolute inset-0 h-full w-full"
           aria-hidden="true"
           focusable="false"
@@ -113,53 +123,11 @@
           />
         </svg>
 
-        <!-- La carretera. Se pinta por pasadas (todos los bordes, luego todo el
-             firme y al final la raya del centro) para que las ramas se fundan
-             en los cruces en vez de pisarse. -->
-        <svg
-          class="map-roads pointer-events-none absolute inset-0 h-full w-full"
-          aria-hidden="true"
-          focusable="false"
-        >
-          <g fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <path
-              v-for="road in roads"
-              :key="`b-${road.key}`"
-              :d="road.d"
-              :stroke-width="road.lit ? stroke.border + 6 : stroke.border"
-              class="motion-safe:transition-opacity"
-              :class="[
-                road.lit ? 'stroke-purple' : 'stroke-white/15',
-                road.dim ? 'opacity-40' : '',
-              ]"
-            />
-            <path
-              v-for="road in roads"
-              :key="`r-${road.key}`"
-              :d="road.d"
-              :stroke-width="stroke.road"
-              class="motion-safe:transition-opacity"
-              :class="[
-                road.done ? 'map-glow stroke-green' : 'stroke-navy-base-light',
-                road.dim ? 'opacity-40' : '',
-              ]"
-            />
-            <path
-              v-for="road in roads"
-              :key="`d-${road.key}`"
-              :d="road.d"
-              :stroke-width="stroke.dash"
-              :stroke-dasharray="stroke.dashes"
-              class="motion-safe:transition-opacity"
-              :class="[
-                road.done ? 'stroke-navy-base/50' : 'stroke-white/40',
-                road.dim ? 'opacity-40' : '',
-              ]"
-            />
-          </g>
-        </svg>
+        <MissionMapRoads :roads="geo.roads" :board="board" :lit="litRoads" />
 
-        <!-- Salida y meta (solo dibujo). -->
+        <!-- Salida y meta (solo dibujo). La etiqueta de la salida va a su
+             lado, para que no la tape «Estás aquí» si la misión actual es de
+             la primera fila. -->
         <div
           class="map-pop pointer-events-none absolute"
           :style="{ left: `${geo.start.x}px`, top: `${geo.start.y}px` }"
@@ -171,7 +139,9 @@
           >
             <FlagIcon :class="board ? 'h-6 w-6' : 'h-5 w-5'" />
           </span>
-          <span :class="markerChip">{{ t('common.mission_map.start') }}</span>
+          <span :class="[markerChip, board ? 'left-8' : 'left-7', 'top-0 -translate-y-1/2']">
+            {{ t('common.mission_map.start') }}
+          </span>
         </div>
         <div
           class="map-pop pointer-events-none absolute"
@@ -182,25 +152,71 @@
           }"
           aria-hidden="true"
         >
+          <!-- Mapa completado: la meta brilla, con un halo grande que late y
+               un aro que se abre (con animaciones; si no, solo el halo). -->
           <span
             v-if="finished"
-            class="absolute h-20 w-20 -translate-x-1/2 -translate-y-1/2 rounded-full bg-green/50 blur-lg"
-          />
+            class="absolute -translate-x-1/2 -translate-y-1/2"
+            :class="board ? 'h-52 w-52' : 'h-32 w-32'"
+          >
+            <span
+              class="absolute inset-0 rounded-full bg-green/50 blur-2xl"
+              :class="pulsing ? 'map-goal-glow' : ''"
+            />
+            <span class="absolute inset-[28%] rounded-full bg-green/80 blur-lg" />
+            <span
+              v-if="pulsing"
+              class="map-goal-ring absolute inset-[28%] rounded-full border-4 border-green"
+            />
+          </span>
           <span
-            class="absolute flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-badge-legendaria text-white shadow-lg ring-4 ring-white"
-            :class="board ? 'h-14 w-14' : 'h-11 w-11'"
+            class="absolute flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-badge-legendaria text-white shadow-lg ring-4"
+            :class="[board ? 'h-14 w-14' : 'h-11 w-11', finished ? 'ring-green' : 'ring-white']"
           >
             <TrophyIcon :class="board ? 'h-7 w-7' : 'h-6 w-6'" />
           </span>
-          <span :class="markerChip">{{ t('common.mission_map.goal') }}</span>
+          <span
+            :class="[
+              markerChip,
+              board ? 'left-0 top-9 -translate-x-1/2' : 'left-7 top-0 -translate-y-1/2',
+            ]"
+          >
+            {{ t('common.mission_map.goal') }}
+          </span>
         </div>
 
-        <!-- Las misiones, en el orden del recorrido. -->
+        <!-- Al resaltar (pasar por una misión o pulsar la leyenda), un velo
+             atenúa el tablero; lo resaltado (sus medallones y sus tramos) va
+             por encima, y las etiquetas siempre, para que se lean igual de
+             bien. Es un solo elemento: así, pasar el ratón no vuelve a pintar
+             las cuarenta misiones. -->
+        <div
+          class="pointer-events-none absolute inset-0 z-10 bg-navy-base/50 motion-safe:transition-opacity motion-safe:duration-200"
+          :class="highlighting ? 'opacity-100' : 'opacity-0'"
+          aria-hidden="true"
+        />
+
+        <!-- Las misiones, en el orden del recorrido. Cada una se vuelve a
+             pintar solo si cambia lo suyo (`v-memo`). -->
+        <p :id="keysId" class="sr-only">{{ t('common.mission_map.keys_hint') }}</p>
         <ol class="absolute inset-0">
           <li
             v-for="(item, index) in items"
             :key="item.id"
+            v-memo="[
+              item,
+              geo,
+              drawSeconds,
+              roleOf(item),
+              item.id === selected,
+              item.id === tabStop,
+              item.id === currentId,
+              you,
+              floating,
+              wide,
+            ]"
             class="map-pop absolute"
+            :class="roleOf(item) ? 'z-30' : ''"
             :style="placeStyle(item.id)"
           >
             <button
@@ -209,20 +225,22 @@
               class="group relative flex w-full rounded-2xl text-left focus:outline-none"
               :class="board ? 'flex-col items-center' : 'h-full items-center'"
               :style="board ? undefined : columnButtonStyle(item.id)"
+              :tabindex="item.id === tabStop ? 0 : -1"
               :aria-current="item.id === currentId ? 'step' : undefined"
               :aria-haspopup="wide ? undefined : 'dialog'"
+              :aria-describedby="item.id === tabStop ? keysId : undefined"
               @click="openDetail(item.id)"
               @keydown="onNodeKeydown($event, index)"
-              @mouseenter="hovered = item.id"
-              @mouseleave="hovered = null"
-              @focus="focused = item.id"
-              @blur="focused = null"
+              @pointerenter="onPointerEnter($event, item.id)"
+              @pointerleave="onPointerLeave($event)"
+              @focus="onNodeFocus($event, item.id)"
+              @blur="onNodeBlur()"
             >
               <!-- El medallón: la portada con el aro de su rareza, el número de
                    paso y el icono del estado. -->
               <span
-                class="relative block flex-shrink-0 rounded-full motion-safe:transition-[transform,opacity] motion-safe:duration-200"
-                :class="[lifted(item) ? '-translate-y-1.5' : '', dimmed(item) ? 'opacity-50' : '']"
+                class="relative block flex-shrink-0 rounded-full motion-safe:transition-transform motion-safe:duration-200"
+                :class="lifted(item) ? '-translate-y-1.5' : ''"
                 :style="{ width: `${geo.node}px`, height: `${geo.node}px` }"
               >
                 <!-- Completada: un brillo detrás. -->
@@ -288,25 +306,23 @@
                   :state="item.state"
                   class="absolute -bottom-1 -right-1 ring-[3px] ring-white"
                 />
+                <!-- Clara sobre el tablero en todos los temas (no el dorado de
+                     la rareza, que en «university» es azul marino). -->
                 <StarIcon
                   v-if="item.state === 'completed'"
-                  class="absolute -right-2 -top-2 h-6 w-6 text-badge-legendaria drop-shadow"
+                  class="absolute -right-2 -top-2 h-6 w-6 text-peach drop-shadow"
                   aria-hidden="true"
                 />
               </span>
 
               <!-- «Estás aquí», en el tablero: encima del medallón, sobre la
-                   carretera (fuera de él, para que no se atenúe con él). -->
+                   carretera y el velo (nunca se atenúa). -->
               <span
                 v-if="board && item.id === currentId"
-                class="absolute bottom-full left-1/2 mb-3 -translate-x-1/2"
-                aria-hidden="true"
+                class="absolute bottom-full left-1/2 z-30 mb-3 -translate-x-1/2"
               >
                 <span :class="['block', floating ? 'map-float' : '']">
-                  <span :class="hereChip">
-                    <Avatar :src="you?.avatar" :seed="you?.seed" :name="you?.name" size="xs" />
-                    {{ t('common.mission_map.you_are_here') }}
-                  </span>
+                  <MissionMapHere :you="you" />
                 </span>
               </span>
 
@@ -316,28 +332,27 @@
                 class="flex min-w-0 flex-col"
                 :class="board ? 'mt-3 max-w-full items-center' : 'flex-1 items-start'"
               >
-                <span
+                <MissionMapHere
                   v-if="!board && item.id === currentId"
-                  :class="[hereChip, 'mb-1']"
-                  aria-hidden="true"
-                >
-                  <Avatar :src="you?.avatar" :seed="you?.seed" :name="you?.name" size="xxs" />
-                  {{ t('common.mission_map.you_are_here') }}
-                </span>
+                  :you="you"
+                  size="xxs"
+                  class="relative z-30 mb-1"
+                />
                 <span
-                  class="block max-w-full rounded-xl bg-white px-3 py-1.5 shadow-md motion-safe:transition-shadow group-focus-visible:ring-[3px] group-focus-visible:ring-purple"
+                  class="relative z-30 block max-w-full rounded-xl bg-white px-3 py-1.5 shadow-md motion-safe:transition-shadow group-focus-visible:ring-[3px] group-focus-visible:ring-purple"
                   :class="[
-                    dimmed(item) ? 'opacity-60' : '',
                     board ? 'text-center' : '',
-                    selected === item.id || active === item.id ? 'ring-[3px] ring-purple' : '',
-                    linkedOnly(item) ? 'ring-2 ring-green' : '',
+                    selected === item.id || roleOf(item) === 'active'
+                      ? 'ring-[3px] ring-purple'
+                      : '',
+                    roleOf(item) === 'linked' ? 'ring-2 ring-green' : '',
                   ]"
                 >
                   <span class="sr-only"
                     >{{ t('common.mission_map.step', { n: item.step }) }}:
                   </span>
                   <span
-                    class="line-clamp-2 break-words text-sm font-bold leading-tight"
+                    class="line-clamp-2 text-sm font-bold leading-tight [overflow-wrap:anywhere]"
                     :class="item.state === 'locked' ? 'text-navy-700/70' : 'text-navy-700'"
                   >
                     {{ item.title }}
@@ -362,11 +377,14 @@
         </ol>
       </div>
 
-      <!-- Pantallas anchas: el detalle, en un panel al lado del tablero. -->
+      <!-- Pantallas anchas: el detalle, en un panel al lado del tablero. Pegado
+           arriba mientras se baja por el tablero y, si no cabe en la
+           ventana, con su propio scroll (que el botón se alcance siempre). -->
       <div
         v-if="wide"
+        ref="panelRef"
         role="region"
-        class="sticky top-4 w-80 flex-shrink-0 self-start rounded-2xl border border-navy-700/10 bg-white p-4 shadow-lg"
+        class="sticky top-4 max-h-[calc(100dvh-2rem)] w-80 flex-shrink-0 self-start overflow-y-auto rounded-2xl border border-navy-700/10 bg-white p-4 shadow-lg"
         :aria-labelledby="selectedItem ? panelTitleId : undefined"
         :aria-label="selectedItem ? undefined : t('common.mission_map.detail.label')"
       >
@@ -424,10 +442,12 @@
       <p class="basis-full text-xs text-navy-700/70">{{ t('common.mission_map.legend.hint') }}</p>
     </div>
 
-    <!-- Móvil y pantallas estrechas: el detalle, en una hoja inferior. -->
+    <!-- Móvil y pantallas estrechas: el detalle, en una hoja inferior, con el
+         botón para entrar en su pie. Siempre montada: al pasar de ancho a
+         estrecho con una misión elegida se abre como si se pulsara (con su
+         foco y su bloqueo del scroll). -->
     <Modal
-      v-if="!wide"
-      :model-value="selectedItem !== null"
+      :model-value="!wide && selectedItem !== null"
       :title="selectedItem?.title"
       sheet
       sticky-chrome
@@ -439,8 +459,12 @@
         :item="selectedItem"
         :mode="mode"
         hide-title
+        hide-action
         @go="goTo"
       />
+      <template v-if="selectedItem?.href && selectedItem.actionLabel" #footer>
+        <MissionMapDetailAction :item="selectedItem" />
+      </template>
     </Modal>
   </section>
 </template>
@@ -472,7 +496,6 @@ import {
   mapSparkles,
   type MapIsland,
   type MapPoint,
-  type MapRoad,
 } from '~/utils/mission-map-geometry'
 import { resolveDateLocale } from '~/utils/notifications'
 
@@ -493,9 +516,10 @@ import { resolveDateLocale } from '~/utils/notifications'
  * pasar por un medallón se resalta lo que está unido a él (lo que lo abre y lo
  * que abre); la leyenda resalta las de un estado. Al pulsarlo se abre su
  * detalle (MissionMapDetail): en un panel al lado si hay sitio y, si no, en una
- * hoja inferior (Modal con `sheet`). Esc cierra el panel y el foco vuelve al
- * medallón; las flechas pasan de uno a otro. Con «menos animación» (de la app
- * o del sistema), todo quieto: ni la carretera se dibuja ni nada flota.
+ * hoja inferior (Modal con `sheet`). Esc cierra el detalle y el foco vuelve al
+ * medallón. El mapa es una sola parada del tabulador; las flechas, Inicio y
+ * Fin pasan de un medallón a otro. Con «menos animación» (de la app o del
+ * sistema), todo quieto: ni la carretera se dibuja ni nada flota ni late.
  */
 
 interface MapMission extends MapMissionInput {
@@ -537,12 +561,11 @@ const RARITY_RING: Record<string, string> = {
   legendaria: 'ring-badge-legendaria',
 }
 
-/** El color de cada tono de isla (utils/mission-map-geometry.ts). */
 /** El color de cada tono de isla (utils/mission-map-geometry.ts), sobre el azul de la noche. */
 const ISLAND_COLORS: Record<MapIsland['tone'], string> = {
-  mint: 'var(--color-purple-rgb)',
-  purple: 'var(--color-navy-base-light-rgb)',
-  peach: 'var(--color-mint-rgb)',
+  purple: 'var(--color-purple-rgb)',
+  navy: 'var(--color-navy-base-light-rgb)',
+  mint: 'var(--color-mint-rgb)',
 }
 
 // ---- La disposición y lo que se cuenta ----
@@ -558,6 +581,13 @@ const finished = computed(
     props.mode === 'student' &&
     progress.value.total > 0 &&
     progress.value.done === progress.value.total
+)
+const progressText = computed(() =>
+  t(
+    'common.mission_map.your_progress',
+    { done: progress.value.done, total: progress.value.total },
+    progress.value.total
+  )
 )
 
 function studentStateText(state: MapNodeState, percent: number): string {
@@ -731,13 +761,6 @@ const board = computed(() => geo.value.shape === 'board')
 const islands = computed(() => mapIslands(geo.value.width, geo.value.height))
 const sparkles = computed(() => mapSparkles(geo.value.width, geo.value.height))
 
-/** Grosor de la carretera: borde, firme y raya del centro. */
-const stroke = computed(() =>
-  board.value
-    ? { border: 34, road: 26, dash: 3, dashes: '12 14' }
-    : { border: 24, road: 18, dash: 2.5, dashes: '9 11' }
-)
-
 /** Dónde va cada misión: en el tablero, centrada en su sitio; en la columna, a lo ancho. */
 function placeStyle(id: string) {
   const place = geo.value.places.get(id) ?? { x: 0, y: 0 }
@@ -767,13 +790,9 @@ function columnButtonStyle(id: string) {
   return { paddingLeft: `${left}px`, columnGap: `${geo.value.label - left - geo.value.node}px` }
 }
 
-const markerChip = computed(() => [
-  'absolute whitespace-nowrap rounded-full bg-white px-2.5 py-0.5 text-xs font-bold uppercase tracking-wide text-navy-700 shadow',
-  board.value ? 'left-0 top-9 -translate-x-1/2' : 'left-7 top-0 -translate-y-1/2',
-])
-
-const hereChip =
-  'inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-white py-0.5 pl-0.5 pr-2.5 text-xs font-bold text-navy-700 shadow-lg ring-2 ring-purple'
+/** La etiqueta de la salida y de la meta (dónde va, en cada una). */
+const markerChip =
+  'absolute whitespace-nowrap rounded-full bg-white px-2.5 py-0.5 text-xs font-bold uppercase tracking-wide text-navy-700 shadow'
 
 /** Una estrellita de cuatro puntas centrada en su sitio. */
 function sparklePath(p: MapPoint & { size: number }) {
@@ -787,6 +806,7 @@ function measure() {
   boardWidth.value = boardRef.value?.clientWidth ?? 0
 }
 
+const panelRef = ref<HTMLElement | null>(null)
 let observer: ResizeObserver | null = null
 onMounted(() => {
   measure()
@@ -799,6 +819,8 @@ onMounted(() => {
 onBeforeUnmount(() => observer?.disconnect())
 
 // ---- Resaltar: al pasar por un medallón, lo unido a él; con la leyenda, un estado ----
+// Solo con el ratón y con el foco del teclado: un toque en el móvil no deja
+// el mapa resaltado (ni al cerrar la hoja).
 const hovered = ref<string | null>(null)
 const focused = ref<string | null>(null)
 const active = computed(() => hovered.value ?? focused.value)
@@ -809,34 +831,51 @@ const linked = computed(() => {
   return new Set([id, ...requires, ...unlocks])
 })
 const filter = ref<MapNodeState | null>(null)
+/** Se está resaltando algo: el velo atenúa lo demás. */
+const highlighting = computed(() => active.value !== null || filter.value !== null)
 
-function dimmed(item: MissionMapItem) {
-  if (linked.value) return !linked.value.has(item.id)
-  return filter.value !== null && item.state !== filter.value
+/**
+ * Lo que es cada misión al resaltar: la que se mira (`active`), lo que la
+ * abre o lo que abre ella (`linked`) o una del estado de la leyenda
+ * (`match`). Las demás, nada: se atenúan.
+ */
+function roleOf(item: MissionMapItem): '' | 'active' | 'linked' | 'match' {
+  if (active.value) {
+    if (active.value === item.id) return 'active'
+    return linked.value?.has(item.id) ? 'linked' : ''
+  }
+  return filter.value !== null && item.state === filter.value ? 'match' : ''
 }
 function lifted(item: MissionMapItem) {
-  if (active.value) return active.value === item.id
-  return filter.value !== null && item.state === filter.value
+  const role = roleOf(item)
+  return role === 'active' || role === 'match'
 }
-/** Lo que abre la que se está mirando, o lo que abre ella. */
-function linkedOnly(item: MissionMapItem) {
-  return !!linked.value?.has(item.id) && active.value !== item.id
+
+function onPointerEnter(event: PointerEvent, id: string) {
+  if (event.pointerType === 'mouse') hovered.value = id
+}
+function onPointerLeave(event: PointerEvent) {
+  if (event.pointerType === 'mouse') hovered.value = null
 }
 
 /**
- * Se resaltan los tramos que entran y salen de la que se mira. En la columna
- * del móvil la carretera va de una a la siguiente: solo se resalta el tramo
+ * Se encienden los tramos que entran y salen de la que se mira. En la columna
+ * del móvil la carretera va de una a la siguiente: solo se enciende el tramo
  * que es también un requisito (o la salida y la meta).
  */
-const roads = computed(() => {
+const litRoads = computed(() => {
   const id = active.value
+  if (id === null) return null
   const edges = new Set(layout.value.edges.map(edge => edge.key))
-  const real = (road: MapRoad) =>
-    board.value || edges.has(road.key) || road.from === MAP_START || road.to === MAP_GOAL
-  return geo.value.roads.map(road => {
-    const lit = id !== null && (road.from === id || road.to === id) && real(road)
-    return { ...road, lit, dim: id !== null ? !lit : filter.value !== null }
-  })
+  return new Set(
+    geo.value.roads
+      .filter(
+        road =>
+          (road.from === id || road.to === id) &&
+          (board.value || edges.has(road.key) || road.from === MAP_START || road.to === MAP_GOAL)
+      )
+      .map(road => road.key)
+  )
 })
 
 const LEGEND_ORDER: Record<'student' | 'teacher', MapNodeState[]> = {
@@ -855,10 +894,40 @@ const legend = computed(() =>
 function toggleFilter(state: MapNodeState) {
   filter.value = filter.value === state ? null : state
 }
+// Si con datos nuevos ya no queda ninguna de ese estado, la leyenda se suelta:
+// su botón desaparece y el mapa se quedaría atenuado sin forma de quitarlo.
+watch(legend, entries => {
+  if (filter.value && !entries.some(entry => entry.state === filter.value)) filter.value = null
+})
 
 // ---- El detalle ----
 const selected = ref<string | null>(null)
+/** La ha elegido quien mira (no es la que se enseña de entrada en pantallas anchas). */
+const picked = ref(false)
 const selectedItem = computed(() => items.value.find(item => item.id === selected.value) ?? null)
+
+// ---- El tabulador: una sola parada en el mapa ----
+/** La última misión que ha tenido el foco (con el teclado o al pulsarla). */
+const rover = ref<string | null>(null)
+/**
+ * La que recibe el foco al entrar con el tabulador: la última que lo tuvo; si
+ * no, la elegida; si no, la actual; si no, la primera.
+ */
+const tabStop = computed(() => {
+  const ids = new Set(items.value.map(item => item.id))
+  const known = [rover.value, selected.value, currentId.value].find(id => id && ids.has(id))
+  return known ?? items.value[0]?.id ?? null
+})
+const keysId = useId()
+
+function onNodeFocus(event: FocusEvent, id: string) {
+  rover.value = id
+  // Solo el foco que se ve (el del teclado) resalta lo unido a ella.
+  focused.value = (event.target as HTMLElement).matches(':focus-visible') ? id : null
+}
+function onNodeBlur() {
+  focused.value = null
+}
 
 function nodeButton(id: string) {
   return rootRef.value?.querySelector<HTMLElement>(`[data-map-node-button="${CSS.escape(id)}"]`)
@@ -876,30 +945,67 @@ function focusNode(id: string, scroll = false) {
   button.focus({ preventScroll: true })
 }
 
-/** Abre el detalle. En el panel de al lado, el foco va a su título (y se lee). */
+/**
+ * El foco al título del panel de al lado (y se lee). Si el panel no está a la
+ * vista (p. ej. si la misión está muy abajo), antes se lleva hasta él.
+ */
+function focusPanelTitle() {
+  const title = document.getElementById(panelTitleId)
+  if (!title) return
+  const { top, bottom } = title.getBoundingClientRect()
+  if (top < 0 || bottom > window.innerHeight) {
+    panelRef.value?.scrollIntoView({
+      block: 'nearest',
+      behavior: reducedMotion.value ? 'auto' : 'smooth',
+    })
+  }
+  title.focus({ preventScroll: true })
+}
+
+/** Abre el detalle. En el panel de al lado, el foco va a su título. */
 async function openDetail(id: string) {
   selected.value = id
+  picked.value = true
   if (!wide.value) return
   await nextTick()
-  document.getElementById(panelTitleId)?.focus({ preventScroll: true })
+  focusPanelTitle()
 }
 
-/** Cierra el panel y el foco vuelve al medallón. La hoja inferior lo hace ella sola. */
+/** Cierra el panel y el foco vuelve al medallón. La hoja inferior, en `onSheet`. */
 function closeDetail() {
   const id = selected.value
-  if (!id) return
+  if (!id || !wide.value) return
   selected.value = null
-  if (wide.value) focusNode(id)
+  picked.value = true
+  focusNode(id)
 }
 
-function onSheet(open: boolean) {
-  if (!open) selected.value = null
+/**
+ * La hoja inferior se ha cerrado (X, Esc o fuera): el foco vuelve al
+ * medallón, después de que la ventana devuelva el suyo (que, si se abrió al
+ * estrechar la pantalla, era el título del panel, que ya no está).
+ */
+async function onSheet(open: boolean) {
+  if (open) return
+  const id = selected.value
+  selected.value = null
+  await nextTick()
+  if (id) focusNode(id)
 }
 
-/** De «Para abrirla, completa antes…» al medallón de esa misión. */
+/**
+ * De «Para abrirla, completa antes…» o «Al completarla, abre…» a esa misión:
+ * en el panel de al lado se abre también su detalle; en el móvil, primero se
+ * cierra la hoja.
+ */
 async function goTo(id: string) {
-  if (!wide.value && selected.value) {
-    // Primero se cierra la hoja (que devuelve el foco a su medallón) y luego se va.
+  if (wide.value) {
+    selected.value = id
+    picked.value = true
+    focusNode(id, true)
+    return
+  }
+  if (selected.value) {
     selected.value = null
     await nextTick()
     await new Promise(resolve => requestAnimationFrame(resolve))
@@ -911,7 +1017,7 @@ function goToCurrent() {
   if (currentId.value) focusNode(currentId.value, true)
 }
 
-/** Las flechas pasan de un medallón al siguiente (o al anterior) del recorrido. */
+/** Las flechas, Inicio y Fin pasan de un medallón a otro del recorrido. */
 function onNodeKeydown(event: KeyboardEvent, index: number) {
   const last = items.value.length - 1
   const target: Record<string, number> = {
@@ -928,17 +1034,26 @@ function onNodeKeydown(event: KeyboardEvent, index: number) {
   focusNode(items.value[next]!.id)
 }
 
-// En pantallas anchas, el alumnado ve de entrada el detalle de su misión.
-let autoSelected = false
+// En pantallas anchas, el alumnado ve de entrada el detalle de su misión
+// (mientras no elija otra). Al estrechar la pantalla esa no se abre en la
+// hoja inferior: solo lo que ha elegido.
 watch(
   [wide, currentId],
   ([isWide, id]) => {
-    if (autoSelected || !isWide || !id || selected.value) return
-    autoSelected = true
-    selected.value = id
+    if (picked.value) return
+    selected.value = isWide ? id : null
   },
   { immediate: true }
 )
+
+// De estrecho a ancho con la hoja abierta: el detalle pasa al panel y el foco,
+// a su título (cuando la hoja ya ha devuelto el suyo).
+const sheetOpen = computed(() => !wide.value && selectedItem.value !== null)
+watch(sheetOpen, async (open, wasOpen) => {
+  if (open || !wasOpen || !wide.value || !selected.value) return
+  await nextTick()
+  focusPanelTitle()
+})
 
 // Si cambian las misiones y la elegida ya no está, se cierra.
 watch(items, list => {
@@ -948,6 +1063,8 @@ watch(items, list => {
 // ---- La entrada: la carretera se dibuja y los medallones aparecen en cascada ----
 const entering = ref(false)
 const floating = computed(() => !reducedMotion.value)
+/** Mapa completado y con animaciones: la meta late. */
+const pulsing = computed(() => finished.value && !reducedMotion.value)
 const drawSeconds = computed(() => Math.min(2.2, 0.8 + items.value.length * 0.08))
 function startEntrance() {
   if (reducedMotion.value) return
@@ -960,10 +1077,6 @@ function startEntrance() {
 /* Solo con animaciones: la app pone `data-reduce-motion` y el sistema
    `prefers-reduced-motion`; con cualquiera de los dos, todo quieto. */
 @media (prefers-reduced-motion: no-preference) {
-  .map-enter .map-roads {
-    animation: map-reveal var(--map-draw) ease-out backwards;
-  }
-
   .map-enter .map-pop {
     animation: map-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
     animation-delay: var(--map-delay, 0s);
@@ -972,19 +1085,14 @@ function startEntrance() {
   .map-float {
     animation: map-float 2.6s ease-in-out infinite;
   }
-}
 
-/* El tramo recorrido brilla. */
-.map-glow {
-  filter: drop-shadow(0 0 6px rgb(var(--color-green-rgb) / 0.7));
-}
-
-@keyframes map-reveal {
-  from {
-    clip-path: inset(0 0 100% 0);
+  /* La meta del mapa completado: el halo late y un aro se abre hacia fuera. */
+  .map-goal-glow {
+    animation: map-goal-glow 2.4s ease-in-out infinite;
   }
-  to {
-    clip-path: inset(0 0 0 0);
+
+  .map-goal-ring {
+    animation: map-goal-ring 2.4s ease-out infinite;
   }
 }
 
@@ -1006,6 +1114,29 @@ function startEntrance() {
   }
   50% {
     transform: translateY(-5px);
+  }
+}
+
+@keyframes map-goal-glow {
+  0%,
+  100% {
+    opacity: 0.65;
+    transform: scale(0.85);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes map-goal-ring {
+  from {
+    opacity: 0.9;
+    transform: scale(0.7);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.5);
   }
 }
 </style>

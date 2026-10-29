@@ -14,6 +14,7 @@ const {
   mapShape,
   boardColumns,
   roadDown,
+  roadVia,
   roadAcross,
   roadTurn,
   mapGeometry,
@@ -33,6 +34,119 @@ const C = MAP_SIZES.column
 const near = (a, b, message) => assert.ok(Math.abs(a - b) < 0.11, `${message}: ${a} ≠ ${b}`)
 /** Los números de un trazo SVG, por parejas (x, y). */
 const points = d => [...d.matchAll(/(-?[\d.]+) (-?[\d.]+)/g)].map(p => [Number(p[1]), Number(p[2])])
+
+/** Puntos de un trazo (M, L y C), muy juntos: por donde pasa de verdad la carretera. */
+function trace(d) {
+  const tokens = d.trim().split(/\s+/)
+  const out = []
+  let at
+  for (let i = 0; i < tokens.length; ) {
+    const command = tokens[i++]
+    const next = () => [Number(tokens[i++]), Number(tokens[i++])]
+    if (command === 'M') {
+      at = next()
+      out.push(at)
+    } else if (command === 'L') {
+      const to = next()
+      for (let s = 1; s <= 40; s += 1) {
+        out.push([at[0] + ((to[0] - at[0]) * s) / 40, at[1] + ((to[1] - at[1]) * s) / 40])
+      }
+      at = to
+    } else {
+      const [p1, p2, p3] = [next(), next(), next()]
+      for (let s = 1; s <= 80; s += 1) {
+        const t = s / 80
+        const u = 1 - t
+        out.push(
+          [0, 1].map(
+            k => u ** 3 * at[k] + 3 * u * u * t * p1[k] + 3 * u * t * t * p2[k] + t ** 3 * p3[k]
+          )
+        )
+      }
+      at = p3
+    }
+  }
+  return out
+}
+
+/**
+ * Lo más cerca que pasa una carretera del centro de un medallón que no es el
+ * suyo (ni de donde sale ni adonde llega), y cuál.
+ */
+function closest(geo) {
+  let min = Infinity
+  let where = ''
+  for (const road of geo.roads) {
+    const path = trace(road.d)
+    for (const [id, place] of geo.places) {
+      if (id === road.from || id === road.to) continue
+      for (const [x, y] of path) {
+        const distance = Math.hypot(x - place.x, y - place.y)
+        if (distance < min) [min, where] = [distance, `${road.key} junto a ${id}`]
+      }
+    }
+  }
+  return { min, where }
+}
+
+/** 40 misiones con ramas: capas de anchos distintos, cruces y aristas que saltan capas. */
+function branched40() {
+  const layers = [
+    [0],
+    [1, 2, 3],
+    [4, 5, 6, 7, 8],
+    [9, 10],
+    [11, 12, 13, 14, 15, 16],
+    [17],
+    [18, 19, 20, 21],
+    [22, 23, 24, 25, 26, 27, 28],
+    [29, 30, 31],
+    [32, 33, 34, 35],
+    [36, 37, 38],
+    [39],
+  ]
+  const needs = []
+  let seed = 3
+  const random = () => (seed = (seed * 9301 + 49297) % 233280) / 233280
+  layers.forEach((layer, index) => {
+    for (const i of layer) {
+      const list = new Set()
+      if (index > 0) {
+        const previous = layers[index - 1]
+        list.add(previous[Math.floor(random() * previous.length)])
+        if (random() < 0.4)
+          list.add(previous[previous.length - 1 - Math.floor(random() * previous.length)])
+        if (index > 1 && random() < 0.25) {
+          const before = layers[index - 2]
+          list.add(before[Math.floor(random() * before.length)])
+        }
+      }
+      needs[i] = [...list]
+    }
+  })
+  needs[5] = [1, 2, 3]
+  needs[4] = [3]
+  needs[8] = [1]
+  return needs.map((list, i) =>
+    m(
+      `m${i}`,
+      list.map(r => `m${r}`)
+    )
+  )
+}
+
+/** Unas misiones al azar (siempre las mismas para la misma semilla), con muchas sin requisitos. */
+function randomMissions(count, seed, chance) {
+  const random = () => (seed = (seed * 9301 + 49297) % 233280) / 233280
+  return Array.from({ length: count }, (_, i) => {
+    const list = new Set()
+    if (i > 0 && random() < chance) {
+      for (let k = 1 + Math.floor(random() * 3); k > 0; k -= 1)
+        list.add(`m${Math.floor(random() * i)}`)
+    }
+    return m(`m${i}`, [...list])
+  })
+}
 
 test('la forma según el ancho: tablero desde BOARD_MIN_WIDTH; columna por debajo', () => {
   assert.equal(mapShape(320), 'column')
@@ -54,6 +168,16 @@ test('los trazos: S vertical (recta en la misma columna), S de lado y media vuel
   for (const [x] of points(roadDown({ x: 320.25, y: 50 }, { x: 180.5, y: 170 }))) {
     assert.ok(x >= 180.5 && x <= 320.3, `${x} fuera`)
   }
+  // Por varios puntos: una S de cada uno al siguiente (recta si no cambia la x).
+  assert.equal(
+    roadVia([
+      { x: 100, y: 0 },
+      { x: 200, y: 100 },
+      { x: 200, y: 150 },
+      { x: 100, y: 250 },
+    ]),
+    'M 100 0 C 100 50 200 50 200 100 L 200 150 C 200 200 100 200 100 250'
+  )
   assert.equal(roadAcross({ x: 100, y: 50 }, { x: 300, y: 70 }), 'M 100 50 C 200 50 200 70 300 70')
   // A la derecha con `bulge` positivo, a la izquierda con negativo.
   assert.equal(
@@ -217,6 +341,119 @@ test('columna (móvil): la carretera a la izquierda, de cada misión a la siguie
   )
 })
 
+test('capa que no cabe: filas al tresbolillo, una llena y otra con una menos en los huecos', () => {
+  // m0 abre cinco; a 700 px caben tres por fila: 3 y 2, la segunda media columna a un lado.
+  const missions = [m('m0'), ...[1, 2, 3, 4, 5].map(i => m(`m${i}`, ['m0'])), m('m6', ['m5'])]
+  const width = 700
+  const geo = mapGeometry(layoutMissionMap(missions, 'teacher'), width)
+  const colWidth = (width - 2 * B.padX) / 3
+  const at = id => geo.places.get(id)
+  const slotX = slot => B.padX + colWidth * (slot + 0.5)
+  for (const [id, slot] of [
+    ['m1', 0],
+    ['m2', 1],
+    ['m3', 2],
+    ['m4', 0.5],
+    ['m5', 1.5],
+  ]) {
+    near(at(id).x, slotX(slot), id)
+  }
+  assert.equal(at('m4').y, at('m1').y + B.row, 'la segunda fila, debajo')
+  // m0 → m4 cruza la fila de m1, m2 y m3: por el hueco (en recto) y no por encima.
+  const road = geo.roads.find(r => r.key === 'm0>m4')
+  const crossing = points(road.d).filter(([, y]) => Math.abs(y - at('m1').y) <= B.through)
+  assert.equal(crossing.length, 2, 'entra y sale de la fila en dos puntos')
+  assert.equal(crossing[0][0], crossing[1][0], 'en recto')
+  for (const id of ['m1', 'm2', 'm3']) {
+    assert.ok(Math.abs(crossing[0][0] - at(id).x) >= colWidth / 2 - 0.5, `lejos de ${id}`)
+  }
+})
+
+test('ninguna rama termina en el aire: lo que no abre nada sigue hasta la meta', () => {
+  // a → b → c; a → d (d no abre nada y es de una capa anterior a la última).
+  const layout = layoutMissionMap(
+    [
+      m('a', [], { status: 'completada', progress: 100 }),
+      m('b', ['a']),
+      m('c', ['b']),
+      m('d', ['a']),
+    ],
+    'student'
+  )
+  const geo = mapGeometry(layout, 700)
+  assert.deepEqual(
+    geo.roads.map(r => [r.key, r.done]),
+    [
+      ['start>a', true],
+      ['a>b', true],
+      ['b>c', false],
+      ['a>d', true],
+      ['d>goal', false],
+      ['c>goal', false],
+    ]
+  )
+  // La de d baja hasta la meta pasando por un hueco de la fila de c.
+  const road = points(geo.roads.find(r => r.key === 'd>goal').d)
+  assert.deepEqual(road.at(-1), [
+    Math.round(geo.goal.x * 10) / 10,
+    Math.round(geo.goal.y * 10) / 10,
+  ])
+  assert.ok(
+    road.some(([x, y]) => y === geo.places.get('c').y - B.through && x !== geo.places.get('c').x)
+  )
+})
+
+test('ninguna carretera pasa a menos de un radio de un medallón que no sea el suyo', () => {
+  const maps = {
+    'lineales (sin requisitos)': Array.from({ length: 40 }, (_, i) => m(`m${i}`)),
+    'en cadena': Array.from({ length: 40 }, (_, i) => m(`m${i}`, i > 0 ? [`m${i - 1}`] : [])),
+    'con ramas': branched40(),
+    'muchas sin requisitos': randomMissions(40, 977, 0.3),
+    'al azar': randomMissions(40, 4111, 0.9),
+  }
+  for (const [name, missions] of Object.entries(maps)) {
+    const layout = layoutMissionMap(missions, 'teacher')
+    for (const width of [320, 520, 640, 700, 808, 860, 1000, 1280]) {
+      const geo = mapGeometry(layout, width)
+      // Del centro de la carretera al centro del medallón, al menos un diámetro:
+      // un radio libre entre la carretera y su borde.
+      const { min, where } = closest(geo)
+      assert.ok(min >= geo.node, `${name} a ${width} px: ${where} a ${min.toFixed(1)} px`)
+      // Y la carretera entera (con su borde) dentro del tablero.
+      for (const road of geo.roads) {
+        for (const [x, y] of trace(road.d)) {
+          assert.ok(
+            x >= 17 && x <= width - 17 && y >= 0 && y <= geo.height,
+            `${name} ${road.key} fuera`
+          )
+        }
+      }
+    }
+  }
+})
+
+test('la salida, sobre el centro de la primera fila y con sitio para que su tramo no roce nada', () => {
+  // Cuatro por fila (1000 px): la salida, en el hueco del centro; baja más
+  // cuanto más se aparta de lado su tramo más largo.
+  const layout = layoutMissionMap(
+    ['a', 'b', 'c', 'd'].map(id => m(id)).concat(m('e', ['a', 'b', 'c', 'd'])),
+    'student'
+  )
+  const width = 1000
+  const geo = mapGeometry(layout, width)
+  const colWidth = (width - 2 * B.padX) / 4
+  near(geo.start.x, width / 2, 'centrada')
+  const first = geo.places.get('a')
+  near(first.y - geo.start.y, B.slope * 1.5 * colWidth, 'baja lo que pide el tramo más torcido')
+  // A 700 (tres por fila) la del centro queda justo debajo y basta con lo de siempre.
+  const narrow = mapGeometry(
+    layoutMissionMap(['a', 'b', 'c'].map(id => m(id)).concat(m('d', ['b'])), 'student'),
+    700
+  )
+  assert.equal(narrow.places.get('b').y - narrow.start.y, B.startGap)
+  near(narrow.start.x, narrow.places.get('b').x, 'sobre la del centro')
+})
+
 test('con 40 misiones salen 40 sitios distintos y un alto que crece con ellas', () => {
   const many = Array.from({ length: 40 }, (_, i) => m(`m${i}`))
   for (const width of [320, 700, 1000]) {
@@ -234,7 +471,7 @@ test('el fondo: las islas y las estrellitas salen siempre igual y dentro del map
   assert.ok(islands.length >= 4)
   assert.deepEqual(
     islands.slice(0, 3).map(i => i.tone),
-    ['mint', 'purple', 'peach']
+    ['purple', 'navy', 'mint']
   )
   const sparkles = mapSparkles(600, 1200)
   assert.deepEqual(sparkles, mapSparkles(600, 1200))

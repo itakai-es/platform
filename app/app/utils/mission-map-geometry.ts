@@ -10,15 +10,20 @@
  * - `board` (desde BOARD_MIN_WIDTH): un tablero. Si cada capa tiene una sola
  *   misión (sin requisitos, o una cadena), el camino serpentea en filas de 2 a
  *   4, de izquierda a derecha y de vuelta, como en un juego de mesa. Con ramas,
- *   cada capa es una fila (o varias, si no cabe) y la misión que va sola en su
- *   fila se pone bajo lo que pide, un poco a un lado, para que el camino
- *   serpentee. Una carretera por arista.
+ *   cada capa es una fila y la misión que va sola en su fila se pone bajo lo
+ *   que pide, un poco a un lado, para que el camino serpentee. La capa que no
+ *   cabe se parte en filas al tresbolillo (una llena y otra con una menos,
+ *   media columna a un lado). Una carretera por arista; la que salta filas
+ *   pasa entre los medallones de cada fila que cruza, nunca por encima.
  * - `column` (móvil): una columna, con la carretera a la izquierda y los
  *   títulos a la derecha, de cada misión a la siguiente del recorrido; lo que
  *   abre cada una va en texto.
  *
  * La salida va antes de lo que no pide nada y la meta, detrás de la última
- * capa. Un tramo va hecho si sale de una misión completada (o de la salida).
+ * capa. En el tablero con ramas, todo lo que no abre nada (lo de la última
+ * capa y las ramas que acaban antes) sigue hasta la meta: ningún camino se
+ * queda en el aire. Un tramo va hecho si sale de una misión completada (o de
+ * la salida).
  */
 import type { MapNodeState } from './mission-map'
 import type { MissionMapLayout } from './mission-map-layout'
@@ -39,13 +44,13 @@ export interface MapRoad {
   done: boolean
 }
 
-/** Una mancha de color del fondo (una «isla»). */
+/** Una mancha de color del fondo (una «isla»), con el nombre de su color. */
 export interface MapIsland {
   x: number
   y: number
   rx: number
   ry: number
-  tone: 'mint' | 'purple' | 'peach'
+  tone: 'purple' | 'navy' | 'mint'
 }
 
 export interface MapGeometry {
@@ -77,9 +82,10 @@ export const MAP_SIZES = {
     /** Ancho mínimo de cada columna (la etiqueta y un respiro). */
     column: 184,
     padX: 36,
-    /** Centro de la primera fila. */
-    top: 168,
-    startGap: 118,
+    /** Centro de la primera fila (la salida queda a `startGap` por encima, con margen). */
+    top: 190,
+    /** De la salida a la primera fila: deja sitio a «Estás aquí» entre las dos. */
+    startGap: 140,
     goalGap: 182,
     bottom: 84,
     /** Lo que baja la etiqueta desde el centro del medallón. */
@@ -88,6 +94,18 @@ export const MAP_SIZES = {
     wave: 22,
     /** Con ramas, lo que se aparta de lo que pide la misión que va sola en su fila. */
     meander: 0.3,
+    /**
+     * La carretera que cruza una fila va recta por su hueco desde este tanto
+     * antes del centro de los medallones hasta este tanto después.
+     */
+    through: 52,
+    /**
+     * Lo que baja, como poco, el primer tramo desde la salida (y el último
+     * hasta la meta) por cada px que se aparta de lado.
+     */
+    slope: 0.6,
+    /** Lo más que se aparta de lado (en columnas) un tramo de una fila a la siguiente. */
+    slant: 2,
   },
   column: {
     node: 64,
@@ -122,9 +140,29 @@ const at = (p: MapPoint) => `${round(p.x)} ${round(p.y)}`
  * las de los dos puntos. Recta si están en la misma columna.
  */
 export function roadDown(from: MapPoint, to: MapPoint): string {
-  if (Math.abs(from.x - to.x) < 0.5) return `M ${at(from)} L ${at(to)}`
-  const mid = (to.y - from.y) / 2
-  return `M ${at(from)} C ${at({ x: from.x, y: from.y + mid })} ${at({ x: to.x, y: to.y - mid })} ${at(to)}`
+  return roadVia([from, to])
+}
+
+/**
+ * De arriba abajo pasando por unos puntos: una S vertical de cada uno al
+ * siguiente. Como cada S sale y llega en vertical, en los puntos de paso la
+ * carretera sigue recta, sin codos.
+ */
+export function roadVia(points: MapPoint[]): string {
+  const parts = [`M ${at(points[0]!)}`]
+  for (let index = 1; index < points.length; index += 1) {
+    const from = points[index - 1]!
+    const to = points[index]!
+    if (Math.abs(from.x - to.x) < 0.5) {
+      parts.push(`L ${at(to)}`)
+      continue
+    }
+    const mid = (to.y - from.y) / 2
+    parts.push(
+      `C ${at({ x: from.x, y: from.y + mid })} ${at({ x: to.x, y: to.y - mid })} ${at(to)}`
+    )
+  }
+  return parts.join(' ')
 }
 
 /** De lado: una S que sale y llega en horizontal (dos paradas de la misma fila). */
@@ -217,43 +255,151 @@ function boardGeometry(layout: MissionMapLayout, width: number): MapGeometry {
     }
   }
 
-  // Con ramas: cada capa en su fila (o en varias, si no cabe).
+  // Con ramas: cada capa en su fila.
   const needs = new Map(layout.nodes.map(n => [n.id, n.prerequisiteIds]))
   const rows: string[][] = []
-  for (const layer of layout.layers) {
-    for (let from = 0; from < layer.length; from += columns)
-      rows.push(layer.slice(from, from + columns))
-  }
+  /** La fila de cada cosa: la salida va antes de la primera y la meta, detrás de la última. */
+  const rowOf = new Map<string, number>([[MAP_START, -1]])
   const minX = S.padX + colWidth / 2
   const maxX = width - S.padX - colWidth / 2
-  rows.forEach((row, index) => {
-    const y = S.top + index * S.row
-    if (row.length === 1) {
+  /** El centro de una columna (`slot` + 0,5 es el hueco entre esa y la siguiente). */
+  const slotX = (slot: number) => S.padX + colWidth * (slot + 0.5)
+  /** Una fila más, con la x de cada una; la y se pone al final, con el sitio de la salida. */
+  const addRow = (row: string[], xOf: (id: string, slot: number) => number) => {
+    row.forEach((id, slot) => {
+      places.set(id, { x: xOf(id, slot), y: 0 })
+      rowOf.set(id, rows.length)
+    })
+    rows.push(row)
+  }
+  for (const layer of layout.layers) {
+    if (layer.length === 1) {
       // A solas, bajo lo que pide, y un poco a un lado (alternando) para que el
       // camino no sea una recta.
-      const parents = (needs.get(row[0]!) ?? []).flatMap(id => places.get(id) ?? [])
-      const base = parents.length > 0 ? average(parents.map(p => p.x)) : width / 2
-      const side = index % 2 === 0 ? -1 : 1
-      const x = Math.min(maxX, Math.max(minX, base + side * colWidth * S.meander))
-      places.set(row[0]!, { x, y })
-      return
+      addRow(layer, id => {
+        const parents = (needs.get(id) ?? []).flatMap(p => places.get(p) ?? [])
+        const base = parents.length > 0 ? average(parents.map(p => p.x)) : width / 2
+        const side = rows.length % 2 === 0 ? -1 : 1
+        return Math.min(maxX, Math.max(minX, base + side * colWidth * S.meander))
+      })
+      continue
     }
-    // Las que no llenan la fila se reparten el ancho (sin pasarse de separadas).
-    const spacing = Math.min((width - 2 * S.padX) / row.length, colWidth * 1.5)
-    row.forEach((id, slot) => {
-      places.set(id, { x: width / 2 + (slot - (row.length - 1) / 2) * spacing, y })
-    })
-  })
-  const first = rows[0] ?? []
-  const last = layout.layers.at(-1) ?? []
-  const lastY = S.top + (rows.length - 1) * S.row
-  const start = { x: average(first.map(id => places.get(id)!.x)), y: S.top - S.startGap }
-  const goal = { x: average(last.map(id => places.get(id)!.x)), y: lastY + S.goalGap }
-  for (const id of layout.layers[0] ?? []) road(MAP_START, id, roadDown(start, places.get(id)!))
-  for (const edge of layout.edges) {
-    road(edge.from, edge.to, roadDown(places.get(edge.from)!, places.get(edge.to)!))
+    if (layer.length <= columns) {
+      // Las que no llenan la fila se reparten el ancho (sin pasarse de separadas).
+      const spacing = Math.min((width - 2 * S.padX) / layer.length, colWidth * 1.5)
+      addRow(layer, (_id, slot) => width / 2 + (slot - (layer.length - 1) / 2) * spacing)
+      continue
+    }
+    // No cabe: filas al tresbolillo, una llena y otra con una menos en los
+    // huecos de la de arriba, para que lo que baja pase entre medallones.
+    for (let from = 0, part = 0; from < layer.length; part += 1) {
+      const staggered = part % 2 === 1
+      const size = staggered ? columns - 1 : columns
+      const row = layer.slice(from, from + size)
+      from += size
+      const offset = (staggered ? 0.5 : 0) + Math.floor((size - row.length) / 2)
+      addRow(row, (_id, slot) => slotX(offset + slot))
+    }
   }
-  for (const id of last) road(id, MAP_GOAL, roadDown(places.get(id)!, goal))
+
+  // La salida, sobre el centro de la primera fila, y la meta, bajo el de la última.
+  const first = layout.layers[0] ?? []
+  const startX = average(rows[0]!.map(id => places.get(id)!.x))
+  const goalX = average(rows.at(-1)!.map(id => places.get(id)!.x))
+  rowOf.set(MAP_GOAL, rows.length)
+
+  // Los carriles de cada fila, por donde pasan las carreteras que la cruzan:
+  // las columnas y los huecos entre ellas (y entre cada dos medallones) que
+  // quedan al menos a media columna de todos sus medallones.
+  const grid = Array.from({ length: 2 * columns + 1 }, (_, k) => S.padX + (colWidth * k) / 2)
+  const rowLanes = rows.map(row => {
+    const xs = row.map(id => places.get(id)!.x).sort((a, b) => a - b)
+    const between = xs.slice(1).map((x, i) => (xs[i]! + x) / 2)
+    const clear = (x: number) => xs.every(n => Math.abs(n - x) >= colWidth / 2 - 0.5)
+    return [...new Set([...grid, ...between].map(round))].filter(clear).sort((a, b) => a - b)
+  })
+  const xOf = (id: string) =>
+    id === MAP_START ? startX : id === MAP_GOAL ? goalX : places.get(id)!.x
+  /**
+   * Lo que se tuerce un tramo: lo que se aparta de lado por cada px que baja.
+   * Uno que se aparta más de `slant` columnas pasaría rozando los medallones
+   * de al lado de donde sale o adonde llega: solo si no queda otra.
+   */
+  const bend = (dx: number, dy: number) =>
+    (dx / dy) ** 2 + (Math.abs(dx) > S.slant * colWidth ? 100 : 0)
+
+  /**
+   * Por qué carriles va cada carretera: en cada fila que cruza, el que hace
+   * que se tuerza lo menos posible en todo el camino (un tramo corto, como el
+   * de la salida, se tuerce más con lo mismo). Cruza la fila en recto, de
+   * `through` antes a `through` después del centro de los medallones.
+   */
+  const pickLanes = (from: string, to: string): number[] => {
+    const rowA = rowOf.get(from)!
+    const crossed = rowLanes.slice(rowA + 1, rowOf.get(to)!)
+    if (crossed.length === 0) return []
+    const free = S.row - 2 * S.through
+    // Lo menos torcido hasta cada carril de cada fila, y por dónde se llega.
+    let best = crossed[0]!.map(x => ({
+      cost: bend(x - xOf(from), rowA === -1 ? S.startGap - S.through : S.row - S.through),
+      path: [x],
+    }))
+    for (const row of crossed.slice(1)) {
+      best = row.map(x =>
+        best
+          .map(prev => ({
+            cost: prev.cost + bend(x - prev.path.at(-1)!, free),
+            path: [...prev.path, x],
+          }))
+          .reduce((low, option) => (option.cost < low.cost ? option : low))
+      )
+    }
+    const tail = (to === MAP_GOAL ? S.goalGap : S.row) - S.through
+    const end = (option: (typeof best)[number]) =>
+      option.cost + bend(xOf(to) - option.path.at(-1)!, tail)
+    return best.reduce((low, option) => (end(option) < end(low) ? option : low)).path
+  }
+
+  const opens = new Set(layout.edges.map(edge => edge.from))
+  const links: [string, string][] = [
+    ...first.map(id => [MAP_START, id] as [string, string]),
+    ...layout.edges.map(edge => [edge.from, edge.to] as [string, string]),
+    // Lo que no abre nada sigue hasta la meta.
+    ...ids.filter(id => !opens.has(id)).map(id => [id, MAP_GOAL] as [string, string]),
+  ]
+  const routes = links.map(([from, to]) => ({ from, to, xs: pickLanes(from, to) }))
+
+  // La salida y la meta, con sitio para que su primer o último tramo no se
+  // tuerza tanto que pase rozando un medallón de la primera o la última fila.
+  const room = (dx: number, lead: number) => lead + S.slope * Math.abs(dx)
+  let startGap: number = S.startGap
+  let goalGap: number = S.goalGap
+  for (const { from, to, xs } of routes) {
+    if (from === MAP_START) {
+      const next = xs[0] ?? xOf(to)
+      startGap = Math.max(startGap, room(next - startX, xs.length > 0 ? S.through : 0))
+    }
+    if (to === MAP_GOAL) {
+      const prev = xs.at(-1) ?? xOf(from)
+      goalGap = Math.max(goalGap, room(goalX - prev, xs.length > 0 ? S.through : 0))
+    }
+  }
+  const top = S.top + startGap - S.startGap
+  const rowY = (row: number) => top + row * S.row
+  for (const [id, place] of places) places.set(id, { x: place.x, y: rowY(rowOf.get(id)!) })
+  const start = { x: startX, y: top - startGap }
+  const goal = { x: goalX, y: rowY(rows.length - 1) + goalGap }
+  const point = (id: string) =>
+    id === MAP_START ? start : id === MAP_GOAL ? goal : places.get(id)!
+
+  for (const { from, to, xs } of routes) {
+    const rowA = rowOf.get(from)!
+    const via = xs.flatMap((x, index) => [
+      { x, y: rowY(rowA + 1 + index) - S.through },
+      { x, y: rowY(rowA + 1 + index) + S.through },
+    ])
+    road(from, to, roadVia([point(from), ...via, point(to)]))
+  }
   return {
     shape: 'board',
     width,
@@ -310,7 +456,7 @@ function columnGeometry(layout: MissionMapLayout, width: number): MapGeometry {
  * alto del mapa. Siempre las mismas para el mismo tamaño.
  */
 export function mapIslands(width: number, height: number): MapIsland[] {
-  const tones: MapIsland['tone'][] = ['mint', 'purple', 'peach']
+  const tones: MapIsland['tone'][] = ['purple', 'navy', 'mint']
   const step = 300
   const islands: MapIsland[] = []
   for (let index = 0, y = 90; y < height + step / 2; index += 1, y += step) {

@@ -636,7 +636,9 @@
       "goal": "Meta",
       "you_are_here": "Estás aquí",
       "go_to_mine": "Ir a mi misión",
+      "keys_hint": "Con el teclado, las flechas pasan de una misión a otra; Inicio y Fin llevan a la primera y a la última.",
       "your_progress": "Has completado {done} de {total} misión | Has completado {done} de {total} misiones",
+      "all_done": "¡Mapa completado!",
       "class_progress": "La clase lleva el {percent} % del recorrido",
       "class_done_by_all": "Completadas por toda la clase: {done} de {total}",
       "legend": {

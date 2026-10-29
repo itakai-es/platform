@@ -42,10 +42,6 @@ export interface MapMissionInput {
 /** Un nodo del mapa, listo para pintar. */
 export interface MapLayoutNode {
   id: string
-  /** Capa (desde 0): la longitud del camino más largo desde una que no pide nada. */
-  layer: number
-  /** Posición dentro de su capa (desde 0), en el orden de la clase. */
-  slot: number
   /** Posición en el recorrido del mapa (desde 1). */
   step: number
   state: MapNodeState
@@ -60,21 +56,22 @@ export interface MapLayoutNode {
   prerequisiteIds: string[]
 }
 
-/** Una línea del mapa, de `from` a `to`. */
+/**
+ * Una línea del mapa, de `from` a `to`: con requisitos, `to` pide `from`; sin
+ * ellos, `to` es la siguiente en el orden de la clase. Si va hecha lo dice la
+ * geometría (utils/mission-map-geometry.ts), que lo cuenta igual para la
+ * salida y la meta.
+ */
 export interface MapLayoutEdge {
   key: string
   from: string
   to: string
-  /** `requirement`: `to` pide `from`. `order`: sin requisitos, la siguiente en el orden. */
-  kind: 'requirement' | 'order'
-  /** Va hecha: `from` está completada. */
-  done: boolean
 }
 
 export interface MissionMapLayout {
   /** Los nodos en el orden del recorrido. */
   nodes: MapLayoutNode[]
-  /** Los ids de cada capa, en orden. */
+  /** Los ids de cada capa (la longitud del camino más largo desde una que no pide nada), en orden. */
   layers: string[][]
   edges: MapLayoutEdge[]
   /** Hay requisitos entre las misiones (si no, el camino es el orden de la clase). */
@@ -150,8 +147,8 @@ export function layoutMissionMap(
 
   const byClassOrder = (a: string, b: string) => classIndex.get(a)! - classIndex.get(b)!
   const nodes: MapLayoutNode[] = []
-  for (const [layer, layerIds] of compact.entries()) {
-    for (const [slot, id] of layerIds.entries()) {
+  for (const layerIds of compact) {
+    for (const id of layerIds) {
       const m = byId.get(id)!
       const prerequisiteIds = [...(needs.get(id) ?? [])].sort(byClassOrder)
       const lockReason =
@@ -164,8 +161,6 @@ export function layoutMissionMap(
             : []
       nodes.push({
         id,
-        layer,
-        slot,
         step: nodes.length + 1,
         state: stateOf(m),
         lockReason,
@@ -175,24 +170,12 @@ export function layoutMissionMap(
     }
   }
 
-  const stateById = new Map(nodes.map(n => [n.id, n.state]))
-  const lines: MapLayoutEdge[] = branched
+  const line = (from: string, to: string): MapLayoutEdge => ({ key: `${from}>${to}`, from, to })
+  const lines = branched
     ? edges
-        .map(edge => ({
-          key: `${edge.requiredMissionId}>${edge.missionId}`,
-          from: edge.requiredMissionId,
-          to: edge.missionId,
-          kind: 'requirement' as const,
-          done: stateById.get(edge.requiredMissionId) === 'completed',
-        }))
+        .map(edge => line(edge.requiredMissionId, edge.missionId))
         .sort((a, b) => byClassOrder(a.to, b.to) || byClassOrder(a.from, b.from))
-    : ids.slice(1).map((to, index) => ({
-        key: `${ids[index]}>${to}`,
-        from: ids[index]!,
-        to,
-        kind: 'order' as const,
-        done: stateById.get(ids[index]!) === 'completed',
-      }))
+    : ids.slice(1).map((to, index) => line(ids[index]!, to))
 
   return { nodes, layers: compact, edges: lines, branched }
 }
