@@ -17,6 +17,7 @@
       :missions="inClassOrder"
       mode="student"
       :class-id="classId"
+      :you="you"
     />
 
     <!-- Empty (con o sin filtros) -->
@@ -60,6 +61,7 @@
 import { ClipboardDocumentListIcon } from '@heroicons/vue/24/outline'
 import type { MissionStatus, MissionRarity } from '~/types/mission.types'
 import { DEFAULT_MISSION_SORT, sortMissions } from '~/utils/mission-sort'
+import { studentAvatarSeed } from '~/utils/avatar'
 import type { ViewMode } from '~/composables/useViewMode'
 
 definePageMeta({ layout: 'student', middleware: ['auth', 'role'] })
@@ -67,7 +69,14 @@ definePageMeta({ layout: 'student', middleware: ['auth', 'role'] })
 const { t, locale } = useI18n()
 const route = useRoute()
 const classId = computed(() => route.params.id as string)
-const { classMissions, classSettings } = useStudentClassDetail(classId)
+const { classMissions, classSettings, studentAvatar } = useStudentClassDetail(classId)
+const authStore = useAuthStore()
+// Quien mira, para «Estás aquí» en el mapa: su avatar en esta clase.
+const you = computed(() => ({
+  avatar: studentAvatar.value,
+  seed: studentAvatarSeed(classId.value, authStore.user?.id ?? ''),
+  name: authStore.user?.name ?? null,
+}))
 // El mapa (en pruebas) es una vista más y, si la clase lo tiene encendido, la de entrada.
 const mapOn = computed(() => classSettings.value.missionMap)
 const viewModes = computed<ViewMode[]>(() =>
@@ -97,6 +106,8 @@ const missions = computed(() =>
     earnedXp: m.earnedXp as number | undefined,
     earnedCoins: m.earnedCoins as number | undefined,
     earnedMana: m.earnedMana as number | undefined,
+    // Cuántos enigmas lleva completados, de cuántos (el detalle del mapa).
+    progressDetail: m.progressDetail as { done: number; total: number } | undefined,
     backgroundImage: m.backgroundImage as string | undefined,
     // El camino del mapa: lo que pide y, si la tiene cerrada por él, lo que le falta.
     prerequisiteIds: (m.prerequisiteIds as string[] | undefined) ?? [],

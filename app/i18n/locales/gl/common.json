@@ -621,7 +621,40 @@
       "no_students": "Aínda non hai alumnado",
       "opens_after": "Ábrese ao completar {missions}",
       "quoted": "«{title}»",
-      "locked_path_explain": "Para abrila, completa antes {missions}."
+      "locked_path_explain": "Para abrila, completa antes {missions}.",
+      "state_short": {
+        "completed": "Completada",
+        "in_progress": "En curso",
+        "available": "Dispoñible",
+        "urgent": "Urxente",
+        "expired": "Expirada",
+        "locked": "Pechada"
+      },
+      "start": "Saída",
+      "goal": "Meta",
+      "you_are_here": "Estás aquí",
+      "go_to_mine": "Ir á miña misión",
+      "your_progress": "Completaches {done} de {total} misión | Completaches {done} de {total} misións",
+      "class_progress": "A clase leva o {percent} % do percorrido",
+      "class_done_by_all": "Completadas por toda a clase: {done} de {total}",
+      "legend": {
+        "title": "Lenda",
+        "hint": "Preme un estado para salientar as súas misións no mapa."
+      },
+      "detail": {
+        "label": "Detalle da misión",
+        "empty": "Preme unha misión do mapa para ver aquí o seu detalle.",
+        "your_progress": "O teu progreso",
+        "enigmas_done": "{done} de {total} enigma | {done} de {total} enigmas",
+        "deadline": "Data límite: {date}",
+        "requires": "Para abrila, completa antes:",
+        "requires_teacher": "Para abrila, cómpre completar antes:",
+        "unlocks": "Ao completala, abre o camiño a:",
+        "start": "Comezar",
+        "continue": "Continuar",
+        "view": "Ver misión",
+        "open": "Abrir misión"
+      }
     }
   }
 }

@@ -1,8 +1,9 @@
 /**
  * La disposición del mapa de misiones (E3), sin Vue: de las misiones de una
  * clase (en su orden) saca las capas, los nodos con su estado y lo que los
- * abre, las líneas entre ellos y dónde va cada nodo en la rejilla. Lo pinta
- * MissionMap.vue; vive aquí para poder probarlo sin navegador.
+ * abre, las líneas entre ellos y lo que está unido a cada uno. Lo pinta
+ * MissionMap.vue (dónde va cada cosa, en utils/mission-map-geometry.ts); vive
+ * aquí para poder probarlo sin navegador.
  *
  * - Con requisitos (el camino del mapa), la capa de cada misión es la longitud
  *   del camino más largo desde una que no pide nada; dentro de cada capa, el
@@ -196,41 +197,17 @@ export function layoutMissionMap(
   return { nodes, layers: compact, edges: lines, branched }
 }
 
-/** Cuántos nodos caben por fila en un ancho (px) desde `sm`: entre 2 y 4. */
-export function mapColumns(width: number, nodeWidth = 176): number {
-  return Math.min(4, Math.max(2, Math.floor(width / nodeWidth)))
-}
-
-/** Dónde va un nodo en la rejilla desde `sm`: fila y primera columna (desde 1); ocupa dos. */
-export interface MapGridCell {
-  row: number
-  column: number
-}
-
 /**
- * La rejilla del mapa desde `sm`, de `2 × columns` columnas en la que cada nodo
- * ocupa dos: cada capa en su fila (o en varias, si no cabe), con sus nodos
- * centrados. Si todas las capas tienen un solo nodo (sin requisitos o una
- * cadena), van en zigzag, alternando izquierda y derecha.
+ * Lo que está unido a una misión en el mapa: lo que pide (`requires`) y lo que
+ * abre ella (`unlocks`), en el orden de las líneas. Sin requisitos, la
+ * anterior y la siguiente del camino. Para resaltarlo al pasar por encima.
  */
-export function mapGrid(layout: MissionMapLayout, columns: number): Map<string, MapGridCell> {
-  const cells = new Map<string, MapGridCell>()
-  const zigzag = layout.layers.every(layer => layer.length === 1)
-  let row = 1
-  for (const layer of layout.layers) {
-    if (zigzag) {
-      cells.set(layer[0]!, { row, column: row % 2 === 1 || columns < 2 ? 1 : 2 * columns - 1 })
-      row += 1
-      continue
-    }
-    for (let start = 0; start < layer.length; start += columns) {
-      const chunk = layer.slice(start, start + columns)
-      const offset = columns - chunk.length
-      for (const [index, id] of chunk.entries()) {
-        cells.set(id, { row, column: offset + 2 * index + 1 })
-      }
-      row += 1
-    }
+export function mapNeighbors(
+  layout: MissionMapLayout,
+  id: string
+): { requires: string[]; unlocks: string[] } {
+  return {
+    requires: layout.edges.filter(e => e.to === id).map(e => e.from),
+    unlocks: layout.edges.filter(e => e.from === id).map(e => e.to),
   }
-  return cells
 }

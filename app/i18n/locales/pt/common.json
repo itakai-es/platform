@@ -621,7 +621,40 @@
       "no_students": "Ainda não há estudantes",
       "opens_after": "Abre ao completar {missions}",
       "quoted": "«{title}»",
-      "locked_path_explain": "Para a abrir, completa antes {missions}."
+      "locked_path_explain": "Para a abrir, completa antes {missions}.",
+      "state_short": {
+        "completed": "Concluída",
+        "in_progress": "Em curso",
+        "available": "Disponível",
+        "urgent": "Urgente",
+        "expired": "Expirada",
+        "locked": "Fechada"
+      },
+      "start": "Partida",
+      "goal": "Meta",
+      "you_are_here": "Estás aqui",
+      "go_to_mine": "Ir para a minha missão",
+      "your_progress": "Concluíste {done} de {total} missão | Concluíste {done} de {total} missões",
+      "class_progress": "A turma já fez {percent} % do percurso",
+      "class_done_by_all": "Concluídas por toda a turma: {done} de {total}",
+      "legend": {
+        "title": "Legenda",
+        "hint": "Carrega num estado para destacar as suas missões no mapa."
+      },
+      "detail": {
+        "label": "Detalhe da missão",
+        "empty": "Carrega numa missão do mapa para veres aqui o seu detalhe.",
+        "your_progress": "O teu progresso",
+        "enigmas_done": "{done} de {total} enigma | {done} de {total} enigmas",
+        "deadline": "Prazo: {date}",
+        "requires": "Para a abrir, conclui antes:",
+        "requires_teacher": "Para a abrir, é preciso concluir antes:",
+        "unlocks": "Ao concluí-la, abre o caminho para:",
+        "start": "Começar",
+        "continue": "Continuar",
+        "view": "Ver missão",
+        "open": "Abrir missão"
+      }
     }
   }
 }

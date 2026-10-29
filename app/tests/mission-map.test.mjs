@@ -1,14 +1,19 @@
 /**
- * Pruebas de utils/mission-map.ts (lo que dibuja el mapa de misiones). Dentro
+ * Pruebas de utils/mission-map.ts (lo que cuenta el mapa de misiones). Dentro
  * de itakai-app-dev:
  *   node --experimental-network-imports --test /app/tests/mission-map.test.mjs
  */
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 
-const { studentNodeState, teacherNodeState, mapLane, pathBetween, segmentDone } = await import(
-  'http://localhost:4000/_nuxt/utils/mission-map.ts'
-)
+const {
+  studentNodeState,
+  teacherNodeState,
+  mapProgress,
+  currentNodeId,
+  ringFraction,
+  classMapProgress,
+} = await import('http://localhost:4000/_nuxt/utils/mission-map.ts')
 
 const now = Date.parse('2026-10-23T10:00:00Z')
 const inDays = d => new Date(now + d * 86400000).toISOString()
@@ -35,25 +40,61 @@ test('el del profesorado sigue al filtro de estado: completada es de todo el alu
   )
 })
 
-test('los carriles alternan empezando por la izquierda', () => {
-  assert.deepEqual([0, 1, 2, 3].map(mapLane), ['left', 'right', 'left', 'right'])
+test('lo recorrido: cuántas están completadas, de cuántas, y en %', () => {
+  assert.deepEqual(mapProgress(['completed', 'completed', 'available', 'locked']), {
+    done: 2,
+    total: 4,
+    percent: 50,
+  })
+  assert.deepEqual(mapProgress(['completed', 'in_progress', 'locked']), {
+    done: 1,
+    total: 3,
+    percent: 33,
+  })
+  assert.deepEqual(mapProgress([]), { done: 0, total: 0, percent: 0 })
 })
 
-test('el trazo une los centros: recta en la misma columna, curva en S entre carriles', () => {
-  assert.equal(pathBetween({ x: 40, y: 10 }, { x: 40, y: 110 }), 'M 40 10 L 40 110')
+test('«Estás aquí»: la primera en curso; si no, la primera urgente o disponible', () => {
+  const n = (id, state) => ({ id, state })
+  // Una en curso gana a una disponible anterior.
   assert.equal(
-    pathBetween({ x: 100, y: 40 }, { x: 300, y: 160 }),
-    'M 100 40 C 100 100 300 100 300 160'
+    currentNodeId([n('a', 'completed'), n('b', 'available'), n('c', 'in_progress')]),
+    'c'
   )
-  // Los puntos de control no se salen de entre los dos nodos: no pisa los textos.
-  const d = pathBetween({ x: 320.25, y: 50 }, { x: 180.5, y: 170 })
-  const xs = [...d.matchAll(/(-?[\d.]+) (-?[\d.]+)/g)].map(m => Number(m[1]))
-  for (const x of xs) assert.ok(x >= 180.5 && x <= 320.3, `${x} fuera`)
+  // Sin ninguna en curso, la primera abierta del recorrido (urgente o disponible).
+  assert.equal(
+    currentNodeId([n('a', 'completed'), n('b', 'expired'), n('c', 'urgent'), n('d', 'available')]),
+    'c'
+  )
+  assert.equal(currentNodeId([n('a', 'locked'), n('b', 'available')]), 'b')
+  // Todo hecho, caducado o cerrado: no está en ninguna.
+  assert.equal(currentNodeId([n('a', 'completed'), n('b', 'expired'), n('c', 'locked')]), null)
+  assert.equal(currentNodeId([]), null)
 })
 
-test('un tramo va hecho cuando sale de una misión completada', () => {
-  assert.equal(segmentDone('completed'), true)
-  for (const state of ['in_progress', 'available', 'urgent', 'expired', 'locked']) {
-    assert.equal(segmentDone(state), false)
-  }
+test('el anillo del profesorado: la parte del alumnado que la ha completado, de 0 a 1', () => {
+  assert.equal(ringFraction(7, 8), 0.875)
+  assert.equal(ringFraction(0, 8), 0)
+  assert.equal(ringFraction(8, 8), 1)
+  // Sin alumnado no hay anillo; nunca se sale de 0..1.
+  assert.equal(ringFraction(3, 0), 0)
+  assert.equal(ringFraction(), 0)
+  assert.equal(ringFraction(9, 8), 1)
+})
+
+test('cómo va la clase: la media de lo completado y cuántas ha completado todo el alumnado', () => {
+  const missions = [
+    { completedCount: 8, totalStudents: 8 },
+    { completedCount: 4, totalStudents: 8 },
+    { completedCount: 0, totalStudents: 8 },
+    { completedCount: 0, totalStudents: 8 },
+  ]
+  // 12 de 32 posibles.
+  assert.deepEqual(classMapProgress(missions), { students: 8, percent: 38, doneByAll: 1 })
+  assert.deepEqual(classMapProgress([{ completedCount: 0, totalStudents: 0 }]), {
+    students: 0,
+    percent: 0,
+    doneByAll: 0,
+  })
+  assert.deepEqual(classMapProgress([]), { students: 0, percent: 0, doneByAll: 0 })
 })

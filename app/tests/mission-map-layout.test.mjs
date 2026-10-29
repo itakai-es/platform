@@ -1,12 +1,12 @@
 /**
- * Pruebas de utils/mission-map-layout.ts (capas, nodos, líneas y rejilla del
- * mapa de misiones). Dentro de itakai-app-dev:
+ * Pruebas de utils/mission-map-layout.ts (capas, nodos, líneas y lo que está
+ * unido a cada nodo en el mapa de misiones). Dentro de itakai-app-dev:
  *   node --experimental-network-imports --test /app/tests/mission-map-layout.test.mjs
  */
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 
-const { layoutMissionMap, mapGrid, mapColumns } = await import(
+const { layoutMissionMap, mapNeighbors } = await import(
   'http://localhost:4000/_nuxt/utils/mission-map-layout.ts'
 )
 
@@ -99,44 +99,17 @@ test('al alumnado: cerrada por el camino con lo que le falta, o por su docente; 
   )
 })
 
-test('la rejilla: cada capa en su fila y centrada; si no cabe, en varias; en zigzag si va de una en una', () => {
+test('lo unido a una misión: lo que pide y lo que abre (para resaltarlo)', () => {
+  // 1 → 2 → (3 y 4); 5 pide 3 y 4.
   const layout = layoutMissionMap(
-    [m('a'), m('b', ['a']), m('c', ['a']), m('d', ['a']), m('e', ['a']), m('f', ['a'])],
-    'student'
+    [m('m1'), m('m2', ['m1']), m('m3', ['m2']), m('m4', ['m2']), m('m5', ['m3', 'm4'])],
+    'teacher'
   )
-  const cells = mapGrid(layout, 3)
-  // a sola, centrada en una rejilla de 6 columnas; b, c, d en la segunda fila; e y f, en la tercera.
-  assert.deepEqual(cells.get('a'), { row: 1, column: 3 })
-  assert.deepEqual(
-    ['b', 'c', 'd'].map(id => cells.get(id)),
-    [
-      { row: 2, column: 1 },
-      { row: 2, column: 3 },
-      { row: 2, column: 5 },
-    ]
-  )
-  assert.deepEqual(
-    ['e', 'f'].map(id => cells.get(id)),
-    [
-      { row: 3, column: 2 },
-      { row: 3, column: 4 },
-    ]
-  )
+  assert.deepEqual(mapNeighbors(layout, 'm2'), { requires: ['m1'], unlocks: ['m3', 'm4'] })
+  assert.deepEqual(mapNeighbors(layout, 'm5'), { requires: ['m3', 'm4'], unlocks: [] })
+  assert.deepEqual(mapNeighbors(layout, 'm1'), { requires: [], unlocks: ['m2'] })
 
-  const chain = layoutMissionMap([m('a'), m('b', ['a']), m('c', ['b'])], 'student')
-  const zig = mapGrid(chain, 2)
-  assert.deepEqual(
-    ['a', 'b', 'c'].map(id => zig.get(id)),
-    [
-      { row: 1, column: 1 },
-      { row: 2, column: 3 },
-      { row: 3, column: 1 },
-    ]
-  )
-})
-
-test('las columnas según el ancho: entre 2 y 4', () => {
-  assert.equal(mapColumns(300), 2)
-  assert.equal(mapColumns(600), 3)
-  assert.equal(mapColumns(2000), 4)
+  // Sin requisitos, la anterior y la siguiente del camino.
+  const linear = layoutMissionMap([m('a'), m('b'), m('c')], 'student')
+  assert.deepEqual(mapNeighbors(linear, 'b'), { requires: ['a'], unlocks: ['c'] })
 })

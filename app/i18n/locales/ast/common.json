@@ -621,7 +621,40 @@
       "no_students": "Entá nun hai alumnáu",
       "opens_after": "Ábrese al completar {missions}",
       "quoted": "«{title}»",
-      "locked_path_explain": "Pa abrila, completa enantes {missions}."
+      "locked_path_explain": "Pa abrila, completa enantes {missions}.",
+      "state_short": {
+        "completed": "Completada",
+        "in_progress": "En cursu",
+        "available": "Disponible",
+        "urgent": "Urxente",
+        "expired": "Caducada",
+        "locked": "Zarrada"
+      },
+      "start": "Salida",
+      "goal": "Meta",
+      "you_are_here": "Tas equí",
+      "go_to_mine": "Dir a la mio misión",
+      "your_progress": "Completesti {done} de {total} misión | Completesti {done} de {total} misiones",
+      "class_progress": "La clase lleva el {percent} % del percorríu",
+      "class_done_by_all": "Completaes por tola clase: {done} de {total}",
+      "legend": {
+        "title": "Lleenda",
+        "hint": "Primi un estáu pa resaltar les sos misiones nel mapa."
+      },
+      "detail": {
+        "label": "Detalle de la misión",
+        "empty": "Primi una misión del mapa pa ver equí el so detalle.",
+        "your_progress": "El to progresu",
+        "enigmas_done": "{done} de {total} enigma | {done} de {total} enigmes",
+        "deadline": "Data llende: {date}",
+        "requires": "Pa abrila, completa enantes:",
+        "requires_teacher": "Pa abrila, hai que completar enantes:",
+        "unlocks": "Al completala, abre’l camín a:",
+        "start": "Entamar",
+        "continue": "Siguir",
+        "view": "Ver la misión",
+        "open": "Abrir la misión"
+      }
     }
   }
 }

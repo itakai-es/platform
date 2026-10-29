@@ -621,7 +621,40 @@
       "no_students": "Encara no hi ha alumnat",
       "opens_after": "S’obri en completar {missions}",
       "quoted": "«{title}»",
-      "locked_path_explain": "Per a obrir-la, completa abans {missions}."
+      "locked_path_explain": "Per a obrir-la, completa abans {missions}.",
+      "state_short": {
+        "completed": "Completada",
+        "in_progress": "En curs",
+        "available": "Disponible",
+        "urgent": "Urgent",
+        "expired": "Caducada",
+        "locked": "Tancada"
+      },
+      "start": "Eixida",
+      "goal": "Meta",
+      "you_are_here": "Estàs ací",
+      "go_to_mine": "Ves a la meua missió",
+      "your_progress": "Has completat {done} de {total} missió | Has completat {done} de {total} missions",
+      "class_progress": "La classe porta el {percent} % del recorregut",
+      "class_done_by_all": "Completades per tota la classe: {done} de {total}",
+      "legend": {
+        "title": "Llegenda",
+        "hint": "Prem un estat per a destacar-ne les missions en el mapa."
+      },
+      "detail": {
+        "label": "Detall de la missió",
+        "empty": "Prem una missió del mapa per a veure’n ací el detall.",
+        "your_progress": "El teu progrés",
+        "enigmas_done": "{done} de {total} enigma | {done} de {total} enigmes",
+        "deadline": "Data límit: {date}",
+        "requires": "Per a obrir-la, completa abans:",
+        "requires_teacher": "Per a obrir-la, cal completar abans:",
+        "unlocks": "En completar-la, obri el camí a:",
+        "start": "Començar",
+        "continue": "Continuar",
+        "view": "Veure la missió",
+        "open": "Obrir la missió"
+      }
     }
   }
 }

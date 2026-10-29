@@ -621,7 +621,40 @@
       "no_students": "Oraindik ez dago ikaslerik",
       "opens_after": "{missions} osatzean irekitzen da",
       "quoted": "«{title}»",
-      "locked_path_explain": "Irekitzeko, osatu lehenago {missions}."
+      "locked_path_explain": "Irekitzeko, osatu lehenago {missions}.",
+      "state_short": {
+        "completed": "Osatua",
+        "in_progress": "Abian",
+        "available": "Eskuragarri",
+        "urgent": "Urgentea",
+        "expired": "Iraungia",
+        "locked": "Itxita"
+      },
+      "start": "Irteera",
+      "goal": "Helmuga",
+      "you_are_here": "Hemen zaude",
+      "go_to_mine": "Joan nire misiora",
+      "your_progress": "{total} misiotik {done} osatu dituzu | {total} misiotik {done} osatu dituzu",
+      "class_progress": "Klaseak ibilbidearen % {percent} egin du",
+      "class_done_by_all": "Klase osoak osatuak: {done}/{total}",
+      "legend": {
+        "title": "Legenda",
+        "hint": "Sakatu egoera bat haren misioak mapan nabarmentzeko."
+      },
+      "detail": {
+        "label": "Misioaren xehetasuna",
+        "empty": "Sakatu mapako misio bat haren xehetasuna hemen ikusteko.",
+        "your_progress": "Zure aurrerapena",
+        "enigmas_done": "{total} enigmatik {done} | {total} enigmatik {done}",
+        "deadline": "Epemuga: {date}",
+        "requires": "Irekitzeko, osatu lehenago:",
+        "requires_teacher": "Irekitzeko, hau osatu behar da lehenago:",
+        "unlocks": "Osatzean, bidea irekitzen dio:",
+        "start": "Hasi",
+        "continue": "Jarraitu",
+        "view": "Ikusi misioa",
+        "open": "Ireki misioa"
+      }
     }
   }
 }

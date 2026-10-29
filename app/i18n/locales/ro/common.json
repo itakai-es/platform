@@ -621,7 +621,40 @@
       "no_students": "Încă nu e nimeni în clasă",
       "opens_after": "Se deschide după ce finalizezi {missions}",
       "quoted": "«{title}»",
-      "locked_path_explain": "Ca s-o deschizi, finalizează mai întâi {missions}."
+      "locked_path_explain": "Ca s-o deschizi, finalizează mai întâi {missions}.",
+      "state_short": {
+        "completed": "Finalizată",
+        "in_progress": "În curs",
+        "available": "Disponibilă",
+        "urgent": "Urgentă",
+        "expired": "Expirată",
+        "locked": "Închisă"
+      },
+      "start": "Start",
+      "goal": "Sosire",
+      "you_are_here": "Ești aici",
+      "go_to_mine": "Mergi la misiunea mea",
+      "your_progress": "Ai finalizat {done} din {total} misiune | Ai finalizat {done} din {total} misiuni",
+      "class_progress": "Clasa a parcurs {percent} % din traseu",
+      "class_done_by_all": "Finalizate de toată clasa: {done} din {total}",
+      "legend": {
+        "title": "Legendă",
+        "hint": "Apasă pe o stare pentru a-i evidenția misiunile pe hartă."
+      },
+      "detail": {
+        "label": "Detaliile misiunii",
+        "empty": "Apasă pe o misiune de pe hartă ca să-i vezi aici detaliile.",
+        "your_progress": "Progresul tău",
+        "enigmas_done": "{done} din {total} enigmă | {done} din {total} enigme",
+        "deadline": "Termen-limită: {date}",
+        "requires": "Ca să o deschizi, finalizează mai întâi:",
+        "requires_teacher": "Ca să se deschidă, trebuie finalizată mai întâi:",
+        "unlocks": "Când o finalizezi, deschide drumul spre:",
+        "start": "Începe",
+        "continue": "Continuă",
+        "view": "Vezi misiunea",
+        "open": "Deschide misiunea"
+      }
     }
   }
 }

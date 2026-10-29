@@ -22,6 +22,13 @@
             @keydown.esc="handleEsc"
             @keydown.tab="trapTab"
           >
+            <!-- Asa de la hoja inferior (solo dibujo). -->
+            <span
+              v-if="sheet"
+              class="mx-auto mt-2 block h-1.5 w-10 flex-shrink-0 rounded-full bg-gray-300 sm:hidden"
+              aria-hidden="true"
+            />
+
             <!-- Centinela: el foco que sale hacia atrás de un reproductor
                  incrustado (su teclado no llega aquí) vuelve al final. -->
             <span tabindex="0" data-focus-guard class="sr-only" @focus="focusLast" />
@@ -101,6 +108,11 @@ interface Props {
    * medida que se elige algo, y no cambian de pestaña.
    */
   fitContent?: boolean
+  /**
+   * En el móvil (por debajo de `sm`) sale de abajo, pegada al borde y a todo
+   * lo ancho, como una hoja inferior; desde `sm`, centrada como siempre.
+   */
+  sheet?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -110,6 +122,7 @@ const props = withDefaults(defineProps<Props>(), {
   persistent: false,
   stickyChrome: false,
   fitContent: false,
+  sheet: false,
   closeOnEsc: null,
 })
 
@@ -188,16 +201,15 @@ function trapTab(event: KeyboardEvent) {
 let opener: HTMLElement | null = null
 
 const viewportClasses = computed(() =>
-  props.stickyChrome
-    ? 'fixed inset-0 z-50 overflow-hidden'
-    : 'fixed inset-0 z-50 overflow-y-auto'
+  props.stickyChrome ? 'fixed inset-0 z-50 overflow-hidden' : 'fixed inset-0 z-50 overflow-y-auto'
 )
 
-const containerClasses = computed(() =>
-  props.stickyChrome
-    ? 'flex h-full items-center justify-center p-4'
-    : 'flex min-h-full items-center justify-center p-4'
-)
+const containerClasses = computed(() => {
+  const height = props.stickyChrome ? 'h-full' : 'min-h-full'
+  return props.sheet
+    ? `flex ${height} items-end justify-center sm:items-center sm:p-4`
+    : `flex ${height} items-center justify-center p-4`
+})
 
 const modalClasses = computed(() => {
   const sizes = {
@@ -222,7 +234,9 @@ const modalClasses = computed(() => {
       : 'flex flex-col h-[92vh] max-h-[92vh]'
     : ''
 
-  return `relative w-full ${sizes[props.size]} ${themes[props.theme]} rounded-2xl shadow-xl transition-all overflow-hidden focus:outline-none ${layout}`
+  const shape = props.sheet ? 'modal-sheet rounded-t-2xl sm:rounded-2xl' : 'rounded-2xl'
+
+  return `relative w-full ${sizes[props.size]} ${themes[props.theme]} ${shape} shadow-xl transition-all overflow-hidden focus:outline-none ${layout}`
 })
 
 const headerClasses = computed(() => {
@@ -325,5 +339,21 @@ onUnmounted(unlockScroll)
 .modal-enter-from,
 .modal-leave-to {
   opacity: 0;
+}
+
+/* La hoja inferior sube desde el borde (solo en el móvil y con animaciones). */
+@media (max-width: 639px) and (prefers-reduced-motion: no-preference) {
+  .modal-enter-active .modal-sheet {
+    animation: modal-sheet-up 0.25s ease-out;
+  }
+}
+
+@keyframes modal-sheet-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
 }
 </style>

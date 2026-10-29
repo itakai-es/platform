@@ -621,7 +621,40 @@
       "no_students": "No students yet",
       "opens_after": "Opens after completing {missions}",
       "quoted": "“{title}”",
-      "locked_path_explain": "To open it, first complete {missions}."
+      "locked_path_explain": "To open it, first complete {missions}.",
+      "state_short": {
+        "completed": "Completed",
+        "in_progress": "In progress",
+        "available": "Available",
+        "urgent": "Urgent",
+        "expired": "Expired",
+        "locked": "Closed"
+      },
+      "start": "Start",
+      "goal": "Finish",
+      "you_are_here": "You are here",
+      "go_to_mine": "Go to my mission",
+      "your_progress": "You have completed {done} of {total} mission | You have completed {done} of {total} missions",
+      "class_progress": "The class has covered {percent}% of the path",
+      "class_done_by_all": "Completed by the whole class: {done} of {total}",
+      "legend": {
+        "title": "Legend",
+        "hint": "Press a status to highlight its missions on the map."
+      },
+      "detail": {
+        "label": "Mission details",
+        "empty": "Press a mission on the map to see its details here.",
+        "your_progress": "Your progress",
+        "enigmas_done": "{done} of {total} enigma | {done} of {total} enigmas",
+        "deadline": "Deadline: {date}",
+        "requires": "To open it, first complete:",
+        "requires_teacher": "To open it, students must first complete:",
+        "unlocks": "Completing it opens the way to:",
+        "start": "Start",
+        "continue": "Continue",
+        "view": "View mission",
+        "open": "Open mission"
+      }
     }
   }
 }

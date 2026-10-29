@@ -1,13 +1,12 @@
 /**
- * Lo que dibuja el mapa de misiones (E3, en pruebas), sin Vue: el estado de
- * cada nodo para quien lo mira, el carril de cada uno en el zigzag y el trazo
- * del camino entre dos nodos. Lo usa MissionMap.vue; vive aquí para poder
- * probarlo sin navegador.
- *
- * El camino es lineal: los nodos van en el orden de la clase (el de la
- * progresión) y cada uno se une con el siguiente. Las posiciones no se guardan:
- * salen del orden.
+ * Lo que cuenta el mapa de misiones (E3, en pruebas), sin Vue: el estado de
+ * cada nodo para quien lo mira, lo recorrido, dónde está el alumnado («Estás
+ * aquí») y, para el profesorado, el anillo de cada medallón y cómo va la clase.
+ * Lo usa MissionMap.vue; vive aquí para poder probarlo sin navegador. La
+ * disposición está en utils/mission-map-layout.ts y las posiciones, en
+ * utils/mission-map-geometry.ts.
  */
+import type { MissionRarity } from '~/types/mission.types'
 import { teacherMissionStatus } from './mission-teacher-status'
 
 /** Estado de un nodo, con su icono y su texto (nunca solo el color). */
@@ -18,6 +17,45 @@ export type MapNodeState =
   | 'urgent'
   | 'expired'
   | 'locked'
+
+/** Una misión de la que se habla en el mapa («Para abrirla, completa antes…»). */
+export interface MapMissionRef {
+  id: string
+  title: string
+}
+
+/** Lo que pintan el mapa y el detalle de cada misión, ya con sus textos. */
+export interface MissionMapItem {
+  id: string
+  /** Posición en el recorrido (desde 1). */
+  step: number
+  title: string
+  rarity: MissionRarity
+  cover: string | null
+  state: MapNodeState
+  /** El estado en pocas palabras, como en la leyenda («En curso», «Activa»). */
+  stateLabel: string
+  /** El estado entero, para el lector de pantalla («En curso: 40 %»). */
+  stateText: string
+  /** Adónde lleva el botón principal; null si no se puede entrar. */
+  href: string | null
+  /** «Empezar», «Continuar», «Ver misión» o «Abrir misión». */
+  actionLabel: string | null
+  /** Alumnado, cerrada por su docente: por qué no se puede entrar. */
+  lockedNote: string | null
+  /** Lo que la abre: al alumnado, lo que le falta; al profesorado, todo lo que pide. */
+  requires: MapMissionRef[]
+  /** Lo que abre ella, si el mapa tiene requisitos. */
+  unlocks: MapMissionRef[]
+  rewards: { xp: number; coins: number; mana: number }
+  enigmas: number
+  /** Alumnado: su avance (null si está cerrada). */
+  progress: { percent: number; done: number; total: number } | null
+  /** Profesorado: cuántas personas la han completado, de cuántas, y en texto. */
+  completed: { done: number; total: number; text: string } | null
+  /** La fecha límite, ya escrita en el idioma de la app. */
+  deadline: string | null
+}
 
 /**
  * El de una misión para el alumnado, a partir del estado que da la API
@@ -61,33 +99,55 @@ export function teacherNodeState(
   }
 }
 
-/** Carril de un nodo desde `sm`: alternan, empezando por la izquierda. */
-export function mapLane(index: number): 'left' | 'right' {
-  return index % 2 === 0 ? 'left' : 'right'
-}
-
-export interface MapPoint {
-  x: number
-  y: number
+/** Lo recorrido: cuántas misiones están completadas, de cuántas, y en %. */
+export function mapProgress(states: MapNodeState[]): {
+  done: number
+  total: number
+  percent: number
+} {
+  const total = states.length
+  const done = states.filter(state => state === 'completed').length
+  return { done, total, percent: total === 0 ? 0 : Math.round((done / total) * 100) }
 }
 
 /**
- * Trazo SVG de un nodo al siguiente, de centro a centro: una curva en S que
- * sale y llega en vertical. Su x no se sale nunca de entre las de los dos
- * nodos, así que no pisa los textos, que van por fuera. Con los dos nodos en la
- * misma columna (móvil) es una recta.
+ * «Estás aquí»: la misión en la que va el alumnado, en el orden del recorrido.
+ * La primera en curso; si no hay, la primera urgente o disponible. null si no
+ * queda ninguna abierta (todo completado, expirado o cerrado).
  */
-export function pathBetween(from: MapPoint, to: MapPoint): string {
-  const r = (n: number) => Math.round(n * 10) / 10
-  if (Math.abs(from.x - to.x) < 0.5) return `M ${r(from.x)} ${r(from.y)} L ${r(to.x)} ${r(to.y)}`
-  const mid = (to.y - from.y) / 2
-  return [
-    `M ${r(from.x)} ${r(from.y)}`,
-    `C ${r(from.x)} ${r(from.y + mid)} ${r(to.x)} ${r(to.y - mid)} ${r(to.x)} ${r(to.y)}`,
-  ].join(' ')
+export function currentNodeId(nodes: { id: string; state: MapNodeState }[]): string | null {
+  const first = (states: MapNodeState[]) => nodes.find(node => states.includes(node.state))?.id
+  return first(['in_progress']) ?? first(['urgent', 'available']) ?? null
 }
 
-/** El tramo que sale de un nodo va hecho si ese nodo está completado. */
-export function segmentDone(from: MapNodeState): boolean {
-  return from === 'completed'
+/**
+ * Profesorado: la parte del anillo de un medallón, de 0 a 1: cuántas personas
+ * la han completado de cuántas. Sin alumnado, 0.
+ */
+export function ringFraction(done = 0, total = 0): number {
+  if (total <= 0) return 0
+  return Math.min(1, Math.max(0, done / total))
+}
+
+/**
+ * Profesorado: cómo va la clase en el mapa. `percent` es la media de lo
+ * completado (cuántas misiones ha completado cada estudiante, de todas) y
+ * `doneByAll`, cuántas ha completado todo el alumnado.
+ */
+export function classMapProgress(missions: { completedCount?: number; totalStudents?: number }[]): {
+  students: number
+  percent: number
+  doneByAll: number
+} {
+  const students = Math.max(0, ...missions.map(m => m.totalStudents ?? 0))
+  if (students === 0 || missions.length === 0) return { students, percent: 0, doneByAll: 0 }
+  const completions = missions.reduce(
+    (sum, m) => sum + Math.min(m.completedCount ?? 0, students),
+    0
+  )
+  return {
+    students,
+    percent: Math.round((completions / (students * missions.length)) * 100),
+    doneByAll: missions.filter(m => (m.completedCount ?? 0) >= students).length,
+  }
 }
