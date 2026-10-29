@@ -1,11 +1,14 @@
 -- Ayuda de E3, entrega 4: el camino del mapa de misiones. La guía del mapa
--- (profesorado) pasa a contar el tablero nuevo y el camino: cómo se monta (en
--- los ajustes de cada misión o encadenando en orden), qué ve el alumnado, cuándo
--- se abre cada misión (los opcionales no cuentan, lo empezado no se cierra, lo
--- caducado o sin enigmas no cierra, «bloqueada» va por encima), cómo se apaga y
--- qué pasa al copiar. Una guía nueva para el alumnado (por qué una misión tiene
--- candado y cómo leer el mapa) y los retoques de las que hablan del orden, de
--- completar una misión, de las copias, del historial y de la vista del alumnado.
+-- (profesorado) pasa a contar el tablero nuevo (los senderos hacia la meta,
+-- quién ha completado cada misión y cuánta gente la lleva en curso), qué ve el
+-- alumnado («Bloqueada» y el motivo), cómo se apaga y qué pasa al copiar. Dos
+-- guías nuevas: una para el profesorado sobre el camino (cómo se monta, en los
+-- ajustes de cada misión o encadenando en orden; cuándo se abre cada misión: los
+-- opcionales no cuentan, lo empezado no se cierra, lo caducado o sin enigmas no
+-- cierra, «bloqueada» va por encima; y cómo encaja con el orden) y otra para el
+-- alumnado (por qué una misión sale bloqueada y cómo leer el mapa). Y los
+-- retoques de las que hablan del orden, de completar una misión, de las copias,
+-- del historial y de la vista del alumnado.
 --
 -- Como el resto del contenido de serie, el panel de administración manda. El
 -- INSERT solo crea lo que no exista y va al final de su categoría; cada UPDATE
@@ -13,13 +16,54 @@
 -- alguien haya editado se queda como está. Siempre por slug de categoría y de
 -- artículo, nunca por id.
 
+-- misiones/montar-el-camino-del-mapa
+INSERT INTO "help_articles" ("id", "category_id", "slug", "title", "summary", "cover_image", "body", "locale", "status", "order_index", "featured", "audience", "kind", "published_at", "updated_at")
+SELECT gen_random_uuid()::text, c."id", $itakai$montar-el-camino-del-mapa$itakai$, $itakai$Montar el camino del mapa$itakai$, $itakai$Que una misión no se abra hasta completar otras: cómo se marcan los requisitos, cuándo se abre cada misión para cada estudiante y cómo encaja con el orden.$itakai$, $itakai$/app/ayuda/recorrido.svg$itakai$, $itakai$Con el [mapa de misiones](/ayuda/misiones/el-mapa-de-misiones) puedes montar un **camino**: que una misión no se abra hasta que cada estudiante complete otras, como los niveles de un juego. Lo que pide cada misión son sus **requisitos**.
+
+## Qué puede pedir una misión
+
+Una misión puede pedir que antes se completen **hasta 3** misiones de su clase, y entonces hacen falta **todas**. Hay dos formas de montar el camino, y se pueden combinar.
+
+## Misión a misión
+
+Abre la misión y ve a **Ajustes**. En la sección **Camino**, marca en **Para abrirla, completar antes** las que hacen falta y pulsa **Guardar cambios**. Junto a cada casilla ves si esa misión está bloqueada o expirada. Las atenuadas no se pueden marcar: ya dependen de esta, y si la pidiera, no se abriría ninguna de las dos.
+
+## En un paso
+
+En la pestaña **Misiones**, pulsa **Ordenar**. Debajo de la lista, en **Camino del mapa**, hay dos botones:
+
+- **Encadenar en orden** hace que cada misión pida la anterior y sustituye lo que hubiera. Las bloqueadas se quedan fuera: ni piden nada ni las pide nadie.
+- **Quitar los requisitos** los borra todos, y todas las misiones se abren desde el principio.
+
+Junto a cada botón se lee lo que va a pasar antes de pulsarlo.
+
+Montar el camino pide acceso de **edición** en la clase, y cada cambio queda en el [historial](/ayuda/clases/el-historial-de-la-clase). Se puede preparar con el mapa apagado: se guarda, pero no cierra nada hasta que lo enciendas.
+
+## Cuándo se abre cada misión
+
+Cada estudiante recorre el camino a su ritmo: una misión se le abre en cuanto completa lo que pide. Hasta entonces la ve como **Bloqueada**, con lo que le falta: **Se abre al completar «…»**. Si llega por un enlace, ve **Aún no puedes empezar esta misión** y, si lo que le falta ya está abierto, un botón para ir a ello.
+
+- **Completar es aprobar los obligatorios.** Una misión está completada cuando alguien tiene aprobados todos sus enigmas obligatorios. Los [opcionales](/ayuda/misiones/enigmas-los-pasos-de-una-mision) dan su recompensa, pero no hacen falta; si todos son opcionales, basta con aprobar uno.
+- **Lo empezado no se cierra.** Si alguien ya tiene en una misión una entrega, un enigma aprobado o una pista usada, no se le cierra aunque le pongas requisitos después.
+- **Lo que no se puede cumplir no cierra.** Si la misión que se pide ha caducado o no tiene enigmas, no cierra lo que va detrás. Si le alargas la fecha, vuelve a cerrarlo para quien aún no lo haya empezado.
+- **Bloqueada va por encima.** Una misión bloqueada está cerrada para toda la clase, pida lo que pida. Si la que se pide está bloqueada, lo que va detrás espera a que la desbloquees, y tu alumnado lee **Se abre al completar «A» (cerrada por tu docente por ahora)**.
+- **Tú no tienes cierres.** El profesorado lo ve todo abierto, también con **Ver como estudiante**. Para probar el camino hace falta una cuenta de estudiante.
+
+No se puede abrir una misión a una sola persona: si alguien se queda atascado, quita ese requisito, que cambia para toda la clase, o apaga el mapa.
+
+## El camino y el orden
+
+Con el mapa encendido, una misión **no puede ir delante de lo que pide**: si estaba delante, al guardar sus requisitos pasa detrás, y en **Ordenar** no se puede volver a poner delante sin quitarle antes lo que pide. Con el mapa apagado ordenas como quieras; al encenderlo, se recoloca solo lo justo. Lo cuenta [el orden de las misiones](/ayuda/misiones/el-orden-de-las-misiones).$itakai$, 'es', 'publicado'::"HelpArticleStatus", (SELECT COALESCE(MAX(a."order_index"), -1) + 1 FROM "help_articles" a WHERE a."category_id" = c."id"), false, 'profesor'::"HelpAudience", 'guia'::"HelpArticleKind", CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+FROM "help_categories" c WHERE c."slug" = $itakai$misiones$itakai$
+ON CONFLICT ("category_id", "slug", "locale") DO NOTHING;
+
 -- si-eres-alumno/el-mapa-y-las-misiones-cerradas
 INSERT INTO "help_articles" ("id", "category_id", "slug", "title", "summary", "cover_image", "body", "locale", "status", "order_index", "featured", "audience", "kind", "published_at", "updated_at")
-SELECT gen_random_uuid()::text, c."id", $itakai$el-mapa-y-las-misiones-cerradas$itakai$, $itakai$El mapa de misiones y las misiones cerradas$itakai$, $itakai$Por qué una misión sale con candado y cómo se abre, y cómo leer el mapa: «Estás aquí», la leyenda y el detalle de cada misión.$itakai$, $itakai$/app/ayuda/recorrido.svg$itakai$, $itakai$A veces una misión sale con un **candado**: todavía no puedes entrar en ella. Puede ser por dos motivos, y la propia misión te dice cuál.
+SELECT gen_random_uuid()::text, c."id", $itakai$el-mapa-y-las-misiones-cerradas$itakai$, $itakai$El mapa de misiones y las misiones bloqueadas$itakai$, $itakai$Por qué una misión sale con candado, como «Bloqueada», y cómo se abre; y cómo leer el mapa: «Estás aquí», la leyenda y el detalle de cada misión.$itakai$, $itakai$/app/ayuda/recorrido.svg$itakai$, $itakai$A veces una misión sale con un **candado** y como **Bloqueada**: todavía no puedes entrar en ella. Puede ser por dos motivos, y la propia misión te dice cuál.
 
 ## Se abre al completar otra
 
-Si tu clase usa el **mapa de misiones**, tu docente puede preparar un camino: unas misiones se abren al completar otras, como los niveles de un juego. Esas misiones dicen **Se abre al completar «…»**, con el nombre de la que te falta. Si salen dos o tres, tienes que completarlas **todas**.
+Si tu clase usa el **mapa de misiones**, tu docente puede preparar un camino: unas misiones se abren al completar otras, como los niveles de un juego. En las tarjetas, esas misiones dicen **Se abre al completar «…»**, con el nombre de la que te falta. Si salen dos o tres, tienes que completarlas **todas**.
 
 - Una misión está completada cuando tu docente te ha aprobado todos sus enigmas. Los que pone **Opcional** no hacen falta.
 - En cuanto completas lo que pide, la misión se te abre sola. No tienes que pedir nada.
@@ -27,7 +71,7 @@ Si tu clase usa el **mapa de misiones**, tu docente puede preparar un camino: un
 - Si la misión que te falta ya ha pasado su fecha, o no tiene enigmas, no te cierra nada: la siguiente se abre igualmente.
 - Si ya habías empezado una misión (hiciste una entrega, te aprobaron un enigma o usaste una pista), no se te cierra aunque después le pongan un requisito.
 
-Mientras está cerrada no puedes ver su historia, sus enigmas ni sus documentos, ni usar sus pistas. Si llegas a ella desde un enlace, verás **Aún no puedes empezar esta misión** y, si la que te falta ya está abierta, un botón para ir a ella.
+Mientras está bloqueada no puedes ver su historia, sus enigmas ni sus documentos, ni usar sus pistas. Si llegas a ella desde un enlace, verás **Aún no puedes empezar esta misión** y, si la que te falta ya está abierta, un botón para ir a ella.
 
 ## Cerrada por tu docente
 
@@ -41,27 +85,27 @@ En la pestaña **Misiones** de tu clase, la vista **Mapa** enseña tus misiones 
 
 - Arriba ves lo que llevas, por ejemplo **Has completado 3 de 8 misiones**, con tu barra.
 - **Estás aquí**, con tu avatar, marca la misión en la que vas. El botón **Ir a mi misión** te lleva hasta ella.
-- Cada misión lleva un icono con su estado. En la **Leyenda**, debajo del mapa, ves qué es cada uno: **Completada**, **En curso**, **Disponible**, **Urgente** (vence pronto), **Expirada** o **Cerrada**.
+- Cada misión lleva un icono con su estado. En la **Leyenda**, debajo del mapa, ves qué es cada uno: **Completada**, **En curso**, **Disponible**, **Urgente** (vence pronto), **Expirada** o **Bloqueada**.
 - Pulsa un estado de la **Leyenda** para resaltar sus misiones: por ejemplo, **Disponible** te enseña las que puedes empezar ya. Vuelve a pulsarlo para quitarlo.
-- Con el teclado, las flechas te llevan de una misión a la siguiente.
+- Con el teclado, las flechas te llevan de una misión a la siguiente. Si usas lector de pantalla, en una misión bloqueada oirás también el motivo: **Bloqueada: se abre al completar «…»** o **Bloqueada: cerrada por tu docente por ahora**.
 
-Al pulsar una misión se abre su **detalle**: lo que da, cuánto llevas, su fecha límite, qué hay que completar para abrirla y qué abre ella. Si está abierta, tiene el botón para **Empezar**, **Continuar** o **Ver misión**. Si está cerrada, te dice qué te falta o que la ha cerrado tu docente.
+Al pulsar una misión se abre su **detalle**: lo que da, cuánto llevas, su fecha límite, qué hay que completar para abrirla y qué abre ella. Si está abierta, tiene el botón para **Empezar**, **Continuar** o **Ver misión**. Si está bloqueada, en vez del botón te dice qué te falta, en **Para abrirla, completa antes**, o que la ha cerrado tu docente.
 
 El mapa está **en pruebas** (pone **Beta**), así que puede cambiar un poco. Si lo prefieres, también puedes ver tus misiones en **Cuadrícula** o en **Lista**.$itakai$, 'es', 'publicado'::"HelpArticleStatus", (SELECT COALESCE(MAX(a."order_index"), -1) + 1 FROM "help_articles" a WHERE a."category_id" = c."id"), false, 'alumno'::"HelpAudience", 'guia'::"HelpArticleKind", CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
 FROM "help_categories" c WHERE c."slug" = $itakai$si-eres-alumno$itakai$
 ON CONFLICT ("category_id", "slug", "locale") DO NOTHING;
 
--- misiones/el-mapa-de-misiones: el resumen, con el tablero y el camino.
+-- misiones/el-mapa-de-misiones: el resumen, con el tablero.
 UPDATE "help_articles" a
-SET "summary" = $itakai$Las misiones de la clase en un tablero, de la Salida a la Meta, y un camino en el que cada misión se abre al completar otras. Está en pruebas.$itakai$, "updated_at" = CURRENT_TIMESTAMP
+SET "summary" = $itakai$Las misiones de la clase en un tablero, de la Salida a la Meta: cómo se enciende, qué ves tú, qué ve tu alumnado y qué pasa al apagarlo. Está en pruebas.$itakai$, "updated_at" = CURRENT_TIMESTAMP
 FROM "help_categories" c
 WHERE c."id" = a."category_id" AND c."slug" = $itakai$misiones$itakai$ AND a."locale" = 'es'
   AND a."slug" = $itakai$el-mapa-de-misiones$itakai$
   AND a."summary" = $itakai$Una vista de mapa en Misiones: el camino de la clase, en su orden, con el estado de cada misión. Está en pruebas.$itakai$;
 
--- misiones/el-mapa-de-misiones: el tablero, montar el camino, qué ve el alumnado, cuándo se abre cada misión, apagarlo y las copias.
+-- misiones/el-mapa-de-misiones: encenderlo, el tablero, qué ve el alumnado, apagarlo y las copias; el camino, en su guía.
 UPDATE "help_articles" a
-SET "body" = $itakai$El **mapa de misiones** enseña las misiones de la clase como un tablero, de la **Salida** a la **Meta**, con una carretera que las une. Con él puedes montar además un **camino**: que una misión no se abra hasta completar otras. Es una función **en pruebas**, con la etiqueta **Beta**: su aspecto y su funcionamiento se ajustarán con lo que se vea al usarla.
+SET "body" = $itakai$El **mapa de misiones** enseña las misiones de la clase como un tablero, de la **Salida** a la **Meta**, con una carretera que las une. Con él puedes [montar además un camino](/ayuda/misiones/montar-el-camino-del-mapa), en el que una misión no se abre hasta completar otras. Está **en pruebas**, con la etiqueta **Beta**: su aspecto y su funcionamiento pueden cambiar.
 
 ## Encenderlo
 
@@ -69,37 +113,25 @@ En *Ajustes* de la clase, sección **Funcionalidades**, en **En pruebas**, activ
 
 ## El tablero
 
-Cada misión es un medallón con su portada, su número de paso y el icono de su estado, que también se dice en texto, nunca solo con un color. Sin camino, las misiones siguen el [orden de la clase](/ayuda/misiones/el-orden-de-las-misiones); con camino, cada una va detrás de lo que pide. El tramo ya recorrido se ilumina.
+Cada misión es un medallón con su portada, su número de paso y el icono de su estado, que también se dice en texto, nunca solo con un color. Sin camino, las misiones siguen el [orden de la clase](/ayuda/misiones/el-orden-de-las-misiones); con camino, cada una va detrás de lo que pide, y las ramas que acaban antes llegan a la **Meta** por un sendero más fino, para que destaque el camino principal. El tramo ya recorrido se ilumina.
 
 - **Tu alumnado** ve el mapa de entrada, con lo que lleva (**Has completado 3 de 8 misiones**), **Estás aquí** con su avatar en la misión en la que va y el botón **Ir a mi misión**.
 - **Tú** ves en cada medallón un anillo con la parte de la clase que la ha completado y, arriba, cómo va la clase en el recorrido.
 
-Al pulsar una misión se abre su detalle: lo que da, el avance, la fecha límite, qué la abre, qué abre ella y el botón para entrar. Sale al lado del tablero o, en el móvil, desde abajo; ahí el camino es una columna. En la **Leyenda**, debajo del mapa, cada estado resalta sus misiones, y con el teclado las flechas pasan de una misión a la siguiente.
+Al pulsar una misión se abre su detalle, al lado del tablero o, en el móvil, desde abajo (ahí el camino es una columna): lo que da, el avance, la fecha límite, qué la abre, qué abre ella y el botón para entrar.
 
-## Montar el camino
+En tu detalle, el avance es el de la clase: cuántas personas la han completado y, con sus avatares, quién (si son más de ocho, el último dice cuántas más; al pasar el ratón, ves quiénes). Mientras quede alguien por completarla, **En curso: 2** dice cuántas la han empezado sin terminarla. Tu vista previa como estudiante no cuenta.
 
-Una misión puede pedir que antes se completen **hasta 3** misiones de su clase, y entonces hacen falta **todas**. Hay dos formas de montarlo, y se pueden combinar:
-
-- **Misión a misión.** Abre la misión y ve a **Ajustes**. En la sección **Camino**, marca en **Para abrirla, completar antes** las que hacen falta y pulsa **Guardar cambios**. Junto a cada casilla ves si esa misión está bloqueada o expirada. Las atenuadas no se pueden marcar: ya dependen de esta, y si la pidiera, no se abriría ninguna de las dos.
-- **En un paso.** En la pestaña **Misiones**, pulsa **Ordenar**. Debajo de la lista, en **Camino del mapa**, **Encadenar en orden** hace que cada misión pida la anterior y sustituye lo que hubiera; las bloqueadas se quedan fuera, ni piden nada ni las pide nadie. **Quitar los requisitos** los borra todos.
-
-Junto a cada botón se lee lo que va a pasar antes de pulsarlo. Montar el camino pide acceso de **edición** en la clase, cada cambio queda en el [historial](/ayuda/clases/el-historial-de-la-clase) y se puede preparar con el mapa apagado: se guarda, pero no cierra nada hasta que lo enciendas.
-
-Con el mapa encendido, una misión **no puede ir delante de lo que pide**: si estaba delante, al guardar sus requisitos pasa detrás, y en **Ordenar** no se puede volver a poner delante sin quitarle antes lo que pide. Con el mapa apagado ordenas como quieras; al encenderlo, se recoloca solo lo justo.
+En la **Leyenda**, debajo del mapa, cada estado resalta sus misiones, y con el teclado las flechas pasan de una misión a la siguiente.
 
 ## Qué ve tu alumnado
 
-Cada estudiante recorre el camino a su ritmo: una misión se le abre en cuanto completa lo que pide. Hasta entonces la ve con candado y **Se abre al completar «…»**, en el mapa y en las tarjetas, y no puede entrar: ni ver su historia ni sus documentos, ni entregar, ni usar sus pistas. Si llega por un enlace, ve **Aún no puedes empezar esta misión** y, si lo que le falta ya está abierto, un botón para ir a ello.
+Una misión que aún no se le ha abierto la ve con candado, y no puede ver su historia ni sus documentos, ni entregar, ni usar sus pistas. En el mapa, en la **Leyenda** y en el detalle sale como **Bloqueada**, y el lector de pantalla dice además el motivo:
 
-## Cuándo se abre
+- **Bloqueada: se abre al completar «…»**, si le falta algo del camino. En las tarjetas lee **Se abre al completar «…»** y en el detalle, **Para abrirla, completa antes**.
+- **Bloqueada: cerrada por tu docente por ahora**, si la has bloqueado tú. El detalle dice **Tu docente ha cerrado esta misión por ahora. Podrás entrar cuando la abra.**
 
-- **Completar es aprobar los obligatorios.** Una misión está completada cuando alguien tiene aprobados todos sus enigmas obligatorios. Los [opcionales](/ayuda/misiones/enigmas-los-pasos-de-una-mision) dan su recompensa, pero no hacen falta; si todos son opcionales, basta con aprobar uno.
-- **Lo empezado no se cierra.** Si alguien ya tiene en una misión una entrega, un enigma aprobado o una pista usada, no se le cierra aunque le pongas requisitos después.
-- **Lo que no se puede cumplir no cierra.** Si la misión que se pide ha caducado o no tiene enigmas, no cierra lo que va detrás. Si le alargas la fecha, vuelve a cerrarlo para quien aún no lo haya empezado.
-- **Bloqueada va por encima.** Una misión bloqueada está cerrada para toda la clase, pida lo que pida. Si la que se pide está bloqueada, lo que va detrás espera a que la desbloquees, y tu alumnado lee **Se abre al completar «A» (cerrada por tu docente por ahora)**.
-- **Tú no tienes cierres.** El profesorado lo ve todo abierto, también con **Ver como estudiante**. Para probar el camino hace falta una cuenta de estudiante.
-
-No se puede abrir una misión a una sola persona: si alguien se queda atascado, quita ese requisito, que cambia para toda la clase, o apaga el mapa.
+Cuándo se abre cada una lo cuenta [montar el camino del mapa](/ayuda/misiones/montar-el-camino-del-mapa), y a tu alumnado, [el mapa de misiones y las misiones bloqueadas](/ayuda/si-eres-alumno/el-mapa-y-las-misiones-cerradas).
 
 ## Apagarlo
 
@@ -107,7 +139,7 @@ Apagar el mapa **lo abre todo al momento**: solo siguen cerradas las bloqueadas,
 
 ## Al copiar
 
-- Al [duplicar la clase](/ayuda/clases/duplicar-una-clase-para-el-curso-siguiente) o importar una [plantilla](/ayuda/clases/crear-una-clase-desde-cero-o-desde-una-plantilla) con sus misiones, el camino llega igual, y con las funcionalidades, el interruptor llega como estaba. La ficha pública de una plantilla no lo enseña, por estar en pruebas.
+- Al [duplicar la clase](/ayuda/clases/duplicar-una-clase-para-el-curso-siguiente) o importar una [plantilla](/ayuda/clases/crear-una-clase-desde-cero-o-desde-una-plantilla) con sus misiones, el camino llega igual y, con las funcionalidades, el interruptor también. La ficha pública de una plantilla no lo enseña, por estar en pruebas.
 - Una misión [importada de otra clase](/ayuda/misiones/importar-una-mision-de-otra-clase), o que pasas a otra clase, llega **sin requisitos**, y en la de origen ya no la pide nadie.$itakai$, "updated_at" = CURRENT_TIMESTAMP
 FROM "help_categories" c
 WHERE c."id" = a."category_id" AND c."slug" = $itakai$misiones$itakai$ AND a."locale" = 'es'
@@ -157,7 +189,7 @@ El orden no abre ni cierra nada por sí solo: una misión bloqueada sigue bloque
 
 Con el [mapa de misiones](/ayuda/misiones/el-mapa-de-misiones), cada misión puede pedir que antes se completen otras, y en **Ordenar** se lee bajo su título: **Se abre al completar «…»**. Si el mapa está encendido, **una misión no puede ir delante de lo que pide**: si la arrastras ahí, vuelve a su sitio y un aviso te dice qué lo impide. Con el mapa apagado ordenas como quieras, y al encenderlo se recoloca solo lo justo.
 
-Debajo de la lista, **Camino del mapa** tiene dos atajos: **Encadenar en orden**, para que cada misión pida la anterior, y **Quitar los requisitos**.$itakai$, "updated_at" = CURRENT_TIMESTAMP
+Debajo de la lista, **Camino del mapa** tiene dos atajos: **Encadenar en orden**, para que cada misión pida la anterior, y **Quitar los requisitos**. Cómo se monta el camino y cuándo se abre cada misión lo cuenta [montar el camino del mapa](/ayuda/misiones/montar-el-camino-del-mapa).$itakai$, "updated_at" = CURRENT_TIMESTAMP
 FROM "help_categories" c
 WHERE c."id" = a."category_id" AND c."slug" = $itakai$misiones$itakai$ AND a."locale" = 'es'
   AND a."slug" = $itakai$el-orden-de-las-misiones$itakai$
@@ -207,7 +239,7 @@ Al crear o editar un enigma puedes marcar **Este enigma es opcional**. En la mis
 
 Cuando apruebas el último enigma obligatorio que le faltaba a alguien, la misión se marca como completada y esa persona se lleva el bonus de rareza y la insignia asociada, si la misión tiene una. Eso ocurre una sola vez, en esa revisión. Si todos los enigmas son opcionales, basta con aprobar uno.
 
-Completar una misión también abre las que la piden en el camino del [mapa de misiones](/ayuda/misiones/el-mapa-de-misiones).$itakai$, "updated_at" = CURRENT_TIMESTAMP
+Completar una misión también abre las que la piden en el [camino del mapa](/ayuda/misiones/montar-el-camino-del-mapa).$itakai$, "updated_at" = CURRENT_TIMESTAMP
 FROM "help_categories" c
 WHERE c."id" = a."category_id" AND c."slug" = $itakai$misiones$itakai$ AND a."locale" = 'es'
   AND a."slug" = $itakai$enigmas-los-pasos-de-una-mision$itakai$
@@ -379,7 +411,7 @@ Nada del alumnado: ni entregas, ni progreso, ni las pistas que haya usado, ni la
 
 La copia llega **bloqueada**, **sin fecha límite**, aunque la original tuviera una, y **al final** del [orden de la clase](/ayuda/misiones/el-orden-de-las-misiones). Así la revisas con calma, le pones fecha si hace falta, la colocas en su sitio y la desbloqueas cuando quieras que tu alumnado empiece a entregar.
 
-Tampoco trae **requisitos** del [mapa de misiones](/ayuda/misiones/el-mapa-de-misiones): los suyos eran misiones de la otra clase. Si quieres que pida alguna de esta, márcala en sus **Ajustes**, sección **Camino**.
+Tampoco trae **requisitos** del [camino del mapa](/ayuda/misiones/montar-el-camino-del-mapa): los suyos eran misiones de la otra clase. Si quieres que pida alguna de esta, márcala en sus **Ajustes**, sección **Camino**.
 
 Queda anotada en el [historial](/ayuda/clases/el-historial-de-la-clase) de las dos clases: en la de destino, que se importó; en la de origen, quién se llevó una copia.
 
@@ -465,7 +497,7 @@ Solo se ofrecen los recursos que usa la clase. Si apagas las monedas o la experi
 
 ## Cuándo se pueden usar
 
-Mientras la misión está en curso: ni completada ni caducada. Una misión bloqueada no la ve el alumnado, y con ella tampoco sus pistas. Tampoco se usan en una misión que alguien aún tiene cerrada por el camino del [mapa de misiones](/ayuda/misiones/el-mapa-de-misiones). En una misión por equipos, cada estudiante usa y paga las suyas.
+Mientras la misión está en curso: ni completada ni caducada. Una misión bloqueada no la ve el alumnado, y con ella tampoco sus pistas. Tampoco se usan en una misión que alguien aún tiene cerrada por el [camino del mapa](/ayuda/misiones/montar-el-camino-del-mapa). En una misión por equipos, cada estudiante usa y paga las suyas.
 
 Desde la vista previa ves todas las pistas abiertas, pero no se usan: para probar el cobro hace falta una cuenta de estudiante.
 
@@ -830,7 +862,7 @@ Todo lo relevante que hace el profesorado, con su autoría: cada línea lleva el
 - **Recompensas**: las recompensas libres, con su motivo y a quién.
 - **Asistencia**: cada lista que se pasa, se corrige o se borra, con la fecha y cuántas personas vinieron y cuántas no.
 - **Equipos**: las agrupaciones que se crean, se editan, se archivan o se borran, los cambios de equipo y cada premio a un equipo, con sus puntos y, si se repartió, a quién.
-- **Misiones**, **Enigmas**, **Pistas** y **Documentos**: altas, cambios, borrados, bloqueos, cambios de recompensas, cambios de [orden](/ayuda/misiones/el-orden-de-las-misiones) y cambios en el camino del [mapa de misiones](/ayuda/misiones/el-mapa-de-misiones), y las misiones [importadas de otra clase](/ayuda/misiones/importar-una-mision-de-otra-clase) o copiadas en otra.
+- **Misiones**, **Enigmas**, **Pistas** y **Documentos**: altas, cambios, borrados, bloqueos, cambios de recompensas, cambios de [orden](/ayuda/misiones/el-orden-de-las-misiones) y cambios en el [camino del mapa](/ayuda/misiones/montar-el-camino-del-mapa), y las misiones [importadas de otra clase](/ayuda/misiones/importar-una-mision-de-otra-clase) o copiadas en otra.
 - **Tienda**: artículos añadidos, editados o quitados.
 - **Alumnado**: cuentas creadas, contraseñas restablecidas, alias cambiados, avatares devueltos al catálogo y bajas de la clase.
 - **Profesorado**: altas, cambios de perfil o de nivel, bajas y salidas.
@@ -918,7 +950,7 @@ Si le has [creado tú la cuenta](/ayuda/alumnado/dar-de-alta-alumnos-sin-correo)
 
 ## Ver tu clase como la ve tu alumnado
 
-Con **Ver como estudiante**, debajo de tu nombre en el menú de la izquierda (en pantallas anchas), entras en la plataforma con una cuenta de estudiante de prueba, dentro de todas tus clases, para revisarlas desde dentro. Esa matrícula de prueba no cuenta en los listados, ni en el recuento del alumnado, ni en la clasificación. Con ella lo ves todo abierto: el camino del mapa solo cierra misiones a las cuentas de estudiante.$itakai$, "updated_at" = CURRENT_TIMESTAMP
+Con **Ver como estudiante**, debajo de tu nombre en el menú de la izquierda (en pantallas anchas), entras en la plataforma con una cuenta de estudiante de prueba, dentro de todas tus clases, para revisarlas desde dentro. Esa matrícula de prueba no cuenta en los listados, ni en el recuento del alumnado, ni en la clasificación. Con ella lo ves todo abierto: el [camino del mapa](/ayuda/misiones/montar-el-camino-del-mapa) solo cierra misiones a las cuentas de estudiante.$itakai$, "updated_at" = CURRENT_TIMESTAMP
 FROM "help_categories" c
 WHERE c."id" = a."category_id" AND c."slug" = $itakai$alumnado$itakai$ AND a."locale" = 'es'
   AND a."slug" = $itakai$la-vista-del-alumno$itakai$
@@ -967,7 +999,7 @@ Las misiones están partidas en enigmas: los pasos que hay que ir haciendo. Los 
 
 Si te atascas, puede que la misión tenga [pistas](/ayuda/si-eres-alumno/usar-las-pistas-de-una-mision): se abren en orden y cada una tiene su coste.
 
-Si una misión sale con candado, aún no puedes entrar: o se abre al completar otra, o la ha cerrado tu docente por ahora. Te lo explica [el mapa de misiones y las misiones cerradas](/ayuda/si-eres-alumno/el-mapa-y-las-misiones-cerradas).
+Si una misión sale con candado, aún no puedes entrar: o se abre al completar otra, o la ha cerrado tu docente por ahora. Te lo explica [el mapa de misiones y las misiones bloqueadas](/ayuda/si-eres-alumno/el-mapa-y-las-misiones-cerradas).
 
 ## La entrega
 
