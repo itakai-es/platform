@@ -171,6 +171,19 @@ export function useTeacherClassDetail(classIdRef: Ref<string> | ComputedRef<stri
     }
   }
 
+  /**
+   * Vuelve a pedir las misiones de la clase, p. ej. tras importar una o tras
+   * encender o apagar el mapa (al encenderlo, la API recoloca el orden).
+   */
+  async function reloadMissions() {
+    try {
+      const res = await teacherStore.fetchClassMissions(classId.value, true)
+      state.value.missions = res.missions
+    } catch (error) {
+      console.error('Error refreshing class missions:', error)
+    }
+  }
+
   /** Vacía el estado de la clase, p. ej. al salir de ella: la próxima visita la vuelve a pedir. */
   function forget() {
     state.value = { ...emptyState(), isLoading: false }
@@ -264,6 +277,7 @@ export function useTeacherClassDetail(classIdRef: Ref<string> | ComputedRef<stri
     isOwner,
     loadAll,
     revalidate,
+    reloadMissions,
     forget,
     setMyAccess,
     ensureGuide,

@@ -194,9 +194,10 @@
             "button": "Reorder",
             "title": "Class order",
             "hint": "Students see the missions in this order. Drag each row by its handle or, with the keyboard, move to the handle and use the up and down arrow keys. Each change is saved right away.",
+            "hint_path": "A mission can’t go before what it requires: to move it, first remove what it requires in its Settings › Path, or use “Remove requirements”.",
             "done": "Done",
             "error": "The order couldn't be saved. Please try again.",
-            "breaks_path": "“{mission}” opens after completing “{required}”: it has to go after it."
+            "breaks_path": "“{mission}” opens after completing “{required}”: it has to go after it. First remove what it requires in its Settings › Path, or use “Remove requirements”."
           },
           "path": {
             "title": "Map path",
@@ -204,6 +205,7 @@
             "chain": "Chain in order",
             "chain_summary": "Each mission will require completing the previous one to open: {count} requirement. | Each mission will require completing the previous one to open: {count} requirements.",
             "chain_replaces": "It replaces the current one. | It replaces the {count} current ones.",
+            "chain_skips_locked": "Locked missions are left out.",
             "chained": "Already chained: each mission requires the previous one.",
             "chain_done": "Missions chained in order",
             "clear": "Remove requirements",
@@ -884,12 +886,15 @@
           "path_title": "Path",
           "path_hint": "Each student will see it closed until they complete all the ones you tick. It doesn’t close for anyone who has already started it.",
           "path_legend": "To open it, complete first",
-          "path_map_off": "What has to be completed before opening a mission only counts with the mission map turned on. Turn it on in the class settings, under Features.",
+          "path_map_off": "Requirements only close missions with the map turned on (Class settings › Features).",
           "path_empty": "There are no other missions in the class.",
-          "path_cycle_reason": "It already needs this mission to open: requiring it would close a loop.",
+          "path_cycle_note": "The greyed-out ones already depend on this mission: if it required them, none of them would ever open.",
           "path_limit": "{max} at most. To choose another, untick one.",
           "path_moved": "Saved. The mission has moved behind what it requires in the class order.",
-          "path_load_error": "The class missions could not be loaded."
+          "path_error_cycle": "One of the ticked missions already depends on this one: if it required it, neither would ever open. Check the path and save again.",
+          "path_error_invalid": "One of the ticked missions is no longer in this class. Check the path and save again.",
+          "path_load_error": "The class missions could not be loaded.",
+          "path_retry": "Try again"
         }
       },
       "import": {

@@ -621,6 +621,8 @@
       "no_students": "Encara no hi ha alumnat",
       "opens_after": "S’obri en completar {missions}",
       "quoted": "«{title}»",
+      "quoted_teacher_closed": "«{title}» (tancada pel teu docent de moment)",
+      "and": "i",
       "locked_path_explain": "Per a obrir-la, completa abans {missions}.",
       "state_short": {
         "completed": "Completada",

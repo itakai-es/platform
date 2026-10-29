@@ -20,12 +20,17 @@ definePageMeta({ layout: 'teacher', middleware: ['auth', 'role'] })
 
 const route = useRoute()
 const classId = computed(() => route.params.id as string)
-const { state, setClassData, setMyAccess, forget } = useTeacherClassDetail(classId)
+const { state, classSettings, setClassData, setMyAccess, reloadMissions, forget } =
+  useTeacherClassDetail(classId)
 
 // Los emits ya persisten en backend; aquí reflejamos en el estado compartido
-// para que el header y el resto de pestañas reaccionen al instante.
+// para que el header y el resto de pestañas reaccionen al instante. Al encender
+// o apagar el mapa, también las misiones: al encenderlo, la API recoloca el
+// orden para que cada una vaya detrás de lo que pide.
 function onSettingsUpdate(settings: ClassSettings) {
+  const mapChanged = classSettings.value.missionMap !== settings.missionMap
   setClassData({ settings })
+  if (mapChanged) void reloadMissions()
 }
 function onGeneralUpdate(data: {
   name: string

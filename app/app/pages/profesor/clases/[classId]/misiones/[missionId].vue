@@ -71,8 +71,7 @@
           :mission-id="missionId"
           :class-id="classId"
           :mission="mission"
-          @update="onSettingsUpdate"
-          @path-update="onSettingsUpdate"
+          @saved="onSettingsUpdate"
         />
       </template>
     </MissionDetailTemplate>
@@ -223,7 +222,9 @@ function tabHref(tabId: string) {
 
 // El panel ya persiste los cambios; recargamos la misión desde el backend (con
 // force) para que TODO lo derivado —bonus de XP de misión, etiqueta de estado
-// calculada, portada— refleje exactamente lo guardado, sin duplicar lógica.
+// calculada, portada, camino— refleje exactamente lo guardado, sin duplicar
+// lógica. El panel avisa una sola vez por guardado, aunque cambien la misión y
+// su camino a la vez.
 async function onSettingsUpdate() {
   const fresh = await missionStore.ensureTeacherMissionById(missionId.value, true)
   if (fresh) mission.value = fresh as unknown as MissionDetail

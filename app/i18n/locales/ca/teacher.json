@@ -194,9 +194,10 @@
             "button": "Ordena",
             "title": "Ordre de la classe",
             "hint": "L'alumnat veu les missions en aquest ordre. Arrossega cada fila per la nansa o, amb el teclat, situa't a la nansa i fes servir les fletxes amunt i avall. Cada canvi es desa a l'instant.",
+            "hint_path": "Una missió no pot anar davant del que demana: per moure-la, treu abans el que demana als seus Ajustos › Camí, o fes servir «Treu els requisits».",
             "done": "Fet",
             "error": "No s'ha pogut desar l'ordre. Torna-ho a provar.",
-            "breaks_path": "«{mission}» s’obre en completar «{required}»: ha d’anar darrere."
+            "breaks_path": "«{mission}» s’obre en completar «{required}»: ha d’anar darrere. Treu abans el que demana als seus Ajustos › Camí, o fes servir «Treu els requisits»."
           },
           "path": {
             "title": "Camí del mapa",
@@ -204,6 +205,7 @@
             "chain": "Encadena en ordre",
             "chain_summary": "Cada missió demanarà completar l’anterior per obrir-se: {count} requisit. | Cada missió demanarà completar l’anterior per obrir-se: {count} requisits.",
             "chain_replaces": "Substitueix el que hi ha ara. | Substitueix els {count} que hi ha ara.",
+            "chain_skips_locked": "Les bloquejades en queden fora.",
             "chained": "Ja estan encadenades: cada missió demana l’anterior.",
             "chain_done": "Missions encadenades en ordre",
             "clear": "Treu els requisits",
@@ -884,12 +886,15 @@
           "path_title": "Camí",
           "path_hint": "Cada estudiant la veurà tancada fins que completi totes les que marquis. A qui ja l’hagi començada no se li tanca.",
           "path_legend": "Per obrir-la, completar abans",
-          "path_map_off": "El que cal completar abans per obrir una missió només compta amb el mapa de missions activat. S’activa als ajustos de la classe, a Funcionalitats.",
+          "path_map_off": "Els requisits només tanquen missions amb el mapa activat (Ajustos de la classe › Funcionalitats).",
           "path_empty": "No hi ha altres missions a la classe.",
-          "path_cycle_reason": "Ja necessita aquesta missió per obrir-se: demanar-la tancaria un cercle.",
+          "path_cycle_note": "Les atenuades ja depenen d’aquesta missió: si les demanés, no se n’obriria cap.",
           "path_limit": "Com a màxim, {max}. Per triar-ne una altra, desmarca’n una.",
           "path_moved": "Desat. La missió ha passat darrere del que demana en l’ordre de la classe.",
-          "path_load_error": "No s’han pogut carregar les missions de la classe."
+          "path_error_cycle": "Alguna de les marcades ja depèn d’aquesta missió: si la demanés, no se n’obriria cap. Revisa el camí i torna a desar.",
+          "path_error_invalid": "Alguna de les marcades ja no és en aquesta classe. Revisa el camí i torna a desar.",
+          "path_load_error": "No s’han pogut carregar les missions de la classe.",
+          "path_retry": "Torna-ho a provar"
         }
       },
       "import": {

@@ -76,44 +76,79 @@
       </div>
     </SettingsSection>
 
-    <!-- Camino del mapa: lo que hay que completar antes para abrirla. Solo con
-         el mapa encendido en la clase; si no, una nota que lo explica. -->
+    <!-- Camino del mapa: lo que hay que completar antes para abrirla. Se edita
+         aunque el mapa esté apagado en la clase; entonces una nota dice que aún
+         no cierra nada. -->
     <SettingsSection
       :title="t('teacher.missions.detail.settings.path_title')"
-      :hint="mapOn ? t('teacher.missions.detail.settings.path_hint') : undefined"
+      :hint="t('teacher.missions.detail.settings.path_hint')"
     >
       <InfoNote v-if="!mapOn">{{ t('teacher.missions.detail.settings.path_map_off') }}</InfoNote>
-      <fieldset v-else :disabled="!pathReady">
+
+      <!-- Cargando las misiones de la clase -->
+      <div v-if="pathStatus === 'loading'" class="space-y-2" aria-hidden="true">
+        <Skeleton width="w-48" height="h-4" />
+        <Skeleton v-for="i in 3" :key="i" width="w-2/3" height="h-4" />
+      </div>
+
+      <!-- No han llegado: se dice y se puede volver a pedir -->
+      <div v-else-if="pathStatus === 'error'" role="alert" class="space-y-3">
+        <InfoNote>{{ t('teacher.missions.detail.settings.path_load_error') }}</InfoNote>
+        <Button variant="outline" size="sm" @click="loadClassMissions(true)">
+          {{ t('teacher.missions.detail.settings.path_retry') }}
+        </Button>
+      </div>
+
+      <fieldset v-else>
         <legend class="mb-2 text-sm font-medium text-text-primary">
           {{ t('teacher.missions.detail.settings.path_legend') }}
         </legend>
-        <p v-if="pathReady && pathChoices.length === 0" class="text-sm text-text-muted">
+        <p v-if="pathChoices.length === 0" class="text-sm text-text-muted">
           {{ t('teacher.missions.detail.settings.path_empty') }}
         </p>
         <ul v-else class="space-y-2">
-          <li v-for="choice in pathChoices" :key="choice.id">
+          <!-- Junto a cada una, si está bloqueada o expirada: así no cierra
+               nada (expirada) o nadie la puede hacer aún (bloqueada). -->
+          <li
+            v-for="choice in pathChoices"
+            :key="choice.id"
+            class="flex flex-wrap items-center gap-x-2 gap-y-1"
+          >
             <Checkbox
               :id="`${uid}-path-${choice.id}`"
               :model-value="choice.checked"
               :label="choice.title"
               :disabled="choice.disabledReason !== null"
-              :described-by="
-                choice.disabledReason === 'cycle' ? `${uid}-path-${choice.id}-why` : undefined
-              "
+              :described-by="choiceDescribedBy(choice)"
               @update:model-value="togglePrerequisite(choice.id, $event)"
             />
-            <p
-              v-if="choice.disabledReason === 'cycle'"
-              :id="`${uid}-path-${choice.id}-why`"
-              class="ml-6 text-xs text-text-muted"
+            <StatusBadge
+              v-if="choiceState(choice.id)"
+              :id="`${uid}-path-${choice.id}-state`"
+              :variant="choiceState(choice.id)!"
             >
-              {{ t('teacher.missions.detail.settings.path_cycle_reason') }}
-            </p>
+              {{ missionStatusLabel(choiceState(choice.id)!) }}
+            </StatusBadge>
           </li>
         </ul>
-        <p v-if="pathAtLimit" class="mt-2 text-sm text-text-muted" aria-live="polite">
+        <!-- Por qué hay casillas atenuadas: una vez, bajo la lista -->
+        <p v-if="hasCycleChoices" :id="cycleNoteId" class="mt-2 text-sm text-navy-700/80">
+          {{ t('teacher.missions.detail.settings.path_cycle_note') }}
+        </p>
+        <!-- Siempre en la página: al llegar al tope solo cambia el texto, y así
+             se anuncia. -->
+        <p
+          :id="limitNoteId"
+          class="text-sm text-navy-700/80"
+          :class="{ 'mt-2': pathAtLimit }"
+          aria-live="polite"
+        >
           {{
-            t('teacher.missions.detail.settings.path_limit', { max: MISSION_PREREQUISITE_LIMIT })
+            pathAtLimit
+              ? t('teacher.missions.detail.settings.path_limit', {
+                  max: MISSION_PREREQUISITE_LIMIT,
+                })
+              : ''
           }}
         </p>
       </fieldset>
@@ -155,7 +190,10 @@ import {
   MISSION_PREREQUISITE_LIMIT,
   prerequisiteChoices,
   type PathMission,
+  type PrerequisiteChoice,
 } from '~/utils/mission-path'
+import { teacherMissionStatus } from '~/utils/mission-teacher-status'
+import type { MissionPrerequisite } from '~/types/mission.types'
 
 type MissionRarity = 'comun' | 'rara' | 'epica' | 'legendaria'
 
@@ -185,7 +223,7 @@ const props = defineProps<{
     rarityLocked?: boolean
     teamSet?: { id: string; title: string; archived: boolean } | null
     /** Lo que pide para abrirse en el mapa. */
-    prerequisites?: { id: string; title: string }[]
+    prerequisites?: MissionPrerequisite[]
     classSettings?: { missionMap?: boolean }
   } | null
 }>()
@@ -195,17 +233,11 @@ const props = defineProps<{
 const rarityLocked = computed(() => props.mission?.rarityLocked ?? false)
 
 const emit = defineEmits<{
-  update: [
-    data: {
-      title: string
-      deadline: string | null
-      backgroundImage: string
-      rarity: MissionRarity
-      blocked: boolean
-    },
-  ]
-  /** Lo que pide ahora para abrirse en el mapa, ya guardado. */
-  pathUpdate: [prerequisites: { id: string; title: string }[]]
+  /**
+   * Se ha guardado algo (la misión, lo que pide para abrirse o las dos cosas):
+   * una sola vez por guardado, para que la página la vuelva a pedir una vez.
+   */
+  saved: []
 }>()
 
 const { t, locale } = useI18n()
@@ -288,28 +320,33 @@ const dirty = computed(() => missionDirty.value || pathDirty.value)
 
 // --------- Camino del mapa ---------
 // Las demás misiones de la clase, con lo que pide cada una, para las casillas y
-// para saber cuáles cerrarían un círculo. Solo con el mapa encendido.
+// para saber cuáles cerrarían un círculo. Se piden aunque el mapa esté apagado:
+// los requisitos se pueden preparar antes de encenderlo.
 const teacherStore = useTeacherStore()
 const mapOn = computed(() => props.mission?.classSettings?.missionMap === true)
 const classMissions = ref<PathMission[]>([])
-const pathReady = ref(false)
+const pathStatus = ref<'loading' | 'ready' | 'error'>('loading')
 async function loadClassMissions(force = false) {
-  if (!props.classId) return
+  // Sin clase no hay más misiones que ofrecer.
+  if (!props.classId) {
+    pathStatus.value = 'ready'
+    return
+  }
+  // Volver a pedirlas tras guardar no esconde las casillas; tras un fallo, sí
+  // (vuelve el esqueleto mientras se reintenta).
+  if (pathStatus.value !== 'ready') pathStatus.value = 'loading'
   try {
     const res = await teacherStore.ensureClassMissions(props.classId, force)
     classMissions.value = res.missions as PathMission[]
-    pathReady.value = true
+    pathStatus.value = 'ready'
   } catch {
-    toast.error(t('teacher.missions.detail.settings.path_load_error'))
+    if (pathStatus.value !== 'ready') pathStatus.value = 'error'
+    else toast.error(t('teacher.missions.detail.settings.path_load_error'))
   }
 }
-watch(
-  mapOn,
-  on => {
-    if (on && !pathReady.value) void loadClassMissions()
-  },
-  { immediate: true }
-)
+onMounted(() => {
+  void loadClassMissions()
+})
 const pathChoices = computed(() =>
   prerequisiteChoices(
     // Esta misión, con lo marcado ahora: así lo que ya cuelga de ella no se ofrece.
@@ -321,6 +358,39 @@ const pathChoices = computed(() =>
   )
 )
 const pathAtLimit = computed(() => form.value.prerequisites.length >= MISSION_PREREQUISITE_LIMIT)
+const hasCycleChoices = computed(() => pathChoices.value.some(c => c.disabledReason === 'cycle'))
+const cycleNoteId = `${uid}-path-cycle`
+const limitNoteId = `${uid}-path-limit`
+
+/**
+ * Lo que lee el lector de pantalla con cada casilla: su estado (bloqueada o
+ * expirada) y, si está atenuada, por qué (la nota del círculo o la del tope).
+ */
+function choiceDescribedBy(choice: PrerequisiteChoice): string | undefined {
+  const ids = [
+    choiceState(choice.id) ? `${uid}-path-${choice.id}-state` : null,
+    choice.disabledReason === 'cycle' ? cycleNoteId : null,
+    choice.disabledReason === 'limit' ? limitNoteId : null,
+  ].filter(Boolean)
+  return ids.length > 0 ? ids.join(' ') : undefined
+}
+
+/**
+ * Bloqueada o expirada, como en los listados del profesorado (el mismo nombre):
+ * una expirada ya no cierra nada y una bloqueada nadie la puede hacer aún.
+ */
+const missionStatusLabel = useMissionStatusLabel()
+const choiceStates = computed(() => {
+  const states = new Map<string, 'bloqueada' | 'expirada'>()
+  for (const m of classMissions.value) {
+    const status = teacherMissionStatus({ status: m.status ?? '', deadline: m.deadline })
+    if (status === 'bloqueada' || status === 'expirada') states.set(m.id, status)
+  }
+  return states
+})
+function choiceState(id: string) {
+  return choiceStates.value.get(id) ?? null
+}
 
 /** Marca o desmarca una; se guardan en el orden de la clase. */
 function togglePrerequisite(id: string, checked: boolean) {
@@ -419,6 +489,12 @@ async function save() {
     status: form.value.blocked ? ('bloqueada' as const) : ('activa' as const),
     teamSetId: form.value.teamSetId || null,
   }
+  const rarityChanged = form.value.rarity !== snapshot.value.rarity
+  // Algo guardado (aunque luego falle lo otro): la página vuelve a pedir la
+  // misión al acabar, una sola vez.
+  let saved = false
+  // Qué se estaba guardando si falla: la misión o lo que pide.
+  let step: 'mission' | 'path' = 'mission'
 
   try {
     if (missionDirty.value) {
@@ -426,9 +502,10 @@ async function save() {
         `${config.public.apiBase}/missions/${props.missionId}`,
         { method: 'PATCH', body: payload }
       )
+      saved = true
       // El backend persiste las imágenes subidas (data URL) y devuelve su URL final.
       const storedImage = res.mission?.backgroundImage ?? payload.backgroundImage
-      const saved: MissionSettings = {
+      const next: MissionSettings = {
         title: payload.title,
         deadline: form.value.deadline,
         backgroundImage: storedImage ?? '',
@@ -437,30 +514,25 @@ async function save() {
         teamSetId: form.value.teamSetId,
         prerequisites: [...snapshot.value.prerequisites],
       }
-      snapshot.value = { ...saved }
-      form.value = { ...saved, prerequisites: [...form.value.prerequisites] }
-      emit('update', {
-        title: saved.title,
-        deadline: payload.deadline,
-        backgroundImage: saved.backgroundImage,
-        rarity: saved.rarity,
-        blocked: saved.blocked,
-      })
+      snapshot.value = { ...next }
+      form.value = { ...next, prerequisites: [...form.value.prerequisites] }
     }
 
-    // Lo que pide para abrirse: la API comprueba la clase, el tope y los ciclos,
-    // y si iba delante de algo que pide, la recoloca detrás en el orden.
+    // Lo que pide para abrirse: la API comprueba la clase, el tope y los ciclos
+    // y, con el mapa encendido, si iba delante de algo que pide, la recoloca
+    // detrás en el orden.
     let moved = 0
     if (pathDirty.value) {
-      const res = await $fetch<{ prerequisites: { id: string; title: string }[]; moved: number }>(
+      step = 'path'
+      const res = await $fetch<{ prerequisites: MissionPrerequisite[]; moved: number }>(
         `${config.public.apiBase}/missions/${props.missionId}/prerequisites`,
         { method: 'PUT', body: { ids: form.value.prerequisites } }
       )
+      saved = true
       moved = res.moved
       const ids = res.prerequisites.map(m => m.id)
       snapshot.value = { ...snapshot.value, prerequisites: ids }
       form.value = { ...form.value, prerequisites: [...ids] }
-      emit('pathUpdate', res.prerequisites)
       // Las misiones de la clase (y su orden) han cambiado: el mapa y las casillas, al día.
       await loadClassMissions(true)
     }
@@ -470,14 +542,41 @@ async function save() {
         : t('teacher.missions.detail.settings.toast_saved')
     )
   } catch (err) {
-    // El backend bloquea el cambio de rareza si algún alumno ya completó la
-    // misión, y lo que pide para abrirse si cerraría un círculo (alguien lo ha
-    // cambiado a la vez): se enseña su mensaje concreto en vez del genérico.
-    const message = (err as { data?: { message?: string } })?.data?.message
-    toast.error(message || t('teacher.missions.detail.settings.toast_error'))
+    toast.error(saveErrorMessage(err, step === 'mission' && rarityChanged))
+    // Alguien ha cambiado el camino a la vez: las casillas, como están ahora.
     if (pathDirty.value) void loadClassMissions(true)
   } finally {
     saving.value = false
+    if (saved) emit('saved')
   }
+}
+
+/**
+ * Qué decir si no se ha podido guardar, por el código de la API (su mensaje va
+ * en castellano y sin traducir): un círculo o el tope (alguien ha cambiado el
+ * camino a la vez) o una misión que ya no es de la clase. Cambiar la rareza
+ * cuando alguien ya la ha completado se rechaza sin código: es lo único que
+ * responde 400 sin él ni errores de validación.
+ */
+function saveErrorMessage(err: unknown, savingRarity: boolean): string {
+  const fetchError = err as { statusCode?: number; data?: { code?: string; errors?: unknown } }
+  switch (fetchError?.data?.code) {
+    case 'MISSION_PREREQUISITE_CYCLE':
+      return t('teacher.missions.detail.settings.path_error_cycle')
+    case 'MISSION_PREREQUISITE_LIMIT':
+      return t('teacher.missions.detail.settings.path_limit', { max: MISSION_PREREQUISITE_LIMIT })
+    case 'MISSION_PREREQUISITE_INVALID':
+    case 'MISSION_PREREQUISITE_SELF':
+      return t('teacher.missions.detail.settings.path_error_invalid')
+  }
+  if (
+    savingRarity &&
+    fetchError?.statusCode === 400 &&
+    !fetchError.data?.code &&
+    !fetchError.data?.errors
+  ) {
+    return t('teacher.missions.detail.settings.rarity_locked_hint')
+  }
+  return t('teacher.missions.detail.settings.toast_error')
 }
 </script>

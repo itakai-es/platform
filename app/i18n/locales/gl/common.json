@@ -621,6 +621,8 @@
       "no_students": "Aínda non hai alumnado",
       "opens_after": "Ábrese ao completar {missions}",
       "quoted": "«{title}»",
+      "quoted_teacher_closed": "«{title}» (pechada polo teu docente de momento)",
+      "and": "e",
       "locked_path_explain": "Para abrila, completa antes {missions}.",
       "state_short": {
         "completed": "Completada",

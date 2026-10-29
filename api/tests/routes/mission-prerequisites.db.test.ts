@@ -637,6 +637,40 @@ describeWithDatabase('camino del mapa de misiones: requisitos y cierre por estud
     ).toBe(1)
   })
 
+  it('encadenar en orden deja fuera las bloqueadas: cada abierta pide la abierta anterior', async () => {
+    const a = await mission('A')
+    const borrador = await mission('Borrador', { status: 'bloqueada' })
+    const c = await mission('C')
+    const d = await mission('D')
+    // Lo que pedía el borrador, y lo que lo pedía, se va.
+    expect((await setPrerequisites(borrador.id, [a.id])).statusCode).toBe(200)
+    expect((await setPrerequisites(c.id, [borrador.id])).statusCode).toBe(200)
+
+    const chained = await app.inject({
+      method: 'POST',
+      url: `/teacher/classes/${f.classId}/missions/chain`,
+      headers: as('owner'),
+    })
+    expect(chained.statusCode, chained.body).toBe(200)
+    expect(chained.json().prerequisites).toEqual({ [c.id]: [a.id], [d.id]: [c.id] })
+    expect(await edgesIn()).toEqual(['C<A', 'D<C'])
+    // El orden no cambia: el borrador sigue en su sitio.
+    expect(await titlesIn()).toEqual(['A', 'Borrador', 'C', 'D'])
+    const log = await prisma.classActionLog.findFirstOrThrow({
+      where: { classId: f.classId, action: 'mission.chained' },
+    })
+    expect(log.metadata).toEqual({ count: 3, replaced: 2 })
+
+    // El alumno no tiene el borrador delante de C: C se abre al completar A.
+    const listed = await studentList()
+    expect(listed.get('C')?.requires.map(r => r.title)).toEqual(['A'])
+    expect(listed.get('D')?.requires.map(r => r.title)).toEqual(['C'])
+
+    // Ya encadenadas así: no se apunta otra vez.
+    await app.inject({ method: 'POST', url: `/teacher/classes/${f.classId}/missions/chain`, headers: as('owner') })
+    expect(await prisma.classActionLog.count({ where: { classId: f.classId, action: 'mission.chained' } })).toBe(1)
+  })
+
   // ---- Copias ----
 
   it('duplicar la clase e importar una plantilla copian el camino; importar una suelta llega sin requisitos', async () => {

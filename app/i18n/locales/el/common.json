@@ -621,6 +621,8 @@
       "no_students": "Δεν υπάρχουν ακόμα μαθητές και μαθήτριες",
       "opens_after": "Ανοίγει μετά την ολοκλήρωση: {missions}",
       "quoted": "«{title}»",
+      "quoted_teacher_closed": "«{title}» (κλειστή προς το παρόν από τον/την εκπαιδευτικό σου)",
+      "and": "και",
       "locked_path_explain": "Για να την ανοίξεις, ολοκλήρωσε πρώτα: {missions}.",
       "state_short": {
         "completed": "Ολοκληρωμένη",

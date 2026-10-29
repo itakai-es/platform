@@ -621,6 +621,8 @@
       "no_students": "No students yet",
       "opens_after": "Opens after completing {missions}",
       "quoted": "“{title}”",
+      "quoted_teacher_closed": "“{title}” (closed by your teacher for now)",
+      "and": "and",
       "locked_path_explain": "To open it, first complete {missions}.",
       "state_short": {
         "completed": "Completed",

@@ -63,7 +63,7 @@
       <div v-if="ordering" :id="orderPanelId">
         <SettingsSection
           :title="t('teacher.classes.detail.missions_tab.order.title')"
-          :hint="t('teacher.classes.detail.missions_tab.order.hint')"
+          :hint="orderHint"
         >
           <template #actions>
             <Button variant="primary" size="sm" @click="stopOrdering">
@@ -85,8 +85,9 @@
                 <p class="text-xs text-navy-700/70">
                   {{ statusLabel(item) }}
                 </p>
-                <!-- Lo que pide en el mapa: no puede ir delante de eso -->
-                <p v-if="mapOn && pathTextOf(item)" class="text-xs text-navy-700/70">
+                <!-- Lo que pide en el mapa (con el mapa encendido, no puede ir
+                     delante de eso) -->
+                <p v-if="pathTextOf(item)" class="text-xs text-navy-700/70">
                   {{ pathTextOf(item) }}
                 </p>
               </template>
@@ -97,18 +98,29 @@
           </div>
         </SettingsSection>
 
-        <!-- Camino del mapa en un paso (solo con el mapa encendido): cada misión
-             pide la anterior, o ninguna pide nada. Sin ventana de confirmar: lo
-             que va a pasar está escrito junto a cada botón. -->
+        <!-- Camino del mapa en un paso: cada misión abierta pide la abierta
+             anterior (las bloqueadas se quedan fuera), o ninguna pide nada. Sin
+             ventana de confirmar: lo que va a pasar está escrito junto a cada
+             botón. Con el mapa apagado también, con una nota: se prepara antes
+             de encenderlo. -->
         <SettingsSection
-          v-if="mapOn"
           class="mt-6"
           :title="t('teacher.classes.detail.missions_tab.path.title')"
           :hint="t('teacher.classes.detail.missions_tab.path.hint')"
         >
+          <InfoNote v-if="!mapOn">
+            {{ t('teacher.missions.detail.settings.path_map_off') }}
+          </InfoNote>
           <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-            <p :id="chainSummaryId" class="text-sm text-text-secondary">{{ chainText }}</p>
+            <p
+              :id="chainSummaryId"
+              tabindex="-1"
+              class="text-sm text-navy-700/80 focus:outline-none"
+            >
+              {{ chainText }}
+            </p>
             <Button
+              :id="chainButtonId"
               variant="outline"
               size="sm"
               class="w-full flex-shrink-0 sm:w-auto"
@@ -125,7 +137,7 @@
             v-if="chain.current > 0"
             class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"
           >
-            <p :id="clearSummaryId" class="text-sm text-text-secondary">
+            <p :id="clearSummaryId" class="text-sm text-navy-700/80">
               {{
                 t(
                   'teacher.classes.detail.missions_tab.path.clear_summary',
@@ -135,6 +147,7 @@
               }}
             </p>
             <Button
+              :id="clearButtonId"
               variant="outline"
               size="sm"
               class="w-full flex-shrink-0 sm:w-auto"
@@ -212,7 +225,7 @@
       :class-id="classId"
       :class-name="state.classData?.name"
       :return-focus="headerImportButton"
-      @imported="refreshMissions"
+      @imported="reloadMissions"
     />
   </div>
 </template>
@@ -236,7 +249,7 @@ definePageMeta({ layout: 'teacher', middleware: ['auth', 'role'] })
 const { t, locale } = useI18n()
 const route = useRoute()
 const classId = computed(() => route.params.id as string)
-const { state, can, classSettings } = useTeacherClassDetail(classId)
+const { state, can, classSettings, reloadMissions } = useTeacherClassDetail(classId)
 // El mapa es una vista más, solo en las clases que lo tienen encendido (en pruebas).
 const mapOn = computed(() => classSettings.value.missionMap)
 const viewModes = computed<ViewMode[]>(() =>
@@ -332,17 +345,21 @@ function statusLabel(mission: Parameters<typeof teacherMissionStatus>[0]) {
   return missionStatusLabel(teacherMissionStatus(mission))
 }
 
+/** «X» se abre al completar «Y»: tiene que ir detrás (y cómo quitarlo). */
+function breaksPathMessage(broken: { missionId: string; requiredMissionId: string }) {
+  const titleOf = (id: string) => state.value.missions.find(m => m.id === id)?.title ?? ''
+  return t('teacher.classes.detail.missions_tab.order.breaks_path', {
+    mission: titleOf(broken.missionId),
+    required: titleOf(broken.requiredMissionId),
+  })
+}
+
 async function saveOrder(ids: string[]) {
-  // Una misión no va delante de lo que pide (la API también lo rechaza).
-  const broken = orderBreaksPath(ids, state.value.missions)
+  // Con el mapa encendido, una misión no va delante de lo que pide (la API
+  // también lo rechaza). Apagado, sí: al encenderlo, la API la recoloca.
+  const broken = mapOn.value ? orderBreaksPath(ids, state.value.missions) : null
   if (broken) {
-    const titleOf = (id: string) => state.value.missions.find(m => m.id === id)?.title ?? ''
-    toast.error(
-      t('teacher.classes.detail.missions_tab.order.breaks_path', {
-        mission: titleOf(broken.missionId),
-        required: titleOf(broken.requiredMissionId),
-      })
-    )
+    toast.error(breaksPathMessage(broken))
     return false
   }
   try {
@@ -350,12 +367,17 @@ async function saveOrder(ids: string[]) {
     state.value.missions = orderByIds(state.value.missions, order)
     return true
   } catch (err) {
-    const data = (err as { data?: { code?: string; message?: string } })?.data
-    toast.error(
-      data?.code === 'MISSION_ORDER_BREAKS_PATH' && data.message
-        ? data.message
-        : t('teacher.classes.detail.missions_tab.order.error')
-    )
+    // Alguien ha cambiado el camino a la vez: con las misiones al día se sabe
+    // qué misión lo impide (el mensaje de la API va sin traducir).
+    if ((err as { data?: { code?: string } })?.data?.code === 'MISSION_ORDER_BREAKS_PATH') {
+      await reloadMissions()
+      const now = orderBreaksPath(ids, state.value.missions)
+      if (now) {
+        toast.error(breaksPathMessage(now))
+        return false
+      }
+    }
+    toast.error(t('teacher.classes.detail.missions_tab.order.error'))
     return false
   }
 }
@@ -373,13 +395,32 @@ function pathTextOf(mission: { prerequisiteIds?: string[] }) {
 // Encadenar en orden o quitar los requisitos, con lo que va a pasar junto al botón.
 const chainSummaryId = useId()
 const clearSummaryId = useId()
+const chainButtonId = useId()
+const clearButtonId = useId()
 const chain = computed(() => chainSummary(orderedMissions.value))
 const chainText = computed(() => {
-  const { links, current, alreadyChained } = chain.value
-  if (alreadyChained) return t('teacher.classes.detail.missions_tab.path.chained')
-  const base = t('teacher.classes.detail.missions_tab.path.chain_summary', { count: links }, links)
-  return current > 0
-    ? `${base} ${t('teacher.classes.detail.missions_tab.path.chain_replaces', { count: current }, current)}`
+  const { links, current, skipped, alreadyChained } = chain.value
+  const parts = alreadyChained
+    ? [t('teacher.classes.detail.missions_tab.path.chained')]
+    : [
+        t('teacher.classes.detail.missions_tab.path.chain_summary', { count: links }, links),
+        current > 0
+          ? t(
+              'teacher.classes.detail.missions_tab.path.chain_replaces',
+              { count: current },
+              current
+            )
+          : '',
+      ]
+  if (skipped > 0) parts.push(t('teacher.classes.detail.missions_tab.path.chain_skips_locked'))
+  return parts.filter(Boolean).join(' ')
+})
+// La pista del orden: con el mapa encendido y requisitos, por qué una fila no
+// se deja mover y qué hacer.
+const orderHint = computed(() => {
+  const base = t('teacher.classes.detail.missions_tab.order.hint')
+  return mapOn.value && chain.value.current > 0
+    ? `${base} ${t('teacher.classes.detail.missions_tab.order.hint_path')}`
     : base
 })
 const pathBusy = ref<'chain' | 'clear' | null>(null)
@@ -398,19 +439,25 @@ async function changePath(mode: 'chain' | 'clear') {
   } finally {
     pathBusy.value = null
   }
+  await focusAfterPathChange(mode)
+}
+
+/**
+ * Tras encadenar o quitar, el botón pulsado se desactiva o desaparece: el foco
+ * se queda en él si sigue activo (no ha ido bien), si no pasa al otro y, si no
+ * queda ninguno, al resumen de la cadena.
+ */
+async function focusAfterPathChange(mode: 'chain' | 'clear') {
+  await nextTick()
+  const ids = mode === 'chain' ? [chainButtonId, clearButtonId] : [clearButtonId, chainButtonId]
+  const active = ids
+    .map(id => document.getElementById(id) as HTMLButtonElement | null)
+    .find(button => button && !button.disabled)
+  ;(active ?? document.getElementById(chainSummaryId))?.focus()
 }
 
 // Sin misiones suficientes (o sin edición) no hay nada que ordenar.
 watch(canOrder, value => {
   if (!value) ordering.value = false
 })
-
-async function refreshMissions() {
-  try {
-    const res = await teacherStore.fetchClassMissions(classId.value, true)
-    state.value.missions = res.missions
-  } catch (error) {
-    console.error('Error refreshing class missions:', error)
-  }
-}
 </script>

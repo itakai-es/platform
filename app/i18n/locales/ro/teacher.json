@@ -194,20 +194,22 @@
             "button": "Ordonează",
             "title": "Ordinea clasei",
             "hint": "Clasa vede misiunile în această ordine. Trage fiecare rând de mânerul lui sau, cu tastatura, mergi pe mâner și folosește săgețile sus și jos. Fiecare schimbare se salvează imediat.",
+            "hint_path": "O misiune nu poate veni înaintea a ceea ce cere: ca s-o muți, elimină mai întâi ce cere din Setări › Drum ale ei sau folosește «Elimină cerințele».",
             "done": "Gata",
             "error": "Ordinea nu a putut fi salvată. Încearcă din nou.",
-            "breaks_path": "«{mission}» se deschide după ce se finalizează «{required}»: trebuie să vină după."
+            "breaks_path": "«{mission}» se deschide după ce se finalizează «{required}»: trebuie să vină după. Elimină mai întâi ce cere din Setări › Drum ale ei sau folosește «Elimină cerințele»."
           },
           "path": {
             "title": "Drumul hărții",
             "hint": "Un drum simplu, dintr-un pas. Ca să alegi ce cere fiecare misiune, deschide-o și mergi la Setări, Drum.",
             "chain": "Înlănțuie în ordine",
-            "chain_summary": "Fiecare misiune va cere finalizarea celei anterioare ca să se deschidă: {count} cerință. | Fiecare misiune va cere finalizarea celei anterioare ca să se deschidă: {count} cerințe.",
-            "chain_replaces": "O înlocuiește pe cea de acum. | Le înlocuiește pe cele {count} de acum.",
+            "chain_summary": "Fiecare misiune va cere finalizarea celei anterioare ca să se deschidă: {count} cerință. | Fiecare misiune va cere finalizarea celei anterioare ca să se deschidă. Cerințe: {count}.",
+            "chain_replaces": "O înlocuiește pe cea de acum. | Le înlocuiește pe toate cele de acum (cerințe: {count}).",
+            "chain_skips_locked": "Cele blocate rămân pe dinafară.",
             "chained": "Sunt deja înlănțuite: fiecare misiune o cere pe cea anterioară.",
             "chain_done": "Misiuni înlănțuite în ordine",
             "clear": "Elimină cerințele",
-            "clear_summary": "Elimină cerința existentă: toate misiunile se deschid de la început. | Elimină cele {count} cerințe existente: toate misiunile se deschid de la început.",
+            "clear_summary": "Elimină cerința existentă: toate misiunile se deschid de la început. | Elimină toate cerințele existente (cerințe: {count}): toate misiunile se deschid de la început.",
             "clear_done": "Cerințe eliminate",
             "error": "Nu s-a putut schimba drumul. Încearcă din nou."
           }
@@ -884,12 +886,15 @@
           "path_title": "Drum",
           "path_hint": "Fiecare elev o va vedea închisă până finalizează toate misiunile pe care le bifezi. Pentru cine a început-o deja nu se închide.",
           "path_legend": "Ca să se deschidă, de finalizat înainte",
-          "path_map_off": "Ce trebuie finalizat înainte de a deschide o misiune contează doar cu harta misiunilor pornită. Se pornește din setările clasei, la Funcționalități.",
+          "path_map_off": "Cerințele închid misiuni doar cu harta pornită (Setările clasei › Funcționalități).",
           "path_empty": "Nu există alte misiuni în clasă.",
-          "path_cycle_reason": "Are deja nevoie de această misiune ca să se deschidă: dacă o ceri, s-ar închide un cerc.",
+          "path_cycle_note": "Cele estompate depind deja de această misiune: dacă le-ar cere, niciuna nu s-ar mai deschide.",
           "path_limit": "Cel mult {max}. Ca să alegi alta, debifează una.",
-          "path_moved": "Salvat. Misiunea a trecut după ce cere, în ordinea clasei.",
-          "path_load_error": "Nu s-au putut încărca misiunile clasei."
+          "path_moved": "Salvat. În ordinea clasei, misiunea a trecut după misiunile pe care le cere.",
+          "path_error_cycle": "Una dintre cele bifate depinde deja de această misiune: dacă ar cere-o, niciuna nu s-ar mai deschide. Verifică drumul și salvează din nou.",
+          "path_error_invalid": "Una dintre cele bifate nu mai este în această clasă. Verifică drumul și salvează din nou.",
+          "path_load_error": "Nu s-au putut încărca misiunile clasei.",
+          "path_retry": "Încearcă din nou"
         }
       },
       "import": {

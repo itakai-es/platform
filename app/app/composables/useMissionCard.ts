@@ -157,7 +157,8 @@ export function useMissionCard(props: MissionCardProps, emit: (e: 'click') => vo
   })
 
   // Cerrada por el camino del mapa: la tarjeta dice qué la abre («Se abre al
-  // completar «A»»), en lugar de que la ha cerrado su docente.
+  // completar «A»»), en lugar de que la ha cerrado su docente. Un requisito que
+  // su docente tiene cerrado lo dice («A» (cerrada por tu docente por ahora)).
   const { opensAfter, missionList } = useMissionPathText()
   const pathLocked = computed(
     () =>
@@ -171,7 +172,7 @@ export function useMissionCard(props: MissionCardProps, emit: (e: 'click') => vo
     pathLocked.value
       ? t('student.missions.locked_path_aria', {
           title: props.title,
-          missions: missionList((props.requires ?? []).map(m => m.title)),
+          missions: missionList(props.requires ?? []),
         })
       : t('student.missions.locked_aria', { title: props.title })
   )
@@ -185,7 +186,7 @@ export function useMissionCard(props: MissionCardProps, emit: (e: 'click') => vo
       toast.info(
         pathLocked.value
           ? t('common.mission_map.locked_path_explain', {
-              missions: missionList((props.requires ?? []).map(m => m.title)),
+              missions: missionList(props.requires ?? []),
             })
           : t('student.missions.locked_toast')
       )

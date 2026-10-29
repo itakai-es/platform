@@ -621,6 +621,8 @@
       "no_students": "Entá nun hai alumnáu",
       "opens_after": "Ábrese al completar {missions}",
       "quoted": "«{title}»",
+      "quoted_teacher_closed": "«{title}» (zarrada pol to docente de momentu)",
+      "and": "y",
       "locked_path_explain": "Pa abrila, completa enantes {missions}.",
       "state_short": {
         "completed": "Completada",

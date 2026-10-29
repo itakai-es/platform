@@ -1,4 +1,9 @@
-import type { MissionLockReason, MissionRequirement, MissionStatus } from './mission.types'
+import type {
+  MissionLockReason,
+  MissionPrerequisite,
+  MissionRequirement,
+  MissionStatus,
+} from './mission.types'
 import type { ClassSettings } from './class.types'
 
 export interface MissionNarrative {
@@ -144,6 +149,9 @@ export interface MissionDetail {
    */
   lockReason?: MissionLockReason | null
   requires?: MissionRequirement[]
-  /** Profesorado: lo que pide para abrirse en el mapa, en el orden de la clase. */
-  prerequisites?: MissionRequirement[]
+  /**
+   * Profesorado: lo que pide para abrirse en el mapa, en el orden de la clase,
+   * con el estado de cada una.
+   */
+  prerequisites?: MissionPrerequisite[]
 }

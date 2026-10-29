@@ -702,7 +702,8 @@ export const useTeacherStore = defineStore('teacher', () => {
 
   /**
    * Camino del mapa de una clase. «Encadenar en orden» (`chain`): cada misión
-   * pide la anterior, en el orden de la clase, y deja de pedir lo que pidiera.
+   * abierta pide la abierta anterior, en el orden de la clase (las bloqueadas se
+   * quedan fuera), y deja de pedir lo que pidiera.
    * Quitar los requisitos (`clear`): ninguna pide nada. Devuelve las misiones de
    * la clase ya al día (también en la caché).
    */

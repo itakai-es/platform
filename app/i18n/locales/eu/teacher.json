@@ -194,9 +194,10 @@
             "button": "Ordenatu",
             "title": "Klaseko ordena",
             "hint": "Ikasleek ordena honetan ikusten dituzte misioak. Arrastatu errenkada bakoitza bere heldulekutik edo, teklatuarekin, joan heldulekura eta erabili gora eta behera geziak. Aldaketa bakoitza berehala gordetzen da.",
+            "hint_path": "Misio bat ezin da eskatzen duenaren aurretik joan: mugitzeko, lehenago kendu eskatzen duena bere Ezarpenak › Bidea atalean, edo erabili «Kendu baldintzak».",
             "done": "Eginda",
             "error": "Ezin izan da ordena gorde. Saiatu berriro.",
-            "breaks_path": "«{mission}» «{required}» osatzean irekitzen da: haren atzean joan behar du."
+            "breaks_path": "«{mission}» «{required}» osatzean irekitzen da: haren atzean joan behar du. Lehenago, kendu eskatzen duena bere Ezarpenak › Bidea atalean, edo erabili «Kendu baldintzak»."
           },
           "path": {
             "title": "Maparen bidea",
@@ -204,6 +205,7 @@
             "chain": "Kateatu ordenan",
             "chain_summary": "Misio bakoitzak aurrekoa osatzea eskatuko du irekitzeko: baldintza {count}. | Misio bakoitzak aurrekoa osatzea eskatuko du irekitzeko: {count} baldintza.",
             "chain_replaces": "Orain dagoena ordezkatzen du. | Orain dauden {count} baldintzak ordezkatzen ditu.",
+            "chain_skips_locked": "Blokeatuak kanpoan geratzen dira.",
             "chained": "Kateatuta daude jada: misio bakoitzak aurrekoa eskatzen du.",
             "chain_done": "Misioak ordenan kateatuta",
             "clear": "Kendu baldintzak",
@@ -884,12 +886,15 @@
           "path_title": "Bidea",
           "path_hint": "Ikasle bakoitzak itxita ikusiko du markatzen dituzun guztiak osatu arte. Dagoeneko hasi duenari ez zaio ixten.",
           "path_legend": "Irekitzeko, lehenago osatu",
-          "path_map_off": "Misio bat ireki aurretik osatu beharrekoa misioen mapa piztuta dagoenean bakarrik kontatzen da. Klasearen ezarpenetan pizten da, Funtzionalitateak atalean.",
+          "path_map_off": "Baldintzek mapa piztuta dagoenean bakarrik ixten dituzte misioak (Klasearen ezarpenak › Funtzionalitateak).",
           "path_empty": "Ez dago beste misiorik klasean.",
-          "path_cycle_reason": "Dagoeneko misio hau behar du irekitzeko: eskatzeak zirkulu bat itxiko luke.",
+          "path_cycle_note": "Itzalita daudenak dagoeneko misio honen menpe daude: eskatuko balitu, bat ere ez litzateke irekiko.",
           "path_limit": "Gehienez {max}. Beste bat aukeratzeko, kendu marka bati.",
           "path_moved": "Gordeta. Misioa eskatzen duenaren atzera pasatu da klaseko ordenan.",
-          "path_load_error": "Ezin izan dira klaseko misioak kargatu."
+          "path_error_cycle": "Markatutako bat dagoeneko misio honen menpe dago: eskatuko balu, bat ere ez litzateke irekiko. Berrikusi bidea eta gorde berriro.",
+          "path_error_invalid": "Markatutako bat ez dago jada klase honetan. Berrikusi bidea eta gorde berriro.",
+          "path_load_error": "Ezin izan dira klaseko misioak kargatu.",
+          "path_retry": "Saiatu berriro"
         }
       },
       "import": {

@@ -14,6 +14,10 @@ export interface PathMission {
   id: string
   title: string
   prerequisiteIds?: string[]
+  /** `bloqueada` si la ha cerrado su docente (un borrador): no entra en la cadena. */
+  status?: string
+  /** Su fecha límite, si tiene (ISO). */
+  deadline?: string | null
 }
 
 /** Una arista del camino: `missionId` pide `requiredMissionId`. */
@@ -106,24 +110,29 @@ export function orderBreaksPath(
 }
 
 /**
- * Lo que hace «Encadenar en orden» con estas misiones (ya en su orden): cuántos
- * requisitos deja (cada una pide la anterior), cuántos hay ahora y si ya están
- * así (entonces no hay nada que hacer).
+ * Lo que hace «Encadenar en orden» con estas misiones (ya en su orden): cada
+ * misión abierta pide la abierta anterior; las bloqueadas (borradores) se
+ * quedan fuera, sin pedir nada y sin que nadie las pida. Lo mismo que la API
+ * (`chainMissions`). Cuántos requisitos deja, cuántos hay ahora, cuántas se
+ * quedan fuera y si ya están así (entonces no hay nada que hacer).
  */
 export function chainSummary(missions: PathMission[]): {
   links: number
   current: number
+  skipped: number
   alreadyChained: boolean
 } {
   const edges = pathEdges(missions)
-  const links = Math.max(0, missions.length - 1)
+  const open = missions.filter(m => m.status !== 'bloqueada')
+  const links = Math.max(0, open.length - 1)
+  // Con tantos requisitos como eslabones y cada abierta pidiendo solo la
+  // anterior, ni la primera ni las bloqueadas piden nada.
   const alreadyChained =
     edges.length === links &&
-    missions.every(
+    open.every(
       (m, index) =>
         index === 0 ||
-        ((m.prerequisiteIds ?? []).length === 1 &&
-          m.prerequisiteIds![0] === missions[index - 1]!.id)
+        ((m.prerequisiteIds ?? []).length === 1 && m.prerequisiteIds![0] === open[index - 1]!.id)
     )
-  return { links, current: edges.length, alreadyChained }
+  return { links, current: edges.length, skipped: missions.length - open.length, alreadyChained }
 }

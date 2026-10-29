@@ -166,21 +166,20 @@
           :heading-level="2"
         >
           <template #action>
+            <!-- Un enlace por requisito que ya se puede hacer; el que tiene
+                 cerrado su docente solo se nombra en el texto, sin enlace. -->
             <div class="flex flex-wrap justify-center gap-3">
-              <NuxtLink
-                v-for="required in mission.requires"
+              <Button
+                v-for="required in openRequires"
                 :key="required.id"
+                variant="primary"
                 :to="`${classDetailLink}/misiones/${required.id}`"
               >
-                <Button variant="primary">
-                  {{ t('student.mission_detail.path_locked.go_to', { title: required.title }) }}
-                </Button>
-              </NuxtLink>
-              <NuxtLink :to="`${classDetailLink}/misiones`">
-                <Button variant="outline">{{
-                  t('student.mission_detail.path_locked.back')
-                }}</Button>
-              </NuxtLink>
+                {{ t('student.mission_detail.path_locked.go_to', { title: required.title }) }}
+              </Button>
+              <Button variant="outline" :to="`${classDetailLink}/misiones`">
+                {{ t('student.mission_detail.path_locked.back') }}
+              </Button>
             </div>
           </template>
         </EmptyState>
@@ -1634,8 +1633,12 @@ const pathLocked = computed(
 )
 const pathLockedText = computed(() =>
   t('student.mission_detail.path_locked.description', {
-    missions: missionList((props.mission?.requires ?? []).map(m => m.title)),
+    missions: missionList(props.mission?.requires ?? []),
   })
+)
+// Las que se pueden hacer ya: las cerradas por su docente no llevan a ninguna parte.
+const openRequires = computed(() =>
+  (props.mission?.requires ?? []).filter(required => required.state !== 'teacher')
 )
 // Pistas: el profesorado ve siempre la sección (para añadirlas); el alumnado,
 // solo si la misión tiene alguna.

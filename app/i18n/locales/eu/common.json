@@ -621,6 +621,8 @@
       "no_students": "Oraindik ez dago ikaslerik",
       "opens_after": "{missions} osatzean irekitzen da",
       "quoted": "«{title}»",
+      "quoted_teacher_closed": "«{title}» (zure irakasleak itxita oraingoz)",
+      "and": "eta",
       "locked_path_explain": "Irekitzeko, osatu lehenago {missions}.",
       "state_short": {
         "completed": "Osatua",

@@ -24,10 +24,25 @@ export type MissionRarity = 'comun' | 'rara' | 'epica' | 'legendaria'
  */
 export type MissionLockReason = 'teacher' | 'path'
 
-/** Una misión que hay que completar antes (camino del mapa): lo que se enseña de ella. */
+/**
+ * Una misión que hay que completar antes (camino del mapa): lo que se enseña de
+ * ella. Al alumnado le llega con su `state`: `open` si ya se puede hacer y
+ * `teacher` si la tiene cerrada su docente (entonces no se enlaza).
+ */
 export interface MissionRequirement {
   id: string
   title: string
+  state?: 'open' | 'teacher'
+}
+
+/**
+ * Lo que pide una misión, como lo ve el profesorado (Ajustes › Camino), con el
+ * estado de cada una: una caducada o sin enigmas ya no cierra nada.
+ */
+export interface MissionPrerequisite {
+  id: string
+  title: string
+  status?: 'bloqueada' | 'expirada' | 'urgente' | 'activa'
 }
 
 export interface Mission {

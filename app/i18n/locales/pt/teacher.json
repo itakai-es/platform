@@ -194,9 +194,10 @@
             "button": "Ordenar",
             "title": "Ordem da turma",
             "hint": "A turma vê as missões por esta ordem. Arrasta cada linha pela sua pega ou, com o teclado, vai até à pega e usa as setas para cima e para baixo. Cada alteração fica guardada no momento.",
+            "hint_path": "Uma missão não pode ir antes do que pede: para a mover, retira antes o que pede nas suas Definições › Caminho, ou usa «Retirar os requisitos».",
             "done": "Concluído",
             "error": "Não foi possível guardar a ordem. Tenta de novo.",
-            "breaks_path": "«{mission}» abre ao completar «{required}»: tem de ir depois."
+            "breaks_path": "«{mission}» abre ao completar «{required}»: tem de ir depois. Retira antes o que pede nas suas Definições › Caminho, ou usa «Retirar os requisitos»."
           },
           "path": {
             "title": "Caminho do mapa",
@@ -204,6 +205,7 @@
             "chain": "Encadear por ordem",
             "chain_summary": "Cada missão vai pedir que se complete a anterior para abrir: {count} requisito. | Cada missão vai pedir que se complete a anterior para abrir: {count} requisitos.",
             "chain_replaces": "Substitui o que existe agora. | Substitui os {count} que existem agora.",
+            "chain_skips_locked": "As bloqueadas ficam de fora.",
             "chained": "Já estão encadeadas: cada missão pede a anterior.",
             "chain_done": "Missões encadeadas por ordem",
             "clear": "Retirar os requisitos",
@@ -884,12 +886,15 @@
           "path_title": "Caminho",
           "path_hint": "Cada estudante vai vê-la fechada até completar todas as que marcares. A quem já a tiver começado não se fecha.",
           "path_legend": "Para a abrir, completar antes",
-          "path_map_off": "O que é preciso completar antes de abrir uma missão só conta com o mapa de missões ligado. Liga-se nas definições da turma, em Funcionalidades.",
+          "path_map_off": "Os requisitos só fecham missões com o mapa ligado (Definições da turma › Funcionalidades).",
           "path_empty": "Não há outras missões na turma.",
-          "path_cycle_reason": "Já precisa desta missão para abrir: pedi-la fecharia um círculo.",
+          "path_cycle_note": "As esbatidas já dependem desta missão: se as pedisse, nenhuma abriria.",
           "path_limit": "No máximo, {max}. Para escolher outra, desmarca uma.",
           "path_moved": "Guardado. A missão passou para depois do que pede na ordem da turma.",
-          "path_load_error": "Não foi possível carregar as missões da turma."
+          "path_error_cycle": "Uma das marcadas já depende desta missão: se a pedisse, nenhuma abriria. Revê o caminho e volta a guardar.",
+          "path_error_invalid": "Uma das marcadas já não está nesta turma. Revê o caminho e volta a guardar.",
+          "path_load_error": "Não foi possível carregar as missões da turma.",
+          "path_retry": "Tentar novamente"
         }
       },
       "import": {

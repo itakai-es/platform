@@ -75,12 +75,50 @@ test('encadenar en orden: cuántos requisitos deja, cuántos hay y si ya está a
   assert.deepEqual(chainSummary([m('a'), m('b'), m('c', ['a'])]), {
     links: 2,
     current: 1,
+    skipped: 0,
     alreadyChained: false,
   })
   assert.deepEqual(chainSummary([m('a'), m('b', ['a']), m('c', ['b'])]), {
     links: 2,
     current: 2,
+    skipped: 0,
     alreadyChained: true,
   })
-  assert.deepEqual(chainSummary([m('a')]), { links: 0, current: 0, alreadyChained: true })
+  assert.deepEqual(chainSummary([m('a')]), {
+    links: 0,
+    current: 0,
+    skipped: 0,
+    alreadyChained: true,
+  })
+})
+
+test('encadenar en orden deja fuera las bloqueadas: cada abierta pide la abierta anterior', () => {
+  const locked = (id, prerequisiteIds = []) => ({ ...m(id, prerequisiteIds), status: 'bloqueada' })
+  // a, (b bloqueada), c, d: c pide a y d pide c.
+  assert.deepEqual(chainSummary([m('a'), locked('b'), m('c'), m('d')]), {
+    links: 2,
+    current: 0,
+    skipped: 1,
+    alreadyChained: false,
+  })
+  assert.deepEqual(chainSummary([m('a'), locked('b'), m('c', ['a']), m('d', ['c'])]), {
+    links: 2,
+    current: 2,
+    skipped: 1,
+    alreadyChained: true,
+  })
+  // Encadenadas con la bloqueada dentro: no es lo que deja «Encadenar».
+  assert.deepEqual(chainSummary([m('a'), locked('b', ['a']), m('c', ['b'])]), {
+    links: 1,
+    current: 2,
+    skipped: 1,
+    alreadyChained: false,
+  })
+  // Una bloqueada que pide algo, con las abiertas ya encadenadas: tampoco.
+  assert.deepEqual(chainSummary([m('a'), m('b', ['a']), locked('c', ['a'])]), {
+    links: 1,
+    current: 2,
+    skipped: 1,
+    alreadyChained: false,
+  })
 })

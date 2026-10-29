@@ -621,6 +621,8 @@
       "no_students": "Încă nu e nimeni în clasă",
       "opens_after": "Se deschide după ce finalizezi {missions}",
       "quoted": "«{title}»",
+      "quoted_teacher_closed": "«{title}» (închisă deocamdată de cadrul didactic)",
+      "and": "și",
       "locked_path_explain": "Ca s-o deschizi, finalizează mai întâi {missions}.",
       "state_short": {
         "completed": "Finalizată",

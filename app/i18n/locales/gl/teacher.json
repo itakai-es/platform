@@ -194,9 +194,10 @@
             "button": "Ordenar",
             "title": "Orde da clase",
             "hint": "O alumnado ve as misións nesta orde. Arrastra cada fila pola súa asa ou, co teclado, ponte na asa e usa as frechas arriba e abaixo. Cada cambio gárdase ao momento.",
+            "hint_path": "Unha misión non pode ir diante do que pide: para movela, quita antes o que pide nos seus Axustes › Camiño, ou usa «Quitar os requisitos».",
             "done": "Feito",
             "error": "Non se puido gardar a orde. Téntao de novo.",
-            "breaks_path": "«{mission}» ábrese ao completar «{required}»: ten que ir detrás."
+            "breaks_path": "«{mission}» ábrese ao completar «{required}»: ten que ir detrás. Quita antes o que pide nos seus Axustes › Camiño, ou usa «Quitar os requisitos»."
           },
           "path": {
             "title": "Camiño do mapa",
@@ -204,6 +205,7 @@
             "chain": "Encadear en orde",
             "chain_summary": "Cada misión pedirá completar a anterior para abrirse: {count} requisito. | Cada misión pedirá completar a anterior para abrirse: {count} requisitos.",
             "chain_replaces": "Substitúe o que hai agora. | Substitúe os {count} que hai agora.",
+            "chain_skips_locked": "As bloqueadas quedan fóra.",
             "chained": "Xa están encadeadas: cada misión pide a anterior.",
             "chain_done": "Misións encadeadas en orde",
             "clear": "Quitar os requisitos",
@@ -884,12 +886,15 @@
           "path_title": "Camiño",
           "path_hint": "Cada estudante verá a misión pechada ata completar todas as que marques. A quen xa a comezase non se lle pecha.",
           "path_legend": "Para abrila, completar antes",
-          "path_map_off": "O que hai que completar antes para abrir unha misión só conta co mapa de misións acendido. Acéndese nos axustes da clase, en Funcionalidades.",
+          "path_map_off": "Os requisitos só pechan misións co mapa acendido (Axustes da clase › Funcionalidades).",
           "path_empty": "Non hai outras misións na clase.",
-          "path_cycle_reason": "Xa necesita esta misión para abrirse: pedila pecharía un círculo.",
+          "path_cycle_note": "As atenuadas xa dependen desta misión: se as pedise, ningunha se abriría.",
           "path_limit": "Como moito, {max}. Para escoller outra, desmarca unha.",
           "path_moved": "Gardado. A misión pasou detrás do que pide na orde da clase.",
-          "path_load_error": "Non se puideron cargar as misións da clase."
+          "path_error_cycle": "Algunha das marcadas xa depende desta misión: se a pedise, ningunha se abriría. Revisa o camiño e garda de novo.",
+          "path_error_invalid": "Algunha das marcadas xa non está nesta clase. Revisa o camiño e garda de novo.",
+          "path_load_error": "Non se puideron cargar as misións da clase.",
+          "path_retry": "Tentar de novo"
         }
       },
       "import": {

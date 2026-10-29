@@ -1112,18 +1112,24 @@ export class MissionsService {
   }
 
   /**
-   * «Encadenar en orden»: cada misión de la clase pide la anterior, en el orden
-   * de la clase, y deja de pedir lo que pidiera. Es el camino simple, para quien
-   * no quiere pensar ramas. El orden no cambia (una cadena en orden ya lo
-   * cumple). Una sola entrada `mission.chained`; si ya estaba así, ninguna.
-   * Devuelve lo que pide cada misión.
+   * «Encadenar en orden»: cada misión abierta de la clase pide la abierta
+   * anterior, en el orden de la clase, y deja de pedir lo que pidiera. Las
+   * bloqueadas (borradores) se quedan fuera: no piden nada y nadie las pide, así
+   * que un borrador no deja cerrado lo que va detrás. Es el camino simple, para
+   * quien no quiere pensar ramas. El orden no cambia (una cadena en orden ya lo
+   * cumple). Una sola entrada `mission.chained` (`count`, las encadenadas); si
+   * ya estaba así, ninguna. Devuelve lo que pide cada misión.
    */
   async chainMissions(userId: string, classId: string) {
     await assertClassAccess(classId, userId, 'mission.edit')
     return prisma.$transaction(async tx => {
       await lockMissionPath(tx, [classId])
       const order = (
-        await tx.mission.findMany({ where: { classId }, orderBy: MISSION_ORDER, select: { id: true } })
+        await tx.mission.findMany({
+          where: { classId, status: { not: 'bloqueada' } },
+          orderBy: MISSION_ORDER,
+          select: { id: true },
+        })
       ).map(m => m.id)
       const chain = chainEdges(order)
       const edges = await classPathEdges(tx, classId)

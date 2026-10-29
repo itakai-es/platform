@@ -194,9 +194,10 @@
             "button": "Ordenar",
             "title": "Orden de la clase",
             "hint": "El alumnado ve las misiones en este orden. Arrastra cada fila por su asa o, con el teclado, ponte en el asa y usa las flechas arriba y abajo. Cada cambio se guarda al momento.",
+            "hint_path": "Una misión no puede ir delante de lo que pide: para moverla, quita antes lo que pide en sus Ajustes › Camino, o usa «Quitar los requisitos».",
             "done": "Hecho",
             "error": "No se ha podido guardar el orden. Inténtalo de nuevo.",
-            "breaks_path": "«{mission}» se abre al completar «{required}»: tiene que ir detrás."
+            "breaks_path": "«{mission}» se abre al completar «{required}»: tiene que ir detrás. Quita antes lo que pide en sus Ajustes › Camino, o usa «Quitar los requisitos»."
           },
           "path": {
             "title": "Camino del mapa",
@@ -204,6 +205,7 @@
             "chain": "Encadenar en orden",
             "chain_summary": "Cada misión pedirá completar la anterior para abrirse: {count} requisito. | Cada misión pedirá completar la anterior para abrirse: {count} requisitos.",
             "chain_replaces": "Sustituye el que hay ahora. | Sustituye los {count} que hay ahora.",
+            "chain_skips_locked": "Las bloqueadas se quedan fuera.",
             "chained": "Ya están encadenadas: cada misión pide la anterior.",
             "chain_done": "Misiones encadenadas en orden",
             "clear": "Quitar los requisitos",
@@ -884,12 +886,15 @@
           "path_title": "Camino",
           "path_hint": "Cada estudiante la verá cerrada hasta completar todas las que marques. A quien ya la haya empezado no se le cierra.",
           "path_legend": "Para abrirla, completar antes",
-          "path_map_off": "Lo que hay que completar antes para abrir una misión solo cuenta con el mapa de misiones encendido. Se enciende en los ajustes de la clase, en Funcionalidades.",
+          "path_map_off": "Los requisitos solo cierran misiones con el mapa activado (Ajustes de la clase › Funcionalidades).",
           "path_empty": "No hay otras misiones en la clase.",
-          "path_cycle_reason": "Ya necesita esta misión para abrirse: pedirla cerraría un círculo.",
+          "path_cycle_note": "Las atenuadas ya dependen de esta misión: si la pidieran, ninguna se abriría.",
           "path_limit": "Como mucho, {max}. Para elegir otra, desmarca una.",
           "path_moved": "Guardado. La misión ha pasado detrás de lo que pide en el orden de la clase.",
-          "path_load_error": "No se han podido cargar las misiones de la clase."
+          "path_error_cycle": "Alguna de las marcadas ya depende de esta misión: si la pidiera, ninguna se abriría. Revisa el camino y vuelve a guardar.",
+          "path_error_invalid": "Alguna de las marcadas ya no está en esta clase. Revisa el camino y vuelve a guardar.",
+          "path_load_error": "No se han podido cargar las misiones de la clase.",
+          "path_retry": "Reintentar"
         }
       },
       "import": {
