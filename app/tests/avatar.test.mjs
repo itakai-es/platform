@@ -71,8 +71,13 @@ test('el color de un estudiante es de su matrícula: puede cambiar de una clase 
   assert.equal(a.studentAvatarSeed(undefined, 's1'), ':s1')
 })
 
-test('el catálogo docente: una clave por color de la paleta; lo que no es del catálogo, nada', () => {
-  assert.deepEqual(a.TEACHER_AVATAR_KEYS, PALETTE)
+test('el catálogo docente: los personajes con su retrato, un color por clave de la paleta; lo que no es del catálogo, nada', () => {
+  assert.deepEqual(a.TEACHER_AVATAR_KEYS, [...a.TEACHER_CHARACTER_KEYS, ...PALETTE])
+  for (const key of a.TEACHER_CHARACTER_KEYS) {
+    const entry = a.teacherAvatarOf(key)
+    assert.ok(PALETTE.includes(entry.color), key)
+    assert.equal(entry.portrait, a.studentAvatarSrc(key))
+  }
   for (const key of PALETTE) assert.deepEqual(a.teacherAvatarOf(key), { color: key })
   for (const key of [null, undefined, '', 'gold', '/app/avatars/atenea.svg', 'constructor']) {
     assert.equal(a.teacherAvatarOf(key), null, String(key))
