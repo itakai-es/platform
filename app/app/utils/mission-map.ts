@@ -1,10 +1,10 @@
 /**
  * Lo que cuenta el mapa de misiones (E3, en pruebas), sin Vue: el estado de
  * cada nodo para quien lo mira, lo recorrido, dónde está el alumnado («Estás
- * aquí») y, para el profesorado, el anillo de cada medallón y cómo va la clase.
- * Lo usa MissionMap.vue; vive aquí para poder probarlo sin navegador. La
- * disposición está en utils/mission-map-layout.ts y las posiciones, en
- * utils/mission-map-geometry.ts.
+ * aquí») y, para el profesorado, el anillo de cada medallón, cómo va la clase y
+ * los avatares de quien ha completado cada misión. Lo usa MissionMap.vue; vive
+ * aquí para poder probarlo sin navegador. La disposición está en
+ * utils/mission-map-layout.ts y las posiciones, en utils/mission-map-geometry.ts.
  */
 import type { MissionRarity } from '~/types/mission.types'
 import { teacherMissionStatus } from './mission-teacher-status'
@@ -22,6 +22,15 @@ export type MapNodeState =
 export interface MapMissionRef {
   id: string
   title: string
+}
+
+/** Profesorado: una persona de la clase que ha completado una misión, con su avatar. */
+export interface MapPerson {
+  id: string
+  name: string
+  avatar: string | null
+  /** De dónde sale el color del avatar: `studentAvatarSeed(clase, estudiante)`. */
+  seed: string
 }
 
 /** Lo que pintan el mapa y el detalle de cada misión, ya con sus textos. */
@@ -51,8 +60,17 @@ export interface MissionMapItem {
   enigmas: number
   /** Alumnado: su avance (null si está cerrada). */
   progress: { percent: number; done: number; total: number } | null
-  /** Profesorado: cuántas personas la han completado, de cuántas, y en texto. */
-  completed: { done: number; total: number; text: string } | null
+  /**
+   * Profesorado: cuántas personas la han completado, de cuántas, y en texto;
+   * quiénes (primero quien antes) y cuántas la llevan en curso.
+   */
+  completed: {
+    done: number
+    total: number
+    text: string
+    people: MapPerson[]
+    inProgress: number
+  } | null
   /** La fecha límite, ya escrita en el idioma de la app. */
   deadline: string | null
 }
@@ -150,4 +168,14 @@ export function classMapProgress(missions: { completedCount?: number; totalStude
     percent: Math.round((completions / (students * missions.length)) * 100),
     doneByAll: missions.filter(m => (m.completedCount ?? 0) >= students).length,
   }
+}
+
+/**
+ * Profesorado: los avatares que caben de quienes han completado una misión y
+ * cuántos quedan para «+N». Con `max` o menos, todos; si hay más, `max` − 1 y
+ * el «+N» ocupa el último hueco.
+ */
+export function avatarStack<T>(people: T[], max = 8): { shown: T[]; more: number } {
+  const shown = people.length <= max ? people : people.slice(0, Math.max(0, max - 1))
+  return { shown, more: people.length - shown.length }
 }

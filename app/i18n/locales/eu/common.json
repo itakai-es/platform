@@ -615,7 +615,8 @@
         "available": "Eskuragarri",
         "urgent": "Urgentea: laster amaitzen da",
         "expired": "Iraungia",
-        "locked": "Itxita oraingoz"
+        "locked": "Blokeatua: zure irakasleak itxita oraingoz",
+        "locked_path": "Blokeatua: {missions} osatzean irekitzen da"
       },
       "completed_by": "Inork ez du osatu oraindik: 0/{total} | Osatu dutenak: {done}/{total} | Osatu dutenak: {done}/{total}",
       "no_students": "Oraindik ez dago ikaslerik",
@@ -630,7 +631,7 @@
         "available": "Eskuragarri",
         "urgent": "Urgentea",
         "expired": "Iraungia",
-        "locked": "Itxita"
+        "locked": "Blokeatua"
       },
       "start": "Irteera",
       "goal": "Helmuga",
@@ -650,6 +651,9 @@
         "empty": "Sakatu mapako misio bat haren xehetasuna hemen ikusteko.",
         "your_progress": "Zure aurrerapena",
         "enigmas_done": "{total} enigmatik {done} | {total} enigmatik {done}",
+        "completed_list": "Osatu dutenak",
+        "completed_more": "eta beste {n}",
+        "in_progress": "Abian: {n}",
         "deadline": "Epemuga: {date}",
         "requires": "Irekitzeko, osatu lehenago:",
         "requires_teacher": "Irekitzeko, hau osatu behar da lehenago:",

@@ -615,7 +615,8 @@
         "available": "Disponibilă",
         "urgent": "Urgentă: expiră curând",
         "expired": "Expirată",
-        "locked": "Închisă deocamdată"
+        "locked": "Blocată: închisă deocamdată de cadrul didactic",
+        "locked_path": "Blocată: se deschide după ce finalizezi {missions}"
       },
       "completed_by": "Nimeni nu a finalizat-o încă: 0 din {total} | {done} din {total} a finalizat-o | {done} din {total} au finalizat-o",
       "no_students": "Încă nu e nimeni în clasă",
@@ -630,7 +631,7 @@
         "available": "Disponibilă",
         "urgent": "Urgentă",
         "expired": "Expirată",
-        "locked": "Închisă"
+        "locked": "Blocată"
       },
       "start": "Start",
       "goal": "Sosire",
@@ -650,6 +651,9 @@
         "empty": "Apasă pe o misiune de pe hartă ca să-i vezi aici detaliile.",
         "your_progress": "Progresul tău",
         "enigmas_done": "{done} din {total} enigmă | {done} din {total} enigme",
+        "completed_list": "Cine a finalizat-o",
+        "completed_more": "și încă {n}",
+        "in_progress": "În curs: {n}",
         "deadline": "Termen-limită: {date}",
         "requires": "Ca să o deschizi, finalizează mai întâi:",
         "requires_teacher": "Ca să se deschidă, trebuie finalizată mai întâi:",

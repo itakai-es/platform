@@ -337,6 +337,51 @@ async function startedMissionIds(db: Db, studentId: string, missionIds: string[]
 }
 
 /**
+ * Lo mismo que `startedMissionIds` (la misma regla de qué es empezar), pero de
+ * toda la clase a la vez: quién ha empezado de verdad cada una de `missionIds`.
+ * Para el profesorado (cuánta gente lleva una misión en curso), con consultas
+ * agrupadas, nunca una por misión. Cuenta a cualquiera con trabajo: quien lo
+ * llama se queda con quien le interese (p. ej., el alumnado de la clase).
+ */
+export async function startedStudentsByMission(
+  db: Db,
+  missionIds: string[]
+): Promise<Map<string, Set<string>>> {
+  const started = new Map<string, Set<string>>()
+  if (missionIds.length === 0) return started
+  const add = (missionId: string, studentId: string) => {
+    const set = started.get(missionId) ?? new Set<string>()
+    set.add(studentId)
+    started.set(missionId, set)
+  }
+  const inMissions = { missionId: { in: missionIds } }
+  const [progress, enigmas, submitted, approved, hinted] = await Promise.all([
+    db.studentMissionProgress.findMany({
+      where: { ...inMissions, OR: [{ enigmasCompleted: { gt: 0 } }, { completedAt: { not: null } }] },
+      select: { missionId: true, studentId: true },
+    }),
+    db.missionEnigma.findMany({ where: inMissions, select: { id: true, missionId: true } }),
+    db.enigmaSubmission.groupBy({
+      by: ['enigmaId', 'studentId'],
+      where: { enigma: inMissions },
+    }),
+    db.studentEnigmaProgress.groupBy({
+      by: ['enigmaId', 'studentId'],
+      where: { enigma: inMissions },
+    }),
+    db.missionHintUse.groupBy({ by: ['missionId', 'studentId'], where: inMissions }),
+  ])
+  for (const p of progress) add(p.missionId, p.studentId)
+  const missionOf = new Map(enigmas.map(e => [e.id, e.missionId]))
+  for (const work of [...submitted, ...approved]) {
+    const missionId = missionOf.get(work.enigmaId)
+    if (missionId) add(missionId, work.studentId)
+  }
+  for (const h of hinted) add(h.missionId, h.studentId)
+  return started
+}
+
+/**
  * Las cerradas por el camino para S según las aristas `edges`: cada una con lo
  * que le falta, en el orden de la clase. No salen las que solo piden requisitos
  * que ya no cierran (completados, caducados o sin enigmas: ver

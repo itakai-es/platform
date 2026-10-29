@@ -403,6 +403,65 @@ test('ninguna rama termina en el aire: lo que no abre nada sigue hasta la meta',
   )
 })
 
+test('las ramas que acaban antes llegan a la meta por un sendero; el camino principal, no', () => {
+  // a → b → c; a → d: d no abre nada y no es de la última capa (la de c).
+  const layout = layoutMissionMap(
+    [
+      m('a', [], { status: 'completada', progress: 100 }),
+      m('b', ['a']),
+      m('c', ['b']),
+      m('d', ['a'], { status: 'completada', progress: 100 }),
+    ],
+    'student'
+  )
+  const geo = mapGeometry(layout, 700)
+  assert.deepEqual(
+    geo.roads.filter(r => r.trail).map(r => [r.key, r.done]),
+    // El sendero de una rama hecha va hecho: se ilumina igual.
+    [['d>goal', true]]
+  )
+  assert.equal(geo.roads.find(r => r.key === 'c>goal').trail, false)
+
+  // Con 40 misiones y ramas, a cualquier ancho del tablero: sendero es justo
+  // lo que va a la meta desde fuera de la última capa.
+  for (const missions of [
+    branched40(),
+    randomMissions(40, 977, 0.3),
+    randomMissions(40, 4111, 0.9),
+  ]) {
+    const big = layoutMissionMap(missions, 'teacher')
+    const last = new Set(big.layers.at(-1))
+    for (const width of [520, 700, 1000, 1280]) {
+      const roads = mapGeometry(big, width).roads
+      for (const road of roads) {
+        assert.equal(
+          road.trail,
+          road.to === 'goal' && !last.has(road.from),
+          `${width} px: ${road.key}`
+        )
+      }
+      assert.ok(
+        roads.some(r => r.trail),
+        `${width} px: sin senderos`
+      )
+      assert.ok(
+        roads.some(r => r.to === 'goal' && !r.trail),
+        `${width} px: sin final del camino`
+      )
+    }
+  }
+
+  // Sin ramas (serpenteando) y en la columna del móvil, todo es camino principal.
+  const linear = layoutMissionMap(
+    Array.from({ length: 12 }, (_, i) => m(`m${i}`)),
+    'student'
+  )
+  for (const width of [320, 1000]) {
+    assert.ok(mapGeometry(linear, width).roads.every(r => r.trail === false))
+  }
+  assert.ok(mapGeometry(layout, 320).roads.every(r => r.trail === false))
+})
+
 test('ninguna carretera pasa a menos de un radio de un medallón que no sea el suyo', () => {
   const maps = {
     'lineales (sin requisitos)': Array.from({ length: 40 }, (_, i) => m(`m${i}`)),

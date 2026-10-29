@@ -615,7 +615,8 @@
         "available": "Available",
         "urgent": "Urgent: due soon",
         "expired": "Expired",
-        "locked": "Closed by your teacher"
+        "locked": "Locked: closed by your teacher for now",
+        "locked_path": "Locked: opens after completing {missions}"
       },
       "completed_by": "Nobody has completed it yet: 0 of {total} | {done} of {total} has completed it | {done} of {total} have completed it",
       "no_students": "No students yet",
@@ -630,7 +631,7 @@
         "available": "Available",
         "urgent": "Urgent",
         "expired": "Expired",
-        "locked": "Closed"
+        "locked": "Locked"
       },
       "start": "Start",
       "goal": "Finish",
@@ -650,6 +651,9 @@
         "empty": "Press a mission on the map to see its details here.",
         "your_progress": "Your progress",
         "enigmas_done": "{done} of {total} enigma | {done} of {total} enigmas",
+        "completed_list": "Who has completed it",
+        "completed_more": "and {n} more",
+        "in_progress": "In progress: {n}",
         "deadline": "Deadline: {date}",
         "requires": "To open it, first complete:",
         "requires_teacher": "To open it, students must first complete:",

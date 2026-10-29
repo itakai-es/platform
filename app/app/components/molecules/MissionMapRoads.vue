@@ -6,8 +6,17 @@
     aria-hidden="true"
     focusable="false"
   >
+    <!-- Primero los senderos (las ramas que acaban antes y van a la meta),
+         estrechos y apagados, para que el camino principal pase por encima y
+         destaque. Los de una rama hecha se apagan menos: se ven iluminados. -->
+    <g fill="none" stroke-linecap="round" stroke-linejoin="round" class="opacity-50">
+      <MissionMapRoadPasses :roads="trails.pending" :stroke="stroke.trail" />
+    </g>
+    <g fill="none" stroke-linecap="round" stroke-linejoin="round" class="opacity-90">
+      <MissionMapRoadPasses :roads="trails.done" :stroke="stroke.trail" />
+    </g>
     <g fill="none" stroke-linecap="round" stroke-linejoin="round">
-      <MissionMapRoadPasses :roads="roads" :stroke="stroke" />
+      <MissionMapRoadPasses :roads="main" :stroke="stroke.road" />
     </g>
   </svg>
   <!-- Los tramos encendidos (los de la misión que se mira), otra vez y por
@@ -20,7 +29,8 @@
     focusable="false"
   >
     <g fill="none" stroke-linecap="round" stroke-linejoin="round">
-      <MissionMapRoadPasses :roads="litRoads" :stroke="stroke" lit />
+      <MissionMapRoadPasses :roads="litTrails" :stroke="stroke.trail" lit />
+      <MissionMapRoadPasses :roads="litMain" :stroke="stroke.road" lit />
     </g>
   </svg>
 </template>
@@ -32,6 +42,10 @@ import type { MapRoad } from '~/utils/mission-map-geometry'
  * La carretera del mapa de misiones (MissionMap.vue): la de siempre, que no
  * cambia al resaltar, y encima, solo cuando se mira una misión, sus tramos
  * encendidos. Así, al pasar el ratón solo se pintan esos pocos tramos.
+ *
+ * Los senderos (`trail`, utils/mission-map-geometry.ts) son más estrechos, con
+ * una línea de puntos en vez de la raya del centro, y van por debajo del camino
+ * principal y más apagados.
  */
 const props = defineProps<{
   /** Los tramos, con su trazo (utils/mission-map-geometry.ts). */
@@ -42,13 +56,26 @@ const props = defineProps<{
   lit: Set<string> | null
 }>()
 
+const main = computed(() => props.roads.filter(road => !road.trail))
+const trails = computed(() => {
+  const all = props.roads.filter(road => road.trail)
+  return { pending: all.filter(road => !road.done), done: all.filter(road => road.done) }
+})
 const litRoads = computed(() => (props.lit ? props.roads.filter(r => props.lit!.has(r.key)) : []))
+const litMain = computed(() => litRoads.value.filter(road => !road.trail))
+const litTrails = computed(() => litRoads.value.filter(road => road.trail))
 
-/** Grosor de la carretera: borde, firme y raya del centro. */
+/** Grosor de la carretera y del sendero: borde, firme y raya (o puntos) del centro. */
 const stroke = computed(() =>
   props.board
-    ? { border: 34, road: 26, dash: 3, dashes: '12 14' }
-    : { border: 24, road: 18, dash: 2.5, dashes: '9 11' }
+    ? {
+        road: { border: 34, road: 26, dash: 3, dashes: '12 14' },
+        trail: { border: 16, road: 10, dash: 2.5, dashes: '0 8' },
+      }
+    : {
+        road: { border: 24, road: 18, dash: 2.5, dashes: '9 11' },
+        trail: { border: 12, road: 7, dash: 2, dashes: '0 7' },
+      }
 )
 </script>
 

@@ -485,6 +485,7 @@ import {
   mapProgress,
   ringFraction,
   type MapNodeState,
+  type MapPerson,
   type MissionMapItem,
 } from '~/utils/mission-map'
 import { layoutMissionMap, mapNeighbors, type MapMissionInput } from '~/utils/mission-map-layout'
@@ -498,6 +499,7 @@ import {
   type MapPoint,
 } from '~/utils/mission-map-geometry'
 import { resolveDateLocale } from '~/utils/notifications'
+import { studentAvatarSeed } from '~/utils/avatar'
 
 /**
  * El mapa de misiones de una clase, en pruebas: una vista más de la pestaña
@@ -512,7 +514,8 @@ import { resolveDateLocale } from '~/utils/notifications'
  *
  * El alumnado ve su estado en cada misión, cuánto lleva recorrido y dónde está
  * («Estás aquí», con su avatar); el profesorado, el de la clase y, en un anillo
- * alrededor de cada medallón, la parte del alumnado que la ha completado. Al
+ * alrededor de cada medallón, la parte del alumnado que la ha completado (en su
+ * detalle, quiénes, con sus avatares, y cuántos la llevan en curso). Al
  * pasar por un medallón se resalta lo que está unido a él (lo que lo abre y lo
  * que abre); la leyenda resalta las de un estado. Al pulsarlo se abre su
  * detalle (MissionMapDetail): en un panel al lado si hay sitio y, si no, en una
@@ -530,6 +533,10 @@ interface MapMission extends MapMissionInput {
   manaReward?: number
   /** Profesorado: cuántos enigmas tiene. */
   enigmasCount?: number
+  /** Profesorado: quién la ha completado (ids, primero quien antes). */
+  completedStudentIds?: string[]
+  /** Profesorado: cuánta gente la ha empezado sin completarla. */
+  inProgressCount?: number
   /** Alumnado: cuántos enigmas lleva completados, de cuántos. */
   progressDetail?: { done: number; total: number }
 }
@@ -541,12 +548,14 @@ const props = defineProps<{
   classId: string
   /** Alumnado: su avatar, para «Estás aquí». */
   you?: { avatar?: string | null; seed: string; name?: string | null } | null
+  /** Profesorado: el alumnado de la clase, para los avatares de quien ha completado cada una. */
+  students?: { id: string; name: string; avatar?: string | null }[]
 }>()
 
 const { t, locale } = useI18n()
 const { getImageUrl } = useImageUrl()
 const teacherStatusLabel = useMissionStatusLabel()
-const { opensAfter } = useMissionPathText()
+const { missionList } = useMissionPathText()
 const reducedMotion = useReducedMotion()
 const titleId = useId()
 const legendId = useId()
@@ -669,6 +678,25 @@ function completedBy(mission: MapMission): string {
   return t('common.mission_map.completed_by', { done, total }, done)
 }
 
+/** Profesorado: el alumnado de la clase, por id. */
+const studentsById = computed(() => new Map((props.students ?? []).map(s => [s.id, s])))
+
+/** Profesorado: quien ha completado una misión, con su avatar (en el orden que llega). */
+function peopleOf(ids: string[]): MapPerson[] {
+  return ids.flatMap(id => {
+    const student = studentsById.value.get(id)
+    if (!student) return []
+    return [
+      {
+        id,
+        name: student.name,
+        avatar: student.avatar ?? null,
+        seed: studentAvatarSeed(props.classId, id),
+      },
+    ]
+  })
+}
+
 /** En el idioma de la app, no en el del navegador (ver resolveDateLocale). */
 function formatDeadline(deadline: string | null | undefined): string | null {
   if (!deadline) return null
@@ -703,11 +731,11 @@ const items = computed<MissionMapItem[]>(() => {
       cover: getImageUrl(mission.backgroundImage) ?? null,
       state: node.state,
       stateLabel: stateLabelOf(node.state),
-      // Cerrada por el camino, el estado ya es lo que la abre.
+      // Cerrada por el camino: «Bloqueada» y lo que la abre.
       stateText: teacher
         ? teacherStatusLabel(teacherStatusOf(node.state))
         : pathLocked && node.opensAfter.length > 0
-          ? opensAfter(node.opensAfter)
+          ? t('common.mission_map.state.locked_path', { missions: missionList(node.opensAfter) })
           : studentStateText(node.state, percent),
       href: teacher
         ? `/profesor/clases/${props.classId}/misiones/${node.id}`
@@ -739,6 +767,8 @@ const items = computed<MissionMapItem[]>(() => {
             done: mission.completedCount ?? 0,
             total: mission.totalStudents ?? 0,
             text: completedBy(mission),
+            people: peopleOf(mission.completedStudentIds ?? []),
+            inProgress: mission.inProgressCount ?? 0,
           }
         : null,
       deadline: formatDeadline(mission.deadline),

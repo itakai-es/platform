@@ -13,6 +13,7 @@ const {
   currentNodeId,
   ringFraction,
   classMapProgress,
+  avatarStack,
 } = await import('http://localhost:4000/_nuxt/utils/mission-map.ts')
 
 const now = Date.parse('2026-10-23T10:00:00Z')
@@ -97,4 +98,15 @@ test('cómo va la clase: la media de lo completado y cuántas ha completado todo
     doneByAll: 0,
   })
   assert.deepEqual(classMapProgress([]), { students: 0, percent: 0, doneByAll: 0 })
+})
+
+test('quién la ha completado: hasta ocho avatares; con más, siete y «+N» con el resto', () => {
+  const people = n => Array.from({ length: n }, (_, i) => `p${i}`)
+  assert.deepEqual(avatarStack([]), { shown: [], more: 0 })
+  assert.deepEqual(avatarStack(people(3)), { shown: people(3), more: 0 })
+  assert.deepEqual(avatarStack(people(8)), { shown: people(8), more: 0 })
+  assert.deepEqual(avatarStack(people(9)), { shown: people(7), more: 2 })
+  assert.deepEqual(avatarStack(people(30)), { shown: people(7), more: 23 })
+  // En el orden en que llegan (primero quien antes la completó).
+  assert.deepEqual(avatarStack(['b', 'a', 'c'], 2), { shown: ['b'], more: 2 })
 })

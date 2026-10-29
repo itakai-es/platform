@@ -62,7 +62,7 @@
         "en_progreso": "Abian"
       },
       "locked_toast": "Zure irakasleak misio hau itxi du oraingoz. Irekitzen duenean sartu ahal izango zara.",
-      "locked_aria": "{title}: misioa itxita dago oraingoz",
+      "locked_aria": "{title}: misioa blokeatuta dago oraingoz",
       "expired_on": "Iraungi zen: {date}",
       "locked_path_aria": "{title}: {missions} osatzean irekitzen da"
     },

@@ -62,7 +62,7 @@
         "en_progreso": "În desfășurare"
       },
       "locked_toast": "Misiunea este închisă deocamdată. Vei putea intra când se deschide.",
-      "locked_aria": "{title}: misiune închisă deocamdată",
+      "locked_aria": "{title}: misiune blocată deocamdată",
       "expired_on": "A expirat: {date}",
       "locked_path_aria": "{title}: se deschide după ce finalizezi {missions}"
     },

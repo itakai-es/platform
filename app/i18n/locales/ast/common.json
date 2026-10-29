@@ -615,7 +615,8 @@
         "available": "Disponible",
         "urgent": "Urxente: vence pronto",
         "expired": "Caducada",
-        "locked": "Zarrada de momentu"
+        "locked": "Bloquiada: zarrada pol to docente de momentu",
+        "locked_path": "Bloquiada: ábrese al completar {missions}"
       },
       "completed_by": "Naide la completó entá: 0 de {total} | {done} de {total} completóla | {done} de {total} completáronla",
       "no_students": "Entá nun hai alumnáu",
@@ -630,7 +631,7 @@
         "available": "Disponible",
         "urgent": "Urxente",
         "expired": "Caducada",
-        "locked": "Zarrada"
+        "locked": "Bloquiada"
       },
       "start": "Salida",
       "goal": "Meta",
@@ -650,6 +651,9 @@
         "empty": "Primi una misión del mapa pa ver equí el so detalle.",
         "your_progress": "El to progresu",
         "enigmas_done": "{done} de {total} enigma | {done} de {total} enigmes",
+        "completed_list": "Quién la completó",
+        "completed_more": "y {n} más",
+        "in_progress": "En cursu: {n}",
         "deadline": "Data llende: {date}",
         "requires": "Pa abrila, completa enantes:",
         "requires_teacher": "Pa abrila, hai que completar enantes:",

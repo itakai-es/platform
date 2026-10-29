@@ -615,7 +615,8 @@
         "available": "Disponible",
         "urgent": "Urgent: venç prompte",
         "expired": "Caducada",
-        "locked": "Tancada de moment"
+        "locked": "Bloquejada: tancada pel teu docent de moment",
+        "locked_path": "Bloquejada: s’obri en completar {missions}"
       },
       "completed_by": "Encara no l'ha completada ningú: 0 de {total} | {done} de {total} l'ha completada | {done} de {total} l'han completada",
       "no_students": "Encara no hi ha alumnat",
@@ -630,7 +631,7 @@
         "available": "Disponible",
         "urgent": "Urgent",
         "expired": "Caducada",
-        "locked": "Tancada"
+        "locked": "Bloquejada"
       },
       "start": "Eixida",
       "goal": "Meta",
@@ -650,6 +651,9 @@
         "empty": "Prem una missió del mapa per a veure’n ací el detall.",
         "your_progress": "El teu progrés",
         "enigmas_done": "{done} de {total} enigma | {done} de {total} enigmes",
+        "completed_list": "Qui l’ha completada",
+        "completed_more": "i {n} més",
+        "in_progress": "En curs: {n}",
         "deadline": "Data límit: {date}",
         "requires": "Per a obrir-la, completa abans:",
         "requires_teacher": "Per a obrir-la, cal completar abans:",

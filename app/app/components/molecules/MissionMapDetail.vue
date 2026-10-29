@@ -63,7 +63,8 @@
       <ProgressBar :percentage="item.progress.percent" :label="`${item.progress.percent} %`" />
     </div>
 
-    <!-- Profesorado: cuántas personas la han completado. -->
+    <!-- Profesorado: cuántas personas la han completado y quiénes, y cuántas
+         la llevan en curso (mientras quede alguien por completarla). -->
     <div v-if="item.completed">
       <p class="mb-1 flex items-center gap-1.5 text-sm font-semibold">
         <UsersIcon class="h-4 w-4 text-navy-700/70" aria-hidden="true" />
@@ -73,6 +74,18 @@
         :percentage="completedPercent"
         :label="`${item.completed.done}/${item.completed.total}`"
       />
+      <MissionMapDetailPeople
+        v-if="item.completed.people.length > 0"
+        :people="item.completed.people"
+        class="mt-2.5"
+      />
+      <p
+        v-if="item.completed.done < item.completed.total"
+        class="mt-2 flex items-center gap-1.5 text-sm text-navy-700/80"
+      >
+        <PlayCircleIcon class="h-4 w-4 text-navy-700/70" aria-hidden="true" />
+        {{ t('common.mission_map.detail.in_progress', { n: item.completed.inProgress }) }}
+      </p>
     </div>
 
     <p v-if="item.deadline" class="flex items-center gap-1.5 text-sm">
@@ -107,15 +120,16 @@
 </template>
 
 <script setup lang="ts">
-import { CalendarDaysIcon, UsersIcon } from '@heroicons/vue/24/outline'
+import { CalendarDaysIcon, PlayCircleIcon, UsersIcon } from '@heroicons/vue/24/outline'
 import { RocketLaunchIcon } from '@heroicons/vue/24/solid'
 import type { MissionMapItem } from '~/utils/mission-map'
 
 /**
  * El detalle de una misión del mapa de misiones: la portada, el estado, la
- * rareza y lo que da, el avance (del estudiante o de la clase), la fecha
- * límite, lo que la abre y lo que abre, y el botón para entrar. Una cerrada no
- * tiene botón: en su lugar va el motivo (su docente o lo que falta completar).
+ * rareza y lo que da, el avance (del estudiante o de la clase, con quién la ha
+ * completado y cuánta gente la lleva en curso), la fecha límite, lo que la abre
+ * y lo que abre, y el botón para entrar. Una cerrada no tiene botón: en su
+ * lugar va el motivo (su docente o lo que falta completar).
  *
  * Lo usa MissionMap.vue dentro del panel de al lado y de la hoja inferior del
  * móvil; en la hoja el título va en la cabecera de la ventana (`hideTitle`) y

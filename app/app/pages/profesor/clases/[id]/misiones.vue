@@ -177,12 +177,15 @@
           @reset="resetFilters"
         />
 
-        <!-- Mapa (en pruebas, si la clase lo tiene encendido) -->
+        <!-- Mapa (en pruebas, si la clase lo tiene encendido). El alumnado ya
+             está cargado con la clase: da los avatares de quien ha completado
+             cada misión. -->
         <MissionMap
           v-if="view === 'map'"
           :missions="orderedMissions"
           mode="teacher"
           :class-id="classId"
+          :students="state.students"
         />
 
         <!-- Vacío tras filtros -->

@@ -22,8 +22,10 @@
  * La salida va antes de lo que no pide nada y la meta, detrás de la última
  * capa. En el tablero con ramas, todo lo que no abre nada (lo de la última
  * capa y las ramas que acaban antes) sigue hasta la meta: ningún camino se
- * queda en el aire. Un tramo va hecho si sale de una misión completada (o de
- * la salida).
+ * queda en el aire. El tramo de una rama que acaba antes es un sendero
+ * (`trail`): se pinta más estrecho y más apagado, para que destaque el camino
+ * principal. Un tramo va hecho si sale de una misión completada (o de la
+ * salida).
  */
 import type { MapNodeState } from './mission-map'
 import type { MissionMapLayout } from './mission-map-layout'
@@ -42,6 +44,12 @@ export interface MapRoad {
   to: string
   d: string
   done: boolean
+  /**
+   * Sendero: de una rama que acaba antes de la última capa hasta la meta. No es
+   * el camino principal: va más estrecho y más apagado (pero se ilumina igual
+   * al completar la rama).
+   */
+  trail: boolean
 }
 
 /** Una mancha de color del fondo (una «isla»), con el nombre de su color. */
@@ -200,8 +208,8 @@ function boardGeometry(layout: MissionMapLayout, width: number): MapGeometry {
   const states = new Map(layout.nodes.map(n => [n.id, n.state]))
   const places = new Map<string, MapPoint>()
   const roads: MapRoad[] = []
-  const road = (from: string, to: string, d: string) =>
-    roads.push({ key: `${from}>${to}`, from, to, d, done: roadDone(states, from) })
+  const road = (from: string, to: string, d: string, trail = false) =>
+    roads.push({ key: `${from}>${to}`, from, to, d, done: roadDone(states, from), trail })
   const ids = layout.nodes.map(n => n.id)
 
   // Sin ramas: un camino que serpentea por filas, como un tablero de juego.
@@ -361,6 +369,8 @@ function boardGeometry(layout: MissionMapLayout, width: number): MapGeometry {
   }
 
   const opens = new Set(layout.edges.map(edge => edge.from))
+  /** Lo de la última capa: su tramo hasta la meta es el final del camino principal. */
+  const last = new Set(layout.layers.at(-1) ?? [])
   const links: [string, string][] = [
     ...first.map(id => [MAP_START, id] as [string, string]),
     ...layout.edges.map(edge => [edge.from, edge.to] as [string, string]),
@@ -398,7 +408,8 @@ function boardGeometry(layout: MissionMapLayout, width: number): MapGeometry {
       { x, y: rowY(rowA + 1 + index) - S.through },
       { x, y: rowY(rowA + 1 + index) + S.through },
     ])
-    road(from, to, roadVia([point(from), ...via, point(to)]))
+    // Lo que no abre nada y no es de la última capa llega a la meta por un sendero.
+    road(from, to, roadVia([point(from), ...via, point(to)]), to === MAP_GOAL && !last.has(from))
   }
   return {
     shape: 'board',
@@ -436,6 +447,7 @@ function columnGeometry(layout: MissionMapLayout, width: number): MapGeometry {
       to,
       d: roadDown(point(from), point(to)),
       done: roadDone(states, from),
+      trail: false,
     }
   })
   return {

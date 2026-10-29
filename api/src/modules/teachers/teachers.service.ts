@@ -59,6 +59,7 @@ import {
   lockMissionPath,
   pathOrder,
   placeAfterPrerequisites,
+  startedStudentsByMission,
 } from '../../utils/mission-path.js'
 
 const BADGES_DIR = join(process.cwd(), 'uploads', 'badges')
@@ -1060,15 +1061,24 @@ export class TeachersService {
 
   async getClassMissions(userId: string, classId: string) {
     await assertClassAccess(classId, userId, 'class.view')
-    const totalStudents = await prisma.classEnrollment.count({
+    // El alumnado de la clase (sin la vista previa del profesorado): solo cuenta él.
+    const enrolled = await prisma.classEnrollment.findMany({
       where: { classId, isPreview: false },
+      select: { studentId: true },
     })
+    const totalStudents = enrolled.length
+    const inClass = new Set(enrolled.map(e => e.studentId))
 
     const missions = await prisma.mission.findMany({
       where: { classId },
       include: {
         enigmas: true,
-        progress: true,
+        // Quién la ha completado, primero quien antes.
+        progress: {
+          where: { completedAt: { not: null } },
+          select: { studentId: true },
+          orderBy: [{ completedAt: 'asc' }, { studentId: 'asc' }],
+        },
         // Lo que pide cada una en el mapa (ver utils/mission-path.ts).
         prerequisites: {
           where: { requiredMission: { classId } },
@@ -1080,26 +1090,43 @@ export class TeachersService {
     })
 
     const position = new Map(missions.map((m, index) => [m.id, index]))
+    // Quién tiene trabajo empezado en cada una (la regla del camino), de una vez.
+    const started = await startedStudentsByMission(
+      prisma,
+      missions.map(m => m.id)
+    )
     return {
-      missions: missions.map((m) => ({
-        id: m.id,
-        title: m.title,
-        description: m.description,
-        status: m.status,
-        rarity: m.rarity,
-        deadline: m.deadline,
-        backgroundImage: m.backgroundImage,
-        orderIndex: m.orderIndex,
-        enigmasCount: m.enigmas.length,
-        ...missionRewards(m),
-        completedCount: m.progress.filter((p) => p.completedAt).length,
-        totalStudents,
-        // Lo que pide para abrirse en el mapa (ids, en el orden de la clase),
-        // aunque el mapa esté apagado.
-        prerequisiteIds: m.prerequisites
-          .map(p => p.requiredMissionId)
-          .sort((a, b) => (position.get(a) ?? 0) - (position.get(b) ?? 0)),
-      })),
+      missions: missions.map((m) => {
+        // Quién la ha completado (ids, primero quien antes) y cuánta gente la
+        // lleva en curso, solo del alumnado de la clase. Es del profesorado: los
+        // listados del alumnado no lo traen.
+        const completedStudentIds = m.progress.map(p => p.studentId).filter(id => inClass.has(id))
+        const done = new Set(completedStudentIds)
+        const inProgressCount = [...(started.get(m.id) ?? [])].filter(
+          id => inClass.has(id) && !done.has(id)
+        ).length
+        return {
+          id: m.id,
+          title: m.title,
+          description: m.description,
+          status: m.status,
+          rarity: m.rarity,
+          deadline: m.deadline,
+          backgroundImage: m.backgroundImage,
+          orderIndex: m.orderIndex,
+          enigmasCount: m.enigmas.length,
+          ...missionRewards(m),
+          completedCount: completedStudentIds.length,
+          completedStudentIds,
+          inProgressCount,
+          totalStudents,
+          // Lo que pide para abrirse en el mapa (ids, en el orden de la clase),
+          // aunque el mapa esté apagado.
+          prerequisiteIds: m.prerequisites
+            .map(p => p.requiredMissionId)
+            .sort((a, b) => (position.get(a) ?? 0) - (position.get(b) ?? 0)),
+        }
+      }),
       total: missions.length,
     }
   }

@@ -62,7 +62,7 @@
         "en_progreso": "En progreso"
       },
       "locked_toast": "Tu docente ha cerrado esta misión por ahora. Podrás entrar cuando la abra.",
-      "locked_aria": "{title}: misión cerrada por ahora",
+      "locked_aria": "{title}: misión bloqueada por ahora",
       "expired_on": "Venció: {date}",
       "locked_path_aria": "{title}: se abre al completar {missions}"
     },

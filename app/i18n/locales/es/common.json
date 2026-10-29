@@ -615,7 +615,8 @@
         "available": "Disponible",
         "urgent": "Urgente: vence pronto",
         "expired": "Expirada",
-        "locked": "Cerrada por tu docente"
+        "locked": "Bloqueada: cerrada por tu docente por ahora",
+        "locked_path": "Bloqueada: se abre al completar {missions}"
       },
       "completed_by": "Nadie la ha completado aún: 0 de {total} | {done} de {total} la ha completado | {done} de {total} la han completado",
       "no_students": "Aún no hay alumnado",
@@ -630,7 +631,7 @@
         "available": "Disponible",
         "urgent": "Urgente",
         "expired": "Expirada",
-        "locked": "Cerrada"
+        "locked": "Bloqueada"
       },
       "start": "Salida",
       "goal": "Meta",
@@ -650,6 +651,9 @@
         "empty": "Pulsa una misión del mapa para ver aquí su detalle.",
         "your_progress": "Tu progreso",
         "enigmas_done": "{done} de {total} enigma | {done} de {total} enigmas",
+        "completed_list": "Quién la ha completado",
+        "completed_more": "y {n} más",
+        "in_progress": "En curso: {n}",
         "deadline": "Fecha límite: {date}",
         "requires": "Para abrirla, completa antes:",
         "requires_teacher": "Para abrirla, hay que completar antes:",
