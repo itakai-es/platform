@@ -438,9 +438,33 @@ model Mission {
   documents MissionDocument[]
   hints     MissionHint[]
   hintUses  MissionHintUse[]
+  // Lo que pide para abrirse (mapa de misiones) y las que la piden a ella.
+  prerequisites MissionPrerequisite[] @relation("MissionPrerequisites")
+  requiredBy    MissionPrerequisite[] @relation("MissionRequiredBy")
 
   @@index([classId, orderIndex])
   @@map("missions")
+}
+
+// Requisito de una misión en el mapa de misiones (E3): para abrirla, cada
+// estudiante tiene que haber completado antes `requiredMission` (si hay varias,
+// todas). Las dos son de la misma clase, nunca la misma, sin ciclos y como mucho
+// tres por misión: lo comprueba el servidor al guardarlas (ver
+// utils/mission-path.ts). Solo cierran con el mapa encendido en la clase, y el
+// cierre se calcula al leer, por estudiante: nunca se escribe en `status`. Se
+// van con cualquiera de las dos misiones.
+model MissionPrerequisite {
+  id                String   @id @default(uuid())
+  missionId         String   @map("mission_id")
+  requiredMissionId String   @map("required_mission_id")
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  mission         Mission @relation("MissionPrerequisites", fields: [missionId], references: [id], onDelete: Cascade)
+  requiredMission Mission @relation("MissionRequiredBy", fields: [requiredMissionId], references: [id], onDelete: Cascade)
+
+  @@unique([missionId, requiredMissionId])
+  @@index([requiredMissionId])
+  @@map("mission_prerequisites")
 }
 
 model MissionDocument {

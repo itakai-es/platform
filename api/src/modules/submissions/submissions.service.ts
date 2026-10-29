@@ -18,6 +18,7 @@ import {
   type ClassUser,
 } from '../../utils/class-access.js'
 import { NotFoundError, ValidationError } from '../../utils/errors.js'
+import { assertMissionOpenOnPath } from '../../utils/mission-path.js'
 
 const UPLOADS_DIR = join(process.cwd(), 'uploads', 'submissions')
 
@@ -67,6 +68,15 @@ export class SubmissionsService {
     if (enigma.mission.deadline && new Date(enigma.mission.deadline) < new Date()) {
       throw new Error('La misión ha expirado y ya no admite entregas')
     }
+    // Cerrada por el camino del mapa (le falta completar otra antes): 409.
+    await assertMissionOpenOnPath(
+      {
+        id: enigma.mission.id,
+        classId: enigma.mission.classId,
+        settings: enigma.mission.class.settings,
+      },
+      studentId
+    )
 
     const enrollment = await prisma.classEnrollment.findUniqueOrThrow({
       where: { id: ref.id },
@@ -596,19 +606,27 @@ export class SubmissionsService {
         },
       })
 
-      // Recompute mission progress.
-      const [missionEnigmasCompleted, totalEnigmas] = await Promise.all([
+      // Recompute mission progress. El % cuenta todos los enigmas; completar la
+      // misión, solo los obligatorios (la regla de `enigmasComplete`, utils/mission-path.ts): un opcional sin
+      // hacer no la deja abierta para siempre, ni encierra a nadie en el mapa.
+      // Lo ya aprobado antes de esta regla no se recalcula: se completa con la
+      // próxima aprobación (y el mapa ya lo cuenta como hecho).
+      const [missionEnigmasCompleted, totalEnigmas, requiredPending] = await Promise.all([
         tx.studentEnigmaProgress.count({
           where: { studentId, enigma: { missionId } },
         }),
         tx.missionEnigma.count({ where: { missionId } }),
+        tx.missionEnigma.count({
+          where: { missionId, isOptional: false, progress: { none: { studentId } } },
+        }),
       ])
 
       if (totalEnigmas === 0) {
         throw new Error('La misión no tiene enigmas configurados')
       }
 
-      const isComplete = missionEnigmasCompleted >= totalEnigmas
+      // Con todos opcionales, basta con este (ya aprobado): `requiredPending` es 0.
+      const isComplete = requiredPending === 0 && missionEnigmasCompleted > 0
       const progressPct = Math.round((missionEnigmasCompleted / totalEnigmas) * 100)
 
       // Upsert progress but DO NOT set completedAt here — we use a conditional

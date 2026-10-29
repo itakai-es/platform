@@ -195,7 +195,21 @@
             "title": "Ordre de la classe",
             "hint": "L'alumnat veu les missions en aquest ordre. Arrossega cada fila per la nansa o, amb el teclat, situa't a la nansa i fes servir les fletxes amunt i avall. Cada canvi es desa a l'instant.",
             "done": "Fet",
-            "error": "No s'ha pogut desar l'ordre. Torna-ho a provar."
+            "error": "No s'ha pogut desar l'ordre. Torna-ho a provar.",
+            "breaks_path": "«{mission}» s’obre en completar «{required}»: ha d’anar darrere."
+          },
+          "path": {
+            "title": "Camí del mapa",
+            "hint": "Un camí senzill en un pas. Per triar què demana cada missió, obre-la i ves a Ajustos, Camí.",
+            "chain": "Encadena en ordre",
+            "chain_summary": "Cada missió demanarà completar l’anterior per obrir-se: {count} requisit. | Cada missió demanarà completar l’anterior per obrir-se: {count} requisits.",
+            "chain_replaces": "Substitueix el que hi ha ara. | Substitueix els {count} que hi ha ara.",
+            "chained": "Ja estan encadenades: cada missió demana l’anterior.",
+            "chain_done": "Missions encadenades en ordre",
+            "clear": "Treu els requisits",
+            "clear_summary": "Treu el requisit que hi ha: totes les missions s’obren des del principi. | Treu els {count} requisits que hi ha: totes les missions s’obren des del principi.",
+            "clear_done": "Requisits trets",
+            "error": "No s’ha pogut canviar el camí. Torna-ho a provar."
           }
         },
         "meta": {
@@ -670,7 +684,10 @@
               "rewards_changed": "va canviar la recompensa de la missió «{title}»",
               "imported": "va importar la missió «{title}»",
               "exported": "va copiar la missió «{title}» a una altra classe",
-              "reordered": "va canviar l'ordre de les missions"
+              "reordered": "va canviar l'ordre de les missions",
+              "prerequisites_changed": "va canviar el que cal completar per obrir la missió «{title}»",
+              "chained": "va encadenar les missions en ordre: cadascuna demana l’anterior",
+              "prerequisites_cleared": "va treure els requisits del camí de les missions"
             },
             "enigma": {
               "created": "va afegir l'enigma «{title}»",
@@ -863,7 +880,16 @@
           "team_set_none": "Individual (sense equips)",
           "team_set_hint": "Només informatiu: l’alumnat veu amb quins equips es fa i pots aprovar tot un equip de cop. Cada estudiant continua lliurant el seu.",
           "basics_title": "Dades de la missió",
-          "play_title": "Dificultat i visibilitat"
+          "play_title": "Dificultat i visibilitat",
+          "path_title": "Camí",
+          "path_hint": "Cada estudiant la veurà tancada fins que completi totes les que marquis. A qui ja l’hagi començada no se li tanca.",
+          "path_legend": "Per obrir-la, completar abans",
+          "path_map_off": "El que cal completar abans per obrir una missió només compta amb el mapa de missions activat. S’activa als ajustos de la classe, a Funcionalitats.",
+          "path_empty": "No hi ha altres missions a la classe.",
+          "path_cycle_reason": "Ja necessita aquesta missió per obrir-se: demanar-la tancaria un cercle.",
+          "path_limit": "Com a màxim, {max}. Per triar-ne una altra, desmarca’n una.",
+          "path_moved": "Desat. La missió ha passat darrere del que demana en l’ordre de la classe.",
+          "path_load_error": "No s’han pogut carregar les missions de la classe."
         }
       },
       "import": {

@@ -195,7 +195,21 @@
             "title": "Klaseko ordena",
             "hint": "Ikasleek ordena honetan ikusten dituzte misioak. Arrastatu errenkada bakoitza bere heldulekutik edo, teklatuarekin, joan heldulekura eta erabili gora eta behera geziak. Aldaketa bakoitza berehala gordetzen da.",
             "done": "Eginda",
-            "error": "Ezin izan da ordena gorde. Saiatu berriro."
+            "error": "Ezin izan da ordena gorde. Saiatu berriro.",
+            "breaks_path": "«{mission}» «{required}» osatzean irekitzen da: haren atzean joan behar du."
+          },
+          "path": {
+            "title": "Maparen bidea",
+            "hint": "Bide sinple bat urrats bakarrean. Misio bakoitzak zer eskatzen duen aukeratzeko, ireki eta joan Ezarpenak, Bidea atalera.",
+            "chain": "Kateatu ordenan",
+            "chain_summary": "Misio bakoitzak aurrekoa osatzea eskatuko du irekitzeko: baldintza {count}. | Misio bakoitzak aurrekoa osatzea eskatuko du irekitzeko: {count} baldintza.",
+            "chain_replaces": "Orain dagoena ordezkatzen du. | Orain dauden {count} baldintzak ordezkatzen ditu.",
+            "chained": "Kateatuta daude jada: misio bakoitzak aurrekoa eskatzen du.",
+            "chain_done": "Misioak ordenan kateatuta",
+            "clear": "Kendu baldintzak",
+            "clear_summary": "Dagoen baldintza kentzen du: misio guztiak hasieratik irekitzen dira. | Dauden {count} baldintzak kentzen ditu: misio guztiak hasieratik irekitzen dira.",
+            "clear_done": "Baldintzak kenduta",
+            "error": "Ezin izan da bidea aldatu. Saiatu berriro."
           }
         },
         "meta": {
@@ -670,7 +684,10 @@
               "rewards_changed": "«{title}» misioaren saria aldatu du",
               "imported": "«{title}» misioa inportatu du",
               "exported": "«{title}» misioa beste klase batera kopiatu du",
-              "reordered": "misioen ordena aldatu du"
+              "reordered": "misioen ordena aldatu du",
+              "prerequisites_changed": "«{title}» misioa irekitzeko osatu beharrekoa aldatu du",
+              "chained": "misioak ordenan kateatu ditu: bakoitzak aurrekoa eskatzen du",
+              "prerequisites_cleared": "misioen bideko baldintzak kendu ditu"
             },
             "enigma": {
               "created": "«{title}» enigma gehitu du",
@@ -863,7 +880,16 @@
           "team_set_none": "Banakakoa (talderik gabe)",
           "team_set_hint": "Informazio hutsa: ikasleek ikusten dute zein taldetan egiten den, eta talde oso bat batera onar dezakezu. Ikasle bakoitzak berea entregatzen jarraitzen du.",
           "basics_title": "Misioaren datuak",
-          "play_title": "Zailtasuna eta ikusgarritasuna"
+          "play_title": "Zailtasuna eta ikusgarritasuna",
+          "path_title": "Bidea",
+          "path_hint": "Ikasle bakoitzak itxita ikusiko du markatzen dituzun guztiak osatu arte. Dagoeneko hasi duenari ez zaio ixten.",
+          "path_legend": "Irekitzeko, lehenago osatu",
+          "path_map_off": "Misio bat ireki aurretik osatu beharrekoa misioen mapa piztuta dagoenean bakarrik kontatzen da. Klasearen ezarpenetan pizten da, Funtzionalitateak atalean.",
+          "path_empty": "Ez dago beste misiorik klasean.",
+          "path_cycle_reason": "Dagoeneko misio hau behar du irekitzeko: eskatzeak zirkulu bat itxiko luke.",
+          "path_limit": "Gehienez {max}. Beste bat aukeratzeko, kendu marka bati.",
+          "path_moved": "Gordeta. Misioa eskatzen duenaren atzera pasatu da klaseko ordenan.",
+          "path_load_error": "Ezin izan dira klaseko misioak kargatu."
         }
       },
       "import": {

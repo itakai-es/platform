@@ -618,7 +618,10 @@
         "locked": "Tancada de moment"
       },
       "completed_by": "Encara no l'ha completada ningú: 0 de {total} | {done} de {total} l'ha completada | {done} de {total} l'han completada",
-      "no_students": "Encara no hi ha alumnat"
+      "no_students": "Encara no hi ha alumnat",
+      "opens_after": "S’obri en completar {missions}",
+      "quoted": "«{title}»",
+      "locked_path_explain": "Per a obrir-la, completa abans {missions}."
     }
   }
 }

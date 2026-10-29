@@ -350,7 +350,11 @@ export const useMissionStore = defineStore('mission', () => {
   const ensureMissionById = async (id: string, force = false) => {
     if (!force && loadedMissionDetails.value.has(id)) {
       const cached = missionDetailsCache.value.get(id)
-      if (cached) return cached
+      // Cerrada por el camino del mapa: se abre en cuanto se completa lo que
+      // pide, así que no se sirve de la caché (se vuelve a preguntar).
+      const pathLocked =
+        (cached as { lockReason?: string | null } | undefined)?.lockReason === 'path'
+      if (cached && !pathLocked) return cached
     }
     if (!force && isLoadingMissionById.value) {
       const cached = missionDetailsCache.value.get(id)

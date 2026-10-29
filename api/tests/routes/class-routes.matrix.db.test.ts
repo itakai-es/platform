@@ -288,6 +288,26 @@ const TEACHER_CLASS: RouteCase[] = [
     levels: levels('edit', 200),
   },
   {
+    route: 'POST /teacher/classes/:classId/missions/chain',
+    request: async f => {
+      await f.newMission()
+      await f.newMission()
+      return { method: 'POST', url: `${c(f)}/missions/chain` }
+    },
+    owner: 200,
+    other: 404,
+    student: 403,
+    levels: levels('edit', 200),
+  },
+  {
+    route: 'DELETE /teacher/classes/:classId/missions/prerequisites',
+    request: f => ({ method: 'DELETE', url: `${c(f)}/missions/prerequisites` }),
+    owner: 200,
+    other: 404,
+    student: 403,
+    levels: levels('edit', 200),
+  },
+  {
     route: 'GET /teacher/classes/:classId/ranking',
     request: f => ({ method: 'GET', url: `${c(f)}/ranking` }),
     owner: 200,
@@ -1069,6 +1089,21 @@ const MISSIONS: RouteCase[] = [
     other: 404,
     student: 403,
     levels: levels('edit', 201),
+  },
+  {
+    route: 'PUT /missions/:missionId/prerequisites',
+    request: async f => {
+      const required = await f.newMission()
+      return {
+        method: 'PUT',
+        url: `/missions/${await f.newMission()}/prerequisites`,
+        payload: { ids: [required] },
+      }
+    },
+    owner: 200,
+    other: 404,
+    student: 403,
+    levels: levels('edit', 200),
   },
   {
     route: 'PUT /missions/:missionId/hints/reorder',

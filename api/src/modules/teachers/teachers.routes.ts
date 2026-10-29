@@ -728,6 +728,24 @@ export async function teacherRoutes(fastify: FastifyInstance) {
     }
   )
 
+  // Encadenar en orden: cada misión de la clase pide la anterior (edición).
+  fastify.post(
+    '/classes/:classId/missions/chain',
+    async (request: FastifyRequest<{ Params: { classId: string } }>) => {
+      const { id } = request.user as { id: string }
+      return missionsService.chainMissions(id, request.params.classId)
+    }
+  )
+
+  // Quitar todos los requisitos del camino de la clase (edición).
+  fastify.delete(
+    '/classes/:classId/missions/prerequisites',
+    async (request: FastifyRequest<{ Params: { classId: string } }>) => {
+      const { id } = request.user as { id: string }
+      return missionsService.clearPrerequisites(id, request.params.classId)
+    }
+  )
+
   fastify.get('/classes/:classId/ranking', async (request: FastifyRequest<{ Params: { classId: string } }>, reply: FastifyReply) => {
     try {
       const { id } = request.user as { id: string }

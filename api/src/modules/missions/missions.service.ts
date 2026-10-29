@@ -27,7 +27,19 @@ import {
   mergeMissionOrder,
   nextMissionOrderIndex,
 } from '../../utils/mission-order.js'
-import { NotFoundError, ValidationError } from '../../utils/errors.js'
+import {
+  MISSION_PREREQUISITE_LIMIT,
+  assertMissionOpenOnPath,
+  chainEdges,
+  classPathEdges,
+  classPathsFor,
+  cycleWith,
+  lockMissionPath,
+  orderViolation,
+  pathOrder,
+  type PathEdge,
+} from '../../utils/mission-path.js'
+import { ConflictError, NotFoundError, ValidationError } from '../../utils/errors.js'
 import { existsSync, mkdirSync } from 'fs'
 import {
   saveUpload,
@@ -218,6 +230,52 @@ function formatDocumentForFrontend(
   }
 }
 
+/**
+ * Rechaza un orden en el que una misión va delante de algo que pide (409, con
+ * las dos en el mensaje). El mapa, la lista y el tabulador siguen el mismo orden.
+ */
+async function assertOrderKeepsPath(tx: Db, classId: string, order: string[]) {
+  const broken = orderViolation(order, await classPathEdges(tx, classId))
+  if (!broken) return
+  const titles = new Map(
+    (
+      await tx.mission.findMany({
+        where: { id: { in: [broken.missionId, broken.requiredMissionId] } },
+        select: { id: true, title: true },
+      })
+    ).map(m => [m.id, m.title])
+  )
+  throw new ConflictError(
+    `«${titles.get(broken.missionId) ?? ''}» se abre al completar «${titles.get(broken.requiredMissionId) ?? ''}»: tiene que ir detrás`,
+    'MISSION_ORDER_BREAKS_PATH'
+  )
+}
+
+/**
+ * Deja la clase en el orden más parecido al que tiene en el que cada misión va
+ * detrás de lo que pide (ver `pathOrder`), escribiendo solo las que cambian.
+ * Devuelve cuántas se han movido. Va con el camino ya bloqueado.
+ */
+async function placeAfterPrerequisites(tx: Db, classId: string): Promise<number> {
+  const current = await tx.mission.findMany({
+    where: { classId },
+    orderBy: MISSION_ORDER,
+    select: { id: true, orderIndex: true },
+  })
+  const next = pathOrder(
+    current.map(m => m.id),
+    await classPathEdges(tx, classId)
+  )
+  let moved = 0
+  for (const [index, id] of next.entries()) {
+    if (current[index]?.id !== id) moved += 1
+    const before = current.find(m => m.id === id)
+    if (before?.orderIndex === index) continue
+    await tx.mission.update({ where: { id }, data: { orderIndex: index } })
+  }
+  return moved
+}
+
 export class MissionsService {
   async getMissions(user: ClassUser, filters?: { subject?: string; search?: string }) {
     const userId = user.id
@@ -250,8 +308,21 @@ export class MissionsService {
       orderBy: [{ class: { name: 'asc' } }, { classId: 'asc' }, ...MISSION_ORDER],
     })
 
+    // El camino del mapa de cada clase para esta persona: las cerradas por él
+    // salen bloqueadas, con lo que les falta.
+    const paths = await classPathsFor(
+      prisma,
+      userId,
+      missions.map(m => ({ id: m.classId, settings: m.class.settings }))
+    )
+
     return {
-      missions: missions.map((m) => formatMission(m, true, resolveClassSettings(m.class.settings))),
+      missions: missions.map((m) =>
+        formatMission(m, true, resolveClassSettings(m.class.settings), {
+          requires: paths.get(m.classId)?.locks.get(m.id),
+          prerequisiteIds: paths.get(m.classId)?.prerequisites.get(m.id),
+        })
+      ),
       total: missions.length,
     }
   }
@@ -261,7 +332,10 @@ export class MissionsService {
     // matriculado. Al alumno se le cierra (404) con la clase archivada o la
     // misión bloqueada; al profesorado no, que la sigue gestionando. Quien es
     // las dos cosas (vista previa) la ve como profesor.
-    const membership = await assertMissionMember(missionId, user)
+    // Cerrada por el camino del mapa, el alumno no entra, pero sí ve qué le
+    // falta para abrirla (ver `lockedMissionView`).
+    const membership = await assertMissionMember(missionId, user, prisma, { allowPathLocked: true })
+    if (membership.pathLock) return this.lockedMissionView(missionId, membership.pathLock)
     const isTeacher = membership.teacher !== null
     const canEdit =
       membership.teacher !== null &&
@@ -285,6 +359,10 @@ export class MissionsService {
         teamSet: { select: { id: true, title: true, archivedAt: true } },
         documents: {
           orderBy: { orderIndex: 'asc' },
+        },
+        // Lo que pide para abrirse en el mapa, en el orden de la clase.
+        prerequisites: {
+          select: { requiredMission: { select: { id: true, title: true, orderIndex: true, createdAt: true } } },
         },
       },
     })
@@ -385,6 +463,22 @@ export class MissionsService {
         // Estado real de la misión (activa/bloqueada), independiente del status
         // calculado de arriba, para poder editarlo en Ajustes.
         blocked: mission.status === 'bloqueada',
+        // Aquí no llega cerrada por el camino (ver `lockedMissionView`).
+        lockReason: mission.status === 'bloqueada' ? 'teacher' : null,
+        requires: [],
+        // Lo que pide para abrirse en el mapa (Ajustes > Camino), en el orden de
+        // la clase. Solo para el profesorado: el alumno ve lo que le falta.
+        prerequisites: isTeacher
+          ? mission.prerequisites
+              .map(p => p.requiredMission)
+              .sort(
+                (a, b) =>
+                  a.orderIndex - b.orderIndex ||
+                  a.createdAt.getTime() - b.createdAt.getTime() ||
+                  a.id.localeCompare(b.id)
+              )
+              .map(({ id, title }) => ({ id, title }))
+          : [],
         rarity: mission.rarity,
         deadline: mission.deadline,
         backgroundImage: mission.backgroundImage,
@@ -468,6 +562,56 @@ export class MissionsService {
     }
   }
 
+  /**
+   * Una misión cerrada por el camino, como la ve el alumno: la cabecera (título,
+   * clase, rareza, fecha, portada y lo que da) y qué le falta completar para
+   * abrirla. Ni la historia, ni los enigmas, ni los documentos ni las pistas:
+   * eso se ve al abrirse. Misma forma que el detalle, con las listas vacías.
+   */
+  private async lockedMissionView(
+    missionId: string,
+    requires: { id: string; title: string }[]
+  ) {
+    const mission = await prisma.mission.findUnique({
+      where: { id: missionId },
+      include: { class: true, enigmas: { select: { xpReward: true } } },
+    })
+    if (!mission) throw new NotFoundError('Misión no encontrada')
+    return {
+      mission: {
+        id: mission.id,
+        title: mission.title,
+        description: null,
+        className: mission.class.name,
+        classId: mission.classId,
+        classSettings: resolveClassSettings(mission.class.settings),
+        status: 'bloqueada',
+        blocked: false,
+        lockReason: 'path' as const,
+        requires,
+        prerequisites: [],
+        rarity: mission.rarity,
+        deadline: mission.deadline,
+        backgroundImage: mission.backgroundImage,
+        teamSet: null,
+        isTeacher: false,
+        canEdit: false,
+        importedFromOtherClass: false,
+        progress: { done: 0, total: mission.enigmas.length },
+        rewards: {
+          xp: calculateMissionTotalXP(mission.rarity, mission.enigmas.map(e => e.xpReward)),
+        },
+        enigmas: [],
+        documents: [],
+        hints: [],
+        hintState: null,
+        badgeReward: null,
+        teacherStats: null,
+        rarityLocked: false,
+      },
+    }
+  }
+
   async startMission(user: ClassUser, missionId: string) {
     const userId = user.id
     const mission = await prisma.mission.findUnique({
@@ -480,6 +624,11 @@ export class MissionsService {
     if (!mission || !ref) throw new NotFoundError('Misión no encontrada')
     if (mission.class.archived) throw new Error('La clase está archivada y no admite nuevas acciones')
     if (mission.status === 'bloqueada') throw new Error('Tu docente ha bloqueado esta misión')
+    // Cerrada por el camino del mapa: 409 con lo que falta.
+    await assertMissionOpenOnPath(
+      { id: mission.id, classId: mission.classId, settings: mission.class.settings },
+      userId
+    )
 
     // Perfil del alumno en la clase (alias y avatar) para la actividad.
     const enrollment = await prisma.classEnrollment.findUniqueOrThrow({ where: { id: ref.id } })
@@ -818,6 +967,19 @@ export class MissionsService {
     const updated = await prisma.$transaction(async tx => {
       // La que llega de otra clase va al final del orden de esa clase.
       const moving = targetClassId !== mission.classId
+      if (moving) {
+        // El camino de las dos clases, quieto hasta confirmar: nadie la pide ni
+        // la deja de pedir mientras se va. Llega sin requisitos (los suyos eran
+        // de la otra clase) y en la de origen ya no la pide nadie.
+        await lockMissionPath(tx, [mission.classId, targetClassId])
+        await tx.missionPrerequisite.deleteMany({
+          where: { OR: [{ missionId }, { requiredMissionId: missionId }] },
+        })
+      } else {
+        // Antes que la fila de la misión, como al guardar requisitos (que
+        // pueden recolocarla): así nunca se esperan en cruz.
+        await lockMissionOrder(tx, mission.classId)
+      }
       const saved = await tx.mission.update({
         where: { id: missionId },
         data: {
@@ -869,6 +1031,8 @@ export class MissionsService {
         current.map(m => m.id),
         missionIds
       )
+      // El orden no contradice el camino: una misión no va delante de lo que pide.
+      await assertOrderKeepsPath(tx, classId, next)
       const changed = current.filter((m, index) => m.id !== next[index] || m.orderIndex !== index)
       if (changed.length === 0) return next
       // Una fila por misión, de una en una: van todas por la misma conexión.
@@ -902,6 +1066,161 @@ export class MissionsService {
     })
 
     return { order, message: 'Orden actualizado correctamente' }
+  }
+
+  /**
+   * Fija lo que pide una misión para abrirse en el mapa (Ajustes > Camino):
+   * `requiredIds` sustituye a lo que pedía. Solo «todas» (Y), solo misiones de
+   * su clase, nunca ella misma, como mucho `MISSION_PREREQUISITE_LIMIT` y sin
+   * ciclos. Todo con el camino de la clase bloqueado (ver `lockMissionPath`):
+   * dos guardados a la vez no cierran un círculo entre los dos. Si la misión
+   * iba delante de algo que ahora pide, se recoloca detrás (y con ella lo que
+   * la pide a ella), lo justo para que el orden cumpla el camino.
+   *
+   * Se guarda aunque el mapa esté apagado en la clase; entonces no cierra nada.
+   * Una entrada `mission.updated` con el campo `prerequisites`, si cambia algo.
+   * Devuelve lo que pide ahora, en el orden de la clase, y el orden que queda.
+   */
+  async setPrerequisites(userId: string, missionId: string, requiredIds: string[]) {
+    const { classId } = await assertMissionAccess(missionId, userId, 'mission.edit')
+    const wanted = [...new Set(requiredIds)]
+    if (wanted.includes(missionId)) {
+      throw new ValidationError('Una misión no puede pedirse a sí misma', 'MISSION_PREREQUISITE_SELF')
+    }
+    if (wanted.length > MISSION_PREREQUISITE_LIMIT) {
+      throw new ValidationError(
+        `Una misión puede pedir como mucho ${MISSION_PREREQUISITE_LIMIT} misiones`,
+        'MISSION_PREREQUISITE_LIMIT'
+      )
+    }
+
+    return prisma.$transaction(async tx => {
+      await lockMissionPath(tx, [classId])
+      const mission = await tx.mission.findUnique({
+        where: { id: missionId },
+        select: { id: true, classId: true, title: true },
+      })
+      // Si entretanto ha pasado a otra clase, el permiso comprobado ya no vale.
+      if (!mission || mission.classId !== classId) throw new NotFoundError('Misión no encontrada')
+      const found = await tx.mission.findMany({
+        where: { id: { in: wanted }, classId },
+        select: { id: true, title: true },
+      })
+      if (found.length !== wanted.length) {
+        throw new ValidationError(
+          'Una misión solo puede pedir misiones de su misma clase',
+          'MISSION_PREREQUISITE_INVALID'
+        )
+      }
+
+      const edges = await classPathEdges(tx, classId)
+      const cycle = cycleWith(edges, missionId, wanted)
+      if (cycle) {
+        const title = found.find(m => m.id === cycle)?.title ?? ''
+        throw new ConflictError(
+          `«${title}» ya necesita «${mission.title}» para abrirse: pedirla cerraría un círculo`,
+          'MISSION_PREREQUISITE_CYCLE'
+        )
+      }
+
+      const before = edges.filter(e => e.missionId === missionId).map(e => e.requiredMissionId)
+      const changed = before.length !== wanted.length || before.some(id => !wanted.includes(id))
+      let moved = 0
+      if (changed) {
+        await tx.missionPrerequisite.deleteMany({
+          where: { missionId, requiredMissionId: { notIn: wanted } },
+        })
+        const added = wanted.filter(id => !before.includes(id))
+        if (added.length > 0) {
+          await tx.missionPrerequisite.createMany({
+            data: added.map(requiredMissionId => ({ missionId, requiredMissionId })),
+            skipDuplicates: true,
+          })
+        }
+        moved = await placeAfterPrerequisites(tx, classId)
+        await recordClassAction(tx, {
+          classId,
+          actorId: userId,
+          action: 'mission.updated',
+          entityType: 'mission',
+          entityId: missionId,
+          metadata: { title: mission.title, fields: ['prerequisites'], count: wanted.length, moved },
+        })
+      }
+
+      const order = (
+        await tx.mission.findMany({ where: { classId }, orderBy: MISSION_ORDER, select: { id: true } })
+      ).map(m => m.id)
+      const position = new Map(order.map((id, index) => [id, index]))
+      return {
+        prerequisites: [...found].sort((a, b) => position.get(a.id)! - position.get(b.id)!),
+        order,
+        moved,
+        message: 'Requisitos guardados',
+      }
+    })
+  }
+
+  /**
+   * «Encadenar en orden»: cada misión de la clase pide la anterior, en el orden
+   * de la clase, y deja de pedir lo que pidiera. Es el camino simple, para quien
+   * no quiere pensar ramas. El orden no cambia (una cadena en orden ya lo
+   * cumple). Una sola entrada `mission.chained`; si ya estaba así, ninguna.
+   * Devuelve lo que pide cada misión.
+   */
+  async chainMissions(userId: string, classId: string) {
+    await assertClassAccess(classId, userId, 'mission.edit')
+    return prisma.$transaction(async tx => {
+      await lockMissionPath(tx, [classId])
+      const order = (
+        await tx.mission.findMany({ where: { classId }, orderBy: MISSION_ORDER, select: { id: true } })
+      ).map(m => m.id)
+      const chain = chainEdges(order)
+      const edges = await classPathEdges(tx, classId)
+      const key = (e: PathEdge) => `${e.missionId}>${e.requiredMissionId}`
+      const same =
+        edges.length === chain.length && chain.every(e => edges.some(old => key(old) === key(e)))
+      if (!same) {
+        await tx.missionPrerequisite.deleteMany({ where: { mission: { classId } } })
+        if (chain.length > 0) await tx.missionPrerequisite.createMany({ data: chain })
+        await recordClassAction(tx, {
+          classId,
+          actorId: userId,
+          action: 'mission.chained',
+          entityType: 'class',
+          entityId: classId,
+          metadata: { count: order.length, replaced: edges.length },
+        })
+      }
+      return {
+        prerequisites: Object.fromEntries(chain.map(e => [e.missionId, [e.requiredMissionId]])),
+        message: 'Misiones encadenadas en orden',
+      }
+    })
+  }
+
+  /**
+   * Quita todos los requisitos de la clase: el mapa vuelve a ser un camino sin
+   * cierres. Una sola entrada `mission.prerequisites_cleared`; si no había
+   * ninguno, nada.
+   */
+  async clearPrerequisites(userId: string, classId: string) {
+    await assertClassAccess(classId, userId, 'mission.edit')
+    return prisma.$transaction(async tx => {
+      await lockMissionPath(tx, [classId])
+      const { count } = await tx.missionPrerequisite.deleteMany({ where: { mission: { classId } } })
+      if (count > 0) {
+        await recordClassAction(tx, {
+          classId,
+          actorId: userId,
+          action: 'mission.prerequisites_cleared',
+          entityType: 'class',
+          entityId: classId,
+          metadata: { count },
+        })
+      }
+      return { removed: count, message: 'Requisitos quitados' }
+    })
   }
 
   // Teacher: Reorder enigmas

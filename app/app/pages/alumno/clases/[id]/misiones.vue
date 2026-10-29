@@ -47,6 +47,8 @@
         :earned-mana="mission.earnedMana"
         :background-image="mission.backgroundImage"
         :class-id="classId"
+        :lock-reason="mission.lockReason"
+        :requires="mission.requires"
         :layout="view"
         compact
       />
@@ -96,6 +98,10 @@ const missions = computed(() =>
     earnedCoins: m.earnedCoins as number | undefined,
     earnedMana: m.earnedMana as number | undefined,
     backgroundImage: m.backgroundImage as string | undefined,
+    // El camino del mapa: lo que pide y, si la tiene cerrada por él, lo que le falta.
+    prerequisiteIds: (m.prerequisiteIds as string[] | undefined) ?? [],
+    lockReason: (m.lockReason as 'teacher' | 'path' | null | undefined) ?? null,
+    requires: (m.requires as { id: string; title: string }[] | undefined) ?? [],
   }))
 )
 

@@ -4,11 +4,27 @@ import { getPlatformContext, getSkinName } from '../platform-context.js'
 import { INCLUSIVE_LANGUAGE_ES } from '../prompts/index.js'
 import { calculateMissionTotalXP } from '../../../utils/xp-calculator.js'
 import { sortByClassOrder } from '../../../utils/mission-order.js'
+import { resolveClassSettings } from '../../../utils/class-settings.js'
 import {
   listedClassesWhere,
   assertMissionAccess,
   passesAccessCheck,
 } from '../../../utils/class-access.js'
+
+/**
+ * Lo que pide una misión en el mapa, para el resumen: «; se abre al completar
+ * «A»» (y si el mapa está apagado en su clase, que ahora no cierra). Vacío si
+ * no pide nada.
+ */
+function pathNote(mission: {
+  class: { settings: unknown }
+  prerequisites: { requiredMission: { title: string } }[]
+}): string {
+  if (mission.prerequisites.length === 0) return ''
+  const titles = mission.prerequisites.map(p => `«${p.requiredMission.title}»`).join(' y ')
+  const off = resolveClassSettings(mission.class.settings).missionMap ? '' : ', sin efecto con el mapa apagado'
+  return `; se abre al completar ${titles}${off}`
+}
 
 export class TeacherAgent extends BaseAgent {
   protected buildSystemPrompt(context: AgentRequestContext) {
@@ -54,8 +70,10 @@ export class TeacherAgent extends BaseAgent {
       prisma.mission.findMany({
         where: { class: myClasses },
         include: {
-          class: { select: { name: true } },
+          class: { select: { name: true, settings: true } },
           _count: { select: { enigmas: true } },
+          // Lo que pide cada una en el mapa, para decir qué la abre.
+          prerequisites: { select: { requiredMission: { select: { title: true } } } },
         },
         // Las más recientes, que son las del curso; se enseñan en el orden de
         // la progresión de cada clase, como las ve el alumnado.
@@ -74,7 +92,7 @@ export class TeacherAgent extends BaseAgent {
       ? classes.map(cls => `${cls.name} (${cls._count.enrollments} estudiantes, ${cls._count.missions} misiones)`).join('; ')
       : 'Sin clases creadas'
     const missionsSummary = missions.length > 0
-      ? sortByClassOrder(missions).map(mission => `${mission.title} en ${mission.class.name} (${mission._count.enigmas} enigmas)`).join('; ')
+      ? sortByClassOrder(missions).map(mission => `${mission.title} en ${mission.class.name} (${mission._count.enigmas} enigmas${pathNote(mission)})`).join('; ')
       : 'Sin misiones'
 
     const teacherName = teacher?.name?.split(' ')[0] || ''
@@ -125,7 +143,13 @@ export class TeacherAgent extends BaseAgent {
       prisma.mission.findUnique({
         where: { id: missionId },
         include: {
-          class: { select: { name: true } },
+          class: { select: { name: true, settings: true } },
+          // El camino del mapa: lo que pide y lo que la pide a ella.
+          prerequisites: { select: { requiredMission: { select: { title: true } } } },
+          requiredBy: {
+            select: { mission: { select: { title: true } } },
+            orderBy: { mission: { orderIndex: 'asc' } },
+          },
           enigmas: {
             orderBy: { orderIndex: 'asc' },
             select: {
@@ -176,6 +200,18 @@ export class TeacherAgent extends BaseAgent {
 
     if (mission.deadline) {
       lines.push(`Deadline: ${mission.deadline.toISOString().split('T')[0]}`)
+    }
+
+    // El camino del mapa: cada estudiante la tiene cerrada hasta completar lo que pide.
+    if (mission.prerequisites.length > 0 || mission.requiredBy.length > 0) {
+      const mapOn = resolveClassSettings(mission.class.settings).missionMap
+      lines.push(`Mission map path (${mapOn ? 'map on: it locks per student' : 'map off: it does not lock anything now'}):`)
+      if (mission.prerequisites.length > 0) {
+        lines.push(`  Opens for each student after completing: ${mission.prerequisites.map(p => `«${p.requiredMission.title}»`).join(', ')}`)
+      }
+      if (mission.requiredBy.length > 0) {
+        lines.push(`  Completing it opens: ${mission.requiredBy.map(p => `«${p.mission.title}»`).join(', ')}`)
+      }
     }
 
     if (mission.description) {

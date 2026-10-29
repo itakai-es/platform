@@ -404,7 +404,9 @@ export async function useHint(
   hintId: string,
   seen: HintCostInput = {}
 ) {
-  // Al alumno, una misión bloqueada o de una clase archivada no le existe (404).
+  // Al alumno, una misión bloqueada o de una clase archivada no le existe (404);
+  // una cerrada por el camino del mapa sí, pero no deja usar sus pistas (409,
+  // MISSION_PATH_LOCKED) hasta completar lo que pide.
   const membership = await assertMissionMember(missionId, user)
   await findHint(missionId, hintId)
   if (membership.teacher) {

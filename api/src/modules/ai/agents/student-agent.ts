@@ -4,6 +4,7 @@ import { getPlatformContext, getSkinName } from '../platform-context.js'
 import { INCLUSIVE_LANGUAGE_ES } from '../prompts/index.js'
 import { calculateMissionTotalXP } from '../../../utils/xp-calculator.js'
 import { sortByClassOrder } from '../../../utils/mission-order.js'
+import { classPathsFor } from '../../../utils/mission-path.js'
 import {
   assertMissionMember,
   passesAccessCheck,
@@ -74,7 +75,7 @@ export class StudentAgent extends BaseAgent {
           title: true,
           description: true,
           rarity: true,
-          class: { select: { name: true } },
+          class: { select: { name: true, settings: true } },
           _count: { select: { enigmas: true } },
         },
         // Las más recientes; se enseñan en el orden de la progresión de cada clase.
@@ -95,9 +96,23 @@ export class StudentAgent extends BaseAgent {
     const missionSummary = missionProgress.length > 0
       ? missionProgress.map(item => `${item.mission.title} en ${item.mission.class.name} (${item.progress}%, ${item.mission._count.enigmas} enigmas)`).join('; ')
       : 'Sin misiones en progreso'
-    const availableMissionsSummary = availableMissions.length > 0
-      ? sortByClassOrder(availableMissions).map(m => `${m.title} en ${m.class.name} (${m.rarity}, ${m._count.enigmas} enigmas${m.description ? ': ' + m.description.slice(0, 80) : ''})`).join('; ')
+    // El camino del mapa: las cerradas hasta completar otra no son «disponibles»;
+    // van aparte, con lo que las abre, para que no se las proponga como siguiente paso.
+    const paths = await classPathsFor(
+      prisma,
+      context.userId,
+      availableMissions.map(m => ({ id: m.classId, settings: m.class.settings }))
+    )
+    const lockOf = (m: { id: string; classId: string }) => paths.get(m.classId)?.locks.get(m.id)
+    const ordered = sortByClassOrder(availableMissions)
+    const openMissions = ordered.filter(m => !lockOf(m))
+    const pathLocked = ordered.filter(m => lockOf(m))
+    const availableMissionsSummary = openMissions.length > 0
+      ? openMissions.map(m => `${m.title} en ${m.class.name} (${m.rarity}, ${m._count.enigmas} enigmas${m.description ? ': ' + m.description.slice(0, 80) : ''})`).join('; ')
       : 'Sin misiones disponibles'
+    const pathLockedSummary = pathLocked
+      .map(m => `${m.title} en ${m.class.name} (se abre al completar ${lockOf(m)!.map(r => `«${r.title}»`).join(' y ')})`)
+      .join('; ')
 
     const studentName = student?.name?.split(' ')[0] || ''
 
@@ -108,6 +123,9 @@ export class StudentAgent extends BaseAgent {
       `Clases: ${enrollmentsSummary}`,
       `Misiones en progreso: ${missionSummary}`,
       `Misiones disponibles: ${availableMissionsSummary}`,
+      pathLockedSummary
+        ? `Misiones cerradas hasta completar otra (mapa de misiones; aún no puede entrar, entregar ni usar pistas): ${pathLockedSummary}`
+        : '',
     ]
 
     // Inject current mission context if available
@@ -142,9 +160,27 @@ export class StudentAgent extends BaseAgent {
     studentId: string,
     role: string | null
   ): Promise<string | null> {
-    // El contexto de una misión solo se carga para quien puede verla; si no, se ignora.
-    if (!(await passesAccessCheck(assertMissionMember(missionId, { id: studentId, role })))) {
+    // El contexto de una misión solo se carga para quien puede verla; si no, se
+    // ignora (lo que no es de acceso sí se relanza). Si la tiene cerrada por el
+    // camino del mapa, solo qué la abre: sus enigmas y documentos, al abrirse.
+    const membership = await assertMissionMember(missionId, { id: studentId, role }, prisma, {
+      allowPathLocked: true,
+    }).catch(async (error: unknown) => {
+      await passesAccessCheck(Promise.reject(error))
       return null
+    })
+    if (!membership) return null
+    if (membership.pathLock) {
+      const locked = await prisma.mission.findUnique({
+        where: { id: missionId },
+        select: { title: true, class: { select: { name: true } } },
+      })
+      if (!locked) return null
+      return [
+        `Mission: ${locked.title}`,
+        `Class: ${locked.class.name}`,
+        `Status: closed by the mission map path — it opens when the student completes ${membership.pathLock.map(r => `«${r.title}»`).join(' and ')}. Until then they cannot open it, submit or use its hints. Do not describe its enigmas: point them to the mission that opens it.`,
+      ].join('\n')
     }
 
     const [mission, studentProgress, enigmaProgress] = await Promise.all([

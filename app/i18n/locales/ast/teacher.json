@@ -195,7 +195,21 @@
             "title": "Orde de la clase",
             "hint": "L'alumnáu ve les misiones nesti orde. Arrastra cada filera pela so asa o, col tecláu, ponte na asa y usa les flechas arriba y abaxo. Cada cambéu guárdase al momentu.",
             "done": "Fecho",
-            "error": "Nun se pudo guardar l'orde. Téntalo de nuevo."
+            "error": "Nun se pudo guardar l'orde. Téntalo de nuevo.",
+            "breaks_path": "«{mission}» ábrese al completar «{required}»: tien de dir detrás."
+          },
+          "path": {
+            "title": "Camín del mapa",
+            "hint": "Un camín cenciellu nun pasu. Pa escoyer lo que pide cada misión, ábrela y vete a Axustes, Camín.",
+            "chain": "Encadenar n’orde",
+            "chain_summary": "Cada misión va pidir completar l’anterior p’abrise: {count} requisitu. | Cada misión va pidir completar l’anterior p’abrise: {count} requisitos.",
+            "chain_replaces": "Sustitúi’l que hai agora. | Sustitúi los {count} que hai agora.",
+            "chained": "Yá tán encadenaes: cada misión pide l’anterior.",
+            "chain_done": "Misiones encadenaes n’orde",
+            "clear": "Quitar los requisitos",
+            "clear_summary": "Quita’l requisitu que hai: toles misiones s’abren dende’l principiu. | Quita los {count} requisitos que hai: toles misiones s’abren dende’l principiu.",
+            "clear_done": "Requisitos quitaos",
+            "error": "Nun se pudo camudar el camín. Inténtalo de nueves."
           }
         },
         "meta": {
@@ -670,7 +684,10 @@
               "rewards_changed": "camudó la recompensa de la misión «{title}»",
               "imported": "importó la misión «{title}»",
               "exported": "copió la misión «{title}» n'otra clase",
-              "reordered": "camudó l'orde de les misiones"
+              "reordered": "camudó l'orde de les misiones",
+              "prerequisites_changed": "camudó lo que hai que completar p’abrir la misión «{title}»",
+              "chained": "encadenó les misiones n’orde: cada una pide l’anterior",
+              "prerequisites_cleared": "quitó los requisitos del camín de les misiones"
             },
             "enigma": {
               "created": "amestó l'enigma «{title}»",
@@ -863,7 +880,16 @@
           "team_set_none": "Individual (ensin equipos)",
           "team_set_hint": "Namás informativo: l’alumnáu ve con qué equipos se fai y pues aprobar tol equipu d’una vegada. Cada estudiante sigue entregando lo so.",
           "basics_title": "Datos de la misión",
-          "play_title": "Dificultá y visibilidá"
+          "play_title": "Dificultá y visibilidá",
+          "path_title": "Camín",
+          "path_hint": "Cada estudiante va vela zarrada hasta completar toles que marques. A quien yá la entamare nun se-y zarra.",
+          "path_legend": "Pa abrila, completar enantes",
+          "path_map_off": "Lo que hai que completar enantes p’abrir una misión namás cuenta col mapa de misiones aceso. Acéndese nos axustes de la clase, en Funcionalidaes.",
+          "path_empty": "Nun hai otres misiones na clase.",
+          "path_cycle_reason": "Yá precisa esta misión p’abrise: pidila zarraría un círculu.",
+          "path_limit": "Como muncho, {max}. Pa escoyer otra, desmarca una.",
+          "path_moved": "Guardao. La misión pasó detrás de lo que pide nel orde de la clase.",
+          "path_load_error": "Nun se pudieron cargar les misiones de la clase."
         }
       },
       "import": {

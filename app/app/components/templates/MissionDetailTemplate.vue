@@ -155,8 +155,39 @@
         <span>{{ t('teacher.components.mission_detail_template.expired_readonly') }}</span>
       </div>
 
+      <!-- Cerrada por el camino del mapa (solo alumnado): qué tiene que completar
+           antes. Ni la historia, ni los enigmas, ni los documentos: se ven al
+           abrirse. -->
+      <section v-if="pathLocked" class="rounded-2xl bg-white px-4 shadow-lg">
+        <EmptyState
+          :icon="LockClosedIcon"
+          :title="t('student.mission_detail.path_locked.title')"
+          :description="pathLockedText"
+          :heading-level="2"
+        >
+          <template #action>
+            <div class="flex flex-wrap justify-center gap-3">
+              <NuxtLink
+                v-for="required in mission.requires"
+                :key="required.id"
+                :to="`${classDetailLink}/misiones/${required.id}`"
+              >
+                <Button variant="primary">
+                  {{ t('student.mission_detail.path_locked.go_to', { title: required.title }) }}
+                </Button>
+              </NuxtLink>
+              <NuxtLink :to="`${classDetailLink}/misiones`">
+                <Button variant="outline">{{
+                  t('student.mission_detail.path_locked.back')
+                }}</Button>
+              </NuxtLink>
+            </div>
+          </template>
+        </EmptyState>
+      </section>
+
       <!-- Contenido de otras pestañas (p. ej. Ajustes) -->
-      <div v-if="showTabs && activeTab !== 'resumen'">
+      <div v-else-if="showTabs && activeTab !== 'resumen'">
         <slot name="tab" :active-tab="activeTab" />
       </div>
 
@@ -1596,6 +1627,16 @@ const onDocumentReorderAndSave = () => {
 // Computed
 const isTeacher = computed(() => props.mode === 'teacher')
 const canEdit = computed(() => isTeacher.value && props.editable)
+// Cerrada por el camino del mapa: al alumno le falta completar otra antes.
+const { missionList } = useMissionPathText()
+const pathLocked = computed(
+  () => !isTeacher.value && props.mission?.lockReason === 'path' && !!props.mission.requires?.length
+)
+const pathLockedText = computed(() =>
+  t('student.mission_detail.path_locked.description', {
+    missions: missionList((props.mission?.requires ?? []).map(m => m.title)),
+  })
+)
 // Pistas: el profesorado ve siempre la sección (para añadirlas); el alumnado,
 // solo si la misión tiene alguna.
 const showHints = computed(() => isTeacher.value || (props.mission?.hints?.length ?? 0) > 0)

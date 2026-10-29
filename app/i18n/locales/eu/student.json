@@ -63,7 +63,8 @@
       },
       "locked_toast": "Zure irakasleak misio hau itxi du oraingoz. Irekitzen duenean sartu ahal izango zara.",
       "locked_aria": "{title}: misioa itxita dago oraingoz",
-      "expired_on": "Iraungi zen: {date}"
+      "expired_on": "Iraungi zen: {date}",
+      "locked_path_aria": "{title}: {missions} osatzean irekitzen da"
     },
     "mission_detail": {
       "meta": {
@@ -89,7 +90,8 @@
         "success": "Entrega behar bezala bidali da. Irakasleak laster berrikusiko du.",
         "error": "Errorea entrega bidaltzean. Saiatu berriro.",
         "expired_error": "Misio hau iraungita dago. Dagoeneko ezin duzu enigmarik entregatu.",
-        "downloading": "Deskargatzen"
+        "downloading": "Deskargatzen",
+        "path_locked": "Misio hau ez dago irekita oraindik: lehenago beste bat osatu behar duzu."
       },
       "hints": {
         "intro": "Trabatu zara? Erabili pista bat. Ordenan irekitzen dira, banan-banan, eta bakoitzak bere kostua du.",
@@ -110,6 +112,12 @@
         "used_announcement": "{position}. pista erabili duzu.",
         "use_error": "Ezin izan da pista erabili.",
         "bonus_penalty": "−%{count} zure pistengatik"
+      },
+      "path_locked": {
+        "title": "Oraindik ezin duzu misio hau hasi",
+        "description": "{missions} osatzean irekitzen da. Orduan ikusiko dituzu bere istorioa, enigmak eta dokumentuak.",
+        "go_to": "Joan «{title}» misiora",
+        "back": "Itzuli misioetara"
       }
     },
     "classes": {

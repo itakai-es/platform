@@ -57,6 +57,12 @@ const reorderSchema = z.object({
   ids: z.array(z.string()),
 })
 
+// Lo que pide una misión para abrirse: sus ids. El tope (3), la clase y los
+// ciclos los comprueba el servicio, con su mensaje; aquí solo se acota la lista.
+const prerequisitesSchema = z.object({
+  ids: z.array(z.string().max(64)).max(50),
+})
+
 // Pistas: el texto es obligatorio al crearla y se recorta a su tope; el coste se
 // acota en el servicio, no aquí: un tipo desconocido pasa a monedas y una
 // cantidad rara (negativa, enorme, en texto) se recoloca, no se rechaza.
@@ -491,6 +497,23 @@ export async function missionsRoutes(fastify: FastifyInstance) {
         }
         return reply.status(500).send({ message: 'Error interno' })
       }
+    }
+  )
+
+  // ---- Camino del mapa ----
+
+  // Teacher: lo que pide la misión para abrirse en el mapa (Ajustes > Camino).
+  // Sin try/catch propio: el acceso, la validación y los 409 (ciclo, misión de
+  // otra clase) los resuelve el manejador global.
+  fastify.put(
+    '/:missionId/prerequisites',
+    async (request: FastifyRequest<{ Params: { missionId: string } }>, reply: FastifyReply) => {
+      const { id, role } = request.user as { id: string; role: string }
+      if (role !== 'teacher') {
+        return reply.status(403).send({ message: 'Solo el profesorado puede cambiar el camino' })
+      }
+      const { ids } = prerequisitesSchema.parse(request.body)
+      return missionsService.setPrerequisites(id, request.params.missionId, ids)
     }
   )
 

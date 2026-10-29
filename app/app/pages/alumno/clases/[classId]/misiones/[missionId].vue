@@ -230,6 +230,15 @@ const handleSubmissionSubmit = async (data: { enigmaId: string; file: File }) =>
     selectedEnigmaForSubmission.value = null
   } catch (err) {
     console.error('Error submitting enigma:', err)
+    // Se ha cerrado por el camino del mapa mientras tanto (su docente le ha
+    // puesto un requisito): se dice y se vuelve a pedir, que enseña qué falta.
+    if ((err as { data?: { code?: string } })?.data?.code === 'MISSION_PATH_LOCKED') {
+      toast.error(t('student.mission_detail.submission.path_locked'))
+      showSubmissionModal.value = false
+      selectedEnigmaForSubmission.value = null
+      void fetchMission(true)
+      return
+    }
     toast.error(t('student.mission_detail.submission.error'))
   }
 }

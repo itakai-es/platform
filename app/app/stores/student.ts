@@ -1,6 +1,11 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import type { MissionStatus, MissionRarity } from '~/types/mission.types'
+import type {
+  MissionLockReason,
+  MissionRarity,
+  MissionRequirement,
+  MissionStatus,
+} from '~/types/mission.types'
 import type { ActivityType } from '~/types/activity.types'
 import { normalizeLegacyActivityType, validateActivityType } from '~/types/activity.types'
 
@@ -58,6 +63,12 @@ export interface StudentMission {
   earnedCoins?: number
   earnedMana?: number
   backgroundImage?: string
+  /** Por qué sale bloqueada: su docente la cerró o le falta completar otra (mapa de misiones). */
+  lockReason?: MissionLockReason | null
+  /** Cerrada por el camino del mapa: lo que le falta completar, en el orden de la clase. */
+  requires?: MissionRequirement[]
+  /** Lo que pide la misión en el mapa (ids); vacío con el mapa apagado. */
+  prerequisiteIds?: string[]
 }
 
 export const useStudentStore = defineStore('student', () => {

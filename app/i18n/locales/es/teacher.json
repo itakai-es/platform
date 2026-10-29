@@ -195,7 +195,21 @@
             "title": "Orden de la clase",
             "hint": "El alumnado ve las misiones en este orden. Arrastra cada fila por su asa o, con el teclado, ponte en el asa y usa las flechas arriba y abajo. Cada cambio se guarda al momento.",
             "done": "Hecho",
-            "error": "No se ha podido guardar el orden. Inténtalo de nuevo."
+            "error": "No se ha podido guardar el orden. Inténtalo de nuevo.",
+            "breaks_path": "«{mission}» se abre al completar «{required}»: tiene que ir detrás."
+          },
+          "path": {
+            "title": "Camino del mapa",
+            "hint": "Un camino sencillo en un paso. Para elegir qué pide cada misión, ábrela y ve a Ajustes, Camino.",
+            "chain": "Encadenar en orden",
+            "chain_summary": "Cada misión pedirá completar la anterior para abrirse: {count} requisito. | Cada misión pedirá completar la anterior para abrirse: {count} requisitos.",
+            "chain_replaces": "Sustituye el que hay ahora. | Sustituye los {count} que hay ahora.",
+            "chained": "Ya están encadenadas: cada misión pide la anterior.",
+            "chain_done": "Misiones encadenadas en orden",
+            "clear": "Quitar los requisitos",
+            "clear_summary": "Quita el requisito que hay: todas las misiones se abren desde el principio. | Quita los {count} requisitos que hay: todas las misiones se abren desde el principio.",
+            "clear_done": "Requisitos quitados",
+            "error": "No se ha podido cambiar el camino. Inténtalo de nuevo."
           }
         },
         "meta": {
@@ -670,7 +684,10 @@
               "rewards_changed": "cambió la recompensa de la misión «{title}»",
               "imported": "importó la misión «{title}»",
               "exported": "copió la misión «{title}» en otra clase",
-              "reordered": "cambió el orden de las misiones"
+              "reordered": "cambió el orden de las misiones",
+              "prerequisites_changed": "cambió lo que hay que completar para abrir la misión «{title}»",
+              "chained": "encadenó las misiones en orden: cada una pide la anterior",
+              "prerequisites_cleared": "quitó los requisitos del camino de las misiones"
             },
             "enigma": {
               "created": "añadió el enigma «{title}»",
@@ -863,7 +880,16 @@
           "team_set_none": "Individual (sin equipos)",
           "team_set_hint": "Solo informativo: el alumnado ve con qué equipos se hace y puedes aprobar a todo un equipo de una vez. Cada estudiante sigue entregando lo suyo.",
           "basics_title": "Datos de la misión",
-          "play_title": "Dificultad y visibilidad"
+          "play_title": "Dificultad y visibilidad",
+          "path_title": "Camino",
+          "path_hint": "Cada estudiante la verá cerrada hasta completar todas las que marques. A quien ya la haya empezado no se le cierra.",
+          "path_legend": "Para abrirla, completar antes",
+          "path_map_off": "Lo que hay que completar antes para abrir una misión solo cuenta con el mapa de misiones encendido. Se enciende en los ajustes de la clase, en Funcionalidades.",
+          "path_empty": "No hay otras misiones en la clase.",
+          "path_cycle_reason": "Ya necesita esta misión para abrirse: pedirla cerraría un círculo.",
+          "path_limit": "Como mucho, {max}. Para elegir otra, desmarca una.",
+          "path_moved": "Guardado. La misión ha pasado detrás de lo que pide en el orden de la clase.",
+          "path_load_error": "No se han podido cargar las misiones de la clase."
         }
       },
       "import": {

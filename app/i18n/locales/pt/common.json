@@ -618,7 +618,10 @@
         "locked": "Fechada por agora"
       },
       "completed_by": "Ninguém a concluiu ainda: 0 de {total} | {done} de {total} concluiu-a | {done} de {total} concluíram-na",
-      "no_students": "Ainda não há estudantes"
+      "no_students": "Ainda não há estudantes",
+      "opens_after": "Abre ao completar {missions}",
+      "quoted": "«{title}»",
+      "locked_path_explain": "Para a abrir, completa antes {missions}."
     }
   }
 }

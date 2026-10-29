@@ -195,7 +195,21 @@
             "title": "Ordem da turma",
             "hint": "A turma vê as missões por esta ordem. Arrasta cada linha pela sua pega ou, com o teclado, vai até à pega e usa as setas para cima e para baixo. Cada alteração fica guardada no momento.",
             "done": "Concluído",
-            "error": "Não foi possível guardar a ordem. Tenta de novo."
+            "error": "Não foi possível guardar a ordem. Tenta de novo.",
+            "breaks_path": "«{mission}» abre ao completar «{required}»: tem de ir depois."
+          },
+          "path": {
+            "title": "Caminho do mapa",
+            "hint": "Um caminho simples num só passo. Para escolher o que cada missão pede, abre-a e vai a Definições, Caminho.",
+            "chain": "Encadear por ordem",
+            "chain_summary": "Cada missão vai pedir que se complete a anterior para abrir: {count} requisito. | Cada missão vai pedir que se complete a anterior para abrir: {count} requisitos.",
+            "chain_replaces": "Substitui o que existe agora. | Substitui os {count} que existem agora.",
+            "chained": "Já estão encadeadas: cada missão pede a anterior.",
+            "chain_done": "Missões encadeadas por ordem",
+            "clear": "Retirar os requisitos",
+            "clear_summary": "Retira o requisito que existe: todas as missões abrem desde o início. | Retira os {count} requisitos que existem: todas as missões abrem desde o início.",
+            "clear_done": "Requisitos retirados",
+            "error": "Não foi possível mudar o caminho. Tenta novamente."
           }
         },
         "meta": {
@@ -670,7 +684,10 @@
               "rewards_changed": "alterou a recompensa da missão «{title}»",
               "imported": "importou a missão «{title}»",
               "exported": "copiou a missão «{title}» para outra turma",
-              "reordered": "mudou a ordem das missões"
+              "reordered": "mudou a ordem das missões",
+              "prerequisites_changed": "mudou o que é preciso completar para abrir a missão «{title}»",
+              "chained": "encadeou as missões por ordem: cada uma pede a anterior",
+              "prerequisites_cleared": "retirou os requisitos do caminho das missões"
             },
             "enigma": {
               "created": "adicionou o enigma «{title}»",
@@ -863,7 +880,16 @@
           "team_set_none": "Individual (sem equipas)",
           "team_set_hint": "Só informativo: a turma vê com que equipas se faz e podes aprovar uma equipa inteira de uma vez. Cada estudante continua a entregar o seu.",
           "basics_title": "Dados da missão",
-          "play_title": "Dificuldade e visibilidade"
+          "play_title": "Dificuldade e visibilidade",
+          "path_title": "Caminho",
+          "path_hint": "Cada estudante vai vê-la fechada até completar todas as que marcares. A quem já a tiver começado não se fecha.",
+          "path_legend": "Para a abrir, completar antes",
+          "path_map_off": "O que é preciso completar antes de abrir uma missão só conta com o mapa de missões ligado. Liga-se nas definições da turma, em Funcionalidades.",
+          "path_empty": "Não há outras missões na turma.",
+          "path_cycle_reason": "Já precisa desta missão para abrir: pedi-la fecharia um círculo.",
+          "path_limit": "No máximo, {max}. Para escolher outra, desmarca uma.",
+          "path_moved": "Guardado. A missão passou para depois do que pede na ordem da turma.",
+          "path_load_error": "Não foi possível carregar as missões da turma."
         }
       },
       "import": {

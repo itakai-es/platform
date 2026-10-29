@@ -64,7 +64,7 @@
         </div>
       </template>
 
-      <!-- Pestaña Ajustes: título, fecha límite e imagen de la misión -->
+      <!-- Pestaña Ajustes: título, fecha límite, imagen y camino del mapa de la misión -->
       <template #tab="{ activeTab: current }">
         <MissionConfigPanel
           v-if="current === 'ajustes'"
@@ -72,6 +72,7 @@
           :class-id="classId"
           :mission="mission"
           @update="onSettingsUpdate"
+          @path-update="onSettingsUpdate"
         />
       </template>
     </MissionDetailTemplate>

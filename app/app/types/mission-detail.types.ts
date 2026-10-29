@@ -1,4 +1,4 @@
-import type { MissionStatus } from './mission.types'
+import type { MissionLockReason, MissionRequirement, MissionStatus } from './mission.types'
 import type { ClassSettings } from './class.types'
 
 export interface MissionNarrative {
@@ -137,4 +137,13 @@ export interface MissionDetail {
   teacherStats?: TeacherMissionStats | null
   /** True si algún alumno ya completó la misión: la rareza queda bloqueada. */
   rarityLocked?: boolean
+  /**
+   * Alumnado: por qué está bloqueada. Con `path` (camino del mapa) la misión
+   * llega sin historia, enigmas, documentos ni pistas, y `requires` dice qué
+   * le falta completar antes.
+   */
+  lockReason?: MissionLockReason | null
+  requires?: MissionRequirement[]
+  /** Profesorado: lo que pide para abrirse en el mapa, en el orden de la clase. */
+  prerequisites?: MissionRequirement[]
 }

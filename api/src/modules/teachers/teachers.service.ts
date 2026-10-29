@@ -54,6 +54,7 @@ import {
 import { missionRewards } from '../../utils/mission-formatter.js'
 import { completedMissionsByStudent } from '../../utils/ranking.js'
 import { MISSION_ORDER, nextMissionOrderIndex } from '../../utils/mission-order.js'
+import { classPathEdges, pathOrder } from '../../utils/mission-path.js'
 
 const BADGES_DIR = join(process.cwd(), 'uploads', 'badges')
 const COVERS_DIR = join(process.cwd(), 'uploads', 'covers')
@@ -709,12 +710,31 @@ export class TeachersService {
         // origen y ese es su orden en la copia, numerado desde 0.
         const missionIds = new Map<string, string>()
         if (options.missions && source.missions && source.missions.length > 0) {
-          for (const [position, m] of source.missions.entries()) {
+          // El camino del origen (lo que pide cada misión), leído ya con el
+          // origen bloqueado. Las misiones se leyeron antes: si el orden no
+          // cumple el camino (alguien lo cambió entretanto), la copia va en el
+          // más parecido que lo cumple.
+          const sourceIds = source.missions.map(m => m.id)
+          const edges = (await classPathEdges(tx, source.id)).filter(
+            e => sourceIds.includes(e.missionId) && sourceIds.includes(e.requiredMissionId)
+          )
+          const byId = new Map(source.missions.map(m => [m.id, m]))
+          const ordered = pathOrder(sourceIds, edges).map(id => byId.get(id)!)
+          for (const [position, m] of ordered.entries()) {
             const copy = await copyMissionInto(tx, m, newClass.id, {
               ...missionCopy,
               orderIndex: position,
             })
             missionIds.set(m.id, copy.mission.id)
+          }
+          // Y el camino de la copia, entre las misiones nuevas.
+          if (edges.length > 0) {
+            await tx.missionPrerequisite.createMany({
+              data: edges.map(e => ({
+                missionId: missionIds.get(e.missionId)!,
+                requiredMissionId: missionIds.get(e.requiredMissionId)!,
+              })),
+            })
           }
         }
 
@@ -1018,11 +1038,20 @@ export class TeachersService {
 
     const missions = await prisma.mission.findMany({
       where: { classId },
-      include: { enigmas: true, progress: true },
+      include: {
+        enigmas: true,
+        progress: true,
+        // Lo que pide cada una en el mapa (ver utils/mission-path.ts).
+        prerequisites: {
+          where: { requiredMission: { classId } },
+          select: { requiredMissionId: true },
+        },
+      },
       // El orden de la progresión: el que ve el alumnado.
       orderBy: MISSION_ORDER,
     })
 
+    const position = new Map(missions.map((m, index) => [m.id, index]))
     return {
       missions: missions.map((m) => ({
         id: m.id,
@@ -1037,6 +1066,11 @@ export class TeachersService {
         ...missionRewards(m),
         completedCount: m.progress.filter((p) => p.completedAt).length,
         totalStudents,
+        // Lo que pide para abrirse en el mapa (ids, en el orden de la clase),
+        // aunque el mapa esté apagado.
+        prerequisiteIds: m.prerequisites
+          .map(p => p.requiredMissionId)
+          .sort((a, b) => (position.get(a) ?? 0) - (position.get(b) ?? 0)),
       })),
       total: missions.length,
     }

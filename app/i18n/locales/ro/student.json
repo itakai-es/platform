@@ -63,7 +63,8 @@
       },
       "locked_toast": "Misiunea este închisă deocamdată. Vei putea intra când se deschide.",
       "locked_aria": "{title}: misiune închisă deocamdată",
-      "expired_on": "A expirat: {date}"
+      "expired_on": "A expirat: {date}",
+      "locked_path_aria": "{title}: se deschide după ce finalizezi {missions}"
     },
     "mission_detail": {
       "meta": {
@@ -89,7 +90,8 @@
         "success": "Lucrarea a fost trimisă. Cadrul didactic o va verifica în curând.",
         "error": "Eroare la trimiterea lucrării. Încearcă din nou.",
         "expired_error": "Această misiune a expirat. Nu mai poți trimite enigme.",
-        "downloading": "Se descarcă"
+        "downloading": "Se descarcă",
+        "path_locked": "Această misiune nu e încă deschisă: mai întâi trebuie să finalizezi alta."
       },
       "hints": {
         "intro": "Te-ai blocat? Folosește un indiciu. Se deschid în ordine, câte unul, și fiecare are costul lui.",
@@ -110,6 +112,12 @@
         "used_announcement": "Ai folosit indiciul {position}.",
         "use_error": "Indiciul nu a putut fi folosit.",
         "bonus_penalty": "−{count} % pentru indiciile tale"
+      },
+      "path_locked": {
+        "title": "Încă nu poți începe această misiune",
+        "description": "Se deschide după ce finalizezi {missions}. Atunci îi vei vedea povestea, enigmele și documentele.",
+        "go_to": "Mergi la «{title}»",
+        "back": "Înapoi la misiuni"
       }
     },
     "classes": {

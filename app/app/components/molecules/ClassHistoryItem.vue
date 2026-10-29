@@ -95,13 +95,23 @@ function accessLabels(source: unknown) {
 }
 
 /**
- * Clave del texto. Bloquear o desbloquear una misión, y la propiedad que pasa
- * sola al borrarse una cuenta, tienen texto propio aunque compartan acción.
+ * Clave del texto. Bloquear o desbloquear una misión, cambiar lo que pide para
+ * abrirse y la propiedad que pasa sola al borrarse una cuenta tienen texto
+ * propio aunque compartan acción.
  */
 function textKey(entry: ClassHistoryEntry): string {
   const { action, params } = entry
   if (action === 'mission.updated' && typeof params.status === 'string') {
     return params.status === 'bloqueada' ? 'mission.blocked' : 'mission.unblocked'
+  }
+  // Lo que pide para abrirse en el mapa de misiones (va sola, sin otros campos).
+  if (
+    action === 'mission.updated' &&
+    Array.isArray(params.fields) &&
+    params.fields.length === 1 &&
+    params.fields[0] === 'prerequisites'
+  ) {
+    return 'mission.prerequisites_changed'
   }
   if (action === 'class.ownership_transferred' && params.reason === 'account_deleted') {
     return 'class.ownership_inherited'

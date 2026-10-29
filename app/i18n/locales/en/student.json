@@ -63,7 +63,8 @@
       },
       "locked_toast": "Your teacher has closed this mission for now. You can go in once it is opened.",
       "locked_aria": "{title}: mission closed for now",
-      "expired_on": "Expired: {date}"
+      "expired_on": "Expired: {date}",
+      "locked_path_aria": "{title}: opens after completing {missions}"
     },
     "mission_detail": {
       "meta": {
@@ -89,7 +90,8 @@
         "success": "Submission sent successfully. The teacher will review it soon.",
         "error": "Error submitting. Please try again.",
         "expired_error": "This mission has expired. You can no longer submit enigmas.",
-        "downloading": "Downloading"
+        "downloading": "Downloading",
+        "path_locked": "This mission isn’t open yet: you need to complete another one first."
       },
       "hints": {
         "intro": "Stuck? Use a hint. They open in order, one at a time, and each one has its cost.",
@@ -110,6 +112,12 @@
         "used_announcement": "You have used hint {position}.",
         "use_error": "The hint couldn't be used.",
         "bonus_penalty": "−{count}% for your hints"
+      },
+      "path_locked": {
+        "title": "You can’t start this mission yet",
+        "description": "It opens after completing {missions}. Then you’ll see its story, its enigmas and its documents.",
+        "go_to": "Go to “{title}”",
+        "back": "Back to missions"
       }
     },
     "classes": {

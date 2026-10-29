@@ -63,7 +63,8 @@
       },
       "locked_toast": "El teu docent ha tancat esta missió de moment. Podràs entrar-hi quan l’òbriga.",
       "locked_aria": "{title}: missió tancada de moment",
-      "expired_on": "Va caducar: {date}"
+      "expired_on": "Va caducar: {date}",
+      "locked_path_aria": "{title}: s’obri en completar {missions}"
     },
     "mission_detail": {
       "meta": {
@@ -89,7 +90,8 @@
         "success": "Entrega enviada correctament. El teu docent la revisarà prompte.",
         "error": "Error en enviar l'entrega. Torna-ho a intentar.",
         "expired_error": "Esta missió ha caducat. Ja no pots entregar enigmes.",
-        "downloading": "Descarregant"
+        "downloading": "Descarregant",
+        "path_locked": "Esta missió encara no està oberta: abans n’has de completar una altra."
       },
       "hints": {
         "intro": "T'has encallat? Utilitza una pista. S'obrin en orde, d'una en una, i cadascuna té el seu cost.",
@@ -110,6 +112,12 @@
         "used_announcement": "Has utilitzat la pista {position}.",
         "use_error": "No s'ha pogut utilitzar la pista.",
         "bonus_penalty": "−{count} % per les teues pistes"
+      },
+      "path_locked": {
+        "title": "Encara no pots començar esta missió",
+        "description": "S’obri en completar {missions}. Aleshores en voràs la història, els enigmes i els documents.",
+        "go_to": "Ves a «{title}»",
+        "back": "Torna a les missions"
       }
     },
     "classes": {

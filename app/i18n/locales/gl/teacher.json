@@ -195,7 +195,21 @@
             "title": "Orde da clase",
             "hint": "O alumnado ve as misións nesta orde. Arrastra cada fila pola súa asa ou, co teclado, ponte na asa e usa as frechas arriba e abaixo. Cada cambio gárdase ao momento.",
             "done": "Feito",
-            "error": "Non se puido gardar a orde. Téntao de novo."
+            "error": "Non se puido gardar a orde. Téntao de novo.",
+            "breaks_path": "«{mission}» ábrese ao completar «{required}»: ten que ir detrás."
+          },
+          "path": {
+            "title": "Camiño do mapa",
+            "hint": "Un camiño sinxelo nun paso. Para escoller o que pide cada misión, ábrea e vai a Axustes, Camiño.",
+            "chain": "Encadear en orde",
+            "chain_summary": "Cada misión pedirá completar a anterior para abrirse: {count} requisito. | Cada misión pedirá completar a anterior para abrirse: {count} requisitos.",
+            "chain_replaces": "Substitúe o que hai agora. | Substitúe os {count} que hai agora.",
+            "chained": "Xa están encadeadas: cada misión pide a anterior.",
+            "chain_done": "Misións encadeadas en orde",
+            "clear": "Quitar os requisitos",
+            "clear_summary": "Quita o requisito que hai: todas as misións se abren desde o principio. | Quita os {count} requisitos que hai: todas as misións se abren desde o principio.",
+            "clear_done": "Requisitos quitados",
+            "error": "Non se puido cambiar o camiño. Téntao de novo."
           }
         },
         "meta": {
@@ -670,7 +684,10 @@
               "rewards_changed": "cambiou a recompensa da misión «{title}»",
               "imported": "importou a misión «{title}»",
               "exported": "copiou a misión «{title}» noutra clase",
-              "reordered": "cambiou a orde das misións"
+              "reordered": "cambiou a orde das misións",
+              "prerequisites_changed": "cambiou o que hai que completar para abrir a misión «{title}»",
+              "chained": "encadeou as misións en orde: cada unha pide a anterior",
+              "prerequisites_cleared": "quitou os requisitos do camiño das misións"
             },
             "enigma": {
               "created": "engadiu o enigma «{title}»",
@@ -863,7 +880,16 @@
           "team_set_none": "Individual (sen equipos)",
           "team_set_hint": "Só informativo: o alumnado ve con que equipos se fai e podes aprobar todo un equipo dunha vez. Cada estudante segue entregando o seu.",
           "basics_title": "Datos da misión",
-          "play_title": "Dificultade e visibilidade"
+          "play_title": "Dificultade e visibilidade",
+          "path_title": "Camiño",
+          "path_hint": "Cada estudante verá a misión pechada ata completar todas as que marques. A quen xa a comezase non se lle pecha.",
+          "path_legend": "Para abrila, completar antes",
+          "path_map_off": "O que hai que completar antes para abrir unha misión só conta co mapa de misións acendido. Acéndese nos axustes da clase, en Funcionalidades.",
+          "path_empty": "Non hai outras misións na clase.",
+          "path_cycle_reason": "Xa necesita esta misión para abrirse: pedila pecharía un círculo.",
+          "path_limit": "Como moito, {max}. Para escoller outra, desmarca unha.",
+          "path_moved": "Gardado. A misión pasou detrás do que pide na orde da clase.",
+          "path_load_error": "Non se puideron cargar as misións da clase."
         }
       },
       "import": {

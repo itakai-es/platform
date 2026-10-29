@@ -2,6 +2,7 @@ import { prisma } from '../../config/database.js'
 import { getLevelInfo, wouldLevelUp, calculateMissionTotalXP } from '../../utils/xp-calculator.js'
 import { resolveLevelConfig, tierForLevel } from '../../utils/level-config.js'
 import { formatMission, getMissionStatus } from '../../utils/mission-formatter.js'
+import { classPathFor, classPathsFor } from '../../utils/mission-path.js'
 import { ensureSafeEducationalPrompt } from '../ai/ai-safety.js'
 import { generateFireRedAvatar } from '../ai/generators/avatar-firered.js'
 import { releaseGeneratedAvatar } from '../storage/upload-usage.js'
@@ -320,8 +321,17 @@ export class StudentsService {
       orderBy: MISSION_ORDER,
     })
 
+    // El camino del mapa para esta persona: lo que pide cada misión y las que
+    // tiene cerradas por eso (solo con el mapa encendido en la clase).
+    const path = await classPathFor(prisma, classId, userId, missions[0]?.class.settings ?? null)
+
     return {
-      missions: missions.map((m) => formatMission(m, false, resolveClassSettings(m.class.settings))),
+      missions: missions.map((m) =>
+        formatMission(m, false, resolveClassSettings(m.class.settings), {
+          requires: path.locks.get(m.id),
+          prerequisiteIds: path.prerequisites.get(m.id),
+        })
+      ),
       total: missions.length,
     }
   }
@@ -784,8 +794,20 @@ export class StudentsService {
       orderBy: [{ class: { name: 'asc' } }, { classId: 'asc' }, ...MISSION_ORDER],
     })
 
+    // El camino del mapa de cada clase para esta persona (ver getClassMissions).
+    const paths = await classPathsFor(
+      prisma,
+      userId,
+      missions.map(m => ({ id: m.classId, settings: m.class.settings }))
+    )
+
     return {
-      missions: missions.map((m) => formatMission(m, true, resolveClassSettings(m.class.settings))),
+      missions: missions.map((m) =>
+        formatMission(m, true, resolveClassSettings(m.class.settings), {
+          requires: paths.get(m.classId)?.locks.get(m.id),
+          prerequisiteIds: paths.get(m.classId)?.prerequisites.get(m.id),
+        })
+      ),
       total: missions.length,
     }
   }

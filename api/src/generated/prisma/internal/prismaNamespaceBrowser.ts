@@ -64,6 +64,7 @@ export const ModelName = {
   ShopPurchase: 'ShopPurchase',
   ShopItemUse: 'ShopItemUse',
   Mission: 'Mission',
+  MissionPrerequisite: 'MissionPrerequisite',
   MissionDocument: 'MissionDocument',
   MissionEnigma: 'MissionEnigma',
   StudentEnigmaProgress: 'StudentEnigmaProgress',
@@ -325,6 +326,16 @@ export const MissionScalarFieldEnum = {
 } as const
 
 export type MissionScalarFieldEnum = (typeof MissionScalarFieldEnum)[keyof typeof MissionScalarFieldEnum]
+
+
+export const MissionPrerequisiteScalarFieldEnum = {
+  id: 'id',
+  missionId: 'missionId',
+  requiredMissionId: 'requiredMissionId',
+  createdAt: 'createdAt'
+} as const
+
+export type MissionPrerequisiteScalarFieldEnum = (typeof MissionPrerequisiteScalarFieldEnum)[keyof typeof MissionPrerequisiteScalarFieldEnum]
 
 
 export const MissionDocumentScalarFieldEnum = {

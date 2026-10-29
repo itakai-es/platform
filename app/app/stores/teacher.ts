@@ -701,6 +701,24 @@ export const useTeacherStore = defineStore('teacher', () => {
   }
 
   /**
+   * Camino del mapa de una clase. «Encadenar en orden» (`chain`): cada misión
+   * pide la anterior, en el orden de la clase, y deja de pedir lo que pidiera.
+   * Quitar los requisitos (`clear`): ninguna pide nada. Devuelve las misiones de
+   * la clase ya al día (también en la caché).
+   */
+  async function setClassMissionPath(classId: string, mode: 'chain' | 'clear') {
+    const config = useRuntimeConfig()
+    await $fetch(
+      mode === 'chain'
+        ? `${config.public.apiBase}/teacher/classes/${classId}/missions/chain`
+        : `${config.public.apiBase}/teacher/classes/${classId}/missions/prerequisites`,
+      { method: mode === 'chain' ? 'POST' : 'DELETE' }
+    )
+    hasLoadedMissions.value = false
+    return (await fetchClassMissions(classId, true)).missions
+  }
+
+  /**
    * Obtiene la guía de una clase
    */
   async function fetchClassGuide(classId: string, force = false) {
@@ -1186,6 +1204,7 @@ export const useTeacherStore = defineStore('teacher', () => {
     getInvitationCode,
     fetchClassMissions,
     reorderClassMissions,
+    setClassMissionPath,
     importMission,
     fetchClassGuide,
     updateClassGuideCache,

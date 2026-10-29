@@ -618,7 +618,10 @@
         "locked": "Closed by your teacher"
       },
       "completed_by": "Nobody has completed it yet: 0 of {total} | {done} of {total} has completed it | {done} of {total} have completed it",
-      "no_students": "No students yet"
+      "no_students": "No students yet",
+      "opens_after": "Opens after completing {missions}",
+      "quoted": "“{title}”",
+      "locked_path_explain": "To open it, first complete {missions}."
     }
   }
 }

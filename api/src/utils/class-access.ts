@@ -3,6 +3,7 @@ import { prisma } from '../config/database.js'
 import type { Prisma } from '../generated/prisma/client.js'
 import type { ClassAccessLevel, ClassTeacherProfile } from '../generated/prisma/enums.js'
 import { ForbiddenError, NotFoundError } from './errors.js'
+import { MissionPathLockedError, missionPathLock, type PathRequirement } from './mission-path.js'
 
 /**
  * Acceso del profesorado a una clase. Todo lo que pregunte «¿puede este
@@ -374,9 +375,26 @@ export async function assertClassMember(
 
 /** Lo que hace falta de la misión para decidir si un alumno la ve. */
 interface MissionForMember {
+  id: string
   classId: string
   status: string
-  class: { archived: boolean }
+  class: { archived: boolean; settings: unknown }
+}
+
+/** Qué se hace con una misión cerrada por el camino del mapa. */
+export interface MissionMemberOptions {
+  /**
+   * Dejarla pasar y decir qué falta (`pathLock`), en lugar de responder 409. Es
+   * para el detalle de la misión, que enseña al alumno qué tiene que completar.
+   */
+  allowPathLocked?: boolean
+}
+
+/** Quien ve la misión y, si es alumno y la tiene cerrada por el camino, qué le falta. */
+export type MissionMembership = ClassMembership & {
+  classId: string
+  /** Lo que le falta para abrirla (ver utils/mission-path.ts); null si no está cerrada. */
+  pathLock: PathRequirement[] | null
 }
 
 /** Regla común de `assertMissionMember` y `assertDocumentMember`. */
@@ -384,30 +402,53 @@ async function missionMembership(
   mission: MissionForMember | null | undefined,
   notFound: string,
   user: ClassUser,
-  tx: Db
-): Promise<ClassMembership & { classId: string }> {
+  tx: Db,
+  options: MissionMemberOptions = {}
+): Promise<MissionMembership> {
   const membership = mission && (await getClassMembership(mission.classId, user, tx))
   if (!mission || !membership) throw new NotFoundError(notFound)
   if (!membership.teacher && (mission.class.archived || mission.status === 'bloqueada')) {
     throw new NotFoundError(notFound)
   }
-  return { ...membership, classId: mission.classId }
+  // Cerrada por el camino (mapa de misiones): al alumno le existe, pero no
+  // entra hasta completar lo que pide. El profesorado la ve siempre.
+  const pathLock = membership.teacher
+    ? null
+    : await missionPathLock(
+        tx,
+        // Los ajustes ya vienen con la misión: sin ellos, el de por defecto (apagado).
+        { id: mission.id, classId: mission.classId, settings: mission.class.settings ?? null },
+        user.id
+      )
+  if (pathLock && !options.allowPathLocked) throw new MissionPathLockedError(pathLock)
+  return { ...membership, classId: mission.classId, pathLock }
 }
+
+/** Lo que se lee de la misión para `missionMembership`. */
+const MISSION_FOR_MEMBER_SELECT = {
+  id: true,
+  classId: true,
+  status: true,
+  class: { select: { archived: true, settings: true } },
+} as const
 
 /**
  * Exige poder ver la misión: profesorado de su clase o alumno matriculado. Al
- * alumno se le cierra, además, si la clase está archivada o la misión bloqueada.
+ * alumno se le cierra, además, si la clase está archivada o la misión bloqueada
+ * (404), o si la tiene cerrada por el camino del mapa (409, salvo
+ * `allowPathLocked`).
  */
 export async function assertMissionMember(
   missionId: string,
   user: ClassUser,
-  tx: Db = prisma
-): Promise<ClassMembership & { classId: string }> {
+  tx: Db = prisma,
+  options: MissionMemberOptions = {}
+): Promise<MissionMembership> {
   const mission = await tx.mission.findUnique({
     where: { id: missionId },
-    select: { classId: true, status: true, class: { select: { archived: true } } },
+    select: MISSION_FOR_MEMBER_SELECT,
   })
-  return missionMembership(mission, 'Misión no encontrada', user, tx)
+  return missionMembership(mission, 'Misión no encontrada', user, tx, options)
 }
 
 /** Igual que `assertMissionMember`, partiendo de un documento de la misión. */
@@ -415,13 +456,10 @@ export async function assertDocumentMember(
   documentId: string,
   user: ClassUser,
   tx: Db = prisma
-): Promise<ClassMembership & { classId: string; missionId: string }> {
+): Promise<MissionMembership & { missionId: string }> {
   const document = await tx.missionDocument.findUnique({
     where: { id: documentId },
-    select: {
-      missionId: true,
-      mission: { select: { classId: true, status: true, class: { select: { archived: true } } } },
-    },
+    select: { missionId: true, mission: { select: MISSION_FOR_MEMBER_SELECT } },
   })
   if (!document) throw new NotFoundError('Documento no encontrado')
   const membership = await missionMembership(document.mission, 'Documento no encontrado', user, tx)
@@ -430,15 +468,22 @@ export async function assertDocumentMember(
 
 /**
  * Versión sin excepción de las comprobaciones `assert…`: false si la comprobación
- * responde 404 o 403. Para cuando sin acceso no se rechaza la petición, solo se
- * deja fuera lo que dependía de él.
+ * responde 404 o 403, o si la misión está cerrada por el camino del mapa. Para
+ * cuando sin acceso no se rechaza la petición, solo se deja fuera lo que
+ * dependía de él.
  */
 export async function passesAccessCheck(check: Promise<unknown>): Promise<boolean> {
   try {
     await check
     return true
   } catch (error) {
-    if (error instanceof NotFoundError || error instanceof ForbiddenError) return false
+    if (
+      error instanceof NotFoundError ||
+      error instanceof ForbiddenError ||
+      error instanceof MissionPathLockedError
+    ) {
+      return false
+    }
     throw error
   }
 }

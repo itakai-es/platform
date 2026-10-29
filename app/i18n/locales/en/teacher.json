@@ -195,7 +195,21 @@
             "title": "Class order",
             "hint": "Students see the missions in this order. Drag each row by its handle or, with the keyboard, move to the handle and use the up and down arrow keys. Each change is saved right away.",
             "done": "Done",
-            "error": "The order couldn't be saved. Please try again."
+            "error": "The order couldn't be saved. Please try again.",
+            "breaks_path": "“{mission}” opens after completing “{required}”: it has to go after it."
+          },
+          "path": {
+            "title": "Map path",
+            "hint": "A simple path in one step. To choose what each mission requires, open it and go to Settings, Path.",
+            "chain": "Chain in order",
+            "chain_summary": "Each mission will require completing the previous one to open: {count} requirement. | Each mission will require completing the previous one to open: {count} requirements.",
+            "chain_replaces": "It replaces the current one. | It replaces the {count} current ones.",
+            "chained": "Already chained: each mission requires the previous one.",
+            "chain_done": "Missions chained in order",
+            "clear": "Remove requirements",
+            "clear_summary": "Removes the current requirement: every mission opens from the start. | Removes the {count} current requirements: every mission opens from the start.",
+            "clear_done": "Requirements removed",
+            "error": "The path could not be changed. Please try again."
           }
         },
         "meta": {
@@ -670,7 +684,10 @@
               "rewards_changed": "changed the reward of the mission “{title}”",
               "imported": "imported the mission “{title}”",
               "exported": "copied the mission “{title}” to another class",
-              "reordered": "changed the order of the missions"
+              "reordered": "changed the order of the missions",
+              "prerequisites_changed": "changed what has to be completed to open the mission “{title}”",
+              "chained": "chained the missions in order: each one requires the previous one",
+              "prerequisites_cleared": "removed the requirements of the missions path"
             },
             "enigma": {
               "created": "added the enigma “{title}”",
@@ -863,7 +880,16 @@
           "team_set_none": "Individual (no teams)",
           "team_set_hint": "For information only: students see which teams it is done in, and you can approve a whole team at once. Each student still submits their own work.",
           "basics_title": "Mission details",
-          "play_title": "Difficulty and visibility"
+          "play_title": "Difficulty and visibility",
+          "path_title": "Path",
+          "path_hint": "Each student will see it closed until they complete all the ones you tick. It doesn’t close for anyone who has already started it.",
+          "path_legend": "To open it, complete first",
+          "path_map_off": "What has to be completed before opening a mission only counts with the mission map turned on. Turn it on in the class settings, under Features.",
+          "path_empty": "There are no other missions in the class.",
+          "path_cycle_reason": "It already needs this mission to open: requiring it would close a loop.",
+          "path_limit": "{max} at most. To choose another, untick one.",
+          "path_moved": "Saved. The mission has moved behind what it requires in the class order.",
+          "path_load_error": "The class missions could not be loaded."
         }
       },
       "import": {

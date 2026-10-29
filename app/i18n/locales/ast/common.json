@@ -618,7 +618,10 @@
         "locked": "Zarrada de momentu"
       },
       "completed_by": "Naide la completó entá: 0 de {total} | {done} de {total} completóla | {done} de {total} completáronla",
-      "no_students": "Entá nun hai alumnáu"
+      "no_students": "Entá nun hai alumnáu",
+      "opens_after": "Ábrese al completar {missions}",
+      "quoted": "«{title}»",
+      "locked_path_explain": "Pa abrila, completa enantes {missions}."
     }
   }
 }

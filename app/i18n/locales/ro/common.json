@@ -618,7 +618,10 @@
         "locked": "Închisă deocamdată"
       },
       "completed_by": "Nimeni nu a finalizat-o încă: 0 din {total} | {done} din {total} a finalizat-o | {done} din {total} au finalizat-o",
-      "no_students": "Încă nu e nimeni în clasă"
+      "no_students": "Încă nu e nimeni în clasă",
+      "opens_after": "Se deschide după ce finalizezi {missions}",
+      "quoted": "«{title}»",
+      "locked_path_explain": "Ca s-o deschizi, finalizează mai întâi {missions}."
     }
   }
 }

@@ -63,7 +63,8 @@
       },
       "locked_toast": "O teu docente pechou esta misión polo de agora. Poderás entrar cando a abra.",
       "locked_aria": "{title}: misión pechada polo de agora",
-      "expired_on": "Venceu: {date}"
+      "expired_on": "Venceu: {date}",
+      "locked_path_aria": "{title}: ábrese ao completar {missions}"
     },
     "mission_detail": {
       "meta": {
@@ -89,7 +90,8 @@
         "success": "Entrega enviada correctamente. O teu profesorado revisaraa pronto.",
         "error": "Erro ao enviar a entrega. Téntao de novo.",
         "expired_error": "Esta misión expirou. Xa non podes entregar enigmas.",
-        "downloading": "Descargando"
+        "downloading": "Descargando",
+        "path_locked": "Esta misión aínda non está aberta: antes tes que completar outra."
       },
       "hints": {
         "intro": "Atascácheste? Usa unha pista. Ábrense en orde, dunha en unha, e cada unha ten o seu custo.",
@@ -110,6 +112,12 @@
         "used_announcement": "Usaches a pista {position}.",
         "use_error": "Non se puido usar a pista.",
         "bonus_penalty": "−{count} % polas túas pistas"
+      },
+      "path_locked": {
+        "title": "Aínda non podes comezar esta misión",
+        "description": "Ábrese ao completar {missions}. Entón verás a súa historia, os seus enigmas e os seus documentos.",
+        "go_to": "Ir a «{title}»",
+        "back": "Volver ás misións"
       }
     },
     "classes": {

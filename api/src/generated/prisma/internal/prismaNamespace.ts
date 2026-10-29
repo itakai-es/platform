@@ -397,6 +397,7 @@ export const ModelName = {
   ShopPurchase: 'ShopPurchase',
   ShopItemUse: 'ShopItemUse',
   Mission: 'Mission',
+  MissionPrerequisite: 'MissionPrerequisite',
   MissionDocument: 'MissionDocument',
   MissionEnigma: 'MissionEnigma',
   StudentEnigmaProgress: 'StudentEnigmaProgress',
@@ -438,7 +439,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "userSettings" | "refreshToken" | "instanceSetting" | "class" | "classTeacher" | "classActionLog" | "classEnrollment" | "classGuide" | "shopItem" | "shopPurchase" | "shopItemUse" | "mission" | "missionDocument" | "missionEnigma" | "studentEnigmaProgress" | "missionHint" | "missionHintUse" | "enigmaSubmission" | "studentMissionProgress" | "badge" | "studentBadge" | "joinRequest" | "invitation" | "notification" | "activity" | "systemLog" | "chatConversation" | "chatMessage" | "behaviorTemplate" | "behaviorApplication" | "attendanceSession" | "attendanceRecord" | "teamSet" | "team" | "teamMember" | "teamAward" | "helpCategory" | "helpArticle"
+    modelProps: "user" | "userSettings" | "refreshToken" | "instanceSetting" | "class" | "classTeacher" | "classActionLog" | "classEnrollment" | "classGuide" | "shopItem" | "shopPurchase" | "shopItemUse" | "mission" | "missionPrerequisite" | "missionDocument" | "missionEnigma" | "studentEnigmaProgress" | "missionHint" | "missionHintUse" | "enigmaSubmission" | "studentMissionProgress" | "badge" | "studentBadge" | "joinRequest" | "invitation" | "notification" | "activity" | "systemLog" | "chatConversation" | "chatMessage" | "behaviorTemplate" | "behaviorApplication" | "attendanceSession" | "attendanceRecord" | "teamSet" | "team" | "teamMember" | "teamAward" | "helpCategory" | "helpArticle"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1401,6 +1402,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.MissionCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.MissionCountAggregateOutputType> | number
+        }
+      }
+    }
+    MissionPrerequisite: {
+      payload: Prisma.$MissionPrerequisitePayload<ExtArgs>
+      fields: Prisma.MissionPrerequisiteFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MissionPrerequisiteFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionPrerequisitePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MissionPrerequisiteFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionPrerequisitePayload>
+        }
+        findFirst: {
+          args: Prisma.MissionPrerequisiteFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionPrerequisitePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MissionPrerequisiteFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionPrerequisitePayload>
+        }
+        findMany: {
+          args: Prisma.MissionPrerequisiteFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionPrerequisitePayload>[]
+        }
+        create: {
+          args: Prisma.MissionPrerequisiteCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionPrerequisitePayload>
+        }
+        createMany: {
+          args: Prisma.MissionPrerequisiteCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.MissionPrerequisiteCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionPrerequisitePayload>[]
+        }
+        delete: {
+          args: Prisma.MissionPrerequisiteDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionPrerequisitePayload>
+        }
+        update: {
+          args: Prisma.MissionPrerequisiteUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionPrerequisitePayload>
+        }
+        deleteMany: {
+          args: Prisma.MissionPrerequisiteDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MissionPrerequisiteUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.MissionPrerequisiteUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionPrerequisitePayload>[]
+        }
+        upsert: {
+          args: Prisma.MissionPrerequisiteUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionPrerequisitePayload>
+        }
+        aggregate: {
+          args: Prisma.MissionPrerequisiteAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMissionPrerequisite>
+        }
+        groupBy: {
+          args: Prisma.MissionPrerequisiteGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MissionPrerequisiteGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MissionPrerequisiteCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MissionPrerequisiteCountAggregateOutputType> | number
         }
       }
     }
@@ -3586,6 +3661,16 @@ export const MissionScalarFieldEnum = {
 export type MissionScalarFieldEnum = (typeof MissionScalarFieldEnum)[keyof typeof MissionScalarFieldEnum]
 
 
+export const MissionPrerequisiteScalarFieldEnum = {
+  id: 'id',
+  missionId: 'missionId',
+  requiredMissionId: 'requiredMissionId',
+  createdAt: 'createdAt'
+} as const
+
+export type MissionPrerequisiteScalarFieldEnum = (typeof MissionPrerequisiteScalarFieldEnum)[keyof typeof MissionPrerequisiteScalarFieldEnum]
+
+
 export const MissionDocumentScalarFieldEnum = {
   id: 'id',
   missionId: 'missionId',
@@ -4542,6 +4627,7 @@ export type GlobalOmitConfig = {
   shopPurchase?: Prisma.ShopPurchaseOmit
   shopItemUse?: Prisma.ShopItemUseOmit
   mission?: Prisma.MissionOmit
+  missionPrerequisite?: Prisma.MissionPrerequisiteOmit
   missionDocument?: Prisma.MissionDocumentOmit
   missionEnigma?: Prisma.MissionEnigmaOmit
   studentEnigmaProgress?: Prisma.StudentEnigmaProgressOmit

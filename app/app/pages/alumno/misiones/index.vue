@@ -61,6 +61,8 @@
         :earned-mana="mission.earnedMana"
         :background-image="mission.backgroundImage"
         :class-name="mission.className"
+        :lock-reason="mission.lockReason"
+        :requires="mission.requires"
         :layout="view"
         compact
       />

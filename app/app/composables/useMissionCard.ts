@@ -1,4 +1,9 @@
-import type { MissionStatus, MissionRarity } from '~/types/mission.types'
+import type {
+  MissionLockReason,
+  MissionRarity,
+  MissionRequirement,
+  MissionStatus,
+} from '~/types/mission.types'
 import { resolveDateLocale } from '~/utils/notifications'
 
 /**
@@ -26,6 +31,10 @@ export interface MissionCardProps {
   completedCount?: number
   totalStudents?: number
   deadline?: string | null
+  /** Alumnado: por qué está bloqueada (su docente o el camino del mapa). */
+  lockReason?: MissionLockReason | null
+  /** Alumnado: cerrada por el camino, lo que le falta completar. */
+  requires?: MissionRequirement[]
   // Compat: se conserva para no romper llamadas existentes (ignorado)
   compact?: boolean
 }
@@ -147,13 +156,39 @@ export function useMissionCard(props: MissionCardProps, emit: (e: 'click') => vo
     return colors[props.rarity || 'comun'] || colors.comun
   })
 
+  // Cerrada por el camino del mapa: la tarjeta dice qué la abre («Se abre al
+  // completar «A»»), en lugar de que la ha cerrado su docente.
+  const { opensAfter, missionList } = useMissionPathText()
+  const pathLocked = computed(
+    () =>
+      !isTeacherMode.value &&
+      props.status === 'bloqueada' &&
+      props.lockReason === 'path' &&
+      (props.requires?.length ?? 0) > 0
+  )
+  const pathText = computed(() => (pathLocked.value ? opensAfter(props.requires ?? []) : ''))
+  const lockedAria = computed(() =>
+    pathLocked.value
+      ? t('student.missions.locked_path_aria', {
+          title: props.title,
+          missions: missionList((props.requires ?? []).map(m => m.title)),
+        })
+      : t('student.missions.locked_aria', { title: props.title })
+  )
+
   const handleCardClick = () => {
     if (isTeacherMode.value) {
       emit('click')
       return
     }
     if (props.status === 'bloqueada') {
-      toast.info(t('student.missions.locked_toast'))
+      toast.info(
+        pathLocked.value
+          ? t('common.mission_map.locked_path_explain', {
+              missions: missionList((props.requires ?? []).map(m => m.title)),
+            })
+          : t('student.missions.locked_toast')
+      )
     }
     // Las misiones expiradas se abren en solo lectura (el enlace navega).
   }
@@ -173,6 +208,9 @@ export function useMissionCard(props: MissionCardProps, emit: (e: 'click') => vo
     statusLabel,
     showStatusBadge,
     progressBarColor,
+    pathLocked,
+    pathText,
+    lockedAria,
     handleCardClick,
   }
 }

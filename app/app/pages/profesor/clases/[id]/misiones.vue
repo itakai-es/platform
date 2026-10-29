@@ -85,11 +85,67 @@
                 <p class="text-xs text-navy-700/70">
                   {{ statusLabel(item) }}
                 </p>
+                <!-- Lo que pide en el mapa: no puede ir delante de eso -->
+                <p v-if="mapOn && pathTextOf(item)" class="text-xs text-navy-700/70">
+                  {{ pathTextOf(item) }}
+                </p>
               </template>
               <template #meta="{ item }">
                 <RarityBadge v-if="item.rarity" :rarity="item.rarity" />
               </template>
             </AdminSortableList>
+          </div>
+        </SettingsSection>
+
+        <!-- Camino del mapa en un paso (solo con el mapa encendido): cada misión
+             pide la anterior, o ninguna pide nada. Sin ventana de confirmar: lo
+             que va a pasar está escrito junto a cada botón. -->
+        <SettingsSection
+          v-if="mapOn"
+          class="mt-6"
+          :title="t('teacher.classes.detail.missions_tab.path.title')"
+          :hint="t('teacher.classes.detail.missions_tab.path.hint')"
+        >
+          <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <p :id="chainSummaryId" class="text-sm text-text-secondary">{{ chainText }}</p>
+            <Button
+              variant="outline"
+              size="sm"
+              class="w-full flex-shrink-0 sm:w-auto"
+              :disabled="chain.alreadyChained || !!pathBusy"
+              :loading="pathBusy === 'chain'"
+              :aria-describedby="chainSummaryId"
+              @click="changePath('chain')"
+            >
+              <LinkIcon class="mr-2 h-4 w-4" aria-hidden="true" />
+              {{ t('teacher.classes.detail.missions_tab.path.chain') }}
+            </Button>
+          </div>
+          <div
+            v-if="chain.current > 0"
+            class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"
+          >
+            <p :id="clearSummaryId" class="text-sm text-text-secondary">
+              {{
+                t(
+                  'teacher.classes.detail.missions_tab.path.clear_summary',
+                  { count: chain.current },
+                  chain.current
+                )
+              }}
+            </p>
+            <Button
+              variant="outline"
+              size="sm"
+              class="w-full flex-shrink-0 sm:w-auto"
+              :disabled="!!pathBusy"
+              :loading="pathBusy === 'clear'"
+              :aria-describedby="clearSummaryId"
+              @click="changePath('clear')"
+            >
+              <XMarkIcon class="mr-2 h-4 w-4" aria-hidden="true" />
+              {{ t('teacher.classes.detail.missions_tab.path.clear') }}
+            </Button>
           </div>
         </SettingsSection>
       </div>
@@ -164,12 +220,15 @@
 <script setup lang="ts">
 import { teacherMissionStatus } from '~/utils/mission-teacher-status'
 import { DEFAULT_MISSION_SORT, orderByIds, sortMissions } from '~/utils/mission-sort'
+import { chainSummary, orderBreaksPath } from '~/utils/mission-path'
 import type { ViewMode } from '~/composables/useViewMode'
 import {
   RocketLaunchIcon,
   PlusIcon,
   ArrowDownTrayIcon,
   ArrowsUpDownIcon,
+  LinkIcon,
+  XMarkIcon,
 } from '@heroicons/vue/24/outline'
 
 definePageMeta({ layout: 'teacher', middleware: ['auth', 'role'] })
@@ -179,8 +238,9 @@ const route = useRoute()
 const classId = computed(() => route.params.id as string)
 const { state, can, classSettings } = useTeacherClassDetail(classId)
 // El mapa es una vista más, solo en las clases que lo tienen encendido (en pruebas).
+const mapOn = computed(() => classSettings.value.missionMap)
 const viewModes = computed<ViewMode[]>(() =>
-  classSettings.value.missionMap ? ['grid', 'list', 'map'] : ['grid', 'list']
+  mapOn.value ? ['grid', 'list', 'map'] : ['grid', 'list']
 )
 const view = useViewMode('teacher-class-missions', 'grid', viewModes)
 
@@ -273,13 +333,70 @@ function statusLabel(mission: Parameters<typeof teacherMissionStatus>[0]) {
 }
 
 async function saveOrder(ids: string[]) {
+  // Una misión no va delante de lo que pide (la API también lo rechaza).
+  const broken = orderBreaksPath(ids, state.value.missions)
+  if (broken) {
+    const titleOf = (id: string) => state.value.missions.find(m => m.id === id)?.title ?? ''
+    toast.error(
+      t('teacher.classes.detail.missions_tab.order.breaks_path', {
+        mission: titleOf(broken.missionId),
+        required: titleOf(broken.requiredMissionId),
+      })
+    )
+    return false
+  }
   try {
     const order = await teacherStore.reorderClassMissions(classId.value, ids)
     state.value.missions = orderByIds(state.value.missions, order)
     return true
-  } catch {
-    toast.error(t('teacher.classes.detail.missions_tab.order.error'))
+  } catch (err) {
+    const data = (err as { data?: { code?: string; message?: string } })?.data
+    toast.error(
+      data?.code === 'MISSION_ORDER_BREAKS_PATH' && data.message
+        ? data.message
+        : t('teacher.classes.detail.missions_tab.order.error')
+    )
     return false
+  }
+}
+
+// ---- Camino del mapa: lo que pide cada misión ----
+const { opensAfter } = useMissionPathText()
+/** «Se abre al completar «A»», con lo que pide la misión; vacío si no pide nada. */
+function pathTextOf(mission: { prerequisiteIds?: string[] }) {
+  // En el orden de la clase, como en el mapa.
+  const ids = new Set(mission.prerequisiteIds ?? [])
+  const required = orderedMissions.value.filter(m => ids.has(m.id))
+  return required.length > 0 ? opensAfter(required) : ''
+}
+
+// Encadenar en orden o quitar los requisitos, con lo que va a pasar junto al botón.
+const chainSummaryId = useId()
+const clearSummaryId = useId()
+const chain = computed(() => chainSummary(orderedMissions.value))
+const chainText = computed(() => {
+  const { links, current, alreadyChained } = chain.value
+  if (alreadyChained) return t('teacher.classes.detail.missions_tab.path.chained')
+  const base = t('teacher.classes.detail.missions_tab.path.chain_summary', { count: links }, links)
+  return current > 0
+    ? `${base} ${t('teacher.classes.detail.missions_tab.path.chain_replaces', { count: current }, current)}`
+    : base
+})
+const pathBusy = ref<'chain' | 'clear' | null>(null)
+async function changePath(mode: 'chain' | 'clear') {
+  if (pathBusy.value) return
+  pathBusy.value = mode
+  try {
+    state.value.missions = await teacherStore.setClassMissionPath(classId.value, mode)
+    toast.success(
+      mode === 'chain'
+        ? t('teacher.classes.detail.missions_tab.path.chain_done')
+        : t('teacher.classes.detail.missions_tab.path.clear_done')
+    )
+  } catch {
+    toast.error(t('teacher.classes.detail.missions_tab.path.error'))
+  } finally {
+    pathBusy.value = null
   }
 }
 

@@ -618,7 +618,10 @@
         "locked": "Cerrada por tu docente"
       },
       "completed_by": "Nadie la ha completado aún: 0 de {total} | {done} de {total} la ha completado | {done} de {total} la han completado",
-      "no_students": "Aún no hay alumnado"
+      "no_students": "Aún no hay alumnado",
+      "opens_after": "Se abre al completar {missions}",
+      "quoted": "«{title}»",
+      "locked_path_explain": "Para abrirla, completa antes {missions}."
     }
   }
 }

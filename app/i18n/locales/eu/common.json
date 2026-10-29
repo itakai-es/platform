@@ -618,7 +618,10 @@
         "locked": "Itxita oraingoz"
       },
       "completed_by": "Inork ez du osatu oraindik: 0/{total} | Osatu dutenak: {done}/{total} | Osatu dutenak: {done}/{total}",
-      "no_students": "Oraindik ez dago ikaslerik"
+      "no_students": "Oraindik ez dago ikaslerik",
+      "opens_after": "{missions} osatzean irekitzen da",
+      "quoted": "«{title}»",
+      "locked_path_explain": "Irekitzeko, osatu lehenago {missions}."
     }
   }
 }

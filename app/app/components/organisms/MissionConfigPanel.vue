@@ -76,6 +76,49 @@
       </div>
     </SettingsSection>
 
+    <!-- Camino del mapa: lo que hay que completar antes para abrirla. Solo con
+         el mapa encendido en la clase; si no, una nota que lo explica. -->
+    <SettingsSection
+      :title="t('teacher.missions.detail.settings.path_title')"
+      :hint="mapOn ? t('teacher.missions.detail.settings.path_hint') : undefined"
+    >
+      <InfoNote v-if="!mapOn">{{ t('teacher.missions.detail.settings.path_map_off') }}</InfoNote>
+      <fieldset v-else :disabled="!pathReady">
+        <legend class="mb-2 text-sm font-medium text-text-primary">
+          {{ t('teacher.missions.detail.settings.path_legend') }}
+        </legend>
+        <p v-if="pathReady && pathChoices.length === 0" class="text-sm text-text-muted">
+          {{ t('teacher.missions.detail.settings.path_empty') }}
+        </p>
+        <ul v-else class="space-y-2">
+          <li v-for="choice in pathChoices" :key="choice.id">
+            <Checkbox
+              :id="`${uid}-path-${choice.id}`"
+              :model-value="choice.checked"
+              :label="choice.title"
+              :disabled="choice.disabledReason !== null"
+              :described-by="
+                choice.disabledReason === 'cycle' ? `${uid}-path-${choice.id}-why` : undefined
+              "
+              @update:model-value="togglePrerequisite(choice.id, $event)"
+            />
+            <p
+              v-if="choice.disabledReason === 'cycle'"
+              :id="`${uid}-path-${choice.id}-why`"
+              class="ml-6 text-xs text-text-muted"
+            >
+              {{ t('teacher.missions.detail.settings.path_cycle_reason') }}
+            </p>
+          </li>
+        </ul>
+        <p v-if="pathAtLimit" class="mt-2 text-sm text-text-muted" aria-live="polite">
+          {{
+            t('teacher.missions.detail.settings.path_limit', { max: MISSION_PREREQUISITE_LIMIT })
+          }}
+        </p>
+      </fieldset>
+    </SettingsSection>
+
     <SettingsSection :title="t('teacher.missions.detail.settings.background_label')">
       <CoverImageField
         :image="form.backgroundImage"
@@ -108,6 +151,12 @@
 </template>
 
 <script setup lang="ts">
+import {
+  MISSION_PREREQUISITE_LIMIT,
+  prerequisiteChoices,
+  type PathMission,
+} from '~/utils/mission-path'
+
 type MissionRarity = 'comun' | 'rara' | 'epica' | 'legendaria'
 
 interface MissionSettings {
@@ -118,6 +167,8 @@ interface MissionSettings {
   blocked: boolean
   /** Agrupación de equipos con la que se hace; '' = individual. */
   teamSetId: string
+  /** Lo que hay que completar antes para abrirla (ids), en el orden de la clase. */
+  prerequisites: string[]
 }
 
 const props = defineProps<{
@@ -133,6 +184,9 @@ const props = defineProps<{
     blocked?: boolean
     rarityLocked?: boolean
     teamSet?: { id: string; title: string; archived: boolean } | null
+    /** Lo que pide para abrirse en el mapa. */
+    prerequisites?: { id: string; title: string }[]
+    classSettings?: { missionMap?: boolean }
   } | null
 }>()
 
@@ -150,6 +204,8 @@ const emit = defineEmits<{
       blocked: boolean
     },
   ]
+  /** Lo que pide ahora para abrirse en el mapa, ya guardado. */
+  pathUpdate: [prerequisites: { id: string; title: string }[]]
 }>()
 
 const { t, locale } = useI18n()
@@ -202,13 +258,15 @@ const buildForm = (): MissionSettings => ({
   rarity: coerceRarity(props.mission?.rarity),
   blocked: props.mission?.blocked ?? false,
   teamSetId: props.mission?.teamSet?.id ?? '',
+  prerequisites: (props.mission?.prerequisites ?? []).map(m => m.id),
 })
 
 const form = ref<MissionSettings>(buildForm())
 const snapshot = ref<MissionSettings>(buildForm())
 const saving = ref(false)
 
-const dirty = computed(() => {
+/** Ha cambiado algo de la misión en sí (lo que se guarda con PATCH). */
+const missionDirty = computed(() => {
   const a = form.value
   const b = snapshot.value
   return (
@@ -220,6 +278,57 @@ const dirty = computed(() => {
     a.teamSetId !== b.teamSetId
   )
 })
+/** Ha cambiado lo que pide para abrirse (se guarda aparte: lo comprueba la API). */
+const pathDirty = computed(() => {
+  const a = form.value.prerequisites
+  const b = snapshot.value.prerequisites
+  return a.length !== b.length || a.some(id => !b.includes(id))
+})
+const dirty = computed(() => missionDirty.value || pathDirty.value)
+
+// --------- Camino del mapa ---------
+// Las demás misiones de la clase, con lo que pide cada una, para las casillas y
+// para saber cuáles cerrarían un círculo. Solo con el mapa encendido.
+const teacherStore = useTeacherStore()
+const mapOn = computed(() => props.mission?.classSettings?.missionMap === true)
+const classMissions = ref<PathMission[]>([])
+const pathReady = ref(false)
+async function loadClassMissions(force = false) {
+  if (!props.classId) return
+  try {
+    const res = await teacherStore.ensureClassMissions(props.classId, force)
+    classMissions.value = res.missions as PathMission[]
+    pathReady.value = true
+  } catch {
+    toast.error(t('teacher.missions.detail.settings.path_load_error'))
+  }
+}
+watch(
+  mapOn,
+  on => {
+    if (on && !pathReady.value) void loadClassMissions()
+  },
+  { immediate: true }
+)
+const pathChoices = computed(() =>
+  prerequisiteChoices(
+    // Esta misión, con lo marcado ahora: así lo que ya cuelga de ella no se ofrece.
+    classMissions.value.map(m =>
+      m.id === props.missionId ? { ...m, prerequisiteIds: form.value.prerequisites } : m
+    ),
+    props.missionId,
+    form.value.prerequisites
+  )
+)
+const pathAtLimit = computed(() => form.value.prerequisites.length >= MISSION_PREREQUISITE_LIMIT)
+
+/** Marca o desmarca una; se guardan en el orden de la clase. */
+function togglePrerequisite(id: string, checked: boolean) {
+  const selected = new Set(form.value.prerequisites)
+  if (checked) selected.add(id)
+  else selected.delete(id)
+  form.value.prerequisites = classMissions.value.map(m => m.id).filter(m => selected.has(m))
+}
 
 // Sincroniza cuando cambian los datos externos y el formulario está limpio.
 watch(
@@ -230,6 +339,7 @@ watch(
     props.mission?.rarity,
     props.mission?.blocked,
     props.mission?.teamSet?.id,
+    (props.mission?.prerequisites ?? []).map(m => m.id).join(','),
   ],
   () => {
     if (!dirty.value) {
@@ -240,7 +350,7 @@ watch(
 )
 
 function reset() {
-  form.value = { ...snapshot.value }
+  form.value = { ...snapshot.value, prerequisites: [...snapshot.value.prerequisites] }
 }
 
 // --------- Imagen de la misión ---------
@@ -311,35 +421,61 @@ async function save() {
   }
 
   try {
-    const res = await $fetch<{ mission?: { backgroundImage?: string | null } }>(
-      `${config.public.apiBase}/missions/${props.missionId}`,
-      { method: 'PATCH', body: payload }
-    )
-    // El backend persiste las imágenes subidas (data URL) y devuelve su URL final.
-    const storedImage = res.mission?.backgroundImage ?? payload.backgroundImage
-    const saved: MissionSettings = {
-      title: payload.title,
-      deadline: form.value.deadline,
-      backgroundImage: storedImage ?? '',
-      rarity: payload.rarity,
-      blocked: form.value.blocked,
-      teamSetId: form.value.teamSetId,
+    if (missionDirty.value) {
+      const res = await $fetch<{ mission?: { backgroundImage?: string | null } }>(
+        `${config.public.apiBase}/missions/${props.missionId}`,
+        { method: 'PATCH', body: payload }
+      )
+      // El backend persiste las imágenes subidas (data URL) y devuelve su URL final.
+      const storedImage = res.mission?.backgroundImage ?? payload.backgroundImage
+      const saved: MissionSettings = {
+        title: payload.title,
+        deadline: form.value.deadline,
+        backgroundImage: storedImage ?? '',
+        rarity: payload.rarity,
+        blocked: form.value.blocked,
+        teamSetId: form.value.teamSetId,
+        prerequisites: [...snapshot.value.prerequisites],
+      }
+      snapshot.value = { ...saved }
+      form.value = { ...saved, prerequisites: [...form.value.prerequisites] }
+      emit('update', {
+        title: saved.title,
+        deadline: payload.deadline,
+        backgroundImage: saved.backgroundImage,
+        rarity: saved.rarity,
+        blocked: saved.blocked,
+      })
     }
-    snapshot.value = { ...saved }
-    form.value = { ...saved }
-    emit('update', {
-      title: saved.title,
-      deadline: payload.deadline,
-      backgroundImage: saved.backgroundImage,
-      rarity: saved.rarity,
-      blocked: saved.blocked,
-    })
-    toast.success(t('teacher.missions.detail.settings.toast_saved'))
+
+    // Lo que pide para abrirse: la API comprueba la clase, el tope y los ciclos,
+    // y si iba delante de algo que pide, la recoloca detrás en el orden.
+    let moved = 0
+    if (pathDirty.value) {
+      const res = await $fetch<{ prerequisites: { id: string; title: string }[]; moved: number }>(
+        `${config.public.apiBase}/missions/${props.missionId}/prerequisites`,
+        { method: 'PUT', body: { ids: form.value.prerequisites } }
+      )
+      moved = res.moved
+      const ids = res.prerequisites.map(m => m.id)
+      snapshot.value = { ...snapshot.value, prerequisites: ids }
+      form.value = { ...form.value, prerequisites: [...ids] }
+      emit('pathUpdate', res.prerequisites)
+      // Las misiones de la clase (y su orden) han cambiado: el mapa y las casillas, al día.
+      await loadClassMissions(true)
+    }
+    toast.success(
+      moved > 0
+        ? t('teacher.missions.detail.settings.path_moved')
+        : t('teacher.missions.detail.settings.toast_saved')
+    )
   } catch (err) {
-    // El backend bloquea el cambio de rareza si algún alumno ya completó la misión;
-    // en ese caso mostramos su mensaje concreto en vez del genérico.
+    // El backend bloquea el cambio de rareza si algún alumno ya completó la
+    // misión, y lo que pide para abrirse si cerraría un círculo (alguien lo ha
+    // cambiado a la vez): se enseña su mensaje concreto en vez del genérico.
     const message = (err as { data?: { message?: string } })?.data?.message
     toast.error(message || t('teacher.missions.detail.settings.toast_error'))
+    if (pathDirty.value) void loadClassMissions(true)
   } finally {
     saving.value = false
   }

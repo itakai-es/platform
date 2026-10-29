@@ -618,7 +618,10 @@
         "locked": "Pechada polo de agora"
       },
       "completed_by": "Ninguén a completou aínda: 0 de {total} | {done} de {total} completouna | {done} de {total} completárona",
-      "no_students": "Aínda non hai alumnado"
+      "no_students": "Aínda non hai alumnado",
+      "opens_after": "Ábrese ao completar {missions}",
+      "quoted": "«{title}»",
+      "locked_path_explain": "Para abrila, completa antes {missions}."
     }
   }
 }

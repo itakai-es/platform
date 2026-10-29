@@ -102,7 +102,15 @@ const setupTxMock = (overrides: Record<string, any> = {}) => {
         upsert: mocks.studentEnigmaProgressUpsert,
         count: mocks.studentEnigmaProgressCount,
       },
-      missionEnigma: { count: mocks.missionEnigmaCount },
+      missionEnigma: {
+        // Con `progress`, los obligatorios que le faltan (completar la misión ya
+        // no cuenta los opcionales). Aquí no hay opcionales: los que no tiene aprobados.
+        count: vi.fn(async (args: { where?: { progress?: unknown } } = {}) =>
+          args.where?.progress
+            ? Math.max(0, (await mocks.missionEnigmaCount()) - (await mocks.studentEnigmaProgressCount()))
+            : mocks.missionEnigmaCount(args)
+        ),
+      },
       studentMissionProgress: {
         upsert: mocks.studentMissionProgressUpsert,
         updateMany: mocks.studentMissionProgressUpdateMany,

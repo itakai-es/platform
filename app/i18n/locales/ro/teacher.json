@@ -195,7 +195,21 @@
             "title": "Ordinea clasei",
             "hint": "Clasa vede misiunile în această ordine. Trage fiecare rând de mânerul lui sau, cu tastatura, mergi pe mâner și folosește săgețile sus și jos. Fiecare schimbare se salvează imediat.",
             "done": "Gata",
-            "error": "Ordinea nu a putut fi salvată. Încearcă din nou."
+            "error": "Ordinea nu a putut fi salvată. Încearcă din nou.",
+            "breaks_path": "«{mission}» se deschide după ce se finalizează «{required}»: trebuie să vină după."
+          },
+          "path": {
+            "title": "Drumul hărții",
+            "hint": "Un drum simplu, dintr-un pas. Ca să alegi ce cere fiecare misiune, deschide-o și mergi la Setări, Drum.",
+            "chain": "Înlănțuie în ordine",
+            "chain_summary": "Fiecare misiune va cere finalizarea celei anterioare ca să se deschidă: {count} cerință. | Fiecare misiune va cere finalizarea celei anterioare ca să se deschidă: {count} cerințe.",
+            "chain_replaces": "O înlocuiește pe cea de acum. | Le înlocuiește pe cele {count} de acum.",
+            "chained": "Sunt deja înlănțuite: fiecare misiune o cere pe cea anterioară.",
+            "chain_done": "Misiuni înlănțuite în ordine",
+            "clear": "Elimină cerințele",
+            "clear_summary": "Elimină cerința existentă: toate misiunile se deschid de la început. | Elimină cele {count} cerințe existente: toate misiunile se deschid de la început.",
+            "clear_done": "Cerințe eliminate",
+            "error": "Nu s-a putut schimba drumul. Încearcă din nou."
           }
         },
         "meta": {
@@ -670,7 +684,10 @@
               "rewards_changed": "a schimbat recompensa misiunii «{title}»",
               "imported": "a importat misiunea «{title}»",
               "exported": "a copiat misiunea «{title}» în altă clasă",
-              "reordered": "a schimbat ordinea misiunilor"
+              "reordered": "a schimbat ordinea misiunilor",
+              "prerequisites_changed": "a schimbat ce trebuie finalizat ca să se deschidă misiunea «{title}»",
+              "chained": "a înlănțuit misiunile în ordine: fiecare o cere pe cea anterioară",
+              "prerequisites_cleared": "a eliminat cerințele drumului misiunilor"
             },
             "enigma": {
               "created": "a adăugat enigma «{title}»",
@@ -863,7 +880,16 @@
           "team_set_none": "Individual (fără echipe)",
           "team_set_hint": "Doar informativ: clasa vede cu ce echipe se face și poți aproba o echipă întreagă dintr-odată. Fiecare elev continuă să-și predea partea.",
           "basics_title": "Datele misiunii",
-          "play_title": "Dificultate și vizibilitate"
+          "play_title": "Dificultate și vizibilitate",
+          "path_title": "Drum",
+          "path_hint": "Fiecare elev o va vedea închisă până finalizează toate misiunile pe care le bifezi. Pentru cine a început-o deja nu se închide.",
+          "path_legend": "Ca să se deschidă, de finalizat înainte",
+          "path_map_off": "Ce trebuie finalizat înainte de a deschide o misiune contează doar cu harta misiunilor pornită. Se pornește din setările clasei, la Funcționalități.",
+          "path_empty": "Nu există alte misiuni în clasă.",
+          "path_cycle_reason": "Are deja nevoie de această misiune ca să se deschidă: dacă o ceri, s-ar închide un cerc.",
+          "path_limit": "Cel mult {max}. Ca să alegi alta, debifează una.",
+          "path_moved": "Salvat. Misiunea a trecut după ce cere, în ordinea clasei.",
+          "path_load_error": "Nu s-au putut încărca misiunile clasei."
         }
       },
       "import": {

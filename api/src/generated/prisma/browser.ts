@@ -83,6 +83,11 @@ export type ShopItemUse = Prisma.ShopItemUseModel
  */
 export type Mission = Prisma.MissionModel
 /**
+ * Model MissionPrerequisite
+ * 
+ */
+export type MissionPrerequisite = Prisma.MissionPrerequisiteModel
+/**
  * Model MissionDocument
  * 
  */

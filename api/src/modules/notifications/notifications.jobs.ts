@@ -1,6 +1,8 @@
 import { prisma } from '../../config/database.js'
 import { registerJob, type JobContext } from '../../utils/scheduler.js'
 import { notifyMany, type NotifyInput } from './notifications.service.js'
+import { resolveClassSettings } from '../../utils/class-settings.js'
+import { missionPathLock } from '../../utils/mission-path.js'
 
 /**
  * Tareas periódicas de notificaciones (Fase 3, punto 3).
@@ -32,7 +34,8 @@ function hoursLeft(deadline: Date, now: Date) {
  * Solo se avisa a quien todavía puede hacer algo: alumnos matriculados en una
  * clase activa que no han completado la misión y que no han desactivado los
  * recordatorios en su perfil (`UserSettings.missionReminders`, que hasta ahora
- * era un interruptor que no leía nadie).
+ * era un interruptor que no leía nadie). Tampoco a quien la tiene cerrada por el
+ * camino del mapa de misiones: aún no puede entrar en ella.
  */
 async function runDeadlineReminders({ now }: JobContext) {
   const until = new Date(now.getTime() + REMINDER_LEAD_HOURS * HOUR)
@@ -48,7 +51,7 @@ async function runDeadlineReminders({ now }: JobContext) {
       title: true,
       deadline: true,
       classId: true,
-      class: { select: { name: true } },
+      class: { select: { name: true, settings: true } },
       progress: { select: { studentId: true, completedAt: true } },
     },
   })
@@ -87,11 +90,24 @@ async function runDeadlineReminders({ now }: JobContext) {
     )
 
     const remaining = hoursLeft(mission.deadline, now)
+    // Con el mapa encendido, a quien la tiene cerrada por el camino (le falta
+    // completar otra antes) no se le avisa: aún no puede hacer nada en ella.
+    const onPath = resolveClassSettings(mission.class.settings).missionMap
 
     for (const enrollment of byClass.get(mission.classId) ?? []) {
       if (completed.has(enrollment.studentId)) continue
       const settings = enrollment.student.settings
       if (settings && !settings.missionReminders) continue
+      if (
+        onPath &&
+        (await missionPathLock(
+          prisma,
+          { id: mission.id, classId: mission.classId, settings: mission.class.settings },
+          enrollment.studentId
+        ))
+      ) {
+        continue
+      }
 
       avisos.push({
         userId: enrollment.studentId,

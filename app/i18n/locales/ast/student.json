@@ -63,7 +63,8 @@
       },
       "locked_toast": "El to docente zarró esta misión de momentu. Vas poder entrar cuando l’abra.",
       "locked_aria": "{title}: misión zarrada de momentu",
-      "expired_on": "Caducó: {date}"
+      "expired_on": "Caducó: {date}",
+      "locked_path_aria": "{title}: ábrese al completar {missions}"
     },
     "mission_detail": {
       "meta": {
@@ -89,7 +90,8 @@
         "success": "Entrega unviada correutamente. El to docente va revisala ceo.",
         "error": "Fallu al unviar la entrega. Inténtalo otra vuelta.",
         "expired_error": "Esta misión caducó. Yá nun pues entregar enigmes.",
-        "downloading": "Baxando"
+        "downloading": "Baxando",
+        "path_locked": "Esta misión entá nun ta abierta: enantes tienes de completar otra."
       },
       "hints": {
         "intro": "¿Atascástite? Usa una pista. Ábrense n'orde, d'una en una, y cada una tien el so costu.",
@@ -110,6 +112,12 @@
         "used_announcement": "Usesti la pista {position}.",
         "use_error": "Nun se pudo usar la pista.",
         "bonus_penalty": "−{count} % poles tos pistes"
+      },
+      "path_locked": {
+        "title": "Entá nun pues entamar esta misión",
+        "description": "Ábrese al completar {missions}. Entós vas ver la so historia, los sos enigmes y los sos documentos.",
+        "go_to": "Dir a «{title}»",
+        "back": "Volver a les misiones"
       }
     },
     "classes": {
