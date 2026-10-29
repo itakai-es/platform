@@ -37,6 +37,7 @@
         v-slot="{ labelId }"
         :label="t('teacher.components.mission_hints.form.cost_type')"
       >
+        <!-- Cada forma de pago con el icono de su recurso, como en las recompensas -->
         <OptionPillGroup
           v-model="form.costType"
           :options="costTypeOptions"
@@ -44,7 +45,16 @@
           :columns="3"
           min-item-width="8rem"
           :aria-labelledby="labelId"
-        />
+        >
+          <template #option="{ option }">
+            <span class="flex flex-col items-center gap-1.5 py-1">
+              <CoinIcon v-if="option.value === 'coins'" class="h-8 w-8" />
+              <XpIcon v-else-if="option.value === 'xp'" class="h-8 w-8" />
+              <ReceiptPercentIcon v-else class="h-8 w-8" aria-hidden="true" />
+              <span>{{ option.label }}</span>
+            </span>
+          </template>
+        </OptionPillGroup>
       </FieldGroup>
 
       <FieldGroup
@@ -75,7 +85,15 @@
             class="min-w-0 sm:flex-1"
             :aria-label="t('teacher.components.mission_hints.form.presets')"
             @update:model-value="pickPreset"
-          />
+          >
+            <template #option="{ option }">
+              <span class="inline-flex items-center justify-center gap-1">
+                <CoinIcon v-if="form.costType === 'coins'" class="h-4 w-4" />
+                <XpIcon v-else-if="form.costType === 'xp'" class="h-4 w-4" />
+                <span>{{ option.label }}</span>
+              </span>
+            </template>
+          </OptionPillGroup>
         </div>
       </FieldGroup>
 
@@ -140,7 +158,7 @@
 </template>
 
 <script setup lang="ts">
-import { TrashIcon } from '@heroicons/vue/24/outline'
+import { ReceiptPercentIcon, TrashIcon } from '@heroicons/vue/24/outline'
 import type { MissionHintCostType, MissionHintDetail } from '~/types/mission-detail.types'
 import type { MissionHintInput } from '~/composables/useMissionHints'
 import { HINT_COST_PRESETS, HINT_LIMITS, clampHintCost } from '~/utils/mission-hints'
