@@ -1260,7 +1260,8 @@
           "completion_desc": "Completion ↓",
           "completion_asc": "Completion ↑",
           "class_order": "Class order"
-        }
+        },
+        "map_note": "The map shows all the class missions, in their order."
       },
       "rewards_form_modal": {
         "title": "Edit rewards",

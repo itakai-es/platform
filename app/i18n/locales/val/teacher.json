@@ -1260,7 +1260,8 @@
           "completion_desc": "Compleció ↓",
           "completion_asc": "Compleció ↑",
           "class_order": "Orde de la classe"
-        }
+        },
+        "map_note": "En el mapa ixen totes les missions de la classe, en el seu orde."
       },
       "rewards_form_modal": {
         "title": "Editar recompenses",

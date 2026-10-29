@@ -1260,7 +1260,8 @@
           "completion_desc": "Finalizare ↓",
           "completion_asc": "Finalizare ↑",
           "class_order": "Ordinea clasei"
-        }
+        },
+        "map_note": "Pe hartă apar toate misiunile clasei, în ordinea lor."
       },
       "rewards_form_modal": {
         "title": "Editează recompensele",

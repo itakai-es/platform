@@ -10,6 +10,7 @@
     :view="view"
     :view-modes="viewModes"
     :view-only="view === 'map'"
+    :view-only-note="t('teacher.components.mission_filter_bar.map_note')"
     variant="red"
     @update:search="$emit('update:search', $event)"
     @update:sort="$emit('update:sort', $event)"

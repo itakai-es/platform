@@ -6,6 +6,14 @@
       class="flex gap-2 sm:gap-3 items-center"
       :class="{ 'flex-wrap sm:flex-nowrap': searchOwnRow }"
     >
+      <!-- Sin buscador ni filtros (el mapa): una nota ocupa su sitio, así la vista y el
+           recuento siguen a la derecha, como en las otras vistas. -->
+      <p
+        v-if="viewOnly && viewOnlyNote"
+        class="min-w-0 flex-1 px-2 text-sm font-medium text-navy-700"
+      >
+        {{ viewOnlyNote }}
+      </p>
       <div
         v-if="!hideSearch && !viewOnly"
         class="min-w-0"
@@ -117,6 +125,8 @@ interface Props {
    * vista que enseña la lista entera (el mapa de misiones).
    */
   viewOnly?: boolean
+  /** Lo que se dice a la izquierda en la vista que enseña la lista entera. */
+  viewOnlyNote?: string
   /** Oculta el buscador, para listas que solo se filtran por los desplegables. */
   hideSearch?: boolean
 }
@@ -129,6 +139,7 @@ const props = withDefaults(defineProps<Props>(), {
   activeFilterCount: 0,
   viewModes: undefined,
   viewOnly: false,
+  viewOnlyNote: undefined,
   hideSearch: false,
 })
 

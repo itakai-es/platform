@@ -1260,7 +1260,8 @@
           "completion_desc": "Osatze-tasa ↓",
           "completion_asc": "Osatze-tasa ↑",
           "class_order": "Klaseko ordena"
-        }
+        },
+        "map_note": "Mapan klaseko misio guztiak ageri dira, beren ordenan."
       },
       "rewards_form_modal": {
         "title": "Sariak editatu",

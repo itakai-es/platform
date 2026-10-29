@@ -1260,7 +1260,8 @@
           "completion_desc": "Completáu ↓",
           "completion_asc": "Completáu ↑",
           "class_order": "Orde de la clase"
-        }
+        },
+        "map_note": "Nel mapa salen toles misiones de la clase, nel so orde."
       },
       "rewards_form_modal": {
         "title": "Editar recompenses",
