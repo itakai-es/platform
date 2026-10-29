@@ -11,10 +11,14 @@ import type { FastifyInstance } from 'fastify'
  *   sin ciclos (tampoco con dos guardados a la vez), y la misión se recoloca
  *   detrás de lo que pide; reordenar no la pone delante.
  * - El cierre: solo con el mapa encendido, por estudiante, calculado al leer,
- *   en todas las vías (listados, detalle, documentos, entregar, pistas,
- *   empezar, el asistente); lo empezado no se cierra; la manual va por encima.
+ *   en todas las vías (listados, detalle, documentos, entregar, pistas, el
+ *   asistente, los recordatorios); lo empezado de verdad no se cierra; la
+ *   manual va por encima; un requisito caducado o sin enigmas no cierra; al
+ *   profesorado (vista previa) no se le cierra nada.
+ * - Lo que se enseña de una cerrada: sin su historia, ni para buscar.
  * - Completar: cuentan los enigmas obligatorios (también para lo ya aprobado).
- * - Encadenar en orden, quitar los requisitos y las copias.
+ * - Encadenar en orden, quitar los requisitos, el orden con el mapa apagado y
+ *   al encenderlo, y las copias.
  *
  * Usa Fastify, JWT, servicios y Postgres de verdad: necesita TEST_DATABASE_URL
  * (ver tests/helpers/test-db.ts). Solo se simula el correo.
@@ -37,6 +41,12 @@ import { submissionsService } from '../../src/modules/submissions/submissions.se
 import { StudentAgent } from '../../src/modules/ai/agents/student-agent.js'
 import { TeacherAgent } from '../../src/modules/ai/agents/teacher-agent.js'
 import { createClassWithOwner } from '../../src/utils/class-owner.js'
+import { registerNotificationJobs } from '../../src/modules/notifications/notifications.jobs.js'
+import { runJobNow } from '../../src/utils/scheduler.js'
+
+registerNotificationJobs()
+
+const HOUR = 3600_000
 
 /** Espera a que se cumpla `condition`, o falla a los cinco segundos. */
 async function waitUntil(condition: () => Promise<boolean>, what: string) {
@@ -73,9 +83,10 @@ type Actor = 'owner' | 'other' | 'student' | 'outsider'
 interface StudentListed {
   id: string
   title: string
+  description: string | null
   status: string
   lockReason: 'teacher' | 'path' | null
-  requires: { id: string; title: string }[]
+  requires: { id: string; title: string; state: 'open' | 'teacher' }[]
   prerequisiteIds: string[]
 }
 
@@ -169,12 +180,28 @@ describeWithDatabase('camino del mapa de misiones: requisitos y cierre por estud
     ).map(m => m.title)
 
   /** El listado de la clase que ve el alumno, por título. */
-  async function studentList(url = `/students/classes/${f.classId}/missions`) {
-    const res = await app.inject({ method: 'GET', url, headers: as('student') })
+  async function studentList(url = `/students/classes/${f.classId}/missions`, actor: Actor = 'student') {
+    const res = await app.inject({ method: 'GET', url, headers: as(actor) })
     expect(res.statusCode, res.body).toBe(200)
     return new Map(
       (res.json().missions as StudentListed[]).map(m => [m.title, m] as const)
     )
+  }
+
+  /** Entrega un enigma (sin fichero), como `actor`. */
+  const submit = (enigmaId: string, actor: Actor = 'student') =>
+    app.inject({
+      method: 'POST',
+      url: `/submissions/enigmas/${enigmaId}`,
+      headers: { ...as(actor), ...formData({ nota: 'hecho' }).headers },
+      payload: formData({ nota: 'hecho' }).payload,
+    })
+
+  /** El detalle de una misión, como `actor`. */
+  async function detailOf(missionId: string, actor: Actor = 'student') {
+    const res = await app.inject({ method: 'GET', url: `/missions/${missionId}`, headers: as(actor) })
+    expect(res.statusCode, res.body).toBe(200)
+    return res.json().mission
   }
 
   /** Entrega y aprueba (100 %) un enigma para el alumno. */
@@ -338,7 +365,7 @@ describeWithDatabase('camino del mapa de misiones: requisitos y cierre por estud
 
   // ---- El cierre por estudiante ----
 
-  it('cerrada por el camino en todas las vías: listados, detalle, documentos, entregar, pista y empezar', async () => {
+  it('cerrada por el camino en todas las vías: listados, detalle, documentos, entregar y pista', async () => {
     const a = await mission('A')
     const b = await mission('B')
     expect((await setPrerequisites(b.id, [a.id])).statusCode).toBe(200)
@@ -350,7 +377,7 @@ describeWithDatabase('camino del mapa de misiones: requisitos y cierre por estud
     expect(list.get('B')).toMatchObject({
       status: 'bloqueada',
       lockReason: 'path',
-      requires: [{ id: a.id, title: 'A' }],
+      requires: [{ id: a.id, title: 'A', state: 'open' }],
       prerequisiteIds: [a.id],
     })
     // Los listados que mezclan clases, igual.
@@ -376,7 +403,16 @@ describeWithDatabase('camino del mapa de misiones: requisitos y cierre por estud
       expect(res.json().code).toBe('MISSION_PATH_LOCKED')
     }
     locked(await app.inject({ method: 'GET', url: `/missions/${b.id}/documents`, headers: as('student') }))
-    locked(await app.inject({ method: 'GET', url: `/files/documents/${document}`, headers: as('student') }))
+    // La descarga del documento, como cualquier fichero sin acceso: 404, sin decir qué falta.
+    for (const download of [
+      { method: 'GET' as const, url: `/files/documents/${document}` },
+      { method: 'POST' as const, url: `/files/documents/${document}/link` },
+    ]) {
+      const res = await app.inject({ ...download, headers: as('student') })
+      expect(res.statusCode, download.url).toBe(404)
+      expect(res.json().code).not.toBe('MISSION_PATH_LOCKED')
+      expect(res.body).not.toContain('«')
+    }
     locked(
       await app.inject({
         method: 'POST',
@@ -393,7 +429,6 @@ describeWithDatabase('camino del mapa de misiones: requisitos y cierre por estud
         payload: {},
       })
     )
-    locked(await app.inject({ method: 'POST', url: `/missions/${b.id}/start`, headers: as('student') }))
     expect(await prisma.enigmaSubmission.count({ where: { enigmaId: b.enigmaIds[0] } })).toBe(0)
     expect(await prisma.missionHintUse.count({ where: { missionId: b.id } })).toBe(0)
 
@@ -743,5 +778,336 @@ describeWithDatabase('camino del mapa de misiones: requisitos y cierre por estud
     })
     expect(teacherPrompt).toContain('Opens for each student after completing: «Primera parada»')
     expect(teacherPrompt).toContain('se abre al completar «Primera parada»')
+  })
+
+  // ---- Lo que cuenta como empezada ----
+
+  it('empezar es trabajo de verdad: una fila de progreso vacía no abre nada; un enigma aprobado o completado, sí', async () => {
+    const studentId = f.users.student.id
+    const a = await mission('A')
+    const empty = await mission('Fila vacía')
+    const counted = await mission('Con progreso')
+    const approved = await mission('Con aprobado', { enigmas: [false, false] })
+    await prisma.studentMissionProgress.create({
+      data: { studentId, missionId: empty.id, progress: 0, enigmasCompleted: 0 },
+    })
+    await prisma.studentMissionProgress.create({
+      data: { studentId, missionId: counted.id, progress: 50, enigmasCompleted: 1 },
+    })
+    await prisma.studentEnigmaProgress.create({
+      data: { studentId, enigmaId: approved.enigmaIds[0]!, xpEarned: 10, percentage: 100 },
+    })
+    for (const m of [empty, counted, approved]) {
+      expect((await setPrerequisites(m.id, [a.id])).statusCode).toBe(200)
+    }
+
+    const list = await studentList()
+    expect(list.get('Fila vacía')?.lockReason).toBe('path')
+    expect(list.get('Con progreso')?.lockReason).toBeNull()
+    expect(list.get('Con aprobado')?.lockReason).toBeNull()
+    // Ni entregar en la de la fila vacía.
+    expect((await submit(empty.enigmaIds[0]!)).statusCode).toBe(409)
+
+    // La ruta que creaba esa fila vacía ya no existe.
+    const start = await app.inject({
+      method: 'POST',
+      url: `/missions/${empty.id}/start`,
+      headers: as('student'),
+    })
+    expect(start.statusCode).toBe(404)
+  })
+
+  // ---- Requisitos que no se pueden cumplir ----
+
+  it('un requisito caducado no cierra (listado, detalle y entrega); alargarle la fecha vuelve a cerrar, salvo a quien ya empezó', async () => {
+    const a = await mission('A')
+    const b = await mission('B')
+    expect((await setPrerequisites(b.id, [a.id])).statusCode).toBe(200)
+    await prisma.mission.update({ where: { id: a.id }, data: { deadline: new Date(Date.now() - HOUR) } })
+
+    const list = await studentList()
+    expect(list.get('A')?.status).toBe('expirada')
+    expect(list.get('B')).toMatchObject({ status: 'activa', lockReason: null, requires: [] })
+    for (const url of ['/students/missions', '/missions']) {
+      expect((await studentList(url)).get('B')?.lockReason, url).toBeNull()
+    }
+    const detail = await detailOf(b.id)
+    expect(detail).toMatchObject({ lockReason: null, requires: [] })
+    expect(detail.enigmas).toHaveLength(1)
+    // El profesorado ve en el editor que lo que pide ha caducado.
+    expect((await detailOf(b.id, 'owner')).prerequisites).toEqual([
+      { id: a.id, title: 'A', status: 'expirada' },
+    ])
+    const submitted = await submit(b.enigmaIds[0]!)
+    expect(submitted.statusCode, submitted.body).toBe(201)
+
+    // Con la fecha alargada, A vuelve a cerrar B. No a quien ya la ha empezado
+    // (acaba de entregar), sí a quien no la ha tocado.
+    await prisma.mission.update({ where: { id: a.id }, data: { deadline: new Date(Date.now() + 48 * HOUR) } })
+    expect((await studentList()).get('B')?.lockReason).toBeNull()
+    await prisma.classEnrollment.create({ data: { classId: f.classId, studentId: f.users.outsider.id } })
+    try {
+      expect((await studentList(undefined, 'outsider')).get('B')).toMatchObject({
+        lockReason: 'path',
+        requires: [{ id: a.id, state: 'open' }],
+      })
+      expect((await submit(b.enigmaIds[0]!, 'outsider')).statusCode).toBe(409)
+    } finally {
+      await prisma.classEnrollment.deleteMany({
+        where: { classId: f.classId, studentId: f.users.outsider.id },
+      })
+    }
+  })
+
+  it('un requisito sin enigmas no cierra; uno bloqueado a mano sí, con su estado, salvo que además haya caducado', async () => {
+    const empty = await mission('Vacía', { enigmas: [] })
+    const blocked = await mission('Cerrada a mano', { status: 'bloqueada' })
+    const b = await mission('Pide la vacía')
+    const c = await mission('Pide la cerrada')
+    expect((await setPrerequisites(b.id, [empty.id])).statusCode).toBe(200)
+    expect((await setPrerequisites(c.id, [blocked.id])).statusCode).toBe(200)
+
+    const list = await studentList()
+    expect(list.get('Pide la vacía')).toMatchObject({ lockReason: null, requires: [] })
+    // «Ir a «Cerrada a mano»» no llevaría a nada: el requisito dice que lo ha cerrado su docente.
+    expect(list.get('Pide la cerrada')).toMatchObject({
+      lockReason: 'path',
+      requires: [{ id: blocked.id, title: 'Cerrada a mano', state: 'teacher' }],
+    })
+    for (const url of ['/students/missions', '/missions']) {
+      expect((await studentList(url)).get('Pide la cerrada')?.requires, url).toEqual([
+        { id: blocked.id, title: 'Cerrada a mano', state: 'teacher' },
+      ])
+    }
+    expect((await detailOf(c.id)).requires).toEqual([
+      { id: blocked.id, title: 'Cerrada a mano', state: 'teacher' },
+    ])
+    expect((await detailOf(c.id, 'owner')).prerequisites).toEqual([
+      { id: blocked.id, title: 'Cerrada a mano', status: 'bloqueada' },
+    ])
+
+    // Bloqueada y caducada: ya no cierra.
+    await prisma.mission.update({ where: { id: blocked.id }, data: { deadline: new Date(Date.now() - HOUR) } })
+    expect((await studentList()).get('Pide la cerrada')).toMatchObject({ lockReason: null, requires: [] })
+    expect((await detailOf(c.id)).lockReason).toBeNull()
+  })
+
+  // ---- Lo que se enseña de una cerrada ----
+
+  it('los listados no enseñan la historia de las cerradas, y buscar por ella no las encuentra', async () => {
+    const a = await mission('A')
+    const b = await mission('Ruta cerrada')
+    const c = await mission('Bloqueada a mano', { status: 'bloqueada' })
+    await prisma.mission.updateMany({
+      where: { id: { in: [a.id, b.id, c.id] } },
+      data: { description: 'El secreto del laberinto' },
+    })
+    expect((await setPrerequisites(b.id, [a.id])).statusCode).toBe(200)
+
+    for (const url of [`/students/classes/${f.classId}/missions`, '/students/missions', '/missions']) {
+      const list = await studentList(url)
+      expect(list.get('A')?.description, url).toBe('El secreto del laberinto')
+      expect(list.get('Ruta cerrada')?.description, url).toBeNull()
+      expect(list.get('Bloqueada a mano')?.description, url).toBeNull()
+    }
+
+    const found = async (search: string) =>
+      [...(await studentList(`/missions?search=${encodeURIComponent(search)}`)).keys()].sort()
+    expect(await found('laberinto')).toEqual(['A'])
+    // Por el título, sí.
+    expect(await found('cerrada')).toEqual(['Ruta cerrada'])
+    expect(await found('a mano')).toEqual(['Bloqueada a mano'])
+
+    // Abierta la ruta (A completada), su historia ya se ve y se encuentra.
+    await approve(a.enigmaIds[0]!)
+    expect((await studentList()).get('Ruta cerrada')?.description).toBe('El secreto del laberinto')
+    expect(await found('laberinto')).toEqual(['A', 'Ruta cerrada'])
+  })
+
+  // ---- El profesorado ----
+
+  it('al profesorado no se le cierra nada: en la vista previa lo ve todo abierto, con su camino, y entrega', async () => {
+    const a = await mission('A')
+    const b = await mission('B')
+    expect((await setPrerequisites(b.id, [a.id])).statusCode).toBe(200)
+    const preview = await app.inject({ method: 'POST', url: '/students/preview/enroll', headers: as('owner') })
+    expect(preview.statusCode, preview.body).toBe(200)
+    try {
+      // Por id: la vista previa mezcla otras clases suyas (las copias de antes también tienen «B»).
+      for (const url of [`/students/classes/${f.classId}/missions`, '/students/missions', '/missions']) {
+        const res = await app.inject({ method: 'GET', url, headers: as('owner') })
+        expect(res.statusCode, res.body).toBe(200)
+        expect((res.json().missions as StudentListed[]).find(m => m.id === b.id), url).toMatchObject({
+          status: 'activa',
+          lockReason: null,
+          requires: [],
+          prerequisiteIds: [a.id],
+        })
+      }
+      const submitted = await submit(b.enigmaIds[0]!, 'owner')
+      expect(submitted.statusCode, submitted.body).toBe(201)
+    } finally {
+      await prisma.enigmaSubmission.deleteMany({ where: { studentId: f.users.owner.id } })
+      await prisma.activity.deleteMany({ where: { userId: f.users.owner.id } })
+      await prisma.classEnrollment.deleteMany({ where: { studentId: f.users.owner.id } })
+    }
+  })
+
+  // ---- Recordatorios ----
+
+  it('recordatorios: a quien la tiene cerrada por el camino no se le avisa; al completar lo que pide, sí', async () => {
+    const studentId = f.users.student.id
+    const a = await mission('A')
+    const b = await mission('B')
+    await prisma.mission.updateMany({
+      where: { id: { in: [a.id, b.id] } },
+      data: { deadline: new Date(Date.now() + 10 * HOUR) },
+    })
+    expect((await setPrerequisites(b.id, [a.id])).statusCode).toBe(200)
+    const reminded = async () =>
+      (
+        await prisma.notification.findMany({
+          where: { userId: studentId, type: 'deadline_reminder' },
+          select: { metadata: true },
+        })
+      )
+        .map(n => (n.metadata as { missionId: string }).missionId)
+        .filter(id => id === a.id || id === b.id)
+        .sort()
+    try {
+      await runJobNow('deadline-reminders')
+      expect(await reminded()).toEqual([a.id])
+
+      await approve(a.enigmaIds[0]!)
+      await runJobNow('deadline-reminders')
+      expect(await reminded()).toEqual([a.id, b.id].sort())
+    } finally {
+      await prisma.notification.deleteMany({ where: { userId: studentId } })
+    }
+  })
+
+  // ---- Mover y editar ----
+
+  it('mover una misión exige edición en las dos clases', async () => {
+    const m = await mission('Viajera')
+    // El propietario de la clase entra en la otra solo con lectura.
+    await prisma.classTeacher.create({
+      data: { classId: f.otherClassId, userId: f.users.owner.id, access: 'read', profile: 'practicas' },
+    })
+    const move = () =>
+      app.inject({
+        method: 'PATCH',
+        url: `/missions/${m.id}`,
+        headers: as('owner'),
+        payload: { classId: f.otherClassId },
+      })
+    try {
+      expect((await move()).statusCode).toBe(403)
+      expect((await prisma.mission.findUniqueOrThrow({ where: { id: m.id } })).classId).toBe(f.classId)
+
+      await prisma.classTeacher.update({
+        where: { classId_userId: { classId: f.otherClassId, userId: f.users.owner.id } },
+        data: { access: 'edit' },
+      })
+      const moved = await move()
+      expect(moved.statusCode, moved.body).toBe(200)
+      expect((await prisma.mission.findUniqueOrThrow({ where: { id: m.id } })).classId).toBe(f.otherClassId)
+    } finally {
+      await prisma.classTeacher.deleteMany({
+        where: { classId: f.otherClassId, userId: f.users.owner.id },
+      })
+    }
+  })
+
+  it('editar una misión que se va a otra clase mientras espera el cerrojo: 404, sin tocarla', async () => {
+    const m = await mission('Viajera')
+
+    let locked!: () => void
+    let release!: () => void
+    const isLocked = new Promise<void>(resolve => (locked = resolve))
+    const held = new Promise<void>(resolve => (release = resolve))
+    const holder = prisma.$transaction(
+      async tx => {
+        await tx.$queryRaw`SELECT id FROM classes WHERE id = ${f.classId} FOR NO KEY UPDATE`
+        locked()
+        await held
+        // Otra persona se la lleva a la otra clase antes de soltar el cerrojo.
+        await tx.mission.update({ where: { id: m.id }, data: { classId: f.otherClassId } })
+      },
+      { timeout: 15000 }
+    )
+    await isLocked
+    const edit = app.inject({
+      method: 'PATCH',
+      url: `/missions/${m.id}`,
+      headers: as('owner'),
+      payload: { title: 'Cambiada' },
+    })
+    await waitUntil(async () => (await pathLockWaits()) >= 1, 'la edición espera al cerrojo')
+    release()
+    await holder
+
+    const res = await edit
+    expect(res.statusCode, res.body).toBe(404)
+    expect(await prisma.mission.findUniqueOrThrow({ where: { id: m.id } })).toMatchObject({
+      classId: f.otherClassId,
+      title: 'Viajera',
+    })
+  })
+
+  // ---- El orden con el mapa apagado ----
+
+  it('con el mapa apagado, reordenar no mira el camino; al encenderlo se recoloca lo justo', async () => {
+    const a = await mission('A')
+    const b = await mission('B')
+    const c = await mission('C')
+    expect((await setPrerequisites(b.id, [a.id])).statusCode).toBe(200)
+    await mapOn(false)
+
+    const order = (ids: string[]) =>
+      app.inject({
+        method: 'PUT',
+        url: `/teacher/classes/${f.classId}/missions/order`,
+        headers: as('owner'),
+        payload: { ids },
+      })
+    const reordered = await order([b.id, c.id, a.id])
+    expect(reordered.statusCode, reordered.body).toBe(200)
+    expect(await titlesIn()).toEqual(['B', 'C', 'A'])
+    // Guardar requisitos tampoco mueve nada con el mapa apagado.
+    const saved = await setPrerequisites(c.id, [a.id])
+    expect(saved.statusCode, saved.body).toBe(200)
+    expect(saved.json().moved).toBe(0)
+    expect(await titlesIn()).toEqual(['B', 'C', 'A'])
+
+    const turnOn = () =>
+      app.inject({
+        method: 'PUT',
+        url: `/teacher/classes/${f.classId}`,
+        headers: as('owner'),
+        payload: { settings: { missionMap: true } },
+      })
+    const on = await turnOn()
+    expect(on.statusCode, on.body).toBe(200)
+    expect(on.json().class.settings.missionMap).toBe(true)
+    expect(await titlesIn()).toEqual(['A', 'B', 'C'])
+    const logs = await prisma.classActionLog.findMany({
+      where: { classId: f.classId, action: 'mission.reordered' },
+      orderBy: { createdAt: 'asc' },
+    })
+    expect(logs.map(l => l.metadata)).toEqual([
+      { count: 3, moved: 3 },
+      { count: 3, moved: 3 },
+    ])
+
+    // Ya en orden, encenderlo otra vez no escribe ni apunta nada; y con el mapa
+    // encendido, reordenar contra el camino vuelve a rechazarse.
+    expect((await turnOn()).statusCode).toBe(200)
+    expect(
+      await prisma.classActionLog.count({ where: { classId: f.classId, action: 'mission.reordered' } })
+    ).toBe(2)
+    const broken = await order([b.id, a.id, c.id])
+    expect(broken.statusCode).toBe(409)
+    expect(broken.json().code).toBe('MISSION_ORDER_BREAKS_PATH')
   })
 })

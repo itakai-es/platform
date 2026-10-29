@@ -2,7 +2,13 @@ import { prisma } from '../../config/database.js'
 import { registerJob, type JobContext } from '../../utils/scheduler.js'
 import { notifyMany, type NotifyInput } from './notifications.service.js'
 import { resolveClassSettings } from '../../utils/class-settings.js'
-import { missionPathLock } from '../../utils/mission-path.js'
+import {
+  classPathEdges,
+  locksFromEdges,
+  walksPath,
+  type PathEdge,
+  type PathRequirement,
+} from '../../utils/mission-path.js'
 
 /**
  * Tareas periódicas de notificaciones (Fase 3, punto 3).
@@ -69,7 +75,7 @@ async function runDeadlineReminders({ now }: JobContext) {
     select: {
       classId: true,
       studentId: true,
-      student: { select: { settings: { select: { missionReminders: true } } } },
+      student: { select: { role: true, settings: { select: { missionReminders: true } } } },
     },
   })
 
@@ -78,6 +84,29 @@ async function runDeadlineReminders({ now }: JobContext) {
     const list = byClass.get(enrollment.classId)
     if (list) list.push(enrollment)
     else byClass.set(enrollment.classId, [enrollment])
+  }
+
+  // El camino del mapa, sin repetir consultas: las aristas de cada clase con el
+  // mapa encendido se leen una vez, y lo que tiene cerrado cada estudiante se
+  // calcula una vez por clase (sirve para todas las misiones que le vencen allí),
+  // solo para quien de verdad iba a recibir el aviso.
+  const edgesByClass = new Map<string, PathEdge[]>()
+  for (const mission of missions) {
+    if (edgesByClass.has(mission.classId)) continue
+    if (!resolveClassSettings(mission.class.settings).missionMap) continue
+    edgesByClass.set(mission.classId, await classPathEdges(prisma, mission.classId))
+  }
+  const locksByStudent = new Map<string, Map<string, PathRequirement[]>>()
+  async function pathLocked(missionId: string, classId: string, studentId: string) {
+    const edges = edgesByClass.get(classId)
+    if (!edges || edges.length === 0) return false
+    const key = `${classId}:${studentId}`
+    let locks = locksByStudent.get(key)
+    if (!locks) {
+      locks = await locksFromEdges(prisma, edges, studentId, now)
+      locksByStudent.set(key, locks)
+    }
+    return locks.has(missionId)
   }
 
   const avisos: NotifyInput[] = []
@@ -90,21 +119,17 @@ async function runDeadlineReminders({ now }: JobContext) {
     )
 
     const remaining = hoursLeft(mission.deadline, now)
-    // Con el mapa encendido, a quien la tiene cerrada por el camino (le falta
-    // completar otra antes) no se le avisa: aún no puede hacer nada en ella.
-    const onPath = resolveClassSettings(mission.class.settings).missionMap
 
     for (const enrollment of byClass.get(mission.classId) ?? []) {
       if (completed.has(enrollment.studentId)) continue
       const settings = enrollment.student.settings
       if (settings && !settings.missionReminders) continue
+      // Con el mapa encendido, a quien la tiene cerrada por el camino (le falta
+      // completar otra antes) no se le avisa: aún no puede hacer nada en ella.
+      // Al profesorado no se le cierra nada (ver `walksPath`).
       if (
-        onPath &&
-        (await missionPathLock(
-          prisma,
-          { id: mission.id, classId: mission.classId, settings: mission.class.settings },
-          enrollment.studentId
-        ))
+        walksPath({ id: enrollment.studentId, role: enrollment.student.role }) &&
+        (await pathLocked(mission.id, mission.classId, enrollment.studentId))
       ) {
         continue
       }

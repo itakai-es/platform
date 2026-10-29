@@ -143,22 +143,6 @@ export async function missionsRoutes(fastify: FastifyInstance) {
     }
   })
 
-  // Start mission
-  fastify.post('/:missionId/start', async (request: FastifyRequest<{ Params: { missionId: string } }>, reply: FastifyReply) => {
-    try {
-      const { id, role } = request.user as { id: string; role: string | null }
-      const { missionId } = request.params
-      const result = await missionsService.startMission({ id, role }, missionId)
-      return result
-    } catch (error) {
-      rethrowHttpError(error)
-      if (error instanceof Error) {
-        return reply.status(404).send({ message: error.message })
-      }
-      return reply.status(500).send({ message: 'Error interno' })
-    }
-  })
-
   // Teacher: Create mission
   fastify.post('/', async (request: FastifyRequest, reply: FastifyReply) => {
     try {

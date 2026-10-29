@@ -64,7 +64,10 @@ export interface FormattedMission {
    * persona). null si no está cerrada.
    */
   lockReason: 'teacher' | 'path' | null
-  /** Con `path`, lo que le falta completar, en el orden de la clase. */
+  /**
+   * Con `path`, lo que le falta completar, en el orden de la clase; cada uno con
+   * su `state` (`teacher` si su docente lo tiene cerrado a mano).
+   */
   requires: PathRequirement[]
   /** Lo que pide la misión en el mapa (ids), lo tenga hecho o no; vacío con el mapa apagado. */
   prerequisiteIds: string[]
@@ -153,11 +156,15 @@ export function formatMission(
   const pathLocked = requires.length > 0 && baseStatus !== 'completada' && baseStatus !== 'bloqueada'
   const status = pathLocked ? 'bloqueada' : baseStatus
   const lockReason = pathLocked ? 'path' : baseStatus === 'bloqueada' ? 'teacher' : null
+  // La historia de una misión cerrada (por el camino o a mano, aunque ya la
+  // tuviera completada) no sale en los listados: como en su detalle (ver
+  // `lockedMissionView`), se lee al abrirse.
+  const closed = pathLocked || mission.status === 'bloqueada'
 
   const formatted: FormattedMission = {
     id: mission.id,
     title: mission.title,
-    description: mission.description,
+    description: closed ? null : mission.description,
     classId: mission.classId,
     status,
     rarity: mission.rarity,

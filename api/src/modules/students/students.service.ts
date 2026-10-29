@@ -300,7 +300,8 @@ export class StudentsService {
     }
   }
 
-  async getClassMissions(userId: string, classId: string) {
+  async getClassMissions(user: ClassUser, classId: string) {
+    const userId = user.id
     // Verify enrollment
     const enrollment = await prisma.classEnrollment.findUnique({
       where: { studentId_classId: { studentId: userId, classId } },
@@ -322,8 +323,9 @@ export class StudentsService {
     })
 
     // El camino del mapa para esta persona: lo que pide cada misión y las que
-    // tiene cerradas por eso (solo con el mapa encendido en la clase).
-    const path = await classPathFor(prisma, classId, userId, missions[0]?.class.settings ?? null)
+    // tiene cerradas por eso (solo con el mapa encendido en la clase, y nada
+    // cerrado si mira el profesorado en la vista previa).
+    const path = await classPathFor(prisma, classId, user, missions[0]?.class.settings ?? null)
 
     return {
       missions: missions.map((m) =>
@@ -797,7 +799,7 @@ export class StudentsService {
     // El camino del mapa de cada clase para esta persona (ver getClassMissions).
     const paths = await classPathsFor(
       prisma,
-      userId,
+      user,
       missions.map(m => ({ id: m.classId, settings: m.class.settings }))
     )
 

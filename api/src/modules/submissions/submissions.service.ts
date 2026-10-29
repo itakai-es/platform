@@ -68,14 +68,15 @@ export class SubmissionsService {
     if (enigma.mission.deadline && new Date(enigma.mission.deadline) < new Date()) {
       throw new Error('La misión ha expirado y ya no admite entregas')
     }
-    // Cerrada por el camino del mapa (le falta completar otra antes): 409.
+    // Cerrada por el camino del mapa (le falta completar otra antes): 409. Al
+    // profesorado que entrega en la vista previa no se le cierra nada.
     await assertMissionOpenOnPath(
       {
         id: enigma.mission.id,
         classId: enigma.mission.classId,
         settings: enigma.mission.class.settings,
       },
-      studentId
+      user
     )
 
     const enrollment = await prisma.classEnrollment.findUniqueOrThrow({

@@ -54,7 +54,12 @@ import {
 import { missionRewards } from '../../utils/mission-formatter.js'
 import { completedMissionsByStudent } from '../../utils/ranking.js'
 import { MISSION_ORDER, nextMissionOrderIndex } from '../../utils/mission-order.js'
-import { classPathEdges, pathOrder } from '../../utils/mission-path.js'
+import {
+  classPathEdges,
+  lockMissionPath,
+  pathOrder,
+  placeAfterPrerequisites,
+} from '../../utils/mission-path.js'
 
 const BADGES_DIR = join(process.cwd(), 'uploads', 'badges')
 const COVERS_DIR = join(process.cwd(), 'uploads', 'covers')
@@ -430,7 +435,13 @@ export class TeachersService {
 
     const { settings: settingsPatch, levelConfig: levelConfigPatch, scheduleConfig: scheduleConfigPatch, ...rest } = data
 
+    // Encender el mapa: el orden vuelve a cumplir el camino (con el mapa apagado
+    // se ha podido ordenar sin mirarlo), dentro de esta misma transacción.
+    const turnsMapOn = settingsPatch?.missionMap === true
+
     const updated = await prisma.$transaction(async tx => {
+      // El camino de la clase, quieto hasta confirmar (ver `lockMissionPath`).
+      if (turnsMapOn) await lockMissionPath(tx, [classId])
       const saved = await tx.class.update({
         where: { id: classId },
         data: {
@@ -473,6 +484,23 @@ export class TeachersService {
           await tx.classEnrollment.updateMany({
             where: { classId, studentId: { in: ids } },
             data: { level: lvl },
+          })
+        }
+      }
+
+      // Lo que iba delante de lo que pide se coloca detrás, lo justo (ver
+      // `pathOrder`); si ya cumplía, no se escribe nada. Se apunta como un
+      // reordenar más, para que el historial diga por qué ha cambiado el orden.
+      if (turnsMapOn && resolveClassSettings(saved.settings).missionMap) {
+        const moved = await placeAfterPrerequisites(tx, classId)
+        if (moved > 0) {
+          await recordClassAction(tx, {
+            classId,
+            actorId: userId,
+            action: 'mission.reordered',
+            entityType: 'class',
+            entityId: classId,
+            metadata: { count: await tx.mission.count({ where: { classId } }), moved },
           })
         }
       }

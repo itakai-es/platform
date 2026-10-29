@@ -6,12 +6,15 @@ import {
   enigmasComplete,
   orderViolation,
   pathOrder,
+  requirementCloses,
+  walksPath,
 } from '../../src/utils/mission-path.js'
 
 /**
  * Las reglas del camino del mapa de misiones (E3, entrega 3) sin base de datos:
- * qué cuenta como completar, los ciclos, el orden que cumple el camino y la
- * cadena de «Encadenar en orden».
+ * qué cuenta como completar, cuándo un requisito deja de cerrar, a quién se le
+ * cierra, los ciclos, el orden que cumple el camino y la cadena de «Encadenar
+ * en orden».
  */
 
 const edge = (missionId: string, requiredMissionId: string) => ({ missionId, requiredMissionId })
@@ -42,6 +45,49 @@ describe('completar una misión', () => {
     ).toBe(true)
     expect(enigmasComplete([{ isOptional: true, approved: false }])).toBe(false)
     expect(enigmasComplete([])).toBe(false)
+  })
+})
+
+describe('cuándo un requisito sigue cerrando', () => {
+  const now = new Date('2026-10-29T12:00:00.000Z')
+  const pending = { isOptional: false, approved: false }
+  const requirement = (overrides: Partial<Parameters<typeof requirementCloses>[0]> = {}) => ({
+    deadline: null,
+    completed: false,
+    enigmas: [pending],
+    ...overrides,
+  })
+
+  it('cierra mientras no se ha completado y se puede completar', () => {
+    expect(requirementCloses(requirement(), now)).toBe(true)
+    // Con fecha por delante, también.
+    expect(requirementCloses(requirement({ deadline: new Date('2026-10-30T00:00:00.000Z') }), now)).toBe(true)
+  })
+
+  it('completado (con fecha o con sus obligatorios aprobados), no', () => {
+    expect(requirementCloses(requirement({ completed: true }), now)).toBe(false)
+    expect(
+      requirementCloses(
+        requirement({ enigmas: [{ isOptional: false, approved: true }, { isOptional: true, approved: false }] }),
+        now
+      )
+    ).toBe(false)
+  })
+
+  it('el que no se puede cumplir no cierra: caducado o sin enigmas', () => {
+    expect(requirementCloses(requirement({ deadline: new Date('2026-10-29T11:59:59.000Z') }), now)).toBe(false)
+    expect(requirementCloses(requirement({ enigmas: [] }), now)).toBe(false)
+    // Justo en la fecha aún no ha caducado (la comparación de `getMissionStatus`).
+    expect(requirementCloses(requirement({ deadline: now }), now)).toBe(true)
+  })
+})
+
+describe('a quién se le cierra', () => {
+  it('solo al alumnado: el profesorado (también en la vista previa) lo tiene todo abierto', () => {
+    expect(walksPath({ id: 'u', role: 'student' })).toBe(true)
+    expect(walksPath({ id: 'u', role: 'teacher' })).toBe(false)
+    expect(walksPath({ id: 'u', role: 'admin' })).toBe(false)
+    expect(walksPath({ id: 'u', role: null })).toBe(false)
   })
 })
 

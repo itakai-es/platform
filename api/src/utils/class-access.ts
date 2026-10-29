@@ -411,14 +411,15 @@ async function missionMembership(
     throw new NotFoundError(notFound)
   }
   // Cerrada por el camino (mapa de misiones): al alumno le existe, pero no
-  // entra hasta completar lo que pide. El profesorado la ve siempre.
+  // entra hasta completar lo que pide. El profesorado la ve siempre, también en
+  // la vista previa (ver `walksPath`).
   const pathLock = membership.teacher
     ? null
     : await missionPathLock(
         tx,
         // Los ajustes ya vienen con la misión: sin ellos, el de por defecto (apagado).
         { id: mission.id, classId: mission.classId, settings: mission.class.settings ?? null },
-        user.id
+        user
       )
   if (pathLock && !options.allowPathLocked) throw new MissionPathLockedError(pathLock)
   return { ...membership, classId: mission.classId, pathLock }
@@ -451,7 +452,11 @@ export async function assertMissionMember(
   return missionMembership(mission, 'Misión no encontrada', user, tx, options)
 }
 
-/** Igual que `assertMissionMember`, partiendo de un documento de la misión. */
+/**
+ * Igual que `assertMissionMember`, partiendo de un documento de la misión. Con la
+ * misión cerrada por el camino, 404 como cualquier fichero sin acceso, sin decir
+ * qué falta: eso lo cuentan las rutas de la misión (409).
+ */
 export async function assertDocumentMember(
   documentId: string,
   user: ClassUser,
@@ -462,7 +467,10 @@ export async function assertDocumentMember(
     select: { missionId: true, mission: { select: MISSION_FOR_MEMBER_SELECT } },
   })
   if (!document) throw new NotFoundError('Documento no encontrado')
-  const membership = await missionMembership(document.mission, 'Documento no encontrado', user, tx)
+  const membership = await missionMembership(document.mission, 'Documento no encontrado', user, tx, {
+    allowPathLocked: true,
+  })
+  if (membership.pathLock) throw new NotFoundError('Documento no encontrado')
   return { ...membership, missionId: document.missionId }
 }
 

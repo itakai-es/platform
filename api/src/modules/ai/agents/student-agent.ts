@@ -4,7 +4,7 @@ import { getPlatformContext, getSkinName } from '../platform-context.js'
 import { INCLUSIVE_LANGUAGE_ES } from '../prompts/index.js'
 import { calculateMissionTotalXP } from '../../../utils/xp-calculator.js'
 import { sortByClassOrder } from '../../../utils/mission-order.js'
-import { classPathsFor } from '../../../utils/mission-path.js'
+import { classPathsFor, type PathRequirement } from '../../../utils/mission-path.js'
 import {
   assertMissionMember,
   passesAccessCheck,
@@ -97,10 +97,12 @@ export class StudentAgent extends BaseAgent {
       ? missionProgress.map(item => `${item.mission.title} en ${item.mission.class.name} (${item.progress}%, ${item.mission._count.enigmas} enigmas)`).join('; ')
       : 'Sin misiones en progreso'
     // El camino del mapa: las cerradas hasta completar otra no son «disponibles»;
-    // van aparte, con lo que las abre, para que no se las proponga como siguiente paso.
+    // van aparte, con lo que las abre, para que no se las proponga como siguiente
+    // paso. Si lo que la abre lo tiene cerrado su docente, se dice: aún no puede
+    // hacerlo. Al profesorado en la vista previa no se le cierra nada.
     const paths = await classPathsFor(
       prisma,
-      context.userId,
+      { id: context.userId, role: context.role },
       availableMissions.map(m => ({ id: m.classId, settings: m.class.settings }))
     )
     const lockOf = (m: { id: string; classId: string }) => paths.get(m.classId)?.locks.get(m.id)
@@ -110,8 +112,10 @@ export class StudentAgent extends BaseAgent {
     const availableMissionsSummary = openMissions.length > 0
       ? openMissions.map(m => `${m.title} en ${m.class.name} (${m.rarity}, ${m._count.enigmas} enigmas${m.description ? ': ' + m.description.slice(0, 80) : ''})`).join('; ')
       : 'Sin misiones disponibles'
+    const requirementName = (r: PathRequirement) =>
+      r.state === 'teacher' ? `«${r.title}», que ahora tiene cerrada su docente` : `«${r.title}»`
     const pathLockedSummary = pathLocked
-      .map(m => `${m.title} en ${m.class.name} (se abre al completar ${lockOf(m)!.map(r => `«${r.title}»`).join(' y ')})`)
+      .map(m => `${m.title} en ${m.class.name} (se abre al completar ${lockOf(m)!.map(requirementName).join(' y ')})`)
       .join('; ')
 
     const studentName = student?.name?.split(' ')[0] || ''
@@ -179,7 +183,7 @@ export class StudentAgent extends BaseAgent {
       return [
         `Mission: ${locked.title}`,
         `Class: ${locked.class.name}`,
-        `Status: closed by the mission map path — it opens when the student completes ${membership.pathLock.map(r => `«${r.title}»`).join(' and ')}. Until then they cannot open it, submit or use its hints. Do not describe its enigmas: point them to the mission that opens it.`,
+        `Status: closed by the mission map path — it opens when the student completes ${membership.pathLock.map(r => (r.state === 'teacher' ? `«${r.title}» (closed by the teacher for now)` : `«${r.title}»`)).join(' and ')}. Until then they cannot open it, submit or use its hints. Do not describe its enigmas: point them to the mission that opens it.`,
       ].join('\n')
     }
 

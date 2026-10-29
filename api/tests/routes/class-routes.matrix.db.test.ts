@@ -2391,7 +2391,6 @@ describeWithDatabase('matriz de acceso del profesorado añadido a una clase', ()
     expect((await as({ method: 'GET', url: '/missions' })).body).not.toContain(missionId)
     expect((await as({ method: 'GET', url: '/missions/enhanced' })).body).not.toContain(missionId)
     expect((await as({ method: 'GET', url: '/missions/stats' })).json().total).toBe(0)
-    expect((await as({ method: 'POST', url: `/missions/${missionId}/start` })).statusCode).toBe(404)
     expect(
       (
         await as({
@@ -2411,7 +2410,6 @@ describeWithDatabase('matriz de acceso del profesorado añadido a una clase', ()
       data: { endsAt: null },
     })
     expect((await as({ method: 'GET', url: '/missions' })).body).toContain(missionId)
-    expect((await as({ method: 'POST', url: `/missions/${missionId}/start` })).statusCode).toBe(200)
     expect((await submit()).statusCode).toBe(201)
     // Sin fila ni matrícula, para no contar en los tests que siguen.
     await setLevel(former.id, null)

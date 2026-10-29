@@ -122,6 +122,8 @@ beforeEach(() => {
           delete: mocks.missionEnigmaDelete,
         },
         studentMissionProgress: {
+          // La rareza se comprueba dentro de la transacción, con la misión ya releída.
+          count: mocks.studentMissionProgressCount,
           upsert: mocks.studentMissionProgressUpsert,
           updateMany: mocks.studentMissionProgressUpdateMany,
           findUnique: mocks.studentMissionProgressFindUnique,

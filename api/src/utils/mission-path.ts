@@ -14,17 +14,25 @@ import { MISSION_ORDER } from './mission-order.js'
  * en la clase (apagarlo lo abre todo al momento, aunque los requisitos se
  * guarden). La manual va siempre por encima.
  *
- * Una misión está cerrada para S si pide alguna que S no ha completado y S no
- * la ha empezado: lo empezado no se cierra, aunque el requisito llegue después
- * (ver `startedMissionIds`). Y una misión cuenta como completada si tiene
- * `completedAt` o si ya tiene aprobados todos sus enigmas obligatorios (ver
- * `enigmasComplete`): así un opcional sin hacer no deja a nadie encerrado,
- * tampoco en las que se cerraron antes de que los opcionales dejaran de contar.
+ * Una misión está cerrada para S si pide alguna que todavía le cierra el paso y
+ * S no la ha empezado: lo empezado no se cierra, aunque el requisito llegue
+ * después. Empezar es trabajo de verdad (una entrega, un enigma aprobado, una
+ * pista usada), no una fila de progreso vacía (ver `startedMissionIds`).
+ *
+ * Un requisito deja de cerrar en cuanto S lo completa, y también si no se puede
+ * cumplir: caducado o sin ningún enigma (ver `requirementCloses`). Una misión
+ * cuenta como completada si tiene `completedAt` o si ya tiene aprobados todos
+ * sus enigmas obligatorios (ver `enigmasComplete`): así un opcional sin hacer no
+ * deja a nadie encerrado, tampoco en las que se cerraron antes de que los
+ * opcionales dejaran de contar.
+ *
+ * Solo lo recorre el alumnado (ver `walksPath`): el profesorado de la clase, también
+ * en la vista previa, la ve y la usa toda abierta.
  *
  * Todas las vías del alumnado pasan por aquí: los listados (`classPathsFor`),
  * el detalle, los documentos y el contexto de la IA (`missionMembership`, en
- * class-access.ts) y empezar, entregar y usar una pista
- * (`assertMissionOpenOnPath`).
+ * class-access.ts), entregar y usar una pista (`assertMissionOpenOnPath`) y los
+ * recordatorios de fecha (`locksFromEdges`).
  */
 
 type Db = Prisma.TransactionClient
@@ -32,10 +40,31 @@ type Db = Prisma.TransactionClient
 /** Como mucho, cuántas misiones puede pedir una. */
 export const MISSION_PREREQUISITE_LIMIT = 3
 
-/** Una misión que hace falta completar: lo que se enseña de ella. */
+/**
+ * Una misión que hace falta completar: lo que se enseña de ella. `state` dice si
+ * se puede hacer ya (`open`) o si la ha cerrado su docente a mano (`teacher`):
+ * entonces «Ir a «X»» no lleva a ninguna parte hasta que la abra.
+ */
 export interface PathRequirement {
   id: string
   title: string
+  state: 'open' | 'teacher'
+}
+
+/** Quien recorre el camino: su id y su rol, como llega en la sesión. */
+export interface PathViewer {
+  id: string
+  role?: string | null
+}
+
+/**
+ * ¿Tiene camino? Solo el alumnado (rol `student`, que entra con su matrícula de
+ * verdad: la de vista previa no le vale). El profesorado, también cuando mira su
+ * clase como alumno, lo tiene todo abierto: no se le cierra nada ni se le
+ * enseña ningún candado del camino.
+ */
+export function walksPath(viewer: PathViewer): boolean {
+  return viewer.role === 'student'
 }
 
 /** Una arista del camino: `missionId` pide `requiredMissionId`. */
@@ -45,8 +74,9 @@ export interface PathEdge {
 }
 
 /**
- * Cerrada por el camino: 409 con su código, para entregar, usar una pista,
- * empezarla o abrir sus documentos. El mensaje dice qué falta.
+ * Cerrada por el camino: 409 con su código, para entregar, usar una pista o
+ * listar sus documentos (las rutas de misiones). El mensaje dice qué falta. La
+ * descarga de un documento responde 404, sin títulos (ver `assertDocumentMember`).
  */
 export class MissionPathLockedError extends ConflictError {
   readonly requires: PathRequirement[]
@@ -72,6 +102,32 @@ export function enigmasComplete(enigmas: { isOptional: boolean; approved: boolea
   const required = enigmas.filter(e => !e.isOptional)
   if (required.length === 0) return enigmas.some(e => e.approved)
   return required.every(e => e.approved)
+}
+
+/** Lo que se sabe de una misión requisito para un estudiante. */
+export interface RequirementState {
+  /** Su fecha límite, si tiene. */
+  deadline: Date | null
+  /** Si S la tiene con `completedAt`. */
+  completed: boolean
+  /** Sus enigmas, con si S tiene aprobado cada uno. */
+  enigmas: { isOptional: boolean; approved: boolean }[]
+}
+
+/**
+ * ¿Sigue cerrando el requisito lo que depende de él? No, si S ya lo ha
+ * completado (con `completedAt` o con sus obligatorios aprobados), y tampoco si
+ * no se puede cumplir: sin ningún enigma, o caducado (la fecha ya pasó, la misma
+ * comparación que `getMissionStatus`). Un requisito imposible no deja a nadie
+ * encerrado. La bloqueada a mano sí cierra (su docente la puede abrir), salvo
+ * que además esté caducada; alargarle la fecha a una caducada vuelve a cerrar lo
+ * que la pide a quien aún no lo ha empezado.
+ */
+export function requirementCloses(requirement: RequirementState, now: Date): boolean {
+  if (requirement.completed) return false
+  if (requirement.enigmas.length === 0) return false
+  if (requirement.deadline && requirement.deadline < now) return false
+  return !enigmasComplete(requirement.enigmas)
 }
 
 /** Las misiones que necesitan `missionId`, directa o indirectamente. */
@@ -207,52 +263,71 @@ export function prerequisitesByMission(edges: PathEdge[]): Map<string, string[]>
   return byMission
 }
 
-/**
- * De `missionIds`, las que S ha completado: con `completedAt` o con todos sus
- * enigmas obligatorios aprobados (ver `enigmasComplete`).
- */
-async function completedMissionIds(db: Db, studentId: string, missionIds: string[]) {
-  const done = new Set(
-    (
-      await db.studentMissionProgress.findMany({
-        where: { studentId, missionId: { in: missionIds }, completedAt: { not: null } },
-        select: { missionId: true },
-      })
-    ).map(p => p.missionId)
-  )
-  const rest = missionIds.filter(id => !done.has(id))
-  if (rest.length === 0) return done
-  const enigmas = await db.missionEnigma.findMany({
-    where: { missionId: { in: rest } },
-    select: { missionId: true, isOptional: true, progress: { where: { studentId }, select: { id: true } } },
-  })
-  const byMission = new Map<string, { isOptional: boolean; approved: boolean }[]>()
-  for (const e of enigmas) {
-    const list = byMission.get(e.missionId) ?? []
-    list.push({ isOptional: e.isOptional, approved: e.progress.length > 0 })
-    byMission.set(e.missionId, list)
-  }
-  for (const [missionId, list] of byMission) if (enigmasComplete(list)) done.add(missionId)
-  return done
+
+/** ¿Está el mapa encendido en la clase? `settings`, si ya se tienen (si no, se leen). */
+export async function missionMapOn(db: Db, classId: string, settings?: unknown): Promise<boolean> {
+  const raw =
+    settings !== undefined
+      ? settings
+      : (await db.class.findUnique({ where: { id: classId }, select: { settings: true } }))
+          ?.settings
+  return resolveClassSettings(raw).missionMap
 }
 
 /**
- * De `missionIds`, las que S ya ha empezado: tiene una entrega en alguno de sus
- * enigmas, una fila de progreso (que nace con la primera aprobación o al
- * empezarla) o ha usado una pista (la ha pagado). Esas no se le cierran.
+ * Deja la clase en el orden más parecido al que tiene en el que cada misión va
+ * detrás de lo que pide (ver `pathOrder`), escribiendo solo las que cambian.
+ * Devuelve cuántas se han movido. Va con el camino ya bloqueado (ver
+ * `lockMissionPath`): al guardar requisitos con el mapa encendido y al
+ * encenderlo, que es cuando el orden tiene que volver a cumplir el camino.
+ */
+export async function placeAfterPrerequisites(tx: Db, classId: string): Promise<number> {
+  const current = await tx.mission.findMany({
+    where: { classId },
+    orderBy: MISSION_ORDER,
+    select: { id: true, orderIndex: true },
+  })
+  const next = pathOrder(
+    current.map(m => m.id),
+    await classPathEdges(tx, classId)
+  )
+  let moved = 0
+  for (const [index, id] of next.entries()) {
+    if (current[index]?.id !== id) moved += 1
+    const before = current.find(m => m.id === id)
+    if (before?.orderIndex === index) continue
+    await tx.mission.update({ where: { id }, data: { orderIndex: index } })
+  }
+  return moved
+}
+
+/**
+ * De `missionIds`, las que S ya ha empezado de verdad: tiene una entrega o un
+ * enigma aprobado en alguna, ha usado una pista (la ha pagado) o tiene progreso
+ * con algo dentro (enigmas completados o la misión completada). Esas no se le
+ * cierran. Una fila de progreso vacía no cuenta: no es trabajo, y no puede
+ * servir para que una misión no se cierre nunca.
  */
 async function startedMissionIds(db: Db, studentId: string, missionIds: string[]) {
   const started = new Set<string>()
+  if (missionIds.length === 0) return started
   const progress = await db.studentMissionProgress.findMany({
-    where: { studentId, missionId: { in: missionIds } },
+    where: {
+      studentId,
+      missionId: { in: missionIds },
+      OR: [{ enigmasCompleted: { gt: 0 } }, { completedAt: { not: null } }],
+    },
     select: { missionId: true },
   })
   for (const p of progress) started.add(p.missionId)
-  const submitted = await db.missionEnigma.findMany({
-    where: { missionId: { in: missionIds }, submissions: { some: { studentId } } },
+  const worked = await db.missionEnigma.findMany({
+    where: {
+      missionId: { in: missionIds },
+      OR: [{ submissions: { some: { studentId } } }, { progress: { some: { studentId } } }],
+    },
     select: { missionId: true },
   })
-  for (const e of submitted) started.add(e.missionId)
+  for (const e of worked) started.add(e.missionId)
   const hinted = await db.missionHintUse.findMany({
     where: { studentId, missionId: { in: missionIds } },
     select: { missionId: true },
@@ -263,40 +338,69 @@ async function startedMissionIds(db: Db, studentId: string, missionIds: string[]
 
 /**
  * Las cerradas por el camino para S según las aristas `edges`: cada una con lo
- * que le falta, en el orden de la clase. Las que pide algo ya completado, o que
- * S ya ha empezado, no salen.
+ * que le falta, en el orden de la clase. No salen las que solo piden requisitos
+ * que ya no cierran (completados, caducados o sin enigmas: ver
+ * `requirementCloses`) ni las que S ya ha empezado.
+ *
+ * Es la cuenta de un estudiante: quien la llama ya ha mirado que el mapa esté
+ * encendido y que S recorra el camino (`walksPath`). Los recordatorios la usan
+ * así, con las aristas de cada clase leídas una sola vez.
  */
-async function locksFromEdges(
+export async function locksFromEdges(
   db: Db,
   edges: PathEdge[],
-  studentId: string
+  studentId: string,
+  now: Date = new Date()
 ): Promise<Map<string, PathRequirement[]>> {
   const locks = new Map<string, PathRequirement[]>()
   if (edges.length === 0) return locks
-  const done = await completedMissionIds(db, studentId, [
-    ...new Set(edges.map(e => e.requiredMissionId)),
-  ])
-  const missing = new Map<string, string[]>()
-  for (const edge of edges) {
-    if (done.has(edge.requiredMissionId)) continue
-    const list = missing.get(edge.missionId) ?? []
-    list.push(edge.requiredMissionId)
-    missing.set(edge.missionId, list)
-  }
-  if (missing.size === 0) return locks
-  const started = await startedMissionIds(db, studentId, [...missing.keys()])
-  const closed = [...missing.entries()].filter(([missionId]) => !started.has(missionId))
-  if (closed.length === 0) return locks
-  const titles = await db.mission.findMany({
-    where: { id: { in: [...new Set(closed.flatMap(([, ids]) => ids))] } },
-    select: { id: true, title: true },
+  // Los requisitos, con lo que hace falta para saber si cierran y lo que se
+  // enseña de ellos, en el orden de la clase.
+  const required = await db.mission.findMany({
+    where: { id: { in: [...new Set(edges.map(e => e.requiredMissionId))] } },
+    select: {
+      id: true,
+      title: true,
+      status: true,
+      deadline: true,
+      progress: { where: { studentId }, select: { completedAt: true } },
+      enigmas: {
+        select: { isOptional: true, progress: { where: { studentId }, select: { id: true } } },
+      },
+    },
     orderBy: MISSION_ORDER,
   })
-  for (const [missionId, ids] of closed) {
-    const wanted = new Set(ids)
+  const closing = required.filter(m =>
+    requirementCloses(
+      {
+        deadline: m.deadline,
+        completed: m.progress.some(p => p.completedAt !== null),
+        enigmas: m.enigmas.map(e => ({ isOptional: e.isOptional, approved: e.progress.length > 0 })),
+      },
+      now
+    )
+  )
+  if (closing.length === 0) return locks
+  const closingIds = new Set(closing.map(m => m.id))
+  const missing = new Map<string, Set<string>>()
+  for (const edge of edges) {
+    if (!closingIds.has(edge.requiredMissionId)) continue
+    const set = missing.get(edge.missionId) ?? new Set<string>()
+    set.add(edge.requiredMissionId)
+    missing.set(edge.missionId, set)
+  }
+  const started = await startedMissionIds(db, studentId, [...missing.keys()])
+  for (const [missionId, ids] of missing) {
+    if (started.has(missionId)) continue
     locks.set(
       missionId,
-      titles.filter(m => wanted.has(m.id)).map(m => ({ id: m.id, title: m.title }))
+      closing
+        .filter(m => ids.has(m.id))
+        .map(m => ({
+          id: m.id,
+          title: m.title,
+          state: m.status === 'bloqueada' ? ('teacher' as const) : ('open' as const),
+        }))
     )
   }
   return locks
@@ -314,27 +418,23 @@ export interface ClassPath {
 const noPath = (): ClassPath => ({ prerequisites: new Map(), locks: new Map() })
 
 /**
- * El camino de una clase para S: lo que pide cada misión y las que tiene
- * cerradas. Con el mapa apagado en la clase no hay camino. `settings`, si ya se
- * tienen los de la clase (si no, se leen).
+ * El camino de una clase para quien la mira como alumno: lo que pide cada misión
+ * y las que tiene cerradas. Con el mapa apagado en la clase no hay camino. El
+ * profesorado (vista previa) ve lo que pide cada una, pero nada cerrado.
+ * `settings`, si ya se tienen los de la clase (si no, se leen).
  */
 export async function classPathFor(
   db: Db,
   classId: string,
-  studentId: string,
+  viewer: PathViewer,
   settings?: unknown
 ): Promise<ClassPath> {
-  const raw =
-    settings !== undefined
-      ? settings
-      : (await db.class.findUnique({ where: { id: classId }, select: { settings: true } }))
-          ?.settings
-  if (!resolveClassSettings(raw).missionMap) return noPath()
+  if (!(await missionMapOn(db, classId, settings))) return noPath()
   const edges = await classPathEdges(db, classId)
   if (edges.length === 0) return noPath()
   return {
     prerequisites: prerequisitesByMission(edges),
-    locks: await locksFromEdges(db, edges, studentId),
+    locks: walksPath(viewer) ? await locksFromEdges(db, edges, viewer.id) : new Map(),
   }
 }
 
@@ -344,46 +444,43 @@ export async function classPathFor(
  */
 export async function classPathsFor(
   db: Db,
-  studentId: string,
+  viewer: PathViewer,
   classes: { id: string; settings: unknown }[]
 ): Promise<Map<string, ClassPath>> {
   const paths = new Map<string, ClassPath>()
   for (const cls of classes) {
     if (paths.has(cls.id)) continue
-    paths.set(cls.id, await classPathFor(db, cls.id, studentId, cls.settings))
+    paths.set(cls.id, await classPathFor(db, cls.id, viewer, cls.settings))
   }
   return paths
 }
 
 /**
- * Lo que le falta a S para abrir una misión, o null si no la tiene cerrada por
- * el camino (mapa apagado, sin requisitos, ya completados o ya empezada).
+ * Lo que le falta a quien mira para abrir una misión, o null si no la tiene
+ * cerrada por el camino (no es alumno, mapa apagado, sin requisitos, ya
+ * cumplidos o ya empezada).
  */
 export async function missionPathLock(
   db: Db,
   mission: { id: string; classId: string; settings?: unknown },
-  studentId: string
+  viewer: PathViewer
 ): Promise<PathRequirement[] | null> {
-  const raw =
-    mission.settings !== undefined
-      ? mission.settings
-      : (await db.class.findUnique({ where: { id: mission.classId }, select: { settings: true } }))
-          ?.settings
-  if (!resolveClassSettings(raw).missionMap) return null
+  if (!walksPath(viewer)) return null
+  if (!(await missionMapOn(db, mission.classId, mission.settings))) return null
   const edges = await db.missionPrerequisite.findMany({
     where: { missionId: mission.id, requiredMission: { classId: mission.classId } },
     select: { missionId: true, requiredMissionId: true },
   })
   if (edges.length === 0) return null
-  return (await locksFromEdges(db, edges, studentId)).get(mission.id) ?? null
+  return (await locksFromEdges(db, edges, viewer.id)).get(mission.id) ?? null
 }
 
-/** Exige que la misión no esté cerrada por el camino para S; si lo está, 409. */
+/** Exige que la misión no esté cerrada por el camino para quien mira; si lo está, 409. */
 export async function assertMissionOpenOnPath(
   mission: { id: string; classId: string; settings?: unknown },
-  studentId: string,
+  viewer: PathViewer,
   db: Db = prisma
 ) {
-  const lock = await missionPathLock(db, mission, studentId)
+  const lock = await missionPathLock(db, mission, viewer)
   if (lock) throw new MissionPathLockedError(lock)
 }
