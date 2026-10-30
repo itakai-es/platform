@@ -203,6 +203,8 @@ export const useAuthStore = defineStore('auth', () => {
       // cortarían el resto.
       useNotificationsStore().reset()
       useCredentialsSheetStore().reset()
+      // El perfil también: si no, quien entre después ve el de la cuenta anterior.
+      useProfileStore().$reset()
 
       // Reset all other stores to avoid data leakage between users
       try {
@@ -236,6 +238,7 @@ export const useAuthStore = defineStore('auth', () => {
       // las contraseñas de la última hoja de credenciales.
       useNotificationsStore().reset()
       useCredentialsSheetStore().reset()
+      useProfileStore().$reset()
     }
   }
 
@@ -279,6 +282,18 @@ export const useAuthStore = defineStore('auth', () => {
   const markPasswordChanged = () => {
     if (!user.value) return
     user.value = { ...user.value, mustChangePassword: false }
+    if (import.meta.client) {
+      localStorage.setItem('auth_user', JSON.stringify(user.value))
+    }
+  }
+
+  /**
+   * El avatar de docente ha cambiado, o llega con el perfil: el menú lo enseña
+   * al momento y se queda guardado con la sesión.
+   */
+  const setUserAvatar = (avatar: string | null) => {
+    if (!user.value || (user.value.avatar ?? null) === avatar) return
+    user.value = { ...user.value, avatar }
     if (import.meta.client) {
       localStorage.setItem('auth_user', JSON.stringify(user.value))
     }
@@ -436,6 +451,7 @@ export const useAuthStore = defineStore('auth', () => {
     loadUserFromStorage,
     completeOnboarding,
     markPasswordChanged,
+    setUserAvatar,
     resetPassword,
     requestPasswordReset,
   }

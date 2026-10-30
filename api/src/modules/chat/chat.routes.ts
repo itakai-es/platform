@@ -61,7 +61,8 @@ async function assertConversationContext(
   if (context.missionId) {
     await (asTeacher
       ? assertMissionAccess(context.missionId, user.id, 'mission.view')
-      : assertMissionMember(context.missionId, user))
+      : // Cerrada por el camino del mapa, sí: el asistente le dice qué la abre.
+        assertMissionMember(context.missionId, user, undefined, { allowPathLocked: true }))
   }
   if (context.classId) {
     await (asTeacher

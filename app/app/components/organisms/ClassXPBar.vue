@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { UserIcon } from '@heroicons/vue/24/solid'
-
 /**
  * ClassXPBar - XP and level display for a specific class
  *
@@ -16,6 +14,8 @@ interface Props {
   name?: string
   username?: string
   avatar?: string
+  /** De dónde sale el color del avatar: `studentAvatarSeed(clase, estudiante)`. */
+  avatarSeed?: string
   currentXp: number
   requiredXp: number
   progress: number
@@ -23,12 +23,7 @@ interface Props {
   totalStudents: number
 }
 
-const props = defineProps<Props>()
-
-// Marco del color del tramo de nivel alrededor del avatar (doble anillo).
-const ringStyle = computed(() =>
-  props.color ? { boxShadow: `0 0 0 2px #fff, 0 0 0 4px ${props.color}` } : undefined
-)
+defineProps<Props>()
 </script>
 
 <template>
@@ -46,18 +41,13 @@ const ringStyle = computed(() =>
         <!-- Top Row: Avatar/Name + Ranking -->
         <div class="flex items-center justify-between gap-3 mb-3 sm:mb-4">
           <div class="flex items-center gap-2.5 sm:gap-3 flex-shrink-0 min-w-0">
-            <div
-              class="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden flex-shrink-0"
-              :style="ringStyle"
-            >
-              <img
-                v-if="avatar"
-                :src="avatar"
-                :alt="name || username"
-                class="w-full h-full object-contain"
-              />
-              <UserIcon v-else class="w-6 h-6 sm:w-8 sm:h-8 text-navy-700" />
-            </div>
+            <Avatar
+              :src="avatar"
+              :name="username || name"
+              :seed="avatarSeed"
+              :ring-color="color"
+              size="sm"
+            />
             <div class="min-w-0">
               <p
                 v-if="name"
@@ -85,7 +75,9 @@ const ringStyle = computed(() =>
         <!-- Bottom Row: Progress Bar (full width) -->
         <div>
           <div class="flex items-baseline justify-between mb-1 sm:mb-1.5">
-            <p class="text-navy-700 font-medium text-xs sm:text-sm mr-2 flex items-center gap-1.5 min-w-0">
+            <p
+              class="text-navy-700 font-medium text-xs sm:text-sm mr-2 flex items-center gap-1.5 min-w-0"
+            >
               <span
                 class="w-2 h-2 rounded-full flex-shrink-0"
                 :style="{ backgroundColor: color || '#38BDF8' }"
@@ -112,18 +104,13 @@ const ringStyle = computed(() =>
       <div class="hidden sm:flex lg:hidden xl:flex items-center gap-4">
         <!-- Avatar + Name -->
         <div class="flex items-center gap-3 flex-shrink-0">
-          <div
-            class="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden flex-shrink-0"
-            :style="ringStyle"
-          >
-            <img
-              v-if="avatar"
-              :src="avatar"
-              :alt="name || username"
-              class="w-full h-full object-contain"
-            />
-            <UserIcon v-else class="w-8 h-8 text-navy-700" />
-          </div>
+          <Avatar
+            :src="avatar"
+            :name="username || name"
+            :seed="avatarSeed"
+            :ring-color="color"
+            size="md"
+          />
           <div class="min-w-0">
             <p v-if="name" class="text-navy-700 font-bold text-lg leading-tight truncate">
               {{ name }}

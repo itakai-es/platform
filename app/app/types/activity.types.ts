@@ -19,6 +19,8 @@ export type ActivityType =
   | 'behavior_applied'
   | 'shop_purchased'
   | 'shop_item_used'
+  | 'hint_used'
+  | 'mission_started'
 
 export interface RecentActivity {
   id: string
@@ -129,6 +131,20 @@ export const ACTIVITY_CONFIG: Record<ActivityType, ActivityDisplayConfig> = {
     bgColor: 'bg-purple-light/40',
     textColor: 'text-purple',
     label: 'Uso de poder',
+  },
+  hint_used: {
+    icon: 'light-bulb',
+    bgColor: 'bg-yellow/20',
+    textColor: 'text-yellow-dark',
+    label: 'Pista usada',
+  },
+  // La escribe la ruta de empezar una misión, que la app de hoy ya no llama: quedan
+  // entradas guardadas (y la ruta sigue abierta), así que el muro tiene que saber leerlas.
+  mission_started: {
+    icon: 'rocket-launch',
+    bgColor: 'bg-sky-light/20',
+    textColor: 'text-navy-700',
+    label: 'Misión empezada',
   },
 }
 

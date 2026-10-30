@@ -17,6 +17,34 @@ export type MissionStatus =
 // Rareza de misión para el sistema de gamificación
 export type MissionRarity = 'comun' | 'rara' | 'epica' | 'legendaria'
 
+/**
+ * Por qué una misión sale `bloqueada` al alumnado: la cerró su docente
+ * (`teacher`, para toda la clase) o le falta completar otra antes (`path`, el
+ * camino del mapa de misiones, solo a esa persona).
+ */
+export type MissionLockReason = 'teacher' | 'path'
+
+/**
+ * Una misión que hay que completar antes (camino del mapa): lo que se enseña de
+ * ella. Al alumnado le llega con su `state`: `open` si ya se puede hacer y
+ * `teacher` si la tiene cerrada su docente (entonces no se enlaza).
+ */
+export interface MissionRequirement {
+  id: string
+  title: string
+  state?: 'open' | 'teacher'
+}
+
+/**
+ * Lo que pide una misión, como lo ve el profesorado (Ajustes › Camino), con el
+ * estado de cada una: una caducada o sin enigmas ya no cierra nada.
+ */
+export interface MissionPrerequisite {
+  id: string
+  title: string
+  status?: 'bloqueada' | 'expirada' | 'urgente' | 'activa'
+}
+
 export interface Mission {
   id: string
   title: string
@@ -88,6 +116,12 @@ export interface EnhancedMission {
   backgroundImage?: string // URL de imagen generada con IA
   subject?: string
   expiresAt?: string // ISO date string - fecha límite real de la misión
+  /** Por qué sale bloqueada (ver MissionLockReason). */
+  lockReason?: MissionLockReason | null
+  /** Cerrada por el camino del mapa: lo que le falta completar. */
+  requires?: MissionRequirement[]
+  /** Lo que pide la misión en el mapa (ids). */
+  prerequisiteIds?: string[]
 }
 
 // Tipos para el dashboard de clase

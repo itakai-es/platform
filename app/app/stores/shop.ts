@@ -133,6 +133,13 @@ export const useShopStore = defineStore('shop', () => {
     classShop.value = new Map(classShop.value)
   }
 
+  /** Saldo de monedas que ya se sabe por otro lado (al pagar una pista); sin la tienda cargada, nada. */
+  function setBalance(classId: string, balance: number) {
+    const state = classShop.value.get(classId)
+    if (!state) return
+    state.balance = balance
+    touch()
+  }
   function getBalance(classId: string): number {
     return classShop.value.get(classId)?.balance ?? 0
   }
@@ -429,6 +436,7 @@ export const useShopStore = defineStore('shop', () => {
     loadedStudentShopClasses,
     loadedTeacherShopClasses,
     getBalance,
+    setBalance,
     getMana,
     getItems,
     getPurchases,

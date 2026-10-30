@@ -122,10 +122,10 @@
                 <div class="flex items-center gap-3 min-w-0">
                   <Avatar
                     :src="student.avatar"
-                    :username="student.name"
+                    :name="student.name"
+                    :seed="studentAvatarSeed(classId, student.id)"
                     :ring-color="student.levelColor"
                     size="xs"
-                    class="flex-shrink-0"
                   />
                   <div class="min-w-0">
                     <NuxtLink
@@ -202,6 +202,7 @@
                   :student="student"
                   :access="myAccess"
                   @renamed="onRenamed(student, $event)"
+                  @avatar-changed="student.avatar = $event"
                   @removed="onRemoved(student)"
                 />
               </td>
@@ -290,6 +291,7 @@
         <TeamStandings :standings="teamStandings" />
         <ClassRankingSection
           :ranking-data="rankingData"
+          :class-id="classId"
           :clickable="true"
           :show-current-user-highlight="false"
           @student-click="viewStudentProfile"
@@ -335,6 +337,7 @@ import LifeIcon from '~/components/atoms/LifeIcon.vue'
 import type { ClassSettings } from '~/types/class.types'
 import type { AccountType } from '~/types/teacher.types'
 import type { BatchResult } from '~/stores/behaviors'
+import { studentAvatarSeed } from '~/utils/avatar'
 import { resolveClassSettings } from '~/utils/class-settings'
 
 definePageMeta({ layout: 'teacher', middleware: ['auth', 'role'] })
@@ -376,9 +379,13 @@ const { state: classState, can } = useTeacherClassDetail(classId)
 const myAccess = computed(() => classState.value.classData?.myAccess ?? null)
 const className = computed(() => classState.value.classData?.name ?? '')
 // La columna de acciones aparece si hay algo que hacer con alguien: gestionar
-// el alumnado de la clase o restablecer la contraseña de alguna cuenta.
+// el alumnado de la clase, devolver un avatar al catálogo (con edición) o
+// restablecer la contraseña de alguna cuenta.
 const showActions = computed(
-  () => can('student.manage') || allStudents.value.some(s => s.canResetPassword)
+  () =>
+    can('student.manage') ||
+    can('student.avatar') ||
+    allStudents.value.some(s => s.canResetPassword)
 )
 
 const announcement = ref('')

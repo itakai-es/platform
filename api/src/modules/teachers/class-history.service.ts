@@ -21,6 +21,7 @@ export const CLASS_HISTORY_TYPES = [
   'student',
   'mission',
   'enigma',
+  'hint',
   'document',
   'submission',
   'behavior',
@@ -71,6 +72,7 @@ export async function getClassHistory(actor: ClassUser, classId: string, query: 
         actorId: true,
         actorName: true,
         actorAvatar: true,
+        actor: { select: { avatar: true } },
         targetUser: { select: { id: true, name: true, role: true } },
       },
     }),
@@ -112,7 +114,13 @@ export async function getClassHistory(actor: ClassUser, classId: string, query: 
       action: row.action,
       type: row.action.split('.')[0],
       createdAt: row.createdAt,
-      actor: { id: row.actorId, name: row.actorName, avatar: row.actorAvatar },
+      // El avatar de ahora, para reconocer a la persona aunque lo haya cambiado
+      // después; si su cuenta ya no está, el que tenía al hacerlo.
+      actor: {
+        id: row.actorId,
+        name: row.actorName,
+        avatar: row.actor ? row.actor.avatar : row.actorAvatar,
+      },
       target: resolveTarget(row.targetUser, enrolled),
       entity: row.entityType ? { type: row.entityType, id: row.entityId } : null,
       params: row.metadata ?? {},

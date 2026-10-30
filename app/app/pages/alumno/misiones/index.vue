@@ -61,6 +61,8 @@
         :earned-mana="mission.earnedMana"
         :background-image="mission.backgroundImage"
         :class-name="mission.className"
+        :lock-reason="mission.lockReason"
+        :requires="mission.requires"
         :layout="view"
         compact
       />
@@ -71,8 +73,9 @@
 <script setup lang="ts">
 import { RocketLaunchIcon } from '@heroicons/vue/24/outline'
 import type { MissionStatus, MissionRarity } from '~/types/mission.types'
+import { DEFAULT_MISSION_SORT, sortMissions } from '~/utils/mission-sort'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const view = useViewMode('student-missions')
 
 interface StudentMission {
@@ -86,6 +89,8 @@ interface StudentMission {
   progress: number
   timeRemaining?: string
   deadline?: string | null
+  /** Posición en el orden de su clase (el de la progresión). */
+  orderIndex?: number
   xpReward: number
   coinReward?: number
   manaReward?: number
@@ -119,20 +124,12 @@ const searchQuery = ref('')
 const activeClassFilters = ref<string[]>([])
 const activeRarityFilters = ref<string[]>([])
 const activeStatusFilters = ref<string[]>([])
-const sortBy = ref('deadline-asc')
+const sortBy = ref(DEFAULT_MISSION_SORT)
 
 // Use store data
 const missions = computed(() => studentStore.missions)
 const classes = computed(() => classesStore.classes.map(c => ({ id: c.id, name: c.name || '' })))
 const loading = computed(() => studentStore.isLoadingMissions || classesStore.isLoadingClasses)
-
-// Rarity order for sorting
-const rarityOrder: Record<string, number> = {
-  comun: 1,
-  rara: 2,
-  epica: 3,
-  legendaria: 4,
-}
 
 // Computed
 const classOptions = computed(() => {
@@ -178,34 +175,7 @@ const displayedMissions = computed(() => {
     )
   }
 
-  // Sort
-  const [field, order] = sortBy.value.split('-')
-  const sortedResult = [...result].sort((a, b) => {
-    let comparison = 0
-
-    switch (field) {
-      case 'title':
-        comparison = a.title.localeCompare(b.title, 'es')
-        break
-      case 'xp':
-        comparison = a.xpReward - b.xpReward
-        break
-      case 'deadline':
-        // Use timeRemaining for sorting (null goes to end)
-        if (!a.timeRemaining && !b.timeRemaining) comparison = 0
-        else if (!a.timeRemaining) comparison = 1
-        else if (!b.timeRemaining) comparison = -1
-        else comparison = a.timeRemaining.localeCompare(b.timeRemaining)
-        break
-      case 'rarity':
-        comparison = rarityOrder[a.rarity] - rarityOrder[b.rarity]
-        break
-    }
-
-    return order === 'desc' ? -comparison : comparison
-  })
-
-  return sortedResult
+  return sortMissions(result, sortBy.value, locale.value)
 })
 
 // Methods

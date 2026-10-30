@@ -102,7 +102,7 @@
                   getRoleAvatarColor(user.role),
                 ]"
               >
-                {{ getInitials(user.name) }}
+                {{ avatarInitials(user.name) }}
               </div>
               <div class="min-w-0 flex-1">
                 <h3 class="font-bold text-navy-700 truncate text-lg">{{ user.name }}</h3>
@@ -353,6 +353,7 @@ import type { ActionMenuItem } from '~/types/action-menu.types'
 import type { ManagedCredentials } from '~/types/auth.types'
 import type { AccountDeletionCheck } from '~/types/profile.types'
 import { accountIdentifier } from '~/utils/identity'
+import { avatarInitials } from '~/utils/avatar'
 
 const { t } = useI18n()
 
@@ -644,13 +645,6 @@ const confirmDelete = async () => {
 }
 
 // Visual helpers
-const getInitials = (name: string) => {
-  const parts = name.split(' ')
-  return parts.length >= 2
-    ? `${parts[0]![0]}${parts[1]![0]}`.toUpperCase()
-    : name.substring(0, 2).toUpperCase()
-}
-
 const getRoleAvatarColor = (role: string) => {
   switch (role) {
     case 'admin':

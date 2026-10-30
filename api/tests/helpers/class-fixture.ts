@@ -27,6 +27,7 @@ export interface ClassFixture {
   newBehavior: () => Promise<string>
   newMission: (classId?: string) => Promise<string>
   newEnigma: (missionId: string) => Promise<string>
+  newHint: (missionId: string) => Promise<string>
   newDocument: (missionId: string) => Promise<string>
   newSubmission: (enigmaId: string) => Promise<string>
   newBadge: (actor?: Actor) => Promise<string>
@@ -127,6 +128,12 @@ export async function createClassFixture(app: FastifyInstance): Promise<ClassFix
     newEnigma: async missionId =>
       (await prisma.missionEnigma.create({ data: { missionId, title: 'Enigma', xpReward: 10 } }))
         .id,
+    newHint: async missionId =>
+      (
+        await prisma.missionHint.create({
+          data: { missionId, content: 'Mira el mapa', costType: 'coins', cost: 5 },
+        })
+      ).id,
     newDocument: async missionId =>
       (
         await prisma.missionDocument.create({

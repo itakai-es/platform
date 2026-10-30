@@ -189,7 +189,30 @@
           "empty_search": "No s'han trobat missions per a \"{query}\"",
           "empty_status": "No hi ha missions amb els estats seleccionats",
           "empty_rarity": "No hi ha missions amb les rareses seleccionades",
-          "empty_default": "No hi ha missions en aquesta classe"
+          "empty_default": "No hi ha missions en aquesta classe",
+          "order": {
+            "button": "Ordena",
+            "title": "Ordre de la classe",
+            "hint": "L'alumnat veu les missions en aquest ordre. Arrossega cada fila per la nansa o, amb el teclat, situa't a la nansa i fes servir les fletxes amunt i avall. Cada canvi es desa a l'instant.",
+            "hint_path": "Una missió no pot anar davant del que demana: per moure-la, treu abans el que demana als seus Ajustos › Camí, o fes servir «Treu els requisits».",
+            "done": "Fet",
+            "error": "No s'ha pogut desar l'ordre. Torna-ho a provar.",
+            "breaks_path": "«{mission}» s’obre en completar «{required}»: ha d’anar darrere. Treu abans el que demana als seus Ajustos › Camí, o fes servir «Treu els requisits»."
+          },
+          "path": {
+            "title": "Camí del mapa",
+            "hint": "Un camí senzill en un pas. Per triar què demana cada missió, obre-la i ves a Ajustos, Camí.",
+            "chain": "Encadena en ordre",
+            "chain_summary": "Cada missió demanarà completar l’anterior per obrir-se: {count} requisit. | Cada missió demanarà completar l’anterior per obrir-se: {count} requisits.",
+            "chain_replaces": "Substitueix el que hi ha ara. | Substitueix els {count} que hi ha ara.",
+            "chain_skips_locked": "Les bloquejades en queden fora.",
+            "chained": "Ja estan encadenades: cada missió demana l’anterior.",
+            "chain_done": "Missions encadenades en ordre",
+            "clear": "Treu els requisits",
+            "clear_summary": "Treu el requisit que hi ha: totes les missions s’obren des del principi. | Treu els {count} requisits que hi ha: totes les missions s’obren des del principi.",
+            "clear_done": "Requisits trets",
+            "error": "No s’ha pogut canviar el camí. Torna-ho a provar."
+          }
         },
         "meta": {
           "title": "Detall de classe | ITAKAI Docent",
@@ -353,6 +376,10 @@
             "sounds": {
               "label": "Sons",
               "desc": "Efectes de so en pujar de nivell, completar missions, etc."
+            },
+            "missionMap": {
+              "label": "Mapa de missions",
+              "desc": "Una vista més a Missions: el camí de la classe, en l'ordre que decideixis."
             }
           },
           "requires": "Necessita {feature}",
@@ -428,7 +455,11 @@
               "error": "No s'ha pogut enviar la classe a la paperera. Torna-ho a provar."
             }
           },
-          "edit_level_note": "Pots canviar el nom, l'horari i la portada. La classificació, les funcionalitats i els nivells els canvia qui administra la classe."
+          "edit_level_note": "Pots canviar el nom, l'horari i la portada. La classificació, les funcionalitats i els nivells els canvia qui administra la classe.",
+          "beta": {
+            "title": "En proves",
+            "hint": "Funcionalitats noves que s'estan provant. Estan desactivades d'entrada i l'aspecte i el funcionament s'ajustaran amb les proves."
+          }
         },
         "badges_empty": "No hi ha insígnies en aquesta classe",
         "archived_notice": "Aquesta classe està arxivada: es pot consultar, però no admet més estudiants.",
@@ -611,7 +642,8 @@
             "shop": "Botiga",
             "reward": "Recompenses",
             "attendance": "Assistència",
-            "team": "Equips"
+            "team": "Equips",
+            "hint": "Pistes"
           },
           "actions": {
             "class": {
@@ -642,7 +674,8 @@
               "nickname_changed": "va canviar l'àlies de {target}",
               "removed": "va treure {target} de la classe",
               "removed_unused": "va treure {target} de la classe i va esborrar el seu compte, que no s'havia fet servir",
-              "avatar_generated": "va generar un avatar nou per a {target}"
+              "avatar_generated": "va generar un avatar nou per a {target}",
+              "avatar_changed": "va canviar l'avatar de {target} per un del catàleg"
             },
             "mission": {
               "created": "va crear la missió «{title}»",
@@ -652,7 +685,11 @@
               "moved": "va canviar de classe la missió «{title}»",
               "rewards_changed": "va canviar la recompensa de la missió «{title}»",
               "imported": "va importar la missió «{title}»",
-              "exported": "va copiar la missió «{title}» a una altra classe"
+              "exported": "va copiar la missió «{title}» a una altra classe",
+              "reordered": "va canviar l'ordre de les missions",
+              "prerequisites_changed": "va canviar el que cal completar per obrir la missió «{title}»",
+              "chained": "va encadenar les missions en ordre: cadascuna demana l’anterior",
+              "prerequisites_cleared": "va treure els requisits del camí de les missions"
             },
             "enigma": {
               "created": "va afegir l'enigma «{title}»",
@@ -666,7 +703,8 @@
               "deleted": "va esborrar el document «{title}»"
             },
             "submission": {
-              "approved": "va aprovar el lliurament de {target} a «{title}» amb un {percentage} %"
+              "approved": "va aprovar el lliurament de {target} a «{title}» amb un {percentage} %",
+              "approved_hints": "va aprovar el lliurament de {target} a «{title}» amb un {percentage} % (les seves pistes restaven un {penalty} %)"
             },
             "behavior": {
               "applied": "va aplicar «{title}» a {target}",
@@ -702,6 +740,12 @@
               "awarded_batch": "va donar {points} punt a l’equip «{title}» i va repartir «{label}» a cada integrant | va donar {points} punts a l’equip «{title}» i va repartir «{label}» a cada integrant",
               "distributed": "va repartir «{label}» a l’equip «{title}»",
               "distributed_batch": "va repartir «{label}» a l’única persona de l’equip «{title}» | va repartir «{label}» a les {count} persones de l’equip «{title}»"
+            },
+            "hint": {
+              "created": "va afegir la pista {position} a la missió «{title}»",
+              "updated": "va editar la pista {position} de la missió «{title}»",
+              "deleted": "va esborrar la pista {position} de la missió «{title}»",
+              "reordered": "va canviar l'ordre de les pistes de la missió «{title}»"
             }
           },
           "anonymous": {
@@ -711,10 +755,12 @@
               "nickname_changed": "va canviar l'àlies d'algú que ja no és a la classe",
               "removed": "va treure algú de la classe",
               "removed_unused": "va treure de la classe algú que no havia entrat mai i va esborrar el seu compte",
-              "avatar_generated": "va generar un avatar nou per a algú que ja no és a la classe"
+              "avatar_generated": "va generar un avatar nou per a algú que ja no és a la classe",
+              "avatar_changed": "va canviar per un del catàleg l'avatar d'algú que ja no és a la classe"
             },
             "submission": {
-              "approved": "va aprovar a «{title}» el lliurament d'algú que ja no és a la classe, amb un {percentage} %"
+              "approved": "va aprovar a «{title}» el lliurament d'algú que ja no és a la classe, amb un {percentage} %",
+              "approved_hints": "va aprovar a «{title}» el lliurament d'algú que ja no és a la classe, amb un {percentage} % (les seves pistes restaven un {penalty} %)"
             },
             "behavior": {
               "applied": "va aplicar «{title}» a algú que ja no és a la classe"
@@ -836,7 +882,19 @@
           "team_set_none": "Individual (sense equips)",
           "team_set_hint": "Només informatiu: l’alumnat veu amb quins equips es fa i pots aprovar tot un equip de cop. Cada estudiant continua lliurant el seu.",
           "basics_title": "Dades de la missió",
-          "play_title": "Dificultat i visibilitat"
+          "play_title": "Dificultat i visibilitat",
+          "path_title": "Camí",
+          "path_hint": "Cada estudiant la veurà tancada fins que completi totes les que marquis. A qui ja l’hagi començada no se li tanca.",
+          "path_legend": "Per obrir-la, completar abans",
+          "path_map_off": "Els requisits només tanquen missions amb el mapa activat (Ajustos de la classe › Funcionalitats).",
+          "path_empty": "No hi ha altres missions a la classe.",
+          "path_cycle_note": "Les atenuades ja depenen d’aquesta missió: si les demanés, no se n’obriria cap.",
+          "path_limit": "Com a màxim, {max}. Per triar-ne una altra, desmarca’n una.",
+          "path_moved": "Desat. La missió ha passat darrere del que demana en l’ordre de la classe.",
+          "path_error_cycle": "Alguna de les marcades ja depèn d’aquesta missió: si la demanés, no se n’obriria cap. Revisa el camí i torna a desar.",
+          "path_error_invalid": "Alguna de les marcades ja no és en aquesta classe. Revisa el camí i torna a desar.",
+          "path_load_error": "No s’han pogut carregar les missions de la classe.",
+          "path_retry": "Torna-ho a provar"
         }
       },
       "import": {
@@ -883,7 +941,8 @@
         "copy_success_title": "Missió copiada",
         "duplicate_success_title": "Missió duplicada",
         "success_description": "La còpia de «{title}» ja és a «{name}», bloquejada i sense data límit. Revisa-la i desbloqueja-la quan vulguis que la vegi el teu alumnat.",
-        "open_mission": "Obre la missió"
+        "open_mission": "Obre la missió",
+        "hints": "Sense pistes | 1 pista | {count} pistes"
       },
       "adapt": {
         "button": "Adaptar amb IA",
@@ -918,7 +977,8 @@
         "applied": "Missió adaptada",
         "apply_error": "No s'ha pogut aplicar la proposta. La missió no ha canviat.",
         "apply_error_partial": "Només s'ha aplicat una part de la proposta. Revisa la comparació: ja mostra el que s'ha desat.",
-        "after_import_hint": "La vols a la mida d'aquesta classe? La IA et proposa com adaptar-la i tu decideixes si aplicar-ho."
+        "after_import_hint": "La vols a la mida d'aquesta classe? La IA et proposa com adaptar-la i tu decideixes si aplicar-ho.",
+        "hints_note": "Sense pistes | La IA no adapta la pista de la missió: revisa-la després d'aplicar la proposta. | La IA no adapta les {count} pistes de la missió: revisa-les després d'aplicar la proposta."
       }
     },
     "badges": {
@@ -1050,7 +1110,17 @@
         "remove_unused_confirm": "Treure i esborrar el compte",
         "removed": "{name} ja no és a la classe",
         "removed_account_deleted": "{name} ja no és a la classe i el seu compte sense ús s'ha esborrat",
-        "remove_error": "No s'ha pogut treure de la classe."
+        "remove_error": "No s'ha pogut treure de la classe.",
+        "avatar": "Canviar l'avatar",
+        "avatar_title": "Avatar a la classe",
+        "avatar_intro": "Si l'avatar de {name} en aquesta classe no és adequat, canvia'l per un personatge del catàleg. Només canvia en aquesta classe, i {name} en pot triar un altre des de la pestanya Avatar.",
+        "avatar_now": "Ara surt així",
+        "avatar_choose": "Personatges del catàleg",
+        "avatar_pick": "Tria el personatge que portarà {name} en aquesta classe.",
+        "avatar_summary": "En desar, {name} passa a portar {avatar} en aquesta classe.",
+        "avatar_summary_generated": "En desar, {name} passa a portar {avatar} en aquesta classe, i la imatge que va generar amb IA s'esborra.",
+        "avatar_saved": "Avatar canviat",
+        "avatar_error": "No s'ha pogut canviar l'avatar."
       }
     },
     "ai_assistant": {
@@ -1106,7 +1176,15 @@
           "el": "Grec",
           "ro": "Romanès"
         },
-        "delete_modal_blocked": "Hi ha classes que depenen del teu compte."
+        "delete_modal_blocked": "Hi ha classes que depenen del teu compte.",
+        "avatar_title": "El teu avatar",
+        "avatar_description": "Amb ell et reconeixen el teu alumnat i la resta del professorat: surt al costat del teu nom a l'historial, al professorat de cada classe, a l'activitat i a l'assistència. És el mateix a totes les teves classes.",
+        "avatar_preview": "Així et veuen a les teves classes",
+        "avatar_auto": "Automàtic",
+        "avatar_updated": "Avatar actualitzat",
+        "avatar_error": "No s'ha pogut canviar l'avatar.",
+        "avatar_characters": "Personatges",
+        "avatar_colors": "Les teves inicials sobre un color"
       },
       "meta": {
         "title": "El meu perfil | ITAKAI",
@@ -1211,8 +1289,10 @@
           "rarity_desc": "Raresa ↓",
           "rarity_asc": "Raresa ↑",
           "completion_desc": "Completesa ↓",
-          "completion_asc": "Completesa ↑"
-        }
+          "completion_asc": "Completesa ↑",
+          "class_order": "Ordre de la classe"
+        },
+        "map_note": "Al mapa surten totes les missions de la classe, en el seu ordre."
       },
       "rewards_form_modal": {
         "title": "Editar recompenses",
@@ -1309,7 +1389,57 @@
         "approve_error": "No s'ha pogut aprovar el lliurament",
         "approve_team": "Aprovar l’equip ({count}) amb un {pct} %",
         "team_approved": "{team}: {count} lliurament aprovat amb un {pct} % | {team}: {count} lliuraments aprovats amb un {pct} %",
-        "team_note": "Missió per equips («{set}»): en revisar un lliurament pots aprovar amb el mateix percentatge tot el seu equip que hagi lliurat."
+        "team_note": "Missió per equips («{set}»): en revisar un lliurament pots aprovar amb el mateix percentatge tot el seu equip que hagi lliurat.",
+        "hint_penalty": "−{count} % per les seves pistes",
+        "penalty_changed": "Lliurament de {name} aprovat (+{xp} XP). Les seves pistes resten ara un {count} %, no el que es veia en obrir la finestra.",
+        "team_hints_note": "Algú d'aquest equip ha fet servir pistes de %: a cadascú se li aplica el seu propi descompte, així que no tot l'equip rebrà el mateix.",
+        "team_penalty_changed": "Algú de l'equip ha fet servir una altra pista de % mentre revisaves: a cadascú se li ha descomptat el que resten ara les seves pistes."
+      },
+      "mission_hints": {
+        "add": "Afegir",
+        "intro": "L'alumnat les fa servir en aquest ordre, d'una en una, i en paga el cost en fer-les servir. Veu quantes n'hi ha i quant costen; el text, només de les que ja ha fet servir.",
+        "empty_title": "Aquesta missió encara no té pistes",
+        "empty_description": "Afegeix pistes que vagin del més general al més concret. Cadascuna pot costar {coins}, XP o un % de la recompensa.",
+        "empty_description_readonly": "Si se n'afegeixen, l'alumnat les veurà aquí i les farà servir en ordre.",
+        "add_first": "Afegir la primera pista",
+        "limit_reached": "Aquesta missió ja té {max} pistes, el màxim.",
+        "used_by": "Sense fer servir | L'ha fet servir 1 estudiant | L'han fet servir {count} estudiants",
+        "edit_named": "Editar la pista {position}",
+        "free_in_class": "Gratis en aquesta classe",
+        "free_no_coins": "La classe no fa servir {coins}: aquesta pista surt gratis.",
+        "free_no_xp": "La classe no fa servir XP: aquesta pista surt gratis.",
+        "free_note_list": "Alguna pista surt gratis perquè la classe no fa servir el recurs amb què es paga.",
+        "toast_added": "Pista afegida",
+        "toast_saved": "Pista desada",
+        "toast_deleted": "Pista eliminada",
+        "toast_error": "No s'ha pogut desar la pista",
+        "toast_delete_error": "No s'ha pogut eliminar la pista",
+        "reorder_error": "No s'ha pogut canviar l'ordre de les pistes",
+        "form": {
+          "add_title": "Nova pista",
+          "edit_title": "Pista {position}",
+          "content": "Text de la pista",
+          "content_hint": "El que llegeix qui la fa servir. Fins a {max} caràcters.",
+          "content_placeholder": "Ex.: Fixa't en les dates del document de suport.",
+          "content_required": "Escriu el text de la pista.",
+          "cost_type": "Com es paga",
+          "type_xp": "XP",
+          "type_percent": "% de la recompensa",
+          "amount_coins": "Preu en {coins}",
+          "amount_xp": "Preu en XP",
+          "amount_percent": "Percentatge que resta",
+          "amount_hint": "Qualsevol nombre enter. Les dreceres només són suggeriments.",
+          "amount_percent_hint": "Es resta del que la missió encara ha de pagar a qui la faci servir, mai del que ja ha cobrat. Diverses pistes de % se sumen, fins al 100 %.",
+          "presets": "Dreceres",
+          "used_note": "Sense fer servir | L'ha fet servir 1 estudiant, així que no es pot esborrar. El que va pagar no canvia: el cost nou val per a qui la faci servir a partir d'ara. | L'han fet servir {count} estudiants, així que no es pot esborrar. El que van pagar no canvia: el cost nou val per a qui la faci servir a partir d'ara.",
+          "summary_free": "Qui la faci servir l'obrirà gratis.",
+          "summary_coins": "Qui la faci servir pagarà {count} {coins} en obrir-la.",
+          "summary_xp": "Qui la faci servir pagarà {count} XP en obrir-la (pot baixar de nivell).",
+          "summary_percent": "Qui la faci servir cobrarà un {count} % menys del que la missió encara li hagi de pagar.",
+          "delete": "Eliminar la pista",
+          "delete_summary": "Si l'elimines, s'esborra a l'instant: encara no l'ha fet servir ningú.",
+          "add_button": "Afegir la pista"
+        }
       }
     },
     "templates": {

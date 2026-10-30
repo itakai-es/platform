@@ -151,10 +151,10 @@
                 />
                 <Avatar
                   v-else
-                  :src="winner.avatar || undefined"
-                  :username="winner.label"
+                  :src="winner.avatar"
+                  :name="winner.label"
+                  :seed="studentAvatarSeed(classId, winner.id)"
                   size="md"
-                  alt=""
                 />
                 <div class="min-w-0">
                   <p class="text-sm text-white/70">{{ t('teacher.roulette.picked_label') }}</p>
@@ -340,6 +340,7 @@
                 :id="`roulette-entry-${entry.id}`"
                 :name="entry.label"
                 :avatar="entry.avatar ?? undefined"
+                :avatar-seed="studentAvatarSeed(classId, entry.id)"
                 :sub="entrySub(entry)"
                 :muted="isOut(entry.id)"
               >
@@ -423,6 +424,7 @@ import type { TeamOption } from '~/types/team.types'
 import { teamFillOf } from '~/utils/team-style'
 import { resolveClassSettings } from '~/utils/class-settings'
 import { matchesQuery } from '~/utils/text-search'
+import { studentAvatarSeed } from '~/utils/avatar'
 import {
   localDay,
   randomIndex,

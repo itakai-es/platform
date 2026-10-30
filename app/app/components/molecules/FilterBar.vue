@@ -1,8 +1,24 @@
 <template>
   <div class="rounded-2xl p-2.5 sm:p-3 space-y-2" :class="bgClass">
-    <!-- Row 1: Search + Filters toggle + Count -->
-    <div class="flex gap-2 sm:gap-3 items-center">
-      <div v-if="!hideSearch" class="flex-1 min-w-0">
+    <!-- Row 1: Search + Filters toggle + Count. Con más de dos vistas, en el móvil
+         el buscador va en su fila: con todo al lado se queda sin sitio para escribir. -->
+    <div
+      class="flex gap-2 sm:gap-3 items-center"
+      :class="{ 'flex-wrap sm:flex-nowrap': searchOwnRow }"
+    >
+      <!-- Sin buscador ni filtros (el mapa): una nota ocupa su sitio, así la vista y el
+           recuento siguen a la derecha, como en las otras vistas. -->
+      <p
+        v-if="viewOnly && viewOnlyNote"
+        class="min-w-0 flex-1 px-2 text-sm font-medium text-navy-700"
+      >
+        {{ viewOnlyNote }}
+      </p>
+      <div
+        v-if="!hideSearch && !viewOnly"
+        class="min-w-0"
+        :class="searchOwnRow ? 'w-full sm:w-auto sm:flex-1' : 'flex-1'"
+      >
         <SearchInput
           :model-value="search"
           :placeholder="searchPlaceholder ?? t('common.filter_bar.search')"
@@ -12,7 +28,7 @@
 
       <!-- Toggle filters button -->
       <button
-        v-if="$slots.filters || sortOptions.length > 0"
+        v-if="!viewOnly && ($slots.filters || sortOptions.length > 0)"
         type="button"
         class="flex-shrink-0 relative flex items-center gap-1.5 px-3 sm:px-4 py-2.5 sm:py-3 border border-border-primary bg-surface text-text-primary hover:bg-gray-50 rounded-2xl text-sm sm:text-base font-medium transition-colors duration-200"
         :aria-label="filtersLabel"
@@ -27,6 +43,7 @@
       <ViewToggle
         v-if="view !== undefined"
         :model-value="view"
+        :modes="viewModes"
         class="flex-shrink-0"
         @update:model-value="$emit('update:view', $event)"
       />
@@ -34,7 +51,7 @@
       <!-- Results count (sin buscador, se va a la derecha igualmente). Celeste oscuro y no el
            de marca: el blanco sobre `bg-sky` se queda en 2,6:1 y no se lee bien. -->
       <div
-        :class="{ 'ml-auto': hideSearch }"
+        :class="{ 'ml-auto': hideSearch || viewOnly || searchOwnRow }"
         class="flex-shrink-0 bg-sky-700 text-white w-10 h-10 sm:w-12 sm:h-12 rounded-full text-sm sm:text-base font-semibold flex items-center justify-center"
       >
         {{ resultsCount }}
@@ -51,7 +68,7 @@
       leave-to-class="opacity-0 max-h-0"
     >
       <div
-        v-if="filtersOpen"
+        v-if="filtersOpen && !viewOnly"
         class="grid grid-cols-1 xs:grid-cols-2 sm:flex sm:flex-wrap gap-2 sm:gap-3 sm:items-center"
       >
         <slot name="filters" />
@@ -101,6 +118,15 @@ interface Props {
   activeFilterCount?: number
   // Modo de vista (cuadrícula/lista). Si se omite, el toggle no se muestra.
   view?: ViewMode
+  /** Los modos que ofrece el toggle (por defecto, cuadrícula y lista). */
+  viewModes?: ViewMode[]
+  /**
+   * Solo el toggle de vista y el recuento: sin buscador ni filtros, para una
+   * vista que enseña la lista entera (el mapa de misiones).
+   */
+  viewOnly?: boolean
+  /** Lo que se dice a la izquierda en la vista que enseña la lista entera. */
+  viewOnlyNote?: string
   /** Oculta el buscador, para listas que solo se filtran por los desplegables. */
   hideSearch?: boolean
 }
@@ -111,6 +137,9 @@ const props = withDefaults(defineProps<Props>(), {
   variant: 'mint',
   hasActiveFilters: false,
   activeFilterCount: 0,
+  viewModes: undefined,
+  viewOnly: false,
+  viewOnlyNote: undefined,
   hideSearch: false,
 })
 
@@ -129,6 +158,9 @@ const filtersLabel = computed(() =>
     ? t('common.filter_bar.filters_count', { count: props.activeFilterCount })
     : t('common.filter_bar.filters')
 )
+
+// Con el mapa, el toggle tiene tres botones: en el móvil, el buscador baja de fila.
+const searchOwnRow = computed(() => (props.viewModes?.length ?? 0) > 2)
 
 // Sin buscador, los filtros son lo único que hay en la barra: salen abiertos.
 const filtersOpen = ref(props.hideSearch)

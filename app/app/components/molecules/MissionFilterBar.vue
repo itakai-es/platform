@@ -8,6 +8,9 @@
     :has-active-filters="hasActiveFilters"
     :active-filter-count="activeFilterCount"
     :view="view"
+    :view-modes="viewModes"
+    :view-only="view === 'map'"
+    :view-only-note="t('teacher.components.mission_filter_bar.map_note')"
     variant="red"
     @update:search="$emit('update:search', $event)"
     @update:sort="$emit('update:sort', $event)"
@@ -78,6 +81,8 @@ interface Props {
   statusFilters?: string[]
   hasExtraActiveFilters?: boolean
   view?: ViewMode
+  /** Los modos de vista que se ofrecen; en el mapa no hay filtros: va la clase entera. */
+  viewModes?: ViewMode[]
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -87,6 +92,7 @@ const props = withDefaults(defineProps<Props>(), {
   showStatusFilter: false,
   statusFilters: () => [],
   hasExtraActiveFilters: false,
+  viewModes: undefined,
 })
 
 defineEmits<{
@@ -108,16 +114,18 @@ const rarityOptions = computed<SelectOption[]>(() => [
 ])
 
 // Status options
-const statusOptions = computed<SelectOption[]>(() => [
-  { value: 'activa', label: t('teacher.components.mission_filter_bar.status.active') },
-  { value: 'urgente', label: t('teacher.components.mission_filter_bar.status.urgent') },
-  { value: 'completada', label: t('teacher.components.mission_filter_bar.status.completed') },
-  { value: 'expirada', label: t('teacher.components.mission_filter_bar.status.expired') },
-  { value: 'bloqueada', label: t('teacher.components.mission_filter_bar.status.locked') },
-])
+const statusLabel = useMissionStatusLabel()
+const statusOptions = computed<SelectOption[]>(() =>
+  (['activa', 'urgente', 'completada', 'expirada', 'bloqueada'] as const).map(value => ({
+    value,
+    label: statusLabel(value),
+  }))
+)
 
-// Sort options
+// Sort options. El primero, el orden de la clase (el de la progresión que fija
+// el profesorado), es el de por defecto: ver utils/mission-sort.ts.
 const baseSortOptions = computed<SelectOption[]>(() => [
+  { value: 'order-asc', label: t('teacher.components.mission_filter_bar.sort.class_order') },
   { value: 'deadline-asc', label: t('teacher.components.mission_filter_bar.sort.deadline_asc') },
   { value: 'deadline-desc', label: t('teacher.components.mission_filter_bar.sort.deadline_desc') },
   { value: 'title-asc', label: t('teacher.components.mission_filter_bar.sort.name_asc') },

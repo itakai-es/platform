@@ -189,7 +189,30 @@
           "empty_search": "Nun s'atoparon misiones pa \"{query}\"",
           "empty_status": "Nun hai misiones colos estaos escoyíos",
           "empty_rarity": "Nun hai misiones coles rareces escoyíes",
-          "empty_default": "Nun hai misiones nesta clase"
+          "empty_default": "Nun hai misiones nesta clase",
+          "order": {
+            "button": "Ordenar",
+            "title": "Orde de la clase",
+            "hint": "L'alumnáu ve les misiones nesti orde. Arrastra cada fila pela so asa o, col tecláu, ponte na asa y usa les flechas arriba y abaxo. Cada cambéu guárdase al momentu.",
+            "hint_path": "Una misión nun pue dir delantre de lo que pide: pa movela, quita enantes lo que pide nos sos Axustes › Camín, o usa «Quitar los requisitos».",
+            "done": "Fecho",
+            "error": "Nun se pudo guardar l'orde. Inténtalo de nuevo.",
+            "breaks_path": "«{mission}» ábrese al completar «{required}»: tien de dir detrás. Quita enantes lo que pide nos sos Axustes › Camín, o usa «Quitar los requisitos»."
+          },
+          "path": {
+            "title": "Camín del mapa",
+            "hint": "Un camín cenciellu nun pasu. Pa escoyer lo que pide cada misión, ábrela y vete a Axustes, Camín.",
+            "chain": "Encadenar n’orde",
+            "chain_summary": "Cada misión va pidir completar l’anterior p’abrise: {count} requisitu. | Cada misión va pidir completar l’anterior p’abrise: {count} requisitos.",
+            "chain_replaces": "Sustitúi’l que hai agora. | Sustitúi los {count} que hai agora.",
+            "chain_skips_locked": "Les bloquiaes queden fuera.",
+            "chained": "Yá tán encadenaes: cada misión pide l’anterior.",
+            "chain_done": "Misiones encadenaes n’orde",
+            "clear": "Quitar los requisitos",
+            "clear_summary": "Quita’l requisitu que hai: toles misiones s’abren dende’l principiu. | Quita los {count} requisitos que hai: toles misiones s’abren dende’l principiu.",
+            "clear_done": "Requisitos quitaos",
+            "error": "Nun se pudo camudar el camín. Inténtalo de nuevo."
+          }
         },
         "meta": {
           "title": "Detalle de clase | ITAKAI Docente",
@@ -353,6 +376,10 @@
             "sounds": {
               "label": "Sonidos",
               "desc": "Efeutos de soníu al xubir de nivel, completar misiones, etc."
+            },
+            "missionMap": {
+              "label": "Mapa de misiones",
+              "desc": "Una vista más en Misiones: el camín de la clase, nel orde que decidas."
             }
           },
           "requires": "Necesita {feature}",
@@ -428,7 +455,11 @@
               "error": "Nun se pudo unviar la clase a la papelera. Tórnalo a intentar."
             }
           },
-          "edit_level_note": "Pues camudar el nome, l'horariu y la portada. La clasificación, les funcionalidaes y los niveles cámudalos quien alministra la clase."
+          "edit_level_note": "Pues camudar el nome, l'horariu y la portada. La clasificación, les funcionalidaes y los niveles cámudalos quien alministra la clase.",
+          "beta": {
+            "title": "En pruebes",
+            "hint": "Funcionalidaes nueves que se tán probando. Vienen desactivaes d'entrada y l'aspeutu y el funcionamientu van axustase coles pruebes."
+          }
         },
         "badges_empty": "Nun hai insinies nesta clase",
         "archived_notice": "Esta clase ta archivada: pue consultase, pero nun almite más estudiantes.",
@@ -611,7 +642,8 @@
             "shop": "Tienda",
             "reward": "Recompenses",
             "attendance": "Asistencia",
-            "team": "Equipos"
+            "team": "Equipos",
+            "hint": "Pistes"
           },
           "actions": {
             "class": {
@@ -642,7 +674,8 @@
               "nickname_changed": "camudó'l nomatu de {target}",
               "removed": "quitó a {target} de la clase",
               "removed_unused": "quitó a {target} de la clase y borró la so cuenta, que nun se usara",
-              "avatar_generated": "xeneró un avatar nuevu pa {target}"
+              "avatar_generated": "xeneró un avatar nuevu pa {target}",
+              "avatar_changed": "camudó l'avatar de {target} por ún del catálogu"
             },
             "mission": {
               "created": "creó la misión «{title}»",
@@ -652,7 +685,11 @@
               "moved": "camudó de clase la misión «{title}»",
               "rewards_changed": "camudó la recompensa de la misión «{title}»",
               "imported": "importó la misión «{title}»",
-              "exported": "copió la misión «{title}» n'otra clase"
+              "exported": "copió la misión «{title}» n'otra clase",
+              "reordered": "camudó l'orde de les misiones",
+              "prerequisites_changed": "camudó lo que hai que completar p’abrir la misión «{title}»",
+              "chained": "encadenó les misiones n’orde: cada una pide l’anterior",
+              "prerequisites_cleared": "quitó los requisitos del camín de les misiones"
             },
             "enigma": {
               "created": "amestó l'enigma «{title}»",
@@ -666,7 +703,8 @@
               "deleted": "desanició'l documentu «{title}»"
             },
             "submission": {
-              "approved": "aprobó la entrega de {target} en «{title}» con un {percentage} %"
+              "approved": "aprobó la entrega de {target} en «{title}» con un {percentage} %",
+              "approved_hints": "aprobó la entrega de {target} en «{title}» con un {percentage} % (les sos pistes restaben un {penalty} %)"
             },
             "behavior": {
               "applied": "aplicó-y «{title}» a {target}",
@@ -702,6 +740,12 @@
               "awarded_batch": "dio {points} puntu al equipu «{title}» y repartió «{label}» a cada integrante | dio {points} puntos al equipu «{title}» y repartió «{label}» a cada integrante",
               "distributed": "repartió «{label}» al equipu «{title}»",
               "distributed_batch": "repartió «{label}» a la única persona del equipu «{title}» | repartió «{label}» a les {count} persones del equipu «{title}»"
+            },
+            "hint": {
+              "created": "amestó la pista {position} a la misión «{title}»",
+              "updated": "editó la pista {position} de la misión «{title}»",
+              "deleted": "desanició la pista {position} de la misión «{title}»",
+              "reordered": "camudó l'orde de les pistes de la misión «{title}»"
             }
           },
           "anonymous": {
@@ -711,10 +755,12 @@
               "nickname_changed": "camudó'l nomatu de daquién que yá nun ta na clase",
               "removed": "quitó a daquién de la clase",
               "removed_unused": "quitó de la clase a daquién que nun entrara enxamás y borró la so cuenta",
-              "avatar_generated": "xeneró un avatar nuevu pa daquién que yá nun ta na clase"
+              "avatar_generated": "xeneró un avatar nuevu pa daquién que yá nun ta na clase",
+              "avatar_changed": "camudó por ún del catálogu l'avatar de daquién que yá nun ta na clase"
             },
             "submission": {
-              "approved": "aprobó en «{title}» la entrega de daquién que yá nun ta na clase, con un {percentage} %"
+              "approved": "aprobó en «{title}» la entrega de daquién que yá nun ta na clase, con un {percentage} %",
+              "approved_hints": "aprobó en «{title}» la entrega de daquién que yá nun ta na clase, con un {percentage} % (les sos pistes restaben un {penalty} %)"
             },
             "behavior": {
               "applied": "aplicó-y «{title}» a daquién que yá nun ta na clase"
@@ -836,7 +882,19 @@
           "team_set_none": "Individual (ensin equipos)",
           "team_set_hint": "Namás informativo: l’alumnáu ve con qué equipos se fai y pues aprobar tol equipu d’una vegada. Cada estudiante sigue entregando lo so.",
           "basics_title": "Datos de la misión",
-          "play_title": "Dificultá y visibilidá"
+          "play_title": "Dificultá y visibilidá",
+          "path_title": "Camín",
+          "path_hint": "Cada estudiante va vela zarrada hasta completar toles que marques. A quien yá la entamare nun se-y zarra.",
+          "path_legend": "Pa abrila, completar enantes",
+          "path_map_off": "Los requisitos namás zarren misiones col mapa aceso (Axustes de la clase › Funcionalidaes).",
+          "path_empty": "Nun hai otres misiones na clase.",
+          "path_cycle_note": "Les atenuaes yá dependen d’esta misión: si les pidiere, nenguna s’abriría.",
+          "path_limit": "Como muncho, {max}. Pa escoyer otra, desmarca una.",
+          "path_moved": "Guardao. La misión pasó detrás de lo que pide nel orde de la clase.",
+          "path_error_cycle": "Dalguna de les marcaes yá depende d’esta misión: si la pidiere, nenguna s’abriría. Revisa’l camín y vuelve guardar.",
+          "path_error_invalid": "Dalguna de les marcaes yá nun ta nesta clase. Revisa’l camín y vuelve guardar.",
+          "path_load_error": "Nun se pudieron cargar les misiones de la clase.",
+          "path_retry": "Tornar a intentalo"
         }
       },
       "import": {
@@ -883,7 +941,8 @@
         "copy_success_title": "Misión copiada",
         "duplicate_success_title": "Misión duplicada",
         "success_description": "La copia de «{title}» yá ta en «{name}», bloquiada y ensin data llende. Revísala y desbloquíala cuando quieras que la vea'l to alumnáu.",
-        "open_mission": "Abrir la misión"
+        "open_mission": "Abrir la misión",
+        "hints": "Ensin pistes | 1 pista | {count} pistes"
       },
       "adapt": {
         "button": "Adaptar con IA",
@@ -918,7 +977,8 @@
         "applied": "Misión adaptada",
         "apply_error": "Nun se pudo aplicar la propuesta. La misión nun camudó.",
         "apply_error_partial": "Namás s'aplicó una parte de la propuesta. Revisa la comparanza: yá amuesa lo guardao.",
-        "after_import_hint": "¿Quiesla a la midida d'esta clase? La IA propónte cómo adaptala y tu decides si aplicalo."
+        "after_import_hint": "¿Quiesla a la midida d'esta clase? La IA propónte cómo adaptala y tu decides si aplicalo.",
+        "hints_note": "Ensin pistes | La IA nun adapta la pista de la misión: revísala depués d'aplicar la propuesta. | La IA nun adapta les {count} pistes de la misión: revísales depués d'aplicar la propuesta."
       }
     },
     "badges": {
@@ -1050,7 +1110,17 @@
         "remove_unused_confirm": "Quitar y borrar la cuenta",
         "removed": "{name} yá nun ta na clase",
         "removed_account_deleted": "{name} yá nun ta na clase y la so cuenta ensin usar borróse",
-        "remove_error": "Nun se pudo quitar de la clase."
+        "remove_error": "Nun se pudo quitar de la clase.",
+        "avatar": "Camudar l'avatar",
+        "avatar_title": "Avatar na clase",
+        "avatar_intro": "Si l'avatar de {name} nesta clase nun ye afayadizu, camúdalu por un personaxe del catálogu. Namás camuda nesta clase, y {name} pue escoyer otru dende la so llingüeta Avatar.",
+        "avatar_now": "Agora sal asina",
+        "avatar_choose": "Personaxes del catálogu",
+        "avatar_pick": "Escueyi'l personaxe que llevará {name} nesta clase.",
+        "avatar_summary": "Al guardar, {name} pasa a llevar a {avatar} nesta clase.",
+        "avatar_summary_generated": "Al guardar, {name} pasa a llevar a {avatar} nesta clase, y la imaxe que xeneró con IA bórrase.",
+        "avatar_saved": "Avatar camudáu",
+        "avatar_error": "Nun se pudo camudar l'avatar."
       }
     },
     "ai_assistant": {
@@ -1106,7 +1176,15 @@
           "el": "Griegu",
           "ro": "Rumanu"
         },
-        "delete_modal_blocked": "Hai clases que dependen de la to cuenta."
+        "delete_modal_blocked": "Hai clases que dependen de la to cuenta.",
+        "avatar_title": "El to avatar",
+        "avatar_description": "Con él reconócente el to alumnáu y el restu del profesoráu: sal xunto al to nome nel historial, nel profesoráu de cada clase, na actividá y na asistencia. Ye'l mesmu en toles tos clases.",
+        "avatar_preview": "Asina te ven nes tos clases",
+        "avatar_auto": "Automáticu",
+        "avatar_updated": "Avatar anováu",
+        "avatar_error": "Nun se pudo camudar l'avatar.",
+        "avatar_characters": "Personaxes",
+        "avatar_colors": "Les tos iniciales sobre un color"
       },
       "meta": {
         "title": "El mio perfil | ITAKAI",
@@ -1211,8 +1289,10 @@
           "rarity_desc": "Rareza ↓",
           "rarity_asc": "Rareza ↑",
           "completion_desc": "Completáu ↓",
-          "completion_asc": "Completáu ↑"
-        }
+          "completion_asc": "Completáu ↑",
+          "class_order": "Orde de la clase"
+        },
+        "map_note": "Nel mapa salen toles misiones de la clase, nel so orde."
       },
       "rewards_form_modal": {
         "title": "Editar recompenses",
@@ -1309,7 +1389,57 @@
         "approve_error": "Nun se pudo aprobar la entrega",
         "approve_team": "Aprobar l’equipu ({count}) con un {pct} %",
         "team_approved": "{team}: aprobada {count} entrega con un {pct} % | {team}: aprobaes {count} entregues con un {pct} %",
-        "team_note": "Misión per equipos («{set}»): al revisar una entrega pues aprobar col mesmu porcentaxe a tol so equipu que la entregare."
+        "team_note": "Misión per equipos («{set}»): al revisar una entrega pues aprobar col mesmu porcentaxe a tol so equipu que la entregare.",
+        "hint_penalty": "−{count} % poles sos pistes",
+        "penalty_changed": "Entrega de {name} aprobada (+{xp} XP). Les sos pistes resten agora un {count} %, non lo que se vía al abrir la ventana.",
+        "team_hints_note": "Daquién d'esti equipu usó pistes de %: a cada quien aplícase-y el so propiu descuentu, asina que non tol equipu va recibir lo mesmo.",
+        "team_penalty_changed": "Daquién del equipu usó otra pista de % mientres revisabes: a cada quien descontóse-y lo que resten agora les sos pistes."
+      },
+      "mission_hints": {
+        "add": "Amestar",
+        "intro": "L'alumnáu úsales nesti orde, d'una en una, y paga'l so costu al usales. Ve cuántes hai y cuánto cuesten; el testu, namás de les que yá usó.",
+        "empty_title": "Esta misión entá nun tien pistes",
+        "empty_description": "Amiesta pistes que vaigan de lo xeneral a lo concreto. Cada una pue costar {coins}, XP o un % de la recompensa.",
+        "empty_description_readonly": "Si s'amiesten, l'alumnáu va veles equí y va usales n'orde.",
+        "add_first": "Amestar la primer pista",
+        "limit_reached": "Esta misión yá tien {max} pistes, el máximu.",
+        "used_by": "Ensin usar | Usóla 1 estudiante | Usáronla {count} estudiantes",
+        "edit_named": "Editar la pista {position}",
+        "free_in_class": "De baldre nesta clase",
+        "free_no_coins": "La clase nun usa {coins}: esta pista sal de baldre.",
+        "free_no_xp": "La clase nun usa XP: esta pista sal de baldre.",
+        "free_note_list": "Dalguna pista sal de baldre porque la clase nun usa'l recursu col que se paga.",
+        "toast_added": "Pista amestada",
+        "toast_saved": "Pista guardada",
+        "toast_deleted": "Pista desaniciada",
+        "toast_error": "Nun se pudo guardar la pista",
+        "toast_delete_error": "Nun se pudo desaniciar la pista",
+        "reorder_error": "Nun se pudo camudar l'orde de les pistes",
+        "form": {
+          "add_title": "Pista nueva",
+          "edit_title": "Pista {position}",
+          "content": "Testu de la pista",
+          "content_hint": "Lo que llee quien la usa. Hasta {max} caráuteres.",
+          "content_placeholder": "Ex.: Fíxate nes feches del documentu d’apoyu.",
+          "content_required": "Escribi’l testu de la pista.",
+          "cost_type": "Cómo se paga",
+          "type_xp": "XP",
+          "type_percent": "% de la recompensa",
+          "amount_coins": "Preciu en {coins}",
+          "amount_xp": "Preciu en XP",
+          "amount_percent": "Porcentaxe que resta",
+          "amount_hint": "Cualquier númberu enteru. Los atayos son namás suxerencies.",
+          "amount_percent_hint": "Réstase de lo que la misión entá tien de pagar a quien la use, enxamás de lo yá cobrao. Delles pistes de % súmense, hasta'l 100 %.",
+          "presets": "Atayos",
+          "used_note": "Ensin usar | Usóla 1 estudiante, asina que nun se pue desaniciar. Lo que pagó nun camuda: el costu nuevu val pa quien la use d'equí p'alantre. | Usáronla {count} estudiantes, asina que nun se pue desaniciar. Lo que pagaron nun camuda: el costu nuevu val pa quien la use d'equí p'alantre.",
+          "summary_free": "Quien la use va abrila de baldre.",
+          "summary_coins": "Quien la use va pagar {count} {coins} al abrila.",
+          "summary_xp": "Quien la use va pagar {count} XP al abrila (pue baxar de nivel).",
+          "summary_percent": "Quien la use va cobrar un {count} % menos de lo que la misión entá-y tenga de pagar.",
+          "delete": "Desaniciar la pista",
+          "delete_summary": "Si la desanicies, desaníciase nel momentu: naide la usó entá.",
+          "add_button": "Amestar la pista"
+        }
       }
     },
     "templates": {

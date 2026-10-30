@@ -4,6 +4,7 @@
     <Avatar
       v-if="showAvatar && assistantAvatar"
       :src="assistantAvatar"
+      color="purple"
       size="xs"
       class="mr-3 mt-1 flex-shrink-0"
     />

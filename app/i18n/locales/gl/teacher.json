@@ -189,7 +189,30 @@
           "empty_search": "Non se atoparon misións para \"{query}\"",
           "empty_status": "Non hai misións cos estados seleccionados",
           "empty_rarity": "Non hai misións coas rarezas seleccionadas",
-          "empty_default": "Non hai misións nesta clase"
+          "empty_default": "Non hai misións nesta clase",
+          "order": {
+            "button": "Ordenar",
+            "title": "Orde da clase",
+            "hint": "O alumnado ve as misións nesta orde. Arrastra cada fila pola súa asa ou, co teclado, ponte na asa e usa as frechas arriba e abaixo. Cada cambio gárdase ao momento.",
+            "hint_path": "Unha misión non pode ir diante do que pide: para movela, quita antes o que pide nos seus Axustes › Camiño, ou usa «Quitar os requisitos».",
+            "done": "Feito",
+            "error": "Non se puido gardar a orde. Téntao de novo.",
+            "breaks_path": "«{mission}» ábrese ao completar «{required}»: ten que ir detrás. Quita antes o que pide nos seus Axustes › Camiño, ou usa «Quitar os requisitos»."
+          },
+          "path": {
+            "title": "Camiño do mapa",
+            "hint": "Un camiño sinxelo nun paso. Para escoller o que pide cada misión, ábrea e vai a Axustes, Camiño.",
+            "chain": "Encadear en orde",
+            "chain_summary": "Cada misión pedirá completar a anterior para abrirse: {count} requisito. | Cada misión pedirá completar a anterior para abrirse: {count} requisitos.",
+            "chain_replaces": "Substitúe o que hai agora. | Substitúe os {count} que hai agora.",
+            "chain_skips_locked": "As bloqueadas quedan fóra.",
+            "chained": "Xa están encadeadas: cada misión pide a anterior.",
+            "chain_done": "Misións encadeadas en orde",
+            "clear": "Quitar os requisitos",
+            "clear_summary": "Quita o requisito que hai: todas as misións se abren desde o principio. | Quita os {count} requisitos que hai: todas as misións se abren desde o principio.",
+            "clear_done": "Requisitos quitados",
+            "error": "Non se puido cambiar o camiño. Téntao de novo."
+          }
         },
         "meta": {
           "title": "Detalle de clase | ITAKAI Docente",
@@ -353,6 +376,10 @@
             "sounds": {
               "label": "Sons",
               "desc": "Efectos de son ao subir de nivel, completar misións, etc."
+            },
+            "missionMap": {
+              "label": "Mapa de misións",
+              "desc": "Unha vista máis en Misións: o camiño da clase, na orde que decidas."
             }
           },
           "requires": "Necesita {feature}",
@@ -428,7 +455,11 @@
               "error": "Non se puido enviar a clase á papeleira. Téntao de novo."
             }
           },
-          "edit_level_note": "Podes cambiar o nome, o horario e a portada. A clasificación, as funcionalidades e os niveis cámbiaos quen administra a clase."
+          "edit_level_note": "Podes cambiar o nome, o horario e a portada. A clasificación, as funcionalidades e os niveis cámbiaos quen administra a clase.",
+          "beta": {
+            "title": "En probas",
+            "hint": "Funcionalidades novas que se están a probar. Veñen desactivadas de entrada e o seu aspecto e funcionamento axustaranse coas probas."
+          }
         },
         "badges_empty": "Non hai insignias nesta clase",
         "archived_notice": "Esta clase está arquivada: pódese consultar, pero non admite máis estudantes.",
@@ -611,7 +642,8 @@
             "shop": "Tenda",
             "reward": "Recompensas",
             "attendance": "Asistencia",
-            "team": "Equipos"
+            "team": "Equipos",
+            "hint": "Pistas"
           },
           "actions": {
             "class": {
@@ -642,7 +674,8 @@
               "nickname_changed": "cambiou o alcume de {target}",
               "removed": "quitou a {target} da clase",
               "removed_unused": "quitou a {target} da clase e borrou a súa conta, que non se usara",
-              "avatar_generated": "xerou un avatar novo para {target}"
+              "avatar_generated": "xerou un avatar novo para {target}",
+              "avatar_changed": "cambiou o avatar de {target} por un do catálogo"
             },
             "mission": {
               "created": "creou a misión «{title}»",
@@ -652,7 +685,11 @@
               "moved": "cambiou de clase a misión «{title}»",
               "rewards_changed": "cambiou a recompensa da misión «{title}»",
               "imported": "importou a misión «{title}»",
-              "exported": "copiou a misión «{title}» noutra clase"
+              "exported": "copiou a misión «{title}» noutra clase",
+              "reordered": "cambiou a orde das misións",
+              "prerequisites_changed": "cambiou o que hai que completar para abrir a misión «{title}»",
+              "chained": "encadeou as misións en orde: cada unha pide a anterior",
+              "prerequisites_cleared": "quitou os requisitos do camiño das misións"
             },
             "enigma": {
               "created": "engadiu o enigma «{title}»",
@@ -666,7 +703,8 @@
               "deleted": "eliminou o documento «{title}»"
             },
             "submission": {
-              "approved": "aprobou a entrega de {target} en «{title}» cun {percentage} %"
+              "approved": "aprobou a entrega de {target} en «{title}» cun {percentage} %",
+              "approved_hints": "aprobou a entrega de {target} en «{title}» cun {percentage} % (as súas pistas restaban un {penalty} %)"
             },
             "behavior": {
               "applied": "aplicoulle «{title}» a {target}",
@@ -702,6 +740,12 @@
               "awarded_batch": "deu {points} punto ao equipo «{title}» e repartiu «{label}» a cada integrante | deu {points} puntos ao equipo «{title}» e repartiu «{label}» a cada integrante",
               "distributed": "repartiu «{label}» ao equipo «{title}»",
               "distributed_batch": "repartiu «{label}» á única persoa do equipo «{title}» | repartiu «{label}» ás {count} persoas do equipo «{title}»"
+            },
+            "hint": {
+              "created": "engadiu a pista {position} á misión «{title}»",
+              "updated": "editou a pista {position} da misión «{title}»",
+              "deleted": "eliminou a pista {position} da misión «{title}»",
+              "reordered": "cambiou a orde das pistas da misión «{title}»"
             }
           },
           "anonymous": {
@@ -711,10 +755,12 @@
               "nickname_changed": "cambiou o alcume de alguén que xa non está na clase",
               "removed": "quitou a alguén da clase",
               "removed_unused": "quitou da clase a alguén que non entrara nunca e borrou a súa conta",
-              "avatar_generated": "xerou un avatar novo para alguén que xa non está na clase"
+              "avatar_generated": "xerou un avatar novo para alguén que xa non está na clase",
+              "avatar_changed": "cambiou por un do catálogo o avatar de alguén que xa non está na clase"
             },
             "submission": {
-              "approved": "aprobou en «{title}» a entrega de alguén que xa non está na clase, cun {percentage} %"
+              "approved": "aprobou en «{title}» a entrega de alguén que xa non está na clase, cun {percentage} %",
+              "approved_hints": "aprobou en «{title}» a entrega de alguén que xa non está na clase, cun {percentage} % (as súas pistas restaban un {penalty} %)"
             },
             "behavior": {
               "applied": "aplicoulle «{title}» a alguén que xa non está na clase"
@@ -836,7 +882,19 @@
           "team_set_none": "Individual (sen equipos)",
           "team_set_hint": "Só informativo: o alumnado ve con que equipos se fai e podes aprobar todo un equipo dunha vez. Cada estudante segue entregando o seu.",
           "basics_title": "Datos da misión",
-          "play_title": "Dificultade e visibilidade"
+          "play_title": "Dificultade e visibilidade",
+          "path_title": "Camiño",
+          "path_hint": "Cada estudante verá a misión pechada ata completar todas as que marques. A quen xa a comezase non se lle pecha.",
+          "path_legend": "Para abrila, completar antes",
+          "path_map_off": "Os requisitos só pechan misións co mapa acendido (Axustes da clase › Funcionalidades).",
+          "path_empty": "Non hai outras misións na clase.",
+          "path_cycle_note": "As atenuadas xa dependen desta misión: se as pedise, ningunha se abriría.",
+          "path_limit": "Como moito, {max}. Para escoller outra, desmarca unha.",
+          "path_moved": "Gardado. A misión pasou detrás do que pide na orde da clase.",
+          "path_error_cycle": "Algunha das marcadas xa depende desta misión: se a pedise, ningunha se abriría. Revisa o camiño e garda de novo.",
+          "path_error_invalid": "Algunha das marcadas xa non está nesta clase. Revisa o camiño e garda de novo.",
+          "path_load_error": "Non se puideron cargar as misións da clase.",
+          "path_retry": "Tentar de novo"
         }
       },
       "import": {
@@ -883,7 +941,8 @@
         "copy_success_title": "Misión copiada",
         "duplicate_success_title": "Misión duplicada",
         "success_description": "A copia de «{title}» xa está en «{name}», bloqueada e sen data límite. Revísaa e desbloquéaa cando queiras que a vexa o teu alumnado.",
-        "open_mission": "Abrir a misión"
+        "open_mission": "Abrir a misión",
+        "hints": "Sen pistas | 1 pista | {count} pistas"
       },
       "adapt": {
         "button": "Adaptar con IA",
@@ -918,7 +977,8 @@
         "applied": "Misión adaptada",
         "apply_error": "Non se puido aplicar a proposta. A misión non cambiou.",
         "apply_error_partial": "Só se aplicou unha parte da proposta. Revisa a comparación: xa amosa o gardado.",
-        "after_import_hint": "Quérela á medida desta clase? A IA proponche como adaptala e ti decides se aplicalo."
+        "after_import_hint": "Quérela á medida desta clase? A IA proponche como adaptala e ti decides se aplicalo.",
+        "hints_note": "Sen pistas | A IA non adapta a pista da misión: revísaa despois de aplicar a proposta. | A IA non adapta as {count} pistas da misión: revísaas despois de aplicar a proposta."
       }
     },
     "badges": {
@@ -1050,7 +1110,17 @@
         "remove_unused_confirm": "Quitar e borrar a conta",
         "removed": "{name} xa non está na clase",
         "removed_account_deleted": "{name} xa non está na clase e a súa conta sen usar borrouse",
-        "remove_error": "Non se puido quitar da clase."
+        "remove_error": "Non se puido quitar da clase.",
+        "avatar": "Cambiar o avatar",
+        "avatar_title": "Avatar na clase",
+        "avatar_intro": "Se o avatar de {name} nesta clase non é axeitado, cámbiao por unha personaxe do catálogo. Só cambia nesta clase, e {name} pode escoller outro desde a súa lapela Avatar.",
+        "avatar_now": "Agora sae así",
+        "avatar_choose": "Personaxes do catálogo",
+        "avatar_pick": "Escolle a personaxe que levará {name} nesta clase.",
+        "avatar_summary": "Ao gardar, {name} pasa a levar a {avatar} nesta clase.",
+        "avatar_summary_generated": "Ao gardar, {name} pasa a levar a {avatar} nesta clase, e a imaxe que xerou con IA bórrase.",
+        "avatar_saved": "Avatar cambiado",
+        "avatar_error": "Non se puido cambiar o avatar."
       }
     },
     "ai_assistant": {
@@ -1106,7 +1176,15 @@
           "el": "Grego",
           "ro": "Romanés"
         },
-        "delete_modal_blocked": "Hai clases que dependen da túa conta."
+        "delete_modal_blocked": "Hai clases que dependen da túa conta.",
+        "avatar_title": "O teu avatar",
+        "avatar_description": "Con el recoñécente o teu alumnado e o resto do profesorado: sae xunto ao teu nome no historial, no profesorado de cada clase, na actividade e na asistencia. É o mesmo en todas as túas clases.",
+        "avatar_preview": "Así te ven nas túas clases",
+        "avatar_auto": "Automático",
+        "avatar_updated": "Avatar actualizado",
+        "avatar_error": "Non se puido cambiar o avatar.",
+        "avatar_characters": "Personaxes",
+        "avatar_colors": "As túas iniciais sobre unha cor"
       },
       "meta": {
         "title": "O meu perfil | ITAKAI",
@@ -1211,8 +1289,10 @@
           "rarity_desc": "Rareza ↓",
           "rarity_asc": "Rareza ↑",
           "completion_desc": "Completación ↓",
-          "completion_asc": "Completación ↑"
-        }
+          "completion_asc": "Completación ↑",
+          "class_order": "Orde da clase"
+        },
+        "map_note": "No mapa saen todas as misións da clase, na súa orde."
       },
       "rewards_form_modal": {
         "title": "Editar recompensas",
@@ -1309,7 +1389,57 @@
         "approve_error": "Non se puido aprobar a entrega",
         "approve_team": "Aprobar o equipo ({count}) cun {pct} %",
         "team_approved": "{team}: aprobada {count} entrega cun {pct} % | {team}: aprobadas {count} entregas cun {pct} %",
-        "team_note": "Misión por equipos («{set}»): ao revisar unha entrega podes aprobar co mesmo porcentaxe todo o seu equipo que entregase."
+        "team_note": "Misión por equipos («{set}»): ao revisar unha entrega podes aprobar co mesmo porcentaxe todo o seu equipo que entregase.",
+        "hint_penalty": "−{count} % polas súas pistas",
+        "penalty_changed": "Entrega de {name} aprobada (+{xp} XP). As súas pistas restan agora un {count} %, non o que se vía ao abrir a xanela.",
+        "team_hints_note": "Alguén deste equipo usou pistas de %: a cada quen aplícaselle o seu propio desconto, así que non todo o equipo recibirá o mesmo.",
+        "team_penalty_changed": "Alguén do equipo usou outra pista de % mentres revisabas: a cada quen descontóuselle o que restan agora as súas pistas."
+      },
+      "mission_hints": {
+        "add": "Engadir",
+        "intro": "O alumnado úsaas nesta orde, dunha en unha, e paga o seu custo ao usalas. Ve cantas hai e canto custan; o texto, só das que xa usou.",
+        "empty_title": "Esta misión aínda non ten pistas",
+        "empty_description": "Engade pistas que vaian do xeral ao concreto. Cada unha pode custar {coins}, XP ou unha % da recompensa.",
+        "empty_description_readonly": "Se se engaden, o alumnado veraas aquí e usaraas en orde.",
+        "add_first": "Engadir a primeira pista",
+        "limit_reached": "Esta misión xa ten {max} pistas, o máximo.",
+        "used_by": "Sen usar | Usouna 1 estudante | Usárona {count} estudantes",
+        "edit_named": "Editar a pista {position}",
+        "free_in_class": "Gratis nesta clase",
+        "free_no_coins": "A clase non usa {coins}: esta pista sae gratis.",
+        "free_no_xp": "A clase non usa XP: esta pista sae gratis.",
+        "free_note_list": "Algunha pista sae gratis porque a clase non usa o recurso co que se paga.",
+        "toast_added": "Pista engadida",
+        "toast_saved": "Pista gardada",
+        "toast_deleted": "Pista eliminada",
+        "toast_error": "Non se puido gardar a pista",
+        "toast_delete_error": "Non se puido eliminar a pista",
+        "reorder_error": "Non se puido cambiar a orde das pistas",
+        "form": {
+          "add_title": "Nova pista",
+          "edit_title": "Pista {position}",
+          "content": "Texto da pista",
+          "content_hint": "O que le quen a usa. Ata {max} caracteres.",
+          "content_placeholder": "Ex.: Fíxate nas datas do documento de apoio.",
+          "content_required": "Escribe o texto da pista.",
+          "cost_type": "Como se paga",
+          "type_xp": "XP",
+          "type_percent": "% da recompensa",
+          "amount_coins": "Prezo en {coins}",
+          "amount_xp": "Prezo en XP",
+          "amount_percent": "Porcentaxe que resta",
+          "amount_hint": "Calquera número enteiro. Os atallos só son suxestións.",
+          "amount_percent_hint": "Réstase do que a misión aínda ten que pagar a quen a use, nunca do xa cobrado. Varias pistas de % súmanse, ata o 100 %.",
+          "presets": "Atallos",
+          "used_note": "Sen usar | Usouna 1 estudante, así que non se pode borrar. O que pagou non cambia: o custo novo vale para quen a use a partir de agora. | Usárona {count} estudantes, así que non se pode borrar. O que pagaron non cambia: o custo novo vale para quen a use a partir de agora.",
+          "summary_free": "Quen a use poderá abrila gratis.",
+          "summary_coins": "Quen a use pagará {count} {coins} ao abrila.",
+          "summary_xp": "Quen a use pagará {count} XP ao abrila (pode baixar de nivel).",
+          "summary_percent": "Quen a use cobrará un {count} % menos do que a misión aínda lle teña que pagar.",
+          "delete": "Eliminar a pista",
+          "delete_summary": "Se a eliminas, bórrase no momento: aínda non a usou ninguén.",
+          "add_button": "Engadir a pista"
+        }
       }
     },
     "templates": {

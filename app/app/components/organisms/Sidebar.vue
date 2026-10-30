@@ -9,6 +9,15 @@
           class="sidebar-logo"
         />
       </div>
+      <!-- El avatar de docente: con él lo reconocen en sus clases -->
+      <Avatar
+        v-if="userRole === 'teacher'"
+        :avatar-key="avatar"
+        :seed="userId"
+        :name="userName"
+        size="sm"
+        class="mb-2"
+      />
       <h3 class="user-name">{{ userName }}</h3>
       <p class="user-subtitle">{{ userSubtitle }}</p>
       <!-- Ver como alumno (modo demo): solo para profesores -->
@@ -29,7 +38,11 @@
 
     <!-- Navigation Items OR Chat Conversations -->
     <nav
-      :class="chatConversations !== undefined ? 'flex-1 flex flex-col px-2 min-h-0' : 'sidebar-nav scrollbar-custom'"
+      :class="
+        chatConversations !== undefined
+          ? 'flex-1 flex flex-col px-2 min-h-0'
+          : 'sidebar-nav scrollbar-custom'
+      "
     >
       <!-- Chat Conversations Mode — buttons + list inside white container -->
       <template v-if="chatConversations !== undefined">
@@ -204,7 +217,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { EyeIcon } from '@heroicons/vue/24/outline'
-import { getAvatarUrl } from '~/utils/avatar'
 import type { ChatConversation } from '~/stores/aiAssistant'
 
 const { t, tm, rt } = useI18n()
@@ -238,7 +250,8 @@ interface Props {
   userSubtitle: string
   userXp?: string // XP display (e.g., "850 / 2500 XP")
   userId: string
-  avatar?: string
+  /** Clave del avatar de docente (solo se pinta para el profesorado). */
+  avatar?: string | null
   showProgress?: boolean
   progressPercentage?: number
   currentGod?: CurrentGod | null
@@ -265,27 +278,6 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 defineEmits(['help-center', 'new-conversation', 'conversation-click', 'load-more-conversations'])
-
-// Get avatar URL (with default if not provided)
-const avatarUrl = computed(() => {
-  return getAvatarUrl({
-    id: props.userId,
-    avatar: props.avatar,
-  })
-})
-
-// Get user initials (for admin without avatar)
-const userInitials = computed(() => {
-  if (!props.userName) return 'AD'
-
-  const nameParts = props.userName.trim().split(' ')
-  if (nameParts.length >= 2) {
-    // First letter of first name + first letter of last name
-    return (nameParts[0][0] + nameParts[nameParts.length - 1][0]).toUpperCase()
-  }
-  // If only one name, take first two letters
-  return props.userName.substring(0, 2).toUpperCase()
-})
 
 // Calculate luminance of a color to determine if text should be black or white
 function getTextColor(hexColor: string): string {

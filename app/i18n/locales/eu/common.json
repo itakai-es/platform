@@ -554,6 +554,115 @@
         "base": "Oinarrizkoa",
         "temporal": "Behin-behinekoa"
       }
+    },
+    "mission_hints": {
+      "title": "Pistak",
+      "hint_label": "{position}. pista",
+      "free": "Doan",
+      "cost_coins": "{count} {coins}",
+      "cost_xp": "{count} XP",
+      "cost_percent": "Sariaren −%{count}"
+    },
+    "activity_feed": {
+      "hint_used_student": "{mission} misioaren {position}. pista erabili duzu",
+      "hint_used_teacher": "{mission} misioaren {position}. pista erabili du",
+      "hint_used_percent_student": "{mission} misioaren {position}. pista erabili duzu: −%{count} kobratzeko geratzen zitzaizunetik",
+      "hint_used_percent_teacher": "{mission} misioaren {position}. pista erabili du: −%{count} kobratzeko geratzen zitzaionetik",
+      "enigma_approved_student": "{enigma} entrega onartu dizute",
+      "enigma_approved_teacher": "{enigma} entrega onartu diote",
+      "mission_started_student": "{mission} misioa hasi duzu",
+      "mission_started_teacher": "{mission} misioa hasi du"
+    },
+    "avatars": {
+      "characters": {
+        "atenea": {
+          "name": "Atenea",
+          "trait": "Jakinduria eta estrategia"
+        },
+        "odiseo": {
+          "name": "Odiseo",
+          "trait": "Azkartasuna eta ausardia"
+        },
+        "penelope": {
+          "name": "Penelope",
+          "trait": "Leialtasuna eta pazientzia"
+        },
+        "polifemo": {
+          "name": "Polifemo",
+          "trait": "Indarra eta erabakitasuna"
+        },
+        "poseidon": {
+          "name": "Poseidon",
+          "trait": "Boterea eta nagusitasuna"
+        }
+      },
+      "custom_name": "AArekin sortutako zure avatarra",
+      "custom_trait": "AArekin sortua"
+    },
+    "view_modes": {
+      "grid": "Sareta",
+      "list": "Zerrenda",
+      "map": "Mapa"
+    },
+    "mission_map": {
+      "title": "Misioen mapa",
+      "beta": "Beta",
+      "beta_note": "Probetan dago: itxura eta funtzionamendua alda daitezke.",
+      "step": "{n}. misioa",
+      "state": {
+        "completed": "Osatua",
+        "in_progress": "Abian: %{progress}",
+        "available": "Eskuragarri",
+        "urgent": "Urgentea: laster iraungiko da",
+        "expired": "Iraungia",
+        "locked": "Blokeatua: zure irakasleak itxita oraingoz",
+        "locked_path": "Blokeatua: {missions} osatzean irekitzen da"
+      },
+      "completed_by": "Inork ez du osatu oraindik: 0/{total} | Osatu dutenak: {done}/{total} | Osatu dutenak: {done}/{total}",
+      "no_students": "Oraindik ez dago ikaslerik",
+      "opens_after": "{missions} osatzean irekitzen da",
+      "quoted": "«{title}»",
+      "quoted_teacher_closed": "«{title}» (zure irakasleak itxita oraingoz)",
+      "and": "eta",
+      "locked_path_explain": "Irekitzeko, osatu lehenago {missions}.",
+      "state_short": {
+        "completed": "Osatua",
+        "in_progress": "Abian",
+        "available": "Eskuragarri",
+        "urgent": "Urgentea",
+        "expired": "Iraungia",
+        "locked": "Blokeatua"
+      },
+      "start": "Irteera",
+      "goal": "Helmuga",
+      "you_are_here": "Hemen zaude",
+      "go_to_mine": "Joan nire misiora",
+      "keys_hint": "Teklatuarekin, geziek misio batetik bestera eramaten dute; Hasiera eta Amaiera teklek lehenengora eta azkenera.",
+      "your_progress": "Osatutako misioak: {done}/{total} | Osatutako misioak: {done}/{total}",
+      "all_done": "Mapa osatuta!",
+      "class_progress": "Klaseak ibilbidearen %{percent} egin du",
+      "class_done_by_all": "Klase osoak osatuak: {done}/{total}",
+      "legend": {
+        "title": "Legenda",
+        "hint": "Sakatu egoera bat haren misioak mapan nabarmentzeko."
+      },
+      "detail": {
+        "label": "Misioaren xehetasuna",
+        "empty": "Sakatu mapako misio bat haren xehetasuna hemen ikusteko.",
+        "your_progress": "Zure aurrerapena",
+        "enigmas_done": "{total} enigmatik {done} | {total} enigmatik {done}",
+        "completed_list": "Osatu dutenak",
+        "completed_more": "eta beste {n}",
+        "in_progress": "Abian: {n}",
+        "deadline": "Epemuga: {date}",
+        "requires": "Irekitzeko, osatu lehenago:",
+        "requires_teacher": "Irekitzeko, hau osatu behar da lehenago:",
+        "unlocks": "Osatzean, hauetarako bidea irekitzen du:",
+        "start": "Hasi",
+        "continue": "Jarraitu",
+        "view": "Ikusi misioa",
+        "open": "Ireki misioa"
+      }
     }
   }
 }

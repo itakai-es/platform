@@ -28,10 +28,10 @@
           >
             <li v-for="member in entry.members" :key="member.id" class="flex items-center gap-3">
               <Avatar
-                :src="member.avatar ?? undefined"
-                :username="member.name"
+                :src="member.avatar"
+                :name="member.name"
+                :seed="studentAvatarSeed(classId, member.id)"
                 size="xs"
-                class="flex-shrink-0"
               />
               <span class="min-w-0 truncate text-sm font-medium text-navy-700">{{
                 member.name
@@ -49,6 +49,7 @@
 
 <script setup lang="ts">
 import { UserGroupIcon } from '@heroicons/vue/24/outline'
+import { studentAvatarSeed } from '~/utils/avatar'
 
 /**
  * «Mi equipo» en la portada de la clase del alumnado: cada equipo en el que

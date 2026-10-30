@@ -405,14 +405,14 @@ describe('summarizeClassTeachers', () => {
       access: 'admin',
       profile: 'titular',
       isOwner: true,
-      user: { name: 'Elena' },
+      user: { name: 'Elena', avatar: 'mint' },
     },
     {
       userId: 'sub',
       access: 'edit',
       profile: 'sustituto',
       isOwner: false,
-      user: { name: 'Antonio' },
+      user: { name: 'Antonio', avatar: null },
     },
   ] as any
 
@@ -420,8 +420,22 @@ describe('summarizeClassTeachers', () => {
     expect(summarizeClassTeachers(rows, 'sub')).toEqual({
       myAccess: { access: 'edit', profile: 'sustituto', isOwner: false },
       teachers: [
-        { id: 'owner', name: 'Elena', access: 'admin', profile: 'titular', isOwner: true },
-        { id: 'sub', name: 'Antonio', access: 'edit', profile: 'sustituto', isOwner: false },
+        {
+          id: 'owner',
+          name: 'Elena',
+          avatar: 'mint',
+          access: 'admin',
+          profile: 'titular',
+          isOwner: true,
+        },
+        {
+          id: 'sub',
+          name: 'Antonio',
+          avatar: null,
+          access: 'edit',
+          profile: 'sustituto',
+          isOwner: false,
+        },
       ],
     })
   })
@@ -469,6 +483,24 @@ describe('recordClassAction', () => {
       },
     })
     expect(db.classActionLog.create).not.toHaveBeenCalled()
+  })
+
+  it('copia también el avatar de quien actúa, que lee de su cuenta con el nombre', async () => {
+    const t = tx()
+    t.user.findUnique.mockResolvedValue({ name: 'Elena Sánchez', avatar: 'mint' })
+    await recordClassAction(t as any, {
+      classId: CLASS,
+      actorId: USER,
+      action: 'student.avatar_changed',
+      targetUserId: 'student-1',
+    })
+    expect(t.user.findUnique).toHaveBeenCalledWith({
+      where: { id: USER },
+      select: { name: true, avatar: true },
+    })
+    expect(t.classActionLog.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({ actorName: 'Elena Sánchez', actorAvatar: 'mint' }),
+    })
   })
 
   it('la acción tiene que ser dominio.verbo', async () => {

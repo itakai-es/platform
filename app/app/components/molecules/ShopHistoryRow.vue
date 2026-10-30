@@ -16,38 +16,25 @@
     <div class="min-w-0 flex-1">
       <p class="font-bold text-navy-700 leading-snug truncate">{{ title }}</p>
       <p class="mt-0.5 flex min-w-0 items-center gap-1.5 text-xs text-text-secondary">
-        <!-- Vista del profesor: avatar + nickname del alumno antes del subtítulo.
-             Mini-avatar al estilo del átomo Avatar (fondo lila + object-contain),
-             con iniciales de respaldo para que siempre se vea quién fue. -->
+        <!-- Vista del profesor: mini avatar + nickname del alumno antes del subtítulo
+             (sin imagen, sus iniciales: siempre se ve quién fue). -->
         <template v-if="name">
           <!-- Si tenemos el id del alumno (vista del profesor), avatar + nombre son
                un enlace a su perfil con Tooltip de la app. -->
-          <Tooltip
-            v-if="studentId"
-            :text="t('teacher.classes.detail.shop.view_student_profile')"
-          >
+          <Tooltip v-if="studentId" :text="t('teacher.classes.detail.shop.view_student_profile')">
             <NuxtLink
               :to="`/profesor/alumnos/${studentId}`"
               class="group flex min-w-0 items-center gap-1.5 cursor-pointer"
             >
-              <span
-                class="flex h-5 w-5 flex-shrink-0 items-center justify-center overflow-hidden rounded-full bg-lila-medium text-[9px] font-bold text-text-primary"
-              >
-                <img v-if="avatar" :src="avatar" :alt="name" class="h-full w-full object-contain p-px" />
-                <template v-else>{{ initials }}</template>
-              </span>
+              <Avatar :src="avatar" :name="name" :seed="avatarSeed" size="xxs" />
               <span
                 class="truncate font-medium text-navy-700/70 transition-colors group-hover:text-navy-700 group-hover:underline"
-              >{{ name }}</span>
+                >{{ name }}</span
+              >
             </NuxtLink>
           </Tooltip>
           <span v-else class="flex min-w-0 items-center gap-1.5">
-            <span
-              class="flex h-5 w-5 flex-shrink-0 items-center justify-center overflow-hidden rounded-full bg-lila-medium text-[9px] font-bold text-text-primary"
-            >
-              <img v-if="avatar" :src="avatar" :alt="name" class="h-full w-full object-contain p-px" />
-              <template v-else>{{ initials }}</template>
-            </span>
+            <Avatar :src="avatar" :name="name" :seed="avatarSeed" size="xxs" />
             <span class="truncate font-medium text-navy-700/70">{{ name }}</span>
           </span>
           <span class="flex-shrink-0" aria-hidden="true">·</span>
@@ -76,6 +63,8 @@ const props = defineProps<{
   avatar?: string | null
   /** Vista del profesor: user id del alumno → enlace a su perfil. */
   studentId?: string
+  /** De dónde sale el color del avatar: `studentAvatarSeed(clase, estudiante)`. */
+  avatarSeed?: string
 }>()
 
 const { t } = useI18n()
@@ -84,6 +73,4 @@ const typeLabel = computed(() =>
     ? t('student.classes.detail.shop.power')
     : t('student.classes.detail.shop.reward')
 )
-// Iniciales de respaldo cuando el alumno aún no tiene avatar.
-const initials = computed(() => (props.name ? props.name.slice(0, 2).toUpperCase() : '?'))
 </script>

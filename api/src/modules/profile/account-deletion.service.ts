@@ -8,6 +8,7 @@ import {
 import { transferClassOwnership } from '../../utils/class-owner.js'
 import { ConflictError } from '../../utils/errors.js'
 import { notifyOwnershipReceived } from '../teachers/class-teachers.service.js'
+import { releaseGeneratedAvatar } from '../storage/upload-usage.js'
 import {
   PURGE_TRANSACTION_TIMEOUT_MS,
   finishClassPurge,
@@ -36,6 +37,11 @@ import {
  * Lo demás que hizo como profesor se conserva sin su cuenta: el registro de la
  * clase guarda su nombre copiado, y las entregas que aprobó, las entradas del
  * feed y los comportamientos que aplicó se quedan sin autor.
+ *
+ * Sus matrículas se van en cascada con la cuenta; los avatares generados con IA
+ * que tenía en ellas se borran después, si ya no los apunta nadie, como al
+ * salir de una clase (`releaseGeneratedAvatar`): si no, seguirían a la vista en
+ * su dirección.
  */
 
 type Db = Prisma.TransactionClient
@@ -140,7 +146,7 @@ export async function deleteUserAccount(
 ): Promise<{ transferred: OwnedClassSuccession[]; purged: number }> {
   // Cada purga lleva su margen, como la de la tarea programada.
   const inTrash = (await ownedTrashedClasses(userId)).length
-  const { succession: transferred, purged } = await prisma.$transaction(
+  const { succession: transferred, purged, avatars } = await prisma.$transaction(
     async tx => {
       const succession = await ownedClassesSuccession(userId, tx)
       const blocked = succession.filter(s => !s.successor)
@@ -176,8 +182,13 @@ export async function deleteUserAccount(
       }
 
       await reassignBadges(tx, userId)
+      // Leídos justo antes del borrado: lo que tenía en las purgadas ya va con su clase.
+      const avatars = await tx.classEnrollment.findMany({
+        where: { studentId: userId, avatarUrl: { not: null } },
+        select: { avatarUrl: true },
+      })
       await tx.user.delete({ where: { id: userId } })
-      return { succession, purged }
+      return { succession, purged, avatars: avatars.map(e => e.avatarUrl) }
     },
     { timeout: 5_000 + inTrash * PURGE_TRANSACTION_TIMEOUT_MS }
   )
@@ -188,6 +199,7 @@ export async function deleteUserAccount(
   // Los ficheros de las purgadas, ya confirmado el borrado. No lanza: lo que no
   // se pueda borrar queda en el registro del sistema.
   for (const cls of purged) await finishClassPurge(cls)
+  for (const avatarUrl of avatars) await releaseGeneratedAvatar(avatarUrl)
   return { transferred, purged: purged.length }
 }
 

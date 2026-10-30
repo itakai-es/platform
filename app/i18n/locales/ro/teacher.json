@@ -189,7 +189,30 @@
           "empty_search": "Nu s-au găsit misiuni pentru „{query}”",
           "empty_status": "Nu există misiuni cu stările selectate",
           "empty_rarity": "Nu există misiuni cu raritățile selectate",
-          "empty_default": "Nu există misiuni în această clasă"
+          "empty_default": "Nu există misiuni în această clasă",
+          "order": {
+            "button": "Ordonează",
+            "title": "Ordinea clasei",
+            "hint": "Clasa vede misiunile în această ordine. Trage fiecare rând de mânerul lui sau, cu tastatura, mergi pe mâner și folosește săgețile sus și jos. Fiecare schimbare se salvează imediat.",
+            "hint_path": "O misiune nu poate veni înaintea a ceea ce cere: ca s-o muți, elimină mai întâi ce cere din Setări › Drum ale misiunii sau folosește „Elimină cerințele”.",
+            "done": "Gata",
+            "error": "Ordinea nu a putut fi salvată. Încearcă din nou.",
+            "breaks_path": "„{mission}” se deschide după ce se finalizează „{required}”, deci trebuie să vină după ea. Mai întâi elimină ce cere din Setări › Drum ale misiunii sau folosește „Elimină cerințele”."
+          },
+          "path": {
+            "title": "Drumul hărții",
+            "hint": "Un drum simplu, dintr-un pas. Ca să alegi ce cere fiecare misiune, deschide-o și mergi la Setări, Drum.",
+            "chain": "Înlănțuie în ordine",
+            "chain_summary": "Fiecare misiune va cere finalizarea celei anterioare ca să se deschidă: {count} cerință. | Fiecare misiune va cere finalizarea celei anterioare ca să se deschidă. Cerințe: {count}.",
+            "chain_replaces": "O înlocuiește pe cea de acum. | Le înlocuiește pe toate cele de acum (cerințe: {count}).",
+            "chain_skips_locked": "Cele blocate rămân pe dinafară.",
+            "chained": "Sunt deja înlănțuite: fiecare misiune o cere pe cea anterioară.",
+            "chain_done": "Misiuni înlănțuite în ordine",
+            "clear": "Elimină cerințele",
+            "clear_summary": "Elimină cerința existentă: toate misiunile se deschid de la început. | Elimină toate cerințele existente (cerințe: {count}): toate misiunile se deschid de la început.",
+            "clear_done": "Cerințe eliminate",
+            "error": "Nu s-a putut schimba drumul. Încearcă din nou."
+          }
         },
         "meta": {
           "title": "Detaliile clasei | ITAKAI Cadru didactic",
@@ -353,6 +376,10 @@
             "sounds": {
               "label": "Sunete",
               "desc": "Efecte sonore la urcarea de nivel, la finalizarea misiunilor etc."
+            },
+            "missionMap": {
+              "label": "Harta misiunilor",
+              "desc": "Încă o vizualizare în Misiuni: drumul clasei, în ordinea pe care o alegi."
             }
           },
           "requires": "Necesită {feature}",
@@ -428,7 +455,11 @@
               "error": "Clasa nu a putut fi mutată în coșul de gunoi. Încearcă din nou."
             }
           },
-          "edit_level_note": "Poți schimba numele, orarul și coperta. Clasificarea, funcționalitățile și nivelurile le schimbă cine administrează clasa."
+          "edit_level_note": "Poți schimba numele, orarul și coperta. Clasificarea, funcționalitățile și nivelurile le schimbă cine administrează clasa.",
+          "beta": {
+            "title": "În testare",
+            "hint": "Funcționalități noi aflate în testare. Sunt dezactivate la început, iar aspectul și funcționarea lor se vor ajusta în urma testelor."
+          }
         },
         "badges_empty": "Nu există insigne în această clasă",
         "archived_notice": "Această clasă este arhivată: poate fi consultată, dar nu mai primește elevi noi.",
@@ -611,7 +642,8 @@
             "shop": "Magazin",
             "reward": "Recompense",
             "attendance": "Prezență",
-            "team": "Echipe"
+            "team": "Echipe",
+            "hint": "Indicii"
           },
           "actions": {
             "class": {
@@ -642,7 +674,8 @@
               "nickname_changed": "a schimbat porecla pentru {target}",
               "removed": "a scos {target} din clasă",
               "removed_unused": "a scos {target} din clasă și i-a șters contul, care nu fusese folosit",
-              "avatar_generated": "a generat un avatar nou pentru {target}"
+              "avatar_generated": "a generat un avatar nou pentru {target}",
+              "avatar_changed": "a înlocuit avatarul lui {target} cu unul din catalog"
             },
             "mission": {
               "created": "a creat misiunea «{title}»",
@@ -652,7 +685,11 @@
               "moved": "a schimbat clasa misiunii «{title}»",
               "rewards_changed": "a schimbat recompensa misiunii «{title}»",
               "imported": "a importat misiunea «{title}»",
-              "exported": "a copiat misiunea «{title}» în altă clasă"
+              "exported": "a copiat misiunea «{title}» în altă clasă",
+              "reordered": "a schimbat ordinea misiunilor",
+              "prerequisites_changed": "a schimbat ce trebuie finalizat ca să se deschidă misiunea «{title}»",
+              "chained": "a înlănțuit misiunile în ordine: fiecare o cere pe cea anterioară",
+              "prerequisites_cleared": "a eliminat cerințele drumului misiunilor"
             },
             "enigma": {
               "created": "a adăugat enigma «{title}»",
@@ -666,7 +703,8 @@
               "deleted": "a șters documentul «{title}»"
             },
             "submission": {
-              "approved": "a aprobat lucrarea de la {target} pentru «{title}» cu {percentage} %"
+              "approved": "a aprobat lucrarea de la {target} pentru «{title}» cu {percentage} %",
+              "approved_hints": "a aprobat lucrarea de la {target} pentru «{title}» cu {percentage} % (indiciile folosite scădeau {penalty} %)"
             },
             "behavior": {
               "applied": "a aplicat «{title}» pentru {target}",
@@ -702,6 +740,12 @@
               "awarded_batch": "a dat {points} punct echipei «{title}» și a împărțit «{label}» fiecărei persoane din echipă | a dat {points} puncte echipei «{title}» și a împărțit «{label}» fiecărei persoane din echipă",
               "distributed": "a împărțit «{label}» echipei «{title}»",
               "distributed_batch": "a dat «{label}» singurei persoane din echipa «{title}» | a împărțit «{label}» celor {count} membri ai echipei «{title}»"
+            },
+            "hint": {
+              "created": "a adăugat indiciul {position} la misiunea «{title}»",
+              "updated": "a editat indiciul {position} al misiunii «{title}»",
+              "deleted": "a șters indiciul {position} al misiunii «{title}»",
+              "reordered": "a schimbat ordinea indiciilor misiunii «{title}»"
             }
           },
           "anonymous": {
@@ -711,10 +755,12 @@
               "nickname_changed": "a schimbat porecla unei persoane care nu mai este în clasă",
               "removed": "a scos pe cineva din clasă",
               "removed_unused": "a scos din clasă o persoană care nu intrase niciodată și i-a șters contul",
-              "avatar_generated": "a generat un avatar nou pentru o persoană care nu mai este în clasă"
+              "avatar_generated": "a generat un avatar nou pentru o persoană care nu mai este în clasă",
+              "avatar_changed": "a înlocuit cu unul din catalog avatarul unei persoane care nu mai este în clasă"
             },
             "submission": {
-              "approved": "a aprobat lucrarea pentru «{title}» a unei persoane care nu mai este în clasă, cu {percentage} %"
+              "approved": "a aprobat lucrarea pentru «{title}» a unei persoane care nu mai este în clasă, cu {percentage} %",
+              "approved_hints": "a aprobat pentru «{title}» lucrarea cuiva care nu mai este în clasă, cu {percentage} % (indiciile folosite scădeau {penalty} %)"
             },
             "behavior": {
               "applied": "a aplicat «{title}» unei persoane care nu mai este în clasă"
@@ -836,7 +882,19 @@
           "team_set_none": "Individual (fără echipe)",
           "team_set_hint": "Doar informativ: clasa vede cu ce echipe se face și poți aproba o echipă întreagă dintr-odată. Fiecare elev continuă să-și predea partea.",
           "basics_title": "Datele misiunii",
-          "play_title": "Dificultate și vizibilitate"
+          "play_title": "Dificultate și vizibilitate",
+          "path_title": "Drum",
+          "path_hint": "Fiecare elev o va vedea închisă până finalizează toate misiunile pe care le bifezi. Pentru cine a început-o deja nu se închide.",
+          "path_legend": "Ca să se deschidă, trebuie finalizate mai întâi",
+          "path_map_off": "Cerințele închid misiuni doar cu harta pornită (Setările clasei › Funcționalități).",
+          "path_empty": "Nu există alte misiuni în clasă.",
+          "path_cycle_note": "Cele estompate depind deja de această misiune: dacă le-ar cere, niciuna nu s-ar mai deschide.",
+          "path_limit": "Cel mult {max}. Ca să alegi alta, debifează una.",
+          "path_moved": "Salvat. În ordinea clasei, misiunea a trecut după misiunile pe care le cere.",
+          "path_error_cycle": "Una dintre cele bifate depinde deja de această misiune: dacă ar cere-o, niciuna nu s-ar mai deschide. Verifică drumul și salvează din nou.",
+          "path_error_invalid": "Una dintre cele bifate nu mai este în această clasă. Verifică drumul și salvează din nou.",
+          "path_load_error": "Nu s-au putut încărca misiunile clasei.",
+          "path_retry": "Încearcă din nou"
         }
       },
       "import": {
@@ -883,7 +941,8 @@
         "copy_success_title": "Misiune copiată",
         "duplicate_success_title": "Misiune duplicată",
         "success_description": "Copia misiunii „{title}” este acum în „{name}”, blocată și fără termen-limită. Verific-o și deblocheaz-o când vrei să o vadă elevii tăi.",
-        "open_mission": "Deschide misiunea"
+        "open_mission": "Deschide misiunea",
+        "hints": "Fără indicii | 1 indiciu | Indicii: {count}"
       },
       "adapt": {
         "button": "Adaptează cu IA",
@@ -918,7 +977,8 @@
         "applied": "Misiune adaptată",
         "apply_error": "Propunerea nu a putut fi aplicată. Misiunea nu s-a schimbat.",
         "apply_error_partial": "S-a aplicat doar o parte din propunere. Verifică comparația: arată deja ce s-a salvat.",
-        "after_import_hint": "O vrei pe măsura acestei clase? IA îți propune cum s-o adaptezi, iar tu decizi dacă o aplici."
+        "after_import_hint": "O vrei pe măsura acestei clase? IA îți propune cum s-o adaptezi, iar tu decizi dacă o aplici.",
+        "hints_note": "Fără indicii | IA nu adaptează indiciul misiunii: verifică-l după ce aplici propunerea. | IA nu adaptează indiciile misiunii ({count}): verifică-le după ce aplici propunerea."
       }
     },
     "badges": {
@@ -1050,7 +1110,17 @@
         "remove_unused_confirm": "Elimină și șterge contul",
         "removed": "{name} nu mai este în clasă",
         "removed_account_deleted": "{name} nu mai este în clasă, iar contul său nefolosit a fost șters",
-        "remove_error": "Eliminarea din clasă nu a reușit."
+        "remove_error": "Eliminarea din clasă nu a reușit.",
+        "avatar": "Schimbă avatarul",
+        "avatar_title": "Avatarul în clasă",
+        "avatar_intro": "Dacă avatarul lui {name} în această clasă nu este potrivit, înlocuiește-l cu un personaj din catalog. Se schimbă doar în această clasă, iar {name} își poate alege alt avatar din fila Avatar.",
+        "avatar_now": "Acum apare așa",
+        "avatar_choose": "Personaje din catalog",
+        "avatar_pick": "Alege personajul pe care îl va avea {name} în această clasă.",
+        "avatar_summary": "La salvare, {name} va apărea ca {avatar} în această clasă.",
+        "avatar_summary_generated": "La salvare, {name} va apărea ca {avatar} în această clasă, iar imaginea generată cu IA se șterge.",
+        "avatar_saved": "Avatarul a fost schimbat",
+        "avatar_error": "Avatarul nu a putut fi schimbat."
       }
     },
     "ai_assistant": {
@@ -1106,7 +1176,15 @@
           "el": "Greacă",
           "ro": "Română"
         },
-        "delete_modal_blocked": "Există clase care depind de contul tău."
+        "delete_modal_blocked": "Există clase care depind de contul tău.",
+        "avatar_title": "Avatarul tău",
+        "avatar_description": "După el te recunosc elevii și celelalte cadre didactice: apare lângă numele tău în istoric, în lista cadrelor didactice ale fiecărei clase, în activitate și la prezență. Este același în toate clasele tale.",
+        "avatar_preview": "Așa te văd în clasele tale",
+        "avatar_auto": "Automat",
+        "avatar_updated": "Avatarul a fost actualizat",
+        "avatar_error": "Avatarul nu a putut fi schimbat.",
+        "avatar_characters": "Personaje",
+        "avatar_colors": "Inițialele tale pe o culoare"
       },
       "meta": {
         "title": "Profilul meu | ITAKAI",
@@ -1211,8 +1289,10 @@
           "rarity_desc": "Raritate ↓",
           "rarity_asc": "Raritate ↑",
           "completion_desc": "Finalizare ↓",
-          "completion_asc": "Finalizare ↑"
-        }
+          "completion_asc": "Finalizare ↑",
+          "class_order": "Ordinea clasei"
+        },
+        "map_note": "Pe hartă apar toate misiunile clasei, în ordinea lor."
       },
       "rewards_form_modal": {
         "title": "Editează recompensele",
@@ -1309,7 +1389,57 @@
         "approve_error": "Lucrarea nu a putut fi aprobată",
         "approve_team": "Aprobă echipa ({count}) cu {pct} %",
         "team_approved": "{team}: {count} lucrare aprobată cu {pct} % | {team}: {count} lucrări aprobate cu {pct} %",
-        "team_note": "Misiune pe echipe («{set}»): când verifici o lucrare, poți aproba cu același procent toată echipa ei care a predat."
+        "team_note": "Misiune pe echipe («{set}»): când verifici o lucrare, poți aproba cu același procent toată echipa ei care a predat.",
+        "hint_penalty": "−{count} % pentru indiciile folosite",
+        "penalty_changed": "Lucrarea trimisă de {name} a fost aprobată (+{xp} XP). Indiciile folosite scad acum {count} %, nu cât se vedea la deschiderea ferestrei.",
+        "team_hints_note": "Cineva din această echipă a folosit indicii de %: fiecăruia i se aplică propria reducere, așa că nu toată echipa va primi la fel.",
+        "team_penalty_changed": "Cineva din echipă a folosit încă un indiciu de % în timp ce revizuiai: fiecăruia i s-a aplicat reducerea pe care o au acum indiciile sale."
+      },
+      "mission_hints": {
+        "add": "Adaugă",
+        "intro": "Elevii le folosesc în această ordine, câte unul, și plătesc costul când le folosesc. Văd câte sunt și cât costă, dar pot citi doar textul celor pe care le-au folosit deja.",
+        "empty_title": "Această misiune nu are încă indicii",
+        "empty_description": "Adaugă indicii care merg de la general la concret. Fiecare poate costa {coins}, XP sau un % din recompensă.",
+        "empty_description_readonly": "Dacă se adaugă, elevii le vor vedea aici și le vor folosi în ordine.",
+        "add_first": "Adaugă primul indiciu",
+        "limit_reached": "Această misiune are deja {max} indicii, maximul.",
+        "used_by": "Nefolosit | Folosit de 1 elev | Elevi care l-au folosit: {count}",
+        "edit_named": "Editează indiciul {position}",
+        "free_in_class": "Gratuit în această clasă",
+        "free_no_coins": "Clasa nu folosește {coins}: acest indiciu este gratuit.",
+        "free_no_xp": "Clasa nu folosește XP: acest indiciu este gratuit.",
+        "free_note_list": "Unele indicii sunt gratuite, pentru că clasa nu folosește resursa cu care se plătesc.",
+        "toast_added": "Indiciu adăugat",
+        "toast_saved": "Indiciu salvat",
+        "toast_deleted": "Indiciu șters",
+        "toast_error": "Indiciul nu a putut fi salvat",
+        "toast_delete_error": "Indiciul nu a putut fi șters",
+        "reorder_error": "Ordinea indiciilor nu a putut fi schimbată",
+        "form": {
+          "add_title": "Indiciu nou",
+          "edit_title": "Indiciul {position}",
+          "content": "Textul indiciului",
+          "content_hint": "Ce citește cine îl folosește. Până la {max} de caractere.",
+          "content_placeholder": "Ex.: Uită-te la datele din documentul de sprijin.",
+          "content_required": "Scrie textul indiciului.",
+          "cost_type": "Cum se plătește",
+          "type_xp": "XP",
+          "type_percent": "% din recompensă",
+          "amount_coins": "Preț în {coins}",
+          "amount_xp": "Preț în XP",
+          "amount_percent": "Procentul pe care îl scade",
+          "amount_hint": "Orice număr întreg. Scurtăturile sunt doar sugestii.",
+          "amount_percent_hint": "Se scade din ce misiunea mai are de plătit celui care îl folosește, niciodată din ce a primit deja. Mai multe indicii de % se adună, până la 100 %.",
+          "presets": "Scurtături",
+          "used_note": "Nefolosit | L-a folosit 1 elev, așa că nu se poate șterge. Ce a plătit nu se schimbă: noul cost se aplică celor care îl folosesc de acum înainte. | L-au folosit mai mulți elevi ({count}), așa că nu se poate șterge. Ce au plătit nu se schimbă: noul cost se aplică celor care îl folosesc de acum înainte.",
+          "summary_free": "Cine îl folosește îl va deschide gratuit.",
+          "summary_coins": "Cine îl folosește va plăti {count} {coins} ca să-l deschidă.",
+          "summary_xp": "Cine îl folosește va plăti {count} XP ca să-l deschidă (poate coborî un nivel).",
+          "summary_percent": "Cine îl folosește va primi cu {count} % mai puțin din ce misiunea mai are să-i plătească.",
+          "delete": "Șterge indiciul",
+          "delete_summary": "Dacă îl ștergi, dispare imediat: nu l-a folosit încă nimeni.",
+          "add_button": "Adaugă indiciul"
+        }
       }
     },
     "templates": {

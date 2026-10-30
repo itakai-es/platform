@@ -496,6 +496,8 @@
     --color-section-purple: var(--color-purple);
     --color-section-enigmas: #6CF3AF;
     --color-section-atenea: var(--color-yellow);
+    /* Pistas: morado, como la historia y los documentos de apoyo (el amarillo es el de la IA) */
+    --color-section-hints: var(--color-purple);
     --color-section-heading: var(--color-navy-700);
 
     /* Card border (college: sin borde, sin accent) */
@@ -605,6 +607,8 @@
     --color-section-purple:  #EAEAEC;
     --color-section-enigmas: #D8D8DB;
     --color-section-atenea:  #FFFFFF;
+    /* Pistas: gris medio, para que sus tarjetas blancas se distingan */
+    --color-section-hints:   #EAEAEC;
     --color-section-heading: var(--color-navy-700);
 
     /* Card accent border izquierdo (patrón enterprise) */

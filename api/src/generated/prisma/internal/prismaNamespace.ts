@@ -397,9 +397,12 @@ export const ModelName = {
   ShopPurchase: 'ShopPurchase',
   ShopItemUse: 'ShopItemUse',
   Mission: 'Mission',
+  MissionPrerequisite: 'MissionPrerequisite',
   MissionDocument: 'MissionDocument',
   MissionEnigma: 'MissionEnigma',
   StudentEnigmaProgress: 'StudentEnigmaProgress',
+  MissionHint: 'MissionHint',
+  MissionHintUse: 'MissionHintUse',
   EnigmaSubmission: 'EnigmaSubmission',
   StudentMissionProgress: 'StudentMissionProgress',
   Badge: 'Badge',
@@ -436,7 +439,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "userSettings" | "refreshToken" | "instanceSetting" | "class" | "classTeacher" | "classActionLog" | "classEnrollment" | "classGuide" | "shopItem" | "shopPurchase" | "shopItemUse" | "mission" | "missionDocument" | "missionEnigma" | "studentEnigmaProgress" | "enigmaSubmission" | "studentMissionProgress" | "badge" | "studentBadge" | "joinRequest" | "invitation" | "notification" | "activity" | "systemLog" | "chatConversation" | "chatMessage" | "behaviorTemplate" | "behaviorApplication" | "attendanceSession" | "attendanceRecord" | "teamSet" | "team" | "teamMember" | "teamAward" | "helpCategory" | "helpArticle"
+    modelProps: "user" | "userSettings" | "refreshToken" | "instanceSetting" | "class" | "classTeacher" | "classActionLog" | "classEnrollment" | "classGuide" | "shopItem" | "shopPurchase" | "shopItemUse" | "mission" | "missionPrerequisite" | "missionDocument" | "missionEnigma" | "studentEnigmaProgress" | "missionHint" | "missionHintUse" | "enigmaSubmission" | "studentMissionProgress" | "badge" | "studentBadge" | "joinRequest" | "invitation" | "notification" | "activity" | "systemLog" | "chatConversation" | "chatMessage" | "behaviorTemplate" | "behaviorApplication" | "attendanceSession" | "attendanceRecord" | "teamSet" | "team" | "teamMember" | "teamAward" | "helpCategory" | "helpArticle"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1402,6 +1405,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    MissionPrerequisite: {
+      payload: Prisma.$MissionPrerequisitePayload<ExtArgs>
+      fields: Prisma.MissionPrerequisiteFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MissionPrerequisiteFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionPrerequisitePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MissionPrerequisiteFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionPrerequisitePayload>
+        }
+        findFirst: {
+          args: Prisma.MissionPrerequisiteFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionPrerequisitePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MissionPrerequisiteFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionPrerequisitePayload>
+        }
+        findMany: {
+          args: Prisma.MissionPrerequisiteFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionPrerequisitePayload>[]
+        }
+        create: {
+          args: Prisma.MissionPrerequisiteCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionPrerequisitePayload>
+        }
+        createMany: {
+          args: Prisma.MissionPrerequisiteCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.MissionPrerequisiteCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionPrerequisitePayload>[]
+        }
+        delete: {
+          args: Prisma.MissionPrerequisiteDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionPrerequisitePayload>
+        }
+        update: {
+          args: Prisma.MissionPrerequisiteUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionPrerequisitePayload>
+        }
+        deleteMany: {
+          args: Prisma.MissionPrerequisiteDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MissionPrerequisiteUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.MissionPrerequisiteUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionPrerequisitePayload>[]
+        }
+        upsert: {
+          args: Prisma.MissionPrerequisiteUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionPrerequisitePayload>
+        }
+        aggregate: {
+          args: Prisma.MissionPrerequisiteAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMissionPrerequisite>
+        }
+        groupBy: {
+          args: Prisma.MissionPrerequisiteGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MissionPrerequisiteGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MissionPrerequisiteCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MissionPrerequisiteCountAggregateOutputType> | number
+        }
+      }
+    }
     MissionDocument: {
       payload: Prisma.$MissionDocumentPayload<ExtArgs>
       fields: Prisma.MissionDocumentFieldRefs
@@ -1621,6 +1698,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.StudentEnigmaProgressCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.StudentEnigmaProgressCountAggregateOutputType> | number
+        }
+      }
+    }
+    MissionHint: {
+      payload: Prisma.$MissionHintPayload<ExtArgs>
+      fields: Prisma.MissionHintFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MissionHintFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionHintPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MissionHintFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionHintPayload>
+        }
+        findFirst: {
+          args: Prisma.MissionHintFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionHintPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MissionHintFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionHintPayload>
+        }
+        findMany: {
+          args: Prisma.MissionHintFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionHintPayload>[]
+        }
+        create: {
+          args: Prisma.MissionHintCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionHintPayload>
+        }
+        createMany: {
+          args: Prisma.MissionHintCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.MissionHintCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionHintPayload>[]
+        }
+        delete: {
+          args: Prisma.MissionHintDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionHintPayload>
+        }
+        update: {
+          args: Prisma.MissionHintUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionHintPayload>
+        }
+        deleteMany: {
+          args: Prisma.MissionHintDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MissionHintUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.MissionHintUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionHintPayload>[]
+        }
+        upsert: {
+          args: Prisma.MissionHintUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionHintPayload>
+        }
+        aggregate: {
+          args: Prisma.MissionHintAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMissionHint>
+        }
+        groupBy: {
+          args: Prisma.MissionHintGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MissionHintGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MissionHintCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MissionHintCountAggregateOutputType> | number
+        }
+      }
+    }
+    MissionHintUse: {
+      payload: Prisma.$MissionHintUsePayload<ExtArgs>
+      fields: Prisma.MissionHintUseFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MissionHintUseFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionHintUsePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MissionHintUseFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionHintUsePayload>
+        }
+        findFirst: {
+          args: Prisma.MissionHintUseFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionHintUsePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MissionHintUseFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionHintUsePayload>
+        }
+        findMany: {
+          args: Prisma.MissionHintUseFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionHintUsePayload>[]
+        }
+        create: {
+          args: Prisma.MissionHintUseCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionHintUsePayload>
+        }
+        createMany: {
+          args: Prisma.MissionHintUseCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.MissionHintUseCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionHintUsePayload>[]
+        }
+        delete: {
+          args: Prisma.MissionHintUseDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionHintUsePayload>
+        }
+        update: {
+          args: Prisma.MissionHintUseUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionHintUsePayload>
+        }
+        deleteMany: {
+          args: Prisma.MissionHintUseDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MissionHintUseUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.MissionHintUseUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionHintUsePayload>[]
+        }
+        upsert: {
+          args: Prisma.MissionHintUseUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MissionHintUsePayload>
+        }
+        aggregate: {
+          args: Prisma.MissionHintUseAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMissionHintUse>
+        }
+        groupBy: {
+          args: Prisma.MissionHintUseGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MissionHintUseGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MissionHintUseCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MissionHintUseCountAggregateOutputType> | number
         }
       }
     }
@@ -3231,6 +3456,7 @@ export const UserScalarFieldEnum = {
   homeClassId: 'homeClassId',
   mustChangePassword: 'mustChangePassword',
   passwordChangedAt: 'passwordChangedAt',
+  avatar: 'avatar',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -3427,11 +3653,22 @@ export const MissionScalarFieldEnum = {
   backgroundImage: 'backgroundImage',
   deadline: 'deadline',
   teamSetId: 'teamSetId',
+  orderIndex: 'orderIndex',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type MissionScalarFieldEnum = (typeof MissionScalarFieldEnum)[keyof typeof MissionScalarFieldEnum]
+
+
+export const MissionPrerequisiteScalarFieldEnum = {
+  id: 'id',
+  missionId: 'missionId',
+  requiredMissionId: 'requiredMissionId',
+  createdAt: 'createdAt'
+} as const
+
+export type MissionPrerequisiteScalarFieldEnum = (typeof MissionPrerequisiteScalarFieldEnum)[keyof typeof MissionPrerequisiteScalarFieldEnum]
 
 
 export const MissionDocumentScalarFieldEnum = {
@@ -3475,10 +3712,38 @@ export const StudentEnigmaProgressScalarFieldEnum = {
   xpEarned: 'xpEarned',
   coinsEarned: 'coinsEarned',
   manaEarned: 'manaEarned',
-  percentage: 'percentage'
+  percentage: 'percentage',
+  hintPenalty: 'hintPenalty'
 } as const
 
 export type StudentEnigmaProgressScalarFieldEnum = (typeof StudentEnigmaProgressScalarFieldEnum)[keyof typeof StudentEnigmaProgressScalarFieldEnum]
+
+
+export const MissionHintScalarFieldEnum = {
+  id: 'id',
+  missionId: 'missionId',
+  content: 'content',
+  orderIndex: 'orderIndex',
+  costType: 'costType',
+  cost: 'cost',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MissionHintScalarFieldEnum = (typeof MissionHintScalarFieldEnum)[keyof typeof MissionHintScalarFieldEnum]
+
+
+export const MissionHintUseScalarFieldEnum = {
+  id: 'id',
+  hintId: 'hintId',
+  missionId: 'missionId',
+  studentId: 'studentId',
+  costType: 'costType',
+  cost: 'cost',
+  createdAt: 'createdAt'
+} as const
+
+export type MissionHintUseScalarFieldEnum = (typeof MissionHintUseScalarFieldEnum)[keyof typeof MissionHintUseScalarFieldEnum]
 
 
 export const EnigmaSubmissionScalarFieldEnum = {
@@ -4362,9 +4627,12 @@ export type GlobalOmitConfig = {
   shopPurchase?: Prisma.ShopPurchaseOmit
   shopItemUse?: Prisma.ShopItemUseOmit
   mission?: Prisma.MissionOmit
+  missionPrerequisite?: Prisma.MissionPrerequisiteOmit
   missionDocument?: Prisma.MissionDocumentOmit
   missionEnigma?: Prisma.MissionEnigmaOmit
   studentEnigmaProgress?: Prisma.StudentEnigmaProgressOmit
+  missionHint?: Prisma.MissionHintOmit
+  missionHintUse?: Prisma.MissionHintUseOmit
   enigmaSubmission?: Prisma.EnigmaSubmissionOmit
   studentMissionProgress?: Prisma.StudentMissionProgressOmit
   badge?: Prisma.BadgeOmit

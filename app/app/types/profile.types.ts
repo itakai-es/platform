@@ -53,6 +53,8 @@ export interface UserProfile {
   accountType: AccountType
   name: string
   role: 'student' | 'teacher' | 'admin'
+  /** Avatar de docente: clave del catálogo; null sin elegir. */
+  avatar?: string | null
   security: SecuritySettings
   preferences: UserPreferences
   createdAt: Date

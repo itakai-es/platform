@@ -2,11 +2,16 @@ import { z } from 'zod'
 import { prisma } from '../../config/database.js'
 import { Prisma } from '../../generated/prisma/client.js'
 import type { MissionRarity } from '../../generated/prisma/enums.js'
-import { resolveClassSettings, type ClassSettings } from '../../utils/class-settings.js'
+import {
+  resolveClassSettings,
+  templateFeatures,
+  type TemplateFeatures,
+} from '../../utils/class-settings.js'
 import { recordClassAction } from '../../utils/class-access.js'
 import { GoneError, NotFoundError } from '../../utils/errors.js'
 import { containsPattern } from '../../utils/like-pattern.js'
 import { missionRewards } from '../../utils/mission-formatter.js'
+import { MISSION_ORDER } from '../../utils/mission-order.js'
 import { publicUploadResolver } from '../storage/storage.service.js'
 
 /**
@@ -131,14 +136,14 @@ const TEMPLATE_DETAIL = {
     select: { id: true, ...TEMPLATE_BEHAVIOR },
     orderBy: [{ kind: 'asc' }, { name: 'asc' }, { id: 'asc' }],
   },
-  // Como en la pestaña de misiones de una clase: la más reciente, primero.
+  // En el orden de la progresión de la clase, que es el que se lleva quien la importa.
   missions: {
     select: {
       title: true,
       rarity: true,
       enigmas: { select: { xpReward: true, coinReward: true, manaReward: true } },
     },
-    orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
+    orderBy: MISSION_ORDER,
   },
 } satisfies Prisma.ClassSelect
 
@@ -360,7 +365,7 @@ export interface PublicTemplateCard {
    * Qué funcionalidades lleva encendidas, como en la ficha. Dan sentido a los
    * contadores: los objetos de una tienda apagada también se copian.
    */
-  features: ClassSettings
+  features: TemplateFeatures
   missionCount: number
   shopItemCount: number
   behaviorCount: number
@@ -385,7 +390,7 @@ export interface PublicTemplateDetail {
   /** La ha recomendado la administración. Ni quién ni cuándo. */
   recommended: boolean
   /** Qué funcionalidades lleva encendidas: las que se lleva quien la importa. */
-  features: ClassSettings
+  features: TemplateFeatures
   missionCount: number
   shopItemCount: number
   behaviorCount: number
@@ -446,7 +451,7 @@ function toPublicCard(
     province: tpl.province,
     backgroundImage,
     recommended: tpl.recommendedAt !== null,
-    features: resolveClassSettings(tpl.settings),
+    features: templateFeatures(tpl.settings),
     missionCount: tpl._count.missions,
     shopItemCount: tpl._count.shopItems,
     behaviorCount: tpl._count.behaviorTemplates,
@@ -531,7 +536,7 @@ export async function getPublicTemplate(id: string): Promise<PublicTemplateDetai
     language: tpl.language,
     province: tpl.province,
     recommended: tpl.recommendedAt !== null,
-    features: resolveClassSettings(tpl.settings),
+    features: templateFeatures(tpl.settings),
     missionCount: tpl.missions.length,
     shopItemCount: tpl.shopItems.length,
     behaviorCount: tpl.behaviorTemplates.length,

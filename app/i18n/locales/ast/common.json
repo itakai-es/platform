@@ -554,6 +554,115 @@
         "base": "De base",
         "temporal": "Temporal"
       }
+    },
+    "mission_hints": {
+      "title": "Pistes",
+      "hint_label": "Pista {position}",
+      "free": "De baldre",
+      "cost_coins": "{count} {coins}",
+      "cost_xp": "{count} XP",
+      "cost_percent": "−{count} % de la recompensa"
+    },
+    "activity_feed": {
+      "hint_used_student": "Usesti la pista {position} de {mission}",
+      "hint_used_teacher": "Usó la pista {position} de {mission}",
+      "hint_used_percent_student": "Usesti la pista {position} de {mission}: −{count} % en lo que te quedaba por cobrar",
+      "hint_used_percent_teacher": "Usó la pista {position} de {mission}: −{count} % en lo que-y quedaba por cobrar",
+      "enigma_approved_student": "Aprobáronte la entrega de {enigma}",
+      "enigma_approved_teacher": "Recibió l'aprobación de la so entrega de {enigma}",
+      "mission_started_student": "Entamesti la misión {mission}",
+      "mission_started_teacher": "Entamó la misión {mission}"
+    },
+    "avatars": {
+      "characters": {
+        "atenea": {
+          "name": "Atenea",
+          "trait": "Sabiduría y estratexa"
+        },
+        "odiseo": {
+          "name": "Odiseo",
+          "trait": "Astucia y valentía"
+        },
+        "penelope": {
+          "name": "Penélope",
+          "trait": "Llealtá y paciencia"
+        },
+        "polifemo": {
+          "name": "Polifemo",
+          "trait": "Fuercia y determinación"
+        },
+        "poseidon": {
+          "name": "Poseidón",
+          "trait": "Poder y dominiu"
+        }
+      },
+      "custom_name": "El to avatar con IA",
+      "custom_trait": "Xeneráu con IA"
+    },
+    "view_modes": {
+      "grid": "Cuadrícula",
+      "list": "Llista",
+      "map": "Mapa"
+    },
+    "mission_map": {
+      "title": "Mapa de misiones",
+      "beta": "Beta",
+      "beta_note": "Ta en pruebes: l'aspeutu y el funcionamientu puen camudar.",
+      "step": "Misión {n}",
+      "state": {
+        "completed": "Completada",
+        "in_progress": "En cursu: {progress} %",
+        "available": "Disponible",
+        "urgent": "Urxente: vence pronto",
+        "expired": "Caducada",
+        "locked": "Bloquiada: zarrada pol to docente de momentu",
+        "locked_path": "Bloquiada: ábrese al completar {missions}"
+      },
+      "completed_by": "Naide la completó entá: 0 de {total} | {done} de {total} completóla | {done} de {total} completáronla",
+      "no_students": "Entá nun hai alumnáu",
+      "opens_after": "Ábrese al completar {missions}",
+      "quoted": "«{title}»",
+      "quoted_teacher_closed": "«{title}» (zarrada pol to docente de momentu)",
+      "and": "y",
+      "locked_path_explain": "Pa abrila, completa enantes {missions}.",
+      "state_short": {
+        "completed": "Completada",
+        "in_progress": "En cursu",
+        "available": "Disponible",
+        "urgent": "Urxente",
+        "expired": "Caducada",
+        "locked": "Bloquiada"
+      },
+      "start": "Salida",
+      "goal": "Meta",
+      "you_are_here": "Tas equí",
+      "go_to_mine": "Dir a la mio misión",
+      "keys_hint": "Col tecláu, les flechas pasen d'una misión a otra; Aniciu y Fin lleven a la primera y a la última.",
+      "your_progress": "Completesti {done} de {total} misión | Completesti {done} de {total} misiones",
+      "all_done": "¡Mapa completáu!",
+      "class_progress": "La clase lleva el {percent} % del percorríu",
+      "class_done_by_all": "Completaes por tola clase: {done} de {total}",
+      "legend": {
+        "title": "Lleenda",
+        "hint": "Primi un estáu pa resaltar les sos misiones nel mapa."
+      },
+      "detail": {
+        "label": "Detalle de la misión",
+        "empty": "Primi una misión del mapa pa ver equí el so detalle.",
+        "your_progress": "El to progresu",
+        "enigmas_done": "{done} de {total} enigma | {done} de {total} enigmes",
+        "completed_list": "Quién la completó",
+        "completed_more": "y {n} más",
+        "in_progress": "En cursu: {n}",
+        "deadline": "Data llende: {date}",
+        "requires": "Pa abrila, completa enantes:",
+        "requires_teacher": "Pa abrila, hai que completar enantes:",
+        "unlocks": "Al completala, abre’l camín a:",
+        "start": "Entamar",
+        "continue": "Siguir",
+        "view": "Ver la misión",
+        "open": "Abrir la misión"
+      }
     }
   }
 }

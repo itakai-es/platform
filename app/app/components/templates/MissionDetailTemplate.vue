@@ -155,8 +155,38 @@
         <span>{{ t('teacher.components.mission_detail_template.expired_readonly') }}</span>
       </div>
 
+      <!-- Cerrada por el camino del mapa (solo alumnado): qué tiene que completar
+           antes. Ni la historia, ni los enigmas, ni los documentos: se ven al
+           abrirse. -->
+      <section v-if="pathLocked" class="rounded-2xl bg-white px-4 shadow-lg">
+        <EmptyState
+          :icon="LockClosedIcon"
+          :title="t('student.mission_detail.path_locked.title')"
+          :description="pathLockedText"
+          :heading-level="2"
+        >
+          <template #action>
+            <!-- Un enlace por requisito que ya se puede hacer; el que tiene
+                 cerrado su docente solo se nombra en el texto, sin enlace. -->
+            <div class="flex flex-wrap justify-center gap-3">
+              <Button
+                v-for="required in openRequires"
+                :key="required.id"
+                variant="primary"
+                :to="`${classDetailLink}/misiones/${required.id}`"
+              >
+                {{ t('student.mission_detail.path_locked.go_to', { title: required.title }) }}
+              </Button>
+              <Button variant="outline" :to="`${classDetailLink}/misiones`">
+                {{ t('student.mission_detail.path_locked.back') }}
+              </Button>
+            </div>
+          </template>
+        </EmptyState>
+      </section>
+
       <!-- Contenido de otras pestañas (p. ej. Ajustes) -->
-      <div v-if="showTabs && activeTab !== 'resumen'">
+      <div v-else-if="showTabs && activeTab !== 'resumen'">
         <slot name="tab" :active-tab="activeTab" />
       </div>
 
@@ -165,29 +195,13 @@
         <!-- Left Column (2/3): Main content -->
         <div class="xl:col-span-2 space-y-4 xl:space-y-6">
           <!-- Historia de la Mision - Purple theme -->
-          <article
-            class="rounded-2xl p-4 sm:p-6 shadow-lg"
-            :style="{
-              backgroundColor: 'var(--color-section-purple)',
-              borderLeft: 'var(--card-accent-left) solid var(--color-card-accent)',
-            }"
+          <MissionDetailSection
+            :title="t('teacher.components.mission_detail_template.narrative_title')"
+            :icon="BookOpenIcon"
           >
-            <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
-              <div class="flex items-center gap-2 min-w-0">
-                <BookOpenIcon
-                  class="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0"
-                  :style="{ color: 'var(--color-section-heading)' }"
-                />
-                <h2
-                  class="text-lg sm:text-2xl font-extrabold"
-                  :style="{ color: 'var(--color-section-heading)' }"
-                >
-                  {{ t('teacher.components.mission_detail_template.narrative_title') }}
-                </h2>
-              </div>
-              <!-- Teacher: Edit controls -->
+            <!-- Teacher: Edit controls -->
+            <template v-if="canEdit" #actions>
               <Button
-                v-if="canEdit"
                 variant="primary"
                 size="sm"
                 :icon-left="PencilIcon"
@@ -195,7 +209,7 @@
               >
                 {{ t('teacher.components.mission_detail_template.btn_edit') }}
               </Button>
-            </div>
+            </template>
 
             <!-- Narrative box -->
             <div class="bg-white rounded-xl p-5">
@@ -248,41 +262,20 @@
                 />
               </button>
             </div>
-          </article>
+          </MissionDetailSection>
 
           <!-- Enigmas Section - Green theme -->
-          <article
-            class="rounded-2xl p-4 sm:p-6 shadow-lg"
-            :style="{
-              backgroundColor: 'var(--color-section-enigmas)',
-              borderLeft: 'var(--card-accent-left) solid var(--color-card-accent)',
-            }"
+          <MissionDetailSection
+            :title="t('teacher.components.mission_detail_template.enigmas_title')"
+            :icon="MapIcon"
+            tone="enigmas"
           >
-            <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
-              <div class="flex items-center gap-2 min-w-0">
-                <MapIcon
-                  class="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0"
-                  :style="{ color: 'var(--color-section-heading)' }"
-                />
-                <h2
-                  class="text-lg sm:text-2xl font-extrabold"
-                  :style="{ color: 'var(--color-section-heading)' }"
-                >
-                  {{ t('teacher.components.mission_detail_template.enigmas_title') }}
-                </h2>
-              </div>
-              <!-- Teacher: Add control -->
-              <div v-if="canEdit" class="flex items-center gap-2">
-                <Button
-                  variant="primary"
-                  size="sm"
-                  :icon-left="PlusIcon"
-                  @click="emit('addEnigma')"
-                >
-                  {{ t('teacher.components.mission_detail_template.btn_add') }}
-                </Button>
-              </div>
-            </div>
+            <!-- Teacher: Add control -->
+            <template v-if="canEdit" #actions>
+              <Button variant="primary" size="sm" :icon-left="PlusIcon" @click="emit('addEnigma')">
+                {{ t('teacher.components.mission_detail_template.btn_add') }}
+              </Button>
+            </template>
 
             <!-- Enigmas list -->
             <div class="space-y-6">
@@ -722,42 +715,35 @@
                 </Button>
               </div>
             </div>
-          </article>
+          </MissionDetailSection>
+
+          <!-- Pistas: el profesorado las escribe y ordena; el alumnado las usa en orden -->
+          <MissionHintsPanel
+            v-if="showHints"
+            :mission="mission"
+            :mode="mode"
+            :can-edit="canEdit"
+            @changed="patch => emit('hintsChanged', patch)"
+            @stale="emit('hintsStale')"
+          />
 
           <!-- Documentos de Apoyo - Purple theme -->
-          <article
+          <MissionDetailSection
             id="documentos-apoyo"
-            class="rounded-2xl p-4 sm:p-6 shadow-lg scroll-mt-4"
-            :style="{
-              backgroundColor: 'var(--color-section-purple)',
-              borderLeft: 'var(--card-accent-left) solid var(--color-card-accent)',
-            }"
+            :title="t('teacher.components.mission_detail_template.documents_title')"
+            :icon="DocumentTextIcon"
           >
-            <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
-              <div class="flex items-center gap-2 min-w-0">
-                <DocumentTextIcon
-                  class="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0"
-                  :style="{ color: 'var(--color-section-heading)' }"
-                />
-                <h2
-                  class="text-lg sm:text-2xl font-extrabold"
-                  :style="{ color: 'var(--color-section-heading)' }"
-                >
-                  {{ t('teacher.components.mission_detail_template.documents_title') }}
-                </h2>
-              </div>
-              <!-- Teacher: Add control -->
-              <div v-if="canEdit" class="flex items-center gap-2">
-                <Button
-                  variant="primary"
-                  size="sm"
-                  :icon-left="PlusIcon"
-                  @click="emit('addDocument')"
-                >
-                  {{ t('teacher.components.mission_detail_template.btn_add') }}
-                </Button>
-              </div>
-            </div>
+            <!-- Teacher: Add control -->
+            <template v-if="canEdit" #actions>
+              <Button
+                variant="primary"
+                size="sm"
+                :icon-left="PlusIcon"
+                @click="emit('addDocument')"
+              >
+                {{ t('teacher.components.mission_detail_template.btn_add') }}
+              </Button>
+            </template>
 
             <div class="space-y-6">
               <!-- Draggable list for teachers (always active, handle appears on hover) -->
@@ -954,7 +940,7 @@
                 </p>
               </div>
             </div>
-          </article>
+          </MissionDetailSection>
         </div>
 
         <!-- Right Column (1/3): Sidebar widgets -->
@@ -1054,6 +1040,10 @@
                 <p class="text-sm text-navy-700/70">
                   {{ t('teacher.components.mission_detail_template.xp_mission') }}
                 </p>
+                <!-- Ya con lo que restan sus pistas de %: se dice, para que cuadre -->
+                <p v-if="hintPenalty > 0" class="text-xs font-medium text-navy-700 mt-1">
+                  {{ t('student.mission_detail.hints.bonus_penalty', { count: hintPenalty }) }}
+                </p>
                 <p v-if="!isTeacher && !isMissionComplete" class="text-xs text-navy-700/70 mt-2">
                   {{ t('teacher.components.mission_detail_template.complete_all_enigmas') }}
                 </p>
@@ -1139,6 +1129,10 @@
                 @click="openBadgeDetail"
               />
             </div>
+            <!-- Lo que aún le queda por cobrar llega con el descuento de sus pistas -->
+            <InfoNote v-if="hintPenalty > 0 && !isMissionComplete" class="mt-4" on-color>
+              {{ t('student.mission_detail.hints.penalty_note', { count: hintPenalty }) }}
+            </InfoNote>
           </Card>
         </div>
       </div>
@@ -1288,9 +1282,12 @@ import type {
   MissionEnigmaDetail as MissionEnigma,
   MissionDocumentDetail as MissionDocument,
   BadgeRewardDetail as BadgeReward,
+  MissionHintDetail,
+  MissionHintState,
   TeacherMissionStats,
 } from '~/types/mission-detail.types'
 import { getMissionCompletionBonus } from '~/utils/xp-calculator'
+import { rewardAfterHints } from '~/utils/mission-hints'
 import { shuffled } from '~/utils/shuffle'
 import type { MissionRarity } from '~/utils/gamification-config'
 
@@ -1554,6 +1551,10 @@ const emit = defineEmits<{
   editRewards: []
   uploadSubmission: [enigmaId: string]
   viewSubmissions: [enigma: MissionEnigma]
+  /** Las pistas han cambiado (las del profesorado o, al usar una, las del alumno y su estado). */
+  hintsChanged: [patch: { hints: MissionHintDetail[]; hintState?: MissionHintState | null }]
+  /** Lo que se ve de las pistas ya no vale: hay que volver a pedir la misión. */
+  hintsStale: []
   resourceClick: [resource: string]
   ateneaAction: [action: 'chat' | 'help' | 'start']
 }>()
@@ -1625,6 +1626,23 @@ const onDocumentReorderAndSave = () => {
 // Computed
 const isTeacher = computed(() => props.mode === 'teacher')
 const canEdit = computed(() => isTeacher.value && props.editable)
+// Cerrada por el camino del mapa: al alumno le falta completar otra antes.
+const { missionList } = useMissionPathText()
+const pathLocked = computed(
+  () => !isTeacher.value && props.mission?.lockReason === 'path' && !!props.mission.requires?.length
+)
+const pathLockedText = computed(() =>
+  t('student.mission_detail.path_locked.description', {
+    missions: missionList(props.mission?.requires ?? []),
+  })
+)
+// Las que se pueden hacer ya: las cerradas por su docente no llevan a ninguna parte.
+const openRequires = computed(() =>
+  (props.mission?.requires ?? []).filter(required => required.state !== 'teacher')
+)
+// Pistas: el profesorado ve siempre la sección (para añadirlas); el alumnado,
+// solo si la misión tiene alguna.
+const showHints = computed(() => isTeacher.value || (props.mission?.hints?.length ?? 0) > 0)
 const baseRoute = computed(() => (isTeacher.value ? '/profesor' : '/alumno'))
 const dashboardLink = computed(() => `${baseRoute.value}/inicio`)
 const classesLink = computed(() => `${baseRoute.value}/clases`)
@@ -1681,10 +1699,15 @@ const xpProgressPercent = computed(() =>
   totalEnigmaXp.value > 0 ? Math.round((earnedXp.value / totalEnigmaXp.value) * 100) : 0
 )
 
-// Mission completion bonus based on rarity
+// Lo que restan las pistas de % del alumno en lo que la misión le queda por pagar.
+const hintPenalty = computed(() => (isTeacher.value ? 0 : (props.mission?.hintState?.penalty ?? 0)))
+
+// Mission completion bonus based on rarity, con el descuento de sus pistas (el
+// bonus llega con el último enigma: siempre es «lo que queda por cobrar»).
 const missionCompletionBonus = computed(() => {
   if (!props.mission?.rarity) return 0
-  return getMissionCompletionBonus(props.mission.rarity as MissionRarity)
+  const bonus = getMissionCompletionBonus(props.mission.rarity as MissionRarity)
+  return rewardAfterHints(bonus, 100, hintPenalty.value)
 })
 
 // Total XP (enigmas + bonus)

@@ -9,12 +9,15 @@ import {
 import { NotFoundError, ValidationError } from '../../utils/errors.js'
 import { cleanDisplayName } from '../../utils/identity.js'
 import { NICKNAME_MAX_LENGTH } from '../../utils/enrollment.js'
+import { isStudentCatalogAvatar } from '../../utils/avatars.js'
 import { deleteUpload } from '../storage/storage.service.js'
+import { releaseGeneratedAvatar } from '../storage/upload-usage.js'
 
 /**
  * Lo que el profesorado hace con un alumno dentro de una clase: cambiarle el
- * alias con el que sale en ella y quitarlo de la clase. Vale para cualquier
- * alumno, tenga correo o no: es la matrícula lo que se toca, no la cuenta.
+ * alias o el avatar con el que sale en ella y quitarlo de la clase. Vale para
+ * cualquier alumno, tenga correo o no: es la matrícula lo que se toca, no la
+ * cuenta.
  */
 
 /** Longitud del alias: la misma que admite el alumno cuando lo cambia él. */
@@ -52,7 +55,7 @@ export function unusedAccountHomeClass(account: UnusedAccountFacts): string | nu
 async function studentEnrollment(classId: string, studentId: string, tx: Prisma.TransactionClient) {
   const enrollment = await tx.classEnrollment.findUnique({
     where: { studentId_classId: { studentId, classId } },
-    select: { id: true, isPreview: true },
+    select: { id: true, isPreview: true, avatarUrl: true },
   })
   if (!enrollment || enrollment.isPreview) {
     throw new NotFoundError('Esa cuenta de estudiante no está en esta clase')
@@ -98,12 +101,57 @@ export async function updateStudentNickname(
 }
 
 /**
+ * Devuelve el avatar del alumno en la clase a uno del catálogo: lo que hace el
+ * profesorado cuando el que ha puesto (o generado con IA) no es adecuado. Pide
+ * edición, para que quien sustituye pueda quitar una imagen al momento. El
+ * estudiante puede elegir otro desde su pestaña Avatar, como el alias.
+ *
+ * Si el que tenía era una imagen generada con IA y ya no la apunta nadie, se
+ * borra el fichero (`releaseGeneratedAvatar`).
+ */
+export async function updateStudentAvatar(
+  actor: ClassUser,
+  classId: string,
+  studentId: string,
+  avatar: string
+): Promise<{ avatarUrl: string }> {
+  await assertClassAccess(classId, actor.id, 'student.avatar')
+
+  if (!isStudentCatalogAvatar(avatar)) {
+    throw new ValidationError('Elige un avatar de la lista', 'AVATAR_NOT_ALLOWED')
+  }
+
+  const previous = await prisma.$transaction(async tx => {
+    const enrollment = await studentEnrollment(classId, studentId, tx)
+    if (enrollment.avatarUrl === avatar) return null
+    await tx.classEnrollment.update({
+      where: { id: enrollment.id },
+      data: { avatarUrl: avatar },
+    })
+    // Sin la imagen en metadata: el registro dice qué pasó, no la guarda.
+    await recordClassAction(tx, {
+      classId,
+      actorId: actor.id,
+      action: 'student.avatar_changed',
+      entityType: 'enrollment',
+      entityId: enrollment.id,
+      targetUserId: studentId,
+    })
+    return enrollment.avatarUrl
+  })
+
+  await releaseGeneratedAvatar(previous)
+  return { avatarUrl: avatar }
+}
+
+/**
  * Quita al alumno de la clase y borra lo que tenía en ella: la matrícula (con
  * su XP, nivel, monedas, maná y vidas), el progreso y las entregas de las
  * misiones de la clase, las insignias de esas misiones, las compras y usos de la
  * tienda, los comportamientos, su historial en la clase, sus conversaciones con
- * el asistente sobre la clase y los avisos que hablaban de ella o de sus
- * entregas. Lo que tenga en otras clases no se toca, ni tampoco su cuenta.
+ * el asistente sobre la clase, los avisos que hablaban de ella o de sus
+ * entregas y su avatar generado con IA, si ya no lo apunta nadie. Lo que tenga
+ * en otras clases no se toca, ni tampoco su cuenta.
  *
  * Si la clase era la de origen de una cuenta gestionada, la cuenta se queda sin
  * clase de origen: desde aquí ya no la gestiona nadie, y queda para quien
@@ -120,7 +168,7 @@ export async function removeStudentFromClass(
 ): Promise<{ removed: true; accountDeleted: boolean }> {
   await assertClassAccess(classId, actor.id, 'student.manage')
 
-  const { files, accountDeleted } = await prisma.$transaction(async tx => {
+  const { files, accountDeleted, avatarUrl } = await prisma.$transaction(async tx => {
     const enrollment = await studentEnrollment(classId, studentId, tx)
     // Se decide antes de borrar la matrícula, que es una de las que cuenta.
     const account = await tx.user.findUniqueOrThrow({
@@ -159,17 +207,19 @@ export async function removeStudentFromClass(
       })
     }
 
-    return { files, accountDeleted }
+    return { files, accountDeleted, avatarUrl: enrollment.avatarUrl }
   })
 
   // Los ficheros, al final y sin tumbar nada: la base ya no los apunta.
   await deleteUploads(files)
+  await releaseGeneratedAvatar(avatarUrl)
   return { removed: true, accountDeleted }
 }
 
 /**
  * Borra una matrícula y lo que colgaba de ella en la clase: el progreso y las
- * entregas de sus misiones, las insignias de esas misiones, las compras y usos
+ * entregas de sus misiones, las insignias de esas misiones, las pistas que usó en
+ * ellas, las compras y usos
  * de la tienda, los comportamientos, el historial y los avisos que hablaban de
  * la clase o de esas entregas. Vale también para la matrícula de vista previa
  * de un profesor al que quitan de la clase. Devuelve los ficheros de las
@@ -181,6 +231,11 @@ export async function deleteEnrollmentData(
   userId: string,
   enrollmentId: string
 ): Promise<(string | null)[]> {
+  // Lo primero, la matrícula bloqueada, como hacen la tienda, el uso de una
+  // pista y la aprobación de una entrega: así todos bloquean en el mismo orden
+  // (sin interbloqueos) y lo que esté a medias termina antes de borrar, con lo
+  // que su uso de pista o su compra también se borra aquí.
+  await tx.$queryRaw`SELECT id FROM class_enrollments WHERE id = ${enrollmentId} FOR UPDATE`
   const missionIds = (await tx.mission.findMany({ where: { classId }, select: { id: true } })).map(
     m => m.id
   )
@@ -216,6 +271,9 @@ export async function deleteEnrollmentData(
   })
   await tx.studentBadge.deleteMany({
     where: { studentId: userId, badge: { missionId: { in: missionIds } } },
+  })
+  await tx.missionHintUse.deleteMany({
+    where: { studentId: userId, missionId: { in: missionIds } },
   })
   await tx.shopPurchase.deleteMany({ where: { studentId: userId, classId } })
   await tx.shopItemUse.deleteMany({ where: { studentId: userId, classId } })

@@ -62,7 +62,9 @@
         "en_progreso": "En progrés"
       },
       "locked_toast": "El teu docent ha tancat esta missió de moment. Podràs entrar-hi quan l’òbriga.",
-      "locked_aria": "{title}: missió tancada de moment"
+      "locked_aria": "{title}: missió bloquejada de moment",
+      "expired_on": "Va caducar: {date}",
+      "locked_path_aria": "{title}: s’obri en completar {missions}"
     },
     "mission_detail": {
       "meta": {
@@ -88,7 +90,34 @@
         "success": "Entrega enviada correctament. El teu docent la revisarà prompte.",
         "error": "Error en enviar l'entrega. Torna-ho a intentar.",
         "expired_error": "Esta missió ha caducat. Ja no pots entregar enigmes.",
-        "downloading": "Descarregant"
+        "downloading": "Descarregant",
+        "path_locked": "Esta missió encara no està oberta: abans n’has de completar una altra."
+      },
+      "hints": {
+        "intro": "T'has encallat? Utilitza una pista. S'obrin en orde, d'una en una, i cadascuna té el seu cost.",
+        "locked": "S'obri després de la pista {position}.",
+        "not_used": "Sense utilitzar.",
+        "use_button": "Utilitzar la pista {position}",
+        "summary_coins": "Costa {count} {coins}. Tens {balance}.",
+        "summary_xp": "Costa {count} XP. Tens {balance}. Pagar amb XP et pot fer baixar de nivell.",
+        "summary_percent": "Resta un {count} % del que esta missió encara t'ha de donar: els enigmes sense aprovar (també els que estan en revisió) i el bonus de la missió. El que ja has cobrat no canvia.",
+        "summary_free": "És gratis.",
+        "short_coins": "Et falten {count} {coins}.",
+        "short_xp": "Et falten {count} XP.",
+        "used": "Utilitzada",
+        "penalty_note": "Les teues pistes resten un {count} % del que et queda per cobrar en esta missió.",
+        "closed_completed": "Has completat la missió: ja no cal utilitzar més pistes.",
+        "closed_expired": "La missió ha caducat: ja no se'n poden utilitzar les pistes.",
+        "preview_note": "Vista prèvia: veus totes les pistes obertes. L'alumnat les obri d'una en una, en este orde, pagant-ne el cost.",
+        "used_announcement": "Has utilitzat la pista {position}.",
+        "use_error": "No s'ha pogut utilitzar la pista.",
+        "bonus_penalty": "−{count} % per les teues pistes"
+      },
+      "path_locked": {
+        "title": "Encara no pots començar esta missió",
+        "description": "S’obri en completar {missions}. Aleshores en voràs la història, els enigmes i els documents.",
+        "go_to": "Anar a «{title}»",
+        "back": "Tornar a les missions"
       }
     },
     "classes": {
@@ -143,14 +172,14 @@
           "tip": "Consell: dona detalls de colors, vestimenta, accessoris i estil. La IA crearà el teu avatar basant-se en el personatge que hages seleccionat.",
           "generate_button": "Genera l'avatar",
           "generating": "Generant el teu avatar...",
-          "generated_trait": "Generat amb IA",
           "nickname_placeholder": "El teu sobrenom...",
           "save_changes": "Guardar els canvis",
           "no_guide_hint": "Tria la teua guia per a veure el teu avatar",
           "save_success": "Perfil guardat correctament",
           "save_error": "Error en guardar el perfil",
           "generate_error": "No s'ha pogut generar l'avatar. Torna-ho a intentar d'ací a uns segons.",
-          "generate_error_with_detail": "No s'ha pogut generar l'avatar: {detail}"
+          "generate_error_with_detail": "No s'ha pogut generar l'avatar: {detail}",
+          "how_others_see": "Així et veuen en esta classe"
         },
         "mission_no_description": "Sense descripció",
         "shop": {
@@ -324,7 +353,6 @@
       "recent_activity_card": {
         "title": "Activitat recent",
         "empty": "No hi ha activitat recent",
-        "user_fallback": "Algú",
         "by_actor": "Per {name}"
       },
       "submission_modal": {

@@ -2,8 +2,10 @@ import { prisma } from '../../config/database.js'
 import { verifyPassword } from '../../utils/password.js'
 import { ForbiddenError, NotFoundError, ValidationError } from '../../utils/errors.js'
 import { normalizeEmail } from '../../utils/identity.js'
+import { isTeacherAvatarKey } from '../../utils/avatars.js'
 import { changeOwnPassword } from '../../utils/password-change.js'
 import { privateUploadResolver } from '../storage/storage.service.js'
+import { HINT_ORDER } from '../missions/mission-hints.service.js'
 import { deleteUserAccount } from './account-deletion.service.js'
 
 function parseUserAgent(userAgent: string): { browser: string; os: string; device: 'desktop' | 'mobile' | 'tablet' } {
@@ -88,6 +90,8 @@ export class ProfileService {
         accountType: user.accountType,
         name: user.name,
         role: user.role,
+        // Avatar de docente: clave del catálogo, o null sin elegir.
+        avatar: user.avatar,
         security: {
           twoFactorEnabled: settings.twoFactorEnabled,
           sessions,
@@ -220,6 +224,29 @@ export class ProfileService {
   }
 
   /**
+   * Avatar del profesorado: una clave del catálogo docente, o null para volver
+   * a las iniciales sobre el color de siempre. Es de la cuenta, no de cada clase:
+   * con él lo reconocen el alumnado y el resto del profesorado en todas sus
+   * clases. El alumnado lleva su avatar en cada clase, por otro camino.
+   */
+  async updateTeacherAvatar(userId: string, avatar: string | null) {
+    const user = await prisma.user.findUnique({ where: { id: userId }, select: { role: true } })
+    if (!user) throw new NotFoundError('Cuenta no encontrada')
+    if (user.role !== 'teacher') {
+      throw new ForbiddenError('Solo el profesorado elige aquí su avatar', 'NOT_TEACHER')
+    }
+    if (avatar !== null && !isTeacherAvatarKey(avatar)) {
+      throw new ValidationError('Elige un avatar de la lista', 'AVATAR_NOT_ALLOWED')
+    }
+    const updated = await prisma.user.update({
+      where: { id: userId },
+      data: { avatar },
+      select: { avatar: true },
+    })
+    return { avatar: updated.avatar }
+  }
+
+  /**
    * Update user preferences
    */
   async updatePreferences(userId: string, data: {
@@ -282,6 +309,8 @@ export class ProfileService {
                 enigmas: true,
                 documents: true,
                 badges: true,
+                // Las pistas, en su orden. Quién las usó va en la exportación de cada estudiante.
+                hints: { orderBy: HINT_ORDER },
               },
             },
             guide: true,
@@ -315,6 +344,7 @@ export class ProfileService {
         },
         missionProgress: true,
         enigmaProgress: true,
+        missionHintUses: { orderBy: { createdAt: 'asc' } },
         notifications: true,
         activities: true,
         joinRequests: true,
@@ -352,6 +382,7 @@ export class ProfileService {
         accountType: user.accountType,
         name: user.name,
         role: user.role,
+        avatar: user.avatar,
         isOnboarded: user.isOnboarded,
         status: user.status,
         createdAt: user.createdAt,
@@ -375,6 +406,8 @@ export class ProfileService {
         earnedBadges: user.earnedBadges,
         missionProgress: user.missionProgress,
         enigmaProgress: user.enigmaProgress,
+        // Cada pista que usó, con lo que le costó en ese momento.
+        hintUses: user.missionHintUses,
         submissions: user.submissions.map(s => withFileRoute(s, '/files/submissions')),
         joinRequests: user.joinRequests,
         receivedInvitations: user.receivedInvitations,

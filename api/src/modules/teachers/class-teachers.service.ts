@@ -40,6 +40,8 @@ const NOT_ADDABLE =
 export interface ClassTeacherRow {
   id: string
   name: string
+  /** Clave de su avatar de docente; null sin elegir. */
+  avatar: string | null
   email: string | null
   profile: ClassTeacherProfile
   access: ClassAccessLevel
@@ -55,7 +57,7 @@ const TEACHER_ROW_SELECT = {
   isOwner: true,
   createdAt: true,
   endsAt: true,
-  user: { select: { name: true, email: true } },
+  user: { select: { name: true, email: true, avatar: true } },
 } satisfies Prisma.ClassTeacherSelect
 
 type TeacherRowPayload = Prisma.ClassTeacherGetPayload<{ select: typeof TEACHER_ROW_SELECT }>
@@ -64,6 +66,7 @@ function toTeacherRow(row: TeacherRowPayload): ClassTeacherRow {
   return {
     id: row.userId,
     name: row.user.name,
+    avatar: row.user.avatar,
     email: row.user.email,
     profile: row.profile,
     access: row.access,

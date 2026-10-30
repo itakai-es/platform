@@ -132,43 +132,6 @@ export const useMissionStore = defineStore('mission', () => {
     }
   }
 
-  const startMission = async (id: string) => {
-    loading.value = true
-    error.value = null
-
-    try {
-      const config = useRuntimeConfig()
-      const response = await $fetch<{ mission: Mission; message: string }>(
-        `${config.public.apiBase}/missions/${id}/start`,
-        {
-          method: 'POST',
-        }
-      )
-
-      // Actualizar en el array de misiones
-      const index = missions.value.findIndex(m => m.id === id)
-      if (index !== -1) {
-        missions.value[index] = response.mission
-      }
-
-      // Actualizar activeMissions si tiene progreso
-      if (
-        response.mission.progress.done > 0 &&
-        response.mission.progress.done < response.mission.progress.total
-      ) {
-        activeMissions.value.push(response.mission)
-      }
-
-      return response.mission
-    } catch (err: any) {
-      error.value = err.message || 'Error al iniciar misión'
-      console.error('Error starting mission:', err)
-      throw err
-    } finally {
-      loading.value = false
-    }
-  }
-
   const fetchStats = async () => {
     try {
       const config = useRuntimeConfig()
@@ -350,7 +313,11 @@ export const useMissionStore = defineStore('mission', () => {
   const ensureMissionById = async (id: string, force = false) => {
     if (!force && loadedMissionDetails.value.has(id)) {
       const cached = missionDetailsCache.value.get(id)
-      if (cached) return cached
+      // Cerrada por el camino del mapa: se abre en cuanto se completa lo que
+      // pide, así que no se sirve de la caché (se vuelve a preguntar).
+      const pathLocked =
+        (cached as { lockReason?: string | null } | undefined)?.lockReason === 'path'
+      if (cached && !pathLocked) return cached
     }
     if (!force && isLoadingMissionById.value) {
       const cached = missionDetailsCache.value.get(id)
@@ -449,7 +416,6 @@ export const useMissionStore = defineStore('mission', () => {
     // Actions (legacy fetchX — se mantienen para no romper APIs existentes)
     fetchMissions,
     fetchMissionById,
-    startMission,
     fetchStats,
     fetchFilters,
     clearError,

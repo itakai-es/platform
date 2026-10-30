@@ -45,24 +45,19 @@
                  el nickname es un NuxtLink al perfil del alumno en la vista de profesor. -->
             <Tooltip v-if="activity.username && showAvatar" variant="light">
               <template #content>
-                <span
-                  class="flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-lila-medium"
-                >
-                  <img
-                    :src="activity.avatar || defaultAvatar"
-                    :alt="
-                      activity.username ||
-                      t('student.components.recent_activity_card.user_fallback')
-                    "
-                    class="h-full w-full object-contain p-1"
-                  />
-                </span>
+                <Avatar
+                  :src="activity.avatar"
+                  :name="activity.username"
+                  :seed="activity.avatarSeed"
+                  size="md"
+                />
               </template>
               <NuxtLink
                 v-if="activity.studentId"
                 :to="`/profesor/alumnos/${activity.studentId}`"
                 class="font-semibold hover:underline"
-              >{{ activity.username }}</NuxtLink>
+                >{{ activity.username }}</NuxtLink
+              >
               <span v-else class="font-semibold cursor-default">{{ activity.username }}</span>
               <span>&nbsp;</span>
             </Tooltip>
@@ -70,24 +65,30 @@
               v-else-if="activity.username && activity.studentId"
               :to="`/profesor/alumnos/${activity.studentId}`"
               class="font-semibold hover:underline"
-            >{{ activity.username }}&nbsp;</NuxtLink>
-            <span
-              v-else-if="activity.username"
-              class="font-semibold"
-            >{{ activity.username }}&nbsp;</span>
+              >{{ activity.username }}&nbsp;</NuxtLink
+            >
+            <span v-else-if="activity.username" class="font-semibold"
+              >{{ activity.username }}&nbsp;</span
+            >
             <span v-html="activity.description"></span>
           </p>
-          <!-- Quién lo hizo, si la descripción no lo dice -->
-          <p v-if="activity.actorName" class="mt-1 text-xs text-navy-700/70">
-            {{
-              t('student.components.recent_activity_card.by_actor', { name: activity.actorName })
-            }}
+          <!-- Quién lo hizo (aprobó, aplicó…), con su avatar -->
+          <p v-if="activity.actor" class="mt-1 flex items-center gap-1.5 text-xs text-navy-700/70">
+            <!-- Las entradas antiguas solo guardan el nombre: sin id, el color no sería
+                 el suyo, así que van sin círculo -->
+            <Avatar
+              v-if="activity.actor.id || activity.actor.avatar"
+              :avatar-key="activity.actor.avatar"
+              :seed="activity.actor.id"
+              :name="activity.actor.name"
+              size="xxs"
+            />
+            <span class="min-w-0 truncate">{{
+              t('student.components.recent_activity_card.by_actor', { name: activity.actor.name })
+            }}</span>
           </p>
           <!-- Chips de recursos involucrados (XP, monedas, maná, vidas) -->
-          <div
-            v-if="activity.resources?.length"
-            class="mt-1.5 flex flex-wrap items-center gap-1.5"
-          >
+          <div v-if="activity.resources?.length" class="mt-1.5 flex flex-wrap items-center gap-1.5">
             <Tooltip
               v-for="r in activity.resources"
               :key="r.kind"
@@ -124,7 +125,7 @@
 import { ref } from 'vue'
 import { ClockIcon } from '@heroicons/vue/24/outline'
 import type { ActivityBadgeType } from '~/components/atoms/ActivityBadge.vue'
-import type { ResourceDelta } from '~/composables/useActivityFormatter'
+import type { ActivityActor, ResourceDelta } from '~/composables/useActivityFormatter'
 
 const { t } = useI18n()
 
@@ -134,14 +135,16 @@ const { t } = useI18n()
 export interface ActivityItem {
   id: string
   avatar?: string
+  /** De dónde sale el color del avatar: `studentAvatarSeed(clase, estudiante)`. */
+  avatarSeed?: string
   username?: string
   studentId?: string
   description: string
   timeAgo: string
   badge?: ActivityBadgeType
   resources?: ResourceDelta[]
-  /** Profesor que lo hizo (aplicar un comportamiento…). */
-  actorName?: string
+  /** Docente que lo hizo (aprobar una entrega, aplicar un comportamiento…). */
+  actor?: ActivityActor
 }
 
 interface Props {
@@ -152,7 +155,6 @@ interface Props {
   hasMore?: boolean
   emptyMessage?: string
   cardType?: 'ia' | 'stats' | 'pending' | 'clases' | 'info'
-  defaultAvatar?: string
   maxHeight?: string
   minHeight?: string
   showAvatar?: boolean
@@ -165,7 +167,6 @@ const props = withDefaults(defineProps<Props>(), {
   hasMore: false,
   emptyMessage: undefined,
   cardType: 'pending',
-  defaultAvatar: '/app/avatars/atenea.svg',
   maxHeight: '400px',
   minHeight: undefined,
   showAvatar: true,

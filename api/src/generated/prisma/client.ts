@@ -107,6 +107,11 @@ export type ShopItemUse = Prisma.ShopItemUseModel
  */
 export type Mission = Prisma.MissionModel
 /**
+ * Model MissionPrerequisite
+ * 
+ */
+export type MissionPrerequisite = Prisma.MissionPrerequisiteModel
+/**
  * Model MissionDocument
  * 
  */
@@ -121,6 +126,16 @@ export type MissionEnigma = Prisma.MissionEnigmaModel
  * 
  */
 export type StudentEnigmaProgress = Prisma.StudentEnigmaProgressModel
+/**
+ * Model MissionHint
+ * 
+ */
+export type MissionHint = Prisma.MissionHintModel
+/**
+ * Model MissionHintUse
+ * 
+ */
+export type MissionHintUse = Prisma.MissionHintUseModel
 /**
  * Model EnigmaSubmission
  * 

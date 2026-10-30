@@ -166,17 +166,20 @@ definePageMeta({
   key: route => route.params.id as string,
 })
 
+const { t } = useI18n()
+
+// Con el `t` de arriba: el título se vuelve a calcular al cambiar de idioma,
+// ya fuera del setup, y ahí `useI18n()` lanza y deja la página a medio traducir.
 useHead({
-  title: () => useI18n().t('teacher.classes.detail.meta.title'),
+  title: () => t('teacher.classes.detail.meta.title'),
   meta: [
     {
       name: 'description',
-      content: () => useI18n().t('teacher.classes.detail.meta.description'),
+      content: () => t('teacher.classes.detail.meta.description'),
     },
   ],
 })
 
-const { t } = useI18n()
 const route = useRoute()
 
 const classId = computed(() => route.params.id as string)

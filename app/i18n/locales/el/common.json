@@ -554,6 +554,115 @@
         "base": "Βασική",
         "temporal": "Προσωρινή"
       }
+    },
+    "mission_hints": {
+      "title": "Υποδείξεις",
+      "hint_label": "Υπόδειξη {position}",
+      "free": "Δωρεάν",
+      "cost_coins": "{count} {coins}",
+      "cost_xp": "{count} XP",
+      "cost_percent": "−{count}% της ανταμοιβής"
+    },
+    "activity_feed": {
+      "hint_used_student": "Χρησιμοποίησες την υπόδειξη {position} της αποστολής {mission}",
+      "hint_used_teacher": "Χρησιμοποίησε την υπόδειξη {position} της αποστολής {mission}",
+      "hint_used_percent_student": "Χρησιμοποίησες την υπόδειξη {position} της αποστολής {mission}: −{count}% σε όσα σου έμεναν να κερδίσεις",
+      "hint_used_percent_teacher": "Χρησιμοποίησε την υπόδειξη {position} της αποστολής {mission}: −{count}% σε όσα του/της έμεναν να κερδίσει",
+      "enigma_approved_student": "Η υποβολή σου για {enigma} εγκρίθηκε",
+      "enigma_approved_teacher": "Η υποβολή του/της για {enigma} εγκρίθηκε",
+      "mission_started_student": "Ξεκίνησες την αποστολή {mission}",
+      "mission_started_teacher": "Ξεκίνησε την αποστολή {mission}"
+    },
+    "avatars": {
+      "characters": {
+        "atenea": {
+          "name": "Αθηνά",
+          "trait": "Σοφία και στρατηγική"
+        },
+        "odiseo": {
+          "name": "Οδυσσέας",
+          "trait": "Εξυπνάδα και θάρρος"
+        },
+        "penelope": {
+          "name": "Πηνελόπη",
+          "trait": "Πίστη και υπομονή"
+        },
+        "polifemo": {
+          "name": "Πολύφημος",
+          "trait": "Δύναμη και αποφασιστικότητα"
+        },
+        "poseidon": {
+          "name": "Ποσειδώνας",
+          "trait": "Ισχύς και κυριαρχία"
+        }
+      },
+      "custom_name": "Το άβατάρ σου με ΤΝ",
+      "custom_trait": "Δημιουργήθηκε με ΤΝ"
+    },
+    "view_modes": {
+      "grid": "Πλέγμα",
+      "list": "Λίστα",
+      "map": "Χάρτης"
+    },
+    "mission_map": {
+      "title": "Χάρτης αποστολών",
+      "beta": "Beta",
+      "beta_note": "Είναι σε δοκιμαστική φάση: η εμφάνιση και η λειτουργία του μπορεί να αλλάξουν.",
+      "step": "Αποστολή {n}",
+      "state": {
+        "completed": "Ολοκληρωμένη",
+        "in_progress": "Σε εξέλιξη: {progress}%",
+        "available": "Διαθέσιμη",
+        "urgent": "Επείγουσα: λήγει σύντομα",
+        "expired": "Έληξε",
+        "locked": "Κλειδωμένη: κλειστή προς το παρόν από τον/την εκπαιδευτικό σου",
+        "locked_path": "Κλειδωμένη· ανοίγει μετά την ολοκλήρωση: {missions}"
+      },
+      "completed_by": "Δεν την έχει ολοκληρώσει κανείς ακόμα: 0 από {total} | Την έχει ολοκληρώσει {done} από {total} | Την έχουν ολοκληρώσει {done} από {total}",
+      "no_students": "Δεν υπάρχουν ακόμα μαθητές και μαθήτριες",
+      "opens_after": "Ανοίγει μετά την ολοκλήρωση: {missions}",
+      "quoted": "«{title}»",
+      "quoted_teacher_closed": "«{title}» (κλειστή προς το παρόν από τον/την εκπαιδευτικό σου)",
+      "and": "και",
+      "locked_path_explain": "Για να την ανοίξεις, ολοκλήρωσε πρώτα: {missions}.",
+      "state_short": {
+        "completed": "Ολοκληρωμένη",
+        "in_progress": "Σε εξέλιξη",
+        "available": "Διαθέσιμη",
+        "urgent": "Επείγουσα",
+        "expired": "Έληξε",
+        "locked": "Κλειδωμένη"
+      },
+      "start": "Αφετηρία",
+      "goal": "Τερματισμός",
+      "you_are_here": "Είσαι εδώ",
+      "go_to_mine": "Πήγαινε στην αποστολή μου",
+      "keys_hint": "Με το πληκτρολόγιο, τα βέλη περνούν από μια αποστολή σε άλλη· τα Home και End πηγαίνουν στην πρώτη και στην τελευταία.",
+      "your_progress": "Έχεις ολοκληρώσει {done} από {total} αποστολή | Έχεις ολοκληρώσει {done} από {total} αποστολές",
+      "all_done": "Ο χάρτης ολοκληρώθηκε!",
+      "class_progress": "Η τάξη έχει διανύσει το {percent}% της διαδρομής",
+      "class_done_by_all": "Ολοκληρωμένες από όλη την τάξη: {done} από {total}",
+      "legend": {
+        "title": "Υπόμνημα",
+        "hint": "Πάτησε μια κατάσταση για να επισημάνεις τις αποστολές της στον χάρτη."
+      },
+      "detail": {
+        "label": "Λεπτομέρειες αποστολής",
+        "empty": "Πάτησε μια αποστολή στον χάρτη για να δεις εδώ τις λεπτομέρειές της.",
+        "your_progress": "Η πρόοδός σου",
+        "enigmas_done": "{done} από {total} γρίφο | {done} από {total} γρίφους",
+        "completed_list": "Την έχουν ολοκληρώσει",
+        "completed_more": "και {n} ακόμη",
+        "in_progress": "Σε εξέλιξη: {n}",
+        "deadline": "Προθεσμία: {date}",
+        "requires": "Για να ανοίξει, ολοκλήρωσε πρώτα:",
+        "requires_teacher": "Για να ανοίξει, πρέπει πρώτα να ολοκληρωθεί:",
+        "unlocks": "Όταν ολοκληρωθεί, ανοίγει τον δρόμο προς:",
+        "start": "Ξεκίνα",
+        "continue": "Συνέχισε",
+        "view": "Δες την αποστολή",
+        "open": "Άνοιξε την αποστολή"
+      }
     }
   }
 }

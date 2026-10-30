@@ -13,6 +13,8 @@
       @upload-submission="openSubmissionModal"
       @resource-click="handleResourceClick"
       @atenea-action="handleAteneaAction"
+      @hints-changed="onHintsChanged"
+      @hints-stale="fetchMission(true)"
     />
 
     <!-- Submission Modal -->
@@ -88,13 +90,14 @@ useHead({
   ],
 })
 
-// Fetch mission data from store (uses cache via ensureMissionById)
-const fetchMission = async () => {
-  loading.value = true
+// Fetch mission data from store (uses cache via ensureMissionById). Con `force`,
+// de nuevo desde la API (las pistas han cambiado por otro lado).
+const fetchMission = async (force = false) => {
+  loading.value = !force
   error.value = null
 
   try {
-    const fetchedMission = await missionStore.ensureMissionById(missionId.value)
+    const fetchedMission = await missionStore.ensureMissionById(missionId.value, force)
     mission.value = fetchedMission as unknown as MissionDetail
   } catch (err: any) {
     error.value = err.message || t('student.mission_detail.error.loading_error')
@@ -129,6 +132,12 @@ const teamNote = computed(() => {
       })
     : t('student.teams.mission_team_alone', { set: teamSet.title, team: mine.team.title })
 })
+
+// Pistas: al usar una, sus textos, el descuento y el saldo vuelven ya con el
+// cobro hecho; quedan en la misión (y en la caché).
+const onHintsChanged = (patch: Pick<MissionDetail, 'hints' | 'hintState'>) => {
+  if (mission.value) Object.assign(mission.value, patch)
+}
 
 // Support documents
 const supportDocuments = computed(() => mission.value?.documents || [])
@@ -221,6 +230,15 @@ const handleSubmissionSubmit = async (data: { enigmaId: string; file: File }) =>
     selectedEnigmaForSubmission.value = null
   } catch (err) {
     console.error('Error submitting enigma:', err)
+    // Se ha cerrado por el camino del mapa mientras tanto (su docente le ha
+    // puesto un requisito): se dice y se vuelve a pedir, que enseña qué falta.
+    if ((err as { data?: { code?: string } })?.data?.code === 'MISSION_PATH_LOCKED') {
+      toast.error(t('student.mission_detail.submission.path_locked'))
+      showSubmissionModal.value = false
+      selectedEnigmaForSubmission.value = null
+      void fetchMission(true)
+      return
+    }
     toast.error(t('student.mission_detail.submission.error'))
   }
 }

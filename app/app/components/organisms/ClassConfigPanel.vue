@@ -146,55 +146,66 @@
     </div>
 
     <!-- Section: Funcionalidades -->
-    <div v-else-if="activeSection === 'features'">
+    <div v-else-if="activeSection === 'features'" class="space-y-6">
       <!-- Column-major en sm+ con 5 filas auto: las 5 primeras de `order` van a la
            columna izquierda (módulos) y las 4 últimas a la derecha (recursos). -->
       <div
         class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:grid-flow-col sm:grid-rows-[repeat(5,auto)]"
       >
-        <div
+        <ClassFeatureRow
           v-for="flag in order"
           :key="flag"
-          class="flex items-center gap-3 rounded-2xl bg-white p-4 shadow-sm"
-          :class="isBlocked(flag) ? 'opacity-75' : ''"
+          :icon="meta[flag].icon"
+          :label="featureLabel(flag)"
+          :description="featureDescription(flag)"
+          :dimmed="isBlocked(flag)"
         >
-          <span
-            class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-navy-700/5 text-navy-700"
-          >
-            <component :is="meta[flag].icon" class="h-5 w-5" />
-          </span>
-
-          <div class="min-w-0 flex-1">
-            <p class="font-semibold leading-tight text-navy-700">
-              {{ t(`teacher.classes.detail.settings.items.${flag}.label`, { coins: coinLabel }) }}
-            </p>
-            <p class="mt-0.5 text-xs text-text-secondary">
-              <template v-if="isBlocked(flag) && meta[flag].requires">
-                {{
-                  t('teacher.classes.detail.settings.requires', {
-                    feature: t(
-                      `teacher.classes.detail.settings.items.${meta[flag].requires}.label`,
-                      { coins: coinLabel }
-                    ),
-                  })
-                }}
-              </template>
-              <template v-else-if="isBlocked(flag)">
-                {{ t('teacher.classes.detail.settings.requires_resource', { coins: coinLabel }) }}
-              </template>
-              <template v-else>
-                {{ t(`teacher.classes.detail.settings.items.${flag}.desc`, { coins: coinLabel }) }}
-              </template>
-            </p>
-          </div>
-
-          <Toggle
-            :model-value="localSettings[flag]"
-            :disabled="!canEditSettings || isBlocked(flag)"
-            @update:model-value="setFlag(flag, $event)"
-          />
-        </div>
+          <template #action="{ labelId, descriptionId }">
+            <Toggle
+              :model-value="localSettings[flag]"
+              :disabled="!canEditSettings || isBlocked(flag)"
+              :aria-labelledby="labelId"
+              :aria-describedby="descriptionId"
+              @update:model-value="setFlag(flag, $event)"
+            />
+          </template>
+        </ClassFeatureRow>
       </div>
+
+      <!-- En pruebas: funcionalidades nuevas, apagadas de entrada y con su
+           etiqueta «Beta». No salen en la ficha pública de una plantilla. -->
+      <section aria-labelledby="cfg-beta-title" class="space-y-3">
+        <div>
+          <h3 id="cfg-beta-title" class="font-semibold text-navy-700">
+            {{ t('teacher.classes.detail.settings.beta.title') }}
+          </h3>
+          <p class="mt-0.5 text-sm text-navy-700/70">
+            {{ t('teacher.classes.detail.settings.beta.hint') }}
+          </p>
+        </div>
+        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <ClassFeatureRow
+            v-for="flag in betaOrder"
+            :key="flag"
+            :icon="meta[flag].icon"
+            :label="featureLabel(flag)"
+            :description="featureDescription(flag)"
+          >
+            <template #badge>
+              <Badge variant="info" size="sm">{{ t('common.mission_map.beta') }}</Badge>
+            </template>
+            <template #action="{ labelId, descriptionId }">
+              <Toggle
+                :model-value="localSettings[flag]"
+                :disabled="!canEditSettings"
+                :aria-labelledby="labelId"
+                :aria-describedby="descriptionId"
+                @update:model-value="setFlag(flag, $event)"
+              />
+            </template>
+          </ClassFeatureRow>
+        </div>
+      </section>
     </div>
 
     <!-- Section: Niveles (sistema de niveles configurable de la clase) -->
@@ -303,6 +314,7 @@ import {
   SpeakerWaveIcon,
   DocumentDuplicateIcon,
   LinkIcon,
+  MapIcon,
 } from '@heroicons/vue/24/outline'
 import type { DuplicateOptions } from '~/components/organisms/DuplicateClassModal.vue'
 import CoinIcon from '~/components/atoms/CoinIcon.vue'
@@ -747,6 +759,7 @@ const meta: Record<keyof ClassSettings, { icon: Component; requires?: keyof Clas
   lives: { icon: LifeIcon },
   visualEffects: { icon: SparklesIcon },
   sounds: { icon: SpeakerWaveIcon },
+  missionMap: { icon: MapIcon },
 }
 
 // Column-major en sm+ con 5 filas: la columna izquierda son los 5 módulos /
@@ -766,6 +779,25 @@ const order: (keyof ClassSettings)[] = [
   'mana',
   'lives',
 ]
+
+// En pruebas (beta): apagadas de entrada, en su propio grupo.
+const betaOrder: (keyof ClassSettings)[] = ['missionMap']
+
+function featureLabel(flag: keyof ClassSettings): string {
+  return t(`teacher.classes.detail.settings.items.${flag}.label`, { coins: coinLabel.value })
+}
+
+/** La explicación de la funcionalidad o, si no se puede activar, qué le falta. */
+function featureDescription(flag: keyof ClassSettings): string {
+  const requires = meta[flag].requires
+  if (isBlocked(flag) && requires) {
+    return t('teacher.classes.detail.settings.requires', { feature: featureLabel(requires) })
+  }
+  if (isBlocked(flag)) {
+    return t('teacher.classes.detail.settings.requires_resource', { coins: coinLabel.value })
+  }
+  return t(`teacher.classes.detail.settings.items.${flag}.desc`, { coins: coinLabel.value })
+}
 
 function isBlocked(flag: keyof ClassSettings): boolean {
   const req = meta[flag].requires

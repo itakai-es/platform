@@ -1,6 +1,6 @@
 <template>
   <div class="flex min-w-0 flex-1 items-center gap-3">
-    <Avatar :username="name" size="xs" class="flex-shrink-0" aria-hidden="true" />
+    <Avatar :avatar-key="avatar" :seed="id" :name="name" size="xs" />
     <div class="min-w-0 flex-1">
       <p class="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
         <span class="truncate font-semibold text-navy-700">{{ name }}</span>
@@ -32,7 +32,11 @@ import type { ClassTeacherProfile } from '~/types/class.types'
  * ajustes, un `CardItem` en la tarjeta del alumnado) los pone quien la usa.
  */
 defineProps<{
+  /** Id de la cuenta: da el color del avatar si no ha elegido uno. */
+  id?: string | null
   name: string
+  /** Clave de su avatar de docente. */
+  avatar?: string | null
   profile: ClassTeacherProfile
   isOwner: boolean
 }>()

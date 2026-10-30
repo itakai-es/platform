@@ -62,7 +62,9 @@
         "en_progreso": "En progreso"
       },
       "locked_toast": "Tu docente ha cerrado esta misión por ahora. Podrás entrar cuando la abra.",
-      "locked_aria": "{title}: misión cerrada por ahora"
+      "locked_aria": "{title}: misión bloqueada por ahora",
+      "expired_on": "Venció: {date}",
+      "locked_path_aria": "{title}: se abre al completar {missions}"
     },
     "mission_detail": {
       "meta": {
@@ -88,7 +90,34 @@
         "success": "Entrega enviada correctamente. Tu docente la revisará pronto.",
         "error": "Error al enviar la entrega. Inténtalo de nuevo.",
         "expired_error": "Esta misión ha expirado. Ya no puedes entregar enigmas.",
-        "downloading": "Descargando"
+        "downloading": "Descargando",
+        "path_locked": "Esta misión aún no está abierta: antes tienes que completar otra."
+      },
+      "hints": {
+        "intro": "¿Te has atascado? Usa una pista. Se abren en orden, de una en una, y cada una tiene su coste.",
+        "locked": "Se abre después de la pista {position}.",
+        "not_used": "Sin usar.",
+        "use_button": "Usar la pista {position}",
+        "summary_coins": "Cuesta {count} {coins}. Tienes {balance}.",
+        "summary_xp": "Cuesta {count} XP. Tienes {balance}. Pagar con XP puede bajarte de nivel.",
+        "summary_percent": "Resta un {count} % a lo que esta misión aún te tiene que dar: los enigmas sin aprobar (también los que están en revisión) y el bonus de la misión. Lo que ya has cobrado no cambia.",
+        "summary_free": "Es gratis.",
+        "short_coins": "Te faltan {count} {coins}.",
+        "short_xp": "Te faltan {count} XP.",
+        "used": "Usada",
+        "penalty_note": "Tus pistas restan un {count} % a lo que te queda por cobrar en esta misión.",
+        "closed_completed": "Has completado la misión: ya no hace falta usar más pistas.",
+        "closed_expired": "La misión ha caducado: ya no se pueden usar sus pistas.",
+        "preview_note": "Vista previa: ves todas las pistas abiertas. El alumnado las abre de una en una, en este orden, pagando su coste.",
+        "used_announcement": "Has usado la pista {position}.",
+        "use_error": "No se ha podido usar la pista.",
+        "bonus_penalty": "−{count} % por tus pistas"
+      },
+      "path_locked": {
+        "title": "Aún no puedes empezar esta misión",
+        "description": "Se abre al completar {missions}. Entonces verás su historia, sus enigmas y sus documentos.",
+        "go_to": "Ir a «{title}»",
+        "back": "Volver a las misiones"
       }
     },
     "classes": {
@@ -143,14 +172,14 @@
           "tip": "Tip: Da detalles de colores, vestimenta, accesorios y estilo. La IA creará tu avatar basándose en el personaje que hayas seleccionado.",
           "generate_button": "Genera avatar",
           "generating": "Generando tu avatar...",
-          "generated_trait": "Generado con IA",
           "nickname_placeholder": "Tu nickname...",
           "save_changes": "Guardar cambios",
           "no_guide_hint": "Elige tu guía para ver tu avatar",
           "save_success": "Perfil guardado correctamente",
           "save_error": "Error al guardar el perfil",
           "generate_error": "No se pudo generar el avatar. Inténtalo de nuevo en unos segundos.",
-          "generate_error_with_detail": "No se pudo generar el avatar: {detail}"
+          "generate_error_with_detail": "No se pudo generar el avatar: {detail}",
+          "how_others_see": "Así te ven en esta clase"
         },
         "mission_no_description": "Sin descripción",
         "shop": {
@@ -324,7 +353,6 @@
       "recent_activity_card": {
         "title": "Actividad reciente",
         "empty": "No hay actividad reciente",
-        "user_fallback": "Alguien",
         "by_actor": "Por {name}"
       },
       "submission_modal": {

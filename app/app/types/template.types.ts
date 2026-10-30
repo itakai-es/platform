@@ -8,7 +8,7 @@
  * publicó la plantilla.
  */
 
-import type { ClassSettings } from './class.types'
+import type { ClassSettings, TemplateFeatures } from './class.types'
 import type { MissionRarity } from './mission.types'
 import type { ShopItemKind, ShopItemUsage } from '~/stores/shop'
 
@@ -98,8 +98,8 @@ export interface TemplateContents {
 export interface PublicTemplateCard extends TemplateCardData {
   /** El principio de la narrativa en texto plano; entera, en la ficha. */
   excerpt: string | null
-  /** Las funcionalidades encendidas, ya resueltas por la API. */
-  features: ClassSettings
+  /** Las funcionalidades encendidas, ya resueltas por la API (sin las que están en pruebas). */
+  features: TemplateFeatures
   missionCount: number
   shopItemCount: number
   behaviorCount: number
@@ -122,7 +122,7 @@ export interface PublicTemplatePage {
 export interface PublicTemplateDetail extends TemplateCardData, TemplateStory, TemplateContents {
   /** En Markdown, tal cual: se sanea al pintarla. */
   narrative: string | null
-  features: ClassSettings
+  features: TemplateFeatures
   missionCount: number
   shopItemCount: number
   behaviorCount: number

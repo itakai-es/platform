@@ -327,6 +327,7 @@ describeWithDatabase('importar una misión de otra clase', () => {
       })
       expect(body.copied).toEqual({
         enigmas: 2,
+        hints: 0,
         documents: 2,
         badges: [{ id: expect.any(String), name: 'Cartógrafa' }],
       })
@@ -448,7 +449,7 @@ describeWithDatabase('importar una misión de otra clase', () => {
 
       const response = await importMission(mission.id, 'owner', { targetClassId: f.classId })
       expect(response.statusCode).toBe(201)
-      expect(response.json().copied).toEqual({ enigmas: 1, documents: 0, badges: [] })
+      expect(response.json().copied).toEqual({ enigmas: 1, hints: 0, documents: 0, badges: [] })
 
       const copy = await copyOf(response.json().mission.id)
       expect(copy.enigmas.map(e => [e.title, e.xpReward])).toEqual([['Único', 15]])
@@ -457,7 +458,7 @@ describeWithDatabase('importar una misión de otra clase', () => {
       const entry = await prisma.classActionLog.findFirstOrThrow({
         where: { classId: f.classId, action: 'mission.imported', entityId: copy.id },
       })
-      expect(entry.metadata).toMatchObject({ enigmas: 1, documents: 0, badges: 0 })
+      expect(entry.metadata).toMatchObject({ enigmas: 1, hints: 0, documents: 0, badges: 0 })
     })
 
     it('queda en el registro de las dos clases: en el destino de dónde vino, en el origen adónde fue', async () => {
@@ -475,6 +476,7 @@ describeWithDatabase('importar una misión de otra clase', () => {
         fromClassId: sourceClassId,
         fromMissionId: src.mission.id,
         enigmas: 2,
+        hints: 0,
         documents: 2,
         badges: 1,
       })
@@ -488,6 +490,7 @@ describeWithDatabase('importar una misión de otra clase', () => {
         toClassId: f.classId,
         toMissionId: copyId,
         enigmas: 2,
+        hints: 0,
         documents: 2,
         badges: 1,
       })
@@ -508,7 +511,7 @@ describeWithDatabase('importar una misión de otra clase', () => {
         copyBadge: false,
       })
       expect(response.statusCode).toBe(201)
-      expect(response.json().copied).toEqual({ enigmas: 2, documents: 2, badges: [] })
+      expect(response.json().copied).toEqual({ enigmas: 2, hints: 0, documents: 2, badges: [] })
 
       const copy = await copyOf(response.json().mission.id)
       expect(copy.badges).toEqual([])

@@ -554,6 +554,115 @@
         "base": "De base",
         "temporal": "Temporal"
       }
+    },
+    "mission_hints": {
+      "title": "Pistas",
+      "hint_label": "Pista {position}",
+      "free": "Gratis",
+      "cost_coins": "{count} {coins}",
+      "cost_xp": "{count} XP",
+      "cost_percent": "−{count} % da recompensa"
+    },
+    "activity_feed": {
+      "hint_used_student": "Usaches a pista {position} de {mission}",
+      "hint_used_teacher": "Usou a pista {position} de {mission}",
+      "hint_used_percent_student": "Usaches a pista {position} de {mission}: −{count} % no que che quedaba por cobrar",
+      "hint_used_percent_teacher": "Usou a pista {position} de {mission}: −{count} % no que lle quedaba por cobrar",
+      "enigma_approved_student": "Aprobáronche a entrega de {enigma}",
+      "enigma_approved_teacher": "Recibiu a aprobación da súa entrega de {enigma}",
+      "mission_started_student": "Comezaches a misión {mission}",
+      "mission_started_teacher": "Comezou a misión {mission}"
+    },
+    "avatars": {
+      "characters": {
+        "atenea": {
+          "name": "Atenea",
+          "trait": "Sabedoría e estratexia"
+        },
+        "odiseo": {
+          "name": "Odiseo",
+          "trait": "Astucia e valentía"
+        },
+        "penelope": {
+          "name": "Penélope",
+          "trait": "Lealdade e paciencia"
+        },
+        "polifemo": {
+          "name": "Polifemo",
+          "trait": "Forza e determinación"
+        },
+        "poseidon": {
+          "name": "Poseidón",
+          "trait": "Poder e dominio"
+        }
+      },
+      "custom_name": "O teu avatar con IA",
+      "custom_trait": "Xerado con IA"
+    },
+    "view_modes": {
+      "grid": "Grade",
+      "list": "Lista",
+      "map": "Mapa"
+    },
+    "mission_map": {
+      "title": "Mapa de misións",
+      "beta": "Beta",
+      "beta_note": "Está en probas: o seu aspecto e o seu funcionamento poden cambiar.",
+      "step": "Misión {n}",
+      "state": {
+        "completed": "Completada",
+        "in_progress": "En curso: {progress} %",
+        "available": "Dispoñible",
+        "urgent": "Urxente: vence axiña",
+        "expired": "Expirada",
+        "locked": "Bloqueada: pechada polo teu docente polo de agora",
+        "locked_path": "Bloqueada: ábrese ao completar {missions}"
+      },
+      "completed_by": "Ninguén a completou aínda: 0 de {total} | {done} de {total} completouna | {done} de {total} completárona",
+      "no_students": "Aínda non hai alumnado",
+      "opens_after": "Ábrese ao completar {missions}",
+      "quoted": "«{title}»",
+      "quoted_teacher_closed": "«{title}» (pechada polo teu docente polo de agora)",
+      "and": "e",
+      "locked_path_explain": "Para abrila, completa antes {missions}.",
+      "state_short": {
+        "completed": "Completada",
+        "in_progress": "En curso",
+        "available": "Dispoñible",
+        "urgent": "Urxente",
+        "expired": "Expirada",
+        "locked": "Bloqueada"
+      },
+      "start": "Saída",
+      "goal": "Meta",
+      "you_are_here": "Estás aquí",
+      "go_to_mine": "Ir á miña misión",
+      "keys_hint": "Co teclado, as frechas pasan dunha misión a outra; Inicio e Fin levan á primeira e á última.",
+      "your_progress": "Completaches {done} de {total} misión | Completaches {done} de {total} misións",
+      "all_done": "Mapa completado!",
+      "class_progress": "A clase leva o {percent} % do percorrido",
+      "class_done_by_all": "Completadas por toda a clase: {done} de {total}",
+      "legend": {
+        "title": "Lenda",
+        "hint": "Preme un estado para salientar as súas misións no mapa."
+      },
+      "detail": {
+        "label": "Detalle da misión",
+        "empty": "Preme unha misión do mapa para ver aquí o seu detalle.",
+        "your_progress": "O teu progreso",
+        "enigmas_done": "{done} de {total} enigma | {done} de {total} enigmas",
+        "completed_list": "Quen a completou",
+        "completed_more": "e {n} máis",
+        "in_progress": "En curso: {n}",
+        "deadline": "Data límite: {date}",
+        "requires": "Para abrila, completa antes:",
+        "requires_teacher": "Para abrila, cómpre completar antes:",
+        "unlocks": "Ao completala, abre o camiño a:",
+        "start": "Comezar",
+        "continue": "Continuar",
+        "view": "Ver misión",
+        "open": "Abrir misión"
+      }
     }
   }
 }

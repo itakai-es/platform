@@ -186,11 +186,12 @@
               >
                 <!-- Header: Avatar, Nickname, Class Name -->
                 <div class="flex items-start gap-3 mb-3">
-                  <!-- Per-class Avatar -->
-                  <img
-                    :src="classItem.avatar || '/app/avatars/odiseo.svg'"
-                    :alt="classItem.nickname"
-                    class="w-12 h-12 rounded-xl object-contain flex-shrink-0 bg-gray-100 p-1"
+                  <!-- Avatar de la clase -->
+                  <Avatar
+                    :src="classItem.avatar"
+                    :name="classItem.nickname"
+                    :seed="studentAvatarSeed(classItem.id, student.id)"
+                    size="sm"
                   />
                   <div class="flex-1 min-w-0">
                     <h3 class="font-bold text-navy-700 truncate">{{ classItem.name }}</h3>
@@ -211,6 +212,7 @@
                     :student="manageable(classItem)"
                     :access="classItem.myAccess"
                     @renamed="onRenamed(classItem, $event)"
+                    @avatar-changed="classItem.avatar = $event"
                     @removed="onRemoved"
                   />
                 </div>
@@ -337,7 +339,6 @@
             :loading="false"
             card-type="pending"
             :empty-message="t('teacher.students.detail.no_activity')"
-            default-avatar="/app/avatars/odiseo.svg"
           />
         </div>
       </div>
@@ -361,6 +362,7 @@ import type { AccountType, ManageableStudent } from '~/types/teacher.types'
 import { resolveClassSettings } from '~/utils/class-settings'
 import { canInClass } from '~/utils/class-access'
 import { accountIdentifier } from '~/utils/identity'
+import { studentAvatarSeed } from '~/utils/avatar'
 
 interface StudentClass {
   id: string
@@ -483,6 +485,7 @@ function manageable(classItem: StudentClass): ManageableStudent {
     id: current.id,
     name: current.name,
     nickname: classItem.nickname,
+    avatar: classItem.avatar,
     accountType: current.accountType,
     canResetPassword: current.canResetPassword,
     isHomeClass: current.homeClassId === classItem.id,

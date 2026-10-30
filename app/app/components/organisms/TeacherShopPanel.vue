@@ -138,6 +138,7 @@
               :avatar="getImageUrl(p.studentAvatar || undefined)"
               :name="p.studentName"
               :student-id="p.studentId"
+              :avatar-seed="studentAvatarSeed(classId, p.studentId)"
               :title="p.itemName"
               :subtitle="`${t('student.classes.detail.shop.history_bought')} · ${formatDate(p.date)}`"
             >
@@ -174,6 +175,7 @@
               :avatar="getImageUrl(u.studentAvatar || undefined)"
               :name="u.studentName"
               :student-id="u.studentId"
+              :avatar-seed="studentAvatarSeed(classId, u.studentId)"
               :title="u.itemName"
               :subtitle="`${u.kind === 'reward' ? t('student.classes.detail.shop.history_redeemed') : t('student.classes.detail.shop.history_used')} · ${formatDate(u.date)}`"
             >
@@ -546,6 +548,7 @@ import {
 import { GiftIcon, BoltIcon } from '@heroicons/vue/24/solid'
 import type { ShopItem, ShopItemKind, ShopItemUsage } from '~/stores/shop'
 import { SHOP_PRICE_PRESETS, SHOP_MANA_PRESETS } from '~/utils/gamification-config'
+import { studentAvatarSeed } from '~/utils/avatar'
 import { SHOP_SUGGESTIONS, type ShopSuggestion } from '~/utils/shop-suggestions'
 
 const props = withDefaults(

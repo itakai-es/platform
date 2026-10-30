@@ -1,18 +1,28 @@
 <template>
   <div class="space-y-6">
-    <!-- Filtros -->
+    <!-- Filtros (en el mapa no hay: va la clase entera, en su orden) -->
     <MissionFilterBar
       v-model:search="searchQuery"
       v-model:rarity-filters="rarityFilters"
       v-model:sort="sortBy"
       v-model:view="view"
-      :results-count="displayed.length"
+      :view-modes="viewModes"
+      :results-count="view === 'map' ? inClassOrder.length : displayed.length"
       @reset="resetFilters"
+    />
+
+    <!-- Mapa (en pruebas): de entrada, si la clase lo tiene encendido -->
+    <MissionMap
+      v-if="view === 'map' && inClassOrder.length"
+      :missions="inClassOrder"
+      mode="student"
+      :class-id="classId"
+      :you="you"
     />
 
     <!-- Empty (con o sin filtros) -->
     <EmptyState
-      v-if="!displayed.length"
+      v-else-if="view === 'map' ? !inClassOrder.length : !displayed.length"
       :icon="ClipboardDocumentListIcon"
       :title="t('student.classes.detail.missions_tab.empty_title')"
       :description="emptyMessage"
@@ -29,7 +39,7 @@
         :status="mission.status"
         :rarity="mission.rarity"
         :progress="mission.progress"
-        :time-remaining="mission.timeRemaining"
+        :deadline="mission.deadline"
         :xp-reward="mission.xpReward"
         :coin-reward="mission.coinReward"
         :mana-reward="mission.manaReward"
@@ -38,6 +48,8 @@
         :earned-mana="mission.earnedMana"
         :background-image="mission.backgroundImage"
         :class-id="classId"
+        :lock-reason="mission.lockReason"
+        :requires="mission.requires"
         :layout="view"
         compact
       />
@@ -48,21 +60,34 @@
 <script setup lang="ts">
 import { ClipboardDocumentListIcon } from '@heroicons/vue/24/outline'
 import type { MissionStatus, MissionRarity } from '~/types/mission.types'
+import { DEFAULT_MISSION_SORT, sortMissions } from '~/utils/mission-sort'
+import { studentAvatarSeed } from '~/utils/avatar'
+import type { ViewMode } from '~/composables/useViewMode'
 
 definePageMeta({ layout: 'student', middleware: ['auth', 'role'] })
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const route = useRoute()
 const classId = computed(() => route.params.id as string)
-const { classMissions } = useStudentClassDetail(classId)
-const view = useViewMode('student-class-missions')
+const { classMissions, classSettings, studentAvatar } = useStudentClassDetail(classId)
+const authStore = useAuthStore()
+// Quien mira, para «Estás aquí» en el mapa: su avatar en esta clase.
+const you = computed(() => ({
+  avatar: studentAvatar.value,
+  seed: studentAvatarSeed(classId.value, authStore.user?.id ?? ''),
+  name: authStore.user?.name ?? null,
+}))
+// El mapa (en pruebas) es una vista más y, si la clase lo tiene encendido, la de entrada.
+const mapOn = computed(() => classSettings.value.missionMap)
+const viewModes = computed<ViewMode[]>(() =>
+  mapOn.value ? ['grid', 'list', 'map'] : ['grid', 'list']
+)
+const view = useViewMode('student-class-missions', () => (mapOn.value ? 'map' : 'grid'), viewModes)
 
 // Estado de filtros local (cada tab arranca limpio cada vez).
 const searchQuery = ref('')
 const rarityFilters = ref<string[]>([])
-const sortBy = ref('deadline-asc')
-
-const rarityOrder: Record<string, number> = { comun: 1, rara: 2, epica: 3, legendaria: 4 }
+const sortBy = ref(DEFAULT_MISSION_SORT)
 
 const missions = computed(() =>
   (classMissions.value || []).map((m: Record<string, unknown>) => ({
@@ -72,14 +97,22 @@ const missions = computed(() =>
     status: (m.status as MissionStatus) || 'activa',
     rarity: (m.rarity as MissionRarity) || 'comun',
     progress: (m.progress as number) || 0,
-    timeRemaining: m.timeRemaining as string | undefined,
+    // La fecha límite de verdad: con ella se ordena «Fecha» y la ve la tarjeta.
+    deadline: (m.deadline as string | null | undefined) ?? null,
+    orderIndex: m.orderIndex as number | undefined,
     xpReward: (m.xpReward as number) || 0,
     coinReward: (m.coinReward as number) || 0,
     manaReward: (m.manaReward as number) || 0,
     earnedXp: m.earnedXp as number | undefined,
     earnedCoins: m.earnedCoins as number | undefined,
     earnedMana: m.earnedMana as number | undefined,
+    // Cuántos enigmas lleva completados, de cuántos (el detalle del mapa).
+    progressDetail: m.progressDetail as { done: number; total: number } | undefined,
     backgroundImage: m.backgroundImage as string | undefined,
+    // El camino del mapa: lo que pide y, si la tiene cerrada por él, lo que le falta.
+    prerequisiteIds: (m.prerequisiteIds as string[] | undefined) ?? [],
+    lockReason: (m.lockReason as 'teacher' | 'path' | null | undefined) ?? null,
+    requires: (m.requires as { id: string; title: string }[] | undefined) ?? [],
   }))
 )
 
@@ -94,30 +127,11 @@ const displayed = computed(() => {
       m => m.title.toLowerCase().includes(query) || m.description.toLowerCase().includes(query)
     )
   }
-  const [field, order] = sortBy.value.split('-')
-  const sorted = [...result].sort((a, b) => {
-    let comparison = 0
-    switch (field) {
-      case 'title':
-        comparison = a.title.localeCompare(b.title, 'es')
-        break
-      case 'xp':
-        comparison = a.xpReward - b.xpReward
-        break
-      case 'deadline':
-        if (!a.timeRemaining && !b.timeRemaining) comparison = 0
-        else if (!a.timeRemaining) comparison = 1
-        else if (!b.timeRemaining) comparison = -1
-        else comparison = a.timeRemaining.localeCompare(b.timeRemaining)
-        break
-      case 'rarity':
-        comparison = (rarityOrder[a.rarity] || 0) - (rarityOrder[b.rarity] || 0)
-        break
-    }
-    return order === 'desc' ? -comparison : comparison
-  })
-  return sorted
+  return sortMissions(result, sortBy.value, locale.value)
 })
+
+// La clase entera en su orden, sin filtros: la del mapa.
+const inClassOrder = computed(() => sortMissions(missions.value, DEFAULT_MISSION_SORT))
 
 function resetFilters() {
   searchQuery.value = ''

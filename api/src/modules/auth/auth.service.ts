@@ -548,6 +548,7 @@ export class AuthService {
     accountType: UserAccountType
     isOnboarded: boolean
     mustChangePassword: boolean
+    avatar: string | null
     createdAt: Date
   }) {
     return {
@@ -559,6 +560,8 @@ export class AuthService {
       accountType: user.accountType,
       isOnboarded: user.isOnboarded,
       mustChangePassword: user.mustChangePassword,
+      // Avatar de docente (clave del catálogo); el del alumnado es de cada clase.
+      avatar: user.avatar,
       createdAt: user.createdAt,
     }
   }

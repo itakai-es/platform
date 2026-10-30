@@ -62,7 +62,9 @@
         "en_progreso": "În desfășurare"
       },
       "locked_toast": "Misiunea este închisă deocamdată. Vei putea intra când se deschide.",
-      "locked_aria": "{title}: misiune închisă deocamdată"
+      "locked_aria": "{title}: misiune blocată deocamdată",
+      "expired_on": "A expirat: {date}",
+      "locked_path_aria": "{title}: se deschide după ce finalizezi {missions}"
     },
     "mission_detail": {
       "meta": {
@@ -88,7 +90,34 @@
         "success": "Lucrarea a fost trimisă. Cadrul didactic o va verifica în curând.",
         "error": "Eroare la trimiterea lucrării. Încearcă din nou.",
         "expired_error": "Această misiune a expirat. Nu mai poți trimite enigme.",
-        "downloading": "Se descarcă"
+        "downloading": "Se descarcă",
+        "path_locked": "Această misiune nu e încă deschisă: mai întâi trebuie să finalizezi alta."
+      },
+      "hints": {
+        "intro": "Te-ai blocat? Folosește un indiciu. Se deschid în ordine, câte unul, și fiecare are costul lui.",
+        "locked": "Se deschide după indiciul {position}.",
+        "not_used": "Nefolosit.",
+        "use_button": "Folosește indiciul {position}",
+        "summary_coins": "Costă {count} {coins}. Ai {balance}.",
+        "summary_xp": "Costă {count} XP. Ai {balance}. Dacă plătești cu XP, poți coborî un nivel.",
+        "summary_percent": "Scade {count} % din ce mai are să-ți dea această misiune: enigmele neaprobate (inclusiv cele în verificare) și bonusul misiunii. Ce ai primit deja nu se schimbă.",
+        "summary_free": "Este gratuit.",
+        "short_coins": "Îți mai trebuie {count} {coins}.",
+        "short_xp": "Îți mai trebuie {count} XP.",
+        "used": "Folosit",
+        "penalty_note": "Indiciile tale scad {count} % din ce mai ai de primit în această misiune.",
+        "closed_completed": "Ai finalizat misiunea: nu mai ai nevoie de indicii.",
+        "closed_expired": "Misiunea a expirat: indiciile ei nu mai pot fi folosite.",
+        "preview_note": "Previzualizare: vezi toate indiciile deschise. Elevii le deschid câte unul, în această ordine, plătind costul lor.",
+        "used_announcement": "Ai folosit indiciul {position}.",
+        "use_error": "Indiciul nu a putut fi folosit.",
+        "bonus_penalty": "−{count} % pentru indiciile tale"
+      },
+      "path_locked": {
+        "title": "Încă nu poți începe această misiune",
+        "description": "Se deschide după ce finalizezi {missions}. Atunci îi vei vedea povestea, enigmele și documentele.",
+        "go_to": "Mergi la „{title}”",
+        "back": "Înapoi la misiuni"
       }
     },
     "classes": {
@@ -143,14 +172,14 @@
           "tip": "Sfat: dă detalii despre culori, ținută, accesorii și stil. IA îți va crea avatarul pornind de la personajul pe care l-ai ales.",
           "generate_button": "Generează avatarul",
           "generating": "Se generează avatarul tău...",
-          "generated_trait": "Generat cu IA",
           "nickname_placeholder": "Porecla ta...",
           "save_changes": "Salvează modificările",
           "no_guide_hint": "Alege-ți ghidul ca să îți vezi avatarul",
           "save_success": "Profilul a fost salvat",
           "save_error": "Eroare la salvarea profilului",
           "generate_error": "Avatarul nu a putut fi generat. Încearcă din nou peste câteva secunde.",
-          "generate_error_with_detail": "Avatarul nu a putut fi generat: {detail}"
+          "generate_error_with_detail": "Avatarul nu a putut fi generat: {detail}",
+          "how_others_see": "Așa te văd ceilalți în această clasă"
         },
         "mission_no_description": "Fără descriere",
         "shop": {
@@ -324,7 +353,6 @@
       "recent_activity_card": {
         "title": "Activitate recentă",
         "empty": "Nu există activitate recentă",
-        "user_fallback": "Cineva",
         "by_actor": "De {name}"
       },
       "submission_modal": {

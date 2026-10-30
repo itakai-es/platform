@@ -11,7 +11,11 @@
 
     <template v-else-if="ui.rankingData">
       <TeamStandings v-if="teams.data.value" :standings="teams.data.value.standings" />
-      <ClassRankingSection :ranking-data="ui.rankingData" :show-current-user-highlight="true" />
+      <ClassRankingSection
+        :ranking-data="ui.rankingData"
+        :class-id="classId"
+        :show-current-user-highlight="true"
+      />
     </template>
   </div>
 </template>

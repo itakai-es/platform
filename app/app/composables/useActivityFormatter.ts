@@ -1,6 +1,14 @@
 import type { ActivityType } from '~/types/activity.types'
 import { normalizeLegacyActivityType, validateActivityType } from '~/types/activity.types'
 import { rewardTakesOnly } from '~/utils/reward-sign'
+import { studentAvatarSeed } from '~/utils/avatar'
+
+/** Docente que hizo lo que cuenta una entrada: su nombre y la clave de su avatar. */
+export interface ActivityActor {
+  id: string | null
+  name: string
+  avatar: string | null
+}
 
 interface Activity {
   id: string
@@ -10,7 +18,7 @@ interface Activity {
   username?: string
   teacherName?: string
   /** Quién hizo lo que cuenta la entrada, si no es el propio alumno (aprobar, aplicar). */
-  actor?: { id: string | null; name: string; avatar: string | null } | null
+  actor?: ActivityActor | null
   enigmaTitle?: string
   enigmaXp?: number
   missionTitle?: string
@@ -42,6 +50,7 @@ interface FormattedActivity {
   description: string
   timeAgo: string
   avatar?: string
+  avatarSeed?: string
   badge?: {
     type: 'xp' | 'new' | 'level' | 'mission' | 'achievement' | 'behavior'
     text: string
@@ -51,8 +60,8 @@ interface FormattedActivity {
   }
   /** Chips visuales de recursos involucrados (XP, monedas, maná, vidas). */
   resources?: ResourceDelta[]
-  /** Profesor que lo hizo, cuando la descripción no lo nombra ya. */
-  actorName?: string
+  /** Docente que lo hizo (aprobar, aplicar), con su avatar. */
+  actor?: ActivityActor
 }
 
 /**
@@ -79,6 +88,7 @@ function makeDelta(kind: ResourceKind, value: number | undefined | null): Resour
  * @param perspective - 'student' for 2nd person (Tu...), 'teacher' for 3rd person (El estudiante...)
  */
 export function useActivityFormatter(perspective: 'student' | 'teacher' = 'student') {
+  const { t } = useI18n()
   const formatTimeAgo = (timestamp: Date | string): string => {
     const now = new Date()
     const activityDate = new Date(timestamp)
@@ -113,20 +123,24 @@ export function useActivityFormatter(perspective: 'student' | 'teacher' = 'stude
             }
           | undefined
         let resources: ResourceDelta[] | undefined
-        let actorName: string | undefined
+        let actor: ActivityActor | undefined
 
         // Format based on perspective
         const isTeacher = perspective === 'teacher'
 
         switch (normalizedType) {
           case 'enigma_completed': {
-            // Quien aprobó: el actor de la entrada; las antiguas solo guardan el nombre.
-            const reviewer = activity.actor?.name || activity.teacherName || 'El profesorado'
-            if (isTeacher) {
-              description = `${esc(reviewer)} aprobó su entrega de <strong>"${esc(activity.enigmaTitle)}"</strong>`
-            } else {
-              description = `${esc(reviewer)} aprobó tu entrega de <strong>"${esc(activity.enigmaTitle)}"</strong>`
-            }
+            const params = { enigma: `<strong>"${esc(activity.enigmaTitle)}"</strong>` }
+            description = isTeacher
+              ? t('common.activity_feed.enigma_approved_teacher', params)
+              : t('common.activity_feed.enigma_approved_student', params)
+            // Quién la aprobó va debajo, con su avatar. Las entradas antiguas solo
+            // guardan el nombre.
+            actor =
+              activity.actor ??
+              (activity.teacherName
+                ? { id: null, name: activity.teacherName, avatar: null }
+                : undefined)
             badge = { type: 'xp', text: `+${activity.enigmaXp} XP` }
             break
           }
@@ -236,7 +250,7 @@ export function useActivityFormatter(perspective: 'student' | 'teacher' = 'stude
               makeDelta('mana', meta.manaDelta),
               makeDelta('life', meta.lifeDelta),
             ].filter((r): r is ResourceDelta => r !== null)
-            actorName = activity.actor?.name || undefined
+            actor = activity.actor ?? undefined
             // Propagamos el tipo (positivo/negativo) al badge para que el
             // frontend pueda elegir icono pulgar arriba/abajo.
             badge = {
@@ -277,6 +291,48 @@ export function useActivityFormatter(perspective: 'student' | 'teacher' = 'stude
             break
           }
 
+          case 'hint_used': {
+            const meta = (activity.metadata || {}) as {
+              position?: number
+              costType?: string
+              cost?: number
+            }
+            const params = {
+              position: meta.position ?? 1,
+              mission: `<strong>"${esc(activity.missionTitle || '')}"</strong>`,
+              count: meta.cost ?? 0,
+            }
+            // Una pista de % no mueve saldo: lo dice la frase. Las de monedas o XP,
+            // con su chip en negativo, como una compra.
+            if (meta.costType === 'percent' && params.count > 0) {
+              description = isTeacher
+                ? t('common.activity_feed.hint_used_percent_teacher', params)
+                : t('common.activity_feed.hint_used_percent_student', params)
+            } else {
+              description = isTeacher
+                ? t('common.activity_feed.hint_used_teacher', params)
+                : t('common.activity_feed.hint_used_student', params)
+            }
+            resources = [
+              makeDelta(
+                meta.costType === 'xp' ? 'xp' : 'coin',
+                meta.costType === 'percent' ? 0 : -(meta.cost ?? 0)
+              ),
+            ].filter((r): r is ResourceDelta => r !== null)
+            badge = undefined
+            break
+          }
+
+          // La app ya no empieza las misiones a mano, pero quedan entradas guardadas.
+          case 'mission_started': {
+            const params = { mission: `<strong>"${esc(activity.missionTitle || '')}"</strong>` }
+            description = isTeacher
+              ? t('common.activity_feed.mission_started_teacher', params)
+              : t('common.activity_feed.mission_started_student', params)
+            badge = undefined
+            break
+          }
+
           default:
             console.error(`[ActivityFormatter] Unknown activity type:`, {
               type: activity.type,
@@ -293,10 +349,13 @@ export function useActivityFormatter(perspective: 'student' | 'teacher' = 'stude
           studentId: activity.studentId,
           description,
           timeAgo: formatTimeAgo(activity.timestamp),
-          avatar: activity.avatar || '/app/avatars/atenea.svg',
+          avatar: activity.avatar || undefined,
+          avatarSeed: activity.studentId
+            ? studentAvatarSeed(activity.classId, activity.studentId)
+            : undefined,
           badge,
           resources: resources?.length ? resources : undefined,
-          actorName,
+          actor,
         }
       })
       .filter((a): a is FormattedActivity => a !== null)

@@ -554,6 +554,115 @@
         "base": "De base",
         "temporal": "Temporal"
       }
+    },
+    "mission_hints": {
+      "title": "Pistes",
+      "hint_label": "Pista {position}",
+      "free": "Gratis",
+      "cost_coins": "{count} {coins}",
+      "cost_xp": "{count} XP",
+      "cost_percent": "−{count} % de la recompensa"
+    },
+    "activity_feed": {
+      "hint_used_student": "Vas utilitzar la pista {position} de {mission}",
+      "hint_used_teacher": "Va utilitzar la pista {position} de {mission}",
+      "hint_used_percent_student": "Vas utilitzar la pista {position} de {mission}: −{count} % del que et quedava per cobrar",
+      "hint_used_percent_teacher": "Va utilitzar la pista {position} de {mission}: −{count} % del que li quedava per cobrar",
+      "enigma_approved_student": "Et van aprovar l'entrega de {enigma}",
+      "enigma_approved_teacher": "Li van aprovar l'entrega de {enigma}",
+      "mission_started_student": "Vas començar la missió {mission}",
+      "mission_started_teacher": "Va començar la missió {mission}"
+    },
+    "avatars": {
+      "characters": {
+        "atenea": {
+          "name": "Atena",
+          "trait": "Saviesa i estratègia"
+        },
+        "odiseo": {
+          "name": "Odisseu",
+          "trait": "Astúcia i valentia"
+        },
+        "penelope": {
+          "name": "Penèlope",
+          "trait": "Lleialtat i paciència"
+        },
+        "polifemo": {
+          "name": "Polifem",
+          "trait": "Força i determinació"
+        },
+        "poseidon": {
+          "name": "Posidó",
+          "trait": "Poder i domini"
+        }
+      },
+      "custom_name": "El teu avatar amb IA",
+      "custom_trait": "Generat amb IA"
+    },
+    "view_modes": {
+      "grid": "Quadrícula",
+      "list": "Llista",
+      "map": "Mapa"
+    },
+    "mission_map": {
+      "title": "Mapa de missions",
+      "beta": "Beta",
+      "beta_note": "Està en proves: l'aspecte i el funcionament poden canviar.",
+      "step": "Missió {n}",
+      "state": {
+        "completed": "Completada",
+        "in_progress": "En curs: {progress} %",
+        "available": "Disponible",
+        "urgent": "Urgent: venç prompte",
+        "expired": "Caducada",
+        "locked": "Bloquejada: tancada pel teu docent de moment",
+        "locked_path": "Bloquejada: s’obri en completar {missions}"
+      },
+      "completed_by": "Encara no l'ha completada ningú: 0 de {total} | {done} de {total} l'ha completada | {done} de {total} l'han completada",
+      "no_students": "Encara no hi ha alumnat",
+      "opens_after": "S’obri en completar {missions}",
+      "quoted": "«{title}»",
+      "quoted_teacher_closed": "«{title}» (tancada pel teu docent de moment)",
+      "and": "i",
+      "locked_path_explain": "Per a obrir-la, completa abans {missions}.",
+      "state_short": {
+        "completed": "Completada",
+        "in_progress": "En curs",
+        "available": "Disponible",
+        "urgent": "Urgent",
+        "expired": "Caducada",
+        "locked": "Bloquejada"
+      },
+      "start": "Eixida",
+      "goal": "Meta",
+      "you_are_here": "Estàs ací",
+      "go_to_mine": "Anar a la meua missió",
+      "keys_hint": "Amb el teclat, les fletxes passen d'una missió a una altra; Inici i Fi porten a la primera i a l'última.",
+      "your_progress": "Has completat {done} de {total} missió | Has completat {done} de {total} missions",
+      "all_done": "Mapa completat!",
+      "class_progress": "La classe ha fet el {percent} % del recorregut",
+      "class_done_by_all": "Completades per tota la classe: {done} de {total}",
+      "legend": {
+        "title": "Llegenda",
+        "hint": "Prem un estat per a destacar-ne les missions en el mapa."
+      },
+      "detail": {
+        "label": "Detall de la missió",
+        "empty": "Prem una missió del mapa per a veure’n ací el detall.",
+        "your_progress": "El teu progrés",
+        "enigmas_done": "{done} de {total} enigma | {done} de {total} enigmes",
+        "completed_list": "Qui l’ha completada",
+        "completed_more": "i {n} més",
+        "in_progress": "En curs: {n}",
+        "deadline": "Data límit: {date}",
+        "requires": "Per a obrir-la, completa abans:",
+        "requires_teacher": "Per a obrir-la, cal completar abans:",
+        "unlocks": "En completar-la, obri el camí a:",
+        "start": "Començar",
+        "continue": "Continuar",
+        "view": "Veure la missió",
+        "open": "Obrir la missió"
+      }
     }
   }
 }

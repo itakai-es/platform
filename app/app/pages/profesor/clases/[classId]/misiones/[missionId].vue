@@ -41,6 +41,8 @@
       @reorder-documents="reorderDocuments"
       @edit-rewards="editRewards"
       @view-submissions="openSubmissionsModal"
+      @hints-changed="onHintsChanged"
+      @hints-stale="fetchMission(true, true)"
     >
       <!-- Copiarla en otra clase (o en la suya: duplicarla). El texto, solo en
            pantallas anchas: por debajo, junto a las migas, las partiría en dos. -->
@@ -62,14 +64,14 @@
         </div>
       </template>
 
-      <!-- Pestaña Ajustes: título, fecha límite e imagen de la misión -->
+      <!-- Pestaña Ajustes: título, fecha límite, imagen y camino del mapa de la misión -->
       <template #tab="{ activeTab: current }">
         <MissionConfigPanel
           v-if="current === 'ajustes'"
           :mission-id="missionId"
           :class-id="classId"
           :mission="mission"
-          @update="onSettingsUpdate"
+          @saved="onSettingsUpdate"
         />
       </template>
     </MissionDetailTemplate>
@@ -220,7 +222,9 @@ function tabHref(tabId: string) {
 
 // El panel ya persiste los cambios; recargamos la misión desde el backend (con
 // force) para que TODO lo derivado —bonus de XP de misión, etiqueta de estado
-// calculada, portada— refleje exactamente lo guardado, sin duplicar lógica.
+// calculada, portada, camino— refleje exactamente lo guardado, sin duplicar
+// lógica. El panel avisa una sola vez por guardado, aunque cambien la misión y
+// su camino a la vez.
 async function onSettingsUpdate() {
   const fresh = await missionStore.ensureTeacherMissionById(missionId.value, true)
   if (fresh) mission.value = fresh as unknown as MissionDetail
@@ -335,8 +339,10 @@ useHead({
 // Fetch mission data from store (uses cache, endpoint del profesor)
 // Usa ensureTeacherMissionById (idempotente) en lugar de fetchMissionById
 // para evitar carreras y reusar la caché de detalle teacher del store.
-const fetchMission = async (force = false) => {
-  loading.value = true
+// Con `quiet`, sin el esqueleto: la misión se pone al día donde está (las
+// pistas han cambiado por otro lado), sin cerrar lo abierto ni volver arriba.
+const fetchMission = async (force = false, quiet = false) => {
+  loading.value = !quiet
   error.value = null
 
   try {
@@ -724,6 +730,11 @@ const reorderDocuments = async (docIds: string[]) => {
   } catch (err) {
     console.error('Error reordering documents:', err)
   }
+}
+
+// Pistas: el panel ya ha guardado el cambio; aquí queda en la misión (y en la caché).
+const onHintsChanged = (patch: Pick<MissionDetail, 'hints' | 'hintState'>) => {
+  if (mission.value) Object.assign(mission.value, patch)
 }
 
 const editRewards = () => {

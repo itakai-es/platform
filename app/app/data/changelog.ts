@@ -41,6 +41,57 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.0',
+    date: '2026-10-30',
+    title: 'Pistas, avatares del profesorado y mapa de misiones',
+    changes: [
+      {
+        type: 'new',
+        text: 'Pistas en las misiones: hasta 10 por misión, en el orden que elijas y con su coste en monedas, en XP o en un porcentaje de la recompensa. El alumnado las usa de una en una y, antes de pulsar, ve lo que cuestan y lo que tiene.',
+      },
+      {
+        type: 'new',
+        text: 'Avatar del profesorado: un personaje (Atenea, Odiseo, Penélope, Polifemo o Poseidón) o tus iniciales sobre un color, el mismo en todas tus clases. Se elige en tu perfil.',
+      },
+      {
+        type: 'new',
+        text: 'Quién hace cada cosa se reconoce por su avatar en el historial de la clase, el profesorado de la clase, el muro de actividad y la lista de asistencia.',
+      },
+      {
+        type: 'new',
+        text: 'Ordenar las misiones de una clase con «Ordenar», en la pestaña Misiones (también con el teclado). Ese orden es el que ve el alumnado.',
+      },
+      {
+        type: 'new',
+        text: 'Mapa de misiones, en pruebas: se enciende en «Ajustes → Funcionalidades». Las misiones de la clase como un tablero, de la Salida a la Meta. Cada estudiante ve hasta dónde ha llegado, y el profesorado, qué parte de la clase ha completado cada misión y quién. Al pulsar una misión se abre su detalle.',
+      },
+      {
+        type: 'new',
+        text: 'El camino del mapa: cada misión puede pedir que antes se completen hasta 3 de la clase, y se abre para cada estudiante cuando las completa. «Encadenar en orden» lo monta de una vez. Lo que alguien ya ha empezado nunca se le cierra, y apagar el mapa lo abre todo.',
+      },
+      {
+        type: 'improved',
+        text: 'Los avatares del alumnado salen como retrato, con un fondo de color, en los tamaños pequeños. El profesorado puede devolver al catálogo un avatar que no sea adecuado.',
+      },
+      {
+        type: 'improved',
+        text: 'Los enigmas opcionales ya no hacen falta para completar una misión: se completa al aprobar el último obligatorio.',
+      },
+      {
+        type: 'improved',
+        text: 'Ordenar por fecha las misiones del alumnado usa la fecha límite.',
+      },
+      {
+        type: 'fixed',
+        text: 'Al cambiar de cuenta en el mismo navegador, la página de perfil enseñaba la cuenta anterior.',
+      },
+      {
+        type: 'fixed',
+        text: 'Las etiquetas de estado de las tarjetas de misión («Urgente», «Caducada»…) salían en castellano aunque la app estuviera en otro idioma.',
+      },
+    ],
+  },
+  {
     version: '0.6.1',
     date: '2026-10-23',
     changes: [

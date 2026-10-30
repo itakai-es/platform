@@ -554,6 +554,115 @@
         "base": "De bază",
         "temporal": "Temporară"
       }
+    },
+    "mission_hints": {
+      "title": "Indicii",
+      "hint_label": "Indiciul {position}",
+      "free": "Gratuit",
+      "cost_coins": "{count} {coins}",
+      "cost_xp": "{count} XP",
+      "cost_percent": "−{count} % din recompensă"
+    },
+    "activity_feed": {
+      "hint_used_student": "Ai folosit indiciul {position} din {mission}",
+      "hint_used_teacher": "A folosit indiciul {position} din {mission}",
+      "hint_used_percent_student": "Ai folosit indiciul {position} din {mission}: −{count} % din ce mai aveai de primit",
+      "hint_used_percent_teacher": "A folosit indiciul {position} din {mission}: −{count} % din ce mai avea de primit",
+      "enigma_approved_student": "Lucrarea ta pentru {enigma} a fost aprobată",
+      "enigma_approved_teacher": "Lucrarea pentru {enigma} i-a fost aprobată",
+      "mission_started_student": "Ai început misiunea {mission}",
+      "mission_started_teacher": "A început misiunea {mission}"
+    },
+    "avatars": {
+      "characters": {
+        "atenea": {
+          "name": "Atena",
+          "trait": "Înțelepciune și strategie"
+        },
+        "odiseo": {
+          "name": "Odiseu",
+          "trait": "Istețime și curaj"
+        },
+        "penelope": {
+          "name": "Penelopa",
+          "trait": "Loialitate și răbdare"
+        },
+        "polifemo": {
+          "name": "Polifem",
+          "trait": "Forță și hotărâre"
+        },
+        "poseidon": {
+          "name": "Poseidon",
+          "trait": "Putere și stăpânire"
+        }
+      },
+      "custom_name": "Avatarul tău cu IA",
+      "custom_trait": "Generat cu IA"
+    },
+    "view_modes": {
+      "grid": "Grilă",
+      "list": "Listă",
+      "map": "Hartă"
+    },
+    "mission_map": {
+      "title": "Harta misiunilor",
+      "beta": "Beta",
+      "beta_note": "Este în testare: aspectul și funcționarea se pot schimba.",
+      "step": "Misiunea {n}",
+      "state": {
+        "completed": "Finalizată",
+        "in_progress": "În curs: {progress} %",
+        "available": "Disponibilă",
+        "urgent": "Urgentă: expiră curând",
+        "expired": "Expirată",
+        "locked": "Blocată: închisă deocamdată de cadrul didactic",
+        "locked_path": "Blocată: se deschide după ce finalizezi {missions}"
+      },
+      "completed_by": "Nimeni nu a finalizat-o încă: 0 din {total} | {done} din {total} a finalizat-o | {done} din {total} au finalizat-o",
+      "no_students": "Încă nu e nimeni în clasă",
+      "opens_after": "Se deschide după ce finalizezi {missions}",
+      "quoted": "„{title}”",
+      "quoted_teacher_closed": "„{title}” (închisă deocamdată de cadrul didactic)",
+      "and": "și",
+      "locked_path_explain": "Ca s-o deschizi, finalizează mai întâi {missions}.",
+      "state_short": {
+        "completed": "Finalizată",
+        "in_progress": "În curs",
+        "available": "Disponibilă",
+        "urgent": "Urgentă",
+        "expired": "Expirată",
+        "locked": "Blocată"
+      },
+      "start": "Start",
+      "goal": "Sosire",
+      "you_are_here": "Ești aici",
+      "go_to_mine": "Mergi la misiunea mea",
+      "keys_hint": "Cu tastatura, săgețile trec de la o misiune la alta; Home și End duc la prima și la ultima.",
+      "your_progress": "Ai finalizat {done} din {total} misiune | Misiuni finalizate: {done} din {total}",
+      "all_done": "Hartă finalizată!",
+      "class_progress": "Clasa a parcurs {percent} % din traseu",
+      "class_done_by_all": "Finalizate de toată clasa: {done} din {total}",
+      "legend": {
+        "title": "Legendă",
+        "hint": "Apasă pe o stare pentru a-i evidenția misiunile pe hartă."
+      },
+      "detail": {
+        "label": "Detaliile misiunii",
+        "empty": "Apasă pe o misiune de pe hartă ca să-i vezi aici detaliile.",
+        "your_progress": "Progresul tău",
+        "enigmas_done": "{done} din {total} enigmă | Enigme: {done} din {total}",
+        "completed_list": "Cine a finalizat-o",
+        "completed_more": "și încă {n}",
+        "in_progress": "În curs: {n}",
+        "deadline": "Termen-limită: {date}",
+        "requires": "Ca să o deschizi, finalizează mai întâi:",
+        "requires_teacher": "Ca să se deschidă, trebuie să se finalizeze mai întâi:",
+        "unlocks": "Când o finalizezi, deschide drumul spre:",
+        "start": "Începe",
+        "continue": "Continuă",
+        "view": "Vezi misiunea",
+        "open": "Deschide misiunea"
+      }
     }
   }
 }

@@ -11,19 +11,15 @@
         :next-title="classGamification.nextTitle"
         :name="classGamification.name"
         :username="classGamification.username"
-        :avatar="classGamification.avatar || currentGuide?.avatar"
+        :avatar="classGamification.avatar"
+        :avatar-seed="studentAvatarSeed(classId, authStore.user?.id ?? '')"
         :current-xp="classGamification.currentXP"
         :required-xp="classGamification.requiredXP"
         :progress="classGamification.progress"
         :rank="classGamification.rank"
         :total-students="classGamification.totalStudents"
       />
-      <Skeleton
-        v-else-if="classSettings.xp"
-        width="w-full"
-        height="h-28"
-        class="rounded-2xl"
-      />
+      <Skeleton v-else-if="classSettings.xp" width="w-full" height="h-28" class="rounded-2xl" />
 
       <!-- Mi Progreso -->
       <Card type="stats">
@@ -33,7 +29,9 @@
           title-tag="h2"
         />
         <CardGrid cols="2x2">
-          <div class="bg-white rounded-xl px-4 py-14 flex flex-col items-center justify-center text-center">
+          <div
+            class="bg-white rounded-xl px-4 py-14 flex flex-col items-center justify-center text-center"
+          >
             <p class="text-5xl sm:text-6xl font-semibold text-navy-700">
               {{ progress.completionRate }}%
             </p>
@@ -41,7 +39,9 @@
               {{ t('student.classes.detail.progress.completion_rate') }}
             </p>
           </div>
-          <div class="bg-white rounded-xl px-4 py-14 flex flex-col items-center justify-center text-center">
+          <div
+            class="bg-white rounded-xl px-4 py-14 flex flex-col items-center justify-center text-center"
+          >
             <p class="text-5xl sm:text-6xl font-semibold text-navy-700">
               {{ progress.missionsCompleted }}/{{ progress.missionsTotal }}
             </p>
@@ -60,7 +60,9 @@
               {{ t('student.classes.detail.progress.xp_total') }}
             </p>
           </div>
-          <div class="bg-white rounded-xl px-4 py-14 flex flex-col items-center justify-center text-center">
+          <div
+            class="bg-white rounded-xl px-4 py-14 flex flex-col items-center justify-center text-center"
+          >
             <p class="text-5xl sm:text-6xl font-semibold text-navy-700">
               {{ unlockedBadgesCount }}/{{ currentClassBadges.length }}
             </p>
@@ -89,7 +91,6 @@
         :loading-more="loadingMore"
         :has-more="hasMore"
         card-type="pending"
-        :default-avatar="studentAvatar"
         @load-more="loadMoreActivities"
       />
     </div>
@@ -100,6 +101,7 @@
 import { storeToRefs } from 'pinia'
 import { ArrowTrendingUpIcon } from '@heroicons/vue/24/outline'
 import type { ClassTeacherPublic } from '~/types/class.types'
+import { studentAvatarSeed } from '~/utils/avatar'
 
 definePageMeta({ layout: 'student', middleware: ['auth', 'role'] })
 
@@ -107,7 +109,7 @@ const { t } = useI18n()
 const route = useRoute()
 const classId = computed(() => route.params.id as string)
 const classesStore = useClassesStore()
-const gamificationStore = useGamificationStore()
+const authStore = useAuthStore()
 
 const detail = useStudentClassDetail(classId)
 const {
@@ -141,23 +143,12 @@ const classTeachers = computed(
   () => (classData.value as { teachers?: ClassTeacherPublic[] } | null)?.teachers ?? null
 )
 
-// Avatar guide actual (para fallback del avatar de la barra XP).
-const currentGuide = computed(() => {
-  const guideId = classGamification.value?.guideId
-  if (!guideId) return null
-  return (gamificationStore.guides as any[]).find(g => g.id === guideId) || null
-})
-
-const unlockedBadgesCount = computed(
-  () => currentClassBadges.value.filter(b => b.unlocked).length
-)
+const unlockedBadgesCount = computed(() => currentClassBadges.value.filter(b => b.unlocked).length)
 
 // Activities con formato + avatar del alumno por defecto.
 const { formatActivities } = useActivityFormatter('student')
 const formattedActivities = computed(() =>
-  formatActivities(
-    recentActivities.value.map(a => ({ ...a, avatar: studentAvatar.value }))
-  )
+  formatActivities(recentActivities.value.map(a => ({ ...a, avatar: studentAvatar.value })))
 )
 
 // Paginación de actividades.

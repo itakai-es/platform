@@ -189,7 +189,30 @@
           "empty_search": "No missions found for \"{query}\"",
           "empty_status": "There are no missions with the selected statuses",
           "empty_rarity": "There are no missions with the selected rarities",
-          "empty_default": "There are no missions in this class"
+          "empty_default": "There are no missions in this class",
+          "order": {
+            "button": "Reorder",
+            "title": "Class order",
+            "hint": "Students see the missions in this order. Drag each row by its handle or, with the keyboard, move to the handle and use the up and down arrow keys. Each change is saved right away.",
+            "hint_path": "A mission can’t go before what it requires: to move it, first remove what it requires in its Settings › Path, or use “Remove requirements”.",
+            "done": "Done",
+            "error": "The order couldn't be saved. Please try again.",
+            "breaks_path": "“{mission}” opens after completing “{required}”: it has to go after it. First remove what it requires in its Settings › Path, or use “Remove requirements”."
+          },
+          "path": {
+            "title": "Map path",
+            "hint": "A simple path in one step. To choose what each mission requires, open it and go to Settings, Path.",
+            "chain": "Chain in order",
+            "chain_summary": "Each mission will require completing the previous one to open: {count} requirement. | Each mission will require completing the previous one to open: {count} requirements.",
+            "chain_replaces": "It replaces the current one. | It replaces the {count} current ones.",
+            "chain_skips_locked": "Locked missions are left out.",
+            "chained": "Already chained: each mission requires the previous one.",
+            "chain_done": "Missions chained in order",
+            "clear": "Remove requirements",
+            "clear_summary": "Removes the current requirement: every mission opens from the start. | Removes the {count} current requirements: every mission opens from the start.",
+            "clear_done": "Requirements removed",
+            "error": "The path could not be changed. Please try again."
+          }
         },
         "meta": {
           "title": "Class detail | ITAKAI Teacher",
@@ -353,6 +376,10 @@
             "sounds": {
               "label": "Sounds",
               "desc": "Sound effects when leveling up, completing missions, etc."
+            },
+            "missionMap": {
+              "label": "Mission map",
+              "desc": "One more view in Missions: the class path, in the order you choose."
             }
           },
           "requires": "Needs {feature}",
@@ -428,7 +455,11 @@
               "error": "The class couldn't be moved to the trash. Please try again."
             }
           },
-          "edit_level_note": "You can change the name, the schedule and the cover. The classification, features and levels are changed by whoever administers the class."
+          "edit_level_note": "You can change the name, the schedule and the cover. The classification, features and levels are changed by whoever administers the class.",
+          "beta": {
+            "title": "In testing",
+            "hint": "New features being tried out. They're off by default, and how they look and work will be adjusted as they're tested."
+          }
         },
         "badges_empty": "No badges in this class",
         "archived_notice": "This class is archived: you can still look through it, but it does not take new students.",
@@ -611,7 +642,8 @@
             "shop": "Shop",
             "reward": "Rewards",
             "attendance": "Attendance",
-            "team": "Teams"
+            "team": "Teams",
+            "hint": "Hints"
           },
           "actions": {
             "class": {
@@ -642,7 +674,8 @@
               "nickname_changed": "changed {target}'s nickname",
               "removed": "removed {target} from the class",
               "removed_unused": "removed {target} from the class and deleted their unused account",
-              "avatar_generated": "generated a new avatar for {target}"
+              "avatar_generated": "generated a new avatar for {target}",
+              "avatar_changed": "replaced {target}'s avatar with one from the catalogue"
             },
             "mission": {
               "created": "created the mission “{title}”",
@@ -652,7 +685,11 @@
               "moved": "moved the mission “{title}” between classes",
               "rewards_changed": "changed the reward of the mission “{title}”",
               "imported": "imported the mission “{title}”",
-              "exported": "copied the mission “{title}” to another class"
+              "exported": "copied the mission “{title}” to another class",
+              "reordered": "changed the order of the missions",
+              "prerequisites_changed": "changed what has to be completed to open the mission “{title}”",
+              "chained": "chained the missions in order: each one requires the previous one",
+              "prerequisites_cleared": "removed the requirements from the mission path"
             },
             "enigma": {
               "created": "added the enigma “{title}”",
@@ -666,7 +703,8 @@
               "deleted": "deleted the document “{title}”"
             },
             "submission": {
-              "approved": "approved {target}'s submission for “{title}” at {percentage}%"
+              "approved": "approved {target}'s submission for “{title}” at {percentage}%",
+              "approved_hints": "approved {target}'s submission for “{title}” at {percentage}% (their hints took off {penalty}%)"
             },
             "behavior": {
               "applied": "applied “{title}” to {target}",
@@ -702,6 +740,12 @@
               "awarded_batch": "gave {points} point to team “{title}” and gave “{label}” to each member | gave {points} points to team “{title}” and gave “{label}” to each member",
               "distributed": "gave “{label}” to team “{title}”",
               "distributed_batch": "gave “{label}” to the only member of team “{title}” | gave “{label}” to the {count} members of team “{title}”"
+            },
+            "hint": {
+              "created": "added hint {position} to the mission “{title}”",
+              "updated": "edited hint {position} in the mission “{title}”",
+              "deleted": "deleted hint {position} from the mission “{title}”",
+              "reordered": "changed the order of the hints in the mission “{title}”"
             }
           },
           "anonymous": {
@@ -711,10 +755,12 @@
               "nickname_changed": "changed the nickname of a student who is no longer in the class",
               "removed": "removed a student from the class",
               "removed_unused": "removed a student who had never signed in from the class and deleted their account",
-              "avatar_generated": "generated a new avatar for a student who is no longer in the class"
+              "avatar_generated": "generated a new avatar for a student who is no longer in the class",
+              "avatar_changed": "replaced the avatar of someone who is no longer in the class with one from the catalogue"
             },
             "submission": {
-              "approved": "approved a submission for “{title}” at {percentage}% from a student who is no longer in the class"
+              "approved": "approved a submission for “{title}” at {percentage}% from a student who is no longer in the class",
+              "approved_hints": "approved, for “{title}”, the submission of someone who is no longer in the class, at {percentage}% (their hints took off {penalty}%)"
             },
             "behavior": {
               "applied": "applied “{title}” to a student who is no longer in the class"
@@ -836,7 +882,19 @@
           "team_set_none": "Individual (no teams)",
           "team_set_hint": "For information only: students see which teams it is done in, and you can approve a whole team at once. Each student still submits their own work.",
           "basics_title": "Mission details",
-          "play_title": "Difficulty and visibility"
+          "play_title": "Difficulty and visibility",
+          "path_title": "Path",
+          "path_hint": "Each student will see it closed until they complete all the ones you tick. It doesn’t close for anyone who has already started it.",
+          "path_legend": "To open it, complete first",
+          "path_map_off": "Requirements only close missions with the map turned on (Class settings › Features).",
+          "path_empty": "There are no other missions in the class.",
+          "path_cycle_note": "The greyed-out ones already depend on this mission: if it required them, none of them would ever open.",
+          "path_limit": "{max} at most. To choose another, untick one.",
+          "path_moved": "Saved. In the class order, the mission has moved after the ones it requires.",
+          "path_error_cycle": "One of the ticked missions already depends on this one: if it required it, neither would ever open. Check the path and save again.",
+          "path_error_invalid": "One of the ticked missions is no longer in this class. Check the path and save again.",
+          "path_load_error": "The class missions could not be loaded.",
+          "path_retry": "Try again"
         }
       },
       "import": {
@@ -883,7 +941,8 @@
         "copy_success_title": "Mission copied",
         "duplicate_success_title": "Mission duplicated",
         "success_description": "The copy of “{title}” is now in “{name}”, locked and without a deadline. Review it and unlock it when you want your students to see it.",
-        "open_mission": "Open the mission"
+        "open_mission": "Open the mission",
+        "hints": "No hints | 1 hint | {count} hints"
       },
       "adapt": {
         "button": "Adapt with AI",
@@ -918,7 +977,8 @@
         "applied": "Mission adapted",
         "apply_error": "The proposal could not be applied. The mission has not changed.",
         "apply_error_partial": "Only part of the proposal was applied. Check the comparison: it already shows what was saved.",
-        "after_import_hint": "Want it tailored to this class? The AI suggests how to adapt it and you decide whether to apply it."
+        "after_import_hint": "Want it tailored to this class? The AI suggests how to adapt it and you decide whether to apply it.",
+        "hints_note": "No hints | The AI doesn't adapt the mission's hint: review it after applying the proposal. | The AI doesn't adapt the mission's {count} hints: review them after applying the proposal."
       }
     },
     "badges": {
@@ -1050,7 +1110,17 @@
         "remove_unused_confirm": "Remove and delete account",
         "removed": "{name} is no longer in the class",
         "removed_account_deleted": "{name} is no longer in the class and their unused account has been deleted",
-        "remove_error": "The student could not be removed from the class."
+        "remove_error": "The student could not be removed from the class.",
+        "avatar": "Change avatar",
+        "avatar_title": "Avatar in the class",
+        "avatar_intro": "If {name}'s avatar in this class isn't suitable, replace it with a character from the catalogue. It only changes in this class, and {name} can choose a different one from their Avatar tab.",
+        "avatar_now": "How they appear now",
+        "avatar_choose": "Catalogue characters",
+        "avatar_pick": "Choose the character {name} will have in this class.",
+        "avatar_summary": "When you save, {name} will appear as {avatar} in this class.",
+        "avatar_summary_generated": "When you save, {name} will appear as {avatar} in this class, and the image they generated with AI will be deleted.",
+        "avatar_saved": "Avatar changed",
+        "avatar_error": "The avatar could not be changed."
       }
     },
     "ai_assistant": {
@@ -1106,7 +1176,15 @@
           "el": "Ελληνικά",
           "ro": "Română"
         },
-        "delete_modal_blocked": "Some classes depend on your account."
+        "delete_modal_blocked": "Some classes depend on your account.",
+        "avatar_title": "Your avatar",
+        "avatar_description": "It's how your students and the other teachers recognise you: it appears next to your name in the history, in each class's teachers, in the activity feed and in attendance. It's the same in all your classes.",
+        "avatar_preview": "How you appear in your classes",
+        "avatar_auto": "Automatic",
+        "avatar_updated": "Avatar updated",
+        "avatar_error": "The avatar could not be changed.",
+        "avatar_characters": "Characters",
+        "avatar_colors": "Your initials on a colour"
       },
       "meta": {
         "title": "My profile | ITAKAI",
@@ -1211,8 +1289,10 @@
           "rarity_desc": "Rarity ↓",
           "rarity_asc": "Rarity ↑",
           "completion_desc": "Completion ↓",
-          "completion_asc": "Completion ↑"
-        }
+          "completion_asc": "Completion ↑",
+          "class_order": "Class order"
+        },
+        "map_note": "The map shows all the class missions, in their order."
       },
       "rewards_form_modal": {
         "title": "Edit rewards",
@@ -1309,7 +1389,57 @@
         "approve_error": "Couldn't approve the submission",
         "approve_team": "Approve the team ({count}) at {pct} %",
         "team_approved": "{team}: {count} submission approved at {pct} % | {team}: {count} submissions approved at {pct} %",
-        "team_note": "Team mission (“{set}”): when reviewing a submission you can approve, at the same percentage, everyone in that team who has submitted."
+        "team_note": "Team mission (“{set}”): when reviewing a submission you can approve, at the same percentage, everyone in that team who has submitted.",
+        "hint_penalty": "−{count}% for their hints",
+        "penalty_changed": "{name}'s submission approved (+{xp} XP). Their hints now take off {count}%, not what was shown when the window opened.",
+        "team_hints_note": "Someone in this team has used % hints: each person gets their own discount, so not everyone in the team will receive the same.",
+        "team_penalty_changed": "Someone in the team used another % hint while you were reviewing: each person got the discount their hints take off now."
+      },
+      "mission_hints": {
+        "add": "Add",
+        "intro": "Students use them in this order, one at a time, and pay their cost when they use them. They can see how many there are and what each one costs, but can only read the ones they have used.",
+        "empty_title": "This mission has no hints yet",
+        "empty_description": "Add hints that go from general to specific. Each one can cost {coins}, XP or a % of the reward.",
+        "empty_description_readonly": "If any are added, students will see them here and use them in order.",
+        "add_first": "Add the first hint",
+        "limit_reached": "This mission already has {max} hints, the maximum.",
+        "used_by": "Not used | Used by 1 student | Used by {count} students",
+        "edit_named": "Edit hint {position}",
+        "free_in_class": "Free in this class",
+        "free_no_coins": "The class doesn't use {coins}: this hint is free.",
+        "free_no_xp": "The class doesn't use XP: this hint is free.",
+        "free_note_list": "Some hints are free because the class doesn't use the resource they are paid with.",
+        "toast_added": "Hint added",
+        "toast_saved": "Hint saved",
+        "toast_deleted": "Hint deleted",
+        "toast_error": "The hint couldn't be saved",
+        "toast_delete_error": "The hint couldn't be deleted",
+        "reorder_error": "The order of the hints couldn't be changed",
+        "form": {
+          "add_title": "New hint",
+          "edit_title": "Hint {position}",
+          "content": "Hint text",
+          "content_hint": "The text shown to whoever uses it. Up to {max} characters.",
+          "content_placeholder": "E.g.: Look at the dates in the support document.",
+          "content_required": "Write the text of the hint.",
+          "cost_type": "How it's paid",
+          "type_xp": "XP",
+          "type_percent": "% of the reward",
+          "amount_coins": "Price in {coins}",
+          "amount_xp": "Price in XP",
+          "amount_percent": "Percentage it takes off",
+          "amount_hint": "Any whole number. The shortcuts are only suggestions.",
+          "amount_percent_hint": "It comes off what the mission still has to pay whoever uses it, never off what they have already earned. Several % hints add up, to a maximum of 100%.",
+          "presets": "Shortcuts",
+          "used_note": "Not used | 1 student has used it, so it cannot be deleted. What they paid does not change: the new cost applies to whoever uses it from now on. | {count} students have used it, so it cannot be deleted. What they paid does not change: the new cost applies to whoever uses it from now on.",
+          "summary_free": "Whoever uses it will open it for free.",
+          "summary_coins": "Whoever uses it will pay {count} {coins} to open it.",
+          "summary_xp": "Whoever uses it will pay {count} XP to open it (they may go down a level).",
+          "summary_percent": "Whoever uses it will earn {count}% less of what the mission still has to pay them.",
+          "delete": "Delete hint",
+          "delete_summary": "Deleting it removes it straight away: nobody has used it yet.",
+          "add_button": "Add hint"
+        }
       }
     },
     "templates": {

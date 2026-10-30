@@ -39,7 +39,13 @@ export interface ClassSettings {
   lives: boolean
   visualEffects: boolean
   sounds: boolean
+  /** Mapa de misiones (beta): apagado mientras nadie lo encienda. */
+  missionMap: boolean
 }
+
+/** Las que enseña la ficha de una plantilla: todas menos las que están en pruebas. */
+export type TemplateFeature = Exclude<keyof ClassSettings, 'missionMap'>
+export type TemplateFeatures = Pick<ClassSettings, TemplateFeature>
 
 /** Hasta dónde llega un profesor en una clase. Cada nivel incluye los anteriores. */
 export type ClassAccessLevel = 'read' | 'edit' | 'admin'
@@ -58,6 +64,8 @@ export interface ClassAccess {
 export interface ClassTeacher extends ClassAccess {
   id: string
   name: string
+  /** Clave de su avatar de docente; null sin elegir (iniciales sobre un color derivado del id). */
+  avatar?: string | null
 }
 
 /** Un profesor en la sección de profesorado de los ajustes (`GET …/teachers`). */
@@ -76,7 +84,10 @@ export interface ClassTeachersResponse {
 
 /** Lo que el alumnado ve de quien imparte su clase: sin correo ni nivel. */
 export interface ClassTeacherPublic {
+  id: string
   name: string
+  /** Clave de su avatar de docente. */
+  avatar: string | null
   profile: ClassTeacherProfile
   isOwner: boolean
 }
@@ -88,6 +99,7 @@ export type ClassHistoryType =
   | 'student'
   | 'mission'
   | 'enigma'
+  | 'hint'
   | 'document'
   | 'submission'
   | 'behavior'

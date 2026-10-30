@@ -50,6 +50,10 @@ model User {
   homeClassId        String?         @map("home_class_id")
   mustChangePassword Boolean         @default(false) @map("must_change_password")
   passwordChangedAt  DateTime?       @map("password_changed_at")
+  /// Avatar del profesorado: clave del catálogo docente (hoy, un color de la
+  /// paleta: «purple», «mint»…), nunca una ruta ni una URL. Nulo = sin elegir:
+  /// iniciales sobre un color derivado del id. Lo valida la API (utils/avatars.ts).
+  avatar             String?
   createdAt          DateTime        @default(now()) @map("created_at")
   updatedAt          DateTime        @updatedAt @map("updated_at")
 
@@ -76,6 +80,7 @@ model User {
   settings          UserSettings?
   shopPurchases     ShopPurchase[]
   shopItemUses      ShopItemUse[]
+  missionHintUses   MissionHintUse[]
   behaviorsApplied  BehaviorApplication[] @relation("BehaviorTeacher")
   submissionsReviewed EnigmaSubmission[] @relation("SubmissionReviewer")
   activitiesActed   Activity[]          @relation("ActivityActor")
@@ -417,6 +422,11 @@ model Mission {
   // y el profesorado puede aprobar a todo un equipo de una vez); cada estudiante
   // sigue entregando lo suyo. No se copia entre clases: son estudiantes concretos.
   teamSetId       String?       @map("team_set_id")
+  // Orden de la progresión dentro de su clase (desde 0), el que fija el
+  // profesorado; a igualdad, la más antigua primero. Las nuevas, las importadas
+  // y las que llegan de otra clase van al final; las copias de una clase entera
+  // conservan el orden.
+  orderIndex      Int               @default(0) @map("order_index")
   createdAt       DateTime          @default(now()) @map("created_at")
   updatedAt       DateTime          @updatedAt @map("updated_at")
 
@@ -426,8 +436,35 @@ model Mission {
   badges    Badge[]
   progress  StudentMissionProgress[]
   documents MissionDocument[]
+  hints     MissionHint[]
+  hintUses  MissionHintUse[]
+  // Lo que pide para abrirse (mapa de misiones) y las que la piden a ella.
+  prerequisites MissionPrerequisite[] @relation("MissionPrerequisites")
+  requiredBy    MissionPrerequisite[] @relation("MissionRequiredBy")
 
+  @@index([classId, orderIndex])
   @@map("missions")
+}
+
+// Requisito de una misión en el mapa de misiones (E3): para abrirla, cada
+// estudiante tiene que haber completado antes `requiredMission` (si hay varias,
+// todas). Las dos son de la misma clase, nunca la misma, sin ciclos y como mucho
+// tres por misión: lo comprueba el servidor al guardarlas (ver
+// utils/mission-path.ts). Solo cierran con el mapa encendido en la clase, y el
+// cierre se calcula al leer, por estudiante: nunca se escribe en `status`. Se
+// van con cualquiera de las dos misiones.
+model MissionPrerequisite {
+  id                String   @id @default(uuid())
+  missionId         String   @map("mission_id")
+  requiredMissionId String   @map("required_mission_id")
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  mission         Mission @relation("MissionPrerequisites", fields: [missionId], references: [id], onDelete: Cascade)
+  requiredMission Mission @relation("MissionRequiredBy", fields: [requiredMissionId], references: [id], onDelete: Cascade)
+
+  @@unique([missionId, requiredMissionId])
+  @@index([requiredMissionId])
+  @@map("mission_prerequisites")
 }
 
 model MissionDocument {
@@ -482,12 +519,57 @@ model StudentEnigmaProgress {
   coinsEarned Int       @default(0) @map("coins_earned")
   manaEarned  Int       @default(0) @map("mana_earned")
   percentage  Int       @default(100) // Completion % the teacher graded (0-100); scales every reward
+  // % que restaban las pistas de % de la misión al aprobarlo (suma con tope 100).
+  // Se guarda para que subir después la recompensa del enigma no devuelva el descuento.
+  hintPenalty Int       @default(0) @map("hint_penalty")
 
   student User          @relation(fields: [studentId], references: [id], onDelete: Cascade)
   enigma  MissionEnigma @relation(fields: [enigmaId], references: [id], onDelete: Cascade)
 
   @@unique([studentId, enigmaId])
   @@map("student_enigma_progress")
+}
+
+// Pistas de una misión, en el orden que fija el profesorado. Cada una cuesta
+// monedas, XP o un % de lo que la misión aún tiene que pagar a quien la usa.
+model MissionHint {
+  id         String   @id @default(uuid())
+  missionId  String   @map("mission_id")
+  content    String
+  orderIndex Int      @default(0) @map("order_index")
+  costType   String   @default("coins") @map("cost_type") // "coins" | "xp" | "percent"
+  cost       Int      @default(0) // monedas o XP; con "percent", de 0 a 100
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  mission Mission          @relation(fields: [missionId], references: [id], onDelete: Cascade)
+  uses    MissionHintUse[]
+
+  @@index([missionId, orderIndex])
+  @@map("mission_hints")
+}
+
+// Cada pista que ha usado un estudiante, con lo que costó en ese momento: lo
+// cobrado (monedas o XP) o el % aplicado. Una pista usada no se borra.
+model MissionHintUse {
+  id        String   @id @default(uuid())
+  hintId    String   @map("hint_id")
+  missionId String   @map("mission_id")
+  studentId String   @map("student_id")
+  costType  String   @map("cost_type")
+  cost      Int
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Sin cascada desde la pista: la base no deja borrar una pista usada, ni
+  // aunque el borrado llegue a la vez que el uso. Al borrar la misión o la clase
+  // los usos se van con ella (la comprobación es al final de la sentencia).
+  hint    MissionHint @relation(fields: [hintId], references: [id], onDelete: NoAction)
+  mission Mission     @relation(fields: [missionId], references: [id], onDelete: Cascade)
+  student User        @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@unique([hintId, studentId])
+  @@index([missionId, studentId])
+  @@map("mission_hint_uses")
 }
 
 enum SubmissionStatus {
@@ -700,6 +782,7 @@ enum ActivityType {
   behavior_applied
   shop_purchased
   shop_item_used
+  hint_used
 }
 
 model Activity {

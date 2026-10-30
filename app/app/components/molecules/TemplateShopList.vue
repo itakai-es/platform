@@ -79,7 +79,7 @@
 
 <script setup lang="ts">
 import { ShoppingBagIcon, BoltIcon, GiftIcon } from '@heroicons/vue/24/outline'
-import type { ClassSettings } from '~/types/class.types'
+import type { TemplateFeatures } from '~/types/class.types'
 import type { TemplateShopItem } from '~/types/template.types'
 import CoinIcon from '~/components/atoms/CoinIcon.vue'
 import ManaIcon from '~/components/atoms/ManaIcon.vue'
@@ -97,7 +97,7 @@ import LifeIcon from '~/components/atoms/LifeIcon.vue'
 defineProps<{
   items: TemplateShopItem[]
   /** Las funcionalidades de la plantilla, ya resueltas. */
-  features: ClassSettings
+  features: TemplateFeatures
 }>()
 
 const { t } = useI18n()

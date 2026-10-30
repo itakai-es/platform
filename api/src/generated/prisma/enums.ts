@@ -156,7 +156,8 @@ export const ActivityType = {
   progress_milestone: 'progress_milestone',
   behavior_applied: 'behavior_applied',
   shop_purchased: 'shop_purchased',
-  shop_item_used: 'shop_item_used'
+  shop_item_used: 'shop_item_used',
+  hint_used: 'hint_used'
 } as const
 
 export type ActivityType = (typeof ActivityType)[keyof typeof ActivityType]

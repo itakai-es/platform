@@ -1,12 +1,6 @@
 <template>
   <li class="flex items-start gap-3 py-3">
-    <Avatar
-      :src="entry.actor.avatar ?? undefined"
-      :username="actorName"
-      size="xs"
-      class="flex-shrink-0"
-      aria-hidden="true"
-    />
+    <Avatar :avatar-key="entry.actor.avatar" :seed="entry.actor.id" :name="actorName" size="xs" />
     <div class="min-w-0 flex-1">
       <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-0.5">
         <p class="min-w-0 truncate font-semibold text-navy-700">{{ actorName }}</p>
@@ -101,18 +95,32 @@ function accessLabels(source: unknown) {
 }
 
 /**
- * Clave del texto. Bloquear o desbloquear una misión, y la propiedad que pasa
- * sola al borrarse una cuenta, tienen texto propio aunque compartan acción.
+ * Clave del texto. Bloquear o desbloquear una misión, cambiar lo que pide para
+ * abrirse y la propiedad que pasa sola al borrarse una cuenta tienen texto
+ * propio aunque compartan acción.
  */
 function textKey(entry: ClassHistoryEntry): string {
   const { action, params } = entry
   if (action === 'mission.updated' && typeof params.status === 'string') {
     return params.status === 'bloqueada' ? 'mission.blocked' : 'mission.unblocked'
   }
+  // Lo que pide para abrirse en el mapa de misiones (va sola, sin otros campos).
+  if (
+    action === 'mission.updated' &&
+    Array.isArray(params.fields) &&
+    params.fields.length === 1 &&
+    params.fields[0] === 'prerequisites'
+  ) {
+    return 'mission.prerequisites_changed'
+  }
   if (action === 'class.ownership_transferred' && params.reason === 'account_deleted') {
     return 'class.ownership_inherited'
   }
   if (action === 'student.removed' && params.accountDeleted) return 'student.removed_unused'
+  // Aprobada con el descuento de sus pistas de %: «con un 80 %» no lo cuenta todo.
+  if (action === 'submission.approved' && Number(params.hintPenalty ?? 0) > 0) {
+    return 'submission.approved_hints'
+  }
   if (action === 'team.set_updated' && typeof params.archived === 'boolean') {
     return params.archived ? 'team.set_archived' : 'team.set_unarchived'
   }
@@ -144,6 +152,8 @@ const text = computed(() => {
     title: param('title'),
     target: entry.target?.name || t('teacher.classes.detail.history.unknown_target'),
     percentage: param('percentage'),
+    position: param('position'),
+    penalty: param('hintPenalty'),
     // El plural: de los puntos en un premio de equipo; si no, de las personas del lote.
     count:
       action === 'team.awarded' || action === 'team.awarded_batch'

@@ -1,4 +1,10 @@
-import type { MissionStatus, MissionRarity } from '~/types/mission.types'
+import type {
+  MissionLockReason,
+  MissionRarity,
+  MissionRequirement,
+  MissionStatus,
+} from '~/types/mission.types'
+import { resolveDateLocale } from '~/utils/notifications'
 
 /**
  * Props compartidas por todas las representaciones de una tarjeta de misión
@@ -25,6 +31,10 @@ export interface MissionCardProps {
   completedCount?: number
   totalStudents?: number
   deadline?: string | null
+  /** Alumnado: por qué está bloqueada (su docente o el camino del mapa). */
+  lockReason?: MissionLockReason | null
+  /** Alumnado: cerrada por el camino, lo que le falta completar. */
+  requires?: MissionRequirement[]
   // Compat: se conserva para no romper llamadas existentes (ignorado)
   compact?: boolean
 }
@@ -37,7 +47,7 @@ export interface MissionCardProps {
  * cálculos de estado, progreso, recompensas o navegación.
  */
 export function useMissionCard(props: MissionCardProps, emit: (e: 'click') => void) {
-  const { t } = useI18n()
+  const { t, locale } = useI18n()
   const toast = useToast()
   const { getImageUrl } = useImageUrl()
 
@@ -78,11 +88,21 @@ export function useMissionCard(props: MissionCardProps, emit: (e: 'click') => vo
       props.earnedMana < props.manaReward
   )
 
+  // En el idioma de la app, no en el del navegador (ver resolveDateLocale).
   const formattedDeadline = computed(() => {
     if (!props.deadline) return null
     const date = new Date(props.deadline)
-    return date.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })
+    return date.toLocaleDateString(resolveDateLocale(locale.value), {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+    })
   })
+  const expiredOnLabel = computed(() =>
+    formattedDeadline.value
+      ? t('student.missions.expired_on', { date: formattedDeadline.value })
+      : null
+  )
 
   // Profesor: misión completada por todos los estudiantes.
   const isFullyCompletedTeacher = computed(() => {
@@ -109,17 +129,10 @@ export function useMissionCard(props: MissionCardProps, emit: (e: 'click') => vo
     return `/alumno/misiones/${props.id}`
   })
 
-  const statusLabel = computed(() => {
-    const labels: Record<MissionStatus, string> = {
-      urgente: 'Urgente',
-      activa: 'Activa',
-      completada: 'Completada',
-      bloqueada: 'Bloqueada',
-      expirada: 'Expirada',
-      pendiente: 'Pendiente',
-    }
-    return labels[props.status]
-  })
+  // El mismo nombre que en el filtro de estado y en el mapa, en el idioma de la
+  // app. La insignia solo sale con urgente, expirada o bloqueada.
+  const missionStatusLabel = useMissionStatusLabel()
+  const statusLabel = computed(() => missionStatusLabel(props.status))
 
   // La insignia de estado solo se muestra para urgente/expirada, o bloqueada en
   // modo profesor, y nunca cuando ya está completada por todos.
@@ -143,13 +156,40 @@ export function useMissionCard(props: MissionCardProps, emit: (e: 'click') => vo
     return colors[props.rarity || 'comun'] || colors.comun
   })
 
+  // Cerrada por el camino del mapa: la tarjeta dice qué la abre («Se abre al
+  // completar «A»»), en lugar de que la ha cerrado su docente. Un requisito que
+  // su docente tiene cerrado lo dice («A» (cerrada por tu docente por ahora)).
+  const { opensAfter, missionList } = useMissionPathText()
+  const pathLocked = computed(
+    () =>
+      !isTeacherMode.value &&
+      props.status === 'bloqueada' &&
+      props.lockReason === 'path' &&
+      (props.requires?.length ?? 0) > 0
+  )
+  const pathText = computed(() => (pathLocked.value ? opensAfter(props.requires ?? []) : ''))
+  const lockedAria = computed(() =>
+    pathLocked.value
+      ? t('student.missions.locked_path_aria', {
+          title: props.title,
+          missions: missionList(props.requires ?? []),
+        })
+      : t('student.missions.locked_aria', { title: props.title })
+  )
+
   const handleCardClick = () => {
     if (isTeacherMode.value) {
       emit('click')
       return
     }
     if (props.status === 'bloqueada') {
-      toast.info(t('student.missions.locked_toast'))
+      toast.info(
+        pathLocked.value
+          ? t('common.mission_map.locked_path_explain', {
+              missions: missionList(props.requires ?? []),
+            })
+          : t('student.missions.locked_toast')
+      )
     }
     // Las misiones expiradas se abren en solo lectura (el enlace navega).
   }
@@ -162,12 +202,16 @@ export function useMissionCard(props: MissionCardProps, emit: (e: 'click') => vo
     showEarnedCoins,
     showEarnedMana,
     formattedDeadline,
+    expiredOnLabel,
     isFullyCompletedTeacher,
     progressValue,
     missionLink,
     statusLabel,
     showStatusBadge,
     progressBarColor,
+    pathLocked,
+    pathText,
+    lockedAria,
     handleCardClick,
   }
 }

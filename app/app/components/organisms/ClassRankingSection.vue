@@ -29,17 +29,13 @@
               @click="handleStudentClick(rankingData.podium[0].id)"
             >
               <div class="relative flex-shrink-0">
-                <div
-                  class="w-16 h-16 rounded-full bg-white flex items-center justify-center overflow-hidden border-3 border-yellow shadow-lg"
-                >
-                  <img
-                    v-if="rankingData.podium[0].avatar"
-                    :src="rankingData.podium[0].avatar"
-                    :alt="rankingData.podium[0].username"
-                    class="w-full h-full object-contain"
-                  />
-                  <UserIcon v-else class="w-8 h-8 text-yellow" />
-                </div>
+                <Avatar
+                  :src="rankingData.podium[0].avatar"
+                  :name="rankingData.podium[0].username"
+                  :seed="studentAvatarSeed(classId, rankingData.podium[0].id)"
+                  size="md"
+                  class="ring ring-yellow shadow-lg"
+                />
                 <div
                   class="absolute -top-1 -left-1 w-7 h-7 rounded-full bg-yellow flex items-center justify-center shadow-lg"
                 >
@@ -55,7 +51,8 @@
                   >
                   <span>·</span>
                   <span class="inline-flex items-center gap-1">
-                    <Tooltip :text="t('common.resources.xp')"><XpIcon class="w-4 h-4" /></Tooltip>{{ rankingData.podium[0].xp.toLocaleString() }}
+                    <Tooltip :text="t('common.resources.xp')"><XpIcon class="w-4 h-4" /></Tooltip
+                    >{{ rankingData.podium[0].xp.toLocaleString() }}
                   </span>
                 </p>
                 <p class="text-xs text-text-secondary">
@@ -77,17 +74,13 @@
               @click="handleStudentClick(rankingData.podium[1].id)"
             >
               <div class="relative flex-shrink-0">
-                <div
-                  class="w-14 h-14 rounded-full bg-white flex items-center justify-center overflow-hidden border-2 border-gray-400 shadow-lg"
-                >
-                  <img
-                    v-if="rankingData.podium[1].avatar"
-                    :src="rankingData.podium[1].avatar"
-                    :alt="rankingData.podium[1].username"
-                    class="w-full h-full object-contain"
-                  />
-                  <UserIcon v-else class="w-7 h-7 text-gray-500" />
-                </div>
+                <Avatar
+                  :src="rankingData.podium[1].avatar"
+                  :name="rankingData.podium[1].username"
+                  :seed="studentAvatarSeed(classId, rankingData.podium[1].id)"
+                  size="sm"
+                  class="ring-2 ring-gray-400 shadow-lg"
+                />
                 <div
                   class="absolute -top-1 -left-1 w-6 h-6 rounded-full bg-gray-400 flex items-center justify-center shadow-lg"
                 >
@@ -103,7 +96,8 @@
                   >
                   <span>·</span>
                   <span class="inline-flex items-center gap-1">
-                    <Tooltip :text="t('common.resources.xp')"><XpIcon class="w-4 h-4" /></Tooltip>{{ rankingData.podium[1].xp.toLocaleString() }}
+                    <Tooltip :text="t('common.resources.xp')"><XpIcon class="w-4 h-4" /></Tooltip
+                    >{{ rankingData.podium[1].xp.toLocaleString() }}
                   </span>
                 </p>
                 <p class="text-xs text-text-secondary">
@@ -125,17 +119,13 @@
               @click="handleStudentClick(rankingData.podium[2].id)"
             >
               <div class="relative flex-shrink-0">
-                <div
-                  class="w-14 h-14 rounded-full bg-white flex items-center justify-center overflow-hidden border-2 border-[#CD7F32] shadow-lg"
-                >
-                  <img
-                    v-if="rankingData.podium[2].avatar"
-                    :src="rankingData.podium[2].avatar"
-                    :alt="rankingData.podium[2].username"
-                    class="w-full h-full object-contain"
-                  />
-                  <UserIcon v-else class="w-7 h-7 text-[#CD7F32]" />
-                </div>
+                <Avatar
+                  :src="rankingData.podium[2].avatar"
+                  :name="rankingData.podium[2].username"
+                  :seed="studentAvatarSeed(classId, rankingData.podium[2].id)"
+                  size="sm"
+                  class="ring-2 ring-[#CD7F32] shadow-lg"
+                />
                 <div
                   class="absolute -top-1 -left-1 w-6 h-6 rounded-full bg-[#CD7F32] flex items-center justify-center shadow-lg"
                 >
@@ -151,7 +141,8 @@
                   >
                   <span>·</span>
                   <span class="inline-flex items-center gap-1">
-                    <Tooltip :text="t('common.resources.xp')"><XpIcon class="w-4 h-4" /></Tooltip>{{ rankingData.podium[2].xp.toLocaleString() }}
+                    <Tooltip :text="t('common.resources.xp')"><XpIcon class="w-4 h-4" /></Tooltip
+                    >{{ rankingData.podium[2].xp.toLocaleString() }}
                   </span>
                 </p>
                 <p class="text-xs text-text-secondary">
@@ -176,17 +167,13 @@
               @click="handleStudentClick(rankingData.podium[1].id)"
             >
               <div class="relative mb-3">
-                <div
-                  class="w-24 h-24 rounded-full bg-white flex items-center justify-center overflow-hidden border-4 border-gray-400 shadow-lg"
-                >
-                  <img
-                    v-if="rankingData.podium[1].avatar"
-                    :src="rankingData.podium[1].avatar"
-                    :alt="rankingData.podium[1].username"
-                    class="w-full h-full object-contain"
-                  />
-                  <UserIcon v-else class="w-12 h-12 text-gray-500" />
-                </div>
+                <Avatar
+                  :src="rankingData.podium[1].avatar"
+                  :name="rankingData.podium[1].username"
+                  :seed="studentAvatarSeed(classId, rankingData.podium[1].id)"
+                  size="lg"
+                  class="ring-4 ring-gray-400 shadow-lg"
+                />
                 <div
                   class="absolute -top-2 -left-2 w-10 h-10 rounded-full bg-gray-400 flex items-center justify-center shadow-lg"
                 >
@@ -203,7 +190,8 @@
                 </p>
                 <div class="bg-gray-400/20 rounded-full px-3 py-1 mt-2">
                   <p class="text-sm text-navy-700 font-bold inline-flex items-center gap-1">
-                    <Tooltip :text="t('common.resources.xp')"><XpIcon class="w-4 h-4" /></Tooltip>{{ rankingData.podium[1].xp.toLocaleString() }}
+                    <Tooltip :text="t('common.resources.xp')"><XpIcon class="w-4 h-4" /></Tooltip
+                    >{{ rankingData.podium[1].xp.toLocaleString() }}
                   </p>
                 </div>
                 <div class="flex items-center gap-3 mt-2 text-xs text-text-secondary">
@@ -231,17 +219,13 @@
               @click="handleStudentClick(rankingData.podium[0].id)"
             >
               <div class="relative mb-3">
-                <div
-                  class="w-28 h-28 rounded-full bg-white flex items-center justify-center overflow-hidden border-4 border-yellow shadow-xl"
-                >
-                  <img
-                    v-if="rankingData.podium[0].avatar"
-                    :src="rankingData.podium[0].avatar"
-                    :alt="rankingData.podium[0].username"
-                    class="w-full h-full object-contain"
-                  />
-                  <UserIcon v-else class="w-14 h-14 text-yellow" />
-                </div>
+                <Avatar
+                  :src="rankingData.podium[0].avatar"
+                  :name="rankingData.podium[0].username"
+                  :seed="studentAvatarSeed(classId, rankingData.podium[0].id)"
+                  size="xl"
+                  class="ring-4 ring-yellow shadow-xl"
+                />
                 <div
                   class="absolute -top-3 -left-3 w-12 h-12 rounded-full bg-yellow flex items-center justify-center shadow-lg"
                 >
@@ -258,7 +242,8 @@
                 </p>
                 <div class="bg-yellow/40 rounded-full px-4 py-1.5 mt-3">
                   <p class="text-base text-navy-700 font-bold inline-flex items-center gap-1">
-                    <Tooltip :text="t('common.resources.xp')"><XpIcon class="w-5 h-5" /></Tooltip>{{ rankingData.podium[0].xp.toLocaleString() }}
+                    <Tooltip :text="t('common.resources.xp')"><XpIcon class="w-5 h-5" /></Tooltip
+                    >{{ rankingData.podium[0].xp.toLocaleString() }}
                   </p>
                 </div>
                 <div class="flex items-center gap-4 mt-3 text-sm text-text-secondary">
@@ -286,17 +271,13 @@
               @click="handleStudentClick(rankingData.podium[2].id)"
             >
               <div class="relative mb-3">
-                <div
-                  class="w-24 h-24 rounded-full bg-white flex items-center justify-center overflow-hidden border-4 border-[#CD7F32] shadow-lg"
-                >
-                  <img
-                    v-if="rankingData.podium[2].avatar"
-                    :src="rankingData.podium[2].avatar"
-                    :alt="rankingData.podium[2].username"
-                    class="w-full h-full object-contain"
-                  />
-                  <UserIcon v-else class="w-12 h-12 text-[#CD7F32]" />
-                </div>
+                <Avatar
+                  :src="rankingData.podium[2].avatar"
+                  :name="rankingData.podium[2].username"
+                  :seed="studentAvatarSeed(classId, rankingData.podium[2].id)"
+                  size="lg"
+                  class="ring-4 ring-[#CD7F32] shadow-lg"
+                />
                 <div
                   class="absolute -top-2 -left-2 w-10 h-10 rounded-full bg-[#CD7F32] flex items-center justify-center shadow-lg"
                 >
@@ -313,7 +294,8 @@
                 </p>
                 <div class="bg-[#CD7F32]/30 rounded-full px-3 py-1 mt-2">
                   <p class="text-sm text-navy-700 font-bold inline-flex items-center gap-1">
-                    <Tooltip :text="t('common.resources.xp')"><XpIcon class="w-4 h-4" /></Tooltip>{{ rankingData.podium[2].xp.toLocaleString() }}
+                    <Tooltip :text="t('common.resources.xp')"><XpIcon class="w-4 h-4" /></Tooltip
+                    >{{ rankingData.podium[2].xp.toLocaleString() }}
                   </p>
                 </div>
                 <div class="flex items-center gap-3 mt-2 text-xs text-text-secondary">
@@ -413,20 +395,15 @@
             <span class="text-sm font-bold text-navy-700">{{ student.rank }}</span>
           </div>
 
-          <!-- Avatar (borde = color del tramo de nivel de la clase) -->
-          <div
-            class="w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-white flex items-center justify-center flex-shrink-0 overflow-hidden border-2 border-gray-200"
-            :style="student.levelColor ? { borderColor: student.levelColor } : undefined"
+          <!-- Avatar (marco = color del tramo de nivel de la clase) -->
+          <Avatar
+            :src="student.avatar"
+            :name="student.username"
+            :seed="studentAvatarSeed(classId, student.id)"
+            :ring-color="student.levelColor"
             :title="student.levelTitle"
-          >
-            <img
-              v-if="student.avatar"
-              :src="student.avatar"
-              :alt="student.username"
-              class="w-full h-full object-contain"
-            />
-            <UserIcon v-else class="w-5 h-5 sm:w-7 sm:h-7 text-gray-400" />
-          </div>
+            size="sm"
+          />
 
           <!-- Info -->
           <div class="flex-1 min-w-0">
@@ -455,7 +432,8 @@
           <!-- XP Badge -->
           <div class="flex-shrink-0 bg-navy-700/10 rounded-full px-2 py-1 sm:px-3 sm:py-1.5">
             <p class="text-xs sm:text-sm font-bold text-navy-700 inline-flex items-center gap-1">
-              <Tooltip :text="t('common.resources.xp')"><XpIcon class="w-4 h-4" /></Tooltip>{{ student.xp.toLocaleString() }}
+              <Tooltip :text="t('common.resources.xp')"><XpIcon class="w-4 h-4" /></Tooltip
+              >{{ student.xp.toLocaleString() }}
             </p>
           </div>
         </CardItem>
@@ -467,17 +445,19 @@
 <script setup lang="ts">
 import {
   TrophyIcon,
-  UserIcon,
   ChartPieIcon,
   ListBulletIcon,
   RocketLaunchIcon,
 } from '@heroicons/vue/24/outline'
 import type { ClassRanking } from '~/types/ranking.types'
+import { studentAvatarSeed } from '~/utils/avatar'
 
 const { t } = useI18n()
 
 interface Props {
   rankingData: ClassRanking
+  /** La clase: da el color del avatar de cada estudiante. */
+  classId: string
   clickable?: boolean
   showCurrentUserHighlight?: boolean
 }

@@ -5,6 +5,7 @@
  */
 import { calculateMissionTotalXP } from './xp-calculator.js'
 import type { ClassSettings } from './class-settings.js'
+import type { PathRequirement } from './mission-path.js'
 
 export interface MissionFormatInput {
   id: string
@@ -15,6 +16,8 @@ export interface MissionFormatInput {
   rarity: string
   deadline: Date | null
   backgroundImage: string | null
+  /** Posición en el orden de su clase (ver utils/mission-order.ts). */
+  orderIndex?: number
   xpReward?: number
   class?: { name: string } | null
   enigmas?: {
@@ -36,6 +39,8 @@ export interface FormattedMission {
   rarity: string
   deadline: Date | null
   backgroundImage: string | null
+  /** Posición en el orden de su clase: la pantalla la usa al mezclar clases. */
+  orderIndex: number
   progress: number
   xpReward: number
   coinReward: number
@@ -53,6 +58,26 @@ export interface FormattedMission {
     coins: number
     mana: number
   }
+  /**
+   * Por qué sale `bloqueada`: la cerró su docente (`teacher`, para toda la
+   * clase) o le falta completar algo del camino del mapa (`path`, solo a esta
+   * persona). null si no está cerrada.
+   */
+  lockReason: 'teacher' | 'path' | null
+  /**
+   * Con `path`, lo que le falta completar, en el orden de la clase; cada uno con
+   * su `state` (`teacher` si su docente lo tiene cerrado a mano).
+   */
+  requires: PathRequirement[]
+  /** Lo que pide la misión en el mapa (ids), lo tenga hecho o no; vacío con el mapa apagado. */
+  prerequisiteIds: string[]
+}
+
+/** El camino del mapa para una misión y un estudiante (ver utils/mission-path.ts). */
+export interface MissionPathInfo {
+  /** Lo que le falta para abrirla; vacío o sin él, no está cerrada por el camino. */
+  requires?: PathRequirement[]
+  prerequisiteIds?: string[]
 }
 
 /** Lo que se lee de cada enigma para sumar lo que da su misión. */
@@ -86,7 +111,8 @@ export function missionRewards(
 export function formatMission(
   mission: MissionFormatInput,
   includeClassName = false,
-  settings?: ClassSettings
+  settings?: ClassSettings,
+  path: MissionPathInfo = {}
 ): FormattedMission {
   // Hide a resource's amounts entirely when the class has it disabled (cards
   // hide a reward chip when its value is 0/undefined).
@@ -122,15 +148,29 @@ export function formatMission(
       : 0
     : undefined
 
+  // La cerrada por el camino sale `bloqueada`, como la que cierra su docente
+  // (sin enlace, con candado), y `lockReason` dice cuál de las dos es. La de su
+  // docente va por encima; la completada, por encima de las dos.
+  const baseStatus = getMissionStatus(mission, progressRecord)
+  const requires = path.requires ?? []
+  const pathLocked = requires.length > 0 && baseStatus !== 'completada' && baseStatus !== 'bloqueada'
+  const status = pathLocked ? 'bloqueada' : baseStatus
+  const lockReason = pathLocked ? 'path' : baseStatus === 'bloqueada' ? 'teacher' : null
+  // La historia de una misión cerrada (por el camino o a mano, aunque ya la
+  // tuviera completada) no sale en los listados: como en su detalle (ver
+  // `lockedMissionView`), se lee al abrirse.
+  const closed = pathLocked || mission.status === 'bloqueada'
+
   const formatted: FormattedMission = {
     id: mission.id,
     title: mission.title,
-    description: mission.description,
+    description: closed ? null : mission.description,
     classId: mission.classId,
-    status: getMissionStatus(mission, progressRecord),
+    status,
     rarity: mission.rarity,
     deadline: mission.deadline,
     backgroundImage: mission.backgroundImage,
+    orderIndex: mission.orderIndex ?? 0,
     progress: progressPercent,
     xpReward: totalXp,
     coinReward: totalCoins,
@@ -147,6 +187,9 @@ export function formatMission(
       coins: totalCoins,
       mana: totalMana,
     },
+    lockReason,
+    requires: pathLocked ? requires : [],
+    prerequisiteIds: path.prerequisiteIds ?? [],
   }
 
   if (includeClassName && mission.class) {

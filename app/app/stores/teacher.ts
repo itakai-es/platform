@@ -27,6 +27,7 @@ import type {
   StudentListResponse,
 } from '~/types/teacher.types'
 import { canInClass } from '~/utils/class-access'
+import { orderByIds } from '~/utils/mission-sort'
 
 export const useTeacherStore = defineStore('teacher', () => {
   // State
@@ -682,6 +683,43 @@ export const useTeacherStore = defineStore('teacher', () => {
   }
 
   /**
+   * Ordena las misiones de una clase (el orden de la progresión que ve el
+   * alumnado). `missionIds` es el orden nuevo, de la primera a la última; la API
+   * devuelve el que ha quedado, con todas las de la clase. Se reordena la caché
+   * de sus misiones y el listado general se vuelve a pedir en la próxima visita.
+   */
+  async function reorderClassMissions(classId: string, missionIds: string[]) {
+    const config = useRuntimeConfig()
+    const { order } = await $fetch<{ order: string[] }>(
+      `${config.public.apiBase}/teacher/classes/${classId}/missions/order`,
+      { method: 'PUT', body: { ids: missionIds } }
+    )
+    const cached = classMissions.value.get(classId)
+    if (cached) classMissions.value.set(classId, orderByIds(cached, order))
+    hasLoadedMissions.value = false
+    return order
+  }
+
+  /**
+   * Camino del mapa de una clase. «Encadenar en orden» (`chain`): cada misión
+   * abierta pide la abierta anterior, en el orden de la clase (las bloqueadas se
+   * quedan fuera), y deja de pedir lo que pidiera.
+   * Quitar los requisitos (`clear`): ninguna pide nada. Devuelve las misiones de
+   * la clase ya al día (también en la caché).
+   */
+  async function setClassMissionPath(classId: string, mode: 'chain' | 'clear') {
+    const config = useRuntimeConfig()
+    await $fetch(
+      mode === 'chain'
+        ? `${config.public.apiBase}/teacher/classes/${classId}/missions/chain`
+        : `${config.public.apiBase}/teacher/classes/${classId}/missions/prerequisites`,
+      { method: mode === 'chain' ? 'POST' : 'DELETE' }
+    )
+    hasLoadedMissions.value = false
+    return (await fetchClassMissions(classId, true)).missions
+  }
+
+  /**
    * Obtiene la guía de una clase
    */
   async function fetchClassGuide(classId: string, force = false) {
@@ -831,6 +869,17 @@ export const useTeacherStore = defineStore('teacher', () => {
     )
     forgetStudent(studentId, classId)
     return response.nickname
+  }
+
+  /** Devuelve el avatar del alumno en la clase a uno del catálogo. */
+  async function updateStudentAvatar(classId: string, studentId: string, avatar: string) {
+    const config = useRuntimeConfig()
+    const response = await $fetch<{ avatarUrl: string }>(
+      `${config.public.apiBase}/teacher/classes/${classId}/students/${studentId}/avatar`,
+      { method: 'PUT', body: { avatar } }
+    )
+    forgetStudent(studentId, classId)
+    return response.avatarUrl
   }
 
   /** Quita al alumno de la clase, con todo lo que tenía en ella. */
@@ -1155,6 +1204,8 @@ export const useTeacherStore = defineStore('teacher', () => {
     duplicateClass,
     getInvitationCode,
     fetchClassMissions,
+    reorderClassMissions,
+    setClassMissionPath,
     importMission,
     fetchClassGuide,
     updateClassGuideCache,
@@ -1194,6 +1245,7 @@ export const useTeacherStore = defineStore('teacher', () => {
     createManagedStudents,
     resetStudentPassword,
     updateStudentNickname,
+    updateStudentAvatar,
     removeStudentFromClass,
     forgetStudent,
     $reset,

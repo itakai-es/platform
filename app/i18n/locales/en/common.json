@@ -554,6 +554,115 @@
         "base": "Base",
         "temporal": "Temporary"
       }
+    },
+    "mission_hints": {
+      "title": "Hints",
+      "hint_label": "Hint {position}",
+      "free": "Free",
+      "cost_coins": "{count} {coins}",
+      "cost_xp": "{count} XP",
+      "cost_percent": "−{count}% of the reward"
+    },
+    "activity_feed": {
+      "hint_used_student": "You used hint {position} of {mission}",
+      "hint_used_teacher": "Used hint {position} of {mission}",
+      "hint_used_percent_student": "You used hint {position} of {mission}: −{count}% on what you still had to earn",
+      "hint_used_percent_teacher": "Used hint {position} of {mission}: −{count}% on what they still had to earn",
+      "enigma_approved_student": "Your submission for {enigma} was approved",
+      "enigma_approved_teacher": "Had their submission for {enigma} approved",
+      "mission_started_student": "You started the mission {mission}",
+      "mission_started_teacher": "Started the mission {mission}"
+    },
+    "avatars": {
+      "characters": {
+        "atenea": {
+          "name": "Athena",
+          "trait": "Wisdom and strategy"
+        },
+        "odiseo": {
+          "name": "Odysseus",
+          "trait": "Cunning and courage"
+        },
+        "penelope": {
+          "name": "Penelope",
+          "trait": "Loyalty and patience"
+        },
+        "polifemo": {
+          "name": "Polyphemus",
+          "trait": "Strength and determination"
+        },
+        "poseidon": {
+          "name": "Poseidon",
+          "trait": "Power and command"
+        }
+      },
+      "custom_name": "Your AI avatar",
+      "custom_trait": "AI-generated"
+    },
+    "view_modes": {
+      "grid": "Grid",
+      "list": "List",
+      "map": "Map"
+    },
+    "mission_map": {
+      "title": "Mission map",
+      "beta": "Beta",
+      "beta_note": "It's being tested: how it looks and works may change.",
+      "step": "Mission {n}",
+      "state": {
+        "completed": "Completed",
+        "in_progress": "In progress: {progress}%",
+        "available": "Available",
+        "urgent": "Urgent: due soon",
+        "expired": "Expired",
+        "locked": "Locked: closed by your teacher for now",
+        "locked_path": "Locked: opens after completing {missions}"
+      },
+      "completed_by": "Nobody has completed it yet: 0 of {total} | {done} of {total} has completed it | {done} of {total} have completed it",
+      "no_students": "No students yet",
+      "opens_after": "Opens after completing {missions}",
+      "quoted": "“{title}”",
+      "quoted_teacher_closed": "“{title}” (closed by your teacher for now)",
+      "and": "and",
+      "locked_path_explain": "To open it, first complete {missions}.",
+      "state_short": {
+        "completed": "Completed",
+        "in_progress": "In progress",
+        "available": "Available",
+        "urgent": "Urgent",
+        "expired": "Expired",
+        "locked": "Locked"
+      },
+      "start": "Start",
+      "goal": "Finish",
+      "you_are_here": "You are here",
+      "go_to_mine": "Go to my mission",
+      "keys_hint": "With the keyboard, the arrow keys move from one mission to another; Home and End go to the first and the last.",
+      "your_progress": "You have completed {done} of {total} mission | You have completed {done} of {total} missions",
+      "all_done": "Map completed!",
+      "class_progress": "The class has covered {percent}% of the path",
+      "class_done_by_all": "Completed by the whole class: {done} of {total}",
+      "legend": {
+        "title": "Legend",
+        "hint": "Select a status to highlight its missions on the map."
+      },
+      "detail": {
+        "label": "Mission details",
+        "empty": "Select a mission on the map to see its details here.",
+        "your_progress": "Your progress",
+        "enigmas_done": "{done} of {total} enigma | {done} of {total} enigmas",
+        "completed_list": "Who has completed it",
+        "completed_more": "and {n} more",
+        "in_progress": "In progress: {n}",
+        "deadline": "Deadline: {date}",
+        "requires": "To open it, first complete:",
+        "requires_teacher": "To open it, students must first complete:",
+        "unlocks": "Completing it opens the way to:",
+        "start": "Start",
+        "continue": "Continue",
+        "view": "View mission",
+        "open": "Open mission"
+      }
     }
   }
 }

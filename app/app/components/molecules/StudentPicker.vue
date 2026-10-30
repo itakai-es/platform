@@ -35,6 +35,7 @@
             :id="`${uid}-${s.id}`"
             :name="s.name"
             :avatar="s.avatar"
+            :avatar-seed="studentAvatarSeed(classId, s.id)"
             :hint="s.hint"
             :checked="selected.has(s.id)"
             :disabled="disabled"
@@ -55,6 +56,7 @@
 
 <script setup lang="ts">
 import { matchesQuery } from '~/utils/text-search'
+import { studentAvatarSeed } from '~/utils/avatar'
 
 /**
  * Elegir a varios estudiantes de una clase: casillas de verdad, buscador,
@@ -76,12 +78,14 @@ export interface PickerStudent {
 const props = withDefaults(
   defineProps<{
     students: PickerStudent[]
+    /** La clase: da el color del avatar de cada estudiante. */
+    classId?: string
     /** Ids elegidos. */
     modelValue: string[]
     legend?: string
     disabled?: boolean
   }>(),
-  { legend: undefined, disabled: false }
+  { classId: undefined, legend: undefined, disabled: false }
 )
 
 const emit = defineEmits<{ 'update:modelValue': [ids: string[]] }>()

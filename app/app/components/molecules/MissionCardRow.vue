@@ -20,7 +20,7 @@
         v-else-if="!isTeacherMode"
         type="button"
         class="absolute inset-0 z-20 cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-navy-700 focus-visible:ring-inset"
-        :aria-label="t('student.missions.locked_aria', { title })"
+        :aria-label="lockedAria"
       />
 
       <!-- Thumbnail -->
@@ -84,6 +84,12 @@
 
         <!-- Class name -->
         <p v-if="className" class="text-sm text-text-secondary truncate">{{ className }}</p>
+
+        <!-- Cerrada por el camino del mapa: qué la abre -->
+        <p v-if="pathText" class="flex items-start gap-1.5 text-sm text-navy-700">
+          <LockClosedIcon class="mt-0.5 h-4 w-4 flex-shrink-0" aria-hidden="true" />
+          <span>{{ pathText }}</span>
+        </p>
 
         <!-- Rewards + meta in a single wrapping row -->
         <div
@@ -153,7 +159,7 @@
             class="inline-flex items-center gap-1 font-normal text-xs text-gray-500"
           >
             <ClockIcon class="w-3.5 h-3.5" />
-            Venció: {{ formattedDeadline }}
+            {{ expiredOnLabel }}
           </span>
         </div>
       </div>
@@ -190,12 +196,15 @@ const {
   showEarnedCoins,
   showEarnedMana,
   formattedDeadline,
+  expiredOnLabel,
   isFullyCompletedTeacher,
   progressValue,
   missionLink,
   statusLabel,
   showStatusBadge,
   progressBarColor,
+  pathText,
+  lockedAria,
   handleCardClick,
 } = useMissionCard(props, emit)
 </script>

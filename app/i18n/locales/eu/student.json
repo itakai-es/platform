@@ -62,7 +62,9 @@
         "en_progreso": "Abian"
       },
       "locked_toast": "Zure irakasleak misio hau itxi du oraingoz. Irekitzen duenean sartu ahal izango zara.",
-      "locked_aria": "{title}: misioa itxita dago oraingoz"
+      "locked_aria": "{title}: misioa blokeatuta dago oraingoz",
+      "expired_on": "Iraungi zen: {date}",
+      "locked_path_aria": "{title}: {missions} osatzean irekitzen da"
     },
     "mission_detail": {
       "meta": {
@@ -88,7 +90,34 @@
         "success": "Entrega behar bezala bidali da. Irakasleak laster berrikusiko du.",
         "error": "Errorea entrega bidaltzean. Saiatu berriro.",
         "expired_error": "Misio hau iraungita dago. Dagoeneko ezin duzu enigmarik entregatu.",
-        "downloading": "Deskargatzen"
+        "downloading": "Deskargatzen",
+        "path_locked": "Misio hau ez dago irekita oraindik: lehenago beste bat osatu behar duzu."
+      },
+      "hints": {
+        "intro": "Trabatu zara? Erabili pista bat. Ordenan irekitzen dira, banan-banan, eta bakoitzak bere kostua du.",
+        "locked": "{position}. pistaren ondoren irekitzen da.",
+        "not_used": "Erabili gabe.",
+        "use_button": "Erabili {position}. pista",
+        "summary_coins": "{count} {coins} balio du. {balance} dituzu.",
+        "summary_xp": "{count} XP balio du. {balance} dituzu. XParekin ordaintzeak maila jaitsi diezazuke.",
+        "summary_percent": "Misio honek oraindik eman behar dizunari %{count} kentzen dio: onartu gabeko enigmei (berrikuspenean daudenei ere bai) eta misioaren bonusari. Dagoeneko kobratu duzuna ez da aldatzen.",
+        "summary_free": "Doan da.",
+        "short_coins": "{count} {coins} falta zaizkizu.",
+        "short_xp": "{count} XP falta zaizkizu.",
+        "used": "Erabilita",
+        "penalty_note": "Zure pistek %{count} kentzen diote misio honetan kobratzeko geratzen zaizunari.",
+        "closed_completed": "Misioa osatu duzu: ez duzu pista gehiagorik behar.",
+        "closed_expired": "Misioa iraungi da: ezin dira haren pistak erabili.",
+        "preview_note": "Aurrebista: pista guztiak irekita ikusten dituzu. Ikasleek banan-banan irekitzen dituzte, ordena honetan, haien kostua ordainduta.",
+        "used_announcement": "{position}. pista erabili duzu.",
+        "use_error": "Ezin izan da pista erabili.",
+        "bonus_penalty": "−%{count} zure pistengatik"
+      },
+      "path_locked": {
+        "title": "Oraindik ezin duzu misio hau hasi",
+        "description": "{missions} osatzean irekitzen da. Orduan ikusiko dituzu haren istorioa, enigmak eta dokumentuak.",
+        "go_to": "Joan «{title}» misiora",
+        "back": "Itzuli misioetara"
       }
     },
     "classes": {
@@ -143,14 +172,14 @@
           "tip": "Aholkua: Izan zehatz koloreekin, janzkerarekin, osagarriekin eta estiloarekin. AA-k zure avatarra sortuko du hautatutako pertsonaian oinarrituz.",
           "generate_button": "Avatarra sortu",
           "generating": "Zure avatarra sortzen...",
-          "generated_trait": "AArekin sortua",
           "nickname_placeholder": "Zure ezizena...",
           "save_changes": "Aldaketak gorde",
           "no_guide_hint": "Aukeratu zure gida zure avatarra ikusteko",
           "save_success": "Profila behar bezala gorde da",
           "save_error": "Errorea profila gordetzean",
           "generate_error": "Ezin izan da avatarra sortu. Saiatu berriro segundo batzuetan.",
-          "generate_error_with_detail": "Ezin izan da avatarra sortu: {detail}"
+          "generate_error_with_detail": "Ezin izan da avatarra sortu: {detail}",
+          "how_others_see": "Honela ikusten zaituzte klase honetan"
         },
         "mission_no_description": "Deskribapenik gabe",
         "shop": {
@@ -324,7 +353,6 @@
       "recent_activity_card": {
         "title": "Azken jarduera",
         "empty": "Ez dago azken jarduerarik",
-        "user_fallback": "Erabiltzailea",
         "by_actor": "Egilea: {name}"
       },
       "submission_modal": {

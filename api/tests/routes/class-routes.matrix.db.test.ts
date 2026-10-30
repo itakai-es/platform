@@ -22,7 +22,7 @@ import { randomUUID } from 'node:crypto'
  *
  * Usa Fastify, JWT, servicios y Postgres de verdad: necesita TEST_DATABASE_URL
  * (ver tests/helpers/test-db.ts). Solo se simula lo que sale de la máquina:
- * correo, almacenamiento de ficheros y el generador de avatares.
+ * correo y almacenamiento de ficheros.
  */
 
 vi.mock('../../src/utils/email.js', () => ({
@@ -37,10 +37,6 @@ vi.mock('../../src/modules/storage/storage.service.js', async importOriginal => 
   ...(await importOriginal<typeof import('../../src/modules/storage/storage.service.js')>()),
   saveUpload: vi.fn(async (path: string) => `/uploads/${path}`),
   deleteUpload: vi.fn(),
-}))
-
-vi.mock('../../src/modules/ai/generators/avatar-firered.js', () => ({
-  generateFireRedAvatar: vi.fn(async () => ({ fileUrl: '/uploads/avatars/test.png' })),
 }))
 
 import {
@@ -281,6 +277,37 @@ const TEACHER_CLASS: RouteCase[] = [
     levels: levels('read', 200),
   },
   {
+    route: 'PUT /teacher/classes/:classId/missions/order',
+    request: async f => {
+      const ids = [await f.newMission(), await f.newMission()]
+      return { method: 'PUT', url: `${c(f)}/missions/order`, payload: { ids: ids.reverse() } }
+    },
+    owner: 200,
+    other: 404,
+    student: 403,
+    levels: levels('edit', 200),
+  },
+  {
+    route: 'POST /teacher/classes/:classId/missions/chain',
+    request: async f => {
+      await f.newMission()
+      await f.newMission()
+      return { method: 'POST', url: `${c(f)}/missions/chain` }
+    },
+    owner: 200,
+    other: 404,
+    student: 403,
+    levels: levels('edit', 200),
+  },
+  {
+    route: 'DELETE /teacher/classes/:classId/missions/prerequisites',
+    request: f => ({ method: 'DELETE', url: `${c(f)}/missions/prerequisites` }),
+    owner: 200,
+    other: 404,
+    student: 403,
+    levels: levels('edit', 200),
+  },
+  {
     route: 'GET /teacher/classes/:classId/ranking',
     request: f => ({ method: 'GET', url: `${c(f)}/ranking` }),
     owner: 200,
@@ -514,11 +541,12 @@ const TEACHER_CLASS: RouteCase[] = [
     levels: levels('edit', 200),
   },
   {
-    route: 'POST /teacher/classes/:classId/students/:studentId/avatar/generate',
+    // Devolver el avatar de un estudiante al catálogo: pide edición.
+    route: 'PUT /teacher/classes/:classId/students/:studentId/avatar',
     request: f => ({
-      method: 'POST',
-      url: `${c(f)}/students/${f.users.student.id}/avatar/generate`,
-      payload: { avatar_id: 'avatar-1', wardrobe_prompt: 'capa', background_prompt: 'bosque' },
+      method: 'PUT',
+      url: `${c(f)}/students/${f.users.student.id}/avatar`,
+      payload: { avatar: '/app/avatars/atenea.svg' },
     }),
     owner: 200,
     other: 404,
@@ -1043,6 +1071,78 @@ const MISSIONS: RouteCase[] = [
       return {
         method: 'DELETE',
         url: `/missions/${missionId}/enigmas/${await f.newEnigma(missionId)}`,
+      }
+    },
+    owner: 200,
+    other: 404,
+    student: 403,
+    levels: levels('edit', 200),
+  },
+  {
+    route: 'POST /missions/:missionId/hints',
+    request: async f => ({
+      method: 'POST',
+      url: `/missions/${await f.newMission()}/hints`,
+      payload: { content: 'Empieza por el título', costType: 'coins', cost: 10 },
+    }),
+    owner: 201,
+    other: 404,
+    student: 403,
+    levels: levels('edit', 201),
+  },
+  {
+    route: 'PUT /missions/:missionId/prerequisites',
+    request: async f => {
+      const required = await f.newMission()
+      return {
+        method: 'PUT',
+        url: `/missions/${await f.newMission()}/prerequisites`,
+        payload: { ids: [required] },
+      }
+    },
+    owner: 200,
+    other: 404,
+    student: 403,
+    levels: levels('edit', 200),
+  },
+  {
+    route: 'PUT /missions/:missionId/hints/reorder',
+    request: async f => {
+      const missionId = await f.newMission()
+      const ids = [await f.newHint(missionId), await f.newHint(missionId)]
+      return {
+        method: 'PUT',
+        url: `/missions/${missionId}/hints/reorder`,
+        payload: { ids: ids.reverse() },
+      }
+    },
+    owner: 200,
+    other: 404,
+    student: 403,
+    levels: levels('edit', 200),
+  },
+  {
+    route: 'PUT /missions/:missionId/hints/:hintId',
+    request: async f => {
+      const missionId = await f.newMission()
+      return {
+        method: 'PUT',
+        url: `/missions/${missionId}/hints/${await f.newHint(missionId)}`,
+        payload: { content: 'Pista cambiada' },
+      }
+    },
+    owner: 200,
+    other: 404,
+    student: 403,
+    levels: levels('edit', 200),
+  },
+  {
+    route: 'DELETE /missions/:missionId/hints/:hintId',
+    request: async f => {
+      const missionId = await f.newMission()
+      return {
+        method: 'DELETE',
+        url: `/missions/${missionId}/hints/${await f.newHint(missionId)}`,
       }
     },
     owner: 200,
@@ -2291,7 +2391,6 @@ describeWithDatabase('matriz de acceso del profesorado añadido a una clase', ()
     expect((await as({ method: 'GET', url: '/missions' })).body).not.toContain(missionId)
     expect((await as({ method: 'GET', url: '/missions/enhanced' })).body).not.toContain(missionId)
     expect((await as({ method: 'GET', url: '/missions/stats' })).json().total).toBe(0)
-    expect((await as({ method: 'POST', url: `/missions/${missionId}/start` })).statusCode).toBe(404)
     expect(
       (
         await as({
@@ -2311,7 +2410,6 @@ describeWithDatabase('matriz de acceso del profesorado añadido a una clase', ()
       data: { endsAt: null },
     })
     expect((await as({ method: 'GET', url: '/missions' })).body).toContain(missionId)
-    expect((await as({ method: 'POST', url: `/missions/${missionId}/start` })).statusCode).toBe(200)
     expect((await submit()).statusCode).toBe(201)
     // Sin fila ni matrícula, para no contar en los tests que siguen.
     await setLevel(former.id, null)

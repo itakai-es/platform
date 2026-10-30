@@ -96,7 +96,7 @@ const sessionSelect = {
   endTime: true,
   source: true,
   updatedAt: true,
-  takenBy: { select: { name: true } },
+  takenBy: { select: { id: true, name: true, avatar: true } },
   records: {
     select: { status: true, note: true, enrollment: { select: { studentId: true } } },
   },
@@ -112,7 +112,10 @@ function formatSession(s: SessionRow) {
     startTime: s.startTime,
     endTime: s.endTime,
     source: s.source,
-    takenBy: s.takenBy?.name ?? null,
+    // Quién la guardó, con su avatar actual, para el «Guardada por».
+    takenBy: s.takenBy
+      ? { id: s.takenBy.id, name: s.takenBy.name, avatar: s.takenBy.avatar }
+      : null,
     updatedAt: s.updatedAt.toISOString(),
     counts: countStatuses(statuses),
     records: s.records.map(r => ({

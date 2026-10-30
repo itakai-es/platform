@@ -3,11 +3,66 @@ import { BaseAgent, type AgentRequestContext } from './base-agent.js'
 import { getPlatformContext, getSkinName } from '../platform-context.js'
 import { INCLUSIVE_LANGUAGE_ES } from '../prompts/index.js'
 import { calculateMissionTotalXP } from '../../../utils/xp-calculator.js'
+import { sortByClassOrder } from '../../../utils/mission-order.js'
+import { resolveClassSettings } from '../../../utils/class-settings.js'
 import {
   listedClassesWhere,
   assertMissionAccess,
   passesAccessCheck,
 } from '../../../utils/class-access.js'
+
+/** Lo que se lee de una misión requisito para contar cómo está. */
+const REQUIRED_SELECT = {
+  title: true,
+  status: true,
+  deadline: true,
+  _count: { select: { enigmas: true } },
+} as const
+
+interface RequiredMission {
+  title: string
+  status: string
+  deadline: Date | null
+  _count: { enigmas: number }
+}
+
+/**
+ * Cómo está una misión requisito, si no es lo normal: sin enigmas o caducada ya
+ * no cierra nada (ver `requirementCloses`, utils/mission-path.ts); bloqueada a
+ * mano, nadie la puede completar hasta que se abra. null si cierra como siempre.
+ */
+function requirementNote(required: RequiredMission, locale: 'es' | 'en'): string | null {
+  const es = locale === 'es'
+  if (required._count.enigmas === 0) return es ? 'sin enigmas, no cierra' : 'no enigmas: does not lock'
+  if (required.deadline && required.deadline < new Date()) {
+    return es ? 'caducada, ya no cierra' : 'past its deadline: does not lock'
+  }
+  if (required.status === 'bloqueada') {
+    return es ? 'bloqueada: nadie la puede completar' : 'blocked: nobody can complete it'
+  }
+  return null
+}
+
+/** «A», o «A» (cómo está), para las listas de requisitos. */
+function requirementLabel(required: RequiredMission, locale: 'es' | 'en'): string {
+  const note = requirementNote(required, locale)
+  return note ? `«${required.title}» (${note})` : `«${required.title}»`
+}
+
+/**
+ * Lo que pide una misión en el mapa, para el resumen: «; se abre al completar
+ * «A»» (y si el mapa está apagado en su clase, que ahora no cierra). Vacío si
+ * no pide nada.
+ */
+function pathNote(mission: {
+  class: { settings: unknown }
+  prerequisites: { requiredMission: RequiredMission }[]
+}): string {
+  if (mission.prerequisites.length === 0) return ''
+  const titles = mission.prerequisites.map(p => requirementLabel(p.requiredMission, 'es')).join(' y ')
+  const off = resolveClassSettings(mission.class.settings).missionMap ? '' : ', sin efecto con el mapa apagado'
+  return `; se abre al completar ${titles}${off}`
+}
 
 export class TeacherAgent extends BaseAgent {
   protected buildSystemPrompt(context: AgentRequestContext) {
@@ -53,9 +108,13 @@ export class TeacherAgent extends BaseAgent {
       prisma.mission.findMany({
         where: { class: myClasses },
         include: {
-          class: { select: { name: true } },
+          class: { select: { name: true, settings: true } },
           _count: { select: { enigmas: true } },
+          // Lo que pide cada una en el mapa, para decir qué la abre.
+          prerequisites: { select: { requiredMission: { select: REQUIRED_SELECT } } },
         },
+        // Las más recientes, que son las del curso; se enseñan en el orden de
+        // la progresión de cada clase, como las ve el alumnado.
         orderBy: { createdAt: 'desc' },
         take: 5,
       }),
@@ -71,7 +130,7 @@ export class TeacherAgent extends BaseAgent {
       ? classes.map(cls => `${cls.name} (${cls._count.enrollments} estudiantes, ${cls._count.missions} misiones)`).join('; ')
       : 'Sin clases creadas'
     const missionsSummary = missions.length > 0
-      ? missions.map(mission => `${mission.title} en ${mission.class.name} (${mission._count.enigmas} enigmas)`).join('; ')
+      ? sortByClassOrder(missions).map(mission => `${mission.title} en ${mission.class.name} (${mission._count.enigmas} enigmas${pathNote(mission)})`).join('; ')
       : 'Sin misiones'
 
     const teacherName = teacher?.name?.split(' ')[0] || ''
@@ -122,7 +181,13 @@ export class TeacherAgent extends BaseAgent {
       prisma.mission.findUnique({
         where: { id: missionId },
         include: {
-          class: { select: { name: true } },
+          class: { select: { name: true, settings: true } },
+          // El camino del mapa: lo que pide y lo que la pide a ella.
+          prerequisites: { select: { requiredMission: { select: REQUIRED_SELECT } } },
+          requiredBy: {
+            select: { mission: { select: { title: true } } },
+            orderBy: { mission: { orderIndex: 'asc' } },
+          },
           enigmas: {
             orderBy: { orderIndex: 'asc' },
             select: {
@@ -173,6 +238,18 @@ export class TeacherAgent extends BaseAgent {
 
     if (mission.deadline) {
       lines.push(`Deadline: ${mission.deadline.toISOString().split('T')[0]}`)
+    }
+
+    // El camino del mapa: cada estudiante la tiene cerrada hasta completar lo que pide.
+    if (mission.prerequisites.length > 0 || mission.requiredBy.length > 0) {
+      const mapOn = resolveClassSettings(mission.class.settings).missionMap
+      lines.push(`Mission map path (${mapOn ? 'map on: it locks per student' : 'map off: it does not lock anything now'}):`)
+      if (mission.prerequisites.length > 0) {
+        lines.push(`  Opens for each student after completing: ${mission.prerequisites.map(p => requirementLabel(p.requiredMission, 'en')).join(', ')}`)
+      }
+      if (mission.requiredBy.length > 0) {
+        lines.push(`  Completing it opens: ${mission.requiredBy.map(p => `«${p.mission.title}»`).join(', ')}`)
+      }
     }
 
     if (mission.description) {

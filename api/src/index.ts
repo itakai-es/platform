@@ -19,7 +19,6 @@ import { aiRoutes } from './modules/ai/ai.routes.js'
 import { adminRoutes } from './modules/admin/admin.routes.js'
 import { healthRoutes } from './modules/health/health.routes.js'
 import { submissionsRoutes } from './modules/submissions/submissions.routes.js'
-import { gamificationRoutes } from './modules/gamification/gamification.routes.js'
 import { profileRoutes } from './modules/profile/profile.routes.js'
 import { publicHelpRoutes, adminHelpRoutes } from './modules/help/help.routes.js'
 import { publicTemplateRoutes } from './modules/templates/templates.routes.js'
@@ -268,7 +267,6 @@ async function buildServer() {
   await fastify.register(aiRoutes, { prefix: '/ai' })
   await fastify.register(adminRoutes, { prefix: '/admin' })
   await fastify.register(submissionsRoutes, { prefix: '/submissions' })
-  await fastify.register(gamificationRoutes, { prefix: '/gamification' })
   await fastify.register(profileRoutes, { prefix: '/profile' })
   // Ficheros privados (entregas y documentos de misión), con comprobación de acceso.
   await fastify.register(filesRoutes, { prefix: '/files' })

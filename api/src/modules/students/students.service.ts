@@ -2,8 +2,10 @@ import { prisma } from '../../config/database.js'
 import { getLevelInfo, wouldLevelUp, calculateMissionTotalXP } from '../../utils/xp-calculator.js'
 import { resolveLevelConfig, tierForLevel } from '../../utils/level-config.js'
 import { formatMission, getMissionStatus } from '../../utils/mission-formatter.js'
+import { classPathFor, classPathsFor } from '../../utils/mission-path.js'
 import { ensureSafeEducationalPrompt } from '../ai/ai-safety.js'
 import { generateFireRedAvatar } from '../ai/generators/avatar-firered.js'
+import { releaseGeneratedAvatar } from '../storage/upload-usage.js'
 import { getAIProvider } from '../ai/providers/index.js'
 import { AVATAR_PROMPTS } from '../ai/prompts/index.js'
 import { AvatarServiceUnavailableError } from '../../utils/errors.js'
@@ -24,11 +26,12 @@ import {
   isAllowedClassAvatar,
   participatingEnrollmentWhere,
 } from '../../utils/enrollment.js'
-import { activityActor } from '../../utils/activity.js'
+import { ACTIVITY_ACTOR_INCLUDE, activityActor } from '../../utils/activity.js'
 import { assertNotManagedAccount } from '../../utils/identity-db.js'
 import { changeOwnPassword } from '../../utils/password-change.js'
 import { consumeRateLimit } from '../../utils/rate-limit.js'
 import { completedMissionsByStudent } from '../../utils/ranking.js'
+import { MISSION_ORDER } from '../../utils/mission-order.js'
 
 /** Matricularse en una clase es cosa de alumnos: el profesorado la mira con la vista previa. */
 function assertStudentRole(user: ClassUser) {
@@ -262,7 +265,9 @@ export class StudentsService {
       // Quién imparte la clase, con su perfil; también quien está en prácticas,
       // que ve los datos del alumnado. Sin correo ni nivel de acceso.
       teachers: cls.teachers.map(t => ({
+        id: t.userId,
         name: t.user.name,
+        avatar: t.user.avatar,
         profile: t.profile,
         isOwner: t.isOwner,
       })),
@@ -295,7 +300,8 @@ export class StudentsService {
     }
   }
 
-  async getClassMissions(userId: string, classId: string) {
+  async getClassMissions(user: ClassUser, classId: string) {
+    const userId = user.id
     // Verify enrollment
     const enrollment = await prisma.classEnrollment.findUnique({
       where: { studentId_classId: { studentId: userId, classId } },
@@ -312,11 +318,22 @@ export class StudentsService {
         progress: { where: { studentId: userId } },
         class: true,
       },
-      orderBy: { createdAt: 'desc' },
+      // El orden de la progresión que fija el profesorado.
+      orderBy: MISSION_ORDER,
     })
 
+    // El camino del mapa para esta persona: lo que pide cada misión y las que
+    // tiene cerradas por eso (solo con el mapa encendido en la clase, y nada
+    // cerrado si mira el profesorado en la vista previa).
+    const path = await classPathFor(prisma, classId, user, missions[0]?.class.settings ?? null)
+
     return {
-      missions: missions.map((m) => formatMission(m, false, resolveClassSettings(m.class.settings))),
+      missions: missions.map((m) =>
+        formatMission(m, false, resolveClassSettings(m.class.settings), {
+          requires: path.locks.get(m.id),
+          prerequisiteIds: path.prerequisites.get(m.id),
+        })
+      ),
       total: missions.length,
     }
   }
@@ -511,6 +528,8 @@ export class StudentsService {
         avatarUrl: data.avatarUrl !== undefined ? data.avatarUrl : enrollment.avatarUrl,
       },
     })
+    // El generado con IA que deja ya no se puede volver a poner: fuera su fichero.
+    if (updated.avatarUrl !== enrollment.avatarUrl) await releaseGeneratedAvatar(enrollment.avatarUrl)
 
     return {
       nickname: updated.nickname,
@@ -590,6 +609,8 @@ export class StudentsService {
       where: { studentId_classId: { studentId: userId, classId } },
       data: { avatarUrl: fileUrl },
     })
+    // El nuevo sustituye al que tenía: si era otro generado, fuera su fichero.
+    if (updated.avatarUrl !== enrollment.avatarUrl) await releaseGeneratedAvatar(enrollment.avatarUrl)
 
     return { avatarUrl: updated.avatarUrl, message: 'Avatar generado correctamente' }
   }
@@ -654,6 +675,7 @@ export class StudentsService {
         userId,
         classId,
       },
+      include: ACTIVITY_ACTOR_INCLUDE,
       orderBy: { createdAt: 'desc' },
       skip: offset,
       take: limit,
@@ -770,11 +792,24 @@ export class StudentsService {
         progress: { where: { studentId: userId } },
         class: true,
       },
-      orderBy: { createdAt: 'desc' },
+      // Por clase y, dentro de cada una, en el orden de la progresión.
+      orderBy: [{ class: { name: 'asc' } }, { classId: 'asc' }, ...MISSION_ORDER],
     })
 
+    // El camino del mapa de cada clase para esta persona (ver getClassMissions).
+    const paths = await classPathsFor(
+      prisma,
+      user,
+      missions.map(m => ({ id: m.classId, settings: m.class.settings }))
+    )
+
     return {
-      missions: missions.map((m) => formatMission(m, true, resolveClassSettings(m.class.settings))),
+      missions: missions.map((m) =>
+        formatMission(m, true, resolveClassSettings(m.class.settings), {
+          requires: paths.get(m.classId)?.locks.get(m.id),
+          prerequisiteIds: paths.get(m.classId)?.prerequisites.get(m.id),
+        })
+      ),
       total: missions.length,
     }
   }
@@ -880,6 +915,7 @@ export class StudentsService {
   async getActivities(userId: string, limit = 10) {
     const activities = await prisma.activity.findMany({
       where: { userId },
+      include: ACTIVITY_ACTOR_INCLUDE,
       orderBy: { createdAt: 'desc' },
       take: limit,
     })

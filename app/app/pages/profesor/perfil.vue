@@ -120,6 +120,9 @@
         <div class="grid md:grid-cols-2 gap-4 md:gap-6">
           <!-- Left Column -->
           <div class="space-y-6">
+            <!-- Avatar de docente: con él lo reconocen en sus clases -->
+            <TeacherAvatarCard />
+
             <!-- Tema -->
             <Card type="settings">
               <div class="p-6">

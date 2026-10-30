@@ -3,6 +3,8 @@ import { ArrowDownTrayIcon } from '@heroicons/vue/24/outline'
 import { CheckCircleIcon } from '@heroicons/vue/24/solid'
 import { formatNotificationDate, formatNotificationTime } from '~/utils/notifications'
 import type { TeamColor, TeamEmblem } from '~/types/team.types'
+import { rewardAfterHints } from '~/utils/mission-hints'
+import { studentAvatarSeed } from '~/utils/avatar'
 
 interface Enigma {
   id: string
@@ -24,6 +26,8 @@ interface Submission {
   status: 'pendiente' | 'aprobada'
   /** En una misión por equipos, el equipo de quien entregó. */
   team?: { id: string; title: string; color: TeamColor | null; emblem: TeamEmblem | null } | null
+  /** % que restan sus pistas de % en lo que la misión le queda por pagar (0 sin ellas). */
+  hintPenalty?: number
   fileName?: string
   hasFile?: boolean
   fileSize?: number
@@ -130,15 +134,21 @@ const baseRewards = computed(() => {
   }
 })
 
-// Recompensas que recibirá el estudiante con el % seleccionado.
-const awarded = computed(() => {
-  const pct = (selectedPct.value || 0) / 100
+// Recompensas que recibirá cada estudiante con el % seleccionado y el descuento
+// de sus pistas, con la misma cuenta que la API.
+const awardedFor = (submission: Submission) => {
+  const pct = selectedPct.value || 0
+  const penalty = submission.hintPenalty ?? 0
   return {
-    xp: Math.round(baseRewards.value.xp * pct),
-    coins: Math.round(baseRewards.value.coins * pct),
-    mana: Math.round(baseRewards.value.mana * pct),
+    xp: rewardAfterHints(baseRewards.value.xp, pct, penalty),
+    coins: rewardAfterHints(baseRewards.value.coins, pct, penalty),
+    mana: rewardAfterHints(baseRewards.value.mana, pct, penalty),
   }
-})
+}
+
+/** Alguien del equipo de esta entrega recibirá menos por sus pistas. */
+const teamHasHintPenalty = (submission: Submission) =>
+  teamPending(submission).some(s => (s.hintPenalty ?? 0) > 0)
 
 // Mantener el porcentaje como entero entre 0 y 100.
 watch(selectedPct, val => {
@@ -169,20 +179,14 @@ const cancelEditing = () => {
 const handleApprove = async (submission: Submission) => {
   if (!props.enigma) return
 
-  // Capturar las recompensas antes de resetear el porcentaje.
-  const { xp: awardedXp, coins: awardedCoins, mana: awardedMana } = awarded.value
+  // Capturar el porcentaje antes de resetearlo. Las recompensas las decide la API.
   const pct = selectedPct.value
 
   try {
-    await $fetch(`${config.public.apiBase}/submissions/${submission.id}/approve`, {
-      method: 'POST',
-      body: {
-        xpAwarded: awardedXp,
-        coinsAwarded: awardedCoins,
-        manaAwarded: awardedMana,
-        percentage: pct,
-      },
-    })
+    const response = await $fetch<{ xpAwarded: number; hintPenalty?: number }>(
+      `${config.public.apiBase}/submissions/${submission.id}/approve`,
+      { method: 'POST', body: { percentage: pct } }
+    )
 
     // Mark as approved locally
     approvedIds.value.add(submission.id)
@@ -191,12 +195,25 @@ const handleApprove = async (submission: Submission) => {
     // Emit refresh to update parent
     emit('refresh')
 
-    toast.success(
-      t('common.toast.submission_student_approved', {
-        name: submission.student.name,
-        xp: awardedXp,
-      })
-    )
+    // La API aprueba con el descuento de ese momento: si ha usado otra pista de %
+    // con la ventana abierta, lo que ha recibido no es lo que se veía, y se dice.
+    const penalty = response.hintPenalty ?? 0
+    if (penalty !== (submission.hintPenalty ?? 0)) {
+      toast.info(
+        t('teacher.components.enigma_submissions_modal.penalty_changed', {
+          name: submission.student.name,
+          xp: response.xpAwarded,
+          count: penalty,
+        })
+      )
+    } else {
+      toast.success(
+        t('common.toast.submission_student_approved', {
+          name: submission.student.name,
+          xp: response.xpAwarded,
+        })
+      )
+    }
     // Feedback al profe por aprobar (sparkle + success).
     effects.play('enigma_approved')
   } catch (err: any) {
@@ -216,11 +233,18 @@ const handleApproveTeam = async (submission: Submission) => {
   const pct = selectedPct.value
   approvingTeam.value = true
   try {
-    const result = await $fetch<{ approved: { submissionId: string }[] }>(
-      `${config.public.apiBase}/submissions/${submission.id}/approve-team`,
-      { method: 'POST', body: { percentage: pct } }
-    )
+    // Lo que restaban las pistas de cada cual al abrir la ventana, para compararlo.
+    const shown = new Map(teamPending(submission).map(s => [s.id, s.hintPenalty ?? 0]))
+    const result = await $fetch<{
+      approved: { submissionId: string; hintPenalty?: number }[]
+    }>(`${config.public.apiBase}/submissions/${submission.id}/approve-team`, {
+      method: 'POST',
+      body: { percentage: pct },
+    })
     for (const a of result.approved) approvedIds.value.add(a.submissionId)
+    const penaltyChanged = result.approved.some(
+      a => shown.has(a.submissionId) && (a.hintPenalty ?? 0) !== shown.get(a.submissionId)
+    )
     cancelEditing()
     emit('refresh')
     toast.success(
@@ -230,6 +254,9 @@ const handleApproveTeam = async (submission: Submission) => {
         result.approved.length
       )
     )
+    if (penaltyChanged) {
+      toast.info(t('teacher.components.enigma_submissions_modal.team_penalty_changed'))
+    }
     effects.play('enigma_approved')
   } catch (err) {
     const message = (err as { data?: { message?: string } }).data?.message
@@ -244,15 +271,6 @@ const handleApproveTeam = async (submission: Submission) => {
 // «hace 2 horas» en el idioma de la interfaz; la fecha completa, al pasar por encima.
 const formatDate = (dateStr: string) => formatNotificationTime(dateStr, locale.value)
 const formatFullDate = (dateStr: string) => formatNotificationDate(dateStr, locale.value)
-
-const getInitials = (name: string) => {
-  return name
-    .split(' ')
-    .map(n => n[0])
-    .slice(0, 2)
-    .join('')
-    .toUpperCase()
-}
 
 // Modal open state
 const isOpen = computed(() => !!props.enigma)
@@ -351,24 +369,18 @@ watch(
           :key="submission.id"
           class="rounded-xl border border-gray-200 overflow-hidden bg-white hover:bg-gray-50 transition-colors"
         >
-          <!-- Student row -->
-          <div class="p-4 flex items-center gap-4">
+          <!-- Student row: en una ventana estrecha, las acciones bajan a su línea -->
+          <div class="p-4 flex flex-wrap items-center gap-x-4 gap-y-3">
             <!-- Avatar -->
-            <img
-              v-if="submission.student.avatar"
+            <Avatar
               :src="submission.student.avatar"
-              :alt="submission.student.name"
-              class="w-12 h-12 rounded-full object-contain flex-shrink-0 bg-gray-100"
+              :name="submission.student.name"
+              :seed="studentAvatarSeed(classId, submission.student.id)"
+              size="sm"
             />
-            <div
-              v-else
-              class="w-12 h-12 rounded-full flex items-center justify-center bg-purple/20 text-purple font-bold text-base flex-shrink-0"
-            >
-              {{ getInitials(submission.student.name) }}
-            </div>
 
             <!-- Info -->
-            <div class="flex-1 min-w-0">
+            <div class="flex-1 min-w-[9rem]">
               <p class="font-bold text-navy-700 text-base">{{ submission.student.name }}</p>
               <TeamBadge
                 v-if="submission.team"
@@ -378,6 +390,13 @@ watch(
                 size="sm"
                 class="mt-0.5 text-xs"
               />
+              <p v-if="submission.hintPenalty" class="text-xs font-medium text-navy-700">
+                {{
+                  t('teacher.components.enigma_submissions_modal.hint_penalty', {
+                    count: submission.hintPenalty,
+                  })
+                }}
+              </p>
               <time
                 class="text-xs text-navy-700/70 block"
                 :datetime="submission.submittedAt"
@@ -387,7 +406,7 @@ watch(
             </div>
 
             <!-- Actions -->
-            <div class="flex items-center gap-2 flex-shrink-0">
+            <div class="flex flex-wrap items-center justify-end gap-2 ml-auto">
               <Button
                 v-if="submission.hasFile"
                 variant="outline"
@@ -454,6 +473,14 @@ watch(
                   </div>
                 </div>
 
+                <!-- Aprobar a todo el equipo aplica a cada cual su descuento: se dice antes -->
+                <p
+                  v-if="teamPending(submission).length > 1 && teamHasHintPenalty(submission)"
+                  class="text-xs text-navy-700/80"
+                >
+                  {{ t('teacher.components.enigma_submissions_modal.team_hints_note') }}
+                </p>
+
                 <!-- Previsualización de recompensas + aprobar -->
                 <div class="flex items-center justify-between gap-3 flex-wrap">
                   <div class="flex items-center gap-2.5 text-sm">
@@ -464,19 +491,19 @@ watch(
                       v-if="showXp"
                       class="inline-flex items-center gap-1 font-semibold text-navy-700"
                     >
-                      <XpIcon class="w-4 h-4" />{{ awarded.xp }} XP
+                      <XpIcon class="w-4 h-4" />{{ awardedFor(submission).xp }} XP
                     </span>
                     <span
                       v-if="baseRewards.coins && showCoins"
                       class="inline-flex items-center gap-1 font-semibold text-navy-700"
                     >
-                      <CoinIcon class="w-4 h-4" />{{ awarded.coins }}
+                      <CoinIcon class="w-4 h-4" />{{ awardedFor(submission).coins }}
                     </span>
                     <span
                       v-if="baseRewards.mana && showMana"
                       class="inline-flex items-center gap-1 font-semibold text-navy-700"
                     >
-                      <ManaIcon class="w-4 h-4" />{{ awarded.mana }}
+                      <ManaIcon class="w-4 h-4" />{{ awardedFor(submission).mana }}
                     </span>
                   </div>
                   <div class="flex flex-wrap items-center gap-2">

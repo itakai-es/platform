@@ -173,9 +173,8 @@ export async function studentsRoutes(fastify: FastifyInstance) {
 
   fastify.get('/classes/:classId/missions', async (request: FastifyRequest<{ Params: { classId: string } }>, reply: FastifyReply) => {
     try {
-      const { id } = request.user as { id: string }
       const { classId } = request.params
-      const result = await studentsService.getClassMissions(id, classId)
+      const result = await studentsService.getClassMissions(request.user as RequestUser, classId)
       return result
     } catch (error) {
       if (error instanceof Error) {
