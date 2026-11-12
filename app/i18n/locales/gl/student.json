@@ -136,7 +136,6 @@
         "description": "Aínda non estás en ningunha clase. Pídelle o código ao teu profesorado para unirte."
       },
       "detail": {
-        "error_title": "Erro ao cargar a clase",
         "back_to_classes": "Volver ás miñas clases",
         "breadcrumb_classes": "As miñas clases",
         "teacher_fallback": "Docente",
@@ -266,6 +265,24 @@
           "optional": "opcional",
           "enigma_approved": "{percent} · {date}",
           "enigma_pending_since": "En revisión desde o {date}"
+        },
+        "errors": {
+          "archived": {
+            "title": "Esta clase xa non está dispoñible",
+            "description": "O profesorado arquivouna. As túas misións e o teu progreso non se perden."
+          },
+          "not_found": {
+            "title": "Non atopamos esta clase",
+            "description": "Pode que a ligazón non sexa correcta ou que xa non esteas nela."
+          },
+          "forbidden": {
+            "title": "Non estás nesta clase",
+            "description": "Se cres que é un erro, fala co profesorado."
+          },
+          "generic": {
+            "title": "Non se puido cargar a clase",
+            "description": "Téntao de novo nun momento."
+          }
         }
       }
     },

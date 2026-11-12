@@ -51,9 +51,10 @@
       </div>
     </div>
 
-    <!-- Las cifras, escritas: «Tú: 383», «Media: 430» -->
+    <!-- Las cifras, escritas: «Tú: 383», «Media: 430». Con la banda sola, la
+         propia sí: es suya; la media no viaja. -->
     <dl
-      v-if="average !== null"
+      v-if="average !== null || bandOnly"
       class="flex flex-wrap gap-x-5 gap-y-1 text-sm text-navy-700"
     >
       <div v-for="row in rows" :key="row.key" class="inline-flex items-center gap-1.5">
@@ -181,18 +182,15 @@ const track = computed(() => {
   }
 })
 
-const rows = computed(() => [
-  {
+const rows = computed(() => {
+  const subject = {
     key: 'subject',
     label: props.subjectLabel ?? t('common.charts.you'),
     display: display(props.you),
-  },
-  {
-    key: 'average',
-    label: averageName.value,
-    display: display(props.average ?? 0),
-  },
-])
+  }
+  if (props.average === null) return [subject]
+  return [subject, { key: 'average', label: averageName.value, display: display(props.average) }]
+})
 
 // common.charts.compare.{self,other}.{above,at,below}
 const sentence = computed(() =>

@@ -278,7 +278,9 @@ export class StudentsService {
 
     if (!enrollment) throw new Error('No estás en esta clase')
     // Clase archivada: el alumno pierde el acceso aunque conserve el link.
-    if (enrollment.class.archived) throw new Error('Esta clase está archivada y ya no está disponible')
+    if (enrollment.class.archived) {
+      throw new NotFoundError('Esta clase está archivada y ya no está disponible', 'CLASS_ARCHIVED')
+    }
 
     const cls = enrollment.class
     const { studentTypes: rankingTypes } = await loadRankingContext(classId)

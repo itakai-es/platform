@@ -136,7 +136,6 @@
         "description": "Entá nun tas en nenguna clase. Pidi'l códigu al to docente pa xunite."
       },
       "detail": {
-        "error_title": "Fallu al cargar la clase",
         "back_to_classes": "Volver a les mios clases",
         "breadcrumb_classes": "Les mios clases",
         "teacher_fallback": "Docente",
@@ -266,6 +265,24 @@
           "optional": "opcional",
           "enigma_approved": "{percent} · {date}",
           "enigma_pending_since": "En revisión dende el {date}"
+        },
+        "errors": {
+          "archived": {
+            "title": "Esta clase yá nun ta disponible",
+            "description": "El profesoráu archivóla. Les tos misiones y el to progresu nun se pierden."
+          },
+          "not_found": {
+            "title": "Nun alcontramos esta clase",
+            "description": "Pue que l'enllaz nun seya correutu o que yá nun teas nella."
+          },
+          "forbidden": {
+            "title": "Nun tas nesta clase",
+            "description": "Si crees que ye un fallu, fala col profesoráu."
+          },
+          "generic": {
+            "title": "Nun se pudo cargar la clase",
+            "description": "Vuelvi tentalo dientro d'un momentu."
+          }
         }
       }
     },

@@ -171,6 +171,7 @@ export async function studentsRoutes(fastify: FastifyInstance) {
       const cls = await studentsService.getClassById(id, classId)
       return { class: cls }
     } catch (error) {
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(404).send({ message: error.message })
       }

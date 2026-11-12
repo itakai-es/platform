@@ -136,7 +136,6 @@
         "description": "Encara no ets en cap classe. Demana el codi al teu docent per unir-t'hi."
       },
       "detail": {
-        "error_title": "Error en carregar la classe",
         "back_to_classes": "Tornar a les meves classes",
         "breadcrumb_classes": "Les meves classes",
         "teacher_fallback": "Docent",
@@ -266,6 +265,24 @@
           "optional": "opcional",
           "enigma_approved": "{percent} · {date}",
           "enigma_pending_since": "En revisió des del {date}"
+        },
+        "errors": {
+          "archived": {
+            "title": "Aquesta classe ja no està disponible",
+            "description": "El professorat l'ha arxivada. Les teves missions i el teu progrés no es perden."
+          },
+          "not_found": {
+            "title": "No trobem aquesta classe",
+            "description": "Pot ser que l'enllaç no sigui correcte o que ja no hi siguis."
+          },
+          "forbidden": {
+            "title": "No ets en aquesta classe",
+            "description": "Si creus que és un error, parla'n amb el professorat."
+          },
+          "generic": {
+            "title": "No s'ha pogut carregar la classe",
+            "description": "Torna-ho a provar d'aquí a un moment."
+          }
         }
       }
     },

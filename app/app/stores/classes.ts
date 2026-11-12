@@ -79,6 +79,8 @@ export const useClassesStore = defineStore('classes', () => {
   const isLoadingActivities = ref(false)
   const isJoining = ref(false)
   const error = ref<string | null>(null)
+  /** De qué tipo es el último fallo al abrir una clase del alumnado, para decirlo en su idioma. */
+  const classErrorKind = ref<'archived' | 'not_found' | 'forbidden' | 'generic' | null>(null)
 
   // Cache flags (persist during session)
   const hasLoadedClasses = ref(false)
@@ -173,6 +175,7 @@ export const useClassesStore = defineStore('classes', () => {
     try {
       isLoadingClass.value = true
       error.value = null
+      classErrorKind.value = null
 
       const config = useRuntimeConfig()
       const response = await $fetch<{ class: ClassWithExtras }>(
@@ -194,9 +197,18 @@ export const useClassesStore = defineStore('classes', () => {
     } catch (err: any) {
       console.error('Error fetching student class by id:', err)
 
-      if (err?.status === 404 || err?.statusCode === 404) {
+      const status = err?.status ?? err?.statusCode
+      classErrorKind.value =
+        err?.data?.code === 'CLASS_ARCHIVED'
+          ? 'archived'
+          : status === 404
+            ? 'not_found'
+            : status === 403
+              ? 'forbidden'
+              : 'generic'
+      if (status === 404) {
         error.value = 'No se encontró la clase'
-      } else if (err?.status === 403 || err?.statusCode === 403) {
+      } else if (status === 403) {
         error.value = 'No estás en esta clase'
       } else {
         error.value = 'Error al cargar la clase'
@@ -571,6 +583,7 @@ export const useClassesStore = defineStore('classes', () => {
     isLoading,
     isLoadingClasses,
     isLoadingClass,
+    classErrorKind,
     isLoadingClassMissions,
     isLoadingGuide,
     isLoadingActivities,

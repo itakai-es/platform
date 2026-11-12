@@ -16,8 +16,8 @@
     <EmptyState
       v-else-if="error"
       :icon="ExclamationTriangleIcon"
-      :title="t('student.classes.detail.error_title')"
-      :description="error"
+      :title="t(`student.classes.detail.errors.${classErrorKind ?? 'generic'}.title`)"
+      :description="t(`student.classes.detail.errors.${classErrorKind ?? 'generic'}.description`)"
     >
       <template #action>
         <NuxtLink to="/alumno/clases">
@@ -146,7 +146,7 @@ const {
   loadAll,
 } = detail
 
-const { isLoadingClass, error } = storeToRefs(classesStore)
+const { isLoadingClass, error, classErrorKind } = storeToRefs(classesStore)
 const { showLevelUpModal, levelUpData } = storeToRefs(classGamificationStore)
 
 // Días y horas de la clase, junto al nombre de quien la imparte.
