@@ -13,6 +13,7 @@
       <NuxtLink
         v-if="!isTeacherMode && status !== 'bloqueada'"
         :to="missionLink"
+        :aria-label="title"
         class="absolute inset-0 z-20"
       />
       <!-- Bloqueada: sin enlace, pero se alcanza con el teclado y dice por qué -->

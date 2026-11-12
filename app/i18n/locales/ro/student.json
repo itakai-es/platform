@@ -184,7 +184,8 @@
           "how_others_see": "Așa te văd ceilalți în această clasă",
           "nickname_empty": "Scrie o poreclă: este numele cu care te vede clasa ta.",
           "nickname_taken": "Altcineva din clasa ta are deja această poreclă. Încearcă alta.",
-          "nickname_invalid": "Porecla trebuie să aibă între 1 și {max} caractere, cu cel puțin o literă sau o cifră."
+          "nickname_invalid": "Porecla trebuie să aibă între 1 și {max} caractere, cu cel puțin o literă sau o cifră.",
+          "nickname_reserved": "Porecla aceasta nu se poate folosi: alege una care să nu fie „Estudiante” și nici numele altei persoane din clasa ta."
         },
         "mission_no_description": "Fără descriere",
         "shop": {
@@ -422,7 +423,7 @@
         "missions_suffix": "misiuni",
         "you_badge": "Tu",
         "avg_xp": "XP mediu",
-        "avg_progress": "Progres mediu",
+        "avg_progress": "Progres mediu (enigme obligatorii)",
         "avg_missions": "Misiuni în medie",
         "total_xp": "XP total al clasei",
         "podium_empty": "Încă nimeni nu are XP. Podiumul se va umple de îndată ce cineva câștigă XP.",
@@ -442,8 +443,9 @@
       "class_xp_bar": {
         "rank": "Clasament",
         "level_line": "Nivelul {level} · {title}",
-        "xp_line": "{current}/{required} XP",
-        "rank_of": "Locul {rank} din {total}"
+        "rank_of": "Locul {rank} din {total}",
+        "xp_to_next": "Mai e {count} XP până la nivelul {level} | Mai sunt {count} XP până la nivelul {level}",
+        "max_level": "Nivel maxim"
       }
     },
     "teams": {

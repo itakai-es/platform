@@ -184,7 +184,8 @@
           "how_others_see": "How others see you in this class",
           "nickname_empty": "Enter a nickname: it's the name your class sees you by.",
           "nickname_taken": "Someone else in your class already has that nickname. Try another one.",
-          "nickname_invalid": "Your nickname must be 1 to {max} characters long and include a letter or number."
+          "nickname_invalid": "Your nickname must be 1 to {max} characters long and include a letter or number.",
+          "nickname_reserved": "You can't use that nickname: choose one that isn't “Estudiante” or the name of someone else in your class."
         },
         "mission_no_description": "No description",
         "shop": {
@@ -422,7 +423,7 @@
         "missions_suffix": "missions",
         "you_badge": "You",
         "avg_xp": "Average XP",
-        "avg_progress": "Average progress",
+        "avg_progress": "Average progress (required enigmas)",
         "avg_missions": "Average missions",
         "total_xp": "Total class XP",
         "podium_empty": "Nobody has XP yet. The podium will fill up as soon as someone earns some.",
@@ -442,8 +443,9 @@
       "class_xp_bar": {
         "rank": "Ranking",
         "level_line": "Level {level} · {title}",
-        "xp_line": "{current}/{required} XP",
-        "rank_of": "Position {rank} of {total}"
+        "rank_of": "Position {rank} of {total}",
+        "xp_to_next": "{count} XP to level {level} | {count} XP to level {level}",
+        "max_level": "Maximum level"
       }
     },
     "teams": {

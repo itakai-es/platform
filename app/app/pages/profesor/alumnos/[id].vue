@@ -91,7 +91,9 @@
       <CardGrid cols="tiles">
         <StatTile
           size="sm"
-          :label="t('teacher.students.detail.stat_classes')"
+          :label="
+            t('teacher.students.detail.stat_classes', {}, student.stats.totalClasses)
+          "
           :value="student.stats.totalClasses"
         />
         <StatTile

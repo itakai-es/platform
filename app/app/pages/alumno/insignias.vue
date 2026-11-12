@@ -116,16 +116,12 @@
               </div>
 
               <!-- Rarity badge -->
-              <span
-                class="px-3 py-1 rounded-full text-xs font-semibold mb-3"
-                :class="
-                  selectedBadge.unlocked
-                    ? getRarityClasses(selectedBadge.rarity)
-                    : 'bg-gray-100 text-gray-400'
-                "
-              >
-                {{ getRarityLabel(selectedBadge.rarity) }}
-              </span>
+              <BadgeRarityPill
+                :rarity="selectedBadge.rarity"
+                :unlocked="selectedBadge.unlocked"
+                size="sm"
+                class="mb-3"
+              />
 
               <!-- Name -->
               <h2 class="text-lg xs:text-xl font-bold text-navy-700 mb-2">
@@ -360,26 +356,6 @@ const formatDate = (dateStr: string | null) => {
     month: 'short',
     year: 'numeric',
   })
-}
-
-const getRarityClasses = (rarity: string) => {
-  const classes: Record<string, string> = {
-    common: 'bg-gray-200 text-gray-700',
-    rare: 'bg-sky-100 text-sky-700',
-    epic: 'bg-violet-100 text-violet-700',
-    legendary: 'bg-amber-100 text-amber-800',
-  }
-  return classes[rarity] || classes.common
-}
-
-const getRarityLabel = (rarity: string) => {
-  const labels: Record<string, string> = {
-    common: t('student.achievements.rarity.common'),
-    rare: t('student.achievements.rarity.rare'),
-    epic: t('student.achievements.rarity.epic'),
-    legendary: t('student.achievements.rarity.legendary'),
-  }
-  return labels[rarity] || t('student.achievements.rarity.common')
 }
 
 // Lifecycle

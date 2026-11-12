@@ -25,7 +25,9 @@ import type {
   AdminTemplateFilters,
   PaginatedTemplatesResponse,
   AdminListQuery,
+  AdminAnalyticsPeriod,
   AnalyticsData,
+  ServiceHealthEntry,
 } from '~/types/admin.types'
 import type { AccountDeletionCheck } from '~/types/profile.types'
 import type { ManagedCredentials } from '~/types/auth.types'
@@ -98,9 +100,14 @@ export const useAdminStore = defineStore('admin', () => {
   const isLoadingSettings = ref(false)
   const isSavingSettings = ref(false)
 
-  // Analytics state
-  const analytics = ref<AnalyticsData | null>(null)
-  const isLoadingAnalytics = ref(false)
+  // Estadísticas: lo de cada periodo por separado (volver a uno ya visto lo enseña
+  // al momento y nunca el de otro) y, aparte, el estado de los servicios, que tarda
+  // más (sondea la IA) y no tiene por qué frenar el resto.
+  const analyticsByPeriod = ref<Partial<Record<AdminAnalyticsPeriod, AnalyticsData>>>({})
+  const analyticsFailed = ref<Partial<Record<AdminAnalyticsPeriod, boolean>>>({})
+  const analyticsRequests = new Map<AdminAnalyticsPeriod, Promise<AnalyticsData | null>>()
+  const analyticsServices = ref<ServiceHealthEntry[] | null>(null)
+  const analyticsServicesFailed = ref(false)
 
   // Loading states
   const isLoadingStats = ref(true)
@@ -124,9 +131,7 @@ export const useAdminStore = defineStore('admin', () => {
   const hasLoadedSettings = ref(false)
   const hasLoadedAllClasses = ref(false)
   const hasLoadedAllMissions = ref(false)
-  const hasLoadedAnalytics = ref(false)
   const hasLoadedServices = ref(false)
-  const loadedAnalyticsPeriods = ref<Map<string, boolean>>(new Map())
   const loadedActivityPeriods = ref<Map<string, boolean>>(new Map())
   // Hash-based caches: clave = JSON.stringify de los filtros normalizados.
   // Permite cache fino para vistas con multiples filtros (registros).
@@ -825,31 +830,50 @@ export const useAdminStore = defineStore('admin', () => {
   // Analytics Actions
   // =========================================================================
 
-  async function fetchAnalytics(period: 'week' | 'month' | 'quarter' = 'month') {
+  /** Las estadísticas de un periodo. null si no han llegado (y queda apuntado el fallo). */
+  async function fetchAnalytics(period: AdminAnalyticsPeriod = 'month') {
+    analyticsFailed.value = { ...analyticsFailed.value, [period]: false }
     try {
-      isLoadingAnalytics.value = true
-      error.value = null
       const config = useRuntimeConfig()
       const response = await $fetch<{ analytics: AnalyticsData }>(
         `${config.public.apiBase}/admin/analytics?period=${period}`
       )
-      analytics.value = response.analytics
-      hasLoadedAnalytics.value = true
-      loadedAnalyticsPeriods.value.set(period, true)
+      analyticsByPeriod.value = { ...analyticsByPeriod.value, [period]: response.analytics }
       return response.analytics
     } catch (err: unknown) {
-      error.value = (err as Error).message || 'Error al cargar las analíticas'
       console.error('Error fetching analytics:', err)
-      throw err
-    } finally {
-      isLoadingAnalytics.value = false
+      analyticsFailed.value = { ...analyticsFailed.value, [period]: true }
+      return null
     }
   }
 
-  async function ensureAnalytics(period: 'week' | 'month' | 'quarter' = 'month', force = false) {
-    if (loadedAnalyticsPeriods.value.get(period) && !force) return analytics.value
-    if (isLoadingAnalytics.value) return analytics.value
-    return await fetchAnalytics(period)
+  /**
+   * Las de un periodo, si aún no están (o con `force`). Si ya se están pidiendo, la
+   * misma petición: cambiar de periodo a mitad de una no deja el otro sin pedir.
+   */
+  function ensureAnalytics(period: AdminAnalyticsPeriod = 'month', force = false) {
+    const loaded = analyticsByPeriod.value[period]
+    if (loaded && !force) return Promise.resolve(loaded)
+    const pending = analyticsRequests.get(period)
+    if (pending) return pending
+    const request = fetchAnalytics(period).finally(() => analyticsRequests.delete(period))
+    analyticsRequests.set(period, request)
+    return request
+  }
+
+  /** El estado de cada servicio, ahora mismo (cada vez que se pide: es en vivo). */
+  async function fetchAnalyticsServices() {
+    analyticsServicesFailed.value = false
+    try {
+      const config = useRuntimeConfig()
+      const response = await $fetch<{ services: ServiceHealthEntry[] }>(
+        `${config.public.apiBase}/admin/analytics/services`
+      )
+      analyticsServices.value = response.services
+    } catch (err: unknown) {
+      console.error('Error fetching service health:', err)
+      analyticsServicesFailed.value = true
+    }
   }
 
   // =========================================================================
@@ -880,7 +904,10 @@ export const useAdminStore = defineStore('admin', () => {
     isLoadingTemplates.value = false
     hasLoadedTemplates.value = false
     settings.value = null
-    analytics.value = null
+    analyticsByPeriod.value = {}
+    analyticsFailed.value = {}
+    analyticsServices.value = null
+    analyticsServicesFailed.value = false
     selectedUser.value = null
     totalUsers.value = 0
     currentPage.value = 1
@@ -906,7 +933,6 @@ export const useAdminStore = defineStore('admin', () => {
     isLoadingClasses.value = false
     isLoadingMissions.value = false
     isLoadingSettings.value = false
-    isLoadingAnalytics.value = false
     isPerformingUserAction.value = false
     isSavingSettings.value = false
     error.value = null
@@ -918,9 +944,7 @@ export const useAdminStore = defineStore('admin', () => {
     hasLoadedSettings.value = false
     hasLoadedAllClasses.value = false
     hasLoadedAllMissions.value = false
-    hasLoadedAnalytics.value = false
     hasLoadedServices.value = false
-    loadedAnalyticsPeriods.value = new Map()
     loadedActivityPeriods.value = new Map()
     loadedActivityLogHashes.value = new Map()
     loadedSystemLogHashes.value = new Map()
@@ -936,7 +960,10 @@ export const useAdminStore = defineStore('admin', () => {
     classes,
     missions,
     settings,
-    analytics,
+    analyticsByPeriod,
+    analyticsFailed,
+    analyticsServices,
+    analyticsServicesFailed,
     selectedUser,
     // Pagination
     totalUsers,
@@ -971,7 +998,6 @@ export const useAdminStore = defineStore('admin', () => {
     isLoadingClasses,
     isLoadingMissions,
     isLoadingSettings,
-    isLoadingAnalytics,
     isPerformingUserAction,
     isSavingSettings,
     // Error
@@ -984,9 +1010,7 @@ export const useAdminStore = defineStore('admin', () => {
     hasLoadedSettings,
     hasLoadedAllClasses,
     hasLoadedAllMissions,
-    hasLoadedAnalytics,
     hasLoadedServices,
-    loadedAnalyticsPeriods,
     loadedActivityPeriods,
     loadedActivityLogHashes,
     loadedSystemLogHashes,
@@ -1012,6 +1036,7 @@ export const useAdminStore = defineStore('admin', () => {
     purgeTrashedClass,
     fetchAllMissions,
     fetchAnalytics,
+    fetchAnalyticsServices,
     // Actions (ensureX - patron canonico con cache)
     ensureStats,
     ensureUsers,

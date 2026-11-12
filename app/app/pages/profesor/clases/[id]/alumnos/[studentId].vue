@@ -61,17 +61,10 @@
                   title: student.level.title,
                 })
               }}
-              <span
-                v-if="student.level.requiredXp > 0"
-                class="text-sm font-medium tabular-nums text-navy-700/80"
-                >·
-                {{
-                  t('student.components.class_xp_bar.xp_line', {
-                    current: formatNumber(student.level.currentXp),
-                    required: formatNumber(student.level.requiredXp),
-                  })
-                }}</span
-              >
+            </p>
+            <!-- Lo que le falta para el siguiente («Faltan 301 XP para el nivel 5») -->
+            <p v-if="student.level" class="mt-0.5 text-sm font-medium tabular-nums text-navy-700/80">
+              {{ levelXpText(student.level) }}
             </p>
             <p
               v-if="attendanceLine"
@@ -326,12 +319,13 @@ definePageMeta({ layout: 'teacher', middleware: ['auth', 'role'] })
 
 const { t, locale } = useI18n()
 const { formatNumber, formatPercent } = useNumberFormat()
+const levelXpText = useLevelXpText()
 const route = useRoute()
 const classId = computed(() => route.params.id as string)
 const studentId = computed(() => route.params.studentId as string)
 
 const { state: classState, can, classSettings } = useTeacherClassDetail(classId)
-const { period } = useAnalyticsPeriod()
+const { period } = useAnalyticsPeriod({ syncUrl: true })
 
 const {
   analytics,

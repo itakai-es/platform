@@ -212,6 +212,16 @@ export function formatWeekShort(week: string, code: string): string {
   return dateFormatter(code, { day: 'numeric', month: 'short' }, true).format(dayToDate(week))
 }
 
+/** «oct», para el pie de la columna de un mes (`AAAA-MM-01`). */
+export function formatMonthShort(day: string, code: string): string {
+  return dateFormatter(code, { month: 'short' }, true).format(dayToDate(day))
+}
+
+/** «octubre de 2026», el mes entero, para la tabla y el lector de pantalla. */
+export function formatMonthLong(day: string, code: string): string {
+  return dateFormatter(code, { month: 'long', year: 'numeric' }, true).format(dayToDate(day))
+}
+
 /** «14 de octubre de 2026», para la tabla y el lector de pantalla. */
 export function formatDayLong(day: string, code: string): string {
   return dateFormatter(code, { dateStyle: 'long' }, true).format(dayToDate(day))

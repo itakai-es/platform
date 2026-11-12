@@ -6,8 +6,14 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 
-const { studentNodeState, teacherNodeState, mapProgress, currentNodeId, classMapProgress } =
-  await import('http://localhost:4000/_nuxt/utils/mission-map.ts')
+const {
+  studentNodeState,
+  missionStarted,
+  teacherNodeState,
+  mapProgress,
+  currentNodeId,
+  classMapProgress,
+} = await import('http://localhost:4000/_nuxt/utils/mission-map.ts')
 const { ringFraction } = await import('http://localhost:4000/_nuxt/utils/progress-ring.ts')
 const { avatarStack } = await import('http://localhost:4000/_nuxt/utils/avatar.ts')
 
@@ -33,6 +39,27 @@ test('quien lleva solo un opcional ya ha empezado, aunque su % de obligatorios s
     studentNodeState({ status: 'activa', progress: 0, progressDetail: { extraDone: 0 } }),
     'available'
   )
+})
+
+test('«en curso» es lo que dice la API con `started`, como el Resumen, aunque lleve un 0 %', () => {
+  // Una entrega por revisar o una pista: empezada, sin nada aprobado.
+  assert.equal(studentNodeState({ status: 'activa', started: true, progress: 0 }), 'in_progress')
+  assert.equal(studentNodeState({ status: 'activa', started: false, progress: 0 }), 'available')
+  // `started` manda también sobre el progreso.
+  assert.equal(studentNodeState({ status: 'activa', started: false, progress: 50 }), 'available')
+  // Los demás estados no cambian por haberla empezado.
+  assert.equal(studentNodeState({ status: 'urgente', started: true }), 'urgent')
+  assert.equal(studentNodeState({ status: 'completada', started: true }), 'completed')
+  assert.equal(studentNodeState({ status: 'bloqueada', started: true }), 'locked')
+})
+
+test('empezada: con `started`, lo que diga; sin él, por su progreso u opcionales', () => {
+  assert.equal(missionStarted({ started: true, progress: 0 }), true)
+  assert.equal(missionStarted({ started: false, progress: 30 }), false)
+  assert.equal(missionStarted({ progress: 30 }), true)
+  assert.equal(missionStarted({ progress: 0, progressDetail: { extraDone: 1 } }), true)
+  assert.equal(missionStarted({ progress: 0 }), false)
+  assert.equal(missionStarted({}), false)
 })
 
 test('el del profesorado sigue al filtro de estado: completada es de todo el alumnado', () => {

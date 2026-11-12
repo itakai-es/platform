@@ -185,7 +185,9 @@
           "audience_top": "El teu alumnat veu: les {n} primeres posicions i la seva.",
           "audience_position": "El teu alumnat veu: només la seva posició.",
           "audience_teams": "El teu alumnat veu: tots els equips.",
-          "audience_type_off": "El teu alumnat no veu aquest tipus de rànquing: s'activa a Funcionalitats."
+          "audience_type_off": "El teu alumnat no veu aquest tipus de rànquing: s'activa a Funcionalitats.",
+          "not_entered_title": "Encara no hi ha ningú al rànquing",
+          "not_entered_description": "Els comptes que encara no han entrat no surten al rànquing. Hi sortiran quan entrin per primera vegada."
         },
         "missions_tab": {
           "no_missions_title": "No hi ha missions",
@@ -432,7 +434,9 @@
             "background_error": "No s'ha pogut generar la imatge"
           },
           "features": {
-            "title": "Funcionalitats"
+            "title": "Funcionalitats",
+            "closed_archived": "La classe està arxivada: desarxiva-la per canviar-ne les funcionalitats i el rànquing.",
+            "closed_trash": "La classe és a la paperera: restaura-la per canviar-ne les funcionalitats i el rànquing."
           },
           "management": {
             "title": "Gestió",
@@ -493,7 +497,7 @@
               },
               "missions": {
                 "label": "Missions completades",
-                "desc": "Premia acabar missions. També per setmana i per temporada; en els empats decideix l'XP."
+                "desc": "Premia acabar missions. També per setmana i per temporada. Si el tipus XP també està activat, en els empats decideix l'XP."
               },
               "teams": {
                 "label": "Equips",
@@ -1062,7 +1066,12 @@
         "btn_saving": "Desant...",
         "btn_save_changes": "Desar canvis",
         "btn_create": "Crear insígnia",
-        "no_mission": "Sense missió"
+        "no_mission": "Sense missió",
+        "copy_name": "{name} (còpia)",
+        "label_mission": "Missió associada",
+        "btn_upload_image": "Puja una imatge",
+        "btn_generate": "Generar amb IA",
+        "btn_generating": "Generant..."
       },
       "detail": {
         "btn_close": "Tancar",
@@ -1079,7 +1088,8 @@
         "name_required": "El nom és obligatori",
         "name_min_length": "El nom ha de tenir almenys 3 caràcters",
         "image_size": "La imatge no pot superar 2MB",
-        "image_type": "Només es permeten fitxers PNG, JPG, SVG o WebP"
+        "image_type": "Només es permeten fitxers PNG, JPG, SVG o WebP",
+        "image_required": "La imatge és obligatòria. Puja'n una o genera-la amb IA."
       },
       "meta": {
         "title": "Les meves insígnies | ITAKAI Docent",
@@ -1094,7 +1104,10 @@
         "system": "Insígnies d'ITAKAI",
         "system_hint": "Es concedeixen soles segons el progrés de l'alumnat i no es poden editar. Obre-les per veure com s'aconsegueixen o crear-ne una de semblant."
       },
-      "filter_all": "Totes les insígnies"
+      "filter_all": "Totes les insígnies",
+      "search_placeholder": "Cercar insígnies...",
+      "no_results_title": "Sense resultats",
+      "no_results_description": "No hi ha insígnies amb aquests filtres"
     },
     "students": {
       "index": {
@@ -1133,7 +1146,7 @@
         "error_title": "Error en carregar la fitxa d'estudiant",
         "error_default": "Error en carregar les dades de la fitxa",
         "btn_retry": "Reintentar",
-        "stat_classes": "Classes",
+        "stat_classes": "Classe | Classes",
         "enrolled_classes_title": "Classes inscrites",
         "enrolled_classes_count": "Sense classes | 1 classe | {count} classes",
         "not_enrolled": "No és en cap de les teves classes",
@@ -1189,7 +1202,8 @@
         "avatar_summary": "En desar, {name} passa a portar {avatar} en aquesta classe.",
         "avatar_summary_generated": "En desar, {name} passa a portar {avatar} en aquesta classe, i la imatge que va generar amb IA s'esborra.",
         "avatar_saved": "Avatar canviat",
-        "avatar_error": "No s'ha pogut canviar l'avatar."
+        "avatar_error": "No s'ha pogut canviar l'avatar.",
+        "nickname_reserved": "Aquest àlies no es pot fer servir: tria'n un que no sigui «Estudiante» ni el nom d'una altra persona de la classe."
       }
     },
     "ai_assistant": {
@@ -1443,7 +1457,7 @@
         },
         "btn_close": "Tancar",
         "completed_by_students": "Estudiants que l'han completada",
-        "required_average": "Mitjana d'enigmes obligatoris aprovats: {percent}",
+        "required_average": "Enigmes obligatoris aprovats: {percent} de mitjana",
         "edit_enigma_named": "Editar l'enigma «{title}»",
         "enigma_actions": "Més accions de l'enigma «{title}»",
         "edit_document_named": "Editar el document «{title}»",
@@ -1612,7 +1626,9 @@
       "cancel": "Cancel·la",
       "done": "Fet",
       "wizard_question_schedule": "Posa-li un horari a la teva classe",
-      "wizard_question_cover": "Ara, una portada per a la teva classe"
+      "wizard_question_cover": "Ara, una portada per a la teva classe",
+      "time_start": "Hora d'inici",
+      "time_end": "Hora de final"
     },
     "roulette": {
       "meta": {
@@ -1907,7 +1923,7 @@
       },
       "summary": {
         "avg_missions": "Missions de mitjana",
-        "avg_percent": "Progrés mitjà",
+        "avg_percent": "Progrés mitjà (enigmes obligatoris)",
         "pending_link": "Anar a Missions",
         "attendance": "Assistència mitjana",
         "attendance_sessions": "{count} sessió en aquest període | {count} sessions en aquest període",
@@ -1917,10 +1933,10 @@
       },
       "missions": {
         "title": "Missions",
-        "caption": "On és cada estudiant ara mateix: no canvia amb el període. La mitjana d'aprovació i les pistes de la taula sí que són del període.",
+        "caption": "On és cada estudiant ara mateix: no canvia amb el període. La nota mitjana del que s'ha aprovat i les pistes de la taula sí que són del període.",
         "table_caption": "Quantes persones hi ha en cada estat, a cada missió",
         "col_mission": "Missió",
-        "col_average": "Mitjana d'aprovació",
+        "col_average": "Nota mitjana del que s'ha aprovat",
         "col_hints": "Pistes",
         "deadline_future": "Venç el {date}",
         "deadline_past": "Va vèncer el {date}",
@@ -1943,7 +1959,7 @@
           "mission_expired_many": "{count} missions expirades sense completar; la darrera, «{mission}», va vèncer el {date}",
           "low_grade": "Va aprovar «{enigma}» («{mission}») amb un {percent}, menys del {threshold}",
           "low_grade_many": "{count} enigmes aprovats amb menys del {threshold}; el més baix, «{enigma}», amb un {percent}",
-          "low_average": "Mitjana d'aprovació del {average} en {approvals} enigma, menys del {threshold} | Mitjana d'aprovació del {average} en {approvals} enigmes, menys del {threshold}",
+          "low_average": "Nota mitjana del que s'ha aprovat: {average} en {approvals} enigma, menys del {threshold} | Nota mitjana del que s'ha aprovat: {average} en {approvals} enigmes, menys del {threshold}",
           "hints": "Va fer servir {count} pista a «{mission}» | Va fer servir {count} pistes a «{mission}»",
           "hints_percent": "Va fer servir {count} pista a «{mission}» ({detail}) | Va fer servir {count} pistes a «{mission}» ({detail})",
           "hints_many": "Moltes pistes en {count} missions; la que més, «{mission}», amb {hints}",
@@ -1952,7 +1968,7 @@
         },
         "mission": {
           "unfinished_after_deadline": "{unfinished} de {started} que la van començar no la van completar abans de la data ({percent})",
-          "low_average": "Mitjana d'aprovació del {average} en {approvals} enigma aprovat, menys del {threshold} | Mitjana d'aprovació del {average} en {approvals} enigmes aprovats, menys del {threshold}",
+          "low_average": "Nota mitjana del que s'ha aprovat: {average} en {approvals} enigma aprovat, menys del {threshold} | Nota mitjana del que s'ha aprovat: {average} en {approvals} enigmes aprovats, menys del {threshold}",
           "many_hints": "{perStudent} pistes de mitjana per estudiant que la va començar",
           "students_expired": "{count} persona sense completar-la després de la data | {count} persones sense completar-la després de la data"
         }
@@ -2018,7 +2034,7 @@
           "deadline_past": "va vèncer el {date}",
           "deadline_future": "venç el {date}",
           "enigmas": "{approved} de {total} enigma aprovat | {approved} de {total} enigmes aprovats",
-          "average": "mitjana del {value}",
+          "average": "nota mitjana del que s'ha aprovat: {value}",
           "hints": "{count} pista | {count} pistes",
           "pending_reviews": "{count} lliurament per revisar | {count} lliuraments per revisar",
           "enigma_approved": "{percent} · {date}",

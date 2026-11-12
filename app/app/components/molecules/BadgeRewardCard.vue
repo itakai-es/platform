@@ -23,33 +23,13 @@ interface Emits {
   (e: 'click'): void
 }
 
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
   unlocked: false,
   loadingImage: false,
   loadingName: false,
 })
 
 defineEmits<Emits>()
-
-const getRarityClasses = (rarity?: string) => {
-  const classes: Record<string, string> = {
-    common: 'bg-gray-200 text-gray-700',
-    rare: 'bg-sky-100 text-sky-700',
-    epic: 'bg-violet-100 text-violet-700',
-    legendary: 'bg-amber-100 text-amber-800',
-  }
-  return classes[rarity || 'common'] || classes.common
-}
-
-const getRarityLabel = (rarity?: string) => {
-  const labels: Record<string, string> = {
-    common: 'Común',
-    rare: 'Rara',
-    epic: 'Épica',
-    legendary: 'Legendaria',
-  }
-  return labels[rarity || 'common'] || 'Común'
-}
 </script>
 
 <template>
@@ -104,13 +84,8 @@ const getRarityLabel = (rarity?: string) => {
         {{ badge.name }}
       </h4>
 
-      <!-- Rarity Badge -->
-      <span
-        class="px-3 py-1 rounded-full text-sm font-medium"
-        :class="unlocked ? getRarityClasses(badge.rarity) : 'bg-gray-100 text-gray-400'"
-      >
-        {{ getRarityLabel(badge.rarity) }}
-      </span>
+      <!-- Su rareza, en el idioma de la app -->
+      <BadgeRarityPill :rarity="badge.rarity" :unlocked="unlocked" />
     </div>
   </button>
 </template>

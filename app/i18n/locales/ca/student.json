@@ -184,7 +184,8 @@
           "how_others_see": "Així et veuen en aquesta classe",
           "nickname_empty": "Escriu un àlies: és el nom amb què et veu la teva classe.",
           "nickname_taken": "Aquest àlies ja el té una altra persona de la teva classe. Prova'n un altre.",
-          "nickname_invalid": "L'àlies ha de tenir d'1 a {max} caràcters, amb alguna lletra o número."
+          "nickname_invalid": "L'àlies ha de tenir d'1 a {max} caràcters, amb alguna lletra o número.",
+          "nickname_reserved": "Aquest àlies no es pot fer servir: tria'n un que no sigui «Estudiante» ni el nom d'una altra persona de la teva classe."
         },
         "mission_no_description": "Sense descripció",
         "shop": {
@@ -422,7 +423,7 @@
         "missions_suffix": "missions",
         "you_badge": "Tu",
         "avg_xp": "XP mitjana",
-        "avg_progress": "Progrés mitjà",
+        "avg_progress": "Progrés mitjà (enigmes obligatoris)",
         "avg_missions": "Missions de mitjana",
         "total_xp": "XP total classe",
         "podium_empty": "Encara ningú no té XP. El podi s'omplirà quan algú n'aconsegueixi.",
@@ -442,8 +443,9 @@
       "class_xp_bar": {
         "rank": "Rànquing",
         "level_line": "Nivell {level} · {title}",
-        "xp_line": "{current}/{required} XP",
-        "rank_of": "Posició {rank} de {total}"
+        "rank_of": "Posició {rank} de {total}",
+        "xp_to_next": "Falta {count} XP per al nivell {level} | Falten {count} XP per al nivell {level}",
+        "max_level": "Nivell màxim"
       }
     },
     "teams": {

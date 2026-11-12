@@ -219,7 +219,6 @@
       },
       "ai": {
         "total_conversations": "Conversations since the start",
-        "avg_conversations_user": "Conv. per user since the start",
         "total_messages": "Messages in the period"
       },
       "table": {
@@ -240,6 +239,12 @@
         "absolute": "{diff} compared with the previous period",
         "percent": "{percent} compared with the previous period",
         "points": "{diff} point compared with the previous period | {diff} points compared with the previous period"
+      },
+      "no_role": "No role",
+      "services": {
+        "database": "Database",
+        "ai_text": "AI (text)",
+        "ai_image": "AI (images)"
       }
     },
     "logs": {

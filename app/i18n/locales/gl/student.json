@@ -184,7 +184,8 @@
           "how_others_see": "Así te ven nesta clase",
           "nickname_empty": "Escribe un alcume: é o nome co que te ve a túa clase.",
           "nickname_taken": "Ese alcume xa o ten outra persoa da túa clase. Proba con outro.",
-          "nickname_invalid": "O alcume ten que ter de 1 a {max} caracteres, con algunha letra ou número."
+          "nickname_invalid": "O alcume ten que ter de 1 a {max} caracteres, con algunha letra ou número.",
+          "nickname_reserved": "Ese alcume non se pode usar: escolle un que non sexa «Estudiante» nin o nome doutra persoa da túa clase."
         },
         "mission_no_description": "Sen descrición",
         "shop": {
@@ -422,7 +423,7 @@
         "missions_suffix": "misións",
         "you_badge": "Ti",
         "avg_xp": "XP media",
-        "avg_progress": "Progreso medio",
+        "avg_progress": "Progreso medio (enigmas obrigatorios)",
         "avg_missions": "Misións de media",
         "total_xp": "XP total clase",
         "podium_empty": "Aínda ninguén ten XP. O podio encherase en canto alguén a consiga.",
@@ -442,8 +443,9 @@
       "class_xp_bar": {
         "rank": "Ranking",
         "level_line": "Nivel {level} · {title}",
-        "xp_line": "{current}/{required} XP",
-        "rank_of": "Posto {rank} de {total}"
+        "rank_of": "Posto {rank} de {total}",
+        "xp_to_next": "Falta {count} XP para o nivel {level} | Faltan {count} XP para o nivel {level}",
+        "max_level": "Nivel máximo"
       }
     },
     "teams": {

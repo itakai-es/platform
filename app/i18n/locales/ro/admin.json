@@ -214,7 +214,6 @@
       },
       "ai": {
         "total_conversations": "Conversații de la început",
-        "avg_conversations_user": "Conv. pe cont de la început",
         "total_messages": "Mesaje din perioadă"
       },
       "system": {
@@ -240,6 +239,12 @@
         "absolute": "{diff} față de perioada anterioară",
         "percent": "{percent} față de perioada anterioară",
         "points": "{diff} punct față de perioada anterioară | {diff} puncte față de perioada anterioară"
+      },
+      "no_role": "Fără rol",
+      "services": {
+        "database": "Baza de date",
+        "ai_text": "IA (text)",
+        "ai_image": "IA (imagini)"
       }
     },
     "logs": {

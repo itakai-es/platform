@@ -214,7 +214,6 @@
       },
       "ai": {
         "total_conversations": "Conversaciones dende l'aniciu",
-        "avg_conversations_user": "Conv. por cuenta dende l'aniciu",
         "total_messages": "Mensaxes del periodu"
       },
       "system": {
@@ -240,6 +239,12 @@
         "absolute": "{diff} respeuto al periodu anterior",
         "percent": "{percent} respeuto al periodu anterior",
         "points": "{diff} puntu respeuto al periodu anterior | {diff} puntos respeuto al periodu anterior"
+      },
+      "no_role": "Ensin rol",
+      "services": {
+        "database": "Base de datos",
+        "ai_text": "IA (testu)",
+        "ai_image": "IA (imáxenes)"
       }
     },
     "logs": {

@@ -97,13 +97,19 @@ export interface ClassRanking extends RankingBase {
   podium: RankingStudent[]
   /** El resto que se puede ver y, al final, quien aún no ha sumado nada (`rank` null). */
   leaderboard: RankingStudent[]
-  /** Solo en la clasificación completa y de «Siempre». */
-  stats: ClassRankingStats | null
+  /**
+   * Solo en la del profesorado, en la clasificación completa y de «Siempre». Al
+   * alumnado no le llega: tiene «Tú y tu clase» (`comparison`).
+   */
+  stats?: ClassRankingStats | null
   /** Cuántas personas cuentan en la clase. */
   total: number
   /** Solo en la del alumnado: su propia fila, salga o no en la lista. */
   me?: RankingStudent | null
-  /** Solo en la del alumnado, en `top` y `position`: «Tú y tu clase», si está encendida. */
+  /**
+   * Solo en la del alumnado, en cualquier modo: «Tú y tu clase» (lo mismo que en su
+   * Resumen); null si la clase tiene la comparación apagada.
+   */
   comparison?: AnonymousComparison | null
 }
 

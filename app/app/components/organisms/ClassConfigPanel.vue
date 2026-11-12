@@ -147,6 +147,9 @@
 
     <!-- Section: Funcionalidades -->
     <div v-else-if="activeSection === 'features'" class="space-y-6">
+      <!-- Archivada o en la papelera: se ven, pero no se cambian (la API lo
+           rechaza); el nombre, la portada, el horario y los niveles, sí -->
+      <InfoNote v-if="closedNote">{{ closedNote }}</InfoNote>
       <!-- Column-major en sm+ con 5 filas auto: las 5 primeras van a la columna
            izquierda (el ranking, la comparación y los módulos) y las 5 últimas a la
            derecha (los recursos y los sonidos). -->
@@ -163,7 +166,7 @@
             <template #action="{ labelId, descriptionId }">
               <Toggle
                 :model-value="localSettings[flag]"
-                :disabled="!canEditSettings || isBlocked(flag)"
+                :disabled="!canEditFeatures || isBlocked(flag)"
                 :aria-labelledby="labelId"
                 :aria-describedby="descriptionId"
                 @update:model-value="setFlag(flag, $event)"
@@ -180,7 +183,7 @@
             <template #action="{ labelId, descriptionId }">
               <Toggle
                 :model-value="compareOn"
-                :disabled="!canEditSettings"
+                :disabled="!canEditFeatures"
                 :aria-labelledby="labelId"
                 :aria-describedby="descriptionId"
                 @update:model-value="setCompare"
@@ -196,8 +199,8 @@
         :class-id="classId"
         :settings="localSettings"
         :config="localRanking"
-        :can-edit="canEditSettings"
-        :can-start-season="can('class.startSeason')"
+        :can-edit="canEditFeatures"
+        :can-start-season="can('class.startSeason') && !closedNote"
         @update="onRankingUpdate"
       />
 
@@ -226,7 +229,7 @@
             <template #action="{ labelId, descriptionId }">
               <Toggle
                 :model-value="localSettings[flag]"
-                :disabled="!canEditSettings"
+                :disabled="!canEditFeatures"
                 :aria-labelledby="labelId"
                 :aria-describedby="descriptionId"
                 @update:model-value="setFlag(flag, $event)"
@@ -402,6 +405,8 @@ const props = defineProps<{
     isTemplate?: boolean | null
     invitationCode?: string
     settings?: Partial<ClassSettings> | null
+    archived?: boolean
+    deletedAt?: string | null
     levelConfig?: LevelConfig | null
     rankingConfig?: unknown
     scheduleConfig?: ScheduleConfig | ScheduleConfig[] | null
@@ -435,6 +440,17 @@ const config = useRuntimeConfig()
 const { can } = useClassPermissions(() => props.access)
 const canEditContent = computed(() => can('class.editContent'))
 const canEditSettings = computed(() => can('class.editSettings'))
+
+/**
+ * Archivada o en la papelera: sus funcionalidades y su ranking no se cambian (la API
+ * responde 409) y se dice por qué. El resto de ajustes sí.
+ */
+const closedNote = computed(() => {
+  if (props.classData?.deletedAt) return t('teacher.classes.detail.settings.features.closed_trash')
+  if (props.classData?.archived) return t('teacher.classes.detail.settings.features.closed_archived')
+  return ''
+})
+const canEditFeatures = computed(() => canEditSettings.value && !closedNote.value)
 
 // --------- Sub-navegación (pills) ---------
 type SectionId = 'general' | 'features' | 'levels' | 'management' | 'teachers'
@@ -901,7 +917,7 @@ async function setFlag(flag: keyof ClassSettings, value: boolean) {
   } catch (err: unknown) {
     localSettings.value = prev
     localRanking.value = previousRanking
-    toast.error(rankingSaveError(err))
+    toast.error(rankingSaveError(err, undefined, 'features'))
   }
 }
 

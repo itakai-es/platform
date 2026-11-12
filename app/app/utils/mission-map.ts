@@ -85,10 +85,15 @@ export interface MissionMapItem {
 /**
  * El de una misión para el alumnado, a partir del estado que da la API
  * (getMissionStatus: completada > bloqueada > expirada > urgente > activa) y
- * de su progreso.
+ * de si la ha empezado.
+ *
+ * «En curso» es lo que dice la API con `started` (lo mismo que su Resumen: una
+ * entrega por revisar o una pista ya cuentan, aunque no lleve nada aprobado). Si
+ * no llega, se deduce de su progreso.
  */
 export function studentNodeState(mission: {
   status: string
+  started?: boolean
   progress?: number
   progressDetail?: { extraDone?: number }
 }): MapNodeState {
@@ -102,11 +107,22 @@ export function studentNodeState(mission: {
     case 'urgente':
       return 'urgent'
     default:
-      // El % es de los obligatorios: quien lleva un opcional también ha empezado.
-      return (mission.progress ?? 0) > 0 || (mission.progressDetail?.extraDone ?? 0) > 0
-        ? 'in_progress'
-        : 'available'
+      return missionStarted(mission) ? 'in_progress' : 'available'
   }
+}
+
+/**
+ * Si el alumnado ha empezado una misión: `started` de la API y, si no llega, su
+ * progreso (el % es de los obligatorios: quien lleva un opcional también ha
+ * empezado). Decide «En curso» y que el botón diga «Continuar» y no «Empezar».
+ */
+export function missionStarted(mission: {
+  started?: boolean
+  progress?: number
+  progressDetail?: { extraDone?: number }
+}): boolean {
+  if (typeof mission.started === 'boolean') return mission.started
+  return (mission.progress ?? 0) > 0 || (mission.progressDetail?.extraDone ?? 0) > 0
 }
 
 /**

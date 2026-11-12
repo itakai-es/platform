@@ -1,7 +1,9 @@
 <template>
   <div class="space-y-6">
-    <!-- Podio (salvo en «solo tu puesto», donde la API no lo manda) y a su lado las
-         medias o, en los modos que recortan, el puesto y la comparación de quien mira -->
+    <!-- Podio (salvo en «solo tu puesto», donde la API no lo manda) y a su lado: al
+         profesorado, las medias de la clase; al alumnado, «Tú y tu clase» (la misma
+         comparación que en su Resumen, si la clase la tiene encendida) y, en los
+         modos que recortan, también su puesto. -->
     <div :class="['grid grid-cols-1 gap-4 xl:gap-6', twoColumns ? 'xl:grid-cols-2' : '']">
       <RankingPodium
         v-if="mode !== 'position'"
@@ -42,9 +44,15 @@
           v-if="comparison"
           :comparison="comparison"
           :flex="mode === 'position'"
-          :you="me ? { src: me.avatar, name: me.username, color: me.avatarColor } : null"
+          :you="compareAvatar"
         />
       </div>
+      <ClassCompareCard
+        v-else-if="comparison"
+        :comparison="comparison"
+        flex
+        :you="compareAvatar"
+      />
     </div>
 
     <RankingList
@@ -102,14 +110,18 @@ const me = computed(() => props.rankingData.me ?? null)
 const podium = computed(() => props.rankingData.podium ?? [])
 const leaderboard = computed(() => props.rankingData.leaderboard ?? [])
 
+/** La vista del profesorado: solo a él le dice la API qué ve su alumnado. */
+const forTeacher = computed(() => !!props.rankingData.options.audience)
+
 /**
- * Las medias: solo en la clasificación completa de «Siempre». La XP, si la clase la
- * usa y llega (no llega con el tipo XP apagado), y el progreso, solo al profesorado:
- * la API ya no se lo manda al alumnado.
+ * Las medias de la clase: solo al profesorado y solo en la clasificación completa
+ * de «Siempre». La XP, si la clase la usa y llega (no llega con el tipo XP apagado).
+ * El alumnado no las ve en ningún modo: su media es la de «Tú y tu clase» (la del
+ * resto de la clase, redondeada), la misma que en su Resumen, y no dos distintas.
  */
 const statItems = computed(() => {
   const s = props.rankingData.stats
-  if (!s) return []
+  if (!s || !forTeacher.value) return []
   const usesXp = props.rankingData.options.usesXp
   return [
     ...(usesXp && typeof s.avgXp === 'number'
@@ -146,16 +158,24 @@ const statItems = computed(() => {
   ]
 })
 
-/** «Tú y tu clase», si la API la manda y hay algo que comparar. */
+/**
+ * «Tú y tu clase», si la API la manda (en cualquier modo; null con la comparación
+ * apagada) y hay algo que comparar. Solo al alumnado.
+ */
 const comparison = computed(() => {
   const value = props.rankingData.comparison
-  return value && value.metrics.length > 0 ? value : null
+  return !forTeacher.value && value && value.metrics.length > 0 ? value : null
 })
+
+/** Su avatar, que marca su sitio en cada pista de «Tú y tu clase». */
+const compareAvatar = computed(() =>
+  me.value ? { src: me.value.avatar, name: me.value.username, color: me.value.avatarColor } : null
+)
 
 const twoColumns = computed(() =>
   mode.value === 'position'
     ? comparison.value !== null
-    : statItems.value.length > 0 || mode.value === 'top'
+    : statItems.value.length > 0 || mode.value === 'top' || comparison.value !== null
 )
 
 /** El sufijo de lo que depende del periodo (`_week`, `_season`); nada en «Siempre». */

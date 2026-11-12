@@ -369,23 +369,35 @@ export interface PaginatedSystemLogsResponse {
 // Analytics
 // =============================================================================
 
+/** Los periodos de las estadísticas de la instancia. */
+export type AdminAnalyticsPeriod = 'week' | 'month' | 'quarter'
+
+/**
+ * Un elemento de un reparto: su clave estable (el rol, el estado o la rareza de
+ * una misión, el id de un asistente) y su cifra, con su % sobre el total del
+ * reparto. Sin etiqueta ni color: la pantalla los pone en el idioma y la paleta
+ * de quien mira.
+ */
 export interface AnalyticsMetric {
-  label: string
+  key: string
   value: number
-  percentage?: number
-  color?: string
+  percentage: number
 }
 
+/** Un tramo de una serie: el día de Madrid en que empieza (`AAAA-MM-DD`) y su cifra. */
 export interface TimeSeriesPoint {
-  label: string
+  start: string
   value: number
 }
+
+/** Los servicios que se comprueban en las estadísticas (`GET /admin/analytics/services`). */
+export type ServiceKey = 'database' | 'ai_text' | 'ai_image'
 
 export interface ServiceHealthEntry {
-  name: string
+  key: ServiceKey
   status: 'operational' | 'degraded' | 'down'
-  /** Lo que ha tardado en responder ahora mismo a la comprobación. */
-  latencyMs: number
+  /** Lo que ha tardado en responder ahora mismo su comprobación; null si no se midió. */
+  latencyMs: number | null
 }
 
 /** Una cifra del periodo y la del periodo anterior, de la misma duración. */
@@ -413,9 +425,9 @@ export interface AnalyticsData {
     diskUsage: number
     diskUsedGB: number
     diskTotalGB: number
-    dbLatency: number
+    /** null si la base no ha respondido. */
+    dbLatency: number | null
   }
-  serviceHealth: ServiceHealthEntry[]
   // Series del periodo
   newUsersSeries: TimeSeriesPoint[]
   activitySeries: TimeSeriesPoint[]
@@ -423,7 +435,6 @@ export interface AnalyticsData {
   aiUsage: {
     totalMessages: number
     totalConversations: number
-    avgConversationsPerUser: number
     messagesByAssistant: AnalyticsMetric[]
     messagesSeries: TimeSeriesPoint[]
   }

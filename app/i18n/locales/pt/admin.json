@@ -214,7 +214,6 @@
       },
       "ai": {
         "total_conversations": "Conversas desde o início",
-        "avg_conversations_user": "Conv. por conta desde o início",
         "total_messages": "Mensagens do período"
       },
       "system": {
@@ -240,6 +239,12 @@
         "absolute": "{diff} em relação ao período anterior",
         "percent": "{percent} em relação ao período anterior",
         "points": "{diff} ponto em relação ao período anterior | {diff} pontos em relação ao período anterior"
+      },
+      "no_role": "Sem função",
+      "services": {
+        "database": "Base de dados",
+        "ai_text": "IA (texto)",
+        "ai_image": "IA (imagens)"
       }
     },
     "logs": {

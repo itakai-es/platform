@@ -97,6 +97,9 @@ const missions = computed(() =>
     status: (m.status as MissionStatus) || 'activa',
     rarity: (m.rarity as MissionRarity) || 'comun',
     progress: (m.progress as number) || 0,
+    // Si la ha empezado (una entrega, aunque esté por revisar, o una pista): el
+    // «En curso» del mapa, el mismo que en su Resumen.
+    started: m.started as boolean | undefined,
     // La fecha límite de verdad: con ella se ordena «Fecha» y la ve la tarjeta.
     deadline: (m.deadline as string | null | undefined) ?? null,
     orderIndex: m.orderIndex as number | undefined,

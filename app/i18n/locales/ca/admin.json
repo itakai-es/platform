@@ -219,7 +219,6 @@
       },
       "ai": {
         "total_conversations": "Converses des de l'inici",
-        "avg_conversations_user": "Conv. per compte des de l'inici",
         "total_messages": "Missatges del període"
       },
       "table": {
@@ -240,6 +239,12 @@
         "absolute": "{diff} respecte al període anterior",
         "percent": "{percent} respecte al període anterior",
         "points": "{diff} punt respecte al període anterior | {diff} punts respecte al període anterior"
+      },
+      "no_role": "Sense rol",
+      "services": {
+        "database": "Base de dades",
+        "ai_text": "IA (text)",
+        "ai_image": "IA (imatges)"
       }
     },
     "logs": {

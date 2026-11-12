@@ -184,7 +184,8 @@
           "how_others_see": "É assim que te veem nesta turma",
           "nickname_empty": "Escreve uma alcunha: é o nome com que a tua turma te vê.",
           "nickname_taken": "Essa alcunha já é de outra pessoa da tua turma. Experimenta outra.",
-          "nickname_invalid": "A alcunha tem de ter de 1 a {max} caracteres, com alguma letra ou número."
+          "nickname_invalid": "A alcunha tem de ter de 1 a {max} caracteres, com alguma letra ou número.",
+          "nickname_reserved": "Essa alcunha não pode ser usada: escolhe uma que não seja «Estudiante» nem o nome de outra pessoa da tua turma."
         },
         "mission_no_description": "Sem descrição",
         "shop": {
@@ -422,7 +423,7 @@
         "missions_suffix": "missões",
         "you_badge": "Tu",
         "avg_xp": "XP média",
-        "avg_progress": "Progresso médio",
+        "avg_progress": "Progresso médio (enigmas obrigatórios)",
         "avg_missions": "Missões em média",
         "total_xp": "XP total da turma",
         "podium_empty": "Ainda ninguém tem XP. O pódio enche-se assim que alguém a conseguir.",
@@ -442,8 +443,9 @@
       "class_xp_bar": {
         "rank": "Ranking",
         "level_line": "Nível {level} · {title}",
-        "xp_line": "{current}/{required} XP",
-        "rank_of": "Posição {rank} de {total}"
+        "rank_of": "Posição {rank} de {total}",
+        "xp_to_next": "Falta {count} XP para o nível {level} | Faltam {count} XP para o nível {level}",
+        "max_level": "Nível máximo"
       }
     },
     "teams": {

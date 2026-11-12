@@ -118,12 +118,10 @@
               </div>
               <div class="bg-navy-700/5 rounded-xl py-2.5 px-2">
                 <div class="flex items-center justify-center gap-1">
-                  <TrophyIcon class="w-4 h-4 text-navy-700" />
+                  <TrophyIcon class="w-4 h-4 text-navy-700" aria-hidden="true" />
+                  <!-- Las que ha conseguido (también las de ITAKAI), sin «de cuántas» -->
                   <p class="text-lg font-bold text-navy-700">
-                    {{ student.totalBadgesEarned
-                    }}<span class="text-navy-700/70 font-normal"
-                      >/{{ student.totalBadgesAvailable }}</span
-                    >
+                    {{ formatNumber(student.totalBadgesEarned) }}
                   </p>
                 </div>
                 <p class="text-xs text-navy-700/70 uppercase tracking-wide">
@@ -169,7 +167,7 @@ import { accountIdentifier } from '~/utils/identity'
 import type { Student, StudentListSort, StudentProgressRange } from '~/types/teacher.types'
 
 const { t } = useI18n()
-const { formatCompactNumber } = useNumberFormat()
+const { formatCompactNumber, formatNumber } = useNumberFormat()
 
 /** «4 de 7 misiones»: N son las que cuentan (con enigmas y sin bloquear a mano). */
 const missionsText = (student: Student) =>

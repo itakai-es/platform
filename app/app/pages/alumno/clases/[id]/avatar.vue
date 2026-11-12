@@ -231,6 +231,8 @@ const NICKNAME_MAX = 20
 function saveErrorMessage(err: unknown) {
   const code = (err as { data?: { code?: string } })?.data?.code
   if (code === 'NICKNAME_TAKEN') return t('student.classes.detail.avatar_tab.nickname_taken')
+  // «Estudiante» o el nombre real de otra persona de la clase: la confundirían con ella
+  if (code === 'NICKNAME_RESERVED') return t('student.classes.detail.avatar_tab.nickname_reserved')
   if (code === 'INVALID_NICKNAME') {
     return t('student.classes.detail.avatar_tab.nickname_invalid', { max: NICKNAME_MAX })
   }

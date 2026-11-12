@@ -26,6 +26,8 @@ export interface MapMissionInput {
   title: string
   status: string
   deadline?: string | null
+  /** Alumnado: si la ha empezado (una entrega, aunque esté por revisar, o una pista). */
+  started?: boolean
   /** Alumnado: su % en la misión (de sus enigmas obligatorios). */
   progress?: number
   /** Alumnado: cuántos opcionales lleva: con alguno, ya la ha empezado. */

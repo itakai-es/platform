@@ -184,7 +184,8 @@
           "how_others_see": "Honela ikusten zaituzte klase honetan",
           "nickname_empty": "Idatzi ezizen bat: zure klaseak izen horrekin ikusten zaitu.",
           "nickname_taken": "Zure klaseko beste norbaitek badu ezizen hori. Saiatu beste batekin.",
-          "nickname_invalid": "Ezizenak 1 eta {max} karaktere artean izan behar ditu, letraren bat edo zenbakiren bat barne."
+          "nickname_invalid": "Ezizenak 1 eta {max} karaktere artean izan behar ditu, letraren bat edo zenbakiren bat barne.",
+          "nickname_reserved": "Ezizen hori ezin da erabili: aukeratu «Estudiante» edo zure klaseko beste norbaiten izena ez den bat."
         },
         "mission_no_description": "Deskribapenik gabe",
         "shop": {
@@ -422,7 +423,7 @@
         "missions_suffix": "misio",
         "you_badge": "Zu",
         "avg_xp": "Batez besteko XP",
-        "avg_progress": "Batez besteko aurrerapena",
+        "avg_progress": "Batez besteko aurrerapena (nahitaezko enigmak)",
         "avg_missions": "Misioen batez bestekoa",
         "total_xp": "Klaseko guztirako XP",
         "podium_empty": "Oraindik inork ez du XPrik. Norbaitek lortu bezain laster beteko da podiuma.",
@@ -442,8 +443,9 @@
       "class_xp_bar": {
         "rank": "Rankinga",
         "level_line": "{level}. maila · {title}",
-        "xp_line": "{current}/{required} XP",
-        "rank_of": "{rank}. postua, guztira {total}"
+        "rank_of": "{rank}. postua, guztira {total}",
+        "xp_to_next": "{count} XP falta da {level}. mailarako | {count} XP falta dira {level}. mailarako",
+        "max_level": "Gehienezko maila"
       }
     },
     "teams": {

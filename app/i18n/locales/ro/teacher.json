@@ -185,7 +185,9 @@
           "audience_top": "Elevii tăi văd: primele {n} locuri și locul propriu.",
           "audience_position": "Elevii tăi văd: doar locul propriu.",
           "audience_teams": "Elevii tăi văd: toate echipele.",
-          "audience_type_off": "Elevii tăi nu văd acest tip de clasament: se activează în Funcționalități."
+          "audience_type_off": "Elevii tăi nu văd acest tip de clasament: se activează în Funcționalități.",
+          "not_entered_title": "Încă nu e nimeni în clasament",
+          "not_entered_description": "Conturile care încă nu au intrat nu apar în clasament. Vor apărea când intră pentru prima dată."
         },
         "missions_tab": {
           "no_missions_title": "Nu există misiuni",
@@ -432,7 +434,9 @@
             "background_error": "Imaginea nu a putut fi generată"
           },
           "features": {
-            "title": "Funcționalități"
+            "title": "Funcționalități",
+            "closed_archived": "Clasa este arhivată: dezarhiveaz-o pentru a-i schimba funcționalitățile și clasamentul.",
+            "closed_trash": "Clasa este în coșul de gunoi: restaureaz-o pentru a-i schimba funcționalitățile și clasamentul."
           },
           "management": {
             "title": "Administrare",
@@ -493,7 +497,7 @@
               },
               "missions": {
                 "label": "Misiuni finalizate",
-                "desc": "Răsplătește finalizarea misiunilor. Și pe săptămână, și pe sezon; la egalitate decide XP."
+                "desc": "Răsplătește finalizarea misiunilor. Și pe săptămână, și pe sezon. Dacă e activat și tipul XP, la egalitate decide XP."
               },
               "teams": {
                 "label": "Echipe",
@@ -1062,7 +1066,12 @@
         "btn_saving": "Se salvează...",
         "btn_save_changes": "Salvează modificările",
         "btn_create": "Creează insigna",
-        "no_mission": "Fără misiune"
+        "no_mission": "Fără misiune",
+        "copy_name": "{name} (copie)",
+        "label_mission": "Misiunea asociată",
+        "btn_upload_image": "Încarcă imagine",
+        "btn_generate": "Generează cu IA",
+        "btn_generating": "Se generează..."
       },
       "detail": {
         "btn_close": "Închide",
@@ -1079,7 +1088,8 @@
         "name_required": "Numele este obligatoriu",
         "name_min_length": "Numele trebuie să aibă cel puțin 3 caractere",
         "image_size": "Imaginea nu poate depăși 2 MB",
-        "image_type": "Sunt acceptate doar fișiere PNG, JPG, SVG sau WebP"
+        "image_type": "Sunt acceptate doar fișiere PNG, JPG, SVG sau WebP",
+        "image_required": "Imaginea este obligatorie. Încarcă una sau generează-o cu IA."
       },
       "meta": {
         "title": "Insignele mele | ITAKAI Cadru didactic",
@@ -1094,7 +1104,10 @@
         "system": "Insignele ITAKAI",
         "system_hint": "Se acordă automat după progresul din clasă și nu pot fi editate. Deschide-le ca să vezi cum se obțin sau ca să creezi una asemănătoare."
       },
-      "filter_all": "Toate insignele"
+      "filter_all": "Toate insignele",
+      "search_placeholder": "Caută insigne...",
+      "no_results_title": "Fără rezultate",
+      "no_results_description": "Nu există insigne cu aceste filtre"
     },
     "students": {
       "index": {
@@ -1133,7 +1146,7 @@
         "error_title": "Eroare la încărcarea fișei",
         "error_default": "Eroare la încărcarea datelor din fișă",
         "btn_retry": "Reîncearcă",
-        "stat_classes": "Clase",
+        "stat_classes": "Clasă | Clase",
         "enrolled_classes_title": "Clase din care face parte",
         "enrolled_classes_count": "Nicio clasă | 1 clasă | {count} clase",
         "not_enrolled": "Nu face parte din niciuna dintre clasele tale",
@@ -1189,7 +1202,8 @@
         "avatar_summary": "La salvare, {name} va apărea ca {avatar} în această clasă.",
         "avatar_summary_generated": "La salvare, {name} va apărea ca {avatar} în această clasă, iar imaginea generată cu IA se șterge.",
         "avatar_saved": "Avatarul a fost schimbat",
-        "avatar_error": "Avatarul nu a putut fi schimbat."
+        "avatar_error": "Avatarul nu a putut fi schimbat.",
+        "nickname_reserved": "Porecla aceasta nu se poate folosi: alege una care să nu fie „Estudiante” și nici numele altei persoane din clasă."
       }
     },
     "ai_assistant": {
@@ -1443,7 +1457,7 @@
         },
         "btn_close": "Închide",
         "completed_by_students": "Elevi care au finalizat-o",
-        "required_average": "Media enigmelor obligatorii aprobate: {percent}",
+        "required_average": "Enigme obligatorii aprobate: {percent} în medie",
         "edit_enigma_named": "Editează enigma „{title}”",
         "enigma_actions": "Mai multe acțiuni pentru enigma „{title}”",
         "edit_document_named": "Editează documentul „{title}”",
@@ -1612,7 +1626,9 @@
       "cancel": "Anulează",
       "done": "Gata",
       "wizard_question_schedule": "Stabilește un orar pentru clasa ta",
-      "wizard_question_cover": "Acum, o copertă pentru clasa ta"
+      "wizard_question_cover": "Acum, o copertă pentru clasa ta",
+      "time_start": "Ora de început",
+      "time_end": "Ora de sfârșit"
     },
     "roulette": {
       "meta": {
@@ -1907,7 +1923,7 @@
       },
       "summary": {
         "avg_missions": "Misiuni în medie",
-        "avg_percent": "Progres mediu",
+        "avg_percent": "Progres mediu (enigme obligatorii)",
         "pending_link": "Mergi la Misiuni",
         "attendance": "Prezență medie",
         "attendance_sessions": "{count} sesiune în această perioadă | {count} sesiuni în această perioadă",
@@ -1917,10 +1933,10 @@
       },
       "missions": {
         "title": "Misiuni",
-        "caption": "Unde se află fiecare persoană acum: nu se schimbă cu perioada. Media de aprobare și indiciile din tabel țin de perioadă.",
+        "caption": "Unde se află fiecare persoană acum: nu se schimbă cu perioada. Nota medie a ce s-a aprobat și indiciile din tabel țin de perioadă.",
         "table_caption": "Câte persoane sunt în fiecare stare, pe misiuni",
         "col_mission": "Misiune",
-        "col_average": "Media de aprobare",
+        "col_average": "Nota medie a ce s-a aprobat",
         "col_hints": "Indicii",
         "deadline_future": "Expiră pe {date}",
         "deadline_past": "A expirat pe {date}",
@@ -1943,7 +1959,7 @@
           "mission_expired_many": "{count} misiuni expirate nefinalizate; ultima, „{mission}”, a expirat pe {date}",
           "low_grade": "„{enigma}” („{mission}”) aprobată cu {percent}, sub {threshold}",
           "low_grade_many": "{count} enigme aprobate sub {threshold}; cea mai slabă, „{enigma}”, cu {percent}",
-          "low_average": "Media de aprobare de {average} la {approvals} enigmă, sub {threshold} | Media de aprobare de {average} la {approvals} enigme, sub {threshold}",
+          "low_average": "Nota medie a ce s-a aprobat: {average} la {approvals} enigmă, sub {threshold} | Nota medie a ce s-a aprobat: {average} la {approvals} enigme, sub {threshold}",
           "hints": "A folosit {count} indiciu în „{mission}” | A folosit {count} indicii în „{mission}”",
           "hints_percent": "A folosit {count} indiciu în „{mission}” ({detail}) | A folosit {count} indicii în „{mission}” ({detail})",
           "hints_many": "Multe indicii în {count} misiuni; cele mai multe în „{mission}”, {hints}",
@@ -1952,7 +1968,7 @@
         },
         "mission": {
           "unfinished_after_deadline": "{unfinished} din {started} care au început-o nu au finalizat-o până la termen ({percent})",
-          "low_average": "Media de aprobare de {average} la {approvals} enigmă aprobată, sub {threshold} | Media de aprobare de {average} la {approvals} enigme aprobate, sub {threshold}",
+          "low_average": "Nota medie a ce s-a aprobat: {average} la {approvals} enigmă aprobată, sub {threshold} | Nota medie a ce s-a aprobat: {average} la {approvals} enigme aprobate, sub {threshold}",
           "many_hints": "{perStudent} indicii în medie pentru fiecare persoană care a început-o",
           "students_expired": "{count} persoană nu a finalizat-o până la termen | {count} persoane nu au finalizat-o până la termen"
         }
@@ -2018,7 +2034,7 @@
           "deadline_past": "a expirat pe {date}",
           "deadline_future": "expiră pe {date}",
           "enigmas": "{approved} din {total} enigmă aprobată | {approved} din {total} enigme aprobate",
-          "average": "media {value}",
+          "average": "nota medie a ce s-a aprobat: {value}",
           "hints": "{count} indiciu | {count} indicii",
           "pending_reviews": "{count} lucrare de verificat | {count} lucrări de verificat",
           "enigma_approved": "{percent} · {date}",

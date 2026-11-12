@@ -184,7 +184,8 @@
           "how_others_see": "Asina te ven nesta clase",
           "nickname_empty": "Escribi un nomatu: ye'l nome col que te ve la to clase.",
           "nickname_taken": "Esi nomatu yá lu tien otra persona de la to clase. Prueba con otru.",
-          "nickname_invalid": "El nomatu tien que tener d'1 a {max} caráuteres, con dalguna lletra o númberu."
+          "nickname_invalid": "El nomatu tien que tener d'1 a {max} caráuteres, con dalguna lletra o númberu.",
+          "nickname_reserved": "Esi nomatu nun se pue usar: escueyi ún que nun sea «Estudiante» nin el nome d'otra persona de la to clase."
         },
         "mission_no_description": "Ensin descripción",
         "shop": {
@@ -422,7 +423,7 @@
         "missions_suffix": "misiones",
         "you_badge": "Tu",
         "avg_xp": "XP media",
-        "avg_progress": "Progresu mediu",
+        "avg_progress": "Progresu mediu (enigmes obligatorios)",
         "avg_missions": "Misiones de media",
         "total_xp": "XP total de la clase",
         "podium_empty": "Inda naide tien XP. El podiu va enllenase en cuantes que dalguién la consiga.",
@@ -442,8 +443,9 @@
       "class_xp_bar": {
         "rank": "Clasificación",
         "level_line": "Nivel {level} · {title}",
-        "xp_line": "{current}/{required} XP",
-        "rank_of": "Puestu {rank} de {total}"
+        "rank_of": "Puestu {rank} de {total}",
+        "xp_to_next": "Falta {count} XP pal nivel {level} | Falten {count} XP pal nivel {level}",
+        "max_level": "Nivel máximu"
       }
     },
     "teams": {

@@ -16,7 +16,7 @@
       :search="searchQuery"
       :sort="selectedOrigin"
       :results-count="filteredBadges.length"
-      search-placeholder="Buscar insignias..."
+      :search-placeholder="t('teacher.badges.search_placeholder')"
       :sort-options="originOptions"
       :has-active-filters="selectedRarities.length > 0"
       :active-filter-count="selectedRarities.length"
@@ -29,8 +29,8 @@
         <MultiSelectDropdown
           v-model="selectedRarities"
           :options="rarityOptions"
-          all-label="Todas las rarezas"
-          plural-label="rarezas"
+          :all-label="t('teacher.components.mission_filter_bar.all_rarities')"
+          :plural-label="t('teacher.components.mission_filter_bar.plural_rarities')"
           class="sm:w-auto"
         />
       </template>
@@ -97,8 +97,8 @@
     <EmptyState
       v-else
       :icon="TrophyIcon"
-      title="Sin resultados"
-      description="No se encontraron insignias con esos filtros"
+      :title="t('teacher.badges.no_results_title')"
+      :description="t('teacher.badges.no_results_description')"
     />
 
     <!-- Detalle de una insignia que no se puede editar: por qué, cómo se gana
@@ -119,14 +119,14 @@
           <TrophyIcon class="w-16 h-16 text-purple" aria-hidden="true" />
         </div>
 
-        <span
-          class="px-3 py-1 rounded-full text-xs font-semibold mb-3"
-          :class="getRarityClasses(detailBadge.rarity)"
-        >
-          {{ getRarityLabel(detailBadge.rarity) }}
-        </span>
+        <BadgeRarityPill :rarity="detailBadge.rarity" size="sm" class="mb-3" />
 
-        <p v-if="detailBadge.description" class="text-sm text-navy-700/70 mb-4">
+        <!-- La de ITAKAI no lleva su descripción: dice cómo se gana, lo mismo que la
+             nota de debajo, que va en el idioma de la app -->
+        <p
+          v-if="detailBadge.description && !detailBadge.isSystem"
+          class="text-sm text-navy-700/70 mb-4"
+        >
           {{ detailBadge.description }}
         </p>
 
@@ -162,15 +162,17 @@
           <!-- Mission selector -->
           <div>
             <label class="block text-sm font-medium text-navy-700 mb-1.5">
-              Misión asociada
-              <span class="text-navy-700/70 font-normal">(opcional)</span>
+              {{ t('teacher.badges.form.label_mission') }}
+              <span class="text-navy-700/70 font-normal">{{
+                t('teacher.badges.form.image_optional')
+              }}</span>
             </label>
             <SelectDropdown
               v-model="form.missionId"
               :options="
                 teacherMissions.map(m => ({
                   value: m.id,
-                  label: `${m.title} (${rarityLabels[m.rarity] || 'Común'})`,
+                  label: `${m.title} (${missionRarityName(m.rarity)})`,
                 }))
               "
               :placeholder="t('teacher.badges.form.no_mission')"
@@ -225,7 +227,7 @@
             <div v-if="imagePreview" class="flex items-center gap-3 mb-3">
               <img
                 :src="imagePreview"
-                alt="Preview"
+                alt=""
                 class="w-12 h-12 object-cover rounded-lg flex-shrink-0"
               />
               <div class="flex-1 min-w-0">
@@ -242,8 +244,8 @@
               </div>
             </div>
             <Button variant="outline" size="sm" @click="fileInput?.click()">
-              <PhotoIcon class="w-4 h-4 mr-2" />
-              Subir imagen
+              <PhotoIcon class="w-4 h-4 mr-2" aria-hidden="true" />
+              {{ t('teacher.badges.form.btn_upload_image') }}
             </Button>
             <p v-if="errors.image" class="mt-1 text-xs text-red-500">{{ errors.image }}</p>
           </div>
@@ -272,7 +274,11 @@
             @click="generateAllWithAI"
           >
             <SparklesIcon class="w-4 h-4 mr-2" :class="{ 'animate-pulse': isGeneratingAI }" />
-            {{ isGeneratingAI ? 'Generando...' : 'Generar con IA' }}
+            {{
+              isGeneratingAI
+                ? t('teacher.badges.form.btn_generating')
+                : t('teacher.badges.form.btn_generate')
+            }}
           </Button>
         </div>
       </div>
@@ -395,7 +401,7 @@ const imagePath = ref<string | null>(null)
 // Live preview
 const previewBadge = computed(() => ({
   id: 'preview',
-  name: form.name || 'Nombre',
+  name: form.name || t('teacher.badges.form.label_name'),
   description: form.description,
   imageUrl: imagePreview.value || undefined,
   rarity: badgeRarity.value as 'common' | 'rare' | 'epic' | 'legendary',
@@ -410,12 +416,12 @@ const searchQuery = ref('')
 const selectedRarities = ref<string[]>([])
 const selectedOrigin = ref('all')
 
-const rarityOptions = [
-  { value: 'common', label: 'Común' },
-  { value: 'rare', label: 'Rara' },
-  { value: 'epic', label: 'Épica' },
-  { value: 'legendary', label: 'Legendaria' },
-]
+const rarityOptions = computed(() =>
+  (['common', 'rare', 'epic', 'legendary'] as const).map(value => ({
+    value,
+    label: t(`teacher.components.mission_filter_bar.rarity.${value}`),
+  }))
+)
 
 // Con las mismas palabras que las secciones de la lista.
 const originOptions = computed(() => [
@@ -515,16 +521,10 @@ const lockedReason = computed(() => {
 const form = reactive({ name: '', description: '', missionId: '', rarity: 'common' })
 const errors = reactive({ name: '', description: '', image: '' })
 
-const rarityLabels: Record<string, string> = {
-  comun: 'Común',
-  rara: 'Rara',
-  epica: 'Épica',
-  legendaria: 'Legendaria',
-  common: 'Común',
-  rare: 'Rara',
-  epic: 'Épica',
-  legendary: 'Legendaria',
-}
+/** La rareza de una misión («comun», «rara»…), con su nombre en el idioma de la app. */
+const MISSION_RARITIES = ['comun', 'rara', 'epica', 'legendaria']
+const missionRarityName = (rarity: string) =>
+  t(`student.components.rarity_badge.${MISSION_RARITIES.includes(rarity) ? rarity : 'comun'}`)
 const { recentMissions: storeRecentMissions } = storeToRefs(teacherStore)
 // `allTeacherMissions` se deriva del teacher store en lugar de mantener un ref
 // local redundante; así una sola fuente de verdad alimenta el selector.
@@ -583,32 +583,6 @@ const badgeRarity = computed(() => {
   return map[selectedMission.value.rarity] || selectedMission.value.rarity || 'common'
 })
 
-// Rarity helpers (same as student BadgeRewardCard)
-const getRarityClasses = (rarity?: string) => {
-  const classes: Record<string, string> = {
-    common: 'bg-gray-200 text-gray-700',
-    rare: 'bg-sky-100 text-sky-700',
-    epic: 'bg-violet-100 text-violet-700',
-    legendary: 'bg-amber-100 text-amber-800',
-  }
-  return classes[rarity || 'common'] || classes.common
-}
-
-const getRarityLabel = (rarity?: string) => {
-  const labels: Record<string, string> = {
-    common: 'Común',
-    rare: 'Rara',
-    epic: 'Épica',
-    legendary: 'Legendaria',
-  }
-  return labels[rarity || 'common'] || 'Común'
-}
-
-const formatDate = (date: Date | string) => {
-  const d = typeof date === 'string' ? new Date(date) : date
-  return d.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })
-}
-
 // Fetch badges
 // Tras crear/editar/eliminar invalidamos la cache del store y volvemos a llamar
 // ensureBadges() para refrescar el listado desde la API.
@@ -652,7 +626,8 @@ const createSimilar = () => {
   if (!badge) return
   showDetail.value = false
   openCreateModal()
-  form.name = badge.name
+  // Con otro nombre: dos insignias que se llaman igual no se distinguen.
+  form.name = t('teacher.badges.form.copy_name', { name: badge.name })
   form.rarity = badge.rarity || 'common'
   loadBadgeImage(badge)
 }
@@ -722,7 +697,7 @@ const validate = (): boolean => {
     isValid = false
   }
   if (!imagePreview.value) {
-    errors.image = 'La imagen es obligatoria. Sube una o genera con IA.'
+    errors.image = t('teacher.badges.validation.image_required')
     isValid = false
   }
   return isValid

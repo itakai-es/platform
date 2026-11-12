@@ -22,16 +22,25 @@
       </dt>
       <!-- Un número nunca se parte por dentro («139 / 0»): si no cabe, salta
            por los espacios («3 de / 8»). En el móvil, un tamaño menos. -->
-      <!-- Con `ring`, la cifra va dentro de su anillo (que es solo dibujo) -->
+      <!-- Con `ring`, la cifra va dentro de su anillo (que es solo dibujo). Si la
+           caja es más estrecha que el anillo (móvil con letra muy grande), el
+           anillo se queda pequeño y la cifra va debajo, fuera de él: nunca se sale.
+           Anillo y cifra comparten celda de la rejilla; la consulta de contenedor
+           de abajo los separa en dos filas. -->
       <dd
         v-if="ring !== undefined"
-        class="order-1 flex w-full justify-center font-semibold leading-tight tabular-nums text-navy-700"
+        class="stat-ring order-1 grid w-full place-items-center font-semibold leading-tight tabular-nums text-navy-700"
+        :class="`stat-ring--${size}`"
       >
-        <ProgressRing :value="ring ?? 0" :tone="ringTone" :class="RING_SIZE[size]">
-          <span class="px-3" :class="RING_VALUE_SIZE[size]"
-            ><slot name="value">{{ displayValue }}</slot></span
-          >
-        </ProgressRing>
+        <ProgressRing
+          :value="ring ?? 0"
+          :tone="ringTone"
+          class="stat-ring__art"
+          :class="RING_SIZE[size]"
+        />
+        <span class="stat-ring__value px-3 text-center" :class="[RING_VALUE_SIZE[size], RING_INNER[size]]"
+          ><slot name="value">{{ displayValue }}</slot></span
+        >
       </dd>
       <dd
         v-else
@@ -138,11 +147,18 @@ const VALUE_SIZE = {
   lg: 'text-4xl sm:text-5xl xl:text-6xl',
 }
 // El anillo, en rem (crece con la letra); la cifra de dentro, un tamaño menos.
-// Cuadrado y, si la caja es más estrecha (móvil con letra grande), a su ancho.
+// Cuadrado; si la caja es más estrecha que él, pequeño y con la cifra debajo
+// (ver `.stat-ring` en el estilo).
 const RING_SIZE = {
-  sm: 'aspect-square w-28 max-w-full 2xl:w-32',
-  md: 'aspect-square w-32 max-w-full',
-  lg: 'aspect-square w-36 max-w-full',
+  sm: 'aspect-square w-28 2xl:w-32',
+  md: 'aspect-square w-32',
+  lg: 'aspect-square w-36',
+}
+// Dentro del anillo, la cifra no pasa de su ancho (salta por los espacios).
+const RING_INNER = {
+  sm: 'max-w-[7rem] 2xl:max-w-[8rem]',
+  md: 'max-w-[8rem]',
+  lg: 'max-w-[9rem]',
 }
 const RING_VALUE_SIZE = {
   sm: 'text-xl sm:text-2xl 2xl:text-3xl',
@@ -164,16 +180,20 @@ const { formatNumber } = useNumberFormat()
 /** El texto de apoyo: suavizado sobre blanco; sobre el color de una tarjeta, macizo. */
 const softText = computed(() => (props.surface === 'item' ? 'text-navy-700/80' : 'text-navy-700'))
 
-const surfaceProps = computed(() =>
-  props.surface === 'card'
-    ? { type: props.type, class: 'h-full' }
+// Con anillo, la caja es un contenedor de consultas (`container-type`): el anillo
+// mira su ancho para saber si cabe. Solo con anillo: la caja ya tiene el ancho de
+// su rejilla, no el de lo que lleva dentro.
+const surfaceProps = computed(() => {
+  const container = props.ring !== undefined ? ' stat-tile-container' : ''
+  return props.surface === 'card'
+    ? { type: props.type, class: `h-full${container}` }
     : {
         layout: 'column',
         padding: props.size === 'sm' ? 'md' : 'lg',
         centered: true,
-        class: 'h-full justify-center',
+        class: `h-full justify-center${container}`,
       }
-)
+})
 
 const format = (value: string | number) =>
   typeof value === 'number' ? formatNumber(value) : value
@@ -187,3 +207,39 @@ const displayValue = computed(() => {
   })
 })
 </script>
+
+<style scoped>
+.stat-tile-container {
+  container-type: inline-size;
+}
+/* El anillo y la cifra, en la misma celda: la cifra, dentro del anillo */
+.stat-ring > * {
+  grid-area: 1 / 1;
+}
+/* La caja (sin su relleno) es más estrecha que el anillo entero (w-28 o w-32 en
+   pantallas muy anchas, w-32, w-36): anillo pequeño arriba y la cifra debajo, en
+   su propia fila. El rem de la consulta es el del documento: crece con la letra
+   igual que el anillo. */
+@container (max-width: 7.99rem) {
+  .stat-ring--sm > .stat-ring__art,
+  .stat-ring--md > .stat-ring__art {
+    width: 3.5rem;
+  }
+  .stat-ring--sm > .stat-ring__value,
+  .stat-ring--md > .stat-ring__value {
+    grid-area: 2 / 1;
+    max-width: none;
+    margin-top: 0.5rem;
+  }
+}
+@container (max-width: 8.99rem) {
+  .stat-ring--lg > .stat-ring__art {
+    width: 3.5rem;
+  }
+  .stat-ring--lg > .stat-ring__value {
+    grid-area: 2 / 1;
+    max-width: none;
+    margin-top: 0.5rem;
+  }
+}
+</style>

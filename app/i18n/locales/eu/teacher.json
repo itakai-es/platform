@@ -185,7 +185,9 @@
           "audience_top": "Zure ikasleek hau ikusten dute: lehen {n} postuak eta berea.",
           "audience_position": "Zure ikasleek hau ikusten dute: beren postua soilik.",
           "audience_teams": "Zure ikasleek hau ikusten dute: talde guztiak.",
-          "audience_type_off": "Zure ikasleek ez dute ranking mota hau ikusten: Funtzionalitateak atalean aktibatzen da."
+          "audience_type_off": "Zure ikasleek ez dute ranking mota hau ikusten: Funtzionalitateak atalean aktibatzen da.",
+          "not_entered_title": "Oraindik ez dago inor rankingean",
+          "not_entered_description": "Oraindik sartu ez diren kontuak ez dira rankingean agertzen. Lehen aldiz sartzen direnean agertuko dira."
         },
         "missions_tab": {
           "no_missions_title": "Ez dago misiorik",
@@ -432,7 +434,9 @@
             "background_error": "Ezin izan da irudia sortu"
           },
           "features": {
-            "title": "Funtzionalitateak"
+            "title": "Funtzionalitateak",
+            "closed_archived": "Klasea artxibatuta dago: desartxibatu funtzionalitateak eta rankinga aldatzeko.",
+            "closed_trash": "Klasea zakarrontzian dago: leheneratu funtzionalitateak eta rankinga aldatzeko."
           },
           "management": {
             "title": "Kudeaketa",
@@ -493,7 +497,7 @@
               },
               "missions": {
                 "label": "Osatutako misioak",
-                "desc": "Misioak amaitzea saritzen du. Astez eta denboraldiz ere bai; berdinketetan XPak erabakitzen du."
+                "desc": "Misioak amaitzea saritzen du. Astez eta denboraldiz ere bai. XP mota ere aktibatuta badago, berdinketetan XPak erabakitzen du."
               },
               "teams": {
                 "label": "Taldeak",
@@ -1062,7 +1066,12 @@
         "btn_saving": "Gordetzen...",
         "btn_save_changes": "Aldaketak gorde",
         "btn_create": "Domina sortu",
-        "no_mission": "Misiorik gabe"
+        "no_mission": "Misiorik gabe",
+        "copy_name": "{name} (kopia)",
+        "label_mission": "Lotutako misioa",
+        "btn_upload_image": "Igo irudia",
+        "btn_generate": "Sortu AArekin",
+        "btn_generating": "Sortzen..."
       },
       "detail": {
         "btn_close": "Itxi",
@@ -1079,7 +1088,8 @@
         "name_required": "Izena derrigorrezkoa da",
         "name_min_length": "Izenak gutxienez 3 karaktere izan behar ditu",
         "image_size": "Irudiak ezin du 2MB gainditu",
-        "image_type": "PNG, JPG, SVG edo WebP fitxategiak soilik onartzen dira"
+        "image_type": "PNG, JPG, SVG edo WebP fitxategiak soilik onartzen dira",
+        "image_required": "Irudia derrigorrezkoa da. Igo bat edo sortu AArekin."
       },
       "meta": {
         "title": "Nire dominak | ITAKAI Irakaslea",
@@ -1094,7 +1104,10 @@
         "system": "ITAKAIren dominak",
         "system_hint": "Ikasleen aurrerapenaren arabera ematen dira berez, eta ezin dira editatu. Ireki itzazu nola lortzen diren ikusteko edo antzeko bat sortzeko."
       },
-      "filter_all": "Domina guztiak"
+      "filter_all": "Domina guztiak",
+      "search_placeholder": "Dominak bilatu...",
+      "no_results_title": "Emaitzarik gabe",
+      "no_results_description": "Ez dago dominarik iragazki hauekin"
     },
     "students": {
       "index": {
@@ -1133,7 +1146,7 @@
         "error_title": "Errorea ikaslea kargatzean",
         "error_default": "Errorea ikaslearen datuak kargatzean",
         "btn_retry": "Berriro saiatu",
-        "stat_classes": "Klaseak",
+        "stat_classes": "Klasea | Klaseak",
         "enrolled_classes_title": "Matrikulatutako klaseak",
         "enrolled_classes_count": "Klaserik ez | Klase 1 | {count} klase",
         "not_enrolled": "Ez dago zure klaseetan matrikulatuta",
@@ -1189,7 +1202,8 @@
         "avatar_summary": "Gordetzean, {name}(e)k {avatar} izango du klase honetan.",
         "avatar_summary_generated": "Gordetzean, {name}(e)k {avatar} izango du klase honetan, eta AArekin sortutako irudia ezabatu egingo da.",
         "avatar_saved": "Avatarra aldatu da",
-        "avatar_error": "Ezin izan da avatarra aldatu."
+        "avatar_error": "Ezin izan da avatarra aldatu.",
+        "nickname_reserved": "Ezizen hori ezin da erabili: aukeratu «Estudiante» edo klaseko beste norbaiten izena ez den bat."
       }
     },
     "ai_assistant": {
@@ -1443,7 +1457,7 @@
         },
         "btn_close": "Itxi",
         "completed_by_students": "Osatu duten ikasleak",
-        "required_average": "Onartutako nahitaezko enigmen batez bestekoa: {percent}",
+        "required_average": "Onartutako nahitaezko enigmak: {percent} batez beste",
         "edit_enigma_named": "Editatu «{title}» enigma",
         "enigma_actions": "«{title}» enigmaren ekintza gehiago",
         "edit_document_named": "Editatu «{title}» dokumentua",
@@ -1612,7 +1626,9 @@
       "cancel": "Utzi",
       "done": "Eginda",
       "wizard_question_schedule": "Jarri ordutegi bat zure klaseari",
-      "wizard_question_cover": "Orain, azal bat zure klaserako"
+      "wizard_question_cover": "Orain, azal bat zure klaserako",
+      "time_start": "Hasiera-ordua",
+      "time_end": "Amaiera-ordua"
     },
     "roulette": {
       "meta": {
@@ -1907,7 +1923,7 @@
       },
       "summary": {
         "avg_missions": "Misioen batez bestekoa",
-        "avg_percent": "Batez besteko aurrerapena",
+        "avg_percent": "Batez besteko aurrerapena (nahitaezko enigmak)",
         "pending_link": "Joan misioetara",
         "attendance": "Batez besteko asistentzia",
         "attendance_sessions": "Saio {count} aldi honetan | {count} saio aldi honetan",
@@ -1917,10 +1933,10 @@
       },
       "missions": {
         "title": "Misioak",
-        "caption": "Ikasle bakoitza non dagoen une honetan: ez da aldatzen aldiarekin. Taulako onarpenen batez bestekoa eta pistak, ordea, aldikoak dira.",
+        "caption": "Ikasle bakoitza non dagoen une honetan: ez da aldatzen aldiarekin. Taulako onartutakoaren batez besteko nota eta pistak, ordea, aldikoak dira.",
         "table_caption": "Zenbat pertsona dagoen egoera bakoitzean, misioz misio",
         "col_mission": "Misioa",
-        "col_average": "Onarpenen batez bestekoa",
+        "col_average": "Onartutakoaren batez besteko nota",
         "col_hints": "Pistak",
         "deadline_future": "Epemuga: {date}",
         "deadline_past": "Iraungi zen: {date}",
@@ -1943,7 +1959,7 @@
           "mission_expired_many": "Osatu gabe iraungitako {count} misio; azkena, «{mission}», {date} egunean iraungi zen",
           "low_grade": "«{enigma}» («{mission}») {percent}ekin onartu zitzaion, {threshold} baino gutxiago",
           "low_grade_many": "{count} enigma {threshold} baino gutxiagorekin onartuak; baxuena, «{enigma}», {percent}ekin",
-          "low_average": "Onarpenen batez bestekoa {average}, enigma {approvals}ean, {threshold} baino gutxiago | Onarpenen batez bestekoa {average}, {approvals} enigmatan, {threshold} baino gutxiago",
+          "low_average": "Onartutakoaren batez besteko nota: {average}, enigma {approvals}ean, {threshold} baino gutxiago | Onartutakoaren batez besteko nota: {average}, {approvals} enigmatan, {threshold} baino gutxiago",
           "hints": "Pista {count} erabili du «{mission}» misioan | {count} pista erabili ditu «{mission}» misioan",
           "hints_percent": "Pista {count} erabili du «{mission}» misioan ({detail}) | {count} pista erabili ditu «{mission}» misioan ({detail})",
           "hints_many": "Pista asko {count} misiotan; gehien, «{mission}» misioan, {hints}",
@@ -1952,7 +1968,7 @@
         },
         "mission": {
           "unfinished_after_deadline": "Hasi zuten {started} pertsonetatik {unfinished}ek ez zuten epea baino lehen osatu ({percent})",
-          "low_average": "Onarpenen batez bestekoa {average}, onartutako enigma {approvals}ean, {threshold} baino gutxiago | Onarpenen batez bestekoa {average}, onartutako {approvals} enigmatan, {threshold} baino gutxiago",
+          "low_average": "Onartutakoaren batez besteko nota: {average}, onartutako enigma {approvals}ean, {threshold} baino gutxiago | Onartutakoaren batez besteko nota: {average}, onartutako {approvals} enigmatan, {threshold} baino gutxiago",
           "many_hints": "{perStudent} pista batez beste, hasi duen ikasle bakoitzeko",
           "students_expired": "Pertsona {count}ek ez du osatu data igarota | {count} pertsonak ez dute osatu data igarota"
         }
@@ -2018,7 +2034,7 @@
           "deadline_past": "iraungi zen: {date}",
           "deadline_future": "epemuga: {date}",
           "enigmas": "{total} enigmatik {approved} onartuta | {total} enigmatik {approved} onartuta",
-          "average": "batez bestekoa: {value}",
+          "average": "onartutakoaren batez besteko nota: {value}",
           "hints": "Pista {count} | {count} pista",
           "pending_reviews": "Berrikusteko entrega {count} | Berrikusteko {count} entrega",
           "enigma_approved": "{percent} · {date}",

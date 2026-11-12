@@ -62,8 +62,8 @@ export interface Student {
   totalMissionsCounted: number
   /** El saldo de todas sus clases: sin máximo, lleva comportamientos, recompensas y bonus. */
   totalXpEarned: number
+  /** Las insignias que ha conseguido, también las de ITAKAI. */
   totalBadgesEarned: number
-  totalBadgesAvailable: number
   /** % de enigmas obligatorios aprobados de todas sus clases; null si no tiene ninguno. */
   overallProgress: number | null
   classCount: number // Número de clases inscritas

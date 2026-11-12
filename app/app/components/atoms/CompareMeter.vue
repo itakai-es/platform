@@ -5,31 +5,37 @@
   </p>
 
   <div v-else class="space-y-3">
-    <!-- La pista: solo dibujo. Quien se compara es su avatar, puesto en su cifra
-         sobre la parte llena; la media, una marca con su nombre debajo. El
-         margen deja sitio al avatar en los extremos, sin salirse. -->
+    <!-- La pista: solo dibujo. Encima de ella, la media: su nombre arriba y
+         una marca que apunta a su sitio. En la pista, quien se compara: su
+         avatar en su cifra, sobre la parte llena. La marca acaba antes de
+         donde empieza el avatar: aunque estén en el mismo sitio, nada se tapa
+         (y la frase dice entonces que está en la media). El margen deja sitio
+         al avatar en los extremos, sin salirse. Todo en rem: crece con la letra. -->
     <div v-if="average !== null" class="px-5" aria-hidden="true">
-      <div class="relative h-16">
-        <span class="absolute inset-x-0 top-[1.375rem] h-3 rounded-full bg-progress-track" />
+      <div class="relative h-[4.625rem]">
         <span
-          class="absolute left-0 top-[1.375rem] h-3 rounded-full bg-purple"
-          :class="grows ? 'chart-grow-x' : ''"
-          :style="{ width: `${track.you}%` }"
-        />
-        <!-- La marca de la media, por encima de la pista -->
-        <span
-          class="absolute top-3 h-8 w-1.5 -translate-x-1/2 rounded-full bg-navy-700 ring-2 ring-white"
-          :style="{ left: `${track.average}%` }"
-        />
-        <span
-          class="absolute top-11 whitespace-nowrap text-xs font-semibold text-navy-700"
+          class="absolute top-0 whitespace-nowrap text-xs font-semibold leading-4 text-navy-700"
           :class="ALIGN[track.averageAlign]"
           :style="{ left: `${track.average}%` }"
           >{{ averageName }}</span
         >
-        <!-- Quien se compara -->
+        <svg
+          class="absolute top-[1.125rem] h-2.5 w-3.5 -translate-x-1/2 fill-current text-navy-700"
+          viewBox="0 0 14 10"
+          focusable="false"
+          :style="{ left: `${track.average}%` }"
+        >
+          <path :d="MARK_PATH" />
+        </svg>
+        <span class="absolute inset-x-0 top-[2.875rem] h-3 rounded-full bg-progress-track" />
         <span
-          class="absolute top-7 -translate-x-1/2 -translate-y-1/2 rounded-full shadow-md ring-[3px] ring-white"
+          class="absolute left-0 top-[2.875rem] h-3 rounded-full bg-purple"
+          :class="grows ? 'chart-grow-x' : ''"
+          :style="{ width: `${track.you}%` }"
+        />
+        <!-- Quien se compara, centrado en la pista -->
+        <span
+          class="absolute top-[3.25rem] -translate-x-1/2 -translate-y-1/2 rounded-full shadow-md ring-[3px] ring-white"
           :style="{ left: `${track.you}%` }"
         >
           <Avatar
@@ -52,7 +58,17 @@
     >
       <div v-for="row in rows" :key="row.key" class="inline-flex items-center gap-1.5">
         <dt class="inline-flex items-center gap-1.5 font-semibold">
-          <span class="h-3 w-3 flex-shrink-0 rounded-full" :class="row.swatch" aria-hidden="true" />
+          <!-- La muestra de la media es su marca; la de quien se compara, la parte llena -->
+          <svg
+            v-if="row.key === 'average'"
+            class="h-2.5 w-3.5 flex-shrink-0 fill-current text-navy-700"
+            viewBox="0 0 14 10"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path :d="MARK_PATH" />
+          </svg>
+          <span v-else class="h-3 w-3 flex-shrink-0 rounded-full bg-purple" aria-hidden="true" />
           {{ row.label }}
         </dt>
         <dd class="inline-flex items-center gap-1 font-semibold tabular-nums">
@@ -143,6 +159,9 @@ const display = (value: number) => props.formatValue?.(value) ?? formatNumber(va
 
 const averageName = computed(() => props.averageLabel ?? t('common.charts.average'))
 
+/** La marca de la media (un triángulo que apunta a la pista), también en su leyenda. */
+const MARK_PATH = 'M1 0h12a1 1 0 0 1 .8 1.6l-6 7.6a1 1 0 0 1-1.6 0l-6-7.6A1 1 0 0 1 1 0z'
+
 // El nombre de la media, centrado en su marca; cerca de un extremo, hacia dentro.
 const ALIGN = {
   start: '',
@@ -167,13 +186,11 @@ const rows = computed(() => [
     key: 'subject',
     label: props.subjectLabel ?? t('common.charts.you'),
     display: display(props.you),
-    swatch: 'bg-purple',
   },
   {
     key: 'average',
     label: averageName.value,
     display: display(props.average ?? 0),
-    swatch: 'bg-navy-700',
   },
 ])
 

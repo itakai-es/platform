@@ -462,6 +462,7 @@ import {
   classMapProgress,
   currentNodeId,
   mapProgress,
+  missionStarted,
   type MapNodeState,
   type MapPerson,
   type MissionMapItem,
@@ -640,8 +641,8 @@ function teacherStatusOf(state: MapNodeState): string {
 const stateLabelOf = (state: MapNodeState) =>
   props.mode === 'teacher' ? teacherStatusLabel(teacherStatusOf(state)) : studentStateLabel(state)
 
-/** El botón del alumnado: empezar, seguir o volver a verla. */
-function studentAction(state: MapNodeState, percent: number): string | null {
+/** El botón del alumnado: empezar, seguir (si ya la ha empezado) o volver a verla. */
+function studentAction(state: MapNodeState, started: boolean): string | null {
   switch (state) {
     case 'locked':
       return null
@@ -651,7 +652,7 @@ function studentAction(state: MapNodeState, percent: number): string | null {
     case 'in_progress':
       return t('common.mission_map.detail.continue')
     default:
-      return percent > 0
+      return started
         ? t('common.mission_map.detail.continue')
         : t('common.mission_map.detail.start')
   }
@@ -731,7 +732,7 @@ const items = computed<MissionMapItem[]>(() => {
           : `/alumno/clases/${props.classId}/misiones/${node.id}`,
       actionLabel: teacher
         ? t('common.mission_map.detail.open')
-        : studentAction(node.state, percent),
+        : studentAction(node.state, missionStarted(mission)),
       lockedNote: !teacher && locked && !pathLocked ? t('student.missions.locked_toast') : null,
       requires: node.opensAfter,
       unlocks: (unlocks.get(node.id) ?? []).map(id => ({ id, title: titleOf(id) })),

@@ -199,10 +199,12 @@
               </td>
               <!-- Behaviors -->
               <td v-if="settings.behaviors" class="px-4 py-3">
-                <div class="flex items-center justify-center gap-2 font-semibold">
-                  <span class="text-success">+{{ student.positiveBehaviors }}</span>
-                  <span class="text-navy-700/30">/</span>
-                  <span class="text-error">−{{ student.negativeBehaviors }}</span>
+                <!-- Los signos dicen cuál es cuál: en azul marino, que se lea (el
+                     verde y el rojo claros no llegaban al contraste mínimo) -->
+                <div class="flex items-center justify-center gap-2 font-semibold text-navy-700">
+                  <span>+{{ student.positiveBehaviors }}</span>
+                  <span class="text-navy-700/50" aria-hidden="true">/</span>
+                  <span>−{{ student.negativeBehaviors }}</span>
                 </div>
               </td>
               <td v-if="showActions" class="px-2 py-3 text-right">
@@ -287,11 +289,13 @@
       :student-link="studentProfileLink"
       :show-current-user-highlight="false"
     >
+      <!-- Nadie en la clasificación: o la clase no tiene alumnado, o sus cuentas
+           aún no han entrado (no salen hasta su primera entrada) -->
       <template #empty>
         <EmptyState
           :icon="UsersIcon"
-          :title="t('teacher.classes.detail.ranking.no_students_title')"
-          :description="t('teacher.classes.detail.ranking.no_students_description')"
+          :title="rankingEmpty.title"
+          :description="rankingEmpty.description"
         />
       </template>
     </ClassRankingBoard>
@@ -376,6 +380,19 @@ const config = useRuntimeConfig()
 const classId = computed(() => route.params.id as string)
 
 const allStudents = ref<ClassStudentRow[]>([])
+
+/** El ranking vacío: sin alumnado, o con cuentas que aún no han entrado (no salen en él). */
+const rankingEmpty = computed(() =>
+  allStudents.value.length > 0
+    ? {
+        title: t('teacher.classes.detail.ranking.not_entered_title'),
+        description: t('teacher.classes.detail.ranking.not_entered_description'),
+      }
+    : {
+        title: t('teacher.classes.detail.ranking.no_students_title'),
+        description: t('teacher.classes.detail.ranking.no_students_description'),
+      }
+)
 
 // Acceso propio y nombre de la clase: los carga la página de la clase.
 const { state: classState, can } = useTeacherClassDetail(classId)
@@ -525,6 +542,11 @@ function setView(view: StudentsView) {
   const query = { ...route.query }
   if (view === 'list') delete query.vista
   else query.vista = VIEW_IN_URL[view]
+  // El tipo y el periodo del ranking (`useClassRankingBoard`) son solo de su vista.
+  if (view !== 'ranking') {
+    delete query.tipo
+    delete query.periodo
+  }
   void router.replace({ query })
 }
 const viewOptions = computed(() => {

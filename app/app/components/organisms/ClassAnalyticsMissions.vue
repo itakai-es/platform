@@ -86,16 +86,17 @@
             noteOf(row.key)
           }}</span>
         </template>
-        <!-- Quién la ha completado: sus avatares, con su nombre para el lector -->
+        <!-- Quién la ha completado: en la tabla, compacto (dos avatares y «+N»);
+             los nombres de todos, para el lector y al pasar el ratón -->
         <template #cell="{ row, column, value }">
           <AvatarStack
             v-if="column.key === 'completed_by' && peopleOf(row.key).length"
             :people="peopleOf(row.key)"
             :total="totalOf(row.key)"
-            :max="STACK_MAX"
+            :max="TABLE_STACK_MAX"
             :label="t('common.mission_map.detail.completed_list')"
             size="xxs"
-            class="justify-center"
+            class="flex-nowrap justify-center"
           />
           <template v-else>{{ cellText(value) }}</template>
         </template>
@@ -129,6 +130,8 @@ const props = defineProps<{
 
 /** Huecos de la pila de avatares: las cinco que manda la API y «+N». */
 const STACK_MAX = 6
+/** En la tabla, menos: que quepa a lo ancho junto a las cifras. */
+const TABLE_STACK_MAX = 3
 
 const { t, locale } = useI18n()
 const { formatNumber, formatPercent } = useNumberFormat()

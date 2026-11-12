@@ -2,13 +2,16 @@
   <div :class="isPills ? '' : 'border-b border-navy-700/10'">
     <!-- Con `idPrefix` son pestañas de verdad (tablist): se recorren con las
          flechas y la activa controla su panel; solo la activa, porque quien
-         las usa puede pintar solo el panel que se ve. Sin él, una fila de
-         botones. Las píldoras, si no caben en una fila, bajan a la siguiente:
-         en el móvil se ven todas sin tener que desplazarlas. -->
+         las usa puede pintar solo el panel que se ve. Con `toggle`, un grupo de
+         conmutadores (`aria-pressed`): eligen qué se ve debajo sin ser pestañas
+         (el periodo, una vista). Sin nada, una fila de botones de navegación.
+         Las píldoras, si no caben en una fila, bajan a la siguiente: en el móvil
+         se ven todas sin desplazarlas. Una que no cabe sola parte su texto por
+         los espacios, nunca por dentro de una palabra. -->
     <component
-      :is="idPrefix ? 'div' : 'nav'"
+      :is="idPrefix || toggle ? 'div' : 'nav'"
       :class="isPills ? 'flex flex-wrap gap-2' : '-mb-px flex gap-6 overflow-x-auto'"
-      :role="idPrefix ? 'tablist' : undefined"
+      :role="idPrefix ? 'tablist' : toggle ? 'group' : undefined"
       :aria-label="ariaLabel ?? t('common.accessibility.tabs')"
     >
       <button
@@ -20,7 +23,7 @@
         :class="
           isPills
             ? [
-                'px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors',
+                'px-4 py-2 rounded-full text-sm font-medium text-center transition-colors',
                 activeTab === tab.id
                   ? 'bg-navy-700 text-white'
                   : 'bg-surface border border-border-primary text-navy-700 hover:bg-gray-50',
@@ -36,7 +39,8 @@
         :aria-selected="idPrefix ? activeTab === tab.id : undefined"
         :aria-controls="idPrefix && activeTab === tab.id ? tabPanelId(idPrefix, tab.id) : undefined"
         :tabindex="idPrefix && activeTab !== tab.id ? -1 : undefined"
-        :aria-current="!idPrefix && activeTab === tab.id ? 'page' : undefined"
+        :aria-pressed="toggle && !idPrefix ? activeTab === tab.id : undefined"
+        :aria-current="!idPrefix && !toggle && activeTab === tab.id ? 'page' : undefined"
         @click="handleTabClick(tab.id)"
         @keydown="onKeydown($event, index)"
       >
@@ -65,12 +69,19 @@ interface Props {
    * que pone quien las usa (con `role="tabpanel"` y `aria-labelledby`).
    */
   idPrefix?: string
+  /**
+   * Conmutadores en vez de navegación: un grupo (`role="group"`) de botones con
+   * `aria-pressed`. Para elegir qué se ve debajo sin cambiar de página (el
+   * periodo de la analítica, la vista de Alumnado).
+   */
+  toggle?: boolean
   ariaLabel?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
   variant: 'default',
   idPrefix: undefined,
+  toggle: false,
   ariaLabel: undefined,
 })
 

@@ -34,15 +34,14 @@ const props = defineProps<Props>()
 
 const { t } = useI18n()
 const { formatNumber } = useNumberFormat()
+const levelXpText = useLevelXpText()
 
 const levelLine = computed(() =>
   t('student.components.class_xp_bar.level_line', { level: props.level, title: props.title })
 )
+/** «Faltan 301 XP para el nivel 5» (o «Nivel máximo»): nunca «2/303 XP». */
 const xpLine = computed(() =>
-  t('student.components.class_xp_bar.xp_line', {
-    current: formatNumber(props.currentXp),
-    required: formatNumber(props.requiredXp),
-  })
+  levelXpText({ level: props.level, currentXp: props.currentXp, requiredXp: props.requiredXp })
 )
 /** «Puesto 7 de 25», para el lector de pantalla: lo que se ve es «7 / 25». */
 const rankText = computed(() =>
@@ -67,9 +66,10 @@ const rankText = computed(() =>
     <div class="bg-white rounded-xl p-3 sm:p-4">
       <!-- Stacked Layout: Mobile (< 640px) + Medium Desktop (1024px - 1280px) -->
       <div class="sm:hidden lg:block xl:hidden">
-        <!-- Top Row: Avatar/Name + Ranking -->
-        <div class="flex items-center justify-between gap-3 mb-3 sm:mb-4">
-          <div class="flex items-center gap-2.5 sm:gap-3 flex-shrink-0 min-w-0">
+        <!-- Top Row: Avatar/Name + Ranking. Si no caben en una línea (móvil con
+             letra grande), el puesto baja a la siguiente, a la derecha. -->
+        <div class="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 mb-3 sm:mb-4">
+          <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
             <LevelAvatar
               :src="avatar"
               :name="username || name"
@@ -90,7 +90,7 @@ const rankText = computed(() =>
             </div>
           </div>
 
-          <div v-if="rank !== null" class="flex-shrink-0 text-right">
+          <div v-if="rank !== null" class="ml-auto flex-shrink-0 text-right">
             <p class="text-navy-700/80 text-xs sm:text-sm mb-0.5" aria-hidden="true">
               {{ t('student.components.class_xp_bar.rank') }}
             </p>
@@ -108,9 +108,11 @@ const rankText = computed(() =>
 
         <!-- Bottom Row: Progress Bar (full width) -->
         <div>
-          <div class="flex items-baseline justify-between mb-1 sm:mb-1.5">
+          <div
+            class="flex flex-wrap items-baseline justify-between gap-x-2 gap-y-0.5 mb-1 sm:mb-1.5"
+          >
             <p
-              class="text-navy-700 font-medium text-xs sm:text-sm mr-2 flex items-center gap-1.5 min-w-0"
+              class="text-navy-700 font-medium text-xs sm:text-sm flex items-center gap-1.5 min-w-0"
             >
               <span
                 class="w-2 h-2 rounded-full flex-shrink-0"
@@ -118,9 +120,7 @@ const rankText = computed(() =>
               />
               <span class="min-w-0">{{ levelLine }}</span>
             </p>
-            <span
-              class="text-xs sm:text-sm font-medium text-navy-700/80 tabular-nums flex-shrink-0"
-            >
+            <span class="min-w-0 text-xs sm:text-sm font-medium text-navy-700/80 tabular-nums">
               {{ xpLine }}
             </span>
           </div>
@@ -155,15 +155,15 @@ const rankText = computed(() =>
 
         <!-- XP Progress - Center (grows to fill space) -->
         <div class="flex-1 min-w-0">
-          <div class="flex items-baseline justify-between mb-1.5">
-            <p class="text-navy-700 font-medium text-sm mr-2 flex items-center gap-1.5 min-w-0">
+          <div class="flex flex-wrap items-baseline justify-between gap-x-2 gap-y-0.5 mb-1.5">
+            <p class="text-navy-700 font-medium text-sm flex items-center gap-1.5 min-w-0">
               <span
                 class="w-2 h-2 rounded-full flex-shrink-0"
                 :style="{ backgroundColor: color || '#38BDF8' }"
               />
               <span class="min-w-0">{{ levelLine }}</span>
             </p>
-            <span class="text-sm font-medium text-navy-700/80 tabular-nums flex-shrink-0">
+            <span class="min-w-0 text-sm font-medium text-navy-700/80 tabular-nums">
               {{ xpLine }}
             </span>
           </div>

@@ -332,10 +332,14 @@ async function saveNickname() {
     toast.success(t('teacher.students.actions.nickname_saved'))
     emit('renamed', saved)
   } catch (error) {
+    const code = (error as { data?: { code?: string } })?.data?.code
+    // Ya es de otra persona; o es «Estudiante» o el nombre real de alguien de la clase
     nicknameError.value =
-      (error as { data?: { code?: string } })?.data?.code === 'NICKNAME_TAKEN'
+      code === 'NICKNAME_TAKEN'
         ? t('student.classes.detail.avatar_tab.nickname_taken')
-        : apiMessage(error, t('teacher.students.actions.nickname_error'))
+        : code === 'NICKNAME_RESERVED'
+          ? t('teacher.students.actions.nickname_reserved')
+          : apiMessage(error, t('teacher.students.actions.nickname_error'))
   } finally {
     busy.value = false
   }

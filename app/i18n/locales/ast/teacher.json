@@ -185,7 +185,9 @@
           "audience_top": "El to alumnáu ve: los {n} primeros puestos y el so.",
           "audience_position": "El to alumnáu ve: namái el so puestu.",
           "audience_teams": "El to alumnáu ve: tolos equipos.",
-          "audience_type_off": "El to alumnáu nun ve esti tipu de clasificación: actívase en Funcionalidaes."
+          "audience_type_off": "El to alumnáu nun ve esti tipu de clasificación: actívase en Funcionalidaes.",
+          "not_entered_title": "Entá nun hai naide na clasificación",
+          "not_entered_description": "Les cuentes qu'entá nun entraron nun salen na clasificación. Van salir cuando entren per primer vegada."
         },
         "missions_tab": {
           "no_missions_title": "Nun hai misiones",
@@ -432,7 +434,9 @@
             "background_error": "Nun se pudo xenerar la imaxe"
           },
           "features": {
-            "title": "Funcionalidaes"
+            "title": "Funcionalidaes",
+            "closed_archived": "La clase ta archivada: desarchívala pa camudar les sos funcionalidaes y la clasificación.",
+            "closed_trash": "La clase ta na papelera: restáurala pa camudar les sos funcionalidaes y la clasificación."
           },
           "management": {
             "title": "Xestión",
@@ -493,7 +497,7 @@
               },
               "missions": {
                 "label": "Misiones completaes",
-                "desc": "Premia terminar misiones. Tamién por selmana y por temporada; nos empates decide la XP."
+                "desc": "Premia terminar misiones. Tamién por selmana y por temporada. Si'l tipu XP tamién ta activáu, nos empates decide la XP."
               },
               "teams": {
                 "label": "Equipos",
@@ -1062,7 +1066,12 @@
         "btn_saving": "Guardando...",
         "btn_save_changes": "Guardar los cambeos",
         "btn_create": "Crear insinia",
-        "no_mission": "Ensin misión"
+        "no_mission": "Ensin misión",
+        "copy_name": "{name} (copia)",
+        "label_mission": "Misión asociada",
+        "btn_upload_image": "Xubir imaxe",
+        "btn_generate": "Xenerar con IA",
+        "btn_generating": "Xenerando..."
       },
       "detail": {
         "btn_close": "Zarrar",
@@ -1079,7 +1088,8 @@
         "name_required": "El nome ye obligatoriu",
         "name_min_length": "El nome tien de tener polo menos 3 caráuteres",
         "image_size": "La imaxe nun pue pasar de 2 MB",
-        "image_type": "Namás s'almiten ficheros PNG, JPG, SVG o WebP"
+        "image_type": "Namás s'almiten ficheros PNG, JPG, SVG o WebP",
+        "image_required": "La imaxe ye obligatoria. Xubi una o xenérala con IA."
       },
       "meta": {
         "title": "Les mios insinies | ITAKAI Docente",
@@ -1094,7 +1104,10 @@
         "system": "Insinies d'ITAKAI",
         "system_hint": "Concédense soles según el progresu del alumnáu y nun se puen editar. Ábreles pa ver cómo se ganen o crear una asemeyada."
       },
-      "filter_all": "Toles insinies"
+      "filter_all": "Toles insinies",
+      "search_placeholder": "Guetar insinies...",
+      "no_results_title": "Ensin resultaos",
+      "no_results_description": "Nun hai insinies con estos filtros"
     },
     "students": {
       "index": {
@@ -1133,7 +1146,7 @@
         "error_title": "Fallu al cargar la ficha d'estudiante",
         "error_default": "Fallu al cargar los datos de la ficha",
         "btn_retry": "Reintentar",
-        "stat_classes": "Clases",
+        "stat_classes": "Clase | Clases",
         "enrolled_classes_title": "Clases inscrites",
         "enrolled_classes_count": "Ensin clases | 1 clase | {count} clases",
         "not_enrolled": "Nun ta en nenguna de les tos clases",
@@ -1189,7 +1202,8 @@
         "avatar_summary": "Al guardar, {name} pasa a llevar a {avatar} nesta clase.",
         "avatar_summary_generated": "Al guardar, {name} pasa a llevar a {avatar} nesta clase, y la imaxe que xeneró con IA bórrase.",
         "avatar_saved": "Avatar camudáu",
-        "avatar_error": "Nun se pudo camudar l'avatar."
+        "avatar_error": "Nun se pudo camudar l'avatar.",
+        "nickname_reserved": "Esi nomatu nun se pue usar: escueyi ún que nun sea «Estudiante» nin el nome d'otra persona de la clase."
       }
     },
     "ai_assistant": {
@@ -1443,7 +1457,7 @@
         },
         "btn_close": "Zarrar",
         "completed_by_students": "Estudiantes que la completaron",
-        "required_average": "Media d'enigmes obligatorios aprobaos: {percent}",
+        "required_average": "Enigmes obligatorios aprobaos: {percent} de media",
         "edit_enigma_named": "Editar l'enigma «{title}»",
         "enigma_actions": "Más aiciones de l'enigma «{title}»",
         "edit_document_named": "Editar el documentu «{title}»",
@@ -1612,7 +1626,9 @@
       "cancel": "Encaboxar",
       "done": "Fecho",
       "wizard_question_schedule": "Ponle un horariu a la to clase",
-      "wizard_question_cover": "Agora, una portada pa la to clase"
+      "wizard_question_cover": "Agora, una portada pa la to clase",
+      "time_start": "Hora d'aniciu",
+      "time_end": "Hora de fin"
     },
     "roulette": {
       "meta": {
@@ -1907,7 +1923,7 @@
       },
       "summary": {
         "avg_missions": "Misiones de media",
-        "avg_percent": "Progresu mediu",
+        "avg_percent": "Progresu mediu (enigmes obligatorios)",
         "pending_link": "Dir a Misiones",
         "attendance": "Asistencia media",
         "attendance_sessions": "{count} sesión nesti periodu | {count} sesiones nesti periodu",
@@ -1917,10 +1933,10 @@
       },
       "missions": {
         "title": "Misiones",
-        "caption": "Ónde ta cada estudiante agora mesmo: nun camuda col periodu. La media d'aprobación y les pistes de la tabla sí son del periodu.",
+        "caption": "Ónde ta cada estudiante agora mesmo: nun camuda col periodu. La nota media de lo aprobao y les pistes de la tabla sí son del periodu.",
         "table_caption": "Cuántes persones hai en cada estáu, en cada misión",
         "col_mission": "Misión",
-        "col_average": "Media d'aprobación",
+        "col_average": "Nota media de lo aprobao",
         "col_hints": "Pistes",
         "deadline_future": "Caduca'l {date}",
         "deadline_past": "Caducó'l {date}",
@@ -1943,7 +1959,7 @@
           "mission_expired_many": "{count} misiones caducaes ensin completar; la cabera, «{mission}», caducó'l {date}",
           "low_grade": "Aprobó «{enigma}» («{mission}») con un {percent}, menos del {threshold}",
           "low_grade_many": "{count} enigmes aprobaos con menos del {threshold}; el más baxu, «{enigma}», con un {percent}",
-          "low_average": "Media d'aprobación del {average} en {approvals} enigma, menos del {threshold} | Media d'aprobación del {average} en {approvals} enigmes, menos del {threshold}",
+          "low_average": "Nota media de lo aprobao: {average} en {approvals} enigma, menos del {threshold} | Nota media de lo aprobao: {average} en {approvals} enigmes, menos del {threshold}",
           "hints": "Usó {count} pista en «{mission}» | Usó {count} pistes en «{mission}»",
           "hints_percent": "Usó {count} pista en «{mission}» ({detail}) | Usó {count} pistes en «{mission}» ({detail})",
           "hints_many": "Munches pistes en {count} misiones; la que más, «{mission}», con {hints}",
@@ -1952,7 +1968,7 @@
         },
         "mission": {
           "unfinished_after_deadline": "{unfinished} de {started} que la entamaron nun la completaron enantes de la fecha ({percent})",
-          "low_average": "Media d'aprobación del {average} en {approvals} enigma aprobáu, menos del {threshold} | Media d'aprobación del {average} en {approvals} enigmes aprobaos, menos del {threshold}",
+          "low_average": "Nota media de lo aprobao: {average} en {approvals} enigma aprobáu, menos del {threshold} | Nota media de lo aprobao: {average} en {approvals} enigmes aprobaos, menos del {threshold}",
           "many_hints": "{perStudent} pistes de media per estudiante que la entamó",
           "students_expired": "{count} persona ensin completala tres la fecha | {count} persones ensin completala tres la fecha"
         }
@@ -2018,7 +2034,7 @@
           "deadline_past": "caducó'l {date}",
           "deadline_future": "caduca'l {date}",
           "enigmas": "{approved} de {total} enigma aprobáu | {approved} de {total} enigmes aprobaos",
-          "average": "media del {value}",
+          "average": "nota media de lo aprobao: {value}",
           "hints": "{count} pista | {count} pistes",
           "pending_reviews": "{count} entrega por revisar | {count} entregues por revisar",
           "enigma_approved": "{percent} · {date}",

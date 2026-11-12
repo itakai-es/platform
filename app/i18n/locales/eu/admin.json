@@ -219,7 +219,6 @@
       },
       "ai": {
         "total_conversations": "Elkarrizketak hasieratik",
-        "avg_conversations_user": "Elk. erabiltzaileko hasieratik",
         "total_messages": "Aldiko mezuak"
       },
       "table": {
@@ -240,6 +239,12 @@
         "absolute": "{diff} aurreko aldiarekin alderatuta",
         "percent": "{percent} aurreko aldiarekin alderatuta",
         "points": "{diff} puntu aurreko aldiarekin alderatuta | {diff} puntu aurreko aldiarekin alderatuta"
+      },
+      "no_role": "Rolik gabe",
+      "services": {
+        "database": "Datu-basea",
+        "ai_text": "AA (testua)",
+        "ai_image": "AA (irudiak)"
       }
     },
     "logs": {

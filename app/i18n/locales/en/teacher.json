@@ -185,7 +185,9 @@
           "audience_top": "Your students see: the top {n} places and their own.",
           "audience_position": "Your students see: only their own position.",
           "audience_teams": "Your students see: all the teams.",
-          "audience_type_off": "Your students can't see this ranking type: turn it on in Features."
+          "audience_type_off": "Your students can't see this ranking type: turn it on in Features.",
+          "not_entered_title": "Nobody in the ranking yet",
+          "not_entered_description": "Accounts that haven't signed in yet don't appear in the ranking. They'll appear once they sign in for the first time."
         },
         "missions_tab": {
           "no_missions_title": "No missions",
@@ -432,7 +434,9 @@
             "background_error": "Could not generate the image"
           },
           "features": {
-            "title": "Features"
+            "title": "Features",
+            "closed_archived": "The class is archived: unarchive it to change its features and the ranking.",
+            "closed_trash": "The class is in the trash: restore it to change its features and the ranking."
           },
           "management": {
             "title": "Management",
@@ -493,7 +497,7 @@
               },
               "missions": {
                 "label": "Completed missions",
-                "desc": "Rewards finishing missions. Also by week and by season; XP breaks ties."
+                "desc": "Rewards finishing missions. Also by week and by season. If the XP type is also turned on, XP breaks ties."
               },
               "teams": {
                 "label": "Teams",
@@ -1062,7 +1066,12 @@
         "btn_saving": "Saving...",
         "btn_save_changes": "Save changes",
         "btn_create": "Create badge",
-        "no_mission": "No mission"
+        "no_mission": "No mission",
+        "copy_name": "{name} (copy)",
+        "label_mission": "Linked mission",
+        "btn_upload_image": "Upload image",
+        "btn_generate": "Generate with AI",
+        "btn_generating": "Generating..."
       },
       "detail": {
         "btn_close": "Close",
@@ -1079,7 +1088,8 @@
         "name_required": "Name is required",
         "name_min_length": "Name must be at least 3 characters",
         "image_size": "Image cannot exceed 2MB",
-        "image_type": "Only PNG, JPG, SVG, or WebP files are allowed"
+        "image_type": "Only PNG, JPG, SVG, or WebP files are allowed",
+        "image_required": "An image is required. Upload one or generate it with AI."
       },
       "meta": {
         "title": "My badges | ITAKAI Teacher",
@@ -1094,7 +1104,10 @@
         "system": "ITAKAI badges",
         "system_hint": "They're awarded automatically as students progress and can't be edited. Open one to see how it's earned or to create a similar one."
       },
-      "filter_all": "All badges"
+      "filter_all": "All badges",
+      "search_placeholder": "Search badges...",
+      "no_results_title": "No results",
+      "no_results_description": "No badges match these filters"
     },
     "students": {
       "index": {
@@ -1133,7 +1146,7 @@
         "error_title": "Error loading student",
         "error_default": "Error loading student data",
         "btn_retry": "Retry",
-        "stat_classes": "Classes",
+        "stat_classes": "Class | Classes",
         "enrolled_classes_title": "Enrolled classes",
         "enrolled_classes_count": "No classes | 1 class | {count} classes",
         "not_enrolled": "Not enrolled in any of your classes",
@@ -1189,7 +1202,8 @@
         "avatar_summary": "When you save, {name} will appear as {avatar} in this class.",
         "avatar_summary_generated": "When you save, {name} will appear as {avatar} in this class, and the image they generated with AI will be deleted.",
         "avatar_saved": "Avatar changed",
-        "avatar_error": "The avatar could not be changed."
+        "avatar_error": "The avatar could not be changed.",
+        "nickname_reserved": "That nickname can't be used: choose one that isn't “Estudiante” or the name of someone else in the class."
       }
     },
     "ai_assistant": {
@@ -1443,7 +1457,7 @@
         },
         "btn_close": "Close",
         "completed_by_students": "Students who have completed it",
-        "required_average": "Average of required enigmas approved: {percent}",
+        "required_average": "Required enigmas approved: {percent} on average",
         "edit_enigma_named": "Edit enigma “{title}”",
         "enigma_actions": "More actions for enigma “{title}”",
         "edit_document_named": "Edit document “{title}”",
@@ -1612,7 +1626,9 @@
       "cancel": "Cancel",
       "done": "Done",
       "wizard_question_schedule": "Set a schedule for your class",
-      "wizard_question_cover": "Now, a cover for your class"
+      "wizard_question_cover": "Now, a cover for your class",
+      "time_start": "Start time",
+      "time_end": "End time"
     },
     "roulette": {
       "meta": {
@@ -1907,7 +1923,7 @@
       },
       "summary": {
         "avg_missions": "Average missions",
-        "avg_percent": "Average progress",
+        "avg_percent": "Average progress (required enigmas)",
         "pending_link": "Go to Missions",
         "attendance": "Average attendance",
         "attendance_sessions": "{count} session in this period | {count} sessions in this period",
@@ -1917,10 +1933,10 @@
       },
       "missions": {
         "title": "Missions",
-        "caption": "Where each student is right now: this doesn't change with the period. The approval average and hints in the table do belong to the period.",
+        "caption": "Where each student is right now: this doesn't change with the period. The average grade of approved work and the hints in the table do belong to the period.",
         "table_caption": "How many people are in each state, per mission",
         "col_mission": "Mission",
-        "col_average": "Approval average",
+        "col_average": "Average grade of approved work",
         "col_hints": "Hints",
         "deadline_future": "Due {date}",
         "deadline_past": "Expired on {date}",
@@ -1943,7 +1959,7 @@
           "mission_expired_many": "{count} missions expired without being completed; the latest, “{mission}”, on {date}",
           "low_grade": "“{enigma}” (“{mission}”) approved at {percent}, below {threshold}",
           "low_grade_many": "{count} enigmas approved below {threshold}; the lowest, “{enigma}”, at {percent}",
-          "low_average": "Approval average of {average} across {approvals} enigma, below {threshold} | Approval average of {average} across {approvals} enigmas, below {threshold}",
+          "low_average": "Average grade of approved work: {average} across {approvals} enigma, below {threshold} | Average grade of approved work: {average} across {approvals} enigmas, below {threshold}",
           "hints": "Used {count} hint in “{mission}” | Used {count} hints in “{mission}”",
           "hints_percent": "Used {count} hint in “{mission}” ({detail}) | Used {count} hints in “{mission}” ({detail})",
           "hints_many": "Many hints in {count} missions; the most in “{mission}”, with {hints}",
@@ -1952,7 +1968,7 @@
         },
         "mission": {
           "unfinished_after_deadline": "{unfinished} of the {started} who started it didn't finish it before the deadline ({percent})",
-          "low_average": "Approval average of {average} across {approvals} approved enigma, below {threshold} | Approval average of {average} across {approvals} approved enigmas, below {threshold}",
+          "low_average": "Average grade of approved work: {average} across {approvals} approved enigma, below {threshold} | Average grade of approved work: {average} across {approvals} approved enigmas, below {threshold}",
           "many_hints": "{perStudent} hints on average per student who started it",
           "students_expired": "{count} person didn't complete it by the deadline | {count} people didn't complete it by the deadline"
         }
@@ -2018,7 +2034,7 @@
           "deadline_past": "expired on {date}",
           "deadline_future": "due {date}",
           "enigmas": "{approved} of {total} enigma approved | {approved} of {total} enigmas approved",
-          "average": "average {value}",
+          "average": "average grade of approved work: {value}",
           "hints": "{count} hint | {count} hints",
           "pending_reviews": "{count} submission to review | {count} submissions to review",
           "enigma_approved": "{percent} · {date}",

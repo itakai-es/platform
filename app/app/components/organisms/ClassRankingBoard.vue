@@ -24,13 +24,16 @@
         :type="activeType"
       />
 
-      <!-- Periodo, si el tipo tiene más de uno: la XP solo tiene «Siempre» -->
-      <div v-if="periodOptions.length > 1" class="max-w-md space-y-2">
-        <OptionPillGroup
-          :model-value="activePeriod"
-          :options="periodOptions"
+      <!-- Periodo, si el tipo tiene más de uno: la XP solo tiene «Siempre». Las
+           mismas píldoras que el periodo de la analítica. -->
+      <div v-if="periodTabs.length > 1" class="space-y-2">
+        <TabNavigation
+          variant="pills"
+          toggle
+          :tabs="periodTabs"
+          :active-tab="activePeriod"
           :aria-label="t('common.ranking.periods_label')"
-          @update:model-value="period = $event"
+          @tab-change="period = $event as RankingPeriod"
         />
         <p v-if="seasonNote" class="text-sm text-navy-700/70">{{ seasonNote }}</p>
       </div>
@@ -65,7 +68,7 @@
 
 <script setup lang="ts">
 import { tabElementId, tabPanelId } from '~/utils/tabs'
-import type { RankingType } from '~/utils/ranking-config'
+import type { RankingPeriod, RankingType } from '~/utils/ranking-config'
 
 /**
  * El ranking de una clase, con sus pestañas por tipo y sus periodos: el mismo en la
@@ -107,11 +110,8 @@ const activeType = computed<RankingType>(
 /** El periodo se lee de la respuesta: la API se queda con «Siempre» si el pedido no vale. */
 const activePeriod = computed(() => data.value?.period ?? period.value)
 
-const periodOptions = computed(() =>
-  (data.value?.options.periods ?? []).map(value => ({
-    value,
-    label: t(`common.ranking.period.${value}`),
-  }))
+const periodTabs = computed(() =>
+  (data.value?.options.periods ?? []).map(id => ({ id, label: t(`common.ranking.period.${id}`) }))
 )
 
 const seasonNote = computed(() => {

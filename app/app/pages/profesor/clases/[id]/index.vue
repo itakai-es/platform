@@ -1,7 +1,10 @@
 <template>
-  <div class="grid grid-cols-1 xl:grid-cols-3 gap-4 md:gap-6">
-    <!-- Left Column (2/3): el panel de la clase, en orden de uso -->
-    <div class="min-w-0 xl:col-span-2 space-y-4 md:space-y-6">
+  <!-- Arriba, dos columnas: el panel (cifras, misiones y dificultades) y, al lado, el
+       asistente y la actividad. Debajo, a todo el ancho, las dos tablas largas
+       (estudiantes y semanas): así la columna de la derecha no deja un hueco. En el
+       móvil, una columna en este orden; en pantallas anchas, la derecha va arriba. -->
+  <div class="grid grid-cols-1 gap-4 md:gap-6 xl:grid-cols-3">
+    <div class="min-w-0 space-y-4 md:space-y-6 xl:col-span-2 xl:row-start-1">
       <ClassAnalyticsSummary
         :class-id="classId"
         :summary="analytics?.summary ?? null"
@@ -17,20 +20,27 @@
           :loading="!analytics"
         />
         <AnalyticsSignalsCard :signals="signals" :loading="!analytics" />
-        <ClassAnalyticsStudents
-          :class-id="classId"
-          :students="analytics?.students ?? []"
-          :loading="!analytics"
-          :show-attendance="showAttendance"
-        />
-        <ClassAnalyticsWeeks :weeks="analytics?.weeks ?? []" :loading="!analytics" />
       </template>
     </div>
 
-    <!-- Right Column (1/3): Sidebar widgets -->
-    <div class="min-w-0 space-y-4 md:space-y-6">
+    <div
+      v-if="!analyticsError"
+      class="min-w-0 space-y-4 md:space-y-6 xl:col-span-3 xl:row-start-2"
+    >
+      <ClassAnalyticsStudents
+        :class-id="classId"
+        :students="analytics?.students ?? []"
+        :loading="!analytics"
+        :show-attendance="showAttendance"
+      />
+      <ClassAnalyticsWeeks :weeks="analytics?.weeks ?? []" :loading="!analytics" />
+    </div>
+
+    <!-- Right Column (1/3): Sidebar widgets. La actividad, sin altura máxima: son las
+         diez últimas y en la página hay un solo desplazamiento, el suyo. -->
+    <div class="min-w-0 space-y-4 md:space-y-6 xl:col-start-3 xl:row-start-1">
       <AIAssistantCard :class-id="classId" />
-      <RecentActivityCard :activities="recentActivities" card-type="pending" />
+      <RecentActivityCard :activities="recentActivities" card-type="pending" max-height="none" />
     </div>
   </div>
 </template>
@@ -55,7 +65,7 @@ const { state, can, ensureAnalytics } = useTeacherClassDetail(classId)
 
 // El panel: se pide al entrar en el Resumen y al cambiar de periodo. Lo ya visto
 // se enseña al momento mientras se vuelve a pedir por detrás.
-const { period } = useAnalyticsPeriod()
+const { period } = useAnalyticsPeriod({ syncUrl: true })
 const analytics = computed(() => state.value.analytics[period.value] ?? null)
 const analyticsError = computed(() => state.value.analyticsError[period.value] ?? null)
 watch(period, value => void ensureAnalytics(value, true), { immediate: true })

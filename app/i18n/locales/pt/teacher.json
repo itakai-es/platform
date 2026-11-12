@@ -185,7 +185,9 @@
           "audience_top": "Os teus estudantes veem: as {n} primeiras posições e a sua.",
           "audience_position": "Os teus estudantes veem: só a sua posição.",
           "audience_teams": "Os teus estudantes veem: todas as equipas.",
-          "audience_type_off": "Os teus estudantes não veem este tipo de ranking: ativa-se em Funcionalidades."
+          "audience_type_off": "Os teus estudantes não veem este tipo de ranking: ativa-se em Funcionalidades.",
+          "not_entered_title": "Ainda não há ninguém no ranking",
+          "not_entered_description": "As contas que ainda não entraram não aparecem no ranking. Vão aparecer quando entrarem pela primeira vez."
         },
         "missions_tab": {
           "no_missions_title": "Não há missões",
@@ -432,7 +434,9 @@
             "background_error": "Não foi possível gerar a imagem"
           },
           "features": {
-            "title": "Funcionalidades"
+            "title": "Funcionalidades",
+            "closed_archived": "A turma está arquivada: desarquiva-a para mudar as suas funcionalidades e o ranking.",
+            "closed_trash": "A turma está no lixo: restaura-a para mudar as suas funcionalidades e o ranking."
           },
           "management": {
             "title": "Gestão",
@@ -493,7 +497,7 @@
               },
               "missions": {
                 "label": "Missões concluídas",
-                "desc": "Premeia terminar missões. Também por semana e por temporada; nos empates decide a XP."
+                "desc": "Premeia terminar missões. Também por semana e por temporada. Se o tipo XP também estiver ativado, nos empates decide a XP."
               },
               "teams": {
                 "label": "Equipas",
@@ -1062,7 +1066,12 @@
         "btn_saving": "A guardar...",
         "btn_save_changes": "Guardar alterações",
         "btn_create": "Criar emblema",
-        "no_mission": "Sem missão"
+        "no_mission": "Sem missão",
+        "copy_name": "{name} (cópia)",
+        "label_mission": "Missão associada",
+        "btn_upload_image": "Carregar imagem",
+        "btn_generate": "Gerar com IA",
+        "btn_generating": "A gerar..."
       },
       "detail": {
         "btn_close": "Fechar",
@@ -1079,7 +1088,8 @@
         "name_required": "O nome é obrigatório",
         "name_min_length": "O nome tem de ter pelo menos 3 caracteres",
         "image_size": "A imagem não pode ultrapassar 2 MB",
-        "image_type": "Só são aceites ficheiros PNG, JPG, SVG ou WebP"
+        "image_type": "Só são aceites ficheiros PNG, JPG, SVG ou WebP",
+        "image_required": "A imagem é obrigatória. Carrega uma ou gera-a com IA."
       },
       "meta": {
         "title": "Os meus emblemas | ITAKAI Docente",
@@ -1094,7 +1104,10 @@
         "system": "Emblemas do ITAKAI",
         "system_hint": "São atribuídos automaticamente consoante o progresso de cada estudante e não podem ser editados. Abre-os para ver como se ganham ou criar um parecido."
       },
-      "filter_all": "Todos os emblemas"
+      "filter_all": "Todos os emblemas",
+      "search_placeholder": "Procurar emblemas...",
+      "no_results_title": "Sem resultados",
+      "no_results_description": "Não há emblemas com estes filtros"
     },
     "students": {
       "index": {
@@ -1133,7 +1146,7 @@
         "error_title": "Erro ao carregar a ficha de estudante",
         "error_default": "Erro ao carregar os dados da ficha",
         "btn_retry": "Tentar de novo",
-        "stat_classes": "Turmas",
+        "stat_classes": "Turma | Turmas",
         "enrolled_classes_title": "Turmas inscritas",
         "enrolled_classes_count": "Sem turmas | 1 turma | {count} turmas",
         "not_enrolled": "Não está em nenhuma das tuas turmas",
@@ -1189,7 +1202,8 @@
         "avatar_summary": "Ao guardar, {name} passa a ter {avatar} nesta turma.",
         "avatar_summary_generated": "Ao guardar, {name} passa a ter {avatar} nesta turma, e a imagem que gerou com IA é apagada.",
         "avatar_saved": "Avatar alterado",
-        "avatar_error": "Não foi possível mudar o avatar."
+        "avatar_error": "Não foi possível mudar o avatar.",
+        "nickname_reserved": "Essa alcunha não pode ser usada: escolhe uma que não seja «Estudiante» nem o nome de outra pessoa da turma."
       }
     },
     "ai_assistant": {
@@ -1443,7 +1457,7 @@
         },
         "btn_close": "Fechar",
         "completed_by_students": "Estudantes que a concluíram",
-        "required_average": "Média de enigmas obrigatórios aprovados: {percent}",
+        "required_average": "Enigmas obrigatórios aprovados: {percent} em média",
         "edit_enigma_named": "Editar o enigma «{title}»",
         "enigma_actions": "Mais ações do enigma «{title}»",
         "edit_document_named": "Editar o documento «{title}»",
@@ -1612,7 +1626,9 @@
       "cancel": "Cancelar",
       "done": "Concluído",
       "wizard_question_schedule": "Define um horário para a tua turma",
-      "wizard_question_cover": "Agora, uma capa para a tua turma"
+      "wizard_question_cover": "Agora, uma capa para a tua turma",
+      "time_start": "Hora de início",
+      "time_end": "Hora de fim"
     },
     "roulette": {
       "meta": {
@@ -1907,7 +1923,7 @@
       },
       "summary": {
         "avg_missions": "Missões em média",
-        "avg_percent": "Progresso médio",
+        "avg_percent": "Progresso médio (enigmas obrigatórios)",
         "pending_link": "Ir para Missões",
         "attendance": "Assiduidade média",
         "attendance_sessions": "{count} sessão neste período | {count} sessões neste período",
@@ -1917,10 +1933,10 @@
       },
       "missions": {
         "title": "Missões",
-        "caption": "Onde está cada estudante neste momento: não muda com o período. Já a média de aprovação e as pistas da tabela são do período.",
+        "caption": "Onde está cada estudante neste momento: não muda com o período. Já a nota média do que foi aprovado e as pistas da tabela são do período.",
         "table_caption": "Quantas pessoas há em cada estado, por missão",
         "col_mission": "Missão",
-        "col_average": "Média de aprovação",
+        "col_average": "Nota média do que foi aprovado",
         "col_hints": "Pistas",
         "deadline_future": "Termina a {date}",
         "deadline_past": "Expirou a {date}",
@@ -1943,7 +1959,7 @@
           "mission_expired_many": "{count} missões expiradas sem concluir; a última, «{mission}», expirou a {date}",
           "low_grade": "«{enigma}» («{mission}») aprovado com {percent}, abaixo de {threshold}",
           "low_grade_many": "{count} enigmas aprovados abaixo de {threshold}; o mais baixo, «{enigma}», com {percent}",
-          "low_average": "Média de aprovação de {average} em {approvals} enigma, abaixo de {threshold} | Média de aprovação de {average} em {approvals} enigmas, abaixo de {threshold}",
+          "low_average": "Nota média do que foi aprovado: {average} em {approvals} enigma, abaixo de {threshold} | Nota média do que foi aprovado: {average} em {approvals} enigmas, abaixo de {threshold}",
           "hints": "Usou {count} pista em «{mission}» | Usou {count} pistas em «{mission}»",
           "hints_percent": "Usou {count} pista em «{mission}» ({detail}) | Usou {count} pistas em «{mission}» ({detail})",
           "hints_many": "Muitas pistas em {count} missões; a que tem mais, «{mission}», com {hints}",
@@ -1952,7 +1968,7 @@
         },
         "mission": {
           "unfinished_after_deadline": "{unfinished} de {started} que a começaram não a concluíram antes da data ({percent})",
-          "low_average": "Média de aprovação de {average} em {approvals} enigma aprovado, abaixo de {threshold} | Média de aprovação de {average} em {approvals} enigmas aprovados, abaixo de {threshold}",
+          "low_average": "Nota média do que foi aprovado: {average} em {approvals} enigma aprovado, abaixo de {threshold} | Nota média do que foi aprovado: {average} em {approvals} enigmas aprovados, abaixo de {threshold}",
           "many_hints": "{perStudent} pistas em média por estudante que a começou",
           "students_expired": "{count} pessoa sem a concluir depois da data | {count} pessoas sem a concluir depois da data"
         }
@@ -2018,7 +2034,7 @@
           "deadline_past": "expirou a {date}",
           "deadline_future": "termina a {date}",
           "enigmas": "{approved} de {total} enigma aprovado | {approved} de {total} enigmas aprovados",
-          "average": "média de {value}",
+          "average": "nota média do que foi aprovado: {value}",
           "hints": "{count} pista | {count} pistas",
           "pending_reviews": "{count} entrega por rever | {count} entregas por rever",
           "enigma_approved": "{percent} · {date}",

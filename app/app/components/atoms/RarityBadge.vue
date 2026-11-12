@@ -68,8 +68,8 @@
  * Colores según diseño:
  * - común: Verde (#6cf3af) con texto navy
  * - rara: Rosa/Azul (#E8B4D8) con texto navy
- * - épica: Morado (#ac74fd) con texto blanco
- * - legendaria: Dorado (#F59E0B) con texto blanco
+ * - épica: Morado (#ac74fd) con texto navy
+ * - legendaria: Dorado (#F59E0B) con texto navy
  */
 
 import type { MissionRarity } from '~/types/mission.types'
@@ -88,8 +88,10 @@ const badgeClasses = computed(() => {
   const variants: Record<MissionRarity, string> = {
     comun: 'bg-badge-comun text-navy-700',
     rara: 'bg-purple-light text-navy-700',
-    epica: 'bg-purple text-white',
-    legendaria: 'bg-badge-legendaria text-white',
+    // Azul marino y no blanco: el blanco sobre morado (3,1:1) o sobre ámbar (2,1:1)
+    // no llega al contraste AA.
+    epica: 'bg-purple text-navy-700',
+    legendaria: 'bg-badge-legendaria text-navy-700',
   }
 
   return [base, variants[props.rarity]].join(' ')

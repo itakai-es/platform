@@ -1,24 +1,27 @@
 <template>
-  <div class="flex items-center gap-3">
-    <span class="text-xs font-medium text-navy-700/70 w-24 flex-shrink-0">{{ label }}</span>
-    <div class="flex-1 h-3 bg-navy-700/10 rounded-full overflow-hidden">
-      <div
-        class="h-full rounded-full transition-all duration-300"
-        :class="barColor"
-        :style="{ width: `${percentage}%` }"
-      />
-    </div>
-    <span :class="['text-xs font-mono font-bold text-right whitespace-nowrap', textColor]">
-      {{ value }}{{ unit }}
-    </span>
-  </div>
+  <!-- La misma fila que los repartos: nombre, barra y cifra en azul marino -->
+  <DistributionBar
+    :label="label"
+    :value="value ?? 0"
+    :percentage="percentage"
+    :tone="tone"
+    :display="value === null ? '—' : `${formatNumber(value)}${unit}`"
+  />
 </template>
 
 <script setup lang="ts">
+import type { DistributionTone } from '~/components/atoms/DistributionBar.vue'
+
+/**
+ * Un recurso del sistema en las estadísticas de Administración (CPU, memoria,
+ * disco, latencia de la base), con la fila de `DistributionBar`. La barra cambia
+ * de color de token al pasar de `warnAt` y de `dangerAt` (en % de `max`); la cifra
+ * va siempre escrita, con contraste AA. `value` null: no se ha podido medir («—»).
+ */
 const props = withDefaults(
   defineProps<{
     label: string
-    value: number
+    value: number | null
     max: number
     unit?: string
     warnAt?: number
@@ -31,19 +34,15 @@ const props = withDefaults(
   }
 )
 
-const percentage = computed(() => Math.min((props.value / props.max) * 100, 100))
+const { formatNumber } = useNumberFormat()
 
-const barColor = computed(() => {
-  const pct = percentage.value
-  if (pct >= props.dangerAt) return 'bg-red-500'
-  if (pct >= props.warnAt) return 'bg-yellow-500'
-  return 'bg-purple'
-})
+const percentage = computed(() =>
+  props.value === null ? 0 : Math.min(Math.max((props.value / props.max) * 100, 0), 100)
+)
 
-const textColor = computed(() => {
-  const pct = percentage.value
-  if (pct >= props.dangerAt) return 'text-red-500'
-  if (pct >= props.warnAt) return 'text-yellow-600'
-  return 'text-navy-700'
+const tone = computed<DistributionTone>(() => {
+  if (percentage.value >= props.dangerAt) return 'error'
+  if (percentage.value >= props.warnAt) return 'yellow'
+  return 'purple'
 })
 </script>

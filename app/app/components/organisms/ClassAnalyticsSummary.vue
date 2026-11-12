@@ -34,10 +34,8 @@
           :value="summary.averagePercent === null ? '—' : formatPercent(summary.averagePercent)"
           :ring="summary.averagePercent === null ? null : percentFraction(summary.averagePercent)"
         >
-          <template #detail
-            >{{ t('teacher.analytics.summary.today') }} ·
-            {{ t('teacher.students.detail.stat_required_enigmas') }}</template
-          >
+          <!-- La etiqueta ya dice qué cuenta (los enigmas obligatorios) -->
+          <template #detail>{{ t('teacher.analytics.summary.today') }}</template>
         </StatTile>
         <StatTile
           surface="item"

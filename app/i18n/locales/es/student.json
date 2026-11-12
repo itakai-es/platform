@@ -184,7 +184,8 @@
           "how_others_see": "Así te ven en esta clase",
           "nickname_empty": "Escribe un alias: es el nombre con el que te ve tu clase.",
           "nickname_taken": "Ese alias ya lo tiene otra persona de tu clase. Prueba con otro.",
-          "nickname_invalid": "El alias tiene que tener de 1 a {max} caracteres, con alguna letra o número."
+          "nickname_invalid": "El alias tiene que tener de 1 a {max} caracteres, con alguna letra o número.",
+          "nickname_reserved": "Ese alias no se puede usar: elige uno que no sea «Estudiante» ni el nombre de otra persona de tu clase."
         },
         "mission_no_description": "Sin descripción",
         "shop": {
@@ -422,7 +423,7 @@
         "missions_suffix": "misiones",
         "you_badge": "Tú",
         "avg_xp": "XP media",
-        "avg_progress": "Progreso medio",
+        "avg_progress": "Progreso medio (enigmas obligatorios)",
         "avg_missions": "Misiones de media",
         "total_xp": "XP total clase",
         "podium_empty": "Aún nadie tiene XP. El podio se llenará en cuanto alguien la consiga.",
@@ -442,8 +443,9 @@
       "class_xp_bar": {
         "rank": "Ranking",
         "level_line": "Nivel {level} · {title}",
-        "xp_line": "{current}/{required} XP",
-        "rank_of": "Puesto {rank} de {total}"
+        "rank_of": "Puesto {rank} de {total}",
+        "xp_to_next": "Falta {count} XP para el nivel {level} | Faltan {count} XP para el nivel {level}",
+        "max_level": "Nivel máximo"
       }
     },
     "teams": {

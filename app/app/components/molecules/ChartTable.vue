@@ -30,7 +30,7 @@
             :key="column.key"
             scope="col"
             class="py-2 font-semibold"
-            :class="[ALIGN[column.align ?? 'end'], compact ? 'px-1.5 text-xs' : 'px-3']"
+            :class="[ALIGN[column.align ?? 'end'], compact ? 'hyphens-auto px-1 text-xs' : 'px-3']"
             :aria-sort="column.sort"
           >
             <slot name="column" :column="column">{{ column.label }}</slot>
@@ -49,11 +49,8 @@
             :class="compact ? 'px-1.5' : 'px-3'"
           >
             <!-- Ancho mínimo: con cifras al lado, la columna no se aplasta a
-                 una letra por línea; el resto se desplaza. -->
-            <span
-              class="block max-w-[14rem] break-words"
-              :class="compact ? 'min-w-[6rem]' : 'min-w-[7rem]'"
-            >
+                 una letra por línea (ni un título en cuatro); el resto se desplaza. -->
+            <span class="block min-w-[8rem] max-w-[14rem] break-words">
               <slot name="header" :row="row">
                 <NuxtLink
                   v-if="row.to"
@@ -71,7 +68,7 @@
             class="py-2 tabular-nums text-navy-700"
             :class="[
               ALIGN[column.align ?? 'end'],
-              compact ? 'px-1.5' : 'px-3',
+              compact ? 'px-1' : 'px-3',
               column.wrap ? '' : 'whitespace-nowrap',
             ]"
           >
@@ -103,8 +100,9 @@ import { useNumberFormat } from '~/composables/useNumberFormat'
  *   `cells`, el valor de cada columna por su `key`. Un número se escribe en el
  *   idioma de la app; null o ausente, «—».
  *
- * `compact`, menos aire y cabeceras más pequeñas, para tablas de muchas columnas
- * en el hueco de una columna de la página.
+ * `compact`, menos aire y cabeceras más pequeñas (que se parten con guion si no
+ * caben), para tablas de muchas columnas en el hueco de una columna de la página:
+ * las cifras se quedan estrechas y el título de cada fila, legible.
  *
  * Ranuras: `header` ({ row }), `column` ({ column }) y `cell` ({ row, column,
  * value }) para poner iconos, avatares o recompensas (icono + número).
