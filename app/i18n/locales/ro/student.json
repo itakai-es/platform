@@ -94,7 +94,7 @@
         "downloading": "Se descarcă",
         "path_locked": "Această misiune nu e încă deschisă: mai întâi trebuie să finalizezi alta.",
         "already_approved": "Această enigmă ți-a fost deja aprobată.",
-        "already_pending": "Ai deja o predare pentru această enigmă care așteaptă revizuirea."
+        "already_pending": "Ai deja o lucrare pentru această enigmă care așteaptă verificarea."
       },
       "hints": {
         "intro": "Te-ai blocat? Folosește un indiciu. Se deschid în ordine, câte unul, și fiecare are costul lui.",
@@ -247,14 +247,14 @@
         },
         "results": {
           "title": "Rezultatele mele",
-          "hint": "Recompensele fiecărei misiuni sunt cele primite pentru enigmele ei. Nu includ bonusul pentru finalizare, așa că nu însumează soldul tău.",
+          "hint": "Recompensele fiecărei misiuni sunt cele primite pentru enigmele ei. Nu includ bonusul pentru finalizare, așa că suma lor nu coincide neapărat cu soldul tău.",
           "filter_label": "Filtrează misiunile mele",
           "empty_pending": "Nu ai misiuni în așteptare",
           "empty_done": "Încă nu ai finalizat nicio misiune",
           "in_review": "{count} în verificare | {count} în verificare",
           "deadline_past": "a expirat pe {date}",
           "hints": "{count} indiciu folosit | {count} indicii folosite",
-          "by_enigma": "% pentru fiecare enigmă",
+          "by_enigma": "% pe enigmă",
           "enigma_open": "Netrimisă",
           "filter_pending": "În așteptare ({count})",
           "filter_done": "Finalizate ({count})",
@@ -425,7 +425,7 @@
         "avg_progress": "Progres mediu",
         "avg_missions": "Misiuni în medie",
         "total_xp": "XP total al clasei",
-        "podium_empty": "Încă nimeni nu are XP. Podiumul se va umple de îndată ce cineva va câștiga.",
+        "podium_empty": "Încă nimeni nu are XP. Podiumul se va umple de îndată ce cineva câștigă XP.",
         "rank_sr": "Locul {rank}",
         "missions_count": "{count} misiune | {count} misiuni",
         "podium_empty_missions": "Încă nimeni nu a finalizat o misiune. Podiumul se va umple de îndată ce cineva o va face.",

@@ -721,7 +721,7 @@
         "path_locked": "Pechada polo camiño"
       },
       "compare": {
-        "not_enough": "A túa clase aínda é pequena para comparar.",
+        "not_enough": "A túa clase aínda é demasiado pequena para comparar.",
         "self": {
           "above": "Vas por riba da media do resto da túa clase.",
           "at": "Estás na media do resto da túa clase.",
@@ -750,7 +750,7 @@
       "confirm": "Confirmar"
     },
     "assistant_card": {
-      "greeting": "Ola {name}! Son {god}, o teu asistente de IA. En que podo axudarte?",
+      "greeting": "Ola, {name}! Son {god}, o teu asistente de IA. En que podo axudarte?",
       "greeting_no_name": "Ola! Son {god}, o teu asistente de IA. En que podo axudarte?"
     },
     "progress": {

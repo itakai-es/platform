@@ -68,7 +68,7 @@
       "submission_student_approved": "Entrega de {name} aprovada (+{xp} XP)",
       "download_not_found": "No s'ha trobat el fitxer per a descarregar",
       "download_error": "No s'ha pogut descarregar el fitxer",
-      "download_no_access": "No tens accés a aquest fitxer",
+      "download_no_access": "No tens accés a este fitxer",
       "popup_blocked": "Permet les finestres emergents per a obrir el fitxer"
     },
     "notifications": {
@@ -238,7 +238,7 @@
         },
         "alumno": {
           "title": "Ajuda per a l'alumnat",
-          "subtitle": "Com entrar en la teua classe, entregar missions i traure profit de l'XP, les monedes i el manà."
+          "subtitle": "Com entrar en la teua classe, entregar missions i traure profit de l'XP, les monedes i el mana."
         }
       },
       "all_categories": "Totes les categories",
@@ -414,7 +414,7 @@
     },
     "file_unavailable": {
       "title": "L'enllaç ja no és vàlid",
-      "message": "L'enllaç per a obrir aquest fitxer ha caducat. Torna a la missió i obri'l una altra vegada."
+      "message": "L'enllaç per a obrir este fitxer ha caducat. Torna a la missió i obri'l una altra vegada."
     },
     "class_teachers": {
       "owner": "Propietat",
@@ -721,7 +721,7 @@
         "path_locked": "Tancada pel camí"
       },
       "compare": {
-        "not_enough": "La teua classe encara és xicoteta per a comparar.",
+        "not_enough": "La teua classe encara és massa xicoteta per a comparar.",
         "self": {
           "above": "Vas per damunt de la mitjana de la resta de la teua classe.",
           "at": "Estàs en la mitjana de la resta de la teua classe.",
@@ -750,7 +750,7 @@
       "confirm": "Confirmar"
     },
     "assistant_card": {
-      "greeting": "Hola {name}! Soc {god}, el teu assistent d'IA. En què et puc ajudar?",
+      "greeting": "Hola, {name}! Soc {god}, el teu assistent d'IA. En què et puc ajudar?",
       "greeting_no_name": "Hola! Soc {god}, el teu assistent d'IA. En què et puc ajudar?"
     },
     "progress": {

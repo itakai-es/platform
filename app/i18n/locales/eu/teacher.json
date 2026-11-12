@@ -493,7 +493,7 @@
               },
               "missions": {
                 "label": "Osatutako misioak",
-                "desc": "Amaitzea saritzen du. Astez edo denboraldiz; berdinketetan XPak erabakitzen du."
+                "desc": "Misioak amaitzea saritzen du. Astez eta denboraldiz ere bai; berdinketetan XPak erabakitzen du."
               },
               "teams": {
                 "label": "Taldeak",
@@ -1040,28 +1040,28 @@
       }
     },
     "badges": {
-      "title": "Nire dominariak",
-      "subtitle": "Sortu eta kudeatu dominari pertsonalizatuak zure ikasleen lorpenak saritzeko",
-      "new_badge": "Dominari berria",
+      "title": "Nire dominak",
+      "subtitle": "Sortu eta kudeatu domina pertsonalizatuak zure ikasleen lorpenak saritzeko",
+      "new_badge": "Domina berria",
       "btn_delete": "Ezabatu",
       "no_badges_title": "Oraindik ez duzu bat ere sortu",
-      "no_badges_description": "Sortu zure lehen dominaria zure ikasleak saritzeko",
-      "create_first": "Lehen dominaria sortu",
+      "no_badges_description": "Sortu zure lehen domina zure ikasleak saritzeko",
+      "create_first": "Lehen domina sortu",
       "form": {
-        "edit_title": "Dominaria editatu",
-        "create_title": "Dominari berria",
+        "edit_title": "Domina editatu",
+        "create_title": "Domina berria",
         "label_name": "Izena",
         "label_description": "Deskribapena",
         "label_image": "Irudia",
         "image_optional": "(aukerakoa)",
         "placeholder_name": "Adib: Ekuazioen maisua",
-        "placeholder_description": "Deskribatu dominari honek zer lorpen adierazten duen...",
+        "placeholder_description": "Deskribatu domina honek zer lorpen adierazten duen...",
         "btn_remove_image": "Irudia kendu",
         "preview_label": "Aurrebista:",
         "btn_cancel": "Utzi",
         "btn_saving": "Gordetzen...",
         "btn_save_changes": "Aldaketak gorde",
-        "btn_create": "Dominaria sortu",
+        "btn_create": "Domina sortu",
         "no_mission": "Misiorik gabe"
       },
       "detail": {
@@ -1073,8 +1073,8 @@
         "system_generic": "ITAKAIrena da eta ezin da editatu: berez ematen da ikasleen aurrerapenaren arabera.",
         "not_yours": "Ezin duzu editatu: beste pertsona batek sortu zuen, aldatu ezin duzun misio baterako."
       },
-      "delete_title": "Dominaria ezabatu",
-      "delete_confirm": "Ziur zaude '{name}' dominaria ezabatu nahi duzula? Ekintza hau ezin da desegin.",
+      "delete_title": "Domina ezabatu",
+      "delete_confirm": "Ziur zaude '{name}' domina ezabatu nahi duzula? Ekintza hau ezin da desegin.",
       "validation": {
         "name_required": "Izena derrigorrezkoa da",
         "name_min_length": "Izenak gutxienez 3 karaktere izan behar ditu",
@@ -1082,19 +1082,19 @@
         "image_type": "PNG, JPG, SVG edo WebP fitxategiak soilik onartzen dira"
       },
       "meta": {
-        "title": "Nire dominariak | ITAKAI Irakaslea",
-        "description": "Sortu, editatu eta kudeatu dominari pertsonalizatuak zure ikasleen lorpenak saritzeko."
+        "title": "Nire dominak | ITAKAI Irakaslea",
+        "description": "Sortu, editatu eta kudeatu domina pertsonalizatuak zure ikasleen lorpenak saritzeko."
       },
       "generate_error": "Ezin izan da doma sortu.",
       "save_error": "Ezin izan da doma gorde.",
       "delete_error": "Ezin izan da doma ezabatu.",
       "sections": {
-        "own": "Zure dominariak",
+        "own": "Zure dominak",
         "own_hint": "Zuk sortutakoak eta edita ditzakezun misioetakoak. Ireki itzazu aldatzeko.",
-        "system": "ITAKAIren dominariak",
+        "system": "ITAKAIren dominak",
         "system_hint": "Ikasleen aurrerapenaren arabera ematen dira berez, eta ezin dira editatu. Ireki itzazu nola lortzen diren ikusteko edo antzeko bat sortzeko."
       },
-      "filter_all": "Dominari guztiak"
+      "filter_all": "Domina guztiak"
     },
     "students": {
       "index": {
@@ -1170,7 +1170,7 @@
         "remove_confirm": "Klasetik kendu",
         "remove_loses": "Klase honetan duen guztia ezabatuko da:",
         "remove_loses_progress": "bere maila, XPa, txanponak, mana eta bizitzak;",
-        "remove_loses_submissions": "misioetako aurrerapena, entregak eta misio horietako intsigniak;",
+        "remove_loses_submissions": "misioetako aurrerapena, entregak eta misio horietako dominak;",
         "remove_loses_shop": "dendako erosketak eta erabilerak, eta aplikatu zaizkion portaerak;",
         "remove_loses_history": "klase honi buruzko historia, jakinarazpenak eta laguntzailearekin izandako elkarrizketak.",
         "remove_keeps": "Beste klaseetan duena ez da aldatzen, eta bere kontuak bere horretan jarraitzen du. Ezin da desegin.",
@@ -1910,7 +1910,7 @@
         "avg_percent": "Batez besteko aurrerapena",
         "pending_link": "Joan misioetara",
         "attendance": "Batez besteko asistentzia",
-        "attendance_sessions": "{count} saio aldi honetan | {count} saio aldi honetan",
+        "attendance_sessions": "Saio {count} aldi honetan | {count} saio aldi honetan",
         "xp": "Batez besteko XP",
         "unstarted_note": "Batez bestekoek ez dute kontuan hartzen estreinatu gabeko {count} kontu. | Batez bestekoek ez dituzte kontuan hartzen estreinatu gabeko {count} kontu.",
         "today": "Gaur"
@@ -1940,7 +1940,7 @@
           "inactive_never": "Jarduerarik gabe klasean sartu zenetik, duela {days} egun, misio {count} irekirekin | Jarduerarik gabe klasean sartu zenetik, duela {days} egun, {count} misio irekirekin",
           "mission_expired": "«{mission}» iraungi zen ({date}) hasi gabe",
           "mission_expired_started": "«{mission}» iraungi zen ({date}): hasi zuen, baina ez zuen osatu",
-          "mission_expired_many": "Osatu gabe iraungitako {count} misio; azkena, «{mission}», {date}",
+          "mission_expired_many": "Osatu gabe iraungitako {count} misio; azkena, «{mission}», {date} egunean iraungi zen",
           "low_grade": "«{enigma}» («{mission}») {percent}ekin onartu zitzaion, {threshold} baino gutxiago",
           "low_grade_many": "{count} enigma {threshold} baino gutxiagorekin onartuak; baxuena, «{enigma}», {percent}ekin",
           "low_average": "Onarpenen batez bestekoa {average}, enigma {approvals}ean, {threshold} baino gutxiago | Onarpenen batez bestekoa {average}, {approvals} enigmatan, {threshold} baino gutxiago",
@@ -1948,7 +1948,7 @@
           "hints_percent": "Pista {count} erabili du «{mission}» misioan ({detail}) | {count} pista erabili ditu «{mission}» misioan ({detail})",
           "hints_many": "Pista asko {count} misiotan; gehien, «{mission}» misioan, {hints}",
           "low_attendance": "Asistentzia {rate}: saio {total}etik {attended} | Asistentzia {rate}: {total} saiotik {attended}",
-          "hints_percent_detail": "horietako batek saritik % bat kentzen du | horietako {count}k saritik % bat kentzen dute"
+          "hints_percent_detail": "horietako batek saritik ehuneko bat kentzen du | horietako {count}k saritik ehuneko bat kentzen dute"
         },
         "mission": {
           "unfinished_after_deadline": "Hasi zuten {started} pertsonetatik {unfinished}ek ez zuten epea baino lehen osatu ({percent})",
@@ -2044,9 +2044,9 @@
             "approvals": "Onarpenak",
             "missions": "Misioak",
             "hints": "Pistak",
-            "behaviors": "Portaerak eta sariak",
+            "behaviors": "Jokabideak eta sariak",
             "shop": "Denda",
-            "progress": "Mailak eta intsigniak",
+            "progress": "Mailak eta dominak",
             "attendance": "Asistentzia"
           },
           "loaded": "Sarrera {count} gehiago kargatu da. | {count} sarrera gehiago kargatu dira."

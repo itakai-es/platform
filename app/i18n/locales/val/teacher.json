@@ -478,8 +478,8 @@
               "position": "Només la seua posició"
             },
             "mode_hint": {
-              "full": "Cada estudiant veu tota la classe, amb àlies, nivell, XP i missions.",
-              "top": "Cada estudiant veu les primeres posicions, amb qui hi empate, i la seua. La resta de la classe no hi ix.",
+              "full": "Cada estudiant veu tota la classe, amb sobrenom, nivell, XP i missions.",
+              "top": "Cada estudiant veu les primeres posicions, empats inclosos, i la seua. La resta de la classe no hi ix.",
               "position": "Cada estudiant veu només la seua posició i el total de la classe, sense podi ni llista."
             },
             "top_label": "Quantes posicions es veuen",
@@ -493,7 +493,7 @@
               },
               "missions": {
                 "label": "Missions completades",
-                "desc": "Premia acabar. Per setmana o temporada; en els empats decidix l'XP."
+                "desc": "Premia acabar missions. També per setmana i per temporada; en els empats decidix l'XP."
               },
               "teams": {
                 "label": "Equips",
@@ -611,7 +611,7 @@
         "read_only_notice": "El teu accés a esta classe et deixa vore açò, però no canviar-ho.",
         "teachers": {
           "title": "Professorat",
-          "description": "Qui imparteix esta classe, amb quin perfil i què hi pot fer.",
+          "description": "Qui impartix esta classe, amb quin perfil i què hi pot fer.",
           "add": "Afegir docent",
           "add_title": "Afegir docent",
           "add_confirm": "Afegir",
@@ -1679,7 +1679,7 @@
         "all": "Tot l'alumnat",
         "none": "Ningú",
         "empty": "Encara no hi ha estudiants en esta classe.",
-        "no_results": "Ningú no coincideix amb la busca.",
+        "no_results": "Ningú no coincidix amb la busca.",
         "count": "Triats: {count} de {total}",
         "only_present": "Només els presents hui",
         "only_absent": "Només els absents hui"
@@ -1814,7 +1814,7 @@
       "delete_message": "S’esborrarà «{title}» amb els seus equips i els seus punts. El que ja s’ha repartit a cada integrant es queda. No es pot desfer.",
       "points": "{count} punt | {count} punts",
       "members_count": "Sense integrants | {count} integrant | {count} integrants",
-      "empty_team": "Encara no hi ha ningú en aquest equip",
+      "empty_team": "Encara no hi ha ningú en este equip",
       "no_team": "Sense equip",
       "unknown_student": "Estudiant",
       "award": "Premiar",
@@ -1856,7 +1856,7 @@
         "title": "Nom de l’agrupació",
         "title_placeholder": "Ex.: Cases",
         "title_required": "Posa-li un nom.",
-        "title_too_long": "El nom pot tenir fins a 60 caràcters.",
+        "title_too_long": "El nom pot tindre fins a 60 caràcters.",
         "kind": "Tipus",
         "kind_hint": {
           "base": "Fixa durant el curs. Els seus punts compten a la classificació d’equips.",
@@ -1868,7 +1868,7 @@
         "size": "Grandària",
         "size_teams": "Nombre d’equips",
         "size_perTeam": "Persones per equip",
-        "size_result": "Sortirà {count} equip. | Sortiran {count} equips.",
+        "size_result": "Eixirà {count} equip. | Eixiran {count} equips.",
         "balance": "Equilibrar per nivell",
         "absent_note": "Hui no falta ningú en la llista: hi entra tot l’alumnat. | Hui falta {count} persona en la llista i queda fora del repartiment. | Hui falten {count} persones en la llista i queden fora del repartiment.",
         "no_list_note": "Hui encara no s’ha passat llista: hi entra tot l’alumnat.",
@@ -1893,7 +1893,7 @@
       "picked_count": "{count} persona triada | {count} persones triades",
       "put_here": "Posa ací",
       "put_here_aria": "Posa les persones triades en {team}",
-      "distribute": "Reparteix a l'atzar",
+      "distribute": "Repartix a l'atzar",
       "distributed": "{count} persona repartida entre els equips. | {count} persones repartides entre els equips.",
       "distribute_skipped": "{count} que falta hui es queda sense equip. | {count} que falten hui es queden sense equip.",
       "put_in": "Posa en:"
@@ -1908,7 +1908,7 @@
       "summary": {
         "avg_missions": "Missions de mitjana",
         "avg_percent": "Progrés mitjà",
-        "pending_link": "Ves a Missions",
+        "pending_link": "Anar a Missions",
         "attendance": "Assistència mitjana",
         "attendance_sessions": "{count} sessió en este període | {count} sessions en este període",
         "xp": "XP mitjana",
@@ -1922,7 +1922,7 @@
         "col_mission": "Missió",
         "col_average": "Mitjana d'aprovació",
         "col_hints": "Pistes",
-        "deadline_future": "Venç el {date}",
+        "deadline_future": "Caduca el {date}",
         "deadline_past": "Va caducar el {date}",
         "excluded_teacher": "Bloquejada: no compta per al progrés",
         "excluded_empty": "Sense enigmes: no compta per al progrés",
@@ -1940,15 +1940,15 @@
           "inactive_never": "Sense activitat des que va entrar a la classe, fa {days} dies, amb {count} missió oberta | Sense activitat des que va entrar a la classe, fa {days} dies, amb {count} missions obertes",
           "mission_expired": "«{mission}» va caducar el {date} sense començar-la",
           "mission_expired_started": "«{mission}» va caducar el {date}: la va començar i no la va completar",
-          "mission_expired_many": "{count} missions caducades sense completar; l'última, «{mission}», el {date}",
+          "mission_expired_many": "{count} missions caducades sense completar; l'última, «{mission}», va caducar el {date}",
           "low_grade": "Va aprovar «{enigma}» («{mission}») amb un {percent}, menys del {threshold}",
           "low_grade_many": "{count} enigmes aprovats amb menys del {threshold}; el més baix, «{enigma}», amb un {percent}",
           "low_average": "Mitjana d'aprovació del {average} en {approvals} enigma, menys del {threshold} | Mitjana d'aprovació del {average} en {approvals} enigmes, menys del {threshold}",
           "hints": "Va utilitzar {count} pista en «{mission}» | Va utilitzar {count} pistes en «{mission}»",
           "hints_percent": "Va utilitzar {count} pista en «{mission}» ({detail}) | Va utilitzar {count} pistes en «{mission}» ({detail})",
-          "hints_many": "Moltes pistes en {count} missions; on més, «{mission}», amb {hints}",
+          "hints_many": "Moltes pistes en {count} missions; la que més, «{mission}», amb {hints}",
           "low_attendance": "Assistència del {rate}: {attended} de {total} sessió | Assistència del {rate}: {attended} de {total} sessions",
-          "hints_percent_detail": "{count} resta % de la recompensa | {count} resten % de la recompensa"
+          "hints_percent_detail": "{count} resta un % de la recompensa | {count} resten un % de la recompensa"
         },
         "mission": {
           "unfinished_after_deadline": "{unfinished} de {started} que la van començar no la van completar abans de la data ({percent})",
@@ -2016,7 +2016,7 @@
           "excluded_empty": "Sense enigmes",
           "completed_on": "el {date}",
           "deadline_past": "va caducar el {date}",
-          "deadline_future": "venç el {date}",
+          "deadline_future": "caduca el {date}",
           "enigmas": "{approved} de {total} enigma aprovat | {approved} de {total} enigmes aprovats",
           "average": "mitjana del {value}",
           "hints": "{count} pista | {count} pistes",

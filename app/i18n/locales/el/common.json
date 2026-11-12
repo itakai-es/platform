@@ -576,8 +576,8 @@
       "enigma_approved_teacher": "Η υποβολή του/της για {enigma} εγκρίθηκε",
       "mission_started_student": "Ξεκίνησες την αποστολή {mission}",
       "mission_started_teacher": "Ξεκίνησε την αποστολή {mission}",
-      "enigma_submitted_teacher": "Έστειλε {enigma} για έλεγχο",
-      "enigma_submitted_student": "Υπέβαλες {enigma}",
+      "enigma_submitted_teacher": "Έστειλε τον γρίφο {enigma} για έλεγχο",
+      "enigma_submitted_student": "Υπέβαλες τον γρίφο {enigma}",
       "mission_completed_teacher": "Ολοκλήρωσε την αποστολή {mission}",
       "mission_completed_student": "Ολοκλήρωσες την αποστολή {mission}",
       "level_up_teacher": "Ανέβηκε στο επίπεδο {level}",
@@ -721,7 +721,7 @@
         "path_locked": "Κλειστή από τη διαδρομή"
       },
       "compare": {
-        "not_enough": "Η τάξη σου είναι ακόμη μικρή για σύγκριση.",
+        "not_enough": "Η τάξη σου είναι ακόμη πολύ μικρή για σύγκριση.",
         "self": {
           "above": "Είσαι πάνω από τον μέσο όρο της υπόλοιπης τάξης σου.",
           "at": "Είσαι στον μέσο όρο της υπόλοιπης τάξης σου.",
@@ -750,7 +750,7 @@
       "confirm": "Επιβεβαίωση"
     },
     "assistant_card": {
-      "greeting": "Γεια σου {name}! Είμαι ο/η {god}, ο βοηθός σου τεχνητής νοημοσύνης. Πώς μπορώ να σε βοηθήσω;",
+      "greeting": "Γεια σου, {name}! Είμαι ο/η {god}, ο βοηθός σου τεχνητής νοημοσύνης. Πώς μπορώ να σε βοηθήσω;",
       "greeting_no_name": "Γεια σου! Είμαι ο/η {god}, ο βοηθός σου τεχνητής νοημοσύνης. Πώς μπορώ να σε βοηθήσω;"
     },
     "progress": {
@@ -770,7 +770,7 @@
         "week": "Αυτή την εβδομάδα",
         "season": "Σεζόν"
       },
-      "season_since": "Σεζόν σε εξέλιξη από {date}.",
+      "season_since": "Σεζόν σε εξέλιξη από τις {date}.",
       "no_score": {
         "xp": "Ακόμα χωρίς XP",
         "missions": {

@@ -26,7 +26,7 @@
       "ai_assistant": {
         "name": "Atena",
         "message_new_user": "Olá {name}! Damos-te as boas-vindas ao ITAKAI. Conclui a tua primeira missão para começares a ganhar XP!",
-        "message_returning_user": "Olá {name}! Concluíste {count} missão {classes}. Continua assim! | Olá {name}! Concluíste {count} missões {classes}. Continua assim!",
+        "message_returning_user": "Olá, {name}! Concluíste {count} missão {classes}. Continua assim! | Olá, {name}! Concluíste {count} missões {classes}. Continua assim!",
         "classes_phrase": "em {count} turma | em {count} turmas"
       },
       "class_fallback_name": "Turma",
@@ -247,14 +247,14 @@
         },
         "results": {
           "title": "Os meus resultados",
-          "hint": "As recompensas de cada missão são as que recebeste com os seus enigmas. Não incluem o bónus por a concluir, por isso não somam o teu saldo.",
+          "hint": "As recompensas de cada missão são as que recebeste com os seus enigmas. Não incluem o bónus por a concluíres, por isso a soma não tem de coincidir com o teu saldo.",
           "filter_label": "Filtrar as minhas missões",
           "empty_pending": "Não tens missões pendentes",
           "empty_done": "Ainda não concluíste nenhuma missão",
           "in_review": "{count} em revisão | {count} em revisão",
           "deadline_past": "expirou a {date}",
           "hints": "{count} pista usada | {count} pistas usadas",
-          "by_enigma": "% de cada enigma",
+          "by_enigma": "% por enigma",
           "enigma_open": "Por entregar",
           "filter_pending": "Pendentes ({count})",
           "filter_done": "Feitas ({count})",

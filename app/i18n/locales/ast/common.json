@@ -584,8 +584,8 @@
       "level_up_student": "Xubisti al nivel {level}",
       "class_joined_teacher": "Xunióse a {name}",
       "class_joined_student": "Xunístite a {name}",
-      "achievement_unlocked_teacher": "Desbloquió'l logru {name}",
-      "achievement_unlocked_student": "Desbloquiesti'l logru {name}",
+      "achievement_unlocked_teacher": "Desbloquió'l llogru {name}",
+      "achievement_unlocked_student": "Desbloquiesti'l llogru {name}",
       "badge_unlocked_teacher": "Desbloquió la insinia {name}",
       "badge_unlocked_student": "Desbloquiesti la insinia {name}",
       "xp_gained_teacher": "Ganó {xp} en {source}",
@@ -721,7 +721,7 @@
         "path_locked": "Zarrada pol camín"
       },
       "compare": {
-        "not_enough": "La to clase entá ye pequeña pa comparar.",
+        "not_enough": "La to clase entá ye demasiao pequeña pa comparar.",
         "self": {
           "above": "Vas per enriba de la media del restu de la to clase.",
           "at": "Tas na media del restu de la to clase.",
@@ -750,7 +750,7 @@
       "confirm": "Confirmar"
     },
     "assistant_card": {
-      "greeting": "¡Hola {name}! Soi {god}, el to asistente d'IA. ¿En qué te puedo ayudar?",
+      "greeting": "¡Hola, {name}! Soi {god}, el to asistente d'IA. ¿En qué te puedo ayudar?",
       "greeting_no_name": "¡Hola! Soi {god}, el to asistente d'IA. ¿En qué te puedo ayudar?"
     },
     "progress": {

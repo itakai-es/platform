@@ -83,8 +83,8 @@
         "message": "Kaixo {god}, azal ditzakezu \"{title}\" misioko enigmak?"
       },
       "m5": {
-        "label": "Emadazu arrastoak, spoilerrik gabe",
-        "message": "Kaixo {god}, \"{title}\" misioan trabatuta nago. Emango zenidake arrastoren bat spoilerrik gabe?"
+        "label": "Emadazu pistak, spoilerrik gabe",
+        "message": "Kaixo {god}, \"{title}\" misioan trabatuta nago. Emango zenidake pistaren bat spoilerrik gabe?"
       },
       "m6": {
         "label": "Nola hobetu nire entrega?",
@@ -156,8 +156,8 @@
           "message": "Ulertzea kostatzen zaidan gai bat dago. Modu erraz batean azal diezadakezu?"
         },
         "s2": {
-          "label": "Emadazu arrastoak enigma baterako",
-          "message": "Enigma batean trabatuta nago. Emango zenidake arrastoren bat spoilerrik gabe?"
+          "label": "Emadazu pistak enigma baterako",
+          "message": "Enigma batean trabatuta nago. Emango zenidake pistaren bat spoilerrik gabe?"
         },
         "s3": {
           "label": "Maila igotzeko aholkuak",

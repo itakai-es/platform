@@ -357,7 +357,7 @@
               "desc": "Mostra o saldo e os prezos en {coins}."
             },
             "mana": {
-              "label": "Mana",
+              "label": "Maná",
               "desc": "Enerxía para usar poderes da tenda."
             },
             "rankings": {
@@ -493,7 +493,7 @@
               },
               "missions": {
                 "label": "Misións completadas",
-                "desc": "Premia rematar. Por semana ou tempada; nos empates decide a XP."
+                "desc": "Premia rematar misións. Tamén por semana e por tempada; nos empates decide a XP."
               },
               "teams": {
                 "label": "Equipos",
@@ -1649,7 +1649,7 @@
       "none_left_description": "Volve poñer a alguén da lista ou comeza de novo.",
       "empty_title": "Aínda non hai estudantes nesta clase",
       "empty_description": "Cando se unan, sairán aquí na ruleta.",
-      "trash_title": "Esta clase está no lixo",
+      "trash_title": "Esta clase está na papeleira",
       "trash_description": "Restáuraa desde a clase para volver usar a ruleta.",
       "back_to_class": "Volver á clase",
       "list_title_teams": "Equipos",
@@ -1948,7 +1948,7 @@
           "hints_percent": "Usou {count} pista en «{mission}» ({detail}) | Usou {count} pistas en «{mission}» ({detail})",
           "hints_many": "Moitas pistas en {count} misións; a que máis, «{mission}», con {hints}",
           "low_attendance": "Asistencia do {rate}: {attended} de {total} sesión | Asistencia do {rate}: {attended} de {total} sesións",
-          "hints_percent_detail": "{count} resta % da recompensa | {count} restan % da recompensa"
+          "hints_percent_detail": "{count} resta unha porcentaxe da recompensa | {count} restan unha porcentaxe da recompensa"
         },
         "mission": {
           "unfinished_after_deadline": "{unfinished} de {started} que a comezaron non a completaron antes da data ({percent})",

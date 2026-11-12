@@ -493,7 +493,7 @@
               },
               "missions": {
                 "label": "Missões concluídas",
-                "desc": "Premeia terminar. Por semana ou temporada; nos empates decide a XP."
+                "desc": "Premeia terminar missões. Também por semana e por temporada; nos empates decide a XP."
               },
               "teams": {
                 "label": "Equipas",
@@ -1170,7 +1170,7 @@
         "remove_confirm": "Remover da turma",
         "remove_loses": "Vai ser apagado tudo o que tem nesta turma:",
         "remove_loses_progress": "o seu nível, XP, moedas, mana e vidas;",
-        "remove_loses_submissions": "o seu progresso nas missões, as suas entregas e as insígnias dessas missões;",
+        "remove_loses_submissions": "o seu progresso nas missões, as suas entregas e os emblemas dessas missões;",
         "remove_loses_shop": "as suas compras e usos na loja e os comportamentos que lhe foram aplicados;",
         "remove_loses_history": "o seu histórico, os seus avisos e as suas conversas com o assistente sobre esta turma.",
         "remove_keeps": "O que tiver noutras turmas não muda e a sua conta continua a existir. Não pode ser anulado.",
@@ -1917,7 +1917,7 @@
       },
       "missions": {
         "title": "Missões",
-        "caption": "Onde está cada estudante neste momento: não muda com o período. A média de aprovação e as pistas da tabela são do período.",
+        "caption": "Onde está cada estudante neste momento: não muda com o período. Já a média de aprovação e as pistas da tabela são do período.",
         "table_caption": "Quantas pessoas há em cada estado, por missão",
         "col_mission": "Missão",
         "col_average": "Média de aprovação",
@@ -1932,7 +1932,7 @@
       "signals": {
         "title": "Dificuldades detetadas",
         "empty_title": "Nada a destacar neste período",
-        "empty_description": "Se alguma pessoa ficar parada ou uma missão se complicar, aparece aqui com o motivo.",
+        "empty_description": "Se alguém tiver dificuldades ou uma missão se complicar, aparece aqui com o motivo.",
         "show_all": "Ver todas ({count})",
         "show_less": "Ver menos",
         "student": {
@@ -1940,7 +1940,7 @@
           "inactive_never": "Sem atividade desde que entrou na turma, há {days} dias, com {count} missão aberta | Sem atividade desde que entrou na turma, há {days} dias, com {count} missões abertas",
           "mission_expired": "«{mission}» expirou a {date} sem a começar",
           "mission_expired_started": "«{mission}» expirou a {date}: começou-a e não a concluiu",
-          "mission_expired_many": "{count} missões expiradas sem concluir; a última, «{mission}», a {date}",
+          "mission_expired_many": "{count} missões expiradas sem concluir; a última, «{mission}», expirou a {date}",
           "low_grade": "«{enigma}» («{mission}») aprovado com {percent}, abaixo de {threshold}",
           "low_grade_many": "{count} enigmas aprovados abaixo de {threshold}; o mais baixo, «{enigma}», com {percent}",
           "low_average": "Média de aprovação de {average} em {approvals} enigma, abaixo de {threshold} | Média de aprovação de {average} em {approvals} enigmas, abaixo de {threshold}",
@@ -1948,7 +1948,7 @@
           "hints_percent": "Usou {count} pista em «{mission}» ({detail}) | Usou {count} pistas em «{mission}» ({detail})",
           "hints_many": "Muitas pistas em {count} missões; a que tem mais, «{mission}», com {hints}",
           "low_attendance": "Assiduidade de {rate}: {attended} de {total} sessão | Assiduidade de {rate}: {attended} de {total} sessões",
-          "hints_percent_detail": "{count} retira % à recompensa | {count} retiram % à recompensa"
+          "hints_percent_detail": "{count} retira uma percentagem à recompensa | {count} retiram uma percentagem à recompensa"
         },
         "mission": {
           "unfinished_after_deadline": "{unfinished} de {started} que a começaram não a concluíram antes da data ({percent})",
@@ -2046,7 +2046,7 @@
             "hints": "Pistas",
             "behaviors": "Comportamentos e recompensas",
             "shop": "Loja",
-            "progress": "Níveis e insígnias",
+            "progress": "Níveis e emblemas",
             "attendance": "Assiduidade"
           },
           "loaded": "Foi carregada mais {count} entrada. | Foram carregadas mais {count} entradas."

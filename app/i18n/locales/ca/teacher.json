@@ -163,7 +163,7 @@
           "no_results_description": "Cap estudiant coincideix amb la cerca.",
           "col_behaviors": "Comportaments",
           "view_list": "Llistat",
-          "view_ranking": "Ranquing",
+          "view_ranking": "Rànquing",
           "col_actions": "Accions",
           "managed_badge": "Sense correu",
           "pending_sign_in_badge": "Pendent d'entrar",
@@ -319,14 +319,14 @@
             "pace_desc_fast": "Es puja de nivell ràpid: cada nivell costa només una mica més que l'anterior.",
             "pace_desc_normal": "Progressió equilibrada: cada nivell costa una mica més que l'anterior.",
             "pace_desc_slow": "Cada nivell costa força més que l'anterior. Progressió llarga, ideal per a tot el curs.",
-            "mode_label": "Com es guanya la XP",
+            "mode_label": "Com es guanya l'XP",
             "mode_curve": "Per fórmula",
             "mode_custom": "Manual (per nivell)",
             "pace_label": "Ritme de pujada",
             "pace_fast": "Ràpid",
             "pace_normal": "Normal",
             "pace_slow": "Lent",
-            "custom_hint": "Escriu la XP necessària per pujar de cada nivell al següent.",
+            "custom_hint": "Escriu l'XP necessària per pujar de cada nivell al següent.",
             "compare_title": "XP total per assolir cada nivell",
             "compare_level": "Nivell {level}",
             "cap_label": "Nombre de nivells",
@@ -479,7 +479,7 @@
             },
             "mode_hint": {
               "full": "Cada estudiant veu tota la classe, amb àlies, nivell, XP i missions.",
-              "top": "Cada estudiant veu les primeres posicions, amb qui hi empati, i la seva. La resta de la classe no hi surt.",
+              "top": "Cada estudiant veu les primeres posicions, empats inclosos, i la seva. La resta de la classe no hi surt.",
               "position": "Cada estudiant veu només la seva posició i el total de la classe, sense podi ni llista."
             },
             "top_label": "Quantes posicions es veuen",
@@ -493,7 +493,7 @@
               },
               "missions": {
                 "label": "Missions completades",
-                "desc": "Premia acabar. Per setmana o temporada; en els empats decideix l'XP."
+                "desc": "Premia acabar missions. També per setmana i per temporada; en els empats decideix l'XP."
               },
               "teams": {
                 "label": "Equips",
@@ -1908,7 +1908,7 @@
       "summary": {
         "avg_missions": "Missions de mitjana",
         "avg_percent": "Progrés mitjà",
-        "pending_link": "Ves a Missions",
+        "pending_link": "Anar a Missions",
         "attendance": "Assistència mitjana",
         "attendance_sessions": "{count} sessió en aquest període | {count} sessions en aquest període",
         "xp": "XP mitjana",
@@ -1946,9 +1946,9 @@
           "low_average": "Mitjana d'aprovació del {average} en {approvals} enigma, menys del {threshold} | Mitjana d'aprovació del {average} en {approvals} enigmes, menys del {threshold}",
           "hints": "Va fer servir {count} pista a «{mission}» | Va fer servir {count} pistes a «{mission}»",
           "hints_percent": "Va fer servir {count} pista a «{mission}» ({detail}) | Va fer servir {count} pistes a «{mission}» ({detail})",
-          "hints_many": "Moltes pistes en {count} missions; on més, «{mission}», amb {hints}",
+          "hints_many": "Moltes pistes en {count} missions; la que més, «{mission}», amb {hints}",
           "low_attendance": "Assistència del {rate}: {attended} de {total} sessió | Assistència del {rate}: {attended} de {total} sessions",
-          "hints_percent_detail": "{count} resta % de la recompensa | {count} resten % de la recompensa"
+          "hints_percent_detail": "{count} resta un % de la recompensa | {count} resten un % de la recompensa"
         },
         "mission": {
           "unfinished_after_deadline": "{unfinished} de {started} que la van començar no la van completar abans de la data ({percent})",

@@ -493,7 +493,7 @@
               },
               "missions": {
                 "label": "Misiones completadas",
-                "desc": "Premia terminar. Por semana o temporada; en los empates decide la XP."
+                "desc": "Premia terminar misiones. También por semana y por temporada; en los empates decide la XP."
               },
               "teams": {
                 "label": "Equipos",
@@ -1948,7 +1948,7 @@
           "hints_percent": "Usó {count} pista en «{mission}» ({detail}) | Usó {count} pistas en «{mission}» ({detail})",
           "hints_many": "Muchas pistas en {count} misiones; la que más, «{mission}», con {hints}",
           "low_attendance": "Asistencia del {rate}: {attended} de {total} sesión | Asistencia del {rate}: {attended} de {total} sesiones",
-          "hints_percent_detail": "{count} resta % de la recompensa | {count} restan % de la recompensa"
+          "hints_percent_detail": "{count} resta un % de la recompensa | {count} restan un % de la recompensa"
         },
         "mission": {
           "unfinished_after_deadline": "{unfinished} de {started} que la empezaron no la completaron antes de la fecha ({percent})",

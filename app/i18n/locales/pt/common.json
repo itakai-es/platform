@@ -586,8 +586,8 @@
       "class_joined_student": "Juntaste-te a {name}",
       "achievement_unlocked_teacher": "Desbloqueou a conquista {name}",
       "achievement_unlocked_student": "Desbloqueaste a conquista {name}",
-      "badge_unlocked_teacher": "Desbloqueou a insígnia {name}",
-      "badge_unlocked_student": "Desbloqueaste a insígnia {name}",
+      "badge_unlocked_teacher": "Desbloqueou o emblema {name}",
+      "badge_unlocked_student": "Desbloqueaste o emblema {name}",
       "xp_gained_teacher": "Ganhou {xp} em {source}",
       "xp_gained_student": "Ganhaste {xp} em {source}",
       "student_enrolled_teacher": "Registou-se na plataforma",
@@ -654,14 +654,14 @@
         "available": "Disponível",
         "urgent": "Urgente: termina em breve",
         "expired": "Expirada",
-        "locked": "Bloqueada por agora por quem te dá aulas",
+        "locked": "Bloqueada, por agora, por quem te dá aulas",
         "locked_path": "Bloqueada: abre ao concluir {missions}"
       },
       "completed_by": "Ninguém a concluiu ainda: 0 de {total} | {done} de {total} concluiu-a | {done} de {total} concluíram-na",
       "no_students": "Ainda não há estudantes",
       "opens_after": "Abre ao concluir {missions}",
       "quoted": "«{title}»",
-      "quoted_teacher_closed": "«{title}» (bloqueada por agora por quem te dá aulas)",
+      "quoted_teacher_closed": "«{title}» (bloqueada, por agora, por quem te dá aulas)",
       "and": "e",
       "locked_path_explain": "Para a abrir, conclui antes {missions}.",
       "state_short": {
@@ -721,7 +721,7 @@
         "path_locked": "Fechada pelo caminho"
       },
       "compare": {
-        "not_enough": "A tua turma ainda é pequena para comparar.",
+        "not_enough": "A tua turma ainda é demasiado pequena para comparar.",
         "self": {
           "above": "Estás acima da média do resto da tua turma.",
           "at": "Estás na média do resto da tua turma.",
@@ -750,7 +750,7 @@
       "confirm": "Confirmar"
     },
     "assistant_card": {
-      "greeting": "Olá {name}! Sou {god}, o teu assistente de IA. Em que posso ajudar-te?",
+      "greeting": "Olá, {name}! Sou {god}, o teu assistente de IA. Em que posso ajudar-te?",
       "greeting_no_name": "Olá! Sou {god}, o teu assistente de IA. Em que posso ajudar-te?"
     },
     "progress": {

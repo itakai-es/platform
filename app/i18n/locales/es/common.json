@@ -721,7 +721,7 @@
         "path_locked": "Cerrada por el camino"
       },
       "compare": {
-        "not_enough": "Tu clase aún es pequeña para comparar.",
+        "not_enough": "Tu clase aún es demasiado pequeña para comparar.",
         "self": {
           "above": "Vas por encima de la media del resto de tu clase.",
           "at": "Estás en la media del resto de tu clase.",
@@ -750,7 +750,7 @@
       "confirm": "Confirmar"
     },
     "assistant_card": {
-      "greeting": "¡Hola {name}! Soy {god}, tu asistente de IA. ¿En qué puedo ayudarte?",
+      "greeting": "¡Hola, {name}! Soy {god}, tu asistente de IA. ¿En qué puedo ayudarte?",
       "greeting_no_name": "¡Hola! Soy {god}, tu asistente de IA. ¿En qué puedo ayudarte?"
     },
     "progress": {

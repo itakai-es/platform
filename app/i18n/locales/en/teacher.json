@@ -362,7 +362,7 @@
             },
             "rankings": {
               "label": "Ranking",
-              "desc": "Class leaderboard of students. When off, only teachers can see it."
+              "desc": "Leaderboard of the class's students. When off, only teachers can see it."
             },
             "xp": {
               "label": "Experience (XP)",
@@ -478,7 +478,7 @@
               "position": "Only their own position"
             },
             "mode_hint": {
-              "full": "Each student sees the whole class, with alias, level, XP and missions.",
+              "full": "Each student sees the whole class, with nickname, level, XP and missions.",
               "top": "Each student sees the top positions, including any ties, and their own. The rest of the class is not shown.",
               "position": "Each student sees only their own position and the class total, with no podium or list."
             },
@@ -493,7 +493,7 @@
               },
               "missions": {
                 "label": "Completed missions",
-                "desc": "Rewards finishing. By week or season; XP breaks ties."
+                "desc": "Rewards finishing missions. Also by week and by season; XP breaks ties."
               },
               "teams": {
                 "label": "Teams",
@@ -2010,7 +2010,7 @@
           "filter_all": "All ({count})",
           "filter_pending": "Pending ({count})",
           "filter_done": "Done ({count})",
-          "by_enigma": "% by enigma",
+          "by_enigma": "% per enigma",
           "optional": "optional",
           "excluded_teacher": "Locked",
           "excluded_empty": "No enigmas",

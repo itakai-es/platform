@@ -478,7 +478,7 @@
               "position": "Doar locul propriu"
             },
             "mode_hint": {
-              "full": "Fiecare elev vede toată clasa, cu pseudonim, nivel, XP și misiuni.",
+              "full": "Fiecare elev vede toată clasa, cu poreclă, nivel, XP și misiuni.",
               "top": "Fiecare elev vede primele locuri, inclusiv egalitățile, și locul propriu. Restul clasei nu apare.",
               "position": "Fiecare elev vede doar locul propriu și totalul clasei, fără podium sau listă."
             },
@@ -493,7 +493,7 @@
               },
               "missions": {
                 "label": "Misiuni finalizate",
-                "desc": "Răsplătește finalizarea. Pe săptămână sau sezon; la egalitate decide XP."
+                "desc": "Răsplătește finalizarea misiunilor. Și pe săptămână, și pe sezon; la egalitate decide XP."
               },
               "teams": {
                 "label": "Echipe",
@@ -1067,10 +1067,10 @@
       "detail": {
         "btn_close": "Închide",
         "btn_copy": "Creează una asemănătoare",
-        "system_level": "Este a ITAKAI și nu poate fi editată: se acordă automat la atingerea nivelului {count} într-o clasă.",
-        "system_missions": "Este a ITAKAI și nu poate fi editată: se acordă automat la finalizarea primei misiuni. | Este a ITAKAI și nu poate fi editată: se acordă automat când misiunile finalizate ajung la {count}.",
-        "system_xp": "Este a ITAKAI și nu poate fi editată: se acordă automat când XP-ul dintr-o clasă ajunge la {count}.",
-        "system_generic": "Este a ITAKAI și nu poate fi editată: se acordă automat după progresul din clasă.",
+        "system_level": "Este o insignă ITAKAI și nu poate fi editată: se acordă automat la atingerea nivelului {count} într-o clasă.",
+        "system_missions": "Este o insignă ITAKAI și nu poate fi editată: se acordă automat la finalizarea primei misiuni. | Este o insignă ITAKAI și nu poate fi editată: se acordă automat când misiunile finalizate ajung la {count}.",
+        "system_xp": "Este o insignă ITAKAI și nu poate fi editată: se acordă automat când XP-ul dintr-o clasă ajunge la {count}.",
+        "system_generic": "Este o insignă ITAKAI și nu poate fi editată: se acordă automat după progresul din clasă.",
         "not_yours": "Nu o poți edita: a creat-o altă persoană pentru o misiune pe care nu o poți modifica."
       },
       "delete_title": "Șterge insigna",
@@ -1908,7 +1908,7 @@
       "summary": {
         "avg_missions": "Misiuni în medie",
         "avg_percent": "Progres mediu",
-        "pending_link": "Mergi la misiuni",
+        "pending_link": "Mergi la Misiuni",
         "attendance": "Prezență medie",
         "attendance_sessions": "{count} sesiune în această perioadă | {count} sesiuni în această perioadă",
         "xp": "XP mediu",
@@ -1940,7 +1940,7 @@
           "inactive_never": "Fără activitate de când a intrat în clasă, acum {days} zile, cu {count} misiune deschisă | Fără activitate de când a intrat în clasă, acum {days} zile, cu {count} misiuni deschise",
           "mission_expired": "„{mission}” a expirat pe {date} fără să fie începută",
           "mission_expired_started": "„{mission}” a expirat pe {date}: a început-o, dar nu a finalizat-o",
-          "mission_expired_many": "{count} misiuni expirate nefinalizate; ultima, „{mission}”, pe {date}",
+          "mission_expired_many": "{count} misiuni expirate nefinalizate; ultima, „{mission}”, a expirat pe {date}",
           "low_grade": "„{enigma}” („{mission}”) aprobată cu {percent}, sub {threshold}",
           "low_grade_many": "{count} enigme aprobate sub {threshold}; cea mai slabă, „{enigma}”, cu {percent}",
           "low_average": "Media de aprobare de {average} la {approvals} enigmă, sub {threshold} | Media de aprobare de {average} la {approvals} enigme, sub {threshold}",
@@ -1954,7 +1954,7 @@
           "unfinished_after_deadline": "{unfinished} din {started} care au început-o nu au finalizat-o până la termen ({percent})",
           "low_average": "Media de aprobare de {average} la {approvals} enigmă aprobată, sub {threshold} | Media de aprobare de {average} la {approvals} enigme aprobate, sub {threshold}",
           "many_hints": "{perStudent} indicii în medie pentru fiecare persoană care a început-o",
-          "students_expired": "{count} persoană nu a finalizat-o după termen | {count} persoane nu au finalizat-o după termen"
+          "students_expired": "{count} persoană nu a finalizat-o până la termen | {count} persoane nu au finalizat-o până la termen"
         }
       },
       "students": {
@@ -1969,8 +1969,8 @@
         "no_activity": "Fără activitate",
         "sort_missions_asc": "Misiuni ↑",
         "sort_missions_desc": "Misiuni ↓",
-        "sort_activity_recent": "Activitate mai recentă",
-        "sort_activity_oldest": "Activitate mai veche",
+        "sort_activity_recent": "Cea mai recentă activitate",
+        "sort_activity_oldest": "Cea mai veche activitate",
         "sort_pending_desc": "De verificat ↓",
         "sort_hints_desc": "Indicii ↓",
         "sort_signals_desc": "Semnale ↓",

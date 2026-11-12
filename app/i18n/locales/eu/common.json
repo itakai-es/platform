@@ -126,7 +126,7 @@
       "features_title": "Zer egin dezakezu ITAKAI-rekin?",
       "features_subtitle": "Ezagutu hezkuntza esperientzia bakarra bihurtzen duten tresna eta funtzionaltasun guztiak",
       "feature_gamification_title": "Gamifikazio osoa",
-      "feature_gamification_desc": "Puntu, maila, dominari eta sari sistema etengabeko ikaskuntza bultzatzen duena",
+      "feature_gamification_desc": "Puntu, maila, domina eta sari sistema etengabeko ikaskuntza bultzatzen duena",
       "feature_narrative_title": "Narratiba murgilgarria",
       "feature_narrative_desc": "Klase bakoitza pertsonaia eta istorioekin arreta hartzen duen abentura bakarra da",
       "feature_teamwork_title": "Talde lana",
@@ -586,8 +586,8 @@
       "class_joined_student": "{name} klasean sartu zara",
       "achievement_unlocked_teacher": "{name} lorpena desblokeatu du",
       "achievement_unlocked_student": "{name} lorpena desblokeatu duzu",
-      "badge_unlocked_teacher": "{name} intsignia desblokeatu du",
-      "badge_unlocked_student": "{name} intsignia desblokeatu duzu",
+      "badge_unlocked_teacher": "{name} domina desblokeatu du",
+      "badge_unlocked_student": "{name} domina desblokeatu duzu",
       "xp_gained_teacher": "{xp} irabazi du hemen: {source}",
       "xp_gained_student": "{xp} irabazi duzu hemen: {source}",
       "student_enrolled_teacher": "Plataforman erregistratu da",
@@ -750,7 +750,7 @@
       "confirm": "Berretsi"
     },
     "assistant_card": {
-      "greeting": "Kaixo {name}! {god} naiz, zure AA laguntzailea. Zertan lagun zaitzaket?",
+      "greeting": "Kaixo, {name}! {god} naiz, zure AA laguntzailea. Zertan lagun zaitzaket?",
       "greeting_no_name": "Kaixo! {god} naiz, zure AA laguntzailea. Zertan lagun zaitzaket?"
     },
     "progress": {

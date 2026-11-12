@@ -750,7 +750,7 @@
       "confirm": "Confirm"
     },
     "assistant_card": {
-      "greeting": "Hi {name}! I'm {god}, your AI assistant. How can I help you?",
+      "greeting": "Hi, {name}! I'm {god}, your AI assistant. How can I help you?",
       "greeting_no_name": "Hi! I'm {god}, your AI assistant. How can I help you?"
     },
     "progress": {

@@ -130,7 +130,7 @@
       "feature_narrative_title": "Narrativa immersiva",
       "feature_narrative_desc": "Cada classe és una aventura única amb personatges i històries que capturen l'atenció",
       "feature_teamwork_title": "Treball en equip",
-      "feature_teamwork_desc": "Reptes col·laboratius i ranquings que fomenten el treball en equip i la superació constant",
+      "feature_teamwork_desc": "Reptes col·laboratius i rànquings que fomenten el treball en equip i la superació constant",
       "feature_analytics_title": "Anàlisi intel·ligent",
       "feature_analytics_desc": "Eines avançades de seguiment i anàlisi del progrés estudiantil",
       "feature_access_title": "Accés universal",
@@ -238,7 +238,7 @@
         },
         "alumno": {
           "title": "Ajuda per a l'alumnat",
-          "subtitle": "Com entrar a la teva classe, lliurar missions i treure profit de l'XP, les monedes i el manà."
+          "subtitle": "Com entrar a la teva classe, lliurar missions i treure profit de l'XP, les monedes i el mana."
         }
       },
       "all_categories": "Totes les categories",
@@ -721,7 +721,7 @@
         "path_locked": "Tancada pel camí"
       },
       "compare": {
-        "not_enough": "La teva classe encara és petita per comparar.",
+        "not_enough": "La teva classe encara és massa petita per comparar.",
         "self": {
           "above": "Vas per sobre de la mitjana de la resta de la teva classe.",
           "at": "Estàs a la mitjana de la resta de la teva classe.",
@@ -750,7 +750,7 @@
       "confirm": "Confirmar"
     },
     "assistant_card": {
-      "greeting": "Hola {name}! Soc {god}, el teu assistent d'IA. En què et puc ajudar?",
+      "greeting": "Hola, {name}! Soc {god}, el teu assistent d'IA. En què et puc ajudar?",
       "greeting_no_name": "Hola! Soc {god}, el teu assistent d'IA. En què et puc ajudar?"
     },
     "progress": {

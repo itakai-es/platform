@@ -26,7 +26,7 @@
       "ai_assistant": {
         "name": "Atenea",
         "message_new_user": "Hola {name}! Et donem la benvinguda a ITAKAI. Completa la teua primera missió per a començar a guanyar XP!",
-        "message_returning_user": "Hola {name}! Has completat {count} missió {classes}. Continua així! | Hola {name}! Has completat {count} missions {classes}. Continua així!",
+        "message_returning_user": "Hola, {name}! Has completat {count} missió {classes}. Continua així! | Hola, {name}! Has completat {count} missions {classes}. Continua així!",
         "classes_phrase": "en {count} classe | en {count} classes"
       },
       "class_fallback_name": "Classe",
@@ -247,20 +247,20 @@
         },
         "results": {
           "title": "Els meus resultats",
-          "hint": "Les recompenses de cada missió són les que has cobrat amb els seus enigmes. No inclouen el bonus per completar-la, així que no sumen el teu saldo.",
+          "hint": "Les recompenses de cada missió són les que has cobrat amb els seus enigmes. No inclouen el bonus per completar-la, així que la suma no coincidix necessàriament amb el teu saldo.",
           "filter_label": "Filtra les meues missions",
           "empty_pending": "No tens missions pendents",
           "empty_done": "Encara no has completat cap missió",
           "in_review": "{count} en revisió | {count} en revisió",
           "deadline_past": "va caducar el {date}",
           "hints": "{count} pista usada | {count} pistes usades",
-          "by_enigma": "% de cada enigma",
+          "by_enigma": "% per enigma",
           "enigma_open": "Sense entregar",
           "filter_pending": "Pendents ({count})",
           "filter_done": "Fetes ({count})",
           "empty_description": "Quan canvie, eixirà ací.",
           "completed_on": "el {date}",
-          "deadline_future": "venç el {date}",
+          "deadline_future": "caduca el {date}",
           "enigmas": "{approved} de {total} enigma aprovat | {approved} de {total} enigmes aprovats",
           "optional": "opcional",
           "enigma_approved": "{percent} · {date}",
@@ -333,7 +333,7 @@
       "account": {
         "title": "El teu compte",
         "username": "Usuari",
-        "managed_note": "El teu compte el gestiona el professorat: entres amb el teu usuari, no té correu i no es pot eliminar des d'aquí. Si necessites algun canvi, demana'ls-ho."
+        "managed_note": "El teu compte el gestiona el professorat: entres amb el teu usuari, no té correu i no es pot eliminar des d'ací. Si necessites algun canvi, demana'ls-ho."
       },
       "security": {
         "sessions_title": "Sessions",

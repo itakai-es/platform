@@ -26,7 +26,7 @@
       "ai_assistant": {
         "name": "Atenea",
         "message_new_user": "Hello {name}! Welcome to ITAKAI. Complete your first mission to start earning XP!",
-        "message_returning_user": "Hello {name}! You have completed {count} mission {classes}. Keep it up! | Hello {name}! You have completed {count} missions {classes}. Keep it up!",
+        "message_returning_user": "Hello, {name}! You have completed {count} mission {classes}. Keep it up! | Hello, {name}! You have completed {count} missions {classes}. Keep it up!",
         "classes_phrase": "in {count} class | in {count} classes"
       },
       "class_fallback_name": "Class",
@@ -247,14 +247,14 @@
         },
         "results": {
           "title": "My results",
-          "hint": "Each mission's rewards are what you earned from its enigmas. They don't include the bonus for completing it, so they don't add up to your balance.",
+          "hint": "Each mission's rewards are what you earned from its enigmas. They don't include the bonus for completing it, so their total won't necessarily match your balance.",
           "filter_label": "Filter my missions",
           "empty_pending": "No pending missions",
           "empty_done": "You haven't completed any missions yet",
           "in_review": "{count} under review | {count} under review",
           "deadline_past": "expired on {date}",
           "hints": "{count} hint used | {count} hints used",
-          "by_enigma": "% for each enigma",
+          "by_enigma": "% per enigma",
           "enigma_open": "Not submitted",
           "filter_pending": "Pending ({count})",
           "filter_done": "Done ({count})",

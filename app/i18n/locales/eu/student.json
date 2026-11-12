@@ -26,7 +26,7 @@
       "ai_assistant": {
         "name": "Atenea",
         "message_new_user": "Kaixo {name}! Ongi etorri ITAKAI-ra. Osatu zure lehen misioa XP irabazten hasteko!",
-        "message_returning_user": "Kaixo {name}! Misio bat osatu duzu {classes}. Jarraitu horrela! | Kaixo {name}! {count} misio osatu dituzu {classes}. Jarraitu horrela!",
+        "message_returning_user": "Kaixo, {name}! Misio bat osatu duzu {classes}. Jarraitu horrela! | Kaixo, {name}! {count} misio osatu dituzu {classes}. Jarraitu horrela!",
         "classes_phrase": "klase batean | {count} klasetan"
       },
       "class_fallback_name": "Klasea",
@@ -85,7 +85,7 @@
         "message": "Kaixo! Hemen nago \"{mission_title}\" misioarekin laguntzeko. Prest abentura hau hasteko?"
       },
       "rewards": {
-        "unlock_badge_hint": "Osatu misio honetako enigma guztiak dominaria desblokeatzeko."
+        "unlock_badge_hint": "Osatu misio honetako enigma guztiak domina desblokeatzeko."
       },
       "submission": {
         "success": "Entrega behar bezala bidali da. Irakasleak laster berrikusiko du.",
@@ -247,14 +247,14 @@
         },
         "results": {
           "title": "Nire emaitzak",
-          "hint": "Misio bakoitzeko sariak bere enigmekin kobratu dituzunak dira. Ez dute osatzeagatiko bonusa barne hartzen, beraz, ez dute zure saldoa osatzen.",
+          "hint": "Misio bakoitzeko sariak bere enigmekin kobratu dituzunak dira. Ez dute osatzeagatiko bonusa barne hartzen; beraz, guztien batura ez dator nahitaez bat zure saldoarekin.",
           "filter_label": "Iragazi nire misioak",
           "empty_pending": "Ez duzu misiorik egiteko",
           "empty_done": "Oraindik ez duzu misiorik osatu",
           "in_review": "{count} berrikusten | {count} berrikusten",
           "deadline_past": "iraungi zen: {date}",
           "hints": "Pista {count} erabilita | {count} pista erabilita",
-          "by_enigma": "Enigma bakoitzaren %",
+          "by_enigma": "% enigmaka",
           "enigma_open": "Entregatu gabe",
           "filter_pending": "Egiteko ({count})",
           "filter_done": "Eginak ({count})",
