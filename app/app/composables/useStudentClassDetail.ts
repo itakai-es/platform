@@ -3,35 +3,14 @@
  *
  * Equivalente a `useTeacherClassDetail` para el lado del alumno. Centraliza
  * los datos que necesitan varias pestañas (clase, settings, gamificación,
- * misiones, guía, badges, actividades) y los fetches que las disparan, para
+ * misiones, guía, actividades) y los fetches que las disparan, para
  * que cada subruta no tenga que repetir loaders ni reinventar fetches.
  *
- * La pestaña Ranking dispara su propio fetch diferido con `ensureRanking()`
- * en su onMounted; las demás aprovechan la carga inicial de `loadAll()`.
+ * La pestaña Ranking pide lo suyo con `ClassRankingBoard`, según el tipo y el
+ * periodo que se miran; las demás aprovechan la carga inicial de `loadAll()`.
  */
 import { resolveClassSettings } from '~/utils/class-settings'
-
-interface UIState {
-  classNickname: string
-  originalNickname: string
-  rankingData: any | null
-  rankingFetched: boolean
-  isLoadingRanking: boolean
-  activeRankingFilter: string
-  rankingFilters: { id: string; label: string }[]
-}
-
-function emptyUI(): UIState {
-  return {
-    classNickname: '',
-    originalNickname: '',
-    rankingData: null,
-    rankingFetched: false,
-    isLoadingRanking: false,
-    activeRankingFilter: 'general',
-    rankingFilters: [],
-  }
-}
+import type { RankingType } from '~/utils/ranking-config'
 
 export function useStudentClassDetail(classIdRef: Ref<string> | ComputedRef<string> | string) {
   const classId = computed(() => unref(classIdRef))
@@ -41,17 +20,14 @@ export function useStudentClassDetail(classIdRef: Ref<string> | ComputedRef<stri
   const classGamificationStore = useClassGamificationStore()
   const shopStore = useShopStore()
 
-  // Estado de UI local del detalle (ranking lazy + nickname editable + filtros).
-  // Por classId con `useState` para sobrevivir a SSR.
-  const ui = useState<UIState>(`studentClassDetail:${classId.value}`, emptyUI)
-
   // Datos vivos del store (no se duplican; aquí solo se exponen).
   const selectedClass = computed(() => classesStore.selectedClass)
   const classData = computed(() => selectedClass.value as any)
   const classSettings = computed(() => resolveClassSettings(classData.value?.settings))
+  /** Los tipos de ranking que ve; sin ninguno, la clase no tiene pestaña de ranking. */
+  const rankingTypes = computed<RankingType[]>(() => classData.value?.rankingTypes ?? [])
   const classMissions = computed(() => classesStore.missionsByClass.get(classId.value) ?? [])
   const classGuide = computed(() => classesStore.classGuides.get(classId.value) || null)
-  const currentClassBadges = computed(() => classesStore.classBadges.get(classId.value) || [])
   const recentActivities = computed(() => classesStore.classActivities.get(classId.value) || [])
 
   const classGamification = computed(() => classGamificationStore.getClassData(classId.value))
@@ -78,29 +54,10 @@ export function useStudentClassDetail(classIdRef: Ref<string> | ComputedRef<stri
     await Promise.all([
       classesStore.fetchClassMissions(classId.value),
       classesStore.fetchClassGuide(classId.value),
-      classesStore.fetchClassBadges(classId.value),
       classesStore.fetchClassActivities(classId.value, 0, ACTIVITIES_LIMIT),
-      classGamificationStore.fetchClassXp(classId.value, force),
+      // Si falla, el Resumen lo dice con su reintento (`error` del store).
+      classGamificationStore.fetchClassXp(classId.value, force).catch(() => {}),
     ])
-  }
-
-  /** Idempotente: salta si el ranking ya está cargado. `force=true` lo recarga. */
-  async function ensureRanking(force = false) {
-    if (ui.value.rankingFetched && !force) return
-    if (ui.value.isLoadingRanking) return
-    ui.value.isLoadingRanking = true
-    try {
-      const response = await $fetch<any>(
-        `${config.public.apiBase}/students/classes/${classId.value}/ranking?filter=${ui.value.activeRankingFilter}`
-      )
-      ui.value.rankingData = response
-      ui.value.rankingFetched = true
-      if (response.filters) ui.value.rankingFilters = response.filters
-    } catch (err) {
-      console.error('Error fetching ranking:', err)
-    } finally {
-      ui.value.isLoadingRanking = false
-    }
   }
 
   // Resuelve la URL de la imagen de portada (relativa → absoluta).
@@ -113,13 +70,12 @@ export function useStudentClassDetail(classIdRef: Ref<string> | ComputedRef<stri
 
   return {
     classId,
-    ui,
     // Datos
     classData,
     classSettings,
+    rankingTypes,
     classMissions,
     classGuide,
-    currentClassBadges,
     recentActivities,
     classGamification,
     studentAvatar,
@@ -129,6 +85,5 @@ export function useStudentClassDetail(classIdRef: Ref<string> | ComputedRef<stri
     resolvedClassImage,
     // Loaders
     loadAll,
-    ensureRanking,
   }
 }

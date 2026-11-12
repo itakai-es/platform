@@ -25,6 +25,8 @@ export const useClassGamificationStore = defineStore('classGamification', () => 
   // Loading state
   const isLoading = ref(false)
   const error = ref<string | null>(null)
+  /** El código HTTP del último fallo: con 429 el aviso pide esperar un poco. */
+  const errorStatus = ref<number | null>(null)
 
   // Cache flags (persist during session)
   const loadedClasses = ref<Set<string>>(new Set())
@@ -55,6 +57,7 @@ export const useClassGamificationStore = defineStore('classGamification', () => 
 
     isLoading.value = true
     error.value = null
+    errorStatus.value = null
 
     const previousData = classXpData.value.get(classId) || null
 
@@ -82,6 +85,7 @@ export const useClassGamificationStore = defineStore('classGamification', () => 
       return response.gamification
     } catch (err: any) {
       error.value = err.message || 'Error al cargar los datos de XP'
+      errorStatus.value = err.statusCode ?? null
       console.error('Error fetching class XP:', err)
       throw err
     } finally {
@@ -204,6 +208,7 @@ export const useClassGamificationStore = defineStore('classGamification', () => 
     levelUpData,
     isLoading,
     error,
+    errorStatus,
 
     // Getters
     getClassData,
