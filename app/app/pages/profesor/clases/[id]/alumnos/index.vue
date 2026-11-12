@@ -1,8 +1,8 @@
 <template>
   <div class="space-y-4">
     <!-- Sub-navegación (pills), mismo patrón que el panel de Ajustes. El pill de
-         Ranking solo aparece si la clase tiene los rankings activados. -->
-    <div v-if="viewOptions.length > 1" class="flex gap-2 overflow-x-auto scrollbar-subtle">
+         Ranking aparece siempre, aunque su alumnado no lo vea. -->
+    <div v-if="viewOptions.length > 1" class="flex flex-wrap gap-2">
       <button
         v-for="v in viewOptions"
         :key="v.id"
@@ -14,7 +14,7 @@
             ? 'bg-navy-700 text-white'
             : 'bg-surface border border-border-primary text-navy-700 hover:bg-gray-50',
         ]"
-        @click="activeView = v.id"
+        @click="setView(v.id)"
       >
         {{ v.label }}
       </button>
@@ -42,6 +42,13 @@
         <Skeleton v-for="i in 5" :key="i" height="h-16" />
       </div>
 
+      <!-- La API ha fallado: no es que no haya estudiantes -->
+      <Card v-else-if="loadError" type="stats">
+        <CardItem layout="column" padding="lg" centered>
+          <LoadError :rate-limited="loadError === 'rate_limited'" @retry="loadStudents" />
+        </CardItem>
+      </Card>
+
       <!-- Empty: no students in class -->
       <EmptyState
         v-else-if="allStudents.length === 0"
@@ -60,11 +67,14 @@
 
       <!-- Students table. `relative`: los textos sr-only de la tabla se recortan
            aquí y no ensanchan la página en el móvil. -->
-      <div v-else class="relative overflow-x-auto rounded-2xl bg-white shadow-lg">
+      <div v-else class="scrollbar-visible relative overflow-x-auto rounded-2xl bg-white shadow-lg">
         <table class="w-full min-w-[600px] text-sm">
+          <caption class="sr-only">
+            {{ t('teacher.classes.detail.students.table_caption') }}
+          </caption>
           <thead>
             <tr class="border-b border-navy-700/10 text-left text-navy-700/70">
-              <th v-if="canSelect" class="w-10 py-3 pl-4">
+              <th v-if="canSelect" scope="col" class="w-10 py-3 pl-4">
                 <Checkbox
                   :id="`${selectUid}-all`"
                   :model-value="allVisibleSelected"
@@ -74,28 +84,28 @@
                   {{ t('teacher.classroom.select_all_visible') }}
                 </label>
               </th>
-              <th class="px-4 py-3 font-semibold">
+              <th scope="col" class="px-4 py-3 font-semibold">
                 {{ t('teacher.classes.detail.students.col_student') }}
               </th>
-              <th class="px-4 py-3 font-semibold text-center">
+              <th scope="col" class="px-4 py-3 font-semibold text-center">
                 {{ t('teacher.classes.detail.students.col_level') }}
               </th>
-              <th v-if="settings.xp" class="px-4 py-3 font-semibold text-center">
+              <th v-if="settings.xp" scope="col" class="px-4 py-3 font-semibold text-center">
                 {{ t('common.resources.xp') }}
               </th>
-              <th v-if="settings.coins" class="px-4 py-3 font-semibold text-center">
+              <th v-if="settings.coins" scope="col" class="px-4 py-3 font-semibold text-center">
                 {{ t('common.resources.coins') }}
               </th>
-              <th v-if="settings.mana" class="px-4 py-3 font-semibold text-center">
+              <th v-if="settings.mana" scope="col" class="px-4 py-3 font-semibold text-center">
                 {{ t('common.resources.mana') }}
               </th>
-              <th v-if="settings.lives" class="px-4 py-3 font-semibold text-center">
+              <th v-if="settings.lives" scope="col" class="px-4 py-3 font-semibold text-center">
                 {{ t('common.resources.lives') }}
               </th>
-              <th v-if="settings.behaviors" class="px-4 py-3 font-semibold text-center">
+              <th v-if="settings.behaviors" scope="col" class="px-4 py-3 font-semibold text-center">
                 {{ t('teacher.classes.detail.students.col_behaviors') }}
               </th>
-              <th v-if="showActions" class="px-2 py-3">
+              <th v-if="showActions" scope="col" class="px-2 py-3">
                 <span class="sr-only">{{ t('teacher.classes.detail.students.col_actions') }}</span>
               </th>
             </tr>
@@ -118,7 +128,7 @@
                 </label>
               </td>
               <!-- Student: avatar + nombre real + @alias -->
-              <td class="px-4 py-3">
+              <th scope="row" class="px-4 py-3 text-left font-normal">
                 <div class="flex items-center gap-3 min-w-0">
                   <Avatar
                     :src="student.avatar"
@@ -129,7 +139,7 @@
                   />
                   <div class="min-w-0">
                     <NuxtLink
-                      :to="`/profesor/alumnos/${student.id}`"
+                      :to="studentProfileLink(student.id)"
                       class="block font-semibold text-navy-700 truncate hover:underline"
                     >
                       {{ student.name }}
@@ -149,7 +159,7 @@
                     </div>
                   </div>
                 </div>
-              </td>
+              </th>
               <!-- Level (coloreado con el tramo del sistema de niveles de la clase) -->
               <td class="px-4 py-3 text-center">
                 <span
@@ -269,35 +279,22 @@
     />
 
     <!-- ============================== Vista: Ranking ============================== -->
-    <template v-else>
-      <!-- Loading -->
-      <div v-if="rankingLoading" class="space-y-6">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-          <Skeleton height="h-96" />
-          <Skeleton height="h-96" />
-        </div>
-        <Skeleton height="h-64" />
-      </div>
-
-      <!-- Empty: no students -->
-      <EmptyState
-        v-else-if="!rankingData || !rankingData.stats || rankingData.stats.totalStudents === 0"
-        :icon="UsersIcon"
-        :title="t('teacher.classes.detail.ranking.no_students_title')"
-        :description="t('teacher.classes.detail.ranking.no_students_description')"
-      />
-
-      <template v-else>
-        <TeamStandings :standings="teamStandings" />
-        <ClassRankingSection
-          :ranking-data="rankingData"
-          :class-id="classId"
-          :clickable="true"
-          :show-current-user-highlight="false"
-          @student-click="viewStudentProfile"
+    <!-- El profesorado lo ve siempre completo, de todos los tipos, con un aviso de
+         qué ve su alumnado. -->
+    <ClassRankingBoard
+      v-else
+      :url="`${config.public.apiBase}/teacher/classes/${classId}/ranking`"
+      :student-link="studentProfileLink"
+      :show-current-user-highlight="false"
+    >
+      <template #empty>
+        <EmptyState
+          :icon="UsersIcon"
+          :title="t('teacher.classes.detail.ranking.no_students_title')"
+          :description="t('teacher.classes.detail.ranking.no_students_description')"
         />
       </template>
-    </template>
+    </ClassRankingBoard>
 
     <!-- Aplicar a la selección (o a los presentes/ausentes de la lista), con confirmación -->
     <ClassroomActionModal
@@ -328,8 +325,12 @@
 </template>
 
 <script setup lang="ts">
-import { UsersIcon, MagnifyingGlassIcon, HandRaisedIcon, GiftIcon } from '@heroicons/vue/24/outline'
-import { storeToRefs } from 'pinia'
+import {
+  UsersIcon,
+  MagnifyingGlassIcon,
+  HandRaisedIcon,
+  GiftIcon,
+} from '@heroicons/vue/24/outline'
 import XpIcon from '~/components/atoms/XpIcon.vue'
 import CoinIcon from '~/components/atoms/CoinIcon.vue'
 import ManaIcon from '~/components/atoms/ManaIcon.vue'
@@ -337,6 +338,7 @@ import LifeIcon from '~/components/atoms/LifeIcon.vue'
 import type { ClassSettings } from '~/types/class.types'
 import type { AccountType } from '~/types/teacher.types'
 import type { BatchResult } from '~/stores/behaviors'
+import { loadErrorOf, type AnalyticsLoadError } from '~/composables/useStudentAnalytics'
 import { studentAvatarSeed } from '~/utils/avatar'
 import { resolveClassSettings } from '~/utils/class-settings'
 
@@ -368,6 +370,7 @@ interface ClassStudentRow {
 const { t } = useI18n()
 const { coinLabel } = useCoinLabel()
 const route = useRoute()
+const router = useRouter()
 const config = useRuntimeConfig()
 
 const classId = computed(() => route.params.id as string)
@@ -503,8 +506,27 @@ const isLoading = ref(true)
 // Sub-vista activa: 'list' (tabla de gestión) por defecto; 'attendance' es
 // pasar lista y su histórico; 'teams', los equipos; 'ranking' es el podio.
 type StudentsView = 'list' | 'attendance' | 'teams' | 'ranking'
-// `?vista=asistencia` abre directamente pasar lista (el aviso de la ruleta lleva aquí).
-const activeView = ref<StudentsView>(route.query.vista === 'asistencia' ? 'attendance' : 'list')
+// Va en la URL (`?vista=asistencia`, el aviso de la ruleta lleva ahí): al volver de
+// la página de un estudiante se sigue en la misma vista.
+const VIEW_IN_URL: Record<Exclude<StudentsView, 'list'>, string> = {
+  attendance: 'asistencia',
+  teams: 'equipos',
+  ranking: 'ranking',
+}
+const viewFromUrl = computed<StudentsView>(() => {
+  const found = Object.entries(VIEW_IN_URL).find(([, vista]) => vista === route.query.vista)
+  return found ? (found[0] as StudentsView) : 'list'
+})
+// Una vista que aquí no se puede abrir (sin permiso) deja el listado.
+const activeView = computed<StudentsView>(() =>
+  viewOptions.value.some(option => option.id === viewFromUrl.value) ? viewFromUrl.value : 'list'
+)
+function setView(view: StudentsView) {
+  const query = { ...route.query }
+  if (view === 'list') delete query.vista
+  else query.vista = VIEW_IN_URL[view]
+  void router.replace({ query })
+}
 const viewOptions = computed(() => {
   const list: { id: StudentsView; label: string }[] = [
     { id: 'list', label: t('teacher.classes.detail.students.view_list') },
@@ -512,8 +534,8 @@ const viewOptions = computed(() => {
   if (can('attendance.view'))
     list.push({ id: 'attendance', label: t('teacher.classes.detail.students.view_attendance') })
   list.push({ id: 'teams', label: t('teacher.classes.detail.students.view_teams') })
-  if (settings.value.rankings)
-    list.push({ id: 'ranking', label: t('teacher.classes.detail.students.view_ranking') })
+  // El profesorado ve el ranking siempre, también si su alumnado no lo tiene.
+  list.push({ id: 'ranking', label: t('teacher.classes.detail.students.view_ranking') })
   return list
 })
 
@@ -579,45 +601,16 @@ const students = computed(() => {
   return [...list].sort((a, b) => compareAsc(a, b) * dir)
 })
 
-// --- Ranking (podio) ---
-// El listado del ranking vive en el teacher store, cacheado por `${classId}-general`.
-const teacherStore = useTeacherStore()
-const { classRankings } = storeToRefs(teacherStore)
-const rankingData = computed(() => classRankings.value.get(`${classId.value}-general`) ?? null)
-const rankingLoading = ref(false)
-const rankingLoaded = ref(false)
-
-// Clasificación de equipos: las agrupaciones de base, por puntos.
-const classTeams = useClassTeams(classId)
-const teamStandings = computed(() =>
-  classTeams.activeSets.value
-    .filter(set => set.kind === 'base')
-    .map(set => ({
-      set: { id: set.id, title: set.title },
-      teams: set.teams
-        .map((team, index) => ({ ...team, index }))
-        .sort((a, b) => b.points - a.points),
-    }))
-)
-
-function viewStudentProfile(studentId: string) {
-  navigateTo(`/profesor/alumnos/${studentId}`)
+/** Su página dentro de la clase: el listado, el podio y la lista del ranking son enlaces a ella. */
+function studentProfileLink(studentId: string) {
+  return `/profesor/clases/${classId.value}/alumnos/${studentId}`
 }
 
-// Carga perezosa del ranking la primera vez que se abre esa sub-vista; si ya
-// estaba cacheado por el store, `ensureClassRanking` es no-op (cache hit).
-watch(activeView, async view => {
-  if (view !== 'ranking' || rankingLoaded.value) return
-  rankingLoading.value = true
-  try {
-    await Promise.all([teacherStore.ensureClassRanking(classId.value), classTeams.ensure()])
-    rankingLoaded.value = true
-  } finally {
-    rankingLoading.value = false
-  }
-})
+const loadError = ref<AnalyticsLoadError | null>(null)
 
-onMounted(async () => {
+async function loadStudents() {
+  isLoading.value = true
+  loadError.value = null
   try {
     const res = await $fetch<{ students: ClassStudentRow[]; settings: ClassSettings }>(
       `${config.public.apiBase}/teacher/classes/${classId.value}/students`
@@ -625,9 +618,11 @@ onMounted(async () => {
     allStudents.value = res.students
     settings.value = resolveClassSettings(res.settings)
   } catch (err) {
-    console.error('Error fetching class students:', err)
+    loadError.value = loadErrorOf(err)
   } finally {
     isLoading.value = false
   }
-})
+}
+
+onMounted(loadStudents)
 </script>

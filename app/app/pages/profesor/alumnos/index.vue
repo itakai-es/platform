@@ -59,13 +59,13 @@
               </div>
               <div class="h-8 bg-gray-200 rounded-full w-16" />
             </div>
-            <div class="grid grid-cols-3 gap-2">
-              <div class="bg-gray-50 rounded-xl p-2.5 h-16" />
+            <div class="grid grid-cols-2 gap-2">
               <div class="bg-gray-50 rounded-xl p-2.5 h-16" />
               <div class="bg-gray-50 rounded-xl p-2.5 h-16" />
             </div>
+            <div class="h-4 bg-gray-100 rounded w-40 mt-3 mb-2" />
+            <div class="h-2.5 bg-gray-100 rounded-full" />
           </div>
-          <div class="h-1.5 bg-gray-100" />
         </div>
       </CardGrid>
 
@@ -106,29 +106,12 @@
             </div>
 
             <!-- Stats -->
-            <div class="grid grid-cols-3 gap-2 text-center">
+            <div class="grid grid-cols-2 gap-2 text-center">
               <div class="bg-navy-700/5 rounded-xl py-2.5 px-2">
                 <div class="flex items-center justify-center gap-1">
-                  <RocketLaunchIcon class="w-4 h-4 text-navy-700" />
+                  <XpIcon class="w-4 h-4" />
                   <p class="text-lg font-bold text-navy-700">
-                    {{ student.totalMissionsCompleted
-                    }}<span class="text-navy-700/70 font-normal"
-                      >/{{ student.totalMissionsAvailable }}</span
-                    >
-                  </p>
-                </div>
-                <p class="text-xs text-navy-700/70 uppercase tracking-wide">
-                  {{ t('teacher.students.index.stat_missions') }}
-                </p>
-              </div>
-              <div class="bg-navy-700/5 rounded-xl py-2.5 px-2">
-                <div class="flex items-center justify-center gap-1">
-                  <MapIcon class="w-4 h-4 text-navy-700" />
-                  <p class="text-lg font-bold text-navy-700">
-                    {{ formatXP(student.totalXpEarned)
-                    }}<span class="text-navy-700/70 font-normal"
-                      >/{{ formatXP(student.totalXpAvailable) }}</span
-                    >
+                    {{ formatCompactNumber(student.totalXpEarned) }}
                   </p>
                 </div>
                 <p class="text-xs text-navy-700/70 uppercase tracking-wide">XP</p>
@@ -148,14 +131,25 @@
                 </p>
               </div>
             </div>
-          </div>
 
-          <!-- Progress bar -->
-          <div class="h-1.5 bg-gray-100">
-            <div
-              class="h-full bg-navy-700 transition-all duration-300"
-              :style="{ width: `${student.overallProgress}%` }"
-            />
+            <!-- «X de N misiones»: la cifra principal, escrita y con su barra -->
+            <template v-if="student.totalMissionsCounted > 0">
+              <p class="mt-3 mb-1.5 flex items-center gap-1.5 text-sm font-semibold text-navy-700">
+                <RocketLaunchIcon class="w-4 h-4" aria-hidden="true" />
+                {{ missionsText(student) }}
+              </p>
+              <ProgressBar
+                :percentage="(student.totalMissionsCompleted / student.totalMissionsCounted) * 100"
+                role="progressbar"
+                :aria-valuemin="0"
+                :aria-valuemax="student.totalMissionsCounted"
+                :aria-valuenow="student.totalMissionsCompleted"
+                :aria-label="missionsText(student)"
+              />
+            </template>
+            <p v-else class="mt-3 text-sm text-navy-700/70">
+              {{ t('teacher.students.index.no_missions') }}
+            </p>
           </div>
         </article>
       </CardGrid>
@@ -170,18 +164,20 @@
 </template>
 
 <script setup lang="ts">
-import { UsersIcon, RocketLaunchIcon, MapIcon, TrophyIcon } from '@heroicons/vue/24/outline'
+import { UsersIcon, RocketLaunchIcon, TrophyIcon } from '@heroicons/vue/24/outline'
 import { accountIdentifier } from '~/utils/identity'
-import type { StudentListSort, StudentProgressRange } from '~/types/teacher.types'
-
-const formatXP = (xp: number): string => {
-  if (xp >= 1000) {
-    return (xp / 1000).toFixed(1) + 'k'
-  }
-  return String(xp ?? 0)
-}
+import type { Student, StudentListSort, StudentProgressRange } from '~/types/teacher.types'
 
 const { t } = useI18n()
+const { formatCompactNumber } = useNumberFormat()
+
+/** «4 de 7 misiones»: N son las que cuentan (con enigmas y sin bloquear a mano). */
+const missionsText = (student: Student) =>
+  t(
+    'common.progress.missions_of',
+    { done: student.totalMissionsCompleted, total: student.totalMissionsCounted },
+    student.totalMissionsCounted
+  )
 
 useHead({
   title: () => t('teacher.students.index.meta.title'),

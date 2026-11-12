@@ -6,12 +6,14 @@
  * comparten la carga principal de datos (classData, students, missions…) y los
  * settings de la clase. Este composable centraliza:
  *  - el fetch principal (`loadAll`) que carga clase + estudiantes + misiones
- *    + dispara los fetches diferidos de guía, ranking y actividades
- *  - los fetches diferidos (`loadGuide`, `loadRanking`, `loadActivities`) que
- *    una tab puede lanzar bajo demanda si quiere refrescar
+ *    + dispara los fetches diferidos de guía y actividades
+ *  - los fetches diferidos (`ensureGuide`, `ensureActivities`) que una tab puede
+ *    lanzar bajo demanda si quiere refrescar
+ *  - la analítica del Resumen (`ensureAnalytics`), por periodo, que solo pide esa
+ *    pestaña
  *  - el estado de UI compartido entre el layout y los hijos (`showInviteModal`,
  *    `selectedActivityBadge`)
- *  - las derivadas (`classSettings`, `classStats`, `resolvedClassImage`)
+ *  - las derivadas (`classSettings`, `resolvedClassImage`)
  *  - qué puede hacer el usuario en la clase (`can`), a partir de su acceso.
  *
  * El estado se memoriza por `classId` con `useState` para que sea SSR-safe y
@@ -21,24 +23,19 @@
 import { resolveClassSettings } from '~/utils/class-settings'
 import type { ScheduleConfig } from '~/types/schedule.types'
 import type { ClassAccess } from '~/types/class.types'
+import type { AnalyticsPeriodPreset, ClassAnalytics } from '~/types/analytics.types'
+
+/** Una migaja de más tras el nombre de la clase, en la cabecera (una página dentro de una pestaña). */
+export interface ClassBreadcrumbStep {
+  label: string
+  to?: string
+}
 
 interface State {
   classData: any | null
   students: any[]
   missions: any[]
   classGuide: { content: string; lastUpdated?: string } | null
-  rankingData: {
-    podium: any[]
-    leaderboard: any[]
-    stats: {
-      avgXp: number
-      avgProgress: number
-      avgMissions: string
-      participation: number
-      totalStudents: number
-      totalXp: number
-    }
-  } | null
   rawActivities: any[]
   isLoading: boolean
   isLoaded: boolean
@@ -46,13 +43,17 @@ interface State {
   // llamada sin tener que mirar si los datos están vacíos (un guide=null tras
   // fetchar es válido y no debe disparar refetch en cada visita).
   guideFetched: boolean
-  rankingFetched: boolean
   activitiesFetched: boolean
   isLoadingGuide: boolean
-  isLoadingRanking: boolean
   isLoadingActivities: boolean
   showInviteModal: boolean
   selectedActivityBadge: { image: string; text: string } | null
+  // La analítica se guarda por periodo: volver a uno ya visto no enseña esqueletos.
+  analytics: Partial<Record<AnalyticsPeriodPreset, ClassAnalytics>>
+  // Peticiones en vuelo (empiezan sin ninguna: el esqueleto sale de no tener datos).
+  analyticsFetching: Partial<Record<AnalyticsPeriodPreset, boolean>>
+  analyticsError: Partial<Record<AnalyticsPeriodPreset, 'error' | 'rate_limited'>>
+  breadcrumbSteps: ClassBreadcrumbStep[]
 }
 
 function emptyState(): State {
@@ -61,18 +62,19 @@ function emptyState(): State {
     students: [],
     missions: [],
     classGuide: null,
-    rankingData: null,
     rawActivities: [],
     isLoading: true,
     isLoaded: false,
     guideFetched: false,
-    rankingFetched: false,
     activitiesFetched: false,
     isLoadingGuide: false,
-    isLoadingRanking: false,
     isLoadingActivities: false,
     showInviteModal: false,
     selectedActivityBadge: null,
+    analytics: {},
+    analyticsFetching: {},
+    analyticsError: {},
+    breadcrumbSteps: [],
   }
 }
 
@@ -86,17 +88,6 @@ export function useTeacherClassDetail(classIdRef: Ref<string> | ComputedRef<stri
 
   const classSettings = computed(() => resolveClassSettings(state.value.classData?.settings))
   const { can, isOwner } = useClassPermissions(() => state.value.classData?.myAccess)
-  const classStats = computed(
-    () =>
-      state.value.classData?.stats || {
-        avgProgress: 0,
-        participation: 0,
-        avgMissionsCompleted: 0,
-        totalMissions: 0,
-        pendingReviews: 0,
-        avgXp: 0,
-      }
-  )
   const resolvedClassImage = computed(() => {
     const url = state.value.classData?.backgroundImage
     if (!url) return ''
@@ -117,28 +108,17 @@ export function useTeacherClassDetail(classIdRef: Ref<string> | ComputedRef<stri
       if (classResult) {
         state.value.classData = {
           ...classResult,
-          stats: classResult.stats || {
-            avgProgress: 0,
-            participation: 0,
-            avgMissionsCompleted: 0,
-            totalMissions: 0,
-            pendingReviews: 0,
-          },
+          stats: classResult.stats || { missionsCounted: 0, pendingReviews: 0 },
         }
       }
       const studentsResult = await teacherStore.fetchStudents(classId.value)
-      state.value.students =
-        studentsResult?.students?.map((s: any) => ({
-          ...s,
-          progress: Math.round((s.totalMissionsCompleted / 12) * 100),
-        })) || []
+      state.value.students = studentsResult?.students || []
       const missionsResult = await teacherStore.fetchClassMissions(classId.value, true)
       state.value.missions = missionsResult?.missions || []
       state.value.isLoaded = true
       // Fetches diferidos (no bloqueantes). Cada uno respeta su propio flag,
       // así que si una tab ya los disparó por su cuenta, aquí no se duplican.
       void ensureGuide()
-      void ensureRanking()
       void ensureActivities()
     } catch (error) {
       console.error('Error loading class:', error)
@@ -152,20 +132,22 @@ export function useTeacherClassDetail(classIdRef: Ref<string> | ComputedRef<stri
   /**
    * Al volver a una clase ya cargada se enseña lo guardado y, por detrás, se
    * pide la clase de nuevo: el acceso propio puede haber cambiado (o haberse
-   * perdido) mientras tanto. Sus misiones, solo si el almacén las ha dado por
-   * caducadas (p. ej. se ha importado una en esta clase desde otra pantalla):
-   * la pestaña Misiones las lee de aquí, no del almacén.
+   * perdido) mientras tanto. Sus misiones y su alumnado, como los tenga el
+   * almacén, que los vuelve a pedir si los ha dado por caducados (p. ej. se ha
+   * creado o importado una misión, o se han dado altas, desde esta u otra
+   * pantalla): la pestaña Misiones y el mapa los leen de aquí, no del almacén.
+   * La actividad, siempre: también la mueve el alumnado. También lo llama la
+   * clase abierta cuando cambia algo en ella (`classDataRevision` del almacén).
    */
   async function revalidate() {
+    void ensureActivities(true)
     try {
       const fresh = await teacherStore.fetchClassById(classId.value, true)
       if (fresh && state.value.classData) {
         state.value.classData = { ...state.value.classData, ...fresh }
       }
-      if (!teacherStore.loadedClassMissions.has(classId.value)) {
-        const missionsResult = await teacherStore.fetchClassMissions(classId.value, true)
-        state.value.missions = missionsResult?.missions || []
-      }
+      state.value.missions = (await teacherStore.ensureClassMissions(classId.value)).missions
+      state.value.students = (await teacherStore.fetchStudents(classId.value)).students
     } catch (error) {
       if (teacherStore.isClassGone(error)) forget()
     }
@@ -206,21 +188,6 @@ export function useTeacherClassDetail(classIdRef: Ref<string> | ComputedRef<stri
     }
   }
 
-  async function ensureRanking(force = false) {
-    if (state.value.rankingFetched && !force) return
-    if (state.value.isLoadingRanking) return
-    state.value.isLoadingRanking = true
-    try {
-      const res = await teacherStore.fetchClassRanking(classId.value, 'general')
-      state.value.rankingData = res
-      state.value.rankingFetched = true
-    } catch {
-      state.value.rankingData = null
-    } finally {
-      state.value.isLoadingRanking = false
-    }
-  }
-
   async function ensureActivities(force = false) {
     if (state.value.activitiesFetched && !force) return
     if (state.value.isLoadingActivities) return
@@ -239,6 +206,33 @@ export function useTeacherClassDetail(classIdRef: Ref<string> | ComputedRef<stri
     }
   }
 
+  /**
+   * La analítica de un periodo. Corta por lo que ya tiene y por lo que hay en
+   * vuelo, nunca por un «cargando» que empieza en verdadero (se quedaría en el
+   * esqueleto para siempre): la pantalla sabe que carga porque aún no hay datos
+   * ni error. Con `force` se vuelve a pedir enseñando mientras lo que hay, y si
+   * eso falla se queda lo que había.
+   */
+  async function ensureAnalytics(period: AnalyticsPeriodPreset, force = false) {
+    if (state.value.analytics[period] && !force) return
+    if (state.value.analyticsFetching[period]) return
+    state.value.analyticsFetching[period] = true
+    state.value.analyticsError[period] = undefined
+    try {
+      state.value.analytics[period] = await $fetch<ClassAnalytics>(
+        `${runtimeConfig.public.apiBase}/teacher/classes/${classId.value}/analytics`,
+        { params: { period } }
+      )
+    } catch (error) {
+      if (!state.value.analytics[period]) {
+        const status = (error as { statusCode?: number })?.statusCode
+        state.value.analyticsError[period] = status === 429 ? 'rate_limited' : 'error'
+      }
+    } finally {
+      state.value.analyticsFetching[period] = false
+    }
+  }
+
   // Setters/handlers que comparten el layout y los hijos.
   function setClassData(
     patch: Partial<{
@@ -248,6 +242,7 @@ export function useTeacherClassDetail(classIdRef: Ref<string> | ComputedRef<stri
       narrative: string
       settings: any
       levelConfig: any
+      rankingConfig: any
       scheduleConfig: ScheduleConfig[]
     }>
   ) {
@@ -271,7 +266,6 @@ export function useTeacherClassDetail(classIdRef: Ref<string> | ComputedRef<stri
     classId,
     state,
     classSettings,
-    classStats,
     resolvedClassImage,
     can,
     isOwner,
@@ -281,8 +275,8 @@ export function useTeacherClassDetail(classIdRef: Ref<string> | ComputedRef<stri
     forget,
     setMyAccess,
     ensureGuide,
-    ensureRanking,
     ensureActivities,
+    ensureAnalytics,
     setClassData,
     openActivityBadge,
     closeActivityBadge,

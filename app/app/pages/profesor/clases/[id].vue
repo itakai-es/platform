@@ -48,6 +48,8 @@
         :tabs="tabs"
         :active-tab="activeTab"
         :tab-href="tabHref"
+        :breadcrumb-class-to="`/profesor/clases/${classId}`"
+        :breadcrumb-steps="state.breadcrumbSteps"
         :subject="state.classData.subject"
         :education-level="state.classData.educationLevel"
         :language="state.classData.language"
@@ -73,9 +75,10 @@
               :disabled="state.classData.archived"
               @click="state.showInviteModal = true"
             >
-              <UserPlusIcon class="w-5 h-5 sm:mr-2" /><span class="hidden sm:inline">{{
-                t('teacher.classes.detail.btn_invite')
-              }}</span>
+              <UserPlusIcon class="w-5 h-5 sm:mr-2" aria-hidden="true" /><span
+                class="sr-only sm:not-sr-only"
+                >{{ t('teacher.classes.detail.btn_invite') }}</span
+              >
             </Button>
           </div>
         </template>
@@ -292,9 +295,14 @@ onMounted(() => {
 })
 
 // Un aviso de cambio de acceso a esta clase, abierto con la clase ya en pantalla:
-// se vuelve a pedir para que pestañas y controles sigan al nivel nuevo.
+// se vuelve a pedir para que pestañas y controles sigan al nivel nuevo. Igual
+// tras un cambio en ella desde aquí (altas, bajas, misiones…): las pestañas ya
+// montadas no pasan por `loadAll` y enseñarían las cifras de antes.
 watch(
-  () => teacherStore.classAccessRevision[classId.value],
+  [
+    () => teacherStore.classAccessRevision[classId.value],
+    () => teacherStore.classDataRevision[classId.value],
+  ],
   () => {
     void revalidate()
   }
