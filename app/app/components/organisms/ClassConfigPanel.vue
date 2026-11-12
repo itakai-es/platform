@@ -147,30 +147,59 @@
 
     <!-- Section: Funcionalidades -->
     <div v-else-if="activeSection === 'features'" class="space-y-6">
-      <!-- Column-major en sm+ con 5 filas auto: las 5 primeras de `order` van a la
-           columna izquierda (módulos) y las 4 últimas a la derecha (recursos). -->
+      <!-- Column-major en sm+ con 5 filas auto: las 5 primeras van a la columna
+           izquierda (el ranking, la comparación y los módulos) y las 5 últimas a la
+           derecha (los recursos y los sonidos). -->
       <div
         class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:grid-flow-col sm:grid-rows-[repeat(5,auto)]"
       >
-        <ClassFeatureRow
-          v-for="flag in order"
-          :key="flag"
-          :icon="meta[flag].icon"
-          :label="featureLabel(flag)"
-          :description="featureDescription(flag)"
-          :dimmed="isBlocked(flag)"
-        >
-          <template #action="{ labelId, descriptionId }">
-            <Toggle
-              :model-value="localSettings[flag]"
-              :disabled="!canEditSettings || isBlocked(flag)"
-              :aria-labelledby="labelId"
-              :aria-describedby="descriptionId"
-              @update:model-value="setFlag(flag, $event)"
-            />
-          </template>
-        </ClassFeatureRow>
+        <template v-for="flag in order" :key="flag">
+          <ClassFeatureRow
+            :icon="meta[flag].icon"
+            :label="featureLabel(flag)"
+            :description="featureDescription(flag)"
+            :dimmed="isBlocked(flag)"
+          >
+            <template #action="{ labelId, descriptionId }">
+              <Toggle
+                :model-value="localSettings[flag]"
+                :disabled="!canEditSettings || isBlocked(flag)"
+                :aria-labelledby="labelId"
+                :aria-describedby="descriptionId"
+                @update:model-value="setFlag(flag, $event)"
+              />
+            </template>
+          </ClassFeatureRow>
+          <!-- Junto al ranking, pero fila propia: se puede tener con el ranking apagado -->
+          <ClassFeatureRow
+            v-if="flag === 'rankings'"
+            :icon="ScaleIcon"
+            :label="t('teacher.classes.detail.settings.compare.label')"
+            :description="t('teacher.classes.detail.settings.compare.desc')"
+          >
+            <template #action="{ labelId, descriptionId }">
+              <Toggle
+                :model-value="compareOn"
+                :disabled="!canEditSettings"
+                :aria-labelledby="labelId"
+                :aria-describedby="descriptionId"
+                @update:model-value="setCompare"
+              />
+            </template>
+          </ClassFeatureRow>
+        </template>
       </div>
+
+      <!-- Con el ranking encendido se abren sus opciones; apagado, lo ve solo el profesorado -->
+      <ClassRankingOptions
+        v-if="localSettings.rankings"
+        :class-id="classId"
+        :settings="localSettings"
+        :config="localRanking"
+        :can-edit="canEditSettings"
+        :can-start-season="can('class.startSeason')"
+        @update="onRankingUpdate"
+      />
 
       <!-- En pruebas: funcionalidades nuevas, apagadas de entrada y con su
            etiqueta «Beta». No salen en la ficha pública de una plantilla. -->
@@ -309,6 +338,7 @@
 import {
   ShoppingBagIcon,
   ChartBarIcon,
+  ScaleIcon,
   SparklesIcon,
   HandRaisedIcon,
   SpeakerWaveIcon,
@@ -334,6 +364,13 @@ import {
   coerceClassSettings,
   classSettingNeedsResource,
 } from '~/utils/class-settings'
+import {
+  compareEnabled,
+  normalizeRankingSwitch,
+  rankingTypesToTurnOn,
+  resolveRankingConfig,
+  type RankingConfig,
+} from '~/utils/ranking-config'
 import {
   CLASS_LANGUAGES,
   subjectsForLevel,
@@ -366,6 +403,7 @@ const props = defineProps<{
     invitationCode?: string
     settings?: Partial<ClassSettings> | null
     levelConfig?: LevelConfig | null
+    rankingConfig?: unknown
     scheduleConfig?: ScheduleConfig | ScheduleConfig[] | null
   } | null
   /** Acceso propio en la clase: lo que su nivel no permite cambiar se ve desactivado. */
@@ -376,6 +414,7 @@ const emit = defineEmits<{
   update: [settings: ClassSettings]
   'general-update': [data: GeneralData & { scheduleConfig?: ScheduleConfig[] }]
   'levels-update': [levelConfig: LevelConfig]
+  'ranking-update': [rankingConfig: RankingConfig]
   'access-change': [access: ClassAccess | null]
   left: []
   trashed: []
@@ -741,6 +780,35 @@ watch(
   }
 )
 
+const localRanking = ref<RankingConfig>(resolveRankingConfig(props.classData?.rankingConfig))
+watch(
+  () => props.classData?.rankingConfig,
+  val => {
+    localRanking.value = resolveRankingConfig(val)
+  }
+)
+
+function onRankingUpdate(next: RankingConfig) {
+  localRanking.value = next
+  emit('ranking-update', next)
+}
+
+const rankingSaveError = useRankingSaveError()
+
+// La comparación con la media: sin tocar, sigue al ranking; al tocarla, va por su cuenta.
+const compareOn = computed(() => compareEnabled(localSettings.value, localRanking.value))
+
+async function setCompare(on: boolean) {
+  const previous = localRanking.value
+  onRankingUpdate({ ...previous, compare: on })
+  try {
+    await teacherStore.updateClass(props.classId, { rankingConfig: { compare: on } })
+  } catch (err: unknown) {
+    onRankingUpdate(previous)
+    toast.error(rankingSaveError(err))
+  }
+}
+
 // `requires` aquí solo controla el grisado / hint "Necesita X" del toggle (un
 // prerrequisito duro y simple). NO es la fuente de la lógica de cascada: esa vive
 // en coerceClassSettings (CLASS_SETTING_DEPENDENCIES / COUPLES / ONE_OF).
@@ -753,7 +821,7 @@ const meta: Record<keyof ClassSettings, { icon: Component; requires?: keyof Clas
   shop: { icon: ShoppingBagIcon },
   coins: { icon: CoinIcon },
   mana: { icon: ManaIcon, requires: 'shop' },
-  rankings: { icon: ChartBarIcon, requires: 'xp' },
+  rankings: { icon: ChartBarIcon },
   xp: { icon: XpIcon },
   behaviors: { icon: HandRaisedIcon },
   lives: { icon: LifeIcon },
@@ -762,22 +830,23 @@ const meta: Record<keyof ClassSettings, { icon: Component; requires?: keyof Clas
   missionMap: { icon: MapIcon },
 }
 
-// Column-major en sm+ con 5 filas: la columna izquierda son los 5 módulos /
-// mecánicas (Ranking, Tienda, Comportamientos, Efectos visuales, Sonidos) y
-// la derecha los 4 recursos (XP, Monedas, Maná, Vidas). Las dependencias se
-// siguen aplicando con `meta[*].requires`, pero ya no condicionan el layout.
+// Column-major en sm+ con 5 filas: la columna izquierda son los módulos / mecánicas
+// (Ranking, la comparación con la media, que no es un ajuste de estos, Tienda,
+// Comportamientos, Efectos visuales) y la derecha los 4 recursos (XP, Monedas, Maná,
+// Vidas) y los Sonidos. Las dependencias se siguen aplicando con `meta[*].requires`,
+// pero ya no condicionan el layout.
 const order: (keyof ClassSettings)[] = [
   // Izquierda (módulos / mecánicas)
   'rankings',
   'shop',
   'behaviors',
   'visualEffects',
-  'sounds',
   // Derecha (recursos)
   'xp',
   'coins',
   'mana',
   'lives',
+  'sounds',
 ]
 
 // En pruebas (beta): apagadas de entrada, en su propio grupo.
@@ -809,16 +878,30 @@ async function setFlag(flag: keyof ClassSettings, value: boolean) {
   // coerceClassSettings resuelve la cascada completa (prerrequisitos hacia arriba,
   // acoplamientos y "al menos un recurso") hasta un estado coherente, igual que
   // normaliza el backend. Así la UI optimista nunca diverge de lo que se persiste.
-  const next = coerceClassSettings(localSettings.value, flag, value)
+  const coerced = coerceClassSettings(localSettings.value, flag, value)
+  // El ranking y sus tipos, también coherentes: al encenderlo, con alguno que se
+  // pueda usar; y apagado si se queda sin ninguno (solo XP y se apaga la XP).
+  const previousRanking = localRanking.value
+  const turnsRankingOn = flag === 'rankings' && value
+  const types = turnsRankingOn ? rankingTypesToTurnOn(previousRanking, coerced) : previousRanking.types
+  const changesTypes = types !== previousRanking.types
+  const nextRanking = changesTypes ? { ...previousRanking, types } : previousRanking
+  const next = normalizeRankingSwitch(coerced, nextRanking)
 
   const prev = localSettings.value
   localSettings.value = next
+  localRanking.value = nextRanking
   try {
-    await teacherStore.updateClass(props.classId, { settings: { ...next } })
+    await teacherStore.updateClass(props.classId, {
+      settings: { ...next },
+      ...(changesTypes ? { rankingConfig: { types } } : {}),
+    })
     emit('update', { ...next })
-  } catch {
+    if (changesTypes) emit('ranking-update', nextRanking)
+  } catch (err: unknown) {
     localSettings.value = prev
-    toast.error(t('teacher.classes.detail.settings.toast_error'))
+    localRanking.value = previousRanking
+    toast.error(rankingSaveError(err))
   }
 }
 

@@ -1,3 +1,5 @@
+import type { TeamStanding } from '~/types/ranking.types'
+
 import type { BatchResult } from '~/stores/behaviors'
 
 /** Paleta de los equipos: claves de los tokens de color (ver `utils/team-style.ts`). */
@@ -96,10 +98,14 @@ export interface StudentTeams {
     /** `archived`: la portada no la enseña; la página de una misión por equipos, sí. */
     set: { id: string; title: string; kind: TeamSetKind; archived: boolean }
     team: Omit<Team, 'studentIds' | 'points'> & { index: number; points: number | null }
-    members: { id: string; name: string; avatar: string | null; isMe: boolean }[]
+    /** `id`, el de la matrícula; `avatarColor`, el color de su avatar, ya calculado. */
+    members: {
+      id: string
+      name: string
+      avatar: string | null
+      avatarColor: TeamColor
+      isMe: boolean
+    }[]
   }[]
-  standings: {
-    set: { id: string; title: string }
-    teams: (Omit<Team, 'studentIds'> & { index: number; points: number })[]
-  }[]
+  standings: TeamStanding[]
 }

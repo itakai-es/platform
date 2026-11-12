@@ -27,13 +27,13 @@ export const DEFAULT_CLASS_SETTINGS: ClassSettings = {
  * is on. Used both for the panel's "blocked / Necesita X" hint and the
  * off-cascade in `normalizeClassSettings`.
  *  - mana is spent on shop powers   → mana requires shop
- *  - ranking is ordered by XP       → rankings requires xp
  *  - lives are changed by behaviors → lives requires behaviors
+ *
+ * El ranking ya no pide XP: cada tipo pide lo suyo (ver `~/utils/ranking-config`).
  */
 export const CLASS_SETTING_DEPENDENCIES: Partial<Record<keyof ClassSettings, keyof ClassSettings>> =
   {
     mana: 'shop',
-    rankings: 'xp',
     lives: 'behaviors',
   }
 

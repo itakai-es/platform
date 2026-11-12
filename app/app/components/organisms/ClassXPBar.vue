@@ -4,6 +4,9 @@
  *
  * Shows the student's avatar, level, title, XP progress, and ranking
  * within a specific class context. Avatar and nickname are per-class.
+ *
+ * El avatar va dentro del anillo de su nivel (`LevelAvatar`): lo que lleva hacia
+ * el siguiente, lo mismo que la barra, que lo dice con su XP escrita.
  */
 interface Props {
   level: number
@@ -19,11 +22,37 @@ interface Props {
   currentXp: number
   requiredXp: number
   progress: number
-  rank: number
+  /**
+   * Su puesto en la clasificación. Null si no tiene: la clase no la tiene
+   * activada, aún no tiene XP o es la vista previa del profesorado.
+   */
+  rank: number | null
   totalStudents: number
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
+
+const { t } = useI18n()
+const { formatNumber } = useNumberFormat()
+
+const levelLine = computed(() =>
+  t('student.components.class_xp_bar.level_line', { level: props.level, title: props.title })
+)
+const xpLine = computed(() =>
+  t('student.components.class_xp_bar.xp_line', {
+    current: formatNumber(props.currentXp),
+    required: formatNumber(props.requiredXp),
+  })
+)
+/** «Puesto 7 de 25», para el lector de pantalla: lo que se ve es «7 / 25». */
+const rankText = computed(() =>
+  props.rank === null
+    ? ''
+    : t('student.components.class_xp_bar.rank_of', {
+        rank: formatNumber(props.rank),
+        total: formatNumber(props.totalStudents),
+      })
+)
 </script>
 
 <template>
@@ -41,11 +70,11 @@ defineProps<Props>()
         <!-- Top Row: Avatar/Name + Ranking -->
         <div class="flex items-center justify-between gap-3 mb-3 sm:mb-4">
           <div class="flex items-center gap-2.5 sm:gap-3 flex-shrink-0 min-w-0">
-            <Avatar
+            <LevelAvatar
               :src="avatar"
               :name="username || name"
               :seed="avatarSeed"
-              :ring-color="color"
+              :progress="progress"
               size="sm"
             />
             <div class="min-w-0">
@@ -55,18 +84,23 @@ defineProps<Props>()
               >
                 {{ name }}
               </p>
-              <p v-if="username" class="text-text-secondary text-xs sm:text-sm truncate">
+              <p v-if="username" class="text-navy-700/80 text-xs sm:text-sm truncate">
                 @{{ username }}
               </p>
             </div>
           </div>
 
-          <div class="flex-shrink-0 text-right">
-            <p class="text-text-secondary text-xs sm:text-sm mb-0.5">Ranking</p>
+          <div v-if="rank !== null" class="flex-shrink-0 text-right">
+            <p class="text-navy-700/80 text-xs sm:text-sm mb-0.5" aria-hidden="true">
+              {{ t('student.components.class_xp_bar.rank') }}
+            </p>
             <p class="text-navy-700 font-bold text-lg sm:text-xl tabular-nums whitespace-nowrap">
-              {{ rank
-              }}<span class="text-text-secondary font-normal text-sm sm:text-base">
-                / {{ totalStudents }}</span
+              <span class="sr-only">{{ rankText }}</span>
+              <span aria-hidden="true"
+                >{{ formatNumber(rank)
+                }}<span class="text-navy-700/80 font-normal text-sm sm:text-base">
+                  / {{ formatNumber(totalStudents) }}</span
+                ></span
               >
             </p>
           </div>
@@ -82,12 +116,12 @@ defineProps<Props>()
                 class="w-2 h-2 rounded-full flex-shrink-0"
                 :style="{ backgroundColor: color || '#38BDF8' }"
               />
-              <span class="truncate">Nivel {{ level }} · {{ title }}</span>
+              <span class="min-w-0">{{ levelLine }}</span>
             </p>
             <span
-              class="text-xs sm:text-sm font-medium text-text-secondary tabular-nums flex-shrink-0"
+              class="text-xs sm:text-sm font-medium text-navy-700/80 tabular-nums flex-shrink-0"
             >
-              {{ currentXp }}/{{ requiredXp }} XP
+              {{ xpLine }}
             </span>
           </div>
           <div class="h-2 sm:h-2.5 bg-gray-100 rounded-full overflow-hidden">
@@ -104,18 +138,18 @@ defineProps<Props>()
       <div class="hidden sm:flex lg:hidden xl:flex items-center gap-4">
         <!-- Avatar + Name -->
         <div class="flex items-center gap-3 flex-shrink-0">
-          <Avatar
+          <LevelAvatar
             :src="avatar"
             :name="username || name"
             :seed="avatarSeed"
-            :ring-color="color"
+            :progress="progress"
             size="md"
           />
           <div class="min-w-0">
             <p v-if="name" class="text-navy-700 font-bold text-lg leading-tight truncate">
               {{ name }}
             </p>
-            <p v-if="username" class="text-text-secondary text-sm truncate">@{{ username }}</p>
+            <p v-if="username" class="text-navy-700/80 text-sm truncate">@{{ username }}</p>
           </div>
         </div>
 
@@ -127,10 +161,10 @@ defineProps<Props>()
                 class="w-2 h-2 rounded-full flex-shrink-0"
                 :style="{ backgroundColor: color || '#38BDF8' }"
               />
-              <span class="truncate">Nivel {{ level }} · {{ title }}</span>
+              <span class="min-w-0">{{ levelLine }}</span>
             </p>
-            <span class="text-sm font-medium text-text-secondary tabular-nums flex-shrink-0">
-              {{ currentXp }}/{{ requiredXp }} XP
+            <span class="text-sm font-medium text-navy-700/80 tabular-nums flex-shrink-0">
+              {{ xpLine }}
             </span>
           </div>
           <div class="h-2.5 bg-gray-100 rounded-full overflow-hidden">
@@ -141,12 +175,19 @@ defineProps<Props>()
           </div>
         </div>
 
-        <!-- Ranking -->
-        <div class="flex-shrink-0 text-right">
-          <p class="text-text-secondary text-sm mb-0.5">Ranking</p>
+        <!-- Puesto en la clasificación (solo si tiene) -->
+        <div v-if="rank !== null" class="flex-shrink-0 text-right">
+          <p class="text-navy-700/80 text-sm mb-0.5" aria-hidden="true">
+            {{ t('student.components.class_xp_bar.rank') }}
+          </p>
           <p class="text-navy-700 font-bold text-2xl tabular-nums whitespace-nowrap">
-            {{ rank
-            }}<span class="text-text-secondary font-normal text-base"> / {{ totalStudents }}</span>
+            <span class="sr-only">{{ rankText }}</span>
+            <span aria-hidden="true"
+              >{{ formatNumber(rank)
+              }}<span class="text-navy-700/80 font-normal text-base">
+                / {{ formatNumber(totalStudents) }}</span
+              ></span
+            >
           </p>
         </div>
       </div>

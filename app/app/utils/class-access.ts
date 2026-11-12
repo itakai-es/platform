@@ -33,6 +33,7 @@ export const CLASS_ACTION_LEVEL = {
   'class.duplicate': 'read',
   'class.editContent': 'edit',
   'class.editSettings': 'admin',
+  'class.startSeason': 'admin',
   'class.archive': 'admin',
   'class.inviteCode': 'admin',
   'class.publishTemplate': 'owner',
@@ -64,6 +65,8 @@ export const CLASS_ACTION_LEVEL = {
   'attendance.export': 'edit',
   'team.manage': 'edit',
   'team.award': 'edit',
+  'analytics.view': 'read',
+  'analytics.export': 'edit',
 } as const satisfies Record<string, ClassRequiredLevel>
 
 export type ClassAction = keyof typeof CLASS_ACTION_LEVEL

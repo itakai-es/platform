@@ -30,7 +30,7 @@
               <Avatar
                 :src="member.avatar"
                 :name="member.name"
-                :seed="studentAvatarSeed(classId, member.id)"
+                :color="member.avatarColor"
                 size="xs"
               />
               <span class="min-w-0 truncate text-sm font-medium text-navy-700">{{
@@ -49,12 +49,11 @@
 
 <script setup lang="ts">
 import { UserGroupIcon } from '@heroicons/vue/24/outline'
-import { studentAvatarSeed } from '~/utils/avatar'
 
 /**
  * «Mi equipo» en la portada de la clase del alumnado: cada equipo en el que
  * está (de las agrupaciones sin archivar) con quién lo forma. Los puntos, solo
- * de las agrupaciones de base y si la clase tiene la clasificación activada.
+ * de las agrupaciones de base y si la clase tiene encendido el ranking de equipos.
  * Sin equipos no sale nada.
  */
 const props = defineProps<{ classId: string }>()
