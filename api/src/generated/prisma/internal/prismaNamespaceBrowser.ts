@@ -191,6 +191,7 @@ export const ClassScalarFieldEnum = {
   isTemplate: 'isTemplate',
   settings: 'settings',
   levelConfig: 'levelConfig',
+  rankingConfig: 'rankingConfig',
   scheduleConfig: 'scheduleConfig',
   teacherId: 'teacherId',
   deletedAt: 'deletedAt',
