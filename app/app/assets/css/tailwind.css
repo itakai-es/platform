@@ -924,6 +924,27 @@
     background-color: rgb(127 127 127 / 0.7);
   }
 
+  /* Barra siempre a la vista: para las tablas que, si no caben, se desplazan dentro
+     de su caja. Si caben no sale; si no, se nota que hay más a la derecha. */
+  .scrollbar-visible::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+  }
+  .scrollbar-visible::-webkit-scrollbar-track {
+    background-color: rgb(var(--color-navy-700-rgb) / 0.08);
+    border-radius: 9999px;
+  }
+  .scrollbar-visible::-webkit-scrollbar-thumb {
+    background-color: rgb(var(--color-navy-700-rgb) / 0.45);
+    border-radius: 9999px;
+  }
+  @supports not selector(::-webkit-scrollbar) {
+    .scrollbar-visible {
+      scrollbar-width: thin;
+      scrollbar-color: rgb(var(--color-navy-700-rgb) / 0.45) rgb(var(--color-navy-700-rgb) / 0.08);
+    }
+  }
+
   /* Scroll horizontal sin barra visible: para tiras que ya tienen su propio
      control de navegación (p. ej. las pestañas con flechas de la cabecera). */
   .scrollbar-none {
@@ -1112,6 +1133,40 @@
   .onb-fade-in,
   .onb-reveal,
   .title-item-enter-active {
+    animation: none;
+  }
+}
+
+/* Gráficos de analítica: las barras y las columnas crecen al aparecer. Solo se
+   pone la clase si la persona no ha pedido menos movimiento (`useReducedMotion`);
+   por si acaso, el sistema y `data-reduce-motion` también la paran. */
+.chart-grow-x {
+  transform-origin: left center;
+  animation: chartGrowX 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.chart-grow-y {
+  transform-origin: center bottom;
+  animation: chartGrowY 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes chartGrowX {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+@keyframes chartGrowY {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .chart-grow-x,
+  .chart-grow-y {
     animation: none;
   }
 }

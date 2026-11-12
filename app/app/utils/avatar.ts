@@ -128,3 +128,19 @@ export function teacherAvatarOf(key: string | null | undefined): TeacherAvatarEn
   // Solo las claves propias del catálogo: «constructor» no es un avatar.
   return key && Object.hasOwn(TEACHER_AVATARS, key) ? TEACHER_AVATARS[key]! : null
 }
+
+/**
+ * Los avatares que caben en una pila (`AvatarStack`) y cuántos quedan para «+N».
+ * `total` es cuántas personas son de verdad (por defecto, las de `people`): la API
+ * puede mandar solo las primeras. Si son `max` o menos, salen todas las que hay;
+ * si son más, como mucho `max` − 1 y el «+N» ocupa el último hueco.
+ */
+export function avatarStack<T>(
+  people: readonly T[],
+  max = 8,
+  total = people.length
+): { shown: T[]; more: number } {
+  const room = total <= max ? max : Math.max(0, max - 1)
+  const shown = people.slice(0, Math.min(room, people.length))
+  return { shown, more: Math.max(0, total - shown.length) }
+}

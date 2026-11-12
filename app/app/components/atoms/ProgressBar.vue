@@ -12,43 +12,22 @@
       </span>
     </div>
 
-    <!-- Circular Progress Bar (Ring) -->
-    <div v-else-if="type === 'circular'" class="inline-flex items-center justify-center relative">
-      <svg :width="size" :height="size" class="transform -rotate-90">
-        <!-- Track (fondo del anillo) -->
-        <circle
-          :cx="center"
-          :cy="center"
-          :r="radius"
-          fill="none"
-          :style="{ stroke: trackColor }"
-          :stroke-width="strokeWidth"
-        />
-
-        <!-- Progress bar (relleno del anillo) -->
-        <circle
-          :cx="center"
-          :cy="center"
-          :r="radius"
-          fill="none"
-          :style="{ stroke: fillColor }"
-          :stroke-width="strokeWidth"
-          :stroke-dasharray="circumference"
-          :stroke-dashoffset="strokeDashoffset"
-          stroke-linecap="round"
-          class="transition-all duration-300 ease-out"
-        />
-      </svg>
-
-      <!-- Percentage centered -->
-      <div class="absolute inset-0 flex items-center justify-center">
-        <span class="text-sm font-bold text-navy-700">{{ percentage }}%</span>
-      </div>
-    </div>
+    <!-- Circular: el anillo de la app (ProgressRing), con el % dentro -->
+    <ProgressRing
+      v-else-if="type === 'circular'"
+      :value="percentFraction(percentage)"
+      :tone="RING_TONE[variant]"
+      :stroke="ringStrokeFor(strokeWidth, size)"
+      :style="{ width: `${size}px`, height: `${size}px` }"
+    >
+      <span class="text-sm font-bold text-navy-700">{{ percentage }}%</span>
+    </ProgressRing>
   </div>
 </template>
 
 <script setup lang="ts">
+import { percentFraction, ringStrokeFor } from '~/utils/progress-ring'
+
 interface Props {
   percentage: number
   type?: 'linear' | 'circular'
@@ -85,23 +64,6 @@ const progressBarClasses = computed(() => {
   return [base, variants[props.variant]].join(' ')
 })
 
-// Circular Progress Calculations
-const center = computed(() => props.size / 2)
-const radius = computed(() => (props.size - props.strokeWidth) / 2)
-const circumference = computed(() => 2 * Math.PI * radius.value)
-const strokeDashoffset = computed(() => {
-  const progress = Math.min(Math.max(props.percentage, 0), 100)
-  return circumference.value - (progress / 100) * circumference.value
-})
-
-// Circular colors (from CSS variables)
-const trackColor = 'var(--color-progress-track)'
-const fillColor = computed(() => {
-  const variants = {
-    default: 'var(--color-navy-700)',
-    student: 'var(--color-green)',
-    teacher: 'var(--color-purple)',
-  }
-  return variants[props.variant]
-})
+// Circular: el color del anillo de cada variante (de token).
+const RING_TONE = { default: 'navy', student: 'green', teacher: 'purple' } as const
 </script>
