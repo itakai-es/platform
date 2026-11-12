@@ -190,28 +190,27 @@
         "quarter": "Trimestre"
       },
       "kpis": {
-        "avg_response": "Tempo de resposta",
-        "requests_per_min": "Peticións/min",
         "error_rate": "Taxa de erro",
-        "uptime": "Dispoñibilidade"
+        "activity": "Actividade no período",
+        "new_users": "Altas no período",
+        "missions_completed": "Misións completadas no período"
       },
       "overview": {
         "total_users": "Contas totais",
-        "missions_completed": "Misións completadas",
-        "completion_rate": "Taxa de completado",
-        "active_today": "Activas hoxe"
+        "active_today": "Activas hoxe",
+        "pending_reviews": "Entregas por revisar"
       },
       "sections": {
         "system_resources": "Recursos do sistema",
         "service_health": "Estado de servizos",
-        "response_time": "Tempo de resposta",
-        "active_users": "Contas activas",
-        "requests": "Peticións",
-        "tokens_over_time": "Tokens consumidos",
         "users_by_role": "Contas por rol",
         "missions_by_status": "Misións por estado",
         "missions_by_rarity": "Misións por rareza",
-        "ai_usage": "Uso de IA (asistentes)"
+        "ai_usage": "Uso de IA (asistentes)",
+        "period_series": "No período",
+        "new_users": "Altas",
+        "activity": "Actividade rexistrada",
+        "assistant_messages": "Mensaxes aos asistentes"
       },
       "system": {
         "memory": "Memoria",
@@ -219,15 +218,13 @@
         "db_latency": "Latencia BD"
       },
       "ai": {
-        "total_tokens": "Tokens totais",
-        "avg_tokens_user": "Media por conta",
-        "total_conversations": "Conversas",
-        "avg_conversations_user": "Conv. por conta"
+        "total_conversations": "Conversas desde o inicio",
+        "avg_conversations_user": "Conv. por conta desde o inicio",
+        "total_messages": "Mensaxes do período"
       },
       "table": {
         "service": "Servizo",
         "status": "Estado",
-        "uptime": "Uptime",
         "latency": "Latencia"
       },
       "status": {
@@ -238,6 +235,11 @@
       "meta": {
         "title": "Analíticas do sistema | ITAKAI Admin",
         "description": "Visualiza métricas avanzadas, gráficos de rendemento e análises detalladas da plataforma."
+      },
+      "delta": {
+        "absolute": "{diff} respecto ao período anterior",
+        "percent": "{percent} respecto ao período anterior",
+        "points": "{diff} punto respecto ao período anterior | {diff} puntos respecto ao período anterior"
       }
     },
     "logs": {

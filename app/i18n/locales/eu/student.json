@@ -26,7 +26,8 @@
       "ai_assistant": {
         "name": "Atenea",
         "message_new_user": "Kaixo {name}! Ongi etorri ITAKAI-ra. Osatu zure lehen misioa XP irabazten hasteko!",
-        "message_returning_user": "Kaixo {name}! {missions_completed} misio osatu dituzu {classes_enrolled} klasetan. Jarraitu horrela!"
+        "message_returning_user": "Kaixo {name}! Misio bat osatu duzu {classes}. Jarraitu horrela! | Kaixo {name}! {count} misio osatu dituzu {classes}. Jarraitu horrela!",
+        "classes_phrase": "klase batean | {count} klasetan"
       },
       "class_fallback_name": "Klasea",
       "recent_badges_empty": "Ez dago azken domarik",
@@ -91,7 +92,9 @@
         "error": "Errorea entrega bidaltzean. Saiatu berriro.",
         "expired_error": "Misio hau iraungita dago. Dagoeneko ezin duzu enigmarik entregatu.",
         "downloading": "Deskargatzen",
-        "path_locked": "Misio hau ez dago irekita oraindik: lehenago beste bat osatu behar duzu."
+        "path_locked": "Misio hau ez dago irekita oraindik: lehenago beste bat osatu behar duzu.",
+        "already_approved": "Enigma hau onartuta duzu jada.",
+        "already_pending": "Enigma honen entrega bat duzu dagoeneko berrikusteko zain."
       },
       "hints": {
         "intro": "Trabatu zara? Erabili pista bat. Ordenan irekitzen dira, banan-banan, eta bakoitzak bere kostua du.",
@@ -148,7 +151,6 @@
         },
         "progress": {
           "title": "Nire aurrerapena",
-          "completion_rate": "Osatua",
           "missions_completed": "Osatutako misioak",
           "xp_total": "Guztirako XP",
           "badges_earned": "Lortutako dominak"
@@ -179,7 +181,10 @@
           "save_error": "Errorea profila gordetzean",
           "generate_error": "Ezin izan da avatarra sortu. Saiatu berriro segundo batzuetan.",
           "generate_error_with_detail": "Ezin izan da avatarra sortu: {detail}",
-          "how_others_see": "Honela ikusten zaituzte klase honetan"
+          "how_others_see": "Honela ikusten zaituzte klase honetan",
+          "nickname_empty": "Idatzi ezizen bat: zure klaseak izen horrekin ikusten zaitu.",
+          "nickname_taken": "Zure klaseko beste norbaitek badu ezizen hori. Saiatu beste batekin.",
+          "nickname_invalid": "Ezizenak 1 eta {max} karaktere artean izan behar ditu, letraren bat edo zenbakiren bat barne."
         },
         "mission_no_description": "Deskribapenik gabe",
         "shop": {
@@ -234,6 +239,32 @@
         "teachers": {
           "title": "Irakasleak",
           "empty": "Klase honek ez du irakaslerik oraindik."
+        },
+        "compare": {
+          "title": "Zu eta zure klasea",
+          "hint": "Zure klaseko gainerakoen batez besteko biribilduarekin alderatzen da. Ez da inor zehazki ikusten.",
+          "season_missions": "Denboraldi honetako misioak"
+        },
+        "results": {
+          "title": "Nire emaitzak",
+          "hint": "Misio bakoitzeko sariak bere enigmekin kobratu dituzunak dira. Ez dute osatzeagatiko bonusa barne hartzen, beraz, ez dute zure saldoa osatzen.",
+          "filter_label": "Iragazi nire misioak",
+          "empty_pending": "Ez duzu misiorik egiteko",
+          "empty_done": "Oraindik ez duzu misiorik osatu",
+          "in_review": "{count} berrikusten | {count} berrikusten",
+          "deadline_past": "iraungi zen: {date}",
+          "hints": "Pista {count} erabilita | {count} pista erabilita",
+          "by_enigma": "Enigma bakoitzaren %",
+          "enigma_open": "Entregatu gabe",
+          "filter_pending": "Egiteko ({count})",
+          "filter_done": "Eginak ({count})",
+          "empty_description": "Aldatzen denean, hemen agertuko da.",
+          "completed_on": "{date}",
+          "deadline_future": "epemuga: {date}",
+          "enigmas": "{total} enigmatik {approved} onartuta | {total} enigmatik {approved} onartuta",
+          "optional": "aukerakoa",
+          "enigma_approved": "{percent} · {date}",
+          "enigma_pending_since": "Berrikusten, data honetatik: {date}"
         }
       }
     },
@@ -392,8 +423,27 @@
         "you_badge": "Zu",
         "avg_xp": "Batez besteko XP",
         "avg_progress": "Batez besteko aurrerapena",
-        "avg_missions": "Batez besteko misioak",
-        "total_xp": "Klaseko guztirako XP"
+        "avg_missions": "Misioen batez bestekoa",
+        "total_xp": "Klaseko guztirako XP",
+        "podium_empty": "Oraindik inork ez du XPrik. Norbaitek lortu bezain laster beteko da podiuma.",
+        "rank_sr": "{rank}. postua",
+        "missions_count": "Misio {count} | {count} misio",
+        "podium_empty_missions": "Oraindik inork ez du misiorik osatu. Norbaitek egin bezain laster beteko da podiuma.",
+        "podium_empty_missions_week": "Aste honetan oraindik inork ez du misiorik osatu.",
+        "podium_empty_missions_season": "Denboraldi honetan oraindik inork ez du misiorik osatu.",
+        "no_rank_xp": "Oraindik ez duzu posturik. Lortu XPa sailkapenean sartzeko.",
+        "no_rank_missions": "Oraindik ez duzu posturik. Osatu misio bat sailkapenean sartzeko.",
+        "no_rank_missions_week": "Aste honetan oraindik ez duzu posturik. Osatu misio bat sailkapenean sartzeko.",
+        "no_rank_missions_season": "Denboraldi honetan oraindik ez duzu posturik. Osatu misio bat sailkapenean sartzeko.",
+        "my_position_title": "Zure postua",
+        "my_position_preview": "Ikasle bakoitzak bere postua eta klaseko guztizkoa ikusten ditu hemen.",
+        "top_list_title": "{n}. postura arte"
+      },
+      "class_xp_bar": {
+        "rank": "Rankinga",
+        "level_line": "{level}. maila · {title}",
+        "xp_line": "{current}/{required} XP",
+        "rank_of": "{rank}. postua, guztira {total}"
       }
     },
     "teams": {

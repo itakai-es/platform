@@ -168,7 +168,8 @@
           "managed_badge": "No email",
           "pending_sign_in_badge": "Not signed in yet",
           "view_attendance": "Attendance",
-          "view_teams": "Teams"
+          "view_teams": "Teams",
+          "table_caption": "The class's students: level, resources and behaviors"
         },
         "stats_title": "Class statistics",
         "pending_reviews": "Submissions to review",
@@ -178,7 +179,13 @@
         },
         "ranking": {
           "no_students_title": "No students",
-          "no_students_description": "There are no students in this class yet"
+          "no_students_description": "There are no students in this class yet",
+          "hidden_from_students": "Your students can't see this ranking: it's turned off in Features.",
+          "audience_full": "Your students see: the full ranking.",
+          "audience_top": "Your students see: the top {n} places and their own.",
+          "audience_position": "Your students see: only their own position.",
+          "audience_teams": "Your students see: all the teams.",
+          "audience_type_off": "Your students can't see this ranking type: turn it on in Features."
         },
         "missions_tab": {
           "no_missions_title": "No missions",
@@ -355,7 +362,7 @@
             },
             "rankings": {
               "label": "Ranking",
-              "desc": "Class leaderboard of students."
+              "desc": "Class leaderboard of students. When off, only teachers can see it."
             },
             "xp": {
               "label": "Experience (XP)",
@@ -459,6 +466,56 @@
           "beta": {
             "title": "In testing",
             "hint": "New features being tried out. They're off by default, and how they look and work will be adjusted as they're tested."
+          },
+          "ranking": {
+            "title": "Ranking options",
+            "hint": "You always see it in full under Students → Ranking. If you turn the switch off, only teachers can see it.",
+            "mode_label": "What students see",
+            "mode": {
+              "full": "The full ranking",
+              "top": "The top {n} places and their own",
+              "top_suggested": "The top {n} places and their own (suggested)",
+              "position": "Only their own position"
+            },
+            "mode_hint": {
+              "full": "Each student sees the whole class, with alias, level, XP and missions.",
+              "top": "Each student sees the top positions, including any ties, and their own. The rest of the class is not shown.",
+              "position": "Each student sees only their own position and the class total, with no podium or list."
+            },
+            "top_label": "How many positions are shown",
+            "top_option": "The top {n} places",
+            "types_title": "Ranking types",
+            "types_hint": "If there is more than one, students switch between them with tabs.",
+            "type": {
+              "xp": {
+                "label": "XP",
+                "desc": "Accumulated XP. Only has “All time”."
+              },
+              "missions": {
+                "label": "Completed missions",
+                "desc": "Rewards finishing. By week or season; XP breaks ties."
+              },
+              "teams": {
+                "label": "Teams",
+                "desc": "Points from base groupings. All teams are shown in every mode.",
+                "no_base": "There's no base grouping yet: create one in Students → Teams. Until then, this type isn't shown."
+              }
+            },
+            "type_last": "At least one type is needed.",
+            "season": {
+              "title": "Season",
+              "hint": "Once started, missions and teams count from that moment in the “Season” option. Nothing is deleted and XP doesn't change. Starting another one replaces the previous one.",
+              "current": "Running since {date}.",
+              "start": "Start season",
+              "restart": "Start another season",
+              "toast_started": "Season started"
+            },
+            "closed_archived": "The class is archived: unarchive it to change the ranking.",
+            "closed_trash": "The class is in the trash: restore it to change the ranking."
+          },
+          "compare": {
+            "label": "Compare with the average",
+            "desc": "Each student sees whether they're above, at or below the average of the rest of their class, without seeing anyone. It works even if you turn the ranking off."
           }
         },
         "badges_empty": "No badges in this class",
@@ -660,7 +717,8 @@
               "trashed": "moved the class to the trash",
               "restored": "restored the class from the trash",
               "template_recommended": "recommended the template in the catalogues",
-              "template_unrecommended": "removed the template’s recommendation"
+              "template_unrecommended": "removed the template’s recommendation",
+              "season_started": "started a ranking season"
             },
             "teacher": {
               "added": "added {target} to the teachers ({profile}, {access})",
@@ -986,7 +1044,7 @@
       "subtitle": "Create and manage custom badges to reward your students' achievements",
       "new_badge": "New badge",
       "btn_delete": "Delete",
-      "no_badges_title": "No badges",
+      "no_badges_title": "You haven't created any yet",
       "no_badges_description": "Create your first badge to reward your students",
       "create_first": "Create first badge",
       "form": {
@@ -1007,8 +1065,13 @@
         "no_mission": "No mission"
       },
       "detail": {
-        "btn_edit": "Edit",
-        "btn_close": "Close"
+        "btn_close": "Close",
+        "btn_copy": "Create a similar one",
+        "system_level": "This is an ITAKAI badge and can't be edited: it's awarded automatically on reaching level {count} in a class.",
+        "system_missions": "This is an ITAKAI badge and can't be edited: it's awarded automatically on completing the first mission. | This is an ITAKAI badge and can't be edited: it's awarded automatically on completing {count} missions.",
+        "system_xp": "This is an ITAKAI badge and can't be edited: it's awarded automatically on earning {count} XP in a class.",
+        "system_generic": "This is an ITAKAI badge and can't be edited: it's awarded automatically as students progress.",
+        "not_yours": "You can't edit it: someone else created it for a mission you can't change."
       },
       "delete_title": "Delete badge",
       "delete_confirm": "Are you sure you want to delete the badge '{name}'? This action cannot be undone.",
@@ -1022,10 +1085,16 @@
         "title": "My badges | ITAKAI Teacher",
         "description": "Create, edit, and manage custom badges to reward your students' achievements."
       },
-      "filter_system": "System",
       "generate_error": "The badge couldn't be generated.",
       "save_error": "The badge couldn't be saved.",
-      "delete_error": "The badge couldn't be deleted."
+      "delete_error": "The badge couldn't be deleted.",
+      "sections": {
+        "own": "Your badges",
+        "own_hint": "The ones you created and those from missions you can edit. Open one to change it.",
+        "system": "ITAKAI badges",
+        "system_hint": "They're awarded automatically as students progress and can't be edited. Open one to see how it's earned or to create a similar one."
+      },
+      "filter_all": "All badges"
     },
     "students": {
       "index": {
@@ -1051,12 +1120,12 @@
         "no_archived_students_title": "No archived students",
         "no_archived_students_default": "There are no students in your archived classes",
         "btn_view": "View",
-        "stat_missions": "Missions",
         "meta": {
           "title": "My students | ITAKAI Teacher",
           "description": "Manage all your students, review their progress, and academic performance statistics."
         },
-        "stat_badges": "Badges"
+        "stat_badges": "Badges",
+        "no_missions": "No missions to do"
       },
       "detail": {
         "breadcrumb_students": "Students",
@@ -1065,19 +1134,19 @@
         "error_default": "Error loading student data",
         "btn_retry": "Retry",
         "stat_classes": "Classes",
-        "stat_missions": "Missions",
-        "stat_completed": "Completed",
         "enrolled_classes_title": "Enrolled classes",
-        "enrolled_classes_count": "{count} classes",
+        "enrolled_classes_count": "No classes | 1 class | {count} classes",
         "not_enrolled": "Not enrolled in any of your classes",
-        "label_progress": "Completed",
-        "stat_mana": "Mana",
-        "stat_lives": "Life points",
         "no_activity": "No recent activity",
         "meta": {
           "title": "Student profile | ITAKAI Teacher",
           "description": "Detailed student profile with performance statistics, mission progress, and recent activity."
-        }
+        },
+        "level_badge": "Lv. {level}",
+        "stat_missions_completed": "Missions completed",
+        "stat_required_enigmas": "Required enigmas approved",
+        "view_in_class": "View in class",
+        "view_in_class_named": "View in “{class}”"
       },
       "actions": {
         "menu_label": "Actions for {name}",
@@ -1362,7 +1431,6 @@
         "status_in_review": "Under review",
         "status_completed": "Completed",
         "global_progress": "Global progress",
-        "class_average": "Class average",
         "rewards_title": "Rewards",
         "xp_enigmas": "Enigma XP",
         "xp_mission": "Mission XP",
@@ -1373,7 +1441,14 @@
           "epic": "Epic",
           "legendary": "Legendary"
         },
-        "btn_close": "Close"
+        "btn_close": "Close",
+        "completed_by_students": "Students who have completed it",
+        "required_average": "Average of required enigmas approved: {percent}",
+        "edit_enigma_named": "Edit enigma “{title}”",
+        "enigma_actions": "More actions for enigma “{title}”",
+        "edit_document_named": "Edit document “{title}”",
+        "document_actions": "More actions for document “{title}”",
+        "view_submissions_named": "View submissions ({count}) for enigma “{title}”"
       },
       "enigma_submissions_modal": {
         "title_fallback": "Submissions",
@@ -1718,10 +1793,6 @@
         "export_error": "The CSV couldn’t be downloaded.",
         "col_incidents": "Absences and late arrivals",
         "no_incidents": "None"
-      },
-      "profile": {
-        "rate": "Attendance: {rate}%",
-        "sessions": "{count} session this school year | {count} sessions this school year"
       }
     },
     "teams": {
@@ -1826,6 +1897,161 @@
       "distributed": "{count} person shared out among the teams. | {count} people shared out among the teams.",
       "distribute_skipped": "{count} person absent today stays without a team. | {count} people absent today stay without a team.",
       "put_in": "Put in:"
+    },
+    "analytics": {
+      "period": {
+        "label": "Period",
+        "course": "This school year",
+        "last30": "Last 30 days",
+        "last7": "Last 7 days"
+      },
+      "summary": {
+        "avg_missions": "Average missions",
+        "avg_percent": "Average progress",
+        "pending_link": "Go to Missions",
+        "attendance": "Average attendance",
+        "attendance_sessions": "{count} session in this period | {count} sessions in this period",
+        "xp": "Average XP",
+        "unstarted_note": "Averages leave out {count} unused account. | Averages leave out {count} unused accounts.",
+        "today": "Today"
+      },
+      "missions": {
+        "title": "Missions",
+        "caption": "Where each student is right now: this doesn't change with the period. The approval average and hints in the table do belong to the period.",
+        "table_caption": "How many people are in each state, per mission",
+        "col_mission": "Mission",
+        "col_average": "Approval average",
+        "col_hints": "Hints",
+        "deadline_future": "Due {date}",
+        "deadline_past": "Expired on {date}",
+        "excluded_teacher": "Locked: doesn't count towards progress",
+        "excluded_empty": "No enigmas: doesn't count towards progress",
+        "empty_title": "No missions yet",
+        "empty_description": "Once you create missions in this class, you'll see how each one is going here."
+      },
+      "signals": {
+        "title": "Difficulties detected",
+        "empty_title": "Nothing to highlight in this period",
+        "empty_description": "If someone gets stuck or a mission gets difficult, it will appear here with the reason.",
+        "show_all": "See all ({count})",
+        "show_less": "See less",
+        "student": {
+          "inactive": "No activity for {days} days, with {count} open mission | No activity for {days} days, with {count} open missions",
+          "inactive_never": "No activity since joining the class {days} days ago, with {count} open mission | No activity since joining the class {days} days ago, with {count} open missions",
+          "mission_expired": "“{mission}” expired on {date} without being started",
+          "mission_expired_started": "“{mission}” expired on {date}: started but not completed",
+          "mission_expired_many": "{count} missions expired without being completed; the latest, “{mission}”, on {date}",
+          "low_grade": "“{enigma}” (“{mission}”) approved at {percent}, below {threshold}",
+          "low_grade_many": "{count} enigmas approved below {threshold}; the lowest, “{enigma}”, at {percent}",
+          "low_average": "Approval average of {average} across {approvals} enigma, below {threshold} | Approval average of {average} across {approvals} enigmas, below {threshold}",
+          "hints": "Used {count} hint in “{mission}” | Used {count} hints in “{mission}”",
+          "hints_percent": "Used {count} hint in “{mission}” ({detail}) | Used {count} hints in “{mission}” ({detail})",
+          "hints_many": "Many hints in {count} missions; the most in “{mission}”, with {hints}",
+          "low_attendance": "Attendance of {rate}: {attended} of {total} session | Attendance of {rate}: {attended} of {total} sessions",
+          "hints_percent_detail": "{count} takes a % off the reward | {count} take a % off the reward"
+        },
+        "mission": {
+          "unfinished_after_deadline": "{unfinished} of the {started} who started it didn't finish it before the deadline ({percent})",
+          "low_average": "Approval average of {average} across {approvals} approved enigma, below {threshold} | Approval average of {average} across {approvals} approved enigmas, below {threshold}",
+          "many_hints": "{perStudent} hints on average per student who started it",
+          "students_expired": "{count} person didn't complete it by the deadline | {count} people didn't complete it by the deadline"
+        }
+      },
+      "students": {
+        "title": "Students",
+        "table_caption": "The class's students: missions, last activity, submissions to review, hints and signals",
+        "col_missions": "Missions",
+        "col_last_activity": "Last activity",
+        "col_pending": "To review",
+        "col_hints": "Hints",
+        "col_attendance": "Attendance",
+        "col_signals": "Signals",
+        "no_activity": "No activity",
+        "sort_missions_asc": "Missions ↑",
+        "sort_missions_desc": "Missions ↓",
+        "sort_activity_recent": "Most recent activity",
+        "sort_activity_oldest": "Oldest activity",
+        "sort_pending_desc": "To review ↓",
+        "sort_hints_desc": "Hints ↓",
+        "sort_signals_desc": "Signals ↓",
+        "sort_attendance_asc": "Attendance ↑",
+        "sort_attendance_desc": "Attendance ↓"
+      },
+      "weeks": {
+        "title": "Activity by week",
+        "caption": "Submissions, approvals and hints each week, Monday to Sunday.",
+        "table_caption": "Class activity, week by week",
+        "col_week": "Week",
+        "col_submissions": "Submissions",
+        "col_approvals": "Approvals",
+        "col_hints": "Hints",
+        "col_missions": "Missions completed",
+        "week_of": "Week of {date}",
+        "empty_title": "No activity in this period",
+        "empty_description": "Submissions, approvals or hints will appear here."
+      },
+      "student": {
+        "not_found_title": "This person isn't in the class",
+        "not_found_description": "They may no longer be enrolled, or the link may be out of date.",
+        "back_to_list": "Back to students",
+        "all_classes": "See all their classes",
+        "attendance_line": "Attendance: {rate} ({attended} of {total} session) | Attendance: {rate} ({attended} of {total} sessions)",
+        "figures_title": "Their figures",
+        "missions_done": "Missions completed",
+        "xp": "XP",
+        "hints": "Hints used",
+        "class_average": "Class average: {value}",
+        "compared_with": "Compared with the class average: {count} person taking part. | Compared with the class average: {count} people taking part.",
+        "nobody_to_compare": "There's nobody else in the class to compare with yet.",
+        "this_person": "This person",
+        "missions": {
+          "title": "Missions",
+          "filter_label": "Filter their missions",
+          "filter_all": "All ({count})",
+          "filter_pending": "Pending ({count})",
+          "filter_done": "Done ({count})",
+          "by_enigma": "% by enigma",
+          "optional": "optional",
+          "excluded_teacher": "Locked",
+          "excluded_empty": "No enigmas",
+          "completed_on": "on {date}",
+          "deadline_past": "expired on {date}",
+          "deadline_future": "due {date}",
+          "enigmas": "{approved} of {total} enigma approved | {approved} of {total} enigmas approved",
+          "average": "average {value}",
+          "hints": "{count} hint | {count} hints",
+          "pending_reviews": "{count} submission to review | {count} submissions to review",
+          "enigma_approved": "{percent} · {date}",
+          "enigma_pending_since": "Under review since {date}",
+          "enigma_open": "Not approved",
+          "empty_all": "No missions yet",
+          "empty_pending": "No pending missions",
+          "empty_done": "No missions completed yet",
+          "empty_description": "When that changes, it will appear here."
+        },
+        "history": {
+          "title": "History",
+          "filter_label": "Filter by type",
+          "load_more": "Load more",
+          "empty": "Nothing in their history yet.",
+          "empty_filtered": "Nothing of this type.",
+          "attendance": "Attendance: {status}",
+          "attendance_time": "{start}–{end}",
+          "attendance_note": "Note: {note}",
+          "type": {
+            "all": "Everything",
+            "submissions": "Submissions",
+            "approvals": "Approvals",
+            "missions": "Missions",
+            "hints": "Hints",
+            "behaviors": "Behaviors and rewards",
+            "shop": "Shop",
+            "progress": "Levels and badges",
+            "attendance": "Attendance"
+          },
+          "loaded": "{count} more entry loaded. | {count} more entries loaded."
+        }
+      }
     }
   }
 }

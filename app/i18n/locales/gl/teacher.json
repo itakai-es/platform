@@ -168,7 +168,8 @@
           "managed_badge": "Sen correo",
           "pending_sign_in_badge": "Pendente de entrar",
           "view_attendance": "Asistencia",
-          "view_teams": "Equipos"
+          "view_teams": "Equipos",
+          "table_caption": "O alumnado da clase: nivel, recursos e comportamentos"
         },
         "stats_title": "Estatísticas da clase",
         "pending_reviews": "Entregas por revisar",
@@ -178,7 +179,13 @@
         },
         "ranking": {
           "no_students_title": "Non hai estudantes",
-          "no_students_description": "Aínda non hai estudantes nesta clase"
+          "no_students_description": "Aínda non hai estudantes nesta clase",
+          "hidden_from_students": "O teu alumnado non ve esta clasificación: o ranking está apagado en Funcionalidades.",
+          "audience_full": "O teu alumnado ve: a clasificación completa.",
+          "audience_top": "O teu alumnado ve: os {n} primeiros postos e o seu.",
+          "audience_position": "O teu alumnado ve: só o seu posto.",
+          "audience_teams": "O teu alumnado ve: todos os equipos.",
+          "audience_type_off": "O teu alumnado non ve este tipo de ranking: actívase en Funcionalidades."
         },
         "missions_tab": {
           "no_missions_title": "Non hai misións",
@@ -355,7 +362,7 @@
             },
             "rankings": {
               "label": "Ranking",
-              "desc": "Clasificación do alumnado da clase."
+              "desc": "Clasificación do alumnado da clase. Apagado, só a ve o profesorado."
             },
             "xp": {
               "label": "Experiencia (XP)",
@@ -459,6 +466,56 @@
           "beta": {
             "title": "En probas",
             "hint": "Funcionalidades novas que se están a probar. Veñen desactivadas de entrada e o seu aspecto e funcionamento axustaranse coas probas."
+          },
+          "ranking": {
+            "title": "Opcións do ranking",
+            "hint": "Ti velo sempre completo en Alumnado → Ranking. Se apagas o interruptor, só o ve o profesorado.",
+            "mode_label": "Que ve o alumnado",
+            "mode": {
+              "full": "A clasificación completa",
+              "top": "Os {n} primeiros postos e o seu",
+              "top_suggested": "Os {n} primeiros postos e o seu (suxestión)",
+              "position": "Só o seu posto"
+            },
+            "mode_hint": {
+              "full": "Cada estudante ve toda a clase, con alcume, nivel, XP e misións.",
+              "top": "Cada estudante ve os primeiros postos, con quen empate, e o seu. O resto da clase non sae.",
+              "position": "Cada estudante ve só o seu posto e o total da clase, sen podio nin lista."
+            },
+            "top_label": "Cantos postos se ven",
+            "top_option": "Os {n} primeiros postos",
+            "types_title": "Tipos de ranking",
+            "types_hint": "Se hai máis dun, o alumnado cambia dun a outro con lapelas.",
+            "type": {
+              "xp": {
+                "label": "XP",
+                "desc": "A XP acumulada. Só ten «Sempre»."
+              },
+              "missions": {
+                "label": "Misións completadas",
+                "desc": "Premia rematar. Por semana ou tempada; nos empates decide a XP."
+              },
+              "teams": {
+                "label": "Equipos",
+                "desc": "Os puntos das agrupacións de base. Vense todos os equipos en calquera modo.",
+                "no_base": "Aínda non hai ningunha agrupación de base: créase en Alumnado → Equipos. Ata entón, este tipo non se ve."
+              }
+            },
+            "type_last": "Fai falta polo menos un tipo.",
+            "season": {
+              "title": "Tempada",
+              "hint": "Ao empezala, misións e equipos contan desde ese momento na opción «Tempada». Non se borra nada e a XP non cambia. Empezar outra substitúe a anterior.",
+              "current": "En curso desde o {date}.",
+              "start": "Empezar tempada",
+              "restart": "Empezar outra tempada",
+              "toast_started": "Tempada empezada"
+            },
+            "closed_archived": "A clase está arquivada: desarquívaa para cambiar o ranking.",
+            "closed_trash": "A clase está na papeleira: restáuraa para cambiar o ranking."
+          },
+          "compare": {
+            "label": "Comparar coa media",
+            "desc": "Cada estudante ve se vai por riba, na media ou por debaixo do resto da súa clase, sen ver a ninguén. Funciona aínda que apagues o ranking."
           }
         },
         "badges_empty": "Non hai insignias nesta clase",
@@ -660,7 +717,8 @@
               "trashed": "enviou a clase á papeleira",
               "restored": "sacou a clase da papeleira",
               "template_recommended": "recomendou o modelo nos catálogos",
-              "template_unrecommended": "quitou a recomendación do modelo"
+              "template_unrecommended": "quitou a recomendación do modelo",
+              "season_started": "empezou unha tempada do ranking"
             },
             "teacher": {
               "added": "engadiu a {target} ao profesorado ({profile}, {access})",
@@ -986,7 +1044,7 @@
       "subtitle": "Crea e xestiona insignias personalizadas para recompensar os logros do teu alumnado",
       "new_badge": "Nova insignia",
       "btn_delete": "Eliminar",
-      "no_badges_title": "Sen insignias",
+      "no_badges_title": "Aínda non creaches ningunha",
       "no_badges_description": "Crea a túa primeira insignia para recompensar o teu alumnado",
       "create_first": "Crear primeira insignia",
       "form": {
@@ -1007,8 +1065,13 @@
         "no_mission": "Sen misión"
       },
       "detail": {
-        "btn_edit": "Editar",
-        "btn_close": "Pechar"
+        "btn_close": "Pechar",
+        "btn_copy": "Crear unha parecida",
+        "system_level": "É de ITAKAI e non se pode editar: concédese soa ao chegar ao nivel {count} nunha clase.",
+        "system_missions": "É de ITAKAI e non se pode editar: concédese soa ao completar a primeira misión. | É de ITAKAI e non se pode editar: concédese soa ao completar {count} misións.",
+        "system_xp": "É de ITAKAI e non se pode editar: concédese soa ao reunir {count} XP nunha clase.",
+        "system_generic": "É de ITAKAI e non se pode editar: concédese soa segundo o progreso do alumnado.",
+        "not_yours": "Non podes editala: creouna outra persoa para unha misión que non podes cambiar."
       },
       "delete_title": "Eliminar insignia",
       "delete_confirm": "Seguro que queres eliminar a insignia '{name}'? Esta acción non se pode desfacer.",
@@ -1022,10 +1085,16 @@
         "title": "As miñas insignias | ITAKAI Docente",
         "description": "Crea, edita e xestiona insignias personalizadas para premiar os logros do teu alumnado."
       },
-      "filter_system": "Do sistema",
       "generate_error": "Non se puido xerar a insignia.",
       "save_error": "Non se puido gardar a insignia.",
-      "delete_error": "Non se puido eliminar a insignia."
+      "delete_error": "Non se puido eliminar a insignia.",
+      "sections": {
+        "own": "As túas insignias",
+        "own_hint": "As que creaches e as das misións que podes editar. Ábreas para cambialas.",
+        "system": "Insignias de ITAKAI",
+        "system_hint": "Concédense soas segundo o progreso do alumnado e non se poden editar. Ábreas para ver como se gañan ou crear unha parecida."
+      },
+      "filter_all": "Todas as insignias"
     },
     "students": {
       "index": {
@@ -1051,12 +1120,12 @@
         "no_archived_students_title": "Ninguén en clases arquivadas",
         "no_archived_students_default": "Non hai estudantes nas túas clases arquivadas",
         "btn_view": "Ver",
-        "stat_missions": "Misións",
         "meta": {
           "title": "O meu alumnado | ITAKAI Docente",
           "description": "Xestiona o teu alumnado, revisa o seu progreso e estatísticas de rendemento académico."
         },
-        "stat_badges": "Insignias"
+        "stat_badges": "Insignias",
+        "no_missions": "Sen misións por facer"
       },
       "detail": {
         "breadcrumb_students": "Alumnado",
@@ -1065,19 +1134,19 @@
         "error_default": "Erro ao cargar os datos da ficha",
         "btn_retry": "Reintentar",
         "stat_classes": "Clases",
-        "stat_missions": "Misións",
-        "stat_completed": "Completado",
         "enrolled_classes_title": "Clases inscritas",
-        "enrolled_classes_count": "{count} clases",
+        "enrolled_classes_count": "Sen clases | 1 clase | {count} clases",
         "not_enrolled": "Non está en ningunha das túas clases",
-        "label_progress": "Completado",
-        "stat_mana": "Maná",
-        "stat_lives": "Puntos de vida",
         "no_activity": "Sen actividade recente",
         "meta": {
           "title": "Perfil de estudante | ITAKAI Docente",
           "description": "Perfil detallado de cada estudante con estatísticas de rendemento, progreso en misións e actividade recente."
-        }
+        },
+        "level_badge": "Nv. {level}",
+        "stat_missions_completed": "Misións completadas",
+        "stat_required_enigmas": "Enigmas obrigatorios aprobados",
+        "view_in_class": "Ver na clase",
+        "view_in_class_named": "Ver en «{class}»"
       },
       "actions": {
         "menu_label": "Accións para {name}",
@@ -1362,7 +1431,6 @@
         "status_in_review": "En revisión",
         "status_completed": "Completado",
         "global_progress": "Progreso global",
-        "class_average": "Media da clase",
         "rewards_title": "Recompensas",
         "xp_enigmas": "XP de enigmas",
         "xp_mission": "XP de misión",
@@ -1373,7 +1441,14 @@
           "epic": "Épica",
           "legendary": "Legendaria"
         },
-        "btn_close": "Pechar"
+        "btn_close": "Pechar",
+        "completed_by_students": "Estudantes que a completaron",
+        "required_average": "Media de enigmas obrigatorios aprobados: {percent}",
+        "edit_enigma_named": "Editar o enigma «{title}»",
+        "enigma_actions": "Máis accións do enigma «{title}»",
+        "edit_document_named": "Editar o documento «{title}»",
+        "document_actions": "Máis accións do documento «{title}»",
+        "view_submissions_named": "Ver entregas ({count}) do enigma «{title}»"
       },
       "enigma_submissions_modal": {
         "title_fallback": "Entregas",
@@ -1718,10 +1793,6 @@
         "export_error": "Non se puido descargar o CSV.",
         "col_incidents": "Faltas e atrasos",
         "no_incidents": "Ningunha"
-      },
-      "profile": {
-        "rate": "Asistencia: {rate} %",
-        "sessions": "{count} sesión este curso | {count} sesións este curso"
       }
     },
     "teams": {
@@ -1826,6 +1897,161 @@
       "distributed": "{count} persoa repartida entre os equipos. | {count} persoas repartidas entre os equipos.",
       "distribute_skipped": "{count} que falta hoxe queda sen equipo. | {count} que faltan hoxe quedan sen equipo.",
       "put_in": "Poñer en:"
+    },
+    "analytics": {
+      "period": {
+        "label": "Período",
+        "course": "Este curso",
+        "last30": "Últimos 30 días",
+        "last7": "Últimos 7 días"
+      },
+      "summary": {
+        "avg_missions": "Misións de media",
+        "avg_percent": "Progreso medio",
+        "pending_link": "Ir a Misións",
+        "attendance": "Asistencia media",
+        "attendance_sessions": "{count} sesión neste período | {count} sesións neste período",
+        "xp": "XP media",
+        "unstarted_note": "As medias non contan {count} conta sen estrear. | As medias non contan {count} contas sen estrear.",
+        "today": "Hoxe"
+      },
+      "missions": {
+        "title": "Misións",
+        "caption": "Onde está cada estudante agora mesmo: non cambia co período. A media de aprobación e as pistas da táboa si son do período.",
+        "table_caption": "Cantas persoas hai en cada estado, en cada misión",
+        "col_mission": "Misión",
+        "col_average": "Media de aprobación",
+        "col_hints": "Pistas",
+        "deadline_future": "Vence o {date}",
+        "deadline_past": "Venceu o {date}",
+        "excluded_teacher": "Bloqueada: non conta no progreso",
+        "excluded_empty": "Sen enigmas: non conta no progreso",
+        "empty_title": "Aínda non hai misións",
+        "empty_description": "Cando crees misións nesta clase, aquí verás como vai cada unha."
+      },
+      "signals": {
+        "title": "Dificultades detectadas",
+        "empty_title": "Nada que destacar neste período",
+        "empty_description": "Se alguén se atasca ou unha misión se complica, sairá aquí co seu motivo.",
+        "show_all": "Ver todas ({count})",
+        "show_less": "Ver menos",
+        "student": {
+          "inactive": "Sen actividade desde hai {days} días, con {count} misión aberta | Sen actividade desde hai {days} días, con {count} misións abertas",
+          "inactive_never": "Sen actividade desde que entrou na clase, hai {days} días, con {count} misión aberta | Sen actividade desde que entrou na clase, hai {days} días, con {count} misións abertas",
+          "mission_expired": "«{mission}» venceu o {date} sen comezala",
+          "mission_expired_started": "«{mission}» venceu o {date}: comezouna e non a completou",
+          "mission_expired_many": "{count} misións expiradas sen completar; a última, «{mission}», venceu o {date}",
+          "low_grade": "Aprobou «{enigma}» («{mission}») cun {percent}, menos do {threshold}",
+          "low_grade_many": "{count} enigmas aprobados con menos do {threshold}; o máis baixo, «{enigma}», cun {percent}",
+          "low_average": "Media de aprobación do {average} en {approvals} enigma, menos do {threshold} | Media de aprobación do {average} en {approvals} enigmas, menos do {threshold}",
+          "hints": "Usou {count} pista en «{mission}» | Usou {count} pistas en «{mission}»",
+          "hints_percent": "Usou {count} pista en «{mission}» ({detail}) | Usou {count} pistas en «{mission}» ({detail})",
+          "hints_many": "Moitas pistas en {count} misións; a que máis, «{mission}», con {hints}",
+          "low_attendance": "Asistencia do {rate}: {attended} de {total} sesión | Asistencia do {rate}: {attended} de {total} sesións",
+          "hints_percent_detail": "{count} resta % da recompensa | {count} restan % da recompensa"
+        },
+        "mission": {
+          "unfinished_after_deadline": "{unfinished} de {started} que a comezaron non a completaron antes da data ({percent})",
+          "low_average": "Media de aprobación do {average} en {approvals} enigma aprobado, menos do {threshold} | Media de aprobación do {average} en {approvals} enigmas aprobados, menos do {threshold}",
+          "many_hints": "{perStudent} pistas de media por estudante que a comezou",
+          "students_expired": "{count} persoa sen completala tras a data | {count} persoas sen completala tras a data"
+        }
+      },
+      "students": {
+        "title": "Estudantes",
+        "table_caption": "O alumnado da clase: misións, última actividade, entregas por revisar, pistas e sinais",
+        "col_missions": "Misións",
+        "col_last_activity": "Última actividade",
+        "col_pending": "Por revisar",
+        "col_hints": "Pistas",
+        "col_attendance": "Asistencia",
+        "col_signals": "Sinais",
+        "no_activity": "Sen actividade",
+        "sort_missions_asc": "Misións ↑",
+        "sort_missions_desc": "Misións ↓",
+        "sort_activity_recent": "Actividade máis recente",
+        "sort_activity_oldest": "Actividade máis antiga",
+        "sort_pending_desc": "Por revisar ↓",
+        "sort_hints_desc": "Pistas ↓",
+        "sort_signals_desc": "Sinais ↓",
+        "sort_attendance_asc": "Asistencia ↑",
+        "sort_attendance_desc": "Asistencia ↓"
+      },
+      "weeks": {
+        "title": "Actividade por semana",
+        "caption": "Entregas, aprobacións e pistas de cada semana, de luns a domingo.",
+        "table_caption": "A actividade da clase, semana a semana",
+        "col_week": "Semana",
+        "col_submissions": "Entregas",
+        "col_approvals": "Aprobacións",
+        "col_hints": "Pistas",
+        "col_missions": "Misións completadas",
+        "week_of": "Semana do {date}",
+        "empty_title": "Sen actividade neste período",
+        "empty_description": "Cando haxa entregas, aprobacións ou pistas, aparecerán aquí."
+      },
+      "student": {
+        "not_found_title": "Esta persoa non está na clase",
+        "not_found_description": "Pode que xa non estea matriculada ou que a ligazón sexa antiga.",
+        "back_to_list": "Volver ao alumnado",
+        "all_classes": "Ver todas as súas clases",
+        "attendance_line": "Asistencia: {rate} ({attended} de {total} sesión) | Asistencia: {rate} ({attended} de {total} sesións)",
+        "figures_title": "As súas cifras",
+        "missions_done": "Misións completadas",
+        "xp": "XP",
+        "hints": "Pistas usadas",
+        "class_average": "Media da clase: {value}",
+        "compared_with": "Fronte á media da clase: {count} persoa que participa. | Fronte á media da clase: {count} persoas que participan.",
+        "nobody_to_compare": "Aínda non hai ninguén máis na clase con quen comparar.",
+        "this_person": "Esta persoa",
+        "missions": {
+          "title": "Misións",
+          "filter_label": "Filtrar as súas misións",
+          "filter_all": "Todas ({count})",
+          "filter_pending": "Pendentes ({count})",
+          "filter_done": "Feitas ({count})",
+          "by_enigma": "% por enigma",
+          "optional": "opcional",
+          "excluded_teacher": "Bloqueada",
+          "excluded_empty": "Sen enigmas",
+          "completed_on": "o {date}",
+          "deadline_past": "venceu o {date}",
+          "deadline_future": "vence o {date}",
+          "enigmas": "{approved} de {total} enigma aprobado | {approved} de {total} enigmas aprobados",
+          "average": "media do {value}",
+          "hints": "{count} pista | {count} pistas",
+          "pending_reviews": "{count} entrega por revisar | {count} entregas por revisar",
+          "enigma_approved": "{percent} · {date}",
+          "enigma_pending_since": "En revisión desde o {date}",
+          "enigma_open": "Sen aprobar",
+          "empty_all": "Aínda non hai misións",
+          "empty_pending": "Non ten misións pendentes",
+          "empty_done": "Aínda non completou ningunha misión",
+          "empty_description": "Cando cambie, sairá aquí."
+        },
+        "history": {
+          "title": "Historial",
+          "filter_label": "Filtrar por tipo",
+          "load_more": "Cargar máis",
+          "empty": "Aínda non hai nada no seu historial.",
+          "empty_filtered": "Non hai nada deste tipo.",
+          "attendance": "Asistencia: {status}",
+          "attendance_time": "de {start} a {end}",
+          "attendance_note": "Nota: {note}",
+          "type": {
+            "all": "Todo",
+            "submissions": "Entregas",
+            "approvals": "Aprobacións",
+            "missions": "Misións",
+            "hints": "Pistas",
+            "behaviors": "Comportamentos e recompensas",
+            "shop": "Tenda",
+            "progress": "Niveis e insignias",
+            "attendance": "Asistencia"
+          },
+          "loaded": "Cargouse {count} entrada máis. | Cargáronse {count} entradas máis."
+        }
+      }
     }
   }
 }

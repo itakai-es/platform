@@ -21,7 +21,8 @@
       "section_classes": "Clase",
       "section_account": "Cont",
       "profile": "Profilul meu",
-      "logout": "Deconectare"
+      "logout": "Deconectare",
+      "breadcrumb": "Traseu de navigare"
     },
     "actions": {
       "save": "Salvează",
@@ -112,7 +113,8 @@
       "start_new": "Începe una nouă!",
       "chat_with": "Discută cu {name}",
       "chat_with_god": "Discută cu un zeu",
-      "chat_with_label": "Discuție cu"
+      "chat_with_label": "Discuție cu",
+      "load_more": "Încarcă mai multe…"
     },
     "mobile_sidebar": {
       "join_class": "Alătură-te unei clase"
@@ -367,7 +369,8 @@
         "title": "Mai puțină animație",
         "description": "Reduce tranzițiile și efectele de mișcare."
       },
-      "opens_new_tab": "(se deschide într-o filă nouă)"
+      "opens_new_tab": "(se deschide într-o filă nouă)",
+      "tabs": "File"
     },
     "notification_settings": {
       "description": "Notificările tale sunt mereu în „{section}”, în meniu. Emailul este opțional.",
@@ -388,7 +391,8 @@
       "send_to_ai": "Trimite către IA"
     },
     "student_preview": {
-      "banner": "Vezi platforma ca elev (demo)"
+      "banner": "Vezi platforma ca elev (demo)",
+      "enter": "Vezi ca elev"
     },
     "change_email": {
       "title": "E-mail",
@@ -571,7 +575,42 @@
       "enigma_approved_student": "Lucrarea ta pentru {enigma} a fost aprobată",
       "enigma_approved_teacher": "Lucrarea pentru {enigma} i-a fost aprobată",
       "mission_started_student": "Ai început misiunea {mission}",
-      "mission_started_teacher": "A început misiunea {mission}"
+      "mission_started_teacher": "A început misiunea {mission}",
+      "enigma_submitted_teacher": "A trimis {enigma} spre verificare",
+      "enigma_submitted_student": "Ai predat {enigma}",
+      "mission_completed_teacher": "A finalizat misiunea {mission}",
+      "mission_completed_student": "Ai finalizat misiunea {mission}",
+      "level_up_teacher": "A ajuns la nivelul {level}",
+      "level_up_student": "Ai ajuns la nivelul {level}",
+      "class_joined_teacher": "S-a alăturat clasei {name}",
+      "class_joined_student": "Te-ai alăturat clasei {name}",
+      "achievement_unlocked_teacher": "A deblocat realizarea {name}",
+      "achievement_unlocked_student": "Ai deblocat realizarea {name}",
+      "badge_unlocked_teacher": "A deblocat insigna {name}",
+      "badge_unlocked_student": "Ai deblocat insigna {name}",
+      "xp_gained_teacher": "A câștigat {xp} la {source}",
+      "xp_gained_student": "Ai câștigat {xp} la {source}",
+      "student_enrolled_teacher": "S-a înregistrat pe platformă",
+      "student_enrolled_student": "Te-ai înregistrat pe platformă",
+      "progress_milestone_teacher": "A atins o etapă de progres",
+      "progress_milestone_student": "Ai atins o etapă de progres",
+      "reward_taken_teacher": "I s-au luat resurse: {name}",
+      "reward_taken_student": "Ți s-au luat resurse: {name}",
+      "reward_given_teacher": "A primit o recompensă: {name}",
+      "reward_given_student": "Ai primit o recompensă: {name}",
+      "behavior_applied_teacher": "A primit comportamentul {name}",
+      "behavior_applied_student": "Ai primit comportamentul {name}",
+      "shop_purchased_teacher": "A cumpărat {name} din magazin",
+      "shop_purchased_student": "Ai cumpărat {name} din magazin",
+      "shop_item_used_teacher": "A folosit {name}",
+      "shop_item_used_student": "Ai folosit {name}",
+      "fallback": {
+        "class": "o clasă",
+        "activity": "o activitate",
+        "behavior": "un comportament",
+        "item": "un articol"
+      },
+      "unknown": "Activitate recentă"
     },
     "avatars": {
       "characters": {
@@ -615,14 +654,14 @@
         "available": "Disponibilă",
         "urgent": "Urgentă: expiră curând",
         "expired": "Expirată",
-        "locked": "Blocată: închisă deocamdată de cadrul didactic",
+        "locked": "Blocată deocamdată de cadrul didactic",
         "locked_path": "Blocată: se deschide după ce finalizezi {missions}"
       },
       "completed_by": "Nimeni nu a finalizat-o încă: 0 din {total} | {done} din {total} a finalizat-o | {done} din {total} au finalizat-o",
       "no_students": "Încă nu e nimeni în clasă",
       "opens_after": "Se deschide după ce finalizezi {missions}",
       "quoted": "„{title}”",
-      "quoted_teacher_closed": "„{title}” (închisă deocamdată de cadrul didactic)",
+      "quoted_teacher_closed": "„{title}” (blocată deocamdată de cadrul didactic)",
       "and": "și",
       "locked_path_explain": "Ca s-o deschizi, finalizează mai întâi {missions}.",
       "state_short": {
@@ -640,7 +679,7 @@
       "keys_hint": "Cu tastatura, săgețile trec de la o misiune la alta; Home și End duc la prima și la ultima.",
       "your_progress": "Ai finalizat {done} din {total} misiune | Misiuni finalizate: {done} din {total}",
       "all_done": "Hartă finalizată!",
-      "class_progress": "Clasa a parcurs {percent} % din traseu",
+      "class_progress": "În medie, {done} din {total} misiune finalizată | În medie, {done} din {total} misiuni finalizate",
       "class_done_by_all": "Finalizate de toată clasa: {done} din {total}",
       "legend": {
         "title": "Legendă",
@@ -662,6 +701,88 @@
         "continue": "Continuă",
         "view": "Vezi misiunea",
         "open": "Deschide misiunea"
+      }
+    },
+    "charts": {
+      "view_as_table": "Vezi ca tabel",
+      "legend": "Legendă",
+      "label_value": "{label}: {value}",
+      "value_of_total": "{value} din {total}",
+      "you": "Tu",
+      "average": "Media",
+      "empty_title": "Încă nu există date",
+      "empty_description": "Când va exista activitate în această perioadă, va apărea aici.",
+      "status": {
+        "completed": "Finalizată",
+        "pending_review": "De verificat",
+        "in_progress": "În curs",
+        "not_started": "Neîncepută",
+        "expired": "Expirată",
+        "path_locked": "Închisă de traseu"
+      },
+      "compare": {
+        "not_enough": "Clasa ta este încă prea mică pentru a compara.",
+        "self": {
+          "above": "Ești peste media restului clasei.",
+          "at": "Ești la media restului clasei.",
+          "below": "Ești sub media restului clasei."
+        },
+        "other": {
+          "above": "Peste media clasei.",
+          "at": "La media clasei.",
+          "below": "Sub media clasei."
+        }
+      },
+      "signals": {
+        "empty_title": "Nimic de semnalat",
+        "empty_description": "Nu există semne de dificultate în această perioadă."
+      }
+    },
+    "class_card": {
+      "students": "Niciun elev | 1 elev | {count} elevi",
+      "missions": "Nicio misiune | 1 misiune | {count} misiuni",
+      "view_class": "Vezi clasa",
+      "duplicate": "Duplică clasa",
+      "archive": "Arhivează clasa",
+      "unarchive": "Dezarhivează clasa",
+      "confirm_archive": "Arhivezi?",
+      "confirm_unarchive": "Dezarhivezi?",
+      "confirm": "Confirmă"
+    },
+    "assistant_card": {
+      "greeting": "Salut, {name}! Sunt {god}, asistentul tău AI. Cu ce te pot ajuta?",
+      "greeting_no_name": "Salut! Sunt {god}, asistentul tău AI. Cu ce te pot ajuta?"
+    },
+    "progress": {
+      "missions_of": "{done} din {total} misiune | Misiuni: {done} din {total}",
+      "extra": "Extra: {done} din {total} opțional | Extra: {done} din {total} opționale"
+    },
+    "ranking": {
+      "types_label": "Tipul de clasament",
+      "periods_label": "Perioada clasamentului",
+      "type": {
+        "xp": "XP",
+        "missions": "Misiuni",
+        "teams": "Echipe"
+      },
+      "period": {
+        "all": "Tot timpul",
+        "week": "Săptămâna aceasta",
+        "season": "Sezon"
+      },
+      "season_since": "Sezon în curs din {date}.",
+      "no_score": {
+        "xp": "Încă fără XP",
+        "missions": {
+          "all": "Încă fără misiuni finalizate",
+          "week": "Încă fără misiuni săptămâna aceasta",
+          "season": "Încă fără misiuni în acest sezon"
+        },
+        "teams": {
+          "all": "Încă fără puncte",
+          "week": "Încă fără puncte săptămâna aceasta",
+          "season": "Încă fără puncte în acest sezon"
+        }
       }
     }
   }

@@ -21,7 +21,8 @@
       "section_classes": "Classes",
       "section_account": "Account",
       "profile": "My profile",
-      "logout": "Log out"
+      "logout": "Log out",
+      "breadcrumb": "Breadcrumb"
     },
     "actions": {
       "save": "Save",
@@ -112,7 +113,8 @@
       "start_new": "Start a new one!",
       "chat_with": "Chat with {name}",
       "chat_with_god": "Chat with a god",
-      "chat_with_label": "Chat with"
+      "chat_with_label": "Chat with",
+      "load_more": "Load more…"
     },
     "mobile_sidebar": {
       "join_class": "Join class"
@@ -367,7 +369,8 @@
         "title": "Less motion",
         "description": "Reduces transitions and movement effects."
       },
-      "opens_new_tab": "(opens in a new tab)"
+      "opens_new_tab": "(opens in a new tab)",
+      "tabs": "Tabs"
     },
     "notification_settings": {
       "description": "Your notifications are always in \"{section}\", in the menu. Email is optional.",
@@ -388,7 +391,8 @@
       "send_to_ai": "Send to the AI"
     },
     "student_preview": {
-      "banner": "You're viewing the platform as a student (demo)"
+      "banner": "You're viewing the platform as a student (demo)",
+      "enter": "View as student"
     },
     "change_email": {
       "title": "Email",
@@ -571,7 +575,42 @@
       "enigma_approved_student": "Your submission for {enigma} was approved",
       "enigma_approved_teacher": "Had their submission for {enigma} approved",
       "mission_started_student": "You started the mission {mission}",
-      "mission_started_teacher": "Started the mission {mission}"
+      "mission_started_teacher": "Started the mission {mission}",
+      "enigma_submitted_teacher": "Sent {enigma} for review",
+      "enigma_submitted_student": "You submitted {enigma}",
+      "mission_completed_teacher": "Completed the mission {mission}",
+      "mission_completed_student": "You completed the mission {mission}",
+      "level_up_teacher": "Reached level {level}",
+      "level_up_student": "You reached level {level}",
+      "class_joined_teacher": "Joined {name}",
+      "class_joined_student": "You joined {name}",
+      "achievement_unlocked_teacher": "Unlocked the achievement {name}",
+      "achievement_unlocked_student": "You unlocked the achievement {name}",
+      "badge_unlocked_teacher": "Unlocked the badge {name}",
+      "badge_unlocked_student": "You unlocked the badge {name}",
+      "xp_gained_teacher": "Earned {xp} in {source}",
+      "xp_gained_student": "You earned {xp} in {source}",
+      "student_enrolled_teacher": "Signed up on the platform",
+      "student_enrolled_student": "You signed up on the platform",
+      "progress_milestone_teacher": "Reached a progress milestone",
+      "progress_milestone_student": "You reached a progress milestone",
+      "reward_taken_teacher": "Resources were taken away: {name}",
+      "reward_taken_student": "Resources were taken from you: {name}",
+      "reward_given_teacher": "Received a reward: {name}",
+      "reward_given_student": "You received a reward: {name}",
+      "behavior_applied_teacher": "Received the behavior {name}",
+      "behavior_applied_student": "You received the behavior {name}",
+      "shop_purchased_teacher": "Bought {name} in the shop",
+      "shop_purchased_student": "You bought {name} in the shop",
+      "shop_item_used_teacher": "Used {name}",
+      "shop_item_used_student": "You used {name}",
+      "fallback": {
+        "class": "a class",
+        "activity": "an activity",
+        "behavior": "a behavior",
+        "item": "an item"
+      },
+      "unknown": "Recent activity"
     },
     "avatars": {
       "characters": {
@@ -615,14 +654,14 @@
         "available": "Available",
         "urgent": "Urgent: due soon",
         "expired": "Expired",
-        "locked": "Locked: closed by your teacher for now",
+        "locked": "Locked by your teacher for now",
         "locked_path": "Locked: opens after completing {missions}"
       },
       "completed_by": "Nobody has completed it yet: 0 of {total} | {done} of {total} has completed it | {done} of {total} have completed it",
       "no_students": "No students yet",
       "opens_after": "Opens after completing {missions}",
       "quoted": "“{title}”",
-      "quoted_teacher_closed": "“{title}” (closed by your teacher for now)",
+      "quoted_teacher_closed": "“{title}” (locked by your teacher for now)",
       "and": "and",
       "locked_path_explain": "To open it, first complete {missions}.",
       "state_short": {
@@ -640,7 +679,7 @@
       "keys_hint": "With the keyboard, the arrow keys move from one mission to another; Home and End go to the first and the last.",
       "your_progress": "You have completed {done} of {total} mission | You have completed {done} of {total} missions",
       "all_done": "Map completed!",
-      "class_progress": "The class has covered {percent}% of the path",
+      "class_progress": "On average, {done} of {total} mission completed | On average, {done} of {total} missions completed",
       "class_done_by_all": "Completed by the whole class: {done} of {total}",
       "legend": {
         "title": "Legend",
@@ -662,6 +701,88 @@
         "continue": "Continue",
         "view": "View mission",
         "open": "Open mission"
+      }
+    },
+    "charts": {
+      "view_as_table": "View as table",
+      "legend": "Legend",
+      "label_value": "{label}: {value}",
+      "value_of_total": "{value} of {total}",
+      "you": "You",
+      "average": "Average",
+      "empty_title": "No data yet",
+      "empty_description": "When there is activity in this period, it will show up here.",
+      "status": {
+        "completed": "Completed",
+        "pending_review": "To review",
+        "in_progress": "In progress",
+        "not_started": "Not started",
+        "expired": "Expired",
+        "path_locked": "Closed by the path"
+      },
+      "compare": {
+        "not_enough": "Your class is still too small to compare.",
+        "self": {
+          "above": "You're above the average of the rest of your class.",
+          "at": "You're at the average of the rest of your class.",
+          "below": "You're below the average of the rest of your class."
+        },
+        "other": {
+          "above": "Above the class average.",
+          "at": "At the class average.",
+          "below": "Below the class average."
+        }
+      },
+      "signals": {
+        "empty_title": "Nothing to highlight",
+        "empty_description": "There are no signs of difficulty in this period."
+      }
+    },
+    "class_card": {
+      "students": "No students | 1 student | {count} students",
+      "missions": "No missions | 1 mission | {count} missions",
+      "view_class": "View class",
+      "duplicate": "Duplicate class",
+      "archive": "Archive class",
+      "unarchive": "Unarchive class",
+      "confirm_archive": "Archive?",
+      "confirm_unarchive": "Unarchive?",
+      "confirm": "Confirm"
+    },
+    "assistant_card": {
+      "greeting": "Hi {name}! I'm {god}, your AI assistant. How can I help you?",
+      "greeting_no_name": "Hi! I'm {god}, your AI assistant. How can I help you?"
+    },
+    "progress": {
+      "missions_of": "{done} of {total} mission | {done} of {total} missions",
+      "extra": "Extra: {done} of {total} optional | Extra: {done} of {total} optional"
+    },
+    "ranking": {
+      "types_label": "Ranking type",
+      "periods_label": "Ranking period",
+      "type": {
+        "xp": "XP",
+        "missions": "Missions",
+        "teams": "Teams"
+      },
+      "period": {
+        "all": "All time",
+        "week": "This week",
+        "season": "Season"
+      },
+      "season_since": "Season running since {date}.",
+      "no_score": {
+        "xp": "No XP yet",
+        "missions": {
+          "all": "No missions completed yet",
+          "week": "No missions yet this week",
+          "season": "No missions yet this season"
+        },
+        "teams": {
+          "all": "No points yet",
+          "week": "No points yet this week",
+          "season": "No points yet this season"
+        }
       }
     }
   }

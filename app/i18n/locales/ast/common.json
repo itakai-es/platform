@@ -21,7 +21,8 @@
       "section_classes": "Clases",
       "section_account": "Cuenta",
       "profile": "El mio perfil",
-      "logout": "Zarrar sesión"
+      "logout": "Zarrar sesión",
+      "breadcrumb": "Ruta de navegación"
     },
     "actions": {
       "save": "Guardar",
@@ -112,7 +113,8 @@
       "start_new": "¡Entama una nueva!",
       "chat_with": "Charra con {name}",
       "chat_with_god": "Charra con un dios",
-      "chat_with_label": "Charra con"
+      "chat_with_label": "Charra con",
+      "load_more": "Cargar más…"
     },
     "mobile_sidebar": {
       "join_class": "Xunise a una clase"
@@ -367,7 +369,8 @@
         "title": "Menos animación",
         "description": "Amenorga transiciones y efeutos de movimientu."
       },
-      "opens_new_tab": "(ábrese nuna llingüeta nueva)"
+      "opens_new_tab": "(ábrese nuna llingüeta nueva)",
+      "tabs": "Llingüetes"
     },
     "notification_settings": {
       "description": "Los tos avisos tán siempre en «{section}», nel menú. El corréu ye opcional.",
@@ -388,7 +391,8 @@
       "send_to_ai": "Unviar a la IA"
     },
     "student_preview": {
-      "banner": "Tas viendo la plataforma como estudiante (demo)"
+      "banner": "Tas viendo la plataforma como estudiante (demo)",
+      "enter": "Ver como estudiante"
     },
     "change_email": {
       "title": "Corréu electrónicu",
@@ -571,7 +575,42 @@
       "enigma_approved_student": "Aprobáronte la entrega de {enigma}",
       "enigma_approved_teacher": "Recibió l'aprobación de la so entrega de {enigma}",
       "mission_started_student": "Entamesti la misión {mission}",
-      "mission_started_teacher": "Entamó la misión {mission}"
+      "mission_started_teacher": "Entamó la misión {mission}",
+      "enigma_submitted_teacher": "Unvió {enigma} a revisión",
+      "enigma_submitted_student": "Entregesti {enigma}",
+      "mission_completed_teacher": "Completó la misión {mission}",
+      "mission_completed_student": "Completesti la misión {mission}",
+      "level_up_teacher": "Xubió al nivel {level}",
+      "level_up_student": "Xubisti al nivel {level}",
+      "class_joined_teacher": "Xunióse a {name}",
+      "class_joined_student": "Xunístite a {name}",
+      "achievement_unlocked_teacher": "Desbloquió'l logru {name}",
+      "achievement_unlocked_student": "Desbloquiesti'l logru {name}",
+      "badge_unlocked_teacher": "Desbloquió la insinia {name}",
+      "badge_unlocked_student": "Desbloquiesti la insinia {name}",
+      "xp_gained_teacher": "Ganó {xp} en {source}",
+      "xp_gained_student": "Ganesti {xp} en {source}",
+      "student_enrolled_teacher": "Rexistróse na plataforma",
+      "student_enrolled_student": "Rexistrástite na plataforma",
+      "progress_milestone_teacher": "Algamó un finxu de progresu",
+      "progress_milestone_student": "Algamesti un finxu de progresu",
+      "reward_taken_teacher": "Quitáron-y recursos: {name}",
+      "reward_taken_student": "Quitáronte recursos: {name}",
+      "reward_given_teacher": "Recibió una recompensa: {name}",
+      "reward_given_student": "Recibisti una recompensa: {name}",
+      "behavior_applied_teacher": "Recibió'l comportamientu {name}",
+      "behavior_applied_student": "Recibisti'l comportamientu {name}",
+      "shop_purchased_teacher": "Mercó {name} na tienda",
+      "shop_purchased_student": "Mercasti {name} na tienda",
+      "shop_item_used_teacher": "Usó {name}",
+      "shop_item_used_student": "Usesti {name}",
+      "fallback": {
+        "class": "una clase",
+        "activity": "una actividá",
+        "behavior": "un comportamientu",
+        "item": "un artículu"
+      },
+      "unknown": "Actividá reciente"
     },
     "avatars": {
       "characters": {
@@ -615,14 +654,14 @@
         "available": "Disponible",
         "urgent": "Urxente: vence pronto",
         "expired": "Caducada",
-        "locked": "Bloquiada: zarrada pol to docente de momentu",
+        "locked": "Bloquiada pol profesoráu de momentu",
         "locked_path": "Bloquiada: ábrese al completar {missions}"
       },
       "completed_by": "Naide la completó entá: 0 de {total} | {done} de {total} completóla | {done} de {total} completáronla",
       "no_students": "Entá nun hai alumnáu",
       "opens_after": "Ábrese al completar {missions}",
       "quoted": "«{title}»",
-      "quoted_teacher_closed": "«{title}» (zarrada pol to docente de momentu)",
+      "quoted_teacher_closed": "«{title}» (bloquiada pol profesoráu de momentu)",
       "and": "y",
       "locked_path_explain": "Pa abrila, completa enantes {missions}.",
       "state_short": {
@@ -640,7 +679,7 @@
       "keys_hint": "Col tecláu, les flechas pasen d'una misión a otra; Aniciu y Fin lleven a la primera y a la última.",
       "your_progress": "Completesti {done} de {total} misión | Completesti {done} de {total} misiones",
       "all_done": "¡Mapa completáu!",
-      "class_progress": "La clase lleva el {percent} % del percorríu",
+      "class_progress": "De media, {done} de {total} misión completada | De media, {done} de {total} misiones completaes",
       "class_done_by_all": "Completaes por tola clase: {done} de {total}",
       "legend": {
         "title": "Lleenda",
@@ -662,6 +701,88 @@
         "continue": "Siguir",
         "view": "Ver la misión",
         "open": "Abrir la misión"
+      }
+    },
+    "charts": {
+      "view_as_table": "Ver como tabla",
+      "legend": "Lleenda",
+      "label_value": "{label}: {value}",
+      "value_of_total": "{value} de {total}",
+      "you": "Tu",
+      "average": "Media",
+      "empty_title": "Entá nun hai datos",
+      "empty_description": "Cuando haya actividá nesti periodu, va apaecer equí.",
+      "status": {
+        "completed": "Completada",
+        "pending_review": "Por revisar",
+        "in_progress": "En cursu",
+        "not_started": "Ensin entamar",
+        "expired": "Caducada",
+        "path_locked": "Zarrada pol camín"
+      },
+      "compare": {
+        "not_enough": "La to clase entá ye pequeña pa comparar.",
+        "self": {
+          "above": "Vas per enriba de la media del restu de la to clase.",
+          "at": "Tas na media del restu de la to clase.",
+          "below": "Vas per debaxo de la media del restu de la to clase."
+        },
+        "other": {
+          "above": "Per enriba de la media de la clase.",
+          "at": "Na media de la clase.",
+          "below": "Per debaxo de la media de la clase."
+        }
+      },
+      "signals": {
+        "empty_title": "Nada que destacar",
+        "empty_description": "Nun hai nenguna señal de dificultá nesti periodu."
+      }
+    },
+    "class_card": {
+      "students": "Ensin estudiantes | 1 estudiante | {count} estudiantes",
+      "missions": "Ensin misiones | 1 misión | {count} misiones",
+      "view_class": "Ver clase",
+      "duplicate": "Duplicar clase",
+      "archive": "Archivar clase",
+      "unarchive": "Desarchivar clase",
+      "confirm_archive": "¿Archivar?",
+      "confirm_unarchive": "¿Desarchivar?",
+      "confirm": "Confirmar"
+    },
+    "assistant_card": {
+      "greeting": "¡Hola {name}! Soi {god}, el to asistente d'IA. ¿En qué te puedo ayudar?",
+      "greeting_no_name": "¡Hola! Soi {god}, el to asistente d'IA. ¿En qué te puedo ayudar?"
+    },
+    "progress": {
+      "missions_of": "{done} de {total} misión | {done} de {total} misiones",
+      "extra": "Extra: {done} de {total} opcional | Extra: {done} de {total} opcionales"
+    },
+    "ranking": {
+      "types_label": "Tipu de clasificación",
+      "periods_label": "Periodu de la clasificación",
+      "type": {
+        "xp": "XP",
+        "missions": "Misiones",
+        "teams": "Equipos"
+      },
+      "period": {
+        "all": "Siempres",
+        "week": "Esta selmana",
+        "season": "Temporada"
+      },
+      "season_since": "Temporada en cursu dende {date}.",
+      "no_score": {
+        "xp": "Inda ensin XP",
+        "missions": {
+          "all": "Inda ensin misiones completaes",
+          "week": "Inda ensin misiones esta selmana",
+          "season": "Inda ensin misiones esta temporada"
+        },
+        "teams": {
+          "all": "Inda ensin puntos",
+          "week": "Inda ensin puntos esta selmana",
+          "season": "Inda ensin puntos esta temporada"
+        }
       }
     }
   }

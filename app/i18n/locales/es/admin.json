@@ -190,34 +190,32 @@
         "quarter": "Trimestre"
       },
       "kpis": {
-        "avg_response": "Tiempo de respuesta",
-        "requests_per_min": "Peticiones/min",
         "error_rate": "Tasa de error",
-        "uptime": "Disponibilidad"
+        "activity": "Actividad en el periodo",
+        "new_users": "Altas en el periodo",
+        "missions_completed": "Misiones completadas en el periodo"
       },
       "overview": {
         "total_users": "Cuentas totales",
         "active_today": "Activas hoy",
-        "missions_completed": "Misiones completadas",
-        "completion_rate": "Tasa de completado"
+        "pending_reviews": "Entregas por revisar"
       },
       "sections": {
         "system_resources": "Recursos del sistema",
         "service_health": "Estado de servicios",
-        "response_time": "Tiempo de respuesta",
-        "active_users": "Cuentas activas",
-        "requests": "Peticiones",
-        "tokens_over_time": "Tokens consumidos",
         "users_by_role": "Cuentas por rol",
         "missions_by_status": "Misiones por estado",
         "missions_by_rarity": "Misiones por rareza",
-        "ai_usage": "Uso de IA (asistentes)"
+        "ai_usage": "Uso de IA (asistentes)",
+        "period_series": "En el periodo",
+        "new_users": "Altas",
+        "activity": "Actividad registrada",
+        "assistant_messages": "Mensajes a los asistentes"
       },
       "ai": {
-        "total_tokens": "Tokens totales",
-        "avg_tokens_user": "Media por cuenta",
-        "total_conversations": "Conversaciones",
-        "avg_conversations_user": "Conv. por cuenta"
+        "total_conversations": "Conversaciones desde el inicio",
+        "avg_conversations_user": "Conv. por cuenta desde el inicio",
+        "total_messages": "Mensajes del periodo"
       },
       "system": {
         "memory": "Memoria",
@@ -227,7 +225,6 @@
       "table": {
         "service": "Servicio",
         "status": "Estado",
-        "uptime": "Disponibilidad",
         "latency": "Latencia"
       },
       "status": {
@@ -238,6 +235,11 @@
       "meta": {
         "title": "Analíticas del sistema | ITAKAI Admin",
         "description": "Visualiza métricas avanzadas, gráficos de rendimiento y análisis detallados de la plataforma."
+      },
+      "delta": {
+        "absolute": "{diff} respecto al periodo anterior",
+        "percent": "{percent} respecto al periodo anterior",
+        "points": "{diff} punto respecto al periodo anterior | {diff} puntos respecto al periodo anterior"
       }
     },
     "logs": {

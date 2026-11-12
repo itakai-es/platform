@@ -168,7 +168,8 @@
           "managed_badge": "Fără e-mail",
           "pending_sign_in_badge": "Încă nu a intrat",
           "view_attendance": "Prezență",
-          "view_teams": "Echipe"
+          "view_teams": "Echipe",
+          "table_caption": "Elevii clasei: nivel, resurse și comportamente"
         },
         "stats_title": "Statisticile clasei",
         "pending_reviews": "Lucrări de verificat",
@@ -178,7 +179,13 @@
         },
         "ranking": {
           "no_students_title": "Nu există elevi",
-          "no_students_description": "Încă nu sunt elevi în această clasă"
+          "no_students_description": "Încă nu sunt elevi în această clasă",
+          "hidden_from_students": "Elevii tăi nu văd acest clasament: este dezactivat în Funcționalități.",
+          "audience_full": "Elevii tăi văd: clasamentul complet.",
+          "audience_top": "Elevii tăi văd: primele {n} locuri și locul propriu.",
+          "audience_position": "Elevii tăi văd: doar locul propriu.",
+          "audience_teams": "Elevii tăi văd: toate echipele.",
+          "audience_type_off": "Elevii tăi nu văd acest tip de clasament: se activează în Funcționalități."
         },
         "missions_tab": {
           "no_missions_title": "Nu există misiuni",
@@ -355,7 +362,7 @@
             },
             "rankings": {
               "label": "Clasament",
-              "desc": "Clasamentul elevilor din clasă."
+              "desc": "Clasamentul elevilor din clasă. Dezactivat, îl vede doar corpul profesoral."
             },
             "xp": {
               "label": "Experiență (XP)",
@@ -459,6 +466,56 @@
           "beta": {
             "title": "În testare",
             "hint": "Funcționalități noi aflate în testare. Sunt dezactivate la început, iar aspectul și funcționarea lor se vor ajusta în urma testelor."
+          },
+          "ranking": {
+            "title": "Opțiunile clasamentului",
+            "hint": "Tu îl vezi mereu complet în Elevi → Clasament. Dacă oprești comutatorul, îl vede doar corpul profesoral.",
+            "mode_label": "Ce văd elevii",
+            "mode": {
+              "full": "Clasamentul complet",
+              "top": "Primele {n} locuri și locul propriu",
+              "top_suggested": "Primele {n} locuri și locul propriu (sugestie)",
+              "position": "Doar locul propriu"
+            },
+            "mode_hint": {
+              "full": "Fiecare elev vede toată clasa, cu pseudonim, nivel, XP și misiuni.",
+              "top": "Fiecare elev vede primele locuri, inclusiv egalitățile, și locul propriu. Restul clasei nu apare.",
+              "position": "Fiecare elev vede doar locul propriu și totalul clasei, fără podium sau listă."
+            },
+            "top_label": "Câte locuri se văd",
+            "top_option": "Primele {n} locuri",
+            "types_title": "Tipuri de clasament",
+            "types_hint": "Dacă sunt mai multe, elevii trec de la unul la altul cu file.",
+            "type": {
+              "xp": {
+                "label": "XP",
+                "desc": "XP acumulat. Are doar „Tot timpul”."
+              },
+              "missions": {
+                "label": "Misiuni finalizate",
+                "desc": "Răsplătește finalizarea. Pe săptămână sau sezon; la egalitate decide XP."
+              },
+              "teams": {
+                "label": "Echipe",
+                "desc": "Punctele grupărilor de bază. Toate echipele se văd în orice mod.",
+                "no_base": "Încă nu există nicio grupare de bază: se creează în Elevi → Echipe. Până atunci, acest tip nu se vede."
+              }
+            },
+            "type_last": "Este nevoie de cel puțin un tip.",
+            "season": {
+              "title": "Sezon",
+              "hint": "După ce începe, misiunile și echipele se numără din acel moment în opțiunea „Sezon”. Nu se șterge nimic și XP nu se schimbă. Dacă începi altul, îl înlocuiește pe cel anterior.",
+              "current": "În curs din {date}.",
+              "start": "Începe sezonul",
+              "restart": "Începe alt sezon",
+              "toast_started": "Sezon început"
+            },
+            "closed_archived": "Clasa este arhivată: dezarhiveaz-o pentru a schimba clasamentul.",
+            "closed_trash": "Clasa este în coșul de gunoi: restaureaz-o pentru a schimba clasamentul."
+          },
+          "compare": {
+            "label": "Comparare cu media",
+            "desc": "Fiecare elev vede dacă este peste, la nivelul sau sub media restului clasei, fără să vadă pe nimeni. Funcționează și dacă dezactivezi clasamentul."
           }
         },
         "badges_empty": "Nu există insigne în această clasă",
@@ -660,7 +717,8 @@
               "trashed": "a mutat clasa în coșul de gunoi",
               "restored": "a scos clasa din coșul de gunoi",
               "template_recommended": "a recomandat șablonul în cataloage",
-              "template_unrecommended": "a retras recomandarea șablonului"
+              "template_unrecommended": "a retras recomandarea șablonului",
+              "season_started": "a început un sezon al clasamentului"
             },
             "teacher": {
               "added": "a adăugat {target} în echipa didactică ({profile}, {access})",
@@ -986,7 +1044,7 @@
       "subtitle": "Creează și administrează insigne personalizate ca să răsplătești realizările elevilor tăi",
       "new_badge": "Insignă nouă",
       "btn_delete": "Șterge",
-      "no_badges_title": "Fără insigne",
+      "no_badges_title": "Încă nu ai creat niciuna",
       "no_badges_description": "Creează prima insignă ca să îți răsplătești elevii",
       "create_first": "Creează prima insignă",
       "form": {
@@ -1007,8 +1065,13 @@
         "no_mission": "Fără misiune"
       },
       "detail": {
-        "btn_edit": "Editează",
-        "btn_close": "Închide"
+        "btn_close": "Închide",
+        "btn_copy": "Creează una asemănătoare",
+        "system_level": "Este a ITAKAI și nu poate fi editată: se acordă automat la atingerea nivelului {count} într-o clasă.",
+        "system_missions": "Este a ITAKAI și nu poate fi editată: se acordă automat la finalizarea primei misiuni. | Este a ITAKAI și nu poate fi editată: se acordă automat când misiunile finalizate ajung la {count}.",
+        "system_xp": "Este a ITAKAI și nu poate fi editată: se acordă automat când XP-ul dintr-o clasă ajunge la {count}.",
+        "system_generic": "Este a ITAKAI și nu poate fi editată: se acordă automat după progresul din clasă.",
+        "not_yours": "Nu o poți edita: a creat-o altă persoană pentru o misiune pe care nu o poți modifica."
       },
       "delete_title": "Șterge insigna",
       "delete_confirm": "Sigur vrei să ștergi insigna „{name}”? Această acțiune nu poate fi anulată.",
@@ -1022,10 +1085,16 @@
         "title": "Insignele mele | ITAKAI Cadru didactic",
         "description": "Creează, editează și administrează insigne personalizate ca să premiezi realizările elevilor tăi."
       },
-      "filter_system": "Ale sistemului",
       "generate_error": "Insigna nu a putut fi generată.",
       "save_error": "Insigna nu a putut fi salvată.",
-      "delete_error": "Insigna nu a putut fi ștearsă."
+      "delete_error": "Insigna nu a putut fi ștearsă.",
+      "sections": {
+        "own": "Insignele tale",
+        "own_hint": "Cele create de tine și cele ale misiunilor pe care le poți edita. Deschide-le ca să le modifici.",
+        "system": "Insignele ITAKAI",
+        "system_hint": "Se acordă automat după progresul din clasă și nu pot fi editate. Deschide-le ca să vezi cum se obțin sau ca să creezi una asemănătoare."
+      },
+      "filter_all": "Toate insignele"
     },
     "students": {
       "index": {
@@ -1051,12 +1120,12 @@
         "no_archived_students_title": "Nimeni în clase arhivate",
         "no_archived_students_default": "Nu există elevi în clasele tale arhivate",
         "btn_view": "Vezi",
-        "stat_missions": "Misiuni",
         "meta": {
           "title": "Elevii mei | ITAKAI Cadru didactic",
           "description": "Administrează-ți elevii și consultă progresul și statisticile lor de performanță academică."
         },
-        "stat_badges": "Insigne"
+        "stat_badges": "Insigne",
+        "no_missions": "Nicio misiune de făcut"
       },
       "detail": {
         "breadcrumb_students": "Elevi",
@@ -1065,19 +1134,19 @@
         "error_default": "Eroare la încărcarea datelor din fișă",
         "btn_retry": "Reîncearcă",
         "stat_classes": "Clase",
-        "stat_missions": "Misiuni",
-        "stat_completed": "Finalizat",
         "enrolled_classes_title": "Clase din care face parte",
-        "enrolled_classes_count": "{count} clase",
+        "enrolled_classes_count": "Nicio clasă | 1 clasă | {count} clase",
         "not_enrolled": "Nu face parte din niciuna dintre clasele tale",
-        "label_progress": "Finalizat",
-        "stat_mana": "Mana",
-        "stat_lives": "Puncte de viață",
         "no_activity": "Fără activitate recentă",
         "meta": {
           "title": "Profilul elevului | ITAKAI Cadru didactic",
           "description": "Profil detaliat al elevului, cu statistici de performanță, progres în misiuni și activitate recentă."
-        }
+        },
+        "level_badge": "Niv. {level}",
+        "stat_missions_completed": "Misiuni finalizate",
+        "stat_required_enigmas": "Enigme obligatorii aprobate",
+        "view_in_class": "Vezi în clasă",
+        "view_in_class_named": "Vezi în „{class}”"
       },
       "actions": {
         "menu_label": "Acțiuni pentru {name}",
@@ -1362,7 +1431,6 @@
         "status_in_review": "În verificare",
         "status_completed": "Finalizat",
         "global_progress": "Progres global",
-        "class_average": "Media clasei",
         "rewards_title": "Recompense",
         "xp_enigmas": "XP din enigme",
         "xp_mission": "XP din misiune",
@@ -1373,7 +1441,14 @@
           "epic": "Epică",
           "legendary": "Legendară"
         },
-        "btn_close": "Închide"
+        "btn_close": "Închide",
+        "completed_by_students": "Elevi care au finalizat-o",
+        "required_average": "Media enigmelor obligatorii aprobate: {percent}",
+        "edit_enigma_named": "Editează enigma „{title}”",
+        "enigma_actions": "Mai multe acțiuni pentru enigma „{title}”",
+        "edit_document_named": "Editează documentul „{title}”",
+        "document_actions": "Mai multe acțiuni pentru documentul „{title}”",
+        "view_submissions_named": "Vezi lucrările ({count}) pentru enigma „{title}”"
       },
       "enigma_submissions_modal": {
         "title_fallback": "Lucrări",
@@ -1718,10 +1793,6 @@
         "export_error": "CSV-ul nu s-a putut descărca.",
         "col_incidents": "Absențe și întârzieri",
         "no_incidents": "Niciuna"
-      },
-      "profile": {
-        "rate": "Prezență: {rate}%",
-        "sessions": "{count} sesiune în acest an școlar | {count} sesiuni în acest an școlar"
       }
     },
     "teams": {
@@ -1826,6 +1897,161 @@
       "distributed": "{count} persoană împărțită între echipe. | {count} persoane împărțite între echipe.",
       "distribute_skipped": "{count} persoană care lipsește azi rămâne fără echipă. | {count} persoane care lipsesc azi rămân fără echipă.",
       "put_in": "Pune în:"
+    },
+    "analytics": {
+      "period": {
+        "label": "Perioadă",
+        "course": "Acest an școlar",
+        "last30": "Ultimele 30 de zile",
+        "last7": "Ultimele 7 zile"
+      },
+      "summary": {
+        "avg_missions": "Misiuni în medie",
+        "avg_percent": "Progres mediu",
+        "pending_link": "Mergi la misiuni",
+        "attendance": "Prezență medie",
+        "attendance_sessions": "{count} sesiune în această perioadă | {count} sesiuni în această perioadă",
+        "xp": "XP mediu",
+        "unstarted_note": "Mediile nu includ {count} cont nefolosit. | Mediile nu includ {count} conturi nefolosite.",
+        "today": "Astăzi"
+      },
+      "missions": {
+        "title": "Misiuni",
+        "caption": "Unde se află fiecare persoană acum: nu se schimbă cu perioada. Media de aprobare și indiciile din tabel țin de perioadă.",
+        "table_caption": "Câte persoane sunt în fiecare stare, pe misiuni",
+        "col_mission": "Misiune",
+        "col_average": "Media de aprobare",
+        "col_hints": "Indicii",
+        "deadline_future": "Expiră pe {date}",
+        "deadline_past": "A expirat pe {date}",
+        "excluded_teacher": "Blocată: nu se ia în calcul la progres",
+        "excluded_empty": "Fără enigme: nu se ia în calcul la progres",
+        "empty_title": "Încă nu există misiuni",
+        "empty_description": "Când creezi misiuni în această clasă, aici vei vedea cum merge fiecare."
+      },
+      "signals": {
+        "title": "Dificultăți detectate",
+        "empty_title": "Nimic de semnalat în această perioadă",
+        "empty_description": "Dacă cineva se blochează sau o misiune devine dificilă, va apărea aici cu motivul.",
+        "show_all": "Vezi toate ({count})",
+        "show_less": "Vezi mai puține",
+        "student": {
+          "inactive": "Fără activitate de {days} zile, cu {count} misiune deschisă | Fără activitate de {days} zile, cu {count} misiuni deschise",
+          "inactive_never": "Fără activitate de când a intrat în clasă, acum {days} zile, cu {count} misiune deschisă | Fără activitate de când a intrat în clasă, acum {days} zile, cu {count} misiuni deschise",
+          "mission_expired": "„{mission}” a expirat pe {date} fără să fie începută",
+          "mission_expired_started": "„{mission}” a expirat pe {date}: a început-o, dar nu a finalizat-o",
+          "mission_expired_many": "{count} misiuni expirate nefinalizate; ultima, „{mission}”, pe {date}",
+          "low_grade": "„{enigma}” („{mission}”) aprobată cu {percent}, sub {threshold}",
+          "low_grade_many": "{count} enigme aprobate sub {threshold}; cea mai slabă, „{enigma}”, cu {percent}",
+          "low_average": "Media de aprobare de {average} la {approvals} enigmă, sub {threshold} | Media de aprobare de {average} la {approvals} enigme, sub {threshold}",
+          "hints": "A folosit {count} indiciu în „{mission}” | A folosit {count} indicii în „{mission}”",
+          "hints_percent": "A folosit {count} indiciu în „{mission}” ({detail}) | A folosit {count} indicii în „{mission}” ({detail})",
+          "hints_many": "Multe indicii în {count} misiuni; cele mai multe în „{mission}”, {hints}",
+          "low_attendance": "Prezență de {rate}: {attended} din {total} sesiune | Prezență de {rate}: {attended} din {total} sesiuni",
+          "hints_percent_detail": "{count} scade un % din recompensă | {count} scad un % din recompensă"
+        },
+        "mission": {
+          "unfinished_after_deadline": "{unfinished} din {started} care au început-o nu au finalizat-o până la termen ({percent})",
+          "low_average": "Media de aprobare de {average} la {approvals} enigmă aprobată, sub {threshold} | Media de aprobare de {average} la {approvals} enigme aprobate, sub {threshold}",
+          "many_hints": "{perStudent} indicii în medie pentru fiecare persoană care a început-o",
+          "students_expired": "{count} persoană nu a finalizat-o după termen | {count} persoane nu au finalizat-o după termen"
+        }
+      },
+      "students": {
+        "title": "Elevi",
+        "table_caption": "Elevii clasei: misiuni, ultima activitate, lucrări de verificat, indicii și semnale",
+        "col_missions": "Misiuni",
+        "col_last_activity": "Ultima activitate",
+        "col_pending": "De verificat",
+        "col_hints": "Indicii",
+        "col_attendance": "Prezență",
+        "col_signals": "Semnale",
+        "no_activity": "Fără activitate",
+        "sort_missions_asc": "Misiuni ↑",
+        "sort_missions_desc": "Misiuni ↓",
+        "sort_activity_recent": "Activitate mai recentă",
+        "sort_activity_oldest": "Activitate mai veche",
+        "sort_pending_desc": "De verificat ↓",
+        "sort_hints_desc": "Indicii ↓",
+        "sort_signals_desc": "Semnale ↓",
+        "sort_attendance_asc": "Prezență ↑",
+        "sort_attendance_desc": "Prezență ↓"
+      },
+      "weeks": {
+        "title": "Activitate pe săptămână",
+        "caption": "Lucrări, aprobări și indicii din fiecare săptămână, de luni până duminică.",
+        "table_caption": "Activitatea clasei, săptămână de săptămână",
+        "col_week": "Săptămână",
+        "col_submissions": "Lucrări",
+        "col_approvals": "Aprobări",
+        "col_hints": "Indicii",
+        "col_missions": "Misiuni finalizate",
+        "week_of": "Săptămâna din {date}",
+        "empty_title": "Fără activitate în această perioadă",
+        "empty_description": "Când vor exista lucrări, aprobări sau indicii, vor apărea aici."
+      },
+      "student": {
+        "not_found_title": "Această persoană nu este în clasă",
+        "not_found_description": "Este posibil să nu mai fie înscrisă sau ca linkul să fie vechi.",
+        "back_to_list": "Înapoi la elevi",
+        "all_classes": "Vezi toate clasele",
+        "attendance_line": "Prezență: {rate} ({attended} din {total} sesiune) | Prezență: {rate} ({attended} din {total} sesiuni)",
+        "figures_title": "Cifrele sale",
+        "missions_done": "Misiuni finalizate",
+        "xp": "XP",
+        "hints": "Indicii folosite",
+        "class_average": "Media clasei: {value}",
+        "compared_with": "Față de media clasei: {count} persoană care participă. | Față de media clasei: {count} persoane care participă.",
+        "nobody_to_compare": "Încă nu există altcineva în clasă cu care să compari.",
+        "this_person": "Această persoană",
+        "missions": {
+          "title": "Misiuni",
+          "filter_label": "Filtrează misiunile",
+          "filter_all": "Toate ({count})",
+          "filter_pending": "În așteptare ({count})",
+          "filter_done": "Finalizate ({count})",
+          "by_enigma": "% pe enigmă",
+          "optional": "opțională",
+          "excluded_teacher": "Blocată",
+          "excluded_empty": "Fără enigme",
+          "completed_on": "pe {date}",
+          "deadline_past": "a expirat pe {date}",
+          "deadline_future": "expiră pe {date}",
+          "enigmas": "{approved} din {total} enigmă aprobată | {approved} din {total} enigme aprobate",
+          "average": "media {value}",
+          "hints": "{count} indiciu | {count} indicii",
+          "pending_reviews": "{count} lucrare de verificat | {count} lucrări de verificat",
+          "enigma_approved": "{percent} · {date}",
+          "enigma_pending_since": "În verificare din {date}",
+          "enigma_open": "Neaprobată",
+          "empty_all": "Încă nu există misiuni",
+          "empty_pending": "Nu are misiuni în așteptare",
+          "empty_done": "Încă nu a finalizat nicio misiune",
+          "empty_description": "Când se schimbă, va apărea aici."
+        },
+        "history": {
+          "title": "Istoric",
+          "filter_label": "Filtrează după tip",
+          "load_more": "Încarcă mai multe",
+          "empty": "Încă nu există nimic în istoric.",
+          "empty_filtered": "Nu există nimic de acest tip.",
+          "attendance": "Prezență: {status}",
+          "attendance_time": "{start}–{end}",
+          "attendance_note": "Notă: {note}",
+          "type": {
+            "all": "Toate",
+            "submissions": "Lucrări",
+            "approvals": "Aprobări",
+            "missions": "Misiuni",
+            "hints": "Indicii",
+            "behaviors": "Comportamente și recompense",
+            "shop": "Magazin",
+            "progress": "Niveluri și insigne",
+            "attendance": "Prezență"
+          },
+          "loaded": "S-a încărcat încă {count} intrare. | S-au încărcat încă {count} intrări."
+        }
+      }
     }
   }
 }

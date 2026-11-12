@@ -168,7 +168,8 @@
           "managed_badge": "Ensin corréu",
           "pending_sign_in_badge": "Pendiente d'entrar",
           "view_attendance": "Asistencia",
-          "view_teams": "Equipos"
+          "view_teams": "Equipos",
+          "table_caption": "L'alumnáu de la clase: nivel, recursos y comportamientos"
         },
         "stats_title": "Estadístiques de la clase",
         "pending_reviews": "Entregues por revisar",
@@ -178,7 +179,13 @@
         },
         "ranking": {
           "no_students_title": "Nun hai estudiantes",
-          "no_students_description": "Entá nun hai estudiantes nesta clase"
+          "no_students_description": "Entá nun hai estudiantes nesta clase",
+          "hidden_from_students": "El to alumnáu nun ve esta clasificación: ta apagada en Funcionalidaes.",
+          "audience_full": "El to alumnáu ve: la clasificación completa.",
+          "audience_top": "El to alumnáu ve: los {n} primeros puestos y el so.",
+          "audience_position": "El to alumnáu ve: namái el so puestu.",
+          "audience_teams": "El to alumnáu ve: tolos equipos.",
+          "audience_type_off": "El to alumnáu nun ve esti tipu de clasificación: actívase en Funcionalidaes."
         },
         "missions_tab": {
           "no_missions_title": "Nun hai misiones",
@@ -355,7 +362,7 @@
             },
             "rankings": {
               "label": "Clasificación",
-              "desc": "Clasificación del alumnáu de la clase."
+              "desc": "Clasificación del alumnáu de la clase. Apagada, namái la ve'l profesoráu."
             },
             "xp": {
               "label": "Esperiencia (XP)",
@@ -459,6 +466,56 @@
           "beta": {
             "title": "En pruebes",
             "hint": "Funcionalidaes nueves que se tán probando. Vienen desactivaes d'entrada y l'aspeutu y el funcionamientu van axustase coles pruebes."
+          },
+          "ranking": {
+            "title": "Opciones de la clasificación",
+            "hint": "Tu vesla siempre completa n'Alumnáu → Clasificación. Si apagues l'interruptor, namái la ve'l profesoráu.",
+            "mode_label": "Qué ve l'alumnáu",
+            "mode": {
+              "full": "La clasificación completa",
+              "top": "Los {n} primeros puestos y el so",
+              "top_suggested": "Los {n} primeros puestos y el so (suxerencia)",
+              "position": "Namái el so puestu"
+            },
+            "mode_hint": {
+              "full": "Cada estudiante ve a tola clase, con alcuñu, nivel, XP y misiones.",
+              "top": "Cada estudiante ve los primeros puestos, con quien empate, y el so. El restu de la clase nun sal.",
+              "position": "Cada estudiante ve namái el so puestu y el total de la clase, ensin podiu nin llista."
+            },
+            "top_label": "Cuántos puestos se ven",
+            "top_option": "Los {n} primeros puestos",
+            "types_title": "Tipos de clasificación",
+            "types_hint": "Si hai más d'ún, l'alumnáu camuda d'ún a otru con llingüetes.",
+            "type": {
+              "xp": {
+                "label": "XP",
+                "desc": "La XP acumulada. Namái tien «Siempres»."
+              },
+              "missions": {
+                "label": "Misiones completaes",
+                "desc": "Premia terminar. Por selmana o temporada; nos empates decide la XP."
+              },
+              "teams": {
+                "label": "Equipos",
+                "desc": "Los puntos de les agrupaciones de base. Vense tolos equipos en cualquier mou.",
+                "no_base": "Entá nun hai nenguna agrupación de base: créase n'Alumnáu → Equipos. Hasta entós, esti tipu nun se ve."
+              }
+            },
+            "type_last": "Fai falta polo menos un tipu.",
+            "season": {
+              "title": "Temporada",
+              "hint": "Al entamala, les misiones y los equipos cuenten dende esi momentu na opción «Temporada». Nun se desanicia nada y la XP nun camuda. Entamar otra sustitúi l'anterior.",
+              "current": "En cursu dende {date}.",
+              "start": "Entamar temporada",
+              "restart": "Entamar otra temporada",
+              "toast_started": "Temporada entamada"
+            },
+            "closed_archived": "La clase ta archivada: desarchívala pa camudar la clasificación.",
+            "closed_trash": "La clase ta na papelera: restáurala pa camudar la clasificación."
+          },
+          "compare": {
+            "label": "Comparar cola media",
+            "desc": "Cada estudiante ve si va per enriba, na media o per debaxo del restu de la so clase, ensin ver a naide. Funciona anque apagues la clasificación."
           }
         },
         "badges_empty": "Nun hai insinies nesta clase",
@@ -660,7 +717,8 @@
               "trashed": "unvió la clase a la papelera",
               "restored": "sacó la clase de la papelera",
               "template_recommended": "recomendó la plantía nos catálogos",
-              "template_unrecommended": "quitó la recomendación de la plantía"
+              "template_unrecommended": "quitó la recomendación de la plantía",
+              "season_started": "entamó una temporada de la clasificación"
             },
             "teacher": {
               "added": "amestó a {target} al profesoráu ({profile}, {access})",
@@ -986,7 +1044,7 @@
       "subtitle": "Crea y xestiona insinies personalizaes pa recompensar los llogros del to alumnáu",
       "new_badge": "Insinia nueva",
       "btn_delete": "Desaniciar",
-      "no_badges_title": "Ensin insinies",
+      "no_badges_title": "Entá nun creasti nenguna",
       "no_badges_description": "Crea la to primer insinia pa recompensar al to alumnáu",
       "create_first": "Crear la primer insinia",
       "form": {
@@ -1007,8 +1065,13 @@
         "no_mission": "Ensin misión"
       },
       "detail": {
-        "btn_edit": "Editar",
-        "btn_close": "Zarrar"
+        "btn_close": "Zarrar",
+        "btn_copy": "Crear una asemeyada",
+        "system_level": "Ye d'ITAKAI y nun se pue editar: concédese sola al llegar al nivel {count} nuna clase.",
+        "system_missions": "Ye d'ITAKAI y nun se pue editar: concédese sola al completar la primer misión. | Ye d'ITAKAI y nun se pue editar: concédese sola al completar {count} misiones.",
+        "system_xp": "Ye d'ITAKAI y nun se pue editar: concédese sola al axuntar {count} XP nuna clase.",
+        "system_generic": "Ye d'ITAKAI y nun se pue editar: concédese sola según el progresu del alumnáu.",
+        "not_yours": "Nun pues editala: creóla otra persona pa una misión que nun pues camudar."
       },
       "delete_title": "Desaniciar insinia",
       "delete_confirm": "¿De xuru que quies desaniciar la insinia '{name}'? Esta aición nun se pue desfacer.",
@@ -1022,10 +1085,16 @@
         "title": "Les mios insinies | ITAKAI Docente",
         "description": "Crea, edita y xestiona insinies personalizaes pa premiar los llogros del to alumnáu."
       },
-      "filter_system": "Del sistema",
       "generate_error": "Nun se pudo xenerar la insinia.",
       "save_error": "Nun se pudo guardar la insinia.",
-      "delete_error": "Nun se pudo desaniciar la insinia."
+      "delete_error": "Nun se pudo desaniciar la insinia.",
+      "sections": {
+        "own": "Les tos insinies",
+        "own_hint": "Les que creasti y les de les misiones que pues editar. Ábreles pa camudales.",
+        "system": "Insinies d'ITAKAI",
+        "system_hint": "Concédense soles según el progresu del alumnáu y nun se puen editar. Ábreles pa ver cómo se ganen o crear una asemeyada."
+      },
+      "filter_all": "Toles insinies"
     },
     "students": {
       "index": {
@@ -1051,12 +1120,12 @@
         "no_archived_students_title": "Naide en clases archivaes",
         "no_archived_students_default": "Nun hai estudiantes nes tos clases archivaes",
         "btn_view": "Ver",
-        "stat_missions": "Misiones",
         "meta": {
           "title": "El mio alumnáu | ITAKAI Docente",
           "description": "Xestiona'l to alumnáu y revisa'l so progresu y les estadístiques de rendimientu académicu."
         },
-        "stat_badges": "Insinies"
+        "stat_badges": "Insinies",
+        "no_missions": "Ensin misiones por facer"
       },
       "detail": {
         "breadcrumb_students": "Alumnáu",
@@ -1065,19 +1134,19 @@
         "error_default": "Fallu al cargar los datos de la ficha",
         "btn_retry": "Reintentar",
         "stat_classes": "Clases",
-        "stat_missions": "Misiones",
-        "stat_completed": "Completáu",
         "enrolled_classes_title": "Clases inscrites",
-        "enrolled_classes_count": "{count} clases",
+        "enrolled_classes_count": "Ensin clases | 1 clase | {count} clases",
         "not_enrolled": "Nun ta en nenguna de les tos clases",
-        "label_progress": "Completáu",
-        "stat_mana": "Maná",
-        "stat_lives": "Puntos de vida",
         "no_activity": "Ensin actividá reciente",
         "meta": {
           "title": "Perfil d'estudiante | ITAKAI Docente",
           "description": "Perfil detalláu de cada estudiante con estadístiques de rendimientu, progresu nes misiones y actividá reciente."
-        }
+        },
+        "level_badge": "Nv. {level}",
+        "stat_missions_completed": "Misiones completaes",
+        "stat_required_enigmas": "Enigmes obligatorios aprobaos",
+        "view_in_class": "Ver na clase",
+        "view_in_class_named": "Ver en «{class}»"
       },
       "actions": {
         "menu_label": "Aiciones pa {name}",
@@ -1362,7 +1431,6 @@
         "status_in_review": "En revisión",
         "status_completed": "Completáu",
         "global_progress": "Progresu global",
-        "class_average": "Media de la clase",
         "rewards_title": "Recompenses",
         "xp_enigmas": "XP d'enigmes",
         "xp_mission": "XP de misión",
@@ -1373,7 +1441,14 @@
           "epic": "Épica",
           "legendary": "Llexendaria"
         },
-        "btn_close": "Zarrar"
+        "btn_close": "Zarrar",
+        "completed_by_students": "Estudiantes que la completaron",
+        "required_average": "Media d'enigmes obligatorios aprobaos: {percent}",
+        "edit_enigma_named": "Editar l'enigma «{title}»",
+        "enigma_actions": "Más aiciones de l'enigma «{title}»",
+        "edit_document_named": "Editar el documentu «{title}»",
+        "document_actions": "Más aiciones del documentu «{title}»",
+        "view_submissions_named": "Ver les entregues ({count}) de l'enigma «{title}»"
       },
       "enigma_submissions_modal": {
         "title_fallback": "Entregues",
@@ -1718,10 +1793,6 @@
         "export_error": "Nun se pudo descargar el CSV.",
         "col_incidents": "Faltes y retrasos",
         "no_incidents": "Nenguna"
-      },
-      "profile": {
-        "rate": "Asistencia: {rate} %",
-        "sessions": "{count} sesión esti cursu | {count} sesiones esti cursu"
       }
     },
     "teams": {
@@ -1826,6 +1897,161 @@
       "distributed": "{count} persona repartida ente los equipos. | {count} persones repartíes ente los equipos.",
       "distribute_skipped": "{count} que falta güei queda ensin equipu. | {count} que falten güei queden ensin equipu.",
       "put_in": "Poner en:"
+    },
+    "analytics": {
+      "period": {
+        "label": "Periodu",
+        "course": "Esti cursu",
+        "last30": "Caberos 30 díes",
+        "last7": "Caberos 7 díes"
+      },
+      "summary": {
+        "avg_missions": "Misiones de media",
+        "avg_percent": "Progresu mediu",
+        "pending_link": "Dir a Misiones",
+        "attendance": "Asistencia media",
+        "attendance_sessions": "{count} sesión nesti periodu | {count} sesiones nesti periodu",
+        "xp": "XP media",
+        "unstarted_note": "Les medies nun cuenten {count} cuenta ensin estrenar. | Les medies nun cuenten {count} cuentes ensin estrenar.",
+        "today": "Güei"
+      },
+      "missions": {
+        "title": "Misiones",
+        "caption": "Ónde ta cada estudiante agora mesmo: nun camuda col periodu. La media d'aprobación y les pistes de la tabla sí son del periodu.",
+        "table_caption": "Cuántes persones hai en cada estáu, en cada misión",
+        "col_mission": "Misión",
+        "col_average": "Media d'aprobación",
+        "col_hints": "Pistes",
+        "deadline_future": "Vence'l {date}",
+        "deadline_past": "Caducó'l {date}",
+        "excluded_teacher": "Bloquiada: nun cuenta nel progresu",
+        "excluded_empty": "Ensin enigmes: nun cuenta nel progresu",
+        "empty_title": "Entá nun hai misiones",
+        "empty_description": "Cuando crees misiones nesta clase, equí vas ver cómo va caúna."
+      },
+      "signals": {
+        "title": "Dificultaes deteutaes",
+        "empty_title": "Nada que destacar nesti periodu",
+        "empty_description": "Si daquién s'atasca o una misión se complica, va salir equí col so motivu.",
+        "show_all": "Ver toes ({count})",
+        "show_less": "Ver menos",
+        "student": {
+          "inactive": "Ensin actividá dende hai {days} díes, con {count} misión abierta | Ensin actividá dende hai {days} díes, con {count} misiones abiertes",
+          "inactive_never": "Ensin actividá dende que entró na clase, hai {days} díes, con {count} misión abierta | Ensin actividá dende que entró na clase, hai {days} díes, con {count} misiones abiertes",
+          "mission_expired": "«{mission}» caducó'l {date} ensin entamala",
+          "mission_expired_started": "«{mission}» caducó'l {date}: entamóla y nun la completó",
+          "mission_expired_many": "{count} misiones caducaes ensin completar; la cabera, «{mission}», el {date}",
+          "low_grade": "Aprobó «{enigma}» («{mission}») con un {percent}, menos del {threshold}",
+          "low_grade_many": "{count} enigmes aprobaos con menos del {threshold}; el más baxu, «{enigma}», con un {percent}",
+          "low_average": "Media d'aprobación del {average} en {approvals} enigma, menos del {threshold} | Media d'aprobación del {average} en {approvals} enigmes, menos del {threshold}",
+          "hints": "Usó {count} pista en «{mission}» | Usó {count} pistes en «{mission}»",
+          "hints_percent": "Usó {count} pista en «{mission}» ({detail}) | Usó {count} pistes en «{mission}» ({detail})",
+          "hints_many": "Munches pistes en {count} misiones; onde más, «{mission}», con {hints}",
+          "low_attendance": "Asistencia del {rate}: {attended} de {total} sesión | Asistencia del {rate}: {attended} de {total} sesiones",
+          "hints_percent_detail": "{count} resta % de la recompensa | {count} resten % de la recompensa"
+        },
+        "mission": {
+          "unfinished_after_deadline": "{unfinished} de {started} que la entamaron nun la completaron enantes de la fecha ({percent})",
+          "low_average": "Media d'aprobación del {average} en {approvals} enigma aprobáu, menos del {threshold} | Media d'aprobación del {average} en {approvals} enigmes aprobaos, menos del {threshold}",
+          "many_hints": "{perStudent} pistes de media per estudiante que la entamó",
+          "students_expired": "{count} persona ensin completala tres la fecha | {count} persones ensin completala tres la fecha"
+        }
+      },
+      "students": {
+        "title": "Estudiantes",
+        "table_caption": "L'alumnáu de la clase: misiones, cabera actividá, entregues por revisar, pistes y señales",
+        "col_missions": "Misiones",
+        "col_last_activity": "Cabera actividá",
+        "col_pending": "Por revisar",
+        "col_hints": "Pistes",
+        "col_attendance": "Asistencia",
+        "col_signals": "Señales",
+        "no_activity": "Ensin actividá",
+        "sort_missions_asc": "Misiones ↑",
+        "sort_missions_desc": "Misiones ↓",
+        "sort_activity_recent": "Actividá más recién",
+        "sort_activity_oldest": "Actividá más antigua",
+        "sort_pending_desc": "Por revisar ↓",
+        "sort_hints_desc": "Pistes ↓",
+        "sort_signals_desc": "Señales ↓",
+        "sort_attendance_asc": "Asistencia ↑",
+        "sort_attendance_desc": "Asistencia ↓"
+      },
+      "weeks": {
+        "title": "Actividá per selmana",
+        "caption": "Entregues, aprobaciones y pistes de cada selmana, de llunes a domingu.",
+        "table_caption": "La actividá de la clase, selmana a selmana",
+        "col_week": "Selmana",
+        "col_submissions": "Entregues",
+        "col_approvals": "Aprobaciones",
+        "col_hints": "Pistes",
+        "col_missions": "Misiones completaes",
+        "week_of": "Selmana del {date}",
+        "empty_title": "Ensin actividá nesti periodu",
+        "empty_description": "Cuando haya entregues, aprobaciones o pistes, van apaecer equí."
+      },
+      "student": {
+        "not_found_title": "Esta persona nun ta na clase",
+        "not_found_description": "Pue que yá nun tea matriculada o que l'enllaz seya antiguu.",
+        "back_to_list": "Tornar al alumnáu",
+        "all_classes": "Ver toles sos clases",
+        "attendance_line": "Asistencia: {rate} ({attended} de {total} sesión) | Asistencia: {rate} ({attended} de {total} sesiones)",
+        "figures_title": "Les sos cifres",
+        "missions_done": "Misiones completaes",
+        "xp": "XP",
+        "hints": "Pistes usaes",
+        "class_average": "Media de la clase: {value}",
+        "compared_with": "Frente a la media de la clase: {count} persona que participa. | Frente a la media de la clase: {count} persones que participen.",
+        "nobody_to_compare": "Entá nun hai naide más na clase col que comparar.",
+        "this_person": "Esta persona",
+        "missions": {
+          "title": "Misiones",
+          "filter_label": "Filtrar les sos misiones",
+          "filter_all": "Toes ({count})",
+          "filter_pending": "Pendientes ({count})",
+          "filter_done": "Feches ({count})",
+          "by_enigma": "% per enigma",
+          "optional": "opcional",
+          "excluded_teacher": "Bloquiada",
+          "excluded_empty": "Ensin enigmes",
+          "completed_on": "el {date}",
+          "deadline_past": "caducó'l {date}",
+          "deadline_future": "vence'l {date}",
+          "enigmas": "{approved} de {total} enigma aprobáu | {approved} de {total} enigmes aprobaos",
+          "average": "media del {value}",
+          "hints": "{count} pista | {count} pistes",
+          "pending_reviews": "{count} entrega por revisar | {count} entregues por revisar",
+          "enigma_approved": "{percent} · {date}",
+          "enigma_pending_since": "En revisión dende el {date}",
+          "enigma_open": "Ensin aprobar",
+          "empty_all": "Entá nun hai misiones",
+          "empty_pending": "Nun tien misiones pendientes",
+          "empty_done": "Entá nun completó nenguna misión",
+          "empty_description": "Cuando camude, va salir equí."
+        },
+        "history": {
+          "title": "Historial",
+          "filter_label": "Filtrar por tipu",
+          "load_more": "Cargar más",
+          "empty": "Entá nun hai nada nel so historial.",
+          "empty_filtered": "Nun hai nada d'esti tipu.",
+          "attendance": "Asistencia: {status}",
+          "attendance_time": "de {start} a {end}",
+          "attendance_note": "Nota: {note}",
+          "type": {
+            "all": "Too",
+            "submissions": "Entregues",
+            "approvals": "Aprobaciones",
+            "missions": "Misiones",
+            "hints": "Pistes",
+            "behaviors": "Comportamientos y recompenses",
+            "shop": "Tienda",
+            "progress": "Niveles y insinies",
+            "attendance": "Asistencia"
+          },
+          "loaded": "Cargóse {count} entrada más. | Cargáronse {count} entraes más."
+        }
+      }
     }
   }
 }

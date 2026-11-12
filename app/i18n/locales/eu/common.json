@@ -21,7 +21,8 @@
       "section_classes": "Klaseak",
       "section_account": "Kontua",
       "profile": "Nire profila",
-      "logout": "Saioa itxi"
+      "logout": "Saioa itxi",
+      "breadcrumb": "Nabigazio-bidea"
     },
     "actions": {
       "save": "Gorde",
@@ -112,7 +113,8 @@
       "start_new": "Hasi berri bat!",
       "chat_with": "Txateatu {name}-(r)ekin",
       "chat_with_god": "Txateatu jainko batekin",
-      "chat_with_label": "Txatea honekin:"
+      "chat_with_label": "Txatea honekin:",
+      "load_more": "Kargatu gehiago…"
     },
     "mobile_sidebar": {
       "join_class": "Klasera batu"
@@ -367,7 +369,8 @@
         "title": "Animazio gutxiago",
         "description": "Trantsizioak eta mugimendu-efektuak murrizten ditu."
       },
-      "opens_new_tab": "(fitxa berri batean irekitzen da)"
+      "opens_new_tab": "(fitxa berri batean irekitzen da)",
+      "tabs": "Fitxak"
     },
     "notification_settings": {
       "description": "Zure abisuak beti daude «{section}» atalean, menuan. Posta aukerakoa da.",
@@ -388,7 +391,8 @@
       "send_to_ai": "Bidali IAri"
     },
     "student_preview": {
-      "banner": "Plataforma ikasle gisa ikusten ari zara (demoa)"
+      "banner": "Plataforma ikasle gisa ikusten ari zara (demoa)",
+      "enter": "Ikusi ikasle gisa"
     },
     "change_email": {
       "title": "Posta elektronikoa",
@@ -571,7 +575,42 @@
       "enigma_approved_student": "{enigma} entrega onartu dizute",
       "enigma_approved_teacher": "{enigma} entrega onartu diote",
       "mission_started_student": "{mission} misioa hasi duzu",
-      "mission_started_teacher": "{mission} misioa hasi du"
+      "mission_started_teacher": "{mission} misioa hasi du",
+      "enigma_submitted_teacher": "{enigma} berrikusteko bidali du",
+      "enigma_submitted_student": "{enigma} entregatu duzu",
+      "mission_completed_teacher": "{mission} misioa osatu du",
+      "mission_completed_student": "{mission} misioa osatu duzu",
+      "level_up_teacher": "{level}. mailara igo da",
+      "level_up_student": "{level}. mailara igo zara",
+      "class_joined_teacher": "{name} klasean sartu da",
+      "class_joined_student": "{name} klasean sartu zara",
+      "achievement_unlocked_teacher": "{name} lorpena desblokeatu du",
+      "achievement_unlocked_student": "{name} lorpena desblokeatu duzu",
+      "badge_unlocked_teacher": "{name} intsignia desblokeatu du",
+      "badge_unlocked_student": "{name} intsignia desblokeatu duzu",
+      "xp_gained_teacher": "{xp} irabazi du hemen: {source}",
+      "xp_gained_student": "{xp} irabazi duzu hemen: {source}",
+      "student_enrolled_teacher": "Plataforman erregistratu da",
+      "student_enrolled_student": "Plataforman erregistratu zara",
+      "progress_milestone_teacher": "Aurrerapen-mugarri bat lortu du",
+      "progress_milestone_student": "Aurrerapen-mugarri bat lortu duzu",
+      "reward_taken_teacher": "Baliabideak kendu dizkiote: {name}",
+      "reward_taken_student": "Baliabideak kendu dizkizute: {name}",
+      "reward_given_teacher": "Sari bat jaso du: {name}",
+      "reward_given_student": "Sari bat jaso duzu: {name}",
+      "behavior_applied_teacher": "{name} jokabidea jaso du",
+      "behavior_applied_student": "{name} jokabidea jaso duzu",
+      "shop_purchased_teacher": "{name} erosi du dendan",
+      "shop_purchased_student": "{name} erosi duzu dendan",
+      "shop_item_used_teacher": "{name} erabili du",
+      "shop_item_used_student": "{name} erabili duzu",
+      "fallback": {
+        "class": "klase bat",
+        "activity": "jarduera bat",
+        "behavior": "jokabide bat",
+        "item": "artikulu bat"
+      },
+      "unknown": "Azken jarduera"
     },
     "avatars": {
       "characters": {
@@ -615,14 +654,14 @@
         "available": "Eskuragarri",
         "urgent": "Urgentea: laster iraungiko da",
         "expired": "Iraungia",
-        "locked": "Blokeatua: zure irakasleak itxita oraingoz",
+        "locked": "Zure irakasleak blokeatua oraingoz",
         "locked_path": "Blokeatua: {missions} osatzean irekitzen da"
       },
       "completed_by": "Inork ez du osatu oraindik: 0/{total} | Osatu dutenak: {done}/{total} | Osatu dutenak: {done}/{total}",
       "no_students": "Oraindik ez dago ikaslerik",
       "opens_after": "{missions} osatzean irekitzen da",
       "quoted": "«{title}»",
-      "quoted_teacher_closed": "«{title}» (zure irakasleak itxita oraingoz)",
+      "quoted_teacher_closed": "«{title}» (zure irakasleak blokeatua oraingoz)",
       "and": "eta",
       "locked_path_explain": "Irekitzeko, osatu lehenago {missions}.",
       "state_short": {
@@ -640,7 +679,7 @@
       "keys_hint": "Teklatuarekin, geziek misio batetik bestera eramaten dute; Hasiera eta Amaiera teklek lehenengora eta azkenera.",
       "your_progress": "Osatutako misioak: {done}/{total} | Osatutako misioak: {done}/{total}",
       "all_done": "Mapa osatuta!",
-      "class_progress": "Klaseak ibilbidearen %{percent} egin du",
+      "class_progress": "Batez beste, misio {total}etik {done} osatuta | Batez beste, {total} misiotik {done} osatuta",
       "class_done_by_all": "Klase osoak osatuak: {done}/{total}",
       "legend": {
         "title": "Legenda",
@@ -662,6 +701,88 @@
         "continue": "Jarraitu",
         "view": "Ikusi misioa",
         "open": "Ireki misioa"
+      }
+    },
+    "charts": {
+      "view_as_table": "Ikusi taula gisa",
+      "legend": "Legenda",
+      "label_value": "{label}: {value}",
+      "value_of_total": "{value}/{total}",
+      "you": "Zu",
+      "average": "Batez bestekoa",
+      "empty_title": "Oraindik ez dago daturik",
+      "empty_description": "Aldi honetan jarduerarik dagoenean, hemen agertuko da.",
+      "status": {
+        "completed": "Osatua",
+        "pending_review": "Berrikusteko",
+        "in_progress": "Abian",
+        "not_started": "Hasi gabe",
+        "expired": "Iraungia",
+        "path_locked": "Bideak itxia"
+      },
+      "compare": {
+        "not_enough": "Zure klasea txikiegia da oraindik alderatzeko.",
+        "self": {
+          "above": "Zure klaseko gainerakoen batez bestekotik gora zaude.",
+          "at": "Zure klaseko gainerakoen batez bestekoan zaude.",
+          "below": "Zure klaseko gainerakoen batez bestekotik behera zaude."
+        },
+        "other": {
+          "above": "Klaseko batez bestekotik gora.",
+          "at": "Klaseko batez bestekoan.",
+          "below": "Klaseko batez bestekotik behera."
+        }
+      },
+      "signals": {
+        "empty_title": "Ez dago ezer nabarmentzeko",
+        "empty_description": "Aldi honetan ez dago zailtasun-seinalerik."
+      }
+    },
+    "class_card": {
+      "students": "Ikaslerik ez | Ikasle 1 | {count} ikasle",
+      "missions": "Misiorik ez | Misio 1 | {count} misio",
+      "view_class": "Ikusi klasea",
+      "duplicate": "Bikoiztu klasea",
+      "archive": "Artxibatu klasea",
+      "unarchive": "Desartxibatu klasea",
+      "confirm_archive": "Artxibatu?",
+      "confirm_unarchive": "Desartxibatu?",
+      "confirm": "Berretsi"
+    },
+    "assistant_card": {
+      "greeting": "Kaixo {name}! {god} naiz, zure AA laguntzailea. Zertan lagun zaitzaket?",
+      "greeting_no_name": "Kaixo! {god} naiz, zure AA laguntzailea. Zertan lagun zaitzaket?"
+    },
+    "progress": {
+      "missions_of": "{total} misiotik {done} | {total} misiotik {done}",
+      "extra": "Gehigarria: aukerako {total}etik {done} | Gehigarria: {total} aukerakotik {done}"
+    },
+    "ranking": {
+      "types_label": "Ranking mota",
+      "periods_label": "Rankingaren aldia",
+      "type": {
+        "xp": "XP",
+        "missions": "Misioak",
+        "teams": "Taldeak"
+      },
+      "period": {
+        "all": "Beti",
+        "week": "Aste honetan",
+        "season": "Denboraldia"
+      },
+      "season_since": "Denboraldia {date} egunetik martxan.",
+      "no_score": {
+        "xp": "Oraindik XPrik gabe",
+        "missions": {
+          "all": "Oraindik misio osaturik gabe",
+          "week": "Aste honetan oraindik misiorik gabe",
+          "season": "Denboraldi honetan oraindik misiorik gabe"
+        },
+        "teams": {
+          "all": "Oraindik punturik gabe",
+          "week": "Aste honetan oraindik punturik gabe",
+          "season": "Denboraldi honetan oraindik punturik gabe"
+        }
       }
     }
   }

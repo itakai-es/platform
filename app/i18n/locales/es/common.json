@@ -21,7 +21,8 @@
       "section_classes": "Clases",
       "section_account": "Cuenta",
       "profile": "Mi perfil",
-      "logout": "Cerrar sesión"
+      "logout": "Cerrar sesión",
+      "breadcrumb": "Ruta de navegación"
     },
     "actions": {
       "save": "Guardar",
@@ -112,7 +113,8 @@
       "start_new": "¡Inicia una nueva!",
       "chat_with": "Chatea con {name}",
       "chat_with_god": "Chatea con un dios",
-      "chat_with_label": "Chat con"
+      "chat_with_label": "Chat con",
+      "load_more": "Cargar más…"
     },
     "mobile_sidebar": {
       "join_class": "Unirse a clase"
@@ -367,7 +369,8 @@
         "title": "Menos animación",
         "description": "Reduce transiciones y efectos de movimiento."
       },
-      "opens_new_tab": "(se abre en una pestaña nueva)"
+      "opens_new_tab": "(se abre en una pestaña nueva)",
+      "tabs": "Pestañas"
     },
     "notification_settings": {
       "description": "Tus avisos están siempre en «{section}», en el menú. El correo es opcional.",
@@ -388,7 +391,8 @@
       "send_to_ai": "Enviar a la IA"
     },
     "student_preview": {
-      "banner": "Estás viendo la plataforma como estudiante (demo)"
+      "banner": "Estás viendo la plataforma como estudiante (demo)",
+      "enter": "Ver como estudiante"
     },
     "change_email": {
       "title": "Correo electrónico",
@@ -571,7 +575,42 @@
       "enigma_approved_student": "Te aprobaron la entrega de {enigma}",
       "enigma_approved_teacher": "Recibió la aprobación de su entrega de {enigma}",
       "mission_started_student": "Empezaste la misión {mission}",
-      "mission_started_teacher": "Empezó la misión {mission}"
+      "mission_started_teacher": "Empezó la misión {mission}",
+      "enigma_submitted_teacher": "Envió {enigma} a revisión",
+      "enigma_submitted_student": "Entregaste {enigma}",
+      "mission_completed_teacher": "Completó la misión {mission}",
+      "mission_completed_student": "Completaste la misión {mission}",
+      "level_up_teacher": "Subió al nivel {level}",
+      "level_up_student": "Subiste al nivel {level}",
+      "class_joined_teacher": "Se unió a {name}",
+      "class_joined_student": "Te uniste a {name}",
+      "achievement_unlocked_teacher": "Desbloqueó el logro {name}",
+      "achievement_unlocked_student": "Desbloqueaste el logro {name}",
+      "badge_unlocked_teacher": "Desbloqueó la insignia {name}",
+      "badge_unlocked_student": "Desbloqueaste la insignia {name}",
+      "xp_gained_teacher": "Ganó {xp} en {source}",
+      "xp_gained_student": "Ganaste {xp} en {source}",
+      "student_enrolled_teacher": "Se registró en la plataforma",
+      "student_enrolled_student": "Te registraste en la plataforma",
+      "progress_milestone_teacher": "Alcanzó un hito de progreso",
+      "progress_milestone_student": "Alcanzaste un hito de progreso",
+      "reward_taken_teacher": "Se le quitaron recursos: {name}",
+      "reward_taken_student": "Se te quitaron recursos: {name}",
+      "reward_given_teacher": "Recibió una recompensa: {name}",
+      "reward_given_student": "Recibiste una recompensa: {name}",
+      "behavior_applied_teacher": "Recibió el comportamiento {name}",
+      "behavior_applied_student": "Recibiste el comportamiento {name}",
+      "shop_purchased_teacher": "Compró {name} en la tienda",
+      "shop_purchased_student": "Compraste {name} en la tienda",
+      "shop_item_used_teacher": "Usó {name}",
+      "shop_item_used_student": "Usaste {name}",
+      "fallback": {
+        "class": "una clase",
+        "activity": "una actividad",
+        "behavior": "un comportamiento",
+        "item": "un artículo"
+      },
+      "unknown": "Actividad reciente"
     },
     "avatars": {
       "characters": {
@@ -615,14 +654,14 @@
         "available": "Disponible",
         "urgent": "Urgente: vence pronto",
         "expired": "Expirada",
-        "locked": "Bloqueada: cerrada por tu docente por ahora",
+        "locked": "Bloqueada por tu docente por ahora",
         "locked_path": "Bloqueada: se abre al completar {missions}"
       },
       "completed_by": "Nadie la ha completado aún: 0 de {total} | {done} de {total} la ha completado | {done} de {total} la han completado",
       "no_students": "Aún no hay alumnado",
       "opens_after": "Se abre al completar {missions}",
       "quoted": "«{title}»",
-      "quoted_teacher_closed": "«{title}» (cerrada por tu docente por ahora)",
+      "quoted_teacher_closed": "«{title}» (bloqueada por tu docente por ahora)",
       "and": "y",
       "locked_path_explain": "Para abrirla, completa antes {missions}.",
       "state_short": {
@@ -640,7 +679,7 @@
       "keys_hint": "Con el teclado, las flechas pasan de una misión a otra; Inicio y Fin llevan a la primera y a la última.",
       "your_progress": "Has completado {done} de {total} misión | Has completado {done} de {total} misiones",
       "all_done": "¡Mapa completado!",
-      "class_progress": "La clase lleva el {percent} % del recorrido",
+      "class_progress": "De media, {done} de {total} misión completada | De media, {done} de {total} misiones completadas",
       "class_done_by_all": "Completadas por toda la clase: {done} de {total}",
       "legend": {
         "title": "Leyenda",
@@ -662,6 +701,88 @@
         "continue": "Continuar",
         "view": "Ver misión",
         "open": "Abrir misión"
+      }
+    },
+    "charts": {
+      "view_as_table": "Ver como tabla",
+      "legend": "Leyenda",
+      "label_value": "{label}: {value}",
+      "value_of_total": "{value} de {total}",
+      "you": "Tú",
+      "average": "Media",
+      "empty_title": "Aún no hay datos",
+      "empty_description": "Cuando haya actividad en este periodo, aparecerá aquí.",
+      "status": {
+        "completed": "Completada",
+        "pending_review": "Por revisar",
+        "in_progress": "En curso",
+        "not_started": "Sin empezar",
+        "expired": "Expirada",
+        "path_locked": "Cerrada por el camino"
+      },
+      "compare": {
+        "not_enough": "Tu clase aún es pequeña para comparar.",
+        "self": {
+          "above": "Vas por encima de la media del resto de tu clase.",
+          "at": "Estás en la media del resto de tu clase.",
+          "below": "Vas por debajo de la media del resto de tu clase."
+        },
+        "other": {
+          "above": "Por encima de la media de la clase.",
+          "at": "En la media de la clase.",
+          "below": "Por debajo de la media de la clase."
+        }
+      },
+      "signals": {
+        "empty_title": "Nada que destacar",
+        "empty_description": "No hay ninguna señal de dificultad en este periodo."
+      }
+    },
+    "class_card": {
+      "students": "Sin estudiantes | 1 estudiante | {count} estudiantes",
+      "missions": "Sin misiones | 1 misión | {count} misiones",
+      "view_class": "Ver clase",
+      "duplicate": "Duplicar clase",
+      "archive": "Archivar clase",
+      "unarchive": "Desarchivar clase",
+      "confirm_archive": "¿Archivar?",
+      "confirm_unarchive": "¿Desarchivar?",
+      "confirm": "Confirmar"
+    },
+    "assistant_card": {
+      "greeting": "¡Hola {name}! Soy {god}, tu asistente de IA. ¿En qué puedo ayudarte?",
+      "greeting_no_name": "¡Hola! Soy {god}, tu asistente de IA. ¿En qué puedo ayudarte?"
+    },
+    "progress": {
+      "missions_of": "{done} de {total} misión | {done} de {total} misiones",
+      "extra": "Extra: {done} de {total} opcional | Extra: {done} de {total} opcionales"
+    },
+    "ranking": {
+      "types_label": "Tipo de ranking",
+      "periods_label": "Periodo del ranking",
+      "type": {
+        "xp": "XP",
+        "missions": "Misiones",
+        "teams": "Equipos"
+      },
+      "period": {
+        "all": "Siempre",
+        "week": "Esta semana",
+        "season": "Temporada"
+      },
+      "season_since": "Temporada en curso desde el {date}.",
+      "no_score": {
+        "xp": "Aún sin XP",
+        "missions": {
+          "all": "Aún sin misiones completadas",
+          "week": "Aún sin misiones esta semana",
+          "season": "Aún sin misiones esta temporada"
+        },
+        "teams": {
+          "all": "Aún sin puntos",
+          "week": "Aún sin puntos esta semana",
+          "season": "Aún sin puntos esta temporada"
+        }
       }
     }
   }

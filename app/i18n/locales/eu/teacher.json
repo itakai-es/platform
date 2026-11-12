@@ -168,7 +168,8 @@
           "managed_badge": "Posta gabe",
           "pending_sign_in_badge": "Sartzeko zain",
           "view_attendance": "Asistentzia",
-          "view_teams": "Taldeak"
+          "view_teams": "Taldeak",
+          "table_caption": "Klaseko ikasleak: maila, baliabideak eta jokabideak"
         },
         "stats_title": "Klasearen estatistikak",
         "pending_reviews": "Berrikusteko entregak",
@@ -178,7 +179,13 @@
         },
         "ranking": {
           "no_students_title": "Ez dago ikaslerik",
-          "no_students_description": "Oraindik ez dago ikaslerik klase honetan"
+          "no_students_description": "Oraindik ez dago ikaslerik klase honetan",
+          "hidden_from_students": "Zure ikasleek ez dute sailkapen hau ikusten: Funtzionalitateak atalean desaktibatuta dago.",
+          "audience_full": "Zure ikasleek hau ikusten dute: sailkapen osoa.",
+          "audience_top": "Zure ikasleek hau ikusten dute: lehen {n} postuak eta berea.",
+          "audience_position": "Zure ikasleek hau ikusten dute: beren postua soilik.",
+          "audience_teams": "Zure ikasleek hau ikusten dute: talde guztiak.",
+          "audience_type_off": "Zure ikasleek ez dute ranking mota hau ikusten: Funtzionalitateak atalean aktibatzen da."
         },
         "missions_tab": {
           "no_missions_title": "Ez dago misiorik",
@@ -355,7 +362,7 @@
             },
             "rankings": {
               "label": "Rankinga",
-              "desc": "Klaseko ikasleen sailkapena."
+              "desc": "Klaseko ikasleen sailkapena. Desaktibatuta, irakasleek bakarrik ikusten dute."
             },
             "xp": {
               "label": "Esperientzia (XP)",
@@ -459,6 +466,56 @@
           "beta": {
             "title": "Probetan",
             "hint": "Probatzen ari diren funtzionalitate berriak. Hasieran desaktibatuta daude, eta itxura eta funtzionamendua proben arabera doituko dira."
+          },
+          "ranking": {
+            "title": "Rankingaren aukerak",
+            "hint": "Zuk beti osorik ikusten duzu Ikasleak → Rankinga atalean. Etengailua itzaltzen baduzu, irakasleek bakarrik ikusten dute.",
+            "mode_label": "Zer ikusten duten ikasleek",
+            "mode": {
+              "full": "Sailkapen osoa",
+              "top": "Lehen {n} postuak eta berea",
+              "top_suggested": "Lehen {n} postuak eta berea (iradokizuna)",
+              "position": "Beren postua soilik"
+            },
+            "mode_hint": {
+              "full": "Ikasle bakoitzak klase osoa ikusten du, ezizena, maila, XPa eta misioekin.",
+              "top": "Ikasle bakoitzak lehen postuak ikusten ditu, berdinduta daudenekin, eta berea. Klaseko gainerakoak ez dira agertzen.",
+              "position": "Ikasle bakoitzak bere postua eta klaseko guztizkoa soilik ikusten ditu, podiumik eta zerrendarik gabe."
+            },
+            "top_label": "Zenbat postu ikusten diren",
+            "top_option": "Lehen {n} postuak",
+            "types_title": "Ranking motak",
+            "types_hint": "Bat baino gehiago badago, ikasleek fitxen bidez aldatzen dute batetik bestera.",
+            "type": {
+              "xp": {
+                "label": "XP",
+                "desc": "Metatutako XPa. «Beti» bakarrik du."
+              },
+              "missions": {
+                "label": "Osatutako misioak",
+                "desc": "Amaitzea saritzen du. Astez edo denboraldiz; berdinketetan XPak erabakitzen du."
+              },
+              "teams": {
+                "label": "Taldeak",
+                "desc": "Oinarrizko taldekatzeen puntuak. Talde guztiak ikusten dira edozein modutan.",
+                "no_base": "Oraindik ez dago oinarrizko taldekatzerik: Ikasleak → Taldeak atalean sortzen da. Ordura arte, mota hau ez da ikusten."
+              }
+            },
+            "type_last": "Gutxienez mota bat behar da.",
+            "season": {
+              "title": "Denboraldia",
+              "hint": "Hastean, misioek eta taldeek une horretatik aurrera zenbatzen dute «Denboraldia» aukeran. Ez da ezer ezabatzen eta XPa ez da aldatzen. Beste bat hasteak aurrekoa ordezkatzen du.",
+              "current": "{date} egunetik martxan.",
+              "start": "Hasi denboraldia",
+              "restart": "Hasi beste denboraldi bat",
+              "toast_started": "Denboraldia hasi da"
+            },
+            "closed_archived": "Klasea artxibatuta dago: desartxibatu rankinga aldatzeko.",
+            "closed_trash": "Klasea zakarrontzian dago: leheneratu rankinga aldatzeko."
+          },
+          "compare": {
+            "label": "Batez bestekoarekin alderatu",
+            "desc": "Ikasle bakoitzak ikusten du klaseko gainerakoen batez bestekotik gora, batez bestekoan edo behera dagoen, inor ikusi gabe. Rankinga desaktibatuta ere badabil."
           }
         },
         "badges_empty": "Ez dago domarik klase honetan",
@@ -660,7 +717,8 @@
               "trashed": "klasea zakarrontzira bidali du",
               "restored": "klasea zakarrontzitik atera du",
               "template_recommended": "txantiloia gomendatu du katalogoetan",
-              "template_unrecommended": "txantiloiaren gomendioa kendu du"
+              "template_unrecommended": "txantiloiaren gomendioa kendu du",
+              "season_started": "rankingaren denboraldi bat hasi du"
             },
             "teacher": {
               "added": "{target} irakasleen artean gehitu du ({profile}, {access})",
@@ -986,7 +1044,7 @@
       "subtitle": "Sortu eta kudeatu dominari pertsonalizatuak zure ikasleen lorpenak saritzeko",
       "new_badge": "Dominari berria",
       "btn_delete": "Ezabatu",
-      "no_badges_title": "Dominaririk gabe",
+      "no_badges_title": "Oraindik ez duzu bat ere sortu",
       "no_badges_description": "Sortu zure lehen dominaria zure ikasleak saritzeko",
       "create_first": "Lehen dominaria sortu",
       "form": {
@@ -1007,8 +1065,13 @@
         "no_mission": "Misiorik gabe"
       },
       "detail": {
-        "btn_edit": "Editatu",
-        "btn_close": "Itxi"
+        "btn_close": "Itxi",
+        "btn_copy": "Antzeko bat sortu",
+        "system_level": "ITAKAIrena da eta ezin da editatu: berez ematen da klase batean {count}. mailara iristean.",
+        "system_missions": "ITAKAIrena da eta ezin da editatu: berez ematen da lehen misioa osatzean. | ITAKAIrena da eta ezin da editatu: berez ematen da {count} misio osatzean.",
+        "system_xp": "ITAKAIrena da eta ezin da editatu: berez ematen da klase batean {count} XP lortzean.",
+        "system_generic": "ITAKAIrena da eta ezin da editatu: berez ematen da ikasleen aurrerapenaren arabera.",
+        "not_yours": "Ezin duzu editatu: beste pertsona batek sortu zuen, aldatu ezin duzun misio baterako."
       },
       "delete_title": "Dominaria ezabatu",
       "delete_confirm": "Ziur zaude '{name}' dominaria ezabatu nahi duzula? Ekintza hau ezin da desegin.",
@@ -1022,10 +1085,16 @@
         "title": "Nire dominariak | ITAKAI Irakaslea",
         "description": "Sortu, editatu eta kudeatu dominari pertsonalizatuak zure ikasleen lorpenak saritzeko."
       },
-      "filter_system": "Sistemakoak",
       "generate_error": "Ezin izan da doma sortu.",
       "save_error": "Ezin izan da doma gorde.",
-      "delete_error": "Ezin izan da doma ezabatu."
+      "delete_error": "Ezin izan da doma ezabatu.",
+      "sections": {
+        "own": "Zure dominariak",
+        "own_hint": "Zuk sortutakoak eta edita ditzakezun misioetakoak. Ireki itzazu aldatzeko.",
+        "system": "ITAKAIren dominariak",
+        "system_hint": "Ikasleen aurrerapenaren arabera ematen dira berez, eta ezin dira editatu. Ireki itzazu nola lortzen diren ikusteko edo antzeko bat sortzeko."
+      },
+      "filter_all": "Dominari guztiak"
     },
     "students": {
       "index": {
@@ -1051,12 +1120,12 @@
         "no_archived_students_title": "Artxibatutako ikaslerik gabe",
         "no_archived_students_default": "Ez dago ikaslerik zure artxibatutako klaseetan",
         "btn_view": "Ikusi",
-        "stat_missions": "Misioak",
         "meta": {
           "title": "Nire ikasleak | ITAKAI Irakaslea",
           "description": "Kudeatu ikasle guztiak, berrikusi aurrerapena eta errendimendu akademikoaren estatistikak."
         },
-        "stat_badges": "Dominak"
+        "stat_badges": "Dominak",
+        "no_missions": "Egiteko misiorik ez"
       },
       "detail": {
         "breadcrumb_students": "Ikasleak",
@@ -1065,19 +1134,19 @@
         "error_default": "Errorea ikaslearen datuak kargatzean",
         "btn_retry": "Berriro saiatu",
         "stat_classes": "Klaseak",
-        "stat_missions": "Misioak",
-        "stat_completed": "Osatua",
         "enrolled_classes_title": "Matrikulatutako klaseak",
-        "enrolled_classes_count": "{count} klase",
+        "enrolled_classes_count": "Klaserik ez | Klase 1 | {count} klase",
         "not_enrolled": "Ez dago zure klaseetan matrikulatuta",
-        "label_progress": "Osatuta",
-        "stat_mana": "Mana",
-        "stat_lives": "Bizi puntuak",
         "no_activity": "Ez dago azken jarduerarik",
         "meta": {
           "title": "Ikaslearen profila | ITAKAI Irakaslea",
           "description": "Ikaslearen profil zehatza errendimendu estatistikekin, misioen aurrerapenarekin eta azken jarduerarekin."
-        }
+        },
+        "level_badge": "Ml. {level}",
+        "stat_missions_completed": "Osatutako misioak",
+        "stat_required_enigmas": "Onartutako nahitaezko enigmak",
+        "view_in_class": "Ikusi klasean",
+        "view_in_class_named": "Ikusi «{class}» klasean"
       },
       "actions": {
         "menu_label": "Ekintzak: {name}",
@@ -1362,7 +1431,6 @@
         "status_in_review": "Berrikuspenen",
         "status_completed": "Osatua",
         "global_progress": "Aurrerapen orokorra",
-        "class_average": "Klasearen batez bestekoa",
         "rewards_title": "Sariak",
         "xp_enigmas": "Enigmen XP",
         "xp_mission": "Misioaren XP",
@@ -1373,7 +1441,14 @@
           "epic": "Epikoa",
           "legendary": "Legendarioa"
         },
-        "btn_close": "Itxi"
+        "btn_close": "Itxi",
+        "completed_by_students": "Osatu duten ikasleak",
+        "required_average": "Onartutako nahitaezko enigmen batez bestekoa: {percent}",
+        "edit_enigma_named": "Editatu «{title}» enigma",
+        "enigma_actions": "«{title}» enigmaren ekintza gehiago",
+        "edit_document_named": "Editatu «{title}» dokumentua",
+        "document_actions": "«{title}» dokumentuaren ekintza gehiago",
+        "view_submissions_named": "Entregak ikusi ({count}): «{title}» enigma"
       },
       "enigma_submissions_modal": {
         "title_fallback": "Entregak",
@@ -1718,10 +1793,6 @@
         "export_error": "Ezin izan da CSVa deskargatu.",
         "col_incidents": "Hutsegiteak eta berandutzeak",
         "no_incidents": "Bat ere ez"
-      },
-      "profile": {
-        "rate": "Asistentzia: % {rate}",
-        "sessions": "{count} saio ikasturte honetan | {count} saio ikasturte honetan"
       }
     },
     "teams": {
@@ -1826,6 +1897,161 @@
       "distributed": "{count} pertsona banatu da taldeen artean. | {count} pertsona banatu dira taldeen artean.",
       "distribute_skipped": "Gaur falta den {count} pertsona talderik gabe geratzen da. | Gaur falta diren {count} pertsona talderik gabe geratzen dira.",
       "put_in": "Jarri hemen:"
+    },
+    "analytics": {
+      "period": {
+        "label": "Aldia",
+        "course": "Ikasturte hau",
+        "last30": "Azken 30 egunak",
+        "last7": "Azken 7 egunak"
+      },
+      "summary": {
+        "avg_missions": "Misioen batez bestekoa",
+        "avg_percent": "Batez besteko aurrerapena",
+        "pending_link": "Joan misioetara",
+        "attendance": "Batez besteko asistentzia",
+        "attendance_sessions": "{count} saio aldi honetan | {count} saio aldi honetan",
+        "xp": "Batez besteko XP",
+        "unstarted_note": "Batez bestekoek ez dute kontuan hartzen estreinatu gabeko {count} kontu. | Batez bestekoek ez dituzte kontuan hartzen estreinatu gabeko {count} kontu.",
+        "today": "Gaur"
+      },
+      "missions": {
+        "title": "Misioak",
+        "caption": "Ikasle bakoitza non dagoen une honetan: ez da aldatzen aldiarekin. Taulako onarpenen batez bestekoa eta pistak, ordea, aldikoak dira.",
+        "table_caption": "Zenbat pertsona dagoen egoera bakoitzean, misioz misio",
+        "col_mission": "Misioa",
+        "col_average": "Onarpenen batez bestekoa",
+        "col_hints": "Pistak",
+        "deadline_future": "Epemuga: {date}",
+        "deadline_past": "Iraungi zen: {date}",
+        "excluded_teacher": "Blokeatua: ez da aurrerapenean zenbatzen",
+        "excluded_empty": "Enigmarik gabe: ez da aurrerapenean zenbatzen",
+        "empty_title": "Oraindik ez dago misiorik",
+        "empty_description": "Klase honetan misioak sortzen dituzunean, bakoitza nola doan ikusiko duzu hemen."
+      },
+      "signals": {
+        "title": "Hautemandako zailtasunak",
+        "empty_title": "Aldi honetan ez dago ezer nabarmentzekorik",
+        "empty_description": "Norbait trabatzen bada edo misio bat zailtzen bada, hemen agertuko da arrazoiarekin.",
+        "show_all": "Ikusi guztiak ({count})",
+        "show_less": "Ikusi gutxiago",
+        "student": {
+          "inactive": "Jarduerarik gabe duela {days} egunetik, misio {count} irekirekin | Jarduerarik gabe duela {days} egunetik, {count} misio irekirekin",
+          "inactive_never": "Jarduerarik gabe klasean sartu zenetik, duela {days} egun, misio {count} irekirekin | Jarduerarik gabe klasean sartu zenetik, duela {days} egun, {count} misio irekirekin",
+          "mission_expired": "«{mission}» iraungi zen ({date}) hasi gabe",
+          "mission_expired_started": "«{mission}» iraungi zen ({date}): hasi zuen, baina ez zuen osatu",
+          "mission_expired_many": "Osatu gabe iraungitako {count} misio; azkena, «{mission}», {date}",
+          "low_grade": "«{enigma}» («{mission}») {percent}ekin onartu zitzaion, {threshold} baino gutxiago",
+          "low_grade_many": "{count} enigma {threshold} baino gutxiagorekin onartuak; baxuena, «{enigma}», {percent}ekin",
+          "low_average": "Onarpenen batez bestekoa {average}, enigma {approvals}ean, {threshold} baino gutxiago | Onarpenen batez bestekoa {average}, {approvals} enigmatan, {threshold} baino gutxiago",
+          "hints": "Pista {count} erabili du «{mission}» misioan | {count} pista erabili ditu «{mission}» misioan",
+          "hints_percent": "Pista {count} erabili du «{mission}» misioan ({detail}) | {count} pista erabili ditu «{mission}» misioan ({detail})",
+          "hints_many": "Pista asko {count} misiotan; gehien, «{mission}» misioan, {hints}",
+          "low_attendance": "Asistentzia {rate}: saio {total}etik {attended} | Asistentzia {rate}: {total} saiotik {attended}",
+          "hints_percent_detail": "horietako batek saritik % bat kentzen du | horietako {count}k saritik % bat kentzen dute"
+        },
+        "mission": {
+          "unfinished_after_deadline": "Hasi zuten {started} pertsonetatik {unfinished}ek ez zuten epea baino lehen osatu ({percent})",
+          "low_average": "Onarpenen batez bestekoa {average}, onartutako enigma {approvals}ean, {threshold} baino gutxiago | Onarpenen batez bestekoa {average}, onartutako {approvals} enigmatan, {threshold} baino gutxiago",
+          "many_hints": "{perStudent} pista batez beste, hasi duen ikasle bakoitzeko",
+          "students_expired": "Pertsona {count}ek ez du osatu data igarota | {count} pertsonak ez dute osatu data igarota"
+        }
+      },
+      "students": {
+        "title": "Ikasleak",
+        "table_caption": "Klaseko ikasleak: misioak, azken jarduera, berrikusteko entregak, pistak eta seinaleak",
+        "col_missions": "Misioak",
+        "col_last_activity": "Azken jarduera",
+        "col_pending": "Berrikusteko",
+        "col_hints": "Pistak",
+        "col_attendance": "Asistentzia",
+        "col_signals": "Seinaleak",
+        "no_activity": "Jarduerarik gabe",
+        "sort_missions_asc": "Misioak ↑",
+        "sort_missions_desc": "Misioak ↓",
+        "sort_activity_recent": "Jarduera berriena",
+        "sort_activity_oldest": "Jarduera zaharrena",
+        "sort_pending_desc": "Berrikusteko ↓",
+        "sort_hints_desc": "Pistak ↓",
+        "sort_signals_desc": "Seinaleak ↓",
+        "sort_attendance_asc": "Asistentzia ↑",
+        "sort_attendance_desc": "Asistentzia ↓"
+      },
+      "weeks": {
+        "title": "Jarduera astez aste",
+        "caption": "Aste bakoitzeko entregak, onarpenak eta pistak, astelehenetik igandera.",
+        "table_caption": "Klasearen jarduera, astez aste",
+        "col_week": "Astea",
+        "col_submissions": "Entregak",
+        "col_approvals": "Onarpenak",
+        "col_hints": "Pistak",
+        "col_missions": "Osatutako misioak",
+        "week_of": "Astea: {date}",
+        "empty_title": "Jarduerarik ez aldi honetan",
+        "empty_description": "Entregak, onarpenak edo pistak daudenean, hemen agertuko dira."
+      },
+      "student": {
+        "not_found_title": "Pertsona hau ez dago klasean",
+        "not_found_description": "Baliteke jada matrikulatuta ez egotea edo esteka zaharra izatea.",
+        "back_to_list": "Itzuli ikasleetara",
+        "all_classes": "Ikusi bere klase guztiak",
+        "attendance_line": "Asistentzia: {rate} (saio {total}etik {attended}) | Asistentzia: {rate} ({total} saiotik {attended})",
+        "figures_title": "Bere zifrak",
+        "missions_done": "Osatutako misioak",
+        "xp": "XP",
+        "hints": "Erabilitako pistak",
+        "class_average": "Klasearen batez bestekoa: {value}",
+        "compared_with": "Klasearen batez bestekoarekin alderatuta: parte hartzen duen pertsona {count}. | Klasearen batez bestekoarekin alderatuta: parte hartzen duten {count} pertsona.",
+        "nobody_to_compare": "Oraindik ez dago klasean alderatzeko beste inor.",
+        "this_person": "Pertsona hau",
+        "missions": {
+          "title": "Misioak",
+          "filter_label": "Iragazi bere misioak",
+          "filter_all": "Guztiak ({count})",
+          "filter_pending": "Egiteko ({count})",
+          "filter_done": "Eginak ({count})",
+          "by_enigma": "% enigmaka",
+          "optional": "aukerakoa",
+          "excluded_teacher": "Blokeatua",
+          "excluded_empty": "Enigmarik gabe",
+          "completed_on": "{date}",
+          "deadline_past": "iraungi zen: {date}",
+          "deadline_future": "epemuga: {date}",
+          "enigmas": "{total} enigmatik {approved} onartuta | {total} enigmatik {approved} onartuta",
+          "average": "batez bestekoa: {value}",
+          "hints": "Pista {count} | {count} pista",
+          "pending_reviews": "Berrikusteko entrega {count} | Berrikusteko {count} entrega",
+          "enigma_approved": "{percent} · {date}",
+          "enigma_pending_since": "Berrikusten, data honetatik: {date}",
+          "enigma_open": "Onartu gabe",
+          "empty_all": "Oraindik ez dago misiorik",
+          "empty_pending": "Ez du misiorik egiteko",
+          "empty_done": "Oraindik ez du misiorik osatu",
+          "empty_description": "Aldatzen denean, hemen agertuko da."
+        },
+        "history": {
+          "title": "Historia",
+          "filter_label": "Iragazi motaren arabera",
+          "load_more": "Kargatu gehiago",
+          "empty": "Oraindik ez dago ezer bere historian.",
+          "empty_filtered": "Ez dago mota honetako ezer.",
+          "attendance": "Asistentzia: {status}",
+          "attendance_time": "{start}–{end}",
+          "attendance_note": "Oharra: {note}",
+          "type": {
+            "all": "Dena",
+            "submissions": "Entregak",
+            "approvals": "Onarpenak",
+            "missions": "Misioak",
+            "hints": "Pistak",
+            "behaviors": "Portaerak eta sariak",
+            "shop": "Denda",
+            "progress": "Mailak eta intsigniak",
+            "attendance": "Asistentzia"
+          },
+          "loaded": "Sarrera {count} gehiago kargatu da. | {count} sarrera gehiago kargatu dira."
+        }
+      }
     }
   }
 }

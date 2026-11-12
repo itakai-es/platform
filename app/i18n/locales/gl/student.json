@@ -26,7 +26,8 @@
       "ai_assistant": {
         "name": "Atenea",
         "message_new_user": "Ola {name}! Dámosche a benvida a ITAKAI. Completa a túa primeira misión para comezar a gañar XP!",
-        "message_returning_user": "Ola {name}! Completaches {missions_completed} misións en {classes_enrolled} clases. Segue así!"
+        "message_returning_user": "Ola {name}! Completaches {count} misión {classes}. Segue así! | Ola {name}! Completaches {count} misións {classes}. Segue así!",
+        "classes_phrase": "en {count} clase | en {count} clases"
       },
       "class_fallback_name": "Clase",
       "recent_badges_empty": "Non hai insignias recentes",
@@ -91,7 +92,9 @@
         "error": "Erro ao enviar a entrega. Téntao de novo.",
         "expired_error": "Esta misión expirou. Xa non podes entregar enigmas.",
         "downloading": "Descargando",
-        "path_locked": "Esta misión aínda non está aberta: antes tes que completar outra."
+        "path_locked": "Esta misión aínda non está aberta: antes tes que completar outra.",
+        "already_approved": "Este enigma xa o tes aprobado.",
+        "already_pending": "Xa tes unha entrega deste enigma á espera de revisión."
       },
       "hints": {
         "intro": "Atrancácheste? Usa unha pista. Ábrense en orde, dunha en unha, e cada unha ten o seu custo.",
@@ -107,7 +110,7 @@
         "used": "Usada",
         "penalty_note": "As túas pistas restan un {count} % ao que che queda por cobrar nesta misión.",
         "closed_completed": "Completaches a misión: xa non fai falta usar máis pistas.",
-        "closed_expired": "A misión caducou: xa non se poden usar as súas pistas.",
+        "closed_expired": "A misión expirou: xa non se poden usar as súas pistas.",
         "preview_note": "Vista previa: ves todas as pistas abertas. O alumnado ábreas dunha en unha, nesta orde, pagando o seu custo.",
         "used_announcement": "Usaches a pista {position}.",
         "use_error": "Non se puido usar a pista.",
@@ -148,7 +151,6 @@
         },
         "progress": {
           "title": "O meu progreso",
-          "completion_rate": "Completado",
           "missions_completed": "Misións completadas",
           "xp_total": "XP total",
           "badges_earned": "Insignias obtidas"
@@ -179,7 +181,10 @@
           "save_error": "Erro ao gardar o perfil",
           "generate_error": "Non se puido xerar o avatar. Téntao de novo nuns segundos.",
           "generate_error_with_detail": "Non se puido xerar o avatar: {detail}",
-          "how_others_see": "Así te ven nesta clase"
+          "how_others_see": "Así te ven nesta clase",
+          "nickname_empty": "Escribe un alcume: é o nome co que te ve a túa clase.",
+          "nickname_taken": "Ese alcume xa o ten outra persoa da túa clase. Proba con outro.",
+          "nickname_invalid": "O alcume ten que ter de 1 a {max} caracteres, con algunha letra ou número."
         },
         "mission_no_description": "Sen descrición",
         "shop": {
@@ -234,6 +239,32 @@
         "teachers": {
           "title": "Profesorado",
           "empty": "Esta clase aínda non ten profesorado."
+        },
+        "compare": {
+          "title": "Ti e a túa clase",
+          "hint": "Compárase coa media do resto da túa clase, redondeada. Non se ve a ninguén en concreto.",
+          "season_missions": "Misións desta tempada"
+        },
+        "results": {
+          "title": "Os meus resultados",
+          "hint": "As recompensas de cada misión son as que cobraches cos seus enigmas. Non inclúen o bonus por completala, así que non suman o teu saldo.",
+          "filter_label": "Filtrar as miñas misións",
+          "empty_pending": "Non tes misións pendentes",
+          "empty_done": "Aínda non completaches ningunha misión",
+          "in_review": "{count} en revisión | {count} en revisión",
+          "deadline_past": "venceu o {date}",
+          "hints": "{count} pista usada | {count} pistas usadas",
+          "by_enigma": "% de cada enigma",
+          "enigma_open": "Sen entregar",
+          "filter_pending": "Pendentes ({count})",
+          "filter_done": "Feitas ({count})",
+          "empty_description": "Cando cambie, sairá aquí.",
+          "completed_on": "o {date}",
+          "deadline_future": "vence o {date}",
+          "enigmas": "{approved} de {total} enigma aprobado | {approved} de {total} enigmas aprobados",
+          "optional": "opcional",
+          "enigma_approved": "{percent} · {date}",
+          "enigma_pending_since": "En revisión desde o {date}"
         }
       }
     },
@@ -390,10 +421,29 @@
         "level_abbr": "Nv.",
         "missions_suffix": "misións",
         "you_badge": "Ti",
-        "avg_xp": "XP medio",
+        "avg_xp": "XP media",
         "avg_progress": "Progreso medio",
-        "avg_missions": "Misións medias",
-        "total_xp": "XP total clase"
+        "avg_missions": "Misións de media",
+        "total_xp": "XP total clase",
+        "podium_empty": "Aínda ninguén ten XP. O podio encherase en canto alguén a consiga.",
+        "rank_sr": "Posto {rank}",
+        "missions_count": "{count} misión | {count} misións",
+        "podium_empty_missions": "Aínda ninguén completou unha misión. O podio encherase en canto alguén o faga.",
+        "podium_empty_missions_week": "Esta semana aínda ninguén completou unha misión.",
+        "podium_empty_missions_season": "Nesta tempada aínda ninguén completou unha misión.",
+        "no_rank_xp": "Aínda non tes posto. Consegue XP para entrar na clasificación.",
+        "no_rank_missions": "Aínda non tes posto. Completa unha misión para entrar na clasificación.",
+        "no_rank_missions_week": "Esta semana aínda non tes posto. Completa unha misión para entrar na clasificación.",
+        "no_rank_missions_season": "Nesta tempada aínda non tes posto. Completa unha misión para entrar na clasificación.",
+        "my_position_title": "O teu posto",
+        "my_position_preview": "Cada estudante ve aquí o seu posto e o total da clase.",
+        "top_list_title": "Ata o posto {n}"
+      },
+      "class_xp_bar": {
+        "rank": "Ranking",
+        "level_line": "Nivel {level} · {title}",
+        "xp_line": "{current}/{required} XP",
+        "rank_of": "Posto {rank} de {total}"
       }
     },
     "teams": {
