@@ -1,7 +1,7 @@
 import { prisma } from '../../config/database.js'
 import { Prisma } from '../../generated/prisma/client.js'
 import { nanoid } from 'nanoid'
-import { getLevelInfo, getLevelFromXP, calculateMissionTotalXP } from '../../utils/xp-calculator.js'
+import { getLevelInfo, getLevelFromXP } from '../../utils/xp-calculator.js'
 import { existsSync, mkdirSync } from 'fs'
 import { join } from 'path'
 import { randomUUID } from 'crypto'
@@ -18,6 +18,7 @@ import { publicUploadResolver, saveUpload } from '../storage/storage.service.js'
 import { createClassWithOwner } from '../../utils/class-owner.js'
 import {
   assertClassAccess,
+  assertClassNotInTrash,
   assertMissionAccess,
   CLASS_ACTION_LEVEL,
   classTeachersInclude,
@@ -28,8 +29,9 @@ import {
   type ClassAccess,
 } from '../../utils/class-access.js'
 import { accountHandle } from '../../utils/identity.js'
-import { DEFAULT_AVATARS, participatingEnrollmentWhere } from '../../utils/enrollment.js'
-import { ACTIVITY_ACTOR_INCLUDE, activityActor } from '../../utils/activity.js'
+import { DEFAULT_AVATARS } from '../../utils/enrollment.js'
+import { ACTIVITY_ACTOR_INCLUDE, WALL_ACTIVITY_WHERE, activityActor } from '../../utils/activity.js'
+import { countClassesAwaitingReview } from '../../utils/pending-review.js'
 import { assignableBadgesWhere, manageableBadgesWhere } from '../../utils/badge-access.js'
 import {
   manageableHomeClasses,
@@ -52,15 +54,42 @@ import {
   type TemplateFilters,
 } from '../templates/templates.service.js'
 import { missionRewards } from '../../utils/mission-formatter.js'
-import { completedMissionsByStudent } from '../../utils/ranking.js'
+import {
+  loadClassRanking,
+  loadRankingContext,
+  loadTeamStandings,
+  rankingPeriodStart,
+  splitPodium,
+  statsWithoutXp,
+  withoutXp,
+} from '../../utils/ranking.js'
+import {
+  mergeRankingConfig,
+  normalizeRankingSwitch,
+  rankingConfigForCopy,
+  rankingPeriodsFor,
+  resolveRankingConfig,
+  resolveRankingView,
+  type RankingConfig,
+  type RankingMode,
+  type RankingType,
+} from '../../utils/ranking-config.js'
+import { assertClassWritable } from '../../utils/class-writable.js'
 import { MISSION_ORDER, nextMissionOrderIndex } from '../../utils/mission-order.js'
 import {
   classPathEdges,
   lockMissionPath,
   pathOrder,
   placeAfterPrerequisites,
-  startedStudentsByMission,
 } from '../../utils/mission-path.js'
+import { classMatrix } from '../analytics/class-matrix.js'
+import { countsForProgress } from '../analytics/definitions.js'
+import {
+  countedMissionsByClass,
+  missionCompletions,
+  studentProgressByClass,
+  sumProgress,
+} from '../analytics/student-progress.js'
 
 const BADGES_DIR = join(process.cwd(), 'uploads', 'badges')
 const COVERS_DIR = join(process.cwd(), 'uploads', 'covers')
@@ -86,6 +115,7 @@ const CLASS_UPDATE_FIELDS = [
   'province',
   'settings',
   'levelConfig',
+  'rankingConfig',
   'scheduleConfig',
 ] as const
 
@@ -195,6 +225,22 @@ const TEMPLATE_IN_TRASH = 'Restaura la clase antes de publicarla o retirarla com
 const ARCHIVE_IN_TRASH = 'Restaura la clase antes de archivarla o desarchivarla'
 
 /** 409 si la clase está en la papelera: lo que pide hay que hacerlo después de restaurarla. */
+/**
+ * Deja la clase quieta hasta confirmar y lee lo que un guardado mezcla con su cambio:
+ * los ajustes, el ranking (también la temporada) y los niveles. Es el cerrojo de
+ * `lockMissionPath` (`FOR NO KEY UPDATE`), que choca consigo mismo: dos guardados a la
+ * vez van uno detrás de otro, y el segundo ve lo que dejó el primero. No frena lo que
+ * solo cuelga de la clase (entregas, comportamientos, el registro), así que no se cruza
+ * con quien tiene una matrícula bloqueada e inserta algo de la clase.
+ */
+async function lockClassForSettings(tx: Prisma.TransactionClient, classId: string) {
+  await tx.$queryRaw`SELECT id FROM classes WHERE id = ${classId} FOR NO KEY UPDATE`
+  return tx.class.findUniqueOrThrow({
+    where: { id: classId },
+    select: { settings: true, rankingConfig: true, levelConfig: true },
+  })
+}
+
 function assertNotInTrash(cls: { deletedAt: Date | null }, message: string) {
   if (cls.deletedAt) throw new ConflictError(message, 'CLASS_IN_TRASH')
 }
@@ -258,18 +304,17 @@ export class TeachersService {
     const classes = await prisma.class.findMany({
       where: this.buildArchivedWhere(userId, archived),
       include: {
-        enrollments: { where: { isPreview: false }, include: { student: true } },
-        missions: { include: { progress: true } },
+        _count: { select: { enrollments: { where: { isPreview: false } }, missions: true } },
         teachers: classTeachersInclude(),
       },
       orderBy: { createdAt: 'desc' },
       ...(limit ? { take: limit } : {}),
     })
+    // Cuántas misiones cuentan, en la base para todas las clases a la vez.
+    const counted = await countedMissionsByClass(classes.map(c => c.id))
 
     return {
       classes: classes.map((c) => {
-        const totalMissions = c.missions.length
-        const completedProgress = c.missions.flatMap((m) => m.progress.filter((p) => p.completedAt))
         const access = summarizeClassTeachers(c.teachers, userId)
 
         return {
@@ -286,12 +331,9 @@ export class TeachersService {
           province: c.province,
           settings: resolveClassSettings(c.settings),
           scheduleConfig: c.scheduleConfig,
-          studentCount: c.enrollments.length,
-          missionCount: totalMissions,
-          stats: {
-            avgProgress: this.calculateAvgProgress(c.missions),
-            participation: c.enrollments.length > 0 ? Math.round((completedProgress.length / (c.enrollments.length * totalMissions)) * 100) || 0 : 0,
-          },
+          studentCount: c._count.enrollments,
+          missionCount: c._count.missions,
+          stats: { missionsCounted: counted.get(c.id) ?? 0 },
           createdAt: c.createdAt,
           ...access,
         }
@@ -305,8 +347,7 @@ export class TeachersService {
     const cls = await prisma.class.findUnique({
       where: { id: classId },
       include: {
-        enrollments: { where: { isPreview: false }, include: { student: true } },
-        missions: { include: { enigmas: true, progress: true } },
+        _count: { select: { enrollments: { where: { isPreview: false } }, missions: true } },
         guide: true,
         teachers: classTeachersInclude(),
       },
@@ -315,16 +356,12 @@ export class TeachersService {
     if (!cls) throw new NotFoundError('Clase no encontrada')
     const access = summarizeClassTeachers(cls.teachers, userId)
 
-    // Count pending submissions for this class
-    const missionIds = cls.missions.map((m) => m.id)
-    const pendingReviews = await prisma.enigmaSubmission.count({
-      where: {
-        status: 'pendiente',
-        enigma: {
-          missionId: { in: missionIds },
-        },
-      },
-    })
+    // Por revisar: las de su alumnado (sin la vista previa ni quien ya no está)
+    // y sin las de un enigma que esa persona ya tiene aprobado.
+    const [pendingReviews, counted] = await Promise.all([
+      countClassesAwaitingReview({ id: classId }),
+      countedMissionsByClass([classId]),
+    ])
 
     return {
       id: cls.id,
@@ -343,12 +380,13 @@ export class TeachersService {
       deletedAt: cls.deletedAt,
       settings: resolveClassSettings(cls.settings),
       levelConfig: resolveLevelConfig(cls.levelConfig),
+      rankingConfig: resolveRankingConfig(cls.rankingConfig),
       scheduleConfig: cls.scheduleConfig,
       updatedAt: cls.updatedAt,
-      studentCount: cls.enrollments.length,
-      missionCount: cls.missions.length,
+      studentCount: cls._count.enrollments,
+      missionCount: cls._count.missions,
       stats: {
-        avgProgress: this.calculateAvgProgress(cls.missions),
+        missionsCounted: counted.get(classId) ?? 0,
         pendingReviews,
       },
       createdAt: cls.createdAt,
@@ -394,7 +432,7 @@ export class TeachersService {
   async updateClass(
     userId: string,
     classId: string,
-    data: { name?: string; narrative?: string; schedule?: string; backgroundImage?: string; subject?: string; language?: string; educationLevel?: string; province?: string; settings?: Partial<ClassSettings>; levelConfig?: Partial<LevelConfig>; scheduleConfig?: unknown }
+    data: { name?: string; narrative?: string; schedule?: string; backgroundImage?: string; subject?: string; language?: string; educationLevel?: string; province?: string; settings?: Partial<ClassSettings>; levelConfig?: Partial<LevelConfig>; rankingConfig?: { types?: RankingType[]; mode?: RankingMode; topN?: number; compare?: boolean }; scheduleConfig?: unknown }
   ) {
     // El contenido (nombre, narrativa, portada, horario) es de edición; los ajustes
     // de gamificación, los niveles y los metadatos, de administración. El
@@ -407,6 +445,7 @@ export class TeachersService {
     const touchesSettings =
       data.settings !== undefined ||
       data.levelConfig !== undefined ||
+      data.rankingConfig !== undefined ||
       CLASS_METADATA_FIELDS.some(
         field => data[field] !== undefined && (data[field] || null) !== (cls[field] || null)
       )
@@ -434,27 +473,57 @@ export class TeachersService {
       data = { ...data, backgroundImage: (await saveBase64Image(data.backgroundImage, 'covers')) || undefined }
     }
 
-    const { settings: settingsPatch, levelConfig: levelConfigPatch, scheduleConfig: scheduleConfigPatch, ...rest } = data
+    const {
+      settings: settingsPatch,
+      levelConfig: levelConfigPatch,
+      rankingConfig: rankingConfigPatch,
+      scheduleConfig: scheduleConfigPatch,
+      ...rest
+    } = data
 
     // Encender el mapa: el orden vuelve a cumplir el camino (con el mapa apagado
     // se ha podido ordenar sin mirarlo), dentro de esta misma transacción.
     const turnsMapOn = settingsPatch?.missionMap === true
 
     const updated = await prisma.$transaction(async tx => {
+      // Lo que se mezcla con el cambio se lee aquí, con la clase quieta: leído antes
+      // de la transacción, dos guardados a la vez se pisan el uno al otro.
+      const current = await lockClassForSettings(tx, classId)
+      // El ranking no se toca con la clase cerrada, como la temporada.
+      if (rankingConfigPatch) await assertClassWritable(classId, tx)
       // El camino de la clase, quieto hasta confirmar (ver `lockMissionPath`).
       if (turnsMapOn) await lockMissionPath(tx, [classId])
+
+      // Los ajustes y el ranking se cruzan: sin ningún tipo disponible, el interruptor
+      // queda apagado, se toque lo que se toque de los dos.
+      const nextRanking = rankingConfigPatch
+        ? mergeRankingConfig(current.rankingConfig, rankingConfigPatch)
+        : resolveRankingConfig(current.rankingConfig)
+      const currentSettings = resolveClassSettings(current.settings)
+      const nextSettings = normalizeRankingSwitch(
+        settingsPatch
+          ? normalizeClassSettings({ ...currentSettings, ...settingsPatch })
+          : currentSettings,
+        nextRanking
+      )
+      const settingsChange = (Object.keys(nextSettings) as (keyof ClassSettings)[]).some(
+        key => nextSettings[key] !== currentSettings[key]
+      )
+
       const saved = await tx.class.update({
         where: { id: classId },
         data: {
           ...rest,
           // Merge incoming flags over current settings, then normalize dependencies so the
-          // stored config is always coherent (e.g. shop off ⇒ mana off).
-          ...(settingsPatch
-            ? { settings: { ...normalizeClassSettings({ ...resolveClassSettings(cls.settings), ...settingsPatch }) } }
-            : {}),
+          // stored config is always coherent (e.g. shop off ⇒ mana off). Solo si cambia:
+          // quien no los toca no los reescribe.
+          ...(settingsChange ? { settings: { ...nextSettings } } : {}),
           // La config de niveles se normaliza (curva + tramos válidos) antes de guardar.
           ...(levelConfigPatch
-            ? { levelConfig: resolveLevelConfig({ ...resolveLevelConfig(cls.levelConfig), ...levelConfigPatch }) as unknown as Prisma.InputJsonValue }
+            ? { levelConfig: resolveLevelConfig({ ...resolveLevelConfig(current.levelConfig), ...levelConfigPatch }) as unknown as Prisma.InputJsonValue }
+            : {}),
+          ...(rankingConfigPatch
+            ? { rankingConfig: nextRanking as unknown as Prisma.InputJsonValue }
             : {}),
           // El horario se guarda tal cual (objeto JSON estructurado); null lo limpia.
           ...(scheduleConfigPatch !== undefined
@@ -534,6 +603,7 @@ export class TeachersService {
         educationLevel: updated.educationLevel,
         province: updated.province,
         settings: resolveClassSettings(updated.settings),
+        rankingConfig: resolveRankingConfig(updated.rankingConfig),
         scheduleConfig: updated.scheduleConfig,
         ...(await this.classAccessSummary(classId, userId)),
       },
@@ -695,6 +765,10 @@ export class TeachersService {
             levelConfig: (options.features && source.levelConfig
               ? source.levelConfig
               : undefined) as Prisma.InputJsonValue | undefined,
+            // El ranking, igual, menos la temporada: es de la clase concreta.
+            rankingConfig: (options.features
+              ? (rankingConfigForCopy(source.rankingConfig) ?? undefined)
+              : undefined) as unknown as Prisma.InputJsonValue | undefined,
             invitationCode,
             isTemplate: false,
           },
@@ -1061,50 +1135,47 @@ export class TeachersService {
 
   async getClassMissions(userId: string, classId: string) {
     await assertClassAccess(classId, userId, 'class.view')
-    // El alumnado de la clase (sin la vista previa del profesorado): solo cuenta él.
-    const enrolled = await prisma.classEnrollment.findMany({
-      where: { classId, isPreview: false },
-      select: { studentId: true },
-    })
-    const totalStudents = enrolled.length
-    const inClass = new Set(enrolled.map(e => e.studentId))
 
-    const missions = await prisma.mission.findMany({
-      where: { classId },
-      include: {
-        enigmas: true,
-        // Quién la ha completado, primero quien antes.
-        progress: {
-          where: { completedAt: { not: null } },
-          select: { studentId: true },
-          orderBy: [{ completedAt: 'asc' }, { studentId: 'asc' }],
+    const [missions, matrix] = await Promise.all([
+      prisma.mission.findMany({
+        where: { classId },
+        include: {
+          enigmas: true,
+          // Lo que pide cada una en el mapa (ver utils/mission-path.ts).
+          prerequisites: {
+            where: { requiredMission: { classId } },
+            select: { requiredMissionId: true },
+          },
         },
-        // Lo que pide cada una en el mapa (ver utils/mission-path.ts).
-        prerequisites: {
-          where: { requiredMission: { classId } },
-          select: { requiredMissionId: true },
-        },
-      },
-      // El orden de la progresión: el que ve el alumnado.
-      orderBy: MISSION_ORDER,
-    })
+        // El orden de la progresión: el que ve el alumnado.
+        orderBy: MISSION_ORDER,
+      }),
+      // Quién va por dónde, con las mismas definiciones que el panel de la clase.
+      classMatrix(classId),
+    ])
 
     const position = new Map(missions.map((m, index) => [m.id, index]))
-    // Quién tiene trabajo empezado en cada una (la regla del camino), de una vez.
-    const started = await startedStudentsByMission(
-      prisma,
-      missions.map(m => m.id)
-    )
+    const inMatrix = new Map(matrix.missions.map((m, index) => [m.id, index]))
     return {
       missions: missions.map((m) => {
-        // Quién la ha completado (ids, primero quien antes) y cuánta gente la
-        // lleva en curso, solo del alumnado de la clase. Es del profesorado: los
-        // listados del alumnado no lo traen.
-        const completedStudentIds = m.progress.map(p => p.studentId).filter(id => inClass.has(id))
-        const done = new Set(completedStudentIds)
-        const inProgressCount = [...(started.get(m.id) ?? [])].filter(
-          id => inClass.has(id) && !done.has(id)
-        ).length
+        // Quién la ha completado (ids, primero quien antes) y cuánta gente la lleva
+        // en curso (`in_progress`: ni caducada ni cerrada), solo del alumnado de la
+        // clase, sin la vista previa. Es del profesorado: los listados del alumnado
+        // no lo traen.
+        const index = inMatrix.get(m.id)
+        const cells = matrix.students.flatMap(student => {
+          const cell = index === undefined ? undefined : student.missions[index]
+          return cell ? [{ studentId: student.studentId, cell }] : []
+        })
+        const completedStudentIds = cells
+          .filter(({ cell }) => cell.state === 'completed')
+          .sort(
+            (a, b) =>
+              (a.cell.completedAt?.getTime() ?? 0) - (b.cell.completedAt?.getTime() ?? 0) ||
+              (a.studentId < b.studentId ? -1 : a.studentId > b.studentId ? 1 : 0)
+          )
+          .map(({ studentId }) => studentId)
+        const inProgressCount = cells.filter(({ cell }) => cell.state === 'in_progress').length
         return {
           id: m.id,
           title: m.title,
@@ -1115,11 +1186,15 @@ export class TeachersService {
           backgroundImage: m.backgroundImage,
           orderIndex: m.orderIndex,
           enigmasCount: m.enigmas.length,
+          // Cuenta en «X de N misiones»: tiene enigmas y no está bloqueada a mano.
+          counted: countsForProgress(m),
           ...missionRewards(m),
           completedCount: completedStudentIds.length,
           completedStudentIds,
           inProgressCount,
-          totalStudents,
+          totalStudents: matrix.summary.students,
+          // Sin las cuentas sin estrenar: el denominador de las medias de la clase.
+          participatingStudents: matrix.summary.participating,
           // Lo que pide para abrirse en el mapa (ids, en el orden de la clase),
           // aunque el mapa esté apagado.
           prerequisiteIds: m.prerequisites
@@ -1131,65 +1206,85 @@ export class TeachersService {
     }
   }
 
-  async getClassRanking(userId: string, classId: string) {
+  /**
+   * El ranking de la clase para el profesorado: el mismo que el del alumnado
+   * (mismo orden, mismos puestos, mismas medias), de cualquier tipo y siempre
+   * completo, con el nombre real. Para él es analítica, no competición: lo ve aunque
+   * el ranking esté apagado o su alumnado solo vea una parte, y como el resto de la
+   * analítica, no con la clase en la papelera (404). `audience` dice qué ve su
+   * alumnado, para avisárselo.
+   */
+  async getClassRanking(
+    userId: string,
+    classId: string,
+    requested: { type?: unknown; period?: unknown } = {}
+  ) {
     await assertClassAccess(classId, userId, 'class.view')
-    // El mismo podio que ve el alumnado: sin quien aún no ha entrado nunca.
-    const cls = await prisma.class.findUnique({
-      where: { id: classId },
-      include: {
-        enrollments: {
-          where: { isPreview: false, AND: [participatingEnrollmentWhere] },
-          include: { student: true },
-        },
-      },
-    })
-
-    if (!cls) throw new NotFoundError('Clase no encontrada')
-
-    // Misiones completadas por alumno: el mismo recuento que el ranking del alumnado.
-    const { total: totalMissionsInClass, byStudent: completedByStudent } =
-      await completedMissionsByStudent(classId)
-    const levelCfg = resolveLevelConfig(cls.levelConfig)
-
-    const sorted = cls.enrollments
-      .map((e) => {
-        const missionsCompleted = completedByStudent.get(e.student.id) || 0
-        const tier = tierForLevel(e.level, levelCfg)
-        return {
-          id: e.student.id,
-          name: e.student.name,
-          nickname: e.nickname,
-          username: e.nickname || e.student.name || 'Estudiante',
-          avatar: e.avatarUrl || '/app/avatars/atenea.svg',
-          xp: e.xp,
-          level: e.level,
-          levelTitle: tier.title,
-          levelColor: tier.color,
-          missionsCompleted,
-          missionsTotal: totalMissionsInClass,
-          completionPercent: totalMissionsInClass > 0 ? Math.round((missionsCompleted / totalMissionsInClass) * 100) : 0,
-        }
-      })
-      .sort((a, b) => b.xp - a.xp)
-      .map((s, index) => ({ ...s, rank: index + 1 }))
-
-    const totalStudents = sorted.length
-    const avgXp = totalStudents > 0 ? Math.round(sorted.reduce((sum, s) => sum + s.xp, 0) / totalStudents) : 0
-    const totalCompleted = sorted.reduce((sum, s) => sum + s.missionsCompleted, 0)
-    const avgProgress = totalStudents > 0 ? Math.round(sorted.reduce((sum, s) => sum + s.completionPercent, 0) / totalStudents) : 0
-
-    return {
-      ranking: sorted,
-      podium: sorted.slice(0, 3),
-      leaderboard: sorted.slice(3),
-      stats: {
-        totalStudents,
-        avgXp,
-        avgProgress,
-        avgMissions: totalStudents > 0 ? String(Math.round(totalCompleted / totalStudents)) : '0',
-        participation: totalStudents > 0 ? 100 : 0,
+    await assertClassNotInTrash(classId)
+    const { settings, config, studentTypes, teacherTypes } = await loadRankingContext(classId)
+    const { type, period } = resolveRankingView(teacherTypes, config, requested)
+    const since = rankingPeriodStart(period, config)
+    const usesXp = settings.xp
+    const options = {
+      types: teacherTypes,
+      periods: rankingPeriodsFor(type, config),
+      seasonStartedAt: config.seasonStartedAt,
+      usesXp,
+      audience: {
+        rankings: settings.rankings,
+        types: studentTypes,
+        mode: config.mode,
+        topN: config.topN,
       },
     }
+    if (type === 'teams') {
+      return { type, period, options, standings: await loadTeamStandings(classId, since) }
+    }
+
+    const { ranked, stats } = await loadClassRanking(classId, { type, since })
+    const rows = ranked.map(({ alias: _alias, enrollmentId: _enrollment, ...row }) => {
+      const shown = { ...row, username: row.nickname || row.name || 'Estudiante' }
+      return usesXp ? shown : withoutXp(shown)
+    })
+    const { podium, rest } = splitPodium(rows)
+
+    return {
+      type,
+      period,
+      options,
+      ranking: rows,
+      podium,
+      leaderboard: rest,
+      stats: period === 'all' ? (usesXp ? stats : statsWithoutXp(stats)) : null,
+      total: rows.length,
+    }
+  }
+
+  /**
+   * Empieza una temporada: el periodo «Temporada» del ranking cuenta desde ahora.
+   * No borra nada ni toca la XP; empezar otra sustituye a la anterior.
+   */
+  async startRankingSeason(userId: string, classId: string) {
+    await assertClassAccess(classId, userId, 'class.startSeason')
+    return prisma.$transaction(async tx => {
+      const cls = await lockClassForSettings(tx, classId)
+      await assertClassWritable(classId, tx)
+      const current = resolveRankingConfig(cls.rankingConfig)
+      const rankingConfig: RankingConfig = { ...current, seasonStartedAt: new Date().toISOString() }
+      await tx.class.update({
+        where: { id: classId },
+        data: { rankingConfig: rankingConfig as unknown as Prisma.InputJsonValue },
+      })
+      await recordClassAction(tx, {
+        classId,
+        actorId: userId,
+        action: 'class.season_started',
+        entityType: 'class',
+        entityId: classId,
+        metadata: { replaced: current.seasonStartedAt !== null },
+      })
+      return { rankingConfig }
+    })
   }
 
   /**
@@ -1290,17 +1385,11 @@ export class TeachersService {
           where: { studentId, isPreview: false },
           include: { student: true },
         },
-        missions: { include: { enigmas: true, badges: { select: { id: true } } } },
         teachers: classTeachersInclude(),
       },
+      // Primero las vivas, por nombre: la ficha es el índice de sus clases.
+      orderBy: [{ archived: 'asc' }, { name: 'asc' }],
     })
-
-    // Badges earned by this student (used for per-class badge count)
-    const earnedBadges = await prisma.studentBadge.findMany({
-      where: { studentId },
-      select: { badgeId: true },
-    })
-    const earnedBadgeIds = new Set(earnedBadges.map((b) => b.badgeId))
 
     const enrolledClasses = classes.filter((c) => c.enrollments.length > 0)
     if (enrolledClasses.length === 0) {
@@ -1313,29 +1402,13 @@ export class TeachersService {
       select: UNUSED_ACCOUNT_SELECT,
     })
 
-    // Progreso del alumno, solo en las misiones de las clases de quien pregunta:
-    // de las demás no sale ni el título ni el nombre de la clase, y las
-    // estadísticas se calculan sobre ese mismo conjunto.
-    const missionProgress = await prisma.studentMissionProgress.findMany({
-      where: { studentId, mission: { classId: { in: enrolledClasses.map(c => c.id) } } },
-      include: { mission: { include: { class: true, enigmas: { select: { xpReward: true } } } } },
-    })
-
-    // Enigma-level progress for completion rate (counts enigmas done across missions)
-    const allEnigmaIds = enrolledClasses.flatMap((c) =>
-      c.missions.flatMap((m) => m.enigmas.map((e) => e.id))
-    )
-    const enigmaProgress =
-      allEnigmaIds.length > 0
-        ? await prisma.studentEnigmaProgress.findMany({
-            where: { studentId, enigmaId: { in: allEnigmaIds } },
-            select: { enigmaId: true },
-          })
-        : []
-    const completedEnigmaIds = new Set(enigmaProgress.map((ep) => ep.enigmaId))
+    // Su progreso, solo en las clases de quien pregunta: de las demás no sale
+    // nada, y las cifras generales se calculan sobre ese mismo conjunto.
+    const teacherClassIds = enrolledClasses.map((c) => c.id)
+    const progressByClass = await studentProgressByClass(studentId, teacherClassIds)
+    const overall = sumProgress([...progressByClass.values()])
 
     // Get recent activities — only from teacher's classes
-    const teacherClassIds = enrolledClasses.map((c) => c.id)
     const activities = await prisma.activity.findMany({
       where: {
         userId: studentId,
@@ -1343,32 +1416,12 @@ export class TeachersService {
           { classId: { in: teacherClassIds } },
           { classId: null }, // Include global activities (level_up, badge_unlocked, etc.)
         ],
+        ...WALL_ACTIVITY_WHERE,
       },
       include: ACTIVITY_ACTOR_INCLUDE,
       orderBy: { createdAt: 'desc' },
       take: 10,
     })
-
-    // Calculate stats
-    const totalMissionsCompleted = missionProgress.filter((p) => p.completedAt).length
-    const totalMissionsAvailable = enrolledClasses.reduce(
-      (sum, c) => sum + c.missions.length,
-      0
-    )
-    const totalEnigmas = allEnigmaIds.length
-    const completedEnigmas = completedEnigmaIds.size
-    // Completion rate is enigma-based, not mission-based
-    const completionRate =
-      totalEnigmas > 0 ? Math.round((completedEnigmas / totalEnigmas) * 100) : 0
-
-    // Calculate average score (average progress across all missions)
-    const averageScore =
-      missionProgress.length > 0
-        ? Math.round(missionProgress.reduce((sum, p) => sum + p.progress, 0) / missionProgress.length)
-        : 0
-
-    // Calculate streak (placeholder - would need login history for real streak)
-    const streak = 0
 
     // Solo quien administra la clase de origen restablece la contraseña de una
     // cuenta sin correo; la de una cuenta con correo la recupera su dueño.
@@ -1389,31 +1442,11 @@ export class TeachersService {
         pendingSignIn: student.accountType === 'managed' && student.mustChangePassword,
         // La clase de la que quitarlo borra la cuenta, si nunca se ha usado.
         unusedAccountHomeClassId: unusedAccountHomeClass(accountFacts),
-        // Per-class data
+        // Una fila por clase, lo justo para el índice: el detalle está en su página
+        // dentro de cada clase.
         classes: enrolledClasses.map((c) => {
           const enrollment = c.enrollments[0]
-          const classMissionIds = c.missions.map((m) => m.id)
-          const classMissionProgress = missionProgress.filter((p) =>
-            classMissionIds.includes(p.missionId)
-          )
-          const classCompleted = classMissionProgress.filter((p) => p.completedAt).length
-          const classTotal = c.missions.length
-          // Per-class progress is enigma-based as well
-          const classEnigmas = c.missions.flatMap((m) => m.enigmas)
-          const classEnigmaIds = classEnigmas.map((e) => e.id)
-          const classCompletedEnigmas = classEnigmaIds.filter((id) =>
-            completedEnigmaIds.has(id)
-          ).length
-          const classProgress =
-            classEnigmaIds.length > 0
-              ? Math.round((classCompletedEnigmas / classEnigmaIds.length) * 100)
-              : 0
-          const classTotalXp = classEnigmas.reduce((sum, e) => sum + (e.xpReward || 0), 0)
-          // Per-class badges: those linked to missions of this class
-          const classBadgeIds = c.missions.flatMap((m) => m.badges.map((b) => b.id))
-          const classBadgesTotal = classBadgeIds.length
-          const classBadgesEarned = classBadgeIds.filter((id) => earnedBadgeIds.has(id)).length
-
+          const progress = progressByClass.get(c.id)
           return {
             id: c.id,
             name: c.name,
@@ -1422,39 +1455,19 @@ export class TeachersService {
             myAccess: summarizeClassTeachers(c.teachers, userId).myAccess,
             nickname: enrollment.nickname || student.name,
             avatar: enrollment.avatarUrl || DEFAULT_AVATARS[0]!,
-            level: enrollment.level || 1,
-            xp: enrollment.xp || 0,
-            totalXp: classTotalXp,
-            coins: enrollment.coins || 0,
-            mana: enrollment.mana || 0,
-            lives: enrollment.lives,
-            settings: resolveClassSettings(c.settings),
-            progress: classProgress,
-            missionsCompleted: classCompleted,
-            totalMissions: classTotal,
-            badgesEarned: classBadgesEarned,
-            totalBadges: classBadgesTotal,
+            // Null si la clase no usa XP.
+            level: resolveClassSettings(c.settings).xp ? enrollment.level || 1 : null,
+            // «X de N misiones» (ver analytics/definitions.ts).
+            missionsCompleted: progress?.missionsCompleted ?? 0,
+            missionsCounted: progress?.missionsCounted ?? 0,
           }
         }),
         stats: {
           totalClasses: enrolledClasses.length,
-          totalMissionsCompleted,
-          totalMissionsAvailable,
-          completionRate,
-          averageScore,
-          streak,
+          missionsCompleted: overall.missionsCompleted,
+          missionsCounted: overall.missionsCounted,
+          percent: overall.percent,
         },
-        recentMissions: missionProgress
-          .filter((p) => p.completedAt)
-          .sort((a, b) => new Date(b.completedAt!).getTime() - new Date(a.completedAt!).getTime())
-          .slice(0, 5)
-          .map((p) => ({
-            id: p.mission.id,
-            title: p.mission.title,
-            className: p.mission.class.name,
-            xpEarned: calculateMissionTotalXP(p.mission.rarity, p.mission.enigmas.map(e => e.xpReward)),
-            completedAt: p.completedAt!.toISOString(),
-          })),
         recentActivity: activities.map((a) => {
           const metadata = a.metadata && typeof a.metadata === 'object' ? a.metadata as any : {}
 
@@ -1510,16 +1523,18 @@ export class TeachersService {
       where: whereClause,
       include: {
         class: {
-          include: { enrollments: { where: { isPreview: false } } },
+          include: {
+            enrollments: { where: { isPreview: false }, select: { studentId: true } },
+          },
         },
         enigmas: true,
-        progress: true,
       },
       // De una clase, en el orden de la progresión. Todas juntas son «las
       // recientes» (el tope se lleva las más nuevas): la pantalla las ordena.
       orderBy: classIdFilter ? MISSION_ORDER : { createdAt: 'desc' },
       take: limit,
     })
+    const { datesBy } = await missionCompletions(missions)
 
     return {
       missions: missions.map((m) => {
@@ -1538,7 +1553,9 @@ export class TeachersService {
           orderIndex: m.orderIndex,
           enigmasCount: m.enigmas.length,
           ...missionRewards(m, s),
-          completedCount: m.progress.filter((p) => p.completedAt).length,
+          // Solo su alumnado de ahora, como la pestaña de misiones de la clase: sin
+          // la vista previa ni quien la completó en otra clase.
+          completedCount: m.class.enrollments.filter(e => datesBy.get(e.studentId)?.has(m.id)).length,
           totalStudents: m.class.enrollments.length,
           createdAt: m.createdAt,
         }
@@ -1571,6 +1588,7 @@ export class TeachersService {
       where: {
         userId: { in: studentIds },
         OR: [{ classId: { in: classIds } }, { classId: null }],
+        ...WALL_ACTIVITY_WHERE,
       },
       include: { user: true, ...ACTIVITY_ACTOR_INCLUDE },
       orderBy: { createdAt: 'desc' },
@@ -1685,21 +1703,27 @@ export class TeachersService {
   // tiene edición (ver `manageableBadgesWhere`).
 
   async getBadges(userId: string) {
-    const badges = await prisma.badge.findMany({
-      where: { OR: [{ teacherId: null }, manageableBadgesWhere(userId)] },
-      orderBy: { createdAt: 'desc' },
-      include: {
-        mission: {
-          select: {
-            id: true,
-            title: true,
-            description: true,
-            classId: true,
-            class: { select: { id: true, name: true, narrative: true } },
+    const [badges, manageable] = await Promise.all([
+      prisma.badge.findMany({
+        where: { OR: [{ teacherId: null }, manageableBadgesWhere(userId)] },
+        orderBy: { createdAt: 'desc' },
+        include: {
+          mission: {
+            select: {
+              id: true,
+              title: true,
+              description: true,
+              classId: true,
+              class: { select: { id: true, name: true, narrative: true } },
+            },
           },
         },
-      },
-    })
+      }),
+      // Las que se pueden cambiar, con la misma regla que `updateBadge` y
+      // `deleteBadge`: la pantalla no lo deduce de si es del sistema.
+      prisma.badge.findMany({ where: manageableBadgesWhere(userId), select: { id: true } }),
+    ])
+    const editable = new Set(manageable.map(b => b.id))
 
     return {
       badges: badges.map((b) => ({
@@ -1710,6 +1734,12 @@ export class TeachersService {
         rarity: b.rarity,
         category: b.category,
         isSystem: b.teacherId === null,
+        canEdit: editable.has(b.id),
+        // Cómo se gana una del sistema (se concede sola), para explicarlo en su detalle.
+        trigger:
+          b.triggerType && b.triggerValue !== null
+            ? { type: b.triggerType, value: b.triggerValue }
+            : null,
         // Para saber a qué misiones se puede vincular: una ajena no sale de su clase.
         isMine: b.teacherId === userId,
         missionId: b.missionId,
@@ -1853,16 +1883,6 @@ export class TeachersService {
 
   // ==================== HELPERS ====================
 
-  private calculateAvgProgress(missions: any[]): number {
-    if (missions.length === 0) return 0
-
-    const totalProgress = missions.reduce((sum, m) => {
-      const avgMissionProgress = m.progress?.length > 0 ? m.progress.reduce((s: number, p: any) => s + p.progress, 0) / m.progress.length : 0
-      return sum + avgMissionProgress
-    }, 0)
-
-    return Math.round(totalProgress / missions.length)
-  }
 }
 
 export const teachersService = new TeachersService()

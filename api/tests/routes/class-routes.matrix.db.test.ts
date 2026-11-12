@@ -51,6 +51,7 @@ import { missionsRoutes } from '../../src/modules/missions/missions.routes.js'
 import { submissionsRoutes } from '../../src/modules/submissions/submissions.routes.js'
 import { studentsRoutes } from '../../src/modules/students/students.routes.js'
 import { createClassWithOwner } from '../../src/utils/class-owner.js'
+import { Prisma } from '../../src/generated/prisma/client.js'
 
 interface RouteRequest {
   method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
@@ -314,6 +315,20 @@ const TEACHER_CLASS: RouteCase[] = [
     other: 404,
     student: 403,
     levels: levels('read', 200),
+  },
+  {
+    route: 'POST /teacher/classes/:classId/ranking/season',
+    request: f => ({ method: 'POST', url: `${c(f)}/ranking/season` }),
+    owner: 200,
+    other: 404,
+    student: 403,
+    levels: levels('admin', 200),
+    after: async f => {
+      await prisma.class.update({
+        where: { id: f.classId },
+        data: { rankingConfig: Prisma.JsonNull },
+      })
+    },
   },
   {
     route: 'GET /teacher/classes/:classId/students',
@@ -830,6 +845,35 @@ const ATTENDANCE: RouteCase[] = [
   },
 ]
 
+// ---------------------------------------------------------------- analítica
+
+const ANALYTICS: RouteCase[] = [
+  {
+    route: 'GET /teacher/classes/:classId/analytics',
+    request: f => ({ method: 'GET', url: `${c(f)}/analytics?period=last30` }),
+    owner: 200,
+    other: 404,
+    student: 403,
+    levels: levels('read', 200),
+  },
+  {
+    route: 'GET /teacher/classes/:classId/students/:studentId/analytics',
+    request: f => ({ method: 'GET', url: `${c(f)}/students/${f.users.student.id}/analytics` }),
+    owner: 200,
+    other: 404,
+    student: 403,
+    levels: levels('read', 200),
+  },
+  {
+    route: 'GET /teacher/classes/:classId/students/:studentId/timeline',
+    request: f => ({ method: 'GET', url: `${c(f)}/students/${f.users.student.id}/timeline?limit=5` }),
+    owner: 200,
+    other: 404,
+    student: 403,
+    levels: levels('read', 200),
+  },
+]
+
 // ---------------------------------------------------------------- equipos
 
 /** Una agrupación de la clase con un equipo vacío, para las rutas que la necesitan. */
@@ -1239,6 +1283,7 @@ const groups: [string, RouteCase[]][] = [
   ['tienda', SHOP],
   ['comportamientos', BEHAVIORS],
   ['asistencia', ATTENDANCE],
+  ['analítica', ANALYTICS],
   ['equipos', TEAMS],
   ['misiones, enigmas y documentos', MISSIONS],
   ['entregas', SUBMISSIONS],
@@ -2414,6 +2459,28 @@ describeWithDatabase('matriz de acceso del profesorado añadido a una clase', ()
     // Sin fila ni matrícula, para no contar en los tests que siguen.
     await setLevel(former.id, null)
     await prisma.classEnrollment.deleteMany({ where: { studentId: former.id } })
+  })
+
+  it('analítica → «Mi progreso» es del alumno de la clase o de la vista previa de su profesorado', async () => {
+    const url = `/students/classes/${f.classId}/progress`
+    expect((await send({ method: 'GET', url })).statusCode).toBe(401)
+    expect((await send({ method: 'GET', url }, 'student')).statusCode).toBe(200)
+    expect((await send({ method: 'GET', url }, 'outsider')).statusCode).toBe(404)
+    expect((await send({ method: 'GET', url }, 'other')).statusCode).toBe(404)
+    try {
+      for (const level of CO_LEVELS) {
+        // Sin vista previa, el acceso a la clase no basta para entrar por este lado.
+        expect((await sendAs({ method: 'GET', url }, co[level].token)).statusCode).toBe(404)
+        expect(
+          (await sendAs({ method: 'POST', url: '/students/preview/enroll' }, co[level].token)).statusCode
+        ).toBe(200)
+        expect((await sendAs({ method: 'GET', url }, co[level].token)).statusCode).toBe(200)
+      }
+    } finally {
+      await prisma.classEnrollment.deleteMany({
+        where: { classId: f.classId, studentId: { in: CO_LEVELS.map(l => co[l].id) } },
+      })
+    }
   })
 
   it('vista previa → el detalle de la clase del lado del alumno no trae el código de invitación', async () => {

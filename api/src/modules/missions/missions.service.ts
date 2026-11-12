@@ -40,6 +40,9 @@ import {
   type PathRequirement,
 } from '../../utils/mission-path.js'
 import { ConflictError, NotFoundError, ValidationError } from '../../utils/errors.js'
+import { awaitingReview } from '../../utils/pending-review.js'
+import { enigmaTally } from '../analytics/definitions.js'
+import { missionClassStats, studentProgressByClass, sumProgress } from '../analytics/student-progress.js'
 import { existsSync, mkdirSync } from 'fs'
 import {
   saveUpload,
@@ -338,7 +341,12 @@ export class MissionsService {
           orderBy: { orderIndex: 'asc' },
           include: {
             progress: { where: { studentId: userId } },
-            submissions: true,
+            // Las de toda la clase solo hacen falta al profesorado (las cuenta por
+            // revisar); al alumno, nada más que las suyas.
+            submissions: {
+              where: isTeacher ? {} : { studentId: userId },
+              select: { id: true, studentId: true, enigmaId: true, status: true },
+            },
             _count: { select: { progress: true } }, // total completions across all students
           },
         },
@@ -362,41 +370,15 @@ export class MissionsService {
 
     if (!mission) throw new NotFoundError('Misión no encontrada')
 
-    const progress = mission.progress[0]
+    const tally = enigmaTally(
+      mission.enigmas,
+      new Set(mission.enigmas.filter(e => e.progress.length > 0).map(e => e.id))
+    )
 
-    // For teachers, calculate class-wide stats
-    let teacherStats = null
-    if (isTeacher) {
-      // Get all enrollments for this class
-      const enrollments = await prisma.classEnrollment.findMany({
-        where: { classId: mission.classId, isPreview: false },
-      })
-      const totalStudents = enrollments.length
-
-      // Get all mission progress for all students
-      const allProgress = await prisma.studentMissionProgress.findMany({
-        where: { missionId },
-      })
-
-      const completed = allProgress.filter((p) => p.completedAt).length
-      const inProgress = allProgress.filter((p) => !p.completedAt).length
-      const notStarted = totalStudents - completed - inProgress
-
-      // Calculate average progress
-      let avgProgress = 0
-      if (totalStudents > 0) {
-        const totalProgress = allProgress.reduce((sum, p) => sum + p.progress, 0)
-        avgProgress = Math.round(totalProgress / totalStudents)
-      }
-
-      teacherStats = {
-        totalStudents,
-        completed,
-        inProgress,
-        notStarted,
-        avgProgress,
-      }
-    }
+    // Para el profesorado, cómo va la misión en la clase: la definición única,
+    // sin la vista previa ni quien la hizo en otra clase.
+    const classStats = isTeacher ? await missionClassStats(mission.classId, missionId) : null
+    const teacherStats = classStats?.stats ?? null
 
     // Si llegó importada de otra clase (copiarla en la suya es duplicarla, no
     // importarla): solo entonces se ofrece adaptarla con IA a esta clase.
@@ -430,6 +412,23 @@ export class MissionsService {
       }
     }
 
+    // Por revisar, para el profesorado: de su alumnado y sin las pendientes de
+    // quien ya tiene el enigma aprobado, que no se pueden revisar (ver
+    // utils/pending-review.ts).
+    const reviewable = new Set(
+      classStats
+        ? (
+            await awaitingReview(
+              mission.enigmas.flatMap(e =>
+                e.submissions.filter(
+                  sub => sub.status === 'pendiente' && classStats.students.has(sub.studentId)
+                )
+              )
+            )
+          ).map(sub => sub.id)
+        : []
+    )
+
     const privateUploadOf = await privateUploadResolver()
 
     // Pistas: el profesorado las ve enteras; el alumnado, el texto solo de las
@@ -452,7 +451,11 @@ export class MissionsService {
         className: mission.class.name,
         classId: mission.classId,
         classSettings: resolveClassSettings(mission.class.settings),
-        status: getMissionStatus(mission, progress),
+        status: getMissionStatus(
+          mission,
+          mission.progress[0],
+          mission.enigmas.map(e => ({ isOptional: e.isOptional, approved: e.progress.length > 0 }))
+        ),
         // Estado real de la misión (activa/bloqueada), independiente del status
         // calculado de arriba, para poder editarlo en Ajustes.
         blocked: mission.status === 'bloqueada',
@@ -490,9 +493,12 @@ export class MissionsService {
         canEdit,
         // Llegó importada de otra clase (ver arriba).
         importedFromOtherClass,
+        // Sus enigmas obligatorios; los opcionales, aparte (ver analytics/definitions.ts).
         progress: {
-          done: progress?.enigmasCompleted || 0,
-          total: mission.enigmas.length,
+          done: tally.required.approved,
+          total: tally.required.total,
+          extraDone: tally.optional.approved,
+          extraTotal: tally.optional.total,
         },
         rewards: {
           xp: calculateMissionTotalXP(mission.rarity, mission.enigmas.map(e => e.xpReward)),
@@ -501,7 +507,7 @@ export class MissionsService {
           const enigmaProgress = e.progress[0]
           // For teachers, count pending submissions
           const pendingSubmissions = isTeacher
-            ? e.submissions.filter((s) => s.status === 'pendiente').length
+            ? e.submissions.filter((s) => reviewable.has(s.id)).length
             : 0
           const totalSubmissions = isTeacher ? e.submissions.length : 0
 
@@ -533,7 +539,9 @@ export class MissionsService {
             earnedCoins: enigmaProgress?.coinsEarned || 0,
             earnedMana: enigmaProgress?.manaEarned || 0,
             // Rewards become raise-only once any student has completed the enigma.
-            completedCount: e._count.progress,
+            // Solo al profesorado (el editor lo usa): al alumnado no se le dice
+            // cuántos compañeros lo tienen aprobado.
+            ...(isTeacher ? { completedCount: e._count.progress } : {}),
             submissionsCount: pendingSubmissions,
             pendingSubmissions,
             totalSubmissions,
@@ -554,9 +562,13 @@ export class MissionsService {
           : null,
         // Teacher-only stats (null for students)
         teacherStats,
-        // La rareza no se puede cambiar una vez que algún alumno completó la
-        // misión (alteraría su XP). Misma condición que el bloqueo de updateMission.
-        rarityLocked: (teacherStats?.completed ?? 0) > 0,
+        // La rareza no se puede cambiar una vez que alguien completó la misión
+        // (alteraría su XP), esté o no en la clase: la condición de updateMission.
+        rarityLocked: isTeacher
+          ? (await prisma.studentMissionProgress.count({
+              where: { missionId, completedAt: { not: null } },
+            })) > 0
+          : false,
       },
     }
   }
@@ -572,7 +584,7 @@ export class MissionsService {
   private async lockedMissionView(missionId: string, requires: PathRequirement[]) {
     const mission = await prisma.mission.findUnique({
       where: { id: missionId },
-      include: { class: true, enigmas: { select: { xpReward: true } } },
+      include: { class: true, enigmas: { select: { xpReward: true, isOptional: true } } },
     })
     if (!mission) throw new NotFoundError('Misión no encontrada')
     return {
@@ -595,7 +607,12 @@ export class MissionsService {
         isTeacher: false,
         canEdit: false,
         importedFromOtherClass: false,
-        progress: { done: 0, total: mission.enigmas.length },
+        progress: {
+          done: 0,
+          total: mission.enigmas.filter(e => !e.isOptional).length,
+          extraDone: 0,
+          extraTotal: mission.enigmas.filter(e => e.isOptional).length,
+        },
         rewards: {
           xp: calculateMissionTotalXP(mission.rarity, mission.enigmas.map(e => e.xpReward)),
         },
@@ -611,31 +628,22 @@ export class MissionsService {
   }
 
   async getStats(user: ClassUser) {
-    const userId = user.id
+    // Coherente con el listado: las clases archivadas no cuentan en las stats.
     const enrollments = await prisma.classEnrollment.findMany({
-      where: studentEnrollmentsWhere(user),
+      where: { AND: [studentEnrollmentsWhere(user), { class: { archived: false } }] },
       select: { classId: true },
     })
-
-    const classIds = enrollments.map((e) => e.classId)
-
-    const missions = await prisma.mission.findMany({
-      // Coherente con el listado: las clases archivadas no cuentan en las stats.
-      where: { classId: { in: classIds }, class: { archived: false } },
-      include: { progress: { where: { studentId: userId } } },
-    })
-
-    const total = missions.length
-    const completed = missions.filter((m) => m.progress[0]?.completedAt).length
-    const inProgress = missions.filter((m) => m.progress[0] && !m.progress[0].completedAt).length
-    const available = total - completed - inProgress
+    const byClass = [
+      ...(await studentProgressByClass(user.id, enrollments.map(e => e.classId))).values(),
+    ]
+    const overall = sumProgress(byClass)
 
     return {
-      total,
-      completed,
-      inProgress,
-      available,
-      completionRate: total > 0 ? Math.round((completed / total) * 100) : 0,
+      total: overall.missionsCounted,
+      completed: overall.missionsCompleted,
+      inProgress: byClass.reduce((sum, c) => sum + c.pending.in_progress, 0),
+      available: byClass.reduce((sum, c) => sum + c.pending.not_started, 0),
+      percent: overall.percent,
     }
   }
 

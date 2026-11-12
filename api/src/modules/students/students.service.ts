@@ -1,6 +1,6 @@
 import { prisma } from '../../config/database.js'
-import { getLevelInfo, wouldLevelUp, calculateMissionTotalXP } from '../../utils/xp-calculator.js'
-import { resolveLevelConfig, tierForLevel } from '../../utils/level-config.js'
+import { getLevelInfo, wouldLevelUp } from '../../utils/xp-calculator.js'
+import { resolveLevelConfig } from '../../utils/level-config.js'
 import { formatMission, getMissionStatus } from '../../utils/mission-formatter.js'
 import { classPathFor, classPathsFor } from '../../utils/mission-path.js'
 import { ensureSafeEducationalPrompt } from '../ai/ai-safety.js'
@@ -10,27 +10,60 @@ import { getAIProvider } from '../ai/providers/index.js'
 import { AVATAR_PROMPTS } from '../ai/prompts/index.js'
 import { AvatarServiceUnavailableError } from '../../utils/errors.js'
 import { resolveClassSettings } from '../../utils/class-settings.js'
-import { ForbiddenError, ValidationError } from '../../utils/errors.js'
+import { ConflictError, ForbiddenError, NotFoundError, ValidationError } from '../../utils/errors.js'
 import {
+  LIVE_CLASS_WHERE,
   classTeachersInclude,
   getClassMembership,
   listedClassesWhere,
   studentEnrollmentsWhere,
   type ClassUser,
+  type StudentEnrollmentRef,
 } from '../../utils/class-access.js'
 import {
   DEFAULT_AVATARS,
+  ENROLL_TX_OPTIONS,
+  cleanNickname,
   enrollStudentNow,
   freeNicknamesForPreview,
   getRandomAvatar,
   isAllowedClassAvatar,
+  isSameNickname,
+  lockClassNicknames,
+  nicknameTakenInClass,
   participatingEnrollmentWhere,
 } from '../../utils/enrollment.js'
-import { ACTIVITY_ACTOR_INCLUDE, activityActor } from '../../utils/activity.js'
+import { ACTIVITY_ACTOR_INCLUDE, WALL_ACTIVITY_WHERE, activityActor } from '../../utils/activity.js'
+import { studentRankingStats } from '../../utils/anonymous-stats.js'
 import { assertNotManagedAccount } from '../../utils/identity-db.js'
 import { changeOwnPassword } from '../../utils/password-change.js'
 import { consumeRateLimit } from '../../utils/rate-limit.js'
-import { completedMissionsByStudent } from '../../utils/ranking.js'
+import {
+  classesWithBaseTeams,
+  cutRanking,
+  loadRankingBase,
+  loadRankingContext,
+  loadTeamStandings,
+  publicRankingRow,
+  rankClass,
+  rankOf,
+  rankingPeriodStart,
+  statsWithoutXp,
+  withoutXp,
+} from '../../utils/ranking.js'
+import {
+  effectiveRankingTypes,
+  rankingPeriodsFor,
+  resolveRankingConfig,
+  resolveRankingView,
+  studentRankingTypes,
+} from '../../utils/ranking-config.js'
+import { classComparison } from '../analytics/comparison.js'
+import {
+  COUNTED_MISSION_WHERE,
+  missionCompletions,
+  studentProgressByClass,
+} from '../analytics/student-progress.js'
 import { MISSION_ORDER } from '../../utils/mission-order.js'
 
 /** Matricularse en una clase es cosa de alumnos: el profesorado la mira con la vista previa. */
@@ -77,42 +110,55 @@ const AVATAR_GENERATE_LIMIT = { max: 5, windowMs: 60 * 60 * 1000 }
 export class StudentsService {
   // ==================== PROFILE ====================
 
-  async getProfile(userId: string) {
-    const user = await prisma.user.findUnique({
+  async getProfile(user: ClassUser) {
+    const userId = user.id
+    const account = await prisma.user.findUnique({
       where: { id: userId },
-      include: {
-        earnedBadges: { include: { badge: true } },
-        enrollments: true, // Get all enrollments to calculate total XP
-      },
+      include: { earnedBadges: { include: { badge: true } } },
     })
 
-    if (!user) throw new Error('Cuenta no encontrada')
+    if (!account) throw new Error('Cuenta no encontrada')
 
-    // Aggregate XP across all classes for profile display
-    const totalXp = user.enrollments.reduce((sum, e) => sum + e.xp, 0)
-    const levelInfo = getLevelInfo(totalXp)
+    // Las cifras del inicio. Clases: las de «Mis clases» (sin las archivadas ni
+    // las de la papelera). Misiones completadas: las de la definición única de las
+    // que cuentan (ver analytics/definitions.ts), solo de clases en las que está
+    // matriculada de verdad, sin la vista previa.
+    // Insignias: todas las que tiene, como en su página de insignias.
+    const [classesEnrolled, countedMissions] = await Promise.all([
+      prisma.classEnrollment.count({
+        where: { AND: [studentEnrollmentsWhere(user), { class: { archived: false } }] },
+      }),
+      prisma.mission.findMany({
+        where: {
+          ...COUNTED_MISSION_WHERE,
+          class: { ...LIVE_CLASS_WHERE, enrollments: { some: { studentId: userId, isPreview: false } } },
+        },
+        select: { id: true, enigmas: { select: { id: true, isOptional: true } } },
+      }),
+    ])
+    const { datesBy } = await missionCompletions(countedMissions, { studentId: userId })
+    const missionsCompleted = datesBy.get(userId)?.size ?? 0
 
     return {
-      id: user.id,
-      email: user.email,
-      username: user.username,
-      accountType: user.accountType,
-      name: user.name,
-      firstName: user.name.split(' ')[0],
-      lastName: user.name.split(' ').slice(1).join(' ') || '',
+      id: account.id,
+      email: account.email,
+      username: account.username,
+      accountType: account.accountType,
+      name: account.name,
+      firstName: account.name.split(' ')[0],
+      lastName: account.name.split(' ').slice(1).join(' ') || '',
       bio: null,
-      // XP/level is per-class, but for profile we show aggregated stats
-      // Avatar is also per-class (in enrollment)
-      badges: user.earnedBadges.map((eb) => ({
+      // La XP, el nivel y el avatar son de cada clase: aquí no hay.
+      badges: account.earnedBadges.map((eb) => ({
         id: eb.badge.id,
         name: eb.badge.name,
         imageUrl: eb.badge.imageUrl,
         earnedAt: eb.earnedAt,
       })),
       stats: {
-        totalXp,
-        totalBadges: user.earnedBadges.length,
-        classesEnrolled: user.enrollments.length,
+        classesEnrolled,
+        missionsCompleted,
+        badgesEarned: account.earnedBadges.length,
       },
     }
   }
@@ -174,6 +220,12 @@ export class StudentsService {
     })
 
     const activeEnrollments = enrollments.filter((e) => !e.class.archived)
+    const classIds = activeEnrollments.map(e => e.class.id)
+    // «4 de 7 misiones» en cada tarjeta: de una vez, sin una matriz por clase.
+    const [withTeams, progressByClass] = await Promise.all([
+      classesWithBaseTeams(classIds),
+      studentProgressByClass(user.id, classIds),
+    ])
 
     return {
       classes: activeEnrollments.map((e) => ({
@@ -185,8 +237,18 @@ export class StudentsService {
         teacherName: e.class.teacher.name,
         backgroundImage: e.class.backgroundImage,
         settings: resolveClassSettings(e.class.settings),
+        // Como en el detalle: la portada de la clase puede salir de esta lista.
+        rankingTypes: studentRankingTypes(
+          resolveClassSettings(e.class.settings),
+          resolveRankingConfig(e.class.rankingConfig),
+          withTeams.has(e.class.id)
+        ),
         studentCount: e.class.enrollments.length,
         totalMissions: e.class.missions.length,
+        progress: {
+          missionsCompleted: progressByClass.get(e.class.id)?.missionsCompleted ?? 0,
+          missionsCounted: progressByClass.get(e.class.id)?.missionsCounted ?? 0,
+        },
         coins: e.coins,
         mana: e.mana,
         lives: e.lives,
@@ -203,7 +265,7 @@ export class StudentsService {
         class: {
           include: {
             teacher: true,
-            missions: { include: { enigmas: true } },
+            _count: { select: { missions: true } },
             enrollments: { where: { isPreview: false, AND: [participatingEnrollmentWhere] } },
             guide: true,
             teachers: classTeachersInclude(),
@@ -217,43 +279,7 @@ export class StudentsService {
     if (enrollment.class.archived) throw new Error('Esta clase está archivada y ya no está disponible')
 
     const cls = enrollment.class
-
-    // Get student's mission progress for this class
-    const missionProgress = await prisma.studentMissionProgress.findMany({
-      where: {
-        studentId: userId,
-        mission: { classId },
-      },
-    })
-
-    const missionsCompleted = missionProgress.filter((p) => p.completedAt !== null).length
-    const missionsTotal = cls.missions.length
-
-    // Calculate enigmas and XP (consistent with mission cards)
-    const totalEnigmas = cls.missions.reduce((sum, m) => sum + m.enigmas.length, 0)
-    const totalXpPotential = cls.missions.reduce(
-      (sum, m) => sum + calculateMissionTotalXP(m.rarity, m.enigmas.map(e => e.xpReward)),
-      0
-    )
-
-    // Use StudentMissionProgress.enigmasCompleted (same as mission cards)
-    const completedEnigmas = missionProgress.reduce((sum, p) => sum + p.enigmasCompleted, 0)
-    const completionRate = totalEnigmas > 0 ? Math.round((completedEnigmas / totalEnigmas) * 100) : 0
-
-    // Earned XP = the per-class wallet (single source of truth, kept in sync by
-    // applyXpDelta and the reward-recompute). Includes mission-completion bonuses.
-    const xpEarned = enrollment.xp
-
-    // Get class-specific badges (associated with missions in this class)
-    const classBadges = await prisma.badge.count({
-      where: { mission: { classId } },
-    })
-    const earnedClassBadges = await prisma.studentBadge.count({
-      where: {
-        studentId: userId,
-        badge: { mission: { classId } },
-      },
-    })
+    const { studentTypes: rankingTypes } = await loadRankingContext(classId)
 
     return {
       id: cls.id,
@@ -277,26 +303,17 @@ export class StudentsService {
       language: cls.language,
       educationLevel: cls.educationLevel,
       settings: resolveClassSettings(cls.settings),
+      // Los tipos de ranking que ve; vacío si no tiene ninguno (sin pestaña).
+      rankingTypes,
       // Sin código de invitación: desde este lado entra también la vista previa
       // del profesorado, y el código es solo de quien administra la clase.
       studentCount: cls.enrollments.length,
-      missionCount: cls.missions.length,
+      missionCount: cls._count.missions,
       coins: enrollment.coins,
       mana: enrollment.mana,
       lives: enrollment.lives,
       createdAt: cls.createdAt,
       updatedAt: cls.updatedAt,
-      studentProgress: {
-        completionRate,
-        missionsCompleted,
-        missionsTotal,
-        enigmasCompleted: completedEnigmas,
-        enigmasTotal: totalEnigmas,
-        xpEarned,
-        xpTotal: totalXpPotential,
-        badgesEarned: earnedClassBadges,
-        badgesTotal: classBadges,
-      },
     }
   }
 
@@ -365,47 +382,37 @@ export class StudentsService {
     const enrollment = await prisma.classEnrollment.findUnique({
       where: { studentId_classId: { studentId: userId, classId } },
       include: {
-        student: true,
-        class: {
-          include: {
-            missions: { include: { enigmas: true } },
-          },
-        },
+        student: { select: { name: true } },
+        class: true,
       },
     })
 
     if (!enrollment) throw new Error('No estás en esta clase')
-
-    // Get mission progress to calculate completed enigmas (consistent with mission cards)
-    const missionProgress = await prisma.studentMissionProgress.findMany({
-      where: {
-        studentId: userId,
-        mission: { classId },
-      },
-    })
-
-    // Calculate totals
-    const totalEnigmas = enrollment.class.missions.reduce((sum, m) => sum + m.enigmas.length, 0)
-    const totalXpPotential = enrollment.class.missions.reduce(
-      (sum, m) => sum + calculateMissionTotalXP(m.rarity, m.enigmas.map(e => e.xpReward)),
-      0
-    )
-
-    // Completed enigmas from StudentMissionProgress (same as mission cards)
-    const completedEnigmas = missionProgress.reduce((sum, p) => sum + p.enigmasCompleted, 0)
 
     // Per-class XP is the single source of truth: it's kept in sync by
     // applyXpDelta on every approval/revocation and shared with the ranking, so
     // the header and the ranking can never disagree. Level is derived from it.
     const xpEarned = enrollment.xp
 
-    // Get ranking in class (order by enrollment XP)
+    // Su puesto, con el mismo orden que la lista del ranking (`rankByXp`). Sin
+    // puesto (null) si la clase no tiene el ranking por XP encendido, si aún no
+    // tiene XP o si es la vista previa del profesorado, que no está en ella. Todos
+    // los modos enseñan el puesto propio: aquí no hay más que recortar.
     const classStudents = await prisma.classEnrollment.findMany({
       where: { classId, isPreview: false, AND: [participatingEnrollmentWhere] },
-      orderBy: { xp: 'desc' },
+      select: { studentId: true, xp: true, nickname: true },
     })
-
-    const rank = classStudents.findIndex((e) => e.studentId === userId) + 1
+    const settings = resolveClassSettings(enrollment.class.settings)
+    const xpRanking =
+      settings.rankings &&
+      effectiveRankingTypes(resolveRankingConfig(enrollment.class.rankingConfig), settings).includes('xp')
+    const rank =
+      xpRanking && !enrollment.isPreview
+        ? rankOf(
+            classStudents.map(e => ({ id: e.studentId, xp: e.xp, alias: e.nickname })),
+            userId
+          )
+        : null
     // El nivel/título/color del alumno se calcula con la config de SU clase.
     const levelCfg = resolveLevelConfig(enrollment.class.levelConfig)
     const levelInfo = getLevelInfo(xpEarned, levelCfg)
@@ -416,7 +423,6 @@ export class StudentsService {
     return {
       classId,
       xp: xpEarned,
-      xpTotal: totalXpPotential,
       coins: enrollment.coins,
       lives: enrollment.lives,
       level: levelInfo.level,
@@ -434,100 +440,116 @@ export class StudentsService {
       username: enrollment.nickname,
       nickname: enrollment.nickname,
       avatar: enrollment.avatarUrl,
-      // Progress info (consistent with mission cards)
-      enigmasCompleted: completedEnigmas,
-      enigmasTotal: totalEnigmas,
     }
   }
 
-  async getClassRanking(userId: string, classId: string) {
-    // Order by enrollment XP (per-class XP)
-    const enrollments = await prisma.classEnrollment.findMany({
-      where: { classId, isPreview: false, AND: [participatingEnrollmentWhere] },
-      include: { student: true },
-      orderBy: { xp: 'desc' },
+  /**
+   * El ranking de la clase para el alumnado, de un tipo y un periodo (lo que no
+   * valga se resuelve a lo primero que tenga la clase). Si no hay ninguno que ver,
+   * no existe (404): el profesorado ve el suyo en su lado.
+   *
+   * Lo que el modo esconde no sale de aquí (`cutRanking`): en `top` y `position`
+   * no viajan las filas ocultas ni las medias de la clase, con las que se podría
+   * deducir lo escondido. Quien mira recibe siempre su fila aparte (`me`), con su
+   * puesto, y el total; la vista previa del profesorado no tiene fila. Los equipos
+   * se ven enteros en todos los modos: nadie queda señalado individualmente.
+   *
+   * Sin el tipo XP entre los que ve, la XP y el nivel de cada cual no viajan, en
+   * ningún modo (`withoutXp`), y `usesXp` sale apagado: el desempate por XP de las
+   * misiones se queda en el servidor.
+   *
+   * Ni la XP total de la clase ni el progreso medio salen en ningún modo
+   * (`studentRankingStats`). En `top` y `position`, en vez de las medias va la
+   * comparación anónima (`classComparison`), si la clase la tiene encendida.
+   *
+   * Con alias o «Estudiante», nunca el nombre real, y con el id de la matrícula,
+   * no el de la cuenta (`publicRankingRow`).
+   */
+  async getClassRanking(
+    enrollment: StudentEnrollmentRef,
+    classId: string,
+    requested: { type?: unknown; period?: unknown } = {}
+  ) {
+    const context = await loadRankingContext(classId)
+    const { config, studentTypes } = context
+    if (studentTypes.length === 0) {
+      throw new NotFoundError('Esta clase no tiene la clasificación activada', 'RANKING_DISABLED')
+    }
+    const { type, period } = resolveRankingView(studentTypes, config, requested)
+    const since = rankingPeriodStart(period, config)
+    const showsXp = studentTypes.includes('xp')
+    const options = {
+      types: studentTypes,
+      periods: rankingPeriodsFor(type, config),
+      mode: config.mode,
+      topN: config.topN,
+      seasonStartedAt: config.seasonStartedAt,
+      usesXp: showsXp,
+    }
+    if (type === 'teams') {
+      return { type, period, options, standings: await loadTeamStandings(classId, since) }
+    }
+
+    const base = await loadRankingBase(classId)
+    const { ranked, stats } = rankClass(base, { type, since })
+    const rows = ranked.map(row => {
+      const shown = publicRankingRow(row)
+      return { ...(showsXp ? shown : withoutXp(shown)), isCurrentUser: row.enrollmentId === enrollment.id }
     })
-
-    // Config de niveles de la clase → título/color del tramo por alumno.
-    const clsRow = await prisma.class.findUnique({ where: { id: classId }, select: { levelConfig: true } })
-    const levelCfg = resolveLevelConfig(clsRow?.levelConfig)
-
-    // Misiones completadas por alumno: el mismo recuento que el ranking del profesorado.
-    const { total: missionsCount, byStudent: completedMissionsMap } =
-      await completedMissionsByStudent(classId)
-
-    const leaderboard = enrollments.map((e, index) => {
-      const missionsCompleted = completedMissionsMap.get(e.student.id) || 0
-      const completionPercent = missionsCount > 0 ? Math.round((missionsCompleted / missionsCount) * 100) : 0
-
-      const tier = tierForLevel(e.level, levelCfg)
-      return {
-        id: e.student.id,
-        username: e.nickname || e.student.name,
-        avatar: e.avatarUrl || '/app/avatars/atenea.svg',
-        rank: index + 1,
-        xp: e.xp,
-        level: e.level,
-        levelTitle: tier.title,
-        levelColor: tier.color,
-        missionsCompleted,
-        missionsTotal: missionsCount,
-        completionPercent,
-        isCurrentUser: e.student.id === userId,
-      }
-    })
-
-    const currentUserRank = leaderboard.find((l) => l.isCurrentUser)
-
-    // Calculate stats
-    const totalStudents = leaderboard.length
-    const totalXp = leaderboard.reduce((sum, l) => sum + l.xp, 0)
-    const avgXp = totalStudents > 0 ? Math.round(totalXp / totalStudents) : 0
-    const totalProgress = leaderboard.reduce((sum, l) => sum + l.completionPercent, 0)
-    const avgProgress = totalStudents > 0 ? Math.round(totalProgress / totalStudents) : 0
-    const totalMissionsCompleted = leaderboard.reduce((sum, l) => sum + l.missionsCompleted, 0)
-    const avgMissionsNum = totalStudents > 0 ? Math.round(totalMissionsCompleted / totalStudents) : 0
-    const avgMissions = `${avgMissionsNum}/${missionsCount}`
+    const { podium, rest } = cutRanking(rows, config)
+    const showStats = config.mode === 'full' && period === 'all'
+    const comparison =
+      config.mode === 'full' ? null : await classComparison(enrollment.id, classId, context, { base })
 
     return {
-      podium: leaderboard.slice(0, 3),
-      leaderboard: leaderboard.slice(3),
-      stats: {
-        avgXp,
-        avgProgress,
-        avgMissions,
-        totalXp,
-        totalStudents,
-      },
-      filters: [
-        { id: 'general', label: 'General' },
-        { id: 'esta_semana', label: 'Esta Semana' },
-        { id: 'misiones', label: 'Misiones' },
-        { id: 'xp_ganado', label: 'XP Ganado' },
-      ],
-      currentUserRank,
+      type,
+      period,
+      options,
+      podium,
+      leaderboard: rest,
+      stats: showStats ? studentRankingStats(showsXp ? stats : statsWithoutXp(stats)) : null,
+      total: rows.length,
+      me: rows.find(row => row.isCurrentUser) ?? null,
+      comparison,
     }
   }
 
-  async updateClassProfile(userId: string, classId: string, data: { nickname?: string | null; avatarUrl?: string | null }) {
-    // Verify enrollment
-    const enrollment = await prisma.classEnrollment.findUnique({
-      where: { studentId_classId: { studentId: userId, classId } },
-    })
+  /**
+   * El alias y el avatar con los que se ve en la clase. El alias, con las reglas
+   * del profesorado (`cleanNickname`: limpio y de 1 a 20 caracteres) y sin
+   * repetir el de otra persona de la clase (409 `NICKNAME_TAKEN`). No se puede
+   * dejar sin alias: sin él, el resto de la clase vería «Estudiante».
+   */
+  async updateClassProfile(
+    enrollmentRef: StudentEnrollmentRef,
+    classId: string,
+    data: { nickname?: string; avatarUrl?: string | null }
+  ) {
+    const enrollment = await prisma.classEnrollment.findUnique({ where: { id: enrollmentRef.id } })
 
     if (!enrollment) throw new Error('No estás en esta clase')
     if (data.avatarUrl && !isAllowedClassAvatar(data.avatarUrl, enrollment.avatarUrl)) {
       throw new ValidationError('Elige un avatar de la lista', 'AVATAR_NOT_ALLOWED')
     }
+    const nickname = data.nickname === undefined ? undefined : cleanNickname(data.nickname)
 
-    // Update the enrollment with new profile data (nickname and avatarUrl which can be preset or AI-generated)
-    const updated = await prisma.classEnrollment.update({
-      where: { studentId_classId: { studentId: userId, classId } },
-      data: {
-        nickname: data.nickname !== undefined ? data.nickname : enrollment.nickname,
-        avatarUrl: data.avatarUrl !== undefined ? data.avatarUrl : enrollment.avatarUrl,
-      },
-    })
+    const updated = await prisma.$transaction(async tx => {
+      // Solo se comprueba un alias nuevo: quien guarda el suyo (o lo cambia de
+      // mayúsculas) no choca consigo, ni con un repetido de antes de esta regla.
+      if (nickname !== undefined && !isSameNickname(nickname, enrollment.nickname)) {
+        await lockClassNicknames(tx, classId)
+        if (await nicknameTakenInClass(tx, classId, nickname, enrollment.id)) {
+          throw new ConflictError('Ese alias ya lo tiene otra persona de la clase', 'NICKNAME_TAKEN')
+        }
+      }
+      return tx.classEnrollment.update({
+        where: { id: enrollment.id },
+        data: {
+          ...(nickname !== undefined ? { nickname } : {}),
+          ...(data.avatarUrl !== undefined ? { avatarUrl: data.avatarUrl } : {}),
+        },
+      })
+    }, ENROLL_TX_OPTIONS)
     // El generado con IA que deja ya no se puede volver a poner: fuera su fichero.
     if (updated.avatarUrl !== enrollment.avatarUrl) await releaseGeneratedAvatar(enrollment.avatarUrl)
 
@@ -667,7 +689,7 @@ export class StudentsService {
       where: { studentId_classId: { studentId: userId, classId } },
     })
 
-    if (!enrollment) throw new Error('No estás en esta clase')
+    if (!enrollment) throw new NotFoundError('No estás en esta clase')
 
     // Get activities related to this class (filter by classId field)
     const activities = await prisma.activity.findMany({
@@ -914,7 +936,7 @@ export class StudentsService {
 
   async getActivities(userId: string, limit = 10) {
     const activities = await prisma.activity.findMany({
-      where: { userId },
+      where: { userId, ...WALL_ACTIVITY_WHERE },
       include: ACTIVITY_ACTOR_INCLUDE,
       orderBy: { createdAt: 'desc' },
       take: limit,

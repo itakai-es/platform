@@ -83,6 +83,7 @@ describe('tabla de acciones', () => {
       'class.duplicate': 'read',
       'class.editContent': 'edit',
       'class.editSettings': 'admin',
+      'class.startSeason': 'admin',
       'class.archive': 'admin',
       'class.inviteCode': 'admin',
       'class.publishTemplate': 'owner',
@@ -113,6 +114,8 @@ describe('tabla de acciones', () => {
       'attendance.export': 'edit',
       'team.manage': 'edit',
       'team.award': 'edit',
+      'analytics.view': 'read',
+      'analytics.export': 'edit',
     })
   })
 

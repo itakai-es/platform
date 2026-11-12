@@ -3,6 +3,7 @@ import { BaseAgent, type AgentRequestContext } from './base-agent.js'
 import { getPlatformContext, getSkinName } from '../platform-context.js'
 import { INCLUSIVE_LANGUAGE_ES } from '../prompts/index.js'
 import { calculateMissionTotalXP } from '../../../utils/xp-calculator.js'
+import { completionDate, enigmaTally, isCompleted } from '../../analytics/definitions.js'
 import { sortByClassOrder } from '../../../utils/mission-order.js'
 import { classPathsFor, type PathRequirement } from '../../../utils/mission-path.js'
 import {
@@ -51,7 +52,13 @@ export class StudentAgent extends BaseAgent {
             select: {
               title: true,
               class: { select: { name: true } },
-              _count: { select: { enigmas: true } },
+              enigmas: {
+                select: {
+                  id: true,
+                  isOptional: true,
+                  progress: { where: { studentId: context.userId }, select: { id: true } },
+                },
+              },
             },
           },
         },
@@ -94,7 +101,13 @@ export class StudentAgent extends BaseAgent {
       ? enrollments.map(item => `${item.class.name} (nivel ${item.level}, ${item.xp} XP)`).join('; ')
       : 'Sin clases activas'
     const missionSummary = missionProgress.length > 0
-      ? missionProgress.map(item => `${item.mission.title} en ${item.mission.class.name} (${item.progress}%, ${item.mission._count.enigmas} enigmas)`).join('; ')
+      ? missionProgress.map(item => {
+          // Enigmas obligatorios aprobados; los opcionales no cuentan para completar.
+          const { enigmas } = item.mission
+          const approved = new Set(enigmas.filter(e => e.progress.length > 0).map(e => e.id))
+          const tally = enigmaTally(enigmas, approved)
+          return `${item.mission.title} en ${item.mission.class.name} (${isCompleted(item.completedAt, enigmas, approved) ? 100 : (tally.percent ?? 0)}%, ${enigmas.length} enigmas)`
+        }).join('; ')
       : 'Sin misiones en progreso'
     // El camino del mapa: las cerradas hasta completar otra no son «disponibles»;
     // van aparte, con lo que las abre, para que no se las proponga como siguiente
@@ -224,7 +237,7 @@ export class StudentAgent extends BaseAgent {
           studentId,
           enigma: { missionId },
         },
-        select: { enigmaId: true, xpEarned: true },
+        select: { enigmaId: true, xpEarned: true, completedAt: true },
       }),
     ])
 
@@ -272,9 +285,17 @@ export class StudentAgent extends BaseAgent {
     }
 
     if (studentProgress) {
-      lines.push(`\nStudent Progress: ${studentProgress.progress}% complete, ${studentProgress.enigmasCompleted} enigmas completed`)
-      if (studentProgress.completedAt) {
-        lines.push(`Mission completed on: ${studentProgress.completedAt.toISOString().split('T')[0]}`)
+      // Enigmas obligatorios aprobados; los opcionales no cuentan para completar.
+      const tally = enigmaTally(mission.enigmas, completedEnigmaIds)
+      lines.push(`\nStudent Progress: ${tally.required.approved} of ${tally.required.total} required enigmas approved${tally.optional.total > 0 ? `, ${tally.optional.approved} of ${tally.optional.total} optional` : ''}`)
+      // La definición única: también si se queda con todo aprobado sin `completedAt`.
+      const completedOn = completionDate(
+        studentProgress.completedAt,
+        mission.enigmas,
+        new Map(enigmaProgress.map(ep => [ep.enigmaId, ep.completedAt]))
+      )
+      if (completedOn) {
+        lines.push(`Mission completed on: ${completedOn.toISOString().split('T')[0]}`)
       }
     } else {
       lines.push(`\nStudent Progress: Not started yet`)

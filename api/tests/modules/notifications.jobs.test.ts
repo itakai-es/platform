@@ -11,6 +11,8 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 const mocks = vi.hoisted(() => ({
   missionFindMany: vi.fn(),
   classEnrollmentFindMany: vi.fn(),
+  missionProgressFindMany: vi.fn(),
+  enigmaProgressFindMany: vi.fn(),
   notificationDeleteMany: vi.fn(),
   notifyMany: vi.fn(),
 }))
@@ -19,6 +21,8 @@ vi.mock('../../src/config/database.js', () => ({
   prisma: {
     mission: { findMany: mocks.missionFindMany },
     classEnrollment: { findMany: mocks.classEnrollmentFindMany },
+    studentMissionProgress: { findMany: mocks.missionProgressFindMany },
+    studentEnigmaProgress: { findMany: mocks.enigmaProgressFindMany },
     notification: { deleteMany: mocks.notificationDeleteMany },
   },
 }))
@@ -42,7 +46,11 @@ const mission = (overrides: any = {}) => ({
   deadline: in10h,
   classId: 'c1',
   class: { name: '1º ESO' },
-  progress: [],
+  enigmas: [
+    { id: 'e1', isOptional: false },
+    { id: 'e2', isOptional: false },
+    { id: 'o1', isOptional: true },
+  ],
   ...overrides,
 })
 
@@ -56,6 +64,8 @@ beforeEach(() => {
   vi.clearAllMocks()
   vi.setSystemTime(NOW)
   mocks.notifyMany.mockImplementation((inputs: unknown[]) => Promise.resolve(inputs.length))
+  mocks.missionProgressFindMany.mockResolvedValue([])
+  mocks.enigmaProgressFindMany.mockResolvedValue([])
 })
 
 async function run() {
@@ -85,8 +95,26 @@ describe('deadline-reminders', () => {
   })
 
   it('no avisa a quien ya completó la misión', async () => {
-    mocks.missionFindMany.mockResolvedValue([
-      mission({ progress: [{ studentId: 's1', completedAt: NOW }, { studentId: 's2', completedAt: null }] }),
+    mocks.missionFindMany.mockResolvedValue([mission()])
+    mocks.missionProgressFindMany.mockResolvedValue([
+      { studentId: 's1', missionId: 'm1', completedAt: NOW },
+    ])
+    mocks.classEnrollmentFindMany.mockResolvedValue([enrollment('s1'), enrollment('s2')])
+
+    await run()
+
+    expect(mocks.notifyMany.mock.calls[0][0].map((a: any) => a.userId)).toEqual(['s2'])
+  })
+
+  it('tampoco a quien tiene todos los obligatorios aprobados, aunque no tenga `completedAt`', async () => {
+    mocks.missionFindMany.mockResolvedValue([mission()])
+    const approve = (studentId: string, enigmaId: string) => ({ studentId, enigmaId, completedAt: NOW })
+    mocks.enigmaProgressFindMany.mockResolvedValue([
+      // s1 los tiene todos; a s2 le falta uno, por mucho que tenga el opcional.
+      approve('s1', 'e1'),
+      approve('s1', 'e2'),
+      approve('s2', 'e1'),
+      approve('s2', 'o1'),
     ])
     mocks.classEnrollmentFindMany.mockResolvedValue([enrollment('s1'), enrollment('s2')])
 

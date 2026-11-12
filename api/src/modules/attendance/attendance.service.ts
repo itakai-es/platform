@@ -4,6 +4,7 @@ import type { AttendanceStatus } from '../../generated/prisma/enums.js'
 import { assertClassAccess, recordClassAction } from '../../utils/class-access.js'
 import { assertClassWritable } from '../../utils/class-writable.js'
 import { NotFoundError, ValidationError } from '../../utils/errors.js'
+import { ATTENDED_STATUSES, attendanceRate } from '../analytics/definitions.js'
 
 /**
  * Asistencia de una clase. Una sesión es cada vez que se da la clase (clase +
@@ -331,13 +332,12 @@ async function buildSummary(classId: string, from: string, to: string, studentId
     }
     const counts = countStatuses(Object.values(statuses))
     const total = Object.keys(statuses).length
-    // En clase: presente o con retraso.
-    const attended = counts.present + counts.late
+    const attended = ATTENDED_STATUSES.reduce((sum, status) => sum + counts[status], 0)
     return {
       studentId: e.studentId,
       total,
       ...counts,
-      rate: total > 0 ? Math.round((attended / total) * 100) : null,
+      rate: attendanceRate({ attended, total }),
       statuses,
     }
   })

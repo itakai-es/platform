@@ -5,11 +5,13 @@ import { shopService } from '../shop/shop.service.js'
 import { behaviorsService } from '../behaviors/behaviors.service.js'
 import { classroomRoutes } from '../behaviors/classroom.routes.js'
 import { attendanceRoutes } from '../attendance/attendance.routes.js'
+import { analyticsRoutes } from '../analytics/analytics.routes.js'
 import { teamsRoutes } from '../teams/teams.routes.js'
 import { z, ZodError } from 'zod'
 import { scheduleConfigSchema } from './schedule-config.schema.js'
 import { templateFiltersOf, type TemplateFiltersQuery } from '../templates/templates.routes.js'
 import { rethrowHttpError } from '../../utils/errors.js'
+import { RANKING_MODES, RANKING_TOP_SIZES, RANKING_TYPES } from '../../utils/ranking-config.js'
 import { consumeRateLimit, releaseRateLimit } from '../../utils/rate-limit.js'
 import { USERNAME_MAX_LENGTH, USERNAME_MIN_LENGTH } from '../../utils/identity.js'
 import {
@@ -53,6 +55,7 @@ import {
   STUDENT_LIST_SORTS,
   STUDENT_PROGRESS_RANGES,
 } from './student-list.service.js'
+import { wallLimit } from '../../utils/activity.js'
 
 /** Quien hace la petición: el `id` y el `role` que viajan en el token. */
 type RequestUser = { id: string; role: string | null }
@@ -201,6 +204,20 @@ const levelConfigSchema = z
   })
   .partial()
 
+// La temporada no entra: solo se escribe con «Empezar temporada» (`POST …/ranking/season`).
+const rankingConfigSchema = z
+  .object({
+    types: z.array(z.enum(RANKING_TYPES)).min(1),
+    mode: z.enum(RANKING_MODES),
+    topN: z.union([
+      z.literal(RANKING_TOP_SIZES[0]),
+      z.literal(RANKING_TOP_SIZES[1]),
+      z.literal(RANKING_TOP_SIZES[2]),
+    ]),
+    compare: z.boolean(),
+  })
+  .partial()
+
 const updateClassSchema = z.object({
   name: z.string().optional(),
   narrative: z.string().optional(),
@@ -213,6 +230,7 @@ const updateClassSchema = z.object({
   province: z.string().optional(),
   settings: classSettingsSchema.optional(),
   levelConfig: levelConfigSchema.optional(),
+  rankingConfig: rankingConfigSchema.optional(),
   scheduleConfig: scheduleConfigSchema.optional(),
 })
 
@@ -431,6 +449,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
   // módulos, detrás de la misma comprobación de sesión y papel.
   await fastify.register(classroomRoutes)
   await fastify.register(attendanceRoutes)
+  await fastify.register(analyticsRoutes)
   await fastify.register(teamsRoutes)
 
   fastify.get('/classes/:classId/behaviors', async (request: FastifyRequest<{ Params: { classId: string } }>, reply: FastifyReply) => {
@@ -746,11 +765,11 @@ export async function teacherRoutes(fastify: FastifyInstance) {
     }
   )
 
-  fastify.get('/classes/:classId/ranking', async (request: FastifyRequest<{ Params: { classId: string } }>, reply: FastifyReply) => {
+  fastify.get('/classes/:classId/ranking', async (request: FastifyRequest<{ Params: { classId: string }; Querystring: { type?: string; period?: string } }>, reply: FastifyReply) => {
     try {
       const { id } = request.user as { id: string }
       const { classId } = request.params
-      const result = await teachersService.getClassRanking(id, classId)
+      const result = await teachersService.getClassRanking(id, classId, request.query)
       return result
     } catch (error) {
       rethrowHttpError(error)
@@ -760,6 +779,14 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
+
+  fastify.post(
+    '/classes/:classId/ranking/season',
+    async (request: FastifyRequest<{ Params: { classId: string } }>) => {
+      const { id } = request.user as { id: string }
+      return teachersService.startRankingSeason(id, request.params.classId)
+    }
+  )
 
   fastify.get('/classes/:classId/students', async (request: FastifyRequest<{ Params: { classId: string } }>, reply: FastifyReply) => {
     try {
@@ -1026,7 +1053,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
     try {
       const { id } = request.user as { id: string }
       const { classId } = request.params
-      const limit = request.query.limit ? parseInt(request.query.limit) : 10
+      const limit = wallLimit(request.query.limit, 10)
       const result = await teachersService.getClassActivities(id, classId, limit)
       return result
     } catch (error) {
@@ -1184,7 +1211,7 @@ export async function teacherRoutes(fastify: FastifyInstance) {
   fastify.get('/activities', async (request: FastifyRequest<{ Querystring: { limit?: string } }>, reply: FastifyReply) => {
     try {
       const { id } = request.user as { id: string }
-      const limit = request.query.limit ? parseInt(request.query.limit) : 10
+      const limit = wallLimit(request.query.limit, 10)
       const result = await teachersService.getActivities(id, limit)
       return result
     } catch (error) {

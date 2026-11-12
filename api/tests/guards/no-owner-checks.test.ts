@@ -137,9 +137,9 @@ const ALLOWED_ENROLLMENT_LOOKUP: Record<string, Allowed> = {
     reason: 'syncEnrollmentLevel recalcula el nivel de una matrícula; no decide acceso',
   },
   'modules/students/students.service.ts': {
-    count: 8,
+    count: 7,
     reason:
-      'monedero y perfil del alumno en rutas /students/classes/:classId, detrás de requireStudentEnrollment (7), y joinClass, que mira si ya estaba matriculado (1)',
+      'monedero y perfil del alumno en rutas /students/classes/:classId, detrás de requireStudentEnrollment (6), y joinClass, que mira si ya estaba matriculado (1)',
   },
   'modules/shop/shop.service.ts': {
     count: 4,

@@ -34,6 +34,27 @@ export function isAllowedClassAvatar(value: string, current: string | null): boo
   return isStudentCatalogAvatar(value) || value === current
 }
 
+/**
+ * El color de fondo del avatar de un estudiante, el mismo que calcula la
+ * aplicación (`avatarColorOf(studentAvatarSeed(clase, estudiante))`, en
+ * `app/app/utils/avatar.ts`), que no puede cambiar: sale de la clase y de la
+ * cuenta. Lo calcula la API porque el alumnado no recibe el id de la cuenta de sus
+ * compañeros; con él se podrían unir los alias de una misma persona en dos clases.
+ */
+const AVATAR_COLORS = ['purple', 'yellow', 'mint', 'sky', 'red', 'peach'] as const
+
+export type AvatarColor = (typeof AVATAR_COLORS)[number]
+
+export function studentAvatarColor(classId: string, studentId: string): AvatarColor {
+  const seed = `${classId}:${studentId}`
+  let hash = 0
+  for (let i = 0; i < seed.length; i++) {
+    hash = (hash << 5) - hash + seed.charCodeAt(i)
+    hash |= 0
+  }
+  return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length]!
+}
+
 /** Claves del catálogo docente: los personajes y los colores de la paleta de equipos. */
 // Los personajes (sus retratos) y, para quien prefiera sus iniciales, los colores.
 export const TEACHER_AVATAR_KEYS = [

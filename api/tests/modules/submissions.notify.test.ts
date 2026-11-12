@@ -29,6 +29,8 @@ vi.mock('../../src/config/database.js', () => ({
     missionEnigma: { findUnique: mocks.enigmaFindUnique },
     classEnrollment: { findUniqueOrThrow: mocks.enrollmentFindUnique },
     enigmaSubmission: { findFirst: mocks.submissionFindFirst, create: mocks.submissionCreate },
+    // Sin el enigma aprobado: se puede entregar.
+    studentEnigmaProgress: { findUnique: vi.fn(async () => null) },
     class: { findUnique: mocks.classFindUnique },
     activity: { create: mocks.activityCreate },
   },
@@ -46,6 +48,8 @@ vi.mock('../../src/utils/class-access.js', () => ({
 
 vi.mock('../../src/modules/storage/storage.service.js', () => ({
   saveUpload: vi.fn(async (key: string) => `/uploads/${key}`),
+  deleteUpload: vi.fn(async () => true),
+  uploadExtension: vi.fn(() => 'pdf'),
 }))
 
 import {
@@ -53,6 +57,8 @@ import {
   submissionReviewUrl,
 } from '../../src/modules/submissions/submissions.service.js'
 import { NotFoundError } from '../../src/utils/errors.js'
+import { deleteUpload } from '../../src/modules/storage/storage.service.js'
+import { Prisma } from '../../src/generated/prisma/client.js'
 
 const TEACHER = 'teacher-1'
 const CO_TEACHER = 'teacher-2'
@@ -184,5 +190,35 @@ describe('submitEnigma — aviso de entrega nueva', () => {
     expect(mocks.submissionCreate).not.toHaveBeenCalled()
     expect(mocks.activityCreate).not.toHaveBeenCalled()
     expect(mocks.recipients).not.toHaveBeenCalled()
+  })
+})
+
+describe('submitEnigma — la misma entrega dos veces', () => {
+  it('con una pendiente ya guardada responde 409 con su código', async () => {
+    mocks.submissionFindFirst.mockResolvedValueOnce({ id: 'otra', status: 'pendiente' })
+    await expect(submissionsService.submitEnigma(STUDENT_USER, ENIGMA)).rejects.toMatchObject({
+      statusCode: 409,
+      code: 'SUBMISSION_PENDING',
+    })
+    expect(mocks.submissionCreate).not.toHaveBeenCalled()
+  })
+
+  it('si la otra llega a la vez (el índice único da P2002), el mismo 409 y el fichero subido se borra', async () => {
+    vi.mocked(deleteUpload).mockClear()
+    mocks.submissionCreate.mockRejectedValueOnce(
+      new Prisma.PrismaClientKnownRequestError('Unique constraint failed', {
+        code: 'P2002',
+        clientVersion: 'test',
+      })
+    )
+    const file = { buffer: Buffer.from('x'), filename: 'tarea.pdf', mimetype: 'application/pdf' }
+
+    await expect(submissionsService.submitEnigma(STUDENT_USER, ENIGMA, file)).rejects.toMatchObject({
+      statusCode: 409,
+      code: 'SUBMISSION_PENDING',
+    })
+    expect(deleteUpload).toHaveBeenCalledWith(expect.stringMatching(/^\/uploads\/submissions\/.+\.pdf$/))
+    expect(mocks.activityCreate).not.toHaveBeenCalled()
+    expect(mocks.notifyMany).not.toHaveBeenCalled()
   })
 })

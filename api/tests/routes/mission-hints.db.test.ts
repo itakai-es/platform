@@ -757,6 +757,31 @@ describeWithDatabase('pistas en las misiones', () => {
       expect(finished.statusCode).toBe(409)
       expect(finished.json().code).toBe('HINT_MISSION_COMPLETED')
 
+      // Con todos los obligatorios aprobados y sin `completedAt` (se pasó a opcional el
+      // que le faltaba): está completada, y una pista de pago no se cobra.
+      const approved = await missionWithHints([['coins', 5]])
+      const required = await prisma.missionEnigma.findFirstOrThrow({
+        where: { missionId: approved.missionId },
+      })
+      await prisma.missionEnigma.create({
+        data: { missionId: approved.missionId, title: 'Ahora opcional', xpReward: 10, isOptional: true },
+      })
+      await prisma.studentEnigmaProgress.create({
+        data: { studentId: f.users.student.id, enigmaId: required.id, percentage: 100 },
+      })
+      await setWallet({ coins: 20 })
+      const paid = await use(approved.missionId, approved.hintIds[0])
+      expect(paid.statusCode).toBe(409)
+      expect(paid.json().code).toBe('HINT_MISSION_COMPLETED')
+      expect(
+        (await send('GET', `/missions/${approved.missionId}`, 'student')).json().mission.hintState
+      ).toMatchObject({ canUse: false, closedReason: 'completed' })
+      const wallet = await prisma.classEnrollment.findFirstOrThrow({
+        where: { classId: f.classId, studentId: f.users.student.id },
+      })
+      expect(wallet.coins).toBe(20)
+      expect(await prisma.missionHintUse.count({ where: { missionId: approved.missionId } })).toBe(0)
+
       const archived = await missionWithHints([['coins', 0]])
       await prisma.class.update({ where: { id: f.classId }, data: { archived: true } })
       try {

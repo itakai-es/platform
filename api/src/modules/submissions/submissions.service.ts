@@ -1,6 +1,7 @@
 import { prisma } from '../../config/database.js'
 import { existsSync, mkdirSync } from 'fs'
-import { saveUpload, uploadExtension } from '../storage/storage.service.js'
+import { deleteUpload, saveUpload, uploadExtension } from '../storage/storage.service.js'
+import { Prisma } from '../../generated/prisma/client.js'
 import { join } from 'path'
 import { randomUUID } from 'crypto'
 import { getMissionCompletionRewards, validateCustomEnigmaXp } from '../../utils/xp-calculator.js'
@@ -17,7 +18,8 @@ import {
   recordClassAction,
   type ClassUser,
 } from '../../utils/class-access.js'
-import { NotFoundError, ValidationError } from '../../utils/errors.js'
+import { ConflictError, NotFoundError, ValidationError } from '../../utils/errors.js'
+import { awaitingReview } from '../../utils/pending-review.js'
 import { assertMissionOpenOnPath } from '../../utils/mission-path.js'
 
 const UPLOADS_DIR = join(process.cwd(), 'uploads', 'submissions')
@@ -43,6 +45,10 @@ function withoutFileUrl<T extends { fileUrl: string | null }>(submission: T) {
  */
 export const submissionReviewUrl = (classId: string, missionId: string, enigmaId: string) =>
   `/profesor/clases/${classId}/misiones/${missionId}?entregas=${enigmaId}`
+
+/** Ya hay una entrega de ese enigma esperando revisión: 409 `SUBMISSION_PENDING`. */
+const pendingSubmissionConflict = () =>
+  new ConflictError('Ya tienes una entrega pendiente de revisión', 'SUBMISSION_PENDING')
 
 export class SubmissionsService {
   /**
@@ -86,14 +92,23 @@ export class SubmissionsService {
       include: { student: { select: { name: true } } },
     })
 
+    // Un enigma ya aprobado no se vuelve a entregar: esa entrega no se podría
+    // aprobar (daría la recompensa dos veces) y se quedaría para siempre
+    // pendiente de revisar.
+    const approved = await prisma.studentEnigmaProgress.findUnique({
+      where: { studentId_enigmaId: { studentId, enigmaId } },
+      select: { id: true },
+    })
+    if (approved) {
+      throw new ConflictError('Ya tienes este enigma aprobado', 'ENIGMA_ALREADY_APPROVED')
+    }
+
     // Check if already submitted and pending
     const existingSubmission = await prisma.enigmaSubmission.findFirst({
       where: { studentId, enigmaId, status: 'pendiente' },
     })
 
-    if (existingSubmission) {
-      throw new Error('Ya tienes una entrega pendiente de revisión')
-    }
+    if (existingSubmission) throw pendingSubmissionConflict()
 
     // Save file if provided
     let fileUrl: string | null = null
@@ -108,20 +123,32 @@ export class SubmissionsService {
       fileSize = file.buffer.length
     }
 
-    // Create submission
-    const submission = await prisma.enigmaSubmission.create({
-      data: {
-        studentId,
-        enigmaId,
-        fileUrl,
-        fileName,
-        fileSize,
-        status: 'pendiente',
-      },
-      include: {
-        enigma: { include: { mission: true } },
-      },
-    })
+    // Create submission. Dos entregas a la vez del mismo enigma (un doble clic)
+    // pasan las dos la comprobación de arriba: el índice único de pendientes
+    // (estudiante, enigma) deja solo una, y la otra responde como si ya la hubiera.
+    let submission
+    try {
+      submission = await prisma.enigmaSubmission.create({
+        data: {
+          studentId,
+          enigmaId,
+          fileUrl,
+          fileName,
+          fileSize,
+          status: 'pendiente',
+        },
+        include: {
+          enigma: { include: { mission: true } },
+        },
+      })
+    } catch (error) {
+      // El fichero ya subido no se queda huérfano.
+      await deleteUpload(fileUrl)
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+        throw pendingSubmissionConflict()
+      }
+      throw error
+    }
 
     // Get class name for activity
     const classInfo = await prisma.class.findUnique({
@@ -291,7 +318,7 @@ export class SubmissionsService {
     const where: any = { enigmaId }
     if (status) where.status = status
 
-    const submissions = await prisma.enigmaSubmission.findMany({
+    const allSubmissions = await prisma.enigmaSubmission.findMany({
       where,
       include: {
         student: {
@@ -314,6 +341,12 @@ export class SubmissionsService {
       },
       orderBy: { submittedAt: 'desc' },
     })
+    // Las pendientes de quien ya tiene el enigma aprobado no se pueden revisar:
+    // no salen en la ventana ni cuentan como pendientes (ver utils/pending-review.ts).
+    const reviewable = new Set(
+      (await awaitingReview(allSubmissions.filter(s => s.status === 'pendiente'))).map(s => s.id)
+    )
+    const submissions = allSubmissions.filter(s => s.status !== 'pendiente' || reviewable.has(s.id))
 
     // Lo que restan las pistas de % de cada estudiante en esta misión: la
     // ventana enseña «Recibirá» con el descuento, igual que se pagará.

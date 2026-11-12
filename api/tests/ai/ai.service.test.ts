@@ -22,7 +22,11 @@ vi.mock('../../src/config/database.js', () => ({
   prisma: {
     user: { findUnique: vi.fn().mockResolvedValue({ name: 'Test User' }) },
     class: { findMany: vi.fn().mockResolvedValue([]), findFirst: vi.fn().mockResolvedValue(null) },
-    enigmaSubmission: { count: vi.fn().mockResolvedValue(0) },
+    enigmaSubmission: {
+      count: vi.fn().mockResolvedValue(0),
+      // Las entregas por revisar (utils/pending-review.ts) se leen con findMany.
+      findMany: vi.fn().mockResolvedValue([]),
+    },
     mission: { findMany: vi.fn().mockResolvedValue([]) },
     classEnrollment: { findMany: vi.fn().mockResolvedValue([]) },
     studentMissionProgress: { findMany: vi.fn().mockResolvedValue([]) },

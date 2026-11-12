@@ -9,6 +9,9 @@ import { SETTINGS_SECTIONS, type SettingsSection } from '../settings/settings.ty
 import { openAiEndpoint } from '../ai/providers/openai-endpoint.js'
 import { rethrowHttpError, ValidationError } from '../../utils/errors.js'
 import { ENROLL_TX_OPTIONS, enrollStudent } from '../../utils/enrollment.js'
+import { buildTimeSeries } from './admin-series.js'
+import { WALL_ACTIVITY_WHERE } from '../../utils/activity.js'
+import { countAwaitingReview } from '../../utils/pending-review.js'
 import { USERNAME_MAX_LENGTH, USERNAME_MIN_LENGTH } from '../../utils/identity.js'
 import {
   createManagedStudent,
@@ -242,8 +245,8 @@ export async function adminRoutes(fastify: FastifyInstance) {
           distinct: ['userId'],
         }).then(tokens => tokens.length),
 
-        // Submissions waiting for teacher review
-        prisma.enigmaSubmission.count({ where: { status: 'pendiente' } }),
+        // Entregas por revisar: sin las de un enigma que esa persona ya tiene aprobado.
+        countAwaitingReview(),
 
         // Missions with status 'activa' (sin las de clases en la papelera)
         prisma.mission.count({ where: { status: 'activa', class: { deletedAt: null } } }),
@@ -539,7 +542,7 @@ export async function adminRoutes(fastify: FastifyInstance) {
       }
 
       const activities = await prisma.activity.findMany({
-        where: { createdAt: { gte: since } },
+        where: { createdAt: { gte: since }, ...WALL_ACTIVITY_WHERE },
         include: { user: true },
         orderBy: { createdAt: 'desc' },
         take: 100,
@@ -743,88 +746,40 @@ export async function adminRoutes(fastify: FastifyInstance) {
       const today = new Date()
       today.setHours(0, 0, 0, 0)
 
-      // ── Helper: build time-series buckets from raw DB rows ──
-      type BucketRow = { created_at: Date }
-      function buildTimeSeries(rows: BucketRow[], sinceDate: Date, periodType: string): { label: string; value: number }[] {
-        if (periodType === 'week') {
-          const dayNames = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb']
-          const buckets = new Map<string, number>()
-          for (let d = 0; d < 7; d++) {
-            const date = new Date(sinceDate.getTime() + d * 86400000)
-            const key = date.toISOString().slice(0, 10)
-            buckets.set(key, 0)
-          }
-          for (const r of rows) {
-            const key = r.created_at.toISOString().slice(0, 10)
-            if (buckets.has(key)) buckets.set(key, (buckets.get(key) || 0) + 1)
-          }
-          return Array.from(buckets.entries()).map(([dateStr, value]) => ({
-            label: dayNames[new Date(dateStr).getDay()] || '',
-            value,
-          }))
-        } else if (periodType === 'quarter') {
-          const monthNames = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
-          const buckets = new Map<string, number>()
-          const now = new Date()
-          for (let i = 0; i < 4; i++) {
-            const d = new Date(sinceDate.getFullYear(), sinceDate.getMonth() + i, 1)
-            if (d > now) break
-            const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
-            buckets.set(key, 0)
-          }
-          for (const r of rows) {
-            const key = `${r.created_at.getFullYear()}-${String(r.created_at.getMonth() + 1).padStart(2, '0')}`
-            if (buckets.has(key)) buckets.set(key, (buckets.get(key) || 0) + 1)
-          }
-          return Array.from(buckets.entries())
-            .sort(([a], [b]) => a.localeCompare(b))
-            .map(([monthKey, value]) => ({
-              label: monthNames[parseInt(monthKey.split('-')[1]!) - 1] || '',
-              value,
-            }))
-        } else {
-          // month → 4 weeks
-          const buckets: { label: string; value: number }[] = []
-          const weekMs = 7 * 86400000
-          for (let w = 0; w < 4; w++) {
-            const wStart = new Date(sinceDate.getTime() + w * weekMs)
-            const wEnd = new Date(wStart.getTime() + weekMs)
-            const count = rows.filter(r => r.created_at >= wStart && r.created_at < wEnd).length
-            buckets.push({ label: `Sem ${w + 1}`, value: count })
-          }
-          return buckets
-        }
-      }
-
-      // ── Run all DB queries in parallel ──
+      // ── Todo lo que se enseña se mide: nada estimado ni inventado ──
+      // Cada cifra del periodo va con la del periodo anterior, de la misma duración.
+      const inPeriod = { gte: since }
+      const inPrevPeriod = { gte: prevSince, lt: since }
       const [
         totalUsers,
         newUsersThisPeriod,
+        newUsersPrevPeriod,
         activeUsersToday,
         usersByRole,
         totalMissions,
         missionsByStatus,
         missionsByRarity,
-        completedMissionsCount,
+        completedThisPeriod,
+        completedPrevPeriod,
         totalSubmissions,
         pendingSubmissions,
-        newMissionsThisPeriod,
         totalConversations,
-        messageCount,
         conversationsByAssistant,
-        // Time series raw data
+        // Series del periodo
         activitiesInPeriod,
         usersCreatedInPeriod,
         messagesInPeriod,
-        // Previous period for comparison
         prevPeriodActivities,
-        // System health
+        // Salud del sistema
         dbLatencyMs,
         systemLogErrorCount,
         systemLogTotalCount,
+        prevSystemLogErrorCount,
+        prevSystemLogTotalCount,
       ] = await Promise.all([
         prisma.user.count(),
-        prisma.user.count({ where: { createdAt: { gte: since } } }),
+        prisma.user.count({ where: { createdAt: inPeriod } }),
+        prisma.user.count({ where: { createdAt: inPrevPeriod } }),
         prisma.refreshToken.findMany({
           where: { isRevoked: false, createdAt: { gte: today } },
           select: { userId: true },
@@ -834,52 +789,51 @@ export async function adminRoutes(fastify: FastifyInstance) {
         prisma.mission.count(),
         prisma.mission.groupBy({ by: ['status'], _count: true }),
         prisma.mission.groupBy({ by: ['rarity'], _count: true }),
-        prisma.studentMissionProgress.count({ where: { completedAt: { not: null } } }),
+        prisma.studentMissionProgress.count({ where: { completedAt: inPeriod } }),
+        prisma.studentMissionProgress.count({ where: { completedAt: inPrevPeriod } }),
         prisma.enigmaSubmission.count(),
-        prisma.enigmaSubmission.count({ where: { status: 'pendiente' } }),
-        prisma.mission.count({ where: { createdAt: { gte: since } } }),
+        countAwaitingReview(),
         prisma.chatConversation.count(),
-        prisma.chatMessage.count(),
         prisma.chatConversation.groupBy({ by: ['assistantId'], _count: true }),
-        // Raw activities for time series
+        // Entradas del muro del periodo (sin las filas viejas de seguridad)
         prisma.activity.findMany({
-          where: { createdAt: { gte: since } },
+          where: { createdAt: inPeriod, ...WALL_ACTIVITY_WHERE },
           select: { createdAt: true },
         }).then(rows => rows.map(r => ({ created_at: r.createdAt }))),
-        // Users created for time series
+        // Altas del periodo
         prisma.user.findMany({
-          where: { createdAt: { gte: since } },
+          where: { createdAt: inPeriod },
           select: { createdAt: true },
         }).then(rows => rows.map(r => ({ created_at: r.createdAt }))),
-        // Messages for token time series
+        // Mensajes con los asistentes del periodo
         prisma.chatMessage.findMany({
-          where: { createdAt: { gte: since } },
+          where: { createdAt: inPeriod },
           select: { createdAt: true },
         }).then(rows => rows.map(r => ({ created_at: r.createdAt }))),
-        // Previous period activity count for comparison
-        prisma.activity.count({ where: { createdAt: { gte: prevSince, lt: since } } }),
-        // DB latency
+        prisma.activity.count({ where: { createdAt: inPrevPeriod, ...WALL_ACTIVITY_WHERE } }),
+        // Latencia de la base: lo que tarda una consulta mínima ahora
         (async () => {
           const start = performance.now()
           await prisma.$queryRaw`SELECT 1`
           return Math.round(performance.now() - start)
         })(),
-        // Error logs in period
-        prisma.systemLog.count({ where: { level: 'error', createdAt: { gte: since } } }),
-        prisma.systemLog.count({ where: { createdAt: { gte: since } } }),
+        // Errores del registro del sistema, en el periodo y en el anterior
+        prisma.systemLog.count({ where: { level: 'error', createdAt: inPeriod } }),
+        prisma.systemLog.count({ where: { createdAt: inPeriod } }),
+        prisma.systemLog.count({ where: { level: 'error', createdAt: inPrevPeriod } }),
+        prisma.systemLog.count({ where: { createdAt: inPrevPeriod } }),
       ])
 
-      // ── Real system health from process ──
+      // ── Recursos del proceso ──
       const totalMem = os.totalmem()
       const freeMem = os.freemem()
       const memoryUsagePct = Math.round(((totalMem - freeMem) / totalMem) * 100)
-      const uptimeSeconds = process.uptime()
-      const uptimePercent = Math.round((uptimeSeconds / (uptimeSeconds + 1)) * 10000) / 100 // ~99.99 for a running process
 
-      // ── Real error rate from system logs ──
-      const errorRate = systemLogTotalCount > 0
-        ? Math.round((systemLogErrorCount / systemLogTotalCount) * 1000) / 10
-        : 0
+      // ── % de entradas de error en el registro del sistema ──
+      const errorShare = (errors: number, total: number) =>
+        total > 0 ? Math.round((errors / total) * 1000) / 10 : 0
+      const errorRate = errorShare(systemLogErrorCount, systemLogTotalCount)
+      const errorRatePrev = errorShare(prevSystemLogErrorCount, prevSystemLogTotalCount)
 
       // ── Real service health via existing /services endpoint logic ──
       let sparkText: { status: ServiceStatus; detail: string } = { status: 'down', detail: 'No comprobado' }
@@ -925,15 +879,12 @@ export async function adminRoutes(fastify: FastifyInstance) {
         // Disk info unavailable - leave at 0
       }
 
-      // ── Build real time series ──
-      const activitySeries = buildTimeSeries(activitiesInPeriod, since, period)
-      const newUsersSeries = buildTimeSeries(usersCreatedInPeriod, since, period)
-      const messageSeries = buildTimeSeries(messagesInPeriod, since, period)
-
-      // ── KPIs with real previous-period comparison ──
-      const currentPeriodActivities = activitiesInPeriod.length
-      const periodDurationMs = now.getTime() - since.getTime()
-      const periodMinutes = periodDurationMs / 60000
+      // ── Series del periodo ──
+      const activitySeries = buildTimeSeries(activitiesInPeriod, since, now, period)
+      const newUsersSeries = buildTimeSeries(usersCreatedInPeriod, since, now, period)
+      const messageSeries = buildTimeSeries(messagesInPeriod, since, now, period)
+      // Los mensajes a los asistentes, del periodo: como la serie de al lado.
+      const messageCount = messagesInPeriod.length
 
       // ── Format distribution data ──
       const roleColors: Record<string, string> = { student: '#6FEDB7', teacher: '#8B5CF6', admin: '#F87171' }
@@ -944,13 +895,12 @@ export async function adminRoutes(fastify: FastifyInstance) {
       const rarityLabels: Record<string, string> = { comun: 'Común', rara: 'Rara', epica: 'Épica', legendaria: 'Legendaria' }
       const assistantColors: Record<string, string> = { atenea: '#8B5CF6', odiseo: '#3B82F6', penelope: '#6FEDB7', polifemo: '#F59E0B', poseidon: '#F87171' }
       const assistantLabels: Record<string, string> = { atenea: 'Atenea', odiseo: 'Odiseo', penelope: 'Penélope', polifemo: 'Polifemo', poseidon: 'Poseidón' }
-      const totalConvsByAssistant = conversationsByAssistant.reduce((sum, a) => sum + a._count, 0)
 
-      // Messages per assistant (real count from conversations)
+      // Mensajes por asistente, del periodo: sus porcentajes son sobre `messageCount`.
       const messagesByAssistant = await Promise.all(
         conversationsByAssistant.map(async (a) => {
           const count = await prisma.chatMessage.count({
-            where: { conversation: { assistantId: a.assistantId } },
+            where: { createdAt: inPeriod, conversation: { assistantId: a.assistantId } },
           })
           return { assistantId: a.assistantId, conversations: a._count, messages: count }
         })
@@ -960,11 +910,7 @@ export async function adminRoutes(fastify: FastifyInstance) {
         overview: {
           totalUsers,
           activeUsersToday,
-          activeSchools: 0,
-          missionsCompleted: completedMissionsCount,
-          avgCompletionRate: totalMissions > 0 ? Math.round((completedMissionsCount / totalMissions) * 100) : 0,
           newUsersThisPeriod,
-          newMissionsThisPeriod,
           totalSubmissions,
           pendingSubmissions,
         },
@@ -986,7 +932,6 @@ export async function adminRoutes(fastify: FastifyInstance) {
           percentage: totalMissions > 0 ? Math.round((m._count / totalMissions) * 100) : 0,
           color: rarityColors[m.rarity] || '#94A3B8',
         })),
-        schoolComparison: [],
         systemHealth: {
           cpuUsage: (() => {
             const cpus = os.cpus()
@@ -1004,65 +949,46 @@ export async function adminRoutes(fastify: FastifyInstance) {
           diskTotalGB,
           dbLatency: dbLatencyMs,
         },
+        // El estado de cada servicio y lo que ha tardado en responder ahora mismo
+        // a la comprobación. Ni disponibilidad ni p95: no se miden.
         serviceHealth: [
-          {
-            name: 'API Backend',
-            status: 'operational' as const,
-            uptime: Math.round(uptimeSeconds / 3600 * 100) / 100, // hours
-            avgLatency: dbLatencyMs + 5,
-            p95Latency: dbLatencyMs * 2 + 10,
-            requests24h: currentPeriodActivities,
-          },
           {
             name: 'Base de Datos',
             status: (dbLatencyMs > 200 ? 'degraded' : 'operational') as ServiceStatus,
-            uptime: Math.round(uptimeSeconds / 3600 * 100) / 100,
-            avgLatency: dbLatencyMs,
-            p95Latency: Math.round(dbLatencyMs * 2.5),
-            requests24h: currentPeriodActivities * 3, // ~3 queries per activity
+            latencyMs: dbLatencyMs,
           },
           {
             name: 'IA (texto)',
             status: sparkText.status,
-            uptime: sparkText.status === 'operational' ? 99.9 : sparkText.status === 'degraded' ? 90.0 : 0,
-            avgLatency: sparkLatencyMs || 0,
-            p95Latency: sparkLatencyMs ? sparkLatencyMs * 2 : 0,
-            requests24h: messagesInPeriod.length,
+            latencyMs: sparkLatencyMs,
           },
           {
             name: 'IA (imágenes)',
             status: sparkImage.status,
-            uptime: sparkImage.status === 'operational' ? 99.9 : sparkImage.status === 'degraded' ? 90.0 : 0,
-            avgLatency: sparkLatencyMs || 0,
-            p95Latency: sparkLatencyMs ? sparkLatencyMs * 3 : 0,
-            requests24h: 0,
+            latencyMs: sparkLatencyMs,
           },
         ],
-        // Real time series from DB
-        responseTimeSeries: activitySeries.map(p => ({ label: p.label, value: dbLatencyMs + 5 })), // Constant (real measured latency)
-        activeUsersSeries: newUsersSeries,
-        requestsSeries: activitySeries,
+        // Series del periodo: altas, entradas del muro y mensajes a los asistentes.
+        newUsersSeries,
+        activitySeries,
         aiUsage: {
-          totalTokensUsed: messageCount * 350,
-          avgTokensPerUser: totalUsers > 0 ? Math.round((messageCount * 350) / totalUsers) : 0,
+          totalMessages: messageCount,
           totalConversations,
           avgConversationsPerUser: totalUsers > 0 ? Math.round((totalConversations / totalUsers) * 10) / 10 : 0,
-          tokensByAssistant: messagesByAssistant.map(a => ({
+          messagesByAssistant: messagesByAssistant.map(a => ({
             label: assistantLabels[a.assistantId] || a.assistantId,
-            value: a.messages * 350,
+            value: a.messages,
             percentage: messageCount > 0 ? Math.round((a.messages / messageCount) * 100) : 0,
             color: assistantColors[a.assistantId] || '#94A3B8',
           })),
-          tokensSeries: messageSeries.map(p => ({ label: p.label, value: p.value * 350 })),
+          messagesSeries: messageSeries,
         },
+        // Cifras del periodo frente al anterior, de la misma duración.
         kpis: {
-          avgResponseTime: dbLatencyMs + 5,
-          avgResponseTimePrev: dbLatencyMs + 8, // Slightly higher (realistic)
-          errorRate,
-          errorRatePrev: errorRate, // No previous period error rate tracked yet
-          requestsPerMinute: periodMinutes > 0 ? Math.round((currentPeriodActivities / periodMinutes) * 100) / 100 : 0,
-          requestsPerMinutePrev: periodMinutes > 0 ? Math.round((prevPeriodActivities / periodMinutes) * 100) / 100 : 0,
-          uptimePercent,
+          activity: { current: activitiesInPeriod.length, previous: prevPeriodActivities },
+          newUsers: { current: newUsersThisPeriod, previous: newUsersPrevPeriod },
+          missionsCompleted: { current: completedThisPeriod, previous: completedPrevPeriod },
+          errorRate: { current: errorRate, previous: errorRatePrev },
         },
       }
 

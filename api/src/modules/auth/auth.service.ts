@@ -16,6 +16,7 @@ import { OAuth2Client } from 'google-auth-library'
 import { getGeneralSettings } from '../settings/settings.service.js'
 import { identifierWhere, normalizeEmail } from '../../utils/identity.js'
 import { setUserPassword } from '../../utils/password-change.js'
+import { createSystemLog } from '../admin/system-log.service.js'
 
 // ==================== TYPES ====================
 
@@ -523,14 +524,16 @@ export class AuthService {
       data: { isRevoked: true },
     })
 
-    // Log security event
-    await prisma.activity.create({
-      data: {
-        userId,
-        type: 'xp_gained', // Using existing enum, ideally would be 'security_breach'
-        description: 'Sesión comprometida detectada - todas las sesiones de esta familia revocadas',
-        metadata: { family, reason: 'token_reuse_detected' },
-      },
+    // Al registro del sistema, en seguridad: no es algo que el alumnado haga en
+    // clase, así que no va a su muro (antes se apuntaba ahí como `xp_gained`).
+    await createSystemLog({
+      level: 'warning',
+      category: 'security',
+      title: 'Sesión comprometida',
+      message:
+        'Se ha reutilizado un token de sesión ya usado: se han cerrado todas las sesiones de esa familia.',
+      service: 'auth',
+      metadata: { userId, family, reason: 'token_reuse_detected' },
     })
   }
 
