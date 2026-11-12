@@ -37,42 +37,36 @@ export async function awaitingReview<T extends PendingRef>(
   return pending.filter(p => !done.has(pairKey(p.studentId, p.enigmaId)))
 }
 
-/** Cuántas entregas de `where` esperan revisión (pendientes y de un enigma sin aprobar). */
-export async function countAwaitingReview(
-  where: Prisma.EnigmaSubmissionWhereInput = {},
-  db: Db = prisma
-): Promise<number> {
-  const pending = await db.enigmaSubmission.findMany({
-    where: { AND: [where, { status: 'pendiente' }] },
-    select: { studentId: true, enigmaId: true },
-  })
-  return (await awaitingReview(pending, db)).length
-}
-
 /**
  * Cuántas entregas esperan revisión en las clases de `classes`: las de su
  * alumnado de ahora, sin la vista previa del profesorado ni quien entregó en
  * otra clase (la misión se movió, o ya no está en esta). Es la cifra de «por
- * revisar» de una clase; `countAwaitingReview` cuenta las de cualquiera.
+ * revisar» de una clase y, con todas las de fuera de la papelera, la de la
+ * administración.
  */
 export async function countClassesAwaitingReview(
   classes: Prisma.ClassWhereInput,
   db: Db = prisma
 ): Promise<number> {
-  const [pending, enrollments] = await Promise.all([
-    db.enigmaSubmission.findMany({
-      where: { status: 'pendiente', enigma: { mission: { class: classes } } },
-      select: {
-        studentId: true,
-        enigmaId: true,
-        enigma: { select: { mission: { select: { classId: true } } } },
-      },
-    }),
-    db.classEnrollment.findMany({
-      where: { isPreview: false, class: classes },
-      select: { classId: true, studentId: true },
-    }),
-  ])
+  const pending = await db.enigmaSubmission.findMany({
+    where: { status: 'pendiente', enigma: { mission: { class: classes } } },
+    select: {
+      studentId: true,
+      enigmaId: true,
+      enigma: { select: { mission: { select: { classId: true } } } },
+    },
+  })
+  if (pending.length === 0) return 0
+  // Solo las matrículas de quien tiene algo pendiente: con toda la instancia (las
+  // estadísticas de la administración), no se carga a todo el alumnado.
+  const enrollments = await db.classEnrollment.findMany({
+    where: {
+      isPreview: false,
+      class: classes,
+      studentId: { in: [...new Set(pending.map(p => p.studentId))] },
+    },
+    select: { classId: true, studentId: true },
+  })
   const inClass = new Set(enrollments.map(e => `${e.classId}:${e.studentId}`))
   const own = pending.filter(p => inClass.has(`${p.enigma.mission.classId}:${p.studentId}`))
   return (await awaitingReview(own, db)).length

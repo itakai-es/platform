@@ -489,8 +489,11 @@ export class TeachersService {
       // Lo que se mezcla con el cambio se lee aquí, con la clase quieta: leído antes
       // de la transacción, dos guardados a la vez se pisan el uno al otro.
       const current = await lockClassForSettings(tx, classId)
-      // El ranking no se toca con la clase cerrada, como la temporada.
-      if (rankingConfigPatch) await assertClassWritable(classId, tx)
+      // Las funcionalidades y el ranking no se tocan con la clase cerrada (archivada
+      // o en la papelera), como la temporada: 409. El contenido (nombre, portada,
+      // horario, metadatos) y los niveles se siguen pudiendo editar archivada, y
+      // desarchivar va por su propia ruta (`setClassArchived`).
+      if (rankingConfigPatch || settingsPatch) await assertClassWritable(classId, tx)
       // El camino de la clase, quieto hasta confirmar (ver `lockMissionPath`).
       if (turnsMapOn) await lockMissionPath(tx, [classId])
 
@@ -1135,6 +1138,8 @@ export class TeachersService {
 
   async getClassMissions(userId: string, classId: string) {
     await assertClassAccess(classId, userId, 'class.view')
+    // Como la analítica: con la clase en la papelera, nada (404).
+    await assertClassNotInTrash(classId)
 
     const [missions, matrix] = await Promise.all([
       prisma.mission.findMany({

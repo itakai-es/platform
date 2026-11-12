@@ -36,6 +36,7 @@ import {
   missionMapOn,
   orderViolation,
   placeAfterPrerequisites,
+  startedMissionIds,
   type PathEdge,
   type PathRequirement,
 } from '../../utils/mission-path.js'
@@ -296,11 +297,15 @@ export class MissionsService {
 
     // El camino del mapa de cada clase para esta persona: las cerradas por él
     // salen bloqueadas, con lo que les falta.
-    const paths = await classPathsFor(
-      prisma,
-      user,
-      missions.map(m => ({ id: m.classId, settings: m.class.settings }))
-    )
+    // Y las que ya ha empezado (`started`), con la regla de «Mis resultados».
+    const [paths, started] = await Promise.all([
+      classPathsFor(
+        prisma,
+        user,
+        missions.map(m => ({ id: m.classId, settings: m.class.settings }))
+      ),
+      startedMissionIds(prisma, userId, missions.map(m => m.id)),
+    ])
     const lockOf = (m: { id: string; classId: string }) => paths.get(m.classId)?.locks.get(m.id)
     // La cerrada por el camino que solo ha salido por su historia, fuera.
     const needle = search?.toLowerCase()
@@ -309,12 +314,13 @@ export class MissionsService {
       : missions
 
     return {
-      missions: listed.map((m) =>
-        formatMission(m, true, resolveClassSettings(m.class.settings), {
+      missions: listed.map((m) => ({
+        ...formatMission(m, true, resolveClassSettings(m.class.settings), {
           requires: lockOf(m),
           prerequisiteIds: paths.get(m.classId)?.prerequisites.get(m.id),
-        })
-      ),
+        }),
+        started: started.has(m.id),
+      })),
       total: listed.length,
     }
   }

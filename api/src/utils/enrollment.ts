@@ -1,7 +1,7 @@
 import { prisma } from '../config/database.js'
 import type { Prisma } from '../generated/prisma/client.js'
 import { STUDENT_AVATARS, isAllowedClassAvatar } from './avatars.js'
-import { ValidationError } from './errors.js'
+import { ConflictError, ValidationError } from './errors.js'
 import { cleanDisplayName } from './identity.js'
 
 /**
@@ -113,22 +113,33 @@ export function isSameNickname(a: string | null | undefined, b: string | null | 
 }
 
 /**
- * ¿Tiene ya ese alias otra persona de la clase? Se compara como `sameNickname`.
- * No cuentan la propia matrícula (`exceptEnrollmentId`) ni las de vista previa,
- * que no ve nadie más. Para no perder una carrera con otro cambio o un alta, va
- * dentro de una transacción que haya tomado `lockClassNicknames`.
+ * Comprueba que un alias nuevo se pueda poner en la clase; si no, 409:
+ * - `NICKNAME_RESERVED`: es «Estudiante» (`STUDENT_FALLBACK_ALIAS`), con el que se
+ *   nombra a quien no tiene alias, o el nombre real de otra persona de la clase
+ *   (con él, el resto la tomaría por ella);
+ * - `NICKNAME_TAKEN`: es el alias de otra persona de la clase.
+ * Se compara como `sameNickname`, sin mayúsculas ni espacios de más. No cuentan la
+ * propia matrícula (`exceptEnrollmentId`) ni las de vista previa, que no ve nadie
+ * más. Para no perder una carrera con otro cambio o un alta, va dentro de una
+ * transacción que haya tomado `lockClassNicknames`.
  */
-export async function nicknameTakenInClass(
+export async function assertNicknameAvailable(
   db: Db,
   classId: string,
   nickname: string,
   exceptEnrollmentId: string
-): Promise<boolean> {
+): Promise<void> {
+  const reserved = () =>
+    new ConflictError('Ese alias no se puede usar en la clase', 'NICKNAME_RESERVED')
+  if (isSameNickname(nickname, STUDENT_FALLBACK_ALIAS)) throw reserved()
   const others = await db.classEnrollment.findMany({
-    where: { classId, isPreview: false, id: { not: exceptEnrollmentId }, nickname: { not: null } },
-    select: { nickname: true },
+    where: { classId, isPreview: false, id: { not: exceptEnrollmentId } },
+    select: { nickname: true, student: { select: { name: true } } },
   })
-  return others.some(other => isSameNickname(other.nickname, nickname))
+  if (others.some(other => isSameNickname(other.nickname, nickname))) {
+    throw new ConflictError('Ese alias ya lo tiene otra persona de la clase', 'NICKNAME_TAKEN')
+  }
+  if (others.some(other => isSameNickname(other.student.name, nickname))) throw reserved()
 }
 
 /**

@@ -3,6 +3,7 @@ import { buildClassMatrix, type MatrixData } from '../../src/modules/analytics/c
 import {
   HINTS_IN_MISSION,
   INACTIVE_DAYS,
+  LOW_ATTENDANCE_MIN_SESSIONS,
   LOW_GRADE_PERCENT,
   classSignals,
   panelSignals,
@@ -313,6 +314,17 @@ describe('señales por estudiante', () => {
     expect(signalsOf(data()).matrix.students[0]!.attendance).toBeNull()
   })
 
+  it(`con menos de ${LOW_ATTENDANCE_MIN_SESSIONS} sesiones con lista no sale: una falta no es un 0 %`, () => {
+    expect(LOW_ATTENDANCE_MIN_SESSIONS).toBe(3)
+    const att = (attended: number, total: number) =>
+      signalsOf(data({ attendance: [{ enrollmentId: 'en-ana', attended, total }], sessions: total }))
+    expect(only(att(0, 1).students, 'low_attendance')).toEqual([])
+    expect(only(att(1, 2).students, 'low_attendance')).toEqual([])
+    // La cifra sigue en la matriz: lo que no hay es aviso.
+    expect(att(0, 1).matrix.students[0]!.attendance).toMatchObject({ rate: 0, total: 1 })
+    expect(only(att(2, 3).students, 'low_attendance')[0]?.data).toMatchObject({ rate: 67, total: 3 })
+  })
+
   it('las entregas sin revisar no son una señal', () => {
     const { students, matrix } = signalsOf(
       data({
@@ -332,7 +344,7 @@ describe('señales por estudiante', () => {
         // Las pistas también son actividad: de hace tanto como el muro.
         hints: [{ ...hints('ana', 'B', 2), lastAt: day(20) }],
         activity: [{ studentId: 'ana', lastAt: day(20) }],
-        attendance: [{ enrollmentId: 'en-ana', attended: 0, total: 2 }],
+        attendance: [{ enrollmentId: 'en-ana', attended: 0, total: LOW_ATTENDANCE_MIN_SESSIONS }],
       })
     )
     expect(codes).toEqual([

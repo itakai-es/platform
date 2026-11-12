@@ -50,7 +50,7 @@ Aquí salen los avisos del periodo, cada uno con su motivo y un enlace a la pers
 - le aprobaste un enigma con menos de un 50 %, o su media de aprobación no llega al 60 %, con al menos 2 enigmas;
 - usó 2 o más pistas en una misión, o una que resta un % de la recompensa;
 - lleva 14 días o más sin actividad, con misiones que puede hacer (esto se cuenta siempre hasta hoy);
-- su asistencia no llega al 80 %.
+- su asistencia no llega al 80 %, con al menos 3 sesiones con lista en el periodo.
 
 Y de una misión, si tras la fecha el 30 % o más de quien la empezó no la completó, si su media de aprobación no llega al 60 %, con al menos 3 enigmas aprobados, o si lleva 2 o más pistas de media por estudiante que la empezó.
 
@@ -106,12 +106,12 @@ En **Tipos de ranking** enciendes uno o varios. Si hay más de uno, tu alumnado 
 | Tipo | Ordena por | Qué pide |
 |---|---|---|
 | **XP** | La XP acumulada en la clase | Que la clase use la experiencia (XP) |
-| **Misiones completadas** | Las misiones completadas; en los empates, la XP | Nada |
+| **Misiones completadas** | Las misiones completadas; en los empates, la XP, si tu alumnado ve también el ranking de **XP** | Nada |
 | **Equipos** | Los puntos del marcador de cada equipo | Una agrupación de base en **Alumnado → Equipos** |
 
 De entrada van encendidos **XP** y **Equipos**, y hace falta al menos un tipo. Si apagas la XP de la clase y solo tenías **XP**, el ranking se apaga. En **Equipos** se ven todos los equipos en cualquier modo; lo cuenta [premiar a un equipo](/ayuda/gamificacion/premiar-a-un-equipo-y-ver-la-clasificacion).
 
-Quien empata comparte puesto, y el siguiente salta: 1, 2, 2, 4. Quien aún no tiene nada no tiene puesto y va al final. Las cuentas que aún no han entrado por primera vez y tu vista previa como estudiante no salen.
+Quien empata comparte puesto, y el siguiente salta: 1, 2, 2, 4. En **Misiones completadas**, la XP solo desempata si tu alumnado ve también el ranking de **XP**: si no, se adivinaría quién tiene más XP, que esa clase no enseña. Quien aún no tiene nada no tiene puesto y va al final. Las cuentas que aún no han entrado por primera vez y tu vista previa como estudiante no salen.
 
 ## Periodos y temporada
 
@@ -123,7 +123,7 @@ Con **Misiones completadas** o **Equipos** encendidos, **Empezar temporada** hac
 
 Junto al interruptor del ranking está **Comparar con la media**, con su propio interruptor: cada estudiante ve si va por encima, en la media o por debajo del resto de su clase, sin ver a nadie. Funciona aunque apagues el ranking, para quien no quiere competición pero sí que cada cual sepa cómo va. Si nunca lo has tocado, está como el ranking de esa clase.
 
-Tu alumnado lo ve en **Tú y tu clase**, en el **Resumen** de la clase y, si el ranking recorta lo que ve, junto a su puesto. Va redondeado, en palabras, y solo con al menos seis personas en la clase: lo cuenta [comparar con tu clase](/ayuda/si-eres-alumno/comparar-con-tu-clase).
+Tu alumnado lo ve en **Tú y tu clase**, en el **Resumen** de la clase y, con el ranking encendido, también en él, con las mismas cifras. Es lo único de la clase que ve allí: las medias de la clase son para ti. Va redondeado, en palabras, y solo con al menos seis personas en la clase: lo cuenta [comparar con tu clase](/ayuda/si-eres-alumno/comparar-con-tu-clase).
 
 ## Al copiar la clase
 
@@ -200,7 +200,7 @@ Tú ves tu cifra y la media, nada más. El resto de tu clase tampoco ve la tuya:
 - **Si tu clase es pequeña.** Hacen falta al menos cinco personas además de ti, seis en total. Con menos, verás **Tu clase aún es pequeña para comparar.** Con tres o cuatro personas sería fácil adivinar lo de cada cual.
 - **Si tu docente la ha apagado.** Tiene su propio interruptor, aparte del ranking: hay clases con ranking y sin comparación, y al revés.
 
-Si tu clase tiene un ranking en el que solo ves los primeros puestos o solo el tuyo, también la tienes en la pestaña **Ranking**, junto a **Tu puesto**.
+Si tu clase tiene ranking, también la tienes en la pestaña **Ranking**, con las mismas cifras.
 
 ## Si vas por debajo
 
@@ -269,7 +269,7 @@ SET "body" = $itakai$Algunas clases tienen ranking y otras no: lo decide tu doce
 Puede haber uno o varios, cada uno en su pestaña:
 
 - **XP**: la experiencia que llevas en esa clase.
-- **Misiones**: las misiones que has completado. Si empatas, decide la XP, si tu clase la usa.
+- **Misiones**: las misiones que has completado. Si empatas, decide la XP, si tu clase tiene también el ranking de **XP**; si no, compartís puesto.
 - **Equipos**: los puntos de cada equipo, como cuenta [mi equipo](/ayuda/si-eres-alumno/mi-equipo).
 
 No mide notas, ni cuánto has acertado, ni lo bien que ha salido un trabajo: mide lo que llevas hecho. Por eso alguien constante suele estar arriba aunque no saque las mejores notas.

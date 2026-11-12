@@ -236,6 +236,10 @@ async function archivedAmong(
 /**
  * Una fila por alumno con su progreso sumado en las clases de `metricClasses`
  * en las que está: misiones, enigmas, XP e insignias, y el detalle por clase.
+ *
+ * Las insignias son las que ha conseguido, sin máximo: las de las misiones de esas
+ * clases y las de ITAKAI (sin autor), que se ganan solas y se cuentan una vez. No
+ * hay un «de N» que valga: las de ITAKAI no son de ninguna clase.
  */
 async function studentRows(students: Prisma.UserWhereInput, metricClasses: Prisma.ClassWhereInput) {
   const classes = await prisma.class.findMany({
@@ -274,7 +278,7 @@ async function studentRows(students: Prisma.UserWhereInput, metricClasses: Prism
                 select: { missionId: true, completedAt: true },
               },
               enigmaProgress: { select: { enigmaId: true } },
-              earnedBadges: { select: { badgeId: true } },
+              earnedBadges: { select: { badgeId: true, badge: { select: { teacherId: true } } } },
             },
           },
         },
@@ -302,7 +306,6 @@ async function studentRows(students: Prisma.UserWhereInput, metricClasses: Prism
           now
         ),
         badgesEarned: classBadgeIds.filter(id => earned.has(id)).length,
-        badgesAvailable: classBadgeIds.length,
       }
     })
   })
@@ -324,7 +327,8 @@ async function studentRows(students: Prisma.UserWhereInput, metricClasses: Prism
     // Nivel y XP a la vista: los de la clase donde más lleva.
     const top = items.reduce((best, item) => (item.enrollment.xp > best.enrollment.xp ? item : best))
     const overall = sumProgress(items.map(i => i.counts))
-    const badgesEarned = sum(i => i.badgesEarned)
+    // Las de ITAKAI no son de ninguna clase: una vez, aunque esté en varias.
+    const itakaiBadges = e.student.earnedBadges.filter(b => b.badge.teacherId === null).length
     return {
       id: e.student.id,
       name: e.student.name,
@@ -345,11 +349,10 @@ async function studentRows(students: Prisma.UserWhereInput, metricClasses: Prism
       totalMissionsCompleted: overall.missionsCompleted,
       totalMissionsCounted: overall.missionsCounted,
       overallProgress: overall.percent,
-      badgesEarned,
       // El saldo: lleva comportamientos, recompensas y bonus, sin máximo que valga.
       totalXpEarned: sum(i => i.enrollment.xp),
-      totalBadgesEarned: badgesEarned,
-      totalBadgesAvailable: sum(i => i.badgesAvailable),
+      // Las conseguidas, con las de ITAKAI: una cifra, sin «de N».
+      totalBadgesEarned: sum(i => i.badgesEarned) + itakaiBadges,
       classIds: items.map(i => i.cls.id),
       classCount: items.length,
       classProgress: items.map(i => ({

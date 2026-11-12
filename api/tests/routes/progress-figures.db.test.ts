@@ -412,10 +412,9 @@ describeWithDatabase('las cifras de progreso de las pantallas, con la definició
       missionsTotal: 4,
       totalStudents: 2,
     })
+    // Las medias, solo el profesorado: el alumnado recibe la comparación anónima.
     const asStudent = await get('student', `/students/classes/${f.classId}/ranking`)
-    // Las mismas medias; la XP total y el progreso medio, solo el profesorado.
-    const { totalXp: _totalXp, avgProgress: _avgProgress, ...shared } = body.stats
-    expect(asStudent.stats).toEqual(shared)
+    expect(asStudent).not.toHaveProperty('stats')
   })
 
   it('el listado de Alumnado: los opcionales no cuentan, tampoco en los tramos ni en el orden', async () => {

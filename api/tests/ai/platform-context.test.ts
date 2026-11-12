@@ -3,6 +3,7 @@ import { getPlatformContext } from '../../src/modules/ai/platform-context.js'
 import {
   HINTS_IN_MISSION,
   INACTIVE_DAYS,
+  LOW_ATTENDANCE_MIN_SESSIONS,
   LOW_ATTENDANCE_PERCENT,
   LOW_AVERAGE_MIN_APPROVALS,
   LOW_AVERAGE_PERCENT,
@@ -83,7 +84,9 @@ describe('contexto fijo del asistente', () => {
     expect(es).toContain(`bajo el ${LOW_AVERAGE_PERCENT} % (con ${LOW_AVERAGE_MIN_APPROVALS} o más)`)
     expect(es).toContain(`${HINTS_IN_MISSION} o más pistas en una misión`)
     expect(es).toContain(`${INACTIVE_DAYS} días sin actividad`)
-    expect(es).toContain(`asistencia bajo el ${LOW_ATTENDANCE_PERCENT} %`)
+    expect(es).toContain(
+      `asistencia bajo el ${LOW_ATTENDANCE_PERCENT} % (con ${LOW_ATTENDANCE_MIN_SESSIONS} sesiones con lista o más)`
+    )
     expect(es).toContain(`el ${MISSION_UNFINISHED_PERCENT} % o más de quien la empezó`)
     expect(es).toContain(`bajo el ${MISSION_LOW_AVERAGE_PERCENT} % (con ${MISSION_LOW_AVERAGE_MIN_APPROVALS} o más)`)
     expect(es).toContain(`${MISSION_HINTS_PER_STUDENT} o más pistas por estudiante`)
@@ -117,6 +120,9 @@ describe('contexto fijo del asistente', () => {
     }
     // El ranking ya no pide la XP: solo el tipo XP la pide.
     expect(es).toContain('XP (pide que la clase use XP')
+    // La XP solo desempata las misiones si el alumnado ve el ranking de XP.
+    expect(es).toContain('en los empates decide la XP solo si el alumnado ve también el ranking de XP')
+    expect(es).not.toContain('empate por XP')
     expect(es).not.toMatch(/ranking (requiere|necesita) (la )?XP/i)
     // «Ver entregas» ya no está escondido en el menú del móvil.
     expect(es).not.toContain('(móvil: menú ⋮)')

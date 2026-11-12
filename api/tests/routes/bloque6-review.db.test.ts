@@ -102,11 +102,10 @@ describeWithDatabase('la revisión del bloque 6', () => {
       await prisma.studentEnigmaProgress.createMany({
         data: enigmas.slice(0, 3).map(enigmaId => ({ studentId: other.id, enigmaId, percentage: 40 })),
       })
-      const { stats } = await get('student', `/students/classes/${f.classId}/ranking`)
-      expect(stats).not.toBeNull()
-      expect(stats).not.toHaveProperty('avgProgress')
-      expect(stats).not.toHaveProperty('totalXp')
-      expect(stats.avgMissions).toBe(0)
+      // Ni esa ni ninguna otra media de la clase: solo la comparación anónima.
+      const body = await get('student', `/students/classes/${f.classId}/ranking`)
+      expect(body).not.toHaveProperty('stats')
+      expect(JSON.stringify(body)).not.toMatch(/"(avgProgress|totalXp|avgMissions|avgXp)"/)
       // El profesorado lo sigue viendo.
       const teacher = await get('owner', `/teacher/classes/${f.classId}/ranking`)
       expect(teacher.stats.avgProgress).toBe(38)
@@ -120,7 +119,7 @@ describeWithDatabase('la revisión del bloque 6', () => {
     ]
 
     for (const [mode, shows] of [['full', true], ['top', true], ['position', false]] as const) {
-      it(`sin el tipo XP, ni XP ni nivel de nadie, en modo ${mode}; el desempate sigue en el servidor`, async () => {
+      it(`sin el tipo XP, ni XP ni nivel de nadie, en modo ${mode}; y la XP no desempata`, async () => {
         const rich = await person('rica', 900)
         const poor = await person('pobre', 10)
         const m = await f.newMission()
@@ -138,14 +137,15 @@ describeWithDatabase('la revisión del bloque 6', () => {
         expect(rows.length).toBeGreaterThan(0)
         for (const row of rows) for (const key of XP_KEYS) expect(row, key).not.toHaveProperty(key)
         expect(JSON.stringify(body)).not.toContain('900')
-        if (mode === 'full') expect(body.stats.avgXp).toBeNull()
+        expect(body).not.toHaveProperty('stats')
         if (shows) {
-          // Empatan en misiones: va antes quien tiene más XP, aunque ya no se vea.
+          // Empatan en misiones y comparten puesto, por alias: el orden no deja
+          // adivinar quién tiene más XP.
           expect(body.podium.map((row: { username: string }) => row.username)).toEqual([
-            `rica-${tag}`,
             `pobre-${tag}`,
+            `rica-${tag}`,
           ])
-          expect(body.podium.map((row: { rank: number }) => row.rank)).toEqual([1, 2])
+          expect(body.podium.map((row: { rank: number }) => row.rank)).toEqual([1, 1])
         }
       })
     }
@@ -156,7 +156,7 @@ describeWithDatabase('la revisión del bloque 6', () => {
       for (const query of ['?type=xp', '?type=missions']) {
         const body = await get('student', `/students/classes/${f.classId}/ranking${query}`)
         expect(body.options.usesXp).toBe(true)
-        expect(body.stats.avgXp).toBeTypeOf('number')
+        expect(body).not.toHaveProperty('stats')
         expect(body.me).toMatchObject({ xp: 0, level: 1 })
         expect(rowsOf(body).find((row: object) => (row as { xp?: number }).xp === 900)).toBeDefined()
       }

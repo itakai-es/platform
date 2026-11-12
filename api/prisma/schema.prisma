@@ -655,6 +655,9 @@ model Badge {
   students StudentBadge[]
 
   @@index([triggerType, triggerValue])
+  // Las insignias de una misión o de las misiones de una clase (Mi progreso, el
+  // listado del alumnado, las fichas): sin él, cada consulta recorre la tabla.
+  @@index([missionId])
   @@map("badges")
 }
 

@@ -6,14 +6,14 @@ import {
   recordClassAction,
   type ClassUser,
 } from '../../utils/class-access.js'
-import { ConflictError, NotFoundError, ValidationError } from '../../utils/errors.js'
+import { NotFoundError, ValidationError } from '../../utils/errors.js'
 import {
   ENROLL_TX_OPTIONS,
   NICKNAME_MAX_LENGTH,
+  assertNicknameAvailable,
   cleanNickname,
   isSameNickname,
   lockClassNicknames,
-  nicknameTakenInClass,
 } from '../../utils/enrollment.js'
 import { isStudentCatalogAvatar } from '../../utils/avatars.js'
 import { deleteUpload } from '../storage/storage.service.js'
@@ -71,8 +71,9 @@ async function studentEnrollment(classId: string, studentId: string, tx: Prisma.
 
 /**
  * Cambia el alias del alumno en la clase, sin repetir el de otra persona de ella
- * (409 `NICKNAME_TAKEN`), como cuando lo cambia el propio estudiante. Las entradas
- * antiguas de su historial se quedan como estaban.
+ * (409 `NICKNAME_TAKEN`), ni el nombre real de otra persona ni «Estudiante» (409
+ * `NICKNAME_RESERVED`; ver `assertNicknameAvailable`), como cuando lo cambia el
+ * propio estudiante. Las entradas antiguas de su historial se quedan como estaban.
  */
 export async function updateStudentNickname(
   actor: ClassUser,
@@ -90,9 +91,7 @@ export async function updateStudentNickname(
     // consigo, ni con un repetido de antes de esta regla.
     if (!isSameNickname(clean, enrollment.nickname)) {
       await lockClassNicknames(tx, classId)
-      if (await nicknameTakenInClass(tx, classId, clean, enrollment.id)) {
-        throw new ConflictError('Ese alias ya lo tiene otra persona de la clase', 'NICKNAME_TAKEN')
-      }
+      await assertNicknameAvailable(tx, classId, clean, enrollment.id)
     }
     const updated = await tx.classEnrollment.update({
       where: { id: enrollment.id },

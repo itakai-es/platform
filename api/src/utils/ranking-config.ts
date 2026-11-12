@@ -141,6 +141,17 @@ export function studentRankingTypes(
 }
 
 /**
+ * ¿Ve el alumnado el ranking de XP? Con él, la XP de cada cual ya está a la vista y
+ * puede desempatar las misiones; sin él, no (ver `loadRankingBase`).
+ */
+export function studentsSeeXpRanking(
+  settings: Pick<ClassSettings, 'xp' | 'rankings'>,
+  config: RankingConfig
+): boolean {
+  return studentRankingTypes(settings, config, false).includes('xp')
+}
+
+/**
  * El interruptor, coherente con los tipos: sin ninguno disponible (solo XP en una
  * clase que apaga la XP) el ranking queda apagado, como cualquier funcionalidad a
  * la que le falta lo que necesita.

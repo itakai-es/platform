@@ -89,6 +89,11 @@ const ALLOWED_TEACHER_ID: Record<string, Allowed> = {
     reason:
       'catálogo de plantillas del profesorado: isOwn marca las que publicó quien mira (mostrar, no autorizar); el catálogo público no lo lee',
   },
+  'modules/teachers/student-list.service.ts': {
+    count: 2,
+    reason:
+      'insignias de ITAKAI (sin autor, Badge.teacherId nulo) que suma el listado del alumnado: se leen (1) y se cuentan (1)',
+  },
   'modules/teachers/mission-copy.ts': {
     count: 1,
     reason:

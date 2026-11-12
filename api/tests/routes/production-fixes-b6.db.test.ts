@@ -209,13 +209,10 @@ describeWithDatabase('arreglos de producción del bloque 6', () => {
       expect(await asEnrollment(body.leaderboard)).toEqual(
         students.leaderboard.map((r: Row) => [r.id, r.rank])
       )
-      // Las mismas medias; la XP total y el progreso medio, solo el profesorado
-      // (la suma o la media, menos lo propio, es lo de los demás).
-      const { totalXp, avgProgress: _avgProgress, ...sharedStats } = body.stats
-      expect(sharedStats).toEqual(students.stats)
-      expect(students.stats).not.toHaveProperty('totalXp')
-      expect(students.stats).not.toHaveProperty('avgProgress')
-      expect(totalXp).toBe(100 + 80 + 80 + 50)
+      // Las medias, solo el profesorado (la suma o la media, menos lo propio, es lo
+      // de los demás): el alumnado recibe la comparación anónima, no las medias.
+      expect(students).not.toHaveProperty('stats')
+      expect(body.stats.totalXp).toBe(100 + 80 + 80 + 50)
       // Misiones de media (con un decimal), de las N que cuentan: las de la
       // definición única (ver progress-figures.db.test.ts).
       expect(typeof body.stats.avgMissions).toBe('number')

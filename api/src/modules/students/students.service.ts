@@ -2,7 +2,7 @@ import { prisma } from '../../config/database.js'
 import { getLevelInfo, wouldLevelUp } from '../../utils/xp-calculator.js'
 import { resolveLevelConfig } from '../../utils/level-config.js'
 import { formatMission, getMissionStatus } from '../../utils/mission-formatter.js'
-import { classPathFor, classPathsFor } from '../../utils/mission-path.js'
+import { classPathFor, classPathsFor, startedMissionIds } from '../../utils/mission-path.js'
 import { ensureSafeEducationalPrompt } from '../ai/ai-safety.js'
 import { generateFireRedAvatar } from '../ai/generators/avatar-firered.js'
 import { releaseGeneratedAvatar } from '../storage/upload-usage.js'
@@ -10,7 +10,7 @@ import { getAIProvider } from '../ai/providers/index.js'
 import { AVATAR_PROMPTS } from '../ai/prompts/index.js'
 import { AvatarServiceUnavailableError } from '../../utils/errors.js'
 import { resolveClassSettings } from '../../utils/class-settings.js'
-import { ConflictError, ForbiddenError, NotFoundError, ValidationError } from '../../utils/errors.js'
+import { ForbiddenError, NotFoundError, ValidationError } from '../../utils/errors.js'
 import {
   LIVE_CLASS_WHERE,
   classTeachersInclude,
@@ -23,6 +23,7 @@ import {
 import {
   DEFAULT_AVATARS,
   ENROLL_TX_OPTIONS,
+  assertNicknameAvailable,
   cleanNickname,
   enrollStudentNow,
   freeNicknamesForPreview,
@@ -30,11 +31,9 @@ import {
   isAllowedClassAvatar,
   isSameNickname,
   lockClassNicknames,
-  nicknameTakenInClass,
   participatingEnrollmentWhere,
 } from '../../utils/enrollment.js'
 import { ACTIVITY_ACTOR_INCLUDE, WALL_ACTIVITY_WHERE, activityActor } from '../../utils/activity.js'
-import { studentRankingStats } from '../../utils/anonymous-stats.js'
 import { assertNotManagedAccount } from '../../utils/identity-db.js'
 import { changeOwnPassword } from '../../utils/password-change.js'
 import { consumeRateLimit } from '../../utils/rate-limit.js'
@@ -48,15 +47,14 @@ import {
   rankClass,
   rankOf,
   rankingPeriodStart,
-  statsWithoutXp,
   withoutXp,
 } from '../../utils/ranking.js'
 import {
-  effectiveRankingTypes,
   rankingPeriodsFor,
   resolveRankingConfig,
   resolveRankingView,
   studentRankingTypes,
+  studentsSeeXpRanking,
 } from '../../utils/ranking-config.js'
 import { classComparison } from '../analytics/comparison.js'
 import {
@@ -121,8 +119,8 @@ export class StudentsService {
 
     // Las cifras del inicio. Clases: las de «Mis clases» (sin las archivadas ni
     // las de la papelera). Misiones completadas: las de la definición única de las
-    // que cuentan (ver analytics/definitions.ts), solo de clases en las que está
-    // matriculada de verdad, sin la vista previa.
+    // que cuentan (ver analytics/definitions.ts), de esas mismas clases, en las que
+    // está matriculada de verdad, sin la vista previa.
     // Insignias: todas las que tiene, como en su página de insignias.
     const [classesEnrolled, countedMissions] = await Promise.all([
       prisma.classEnrollment.count({
@@ -131,7 +129,11 @@ export class StudentsService {
       prisma.mission.findMany({
         where: {
           ...COUNTED_MISSION_WHERE,
-          class: { ...LIVE_CLASS_WHERE, enrollments: { some: { studentId: userId, isPreview: false } } },
+          class: {
+            ...LIVE_CLASS_WHERE,
+            archived: false,
+            enrollments: { some: { studentId: userId, isPreview: false } },
+          },
         },
         select: { id: true, enigmas: { select: { id: true, isOptional: true } } },
       }),
@@ -342,15 +344,20 @@ export class StudentsService {
     // El camino del mapa para esta persona: lo que pide cada misión y las que
     // tiene cerradas por eso (solo con el mapa encendido en la clase, y nada
     // cerrado si mira el profesorado en la vista previa).
-    const path = await classPathFor(prisma, classId, user, missions[0]?.class.settings ?? null)
+    // Y las que ya ha empezado (`started`), con la misma regla que «Mis resultados».
+    const [path, started] = await Promise.all([
+      classPathFor(prisma, classId, user, missions[0]?.class.settings ?? null),
+      startedMissionIds(prisma, userId, missions.map(m => m.id)),
+    ])
 
     return {
-      missions: missions.map((m) =>
-        formatMission(m, false, resolveClassSettings(m.class.settings), {
+      missions: missions.map((m) => ({
+        ...formatMission(m, false, resolveClassSettings(m.class.settings), {
           requires: path.locks.get(m.id),
           prerequisiteIds: path.prerequisites.get(m.id),
-        })
-      ),
+        }),
+        started: started.has(m.id),
+      })),
       total: missions.length,
     }
   }
@@ -403,9 +410,7 @@ export class StudentsService {
       select: { studentId: true, xp: true, nickname: true },
     })
     const settings = resolveClassSettings(enrollment.class.settings)
-    const xpRanking =
-      settings.rankings &&
-      effectiveRankingTypes(resolveRankingConfig(enrollment.class.rankingConfig), settings).includes('xp')
+    const xpRanking = studentsSeeXpRanking(settings, resolveRankingConfig(enrollment.class.rankingConfig))
     const rank =
       xpRanking && !enrollment.isPreview
         ? rankOf(
@@ -449,18 +454,18 @@ export class StudentsService {
    * no existe (404): el profesorado ve el suyo en su lado.
    *
    * Lo que el modo esconde no sale de aquí (`cutRanking`): en `top` y `position`
-   * no viajan las filas ocultas ni las medias de la clase, con las que se podría
-   * deducir lo escondido. Quien mira recibe siempre su fila aparte (`me`), con su
-   * puesto, y el total; la vista previa del profesorado no tiene fila. Los equipos
-   * se ven enteros en todos los modos: nadie queda señalado individualmente.
+   * no viajan las filas ocultas. Quien mira recibe siempre su fila aparte (`me`),
+   * con su puesto, y el total; la vista previa del profesorado no tiene fila. Los
+   * equipos se ven enteros en todos los modos: nadie queda señalado individualmente.
    *
    * Sin el tipo XP entre los que ve, la XP y el nivel de cada cual no viajan, en
-   * ningún modo (`withoutXp`), y `usesXp` sale apagado: el desempate por XP de las
-   * misiones se queda en el servidor.
+   * ningún modo (`withoutXp`), y `usesXp` sale apagado: entonces la XP tampoco
+   * desempata las misiones (`loadRankingBase`).
    *
-   * Ni la XP total de la clase ni el progreso medio salen en ningún modo
-   * (`studentRankingStats`). En `top` y `position`, en vez de las medias va la
-   * comparación anónima (`classComparison`), si la clase la tiene encendida.
+   * Las medias de la clase no salen en ningún modo: lo único que llega de la clase
+   * es la comparación anónima (`classComparison`), la misma que en «Mi progreso»,
+   * con las mismas cifras, o null si la clase la tiene apagada. Así el alumnado no
+   * ve dos medias distintas de lo mismo.
    *
    * Con alias o «Estudiante», nunca el nombre real, y con el id de la matrícula,
    * no el de la cuenta (`publicRankingRow`).
@@ -491,15 +496,12 @@ export class StudentsService {
     }
 
     const base = await loadRankingBase(classId)
-    const { ranked, stats } = rankClass(base, { type, since })
+    const { ranked } = rankClass(base, { type, since })
     const rows = ranked.map(row => {
       const shown = publicRankingRow(row)
       return { ...(showsXp ? shown : withoutXp(shown)), isCurrentUser: row.enrollmentId === enrollment.id }
     })
     const { podium, rest } = cutRanking(rows, config)
-    const showStats = config.mode === 'full' && period === 'all'
-    const comparison =
-      config.mode === 'full' ? null : await classComparison(enrollment.id, classId, context, { base })
 
     return {
       type,
@@ -507,18 +509,18 @@ export class StudentsService {
       options,
       podium,
       leaderboard: rest,
-      stats: showStats ? studentRankingStats(showsXp ? stats : statsWithoutXp(stats)) : null,
       total: rows.length,
       me: rows.find(row => row.isCurrentUser) ?? null,
-      comparison,
+      comparison: await classComparison(enrollment.id, classId, context, { base }),
     }
   }
 
   /**
    * El alias y el avatar con los que se ve en la clase. El alias, con las reglas
    * del profesorado (`cleanNickname`: limpio y de 1 a 20 caracteres) y sin
-   * repetir el de otra persona de la clase (409 `NICKNAME_TAKEN`). No se puede
-   * dejar sin alias: sin él, el resto de la clase vería «Estudiante».
+   * repetir el de otra persona de la clase (409 `NICKNAME_TAKEN`), ni su nombre
+   * real ni «Estudiante» (409 `NICKNAME_RESERVED`; ver `assertNicknameAvailable`).
+   * No se puede dejar sin alias: sin él, el resto de la clase vería «Estudiante».
    */
   async updateClassProfile(
     enrollmentRef: StudentEnrollmentRef,
@@ -538,9 +540,7 @@ export class StudentsService {
       // mayúsculas) no choca consigo, ni con un repetido de antes de esta regla.
       if (nickname !== undefined && !isSameNickname(nickname, enrollment.nickname)) {
         await lockClassNicknames(tx, classId)
-        if (await nicknameTakenInClass(tx, classId, nickname, enrollment.id)) {
-          throw new ConflictError('Ese alias ya lo tiene otra persona de la clase', 'NICKNAME_TAKEN')
-        }
+        await assertNicknameAvailable(tx, classId, nickname, enrollment.id)
       }
       return tx.classEnrollment.update({
         where: { id: enrollment.id },
@@ -818,20 +818,25 @@ export class StudentsService {
       orderBy: [{ class: { name: 'asc' } }, { classId: 'asc' }, ...MISSION_ORDER],
     })
 
-    // El camino del mapa de cada clase para esta persona (ver getClassMissions).
-    const paths = await classPathsFor(
-      prisma,
-      user,
-      missions.map(m => ({ id: m.classId, settings: m.class.settings }))
-    )
+    // El camino del mapa de cada clase para esta persona y lo que ya ha empezado
+    // (ver getClassMissions).
+    const [paths, started] = await Promise.all([
+      classPathsFor(
+        prisma,
+        user,
+        missions.map(m => ({ id: m.classId, settings: m.class.settings }))
+      ),
+      startedMissionIds(prisma, userId, missions.map(m => m.id)),
+    ])
 
     return {
-      missions: missions.map((m) =>
-        formatMission(m, true, resolveClassSettings(m.class.settings), {
+      missions: missions.map((m) => ({
+        ...formatMission(m, true, resolveClassSettings(m.class.settings), {
           requires: paths.get(m.classId)?.locks.get(m.id),
           prerequisiteIds: paths.get(m.classId)?.prerequisites.get(m.id),
-        })
-      ),
+        }),
+        started: started.has(m.id),
+      })),
       total: missions.length,
     }
   }

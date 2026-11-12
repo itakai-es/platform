@@ -44,11 +44,17 @@ const updateClassProfileSchema = z.object({
 
 /**
  * Lo que se le cierra al alumnado con la clase archivada, como la portada
- * (ver `getClassById`): la clasificación, la gamificación, los equipos y el muro.
+ * (ver `getClassById`): la clasificación, la gamificación, los equipos, el muro,
+ * las misiones y las insignias. «Mi progreso» se cierra en su servicio.
  */
-const CLOSED_WHEN_ARCHIVED = ['/gamification', '/ranking', '/activities', '/teams'].map(
-  suffix => `/classes/:classId${suffix}`
-)
+const CLOSED_WHEN_ARCHIVED = [
+  '/gamification',
+  '/ranking',
+  '/activities',
+  '/teams',
+  '/missions',
+  '/badges',
+].map(suffix => `/classes/:classId${suffix}`)
 
 const generateClassAvatarSchema = z.union([
   z.object({

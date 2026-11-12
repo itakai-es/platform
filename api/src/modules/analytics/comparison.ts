@@ -14,8 +14,9 @@ import { compareEnabled, rankingPeriodsFor } from '../../utils/ranking-config.js
 
 /**
  * «Tú y tu clase»: la comparación anónima de quien mira con el resto de su clase,
- * que va en «Mi progreso» y, en los modos que recortan el ranking, junto a su
- * puesto. Aquí solo se cargan los datos: las reglas, en `utils/anonymous-stats.ts`.
+ * que va en «Mi progreso» y, con las mismas cifras, en el ranking, en todos los
+ * modos: es lo único de la clase que el alumnado recibe allí, en vez de sus medias.
+ * Aquí solo se cargan los datos: las reglas, en `utils/anonymous-stats.ts`.
  *
  * Qué se compara: la XP (si la clase la usa), las misiones completadas, con la
  * definición única, y las de la temporada si hay una empezada. Nunca el % de

@@ -5,7 +5,6 @@ import {
   averageBand,
   compareWithOthers,
   roundForStudents,
-  studentRankingStats,
 } from '../../src/utils/anonymous-stats.js'
 
 /**
@@ -175,14 +174,5 @@ describe('dos estudiantes restando sus «medias del resto»', () => {
       const values = [base[0]!, base[1]! + delta, ...base.slice(2)]
       expect(Math.abs(attack(values, 0, 1, 'xp')) % 50).toBe(0)
     }
-  })
-})
-
-describe('las medias del ranking completo', () => {
-  it('el alumnado las recibe sin la XP total ni el progreso medio', () => {
-    const shown = studentRankingStats({ avgXp: 75, avgProgress: 50, totalXp: 150, totalStudents: 2 })
-    expect(shown).toEqual({ avgXp: 75, totalStudents: 2 })
-    expect(shown).not.toHaveProperty('totalXp')
-    expect(shown).not.toHaveProperty('avgProgress')
   })
 })

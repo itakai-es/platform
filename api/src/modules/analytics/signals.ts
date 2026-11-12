@@ -34,6 +34,11 @@ export const HINTS_IN_MISSION = 2
 export const INACTIVE_DAYS = 14
 /** Asistencia del periodo por debajo de este % (solo si se ha pasado lista). */
 export const LOW_ATTENDANCE_PERCENT = 80
+/**
+ * …con al menos estas sesiones con lista en el periodo: con una o dos, una sola
+ * falta ya da una asistencia del 0 o del 50 %.
+ */
+export const LOW_ATTENDANCE_MIN_SESSIONS = 3
 /** Tras la fecha, este % o más de quien empezó la misión sin completarla. */
 export const MISSION_UNFINISHED_PERCENT = 30
 /** El % medio de aprobación de una misión, por debajo de este %… */
@@ -233,9 +238,14 @@ export function studentSignals(matrix: ClassMatrix, student: MatrixStudent): Stu
     })
   }
 
-  // Asistencia baja, solo si se le ha pasado lista en el periodo.
+  // Asistencia baja, solo si se le ha pasado lista en el periodo bastantes veces.
   const attendance = student.attendance
-  if (attendance && attendance.rate !== null && attendance.rate < LOW_ATTENDANCE_PERCENT) {
+  if (
+    attendance &&
+    attendance.rate !== null &&
+    attendance.total >= LOW_ATTENDANCE_MIN_SESSIONS &&
+    attendance.rate < LOW_ATTENDANCE_PERCENT
+  ) {
     signals.push({
       studentId,
       code: 'low_attendance',

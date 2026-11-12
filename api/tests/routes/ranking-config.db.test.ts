@@ -206,7 +206,8 @@ describeWithDatabase('el ranking configurable', () => {
       ])
       expect(body.leaderboard).toHaveLength(5)
       expect(body.total).toBe(8)
-      expect(body.stats.totalStudents).toBe(8)
+      // Ni en el modo completo van las medias de la clase: solo la comparación.
+      expect(body).not.toHaveProperty('stats')
       expect(body.me.id).toBe(me.enrollmentId)
       expect(body.me.rank).toBe(7)
 
@@ -291,7 +292,7 @@ describeWithDatabase('el ranking configurable', () => {
       expect(body.me).toMatchObject({ id: me.enrollmentId, rank: 7, xp: 57, isCurrentUser: true })
       expect(body.total).toBe(8)
       // Las medias se podrían restar para deducir lo escondido.
-      expect(body.stats).toBeNull()
+      expect(body).not.toHaveProperty('stats')
       expectAbsent(body, ['eva', 'fito', 'cero'])
     })
 
@@ -325,7 +326,7 @@ describeWithDatabase('el ranking configurable', () => {
       const body = await asStudent()
       expect(body.podium).toEqual([])
       expect(body.leaderboard).toEqual([])
-      expect(body.stats).toBeNull()
+      expect(body).not.toHaveProperty('stats')
       expect(body.total).toBe(8)
       expect(body.me).toMatchObject({ rank: 7, id: me.enrollmentId })
       expectAbsent(body, ['ana', 'bea', 'ciro', 'dani', 'eva', 'fito', 'cero'])
@@ -463,13 +464,20 @@ describeWithDatabase('el ranking configurable', () => {
     })
 
     it('el recorte vale igual: los N primeros de las misiones', async () => {
-      await setClass({ rankingConfig: { types: ['missions'], mode: 'top', topN: 3 } })
+      // Con el tipo XP a la vista, la XP desempata: 1, 2, 3, 3 y Eva fuera.
+      await setClass({ rankingConfig: { types: ['xp', 'missions'], mode: 'top', topN: 3 } })
       await completed(['ana', 'bea', 'ciro', 'dani', 'eva'])
-      const body = await asStudent()
+      const body = await asStudent('?type=missions')
       expect(body.type).toBe('missions')
-      expect(body.options.types).toEqual(['missions'])
       expect([...body.podium, ...body.leaderboard].map((r: Row) => r.rank)).toEqual([1, 2, 3, 3])
       expectAbsent(body, ['eva', 'fito', 'cero'])
+
+      // Sin él, empatan los cinco en el 1: entran todos, y nadie sin puesto.
+      await setClass({ rankingConfig: { types: ['missions'], mode: 'top', topN: 3 } })
+      const tied = await asStudent()
+      expect(tied.options.types).toEqual(['missions'])
+      expect([...tied.podium, ...tied.leaderboard].map((r: Row) => r.rank)).toEqual([1, 1, 1, 1, 1])
+      expectAbsent(tied, ['fito', 'cero'])
     })
 
     it('con el tipo XP apagado, la portada no da puesto', async () => {
@@ -493,8 +501,8 @@ describeWithDatabase('el ranking configurable', () => {
       // En «Siempre», lo suyo de siempre.
       const beaRow = rows.find(r => r.username === people.bea!.alias)!
       expect(beaRow.missionsCompleted).toBe(2)
-      // Las medias son de «Siempre»: en un periodo no acompañan.
-      expect(week.stats).toBeNull()
+      // Al alumnado no le llegan medias, tampoco en un periodo.
+      expect(week).not.toHaveProperty('stats')
 
       const xp = await asStudent('?type=xp&period=week')
       expect(xp.period).toBe('all')
@@ -655,8 +663,7 @@ describeWithDatabase('el ranking configurable', () => {
       expect(body.podium[0]).not.toHaveProperty('xp')
       expect(body.podium[0]).not.toHaveProperty('level')
       expect(body.podium[0]).not.toHaveProperty('levelColor')
-      expect(body.stats).toMatchObject({ avgXp: null })
-      expect(body.stats).not.toHaveProperty('totalXp')
+      expect(body).not.toHaveProperty('stats')
       for (const person of Object.values(people)) {
         if (person.xp > 0) expect(leaves(body)).not.toContain(person.xp)
       }

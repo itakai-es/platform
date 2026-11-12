@@ -307,8 +307,12 @@ export async function placeAfterPrerequisites(tx: Db, classId: string): Promise<
  * con algo dentro (enigmas completados o la misión completada). Esas no se le
  * cierran. Una fila de progreso vacía no cuenta: no es trabajo, y no puede
  * servir para que una misión no se cierre nunca.
+ *
+ * Es la regla de «empezada» de la analítica (`hasStarted`, en definitions.ts), así
+ * que también dice qué misiones van «En curso» en los listados del alumnado. Tres
+ * consultas, sean cuantas sean las misiones.
  */
-async function startedMissionIds(db: Db, studentId: string, missionIds: string[]) {
+export async function startedMissionIds(db: Db, studentId: string, missionIds: string[]) {
   const started = new Set<string>()
   if (missionIds.length === 0) return started
   const progress = await db.studentMissionProgress.findMany({

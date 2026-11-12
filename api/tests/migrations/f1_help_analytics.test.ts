@@ -14,6 +14,7 @@ import {
 import {
   HINTS_IN_MISSION,
   INACTIVE_DAYS,
+  LOW_ATTENDANCE_MIN_SESSIONS,
   LOW_ATTENDANCE_PERCENT,
   LOW_AVERAGE_MIN_APPROVALS,
   LOW_AVERAGE_PERCENT,
@@ -253,7 +254,9 @@ describe('migración f1_help_analytics', () => {
     expect(text).toContain(`no llega al ${LOW_AVERAGE_PERCENT} %, con al menos ${LOW_AVERAGE_MIN_APPROVALS} enigmas`)
     expect(text).toContain(`usó ${HINTS_IN_MISSION} o más pistas en una misión, o una que resta un % de la recompensa`)
     expect(text).toContain(`lleva ${INACTIVE_DAYS} días o más sin actividad, con misiones que puede hacer`)
-    expect(text).toContain(`su asistencia no llega al ${LOW_ATTENDANCE_PERCENT} %`)
+    expect(text).toContain(
+      `su asistencia no llega al ${LOW_ATTENDANCE_PERCENT} %, con al menos ${LOW_ATTENDANCE_MIN_SESSIONS} sesiones con lista en el periodo`
+    )
     expect(text).toContain(`el ${MISSION_UNFINISHED_PERCENT} % o más de quien la empezó no la completó`)
     expect(text).toContain(
       `no llega al ${MISSION_LOW_AVERAGE_PERCENT} %, con al menos ${MISSION_LOW_AVERAGE_MIN_APPROVALS} enigmas aprobados`
@@ -308,6 +311,13 @@ describe('migración f1_help_analytics', () => {
     expect(DEFAULT_RANKING_CONFIG.types).toEqual(['xp', 'teams'])
     expect(text).toMatch(/De entrada van encendidos \*\*XP\*\* y \*\*Equipos\*\*, y hace falta al menos un tipo/)
     expect(text).toMatch(/1, 2, 2, 4/)
+    // La XP solo desempata las misiones si el alumnado ve el ranking de XP.
+    expect(text).toMatch(/en los empates, la XP, si tu alumnado ve también el ranking de \*\*XP\*\*/)
+    expect(text).toMatch(/la XP solo desempata si tu alumnado ve también el ranking de \*\*XP\*\*/)
+    expect(text).not.toMatch(/en los empates, la XP \|/)
+    // La comparación también va en el ranking, en cualquier modo, y sin las medias de la clase.
+    expect(text).toMatch(/con el ranking encendido, también en él, con las mismas cifras/)
+    expect(text).not.toMatch(/si el ranking recorta lo que ve/)
     expect(text).toMatch(/\*\*XP\*\* solo tiene \*\*Siempre\*\*/)
     expect(text).toMatch(/\*\*Esta semana\*\*, desde el lunes, y \*\*Temporada\*\*/)
     expect(text).toMatch(/\*\*Empezar temporada\*\*/)
@@ -346,6 +356,7 @@ describe('migración f1_help_analytics', () => {
     expect(MIN_OTHERS).toBe(5)
     expect(text).toMatch(/al menos cinco personas además de ti, seis en total/)
     expect(text).toMatch(/\*\*Tu clase aún es pequeña para comparar\.\*\*/)
+    expect(text).toMatch(/Si tu clase tiene ranking, también la tienes en la pestaña \*\*Ranking\*\*, con las mismas cifras/)
     expect(text).toMatch(/Tiene su propio interruptor, aparte del ranking/)
     expect(text).toMatch(/Nunca tus notas ni tu asistencia/)
     expect(text).toMatch(/cada cual ve solo lo suyo/)
@@ -383,6 +394,7 @@ describe('migración f1_help_analytics', () => {
     expect(text).toMatch(/\*\*Puesto 4 de 8\*\*/)
     expect(text).toMatch(/nunca el nombre real/)
     expect(text).toMatch(/\*\*Nadie ve tus entregas ni tus porcentajes\*\*/)
+    expect(text).toMatch(/Si empatas, decide la XP, si tu clase tiene también el ranking de \*\*XP\*\*; si no, compartís puesto/)
     expect(text).toMatch(linkTo(COMPARE))
   })
 

@@ -95,17 +95,3 @@ export function compareWithOthers(input: {
   }
   return { value, average, band, reason: null }
 }
-
-/**
- * Las medias de la clasificación completa, tal como las recibe el alumnado. Sin la
- * XP total, porque la suma menos lo propio es lo de los demás, y sin el progreso
- * medio, que además no se puede sacar de las filas: en una clase de dos personas,
- * la media menos lo propio es el % de la otra, sin umbral ni redondeo. El profesorado
- * sigue viendo las dos, porque ya ve a cada persona.
- */
-export function studentRankingStats<T extends { totalXp: unknown; avgProgress: unknown }>(
-  stats: T
-): Omit<T, 'totalXp' | 'avgProgress'> {
-  const { totalXp: _totalXp, avgProgress: _avgProgress, ...shown } = stats
-  return shown
-}

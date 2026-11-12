@@ -7,7 +7,7 @@ import {
   weeksBetween,
   type Period,
 } from './definitions.js'
-import { missionCompletions } from './student-progress.js'
+import { COUNTED_MISSION_WHERE, missionCompletions } from './student-progress.js'
 
 /**
  * La actividad de una clase (o de un estudiante en ella) por semanas, de lunes
@@ -25,7 +25,8 @@ import { missionCompletions } from './student-progress.js'
  * de truncarla al lunes. Solo cuenta el alumnado con matrícula vigente en la
  * clase, sin la vista previa, como en la matriz. Una consulta agrupada; las
  * misiones completadas van aparte, con la definición única (`missionCompletions`),
- * que se aplica en memoria.
+ * que se aplica en memoria, y solo de las que cuentan (`COUNTED_MISSION_WHERE`):
+ * las mismas que «X de N» y la fila de cada estudiante.
  */
 
 type Db = Prisma.TransactionClient
@@ -123,7 +124,7 @@ export async function classActivityByWeek(
   const [rows, missions, population] = await Promise.all([
     eventRows,
     db.mission.findMany({
-      where: { classId },
+      where: { classId, ...COUNTED_MISSION_WHERE },
       select: { id: true, enigmas: { select: { id: true, isOptional: true } } },
     }),
     db.classEnrollment.findMany({

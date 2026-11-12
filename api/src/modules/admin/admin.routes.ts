@@ -11,7 +11,9 @@ import { rethrowHttpError, ValidationError } from '../../utils/errors.js'
 import { ENROLL_TX_OPTIONS, enrollStudent } from '../../utils/enrollment.js'
 import { buildTimeSeries } from './admin-series.js'
 import { WALL_ACTIVITY_WHERE } from '../../utils/activity.js'
-import { countAwaitingReview } from '../../utils/pending-review.js'
+import { countClassesAwaitingReview } from '../../utils/pending-review.js'
+import { LIVE_CLASS_WHERE } from '../../utils/class-access.js'
+import { COUNTED_MISSION_WHERE, missionCompletions } from '../analytics/student-progress.js'
 import { USERNAME_MAX_LENGTH, USERNAME_MIN_LENGTH } from '../../utils/identity.js'
 import {
   createManagedStudent,
@@ -90,10 +92,20 @@ interface SparkHealthResponse {
  * Así funciona con OpenAI, Groq, vLLM, etc., no solo con Spark — el panel no
  * debe decir "down" cuando la generación sí funciona.
  */
+/**
+ * Lo que dice una sonda: el estado, el detalle para el registro y lo que tardó en
+ * responder el endpoint; null si no respondió (no hay nada que medir).
+ */
+interface ProbeResult {
+  status: ServiceStatus
+  detail: string
+  latencyMs: number | null
+}
+
 async function probeAiEndpoint(
   baseUrl: string,
   credentials?: { apiKey: string; model: string }
-): Promise<{ status: ServiceStatus; detail: string }> {
+): Promise<ProbeResult> {
   // Mismas rutas que el proveedor: openAiEndpoint acepta el host o una base ya
   // versionada (`https://host/v1`, `https://host/api/v4`).
   const url = (baseUrl || DEFAULT_SPARK_ROUTER_BASE_URL).replace(/\/+$/, '')
@@ -108,10 +120,10 @@ async function probeAiEndpoint(
       if (body?.services) {
         const anyOk = body.services.some(s => s.status === 'ok')
         return anyOk
-          ? { status: 'operational', detail: `Spark · ${ms}ms` }
-          : { status: 'degraded', detail: 'Spark: sin servicios activos' }
+          ? { status: 'operational', detail: `Spark · ${ms}ms`, latencyMs: ms }
+          : { status: 'degraded', detail: 'Spark: sin servicios activos', latencyMs: ms }
       }
-      return { status: 'operational', detail: `Alcanzable · ${ms}ms` }
+      return { status: 'operational', detail: `Alcanzable · ${ms}ms`, latencyMs: ms }
     }
   } catch { /* sin /health → probe genérico */ }
 
@@ -119,7 +131,7 @@ async function probeAiEndpoint(
   try {
     const res = await fetch(openAiEndpoint(url, 'models'), { signal: AbortSignal.timeout(2500) })
     const ms = Math.round(performance.now() - start)
-    return { status: 'operational', detail: `Alcanzable (HTTP ${res.status}) · ${ms}ms` }
+    return { status: 'operational', detail: `Alcanzable (HTTP ${res.status}) · ${ms}ms`, latencyMs: ms }
   } catch { /* tampoco expone /v1/models → se prueba la llamada real */ }
 
   // 3) Último recurso: la MISMA llamada que hace el producto, con un token de
@@ -146,12 +158,12 @@ async function probeAiEndpoint(
       // Cualquier respuesta HTTP significa que el endpoint atiende: un 401 o un
       // 400 son problema de credenciales o de modelo, no de conectividad.
       return res.ok
-        ? { status: 'operational', detail: `Generación OK · ${ms}ms` }
-        : { status: 'degraded', detail: `Responde con HTTP ${res.status}` }
+        ? { status: 'operational', detail: `Generación OK · ${ms}ms`, latencyMs: ms }
+        : { status: 'degraded', detail: `Responde con HTTP ${res.status}`, latencyMs: ms }
     } catch { /* nada responde */ }
   }
 
-  return { status: 'down', detail: 'No se pudo conectar con el endpoint' }
+  return { status: 'down', detail: 'No se pudo conectar con el endpoint', latencyMs: null }
 }
 
 // Sondas baratas de los RESPALDOS (los mismos que usa el proveedor cuando el
@@ -185,38 +197,92 @@ async function probeImageFallback(): Promise<boolean> {
   }
 }
 
-/** Salud de los endpoints de IA (texto e imágenes) configurados en el panel. */
-async function checkSparkServices(): Promise<{
-  text: { status: ServiceStatus; detail: string }
-  image: { status: ServiceStatus; detail: string }
-  latencyMs: number
-}> {
+/**
+ * Salud de los endpoints de IA (texto e imágenes) configurados en el panel. Cada
+ * uno con lo que tardó en responder su propia sonda (`latencyMs`), o null si no se
+ * midió: el de imágenes que comparte endpoint con el de texto no se sondea aparte,
+ * y el que solo funciona con el respaldo no respondió.
+ */
+async function checkSparkServices(): Promise<{ text: ProbeResult; image: ProbeResult }> {
   const ai = await getAiSettings()
   const textBase = ai.text.baseUrl || DEFAULT_SPARK_ROUTER_BASE_URL
   const imageBase = ai.image.baseUrl || DEFAULT_SPARK_ROUTER_BASE_URL
-  const start = performance.now()
   // Al de texto se le pasan las credenciales para poder probar la generación real
   // si no expone rutas de descubrimiento. Al de imágenes NO: generar una imagen
   // como sonda sería lento y costoso. Cuando comparten endpoint —el caso normal—
-  // hereda la conectividad del de texto, que ya es concluyente.
+  // hereda la conectividad del de texto, que ya es concluyente, pero no su
+  // latencia: la de las imágenes no se ha medido.
   let text = await probeAiEndpoint(textBase, {
     apiKey: ai.text.apiKey,
     model: ai.text.model,
   })
-  let image = imageBase === textBase ? text : await probeAiEndpoint(imageBase)
+  let image = imageBase === textBase ? { ...text, latencyMs: null } : await probeAiEndpoint(imageBase)
 
   // Endpoint principal caído ≠ IA caída: el proveedor genera con el respaldo.
   // El panel debe contar la verdad completa — "degradado, generando con el
   // respaldo" — porque "down" a secas sugiere que los profesores no pueden
   // usar la IA cuando sí pueden.
   if (text.status === 'down' && (await probeTextFallback())) {
-    text = { status: 'degraded', detail: 'Principal caído — generando con el respaldo (Gemini)' }
+    text = { status: 'degraded', detail: 'Principal caído — generando con el respaldo (Gemini)', latencyMs: null }
   }
   if (image.status === 'down' && (await probeImageFallback())) {
-    image = { status: 'degraded', detail: 'Principal caído — generando con el respaldo (Flux)' }
+    image = { status: 'degraded', detail: 'Principal caído — generando con el respaldo (Flux)', latencyMs: null }
   }
 
-  return { text, image, latencyMs: Math.round(performance.now() - start) }
+  return { text, image }
+}
+
+/** Lo que tarda una consulta mínima a la base ahora mismo; null si no responde. */
+async function databaseLatency(): Promise<number | null> {
+  try {
+    const start = performance.now()
+    await prisma.$queryRaw`SELECT 1`
+    return Math.round(performance.now() - start)
+  } catch {
+    return null
+  }
+}
+
+/**
+ * Las misiones completadas de la instancia en cada periodo `[from, to)` (sin `to`,
+ * hasta ahora), con la definición única (`missionCompletions`): solo de las que
+ * cuentan, de clases fuera de la papelera y sin la vista previa del profesorado.
+ * Solo se cargan las misiones con algo completado o aprobado desde el primer
+ * periodo: una completada en él tiene su fecha, o la de su última aprobación, ahí.
+ */
+async function completedMissionsIn(periods: { from: Date; to?: Date }[]): Promise<number[]> {
+  const counts = periods.map(() => 0)
+  const since = new Date(Math.min(...periods.map(p => p.from.getTime())))
+  const missions = await prisma.mission.findMany({
+    where: {
+      ...COUNTED_MISSION_WHERE,
+      class: LIVE_CLASS_WHERE,
+      OR: [
+        { progress: { some: { completedAt: { gte: since } } } },
+        { enigmas: { some: { progress: { some: { completedAt: { gte: since } } } } } },
+      ],
+    },
+    select: { id: true, classId: true, enigmas: { select: { id: true, isOptional: true } } },
+  })
+  if (missions.length === 0) return counts
+  const [{ datesBy }, previews] = await Promise.all([
+    missionCompletions(missions),
+    prisma.classEnrollment.findMany({
+      where: { classId: { in: [...new Set(missions.map(m => m.classId))] }, isPreview: true },
+      select: { classId: true, studentId: true },
+    }),
+  ])
+  const preview = new Set(previews.map(p => `${p.classId}:${p.studentId}`))
+  const classOf = new Map(missions.map(m => [m.id, m.classId]))
+  for (const [studentId, dates] of datesBy) {
+    for (const [missionId, at] of dates) {
+      if (preview.has(`${classOf.get(missionId)}:${studentId}`)) continue
+      periods.forEach((period, index) => {
+        if (at >= period.from && (!period.to || at < period.to)) counts[index]! += 1
+      })
+    }
+  }
+  return counts
 }
 
 export async function adminRoutes(fastify: FastifyInstance) {
@@ -245,8 +311,9 @@ export async function adminRoutes(fastify: FastifyInstance) {
           distinct: ['userId'],
         }).then(tokens => tokens.length),
 
-        // Entregas por revisar: sin las de un enigma que esa persona ya tiene aprobado.
-        countAwaitingReview(),
+        // Entregas por revisar, como en cada clase: sin las de un enigma ya aprobado,
+        // sin la vista previa, sin quien ya no está en la clase y sin la papelera.
+        countClassesAwaitingReview(LIVE_CLASS_WHERE),
 
         // Missions with status 'activa' (sin las de clases en la papelera)
         prisma.mission.count({ where: { status: 'activa', class: { deletedAt: null } } }),
@@ -604,14 +671,13 @@ export async function adminRoutes(fastify: FastifyInstance) {
     const safeSimple = (r: PromiseSettledResult<{ status: ServiceStatus; detail: string }>) =>
       r.status === 'fulfilled' ? r.value : { status: 'down' as ServiceStatus, detail: 'Error' }
 
-    const spark = sparkCheck.status === 'fulfilled'
-      ? sparkCheck.value
-      : { text: { status: 'down' as ServiceStatus, detail: 'Error de conexión' }, image: { status: 'down' as ServiceStatus, detail: 'Error de conexión' }, latencyMs: 0 }
+    const down = { status: 'down' as ServiceStatus, detail: 'Error de conexión' }
+    const spark = sparkCheck.status === 'fulfilled' ? sparkCheck.value : { text: down, image: down }
 
     const serviceResults = [
       { name: 'Base de Datos', ...safeSimple(dbCheck) },
-      { name: 'IA (texto)', ...spark.text },
-      { name: 'IA (imágenes)', ...spark.image },
+      { name: 'IA (texto)', status: spark.text.status, detail: spark.text.detail },
+      { name: 'IA (imágenes)', status: spark.image.status, detail: spark.image.detail },
       { name: 'Almacenamiento', ...safeSimple(diskCheck) },
     ]
 
@@ -759,8 +825,7 @@ export async function adminRoutes(fastify: FastifyInstance) {
         totalMissions,
         missionsByStatus,
         missionsByRarity,
-        completedThisPeriod,
-        completedPrevPeriod,
+        [completedThisPeriod, completedPrevPeriod],
         totalSubmissions,
         pendingSubmissions,
         totalConversations,
@@ -789,10 +854,11 @@ export async function adminRoutes(fastify: FastifyInstance) {
         prisma.mission.count(),
         prisma.mission.groupBy({ by: ['status'], _count: true }),
         prisma.mission.groupBy({ by: ['rarity'], _count: true }),
-        prisma.studentMissionProgress.count({ where: { completedAt: inPeriod } }),
-        prisma.studentMissionProgress.count({ where: { completedAt: inPrevPeriod } }),
+        // Misiones completadas, con la definición única, en este periodo y en el anterior.
+        completedMissionsIn([{ from: since }, { from: prevSince, to: since }]),
         prisma.enigmaSubmission.count(),
-        countAwaitingReview(),
+        // Por revisar, como en cada clase (ver `countClassesAwaitingReview`).
+        countClassesAwaitingReview(LIVE_CLASS_WHERE),
         prisma.chatConversation.count(),
         prisma.chatConversation.groupBy({ by: ['assistantId'], _count: true }),
         // Entradas del muro del periodo (sin las filas viejas de seguridad)
@@ -812,11 +878,7 @@ export async function adminRoutes(fastify: FastifyInstance) {
         }).then(rows => rows.map(r => ({ created_at: r.createdAt }))),
         prisma.activity.count({ where: { createdAt: inPrevPeriod, ...WALL_ACTIVITY_WHERE } }),
         // Latencia de la base: lo que tarda una consulta mínima ahora
-        (async () => {
-          const start = performance.now()
-          await prisma.$queryRaw`SELECT 1`
-          return Math.round(performance.now() - start)
-        })(),
+        databaseLatency(),
         // Errores del registro del sistema, en el periodo y en el anterior
         prisma.systemLog.count({ where: { level: 'error', createdAt: inPeriod } }),
         prisma.systemLog.count({ where: { createdAt: inPeriod } }),
@@ -835,16 +897,8 @@ export async function adminRoutes(fastify: FastifyInstance) {
       const errorRate = errorShare(systemLogErrorCount, systemLogTotalCount)
       const errorRatePrev = errorShare(prevSystemLogErrorCount, prevSystemLogTotalCount)
 
-      // ── Real service health via existing /services endpoint logic ──
-      let sparkText: { status: ServiceStatus; detail: string } = { status: 'down', detail: 'No comprobado' }
-      let sparkImage: { status: ServiceStatus; detail: string } = { status: 'down', detail: 'No comprobado' }
-      let sparkLatencyMs = 0
-      try {
-        const sparkResult = await checkSparkServices()
-        sparkText = sparkResult.text
-        sparkImage = sparkResult.image
-        sparkLatencyMs = sparkResult.latencyMs
-      } catch { /* Spark not available */ }
+      // El estado de los servicios va aparte (`/analytics/services`): sondear la IA
+      // tarda segundos y no tiene por qué frenar el resto.
 
       // Real disk usage (cross-platform)
       let diskUsagePct = 0
@@ -886,15 +940,10 @@ export async function adminRoutes(fastify: FastifyInstance) {
       // Los mensajes a los asistentes, del periodo: como la serie de al lado.
       const messageCount = messagesInPeriod.length
 
-      // ── Format distribution data ──
-      const roleColors: Record<string, string> = { student: '#6FEDB7', teacher: '#8B5CF6', admin: '#F87171' }
-      const roleLabels: Record<string, string> = { student: 'Estudiantes', teacher: 'Docentes', admin: 'Administración' }
-      const statusColors: Record<string, string> = { activa: '#6FEDB7', bloqueada: '#F87171' }
-      const statusLabels: Record<string, string> = { activa: 'Activas', bloqueada: 'Bloqueadas' }
-      const rarityColors: Record<string, string> = { comun: '#94A3B8', rara: '#3B82F6', epica: '#A855F7', legendaria: '#F59E0B' }
-      const rarityLabels: Record<string, string> = { comun: 'Común', rara: 'Rara', epica: 'Épica', legendaria: 'Legendaria' }
-      const assistantColors: Record<string, string> = { atenea: '#8B5CF6', odiseo: '#3B82F6', penelope: '#6FEDB7', polifemo: '#F59E0B', poseidon: '#F87171' }
-      const assistantLabels: Record<string, string> = { atenea: 'Atenea', odiseo: 'Odiseo', penelope: 'Penélope', polifemo: 'Polifemo', poseidon: 'Poseidón' }
+      // ── Repartos: cada elemento con su clave estable y su cifra ──
+      // Sin etiquetas ni colores: la pantalla los pone en el idioma y la paleta de
+      // quien mira. `percentage`, sobre el total de su reparto.
+      const share = (value: number, total: number) => (total > 0 ? Math.round((value / total) * 100) : 0)
 
       // Mensajes por asistente, del periodo: sus porcentajes son sobre `messageCount`.
       const messagesByAssistant = await Promise.all(
@@ -914,23 +963,23 @@ export async function adminRoutes(fastify: FastifyInstance) {
           totalSubmissions,
           pendingSubmissions,
         },
+        // `teacher`, `student`, `admin` o `none` (cuentas aún sin rol).
         usersByRole: usersByRole.map(r => ({
-          label: roleLabels[r.role || 'student'] || r.role || 'Sin rol',
+          key: r.role ?? 'none',
           value: r._count,
-          percentage: totalUsers > 0 ? Math.round((r._count / totalUsers) * 100) : 0,
-          color: roleColors[r.role || 'student'] || '#94A3B8',
+          percentage: share(r._count, totalUsers),
         })),
+        // `activa` o `bloqueada`.
         missionsByStatus: missionsByStatus.map(m => ({
-          label: statusLabels[m.status] || m.status,
+          key: m.status,
           value: m._count,
-          percentage: totalMissions > 0 ? Math.round((m._count / totalMissions) * 100) : 0,
-          color: statusColors[m.status] || '#94A3B8',
+          percentage: share(m._count, totalMissions),
         })),
+        // `comun`, `rara`, `epica` o `legendaria`.
         missionsByRarity: missionsByRarity.map(m => ({
-          label: rarityLabels[m.rarity] || m.rarity,
+          key: m.rarity,
           value: m._count,
-          percentage: totalMissions > 0 ? Math.round((m._count / totalMissions) * 100) : 0,
-          color: rarityColors[m.rarity] || '#94A3B8',
+          percentage: share(m._count, totalMissions),
         })),
         systemHealth: {
           cpuUsage: (() => {
@@ -947,39 +996,21 @@ export async function adminRoutes(fastify: FastifyInstance) {
           diskUsage: diskUsagePct,
           diskUsedGB,
           diskTotalGB,
+          // null si la base no ha respondido.
           dbLatency: dbLatencyMs,
         },
-        // El estado de cada servicio y lo que ha tardado en responder ahora mismo
-        // a la comprobación. Ni disponibilidad ni p95: no se miden.
-        serviceHealth: [
-          {
-            name: 'Base de Datos',
-            status: (dbLatencyMs > 200 ? 'degraded' : 'operational') as ServiceStatus,
-            latencyMs: dbLatencyMs,
-          },
-          {
-            name: 'IA (texto)',
-            status: sparkText.status,
-            latencyMs: sparkLatencyMs,
-          },
-          {
-            name: 'IA (imágenes)',
-            status: sparkImage.status,
-            latencyMs: sparkLatencyMs,
-          },
-        ],
         // Series del periodo: altas, entradas del muro y mensajes a los asistentes.
+        // Cada tramo, con su fecha de inicio (`start`, AAAA-MM-DD) y su cifra.
         newUsersSeries,
         activitySeries,
         aiUsage: {
           totalMessages: messageCount,
           totalConversations,
-          avgConversationsPerUser: totalUsers > 0 ? Math.round((totalConversations / totalUsers) * 10) / 10 : 0,
+          // La clave es el id del asistente (`atenea`, `odiseo`…).
           messagesByAssistant: messagesByAssistant.map(a => ({
-            label: assistantLabels[a.assistantId] || a.assistantId,
+            key: a.assistantId,
             value: a.messages,
-            percentage: messageCount > 0 ? Math.round((a.messages / messageCount) * 100) : 0,
-            color: assistantColors[a.assistantId] || '#94A3B8',
+            percentage: share(a.messages, messageCount),
           })),
           messagesSeries: messageSeries,
         },
@@ -996,6 +1027,29 @@ export async function adminRoutes(fastify: FastifyInstance) {
     } catch (error) {
       request.log.error(error, 'Error in /admin/analytics')
       return reply.status(500).send({ message: 'Error interno' })
+    }
+  })
+
+  // El estado de los servicios de las estadísticas, aparte de `/analytics`: sondear
+  // la IA tarda segundos, y así el resto de cifras no la espera. Cada servicio con su
+  // clave (`database`, `ai_text`, `ai_image`), su estado y lo que tardó en responder
+  // su propia comprobación, o null si no se midió (ver `checkSparkServices`).
+  // Ni disponibilidad ni p95: no se miden.
+  fastify.get('/analytics/services', async () => {
+    const [dbLatencyMs, ai] = await Promise.all([
+      databaseLatency(),
+      checkSparkServices().catch(() => null),
+    ])
+    const unknown: ProbeResult = { status: 'down', detail: 'Error de conexión', latencyMs: null }
+    const { text, image } = ai ?? { text: unknown, image: unknown }
+    const databaseStatus: ServiceStatus =
+      dbLatencyMs === null ? 'down' : dbLatencyMs > 200 ? 'degraded' : 'operational'
+    return {
+      services: [
+        { key: 'database', status: databaseStatus, latencyMs: dbLatencyMs },
+        { key: 'ai_text', status: text.status, latencyMs: text.latencyMs },
+        { key: 'ai_image', status: image.status, latencyMs: image.latencyMs },
+      ],
     }
   })
 

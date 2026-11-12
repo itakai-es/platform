@@ -427,27 +427,41 @@ describeWithDatabase('la comparación anónima con la media', () => {
   })
 
   describe('el ranking del alumnado', () => {
-    it('en `full` quedan las medias sin la XP total, y sin la comparación', async () => {
+    /** Ninguna media de la clase, en ningún modo: solo la comparación anónima. */
+    const NO_STATS = ['stats', 'totalXp', 'avgXp', 'avgProgress', 'avgMissions']
+
+    it('en `full`, sin medias: la misma comparación que en «Mi progreso»', async () => {
       await group([10, 20, 30, 40, 50])
       const body = await ranking()
-      expect(body.stats).toMatchObject({ avgXp: 35 })
-      expect(body.stats).not.toHaveProperty('totalXp')
-      expect(walk(body).keys.has('totalXp')).toBe(false)
-      expect(body.comparison).toBeNull()
+      for (const key of NO_STATS) expect(walk(body).keys.has(key), key).toBe(false)
+      expect(metric(body.comparison, 'xp')).toMatchObject({ value: 57, average: 30, reason: null })
+      expect(body.comparison).toEqual((await progress()).comparison)
     })
 
     it('en `top` y `position`, sin medias ni total, con la comparación', async () => {
       await group([10, 20, 30, 40, 50, 60, 70, 80])
       await setClass({ rankingConfig: { mode: 'position', types: ['xp'] } })
       const position = await ranking()
-      expect(position.stats).toBeNull()
+      for (const key of NO_STATS) expect(walk(position).keys.has(key), key).toBe(false)
       expect(metric(position.comparison, 'xp')).toMatchObject({ average: 50, reason: null })
+      expect(position.comparison).toEqual((await progress()).comparison)
 
       await setClass({ rankingConfig: { mode: 'top', topN: 5, types: ['xp'] } })
       const top = await ranking()
-      expect(top.stats).toBeNull()
+      for (const key of NO_STATS) expect(walk(top).keys.has(key), key).toBe(false)
       expect(metric(top.comparison, 'xp')).toMatchObject({ average: null, reason: 'band_only' })
-      expect(walk(top).keys.has('totalXp')).toBe(false)
+      expect(top.comparison).toEqual((await progress()).comparison)
+    })
+
+    it('con la comparación apagada, null en todos los modos, y tampoco hay medias', async () => {
+      await group([10, 20, 30, 40, 50])
+      for (const mode of ['full', 'top', 'position']) {
+        await setClass({ rankingConfig: { mode, topN: 3, types: ['xp'], compare: false } })
+        const body = await ranking()
+        expect(body.comparison, mode).toBeNull()
+        expect(body, mode).not.toHaveProperty('stats')
+      }
+      expect((await progress()).comparison).toBeNull()
     })
 
     it('el profesorado sigue viendo su XP total', async () => {
@@ -491,6 +505,17 @@ describeWithDatabase('la comparación anónima con la media', () => {
         expect(text).not.toContain(person.enrollmentId)
         expect(text).not.toContain(person.alias)
         expect(text).not.toContain(person.name)
+      }
+    })
+
+    it('en el ranking `full`, la comparación tampoco, y no van las medias de la clase', async () => {
+      const others = await group([11, 22, 33, 44, 55])
+      await setClass({ rankingConfig: { mode: 'full', types: ['xp'] } })
+      const body = await ranking()
+      expectNothingOfOthers(body.comparison, others)
+      const { keys } = walk(body)
+      for (const key of ['stats', 'totalXp', 'avgXp', 'avgProgress', 'avgMissions']) {
+        expect(keys.has(key), key).toBe(false)
       }
     })
 

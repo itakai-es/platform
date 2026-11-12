@@ -16,6 +16,7 @@ import {
   rankingTypeAvailable,
   resolveRankingConfig,
   studentRankingTypes,
+  studentsSeeXpRanking,
   type RankingConfig,
   type RankingPeriod,
   type RankingType,
@@ -240,10 +241,10 @@ interface StatsRow {
 /**
  * Las medias que acompañan a la clasificación: XP media, progreso medio (el % de
  * enigmas obligatorios) y misiones de media, con un decimal, de las N que cuentan
- * (`groupAverages`), y la XP total. Para el profesorado, todas. Al alumnado le
- * llegan sin la XP total ni el progreso medio (`studentRankingStats`). Sin alumnado,
- * o sin obligatorios para el progreso, null. La XP, en una clase que no la usa,
- * tampoco se enseña (`withoutXp`).
+ * (`groupAverages`), y la XP total. Solo para el profesorado: al alumnado no le
+ * llega ninguna, solo la comparación anónima (`classComparison`). Sin alumnado, o
+ * sin obligatorios para el progreso, null. La XP, en una clase que no la usa,
+ * tampoco se enseña (`statsWithoutXp`).
  */
 export function rankingStats(rows: readonly StatsRow[], missionsTotal: number) {
   const totalStudents = rows.length
@@ -265,6 +266,12 @@ export function rankingStats(rows: readonly StatsRow[], missionsTotal: number) {
  *
  * Solo el alumnado que cuenta en la clase: sin la vista previa del profesorado ni
  * las cuentas que aún no han entrado (`participatingEnrollmentWhere`).
+ *
+ * `xpTiebreak`: si la XP desempata las misiones. Solo cuando el alumnado ve también
+ * el ranking de XP (`studentsSeeXpRanking`): si no, el orden entre quienes empatan
+ * dejaría adivinar quién tiene más XP, que esa clase no enseña. Es el mismo orden
+ * para el profesorado, para que la misma persona tenga el mismo puesto en las dos
+ * vistas.
  */
 export async function loadRankingBase(classId: string, db: Db = prisma) {
   const [enrollments, cls, missions] = await Promise.all([
@@ -282,7 +289,7 @@ export async function loadRankingBase(classId: string, db: Db = prisma) {
     }),
     db.class.findUnique({
       where: { id: classId },
-      select: { levelConfig: true, settings: true },
+      select: { levelConfig: true, settings: true, rankingConfig: true },
     }),
     missionProgressByStudent(classId, db),
   ])
@@ -291,7 +298,10 @@ export async function loadRankingBase(classId: string, db: Db = prisma) {
     enrollments,
     missions,
     levelConfig: resolveLevelConfig(cls?.levelConfig),
-    usesXp: resolveClassSettings(cls?.settings).xp,
+    xpTiebreak: studentsSeeXpRanking(
+      resolveClassSettings(cls?.settings),
+      resolveRankingConfig(cls?.rankingConfig)
+    ),
   }
 }
 
@@ -302,13 +312,14 @@ export type RankingBase = Awaited<ReturnType<typeof loadRankingBase>>
  * cada estudiante. `score` es lo que la ordena:
  * - `xp`: su XP (por `rankByXp`);
  * - `missions`: las misiones que cuentan completadas, desde `since` si se da, con
- *   la XP como desempate (si la clase la usa).
+ *   la XP como desempate solo si el alumnado ve el ranking de XP (`xpTiebreak`); si
+ *   no, quien empata comparte puesto (1, 1, 3) y va por alias.
  *
  * Lleva el nombre real (`name`) para el profesorado y el id de la cuenta: quien la
  * sirve al alumnado tiene que quitarlos (`publicRankingRow`).
  */
 export function rankClass(
-  { classId, enrollments, missions, levelConfig, usesXp }: RankingBase,
+  { classId, enrollments, missions, levelConfig, xpTiebreak }: RankingBase,
   { type = 'xp', since = null }: { type?: 'xp' | 'missions'; since?: Date | null } = {}
 ) {
   const missionsTotal = missions.total
@@ -335,7 +346,7 @@ export function rankClass(
   })
   const ranked =
     type === 'missions'
-      ? rankByScore(rows, r => r.score, usesXp ? r => r.xp : undefined)
+      ? rankByScore(rows, r => r.score, xpTiebreak ? r => r.xp : undefined)
       : rankByXp(rows)
   // El % de cada cual solo entra en la media: no viaja en la fila de nadie.
   const stats = rankingStats(
@@ -346,7 +357,7 @@ export function rankClass(
     })),
     missionsTotal
   )
-  return { ranked, stats, usesXp }
+  return { ranked, stats }
 }
 
 /** La clasificación de una clase, cargándola entera (ver `loadRankingBase` y `rankClass`). */
