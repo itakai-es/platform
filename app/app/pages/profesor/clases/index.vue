@@ -69,8 +69,13 @@ const classesStore = useClassesStore()
 
 const classes = computed(() => classesStore.classes)
 const archivedClasses = computed(() => teacherStore.archivedClasses)
+// Los esqueletos, solo sin ninguna clase que enseñar: al volver tras un cambio
+// en una clase se ven las tarjetas de antes mientras llegan las nuevas.
 const isLoading = computed(
-  () => classesStore.isLoadingClasses || teacherStore.isLoadingArchivedClasses
+  () =>
+    (classesStore.isLoadingClasses || teacherStore.isLoadingArchivedClasses) &&
+    classes.value.length === 0 &&
+    archivedClasses.value.length === 0
 )
 const archiveLoadingId = ref('')
 

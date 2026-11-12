@@ -3,27 +3,17 @@
  * Tipos para clases y sus estadísticas
  */
 import type { ScheduleConfig } from '~/types/schedule.types'
+import type { RankingConfig } from '~/utils/ranking-config'
 
 /**
  * Estadísticas calculadas dinámicamente por clase
  */
 export interface ClassStats {
-  avgProgress: number // 0-100, promedio de progreso de estudiantes
-  participation: number // 0-100, % de estudiantes activos
-  avgMissionsCompleted: number
-  totalMissions: number
-  pendingReviews: number // Entregas pendientes de revisar
-  avgXp: number // Media de XP de los estudiantes
+  /** Las misiones que cuentan: con enigmas y sin bloquear a mano. */
+  missionsCounted: number
+  /** Solo en el detalle de la clase: entregas pendientes de revisar. */
+  pendingReviews?: number
 }
-
-/**
- * Estado de la clase basado en las estadísticas
- * - al_dia: avgProgress >= 70 AND participation >= 80
- * - atencion: avgProgress >= 50 OR participation >= 60
- * - urgente: avgProgress < 50 AND participation < 60
- * - inactiva: participation === 0
- */
-export type ClassStatus = 'al_dia' | 'atencion' | 'urgente' | 'inactiva'
 
 /**
  * Configuración de funcionalidades por clase (panel "Ajustes").
@@ -171,7 +161,6 @@ export interface Class {
   updatedAt: Date
   // Estadísticas calculadas (opcionales, se añaden en el handler)
   stats?: ClassStats
-  status?: ClassStatus
   /** Acceso propio y profesorado: los devuelve la API de profesor en el listado y en el detalle. */
   myAccess?: ClassAccess | null
   teachers?: ClassTeacher[]
@@ -269,6 +258,8 @@ export interface UpdateClassData {
   province?: string
   settings?: Partial<ClassSettings>
   levelConfig?: LevelConfig
+  /** Sin la temporada: se empieza aparte (`startRankingSeason`). */
+  rankingConfig?: Partial<Pick<RankingConfig, 'types' | 'mode' | 'topN' | 'compare'>>
   scheduleConfig?: ScheduleConfig | ScheduleConfig[]
 }
 

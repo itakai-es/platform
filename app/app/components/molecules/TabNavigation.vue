@@ -9,7 +9,7 @@
       :is="idPrefix ? 'div' : 'nav'"
       :class="isPills ? 'flex flex-wrap gap-2' : '-mb-px flex gap-6 overflow-x-auto'"
       :role="idPrefix ? 'tablist' : undefined"
-      :aria-label="ariaLabel ?? 'Tabs'"
+      :aria-label="ariaLabel ?? t('common.accessibility.tabs')"
     >
       <button
         v-for="(tab, index) in tabs"
@@ -79,6 +79,8 @@ interface Emits {
 }
 
 const emit = defineEmits<Emits>()
+
+const { t } = useI18n()
 
 const tabRefs = ref<HTMLButtonElement[]>([])
 

@@ -16,16 +16,6 @@ interface ClassGuide {
   lastUpdated: string
 }
 
-interface ClassBadge {
-  id: string
-  name: string
-  description: string
-  imageUrl: string
-  rarity: 'common' | 'rare' | 'epic' | 'legendary'
-  unlocked: boolean
-  progress?: { current: number; total: number }
-}
-
 interface ClassActivity {
   id: string
   type: 'xp_gained' | 'badge_unlocked' | 'mission_completed' | 'level_up' | 'enigma_completed'
@@ -50,22 +40,14 @@ interface Teacher {
   avatar: string | null
 }
 
-interface StudentProgress {
-  completionRate: number
-  missionsCompleted: number
-  missionsTotal: number
-  xpEarned: number
-  averageScore: number
-}
-
 interface ClassWithExtras extends Class {
   schedule?: string
   activeMissions?: number
-  completionRate?: number
   backgroundImage?: string
   recentMissions?: RecentMission[]
   teacher?: Teacher
-  studentProgress?: StudentProgress
+  /** Solo en la lista del alumnado: «4 de 7 misiones» en su tarjeta. */
+  progress?: { missionsCompleted: number; missionsCounted: number }
   totalMissions?: number
 }
 
@@ -88,14 +70,12 @@ export const useClassesStore = defineStore('classes', () => {
   // clase ya cargada se veían las de la última que se había pedido.
   const missionsByClass = ref<Map<string, EnhancedMission[]>>(new Map())
   const classGuides = ref<Map<string, ClassGuide>>(new Map())
-  const classBadges = ref<Map<string, ClassBadge[]>>(new Map())
   const classActivities = ref<Map<string, ClassActivity[]>>(new Map())
   const isLoading = ref(false)
   const isLoadingClasses = ref(false)
   const isLoadingClass = ref(false)
   const isLoadingClassMissions = ref(false)
   const isLoadingGuide = ref(false)
-  const isLoadingBadges = ref(false)
   const isLoadingActivities = ref(false)
   const isJoining = ref(false)
   const error = ref<string | null>(null)
@@ -105,7 +85,6 @@ export const useClassesStore = defineStore('classes', () => {
   const loadedClasses = ref<Set<string>>(new Set())
   const loadedMissions = ref<Set<string>>(new Set())
   const loadedGuides = ref<Set<string>>(new Set())
-  const loadedBadges = ref<Set<string>>(new Set())
   const loadedActivities = ref<Set<string>>(new Set())
 
   // Getters
@@ -327,40 +306,6 @@ export const useClassesStore = defineStore('classes', () => {
   }
 
   /**
-   * Fetch badges for a specific class (student perspective)
-   */
-  async function fetchClassBadges(classId: string, force = false) {
-    // Use cached data unless forced
-    if (!force && loadedBadges.value.has(classId)) {
-      const cached = classBadges.value.get(classId)
-      if (cached) {
-        return cached
-      }
-    }
-
-    try {
-      isLoadingBadges.value = true
-      error.value = null
-
-      const config = useRuntimeConfig()
-      const response = await $fetch<{ badges: ClassBadge[] }>(
-        `${config.public.apiBase}/students/classes/${classId}/badges`
-      )
-
-      const badges = response.badges || []
-      classBadges.value.set(classId, badges)
-      loadedBadges.value.add(classId)
-      return badges
-    } catch (err: any) {
-      error.value = err.message || 'Error al cargar las insignias de la clase'
-      console.error('Error fetching class badges:', err)
-      throw err
-    } finally {
-      isLoadingBadges.value = false
-    }
-  }
-
-  /**
    * Fetch activities for a specific class (student perspective)
    * Caches initial load, pagination always fetches fresh data
    */
@@ -461,12 +406,6 @@ export const useClassesStore = defineStore('classes', () => {
     return fetchClassGuide(classId, force)
   }
 
-  async function ensureClassBadges(classId: string, force = false) {
-    if (loadedBadges.value.has(classId) && !force) return
-    if (isLoadingBadges.value) return
-    return fetchClassBadges(classId, force)
-  }
-
   async function ensureClassActivities(classId: string, offset = 0, limit = 5, force = false) {
     // Sólo aplicamos la bandera al primer page; las páginas siguientes siempre
     // pasan por el fetch real (paginación no debe cachearse).
@@ -544,6 +483,8 @@ export const useClassesStore = defineStore('classes', () => {
         }
       )
       classes.value.push(response.class)
+      // Las cifras del Inicio y los listados de clases cuentan con ella.
+      useTeacherStore().invalidateClass(response.class.id)
       return response
     } catch (err: unknown) {
       error.value = (err as Error).message || 'Error al crear la clase'
@@ -602,14 +543,12 @@ export const useClassesStore = defineStore('classes', () => {
     classMissions.value = []
     missionsByClass.value.clear()
     classGuides.value.clear()
-    classBadges.value.clear()
     classActivities.value.clear()
     isLoading.value = false
     isLoadingClasses.value = false
     isLoadingClass.value = false
     isLoadingClassMissions.value = false
     isLoadingGuide.value = false
-    isLoadingBadges.value = false
     isLoadingActivities.value = false
     isJoining.value = false
     error.value = null
@@ -618,7 +557,6 @@ export const useClassesStore = defineStore('classes', () => {
     loadedClasses.value.clear()
     loadedMissions.value.clear()
     loadedGuides.value.clear()
-    loadedBadges.value.clear()
     loadedActivities.value.clear()
   }
 
@@ -629,14 +567,12 @@ export const useClassesStore = defineStore('classes', () => {
     classMissions,
     missionsByClass,
     classGuides,
-    classBadges,
     classActivities,
     isLoading,
     isLoadingClasses,
     isLoadingClass,
     isLoadingClassMissions,
     isLoadingGuide,
-    isLoadingBadges,
     isLoadingActivities,
     isJoining,
     error,
@@ -656,7 +592,6 @@ export const useClassesStore = defineStore('classes', () => {
     fetchTeacherClassById,
     fetchClassMissions,
     fetchClassGuide,
-    fetchClassBadges,
     fetchClassActivities,
     joinClass,
     createClass,
@@ -671,7 +606,6 @@ export const useClassesStore = defineStore('classes', () => {
     ensureTeacherClassById,
     ensureClassMissions,
     ensureClassGuide,
-    ensureClassBadges,
     ensureClassActivities,
   }
 })

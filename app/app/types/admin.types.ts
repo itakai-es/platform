@@ -384,35 +384,29 @@ export interface TimeSeriesPoint {
 export interface ServiceHealthEntry {
   name: string
   status: 'operational' | 'degraded' | 'down'
-  uptime: number
-  avgLatency: number
-  p95Latency: number
-  requests24h: number
+  /** Lo que ha tardado en responder ahora mismo a la comprobación. */
+  latencyMs: number
 }
 
+/** Una cifra del periodo y la del periodo anterior, de la misma duración. */
+export interface PeriodFigure {
+  current: number
+  previous: number
+}
+
+/** Las estadísticas de la instancia: todo medido, nada estimado. */
 export interface AnalyticsData {
   overview: {
     totalUsers: number
     activeUsersToday: number
-    activeSchools: number
-    missionsCompleted: number
-    avgCompletionRate: number
     newUsersThisPeriod: number
-    newMissionsThisPeriod: number
     totalSubmissions: number
+    /** Entregas por revisar (sin las de un enigma ya aprobado). */
     pendingSubmissions: number
   }
   usersByRole: AnalyticsMetric[]
   missionsByStatus: AnalyticsMetric[]
   missionsByRarity: AnalyticsMetric[]
-  schoolComparison: {
-    name: string
-    students: number
-    teachers: number
-    missions: number
-    activityRate: number
-  }[]
-  // System performance
   systemHealth: {
     cpuUsage: number
     memoryUsage: number
@@ -422,27 +416,23 @@ export interface AnalyticsData {
     dbLatency: number
   }
   serviceHealth: ServiceHealthEntry[]
-  // Time series
-  responseTimeSeries: TimeSeriesPoint[]
-  activeUsersSeries: TimeSeriesPoint[]
-  requestsSeries: TimeSeriesPoint[]
-  // AI / Token usage
+  // Series del periodo
+  newUsersSeries: TimeSeriesPoint[]
+  activitySeries: TimeSeriesPoint[]
+  // Asistentes de IA
   aiUsage: {
-    totalTokensUsed: number
-    avgTokensPerUser: number
+    totalMessages: number
     totalConversations: number
     avgConversationsPerUser: number
-    tokensByAssistant: AnalyticsMetric[]
-    tokensSeries: TimeSeriesPoint[]
+    messagesByAssistant: AnalyticsMetric[]
+    messagesSeries: TimeSeriesPoint[]
   }
-  // Top-level KPIs
+  // Cifras del periodo frente al anterior
   kpis: {
-    avgResponseTime: number
-    avgResponseTimePrev: number
-    errorRate: number
-    errorRatePrev: number
-    requestsPerMinute: number
-    requestsPerMinutePrev: number
-    uptimePercent: number
+    activity: PeriodFigure
+    newUsers: PeriodFigure
+    missionsCompleted: PeriodFigure
+    /** % de entradas de error en el registro del sistema. */
+    errorRate: PeriodFigure
   }
 }

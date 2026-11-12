@@ -9,7 +9,7 @@
     <span v-for="reward in rewards" :key="reward.key" class="inline-flex items-center gap-1">
       <component :is="reward.icon" class="h-4 w-4" aria-hidden="true" />
       <span class="sr-only">{{ reward.label }}</span>
-      {{ reward.amount.toLocaleString('es-ES') }}
+      {{ formatNumber(reward.amount) }}
     </span>
   </span>
 </template>
@@ -38,6 +38,7 @@ const props = defineProps<{
 }>()
 
 const { t } = useI18n()
+const { formatNumber } = useNumberFormat()
 
 const rewards = computed(() =>
   [

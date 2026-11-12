@@ -332,7 +332,10 @@ async function saveNickname() {
     toast.success(t('teacher.students.actions.nickname_saved'))
     emit('renamed', saved)
   } catch (error) {
-    nicknameError.value = apiMessage(error, t('teacher.students.actions.nickname_error'))
+    nicknameError.value =
+      (error as { data?: { code?: string } })?.data?.code === 'NICKNAME_TAKEN'
+        ? t('student.classes.detail.avatar_tab.nickname_taken')
+        : apiMessage(error, t('teacher.students.actions.nickname_error'))
   } finally {
     busy.value = false
   }

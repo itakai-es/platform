@@ -46,7 +46,14 @@
         </div>
         <div v-else class="min-w-[14rem] flex-1">
           <p class="mb-1.5 text-sm font-semibold text-navy-700">{{ progressText }}</p>
-          <ProgressBar :percentage="progress.percent" :label="`${progress.percent} %`" />
+          <ProgressBar
+            :percentage="progress.percent"
+            role="progressbar"
+            :aria-valuemin="0"
+            :aria-valuemax="progress.total"
+            :aria-valuenow="progress.done"
+            :aria-label="progressText"
+          />
         </div>
         <Button
           v-if="currentId"
@@ -61,21 +68,28 @@
 
       <!-- Profesorado: cómo va la clase. -->
       <div v-else class="w-full sm:w-80">
-        <template v-if="classProgress.students > 0">
-          <p class="mb-1.5 text-sm font-semibold text-navy-700">
-            {{ t('common.mission_map.class_progress', { percent: classProgress.percent }) }}
-          </p>
-          <ProgressBar :percentage="classProgress.percent" :label="`${classProgress.percent} %`" />
+        <template v-if="classProgress.students > 0 && classProgress.total > 0">
+          <p class="mb-1.5 text-sm font-semibold text-navy-700">{{ classProgressText }}</p>
+          <ProgressBar
+            :percentage="classProgress.percent"
+            role="progressbar"
+            :aria-valuemin="0"
+            :aria-valuemax="100"
+            :aria-valuenow="classProgress.percent"
+            :aria-label="classProgressText"
+          />
           <p class="mt-1 text-xs text-navy-700/70">
             {{
               t('common.mission_map.class_done_by_all', {
                 done: classProgress.doneByAll,
-                total: items.length,
+                total: classProgress.total,
               })
             }}
           </p>
         </template>
-        <p v-else class="text-sm text-navy-700/70">{{ t('common.mission_map.no_students') }}</p>
+        <p v-else-if="classProgress.students === 0" class="text-sm text-navy-700/70">
+          {{ t('common.mission_map.no_students') }}
+        </p>
       </div>
     </header>
 
@@ -248,54 +262,25 @@
                   v-if="item.state === 'completed'"
                   class="absolute -inset-3 rounded-full bg-green/60 blur-md"
                 />
-                <!-- Profesorado: el anillo con la parte del alumnado que la ha completado. -->
-                <svg
+                <!-- Profesorado: el anillo con la parte del alumnado que la ha
+                     completado (6 px de trazo, a 12 px del medallón). -->
+                <ProgressRing
                   v-if="item.completed"
-                  class="absolute -left-4 -top-4"
-                  :width="geo.node + 32"
-                  :height="geo.node + 32"
-                  aria-hidden="true"
-                  focusable="false"
-                >
-                  <circle
-                    :cx="geo.node / 2 + 16"
-                    :cy="geo.node / 2 + 16"
-                    :r="geo.node / 2 + 12"
-                    fill="none"
-                    stroke-width="6"
-                    class="stroke-white/15"
-                  />
-                  <circle
-                    v-if="ringOf(item) > 0"
-                    :cx="geo.node / 2 + 16"
-                    :cy="geo.node / 2 + 16"
-                    :r="geo.node / 2 + 12"
-                    fill="none"
-                    stroke-width="6"
-                    stroke-linecap="round"
-                    pathLength="100"
-                    :stroke-dasharray="`${ringOf(item) * 100} 100`"
-                    :transform="`rotate(-90 ${geo.node / 2 + 16} ${geo.node / 2 + 16})`"
-                    class="stroke-white"
-                  />
-                </svg>
-                <span
-                  class="relative flex h-full w-full items-center justify-center overflow-hidden rounded-full bg-navy-base-light shadow-lg ring-[5px] ring-offset-2 ring-offset-navy-base group-hover:shadow-xl group-focus-visible:outline group-focus-visible:outline-[3px] group-focus-visible:outline-offset-[7px] group-focus-visible:outline-white"
-                  :class="
-                    item.state === 'locked' ? 'ring-badge-bloqueada' : RARITY_RING[item.rarity]
-                  "
-                >
-                  <img
-                    v-if="item.cover"
-                    :src="item.cover"
-                    alt=""
-                    loading="lazy"
-                    decoding="async"
-                    class="h-full w-full object-cover"
-                    :class="item.state === 'locked' ? 'opacity-60 grayscale' : ''"
-                  />
-                  <RocketLaunchIcon v-else class="h-8 w-8 text-white/60" aria-hidden="true" />
-                </span>
+                  :value="ringOf(item)"
+                  :stroke="ringStrokeFor(6, geo.node + 30)"
+                  tone="white"
+                  :animate="false"
+                  class="!absolute -left-[15px] -top-[15px]"
+                  :style="{ width: `${geo.node + 30}px`, height: `${geo.node + 30}px` }"
+                />
+                <MissionCover
+                  :cover="item.cover"
+                  :rarity="item.rarity"
+                  :locked="item.state === 'locked'"
+                  on="dark"
+                  size="fill"
+                  class="shadow-lg group-hover:shadow-xl group-focus-visible:outline group-focus-visible:outline-[3px] group-focus-visible:outline-offset-[7px] group-focus-visible:outline-white"
+                />
                 <span
                   class="absolute -left-1.5 -top-1.5 flex h-7 min-w-[1.75rem] items-center justify-center rounded-full bg-navy-700 px-1.5 text-xs font-bold text-white ring-2 ring-white"
                   aria-hidden="true"
@@ -470,25 +455,19 @@
 </template>
 
 <script setup lang="ts">
-import {
-  FlagIcon,
-  RocketLaunchIcon,
-  StarIcon,
-  TrophyIcon,
-  UsersIcon,
-} from '@heroicons/vue/24/solid'
+import { FlagIcon, StarIcon, TrophyIcon, UsersIcon } from '@heroicons/vue/24/solid'
 import { CursorArrowRaysIcon, MapPinIcon, XMarkIcon } from '@heroicons/vue/24/outline'
 import type { MissionRarity } from '~/types/mission.types'
 import {
   classMapProgress,
   currentNodeId,
   mapProgress,
-  ringFraction,
   type MapNodeState,
   type MapPerson,
   type MissionMapItem,
 } from '~/utils/mission-map'
 import { layoutMissionMap, mapNeighbors, type MapMissionInput } from '~/utils/mission-map-layout'
+import { ringFraction, ringStrokeFor } from '~/utils/progress-ring'
 import {
   MAP_GOAL,
   MAP_START,
@@ -537,8 +516,8 @@ interface MapMission extends MapMissionInput {
   completedStudentIds?: string[]
   /** Profesorado: cuánta gente la ha empezado sin completarla. */
   inProgressCount?: number
-  /** Alumnado: cuántos enigmas lleva completados, de cuántos. */
-  progressDetail?: { done: number; total: number }
+  /** Alumnado: cuántos enigmas obligatorios lleva aprobados, de cuántos; los opcionales, aparte. */
+  progressDetail?: { done: number; total: number; extraDone?: number; extraTotal?: number }
 }
 
 const props = defineProps<{
@@ -553,6 +532,7 @@ const props = defineProps<{
 }>()
 
 const { t, locale } = useI18n()
+const { formatNumber } = useNumberFormat()
 const { getImageUrl } = useImageUrl()
 const teacherStatusLabel = useMissionStatusLabel()
 const { missionList } = useMissionPathText()
@@ -563,13 +543,6 @@ const panelTitleId = useId()
 // Un id válido en `url(#…)`, sea cual sea el formato de `useId`.
 const uid = `map-${useId()}`.replace(/[^\w-]/g, '-')
 
-const RARITY_RING: Record<string, string> = {
-  comun: 'ring-badge-comun',
-  rara: 'ring-purple-light',
-  epica: 'ring-purple',
-  legendaria: 'ring-badge-legendaria',
-}
-
 /** El color de cada tono de isla (utils/mission-map-geometry.ts), sobre el azul de la noche. */
 const ISLAND_COLORS: Record<MapIsland['tone'], string> = {
   purple: 'var(--color-purple-rgb)',
@@ -579,11 +552,25 @@ const ISLAND_COLORS: Record<MapIsland['tone'], string> = {
 
 // ---- La disposición y lo que se cuenta ----
 const layout = computed(() => layoutMissionMap(props.missions, props.mode))
-const progress = computed(() => mapProgress(layout.value.nodes.map(node => node.state)))
+// «X de N misiones»: solo las que cuentan (con enigmas y sin bloquear a mano).
+const progress = computed(() => {
+  const counted = new Set(props.missions.filter(m => m.counted !== false).map(m => m.id))
+  return mapProgress(layout.value.nodes.filter(node => counted.has(node.id)).map(node => node.state))
+})
 const currentId = computed(() =>
   props.mode === 'student' ? currentNodeId(layout.value.nodes) : null
 )
 const classProgress = computed(() => classMapProgress(props.missions))
+const classProgressText = computed(() =>
+  t(
+    'common.mission_map.class_progress',
+    {
+      done: formatNumber(classProgress.value.average),
+      total: formatNumber(classProgress.value.total),
+    },
+    classProgress.value.total
+  )
+)
 /** Alumnado: ha completado el mapa entero (la meta brilla). */
 const finished = computed(
   () =>
@@ -753,7 +740,9 @@ const items = computed<MissionMapItem[]>(() => {
         coins: mission.coinReward ?? 0,
         mana: mission.manaReward ?? 0,
       },
-      enigmas: teacher ? (mission.enigmasCount ?? 0) : (mission.progressDetail?.total ?? 0),
+      enigmas: teacher
+        ? (mission.enigmasCount ?? 0)
+        : (mission.progressDetail?.total ?? 0) + (mission.progressDetail?.extraTotal ?? 0),
       progress:
         teacher || locked
           ? null
@@ -761,6 +750,8 @@ const items = computed<MissionMapItem[]>(() => {
               percent,
               done: mission.progressDetail?.done ?? 0,
               total: mission.progressDetail?.total ?? 0,
+              extraDone: mission.progressDetail?.extraDone ?? 0,
+              extraTotal: mission.progressDetail?.extraTotal ?? 0,
             },
       completed: teacher
         ? {

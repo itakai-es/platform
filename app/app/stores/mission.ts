@@ -44,11 +44,6 @@ export const useMissionStore = defineStore('mission', () => {
 
   const totalMissions = computed(() => missions.value.length)
 
-  const completionRate = computed(() => {
-    if (missions.value.length === 0) return 0
-    return Math.round((completedMissions.value.length / missions.value.length) * 100)
-  })
-
   // Actions
   const fetchMissions = async (filters?: MissionFilters, force = false) => {
     // Use cached data unless forced (only if no filters)
@@ -140,7 +135,8 @@ export const useMissionStore = defineStore('mission', () => {
         completed: number
         inProgress: number
         available: number
-        completionRate: number
+        /** % de enigmas obligatorios aprobados; null si no tiene ninguno. */
+        percent: number | null
       }>(`${config.public.apiBase}/missions/stats`)
 
       return response
@@ -275,6 +271,8 @@ export const useMissionStore = defineStore('mission', () => {
 
       // Agregar la nueva misión al array local
       missions.value.push(response.mission)
+      // Sale en su clase, en «Mis misiones» y en las cifras de las tarjetas.
+      useTeacherStore().invalidateClass(data.classId)
 
       return response.mission
     } catch (err: any) {
@@ -367,6 +365,21 @@ export const useMissionStore = defineStore('mission', () => {
     }
   }
 
+  /**
+   * Da por antiguas las misiones de una clase que se tengan guardadas: el
+   * listado del profesor y el detalle de cada una (alumnado, entregas y
+   * recompensas han podido cambiar). Se queda lo que hay hasta que llegue lo
+   * nuevo. Lo llama `invalidateClass` del almacén del profesor.
+   */
+  const invalidateClass = (classId: string) => {
+    hasLoadedTeacherMissions.value = false
+    for (const [id, mission] of missionDetailsCache.value) {
+      if ((mission as { classId?: string }).classId !== classId) continue
+      loadedMissionDetails.value.delete(id)
+      loadedTeacherMissionDetails.value.delete(id)
+    }
+  }
+
   const $reset = () => {
     missions.value = []
     activeMissions.value = []
@@ -411,7 +424,6 @@ export const useMissionStore = defineStore('mission', () => {
     availableMissions,
     inProgressMissions,
     totalMissions,
-    completionRate,
 
     // Actions (legacy fetchX — se mantienen para no romper APIs existentes)
     fetchMissions,
@@ -430,6 +442,7 @@ export const useMissionStore = defineStore('mission', () => {
     ensureTeacherMissions,
     ensureTeacherMissionById,
 
+    invalidateClass,
     $reset,
   }
 })

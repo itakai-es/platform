@@ -142,7 +142,7 @@
       :class-name="mission.className"
       :mission="mission"
       :class-settings="classCfg"
-      @applied="fetchMission(true)"
+      @applied="onMissionAdapted"
     />
   </div>
 </template>
@@ -226,8 +226,16 @@ function tabHref(tabId: string) {
 // lógica. El panel avisa una sola vez por guardado, aunque cambien la misión y
 // su camino a la vez.
 async function onSettingsUpdate() {
+  // Título, portada, estado o camino: los ven también las listas de su clase.
+  teacherStore.invalidateClass(classId)
   const fresh = await missionStore.ensureTeacherMissionById(missionId.value, true)
   if (fresh) mission.value = fresh as unknown as MissionDetail
+}
+
+// Adaptada con IA: título, enigmas y recompensas nuevos, aquí y en las listas de su clase.
+function onMissionAdapted() {
+  teacherStore.invalidateClass(classId)
+  void fetchMission(true)
 }
 
 // Store
@@ -374,6 +382,7 @@ const updateMissionTitle = async (title: string) => {
       body: { title },
     })
     if (mission.value) mission.value.title = title
+    teacherStore.invalidateClass(classId)
   } catch (err) {
     console.error('Error updating mission title:', err)
   }
@@ -387,6 +396,7 @@ const updateMissionDeadline = async (deadline: string | null) => {
       body: { deadline },
     })
     if (mission.value) mission.value.deadline = deadline ?? ''
+    teacherStore.invalidateClass(classId)
   } catch (err) {
     console.error('Error updating mission deadline:', err)
   }
@@ -412,6 +422,7 @@ const saveNarrative = async (content: string) => {
       body: { description: content },
     })
     if (mission.value) mission.value.description = content
+    teacherStore.invalidateClass(classId)
     isEditingNarrative.value = false
   } catch (err) {
     console.error('Error saving narrative:', err)
@@ -512,6 +523,8 @@ const handleEnigmaSubmit = async (data: EnigmaFormData) => {
       toast.success(t('common.toast.enigma_added'))
     }
 
+    // Las recompensas de la misión, en las listas, son la suma de sus enigmas.
+    teacherStore.invalidateClass(classId)
     showEnigmaModal.value = false
     enigmaToEdit.value = null
   } catch (err) {
@@ -684,6 +697,7 @@ const handleConfirmDelete = async () => {
       if (mission.value?.enigmas) {
         mission.value.enigmas = mission.value.enigmas.filter(e => e.id !== id)
       }
+      teacherStore.invalidateClass(classId)
 
       toast.success(t('common.toast.enigma_deleted'))
     } else {

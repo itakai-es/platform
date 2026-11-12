@@ -10,7 +10,6 @@ import type { ActivityType } from './activity.types'
 export type {
   Class,
   ClassStats,
-  ClassStatus,
   CreateClassData,
   UpdateClassData,
   ClassGuideData,
@@ -31,9 +30,11 @@ export interface StudentClassProgress {
   className: string
   level: number
   xp: number
+  /** «X de N misiones»: N son las que cuentan (con enigmas y sin bloquear a mano). */
   missionsCompleted: number
-  missionsTotal: number
-  progress: number // Porcentaje de progreso (0-100)
+  missionsCounted: number
+  /** % de enigmas obligatorios aprobados; null si no tiene ninguno que hacer. */
+  percent: number | null
 }
 
 /**
@@ -56,13 +57,15 @@ export interface Student {
   // Datos agregados (calculados desde classProgress)
   totalXp: number // Suma de XP en todas las clases
   highestLevel: number // Nivel más alto alcanzado en cualquier clase
+  /** «X de N misiones» de todas sus clases: N son las que cuentan. */
   totalMissionsCompleted: number
-  totalMissionsAvailable: number
+  totalMissionsCounted: number
+  /** El saldo de todas sus clases: sin máximo, lleva comportamientos, recompensas y bonus. */
   totalXpEarned: number
-  totalXpAvailable: number
   totalBadgesEarned: number
   totalBadgesAvailable: number
-  overallProgress: number // Progreso promedio (0-100)
+  /** % de enigmas obligatorios aprobados de todas sus clases; null si no tiene ninguno. */
+  overallProgress: number | null
   classCount: number // Número de clases inscritas
   // Detalle por clase
   classProgress: StudentClassProgress[]

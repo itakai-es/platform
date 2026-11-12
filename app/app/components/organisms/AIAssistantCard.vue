@@ -81,8 +81,9 @@ const godAvatar = computed(() => aiStore.currentGod?.avatar || '/app/avatars/ate
 const displayMessage = computed(() => {
   if (props.message) return props.message
   const userName = authStore.user?.name?.split(' ')[0] || ''
-  const greeting = userName ? `¡Hola ${userName}!` : '¡Hola!'
-  return `${greeting} Soy ${godName.value}, tu asistente de IA. ¿En qué puedo ayudarte?`
+  return userName
+    ? t('common.assistant_card.greeting', { name: userName, god: godName.value })
+    : t('common.assistant_card.greeting_no_name', { god: godName.value })
 })
 
 const chatPath = computed(() => {

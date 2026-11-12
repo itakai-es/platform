@@ -2,7 +2,7 @@
   <DashboardTemplate
     :title="t('teacher.dashboard.title')"
     :subtitle="t('teacher.dashboard.subtitle', { name: user?.name })"
-    :loading-stats="teacherStore.isLoadingStats"
+    :loading-stats="loadingStats"
   >
     <template #header-actions>
       <div class="flex flex-wrap gap-2">
@@ -56,7 +56,7 @@
         </CardHeader>
 
         <!-- Skeletons durante carga -->
-        <template v-if="teacherStore.isLoadingClasses">
+        <template v-if="teacherStore.isLoadingClasses && teacherStore.classes.length === 0">
           <ClassCardSkeleton />
           <ClassCardSkeleton />
           <ClassCardSkeleton />
@@ -97,7 +97,7 @@
         </CardHeader>
 
         <!-- Skeletons durante carga -->
-        <CardGrid v-if="teacherStore.isLoadingMissions">
+        <CardGrid v-if="teacherStore.isLoadingMissions && recentMissions.length === 0">
           <MissionCardSkeleton v-for="i in 3" :key="i" />
         </CardGrid>
 
@@ -132,11 +132,11 @@
     </template>
 
     <template #sidebar>
-      <AIAssistantCardSkeleton v-if="teacherStore.isLoadingStats" />
+      <AIAssistantCardSkeleton v-if="loadingStats" />
       <AIAssistantCard v-else />
       <RecentActivityCard
         :activities="formattedActivities"
-        :loading="teacherStore.isLoadingActivities"
+        :loading="teacherStore.isLoadingActivities && teacherStore.activities.length === 0"
         card-type="pending"
       />
     </template>
@@ -163,6 +163,10 @@ const teacherStore = useTeacherStore()
 const router = useRouter()
 
 const user = computed(() => authStore.user)
+
+// Los esqueletos, solo sin nada que enseñar: al volver tras un cambio se ve lo
+// de antes mientras llega lo nuevo, sin parpadeo.
+const loadingStats = computed(() => teacherStore.isLoadingStats && !teacherStore.stats)
 
 // Show only first 4 classes (2x2 grid)
 const recentClasses = computed(() => {

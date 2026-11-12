@@ -99,30 +99,30 @@
             <span class="inline-flex items-center gap-1">
               <XpIcon class="w-4 h-4" />
               <template v-if="showEarnedXp">
-                <span class="font-bold">{{ earnedXp!.toLocaleString('es-ES') }}</span>
-                <span class="opacity-60">/ {{ xpReward.toLocaleString('es-ES') }}</span>
+                <span class="font-bold">{{ formatNumber(earnedXp!) }}</span>
+                <span class="opacity-60">/ {{ formatNumber(xpReward) }}</span>
               </template>
-              <template v-else>{{ xpReward.toLocaleString('es-ES') }}</template>
+              <template v-else>{{ formatNumber(xpReward) }}</template>
             </span>
           </Tooltip>
           <Tooltip v-if="coinReward" :text="t('common.resources.coins')">
             <span class="inline-flex items-center gap-1">
               <CoinIcon class="w-4 h-4" />
               <template v-if="showEarnedCoins">
-                <span class="font-bold">{{ earnedCoins!.toLocaleString('es-ES') }}</span>
-                <span class="opacity-60">/ {{ coinReward.toLocaleString('es-ES') }}</span>
+                <span class="font-bold">{{ formatNumber(earnedCoins!) }}</span>
+                <span class="opacity-60">/ {{ formatNumber(coinReward) }}</span>
               </template>
-              <template v-else>{{ coinReward.toLocaleString('es-ES') }}</template>
+              <template v-else>{{ formatNumber(coinReward) }}</template>
             </span>
           </Tooltip>
           <Tooltip v-if="manaReward" :text="t('common.resources.mana')">
             <span class="inline-flex items-center gap-1">
               <ManaIcon class="w-4 h-4" />
               <template v-if="showEarnedMana">
-                <span class="font-bold">{{ earnedMana!.toLocaleString('es-ES') }}</span>
-                <span class="opacity-60">/ {{ manaReward.toLocaleString('es-ES') }}</span>
+                <span class="font-bold">{{ formatNumber(earnedMana!) }}</span>
+                <span class="opacity-60">/ {{ formatNumber(manaReward) }}</span>
               </template>
-              <template v-else>{{ manaReward.toLocaleString('es-ES') }}</template>
+              <template v-else>{{ formatNumber(manaReward) }}</template>
             </span>
           </Tooltip>
 
@@ -184,6 +184,8 @@ import {
   XCircleIcon,
 } from '@heroicons/vue/24/solid'
 import { useMissionCard, type MissionCardProps } from '~/composables/useMissionCard'
+
+const { formatNumber } = useNumberFormat()
 
 const props = defineProps<MissionCardProps>()
 const emit = defineEmits<{ click: [] }>()

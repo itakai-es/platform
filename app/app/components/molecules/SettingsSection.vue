@@ -3,7 +3,7 @@
     <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
       <div class="min-w-0">
         <h3 class="font-semibold text-navy-700">{{ title }}</h3>
-        <p v-if="hint" class="mt-0.5 text-sm text-text-secondary">{{ hint }}</p>
+        <p v-if="hint" class="mt-0.5 text-sm text-navy-700/80">{{ hint }}</p>
       </div>
       <div v-if="$slots.actions" class="flex-shrink-0">
         <slot name="actions" />

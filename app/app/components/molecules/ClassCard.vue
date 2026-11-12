@@ -15,19 +15,22 @@
           <StatusBadge v-if="badgeVariant && badgeText" :variant="badgeVariant">{{
             badgeText
           }}</StatusBadge>
-          <span v-if="subtitle" class="text-xs text-text-secondary">{{ subtitle }}</span>
+          <span v-if="subtitle" class="text-xs text-navy-700/80">{{ subtitle }}</span>
           <!-- Etiqueta propia de quien la usa (p. ej. el perfil en la clase) -->
           <slot name="tag" />
         </div>
 
         <!-- Title -->
-        <h3 class="text-lg md:text-xl font-bold text-navy-700 leading-tight min-w-0 mb-2">
+        <component
+          :is="headingTag ?? 'h3'"
+          class="text-lg md:text-xl font-bold text-navy-700 leading-tight min-w-0 mb-2"
+        >
           {{ name }}
-        </h3>
+        </component>
 
         <!-- Horario: una línea por tramo ("Lunes y martes 10:00-11:00"). Un
              horario escrito a mano llega como una sola línea y se recorta. -->
-        <div v-if="schedule?.length" class="flex items-start gap-1 text-sm text-text-secondary mb-3">
+        <div v-if="schedule?.length" class="flex items-start gap-1 text-sm text-navy-700/80 mb-3">
           <ClockIcon class="w-4 h-4 flex-shrink-0 mt-0.5" />
           <div class="min-w-0">
             <p v-for="(line, i) in schedule" :key="i" class="line-clamp-2">{{ line }}</p>
@@ -66,50 +69,20 @@
         </div>
       </div>
       <!-- Info when no activities -->
-      <div v-else class="flex-1 mb-3">
-        <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-text-secondary">
-          <span class="flex items-center gap-1">
-            <UserGroupIcon class="w-4 h-4" />
-            {{ studentCount }} estudiantes
-          </span>
-          <span v-if="missionsCount !== undefined" class="flex items-center gap-1">
-            <RocketLaunchIcon class="w-4 h-4" />
-            {{ missionsCount }} misiones
-          </span>
-          <span v-if="participation !== undefined" class="flex items-center gap-1">
-            <ChartBarIcon class="w-4 h-4" />
-            {{ participation }}% participación
-          </span>
-        </div>
-        <!-- Vidas, monedas y maná del alumno en esta clase -->
-        <div
-          v-if="lives !== undefined || coins !== undefined || mana !== undefined"
-          class="mt-1.5 flex items-center gap-3 text-sm font-semibold text-navy-700"
-        >
-          <Tooltip v-if="lives !== undefined" :text="t('common.resources.lives')">
-            <span class="flex items-center gap-1.5">
-              <LifeIcon class="w-4 h-4" />
-              {{ lives.toLocaleString('es-ES') }}
-            </span>
-          </Tooltip>
-          <Tooltip v-if="coins !== undefined" :text="t('common.resources.coins')">
-            <span class="flex items-center gap-1.5">
-              <CoinIcon class="w-4 h-4" />
-              {{ coins.toLocaleString('es-ES') }}
-            </span>
-          </Tooltip>
-          <Tooltip v-if="mana !== undefined" :text="t('common.resources.mana')">
-            <span class="flex items-center gap-1.5">
-              <ManaIcon class="w-4 h-4" />
-              {{ mana.toLocaleString('es-ES') }}
-            </span>
-          </Tooltip>
-        </div>
+      <div v-else class="flex-1 mb-3 space-y-1.5">
+        <ClassCardFacts
+          :student-count="studentCount"
+          :missions-count="missionsCount"
+          :progress="progress"
+          :coins="coins"
+          :mana="mana"
+          :lives="lives"
+        />
       </div>
 
       <!-- Bottom: Action button - Hidden on mobile, full card is clickable -->
       <div class="hidden md:block">
-        <Button variant="primary" size="sm"> Ver clase </Button>
+        <Button variant="primary" size="sm">{{ t('common.class_card.view_class') }}</Button>
       </div>
     </div>
 
@@ -136,7 +109,7 @@
 
 <script setup lang="ts">
 import { CheckCircleIcon, LockClosedIcon } from '@heroicons/vue/24/solid'
-import { RocketLaunchIcon, ChartBarIcon, UserGroupIcon, ClockIcon } from '@heroicons/vue/24/outline'
+import { ClockIcon } from '@heroicons/vue/24/outline'
 
 interface Activity {
   id: string
@@ -148,15 +121,18 @@ interface Activity {
 interface Props {
   icon: any
   name: string
+  /** El nivel del título: `h2` si la lista cuelga directamente del título de la página. */
+  headingTag?: 'h2' | 'h3'
   subtitle?: string
   badgeVariant?: 'urgente' | 'activa' | 'pendiente' | 'bloqueada'
   badgeText?: string
   studentCount?: number
+  /** Lo suyo en la clase (vista del alumno): «4 de 7 misiones». */
+  progress?: { done: number; total: number }
   recentActivities?: Activity[]
   backgroundImage?: string
   subject?: string
   missionsCount?: number
-  participation?: number
   /** Líneas del resumen de horario (ver useScheduleSummary). */
   schedule?: string[]
   coins?: number

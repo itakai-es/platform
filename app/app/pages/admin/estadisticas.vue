@@ -7,11 +7,13 @@
           <button
             v-for="p in periods"
             :key="p.value"
+            type="button"
+            :aria-pressed="activePeriod === p.value"
             :class="[
               'px-4 py-2 text-sm font-medium transition-colors border-b-2 -mb-px',
               activePeriod === p.value
-                ? 'border-purple text-purple'
-                : 'border-transparent text-text-secondary hover:text-text-primary',
+                ? 'border-purple font-semibold text-navy-700'
+                : 'border-transparent text-navy-700/80 hover:text-navy-700',
             ]"
             @click="changePeriod(p.value)"
           >
@@ -62,46 +64,11 @@
     </div>
 
     <template v-else-if="analytics">
-      <!-- KPI Stats Row -->
+      <!-- Cifras del periodo, frente al periodo anterior de la misma duración -->
       <CardGrid cols="4">
-        <Card type="stats">
-          <StatDisplay
-            :value="`${analytics.kpis.avgResponseTime}ms`"
-            :label="t('admin.analytics.kpis.avg_response')"
-          />
-          <KpiDelta
-            :current="analytics.kpis.avgResponseTime"
-            :previous="analytics.kpis.avgResponseTimePrev"
-            invert
-          />
-        </Card>
-        <Card type="stats">
-          <StatDisplay
-            :value="`${analytics.kpis.requestsPerMinute}`"
-            suffix=" rpm"
-            :label="t('admin.analytics.kpis.requests_per_min')"
-          />
-          <KpiDelta
-            :current="analytics.kpis.requestsPerMinute"
-            :previous="analytics.kpis.requestsPerMinutePrev"
-          />
-        </Card>
-        <Card type="stats">
-          <StatDisplay
-            :value="`${analytics.kpis.errorRate}%`"
-            :label="t('admin.analytics.kpis.error_rate')"
-          />
-          <KpiDelta
-            :current="analytics.kpis.errorRate"
-            :previous="analytics.kpis.errorRatePrev"
-            invert
-          />
-        </Card>
-        <Card type="stats">
-          <StatDisplay
-            :value="`${analytics.kpis.uptimePercent}%`"
-            :label="t('admin.analytics.kpis.uptime')"
-          />
+        <Card v-for="kpi in kpiCards" :key="kpi.key" type="stats">
+          <StatDisplay :value="kpi.value" :label="kpi.label" />
+          <KpiDelta :current="kpi.current" :previous="kpi.previous" :rate="kpi.rate" />
         </Card>
       </CardGrid>
 
@@ -112,7 +79,7 @@
           <CardHeader
             :title="t('admin.analytics.sections.system_resources')"
             :icon="CpuChipIcon"
-            title-tag="h3"
+            title-tag="h2"
           />
           <CardItem padding="lg" layout="column">
             <div class="space-y-5">
@@ -152,29 +119,24 @@
           <CardHeader
             :title="t('admin.analytics.sections.service_health')"
             :icon="ServerIcon"
-            title-tag="h3"
+            title-tag="h2"
           />
           <CardItem padding="lg" layout="column">
             <div class="overflow-x-auto -mx-2">
               <table class="w-full text-sm">
+                <caption class="sr-only">
+                  {{ t('admin.analytics.sections.service_health') }}
+                </caption>
                 <thead>
                   <tr class="border-b border-navy-700/10">
-                    <th class="text-left py-2 px-2 text-xs font-semibold text-navy-700/70">
+                    <th scope="col" class="text-left py-2 px-2 text-xs font-semibold text-navy-700/70">
                       {{ t('admin.analytics.table.service') }}
                     </th>
-                    <th class="text-center py-2 px-2 text-xs font-semibold text-navy-700/70">
+                    <th scope="col" class="text-center py-2 px-2 text-xs font-semibold text-navy-700/70">
                       {{ t('admin.analytics.table.status') }}
                     </th>
-                    <th class="text-right py-2 px-2 text-xs font-semibold text-navy-700/70">
-                      {{ t('admin.analytics.table.uptime') }}
-                    </th>
-                    <th class="text-right py-2 px-2 text-xs font-semibold text-navy-700/70">
+                    <th scope="col" class="text-right py-2 px-2 text-xs font-semibold text-navy-700/70">
                       {{ t('admin.analytics.table.latency') }}
-                    </th>
-                    <th
-                      class="text-right py-2 px-2 text-xs font-semibold text-navy-700/70 hidden sm:table-cell"
-                    >
-                      P95
                     </th>
                   </tr>
                 </thead>
@@ -184,7 +146,9 @@
                     :key="svc.name"
                     class="border-b border-navy-700/5 last:border-0"
                   >
-                    <td class="py-2.5 px-2 font-medium text-navy-700 text-xs">{{ svc.name }}</td>
+                    <th scope="row" class="py-2.5 px-2 text-left font-medium text-navy-700 text-xs">
+                      {{ svc.name }}
+                    </th>
                     <td class="py-2.5 px-2 text-center">
                       <span
                         :class="[
@@ -196,19 +160,11 @@
                         {{ statusLabel(svc.status) }}
                       </span>
                     </td>
-                    <td class="py-2.5 px-2 text-right text-xs text-navy-700/70">
-                      {{ svc.uptime }}%
-                    </td>
                     <td
                       class="py-2.5 px-2 text-right text-xs font-mono"
-                      :class="svc.avgLatency > 500 ? 'text-yellow-600' : 'text-navy-700/70'"
+                      :class="svc.latencyMs > 500 ? 'font-semibold text-navy-700' : 'text-navy-700/70'"
                     >
-                      {{ svc.avgLatency }}ms
-                    </td>
-                    <td
-                      class="py-2.5 px-2 text-right text-xs font-mono text-navy-700/70 hidden sm:table-cell"
-                    >
-                      {{ svc.p95Latency }}ms
+                      {{ formatNumber(svc.latencyMs) }} ms
                     </td>
                   </tr>
                 </tbody>
@@ -218,71 +174,42 @@
         </Card>
       </div>
 
-      <!-- Time Series Charts -->
+      <!-- Series del periodo: lo que se ha medido, sin estimaciones -->
       <Card type="clases">
         <CardHeader
-          :title="t('admin.analytics.sections.response_time')"
+          :title="t('admin.analytics.sections.period_series')"
           :icon="ChartBarIcon"
-          title-tag="h3"
+          title-tag="h2"
         />
-        <CardGrid cols="2">
-          <CardItem padding="lg" layout="column">
-            <p class="text-xs font-semibold text-navy-700/70 mb-3">
-              {{ t('admin.analytics.sections.response_time') }}
-            </p>
-            <MiniBarChart :data="analytics.responseTimeSeries" color="#8B5CF6" unit="ms" />
-          </CardItem>
-          <CardItem padding="lg" layout="column">
-            <p class="text-xs font-semibold text-navy-700/70 mb-3">
-              {{ t('admin.analytics.sections.active_users') }}
-            </p>
-            <MiniBarChart :data="analytics.activeUsersSeries" color="#6FEDB7" />
-          </CardItem>
-          <CardItem padding="lg" layout="column">
-            <p class="text-xs font-semibold text-navy-700/70 mb-3">
-              {{ t('admin.analytics.sections.requests') }}
-            </p>
-            <MiniBarChart :data="analytics.requestsSeries" color="#3B82F6" />
-          </CardItem>
-          <CardItem padding="lg" layout="column">
-            <p class="text-xs font-semibold text-navy-700/70 mb-3">
-              {{ t('admin.analytics.sections.tokens_over_time') }}
-            </p>
-            <MiniBarChart :data="analytics.aiUsage.tokensSeries" color="rgb(var(--palette-amber-500))" />
+        <CardGrid cols="3">
+          <CardItem v-for="chart in seriesCharts" :key="chart.key" padding="lg" layout="column">
+            <p class="text-xs font-semibold text-navy-700/70 mb-3">{{ chart.label }}</p>
+            <ActivityColumns :points="chart.points" :label="chart.label" dense />
           </CardItem>
         </CardGrid>
       </Card>
 
-      <!-- Platform Overview -->
-      <CardGrid cols="4">
+      <!-- Totales de la plataforma (las misiones completadas van arriba, con su comparación) -->
+      <CardGrid cols="3">
         <Card type="stats">
           <StatDisplay
             :value="formatNumber(analytics.overview.totalUsers)"
             :label="t('admin.analytics.overview.total_users')"
           />
-          <p class="text-sm text-navy-700/70 font-medium">
-            +{{ analytics.overview.newUsersThisPeriod }}
+          <p class="text-sm text-navy-700 font-medium">
+            +{{ formatNumber(analytics.overview.newUsersThisPeriod) }}
           </p>
         </Card>
         <Card type="stats">
           <StatDisplay
-            :value="analytics.overview.activeUsersToday"
+            :value="formatNumber(analytics.overview.activeUsersToday)"
             :label="t('admin.analytics.overview.active_today')"
           />
         </Card>
         <Card type="stats">
           <StatDisplay
-            :value="formatNumber(analytics.overview.missionsCompleted)"
-            :label="t('admin.analytics.overview.missions_completed')"
-          />
-          <p class="text-sm text-navy-700/70 font-medium">
-            +{{ analytics.overview.newMissionsThisPeriod }}
-          </p>
-        </Card>
-        <Card type="stats">
-          <StatDisplay
-            :value="`${analytics.overview.avgCompletionRate}%`"
-            :label="t('admin.analytics.overview.completion_rate')"
+            :value="formatNumber(analytics.overview.pendingSubmissions)"
+            :label="t('admin.analytics.overview.pending_reviews')"
           />
         </Card>
       </CardGrid>
@@ -294,7 +221,7 @@
           <CardHeader
             :title="t('admin.analytics.sections.users_by_role')"
             :icon="UsersIcon"
-            title-tag="h3"
+            title-tag="h2"
           />
           <CardItem padding="lg" layout="column">
             <DistributionBar
@@ -310,7 +237,7 @@
           <CardHeader
             :title="t('admin.analytics.sections.missions_by_status')"
             :icon="RocketLaunchIcon"
-            title-tag="h3"
+            title-tag="h2"
           />
           <CardItem padding="lg" layout="column">
             <DistributionBar
@@ -326,7 +253,7 @@
           <CardHeader
             :title="t('admin.analytics.sections.missions_by_rarity')"
             :icon="SparklesIcon"
-            title-tag="h3"
+            title-tag="h2"
           />
           <CardItem padding="lg" layout="column">
             <DistributionBar
@@ -343,48 +270,21 @@
         <CardHeader
           :title="t('admin.analytics.sections.ai_usage')"
           :icon="ChatBubbleLeftRightIcon"
-          title-tag="h3"
+          title-tag="h2"
         />
 
-        <CardGrid cols="4">
-          <CardItem padding="md" layout="column" centered>
-            <p class="text-2xl font-bold text-navy-700">
-              {{ formatNumber(analytics.aiUsage.totalTokensUsed) }}
-            </p>
-            <p class="text-xs text-navy-700/70 mt-1">{{ t('admin.analytics.ai.total_tokens') }}</p>
-          </CardItem>
-          <CardItem padding="md" layout="column" centered>
-            <p class="text-2xl font-bold text-navy-700">
-              {{ formatNumber(analytics.aiUsage.avgTokensPerUser) }}
-            </p>
-            <p class="text-xs text-navy-700/70 mt-1">
-              {{ t('admin.analytics.ai.avg_tokens_user') }}
-            </p>
-          </CardItem>
-          <CardItem padding="md" layout="column" centered>
-            <p class="text-2xl font-bold text-navy-700">
-              {{ formatNumber(analytics.aiUsage.totalConversations) }}
-            </p>
-            <p class="text-xs text-navy-700/70 mt-1">
-              {{ t('admin.analytics.ai.total_conversations') }}
-            </p>
-          </CardItem>
-          <CardItem padding="md" layout="column" centered>
-            <p class="text-2xl font-bold text-navy-700">
-              {{ analytics.aiUsage.avgConversationsPerUser }}
-            </p>
-            <p class="text-xs text-navy-700/70 mt-1">
-              {{ t('admin.analytics.ai.avg_conversations_user') }}
-            </p>
+        <CardGrid cols="3-fixed">
+          <CardItem v-for="figure in aiFigures" :key="figure.key" padding="md" layout="column" centered>
+            <p class="text-2xl font-bold text-navy-700">{{ figure.value }}</p>
+            <p class="text-xs text-navy-700/70 mt-1">{{ figure.label }}</p>
           </CardItem>
         </CardGrid>
 
         <CardItem padding="lg" layout="column">
           <DistributionBar
-            v-for="assistant in analytics.aiUsage.tokensByAssistant"
+            v-for="assistant in analytics.aiUsage.messagesByAssistant"
             :key="assistant.label"
             v-bind="assistant"
-            :show-count="true"
           />
         </CardItem>
       </Card>
@@ -403,8 +303,10 @@ import {
   SparklesIcon,
   ChatBubbleLeftRightIcon,
 } from '@heroicons/vue/24/outline'
+import type { TimeSeriesPoint } from '~/types/admin.types'
+import { daysEndingOn, formatWeekShort } from '~/utils/analytics-view'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 useHead({
   title: () => t('admin.analytics.meta.title'),
   meta: [{ name: 'description', content: () => t('admin.analytics.meta.description') }],
@@ -434,11 +336,101 @@ watchDebounced(
   { debounce: 300, immediate: true }
 )
 
-const formatNumber = (n: number): string => {
-  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`
-  if (n >= 1_000) return `${(n / 1_000).toFixed(1)}k`
-  return n.toString()
+const { formatNumber, formatPercent } = useNumberFormat()
+
+/** Lo del periodo frente al anterior: todo medido, nada estimado. */
+const kpiCards = computed(() => {
+  const k = analytics.value?.kpis
+  if (!k) return []
+  return [
+    {
+      key: 'activity',
+      label: t('admin.analytics.kpis.activity'),
+      value: formatNumber(k.activity.current),
+      ...k.activity,
+      rate: false,
+    },
+    {
+      key: 'new_users',
+      label: t('admin.analytics.kpis.new_users'),
+      value: formatNumber(k.newUsers.current),
+      ...k.newUsers,
+      rate: false,
+    },
+    {
+      key: 'missions_completed',
+      label: t('admin.analytics.kpis.missions_completed'),
+      value: formatNumber(k.missionsCompleted.current),
+      ...k.missionsCompleted,
+      rate: false,
+    },
+    {
+      key: 'error_rate',
+      label: t('admin.analytics.kpis.error_rate'),
+      value: formatPercent(k.errorRate.current, 1),
+      ...k.errorRate,
+      rate: true,
+    },
+  ]
+})
+
+/**
+ * Las columnas de una serie: cada tramo, con su cifra escrita (`ActivityColumns`). La
+ * semana va por días y son ocho fechas (siete días contados desde ahora, y nueve con
+ * cambio de hora): el primero y hoy se llamarían igual, así que va la fecha. La API
+ * manda solo el nombre del día, de fechas seguidas que acaban hoy en Madrid.
+ */
+const FIRST_DAILY_LENGTH = 7
+function columnsOf(series: TimeSeriesPoint[]) {
+  const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/Madrid' })
+  const days = series.length >= FIRST_DAILY_LENGTH ? daysEndingOn(today, series.length) : null
+  return series.map((point, index) => ({
+    key: String(index),
+    label: days ? formatWeekShort(days[index]!, locale.value) : point.label,
+    value: point.value,
+  }))
 }
+
+/** Las series del periodo. */
+const seriesCharts = computed(() => {
+  const a = analytics.value
+  if (!a) return []
+  return [
+    {
+      key: 'new_users',
+      label: t('admin.analytics.sections.new_users'),
+      points: columnsOf(a.newUsersSeries),
+    },
+    {
+      key: 'activity',
+      label: t('admin.analytics.sections.activity'),
+      points: columnsOf(a.activitySeries),
+    },
+    {
+      key: 'assistant_messages',
+      label: t('admin.analytics.sections.assistant_messages'),
+      points: columnsOf(a.aiUsage.messagesSeries),
+    },
+  ]
+})
+
+const aiFigures = computed(() => {
+  const ai = analytics.value?.aiUsage
+  if (!ai) return []
+  return [
+    { key: 'messages', label: t('admin.analytics.ai.total_messages'), value: formatNumber(ai.totalMessages) },
+    {
+      key: 'conversations',
+      label: t('admin.analytics.ai.total_conversations'),
+      value: formatNumber(ai.totalConversations),
+    },
+    {
+      key: 'per_account',
+      label: t('admin.analytics.ai.avg_conversations_user'),
+      value: formatNumber(ai.avgConversationsPerUser),
+    },
+  ]
+})
 
 const statusPillClass = (s: string) =>
   ({

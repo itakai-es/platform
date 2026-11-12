@@ -26,11 +26,17 @@ export interface MapMissionInput {
   title: string
   status: string
   deadline?: string | null
-  /** Alumnado: su % en la misión. */
+  /** Alumnado: su % en la misión (de sus enigmas obligatorios). */
   progress?: number
+  /** Alumnado: cuántos opcionales lleva: con alguno, ya la ha empezado. */
+  progressDetail?: { extraDone?: number }
+  /** Cuenta en «X de N misiones»: tiene enigmas y no está bloqueada a mano. */
+  counted?: boolean
   /** Profesorado: cuántas personas la han completado, de cuántas. */
   completedCount?: number
   totalStudents?: number
+  /** Quienes participan: las cuentas sin estrenar no cuentan en la media del mapa. */
+  participatingStudents?: number
   /** Lo que pide para abrirse (ids de misiones de la clase). */
   prerequisiteIds?: string[]
   /** Alumnado: por qué está cerrada (su docente o el camino). */

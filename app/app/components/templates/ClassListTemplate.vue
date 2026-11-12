@@ -53,6 +53,7 @@
         :key="classItem.id"
         :class-item="classItem"
         :layout="cardView"
+        heading-tag="h2"
         :show-archive-action="showArchiveAction"
         :show-duplicate-action="showDuplicateAction"
         :show-coins="showCoins"
@@ -83,13 +84,8 @@ interface ClassItem {
   archived?: boolean
   totalMissions?: number
   missionCount?: number
+  progress?: { missionsCompleted: number; missionsCounted: number }
   coins?: number
-  stats?: {
-    avgProgress?: number
-    participation?: number
-    avgMissionsCompleted?: number
-    totalMissions?: number
-  }
   /** Acceso propio (listados del profesor): decide qué acciones y etiquetas lleva cada tarjeta. */
   myAccess?: ClassAccess | null
 }
@@ -143,6 +139,9 @@ const resetFilters = () => {
   searchQuery.value = ''
 }
 
+/** Misiones de la clase: el listado del profesorado manda `missionCount`; el del alumnado, `totalMissions`. */
+const missionsOf = (c: ClassItem) => c.missionCount ?? c.totalMissions ?? 0
+
 const sortedAndFiltered = (input: ClassItem[]) => {
   let result = [...input]
 
@@ -164,11 +163,8 @@ const sortedAndFiltered = (input: ClassItem[]) => {
       case 'students':
         comparison = (a.studentCount || 0) - (b.studentCount || 0)
         break
-      case 'progress':
-        comparison = (a.stats?.avgProgress || 0) - (b.stats?.avgProgress || 0)
-        break
       case 'missions':
-        comparison = (a.stats?.totalMissions || 0) - (b.stats?.totalMissions || 0)
+        comparison = missionsOf(a) - missionsOf(b)
         break
     }
 

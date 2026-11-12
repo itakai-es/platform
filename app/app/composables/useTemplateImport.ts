@@ -13,7 +13,6 @@ export function useTemplateImport() {
   const config = useRuntimeConfig()
   const toast = useToast()
   const { t } = useI18n()
-  const classesStore = useClassesStore()
   const teacherStore = useTeacherStore()
 
   /** La plantilla que se está importando; una cada vez. */
@@ -31,11 +30,9 @@ export function useTemplateImport() {
         `${config.public.apiBase}/teacher/templates/${id}/import`,
         { method: 'POST', body: { missions } }
       )
-      // Se vuelven a pedir las clases (la nueva) y, como al importar una misión,
-      // el listado general de misiones, que ya puede traer las suyas.
-      classesStore.hasLoadedClasses = false
-      teacherStore.hasLoadedClasses = false
-      teacherStore.hasLoadedMissions = false
+      // Se vuelven a pedir las clases (la nueva), las cifras del Inicio y, como al
+      // importar una misión, el listado general de misiones, que ya puede traer las suyas.
+      teacherStore.invalidateClass(res.class.id)
       // Las que ha copiado la API, que son las que tenía la plantilla al importarla.
       const copied = res.missions ?? 0
       toast.success(

@@ -168,8 +168,12 @@
               />
 
               <div v-if="aiStore.hasMoreConversations" class="py-2 flex justify-center">
-                <button class="text-xs text-text-muted hover:text-navy-700" @click="handleLoadMore">
-                  Cargar más...
+                <button
+                  type="button"
+                  class="text-xs text-text-muted hover:text-navy-700"
+                  @click="handleLoadMore"
+                >
+                  {{ t('common.sidebar.load_more') }}
                 </button>
               </div>
             </template>
