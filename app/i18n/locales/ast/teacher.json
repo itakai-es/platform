@@ -497,7 +497,7 @@
               },
               "missions": {
                 "label": "Misiones completaes",
-                "desc": "Premia terminar misiones. Tamién por selmana y por temporada. Si'l tipu XP tamién ta activáu, nos empates decide la XP."
+                "desc": "Premia terminar misiones. Tamién por selmana. Si'l tipu XP tamién ta activáu, nos empates decide la XP."
               },
               "teams": {
                 "label": "Equipos",
@@ -506,14 +506,6 @@
               }
             },
             "type_last": "Fai falta polo menos un tipu.",
-            "season": {
-              "title": "Temporada",
-              "hint": "Al entamala, les misiones y los equipos cuenten dende esi momentu na opción «Temporada». Nun se desanicia nada y la XP nun camuda. Entamar otra sustitúi l'anterior.",
-              "current": "En cursu dende {date}.",
-              "start": "Entamar temporada",
-              "restart": "Entamar otra temporada",
-              "toast_started": "Temporada entamada"
-            },
             "closed_archived": "La clase ta archivada: desarchívala pa camudar la clasificación.",
             "closed_trash": "La clase ta na papelera: restáurala pa camudar la clasificación."
           },
@@ -721,8 +713,7 @@
               "trashed": "unvió la clase a la papelera",
               "restored": "sacó la clase de la papelera",
               "template_recommended": "recomendó la plantía nos catálogos",
-              "template_unrecommended": "quitó la recomendación de la plantía",
-              "season_started": "entamó una temporada de la clasificación"
+              "template_unrecommended": "quitó la recomendación de la plantía"
             },
             "teacher": {
               "added": "amestó a {target} al profesoráu ({profile}, {access})",

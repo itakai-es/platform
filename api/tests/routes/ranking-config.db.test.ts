@@ -6,9 +6,10 @@ import type { FastifyInstance } from 'fastify'
 /**
  * El ranking configurable (entregas 5 y 6 del bloque 6): lo que recibe el
  * alumnado en cada modo, recorriendo el JSON para comprobar que no viaja nada de
- * quien no debe salir; los tipos, los periodos y los empates; «Empezar temporada»;
- * y que duplicar e importar llevan la configuración sin la temporada. Necesita
- * TEST_DATABASE_URL (ver tests/helpers/test-db.ts).
+ * quien no debe salir; los tipos, los periodos y los empates; y que duplicar e
+ * importar llevan la configuración. No hay temporadas: su ruta no existe y la fecha
+ * que dejara guardada una versión anterior se ignora. Necesita TEST_DATABASE_URL
+ * (ver tests/helpers/test-db.ts).
  */
 
 vi.mock('../../src/utils/email.js', () => ({
@@ -197,8 +198,8 @@ describeWithDatabase('el ranking configurable', () => {
         periods: ['all'],
         mode: 'full',
         usesXp: true,
-        seasonStartedAt: null,
       })
+      expect(body.options).not.toHaveProperty('seasonStartedAt')
       expect(body.podium.map((r: Row) => r.username)).toEqual([
         people.ana!.alias,
         people.bea!.alias,
@@ -509,26 +510,27 @@ describeWithDatabase('el ranking configurable', () => {
       expect(xp.options.periods).toEqual(['all'])
     })
 
-    it('«Temporada» solo existe empezada y cuenta desde su fecha', async () => {
-      await setClass({ rankingConfig: { types: ['missions'] } })
-      const twoDaysAgo = new Date(Date.now() - 2 * 86_400_000)
-      await completed(['ana'], () => twoDaysAgo)
+    it('no hay «Temporada»: pedirla da «Siempre», aunque haya una fecha guardada', async () => {
+      // Lo que dejó guardado una versión anterior se lee sin romper nada.
+      await setClass({
+        rankingConfig: { types: ['missions', 'teams'], seasonStartedAt: new Date().toISOString() },
+      })
+      await completed(['ana'], () => new Date(Date.now() - 2 * 86_400_000))
       await completed(['bea'])
 
-      const before = await asStudent('?period=season')
-      expect(before.period).toBe('all')
-      expect(before.options.periods).toEqual(['all', 'week'])
+      const student = await asStudent('?type=missions&period=season')
+      expect(student.period).toBe('all')
+      expect(student.options.periods).toEqual(['all', 'week'])
+      expect(student.options).not.toHaveProperty('seasonStartedAt')
+      const ranked = [...student.podium, ...student.leaderboard].filter((r: Row) => r.rank !== null)
+      expect(ranked.map((r: Row) => r.username).sort()).toEqual(
+        [people.ana!.alias, people.bea!.alias].sort()
+      )
 
-      const season = await send('POST', teacherUrl('/season'), owner())
-      expect(season.statusCode, season.body).toBe(200)
-      // Lo completado antes de empezar no cuenta; se completa algo después.
-      await completed(['ciro'], () => new Date(Date.now() + 1000))
-      const after = await asStudent('?period=season')
-      expect(after.period).toBe('season')
-      expect(after.options.periods).toEqual(['all', 'week', 'season'])
-      expect(after.options.seasonStartedAt).toBe(season.json().rankingConfig.seasonStartedAt)
-      const ranked = [...after.podium, ...after.leaderboard].filter((r: Row) => r.rank !== null)
-      expect(ranked.map((r: Row) => r.username)).toEqual([people.ciro!.alias])
+      const teacher = await asTeacher('?type=missions&period=season')
+      expect(teacher.period).toBe('all')
+      expect(teacher.options.periods).toEqual(['all', 'week'])
+      expect(teacher.options).not.toHaveProperty('seasonStartedAt')
     })
   })
 
@@ -586,7 +588,7 @@ describeWithDatabase('el ranking configurable', () => {
       expect(body.standings[0].teams).toHaveLength(4)
     })
 
-    it('«Esta semana» y «Temporada» suman los premios por fecha', async () => {
+    it('«Esta semana» suma los premios por fecha', async () => {
       const old = new Date(Date.now() - 30 * 86_400_000)
       const { teams } = await createTeams({ Viejo: [10], Nuevo: [] }, () => old)
       await prisma.teamAward.create({ data: { teamId: teams.Nuevo!, title: 'Hoy', points: 2 } })
@@ -602,21 +604,9 @@ describeWithDatabase('el ranking configurable', () => {
         ['Nuevo', 2, 1],
         ['Viejo', 0, null],
       ])
-
-      await send('POST', teacherUrl('/season'), owner())
-      await prisma.teamAward.create({
-        data: {
-          teamId: teams.Viejo!,
-          title: 'Después',
-          points: 1,
-          createdAt: new Date(Date.now() + 1000),
-        },
-      })
-      const season = await asTeacher('?type=teams&period=season')
-      expect(season.period).toBe('season')
-      expect(pointsOf(season)).toEqual([
-        ['Viejo', 1, 1],
-        ['Nuevo', 0, null],
+      expect(pointsOf(await asTeacher('?type=teams&period=week'))).toEqual([
+        ['Nuevo', 2, 1],
+        ['Viejo', 0, null],
       ])
     })
 
@@ -719,7 +709,6 @@ describeWithDatabase('el ranking configurable', () => {
         types: ['xp', 'teams'],
         mode: 'top',
         topN: 10,
-        seasonStartedAt: null,
         compare: null,
       })
       const again = await send('PUT', url(), owner(), { rankingConfig: { types: ['missions'] } })
@@ -761,14 +750,12 @@ describeWithDatabase('el ranking configurable', () => {
       ['archivada', { archived: true }, 'CLASS_ARCHIVED'],
       ['en la papelera', { deletedAt: new Date() }, 'CLASS_IN_TRASH'],
     ] as const) {
-      it(`con la clase ${label}: 409, igual que la temporada, y no se guarda`, async () => {
+      it(`con la clase ${label}: 409, y no se guarda`, async () => {
         await setClass({ rankingConfig: { mode: 'full' } })
         await prisma.class.update({ where: { id: f.classId }, data })
         try {
           const put = await send('PUT', url(), owner(), { rankingConfig: { mode: 'position' } })
-          const season = await send('POST', `${url()}/ranking/season`, owner())
           expect([put.statusCode, put.json().code]).toEqual([409, code])
-          expect([season.statusCode, season.json().code]).toEqual([409, code])
           const saved = await prisma.class.findUnique({ where: { id: f.classId } })
           expect(saved!.rankingConfig).toMatchObject({ mode: 'full' })
           // Lo demás de la clase se sigue pudiendo guardar: solo se cierra el ranking.
@@ -819,71 +806,63 @@ describeWithDatabase('el ranking configurable', () => {
       }
     })
 
-    it('la temporada no se escribe desde aquí', async () => {
+    it('lo que no es de la configuración, como una temporada, no se guarda', async () => {
       const res = await send('PUT', url(), owner(), {
         rankingConfig: { seasonStartedAt: '2020-01-01T00:00:00.000Z' },
       })
       expect(res.statusCode, res.body).toBe(200)
-      expect(res.json().class.rankingConfig.seasonStartedAt).toBeNull()
+      expect(res.json().class.rankingConfig).not.toHaveProperty('seasonStartedAt')
+      const saved = await prisma.class.findUniqueOrThrow({ where: { id: f.classId } })
+      expect(saved.rankingConfig).not.toHaveProperty('seasonStartedAt')
+    })
+
+    it('una fecha de temporada guardada antes se lee sin romper nada y se va al guardar', async () => {
+      await setClass({
+        rankingConfig: {
+          types: ['missions'],
+          mode: 'top',
+          topN: 3,
+          seasonStartedAt: '2026-11-02T07:00:00.000Z',
+        },
+      })
+      const detail = await send('GET', url(), owner())
+      expect(detail.statusCode, detail.body).toBe(200)
+      expect(detail.json().class.rankingConfig).toEqual({
+        types: ['missions'],
+        mode: 'top',
+        topN: 3,
+        compare: null,
+      })
+      const save = await send('PUT', url(), owner(), { rankingConfig: { topN: 5 } })
+      expect(save.statusCode, save.body).toBe(200)
+      const saved = await prisma.class.findUniqueOrThrow({ where: { id: f.classId } })
+      expect(saved.rankingConfig).toEqual({ types: ['missions'], mode: 'top', topN: 5, compare: null })
     })
   })
 
-  describe('«Empezar temporada»', () => {
-    it('fija la fecha, deja su entrada en el historial y empezar otra la sustituye', async () => {
-      const before = Date.now()
-      const first = await send('POST', teacherUrl('/season'), owner())
-      expect(first.statusCode, first.body).toBe(200)
-      const started = first.json().rankingConfig.seasonStartedAt
-      expect(new Date(started).getTime()).toBeGreaterThanOrEqual(before - 1000)
-      const logs = () =>
-        prisma.classActionLog.findMany({
-          where: { classId: f.classId, action: 'class.season_started' },
-          orderBy: { createdAt: 'asc' },
-        })
-      expect((await logs()).at(-1)?.metadata).toMatchObject({ replaced: false })
-
-      await new Promise(resolve => setTimeout(resolve, 5))
-      const second = await send('POST', teacherUrl('/season'), owner())
-      const next = second.json().rankingConfig.seasonStartedAt
-      expect(new Date(next).getTime()).toBeGreaterThan(new Date(started).getTime())
-      expect((await logs()).at(-1)?.metadata).toMatchObject({ replaced: true })
-      await prisma.classActionLog.deleteMany({
-        where: { classId: f.classId, action: 'class.season_started' },
-      })
-    })
-
-    it('en una clase archivada no se empieza', async () => {
-      await prisma.class.update({ where: { id: f.classId }, data: { archived: true } })
-      try {
-        const res = await send('POST', teacherUrl('/season'), owner())
-        expect(res.statusCode).toBe(409)
-      } finally {
-        await prisma.class.update({ where: { id: f.classId }, data: { archived: false } })
-      }
-    })
-
-    it('cambia el resto de la configuración sin tocarla', async () => {
+  describe('sin temporadas', () => {
+    it('la ruta para empezar una ya no existe: 404, y no toca la clase', async () => {
       await setClass({ rankingConfig: { mode: 'top', topN: 3, types: ['missions'] } })
       const res = await send('POST', teacherUrl('/season'), owner())
-      expect(res.json().rankingConfig).toMatchObject({ mode: 'top', topN: 3, types: ['missions'] })
-      const save = await send('PUT', `/teacher/classes/${f.classId}`, owner(), {
-        rankingConfig: { topN: 5 },
-      })
-      expect(save.json().class.rankingConfig.seasonStartedAt).toBe(
-        res.json().rankingConfig.seasonStartedAt
-      )
+      expect(res.statusCode, res.body).toBe(404)
+      const saved = await prisma.class.findUniqueOrThrow({ where: { id: f.classId } })
+      expect(saved.rankingConfig).toEqual({ mode: 'top', topN: 3, types: ['missions'] })
     })
   })
 
   describe('copias', () => {
     const copied: string[] = []
-    const season = '2026-11-02T07:00:00.000Z'
-    const saved = { types: ['missions', 'teams'], mode: 'position', topN: 10, seasonStartedAt: season }
+    // Con la fecha de una temporada que dejó guardada una versión anterior: la copia no la lleva.
+    const saved = {
+      types: ['missions', 'teams'],
+      mode: 'position',
+      topN: 10,
+      seasonStartedAt: '2026-11-02T07:00:00.000Z',
+    }
     const expected = {
       types: ['missions', 'teams'],
       mode: 'position',
       topN: 10,
-      seasonStartedAt: null,
       compare: null,
     }
     const rankingConfigOf = async (id: string) =>
@@ -893,7 +872,7 @@ describeWithDatabase('el ranking configurable', () => {
       await prisma.class.deleteMany({ where: { id: { in: copied } } })
     })
 
-    it('duplicar con funcionalidades la lleva sin la temporada; sin ellas, no', async () => {
+    it('duplicar con funcionalidades la lleva; sin ellas, no', async () => {
       await setClass({ rankingConfig: saved })
       const url = `/teacher/classes/${f.classId}/duplicate`
       const withFeatures = await send('POST', url, owner(), {})
@@ -912,7 +891,7 @@ describeWithDatabase('el ranking configurable', () => {
       expect(await rankingConfigOf(res.json().class.id)).toBeNull()
     })
 
-    it('importar una plantilla la lleva sin la temporada', async () => {
+    it('importar una plantilla la lleva', async () => {
       await prisma.class.update({
         where: { id: f.classId },
         data: { isTemplate: true, subject: 'Lengua', educationLevel: 'ESO', language: 'es' },

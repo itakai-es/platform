@@ -66,11 +66,9 @@ import {
 import {
   mergeRankingConfig,
   normalizeRankingSwitch,
-  rankingConfigForCopy,
   rankingPeriodsFor,
   resolveRankingConfig,
   resolveRankingView,
-  type RankingConfig,
   type RankingMode,
   type RankingType,
 } from '../../utils/ranking-config.js'
@@ -227,9 +225,9 @@ const ARCHIVE_IN_TRASH = 'Restaura la clase antes de archivarla o desarchivarla'
 /** 409 si la clase está en la papelera: lo que pide hay que hacerlo después de restaurarla. */
 /**
  * Deja la clase quieta hasta confirmar y lee lo que un guardado mezcla con su cambio:
- * los ajustes, el ranking (también la temporada) y los niveles. Es el cerrojo de
- * `lockMissionPath` (`FOR NO KEY UPDATE`), que choca consigo mismo: dos guardados a la
- * vez van uno detrás de otro, y el segundo ve lo que dejó el primero. No frena lo que
+ * los ajustes, el ranking y los niveles. Es el cerrojo de `lockMissionPath`
+ * (`FOR NO KEY UPDATE`), que choca consigo mismo: dos guardados a la vez van uno
+ * detrás de otro, y el segundo ve lo que dejó el primero. No frena lo que
  * solo cuelga de la clase (entregas, comportamientos, el registro), así que no se cruza
  * con quien tiene una matrícula bloqueada e inserta algo de la clase.
  */
@@ -490,9 +488,9 @@ export class TeachersService {
       // de la transacción, dos guardados a la vez se pisan el uno al otro.
       const current = await lockClassForSettings(tx, classId)
       // Las funcionalidades y el ranking no se tocan con la clase cerrada (archivada
-      // o en la papelera), como la temporada: 409. El contenido (nombre, portada,
-      // horario, metadatos) y los niveles se siguen pudiendo editar archivada, y
-      // desarchivar va por su propia ruta (`setClassArchived`).
+      // o en la papelera): 409. El contenido (nombre, portada, horario, metadatos) y
+      // los niveles se siguen pudiendo editar archivada, y desarchivar va por su
+      // propia ruta (`setClassArchived`).
       if (rankingConfigPatch || settingsPatch) await assertClassWritable(classId, tx)
       // El camino de la clase, quieto hasta confirmar (ver `lockMissionPath`).
       if (turnsMapOn) await lockMissionPath(tx, [classId])
@@ -768,9 +766,9 @@ export class TeachersService {
             levelConfig: (options.features && source.levelConfig
               ? source.levelConfig
               : undefined) as Prisma.InputJsonValue | undefined,
-            // El ranking, igual, menos la temporada: es de la clase concreta.
-            rankingConfig: (options.features
-              ? (rankingConfigForCopy(source.rankingConfig) ?? undefined)
+            // El ranking, igual.
+            rankingConfig: (options.features && source.rankingConfig
+              ? resolveRankingConfig(source.rankingConfig)
               : undefined) as unknown as Prisma.InputJsonValue | undefined,
             invitationCode,
             isTemplate: false,
@@ -1227,13 +1225,12 @@ export class TeachersService {
     await assertClassAccess(classId, userId, 'class.view')
     await assertClassNotInTrash(classId)
     const { settings, config, studentTypes, teacherTypes } = await loadRankingContext(classId)
-    const { type, period } = resolveRankingView(teacherTypes, config, requested)
-    const since = rankingPeriodStart(period, config)
+    const { type, period } = resolveRankingView(teacherTypes, requested)
+    const since = rankingPeriodStart(period)
     const usesXp = settings.xp
     const options = {
       types: teacherTypes,
-      periods: rankingPeriodsFor(type, config),
-      seasonStartedAt: config.seasonStartedAt,
+      periods: rankingPeriodsFor(type),
       usesXp,
       audience: {
         rankings: settings.rankings,
@@ -1263,33 +1260,6 @@ export class TeachersService {
       stats: period === 'all' ? (usesXp ? stats : statsWithoutXp(stats)) : null,
       total: rows.length,
     }
-  }
-
-  /**
-   * Empieza una temporada: el periodo «Temporada» del ranking cuenta desde ahora.
-   * No borra nada ni toca la XP; empezar otra sustituye a la anterior.
-   */
-  async startRankingSeason(userId: string, classId: string) {
-    await assertClassAccess(classId, userId, 'class.startSeason')
-    return prisma.$transaction(async tx => {
-      const cls = await lockClassForSettings(tx, classId)
-      await assertClassWritable(classId, tx)
-      const current = resolveRankingConfig(cls.rankingConfig)
-      const rankingConfig: RankingConfig = { ...current, seasonStartedAt: new Date().toISOString() }
-      await tx.class.update({
-        where: { id: classId },
-        data: { rankingConfig: rankingConfig as unknown as Prisma.InputJsonValue },
-      })
-      await recordClassAction(tx, {
-        classId,
-        actorId: userId,
-        action: 'class.season_started',
-        entityType: 'class',
-        entityId: classId,
-        metadata: { replaced: current.seasonStartedAt !== null },
-      })
-      return { rankingConfig }
-    })
   }
 
   /**

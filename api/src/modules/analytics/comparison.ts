@@ -2,7 +2,6 @@ import { prisma } from '../../config/database.js'
 import type { Prisma } from '../../generated/prisma/client.js'
 import { compareWithOthers, type AnonymousFigure } from '../../utils/anonymous-stats.js'
 import {
-  completedSince,
   cutRanking,
   loadRankingBase,
   rankClass,
@@ -18,14 +17,14 @@ import { compareEnabled, rankingPeriodsFor } from '../../utils/ranking-config.js
  * modos: es lo único de la clase que el alumnado recibe allí, en vez de sus medias.
  * Aquí solo se cargan los datos: las reglas, en `utils/anonymous-stats.ts`.
  *
- * Qué se compara: la XP (si la clase la usa), las misiones completadas, con la
- * definición única, y las de la temporada si hay una empezada. Nunca el % de
- * aprobación ni la asistencia, que son notas y faltas.
+ * Qué se compara: la XP (si la clase la usa) y las misiones completadas, con la
+ * definición única. Nunca el % de aprobación ni la asistencia, que son notas y
+ * faltas.
  */
 
 type Db = Prisma.TransactionClient
 
-export type ComparisonMetricKey = 'xp' | 'missions' | 'season_missions'
+export type ComparisonMetricKey = 'xp' | 'missions'
 
 /** Una cifra de la comparación (ver `AnonymousFigure`). */
 export interface ComparisonMetric extends AnonymousFigure {
@@ -54,12 +53,12 @@ function hiddenOthersInTopMode(
 ): number | null {
   const views = studentTypes
     .filter((type): type is 'xp' | 'missions' => type !== 'teams')
-    .flatMap(type => rankingPeriodsFor(type, config).map(period => ({ type, period })))
+    .flatMap(type => rankingPeriodsFor(type).map(period => ({ type, period })))
   if (config.mode !== 'top' || views.length === 0) return null
 
   const visible = new Set<string>()
   for (const { type, period } of views) {
-    const { ranked } = rankClass(base, { type, since: rankingPeriodStart(period, config, now) })
+    const { ranked } = rankClass(base, { type, since: rankingPeriodStart(period, now) })
     const { podium, rest } = cutRanking(ranked, config)
     for (const row of [...podium, ...rest]) visible.add(row.enrollmentId)
   }
@@ -94,8 +93,6 @@ export async function classComparison(
   const others = group.enrollments.filter(enrollment => enrollment.id !== enrollmentId)
   const hiddenOthers = hiddenOthersInTopMode(others, group, context, now)
   const { missions } = group
-  const season = rankingPeriodStart('season', config, now)
-  const ofOthers = (count: ReadonlyMap<string, number>) => others.map(o => count.get(o.studentId) ?? 0)
   const metrics: ComparisonMetric[] = []
 
   if (settings.xp) {
@@ -112,24 +109,11 @@ export async function classComparison(
       outOf: missions.total,
       ...compareWithOthers({
         value: missions.completedBy.get(mine.studentId) ?? 0,
-        others: ofOthers(missions.completedBy),
+        others: others.map(o => missions.completedBy.get(o.studentId) ?? 0),
         kind: 'missions',
         hiddenOthers,
       }),
     })
-    if (season) {
-      const inSeason = completedSince(missions, season)
-      metrics.push({
-        key: 'season_missions',
-        outOf: missions.total,
-        ...compareWithOthers({
-          value: inSeason.get(mine.studentId) ?? 0,
-          others: ofOthers(inSeason),
-          kind: 'missions',
-          hiddenOthers,
-        }),
-      })
-    }
   }
   return { metrics }
 }

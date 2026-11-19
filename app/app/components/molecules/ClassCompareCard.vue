@@ -62,7 +62,6 @@ const smallClass = computed(() => props.comparison.metrics.some(m => m.reason ==
 const titles = computed<Record<ComparisonMetricKey, string>>(() => ({
   xp: t('common.resources.xp'),
   missions: t('student.classes.detail.progress.missions_completed'),
-  season_missions: t('student.classes.detail.compare.season_missions'),
 }))
 
 const meters = computed(() =>

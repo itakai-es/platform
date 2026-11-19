@@ -204,7 +204,6 @@ const levelConfigSchema = z
   })
   .partial()
 
-// La temporada no entra: solo se escribe con «Empezar temporada» (`POST …/ranking/season`).
 const rankingConfigSchema = z
   .object({
     types: z.array(z.enum(RANKING_TYPES)).min(1),
@@ -779,14 +778,6 @@ export async function teacherRoutes(fastify: FastifyInstance) {
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
-
-  fastify.post(
-    '/classes/:classId/ranking/season',
-    async (request: FastifyRequest<{ Params: { classId: string } }>) => {
-      const { id } = request.user as { id: string }
-      return teachersService.startRankingSeason(id, request.params.classId)
-    }
-  )
 
   fastify.get('/classes/:classId/students', async (request: FastifyRequest<{ Params: { classId: string } }>, reply: FastifyReply) => {
     try {

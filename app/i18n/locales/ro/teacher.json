@@ -497,7 +497,7 @@
               },
               "missions": {
                 "label": "Misiuni finalizate",
-                "desc": "Răsplătește finalizarea misiunilor. Și pe săptămână, și pe sezon. Dacă e activat și tipul XP, la egalitate decide XP."
+                "desc": "Răsplătește finalizarea misiunilor. Și pe săptămână. Dacă e activat și tipul XP, la egalitate decide XP."
               },
               "teams": {
                 "label": "Echipe",
@@ -506,14 +506,6 @@
               }
             },
             "type_last": "Este nevoie de cel puțin un tip.",
-            "season": {
-              "title": "Sezon",
-              "hint": "După ce începe, misiunile și echipele se numără din acel moment în opțiunea „Sezon”. Nu se șterge nimic și XP nu se schimbă. Dacă începi altul, îl înlocuiește pe cel anterior.",
-              "current": "În curs din {date}.",
-              "start": "Începe sezonul",
-              "restart": "Începe alt sezon",
-              "toast_started": "Sezon început"
-            },
             "closed_archived": "Clasa este arhivată: dezarhiveaz-o pentru a schimba clasamentul.",
             "closed_trash": "Clasa este în coșul de gunoi: restaureaz-o pentru a schimba clasamentul."
           },
@@ -721,8 +713,7 @@
               "trashed": "a mutat clasa în coșul de gunoi",
               "restored": "a scos clasa din coșul de gunoi",
               "template_recommended": "a recomandat șablonul în cataloage",
-              "template_unrecommended": "a retras recomandarea șablonului",
-              "season_started": "a început un sezon al clasamentului"
+              "template_unrecommended": "a retras recomandarea șablonului"
             },
             "teacher": {
               "added": "a adăugat {target} în echipa didactică ({profile}, {access})",

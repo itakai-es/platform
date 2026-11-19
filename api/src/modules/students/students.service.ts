@@ -482,15 +482,14 @@ export class StudentsService {
     if (studentTypes.length === 0) {
       throw new NotFoundError('Esta clase no tiene la clasificación activada', 'RANKING_DISABLED')
     }
-    const { type, period } = resolveRankingView(studentTypes, config, requested)
-    const since = rankingPeriodStart(period, config)
+    const { type, period } = resolveRankingView(studentTypes, requested)
+    const since = rankingPeriodStart(period)
     const showsXp = studentTypes.includes('xp')
     const options = {
       types: studentTypes,
-      periods: rankingPeriodsFor(type, config),
+      periods: rankingPeriodsFor(type),
       mode: config.mode,
       topN: config.topN,
-      seasonStartedAt: config.seasonStartedAt,
       usesXp: showsXp,
     }
     if (type === 'teams') {

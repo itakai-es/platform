@@ -264,27 +264,20 @@ describeWithDatabase('la comparación anónima con la media', () => {
     })
   })
 
-  describe('la temporada', () => {
-    it('sin temporada no sale; con una empezada, cuenta desde entonces', async () => {
+  describe('sin temporadas', () => {
+    it('solo la XP y las misiones de siempre, aunque haya guardada la fecha de una temporada', async () => {
       const others = await group([1, 2, 3, 4, 5])
       const before = new Date(Date.now() - 10 * 24 * 60 * 60 * 1000)
       await completedMission(others.map(p => p.accountId), before)
-      expect(metric((await progress()).comparison, 'season_missions')).toBeUndefined()
-
+      // Lo que dejó guardado una versión anterior se lee sin romper nada.
       await setClass({
         rankingConfig: { seasonStartedAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString() },
       })
       await completedMission([...others.slice(0, 3).map(p => p.accountId), me.accountId])
       const { comparison } = await progress()
+      expect(comparison.metrics.map((m: ComparisonMetric) => m.key)).toEqual(['xp', 'missions'])
       // Las dos misiones, para el resto: (2+2+2+1+1) / 5 = 1,6 → 2. Yo, 1.
       expect(metric(comparison, 'missions')).toMatchObject({ value: 1, outOf: 2, average: 2, band: 'below' })
-      // Solo la de la temporada: 3 / 5 = 0,6 → 1. Yo, 1.
-      expect(metric(comparison, 'season_missions')).toMatchObject({
-        value: 1,
-        outOf: 2,
-        average: 1,
-        band: 'at',
-      })
     })
   })
 

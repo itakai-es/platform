@@ -497,7 +497,7 @@
               },
               "missions": {
                 "label": "Misións completadas",
-                "desc": "Premia rematar misións. Tamén por semana e por tempada. Se o tipo XP tamén está activado, nos empates decide a XP."
+                "desc": "Premia rematar misións. Tamén por semana. Se o tipo XP tamén está activado, nos empates decide a XP."
               },
               "teams": {
                 "label": "Equipos",
@@ -506,14 +506,6 @@
               }
             },
             "type_last": "Fai falta polo menos un tipo.",
-            "season": {
-              "title": "Tempada",
-              "hint": "Ao empezala, misións e equipos contan desde ese momento na opción «Tempada». Non se borra nada e a XP non cambia. Empezar outra substitúe a anterior.",
-              "current": "En curso desde o {date}.",
-              "start": "Empezar tempada",
-              "restart": "Empezar outra tempada",
-              "toast_started": "Tempada empezada"
-            },
             "closed_archived": "A clase está arquivada: desarquívaa para cambiar o ranking.",
             "closed_trash": "A clase está na papeleira: restáuraa para cambiar o ranking."
           },
@@ -721,8 +713,7 @@
               "trashed": "enviou a clase á papeleira",
               "restored": "sacou a clase da papeleira",
               "template_recommended": "recomendou o modelo nos catálogos",
-              "template_unrecommended": "quitou a recomendación do modelo",
-              "season_started": "empezou unha tempada do ranking"
+              "template_unrecommended": "quitou a recomendación do modelo"
             },
             "teacher": {
               "added": "engadiu a {target} ao profesorado ({profile}, {access})",

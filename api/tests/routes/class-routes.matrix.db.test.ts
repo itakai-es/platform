@@ -51,7 +51,6 @@ import { missionsRoutes } from '../../src/modules/missions/missions.routes.js'
 import { submissionsRoutes } from '../../src/modules/submissions/submissions.routes.js'
 import { studentsRoutes } from '../../src/modules/students/students.routes.js'
 import { createClassWithOwner } from '../../src/utils/class-owner.js'
-import { Prisma } from '../../src/generated/prisma/client.js'
 
 interface RouteRequest {
   method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
@@ -315,20 +314,6 @@ const TEACHER_CLASS: RouteCase[] = [
     other: 404,
     student: 403,
     levels: levels('read', 200),
-  },
-  {
-    route: 'POST /teacher/classes/:classId/ranking/season',
-    request: f => ({ method: 'POST', url: `${c(f)}/ranking/season` }),
-    owner: 200,
-    other: 404,
-    student: 403,
-    levels: levels('admin', 200),
-    after: async f => {
-      await prisma.class.update({
-        where: { id: f.classId },
-        data: { rankingConfig: Prisma.JsonNull },
-      })
-    },
   },
   {
     route: 'GET /teacher/classes/:classId/students',

@@ -258,8 +258,7 @@ export interface UpdateClassData {
   province?: string
   settings?: Partial<ClassSettings>
   levelConfig?: LevelConfig
-  /** Sin la temporada: se empieza aparte (`startRankingSeason`). */
-  rankingConfig?: Partial<Pick<RankingConfig, 'types' | 'mode' | 'topN' | 'compare'>>
+  rankingConfig?: Partial<RankingConfig>
   scheduleConfig?: ScheduleConfig | ScheduleConfig[]
 }
 

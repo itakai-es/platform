@@ -497,7 +497,7 @@
               },
               "missions": {
                 "label": "Osatutako misioak",
-                "desc": "Misioak amaitzea saritzen du. Astez eta denboraldiz ere bai. XP mota ere aktibatuta badago, berdinketetan XPak erabakitzen du."
+                "desc": "Misioak amaitzea saritzen du. Astez ere bai. XP mota ere aktibatuta badago, berdinketetan XPak erabakitzen du."
               },
               "teams": {
                 "label": "Taldeak",
@@ -506,14 +506,6 @@
               }
             },
             "type_last": "Gutxienez mota bat behar da.",
-            "season": {
-              "title": "Denboraldia",
-              "hint": "Hastean, misioek eta taldeek une horretatik aurrera zenbatzen dute «Denboraldia» aukeran. Ez da ezer ezabatzen eta XPa ez da aldatzen. Beste bat hasteak aurrekoa ordezkatzen du.",
-              "current": "{date} egunetik martxan.",
-              "start": "Hasi denboraldia",
-              "restart": "Hasi beste denboraldi bat",
-              "toast_started": "Denboraldia hasi da"
-            },
             "closed_archived": "Klasea artxibatuta dago: desartxibatu rankinga aldatzeko.",
             "closed_trash": "Klasea zakarrontzian dago: leheneratu rankinga aldatzeko."
           },
@@ -721,8 +713,7 @@
               "trashed": "klasea zakarrontzira bidali du",
               "restored": "klasea zakarrontzitik atera du",
               "template_recommended": "txantiloia gomendatu du katalogoetan",
-              "template_unrecommended": "txantiloiaren gomendioa kendu du",
-              "season_started": "rankingaren denboraldi bat hasi du"
+              "template_unrecommended": "txantiloiaren gomendioa kendu du"
             },
             "teacher": {
               "added": "{target} irakasleen artean gehitu du ({profile}, {access})",

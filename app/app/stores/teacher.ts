@@ -27,7 +27,6 @@ import type {
   StudentListResponse,
 } from '~/types/teacher.types'
 import { canInClass } from '~/utils/class-access'
-import type { RankingConfig } from '~/utils/ranking-config'
 import { orderByIds } from '~/utils/mission-sort'
 
 export const useTeacherStore = defineStore('teacher', () => {
@@ -533,16 +532,6 @@ export const useTeacherStore = defineStore('teacher', () => {
     )
     for (const cls of listedClasses(classId)) cls.isTemplate = response.isTemplate
     return response
-  }
-
-  /** Empieza una temporada del ranking (sustituye a la anterior). Devuelve la configuración. */
-  async function startRankingSeason(classId: string) {
-    const config = useRuntimeConfig()
-    const response = await $fetch<{ rankingConfig: RankingConfig }>(
-      `${config.public.apiBase}/teacher/classes/${classId}/ranking/season`,
-      { method: 'POST' }
-    )
-    return response.rankingConfig
   }
 
   async function setClassArchived(classId: string, archived: boolean) {
@@ -1229,7 +1218,6 @@ export const useTeacherStore = defineStore('teacher', () => {
     ensureRecentMissions,
     ensureTeacherClassById,
     ensureClassMissions,
-    startRankingSeason,
     ensureClassGuide,
     ensureStudentById,
     ensureArchivedClasses,

@@ -28,12 +28,12 @@ describeWithDatabase('guardados de una clase a la vez', () => {
   let f: ClassFixture
 
   const url = () => `/teacher/classes/${f.classId}`
-  const send = async (method: 'PUT' | 'POST', path: string, payload?: object) => {
+  const put = async (path: string, payload: object) => {
     const res = await app.inject({
-      method,
+      method: 'PUT',
       url: path,
       headers: { authorization: `Bearer ${f.token('owner')}` },
-      ...(payload ? { payload } : {}),
+      payload,
     })
     expect(res.statusCode, res.body).toBe(200)
   }
@@ -62,8 +62,8 @@ describeWithDatabase('guardados de una clase a la vez', () => {
     for (let round = 0; round < ROUNDS; round++) {
       await reset()
       await Promise.all([
-        send('PUT', url(), { rankingConfig: { mode: 'position' } }),
-        send('PUT', url(), { rankingConfig: { compare: false } }),
+        put(url(), { rankingConfig: { mode: 'position' } }),
+        put(url(), { rankingConfig: { compare: false } }),
       ])
       expect((await stored()).rankingConfig, `ronda ${round}`).toMatchObject({
         mode: 'position',
@@ -72,25 +72,12 @@ describeWithDatabase('guardados de una clase a la vez', () => {
     }
   })
 
-  it('un cambio del ranking y empezar temporada: no se pierde ninguno', async () => {
-    for (let round = 0; round < ROUNDS; round++) {
-      await reset()
-      await Promise.all([
-        send('PUT', url(), { rankingConfig: { mode: 'position' } }),
-        send('POST', `${url()}/ranking/season`),
-      ])
-      const config = (await stored()).rankingConfig as { mode: string; seasonStartedAt: string | null }
-      expect(config.mode, `ronda ${round}`).toBe('position')
-      expect(config.seasonStartedAt, `ronda ${round}`).not.toBeNull()
-    }
-  })
-
   it('apagar el ranking mientras otro guarda su configuración: no vuelve a encenderse', async () => {
     for (let round = 0; round < ROUNDS; round++) {
       await reset({ rankings: true })
       await Promise.all([
-        send('PUT', url(), { settings: { rankings: false } }),
-        send('PUT', url(), { rankingConfig: { topN: 3 } }),
+        put(url(), { settings: { rankings: false } }),
+        put(url(), { rankingConfig: { topN: 3 } }),
       ])
       const { settings, rankingConfig } = await stored()
       expect(settings, `ronda ${round}`).toMatchObject({ rankings: false })
@@ -102,8 +89,8 @@ describeWithDatabase('guardados de una clase a la vez', () => {
     for (let round = 0; round < ROUNDS; round++) {
       await reset()
       await Promise.all([
-        send('PUT', url(), { settings: { sounds: false } }),
-        send('PUT', url(), { settings: { visualEffects: false } }),
+        put(url(), { settings: { sounds: false } }),
+        put(url(), { settings: { visualEffects: false } }),
       ])
       expect((await stored()).settings, `ronda ${round}`).toMatchObject({
         sounds: false,
@@ -114,18 +101,18 @@ describeWithDatabase('guardados de una clase a la vez', () => {
 
   it('los ajustes solo se escriben si cambian', async () => {
     await reset({ sounds: false })
-    await send('PUT', url(), { rankingConfig: { mode: 'top' } })
+    await put(url(), { rankingConfig: { mode: 'top' } })
     // Quien solo toca el ranking no los rellena: siguen siendo lo que había.
     expect((await stored()).settings).toEqual({ sounds: false })
-    await send('PUT', url(), { settings: { sounds: false, xp: true } })
+    await put(url(), { settings: { sounds: false, xp: true } })
     expect((await stored()).settings).toEqual({ sounds: false })
-    await send('PUT', url(), { name: 'Otro nombre' })
+    await put(url(), { name: 'Otro nombre' })
     expect((await stored()).settings).toEqual({ sounds: false })
 
     // Se quedan sin ningún tipo disponible (solo XP, con la XP apagada): el interruptor
     // se apaga, aunque el guardado solo traiga el ranking.
     await reset({ xp: false, shop: false, coins: false, mana: false, behaviors: false, lives: false })
-    await send('PUT', url(), { rankingConfig: { types: ['xp'] } })
+    await put(url(), { rankingConfig: { types: ['xp'] } })
     expect((await stored()).settings).toMatchObject({ rankings: false })
   })
 })

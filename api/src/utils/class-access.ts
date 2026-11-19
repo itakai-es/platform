@@ -55,8 +55,6 @@ export const CLASS_ACTION_LEVEL = {
   'class.duplicate': 'read',
   'class.editContent': 'edit',
   'class.editSettings': 'admin',
-  // Empezar una temporada del ranking: un ajuste más, con su entrada en el historial.
-  'class.startSeason': 'admin',
   'class.archive': 'admin',
   'class.inviteCode': 'admin',
   'class.publishTemplate': 'owner',

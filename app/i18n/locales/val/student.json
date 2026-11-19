@@ -242,8 +242,7 @@
         },
         "compare": {
           "title": "Tu i la teua classe",
-          "hint": "Es compara amb la mitjana de la resta de la teua classe, arredonida. No es veu ningú en concret.",
-          "season_missions": "Missions d'esta temporada"
+          "hint": "Es compara amb la mitjana de la resta de la teua classe, arredonida. No es veu ningú en concret."
         },
         "results": {
           "title": "Els meus resultats",
@@ -448,11 +447,9 @@
         "missions_count": "{count} missió | {count} missions",
         "podium_empty_missions": "Encara ningú no ha completat cap missió. El podi s'omplirà quan algú ho faça.",
         "podium_empty_missions_week": "Esta setmana encara ningú no ha completat cap missió.",
-        "podium_empty_missions_season": "En esta temporada encara ningú no ha completat cap missió.",
         "no_rank_xp": "Encara no tens posició. Aconseguix XP per a entrar en la classificació.",
         "no_rank_missions": "Encara no tens posició. Completa una missió per a entrar en la classificació.",
         "no_rank_missions_week": "Esta setmana encara no tens posició. Completa una missió per a entrar en la classificació.",
-        "no_rank_missions_season": "En esta temporada encara no tens posició. Completa una missió per a entrar en la classificació.",
         "my_position_title": "La teua posició",
         "my_position_preview": "Cada estudiant veu ací la seua posició i el total de la classe.",
         "top_list_title": "Fins a la posició {n}"

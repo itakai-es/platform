@@ -1,11 +1,12 @@
 import type { ClassSettings } from './class-settings.js'
 
 /**
- * Configuración del ranking de una clase (`Class.rankingConfig`): qué tipos hay,
- * qué ve el alumnado y desde cuándo cuenta la temporada. El interruptor sigue en
- * `settings.rankings`: apagado es «solo el profesorado», y por eso aquí no hay un
- * cuarto modo. Nula significa «como siempre», y `resolveRankingConfig` lo resuelve
- * a XP y equipos, completo y sin temporada: las clases existentes no notan nada.
+ * Configuración del ranking de una clase (`Class.rankingConfig`): qué tipos hay y
+ * qué ve el alumnado. El interruptor sigue en `settings.rankings`: apagado es «solo
+ * el profesorado», y por eso aquí no hay un cuarto modo. Nula significa «como
+ * siempre», y `resolveRankingConfig` lo resuelve a XP y equipos, completo: las
+ * clases existentes no notan nada. Lo guardado que no sea de la configuración se
+ * ignora.
  *
  * `compare` es el interruptor de la comparación anónima con la media, independiente
  * del ranking (ver `compareEnabled`).
@@ -26,7 +27,7 @@ export type RankingMode = (typeof RANKING_MODES)[number]
 export const RANKING_TOP_SIZES = [3, 5, 10] as const
 export type RankingTopSize = (typeof RANKING_TOP_SIZES)[number]
 
-export const RANKING_PERIODS = ['all', 'week', 'season'] as const
+export const RANKING_PERIODS = ['all', 'week'] as const
 export type RankingPeriod = (typeof RANKING_PERIODS)[number]
 
 export interface RankingConfig {
@@ -34,8 +35,6 @@ export interface RankingConfig {
   mode: RankingMode
   /** Cuántos puestos enseña el modo `top`. Sin él en otro modo, se conserva. */
   topN: RankingTopSize
-  /** Desde cuándo cuenta la temporada (ISO); null si no se ha empezado ninguna. */
-  seasonStartedAt: string | null
   /** La comparación anónima con la media; null si nunca se ha tocado (ver `compareEnabled`). */
   compare: boolean | null
 }
@@ -44,14 +43,7 @@ export const DEFAULT_RANKING_CONFIG: RankingConfig = {
   types: ['xp', 'teams'],
   mode: 'full',
   topN: 5,
-  seasonStartedAt: null,
   compare: null,
-}
-
-function isoDateOf(value: unknown): string | null {
-  if (typeof value !== 'string' && !(value instanceof Date)) return null
-  const date = new Date(value)
-  return Number.isNaN(date.getTime()) ? null : date.toISOString()
 }
 
 /**
@@ -74,7 +66,6 @@ export function resolveRankingConfig(raw: unknown): RankingConfig {
     topN: RANKING_TOP_SIZES.includes(r.topN as RankingTopSize)
       ? (r.topN as RankingTopSize)
       : fallback.topN,
-    seasonStartedAt: isoDateOf(r.seasonStartedAt),
     compare: typeof r.compare === 'boolean' ? r.compare : null,
   }
 }
@@ -91,23 +82,11 @@ export function compareEnabled(
   return config.compare ?? settings.rankings
 }
 
-/**
- * Un cambio pedido por el profesorado sobre lo guardado. La temporada no entra:
- * solo se escribe con «Empezar temporada», que deja su entrada en el historial.
- */
+/** Un cambio pedido por el profesorado sobre lo guardado. */
 export function mergeRankingConfig(current: unknown, patch: unknown): RankingConfig {
   const saved = resolveRankingConfig(current)
   const asked = patch && typeof patch === 'object' && !Array.isArray(patch) ? patch : {}
-  return resolveRankingConfig({ ...saved, ...asked, seasonStartedAt: saved.seasonStartedAt })
-}
-
-/**
- * Lo que se copia al duplicar una clase o importar una plantilla: la
- * configuración sin la temporada, que es de la clase concreta. Nula sigue nula.
- */
-export function rankingConfigForCopy(raw: unknown): RankingConfig | null {
-  if (raw === null || raw === undefined) return null
-  return { ...resolveRankingConfig(raw), seasonStartedAt: null }
+  return resolveRankingConfig({ ...saved, ...asked })
 }
 
 /**
@@ -168,23 +147,21 @@ export function normalizeRankingSwitch<T extends Pick<ClassSettings, 'xp' | 'ran
 
 /**
  * Los periodos de un tipo. La XP solo tiene «Siempre»: de ella no hay histórico,
- * solo el saldo. Misiones y equipos tienen fecha; «Temporada», si hay una empezada.
+ * solo el saldo. Misiones y equipos tienen fecha: también «Esta semana».
  */
-export function rankingPeriodsFor(type: RankingType, config: RankingConfig): RankingPeriod[] {
-  if (type === 'xp') return ['all']
-  return config.seasonStartedAt ? ['all', 'week', 'season'] : ['all', 'week']
+export function rankingPeriodsFor(type: RankingType): RankingPeriod[] {
+  return type === 'xp' ? ['all'] : [...RANKING_PERIODS]
 }
 
 /** El tipo y el periodo que se sirven: lo pedido si vale; si no, el primero y «Siempre». */
 export function resolveRankingView(
   types: readonly RankingType[],
-  config: RankingConfig,
   requested: { type?: unknown; period?: unknown }
 ): { type: RankingType; period: RankingPeriod } {
   const type = types.includes(requested.type as RankingType)
     ? (requested.type as RankingType)
     : types[0]!
-  const period = rankingPeriodsFor(type, config).includes(requested.period as RankingPeriod)
+  const period = rankingPeriodsFor(type).includes(requested.period as RankingPeriod)
     ? (requested.period as RankingPeriod)
     : 'all'
   return { type, period }

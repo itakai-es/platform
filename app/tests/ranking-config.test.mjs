@@ -14,11 +14,11 @@ const s = await import('http://localhost:4000/_nuxt/utils/class-settings.ts')
 const a = await import('http://localhost:4000/_nuxt/utils/avatar.ts')
 
 test('nula es como hoy; los valores raros caen en los de por defecto', () => {
-  const today = { types: ['xp', 'teams'], mode: 'full', topN: 5, seasonStartedAt: null, compare: null }
+  const today = { types: ['xp', 'teams'], mode: 'full', topN: 5, compare: null }
   for (const raw of [null, undefined, 'x', 7, [], {}, { types: [] }, { types: ['vidas'] }]) {
     assert.deepEqual(r.resolveRankingConfig(raw), today)
   }
-  assert.deepEqual(r.resolveRankingConfig({ mode: 'anónimo', topN: 4, seasonStartedAt: 'ayer' }), today)
+  assert.deepEqual(r.resolveRankingConfig({ mode: 'anónimo', topN: 4 }), today)
 })
 
 test('se queda con lo que vale, con los tipos sin repetir y en su orden', () => {
@@ -27,16 +27,29 @@ test('se queda con lo que vale, con los tipos sin repetir y en su orden', () => 
       types: ['teams', 'vidas', 'missions', 'teams'],
       mode: 'position',
       topN: 10,
-      seasonStartedAt: '2026-11-02T07:00:00.000Z',
     }),
-    {
-      types: ['missions', 'teams'],
-      mode: 'position',
-      topN: 10,
-      seasonStartedAt: '2026-11-02T07:00:00.000Z',
-      compare: null,
-    }
+    { types: ['missions', 'teams'], mode: 'position', topN: 10, compare: null }
   )
+})
+
+test('lo guardado que ya no es de la configuración, como una temporada, se ignora', () => {
+  const saved = {
+    types: ['missions'],
+    mode: 'top',
+    topN: 3,
+    seasonStartedAt: '2026-11-02T07:00:00.000Z',
+  }
+  assert.deepEqual(r.resolveRankingConfig(saved), {
+    types: ['missions'],
+    mode: 'top',
+    topN: 3,
+    compare: null,
+  })
+  assert.deepEqual(r.resolveRankingConfig({ seasonStartedAt: 'ayer' }), r.DEFAULT_RANKING_CONFIG)
+})
+
+test('los periodos: «Siempre» y «Esta semana», sin temporada', () => {
+  assert.deepEqual([...r.RANKING_PERIODS], ['all', 'week'])
 })
 
 test('la comparación con la media: sin guardar, sigue al ranking; guardada, manda ella', () => {

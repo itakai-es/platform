@@ -338,7 +338,7 @@ export interface StudentTimeline {
 
 // ---- «Mi progreso» del alumnado ----
 
-export type ComparisonMetricKey = 'xp' | 'missions' | 'season_missions'
+export type ComparisonMetricKey = 'xp' | 'missions'
 
 /**
  * Una cifra frente al resto de la clase, tal como la deja pasar la API: su valor

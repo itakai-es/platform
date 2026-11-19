@@ -2,10 +2,10 @@ import type { ClassSettings } from '~/types/class.types'
 
 /**
  * Configuración del ranking de una clase (`Class.rankingConfig`). Espejo de la API
- * (`api/src/utils/ranking-config.ts`): qué tipos hay, qué ve el alumnado, desde
- * cuándo cuenta la temporada y si hay comparación con la media. El interruptor del
- * ranking sigue en `settings.rankings`: apagado es «solo el profesorado». Quien
- * decide es la API, que recorta lo que manda; aquí solo se ofrece lo que tiene sentido.
+ * (`api/src/utils/ranking-config.ts`): qué tipos hay, qué ve el alumnado y si hay
+ * comparación con la media. El interruptor del ranking sigue en `settings.rankings`:
+ * apagado es «solo el profesorado». Quien decide es la API, que recorta lo que manda;
+ * aquí solo se ofrece lo que tiene sentido.
  */
 
 export const RANKING_TYPES = ['xp', 'missions', 'teams'] as const
@@ -17,15 +17,13 @@ export type RankingMode = (typeof RANKING_MODES)[number]
 export const RANKING_TOP_SIZES = [3, 5, 10] as const
 export type RankingTopSize = (typeof RANKING_TOP_SIZES)[number]
 
-export const RANKING_PERIODS = ['all', 'week', 'season'] as const
+export const RANKING_PERIODS = ['all', 'week'] as const
 export type RankingPeriod = (typeof RANKING_PERIODS)[number]
 
 export interface RankingConfig {
   types: RankingType[]
   mode: RankingMode
   topN: RankingTopSize
-  /** Desde cuándo cuenta la temporada (ISO); null si no se ha empezado ninguna. */
-  seasonStartedAt: string | null
   /** La comparación anónima con la media; null si nunca se ha tocado (ver `compareEnabled`). */
   compare: boolean | null
 }
@@ -34,7 +32,6 @@ export const DEFAULT_RANKING_CONFIG: RankingConfig = {
   types: ['xp', 'teams'],
   mode: 'full',
   topN: 5,
-  seasonStartedAt: null,
   compare: null,
 }
 
@@ -47,15 +44,12 @@ export function resolveRankingConfig(raw: unknown): RankingConfig {
   const r = raw as Partial<Record<keyof RankingConfig, unknown>>
   const listed = Array.isArray(r.types) ? (r.types as unknown[]) : []
   const types = RANKING_TYPES.filter(type => listed.includes(type))
-  const started = typeof r.seasonStartedAt === 'string' ? new Date(r.seasonStartedAt) : null
   return {
     types: types.length > 0 ? types : [...fallback.types],
     mode: RANKING_MODES.includes(r.mode as RankingMode) ? (r.mode as RankingMode) : fallback.mode,
     topN: RANKING_TOP_SIZES.includes(r.topN as RankingTopSize)
       ? (r.topN as RankingTopSize)
       : fallback.topN,
-    seasonStartedAt:
-      started && !Number.isNaN(started.getTime()) ? (r.seasonStartedAt as string) : null,
     compare: typeof r.compare === 'boolean' ? r.compare : null,
   }
 }

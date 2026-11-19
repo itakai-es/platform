@@ -178,9 +178,9 @@ model Class {
   // Configuración del sistema de niveles por clase (curva de XP + tramos visuales).
   // Nulo = usa los valores por defecto (DEFAULT_LEVEL_CONFIG), retrocompatible.
   levelConfig     Json?     @map("level_config")
-  // Configuración del ranking por clase (tipos, qué ve el alumnado y fecha de la
-  // temporada; ver utils/ranking-config.ts). Nulo = como siempre: XP y equipos,
-  // completo y sin temporada. `settings.rankings` sigue siendo el interruptor.
+  // Configuración del ranking por clase (tipos y qué ve el alumnado; ver
+  // utils/ranking-config.ts). Nulo = como siempre: XP y equipos, completo.
+  // `settings.rankings` sigue siendo el interruptor.
   rankingConfig   Json?     @map("ranking_config")
   // Configuración de horario/calendario (recurrencia estilo Google + fechas +
   // overrides por día). Nulo = sin horario configurado.

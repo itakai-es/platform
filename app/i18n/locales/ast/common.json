@@ -767,21 +767,17 @@
       },
       "period": {
         "all": "Siempres",
-        "week": "Esta selmana",
-        "season": "Temporada"
+        "week": "Esta selmana"
       },
-      "season_since": "Temporada en cursu dende {date}.",
       "no_score": {
         "xp": "Inda ensin XP",
         "missions": {
           "all": "Inda ensin misiones completaes",
-          "week": "Inda ensin misiones esta selmana",
-          "season": "Inda ensin misiones esta temporada"
+          "week": "Inda ensin misiones esta selmana"
         },
         "teams": {
           "all": "Inda ensin puntos",
-          "week": "Inda ensin puntos esta selmana",
-          "season": "Inda ensin puntos esta temporada"
+          "week": "Inda ensin puntos esta selmana"
         }
       }
     }

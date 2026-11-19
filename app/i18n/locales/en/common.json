@@ -767,21 +767,17 @@
       },
       "period": {
         "all": "All time",
-        "week": "This week",
-        "season": "Season"
+        "week": "This week"
       },
-      "season_since": "Season running since {date}.",
       "no_score": {
         "xp": "No XP yet",
         "missions": {
           "all": "No missions completed yet",
-          "week": "No missions yet this week",
-          "season": "No missions yet this season"
+          "week": "No missions yet this week"
         },
         "teams": {
           "all": "No points yet",
-          "week": "No points yet this week",
-          "season": "No points yet this season"
+          "week": "No points yet this week"
         }
       }
     }

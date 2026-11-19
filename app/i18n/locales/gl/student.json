@@ -242,8 +242,7 @@
         },
         "compare": {
           "title": "Ti e a túa clase",
-          "hint": "Compárase coa media do resto da túa clase, redondeada. Non se ve a ninguén en concreto.",
-          "season_missions": "Misións desta tempada"
+          "hint": "Compárase coa media do resto da túa clase, redondeada. Non se ve a ninguén en concreto."
         },
         "results": {
           "title": "Os meus resultados",
@@ -448,11 +447,9 @@
         "missions_count": "{count} misión | {count} misións",
         "podium_empty_missions": "Aínda ninguén completou unha misión. O podio encherase en canto alguén o faga.",
         "podium_empty_missions_week": "Esta semana aínda ninguén completou unha misión.",
-        "podium_empty_missions_season": "Nesta tempada aínda ninguén completou unha misión.",
         "no_rank_xp": "Aínda non tes posto. Consegue XP para entrar na clasificación.",
         "no_rank_missions": "Aínda non tes posto. Completa unha misión para entrar na clasificación.",
         "no_rank_missions_week": "Esta semana aínda non tes posto. Completa unha misión para entrar na clasificación.",
-        "no_rank_missions_season": "Nesta tempada aínda non tes posto. Completa unha misión para entrar na clasificación.",
         "my_position_title": "O teu posto",
         "my_position_preview": "Cada estudante ve aquí o seu posto e o total da clase.",
         "top_list_title": "Ata o posto {n}"

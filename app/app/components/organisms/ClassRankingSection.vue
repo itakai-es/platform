@@ -178,7 +178,7 @@ const twoColumns = computed(() =>
     : statItems.value.length > 0 || mode.value === 'top' || comparison.value !== null
 )
 
-/** El sufijo de lo que depende del periodo (`_week`, `_season`); nada en «Siempre». */
+/** El sufijo de lo que depende del periodo (`_week`); nada en «Siempre». */
 const periodSuffix = computed(() => (period.value === 'all' ? '' : `_${period.value}`))
 
 const podiumEmptyText = computed(() =>

@@ -15,7 +15,6 @@ const TYPE_IN_URL: Record<RankingType, string> = {
 const PERIOD_IN_URL: Record<RankingPeriod, string> = {
   all: 'siempre',
   week: 'semana',
-  season: 'temporada',
 }
 
 /**

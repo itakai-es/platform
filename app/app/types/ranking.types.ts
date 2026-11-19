@@ -76,7 +76,6 @@ export interface RankingOptions {
   types: RankingType[]
   /** Los periodos del tipo que se está viendo. */
   periods: RankingPeriod[]
-  seasonStartedAt: string | null
   usesXp: boolean
   /** Solo en la del alumnado: lo que le deja ver su clase. */
   mode?: RankingMode

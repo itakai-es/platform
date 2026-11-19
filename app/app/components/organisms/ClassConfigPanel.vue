@@ -200,7 +200,6 @@
         :settings="localSettings"
         :config="localRanking"
         :can-edit="canEditFeatures"
-        :can-start-season="can('class.startSeason') && !closedNote"
         @update="onRankingUpdate"
       />
 
@@ -917,7 +916,7 @@ async function setFlag(flag: keyof ClassSettings, value: boolean) {
   } catch (err: unknown) {
     localSettings.value = prev
     localRanking.value = previousRanking
-    toast.error(rankingSaveError(err, undefined, 'features'))
+    toast.error(rankingSaveError(err, 'features'))
   }
 }
 

@@ -767,21 +767,17 @@
       },
       "period": {
         "all": "Beti",
-        "week": "Aste honetan",
-        "season": "Denboraldia"
+        "week": "Aste honetan"
       },
-      "season_since": "Denboraldia {date} egunetik martxan.",
       "no_score": {
         "xp": "Oraindik XPrik gabe",
         "missions": {
           "all": "Oraindik misio osaturik gabe",
-          "week": "Aste honetan oraindik misiorik gabe",
-          "season": "Denboraldi honetan oraindik misiorik gabe"
+          "week": "Aste honetan oraindik misiorik gabe"
         },
         "teams": {
           "all": "Oraindik punturik gabe",
-          "week": "Aste honetan oraindik punturik gabe",
-          "season": "Denboraldi honetan oraindik punturik gabe"
+          "week": "Aste honetan oraindik punturik gabe"
         }
       }
     }

@@ -242,8 +242,7 @@
         },
         "compare": {
           "title": "You and your class",
-          "hint": "Compared with the rounded average of the rest of your class. Nobody in particular can be seen.",
-          "season_missions": "Missions this season"
+          "hint": "Compared with the rounded average of the rest of your class. Nobody in particular can be seen."
         },
         "results": {
           "title": "My results",
@@ -448,11 +447,9 @@
         "missions_count": "{count} mission | {count} missions",
         "podium_empty_missions": "Nobody has completed a mission yet. The podium will fill up as soon as someone does.",
         "podium_empty_missions_week": "Nobody has completed a mission yet this week.",
-        "podium_empty_missions_season": "Nobody has completed a mission yet this season.",
         "no_rank_xp": "You have no position yet. Earn XP to join the ranking.",
         "no_rank_missions": "You have no position yet. Complete a mission to join the ranking.",
         "no_rank_missions_week": "You have no position yet this week. Complete a mission to join the ranking.",
-        "no_rank_missions_season": "You have no position yet this season. Complete a mission to join the ranking.",
         "my_position_title": "Your position",
         "my_position_preview": "Each student sees their position and the class total here.",
         "top_list_title": "Up to position {n}"

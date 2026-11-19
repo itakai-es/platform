@@ -171,17 +171,11 @@ export function cutRanking<T extends { rank: number | null }>(
 }
 
 /**
- * Desde cuándo cuenta un periodo: nada en «Siempre», el lunes a las 00:00 en
- * Madrid en «Esta semana» y la fecha guardada en «Temporada».
+ * Desde cuándo cuenta un periodo: nada en «Siempre» y el lunes a las 00:00 en
+ * Madrid en «Esta semana».
  */
-export function rankingPeriodStart(
-  period: RankingPeriod,
-  config: Pick<RankingConfig, 'seasonStartedAt'>,
-  now = new Date()
-): Date | null {
-  if (period === 'week') return madridMidnight(madridWeekStart(now))
-  if (period === 'season' && config.seasonStartedAt) return new Date(config.seasonStartedAt)
-  return null
+export function rankingPeriodStart(period: RankingPeriod, now = new Date()): Date | null {
+  return period === 'week' ? madridMidnight(madridWeekStart(now)) : null
 }
 
 // ---- Qué tipos hay en una clase ----

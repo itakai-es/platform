@@ -497,7 +497,7 @@
               },
               "missions": {
                 "label": "Missions completades",
-                "desc": "Premia acabar missions. També per setmana i per temporada. Si el tipus XP també està activat, en els empats decidix l'XP."
+                "desc": "Premia acabar missions. També per setmana. Si el tipus XP també està activat, en els empats decidix l'XP."
               },
               "teams": {
                 "label": "Equips",
@@ -506,14 +506,6 @@
               }
             },
             "type_last": "Cal almenys un tipus.",
-            "season": {
-              "title": "Temporada",
-              "hint": "En començar-la, missions i equips compten des d'eixe moment en l'opció «Temporada». No s'esborra res i l'XP no canvia. Començar-ne una altra substituïx l'anterior.",
-              "current": "En curs des del {date}.",
-              "start": "Començar temporada",
-              "restart": "Començar una altra temporada",
-              "toast_started": "Temporada començada"
-            },
             "closed_archived": "La classe està arxivada: desarxiva-la per a canviar la classificació.",
             "closed_trash": "La classe està en la paperera: restaura-la per a canviar la classificació."
           },
@@ -721,8 +713,7 @@
               "trashed": "va enviar la classe a la paperera",
               "restored": "va traure la classe de la paperera",
               "template_recommended": "va recomanar la plantilla als catàlegs",
-              "template_unrecommended": "va llevar la recomanació de la plantilla",
-              "season_started": "va començar una temporada de la classificació"
+              "template_unrecommended": "va llevar la recomanació de la plantilla"
             },
             "teacher": {
               "added": "va afegir {target} al professorat ({profile}, {access})",

@@ -767,21 +767,17 @@
       },
       "period": {
         "all": "Sempre",
-        "week": "Esta semana",
-        "season": "Temporada"
+        "week": "Esta semana"
       },
-      "season_since": "Temporada em curso desde {date}.",
       "no_score": {
         "xp": "Ainda sem XP",
         "missions": {
           "all": "Ainda sem missões concluídas",
-          "week": "Ainda sem missões esta semana",
-          "season": "Ainda sem missões esta temporada"
+          "week": "Ainda sem missões esta semana"
         },
         "teams": {
           "all": "Ainda sem pontos",
-          "week": "Ainda sem pontos esta semana",
-          "season": "Ainda sem pontos esta temporada"
+          "week": "Ainda sem pontos esta semana"
         }
       }
     }

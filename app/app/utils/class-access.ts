@@ -33,7 +33,6 @@ export const CLASS_ACTION_LEVEL = {
   'class.duplicate': 'read',
   'class.editContent': 'edit',
   'class.editSettings': 'admin',
-  'class.startSeason': 'admin',
   'class.archive': 'admin',
   'class.inviteCode': 'admin',
   'class.publishTemplate': 'owner',

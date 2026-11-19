@@ -172,7 +172,6 @@ describe('migración f1_help_analytics', () => {
       'gamificacion/aplicar-a-varios-estudiantes.body',
       'alumnado/formar-equipos.body',
       'clases/niveles-y-perfiles-del-profesorado.body',
-      'clases/el-historial-de-la-clase.body',
     ])
     const rows = seed()
     for (const update of updates) {
@@ -302,7 +301,7 @@ describe('migración f1_help_analytics', () => {
     expect(text).toMatch(/\*\*no llega a su navegador\*\*/)
   })
 
-  it('el ranking: los tipos, lo que pide cada uno, los periodos, la temporada y la comparación', () => {
+  it('el ranking: los tipos, lo que pide cada uno, los periodos y la comparación', () => {
     const text = guide('tipos-de-ranking-y-quien-los-ve')
     expect(text).toMatch(/\*\*Tipos de ranking\*\*/)
     expect(text).toMatch(/\| \*\*XP\*\* \| La XP acumulada en la clase \| Que la clase use la experiencia \(XP\) \|/)
@@ -318,15 +317,13 @@ describe('migración f1_help_analytics', () => {
     // La comparación también va en el ranking, en cualquier modo, y sin las medias de la clase.
     expect(text).toMatch(/con el ranking encendido, también en él, con las mismas cifras/)
     expect(text).not.toMatch(/si el ranking recorta lo que ve/)
+    expect(text).toMatch(/## Periodos\n/)
     expect(text).toMatch(/\*\*XP\*\* solo tiene \*\*Siempre\*\*/)
-    expect(text).toMatch(/\*\*Esta semana\*\*, desde el lunes, y \*\*Temporada\*\*/)
-    expect(text).toMatch(/\*\*Empezar temporada\*\*/)
-    expect(text).toMatch(/No borra nada y la XP no cambia/)
-    expect(text).toMatch(/\*\*Empezar otra temporada\*\* sustituye a la anterior/)
+    expect(text).toMatch(/tienen además \*\*Esta semana\*\*, desde el lunes\./)
     expect(text).toMatch(/\*\*Comparar con la media\*\*, con su propio interruptor/)
     expect(text).toMatch(/Funciona aunque apagues el ranking/)
     expect(text).toMatch(linkTo(COMPARE))
-    expect(text).toMatch(/La temporada no: es de cada clase/)
+    expect(text).toMatch(/las opciones del ranking van con ella\.$/)
   })
 
   it('«Mi progreso y mis resultados»: las cifras, los estados, el % de cada enigma y el bonus', () => {
@@ -390,7 +387,7 @@ describe('migración f1_help_analytics', () => {
     expect(text).toMatch(/- \*\*XP\*\*:/)
     expect(text).toMatch(/- \*\*Misiones\*\*:/)
     expect(text).toMatch(/- \*\*Equipos\*\*:/)
-    expect(text).toMatch(/\*\*Siempre\*\*, \*\*Esta semana\*\*/)
+    expect(text).toMatch(/\*\*Siempre\*\* o \*\*Esta semana\*\*, que empieza cada lunes/)
     expect(text).toMatch(/\*\*Puesto 4 de 8\*\*/)
     expect(text).toMatch(/nunca el nombre real/)
     expect(text).toMatch(/\*\*Nadie ve tus entregas ni tus porcentajes\*\*/)
@@ -420,6 +417,8 @@ describe('migración f1_help_analytics', () => {
       expect(row.body, where).not.toMatch(/cerrada por tu docente por ahora/)
       expect(row.body, where).not.toMatch(/## Cerrada por tu docente/)
       expect(row.body, where).not.toMatch(/cómo va la clase en el recorrido/)
+      // El ranking no tiene temporadas: solo «Siempre» y «Esta semana».
+      expect(`${row.summary}\n${row.body}`, where).not.toMatch(/temporada/i)
     }
   })
 
@@ -432,7 +431,10 @@ describe('migración f1_help_analytics', () => {
     const teams = body(rows, 'gamificacion', 'premiar-a-un-equipo-y-ver-la-clasificacion')
     expect(teams).toMatch(/Los equipos son uno de los \[tipos de ranking\]/)
     expect(teams).toMatch(/\*\*Alumnado → Ranking\*\*, en su pestaña \*\*Equipos\*\*/)
-    expect(body(rows, 'si-eres-alumno', 'mi-equipo')).toMatch(/en la pestaña \*\*Ranking\*\*, en \*\*Equipos\*\*/)
+    expect(body(rows, 'si-eres-alumno', 'mi-equipo')).toMatch(
+      /en la pestaña \*\*Ranking\*\*, en \*\*Equipos\*\*: de \*\*Siempre\*\* o de \*\*Esta semana\*\*\./
+    )
+    expect(teams).toMatch(/se puede mirar \*\*Esta semana\*\*: cuentan los premios desde el lunes/)
     const view = body(rows, 'alumnado', 'la-vista-del-alumno')
     expect(view).toMatch(/\*\*4 de 8 misiones\*\*/)
     expect(view).toMatch(/\*\*Mi progreso\*\*/)
@@ -472,8 +474,9 @@ describe('migración f1_help_analytics', () => {
     )
     const access = body(rows, 'clases', 'niveles-y-perfiles-del-profesorado')
     expect(access).toMatch(/historial y la \[analítica\]/)
-    expect(access).toMatch(/las opciones del ranking y sus temporadas/)
-    expect(body(rows, 'clases', 'el-historial-de-la-clase')).toMatch(/cada temporada del ranking que se empieza/)
+    expect(access).toMatch(/funcionalidades \(también las opciones del ranking\), niveles/)
+    // El historial no cambia: no hay temporadas que apuntar.
+    expect(body(rows, 'clases', 'el-historial-de-la-clase')).toBe(body(seed(), 'clases', 'el-historial-de-la-clase'))
   })
 
   it('lo nuevo usa un lenguaje que vale para todo el mundo', () => {

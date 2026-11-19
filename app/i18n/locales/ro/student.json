@@ -242,8 +242,7 @@
         },
         "compare": {
           "title": "Tu și clasa ta",
-          "hint": "Comparația se face cu media rotunjită a restului clasei. Nu se vede nicio persoană anume.",
-          "season_missions": "Misiunile din acest sezon"
+          "hint": "Comparația se face cu media rotunjită a restului clasei. Nu se vede nicio persoană anume."
         },
         "results": {
           "title": "Rezultatele mele",
@@ -448,11 +447,9 @@
         "missions_count": "{count} misiune | {count} misiuni",
         "podium_empty_missions": "Încă nimeni nu a finalizat o misiune. Podiumul se va umple de îndată ce cineva o va face.",
         "podium_empty_missions_week": "Săptămâna aceasta încă nimeni nu a finalizat o misiune.",
-        "podium_empty_missions_season": "În acest sezon încă nimeni nu a finalizat o misiune.",
         "no_rank_xp": "Încă nu ai un loc. Câștigă XP ca să intri în clasament.",
         "no_rank_missions": "Încă nu ai un loc. Finalizează o misiune ca să intri în clasament.",
         "no_rank_missions_week": "Săptămâna aceasta încă nu ai un loc. Finalizează o misiune ca să intri în clasament.",
-        "no_rank_missions_season": "În acest sezon încă nu ai un loc. Finalizează o misiune ca să intri în clasament.",
         "my_position_title": "Locul tău",
         "my_position_preview": "Fiecare elev vede aici locul propriu și totalul clasei.",
         "top_list_title": "Până la locul {n}"

@@ -497,7 +497,7 @@
               },
               "missions": {
                 "label": "Completed missions",
-                "desc": "Rewards finishing missions. Also by week and by season. If the XP type is also turned on, XP breaks ties."
+                "desc": "Rewards finishing missions. Also by week. If the XP type is also turned on, XP breaks ties."
               },
               "teams": {
                 "label": "Teams",
@@ -506,14 +506,6 @@
               }
             },
             "type_last": "At least one type is needed.",
-            "season": {
-              "title": "Season",
-              "hint": "Once started, missions and teams count from that moment in the “Season” option. Nothing is deleted and XP doesn't change. Starting another one replaces the previous one.",
-              "current": "Running since {date}.",
-              "start": "Start season",
-              "restart": "Start another season",
-              "toast_started": "Season started"
-            },
             "closed_archived": "The class is archived: unarchive it to change the ranking.",
             "closed_trash": "The class is in the trash: restore it to change the ranking."
           },
@@ -721,8 +713,7 @@
               "trashed": "moved the class to the trash",
               "restored": "restored the class from the trash",
               "template_recommended": "recommended the template in the catalogues",
-              "template_unrecommended": "removed the template’s recommendation",
-              "season_started": "started a ranking season"
+              "template_unrecommended": "removed the template’s recommendation"
             },
             "teacher": {
               "added": "added {target} to the teachers ({profile}, {access})",

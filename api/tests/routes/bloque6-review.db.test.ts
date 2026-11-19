@@ -321,7 +321,6 @@ describeWithDatabase('la revisión del bloque 6', () => {
             mode: 'top',
             topN: 3,
             compare: true,
-            seasonStartedAt: new Date(Date.now() - DAY).toISOString(),
           },
         })
         const top = await measure()

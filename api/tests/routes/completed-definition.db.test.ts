@@ -228,59 +228,29 @@ describeWithDatabase('«completada» por todas las vías', () => {
     expect(detail.mission.teacherStats).toMatchObject({ completed: 1, inProgress: 0 })
   })
 
-  it('el ranking: por misiones, en «Siempre», en la semana y en la temporada, por la fecha que toca', async () => {
+  it('el ranking: por misiones, en «Siempre» y en la semana, por la fecha que toca', async () => {
     await prisma.class.update({
       where: { id: f.classId },
-      data: {
-        rankingConfig: {
-          types: ['xp', 'missions'],
-          mode: 'full',
-          seasonStartedAt: new Date(approvedAt.getTime() - DAY).toISOString(),
-        },
-      },
+      data: { rankingConfig: { types: ['xp', 'missions'], mode: 'full' } },
     })
     const url = `/students/classes/${f.classId}/ranking?type=missions`
     const all = await get('student', url)
     expect(all.me).toMatchObject({ missionsCompleted: 1, score: 1, rank: 1 })
     expect((await get('owner', `/teacher/classes/${f.classId}/ranking?type=missions`)).stats.avgMissions).toBe(0.5)
-    expect((await get('student', `${url}&period=season`)).me.score).toBe(1)
-
-    // Una temporada que empieza después de su última aprobación: ahí no la cuenta.
-    await prisma.class.update({
-      where: { id: f.classId },
-      data: {
-        rankingConfig: {
-          types: ['xp', 'missions'],
-          mode: 'full',
-          seasonStartedAt: new Date(approvedAt.getTime() + 60_000).toISOString(),
-        },
-      },
-    })
-    const season = await get('student', `${url}&period=season`)
-    expect(season.me).toMatchObject({ missionsCompleted: 1, score: 0 })
-    // «Esta semana», igual: desde el lunes, por la fecha de su última aprobación.
+    // «Esta semana»: desde el lunes, por la fecha de su última aprobación.
     const week = await get('student', `${url}&period=week`)
-    const monday = rankingPeriodStart('week', { seasonStartedAt: null })!
+    const monday = rankingPeriodStart('week')!
     expect(week.me.score).toBe(approvedAt >= monday ? 1 : 0)
   })
 
-  it('la comparación cuenta lo mismo, también en la temporada', async () => {
+  it('la comparación cuenta lo mismo', async () => {
     await prisma.class.update({
       where: { id: f.classId },
-      data: {
-        rankingConfig: {
-          types: ['xp', 'missions'],
-          mode: 'full',
-          compare: true,
-          seasonStartedAt: new Date(approvedAt.getTime() - DAY).toISOString(),
-        },
-      },
+      data: { rankingConfig: { types: ['xp', 'missions'], mode: 'full', compare: true } },
     })
     const { comparison } = await get('student', `/students/classes/${f.classId}/progress`)
-    const metric = (key: string) =>
-      comparison.metrics.find((x: { key: string }) => x.key === key).value
-    expect(metric('missions')).toBe(1)
-    expect(metric('season_missions')).toBe(1)
+    expect(comparison.metrics.map((x: { key: string }) => x.key)).toEqual(['xp', 'missions'])
+    expect(comparison.metrics.find((x: { key: string }) => x.key === 'missions').value).toBe(1)
   })
 
   it('al caducar, a quien la tiene hecha no le sale «caducó sin completar»', async () => {

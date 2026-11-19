@@ -79,7 +79,7 @@ ON CONFLICT ("category_id", "slug", "locale") DO NOTHING;
 
 -- gamificacion/tipos-de-ranking-y-quien-los-ve
 INSERT INTO "help_articles" ("id", "category_id", "slug", "title", "summary", "cover_image", "body", "locale", "status", "order_index", "featured", "audience", "kind", "published_at", "updated_at")
-SELECT gen_random_uuid()::text, c."id", $itakai$tipos-de-ranking-y-quien-los-ve$itakai$, $itakai$Tipos de ranking y quién los ve$itakai$, $itakai$Qué ve tu alumnado del ranking, por qué se ordena (XP, misiones o equipos), los periodos y la temporada, y la comparación con la media.$itakai$, $itakai$/app/ayuda/clasificacion.svg$itakai$, $itakai$El ranking de cada clase se configura en *Ajustes*, sección **Funcionalidades**. Cambiarlo pide acceso de administración en la clase, y cada opción se guarda en cuanto la cambias.
+SELECT gen_random_uuid()::text, c."id", $itakai$tipos-de-ranking-y-quien-los-ve$itakai$, $itakai$Tipos de ranking y quién los ve$itakai$, $itakai$Qué ve tu alumnado del ranking, por qué se ordena (XP, misiones o equipos), los periodos y la comparación con la media.$itakai$, $itakai$/app/ayuda/clasificacion.svg$itakai$, $itakai$El ranking de cada clase se configura en *Ajustes*, sección **Funcionalidades**. Cambiarlo pide acceso de administración en la clase, y cada opción se guarda en cuanto la cambias.
 
 ## Encendido o apagado
 
@@ -113,11 +113,9 @@ De entrada van encendidos **XP** y **Equipos**, y hace falta al menos un tipo. S
 
 Quien empata comparte puesto, y el siguiente salta: 1, 2, 2, 4. En **Misiones completadas**, la XP solo desempata si tu alumnado ve también el ranking de **XP**: si no, se adivinaría quién tiene más XP, que esa clase no enseña. Quien aún no tiene nada no tiene puesto y va al final. Las cuentas que aún no han entrado por primera vez y tu vista previa como estudiante no salen.
 
-## Periodos y temporada
+## Periodos
 
-**XP** solo tiene **Siempre**. **Misiones completadas** y **Equipos** tienen además **Esta semana**, desde el lunes, y **Temporada**, si has empezado una. Los periodos le dan una oportunidad a quien llegó tarde o va abajo: cada semana se empieza de cero.
-
-Con **Misiones completadas** o **Equipos** encendidos, **Empezar temporada** hace que en **Temporada** cuenten desde ese momento. No borra nada y la XP no cambia. No se puede deshacer, pero **Empezar otra temporada** sustituye a la anterior. Cada temporada queda en el [historial de la clase](/ayuda/clases/el-historial-de-la-clase).
+**XP** solo tiene **Siempre**. **Misiones completadas** y **Equipos** tienen además **Esta semana**, desde el lunes. Los periodos le dan una oportunidad a quien llegó tarde o va abajo: cada semana se empieza de cero.
 
 ## Comparar con la media
 
@@ -127,7 +125,7 @@ Tu alumnado lo ve en **Tú y tu clase**, en el **Resumen** de la clase y, con el
 
 ## Al copiar la clase
 
-Al duplicar la clase con sus funcionalidades, o al importarla como plantilla, las opciones del ranking van con ella. La temporada no: es de cada clase.$itakai$, 'es', 'publicado'::"HelpArticleStatus", (SELECT COALESCE(MAX(a."order_index"), -1) + 1 FROM "help_articles" a WHERE a."category_id" = c."id"), false, 'profesor'::"HelpAudience", 'guia'::"HelpArticleKind", CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+Al duplicar la clase con sus funcionalidades, o al importarla como plantilla, las opciones del ranking van con ella.$itakai$, 'es', 'publicado'::"HelpArticleStatus", (SELECT COALESCE(MAX(a."order_index"), -1) + 1 FROM "help_articles" a WHERE a."category_id" = c."id"), false, 'profesor'::"HelpAudience", 'guia'::"HelpArticleKind", CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
 FROM "help_categories" c WHERE c."slug" = $itakai$gamificacion$itakai$
 ON CONFLICT ("category_id", "slug", "locale") DO NOTHING;
 
@@ -175,7 +173,7 @@ SELECT gen_random_uuid()::text, c."id", $itakai$comparar-con-tu-clase$itakai$, $
 
 ## Qué se compara
 
-Tu XP, si tu clase la usa, y tus misiones completadas. Si tu docente ha empezado una temporada, también las **Misiones de esta temporada**. Nunca tus notas ni tu asistencia.
+Tu XP, si tu clase la usa, y tus misiones completadas. Nunca tus notas ni tu asistencia.
 
 En cada cifra ves una barra con tu sitio, **Tú**, y el de la **Media**, y una frase:
 
@@ -274,7 +272,7 @@ Puede haber uno o varios, cada uno en su pestaña:
 
 No mide notas, ni cuánto has acertado, ni lo bien que ha salido un trabajo: mide lo que llevas hecho. Por eso alguien constante suele estar arriba aunque no saque las mejores notas.
 
-En **Misiones** y **Equipos** puedes mirar **Siempre**, **Esta semana**, que empieza cada lunes, o **Temporada**, si tu docente ha empezado una.
+En **Misiones** y **Equipos** puedes mirar **Siempre** o **Esta semana**, que empieza cada lunes.
 
 ## Qué ves
 
@@ -411,7 +409,7 @@ El marcador de un equipo es la suma de los puntos de sus premios, no la XP de su
 
 Los equipos son uno de los [tipos de ranking](/ayuda/gamificacion/tipos-de-ranking-y-quien-los-ve): **Equipos**, con las agrupaciones **de base**. Tú lo ves en **Alumnado → Ranking**, en su pestaña **Equipos**, en cuanto hay una agrupación de base. Tu alumnado lo ve en su pestaña **Ranking** si la clase tiene el ranking encendido y el tipo **Equipos** también, en *Ajustes → Funcionalidades*: todos los equipos, en cualquier modo, y de los demás, solo el nombre y los puntos.
 
-Además de **Siempre**, se puede mirar **Esta semana**, desde el lunes, y **Temporada**, si has empezado una: cuentan los premios desde entonces.
+Además de **Siempre**, se puede mirar **Esta semana**: cuentan los premios desde el lunes.
 
 ## Misiones por equipos
 
@@ -457,7 +455,7 @@ Puedes estar en más de un equipo a la vez: uno fijo para todo el curso y otro p
 
 ## Los puntos de tu equipo
 
-Cuando tu equipo hace algo bien, el profesorado puede darle puntos. Si tu clase tiene el ranking de equipos, ves los puntos de tu equipo en **Mi equipo** y la clasificación de los equipos en la pestaña **Ranking**, en **Equipos**: de **Siempre**, de **Esta semana** o de la **Temporada**, si tu docente ha empezado una. De los demás equipos solo se ve el nombre y los puntos.
+Cuando tu equipo hace algo bien, el profesorado puede darle puntos. Si tu clase tiene el ranking de equipos, ves los puntos de tu equipo en **Mi equipo** y la clasificación de los equipos en la pestaña **Ranking**, en **Equipos**: de **Siempre** o de **Esta semana**. De los demás equipos solo se ve el nombre y los puntos.
 
 A veces el premio de equipo también te da XP, monedas o maná a ti: lo verás en tu actividad, como cualquier otro comportamiento o recompensa.
 
@@ -1462,7 +1460,7 @@ Cada nivel incluye todo lo del anterior.
 
 **Edición.** Además, cambia el contenido: la historia, la guía, el nombre, el horario y la portada de la clase; crea y edita misiones, enigmas y documentos; lleva la tienda y los comportamientos, y los aplica; da recompensas libres; [pasa lista](/ayuda/alumnado/pasar-lista-y-consultar-la-asistencia) y descarga la asistencia; forma equipos y los premia; aprueba entregas, gestiona las insignias vinculadas a las misiones de la clase y [devuelve al catálogo](/ayuda/alumnado/avatares-y-alias-por-clase) el avatar de un estudiante que no es adecuado. Le llega un aviso con cada entrega nueva.
 
-**Administración.** Además, cambia los ajustes —funcionalidades (también las opciones del ranking y sus temporadas), niveles, y la asignatura, el nivel educativo, el idioma y la provincia de *Datos generales*—, invita al alumnado, crea sus cuentas y las gestiona: restablece contraseñas, cambia alias y quita estudiantes de la clase. También lleva el profesorado y archiva la clase.
+**Administración.** Además, cambia los ajustes —funcionalidades (también las opciones del ranking), niveles, y la asignatura, el nivel educativo, el idioma y la provincia de *Datos generales*—, invita al alumnado, crea sus cuentas y las gestiona: restablece contraseñas, cambia alias y quita estudiantes de la clase. También lleva el profesorado y archiva la clase.
 
 ## La propiedad de la clase
 
@@ -1507,69 +1505,3 @@ Cada clase tiene una persona **propietaria**, al principio quien la creó. Tiene
 Cada pantalla de la clase enseña solo lo que tu nivel permite: sin edición no aparece **Nueva Misión**, y sin administración no aparece **Invitar**. Donde puedes mirar pero no cambiar nada, verás el aviso «Tu acceso a esta clase te deja ver esto, pero no cambiarlo».
 
 Si alguien te cambia el nivel, te llega un aviso, y la clase se pone al día en cuanto abres el aviso.$itakai$;
-
--- clases/el-historial-de-la-clase: las temporadas del ranking.
-UPDATE "help_articles" a
-SET "body" = $itakai$La pestaña **Historial** de la clase cuenta qué ha hecho el profesorado en ella: quién, qué y cuándo. Es lo más útil cuando la clase es compartida y alguien pregunta quién cambió algo. La ve todo el profesorado de la clase, sea cual sea su nivel.
-
-## Qué aparece
-
-Todo lo relevante que hace el profesorado, con su autoría: cada línea lleva el nombre y el [avatar](/ayuda/tu-cuenta/tu-avatar-de-docente) de quien lo hizo.
-
-- **Entregas**: cada aprobación, con quien entregó, el enigma y el porcentaje.
-- **Comportamientos**: los que se aplican, a quién, y los que se crean, se editan o se borran. Lo aplicado a varios estudiantes de una vez sale en una sola línea, que se despliega para ver a quién.
-- **Recompensas**: las recompensas libres, con su motivo y a quién.
-- **Asistencia**: cada lista que se pasa, se corrige o se borra, con la fecha y cuántas personas vinieron y cuántas no.
-- **Equipos**: las agrupaciones que se crean, se editan, se archivan o se borran, los cambios de equipo y cada premio a un equipo, con sus puntos y, si se repartió, a quién.
-- **Misiones**, **Enigmas**, **Pistas** y **Documentos**: altas, cambios, borrados, bloqueos, cambios de recompensas, cambios de [orden](/ayuda/misiones/el-orden-de-las-misiones) y cambios en el [camino del mapa](/ayuda/misiones/montar-el-camino-del-mapa), y las misiones [importadas de otra clase](/ayuda/misiones/importar-una-mision-de-otra-clase) o copiadas en otra.
-- **Tienda**: artículos añadidos, editados o quitados.
-- **Alumnado**: cuentas creadas, contraseñas restablecidas, alias cambiados, avatares devueltos al catálogo y bajas de la clase.
-- **Profesorado**: altas, cambios de perfil o de nivel, bajas y salidas.
-- **Clase**: cambios de datos y de ajustes, la guía, archivar y desarchivar, publicar como plantilla, duplicar, los cambios de propiedad y cada temporada del ranking que se empieza.
-
-Lo que hace el alumnado por su cuenta —entregar, usar una pista, comprar en la tienda— no sale aquí: lo ves en la misión y en la tienda.
-
-## Filtrar
-
-Arriba tienes dos filtros: **Docente**, para ver solo lo de una persona (**Todo el profesorado** lo junta todo), y **Tipo**, para quedarte con un tipo de cosa, como **Entregas** o **Alumnado**. Lo más reciente sale primero, y la lista va por páginas.
-
-## Cuentas y estudiantes que ya no están
-
-Si se borró la cuenta de quien hizo algo, la línea conserva el nombre y el avatar que tenía al hacerlo. Si quien aparece ya no está en la clase, no se muestra su nombre: la línea dice que era alguien del alumnado que ya no está en la clase.
-
-## Lo que ve el alumnado
-
-El alumnado no ve el historial, pero en su actividad ve quién le aprobó cada entrega y quién le aplicó cada comportamiento, con su avatar.$itakai$, "updated_at" = CURRENT_TIMESTAMP
-FROM "help_categories" c
-WHERE c."id" = a."category_id" AND c."slug" = $itakai$clases$itakai$ AND a."locale" = 'es'
-  AND a."slug" = $itakai$el-historial-de-la-clase$itakai$
-  AND a."body" = $itakai$La pestaña **Historial** de la clase cuenta qué ha hecho el profesorado en ella: quién, qué y cuándo. Es lo más útil cuando la clase es compartida y alguien pregunta quién cambió algo. La ve todo el profesorado de la clase, sea cual sea su nivel.
-
-## Qué aparece
-
-Todo lo relevante que hace el profesorado, con su autoría: cada línea lleva el nombre y el [avatar](/ayuda/tu-cuenta/tu-avatar-de-docente) de quien lo hizo.
-
-- **Entregas**: cada aprobación, con quien entregó, el enigma y el porcentaje.
-- **Comportamientos**: los que se aplican, a quién, y los que se crean, se editan o se borran. Lo aplicado a varios estudiantes de una vez sale en una sola línea, que se despliega para ver a quién.
-- **Recompensas**: las recompensas libres, con su motivo y a quién.
-- **Asistencia**: cada lista que se pasa, se corrige o se borra, con la fecha y cuántas personas vinieron y cuántas no.
-- **Equipos**: las agrupaciones que se crean, se editan, se archivan o se borran, los cambios de equipo y cada premio a un equipo, con sus puntos y, si se repartió, a quién.
-- **Misiones**, **Enigmas**, **Pistas** y **Documentos**: altas, cambios, borrados, bloqueos, cambios de recompensas, cambios de [orden](/ayuda/misiones/el-orden-de-las-misiones) y cambios en el [camino del mapa](/ayuda/misiones/montar-el-camino-del-mapa), y las misiones [importadas de otra clase](/ayuda/misiones/importar-una-mision-de-otra-clase) o copiadas en otra.
-- **Tienda**: artículos añadidos, editados o quitados.
-- **Alumnado**: cuentas creadas, contraseñas restablecidas, alias cambiados, avatares devueltos al catálogo y bajas de la clase.
-- **Profesorado**: altas, cambios de perfil o de nivel, bajas y salidas.
-- **Clase**: cambios de datos y de ajustes, la guía, archivar y desarchivar, publicar como plantilla, duplicar y los cambios de propiedad.
-
-Lo que hace el alumnado por su cuenta —entregar, usar una pista, comprar en la tienda— no sale aquí: lo ves en la misión y en la tienda.
-
-## Filtrar
-
-Arriba tienes dos filtros: **Docente**, para ver solo lo de una persona (**Todo el profesorado** lo junta todo), y **Tipo**, para quedarte con un tipo de cosa, como **Entregas** o **Alumnado**. Lo más reciente sale primero, y la lista va por páginas.
-
-## Cuentas y estudiantes que ya no están
-
-Si se borró la cuenta de quien hizo algo, la línea conserva el nombre y el avatar que tenía al hacerlo. Si quien aparece ya no está en la clase, no se muestra su nombre: la línea dice que era alguien del alumnado que ya no está en la clase.
-
-## Lo que ve el alumnado
-
-El alumnado no ve el historial, pero en su actividad ve quién le aprobó cada entrega y quién le aplicó cada comportamiento, con su avatar.$itakai$;

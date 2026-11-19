@@ -26,17 +26,15 @@
 
       <!-- Periodo, si el tipo tiene más de uno: la XP solo tiene «Siempre». Las
            mismas píldoras que el periodo de la analítica. -->
-      <div v-if="periodTabs.length > 1" class="space-y-2">
-        <TabNavigation
-          variant="pills"
-          toggle
-          :tabs="periodTabs"
-          :active-tab="activePeriod"
-          :aria-label="t('common.ranking.periods_label')"
-          @tab-change="period = $event as RankingPeriod"
-        />
-        <p v-if="seasonNote" class="text-sm text-navy-700/70">{{ seasonNote }}</p>
-      </div>
+      <TabNavigation
+        v-if="periodTabs.length > 1"
+        variant="pills"
+        toggle
+        :tabs="periodTabs"
+        :active-tab="activePeriod"
+        :aria-label="t('common.ranking.periods_label')"
+        @tab-change="period = $event as RankingPeriod"
+      />
 
       <div v-if="loading" class="space-y-6">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -93,7 +91,7 @@ defineSlots<{
 
 const ID_PREFIX = 'ranking'
 
-const { t, locale } = useI18n()
+const { t } = useI18n()
 const { type, period, data, options, loading, error, retry } = useClassRankingBoard(
   () => props.url
 )
@@ -113,14 +111,6 @@ const activePeriod = computed(() => data.value?.period ?? period.value)
 const periodTabs = computed(() =>
   (data.value?.options.periods ?? []).map(id => ({ id, label: t(`common.ranking.period.${id}`) }))
 )
-
-const seasonNote = computed(() => {
-  const started = data.value?.options.seasonStartedAt
-  if (activePeriod.value !== 'season' || !started) return ''
-  return t('common.ranking.season_since', {
-    date: new Date(started).toLocaleDateString(locale.value, { dateStyle: 'long' }),
-  })
-})
 
 function setType(id: string) {
   type.value = id as RankingType

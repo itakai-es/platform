@@ -63,22 +63,6 @@
         </ClassFeatureRow>
       </div>
     </div>
-
-    <!-- Temporada: lo que hace, junto al botón y sin ventana de confirmar -->
-    <SettingsActionRow v-if="seasonApplies" :title="tr('season.title')" :hint="seasonHint">
-      <template #action>
-        <Button
-          type="button"
-          variant="outline"
-          size="md"
-          :disabled="!canStartSeason || startingSeason"
-          :loading="startingSeason"
-          @click="startSeason"
-        >
-          {{ config.seasonStartedAt ? tr('season.restart') : tr('season.start') }}
-        </Button>
-      </template>
-    </SettingsActionRow>
   </SettingsSection>
 </template>
 
@@ -101,15 +85,14 @@ import {
 
 /**
  * Las opciones del ranking en Ajustes → Funcionalidades, abiertas con el
- * interruptor encendido: qué ve el alumnado, qué tipos hay y la temporada. Se
- * guarda al cambiar, como los interruptores de al lado.
+ * interruptor encendido: qué ve el alumnado y qué tipos hay. Se guarda al cambiar,
+ * como los interruptores de al lado.
  */
 const props = defineProps<{
   classId: string
   settings: ClassSettings
   config: RankingConfig
   canEdit: boolean
-  canStartSeason: boolean
 }>()
 
 const emit = defineEmits<{
@@ -125,7 +108,7 @@ const TYPE_ICONS: Record<RankingType, Component> = {
 /** Cuántos primeros se sugieren (decisión del plan): se dice en la opción, no es el valor por defecto. */
 const SUGGESTED_TOP: RankingTopSize = 5
 
-const { t, locale } = useI18n()
+const { t } = useI18n()
 const toast = useToast()
 const rankingSaveError = useRankingSaveError()
 const teacherStore = useTeacherStore()
@@ -203,31 +186,5 @@ function setType(type: RankingType, on: boolean) {
   void save({
     types: RANKING_TYPES.filter(each => (each === type ? on : props.config.types.includes(each))),
   })
-}
-
-// --------- Temporada ---------
-/** Solo misiones y equipos tienen periodos: la XP no tiene histórico. */
-const seasonApplies = computed(() => usableTypes.value.some(type => type !== 'xp'))
-const startingSeason = ref(false)
-
-const seasonHint = computed(() => {
-  const started = props.config.seasonStartedAt
-  if (!started) return tr('season.hint')
-  const date = new Date(started).toLocaleDateString(locale.value, { dateStyle: 'long' })
-  return `${tr('season.current', { date })} ${tr('season.hint')}`
-})
-
-async function startSeason() {
-  if (startingSeason.value) return
-  startingSeason.value = true
-  try {
-    emit('update', await teacherStore.startRankingSeason(props.classId))
-    toast.success(tr('season.toast_started'))
-  } catch (err: unknown) {
-    const message = (err as { data?: { message?: string } })?.data?.message
-    toast.error(rankingSaveError(err, message))
-  } finally {
-    startingSeason.value = false
-  }
 }
 </script>

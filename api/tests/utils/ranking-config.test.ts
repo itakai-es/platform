@@ -9,7 +9,6 @@ import {
   effectiveRankingTypes,
   mergeRankingConfig,
   normalizeRankingSwitch,
-  rankingConfigForCopy,
   rankingPeriodsFor,
   resolveRankingConfig,
   resolveRankingView,
@@ -20,13 +19,12 @@ import { normalizeClassSettings, resolveClassSettings } from '../../src/utils/cl
 import { studentAvatarColor } from '../../src/utils/avatars.js'
 
 describe('resolveRankingConfig', () => {
-  it('nula es como hoy: XP y equipos, completo y sin temporada', () => {
+  it('nula es como hoy: XP y equipos, completo', () => {
     for (const raw of [null, undefined]) {
       expect(resolveRankingConfig(raw)).toEqual({
         types: ['xp', 'teams'],
         mode: 'full',
         topN: 5,
-        seasonStartedAt: null,
         compare: null,
       })
     }
@@ -36,9 +34,7 @@ describe('resolveRankingConfig', () => {
     for (const raw of ['x', 7, [], true, {}, { types: 'xp' }, { types: [] }, { types: ['monedas'] }]) {
       expect(resolveRankingConfig(raw)).toEqual(DEFAULT_RANKING_CONFIG)
     }
-    expect(resolveRankingConfig({ mode: 'anónimo', topN: 4, seasonStartedAt: 'ayer' })).toEqual(
-      DEFAULT_RANKING_CONFIG
-    )
+    expect(resolveRankingConfig({ mode: 'anónimo', topN: 4 })).toEqual(DEFAULT_RANKING_CONFIG)
     expect(resolveRankingConfig({ topN: '5' }).topN).toBe(5)
     expect(resolveRankingConfig({ topN: 1000 }).topN).toBe(5)
   })
@@ -48,21 +44,32 @@ describe('resolveRankingConfig', () => {
     expect(DEFAULT_RANKING_CONFIG.types).toEqual(['xp', 'teams'])
   })
 
-  it('se queda con lo que vale: tipos sin repetir, en su orden, y la fecha en ISO', () => {
+  it('se queda con lo que vale: tipos sin repetir y en su orden', () => {
     expect(
-      resolveRankingConfig({
-        types: ['teams', 'vidas', 'xp', 'teams'],
-        mode: 'top',
-        topN: 10,
-        seasonStartedAt: '2026-11-02T08:00:00+01:00',
-      })
+      resolveRankingConfig({ types: ['teams', 'vidas', 'xp', 'teams'], mode: 'top', topN: 10 })
     ).toEqual({
       types: ['xp', 'teams'],
       mode: 'top',
       topN: 10,
-      seasonStartedAt: '2026-11-02T07:00:00.000Z',
       compare: null,
     })
+  })
+
+  it('lo guardado que ya no es de la configuración, como una temporada, se ignora', () => {
+    const saved = {
+      types: ['missions', 'teams'],
+      mode: 'position',
+      topN: 10,
+      compare: true,
+      seasonStartedAt: '2026-11-02T07:00:00.000Z',
+    }
+    expect(resolveRankingConfig(saved)).toEqual({
+      types: ['missions', 'teams'],
+      mode: 'position',
+      topN: 10,
+      compare: true,
+    })
+    expect(resolveRankingConfig({ seasonStartedAt: 'ayer' })).toEqual(DEFAULT_RANKING_CONFIG)
   })
 
   it('la comparación solo es verdadero o falso; lo demás, sin guardar', () => {
@@ -86,34 +93,23 @@ describe('compareEnabled', () => {
   })
 })
 
-describe('mergeRankingConfig y copias', () => {
-  const saved = { types: ['xp'], mode: 'top', topN: 3, seasonStartedAt: '2026-11-02T07:00:00.000Z' }
+describe('mergeRankingConfig', () => {
+  const saved = { types: ['xp'], mode: 'top', topN: 3 }
 
-  it('un cambio se funde con lo guardado y no puede tocar la temporada', () => {
-    expect(mergeRankingConfig(saved, { mode: 'position', seasonStartedAt: null })).toEqual({
+  it('un cambio se funde con lo guardado, y lo que no es de la configuración no se guarda', () => {
+    expect(mergeRankingConfig(saved, { mode: 'position' })).toEqual({
       types: ['xp'],
       mode: 'position',
       topN: 3,
-      seasonStartedAt: saved.seasonStartedAt,
       compare: null,
     })
     expect(mergeRankingConfig({ ...saved, compare: false }, { mode: 'full' }).compare).toBe(false)
     expect(mergeRankingConfig(saved, { compare: true }).compare).toBe(true)
-    expect(mergeRankingConfig(null, { seasonStartedAt: '2026-01-01' }).seasonStartedAt).toBeNull()
+    expect(
+      mergeRankingConfig({ ...saved, seasonStartedAt: '2026-11-02T07:00:00.000Z' }, { topN: 5 })
+    ).not.toHaveProperty('seasonStartedAt')
+    expect(mergeRankingConfig(null, { seasonStartedAt: '2026-01-01' })).not.toHaveProperty('seasonStartedAt')
     expect(mergeRankingConfig(saved, 'raro')).toEqual(resolveRankingConfig(saved))
-  })
-
-  it('la copia lleva la configuración sin la temporada; nula sigue nula', () => {
-    expect(rankingConfigForCopy(saved)).toEqual({
-      types: ['xp'],
-      mode: 'top',
-      topN: 3,
-      seasonStartedAt: null,
-      compare: null,
-    })
-    expect(rankingConfigForCopy({ ...saved, compare: false })?.compare).toBe(false)
-    expect(rankingConfigForCopy(null)).toBeNull()
-    expect(rankingConfigForCopy(undefined)).toBeNull()
   })
 })
 
@@ -161,29 +157,24 @@ describe('studentRankingTypes', () => {
 })
 
 describe('periodos', () => {
-  const config = resolveRankingConfig(null)
-  const withSeason = { ...config, seasonStartedAt: '2026-10-01T00:00:00.000Z' }
-
-  it('la XP solo tiene «Siempre»; «Temporada» sale si hay una empezada', () => {
-    expect(rankingPeriodsFor('xp', withSeason)).toEqual(['all'])
-    expect(rankingPeriodsFor('missions', config)).toEqual(['all', 'week'])
-    expect(rankingPeriodsFor('teams', withSeason)).toEqual(['all', 'week', 'season'])
+  it('la XP solo tiene «Siempre»; misiones y equipos, también «Esta semana»', () => {
+    expect(rankingPeriodsFor('xp')).toEqual(['all'])
+    expect(rankingPeriodsFor('missions')).toEqual(['all', 'week'])
+    expect(rankingPeriodsFor('teams')).toEqual(['all', 'week'])
   })
 
   it('lo que no vale se queda en lo primero y en «Siempre»', () => {
     const types = ['xp', 'teams'] as const
-    expect(resolveRankingView(types, config, {})).toEqual({ type: 'xp', period: 'all' })
-    expect(resolveRankingView(types, config, { type: 'missions' }).type).toBe('xp')
-    expect(resolveRankingView(types, config, { type: 'xp', period: 'week' }).period).toBe('all')
-    expect(resolveRankingView(types, config, { type: 'teams', period: 'season' }).period).toBe('all')
-    expect(resolveRankingView(types, config, { type: 'teams', period: 'week' })).toEqual({
+    expect(resolveRankingView(types, {})).toEqual({ type: 'xp', period: 'all' })
+    expect(resolveRankingView(types, { type: 'missions' }).type).toBe('xp')
+    expect(resolveRankingView(types, { type: 'xp', period: 'week' }).period).toBe('all')
+    // La temporada ya no existe: se sirve «Siempre».
+    expect(resolveRankingView(types, { type: 'teams', period: 'season' }).period).toBe('all')
+    expect(resolveRankingView(types, { type: 'teams', period: 'week' })).toEqual({
       type: 'teams',
       period: 'week',
     })
-    expect(resolveRankingView(types, withSeason, { type: 'teams', period: 'season' }).period).toBe(
-      'season'
-    )
-    expect(resolveRankingView(types, config, { type: ['xp'], period: 7 })).toEqual({
+    expect(resolveRankingView(types, { type: ['xp'], period: 7 })).toEqual({
       type: 'xp',
       period: 'all',
     })
@@ -191,31 +182,29 @@ describe('periodos', () => {
 
   it('«Esta semana» empieza el lunes a las 00:00 en Madrid, también con el cambio de hora', () => {
     // Jueves 5 de noviembre de 2026 (invierno, UTC+1): lunes 2, 00:00 en Madrid.
-    expect(rankingPeriodStart('week', config, new Date('2026-11-05T10:00:00Z'))?.toISOString()).toBe(
+    expect(rankingPeriodStart('week', new Date('2026-11-05T10:00:00Z'))?.toISOString()).toBe(
       '2026-11-01T23:00:00.000Z'
     )
     // Domingo por la noche en Madrid (ya es lunes en Canarias no, pero en UTC aún domingo).
-    expect(rankingPeriodStart('week', config, new Date('2026-11-08T22:30:00Z'))?.toISOString()).toBe(
+    expect(rankingPeriodStart('week', new Date('2026-11-08T22:30:00Z'))?.toISOString()).toBe(
       '2026-11-01T23:00:00.000Z'
     )
     // Lunes a las 00:30 en Madrid: 23:30 UTC del domingo; ya es la semana nueva.
-    expect(rankingPeriodStart('week', config, new Date('2026-11-08T23:30:00Z'))?.toISOString()).toBe(
+    expect(rankingPeriodStart('week', new Date('2026-11-08T23:30:00Z'))?.toISOString()).toBe(
       '2026-11-08T23:00:00.000Z'
     )
     // Verano (UTC+2).
-    expect(rankingPeriodStart('week', config, new Date('2026-07-08T10:00:00Z'))?.toISOString()).toBe(
+    expect(rankingPeriodStart('week', new Date('2026-07-08T10:00:00Z'))?.toISOString()).toBe(
       '2026-07-05T22:00:00.000Z'
     )
     // La semana del cambio de hora (25 de octubre): el lunes 19 aún es verano.
-    expect(rankingPeriodStart('week', config, new Date('2026-10-25T12:00:00Z'))?.toISOString()).toBe(
+    expect(rankingPeriodStart('week', new Date('2026-10-25T12:00:00Z'))?.toISOString()).toBe(
       '2026-10-18T22:00:00.000Z'
     )
   })
 
-  it('«Siempre» no tiene inicio; «Temporada», el guardado', () => {
-    expect(rankingPeriodStart('all', withSeason)).toBeNull()
-    expect(rankingPeriodStart('season', withSeason)?.toISOString()).toBe(withSeason.seasonStartedAt)
-    expect(rankingPeriodStart('season', config)).toBeNull()
+  it('«Siempre» no tiene inicio', () => {
+    expect(rankingPeriodStart('all')).toBeNull()
   })
 })
 

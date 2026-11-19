@@ -242,8 +242,7 @@
         },
         "compare": {
           "title": "Zu eta zure klasea",
-          "hint": "Zure klaseko gainerakoen batez besteko biribilduarekin alderatzen da. Ez da inor zehazki ikusten.",
-          "season_missions": "Denboraldi honetako misioak"
+          "hint": "Zure klaseko gainerakoen batez besteko biribilduarekin alderatzen da. Ez da inor zehazki ikusten."
         },
         "results": {
           "title": "Nire emaitzak",
@@ -448,11 +447,9 @@
         "missions_count": "Misio {count} | {count} misio",
         "podium_empty_missions": "Oraindik inork ez du misiorik osatu. Norbaitek egin bezain laster beteko da podiuma.",
         "podium_empty_missions_week": "Aste honetan oraindik inork ez du misiorik osatu.",
-        "podium_empty_missions_season": "Denboraldi honetan oraindik inork ez du misiorik osatu.",
         "no_rank_xp": "Oraindik ez duzu posturik. Lortu XPa sailkapenean sartzeko.",
         "no_rank_missions": "Oraindik ez duzu posturik. Osatu misio bat sailkapenean sartzeko.",
         "no_rank_missions_week": "Aste honetan oraindik ez duzu posturik. Osatu misio bat sailkapenean sartzeko.",
-        "no_rank_missions_season": "Denboraldi honetan oraindik ez duzu posturik. Osatu misio bat sailkapenean sartzeko.",
         "my_position_title": "Zure postua",
         "my_position_preview": "Ikasle bakoitzak bere postua eta klaseko guztizkoa ikusten ditu hemen.",
         "top_list_title": "{n}. postura arte"

@@ -123,7 +123,6 @@ describe('contexto fijo del asistente', () => {
       'Misiones completadas',
       'Equipos',
       'Esta semana',
-      'Empezar temporada',
       'Comparar con la media',
       `solo con ${MIN_OTHERS + 1} personas o más`,
       'no propongas ajustes que no existen',
@@ -138,6 +137,8 @@ describe('contexto fijo del asistente', () => {
     expect(es).not.toMatch(/ranking (requiere|necesita) (la )?XP/i)
     // «Ver entregas» ya no está escondido en el menú del móvil.
     expect(es).not.toContain('(móvil: menú ⋮)')
+    // Los periodos son «Siempre» y «Esta semana»: no hay temporadas.
+    expect(es).not.toMatch(/temporada/i)
 
     const en = getPlatformContext('teacher', 'en')
     for (const label of [
@@ -146,13 +147,14 @@ describe('contexto fijo del asistente', () => {
       'The full ranking',
       'Only their own position',
       'Completed missions',
-      'Start season',
+      'This week',
       'Compare with the average',
       'do not suggest settings that do not exist',
     ]) {
       expect(en, label).toContain(label)
     }
     expect(en).not.toContain('(mobile: ⋮ menu)')
+    expect(en).not.toMatch(/season/i)
   })
 
   it('al profesorado le cuenta «Mis insignias» y dónde están Editar y Eliminar', () => {
@@ -184,10 +186,12 @@ describe('contexto fijo del asistente', () => {
     for (const teacherOnly of ['Dificultades detectadas', 'Opciones del ranking', 'Comparar con la media']) {
       expect(es, teacherOnly).not.toContain(teacherOnly)
     }
+    expect(es).not.toMatch(/temporada/i)
     const en = getPlatformContext('student', 'en')
-    for (const label of ['My progress', 'You and your class', 'My results', 'Your class is still too small to compare']) {
+    for (const label of ['My progress', 'You and your class', 'My results', 'Your class is still too small to compare', 'All time|This week']) {
       expect(en, label).toContain(label)
     }
     expect(en).not.toContain('Difficulties detected')
+    expect(en).not.toMatch(/season/i)
   })
 })
