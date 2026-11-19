@@ -21,6 +21,7 @@
  * clase el layout llama `loadAll(id, true)` y resetea.
  */
 import { resolveClassSettings } from '~/utils/class-settings'
+import { loadClassContent } from '~/utils/class-trash'
 import type { ScheduleConfig } from '~/types/schedule.types'
 import type { ClassAccess } from '~/types/class.types'
 import type { AnalyticsPeriodPreset, ClassAnalytics } from '~/types/analytics.types'
@@ -111,11 +112,16 @@ export function useTeacherClassDetail(classIdRef: Ref<string> | ComputedRef<stri
           stats: classResult.stats || { missionsCounted: 0, pendingReviews: 0 },
         }
       }
-      const studentsResult = await teacherStore.fetchStudents(classId.value)
-      state.value.students = studentsResult?.students || []
-      const missionsResult = await teacherStore.fetchClassMissions(classId.value, true)
-      state.value.missions = missionsResult?.missions || []
+      // En la papelera, solo el aviso: ni alumnado ni misiones (ver `loadClassContent`).
+      const content = await loadClassContent(state.value.classData, {
+        students: async () => (await teacherStore.fetchStudents(classId.value))?.students || [],
+        missions: async () =>
+          (await teacherStore.fetchClassMissions(classId.value, true))?.missions || [],
+      })
+      state.value.students = content.students
+      state.value.missions = content.missions
       state.value.isLoaded = true
+      if (state.value.classData?.deletedAt) return
       // Fetches diferidos (no bloqueantes). Cada uno respeta su propio flag,
       // así que si una tab ya los disparó por su cuenta, aquí no se duplican.
       void ensureGuide()
@@ -146,8 +152,13 @@ export function useTeacherClassDetail(classIdRef: Ref<string> | ComputedRef<stri
       if (fresh && state.value.classData) {
         state.value.classData = { ...state.value.classData, ...fresh }
       }
-      state.value.missions = (await teacherStore.ensureClassMissions(classId.value)).missions
-      state.value.students = (await teacherStore.fetchStudents(classId.value)).students
+      // Si mientras tanto ha ido a la papelera, solo el aviso (ver `loadClassContent`).
+      const content = await loadClassContent(state.value.classData, {
+        students: async () => (await teacherStore.fetchStudents(classId.value)).students,
+        missions: async () => (await teacherStore.ensureClassMissions(classId.value)).missions,
+      })
+      state.value.missions = content.missions
+      state.value.students = content.students
     } catch (error) {
       if (teacherStore.isClassGone(error)) forget()
     }

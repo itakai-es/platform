@@ -55,6 +55,18 @@ describe('contexto fijo del asistente', () => {
     expect(en).not.toContain('|AI Assistant')
   })
 
+  it('el menú de cada estudiante: Cambiar avatar está y pide Edición, no Administración', () => {
+    const es = getPlatformContext('teacher', 'es')
+    expect(es).toContain('Cambiar alias, Cambiar avatar (su avatar en esa clase) y Quitar de la clase')
+    expect(es).toContain('salvo Cambiar avatar, que pide Edición')
+    expect(es).not.toContain('Alumnado (todo pide Administración).')
+
+    const en = getPlatformContext('teacher', 'en')
+    expect(en).toContain('Change nickname, Change avatar (their avatar in that class) and Remove from class')
+    expect(en).toContain('except Change avatar, which needs Editing')
+    expect(en).not.toContain('Students (all of this needs Admin).')
+  })
+
   it('al alumnado no le cuenta lo del profesorado, y el resto de idiomas van en español', () => {
     const student = getPlatformContext('student', 'ca')
     expect(student).toContain('Menú de estudiante')
