@@ -379,14 +379,27 @@ describeWithDatabase('la revisión del bloque 6', () => {
             },
           ],
         })
-        const res = await app.inject({
-          method: 'GET',
-          url: `/admin/analytics?period=${period}`,
-          headers: { authorization: `Bearer ${app.jwt.sign({ id: admin.id, role: 'admin' })}` },
-        })
-        expect(res.statusCode, res.body).toBe(200)
-        const { analytics } = res.json()
         const sum = (series: { value: number }[]) => series.reduce((total, p) => total + p.value, 0)
+        // Las cifras son de toda la base y las demás pruebas escriben a la vez: entre
+        // una consulta y otra de la misma petición puede colarse una fila. Se repite
+        // hasta que una respuesta salga quieta; si nunca cuadra, el fallo es de verdad.
+        const fetchAnalytics = async () => {
+          const res = await app.inject({
+            method: 'GET',
+            url: `/admin/analytics?period=${period}`,
+            headers: { authorization: `Bearer ${app.jwt.sign({ id: admin.id, role: 'admin' })}` },
+          })
+          expect(res.statusCode, res.body).toBe(200)
+          return res.json().analytics
+        }
+        const consistent = (a: any) =>
+          sum(a.activitySeries) === a.kpis.activity.current &&
+          sum(a.newUsersSeries) === a.kpis.newUsers.current &&
+          sum(a.aiUsage.messagesSeries) === a.aiUsage.totalMessages
+        let analytics = await fetchAnalytics()
+        for (let attempt = 1; attempt < 3 && !consistent(analytics); attempt++) {
+          analytics = await fetchAnalytics()
+        }
         expect(sum(analytics.activitySeries)).toBe(analytics.kpis.activity.current)
         expect(sum(analytics.newUsersSeries)).toBe(analytics.kpis.newUsers.current)
         expect(sum(analytics.aiUsage.messagesSeries)).toBe(analytics.aiUsage.totalMessages)
