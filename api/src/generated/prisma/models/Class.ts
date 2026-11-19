@@ -85,6 +85,7 @@ export type ClassCountAggregateOutputType = {
   isTemplate: number
   settings: number
   levelConfig: number
+  rankingConfig: number
   scheduleConfig: number
   teacherId: number
   deletedAt: number
@@ -159,6 +160,7 @@ export type ClassCountAggregateInputType = {
   isTemplate?: true
   settings?: true
   levelConfig?: true
+  rankingConfig?: true
   scheduleConfig?: true
   teacherId?: true
   deletedAt?: true
@@ -258,6 +260,7 @@ export type ClassGroupByOutputType = {
   isTemplate: boolean
   settings: runtime.JsonValue
   levelConfig: runtime.JsonValue | null
+  rankingConfig: runtime.JsonValue | null
   scheduleConfig: runtime.JsonValue | null
   teacherId: string
   deletedAt: Date | null
@@ -305,6 +308,7 @@ export type ClassWhereInput = {
   isTemplate?: Prisma.BoolFilter<"Class"> | boolean
   settings?: Prisma.JsonFilter<"Class">
   levelConfig?: Prisma.JsonNullableFilter<"Class">
+  rankingConfig?: Prisma.JsonNullableFilter<"Class">
   scheduleConfig?: Prisma.JsonNullableFilter<"Class">
   teacherId?: Prisma.StringFilter<"Class"> | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Class"> | Date | string | null
@@ -349,6 +353,7 @@ export type ClassOrderByWithRelationInput = {
   isTemplate?: Prisma.SortOrder
   settings?: Prisma.SortOrder
   levelConfig?: Prisma.SortOrderInput | Prisma.SortOrder
+  rankingConfig?: Prisma.SortOrderInput | Prisma.SortOrder
   scheduleConfig?: Prisma.SortOrderInput | Prisma.SortOrder
   teacherId?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -396,6 +401,7 @@ export type ClassWhereUniqueInput = Prisma.AtLeast<{
   isTemplate?: Prisma.BoolFilter<"Class"> | boolean
   settings?: Prisma.JsonFilter<"Class">
   levelConfig?: Prisma.JsonNullableFilter<"Class">
+  rankingConfig?: Prisma.JsonNullableFilter<"Class">
   scheduleConfig?: Prisma.JsonNullableFilter<"Class">
   teacherId?: Prisma.StringFilter<"Class"> | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Class"> | Date | string | null
@@ -440,6 +446,7 @@ export type ClassOrderByWithAggregationInput = {
   isTemplate?: Prisma.SortOrder
   settings?: Prisma.SortOrder
   levelConfig?: Prisma.SortOrderInput | Prisma.SortOrder
+  rankingConfig?: Prisma.SortOrderInput | Prisma.SortOrder
   scheduleConfig?: Prisma.SortOrderInput | Prisma.SortOrder
   teacherId?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -472,6 +479,7 @@ export type ClassScalarWhereWithAggregatesInput = {
   isTemplate?: Prisma.BoolWithAggregatesFilter<"Class"> | boolean
   settings?: Prisma.JsonWithAggregatesFilter<"Class">
   levelConfig?: Prisma.JsonNullableWithAggregatesFilter<"Class">
+  rankingConfig?: Prisma.JsonNullableWithAggregatesFilter<"Class">
   scheduleConfig?: Prisma.JsonNullableWithAggregatesFilter<"Class">
   teacherId?: Prisma.StringWithAggregatesFilter<"Class"> | string
   deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Class"> | Date | string | null
@@ -498,6 +506,7 @@ export type ClassCreateInput = {
   isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Date | string | null
   trashWarnedAt?: Date | string | null
@@ -539,6 +548,7 @@ export type ClassUncheckedCreateInput = {
   isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId: string
   deletedAt?: Date | string | null
@@ -580,6 +590,7 @@ export type ClassUpdateInput = {
   isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -621,6 +632,7 @@ export type ClassUncheckedUpdateInput = {
   isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -662,6 +674,7 @@ export type ClassCreateManyInput = {
   isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId: string
   deletedAt?: Date | string | null
@@ -688,6 +701,7 @@ export type ClassUpdateManyMutationInput = {
   isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -711,6 +725,7 @@ export type ClassUncheckedUpdateManyInput = {
   isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -752,6 +767,7 @@ export type ClassCountOrderByAggregateInput = {
   isTemplate?: Prisma.SortOrder
   settings?: Prisma.SortOrder
   levelConfig?: Prisma.SortOrder
+  rankingConfig?: Prisma.SortOrder
   scheduleConfig?: Prisma.SortOrder
   teacherId?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
@@ -1167,6 +1183,7 @@ export type ClassCreateWithoutHomeStudentsInput = {
   isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Date | string | null
   trashWarnedAt?: Date | string | null
@@ -1207,6 +1224,7 @@ export type ClassUncheckedCreateWithoutHomeStudentsInput = {
   isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId: string
   deletedAt?: Date | string | null
@@ -1252,6 +1270,7 @@ export type ClassCreateWithoutTeacherInput = {
   isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Date | string | null
   trashWarnedAt?: Date | string | null
@@ -1292,6 +1311,7 @@ export type ClassUncheckedCreateWithoutTeacherInput = {
   isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Date | string | null
   deletedById?: string | null
@@ -1342,6 +1362,7 @@ export type ClassCreateWithoutDeletedByInput = {
   isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Date | string | null
   trashWarnedAt?: Date | string | null
@@ -1382,6 +1403,7 @@ export type ClassUncheckedCreateWithoutDeletedByInput = {
   isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId: string
   deletedAt?: Date | string | null
@@ -1432,6 +1454,7 @@ export type ClassCreateWithoutRecommendedByInput = {
   isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Date | string | null
   trashWarnedAt?: Date | string | null
@@ -1472,6 +1495,7 @@ export type ClassUncheckedCreateWithoutRecommendedByInput = {
   isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId: string
   deletedAt?: Date | string | null
@@ -1533,6 +1557,7 @@ export type ClassUpdateWithoutHomeStudentsInput = {
   isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1573,6 +1598,7 @@ export type ClassUncheckedUpdateWithoutHomeStudentsInput = {
   isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1632,6 +1658,7 @@ export type ClassScalarWhereInput = {
   isTemplate?: Prisma.BoolFilter<"Class"> | boolean
   settings?: Prisma.JsonFilter<"Class">
   levelConfig?: Prisma.JsonNullableFilter<"Class">
+  rankingConfig?: Prisma.JsonNullableFilter<"Class">
   scheduleConfig?: Prisma.JsonNullableFilter<"Class">
   teacherId?: Prisma.StringFilter<"Class"> | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Class"> | Date | string | null
@@ -1690,6 +1717,7 @@ export type ClassCreateWithoutTeachersInput = {
   isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Date | string | null
   trashWarnedAt?: Date | string | null
@@ -1730,6 +1758,7 @@ export type ClassUncheckedCreateWithoutTeachersInput = {
   isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId: string
   deletedAt?: Date | string | null
@@ -1786,6 +1815,7 @@ export type ClassUpdateWithoutTeachersInput = {
   isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1826,6 +1856,7 @@ export type ClassUncheckedUpdateWithoutTeachersInput = {
   isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1866,6 +1897,7 @@ export type ClassCreateWithoutActionLogInput = {
   isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Date | string | null
   trashWarnedAt?: Date | string | null
@@ -1906,6 +1938,7 @@ export type ClassUncheckedCreateWithoutActionLogInput = {
   isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId: string
   deletedAt?: Date | string | null
@@ -1962,6 +1995,7 @@ export type ClassUpdateWithoutActionLogInput = {
   isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2002,6 +2036,7 @@ export type ClassUncheckedUpdateWithoutActionLogInput = {
   isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2042,6 +2077,7 @@ export type ClassCreateWithoutEnrollmentsInput = {
   isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Date | string | null
   trashWarnedAt?: Date | string | null
@@ -2082,6 +2118,7 @@ export type ClassUncheckedCreateWithoutEnrollmentsInput = {
   isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId: string
   deletedAt?: Date | string | null
@@ -2138,6 +2175,7 @@ export type ClassUpdateWithoutEnrollmentsInput = {
   isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2178,6 +2216,7 @@ export type ClassUncheckedUpdateWithoutEnrollmentsInput = {
   isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2218,6 +2257,7 @@ export type ClassCreateWithoutGuideInput = {
   isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Date | string | null
   trashWarnedAt?: Date | string | null
@@ -2258,6 +2298,7 @@ export type ClassUncheckedCreateWithoutGuideInput = {
   isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId: string
   deletedAt?: Date | string | null
@@ -2314,6 +2355,7 @@ export type ClassUpdateWithoutGuideInput = {
   isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2354,6 +2396,7 @@ export type ClassUncheckedUpdateWithoutGuideInput = {
   isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2394,6 +2437,7 @@ export type ClassCreateWithoutShopItemsInput = {
   isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Date | string | null
   trashWarnedAt?: Date | string | null
@@ -2434,6 +2478,7 @@ export type ClassUncheckedCreateWithoutShopItemsInput = {
   isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId: string
   deletedAt?: Date | string | null
@@ -2490,6 +2535,7 @@ export type ClassUpdateWithoutShopItemsInput = {
   isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2530,6 +2576,7 @@ export type ClassUncheckedUpdateWithoutShopItemsInput = {
   isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2570,6 +2617,7 @@ export type ClassCreateWithoutShopPurchasesInput = {
   isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Date | string | null
   trashWarnedAt?: Date | string | null
@@ -2610,6 +2658,7 @@ export type ClassUncheckedCreateWithoutShopPurchasesInput = {
   isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId: string
   deletedAt?: Date | string | null
@@ -2666,6 +2715,7 @@ export type ClassUpdateWithoutShopPurchasesInput = {
   isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2706,6 +2756,7 @@ export type ClassUncheckedUpdateWithoutShopPurchasesInput = {
   isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2746,6 +2797,7 @@ export type ClassCreateWithoutShopItemUsesInput = {
   isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Date | string | null
   trashWarnedAt?: Date | string | null
@@ -2786,6 +2838,7 @@ export type ClassUncheckedCreateWithoutShopItemUsesInput = {
   isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId: string
   deletedAt?: Date | string | null
@@ -2842,6 +2895,7 @@ export type ClassUpdateWithoutShopItemUsesInput = {
   isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2882,6 +2936,7 @@ export type ClassUncheckedUpdateWithoutShopItemUsesInput = {
   isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2922,6 +2977,7 @@ export type ClassCreateWithoutMissionsInput = {
   isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Date | string | null
   trashWarnedAt?: Date | string | null
@@ -2962,6 +3018,7 @@ export type ClassUncheckedCreateWithoutMissionsInput = {
   isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId: string
   deletedAt?: Date | string | null
@@ -3018,6 +3075,7 @@ export type ClassUpdateWithoutMissionsInput = {
   isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3058,6 +3116,7 @@ export type ClassUncheckedUpdateWithoutMissionsInput = {
   isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3098,6 +3157,7 @@ export type ClassCreateWithoutJoinRequestsInput = {
   isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Date | string | null
   trashWarnedAt?: Date | string | null
@@ -3138,6 +3198,7 @@ export type ClassUncheckedCreateWithoutJoinRequestsInput = {
   isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId: string
   deletedAt?: Date | string | null
@@ -3194,6 +3255,7 @@ export type ClassUpdateWithoutJoinRequestsInput = {
   isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3234,6 +3296,7 @@ export type ClassUncheckedUpdateWithoutJoinRequestsInput = {
   isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3274,6 +3337,7 @@ export type ClassCreateWithoutInvitationsInput = {
   isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Date | string | null
   trashWarnedAt?: Date | string | null
@@ -3314,6 +3378,7 @@ export type ClassUncheckedCreateWithoutInvitationsInput = {
   isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId: string
   deletedAt?: Date | string | null
@@ -3370,6 +3435,7 @@ export type ClassUpdateWithoutInvitationsInput = {
   isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3410,6 +3476,7 @@ export type ClassUncheckedUpdateWithoutInvitationsInput = {
   isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3450,6 +3517,7 @@ export type ClassCreateWithoutBehaviorTemplatesInput = {
   isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Date | string | null
   trashWarnedAt?: Date | string | null
@@ -3490,6 +3558,7 @@ export type ClassUncheckedCreateWithoutBehaviorTemplatesInput = {
   isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId: string
   deletedAt?: Date | string | null
@@ -3546,6 +3615,7 @@ export type ClassUpdateWithoutBehaviorTemplatesInput = {
   isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3586,6 +3656,7 @@ export type ClassUncheckedUpdateWithoutBehaviorTemplatesInput = {
   isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3626,6 +3697,7 @@ export type ClassCreateWithoutBehaviorApplicationsInput = {
   isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Date | string | null
   trashWarnedAt?: Date | string | null
@@ -3666,6 +3738,7 @@ export type ClassUncheckedCreateWithoutBehaviorApplicationsInput = {
   isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId: string
   deletedAt?: Date | string | null
@@ -3722,6 +3795,7 @@ export type ClassUpdateWithoutBehaviorApplicationsInput = {
   isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3762,6 +3836,7 @@ export type ClassUncheckedUpdateWithoutBehaviorApplicationsInput = {
   isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3802,6 +3877,7 @@ export type ClassCreateWithoutAttendanceSessionsInput = {
   isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Date | string | null
   trashWarnedAt?: Date | string | null
@@ -3842,6 +3918,7 @@ export type ClassUncheckedCreateWithoutAttendanceSessionsInput = {
   isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId: string
   deletedAt?: Date | string | null
@@ -3898,6 +3975,7 @@ export type ClassUpdateWithoutAttendanceSessionsInput = {
   isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3938,6 +4016,7 @@ export type ClassUncheckedUpdateWithoutAttendanceSessionsInput = {
   isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3978,6 +4057,7 @@ export type ClassCreateWithoutTeamSetsInput = {
   isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Date | string | null
   trashWarnedAt?: Date | string | null
@@ -4018,6 +4098,7 @@ export type ClassUncheckedCreateWithoutTeamSetsInput = {
   isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId: string
   deletedAt?: Date | string | null
@@ -4074,6 +4155,7 @@ export type ClassUpdateWithoutTeamSetsInput = {
   isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4114,6 +4196,7 @@ export type ClassUncheckedUpdateWithoutTeamSetsInput = {
   isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4154,6 +4237,7 @@ export type ClassCreateManyTeacherInput = {
   isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Date | string | null
   deletedById?: string | null
@@ -4179,6 +4263,7 @@ export type ClassCreateManyDeletedByInput = {
   isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId: string
   deletedAt?: Date | string | null
@@ -4204,6 +4289,7 @@ export type ClassCreateManyRecommendedByInput = {
   isTemplate?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId: string
   deletedAt?: Date | string | null
@@ -4229,6 +4315,7 @@ export type ClassUpdateWithoutTeacherInput = {
   isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4269,6 +4356,7 @@ export type ClassUncheckedUpdateWithoutTeacherInput = {
   isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4309,6 +4397,7 @@ export type ClassUncheckedUpdateManyWithoutTeacherInput = {
   isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4334,6 +4423,7 @@ export type ClassUpdateWithoutDeletedByInput = {
   isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4374,6 +4464,7 @@ export type ClassUncheckedUpdateWithoutDeletedByInput = {
   isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4414,6 +4505,7 @@ export type ClassUncheckedUpdateManyWithoutDeletedByInput = {
   isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4439,6 +4531,7 @@ export type ClassUpdateWithoutRecommendedByInput = {
   isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   trashWarnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4479,6 +4572,7 @@ export type ClassUncheckedUpdateWithoutRecommendedByInput = {
   isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4519,6 +4613,7 @@ export type ClassUncheckedUpdateManyWithoutRecommendedByInput = {
   isTemplate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   levelConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rankingConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   scheduleConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4692,6 +4787,7 @@ export type ClassSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   isTemplate?: boolean
   settings?: boolean
   levelConfig?: boolean
+  rankingConfig?: boolean
   scheduleConfig?: boolean
   teacherId?: boolean
   deletedAt?: boolean
@@ -4737,6 +4833,7 @@ export type ClassSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   isTemplate?: boolean
   settings?: boolean
   levelConfig?: boolean
+  rankingConfig?: boolean
   scheduleConfig?: boolean
   teacherId?: boolean
   deletedAt?: boolean
@@ -4766,6 +4863,7 @@ export type ClassSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   isTemplate?: boolean
   settings?: boolean
   levelConfig?: boolean
+  rankingConfig?: boolean
   scheduleConfig?: boolean
   teacherId?: boolean
   deletedAt?: boolean
@@ -4795,6 +4893,7 @@ export type ClassSelectScalar = {
   isTemplate?: boolean
   settings?: boolean
   levelConfig?: boolean
+  rankingConfig?: boolean
   scheduleConfig?: boolean
   teacherId?: boolean
   deletedAt?: boolean
@@ -4806,7 +4905,7 @@ export type ClassSelectScalar = {
   updatedAt?: boolean
 }
 
-export type ClassOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "narrative" | "schedule" | "archived" | "invitationCode" | "backgroundImage" | "subject" | "language" | "educationLevel" | "province" | "isTemplate" | "settings" | "levelConfig" | "scheduleConfig" | "teacherId" | "deletedAt" | "deletedById" | "trashWarnedAt" | "recommendedAt" | "recommendedById" | "createdAt" | "updatedAt", ExtArgs["result"]["class"]>
+export type ClassOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "narrative" | "schedule" | "archived" | "invitationCode" | "backgroundImage" | "subject" | "language" | "educationLevel" | "province" | "isTemplate" | "settings" | "levelConfig" | "rankingConfig" | "scheduleConfig" | "teacherId" | "deletedAt" | "deletedById" | "trashWarnedAt" | "recommendedAt" | "recommendedById" | "createdAt" | "updatedAt", ExtArgs["result"]["class"]>
 export type ClassInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   teacher?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   deletedBy?: boolean | Prisma.Class$deletedByArgs<ExtArgs>
@@ -4876,6 +4975,7 @@ export type $ClassPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     isTemplate: boolean
     settings: runtime.JsonValue
     levelConfig: runtime.JsonValue | null
+    rankingConfig: runtime.JsonValue | null
     scheduleConfig: runtime.JsonValue | null
     teacherId: string
     deletedAt: Date | null
@@ -5340,6 +5440,7 @@ export interface ClassFieldRefs {
   readonly isTemplate: Prisma.FieldRef<"Class", 'Boolean'>
   readonly settings: Prisma.FieldRef<"Class", 'Json'>
   readonly levelConfig: Prisma.FieldRef<"Class", 'Json'>
+  readonly rankingConfig: Prisma.FieldRef<"Class", 'Json'>
   readonly scheduleConfig: Prisma.FieldRef<"Class", 'Json'>
   readonly teacherId: Prisma.FieldRef<"Class", 'String'>
   readonly deletedAt: Prisma.FieldRef<"Class", 'DateTime'>

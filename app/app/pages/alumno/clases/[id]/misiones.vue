@@ -97,6 +97,9 @@ const missions = computed(() =>
     status: (m.status as MissionStatus) || 'activa',
     rarity: (m.rarity as MissionRarity) || 'comun',
     progress: (m.progress as number) || 0,
+    // Si la ha empezado (una entrega, aunque esté por revisar, o una pista): el
+    // «En curso» del mapa, el mismo que en su Resumen.
+    started: m.started as boolean | undefined,
     // La fecha límite de verdad: con ella se ordena «Fecha» y la ve la tarjeta.
     deadline: (m.deadline as string | null | undefined) ?? null,
     orderIndex: m.orderIndex as number | undefined,
@@ -106,8 +109,12 @@ const missions = computed(() =>
     earnedXp: m.earnedXp as number | undefined,
     earnedCoins: m.earnedCoins as number | undefined,
     earnedMana: m.earnedMana as number | undefined,
-    // Cuántos enigmas lleva completados, de cuántos (el detalle del mapa).
-    progressDetail: m.progressDetail as { done: number; total: number } | undefined,
+    // Cuántos obligatorios lleva aprobados, de cuántos; los opcionales, aparte (el detalle del mapa).
+    progressDetail: m.progressDetail as
+      | { done: number; total: number; extraDone: number; extraTotal: number }
+      | undefined,
+    // Cuenta en «X de N misiones» (la cuenta del mapa).
+    counted: m.counted as boolean | undefined,
     backgroundImage: m.backgroundImage as string | undefined,
     // El camino del mapa: lo que pide y, si la tiene cerrada por él, lo que le falta.
     prerequisiteIds: (m.prerequisiteIds as string[] | undefined) ?? [],

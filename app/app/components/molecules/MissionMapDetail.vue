@@ -50,7 +50,7 @@
     <div v-if="item.progress">
       <p class="mb-1 flex items-baseline justify-between gap-2 text-sm">
         <span class="font-semibold">{{ t('common.mission_map.detail.your_progress') }}</span>
-        <span class="text-navy-700/70">
+        <span v-if="item.progress.total > 0" class="text-navy-700/70">
           {{
             t(
               'common.mission_map.detail.enigmas_done',
@@ -61,6 +61,15 @@
         </span>
       </p>
       <ProgressBar :percentage="item.progress.percent" :label="`${item.progress.percent} %`" />
+      <p v-if="item.progress.extraTotal > 0" class="mt-1 text-sm text-navy-700/70">
+        {{
+          t(
+            'common.progress.extra',
+            { done: item.progress.extraDone, total: item.progress.extraTotal },
+            item.progress.extraTotal
+          )
+        }}
+      </p>
     </div>
 
     <!-- Profesorado: cuántas personas la han completado y quiénes, y cuántas
@@ -74,9 +83,10 @@
         :percentage="completedPercent"
         :label="`${item.completed.done}/${item.completed.total}`"
       />
-      <MissionMapDetailPeople
+      <AvatarStack
         v-if="item.completed.people.length > 0"
         :people="item.completed.people"
+        :label="t('common.mission_map.detail.completed_list')"
         class="mt-2.5"
       />
       <p

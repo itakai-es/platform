@@ -41,6 +41,85 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.8.0',
+    date: '2026-11-19',
+    title: 'Analítica de la clase y ranking a tu medida',
+    changes: [
+      {
+        type: 'new',
+        text: 'Analítica de la clase, en el Resumen de cada clase: cuántas misiones lleva la clase, cómo va cada misión y quién la ha completado, las dificultades detectadas con su motivo, la tabla del alumnado y la actividad por semana. Cada gráfico se puede ver también como tabla.',
+      },
+      {
+        type: 'new',
+        text: 'Página de cada estudiante dentro de la clase (Alumnado → su nombre): sus cifras frente a la media de la clase, sus misiones con el % de cada enigma, sus dificultades y todo su historial.',
+      },
+      {
+        type: 'new',
+        text: 'Ranking a tu medida, en «Ajustes → Funcionalidades → Opciones del ranking»: qué ve tu alumnado (la clasificación completa, los primeros puestos y el suyo, o solo su puesto), qué se clasifica (XP, misiones completadas o equipos) y, en misiones y equipos, si cuenta desde siempre o solo esta semana.',
+      },
+      {
+        type: 'new',
+        text: '«Comparar con la media»: cada estudiante ve si va por encima, en la media o por debajo del resto de su clase, sin ver a nadie en concreto. Tiene su propio interruptor en «Ajustes → Funcionalidades».',
+      },
+      {
+        type: 'new',
+        text: 'El alumnado tiene en el Resumen de cada clase «Mi progreso», «Tú y tu clase» y «Mis resultados», con sus misiones hechas y pendientes y el % de cada enigma.',
+      },
+      {
+        type: 'improved',
+        text: 'El progreso se cuenta igual en todas las pantallas: misiones completadas de las que cuentan. Una misión bloqueada o sin enigmas no cuenta.',
+      },
+      {
+        type: 'improved',
+        text: 'Con el ranking apagado, tu alumnado no lo ve, pero tú sí, en Alumnado → Ranking.',
+      },
+      {
+        type: 'improved',
+        text: 'En la ficha de un estudiante (Alumnado, en el menú) están ahora todas sus clases, con un enlace a su página en cada una.',
+      },
+      {
+        type: 'improved',
+        text: '«Mis insignias» separa las tuyas de las de ITAKAI, que se ganan solas y no se editan. De cualquiera de ellas puedes hacer una tuya con «Crear una parecida».',
+      },
+      {
+        type: 'improved',
+        text: '«Editar» y «Ver entregas» se ven a primera vista en cada enigma y documento de una misión, también en pantallas pequeñas.',
+      },
+      {
+        type: 'improved',
+        text: 'La barra de nivel dice cuánta XP falta para el siguiente nivel.',
+      },
+      {
+        type: 'fixed',
+        text: '«Mis clases», el Inicio y la lista de misiones se ponen al día solos al crear cuentas de alumnado o misiones, sin recargar la página.',
+      },
+      {
+        type: 'fixed',
+        text: 'Con el ranking apagado, el alumnado ya no ve su puesto en ninguna parte.',
+      },
+      {
+        type: 'fixed',
+        text: 'El inicio del alumnado cuenta bien sus misiones completadas y sus insignias.',
+      },
+      {
+        type: 'fixed',
+        text: 'En el ranking, los empates comparten puesto, nadie sin puntos sale en el podio y la XP total de la clase ya no sale a 0.',
+      },
+      {
+        type: 'fixed',
+        text: 'Un alias ya no se puede repetir dentro de la clase ni coincidir con el nombre de otra persona.',
+      },
+      {
+        type: 'fixed',
+        text: 'Al editar una insignia se conserva su rareza.',
+      },
+      {
+        type: 'fixed',
+        text: 'Textos que salían en castellano con la aplicación en otro idioma.',
+      },
+    ],
+  },
+  {
     version: '0.7.0',
     date: '2026-10-30',
     title: 'Pistas, avatares del profesorado y mapa de misiones',

@@ -350,16 +350,49 @@ Gracias a la reestructuración, ahora puedes usar clases semánticas en todo el 
 />
 ```
 
-#### StatCard
+#### StatTile
 ```vue
-<StatCard
-  title="XP Total"
-  :value="1250"
-  subtitle="+150 esta semana"
-  :icon="TrophyIcon"
-  variant="primary"
-/>
+<!-- Una cifra con su etiqueta (<dl>: el lector dice «Misiones de media: 3 de 8») -->
+<StatTile :label="t('…avg_missions')" :value="3" :total="8">
+  <template #detail>Media de la clase: 35 %</template>
+</StatTile>
 ```
+
+Los gráficos de analítica (`ChartFigure`, `StackedBar`, `ActivityColumns`,
+`CompareMeter`, `ChartLegend`, `ChartTable`, `SignalList`) documentan su uso en la
+cabecera de cada componente. Los estados de una misión (`chart-status.ts`) van con
+trama e icono además del color: de la API llegan con `countsFromSegments`, y la
+leyenda enseña solo los que se usan (`statusesInUse`). Las filas de cifras, con
+`CardGrid cols="tiles"`, que no deja tarjetas descolgadas.
+
+Para que los paneles no se vean planos, las mismas piezas que el mapa de misiones,
+cada una en un solo sitio:
+
+- `ProgressRing`: el anillo de progreso (SVG en un `viewBox` de 100, tamaño en rem,
+  color de token). Lleva la cifra dentro (`StatTile` con `ring`), los enigmas
+  aprobados de cada misión, el nivel alrededor de un avatar y el anillo de los
+  medallones del mapa. Se llena al aparecer, salvo con «Reducir movimiento».
+- `LevelAvatar`: el avatar dentro del anillo de su nivel (`ClassXPBar`, la página
+  del estudiante). El nivel y la XP van siempre escritos al lado.
+- `IconCircle`: un icono en blanco en un círculo macizo (azul marino o morado
+  oscuro de marca): el `symbol` de `StatTile`, el motivo de cada señal y los puntos
+  de la línea de tiempo (`RecentActivityCard` con `variant="timeline"`).
+- `MissionCover`: la portada de una misión en su medallón, con el aro de su rareza
+  (el del mapa). La rareza, si importa, va escrita al lado.
+- `AvatarStack`: avatares unos sobre otros y «+N» (quién ha completado una misión).
+
+Las geometrías están en `utils/progress-ring.ts`, `avatarStack` (`utils/avatar.ts`)
+y `stackedColumns` (`utils/chart-scale.ts`), con sus pruebas en `tests/`. Las
+columnas de actividad (`ActivityColumns`) se apilan por tipo con `parts`, cada uno
+con su relleno y su trama (`ChartFill` con `series`). Las barras y las columnas
+crecen al aparecer con `chart-grow-x` y `chart-grow-y`, solo si no se ha pedido
+menos movimiento (`useReducedMotion`).
+
+Lo que ve el alumnado de sí mismo usa las mismas piezas: `MissionResultRow` con
+`variant="student"` (su vocabulario, en neutro y sin media) y `ClassCompareCard`
+(«Tú y tu clase», con `CompareMeter`). No calculan nada: la media redondeada y la
+banda llegan hechas de la API (`api/src/utils/anonymous-stats.ts`), que es donde se
+garantiza la anonimidad.
 
 ---
 

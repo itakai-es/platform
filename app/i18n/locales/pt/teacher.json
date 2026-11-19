@@ -168,7 +168,8 @@
           "managed_badge": "Sem e-mail",
           "pending_sign_in_badge": "Ainda não entrou",
           "view_attendance": "Assiduidade",
-          "view_teams": "Equipas"
+          "view_teams": "Equipas",
+          "table_caption": "Os estudantes da turma: nível, recursos e comportamentos"
         },
         "stats_title": "Estatísticas da turma",
         "pending_reviews": "Entregas por rever",
@@ -178,7 +179,15 @@
         },
         "ranking": {
           "no_students_title": "Não há estudantes",
-          "no_students_description": "Ainda não há estudantes nesta turma"
+          "no_students_description": "Ainda não há estudantes nesta turma",
+          "hidden_from_students": "Os teus estudantes não veem esta classificação: o ranking está desativado em Funcionalidades.",
+          "audience_full": "Os teus estudantes veem: a classificação completa.",
+          "audience_top": "Os teus estudantes veem: as {n} primeiras posições e a sua.",
+          "audience_position": "Os teus estudantes veem: só a sua posição.",
+          "audience_teams": "Os teus estudantes veem: todas as equipas.",
+          "audience_type_off": "Os teus estudantes não veem este tipo de ranking: ativa-se em Funcionalidades.",
+          "not_entered_title": "Ainda não há ninguém no ranking",
+          "not_entered_description": "As contas que ainda não entraram não aparecem no ranking. Vão aparecer quando entrarem pela primeira vez."
         },
         "missions_tab": {
           "no_missions_title": "Não há missões",
@@ -355,7 +364,7 @@
             },
             "rankings": {
               "label": "Ranking",
-              "desc": "Classificação de estudantes da turma."
+              "desc": "Classificação de estudantes da turma. Desligado, só o corpo docente a vê."
             },
             "xp": {
               "label": "Experiência (XP)",
@@ -425,7 +434,9 @@
             "background_error": "Não foi possível gerar a imagem"
           },
           "features": {
-            "title": "Funcionalidades"
+            "title": "Funcionalidades",
+            "closed_archived": "A turma está arquivada: desarquiva-a para mudar as suas funcionalidades e o ranking.",
+            "closed_trash": "A turma está no lixo: restaura-a para mudar as suas funcionalidades e o ranking."
           },
           "management": {
             "title": "Gestão",
@@ -459,6 +470,48 @@
           "beta": {
             "title": "Em testes",
             "hint": "Funcionalidades novas que estão a ser testadas. Vêm desativadas de início e o aspeto e o funcionamento vão ser ajustados com os testes."
+          },
+          "ranking": {
+            "title": "Opções do ranking",
+            "hint": "Tu vês sempre o ranking completo em Estudantes → Ranking. Se desligares o interruptor, só o corpo docente o vê.",
+            "mode_label": "O que veem os estudantes",
+            "mode": {
+              "full": "A classificação completa",
+              "top": "As {n} primeiras posições e a sua",
+              "top_suggested": "As {n} primeiras posições e a sua (sugestão)",
+              "position": "Só a sua posição"
+            },
+            "mode_hint": {
+              "full": "Cada estudante vê toda a turma, com alcunha, nível, XP e missões.",
+              "top": "Cada estudante vê as primeiras posições, com quem empatar, e a sua. O resto da turma não aparece.",
+              "position": "Cada estudante vê só a sua posição e o total da turma, sem pódio nem lista."
+            },
+            "top_label": "Quantas posições se veem",
+            "top_option": "As {n} primeiras posições",
+            "types_title": "Tipos de ranking",
+            "types_hint": "Se houver mais do que um, os estudantes mudam de um para outro com separadores.",
+            "type": {
+              "xp": {
+                "label": "XP",
+                "desc": "A XP acumulada. Só tem «Sempre»."
+              },
+              "missions": {
+                "label": "Missões concluídas",
+                "desc": "Premeia terminar missões. Também por semana. Se o tipo XP também estiver ativado, nos empates decide a XP."
+              },
+              "teams": {
+                "label": "Equipas",
+                "desc": "Os pontos dos agrupamentos de base. Todas as equipas se veem em qualquer modo.",
+                "no_base": "Ainda não há nenhum agrupamento de base: cria-se em Estudantes → Equipas. Até lá, este tipo não se vê."
+              }
+            },
+            "type_last": "É preciso pelo menos um tipo.",
+            "closed_archived": "A turma está arquivada: desarquiva-a para mudar o ranking.",
+            "closed_trash": "A turma está no lixo: restaura-a para mudar o ranking."
+          },
+          "compare": {
+            "label": "Comparar com a média",
+            "desc": "Cada estudante vê se está acima, na média ou abaixo do resto da turma, sem ver ninguém. Funciona mesmo que desligues o ranking."
           }
         },
         "badges_empty": "Não há emblemas nesta turma",
@@ -986,7 +1039,7 @@
       "subtitle": "Cria e faz a gestão de emblemas personalizados para recompensar as conquistas da tua turma",
       "new_badge": "Novo emblema",
       "btn_delete": "Eliminar",
-      "no_badges_title": "Sem emblemas",
+      "no_badges_title": "Ainda não criaste nenhum",
       "no_badges_description": "Cria o teu primeiro emblema para recompensar a tua turma",
       "create_first": "Criar o primeiro emblema",
       "form": {
@@ -1004,11 +1057,21 @@
         "btn_saving": "A guardar...",
         "btn_save_changes": "Guardar alterações",
         "btn_create": "Criar emblema",
-        "no_mission": "Sem missão"
+        "no_mission": "Sem missão",
+        "copy_name": "{name} (cópia)",
+        "label_mission": "Missão associada",
+        "btn_upload_image": "Carregar imagem",
+        "btn_generate": "Gerar com IA",
+        "btn_generating": "A gerar..."
       },
       "detail": {
-        "btn_edit": "Editar",
-        "btn_close": "Fechar"
+        "btn_close": "Fechar",
+        "btn_copy": "Criar um parecido",
+        "system_level": "É do ITAKAI e não pode ser editado: é atribuído automaticamente ao chegar ao nível {count} numa turma.",
+        "system_missions": "É do ITAKAI e não pode ser editado: é atribuído automaticamente ao concluir a primeira missão. | É do ITAKAI e não pode ser editado: é atribuído automaticamente ao concluir {count} missões.",
+        "system_xp": "É do ITAKAI e não pode ser editado: é atribuído automaticamente ao juntar {count} XP numa turma.",
+        "system_generic": "É do ITAKAI e não pode ser editado: é atribuído automaticamente consoante o progresso de cada estudante.",
+        "not_yours": "Não o podes editar: foi criado por outra pessoa para uma missão que não podes alterar."
       },
       "delete_title": "Eliminar emblema",
       "delete_confirm": "Tens a certeza de que queres eliminar o emblema '{name}'? Esta ação não pode ser anulada.",
@@ -1016,16 +1079,26 @@
         "name_required": "O nome é obrigatório",
         "name_min_length": "O nome tem de ter pelo menos 3 caracteres",
         "image_size": "A imagem não pode ultrapassar 2 MB",
-        "image_type": "Só são aceites ficheiros PNG, JPG, SVG ou WebP"
+        "image_type": "Só são aceites ficheiros PNG, JPG, SVG ou WebP",
+        "image_required": "A imagem é obrigatória. Carrega uma ou gera-a com IA."
       },
       "meta": {
         "title": "Os meus emblemas | ITAKAI Docente",
         "description": "Cria, edita e faz a gestão de emblemas personalizados para premiar as conquistas da tua turma."
       },
-      "filter_system": "Do sistema",
       "generate_error": "Não foi possível gerar o emblema.",
       "save_error": "Não foi possível guardar o emblema.",
-      "delete_error": "Não foi possível eliminar o emblema."
+      "delete_error": "Não foi possível eliminar o emblema.",
+      "sections": {
+        "own": "Os teus emblemas",
+        "own_hint": "Os que criaste e os das missões que podes editar. Abre-os para os alterar.",
+        "system": "Emblemas do ITAKAI",
+        "system_hint": "São atribuídos automaticamente consoante o progresso de cada estudante e não podem ser editados. Abre-os para ver como se ganham ou criar um parecido."
+      },
+      "filter_all": "Todos os emblemas",
+      "search_placeholder": "Procurar emblemas...",
+      "no_results_title": "Sem resultados",
+      "no_results_description": "Não há emblemas com estes filtros"
     },
     "students": {
       "index": {
@@ -1051,12 +1124,12 @@
         "no_archived_students_title": "Ninguém em turmas arquivadas",
         "no_archived_students_default": "Não há estudantes nas tuas turmas arquivadas",
         "btn_view": "Ver",
-        "stat_missions": "Missões",
         "meta": {
           "title": "Os meus estudantes | ITAKAI Docente",
           "description": "Faz a gestão de quem estuda nas tuas turmas e consulta o seu progresso e as estatísticas de desempenho académico."
         },
-        "stat_badges": "Emblemas"
+        "stat_badges": "Emblemas",
+        "no_missions": "Sem missões por fazer"
       },
       "detail": {
         "breadcrumb_students": "Estudantes",
@@ -1064,20 +1137,20 @@
         "error_title": "Erro ao carregar a ficha de estudante",
         "error_default": "Erro ao carregar os dados da ficha",
         "btn_retry": "Tentar de novo",
-        "stat_classes": "Turmas",
-        "stat_missions": "Missões",
-        "stat_completed": "Concluído",
+        "stat_classes": "Turma | Turmas",
         "enrolled_classes_title": "Turmas inscritas",
-        "enrolled_classes_count": "{count} turmas",
+        "enrolled_classes_count": "Sem turmas | 1 turma | {count} turmas",
         "not_enrolled": "Não está em nenhuma das tuas turmas",
-        "label_progress": "Concluído",
-        "stat_mana": "Mana",
-        "stat_lives": "Pontos de vida",
         "no_activity": "Sem atividade recente",
         "meta": {
           "title": "Perfil de estudante | ITAKAI Docente",
           "description": "Perfil detalhado de cada estudante com estatísticas de desempenho, progresso nas missões e atividade recente."
-        }
+        },
+        "level_badge": "Nv. {level}",
+        "stat_missions_completed": "Missões concluídas",
+        "stat_required_enigmas": "Enigmas obrigatórios aprovados",
+        "view_in_class": "Ver na turma",
+        "view_in_class_named": "Ver em «{class}»"
       },
       "actions": {
         "menu_label": "Ações para {name}",
@@ -1101,7 +1174,7 @@
         "remove_confirm": "Remover da turma",
         "remove_loses": "Vai ser apagado tudo o que tem nesta turma:",
         "remove_loses_progress": "o seu nível, XP, moedas, mana e vidas;",
-        "remove_loses_submissions": "o seu progresso nas missões, as suas entregas e as insígnias dessas missões;",
+        "remove_loses_submissions": "o seu progresso nas missões, as suas entregas e os emblemas dessas missões;",
         "remove_loses_shop": "as suas compras e usos na loja e os comportamentos que lhe foram aplicados;",
         "remove_loses_history": "o seu histórico, os seus avisos e as suas conversas com o assistente sobre esta turma.",
         "remove_keeps": "O que tiver noutras turmas não muda e a sua conta continua a existir. Não pode ser anulado.",
@@ -1120,7 +1193,8 @@
         "avatar_summary": "Ao guardar, {name} passa a ter {avatar} nesta turma.",
         "avatar_summary_generated": "Ao guardar, {name} passa a ter {avatar} nesta turma, e a imagem que gerou com IA é apagada.",
         "avatar_saved": "Avatar alterado",
-        "avatar_error": "Não foi possível mudar o avatar."
+        "avatar_error": "Não foi possível mudar o avatar.",
+        "nickname_reserved": "Essa alcunha não pode ser usada: escolhe uma que não seja «Estudiante» nem o nome de outra pessoa da turma."
       }
     },
     "ai_assistant": {
@@ -1362,7 +1436,6 @@
         "status_in_review": "Em revisão",
         "status_completed": "Concluído",
         "global_progress": "Progresso global",
-        "class_average": "Média da turma",
         "rewards_title": "Recompensas",
         "xp_enigmas": "XP de enigmas",
         "xp_mission": "XP de missão",
@@ -1373,7 +1446,14 @@
           "epic": "Épica",
           "legendary": "Lendária"
         },
-        "btn_close": "Fechar"
+        "btn_close": "Fechar",
+        "completed_by_students": "Estudantes que a concluíram",
+        "required_average": "Enigmas obrigatórios aprovados: {percent} em média",
+        "edit_enigma_named": "Editar o enigma «{title}»",
+        "enigma_actions": "Mais ações do enigma «{title}»",
+        "edit_document_named": "Editar o documento «{title}»",
+        "document_actions": "Mais ações do documento «{title}»",
+        "view_submissions_named": "Ver entregas ({count}) do enigma «{title}»"
       },
       "enigma_submissions_modal": {
         "title_fallback": "Entregas",
@@ -1537,7 +1617,9 @@
       "cancel": "Cancelar",
       "done": "Concluído",
       "wizard_question_schedule": "Define um horário para a tua turma",
-      "wizard_question_cover": "Agora, uma capa para a tua turma"
+      "wizard_question_cover": "Agora, uma capa para a tua turma",
+      "time_start": "Hora de início",
+      "time_end": "Hora de fim"
     },
     "roulette": {
       "meta": {
@@ -1718,10 +1800,6 @@
         "export_error": "Não foi possível descarregar o CSV.",
         "col_incidents": "Faltas e atrasos",
         "no_incidents": "Nenhuma"
-      },
-      "profile": {
-        "rate": "Assiduidade: {rate} %",
-        "sessions": "{count} sessão este ano letivo | {count} sessões este ano letivo"
       }
     },
     "teams": {
@@ -1826,6 +1904,161 @@
       "distributed": "{count} pessoa distribuída pelas equipas. | {count} pessoas distribuídas pelas equipas.",
       "distribute_skipped": "{count} que falta hoje fica sem equipa. | {count} que faltam hoje ficam sem equipa.",
       "put_in": "Pôr em:"
+    },
+    "analytics": {
+      "period": {
+        "label": "Período",
+        "course": "Este ano letivo",
+        "last30": "Últimos 30 dias",
+        "last7": "Últimos 7 dias"
+      },
+      "summary": {
+        "avg_missions": "Missões em média",
+        "avg_percent": "Progresso médio (enigmas obrigatórios)",
+        "pending_link": "Ir para Missões",
+        "attendance": "Assiduidade média",
+        "attendance_sessions": "{count} sessão neste período | {count} sessões neste período",
+        "xp": "XP média",
+        "unstarted_note": "As médias não contam {count} conta por estrear. | As médias não contam {count} contas por estrear.",
+        "today": "Hoje"
+      },
+      "missions": {
+        "title": "Missões",
+        "caption": "Onde está cada estudante neste momento: não muda com o período. Já a nota média do que foi aprovado e as pistas da tabela são do período.",
+        "table_caption": "Quantas pessoas há em cada estado, por missão",
+        "col_mission": "Missão",
+        "col_average": "Nota média do que foi aprovado",
+        "col_hints": "Pistas",
+        "deadline_future": "Termina a {date}",
+        "deadline_past": "Expirou a {date}",
+        "excluded_teacher": "Bloqueada: não conta para o progresso",
+        "excluded_empty": "Sem enigmas: não conta para o progresso",
+        "empty_title": "Ainda não há missões",
+        "empty_description": "Quando criares missões nesta turma, vais ver aqui como corre cada uma."
+      },
+      "signals": {
+        "title": "Dificuldades detetadas",
+        "empty_title": "Nada a destacar neste período",
+        "empty_description": "Se alguém tiver dificuldades ou uma missão se complicar, aparece aqui com o motivo.",
+        "show_all": "Ver todas ({count})",
+        "show_less": "Ver menos",
+        "student": {
+          "inactive": "Sem atividade há {days} dias, com {count} missão aberta | Sem atividade há {days} dias, com {count} missões abertas",
+          "inactive_never": "Sem atividade desde que entrou na turma, há {days} dias, com {count} missão aberta | Sem atividade desde que entrou na turma, há {days} dias, com {count} missões abertas",
+          "mission_expired": "«{mission}» expirou a {date} sem a começar",
+          "mission_expired_started": "«{mission}» expirou a {date}: começou-a e não a concluiu",
+          "mission_expired_many": "{count} missões expiradas sem concluir; a última, «{mission}», expirou a {date}",
+          "low_grade": "«{enigma}» («{mission}») aprovado com {percent}, abaixo de {threshold}",
+          "low_grade_many": "{count} enigmas aprovados abaixo de {threshold}; o mais baixo, «{enigma}», com {percent}",
+          "low_average": "Nota média do que foi aprovado: {average} em {approvals} enigma, abaixo de {threshold} | Nota média do que foi aprovado: {average} em {approvals} enigmas, abaixo de {threshold}",
+          "hints": "Usou {count} pista em «{mission}» | Usou {count} pistas em «{mission}»",
+          "hints_percent": "Usou {count} pista em «{mission}» ({detail}) | Usou {count} pistas em «{mission}» ({detail})",
+          "hints_many": "Muitas pistas em {count} missões; a que tem mais, «{mission}», com {hints}",
+          "low_attendance": "Assiduidade de {rate}: {attended} de {total} sessão | Assiduidade de {rate}: {attended} de {total} sessões",
+          "hints_percent_detail": "{count} retira uma percentagem à recompensa | {count} retiram uma percentagem à recompensa"
+        },
+        "mission": {
+          "unfinished_after_deadline": "{unfinished} de {started} que a começaram não a concluíram antes da data ({percent})",
+          "low_average": "Nota média do que foi aprovado: {average} em {approvals} enigma aprovado, abaixo de {threshold} | Nota média do que foi aprovado: {average} em {approvals} enigmas aprovados, abaixo de {threshold}",
+          "many_hints": "{perStudent} pistas em média por estudante que a começou",
+          "students_expired": "{count} pessoa sem a concluir depois da data | {count} pessoas sem a concluir depois da data"
+        }
+      },
+      "students": {
+        "title": "Estudantes",
+        "table_caption": "Os estudantes da turma: missões, última atividade, entregas por rever, pistas e sinais",
+        "col_missions": "Missões",
+        "col_last_activity": "Última atividade",
+        "col_pending": "Por rever",
+        "col_hints": "Pistas",
+        "col_attendance": "Assiduidade",
+        "col_signals": "Sinais",
+        "no_activity": "Sem atividade",
+        "sort_missions_asc": "Missões ↑",
+        "sort_missions_desc": "Missões ↓",
+        "sort_activity_recent": "Atividade mais recente",
+        "sort_activity_oldest": "Atividade mais antiga",
+        "sort_pending_desc": "Por rever ↓",
+        "sort_hints_desc": "Pistas ↓",
+        "sort_signals_desc": "Sinais ↓",
+        "sort_attendance_asc": "Assiduidade ↑",
+        "sort_attendance_desc": "Assiduidade ↓"
+      },
+      "weeks": {
+        "title": "Atividade por semana",
+        "caption": "Entregas, aprovações e pistas de cada semana, de segunda a domingo.",
+        "table_caption": "A atividade da turma, semana a semana",
+        "col_week": "Semana",
+        "col_submissions": "Entregas",
+        "col_approvals": "Aprovações",
+        "col_hints": "Pistas",
+        "col_missions": "Missões concluídas",
+        "week_of": "Semana de {date}",
+        "empty_title": "Sem atividade neste período",
+        "empty_description": "Quando houver entregas, aprovações ou pistas, aparecem aqui."
+      },
+      "student": {
+        "not_found_title": "Esta pessoa não está na turma",
+        "not_found_description": "Pode já não estar inscrita ou a ligação pode estar desatualizada.",
+        "back_to_list": "Voltar aos estudantes",
+        "all_classes": "Ver todas as suas turmas",
+        "attendance_line": "Assiduidade: {rate} ({attended} de {total} sessão) | Assiduidade: {rate} ({attended} de {total} sessões)",
+        "figures_title": "Os seus números",
+        "missions_done": "Missões concluídas",
+        "xp": "XP",
+        "hints": "Pistas usadas",
+        "class_average": "Média da turma: {value}",
+        "compared_with": "Em comparação com a média da turma: {count} pessoa que participa. | Em comparação com a média da turma: {count} pessoas que participam.",
+        "nobody_to_compare": "Ainda não há mais ninguém na turma com quem comparar.",
+        "this_person": "Esta pessoa",
+        "missions": {
+          "title": "Missões",
+          "filter_label": "Filtrar as suas missões",
+          "filter_all": "Todas ({count})",
+          "filter_pending": "Pendentes ({count})",
+          "filter_done": "Feitas ({count})",
+          "by_enigma": "% por enigma",
+          "optional": "opcional",
+          "excluded_teacher": "Bloqueada",
+          "excluded_empty": "Sem enigmas",
+          "completed_on": "a {date}",
+          "deadline_past": "expirou a {date}",
+          "deadline_future": "termina a {date}",
+          "enigmas": "{approved} de {total} enigma aprovado | {approved} de {total} enigmas aprovados",
+          "average": "nota média do que foi aprovado: {value}",
+          "hints": "{count} pista | {count} pistas",
+          "pending_reviews": "{count} entrega por rever | {count} entregas por rever",
+          "enigma_approved": "{percent} · {date}",
+          "enigma_pending_since": "Em revisão desde {date}",
+          "enigma_open": "Por aprovar",
+          "empty_all": "Ainda não há missões",
+          "empty_pending": "Não tem missões pendentes",
+          "empty_done": "Ainda não concluiu nenhuma missão",
+          "empty_description": "Quando mudar, aparece aqui."
+        },
+        "history": {
+          "title": "Histórico",
+          "filter_label": "Filtrar por tipo",
+          "load_more": "Carregar mais",
+          "empty": "Ainda não há nada no seu histórico.",
+          "empty_filtered": "Não há nada deste tipo.",
+          "attendance": "Assiduidade: {status}",
+          "attendance_time": "das {start} às {end}",
+          "attendance_note": "Nota: {note}",
+          "type": {
+            "all": "Tudo",
+            "submissions": "Entregas",
+            "approvals": "Aprovações",
+            "missions": "Missões",
+            "hints": "Pistas",
+            "behaviors": "Comportamentos e recompensas",
+            "shop": "Loja",
+            "progress": "Níveis e emblemas",
+            "attendance": "Assiduidade"
+          },
+          "loaded": "Foi carregada mais {count} entrada. | Foram carregadas mais {count} entradas."
+        }
+      }
     }
   }
 }

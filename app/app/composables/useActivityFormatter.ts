@@ -47,18 +47,12 @@ interface FormattedActivity {
   id: string
   username?: string
   studentId?: string
+  classId?: string
   description: string
   timeAgo: string
   avatar?: string
   avatarSeed?: string
-  badge?: {
-    type: 'xp' | 'new' | 'level' | 'mission' | 'achievement' | 'behavior'
-    text: string
-    image?: string
-    /** Para 'behavior': true = positivo (pulgar arriba), false = negativo (pulgar abajo). */
-    positive?: boolean
-  }
-  /** Chips visuales de recursos involucrados (XP, monedas, maná, vidas). */
+  /** Los recursos que suma o quita (XP, monedas, maná, vidas): icono y número con su signo. */
   resources?: ResourceDelta[]
   /** Docente que lo hizo (aprobar, aplicar), con su avatar. */
   actor?: ActivityActor
@@ -114,26 +108,20 @@ export function useActivityFormatter(perspective: 'student' | 'teacher' = 'stude
         }
 
         let description = ''
-        let badge:
-          | {
-              type: 'xp' | 'new' | 'level' | 'mission' | 'achievement' | 'behavior'
-              text: string
-              image?: string
-              positive?: boolean
-            }
-          | undefined
         let resources: ResourceDelta[] | undefined
         let actor: ActivityActor | undefined
 
         // Format based on perspective
         const isTeacher = perspective === 'teacher'
+        const feed = (key: string, params: Record<string, unknown> = {}) =>
+          t(`common.activity_feed.${key}_${isTeacher ? 'teacher' : 'student'}`, params)
+        const fallback = (key: string) => t(`common.activity_feed.fallback.${key}`)
+        /** Un título o nombre escrito por una persona, en negrita y entrecomillado. */
+        const quoted = (value: unknown) => `<strong>"${esc(value)}"</strong>`
 
         switch (normalizedType) {
-          case 'enigma_completed': {
-            const params = { enigma: `<strong>"${esc(activity.enigmaTitle)}"</strong>` }
-            description = isTeacher
-              ? t('common.activity_feed.enigma_approved_teacher', params)
-              : t('common.activity_feed.enigma_approved_student', params)
+          case 'enigma_completed':
+            description = feed('enigma_approved', { enigma: quoted(activity.enigmaTitle) })
             // Quién la aprobó va debajo, con su avatar. Las entradas antiguas solo
             // guardan el nombre.
             actor =
@@ -141,83 +129,49 @@ export function useActivityFormatter(perspective: 'student' | 'teacher' = 'stude
               (activity.teacherName
                 ? { id: null, name: activity.teacherName, avatar: null }
                 : undefined)
-            badge = { type: 'xp', text: `+${activity.enigmaXp} XP` }
             break
-          }
 
           case 'enigma_submitted':
-            description = isTeacher
-              ? `Envió <strong>"${esc(activity.enigmaTitle)}"</strong> a revisión`
-              : `Entregaste <strong>"${esc(activity.enigmaTitle)}"</strong>`
-            // No badge for submissions (only when approved)
-            badge = undefined
+            description = feed('enigma_submitted', { enigma: quoted(activity.enigmaTitle) })
             break
 
           case 'mission_completed':
-            description = isTeacher
-              ? `Completó la misión <strong>"${esc(activity.missionTitle)}"</strong>`
-              : `Completaste la misión <strong>"${esc(activity.missionTitle)}"</strong>`
-            badge = activity.missionXp
-              ? { type: 'mission', text: `+${activity.missionXp} XP` }
-              : undefined
+            description = feed('mission_completed', { mission: quoted(activity.missionTitle) })
             break
 
           case 'level_up':
-            description = isTeacher
-              ? `Subió al nivel <strong>${esc(activity.newLevel)}</strong>`
-              : `Subiste al nivel <strong>${esc(activity.newLevel)}</strong>`
-            badge = { type: 'level', text: `Nivel ${activity.newLevel}` }
+            description = feed('level_up', { level: `<strong>${esc(activity.newLevel)}</strong>` })
             break
 
           case 'class_joined':
-            description = isTeacher
-              ? `Se unió a <strong>"${esc(activity.className || 'una clase')}"</strong>`
-              : `Te uniste a <strong>"${esc(activity.className || 'una clase')}"</strong>`
-            badge = { type: 'new', text: 'Nueva' }
+            description = feed('class_joined', {
+              name: quoted(activity.className || fallback('class')),
+            })
             break
 
           case 'achievement_unlocked':
-            description = isTeacher
-              ? `Desbloqueó el logro <strong>"${esc(activity.achievementName)}"</strong>`
-              : `Desbloqueaste el logro <strong>"${esc(activity.achievementName)}"</strong>`
-            badge = { type: 'achievement', text: 'Logro' }
+            description = feed('achievement_unlocked', { name: quoted(activity.achievementName) })
             break
 
           case 'badge_unlocked':
-            description = isTeacher
-              ? `Desbloqueó la insignia <strong>"${esc(activity.badgeName)}"</strong>`
-              : `Desbloqueaste la insignia <strong>"${esc(activity.badgeName)}"</strong>`
-            badge = {
-              type: 'achievement',
-              text: activity.badgeName || '',
-              image: activity.badgeImage,
-            }
+            description = feed('badge_unlocked', { name: quoted(activity.badgeName) })
             break
 
           case 'xp_gained':
-            if (activity.xpAmount != null && activity.xpAmount > 0) {
-              description = isTeacher
-                ? `Ganó <strong>+${esc(activity.xpAmount)} XP</strong> en ${esc(activity.source || 'una actividad')}`
-                : `Ganaste <strong>+${esc(activity.xpAmount)} XP</strong> en ${esc(activity.source || 'una actividad')}`
-              badge = { type: 'xp', text: `+${activity.xpAmount} XP` }
-            } else {
-              // Skip activities with no real XP
-              return null
-            }
+            // Skip activities with no real XP
+            if (activity.xpAmount == null || activity.xpAmount <= 0) return null
+            description = feed('xp_gained', {
+              xp: `<strong>+${esc(activity.xpAmount)} XP</strong>`,
+              source: esc(activity.source || fallback('activity')),
+            })
             break
 
           case 'student_enrolled':
-            description = isTeacher
-              ? `Se registró en la plataforma`
-              : `Te registraste en la plataforma`
-            badge = { type: 'new', text: 'Nueva cuenta' }
+            description = feed('student_enrolled')
             break
 
           case 'progress_milestone':
-            description = isTeacher
-              ? esc(activity.source || 'Alcanzó un hito de progreso')
-              : esc(activity.source || 'Alcanzaste un hito de progreso')
-            badge = { type: 'achievement', text: 'Hito' }
+            description = activity.source ? esc(activity.source) : feed('progress_milestone')
             break
 
           case 'behavior_applied': {
@@ -228,21 +182,14 @@ export function useActivityFormatter(perspective: 'student' | 'teacher' = 'stude
               manaDelta?: number
               lifeDelta?: number
             }
-            const name = activity.source || 'un comportamiento'
+            const name = quoted(activity.source || fallback('behavior'))
             // Una recompensa libre (con su motivo) va por el mismo camino que un comportamiento.
-            const takesOnly = meta.kind === 'reward' && rewardTakesOnly(meta)
-            if (takesOnly) {
-              description = isTeacher
-                ? `Se le quitaron recursos: <strong>"${esc(name)}"</strong>`
-                : `Se te quitaron recursos: <strong>"${esc(name)}"</strong>`
+            if (meta.kind === 'reward' && rewardTakesOnly(meta)) {
+              description = feed('reward_taken', { name })
             } else if (meta.kind === 'reward') {
-              description = isTeacher
-                ? `Recibió una recompensa: <strong>"${esc(name)}"</strong>`
-                : `Recibiste una recompensa: <strong>"${esc(name)}"</strong>`
+              description = feed('reward_given', { name })
             } else {
-              description = isTeacher
-                ? `Recibió el comportamiento <strong>"${esc(name)}"</strong>`
-                : `Recibiste el comportamiento <strong>"${esc(name)}"</strong>`
+              description = feed('behavior_applied', { name })
             }
             resources = [
               makeDelta('xp', meta.xpDelta),
@@ -251,43 +198,31 @@ export function useActivityFormatter(perspective: 'student' | 'teacher' = 'stude
               makeDelta('life', meta.lifeDelta),
             ].filter((r): r is ResourceDelta => r !== null)
             actor = activity.actor ?? undefined
-            // Propagamos el tipo (positivo/negativo) al badge para que el
-            // frontend pueda elegir icono pulgar arriba/abajo.
-            badge = {
-              type: 'behavior',
-              text: name,
-              // Una recompensa que solo quita cuenta como negativa.
-              positive: meta.kind === 'reward' ? !takesOnly : meta.kind !== 'negative',
-            }
             break
           }
 
           case 'shop_purchased': {
             const meta = (activity.metadata || {}) as { price?: number }
-            const name = activity.source || 'un artículo'
-            description = isTeacher
-              ? `Compró <strong>"${esc(name)}"</strong> en la tienda`
-              : `Compraste <strong>"${esc(name)}"</strong> en la tienda`
+            description = feed('shop_purchased', {
+              name: quoted(activity.source || fallback('item')),
+            })
             // El precio sale de monedas, así que va firmado en negativo.
             resources = [makeDelta('coin', meta.price != null ? -meta.price : 0)].filter(
               (r): r is ResourceDelta => r !== null
             )
-            badge = undefined
             break
           }
 
           case 'shop_item_used': {
             const meta = (activity.metadata || {}) as { manaCost?: number; lifeRestore?: number }
-            const name = activity.source || 'un artículo'
-            description = isTeacher
-              ? `Usó <strong>"${esc(name)}"</strong>`
-              : `Usaste <strong>"${esc(name)}"</strong>`
+            description = feed('shop_item_used', {
+              name: quoted(activity.source || fallback('item')),
+            })
             resources = [
               // El maná se gasta (negativo), las vidas se recuperan (positivo).
               makeDelta('mana', meta.manaCost ? -meta.manaCost : 0),
               makeDelta('life', meta.lifeRestore),
             ].filter((r): r is ResourceDelta => r !== null)
-            badge = undefined
             break
           }
 
@@ -299,39 +234,28 @@ export function useActivityFormatter(perspective: 'student' | 'teacher' = 'stude
             }
             const params = {
               position: meta.position ?? 1,
-              mission: `<strong>"${esc(activity.missionTitle || '')}"</strong>`,
+              mission: quoted(activity.missionTitle || ''),
               count: meta.cost ?? 0,
             }
             // Una pista de % no mueve saldo: lo dice la frase. Las de monedas o XP,
-            // con su chip en negativo, como una compra.
-            if (meta.costType === 'percent' && params.count > 0) {
-              description = isTeacher
-                ? t('common.activity_feed.hint_used_percent_teacher', params)
-                : t('common.activity_feed.hint_used_percent_student', params)
-            } else {
-              description = isTeacher
-                ? t('common.activity_feed.hint_used_teacher', params)
-                : t('common.activity_feed.hint_used_student', params)
-            }
+            // con su cifra en negativo, como una compra.
+            description =
+              meta.costType === 'percent' && params.count > 0
+                ? feed('hint_used_percent', params)
+                : feed('hint_used', params)
             resources = [
               makeDelta(
                 meta.costType === 'xp' ? 'xp' : 'coin',
                 meta.costType === 'percent' ? 0 : -(meta.cost ?? 0)
               ),
             ].filter((r): r is ResourceDelta => r !== null)
-            badge = undefined
             break
           }
 
           // La app ya no empieza las misiones a mano, pero quedan entradas guardadas.
-          case 'mission_started': {
-            const params = { mission: `<strong>"${esc(activity.missionTitle || '')}"</strong>` }
-            description = isTeacher
-              ? t('common.activity_feed.mission_started_teacher', params)
-              : t('common.activity_feed.mission_started_student', params)
-            badge = undefined
+          case 'mission_started':
+            description = feed('mission_started', { mission: quoted(activity.missionTitle || '') })
             break
-          }
 
           default:
             console.error(`[ActivityFormatter] Unknown activity type:`, {
@@ -340,20 +264,20 @@ export function useActivityFormatter(perspective: 'student' | 'teacher' = 'stude
               perspective,
               activity,
             })
-            description = 'Actividad reciente'
+            description = t('common.activity_feed.unknown')
         }
 
         return {
           id: activity.id,
           username: isTeacher ? activity.username : undefined,
           studentId: activity.studentId,
+          classId: activity.classId,
           description,
           timeAgo: formatTimeAgo(activity.timestamp),
           avatar: activity.avatar || undefined,
           avatarSeed: activity.studentId
             ? studentAvatarSeed(activity.classId, activity.studentId)
             : undefined,
-          badge,
           resources: resources?.length ? resources : undefined,
           actor,
         }

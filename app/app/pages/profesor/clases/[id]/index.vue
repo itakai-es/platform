@@ -1,41 +1,53 @@
 <template>
-  <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
-    <!-- Left Column (2/3): Main widgets stacked vertically -->
-    <div class="xl:col-span-2 space-y-4 md:space-y-6">
-      <!-- Estadísticas de la Clase - Purple theme -->
-      <Card type="stats">
-        <CardHeader
-          :title="t('teacher.classes.detail.stats_title')"
-          :icon="ChartPieIcon"
-          title-tag="h2"
+  <!-- Arriba, dos columnas: el panel (cifras, misiones y dificultades) y, al lado, el
+       asistente y la actividad. Debajo, a todo el ancho, las dos tablas largas
+       (estudiantes y semanas): así la columna de la derecha no deja un hueco. En el
+       móvil, una columna en este orden; en pantallas anchas, la derecha va arriba. -->
+  <div class="grid grid-cols-1 gap-4 md:gap-6 xl:grid-cols-3">
+    <div class="min-w-0 space-y-4 md:space-y-6 xl:col-span-2 xl:row-start-1">
+      <ClassAnalyticsSummary
+        :class-id="classId"
+        :summary="analytics?.summary ?? null"
+        :error="analyticsError"
+        :show-attendance="can('attendance.view')"
+        @retry="ensureAnalytics(period)"
+      />
+      <!-- Todo sale de la misma petición: si falla, lo dice una vez, arriba -->
+      <template v-if="!analyticsError">
+        <ClassAnalyticsMissions
+          :class-id="classId"
+          :missions="analytics?.missions ?? []"
+          :loading="!analytics"
         />
-        <div
-          class="bg-white rounded-xl px-4 py-14 flex flex-col items-center justify-center text-center"
-        >
-          <p class="text-5xl sm:text-6xl font-semibold text-navy-700">
-            {{ classStats.pendingReviews }}
-          </p>
-          <p class="text-sm text-navy-700/80 mt-2">
-            {{ t('teacher.classes.detail.pending_reviews') }}
-          </p>
-        </div>
-      </Card>
+        <AnalyticsSignalsCard :signals="signals" :loading="!analytics" />
+      </template>
     </div>
 
-    <!-- Right Column (1/3): Sidebar widgets -->
-    <div class="space-y-4 md:space-y-6">
+    <div
+      v-if="!analyticsError"
+      class="min-w-0 space-y-4 md:space-y-6 xl:col-span-3 xl:row-start-2"
+    >
+      <ClassAnalyticsStudents
+        :class-id="classId"
+        :students="analytics?.students ?? []"
+        :loading="!analytics"
+        :show-attendance="showAttendance"
+      />
+      <ClassAnalyticsWeeks :weeks="analytics?.weeks ?? []" :loading="!analytics" />
+    </div>
+
+    <!-- Right Column (1/3): Sidebar widgets. La actividad, sin altura máxima: son las
+         diez últimas y en la página hay un solo desplazamiento, el suyo. -->
+    <div class="min-w-0 space-y-4 md:space-y-6 xl:col-start-3 xl:row-start-1">
       <AIAssistantCard :class-id="classId" />
-      <RecentActivityCard :activities="recentActivities" card-type="pending" />
+      <RecentActivityCard :activities="recentActivities" card-type="pending" max-height="none" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ChartPieIcon } from '@heroicons/vue/24/outline'
-
 definePageMeta({ layout: 'teacher', middleware: ['auth', 'role'] })
 
-const { t } = useI18n()
 const route = useRoute()
 const classId = computed(() => route.params.id as string)
 
@@ -48,8 +60,26 @@ await store.ensureTeacherClassById(classId.value).catch(() => undefined)
 
 // El estado compartido entre tabs (clase, actividades, ranking…) sigue
 // viviendo en el composable para que las páginas hermanas se sincronicen sin
-// refetchar. `classStats` deriva de los mismos datos cargados por el store.
-const { state, classStats } = useTeacherClassDetail(classId)
+// refetchar.
+const { state, can, ensureAnalytics } = useTeacherClassDetail(classId)
+
+// El panel: se pide al entrar en el Resumen y al cambiar de periodo. Lo ya visto
+// se enseña al momento mientras se vuelve a pedir por detrás.
+const { period } = useAnalyticsPeriod({ syncUrl: true })
+const analytics = computed(() => state.value.analytics[period.value] ?? null)
+const analyticsError = computed(() => state.value.analyticsError[period.value] ?? null)
+watch(period, value => void ensureAnalytics(value, true), { immediate: true })
+
+const showAttendance = computed(() => can('attendance.view') && !!analytics.value?.summary.attendance)
+
+// Cada señal con la cara de la persona o la portada de la misión, de lo ya cargado.
+const studentsById = computed(() => new Map((analytics.value?.students ?? []).map(s => [s.id, s])))
+const missionsById = computed(() => new Map((analytics.value?.missions ?? []).map(m => [m.id, m])))
+const { classSignal } = useAnalyticsSignals(classId, {
+  student: id => studentsById.value.get(id),
+  mission: id => missionsById.value.get(id),
+})
+const signals = computed(() => (analytics.value?.signals ?? []).map(classSignal))
 
 // Format activities con el mismo formatter compartido para profesor.
 const { formatActivities } = useActivityFormatter('teacher')

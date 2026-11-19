@@ -83,6 +83,7 @@ describeWithDatabase('acceso a las rutas de alumno', () => {
     '/shop',
     '/badges',
     '/activities',
+    '/progress',
   ]
 
   for (const suffix of CLASS_READS) {
@@ -118,7 +119,12 @@ describeWithDatabase('acceso a las rutas de alumno', () => {
   it('el ranking de una clase solo lo ve quien está en ella', async () => {
     const ranking = await send('GET', `/students/classes/${f.classId}/ranking`, 'student')
     expect(ranking.statusCode).toBe(200)
-    expect(ranking.body).toContain(f.users.student.id)
+    // Se reconoce por su matrícula: el alumnado no recibe ids de cuenta.
+    const enrollment = await prisma.classEnrollment.findUniqueOrThrow({
+      where: { studentId_classId: { studentId: f.users.student.id, classId: f.classId } },
+    })
+    expect(ranking.body).toContain(enrollment.id)
+    expect(ranking.body).not.toContain(f.users.student.id)
 
     const foreign = await send('GET', `/students/classes/${f.otherClassId}/ranking`, 'student')
     expect(foreign.statusCode).toBe(404)
@@ -190,7 +196,11 @@ describeWithDatabase('acceso a las rutas de alumno', () => {
     expect((await send('GET', '/students/missions', 'owner')).body).toContain(missionId)
 
     // La vista previa no lo mete en el ranking ni le abre las clases de otros.
-    expect((await send('GET', `${c}/ranking`, 'student')).body).not.toContain(f.users.owner.id)
+    const preview = await prisma.classEnrollment.findUniqueOrThrow({
+      where: { studentId_classId: { studentId: f.users.owner.id, classId: f.classId } },
+    })
+    expect(preview.isPreview).toBe(true)
+    expect((await send('GET', `${c}/ranking`, 'student')).body).not.toContain(preview.id)
     expect(await status('GET', `/students/classes/${f.otherClassId}`, 'owner')).toBe(404)
   })
 
@@ -237,8 +247,8 @@ describeWithDatabase('acceso a las rutas de alumno', () => {
     })
     expect(row.isPreview).toBe(false)
     expect(await status('GET', `/students/classes/${f.otherClassId}`, 'other')).toBe(200)
-    expect(
-      (await send('GET', `/students/classes/${f.otherClassId}/ranking`, 'other')).body
-    ).toContain(f.users.other.id)
+    expect((await send('GET', `/students/classes/${f.otherClassId}/ranking`, 'other')).body).toContain(
+      row.id
+    )
   })
 })

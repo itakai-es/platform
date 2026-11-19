@@ -36,8 +36,9 @@ services:
       NODE_ENV: development
       PORT: 3001
       DATABASE_URL: postgresql://${POSTGRES_USER:-itakai}:${POSTGRES_PASSWORD:-itakai_dev}@postgres:5432/${POSTGRES_DB:-itakai_dev}
+    # Solo dentro del servidor: desde fuera, por un túnel SSH (ver docs).
     ports:
-      - "3003:3001"
+      - "127.0.0.1:3003:3001"
     volumes:
       - ./api:/app
       - /app/node_modules
@@ -63,8 +64,9 @@ services:
       NUXT_PUBLIC_API_BASE: ${NUXT_PUBLIC_API_BASE:-http://localhost:3003}
     entrypoint: ["sh", "-c"]
     command: ["pnpm dev"]    # arrancamos en modo dev (HMR), no el bundle de prod
+    # El servidor de desarrollo de Vite ejecuta código: nunca abierto a internet.
     ports:
-      - "4000:4000"
+      - "127.0.0.1:4000:4000"
     volumes:
       - ./app:/app
       - /app/node_modules    # preservar node_modules del build
@@ -80,7 +82,7 @@ services:
     image: adminer
     container_name: itakai-adminer-dev
     ports:
-      - "8082:8080"
+      - "127.0.0.1:8082:8080"
     depends_on:
       - postgres
     restart: unless-stopped

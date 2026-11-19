@@ -298,15 +298,44 @@
                 @end="onEnigmaReorderAndSave"
               >
                 <template #item="{ element: enigma, index }">
-                  <div class="bg-white rounded-xl p-4 cursor-default group relative">
-                    <!-- Mobile/Tablet layout -->
-                    <div class="flex 2xl:hidden items-center justify-between mb-3">
-                      <!-- Left: drag handle + number -->
-                      <div class="flex items-center gap-2">
-                        <!-- Mobile/Tablet drag handle (always visible) -->
+                  <div
+                    class="bg-white rounded-xl p-4 cursor-default group relative grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 2xl:items-start"
+                  >
+                    <!-- Una sola tarjeta para todos los anchos: hasta 2xl, el número
+                         y las acciones van en una fila y el contenido debajo, a todo
+                         lo ancho (en móvil, las acciones al pie); desde 2xl, las tres
+                         cosas en una fila. (El comentario va dentro: el #item de
+                         draggable admite un solo hijo.) -->
+                    <!-- Asa y número. Hasta 2xl el asa está siempre a la vista; desde
+                         2xl ocupa el sitio del número al pasar por encima. -->
+                    <div class="col-start-1 row-start-1 flex items-center gap-2">
+                      <div
+                        v-if="canEdit"
+                        class="drag-handle-enigma 2xl:hidden flex items-center justify-center w-6 h-10 cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600 flex-shrink-0 -ml-1"
+                      >
+                        <svg class="w-4 h-4" viewBox="0 0 16 16" fill="currentColor">
+                          <circle cx="5" cy="4" r="1.5" />
+                          <circle cx="11" cy="4" r="1.5" />
+                          <circle cx="5" cy="8" r="1.5" />
+                          <circle cx="11" cy="8" r="1.5" />
+                          <circle cx="5" cy="12" r="1.5" />
+                          <circle cx="11" cy="12" r="1.5" />
+                        </svg>
+                      </div>
+                      <div class="relative w-10 h-10 flex-shrink-0">
+                        <div
+                          class="absolute inset-0 rounded-full flex items-center justify-center transition-all duration-200 ease-out"
+                          :class="[
+                            getEnigmaIconClass(enigma, index),
+                            canEdit &&
+                              '2xl:group-hover:opacity-0 2xl:group-hover:scale-90 2xl:group-hover:pointer-events-none',
+                          ]"
+                        >
+                          <span class="text-white font-bold text-sm">{{ index + 1 }}</span>
+                        </div>
                         <div
                           v-if="canEdit"
-                          class="drag-handle-enigma flex items-center justify-center w-6 h-10 cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600 flex-shrink-0 -ml-1"
+                          class="drag-handle-enigma absolute inset-0 rounded-full hidden 2xl:flex items-center justify-center cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600 opacity-0 scale-110 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 ease-out pointer-events-none group-hover:pointer-events-auto"
                         >
                           <svg class="w-4 h-4" viewBox="0 0 16 16" fill="currentColor">
                             <circle cx="5" cy="4" r="1.5" />
@@ -317,65 +346,15 @@
                             <circle cx="11" cy="12" r="1.5" />
                           </svg>
                         </div>
-                        <div
-                          class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
-                          :class="getEnigmaIconClass(enigma, index)"
-                        >
-                          <span class="text-white font-bold text-sm">{{ index + 1 }}</span>
-                        </div>
-                      </div>
-                      <!-- Mobile actions dropdown -->
-                      <div class="relative">
-                        <button
-                          type="button"
-                          class="p-2 rounded-lg hover:bg-gray-100 transition-colors"
-                          @click="toggleEnigmaDropdown(enigma.id)"
-                        >
-                          <EllipsisVerticalIcon class="w-5 h-5 text-navy-700" />
-                        </button>
-                        <Transition name="dropdown">
-                          <div
-                            v-if="openEnigmaDropdown === enigma.id"
-                            class="absolute right-0 top-full mt-1 w-48 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden z-50"
-                          >
-                            <button
-                              v-if="canEdit"
-                              type="button"
-                              class="flex items-center gap-3 w-full px-4 py-3 text-sm text-navy-700 hover:bg-gray-50 transition-colors"
-                              @click="editEnigmaAction(enigma)"
-                            >
-                              <PencilIcon class="w-5 h-5" />
-                              {{ t('teacher.components.mission_detail_template.btn_edit') }}
-                            </button>
-                            <button
-                              type="button"
-                              class="flex items-center gap-3 w-full px-4 py-3 text-sm text-navy-700 hover:bg-gray-50 transition-colors"
-                              @click="viewSubmissionsAction(enigma)"
-                            >
-                              <UserGroupIcon class="w-5 h-5" />
-                              {{
-                                t(
-                                  'teacher.components.mission_detail_template.btn_view_submissions',
-                                  { count: enigma.submissionsCount || 0 }
-                                )
-                              }}
-                            </button>
-                            <button
-                              v-if="canEdit"
-                              type="button"
-                              class="flex items-center gap-3 w-full px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors"
-                              @click="deleteEnigmaAction(enigma.id)"
-                            >
-                              <TrashIcon class="w-5 h-5" />
-                              {{ t('teacher.missions.detail.delete_confirm_btn') }}
-                            </button>
-                          </div>
-                        </Transition>
                       </div>
                     </div>
-                    <!-- Mobile/Tablet content -->
-                    <div class="2xl:hidden">
-                      <div class="flex flex-wrap items-center gap-2 mb-2">
+
+                    <!-- Contenido -->
+                    <div
+                      class="col-span-3 row-start-2 min-w-0 2xl:col-span-1 2xl:col-start-2 2xl:row-start-1"
+                    >
+                      <div class="flex flex-wrap items-center gap-2">
+                        <h4 class="font-semibold text-navy-700">{{ enigma.title }}</h4>
                         <span
                           class="inline-flex items-center gap-3 text-sm font-semibold text-navy-700 flex-shrink-0"
                         >
@@ -398,7 +377,6 @@
                             </span>
                           </Tooltip>
                         </span>
-                        <h4 class="font-semibold text-navy-700">{{ enigma.title }}</h4>
                         <span
                           v-if="enigma.isOptional"
                           class="px-2 py-0.5 text-xs font-medium rounded-full bg-gray-100 text-gray-500 flex-shrink-0"
@@ -406,7 +384,7 @@
                           {{ t('teacher.components.mission_detail_template.optional_label') }}
                         </span>
                       </div>
-                      <p class="text-sm text-navy-700/80">{{ enigma.description }}</p>
+                      <p class="text-sm mt-2 text-navy-700/80">{{ enigma.description }}</p>
                       <div v-if="enigma.objectives && enigma.objectives.length > 0" class="mt-3">
                         <p class="text-sm font-semibold text-navy-700 mb-2">
                           {{ t('teacher.components.mission_detail_template.objectives_label') }}
@@ -424,128 +402,55 @@
                       </div>
                     </div>
 
-                    <!-- Desktop layout -->
-                    <div class="hidden 2xl:flex items-center gap-3">
-                      <!-- Number circle / Drag handle swap container -->
-                      <div class="relative w-10 h-10 flex-shrink-0">
-                        <!-- Number (hidden on hover) -->
-                        <div
-                          class="absolute inset-0 rounded-full flex items-center justify-center transition-all duration-200 ease-out"
-                          :class="[
-                            getEnigmaIconClass(enigma, index),
-                            canEdit &&
-                              'group-hover:opacity-0 group-hover:scale-90 group-hover:pointer-events-none',
-                          ]"
+                    <!-- Acciones: «Ver entregas» (todo el profesorado) y «Editar», a la
+                         vista; «Eliminar», en «⋮». Desde sm van arriba a la derecha; en
+                         móvil, al pie de la tarjeta, porque arriba no caben. -->
+                    <div
+                      class="col-span-3 row-start-3 flex flex-wrap items-center justify-end gap-2 sm:col-span-1 sm:col-start-3 sm:row-start-1"
+                    >
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        :icon-left="UserGroupIcon"
+                        class="whitespace-nowrap"
+                        :aria-label="
+                          t('teacher.components.mission_detail_template.view_submissions_named', {
+                            count: enigma.submissionsCount || 0,
+                            title: enigma.title,
+                          })
+                        "
+                        @click="emit('viewSubmissions', enigma)"
+                      >
+                        {{
+                          t('teacher.components.mission_detail_template.btn_view_submissions', {
+                            count: enigma.submissionsCount || 0,
+                          })
+                        }}
+                      </Button>
+                      <template v-if="canEdit">
+                        <Button
+                          variant="primary"
+                          size="sm"
+                          :icon-left="PencilIcon"
+                          :aria-label="
+                            t('teacher.components.mission_detail_template.edit_enigma_named', {
+                              title: enigma.title,
+                            })
+                          "
+                          @click="emit('editEnigma', enigma)"
                         >
-                          <span class="text-white font-bold text-sm">{{ index + 1 }}</span>
-                        </div>
-                        <!-- Drag handle (visible on hover) -->
-                        <div
-                          v-if="canEdit"
-                          class="drag-handle-enigma absolute inset-0 rounded-full flex items-center justify-center cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600 opacity-0 scale-110 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 ease-out pointer-events-none group-hover:pointer-events-auto"
-                        >
-                          <svg class="w-4 h-4" viewBox="0 0 16 16" fill="currentColor">
-                            <circle cx="5" cy="4" r="1.5" />
-                            <circle cx="11" cy="4" r="1.5" />
-                            <circle cx="5" cy="8" r="1.5" />
-                            <circle cx="11" cy="8" r="1.5" />
-                            <circle cx="5" cy="12" r="1.5" />
-                            <circle cx="11" cy="12" r="1.5" />
-                          </svg>
-                        </div>
-                      </div>
-
-                      <!-- Enigma content -->
-                      <div class="flex-1 min-w-0">
-                        <div class="flex items-center justify-between gap-2">
-                          <div class="flex flex-wrap items-center gap-2">
-                            <h4 class="font-semibold text-navy-700">{{ enigma.title }}</h4>
-                            <span
-                              class="inline-flex items-center gap-3 text-sm font-semibold text-navy-700 flex-shrink-0"
-                            >
-                              <Tooltip v-if="classCfg.xp" :text="t('common.resources.xp')">
-                                <span class="inline-flex items-center gap-1">
-                                  <XpIcon class="w-5 h-5" />{{ enigma.xp }}
-                                </span>
-                              </Tooltip>
-                              <Tooltip v-if="classCfg.coins" :text="t('common.resources.coins')">
-                                <span class="inline-flex items-center gap-1">
-                                  <CoinIcon class="w-5 h-5" />{{ enigmaCoins(enigma) }}
-                                </span>
-                              </Tooltip>
-                              <Tooltip
-                                v-if="enigmaMana(enigma) && classCfg.mana"
-                                :text="t('common.resources.mana')"
-                              >
-                                <span class="inline-flex items-center gap-1">
-                                  <ManaIcon class="w-5 h-5" />{{ enigmaMana(enigma) }}
-                                </span>
-                              </Tooltip>
-                            </span>
-                            <span
-                              v-if="enigma.isOptional"
-                              class="px-2 py-0.5 text-xs font-medium rounded-full bg-gray-100 text-gray-500 flex-shrink-0"
-                            >
-                              {{ t('teacher.components.mission_detail_template.optional_label') }}
-                            </span>
-                          </div>
-                          <!-- Ver entregas (siempre visible) -->
-                          <div class="flex-shrink-0">
-                            <Button
-                              variant="primary"
-                              size="sm"
-                              :icon-left="UserGroupIcon"
-                              class="whitespace-nowrap"
-                              @click="emit('viewSubmissions', enigma)"
-                            >
-                              {{
-                                t(
-                                  'teacher.components.mission_detail_template.btn_view_submissions',
-                                  { count: enigma.submissionsCount || 0 }
-                                )
-                              }}
-                            </Button>
-                          </div>
-                        </div>
-                        <p class="text-sm mt-2 text-navy-700/80">{{ enigma.description }}</p>
-                        <div v-if="enigma.objectives && enigma.objectives.length > 0" class="mt-3">
-                          <p class="text-sm font-semibold text-navy-700 mb-2">
-                            {{ t('teacher.components.mission_detail_template.objectives_label') }}
-                          </p>
-                          <ul class="space-y-1">
-                            <li
-                              v-for="(objective, objIndex) in enigma.objectives"
-                              :key="objIndex"
-                              class="text-sm text-navy-700/80 flex items-start gap-2"
-                            >
-                              <span class="text-navy-700">•</span>
-                              {{ objective }}
-                            </li>
-                          </ul>
-                        </div>
-                        <!-- Editar / Eliminar -->
-                        <div
-                          v-if="canEdit"
-                          class="flex items-center justify-end gap-2 mt-3 pt-3 border-t border-gray-100"
-                        >
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            :icon-left="PencilIcon"
-                            @click="emit('editEnigma', enigma)"
-                          >
-                            {{ t('teacher.components.mission_detail_template.btn_edit') }}
-                          </Button>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            :icon-left="TrashIcon"
-                            @click="emit('deleteEnigma', enigma.id)"
-                          >
-                            {{ t('teacher.missions.detail.delete_confirm_btn') }}
-                          </Button>
-                        </div>
-                      </div>
+                          {{ t('teacher.components.mission_detail_template.btn_edit') }}
+                        </Button>
+                        <ActionMenu
+                          :label="
+                            t('teacher.components.mission_detail_template.enigma_actions', {
+                              title: enigma.title,
+                            })
+                          "
+                          :items="deleteMenu"
+                          @select="emit('deleteEnigma', enigma.id)"
+                        />
+                      </template>
                     </div>
                   </div>
                 </template>
@@ -805,70 +710,39 @@
 
                       <!-- Document content -->
                       <div class="flex-1 min-w-0">
-                        <div class="flex items-start justify-between gap-3">
-                          <div>
+                        <!-- Si el título no cabe al lado, las acciones bajan a otra línea -->
+                        <div class="flex flex-wrap items-start justify-between gap-3">
+                          <div class="min-w-0 flex-1 basis-40">
                             <h4 class="font-semibold text-navy-700">{{ doc.title }}</h4>
                             <p class="text-xs text-navy-700/70 mt-0.5">
                               {{ doc.format }} &bull; {{ doc.metadata }}
                             </p>
                           </div>
-                          <div class="flex items-center gap-2 flex-shrink-0">
-                            <!-- Desktop: Hover buttons -->
-                            <div
-                              class="hidden 2xl:flex items-center gap-2 opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200 ease-out pointer-events-none group-hover:pointer-events-auto"
+                          <!-- «Editar» a la vista; eliminar, en «⋮» -->
+                          <div class="ml-auto flex items-center gap-2 flex-shrink-0">
+                            <Button
+                              variant="primary"
+                              size="sm"
+                              :icon-left="PencilIcon"
+                              :aria-label="
+                                t(
+                                  'teacher.components.mission_detail_template.edit_document_named',
+                                  { title: doc.title }
+                                )
+                              "
+                              @click="emit('editDocument', doc)"
                             >
-                              <Button
-                                variant="primary"
-                                size="sm"
-                                :icon-left="PencilIcon"
-                                class="whitespace-nowrap"
-                                @click="emit('editDocument', doc)"
-                              >
-                                {{ t('teacher.components.mission_detail_template.btn_edit') }}
-                              </Button>
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                :icon-left="TrashIcon"
-                                class="whitespace-nowrap"
-                                @click="emit('deleteDocument', doc.id)"
-                              >
-                                {{ t('teacher.missions.detail.delete_confirm_btn') }}
-                              </Button>
-                            </div>
-                            <!-- Mobile/Tablet: Actions dropdown -->
-                            <div class="relative 2xl:hidden">
-                              <button
-                                type="button"
-                                class="p-2 rounded-lg hover:bg-gray-100 transition-colors"
-                                @click="toggleDocumentDropdown(doc.id)"
-                              >
-                                <EllipsisVerticalIcon class="w-5 h-5 text-navy-700" />
-                              </button>
-                              <Transition name="dropdown">
-                                <div
-                                  v-if="openDocumentDropdown === doc.id"
-                                  class="absolute right-0 top-full mt-1 w-48 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden z-50"
-                                >
-                                  <button
-                                    type="button"
-                                    class="flex items-center gap-3 w-full px-4 py-3 text-sm text-navy-700 hover:bg-gray-50 transition-colors"
-                                    @click="editDocumentAction(doc)"
-                                  >
-                                    <PencilIcon class="w-5 h-5" />
-                                    {{ t('teacher.components.mission_detail_template.btn_edit') }}
-                                  </button>
-                                  <button
-                                    type="button"
-                                    class="flex items-center gap-3 w-full px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors"
-                                    @click="deleteDocumentAction(doc.id)"
-                                  >
-                                    <TrashIcon class="w-5 h-5" />
-                                    {{ t('teacher.missions.detail.delete_confirm_btn') }}
-                                  </button>
-                                </div>
-                              </Transition>
-                            </div>
+                              {{ t('teacher.components.mission_detail_template.btn_edit') }}
+                            </Button>
+                            <ActionMenu
+                              :label="
+                                t('teacher.components.mission_detail_template.document_actions', {
+                                  title: doc.title,
+                                })
+                              "
+                              :items="deleteMenu"
+                              @select="emit('deleteDocument', doc.id)"
+                            />
                             <DocumentOpenButton :doc="doc" />
                           </div>
                         </div>
@@ -960,12 +834,20 @@
               :icon="ChartBarIcon"
               title-tag="h3"
             />
-            <CardItem layout="column" centered>
-              <p class="text-7xl font-bold text-navy-700">{{ missionStats.avgProgress }}%</p>
-              <p class="text-sm text-navy-700/80 mt-2">
-                {{ t('teacher.components.mission_detail_template.class_average') }}
-              </p>
-            </CardItem>
+            <StatTile
+              surface="item"
+              :label="t('teacher.components.mission_detail_template.completed_by_students')"
+              :value="missionStats.completed"
+              :total="missionStats.totalStudents"
+            >
+              <template v-if="missionStats.avgProgress !== null" #detail>
+                {{
+                  t('teacher.components.mission_detail_template.required_average', {
+                    percent: formatPercent(missionStats.avgProgress),
+                  })
+                }}
+              </template>
+            </StatTile>
           </Card>
 
           <!-- Rewards Card - Purple theme -->
@@ -1269,12 +1151,12 @@ import {
   Bars3Icon,
   UserGroupIcon,
   TrophyIcon,
-  EllipsisVerticalIcon,
   CheckCircleIcon,
 } from '@heroicons/vue/24/outline'
 import draggable from 'vuedraggable'
 import type { Component } from 'vue'
 import type { MissionStatus } from '~/types/mission.types'
+import type { ActionMenuItem } from '~/types/action-menu.types'
 import { renderPageMarkdown } from '~/utils/markdown'
 import { resolveClassSettings } from '~/utils/class-settings'
 import type {
@@ -1481,18 +1363,6 @@ function formatDeadline(input: string | Date | null | undefined): string {
 // Local editing state (only for narrative which still needs manual save)
 const isEditingNarrative = ref(false)
 
-// Dropdown state for mobile actions
-const openEnigmaDropdown = ref<string | null>(null)
-const openDocumentDropdown = ref<string | null>(null)
-
-const toggleEnigmaDropdown = (enigmaId: string) => {
-  openEnigmaDropdown.value = openEnigmaDropdown.value === enigmaId ? null : enigmaId
-}
-
-const toggleDocumentDropdown = (docId: string) => {
-  openDocumentDropdown.value = openDocumentDropdown.value === docId ? null : docId
-}
-
 // La insignia-recompensa hereda la rareza de la MISIÓN (no la suya propia): así
 // una misión Legendaria muestra su insignia como Legendaria. Las escalas difieren
 // (misión: comun/rara/epica/legendaria; insignia: common/rare/epic/legendary).
@@ -1559,28 +1429,17 @@ const emit = defineEmits<{
   ateneaAction: [action: 'chat' | 'help' | 'start']
 }>()
 
-// Acciones de los dropdowns: emiten el evento y cierran el menú. Se extraen a
-// métodos porque Vue 3.5 no admite @click con varias sentencias inline.
-const editEnigmaAction = (enigma: MissionEnigma) => {
-  emit('editEnigma', enigma)
-  openEnigmaDropdown.value = null
-}
-const viewSubmissionsAction = (enigma: MissionEnigma) => {
-  emit('viewSubmissions', enigma)
-  openEnigmaDropdown.value = null
-}
-const deleteEnigmaAction = (enigmaId: string) => {
-  emit('deleteEnigma', enigmaId)
-  openEnigmaDropdown.value = null
-}
-const editDocumentAction = (doc: MissionDocument) => {
-  emit('editDocument', doc)
-  openDocumentDropdown.value = null
-}
-const deleteDocumentAction = (docId: string) => {
-  emit('deleteDocument', docId)
-  openDocumentDropdown.value = null
-}
+// El menú «⋮» de cada enigma y documento (solo con permiso de edición): guarda
+// «Eliminar», la acción destructiva, fuera del alcance de un clic sin querer;
+// el resto va a la vista. Al tener una sola opción, quien lo usa no mira el id.
+const deleteMenu = computed<ActionMenuItem[]>(() => [
+  {
+    id: 'delete',
+    label: t('teacher.missions.detail.delete_confirm_btn'),
+    icon: TrashIcon,
+    danger: true,
+  },
+])
 
 // Local state for draggable items
 const localEnigmas = ref<MissionEnigma[]>([])
@@ -1682,11 +1541,6 @@ const enigmas = computed(() => {
   }
   return props.mission?.enigmas || []
 })
-const enigmasCompleted = computed(() => enigmas.value.filter(e => e.status === 'completado').length)
-const enigmaProgressPercent = computed(() =>
-  enigmas.value.length > 0 ? Math.round((enigmasCompleted.value / enigmas.value.length) * 100) : 0
-)
-
 // XP calculations for students
 const totalEnigmaXp = computed(() => enigmas.value.reduce((sum, e) => sum + e.xp, 0))
 // Use earnedXp if available (for partial XP), otherwise use full xp for completed enigmas
@@ -1851,37 +1705,25 @@ const getDocumentTagClasses = (type: MissionDocument['type']) => {
   return classes[type]
 }
 
-// Teacher stats (from API)
-const missionStats = computed<TeacherMissionStats>(() => {
-  // Use real data from API if available
-  if (props.mission?.teacherStats) {
-    return props.mission.teacherStats
-  }
-  // Fallback to zeros if no data
-  return {
-    totalStudents: 0,
-    completed: 0,
-    inProgress: 0,
-    notStarted: 0,
-    avgProgress: 0,
-  }
-})
+// Cómo va la misión en la clase (de la API): quién la ha completado y la media
+// del % de enigmas obligatorios.
+const { formatPercent } = useNumberFormat()
+const missionStats = computed<TeacherMissionStats>(
+  () =>
+    props.mission?.teacherStats ?? {
+      totalStudents: 0,
+      completed: 0,
+      inProgress: 0,
+      notStarted: 0,
+      expired: 0,
+      pathLocked: 0,
+      excluded: 0,
+      avgProgress: null,
+    }
+)
 </script>
 
 <style scoped>
-.dropdown-enter-active,
-.dropdown-leave-active {
-  transition:
-    opacity 0.2s ease,
-    transform 0.2s ease;
-}
-
-.dropdown-enter-from,
-.dropdown-leave-to {
-  opacity: 0;
-  transform: translateY(-10px);
-}
-
 /* Drag handles - prevent browser scroll on touch */
 .drag-handle-enigma,
 .drag-handle-doc {

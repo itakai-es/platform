@@ -7,7 +7,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-itakai_dev}
       POSTGRES_DB: ${POSTGRES_DB:-itakai_dev}
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
     volumes:
       - postgres_data_dev:/var/lib/postgresql/data
       - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
@@ -30,7 +30,7 @@ services:
       PORT: 3001
       DATABASE_URL: postgresql://${POSTGRES_USER:-itakai}:${POSTGRES_PASSWORD:-itakai_dev}@postgres:5432/${POSTGRES_DB:-itakai_dev}
     ports:
-      - "3001:3001"
+      - "127.0.0.1:3001:3001"
     volumes:
       - uploads_data:/app/uploads
     depends_on:
@@ -45,7 +45,7 @@ services:
     image: adminer
     container_name: itakai-adminer
     ports:
-      - "8080:8080"
+      - "127.0.0.1:8080:8080"
     depends_on:
       - postgres
     restart: unless-stopped

@@ -46,12 +46,15 @@ export const DEFAULT_CLASS_SETTINGS: ClassSettings = {
 /**
  * Hard prerequisites (acyclic): disabling the prerequisite force-disables the dependent.
  *  - mana is spent on shop powers   → mana requires shop
- *  - ranking is ordered by XP       → rankings requires xp
  *  - lives are changed by behaviors → lives requires behaviors
+ *
+ * El ranking ya no pide XP: cada tipo pide lo suyo y el interruptor solo se
+ * apaga si no queda ninguno disponible (`normalizeRankingSwitch`, ranking-config.ts).
+ * Las clases que tenían la XP apagada de antes de este cambio guardan `rankings:
+ * false` (migración `rankings_off_without_xp`): lo tenían apagado de hecho.
  */
 const DEPENDENCIES: Partial<Record<keyof ClassSettings, keyof ClassSettings>> = {
   mana: 'shop',
-  rankings: 'xp',
   lives: 'behaviors',
 }
 

@@ -32,7 +32,7 @@ interface Props {
   hoverable?: boolean
   padding?: 'none' | 'sm' | 'md' | 'lg'
   gap?: 'none' | 'sm' | 'md' | 'lg'
-  type: 'ia' | 'stats' | 'pending' | 'clases' | 'info' | 'settings'
+  type: 'ia' | 'stats' | 'pending' | 'clases' | 'info' | 'settings' | 'xpbar'
   flex?: boolean
 }
 
@@ -51,6 +51,7 @@ const colorMap: Record<string, string> = {
   clases: 'var(--color-card-clases)',
   info: 'var(--color-card-info)',
   settings: '#F3F4F6', // Gris claro neutro (sin tema)
+  xpbar: 'var(--color-card-xpbar)', // El de la barra de nivel de la clase
 }
 
 const cardClasses = computed(() => {

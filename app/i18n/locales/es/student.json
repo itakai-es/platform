@@ -26,7 +26,8 @@
       "ai_assistant": {
         "name": "Atenea",
         "message_new_user": "¡Hola {name}! Te damos la bienvenida a ITAKAI. ¡Completa tu primera misión para empezar a ganar XP!",
-        "message_returning_user": "¡Hola {name}! Has completado {missions_completed} misiones en {classes_enrolled} clases. ¡Sigue así!"
+        "message_returning_user": "¡Hola, {name}! Has completado {count} misión {classes}. ¡Sigue así! | ¡Hola, {name}! Has completado {count} misiones {classes}. ¡Sigue así!",
+        "classes_phrase": "en {count} clase | en {count} clases"
       },
       "class_fallback_name": "Clase",
       "recent_badges_empty": "No hay insignias recientes",
@@ -91,7 +92,9 @@
         "error": "Error al enviar la entrega. Inténtalo de nuevo.",
         "expired_error": "Esta misión ha expirado. Ya no puedes entregar enigmas.",
         "downloading": "Descargando",
-        "path_locked": "Esta misión aún no está abierta: antes tienes que completar otra."
+        "path_locked": "Esta misión aún no está abierta: antes tienes que completar otra.",
+        "already_approved": "Este enigma ya lo tienes aprobado.",
+        "already_pending": "Ya tienes una entrega de este enigma esperando revisión."
       },
       "hints": {
         "intro": "¿Te has atascado? Usa una pista. Se abren en orden, de una en una, y cada una tiene su coste.",
@@ -107,7 +110,7 @@
         "used": "Usada",
         "penalty_note": "Tus pistas restan un {count} % a lo que te queda por cobrar en esta misión.",
         "closed_completed": "Has completado la misión: ya no hace falta usar más pistas.",
-        "closed_expired": "La misión ha caducado: ya no se pueden usar sus pistas.",
+        "closed_expired": "La misión ha expirado: ya no se pueden usar sus pistas.",
         "preview_note": "Vista previa: ves todas las pistas abiertas. El alumnado las abre de una en una, en este orden, pagando su coste.",
         "used_announcement": "Has usado la pista {position}.",
         "use_error": "No se ha podido usar la pista.",
@@ -133,7 +136,6 @@
         "description": "Todavía no estás en ninguna clase. Pide el código a tu docente para unirte."
       },
       "detail": {
-        "error_title": "Error al cargar la clase",
         "back_to_classes": "Volver a mis clases",
         "breadcrumb_classes": "Mis clases",
         "teacher_fallback": "Docente",
@@ -148,7 +150,6 @@
         },
         "progress": {
           "title": "Mi progreso",
-          "completion_rate": "Completado",
           "missions_completed": "Misiones completadas",
           "xp_total": "XP total",
           "badges_earned": "Insignias obtenidas"
@@ -179,7 +180,11 @@
           "save_error": "Error al guardar el perfil",
           "generate_error": "No se pudo generar el avatar. Inténtalo de nuevo en unos segundos.",
           "generate_error_with_detail": "No se pudo generar el avatar: {detail}",
-          "how_others_see": "Así te ven en esta clase"
+          "how_others_see": "Así te ven en esta clase",
+          "nickname_empty": "Escribe un alias: es el nombre con el que te ve tu clase.",
+          "nickname_taken": "Ese alias ya lo tiene otra persona de tu clase. Prueba con otro.",
+          "nickname_invalid": "El alias tiene que tener de 1 a {max} caracteres, con alguna letra o número.",
+          "nickname_reserved": "Ese alias no se puede usar: elige uno que no sea «Estudiante» ni el nombre de otra persona de tu clase."
         },
         "mission_no_description": "Sin descripción",
         "shop": {
@@ -234,6 +239,49 @@
         "teachers": {
           "title": "Profesorado",
           "empty": "Esta clase todavía no tiene profesorado."
+        },
+        "compare": {
+          "title": "Tú y tu clase",
+          "hint": "Se compara con la media del resto de tu clase, redondeada. No se ve a nadie en concreto."
+        },
+        "results": {
+          "title": "Mis resultados",
+          "hint": "Las recompensas de cada misión son las que has cobrado con sus enigmas. No incluyen el bonus por completarla, así que su suma no tiene por qué coincidir con tu saldo.",
+          "filter_label": "Filtrar mis misiones",
+          "empty_pending": "No tienes misiones pendientes",
+          "empty_done": "Aún no has completado ninguna misión",
+          "in_review": "{count} en revisión | {count} en revisión",
+          "deadline_past": "venció el {date}",
+          "hints": "{count} pista usada | {count} pistas usadas",
+          "by_enigma": "% por enigma",
+          "enigma_open": "Sin entregar",
+          "filter_pending": "Pendientes ({count})",
+          "filter_done": "Hechas ({count})",
+          "empty_description": "Cuando cambie, saldrá aquí.",
+          "completed_on": "el {date}",
+          "deadline_future": "vence el {date}",
+          "enigmas": "{approved} de {total} enigma aprobado | {approved} de {total} enigmas aprobados",
+          "optional": "opcional",
+          "enigma_approved": "{percent} · {date}",
+          "enigma_pending_since": "En revisión desde el {date}"
+        },
+        "errors": {
+          "archived": {
+            "title": "Esta clase ya no está disponible",
+            "description": "Tu docente la ha archivado. Tus misiones y tu progreso no se pierden."
+          },
+          "not_found": {
+            "title": "No encontramos esta clase",
+            "description": "Puede que el enlace no sea correcto o que ya no estés en ella."
+          },
+          "forbidden": {
+            "title": "No estás en esta clase",
+            "description": "Si crees que es un error, habla con tu docente."
+          },
+          "generic": {
+            "title": "No se ha podido cargar la clase",
+            "description": "Inténtalo de nuevo dentro de un momento."
+          }
         }
       }
     },
@@ -390,10 +438,28 @@
         "level_abbr": "Nv.",
         "missions_suffix": "misiones",
         "you_badge": "Tú",
-        "avg_xp": "XP promedio",
-        "avg_progress": "Progreso promedio",
-        "avg_missions": "Misiones promedio",
-        "total_xp": "XP total clase"
+        "avg_xp": "XP media",
+        "avg_progress": "Progreso medio (enigmas obligatorios)",
+        "avg_missions": "Misiones de media",
+        "total_xp": "XP total clase",
+        "podium_empty": "Aún nadie tiene XP. El podio se llenará en cuanto alguien la consiga.",
+        "rank_sr": "Puesto {rank}",
+        "missions_count": "{count} misión | {count} misiones",
+        "podium_empty_missions": "Aún nadie ha completado una misión. El podio se llenará en cuanto alguien lo haga.",
+        "podium_empty_missions_week": "Esta semana aún nadie ha completado una misión.",
+        "no_rank_xp": "Aún no tienes puesto. Consigue XP para entrar en la clasificación.",
+        "no_rank_missions": "Aún no tienes puesto. Completa una misión para entrar en la clasificación.",
+        "no_rank_missions_week": "Esta semana aún no tienes puesto. Completa una misión para entrar en la clasificación.",
+        "my_position_title": "Tu puesto",
+        "my_position_preview": "Cada estudiante ve aquí su puesto y el total de la clase.",
+        "top_list_title": "Hasta el puesto {n}"
+      },
+      "class_xp_bar": {
+        "rank": "Ranking",
+        "level_line": "Nivel {level} · {title}",
+        "rank_of": "Puesto {rank} de {total}",
+        "xp_to_next": "Falta {count} XP para el nivel {level} | Faltan {count} XP para el nivel {level}",
+        "max_level": "Nivel máximo"
       }
     },
     "teams": {

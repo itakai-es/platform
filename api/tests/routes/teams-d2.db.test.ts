@@ -654,10 +654,19 @@ describeWithDatabase('equipos', () => {
       const body = res.json()
       const mine = body.myTeams.find((m: { set: { id: string } }) => m.set.id === base.id)
       expect(mine.team.title).toBe('Fénix')
+      // De cada integrante, el id de su matrícula y su color de avatar, no su cuenta.
+      const enrollmentId = async (studentId: string) =>
+        (
+          await prisma.classEnrollment.findUniqueOrThrow({
+            where: { studentId_classId: { studentId, classId: f.classId } },
+          })
+        ).id
       const ids = mine.members.map((m: { id: string }) => m.id)
-      expect(ids[0]).toBe(f.users.student.id)
-      expect(ids).toContain(s2)
-      expect(ids).not.toContain(pending)
+      expect(ids[0]).toBe(await enrollmentId(f.users.student.id))
+      expect(ids).toContain(await enrollmentId(s2))
+      expect(ids).not.toContain(await enrollmentId(pending))
+      expect(res.body).not.toContain(s2)
+      expect(mine.members[0].avatarColor).toEqual(expect.any(String))
       const standing = body.standings.find((s: { set: { id: string } }) => s.set.id === base.id)
       expect(standing.teams.map((t: { title: string; points: number }) => [t.title, t.points])).toEqual([
         ['Dragón', 7],

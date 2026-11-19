@@ -57,6 +57,49 @@ describe('formatMission', () => {
     expect(result.progressDetail.total).toBe(0)
   })
 
+  it('el avance son los obligatorios aprobados; los opcionales van aparte, como extra', () => {
+    const earned = { xpEarned: 10, coinsEarned: 0, manaEarned: 0 }
+    const mission: MissionFormatInput = {
+      ...baseMission,
+      enigmas: [
+        { id: 'a', xpReward: 10, isOptional: false, progress: [earned] },
+        { id: 'b', xpReward: 10, isOptional: false, progress: [] },
+        { id: 'c', xpReward: 10, isOptional: true, progress: [earned] },
+      ],
+      progress: [{ enigmasCompleted: 2, completedAt: null }],
+    }
+    const result = formatMission(mission)
+    expect(result.progress).toBe(50)
+    expect(result.progressDetail).toEqual({ done: 1, total: 2, extraDone: 1, extraTotal: 1 })
+    expect(result.counted).toBe(true)
+  })
+
+  it('completada es el 100 %, aunque luego se le añadan enigmas', () => {
+    const mission: MissionFormatInput = {
+      ...baseMission,
+      enigmas: [{ id: 'a', xpReward: 10, isOptional: false, progress: [] }],
+      progress: [{ enigmasCompleted: 1, completedAt: new Date() }],
+    }
+    expect(formatMission(mission).progress).toBe(100)
+  })
+
+  it('solo opcionales: el % sale de si la ha completado', () => {
+    const mission: MissionFormatInput = {
+      ...baseMission,
+      enigmas: [{ id: 'a', xpReward: 10, isOptional: true, progress: [] }],
+      progress: [],
+    }
+    const result = formatMission(mission)
+    expect(result.progress).toBe(0)
+    expect(result.progressDetail).toEqual({ done: 0, total: 0, extraDone: 0, extraTotal: 1 })
+  })
+
+  it('no cuenta en «X de N» la bloqueada a mano ni la que no tiene enigmas', () => {
+    expect(formatMission({ ...baseMission, status: 'bloqueada' }).counted).toBe(false)
+    expect(formatMission({ ...baseMission, enigmas: [] }).counted).toBe(false)
+    expect(formatMission(baseMission).counted).toBe(true)
+  })
+
   it('should calculate total XP including rarity bonus', () => {
     const result = formatMission(baseMission)
     // comun bonus (50) + enigmas (20 + 40) = 110

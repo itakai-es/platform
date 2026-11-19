@@ -26,7 +26,8 @@
       "ai_assistant": {
         "name": "Atenea",
         "message_new_user": "¡Hola {name}! Dámoste la bienvenida a ITAKAI. ¡Completa la to primer misión pa entamar a ganar XP!",
-        "message_returning_user": "¡Hola {name}! Completasti {missions_completed} misiones en {classes_enrolled} clases. ¡Sigui asina!"
+        "message_returning_user": "¡Hola, {name}! Completasti {count} misión {classes}. ¡Sigui asina! | ¡Hola, {name}! Completasti {count} misiones {classes}. ¡Sigui asina!",
+        "classes_phrase": "en {count} clase | en {count} clases"
       },
       "class_fallback_name": "Clase",
       "recent_badges_empty": "Nun hai insinies recientes",
@@ -91,7 +92,9 @@
         "error": "Fallu al unviar la entrega. Inténtalo otra vuelta.",
         "expired_error": "Esta misión caducó. Yá nun pues entregar enigmes.",
         "downloading": "Baxando",
-        "path_locked": "Esta misión entá nun ta abierta: enantes tienes de completar otra."
+        "path_locked": "Esta misión entá nun ta abierta: enantes tienes de completar otra.",
+        "already_approved": "Esti enigma yá lu tienes aprobáu.",
+        "already_pending": "Yá tienes una entrega d'esti enigma esperando revisión."
       },
       "hints": {
         "intro": "¿Atascástite? Usa una pista. Ábrense n'orde, d'una en una, y cada una tien el so costu.",
@@ -133,7 +136,6 @@
         "description": "Entá nun tas en nenguna clase. Pidi'l códigu al to docente pa xunite."
       },
       "detail": {
-        "error_title": "Fallu al cargar la clase",
         "back_to_classes": "Volver a les mios clases",
         "breadcrumb_classes": "Les mios clases",
         "teacher_fallback": "Docente",
@@ -148,7 +150,6 @@
         },
         "progress": {
           "title": "El mio progresu",
-          "completion_rate": "Completáu",
           "missions_completed": "Misiones completaes",
           "xp_total": "XP total",
           "badges_earned": "Insinies llograes"
@@ -179,7 +180,11 @@
           "save_error": "Fallu al guardar el perfil",
           "generate_error": "Nun se pudo xenerar l'avatar. Inténtalo otra vuelta en dellos segundos.",
           "generate_error_with_detail": "Nun se pudo xenerar l'avatar: {detail}",
-          "how_others_see": "Asina te ven nesta clase"
+          "how_others_see": "Asina te ven nesta clase",
+          "nickname_empty": "Escribi un nomatu: ye'l nome col que te ve la to clase.",
+          "nickname_taken": "Esi nomatu yá lu tien otra persona de la to clase. Prueba con otru.",
+          "nickname_invalid": "El nomatu tien que tener d'1 a {max} caráuteres, con dalguna lletra o númberu.",
+          "nickname_reserved": "Esi nomatu nun se pue usar: escueyi ún que nun sea «Estudiante» nin el nome d'otra persona de la to clase."
         },
         "mission_no_description": "Ensin descripción",
         "shop": {
@@ -234,6 +239,49 @@
         "teachers": {
           "title": "Profesoráu",
           "empty": "Esta clase entá nun tien profesoráu."
+        },
+        "compare": {
+          "title": "Tu y la to clase",
+          "hint": "Compárase cola media del restu de la to clase, redondiada. Nun se ve a naide en concreto."
+        },
+        "results": {
+          "title": "Los mios resultaos",
+          "hint": "Les recompenses de cada misión son les que cobresti colos sos enigmes. Nun inclúin el bonus por completala, asina que la so suma nun tien por qué coincidir col to saldu.",
+          "filter_label": "Filtrar les mios misiones",
+          "empty_pending": "Nun tienes misiones pendientes",
+          "empty_done": "Entá nun completesti nenguna misión",
+          "in_review": "{count} en revisión | {count} en revisión",
+          "deadline_past": "caducó'l {date}",
+          "hints": "{count} pista usada | {count} pistes usaes",
+          "by_enigma": "% per enigma",
+          "enigma_open": "Ensin entregar",
+          "filter_pending": "Pendientes ({count})",
+          "filter_done": "Feches ({count})",
+          "empty_description": "Cuando camude, va salir equí.",
+          "completed_on": "el {date}",
+          "deadline_future": "caduca'l {date}",
+          "enigmas": "{approved} de {total} enigma aprobáu | {approved} de {total} enigmes aprobaos",
+          "optional": "opcional",
+          "enigma_approved": "{percent} · {date}",
+          "enigma_pending_since": "En revisión dende el {date}"
+        },
+        "errors": {
+          "archived": {
+            "title": "Esta clase yá nun ta disponible",
+            "description": "El profesoráu archivóla. Les tos misiones y el to progresu nun se pierden."
+          },
+          "not_found": {
+            "title": "Nun alcontramos esta clase",
+            "description": "Pue que l'enllaz nun seya correutu o que yá nun teas nella."
+          },
+          "forbidden": {
+            "title": "Nun tas nesta clase",
+            "description": "Si crees que ye un fallu, fala col profesoráu."
+          },
+          "generic": {
+            "title": "Nun se pudo cargar la clase",
+            "description": "Vuelvi tentalo dientro d'un momentu."
+          }
         }
       }
     },
@@ -391,9 +439,27 @@
         "missions_suffix": "misiones",
         "you_badge": "Tu",
         "avg_xp": "XP media",
-        "avg_progress": "Progresu mediu",
-        "avg_missions": "Misiones medies",
-        "total_xp": "XP total de la clase"
+        "avg_progress": "Progresu mediu (enigmes obligatorios)",
+        "avg_missions": "Misiones de media",
+        "total_xp": "XP total de la clase",
+        "podium_empty": "Inda naide tien XP. El podiu va enllenase en cuantes que dalguién la consiga.",
+        "rank_sr": "Puestu {rank}",
+        "missions_count": "{count} misión | {count} misiones",
+        "podium_empty_missions": "Inda naide completó una misión. El podiu va enllenase en cuantes que dalguién lo faiga.",
+        "podium_empty_missions_week": "Esta selmana inda naide completó una misión.",
+        "no_rank_xp": "Inda nun tienes puestu. Consigui XP pa entrar na clasificación.",
+        "no_rank_missions": "Inda nun tienes puestu. Completa una misión pa entrar na clasificación.",
+        "no_rank_missions_week": "Esta selmana inda nun tienes puestu. Completa una misión pa entrar na clasificación.",
+        "my_position_title": "El to puestu",
+        "my_position_preview": "Cada estudiante ve equí el so puestu y el total de la clase.",
+        "top_list_title": "Hasta'l puestu {n}"
+      },
+      "class_xp_bar": {
+        "rank": "Clasificación",
+        "level_line": "Nivel {level} · {title}",
+        "rank_of": "Puestu {rank} de {total}",
+        "xp_to_next": "Falta {count} XP pal nivel {level} | Falten {count} XP pal nivel {level}",
+        "max_level": "Nivel máximu"
       }
     },
     "teams": {

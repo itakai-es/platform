@@ -7,10 +7,11 @@
       class="flex flex-wrap items-start gap-x-4 gap-y-3"
     >
       <div>
-        <label class="mb-1.5 block text-sm font-medium text-navy-700">{{
+        <label :for="`${uid}-date-${idx}`" class="mb-1.5 block text-sm font-medium text-navy-700">{{
           t('teacher.schedule.starts_on')
         }}</label>
         <input
+          :id="`${uid}-date-${idx}`"
           v-model="tramo.startDate"
           type="date"
           :class="[fieldClass, 'w-40']"
@@ -18,21 +19,24 @@
         />
       </div>
 
-      <div>
-        <label class="mb-1.5 block text-sm font-medium text-navy-700">{{
+      <!-- «Hora» nombra el par; cada campo dice si es la de inicio o la de fin -->
+      <div role="group" :aria-labelledby="`${uid}-time-${idx}`">
+        <span :id="`${uid}-time-${idx}`" class="mb-1.5 block text-sm font-medium text-navy-700">{{
           t('teacher.schedule.time')
-        }}</label>
+        }}</span>
         <div class="flex items-center gap-1.5">
           <input
             v-model="tramo.start"
             type="time"
+            :aria-label="t('teacher.schedule.time_start')"
             :class="[fieldClass, 'w-28']"
             @change="emitChange"
           />
-          <span class="text-text-secondary">–</span>
+          <span class="text-text-secondary" aria-hidden="true">–</span>
           <input
             v-model="tramo.end"
             type="time"
+            :aria-label="t('teacher.schedule.time_end')"
             :class="[fieldClass, 'w-28']"
             @change="emitChange"
           />
@@ -90,6 +94,8 @@ const props = defineProps<{ modelValue?: ScheduleConfig | ScheduleConfig[] | nul
 const emit = defineEmits<{ 'update:modelValue': [value: ScheduleConfig[]] }>()
 
 const { t } = useI18n()
+/** Para unir cada etiqueta con su campo. */
+const uid = useId()
 
 const fieldClass =
   'rounded-2xl border border-border-primary bg-surface px-3 py-2.5 text-sm text-navy-700 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 sm:py-3 sm:text-base'

@@ -9,6 +9,7 @@ import {
   type PathEdge,
   type PathRequirement,
 } from '../../utils/mission-path.js'
+import { missionCompletions } from '../analytics/student-progress.js'
 
 /**
  * Tareas periódicas de notificaciones (Fase 3, punto 3).
@@ -38,7 +39,8 @@ function hoursLeft(deadline: Date, now: Date) {
  * Avisa a cada alumno de las misiones que le vencen en las próximas horas.
  *
  * Solo se avisa a quien todavía puede hacer algo: alumnos matriculados en una
- * clase activa que no han completado la misión y que no han desactivado los
+ * clase activa que no han completado la misión (la definición única, también sin
+ * `completedAt`: ver `missionCompletions`) y que no han desactivado los
  * recordatorios en su perfil (`UserSettings.missionReminders`, que hasta ahora
  * era un interruptor que no leía nadie). Tampoco a quien la tiene cerrada por el
  * camino del mapa de misiones: aún no puede entrar en ella.
@@ -58,11 +60,13 @@ async function runDeadlineReminders({ now }: JobContext) {
       deadline: true,
       classId: true,
       class: { select: { name: true, settings: true } },
-      progress: { select: { studentId: true, completedAt: true } },
+      enigmas: { select: { id: true, isOptional: true } },
     },
   })
 
   if (missions.length === 0) return { missions: 0, candidates: 0, created: 0 }
+
+  const { datesBy: completions } = await missionCompletions(missions)
 
   // Las matrículas de todas las clases implicadas, en una sola consulta: varias
   // misiones de la misma clase vencen a la vez, y preguntar por cada una era una
@@ -114,14 +118,10 @@ async function runDeadlineReminders({ now }: JobContext) {
   for (const mission of missions) {
     if (!mission.deadline) continue
 
-    const completed = new Set(
-      mission.progress.filter(p => p.completedAt !== null).map(p => p.studentId)
-    )
-
     const remaining = hoursLeft(mission.deadline, now)
 
     for (const enrollment of byClass.get(mission.classId) ?? []) {
-      if (completed.has(enrollment.studentId)) continue
+      if (completions.get(enrollment.studentId)?.has(mission.id)) continue
       const settings = enrollment.student.settings
       if (settings && !settings.missionReminders) continue
       // Con el mapa encendido, a quien la tiene cerrada por el camino (le falta

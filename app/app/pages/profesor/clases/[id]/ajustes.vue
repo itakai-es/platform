@@ -6,6 +6,7 @@
     @update="onSettingsUpdate"
     @general-update="onGeneralUpdate"
     @levels-update="onLevelsUpdate"
+    @ranking-update="onRankingUpdate"
     @access-change="setMyAccess"
     @left="onLeft"
     @trashed="onLeft"
@@ -14,6 +15,7 @@
 
 <script setup lang="ts">
 import type { ClassSettings, LevelConfig } from '~/types/class.types'
+import type { RankingConfig } from '~/utils/ranking-config'
 import type { ScheduleConfig } from '~/types/schedule.types'
 
 definePageMeta({ layout: 'teacher', middleware: ['auth', 'role'] })
@@ -42,6 +44,9 @@ function onGeneralUpdate(data: {
 }
 function onLevelsUpdate(levelConfig: LevelConfig) {
   setClassData({ levelConfig })
+}
+function onRankingUpdate(rankingConfig: RankingConfig) {
+  setClassData({ rankingConfig })
 }
 
 // Tras salir de la clase o enviarla a la papelera ya no se llega a ella como

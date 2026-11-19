@@ -2,6 +2,7 @@ import { prisma } from '../../config/database.js'
 import type { Prisma } from '../../generated/prisma/client.js'
 import { assertClassAccess, listedClassesWhere } from '../../utils/class-access.js'
 import { accountHandle } from '../../utils/identity.js'
+import { progressCounts, sumProgress } from '../analytics/student-progress.js'
 
 /**
  * Listado de alumnos del profesorado: los de las clases a las que llega (también
@@ -25,7 +26,11 @@ export const STUDENT_LIST_SORTS = [
 ] as const
 export type StudentListSort = (typeof STUDENT_LIST_SORTS)[number]
 
-/** Tramos de progreso (en %), como los pinta la pantalla. */
+/**
+ * Tramos de progreso (en %), con la misma cifra que pinta la barra: misiones
+ * completadas sobre las que cuentan (ver analytics/definitions.ts). Quien no tiene
+ * misiones que cuenten no tiene cifra, y no cae en ningún tramo.
+ */
 export const STUDENT_PROGRESS_RANGES = ['excellent', 'good', 'progress', 'initial'] as const
 export type StudentProgressRange = (typeof STUDENT_PROGRESS_RANGES)[number]
 
@@ -54,6 +59,15 @@ export interface StudentListQuery {
    * sin clase, una página de `STUDENT_LIST_DEFAULT_LIMIT`.
    */
   limit?: number
+}
+
+/**
+ * «X de N» en %, sin redondear: lo que dibuja la barra de cada alumno. Null si no
+ * tiene misiones que cuenten. Los tramos y el orden salen de aquí, para que las
+ * barras queden escalonadas al ordenar y cada tramo diga lo que se ve.
+ */
+function missionsPercent(s: Pick<StudentListRow, 'totalMissionsCompleted' | 'totalMissionsCounted'>) {
+  return s.totalMissionsCounted > 0 ? (s.totalMissionsCompleted / s.totalMissionsCounted) * 100 : null
 }
 
 const PROGRESS_RANGE: Record<StudentProgressRange, (progress: number) => boolean> = {
@@ -136,7 +150,12 @@ export async function listTeacherStudents(userId: string, query: StudentListQuer
   } else {
     // El progreso se calcula: se ordena y se filtra por él aquí, y solo viaja la página.
     let rows = await studentRows(where, metricClasses)
-    if (progress) rows = rows.filter(s => PROGRESS_RANGE[progress](s.overallProgress))
+    if (progress) {
+      rows = rows.filter(s => {
+        const percent = missionsPercent(s)
+        return percent !== null && PROGRESS_RANGE[progress](percent)
+      })
+    }
     rows.sort(compareBy(sort))
     total = rows.length
     students = limit ? rows.slice((page - 1) * limit, page * limit) : rows
@@ -170,15 +189,25 @@ function byName(a: StudentListRow, b: StudentListRow) {
   return a.name.localeCompare(b.name, 'es', { sensitivity: 'base' }) || a.id.localeCompare(b.id)
 }
 
+/** Por «X de N», en un sentido o en otro. Quien no tiene misiones que cuenten va siempre detrás. */
+function byProgress(a: StudentListRow, b: StudentListRow, direction: 1 | -1) {
+  const percentA = missionsPercent(a)
+  const percentB = missionsPercent(b)
+  if (percentA === null || percentB === null) {
+    return (percentA === null ? 1 : 0) - (percentB === null ? 1 : 0)
+  }
+  return direction * (percentA - percentB)
+}
+
 function compareBy(sort: StudentListSort) {
   return (a: StudentListRow, b: StudentListRow) => {
     switch (sort) {
       case 'name-desc':
         return -byName(a, b)
       case 'progress-desc':
-        return b.overallProgress - a.overallProgress || byName(a, b)
+        return byProgress(a, b, -1) || byName(a, b)
       case 'progress-asc':
-        return a.overallProgress - b.overallProgress || byName(a, b)
+        return byProgress(a, b, 1) || byName(a, b)
       case 'missions-desc':
         return b.totalMissionsCompleted - a.totalMissionsCompleted || byName(a, b)
       default:
@@ -207,6 +236,10 @@ async function archivedAmong(
 /**
  * Una fila por alumno con su progreso sumado en las clases de `metricClasses`
  * en las que está: misiones, enigmas, XP e insignias, y el detalle por clase.
+ *
+ * Las insignias son las que ha conseguido, sin máximo: las de las misiones de esas
+ * clases y las de ITAKAI (sin autor), que se ganan solas y se cuentan una vez. No
+ * hay un «de N» que valga: las de ITAKAI no son de ninguna clase.
  */
 async function studentRows(students: Prisma.UserWhereInput, metricClasses: Prisma.ClassWhereInput) {
   const classes = await prisma.class.findMany({
@@ -218,7 +251,9 @@ async function studentRows(students: Prisma.UserWhereInput, metricClasses: Prism
       missions: {
         select: {
           id: true,
-          enigmas: { select: { id: true, xpReward: true } },
+          status: true,
+          deadline: true,
+          enigmas: { select: { id: true, isOptional: true } },
           badges: { select: { id: true } },
         },
       },
@@ -240,10 +275,10 @@ async function studentRows(students: Prisma.UserWhereInput, metricClasses: Prism
               createdAt: true,
               missionProgress: {
                 where: { completedAt: { not: null } },
-                select: { missionId: true },
+                select: { missionId: true, completedAt: true },
               },
               enigmaProgress: { select: { enigmaId: true } },
-              earnedBadges: { select: { badgeId: true } },
+              earnedBadges: { select: { badgeId: true, badge: { select: { teacherId: true } } } },
             },
           },
         },
@@ -252,30 +287,25 @@ async function studentRows(students: Prisma.UserWhereInput, metricClasses: Prism
   })
 
   // Lo de cada alumno en cada clase.
+  const now = new Date()
   const perClass = classes.flatMap(c => {
-    const missionIds = new Set(c.missions.map(m => m.id))
-    const classEnigmas = c.missions.flatMap(m => m.enigmas)
-    const enigmaIds = new Set(classEnigmas.map(e => e.id))
-    const classTotalXp = classEnigmas.reduce((sum, e) => sum + (e.xpReward || 0), 0)
     const classBadgeIds = c.missions.flatMap(m => m.badges.map(b => b.id))
 
     return c.enrollments.map(e => {
       const earned = new Set(e.student.earnedBadges.map(b => b.badgeId))
-      const enigmasCompleted = e.student.enigmaProgress.filter(p =>
-        enigmaIds.has(p.enigmaId)
-      ).length
+      const completedAt = new Map(e.student.missionProgress.map(p => [p.missionId, p.completedAt]))
       return {
         enrollment: e,
         cls: c,
-        missionsCompleted: e.student.missionProgress.filter(p => missionIds.has(p.missionId))
-          .length,
-        enigmasCompleted,
-        enigmasAvailable: enigmaIds.size,
-        xpAvailable: classTotalXp,
+        counts: progressCounts(
+          c.missions,
+          {
+            completedAt: missionId => completedAt.get(missionId) ?? null,
+            approved: new Set(e.student.enigmaProgress.map(p => p.enigmaId)),
+          },
+          now
+        ),
         badgesEarned: classBadgeIds.filter(id => earned.has(id)).length,
-        badgesAvailable: classBadgeIds.length,
-        // El progreso va por enigmas: los hechos en la clase entre los que tiene.
-        progress: enigmaIds.size > 0 ? Math.round((enigmasCompleted / enigmaIds.size) * 100) : 0,
       }
     })
   })
@@ -296,9 +326,9 @@ async function studentRows(students: Prisma.UserWhereInput, metricClasses: Prism
       items.reduce((total, item) => total + pick(item), 0)
     // Nivel y XP a la vista: los de la clase donde más lleva.
     const top = items.reduce((best, item) => (item.enrollment.xp > best.enrollment.xp ? item : best))
-    const enigmasCompleted = sum(i => i.enigmasCompleted)
-    const enigmasAvailable = sum(i => i.enigmasAvailable)
-    const badgesEarned = sum(i => i.badgesEarned)
+    const overall = sumProgress(items.map(i => i.counts))
+    // Las de ITAKAI no son de ninguna clase: una vez, aunque esté en varias.
+    const itakaiBadges = e.student.earnedBadges.filter(b => b.badge.teacherId === null).length
     return {
       id: e.student.id,
       name: e.student.name,
@@ -311,22 +341,18 @@ async function studentRows(students: Prisma.UserWhereInput, metricClasses: Prism
       avatar: e.avatarUrl,
       highestLevel: top.enrollment.level,
       totalXp: top.enrollment.xp,
-      classTotalXp: first.xpAvailable,
       classId: first.cls.id,
       className: first.cls.name,
       classArchived: first.cls.archived,
-      totalMissionsCompleted: sum(i => i.missionsCompleted),
-      totalMissionsAvailable: sum(i => i.cls.missions.length),
-      totalEnigmasCompleted: enigmasCompleted,
-      totalEnigmasAvailable: enigmasAvailable,
-      // El progreso general sale de los enigmas de todas sus clases.
-      overallProgress:
-        enigmasAvailable > 0 ? Math.round((enigmasCompleted / enigmasAvailable) * 100) : 0,
-      badgesEarned,
+      // «X de N misiones» de sus clases y el % de sus enigmas obligatorios
+      // (ver analytics/definitions.ts): null si no tiene ninguno que hacer.
+      totalMissionsCompleted: overall.missionsCompleted,
+      totalMissionsCounted: overall.missionsCounted,
+      overallProgress: overall.percent,
+      // El saldo: lleva comportamientos, recompensas y bonus, sin máximo que valga.
       totalXpEarned: sum(i => i.enrollment.xp),
-      totalXpAvailable: sum(i => i.xpAvailable),
-      totalBadgesEarned: badgesEarned,
-      totalBadgesAvailable: sum(i => i.badgesAvailable),
+      // Las conseguidas, con las de ITAKAI: una cifra, sin «de N».
+      totalBadgesEarned: sum(i => i.badgesEarned) + itakaiBadges,
       classIds: items.map(i => i.cls.id),
       classCount: items.length,
       classProgress: items.map(i => ({
@@ -334,9 +360,9 @@ async function studentRows(students: Prisma.UserWhereInput, metricClasses: Prism
         className: i.cls.name,
         level: i.enrollment.level,
         xp: i.enrollment.xp,
-        missionsCompleted: i.missionsCompleted,
-        totalMissions: i.cls.missions.length,
-        progress: i.progress,
+        missionsCompleted: i.counts.missionsCompleted,
+        missionsCounted: i.counts.missionsCounted,
+        percent: i.counts.percent,
       })),
       enrolledAt: e.enrolledAt,
       createdAt: e.student.createdAt,

@@ -26,7 +26,8 @@
       "ai_assistant": {
         "name": "Atenea",
         "message_new_user": "Hola {name}! Et donem la benvinguda a ITAKAI. Completa la teua primera missió per a començar a guanyar XP!",
-        "message_returning_user": "Hola {name}! Has completat {missions_completed} missions en {classes_enrolled} classes. Continua així!"
+        "message_returning_user": "Hola, {name}! Has completat {count} missió {classes}. Continua així! | Hola, {name}! Has completat {count} missions {classes}. Continua així!",
+        "classes_phrase": "en {count} classe | en {count} classes"
       },
       "class_fallback_name": "Classe",
       "recent_badges_empty": "No hi ha insígnies recents",
@@ -91,7 +92,9 @@
         "error": "Error en enviar l'entrega. Torna-ho a intentar.",
         "expired_error": "Esta missió ha caducat. Ja no pots entregar enigmes.",
         "downloading": "Descarregant",
-        "path_locked": "Esta missió encara no està oberta: abans n’has de completar una altra."
+        "path_locked": "Esta missió encara no està oberta: abans n’has de completar una altra.",
+        "already_approved": "Este enigma ja el tens aprovat.",
+        "already_pending": "Ja tens una entrega d'este enigma pendent de revisió."
       },
       "hints": {
         "intro": "T'has encallat? Utilitza una pista. S'obrin en orde, d'una en una, i cadascuna té el seu cost.",
@@ -133,7 +136,6 @@
         "description": "Encara no eres en cap classe. Demana el codi al teu docent per a unir-t'hi."
       },
       "detail": {
-        "error_title": "Error en carregar la classe",
         "back_to_classes": "Tornar a les meues classes",
         "breadcrumb_classes": "Les meues classes",
         "teacher_fallback": "Docent",
@@ -148,7 +150,6 @@
         },
         "progress": {
           "title": "El meu progrés",
-          "completion_rate": "Completat",
           "missions_completed": "Missions completades",
           "xp_total": "XP total",
           "badges_earned": "Insígnies obtingudes"
@@ -179,7 +180,11 @@
           "save_error": "Error en guardar el perfil",
           "generate_error": "No s'ha pogut generar l'avatar. Torna-ho a intentar d'ací a uns segons.",
           "generate_error_with_detail": "No s'ha pogut generar l'avatar: {detail}",
-          "how_others_see": "Així et veuen en esta classe"
+          "how_others_see": "Així et veuen en esta classe",
+          "nickname_empty": "Escriu un sobrenom: és el nom amb què et veu la teua classe.",
+          "nickname_taken": "Eixe sobrenom ja el té una altra persona de la teua classe. Prova'n un altre.",
+          "nickname_invalid": "El sobrenom ha de tindre d'1 a {max} caràcters, amb alguna lletra o número.",
+          "nickname_reserved": "Eixe sobrenom no es pot utilitzar: tria'n un que no siga «Estudiante» ni el nom d'una altra persona de la teua classe."
         },
         "mission_no_description": "Sense descripció",
         "shop": {
@@ -234,6 +239,49 @@
         "teachers": {
           "title": "Professorat",
           "empty": "Esta classe encara no té professorat."
+        },
+        "compare": {
+          "title": "Tu i la teua classe",
+          "hint": "Es compara amb la mitjana de la resta de la teua classe, arredonida. No es veu ningú en concret."
+        },
+        "results": {
+          "title": "Els meus resultats",
+          "hint": "Les recompenses de cada missió són les que has cobrat amb els seus enigmes. No inclouen el bonus per completar-la, així que la suma no coincidix necessàriament amb el teu saldo.",
+          "filter_label": "Filtra les meues missions",
+          "empty_pending": "No tens missions pendents",
+          "empty_done": "Encara no has completat cap missió",
+          "in_review": "{count} en revisió | {count} en revisió",
+          "deadline_past": "va caducar el {date}",
+          "hints": "{count} pista usada | {count} pistes usades",
+          "by_enigma": "% per enigma",
+          "enigma_open": "Sense entregar",
+          "filter_pending": "Pendents ({count})",
+          "filter_done": "Fetes ({count})",
+          "empty_description": "Quan canvie, eixirà ací.",
+          "completed_on": "el {date}",
+          "deadline_future": "caduca el {date}",
+          "enigmas": "{approved} de {total} enigma aprovat | {approved} de {total} enigmes aprovats",
+          "optional": "opcional",
+          "enigma_approved": "{percent} · {date}",
+          "enigma_pending_since": "En revisió des del {date}"
+        },
+        "errors": {
+          "archived": {
+            "title": "Esta classe ja no està disponible",
+            "description": "El professorat l'ha arxivada. Les teues missions i el teu progrés no es perden."
+          },
+          "not_found": {
+            "title": "No trobem esta classe",
+            "description": "Pot ser que l'enllaç no siga correcte o que ja no hi sigues."
+          },
+          "forbidden": {
+            "title": "No estàs en esta classe",
+            "description": "Si creus que és un error, parla'n amb el professorat."
+          },
+          "generic": {
+            "title": "No s'ha pogut carregar la classe",
+            "description": "Torna-ho a provar d'ací a un moment."
+          }
         }
       }
     },
@@ -302,7 +350,7 @@
       "account": {
         "title": "El teu compte",
         "username": "Usuari",
-        "managed_note": "El teu compte el gestiona el professorat: entres amb el teu usuari, no té correu i no es pot eliminar des d'aquí. Si necessites algun canvi, demana'ls-ho."
+        "managed_note": "El teu compte el gestiona el professorat: entres amb el teu usuari, no té correu i no es pot eliminar des d'ací. Si necessites algun canvi, demana'ls-ho."
       },
       "security": {
         "sessions_title": "Sessions",
@@ -391,9 +439,27 @@
         "missions_suffix": "missions",
         "you_badge": "Tu",
         "avg_xp": "XP mitjana",
-        "avg_progress": "Progrés mitjà",
-        "avg_missions": "Missions mitjanes",
-        "total_xp": "XP total de la classe"
+        "avg_progress": "Progrés mitjà (enigmes obligatoris)",
+        "avg_missions": "Missions de mitjana",
+        "total_xp": "XP total de la classe",
+        "podium_empty": "Encara ningú no té XP. El podi s'omplirà quan algú n'aconseguisca.",
+        "rank_sr": "Posició {rank}",
+        "missions_count": "{count} missió | {count} missions",
+        "podium_empty_missions": "Encara ningú no ha completat cap missió. El podi s'omplirà quan algú ho faça.",
+        "podium_empty_missions_week": "Esta setmana encara ningú no ha completat cap missió.",
+        "no_rank_xp": "Encara no tens posició. Aconseguix XP per a entrar en la classificació.",
+        "no_rank_missions": "Encara no tens posició. Completa una missió per a entrar en la classificació.",
+        "no_rank_missions_week": "Esta setmana encara no tens posició. Completa una missió per a entrar en la classificació.",
+        "my_position_title": "La teua posició",
+        "my_position_preview": "Cada estudiant veu ací la seua posició i el total de la classe.",
+        "top_list_title": "Fins a la posició {n}"
+      },
+      "class_xp_bar": {
+        "rank": "Classificació",
+        "level_line": "Nivell {level} · {title}",
+        "rank_of": "Posició {rank} de {total}",
+        "xp_to_next": "Falta {count} XP per al nivell {level} | Falten {count} XP per al nivell {level}",
+        "max_level": "Nivell màxim"
       }
     },
     "teams": {

@@ -5,6 +5,8 @@ import { INCLUSIVE_LANGUAGE_ES } from '../prompts/index.js'
 import { calculateMissionTotalXP } from '../../../utils/xp-calculator.js'
 import { sortByClassOrder } from '../../../utils/mission-order.js'
 import { resolveClassSettings } from '../../../utils/class-settings.js'
+import { countClassesAwaitingReview } from '../../../utils/pending-review.js'
+import { missionClassStats } from '../../analytics/student-progress.js'
 import {
   listedClassesWhere,
   assertMissionAccess,
@@ -99,12 +101,8 @@ export class TeacherAgent extends BaseAgent {
         orderBy: { createdAt: 'asc' },
         take: 5,
       }),
-      prisma.enigmaSubmission.count({
-        where: {
-          status: 'pendiente',
-          enigma: { mission: { class: myClasses } },
-        },
-      }),
+      // Por revisar: de su alumnado y sin las de un enigma que esa persona ya tiene aprobado.
+      countClassesAwaitingReview(myClasses),
       prisma.mission.findMany({
         where: { class: myClasses },
         include: {
@@ -177,54 +175,38 @@ export class TeacherAgent extends BaseAgent {
       return null
     }
 
-    const [mission, enrollmentCount, studentProgressList] = await Promise.all([
-      prisma.mission.findUnique({
-        where: { id: missionId },
-        include: {
-          class: { select: { name: true, settings: true } },
-          // El camino del mapa: lo que pide y lo que la pide a ella.
-          prerequisites: { select: { requiredMission: { select: REQUIRED_SELECT } } },
-          requiredBy: {
-            select: { mission: { select: { title: true } } },
-            orderBy: { mission: { orderIndex: 'asc' } },
-          },
-          enigmas: {
-            orderBy: { orderIndex: 'asc' },
-            select: {
-              id: true,
-              title: true,
-              description: true,
-              objectives: true,
-              xpReward: true,
-              isOptional: true,
-              orderIndex: true,
-            },
-          },
-          documents: {
-            orderBy: { orderIndex: 'asc' },
-            select: {
-              name: true,
-              description: true,
-              tags: true,
-            },
+    const mission = await prisma.mission.findUnique({
+      where: { id: missionId },
+      include: {
+        class: { select: { name: true, settings: true } },
+        // El camino del mapa: lo que pide y lo que la pide a ella.
+        prerequisites: { select: { requiredMission: { select: REQUIRED_SELECT } } },
+        requiredBy: {
+          select: { mission: { select: { title: true } } },
+          orderBy: { mission: { orderIndex: 'asc' } },
+        },
+        enigmas: {
+          orderBy: { orderIndex: 'asc' },
+          select: {
+            id: true,
+            title: true,
+            description: true,
+            objectives: true,
+            xpReward: true,
+            isOptional: true,
+            orderIndex: true,
           },
         },
-      }),
-      // Count students enrolled in the mission's class
-      prisma.classEnrollment.count({
-        where: {
-          isPreview: false,
-          class: {
-            missions: { some: { id: missionId } },
+        documents: {
+          orderBy: { orderIndex: 'asc' },
+          select: {
+            name: true,
+            description: true,
+            tags: true,
           },
         },
-      }),
-      // All student progress records for this mission
-      prisma.studentMissionProgress.findMany({
-        where: { missionId },
-        select: { progress: true, completedAt: true },
-      }),
-    ])
+      },
+    })
 
     if (!mission) return null
 
@@ -277,18 +259,20 @@ export class TeacherAgent extends BaseAgent {
       }
     }
 
-    // Student submission stats (teacher perspective)
-    const studentsStarted = studentProgressList.length
-    const studentsCompleted = studentProgressList.filter(sp => sp.completedAt !== null).length
-    const avgProgress = studentsStarted > 0
-      ? Math.round(studentProgressList.reduce((sum, sp) => sum + sp.progress, 0) / studentsStarted)
-      : 0
+    // Cómo va la clase en esta misión (teacher perspective): la definición única,
+    // sin la vista previa ni quien la hizo en otra clase.
+    const { stats } = await missionClassStats(mission.classId, missionId)
 
     lines.push(`\nStudent Stats:`)
-    lines.push(`  Enrolled in class: ${enrollmentCount}`)
-    lines.push(`  Started mission: ${studentsStarted}`)
-    lines.push(`  Completed mission: ${studentsCompleted}`)
-    lines.push(`  Average progress: ${avgProgress}%`)
+    lines.push(`  Enrolled in class: ${stats.totalStudents}`)
+    lines.push(`  Completed mission: ${stats.completed}`)
+    lines.push(`  In progress: ${stats.inProgress}`)
+    lines.push(`  Not started: ${stats.notStarted}`)
+    lines.push(`  Expired without finishing: ${stats.expired}`)
+    lines.push(`  Closed by the mission map path: ${stats.pathLocked}`)
+    if (stats.avgProgress !== null) {
+      lines.push(`  Average of required enigmas approved: ${stats.avgProgress}%`)
+    }
 
     return lines.join('\n')
   }

@@ -2,27 +2,28 @@
   <div class="space-y-6 w-full min-w-0 max-w-full">
     <!-- Page Header -->
     <PageHeader :title="t('admin.analytics.title')" :subtitle="t('admin.analytics.subtitle')">
+      <!-- El periodo, con las mismas píldoras que el de la analítica de las clases -->
       <template #actions>
-        <div class="flex gap-1 border-b border-border-primary">
-          <button
-            v-for="p in periods"
-            :key="p.value"
-            :class="[
-              'px-4 py-2 text-sm font-medium transition-colors border-b-2 -mb-px',
-              activePeriod === p.value
-                ? 'border-purple text-purple'
-                : 'border-transparent text-text-secondary hover:text-text-primary',
-            ]"
-            @click="changePeriod(p.value)"
-          >
-            {{ p.label }}
-          </button>
-        </div>
+        <TabNavigation
+          variant="pills"
+          toggle
+          :tabs="periods"
+          :active-tab="activePeriod"
+          :aria-label="t('teacher.analytics.period.label')"
+          @tab-change="activePeriod = $event as AdminAnalyticsPeriod"
+        />
       </template>
     </PageHeader>
 
+    <!-- No ha llegado: se dice y se puede reintentar -->
+    <Card v-if="!analytics && analyticsFailed[activePeriod]" type="stats">
+      <CardItem layout="column" padding="lg" centered>
+        <LoadError @retry="adminStore.ensureAnalytics(activePeriod, true)" />
+      </CardItem>
+    </Card>
+
     <!-- Loading State -->
-    <div v-if="isLoadingAnalytics" class="space-y-6">
+    <div v-else-if="!analytics" class="space-y-6">
       <CardGrid cols="4">
         <StatCardSkeleton v-for="i in 4" :key="i" type="stats" />
       </CardGrid>
@@ -62,46 +63,11 @@
     </div>
 
     <template v-else-if="analytics">
-      <!-- KPI Stats Row -->
+      <!-- Cifras del periodo, frente al periodo anterior de la misma duración -->
       <CardGrid cols="4">
-        <Card type="stats">
-          <StatDisplay
-            :value="`${analytics.kpis.avgResponseTime}ms`"
-            :label="t('admin.analytics.kpis.avg_response')"
-          />
-          <KpiDelta
-            :current="analytics.kpis.avgResponseTime"
-            :previous="analytics.kpis.avgResponseTimePrev"
-            invert
-          />
-        </Card>
-        <Card type="stats">
-          <StatDisplay
-            :value="`${analytics.kpis.requestsPerMinute}`"
-            suffix=" rpm"
-            :label="t('admin.analytics.kpis.requests_per_min')"
-          />
-          <KpiDelta
-            :current="analytics.kpis.requestsPerMinute"
-            :previous="analytics.kpis.requestsPerMinutePrev"
-          />
-        </Card>
-        <Card type="stats">
-          <StatDisplay
-            :value="`${analytics.kpis.errorRate}%`"
-            :label="t('admin.analytics.kpis.error_rate')"
-          />
-          <KpiDelta
-            :current="analytics.kpis.errorRate"
-            :previous="analytics.kpis.errorRatePrev"
-            invert
-          />
-        </Card>
-        <Card type="stats">
-          <StatDisplay
-            :value="`${analytics.kpis.uptimePercent}%`"
-            :label="t('admin.analytics.kpis.uptime')"
-          />
+        <Card v-for="kpi in kpiCards" :key="kpi.key" type="stats">
+          <StatDisplay :value="kpi.value" :label="kpi.label" />
+          <KpiDelta :current="kpi.current" :previous="kpi.previous" :rate="kpi.rate" />
         </Card>
       </CardGrid>
 
@@ -112,7 +78,7 @@
           <CardHeader
             :title="t('admin.analytics.sections.system_resources')"
             :icon="CpuChipIcon"
-            title-tag="h3"
+            title-tag="h2"
           />
           <CardItem padding="lg" layout="column">
             <div class="space-y-5">
@@ -139,7 +105,7 @@
                 :label="t('admin.analytics.system.db_latency')"
                 :value="analytics.systemHealth.dbLatency"
                 :max="200"
-                unit="ms"
+                unit=" ms"
                 :warn-at="50"
                 :danger-at="100"
               />
@@ -147,44 +113,58 @@
           </CardItem>
         </Card>
 
-        <!-- Service Health -->
+        <!-- Estado de los servicios: llega aparte (sondear la IA tarda), con su
+             propio esqueleto; el resto de la página no lo espera -->
         <Card type="clases">
           <CardHeader
             :title="t('admin.analytics.sections.service_health')"
             :icon="ServerIcon"
-            title-tag="h3"
+            title-tag="h2"
           />
           <CardItem padding="lg" layout="column">
-            <div class="overflow-x-auto -mx-2">
+            <LoadError
+              v-if="!analyticsServices && analyticsServicesFailed"
+              :heading-level="3"
+              @retry="adminStore.fetchAnalyticsServices()"
+            />
+            <div v-else-if="!analyticsServices" class="space-y-3" aria-hidden="true">
+              <Skeleton v-for="j in 3" :key="j" width="w-full" height="h-6" />
+            </div>
+            <!-- Si no cabe (móvil con letra grande), se desplaza dentro de su caja,
+                 con la barra a la vista y alcanzable con el teclado (como ChartTable) -->
+            <div
+              v-else
+              class="scrollbar-visible relative -mx-2 overflow-x-auto"
+              role="region"
+              tabindex="0"
+              :aria-label="t('admin.analytics.sections.service_health')"
+            >
               <table class="w-full text-sm">
+                <caption class="sr-only">
+                  {{ t('admin.analytics.sections.service_health') }}
+                </caption>
                 <thead>
                   <tr class="border-b border-navy-700/10">
-                    <th class="text-left py-2 px-2 text-xs font-semibold text-navy-700/70">
+                    <th scope="col" class="text-left py-2 px-2 text-xs font-semibold text-navy-700/80">
                       {{ t('admin.analytics.table.service') }}
                     </th>
-                    <th class="text-center py-2 px-2 text-xs font-semibold text-navy-700/70">
+                    <th scope="col" class="text-center py-2 px-2 text-xs font-semibold text-navy-700/80">
                       {{ t('admin.analytics.table.status') }}
                     </th>
-                    <th class="text-right py-2 px-2 text-xs font-semibold text-navy-700/70">
-                      {{ t('admin.analytics.table.uptime') }}
-                    </th>
-                    <th class="text-right py-2 px-2 text-xs font-semibold text-navy-700/70">
+                    <th scope="col" class="text-right py-2 px-2 text-xs font-semibold text-navy-700/80">
                       {{ t('admin.analytics.table.latency') }}
-                    </th>
-                    <th
-                      class="text-right py-2 px-2 text-xs font-semibold text-navy-700/70 hidden sm:table-cell"
-                    >
-                      P95
                     </th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr
-                    v-for="svc in analytics.serviceHealth"
-                    :key="svc.name"
+                    v-for="svc in analyticsServices"
+                    :key="svc.key"
                     class="border-b border-navy-700/5 last:border-0"
                   >
-                    <td class="py-2.5 px-2 font-medium text-navy-700 text-xs">{{ svc.name }}</td>
+                    <th scope="row" class="py-2.5 px-2 text-left font-medium text-navy-700 text-xs">
+                      {{ serviceName(svc.key) }}
+                    </th>
                     <td class="py-2.5 px-2 text-center">
                       <span
                         :class="[
@@ -196,19 +176,9 @@
                         {{ statusLabel(svc.status) }}
                       </span>
                     </td>
-                    <td class="py-2.5 px-2 text-right text-xs text-navy-700/70">
-                      {{ svc.uptime }}%
-                    </td>
-                    <td
-                      class="py-2.5 px-2 text-right text-xs font-mono"
-                      :class="svc.avgLatency > 500 ? 'text-yellow-600' : 'text-navy-700/70'"
-                    >
-                      {{ svc.avgLatency }}ms
-                    </td>
-                    <td
-                      class="py-2.5 px-2 text-right text-xs font-mono text-navy-700/70 hidden sm:table-cell"
-                    >
-                      {{ svc.p95Latency }}ms
+                    <!-- Sin medida (no respondió, o comparte la del texto): «—» -->
+                    <td class="py-2.5 px-2 text-right text-xs tabular-nums text-navy-700">
+                      {{ svc.latencyMs === null ? '—' : `${formatNumber(svc.latencyMs)} ms` }}
                     </td>
                   </tr>
                 </tbody>
@@ -218,71 +188,42 @@
         </Card>
       </div>
 
-      <!-- Time Series Charts -->
+      <!-- Series del periodo: lo que se ha medido, sin estimaciones -->
       <Card type="clases">
         <CardHeader
-          :title="t('admin.analytics.sections.response_time')"
+          :title="t('admin.analytics.sections.period_series')"
           :icon="ChartBarIcon"
-          title-tag="h3"
+          title-tag="h2"
         />
-        <CardGrid cols="2">
-          <CardItem padding="lg" layout="column">
-            <p class="text-xs font-semibold text-navy-700/70 mb-3">
-              {{ t('admin.analytics.sections.response_time') }}
-            </p>
-            <MiniBarChart :data="analytics.responseTimeSeries" color="#8B5CF6" unit="ms" />
-          </CardItem>
-          <CardItem padding="lg" layout="column">
-            <p class="text-xs font-semibold text-navy-700/70 mb-3">
-              {{ t('admin.analytics.sections.active_users') }}
-            </p>
-            <MiniBarChart :data="analytics.activeUsersSeries" color="#6FEDB7" />
-          </CardItem>
-          <CardItem padding="lg" layout="column">
-            <p class="text-xs font-semibold text-navy-700/70 mb-3">
-              {{ t('admin.analytics.sections.requests') }}
-            </p>
-            <MiniBarChart :data="analytics.requestsSeries" color="#3B82F6" />
-          </CardItem>
-          <CardItem padding="lg" layout="column">
-            <p class="text-xs font-semibold text-navy-700/70 mb-3">
-              {{ t('admin.analytics.sections.tokens_over_time') }}
-            </p>
-            <MiniBarChart :data="analytics.aiUsage.tokensSeries" color="rgb(var(--palette-amber-500))" />
+        <CardGrid cols="3">
+          <CardItem v-for="chart in seriesCharts" :key="chart.key" padding="lg" layout="column">
+            <p class="text-xs font-semibold text-navy-700/70 mb-3">{{ chart.label }}</p>
+            <ActivityColumns :points="chart.points" :label="chart.label" dense />
           </CardItem>
         </CardGrid>
       </Card>
 
-      <!-- Platform Overview -->
-      <CardGrid cols="4">
+      <!-- Totales de la plataforma (las misiones completadas van arriba, con su comparación) -->
+      <CardGrid cols="3">
         <Card type="stats">
           <StatDisplay
             :value="formatNumber(analytics.overview.totalUsers)"
             :label="t('admin.analytics.overview.total_users')"
           />
-          <p class="text-sm text-navy-700/70 font-medium">
-            +{{ analytics.overview.newUsersThisPeriod }}
+          <p class="text-sm text-navy-700 font-medium">
+            +{{ formatNumber(analytics.overview.newUsersThisPeriod) }}
           </p>
         </Card>
         <Card type="stats">
           <StatDisplay
-            :value="analytics.overview.activeUsersToday"
+            :value="formatNumber(analytics.overview.activeUsersToday)"
             :label="t('admin.analytics.overview.active_today')"
           />
         </Card>
         <Card type="stats">
           <StatDisplay
-            :value="formatNumber(analytics.overview.missionsCompleted)"
-            :label="t('admin.analytics.overview.missions_completed')"
-          />
-          <p class="text-sm text-navy-700/70 font-medium">
-            +{{ analytics.overview.newMissionsThisPeriod }}
-          </p>
-        </Card>
-        <Card type="stats">
-          <StatDisplay
-            :value="`${analytics.overview.avgCompletionRate}%`"
-            :label="t('admin.analytics.overview.completion_rate')"
+            :value="formatNumber(analytics.overview.pendingSubmissions)"
+            :label="t('admin.analytics.overview.pending_reviews')"
           />
         </Card>
       </CardGrid>
@@ -294,13 +235,16 @@
           <CardHeader
             :title="t('admin.analytics.sections.users_by_role')"
             :icon="UsersIcon"
-            title-tag="h3"
+            title-tag="h2"
           />
           <CardItem padding="lg" layout="column">
             <DistributionBar
-              v-for="metric in analytics.usersByRole"
-              :key="metric.label"
-              v-bind="metric"
+              v-for="metric in distributions.roles"
+              :key="metric.key"
+              :label="metric.label"
+              :value="metric.value"
+              :percentage="metric.percentage"
+              :tone="metric.tone"
             />
           </CardItem>
         </Card>
@@ -310,13 +254,16 @@
           <CardHeader
             :title="t('admin.analytics.sections.missions_by_status')"
             :icon="RocketLaunchIcon"
-            title-tag="h3"
+            title-tag="h2"
           />
           <CardItem padding="lg" layout="column">
             <DistributionBar
-              v-for="metric in analytics.missionsByStatus"
-              :key="metric.label"
-              v-bind="metric"
+              v-for="metric in distributions.statuses"
+              :key="metric.key"
+              :label="metric.label"
+              :value="metric.value"
+              :percentage="metric.percentage"
+              :tone="metric.tone"
             />
           </CardItem>
         </Card>
@@ -326,13 +273,16 @@
           <CardHeader
             :title="t('admin.analytics.sections.missions_by_rarity')"
             :icon="SparklesIcon"
-            title-tag="h3"
+            title-tag="h2"
           />
           <CardItem padding="lg" layout="column">
             <DistributionBar
-              v-for="metric in analytics.missionsByRarity"
-              :key="metric.label"
-              v-bind="metric"
+              v-for="metric in distributions.rarities"
+              :key="metric.key"
+              :label="metric.label"
+              :value="metric.value"
+              :percentage="metric.percentage"
+              :tone="metric.tone"
             />
           </CardItem>
         </Card>
@@ -343,48 +293,24 @@
         <CardHeader
           :title="t('admin.analytics.sections.ai_usage')"
           :icon="ChatBubbleLeftRightIcon"
-          title-tag="h3"
+          title-tag="h2"
         />
 
-        <CardGrid cols="4">
-          <CardItem padding="md" layout="column" centered>
-            <p class="text-2xl font-bold text-navy-700">
-              {{ formatNumber(analytics.aiUsage.totalTokensUsed) }}
-            </p>
-            <p class="text-xs text-navy-700/70 mt-1">{{ t('admin.analytics.ai.total_tokens') }}</p>
-          </CardItem>
-          <CardItem padding="md" layout="column" centered>
-            <p class="text-2xl font-bold text-navy-700">
-              {{ formatNumber(analytics.aiUsage.avgTokensPerUser) }}
-            </p>
-            <p class="text-xs text-navy-700/70 mt-1">
-              {{ t('admin.analytics.ai.avg_tokens_user') }}
-            </p>
-          </CardItem>
-          <CardItem padding="md" layout="column" centered>
-            <p class="text-2xl font-bold text-navy-700">
-              {{ formatNumber(analytics.aiUsage.totalConversations) }}
-            </p>
-            <p class="text-xs text-navy-700/70 mt-1">
-              {{ t('admin.analytics.ai.total_conversations') }}
-            </p>
-          </CardItem>
-          <CardItem padding="md" layout="column" centered>
-            <p class="text-2xl font-bold text-navy-700">
-              {{ analytics.aiUsage.avgConversationsPerUser }}
-            </p>
-            <p class="text-xs text-navy-700/70 mt-1">
-              {{ t('admin.analytics.ai.avg_conversations_user') }}
-            </p>
+        <CardGrid cols="2">
+          <CardItem v-for="figure in aiFigures" :key="figure.key" padding="md" layout="column" centered>
+            <p class="text-2xl font-bold text-navy-700">{{ figure.value }}</p>
+            <p class="text-xs text-navy-700/70 mt-1">{{ figure.label }}</p>
           </CardItem>
         </CardGrid>
 
         <CardItem padding="lg" layout="column">
           <DistributionBar
-            v-for="assistant in analytics.aiUsage.tokensByAssistant"
-            :key="assistant.label"
-            v-bind="assistant"
-            :show-count="true"
+            v-for="metric in distributions.assistants"
+            :key="metric.key"
+            :label="metric.label"
+            :value="metric.value"
+            :percentage="metric.percentage"
+            :tone="metric.tone"
           />
         </CardItem>
       </Card>
@@ -403,8 +329,21 @@ import {
   SparklesIcon,
   ChatBubbleLeftRightIcon,
 } from '@heroicons/vue/24/outline'
+import type { DistributionTone } from '~/components/atoms/DistributionBar.vue'
+import type {
+  AdminAnalyticsPeriod,
+  AnalyticsMetric,
+  ServiceKey,
+  TimeSeriesPoint,
+} from '~/types/admin.types'
+import {
+  formatDayLong,
+  formatMonthLong,
+  formatMonthShort,
+  formatWeekShort,
+} from '~/utils/analytics-view'
 
-const { t } = useI18n()
+const { t, te, locale } = useI18n()
 useHead({
   title: () => t('admin.analytics.meta.title'),
   meta: [{ name: 'description', content: () => t('admin.analytics.meta.description') }],
@@ -412,32 +351,188 @@ useHead({
 definePageMeta({ layout: 'admin', middleware: ['auth', 'onboarding', 'role'], role: 'admin' })
 
 const adminStore = useAdminStore()
-const { analytics, isLoadingAnalytics } = storeToRefs(adminStore)
+const { analyticsByPeriod, analyticsFailed, analyticsServices, analyticsServicesFailed } =
+  storeToRefs(adminStore)
 
-const activePeriod = ref<'week' | 'month' | 'quarter'>('month')
-const periods = [
-  { value: 'week' as const, label: t('admin.analytics.period.week') },
-  { value: 'month' as const, label: t('admin.analytics.period.month') },
-  { value: 'quarter' as const, label: t('admin.analytics.period.quarter') },
-]
-
-const changePeriod = (period: 'week' | 'month' | 'quarter') => {
-  activePeriod.value = period
-}
-
-// Carga inicial + cambios de periodo con cache por periodo (en store) y debounce 300ms
-watchDebounced(
-  activePeriod,
-  period => {
-    adminStore.ensureAnalytics(period)
-  },
-  { debounce: 300, immediate: true }
+const activePeriod = ref<AdminAnalyticsPeriod>('month')
+const periods = computed(() =>
+  (['week', 'month', 'quarter'] as const).map(id => ({
+    id,
+    label: t(`admin.analytics.period.${id}`),
+  }))
 )
 
-const formatNumber = (n: number): string => {
-  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`
-  if (n >= 1_000) return `${(n / 1_000).toFixed(1)}k`
-  return n.toString()
+/** Lo del periodo elegido; mientras llega, su esqueleto (nunca lo de otro periodo). */
+const analytics = computed(() => analyticsByPeriod.value[activePeriod.value] ?? null)
+
+// Al entrar y al cambiar de periodo (lo ya visto se queda en el store), con un
+// respiro por si se pasa de uno a otro seguido.
+watchDebounced(activePeriod, period => void adminStore.ensureAnalytics(period), {
+  debounce: 300,
+  immediate: true,
+})
+// El estado de los servicios, aparte y en vivo: la página no lo espera.
+onMounted(() => void adminStore.fetchAnalyticsServices())
+
+const { formatNumber, formatPercent } = useNumberFormat()
+
+/** Lo del periodo frente al anterior: todo medido, nada estimado. */
+const kpiCards = computed(() => {
+  const k = analytics.value?.kpis
+  if (!k) return []
+  return [
+    {
+      key: 'activity',
+      label: t('admin.analytics.kpis.activity'),
+      value: formatNumber(k.activity.current),
+      ...k.activity,
+      rate: false,
+    },
+    {
+      key: 'new_users',
+      label: t('admin.analytics.kpis.new_users'),
+      value: formatNumber(k.newUsers.current),
+      ...k.newUsers,
+      rate: false,
+    },
+    {
+      key: 'missions_completed',
+      label: t('admin.analytics.kpis.missions_completed'),
+      value: formatNumber(k.missionsCompleted.current),
+      ...k.missionsCompleted,
+      rate: false,
+    },
+    {
+      key: 'error_rate',
+      label: t('admin.analytics.kpis.error_rate'),
+      value: formatPercent(k.errorRate.current, 1),
+      ...k.errorRate,
+      rate: true,
+    },
+  ]
+})
+
+/**
+ * Las columnas de una serie: cada tramo con su fecha de inicio, escrita en el
+ * idioma de la app. El trimestre va por meses («oct»); la semana, por días, y el
+ * mes, en cuatro tramos, por el día en que empieza cada uno («14 oct»). Para el
+ * lector y la tabla, la fecha entera.
+ */
+function columnsOf(series: TimeSeriesPoint[]) {
+  const months = activePeriod.value === 'quarter'
+  return series.map(point => ({
+    key: point.start,
+    label: months
+      ? formatMonthShort(point.start, locale.value)
+      : formatWeekShort(point.start, locale.value),
+    title: months
+      ? formatMonthLong(point.start, locale.value)
+      : formatDayLong(point.start, locale.value),
+    value: point.value,
+  }))
+}
+
+/** Las series del periodo. */
+const seriesCharts = computed(() => {
+  const a = analytics.value
+  if (!a) return []
+  return [
+    {
+      key: 'new_users',
+      label: t('admin.analytics.sections.new_users'),
+      points: columnsOf(a.newUsersSeries),
+    },
+    {
+      key: 'activity',
+      label: t('admin.analytics.sections.activity'),
+      points: columnsOf(a.activitySeries),
+    },
+    {
+      key: 'assistant_messages',
+      label: t('admin.analytics.sections.assistant_messages'),
+      points: columnsOf(a.aiUsage.messagesSeries),
+    },
+  ]
+})
+
+const aiFigures = computed(() => {
+  const ai = analytics.value?.aiUsage
+  if (!ai) return []
+  return [
+    { key: 'messages', label: t('admin.analytics.ai.total_messages'), value: formatNumber(ai.totalMessages) },
+    {
+      key: 'conversations',
+      label: t('admin.analytics.ai.total_conversations'),
+      value: formatNumber(ai.totalConversations),
+    },
+  ]
+})
+
+// ---- Repartos: el nombre y el color de cada clave ----
+
+/** El nombre y el color de una clave. Una que no se conoce, tal cual y en morado. */
+interface KeyLook {
+  label: string
+  tone: DistributionTone
+}
+
+const roleLooks = computed<Record<string, KeyLook>>(() => ({
+  teacher: { label: t('admin.users.filters.teachers'), tone: 'navy' },
+  student: { label: t('admin.users.filters.students'), tone: 'purple' },
+  admin: { label: t('admin.users.filters.admins'), tone: 'sky' },
+  none: { label: t('admin.analytics.no_role'), tone: 'yellow' },
+}))
+const statusLooks = computed<Record<string, KeyLook>>(() => ({
+  activa: { label: t('teacher.components.mission_filter_bar.status.active'), tone: 'green' },
+  bloqueada: { label: t('teacher.components.mission_filter_bar.status.locked'), tone: 'navy' },
+}))
+// Los colores de las rarezas, los de sus píldoras (`RarityBadge`).
+const RARITY_TONE: Record<string, DistributionTone> = {
+  comun: 'green',
+  rara: 'purple-light',
+  epica: 'purple',
+  legendaria: 'legendary',
+}
+
+const lookOf = (metric: AnalyticsMetric, looks: Record<string, KeyLook>): KeyLook =>
+  looks[metric.key] ?? { label: metric.key, tone: 'purple' }
+
+function rarityLook(metric: AnalyticsMetric): KeyLook {
+  const path = `student.components.rarity_badge.${metric.key}`
+  return {
+    label: te(path) ? t(path) : metric.key,
+    tone: RARITY_TONE[metric.key] ?? 'purple',
+  }
+}
+
+/** Los asistentes, con su nombre (el de su personaje) y todos del mismo color. */
+function assistantLook(metric: AnalyticsMetric): KeyLook {
+  const path = `common.avatars.characters.${metric.key}.name`
+  return { label: te(path) ? t(path) : metric.key, tone: 'purple' }
+}
+
+const distributions = computed(() => {
+  const a = analytics.value
+  const rows = (list: AnalyticsMetric[] | undefined, look: (metric: AnalyticsMetric) => KeyLook) =>
+    (list ?? []).map(metric => ({
+      key: metric.key,
+      value: metric.value,
+      percentage: metric.percentage,
+      ...look(metric),
+    }))
+  return {
+    roles: rows(a?.usersByRole, metric => lookOf(metric, roleLooks.value)),
+    statuses: rows(a?.missionsByStatus, metric => lookOf(metric, statusLooks.value)),
+    rarities: rows(a?.missionsByRarity, rarityLook),
+    assistants: rows(a?.aiUsage.messagesByAssistant, assistantLook),
+  }
+})
+
+// ---- Servicios ----
+
+const serviceName = (key: ServiceKey | string) => {
+  const path = `admin.analytics.services.${key}`
+  return te(path) ? t(path) : key
 }
 
 const statusPillClass = (s: string) =>

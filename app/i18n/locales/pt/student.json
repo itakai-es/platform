@@ -26,7 +26,8 @@
       "ai_assistant": {
         "name": "Atena",
         "message_new_user": "Olá {name}! Damos-te as boas-vindas ao ITAKAI. Conclui a tua primeira missão para começares a ganhar XP!",
-        "message_returning_user": "Olá {name}! Concluíste {missions_completed} missões em {classes_enrolled} turmas. Continua assim!"
+        "message_returning_user": "Olá, {name}! Concluíste {count} missão {classes}. Continua assim! | Olá, {name}! Concluíste {count} missões {classes}. Continua assim!",
+        "classes_phrase": "em {count} turma | em {count} turmas"
       },
       "class_fallback_name": "Turma",
       "recent_badges_empty": "Não há emblemas recentes",
@@ -91,7 +92,9 @@
         "error": "Erro ao enviar a entrega. Tenta novamente.",
         "expired_error": "Esta missão expirou. Já não podes entregar enigmas.",
         "downloading": "A descarregar",
-        "path_locked": "Esta missão ainda não está aberta: antes tens de concluir outra."
+        "path_locked": "Esta missão ainda não está aberta: antes tens de concluir outra.",
+        "already_approved": "Este enigma já está aprovado.",
+        "already_pending": "Já tens uma entrega deste enigma à espera de revisão."
       },
       "hints": {
         "intro": "Não consegues avançar? Usa uma pista. Abrem-se por ordem, uma de cada vez, e cada uma tem o seu custo.",
@@ -133,7 +136,6 @@
         "description": "Ainda não estás em nenhuma turma. Pede o código a quem te dá aulas para te juntares."
       },
       "detail": {
-        "error_title": "Erro ao carregar a turma",
         "back_to_classes": "Voltar às minhas turmas",
         "breadcrumb_classes": "As minhas turmas",
         "teacher_fallback": "Docente",
@@ -148,7 +150,6 @@
         },
         "progress": {
           "title": "O meu progresso",
-          "completion_rate": "Concluído",
           "missions_completed": "Missões concluídas",
           "xp_total": "XP total",
           "badges_earned": "Emblemas obtidos"
@@ -179,7 +180,11 @@
           "save_error": "Erro ao guardar o perfil",
           "generate_error": "Não foi possível gerar o avatar. Tenta novamente daqui a uns segundos.",
           "generate_error_with_detail": "Não foi possível gerar o avatar: {detail}",
-          "how_others_see": "É assim que te veem nesta turma"
+          "how_others_see": "É assim que te veem nesta turma",
+          "nickname_empty": "Escreve uma alcunha: é o nome com que a tua turma te vê.",
+          "nickname_taken": "Essa alcunha já é de outra pessoa da tua turma. Experimenta outra.",
+          "nickname_invalid": "A alcunha tem de ter de 1 a {max} caracteres, com alguma letra ou número.",
+          "nickname_reserved": "Essa alcunha não pode ser usada: escolhe uma que não seja «Estudiante» nem o nome de outra pessoa da tua turma."
         },
         "mission_no_description": "Sem descrição",
         "shop": {
@@ -234,6 +239,49 @@
         "teachers": {
           "title": "Corpo docente",
           "empty": "Esta turma ainda não tem corpo docente."
+        },
+        "compare": {
+          "title": "Tu e a tua turma",
+          "hint": "A comparação é feita com a média do resto da tua turma, arredondada. Não se vê ninguém em concreto."
+        },
+        "results": {
+          "title": "Os meus resultados",
+          "hint": "As recompensas de cada missão são as que recebeste com os seus enigmas. Não incluem o bónus por a concluíres, por isso a soma não tem de coincidir com o teu saldo.",
+          "filter_label": "Filtrar as minhas missões",
+          "empty_pending": "Não tens missões pendentes",
+          "empty_done": "Ainda não concluíste nenhuma missão",
+          "in_review": "{count} em revisão | {count} em revisão",
+          "deadline_past": "expirou a {date}",
+          "hints": "{count} pista usada | {count} pistas usadas",
+          "by_enigma": "% por enigma",
+          "enigma_open": "Por entregar",
+          "filter_pending": "Pendentes ({count})",
+          "filter_done": "Feitas ({count})",
+          "empty_description": "Quando mudar, aparece aqui.",
+          "completed_on": "a {date}",
+          "deadline_future": "termina a {date}",
+          "enigmas": "{approved} de {total} enigma aprovado | {approved} de {total} enigmas aprovados",
+          "optional": "opcional",
+          "enigma_approved": "{percent} · {date}",
+          "enigma_pending_since": "Em revisão desde {date}"
+        },
+        "errors": {
+          "archived": {
+            "title": "Esta turma já não está disponível",
+            "description": "Quem te dá aulas arquivou-a. As tuas missões e o teu progresso não se perdem."
+          },
+          "not_found": {
+            "title": "Não encontramos esta turma",
+            "description": "Pode ser que a ligação não esteja correta ou que já não estejas nela."
+          },
+          "forbidden": {
+            "title": "Não estás nesta turma",
+            "description": "Se achas que é um erro, fala com quem te dá aulas."
+          },
+          "generic": {
+            "title": "Não foi possível carregar a turma",
+            "description": "Tenta novamente daqui a um momento."
+          }
         }
       }
     },
@@ -391,9 +439,27 @@
         "missions_suffix": "missões",
         "you_badge": "Tu",
         "avg_xp": "XP média",
-        "avg_progress": "Progresso médio",
+        "avg_progress": "Progresso médio (enigmas obrigatórios)",
         "avg_missions": "Missões em média",
-        "total_xp": "XP total da turma"
+        "total_xp": "XP total da turma",
+        "podium_empty": "Ainda ninguém tem XP. O pódio enche-se assim que alguém a conseguir.",
+        "rank_sr": "Posição {rank}",
+        "missions_count": "{count} missão | {count} missões",
+        "podium_empty_missions": "Ainda ninguém concluiu uma missão. O pódio enche-se assim que alguém o fizer.",
+        "podium_empty_missions_week": "Esta semana ainda ninguém concluiu uma missão.",
+        "no_rank_xp": "Ainda não tens posição. Consegue XP para entrar na classificação.",
+        "no_rank_missions": "Ainda não tens posição. Conclui uma missão para entrar na classificação.",
+        "no_rank_missions_week": "Esta semana ainda não tens posição. Conclui uma missão para entrar na classificação.",
+        "my_position_title": "A tua posição",
+        "my_position_preview": "Cada estudante vê aqui a sua posição e o total da turma.",
+        "top_list_title": "Até à posição {n}"
+      },
+      "class_xp_bar": {
+        "rank": "Ranking",
+        "level_line": "Nível {level} · {title}",
+        "rank_of": "Posição {rank} de {total}",
+        "xp_to_next": "Falta {count} XP para o nível {level} | Faltam {count} XP para o nível {level}",
+        "max_level": "Nível máximo"
       }
     },
     "teams": {

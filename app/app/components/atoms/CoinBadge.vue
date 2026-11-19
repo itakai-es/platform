@@ -4,12 +4,14 @@
     :class="[textClass, variant === 'solid' ? pillClass : '', colorClass]"
   >
     <CoinIcon :class="iconClasses" />
-    {{ amount.toLocaleString('es-ES') }}
+    {{ formatNumber(amount) }}
     <span v-if="label" class="font-medium">{{ label }}</span>
   </span>
 </template>
 
 <script setup lang="ts">
+const { formatNumber } = useNumberFormat()
+
 interface Props {
   amount: number
   size?: 'sm' | 'md' | 'lg'

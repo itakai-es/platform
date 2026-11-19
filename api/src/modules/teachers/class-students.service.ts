@@ -7,8 +7,14 @@ import {
   type ClassUser,
 } from '../../utils/class-access.js'
 import { NotFoundError, ValidationError } from '../../utils/errors.js'
-import { cleanDisplayName } from '../../utils/identity.js'
-import { NICKNAME_MAX_LENGTH } from '../../utils/enrollment.js'
+import {
+  ENROLL_TX_OPTIONS,
+  NICKNAME_MAX_LENGTH,
+  assertNicknameAvailable,
+  cleanNickname,
+  isSameNickname,
+  lockClassNicknames,
+} from '../../utils/enrollment.js'
 import { isStudentCatalogAvatar } from '../../utils/avatars.js'
 import { deleteUpload } from '../storage/storage.service.js'
 import { releaseGeneratedAvatar } from '../storage/upload-usage.js'
@@ -55,7 +61,7 @@ export function unusedAccountHomeClass(account: UnusedAccountFacts): string | nu
 async function studentEnrollment(classId: string, studentId: string, tx: Prisma.TransactionClient) {
   const enrollment = await tx.classEnrollment.findUnique({
     where: { studentId_classId: { studentId, classId } },
-    select: { id: true, isPreview: true, avatarUrl: true },
+    select: { id: true, isPreview: true, avatarUrl: true, nickname: true },
   })
   if (!enrollment || enrollment.isPreview) {
     throw new NotFoundError('Esa cuenta de estudiante no está en esta clase')
@@ -63,7 +69,12 @@ async function studentEnrollment(classId: string, studentId: string, tx: Prisma.
   return enrollment
 }
 
-/** Cambia el alias del alumno en la clase. Las entradas antiguas de su historial se quedan como estaban. */
+/**
+ * Cambia el alias del alumno en la clase, sin repetir el de otra persona de ella
+ * (409 `NICKNAME_TAKEN`), ni el nombre real de otra persona ni «Estudiante» (409
+ * `NICKNAME_RESERVED`; ver `assertNicknameAvailable`), como cuando lo cambia el
+ * propio estudiante. Las entradas antiguas de su historial se quedan como estaban.
+ */
 export async function updateStudentNickname(
   actor: ClassUser,
   classId: string,
@@ -72,16 +83,16 @@ export async function updateStudentNickname(
 ): Promise<{ nickname: string }> {
   await assertClassAccess(classId, actor.id, 'student.nickname')
 
-  const clean = cleanDisplayName(nickname)
-  if (!clean || clean.length > NICKNAME_MAX_LENGTH) {
-    throw new ValidationError(
-      `El alias debe tener entre 1 y ${NICKNAME_MAX_LENGTH} caracteres`,
-      'INVALID_NICKNAME'
-    )
-  }
+  const clean = cleanNickname(nickname)
 
   return prisma.$transaction(async tx => {
     const enrollment = await studentEnrollment(classId, studentId, tx)
+    // Solo se comprueba un alias nuevo: quien vuelve a guardar el suyo no choca
+    // consigo, ni con un repetido de antes de esta regla.
+    if (!isSameNickname(clean, enrollment.nickname)) {
+      await lockClassNicknames(tx, classId)
+      await assertNicknameAvailable(tx, classId, clean, enrollment.id)
+    }
     const updated = await tx.classEnrollment.update({
       where: { id: enrollment.id },
       data: { nickname: clean },
@@ -97,7 +108,7 @@ export async function updateStudentNickname(
       targetUserId: studentId,
     })
     return { nickname: updated.nickname ?? clean }
-  })
+  }, ENROLL_TX_OPTIONS)
 }
 
 /**

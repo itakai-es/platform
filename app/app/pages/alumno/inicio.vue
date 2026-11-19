@@ -11,19 +11,19 @@
     <template #stats>
       <Card type="stats">
         <StatDisplay
-          :value="profile?.stats?.classesEnrolled || 0"
+          :value="profile?.stats?.classesEnrolled ?? 0"
           :label="t('student.dashboard.stats.classes_enrolled')"
         />
       </Card>
       <Card type="stats">
         <StatDisplay
-          :value="profile?.stats?.missionsCompleted || 0"
+          :value="profile?.stats?.missionsCompleted ?? 0"
           :label="t('student.dashboard.stats.missions_completed')"
         />
       </Card>
       <Card type="stats">
         <StatDisplay
-          :value="profile?.stats?.badgesEarned || 0"
+          :value="profile?.stats?.badgesEarned ?? 0"
           :label="t('student.dashboard.stats.badges_earned')"
         />
       </Card>
@@ -125,7 +125,7 @@
 
     <template #sidebar>
       <AIAssistantCardSkeleton v-if="gamificationStore.isLoadingProfile" />
-      <AIAssistantCard v-else />
+      <AIAssistantCard v-else :message="aiAssistantMessage" />
       <RecentActivityCard
         :activities="formattedActivities"
         :loading="studentStore.isLoadingActivities"
@@ -142,6 +142,7 @@ import type { ActivityType } from '~/types/activity.types'
 // Activity types imported by useActivityFormatter
 
 const { t } = useI18n()
+const { formatNumber } = useNumberFormat()
 
 useHead({
   title: computed(() => t('student.dashboard.meta.title')),
@@ -257,11 +258,17 @@ const aiAssistantMessage = computed(() => {
     return t('student.dashboard.ai_assistant.message_new_user', { name: userName })
   }
 
-  return t('student.dashboard.ai_assistant.message_returning_user', {
-    name: userName,
-    missions_completed: missionsCompleted,
-    classes_enrolled: classesEnrolled,
-  })
+  // Con plural en las dos cifras: «1 misión en 1 clase», «3 misiones en 2 clases».
+  const classes = t(
+    'student.dashboard.ai_assistant.classes_phrase',
+    { count: formatNumber(classesEnrolled) },
+    classesEnrolled
+  )
+  return t(
+    'student.dashboard.ai_assistant.message_returning_user',
+    { name: userName, count: formatNumber(missionsCompleted), classes },
+    missionsCompleted
+  )
 })
 
 // Handle AI assistant question

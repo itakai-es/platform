@@ -26,7 +26,8 @@
       "ai_assistant": {
         "name": "Atenea",
         "message_new_user": "Hello {name}! Welcome to ITAKAI. Complete your first mission to start earning XP!",
-        "message_returning_user": "Hello {name}! You have completed {missions_completed} missions in {classes_enrolled} classes. Keep it up!"
+        "message_returning_user": "Hello, {name}! You have completed {count} mission {classes}. Keep it up! | Hello, {name}! You have completed {count} missions {classes}. Keep it up!",
+        "classes_phrase": "in {count} class | in {count} classes"
       },
       "class_fallback_name": "Class",
       "recent_badges_empty": "No recent badges",
@@ -91,7 +92,9 @@
         "error": "Error submitting. Please try again.",
         "expired_error": "This mission has expired. You can no longer submit enigmas.",
         "downloading": "Downloading",
-        "path_locked": "This mission isn’t open yet: you need to complete another one first."
+        "path_locked": "This mission isn’t open yet: you need to complete another one first.",
+        "already_approved": "This enigma has already been approved for you.",
+        "already_pending": "You already have a submission for this enigma waiting for review."
       },
       "hints": {
         "intro": "Stuck? Use a hint. They open in order, one at a time, and each one has its own cost.",
@@ -133,7 +136,6 @@
         "description": "You are not enrolled in any class yet. Ask your teacher for the code to join."
       },
       "detail": {
-        "error_title": "Error loading the class",
         "back_to_classes": "Back to my classes",
         "breadcrumb_classes": "My classes",
         "teacher_fallback": "Teacher",
@@ -148,7 +150,6 @@
         },
         "progress": {
           "title": "My progress",
-          "completion_rate": "Completed",
           "missions_completed": "Missions completed",
           "xp_total": "Total XP",
           "badges_earned": "Badges earned"
@@ -179,7 +180,11 @@
           "save_error": "Error saving the profile",
           "generate_error": "Could not generate the avatar. Please try again in a few seconds.",
           "generate_error_with_detail": "Could not generate the avatar: {detail}",
-          "how_others_see": "How others see you in this class"
+          "how_others_see": "How others see you in this class",
+          "nickname_empty": "Enter a nickname: it's the name your class sees you by.",
+          "nickname_taken": "Someone else in your class already has that nickname. Try another one.",
+          "nickname_invalid": "Your nickname must be 1 to {max} characters long and include a letter or number.",
+          "nickname_reserved": "You can't use that nickname: choose one that isn't “Estudiante” or the name of someone else in your class."
         },
         "mission_no_description": "No description",
         "shop": {
@@ -234,6 +239,49 @@
         "teachers": {
           "title": "Teachers",
           "empty": "This class has no teachers yet."
+        },
+        "compare": {
+          "title": "You and your class",
+          "hint": "Compared with the rounded average of the rest of your class. Nobody in particular can be seen."
+        },
+        "results": {
+          "title": "My results",
+          "hint": "Each mission's rewards are what you earned from its enigmas. They don't include the bonus for completing it, so their total won't necessarily match your balance.",
+          "filter_label": "Filter my missions",
+          "empty_pending": "No pending missions",
+          "empty_done": "You haven't completed any missions yet",
+          "in_review": "{count} under review | {count} under review",
+          "deadline_past": "expired on {date}",
+          "hints": "{count} hint used | {count} hints used",
+          "by_enigma": "% per enigma",
+          "enigma_open": "Not submitted",
+          "filter_pending": "Pending ({count})",
+          "filter_done": "Done ({count})",
+          "empty_description": "When that changes, it will appear here.",
+          "completed_on": "on {date}",
+          "deadline_future": "due {date}",
+          "enigmas": "{approved} of {total} enigma approved | {approved} of {total} enigmas approved",
+          "optional": "optional",
+          "enigma_approved": "{percent} · {date}",
+          "enigma_pending_since": "Under review since {date}"
+        },
+        "errors": {
+          "archived": {
+            "title": "This class is no longer available",
+            "description": "Your teacher has archived it. Your missions and your progress are not lost."
+          },
+          "not_found": {
+            "title": "We couldn't find this class",
+            "description": "The link may be wrong, or you may no longer be in it."
+          },
+          "forbidden": {
+            "title": "You're not in this class",
+            "description": "If you think this is a mistake, talk to your teacher."
+          },
+          "generic": {
+            "title": "The class couldn't be loaded",
+            "description": "Please try again in a moment."
+          }
         }
       }
     },
@@ -391,9 +439,27 @@
         "missions_suffix": "missions",
         "you_badge": "You",
         "avg_xp": "Average XP",
-        "avg_progress": "Average progress",
+        "avg_progress": "Average progress (required enigmas)",
         "avg_missions": "Average missions",
-        "total_xp": "Total class XP"
+        "total_xp": "Total class XP",
+        "podium_empty": "Nobody has XP yet. The podium will fill up as soon as someone earns some.",
+        "rank_sr": "Position {rank}",
+        "missions_count": "{count} mission | {count} missions",
+        "podium_empty_missions": "Nobody has completed a mission yet. The podium will fill up as soon as someone does.",
+        "podium_empty_missions_week": "Nobody has completed a mission yet this week.",
+        "no_rank_xp": "You have no position yet. Earn XP to join the ranking.",
+        "no_rank_missions": "You have no position yet. Complete a mission to join the ranking.",
+        "no_rank_missions_week": "You have no position yet this week. Complete a mission to join the ranking.",
+        "my_position_title": "Your position",
+        "my_position_preview": "Each student sees their position and the class total here.",
+        "top_list_title": "Up to position {n}"
+      },
+      "class_xp_bar": {
+        "rank": "Ranking",
+        "level_line": "Level {level} · {title}",
+        "rank_of": "Position {rank} of {total}",
+        "xp_to_next": "{count} XP to level {level} | {count} XP to level {level}",
+        "max_level": "Maximum level"
       }
     },
     "teams": {

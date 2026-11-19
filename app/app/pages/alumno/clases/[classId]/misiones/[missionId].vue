@@ -239,6 +239,20 @@ const handleSubmissionSubmit = async (data: { enigmaId: string; file: File }) =>
       void fetchMission(true)
       return
     }
+    // Ya lo tenía aprobado o ya había una entrega esperando (otra pestaña, un
+    // doble clic): se dice y se pide de nuevo la misión, que enseña su estado.
+    const code = (err as { data?: { code?: string } })?.data?.code
+    if (code === 'ENIGMA_ALREADY_APPROVED' || code === 'SUBMISSION_PENDING') {
+      toast.error(
+        code === 'ENIGMA_ALREADY_APPROVED'
+          ? t('student.mission_detail.submission.already_approved')
+          : t('student.mission_detail.submission.already_pending')
+      )
+      showSubmissionModal.value = false
+      selectedEnigmaForSubmission.value = null
+      void fetchMission(true)
+      return
+    }
     toast.error(t('student.mission_detail.submission.error'))
   }
 }

@@ -163,13 +163,16 @@
             @dragleave="onDragLeave(team.id)"
             @drop.prevent="onDrop(team.id)"
           >
-            <div class="flex items-center justify-between gap-2">
-              <h3 :id="`${uid}-team-${team.id}`" class="min-w-0">
+            <!-- El nombre y sus puntos: si no caben en una línea, los puntos bajan
+                 a la siguiente; un nombre que no cabe ni solo se corta con «…» -->
+            <div class="flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
+              <h3 :id="`${uid}-team-${team.id}`" class="min-w-0 max-w-full">
                 <TeamBadge
                   :title="team.title"
                   :color="team.color"
                   :emblem="team.emblem"
                   :index="i"
+                  class="max-w-full"
                 />
               </h3>
               <span

@@ -185,10 +185,13 @@ describeWithDatabase('lista general de alumnos del profesorado', () => {
     const beyond = await listed(`?classId=${pagedClassId}&limit=2&page=9`)
     expect(beyond).toMatchObject({ students: [], total: 5, totalPages: 3 })
 
-    // Dani resuelve el único enigma de la clase: 100 %, el primero por progreso.
+    // Dani completa la única misión de la clase: 1 de 1, el primero por progreso.
     const missionId = await f.newMission(pagedClassId)
     const enigmaId = await f.newEnigma(missionId)
     await prisma.studentEnigmaProgress.create({ data: { studentId: paged[3], enigmaId } })
+    await prisma.studentMissionProgress.create({
+      data: { studentId: paged[3], missionId, enigmasCompleted: 1, completedAt: new Date() },
+    })
 
     const byProgress = await listed(`?classId=${pagedClassId}&limit=2&sort=progress-desc`)
     expect(byProgress).toMatchObject({ total: 5, totalPages: 3 })
@@ -238,10 +241,13 @@ describeWithDatabase('lista general de alumnos del profesorado', () => {
     )
     try {
       await enroll(extra.id, paged[0])
-      const missionId = await f.newMission(extra.id)
       for (let i = 0; i < 4; i++) {
+        const missionId = await f.newMission(extra.id)
         const enigmaId = await f.newEnigma(missionId)
         await prisma.studentEnigmaProgress.create({ data: { studentId: paged[0], enigmaId } })
+        await prisma.studentMissionProgress.create({
+          data: { studentId: paged[0], missionId, enigmasCompleted: 1, completedAt: new Date() },
+        })
       }
       const ana = (list: StudentList) => list.students.find(s => s.id === paged[0])
 
@@ -250,8 +256,8 @@ describeWithDatabase('lista general de alumnos del profesorado', () => {
       const filtered = ana(await listed(`?archived=active&classId=${pagedClassId}&limit=100`))
       expect(filtered).toEqual(unfiltered)
       expect(filtered?.classIds.sort()).toEqual([pagedClassId, extra.id].sort())
-      // Lo hecho en la otra clase pesa: entre el 80 y el 100 %, según la primera tenga enigma.
-      expect(filtered?.overallProgress).toBeGreaterThanOrEqual(80)
+      // Lo hecho en la otra clase pesa: 4 de 5 misiones, la que le falta es de la primera.
+      expect(filtered).toMatchObject({ totalMissionsCompleted: 4, totalMissionsCounted: 5 })
 
       // El filtro de progreso también mira la pestaña, no solo la clase elegida.
       const excellent = await listed(

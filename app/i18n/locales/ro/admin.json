@@ -190,34 +190,31 @@
         "quarter": "Trimestru"
       },
       "kpis": {
-        "avg_response": "Timp de răspuns",
-        "requests_per_min": "Cereri/min",
         "error_rate": "Rată de eroare",
-        "uptime": "Disponibilitate"
+        "activity": "Activitate în perioadă",
+        "new_users": "Înregistrări în perioadă",
+        "missions_completed": "Misiuni finalizate în perioadă"
       },
       "overview": {
         "total_users": "Conturi în total",
         "active_today": "Active azi",
-        "missions_completed": "Misiuni finalizate",
-        "completion_rate": "Rată de finalizare"
+        "pending_reviews": "Lucrări de verificat"
       },
       "sections": {
         "system_resources": "Resursele sistemului",
         "service_health": "Starea serviciilor",
-        "response_time": "Timp de răspuns",
-        "active_users": "Conturi active",
-        "requests": "Cereri",
-        "tokens_over_time": "Tokenuri consumate",
         "users_by_role": "Conturi după rol",
         "missions_by_status": "Misiuni după stare",
         "missions_by_rarity": "Misiuni după raritate",
-        "ai_usage": "Utilizarea IA (asistenți)"
+        "ai_usage": "Utilizarea IA (asistenți)",
+        "period_series": "În perioada aleasă",
+        "new_users": "Înregistrări",
+        "activity": "Activitate înregistrată",
+        "assistant_messages": "Mesaje către asistenți"
       },
       "ai": {
-        "total_tokens": "Total tokenuri",
-        "avg_tokens_user": "Medie pe cont",
-        "total_conversations": "Conversații",
-        "avg_conversations_user": "Conv. pe cont"
+        "total_conversations": "Conversații de la început",
+        "total_messages": "Mesaje din perioadă"
       },
       "system": {
         "memory": "Memorie",
@@ -227,7 +224,6 @@
       "table": {
         "service": "Serviciu",
         "status": "Stare",
-        "uptime": "Disponibilitate",
         "latency": "Latență"
       },
       "status": {
@@ -238,6 +234,17 @@
       "meta": {
         "title": "Analizele sistemului | ITAKAI Admin",
         "description": "Vezi indicatori avansați, grafice de performanță și analize detaliate ale platformei."
+      },
+      "delta": {
+        "absolute": "{diff} față de perioada anterioară",
+        "percent": "{percent} față de perioada anterioară",
+        "points": "{diff} punct față de perioada anterioară | {diff} puncte față de perioada anterioară"
+      },
+      "no_role": "Fără rol",
+      "services": {
+        "database": "Baza de date",
+        "ai_text": "IA (text)",
+        "ai_image": "IA (imagini)"
       }
     },
     "logs": {

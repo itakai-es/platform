@@ -190,34 +190,31 @@
         "quarter": "Τρίμηνο"
       },
       "kpis": {
-        "avg_response": "Χρόνος απόκρισης",
-        "requests_per_min": "Αιτήματα/λεπτό",
         "error_rate": "Ποσοστό σφαλμάτων",
-        "uptime": "Διαθεσιμότητα"
+        "activity": "Δραστηριότητα στην περίοδο",
+        "new_users": "Εγγραφές στην περίοδο",
+        "missions_completed": "Αποστολές που ολοκληρώθηκαν στην περίοδο"
       },
       "overview": {
         "total_users": "Σύνολο χρηστών",
         "active_today": "Ενεργοί σήμερα",
-        "missions_completed": "Ολοκληρωμένες αποστολές",
-        "completion_rate": "Ποσοστό ολοκλήρωσης"
+        "pending_reviews": "Υποβολές προς έλεγχο"
       },
       "sections": {
         "system_resources": "Πόροι συστήματος",
         "service_health": "Κατάσταση υπηρεσιών",
-        "response_time": "Χρόνος απόκρισης",
-        "active_users": "Ενεργοί χρήστες",
-        "requests": "Αιτήματα",
-        "tokens_over_time": "Tokens που καταναλώθηκαν",
         "users_by_role": "Χρήστες ανά ρόλο",
         "missions_by_status": "Αποστολές ανά κατάσταση",
         "missions_by_rarity": "Αποστολές ανά σπανιότητα",
-        "ai_usage": "Χρήση ΤΝ (βοηθοί)"
+        "ai_usage": "Χρήση ΤΝ (βοηθοί)",
+        "period_series": "Στην περίοδο",
+        "new_users": "Εγγραφές",
+        "activity": "Καταγεγραμμένη δραστηριότητα",
+        "assistant_messages": "Μηνύματα στους βοηθούς"
       },
       "ai": {
-        "total_tokens": "Σύνολο tokens",
-        "avg_tokens_user": "Μέσος όρος ανά χρήστη",
-        "total_conversations": "Συνομιλίες",
-        "avg_conversations_user": "Συνομ. ανά χρήστη"
+        "total_conversations": "Συνομιλίες από την αρχή",
+        "total_messages": "Μηνύματα της περιόδου"
       },
       "system": {
         "memory": "Μνήμη",
@@ -227,7 +224,6 @@
       "table": {
         "service": "Υπηρεσία",
         "status": "Κατάσταση",
-        "uptime": "Διαθεσιμότητα",
         "latency": "Καθυστέρηση"
       },
       "status": {
@@ -238,6 +234,17 @@
       "meta": {
         "title": "Αναλύσεις συστήματος | ITAKAI Admin",
         "description": "Δες προηγμένες μετρήσεις, γραφήματα απόδοσης και αναλυτικά στοιχεία της πλατφόρμας."
+      },
+      "delta": {
+        "absolute": "{diff} σε σχέση με την προηγούμενη περίοδο",
+        "percent": "{percent} σε σχέση με την προηγούμενη περίοδο",
+        "points": "{diff} μονάδα σε σχέση με την προηγούμενη περίοδο | {diff} μονάδες σε σχέση με την προηγούμενη περίοδο"
+      },
+      "no_role": "Χωρίς ρόλο",
+      "services": {
+        "database": "Βάση δεδομένων",
+        "ai_text": "ΤΝ (κείμενο)",
+        "ai_image": "ΤΝ (εικόνες)"
       }
     },
     "logs": {

@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import type { ManagedCredentials } from '~/types/auth.types'
+import { teacherClassesQuery } from '~/utils/teacher-classes'
 import type {
   ClassAccess,
   ClassAccessLevel,
@@ -52,7 +53,6 @@ export const useTeacherStore = defineStore('teacher', () => {
   const classStudents = ref<Map<string, Student[]>>(new Map())
   const classMissions = ref<Map<string, any[]>>(new Map())
   const classGuides = ref<Map<string, { content: string; lastUpdated?: string }>>(new Map())
-  const classRankings = ref<Map<string, any>>(new Map())
   // Per-id / per-classId data added for ensureX wrappers
   const studentDetails = ref<Map<string, any>>(new Map())
 
@@ -68,7 +68,6 @@ export const useTeacherStore = defineStore('teacher', () => {
   const loadedClassStudents = ref<Set<string>>(new Set())
   const loadedClassMissions = ref<Set<string>>(new Set())
   const loadedClassGuides = ref<Set<string>>(new Set())
-  const loadedClassRankings = ref<Set<string>>(new Set())
   // Per-id / per-classId fetched flags for new ensureX wrappers
   const loadedStudentDetails = ref<Set<string>>(new Set())
   // Per-classId fetched flag for the per-class ensureTeacherClassById wrapper
@@ -123,7 +122,7 @@ export const useTeacherStore = defineStore('teacher', () => {
       const response = await $fetch<{ classes: Class[]; total: number }>(
         `${config.public.apiBase}/teacher/classes`,
         {
-          params: limit ? { limit } : undefined, // Solo envía limit si existe
+          params: teacherClassesQuery(limit),
         }
       )
       classes.value = response.classes
@@ -194,15 +193,11 @@ export const useTeacherStore = defineStore('teacher', () => {
   function forgetClass(classId: string) {
     classes.value = classes.value.filter(c => c.id !== classId)
     archivedClasses.value = archivedClasses.value.filter(c => c.id !== classId)
-    for (const map of [classStudents, classMissions, classGuides]) map.value.delete(classId)
+    for (const map of [classStudents, classMissions, classGuides]) {
+      map.value.delete(classId)
+    }
     for (const set of [loadedClassStudents, loadedClassMissions, loadedClassGuides]) {
       set.value.delete(classId)
-    }
-    for (const key of [...classRankings.value.keys()]) {
-      if (key.startsWith(`${classId}-`)) {
-        classRankings.value.delete(key)
-        loadedClassRankings.value.delete(key)
-      }
     }
     loadedClassDetails.value.delete(classId)
     isLoadingClassDetails.value.delete(classId)
@@ -216,6 +211,48 @@ export const useTeacherStore = defineStore('teacher', () => {
     const classesStore = useClassesStore()
     classesStore.classes = classesStore.classes.filter(c => c.id !== classId)
     classesStore.hasLoadedClasses = false
+  }
+
+  /**
+   * Cambios hechos desde aquí en lo que enseña cada clase (altas y bajas,
+   * misiones, entregas, profesorado…): cada uno sube el contador de su clase,
+   * y la pantalla que la tenga abierta vuelve a pedirla.
+   */
+  const classDataRevision = ref<Record<string, number>>({})
+
+  /**
+   * Ha cambiado algo en la clase que se ve fuera de ella: da por antiguo todo lo
+   * que lo enseña, sin borrar nada de lo que hay en pantalla (no parpadea), y se
+   * vuelve a pedir la próxima vez que se pida. Son los listados de clases del
+   * Inicio, de «Mis clases» y de las archivadas (alumnado y misiones de cada
+   * tarjeta), el detalle de la clase y sus misiones, las cifras, la actividad y
+   * las misiones del Inicio, el listado general de alumnos y las misiones de la
+   * clase que guarda el almacén de misiones. La pantalla de la clase, si está
+   * abierta, lo vuelve a pedir ya (`classDataRevision`); la analítica del
+   * Resumen se pide de nuevo cada vez que se entra en él.
+   */
+  function invalidateClass(classId: string) {
+    loadedClassDetails.value.delete(classId)
+    loadedClassMissions.value.delete(classId)
+    hasLoadedClasses.value = false
+    hasLoadedArchivedClasses.value = false
+    hasLoadedStats.value = false
+    hasLoadedActivities.value = false
+    hasLoadedMissions.value = false
+    hasLoadedStudents.value = false
+    useClassesStore().hasLoadedClasses = false
+    useMissionStore().invalidateClass(classId)
+    classDataRevision.value = {
+      ...classDataRevision.value,
+      [classId]: (classDataRevision.value[classId] ?? 0) + 1,
+    }
+  }
+
+  /** La clase en cada listado cargado que la tenga (Inicio, archivadas y «Mis clases»), para cambiarla ahí mismo. */
+  function listedClasses(classId: string): Class[] {
+    return [classes.value, archivedClasses.value, useClassesStore().classes].flatMap(list =>
+      list.filter(c => c.id === classId)
+    )
   }
 
   /**
@@ -258,10 +295,7 @@ export const useTeacherStore = defineStore('teacher', () => {
 
   /** Apunta el acceso propio nuevo de una clase en los listados que la tengan. */
   function setClassAccess(classId: string, access: ClassAccess | null) {
-    for (const list of [classes.value, archivedClasses.value, useClassesStore().classes]) {
-      const cls = list.find(c => c.id === classId)
-      if (cls) cls.myAccess = access
-    }
+    for (const cls of listedClasses(classId)) cls.myAccess = access
   }
 
   // ==========================================
@@ -285,6 +319,7 @@ export const useTeacherStore = defineStore('teacher', () => {
       `${classTeachersUrl(classId)}/teachers`,
       { method: 'POST', body: data }
     )
+    invalidateClass(classId)
     return response.teacher
   }
 
@@ -297,11 +332,13 @@ export const useTeacherStore = defineStore('teacher', () => {
       `${classTeachersUrl(classId)}/teachers/${userId}`,
       { method: 'PATCH', body: data }
     )
+    invalidateClass(classId)
     return response.teacher
   }
 
   async function removeClassTeacher(classId: string, userId: string) {
     await $fetch(`${classTeachersUrl(classId)}/teachers/${userId}`, { method: 'DELETE' })
+    invalidateClass(classId)
   }
 
   /** Sale de la clase: desde ese momento ya no se llega a ella. */
@@ -316,6 +353,7 @@ export const useTeacherStore = defineStore('teacher', () => {
       `${classTeachersUrl(classId)}/transfer`,
       { method: 'POST', body: { userId } }
     )
+    invalidateClass(classId)
     return response.teachers
   }
 
@@ -452,15 +490,10 @@ export const useTeacherStore = defineStore('teacher', () => {
       classes.value.push({
         ...response.class,
         studentCount: response.class.studentCount ?? 0,
-        stats: response.class.stats ?? {
-          avgProgress: 0,
-          participation: 0,
-          avgMissionsCompleted: 0,
-          totalMissions: 0,
-          pendingReviews: 0,
-          avgXp: 0,
-        },
+        stats: response.class.stats ?? { missionsCounted: 0, pendingReviews: 0 },
       })
+      // Las cifras del Inicio y «Mis clases» cuentan con ella.
+      invalidateClass(response.class.id)
       return response
     } catch (error) {
       console.error('Error creating class:', error)
@@ -482,10 +515,8 @@ export const useTeacherStore = defineStore('teacher', () => {
         }
       )
       // Sobre lo que ya había: la respuesta no trae todo lo del listado (estadísticas…).
-      const index = classes.value.findIndex(c => c.id === classId)
-      if (index !== -1) {
-        classes.value[index] = { ...classes.value[index], ...response.class }
-      }
+      // En todos los listados: el nombre, la portada y el horario salen en las tarjetas.
+      for (const cls of listedClasses(classId)) Object.assign(cls, response.class)
       return response
     } catch (error) {
       console.error('Error updating class:', error)
@@ -500,10 +531,7 @@ export const useTeacherStore = defineStore('teacher', () => {
       `${config.public.apiBase}/teacher/classes/${classId}/publish-template`,
       { method: 'POST', body: { publish } }
     )
-    const index = classes.value.findIndex(c => c.id === classId)
-    if (index !== -1) {
-      classes.value[index] = { ...classes.value[index], isTemplate: response.isTemplate }
-    }
+    for (const cls of listedClasses(classId)) cls.isTemplate = response.isTemplate
     return response
   }
 
@@ -529,10 +557,9 @@ export const useTeacherStore = defineStore('teacher', () => {
         classes.value.unshift(response.class)
       }
 
-      // Archivar/desarchivar mueve alumnos entre las pestañas activa y archivada:
-      // el listado se vuelve a pedir en la próxima visita.
-      hasLoadedStudents.value = false
-      hasLoadedStats.value = false
+      // Archivar/desarchivar mueve alumnos entre las pestañas activa y archivada,
+      // y la clase entre los listados: se vuelven a pedir en la próxima visita.
+      invalidateClass(classId)
 
       return response
     } catch (error) {
@@ -594,7 +621,8 @@ export const useTeacherStore = defineStore('teacher', () => {
   /**
    * Duplica una clase propia (crea una copia independiente). `options` elige qué
    * partes copiar (narrativa, funcionalidades, tienda, comportamientos, misiones).
-   * Devuelve la clase nueva; el refresco de la lista lo hace la página.
+   * Devuelve la clase nueva; los listados de clases se vuelven a pedir en la
+   * próxima visita, y el que esté a la vista lo refresca la página.
    */
   async function duplicateClass(
     classId: string,
@@ -607,10 +635,12 @@ export const useTeacherStore = defineStore('teacher', () => {
     }
   ) {
     const config = useRuntimeConfig()
-    return $fetch<{ class: { id: string; name: string }; message: string }>(
+    const response = await $fetch<{ class: { id: string; name: string }; message: string }>(
       `${config.public.apiBase}/teacher/classes/${classId}/duplicate`,
       { method: 'POST', body: options ?? {} }
     )
+    invalidateClass(response.class.id)
+    return response
   }
 
   /**
@@ -665,7 +695,8 @@ export const useTeacherStore = defineStore('teacher', () => {
    * cambia. Se vuelven a pedir en la próxima visita las misiones de la clase de
    * destino (su pestaña Misiones, aunque ya se hubiera abierto, las pide al
    * volver), el listado general y las clases, que dicen cuántas misiones tienen
-   * (Inicio y «Mis clases»). Lo que esté a la vista lo refresca quien llama.
+   * (Inicio y «Mis clases»): ver `invalidateClass`. Lo que esté a la vista lo
+   * refresca quien llama.
    */
   async function importMission(missionId: string, targetClassId: string, copyBadge: boolean) {
     const config = useRuntimeConfig()
@@ -673,10 +704,7 @@ export const useTeacherStore = defineStore('teacher', () => {
       `${config.public.apiBase}/teacher/missions/${missionId}/import`,
       { method: 'POST', body: { targetClassId, copyBadge } }
     )
-    loadedClassMissions.value.delete(targetClassId)
-    hasLoadedMissions.value = false
-    hasLoadedClasses.value = false
-    useClassesStore().hasLoadedClasses = false
+    invalidateClass(targetClassId)
     // La insignia copiada es nueva y de quien importa: que salga en «Insignias».
     if (response.copied.badges.length > 0) useBadgeStore().invalidate()
     return response
@@ -758,40 +786,6 @@ export const useTeacherStore = defineStore('teacher', () => {
     loadedClassGuides.value.add(classId)
   }
 
-  /**
-   * Obtiene el ranking de una clase
-   */
-  async function fetchClassRanking(classId: string, filter = 'general', force = false) {
-    const cacheKey = `${classId}-${filter}`
-
-    // Use cached data unless forced
-    if (!force && loadedClassRankings.value.has(cacheKey)) {
-      const cached = classRankings.value.get(cacheKey)
-      if (cached) {
-        return cached
-      }
-    }
-
-    try {
-      const config = useRuntimeConfig()
-      const response = await $fetch<any>(
-        `${config.public.apiBase}/teacher/classes/${classId}/ranking`,
-        {
-          params: { filter },
-        }
-      )
-
-      // Store in cache
-      classRankings.value.set(cacheKey, response)
-      loadedClassRankings.value.add(cacheKey)
-
-      return response
-    } catch (error) {
-      console.error('Error fetching class ranking:', error)
-      throw error
-    }
-  }
-
   // ==========================================
   // ALUMNADO DE UNA CLASE: altas, alias, quitar y contraseñas
   // ==========================================
@@ -807,8 +801,6 @@ export const useTeacherStore = defineStore('teacher', () => {
     if (classId) {
       classStudents.value.delete(classId)
       loadedClassStudents.value.delete(classId)
-      classRankings.value.delete(`${classId}-general`)
-      loadedClassRankings.value.delete(`${classId}-general`)
     }
     hasLoadedStudents.value = false
     hasLoadedStats.value = false
@@ -848,6 +840,9 @@ export const useTeacherStore = defineStore('teacher', () => {
       { method: 'POST', body: { students } }
     )
     forgetStudent(undefined, classId)
+    // Ya matriculadas: se cuentan en las tarjetas al momento, y lo demás se pide de nuevo.
+    for (const cls of listedClasses(classId)) cls.studentCount += response.created.length
+    invalidateClass(classId)
     return response.created
   }
 
@@ -890,8 +885,8 @@ export const useTeacherStore = defineStore('teacher', () => {
       { method: 'DELETE' }
     )
     forgetStudent(studentId, classId)
-    const cls = classes.value.find(c => c.id === classId)
-    if (cls && cls.studentCount > 0) cls.studentCount--
+    for (const cls of listedClasses(classId)) cls.studentCount = Math.max(0, cls.studentCount - 1)
+    invalidateClass(classId)
     return result
   }
 
@@ -1049,15 +1044,6 @@ export const useTeacherStore = defineStore('teacher', () => {
     return await fetchClassMissions(classId, force)
   }
 
-  async function ensureClassRanking(classId: string, filter = 'general', force = false) {
-    const cacheKey = `${classId}-${filter}`
-    if (loadedClassRankings.value.has(cacheKey) && !force) {
-      const cached = classRankings.value.get(cacheKey)
-      if (cached) return cached
-    }
-    return await fetchClassRanking(classId, filter, force)
-  }
-
   async function ensureClassGuide(classId: string, force = false) {
     if (loadedClassGuides.value.has(classId) && !force) {
       return { guide: classGuides.value.get(classId) || null }
@@ -1125,7 +1111,6 @@ export const useTeacherStore = defineStore('teacher', () => {
     classStudents.value.clear()
     classMissions.value.clear()
     classGuides.value.clear()
-    classRankings.value.clear()
     studentDetails.value.clear()
     // Cache flags
     hasLoadedStats.value = false
@@ -1138,7 +1123,6 @@ export const useTeacherStore = defineStore('teacher', () => {
     loadedClassStudents.value.clear()
     loadedClassMissions.value.clear()
     loadedClassGuides.value.clear()
-    loadedClassRankings.value.clear()
     loadedClassDetails.value.clear()
     loadedStudentDetails.value.clear()
     // In-flight guards
@@ -1167,7 +1151,6 @@ export const useTeacherStore = defineStore('teacher', () => {
     classStudents,
     classMissions,
     classGuides,
-    classRankings,
     studentDetails,
     // Fetched flags (cache de sesión)
     hasLoadedStats,
@@ -1179,7 +1162,6 @@ export const useTeacherStore = defineStore('teacher', () => {
     loadedClassStudents,
     loadedClassMissions,
     loadedClassGuides,
-    loadedClassRankings,
     loadedClassDetails,
     loadedStudentDetails,
     // Actions
@@ -1209,7 +1191,6 @@ export const useTeacherStore = defineStore('teacher', () => {
     importMission,
     fetchClassGuide,
     updateClassGuideCache,
-    fetchClassRanking,
     refreshDashboard,
     // Clases a las que ya no se llega y acceso propio
     isClassGone,
@@ -1219,6 +1200,9 @@ export const useTeacherStore = defineStore('teacher', () => {
     canCreateMissions,
     classAccessRevision,
     markClassAccessChanged,
+    // Cambios en una clase que se ven fuera de ella
+    invalidateClass,
+    classDataRevision,
     // Profesorado e historial de una clase
     fetchClassTeachers,
     addClassTeacher,
@@ -1235,7 +1219,6 @@ export const useTeacherStore = defineStore('teacher', () => {
     ensureRecentMissions,
     ensureTeacherClassById,
     ensureClassMissions,
-    ensureClassRanking,
     ensureClassGuide,
     ensureStudentById,
     ensureArchivedClasses,

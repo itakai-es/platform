@@ -26,7 +26,7 @@
         :icon="EyeIcon"
         @click="auth.enterStudentPreview()"
       >
-        Ver como estudiante
+        {{ $t('common.student_preview.enter') }}
       </UserCardPill>
       <div v-if="showProgress && progressPercentage !== undefined" class="progress-wrapper">
         <div class="progress-bar-new">
@@ -121,7 +121,7 @@
                   class="text-xs text-text-muted hover:text-navy-700 transition-colors"
                   @click="$emit('load-more-conversations')"
                 >
-                  Cargar más...
+                  {{ $t('common.sidebar.load_more') }}
                 </button>
               </div>
 

@@ -132,6 +132,8 @@ export function useClassTeams(classIdRef: MaybeRefOrGetter<string>) {
         teams: set.teams.map(t => (t.id === teamId ? { ...t, points: result.teamPoints } : t)),
       }))
     )
+    // Repartido entre sus miembros, deja actividad y cifras nuevas en la clase y en el Inicio.
+    useTeacherStore().invalidateClass(classId.value)
     return result
   }
 

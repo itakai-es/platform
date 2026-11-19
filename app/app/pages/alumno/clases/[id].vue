@@ -16,8 +16,8 @@
     <EmptyState
       v-else-if="error"
       :icon="ExclamationTriangleIcon"
-      :title="t('student.classes.detail.error_title')"
-      :description="error"
+      :title="t(`student.classes.detail.errors.${classErrorKind ?? 'generic'}.title`)"
+      :description="t(`student.classes.detail.errors.${classErrorKind ?? 'generic'}.description`)"
     >
       <template #action>
         <NuxtLink to="/alumno/clases">
@@ -45,17 +45,15 @@
           {{ classData.teacherName || t('student.classes.detail.teacher_fallback')
           }}{{ scheduleSummary ? ` · ${scheduleSummary}` : '' }}
         </template>
-        <template
-          v-if="classSettings.lives || classSettings.coins || classSettings.mana"
-          #meta
-        >
+        <template v-if="classSettings.lives || classSettings.coins || classSettings.mana" #meta>
           <div
             class="self-start inline-flex items-center gap-5 bg-white/10 rounded-full px-4 py-2 text-white text-base font-semibold"
           >
             <Tooltip v-if="classSettings.lives" :text="t('common.resources.lives')" variant="light">
               <span class="inline-flex items-center gap-1.5">
                 <LifeIcon class="w-5 h-5" />
-                {{ livesBalance.toLocaleString('es-ES') }}
+                <span class="sr-only">{{ t('common.resources.lives') }}:</span>
+                {{ formatNumber(livesBalance) }}
               </span>
             </Tooltip>
             <template v-if="classSettings.coins">
@@ -63,7 +61,8 @@
               <Tooltip :text="t('common.resources.coins')" variant="light">
                 <span class="inline-flex items-center gap-1.5">
                   <CoinIcon class="w-5 h-5" />
-                  {{ shopBalance.toLocaleString('es-ES') }}
+                  <span class="sr-only">{{ t('common.resources.coins') }}:</span>
+                  {{ formatNumber(shopBalance) }}
                 </span>
               </Tooltip>
             </template>
@@ -76,7 +75,8 @@
               <Tooltip :text="t('common.resources.mana')" variant="light">
                 <span class="inline-flex items-center gap-1.5">
                   <ManaIcon class="w-5 h-5" />
-                  {{ manaBalance.toLocaleString('es-ES') }}
+                  <span class="sr-only">{{ t('common.resources.mana') }}:</span>
+                  {{ formatNumber(manaBalance) }}
                 </span>
               </Tooltip>
             </template>
@@ -128,6 +128,7 @@ definePageMeta({
 })
 
 const { t } = useI18n()
+const { formatNumber } = useNumberFormat()
 const route = useRoute()
 const classesStore = useClassesStore()
 const classGamificationStore = useClassGamificationStore()
@@ -137,6 +138,7 @@ const detail = useStudentClassDetail(classId)
 const {
   classData,
   classSettings,
+  rankingTypes,
   resolvedClassImage,
   shopBalance,
   manaBalance,
@@ -144,7 +146,7 @@ const {
   loadAll,
 } = detail
 
-const { isLoadingClass, error } = storeToRefs(classesStore)
+const { isLoadingClass, error, classErrorKind } = storeToRefs(classesStore)
 const { showLevelUpModal, levelUpData } = storeToRefs(classGamificationStore)
 
 // Días y horas de la clase, junto al nombre de quien la imparte.
@@ -162,7 +164,7 @@ const tabs = computed(() => {
     { id: 'guia', label: t('student.classes.detail.tabs.guia'), icon: SparklesIconSolid },
     { id: 'misiones', label: t('student.classes.detail.tabs.misiones'), icon: RocketLaunchIconSolid },
   ]
-  if (s.rankings)
+  if (rankingTypes.value.length > 0)
     list.push({ id: 'ranking', label: t('student.classes.detail.tabs.ranking'), icon: ChartBarIconSolid })
   if (s.shop)
     list.push({ id: 'tienda', label: t('student.classes.detail.tabs.tienda'), icon: ShoppingBagIconSolid })

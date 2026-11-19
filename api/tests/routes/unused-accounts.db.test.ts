@@ -171,16 +171,24 @@ describeWithDatabase('cuentas sin correo que no se han usado', () => {
     }
     const studentRanking = `/students/classes/${f.classId}/ranking`
     const teacherRanking = `/teacher/classes/${f.classId}/ranking`
+    // Sus compañeros reciben el id de la matrícula; el profesorado, el de la cuenta.
+    const enrollmentOf = async (studentId: string) =>
+      (
+        await prisma.classEnrollment.findUniqueOrThrow({
+          where: { studentId_classId: { studentId, classId: f.classId } },
+        })
+      ).id
+    const enrollmentId = await enrollmentOf(id)
 
     const countBefore = await studentCount()
-    expect(await rankingIds(viewer, studentRanking)).not.toContain(id)
-    expect(await rankingIds(viewer, studentRanking)).toContain(viewer.id)
+    expect(await rankingIds(viewer, studentRanking)).not.toContain(enrollmentId)
+    expect(await rankingIds(viewer, studentRanking)).toContain(await enrollmentOf(viewer.id))
     // El podio del profesorado es el mismo; en su lista sí sale, con la etiqueta.
     expect(await rankingIds(f.users.owner, teacherRanking)).not.toContain(id)
     expect(await row(id)).toMatchObject({ pendingSignIn: true })
 
     await signedInOnce(id)
-    expect(await rankingIds(viewer, studentRanking)).toContain(id)
+    expect(await rankingIds(viewer, studentRanking)).toContain(enrollmentId)
     expect(await rankingIds(f.users.owner, teacherRanking)).toContain(id)
     expect(await studentCount()).toBe(countBefore + 1)
   })

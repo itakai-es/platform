@@ -29,6 +29,7 @@
         :key="tab.id"
         :to="tabHref(tab.id)"
         :data-active="activeTab === tab.id"
+        :aria-current="activeTab === tab.id ? 'true' : undefined"
         :class="[
           'px-3 sm:px-4 md:px-6 lg:px-8 py-3 text-sm sm:text-base font-medium transition-colors flex items-center gap-2 rounded-t-2xl whitespace-nowrap flex-shrink-0 hover:opacity-100',
           activeTab === tab.id

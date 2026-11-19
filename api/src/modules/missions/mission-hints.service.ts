@@ -18,6 +18,7 @@ import {
   type HintCostType,
 } from '../../utils/mission-hints.js'
 import { getLevelFromXP } from '../../utils/xp-calculator.js'
+import { isCompleted } from '../analytics/definitions.js'
 
 /**
  * Pistas de las misiones (E1). El profesorado las escribe, las ordena y les pone
@@ -114,13 +115,31 @@ export async function teacherHints(
   return hints.map((hint, index) => teacherView(hint, index + 1, used.get(hint.id) ?? 0))
 }
 
-/** Si la misión sigue en curso para esta persona: ni completada ni caducada. */
-function closedReasonFor(
-  mission: { deadline: Date | null },
-  completedAt: Date | null | undefined,
+/**
+ * Si la misión sigue en curso para esta persona: ni completada ni caducada.
+ * Completada es la definición única (`isCompleted`): quien ya tiene todos los
+ * obligatorios aprobados no paga más pistas, aunque no tenga `completedAt`.
+ */
+async function closedReasonFor(
+  db: Db,
+  mission: { id: string; deadline: Date | null },
+  studentId: string,
   now = new Date()
-): StudentHintState['closedReason'] {
-  if (completedAt) return 'completed'
+): Promise<StudentHintState['closedReason']> {
+  const progress = await db.studentMissionProgress.findUnique({
+    where: { studentId_missionId: { studentId, missionId: mission.id } },
+    select: { completedAt: true },
+  })
+  const enigmas = await db.missionEnigma.findMany({
+    where: { missionId: mission.id },
+    select: {
+      id: true,
+      isOptional: true,
+      progress: { where: { studentId }, select: { id: true } },
+    },
+  })
+  const approved = new Set(enigmas.filter(e => e.progress.length > 0).map(e => e.id))
+  if (isCompleted(progress?.completedAt, enigmas, approved)) return 'completed'
   if (mission.deadline && mission.deadline < now) return 'expired'
   return null
 }
@@ -145,10 +164,6 @@ export async function studentHints(
     where: { missionId, studentId },
     select: { hintId: true, costType: true, cost: true },
   })
-  const progress = await db.studentMissionProgress.findUnique({
-    where: { studentId_missionId: { studentId, missionId } },
-    select: { completedAt: true },
-  })
   const wallet = await db.classEnrollment.findUnique({
     where: { id: input.enrollmentId },
     select: { coins: true, xp: true },
@@ -156,7 +171,11 @@ export async function studentHints(
 
   const usedById = new Map(uses.map(use => [use.hintId, use]))
   const next = hints.find(hint => !usedById.has(hint.id))
-  const closedReason = closedReasonFor(input, progress?.completedAt)
+  const closedReason = await closedReasonFor(
+    db,
+    { id: missionId, deadline: input.deadline },
+    studentId
+  )
 
   return {
     hints: hints.map((hint, index) => {
@@ -432,11 +451,7 @@ export async function useHint(
       if (!mission || mission.status === 'bloqueada') throw new NotFoundError('Misión no encontrada')
       // Dentro de la transacción: una aprobación que completa la misión a la
       // vez bloquea la misma matrícula, así que aquí ya se ve completada.
-      const progress = await tx.studentMissionProgress.findUnique({
-        where: { studentId_missionId: { studentId, missionId } },
-        select: { completedAt: true },
-      })
-      const closed = closedReasonFor(mission, progress?.completedAt)
+      const closed = await closedReasonFor(tx, { id: missionId, deadline: mission.deadline }, studentId)
       if (closed === 'completed') {
         throw new ConflictError(
           'Ya has completado la misión: sus pistas ya no hacen falta',

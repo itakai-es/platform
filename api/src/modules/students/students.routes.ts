@@ -7,7 +7,9 @@ import { requireStudentEnrollment } from '../../utils/class-access.js'
 import { PASSWORD_MIN_LENGTH } from '../../utils/password.js'
 import { currentTokenFamily } from '../../utils/session-cookie.js'
 import { NICKNAME_MAX_LENGTH } from '../../utils/enrollment.js'
+import { wallLimit, wallOffset } from '../../utils/activity.js'
 import { studentTeamsRoutes } from '../teams/teams.routes.js'
+import { studentAnalyticsRoutes } from '../analytics/analytics.routes.js'
 
 type RequestUser = { id: string; role: string | null }
 
@@ -33,10 +35,26 @@ const joinClassSchema = z.object({
   code: z.string(),
 })
 
+// El alias se limpia y se valida en el servicio (`cleanNickname`); aquí solo se
+// corta lo desmedido. Sin `null`: no se puede quedar sin alias.
 const updateClassProfileSchema = z.object({
-  nickname: z.string().min(1).max(NICKNAME_MAX_LENGTH).optional().nullable(),
+  nickname: z.string().max(NICKNAME_MAX_LENGTH * 4).optional(),
   avatarUrl: z.string().optional().nullable(),
 })
+
+/**
+ * Lo que se le cierra al alumnado con la clase archivada, como la portada
+ * (ver `getClassById`): la clasificación, la gamificación, los equipos, el muro,
+ * las misiones y las insignias. «Mi progreso» se cierra en su servicio.
+ */
+const CLOSED_WHEN_ARCHIVED = [
+  '/gamification',
+  '/ranking',
+  '/activities',
+  '/teams',
+  '/missions',
+  '/badges',
+].map(suffix => `/classes/:classId${suffix}`)
 
 const generateClassAvatarSchema = z.union([
   z.object({
@@ -58,19 +76,21 @@ export async function studentsRoutes(fastify: FastifyInstance) {
   // esa clase: la del alumno o, para el profesorado de la clase, la de vista
   // previa. La guía es la excepción: también la lee el profesorado sin matrícula.
   const enrolled = requireStudentEnrollment()
+  const enrolledInLiveClass = requireStudentEnrollment({ closedWhenArchived: true })
   fastify.addHook('preHandler', async (request, reply) => {
     if (reply.sent) return
     const { classId } = request.params as { classId?: string }
-    if (!classId || request.routeOptions.url?.endsWith('/classes/:classId/guide')) return
-    await enrolled(request, reply)
+    const url = request.routeOptions.url ?? ''
+    if (!classId || url.endsWith('/classes/:classId/guide')) return
+    const guard = CLOSED_WHEN_ARCHIVED.some(suffix => url.endsWith(suffix)) ? enrolledInLiveClass : enrolled
+    await guard(request, reply)
   })
 
   // ==================== PROFILE ====================
 
   fastify.get('/profile/me', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
-      const { id } = request.user as { id: string }
-      const profile = await studentsService.getProfile(id)
+      const profile = await studentsService.getProfile(request.user as RequestUser)
       return { profile }
     } catch (error) {
       if (error instanceof Error) {
@@ -151,6 +171,7 @@ export async function studentsRoutes(fastify: FastifyInstance) {
       const cls = await studentsService.getClassById(id, classId)
       return { class: cls }
     } catch (error) {
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(404).send({ message: error.message })
       }
@@ -198,13 +219,14 @@ export async function studentsRoutes(fastify: FastifyInstance) {
     }
   })
 
-  fastify.get('/classes/:classId/ranking', async (request: FastifyRequest<{ Params: { classId: string } }>, reply: FastifyReply) => {
+  fastify.get('/classes/:classId/ranking', async (request: FastifyRequest<{ Params: { classId: string }; Querystring: { type?: string; period?: string } }>, reply: FastifyReply) => {
     try {
-      const { id } = request.user as { id: string }
       const { classId } = request.params
-      const result = await studentsService.getClassRanking(id, classId)
+      const result = await studentsService.getClassRanking(request.studentEnrollment!, classId, request.query)
       return result
     } catch (error) {
+      // Sin la clasificación activada, 404 con su código (`RANKING_DISABLED`).
+      rethrowHttpError(error)
       if (error instanceof Error) {
         return reply.status(404).send({ message: error.message })
       }
@@ -296,24 +318,24 @@ export async function studentsRoutes(fastify: FastifyInstance) {
     try {
       const { id } = request.user as { id: string }
       const { classId } = request.params
-      const offset = request.query.offset ? parseInt(request.query.offset) : 0
-      const limit = request.query.limit ? parseInt(request.query.limit) : 5
+      const offset = wallOffset(request.query.offset)
+      const limit = wallLimit(request.query.limit, 5)
       const result = await studentsService.getClassActivities(id, classId, offset, limit)
       return result
     } catch (error) {
-      if (error instanceof Error) {
-        return reply.status(404).send({ message: error.message })
-      }
+      // El mensaje de un fallo inesperado lleva rutas de fichero: no sale de aquí.
+      rethrowHttpError(error)
+      request.log.error(error, 'Error al cargar el muro de la clase')
       return reply.status(500).send({ message: 'Error interno' })
     }
   })
 
   fastify.put('/classes/:classId/profile', async (request: FastifyRequest<{ Params: { classId: string } }>, reply: FastifyReply) => {
     try {
-      const { id } = request.user as { id: string }
       const { classId } = request.params
       const data = updateClassProfileSchema.parse(request.body)
-      const result = await studentsService.updateClassProfile(id, classId, data)
+      // La matrícula con la que actúa en la clase la deja `requireStudentEnrollment`.
+      const result = await studentsService.updateClassProfile(request.studentEnrollment!, classId, data)
       return result
     } catch (error) {
       rethrowHttpError(error)
@@ -408,7 +430,7 @@ export async function studentsRoutes(fastify: FastifyInstance) {
   fastify.get('/activities', async (request: FastifyRequest<{ Querystring: { limit?: string } }>, reply: FastifyReply) => {
     try {
       const { id } = request.user as { id: string }
-      const limit = request.query.limit ? parseInt(request.query.limit) : 10
+      const limit = wallLimit(request.query.limit, 10)
       const result = await studentsService.getActivities(id, limit)
       return result
     } catch (error) {
@@ -418,4 +440,5 @@ export async function studentsRoutes(fastify: FastifyInstance) {
 
   // Mi equipo y la clasificación de equipos: en su módulo, detrás de la misma matrícula.
   await fastify.register(studentTeamsRoutes)
+  await fastify.register(studentAnalyticsRoutes)
 }

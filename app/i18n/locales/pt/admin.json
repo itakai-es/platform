@@ -190,34 +190,31 @@
         "quarter": "Trimestre"
       },
       "kpis": {
-        "avg_response": "Tempo de resposta",
-        "requests_per_min": "Pedidos/min",
         "error_rate": "Taxa de erro",
-        "uptime": "Disponibilidade"
+        "activity": "Atividade no período",
+        "new_users": "Registos no período",
+        "missions_completed": "Missões concluídas no período"
       },
       "overview": {
         "total_users": "Total de contas",
         "active_today": "Ativas hoje",
-        "missions_completed": "Missões concluídas",
-        "completion_rate": "Taxa de conclusão"
+        "pending_reviews": "Entregas por rever"
       },
       "sections": {
         "system_resources": "Recursos do sistema",
         "service_health": "Estado dos serviços",
-        "response_time": "Tempo de resposta",
-        "active_users": "Contas ativas",
-        "requests": "Pedidos",
-        "tokens_over_time": "Tokens consumidos",
         "users_by_role": "Contas por perfil",
         "missions_by_status": "Missões por estado",
         "missions_by_rarity": "Missões por raridade",
-        "ai_usage": "Utilização de IA (assistentes)"
+        "ai_usage": "Utilização de IA (assistentes)",
+        "period_series": "No período",
+        "new_users": "Registos",
+        "activity": "Atividade registada",
+        "assistant_messages": "Mensagens aos assistentes"
       },
       "ai": {
-        "total_tokens": "Tokens totais",
-        "avg_tokens_user": "Média por conta",
-        "total_conversations": "Conversas",
-        "avg_conversations_user": "Conv. por conta"
+        "total_conversations": "Conversas desde o início",
+        "total_messages": "Mensagens do período"
       },
       "system": {
         "memory": "Memória",
@@ -227,7 +224,6 @@
       "table": {
         "service": "Serviço",
         "status": "Estado",
-        "uptime": "Disponibilidade",
         "latency": "Latência"
       },
       "status": {
@@ -238,6 +234,17 @@
       "meta": {
         "title": "Análises do sistema | ITAKAI Admin",
         "description": "Consulta métricas avançadas, gráficos de desempenho e análises detalhadas da plataforma."
+      },
+      "delta": {
+        "absolute": "{diff} em relação ao período anterior",
+        "percent": "{percent} em relação ao período anterior",
+        "points": "{diff} ponto em relação ao período anterior | {diff} pontos em relação ao período anterior"
+      },
+      "no_role": "Sem função",
+      "services": {
+        "database": "Base de dados",
+        "ai_text": "IA (texto)",
+        "ai_image": "IA (imagens)"
       }
     },
     "logs": {

@@ -18,10 +18,15 @@
       <!-- Breadcrumb + acciones a la derecha -->
       <div class="flex items-center justify-between gap-2">
         <nav
+          :aria-label="t('common.nav.breadcrumb')"
           class="flex items-center gap-1.5 sm:gap-2 text-sm overflow-x-auto scrollbar-subtle min-w-0"
         >
-          <NuxtLink :to="homeTo" class="text-white/70 hover:text-white flex-shrink-0">
-            <HomeIcon class="w-4 h-4" />
+          <NuxtLink
+            :to="homeTo"
+            :aria-label="t('common.about.breadcrumb_home')"
+            class="text-white/70 hover:text-white flex-shrink-0"
+          >
+            <HomeIcon class="w-4 h-4" aria-hidden="true" />
           </NuxtLink>
           <span class="hidden sm:flex items-center gap-1.5 sm:gap-2">
             <ChevronRightIcon class="w-4 h-4 text-white/70" />
@@ -32,10 +37,38 @@
               {{ breadcrumbMiddle }}
             </NuxtLink>
           </span>
-          <ChevronRightIcon class="w-4 h-4 text-white/70 flex-shrink-0" />
-          <span class="text-white font-medium truncate max-w-[180px] sm:max-w-none">{{
-            name
-          }}</span>
+          <!-- Con migas detrás, la clase es un enlace más; en el móvil se pliega, como «Mis clases» -->
+          <span
+            v-if="breadcrumbSteps?.length && breadcrumbClassTo"
+            class="hidden min-w-0 items-center gap-1.5 sm:flex sm:gap-2"
+          >
+            <ChevronRightIcon class="w-4 h-4 text-white/70 flex-shrink-0" />
+            <NuxtLink
+              :to="breadcrumbClassTo"
+              class="text-white/70 hover:text-white truncate max-w-[16rem]"
+            >
+              {{ name }}
+            </NuxtLink>
+          </span>
+          <template v-else>
+            <ChevronRightIcon class="w-4 h-4 text-white/70 flex-shrink-0" />
+            <span class="text-white font-medium truncate max-w-[180px] sm:max-w-none">{{
+              name
+            }}</span>
+          </template>
+          <template v-for="step in breadcrumbSteps" :key="step.label">
+            <ChevronRightIcon class="w-4 h-4 text-white/70 flex-shrink-0" />
+            <NuxtLink
+              v-if="step.to"
+              :to="step.to"
+              class="text-white/70 hover:text-white whitespace-nowrap"
+            >
+              {{ step.label }}
+            </NuxtLink>
+            <span v-else class="text-white font-medium whitespace-nowrap" aria-current="page">{{
+              step.label
+            }}</span>
+          </template>
         </nav>
         <div v-if="$slots.actions" class="flex-shrink-0">
           <slot name="actions" />
@@ -116,6 +149,10 @@ defineProps<{
   breadcrumbMiddle: string
   /** Destino del enlace intermedio. */
   breadcrumbMiddleTo: string
+  /** Portada de la clase: la miga de su nombre es un enlace cuando hay `breadcrumbSteps`. */
+  breadcrumbClassTo?: string
+  /** Migas tras el nombre de la clase, para una página dentro de una pestaña. */
+  breadcrumbSteps?: { label: string; to?: string }[]
   /** Pestañas a renderizar como NuxtLink. */
   tabs: Array<{ id: string; label: string; icon: Component }>
   /** ID de la pestaña activa (la del segmento actual de la URL). */
@@ -127,6 +164,8 @@ defineProps<{
   educationLevel?: string | null
   language?: string | null
 }>()
+
+const { t } = useI18n()
 
 defineSlots<{
   /** Acciones a la derecha del breadcrumb (p. ej. botón "Invitar"). */

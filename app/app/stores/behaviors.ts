@@ -212,6 +212,8 @@ export const useBehaviorsStore = defineStore('behaviors', () => {
     // Invalidamos por convención del target para que las vistas que dependan
     // de la bandera puedan refrescar.
     invalidate(classId)
+    // Y deja actividad y cifras nuevas en la clase y en el Inicio.
+    useTeacherStore().invalidateClass(classId)
     return result
   }
 
@@ -226,15 +228,18 @@ export const useBehaviorsStore = defineStore('behaviors', () => {
       { method: 'POST', body: { studentIds } }
     )
     invalidate(classId)
+    useTeacherStore().invalidateClass(classId)
     return result
   }
 
   /** Recompensa libre (dar o quitar recursos con un motivo) a uno o a varios. */
   async function grantRewards(classId: string, input: RewardInput): Promise<BatchResult> {
-    return $fetch<BatchResult>(`${apiBase()}/teacher/classes/${classId}/rewards`, {
+    const result = await $fetch<BatchResult>(`${apiBase()}/teacher/classes/${classId}/rewards`, {
       method: 'POST',
       body: input,
     })
+    useTeacherStore().invalidateClass(classId)
+    return result
   }
 
   async function addFromSuggestion(classId: string, s: BehaviorSuggestion): Promise<Behavior> {

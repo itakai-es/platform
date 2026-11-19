@@ -369,80 +369,81 @@ export interface PaginatedSystemLogsResponse {
 // Analytics
 // =============================================================================
 
+/** Los periodos de las estadísticas de la instancia. */
+export type AdminAnalyticsPeriod = 'week' | 'month' | 'quarter'
+
+/**
+ * Un elemento de un reparto: su clave estable (el rol, el estado o la rareza de
+ * una misión, el id de un asistente) y su cifra, con su % sobre el total del
+ * reparto. Sin etiqueta ni color: la pantalla los pone en el idioma y la paleta
+ * de quien mira.
+ */
 export interface AnalyticsMetric {
-  label: string
+  key: string
   value: number
-  percentage?: number
-  color?: string
+  percentage: number
 }
 
+/** Un tramo de una serie: el día de Madrid en que empieza (`AAAA-MM-DD`) y su cifra. */
 export interface TimeSeriesPoint {
-  label: string
+  start: string
   value: number
 }
+
+/** Los servicios que se comprueban en las estadísticas (`GET /admin/analytics/services`). */
+export type ServiceKey = 'database' | 'ai_text' | 'ai_image'
 
 export interface ServiceHealthEntry {
-  name: string
+  key: ServiceKey
   status: 'operational' | 'degraded' | 'down'
-  uptime: number
-  avgLatency: number
-  p95Latency: number
-  requests24h: number
+  /** Lo que ha tardado en responder ahora mismo su comprobación; null si no se midió. */
+  latencyMs: number | null
 }
 
+/** Una cifra del periodo y la del periodo anterior, de la misma duración. */
+export interface PeriodFigure {
+  current: number
+  previous: number
+}
+
+/** Las estadísticas de la instancia: todo medido, nada estimado. */
 export interface AnalyticsData {
   overview: {
     totalUsers: number
     activeUsersToday: number
-    activeSchools: number
-    missionsCompleted: number
-    avgCompletionRate: number
     newUsersThisPeriod: number
-    newMissionsThisPeriod: number
     totalSubmissions: number
+    /** Entregas por revisar (sin las de un enigma ya aprobado). */
     pendingSubmissions: number
   }
   usersByRole: AnalyticsMetric[]
   missionsByStatus: AnalyticsMetric[]
   missionsByRarity: AnalyticsMetric[]
-  schoolComparison: {
-    name: string
-    students: number
-    teachers: number
-    missions: number
-    activityRate: number
-  }[]
-  // System performance
   systemHealth: {
     cpuUsage: number
     memoryUsage: number
     diskUsage: number
     diskUsedGB: number
     diskTotalGB: number
-    dbLatency: number
+    /** null si la base no ha respondido. */
+    dbLatency: number | null
   }
-  serviceHealth: ServiceHealthEntry[]
-  // Time series
-  responseTimeSeries: TimeSeriesPoint[]
-  activeUsersSeries: TimeSeriesPoint[]
-  requestsSeries: TimeSeriesPoint[]
-  // AI / Token usage
+  // Series del periodo
+  newUsersSeries: TimeSeriesPoint[]
+  activitySeries: TimeSeriesPoint[]
+  // Asistentes de IA
   aiUsage: {
-    totalTokensUsed: number
-    avgTokensPerUser: number
+    totalMessages: number
     totalConversations: number
-    avgConversationsPerUser: number
-    tokensByAssistant: AnalyticsMetric[]
-    tokensSeries: TimeSeriesPoint[]
+    messagesByAssistant: AnalyticsMetric[]
+    messagesSeries: TimeSeriesPoint[]
   }
-  // Top-level KPIs
+  // Cifras del periodo frente al anterior
   kpis: {
-    avgResponseTime: number
-    avgResponseTimePrev: number
-    errorRate: number
-    errorRatePrev: number
-    requestsPerMinute: number
-    requestsPerMinutePrev: number
-    uptimePercent: number
+    activity: PeriodFigure
+    newUsers: PeriodFigure
+    missionsCompleted: PeriodFigure
+    /** % de entradas de error en el registro del sistema. */
+    errorRate: PeriodFigure
   }
 }

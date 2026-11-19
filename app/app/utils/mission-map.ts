@@ -1,8 +1,9 @@
 /**
  * Lo que cuenta el mapa de misiones (E3, en pruebas), sin Vue: el estado de
  * cada nodo para quien lo mira, lo recorrido, dónde está el alumnado («Estás
- * aquí») y, para el profesorado, el anillo de cada medallón, cómo va la clase y
- * los avatares de quien ha completado cada misión. Lo usa MissionMap.vue; vive
+ * aquí») y, para el profesorado, cómo va la clase. El anillo de cada medallón
+ * (`ringFraction`) está en utils/progress-ring.ts y la pila de avatares de quien
+ * ha completado cada misión (`avatarStack`), en utils/avatar.ts. Lo usa MissionMap.vue; vive
  * aquí para poder probarlo sin navegador. La disposición está en
  * utils/mission-map-layout.ts y las posiciones, en utils/mission-map-geometry.ts.
  */
@@ -58,8 +59,14 @@ export interface MissionMapItem {
   unlocks: MapMissionRef[]
   rewards: { xp: number; coins: number; mana: number }
   enigmas: number
-  /** Alumnado: su avance (null si está cerrada). */
-  progress: { percent: number; done: number; total: number } | null
+  /** Alumnado: su avance en los obligatorios y, aparte, los opcionales (null si está cerrada). */
+  progress: {
+    percent: number
+    done: number
+    total: number
+    extraDone: number
+    extraTotal: number
+  } | null
   /**
    * Profesorado: cuántas personas la han completado, de cuántas, y en texto;
    * quiénes (primero quien antes) y cuántas la llevan en curso.
@@ -78,9 +85,18 @@ export interface MissionMapItem {
 /**
  * El de una misión para el alumnado, a partir del estado que da la API
  * (getMissionStatus: completada > bloqueada > expirada > urgente > activa) y
- * de su progreso.
+ * de si la ha empezado.
+ *
+ * «En curso» es lo que dice la API con `started` (lo mismo que su Resumen: una
+ * entrega por revisar o una pista ya cuentan, aunque no lleve nada aprobado). Si
+ * no llega, se deduce de su progreso.
  */
-export function studentNodeState(mission: { status: string; progress?: number }): MapNodeState {
+export function studentNodeState(mission: {
+  status: string
+  started?: boolean
+  progress?: number
+  progressDetail?: { extraDone?: number }
+}): MapNodeState {
   switch (mission.status) {
     case 'completada':
       return 'completed'
@@ -91,8 +107,22 @@ export function studentNodeState(mission: { status: string; progress?: number })
     case 'urgente':
       return 'urgent'
     default:
-      return (mission.progress ?? 0) > 0 ? 'in_progress' : 'available'
+      return missionStarted(mission) ? 'in_progress' : 'available'
   }
+}
+
+/**
+ * Si el alumnado ha empezado una misión: `started` de la API y, si no llega, su
+ * progreso (el % es de los obligatorios: quien lleva un opcional también ha
+ * empezado). Decide «En curso» y que el botón diga «Continuar» y no «Empezar».
+ */
+export function missionStarted(mission: {
+  started?: boolean
+  progress?: number
+  progressDetail?: { extraDone?: number }
+}): boolean {
+  if (typeof mission.started === 'boolean') return mission.started
+  return (mission.progress ?? 0) > 0 || (mission.progressDetail?.extraDone ?? 0) > 0
 }
 
 /**
@@ -139,43 +169,44 @@ export function currentNodeId(nodes: { id: string; state: MapNodeState }[]): str
 }
 
 /**
- * Profesorado: la parte del anillo de un medallón, de 0 a 1: cuántas personas
- * la han completado de cuántas. Sin alumnado, 0.
+ * Profesorado: cómo va la clase en el mapa, con las misiones que cuentan (las
+ * que no traen `counted`, también): `total` son esas; `average`, las que ha
+ * completado cada estudiante de media, con un decimal, como la media de la clase
+ * de la API; `percent`, cuánto de la barra llena; y `doneByAll`, cuántas ha
+ * completado todo el alumnado.
+ *
+ * La media es la de quienes participan (`participatingStudents`): las cuentas sin
+ * estrenar no bajan la media. Si la API no lo manda, se divide entre `totalStudents`.
  */
-export function ringFraction(done = 0, total = 0): number {
-  if (total <= 0) return 0
-  return Math.min(1, Math.max(0, done / total))
-}
-
-/**
- * Profesorado: cómo va la clase en el mapa. `percent` es la media de lo
- * completado (cuántas misiones ha completado cada estudiante, de todas) y
- * `doneByAll`, cuántas ha completado todo el alumnado.
- */
-export function classMapProgress(missions: { completedCount?: number; totalStudents?: number }[]): {
+export function classMapProgress(
+  missions: {
+    completedCount?: number
+    totalStudents?: number
+    participatingStudents?: number
+    counted?: boolean
+  }[]
+): {
   students: number
+  total: number
+  average: number
   percent: number
   doneByAll: number
 } {
-  const students = Math.max(0, ...missions.map(m => m.totalStudents ?? 0))
-  if (students === 0 || missions.length === 0) return { students, percent: 0, doneByAll: 0 }
-  const completions = missions.reduce(
-    (sum, m) => sum + Math.min(m.completedCount ?? 0, students),
-    0
+  const students = Math.max(
+    0,
+    ...missions.map(m => m.participatingStudents ?? m.totalStudents ?? 0)
   )
+  const counted = missions.filter(m => m.counted !== false)
+  const total = counted.length
+  if (students === 0 || total === 0) {
+    return { students, total, average: 0, percent: 0, doneByAll: 0 }
+  }
+  const completions = counted.reduce((sum, m) => sum + Math.min(m.completedCount ?? 0, students), 0)
   return {
     students,
-    percent: Math.round((completions / (students * missions.length)) * 100),
-    doneByAll: missions.filter(m => (m.completedCount ?? 0) >= students).length,
+    total,
+    average: Math.round((completions / students) * 10) / 10,
+    percent: Math.round((completions / (students * total)) * 100),
+    doneByAll: counted.filter(m => (m.completedCount ?? 0) >= students).length,
   }
-}
-
-/**
- * Profesorado: los avatares que caben de quienes han completado una misión y
- * cuántos quedan para «+N». Con `max` o menos, todos; si hay más, `max` − 1 y
- * el «+N» ocupa el último hueco.
- */
-export function avatarStack<T>(people: T[], max = 8): { shown: T[]; more: number } {
-  const shown = people.length <= max ? people : people.slice(0, Math.max(0, max - 1))
-  return { shown, more: people.length - shown.length }
 }

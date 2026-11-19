@@ -37,8 +37,11 @@ const props = withDefaults(defineProps<Props>(), {
   suffix: '',
 })
 
+// Los números, con los separadores del idioma de la app (no los del navegador).
+const { formatNumber } = useNumberFormat()
+
 const formattedValue = computed(() => {
-  const val = typeof props.value === 'number' ? props.value.toLocaleString() : props.value
+  const val = typeof props.value === 'number' ? formatNumber(props.value) : props.value
   return props.suffix ? `${val}${props.suffix}` : val
 })
 
@@ -61,10 +64,11 @@ const valueClasses = computed(() => {
 
 const labelClasses = computed(() => {
   const colorClasses = {
-    primary: 'text-navy-700/80',
-    pink: 'text-navy-700/80',
-    mint: 'text-navy-700/80',
-    yellow: 'text-navy-700/80',
+    // Va sobre el color de la tarjeta: macizo, para que llegue a AA.
+    primary: 'text-navy-700',
+    pink: 'text-navy-700',
+    mint: 'text-navy-700',
+    yellow: 'text-navy-700',
     white: 'text-white/80',
   }
 

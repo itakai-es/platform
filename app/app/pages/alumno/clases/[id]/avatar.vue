@@ -71,7 +71,7 @@
                 <input
                   v-model="nickname"
                   type="text"
-                  maxlength="20"
+                  :maxlength="NICKNAME_MAX"
                   :disabled="generatingAvatar"
                   class="w-full text-xl font-bold text-navy-700 bg-white rounded-xl border-2 border-navy-700/20 hover:border-navy-700/40 focus:border-navy-700 focus:outline-none focus:ring-2 focus:ring-navy-700/20 transition-all py-3 pl-10 pr-12 disabled:opacity-50 disabled:cursor-not-allowed"
                   :placeholder="t('student.classes.detail.avatar_tab.nickname_placeholder')"
@@ -189,7 +189,7 @@ const authStore = useAuthStore()
 const classGamificationStore = useClassGamificationStore()
 
 const classId = computed(() => route.params.id as string)
-const { ui, classGamification } = useStudentClassDetail(classId)
+const { classGamification } = useStudentClassDetail(classId)
 const { catalog, customOption } = useStudentAvatarCatalog()
 const { getImageUrl } = useImageUrl()
 
@@ -224,28 +224,51 @@ const hasProfileChanges = computed(
   () => selectedSrc.value !== originalSrc.value || nickname.value !== originalNickname.value
 )
 
+/** Largo máximo del alias (el de la API). */
+const NICKNAME_MAX = 20
+
+/** Por qué no se ha guardado, con lo que dice la API. */
+function saveErrorMessage(err: unknown) {
+  const code = (err as { data?: { code?: string } })?.data?.code
+  if (code === 'NICKNAME_TAKEN') return t('student.classes.detail.avatar_tab.nickname_taken')
+  // «Estudiante» o el nombre real de otra persona de la clase: la confundirían con ella
+  if (code === 'NICKNAME_RESERVED') return t('student.classes.detail.avatar_tab.nickname_reserved')
+  if (code === 'INVALID_NICKNAME') {
+    return t('student.classes.detail.avatar_tab.nickname_invalid', { max: NICKNAME_MAX })
+  }
+  return t('student.classes.detail.avatar_tab.save_error')
+}
+
 async function saveProfile() {
   if (!hasProfileChanges.value) return
+  // Sin alias no se puede quedar: el resto de la clase vería «Estudiante».
+  if (!nickname.value.trim()) {
+    toast.error(t('student.classes.detail.avatar_tab.nickname_empty'))
+    return
+  }
   try {
-    await $fetch(`${config.public.apiBase}/students/classes/${classId.value}/profile`, {
-      method: 'PUT',
-      body: {
-        nickname: nickname.value.trim() || undefined,
-        avatarUrl: selectedSrc.value || undefined,
-      },
-    })
-    originalNickname.value = nickname.value.trim()
+    const saved = await $fetch<{ nickname: string | null }>(
+      `${config.public.apiBase}/students/classes/${classId.value}/profile`,
+      {
+        method: 'PUT',
+        body: {
+          nickname: nickname.value.trim(),
+          avatarUrl: selectedSrc.value || undefined,
+        },
+      }
+    )
+    // Como lo ha guardado la API (sin espacios de más ni caracteres invisibles).
+    nickname.value = saved.nickname ?? nickname.value.trim()
+    originalNickname.value = nickname.value
     originalSrc.value = selectedSrc.value
     // Al dejar el generado con IA por un personaje, la imagen se borra y ya no se
     // puede volver a ella: deja de ofrecerse.
     if (catalogKeyOf(selectedSrc.value)) customSrc.value = null
     await classGamificationStore.fetchClassXp(classId.value, true)
-    // Invalida el ranking cacheado para que se vuelva a fetchear con el avatar nuevo.
-    ui.value.rankingData = null
     toast.success(t('student.classes.detail.avatar_tab.save_success'))
   } catch (err) {
     console.error('Error saving class profile:', err)
-    toast.error(t('student.classes.detail.avatar_tab.save_error'))
+    toast.error(saveErrorMessage(err))
   }
 }
 

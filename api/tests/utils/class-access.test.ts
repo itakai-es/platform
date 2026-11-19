@@ -113,6 +113,8 @@ describe('tabla de acciones', () => {
       'attendance.export': 'edit',
       'team.manage': 'edit',
       'team.award': 'edit',
+      'analytics.view': 'read',
+      'analytics.export': 'edit',
     })
   })
 

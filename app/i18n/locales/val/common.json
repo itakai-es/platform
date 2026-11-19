@@ -21,7 +21,8 @@
       "section_classes": "Classes",
       "section_account": "Compte",
       "profile": "El meu perfil",
-      "logout": "Tancar sessió"
+      "logout": "Tancar sessió",
+      "breadcrumb": "Ruta de navegació"
     },
     "actions": {
       "save": "Guardar",
@@ -67,7 +68,7 @@
       "submission_student_approved": "Entrega de {name} aprovada (+{xp} XP)",
       "download_not_found": "No s'ha trobat el fitxer per a descarregar",
       "download_error": "No s'ha pogut descarregar el fitxer",
-      "download_no_access": "No tens accés a aquest fitxer",
+      "download_no_access": "No tens accés a este fitxer",
       "popup_blocked": "Permet les finestres emergents per a obrir el fitxer"
     },
     "notifications": {
@@ -112,7 +113,8 @@
       "start_new": "Comença'n una de nova!",
       "chat_with": "Xateja amb {name}",
       "chat_with_god": "Xateja amb un déu",
-      "chat_with_label": "Xat amb"
+      "chat_with_label": "Xat amb",
+      "load_more": "Carregar-ne més…"
     },
     "mobile_sidebar": {
       "join_class": "Unir-se a una classe"
@@ -236,7 +238,7 @@
         },
         "alumno": {
           "title": "Ajuda per a l'alumnat",
-          "subtitle": "Com entrar en la teua classe, entregar missions i traure profit de l'XP, les monedes i el manà."
+          "subtitle": "Com entrar en la teua classe, entregar missions i traure profit de l'XP, les monedes i el mana."
         }
       },
       "all_categories": "Totes les categories",
@@ -367,7 +369,8 @@
         "title": "Menys animació",
         "description": "Reduïx transicions i efectes de moviment."
       },
-      "opens_new_tab": "(s'obri en una pestanya nova)"
+      "opens_new_tab": "(s'obri en una pestanya nova)",
+      "tabs": "Pestanyes"
     },
     "notification_settings": {
       "description": "Els teus avisos estan sempre en «{section}», en el menú. El correu és opcional.",
@@ -388,7 +391,8 @@
       "send_to_ai": "Envia a la IA"
     },
     "student_preview": {
-      "banner": "Estàs veient la plataforma com a estudiant (demo)"
+      "banner": "Estàs veient la plataforma com a estudiant (demo)",
+      "enter": "Veure com a estudiant"
     },
     "change_email": {
       "title": "Correu electrònic",
@@ -410,7 +414,7 @@
     },
     "file_unavailable": {
       "title": "L'enllaç ja no és vàlid",
-      "message": "L'enllaç per a obrir aquest fitxer ha caducat. Torna a la missió i obri'l una altra vegada."
+      "message": "L'enllaç per a obrir este fitxer ha caducat. Torna a la missió i obri'l una altra vegada."
     },
     "class_teachers": {
       "owner": "Propietat",
@@ -571,7 +575,42 @@
       "enigma_approved_student": "Et van aprovar l'entrega de {enigma}",
       "enigma_approved_teacher": "Li van aprovar l'entrega de {enigma}",
       "mission_started_student": "Vas començar la missió {mission}",
-      "mission_started_teacher": "Va començar la missió {mission}"
+      "mission_started_teacher": "Va començar la missió {mission}",
+      "enigma_submitted_teacher": "Va enviar {enigma} a revisió",
+      "enigma_submitted_student": "Vas entregar {enigma}",
+      "mission_completed_teacher": "Va completar la missió {mission}",
+      "mission_completed_student": "Vas completar la missió {mission}",
+      "level_up_teacher": "Va pujar al nivell {level}",
+      "level_up_student": "Vas pujar al nivell {level}",
+      "class_joined_teacher": "Es va unir a {name}",
+      "class_joined_student": "Et vas unir a {name}",
+      "achievement_unlocked_teacher": "Va desbloquejar l'assoliment {name}",
+      "achievement_unlocked_student": "Vas desbloquejar l'assoliment {name}",
+      "badge_unlocked_teacher": "Va desbloquejar la insígnia {name}",
+      "badge_unlocked_student": "Vas desbloquejar la insígnia {name}",
+      "xp_gained_teacher": "Va guanyar {xp} en {source}",
+      "xp_gained_student": "Vas guanyar {xp} en {source}",
+      "student_enrolled_teacher": "Es va registrar en la plataforma",
+      "student_enrolled_student": "Et vas registrar en la plataforma",
+      "progress_milestone_teacher": "Va assolir una fita de progrés",
+      "progress_milestone_student": "Vas assolir una fita de progrés",
+      "reward_taken_teacher": "Se li van llevar recursos: {name}",
+      "reward_taken_student": "Se't van llevar recursos: {name}",
+      "reward_given_teacher": "Va rebre una recompensa: {name}",
+      "reward_given_student": "Vas rebre una recompensa: {name}",
+      "behavior_applied_teacher": "Va rebre el comportament {name}",
+      "behavior_applied_student": "Vas rebre el comportament {name}",
+      "shop_purchased_teacher": "Va comprar {name} en la botiga",
+      "shop_purchased_student": "Vas comprar {name} en la botiga",
+      "shop_item_used_teacher": "Va utilitzar {name}",
+      "shop_item_used_student": "Vas utilitzar {name}",
+      "fallback": {
+        "class": "una classe",
+        "activity": "una activitat",
+        "behavior": "un comportament",
+        "item": "un article"
+      },
+      "unknown": "Activitat recent"
     },
     "avatars": {
       "characters": {
@@ -615,14 +654,14 @@
         "available": "Disponible",
         "urgent": "Urgent: venç prompte",
         "expired": "Caducada",
-        "locked": "Bloquejada: tancada pel teu docent de moment",
+        "locked": "Bloquejada pel professorat de moment",
         "locked_path": "Bloquejada: s’obri en completar {missions}"
       },
       "completed_by": "Encara no l'ha completada ningú: 0 de {total} | {done} de {total} l'ha completada | {done} de {total} l'han completada",
       "no_students": "Encara no hi ha alumnat",
       "opens_after": "S’obri en completar {missions}",
       "quoted": "«{title}»",
-      "quoted_teacher_closed": "«{title}» (tancada pel teu docent de moment)",
+      "quoted_teacher_closed": "«{title}» (bloquejada pel professorat de moment)",
       "and": "i",
       "locked_path_explain": "Per a obrir-la, completa abans {missions}.",
       "state_short": {
@@ -640,7 +679,7 @@
       "keys_hint": "Amb el teclat, les fletxes passen d'una missió a una altra; Inici i Fi porten a la primera i a l'última.",
       "your_progress": "Has completat {done} de {total} missió | Has completat {done} de {total} missions",
       "all_done": "Mapa completat!",
-      "class_progress": "La classe ha fet el {percent} % del recorregut",
+      "class_progress": "De mitjana, {done} de {total} missió completada | De mitjana, {done} de {total} missions completades",
       "class_done_by_all": "Completades per tota la classe: {done} de {total}",
       "legend": {
         "title": "Llegenda",
@@ -662,6 +701,84 @@
         "continue": "Continuar",
         "view": "Veure la missió",
         "open": "Obrir la missió"
+      }
+    },
+    "charts": {
+      "view_as_table": "Veure com a taula",
+      "legend": "Llegenda",
+      "label_value": "{label}: {value}",
+      "value_of_total": "{value} de {total}",
+      "you": "Tu",
+      "average": "Mitjana",
+      "empty_title": "Encara no hi ha dades",
+      "empty_description": "Quan hi haja activitat en este període, apareixerà ací.",
+      "status": {
+        "completed": "Completada",
+        "pending_review": "Per revisar",
+        "in_progress": "En curs",
+        "not_started": "Sense començar",
+        "expired": "Caducada",
+        "path_locked": "Tancada pel camí"
+      },
+      "compare": {
+        "not_enough": "La teua classe encara és massa xicoteta per a comparar.",
+        "self": {
+          "above": "Vas per damunt de la mitjana de la resta de la teua classe.",
+          "at": "Estàs en la mitjana de la resta de la teua classe.",
+          "below": "Vas per davall de la mitjana de la resta de la teua classe."
+        },
+        "other": {
+          "above": "Per damunt de la mitjana de la classe.",
+          "at": "En la mitjana de la classe.",
+          "below": "Per davall de la mitjana de la classe."
+        }
+      },
+      "signals": {
+        "empty_title": "Res a destacar",
+        "empty_description": "No hi ha cap senyal de dificultat en este període."
+      }
+    },
+    "class_card": {
+      "students": "Sense estudiants | 1 estudiant | {count} estudiants",
+      "missions": "Sense missions | 1 missió | {count} missions",
+      "view_class": "Veure la classe",
+      "duplicate": "Duplicar la classe",
+      "archive": "Arxivar la classe",
+      "unarchive": "Desarxivar la classe",
+      "confirm_archive": "Arxivar?",
+      "confirm_unarchive": "Desarxivar?",
+      "confirm": "Confirmar"
+    },
+    "assistant_card": {
+      "greeting": "Hola, {name}! Soc {god}, el teu assistent d'IA. En què et puc ajudar?",
+      "greeting_no_name": "Hola! Soc {god}, el teu assistent d'IA. En què et puc ajudar?"
+    },
+    "progress": {
+      "missions_of": "{done} de {total} missió | {done} de {total} missions",
+      "extra": "Extra: {done} de {total} opcional | Extra: {done} de {total} opcionals"
+    },
+    "ranking": {
+      "types_label": "Tipus de classificació",
+      "periods_label": "Període de la classificació",
+      "type": {
+        "xp": "XP",
+        "missions": "Missions",
+        "teams": "Equips"
+      },
+      "period": {
+        "all": "Sempre",
+        "week": "Esta setmana"
+      },
+      "no_score": {
+        "xp": "Encara sense XP",
+        "missions": {
+          "all": "Encara sense missions completades",
+          "week": "Encara sense missions esta setmana"
+        },
+        "teams": {
+          "all": "Encara sense punts",
+          "week": "Encara sense punts esta setmana"
+        }
       }
     }
   }

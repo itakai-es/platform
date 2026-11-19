@@ -417,6 +417,53 @@ describeWithDatabase('alumnado de una clase', () => {
       expect(cleaned.json().nickname).toBe('AnaBea')
     })
 
+    it('no repite el alias de otra persona de la clase: 409, sea como sea que se escriba', async () => {
+      const student = f.users.student.id
+      const before = await prisma.classEnrollment.findUniqueOrThrow({
+        where: { studentId_classId: { studentId: student, classId: f.classId } },
+      })
+      const user = await prisma.user.create({
+        data: {
+          email: `alias.${randomUUID().slice(0, 8)}@test.invalid`,
+          passwordHash: 'x',
+          name: 'Otra',
+          role: 'student',
+          isOnboarded: true,
+        },
+      })
+      await prisma.classEnrollment.create({
+        data: { classId: f.classId, studentId: user.id, nickname: 'Guardiana del Faro' },
+      })
+      try {
+        for (const nickname of ['Guardiana del Faro', '  guardiana   DEL faro ']) {
+          const taken = await send('PATCH', url(student), f.users.owner, { nickname })
+          expect(taken.statusCode, nickname).toBe(409)
+          expect(taken.json().code).toBe('NICKNAME_TAKEN')
+        }
+        const after = await prisma.classEnrollment.findUniqueOrThrow({
+          where: { studentId_classId: { studentId: student, classId: f.classId } },
+        })
+        expect(after.nickname).toBe(before.nickname)
+
+        // Un repetido de antes de esta regla se puede volver a guardar, también
+        // cambiándole las mayúsculas: no choca consigo.
+        await prisma.classEnrollment.update({
+          where: { id: before.id },
+          data: { nickname: 'Guardiana del Faro' },
+        })
+        const same = await send('PATCH', url(student), f.users.owner, {
+          nickname: 'GUARDIANA del faro',
+        })
+        expect(same.statusCode, same.body).toBe(200)
+      } finally {
+        await prisma.classEnrollment.update({
+          where: { id: before.id },
+          data: { nickname: before.nickname },
+        })
+        await prisma.user.delete({ where: { id: user.id } })
+      }
+    })
+
     it('sin administración, en clase ajena o con quien no está en la clase, no cambia nada', async () => {
       const payload = { nickname: 'Intruso' }
       expect((await send('PATCH', url(f.users.student.id), undefined, payload)).statusCode).toBe(

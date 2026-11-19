@@ -26,7 +26,8 @@ export interface ClassGamificationData {
   progress: number // 0-100 progress within current level
   currentXP: number // XP accumulated within current level
   requiredXP: number // XP needed to reach next level
-  rank: number // Position in class ranking
+  /** Puesto en la clasificación; null sin ella, sin XP o en la vista previa. */
+  rank: number | null
   totalStudents: number // Total students in class
 }
 

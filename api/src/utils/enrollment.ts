@@ -1,6 +1,8 @@
 import { prisma } from '../config/database.js'
 import type { Prisma } from '../generated/prisma/client.js'
 import { STUDENT_AVATARS, isAllowedClassAvatar } from './avatars.js'
+import { ConflictError, ValidationError } from './errors.js'
+import { cleanDisplayName } from './identity.js'
 
 /**
  * Matricular a un alumno en una clase. Pasa por aquí todo lo que da de alta una
@@ -77,6 +79,68 @@ export function getRandomAvatar(): string {
 /** Para comparar alias: sin espacios de más y sin mayúsculas. */
 const sameNickname = (nickname: string) =>
   nickname.trim().replace(/\s+/g, ' ').toLocaleLowerCase('es')
+
+/**
+ * Con qué se nombra a un compañero en lo que ve el alumnado (el ranking, los
+ * equipos, el muro) si no tiene alias: nunca su nombre real.
+ */
+export const STUDENT_FALLBACK_ALIAS = 'Estudiante'
+
+/** El alias de una matrícula para lo que ve el alumnado: el suyo o «Estudiante». */
+export function publicAlias(nickname: string | null | undefined): string {
+  return nickname?.trim() || STUDENT_FALLBACK_ALIAS
+}
+
+/**
+ * Un alias tal como se guarda, lo ponga el profesorado o el propio estudiante:
+ * limpio (`cleanDisplayName`) y de 1 a `NICKNAME_MAX_LENGTH` caracteres. Si no
+ * cumple, 400 con `INVALID_NICKNAME`.
+ */
+export function cleanNickname(nickname: string): string {
+  const clean = cleanDisplayName(nickname)
+  if (!clean || clean.length > NICKNAME_MAX_LENGTH) {
+    throw new ValidationError(
+      `El alias debe tener entre 1 y ${NICKNAME_MAX_LENGTH} caracteres`,
+      'INVALID_NICKNAME'
+    )
+  }
+  return clean
+}
+
+/** ¿Son el mismo alias? Sin espacios de más y sin mayúsculas, como al repartirlos. */
+export function isSameNickname(a: string | null | undefined, b: string | null | undefined) {
+  return !!a && !!b && sameNickname(a) === sameNickname(b)
+}
+
+/**
+ * Comprueba que un alias nuevo se pueda poner en la clase; si no, 409:
+ * - `NICKNAME_RESERVED`: es «Estudiante» (`STUDENT_FALLBACK_ALIAS`), con el que se
+ *   nombra a quien no tiene alias, o el nombre real de otra persona de la clase
+ *   (con él, el resto la tomaría por ella);
+ * - `NICKNAME_TAKEN`: es el alias de otra persona de la clase.
+ * Se compara como `sameNickname`, sin mayúsculas ni espacios de más. No cuentan la
+ * propia matrícula (`exceptEnrollmentId`) ni las de vista previa, que no ve nadie
+ * más. Para no perder una carrera con otro cambio o un alta, va dentro de una
+ * transacción que haya tomado `lockClassNicknames`.
+ */
+export async function assertNicknameAvailable(
+  db: Db,
+  classId: string,
+  nickname: string,
+  exceptEnrollmentId: string
+): Promise<void> {
+  const reserved = () =>
+    new ConflictError('Ese alias no se puede usar en la clase', 'NICKNAME_RESERVED')
+  if (isSameNickname(nickname, STUDENT_FALLBACK_ALIAS)) throw reserved()
+  const others = await db.classEnrollment.findMany({
+    where: { classId, isPreview: false, id: { not: exceptEnrollmentId } },
+    select: { nickname: true, student: { select: { name: true } } },
+  })
+  if (others.some(other => isSameNickname(other.nickname, nickname))) {
+    throw new ConflictError('Ese alias ya lo tiene otra persona de la clase', 'NICKNAME_TAKEN')
+  }
+  if (others.some(other => isSameNickname(other.student.name, nickname))) throw reserved()
+}
 
 /**
  * Alias al azar que no esté en `taken`: uno de mitología que quede libre y, si

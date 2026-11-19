@@ -4,9 +4,13 @@
     <div class="bg-navy-700 -mx-4 md:-mx-6 -mt-4 md:-mt-6 px-4 md:px-6 pt-6 pb-6">
       <div class="space-y-4">
         <!-- Breadcrumb -->
-        <nav class="flex items-center gap-1.5 sm:gap-2 text-sm">
-          <NuxtLink to="/profesor/inicio" class="text-white/70 hover:text-white flex-shrink-0">
-            <HomeIcon class="w-4 h-4" />
+        <nav :aria-label="t('common.nav.breadcrumb')" class="flex items-center gap-1.5 sm:gap-2 text-sm">
+          <NuxtLink
+            to="/profesor/inicio"
+            :aria-label="t('common.about.breadcrumb_home')"
+            class="text-white/70 hover:text-white flex-shrink-0"
+          >
+            <HomeIcon class="w-4 h-4" aria-hidden="true" />
           </NuxtLink>
           <ChevronRightIcon class="w-4 h-4 text-white/70" />
           <NuxtLink
@@ -57,62 +61,14 @@
 
     <!-- Loading State -->
     <template v-if="loading">
-      <!-- Stats Skeletons -->
-      <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-        <StatCardSkeleton v-for="i in 3" :key="i" type="stats" />
-      </div>
-
-      <!-- Main Grid Skeleton -->
+      <CardGrid cols="tiles">
+        <StatCardSkeleton v-for="i in 3" :key="i" />
+      </CardGrid>
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <!-- Left Column: Classes Skeleton -->
-        <div class="lg:col-span-2">
-          <div class="bg-green rounded-2xl shadow-lg p-5 animate-pulse">
-            <div class="flex items-center justify-between mb-4">
-              <div class="flex items-center gap-2">
-                <div class="w-5 h-5 bg-navy-700/20 rounded" />
-                <div class="h-5 bg-navy-700/20 rounded w-32" />
-              </div>
-              <div class="h-4 bg-navy-700/20 rounded w-16" />
-            </div>
-            <div class="space-y-3">
-              <div v-for="i in 3" :key="i" class="bg-white rounded-xl p-4">
-                <div class="flex items-center justify-between mb-2">
-                  <div class="h-5 bg-gray-200 rounded w-40" />
-                  <div class="h-4 bg-gray-200 rounded w-24" />
-                </div>
-                <div class="h-2 bg-gray-100 rounded-full">
-                  <div class="h-full bg-gray-200 rounded-full w-3/4" />
-                </div>
-                <div class="flex justify-between mt-1">
-                  <div class="h-3 bg-gray-200 rounded w-16" />
-                  <div class="h-3 bg-gray-200 rounded w-10" />
-                </div>
-              </div>
-            </div>
-          </div>
+        <div class="min-w-0 space-y-3 lg:col-span-2" aria-hidden="true">
+          <CardRowSkeleton v-for="i in 3" :key="i" />
         </div>
-
-        <!-- Right Column: Activity Skeleton -->
-        <div>
-          <div class="bg-red-light rounded-2xl shadow-lg p-5 animate-pulse">
-            <div class="flex items-center justify-between mb-4">
-              <div class="flex items-center gap-2">
-                <div class="w-5 h-5 bg-navy-700/20 rounded" />
-                <div class="h-5 bg-navy-700/20 rounded w-36" />
-              </div>
-              <div class="h-8 bg-navy-700/20 rounded-xl w-20" />
-            </div>
-            <div class="space-y-3">
-              <div v-for="i in 4" :key="i" class="flex items-start gap-3 bg-white rounded-xl p-3">
-                <div class="w-8 h-8 rounded-full bg-gray-200 flex-shrink-0" />
-                <div class="flex-1 space-y-2">
-                  <div class="h-4 bg-gray-200 rounded w-full" />
-                  <div class="h-3 bg-gray-200 rounded w-16" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <RecentActivityCard :activities="[]" loading card-type="pending" />
       </div>
     </template>
 
@@ -132,33 +88,31 @@
 
     <!-- Content -->
     <template v-else-if="student">
-      <!-- Stats Cards -->
-      <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-        <Card type="stats">
-          <StatDisplay
-            :value="student.stats.totalClasses"
-            :label="t('teacher.students.detail.stat_classes')"
-          />
-        </Card>
-        <Card type="stats">
-          <StatDisplay
-            :value="student.stats.totalMissionsAvailable"
-            :label="t('teacher.students.detail.stat_missions')"
-          />
-        </Card>
-        <Card type="stats">
-          <StatDisplay
-            :value="`${student.stats.completionRate}%`"
-            :label="t('teacher.students.detail.stat_completed')"
-          />
-        </Card>
-      </div>
+      <CardGrid cols="tiles">
+        <StatTile
+          size="sm"
+          :label="
+            t('teacher.students.detail.stat_classes', {}, student.stats.totalClasses)
+          "
+          :value="student.stats.totalClasses"
+        />
+        <StatTile
+          size="sm"
+          :label="t('teacher.students.detail.stat_missions_completed')"
+          :value="student.stats.missionsCompleted"
+          :total="student.stats.missionsCounted"
+        />
+        <StatTile
+          size="sm"
+          :label="t('teacher.students.detail.stat_required_enigmas')"
+          :value="student.stats.percent === null ? '—' : formatPercent(student.stats.percent)"
+        />
+      </CardGrid>
 
       <!-- Main Grid -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <!-- Left Column: Classes & Missions -->
-        <div class="lg:col-span-2 space-y-6">
-          <!-- Classes Section -->
+        <!-- Left Column: el índice de sus clases; el detalle está en cada una -->
+        <div class="min-w-0 lg:col-span-2">
           <Card type="clases">
             <CardHeader
               :title="t('teacher.students.detail.enrolled_classes_title')"
@@ -166,9 +120,11 @@
             >
               <template #actions>
                 <span class="text-sm text-navy-700/70">{{
-                  t('teacher.students.detail.enrolled_classes_count', {
-                    count: student.classes.length,
-                  })
+                  t(
+                    'teacher.students.detail.enrolled_classes_count',
+                    { count: student.classes.length },
+                    student.classes.length
+                  )
                 }}</span>
               </template>
             </CardHeader>
@@ -178,156 +134,70 @@
               <p>{{ t('teacher.students.detail.not_enrolled') }}</p>
             </div>
 
-            <div v-else class="space-y-3">
-              <div
-                v-for="classItem in student.classes"
-                :key="classItem.id"
-                class="bg-white rounded-xl p-4 hover:shadow-md transition-shadow"
-              >
-                <!-- Header: Avatar, Nickname, Class Name -->
-                <div class="flex items-start gap-3 mb-3">
-                  <!-- Avatar de la clase -->
+            <ul v-else class="space-y-3">
+              <li v-for="classItem in student.classes" :key="classItem.id">
+                <CardItem class="flex-wrap gap-x-4 gap-y-2">
                   <Avatar
                     :src="classItem.avatar"
                     :name="classItem.nickname"
                     :seed="studentAvatarSeed(classItem.id, student.id)"
-                    size="sm"
+                    size="xs"
                   />
-                  <div class="flex-1 min-w-0">
-                    <h3 class="font-bold text-navy-700 truncate">{{ classItem.name }}</h3>
-                    <p class="text-sm text-navy-700/70 truncate">{{ classItem.nickname }}</p>
-                  </div>
-                  <!-- Level Badge — solo si la clase tiene XP activado -->
-                  <div
-                    v-if="classCfg(classItem).xp"
-                    class="flex-shrink-0 bg-navy-700 text-white px-2.5 py-1 rounded-lg text-sm font-bold"
-                  >
-                    Nv. {{ classItem.level }}
-                  </div>
-                  <!-- Acciones sobre el alumno en esta clase -->
-                  <StudentActionsMenu
-                    class="flex-shrink-0 -mr-2 -mt-1"
-                    :class-id="classItem.id"
-                    :class-name="classItem.name"
-                    :student="manageable(classItem)"
-                    :access="classItem.myAccess"
-                    @renamed="onRenamed(classItem, $event)"
-                    @avatar-changed="classItem.avatar = $event"
-                    @removed="onRemoved"
-                  />
-                </div>
-
-                <!-- Asistencia en esta clase (solo profesorado que la ve) -->
-                <StudentAttendanceSummary
-                  v-if="canInClass(classItem.myAccess, 'attendance.view')"
-                  class="mb-3"
-                  :class-id="classItem.id"
-                  :student-id="student.id"
-                />
-
-                <!-- Stats Row: Missions, XP, Badges (XP solo si está activado) -->
-                <div
-                  class="grid gap-2 mb-3"
-                  :class="classCfg(classItem).xp ? 'grid-cols-3' : 'grid-cols-2'"
-                >
-                  <div class="bg-navy-700/5 rounded-lg px-3 py-2 text-center">
-                    <div class="flex items-center justify-center gap-1">
-                      <RocketLaunchIcon class="w-4 h-4 text-navy-700" />
-                      <span class="font-bold text-navy-700"
-                        >{{ classItem.missionsCompleted
-                        }}<span class="text-navy-700/70 font-normal"
-                          >/{{ classItem.totalMissions }}</span
-                        ></span
-                      >
-                    </div>
-                    <p class="text-xs text-navy-700/70">
-                      {{ t('teacher.students.detail.stat_missions') }}
+                  <div class="min-w-0 flex-1 basis-56">
+                    <h3 class="text-base font-bold text-navy-700 [overflow-wrap:anywhere]">
+                      {{ classItem.name }}
+                    </h3>
+                    <!-- Su alias, «X de N misiones» y, si la clase usa XP, el nivel -->
+                    <p class="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-navy-700">
+                      <span class="text-navy-700/70 [overflow-wrap:anywhere]">{{
+                        classItem.nickname
+                      }}</span>
+                      <span class="inline-flex items-center gap-1.5 font-semibold">
+                        <RocketLaunchIcon class="h-4 w-4 flex-shrink-0" aria-hidden="true" />
+                        {{
+                          t(
+                            'common.progress.missions_of',
+                            {
+                              done: formatNumber(classItem.missionsCompleted),
+                              total: formatNumber(classItem.missionsCounted),
+                            },
+                            classItem.missionsCounted
+                          )
+                        }}
+                      </span>
+                      <span v-if="classItem.level !== null" class="font-semibold">
+                        {{ t('teacher.students.detail.level_badge', { level: classItem.level }) }}
+                      </span>
+                      <Badge v-if="classItem.archived" variant="info" size="sm">
+                        {{ t('teacher.teams.archived_badge') }}
+                      </Badge>
                     </p>
                   </div>
-                  <div
-                    v-if="classCfg(classItem).xp"
-                    class="bg-navy-700/5 rounded-lg px-3 py-2 text-center"
-                  >
-                    <div class="flex items-center justify-center gap-1">
-                      <MapIcon class="w-4 h-4 text-navy-700" />
-                      <span class="font-bold text-navy-700"
-                        >{{ formatXP(classItem.xp)
-                        }}<span class="text-navy-700/70 font-normal"
-                          >/{{ formatXP(classItem.totalXp) }}</span
-                        ></span
-                      >
-                    </div>
-                    <p class="text-xs text-navy-700/70">XP</p>
+                  <div class="flex items-center gap-1">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      :icon-right="ArrowRightIcon"
+                      :to="`/profesor/clases/${classItem.id}/alumnos/${student.id}`"
+                      :aria-label="
+                        t('teacher.students.detail.view_in_class_named', { class: classItem.name })
+                      "
+                    >
+                      {{ t('teacher.students.detail.view_in_class') }}
+                    </Button>
+                    <StudentActionsMenu
+                      :class-id="classItem.id"
+                      :class-name="classItem.name"
+                      :student="manageable(classItem)"
+                      :access="classItem.myAccess"
+                      @renamed="onRenamed(classItem, $event)"
+                      @avatar-changed="classItem.avatar = $event"
+                      @removed="onRemoved"
+                    />
                   </div>
-                  <div class="bg-navy-700/5 rounded-lg px-3 py-2 text-center">
-                    <div class="flex items-center justify-center gap-1">
-                      <TrophyIcon class="w-4 h-4 text-navy-700" />
-                      <span class="font-bold text-navy-700"
-                        >{{ classItem.badgesEarned
-                        }}<span class="text-navy-700/70 font-normal"
-                          >/{{ classItem.totalBadges }}</span
-                        ></span
-                      >
-                    </div>
-                    <p class="text-xs text-navy-700/70">Insignias</p>
-                  </div>
-                </div>
-
-                <!-- Wallet: vidas, monedas y maná que el alumno tiene en esta clase
-                     (solo los recursos activos en los ajustes de la clase) -->
-                <div
-                  v-if="
-                    classCfg(classItem).lives ||
-                    classCfg(classItem).coins ||
-                    classCfg(classItem).mana
-                  "
-                  class="flex flex-wrap gap-2 mb-3"
-                >
-                  <div
-                    v-if="classCfg(classItem).lives"
-                    class="flex flex-1 min-w-[90px] items-center justify-center gap-1.5 bg-[#ffe4e9] rounded-lg px-3 py-2"
-                  >
-                    <LifeIcon class="w-4 h-4" />
-                    <span class="font-bold text-navy-700">{{ classItem.lives ?? 100 }}</span>
-                    <span class="text-xs text-navy-700/70">{{
-                      t('teacher.students.detail.stat_lives')
-                    }}</span>
-                  </div>
-                  <div
-                    v-if="classCfg(classItem).coins"
-                    class="flex flex-1 min-w-[90px] items-center justify-center gap-1.5 bg-yellow-light rounded-lg px-3 py-2"
-                  >
-                    <CoinIcon class="w-4 h-4" />
-                    <span class="font-bold text-navy-700">{{ classItem.coins ?? 0 }}</span>
-                    <span class="text-xs text-navy-700/70">{{ coinLabel }}</span>
-                  </div>
-                  <div
-                    v-if="classCfg(classItem).mana"
-                    class="flex flex-1 min-w-[90px] items-center justify-center gap-1.5 bg-sky-light rounded-lg px-3 py-2"
-                  >
-                    <ManaIcon class="w-4 h-4" />
-                    <span class="font-bold text-navy-700">{{ classItem.mana ?? 0 }}</span>
-                    <span class="text-xs text-navy-700/70">{{
-                      t('teacher.students.detail.stat_mana')
-                    }}</span>
-                  </div>
-                </div>
-
-                <!-- Progress Bar -->
-                <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
-                  <div
-                    class="h-full rounded-full bg-navy-700 transition-all duration-300"
-                    :style="{ width: `${classItem.progress}%` }"
-                  />
-                </div>
-                <div class="flex justify-between mt-1">
-                  <span class="text-xs text-text-secondary">{{
-                    t('teacher.students.detail.label_progress')
-                  }}</span>
-                  <span class="text-xs font-medium text-navy-700"> {{ classItem.progress }}% </span>
-                </div>
-              </div>
-            </div>
+                </CardItem>
+              </li>
+            </ul>
           </Card>
         </div>
 
@@ -351,48 +221,30 @@ import {
   HomeIcon,
   ChevronRightIcon,
   AcademicCapIcon,
+  ArrowRightIcon,
   ExclamationTriangleIcon,
   UserIcon,
-  MapIcon,
   RocketLaunchIcon,
-  TrophyIcon,
 } from '@heroicons/vue/24/outline'
-import type { ClassAccess, ClassSettings } from '~/types/class.types'
+import type { ClassAccess } from '~/types/class.types'
 import type { AccountType, ManageableStudent } from '~/types/teacher.types'
-import { resolveClassSettings } from '~/utils/class-settings'
-import { canInClass } from '~/utils/class-access'
 import { accountIdentifier } from '~/utils/identity'
 import { studentAvatarSeed } from '~/utils/avatar'
 
+/** Una fila del índice: su página dentro de la clase tiene el detalle. */
 interface StudentClass {
   id: string
   name: string
   archived?: boolean
   /** Acceso propio en esta clase: decide qué acciones se ofrecen. */
   myAccess?: ClassAccess | null
-  progress: number
+  /** «X de N misiones»: N son las que cuentan (con enigmas y sin bloquear a mano). */
   missionsCompleted: number
-  totalMissions: number
-  // Per-class gamification data
+  missionsCounted: number
   nickname: string
   avatar: string
-  level: number
-  xp: number
-  totalXp: number
-  coins: number
-  mana: number
-  lives?: number
-  settings?: Partial<ClassSettings>
-  badgesEarned: number
-  totalBadges: number
-}
-
-interface RecentMission {
-  id: string
-  title: string
-  className: string
-  xpEarned: number
-  completedAt: string
+  /** Null si la clase no usa XP. */
+  level: number | null
 }
 
 interface Activity {
@@ -405,11 +257,9 @@ interface Activity {
 
 interface StudentStats {
   totalClasses: number
-  totalMissionsCompleted: number
-  totalMissionsAvailable: number
-  completionRate: number
-  averageScore: number
-  streak: number
+  missionsCompleted: number
+  missionsCounted: number
+  percent: number | null
 }
 
 interface StudentDetail {
@@ -429,16 +279,12 @@ interface StudentDetail {
   /** Cuenta sin usar: la clase de la que quitarla la borra del todo. */
   unusedAccountHomeClassId: string | null
   classes: StudentClass[]
-  recentMissions: RecentMission[]
   recentActivity: Activity[]
   stats: StudentStats
 }
 
 const { t } = useI18n()
-const { coinLabel } = useCoinLabel()
-
-// Per-class feature flags: hide a wallet chip when that resource is disabled for the class.
-const classCfg = (c: StudentClass) => resolveClassSettings(c.settings)
+const { formatNumber, formatPercent } = useNumberFormat()
 
 useHead({
   title: () => t('teacher.students.detail.meta.title'),
@@ -506,14 +352,6 @@ async function onRemoved() {
   await fetchStudent()
 }
 
-// Format XP for display
-const formatXP = (xp: number): string => {
-  if (xp >= 1000) {
-    return (xp / 1000).toFixed(1) + 'k'
-  }
-  return String(xp)
-}
-
 // Use shared activity formatter for teacher perspective
 const { formatActivities } = useActivityFormatter('teacher')
 
@@ -522,22 +360,6 @@ const formattedActivities = computed(() => {
   if (!student.value) return []
   return formatActivities(student.value.recentActivity)
 })
-
-// Get progress bar color
-const getProgressBarColor = (progress: number): string => {
-  if (progress >= 80) return 'bg-green-500'
-  if (progress >= 50) return 'bg-yellow-500'
-  if (progress >= 20) return 'bg-orange-500'
-  return 'bg-gray-400'
-}
-
-// Get progress text color
-const getProgressTextColor = (progress: number): string => {
-  if (progress >= 80) return 'text-green-600'
-  if (progress >= 50) return 'text-yellow-600'
-  if (progress >= 20) return 'text-orange-500'
-  return 'text-gray-500'
-}
 
 onMounted(() => {
   fetchStudent()

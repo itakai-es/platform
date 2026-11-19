@@ -190,28 +190,27 @@
         "quarter": "Hiruhilekoa"
       },
       "kpis": {
-        "avg_response": "Erantzun-denbora",
-        "requests_per_min": "Eskaerak/min",
         "error_rate": "Errore-tasa",
-        "uptime": "Erabilgarritasuna"
+        "activity": "Aldiko jarduera",
+        "new_users": "Aldiko altak",
+        "missions_completed": "Aldian osatutako misioak"
       },
       "overview": {
         "total_users": "Erabiltzaileak guztira",
-        "missions_completed": "Misio burututakoak",
-        "completion_rate": "Burutze-tasa",
-        "active_today": "Gaur aktibo"
+        "active_today": "Gaur aktibo",
+        "pending_reviews": "Berrikusteko entregak"
       },
       "sections": {
         "system_resources": "Sistemaren baliabideak",
         "service_health": "Zerbitzuen egoera",
-        "response_time": "Erantzun-denbora",
-        "active_users": "Erabiltzaile aktiboak",
-        "requests": "Eskaerak",
-        "tokens_over_time": "Kontsumitutako tokenak",
         "users_by_role": "Erabiltzaileak rolaren arabera",
         "missions_by_status": "Misioak egoeraren arabera",
         "missions_by_rarity": "Misioak bakantasunaren arabera",
-        "ai_usage": "AA-ren erabilera (laguntzaileak)"
+        "ai_usage": "AA-ren erabilera (laguntzaileak)",
+        "period_series": "Aldian",
+        "new_users": "Altak",
+        "activity": "Erregistratutako jarduera",
+        "assistant_messages": "Laguntzaileei bidalitako mezuak"
       },
       "system": {
         "memory": "Memoria",
@@ -219,15 +218,12 @@
         "db_latency": "BD latentzia"
       },
       "ai": {
-        "total_tokens": "Token guztiak",
-        "avg_tokens_user": "Batez bestekoa erabiltzaileko",
-        "total_conversations": "Elkarrizketak",
-        "avg_conversations_user": "Elk. erabiltzaileko"
+        "total_conversations": "Elkarrizketak hasieratik",
+        "total_messages": "Aldiko mezuak"
       },
       "table": {
         "service": "Zerbitzua",
         "status": "Egoera",
-        "uptime": "Uptime",
         "latency": "Latentzia"
       },
       "status": {
@@ -238,6 +234,17 @@
       "meta": {
         "title": "Sistemaren analitikak | ITAKAI Admin",
         "description": "Ikusi metrika aurreratuak, errendimendu-grafikoak eta plataformaren analisi xeheak."
+      },
+      "delta": {
+        "absolute": "{diff} aurreko aldiarekin alderatuta",
+        "percent": "{percent} aurreko aldiarekin alderatuta",
+        "points": "{diff} puntu aurreko aldiarekin alderatuta | {diff} puntu aurreko aldiarekin alderatuta"
+      },
+      "no_role": "Rolik gabe",
+      "services": {
+        "database": "Datu-basea",
+        "ai_text": "AA (testua)",
+        "ai_image": "AA (irudiak)"
       }
     },
     "logs": {

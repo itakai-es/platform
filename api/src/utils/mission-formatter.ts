@@ -3,9 +3,10 @@
  * Used by missions.service.ts and students.service.ts; `missionRewards`, also by
  * the teachers' mission lists and the template detail.
  */
+import { countsForProgress, enigmaTally, type EnigmaTally } from '../modules/analytics/definitions.js'
 import { calculateMissionTotalXP } from './xp-calculator.js'
 import type { ClassSettings } from './class-settings.js'
-import type { PathRequirement } from './mission-path.js'
+import { enigmasComplete, type PathRequirement } from './mission-path.js'
 
 export interface MissionFormatInput {
   id: string
@@ -21,6 +22,8 @@ export interface MissionFormatInput {
   xpReward?: number
   class?: { name: string } | null
   enigmas?: {
+    id?: string
+    isOptional?: boolean
     xpReward: number
     coinReward?: number
     manaReward?: number
@@ -49,9 +52,14 @@ export interface FormattedMission {
   earnedXp?: number
   earnedCoins?: number
   earnedMana?: number
+  /** Cuenta en «X de N misiones»: tiene enigmas y su docente no la ha bloqueado. */
+  counted: boolean
+  /** Enigmas obligatorios aprobados, de cuántos; los opcionales aparte, como extra. */
   progressDetail: {
     done: number
     total: number
+    extraDone: number
+    extraTotal: number
   }
   rewards: {
     xp: number
@@ -108,6 +116,18 @@ export function missionRewards(
   }
 }
 
+/** Lo que lleva aprobado de los enigmas de una misión, que traen su progreso por enigma. */
+function studentTally(enigmas: NonNullable<MissionFormatInput['enigmas']>): EnigmaTally {
+  const shapes = enigmas.map((enigma, index) => ({
+    id: enigma.id ?? String(index),
+    isOptional: enigma.isOptional ?? false,
+  }))
+  const approved = new Set(
+    shapes.filter((_, index) => (enigmas[index]!.progress?.length ?? 0) > 0).map(e => e.id)
+  )
+  return enigmaTally(shapes, approved)
+}
+
 export function formatMission(
   mission: MissionFormatInput,
   includeClassName = false,
@@ -122,16 +142,39 @@ export function formatMission(
 
   const progressRecord = mission.progress?.[0]
   const totalEnigmas = mission.enigmas?.length || 0
-  const completedEnigmas = progressRecord?.enigmasCompleted || 0
   const {
     xpReward: totalXp,
     coinReward: totalCoins,
     manaReward: totalMana,
   } = missionRewards(mission, settings)
-  const progressPercent = totalEnigmas > 0 ? Math.round((completedEnigmas / totalEnigmas) * 100) : 0
 
   // Only compute earned totals when the caller included per-student enigma progress.
   const hasStudentProgress = mission.enigmas?.some(e => e.progress !== undefined) ?? false
+  // El avance dentro de la misión: sus enigmas obligatorios (ver
+  // analytics/definitions.ts), mirando lo aprobado de verdad. Sin el progreso por
+  // enigma, lo guardado en su fila.
+  const tally = hasStudentProgress ? studentTally(mission.enigmas!) : null
+  // Completada es la definición única: `completedAt` o todos los obligatorios aprobados.
+  const approvals = hasStudentProgress
+    ? mission.enigmas!.map(e => ({
+        isOptional: e.isOptional ?? false,
+        approved: (e.progress?.length ?? 0) > 0,
+      }))
+    : undefined
+  const completed = progressRecord?.completedAt != null || (approvals ? enigmasComplete(approvals) : false)
+  const progressDetail = tally
+    ? {
+        done: tally.required.approved,
+        total: tally.required.total,
+        extraDone: tally.optional.approved,
+        extraTotal: tally.optional.total,
+      }
+    : { done: progressRecord?.enigmasCompleted || 0, total: totalEnigmas, extraDone: 0, extraTotal: 0 }
+  const progressPercent = completed
+    ? 100
+    : progressDetail.total > 0
+      ? Math.round((progressDetail.done / progressDetail.total) * 100)
+      : 0
   const earnedXp = hasStudentProgress
     ? showXp
       ? mission.enigmas!.reduce((sum, e) => sum + (e.progress?.[0]?.xpEarned ?? 0), 0)
@@ -151,7 +194,7 @@ export function formatMission(
   // La cerrada por el camino sale `bloqueada`, como la que cierra su docente
   // (sin enlace, con candado), y `lockReason` dice cuál de las dos es. La de su
   // docente va por encima; la completada, por encima de las dos.
-  const baseStatus = getMissionStatus(mission, progressRecord)
+  const baseStatus = getMissionStatus(mission, progressRecord, approvals)
   const requires = path.requires ?? []
   const pathLocked = requires.length > 0 && baseStatus !== 'completada' && baseStatus !== 'bloqueada'
   const status = pathLocked ? 'bloqueada' : baseStatus
@@ -178,10 +221,16 @@ export function formatMission(
     earnedXp,
     earnedCoins,
     earnedMana,
-    progressDetail: {
-      done: completedEnigmas,
-      total: totalEnigmas,
-    },
+    counted: countsForProgress({
+      id: mission.id,
+      status: mission.status,
+      deadline: mission.deadline,
+      enigmas: (mission.enigmas ?? []).map((e, index) => ({
+        id: e.id ?? String(index),
+        isOptional: e.isOptional ?? false,
+      })),
+    }),
+    progressDetail,
     rewards: {
       xp: totalXp,
       coins: totalCoins,
@@ -199,11 +248,17 @@ export function formatMission(
   return formatted
 }
 
+/**
+ * El estado de una misión para quien la mira. `enigmas`, con si tiene aprobado cada
+ * uno, para la definición única de completada (ver analytics/definitions.ts); sin
+ * ellos, solo se mira `completedAt`.
+ */
 export function getMissionStatus(
   mission: { deadline: Date | null; status: string },
-  progress?: { completedAt: Date | null } | null
+  progress?: { completedAt: Date | null } | null,
+  enigmas?: { isOptional: boolean; approved: boolean }[]
 ): string {
-  if (progress?.completedAt) return 'completada'
+  if (progress?.completedAt || (enigmas && enigmasComplete(enigmas))) return 'completada'
   // Una misión bloqueada por el profesor debe mostrarse como tal por encima de los
   // estados derivados de la fecha (urgente/expirada); si no, una fecha cercana la
   // "desbloquearía" visualmente y el alumno podría interactuar con ella.

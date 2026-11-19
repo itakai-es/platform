@@ -1,488 +1,201 @@
 <template>
   <div class="space-y-6">
-    <!-- Top Row: Podio + Stats -->
-    <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 xl:gap-6">
-      <!-- Podio de Campeones - Yellow theme -->
-      <Card type="ia" flex>
-        <CardHeader
-          :title="t('student.components.class_ranking_section.podium_title')"
-          :icon="TrophyIcon"
-          title-tag="h3"
-        />
+    <!-- Podio (salvo en «solo tu puesto», donde la API no lo manda) y a su lado: al
+         profesorado, las medias de la clase; al alumnado, «Tú y tu clase» (la misma
+         comparación que en su Resumen, si la clase la tiene encendida) y, en los
+         modos que recortan, también su puesto. -->
+    <div :class="['grid grid-cols-1 gap-4 xl:gap-6', twoColumns ? 'xl:grid-cols-2' : '']">
+      <RankingPodium
+        v-if="mode !== 'position'"
+        :entries="podium"
+        :empty-text="podiumEmptyText"
+        :student-link="studentLink"
+        :highlight-you="showCurrentUserHighlight"
+      >
+        <template #metric="{ student }">
+          <RankingMetric :student="student" :type="type" :period="period" />
+        </template>
+        <template #facts="{ student }">
+          <RankingFacts :student="student" :type="type" />
+        </template>
+      </RankingPodium>
 
-        <!-- Podium Display - Vertical on mobile/tablet, horizontal on 2xl+ -->
-        <CardItem
-          layout="column"
-          padding="md"
-          class="3xl:!p-6 !pt-12 3xl:!pt-14 !justify-center"
-          flex
+      <RankingStats v-if="statItems.length > 0" :title="tr('stats_title')" :items="statItems" />
+      <!-- En `position`, las dos tarjetas son las dos columnas; en `top`, una columna -->
+      <div
+        v-else-if="mode !== 'full'"
+        :class="mode === 'top' ? 'flex flex-col gap-4 xl:gap-6' : 'contents'"
+      >
+        <RankingMyPosition
+          :title="tr('my_position_title')"
+          :student="me"
+          :total="rankingData.total"
+          :no-rank-text="noRankText"
+          :preview-text="tr('my_position_preview')"
         >
-          <!-- Mobile/Tablet: Vertical list (shows until container has enough width) -->
-          <div class="flex flex-col gap-3 3xl:hidden">
-            <!-- 1st Place -->
-            <div
-              v-if="rankingData.podium[0]"
-              :class="[
-                'flex items-center gap-4 bg-yellow/20 rounded-xl p-4 border-l-4 border-yellow',
-                clickable ? 'cursor-pointer hover:shadow-md transition-all' : '',
-              ]"
-              @click="handleStudentClick(rankingData.podium[0].id)"
-            >
-              <div class="relative flex-shrink-0">
-                <Avatar
-                  :src="rankingData.podium[0].avatar"
-                  :name="rankingData.podium[0].username"
-                  :seed="studentAvatarSeed(classId, rankingData.podium[0].id)"
-                  size="md"
-                  class="ring ring-yellow shadow-lg"
-                />
-                <div
-                  class="absolute -top-1 -left-1 w-7 h-7 rounded-full bg-yellow flex items-center justify-center shadow-lg"
-                >
-                  <TrophyIcon class="w-4 h-4 text-navy-700" />
-                </div>
-              </div>
-              <div class="flex-1 min-w-0">
-                <p class="font-bold text-navy-700">{{ rankingData.podium[0].username }}</p>
-                <p class="text-sm text-navy-700 font-semibold flex items-center gap-1.5">
-                  <span
-                    >{{ t('student.components.class_ranking_section.level_abbr') }}
-                    {{ rankingData.podium[0].level }}</span
-                  >
-                  <span>·</span>
-                  <span class="inline-flex items-center gap-1">
-                    <Tooltip :text="t('common.resources.xp')"><XpIcon class="w-4 h-4" /></Tooltip
-                    >{{ rankingData.podium[0].xp.toLocaleString() }}
-                  </span>
-                </p>
-                <p class="text-xs text-text-secondary">
-                  {{ rankingData.podium[0].missionsCompleted }}/{{
-                    rankingData.podium[0].missionsTotal
-                  }}
-                  {{ t('student.components.class_ranking_section.missions_suffix') }}
-                </p>
-              </div>
-            </div>
-
-            <!-- 2nd Place -->
-            <div
-              v-if="rankingData.podium[1]"
-              :class="[
-                'flex items-center gap-4 bg-gray-100 rounded-xl p-4 border-l-4 border-gray-400',
-                clickable ? 'cursor-pointer hover:shadow-md transition-all' : '',
-              ]"
-              @click="handleStudentClick(rankingData.podium[1].id)"
-            >
-              <div class="relative flex-shrink-0">
-                <Avatar
-                  :src="rankingData.podium[1].avatar"
-                  :name="rankingData.podium[1].username"
-                  :seed="studentAvatarSeed(classId, rankingData.podium[1].id)"
-                  size="sm"
-                  class="ring-2 ring-gray-400 shadow-lg"
-                />
-                <div
-                  class="absolute -top-1 -left-1 w-6 h-6 rounded-full bg-gray-400 flex items-center justify-center shadow-lg"
-                >
-                  <span class="text-white font-bold text-xs">2</span>
-                </div>
-              </div>
-              <div class="flex-1 min-w-0">
-                <p class="font-semibold text-navy-700">{{ rankingData.podium[1].username }}</p>
-                <p class="text-sm text-navy-700 flex items-center gap-1.5">
-                  <span
-                    >{{ t('student.components.class_ranking_section.level_abbr') }}
-                    {{ rankingData.podium[1].level }}</span
-                  >
-                  <span>·</span>
-                  <span class="inline-flex items-center gap-1">
-                    <Tooltip :text="t('common.resources.xp')"><XpIcon class="w-4 h-4" /></Tooltip
-                    >{{ rankingData.podium[1].xp.toLocaleString() }}
-                  </span>
-                </p>
-                <p class="text-xs text-text-secondary">
-                  {{ rankingData.podium[1].missionsCompleted }}/{{
-                    rankingData.podium[1].missionsTotal
-                  }}
-                  {{ t('student.components.class_ranking_section.missions_suffix') }}
-                </p>
-              </div>
-            </div>
-
-            <!-- 3rd Place -->
-            <div
-              v-if="rankingData.podium[2]"
-              :class="[
-                'flex items-center gap-4 bg-[#CD7F32]/10 rounded-xl p-4 border-l-4 border-[#CD7F32]',
-                clickable ? 'cursor-pointer hover:shadow-md transition-all' : '',
-              ]"
-              @click="handleStudentClick(rankingData.podium[2].id)"
-            >
-              <div class="relative flex-shrink-0">
-                <Avatar
-                  :src="rankingData.podium[2].avatar"
-                  :name="rankingData.podium[2].username"
-                  :seed="studentAvatarSeed(classId, rankingData.podium[2].id)"
-                  size="sm"
-                  class="ring-2 ring-[#CD7F32] shadow-lg"
-                />
-                <div
-                  class="absolute -top-1 -left-1 w-6 h-6 rounded-full bg-[#CD7F32] flex items-center justify-center shadow-lg"
-                >
-                  <span class="text-white font-bold text-xs">3</span>
-                </div>
-              </div>
-              <div class="flex-1 min-w-0">
-                <p class="font-semibold text-navy-700">{{ rankingData.podium[2].username }}</p>
-                <p class="text-sm text-navy-700 flex items-center gap-1.5">
-                  <span
-                    >{{ t('student.components.class_ranking_section.level_abbr') }}
-                    {{ rankingData.podium[2].level }}</span
-                  >
-                  <span>·</span>
-                  <span class="inline-flex items-center gap-1">
-                    <Tooltip :text="t('common.resources.xp')"><XpIcon class="w-4 h-4" /></Tooltip
-                    >{{ rankingData.podium[2].xp.toLocaleString() }}
-                  </span>
-                </p>
-                <p class="text-xs text-text-secondary">
-                  {{ rankingData.podium[2].missionsCompleted }}/{{
-                    rankingData.podium[2].missionsTotal
-                  }}
-                  {{ t('student.components.class_ranking_section.missions_suffix') }}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Desktop: Horizontal podium (only on very wide screens) -->
-          <div class="hidden 3xl:flex items-end justify-center gap-8">
-            <!-- 2nd Place -->
-            <div
-              v-if="rankingData.podium[1]"
-              :class="[
-                'flex flex-col items-center',
-                clickable ? 'cursor-pointer hover:scale-105 transition-transform' : '',
-              ]"
-              @click="handleStudentClick(rankingData.podium[1].id)"
-            >
-              <div class="relative mb-3">
-                <Avatar
-                  :src="rankingData.podium[1].avatar"
-                  :name="rankingData.podium[1].username"
-                  :seed="studentAvatarSeed(classId, rankingData.podium[1].id)"
-                  size="lg"
-                  class="ring-4 ring-gray-400 shadow-lg"
-                />
-                <div
-                  class="absolute -top-2 -left-2 w-10 h-10 rounded-full bg-gray-400 flex items-center justify-center shadow-lg"
-                >
-                  <span class="text-white font-bold text-base">2</span>
-                </div>
-              </div>
-              <div
-                class="bg-gray-100 w-40 h-40 rounded-t-xl flex flex-col items-center justify-center border-t-4 border-gray-400 shadow-md px-3 py-3"
-              >
-                <p
-                  class="text-base font-bold text-navy-700 text-center break-words w-full leading-tight"
-                >
-                  {{ rankingData.podium[1].username }}
-                </p>
-                <div class="bg-gray-400/20 rounded-full px-3 py-1 mt-2">
-                  <p class="text-sm text-navy-700 font-bold inline-flex items-center gap-1">
-                    <Tooltip :text="t('common.resources.xp')"><XpIcon class="w-4 h-4" /></Tooltip
-                    >{{ rankingData.podium[1].xp.toLocaleString() }}
-                  </p>
-                </div>
-                <div class="flex items-center gap-3 mt-2 text-xs text-text-secondary">
-                  <span
-                    >{{ t('student.components.class_ranking_section.level_abbr')
-                    }}{{ rankingData.podium[1].level }}</span
-                  >
-                  <span class="flex items-center gap-1">
-                    <RocketLaunchIcon class="w-3.5 h-3.5" />
-                    {{ rankingData.podium[1].missionsCompleted }}/{{
-                      rankingData.podium[1].missionsTotal
-                    }}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <!-- 1st Place -->
-            <div
-              v-if="rankingData.podium[0]"
-              :class="[
-                'flex flex-col items-center -mt-8',
-                clickable ? 'cursor-pointer hover:scale-105 transition-transform' : '',
-              ]"
-              @click="handleStudentClick(rankingData.podium[0].id)"
-            >
-              <div class="relative mb-3">
-                <Avatar
-                  :src="rankingData.podium[0].avatar"
-                  :name="rankingData.podium[0].username"
-                  :seed="studentAvatarSeed(classId, rankingData.podium[0].id)"
-                  size="xl"
-                  class="ring-4 ring-yellow shadow-xl"
-                />
-                <div
-                  class="absolute -top-3 -left-3 w-12 h-12 rounded-full bg-yellow flex items-center justify-center shadow-lg"
-                >
-                  <TrophyIcon class="w-6 h-6 text-navy-700" />
-                </div>
-              </div>
-              <div
-                class="bg-yellow/20 w-44 h-52 rounded-t-xl flex flex-col items-center justify-center border-t-4 border-yellow shadow-md px-4 py-4"
-              >
-                <p
-                  class="text-lg font-extrabold text-navy-700 text-center break-words w-full leading-tight"
-                >
-                  {{ rankingData.podium[0].username }}
-                </p>
-                <div class="bg-yellow/40 rounded-full px-4 py-1.5 mt-3">
-                  <p class="text-base text-navy-700 font-bold inline-flex items-center gap-1">
-                    <Tooltip :text="t('common.resources.xp')"><XpIcon class="w-5 h-5" /></Tooltip
-                    >{{ rankingData.podium[0].xp.toLocaleString() }}
-                  </p>
-                </div>
-                <div class="flex items-center gap-4 mt-3 text-sm text-text-secondary">
-                  <span
-                    >{{ t('student.components.class_ranking_section.level_abbr')
-                    }}{{ rankingData.podium[0].level }}</span
-                  >
-                  <span class="flex items-center gap-1">
-                    <RocketLaunchIcon class="w-4 h-4" />
-                    {{ rankingData.podium[0].missionsCompleted }}/{{
-                      rankingData.podium[0].missionsTotal
-                    }}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <!-- 3rd Place -->
-            <div
-              v-if="rankingData.podium[2]"
-              :class="[
-                'flex flex-col items-center',
-                clickable ? 'cursor-pointer hover:scale-105 transition-transform' : '',
-              ]"
-              @click="handleStudentClick(rankingData.podium[2].id)"
-            >
-              <div class="relative mb-3">
-                <Avatar
-                  :src="rankingData.podium[2].avatar"
-                  :name="rankingData.podium[2].username"
-                  :seed="studentAvatarSeed(classId, rankingData.podium[2].id)"
-                  size="lg"
-                  class="ring-4 ring-[#CD7F32] shadow-lg"
-                />
-                <div
-                  class="absolute -top-2 -left-2 w-10 h-10 rounded-full bg-[#CD7F32] flex items-center justify-center shadow-lg"
-                >
-                  <span class="text-white font-bold text-base">3</span>
-                </div>
-              </div>
-              <div
-                class="bg-[#CD7F32]/20 w-40 h-36 rounded-t-xl flex flex-col items-center justify-center border-t-4 border-[#CD7F32] shadow-md px-3 py-3"
-              >
-                <p
-                  class="text-base font-bold text-navy-700 text-center break-words w-full leading-tight"
-                >
-                  {{ rankingData.podium[2].username }}
-                </p>
-                <div class="bg-[#CD7F32]/30 rounded-full px-3 py-1 mt-2">
-                  <p class="text-sm text-navy-700 font-bold inline-flex items-center gap-1">
-                    <Tooltip :text="t('common.resources.xp')"><XpIcon class="w-4 h-4" /></Tooltip
-                    >{{ rankingData.podium[2].xp.toLocaleString() }}
-                  </p>
-                </div>
-                <div class="flex items-center gap-3 mt-2 text-xs text-text-secondary">
-                  <span
-                    >{{ t('student.components.class_ranking_section.level_abbr')
-                    }}{{ rankingData.podium[2].level }}</span
-                  >
-                  <span class="flex items-center gap-1">
-                    <RocketLaunchIcon class="w-3.5 h-3.5" />
-                    {{ rankingData.podium[2].missionsCompleted }}/{{
-                      rankingData.podium[2].missionsTotal
-                    }}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </CardItem>
-      </Card>
-
-      <!-- Estadísticas de la Clase - Purple theme -->
-      <Card type="stats" flex>
-        <CardHeader
-          :title="t('student.components.class_ranking_section.stats_title')"
-          :icon="ChartPieIcon"
-          title-tag="h3"
+          <template #metric>
+            <RankingMetric v-if="me" :student="me" :type="type" :period="period" />
+          </template>
+          <template #facts>
+            <RankingFacts v-if="me" :student="me" :type="type" />
+          </template>
+        </RankingMyPosition>
+        <ClassCompareCard
+          v-if="comparison"
+          :comparison="comparison"
+          :flex="mode === 'position'"
+          :you="compareAvatar"
         />
-
-        <CardGrid cols="2x2" flex>
-          <!-- XP Promedio -->
-          <CardItem layout="column" centered class="justify-center">
-            <p class="text-5xl sm:text-6xl font-semibold text-navy-700">
-              {{ (rankingData.stats?.avgXp ?? 0).toLocaleString() }}
-            </p>
-            <p class="text-sm text-navy-700/80 mt-2">
-              {{ t('student.components.class_ranking_section.avg_xp') }}
-            </p>
-          </CardItem>
-          <!-- Progreso Promedio -->
-          <CardItem layout="column" centered class="justify-center">
-            <p class="text-5xl sm:text-6xl font-semibold text-navy-700">
-              {{ rankingData.stats?.avgProgress ?? 0 }}%
-            </p>
-            <p class="text-sm text-navy-700/80 mt-2">
-              {{ t('student.components.class_ranking_section.avg_progress') }}
-            </p>
-          </CardItem>
-          <!-- Misiones Promedio -->
-          <CardItem layout="column" centered class="justify-center">
-            <p class="text-5xl sm:text-6xl font-semibold text-navy-700">
-              {{ rankingData.stats?.avgMissions ?? 0 }}
-            </p>
-            <p class="text-sm text-navy-700/80 mt-2">
-              {{ t('student.components.class_ranking_section.avg_missions') }}
-            </p>
-          </CardItem>
-          <!-- XP Total Clase -->
-          <CardItem layout="column" centered class="justify-center">
-            <p class="text-5xl sm:text-6xl font-semibold text-navy-700">
-              {{ formatTotalXp(rankingData.stats?.totalXp ?? 0) }}
-            </p>
-            <p class="text-sm text-navy-700/80 mt-2">
-              {{ t('student.components.class_ranking_section.total_xp') }}
-            </p>
-          </CardItem>
-        </CardGrid>
-      </Card>
+      </div>
+      <ClassCompareCard
+        v-else-if="comparison"
+        :comparison="comparison"
+        flex
+        :you="compareAvatar"
+      />
     </div>
 
-    <!-- Clasificación Completa - Mint theme (only show if more than 3 students) -->
-    <Card v-if="rankingData.leaderboard && rankingData.leaderboard.length > 0" type="clases">
-      <CardHeader
-        :title="t('student.components.class_ranking_section.rest_title')"
-        :icon="ListBulletIcon"
-        title-tag="h3"
-      />
-
-      <!-- Leaderboard list - 1 col until xl, then 2 cols -->
-      <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 p-4">
-        <CardItem
-          v-for="student in rankingData.leaderboard"
-          :key="student.id"
-          padding="sm"
-          :class="[
-            'transition-all',
-            student.isCurrentUser && showCurrentUserHighlight
-              ? 'ring-2 ring-yellow shadow-md'
-              : 'hover:shadow-md',
-            clickable ? 'cursor-pointer' : '',
-          ]"
-          @click="handleStudentClick(student.id)"
-        >
-          <!-- Rank (hidden on xs) -->
-          <div
-            class="hidden xs:flex w-8 h-8 rounded-full bg-navy-700/10 items-center justify-center flex-shrink-0"
-          >
-            <span class="text-sm font-bold text-navy-700">{{ student.rank }}</span>
-          </div>
-
-          <!-- Avatar (marco = color del tramo de nivel de la clase) -->
-          <Avatar
-            :src="student.avatar"
-            :name="student.username"
-            :seed="studentAvatarSeed(classId, student.id)"
-            :ring-color="student.levelColor"
-            :title="student.levelTitle"
-            size="sm"
-          />
-
-          <!-- Info -->
-          <div class="flex-1 min-w-0">
-            <div class="flex items-center gap-1 sm:gap-2">
-              <p class="font-semibold text-navy-700 text-xs sm:text-base truncate">
-                {{ student.username }}
-              </p>
-              <span
-                v-if="student.isCurrentUser && showCurrentUserHighlight"
-                class="px-1.5 py-0.5 bg-yellow text-navy-700 text-xs font-bold rounded-full flex-shrink-0"
-                >{{ t('student.components.class_ranking_section.you_badge') }}</span
-              >
-            </div>
-            <div class="flex items-center gap-3 text-xs text-text-secondary mt-0.5">
-              <span
-                >{{ t('student.components.class_ranking_section.level_abbr')
-                }}{{ student.level }}</span
-              >
-              <span class="flex items-center gap-1">
-                <RocketLaunchIcon class="w-3.5 h-3.5" />
-                {{ student.missionsCompleted }}/{{ student.missionsTotal }}
-              </span>
-            </div>
-          </div>
-
-          <!-- XP Badge -->
-          <div class="flex-shrink-0 bg-navy-700/10 rounded-full px-2 py-1 sm:px-3 sm:py-1.5">
-            <p class="text-xs sm:text-sm font-bold text-navy-700 inline-flex items-center gap-1">
-              <Tooltip :text="t('common.resources.xp')"><XpIcon class="w-4 h-4" /></Tooltip
-              >{{ student.xp.toLocaleString() }}
-            </p>
-          </div>
-        </CardItem>
-      </div>
-    </Card>
+    <RankingList
+      v-if="mode !== 'position'"
+      :title="listTitle"
+      :no-score-title="noScoreTitle"
+      :entries="leaderboard"
+      :student-link="studentLink"
+      :highlight-you="showCurrentUserHighlight"
+    >
+      <template #metric="{ student }">
+        <RankingMetric :student="student" :type="type" :period="period" />
+      </template>
+      <template #facts="{ student }">
+        <RankingFacts :student="student" :type="type" />
+      </template>
+    </RankingList>
   </div>
 </template>
 
 <script setup lang="ts">
-import {
-  TrophyIcon,
-  ChartPieIcon,
-  ListBulletIcon,
-  RocketLaunchIcon,
-} from '@heroicons/vue/24/outline'
 import type { ClassRanking } from '~/types/ranking.types'
-import { studentAvatarSeed } from '~/utils/avatar'
+
+/**
+ * Una clasificación individual (XP o misiones), según lo que deja ver la clase. La
+ * API ya manda solo lo que se puede enseñar; aquí se compone con sus piezas:
+ * `RankingPodium`, `RankingList`, `RankingStats`, `RankingMyPosition` y, en los modos
+ * que recortan, «Tú y tu clase» (`ClassCompareCard`).
+ */
+const props = withDefaults(
+  defineProps<{
+    rankingData: ClassRanking
+    /**
+     * Adónde lleva cada estudiante (su página, en la vista del profesorado). Con
+     * él, el podio y la lista son enlaces de verdad, que se alcanzan con el teclado.
+     */
+    studentLink?: (studentId: string) => string
+    /** Marcar «Tú» en la fila de quien mira (la vista del alumnado). */
+    showCurrentUserHighlight?: boolean
+  }>(),
+  { studentLink: undefined, showCurrentUserHighlight: true }
+)
 
 const { t } = useI18n()
+const { formatNumber, formatCompactNumber, formatPercent } = useNumberFormat()
+const tr = (key: string, params: Record<string, unknown> = {}) =>
+  t(`student.components.class_ranking_section.${key}`, params)
 
-interface Props {
-  rankingData: ClassRanking
-  /** La clase: da el color del avatar de cada estudiante. */
-  classId: string
-  clickable?: boolean
-  showCurrentUserHighlight?: boolean
-}
+const type = computed(() => props.rankingData.type)
+const period = computed(() => props.rankingData.period)
+/** Lo que deja ver la clase. El profesorado, siempre todo. */
+const mode = computed(() => props.rankingData.options.mode ?? 'full')
+const me = computed(() => props.rankingData.me ?? null)
 
-const props = withDefaults(defineProps<Props>(), {
-  clickable: false,
-  showCurrentUserHighlight: true,
+const podium = computed(() => props.rankingData.podium ?? [])
+const leaderboard = computed(() => props.rankingData.leaderboard ?? [])
+
+/** La vista del profesorado: solo a él le dice la API qué ve su alumnado. */
+const forTeacher = computed(() => !!props.rankingData.options.audience)
+
+/**
+ * Las medias de la clase: solo al profesorado y solo en la clasificación completa
+ * de «Siempre». La XP, si la clase la usa y llega (no llega con el tipo XP apagado).
+ * El alumnado no las ve en ningún modo: su media es la de «Tú y tu clase» (la del
+ * resto de la clase, redondeada), la misma que en su Resumen, y no dos distintas.
+ */
+const statItems = computed(() => {
+  const s = props.rankingData.stats
+  if (!s || !forTeacher.value) return []
+  const usesXp = props.rankingData.options.usesXp
+  return [
+    ...(usesXp && typeof s.avgXp === 'number'
+      ? [{ key: 'avg_xp', value: formatNumber(s.avgXp), label: tr('avg_xp') }]
+      : []),
+    ...(s.avgProgress === undefined
+      ? []
+      : [
+          {
+            key: 'avg_progress',
+            value: s.avgProgress === null ? '—' : formatPercent(s.avgProgress),
+            label: tr('avg_progress'),
+          },
+        ]),
+    {
+      key: 'avg_missions',
+      value: t('common.charts.value_of_total', {
+        value: formatNumber(s.avgMissions ?? 0),
+        total: formatNumber(s.missionsTotal),
+      }),
+      label: tr('avg_missions'),
+    },
+    // Solo la manda al profesorado: al alumnado, la suma le diría lo de los demás.
+    ...(usesXp && typeof s.totalXp === 'number'
+      ? [
+          {
+            key: 'total_xp',
+            // Con un espacio normal: «3,4 mil» puede saltar de línea si no cabe.
+            value: formatCompactNumber(s.totalXp).replace(/\u00a0/g, ' '),
+            label: tr('total_xp'),
+          },
+        ]
+      : []),
+  ]
 })
 
-const emit = defineEmits<{
-  'student-click': [studentId: string]
-}>()
+/**
+ * «Tú y tu clase», si la API la manda (en cualquier modo; null con la comparación
+ * apagada) y hay algo que comparar. Solo al alumnado.
+ */
+const comparison = computed(() => {
+  const value = props.rankingData.comparison
+  return !forTeacher.value && value && value.metrics.length > 0 ? value : null
+})
 
-// Format large XP numbers (e.g., 45200 -> "45.2K")
-const formatTotalXp = (xp: number): string => {
-  if (xp >= 1000) {
-    const formatted = (xp / 1000).toFixed(1)
-    return formatted.endsWith('.0') ? `${Math.floor(xp / 1000)}K` : `${formatted}K`
-  }
-  return xp.toString()
-}
+/** Su avatar, que marca su sitio en cada pista de «Tú y tu clase». */
+const compareAvatar = computed(() =>
+  me.value ? { src: me.value.avatar, name: me.value.username, color: me.value.avatarColor } : null
+)
 
-const handleStudentClick = (studentId: string) => {
-  if (props.clickable) {
-    emit('student-click', studentId)
-  }
-}
+const twoColumns = computed(() =>
+  mode.value === 'position'
+    ? comparison.value !== null
+    : statItems.value.length > 0 || mode.value === 'top' || comparison.value !== null
+)
+
+/** El sufijo de lo que depende del periodo (`_week`); nada en «Siempre». */
+const periodSuffix = computed(() => (period.value === 'all' ? '' : `_${period.value}`))
+
+const podiumEmptyText = computed(() =>
+  type.value === 'xp' ? tr('podium_empty') : tr(`podium_empty_missions${periodSuffix.value}`)
+)
+
+const noRankText = computed(() =>
+  type.value === 'xp' ? tr('no_rank_xp') : tr(`no_rank_missions${periodSuffix.value}`)
+)
+
+const noScoreTitle = computed(() =>
+  type.value === 'xp' ? t('common.ranking.no_score.xp') : t(`common.ranking.no_score.missions.${period.value}`)
+)
+
+const listTitle = computed(() =>
+  mode.value === 'top'
+    ? tr('top_list_title', { n: props.rankingData.options.topN })
+    : tr('rest_title')
+)
 </script>

@@ -25,63 +25,41 @@
       :class="hasActions ? 'pr-[5.5rem]' : 'pr-4 sm:pr-5'"
     >
       <div class="flex min-w-0 items-center gap-2">
-        <h3 class="truncate text-base font-bold text-navy-700 sm:text-lg">{{ name }}</h3>
+        <component :is="headingTag ?? 'h3'" class="truncate text-base font-bold text-navy-700 sm:text-lg">
+          {{ name }}
+        </component>
         <!-- Etiqueta propia de quien la usa (p. ej. el perfil en la clase) -->
         <slot name="tag" />
       </div>
 
-      <div v-if="schedule?.length" class="flex items-center gap-1 text-sm text-text-secondary">
+      <div v-if="schedule?.length" class="flex items-center gap-1 text-sm text-navy-700/80">
         <ClockIcon class="h-4 w-4 flex-shrink-0" />
         <span class="truncate">{{ schedule.join(' · ') }}</span>
       </div>
 
-      <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-text-secondary">
-        <span class="flex items-center gap-1">
-          <UserGroupIcon class="h-4 w-4" />
-          {{ (studentCount ?? 0).toLocaleString('es-ES') }} estudiantes
-        </span>
-        <span v-if="missionsCount !== undefined" class="flex items-center gap-1">
-          <RocketLaunchIcon class="h-4 w-4" />
-          {{ missionsCount }} misiones
-        </span>
-      </div>
-
-      <!-- Vidas, monedas y maná del alumno en esta clase -->
-      <div
-        v-if="lives !== undefined || coins !== undefined || mana !== undefined"
-        class="flex items-center gap-3 text-sm font-semibold text-navy-700"
-      >
-        <Tooltip v-if="lives !== undefined" :text="t('common.resources.lives')">
-          <span class="flex items-center gap-1.5">
-            <LifeIcon class="h-4 w-4" />
-            {{ lives.toLocaleString('es-ES') }}
-          </span>
-        </Tooltip>
-        <Tooltip v-if="coins !== undefined" :text="t('common.resources.coins')">
-          <span class="flex items-center gap-1.5">
-            <CoinIcon class="h-4 w-4" />
-            {{ coins.toLocaleString('es-ES') }}
-          </span>
-        </Tooltip>
-        <Tooltip v-if="mana !== undefined" :text="t('common.resources.mana')">
-          <span class="flex items-center gap-1.5">
-            <ManaIcon class="h-4 w-4" />
-            {{ mana.toLocaleString('es-ES') }}
-          </span>
-        </Tooltip>
-      </div>
+      <ClassCardFacts
+        :student-count="studentCount"
+        :missions-count="missionsCount"
+        :progress="progress"
+        :coins="coins"
+        :mana="mana"
+        :lives="lives"
+      />
     </div>
   </article>
 </template>
 
 <script setup lang="ts">
-import { ClockIcon, UserGroupIcon, RocketLaunchIcon } from '@heroicons/vue/24/outline'
+import { ClockIcon } from '@heroicons/vue/24/outline'
 
 defineProps<{
   name: string
+  /** El nivel del título: `h2` si la lista cuelga directamente del título de la página. */
+  headingTag?: 'h2' | 'h3'
   backgroundImage?: string
   studentCount?: number
   missionsCount?: number
+  progress?: { done: number; total: number }
   /** Líneas del resumen de horario (ver useScheduleSummary). */
   schedule?: string[]
   coins?: number
@@ -92,6 +70,4 @@ defineProps<{
 }>()
 
 defineEmits<{ click: [] }>()
-
-const { t } = useI18n()
 </script>

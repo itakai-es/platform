@@ -8,13 +8,14 @@ import assert from 'node:assert/strict'
 
 const {
   studentNodeState,
+  missionStarted,
   teacherNodeState,
   mapProgress,
   currentNodeId,
-  ringFraction,
   classMapProgress,
-  avatarStack,
 } = await import('http://localhost:4000/_nuxt/utils/mission-map.ts')
+const { ringFraction } = await import('http://localhost:4000/_nuxt/utils/progress-ring.ts')
+const { avatarStack } = await import('http://localhost:4000/_nuxt/utils/avatar.ts')
 
 const now = Date.parse('2026-10-23T10:00:00Z')
 const inDays = d => new Date(now + d * 86400000).toISOString()
@@ -27,6 +28,38 @@ test('el estado de cada nodo para el alumnado sale del de la API y de su progres
   assert.equal(studentNodeState({ status: 'activa', progress: 50 }), 'in_progress')
   assert.equal(studentNodeState({ status: 'activa', progress: 0 }), 'available')
   assert.equal(studentNodeState({ status: 'activa' }), 'available')
+})
+
+test('quien lleva solo un opcional ya ha empezado, aunque su % de obligatorios sea 0', () => {
+  assert.equal(
+    studentNodeState({ status: 'activa', progress: 0, progressDetail: { extraDone: 1 } }),
+    'in_progress'
+  )
+  assert.equal(
+    studentNodeState({ status: 'activa', progress: 0, progressDetail: { extraDone: 0 } }),
+    'available'
+  )
+})
+
+test('«en curso» es lo que dice la API con `started`, como el Resumen, aunque lleve un 0 %', () => {
+  // Una entrega por revisar o una pista: empezada, sin nada aprobado.
+  assert.equal(studentNodeState({ status: 'activa', started: true, progress: 0 }), 'in_progress')
+  assert.equal(studentNodeState({ status: 'activa', started: false, progress: 0 }), 'available')
+  // `started` manda también sobre el progreso.
+  assert.equal(studentNodeState({ status: 'activa', started: false, progress: 50 }), 'available')
+  // Los demás estados no cambian por haberla empezado.
+  assert.equal(studentNodeState({ status: 'urgente', started: true }), 'urgent')
+  assert.equal(studentNodeState({ status: 'completada', started: true }), 'completed')
+  assert.equal(studentNodeState({ status: 'bloqueada', started: true }), 'locked')
+})
+
+test('empezada: con `started`, lo que diga; sin él, por su progreso u opcionales', () => {
+  assert.equal(missionStarted({ started: true, progress: 0 }), true)
+  assert.equal(missionStarted({ started: false, progress: 30 }), false)
+  assert.equal(missionStarted({ progress: 30 }), true)
+  assert.equal(missionStarted({ progress: 0, progressDetail: { extraDone: 1 } }), true)
+  assert.equal(missionStarted({ progress: 0 }), false)
+  assert.equal(missionStarted({}), false)
 })
 
 test('el del profesorado sigue al filtro de estado: completada es de todo el alumnado', () => {
@@ -90,14 +123,51 @@ test('cómo va la clase: la media de lo completado y cuántas ha completado todo
     { completedCount: 0, totalStudents: 8 },
     { completedCount: 0, totalStudents: 8 },
   ]
-  // 12 de 32 posibles.
-  assert.deepEqual(classMapProgress(missions), { students: 8, percent: 38, doneByAll: 1 })
+  // 12 de 32 posibles: 1,5 misiones de media, de 4.
+  assert.deepEqual(classMapProgress(missions), {
+    students: 8,
+    total: 4,
+    average: 1.5,
+    percent: 38,
+    doneByAll: 1,
+  })
   assert.deepEqual(classMapProgress([{ completedCount: 0, totalStudents: 0 }]), {
     students: 0,
+    total: 1,
+    average: 0,
     percent: 0,
     doneByAll: 0,
   })
-  assert.deepEqual(classMapProgress([]), { students: 0, percent: 0, doneByAll: 0 })
+  assert.deepEqual(classMapProgress([]), {
+    students: 0,
+    total: 0,
+    average: 0,
+    percent: 0,
+    doneByAll: 0,
+  })
+})
+
+test('cómo va la clase: solo con las misiones que cuentan', () => {
+  const missions = [
+    { completedCount: 8, totalStudents: 8, counted: true },
+    { completedCount: 2, totalStudents: 8, counted: true },
+    // Bloqueada a mano, y aun así la completó toda la clase antes: no cuenta.
+    { completedCount: 8, totalStudents: 8, counted: false },
+  ]
+  assert.deepEqual(classMapProgress(missions), {
+    students: 8,
+    total: 2,
+    average: 1.3,
+    percent: 63,
+    doneByAll: 1,
+  })
+  assert.deepEqual(classMapProgress([{ completedCount: 0, totalStudents: 8, counted: false }]), {
+    students: 8,
+    total: 0,
+    average: 0,
+    percent: 0,
+    doneByAll: 0,
+  })
 })
 
 test('quién la ha completado: hasta ocho avatares; con más, siete y «+N» con el resto', () => {
@@ -109,4 +179,20 @@ test('quién la ha completado: hasta ocho avatares; con más, siete y «+N» con
   assert.deepEqual(avatarStack(people(30)), { shown: people(7), more: 23 })
   // En el orden en que llegan (primero quien antes la completó).
   assert.deepEqual(avatarStack(['b', 'a', 'c'], 2), { shown: ['b'], more: 2 })
+})
+
+test('classMapProgress: la media es la de quienes participan, si la API lo manda', () => {
+  const missions = [
+    { completedCount: 4, totalStudents: 8, participatingStudents: 4 },
+    { completedCount: 2, totalStudents: 8, participatingStudents: 4 },
+  ]
+  assert.deepEqual(classMapProgress(missions), {
+    students: 4,
+    total: 2,
+    average: 1.5,
+    percent: 75,
+    doneByAll: 1,
+  })
+  // Sin el dato, entre todas las cuentas.
+  assert.equal(classMapProgress([{ completedCount: 4, totalStudents: 8 }]).average, 0.5)
 })

@@ -89,6 +89,11 @@ const ALLOWED_TEACHER_ID: Record<string, Allowed> = {
     reason:
       'catálogo de plantillas del profesorado: isOwn marca las que publicó quien mira (mostrar, no autorizar); el catálogo público no lo lee',
   },
+  'modules/teachers/student-list.service.ts': {
+    count: 2,
+    reason:
+      'insignias de ITAKAI (sin autor, Badge.teacherId nulo) que suma el listado del alumnado: se leen (1) y se cuentan (1)',
+  },
   'modules/teachers/mission-copy.ts': {
     count: 1,
     reason:
@@ -137,9 +142,9 @@ const ALLOWED_ENROLLMENT_LOOKUP: Record<string, Allowed> = {
     reason: 'syncEnrollmentLevel recalcula el nivel de una matrícula; no decide acceso',
   },
   'modules/students/students.service.ts': {
-    count: 8,
+    count: 7,
     reason:
-      'monedero y perfil del alumno en rutas /students/classes/:classId, detrás de requireStudentEnrollment (7), y joinClass, que mira si ya estaba matriculado (1)',
+      'monedero y perfil del alumno en rutas /students/classes/:classId, detrás de requireStudentEnrollment (6), y joinClass, que mira si ya estaba matriculado (1)',
   },
   'modules/shop/shop.service.ts': {
     count: 4,

@@ -190,28 +190,27 @@
         "quarter": "Trimestre"
       },
       "kpis": {
-        "avg_response": "Temps de resposta",
-        "requests_per_min": "Peticions/min",
         "error_rate": "Taxa d'error",
-        "uptime": "Disponibilitat"
+        "activity": "Activitat en el període",
+        "new_users": "Altes en el període",
+        "missions_completed": "Missions completades en el període"
       },
       "overview": {
         "total_users": "Comptes totals",
-        "missions_completed": "Missions completades",
-        "completion_rate": "Taxa de compleció",
-        "active_today": "Actius avui"
+        "active_today": "Actius avui",
+        "pending_reviews": "Lliuraments per revisar"
       },
       "sections": {
         "system_resources": "Recursos del sistema",
         "service_health": "Estat dels serveis",
-        "response_time": "Temps de resposta",
-        "active_users": "Comptes actius",
-        "requests": "Peticions",
-        "tokens_over_time": "Tokens consumits",
         "users_by_role": "Comptes per rol",
         "missions_by_status": "Missions per estat",
         "missions_by_rarity": "Missions per raresa",
-        "ai_usage": "Ús d'IA (assistents)"
+        "ai_usage": "Ús d'IA (assistents)",
+        "period_series": "En el període",
+        "new_users": "Altes",
+        "activity": "Activitat registrada",
+        "assistant_messages": "Missatges als assistents"
       },
       "system": {
         "memory": "Memòria",
@@ -219,15 +218,12 @@
         "db_latency": "Latència BD"
       },
       "ai": {
-        "total_tokens": "Tokens totals",
-        "avg_tokens_user": "Mitjana per compte",
-        "total_conversations": "Converses",
-        "avg_conversations_user": "Conv. per compte"
+        "total_conversations": "Converses des de l'inici",
+        "total_messages": "Missatges del període"
       },
       "table": {
         "service": "Servei",
         "status": "Estat",
-        "uptime": "Uptime",
         "latency": "Latència"
       },
       "status": {
@@ -238,6 +234,17 @@
       "meta": {
         "title": "Analítiques del sistema | ITAKAI Admin",
         "description": "Visualitza mètriques avançades, gràfics de rendiment i anàlisis detallades de la plataforma."
+      },
+      "delta": {
+        "absolute": "{diff} respecte al període anterior",
+        "percent": "{percent} respecte al període anterior",
+        "points": "{diff} punt respecte al període anterior | {diff} punts respecte al període anterior"
+      },
+      "no_role": "Sense rol",
+      "services": {
+        "database": "Base de dades",
+        "ai_text": "IA (text)",
+        "ai_image": "IA (imatges)"
       }
     },
     "logs": {

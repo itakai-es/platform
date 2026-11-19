@@ -16,7 +16,7 @@
       :search="searchQuery"
       :sort="selectedOrigin"
       :results-count="filteredBadges.length"
-      search-placeholder="Buscar insignias..."
+      :search-placeholder="t('teacher.badges.search_placeholder')"
       :sort-options="originOptions"
       :has-active-filters="selectedRarities.length > 0"
       :active-filter-count="selectedRarities.length"
@@ -29,8 +29,8 @@
         <MultiSelectDropdown
           v-model="selectedRarities"
           :options="rarityOptions"
-          all-label="Todas las rarezas"
-          plural-label="rarezas"
+          :all-label="t('teacher.components.mission_filter_bar.all_rarities')"
+          :plural-label="t('teacher.components.mission_filter_bar.plural_rarities')"
           class="sm:w-auto"
         />
       </template>
@@ -50,131 +50,101 @@
       </div>
     </div>
 
-    <!-- Badges Grid -->
-    <div
-      v-else-if="filteredBadges.length > 0"
-      class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4"
-    >
-      <BadgeRewardCard
-        v-for="badge in filteredBadges"
-        :key="badge.id"
-        :badge="badge"
-        :unlocked="true"
-        @click="openDetailModal(badge)"
-      />
-    </div>
-
-    <!-- Empty State (no badges at all) -->
-    <EmptyState
-      v-else-if="badges.length === 0"
-      :icon="TrophyIcon"
-      :title="t('teacher.badges.no_badges_title')"
-      :description="t('teacher.badges.no_badges_description')"
-    >
-      <template #action>
-        <Button variant="primary" @click="openCreateModal">
-          <PlusIcon class="w-5 h-5 mr-2" />
-          {{ t('teacher.badges.create_first') }}
-        </Button>
-      </template>
-    </EmptyState>
+    <!-- Dos bloques: las tuyas, que se editan al abrirlas, y las de ITAKAI, que
+         se conceden solas. El buscador y los filtros actúan sobre las dos. -->
+    <template v-else-if="badgeSections.length > 0">
+      <section
+        v-for="section in badgeSections"
+        :key="section.key"
+        :aria-labelledby="`badges-section-${section.key}`"
+      >
+        <h2 :id="`badges-section-${section.key}`" class="text-lg font-bold text-navy-700">
+          {{ section.title }}
+        </h2>
+        <p v-if="section.badges.length > 0" class="mt-0.5 mb-3 text-sm text-navy-700/70">
+          {{ section.hint }}
+        </p>
+        <div
+          v-if="section.badges.length > 0"
+          class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4"
+        >
+          <BadgeRewardCard
+            v-for="badge in section.badges"
+            :key="badge.id"
+            :badge="badge"
+            :unlocked="true"
+            @click="openBadge(badge)"
+          />
+        </div>
+        <!-- Aún no tiene ninguna propia: invita a crear la primera -->
+        <EmptyState
+          v-else
+          :icon="TrophyIcon"
+          :title="t('teacher.badges.no_badges_title')"
+          :description="t('teacher.badges.no_badges_description')"
+        >
+          <template #action>
+            <Button variant="primary" @click="openCreateModal">
+              <PlusIcon class="w-5 h-5 mr-2" />
+              {{ t('teacher.badges.create_first') }}
+            </Button>
+          </template>
+        </EmptyState>
+      </section>
+    </template>
 
     <!-- Empty filtered results -->
     <EmptyState
       v-else
       :icon="TrophyIcon"
-      title="Sin resultados"
-      description="No se encontraron insignias con esos filtros"
+      :title="t('teacher.badges.no_results_title')"
+      :description="t('teacher.badges.no_results_description')"
     />
 
-    <!-- Badge Detail Modal (same style as student) -->
-    <Teleport to="body">
-      <Transition name="modal">
+    <!-- Detalle de una insignia que no se puede editar: por qué, cómo se gana
+         si es de ITAKAI y, como en las plantillas ajenas, hacerse una propia. -->
+    <Modal v-model="showDetail" :title="detailBadge?.name" size="sm" theme="light">
+      <div v-if="detailBadge" class="flex flex-col items-center text-center">
+        <img
+          v-if="detailBadge.imageUrl"
+          :src="getImageUrl(detailBadge.imageUrl)"
+          alt=""
+          draggable="false"
+          class="mb-4 w-32 h-32 xs:w-36 xs:h-36 object-cover rounded-full drop-shadow-lg select-none"
+        />
         <div
-          v-if="selectedBadge"
-          class="fixed inset-0 z-50 flex items-center justify-center p-4"
-          @click.self="selectedBadge = null"
+          v-else
+          class="mb-4 w-32 h-32 rounded-full bg-purple/20 flex items-center justify-center"
         >
-          <div class="absolute inset-0 bg-black/50" @click="selectedBadge = null" />
-          <div class="relative bg-white rounded-2xl p-5 xs:p-6 max-w-sm w-full shadow-xl">
-            <button
-              class="absolute top-3 right-3 p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100"
-              @click="selectedBadge = null"
-            >
-              <XMarkIcon class="w-5 h-5" />
-            </button>
-
-            <div class="flex flex-col items-center text-center">
-              <!-- Badge Image -->
-              <div class="relative mb-4">
-                <img
-                  v-if="selectedBadge.imageUrl"
-                  :src="getImageUrl(selectedBadge.imageUrl)"
-                  :alt="selectedBadge.name"
-                  draggable="false"
-                  class="w-32 h-32 xs:w-36 xs:h-36 object-cover rounded-full drop-shadow-lg select-none"
-                />
-                <div
-                  v-else
-                  class="w-32 h-32 rounded-full bg-purple/20 flex items-center justify-center"
-                >
-                  <TrophyIcon class="w-16 h-16 text-purple" />
-                </div>
-              </div>
-
-              <!-- Rarity badge -->
-              <span
-                class="px-3 py-1 rounded-full text-xs font-semibold mb-3"
-                :class="getRarityClasses(selectedBadge.rarity)"
-              >
-                {{ getRarityLabel(selectedBadge.rarity) }}
-              </span>
-
-              <!-- Name -->
-              <h2 class="text-lg xs:text-xl font-bold text-navy-700 mb-2">
-                {{ selectedBadge.name }}
-              </h2>
-
-              <!-- Description -->
-              <p v-if="selectedBadge.description" class="text-sm text-navy-700/70 mb-5">
-                {{ selectedBadge.description }}
-              </p>
-              <div v-else class="mb-5" />
-
-              <!-- Actions -->
-              <div class="flex gap-2 w-full">
-                <Button
-                  v-if="!selectedBadge.isSystem"
-                  variant="primary"
-                  class="flex-1"
-                  @click="openEditModal(selectedBadge); selectedBadge = null"
-                >
-                  <PencilIcon class="w-4 h-4 mr-2" />
-                  {{ t('teacher.badges.detail.btn_edit') }}
-                </Button>
-                <Button
-                  v-if="!selectedBadge.isSystem"
-                  variant="outline"
-                  class="flex-1"
-                  @click="confirmDelete(selectedBadge); selectedBadge = null"
-                >
-                  <TrashIcon class="w-4 h-4 mr-2" />
-                  {{ t('teacher.badges.btn_delete') }}
-                </Button>
-                <Button
-                  v-if="selectedBadge.isSystem"
-                  variant="primary"
-                  class="flex-1"
-                  @click="selectedBadge = null"
-                >
-                  {{ t('teacher.badges.detail.btn_close') }}
-                </Button>
-              </div>
-            </div>
-          </div>
+          <TrophyIcon class="w-16 h-16 text-purple" aria-hidden="true" />
         </div>
-      </Transition>
-    </Teleport>
+
+        <BadgeRarityPill :rarity="detailBadge.rarity" size="sm" class="mb-3" />
+
+        <!-- La de ITAKAI no lleva su descripción: dice cómo se gana, lo mismo que la
+             nota de debajo, que va en el idioma de la app -->
+        <p
+          v-if="detailBadge.description && !detailBadge.isSystem"
+          class="text-sm text-navy-700/70 mb-4"
+        >
+          {{ detailBadge.description }}
+        </p>
+
+        <InfoNote class="w-full text-left">{{ lockedReason }}</InfoNote>
+      </div>
+
+      <template #footer>
+        <div class="flex w-full flex-wrap items-center justify-end gap-3">
+          <Button variant="outline" @click="showDetail = false">
+            {{ t('teacher.badges.detail.btn_close') }}
+          </Button>
+          <Button variant="primary" @click="createSimilar">
+            <DocumentDuplicateIcon class="w-4 h-4 mr-2" aria-hidden="true" />
+            {{ t('teacher.badges.detail.btn_copy') }}
+          </Button>
+        </div>
+      </template>
+    </Modal>
 
     <!-- Create/Edit Modal -->
     <Modal
@@ -192,15 +162,17 @@
           <!-- Mission selector -->
           <div>
             <label class="block text-sm font-medium text-navy-700 mb-1.5">
-              Misión asociada
-              <span class="text-navy-700/70 font-normal">(opcional)</span>
+              {{ t('teacher.badges.form.label_mission') }}
+              <span class="text-navy-700/70 font-normal">{{
+                t('teacher.badges.form.image_optional')
+              }}</span>
             </label>
             <SelectDropdown
               v-model="form.missionId"
               :options="
                 teacherMissions.map(m => ({
                   value: m.id,
-                  label: `${m.title} (${rarityLabels[m.rarity] || 'Común'})`,
+                  label: `${m.title} (${missionRarityName(m.rarity)})`,
                 }))
               "
               :placeholder="t('teacher.badges.form.no_mission')"
@@ -255,7 +227,7 @@
             <div v-if="imagePreview" class="flex items-center gap-3 mb-3">
               <img
                 :src="imagePreview"
-                alt="Preview"
+                alt=""
                 class="w-12 h-12 object-cover rounded-lg flex-shrink-0"
               />
               <div class="flex-1 min-w-0">
@@ -272,8 +244,8 @@
               </div>
             </div>
             <Button variant="outline" size="sm" @click="fileInput?.click()">
-              <PhotoIcon class="w-4 h-4 mr-2" />
-              Subir imagen
+              <PhotoIcon class="w-4 h-4 mr-2" aria-hidden="true" />
+              {{ t('teacher.badges.form.btn_upload_image') }}
             </Button>
             <p v-if="errors.image" class="mt-1 text-xs text-red-500">{{ errors.image }}</p>
           </div>
@@ -302,17 +274,17 @@
             @click="generateAllWithAI"
           >
             <SparklesIcon class="w-4 h-4 mr-2" :class="{ 'animate-pulse': isGeneratingAI }" />
-            {{ isGeneratingAI ? 'Generando...' : 'Generar con IA' }}
+            {{
+              isGeneratingAI
+                ? t('teacher.badges.form.btn_generating')
+                : t('teacher.badges.form.btn_generate')
+            }}
           </Button>
         </div>
       </div>
 
       <template #footer>
-        <Button
-          v-if="editingBadge"
-          variant="outline"
-          @click="confirmDelete(editingBadge); closeFormModal()"
-        >
+        <Button v-if="editingBadge" variant="outline" @click="deleteEditingBadge">
           <TrashIcon class="w-4 h-4 mr-2" />
           {{ t('teacher.badges.btn_delete') }}
         </Button>
@@ -350,16 +322,16 @@
 import {
   TrophyIcon,
   PlusIcon,
-  PencilIcon,
   TrashIcon,
   PhotoIcon,
-  XMarkIcon,
   SparklesIcon,
+  DocumentDuplicateIcon,
 } from '@heroicons/vue/24/outline'
 import { canInClass } from '~/utils/class-access'
 
 const { getImageUrl } = useImageUrl()
 const { t, locale } = useI18n()
+const { formatNumber } = useNumberFormat()
 const toast = useToast()
 const config = useRuntimeConfig()
 const authStore = useAuthStore()
@@ -382,6 +354,10 @@ interface Badge {
   imageUrl?: string
   rarity?: 'common' | 'rare' | 'epic' | 'legendary'
   isSystem?: boolean
+  /** Quien la mira puede cambiarla y borrarla (lo decide la API, `manageableBadgesWhere`). */
+  canEdit?: boolean
+  /** Cómo se gana una del sistema, que se concede sola. */
+  trigger?: { type: string; value: number } | null
   /** La creó quien la mira. Una ajena vinculada no sale de la clase de su misión. */
   isMine?: boolean
   missionId?: string
@@ -406,7 +382,9 @@ const loading = computed(() => storeLoading.value)
 const showFormModal = ref(false)
 const showDeleteModal = ref(false)
 const editingBadge = ref<Badge | null>(null)
-const selectedBadge = ref<Badge | null>(null)
+// La del detalle se queda al cerrarlo, para que no se vacíe mientras se va.
+const showDetail = ref(false)
+const detailBadge = ref<Badge | null>(null)
 const badgeToDelete = ref<Badge | null>(null)
 const isSubmitting = ref(false)
 const isDeleting = ref(false)
@@ -415,11 +393,15 @@ const isDeleting = ref(false)
 const fileInput = ref<HTMLInputElement | null>(null)
 const selectedFile = ref<File | null>(null)
 const imagePreview = ref<string | null>(null)
+// La ruta guardada de la imagen (la de la IA, la de la insignia que se edita o
+// la de la que se toma de modelo): se envía tal cual, no la URL ya resuelta. Un
+// fichero subido la sustituye.
+const imagePath = ref<string | null>(null)
 
 // Live preview
 const previewBadge = computed(() => ({
   id: 'preview',
-  name: form.name || 'Nombre',
+  name: form.name || t('teacher.badges.form.label_name'),
   description: form.description,
   imageUrl: imagePreview.value || undefined,
   rarity: badgeRarity.value as 'common' | 'rare' | 'epic' | 'legendary',
@@ -434,18 +416,19 @@ const searchQuery = ref('')
 const selectedRarities = ref<string[]>([])
 const selectedOrigin = ref('all')
 
-const rarityOptions = [
-  { value: 'common', label: 'Común' },
-  { value: 'rare', label: 'Rara' },
-  { value: 'epic', label: 'Épica' },
-  { value: 'legendary', label: 'Legendaria' },
-]
+const rarityOptions = computed(() =>
+  (['common', 'rare', 'epic', 'legendary'] as const).map(value => ({
+    value,
+    label: t(`teacher.components.mission_filter_bar.rarity.${value}`),
+  }))
+)
 
-const originOptions = [
-  { value: 'all', label: 'Todas' },
-  { value: 'mine', label: 'Mis insignias' },
-  { value: 'system', label: t('teacher.badges.filter_system') },
-]
+// Con las mismas palabras que las secciones de la lista.
+const originOptions = computed(() => [
+  { value: 'all', label: t('teacher.badges.filter_all') },
+  { value: 'mine', label: t('teacher.badges.sections.own') },
+  { value: 'system', label: t('teacher.badges.sections.system') },
+])
 
 const hasActiveFilters = computed(() => {
   return (
@@ -484,20 +467,64 @@ const filteredBadges = computed(() => {
   return result
 })
 
-// Form
-const form = reactive({ name: '', description: '', missionId: '' })
+// Las tuyas primero (las que has creado y las de las misiones que puedes
+// editar) y después las de ITAKAI, que se conceden solas. Sin ninguna propia,
+// su bloque invita a crear la primera, salvo si se busca o se filtra otra cosa.
+const ownBadgeCount = computed(() => badges.value.filter(b => !b.isSystem).length)
+const badgeSections = computed(() => {
+  const own = filteredBadges.value.filter(b => !b.isSystem)
+  const system = filteredBadges.value.filter(b => b.isSystem)
+  const inviteOwn =
+    ownBadgeCount.value === 0 &&
+    !searchQuery.value.trim() &&
+    selectedRarities.value.length === 0 &&
+    selectedOrigin.value !== 'system'
+  return [
+    {
+      key: 'own',
+      title: t('teacher.badges.sections.own'),
+      hint: t('teacher.badges.sections.own_hint'),
+      badges: own,
+      visible: own.length > 0 || inviteOwn,
+    },
+    {
+      key: 'system',
+      title: t('teacher.badges.sections.system'),
+      hint: t('teacher.badges.sections.system_hint'),
+      badges: system,
+      visible: system.length > 0,
+    },
+  ].filter(section => section.visible)
+})
+
+/** Por qué no se puede editar la del detalle y, si es de ITAKAI, cómo se gana. */
+const lockedReason = computed(() => {
+  const badge = detailBadge.value
+  if (!badge) return ''
+  if (!badge.isSystem) return t('teacher.badges.detail.not_yours')
+  const trigger = badge.trigger
+  if (!trigger) return t('teacher.badges.detail.system_generic')
+  const count = formatNumber(trigger.value)
+  switch (trigger.type) {
+    case 'level_reached':
+      return t('teacher.badges.detail.system_level', { count })
+    case 'missions_completed':
+      return t('teacher.badges.detail.system_missions', { count }, trigger.value)
+    case 'xp_total':
+      return t('teacher.badges.detail.system_xp', { count })
+    default:
+      return t('teacher.badges.detail.system_generic')
+  }
+})
+
+// Form. `rarity` es la de una insignia sin misión; con misión, manda la de esta.
+const form = reactive({ name: '', description: '', missionId: '', rarity: 'common' })
 const errors = reactive({ name: '', description: '', image: '' })
 
-const rarityLabels: Record<string, string> = {
-  comun: 'Común',
-  rara: 'Rara',
-  epica: 'Épica',
-  legendaria: 'Legendaria',
-  common: 'Común',
-  rare: 'Rara',
-  epic: 'Épica',
-  legendary: 'Legendaria',
-}
+/** La rareza de una misión («comun», «rara»…), con su nombre en el idioma de la app. */
+const MISSION_RARITIES = ['comun', 'rara', 'epica', 'legendaria']
+const missionRarityName = (rarity: string) =>
+  t(`student.components.rarity_badge.${MISSION_RARITIES.includes(rarity) ? rarity : 'comun'}`)
 const { recentMissions: storeRecentMissions } = storeToRefs(teacherStore)
 // `allTeacherMissions` se deriva del teacher store en lugar de mantener un ref
 // local redundante; así una sola fuente de verdad alimenta el selector.
@@ -546,7 +573,7 @@ const teacherMissions = computed(() => {
 // Auto-set rarity from selected mission
 const selectedMission = computed(() => allTeacherMissions.value.find(m => m.id === form.missionId))
 const badgeRarity = computed(() => {
-  if (!selectedMission.value) return 'common'
+  if (!selectedMission.value) return form.rarity
   const map: Record<string, string> = {
     comun: 'common',
     rara: 'rare',
@@ -555,32 +582,6 @@ const badgeRarity = computed(() => {
   }
   return map[selectedMission.value.rarity] || selectedMission.value.rarity || 'common'
 })
-
-// Rarity helpers (same as student BadgeRewardCard)
-const getRarityClasses = (rarity?: string) => {
-  const classes: Record<string, string> = {
-    common: 'bg-gray-200 text-gray-700',
-    rare: 'bg-sky-100 text-sky-700',
-    epic: 'bg-violet-100 text-violet-700',
-    legendary: 'bg-amber-100 text-amber-800',
-  }
-  return classes[rarity || 'common'] || classes.common
-}
-
-const getRarityLabel = (rarity?: string) => {
-  const labels: Record<string, string> = {
-    common: 'Común',
-    rare: 'Rara',
-    epic: 'Épica',
-    legendary: 'Legendaria',
-  }
-  return labels[rarity || 'common'] || 'Común'
-}
-
-const formatDate = (date: Date | string) => {
-  const d = typeof date === 'string' ? new Date(date) : date
-  return d.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })
-}
 
 // Fetch badges
 // Tras crear/editar/eliminar invalidamos la cache del store y volvemos a llamar
@@ -596,20 +597,39 @@ const openCreateModal = () => {
   resetForm()
   showFormModal.value = true
 }
+/** Pone en el formulario la imagen guardada de una insignia. */
+const loadBadgeImage = (badge: Badge) => {
+  imagePath.value = badge.imageUrl || null
+  imagePreview.value = getImageUrl(badge.imageUrl) || null
+}
 const openEditModal = (badge: Badge) => {
   editingBadge.value = badge
   form.name = badge.name
   form.description = badge.description
   form.missionId = badge.missionId || ''
-  if (badge.imageUrl) imagePreview.value = getImageUrl(badge.imageUrl) || badge.imageUrl
+  form.rarity = badge.rarity || 'common'
+  loadBadgeImage(badge)
   showFormModal.value = true
 }
-const openDetailModal = (badge: Badge) => {
-  if (!badge.isSystem) {
+/** La que se puede editar se abre para editarla; las demás, en su detalle. */
+const openBadge = (badge: Badge) => {
+  if (badge.canEdit) {
     openEditModal(badge)
   } else {
-    selectedBadge.value = badge
+    detailBadge.value = badge
+    showDetail.value = true
   }
+}
+/** «Crear una parecida»: una nueva con el nombre, la rareza y la imagen de la del detalle. */
+const createSimilar = () => {
+  const badge = detailBadge.value
+  if (!badge) return
+  showDetail.value = false
+  openCreateModal()
+  // Con otro nombre: dos insignias que se llaman igual no se distinguen.
+  form.name = t('teacher.badges.form.copy_name', { name: badge.name })
+  form.rarity = badge.rarity || 'common'
+  loadBadgeImage(badge)
 }
 const closeFormModal = () => {
   showFormModal.value = false
@@ -619,16 +639,20 @@ const confirmDelete = (badge: Badge) => {
   badgeToDelete.value = badge
   showDeleteModal.value = true
 }
+const deleteEditingBadge = () => {
+  if (editingBadge.value) confirmDelete(editingBadge.value)
+  closeFormModal()
+}
 
 // Form
 const resetForm = () => {
   form.name = ''
   form.description = ''
   form.missionId = ''
+  form.rarity = 'common'
   errors.name = ''
   errors.description = ''
   errors.image = ''
-  ;(window as any).__badgeRawImagePath = null
   clearFile()
 }
 
@@ -656,6 +680,7 @@ const handleFileSelect = (event: Event) => {
 const clearFile = () => {
   selectedFile.value = null
   imagePreview.value = null
+  imagePath.value = null
   if (fileInput.value) fileInput.value.value = ''
 }
 
@@ -672,7 +697,7 @@ const validate = (): boolean => {
     isValid = false
   }
   if (!imagePreview.value) {
-    errors.image = 'La imagen es obligatoria. Sube una o genera con IA.'
+    errors.image = t('teacher.badges.validation.image_required')
     isValid = false
   }
   return isValid
@@ -682,9 +707,9 @@ const handleSubmit = async () => {
   if (!validate()) return
   isSubmitting.value = true
   try {
-    // Use raw AI path if available, otherwise use base64 from file upload
-    const aiPath = (window as any).__badgeRawImagePath
-    const imageUrl = aiPath && !selectedFile.value ? aiPath : imagePreview.value || undefined
+    // La ruta guardada si la hay (IA, la que se edita o la de modelo); si se
+    // ha subido un fichero, su base64.
+    const imageUrl = (!selectedFile.value && imagePath.value) || imagePreview.value || undefined
     const payload = {
       name: form.name.trim(),
       description: form.description.trim(),
@@ -777,7 +802,7 @@ async function generateAllWithAI() {
         : `${config.public.apiBase}${imgRes.imageUrl}`
       imagePreview.value = fullUrl
       selectedFile.value = null
-      ;(window as any).__badgeRawImagePath = imgRes.imageUrl
+      imagePath.value = imgRes.imageUrl
     }
   } catch (error) {
     console.error('Error generating badge:', error)

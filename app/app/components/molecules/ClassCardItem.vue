@@ -4,11 +4,11 @@
     <ClassCardRow
       v-if="layout === 'list'"
       :name="classItem.name"
+      :heading-tag="headingTag"
       :background-image="resolvedImage"
       :student-count="classItem.studentCount"
-      :missions-count="
-        classItem.stats?.totalMissions ?? classItem.missionCount ?? classItem.totalMissions
-      "
+      :missions-count="missionsCount"
+      :progress="progress"
       :schedule="scheduleLines"
       :coins="coins"
       :mana="mana"
@@ -24,11 +24,11 @@
       v-else
       :icon="AcademicCapIcon"
       :name="classItem.name"
+      :heading-tag="headingTag"
       :background-image="resolvedImage"
       :student-count="classItem.studentCount"
-      :missions-count="
-        classItem.stats?.totalMissions ?? classItem.missionCount ?? classItem.totalMissions
-      "
+      :missions-count="missionsCount"
+      :progress="progress"
       :schedule="scheduleLines"
       :coins="coins"
       :mana="mana"
@@ -50,7 +50,8 @@
       <button
         v-if="canDuplicate && !classItem.archived && !confirming"
         class="w-8 h-8 rounded-xl bg-white/90 backdrop-blur-sm shadow-md border border-white/60 flex items-center justify-center text-text-secondary hover:text-navy-700 hover:bg-white transition-all duration-150 disabled:opacity-60"
-        title="Duplicar clase"
+        :title="t('common.class_card.duplicate')"
+        :aria-label="t('common.class_card.duplicate')"
         :disabled="duplicating"
         @click="$emit('duplicate')"
       >
@@ -66,10 +67,15 @@
           class="flex items-center gap-1 bg-white rounded-xl shadow-lg border border-gray-200 px-2 py-1.5"
         >
           <span class="text-xs font-medium text-navy-700 whitespace-nowrap">
-            {{ classItem.archived ? '¿Desarchivar?' : '¿Archivar?' }}
+            {{
+              classItem.archived
+                ? t('common.class_card.confirm_unarchive')
+                : t('common.class_card.confirm_archive')
+            }}
           </span>
           <button
             class="w-6 h-6 rounded-lg bg-navy-700 text-white flex items-center justify-center hover:opacity-90 transition-opacity"
+            :aria-label="t('common.class_card.confirm')"
             :disabled="loading"
             @click="confirm"
           >
@@ -78,6 +84,7 @@
           </button>
           <button
             class="w-6 h-6 rounded-lg bg-gray-100 text-gray-500 flex items-center justify-center hover:bg-gray-200 transition-colors"
+            :aria-label="t('common.actions.cancel')"
             :disabled="loading"
             @click="cancel"
           >
@@ -89,7 +96,8 @@
         <button
           v-else
           class="w-8 h-8 rounded-xl bg-white/90 backdrop-blur-sm shadow-md border border-white/60 flex items-center justify-center text-text-secondary hover:text-navy-700 hover:bg-white transition-all duration-150"
-          :title="classItem.archived ? 'Desarchivar clase' : 'Archivar clase'"
+          :title="archiveLabel"
+          :aria-label="archiveLabel"
           @click="confirming = true"
         >
           <ArchiveBoxArrowDownIcon v-if="classItem.archived" class="w-4 h-4" />
@@ -126,13 +134,12 @@ interface ClassItemData {
   archived?: boolean
   totalMissions?: number
   missionCount?: number
+  /** Solo en el listado del alumnado: «4 de 7 misiones». */
+  progress?: { missionsCompleted: number; missionsCounted: number }
   coins?: number
   mana?: number
   lives?: number
   settings?: Partial<ClassSettings>
-  stats?: {
-    totalMissions?: number
-  }
   /** Acceso propio en la clase (vista del profesor). Sin él no se ofrece archivar ni duplicar. */
   myAccess?: ClassAccess | null
 }
@@ -145,7 +152,23 @@ const props = defineProps<{
   duplicating?: boolean
   showCoins?: boolean
   layout?: ViewMode
+  /** El nivel del título de la tarjeta (por defecto, `h3`). */
+  headingTag?: 'h2' | 'h3'
 }>()
+
+const { t } = useI18n()
+
+/** Misiones de la clase: el listado del profesorado manda `missionCount`; el del alumnado, `totalMissions`. */
+const missionsCount = computed(() => props.classItem.missionCount ?? props.classItem.totalMissions)
+
+const progress = computed(() => {
+  const own = props.classItem.progress
+  return own ? { done: own.missionsCompleted, total: own.missionsCounted } : undefined
+})
+
+const archiveLabel = computed(() =>
+  props.classItem.archived ? t('common.class_card.unarchive') : t('common.class_card.archive')
+)
 
 // Días y horas de la clase, sin periodicidad ni fechas de fin.
 const { summarize } = useScheduleSummary()

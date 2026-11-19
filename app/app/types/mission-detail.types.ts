@@ -92,12 +92,18 @@ export interface BadgeRewardDetail {
   rarity?: 'common' | 'rare' | 'epic' | 'legendary'
 }
 
+/** Cómo va la misión en su clase: cada estudiante cae en un solo estado. */
 export interface TeacherMissionStats {
   totalStudents: number
   completed: number
   inProgress: number
   notStarted: number
-  avgProgress: number
+  expired: number
+  pathLocked: number
+  /** No completada de una misión que no cuenta (bloqueada a mano o sin enigmas). */
+  excluded: number
+  /** Media del % de enigmas obligatorios aprobados; null si no tiene obligatorios. */
+  avgProgress: number | null
 }
 
 export interface MissionDetail {

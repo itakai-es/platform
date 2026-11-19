@@ -21,7 +21,8 @@
       "section_classes": "Τάξεις",
       "section_account": "Λογαριασμός",
       "profile": "Το προφίλ μου",
-      "logout": "Αποσύνδεση"
+      "logout": "Αποσύνδεση",
+      "breadcrumb": "Διαδρομή πλοήγησης"
     },
     "actions": {
       "save": "Αποθήκευση",
@@ -112,7 +113,8 @@
       "start_new": "Ξεκίνα μια νέα!",
       "chat_with": "Συνομίλησε με τον/την {name}",
       "chat_with_god": "Συνομίλησε με έναν θεό",
-      "chat_with_label": "Συνομιλία με"
+      "chat_with_label": "Συνομιλία με",
+      "load_more": "Φόρτωση περισσότερων…"
     },
     "mobile_sidebar": {
       "join_class": "Είσοδος σε τάξη"
@@ -367,7 +369,8 @@
         "title": "Λιγότερη κίνηση",
         "description": "Μειώνει τις μεταβάσεις και τα εφέ κίνησης."
       },
-      "opens_new_tab": "(ανοίγει σε νέα καρτέλα)"
+      "opens_new_tab": "(ανοίγει σε νέα καρτέλα)",
+      "tabs": "Καρτέλες"
     },
     "notification_settings": {
       "description": "Οι ειδοποιήσεις σου βρίσκονται πάντα στις «{section}», στο μενού. Το email είναι προαιρετικό.",
@@ -388,7 +391,8 @@
       "send_to_ai": "Αποστολή στην ΤΝ"
     },
     "student_preview": {
-      "banner": "Βλέπεις την πλατφόρμα ως μαθητής (demo)"
+      "banner": "Βλέπεις την πλατφόρμα ως μαθητής (demo)",
+      "enter": "Προβολή ως μαθητής"
     },
     "change_email": {
       "title": "Email",
@@ -571,7 +575,42 @@
       "enigma_approved_student": "Η υποβολή σου για {enigma} εγκρίθηκε",
       "enigma_approved_teacher": "Η υποβολή του/της για {enigma} εγκρίθηκε",
       "mission_started_student": "Ξεκίνησες την αποστολή {mission}",
-      "mission_started_teacher": "Ξεκίνησε την αποστολή {mission}"
+      "mission_started_teacher": "Ξεκίνησε την αποστολή {mission}",
+      "enigma_submitted_teacher": "Έστειλε τον γρίφο {enigma} για έλεγχο",
+      "enigma_submitted_student": "Υπέβαλες τον γρίφο {enigma}",
+      "mission_completed_teacher": "Ολοκλήρωσε την αποστολή {mission}",
+      "mission_completed_student": "Ολοκλήρωσες την αποστολή {mission}",
+      "level_up_teacher": "Ανέβηκε στο επίπεδο {level}",
+      "level_up_student": "Ανέβηκες στο επίπεδο {level}",
+      "class_joined_teacher": "Εντάχθηκε στην τάξη {name}",
+      "class_joined_student": "Εντάχθηκες στην τάξη {name}",
+      "achievement_unlocked_teacher": "Ξεκλείδωσε το επίτευγμα {name}",
+      "achievement_unlocked_student": "Ξεκλείδωσες το επίτευγμα {name}",
+      "badge_unlocked_teacher": "Ξεκλείδωσε το διακριτικό {name}",
+      "badge_unlocked_student": "Ξεκλείδωσες το διακριτικό {name}",
+      "xp_gained_teacher": "Κέρδισε {xp} σε {source}",
+      "xp_gained_student": "Κέρδισες {xp} σε {source}",
+      "student_enrolled_teacher": "Εγγράφηκε στην πλατφόρμα",
+      "student_enrolled_student": "Εγγράφηκες στην πλατφόρμα",
+      "progress_milestone_teacher": "Έφτασε σε ένα ορόσημο προόδου",
+      "progress_milestone_student": "Έφτασες σε ένα ορόσημο προόδου",
+      "reward_taken_teacher": "Του/της αφαιρέθηκαν πόροι: {name}",
+      "reward_taken_student": "Σου αφαιρέθηκαν πόροι: {name}",
+      "reward_given_teacher": "Έλαβε μια ανταμοιβή: {name}",
+      "reward_given_student": "Έλαβες μια ανταμοιβή: {name}",
+      "behavior_applied_teacher": "Έλαβε τη συμπεριφορά {name}",
+      "behavior_applied_student": "Έλαβες τη συμπεριφορά {name}",
+      "shop_purchased_teacher": "Αγόρασε {name} από το κατάστημα",
+      "shop_purchased_student": "Αγόρασες {name} από το κατάστημα",
+      "shop_item_used_teacher": "Χρησιμοποίησε {name}",
+      "shop_item_used_student": "Χρησιμοποίησες {name}",
+      "fallback": {
+        "class": "μια τάξη",
+        "activity": "μια δραστηριότητα",
+        "behavior": "μια συμπεριφορά",
+        "item": "ένα αντικείμενο"
+      },
+      "unknown": "Πρόσφατη δραστηριότητα"
     },
     "avatars": {
       "characters": {
@@ -615,14 +654,14 @@
         "available": "Διαθέσιμη",
         "urgent": "Επείγουσα: λήγει σύντομα",
         "expired": "Έληξε",
-        "locked": "Κλειδωμένη: κλειστή προς το παρόν από τον/την εκπαιδευτικό σου",
+        "locked": "Κλειδωμένη προς το παρόν από τον/την εκπαιδευτικό σου",
         "locked_path": "Κλειδωμένη· ανοίγει μετά την ολοκλήρωση: {missions}"
       },
       "completed_by": "Δεν την έχει ολοκληρώσει κανείς ακόμα: 0 από {total} | Την έχει ολοκληρώσει {done} από {total} | Την έχουν ολοκληρώσει {done} από {total}",
       "no_students": "Δεν υπάρχουν ακόμα μαθητές και μαθήτριες",
       "opens_after": "Ανοίγει μετά την ολοκλήρωση: {missions}",
       "quoted": "«{title}»",
-      "quoted_teacher_closed": "«{title}» (κλειστή προς το παρόν από τον/την εκπαιδευτικό σου)",
+      "quoted_teacher_closed": "«{title}» (κλειδωμένη προς το παρόν από τον/την εκπαιδευτικό σου)",
       "and": "και",
       "locked_path_explain": "Για να την ανοίξεις, ολοκλήρωσε πρώτα: {missions}.",
       "state_short": {
@@ -640,7 +679,7 @@
       "keys_hint": "Με το πληκτρολόγιο, τα βέλη περνούν από μια αποστολή σε άλλη· τα Home και End πηγαίνουν στην πρώτη και στην τελευταία.",
       "your_progress": "Έχεις ολοκληρώσει {done} από {total} αποστολή | Έχεις ολοκληρώσει {done} από {total} αποστολές",
       "all_done": "Ο χάρτης ολοκληρώθηκε!",
-      "class_progress": "Η τάξη έχει διανύσει το {percent}% της διαδρομής",
+      "class_progress": "Κατά μέσο όρο, {done} από {total} ολοκληρωμένη αποστολή | Κατά μέσο όρο, {done} από {total} ολοκληρωμένες αποστολές",
       "class_done_by_all": "Ολοκληρωμένες από όλη την τάξη: {done} από {total}",
       "legend": {
         "title": "Υπόμνημα",
@@ -662,6 +701,84 @@
         "continue": "Συνέχισε",
         "view": "Δες την αποστολή",
         "open": "Άνοιξε την αποστολή"
+      }
+    },
+    "charts": {
+      "view_as_table": "Προβολή ως πίνακα",
+      "legend": "Υπόμνημα",
+      "label_value": "{label}: {value}",
+      "value_of_total": "{value} από {total}",
+      "you": "Εσύ",
+      "average": "Μέσος όρος",
+      "empty_title": "Δεν υπάρχουν ακόμη δεδομένα",
+      "empty_description": "Όταν υπάρξει δραστηριότητα σε αυτή την περίοδο, θα εμφανιστεί εδώ.",
+      "status": {
+        "completed": "Ολοκληρωμένη",
+        "pending_review": "Προς έλεγχο",
+        "in_progress": "Σε εξέλιξη",
+        "not_started": "Δεν έχει ξεκινήσει",
+        "expired": "Έληξε",
+        "path_locked": "Κλειστή από τη διαδρομή"
+      },
+      "compare": {
+        "not_enough": "Η τάξη σου είναι ακόμη πολύ μικρή για σύγκριση.",
+        "self": {
+          "above": "Είσαι πάνω από τον μέσο όρο της υπόλοιπης τάξης σου.",
+          "at": "Είσαι στον μέσο όρο της υπόλοιπης τάξης σου.",
+          "below": "Είσαι κάτω από τον μέσο όρο της υπόλοιπης τάξης σου."
+        },
+        "other": {
+          "above": "Πάνω από τον μέσο όρο της τάξης.",
+          "at": "Στον μέσο όρο της τάξης.",
+          "below": "Κάτω από τον μέσο όρο της τάξης."
+        }
+      },
+      "signals": {
+        "empty_title": "Τίποτα αξιοσημείωτο",
+        "empty_description": "Δεν υπάρχουν ενδείξεις δυσκολίας σε αυτή την περίοδο."
+      }
+    },
+    "class_card": {
+      "students": "Κανένας μαθητής | 1 μαθητής | {count} μαθητές",
+      "missions": "Καμία αποστολή | 1 αποστολή | {count} αποστολές",
+      "view_class": "Προβολή τάξης",
+      "duplicate": "Αντιγραφή τάξης",
+      "archive": "Αρχειοθέτηση τάξης",
+      "unarchive": "Επαναφορά τάξης από το αρχείο",
+      "confirm_archive": "Αρχειοθέτηση;",
+      "confirm_unarchive": "Επαναφορά;",
+      "confirm": "Επιβεβαίωση"
+    },
+    "assistant_card": {
+      "greeting": "Γεια σου, {name}! Είμαι ο/η {god}, ο βοηθός σου τεχνητής νοημοσύνης. Πώς μπορώ να σε βοηθήσω;",
+      "greeting_no_name": "Γεια σου! Είμαι ο/η {god}, ο βοηθός σου τεχνητής νοημοσύνης. Πώς μπορώ να σε βοηθήσω;"
+    },
+    "progress": {
+      "missions_of": "{done} από {total} αποστολή | {done} από {total} αποστολές",
+      "extra": "Επιπλέον: {done} από {total} προαιρετικό | Επιπλέον: {done} από {total} προαιρετικά"
+    },
+    "ranking": {
+      "types_label": "Τύπος κατάταξης",
+      "periods_label": "Περίοδος κατάταξης",
+      "type": {
+        "xp": "XP",
+        "missions": "Αποστολές",
+        "teams": "Ομάδες"
+      },
+      "period": {
+        "all": "Πάντα",
+        "week": "Αυτή την εβδομάδα"
+      },
+      "no_score": {
+        "xp": "Ακόμα χωρίς XP",
+        "missions": {
+          "all": "Ακόμα χωρίς ολοκληρωμένες αποστολές",
+          "week": "Ακόμα χωρίς αποστολές αυτή την εβδομάδα"
+        },
+        "teams": {
+          "all": "Ακόμα χωρίς πόντους",
+          "week": "Ακόμα χωρίς πόντους αυτή την εβδομάδα"
+        }
       }
     }
   }

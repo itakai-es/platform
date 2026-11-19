@@ -67,6 +67,12 @@ const toast = useToast()
 const { downloadSubmission } = useProtectedFiles()
 const { t, locale } = useI18n()
 const effects = useEffects()
+const teacherStore = useTeacherStore()
+
+/** Tras aprobar cambian las cifras de la clase fuera de aquí: «por revisar», completadas, XP… */
+function invalidateClass() {
+  if (props.classId) teacherStore.invalidateClass(props.classId)
+}
 
 // State
 const submissions = ref<Submission[]>([])
@@ -191,6 +197,7 @@ const handleApprove = async (submission: Submission) => {
     // Mark as approved locally
     approvedIds.value.add(submission.id)
     cancelEditing()
+    invalidateClass()
 
     // Emit refresh to update parent
     emit('refresh')
@@ -246,6 +253,7 @@ const handleApproveTeam = async (submission: Submission) => {
       a => shown.has(a.submissionId) && (a.hintPenalty ?? 0) !== shown.get(a.submissionId)
     )
     cancelEditing()
+    invalidateClass()
     emit('refresh')
     toast.success(
       t(

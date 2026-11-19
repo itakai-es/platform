@@ -93,6 +93,10 @@ export const CLASS_ACTION_LEVEL = {
   // formarlos, cambiarlos y premiarlos es de quien edita.
   'team.manage': 'edit',
   'team.award': 'edit',
+  // Analítica (F1): prácticas la ve, porque ya ve por separado todo lo que
+  // junta; exportarla (datos de menores fuera de la plataforma) es de quien edita.
+  'analytics.view': 'read',
+  'analytics.export': 'edit',
 } as const satisfies Record<string, ClassRequiredLevel>
 
 export type ClassAction = keyof typeof CLASS_ACTION_LEVEL
@@ -563,6 +567,20 @@ export function accessibleClassesWhere(
 export const LIVE_CLASS_WHERE = { deletedAt: null } satisfies Prisma.ClassWhereInput
 
 /**
+ * Una lectura cerrada de la clase y la papelera: quien tiene la clase en la papelera
+ * sigue teniendo acceso (para restaurarla), pero la analítica y el ranking dan 404,
+ * con el mismo mensaje que si no existiera. La capa de acceso no mira la papelera:
+ * va después de comprobar el permiso.
+ */
+export async function assertClassNotInTrash(classId: string, db: Db = prisma) {
+  const live = await db.class.findFirst({
+    where: { id: classId, ...LIVE_CLASS_WHERE },
+    select: { id: true },
+  })
+  if (!live) throw new NotFoundError('Clase no encontrada')
+}
+
+/**
  * Como `accessibleClassesWhere`, sin las clases de la papelera: para listar.
  * El acceso a una clase concreta no mira la papelera (quien la tiene en ella
  * puede seguir abriéndola hasta la purga); los listados sí, así que una clase
@@ -708,17 +726,30 @@ export function requireClassAccess(action: ClassAction) {
   }
 }
 
+/** Opciones de `requireStudentEnrollment`. */
+export interface StudentEnrollmentOptions {
+  /**
+   * Cerrar también la clase archivada (404, como su portada): para lo que solo
+   * tiene sentido con la clase en marcha, como la clasificación o el muro.
+   */
+  closedWhenArchived?: boolean
+}
+
 /**
  * preHandler para las rutas de alumno con `:classId`, detrás de `authenticate`:
  * exige la matrícula con la que el usuario actúa como alumno en esa clase y la
  * deja en `request.studentEnrollment`. Sin ella responde 404.
  */
-export function requireStudentEnrollment() {
+export function requireStudentEnrollment(options: StudentEnrollmentOptions = {}) {
   return async (request: FastifyRequest, _reply: FastifyReply) => {
     const { classId } = request.params as { classId?: string }
     const user = request.user as ClassUser | undefined
     const enrollment = classId && user?.id ? await getStudentEnrollment(classId, user) : null
     if (!enrollment) throw new NotFoundError('No estás en esta clase')
+    if (options.closedWhenArchived) {
+      const cls = await prisma.class.findUnique({ where: { id: classId! }, select: { archived: true } })
+      if (cls?.archived) throw new NotFoundError('Esta clase está archivada y ya no está disponible')
+    }
     request.studentEnrollment = enrollment
   }
 }

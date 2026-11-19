@@ -26,7 +26,8 @@
       "ai_assistant": {
         "name": "Atena",
         "message_new_user": "Salut, {name}! Bine ai venit în ITAKAI. Finalizează prima misiune ca să începi să câștigi XP!",
-        "message_returning_user": "Salut, {name}! Ai finalizat {missions_completed} misiuni în {classes_enrolled} clase. Ține-o tot așa!"
+        "message_returning_user": "Salut, {name}! Ai finalizat {count} misiune {classes}. Ține-o tot așa! | Salut, {name}! Ai finalizat {count} misiuni {classes}. Ține-o tot așa!",
+        "classes_phrase": "în {count} clasă | în {count} clase"
       },
       "class_fallback_name": "Clasă",
       "recent_badges_empty": "Nu există insigne recente",
@@ -91,7 +92,9 @@
         "error": "Eroare la trimiterea lucrării. Încearcă din nou.",
         "expired_error": "Această misiune a expirat. Nu mai poți trimite enigme.",
         "downloading": "Se descarcă",
-        "path_locked": "Această misiune nu e încă deschisă: mai întâi trebuie să finalizezi alta."
+        "path_locked": "Această misiune nu e încă deschisă: mai întâi trebuie să finalizezi alta.",
+        "already_approved": "Această enigmă ți-a fost deja aprobată.",
+        "already_pending": "Ai deja o lucrare pentru această enigmă care așteaptă verificarea."
       },
       "hints": {
         "intro": "Te-ai blocat? Folosește un indiciu. Se deschid în ordine, câte unul, și fiecare are costul lui.",
@@ -133,7 +136,6 @@
         "description": "Încă nu ești în nicio clasă. Cere codul cadrului didactic ca să te alături."
       },
       "detail": {
-        "error_title": "Eroare la încărcarea clasei",
         "back_to_classes": "Înapoi la clasele mele",
         "breadcrumb_classes": "Clasele mele",
         "teacher_fallback": "Cadru didactic",
@@ -148,7 +150,6 @@
         },
         "progress": {
           "title": "Progresul meu",
-          "completion_rate": "Finalizat",
           "missions_completed": "Misiuni finalizate",
           "xp_total": "XP total",
           "badges_earned": "Insigne obținute"
@@ -179,7 +180,11 @@
           "save_error": "Eroare la salvarea profilului",
           "generate_error": "Avatarul nu a putut fi generat. Încearcă din nou peste câteva secunde.",
           "generate_error_with_detail": "Avatarul nu a putut fi generat: {detail}",
-          "how_others_see": "Așa te văd ceilalți în această clasă"
+          "how_others_see": "Așa te văd ceilalți în această clasă",
+          "nickname_empty": "Scrie o poreclă: este numele cu care te vede clasa ta.",
+          "nickname_taken": "Altcineva din clasa ta are deja această poreclă. Încearcă alta.",
+          "nickname_invalid": "Porecla trebuie să aibă între 1 și {max} caractere, cu cel puțin o literă sau o cifră.",
+          "nickname_reserved": "Porecla aceasta nu se poate folosi: alege una care să nu fie „Estudiante” și nici numele altei persoane din clasa ta."
         },
         "mission_no_description": "Fără descriere",
         "shop": {
@@ -234,6 +239,49 @@
         "teachers": {
           "title": "Cadre didactice",
           "empty": "Această clasă nu are încă cadre didactice."
+        },
+        "compare": {
+          "title": "Tu și clasa ta",
+          "hint": "Comparația se face cu media rotunjită a restului clasei. Nu se vede nicio persoană anume."
+        },
+        "results": {
+          "title": "Rezultatele mele",
+          "hint": "Recompensele fiecărei misiuni sunt cele primite pentru enigmele ei. Nu includ bonusul pentru finalizare, așa că suma lor nu coincide neapărat cu soldul tău.",
+          "filter_label": "Filtrează misiunile mele",
+          "empty_pending": "Nu ai misiuni în așteptare",
+          "empty_done": "Încă nu ai finalizat nicio misiune",
+          "in_review": "{count} în verificare | {count} în verificare",
+          "deadline_past": "a expirat pe {date}",
+          "hints": "{count} indiciu folosit | {count} indicii folosite",
+          "by_enigma": "% pe enigmă",
+          "enigma_open": "Netrimisă",
+          "filter_pending": "În așteptare ({count})",
+          "filter_done": "Finalizate ({count})",
+          "empty_description": "Când se schimbă, va apărea aici.",
+          "completed_on": "pe {date}",
+          "deadline_future": "expiră pe {date}",
+          "enigmas": "{approved} din {total} enigmă aprobată | {approved} din {total} enigme aprobate",
+          "optional": "opțională",
+          "enigma_approved": "{percent} · {date}",
+          "enigma_pending_since": "În verificare din {date}"
+        },
+        "errors": {
+          "archived": {
+            "title": "Această clasă nu mai este disponibilă",
+            "description": "Cadrul didactic a arhivat-o. Misiunile și progresul tău nu se pierd."
+          },
+          "not_found": {
+            "title": "Nu găsim această clasă",
+            "description": "Poate că linkul nu este corect sau nu mai ești în ea."
+          },
+          "forbidden": {
+            "title": "Nu ești în această clasă",
+            "description": "Dacă crezi că e o greșeală, vorbește cu cadrul didactic."
+          },
+          "generic": {
+            "title": "Clasa nu a putut fi încărcată",
+            "description": "Încearcă din nou peste câteva momente."
+          }
         }
       }
     },
@@ -391,9 +439,27 @@
         "missions_suffix": "misiuni",
         "you_badge": "Tu",
         "avg_xp": "XP mediu",
-        "avg_progress": "Progres mediu",
+        "avg_progress": "Progres mediu (enigme obligatorii)",
         "avg_missions": "Misiuni în medie",
-        "total_xp": "XP total al clasei"
+        "total_xp": "XP total al clasei",
+        "podium_empty": "Încă nimeni nu are XP. Podiumul se va umple de îndată ce cineva câștigă XP.",
+        "rank_sr": "Locul {rank}",
+        "missions_count": "{count} misiune | {count} misiuni",
+        "podium_empty_missions": "Încă nimeni nu a finalizat o misiune. Podiumul se va umple de îndată ce cineva o va face.",
+        "podium_empty_missions_week": "Săptămâna aceasta încă nimeni nu a finalizat o misiune.",
+        "no_rank_xp": "Încă nu ai un loc. Câștigă XP ca să intri în clasament.",
+        "no_rank_missions": "Încă nu ai un loc. Finalizează o misiune ca să intri în clasament.",
+        "no_rank_missions_week": "Săptămâna aceasta încă nu ai un loc. Finalizează o misiune ca să intri în clasament.",
+        "my_position_title": "Locul tău",
+        "my_position_preview": "Fiecare elev vede aici locul propriu și totalul clasei.",
+        "top_list_title": "Până la locul {n}"
+      },
+      "class_xp_bar": {
+        "rank": "Clasament",
+        "level_line": "Nivelul {level} · {title}",
+        "rank_of": "Locul {rank} din {total}",
+        "xp_to_next": "Mai e {count} XP până la nivelul {level} | Mai sunt {count} XP până la nivelul {level}",
+        "max_level": "Nivel maxim"
       }
     },
     "teams": {

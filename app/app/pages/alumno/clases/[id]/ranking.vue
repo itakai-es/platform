@@ -1,34 +1,30 @@
 <template>
-  <div class="space-y-6">
-    <!-- Loading -->
-    <div v-if="ui.isLoadingRanking" class="space-y-6">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Skeleton height="h-64" />
-        <Skeleton height="h-64" />
-      </div>
-      <Skeleton height="h-96" />
-    </div>
-
-    <template v-else-if="ui.rankingData">
-      <TeamStandings v-if="teams.data.value" :standings="teams.data.value.standings" />
-      <ClassRankingSection
-        :ranking-data="ui.rankingData"
-        :class-id="classId"
-        :show-current-user-highlight="true"
-      />
-    </template>
-  </div>
+  <ClassRankingBoard v-if="showBoard" :url="rankingUrl" />
 </template>
 
 <script setup lang="ts">
 definePageMeta({ layout: 'student', middleware: ['auth', 'role'] })
 
 const route = useRoute()
+const config = useRuntimeConfig()
 const classId = computed(() => route.params.id as string)
-const { ui, ensureRanking } = useStudentClassDetail(classId)
-// Clasificación de equipos (solo llega si la clase tiene la clasificación activada).
-const teams = useStudentTeams(classId)
+const { classData, rankingTypes } = useStudentClassDetail(classId)
 
-// Si llegamos directo a /ranking, ensureRanking() lo dispara; si ya estaba, no-op.
-onMounted(() => void Promise.all([ensureRanking(), teams.ensure()]))
+const rankingUrl = computed(
+  () => `${config.public.apiBase}/students/classes/${classId.value}/ranking`
+)
+
+// Con los datos de esta clase ya cargados: sin ningún tipo de ranking que ver no se
+// pide nada y se vuelve al Resumen.
+const classLoaded = computed(() => classData.value?.id === classId.value)
+const showBoard = computed(() => classLoaded.value && rankingTypes.value.length > 0)
+watch(
+  classLoaded,
+  loaded => {
+    if (loaded && rankingTypes.value.length === 0) {
+      void navigateTo(`/alumno/clases/${classId.value}`, { replace: true })
+    }
+  },
+  { immediate: true }
+)
 </script>

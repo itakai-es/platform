@@ -163,12 +163,13 @@
           "no_results_description": "Cap estudiant coincideix amb la cerca.",
           "col_behaviors": "Comportaments",
           "view_list": "Llistat",
-          "view_ranking": "Ranquing",
+          "view_ranking": "Rànquing",
           "col_actions": "Accions",
           "managed_badge": "Sense correu",
           "pending_sign_in_badge": "Pendent d'entrar",
           "view_attendance": "Assistència",
-          "view_teams": "Equips"
+          "view_teams": "Equips",
+          "table_caption": "L'alumnat de la classe: nivell, recursos i comportaments"
         },
         "stats_title": "Estadístiques de la classe",
         "pending_reviews": "Lliuraments per revisar",
@@ -178,7 +179,15 @@
         },
         "ranking": {
           "no_students_title": "No hi ha estudiants",
-          "no_students_description": "Encara no hi ha estudiants en aquesta classe"
+          "no_students_description": "Encara no hi ha estudiants en aquesta classe",
+          "hidden_from_students": "El teu alumnat no veu aquesta classificació: està desactivada a Funcionalitats.",
+          "audience_full": "El teu alumnat veu: la classificació completa.",
+          "audience_top": "El teu alumnat veu: les {n} primeres posicions i la seva.",
+          "audience_position": "El teu alumnat veu: només la seva posició.",
+          "audience_teams": "El teu alumnat veu: tots els equips.",
+          "audience_type_off": "El teu alumnat no veu aquest tipus de rànquing: s'activa a Funcionalitats.",
+          "not_entered_title": "Encara no hi ha ningú al rànquing",
+          "not_entered_description": "Els comptes que encara no han entrat no surten al rànquing. Hi sortiran quan entrin per primera vegada."
         },
         "missions_tab": {
           "no_missions_title": "No hi ha missions",
@@ -312,14 +321,14 @@
             "pace_desc_fast": "Es puja de nivell ràpid: cada nivell costa només una mica més que l'anterior.",
             "pace_desc_normal": "Progressió equilibrada: cada nivell costa una mica més que l'anterior.",
             "pace_desc_slow": "Cada nivell costa força més que l'anterior. Progressió llarga, ideal per a tot el curs.",
-            "mode_label": "Com es guanya la XP",
+            "mode_label": "Com es guanya l'XP",
             "mode_curve": "Per fórmula",
             "mode_custom": "Manual (per nivell)",
             "pace_label": "Ritme de pujada",
             "pace_fast": "Ràpid",
             "pace_normal": "Normal",
             "pace_slow": "Lent",
-            "custom_hint": "Escriu la XP necessària per pujar de cada nivell al següent.",
+            "custom_hint": "Escriu l'XP necessària per pujar de cada nivell al següent.",
             "compare_title": "XP total per assolir cada nivell",
             "compare_level": "Nivell {level}",
             "cap_label": "Nombre de nivells",
@@ -355,7 +364,7 @@
             },
             "rankings": {
               "label": "Rànquing",
-              "desc": "Classificació de l'alumnat de la classe."
+              "desc": "Classificació de l'alumnat de la classe. Desactivat, només la veu el professorat."
             },
             "xp": {
               "label": "Experiència (XP)",
@@ -425,7 +434,9 @@
             "background_error": "No s'ha pogut generar la imatge"
           },
           "features": {
-            "title": "Funcionalitats"
+            "title": "Funcionalitats",
+            "closed_archived": "La classe està arxivada: desarxiva-la per canviar-ne les funcionalitats i el rànquing.",
+            "closed_trash": "La classe és a la paperera: restaura-la per canviar-ne les funcionalitats i el rànquing."
           },
           "management": {
             "title": "Gestió",
@@ -459,6 +470,48 @@
           "beta": {
             "title": "En proves",
             "hint": "Funcionalitats noves que s'estan provant. Estan desactivades d'entrada i l'aspecte i el funcionament s'ajustaran amb les proves."
+          },
+          "ranking": {
+            "title": "Opcions del rànquing",
+            "hint": "Tu el veus sempre complet a Alumnat → Rànquing. Si desactives l'interruptor, només el veu el professorat.",
+            "mode_label": "Què veu l'alumnat",
+            "mode": {
+              "full": "La classificació completa",
+              "top": "Les {n} primeres posicions i la seva",
+              "top_suggested": "Les {n} primeres posicions i la seva (suggeriment)",
+              "position": "Només la seva posició"
+            },
+            "mode_hint": {
+              "full": "Cada estudiant veu tota la classe, amb àlies, nivell, XP i missions.",
+              "top": "Cada estudiant veu les primeres posicions, empats inclosos, i la seva. La resta de la classe no hi surt.",
+              "position": "Cada estudiant veu només la seva posició i el total de la classe, sense podi ni llista."
+            },
+            "top_label": "Quantes posicions es veuen",
+            "top_option": "Les {n} primeres posicions",
+            "types_title": "Tipus de rànquing",
+            "types_hint": "Si n'hi ha més d'un, l'alumnat canvia d'un a l'altre amb pestanyes.",
+            "type": {
+              "xp": {
+                "label": "XP",
+                "desc": "L'XP acumulada. Només té «Sempre»."
+              },
+              "missions": {
+                "label": "Missions completades",
+                "desc": "Premia acabar missions. També per setmana. Si el tipus XP també està activat, en els empats decideix l'XP."
+              },
+              "teams": {
+                "label": "Equips",
+                "desc": "Els punts de les agrupacions de base. Es veuen tots els equips en qualsevol mode.",
+                "no_base": "Encara no hi ha cap agrupació de base: es crea a Alumnat → Equips. Fins aleshores, aquest tipus no es veu."
+              }
+            },
+            "type_last": "Cal almenys un tipus.",
+            "closed_archived": "La classe està arxivada: desarxiva-la per canviar el rànquing.",
+            "closed_trash": "La classe és a la paperera: restaura-la per canviar el rànquing."
+          },
+          "compare": {
+            "label": "Comparar amb la mitjana",
+            "desc": "Cada estudiant veu si va per sobre, a la mitjana o per sota de la resta de la seva classe, sense veure ningú. Funciona encara que desactivis el rànquing."
           }
         },
         "badges_empty": "No hi ha insígnies en aquesta classe",
@@ -986,7 +1039,7 @@
       "subtitle": "Crea i gestiona insígnies personalitzades per recompensar les fites del teu alumnat",
       "new_badge": "Nova insígnia",
       "btn_delete": "Eliminar",
-      "no_badges_title": "Sense insígnies",
+      "no_badges_title": "Encara no n'has creat cap",
       "no_badges_description": "Crea la teva primera insígnia per recompensar el teu alumnat",
       "create_first": "Crear primera insígnia",
       "form": {
@@ -1004,11 +1057,21 @@
         "btn_saving": "Desant...",
         "btn_save_changes": "Desar canvis",
         "btn_create": "Crear insígnia",
-        "no_mission": "Sense missió"
+        "no_mission": "Sense missió",
+        "copy_name": "{name} (còpia)",
+        "label_mission": "Missió associada",
+        "btn_upload_image": "Puja una imatge",
+        "btn_generate": "Generar amb IA",
+        "btn_generating": "Generant..."
       },
       "detail": {
-        "btn_edit": "Editar",
-        "btn_close": "Tancar"
+        "btn_close": "Tancar",
+        "btn_copy": "Crear-ne una de semblant",
+        "system_level": "És d'ITAKAI i no es pot editar: es concedeix sola en arribar al nivell {count} en una classe.",
+        "system_missions": "És d'ITAKAI i no es pot editar: es concedeix sola en completar la primera missió. | És d'ITAKAI i no es pot editar: es concedeix sola en completar {count} missions.",
+        "system_xp": "És d'ITAKAI i no es pot editar: es concedeix sola en reunir {count} XP en una classe.",
+        "system_generic": "És d'ITAKAI i no es pot editar: es concedeix sola segons el progrés de l'alumnat.",
+        "not_yours": "No la pots editar: la va crear una altra persona per a una missió que no pots canviar."
       },
       "delete_title": "Eliminar insígnia",
       "delete_confirm": "Segur que vols eliminar la insígnia '{name}'? Aquesta acció no es pot desfer.",
@@ -1016,16 +1079,26 @@
         "name_required": "El nom és obligatori",
         "name_min_length": "El nom ha de tenir almenys 3 caràcters",
         "image_size": "La imatge no pot superar 2MB",
-        "image_type": "Només es permeten fitxers PNG, JPG, SVG o WebP"
+        "image_type": "Només es permeten fitxers PNG, JPG, SVG o WebP",
+        "image_required": "La imatge és obligatòria. Puja'n una o genera-la amb IA."
       },
       "meta": {
         "title": "Les meves insígnies | ITAKAI Docent",
         "description": "Crea, edita i gestiona insígnies personalitzades per premiar les fites del teu alumnat."
       },
-      "filter_system": "Del sistema",
       "generate_error": "No s'ha pogut generar la insígnia.",
       "save_error": "No s'ha pogut desar la insígnia.",
-      "delete_error": "No s'ha pogut suprimir la insígnia."
+      "delete_error": "No s'ha pogut suprimir la insígnia.",
+      "sections": {
+        "own": "Les teves insígnies",
+        "own_hint": "Les que has creat i les de les missions que pots editar. Obre-les per canviar-les.",
+        "system": "Insígnies d'ITAKAI",
+        "system_hint": "Es concedeixen soles segons el progrés de l'alumnat i no es poden editar. Obre-les per veure com s'aconsegueixen o crear-ne una de semblant."
+      },
+      "filter_all": "Totes les insígnies",
+      "search_placeholder": "Cercar insígnies...",
+      "no_results_title": "Sense resultats",
+      "no_results_description": "No hi ha insígnies amb aquests filtres"
     },
     "students": {
       "index": {
@@ -1051,12 +1124,12 @@
         "no_archived_students_title": "Ningú en classes arxivades",
         "no_archived_students_default": "No hi ha estudiants a les teves classes arxivades",
         "btn_view": "Veure",
-        "stat_missions": "Missions",
         "meta": {
           "title": "El meu alumnat | ITAKAI Docent",
           "description": "Gestiona el teu alumnat, revisa el seu progrés i estadístiques de rendiment acadèmic."
         },
-        "stat_badges": "Insígnies"
+        "stat_badges": "Insígnies",
+        "no_missions": "Sense missions per fer"
       },
       "detail": {
         "breadcrumb_students": "Alumnat",
@@ -1064,20 +1137,20 @@
         "error_title": "Error en carregar la fitxa d'estudiant",
         "error_default": "Error en carregar les dades de la fitxa",
         "btn_retry": "Reintentar",
-        "stat_classes": "Classes",
-        "stat_missions": "Missions",
-        "stat_completed": "Completat",
+        "stat_classes": "Classe | Classes",
         "enrolled_classes_title": "Classes inscrites",
-        "enrolled_classes_count": "{count} classes",
+        "enrolled_classes_count": "Sense classes | 1 classe | {count} classes",
         "not_enrolled": "No és en cap de les teves classes",
-        "label_progress": "Completat",
-        "stat_mana": "Mana",
-        "stat_lives": "Punts de vida",
         "no_activity": "Sense activitat recent",
         "meta": {
           "title": "Perfil d'estudiant | ITAKAI Docent",
           "description": "Perfil detallat de cada estudiant amb estadístiques de rendiment, progrés en missions i activitat recent."
-        }
+        },
+        "level_badge": "Nv. {level}",
+        "stat_missions_completed": "Missions completades",
+        "stat_required_enigmas": "Enigmes obligatoris aprovats",
+        "view_in_class": "Mostra a la classe",
+        "view_in_class_named": "Mostra a «{class}»"
       },
       "actions": {
         "menu_label": "Accions per a {name}",
@@ -1120,7 +1193,8 @@
         "avatar_summary": "En desar, {name} passa a portar {avatar} en aquesta classe.",
         "avatar_summary_generated": "En desar, {name} passa a portar {avatar} en aquesta classe, i la imatge que va generar amb IA s'esborra.",
         "avatar_saved": "Avatar canviat",
-        "avatar_error": "No s'ha pogut canviar l'avatar."
+        "avatar_error": "No s'ha pogut canviar l'avatar.",
+        "nickname_reserved": "Aquest àlies no es pot fer servir: tria'n un que no sigui «Estudiante» ni el nom d'una altra persona de la classe."
       }
     },
     "ai_assistant": {
@@ -1362,7 +1436,6 @@
         "status_in_review": "En revisió",
         "status_completed": "Completat",
         "global_progress": "Progrés global",
-        "class_average": "Mitjana de la classe",
         "rewards_title": "Recompenses",
         "xp_enigmas": "XP d'enigmes",
         "xp_mission": "XP de missió",
@@ -1373,7 +1446,14 @@
           "epic": "Èpica",
           "legendary": "Llegendària"
         },
-        "btn_close": "Tancar"
+        "btn_close": "Tancar",
+        "completed_by_students": "Estudiants que l'han completada",
+        "required_average": "Enigmes obligatoris aprovats: {percent} de mitjana",
+        "edit_enigma_named": "Editar l'enigma «{title}»",
+        "enigma_actions": "Més accions de l'enigma «{title}»",
+        "edit_document_named": "Editar el document «{title}»",
+        "document_actions": "Més accions del document «{title}»",
+        "view_submissions_named": "Veure lliuraments ({count}) de l'enigma «{title}»"
       },
       "enigma_submissions_modal": {
         "title_fallback": "Lliuraments",
@@ -1537,7 +1617,9 @@
       "cancel": "Cancel·la",
       "done": "Fet",
       "wizard_question_schedule": "Posa-li un horari a la teva classe",
-      "wizard_question_cover": "Ara, una portada per a la teva classe"
+      "wizard_question_cover": "Ara, una portada per a la teva classe",
+      "time_start": "Hora d'inici",
+      "time_end": "Hora de final"
     },
     "roulette": {
       "meta": {
@@ -1718,10 +1800,6 @@
         "export_error": "No s’ha pogut baixar el CSV.",
         "col_incidents": "Faltes i retards",
         "no_incidents": "Cap"
-      },
-      "profile": {
-        "rate": "Assistència: {rate} %",
-        "sessions": "{count} sessió aquest curs | {count} sessions aquest curs"
       }
     },
     "teams": {
@@ -1826,6 +1904,161 @@
       "distributed": "{count} persona repartida entre els equips. | {count} persones repartides entre els equips.",
       "distribute_skipped": "{count} que falta avui es queda sense equip. | {count} que falten avui es queden sense equip.",
       "put_in": "Posa a:"
+    },
+    "analytics": {
+      "period": {
+        "label": "Període",
+        "course": "Aquest curs",
+        "last30": "Últims 30 dies",
+        "last7": "Últims 7 dies"
+      },
+      "summary": {
+        "avg_missions": "Missions de mitjana",
+        "avg_percent": "Progrés mitjà (enigmes obligatoris)",
+        "pending_link": "Anar a Missions",
+        "attendance": "Assistència mitjana",
+        "attendance_sessions": "{count} sessió en aquest període | {count} sessions en aquest període",
+        "xp": "XP mitjana",
+        "unstarted_note": "Les mitjanes no compten {count} compte sense estrenar. | Les mitjanes no compten {count} comptes sense estrenar.",
+        "today": "Avui"
+      },
+      "missions": {
+        "title": "Missions",
+        "caption": "On és cada estudiant ara mateix: no canvia amb el període. La nota mitjana del que s'ha aprovat i les pistes de la taula sí que són del període.",
+        "table_caption": "Quantes persones hi ha en cada estat, a cada missió",
+        "col_mission": "Missió",
+        "col_average": "Nota mitjana del que s'ha aprovat",
+        "col_hints": "Pistes",
+        "deadline_future": "Venç el {date}",
+        "deadline_past": "Va vèncer el {date}",
+        "excluded_teacher": "Bloquejada: no compta per al progrés",
+        "excluded_empty": "Sense enigmes: no compta per al progrés",
+        "empty_title": "Encara no hi ha missions",
+        "empty_description": "Quan creïs missions en aquesta classe, aquí veuràs com va cadascuna."
+      },
+      "signals": {
+        "title": "Dificultats detectades",
+        "empty_title": "Res a destacar en aquest període",
+        "empty_description": "Si algú s'encalla o una missió es complica, sortirà aquí amb el motiu.",
+        "show_all": "Mostra-les totes ({count})",
+        "show_less": "Mostra'n menys",
+        "student": {
+          "inactive": "Sense activitat des de fa {days} dies, amb {count} missió oberta | Sense activitat des de fa {days} dies, amb {count} missions obertes",
+          "inactive_never": "Sense activitat des que va entrar a la classe, fa {days} dies, amb {count} missió oberta | Sense activitat des que va entrar a la classe, fa {days} dies, amb {count} missions obertes",
+          "mission_expired": "«{mission}» va vèncer el {date} sense començar-la",
+          "mission_expired_started": "«{mission}» va vèncer el {date}: la va començar i no la va completar",
+          "mission_expired_many": "{count} missions expirades sense completar; la darrera, «{mission}», va vèncer el {date}",
+          "low_grade": "Va aprovar «{enigma}» («{mission}») amb un {percent}, menys del {threshold}",
+          "low_grade_many": "{count} enigmes aprovats amb menys del {threshold}; el més baix, «{enigma}», amb un {percent}",
+          "low_average": "Nota mitjana del que s'ha aprovat: {average} en {approvals} enigma, menys del {threshold} | Nota mitjana del que s'ha aprovat: {average} en {approvals} enigmes, menys del {threshold}",
+          "hints": "Va fer servir {count} pista a «{mission}» | Va fer servir {count} pistes a «{mission}»",
+          "hints_percent": "Va fer servir {count} pista a «{mission}» ({detail}) | Va fer servir {count} pistes a «{mission}» ({detail})",
+          "hints_many": "Moltes pistes en {count} missions; la que més, «{mission}», amb {hints}",
+          "low_attendance": "Assistència del {rate}: {attended} de {total} sessió | Assistència del {rate}: {attended} de {total} sessions",
+          "hints_percent_detail": "{count} resta un % de la recompensa | {count} resten un % de la recompensa"
+        },
+        "mission": {
+          "unfinished_after_deadline": "{unfinished} de {started} que la van començar no la van completar abans de la data ({percent})",
+          "low_average": "Nota mitjana del que s'ha aprovat: {average} en {approvals} enigma aprovat, menys del {threshold} | Nota mitjana del que s'ha aprovat: {average} en {approvals} enigmes aprovats, menys del {threshold}",
+          "many_hints": "{perStudent} pistes de mitjana per estudiant que la va començar",
+          "students_expired": "{count} persona sense completar-la després de la data | {count} persones sense completar-la després de la data"
+        }
+      },
+      "students": {
+        "title": "Estudiants",
+        "table_caption": "L'alumnat de la classe: missions, darrera activitat, lliuraments per revisar, pistes i senyals",
+        "col_missions": "Missions",
+        "col_last_activity": "Darrera activitat",
+        "col_pending": "Per revisar",
+        "col_hints": "Pistes",
+        "col_attendance": "Assistència",
+        "col_signals": "Senyals",
+        "no_activity": "Sense activitat",
+        "sort_missions_asc": "Missions ↑",
+        "sort_missions_desc": "Missions ↓",
+        "sort_activity_recent": "Activitat més recent",
+        "sort_activity_oldest": "Activitat més antiga",
+        "sort_pending_desc": "Per revisar ↓",
+        "sort_hints_desc": "Pistes ↓",
+        "sort_signals_desc": "Senyals ↓",
+        "sort_attendance_asc": "Assistència ↑",
+        "sort_attendance_desc": "Assistència ↓"
+      },
+      "weeks": {
+        "title": "Activitat per setmana",
+        "caption": "Lliuraments, aprovacions i pistes de cada setmana, de dilluns a diumenge.",
+        "table_caption": "L'activitat de la classe, setmana a setmana",
+        "col_week": "Setmana",
+        "col_submissions": "Lliuraments",
+        "col_approvals": "Aprovacions",
+        "col_hints": "Pistes",
+        "col_missions": "Missions completades",
+        "week_of": "Setmana del {date}",
+        "empty_title": "Sense activitat en aquest període",
+        "empty_description": "Quan hi hagi lliuraments, aprovacions o pistes, apareixeran aquí."
+      },
+      "student": {
+        "not_found_title": "Aquesta persona no és a la classe",
+        "not_found_description": "Pot ser que ja no hi estigui matriculada o que l'enllaç sigui antic.",
+        "back_to_list": "Torna a l'alumnat",
+        "all_classes": "Mostra totes les seves classes",
+        "attendance_line": "Assistència: {rate} ({attended} de {total} sessió) | Assistència: {rate} ({attended} de {total} sessions)",
+        "figures_title": "Les seves xifres",
+        "missions_done": "Missions completades",
+        "xp": "XP",
+        "hints": "Pistes fetes servir",
+        "class_average": "Mitjana de la classe: {value}",
+        "compared_with": "Davant la mitjana de la classe: {count} persona que hi participa. | Davant la mitjana de la classe: {count} persones que hi participen.",
+        "nobody_to_compare": "Encara no hi ha ningú més a la classe amb qui comparar.",
+        "this_person": "Aquesta persona",
+        "missions": {
+          "title": "Missions",
+          "filter_label": "Filtra les seves missions",
+          "filter_all": "Totes ({count})",
+          "filter_pending": "Pendents ({count})",
+          "filter_done": "Fetes ({count})",
+          "by_enigma": "% per enigma",
+          "optional": "opcional",
+          "excluded_teacher": "Bloquejada",
+          "excluded_empty": "Sense enigmes",
+          "completed_on": "el {date}",
+          "deadline_past": "va vèncer el {date}",
+          "deadline_future": "venç el {date}",
+          "enigmas": "{approved} de {total} enigma aprovat | {approved} de {total} enigmes aprovats",
+          "average": "nota mitjana del que s'ha aprovat: {value}",
+          "hints": "{count} pista | {count} pistes",
+          "pending_reviews": "{count} lliurament per revisar | {count} lliuraments per revisar",
+          "enigma_approved": "{percent} · {date}",
+          "enigma_pending_since": "En revisió des del {date}",
+          "enigma_open": "Sense aprovar",
+          "empty_all": "Encara no hi ha missions",
+          "empty_pending": "No té missions pendents",
+          "empty_done": "Encara no ha completat cap missió",
+          "empty_description": "Quan canviï, sortirà aquí."
+        },
+        "history": {
+          "title": "Historial",
+          "filter_label": "Filtra per tipus",
+          "load_more": "Carrega'n més",
+          "empty": "Encara no hi ha res al seu historial.",
+          "empty_filtered": "No hi ha res d'aquest tipus.",
+          "attendance": "Assistència: {status}",
+          "attendance_time": "de {start} a {end}",
+          "attendance_note": "Nota: {note}",
+          "type": {
+            "all": "Tot",
+            "submissions": "Lliuraments",
+            "approvals": "Aprovacions",
+            "missions": "Missions",
+            "hints": "Pistes",
+            "behaviors": "Comportaments i recompenses",
+            "shop": "Botiga",
+            "progress": "Nivells i insígnies",
+            "attendance": "Assistència"
+          },
+          "loaded": "S'ha carregat {count} entrada més. | S'han carregat {count} entrades més."
+        }
+      }
     }
   }
 }

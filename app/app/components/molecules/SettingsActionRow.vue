@@ -4,7 +4,7 @@
   >
     <div class="min-w-0">
       <p class="font-semibold text-navy-700">{{ title }}</p>
-      <p class="mt-0.5 text-sm text-text-secondary">{{ hint }}</p>
+      <p class="mt-0.5 text-sm text-navy-700/80">{{ hint }}</p>
     </div>
     <!-- En columna para que en móvil un botón ocupe todo el ancho, como si fuera
          hijo directo de la fila; un interruptor mantiene su tamaño. -->

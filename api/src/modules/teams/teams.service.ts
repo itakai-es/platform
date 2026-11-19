@@ -3,9 +3,10 @@ import { prisma } from '../../config/database.js'
 import type { Prisma } from '../../generated/prisma/client.js'
 import { assertClassAccess, recordClassAction } from '../../utils/class-access.js'
 import { assertClassWritable } from '../../utils/class-writable.js'
-import { resolveClassSettings } from '../../utils/class-settings.js'
-import { participatingEnrollmentWhere } from '../../utils/enrollment.js'
+import { studentAvatarColor } from '../../utils/avatars.js'
+import { participatingEnrollmentWhere, publicAlias } from '../../utils/enrollment.js'
 import { ConflictError, NotFoundError, ValidationError } from '../../utils/errors.js'
+import { loadRankingContext, loadTeamStandings } from '../../utils/ranking.js'
 import { deal } from '../../utils/shuffle.js'
 import { missingStudentIdsOn } from '../attendance/attendance.service.js'
 import {
@@ -654,15 +655,16 @@ class TeamsService {
   /**
    * Lo que ve el alumnado: sus equipos, con quién está (también de las
    * agrupaciones archivadas, que van marcadas: la portada no las enseña, pero
-   * una misión por equipos sí); y, solo si la clase tiene la clasificación
-   * activada, los puntos de los equipos de base sin archivar (de los demás,
-   * solo el nombre y los puntos). Los
-   * nombres son el alias en la clase o, si no tiene, el nombre; nunca nada del
-   * correo. Quien aún no ha entrado no sale en lo que ve el resto.
+   * una misión por equipos sí); y, solo si la clase tiene encendido el ranking de
+   * equipos, los puntos de los equipos de base sin archivar (de los demás, solo el
+   * nombre y los puntos). Los nombres son el alias en la clase o, si no tiene,
+   * «Estudiante»; nunca el nombre real ni nada del correo, y de cada integrante
+   * va el id de su matrícula, no el de su cuenta, con su color de avatar ya hecho.
+   * Quien aún no ha entrado no sale en lo que ve el resto.
    */
   async getStudentTeams(enrollment: { id: string; isPreview: boolean }, classId: string) {
-    const cls = await prisma.class.findUnique({ where: { id: classId }, select: { settings: true } })
-    const rankings = resolveClassSettings(cls?.settings).rankings
+    const { studentTypes } = await loadRankingContext(classId)
+    const rankings = studentTypes.includes('teams')
 
     const mine = enrollment.isPreview
       ? []
@@ -694,7 +696,6 @@ class TeamsService {
                         studentId: true,
                         nickname: true,
                         avatarUrl: true,
-                        student: { select: { name: true } },
                       },
                     },
                   },
@@ -704,24 +705,10 @@ class TeamsService {
           },
         })
 
-    const baseSets = rankings
-      ? await prisma.teamSet.findMany({
-          where: { classId, kind: 'base', archivedAt: null },
-          orderBy: { createdAt: 'asc' },
-          select: {
-            id: true,
-            title: true,
-            teams: {
-              orderBy: { orderIndex: 'asc' },
-              select: { id: true, title: true, color: true, emblem: true, orderIndex: true },
-            },
-          },
-        })
-      : []
-    const points = await pointsByTeam(prisma, [
-      ...mine.map(m => m.team.id),
-      ...baseSets.flatMap(s => s.teams.map(t => t.id)),
-    ])
+    const points = await pointsByTeam(
+      prisma,
+      mine.map(m => m.team.id)
+    )
     const showPoints = (set: { kind: string; archivedAt: Date | null }) =>
       rankings && set.kind === 'base' && !set.archivedAt
 
@@ -746,19 +733,16 @@ class TeamsService {
           },
           members: team.members
             .map(({ enrollment: e }) => ({
-              id: e.studentId,
-              name: e.nickname?.trim() || e.student.name,
+              id: e.id,
+              // El alias o «Estudiante»: nunca el nombre real ante la clase.
+              name: publicAlias(e.nickname),
               avatar: e.avatarUrl,
+              avatarColor: studentAvatarColor(classId, e.studentId),
               isMe: e.id === enrollment.id,
             }))
             .sort((a, b) => Number(b.isMe) - Number(a.isMe) || a.name.localeCompare(b.name)),
         })),
-      standings: baseSets.map(set => ({
-        set: { id: set.id, title: set.title },
-        teams: set.teams
-          .map(({ orderIndex, ...t }) => ({ ...t, index: orderIndex, points: points.get(t.id) ?? 0 }))
-          .sort((a, b) => b.points - a.points),
-      })),
+      standings: rankings ? await loadTeamStandings(classId) : [],
     }
   }
 }

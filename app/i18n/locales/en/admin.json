@@ -190,28 +190,27 @@
         "quarter": "Quarter"
       },
       "kpis": {
-        "avg_response": "Response time",
-        "requests_per_min": "Requests/min",
         "error_rate": "Error rate",
-        "uptime": "Uptime"
+        "activity": "Activity in the period",
+        "new_users": "Sign-ups in the period",
+        "missions_completed": "Missions completed in the period"
       },
       "overview": {
         "total_users": "Total users",
-        "missions_completed": "Missions completed",
-        "completion_rate": "Completion rate",
-        "active_today": "Active today"
+        "active_today": "Active today",
+        "pending_reviews": "Submissions to review"
       },
       "sections": {
         "system_resources": "System resources",
         "service_health": "Service health",
-        "response_time": "Response time",
-        "active_users": "Active users",
-        "requests": "Requests",
-        "tokens_over_time": "Tokens used",
         "users_by_role": "Users by role",
         "missions_by_status": "Missions by status",
         "missions_by_rarity": "Missions by rarity",
-        "ai_usage": "AI usage (assistants)"
+        "ai_usage": "AI usage (assistants)",
+        "period_series": "During the period",
+        "new_users": "Sign-ups",
+        "activity": "Logged activity",
+        "assistant_messages": "Messages to assistants"
       },
       "system": {
         "memory": "Memory",
@@ -219,15 +218,12 @@
         "db_latency": "DB latency"
       },
       "ai": {
-        "total_tokens": "Total tokens",
-        "avg_tokens_user": "Avg per user",
-        "total_conversations": "Conversations",
-        "avg_conversations_user": "Conv. per user"
+        "total_conversations": "Conversations since the start",
+        "total_messages": "Messages in the period"
       },
       "table": {
         "service": "Service",
         "status": "Status",
-        "uptime": "Uptime",
         "latency": "Latency"
       },
       "status": {
@@ -238,6 +234,17 @@
       "meta": {
         "title": "System analytics | ITAKAI Admin",
         "description": "View advanced metrics, performance graphs and detailed platform analysis."
+      },
+      "delta": {
+        "absolute": "{diff} compared with the previous period",
+        "percent": "{percent} compared with the previous period",
+        "points": "{diff} point compared with the previous period | {diff} points compared with the previous period"
+      },
+      "no_role": "No role",
+      "services": {
+        "database": "Database",
+        "ai_text": "AI (text)",
+        "ai_image": "AI (images)"
       }
     },
     "logs": {

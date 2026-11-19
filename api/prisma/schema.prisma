@@ -178,6 +178,10 @@ model Class {
   // Configuración del sistema de niveles por clase (curva de XP + tramos visuales).
   // Nulo = usa los valores por defecto (DEFAULT_LEVEL_CONFIG), retrocompatible.
   levelConfig     Json?     @map("level_config")
+  // Configuración del ranking por clase (tipos y qué ve el alumnado; ver
+  // utils/ranking-config.ts). Nulo = como siempre: XP y equipos, completo.
+  // `settings.rankings` sigue siendo el interruptor.
+  rankingConfig   Json?     @map("ranking_config")
   // Configuración de horario/calendario (recurrencia estilo Google + fechas +
   // overrides por día). Nulo = sin horario configurado.
   scheduleConfig  Json?     @map("schedule_config")
@@ -482,6 +486,7 @@ model MissionDocument {
 
   mission Mission @relation(fields: [missionId], references: [id], onDelete: Cascade)
 
+  @@index([missionId])
   @@map("mission_documents")
 }
 
@@ -507,6 +512,7 @@ model MissionEnigma {
   progress    StudentEnigmaProgress[]
   submissions EnigmaSubmission[]
 
+  @@index([missionId, orderIndex])
   @@map("mission_enigmas")
 }
 
@@ -527,6 +533,7 @@ model StudentEnigmaProgress {
   enigma  MissionEnigma @relation(fields: [enigmaId], references: [id], onDelete: Cascade)
 
   @@unique([studentId, enigmaId])
+  @@index([enigmaId])
   @@map("student_enigma_progress")
 }
 
@@ -595,6 +602,13 @@ model EnigmaSubmission {
   enigma     MissionEnigma @relation(fields: [enigmaId], references: [id], onDelete: Cascade)
   reviewedBy User?         @relation("SubmissionReviewer", fields: [reviewedById], references: [id], onDelete: SetNull)
 
+  @@index([enigmaId, status])
+  @@index([studentId, enigmaId])
+  // Además, un único parcial que Prisma no modela y vive solo en el SQL de la
+  // migración 20261030100000_f1_analytics_indexes: como mucho una entrega
+  // pendiente por estudiante y enigma, `enigma_submissions_one_pending_key`
+  // (student_id, enigma_id) WHERE status = 'pendiente'. Prisma no lo ve como
+  // deriva (no propone borrarlo), pero tampoco lo crea: no quitar la migración.
   @@map("enigma_submissions")
 }
 
@@ -611,6 +625,7 @@ model StudentMissionProgress {
   mission Mission @relation(fields: [missionId], references: [id], onDelete: Cascade)
 
   @@unique([studentId, missionId])
+  @@index([missionId])
   @@map("student_mission_progress")
 }
 
@@ -640,6 +655,9 @@ model Badge {
   students StudentBadge[]
 
   @@index([triggerType, triggerValue])
+  // Las insignias de una misión o de las misiones de una clase (Mi progreso, el
+  // listado del alumnado, las fichas): sin él, cada consulta recorre la tabla.
+  @@index([missionId])
   @@map("badges")
 }
 
@@ -886,6 +904,8 @@ model ChatConversation {
   user     User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   messages ChatMessage[]
 
+  @@index([userId])
+  @@index([missionId])
   @@map("chat_conversations")
 }
 
@@ -904,6 +924,7 @@ model ChatMessage {
 
   conversation ChatConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
 
+  @@index([conversationId, createdAt])
   @@map("chat_messages")
 }
 
@@ -956,7 +977,7 @@ model BehaviorApplication {
   student  User              @relation("BehaviorStudent", fields: [studentId], references: [id], onDelete: Cascade)
   teamAward TeamAward?        @relation(fields: [teamAwardId], references: [id], onDelete: SetNull)
 
-  @@index([classId])
+  @@index([classId, createdAt])
   @@index([studentId, classId])
   @@index([teamAwardId])
   @@map("behavior_applications")
