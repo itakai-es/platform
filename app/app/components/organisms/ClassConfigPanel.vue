@@ -930,7 +930,7 @@ async function confirmDuplicate(options: DuplicateOptions) {
   try {
     const res = await teacherStore.duplicateClass(props.classId, options)
     // Refresca la lista de clases y lleva al profe a la copia recién creada.
-    await classesStore.ensureTeacherClasses(100, true)
+    await classesStore.ensureTeacherClasses(true)
     toast.success(t('teacher.classes.index.duplicate_success', { name: res.class.name }))
     duplicateModalOpen.value = false
     await router.push(`/profesor/clases/${res.class.id}`)

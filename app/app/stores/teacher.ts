@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import type { ManagedCredentials } from '~/types/auth.types'
+import { teacherClassesQuery } from '~/utils/teacher-classes'
 import type {
   ClassAccess,
   ClassAccessLevel,
@@ -121,7 +122,7 @@ export const useTeacherStore = defineStore('teacher', () => {
       const response = await $fetch<{ classes: Class[]; total: number }>(
         `${config.public.apiBase}/teacher/classes`,
         {
-          params: limit ? { limit } : undefined, // Solo envía limit si existe
+          params: teacherClassesQuery(limit),
         }
       )
       classes.value = response.classes

@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { Class, CreateClassData, UpdateClassData } from '~/types/class.types'
 import type { EnhancedMission } from '~/types/mission.types'
+import { teacherClassesQuery } from '~/utils/teacher-classes'
 
 interface RecentMission {
   id: string
@@ -126,9 +127,9 @@ export const useClassesStore = defineStore('classes', () => {
   }
 
   /**
-   * Fetch classes for teacher (created classes)
+   * Las clases del profesorado. Sin `limit`, todas (ver utils/teacher-classes.ts).
    */
-  async function fetchTeacherClasses(limit = 100, force = false) {
+  async function fetchTeacherClasses(limit?: number, force = false) {
     // Use cached data unless forced
     if (!force && hasLoadedClasses.value) {
       return { classes: classes.value, total: classes.value.length }
@@ -142,7 +143,7 @@ export const useClassesStore = defineStore('classes', () => {
       const response = await $fetch<{ classes: ClassWithExtras[]; total: number }>(
         `${config.public.apiBase}/teacher/classes`,
         {
-          params: { limit },
+          params: teacherClassesQuery(limit),
         }
       )
 
@@ -388,10 +389,10 @@ export const useClassesStore = defineStore('classes', () => {
     return fetchStudentClasses(force)
   }
 
-  async function ensureTeacherClasses(limit = 100, force = false) {
+  async function ensureTeacherClasses(force = false) {
     if (hasLoadedClasses.value && !force) return
     if (isLoadingClasses.value) return
-    return fetchTeacherClasses(limit, force)
+    return fetchTeacherClasses(undefined, force)
   }
 
   async function ensureStudentClassById(classId: string, force = false) {

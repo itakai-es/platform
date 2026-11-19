@@ -101,7 +101,7 @@ const setArchived = async (classId: string, archived: boolean) => {
     await teacherStore.setClassArchived(classId, archived)
     // Refresca ambas listas (activas + archivadas) tras cambiar el estado.
     await Promise.all([
-      classesStore.ensureTeacherClasses(100, true),
+      classesStore.ensureTeacherClasses(true),
       teacherStore.ensureArchivedClasses(true),
     ])
   } catch {
