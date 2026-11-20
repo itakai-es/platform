@@ -5,6 +5,7 @@ import mammoth from 'mammoth'
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import { getAiSettings } from '../settings/settings.service.js'
 import { openAiEndpoint } from './providers/openai-endpoint.js'
+import { zipDeclaredSize } from '../../utils/zip-size.js'
 
 /**
  * Extrae texto de los materiales que sube el profesor (PDF, Word, texto plano)
@@ -15,6 +16,11 @@ import { openAiEndpoint } from './providers/openai-endpoint.js'
 const MAX_CHARS_PER_FILE = 8000
 const MAX_CHARS_TOTAL = 12000
 const VISION_TIMEOUT_MS = 60_000
+// Un .docx es un ZIP y mammoth lo descomprime entero en memoria. Uno normal, con
+// imágenes, ocupa descomprimido poco más que comprimido; por encima de esto es
+// un fichero preparado para tumbar la API, y no se abre.
+const MAX_DOCX_UNCOMPRESSED = 100 * 1024 * 1024
+const MAX_DOCX_ENTRIES = 2000
 
 export interface ExtractedSource {
   name: string
@@ -108,6 +114,10 @@ async function extractOne(file: UploadedFile): Promise<{ text: string; source: E
     }
 
     if (mime.includes('word') || mime.includes('officedocument.wordprocessing') || lower.endsWith('.docx')) {
+      const size = zipDeclaredSize(file.buffer)
+      if (!size || size.entries > MAX_DOCX_ENTRIES || size.uncompressed > MAX_DOCX_UNCOMPRESSED) {
+        return { text: '', source: { name, kind: 'word', chars: 0, note: 'no se pudo abrir el documento' } }
+      }
       const res = await mammoth.extractRawText({ buffer: file.buffer })
       const text = clean(res.value || '', MAX_CHARS_PER_FILE)
       return { text, source: { name, kind: 'word', chars: text.length } }
