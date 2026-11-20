@@ -189,7 +189,11 @@ export async function aiRoutes(fastify: FastifyInstance) {
   // --- Extraer contexto de los materiales del profesor (PDF, Word, texto, imágenes) ---
 
   fastify.post('/extract-context', async (request: FastifyRequest, reply: FastifyReply) => {
-    const { id } = request.user as { id: string }
+    const { id, role } = request.user as { id: string; role: string | null }
+    // Solo lo usa el asistente de crear clase del profesorado.
+    if (role !== 'teacher' && role !== 'admin') {
+      return reply.status(403).send({ message: 'No tienes permiso para esta acción' })
+    }
     const rateCheck = checkRateLimit(id)
     if (!rateCheck.allowed) {
       return reply.status(429).send({ message: 'Limite de peticiones alcanzado', resetInSeconds: rateCheck.resetInSeconds })

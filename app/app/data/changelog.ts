@@ -41,6 +41,20 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.8.1',
+    date: '2026-11-20',
+    changes: [
+      {
+        type: 'fixed',
+        text: 'Las portadas y las insignias solo admiten imágenes PNG, JPG, WebP o GIF, y avisan si el fichero no lo es.',
+      },
+      {
+        type: 'fixed',
+        text: 'Se ha reforzado la seguridad del servidor, de las imágenes subidas y de los documentos que lee el asistente para crear clases.',
+      },
+    ],
+  },
+  {
     version: '0.8.0',
     date: '2026-11-19',
     title: 'Analítica de la clase y ranking a tu medida',

@@ -41,6 +41,7 @@ import {
   type PathRequirement,
 } from '../../utils/mission-path.js'
 import { ConflictError, NotFoundError, ValidationError } from '../../utils/errors.js'
+import { IMAGE_FORMAT_ERROR, parseImageDataUrl } from '../../utils/image-data-url.js'
 import { awaitingReview } from '../../utils/pending-review.js'
 import { enigmaTally } from '../analytics/definitions.js'
 import { missionClassStats, studentProgressByClass, sumProgress } from '../analytics/student-progress.js'
@@ -64,12 +65,12 @@ if (!existsSync(DOCUMENTS_DIR)) {
 }
 
 // Helper: persist a base64 data URL cover to disk, returning its stored URL.
+// Solo PNG, JPG, WebP o GIF de verdad: la extensión la pone el contenido, no
+// quien sube (ver utils/image-data-url.ts).
 async function saveBase64Image(base64Data: string, subdir: 'covers' = 'covers'): Promise<string | null> {
-  const matches = base64Data.match(/^data:image\/(\w+);base64,(.+)$/)
-  if (!matches) return null
-  const ext = matches[1] === 'jpeg' ? 'jpg' : matches[1]
-  const buffer = Buffer.from(matches[2], 'base64')
-  return saveUpload(`${subdir}/${randomUUID()}.${ext}`, buffer, `image/${matches[1]}`)
+  const image = parseImageDataUrl(base64Data)
+  if (!image) throw new ValidationError(IMAGE_FORMAT_ERROR)
+  return saveUpload(`${subdir}/${randomUUID()}.${image.ext}`, image.buffer, image.mime)
 }
 
 type Db = Prisma.TransactionClient

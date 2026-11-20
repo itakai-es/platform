@@ -173,6 +173,17 @@ async function buildServer() {
     prefix: '/uploads/',
     decorateReply: false,
     allowedPath: isPublicUploadPath,
+    // Aquí solo hay imágenes, que se ven dentro de la app con <img> y ahí estas
+    // cabeceras no cuentan. Si alguien abre una directamente y no es lo que dice
+    // (un SVG con código, un fichero disfrazado), no puede ejecutar ni cargar
+    // nada: va aislada, sin el origen de la app ni su sesión.
+    setHeaders: (res: { setHeader: (name: string, value: string) => void }) => {
+      res.setHeader(
+        'Content-Security-Policy',
+        "default-src 'none'; img-src 'self' data:; style-src 'unsafe-inline'; sandbox"
+      )
+      res.setHeader('X-Content-Type-Options', 'nosniff')
+    },
   })
 
   // Register JWT with access token secret
