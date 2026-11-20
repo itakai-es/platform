@@ -6,7 +6,19 @@
       :to="helpArticlePath(props.area, categoryOf(article).slug, article.slug)"
       class="group flex items-center gap-4 border-b border-border-primary px-4 py-3.5 transition-colors last:border-b-0 hover:bg-bg-secondary"
     >
+      <!-- Con vídeo, su miniatura; sin él, el icono de la categoría. -->
+      <HelpVideoThumb
+        v-if="article.hasVideo"
+        :src="getImageUrl(article.coverImage)"
+        video
+        small
+        :duration="article.videoDuration"
+        :accent="categoryOf(article).accent"
+        :icon="categoryOf(article).icon"
+        class="w-28 shrink-0 sm:w-40"
+      />
       <HelpCategoryIcon
+        v-else
         :icon="categoryOf(article).icon"
         :accent="categoryOf(article).accent"
         size="lg"
@@ -15,7 +27,10 @@
 
       <span class="min-w-0 flex-1">
         <span class="flex items-baseline gap-3">
-          <span class="min-w-0 font-semibold text-navy-700">{{ article.title }}</span>
+          <span class="min-w-0 font-semibold text-navy-700">
+            {{ article.title }}
+            <span v-if="article.hasVideo" class="sr-only">({{ t('common.help.video') }})</span>
+          </span>
           <!-- La guía es lo normal y no se etiqueta; el resto de tipos sí. -->
           <Badge
             v-if="article.kind && article.kind !== 'guia'"
@@ -79,11 +94,15 @@ interface HelpListItem {
   snippet?: string | null
   /** Tipo de contenido; solo se etiqueta cuando no es una guía. */
   kind?: HelpArticleKind
+  coverImage?: string | null
+  hasVideo?: boolean
+  videoDuration?: number | null
   /** Dentro de una categoría las filas no la repiten: llega en `category`. */
   category?: HelpCategoryRef
 }
 
 const { t } = useI18n()
+const { getImageUrl } = useImageUrl()
 
 const props = withDefaults(
   defineProps<{

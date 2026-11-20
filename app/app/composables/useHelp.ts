@@ -137,9 +137,9 @@ export function useHelp(area: HelpArea = 'ayuda') {
   /** Los parámetros de audiencia que se mandan al servidor, salvo en «todo». */
   const audienceParams = () => (isBlog || scope.value === 'todo' ? {} : { audience: scope.value })
 
-  const fetchArticle = (categorySlug: string, articleSlug: string) =>
+  const fetchArticle = (categorySlug: string, articleSlug: string, unfiltered = false) =>
     $fetch<HelpArticleView>(`${base}/${categorySlug}/${articleSlug}`, {
-      params: { ...areaParams, ...audienceParams() },
+      params: { ...areaParams, ...(unfiltered ? {} : audienceParams()) },
     })
 
   const search = (query: string) =>

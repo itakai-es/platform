@@ -1,5 +1,9 @@
 <template>
-  <PublicContentShell :section-label="t('common.help.title')" :section-to="portalPath(scope)">
+  <PublicContentShell
+    :section-label="t('common.help.title')"
+    :section-to="portalPath(scope)"
+    :wide-content="inCourseLesson"
+  >
     <!-- Selector de portada: toda la ayuda, profesorado o alumnado. En
          pantallas estrechas baja a una segunda fila a lo ancho, para que la
          barra no desborde. -->
@@ -19,6 +23,7 @@
 
 <script setup lang="ts">
 import type { HelpScope } from '~/types/help.types'
+import { helpCourseHasLesson } from '~/utils/help-courses'
 
 /**
  * Layout del centro de ayuda (Fase 3, punto 17).
@@ -34,6 +39,10 @@ import type { HelpScope } from '~/types/help.types'
 
 const { t } = useI18n()
 const { scope, portalPath } = useHelp()
+const route = useRoute()
+const inCourseLesson = computed(() =>
+  helpCourseHasLesson(route.query.curso, route.params.categoria, route.params.articulo)
+)
 
 /**
  * Las tres portadas. Las etiquetas de profesorado y alumnado son las mismas

@@ -1,6 +1,7 @@
 import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 import * as help from './help.service.js'
+import { registerView } from './help-visits.service.js'
 import { NotFoundError } from '../../utils/errors.js'
 import { pickOne, str } from '../../utils/query-params.js'
 
@@ -79,12 +80,19 @@ export async function publicHelpRoutes(fastify: FastifyInstance) {
 
       if (!found) return reply.status(404).send({ message: 'Artículo no encontrado' })
 
-      // La visita no bloquea la respuesta: si falla, el lector no se entera.
-      void help.registerView(found.article.id)
-
       return found
     }
   )
+
+  /** La página abierta registra la visita por separado de la precarga del artículo. */
+  fastify.post<{ Params: { articleId: string }; Body: unknown }>('/:articleId/visita', async (request, reply) => {
+    const articleId = z.string().uuid().parse(request.params.articleId)
+    // Exigir JSON impide que un formulario de otro sitio registre visitas.
+    z.object({}).strict().parse(request.body)
+    const result = await registerView(articleId, request.ip)
+    if (!result) return reply.status(404).send({ message: 'Artículo no encontrado' })
+    return reply.header('Cache-Control', 'no-store').send(result)
+  })
 
   /** «¿Te ha resultado útil?». Anónimo a propósito. */
   fastify.post(

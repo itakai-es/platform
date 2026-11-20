@@ -41,6 +41,10 @@ export interface HelpArticleCard extends HelpBlogFields {
   updatedAt: string
   audience: HelpAudience
   kind: HelpArticleKind
+  /** Si el artículo lleva vídeo: su portada se pinta como miniatura con play. */
+  hasVideo?: boolean
+  /** Duración del vídeo en segundos, si se conoce. */
+  videoDuration?: number | null
 }
 
 export interface HelpCategory {
@@ -77,11 +81,14 @@ export interface HelpArticle extends HelpBlogFields {
   coverImage: string | null
   body: string
   updatedAt: string
+  views: number
   helpful: number
   audience: HelpAudience
   kind: HelpArticleKind
-  /** Solo los artículos de tipo vídeo la tienen; se incrusta, no se sube. */
+  /** El vídeo del artículo: obligatorio en los de tipo vídeo y opcional en una guía. */
   videoUrl: string | null
+  /** Duración del vídeo en segundos, si se conoce. */
+  videoDuration?: number | null
 }
 
 export interface HelpArticleView {
@@ -101,5 +108,7 @@ export interface HelpSearchResult extends HelpBlogFields {
   snippet: string
   audience: HelpAudience
   kind: HelpArticleKind
+  hasVideo?: boolean
+  videoDuration?: number | null
   category: HelpCategoryRef
 }

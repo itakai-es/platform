@@ -19,9 +19,19 @@
         :to="helpArticlePath(props.area, categoryOf(article).slug, article.slug)"
         class="group flex flex-col overflow-hidden rounded-2xl bg-surface shadow-lg transition-shadow hover:shadow-xl"
       >
+        <!-- Con vídeo, su miniatura 16:9 con play y duración, como una lista de vídeos. -->
+        <HelpVideoThumb
+          v-if="article.hasVideo"
+          :src="getImageUrl(article.coverImage)"
+          video
+          :duration="article.videoDuration"
+          :accent="categoryOf(article).accent"
+          :icon="categoryOf(article).icon"
+          :rounded="false"
+        />
         <!-- Sin portada, el color de la categoría ocupa su sitio. -->
         <img
-          v-if="getImageUrl(article.coverImage)"
+          v-else-if="getImageUrl(article.coverImage)"
           :src="getImageUrl(article.coverImage)"
           alt=""
           :class="[coverClass, 'w-full object-cover']"
@@ -81,6 +91,8 @@ interface HelpTileItem extends HelpBlogFields {
   title: string
   summary?: string | null
   coverImage?: string | null
+  hasVideo?: boolean
+  videoDuration?: number | null
   /** Dentro de una categoría las tarjetas no la repiten: llega en `category`. */
   category?: HelpCategoryRef
 }

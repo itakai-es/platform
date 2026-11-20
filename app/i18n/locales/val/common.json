@@ -251,6 +251,7 @@
       "still_stuck": "No has trobat el que buscaves?",
       "contact_us": "Escriu-nos",
       "updated_on": "Actualitzat el {date}",
+      "visit_count": "{count} visites | 1 visita | {count} visites",
       "feedback_question": "T'ha resultat útil?",
       "feedback_yes": "Sí",
       "feedback_no": "No del tot",
@@ -281,13 +282,95 @@
       "audience": {
         "profesor": "Professorat",
         "alumno": "Alumnat",
-        "ambos": "Professorat i alumnat"
+        "ambos": "Professorat i alumnat",
+        "desarrollador": "Desenvolupadors"
       },
       "back_to_app": "Tornar a l'app",
       "published_on": "Publicat el {date}",
       "by_author": "Per {name}",
       "load_error": "No s'ha pogut carregar el contingut",
-      "retry": "Torna-ho a intentar"
+      "retry": "Torna-ho a intentar",
+      "courses": {
+        "in_courses": "Esta guia als cursos",
+        "mark_complete": "Marca com a completada",
+        "up_next_in": "Pròxima lliçó en {seconds} s",
+        "cancel_next": "Cancel·la",
+        "lesson_actions": "Accions de la lliçó",
+        "open_guide": "Mostra com a guia",
+        "resume_at": "Continua a {time}",
+        "progress_count": "{done} de {total} completades",
+        "lesson_complete": "Completada",
+        "autoplay": "Reproducció automàtica",
+        "resume": "Continua",
+        "view_course": "Mostra el curs",
+        "curriculum": "Temari",
+        "in_progress": "En curs",
+        "rewatch": "Torna-ho a veure",
+        "title": "Cursos",
+        "subtitle": "Recorreguts curts i en orde amb l'essencial, guia a guia i vídeo a vídeo.",
+        "all_courses": "Vore tots els cursos",
+        "lesson_count": "Sense lliçons | 1 lliçó | {count} lliçons",
+        "start": "Començar",
+        "lesson_of": "Lliçó {n} de {total}",
+        "progress": "Progrés del curs",
+        "course_navigation": "Navegació del curs",
+        "previous_lesson": "Lliçó anterior",
+        "next_lesson": "Lliçó següent",
+        "back_to_course": "Tornar al curs",
+        "empty_title": "Encara no hi ha cursos",
+        "empty_description": "Prompte hi haurà recorreguts guiats per a començar.",
+        "not_found_title": "Este curs no existix",
+        "not_found_description": "Potser s'ha retirat. Fes una ullada als altres cursos.",
+        "items": {
+          "primeros-pasos-docentes": {
+            "title": "Primers passos amb itakai",
+            "description": "De zero a la teua primera missió: crea la classe, convida l'alumnat i revisa els lliuraments."
+          },
+          "misiones-a-fondo": {
+            "title": "Missions a fons",
+            "description": "Enigmes, recompenses, rareses, pistes i el mapa: tot per a dissenyar missions que enganxen."
+          },
+          "gamifica-tu-clase": {
+            "title": "Gamifica la teua classe",
+            "description": "Monedes, botiga, vides, insígnies i rangs: tot el que fa que la teua classe siga un joc."
+          },
+          "desarrollo-itakai": {
+            "title": "Curs d’ITAKAI per a desenvolupadors",
+            "description": "Coneix el projecte, treballa amb assistents d’IA i prepara l’entorn amb VS Code i MCP."
+          },
+          "empieza-como-estudiante": {
+            "title": "Comença en itakai",
+            "description": "Tot el que necessites per a entrar en la teua classe, lliurar missions i entendre les teues recompenses."
+          }
+        },
+        "resume_lesson": "Continua per la lliçó {n}",
+        "minutes": "{n} min",
+        "video_lessons": "1 vídeo | {count} vídeos"
+      },
+      "player": {
+        "play": "Reproduïx",
+        "pause": "Pausa",
+        "play_video": "Reproduïx el vídeo: {title}",
+        "mute": "Silencia",
+        "unmute": "Activa el so",
+        "volume": "Volum",
+        "speed": "Velocitat",
+        "speed_normal": "Normal",
+        "subtitles_on": "Activa els subtítols",
+        "subtitles_off": "Lleva els subtítols",
+        "fullscreen": "Pantalla completa",
+        "exit_fullscreen": "Ix de la pantalla completa",
+        "seek": "Posició del vídeo"
+      },
+      "video": "Vídeo",
+      "duration": "Duració: {time}",
+      "copy_block": "Copia el bloc",
+      "command_platform": "Sistema operatiu",
+      "device": {
+        "label": "Vore la guia en",
+        "desktop": "Ordinador",
+        "mobile": "Mòbil"
+      }
     },
     "about": {
       "title": "Sobre ITAKAI",

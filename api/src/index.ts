@@ -21,6 +21,7 @@ import { healthRoutes } from './modules/health/health.routes.js'
 import { submissionsRoutes } from './modules/submissions/submissions.routes.js'
 import { profileRoutes } from './modules/profile/profile.routes.js'
 import { publicHelpRoutes, adminHelpRoutes } from './modules/help/help.routes.js'
+import { registerHelpVisitJobs } from './modules/help/help-visits.service.js'
 import { publicTemplateRoutes } from './modules/templates/templates.routes.js'
 import { filesRoutes } from './modules/files/files.routes.js'
 import { isPublicUploadPath } from './modules/storage/storage.service.js'
@@ -303,6 +304,7 @@ async function start() {
     if (env.SCHEDULER_ENABLED) {
       registerNotificationJobs()
       registerClassTrashJobs()
+      registerHelpVisitJobs()
       server.addHook('onClose', async () => stopScheduler())
     }
 

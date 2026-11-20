@@ -251,6 +251,7 @@
       "still_stuck": "¿Nun atopesti lo que buscabes?",
       "contact_us": "Escríbenos",
       "updated_on": "Anováu el {date}",
+      "visit_count": "{count} visites | 1 visita | {count} visites",
       "feedback_question": "¿Foi útil?",
       "feedback_yes": "Sí",
       "feedback_no": "Non del too",
@@ -281,13 +282,95 @@
       "audience": {
         "profesor": "Profesoráu",
         "alumno": "Alumnáu",
-        "ambos": "Profesoráu y alumnáu"
+        "ambos": "Profesoráu y alumnáu",
+        "desarrollador": "Desendolcadores"
       },
       "back_to_app": "Volver a l'app",
       "published_on": "Publicáu el {date}",
       "by_author": "Por {name}",
       "load_error": "Nun se pudo cargar el conteníu",
-      "retry": "Volver tentalo"
+      "retry": "Volver tentalo",
+      "courses": {
+        "in_courses": "Esta guía nos cursos",
+        "mark_complete": "Marcar como completada",
+        "up_next_in": "Siguiente lleición en {seconds} s",
+        "cancel_next": "Encaboxar",
+        "lesson_actions": "Acciones de la lleición",
+        "open_guide": "Ver como guía",
+        "resume_at": "Siguir en {time}",
+        "progress_count": "{done} de {total} completaes",
+        "lesson_complete": "Completada",
+        "autoplay": "Reproducción automática",
+        "resume": "Siguir",
+        "view_course": "Ver el cursu",
+        "curriculum": "Temariu",
+        "in_progress": "En cursu",
+        "rewatch": "Volver ver",
+        "title": "Cursos",
+        "subtitle": "Percorríos curtios y n'orde colo esencial, guía a guía y videu a videu.",
+        "all_courses": "Ver tolos cursos",
+        "lesson_count": "Ensin lleiciones | 1 lleición | {count} lleiciones",
+        "start": "Entamar",
+        "lesson_of": "Lleición {n} de {total}",
+        "progress": "Progresu del cursu",
+        "course_navigation": "Navegación del cursu",
+        "previous_lesson": "Lleición anterior",
+        "next_lesson": "Lleición siguiente",
+        "back_to_course": "Volver al cursu",
+        "empty_title": "Entá nun hai cursos",
+        "empty_description": "Aína va haber percorríos guiaos pa entamar.",
+        "not_found_title": "Esti cursu nun esiste",
+        "not_found_description": "Ye posible que se retirare. Échá-yos un güeyu a los demás cursos.",
+        "items": {
+          "primeros-pasos-docentes": {
+            "title": "Primeros pasos con itakai",
+            "description": "De cero a la to primer misión: crea la clase, convida al alumnáu y revisa les entregues."
+          },
+          "misiones-a-fondo": {
+            "title": "Misiones a fondu",
+            "description": "Enigmes, recompenses, rareces, pistes y el mapa: too pa diseñar misiones qu'enganchen."
+          },
+          "gamifica-tu-clase": {
+            "title": "Gamifica la to clase",
+            "description": "Monedes, tienda, vides, insinies y rangos: too lo que fai que la to clase seya un xuegu."
+          },
+          "desarrollo-itakai": {
+            "title": "Cursu d’ITAKAI pa desendolcadores",
+            "description": "Conoz el proyectu, trabaya con asistentes d’IA y prepara l’entornu con VS Code y MCP."
+          },
+          "empieza-como-estudiante": {
+            "title": "Entama n'itakai",
+            "description": "Too lo que precises pa entrar na to clase, entregar misiones y entender les tos recompenses."
+          }
+        },
+        "resume_lesson": "Siguir pela lleición {n}",
+        "minutes": "{n} min",
+        "video_lessons": "1 videu | {count} videos"
+      },
+      "player": {
+        "play": "Reproducir",
+        "pause": "Posar",
+        "play_video": "Reproducir el videu: {title}",
+        "mute": "Silenciar",
+        "unmute": "Activar el soníu",
+        "volume": "Volume",
+        "speed": "Velocidá",
+        "speed_normal": "Normal",
+        "subtitles_on": "Activar soumetíos",
+        "subtitles_off": "Quitar soumetíos",
+        "fullscreen": "Pantalla completa",
+        "exit_fullscreen": "Colar de la pantalla completa",
+        "seek": "Posición del videu"
+      },
+      "video": "Videu",
+      "duration": "Duración: {time}",
+      "copy_block": "Copiar bloque",
+      "command_platform": "Sistema operativu",
+      "device": {
+        "label": "Ver la guía en",
+        "desktop": "Ordenador",
+        "mobile": "Móvil"
+      }
     },
     "about": {
       "title": "Tocante a ITAKAI",

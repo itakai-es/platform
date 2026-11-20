@@ -21,7 +21,7 @@
 
     <div v-else class="grid gap-6 lg:grid-cols-[16rem_1fr]">
       <!-- Índice de la categoría, con su color de marca -->
-      <aside class="lg:sticky lg:top-24 lg:self-start">
+      <aside class="self-start lg:sticky lg:top-24">
         <Card v-if="category" :type="helpCardType(category.accent)" padding="sm" gap="none">
           <div class="mb-3 flex items-center gap-2.5 px-1">
             <HelpCategoryIcon :icon="category.icon" size="md" on-card />
@@ -37,6 +37,7 @@
             v-for="sibling in siblings"
             :key="sibling.id"
             :to="articlePath(category.slug, sibling.slug)"
+            :aria-current="sibling.slug === route.params.articulo ? 'page' : undefined"
             class="block rounded-xl px-3 py-2 text-sm leading-snug transition-colors"
             :class="
               sibling.slug === route.params.articulo
@@ -80,7 +81,38 @@
         <HelpArticleSkeleton v-if="!view || swapping" />
 
         <template v-else>
-          <HelpArticleBody :article="view.article" :accent="category?.accent" :area="props.area" />
+          <HelpArticleBody
+            :article="view.article"
+            :accent="category?.accent"
+            :area="props.area"
+            :visits="isBlog ? undefined : visits"
+            :start-at="isBlog ? 0 : videoPosition(view.article.id)"
+            @video-progress="saveGuidePosition"
+            @video-ended="saveGuidePosition(0, 0)"
+          />
+
+          <nav
+            v-if="linkedCourses.length"
+            :aria-label="t('common.help.courses.in_courses')"
+            class="mt-6 rounded-2xl border border-border-primary bg-surface p-4"
+          >
+            <h2 class="mb-2 text-sm font-semibold text-navy-700">
+              {{ t('common.help.courses.in_courses') }}
+            </h2>
+            <ul class="space-y-2">
+              <li v-for="entry in linkedCourses" :key="entry.course.slug">
+                <NuxtLink
+                  :to="entry.lesson.to"
+                  class="inline-flex flex-wrap items-baseline gap-x-2 font-semibold text-navy-700 underline decoration-purple/50 underline-offset-4 hover:decoration-purple"
+                >
+                  {{ entry.course.title }}
+                  <span class="text-xs font-medium">
+                    {{ t('common.help.courses.lesson_of', { n: entry.lesson.number, total: entry.course.items.length }) }}
+                  </span>
+                </NuxtLink>
+              </li>
+            </ul>
+          </nav>
 
           <!-- Anterior y siguiente dentro de la categoría -->
           <nav
@@ -88,42 +120,26 @@
             :aria-label="paginationLabel"
             class="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2"
           >
-            <NuxtLink
+            <HelpNeighbourLink
               v-if="previous"
               :to="articlePath(category?.slug ?? '', previous.slug)"
-              class="group flex min-w-0 items-center gap-3 rounded-2xl bg-surface px-4 py-3 shadow-lg transition-shadow hover:shadow-xl"
-            >
-              <ArrowLeftIcon
-                class="h-4 w-4 shrink-0 text-navy-700/40 transition-colors group-hover:text-purple"
-              />
-              <span class="min-w-0">
-                <span class="block text-xs font-medium text-navy-700/70">
-                  {{ t('common.help.previous') }}
-                </span>
-                <span class="block truncate text-sm font-semibold text-navy-700">
-                  {{ previous.title }}
-                </span>
-              </span>
-            </NuxtLink>
+              :label="t('common.help.previous')"
+              :article="previous"
+              :accent="category?.accent"
+              :icon="category?.icon"
+              direction="prev"
+            />
             <span v-else class="hidden sm:block" />
 
-            <NuxtLink
+            <HelpNeighbourLink
               v-if="next"
               :to="articlePath(category?.slug ?? '', next.slug)"
-              class="group flex min-w-0 items-center gap-3 rounded-2xl bg-surface px-4 py-3 text-right shadow-lg transition-shadow hover:shadow-xl sm:col-start-2"
-            >
-              <span class="ml-auto min-w-0">
-                <span class="block text-xs font-medium text-navy-700/70">
-                  {{ t('common.help.next') }}
-                </span>
-                <span class="block truncate text-sm font-semibold text-navy-700">
-                  {{ next.title }}
-                </span>
-              </span>
-              <ArrowRightIcon
-                class="h-4 w-4 shrink-0 text-navy-700/40 transition-colors group-hover:text-purple"
-              />
-            </NuxtLink>
+              :label="t('common.help.next')"
+              :article="next"
+              :accent="category?.accent"
+              :icon="category?.icon"
+              direction="next"
+            />
           </nav>
 
           <!-- ¿Te ha resultado útil? Solo en la ayuda: el blog no es una pieza de soporte. -->
@@ -182,18 +198,18 @@
           </section>
         </template>
       </article>
+
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import {
-  ArrowLeftIcon,
-  ArrowRightIcon,
   BookOpenIcon,
   CheckCircleIcon,
   NewspaperIcon,
 } from '@heroicons/vue/24/outline'
+import { useHelpArticleVisit } from '~/composables/useHelpArticleVisit'
 import { helpCardType } from '~/utils/help-accents'
 import { helpHeadings } from '~/utils/help-headings'
 import type { HelpArea, HelpArticleView } from '~/types/help.types'
@@ -236,6 +252,7 @@ const pending = ref(true)
 /** Cambio de un artículo a otro: solo se renueva el cuerpo. */
 const swapping = ref(false)
 const rated = ref(false)
+const visits = useHelpArticleVisit(() => swapping.value ? null : view.value?.article)
 
 /**
  * Carga el artículo **sin vaciar el anterior**: al saltar de un artículo a otro
@@ -355,6 +372,17 @@ const previous = computed(() => siblingAt(isBlog ? 1 : -1))
 
 const next = computed(() => siblingAt(isBlog ? -1 : 1))
 
+const { coursesWithArticle, videoPosition, saveVideoPosition } = useHelpCourses()
+const linkedCourses = computed(() =>
+  isBlog
+    ? []
+    : coursesWithArticle(String(route.params.categoria), String(route.params.articulo))
+)
+
+function saveGuidePosition(seconds: number, duration: number) {
+  if (!isBlog && view.value) saveVideoPosition(view.value.article.id, seconds, duration)
+}
+
 /** Ni cargando ni cargado: el artículo no existe o está sin publicar. */
 const notFound = computed(() => !pending.value && !swapping.value && !view.value)
 
@@ -368,9 +396,7 @@ const paginationLabel = computed(() =>
 
 const breadcrumbs = computed(() => [
   { label: sectionTitle.value, to: portalPath(scope.value) },
-  ...(category.value
-    ? [{ label: category.value.name, to: categoryPath(category.value.slug) }]
-    : []),
+  ...(category.value ? [{ label: category.value.name, to: categoryPath(category.value.slug) }] : []),
   ...(headerTitle.value ? [{ label: headerTitle.value }] : []),
 ])
 

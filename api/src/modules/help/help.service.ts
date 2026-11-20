@@ -60,6 +60,8 @@ const ARTICLE_CARD = {
   kind: true,
   publishedAt: true,
   authorName: true,
+  videoUrl: true,
+  videoDurationSeconds: true,
 } as const
 
 /** Lo que solo enseña el blog: la firma y la fecha de publicación. */
@@ -77,9 +79,25 @@ function blogFields(item: BlogFields, area: HelpArea): Partial<BlogFields> {
 }
 
 /** Una tarjeta de la superficie pública, con los campos del blog solo si es del blog. */
-function publicCard<T extends BlogFields>(card: T, area: HelpArea) {
-  const { publishedAt, authorName, ...rest } = card
-  return { ...rest, ...blogFields({ publishedAt, authorName }, area) }
+/** Lo que un listado sabe del vídeo de un artículo: si lo tiene y cuánto dura. */
+interface VideoFields {
+  videoUrl: string | null
+  videoDurationSeconds: number | null
+}
+
+/**
+ * Una tarjeta pública: la firma y la fecha solo en el blog, y del vídeo solo si
+ * lo hay y cuánto dura, para pintar la miniatura con su duración. La URL no
+ * viaja en los listados: solo la necesita el artículo.
+ */
+function publicCard<T extends BlogFields & VideoFields>(card: T, area: HelpArea) {
+  const { publishedAt, authorName, videoUrl, videoDurationSeconds, ...rest } = card
+  return {
+    ...rest,
+    hasVideo: !!videoUrl,
+    videoDuration: videoUrl ? videoDurationSeconds : null,
+    ...blogFields({ publishedAt, authorName }, area),
+  }
 }
 
 // ==================== SUPERFICIE PÚBLICA ====================
@@ -172,10 +190,12 @@ function buildArticleView(article: ArticleWithCategory, cards: ArticleCard[]) {
       coverImage: article.coverImage,
       body: article.body,
       updatedAt: article.updatedAt,
+      views: article.views,
       helpful: article.helpful,
       audience: article.audience,
       kind: article.kind,
       videoUrl: article.videoUrl,
+      videoDuration: article.videoUrl ? article.videoDurationSeconds : null,
       ...blogFields(article, area),
     },
     category: {
@@ -243,6 +263,8 @@ interface SearchRow {
   kind: HelpArticleKind
   published_at: Date | null
   author_name: string | null
+  video_url: string | null
+  video_duration_seconds: number | null
   category_slug: string
   category_name: string
   category_icon: string | null
@@ -278,6 +300,8 @@ export async function searchArticles(query: string, filters: PublicFilters = {},
            a.kind,
            a.published_at,
            a.author_name,
+           a.video_url,
+           a.video_duration_seconds,
            c.slug AS category_slug,
            c.name AS category_name,
            c.icon AS category_icon,
@@ -308,6 +332,8 @@ export async function searchArticles(query: string, filters: PublicFilters = {},
     coverImage: row.cover_image,
     audience: row.audience,
     kind: row.kind,
+    hasVideo: !!row.video_url,
+    videoDuration: row.video_url ? row.video_duration_seconds : null,
     ...blogFields({ publishedAt: row.published_at, authorName: row.author_name }, area),
     snippet: row.snippet,
     category: {
@@ -317,13 +343,6 @@ export async function searchArticles(query: string, filters: PublicFilters = {},
       accent: row.category_accent,
     },
   }))
-}
-
-/** Suma una visita. No bloquea la respuesta ni le importa fallar. */
-export async function registerView(articleId: string) {
-  await prisma.helpArticle
-    .update({ where: { id: articleId }, data: { views: { increment: 1 } } })
-    .catch(() => undefined)
 }
 
 /** «¿Te ha resultado útil?». Anónimo: solo cuenta, no guarda quién. */
@@ -612,12 +631,13 @@ async function checkBlogFields(
 }
 
 /**
- * La URL de vídeo que se guarda dado el estado final del artículo: vacía si
- * no es un vídeo, y obligatoria para publicar uno. Un vídeo en borrador puede
- * esperar sin URL a que el vídeo esté listo.
+ * La URL de vídeo que se guarda dado el estado final del artículo. Cualquier
+ * guía puede llevar su vídeo tutorial encima del texto; en un artículo de tipo
+ * vídeo es obligatoria para publicarlo. Un vídeo en borrador puede esperar sin
+ * URL a que el vídeo esté listo.
  */
 function videoUrlFor(kind: HelpArticleKind, status: HelpArticleStatus, videoUrl: string | null) {
-  if (kind !== 'video') return null
+  if (kind !== 'video') return videoUrl || null
   if (status === 'publicado' && !videoUrl) {
     throw new ValidationError(
       'Un artículo de tipo vídeo necesita la URL del vídeo para publicarse',

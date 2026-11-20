@@ -58,7 +58,7 @@
          abajo el alto de la onda, que se pinta por encima de lo que tiene
          justo arriba. -->
     <main class="flex-1 p-4 pb-24 md:p-6 md:pb-28" style="min-height: calc(100vh - 4.3rem)">
-      <div class="mx-auto max-w-5xl">
+      <div class="mx-auto" :class="wideContent ? 'max-w-screen-2xl' : 'max-w-5xl'">
         <slot />
       </div>
     </main>
@@ -88,6 +88,8 @@ defineProps<{
   sectionLabel: string
   /** Adónde lleva ese nombre: la portada de la sección. */
   sectionTo: string
+  /** Permite que las lecciones tengan sitio para los dos índices laterales. */
+  wideContent?: boolean
 }>()
 
 const { t } = useI18n()

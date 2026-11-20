@@ -68,3 +68,67 @@ export function videoEmbed(raw: string): HelpVideoEmbed {
 
   return link
 }
+
+/** Un subtítulo del `.vtt` de un vídeo, con sus tiempos en segundos. */
+export interface VttCue {
+  start: number
+  end: number
+  text: string
+}
+
+/** `1:47`, `12:05`, `1:02:03`: la duración de un vídeo como la enseña cualquier reproductor. */
+export function formatVideoTime(seconds?: number | null) {
+  const total = Math.max(0, Math.floor(seconds ?? 0))
+  const h = Math.floor(total / 3600)
+  const m = Math.floor((total % 3600) / 60)
+  const s = String(total % 60).padStart(2, '0')
+  return h ? `${h}:${String(m).padStart(2, '0')}:${s}` : `${m}:${s}`
+}
+
+/**
+ * Los subtítulos de un vídeo directo: el mismo fichero con extensión `.vtt`.
+ * Los de YouTube y Vimeo los pone su propio reproductor.
+ */
+export function subtitlesUrl(videoUrl: string) {
+  try {
+    const url = new URL(videoUrl, 'https://itakai.local')
+    if (!/\.(mp4|webm|ogg)$/i.test(url.pathname)) return null
+  } catch {
+    return null
+  }
+  return videoUrl.replace(/\.(mp4|webm|ogg)(?=$|[?#])/i, '.vtt')
+}
+
+const VTT_TIME = /(?:(\d+):)?(\d{1,2}):(\d{2})[.,](\d{1,3})/
+
+function vttSeconds(value: string) {
+  const match = VTT_TIME.exec(value)
+  if (!match) return NaN
+  const [, h = '0', m = '0', s = '0', ms = '0'] = match
+  return Number(h) * 3600 + Number(m) * 60 + Number(s) + Number(ms.padEnd(3, '0')) / 1000
+}
+
+/**
+ * Lee un WebVTT sencillo (el que generan las herramientas de vídeo de la ayuda):
+ * bloques con una línea de tiempos y el texto. Ignora cabecera, notas, estilos
+ * y ajustes de posición; las etiquetas en línea se quitan.
+ */
+export function parseVtt(text: string): VttCue[] {
+  const cues: VttCue[] = []
+  for (const block of text.replace(/\r\n?/g, '\n').split(/\n{2,}/)) {
+    const lines = block.split('\n')
+    const timing = lines.findIndex(line => line.includes('-->'))
+    if (timing < 0) continue
+    const [from = '', to = ''] = lines[timing]!.split('-->')
+    const start = vttSeconds(from)
+    const end = vttSeconds(to)
+    const body = lines
+      .slice(timing + 1)
+      .join('\n')
+      .replace(/<[^>]+>/g, '')
+      .trim()
+    if (Number.isFinite(start) && Number.isFinite(end) && body)
+      cues.push({ start, end, text: body })
+  }
+  return cues
+}
