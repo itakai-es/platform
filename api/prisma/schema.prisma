@@ -42,6 +42,7 @@ model User {
   role               UserRole?
   accountType        UserAccountType @default(self) @map("account_type")
   isOnboarded        Boolean         @default(false) @map("is_onboarded")
+  teacherRegistrationPending Boolean @default(false) @map("teacher_registration_pending")
   status             UserStatus      @default(active)
   // Quién creó la cuenta y en qué clase nació: quien tiene administración en esa
   // clase es quien la gestiona. Las dos se quedan en null si se borra la fila
@@ -77,6 +78,7 @@ model User {
   sentInvitations   Invitation[]        @relation("SentInvitations")
   receivedInvitations Invitation[]      @relation("ReceivedInvitations")
   submissions       EnigmaSubmission[]  @relation("StudentSubmissions")
+  teacherProfile    TeacherProfessionalProfile?
   settings          UserSettings?
   shopPurchases     ShopPurchase[]
   shopItemUses      ShopItemUse[]
@@ -97,6 +99,38 @@ model User {
   @@index([homeClassId])
   @@index([accountType])
   @@map("users")
+}
+
+model EducationCenter {
+  id          String @id @default(uuid())
+  name        String
+  municipality String
+  country     String
+  type        String
+  identity    String @unique
+  mergedIntoId String? @map("merged_into_id")
+  mergedInto  EducationCenter? @relation("CenterMerges", fields: [mergedIntoId], references: [id], onDelete: Restrict)
+  aliases     EducationCenter[] @relation("CenterMerges")
+  profiles    TeacherProfessionalProfile[]
+
+  @@map("education_centers")
+}
+
+model TeacherProfessionalProfile {
+  userId       String @id @map("user_id")
+  user         User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  centerId     String? @map("center_id")
+  center       EducationCenter? @relation(fields: [centerId], references: [id], onDelete: Restrict)
+  centerAnswered Boolean @default(false) @map("center_answered")
+  experience   String?
+  stages       String[] @default([])
+  subjects     String[] @default([])
+  gamificationExperience String? @map("gamification_experience")
+  gamificationFrequency  String? @map("gamification_frequency")
+  completedAt  DateTime? @map("completed_at")
+
+  @@index([centerId])
+  @@map("teacher_professional_profiles")
 }
 
 model UserSettings {

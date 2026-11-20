@@ -146,9 +146,11 @@
               <!-- Sin sesión, se apunta la plantilla y se va a entrar (o a crear
                    la cuenta): al llegar al panel docente se vuelve aquí. Con
                    otro rol, nada que vaya a fallar. -->
-              <template v-else-if="!authStore.isAuthenticated">
-                <InfoNote class="mt-4">{{ t('common.templates.use.login_note') }}</InfoNote>
-                <Button variant="primary" full-width class="mt-3" @click="useWithoutSession">
+              <template v-else-if="!authStore.isAuthenticated || needsTeacherRegistration">
+                <InfoNote v-if="!authStore.isAuthenticated" class="mt-4">
+                  {{ t('common.templates.use.login_note') }}
+                </InfoNote>
+                <Button variant="primary" full-width class="mt-3" @click="queueTemplate">
                   {{ t('common.templates.use.title') }}
                 </Button>
               </template>
@@ -281,7 +283,10 @@ const deadLink = computed(() => {
 })
 
 /** Importar es cosa del profesorado: la ruta cuelga de `/teacher`. */
-const canImport = computed(() => authStore.isAuthenticated && authStore.userRole === 'teacher')
+const needsTeacherRegistration = computed(() => authStore.user?.teacherRegistrationPending === true)
+const canImport = computed(
+  () => authStore.isAuthenticated && authStore.userRole === 'teacher' && !needsTeacherRegistration.value
+)
 
 /**
  * Cuántas misiones, objetos de tienda y comportamientos trae, con su icono, y
@@ -327,13 +332,12 @@ async function onImport() {
 }
 
 /**
- * Sin sesión: se apunta la plantilla y se va a entrar. Desde ahí se puede ir a
- * crear la cuenta sin perderla.
+ * Conserva la plantilla mientras se inicia sesión o se completa el alta docente.
  */
-function useWithoutSession() {
+function queueTemplate() {
   if (!tpl.value) return
   savePendingTemplate(tpl.value.id)
-  navigateTo(ROUTE_NAMES.LOGIN)
+  navigateTo(needsTeacherRegistration.value ? ROUTE_NAMES.TEACHER_REGISTRATION : ROUTE_NAMES.LOGIN)
 }
 
 // En la pestaña, el nombre de la plantilla o, si el enlace está muerto, lo que

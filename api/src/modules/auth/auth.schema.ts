@@ -34,7 +34,8 @@ export const signupSchema = z.object({
 })
 
 /**
- * Terminar el alta es elegir el rol, y nada más. El usuario no se toca por aquí:
+ * Esta operación elige el rol. El perfil docente se completa por separado.
+ * El usuario no se toca por aquí:
  * quien se registra con correo no tiene, y el de una cuenta gestionada lo pone
  * quien la crea y su dueño no lo cambia.
  */

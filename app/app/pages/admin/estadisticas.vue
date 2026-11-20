@@ -15,6 +15,8 @@
       </template>
     </PageHeader>
 
+    <AdminTeacherRegistration />
+
     <!-- No ha llegado: se dice y se puede reintentar -->
     <Card v-if="!analytics && analyticsFailed[activePeriod]" type="stats">
       <CardItem layout="column" padding="lg" centered>

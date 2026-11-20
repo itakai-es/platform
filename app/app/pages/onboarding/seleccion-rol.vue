@@ -429,9 +429,9 @@ async function completeRole(role: 'student' | 'teacher') {
     // Completar onboarding con el rol seleccionado
     await authStore.completeOnboarding(role)
 
-    // Redirigir al dashboard del rol seleccionado. Al del profesorado, con una
-    // plantilla pendiente, lo cambia por su ficha middleware/pending-template.global.ts.
-    router.push(getDashboardByRole(role))
+    await router.push(
+      role === 'teacher' ? ROUTE_NAMES.TEACHER_REGISTRATION : getDashboardByRole(role)
+    )
   } catch (error) {
     console.error('Error completing onboarding:', error)
     // TODO: Mostrar mensaje de error al usuario

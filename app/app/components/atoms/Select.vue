@@ -1,6 +1,13 @@
 <template>
   <div class="relative">
-    <select :value="modelValue" :disabled="disabled" :class="selectClasses" @change="handleChange">
+    <select
+      :id="id"
+      :value="modelValue"
+      :disabled="disabled"
+      :required="required"
+      :class="selectClasses"
+      @change="handleChange"
+    >
       <option v-if="placeholder" value="" disabled>{{ placeholder }}</option>
       <option v-for="option in options" :key="option.value" :value="option.value">
         {{ option.label }}
@@ -21,6 +28,8 @@ interface Option {
 }
 
 interface Props {
+  id?: string
+  required?: boolean
   modelValue: string | number
   options: Option[]
   placeholder?: string

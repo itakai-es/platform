@@ -33,6 +33,7 @@ export type UserMinAggregateOutputType = {
   role: $Enums.UserRole | null
   accountType: $Enums.UserAccountType | null
   isOnboarded: boolean | null
+  teacherRegistrationPending: boolean | null
   status: $Enums.UserStatus | null
   createdById: string | null
   homeClassId: string | null
@@ -52,6 +53,7 @@ export type UserMaxAggregateOutputType = {
   role: $Enums.UserRole | null
   accountType: $Enums.UserAccountType | null
   isOnboarded: boolean | null
+  teacherRegistrationPending: boolean | null
   status: $Enums.UserStatus | null
   createdById: string | null
   homeClassId: string | null
@@ -71,6 +73,7 @@ export type UserCountAggregateOutputType = {
   role: number
   accountType: number
   isOnboarded: number
+  teacherRegistrationPending: number
   status: number
   createdById: number
   homeClassId: number
@@ -92,6 +95,7 @@ export type UserMinAggregateInputType = {
   role?: true
   accountType?: true
   isOnboarded?: true
+  teacherRegistrationPending?: true
   status?: true
   createdById?: true
   homeClassId?: true
@@ -111,6 +115,7 @@ export type UserMaxAggregateInputType = {
   role?: true
   accountType?: true
   isOnboarded?: true
+  teacherRegistrationPending?: true
   status?: true
   createdById?: true
   homeClassId?: true
@@ -130,6 +135,7 @@ export type UserCountAggregateInputType = {
   role?: true
   accountType?: true
   isOnboarded?: true
+  teacherRegistrationPending?: true
   status?: true
   createdById?: true
   homeClassId?: true
@@ -222,6 +228,7 @@ export type UserGroupByOutputType = {
   role: $Enums.UserRole | null
   accountType: $Enums.UserAccountType
   isOnboarded: boolean
+  teacherRegistrationPending: boolean
   status: $Enums.UserStatus
   createdById: string | null
   homeClassId: string | null
@@ -262,6 +269,7 @@ export type UserWhereInput = {
   role?: Prisma.EnumUserRoleNullableFilter<"User"> | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFilter<"User"> | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFilter<"User"> | boolean
+  teacherRegistrationPending?: Prisma.BoolFilter<"User"> | boolean
   status?: Prisma.EnumUserStatusFilter<"User"> | $Enums.UserStatus
   createdById?: Prisma.StringNullableFilter<"User"> | string | null
   homeClassId?: Prisma.StringNullableFilter<"User"> | string | null
@@ -289,6 +297,7 @@ export type UserWhereInput = {
   sentInvitations?: Prisma.InvitationListRelationFilter
   receivedInvitations?: Prisma.InvitationListRelationFilter
   submissions?: Prisma.EnigmaSubmissionListRelationFilter
+  teacherProfile?: Prisma.XOR<Prisma.TeacherProfessionalProfileNullableScalarRelationFilter, Prisma.TeacherProfessionalProfileWhereInput> | null
   settings?: Prisma.XOR<Prisma.UserSettingsNullableScalarRelationFilter, Prisma.UserSettingsWhereInput> | null
   shopPurchases?: Prisma.ShopPurchaseListRelationFilter
   shopItemUses?: Prisma.ShopItemUseListRelationFilter
@@ -315,6 +324,7 @@ export type UserOrderByWithRelationInput = {
   role?: Prisma.SortOrderInput | Prisma.SortOrder
   accountType?: Prisma.SortOrder
   isOnboarded?: Prisma.SortOrder
+  teacherRegistrationPending?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdById?: Prisma.SortOrderInput | Prisma.SortOrder
   homeClassId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -342,6 +352,7 @@ export type UserOrderByWithRelationInput = {
   sentInvitations?: Prisma.InvitationOrderByRelationAggregateInput
   receivedInvitations?: Prisma.InvitationOrderByRelationAggregateInput
   submissions?: Prisma.EnigmaSubmissionOrderByRelationAggregateInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileOrderByWithRelationInput
   settings?: Prisma.UserSettingsOrderByWithRelationInput
   shopPurchases?: Prisma.ShopPurchaseOrderByRelationAggregateInput
   shopItemUses?: Prisma.ShopItemUseOrderByRelationAggregateInput
@@ -371,6 +382,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   role?: Prisma.EnumUserRoleNullableFilter<"User"> | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFilter<"User"> | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFilter<"User"> | boolean
+  teacherRegistrationPending?: Prisma.BoolFilter<"User"> | boolean
   status?: Prisma.EnumUserStatusFilter<"User"> | $Enums.UserStatus
   createdById?: Prisma.StringNullableFilter<"User"> | string | null
   homeClassId?: Prisma.StringNullableFilter<"User"> | string | null
@@ -398,6 +410,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   sentInvitations?: Prisma.InvitationListRelationFilter
   receivedInvitations?: Prisma.InvitationListRelationFilter
   submissions?: Prisma.EnigmaSubmissionListRelationFilter
+  teacherProfile?: Prisma.XOR<Prisma.TeacherProfessionalProfileNullableScalarRelationFilter, Prisma.TeacherProfessionalProfileWhereInput> | null
   settings?: Prisma.XOR<Prisma.UserSettingsNullableScalarRelationFilter, Prisma.UserSettingsWhereInput> | null
   shopPurchases?: Prisma.ShopPurchaseListRelationFilter
   shopItemUses?: Prisma.ShopItemUseListRelationFilter
@@ -424,6 +437,7 @@ export type UserOrderByWithAggregationInput = {
   role?: Prisma.SortOrderInput | Prisma.SortOrder
   accountType?: Prisma.SortOrder
   isOnboarded?: Prisma.SortOrder
+  teacherRegistrationPending?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdById?: Prisma.SortOrderInput | Prisma.SortOrder
   homeClassId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -449,6 +463,7 @@ export type UserScalarWhereWithAggregatesInput = {
   role?: Prisma.EnumUserRoleNullableWithAggregatesFilter<"User"> | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeWithAggregatesFilter<"User"> | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
+  teacherRegistrationPending?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   status?: Prisma.EnumUserStatusWithAggregatesFilter<"User"> | $Enums.UserStatus
   createdById?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   homeClassId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
@@ -468,6 +483,7 @@ export type UserCreateInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
@@ -493,6 +509,7 @@ export type UserCreateInput = {
   sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
@@ -519,6 +536,7 @@ export type UserUncheckedCreateInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   createdById?: string | null
   homeClassId?: string | null
@@ -544,6 +562,7 @@ export type UserUncheckedCreateInput = {
   sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
@@ -570,6 +589,7 @@ export type UserUpdateInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -595,6 +615,7 @@ export type UserUpdateInput = {
   sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
@@ -621,6 +642,7 @@ export type UserUncheckedUpdateInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -646,6 +668,7 @@ export type UserUncheckedUpdateInput = {
   sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
@@ -672,6 +695,7 @@ export type UserCreateManyInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   createdById?: string | null
   homeClassId?: string | null
@@ -691,6 +715,7 @@ export type UserUpdateManyMutationInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -708,6 +733,7 @@ export type UserUncheckedUpdateManyInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -742,6 +768,7 @@ export type UserCountOrderByAggregateInput = {
   role?: Prisma.SortOrder
   accountType?: Prisma.SortOrder
   isOnboarded?: Prisma.SortOrder
+  teacherRegistrationPending?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   homeClassId?: Prisma.SortOrder
@@ -761,6 +788,7 @@ export type UserMaxOrderByAggregateInput = {
   role?: Prisma.SortOrder
   accountType?: Prisma.SortOrder
   isOnboarded?: Prisma.SortOrder
+  teacherRegistrationPending?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   homeClassId?: Prisma.SortOrder
@@ -780,6 +808,7 @@ export type UserMinOrderByAggregateInput = {
   role?: Prisma.SortOrder
   accountType?: Prisma.SortOrder
   isOnboarded?: Prisma.SortOrder
+  teacherRegistrationPending?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   homeClassId?: Prisma.SortOrder
@@ -883,6 +912,20 @@ export type UserUncheckedUpdateManyWithoutCreatedByNestedInput = {
   update?: Prisma.UserUpdateWithWhereUniqueWithoutCreatedByInput | Prisma.UserUpdateWithWhereUniqueWithoutCreatedByInput[]
   updateMany?: Prisma.UserUpdateManyWithWhereWithoutCreatedByInput | Prisma.UserUpdateManyWithWhereWithoutCreatedByInput[]
   deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+}
+
+export type UserCreateNestedOneWithoutTeacherProfileInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTeacherProfileInput, Prisma.UserUncheckedCreateWithoutTeacherProfileInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTeacherProfileInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutTeacherProfileNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTeacherProfileInput, Prisma.UserUncheckedCreateWithoutTeacherProfileInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTeacherProfileInput
+  upsert?: Prisma.UserUpsertWithoutTeacherProfileInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTeacherProfileInput, Prisma.UserUpdateWithoutTeacherProfileInput>, Prisma.UserUncheckedUpdateWithoutTeacherProfileInput>
 }
 
 export type UserCreateNestedOneWithoutSettingsInput = {
@@ -1394,6 +1437,7 @@ export type UserCreateWithoutCreatedUsersInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
@@ -1418,6 +1462,7 @@ export type UserCreateWithoutCreatedUsersInput = {
   sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
@@ -1444,6 +1489,7 @@ export type UserUncheckedCreateWithoutCreatedUsersInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   createdById?: string | null
   homeClassId?: string | null
@@ -1468,6 +1514,7 @@ export type UserUncheckedCreateWithoutCreatedUsersInput = {
   sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
@@ -1499,6 +1546,7 @@ export type UserCreateWithoutCreatedByInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
@@ -1523,6 +1571,7 @@ export type UserCreateWithoutCreatedByInput = {
   sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
@@ -1549,6 +1598,7 @@ export type UserUncheckedCreateWithoutCreatedByInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   homeClassId?: string | null
   mustChangePassword?: boolean
@@ -1573,6 +1623,7 @@ export type UserUncheckedCreateWithoutCreatedByInput = {
   sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
@@ -1620,6 +1671,7 @@ export type UserUpdateWithoutCreatedUsersInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1644,6 +1696,7 @@ export type UserUpdateWithoutCreatedUsersInput = {
   sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
@@ -1670,6 +1723,7 @@ export type UserUncheckedUpdateWithoutCreatedUsersInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1694,6 +1748,7 @@ export type UserUncheckedUpdateWithoutCreatedUsersInput = {
   sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
@@ -1739,6 +1794,7 @@ export type UserScalarWhereInput = {
   role?: Prisma.EnumUserRoleNullableFilter<"User"> | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFilter<"User"> | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFilter<"User"> | boolean
+  teacherRegistrationPending?: Prisma.BoolFilter<"User"> | boolean
   status?: Prisma.EnumUserStatusFilter<"User"> | $Enums.UserStatus
   createdById?: Prisma.StringNullableFilter<"User"> | string | null
   homeClassId?: Prisma.StringNullableFilter<"User"> | string | null
@@ -1749,7 +1805,7 @@ export type UserScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
 }
 
-export type UserCreateWithoutSettingsInput = {
+export type UserCreateWithoutTeacherProfileInput = {
   id?: string
   email?: string | null
   username?: string | null
@@ -1758,6 +1814,7 @@ export type UserCreateWithoutSettingsInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
@@ -1783,6 +1840,7 @@ export type UserCreateWithoutSettingsInput = {
   sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   missionHintUses?: Prisma.MissionHintUseCreateNestedManyWithoutStudentInput
@@ -1799,7 +1857,7 @@ export type UserCreateWithoutSettingsInput = {
   classActionsTarget?: Prisma.ClassActionLogCreateNestedManyWithoutTargetUserInput
 }
 
-export type UserUncheckedCreateWithoutSettingsInput = {
+export type UserUncheckedCreateWithoutTeacherProfileInput = {
   id?: string
   email?: string | null
   username?: string | null
@@ -1808,6 +1866,7 @@ export type UserUncheckedCreateWithoutSettingsInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   createdById?: string | null
   homeClassId?: string | null
@@ -1833,6 +1892,231 @@ export type UserUncheckedCreateWithoutSettingsInput = {
   sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
+  shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
+  shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
+  missionHintUses?: Prisma.MissionHintUseUncheckedCreateNestedManyWithoutStudentInput
+  behaviorsApplied?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityUncheckedCreateNestedManyWithoutActorInput
+  behaviorsReceived?: Prisma.BehaviorApplicationUncheckedCreateNestedManyWithoutStudentInput
+  attendanceTaken?: Prisma.AttendanceSessionUncheckedCreateNestedManyWithoutTakenByInput
+  attendanceUpdated?: Prisma.AttendanceRecordUncheckedCreateNestedManyWithoutUpdatedByInput
+  teamAwardsGiven?: Prisma.TeamAwardUncheckedCreateNestedManyWithoutTeacherInput
+  classTeachers?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedCreateNestedManyWithoutTargetUserInput
+}
+
+export type UserCreateOrConnectWithoutTeacherProfileInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutTeacherProfileInput, Prisma.UserUncheckedCreateWithoutTeacherProfileInput>
+}
+
+export type UserUpsertWithoutTeacherProfileInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutTeacherProfileInput, Prisma.UserUncheckedUpdateWithoutTeacherProfileInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutTeacherProfileInput, Prisma.UserUncheckedCreateWithoutTeacherProfileInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutTeacherProfileInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutTeacherProfileInput, Prisma.UserUncheckedUpdateWithoutTeacherProfileInput>
+}
+
+export type UserUpdateWithoutTeacherProfileInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedUsersNestedInput
+  createdUsers?: Prisma.UserUpdateManyWithoutCreatedByNestedInput
+  homeClass?: Prisma.ClassUpdateOneWithoutHomeStudentsNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  teacherClasses?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUpdateManyWithoutDeletedByNestedInput
+  recommendedTemplates?: Prisma.ClassUpdateManyWithoutRecommendedByNestedInput
+  enrollments?: Prisma.ClassEnrollmentUpdateManyWithoutStudentNestedInput
+  createdBadges?: Prisma.BadgeUpdateManyWithoutTeacherNestedInput
+  earnedBadges?: Prisma.StudentBadgeUpdateManyWithoutStudentNestedInput
+  missionProgress?: Prisma.StudentMissionProgressUpdateManyWithoutStudentNestedInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressUpdateManyWithoutStudentNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ChatConversationUpdateManyWithoutUserNestedInput
+  joinRequests?: Prisma.JoinRequestUpdateManyWithoutStudentNestedInput
+  sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
+  receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
+  submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
+  shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
+  shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
+  missionHintUses?: Prisma.MissionHintUseUpdateManyWithoutStudentNestedInput
+  behaviorsApplied?: Prisma.BehaviorApplicationUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUpdateManyWithoutActorNestedInput
+  behaviorsReceived?: Prisma.BehaviorApplicationUpdateManyWithoutStudentNestedInput
+  attendanceTaken?: Prisma.AttendanceSessionUpdateManyWithoutTakenByNestedInput
+  attendanceUpdated?: Prisma.AttendanceRecordUpdateManyWithoutUpdatedByNestedInput
+  teamAwardsGiven?: Prisma.TeamAwardUpdateManyWithoutTeacherNestedInput
+  classTeachers?: Prisma.ClassTeacherUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUpdateManyWithoutTargetUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutTeacherProfileInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdUsers?: Prisma.UserUncheckedUpdateManyWithoutCreatedByNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  teacherClasses?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
+  trashedClasses?: Prisma.ClassUncheckedUpdateManyWithoutDeletedByNestedInput
+  recommendedTemplates?: Prisma.ClassUncheckedUpdateManyWithoutRecommendedByNestedInput
+  enrollments?: Prisma.ClassEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  createdBadges?: Prisma.BadgeUncheckedUpdateManyWithoutTeacherNestedInput
+  earnedBadges?: Prisma.StudentBadgeUncheckedUpdateManyWithoutStudentNestedInput
+  missionProgress?: Prisma.StudentMissionProgressUncheckedUpdateManyWithoutStudentNestedInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressUncheckedUpdateManyWithoutStudentNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ChatConversationUncheckedUpdateManyWithoutUserNestedInput
+  joinRequests?: Prisma.JoinRequestUncheckedUpdateManyWithoutStudentNestedInput
+  sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
+  receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
+  submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
+  shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
+  shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
+  missionHintUses?: Prisma.MissionHintUseUncheckedUpdateManyWithoutStudentNestedInput
+  behaviorsApplied?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutTeacherNestedInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  activitiesActed?: Prisma.ActivityUncheckedUpdateManyWithoutActorNestedInput
+  behaviorsReceived?: Prisma.BehaviorApplicationUncheckedUpdateManyWithoutStudentNestedInput
+  attendanceTaken?: Prisma.AttendanceSessionUncheckedUpdateManyWithoutTakenByNestedInput
+  attendanceUpdated?: Prisma.AttendanceRecordUncheckedUpdateManyWithoutUpdatedByNestedInput
+  teamAwardsGiven?: Prisma.TeamAwardUncheckedUpdateManyWithoutTeacherNestedInput
+  classTeachers?: Prisma.ClassTeacherUncheckedUpdateManyWithoutUserNestedInput
+  classTeachersAdded?: Prisma.ClassTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  classActions?: Prisma.ClassActionLogUncheckedUpdateManyWithoutActorNestedInput
+  classActionsTarget?: Prisma.ClassActionLogUncheckedUpdateManyWithoutTargetUserNestedInput
+}
+
+export type UserCreateWithoutSettingsInput = {
+  id?: string
+  email?: string | null
+  username?: string | null
+  passwordHash: string
+  name: string
+  role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
+  isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
+  status?: $Enums.UserStatus
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
+  avatar?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedUsersInput
+  createdUsers?: Prisma.UserCreateNestedManyWithoutCreatedByInput
+  homeClass?: Prisma.ClassCreateNestedOneWithoutHomeStudentsInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  teacherClasses?: Prisma.ClassCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassCreateNestedManyWithoutDeletedByInput
+  recommendedTemplates?: Prisma.ClassCreateNestedManyWithoutRecommendedByInput
+  enrollments?: Prisma.ClassEnrollmentCreateNestedManyWithoutStudentInput
+  createdBadges?: Prisma.BadgeCreateNestedManyWithoutTeacherInput
+  earnedBadges?: Prisma.StudentBadgeCreateNestedManyWithoutStudentInput
+  missionProgress?: Prisma.StudentMissionProgressCreateNestedManyWithoutStudentInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressCreateNestedManyWithoutStudentInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ChatConversationCreateNestedManyWithoutUserInput
+  joinRequests?: Prisma.JoinRequestCreateNestedManyWithoutStudentInput
+  sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
+  receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
+  submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileCreateNestedOneWithoutUserInput
+  shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
+  shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
+  missionHintUses?: Prisma.MissionHintUseCreateNestedManyWithoutStudentInput
+  behaviorsApplied?: Prisma.BehaviorApplicationCreateNestedManyWithoutTeacherInput
+  submissionsReviewed?: Prisma.EnigmaSubmissionCreateNestedManyWithoutReviewedByInput
+  activitiesActed?: Prisma.ActivityCreateNestedManyWithoutActorInput
+  behaviorsReceived?: Prisma.BehaviorApplicationCreateNestedManyWithoutStudentInput
+  attendanceTaken?: Prisma.AttendanceSessionCreateNestedManyWithoutTakenByInput
+  attendanceUpdated?: Prisma.AttendanceRecordCreateNestedManyWithoutUpdatedByInput
+  teamAwardsGiven?: Prisma.TeamAwardCreateNestedManyWithoutTeacherInput
+  classTeachers?: Prisma.ClassTeacherCreateNestedManyWithoutUserInput
+  classTeachersAdded?: Prisma.ClassTeacherCreateNestedManyWithoutAddedByInput
+  classActions?: Prisma.ClassActionLogCreateNestedManyWithoutActorInput
+  classActionsTarget?: Prisma.ClassActionLogCreateNestedManyWithoutTargetUserInput
+}
+
+export type UserUncheckedCreateWithoutSettingsInput = {
+  id?: string
+  email?: string | null
+  username?: string | null
+  passwordHash: string
+  name: string
+  role?: $Enums.UserRole | null
+  accountType?: $Enums.UserAccountType
+  isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
+  status?: $Enums.UserStatus
+  createdById?: string | null
+  homeClassId?: string | null
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
+  avatar?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCreatedByInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  teacherClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
+  trashedClasses?: Prisma.ClassUncheckedCreateNestedManyWithoutDeletedByInput
+  recommendedTemplates?: Prisma.ClassUncheckedCreateNestedManyWithoutRecommendedByInput
+  enrollments?: Prisma.ClassEnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  createdBadges?: Prisma.BadgeUncheckedCreateNestedManyWithoutTeacherInput
+  earnedBadges?: Prisma.StudentBadgeUncheckedCreateNestedManyWithoutStudentInput
+  missionProgress?: Prisma.StudentMissionProgressUncheckedCreateNestedManyWithoutStudentInput
+  enigmaProgress?: Prisma.StudentEnigmaProgressUncheckedCreateNestedManyWithoutStudentInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ChatConversationUncheckedCreateNestedManyWithoutUserInput
+  joinRequests?: Prisma.JoinRequestUncheckedCreateNestedManyWithoutStudentInput
+  sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
+  receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
+  submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   missionHintUses?: Prisma.MissionHintUseUncheckedCreateNestedManyWithoutStudentInput
@@ -1874,6 +2158,7 @@ export type UserUpdateWithoutSettingsInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1899,6 +2184,7 @@ export type UserUpdateWithoutSettingsInput = {
   sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   missionHintUses?: Prisma.MissionHintUseUpdateManyWithoutStudentNestedInput
@@ -1924,6 +2210,7 @@ export type UserUncheckedUpdateWithoutSettingsInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1949,6 +2236,7 @@ export type UserUncheckedUpdateWithoutSettingsInput = {
   sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   missionHintUses?: Prisma.MissionHintUseUncheckedUpdateManyWithoutStudentNestedInput
@@ -1974,6 +2262,7 @@ export type UserCreateWithoutRefreshTokensInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
@@ -1998,6 +2287,7 @@ export type UserCreateWithoutRefreshTokensInput = {
   sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
@@ -2024,6 +2314,7 @@ export type UserUncheckedCreateWithoutRefreshTokensInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   createdById?: string | null
   homeClassId?: string | null
@@ -2048,6 +2339,7 @@ export type UserUncheckedCreateWithoutRefreshTokensInput = {
   sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
@@ -2090,6 +2382,7 @@ export type UserUpdateWithoutRefreshTokensInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2114,6 +2407,7 @@ export type UserUpdateWithoutRefreshTokensInput = {
   sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
@@ -2140,6 +2434,7 @@ export type UserUncheckedUpdateWithoutRefreshTokensInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2164,6 +2459,7 @@ export type UserUncheckedUpdateWithoutRefreshTokensInput = {
   sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
@@ -2190,6 +2486,7 @@ export type UserCreateWithoutTeacherClassesInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
@@ -2214,6 +2511,7 @@ export type UserCreateWithoutTeacherClassesInput = {
   sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
@@ -2240,6 +2538,7 @@ export type UserUncheckedCreateWithoutTeacherClassesInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   createdById?: string | null
   homeClassId?: string | null
@@ -2264,6 +2563,7 @@ export type UserUncheckedCreateWithoutTeacherClassesInput = {
   sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
@@ -2295,6 +2595,7 @@ export type UserCreateWithoutTrashedClassesInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
@@ -2319,6 +2620,7 @@ export type UserCreateWithoutTrashedClassesInput = {
   sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
@@ -2345,6 +2647,7 @@ export type UserUncheckedCreateWithoutTrashedClassesInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   createdById?: string | null
   homeClassId?: string | null
@@ -2369,6 +2672,7 @@ export type UserUncheckedCreateWithoutTrashedClassesInput = {
   sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
@@ -2400,6 +2704,7 @@ export type UserCreateWithoutRecommendedTemplatesInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
@@ -2424,6 +2729,7 @@ export type UserCreateWithoutRecommendedTemplatesInput = {
   sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
@@ -2450,6 +2756,7 @@ export type UserUncheckedCreateWithoutRecommendedTemplatesInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   createdById?: string | null
   homeClassId?: string | null
@@ -2474,6 +2781,7 @@ export type UserUncheckedCreateWithoutRecommendedTemplatesInput = {
   sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
@@ -2505,6 +2813,7 @@ export type UserCreateWithoutHomeClassInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
@@ -2529,6 +2838,7 @@ export type UserCreateWithoutHomeClassInput = {
   sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
@@ -2555,6 +2865,7 @@ export type UserUncheckedCreateWithoutHomeClassInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   createdById?: string | null
   mustChangePassword?: boolean
@@ -2579,6 +2890,7 @@ export type UserUncheckedCreateWithoutHomeClassInput = {
   sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
@@ -2626,6 +2938,7 @@ export type UserUpdateWithoutTeacherClassesInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2650,6 +2963,7 @@ export type UserUpdateWithoutTeacherClassesInput = {
   sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
@@ -2676,6 +2990,7 @@ export type UserUncheckedUpdateWithoutTeacherClassesInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2700,6 +3015,7 @@ export type UserUncheckedUpdateWithoutTeacherClassesInput = {
   sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
@@ -2737,6 +3053,7 @@ export type UserUpdateWithoutTrashedClassesInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2761,6 +3078,7 @@ export type UserUpdateWithoutTrashedClassesInput = {
   sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
@@ -2787,6 +3105,7 @@ export type UserUncheckedUpdateWithoutTrashedClassesInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2811,6 +3130,7 @@ export type UserUncheckedUpdateWithoutTrashedClassesInput = {
   sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
@@ -2848,6 +3168,7 @@ export type UserUpdateWithoutRecommendedTemplatesInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2872,6 +3193,7 @@ export type UserUpdateWithoutRecommendedTemplatesInput = {
   sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
@@ -2898,6 +3220,7 @@ export type UserUncheckedUpdateWithoutRecommendedTemplatesInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2922,6 +3245,7 @@ export type UserUncheckedUpdateWithoutRecommendedTemplatesInput = {
   sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
@@ -2964,6 +3288,7 @@ export type UserCreateWithoutClassTeachersInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
@@ -2989,6 +3314,7 @@ export type UserCreateWithoutClassTeachersInput = {
   sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
@@ -3014,6 +3340,7 @@ export type UserUncheckedCreateWithoutClassTeachersInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   createdById?: string | null
   homeClassId?: string | null
@@ -3039,6 +3366,7 @@ export type UserUncheckedCreateWithoutClassTeachersInput = {
   sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
@@ -3069,6 +3397,7 @@ export type UserCreateWithoutClassTeachersAddedInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
@@ -3094,6 +3423,7 @@ export type UserCreateWithoutClassTeachersAddedInput = {
   sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
@@ -3119,6 +3449,7 @@ export type UserUncheckedCreateWithoutClassTeachersAddedInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   createdById?: string | null
   homeClassId?: string | null
@@ -3144,6 +3475,7 @@ export type UserUncheckedCreateWithoutClassTeachersAddedInput = {
   sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
@@ -3185,6 +3517,7 @@ export type UserUpdateWithoutClassTeachersInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3210,6 +3543,7 @@ export type UserUpdateWithoutClassTeachersInput = {
   sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
@@ -3235,6 +3569,7 @@ export type UserUncheckedUpdateWithoutClassTeachersInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3260,6 +3595,7 @@ export type UserUncheckedUpdateWithoutClassTeachersInput = {
   sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
@@ -3296,6 +3632,7 @@ export type UserUpdateWithoutClassTeachersAddedInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3321,6 +3658,7 @@ export type UserUpdateWithoutClassTeachersAddedInput = {
   sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
@@ -3346,6 +3684,7 @@ export type UserUncheckedUpdateWithoutClassTeachersAddedInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3371,6 +3710,7 @@ export type UserUncheckedUpdateWithoutClassTeachersAddedInput = {
   sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
@@ -3396,6 +3736,7 @@ export type UserCreateWithoutClassActionsInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
@@ -3421,6 +3762,7 @@ export type UserCreateWithoutClassActionsInput = {
   sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
@@ -3446,6 +3788,7 @@ export type UserUncheckedCreateWithoutClassActionsInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   createdById?: string | null
   homeClassId?: string | null
@@ -3471,6 +3814,7 @@ export type UserUncheckedCreateWithoutClassActionsInput = {
   sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
@@ -3501,6 +3845,7 @@ export type UserCreateWithoutClassActionsTargetInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
@@ -3526,6 +3871,7 @@ export type UserCreateWithoutClassActionsTargetInput = {
   sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
@@ -3551,6 +3897,7 @@ export type UserUncheckedCreateWithoutClassActionsTargetInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   createdById?: string | null
   homeClassId?: string | null
@@ -3576,6 +3923,7 @@ export type UserUncheckedCreateWithoutClassActionsTargetInput = {
   sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
@@ -3617,6 +3965,7 @@ export type UserUpdateWithoutClassActionsInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3642,6 +3991,7 @@ export type UserUpdateWithoutClassActionsInput = {
   sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
@@ -3667,6 +4017,7 @@ export type UserUncheckedUpdateWithoutClassActionsInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3692,6 +4043,7 @@ export type UserUncheckedUpdateWithoutClassActionsInput = {
   sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
@@ -3728,6 +4080,7 @@ export type UserUpdateWithoutClassActionsTargetInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3753,6 +4106,7 @@ export type UserUpdateWithoutClassActionsTargetInput = {
   sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
@@ -3778,6 +4132,7 @@ export type UserUncheckedUpdateWithoutClassActionsTargetInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3803,6 +4158,7 @@ export type UserUncheckedUpdateWithoutClassActionsTargetInput = {
   sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
@@ -3828,6 +4184,7 @@ export type UserCreateWithoutEnrollmentsInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
@@ -3852,6 +4209,7 @@ export type UserCreateWithoutEnrollmentsInput = {
   sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
@@ -3878,6 +4236,7 @@ export type UserUncheckedCreateWithoutEnrollmentsInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   createdById?: string | null
   homeClassId?: string | null
@@ -3902,6 +4261,7 @@ export type UserUncheckedCreateWithoutEnrollmentsInput = {
   sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
@@ -3944,6 +4304,7 @@ export type UserUpdateWithoutEnrollmentsInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3968,6 +4329,7 @@ export type UserUpdateWithoutEnrollmentsInput = {
   sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
@@ -3994,6 +4356,7 @@ export type UserUncheckedUpdateWithoutEnrollmentsInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4018,6 +4381,7 @@ export type UserUncheckedUpdateWithoutEnrollmentsInput = {
   sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
@@ -4044,6 +4408,7 @@ export type UserCreateWithoutShopPurchasesInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
@@ -4069,6 +4434,7 @@ export type UserCreateWithoutShopPurchasesInput = {
   sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
   missionHintUses?: Prisma.MissionHintUseCreateNestedManyWithoutStudentInput
@@ -4094,6 +4460,7 @@ export type UserUncheckedCreateWithoutShopPurchasesInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   createdById?: string | null
   homeClassId?: string | null
@@ -4119,6 +4486,7 @@ export type UserUncheckedCreateWithoutShopPurchasesInput = {
   sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
   missionHintUses?: Prisma.MissionHintUseUncheckedCreateNestedManyWithoutStudentInput
@@ -4160,6 +4528,7 @@ export type UserUpdateWithoutShopPurchasesInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4185,6 +4554,7 @@ export type UserUpdateWithoutShopPurchasesInput = {
   sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
   missionHintUses?: Prisma.MissionHintUseUpdateManyWithoutStudentNestedInput
@@ -4210,6 +4580,7 @@ export type UserUncheckedUpdateWithoutShopPurchasesInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4235,6 +4606,7 @@ export type UserUncheckedUpdateWithoutShopPurchasesInput = {
   sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
   missionHintUses?: Prisma.MissionHintUseUncheckedUpdateManyWithoutStudentNestedInput
@@ -4260,6 +4632,7 @@ export type UserCreateWithoutShopItemUsesInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
@@ -4285,6 +4658,7 @@ export type UserCreateWithoutShopItemUsesInput = {
   sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   missionHintUses?: Prisma.MissionHintUseCreateNestedManyWithoutStudentInput
@@ -4310,6 +4684,7 @@ export type UserUncheckedCreateWithoutShopItemUsesInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   createdById?: string | null
   homeClassId?: string | null
@@ -4335,6 +4710,7 @@ export type UserUncheckedCreateWithoutShopItemUsesInput = {
   sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   missionHintUses?: Prisma.MissionHintUseUncheckedCreateNestedManyWithoutStudentInput
@@ -4376,6 +4752,7 @@ export type UserUpdateWithoutShopItemUsesInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4401,6 +4778,7 @@ export type UserUpdateWithoutShopItemUsesInput = {
   sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   missionHintUses?: Prisma.MissionHintUseUpdateManyWithoutStudentNestedInput
@@ -4426,6 +4804,7 @@ export type UserUncheckedUpdateWithoutShopItemUsesInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4451,6 +4830,7 @@ export type UserUncheckedUpdateWithoutShopItemUsesInput = {
   sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   missionHintUses?: Prisma.MissionHintUseUncheckedUpdateManyWithoutStudentNestedInput
@@ -4476,6 +4856,7 @@ export type UserCreateWithoutEnigmaProgressInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
@@ -4500,6 +4881,7 @@ export type UserCreateWithoutEnigmaProgressInput = {
   sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
@@ -4526,6 +4908,7 @@ export type UserUncheckedCreateWithoutEnigmaProgressInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   createdById?: string | null
   homeClassId?: string | null
@@ -4550,6 +4933,7 @@ export type UserUncheckedCreateWithoutEnigmaProgressInput = {
   sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
@@ -4592,6 +4976,7 @@ export type UserUpdateWithoutEnigmaProgressInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4616,6 +5001,7 @@ export type UserUpdateWithoutEnigmaProgressInput = {
   sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
@@ -4642,6 +5028,7 @@ export type UserUncheckedUpdateWithoutEnigmaProgressInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4666,6 +5053,7 @@ export type UserUncheckedUpdateWithoutEnigmaProgressInput = {
   sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
@@ -4692,6 +5080,7 @@ export type UserCreateWithoutMissionHintUsesInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
@@ -4717,6 +5106,7 @@ export type UserCreateWithoutMissionHintUsesInput = {
   sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
@@ -4742,6 +5132,7 @@ export type UserUncheckedCreateWithoutMissionHintUsesInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   createdById?: string | null
   homeClassId?: string | null
@@ -4767,6 +5158,7 @@ export type UserUncheckedCreateWithoutMissionHintUsesInput = {
   sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
@@ -4808,6 +5200,7 @@ export type UserUpdateWithoutMissionHintUsesInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4833,6 +5226,7 @@ export type UserUpdateWithoutMissionHintUsesInput = {
   sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
@@ -4858,6 +5252,7 @@ export type UserUncheckedUpdateWithoutMissionHintUsesInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4883,6 +5278,7 @@ export type UserUncheckedUpdateWithoutMissionHintUsesInput = {
   sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
@@ -4908,6 +5304,7 @@ export type UserCreateWithoutSubmissionsInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
@@ -4932,6 +5329,7 @@ export type UserCreateWithoutSubmissionsInput = {
   joinRequests?: Prisma.JoinRequestCreateNestedManyWithoutStudentInput
   sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
@@ -4958,6 +5356,7 @@ export type UserUncheckedCreateWithoutSubmissionsInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   createdById?: string | null
   homeClassId?: string | null
@@ -4982,6 +5381,7 @@ export type UserUncheckedCreateWithoutSubmissionsInput = {
   joinRequests?: Prisma.JoinRequestUncheckedCreateNestedManyWithoutStudentInput
   sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
@@ -5013,6 +5413,7 @@ export type UserCreateWithoutSubmissionsReviewedInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
@@ -5038,6 +5439,7 @@ export type UserCreateWithoutSubmissionsReviewedInput = {
   sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
@@ -5063,6 +5465,7 @@ export type UserUncheckedCreateWithoutSubmissionsReviewedInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   createdById?: string | null
   homeClassId?: string | null
@@ -5088,6 +5491,7 @@ export type UserUncheckedCreateWithoutSubmissionsReviewedInput = {
   sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
@@ -5129,6 +5533,7 @@ export type UserUpdateWithoutSubmissionsInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5153,6 +5558,7 @@ export type UserUpdateWithoutSubmissionsInput = {
   joinRequests?: Prisma.JoinRequestUpdateManyWithoutStudentNestedInput
   sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
@@ -5179,6 +5585,7 @@ export type UserUncheckedUpdateWithoutSubmissionsInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5203,6 +5610,7 @@ export type UserUncheckedUpdateWithoutSubmissionsInput = {
   joinRequests?: Prisma.JoinRequestUncheckedUpdateManyWithoutStudentNestedInput
   sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
@@ -5240,6 +5648,7 @@ export type UserUpdateWithoutSubmissionsReviewedInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5265,6 +5674,7 @@ export type UserUpdateWithoutSubmissionsReviewedInput = {
   sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
@@ -5290,6 +5700,7 @@ export type UserUncheckedUpdateWithoutSubmissionsReviewedInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5315,6 +5726,7 @@ export type UserUncheckedUpdateWithoutSubmissionsReviewedInput = {
   sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
@@ -5340,6 +5752,7 @@ export type UserCreateWithoutMissionProgressInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
@@ -5364,6 +5777,7 @@ export type UserCreateWithoutMissionProgressInput = {
   sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
@@ -5390,6 +5804,7 @@ export type UserUncheckedCreateWithoutMissionProgressInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   createdById?: string | null
   homeClassId?: string | null
@@ -5414,6 +5829,7 @@ export type UserUncheckedCreateWithoutMissionProgressInput = {
   sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
@@ -5456,6 +5872,7 @@ export type UserUpdateWithoutMissionProgressInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5480,6 +5897,7 @@ export type UserUpdateWithoutMissionProgressInput = {
   sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
@@ -5506,6 +5924,7 @@ export type UserUncheckedUpdateWithoutMissionProgressInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5530,6 +5949,7 @@ export type UserUncheckedUpdateWithoutMissionProgressInput = {
   sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
@@ -5556,6 +5976,7 @@ export type UserCreateWithoutCreatedBadgesInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
@@ -5580,6 +6001,7 @@ export type UserCreateWithoutCreatedBadgesInput = {
   sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
@@ -5606,6 +6028,7 @@ export type UserUncheckedCreateWithoutCreatedBadgesInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   createdById?: string | null
   homeClassId?: string | null
@@ -5630,6 +6053,7 @@ export type UserUncheckedCreateWithoutCreatedBadgesInput = {
   sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
@@ -5672,6 +6096,7 @@ export type UserUpdateWithoutCreatedBadgesInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5696,6 +6121,7 @@ export type UserUpdateWithoutCreatedBadgesInput = {
   sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
@@ -5722,6 +6148,7 @@ export type UserUncheckedUpdateWithoutCreatedBadgesInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5746,6 +6173,7 @@ export type UserUncheckedUpdateWithoutCreatedBadgesInput = {
   sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
@@ -5772,6 +6200,7 @@ export type UserCreateWithoutEarnedBadgesInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
@@ -5796,6 +6225,7 @@ export type UserCreateWithoutEarnedBadgesInput = {
   sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
@@ -5822,6 +6252,7 @@ export type UserUncheckedCreateWithoutEarnedBadgesInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   createdById?: string | null
   homeClassId?: string | null
@@ -5846,6 +6277,7 @@ export type UserUncheckedCreateWithoutEarnedBadgesInput = {
   sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
@@ -5888,6 +6320,7 @@ export type UserUpdateWithoutEarnedBadgesInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5912,6 +6345,7 @@ export type UserUpdateWithoutEarnedBadgesInput = {
   sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
@@ -5938,6 +6372,7 @@ export type UserUncheckedUpdateWithoutEarnedBadgesInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5962,6 +6397,7 @@ export type UserUncheckedUpdateWithoutEarnedBadgesInput = {
   sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
@@ -5988,6 +6424,7 @@ export type UserCreateWithoutJoinRequestsInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
@@ -6012,6 +6449,7 @@ export type UserCreateWithoutJoinRequestsInput = {
   sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
@@ -6038,6 +6476,7 @@ export type UserUncheckedCreateWithoutJoinRequestsInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   createdById?: string | null
   homeClassId?: string | null
@@ -6062,6 +6501,7 @@ export type UserUncheckedCreateWithoutJoinRequestsInput = {
   sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
@@ -6104,6 +6544,7 @@ export type UserUpdateWithoutJoinRequestsInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6128,6 +6569,7 @@ export type UserUpdateWithoutJoinRequestsInput = {
   sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
@@ -6154,6 +6596,7 @@ export type UserUncheckedUpdateWithoutJoinRequestsInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6178,6 +6621,7 @@ export type UserUncheckedUpdateWithoutJoinRequestsInput = {
   sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
@@ -6204,6 +6648,7 @@ export type UserCreateWithoutSentInvitationsInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
@@ -6228,6 +6673,7 @@ export type UserCreateWithoutSentInvitationsInput = {
   joinRequests?: Prisma.JoinRequestCreateNestedManyWithoutStudentInput
   receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
@@ -6254,6 +6700,7 @@ export type UserUncheckedCreateWithoutSentInvitationsInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   createdById?: string | null
   homeClassId?: string | null
@@ -6278,6 +6725,7 @@ export type UserUncheckedCreateWithoutSentInvitationsInput = {
   joinRequests?: Prisma.JoinRequestUncheckedCreateNestedManyWithoutStudentInput
   receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
@@ -6309,6 +6757,7 @@ export type UserCreateWithoutReceivedInvitationsInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
@@ -6333,6 +6782,7 @@ export type UserCreateWithoutReceivedInvitationsInput = {
   joinRequests?: Prisma.JoinRequestCreateNestedManyWithoutStudentInput
   sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
   submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
@@ -6359,6 +6809,7 @@ export type UserUncheckedCreateWithoutReceivedInvitationsInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   createdById?: string | null
   homeClassId?: string | null
@@ -6383,6 +6834,7 @@ export type UserUncheckedCreateWithoutReceivedInvitationsInput = {
   joinRequests?: Prisma.JoinRequestUncheckedCreateNestedManyWithoutStudentInput
   sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
   submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
@@ -6425,6 +6877,7 @@ export type UserUpdateWithoutSentInvitationsInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6449,6 +6902,7 @@ export type UserUpdateWithoutSentInvitationsInput = {
   joinRequests?: Prisma.JoinRequestUpdateManyWithoutStudentNestedInput
   receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
@@ -6475,6 +6929,7 @@ export type UserUncheckedUpdateWithoutSentInvitationsInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6499,6 +6954,7 @@ export type UserUncheckedUpdateWithoutSentInvitationsInput = {
   joinRequests?: Prisma.JoinRequestUncheckedUpdateManyWithoutStudentNestedInput
   receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
@@ -6536,6 +6992,7 @@ export type UserUpdateWithoutReceivedInvitationsInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6560,6 +7017,7 @@ export type UserUpdateWithoutReceivedInvitationsInput = {
   joinRequests?: Prisma.JoinRequestUpdateManyWithoutStudentNestedInput
   sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
   submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
@@ -6586,6 +7044,7 @@ export type UserUncheckedUpdateWithoutReceivedInvitationsInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6610,6 +7069,7 @@ export type UserUncheckedUpdateWithoutReceivedInvitationsInput = {
   joinRequests?: Prisma.JoinRequestUncheckedUpdateManyWithoutStudentNestedInput
   sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
   submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
@@ -6636,6 +7096,7 @@ export type UserCreateWithoutNotificationsInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
@@ -6660,6 +7121,7 @@ export type UserCreateWithoutNotificationsInput = {
   sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
@@ -6686,6 +7148,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   createdById?: string | null
   homeClassId?: string | null
@@ -6710,6 +7173,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
@@ -6752,6 +7216,7 @@ export type UserUpdateWithoutNotificationsInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6776,6 +7241,7 @@ export type UserUpdateWithoutNotificationsInput = {
   sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
@@ -6802,6 +7268,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6826,6 +7293,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
@@ -6852,6 +7320,7 @@ export type UserCreateWithoutActivitiesInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
@@ -6876,6 +7345,7 @@ export type UserCreateWithoutActivitiesInput = {
   sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
@@ -6902,6 +7372,7 @@ export type UserUncheckedCreateWithoutActivitiesInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   createdById?: string | null
   homeClassId?: string | null
@@ -6926,6 +7397,7 @@ export type UserUncheckedCreateWithoutActivitiesInput = {
   sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
@@ -6957,6 +7429,7 @@ export type UserCreateWithoutActivitiesActedInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
@@ -6982,6 +7455,7 @@ export type UserCreateWithoutActivitiesActedInput = {
   sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
@@ -7007,6 +7481,7 @@ export type UserUncheckedCreateWithoutActivitiesActedInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   createdById?: string | null
   homeClassId?: string | null
@@ -7032,6 +7507,7 @@ export type UserUncheckedCreateWithoutActivitiesActedInput = {
   sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
@@ -7073,6 +7549,7 @@ export type UserUpdateWithoutActivitiesInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -7097,6 +7574,7 @@ export type UserUpdateWithoutActivitiesInput = {
   sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
@@ -7123,6 +7601,7 @@ export type UserUncheckedUpdateWithoutActivitiesInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7147,6 +7626,7 @@ export type UserUncheckedUpdateWithoutActivitiesInput = {
   sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
@@ -7184,6 +7664,7 @@ export type UserUpdateWithoutActivitiesActedInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -7209,6 +7690,7 @@ export type UserUpdateWithoutActivitiesActedInput = {
   sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
@@ -7234,6 +7716,7 @@ export type UserUncheckedUpdateWithoutActivitiesActedInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7259,6 +7742,7 @@ export type UserUncheckedUpdateWithoutActivitiesActedInput = {
   sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
@@ -7284,6 +7768,7 @@ export type UserCreateWithoutConversationsInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
@@ -7308,6 +7793,7 @@ export type UserCreateWithoutConversationsInput = {
   sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
@@ -7334,6 +7820,7 @@ export type UserUncheckedCreateWithoutConversationsInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   createdById?: string | null
   homeClassId?: string | null
@@ -7358,6 +7845,7 @@ export type UserUncheckedCreateWithoutConversationsInput = {
   sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
@@ -7400,6 +7888,7 @@ export type UserUpdateWithoutConversationsInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -7424,6 +7913,7 @@ export type UserUpdateWithoutConversationsInput = {
   sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
@@ -7450,6 +7940,7 @@ export type UserUncheckedUpdateWithoutConversationsInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7474,6 +7965,7 @@ export type UserUncheckedUpdateWithoutConversationsInput = {
   sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
@@ -7500,6 +7992,7 @@ export type UserCreateWithoutBehaviorsAppliedInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
@@ -7525,6 +8018,7 @@ export type UserCreateWithoutBehaviorsAppliedInput = {
   sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
@@ -7550,6 +8044,7 @@ export type UserUncheckedCreateWithoutBehaviorsAppliedInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   createdById?: string | null
   homeClassId?: string | null
@@ -7575,6 +8070,7 @@ export type UserUncheckedCreateWithoutBehaviorsAppliedInput = {
   sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
@@ -7605,6 +8101,7 @@ export type UserCreateWithoutBehaviorsReceivedInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
@@ -7630,6 +8127,7 @@ export type UserCreateWithoutBehaviorsReceivedInput = {
   sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
@@ -7655,6 +8153,7 @@ export type UserUncheckedCreateWithoutBehaviorsReceivedInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   createdById?: string | null
   homeClassId?: string | null
@@ -7680,6 +8179,7 @@ export type UserUncheckedCreateWithoutBehaviorsReceivedInput = {
   sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
@@ -7721,6 +8221,7 @@ export type UserUpdateWithoutBehaviorsAppliedInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -7746,6 +8247,7 @@ export type UserUpdateWithoutBehaviorsAppliedInput = {
   sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
@@ -7771,6 +8273,7 @@ export type UserUncheckedUpdateWithoutBehaviorsAppliedInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7796,6 +8299,7 @@ export type UserUncheckedUpdateWithoutBehaviorsAppliedInput = {
   sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
@@ -7832,6 +8336,7 @@ export type UserUpdateWithoutBehaviorsReceivedInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -7857,6 +8362,7 @@ export type UserUpdateWithoutBehaviorsReceivedInput = {
   sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
@@ -7882,6 +8388,7 @@ export type UserUncheckedUpdateWithoutBehaviorsReceivedInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7907,6 +8414,7 @@ export type UserUncheckedUpdateWithoutBehaviorsReceivedInput = {
   sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
@@ -7932,6 +8440,7 @@ export type UserCreateWithoutAttendanceTakenInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
@@ -7957,6 +8466,7 @@ export type UserCreateWithoutAttendanceTakenInput = {
   sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
@@ -7982,6 +8492,7 @@ export type UserUncheckedCreateWithoutAttendanceTakenInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   createdById?: string | null
   homeClassId?: string | null
@@ -8007,6 +8518,7 @@ export type UserUncheckedCreateWithoutAttendanceTakenInput = {
   sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
@@ -8048,6 +8560,7 @@ export type UserUpdateWithoutAttendanceTakenInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -8073,6 +8586,7 @@ export type UserUpdateWithoutAttendanceTakenInput = {
   sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
@@ -8098,6 +8612,7 @@ export type UserUncheckedUpdateWithoutAttendanceTakenInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -8123,6 +8638,7 @@ export type UserUncheckedUpdateWithoutAttendanceTakenInput = {
   sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
@@ -8148,6 +8664,7 @@ export type UserCreateWithoutAttendanceUpdatedInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
@@ -8173,6 +8690,7 @@ export type UserCreateWithoutAttendanceUpdatedInput = {
   sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
@@ -8198,6 +8716,7 @@ export type UserUncheckedCreateWithoutAttendanceUpdatedInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   createdById?: string | null
   homeClassId?: string | null
@@ -8223,6 +8742,7 @@ export type UserUncheckedCreateWithoutAttendanceUpdatedInput = {
   sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
@@ -8264,6 +8784,7 @@ export type UserUpdateWithoutAttendanceUpdatedInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -8289,6 +8810,7 @@ export type UserUpdateWithoutAttendanceUpdatedInput = {
   sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
@@ -8314,6 +8836,7 @@ export type UserUncheckedUpdateWithoutAttendanceUpdatedInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -8339,6 +8862,7 @@ export type UserUncheckedUpdateWithoutAttendanceUpdatedInput = {
   sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
@@ -8364,6 +8888,7 @@ export type UserCreateWithoutTeamAwardsGivenInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   mustChangePassword?: boolean
   passwordChangedAt?: Date | string | null
@@ -8389,6 +8914,7 @@ export type UserCreateWithoutTeamAwardsGivenInput = {
   sentInvitations?: Prisma.InvitationCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseCreateNestedManyWithoutStudentInput
@@ -8414,6 +8940,7 @@ export type UserUncheckedCreateWithoutTeamAwardsGivenInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   createdById?: string | null
   homeClassId?: string | null
@@ -8439,6 +8966,7 @@ export type UserUncheckedCreateWithoutTeamAwardsGivenInput = {
   sentInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutTeacherInput
   receivedInvitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutStudentInput
   submissions?: Prisma.EnigmaSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedCreateNestedOneWithoutUserInput
   settings?: Prisma.UserSettingsUncheckedCreateNestedOneWithoutUserInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedCreateNestedManyWithoutStudentInput
   shopItemUses?: Prisma.ShopItemUseUncheckedCreateNestedManyWithoutStudentInput
@@ -8480,6 +9008,7 @@ export type UserUpdateWithoutTeamAwardsGivenInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -8505,6 +9034,7 @@ export type UserUpdateWithoutTeamAwardsGivenInput = {
   sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
@@ -8530,6 +9060,7 @@ export type UserUncheckedUpdateWithoutTeamAwardsGivenInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -8555,6 +9086,7 @@ export type UserUncheckedUpdateWithoutTeamAwardsGivenInput = {
   sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
@@ -8580,6 +9112,7 @@ export type UserCreateManyCreatedByInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   homeClassId?: string | null
   mustChangePassword?: boolean
@@ -8598,6 +9131,7 @@ export type UserUpdateWithoutCreatedByInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -8622,6 +9156,7 @@ export type UserUpdateWithoutCreatedByInput = {
   sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
@@ -8648,6 +9183,7 @@ export type UserUncheckedUpdateWithoutCreatedByInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -8672,6 +9208,7 @@ export type UserUncheckedUpdateWithoutCreatedByInput = {
   sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
@@ -8698,6 +9235,7 @@ export type UserUncheckedUpdateManyWithoutCreatedByInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   homeClassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -8716,6 +9254,7 @@ export type UserCreateManyHomeClassInput = {
   role?: $Enums.UserRole | null
   accountType?: $Enums.UserAccountType
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: $Enums.UserStatus
   createdById?: string | null
   mustChangePassword?: boolean
@@ -8734,6 +9273,7 @@ export type UserUpdateWithoutHomeClassInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -8758,6 +9298,7 @@ export type UserUpdateWithoutHomeClassInput = {
   sentInvitations?: Prisma.InvitationUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUpdateManyWithoutStudentNestedInput
@@ -8784,6 +9325,7 @@ export type UserUncheckedUpdateWithoutHomeClassInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -8808,6 +9350,7 @@ export type UserUncheckedUpdateWithoutHomeClassInput = {
   sentInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutTeacherNestedInput
   receivedInvitations?: Prisma.InvitationUncheckedUpdateManyWithoutStudentNestedInput
   submissions?: Prisma.EnigmaSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  teacherProfile?: Prisma.TeacherProfessionalProfileUncheckedUpdateOneWithoutUserNestedInput
   settings?: Prisma.UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   shopPurchases?: Prisma.ShopPurchaseUncheckedUpdateManyWithoutStudentNestedInput
   shopItemUses?: Prisma.ShopItemUseUncheckedUpdateManyWithoutStudentNestedInput
@@ -8834,6 +9377,7 @@ export type UserUncheckedUpdateManyWithoutHomeClassInput = {
   role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
   accountType?: Prisma.EnumUserAccountTypeFieldUpdateOperationsInput | $Enums.UserAccountType
   isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teacherRegistrationPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -9153,6 +9697,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   role?: boolean
   accountType?: boolean
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: boolean
   createdById?: boolean
   homeClassId?: boolean
@@ -9180,6 +9725,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   sentInvitations?: boolean | Prisma.User$sentInvitationsArgs<ExtArgs>
   receivedInvitations?: boolean | Prisma.User$receivedInvitationsArgs<ExtArgs>
   submissions?: boolean | Prisma.User$submissionsArgs<ExtArgs>
+  teacherProfile?: boolean | Prisma.User$teacherProfileArgs<ExtArgs>
   settings?: boolean | Prisma.User$settingsArgs<ExtArgs>
   shopPurchases?: boolean | Prisma.User$shopPurchasesArgs<ExtArgs>
   shopItemUses?: boolean | Prisma.User$shopItemUsesArgs<ExtArgs>
@@ -9207,6 +9753,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   role?: boolean
   accountType?: boolean
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: boolean
   createdById?: boolean
   homeClassId?: boolean
@@ -9228,6 +9775,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   role?: boolean
   accountType?: boolean
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: boolean
   createdById?: boolean
   homeClassId?: boolean
@@ -9249,6 +9797,7 @@ export type UserSelectScalar = {
   role?: boolean
   accountType?: boolean
   isOnboarded?: boolean
+  teacherRegistrationPending?: boolean
   status?: boolean
   createdById?: boolean
   homeClassId?: boolean
@@ -9259,7 +9808,7 @@ export type UserSelectScalar = {
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "username" | "passwordHash" | "name" | "role" | "accountType" | "isOnboarded" | "status" | "createdById" | "homeClassId" | "mustChangePassword" | "passwordChangedAt" | "avatar" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "username" | "passwordHash" | "name" | "role" | "accountType" | "isOnboarded" | "teacherRegistrationPending" | "status" | "createdById" | "homeClassId" | "mustChangePassword" | "passwordChangedAt" | "avatar" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   createdBy?: boolean | Prisma.User$createdByArgs<ExtArgs>
   createdUsers?: boolean | Prisma.User$createdUsersArgs<ExtArgs>
@@ -9280,6 +9829,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   sentInvitations?: boolean | Prisma.User$sentInvitationsArgs<ExtArgs>
   receivedInvitations?: boolean | Prisma.User$receivedInvitationsArgs<ExtArgs>
   submissions?: boolean | Prisma.User$submissionsArgs<ExtArgs>
+  teacherProfile?: boolean | Prisma.User$teacherProfileArgs<ExtArgs>
   settings?: boolean | Prisma.User$settingsArgs<ExtArgs>
   shopPurchases?: boolean | Prisma.User$shopPurchasesArgs<ExtArgs>
   shopItemUses?: boolean | Prisma.User$shopItemUsesArgs<ExtArgs>
@@ -9328,6 +9878,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     sentInvitations: Prisma.$InvitationPayload<ExtArgs>[]
     receivedInvitations: Prisma.$InvitationPayload<ExtArgs>[]
     submissions: Prisma.$EnigmaSubmissionPayload<ExtArgs>[]
+    teacherProfile: Prisma.$TeacherProfessionalProfilePayload<ExtArgs> | null
     settings: Prisma.$UserSettingsPayload<ExtArgs> | null
     shopPurchases: Prisma.$ShopPurchasePayload<ExtArgs>[]
     shopItemUses: Prisma.$ShopItemUsePayload<ExtArgs>[]
@@ -9353,6 +9904,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     role: $Enums.UserRole | null
     accountType: $Enums.UserAccountType
     isOnboarded: boolean
+    teacherRegistrationPending: boolean
     status: $Enums.UserStatus
     createdById: string | null
     homeClassId: string | null
@@ -9779,6 +10331,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   sentInvitations<T extends Prisma.User$sentInvitationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sentInvitationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   receivedInvitations<T extends Prisma.User$receivedInvitationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$receivedInvitationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   submissions<T extends Prisma.User$submissionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$submissionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EnigmaSubmissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  teacherProfile<T extends Prisma.User$teacherProfileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$teacherProfileArgs<ExtArgs>>): Prisma.Prisma__TeacherProfessionalProfileClient<runtime.Types.Result.GetResult<Prisma.$TeacherProfessionalProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   settings<T extends Prisma.User$settingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$settingsArgs<ExtArgs>>): Prisma.Prisma__UserSettingsClient<runtime.Types.Result.GetResult<Prisma.$UserSettingsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   shopPurchases<T extends Prisma.User$shopPurchasesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$shopPurchasesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ShopPurchasePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   shopItemUses<T extends Prisma.User$shopItemUsesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$shopItemUsesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ShopItemUsePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -9831,6 +10384,7 @@ export interface UserFieldRefs {
   readonly role: Prisma.FieldRef<"User", 'UserRole'>
   readonly accountType: Prisma.FieldRef<"User", 'UserAccountType'>
   readonly isOnboarded: Prisma.FieldRef<"User", 'Boolean'>
+  readonly teacherRegistrationPending: Prisma.FieldRef<"User", 'Boolean'>
   readonly status: Prisma.FieldRef<"User", 'UserStatus'>
   readonly createdById: Prisma.FieldRef<"User", 'String'>
   readonly homeClassId: Prisma.FieldRef<"User", 'String'>
@@ -10683,6 +11237,25 @@ export type User$submissionsArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.EnigmaSubmissionScalarFieldEnum | Prisma.EnigmaSubmissionScalarFieldEnum[]
+}
+
+/**
+ * User.teacherProfile
+ */
+export type User$teacherProfileArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TeacherProfessionalProfile
+   */
+  select?: Prisma.TeacherProfessionalProfileSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TeacherProfessionalProfile
+   */
+  omit?: Prisma.TeacherProfessionalProfileOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TeacherProfessionalProfileInclude<ExtArgs> | null
+  where?: Prisma.TeacherProfessionalProfileWhereInput
 }
 
 /**

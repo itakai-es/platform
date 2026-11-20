@@ -43,7 +43,7 @@ describe('completeOnboarding', () => {
 
     expect(mocks.updateMany).toHaveBeenCalledWith({
       where: { id: USER, isOnboarded: false },
-      data: { role: 'student', isOnboarded: true },
+      data: { role: 'student', isOnboarded: true, teacherRegistrationPending: false },
     })
     expect(user.role).toBe('student')
   })

@@ -52,6 +52,19 @@
 
     <!-- Tab Content -->
     <div class="space-y-6">
+      <Card v-if="activeTab === 'profesional'" type="settings">
+        <div class="space-y-4 p-5">
+          <h2 class="text-lg font-bold">{{ t('auth.teacher_registration.profile') }}</h2>
+          <TeacherProfileForm
+            v-if="editingProfessional"
+            @completed="saveProfessional"
+            @cancel="editingProfessional = false"
+          />
+          <Button v-else variant="secondary" @click="editingProfessional = true">
+            {{ t('auth.teacher_registration.edit_profile') }}
+          </Button>
+        </div>
+      </Card>
       <!-- Tab: Seguridad -->
       <div v-if="activeTab === 'seguridad'">
         <div class="grid md:grid-cols-2 gap-4 md:gap-6">
@@ -304,12 +317,20 @@ const toast = useToast()
 // Tabs configuration
 const tabs = computed(() => [
   { id: 'seguridad', label: t('teacher.profile.tabs.security'), icon: ShieldCheckIcon },
+  { id: 'profesional', label: t('auth.teacher_registration.profile'), icon: UserIcon },
   { id: 'configuracion', label: t('teacher.profile.tabs.settings'), icon: Cog6ToothIcon },
 ])
 
 const activeTab = ref('seguridad')
+const editingProfessional = ref(false)
+
+function saveProfessional() {
+  editingProfessional.value = false
+  toast.success(t('auth.teacher_registration.saved'))
+}
 
 const setActiveTab = (tabId: string) => {
+  if (activeTab.value !== tabId) editingProfessional.value = false
   activeTab.value = tabId
 }
 

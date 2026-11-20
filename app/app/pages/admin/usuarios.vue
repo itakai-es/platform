@@ -134,6 +134,16 @@
             </span>
           </div>
 
+          <Button
+            v-if="user.role === 'teacher'"
+            class="mb-3"
+            variant="secondary"
+            size="sm"
+            @click="openProfessionalProfile(user)"
+          >
+            {{ t('auth.teacher_registration.profile') }}
+          </Button>
+
           <!-- Stats -->
           <div class="grid grid-cols-3 gap-2 text-center">
             <div class="bg-navy-700/5 rounded-xl py-2.5 px-2">
@@ -318,6 +328,16 @@
       </template>
     </Modal>
 
+    <Modal v-model="professionalOpen" :title="t('auth.teacher_registration.profile')">
+      <div class="space-y-3 p-5">
+        <h3 class="font-bold">{{ professionalUser?.name }}</h3>
+        <p v-if="professionalBusy" role="status">{{ t('auth.teacher_registration.loading') }}</p>
+        <LoadError v-else-if="professionalError" @retry="loadProfessionalProfile" />
+        <TeacherProfileAnswers v-else-if="professionalProfile" :profile="professionalProfile" />
+        <p v-else>{{ t('auth.teacher_registration.incomplete') }}</p>
+      </div>
+    </Modal>
+
     <!-- Delete Confirmation Modal -->
     <ConfirmModal
       v-model="showDeleteModal"
@@ -354,6 +374,7 @@ import type { ManagedCredentials } from '~/types/auth.types'
 import type { AccountDeletionCheck } from '~/types/profile.types'
 import { accountIdentifier } from '~/utils/identity'
 import { avatarInitials } from '~/utils/avatar'
+import type { ProfessionalProfile } from '~/utils/teacher-registration'
 
 const { t } = useI18n()
 
@@ -373,6 +394,38 @@ const adminStore = useAdminStore()
 const { users, totalUsers, totalPages, isLoadingUsers, isPerformingUserAction } =
   storeToRefs(adminStore)
 const toast = useToast()
+const professionalApi = useApi()
+const professionalOpen = ref(false)
+const professionalUser = ref<AdminUser | null>(null)
+const professionalProfile = ref<ProfessionalProfile | null>(null)
+const professionalBusy = ref(false)
+const professionalError = ref(false)
+let professionalRequest = 0
+
+async function loadProfessionalProfile() {
+  const user = professionalUser.value
+  if (!user) return
+  const current = ++professionalRequest
+  professionalBusy.value = true
+  professionalError.value = false
+  try {
+    const { profile } = await professionalApi.get<{ profile: ProfessionalProfile | null }>(
+      `/admin/users/${user.id}/professional-profile`
+    )
+    if (current === professionalRequest) professionalProfile.value = profile
+  } catch {
+    if (current === professionalRequest) professionalError.value = true
+  } finally {
+    if (current === professionalRequest) professionalBusy.value = false
+  }
+}
+
+function openProfessionalProfile(user: AdminUser) {
+  professionalUser.value = user
+  professionalProfile.value = null
+  professionalOpen.value = true
+  void loadProfessionalProfile()
+}
 
 /**
  * Búsqueda, filtros, orden y página: los aplica el servidor, que devuelve una

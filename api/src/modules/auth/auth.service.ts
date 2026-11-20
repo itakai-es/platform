@@ -352,6 +352,7 @@ export class AuthService {
       data: {
         role: input.role as UserRole,
         isOnboarded: true,
+        teacherRegistrationPending: input.role === 'teacher',
       },
     })
     if (count === 0) {
@@ -550,6 +551,7 @@ export class AuthService {
     role: UserRole | null
     accountType: UserAccountType
     isOnboarded: boolean
+    teacherRegistrationPending: boolean
     mustChangePassword: boolean
     avatar: string | null
     createdAt: Date
@@ -562,6 +564,7 @@ export class AuthService {
       role: user.role,
       accountType: user.accountType,
       isOnboarded: user.isOnboarded,
+      teacherRegistrationPending: user.teacherRegistrationPending,
       mustChangePassword: user.mustChangePassword,
       // Avatar de docente (clave del catálogo); el del alumnado es de cada clase.
       avatar: user.avatar,
