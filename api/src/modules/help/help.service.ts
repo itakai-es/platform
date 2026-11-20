@@ -9,6 +9,7 @@ import type {
   HelpAudience,
 } from '../../generated/prisma/client.js'
 import { NotFoundError, ValidationError } from '../../utils/errors.js'
+import { parseImageDataUrl } from '../../utils/image-data-url.js'
 
 /**
  * Centro de ayuda (Fase 3, punto 17).
@@ -780,18 +781,8 @@ async function nextArticleOrder(categoryId: string) {
  * fichero, que es como suben imágenes las demás pantallas.
  */
 export async function saveHelpImage(dataUrl: string) {
-  const matches = /^data:image\/(png|jpe?g|webp|gif);base64,(.+)$/.exec(dataUrl)
-  if (!matches) throw new Error('Formato de imagen no admitido')
+  const image = parseImageDataUrl(dataUrl)
+  if (!image) throw new Error('Formato de imagen no admitido')
 
-  const [, mime, payload] = matches
-  const extensions: Record<string, string> = {
-    png: 'png',
-    jpg: 'jpg',
-    jpeg: 'jpg',
-    webp: 'webp',
-    gif: 'gif',
-  }
-
-  const buffer = Buffer.from(payload, 'base64')
-  return saveUpload(`help/${randomUUID()}.${extensions[mime]}`, buffer, `image/${mime}`)
+  return saveUpload(`help/${randomUUID()}.${image.ext}`, image.buffer, image.mime)
 }

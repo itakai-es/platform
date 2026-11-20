@@ -876,10 +876,18 @@ describe('reorderArticles', () => {
 })
 
 describe('saveHelpImage', () => {
-  const payload = Buffer.from('imagen').toString('base64')
+  // Un JPEG de verdad empieza por FF D8 FF; el resto da igual para estas pruebas.
+  const jpeg = Buffer.concat([Buffer.from([0xff, 0xd8, 0xff, 0xe0]), Buffer.from('imagen')])
+  const payload = jpeg.toString('base64')
 
   it('rechaza SVG sin llegar a guardar nada', async () => {
     await expect(saveHelpImage(`data:image/svg+xml;base64,${payload}`)).rejects.toThrow()
+    expect(saveUpload).not.toHaveBeenCalled()
+  })
+
+  it('rechaza un «JPEG» que por dentro no lo es', async () => {
+    const page = Buffer.from('<html><script>alert(1)</script></html>').toString('base64')
+    await expect(saveHelpImage(`data:image/jpeg;base64,${page}`)).rejects.toThrow()
     expect(saveUpload).not.toHaveBeenCalled()
   })
 
@@ -894,7 +902,7 @@ describe('saveHelpImage', () => {
 
     expect(saveUpload).toHaveBeenCalledWith(
       expect.stringMatching(/^help\/[0-9a-f-]+\.jpg$/),
-      Buffer.from('imagen'),
+      jpeg,
       'image/jpeg'
     )
     expect(url).toMatch(/^\/uploads\/help\//)

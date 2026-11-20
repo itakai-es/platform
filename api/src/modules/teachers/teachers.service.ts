@@ -6,6 +6,7 @@ import { existsSync, mkdirSync } from 'fs'
 import { join } from 'path'
 import { randomUUID } from 'crypto'
 import { ConflictError, NotFoundError, ValidationError } from '../../utils/errors.js'
+import { IMAGE_FORMAT_ERROR, parseImageDataUrl } from '../../utils/image-data-url.js'
 import { seedDefaultShopItems } from '../shop/shop.service.js'
 import {
   resolveClassSettings,
@@ -208,15 +209,12 @@ async function saveBase64Image(base64Data: string, subdir: 'badges' | 'covers' =
     return null
   }
 
-  // Extract mime type and data
-  const matches = base64Data.match(/^data:image\/(\w+);base64,(.+)$/)
-  if (!matches) return null
+  // Solo PNG, JPG, WebP o GIF de verdad: la extensión la pone el contenido,
+  // no quien sube (ver utils/image-data-url.ts).
+  const image = parseImageDataUrl(base64Data)
+  if (!image) throw new ValidationError(IMAGE_FORMAT_ERROR)
 
-  const ext = matches[1] === 'jpeg' ? 'jpg' : matches[1]
-  const buffer = Buffer.from(matches[2], 'base64')
-
-  const filename = `${randomUUID()}.${ext}`
-  return saveUpload(`${subdir}/${filename}`, buffer, `image/${matches[1]}`)
+  return saveUpload(`${subdir}/${randomUUID()}.${image.ext}`, image.buffer, image.mime)
 }
 
 const TEMPLATE_IN_TRASH = 'Restaura la clase antes de publicarla o retirarla como plantilla'
