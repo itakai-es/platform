@@ -423,7 +423,8 @@ export const ModelName = {
   TeamMember: 'TeamMember',
   TeamAward: 'TeamAward',
   HelpCategory: 'HelpCategory',
-  HelpArticle: 'HelpArticle'
+  HelpArticle: 'HelpArticle',
+  HelpArticleVisit: 'HelpArticleVisit'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -439,7 +440,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "userSettings" | "refreshToken" | "instanceSetting" | "class" | "classTeacher" | "classActionLog" | "classEnrollment" | "classGuide" | "shopItem" | "shopPurchase" | "shopItemUse" | "mission" | "missionPrerequisite" | "missionDocument" | "missionEnigma" | "studentEnigmaProgress" | "missionHint" | "missionHintUse" | "enigmaSubmission" | "studentMissionProgress" | "badge" | "studentBadge" | "joinRequest" | "invitation" | "notification" | "activity" | "systemLog" | "chatConversation" | "chatMessage" | "behaviorTemplate" | "behaviorApplication" | "attendanceSession" | "attendanceRecord" | "teamSet" | "team" | "teamMember" | "teamAward" | "helpCategory" | "helpArticle"
+    modelProps: "user" | "userSettings" | "refreshToken" | "instanceSetting" | "class" | "classTeacher" | "classActionLog" | "classEnrollment" | "classGuide" | "shopItem" | "shopPurchase" | "shopItemUse" | "mission" | "missionPrerequisite" | "missionDocument" | "missionEnigma" | "studentEnigmaProgress" | "missionHint" | "missionHintUse" | "enigmaSubmission" | "studentMissionProgress" | "badge" | "studentBadge" | "joinRequest" | "invitation" | "notification" | "activity" | "systemLog" | "chatConversation" | "chatMessage" | "behaviorTemplate" | "behaviorApplication" | "attendanceSession" | "attendanceRecord" | "teamSet" | "team" | "teamMember" | "teamAward" | "helpCategory" | "helpArticle" | "helpArticleVisit"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -3403,6 +3404,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    HelpArticleVisit: {
+      payload: Prisma.$HelpArticleVisitPayload<ExtArgs>
+      fields: Prisma.HelpArticleVisitFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.HelpArticleVisitFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HelpArticleVisitPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.HelpArticleVisitFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HelpArticleVisitPayload>
+        }
+        findFirst: {
+          args: Prisma.HelpArticleVisitFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HelpArticleVisitPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.HelpArticleVisitFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HelpArticleVisitPayload>
+        }
+        findMany: {
+          args: Prisma.HelpArticleVisitFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HelpArticleVisitPayload>[]
+        }
+        create: {
+          args: Prisma.HelpArticleVisitCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HelpArticleVisitPayload>
+        }
+        createMany: {
+          args: Prisma.HelpArticleVisitCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.HelpArticleVisitCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HelpArticleVisitPayload>[]
+        }
+        delete: {
+          args: Prisma.HelpArticleVisitDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HelpArticleVisitPayload>
+        }
+        update: {
+          args: Prisma.HelpArticleVisitUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HelpArticleVisitPayload>
+        }
+        deleteMany: {
+          args: Prisma.HelpArticleVisitDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.HelpArticleVisitUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.HelpArticleVisitUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HelpArticleVisitPayload>[]
+        }
+        upsert: {
+          args: Prisma.HelpArticleVisitUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HelpArticleVisitPayload>
+        }
+        aggregate: {
+          args: Prisma.HelpArticleVisitAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateHelpArticleVisit>
+        }
+        groupBy: {
+          args: Prisma.HelpArticleVisitGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HelpArticleVisitGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.HelpArticleVisitCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HelpArticleVisitCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -4070,6 +4145,7 @@ export const HelpArticleScalarFieldEnum = {
   audience: 'audience',
   kind: 'kind',
   videoUrl: 'videoUrl',
+  videoDurationSeconds: 'videoDurationSeconds',
   views: 'views',
   helpful: 'helpful',
   notHelpful: 'notHelpful',
@@ -4080,6 +4156,15 @@ export const HelpArticleScalarFieldEnum = {
 } as const
 
 export type HelpArticleScalarFieldEnum = (typeof HelpArticleScalarFieldEnum)[keyof typeof HelpArticleScalarFieldEnum]
+
+
+export const HelpArticleVisitScalarFieldEnum = {
+  articleId: 'articleId',
+  visitorKey: 'visitorKey',
+  countedAt: 'countedAt'
+} as const
+
+export type HelpArticleVisitScalarFieldEnum = (typeof HelpArticleVisitScalarFieldEnum)[keyof typeof HelpArticleVisitScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -4655,6 +4740,7 @@ export type GlobalOmitConfig = {
   teamAward?: Prisma.TeamAwardOmit
   helpCategory?: Prisma.HelpCategoryOmit
   helpArticle?: Prisma.HelpArticleOmit
+  helpArticleVisit?: Prisma.HelpArticleVisitOmit
 }
 
 /* Types for Logging */

@@ -251,6 +251,7 @@
       "still_stuck": "Não encontrou o que procurava?",
       "contact_us": "Fale connosco",
       "updated_on": "Atualizado a {date}",
+      "visit_count": "{count} visitas | 1 visita | {count} visitas",
       "feedback_question": "Foi útil?",
       "feedback_yes": "Sim",
       "feedback_no": "Nem por isso",
@@ -281,13 +282,95 @@
       "audience": {
         "profesor": "Docentes",
         "alumno": "Estudantes",
-        "ambos": "Docentes e estudantes"
+        "ambos": "Docentes e estudantes",
+        "desarrollador": "Programadores"
       },
       "back_to_app": "Voltar à app",
       "published_on": "Publicado a {date}",
       "by_author": "Por {name}",
       "load_error": "Não foi possível carregar o conteúdo",
-      "retry": "Tentar novamente"
+      "retry": "Tentar novamente",
+      "courses": {
+        "in_courses": "Este guia nos cursos",
+        "mark_complete": "Marcar como concluída",
+        "up_next_in": "Próxima aula em {seconds} s",
+        "cancel_next": "Cancelar",
+        "lesson_actions": "Ações da aula",
+        "open_guide": "Ver como guia",
+        "resume_at": "Continuar em {time}",
+        "progress_count": "{done} de {total} concluídas",
+        "lesson_complete": "Concluída",
+        "autoplay": "Reprodução automática",
+        "resume": "Continuar",
+        "view_course": "Ver curso",
+        "curriculum": "Programa",
+        "in_progress": "Em curso",
+        "rewatch": "Ver novamente",
+        "title": "Cursos",
+        "subtitle": "Percursos curtos e ordenados com o essencial, guia a guia e vídeo a vídeo.",
+        "all_courses": "Ver todos os cursos",
+        "lesson_count": "Sem lições | 1 lição | {count} lições",
+        "start": "Começar",
+        "lesson_of": "Lição {n} de {total}",
+        "progress": "Progresso do curso",
+        "course_navigation": "Navegação do curso",
+        "previous_lesson": "Lição anterior",
+        "next_lesson": "Próxima lição",
+        "back_to_course": "Voltar ao curso",
+        "empty_title": "Ainda não há cursos",
+        "empty_description": "Em breve haverá percursos guiados para começar.",
+        "not_found_title": "Este curso não existe",
+        "not_found_description": "Pode ter sido retirado. Dá uma vista de olhos aos outros cursos.",
+        "items": {
+          "primeros-pasos-docentes": {
+            "title": "Primeiros passos com o itakai",
+            "description": "Do zero à tua primeira missão: cria a turma, convida os alunos e revê as entregas."
+          },
+          "misiones-a-fondo": {
+            "title": "Missões a fundo",
+            "description": "Enigmas, recompensas, raridades, pistas e o mapa: tudo para criar missões que cativam."
+          },
+          "gamifica-tu-clase": {
+            "title": "Gamifica a tua turma",
+            "description": "Moedas, loja, vidas, insígnias e patentes: tudo o que torna a tua turma num jogo."
+          },
+          "desarrollo-itakai": {
+            "title": "Curso de ITAKAI para programadores",
+            "description": "Conhece o projeto, trabalha com assistentes de IA e prepara o ambiente com VS Code e MCP."
+          },
+          "empieza-como-estudiante": {
+            "title": "Começa no itakai",
+            "description": "Tudo o que precisas para entrar na tua turma, entregar missões e perceber as tuas recompensas."
+          }
+        },
+        "resume_lesson": "Continuar na lição {n}",
+        "minutes": "{n} min",
+        "video_lessons": "1 vídeo | {count} vídeos"
+      },
+      "player": {
+        "play": "Reproduzir",
+        "pause": "Pausar",
+        "play_video": "Reproduzir o vídeo: {title}",
+        "mute": "Silenciar",
+        "unmute": "Ativar o som",
+        "volume": "Volume",
+        "speed": "Velocidade",
+        "speed_normal": "Normal",
+        "subtitles_on": "Ativar legendas",
+        "subtitles_off": "Desativar legendas",
+        "fullscreen": "Ecrã inteiro",
+        "exit_fullscreen": "Sair do ecrã inteiro",
+        "seek": "Posição do vídeo"
+      },
+      "video": "Vídeo",
+      "duration": "Duração: {time}",
+      "copy_block": "Copiar bloco",
+      "command_platform": "Sistema operativo",
+      "device": {
+        "label": "Ver o guia no",
+        "desktop": "Computador",
+        "mobile": "Telemóvel"
+      }
     },
     "about": {
       "title": "Sobre o ITAKAI",

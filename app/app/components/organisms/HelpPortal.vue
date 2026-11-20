@@ -2,7 +2,12 @@
   <div>
     <PageHeader :title="heading.title" :subtitle="heading.subtitle" />
 
-    <SearchInput v-model="query" :placeholder="heading.searchPlaceholder" class="mb-6 max-w-lg" />
+    <SearchInput
+      v-model="query"
+      :placeholder="heading.searchPlaceholder"
+      class="mb-6 w-full"
+      :class="{ 'max-w-lg': isBlog }"
+    />
     <!-- Anuncia el resultado de la búsqueda; existe desde el principio para
          que los lectores de pantalla lo lean al cambiar. -->
     <p class="sr-only" role="status" aria-live="polite">{{ searchStatus }}</p>
@@ -62,6 +67,20 @@
     </template>
 
     <template v-else>
+      <!-- Cursos: recorridos cortos y en orden para empezar, por portada -->
+      <section v-if="courses.length" class="mb-8">
+        <div class="mb-3 flex flex-wrap items-baseline justify-between gap-2">
+          <h2 class="text-lg font-bold text-navy-700">{{ t('common.help.courses.title') }}</h2>
+          <NuxtLink
+            :to="HELP_COURSES_PATH"
+            class="text-sm font-semibold text-navy-700 underline underline-offset-2 hover:text-purple"
+          >
+            {{ t('common.help.courses.all_courses') }}
+          </NuxtLink>
+        </div>
+        <HelpCourseCards :courses="courses" />
+      </section>
+
       <!-- Lo más consultado: con la ilustración del artículo a tamaño legible -->
       <section v-if="featured.length" class="mb-8">
         <h2 class="mb-3 text-lg font-bold text-navy-700">{{ t('common.help.most_read') }}</h2>
@@ -109,6 +128,7 @@
 <script setup lang="ts">
 import { BookOpenIcon, MagnifyingGlassIcon, NewspaperIcon } from '@heroicons/vue/24/outline'
 import { helpCardType } from '~/utils/help-accents'
+import { HELP_COURSES_PATH } from '~/utils/help-courses'
 import type { HelpArea, HelpScope, HelpSearchResult } from '~/types/help.types'
 
 /**
@@ -155,6 +175,11 @@ const {
 } = useHelp(props.area)
 
 setScope(props.scope)
+
+/** Los cursos de la portada activa (el blog no tiene). */
+const { courses: scopedCourses } = useHelpCourses()
+// En la portada, solo tres cursos; el resto, en «Ver todos los cursos».
+const courses = computed(() => (isBlog ? [] : scopedCourses.value.slice(0, 3)))
 
 /** Los textos que cambian entre la ayuda (por portada) y el blog. */
 const heading = computed(() =>

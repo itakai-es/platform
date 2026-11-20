@@ -1,6 +1,7 @@
 import {
   AcademicCapIcon,
   BookOpenIcon,
+  CodeBracketIcon,
   Cog6ToothIcon,
   FaceSmileIcon,
   LifebuoyIcon,
@@ -30,6 +31,7 @@ export const HELP_ICONS: Record<string, Component> = {
   'tu-cuenta': UserCircleIcon,
   'si-eres-alumno': FaceSmileIcon,
   'cuando-algo-falla': LifebuoyIcon,
+  desarrollo: CodeBracketIcon,
   configuracion: Cog6ToothIcon,
 }
 

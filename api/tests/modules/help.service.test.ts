@@ -275,6 +275,24 @@ describe('getPublicArticle', () => {
     expect(found?.article.videoUrl).toBe('https://www.youtube-nocookie.com/embed/x')
     expect(found?.category.area).toBe('ayuda')
   })
+
+  it('las tarjetas dicen si hay vídeo y cuánto dura, sin la URL', async () => {
+    mocks.articleFindFirst.mockResolvedValue(
+      articleRow({ videoUrl: 'https://media.example/guia.mp4', videoDurationSeconds: 107 })
+    )
+    mocks.articleFindMany.mockResolvedValue([
+      { id: 'a1', slug: 'primero', title: 'Primero', videoUrl: 'https://media.example/a.mp4', videoDurationSeconds: 95 },
+      { id: 'a2', slug: 'segundo', title: 'Segundo', videoUrl: null, videoDurationSeconds: 40 },
+    ])
+
+    const found = await getPublicArticle('misiones', 'segundo')
+
+    expect(found?.article.videoDuration).toBe(107)
+    expect(found?.siblings[0]).toMatchObject({ hasVideo: true, videoDuration: 95 })
+    expect(found?.siblings[0]).not.toHaveProperty('videoUrl')
+    // Sin vídeo no hay duración, aunque quede una vieja en la columna.
+    expect(found?.siblings[1]).toMatchObject({ hasVideo: false, videoDuration: null })
+  })
 })
 
 describe('searchArticles', () => {
@@ -417,7 +435,7 @@ describe('createArticle', () => {
     expect(data.videoUrl).toBe('https://vimeo.com/1')
   })
 
-  it('vacía la URL si no es vídeo', async () => {
+  it('una guía puede llevar su vídeo tutorial', async () => {
     await createArticle({
       categoryId: 'c1',
       title: 'Guía',
@@ -425,6 +443,12 @@ describe('createArticle', () => {
       kind: 'guia',
       videoUrl: 'https://vimeo.com/1',
     })
+
+    expect(mocks.articleCreate.mock.calls[0][0].data.videoUrl).toBe('https://vimeo.com/1')
+  })
+
+  it('una guía sin vídeo guarda la URL vacía', async () => {
+    await createArticle({ categoryId: 'c1', title: 'Guía', body: 'texto', kind: 'guia', videoUrl: '' })
 
     expect(mocks.articleCreate.mock.calls[0][0].data.videoUrl).toBeNull()
   })
@@ -738,7 +762,7 @@ describe('updateArticle', () => {
     expect(patch.videoUrl).toBe('https://vimeo.com/3')
   })
 
-  it('cambiar el tipo a algo que no es vídeo vacía la URL guardada', async () => {
+  it('cambiar el tipo a algo que no es vídeo conserva el vídeo tutorial', async () => {
     mocks.articleFindUnique.mockResolvedValue({
       ...current,
       kind: 'video',
@@ -747,7 +771,7 @@ describe('updateArticle', () => {
 
     await updateArticle('a1', { kind: 'faq' })
 
-    expect(mocks.articleUpdate.mock.calls[0][0].data.videoUrl).toBeNull()
+    expect(mocks.articleUpdate.mock.calls[0][0].data.videoUrl).toBe('https://vimeo.com/3')
   })
 })
 

@@ -251,6 +251,7 @@
       "still_stuck": "Nu ai găsit ce căutai?",
       "contact_us": "Scrie-ne",
       "updated_on": "Actualizat pe {date}",
+      "visit_count": "{count} vizite | 1 vizită | {count} vizite",
       "feedback_question": "Ți-a fost de folos?",
       "feedback_yes": "Da",
       "feedback_no": "Nu prea",
@@ -281,13 +282,95 @@
       "audience": {
         "profesor": "Cadre didactice",
         "alumno": "Elevi",
-        "ambos": "Cadre didactice și elevi"
+        "ambos": "Cadre didactice și elevi",
+        "desarrollador": "Dezvoltatori"
       },
       "back_to_app": "Înapoi la aplicație",
       "published_on": "Publicat pe {date}",
       "by_author": "De {name}",
       "load_error": "Conținutul nu a putut fi încărcat",
-      "retry": "Încearcă din nou"
+      "retry": "Încearcă din nou",
+      "courses": {
+        "in_courses": "Acest ghid în cursuri",
+        "mark_complete": "Marchează ca finalizată",
+        "up_next_in": "Lecția următoare în {seconds} s",
+        "cancel_next": "Anulează",
+        "lesson_actions": "Acțiunile lecției",
+        "open_guide": "Vezi ca ghid",
+        "resume_at": "Continuă de la {time}",
+        "progress_count": "{done} din {total} finalizate",
+        "lesson_complete": "Finalizată",
+        "autoplay": "Redare automată",
+        "resume": "Continuă",
+        "view_course": "Vezi cursul",
+        "curriculum": "Cuprins",
+        "in_progress": "În curs",
+        "rewatch": "Urmărește din nou",
+        "title": "Cursuri",
+        "subtitle": "Trasee scurte și ordonate cu esențialul, ghid cu ghid și video cu video.",
+        "all_courses": "Vezi toate cursurile",
+        "lesson_count": "Nicio lecție | 1 lecție | Lecții: {count}",
+        "start": "Începe",
+        "lesson_of": "Lecția {n} din {total}",
+        "progress": "Progresul cursului",
+        "course_navigation": "Navigarea în curs",
+        "previous_lesson": "Lecția anterioară",
+        "next_lesson": "Lecția următoare",
+        "back_to_course": "Înapoi la curs",
+        "empty_title": "Încă nu există cursuri",
+        "empty_description": "În curând vor exista trasee ghidate pentru început.",
+        "not_found_title": "Acest curs nu există",
+        "not_found_description": "Poate a fost retras. Aruncă o privire la celelalte cursuri.",
+        "items": {
+          "primeros-pasos-docentes": {
+            "title": "Primii pași cu itakai",
+            "description": "De la zero la prima ta misiune: creează clasa, invită elevii și revizuiește predările."
+          },
+          "misiones-a-fondo": {
+            "title": "Misiuni în detaliu",
+            "description": "Enigme, recompense, rarități, indicii și harta: tot ce îți trebuie pentru misiuni captivante."
+          },
+          "gamifica-tu-clase": {
+            "title": "Gamifică-ți clasa",
+            "description": "Monede, magazin, vieți, insigne și ranguri: tot ce transformă clasa ta într-un joc."
+          },
+          "desarrollo-itakai": {
+            "title": "Curs ITAKAI pentru dezvoltatori",
+            "description": "Descoperă proiectul, lucrează cu asistenți IA și pregătește mediul cu VS Code și MCP."
+          },
+          "empieza-como-estudiante": {
+            "title": "Începe în itakai",
+            "description": "Tot ce ai nevoie ca să intri în clasa ta, să predai misiuni și să-ți înțelegi recompensele."
+          }
+        },
+        "resume_lesson": "Continuă cu lecția {n}",
+        "minutes": "{n} min",
+        "video_lessons": "1 videoclip | {count} videoclipuri"
+      },
+      "player": {
+        "play": "Redă",
+        "pause": "Pauză",
+        "play_video": "Redă videoclipul: {title}",
+        "mute": "Fără sunet",
+        "unmute": "Activează sunetul",
+        "volume": "Volum",
+        "speed": "Viteză",
+        "speed_normal": "Normală",
+        "subtitles_on": "Activează subtitrările",
+        "subtitles_off": "Dezactivează subtitrările",
+        "fullscreen": "Ecran complet",
+        "exit_fullscreen": "Ieși din ecranul complet",
+        "seek": "Poziția videoclipului"
+      },
+      "video": "Video",
+      "duration": "Durată: {time}",
+      "copy_block": "Copiază blocul",
+      "command_platform": "Sistem de operare",
+      "device": {
+        "label": "Vezi ghidul pe",
+        "desktop": "Calculator",
+        "mobile": "Mobil"
+      }
     },
     "about": {
       "title": "Despre ITAKAI",

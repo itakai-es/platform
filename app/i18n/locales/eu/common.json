@@ -251,6 +251,7 @@
       "still_stuck": "Ez duzu bilatzen zenuena aurkitu?",
       "contact_us": "Idatzi iezaguzu",
       "updated_on": "{date}(e)an eguneratua",
+      "visit_count": "{count} bisita | 1 bisita | {count} bisita",
       "feedback_question": "Lagungarria izan zaizu?",
       "feedback_yes": "Bai",
       "feedback_no": "Ez guztiz",
@@ -281,13 +282,95 @@
       "audience": {
         "profesor": "Irakasleak",
         "alumno": "Ikasleak",
-        "ambos": "Irakasleak eta ikasleak"
+        "ambos": "Irakasleak eta ikasleak",
+        "desarrollador": "Garatzaileak"
       },
       "back_to_app": "Itzuli aplikaziora",
       "published_on": "{date}(e)an argitaratua",
       "by_author": "Egilea: {name}",
       "load_error": "Ezin izan da edukia kargatu",
-      "retry": "Saiatu berriro"
+      "retry": "Saiatu berriro",
+      "courses": {
+        "in_courses": "Gida hau ikastaroetan",
+        "mark_complete": "Markatu osatutzat",
+        "up_next_in": "Hurrengo ikasgaia {seconds} s barru",
+        "cancel_next": "Utzi",
+        "lesson_actions": "Ikasgaiaren ekintzak",
+        "open_guide": "Ikusi gida gisa",
+        "resume_at": "Jarraitu {time} puntutik",
+        "progress_count": "{done}/{total} osatuta",
+        "lesson_complete": "Osatuta",
+        "autoplay": "Erreprodukzio automatikoa",
+        "resume": "Jarraitu",
+        "view_course": "Ikusi ikastaroa",
+        "curriculum": "Ikasgai-zerrenda",
+        "in_progress": "Abian",
+        "rewatch": "Ikusi berriro",
+        "title": "Ikastaroak",
+        "subtitle": "Funtsezkoa ordenan jasotzen duten ibilbide laburrak, gidaz gida eta bideoz bideo.",
+        "all_courses": "Ikastaro guztiak ikusi",
+        "lesson_count": "Ikasgairik ez | Ikasgai 1 | {count} ikasgai",
+        "start": "Hasi",
+        "lesson_of": "{n}. ikasgaia, guztira {total}",
+        "progress": "Ikastaroaren aurrerapena",
+        "course_navigation": "Ikastaroaren nabigazioa",
+        "previous_lesson": "Aurreko ikasgaia",
+        "next_lesson": "Hurrengo ikasgaia",
+        "back_to_course": "Itzuli ikastarora",
+        "empty_title": "Oraindik ez dago ikastarorik",
+        "empty_description": "Laster egongo dira hasteko ibilbide gidatuak.",
+        "not_found_title": "Ikastaro hau ez dago",
+        "not_found_description": "Agian kendu egin da. Begiratu gainerako ikastaroei.",
+        "items": {
+          "primeros-pasos-docentes": {
+            "title": "Lehen urratsak itakai-n",
+            "description": "Zerotik zure lehen misiora: sortu klasea, gonbidatu ikasleak eta berrikusi entregak."
+          },
+          "misiones-a-fondo": {
+            "title": "Misioak sakonean",
+            "description": "Igarkizunak, sariak, arraroak, pistak eta mapa: misio erakargarriak diseinatzeko behar duzun guztia."
+          },
+          "gamifica-tu-clase": {
+            "title": "Gamifikatu zure klasea",
+            "description": "Txanponak, denda, bizitzak, intsigniak eta mailak: zure klasea joko bihurtzen duen guztia."
+          },
+          "desarrollo-itakai": {
+            "title": "Garatzaileentzako ITAKAI ikastaroa",
+            "description": "Ezagutu proiektua, lan egin AAko laguntzaileekin eta prestatu ingurunea VS Code eta MCP erabiliz."
+          },
+          "empieza-como-estudiante": {
+            "title": "Hasi itakai-n",
+            "description": "Zure klasera sartzeko, misioak entregatzeko eta zure sariak ulertzeko behar duzun guztia."
+          }
+        },
+        "resume_lesson": "Jarraitu {n}. ikasgaiarekin",
+        "minutes": "{n} min",
+        "video_lessons": "Bideo 1 | {count} bideo"
+      },
+      "player": {
+        "play": "Erreproduzitu",
+        "pause": "Pausatu",
+        "play_video": "Erreproduzitu bideoa: {title}",
+        "mute": "Isilarazi",
+        "unmute": "Soinua aktibatu",
+        "volume": "Bolumena",
+        "speed": "Abiadura",
+        "speed_normal": "Normala",
+        "subtitles_on": "Azpitituluak aktibatu",
+        "subtitles_off": "Azpitituluak kendu",
+        "fullscreen": "Pantaila osoa",
+        "exit_fullscreen": "Irten pantaila osotik",
+        "seek": "Bideoaren posizioa"
+      },
+      "video": "Bideoa",
+      "duration": "Iraupena: {time}",
+      "copy_block": "Kopiatu blokea",
+      "command_platform": "Sistema eragilea",
+      "device": {
+        "label": "Gida hemen ikusi",
+        "desktop": "Ordenagailua",
+        "mobile": "Mugikorra"
+      }
     },
     "about": {
       "title": "ITAKAIri buruz",

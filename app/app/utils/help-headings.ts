@@ -7,6 +7,7 @@
  */
 
 import { renderHelpMarkdown } from '~/utils/markdown'
+import { splitHelpCommandPlatforms } from '~/utils/help-command-platforms'
 
 export interface HelpHeading {
   id: string
@@ -45,13 +46,12 @@ export interface HelpDocument {
  *
  * Sin DOM (la app no se pinta en el servidor) devuelve `null`.
  */
-export function helpDocument(body: string): HelpDocument | null {
+export function helpDocument(body: string, used = new Set<string>()): HelpDocument | null {
   if (typeof document === 'undefined') return null
   const template = document.createElement('template')
   template.innerHTML = renderHelpMarkdown(body)
   const content = template.content
 
-  const used = new Set<string>()
   const headings: HelpHeading[] = []
   content.querySelectorAll('h2').forEach(heading => {
     const text = (heading.textContent ?? '').replace(/\s+/g, ' ').trim()
@@ -67,5 +67,6 @@ export function helpDocument(body: string): HelpDocument | null {
 
 /** Los apartados del artículo, con el mismo `id` que llevan en el cuerpo. */
 export function helpHeadings(body: string): HelpHeading[] {
-  return helpDocument(body)?.headings ?? []
+  const platform = splitHelpCommandPlatforms(body)
+  return helpDocument(platform ? `${platform.before}\n\n${platform.after}` : body)?.headings ?? []
 }

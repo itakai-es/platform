@@ -90,7 +90,8 @@ export const ModelName = {
   TeamMember: 'TeamMember',
   TeamAward: 'TeamAward',
   HelpCategory: 'HelpCategory',
-  HelpArticle: 'HelpArticle'
+  HelpArticle: 'HelpArticle',
+  HelpArticleVisit: 'HelpArticleVisit'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -737,6 +738,7 @@ export const HelpArticleScalarFieldEnum = {
   audience: 'audience',
   kind: 'kind',
   videoUrl: 'videoUrl',
+  videoDurationSeconds: 'videoDurationSeconds',
   views: 'views',
   helpful: 'helpful',
   notHelpful: 'notHelpful',
@@ -747,6 +749,15 @@ export const HelpArticleScalarFieldEnum = {
 } as const
 
 export type HelpArticleScalarFieldEnum = (typeof HelpArticleScalarFieldEnum)[keyof typeof HelpArticleScalarFieldEnum]
+
+
+export const HelpArticleVisitScalarFieldEnum = {
+  articleId: 'articleId',
+  visitorKey: 'visitorKey',
+  countedAt: 'countedAt'
+} as const
+
+export type HelpArticleVisitScalarFieldEnum = (typeof HelpArticleVisitScalarFieldEnum)[keyof typeof HelpArticleVisitScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -1,8 +1,16 @@
 <template>
-  <HelpArticleTemplate area="ayuda" />
+  <HelpCourseLessonTemplate v-if="inCourse" />
+  <HelpArticleTemplate v-else area="ayuda" />
 </template>
 
 <script setup lang="ts">
+import { helpCourseHasLesson } from '~/utils/help-courses'
+
+const route = useRoute()
+const inCourse = computed(() =>
+  helpCourseHasLesson(route.query.curso, route.params.categoria, route.params.articulo)
+)
+
 /** Un artículo del centro de ayuda (Fase 3, punto 17). */
 
 definePageMeta({

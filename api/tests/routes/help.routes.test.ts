@@ -3,6 +3,7 @@ import Fastify from 'fastify'
 import { ZodError } from 'zod'
 import { adminHelpRoutes, publicHelpRoutes } from '../../src/modules/help/help.routes.js'
 import { HttpError } from '../../src/utils/errors.js'
+import { trustPrivateNextHop } from '../../src/utils/trust-proxy.js'
 
 /**
  * Rutas del centro de ayuda: lo que el servicio recibe desde la URL, cómo
@@ -14,7 +15,6 @@ vi.mock('../../src/modules/help/help.service.js', () => ({
   getPublicIndex: vi.fn(),
   searchArticles: vi.fn(),
   getPublicArticle: vi.fn(),
-  registerView: vi.fn(),
   rateArticle: vi.fn(),
   listCategories: vi.fn(),
   createCategory: vi.fn(),
@@ -32,10 +32,13 @@ vi.mock('../../src/modules/help/help.service.js', () => ({
 }))
 
 import * as help from '../../src/modules/help/help.service.js'
+import { registerView } from '../../src/modules/help/help-visits.service.js'
+
+vi.mock('../../src/modules/help/help-visits.service.js', () => ({ registerView: vi.fn() }))
 
 /** El mismo criterio que el manejador global de index.ts, reducido a lo que usan estas rutas. */
 async function buildApp(role: string | null = 'admin') {
-  const app = Fastify()
+  const app = Fastify({ trustProxy: trustPrivateNextHop })
   app.setErrorHandler((error: unknown, _request, reply) => {
     if (error instanceof HttpError) {
       return reply.status(error.statusCode).send({ message: error.message, code: error.code })
@@ -172,7 +175,7 @@ describe('público', () => {
       audience: 'alumno',
       area: undefined,
     })
-    expect(help.registerView).toHaveBeenCalledWith('a1')
+    expect(registerView).not.toHaveBeenCalled()
   })
 
   it('GET /:categoria/:articulo da 404 sin sumar visita si el artículo no está en el área', async () => {
@@ -182,7 +185,55 @@ describe('público', () => {
     const response = await app.inject({ method: 'GET', url: '/public/help/novedades/una-entrada' })
 
     expect(response.statusCode).toBe(404)
-    expect(help.registerView).not.toHaveBeenCalled()
+    expect(registerView).not.toHaveBeenCalled()
+  })
+
+  it('POST /:id/visita usa el origen resuelto por el proxy de confianza', async () => {
+    const articleId = '0f4b1c1e-2d3a-4e5f-8a9b-0c1d2e3f4a5b'
+    vi.mocked(registerView).mockResolvedValue({ views: 12 })
+    const app = await buildApp()
+
+    const response = await app.inject({
+      method: 'POST',
+      url: `/public/help/${articleId}/visita`,
+      remoteAddress: '10.0.0.2',
+      headers: { 'x-forwarded-for': '203.0.113.10, 198.51.100.20' },
+      payload: {},
+    })
+
+    expect(response.statusCode).toBe(200)
+    expect(response.headers['cache-control']).toBe('no-store')
+    expect(response.json()).toEqual({ views: 12 })
+    expect(registerView).toHaveBeenCalledWith(articleId, '198.51.100.20')
+  })
+
+  it('POST /:id/visita ignora cabeceras de origen de una conexión directa', async () => {
+    const articleId = '0f4b1c1e-2d3a-4e5f-8a9b-0c1d2e3f4a5b'
+    vi.mocked(registerView).mockResolvedValue(null)
+    const app = await buildApp()
+
+    const response = await app.inject({
+      method: 'POST',
+      url: `/public/help/${articleId}/visita`,
+      remoteAddress: '198.51.100.25',
+      headers: { 'x-forwarded-for': '198.51.100.40' },
+      payload: {},
+    })
+
+    expect(response.statusCode).toBe(404)
+    expect(registerView).toHaveBeenCalledWith(articleId, '198.51.100.25')
+  })
+
+  it('POST /:id/visita rechaza formularios y cuerpos con campos del cliente', async () => {
+    const url = '/public/help/0f4b1c1e-2d3a-4e5f-8a9b-0c1d2e3f4a5b/visita'
+    const app = await buildApp()
+
+    const form = await app.inject({ method: 'POST', url, headers: { 'content-type': 'text/plain' }, payload: 'views=10' })
+    const json = await app.inject({ method: 'POST', url, payload: { views: 10 } })
+
+    expect(form.statusCode).toBe(400)
+    expect(json.statusCode).toBe(400)
+    expect(registerView).not.toHaveBeenCalled()
   })
 
   it('GET /:categoria/:articulo pasa el área pedida expresamente', async () => {
@@ -314,7 +365,7 @@ describe('administración', () => {
 
     expect(response.statusCode).toBe(200)
     expect(response.json().article.id).toBe('a1')
-    expect(help.registerView).not.toHaveBeenCalled()
+    expect(registerView).not.toHaveBeenCalled()
   })
 
   it('GET /articles descarta filtros con valores desconocidos', async () => {

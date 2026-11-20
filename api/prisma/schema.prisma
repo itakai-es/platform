@@ -1206,8 +1206,10 @@ model HelpArticle {
   audience   HelpAudience      @default(profesor)
   /** Tipo editorial. `video` solo aloja la URL: el vídeo se aloja fuera de la plataforma. */
   kind       HelpArticleKind   @default(guia)
-  /** URL https de YouTube, Vimeo o fichero .mp4/.webm. Solo se guarda si `kind = video`. */
+  /** URL https de YouTube, Vimeo o fichero .mp4/.webm. Obligatoria si `kind = video`; cualquier guía puede llevar su vídeo tutorial. */
   videoUrl   String?           @map("video_url")
+  /** Duración del vídeo en segundos, para la pastilla de las miniaturas. Opcional. */
+  videoDurationSeconds Int?    @map("video_duration_seconds")
   views      Int               @default(0)
   helpful    Int               @default(0)
   notHelpful Int               @default(0) @map("not_helpful")
@@ -1233,10 +1235,23 @@ model HelpArticle {
   createdAt   DateTime  @default(now()) @map("created_at")
   updatedAt   DateTime  @updatedAt @map("updated_at")
 
-  category HelpCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  category HelpCategory       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  visits   HelpArticleVisit[]
 
   @@unique([categoryId, slug, locale])
   @@index([status, locale])
   @@index([categoryId, orderIndex])
   @@map("help_articles")
+}
+
+model HelpArticleVisit {
+  articleId  String   @map("article_id")
+  visitorKey String   @map("visitor_key")
+  countedAt  DateTime @map("counted_at") @db.Timestamptz(3)
+
+  article HelpArticle @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@id([articleId, visitorKey])
+  @@index([countedAt])
+  @@map("help_article_visits")
 }

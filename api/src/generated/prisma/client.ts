@@ -248,3 +248,8 @@ export type HelpCategory = Prisma.HelpCategoryModel
  * 
  */
 export type HelpArticle = Prisma.HelpArticleModel
+/**
+ * Model HelpArticleVisit
+ *
+ */
+export type HelpArticleVisit = Prisma.HelpArticleVisitModel
