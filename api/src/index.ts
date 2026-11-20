@@ -297,7 +297,7 @@ async function start() {
 
     await server.listen({
       port: env.PORT,
-      host: '0.0.0.0',
+      host: env.LISTEN_HOST,
     })
 
     // Los timers arrancan ya escuchando, para no retrasar el arranque.

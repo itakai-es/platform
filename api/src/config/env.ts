@@ -9,6 +9,10 @@ const envSchema = z
     JWT_ACCESS_EXPIRES_IN: z.string().default('15m'),
     JWT_REFRESH_EXPIRES_IN: z.string().default('7d'),
     PORT: z.string().default('3001').transform(Number),
+    // En qué dirección escucha la API. Por defecto, en todas. Detrás de un proxy
+    // inverso en la misma máquina conviene limitarla a la red por la que llega
+    // el proxy, para que no se pueda entrar a la API saltándoselo.
+    LISTEN_HOST: z.string().min(1).default('0.0.0.0'),
     NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
     CORS_ORIGIN: z.string().default('http://localhost:4000'),
 
