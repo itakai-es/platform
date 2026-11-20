@@ -28,6 +28,7 @@ export const ROUTE_NAMES = {
   STUDENT_NOTIFICATIONS: '/alumno/avisos',
 
   // Teacher
+  TEACHER_REGISTRATION: '/onboarding/registro-docente',
   TEACHER_DASHBOARD: '/profesor/inicio',
   TEACHER_CLASSES: '/profesor/clases',
   TEACHER_MISSIONS: '/profesor/misiones',

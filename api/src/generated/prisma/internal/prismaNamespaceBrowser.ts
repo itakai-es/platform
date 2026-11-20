@@ -52,6 +52,8 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
+  EducationCenter: 'EducationCenter',
+  TeacherProfessionalProfile: 'TeacherProfessionalProfile',
   UserSettings: 'UserSettings',
   RefreshToken: 'RefreshToken',
   InstanceSetting: 'InstanceSetting',
@@ -118,6 +120,7 @@ export const UserScalarFieldEnum = {
   role: 'role',
   accountType: 'accountType',
   isOnboarded: 'isOnboarded',
+  teacherRegistrationPending: 'teacherRegistrationPending',
   status: 'status',
   createdById: 'createdById',
   homeClassId: 'homeClassId',
@@ -129,6 +132,34 @@ export const UserScalarFieldEnum = {
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const EducationCenterScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  municipality: 'municipality',
+  country: 'country',
+  type: 'type',
+  identity: 'identity',
+  mergedIntoId: 'mergedIntoId'
+} as const
+
+export type EducationCenterScalarFieldEnum = (typeof EducationCenterScalarFieldEnum)[keyof typeof EducationCenterScalarFieldEnum]
+
+
+export const TeacherProfessionalProfileScalarFieldEnum = {
+  userId: 'userId',
+  centerId: 'centerId',
+  centerAnswered: 'centerAnswered',
+  experience: 'experience',
+  stages: 'stages',
+  subjects: 'subjects',
+  gamificationExperience: 'gamificationExperience',
+  gamificationFrequency: 'gamificationFrequency',
+  completedAt: 'completedAt'
+} as const
+
+export type TeacherProfessionalProfileScalarFieldEnum = (typeof TeacherProfessionalProfileScalarFieldEnum)[keyof typeof TeacherProfessionalProfileScalarFieldEnum]
 
 
 export const UserSettingsScalarFieldEnum = {

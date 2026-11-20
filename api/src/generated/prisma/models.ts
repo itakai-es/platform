@@ -9,6 +9,8 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/User'
+export type * from './models/EducationCenter'
+export type * from './models/TeacherProfessionalProfile'
 export type * from './models/UserSettings'
 export type * from './models/RefreshToken'
 export type * from './models/InstanceSetting'

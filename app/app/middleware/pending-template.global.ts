@@ -16,8 +16,8 @@ import {
  * se importa nada sin que lo pida. Si la plantilla ya no está, la ficha lo
  * dice. Con otro rol no se puede usar: se avisa y se descarta.
  *
- * Espera a que no quede nada por hacer antes del panel: elegir el rol o
- * cambiar la contraseña obligatoria.
+ * Espera a la elección del rol, al cambio de contraseña obligatorio y
+ * al registro docente pendiente antes de abrir la ficha.
  *
  * Sin sesión, la intención solo vive dentro del camino que lleva a usarla: las
  * pantallas de entrar y registrarse (`/auth/…`) y la propia ficha. Quien sale
@@ -36,7 +36,7 @@ export default defineNuxtRouteMiddleware(to => {
     }
     return
   }
-  if (!user?.isOnboarded || user.mustChangePassword) return
+  if (!user?.isOnboarded || user.mustChangePassword || user.teacherRegistrationPending) return
 
   // Solo al entrar en un panel: las páginas públicas no la recogen.
   const area = getRoleFromPath(to.path)

@@ -1,3 +1,4 @@
+import { teacherRegistrationRoutes } from './modules/teacher-registration/teacher-registration.routes.js'
 import Fastify from 'fastify'
 import cors from '@fastify/cors'
 import jwt from '@fastify/jwt'
@@ -270,6 +271,7 @@ async function buildServer() {
   await fastify.register(authRoutes, { prefix: '/auth' })
   await fastify.register(onboardingRoutes, { prefix: '/onboarding' })
   await fastify.register(studentsRoutes, { prefix: '/students' })
+  await fastify.register(teacherRegistrationRoutes, { prefix: '/teacher-registration' })
   await fastify.register(teacherRoutes, { prefix: '/teacher' })
   await fastify.register(classesRoutes, { prefix: '/classes' })
   await fastify.register(missionsRoutes, { prefix: '/missions' })

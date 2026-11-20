@@ -385,6 +385,8 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   User: 'User',
+  EducationCenter: 'EducationCenter',
+  TeacherProfessionalProfile: 'TeacherProfessionalProfile',
   UserSettings: 'UserSettings',
   RefreshToken: 'RefreshToken',
   InstanceSetting: 'InstanceSetting',
@@ -439,7 +441,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "userSettings" | "refreshToken" | "instanceSetting" | "class" | "classTeacher" | "classActionLog" | "classEnrollment" | "classGuide" | "shopItem" | "shopPurchase" | "shopItemUse" | "mission" | "missionPrerequisite" | "missionDocument" | "missionEnigma" | "studentEnigmaProgress" | "missionHint" | "missionHintUse" | "enigmaSubmission" | "studentMissionProgress" | "badge" | "studentBadge" | "joinRequest" | "invitation" | "notification" | "activity" | "systemLog" | "chatConversation" | "chatMessage" | "behaviorTemplate" | "behaviorApplication" | "attendanceSession" | "attendanceRecord" | "teamSet" | "team" | "teamMember" | "teamAward" | "helpCategory" | "helpArticle"
+    modelProps: "user" | "educationCenter" | "teacherProfessionalProfile" | "userSettings" | "refreshToken" | "instanceSetting" | "class" | "classTeacher" | "classActionLog" | "classEnrollment" | "classGuide" | "shopItem" | "shopPurchase" | "shopItemUse" | "mission" | "missionPrerequisite" | "missionDocument" | "missionEnigma" | "studentEnigmaProgress" | "missionHint" | "missionHintUse" | "enigmaSubmission" | "studentMissionProgress" | "badge" | "studentBadge" | "joinRequest" | "invitation" | "notification" | "activity" | "systemLog" | "chatConversation" | "chatMessage" | "behaviorTemplate" | "behaviorApplication" | "attendanceSession" | "attendanceRecord" | "teamSet" | "team" | "teamMember" | "teamAward" | "helpCategory" | "helpArticle"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -514,6 +516,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.UserCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.UserCountAggregateOutputType> | number
+        }
+      }
+    }
+    EducationCenter: {
+      payload: Prisma.$EducationCenterPayload<ExtArgs>
+      fields: Prisma.EducationCenterFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.EducationCenterFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EducationCenterPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.EducationCenterFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EducationCenterPayload>
+        }
+        findFirst: {
+          args: Prisma.EducationCenterFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EducationCenterPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.EducationCenterFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EducationCenterPayload>
+        }
+        findMany: {
+          args: Prisma.EducationCenterFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EducationCenterPayload>[]
+        }
+        create: {
+          args: Prisma.EducationCenterCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EducationCenterPayload>
+        }
+        createMany: {
+          args: Prisma.EducationCenterCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.EducationCenterCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EducationCenterPayload>[]
+        }
+        delete: {
+          args: Prisma.EducationCenterDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EducationCenterPayload>
+        }
+        update: {
+          args: Prisma.EducationCenterUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EducationCenterPayload>
+        }
+        deleteMany: {
+          args: Prisma.EducationCenterDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.EducationCenterUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.EducationCenterUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EducationCenterPayload>[]
+        }
+        upsert: {
+          args: Prisma.EducationCenterUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EducationCenterPayload>
+        }
+        aggregate: {
+          args: Prisma.EducationCenterAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEducationCenter>
+        }
+        groupBy: {
+          args: Prisma.EducationCenterGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EducationCenterGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.EducationCenterCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EducationCenterCountAggregateOutputType> | number
+        }
+      }
+    }
+    TeacherProfessionalProfile: {
+      payload: Prisma.$TeacherProfessionalProfilePayload<ExtArgs>
+      fields: Prisma.TeacherProfessionalProfileFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TeacherProfessionalProfileFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TeacherProfessionalProfilePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TeacherProfessionalProfileFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TeacherProfessionalProfilePayload>
+        }
+        findFirst: {
+          args: Prisma.TeacherProfessionalProfileFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TeacherProfessionalProfilePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TeacherProfessionalProfileFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TeacherProfessionalProfilePayload>
+        }
+        findMany: {
+          args: Prisma.TeacherProfessionalProfileFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TeacherProfessionalProfilePayload>[]
+        }
+        create: {
+          args: Prisma.TeacherProfessionalProfileCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TeacherProfessionalProfilePayload>
+        }
+        createMany: {
+          args: Prisma.TeacherProfessionalProfileCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TeacherProfessionalProfileCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TeacherProfessionalProfilePayload>[]
+        }
+        delete: {
+          args: Prisma.TeacherProfessionalProfileDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TeacherProfessionalProfilePayload>
+        }
+        update: {
+          args: Prisma.TeacherProfessionalProfileUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TeacherProfessionalProfilePayload>
+        }
+        deleteMany: {
+          args: Prisma.TeacherProfessionalProfileDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TeacherProfessionalProfileUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TeacherProfessionalProfileUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TeacherProfessionalProfilePayload>[]
+        }
+        upsert: {
+          args: Prisma.TeacherProfessionalProfileUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TeacherProfessionalProfilePayload>
+        }
+        aggregate: {
+          args: Prisma.TeacherProfessionalProfileAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTeacherProfessionalProfile>
+        }
+        groupBy: {
+          args: Prisma.TeacherProfessionalProfileGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TeacherProfessionalProfileGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TeacherProfessionalProfileCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TeacherProfessionalProfileCountAggregateOutputType> | number
         }
       }
     }
@@ -3451,6 +3601,7 @@ export const UserScalarFieldEnum = {
   role: 'role',
   accountType: 'accountType',
   isOnboarded: 'isOnboarded',
+  teacherRegistrationPending: 'teacherRegistrationPending',
   status: 'status',
   createdById: 'createdById',
   homeClassId: 'homeClassId',
@@ -3462,6 +3613,34 @@ export const UserScalarFieldEnum = {
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const EducationCenterScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  municipality: 'municipality',
+  country: 'country',
+  type: 'type',
+  identity: 'identity',
+  mergedIntoId: 'mergedIntoId'
+} as const
+
+export type EducationCenterScalarFieldEnum = (typeof EducationCenterScalarFieldEnum)[keyof typeof EducationCenterScalarFieldEnum]
+
+
+export const TeacherProfessionalProfileScalarFieldEnum = {
+  userId: 'userId',
+  centerId: 'centerId',
+  centerAnswered: 'centerAnswered',
+  experience: 'experience',
+  stages: 'stages',
+  subjects: 'subjects',
+  gamificationExperience: 'gamificationExperience',
+  gamificationFrequency: 'gamificationFrequency',
+  completedAt: 'completedAt'
+} as const
+
+export type TeacherProfessionalProfileScalarFieldEnum = (typeof TeacherProfessionalProfileScalarFieldEnum)[keyof typeof TeacherProfessionalProfileScalarFieldEnum]
 
 
 export const UserSettingsScalarFieldEnum = {
@@ -4616,6 +4795,8 @@ export type PrismaClientOptions = ({
 }
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
+  educationCenter?: Prisma.EducationCenterOmit
+  teacherProfessionalProfile?: Prisma.TeacherProfessionalProfileOmit
   userSettings?: Prisma.UserSettingsOmit
   refreshToken?: Prisma.RefreshTokenOmit
   instanceSetting?: Prisma.InstanceSettingOmit

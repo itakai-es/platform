@@ -1,3 +1,4 @@
+import { registerAdminTeacherRegistration } from './admin-teacher-registration.routes.js'
 import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
 import { prisma } from '../../config/database.js'
 import { z, ZodError } from 'zod'
@@ -296,6 +297,8 @@ export async function adminRoutes(fastify: FastifyInstance) {
       reply.status(403).send({ message: 'Acceso denegado. Solo para administración.' })
     }
   })
+
+  registerAdminTeacherRegistration(fastify)
 
   // Get system stats
   fastify.get('/stats', async (request: FastifyRequest, reply: FastifyReply) => {

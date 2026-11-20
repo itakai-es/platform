@@ -90,7 +90,7 @@ export async function sessionGate(request: FastifyRequest, reply: FastifyReply) 
 
   const user = await prisma.user.findUnique({
     where: { id },
-    select: { status: true, mustChangePassword: true, passwordChangedAt: true },
+    select: { status: true, mustChangePassword: true, passwordChangedAt: true, teacherRegistrationPending: true },
   })
   if (!user) return revoked()
 
@@ -110,6 +110,14 @@ export async function sessionGate(request: FastifyRequest, reply: FastifyReply) 
     return reply.status(403).send({
       message: 'Tienes que cambiar tu contraseña antes de seguir',
       code: PASSWORD_CHANGE_REQUIRED,
+    })
+  }
+  if (user.teacherRegistrationPending && !matches(path, [
+    ...PASSWORD_CHANGE_PREFIXES, '/onboarding', '/teacher-registration',
+  ])) {
+    return reply.status(403).send({
+      message: 'Completa el registro docente antes de seguir',
+      code: 'TEACHER_REGISTRATION_REQUIRED',
     })
   }
 }

@@ -287,6 +287,12 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  const markTeacherRegistrationComplete = () => {
+    if (!user.value) return
+    user.value = { ...user.value, teacherRegistrationPending: false }
+    if (import.meta.client) localStorage.setItem('auth_user', JSON.stringify(user.value))
+  }
+
   /**
    * El avatar de docente ha cambiado, o llega con el perfil: el menú lo enseña
    * al momento y se queda guardado con la sesión.
@@ -451,6 +457,7 @@ export const useAuthStore = defineStore('auth', () => {
     loadUserFromStorage,
     completeOnboarding,
     markPasswordChanged,
+    markTeacherRegistrationComplete,
     setUserAvatar,
     resetPassword,
     requestPasswordReset,
