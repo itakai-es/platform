@@ -41,6 +41,25 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.9.0',
+    date: '2026-11-21',
+    title: 'Cursos y vídeos en el centro de soporte',
+    changes: [
+      {
+        type: 'new',
+        text: 'El centro de soporte incorpora cursos para docentes y estudiantes, con vídeos, listas de lecciones y progreso guardado en el navegador.',
+      },
+      {
+        type: 'new',
+        text: 'El curso de desarrollo de ITAKAI reúne seis lecciones con materiales, comandos y ejemplos que puedes copiar.',
+      },
+      {
+        type: 'improved',
+        text: 'El buscador aprovecha todo el ancho disponible. El reproductor permite ajustar la velocidad y las lecciones muestran su contador de visitas.',
+      },
+    ],
+  },
+  {
     version: '0.8.1',
     date: '2026-11-20',
     changes: [

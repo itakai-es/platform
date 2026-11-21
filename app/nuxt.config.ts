@@ -139,6 +139,9 @@ export default defineNuxtConfig({
     public: {
       // Backend API URL
       apiBase: process.env.NUXT_PUBLIC_API_BASE || '/api',
+      helpMediaBase:
+        process.env.NUXT_PUBLIC_HELP_MEDIA_BASE ||
+        'https://s3.services.devbeply.es/help-media/itakai/v0.9.0-0275028998de/help-media',
       // Google OAuth Client ID
       googleClientId: process.env.NUXT_PUBLIC_GOOGLE_CLIENT_ID || '',
     },

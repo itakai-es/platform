@@ -103,6 +103,7 @@ function readProgress(): CourseProgressStore {
 export function useHelpCourses() {
   const { t } = useI18n()
   const help = useHelp('ayuda')
+  const mediaBase = useRuntimeConfig().public.helpMediaBase.replace(/\/$/, '')
 
   const lessonPath = (course: string, categoria: string, articulo: string) =>
     `${helpArticlePath('ayuda', categoria, articulo)}?curso=${encodeURIComponent(course)}`
@@ -129,6 +130,7 @@ export function useHelpCourses() {
     const videos = items.filter(item => item.article.hasVideo)
     return {
       ...course,
+      cover: `${mediaBase}/${course.cover}`,
       title: t(`common.help.courses.items.${course.slug}.title`),
       description: t(`common.help.courses.items.${course.slug}.description`),
       items,
