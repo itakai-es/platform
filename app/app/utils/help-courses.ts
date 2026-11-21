@@ -40,7 +40,7 @@ export interface HelpCourse {
 
 /** Dónde está la portada de un curso: junto al resto de medios de la ayuda. */
 function helpCourseCover(slug: string) {
-  return `/help-media/cursos/${slug}.webp`
+  return `cursos/${slug}.webp`
 }
 
 const lesson = (path: string): HelpCourseLessonRef => {
